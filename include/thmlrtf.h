@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlrtf.h,v 1.12 2003/12/22 04:00:50 scribe Exp $
+ * $Id: thmlrtf.h,v 1.13 2003/12/22 06:30:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,6 +22,7 @@
 #define THMLRTF_H
 
 #include <swbasicfilter.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
@@ -35,6 +36,7 @@ protected:
 		bool SecHead;
 		SWBuf version;
 		bool BiblicalText;
+		XMLTag startTag;
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);

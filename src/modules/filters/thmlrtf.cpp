@@ -267,6 +267,41 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				u->suspendTextPassThru = false;
 			}
 		}
+		else if (!strcmp(tag.getName(), "scripRef")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					u->suspendTextPassThru = true;
+				}
+			}
+			if (tag.isEndTag()) {	//	</scripRef>
+				if (!u->BiblicalText) {
+					SWBuf refList = u->startTag.getAttribute("passage");
+					if (!refList.length())
+						refList = u->lastTextNode;
+					SWBuf version = tag.getAttribute("version");
+					buf += "<a href=\"\">";
+					buf += refList.c_str();
+//					buf += u->lastTextNode.c_str();
+					buf += "</a>";
+				}
+				else {
+					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
+					VerseKey *vkey;
+					// see if we have a VerseKey * or descendant
+					try {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					catch ( ... ) {}
+					if (vkey) {
+						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+						buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->Verse(), footnoteNumber.c_str());
+					}
+				}
+
+				// let's let text resume to output again
+				u->suspendTextPassThru = false;
+			}
+		}
 
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && u->SecHead) {
