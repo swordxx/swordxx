@@ -190,6 +190,8 @@ int main(int argc, char **argv) {
 			}
 
 			vk = buffer;
+			string orig = mod.getRawEntry();
+
 			if (!isKJVRef(buffer)) {
 				VerseKey origVK = vk;
 				/* This block is functioning improperly -- problem with AutoNormalize???
@@ -203,7 +205,6 @@ int main(int argc, char **argv) {
 
 				cout << "Not a valid KJV ref: " << origVK << "\n";
 				cout << "appending to ref: " << vk << "\n";
-				string orig = mod.getRawEntry();
 				orig += " [ (";
 				orig += origVK;
 				orig += ") ";
@@ -214,6 +215,10 @@ int main(int argc, char **argv) {
 			else {
 			  successive = 0;
 			}
+		       
+			if (orig.length() > 1)
+			  cout << "Warning, overwriting verse: " << vk << endl;
+
 			// ------------- End verse tests -----------------
 			mod << verseText;	// save text to module at current position
 		}
