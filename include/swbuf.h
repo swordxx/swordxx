@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.22 2003/08/04 19:06:03 scribe Exp $
+* $Id: swbuf.h,v 1.23 2003/08/06 10:34:36 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -44,7 +44,7 @@ class SWDLLEXPORT SWBuf {
 	static char junkBuf[JUNKBUFSIZE];
 
 	inline void assureMore(unsigned long pastEnd) {
-		if (end+pastEnd>=endAlloc) {
+		if (endAlloc-end < pastEnd) {
 			long newsize = (end-buf)+pastEnd;
 			allocSize = newsize + 16;
 			long size = (end - buf);

@@ -270,6 +270,44 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 			}
 		}
 
+		else if (!strcmp(tag.getName(), "figure")) {
+			const char *src = tag.getAttribute("src");
+			if (!src)		// assert we have a src attribute
+				return false;
+
+			char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
+			*filepath = 0;
+			strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
+			strcat(filepath, src);
+
+// we do this because BibleCS looks for this EXACT format for an image tag
+			buf+="<figure src=\"";
+			buf+=filepath;
+			buf+="\" />";
+/*
+			char imgc;
+			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
+			c++;
+			FILE* imgfile;
+				    if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
+						  imgfile = fopen(filepath, "r");
+						  if (imgfile != NULL) {
+								buf += "{\\nonshppict {\\pict\\jpegblip ";
+								while (feof(imgfile) != EOF) {
+									   buf.appendFormatted("%2x", fgetc(imgfile));
+								}
+								fclose(imgfile);
+								buf += "}}";
+						  }
+				    }
+				    else if (stricmp(c, "png")) {
+						  buf += "{\\*\\shppict {\\pict\\pngblip ";
+
+						  buf += "}}";
+				    }
+*/
+			delete [] filepath;
+		}
 		else {
 			return false;  // we still didn't handle token
 		}

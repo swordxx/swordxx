@@ -162,7 +162,7 @@ char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
                         }
                         text += " ";
                 }
-                else {
+			 else {
                         text += *from;
                 }
         }
@@ -240,41 +240,45 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 			if (!src)		// assert we have a src attribute
 				return false;
 
-                        char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
-                        *filepath = 0;
-                        strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-                        unsigned long i = strlen(filepath);
-                        const char *c;
+			char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
+			*filepath = 0;
+			strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
+			unsigned long i = strlen(filepath);
+			const char *c;
 			for (c = (src + 5); *c != '"'; c++) {
 				filepath[i] = *c;
-                                i++;
+				i++;
 			}
-                        filepath[i] = 0;
+			filepath[i] = 0;
 
-                        for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
-                        c++;
-
-                        char imgc;
-                        FILE* imgfile;
+			buf+="<figure src=\"";
+			buf+=filepath;
+			buf+="\" />";
 /*
-                        if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
-                                imgfile = fopen(filepath, "r");
-                                if (imgfile != NULL) {
-                                        buf += "{\\nonshppict {\\pict\\jpegblip ";
-                                        while (feof(imgfile) != EOF) {
-                                                buf.appendFormatted("%2x", fgetc(imgfile));
-                                        }
-                                        fclose(imgfile);
-                                        buf += "}}";
-                                }
-                        }
-                        else if (stricmp(c, "png")) {
-                                buf += "{\\*\\shppict {\\pict\\pngblip ";
+			char imgc;
+			FILE* imgfile;
+			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
+			c++;
 
-                                buf += "}}";
-                        }
+
+			if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
+				imgfile = fopen(filepath, "r");
+				if (imgfile != NULL) {
+					buf += "{\\nonshppict {\\pict\\jpegblip ";
+					while (feof(imgfile) != EOF) {
+						buf.appendFormatted("%2x", fgetc(imgfile));
+					}
+					fclose(imgfile);
+					buf += "}}";
+				}
+			}
+			else if (stricmp(c, "png")) {
+				buf += "{\\*\\shppict {\\pict\\pngblip ";
+
+				buf += "}}";
+			}
 */
-                        delete [] filepath;
+			delete [] filepath;
 		}
 		else {
 			return false;  // we still didn't handle token
