@@ -11,6 +11,8 @@
 #define O_BINARY 0
 #endif
 
+using namespace std;
+
 long SECTIONSLEVELSTART = 38;
 long SECTIONSLEVELSIZE = 29;
 

@@ -11,6 +11,8 @@
 #endif
 
 
+using namespace std;
+
 typedef struct {
 	short versionRecordSize;
 	short publisherID;
