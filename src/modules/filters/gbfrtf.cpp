@@ -47,10 +47,14 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 				case 'H':               // Hebrew
 					*to++ = '{';
 					*to++ = '\\';
+					*to++ = 'c';
 					*to++ = 'f';
+					*to++ = '3';
+					*to++ = ' ';
+					*to++ = '\\';
 					*to++ = 's';
-					*to++ = '1';
-					*to++ = '7';
+					*to++ = 'u';
+					*to++ = 'b';
 					*to++ = ' ';
 					*to++ = '<';
 					for (tok = token + 2; *tok; tok++)
@@ -62,10 +66,14 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 				case 'T':               // Tense
 					*to++ = '{';
 					*to++ = '\\';
+					*to++ = 'c';
 					*to++ = 'f';
+					*to++ = '4';
+					*to++ = ' ';
+					*to++ = '\\';
 					*to++ = 's';
-					*to++ = '1';
-					*to++ = '7';
+					*to++ = 'u';
+					*to++ = 'b';
 					*to++ = ' ';
 					*to++ = '(';
 					bool separate = false;
