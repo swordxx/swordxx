@@ -19,26 +19,23 @@
 #include <rawtext.h>
 
 #include <regex.h>	// GNU
-#ifdef USELUCENE
-#include <CLucene.h>
-using namespace lucene::search;
-using namespace lucene::queryParser;
-#else
 #include <map>
 #include <list>
 #include <algorithm>
 
+#ifndef USELUCENE
 using std::map;
 using std::list;
 using std::find;
-
 #endif
 
 
 SWORD_NAMESPACE_START
 
+#ifndef USELUCENE
 typedef  map < SWBuf, list<long> > strlist;
 typedef list<long> longlist;
+#endif
 
 /******************************************************************************
  * RawText Constructor - Initializes data for instance of RawText
@@ -144,108 +141,8 @@ SWBuf &RawText::getRawEntryBuf() {
 }
 
 
+#ifndef USELUCENE
 signed char RawText::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
-#ifdef USELUCENE
-	SWKey *savekey = 0;
-	SWKey *searchkey = 0;
-	SWKey textkey;
-	char *word = 0;
-	char *wordBuf = 0;
-
-	// be sure we give CLucene enough file handles	
-	FileMgr::getSystemFileMgr()->flush();
-	// save key information so as not to disrupt original
-	// module position
-	if (!key->Persist()) {
-		savekey = CreateKey();
-		*savekey = *key;
-	}
-	else	savekey = key;
-
-	searchkey = (key->Persist())?key->clone():0;
-	if (searchkey) {
-		searchkey->Persist(1);
-		setKey(*searchkey);
-	}
-
-	// position module at the beginning
-	*this = TOP;
-
-	VerseKey *lkey = (VerseKey *)key;
-
-	// iterate thru each entry in module
-
-	IndexWriter* writer = NULL;
-	Directory* d = NULL;
- 
-	lucene::analysis::SimpleAnalyzer& an = *new lucene::analysis::SimpleAnalyzer();
-	SWBuf target = path;
-	char ch = target.c_str()[strlen(target.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
-		target += "/lucene";
-	FileMgr::createParent(target+"/dummy");
-
-	if (IndexReader::indexExists(target.c_str())) {
-		d = &FSDirectory::getDirectory(target.c_str(), false);
-		if (IndexReader::isLocked(*d)) {
-			IndexReader::unlock(*d);
-		}
-																		   
-		writer = new IndexWriter(*d, an, false);
-	} else {
-		d = &FSDirectory::getDirectory(target.c_str(), true);
-		writer = new IndexWriter( *d ,an, true);
-	}
-
-
-	char perc = 1;
-	VerseKey *vkcheck = 0;
-	SWTRY {
-		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	SWCATCH (...) {}
-	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
-	if (!highIndex)
-		highIndex = 1;		// avoid division by zero errors.
- 
-	while (!Error()) {
-		long mindex = 0;
-		if (vkcheck)
-			mindex = vkcheck->NewIndex();
-		else mindex = key->Index();
-		float per = (float)mindex / highIndex;
-		per *= 93;
-		per += 5;
-		char newperc = (char)per;
-//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
-		if (newperc > perc) {
-			perc = newperc;
-			(*percent)(perc, percentUserData);
-		}
-		Document &doc = *new Document();
-		doc.add( Field::Text(_T("key"), (const char *)*lkey ) );
-		doc.add( Field::Text(_T("content"), StripText()) );
-		writer->addDocument(doc);
-		delete &doc;
-
-		(*this)++;
-	}
-
-	writer->optimize();
-	writer->close();
-	delete writer;
-	delete &an;
-
-	// reposition module back to where it was before we were called
-	setKey(*savekey);
-
-	if (!savekey->Persist())
-		delete savekey;
-
-	if (searchkey)
-		delete searchkey;
-
-#else
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	SWKey textkey;
@@ -371,17 +268,21 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 		close(datfd);
 		close(idxfd);
 	}
-#endif
 	return 0;
 }
+
 
 void RawText::deleteSearchFramework() {
 	SWBuf target = path;
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
 		target += "/lucene";
-	FileMgr::removeDir(target.c_str());
+	FileMgr::removeFile(target + "ntwords.dat");
+	FileMgr::removeFile(target + "otwords.dat");
+	FileMgr::removeFile(target + "ntwords.idx");
+	FileMgr::removeFile(target + "otwords.idx");
 }
+
 
 /******************************************************************************
  * SWModule::search 	- Searches a module for a string
@@ -399,100 +300,6 @@ void RawText::deleteSearchFramework() {
  */
 
 ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
-#ifdef USELUCENE
-	listkey.ClearList();
-
-	SWBuf target = path;
-	char ch = target.c_str()[strlen(target.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
-		target += "/lucene";
-	if (IndexReader::indexExists(target.c_str())) {
-
-		switch (searchType) {
-		case -2: {	// let lucene replace multiword for now
-
-
-			// test to see if our scope for this search is bounded by a
-			// VerseKey
-			VerseKey *testKeyType = 0, vk;
-			SWTRY {
-				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
-			}
-			SWCATCH ( ... ) {}
-			// if we don't have a VerseKey * decendant we can't handle
-			// because of scope.
-			// In the future, add bool SWKey::isValid(const char *tryString);
-			if (!testKeyType)
-				break;
-
-
-			// check if we just want to see if search is supported.
-			// If we've gotten this far, then it is supported.
-			if (justCheckIfSupported) {
-				*justCheckIfSupported = true;
-				return listkey;
-			}
-
-			lucene::index::IndexReader *ir;
-			lucene::search::IndexSearcher *is;
-			ir = &IndexReader::open(target);
-			is = new IndexSearcher(*ir);
-			(*percent)(10, percentUserData);
-
-			standard::StandardAnalyzer analyzer;
-			Query &q =  QueryParser::Parse(istr, _T("content"), analyzer);
-			(*percent)(20, percentUserData);
-			Hits &h = is->search(q);
-			(*percent)(80, percentUserData);
-
-
-			// iterate thru each good module position that meets the search
-			for (long i = 0; i < h.Length(); i++) {
-				Document &doc = h.doc(i);
-
-				// set a temporary verse key to this module position
-				vk = doc.get(_T("key"));
-
-				// check scope
-				// Try to set our scope key to this verse key
-				if (scope) {
-					*testKeyType = vk;
-
-					// check to see if it set ok and if so, add to our return list
-					if (*testKeyType == vk) {
-						listkey << (const char *) vk;
-						listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
-					}
-				}
-				else {
-					listkey << (const char*) vk;
-					listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
-				}
-			}
-			(*percent)(98, percentUserData);
-
-			delete &h;
-			delete &q;
-
-			delete is;
-			ir->close();
-
-			listkey = TOP;
-			(*percent)(100, percentUserData);
-			return listkey;
-		}
-
-		default:
-			break;
-		}
-	}
-
-	// check if we just want to see if search is supported
-	if (justCheckIfSupported) {
-		*justCheckIfSupported = false;
-		return listkey;
-	}
-#else
 	listkey.ClearList();
 
 	if ((fastSearch[0]) && (fastSearch[1])) {
@@ -671,10 +478,10 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 		return listkey;
 	}
 
-#endif
 	// if we don't support this search, fall back to base class
 	return SWModule::search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
+#endif
 
 
 void RawText::setEntry(const char *inbuf, long len) {

@@ -219,7 +219,7 @@ public:
 
 	/**
 	 * Sets/gets module KeyText
-	 *
+	 * @deprecated Use getKeyText/setKey
 	 * @param ikeytext Value which to set keytext; [0]-only get
 	 * @return pointer to keytext
 	 */
@@ -228,6 +228,16 @@ public:
 		return *getKey();
 	}
 
+	/**
+	 * gets the key text for the module.
+	 * do we really need this?
+	 */
+	 
+	virtual const char *getKeyText() const {
+		return *getKey();
+	}
+
+	
 	virtual long Index() const { return entryIndex; }
 	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
 
@@ -596,6 +606,15 @@ public:
 	virtual bool isProcessEntryAttributes() const { return procEntAttr; }
 
 	// OPERATORS -----------------------------------------------------------------
+
+	
+#ifdef USELUCENE
+	virtual signed char createSearchFramework(
+			void (*percent) (char, void *) = &nullPercent,
+			void *percentUserData = 0);
+	virtual void deleteSearchFramework();
+	virtual bool hasSearchFramework() { return true; }
+#endif
 
 	SWMODULE_OPERATORS
 

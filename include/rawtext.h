@@ -56,13 +56,14 @@ public:
 	virtual SWBuf &getRawEntryBuf();
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
+#ifndef USELUCENE
 	virtual signed char createSearchFramework(
 			void (*percent) (char, void *) = &nullPercent,
 			void *percentUserData = 0);
 	virtual void deleteSearchFramework();
 	virtual bool hasSearchFramework() { return true; }
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
-
+#endif
 	// write interface ----------------------------
 	virtual bool isWritable() { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & O_RDWR) == O_RDWR)); }
 	static char createModule(const char *path) { return RawVerse::createModule(path); }

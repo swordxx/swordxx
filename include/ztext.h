@@ -83,14 +83,6 @@ public:
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
 
-	virtual signed char createSearchFramework(
-			void (*percent) (char, void *) = &nullPercent,
-			void *percentUserData = 0);
-	virtual void deleteSearchFramework();
-	virtual bool hasSearchFramework() { return true; }
-	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
-
-
 	SWMODULE_OPERATORS
 
 };

@@ -83,8 +83,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					continue;
 				}
 				if (hide && tag.isEndTag()) {
-					SWBuf subType = startTag.getAttribute("subType");
-					if (module->isProcessEntryAttributes() && (option || (subType != "x-Section"))) {
+					if (module->isProcessEntryAttributes() && (option || (!preverse))) {
 						if (preverse) {
 							sprintf(buf, "%i", pvHeaderNum++);
 							module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;

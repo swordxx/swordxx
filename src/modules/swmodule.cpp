@@ -9,9 +9,17 @@
 #include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
+#include <filemgr.h>
 #ifndef _MSC_VER
 #include <iostream>
 #endif
+
+#ifdef USELUCENE
+#include <CLucene.h>
+using namespace lucene::search;
+using namespace lucene::queryParser;
+#endif
+
 
 SWORD_NAMESPACE_START
 
@@ -366,6 +374,7 @@ void SWModule::decrement(int steps) {
  *				-1  - phrase
  *				-2  - multiword
  *				-3  - entryAttrib (eg. Word//Strongs/G1234/)
+ *				-4  - clucene
  * 	flags		- options flags for search
  *	justCheckIfSupported	- if set, don't search, only tell if this
  *							function supports requested search.
@@ -377,8 +386,20 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	listkey.ClearList();
 
+#ifdef USELUCENE
+	SWBuf target = getConfigEntry("AbsoluteDataPath");
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target.append('/');
+	target.append("lucene");
+#endif
 	if (justCheckIfSupported) {
 		*justCheckIfSupported = (searchType >= -3);
+#ifdef USELUCENE
+		if ((searchType == -4) && (IndexReader::indexExists(target.c_str()))) {
+			*justCheckIfSupported = true;
+		}
+#endif
 		return listkey;
 	}
 	
@@ -432,6 +453,73 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	}
 
 	(*percent)(++perc, percentUserData);
+
+
+#ifdef USELUCENE
+	if (searchType == -4) {	// lucene
+		// test to see if our scope for this search is bounded by a
+		// VerseKey
+		VerseKey *testKeyType = 0, vk;
+		SWTRY {
+			testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
+		}
+		SWCATCH ( ... ) {}
+		// if we don't have a VerseKey * decendant we can't handle
+		// because of scope.
+		// In the future, add bool SWKey::isValid(const char *tryString);
+		// For now just drop back to multiword unindexed
+		if (!testKeyType) {
+			searchType = -3;
+		}
+		else {
+			lucene::index::IndexReader *ir;
+			lucene::search::IndexSearcher *is;
+			ir = &IndexReader::open(target);
+			is = new IndexSearcher(*ir);
+			(*percent)(10, percentUserData);
+
+			standard::StandardAnalyzer analyzer;
+			Query &q =  QueryParser::Parse(istr, _T("content"), analyzer);
+			(*percent)(20, percentUserData);
+			Hits &h = is->search(q);
+			(*percent)(80, percentUserData);
+
+
+			// iterate thru each good module position that meets the search
+			for (long i = 0; i < h.Length(); i++) {
+				Document &doc = h.doc(i);
+
+				// set a temporary verse key to this module position
+				vk = doc.get(_T("key"));
+
+				// check scope
+				// Try to set our scope key to this verse key
+				if (scope) {
+					*testKeyType = vk;
+
+					// check to see if it set ok and if so, add to our return list
+					if (*testKeyType == vk) {
+						listkey << (const char *) vk;
+						listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
+					}
+				}
+				else {
+					listkey << (const char*) vk;
+					listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
+				}
+			}
+			(*percent)(98, percentUserData);
+
+			delete &h;
+			delete &q;
+
+			delete is;
+			ir->close();
+		}
+	}
+#endif
+
+
 	if (searchType == -2) {
 		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
 		strcpy(wordBuf, istr);
@@ -477,7 +565,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	perc = 5;
 	(*percent)(perc, percentUserData);
 
-	while (!Error() && !terminateSearch) {
+	
+	while ((searchType > -4) && !Error() && !terminateSearch) {
 		long mindex = 0;
 		if (vkcheck)
 			mindex = vkcheck->NewIndex();
@@ -751,5 +840,128 @@ const char *SWModule::getConfigEntry(const char *key) const {
 void SWModule::setConfig(ConfigEntMap *config) {
 	this->config = config;
 }
+
+
+#ifdef USELUCENE
+void SWModule::deleteSearchFramework() {
+	SWBuf target = getConfigEntry("AbsoluteDataPath");
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target.append('/');
+	target.append("lucene");
+
+	FileMgr::removeDir(target.c_str());
+}
+
+
+signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
+	SWKey *savekey = 0;
+	SWKey *searchkey = 0;
+	SWKey textkey;
+	char *word = 0;
+	char *wordBuf = 0;
+
+	// be sure we give CLucene enough file handles	
+	FileMgr::getSystemFileMgr()->flush();
+
+	// save key information so as not to disrupt original
+	// module position
+	if (!key->Persist()) {
+		savekey = CreateKey();
+		*savekey = *key;
+	}
+	else	savekey = key;
+
+	searchkey = (key->Persist())?key->clone():0;
+	if (searchkey) {
+		searchkey->Persist(1);
+		setKey(*searchkey);
+	}
+
+	// position module at the beginning
+	*this = TOP;
+
+	// iterate thru each entry in module
+
+	IndexWriter *writer = NULL;
+	Directory *d = NULL;
+ 
+	lucene::analysis::SimpleAnalyzer *an = new lucene::analysis::SimpleAnalyzer();
+	SWBuf target = getConfigEntry("AbsoluteDataPath");
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target.append('/');
+	target.append("lucene");
+	FileMgr::createParent(target+"/dummy");
+
+	if (IndexReader::indexExists(target.c_str())) {
+		d = &FSDirectory::getDirectory(target.c_str(), false);
+		if (IndexReader::isLocked(*d)) {
+			IndexReader::unlock(*d);
+		}
+																		   
+		writer = new IndexWriter(*d, *an, false);
+	} else {
+		d = &FSDirectory::getDirectory(target.c_str(), true);
+		writer = new IndexWriter( *d ,*an, true);
+	}
+
+
+ 
+	char perc = 1;
+	VerseKey *vkcheck = 0;
+	SWTRY {
+		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+	}
+	SWCATCH (...) {}
+	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
+	if (!highIndex)
+		highIndex = 1;		// avoid division by zero errors.
+
+	while (!Error()) {
+		long mindex = 0;
+		if (vkcheck)
+			mindex = vkcheck->NewIndex();
+		else mindex = key->Index();
+		float per = (float)mindex / highIndex;
+		per *= 93;
+		per += 5;
+		char newperc = (char)per;
+//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
+		if (newperc > perc) {
+			perc = newperc;
+			(*percent)(perc, percentUserData);
+		}
+		const char *stripText = StripText();
+		if (stripText && *stripText) {
+			Document *doc = new Document();
+			doc->add( Field::Text(_T("key"), getKeyText() ) );
+			doc->add( Field::Text(_T("content"), stripText) );
+			writer->addDocument(*doc);
+			delete doc;
+		}
+
+		(*this)++;
+	}
+
+	writer->optimize();
+	writer->close();
+	delete writer;
+	delete an;
+
+	// reposition module back to where it was before we were called
+	setKey(*savekey);
+
+	if (!savekey->Persist())
+		delete savekey;
+
+	if (searchkey)
+		delete searchkey;
+
+	return 0;
+}
+#endif
+
+
 
 SWORD_NAMESPACE_END
