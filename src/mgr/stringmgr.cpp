@@ -1,7 +1,7 @@
 /******************************************************************************
  *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.7 2004/07/20 12:53:36 joachim Exp $
+ * $Id: stringmgr.cpp,v 1.8 2004/07/20 21:14:14 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -97,13 +97,13 @@ void StringMgr::setSystemStringMgr( StringMgr* newStringMgr ) {
 */
 StringMgr* StringMgr::getSystemStringMgr() {
 	if (!m_systemStringMgr) {
-#ifndef _ICU_
+/*#ifndef _ICU_*/
 		m_systemStringMgr = new StringMgr();
- 		SWLog::getSystemLog()->logInformation("created default StringMgr");
-#else
+//  		SWLog::getSystemLog()->logInformation("created default StringMgr");
+/*#else
 		m_systemStringMgr = new ICUStringMgr();
  		SWLog::getSystemLog()->logInformation("created default IcuStringMgr");
-#endif	
+#endif	*/
 	}
 	
 	return m_systemStringMgr;
@@ -131,8 +131,6 @@ char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
 * @param The text encoded in latin1 which should be turned into an upper case string
 */	
 char* StringMgr::upperLatin1(char* buf) {
-	SWLog::getSystemLog()->logInformation("buf: %s", buf);
-	
 	if (!buf)
 		return 0;
 		
