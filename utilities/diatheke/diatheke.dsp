@@ -93,7 +93,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "__VISUALC__" /FR /YX /FD /GZ /c
-# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "ICU" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /I "../../../../icu-sword/include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "_ICU_" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -101,7 +101,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../windoze/vc/swordlib/Debug"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../windoze/vc/swordlib/Debug"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib icuin.lib icuuc.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../icu-sword/lib" /libpath:"../../windoze/vc/swordlib/swordlib___Win32_Debug_with_ICU"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Release with ICU"
 
@@ -118,7 +118,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "__VISUALC__" /FR /YX /FD /c
-# ADD CPP /nologo /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /D "NDEBUG" /D "ICU" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
+# ADD CPP /nologo /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /I "../../../../icu-sword/include" /D "NDEBUG" /D "_ICU_" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -126,7 +126,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /machine:I386 /libpath:"../../windoze/vc/swordlib/Release"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /machine:I386 /libpath:"../../windoze/vc/swordlib/Release"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib icuin.lib icuuc.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../../icu-sword/lib" /libpath:"../../windoze/vc/swordlib/swordlib___Win32_Release_with_ICU"
 
 !ENDIF 
 
@@ -145,7 +145,23 @@ SOURCE=.\corediatheke.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\diafiltmgr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\diatheke.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\diathekemgr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\gbfcgi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\thmlcgi.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -154,6 +170,22 @@ SOURCE=.\diatheke.cpp
 # Begin Source File
 
 SOURCE=.\corediatheke.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\diafiltmgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\diathekemgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\gbfcgi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\thmlcgi.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

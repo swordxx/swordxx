@@ -1,5 +1,5 @@
-// Diatheke 4.1 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by CrossWire Bible Society
+// Diatheke 4.2 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999-2002 by CrossWire Bible Society
 // http://www.crosswire.org/sword/diatheke
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
@@ -14,8 +14,8 @@
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.1\n");
-	fprintf (stderr, "Copyright 2001 by the CrossWire Bible Society\n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.2\n");
+	fprintf (stderr, "Copyright 1999-2002 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "usage: \n  ");
 	fprintf (stderr, "diatheke <-b book> [-s search_type] [-o option_filters]\n");
@@ -39,7 +39,7 @@ void printsyntax() {
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
 	fprintf (stderr, "  arguments are added to the key.\n");
 }
-/*
+
 int main(int argc, char **argv)
 {
 	int maxverses = -1;
@@ -195,15 +195,10 @@ int main(int argc, char **argv)
 	
 	if (runquery == (RQ_BOOK | RQ_REF))
 	{
-	        doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script);
+	    doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script);
 	}
 	else
 		printsyntax();
+
+	return 0;
 }
-<<<<<<< diatheke.cpp
-
-*/
-=======
-
-
->>>>>>> 1.19

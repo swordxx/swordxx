@@ -2,6 +2,12 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+16-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Martin Gruner's suggestion to swmgr to look
+		for global configuration in multiple location.
+		Set default to: /etc/sword.conf:/usr/local/etc/sword.conf
+	Added ChrisLit's msvc and diatheke patches
+
 15-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added SWCacher to lib and made SWModule impl it
 	Added SWModule::setSkipConsecutiveLinks

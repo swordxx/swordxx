@@ -135,18 +135,19 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 
 bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+	const char *tok;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync ", 5)) {
 			pushString(buf, "<a href=\"");
-			for (const char *tok = token + 5; *(tok+1); tok++)
+			for (tok = token + 5; *(tok+1); tok++)
 				if(*tok != '\"')
 					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 
                         //scan for value and add it to the buffer
-			for (const char *tok = token + 5; *tok; tok++) {
+			for (tok = token + 5; *tok; tok++) {
 				if (!strncmp(tok, "value=\"", 7)) {
 					tok += 7;
 					for (;*tok != '\"'; tok++)
@@ -216,12 +217,12 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			pushString(buf, "<a href=\"");
-			for (const char *tok = token + 5; *(tok+1); tok++)				
+			for (tok = token + 5; *(tok+1); tok++)				
 				if(*tok != '\"') 			
 					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (const char *tok = token + 29; *(tok+2); tok++)				
+			for (tok = token + 29; *(tok+2); tok++)				
 				if(*tok != '\"') 			
 					*(*buf)++ = *tok;		
 			pushString(buf, "</a>");

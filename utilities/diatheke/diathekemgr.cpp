@@ -16,8 +16,11 @@
 
 #ifdef _ICU_
 #include <utf8arshaping.h>
-#include <utf8bidireorder.h>
 #include <utf8transliterator.h>
+#endif
+
+#ifdef WIN32
+#include <windows.h>
 #endif
 
 #include "diathekemgr.h"
@@ -32,9 +35,8 @@ DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autolo
 	shape = ishape;
 
 #ifdef _ICU_
-        arshaping = new UTF8arShaping();
- 	bidireorder = new UTF8BiDiReorder();
-        transliterator = new UTF8Transliterator();
+    arshaping = new UTF8arShaping();
+    transliterator = new UTF8Transliterator();
 #endif
 	Load();
 
@@ -54,8 +56,6 @@ DiathekeMgr::~DiathekeMgr()
 #ifdef _ICU_
         if (arshaping)
                 delete arshaping;
-        if (bidireorder)
-                delete bidireorder;
         if (transliterator)
                 delete transliterator;
 #endif
@@ -69,23 +69,11 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 
 	lang = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (string)"en";
 
-        if (module->Direction() == DIRECTION_RTL) {
 #ifdef _ICU_
-                if (shape && !strnicmp(lang.c_str(), "ar", 2)) {
-                        module->AddRenderFilter(arshaping);
-                }
-#ifdef WIN32
-		if (bidi && (platformID == WIN9X || (strnicmp(lang.c_str(), "he", 2) && strnicmp(lang.c_str(), "ar", 2)))) {
-                        module->AddRenderFilter(bidireorder);
-		}
-#elseif
-		if (bidi) {
-                        module->AddRenderFilter(bidireorder);
-		}
+    if (shape && !strnicmp(lang.c_str(), "ar", 2)) {
+		module->AddRenderFilter(arshaping);
+	}
 #endif
-
-#endif
-        }
 	SWMgr::AddRenderFilters(module, section);
 }
 

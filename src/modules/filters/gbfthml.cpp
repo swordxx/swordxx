@@ -30,7 +30,8 @@ char GBFThML::ProcessText(char *text, int maxlen)
 	int tokpos = 0;
 	bool intoken 	= false;
 	int len;
-	
+	const char *tok;
+
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
 		memmove(&text[maxlen - len], text, len);
@@ -85,7 +86,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			    *to++ = 'e';
 			    *to++ = '=';
 			    *to++ = '"';
-			    for (char *tok = token + 1; *tok; tok++)
+			    for (tok = token + 1; *tok; tok++)
 			      *to++ = *tok;
 			    *to++ = '"';
 			    *to++ = ' ';
@@ -120,7 +121,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			    *to++ = 'e';
 			    *to++ = '=';
 			    *to++ = '"';
-			    for (char *tok = token + 2; *tok; tok++)
+			    for (tok = token + 2; *tok; tok++)
 			      *to++ = *tok;
 			    *to++ = '"';
 			    *to++ = ' ';
@@ -142,7 +143,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = 'f';
 			      *to++ = '=';
 			      *to++ = '\"';
-			      for (const char *tok = token + 3; *tok; tok++) {
+			      for (tok = token + 3; *tok; tok++) {
 				if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
 				  *to++ = *tok;
 				}
@@ -207,7 +208,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = 'e';
 			      *to++ = '=';
 			      *to++ = '"';		
-			      for (char *tok = token + 2; *tok; tok++)
+			      for (tok = token + 2; *tok; tok++)
 				*to++ = *tok;
 			      *to++ = '"';
 			      *to++ = '>';

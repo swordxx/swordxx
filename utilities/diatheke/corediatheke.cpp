@@ -1,5 +1,5 @@
-// Diatheke 4.1 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by CrossWire Bible Society
+// Diatheke 4.2 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999-2002 by CrossWire Bible Society
 // http://www.crosswire.org/sword/diatheke
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
@@ -260,7 +260,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		
 		target->SetKey(ref);
 		
-		char * text = (char *) *target;
+		const char * text = (const char *) *target;
 
 		if (outputformat == FMT_RTF) {
 			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";

@@ -20,6 +20,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
+	const char *tok;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -52,7 +53,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = '7';
 					*to++ = ' ';
 					*to++ = '<';
-					for (char *tok = token + 2; *tok; tok++)
+					for (tok = token + 2; *tok; tok++)
 						*to++ = *tok;
 					*to++ = '>';
 					*to++ = '}';
@@ -68,7 +69,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					*to++ = '(';
 					bool separate = false;
-					for (char *tok = token + 2; *tok; tok++) {
+					for (tok = token + 2; *tok; tok++) {
 						if (separate) {
 							*to++ = ';';
 							*to++ = ' ';

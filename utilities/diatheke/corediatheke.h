@@ -1,5 +1,5 @@
-// Diatheke 4.0 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by CrossWire Bible Society http://www.crosswire.org
+// Diatheke 4.2 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999-2002 by CrossWire Bible Society http://www.crosswire.org
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.64 2002/03/16 17:34:41 scribe Exp $
+ * $Id: swmgr.cpp,v 1.65 2002/03/16 17:50:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -396,7 +396,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "DataPath in " << globalConfPath << " is set to: " << path;
+	cerr << "DataPath in " << gfp << " is set to: " << path;
 #endif
 
 #ifndef _MSC_VER

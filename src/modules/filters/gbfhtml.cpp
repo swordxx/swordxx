@@ -34,6 +34,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	bool isRightJustified = false;
 	bool isCentered = false;
 	int len;
+	const char *tok;
 
 	len = strlen(text) + 1;		// shift string to right of buffer
 	if (len < maxlen) {
@@ -78,7 +79,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 							*to++ = 'e';
 							*to++ = 'm';
 							*to++ = '>';
-							for (char *tok = token+2; *tok; tok++)
+							for (tok = token+2; *tok; tok++)
 								*to++ = *tok;
 							*to++ = '<';
 							*to++ = '/';
@@ -110,7 +111,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 					  *to++ = 'f';
 					  *to++ = '=';
 					  *to++ = '\"';
-					  for (const char *tok = token + 3; *tok; tok++) {
+					  for (tok = token + 3; *tok; tok++) {
 					    if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
 					      *to++ = *tok;
 					    }
@@ -325,7 +326,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 							*to++ = 'e';
 							*to++ = '=';
 							*to++ = '"';
-						        for (char *tok = token + 2; *tok; tok++)
+						        for (tok = token + 2; *tok; tok++)
 								*to++ = *tok;
 							*to++ = '"';
 							*to++ = '>';
