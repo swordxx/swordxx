@@ -1,0 +1,14 @@
+#!/bin/sh
+cd ..
+make distclean
+./usrinst.sh
+make
+
+echo
+echo Please execute the following commands
+echo su
+echo cd ..
+echo "make install; make distclean; exit"
+echo ./mkswordbase2
+echo
+
