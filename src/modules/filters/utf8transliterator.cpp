@@ -16,54 +16,38 @@
 #include <utf8transliterator.h>
 
 const char UTF8Transliterator::optionstring[][NUMTARGETSCRIPTS] = {
-	"Off", 
-	"Latin", 
-	"Greek",
-	"Hebrew",
-	"Cyrillic",
-	"Arabic",
-	"Syriac",
-	"Kana",
-	"Jamo",
-	"Hangul",
-	"Devanagari",
-	"Tamil",
-	"Bengali",
-	"Gurmukhi",
-	"Gujarati",
-	"Oriya",
-	"Telugu",
-	"Kannada",
-	"Malayalam",
-	"Maltese",
-	"BETA",
-	"BGreek",
-	"MCHebrew",
-	"MCSyriac"
+       	"Off",
+		"Latin", 
+		"Greek",
+		"Hebrew",
+		"Cyrillic",
+		"Arabic",
+        "Syriac",
+		"Kana",
+		"Jamo",
+		"Hangul",
+		"Devanagari",
+		"Tamil",
+		"Bengali",
+		"Gurmukhi",
+		"Gujarati",
+		"Oriya",
+		"Telugu",
+		"Kannada",
+		"Malayalam",
+		"Maltese",
+		"Beta/CCAT",
+		"BGreek"
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
 const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
-
 
 UTF8Transliterator::UTF8Transliterator() {
 	option = 0;
 	   unsigned long i;
 	for (i = 0; i < NUMTARGETSCRIPTS; i++) {
 		options.push_back(optionstring[i]);
-	}
-	for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
-		xlitNames[i] = 0;
-	}
-}
-
-UTF8Transliterator::~UTF8Transliterator() {
-	unsigned long i;
-	for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
-		if (xlitNames[i]) {
-			delete xlitNames[i];
-			xlitNames[i] = 0;
-		}
 	}
 }
 
@@ -84,27 +68,23 @@ const char *UTF8Transliterator::getOptionValue()
 char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 {
 	if (option) {	// if we want transliteration
-		long len;
-		
-		len = strlen(text) + 1;
-		// -------------------------------
-		
+                UErrorCode err;
+                bool noNFC = false;
+                bool compat = false;
+
 		// Convert UTF-8 string to UTF-16 (UChars)
-		int32_t ulen;
-		UErrorCode status = U_ZERO_ERROR;
-		static UnicodeConverter conv("utf-8", status);
-		static UnicodeString ustr;
-		conv.toUnicodeString(ustr, text, len, status);
-		ulen = ustr.length();
-		
+                int32_t len;
+                u_strFromUTF8(NULL, NULL, &len, text, -1, &err);
+                len++;
+                UChar *source = new UChar[len];
+                u_strFromUTF8(source, len, &len, text, -1, &err);
+
 		// Figure out which scripts are used in the string
 		unsigned long i, j;
 		unsigned char scripts[NUMSCRIPTS];
-		for (i = 0; i < NUMSCRIPTS; i++) {
-			scripts[i] = false;
-		}
-		for (i = 0; i < ulen; i++) {
-			j = u_charScript(ustr.char32At(i));
+
+                for (i = 0; i < len; i++) {
+                        j = ublock_getCode(source[i]);
 			switch (j) {
 			case U_BASIC_LATIN: scripts[SE_LATIN] = true; break;
 			case U_GREEK: scripts[SE_GREEK] = true; break;
@@ -112,11 +92,10 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			case U_CYRILLIC: scripts[SE_CYRILLIC] = true; break;
 			case U_ARABIC: scripts[SE_ARABIC] = true; break;
 			case U_SYRIAC: scripts[SE_SYRIAC] = true; break;                        
-			case U_KATAKANA:
-			case U_HIRAGANA: scripts[SE_KANA] = true; break;
+			case U_KATAKANA: scripts[SE_KATAKANA] = true; break;
+			case U_HIRAGANA: scripts[SE_HIRAGANA] = true; break;
 			case U_HANGUL_SYLLABLES: scripts[SE_HANGUL] = true;
-			case U_HANGUL_JAMO:
-			case U_HANGUL_COMPATIBILITY_JAMO: scripts[SE_JAMO] = true; break;
+			case U_HANGUL_JAMO: scripts[SE_JAMO] = true; break;
 			case U_DEVANAGARI: scripts[SE_DEVANAGARI] = true; break;
 			case U_TAMIL: scripts[SE_TAMIL] = true; break;
 			case U_BENGALI: scripts[SE_BENGALI] = true; break;
@@ -130,17 +109,28 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			case U_KANGXI_RADICALS:
 			case U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
 			case U_CJK_SYMBOLS_AND_PUNCTUATION:
-			case U_CJK_COMPATIBILITY:
 			case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
 			case U_CJK_UNIFIED_IDEOGRAPHS:
+                                if (lang[0] == 'z' && lang[1] == 'h')
+                                        scripts[SE_HAN] = true;
+                                else if (lang[0] == 'j' && lang[1] == 'a')
+        				scripts[SE_KANJI] = true;
+        			break;
+			case U_CJK_COMPATIBILITY:
 			case U_CJK_COMPATIBILITY_IDEOGRAPHS:
 			case U_CJK_COMPATIBILITY_FORMS:
                                 if (lang[0] == 'z' && lang[1] == 'h')
                                         scripts[SE_HAN] = true;
                                 else if (lang[0] == 'j' && lang[1] == 'a')
         				scripts[SE_KANJI] = true;
+                                compat = true;
         			break;
-				//default: scripts[SE_LATIN] = true;
+			case U_HANGUL_COMPATIBILITY_JAMO:
+                                scripts[SE_JAMO] = true;
+                                compat = true;
+                                break;
+
+                        default: scripts[SE_LATIN] = true;
 			}
 		} 
 		scripts[option] = false; //turn off the reflexive transliteration
@@ -150,103 +140,100 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			if (scripts[i]) j++;
 		}
 		if (!j) return 0;
-		
-		Transliterator* trans;
-		static UnicodeString id;
+
+                UnicodeString id;
+                if (compat) {
+                        id = UnicodeString("NFKD");
+                }
+                else {
+                        id = UnicodeString("NFD");
+                }
 
 		//Simple X to Latin transliterators
 		if (scripts[SE_GREEK]) {
-			if (option == SE_BETA)
-				id = UnicodeString("Greek-BETA", "");
+			if (option == SE_CCAT)
+				id += UnicodeString(";Greek-Beta");
 			else if (option == SE_BGREEK)
-				id = UnicodeString("Greek-BGreek", "");
+				id += UnicodeString(";Greek-BGreek");
 			else {
-				id = UnicodeString("Greek-Latin", "");
+				id += UnicodeString(";Greek-Latin");
 				scripts[SE_LATIN] = true;
 			}
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
 		if (scripts[SE_HEBREW]) {
-			if (option == SE_MCHEBREW)
-				id = UnicodeString("Hebrew-MCHebrew", "");
+			if (option == SE_CCAT)
+				id += UnicodeString(";Hebrew-CCAT");
                         else if (option == SE_SYRIAC)
-                                id = UnicodeString("Hebrew-Syriac", "");
+                                id += UnicodeString(";Hebrew-Syriac");
 			else {
-				id = UnicodeString("Hebrew-Latin", "");
+				id += UnicodeString(";Hebrew-Latin");
 				scripts[SE_LATIN] = true;
 			}
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
 		if (scripts[SE_CYRILLIC]) {
-			id = UnicodeString("Cyrillic-Latin", "");
+			id += UnicodeString(";Cyrillic-Latin");
 			scripts[SE_LATIN] = true;
-			trans = SetTransliterator(&id);
-                        trans->transliterate(ustr);
 		}
 		if (scripts[SE_ARABIC]) {
-			id = UnicodeString("Arabic-Latin", "");
+			id += UnicodeString(";Arabic-Latin");
 			scripts[SE_LATIN] = true;
-			trans = SetTransliterator(&id);
-                        trans->transliterate(ustr);
 		}
 		if (scripts[SE_SYRIAC]) {
-                        if (option == SE_MCSYRIAC)
-        			id = UnicodeString("Syriac-MCSyriac", "");
+                        if (option == SE_CCAT)
+        			id += UnicodeString(";Syriac-CCAT");
                         else if (option == SE_HEBREW)
-                                id = UnicodeString("Syriac-Hebrew", "");
+                                id += UnicodeString(";Syriac-Hebrew");
                         else {
-        			id = UnicodeString("Syriac-Latin", "");
+        			id += UnicodeString(";Syriac-Latin");
         			scripts[SE_LATIN] = true;
                         }
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
-		if (scripts[SE_KANA]) {
-			id = UnicodeString("Kana-Latin", "");
+                if (scripts[SE_HAN]) {
+			id += UnicodeString(";Han-Pinyin");
 			scripts[SE_LATIN] = true;
-			trans = SetTransliterator(&id);
-                        trans->transliterate(ustr);
-		}
-		if (scripts[SE_HAN]) {
-			id = UnicodeString("Han-Pinyin", "");
-			scripts[SE_LATIN] = true;
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
 		if (scripts[SE_KANJI]) {
-			id = UnicodeString("Kanji-OnRomaji", "");
+			id += UnicodeString(";Kanji-OnRomaji");
 			scripts[SE_LATIN] = true;
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
+
+       		// Inter-Kana and Kana to Latin transliterators
+		if (option == SE_HIRAGANA && scripts[SE_KATAKANA]) {
+			id += UnicodeString(";Katakana-Hiragana");
+			scripts[SE_HIRAGANA] = true;
+		}
+		else if (option == SE_KATAKANA && scripts[SE_HIRAGANA]) {
+			id += UnicodeString(";Hiragana-Katakana");
+			scripts[SE_KATAKANA] = true;
+		}
+		else {
+        		if (scripts[SE_KATAKANA]) {
+	        		id += UnicodeString(";Katakana-Latin");
+		        	scripts[SE_LATIN] = true;
+        		}
+	        	if (scripts[SE_HIRAGANA]) {
+		        	id += UnicodeString(";Hiragana-Latin");
+			        scripts[SE_LATIN] = true;
+        		}
+                }
 
 		// Inter-Korean and Korean to Latin transliterators
 		if (option == SE_HANGUL && scripts[SE_JAMO]) {
-			id = UnicodeString("Jamo-Hangul", "");
+			id += UnicodeString(";Jamo-Hangul");
 			scripts[SE_HANGUL] = true;
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
 		else if (option == SE_JAMO && scripts[SE_HANGUL]) {
-			id = UnicodeString("Hangul-Jamo", "");
+			id += UnicodeString(";Hangul-Jamo");
 			scripts[SE_JAMO] = true;
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
 		}
 		else {
 			if (scripts[SE_HANGUL]) {
-				id = UnicodeString("Hangul-Jamo", "");
+				id += UnicodeString(";Hangul-Jamo");
 				scripts[SE_JAMO] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_JAMO]) {
-				id = UnicodeString("Jamo-Latin", "");
+				id += UnicodeString(";Jamo-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 		}
 
@@ -254,218 +241,150 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 		if (option < SE_DEVANAGARI || option > SE_MALAYALAM) {
 			// Indic to Latin
 			if (scripts[SE_TAMIL]) {
-				id = UnicodeString("Tamil-Latin", "");
+				id += UnicodeString(";Tamil-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_BENGALI]) {
-				id = UnicodeString("Bengali-Latin", "");
+				id += UnicodeString(";Bengali-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_GURMUKHI]) {
-				id = UnicodeString("Gurmukhi-Latin", "");
+				id += UnicodeString(";Gurmukhi-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_GUJARATI]) {
-				id = UnicodeString("Gujarati-Latin", "");
+				id += UnicodeString(";Gujarati-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_ORIYA]) {
-				id = UnicodeString("Oriya-Latin", "");
+				id += UnicodeString(";Oriya-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_TELUGU]) {
-				id = UnicodeString("Telugu-Latin", "");
+				id += UnicodeString(";Telugu-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_KANNADA]) {
-				id = UnicodeString("Kannada-Latin", "");
+				id += UnicodeString(";Kannada-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 			if (scripts[SE_MALAYALAM]) {
-				id = UnicodeString("Malayalam-Latin", "");
+				id += UnicodeString(";Malayalam-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 			}
 		}
 		else {
 			if (scripts[SE_LATIN]) {
-				id = UnicodeString("Latin-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Latin-InterIndic");
 			}
 			if (scripts[SE_DEVANAGARI]) {
-				id = UnicodeString("Devanagari-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Devanagari-InterIndic");
 			}
 			if (scripts[SE_TAMIL]) {
-				id = UnicodeString("Tamil-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Tamil-InterIndic");
 			}
 			if (scripts[SE_BENGALI]) {
-				id = UnicodeString("Bengali-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Bengali-InterIndic");
 			}
 			if (scripts[SE_GURMUKHI]) {
-				id = UnicodeString("Gurmurkhi-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Gurmurkhi-InterIndic");
 			}
 			if (scripts[SE_GUJARATI]) {
-				id = UnicodeString("Gujarati-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Gujarati-InterIndic");
 			}
 			if (scripts[SE_ORIYA]) {
-				id = UnicodeString("Oriya-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Oriya-InterIndic");
 			}
 			if (scripts[SE_TELUGU]) {
-				id = UnicodeString("Telugu-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Telugu-InterIndic");
 			}
 			if (scripts[SE_KANNADA]) {
-				id = UnicodeString("Kannada-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Kannada-InterIndic");
 			}
 			if (scripts[SE_MALAYALAM]) {
-				id = UnicodeString("Malayalam-InterIndic", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";Malayalam-InterIndic");
 			}
-
 
 			switch(option) {
 			case SE_DEVANAGARI:
-				id = UnicodeString("InterIndic-Devanagari", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Devanagari");
 				break;
 			case SE_TAMIL:
-				id = UnicodeString("InterIndic-Tamil", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Tamil");
 				break;
 			case SE_BENGALI:
-				id = UnicodeString("InterIndic-Bengali", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Bengali");
 				break;
 			case SE_GURMUKHI:
-				id = UnicodeString("InterIndic-Gurmukhi", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Gurmukhi");
 				break;
 			case SE_GUJARATI:
-				id = UnicodeString("InterIndic-Gujarati", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Gujarati");
 				break;
 			case SE_ORIYA:
-				id = UnicodeString("InterIndic-Oriya", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Oriya");
 				break;
 			case SE_TELUGU:
-				id = UnicodeString("InterIndic-Telugu", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Telugu");
 				break;
 			case SE_KANNADA:
-				id = UnicodeString("InterIndic-Kannada", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Kannada");
 				break;
 			case SE_MALAYALAM:
-				id = UnicodeString("InterIndic-Malayalam", "");
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
+				id += UnicodeString(";InterIndic-Malayalam");
 				break;
 			default:
-				id = UnicodeString("InterIndic-Latin", "");
+				id += UnicodeString(";InterIndic-Latin");
 				scripts[SE_LATIN] = true;
-        			trans = SetTransliterator(&id);
-				trans->transliterate(ustr);
 				break;
 			}
 		}
 
 		if (scripts[SE_LATIN]) {
-			if (option == SE_GREEK)
-				id = UnicodeString("Latin-Greek", "");
-			else if (option == SE_HEBREW)
-				id = UnicodeString("Latin-Hebrew", "");
-			else if (option == SE_CYRILLIC)
-				id = UnicodeString("Latin-Cyrillic", "");
-			else if (option == SE_ARABIC)
-				id = UnicodeString("Latin-Arabic", "");
-			else if (option == SE_SYRIAC)
-				id = UnicodeString("Latin-Syriac", "");
-			else if (option == SE_KANA)
-				id = UnicodeString("Latin-Kana", "");
-			else if (option == SE_JAMO)
-				id = UnicodeString("Latin-Jamo", "");
-			else if (option == SE_HANGUL) {
-				id = UnicodeString("Latin-Hangul", "");
-			}
-			else if (option == SE_MALTESE)
-				id = UnicodeString("Latin-Maltese", "");
-
-			trans = SetTransliterator(&id);
-			trans->transliterate(ustr);
+                switch (option) {
+                        case SE_GREEK:
+				id += UnicodeString(";Latin-Greek");
+                                break;
+                        case SE_HEBREW:
+				id += UnicodeString(";Latin-Hebrew");
+                                break;
+                        case SE_CYRILLIC:
+				id += UnicodeString(";Latin-Cyrillic");
+                                break;
+                        case SE_ARABIC:
+				id += UnicodeString(";Latin-Arabic");
+                                break;
+                        case SE_SYRIAC:
+				id += UnicodeString(";Latin-Syriac");
+                                break;
+                        case SE_KATAKANA:
+				id += UnicodeString(";Latin-Katakana");
+                                break;
+                        case SE_HIRAGANA:
+				id += UnicodeString(";Latin-Hiragana");
+                                break;
+                        case SE_JAMO:
+				id += UnicodeString(";Latin-Jamo");
+                                noNFC = true;
+                                break;
+                        case SE_HANGUL:
+				id += UnicodeString(";Latin-Hangul");
+                                break;
+                }
 		}
-		//		int32_t newlen = ((unsigned int)maxlen) > sizeof(text) ? maxlen : sizeof(text);
-		conv.fromUnicodeString(text, (int32_t&)maxlen, ustr, status);
+
+        if (!noNFC) {
+				id += UnicodeString(";NFC");
+		}
+
+        UParseError perr;
+        Transliterator * trans = Transliterator::createFromRules("", id.getBuffer(), UTRANS_FORWARD, perr, err);
+        UnicodeString target = UnicodeString(source);
+        trans->transliterate(target);
+        u_strToUTF8(text, maxlen, NULL, target.getBuffer(), target.length(), &err);
+        *(text + maxlen) = 0;
+        delete trans;
 	}
 	return 0;
 }
-
-Transliterator* UTF8Transliterator::SetTransliterator(UnicodeString* name) {
-        unsigned long i;
-        UErrorCode status = U_ZERO_ERROR;
-        
-        for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
-                if (xlitNames[i] && *xlitNames[i] == *name) {
-                        //we have the transliterator cached, return it
-                        return xlitPtrs[i];
-                }
-                else if (!xlitNames[i]) {
-                        break;
-                }
-        }
-        if (xlitNames[i]) {
-                //slots are all full, so delete the oldest one and shift others down by 1
-                delete xlitNames[0];
-                delete xlitPtrs[0];
-                for (i = 1; i < TRANSLITERATOR_CACHE_SIZE; i++) {
-                         xlitNames[i - 1] = xlitNames[i];
-                         xlitPtrs[i - 1] = xlitPtrs[i];
-                }
-        }
-        //i is still set to the first unfilled slot
-        xlitNames[i] = new UnicodeString(*name);
-        xlitPtrs[i] = Transliterator::createInstance(*name, UTRANS_FORWARD, status);
-        return xlitPtrs[i];
-}
-
 #endif
