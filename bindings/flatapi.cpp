@@ -17,8 +17,16 @@
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
-
+extern "C" {
 #include "flatapi.h"
+}
+
+typedef struct {
+	ModMap::iterator it;
+//	void *it;
+	ModMap::iterator end;
+//	void *end;
+} ModItType;
 
 
 //-----------------------------------------------------------------

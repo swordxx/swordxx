@@ -1,25 +1,27 @@
 unit Sword;
 
+   
 interface
-   function  SWMgr_getPrefixPath(h: integer): PChar; cdecl; external 'libsword.so';
-   function  SWMgr_new: integer; cdecl; external 'libsword.so';
-   procedure SWMgr_delete(h: integer); cdecl; external 'libsword.so';
-   function  SWMgr_getModulesIterator(h: integer) : integer; cdecl; external 'libsword.so';
-   function  SWMgr_getModuleByName(h: integer; name: PChar) : integer; cdecl; external 'libsword.so';
+   const LIBNAME = 'sword.dll';
+   function  SWMgr_getPrefixPath(h: integer): PChar; cdecl; external libname;
+   function  SWMgr_new: integer; cdecl; external LIBNAME;
+   procedure SWMgr_delete(h: integer); cdecl; external LIBNAME;
+   function  SWMgr_getModulesIterator(h: integer) : integer; cdecl; external LIBNAME;
+   function  SWMgr_getModuleByName(h: integer; name: PChar) : integer; cdecl; external LIBNAME;
 
-   procedure ModList_iterator_next(h: integer); cdecl; external 'libsword.so';
-   function  ModList_iterator_val(h: integer) : integer; cdecl; external 'libsword.so';
+   procedure ModList_iterator_next(h: integer); cdecl; external LIBNAME;
+   function  ModList_iterator_val(h: integer) : integer; cdecl; external LIBNAME;
 
-   function  SWModule_getType(h: integer) : PChar; cdecl; external 'libsword.so';
-   function  SWModule_getName(h: integer) : PChar; cdecl; external 'libsword.so';
-   function  SWModule_getDescription(h: integer) : PChar; cdecl; external 'libsword.so';
-   function  SWModule_getStripText(h: integer) : PChar; cdecl; external 'libsword.so';
-   function  SWModule_getRenderText(h: integer) : PChar; cdecl; external 'libsword.so';
-   function  SWModule_getKeyText(h: integer) : PChar; cdecl; external 'libsword.so';
-   procedure SWModule_setKeyText(h: integer; key: PChar); cdecl; external 'libsword.so';
-   procedure SWModule_begin(h: integer); cdecl; external 'libsword.so';
-   procedure SWModule_next(h: integer); cdecl; external 'libsword.so';
-   procedure SWModule_previous(h: integer); cdecl; external 'libsword.so';
+   function  SWModule_getType(h: integer) : PChar; cdecl; external LIBNAME;
+   function  SWModule_getName(h: integer) : PChar; cdecl; external LIBNAME;
+   function  SWModule_getDescription(h: integer) : PChar; cdecl; external LIBNAME;
+   function  SWModule_getStripText(h: integer) : PChar; cdecl; external LIBNAME;
+   function  SWModule_getRenderText(h: integer) : PChar; cdecl; external LIBNAME;
+   function  SWModule_getKeyText(h: integer) : PChar; cdecl; external LIBNAME;
+   procedure SWModule_setKeyText(h: integer; key: PChar); cdecl; external LIBNAME;
+   procedure SWModule_begin(h: integer); cdecl; external LIBNAME;
+   procedure SWModule_next(h: integer); cdecl; external LIBNAME;
+   procedure SWModule_previous(h: integer); cdecl; external LIBNAME;
 type
 
    SWModule = class(TObject)
