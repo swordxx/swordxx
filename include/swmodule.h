@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.56 2002/10/01 22:04:58 dglassey Exp $
+* $Id: swmodule.h,v 1.57 2002/12/14 21:20:15 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -71,6 +71,16 @@ enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_H
  *
  * SWModule has also functions to write to the data files.
  */
+
+// TODO: should all SWModule decendents be SWCachers?  Only some really
+// cache data.  But if we don't do this, then we need another mechanism to
+// check if we are an SWCacher.  Maybe make SWModule extend SWObject (which
+// it probably should anyway.  But then we need to add all the cheezy
+// heirarchy info to all he decendent classes for our SWDYNAMIC_CAST and
+// then we can see if we implement SWCacher so we know whether or not add
+// to the yet to be developed cachemgr.
+// Just leave for now.  This lets us always able to call module->flush()
+// to manually flush a cache, and doesn't hurt if there is no work done.
 
 class SWDLLEXPORT SWModule : public SWCacher {
 
