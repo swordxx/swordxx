@@ -54,48 +54,48 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
+        buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("gloss=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
+        buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("lemma=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
+        buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("morph=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
+        buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("POS=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
+        buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
-      
+
       buf += "}";
     }
-    
+
     //p
     else if (!strncmp(token, "p", 1)) {
-      buf += "{\\par\\par ";
+      buf += "{\\par ";
     }
     else if (!strncmp(token, "/p", 2)) {
-      buf += "}";
+      buf += "\\par}";
     }
-    
+
     //reference
     else if (!strncmp(token, "reference", 8)) {
       buf += "{<a href=\"\">";
@@ -103,13 +103,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
     else if (!strncmp(token, "/reference", 9)) {
       buf += "</a>}";
     }
-    
+
     //line
     else if (!strncmp(token, "line", 4)) {
-      buf += "{\\par ";
+      buf += "{";
     }
     else if (!strncmp(token, "/line", 5)) {
-      buf += "}";
+      buf += "\\par}";
     }
 
     //note
@@ -117,9 +117,9 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
       buf += " {\\i1\\fs15 (";
     }
     else if (!strncmp(token, "/note", 5)) {
-      buf += " ) }";
+      buf += ")} ";
     }
-    
+
     //title
     else if (!strncmp(token, "title", 5)) {
       buf += "{\\i1\\b1 ";
@@ -169,7 +169,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 
     else {
       return false;  // we still didn't handle token
-		}
+    }
   }
   return true;
 }
