@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.22 2004/05/19 19:38:45 joachim Exp $
+ * $Id: localemgr.cpp,v 1.23 2004/05/29 01:12:42 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -131,7 +131,7 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 	struct dirent *ent;
 	SWBuf newmodfile;
 	LocaleMap::iterator it;
-	SWLog::getSystemLog()->logError("LocaleMgr::loadConfigDir loading %s", ipath);
+	SWLog::getSystemLog()->logInformation("LocaleMgr::loadConfigDir loading %s", ipath);
  
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);
@@ -190,7 +190,7 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 	if (it != locales->end())
 		return (*it).second;
 
-	SWLog::getSystemLog()->logError("LocaleMgr::getLocale failed to find %s\n", name);
+	SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
 	return 0;
 }
 

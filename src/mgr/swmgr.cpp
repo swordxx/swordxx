@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.104 2004/05/06 10:46:25 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.105 2004/05/29 01:12:42 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -69,9 +69,11 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
+
 #ifdef SPLITLIB
 #include <ztext2.h>
 #endif
+
 #include <zld.h>
 #include <zcom.h>
 #include <lzsscomprs.h>
@@ -80,6 +82,9 @@
 #include <utf8hebrewpoints.h>
 #include <greeklexattribs.h>
 #include <swfiltermgr.h>
+
+#include <swlog.h>
+
 #ifndef EXCLUDEZLIB
 #include "zipcomprs.h"
 #endif
@@ -109,7 +114,7 @@ const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #ifdef _MSC_VER
 #define DEBUGSTR(x)
 #else
-#define DEBUGSTR(x) if (debug) std::cerr << x;
+#define DEBUGSTR(x) if (SWMgr::debug) std::cerr << x;
 #endif  
 
 void SWMgr::init() {
@@ -340,7 +345,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	char *envhomedir  = getenv ("HOME");
 
 	*configType = 0;
-	debug=1;
+	//debug=1;
 
 	// check working directory
 	DEBUGSTR("Checking working directory for mods.conf...");
