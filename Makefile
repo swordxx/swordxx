@@ -1,7 +1,7 @@
 root := .
 subdir := 
 targets := testlib
-subdirs := src obj lib tests utilities include apps/X11/VCL
+subdirs := src obj lib tests utilities include
 other-dist := yes
 other-install := yes
 

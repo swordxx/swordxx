@@ -1,6 +1,14 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+15-Mar-2000
+	Added buildvcl option to Makefile.cfg to allow exclusion of
+		the VCL libraries from the build.
+	Changed the install for the include directory to OBTAIN the
+		file list instead of specifying each include file
+	Included cs Czech locale submitted by Kri¹tof Petr
+	Included da Dutch locale submitted by Birger Langkjer
+
 13-Mar-2000
 	Added SWLocale and LocaleMgr classes to support localization
 	Made GBFPlain filter support plain text parsing of strongs
@@ -11,7 +19,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	Added Torsten's Uhlmann's plainfootnotes, an option filter for
 		footnotes in plain format Biblical texts.
 	Added Torsten's rtfhtml filter (at the moment only usable for
-	the About comment)
+		the About comment)
 
 19-Jan-2000
 	Added zText, zVerse, etc. code utilizing Daniel Glassey's comp
