@@ -119,7 +119,7 @@ if ($verse eq "") {
     print <<DEF1;
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Diatheke Insta-Interlinear Bible</title>
 </head>
 
@@ -215,7 +215,7 @@ print <<END;
 
 <html><head>
 <title>Diatheke Interlinear Bible</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="palmcomputingplatform" content="true">
 <meta name="historylisttext" content="Diatheke">
 <style type="text/css">
@@ -315,7 +315,7 @@ print <<END
 
 <html><head>
 <title>HANDiatheke</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="palmcomputingplatform" content="true">
 <meta name="historylisttext" content="HANDiatheke">
 </head>
@@ -411,6 +411,9 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/^Malachi/Mal/g;
 	
 	$line =~ s/^Revelation of John/Rev/g;
+	$line =~ s/^III John/3Jn/g;
+	$line =~ s/^II John/2Jn/g;
+	$line =~ s/^I John/1Jn/g;
 	$line =~ s/^Matthew/Mt/g;
 	$line =~ s/^Mark/Mk/g;
 	$line =~ s/^Luke/Lk/g;
@@ -432,9 +435,6 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/^James/Jas/g;
 	$line =~ s/^II Peter/2Pet/g;
 	$line =~ s/^I Peter/1Pet/g;
-	$line =~ s/^III John/3Jn/g;
-	$line =~ s/^II John/2Jn/g;
-	$line =~ s/^I John/1Jn/g;
 
 	$line =~ s/\nGenesis/Gen/g;
 	$line =~ s/\nExodus/Ex/g;
@@ -470,6 +470,9 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/\nMalachi/Mal/g;
 	
 	$line =~ s/\nRevelation of John/Rev/g;
+	$line =~ s/\nIII John/3Jn/g;
+	$line =~ s/\nII John/2Jn/g;
+	$line =~ s/\nI John/1Jn/g;
 	$line =~ s/\nMatthew/Mt/g;
 	$line =~ s/\nMark/Mk/g;
 	$line =~ s/\nLuke/Lk/g;
@@ -491,9 +494,6 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/\nJames/Jas/g;
 	$line =~ s/\nII Peter/2Pet/g;
 	$line =~ s/\nI Peter/1Pet/g;
-	$line =~ s/\nIII John/3Jn/g;
-	$line =~ s/\nII John/2Jn/g;
-	$line =~ s/\nI John/1Jn/g;
 	
     }
     elsif ($format ne "ThML") {
@@ -532,6 +532,9 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/Malachi/Mal/g;
 	
 	$line =~ s/Revelation of John/Rev/g;
+	$line =~ s/III John/3Jn/g;
+	$line =~ s/II John/2Jn/g;
+	$line =~ s/I John/1Jn/g;
 	$line =~ s/Matthew/Mt/g;
 	$line =~ s/Mark/Mk/g;
 	$line =~ s/Luke/Lk/g;
@@ -553,9 +556,6 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/James/Jas/g;
 	$line =~ s/II Peter/2Pet/g;
 	$line =~ s/I Peter/1Pet/g;
-	$line =~ s/III John/3Jn/g;
-	$line =~ s/II John/2Jn/g;
-	$line =~ s/I John/1Jn/g;
 
 	$line =~ s/([0-9]*[A-Za-z]+) ([0-9]+):([0-9]+)/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$versions[$i]=on\">$1 $2:$3\<\/a\>/g;
     }
