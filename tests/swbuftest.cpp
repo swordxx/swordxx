@@ -97,7 +97,7 @@ void insertStringTest() {
 }
 
 int main(int argc, char **argv) {
-/*	SWBuf x;
+	SWBuf x;
 	cout << "x should be (): (" << x << ")\n";
 	cout << "size should be 0: " << x.size() << "\n";
 	x = "hello";
@@ -124,12 +124,5 @@ int main(int argc, char **argv) {
 	subscriptTest();
 	ctorAssignTest();
 	compareTest();
-*/
-
-	SWBuf text;
-	for (long int i = 0; i < 10000000; ++i) {
-//		text.append("a");
-		text.append('a');
-	}
 }
 
