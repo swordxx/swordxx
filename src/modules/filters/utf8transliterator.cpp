@@ -140,7 +140,6 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 		if (!j) return 0;
 		
 		Transliterator* trans;
-		UParseError perror;
 		static UnicodeString id;
 
 		//Simple X to Latin transliterators
@@ -153,7 +152,7 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 				id = UnicodeString("Greek-Latin", "");
 				scripts[SE_LATIN] = true;
 			}
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
@@ -164,42 +163,42 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 				id = UnicodeString("Hebrew-Latin", "");
 				scripts[SE_LATIN] = true;
 			}
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
 		if (scripts[SE_CYRILLIC]) {
 			id = UnicodeString("Cyrillic-Latin", "");
 			scripts[SE_LATIN] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
 		if (scripts[SE_ARABIC]) {
 			id = UnicodeString("Arabic-Latin", "");
 			scripts[SE_LATIN] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
 		if (scripts[SE_KANA]) {
 			id = UnicodeString("Kana-Latin", "");
 			scripts[SE_LATIN] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
 		if (scripts[SE_HAN]) {
 			id = UnicodeString("Han-Pinyin", "");
 			scripts[SE_LATIN] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
 		if (scripts[SE_KANJI]) {
 			id = UnicodeString("Kanji-OnRomaji", "");
 			scripts[SE_LATIN] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
@@ -208,14 +207,14 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 		if (option == SE_HANGUL && scripts[SE_JAMO]) {
 			id = UnicodeString("Jamo-Hangul", "");
 			scripts[SE_HANGUL] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
 		else if (option == SE_JAMO && scripts[SE_HANGUL]) {
 			id = UnicodeString("Hangul-Jamo", "");
 			scripts[SE_JAMO] = true;
-			trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
 		}
@@ -223,14 +222,14 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			if (scripts[SE_HANGUL]) {
 				id = UnicodeString("Hangul-Jamo", "");
 				scripts[SE_JAMO] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_JAMO]) {
 				id = UnicodeString("Jamo-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
@@ -242,56 +241,56 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			if (scripts[SE_TAMIL]) {
 				id = UnicodeString("Tamil-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_BENGALI]) {
 				id = UnicodeString("Bengali-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_GURMUKHI]) {
 				id = UnicodeString("Gurmukhi-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_GUJARATI]) {
 				id = UnicodeString("Gujarati-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_ORIYA]) {
 				id = UnicodeString("Oriya-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_TELUGU]) {
 				id = UnicodeString("Telugu-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_KANNADA]) {
 				id = UnicodeString("Kannada-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_MALAYALAM]) {
 				id = UnicodeString("Malayalam-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
@@ -299,61 +298,61 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 		else {
 			if (scripts[SE_LATIN]) {
 				id = UnicodeString("Latin-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_DEVANAGARI]) {
 				id = UnicodeString("Devanagari-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_TAMIL]) {
 				id = UnicodeString("Tamil-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_BENGALI]) {
 				id = UnicodeString("Bengali-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_GURMUKHI]) {
 				id = UnicodeString("Gurmurkhi-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_GUJARATI]) {
 				id = UnicodeString("Gujarati-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_ORIYA]) {
 				id = UnicodeString("Oriya-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_TELUGU]) {
 				id = UnicodeString("Telugu-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_KANNADA]) {
 				id = UnicodeString("Kannada-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			if (scripts[SE_MALAYALAM]) {
 				id = UnicodeString("Malayalam-InterIndic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
@@ -362,62 +361,62 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			switch(option) {
 			case SE_DEVANAGARI:
 				id = UnicodeString("InterIndic-Devanagari", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_TAMIL:
 				id = UnicodeString("InterIndic-Tamil", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_BENGALI:
 				id = UnicodeString("InterIndic-Bengali", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_GURMUKHI:
 				id = UnicodeString("InterIndic-Gurmukhi", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_GUJARATI:
 				id = UnicodeString("InterIndic-Gujarati", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_ORIYA:
 				id = UnicodeString("InterIndic-Oriya", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_TELUGU:
 				id = UnicodeString("InterIndic-Telugu", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_KANNADA:
 				id = UnicodeString("InterIndic-Kannada", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			case SE_MALAYALAM:
 				id = UnicodeString("InterIndic-Malayalam", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
 			default:
 				id = UnicodeString("InterIndic-Latin", "");
 				scripts[SE_LATIN] = true;
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				break;
@@ -427,53 +426,53 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 		if (scripts[SE_LATIN]) {
 			if (option == SE_GREEK) {
 				id = UnicodeString("Latin-Greek", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_HEBREW) {
 				id = UnicodeString("Latin-Hebrew", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_CYRILLIC) {
 				id = UnicodeString("Latin-Cyrillic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_ARABIC) {
 				id = UnicodeString("Latin-Arabic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_KANA) {
 				id = UnicodeString("Latin-Kana", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_JAMO) {
 				id = UnicodeString("Latin-Jamo", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_HANGUL) {
 				id = UnicodeString("Latin-Jamo", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				id = UnicodeString("Jamo-Hangul", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
 			else if (option == SE_MALTESE) {
-				if = UnicodeString("Latin-Maltese", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, &perror);
+				id = UnicodeString("Latin-Maltese", "");
+				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 			}
