@@ -27,25 +27,22 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	from = (const unsigned char *)orig.c_str();
 
 	// -------------------------------
-	bool lastUni = false;
 	for (text = ""; *from; from++) {
 		ch = 0;
+                //case: ANSI
 		if ((*from & 128) != 128) {
-//			if ((*from == ' ') && (lastUni))
-//				*to++ = ' ';
 			text += *from;
-			lastUni = false;
 			continue;
 		}
+                //case: Invalid UTF-8 (illegal continuing byte in initial position)
 		if ((*from & 128) && ((*from & 64) != 64)) {
-// error, should never get here
-//			*from = 'x';
 			continue;
 		}
+                //case: 2+ byte codepoint
 		from2[0] = *from;
 		from2[0] <<= 1;
 		int subsequent;
-		for (subsequent = 1; (*from & 128) && (subsequent < 7); subsequent++) {
+		for (subsequent = 1; (from[0] & 128) && (subsequent < 7); subsequent++) {
 			from2[0] <<= 1;
 			from2[subsequent] = from[subsequent];
 			from2[subsequent] &= 63;
@@ -61,10 +58,8 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		text += '\\';
 		text += 'u';
 		sprintf(digit, "%d", ch);
-		for (char *dig = digit; *dig; dig++)
-			text += *dig;
+                text += digit;
 		text += '?';
-		lastUni = true;
 	}
 	   
 	return 0;
