@@ -23,6 +23,7 @@
 int main(int argc, char **argv) {
   
   const char * helptext ="addld 1.0 Lexicon & Dictionary module creation tool for the SWORD Project\nUse -a to add a new LD entry from standard input or a file, -d to delete an\nentry, -l to link two LD entries, -c to create a new module.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n   %s -c <filename>\nTo use 4-byte LD instead of 2-byte, insert a 4 immediately after the '-'.\n";
+  long entrysize;
   
   bool fourbyte = false;
   char mode;
@@ -59,8 +60,8 @@ int main(int argc, char **argv) {
       // case: add from stdin
       else infile = stdin;
       
-      fread(buffer, sizeof(buffer), sizeof(char), infile);
-      mod << buffer;	// save text to module at current position
+      entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
+      mod.setentry(buffer, entrysize);	// save text to module at current position
     }
     else {
       char buffer[65536];  //this is the max size of any entry
@@ -78,8 +79,8 @@ int main(int argc, char **argv) {
       // case: add from stdin
       else infile = stdin;
       
-      fread(buffer, sizeof(buffer), sizeof(char), infile);
-      mod << buffer;	// save text to module at current position
+      entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
+      mod.setentry(buffer, entrysize);	// save text to module at current position
     }
     
   }
