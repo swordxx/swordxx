@@ -173,14 +173,18 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	static int titleOffset = -1;
 	static ListKey lastVerseIDs = ListKey();
 
-	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
-		titleOffset = text.length();
-		return false;
+	if ((!strcmp(token.getName(), "title")) && !token.isEndTag() && !token.getAttribute("eID")) {
+		titleOffset = text.length(); //start of the title tag
+		lastTitle = "";
+		return false; 
 	}
 	else if ((!strcmp(token.getName(), "title")) && (token.isEndTag() || (token.getAttribute("eID")))) {
-		lastTitle = (text.c_str() + titleOffset);
-		lastTitle += token;
-		return false;
+		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
+ 		lastTitle.append(token); //</title>
+		
+// 		printf("lastTitle:	%s\n", lastTitle.c_str());b
+// 		printf("text-lastTitle:	%s\n", text.c_str()+titleOffset);
+		return false; //don't add </title> to the text itself
 	}
 	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag() && !(token.getAttribute("eID"))) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
         	inVerse = false;
@@ -246,20 +250,43 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		if (lastVerseIDs.Count())
 			*currentVerse = lastVerseIDs.getElement(0)->getText();
 
-		text += token;
+		text.append( token );
 
 		return true;
 	}
 	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag() || (token.getAttribute("eID")))) {
         	inVerse = false;
 		if (lastTitle.length()) {
-			SWBuf titleHead = lastTitle;
-			char *end = strchr(lastTitle.getRawData(), '>');
-			titleHead.setSize((end - lastTitle.getRawData())+1);
-			XMLTag titleTag(titleHead);
+			char* end = strchr(lastTitle, '>');
+// 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
+			
+			SWBuf titleTagText;
+			titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
+// 			printf("tagText: %s\n", titleTagText.c_str());
+			
+			XMLTag titleTag(titleTagText);
 			titleTag.setAttribute("type", "section");
 			titleTag.setAttribute("subtype", "x-preverse");
-			text = SWBuf(titleTag) + SWBuf(end+1) + text;
+			
+			//we insert the title into the text again - make sure to remove the old title text
+			char* pos = strstr(text, lastTitle);
+			if (pos) {
+				SWBuf temp;
+				temp.append(text, pos-text);
+				temp.append(pos+lastTitle.length());
+				text = temp;
+			}
+			
+			//if a title was already inserted at the beginning insert this one after that first title
+			int titlePos = 0;
+			if (!strncmp(text.c_str(),"<title ",7)) {
+				char* tmp = strstr(text.c_str(), "</title>");
+				if (tmp) {
+					titlePos = (tmp-text) + 8;
+				}
+			}
+ 			text.insert(titlePos, end+1);
+ 			text.insert(titlePos, titleTag);
 		}
 //		text += token;
 		writeEntry(*currentVerse, text);
@@ -268,10 +295,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		VerseKey dest = *currentVerse;
 		for (int i = 0; i < lastVerseIDs.Count(); ++i) {
 			VerseKey linkKey;
-                        linkKey.AutoNormalize(0);
+			linkKey.AutoNormalize(0);
 			linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
 			linkKey.Persist(1);
-                        linkKey = lastVerseIDs.getElement(i)->getText();
+			linkKey = lastVerseIDs.getElement(i)->getText();
 
 			if (linkKey.Verse() != currentVerse->Verse() || linkKey.Chapter() != currentVerse->Chapter() || linkKey.Book() != currentVerse->Book() || linkKey.Testament() != currentVerse->Testament()) {
 				*currentVerse = linkKey;
@@ -284,7 +311,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		return true;
 	}
         else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
-        	text += token;
+        	text.append( token );
 		writeEntry(*currentVerse, text, true);
 		text = "";
                 return true;
@@ -347,19 +374,20 @@ int main(int argc, char **argv) {
 
 			if (*from == '>') {
 				intoken = false;
-				token += ">";
+				token.append('>');
 				// take this isalpha if out to check for bugs in text
 				if ((isalpha(token[1])) || (isalpha(token[2]))) {
 					if (!handleToken(text, token.c_str())) {
-						text += token;
+						text.append( token );
 					}
 				}
 				continue;
 			}
 
 			if (intoken)
-				token += *from;
-			else	text += *from;
+				token.append( *from );
+			else	
+				text.append( *from );
 		}
 	}
 	// clear up our buffer that readline might have allocated
