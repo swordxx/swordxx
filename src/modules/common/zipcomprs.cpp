@@ -58,20 +58,26 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 
 	// get buffer
 	char chunk[1024];
-	string buf;
+	char *buf = (char *)calloc(1, 1024);
+	char *chunkbuf = buf;
 	int chunklen;
+	unsigned long len = 0;
 	while((chunklen = GetChars(chunk, 1023))) {
-		buf += chunk;
+		memcpy(chunkbuf, chunk, chunklen);
+		chunkbuf += chunklen;
+		len += chunklen;
 		if (chunklen < 1023)
 			break;
+		else	buf = (char *)realloc(buf, len + 1024);
 	}
 
-	zlen = (long) (buf.length()*1.001)+15;
-	char *zbuf = new char[zlen];
-	if (buf.length())
+
+	zlen = (long) (len*1.001)+15;
+	char *zbuf = new char[len];
+	if (len)
 	{
 		//printf("Doing compress\n");
-		if (compress((Bytef*)zbuf, &zlen, (const Bytef*)buf.c_str(), buf.length())!=Z_OK)
+		if (compress((Bytef*)zbuf, &zlen, (const Bytef*)buf, len)!=Z_OK)
 		{
 			printf("ERROR in compression\n");
 		}
@@ -84,6 +90,7 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 		printf("No buffer to compress\n");
 	}
 	delete [] zbuf;
+	free (buf);
 }
 
 
@@ -115,21 +122,33 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
    buffer, or Z_DATA_ERROR if the input data was corrupted.
 */
 
+	// get buffer
+	char chunk[1024];
+	char *zbuf = (char *)calloc(1, 1024);
+	char *chunkbuf = zbuf;
+	int chunklen;
+	unsigned long zlen = 0;
+	while((chunklen = GetChars(chunk, 1023))) {
+		memcpy(chunkbuf, chunk, chunklen);
+		chunkbuf += chunklen;
+		zlen += chunklen;
+		if (chunklen < 1023)
+			break;
+		else	zbuf = (char *)realloc(zbuf, zlen + 1024);
+	}
 
 	//printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
 	if (zlen) {
 		unsigned long blen = zlen*10;	// trust compression is less than 1000%
 		char *buf = new char[blen]; 
-		char *zbuf = new char [zlen];
-		GetChars(zbuf, zlen);
 		//printf("Doing decompress {%s}\n", zbuf);
 		uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen);
 		SendChars(buf, blen);
-		delete [] zbuf;
 		delete [] buf;
 	}
 	else {
 		printf("No buffer to decompress!\n");
 	}
 	//printf("Finished decoding\n");
+	free (buf);
 }

@@ -31,7 +31,7 @@
  * zVerse Statics
  */
 
-// int zVerse::instance = 0;
+int zVerse::instance = 0;
 
 
 /******************************************************************************
@@ -335,4 +335,60 @@ void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf
 void zVerse::swsettext(char testmt, long idxoff, const char *buf)
 {
 	// can't set it yet in a compressed module
+}
+
+
+/******************************************************************************
+ * zVerse::preptext	- Prepares the text before returning it to external
+ *				objects
+ *
+ * ENT:	buf	- buffer where text is stored and where to store the prep'd
+ *			text.
+ */
+
+void zVerse::preptext(char *buf)
+{
+	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
+
+	for (to = from = buf; *from; from++) {
+		switch (*from) {
+		case 10:
+			if (!realdata)
+				continue;
+			space = (cr) ? 0 : 1;
+			cr = 0;
+			nlcnt++;
+			if (nlcnt > 1) {
+//				*to++ = nl;
+				*to++ = nl;
+//				nlcnt = 0;
+			}
+			continue;
+		case 13:
+			if (!realdata)
+				continue;
+			*to++ = nl;
+			space = 0;
+			cr = 1;
+			continue;
+		}
+		realdata = 1;
+		nlcnt = 0;
+		if (space) {
+			space = 0;
+			if (*from != ' ') {
+				*to++ = ' ';
+				from--;
+				continue;
+			}
+		}
+		*to++ = *from;
+	}
+	*to = 0;
+
+	for (to--; to > buf; to--) {			// remove training excess
+		if ((*to == 10) || (*to == ' '))
+			*to = 0;
+		else break;
+	}
 }

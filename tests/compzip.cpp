@@ -36,7 +36,7 @@ FileCompress::FileCompress(char *fname)
 
 	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY, 00644);
 
-	sprintf(buf, "%s.zzz", fname);
+	sprintf(buf, "%s.zip", fname);
 	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY, 00644);
 }
 

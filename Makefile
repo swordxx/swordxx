@@ -31,8 +31,8 @@ d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
 o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
 l = $(o) -lsword -lstdc++
 
-testlib: $(o)
-	$(CC) $(LFLAGS) -o $@ $(l)
+#testlib: $(o)
+#	$(CC) $(LFLAGS) -o $@ $(l)
 
 buildso:
 	$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
