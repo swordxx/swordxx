@@ -53,12 +53,14 @@ void SWCompress::Init()
 
 char *SWCompress::Buf(char *ibuf)
 {
+	// setting an uncompressed buffer
 	if (ibuf) {
 		Init();
 		buf = (char *) malloc(strlen(ibuf) + 1);
 		strcpy(buf, ibuf);
 	}
 
+	// getting an uncompressed buffer
 	if (!buf)
 		Decode();
 
@@ -68,6 +70,7 @@ char *SWCompress::Buf(char *ibuf)
 
 char *SWCompress::zBuf(unsigned long *len, char *ibuf)
 {
+	// setting a compressed buffer
 	if (ibuf) {
 		Init();
 		zbuf = (char *) malloc(*len);
@@ -75,6 +78,7 @@ char *SWCompress::zBuf(unsigned long *len, char *ibuf)
 		zlen = *len;
 	}
 
+	// getting a compressed buffer
 	if (!zbuf)
 		Encode();
 

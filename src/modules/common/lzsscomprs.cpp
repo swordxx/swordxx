@@ -312,7 +312,7 @@ void LZSSCompress::Encode(void)
 	// Start with a clean tree.
 
 	InitTree();
-	direct = 0;	// set direction needed by [Put|Send]Chars()
+	direct = 0;	// set direction needed by parent [Get|Send]Chars()
 
 	// code_buf[0] works as eight flags.  A "1" represents that the
 	// unit is an unencoded letter (1 byte), and a "0" represents
@@ -526,6 +526,9 @@ void LZSSCompress::Encode(void)
 
 		SendChars((char *) code_buf, code_buf_pos);
 	}
+
+
+	// must set zlen for parent class to know length of compressed buffer
 	zlen = zpos;
 }
 
@@ -548,7 +551,7 @@ void LZSSCompress::Decode(void)
 	short int pos;					  // position in the ring buffer
 	short int len;					  // number of chars in ring buffer
 
-	direct = 1;	// set direction needed by [Put|Send]Chars()
+	direct = 1;	// set direction needed by parent [Get|Send]Chars()
 
 	// Initialize the ring buffer with a common string.
 	//
