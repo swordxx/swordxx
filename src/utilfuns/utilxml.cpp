@@ -10,6 +10,8 @@ void XMLTag::parse() const {
 	int start;
 	char *name = 0;
 	char *value = 0;
+	if (!buf)
+		return;
 	for (i = 0; ((buf[i]) && (!isalpha(buf[i]))); i++);
 	for (; buf[i]; i++) {
 		if (buf[i] == ' ') {

@@ -59,9 +59,9 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	
 				//const char* value = tag.getAttribute("value");
 				buf += " value=";
-				buf += (value.length()) ? value : "";
+				buf += (value.length()) ? value.c_str() : "";
 				buf += "\">";
-				buf += (value.length()) ? value : "";
+				buf += (value.length()) ? value.c_str() : "";
 				buf += "</a>) </em></small>";
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
@@ -71,10 +71,10 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	
 				//const char* value = tag.getAttribute("value");
 				buf += " value=";
-				buf += (value.length()) ? value : "";
+				buf += (value.length()) ? value.c_str() : "";
 				buf += "\">";
 				value<<1;
-				buf += (value.length()) ? value : "";
+				buf += (value.length()) ? value.c_str() : "";
 				buf += "</a>&gt; </em></small>";
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {

@@ -186,6 +186,8 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		MyUserData *u = (MyUserData *)userData;		
 		XMLTag tag(token);
+		if ((!tag.isEndTag()) && (!tag.isEmpty()))
+			u->startTag = tag;
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			SWBuf value = tag.getAttribute("value");
 			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
