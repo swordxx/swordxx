@@ -40,8 +40,9 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 	if (!substituteToken(buf, token)) {
 
 		if (!strncmp(token, "scripRef", 8)) {
-			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
+//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
 			userData["suspendTextPassThru"] = "true";
+			return true;
 		}
 		if (!strncmp(token, "/scripRef", 9)) {
 			pushString(buf,
@@ -49,6 +50,7 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 			);
 			pushString(buf, "\" />");
 			userData["suspendTextPassThru"] = "false";
+			return true;
 		}
 //	addTokenSubstitute("/scripRef", "|}");
 //	addTokenSubstitute("/note", ") }");

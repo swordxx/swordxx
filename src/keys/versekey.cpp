@@ -1424,7 +1424,12 @@ const char *VerseKey::getOSISRef() const {
 			"Phil","Col","Thess1","Thess2","Tim1","Tim2","Titus","Phlm","Heb","Jas",
 			"Pet1","Pet2","John1","John2","John3","Jude","Rev"};
 	static char **osisbooks[] = { osisotbooks, osisntbooks };
-
-	sprintf(buf[loop], "%s.%d.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter(), (int)Verse());
+	if (Verse())
+		sprintf(buf[loop], "%s.%d.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter(), (int)Verse());
+	else if (Chapter())
+		sprintf(buf[loop], "%s.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter());
+	else if (Book())
+		sprintf(buf[loop], "%s", osisbooks[Testament()-1][Book()-1]);
+	else	sprintf(buf[loop], "");
 	return buf[loop++];
 }

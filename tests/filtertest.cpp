@@ -9,12 +9,13 @@ int main(int argc, char **argv) {
 	SWModule *module = mgr.Modules.begin()->second;
 //    ThMLHTMLHREF filter;
     ThMLOSIS filter;
+    module->SetKey("jas1:1");
     char *buf = new char [ MAXBUF ];
     memset(buf, 0, MAXBUF);
     strcpy(buf, "This is a verse reference: <scripRef>James 1:19</scripRef> with an <img src=\"/images/yoyo.jpg\">");
     filter.ProcessText(buf, MAXBUF - 3, *module, module);
 
     cout << buf << "\n";
-
+    delete [] buf;
     return 0;
 }
