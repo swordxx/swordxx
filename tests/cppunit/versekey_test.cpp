@@ -11,9 +11,20 @@ using namespace std;
 
 class VerseKeyTest : public CppUnit::TestFixture  {
 CPPUNIT_TEST_SUITE( VerseKeyTest );
+
 CPPUNIT_TEST( testSingleKeyParsing );
 CPPUNIT_TEST( testRangeKeyParsing );
 CPPUNIT_TEST( testListKeyParsing );
+
+CPPUNIT_TEST( testLessThan );
+CPPUNIT_TEST( testLessEqualThan );
+CPPUNIT_TEST( testEquality );
+CPPUNIT_TEST( testGreaterEqualThan );
+CPPUNIT_TEST( testGreaterThan );
+
+CPPUNIT_TEST( testDecrement );
+CPPUNIT_TEST( testIncrement );
+
 CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -177,8 +188,93 @@ public:
 		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1; 3:10", "en") 	== "I John 1:1; I John 3:10;");
 		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ;3:10", "en") 	== "I John 1:1; I John 3:10;");
 		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ; 3:10", "en") 	== "I John 1:1; I John 3:10;");
-
 	}
+	
+	void testLessThan() {
+		VerseKey vk1("Luke 1:1");
+		VerseKey vk2("Luke 1:1");
+		VerseKey vk3("Luke 1:2");
+		
+		CPPUNIT_ASSERT( !(vk1 < vk2) );
+		CPPUNIT_ASSERT( vk1 < vk3 );
+
+		for (int n = 0; n < 30; n++) {//some more stress :)
+			vk1 = "Luke 1:1";
+			vk3 = vk1;
+			
+			for (int j = 0; j < 30; ++j) {
+				vk1--;
+				CPPUNIT_ASSERT( vk1 < vk3 );
+				CPPUNIT_ASSERT( vk1 < VerseKey("Revelation") );
+				CPPUNIT_ASSERT( !(vk1 < VerseKey("Gen")) );
+			}
+		}
+	}
+	void testLessEqualThan() {
+		VerseKey vk1("Luke 1:1");
+		VerseKey vk2("Luke 1:1");
+		VerseKey vk3("Luke 1:2");
+		
+		CPPUNIT_ASSERT( vk1 <= vk2 );
+		CPPUNIT_ASSERT( vk1 <= vk3 );
+	
+		for (int n = 0; n < 30; n++) { //some more stress
+			vk1 = "Luke 1:1";
+			vk3 = vk1;
+			
+			for (int j = 0; j < 30; ++j) {
+				CPPUNIT_ASSERT( vk1 <= vk3 );
+				CPPUNIT_ASSERT( vk1 <= VerseKey("Revelation") );
+				CPPUNIT_ASSERT( !(vk1 <= VerseKey("Gen")) );
+				
+				vk1--;
+			}
+		}
+	}
+	void testEquality() {
+		VerseKey vk1("Luke 1:1");
+		VerseKey vk2("Luke 1:1");
+		VerseKey vk3("Luke 1:2");
+		
+		CPPUNIT_ASSERT( vk1 == vk2 );
+		CPPUNIT_ASSERT( !(vk1 == vk3) );
+	}
+	void testGreaterEqualThan() {
+		VerseKey vk1("Luke 1:3");
+		VerseKey vk2("Luke 1:3");
+		VerseKey vk3("Luke 1:1");
+		
+		CPPUNIT_ASSERT( vk1 >= vk2 );
+		CPPUNIT_ASSERT( vk1 >= vk3 );
+	}
+	void testGreaterThan() {
+		VerseKey vk1("Luke 1:3");
+		VerseKey vk2("Luke 1:1");
+		VerseKey vk3("Luke 1:2");
+		
+		CPPUNIT_ASSERT( vk1 > vk2 );
+		CPPUNIT_ASSERT( vk1 > vk3 );
+	}
+
+	void testDecrement() {
+		VerseKey vk("Matthew 1:1");
+		const int delta = 10;
+		
+		for (int i =0; i < delta; ++i) {
+			vk--;
+		}
+		CPPUNIT_ASSERT( vk == VerseKey("Mal 3:15") );
+	}
+	void testIncrement() {
+		VerseKey vk("Mal 3:15");
+		const int delta = 10;
+		
+		for (int i =0; i < delta; ++i) {
+			vk++;
+		}
+		CPPUNIT_ASSERT( vk == VerseKey("Matthew 1:1") );
+	}
+
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VerseKeyTest);
