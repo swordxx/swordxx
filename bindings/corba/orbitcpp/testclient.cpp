@@ -40,12 +40,16 @@ int main (int argc, char *argv[])
 			std::cout << module->getRenderText() << "\n";
 		}
 */
-		module = mgr->getModuleByName("KJV");
+		module = mgr->getModuleByName("NASB");
+		module->setKeyText("jn3:1");
+		std::cout << module->getRenderText();
+		/*
 		swordorb::SearchHitList *searchResults;
 		searchResults = module->search("God love world", swordorb::MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults->length(); i++) {
 			std::cout << (*searchResults)[i].key << "\n";
 		}
+		*/;
 
 
 		

@@ -139,6 +139,15 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				u->suspendTextPassThru = false;
 			}
 		}
+		// <title>
+		else if (!strcmp(tag.getName(), "title")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<h3>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</h3>";
+			}
+		}
 
 		// <q> quote
 		else if (!strcmp(tag.getName(), "q")) {

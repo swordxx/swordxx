@@ -61,7 +61,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					header = "";
 					continue;
 				}
-				else {
+				if (!tag.isEndTag()) {
 					hide = true;
 					header = "";
 					if (option) {	// we want the tag in the text
