@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.26 2001/07/03 23:26:06 chrislit Exp $
+ * $Id: swmodule.h,v 1.27 2001/10/22 22:10:16 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,12 +32,12 @@
 
 #include <defs.h>
 
-#define FILTERPAD 8
+#define FILTERPAD 72
 
 using namespace std;
 
 typedef list < SWFilter * >FilterList;
-
+enum DIRECTION {DIRECTION_LTR, DIRECTION_RTL, DIRECTION_BIDI};
 
 /**
   * The class SWModule is the base class for all modules used in Sword.
@@ -57,6 +57,7 @@ protected:
   char *modname;
   char *moddesc;
   char *modtype;
+  char direction;
 
   /** this module's display object */
   SWDisplay *disp;
@@ -108,7 +109,7 @@ public:
   *  others of same type under their modtype heading)
   *  see also @ref Type
   */
-  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, bool unicode = false);
+  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, bool unicode = false, char dir = DIRECTION_LTR);
 
   /** Cleans up instance of SWModule
   */
@@ -207,6 +208,14 @@ public:
   * @return pointer to modtype
   */
   virtual char *Type (const char *imodtype = 0);
+
+  /** Sets/gets module direction
+  *
+  * @param newdir value which to set direction;
+  *  [-1] - only get
+  * @return char direction
+  */
+  virtual char Direction(char newdir = -1);
 
   // search methods
 
