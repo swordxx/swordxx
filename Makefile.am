@@ -133,7 +133,8 @@ install: install-recursive
 	@echo ""
 
 
-install-data-am: installlocaleDATA installmodsDATA
+
+install-data-am: installlocaleDATA installmodsDATA install-pkgconfigDATA
 
 uninstall-am: uninstall-info-am uninstalllocaleDATA \
 	uninstallmodsDATA uninstall-sysconfDATA
