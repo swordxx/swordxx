@@ -128,11 +128,8 @@ ThMLRTF::ThMLRTF()
 
 	setTokenCaseSensitive(true);
 
-       	addTokenSubstitute("scripRef", " {\\cf2 #");
 	addTokenSubstitute("/scripRef", "|}");
-	addTokenSubstitute("note", " {\\i1\\fs15 (");
 	addTokenSubstitute("/note", ") }");
-        addTokenSubstitute("div", "{");
 
         addTokenSubstitute("br", "\\line ");
         addTokenSubstitute("br /", "\\line ");
@@ -155,7 +152,7 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
-                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
+/*                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
         			pushString(buf, " {\\fs15 <");
                                 for (unsigned int i = 28; token[i] != '\"'; i++)
                 		        *(*buf)++ = token[i];
@@ -180,7 +177,7 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 			}
 
 			pushString(buf, ")}");
-		}
+*/		}
 		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
 			pushString(buf, "{\\fs15 (");
 			for (unsigned int i = 25; token[i] != '\"'; i++)
@@ -190,13 +187,16 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 		else if (!strncmp(token, "scripRef", 8)) {
 			pushString(buf, "{\\cf2 #");
 		}
-                else if (!strncmp(token, "div class=\"title\"", 17)) {
-                        pushString(buf, "{\\par\\i1\\b1 ");
-                        userData["sechead"] = "true";
-                }
-                else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-                        pushString(buf, "{\\par\\i1\\b1 ");
-                        userData["sechead"] = "true";
+                else if (!strncmp(token, "div", 3)) {
+                        *(*buf)++ = '{';
+                        if (!strncmp(token, "div class=\"title\"", 17)) {
+                                pushString(buf, "\\par\\i1\\b1 ");
+                                userData["sechead"] = "true";
+                        }
+                        else if (!strncmp(token, "div class=\"sechead\"", 19)) {
+                                pushString(buf, "\\par\\i1\\b1 ");
+                                userData["sechead"] = "true";
+                        }
                 }
                 else if (!strncmp(token, "/div", 4)) {
                         *(*buf)++ = '}';

@@ -100,6 +100,33 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				case 'R':
 					switch(token[1])
 					{
+					case 'X':
+					  *to++ = '<';
+					  *to++ = 'a';
+					  *to++ = ' ';
+					  *to++ = 'h';
+					  *to++ = 'r';
+					  *to++ = 'e';
+					  *to++ = 'f';
+					  *to++ = '=';
+					  *to++ = '\"';
+					  for (const char *tok = token + 3; *tok; tok++) {
+					    if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
+					      *to++ = *tok;
+					    }
+					    else {
+					      break;
+					    }
+					  }
+					  *to++ = '\"';
+					  *to++ = '>';
+					  continue;
+					case 'x':
+					  *to++ = '<';
+					  *to++ = '/';
+					  *to++ = 'a';
+					  *to++ = '>';
+					  continue;
 					  case 'B':								//word(s) explained in footnote
 							*to++ = '<';
 							*to++ = 'i';

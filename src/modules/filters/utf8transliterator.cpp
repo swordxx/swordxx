@@ -183,12 +183,12 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 			else if (option == SE_BGREEK)
 				id += UnicodeString(";Greek-BGreek");
 			else {
-                                if (!strnicmp (module->Lang(), "cop", 3)) {
+	            if (!strnicmp (((SWModule*)module)->Lang(), "cop", 3)) {
         				id += UnicodeString(";Coptic-Latin");
-                                }
-                                else {
-        				id += UnicodeString(";Greek-Latin");
-                                }
+                }
+                else {
+		   				id += UnicodeString(";Greek-Latin");
+                }
 				scripts[SE_LATIN] = true;
 			}
 		}
@@ -244,13 +244,13 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 			id += UnicodeString(";Ugaritic-Latin");
 			scripts[SE_LATIN] = true;
 		}
-                if (scripts[SE_HAN]) {
-                        if (!strnicmp (module->Lang(), "ja", 2)) {
-        			id += UnicodeString(";Kanji-OnRomaji");
-                        }
-                        else {
-        			id += UnicodeString(";Han-Pinyin");
-                        }
+        if (scripts[SE_HAN]) {
+	        if (!strnicmp (((SWModule*)module)->Lang(), "ja", 2)) {
+     			id += UnicodeString(";Kanji-OnRomaji");
+            }
+            else {
+       			id += UnicodeString(";Han-Pinyin");
+            }
 			scripts[SE_LATIN] = true;
 		}
 

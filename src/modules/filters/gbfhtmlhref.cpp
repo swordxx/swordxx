@@ -26,6 +26,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	setTokenCaseSensitive(true);
 
 	addTokenSubstitute("Rf", ")</small></font>");
+	addTokenSubstitute("Rx", "</a>");
 	addTokenSubstitute("FI", "<i>"); // italics begin
 	addTokenSubstitute("Fi", "</i>");
 	addTokenSubstitute("FB", "<n>"); // bold begin
@@ -95,6 +96,20 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 				if(*tok != '\"') 			
 					*(*buf)++ = *tok;		
 			pushString(buf, "</a>)</em></small>");
+		}
+
+		else if (!strncmp(token, "RX", 2)) {
+			pushString(buf, "<a href=\"");
+			for (const char *tok = token + 3; *tok; tok++) {
+			  if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
+			    *(*buf)++ = *tok;
+			  }
+			  else {
+			    break;
+			  }
+			}
+			*(*buf)++ = '\"';
+			*(*buf)++ = '>';
 		}
 
 		else if (!strncmp(token, "RB", 2)) {

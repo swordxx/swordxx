@@ -101,6 +101,12 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 				break;
 			case 'R':
 				switch(token[1]) {
+				case 'X':
+				  *to++ = '#';
+				  continue;
+				case 'x':
+				  *to++ = '|';
+				  continue;
 				case 'F':               // footnote begin
 					*to++ = '{';
 					*to++ = '\\';

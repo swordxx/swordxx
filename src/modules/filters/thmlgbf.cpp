@@ -180,10 +180,18 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 				continue;
 			}
 			else if (!strncmp(token, "scripRef", 8)) {
-				*to++ = '#';
+				*to++ = '<';
+				*to++ = 'R';
+				*to++ = 'X';
+				*to++ = '>';
+				continue;
 			}
 			else if (!strncmp(token, "/scripRef", 9)) {
-				*to++ = '|';
+				*to++ = '<';
+				*to++ = 'R';
+				*to++ = 'x';
+				*to++ = '>';
+				continue;
 			}
 			else if (!strncmp(token, "note", 4)) {
 				*to++ = '<';
