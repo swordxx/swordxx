@@ -18,8 +18,8 @@ public:
 		return (*(find(k))).second;
 	}
 	bool has(const Key& k, const T &val) const {
-		multimap<Key, T, Compare>::const_iterator start = lower_bound(k);
-		multimap<Key, T, Compare>::const_iterator end = upper_bound(k);
+		typename multimap<Key, T, Compare>::const_iterator start = lower_bound(k);
+		typename multimap<Key, T, Compare>::const_iterator end = upper_bound(k);
 		for (; start!=end; start++) {
 			if (start->second == val)
 				return true;
