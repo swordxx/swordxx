@@ -9,8 +9,8 @@ int main(int argc, char **argv) {
 //	x.setAttribute("newOne", "oneValue");
 	cout << x.toString() << "\n";
 	cout << "Tag name: [" << x.getName() << "]\n";
-	ListString attributes = x.getAttributeNames();
-	for (ListString::iterator it = attributes.begin(); it != attributes.end(); it++) {
+	StringList attributes = x.getAttributeNames();
+	for (StringList::iterator it = attributes.begin(); it != attributes.end(); it++) {
 		const char *name = it->c_str();
 		cout << " - attribute: [" << name << "] = [";
 		cout << x.getAttribute(name) << "]\n";
