@@ -91,8 +91,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 				// if not a footnote token, keep token in text
 				if (!hide) {
 					text += '<';
-					for (char *tok = token; *tok; tok++)
-						text += *tok;
+					text += token;
 					text += '>';
 				}
 				continue;

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.3 2003/02/24 05:26:15 scribe Exp $
+* $Id: swbuf.cpp,v 1.4 2003/02/27 10:41:18 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -133,16 +133,6 @@ void SWBuf::append(const SWBuf &str) {
 }
 
 
-/******************************************************************************
- * SWBuf::append - appends a value to the current value of this SWBuf
- */
-
-void SWBuf::append(char ch) {
-	assureSize((end-buf)+1);
-	*end = ch;
-	end++;
-	*end = 0;
-}
 
 
 /******************************************************************************
@@ -158,21 +148,8 @@ void SWBuf::setSize(unsigned int len) {
 }
 
 
-SWBuf SWBuf::operator + (const SWBuf &other) const {
-	SWBuf retVal = buf;
-	retVal += other;
-	return retVal;
-}
 
 
-void SWBuf::assureSize(unsigned int size) {
-	if (size > allocSize) {
-		allocSize = size + 5;
-		end = (char *)(end - buf);
-		buf = (char *)realloc(buf, allocSize);
-		end = (buf + (unsigned int)end);
-	}
-}
 
 
 // WARNING: This function can only write at most
