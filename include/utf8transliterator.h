@@ -20,8 +20,8 @@
 #ifndef UTF8TRANSLITERATOR_H
 #define UTF8TRANSLITERATOR_H
 
-enum scriptEnum {SE_OFF, SE_LATIN, SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_KANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, /*one-way (to) transliterators*/ SE_MALTESE, SE_BETA, SE_BGREEK, SE_BHEBREW, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
-#define NUMSCRIPTS 24
+enum scriptEnum {SE_OFF, SE_LATIN, SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, /*one-way (to) transliterators*/ SE_MALTESE, SE_BETA, SE_BGREEK, SE_MCHEBREW, SE_MCSYRIAC, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
+#define NUMSCRIPTS 26
 
 #include <swfilter.h>
 
@@ -34,11 +34,12 @@ class SWDLLEXPORT UTF8Transliterator : public SWFilter
   char option;
 
   static const char optionstring[][NUMSCRIPTS];
-  
+
   static const char optName[];
   static const char optTip[];
   OptionsList options;
  public:
+  char lang[2];
   UTF8Transliterator ();
   virtual ~ UTF8Transliterator ();
   virtual char ProcessText (char *text, int maxlen, const SWKey * key);
