@@ -1,0 +1,57 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright 2001, CrossWire Bible Society (http://www.crosswire.org)
+// Use freely.
+//--------------------------------------------------------------------
+// Based upon standard Gothic transliteration system from
+// http://www.cs.tut.fi/~dla/gothic.html
+//--------------------------------------------------------------------
+
+// Latin-Gothic
+
+translit_Latin_Gothic {
+  Rule {
+    ":: NFD (NFC) ;" 
+    
+    ":: [:Ll:] lower() ;"
+
+    // the hv ligature might not be ligatured
+    "hv> |ƕ;"
+
+    // completeness mapping for latin
+    "c> |k;"
+    "v> |w;"
+    "y> |i;"
+
+    // latin-gothic transliteration
+    "a<>𐌰;"
+    "b<>𐌱;"
+    "g<>𐌲;"
+    "d<>𐌳;"
+    "e<>𐌴;"
+    "q<>𐌵;"
+    "z<>𐌶;"
+    "h<>𐌷;"
+    "þ<>𐌸;"
+    "i<>𐌹;"
+    "k<>𐌺;"
+    "l<>𐌻;"
+    "m<>𐌼;"
+    "n<>𐌽;"
+    "j<>𐌾;"
+    "u<>𐌿;"
+    "p<>𐍀;"
+    "90<𐍁;"  // 90
+    "r<>𐍂;"
+    "s<>𐍃;"
+    "t<>𐍄;"
+    "w<>𐍅;"
+    "f<>𐍆;"
+    "x<>𐍇;"
+    "ƕ<>𐍈;"
+    "o<>𐍉;"
+    "900<𐍊;"  // 900
+
+    ":: NFC (NFD) ;"    
+  }
+}

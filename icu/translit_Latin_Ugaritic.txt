@@ -1,0 +1,63 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright 2001, CrossWire Bible Society (http://www.crosswire.org)
+// Use freely.
+//--------------------------------------------------------------------
+// Based upon SBL standard transliteration system from
+// the SBL Handbook of Style p.31
+//--------------------------------------------------------------------
+
+// Latin-Ugaritic
+
+translit_Latin_Ugaritic {
+  Rule {
+    ":: NFD (NFC) ;" 
+    
+    ":: lower() ;"
+
+    // completeness
+    "c> | k;"
+    "e> | i;"
+    "f> | w;"
+    "j> | i;"
+    "o> | a;"
+    "v> | w;"
+    "x> | k;"
+
+    // ugaritic cuneiform
+    "h ̣ <> 𐏈;"
+    "d ̱ <> 𐏏;"
+    "z ̣ <> 𐏑;"
+    "s ̣ <> 𐏕;"
+    "g ́ <> 𐏙;"
+    "s ̀ <> 𐏝;"
+
+    "a <> 𐏀;"
+    "b <> 𐏁;"
+    "g <> 𐏂;"
+    "h ̮<> 𐏃;"
+    "d <> 𐏄;"
+    "h <> 𐏅;"
+    "w <> 𐏆;"
+    "z <> 𐏇;"
+    "t ̣ <> 𐏉;"
+    "y <> 𐏊;"
+    "k <> 𐏋;"
+    "s ̌ <> 𐏌;"
+    "l <> 𐏍;"
+    "m <> 𐏎;"
+    "n <> 𐏐;"
+    "s <> 𐏒;"
+    "ʿ <> 𐏓;"
+    "p <> 𐏔;"
+    "q <> 𐏖;"
+    "r <> 𐏗;"
+    "t ̱ <> 𐏘;"
+    "t <> 𐏚;"
+    "i <> 𐏛;"
+    "u <> 𐏜;"
+    "' ' <> 𐏟;"
+
+    ":: NFC (NFD) ;"    
+  }
+}

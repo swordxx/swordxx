@@ -1,0 +1,137 @@
+//--------------------------------------------------------------------
+// Copyright 2001, CrossWire Bible Society (http://www.crosswire.org)
+// Use freely.
+//--------------------------------------------------------------------
+// Based upon UNGEGN recommendations from
+// http://www.eki.ee/wgrs/rom2_ka.pdf
+//--------------------------------------------------------------------
+
+// Latin-Georgian
+
+translit_Latin_Georgian {
+  Rule {
+    ":: NFD (NFC) ;" 
+
+    ":: [:LATIN:] lower();"
+
+    //titlecase digraphs
+    "Ch\'<\u10B9}[:LowercaseLetter:];"
+    "Ts\'<\u10BA}[:LowercaseLetter:];"
+
+    "Zh<\u10AF}[:LowercaseLetter:];"
+    "Gh<\u10B6}[:LowercaseLetter:];"
+    "Sh<\u10B8}[:LowercaseLetter:];"
+    "Dz<\u10BB}[:LowercaseLetter:];"
+    "Ts<\u10BC}[:LowercaseLetter:];"
+    "Ch<\u10BD}[:LowercaseLetter:];"
+    "Kh<\u10BE}[:LowercaseLetter:];"
+
+    //non-UNGEGN
+    "Ey<\u10C1}[:Ll:];"
+    "Ow<\u10C5}[:Ll:];"
+
+    //uppercase digraphs
+    "CH\'<\u10B9;"
+    "TS\'<\u10BA;"
+
+    "T\'<\u10A7;"
+    "ZH<\u10AF;"
+    "P\'<\u10B4;"
+    "K\'<\u10B5;"
+    "GH<\u10B6;"
+    "SH<\u10B8;"
+    "DZ<\u10BB;"
+    "TS<\u10BC;"
+    "CH<\u10BD;"
+    "KH<\u10BE;"
+
+    //non-UNGEGN
+    "EY<\u10C1;"
+    "Q\'<\u10C4;"
+    "OW<\u10C5;"
+
+    "A<\u10A0;"
+    "B<\u10A1;"
+    "G<\u10A2;"
+    "D<\u10A3;"
+    "E<\u10A4;"
+    "V<\u10A5;"
+    "Z<\u10A6;"
+    "I<\u10A8;"
+    "K<\u10A9;"
+    "L<\u10AA;"
+    "M<\u10AB;"
+    "N<\u10AC;"
+    "O<\u10AD;"
+    "P<\u10AE;"
+    "R<\u10B0;"
+    "S<\u10B1;"
+    "T<\u10B2;"
+    "U<\u10B3;"
+    "Q<\u10B7;"
+    "J<\u10BF;"
+    "H<\u10C0;"
+    "Y<\u10C2;"
+    "W<\u10C3;"
+
+    //lowercase digraphs
+    "ch\'<>\u10E9;"
+    "ts\'<>\u10EA;"
+
+    "t\'<>\u10D7;"
+    "zh<>\u10DF;"
+    "p\'<>\u10E4;"
+    "k\'<>\u10E5;"
+    "gh<>\u10E6;"
+    "sh<>\u10E8;"
+    "dz<>\u10EB;"
+    "ts<>\u10EC;"
+    "ch<>\u10ED;"
+    "kh<>\u10EE;"
+
+    //non-UNGEGN
+    "ey<>\u10F1;"
+    "q\'<>\u10F4;"
+    "ow<>\u10F5;"
+
+    "a<>\u10D0;"
+    "b<>\u10D1;"
+    "g<>\u10D2;"
+    "d<>\u10D3;"
+    "e<>\u10D4;"
+    "v<>\u10D5;"
+    "z<>\u10D6;"
+    "i<>\u10D8;"
+    "k<>\u10D9;"
+    "l<>\u10DA;"
+    "m<>\u10DB;"
+    "n<>\u10DC;"
+    "o<>\u10DD;"
+    "p<>\u10DE;"
+    "r<>\u10E0;"
+    "s<>\u10E1;"
+    "t<>\u10E2;"
+    "u<>\u10E3;"
+    "q<>\u10E7;"
+    "j<>\u10EF;"
+    "h<>\u10F0;"
+
+    //non-UNGEGN
+    "y<>\u10F2;"
+    "w<>\u10F3;"
+    "f<>\u10F6;"
+
+    //paragraph
+    "\u00B6<>\u10FB;"
+
+    //completeness mappings for latin
+    "c>\u10D9;"
+    "x>\u10EE;"
+
+    //remove untransliterated
+    "<[:GEORGIAN:];"
+    "[:LATIN:]>;"    
+
+    ":: NFC (NFD) ;"    
+  }
+}

@@ -1,0 +1,129 @@
+//--------------------------------------------------------------------
+// Copyright 2001, CrossWire Bible Society (http://www.crosswire.org)
+// Use freely.
+//--------------------------------------------------------------------
+// Based upon SBL standard Coptic transliteration system from
+// The SBL Handbook of Style p. 30
+//--------------------------------------------------------------------
+
+// Latin-Coptic
+
+translit_Latin_Coptic {
+  Rule {
+    ":: NFD (NFC) ;" 
+    
+    "$macron = \u0304;"
+    "$caron = \u030C;"
+
+    //completeness mappings for latin
+    "C}[^$caron]>|C $caron;"
+    "c}[^$caron]>|c $caron;"
+    "Q>|K;"
+    "q>|k;"
+    "V>|U;"
+    "v>|u;"
+    "W>|U;"
+    "w>|u;"
+    "X>|KS;"
+    "x>|ks;"
+    "Y>|U;"
+    "y>|u;"
+
+    //titlecase digraphs
+    "Th<>\u0398}[:LowercaseLetter:];"
+    "Ks<>\u039E}[:LowercaseLetter:];"
+    "Ph<>\u03A6}[:LowercaseLetter:];"
+    "Kh<>\u03A7}[:LowercaseLetter:];"
+    "Ps<>\u03A8}[:LowercaseLetter:];"
+
+    //coptic-unique
+    "Ti<>\u03EE}[:LowercaseLetter:];"
+
+    //uppercase digraphs
+    "TH<>\u0398;"
+    "KS<>\u039E;"
+    "PH<>\u03A6;"
+    "KH<>\u03A7;"
+    "PS<>\u03A8;"
+
+    //coptic-unique
+    "TI<>\u03EE;"
+
+    "E $macron<>\u0397;"
+    "O $macron<>\u03A9;"
+
+    //coptic-unique
+    "S $caron<>\u03E2;"
+    "C $caron<>\u03EC;"
+
+    "A<>\u0391;"
+    "B<>\u0392;"
+    "G<>\u0393;"
+    "D<>\u0394;"
+    "E<>\u0395;"
+    "Z<>\u0396;"
+    "I<>\u0399;"
+    "K<>\u039A;"
+    "L<>\u039B;"
+    "M<>\u039C;"
+    "N<>\u039D;"
+    "O<>\u039F;"
+    "P<>\u03A0;"
+    "R<>\u03A1;"
+    "S<>\u03A3;"
+    "T<>\u03A4;"
+    "U<>\u03A5;"
+
+    //coptic-unique    
+    "F<>\u03E4;"
+    "H<>\u03E8;"
+    "J<>\u03EA;"
+
+    // lowercase digraphs
+    "th<>\u03B8;"
+    "ks<>\u03BE;"
+    "ph<>\u03C6;"
+    "kh<>\u03C7;"
+    "ps<>\u03C8;"
+
+    //coptic-unique
+    "ti<>\u03EF;"
+
+    "e $macron<>\u03B7;"
+    "o $macron<>\u03C9;"
+
+    //coptic-unique
+    "s $caron<>\u03E3;"
+    "c $caron<>\u03ED;"
+
+    "a<>\u03B1;"
+    "b<>\u03B2;"
+    "g<>\u03B3;"
+    "d<>\u03B4;"
+    "e<>\u03B5;"
+    "z<>\u03B6;"
+    "i<>\u03B9;"
+    "k<>\u03BA;"
+    "l<>\u03BB;"
+    "m<>\u03BC;"
+    "n<>\u03BD;"
+    "o<>\u03BF;"
+    "p<>\u03C0;"
+    "r<>\u03C1;"
+    "s<\u03C2;"
+    "s<>\u03C3;"
+    "t<>\u03C4;"
+    "u<>\u03C5;"
+
+    //coptic-unique
+    "f<>\u03E5;"
+    "h<>\u03E9;"
+    "j<>\u03EB;"
+
+    //remove untransliterated
+    "<[:GREEK:];"
+    "[:LATIN:]>;"    
+
+    ":: NFC (NFD) ;"    
+  }
+}
