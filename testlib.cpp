@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <versekey.h>
 #include <rawtext.h>
 //#include <zcom.h>
