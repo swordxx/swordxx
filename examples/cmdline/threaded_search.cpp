@@ -54,7 +54,7 @@ void CSwordModuleSearch::startThread()  {
 
 	pthread_t *thread= new pthread_t;
 	m_isSearching = true;
-	int i = pthread_create(thread, 0, &dummy, this); 
+	int i = pthread_create(thread, attr, &dummy, this); 
 
 	cout << "Created the thread: " << i << endl;
 	cout.flush();
@@ -66,7 +66,7 @@ void CSwordModuleSearch::search()  {
 		printf("Return.");
 		return;
 	}
-	m_searchResult = m_module->Search(m_searchedText, -2, 0, 0, 0, &percentUpdate);
+	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, 0, 0, &percentUpdate);
 	m_isSearching = false;
 }
 
@@ -77,8 +77,8 @@ int main(int argc, char **argv) {
 
 	CSwordModuleSearch* moduleSearch = new CSwordModuleSearch();
 
-	if (argc != 2) {
-		fprintf(stderr, "usage: %s <modname>\n", argv[0]);
+	if (argc != 3) {
+		fprintf(stderr, "usage: %s <modname> <searched text>\n", argv[0]);
 		exit(-1);
 	}
 
@@ -90,8 +90,8 @@ int main(int argc, char **argv) {
 		}
 		exit(-1);
 	}
-
-	moduleSearch->m_searchedText = "Jesus";
+	
+	moduleSearch->m_searchedText = argv[2];
 	moduleSearch->m_module = (*it).second;
 	moduleSearch->startThread();
 	
@@ -104,8 +104,11 @@ int main(int argc, char **argv) {
 			cout.flush();
 	};
 
+	cout << endl << "Number of found items: " <<
+moduleSearch->m_searchResult.Count() << endl;
 	cout << "Finished program" << endl;
 	delete moduleSearch;
+
 	cout.flush();
 	exit(0);
 }
