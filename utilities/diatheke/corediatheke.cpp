@@ -5,6 +5,7 @@
 // see accompanying LICENSE file for license details
 
 #include "corediatheke.h"
+#include <regex.h>
 #include <iostream>
 #include <string>
 #include <list>
@@ -219,7 +220,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		  querytype = QT_LD;
 		
 		//do search stuff
-		searchtype = 1 - searchtype;
+		char st = 1 - searchtype;
 		if (querytype == QT_BIBLE) {
 		  *output << "Verses containing \"";
 		}
@@ -227,7 +228,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	        *output << ref;
 		*output << "\"-- ";
 
-		listkey = target->Search(ref, searchtype);
+		listkey = target->Search(ref, st, REG_ICASE);
 		
 		if (strlen((const char*)listkey)) {
 		  if (!listkey.Error()) {
