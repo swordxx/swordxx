@@ -39,7 +39,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
+# PROP Output_Dir "..\.."
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
@@ -62,11 +62,11 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
+# PROP Output_Dir "..\.."
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../apps/windoze/CBuilder5/InstallMgr/curl" /I "../../../include" /I "../../../src/utilfuns/win32" /I "../../../apps/windoze/CBuilder5/InstallMgr/curl/include" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\libswordd.lib"
 
 !ELSEIF  "$(CFG)" == "libsword - Win32 Debug with ICU"
 
@@ -85,11 +85,11 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "libsword___Win32_Debug_with_ICU"
+# PROP Output_Dir "..\.."
 # PROP Intermediate_Dir "libsword___Win32_Debug_with_ICU"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../src/utilfuns/win32" /I "../../../include" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /D "__VISUALC__" /YX /FD /GZ /c
-# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../../icu-sword/include" /I "../../../apps/windoze/CBuilder5/InstallMgr/curl" /I "../../../include" /I "../../../src/utilfuns/win32" /I "../../../apps/windoze/CBuilder5/InstallMgr/curl/include" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /D "_ICU_" /YX /FD /GZ /c
+# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../../icu-sword/source/common" /I "../../../../icu-sword/source/i18n" /I "../../../include" /I "../../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /D "_ICU_" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -97,7 +97,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\libswordicud.lib"
 
 !ELSEIF  "$(CFG)" == "libsword - Win32 Release with ICU"
 
@@ -108,7 +108,7 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "libsword___Win32_Release_with_ICU"
+# PROP Output_Dir "..\.."
 # PROP Intermediate_Dir "libsword___Win32_Release_with_ICU"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /D "__VISUALC__" /YX /FD /c
@@ -120,7 +120,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\libswordicu.lib"
 
 !ENDIF 
 
@@ -260,10 +260,6 @@ SOURCE=..\..\..\src\utilfuns\zlib\inftrees.c
 # Begin Source File
 
 SOURCE=..\..\..\src\utilfuns\zlib\infutil.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\mgr\installmgr.cpp
 # End Source File
 # Begin Source File
 
