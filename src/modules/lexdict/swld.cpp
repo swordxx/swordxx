@@ -31,7 +31,6 @@ SWLD::~SWLD()
 {
 	if (entkeytxt)
 		delete [] entkeytxt;
-    this->SWModule::~SWModule();
 }
 
 

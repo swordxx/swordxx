@@ -37,7 +37,5 @@ void StrKey::init() {
  * ENT:	ikey - text key
  */
 
-StrKey::~StrKey()
-{
-        this->SWKey::~SWKey();
+StrKey::~StrKey() {
 }

@@ -50,8 +50,7 @@ SWKey *SWKey::clone() const
  * SWKey Destructor - cleans up instance of SWKey
  */
 
-SWKey::~SWKey()
-{
+SWKey::~SWKey() {
 	if (keytext)
 		delete [] keytext;
 }

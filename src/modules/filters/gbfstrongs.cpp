@@ -28,7 +28,6 @@ GBFStrongs::GBFStrongs() {
 
 
 GBFStrongs::~GBFStrongs() {
-    this->SWFilter::~SWFilter();
 }
 
 void GBFStrongs::setOptionValue(const char *ival)

@@ -25,9 +25,7 @@ ZipCompress::ZipCompress() : SWCompress()
  * ZipCompress Destructor - Cleans up instance of ZipCompress
  */
 
-ZipCompress::~ZipCompress()
-{
-    this->SWCompress::~SWCompress();
+ZipCompress::~ZipCompress() {
 }
 
 

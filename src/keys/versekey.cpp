@@ -124,14 +124,12 @@ SWKey *VerseKey::clone() const
  * ENT:	ikey - text key
  */
 
-VerseKey::~VerseKey()
-{
+VerseKey::~VerseKey() {
 	if (upperBound)
 		delete upperBound;
 	if (lowerBound)
 		delete lowerBound;
 	--instance;
-    this->SWKey::~SWKey();
 }
 
 

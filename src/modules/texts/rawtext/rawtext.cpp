@@ -71,8 +71,6 @@ RawText::~RawText()
 
 	if (fastSearch[1])
 		delete fastSearch[1];
-
-     this->SWText::~SWText();	// clean up parent
 }
 
 

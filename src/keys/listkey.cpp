@@ -54,7 +54,6 @@ SWKey *ListKey::clone() const
 ListKey::~ListKey()
 {
 	ClearList();
-    this->SWKey::~SWKey();
 }
 
 

@@ -40,8 +40,6 @@ RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay 
 
 RawLD::~RawLD()
 {
-    this->RawStr::~RawStr();
-    this->SWLD::~SWLD();
 }
 
 

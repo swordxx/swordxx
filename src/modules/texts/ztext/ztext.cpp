@@ -54,8 +54,6 @@ zText::~zText()
 
 	if (lastWriteKey)
 		delete lastWriteKey;
-    this->zVerse::~zVerse();
-    this->SWText::~SWText();
 }
 
 

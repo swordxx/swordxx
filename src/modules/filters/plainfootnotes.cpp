@@ -37,7 +37,6 @@ PLAINFootnotes::PLAINFootnotes(){
 }
 
 PLAINFootnotes::~PLAINFootnotes(){
-    this->SWFilter::~SWFilter();
 }
 
 

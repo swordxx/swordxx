@@ -38,11 +38,7 @@ zCom::zCom(char *ipath, char *iname, char *idesc, SWDisplay *idisp) : RawVerse(i
  * zCom Destructor - Cleans up instance of zCom
  */
 
-zCom::~zCom()
-{
-    this->SWCompress::~SWCompress();
-    this->SWCom::~SWCom();
-    this->RawVerse::~RawVerse();
+zCom::~zCom() {
 }
 
 

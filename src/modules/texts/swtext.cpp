@@ -25,9 +25,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp): SW
  * SWText Destructor - Cleans up instance of SWText
  */
 
-SWText::~SWText()
-{
-	this->SWModule::~SWModule();	// clean up parent
+SWText::~SWText() {
 }
 
 

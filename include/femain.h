@@ -1,6 +1,6 @@
 /*
  *
- * $Id: femain.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: femain.h,v 1.3 2001/02/21 05:53:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,7 +25,7 @@ class FEMain
 {
 public:
   FEMain ();
-  ~FEMain ();
+  virtual ~FEMain ();
   list < SWDisplay * >displays;	// so we can delete each display we create
 };
 
