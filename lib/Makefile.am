@@ -17,11 +17,8 @@ lib_LTLIBRARIES = libsword.la
 
 libsword_la_SOURCES =
 if ICU
-#ICU 2.1
-#ICULIBADD = -licui18n -licuuc -lustdio
-#ICU 2.6
-ICULIBADD = -licui18n -licuuc -licuio
-ICUDEF = -DSWICU_DATA=\"${pkglibdir}/icu${ICU_VER}\" 
+ICULIBADD = $(ICU_LIBS) $(ICU_IOLIBS)
+ICUDEF = -DSWICU_DATA=\"${pkglibdir}/${VERSION}_icu_${ICU_VER}\" 
 else
 ICULIBADD =
 ICUDEF =

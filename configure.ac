@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.26 $)
+AC_REVISION($Revision: 1.27 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -76,6 +76,8 @@ fi
 # Find ICU tools
 # ---------------------------------------------------------------------
 ICU_VER=
+ICU_LIBS=
+ICU_IOLIBS=
 if test x$with_icu = xyes; then
 	AC_PATH_PROG([PKGDATA], [pkgdata],[/usr/sbin/pkgdata],[$PATH:/usr/sbin:.])
 	AC_PATH_PROG([GENCCODE], [genccode], [/usr/sbin/genccode], [$PATH:/usr/sbin:.])
@@ -83,11 +85,17 @@ if test x$with_icu = xyes; then
 	AC_PATH_PROG([GENRB], [genrb], [/usr/sbin/genrb], [$PATH:/usr/sbin:.])
 	
 	AC_PATH_PROG(ICU_CONFIG, icu-config, no)
+# The icu-config script was new in icu 2.2
 	if test "$ICU_CONFIG" = "no" ; then
 	   echo "*** The icu-config script installed by icu could not be found"
-	   echo "*** continuing anyway"
+	   echo "*** continuing anyway and assuming 2.1 or earlier"
+	   ICU_VER="2.1"
+	   ICU_LIBS="-licui18n -licuuc -licudata"
+	   ICU_IOLIBS="-lustdio"
 	else
 	   ICU_VER=`$ICU_CONFIG --version`
+	   ICU_LIBS=`$ICU_CONFIG --ldflags`
+	   ICU_IOLIBS=`$ICU_CONFIG --ldflags-ustdio`
 	fi
 fi
 
@@ -208,6 +216,8 @@ AC_SUBST(dir_confdef)
 AC_SUBST(CC)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
+AC_SUBST(ICU_LIBS)
+AC_SUBST(ICU_IOLIBS)
 AC_SUBST(ICU_VER)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
