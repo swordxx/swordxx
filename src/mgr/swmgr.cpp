@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.15 2000/03/12 23:12:32 scribe Exp $
+ * $Id: swmgr.cpp,v 1.16 2000/03/22 04:51:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -220,29 +220,6 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 	}
 
 
-	// check ~/.sword/
-
-	if (envhomedir != NULL) {
-		path = envhomedir;
-		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
-			path += "/";
-		path += ".sword/";
-		if (existsFile(path.c_str(), "mods.conf")) {
-			stdstr(prefixPath, "");
-			path += "mods.conf";
-			stdstr(configPath, path.c_str());
-			return;
-		}
-		if (existsDir(path.c_str(), "mods.d")) {
-			stdstr(prefixPath, "");
-			path += "mods.d";
-			stdstr(configPath, path.c_str());
-			*configType = 1;
-			return;
-		}
-	}
-
-
 	if ((fd = ::open("/etc/sword.conf", O_RDONLY)) > 0) {
 		::close(fd);
 		SWConfig etcconf("/etc/sword.conf");
@@ -264,6 +241,29 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 				*configType = 1;
 				return;
 			}
+		}
+	}
+
+
+	// check ~/.sword/
+
+	if (envhomedir != NULL) {
+		path = envhomedir;
+		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
+			path += "/";
+		path += ".sword/";
+		if (existsFile(path.c_str(), "mods.conf")) {
+			stdstr(prefixPath, "");
+			path += "mods.conf";
+			stdstr(configPath, path.c_str());
+			return;
+		}
+		if (existsDir(path.c_str(), "mods.d")) {
+			stdstr(prefixPath, "");
+			path += "mods.d";
+			stdstr(configPath, path.c_str());
+			*configType = 2;
+			return;
 		}
 	}
 }
@@ -330,8 +330,41 @@ void SWMgr::Load() {
 		}
 		else	config->Load();
 
-
 		CreateMods();
+
+//	augment config with ~/.sword/mods.d if it exists ---------------------
+			char *envhomedir  = getenv ("HOME");
+			if (envhomedir != NULL && configType != 2) { // 2 = user only
+				string path = envhomedir;
+				if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
+					path += "/";
+				path += ".sword/";
+				if (existsDir(path.c_str(), "mods.d")) {
+					char *savePrefixPath = 0;
+					char *saveConfigPath = 0;
+					SWConfig *saveConfig = 0;
+					stdstr(&savePrefixPath, prefixPath);
+					stdstr(&prefixPath, "");
+					path += "mods.d";
+					stdstr(&saveConfigPath, configPath);
+					stdstr(&configPath, path.c_str());
+					saveConfig = config;
+					config = myconfig = 0;
+					loadConfigDir(configPath);
+
+					CreateMods();
+
+					stdstr(&prefixPath, savePrefixPath);
+					delete []savePrefixPath;
+					stdstr(&configPath, saveConfigPath);
+					delete []saveConfigPath;
+					(*saveConfig) += *config;
+					delete myconfig;
+					config = myconfig = saveConfig;
+				}
+			}
+// -------------------------------------------------------------------------
+
 	}
 	else {
 		SWLog::systemlog->LogError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", (configPath) ? configPath : "<configPath is null>");
