@@ -28,10 +28,9 @@ OSISHTMLHref::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 }
 
 
-OSISHTMLHref::OSISHTMLHref()
-{
-        setTokenStart("<");
-        setTokenEnd(">");
+OSISHTMLHref::OSISHTMLHref() {
+	setTokenStart("<");
+	setTokenEnd(">");
 
 	setEscapeStart("&");
 	setEscapeEnd(";");
@@ -43,9 +42,12 @@ OSISHTMLHref::OSISHTMLHref()
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
+	addTokenSubstitute("lg", "<br />");
+	addTokenSubstitute("/lg", "<br />");
 
-        setTokenCaseSensitive(true);
+	setTokenCaseSensitive(true);
 }
+
 
 bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
@@ -53,7 +55,6 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 
-		//printf("token = %s\n",token);
 		// <w> tag
 		if (!strcmp(tag.getName(), "w")) {
 
@@ -103,18 +104,23 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					} while (++i < count);
 				}
 				if ((attrib = tag.getAttribute("morph")) && (show)) {
-					int count = tag.getAttributePartCount("morph");
-					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
-					do {
-						attrib = tag.getAttribute("morph", i);
-						if (i < 0) i = 0;	// to handle our -1 condition
-						val = strchr(attrib, ':');
-						val = (val) ? (val + 1) : attrib;
-						const char *val2 = val;
-						if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
-							val2+=2;
-						buf.appendFormatted(" <small><em>(<a href=\"type=morph class=%s value=%s\">%s</a>)</em></small> ", tag.getAttribute("morph"), val, val2);
-					} while (++i < count);
+					SWBuf savelemma = tag.getAttribute("savlm");
+					if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
+						show = false;
+					if (show) {
+						int count = tag.getAttributePartCount("morph");
+						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+						do {
+							attrib = tag.getAttribute("morph", i);
+							if (i < 0) i = 0;	// to handle our -1 condition
+							val = strchr(attrib, ':');
+							val = (val) ? (val + 1) : attrib;
+							const char *val2 = val;
+							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
+								val2+=2;
+							buf.appendFormatted(" <small><em>(<a href=\"type=morph class=%s value=%s\">%s</a>)</em></small> ", tag.getAttribute("morph"), val, val2);
+						} while (++i < count);
+					}
 				}
 				if (attrib = tag.getAttribute("POS")) {
 					val = strchr(attrib, ':');
@@ -129,32 +135,31 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
-			if (!tag.isEmpty() && !tag.isEndTag()) {
-				SWBuf footnoteNum = u->fn;
-				SWBuf type = tag.getAttribute("type");
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf type = tag.getAttribute("type");
 
-				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-					int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
-					VerseKey *vkey;
-					// see if we have a VerseKey * or descendant
-					try {
-						vkey = SWDYNAMIC_CAST(VerseKey, userData->key);
+					if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						VerseKey *vkey;
+						// see if we have a VerseKey * or descendant
+						try {
+							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+						}
+						catch ( ... ) {	}
+						if (vkey) {
+							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+							buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
+						}
 					}
-					catch ( ... ) {	}
-					if (vkey) {
-						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						    buf.appendFormatted("<a href=\"noteID=%s.%c.%i\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber, ch);
-						SWBuf tmp;
-						tmp.appendFormatted("%i", ++footnoteNumber);
-						u->fn = tmp.c_str();
-					}
+					u->suspendTextPassThru = true;
 				}
-				u->suspendTextPassThru = true;
 			}
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = false;
 			}
 		}
+
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
@@ -162,9 +167,11 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 			else if (tag.isEndTag()) {	// end tag
 				buf += "<!/P><br />";
+				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
 				buf += "<!P><br />";
+				userData->supressAdjacentWhitespace = true;
 			}
 		}
 
@@ -186,17 +193,16 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			else if (tag.isEndTag()) {
 				buf += "<br />";
 			}
+			else if (tag.getAttribute("sID")) {	// empty line marker
+				buf += "<br />";
+			}
 		}
 
-                // <lg>
-                else if (!strcmp(tag.getName(), "lg")) {
-                        buf += "<br />";
-                }
-
-                // <milestone type="line"/>
-                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-        		buf += "<br />";
-                }
+		// <milestone type="line"/>
+		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+			buf += "<br />";
+			userData->supressAdjacentWhitespace = true;
+		}
 
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
@@ -278,6 +284,46 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 			else {	// empty transChange marker?
 			}
+		}
+
+		// image
+		else if (!strcmp(tag.getName(), "figure")) {
+			const char *src = tag.getAttribute("src");
+			if (!src)		// assert we have a src attribute
+				return false;
+
+			char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
+			*filepath = 0;
+			strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
+			strcat(filepath, src);
+
+// we do this because BibleCS looks for this EXACT format for an image tag
+			buf+="<figure src=\"";
+			buf+=filepath;
+			buf+="\" />";
+/*
+			char imgc;
+			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
+			c++;
+			FILE* imgfile;
+				    if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
+						  imgfile = fopen(filepath, "r");
+						  if (imgfile != NULL) {
+								buf += "{\\nonshppict {\\pict\\jpegblip ";
+								while (feof(imgfile) != EOF) {
+									   buf.appendFormatted("%2x", fgetc(imgfile));
+								}
+								fclose(imgfile);
+								buf += "}}";
+						  }
+				    }
+				    else if (stricmp(c, "png")) {
+						  buf += "{\\*\\shppict {\\pict\\pngblip ";
+
+						  buf += "}}";
+				    }
+*/
+			delete [] filepath;
 		}
 		
 		else {

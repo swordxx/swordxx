@@ -42,8 +42,9 @@ OSISRTF::OSISRTF() {
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-        addTokenSubstitute("lg", "{\\par}");
-        addTokenSubstitute("/lg", "{\\par}");
+	addTokenSubstitute("lg", "{\\par}");
+	addTokenSubstitute("/lg", "{\\par}");
+
 	setTokenCaseSensitive(true);
 }
 
@@ -195,11 +196,11 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 		}
 
-                // <milestone type="line"/>
-                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-        		buf += "{\\par}";
+		// <milestone type="line"/>
+		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+			buf += "{\\par}";
 			userData->supressAdjacentWhitespace = true;
-                }
+		}
 
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
@@ -270,6 +271,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 		}
 
+		// image
 		else if (!strcmp(tag.getName(), "figure")) {
 			const char *src = tag.getAttribute("src");
 			if (!src)		// assert we have a src attribute
@@ -281,7 +283,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			strcat(filepath, src);
 
 // we do this because BibleCS looks for this EXACT format for an image tag
-			buf+="<figure src=\"";
+			buf+="<img src=\"";
 			buf+=filepath;
 			buf+="\" />";
 /*
