@@ -39,6 +39,13 @@ int main(int argc, char **argv)
 	AttributeValue::iterator i3;
 	for (i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); i1++) {
 		cout << "[ " << i1->first << " ]\n";
+		for (i2 = i1->second.begin(); i2 != i1->second.end(); i2++) {
+			cout << "\t[ " << i2->first << " ]\n";
+			for (i3 = i2->second.begin(); i3 != i2->second.end(); i3++) {
+				cout << "\t\t" << i3->first << " = " << i3->second << "\n";
+			}
+		}
 	}
+	cout << endl;
 	return 0;
 }

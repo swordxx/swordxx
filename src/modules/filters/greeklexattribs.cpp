@@ -32,12 +32,13 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 			else {
 				if ((!isalpha(*from)) && (*from != ' ')) {
 					phrase = "";
-					phrase.copy(currentPhrase, (int)(from - currentPhrase));
+					phrase.append(currentPhrase, (int)(from - currentPhrase)-1);
 					currentPhrase = from;
 					while (*from && isdigit(*from)) from++;
 					freq = "";
-					freq.copy(currentPhrase, (int)(from - currentPhrase));
-					module->getEntryAttributes()["AVPhrase"][currentPhrase]["Frequency"] = freq;
+					freq.append(currentPhrase, (int)(from - currentPhrase));
+					module->getEntryAttributes()["AVPhrase"][phrase]["Frequency"] = freq;
+					currentPhrase = 0;
 				}
 			}
 			if (*from == ';') inAV = false;
