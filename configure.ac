@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.22 $)
+AC_REVISION($Revision: 1.23 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -31,12 +31,12 @@ AC_C_BIGENDIAN
 AC_ARG_WITH(zlib,[  --with-zlib             allow zlib compressed modules [default=yes]],,with_zlib=yes)
 AC_ARG_WITH(icu,[  --with-icu              use ICU for unicode [default=no]],,with_icu=no)
 AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=yes]],,with_conf=yes)
+AC_ARG_WITH(curl,[  --with-curl             build install manager suport using libcurl [default=yes]],,with_curl=yes)
 
 
 # ---------------------------------------------------------------------
 # Enable options
 # ---------------------------------------------------------------------
-AC_ARG_ENABLE(installmgr,[  --enable-installmgr     build install manager suport [default=no]],,enable_installmgr=no)
 AC_ARG_ENABLE(debug,[  --enable-debug          build debug library [default=no]],,enable_debug=no)
 AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,enable_profile=no)
 AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
@@ -104,7 +104,7 @@ fi
 
 CURL_CFLAGS=
 CURL_LIBS=
-if test x$enable_installmgr = xyes; then
+if test x$with_curl = xyes; then
   if test x$with_zlib  = xno; then
 	echo "*** Install manager support requires zlib"
 	echo "*** However you have specified no zlib"
@@ -114,8 +114,8 @@ if test x$enable_installmgr = xyes; then
     AC_PATH_PROG(CURL_CONFIG, curl-config, no)
     if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
-	echo "*** compiling without install manager support"
-	enable_installmgr=no
+	echo "*** compiling without libcurl support"
+	with_curl=no
     else
 	echo "curl found - remote install options available"
 	CURL_CFLAGS=`$CURL_CONFIG --cflags`
@@ -207,7 +207,7 @@ AM_CONDITIONAL(ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
-AM_CONDITIONAL(INSTALLMGR, test x$enable_installmgr = xyes)
+AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
 #AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)
