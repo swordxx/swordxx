@@ -115,14 +115,10 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		}
 	}
 
-/*	char *lang = getenv ("LANG");
-	if (lang) {
-		if (strlen(lang) > 0)
-			setDefaultLocaleName(lang);
-		else stdstr(&defaultLocaleName, "en_US");
-
-	}
-	else*/ stdstr(&defaultLocaleName, "en_US");
+	// Locales will be invalidated if you change the StringMgr
+	// So only use the default hardcoded locale and let the
+	// frontends change the locale if they want
+	stdstr(&defaultLocaleName, "en_US");
 
 	if (prefixPath)
 		delete [] prefixPath;
@@ -239,6 +235,8 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 	char *tmplang=0;
 	stdstr(&tmplang, name);
 	strtok(tmplang, ".");
+	// check for @ so e.g. @euro locales are found
+	strtok(tmplang, "@");
 	// Before we set it we want to verify that it is an existing locale
 	// First check for what we ask for
 	if (getLocale(tmplang)) {
