@@ -44,25 +44,37 @@ RawLD4::~RawLD4()
 
 
 /******************************************************************************
- * RawLD4::strongsPad	- Pads a key if it is 100% digits to 5 places
+ * RawLD4::strongsPad	- Pads a key if (it-1) is 100% digits to 5 places
+ *						allows for final to be alpha, e.g. '123B'
  *
  * ENT: buf -	buffer to check and pad
  */
 
-void RawLD4::strongsPad(char *buf)
+void RawLD::strongsPad(char *buf)
 {
-	const char *check;
-	long size = 0;
+	char *check;
+	int size = 0;
 	int len = strlen(buf);
-	if ((len < 5) && (len > 0)) {
-		for (check = buf; *check; check++) {
+	char subLet = 0;
+	if ((len < 6) && (len > 0)) {
+		for (check = buf; *(check+1); check++) {
 			if (!isdigit(*check))
 				break;
 			else size++;
 		}
 
-		if ((size == len) && size) 
+		if ((size == (len-1)) && size) {
+			if (isalpha(*check)) {
+				subLet = toupper(*check);
+				*check = 0;
+			}
 			sprintf(buf, "%.5d", atoi(buf));
+			if (subLet) {
+				check = buf+(strlen(buf));
+				*check = subLet;
+				*(check+1) = 0;
+			}
+		}
 	}
 }
 

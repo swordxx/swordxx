@@ -174,6 +174,8 @@ char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
 
 ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	this->SecHead = false;
+	XMLTag startTag = "";
 	if (module) {
 		version = module->Name();
 		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
