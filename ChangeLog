@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+14-Jan-2001	Joachim Ansorg <jansorg@gmx.de>
+	Updated sk.conf
+
 13-Jan-2001	Chris Little <chrislit@crosswire.org>
 	Added arg to vpl2mod to work with NT-only translations
 
