@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = 1.5
+AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
 LDADD = -L$(top_builddir)/lib -lsword 
 
@@ -8,7 +8,7 @@ compnone complzss localetest keycast introtest indextest configtest \
 romantest testblocks filtertest swaptest genbooktest treeidxtest
 
 if ICU
-ICUPROG = icutest
+ICUPROG = icutest translittest tlitmgrtest
 else
 ICUPROG =
 endif
@@ -17,7 +17,9 @@ noinst_PROGRAMS += $(ICUPROG)
 
 if ICU
 icutest_SOURCES = icutest.cpp
-icutest_LDADD = -licui18n -licuuc
+translittest_SOURCES = translittest.cpp
+tlitmgrtest_SOURCES = tlitmgrtest.cpp
+tlitmgrtest_LDADD = -lustdio
 endif
 
 if ZLIB
