@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.28 2001/10/06 07:44:33 mgruner Exp $
+ * $Id: swmgr.h,v 1.29 2001/10/24 19:40:00 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -58,7 +58,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.28 2001/10/06 07:44:33 mgruner Exp $
+  * @version $Id: swmgr.h,v 1.29 2001/10/24 19:40:00 chrislit Exp $
   */
 class SWDLLEXPORT SWMgr
 {
@@ -84,7 +84,14 @@ protected:
   virtual void AddLocalOptions (SWModule * module, ConfigEntMap & section,
 				ConfigEntMap::iterator start,
 				ConfigEntMap::iterator end);
+
   /**
+    * Adds the encoding filters which are defined in "section" to the SWModule object "module".
+    * @param module To this module the encoding filter(s) are added
+    * @param section We use this section to get a list of filters we should apply to the module
+    */
+  virtual void AddEncodingFilters (SWModule * module, ConfigEntMap & section);
+    /**
     * Adds the render filters which are defined in "section" to the SWModule object "module".
     * @param module To this module the render filter(s) are added
     * @param section We use this section to get a list of filters we should apply to the module
@@ -236,6 +243,6 @@ public:
   * the modules have now a MinimumVersion tag, so it should be possible to get the currently used version.
   * @return The version of the Sword library as a float (e.g. 1.52).
   */
-  const float Version() const {return 1.52;};
+  const float Version() const {return 1.53;};
 };
 #endif
