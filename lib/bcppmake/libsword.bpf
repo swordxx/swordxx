@@ -134,6 +134,7 @@ USEUNIT("..\..\src\modules\filters\gbfwebif.cpp");
 USEUNIT("..\..\src\modules\filters\thmlwebif.cpp");
 USEUNIT("..\..\src\utilfuns\utilweb.cpp");
 USEUNIT("..\..\src\utilfuns\swversion.cpp");
+USEUNIT("..\..\src\utilfuns\url.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.12 2004/07/21 16:44:15 tbiggs Exp $
+* $Id$
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -220,7 +220,7 @@ const SWBuf URL::encode(const char *urlText) {
 	const int length = url.length();
 	for (int i = 0; i < length; i++) { //fill "buf"
 		const char& c = url[i];
-		buf.append( m[c].length() ? m[c] : SWBuf(c) );
+		buf.append( ((m[c].length()) ? m[c] : SWBuf(c)) );
 	}
 
 	url = buf;

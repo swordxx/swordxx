@@ -1,7 +1,7 @@
 /******************************************************************************
  *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.9 2004/07/20 21:14:44 joachim Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -157,12 +157,12 @@ const bool StringMgr::supportsUnicode() const {
 		
 		UErrorCode err = U_ZERO_ERROR;
 		
-		UChar lowerStr[max+10];
-		UChar upperStr[max+10];
-		
 		if (!buf || !max) {
 			return ret;
 		}
+		
+		UChar *lowerStr = new UChar[max+10];
+		UChar *upperStr = new UChar[max+10];
 		
 		u_strFromUTF8  ( 
 			lowerStr, 
@@ -174,6 +174,8 @@ const bool StringMgr::supportsUnicode() const {
 		);
 		if (err != U_ZERO_ERROR) {
 			SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
+			delete lowerStr;
+			delete upperStr;
 			return ret;
 		}
 		
@@ -187,6 +189,8 @@ const bool StringMgr::supportsUnicode() const {
 		);
 		if (err != U_ZERO_ERROR) {
 			SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
+			delete lowerStr;
+			delete upperStr;
 			return ret;
 		}
 
@@ -199,6 +203,8 @@ const bool StringMgr::supportsUnicode() const {
 			&err
 		);
 		
+		delete lowerStr;
+		delete upperStr;
 		return ret;
 	}
 	

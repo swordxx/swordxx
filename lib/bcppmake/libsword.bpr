@@ -101,7 +101,7 @@
       ..\..\src\modules\filters\osisfootnotes.obj ..\..\src\mgr\swsearchable.obj 
       ..\..\src\modules\filters\gbfwebif.obj 
       ..\..\src\modules\filters\thmlwebif.obj ..\..\src\utilfuns\utilweb.obj 
-      ..\..\src\utilfuns\swversion.obj"/>
+      ..\..\src\utilfuns\swversion.obj ..\..\src\utilfuns\url.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
