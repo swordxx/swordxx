@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.11 2004/05/07 18:11:24 dglassey Exp $
+ * $Id: swlocale.cpp,v 1.12 2004/05/08 16:52:24 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -145,26 +145,33 @@ void SWLocale::augment(SWLocale &addFrom) {
 	*localeSource += *addFrom.localeSource;
 }
 
+//#define NONNUMERICLOCALETHING 1
 
 const struct abbrev *SWLocale::getBookAbbrevs() {
 	static const char *nullstr = "";
 	if (!bookAbbrevs) {
 		ConfigEntMap::iterator it;
-		int i;
+		int i, j;
 		int size = localeSource->Sections["Book Abbrevs"].size();
 		bookAbbrevs = new struct abbrev[size + 1];
-		for (i = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
-			bookAbbrevs[i].ab = (*it).first.c_str();
+		for (i = 0, j = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
 			#ifdef NONNUMERICLOCALETHING
-			bookAbbrevs[i].book = VerseKey::getOSISBookNum((*it).second.c_str());
+			int booknum = VerseKey::getOSISBookNum((*it).second.c_str());
+			if (booknum != -1) {
+				bookAbbrevs[j].ab = (*it).first.c_str();
+				bookAbbrevs[j].book = booknum;
+				j++;
+			}
 			#else
+			bookAbbrevs[i].ab = (*it).first.c_str();
 			bookAbbrevs[i].book = atoi((*it).second.c_str());
+			j++;
 			#endif
 			//printf("SWLocale::getBookAbbrevs %s:%s %d\n",bookAbbrevs[i].ab,
 			//	(*it).second.c_str(), bookAbbrevs[i].book); 
 		}
-		bookAbbrevs[i].ab = nullstr;
-		bookAbbrevs[i].book = -1;
+		bookAbbrevs[j].ab = nullstr;
+		bookAbbrevs[j].book = -1;
 	}
 		
 	return bookAbbrevs;
