@@ -192,9 +192,9 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else
 		manager.setGlobalOption("Lemmas","Off");
 	if (optionfilters & OP_SCRIPREF)
-		manager.setGlobalOption("Scripture Cross-References","On");
+		manager.setGlobalOption("Cross-references","On");
 	else
-		manager.setGlobalOption("Scripture Cross-References","Off");
+		manager.setGlobalOption("Cross-references","Off");
 	if (optionfilters & OP_RED)
 		manager.setGlobalOption("Words of Christ in Red","On");
 	else

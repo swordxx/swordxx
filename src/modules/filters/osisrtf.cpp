@@ -24,6 +24,12 @@ SWORD_NAMESPACE_START
 
 
 OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	inXRefNote = false;
+	BiblicalText = false;
+	if (module) {
+		version = module->Name();
+		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+	}	
 	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 }
 
@@ -147,7 +153,9 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						}
 						catch ( ... ) {	}
 						if (vkey) {
-							buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber.c_str());
+							char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
+							buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());
+							u->inXRefNote = (ch == 'x');
 						}
 					}
 					u->suspendTextPassThru = true;
@@ -155,6 +163,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = false;
+				u->inXRefNote = false;
 			}
 		}
 
@@ -175,11 +184,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{<a href=\"\">";
-			}
-			else if (tag.isEndTag()) {
-				buf += "</a>}";
+			if (!u->inXRefNote) {	// only show these if we're not in an xref note
+				if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+					buf += "{<a href=\"\">";
+				}
+				else if (tag.isEndTag()) {
+					buf += "</a>}";
+				}
 			}
 		}
 

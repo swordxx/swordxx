@@ -24,7 +24,7 @@ const SWBuf choices[3] = {"On", "Off", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
 ThMLScripref::ThMLScripref() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	setOptionValue("On");
 }
 
 

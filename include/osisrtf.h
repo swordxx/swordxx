@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisrtf.h,v 1.10 2003/08/12 05:36:30 scribe Exp $
+ * $Id: osisrtf.h,v 1.11 2003/12/24 20:51:36 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,7 +34,10 @@ protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
 		bool osisQToTick;
+		bool BiblicalText;
+		bool inXRefNote;
 		SWBuf w;
+		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
