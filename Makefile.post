@@ -17,6 +17,9 @@ ${root}/lib/libsword.a: $(o)
 else
 ${root}/lib/libsword.a: $(o)
 	$(CROSS_COMPILE)$(AR) $(arflags) $@ $(o)
+ifeq ($(system),macosx)
+	$(CROSS_COMPILE)ranlib -s $@
+endif
 endif
 
 
