@@ -45,8 +45,8 @@ char UTF8HebrewPoints::ProcessText(char *text, int maxlen, const SWKey *key)
 				from++;
 			}
 			else {
-     			*to++ = *from;
-               }
+     			        *to++ = *from;
+                        }
 		}
 		*to++ = 0;
 		*to = 0;
