@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.72 2002/07/11 21:07:35 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.73 2002/07/14 15:16:15 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -73,7 +73,7 @@
 #ifdef ICU
 #include <utf8transliterator.h>
 bool SWMgr::isICU = true;
-else
+#else
 bool SWMgr::isICU = false;
 #endif
 
