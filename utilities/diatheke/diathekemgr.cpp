@@ -86,8 +86,8 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 	SWMgr::AddRenderFilters(module, section);
 }
 
-const SWMgr::LoadError DiathekeMgr::Load () {
-	SWMgr::LoadError retval =  SWMgr::Load();
+char DiathekeMgr::Load () {
+	char retval =  SWMgr::Load();
 #ifdef _ICU_
 	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", transliterator));
         options.push_back(transliterator->getOptionName());
