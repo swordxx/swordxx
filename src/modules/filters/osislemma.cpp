@@ -55,19 +55,21 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				
 				if ((*token == 'w') && (token[1] == ' ')) {
 					start = strstr(token, "lemma=\""); //we leave out the "w " at the start
-					end = (start && (strlen(start)>7)) ? strchr(start+7, '"') : 0;
+					end = start ? strchr(start+7, '"') : 0;
+					
 					if (start && end) { //we want to leave out the morph attribute
 						text.append('<');
 						text.append(token, start-token); //the text before the morph attr
-						text.append(end+1, strlen(token) - (end+1 - token)); //text after the morph attr
+						text.append(end+1);
 						text.append('>');
+						
+						continue;
 					}
 				}
-				else {
-					text.append('<');
-					text.append(token);
-					text.append('>');
-				}
+				
+				text.append('<');
+				text.append(token);
+				text.append('>');
 				
 				continue;
 			}
