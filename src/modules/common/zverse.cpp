@@ -166,6 +166,8 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 	}
 	else return;
 
+	ulBuffNum = swordtoarch32(ulBuffNum);
+
 	if (read(compfp[testmt-1]->getFd(), &ulVerseStart, 4) < 2)
 	{
 		printf ("Error reading ulVerseStart\n");
@@ -188,7 +190,6 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
 
-		ulBuffNum = swordtoarch32(ulBuffNum);
 
 		if (lseek(idxfp[testmt-1]->getFd(), ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
 		{
@@ -233,8 +234,11 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 			flushCache();
 			free(cacheBuf);
 		}
-		cacheBuf = (char *)calloc(strlen(compressor->Buf()) + 1, 1);
-		strcpy(cacheBuf, compressor->Buf());
+		
+		unsigned long len = 0;
+		compressor->Buf(0, &len);
+		cacheBuf = (char *)calloc(len + 1, 1);
+		memcpy(cacheBuf, compressor->Buf(), len);
 
 		cacheTestament = testmt;
 		cacheBufIdx = ulBuffNum;
