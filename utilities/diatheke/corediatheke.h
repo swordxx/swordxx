@@ -23,6 +23,8 @@
 #define FMT_RTF 3
 #define FMT_HTML 4
 #define FMT_OLB 5
+#define FMT_ASIF 6
+#define FMT_OSIS 7
 
 #define QT_BIBLE 1
 #define QT_COMM 2
@@ -36,6 +38,7 @@
 #define OP_FOOTNOTES 2
 #define OP_HEADINGS 4
 #define OP_MORPH 8
+#define OP_DICT 16
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0

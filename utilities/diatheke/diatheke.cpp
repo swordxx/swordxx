@@ -22,7 +22,7 @@ void printsyntax() {
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
 	fprintf (stderr, "  f (Footnotes), and h (Section Headings)\n");
 	fprintf (stderr, "Maximum verses may be any integer value\n");
-	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, and plain(def)\n");
+	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OLB, and plain(def)\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
 	fprintf (stderr, "  arguments are added to the key.\n");
@@ -104,6 +104,10 @@ int main(int argc, char **argv)
 				}
 				else if (!stricmp("rtf", argv[i+1])) {
 					outputformat = FMT_RTF;
+					i++;
+				}
+				else if (!stricmp("olb", argv[i+1])) {
+					outputformat = FMT_OLB;
 					i++;
 				}
 				else i++;
