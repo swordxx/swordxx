@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+14-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Changed all make system files to dglassey's ./configure
+		autotool system
+
 12-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added new option to filemgr open to allow downgrade
 		of access from rdwr to rdonly.
