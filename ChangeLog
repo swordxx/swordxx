@@ -1,10 +1,12 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+20-May-2001 Joachim Ansorg <jansorg@gmx.de>
+	Updated the Czech translation of booknames (cs.conf)
+
 18-May-2001 Joachim Ansorg <jansorg@gmx.de>
 	Added polish translation of the booknames. It was created by Robert
 Kolatzek.
-
 
 06-May-2001	Chris Little <chrislit@crosswire.org>
 	Added GBFHeadings OptionFilter & support for <TS><Ts> tags to
