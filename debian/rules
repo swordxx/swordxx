@@ -34,7 +34,8 @@ configure-stamp:
 	chmod 755 configure
 	./configure $(confflags) --prefix=/usr --mandir=\$${prefix}/share/man \
 		--infodir=\$${prefix}/share/info --with-zlib \
-		--sysconfdir=/etc --enable-shared --without-icu --without-lucene
+		--sysconfdir=/etc --enable-shared --without-icu \
+		--without-lucene
 	touch configure.stamp
 
 build: configure-stamp build-stamp
@@ -68,16 +69,16 @@ install-stamp: build-stamp
 
 	dh_movefiles -plibsword-dev usr/lib/lib*so usr/lib/lib*.a \
 		usr/lib/lib*.la usr/include/*
-	dh_movefiles -pdiatheke usr/bin/diatheke
+	#dh_movefiles -pdiatheke usr/bin/diatheke
 	#dh_movefiles -plibsword-runtime usr/bin/*
 	#dh_movefiles -plibsword-config etc/* usr/share/sword/mods.d/globals.conf \
-		usr/share/sword/locales.d/*
+	#	usr/share/sword/locales.d/*
 	#mkdir -p debian/libsword-dev/usr/share/doc/libsword-dev/html
 	#cp -R doc/api-documentation/html debian/libsword-dev/usr/share/doc/libsword-dev
-	mkdir -p debian/diatheke/usr/share/doc/diatheke/examples
-#	cp -a apps/console/diatheke/cgi/index-public.html debian/diatheke/usr/share/doc/diatheke/examples
-#	cp -a apps/console/diatheke/cgi/*.pl debian/diatheke/usr/lib/cgi-bin
-#	cp -a apps/console/diatheke/README debian/diatheke/usr/share/doc/diatheke
+	#mkdir -p debian/diatheke/usr/share/doc/diatheke/examples
+	#cp -a apps/console/diatheke/cgi/index-public.html debian/diatheke/usr/share/doc/diatheke/examples
+	#cp -a apps/console/diatheke/cgi/*.pl debian/diatheke/usr/lib/cgi-bin
+	#cp -a apps/console/diatheke/README debian/diatheke/usr/share/doc/diatheke
 	touch install-stamp
 
 # Build architecture-independent files here.
@@ -90,18 +91,18 @@ binary-arch: build install
 	dh_testroot 
 	dh_installdocs 
 	dh_installexamples 
-	dh_installinfo
+	#dh_installinfo
 	dh_installmenu 
 	#dh_installmanpages
-	dh_installman
-	dh_undocumented
+	#dh_installman
+	#dh_undocumented
 	dh_installchangelogs ChangeLog
 	dh_strip 
 	dh_link 
 	dh_compress 
 	dh_fixperms 
 	dh_installdeb
-	dh_makeshlibs -V 'libsword3 (>=1.5.6-1)'
+	dh_makeshlibs -V 'libsword4 (>=1.5.7-1)'
 	dh_perl 
 	dh_shlibdeps -ldebian/tmp/usr/lib
 	dh_gencontrol 

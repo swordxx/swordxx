@@ -1,9 +1,26 @@
+sword (1.5.7-2) unstable; urgency=low
+
+  * Fix problem building with current libcurl2-dev - TRUE has
+      been removed from the curl header, VERBOSE just needs to
+      be 1 now, Closes: #227860
+
+ -- Daniel Glassey <wdg@debian.org>  Thu, 15 Jan 2004 15:50:07 +0000
+
 sword (1.5.7-1) unstable; urgency=low
 
-  * New upstream release: 1.5.7
-  * This is no official package!
+  * New upstream version
+  * set lib version to 4
+  * remove diatheke as it has been removed from upstream source,
+     hopefully it will be released separately soon
+  * improve the copyright file because of post to debian-devel
 
- -- Martin Gruner <mg.pub@gmx.net>  Wed, 12 Nov 2003 14:39:30 +0000
+ -- Daniel Glassey <wdg@debian.org>  Wed,  7 Jan 2004 15:16:30 +0000
+
+sword (1.5.6-9) unstable; urgency=medium
+
+  * Build depend on libcurl2-dev
+
+ -- Daniel Glassey <wdg@debian.org>  Thu, 20 Nov 2003 10:20:11 +0000
 
 sword (1.5.6-8) unstable; urgency=low
 

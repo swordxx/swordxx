@@ -1,16 +1,16 @@
 Source: sword
-Build-Depends: debhelper (>=4.0.0), libz-dev, autotools-dev, pkg-config
+Build-Depends: debhelper (>=4.0.0), libz-dev, autotools-dev, pkg-config, libcurl2-dev
 Section: libs
 Priority: optional
 Maintainer: Daniel Glassey <wdg@debian.org>
 Standards-Version: 3.6.1.0
 
-Package: libsword3
+Package: libsword4
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}
 Recommends: sword-frontend
-Replaces: libsword1, libsword2c102, libsword-runtime, libsword-config
+Replaces: libsword1, libsword2c102, libsword3, libsword-runtime, libsword-config
 Description: API/library for bible software
  The SWORD Project is an open source, cross-platform (Linux, Windows, Solaris,
  MacOSX etc.) API/library for Bible software with a constantly growing list 
@@ -26,17 +26,8 @@ Description: API/library for bible software
 Package: libsword-dev
 Architecture: any
 Section: libdevel
-Depends: libsword3 (= ${Source-Version}), libc6-dev, libz-dev
+Depends: libsword4 (= ${Source-Version}), libc6-dev, libz-dev, libcurl2-dev
 Provides: sword-dev
 Description: Development files for libsword
  This package contains the static libraries and headers for developing 
  applications that use the sword library.
-
-Package: diatheke
-Architecture: any
-Section: web
-Depends: ${shlibs:Depends}, apache | httpd
-Recommends: libapache-mod-perl | apache-perl
-Description: CGI script for making bible website
- A command line utility for sword, and a cgi perl script that
- uses the utility to produce a bible browsing/searching website.
