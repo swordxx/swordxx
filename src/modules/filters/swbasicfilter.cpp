@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.17 2002/03/11 19:01:28 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.18 2002/06/06 21:08:47 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -215,6 +215,7 @@ char SWBasicFilter::ProcessText(char *text, int maxlen, const SWKey *key, const 
 	}
 	else	from = text;			// -------------------------------
 
+	resultBuffer = text;
 
 	for (to = text; *from; from++) {
 		if (*from == tokenStart[tokenStartPos]) {

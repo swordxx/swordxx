@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.8 2002/06/06 07:48:44 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.9 2002/06/06 21:08:47 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -61,6 +61,7 @@ public:
 protected:
 	const SWModule *module;
 	const SWKey *key;
+	char *resultBuffer;
 	typedef map<string, string> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;

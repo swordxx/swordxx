@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 		exit(-1);
 	}
 	char *text;
-	if (soap_call_sword__Quick_getModuleRenderText(server, NULL, "MHC", "jas1:19", text)) {
+	if (soap_call_sword__Quick_getModuleRenderText(server, NULL, "KJV", "jas1:19", text)) {
 		soap_print_fault(stderr);
 		soap_print_fault_location(stderr);
 		exit(-1);
