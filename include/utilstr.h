@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.7 2001/11/02 04:59:56 chrislit Exp $
+ * $Id: utilstr.h,v 1.8 2001/11/02 18:35:42 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,7 +42,7 @@ int stricmp(const char *s1, const char *s2);
  *
  * use this instead of toupper() for fast lookups on accented characters
  */
-static const char SW_toupper_array[256] =
+static const unsigned char SW_toupper_array[256] =
         {
                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
