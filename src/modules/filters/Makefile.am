@@ -58,6 +58,16 @@ else
 SWICUSRC =
 ICUDEFS = 
 endif
+
+if ICUSWORD
+ICUDEFS = -D_ICU_ -D_ICUSWORD_
+SWICUSRC = $(filtersdir)/utf8transliterator.cpp
+SWICUSRC += $(filtersdir)/utf8nfc.cpp
+SWICUSRC += $(filtersdir)/utf8nfkd.cpp
+SWICUSRC += $(filtersdir)/utf8arshaping.cpp
+SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
+endif
+
 libsword_la_SOURCES += $(SWICUSRC)
 DEFS += $(ICUDEFS)
 

@@ -140,8 +140,10 @@ filtersdir = $(top_srcdir)/src/modules/filters
 
 @ICU_TRUE@ICUDEFS = -D_ICU_
 @ICU_FALSE@ICUDEFS = 
+@ICUSWORD_TRUE@ICUDEFS = -D_ICU_ -D_ICUSWORD_
 @ICU_TRUE@SWICUSRC = $(filtersdir)/utf8transliterator.cpp $(filtersdir)/utf8nfc.cpp $(filtersdir)/utf8nfkd.cpp $(filtersdir)/utf8arshaping.cpp $(filtersdir)/utf8bidireorder.cpp
 @ICU_FALSE@SWICUSRC = 
+@ICUSWORD_TRUE@SWICUSRC = $(filtersdir)/utf8transliterator.cpp $(filtersdir)/utf8nfc.cpp $(filtersdir)/utf8nfkd.cpp $(filtersdir)/utf8arshaping.cpp $(filtersdir)/utf8bidireorder.cpp
 genbookdir = $(top_srcdir)/src/modules/genbook
 rawgenbookdir = $(top_srcdir)/src/modules/genbook/rawgenbook
 textsdir = $(top_srcdir)/src/modules/texts
@@ -183,6 +185,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 @ICU_TRUE@am__objects_3 = utf8transliterator.lo utf8nfc.lo utf8nfkd.lo \
 @ICU_TRUE@	utf8arshaping.lo utf8bidireorder.lo
 @ICU_FALSE@am__objects_3 =
+@ICUSWORD_TRUE@am__objects_3 = utf8transliterator.lo utf8nfc.lo \
+@ICUSWORD_TRUE@	utf8nfkd.lo utf8arshaping.lo utf8bidireorder.lo
 am_libsword_la_OBJECTS = swkey.lo listkey.lo versekey.lo strkey.lo \
 	treekey.lo treekeyidx.lo Greek2Greek.lo utilstr.lo unixstr.lo \
 	swunicod.lo swversion.lo $(am__objects_1) roman.lo swconfig.lo \

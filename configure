@@ -8679,6 +8679,16 @@ fi
 
 
 
+if test x$with_icu = xsword; then
+  ICUSWORD_TRUE=
+  ICUSWORD_FALSE='#'
+else
+  ICUSWORD_TRUE='#'
+  ICUSWORD_FALSE=
+fi
+
+
+
 if test x$with_zlib = xyes; then
   ZLIB_TRUE=
   ZLIB_FALSE='#'
@@ -8827,6 +8837,13 @@ if test -z "${ICU_TRUE}" && test -z "${ICU_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"ICU\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"ICU\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${ICUSWORD_TRUE}" && test -z "${ICUSWORD_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"ICUSWORD\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"ICUSWORD\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -9432,6 +9449,8 @@ s,@MINGW_TRUE@,$MINGW_TRUE,;t t
 s,@MINGW_FALSE@,$MINGW_FALSE,;t t
 s,@ICU_TRUE@,$ICU_TRUE,;t t
 s,@ICU_FALSE@,$ICU_FALSE,;t t
+s,@ICUSWORD_TRUE@,$ICUSWORD_TRUE,;t t
+s,@ICUSWORD_FALSE@,$ICUSWORD_FALSE,;t t
 s,@ZLIB_TRUE@,$ZLIB_TRUE,;t t
 s,@ZLIB_FALSE@,$ZLIB_FALSE,;t t
 s,@INSTCONF_TRUE@,$INSTCONF_TRUE,;t t

@@ -60,7 +60,7 @@ private:
   static const char SW_RB_RULE[];
   static const char SW_RESDATA[];
   OptionsList options;
-  SWTransMap transMap;
+  static SWTransMap transMap;
   UErrorCode utf8status;
   
   void Load(UErrorCode &status);
