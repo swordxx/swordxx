@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.100 2004/02/06 21:01:01 scribe Exp $
+ * $Id: swmgr.cpp,v 1.101 2004/03/30 19:35:15 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -588,6 +588,11 @@ void SWMgr::loadConfigDir(const char *ipath)
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);
 		while ((ent = readdir(dir))) {
+			//chck whether it ends with .conf, if it doesn't skip it!
+			if (strncmp(".conf", (ent->d_name + strlen(ent->d_name) - 5), 5 )) {
+				continue;
+			}
+			
 			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
 				newmodfile = ipath;
 				if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
@@ -601,6 +606,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 			}
 		}
 		closedir(dir);
+		
 		if (!config) {	// if no .conf file exist yet, create a default
 			newmodfile = ipath;
 			if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
