@@ -9,7 +9,7 @@ LDADD = $(top_builddir)/lib/libsword.la
 #endif
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
-txt2sword addgb imp2gbs mod2imp thml2gbs xml2gbs
+addgb imp2gbs mod2imp xml2gbs
 
 bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2vpl \
 	mkfastmod vpl2mod imp2vs installmgr
@@ -60,12 +60,10 @@ gbfidx_SOURCES = gbfidx.cpp
 modwrite_SOURCES = modwrite.cpp
 addvs_SOURCES = addvs.cpp
 emptyvss_SOURCES = emptyvss.cpp
-txt2sword_SOURCES = txt2sword.cpp
 addgb_SOURCES = addgb.cpp
 imp2gbs_SOURCES = imp2gbs.cpp
 imp2vs_SOURCES = imp2vs.cpp
 mod2imp_SOURCES = mod2imp.cpp
-thml2gbs_SOURCES = thml2gbs.cpp
 mod2osis_SOURCES = mod2osis.cpp
 xml2gbs_SOURCES = xml2gbs.cpp
 osis2mod_SOURCES = osis2mod.cpp
