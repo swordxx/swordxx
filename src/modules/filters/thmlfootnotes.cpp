@@ -69,7 +69,10 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				}
 				if (hide && tag.isEndTag()) {
 					if (module->isProcessEntryAttributes()) {
-						sprintf(buf, "%i", footnoteNum++);
+						SWBuf fc = module->getEntryAttributes()["Footnote"]["count"]["value"];
+						footnoteNum = (fc.length()) ? atoi(fc.c_str()) : 0;
+						sprintf(buf, "%i", ++footnoteNum);
+						module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
 						StringList attributes = startTag.getAttributeNames();
 						for (StringList::iterator it = attributes.begin(); it != attributes.end(); it++) {
 							module->getEntryAttributes()["Footnote"][buf][it->c_str()] = startTag.getAttribute(it->c_str());

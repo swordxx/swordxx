@@ -36,6 +36,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenEnd(">");
 
 	setTokenCaseSensitive(true);
+	addTokenSubstitute("scripture", "<i> ");
 	addTokenSubstitute("/scripture", "</i> ");
 }
 
@@ -103,65 +104,54 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				u->suspendTextPassThru = false;
 			}
 		}
-		else if (tag.getName() && !strcmp(tag.getName(), "scripRef")) {
-			if (tag.isEndTag()) {
-				if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
-					if (u->BiblicalText)
-						buf += "<small><sup>*x</sup></small>";
-					buf += "</a>&nbsp";
-					u->inscriptRef = false;
-					u->suspendTextPassThru = false;
-				}
-				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
-					buf += "&nbsp<a href=\"";
+		// <scripRef> tag
+		else if (!strcmp(tag.getName(), "scripRef")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 					if (u->BiblicalText) {
-						if (u->version) {
+						VerseKey *vkey;
+						// see if we have a VerseKey * or descendant
+						try {
+							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+						}
+						catch ( ... ) {}
+						if (vkey) {
+							// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+							buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
+						}
+						u->suspendTextPassThru = true;
+					}
+					else {
+						SWBuf refList = u->module->getEntryAttributes()["Footnote"][footnoteNumber]["refList"];
+						SWBuf version = tag.getAttribute("version");
+						buf += "&nbsp<a href=\"";
+						if (version.length()) {
 							buf += "version=";
-							buf += u->version;
+							buf += version;
 							buf += " ";
 						}
+						buf += "passage=";
+						buf += refList.c_str();
+						buf += "\">";
 					}
-					buf += "passage=";
+				}
+			}
+			if (tag.isEndTag()) {	//	</scripRef>
+				if (!u->BiblicalText) {
 					buf += u->lastTextNode.c_str();
-					buf += "\">";
-					if (u->BiblicalText)
-						buf += "<small><sup>*x</sup></small>";
-					else {
-						buf += u->lastTextNode.c_str();
-					}
 					buf += "</a>&nbsp";
-					// let's let text resume to output again
-					u->suspendTextPassThru = false;
 				}
-			}
-			else if (tag.getAttribute("passage")) { //passage given
-				u->inscriptRef = true;
-
-				buf += "&nbsp<a href=\"";
-				SWBuf version = tag.getAttribute("version");
-				if (version.length()) {
-					buf += "version=";
-					buf += version;
-					buf += " ";
-				}
-				SWBuf passage = tag.getAttribute("passage");
-				if (passage.length()) {
-					buf += "passage=";
-					buf += passage;
-				}
-				buf += "\">";
-				u->suspendTextPassThru = true;
-			}
-			else { //no passage or version given
-				u->inscriptRef = false;
-				// let's stop text from going to output
-				u->suspendTextPassThru = true;
+				// let's let text resume to output again
+				u->suspendTextPassThru = false;
 			}
 		}
+/* not sure what this is but looked at the spec and this is just around quoted Scripture, not Scripture references; plus needs to check if it's not an endtag; added to simple replacement at top of this file.
 		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
 			u->inscriptRef = true;
 			buf += "<i>";
 		}
+*/
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && u->SecHead) {
 				buf += "</i></b><br />";
