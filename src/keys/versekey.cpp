@@ -181,7 +181,7 @@ void VerseKey::setBooks(const char *iBMAX, struct sbook **ibooks) {
 void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int size) {
 	abbrevs = bookAbbrevs;
 	if (!size) {
-		for (abbrevsCnt = 1; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
+		for (abbrevsCnt = 0; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
 			/*
 			if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
 				fprintf(stderr, "ERROR: book abbreviation (canon.h or locale) misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
