@@ -3,6 +3,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 04-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed VerseKey parse bug that didn't work with a locale
+		other than the sysLocaleMgr locale.
+	Added VerseKey::getLocale()
 	Changed SWText subclasses to work like SWCom subclasses,
 		in that they increment to next valid entry on ++
 
