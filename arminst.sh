@@ -1,9 +1,10 @@
 #!/bin/sh
 
-export PATH=$PATH:/usr/local/arm/bin
-export CXXFLAGS="-I/usr/include/g++-3 -O3"
+export PATH=$PATH:/usr/local/arm/2.95.3/bin/
+#export CXXFLAGS="-I/usr/include/g++-3 -O3"
+export CXXFLAGS="-O3"
 export CFLAGS="-O3"
-./configure --host=arm-v4l-linux --prefix=/usr \
+./configure --host=arm-linux --prefix=/usr \
 	--disable-shared \
 	--without-conf --sysconfdir=/etc 
 
