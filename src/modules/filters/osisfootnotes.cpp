@@ -51,6 +51,8 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	const char *from = orig.c_str();
 	
 	XMLTag tag;
+	bool strongsMarkup = false;
+
 
 	for (text = ""; *from; ++from) {
 
@@ -78,7 +80,9 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				if (!tag.isEndTag()) {
 					if (tag.getAttribute("type") && !strcmp("strongsMarkup", tag.getAttribute("type"))) {  // handle bug in KJV2003 module where some note open tags were <note ... />
 						tag.setEmpty(false);
+						strongsMarkup = true;
 					}
+					
 					if (!tag.isEmpty()) {
 //					if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {
 						refs = "";
@@ -89,7 +93,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					}
 				}
 				if (hide && tag.isEndTag()) {
-					if (module->isProcessEntryAttributes()) {
+					if (module->isProcessEntryAttributes() && !strongsMarkup) { //don`t parse strongsMarkup to EntryAttributes as Footnote
 						sprintf(buf, "%i", footnoteNum++);
 						StringList attributes = startTag.getAttributeNames();
 						for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
@@ -110,6 +114,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					}
 					else	continue;
 				}
+				strongsMarkup = false;
 			}
 
 			// if not a heading token, keep token in text
