@@ -17,11 +17,12 @@
 #include <stdlib.h>
 #include <thmlrtf.h>
 #include <swmodule.h>
+#include <utilxml.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
-ThMLRTF::ThMLRTF()
-{
+ThMLRTF::ThMLRTF() {
 	setTokenStart("<");
 	setTokenEnd(">");
 
@@ -132,26 +133,28 @@ ThMLRTF::ThMLRTF()
 
 	addTokenSubstitute("/note", ") }");
 
-        addTokenSubstitute("br", "\\line ");
-        addTokenSubstitute("br /", "\\line ");
-        addTokenSubstitute("i", "{\\i1 ");
-        addTokenSubstitute("/i", "}");
-        addTokenSubstitute("b", "{\\b1 ");
-        addTokenSubstitute("/b", "}");
-        addTokenSubstitute("p", "\\par ");
+	addTokenSubstitute("br", "\\line ");
+	addTokenSubstitute("br /", "\\line ");
+	addTokenSubstitute("i", "{\\i1 ");
+	addTokenSubstitute("/i", "}");
+	addTokenSubstitute("b", "{\\b1 ");
+	addTokenSubstitute("/b", "}");
+	addTokenSubstitute("p", "\\par ");
 
-        //we need uppercase forms for the moment to support a few early ThML modules that aren't XHTML compliant
-        addTokenSubstitute("BR", "\\line ");
-        addTokenSubstitute("I", "{\\i1 ");
-        addTokenSubstitute("/I", "}");
-        addTokenSubstitute("B", "{\\b1 ");
-        addTokenSubstitute("/B", "}");
-        addTokenSubstitute("P", "\\par ");
+	//we need uppercase forms for the moment to support a few early ThML modules that aren't XHTML compliant
+	addTokenSubstitute("BR", "\\line ");
+	addTokenSubstitute("I", "{\\i1 ");
+	addTokenSubstitute("/I", "}");
+	addTokenSubstitute("B", "{\\b1 ");
+	addTokenSubstitute("/B", "}");
+	addTokenSubstitute("P", "\\par ");
+	addTokenSubstitute("scripture", "{\\i1 ");
+	addTokenSubstitute("/scripture", "}");
 }
 
-char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
-        SWBasicFilter::processText(text, key, module);  //handle tokens as usual
+
+char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+	SWBasicFilter::processText(text, key, module);  //handle tokens as usual
 	const char *from;
 	SWBuf orig = text;
 	from = orig.c_str();
@@ -170,114 +173,131 @@ char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
         return 0;
 }
 
+
+ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	if (module) {
+		version = module->Name();
+		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+	}	
+}
+
+
 bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
-	MyUserData *u = (MyUserData *)userData;
-	if (!substituteToken(buf, token)) {
-	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
-			if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
-				buf += " {\\fs15 <";
-				for (unsigned int i = 28; token[i] != '\"'; i++)
-					buf += token[i];
-				buf += ">}";
+	const char *tok;
+	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		MyUserData *u = (MyUserData *)userData;		
+		XMLTag tag(token);
+		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
+			SWBuf value = tag.getAttribute("value");
+			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
+				buf.appendFormatted(" {\\cf4 \\sub (%s)}", value.c_str());
 			}
-			else if (token[27] == 'T') {
-				buf += " {\\fs15 (";
-				for (unsigned int i = 28; token[i] != '\"'; i++)
-					buf += token[i];
-				buf += ")}";
-			}
-		}
-		else if (!strncmp(token, "sync type=\"morph\" ", 18)) {
-			buf += " {\\fs15 (";
-			for (const char *tok = token + 5; *tok; tok++) {
-				if (!strncmp(tok, "value=\"", 7)) {
-					tok += 7;
-					for (;*tok != '\"'; tok++)
-						buf += *tok;
-					break;
+			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
+				if (value[0] == 'H' || value[0] == 'G' || value[0] == 'A') {
+					value<<1;
+					buf.appendFormatted(" {\\cf3 \\sub <%s>}", value.c_str());
+				}
+				else if (value[0] == 'T') {
+					value<<1;
+					buf.appendFormatted(" {\\cf4 \\sub (%s)}", value.c_str());
 				}
 			}
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+				if (!tag.isEndTag())
+					buf += "{\\b ";
+				else	buf += "}";
+			}
+		}
+		// <note> tag
+		else if (!strcmp(tag.getName(), "note")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf type = tag.getAttribute("type");
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+					VerseKey *vkey;
+					// see if we have a VerseKey * or descendant
+					try {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					catch ( ... ) {	}
+					if (vkey) {
+						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());
+					}
+					u->suspendTextPassThru = true;
+				}
+			}
+			if (tag.isEndTag()) {
+				u->suspendTextPassThru = false;
+			}
+		}
 
-			buf += ")}";
-		}
-		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
-			buf += "{\\fs15 (";
-			for (unsigned int i = 25; token[i] != '\"'; i++)
-				buf += token[i];
-			buf += ")}";
-		}
-		else if (!strncmp(token, "scripRef", 8)) {
-//			buf += "{\\cf2 #";
-			buf += "<a href=\"\">";
-		}
-		else if (!strncmp(token, "/scripRef", 9)) {
-			buf += "</a>";
-		}
-		else if (!strncmp(token, "div", 3)) {
-			buf += '{';
-			if (!strncmp(token, "div class=\"title\"", 17)) {
-				buf += "\\par\\i1\\b1 ";
-				u->sechead = true;
+
+		// <scripRef> tag
+		else if (!strcmp(tag.getName(), "scripRef")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+					if (u->BiblicalText) {
+						VerseKey *vkey;
+						// see if we have a VerseKey * or descendant
+						try {
+							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+						}
+						catch ( ... ) {}
+						if (vkey) {
+							// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+							buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->Verse(), footnoteNumber.c_str());
+						}
+						u->suspendTextPassThru = true;
+					}
+					else {
+						buf += "<a href=\"\">";
+					}
+				}
 			}
-			else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-				buf += "\\par\\i1\\b1 ";
-				u->sechead = true;
+			if (tag.isEndTag()) {	//	</scripRef>
+				if (!u->BiblicalText) {
+//					SWBuf refList = u->module->getEntryAttributes()["Footnote"][footnoteNumber]["refList"];
+					buf += u->lastTextNode.c_str();
+					buf += "</a>";
+				}
+				// let's let text resume to output again
+				u->suspendTextPassThru = false;
 			}
 		}
-		else if (!strncmp(token, "/div", 4)) {
-			if (u->sechead) {
-				buf += "\\par ";
-				u->sechead = false;
+
+		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
+			if (tag.isEndTag() && u->SecHead) {
+				buf += "\\par}";
+				u->SecHead = false;
 			}
-			buf += '}';
+			else if (tag.getAttribute("class")) {
+				if (!stricmp(tag.getAttribute("class"), "sechead")) {
+					u->SecHead = true;
+					buf += "{\\par\\i1\\b1 ";
+				}
+				else if (!stricmp(tag.getAttribute("class"), "title")) {
+					u->SecHead = true;
+					buf += "{\\par\\i1\\b1 ";
+				}
+			}
 		}
-		else if (!strncmp(token, "note", 4)) {
-			buf += " {\\i1\\fs15 (";
-		}
-		else if (!strncmp(token, "img ", 4)) {
-			const char *src = strstr(token, "src");
+		else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
+			const char *src = tag.getAttribute("src");
 			if (!src)		// assert we have a src attribute
 				return false;
 
 			char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
 			*filepath = 0;
 			strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-			unsigned long i = strlen(filepath);
-			const char *c;
-			for (c = (src + 5); *c != '"'; c++) {
-				filepath[i] = *c;
-				i++;
-			}
-			filepath[i] = 0;
+			strcat(filepath, src);
 
-			buf+="<figure src=\"";
+// we do this because BibleCS looks for this EXACT format for an image tag
+			buf+="<img src=\"";
 			buf+=filepath;
 			buf+="\" />";
-/*
-			char imgc;
-			FILE* imgfile;
-			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
-			c++;
-
-
-			if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
-				imgfile = fopen(filepath, "r");
-				if (imgfile != NULL) {
-					buf += "{\\nonshppict {\\pict\\jpegblip ";
-					while (feof(imgfile) != EOF) {
-						buf.appendFormatted("%2x", fgetc(imgfile));
-					}
-					fclose(imgfile);
-					buf += "}}";
-				}
-			}
-			else if (stricmp(c, "png")) {
-				buf += "{\\*\\shppict {\\pict\\pngblip ";
-
-				buf += "}}";
-			}
-*/
 			delete [] filepath;
 		}
 		else {

@@ -48,7 +48,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		XMLTag tag(token);
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			SWBuf value = tag.getAttribute("value");
-			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
+			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
 				buf += "<small><em>(<a href=\"";
 				buf += "type=";
 				buf += tag.getAttribute("type");
@@ -60,7 +60,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				buf += (value.length()) ? value : "";
 				buf += "</a>) </em></small>";
 			}
-			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
 				buf += "<small><em>&lt;<a href=\"";
 				buf += "type=";
 				buf += tag.getAttribute("type");
@@ -73,12 +73,12 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				buf += (value.length()) ? value : "";
 				buf += "</a>&gt; </em></small>";
 			}
-			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
-				buf += "<b>";
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+				if (!tag.isEndTag())
+					buf += "<b>";
+				else	buf += "</b>";
 			}
-			else if(tag.isEndTag()) {
-				buf += "</b>";
-			}
+				
 		}
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
@@ -181,7 +181,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			buf +="</a>");
 		}
 */
-		else if (tag.getName() && !strcmp(tag.getName(), "img")) {
+		else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
 				return false;

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlrtf.h,v 1.11 2003/08/12 05:36:30 scribe Exp $
+ * $Id: thmlrtf.h,v 1.12 2003/12/22 04:00:50 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,8 +31,10 @@ class SWDLLEXPORT ThMLRTF : public SWBasicFilter {
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
-		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-		bool sechead;
+		MyUserData(const SWModule *module, const SWKey *key);
+		bool SecHead;
+		SWBuf version;
+		bool BiblicalText;
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
