@@ -33,7 +33,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 	bool ampersand = false;
 	bool inScriptRef = false;
 
-	len = strlen(text) + 1;						// shift string to right of buffer
+	len = strlen(text) + 2;						// shift string to right of buffer
 	if (len < maxlen) {
 		memmove(&text[maxlen - len], text, len);
 		from = &text[maxlen - len];

@@ -192,9 +192,9 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
+		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
 		if (*ikey) {
 			headoff = 0;
-			tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
 
 			key = new char [ strlen(ikey) + 1 ];
 			strcpy(key, ikey);
@@ -385,7 +385,7 @@ void RawStr::gettext(long istart, unsigned short isize, char *idxbuf, char *buf)
 	do {
 		memset(buf, 0, size);
 		lseek(datfd->getFd(), start, SEEK_SET);
-		read(datfd->getFd(), buf, (int)(size - 1));
+		read(datfd->getFd(), buf, (int)(size - 2));
 
 		for (ch = buf; *ch; ch++) {		// skip over index string
 			if (*ch == 10) {
@@ -393,7 +393,10 @@ void RawStr::gettext(long istart, unsigned short isize, char *idxbuf, char *buf)
 				break;
 			}
 		}
-		memmove(buf, ch, size - (unsigned short)(ch-buf));
+		size -= (unsigned short)(ch-buf);
+		memmove(buf, ch, size);
+		buf[size] = 0;
+		buf[size+1] = 0;
 
 		// resolve link
 		if (!strncmp(buf, "@LINK", 5)) {
@@ -404,6 +407,7 @@ void RawStr::gettext(long istart, unsigned short isize, char *idxbuf, char *buf)
 				}
 			}
 			findoffset(buf + 6, &start, &size);
+			// TODO: FIX!  THIS IS WRONG!!!  buf is not reallocated for the appropriate size!
 		}
 		else break;
 	}

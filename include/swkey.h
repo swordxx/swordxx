@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.11 2001/08/08 09:17:00 scribe Exp $
+ * $Id: swkey.h,v 1.12 2001/08/09 10:39:51 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,6 +32,7 @@
 
 #define SWKEY_OPERATORS \
   SWKey & operator = (const char *ikey) { setText(ikey); return *this; } \
+  SWKey & operator = (const SWKey &ikey) { copyFrom(ikey); return *this; } \
   SWKey & operator = (SW_POSITION pos) { setPosition(pos); return *this; } \
   operator const char *() const { return getText(); } \
   bool operator == (const SWKey & ikey) { return equals(ikey); } \

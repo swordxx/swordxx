@@ -403,7 +403,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
                     for (loop = strlen(book) - 1; loop+1; loop--) {
                          if (book[loop] == ' ') {
-                              if (isroman(&book[loop+1])) {
+						if (isroman(&book[loop+1])) {
                                    if (verse == -1) {
                                         verse = chap;
 								chap = from_rom(&book[loop+1]);
@@ -571,7 +571,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
                          }
                     }
                	break;
-               }
+			}
           }
                
 		if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev.
