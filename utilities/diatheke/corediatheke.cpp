@@ -86,21 +86,25 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	static ConfigEntMap::iterator eit;
 	static VerseKey vk;
 	
-	SWModule *target;
+	SWModule * target;
 	SWFilter * filter = 0;
+	SWFilter * gbffilter = 0;
+	SWFilter * chfilter = 0;
 	char *font = 0;
 	char inputformat = 0;
 	string value = "";
 	string encoding;
 	char querytype = 0;	
-	
-	char * ref2 = new char[strlen(ref)];
-	strcpy(ref2, ref);
+
+	//char * ref2 = new char[strlen(ref)];
+	//strcpy(ref2, ref);
 
 	//deal with queries to "system"
 	if (!stricmp(text, "system")) {
 		querytype = QT_SYSTEM;
-		return systemquery(ref2);
+		char * ret = systemquery(ref);
+		
+		return ret;
 	}
 	if (!strnicmp(text, "info", 4)) {
 	        querytype = QT_INFO;
@@ -109,6 +113,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	//otherwise, we have a real book
 	it = manager.Modules.find(text);
 	if (it == manager.Modules.end()) { //book not found
+		
 		return NULL;
 	}
 
@@ -169,21 +174,29 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	
 	if (optionfilters & OP_FOOTNOTES)
 		manager.setGlobalOption("Footnotes","On");
+	else
+		manager.setGlobalOption("Footnotes","Off");
 	if (optionfilters & OP_HEADINGS)
 		manager.setGlobalOption("Headings","On");
+	else
+		manager.setGlobalOption("Headings","Off");
 	if (optionfilters & OP_STRONGS)
 		manager.setGlobalOption("Strong's Numbers","On");
+	else
+		manager.setGlobalOption("Strong's Numbers","Off");
 	if (optionfilters & OP_MORPH)
 		manager.setGlobalOption("Morphological Tags","On");
+	else
+		manager.setGlobalOption("Morphological Tags","Off");
 	
 	if (querytype == QT_SEARCH) {
 		//do search stuff
 		searchtype = 1 - searchtype;
 		value += "Verse(s) containing \"";
-		value += ref2;
+		value += ref;
 		value += "\": ";
 		
-		listkey = target->Search(ref2, searchtype);
+		listkey = target->Search(ref, searchtype);
 		
 		if (strlen((const char*)listkey)) {
 			if (!listkey.Error())
@@ -215,24 +228,65 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	else if (querytype == QT_LD) {
 		//do dictionary stuff
 		
-		target->SetKey(ref2);
+		target->SetKey(ref);
 		
 		char * text = (char *) *target;
-		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
-		        target->AddRenderFilter(new UnicodeRTF()); //memory leak
-		}
 		if (inputformat == FMT_GBF) {
-		        target->AddRenderFilter(new GBFThML()); //memory leak
+				gbffilter = new GBFThML();
+		        target->AddRenderFilter(gbffilter);
 		}
 		if (filter) target->AddRenderFilter(filter);
+		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
+				chfilter = new UnicodeRTF();
+		        target->AddRenderFilter(chfilter);
+		}
+		else if ((outputformat == FMT_HTML || outputformat == FMT_THML) && strcmp(encoding.c_str(), "UTF-8")) {
+		        chfilter = new Latin1UTF8();
+				target->AddRenderFilter(chfilter);
+		}
+
+		if (outputformat == FMT_RTF) {
+			value  = "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
+			if (font)
+				value += font;
+			else
+				value += "Times New Roman";
+			value += ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
+		}
+		else if (outputformat == FMT_HTML) {
+			value = "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
+		}		
+	
 		if (strlen(text)) {
-			value += target->KeyText();
-			value += " : ";
+			value += (char*)target->KeyText();
+			if (font && !filter) {
+				value += ": <font face=\"";
+				value += font;
+				value += "\">";
+			}
+			else if (outputformat == FMT_RTF) {
+				value += ": {\\f1 ";
+			}
+			else {
+				value += ": ";
+			}
 			value += text;
-			value += "\n(";
+			if (font && !filter) {
+				value += "</font>";
+			}
+			else if (outputformat == FMT_RTF) {
+				value += "}";
+			}
+
+			value += "(";
 			value += target->Name();
 			value += ")\n";
 		}	
+
+		if (outputformat == FMT_RTF) {
+			value  += "}";
+		}
+
 	}
 	
 	else if (querytype == QT_BIBLE || querytype == QT_COMM) {
@@ -245,48 +299,68 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			}
 		}
 		
-		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
-		        target->AddRenderFilter(new UnicodeRTF()); //memory leak
-		}
 		if (inputformat == FMT_GBF) {
-			target->AddRenderFilter(new GBFThML()); //memory leak
+			gbffilter = new GBFThML();
+			target->AddRenderFilter(gbffilter);
 		}
 		if (filter) target->AddRenderFilter(filter);
-		
- 		listkey = vk.ParseVerseList(ref2, "Gen1:1", true);
-		int i;
-		/*
-		for (i = 0; i < listkey.Count() && maxverses; i++) {
-			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
-			if (element) {
-				printf("%s-%s", (const char*)element->LowerBound(), (const char*)element->UpperBound());
-			}
-			else {
-				printf("%s", (const char*)*listkey.GetElement(i));
-			}
+		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
+				chfilter = new UnicodeRTF();
+		        target->AddRenderFilter(chfilter);
 		}
-		*/
+		else if ((outputformat == FMT_HTML || outputformat == FMT_THML) && strcmp(encoding.c_str(), "UTF-8")) {
+				chfilter = new Latin1UTF8();
+				target->AddRenderFilter(chfilter);
+		}
+		
+ 		listkey = vk.ParseVerseList(ref, "Gen1:1", true);
+		int i;
+
+		if (outputformat == FMT_RTF) {
+			value  = "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
+			if (font)
+				value += font;
+			else
+				value += "Times New Roman";
+			value += ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
+		}
+		else if (outputformat == FMT_HTML) {
+			value = "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
+		}
+
 		for (i = 0; i < listkey.Count() && maxverses; i++) {
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 			if (element) {
 				target->Key(element->LowerBound());
 				vk = element->UpperBound();
 				while (maxverses && target->Key() <= vk) {
+					value += (char*)target->KeyText();
 					if (font && !filter) {
-						value += (char*)target->KeyText();
 						value += ": <font face=\"";
 						value += font;
 						value += "\">";
-						value += (char const*)*target;
-						value += "</font>";
-					} else {
-						value += (char*)target->KeyText();
-						value += ": ";
-						value += (char const*)*target;
-						value += "";
 					}
+					else if (outputformat == FMT_RTF) {
+						value += ": {\\f1 ";
+					}
+					else {
+						value += ": ";
+					}
+					value += (char const*)*target;
+					if (font && !filter) {
+						value += "</font>";
+					}
+					else if (outputformat == FMT_RTF) {
+						value += "}";
+					}
+
 					if (inputformat != FMT_THML && !filter)
 						value += "<br />";
+					else if (outputformat == FMT_RTF)
+						value += "\\par ";
+					else if (outputformat == FMT_GBF)
+						value += "<CM>";
+
 					if (maxverses == 1) {
 						value += " (";
 						value += target->Name();
@@ -299,21 +373,33 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			}
 			else {
 				target->Key(*listkey.GetElement(i));
+				value += (char*)target->KeyText();
 				if (font && !filter) {
-					value += (char*)target->KeyText();
 					value += ": <font face=\"";
 					value += font;
 					value += "\">";
-					value += (char const*)*target;
-					value += "</font>";
-				} else {
-					value += (char*)target->KeyText();
-					value += ": ";
-					value += (char const*)*target;
-					value += "";
 				}
+				else if (outputformat == FMT_RTF) {
+					value += ": {\\f1 ";
+				}
+				else {
+					value += ": ";
+				}
+				value += (char const*)*target;
+				if (font && !filter) {
+					value += "</font>";
+				}
+				else if (outputformat == FMT_RTF) {
+					value += "}";
+				}
+					
 				if (inputformat != FMT_THML && !filter)
 					value += "<br />";
+				else if (outputformat == FMT_RTF)
+					value += "\\par ";
+				else if (outputformat == FMT_GBF)
+					value += "<CM>";
+
 				if (maxverses == 1) {
 					value += " (";
 					value += target->Name();
@@ -323,40 +409,28 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				maxverses--;
 			}
 		}
-		/*
-		for (i = 0;i < listkey.Count() && maxverses;i++) {
-		  target->Key(*listkey.GetElement(i));
-		  if (font && !filter) {
-		    value += (char*)target->KeyText();
-		    value += ": <font face=\"";
-		    value += font;
-		    value += "\">";
-		    value += (char const*)*target;
-		    value += "</font>";
-		  } else {
-		    value += (char*)target->KeyText();
-		    value += ": ";
-		    value += (char const*)*target;
-		    value += "";
-		  }
-		  if (inputformat != FMT_THML && !filter)
-		    value += "<br />";
-		  if (i + 1 == maxverses) {
-		    value += " (";
-		    value += target->Name();
-		    value += ")";
-		  }
-		  value += "\n";
-		  maxverses--;
+
+		if (outputformat == FMT_RTF) {
+			value  += "}";
 		}
-		*/
+
 	}
 			
-	delete filter;
-
 	char * versevalue = new char[value.length() + 1];
 	strcpy (versevalue, value.c_str());
-	
-	return versevalue;
 
+	if (filter) {
+		target->RemoveRenderFilter(filter);
+		delete filter;
+	}
+	if (chfilter) {
+		target->RemoveRenderFilter(chfilter);
+		delete chfilter;
+	}
+	if (gbffilter) {
+		target->RemoveRenderFilter(gbffilter);
+		delete gbffilter;
+	}
+
+	return versevalue;
 }
