@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.25 2003/06/27 01:41:07 scribe Exp $
+ * $Id: filemgr.cpp,v 1.26 2003/06/27 02:21:05 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,17 +24,21 @@
 #include <utilstr.h>
 
 #include <dirent.h>
-#include <dir.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <string.h>
 #ifndef __GNUC__
 #include <io.h>
+#include <dir.h>
 #else
 #include <unistd.h>
 #endif
 
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 SWORD_NAMESPACE_START
 
 // ---------------- statics -----------------
@@ -282,9 +286,9 @@ int FileMgr::createParent(const char *pName) {
 	buf[end] = 0;
 	if (strlen(buf)>0) {
 		if (access(buf, 02)) {  // not exists with write access?
-			if ((retCode = mkdir(buf))) {
+			if ((retCode = mkdir(buf, 0755))) {
 				createParent(buf);
-				retCode = mkdir(buf);
+				retCode = mkdir(buf, 0755);
 			}
 		}
 	}

@@ -28,8 +28,6 @@
 #include "gbfcgi.h"
 #include "thmlcgi.h"
 
-using std::string;
-
 //---------------------------------------------------------------------------
 DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc, char mark, bool ibidi, bool ishape)
         : SWMgr(iconfig, isysconfig, autoload, new DiathekeFilterMgr(mark, enc))
@@ -70,11 +68,11 @@ DiathekeMgr::~DiathekeMgr()
 
 void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 {
-	string lang;
+	SWBuf lang;
 	bool rtl;
 	ConfigEntMap::iterator entry;
 
-	lang = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (string)"en";
+	lang = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (SWBuf)"en";
 	rtl = ((entry = section.find("Direction")) != section.end()) ? ((*entry).second == "RtoL") : false;
 
 #ifdef _ICU_

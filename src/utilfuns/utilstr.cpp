@@ -1,5 +1,6 @@
 #include <utilstr.h>
 #include <ctype.h>
+#include <string.h>
 
 #ifdef _ICU_
 #include <unicode/utypes.h>
@@ -9,7 +10,6 @@
 
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
-#include <string.h>
 
 #endif
 

@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <osisplain.h>
 #include <utilxml.h>
+#include <ctype.h>
 
 SWORD_NAMESPACE_START
 

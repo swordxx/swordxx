@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+26-Jun-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Removed all std::string references from API and
+		mostly replaced with SWBuf
+	Added int max param to SWBuf::append
+	Added some file copy functions to FileMgr
+	Moved some more install stuff to installmgr
+
 18-Jun-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Joachim added OSISFootnotes.  Added entryAttributes
 		parsing in OSISFootnotes

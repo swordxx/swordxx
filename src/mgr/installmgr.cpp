@@ -6,6 +6,7 @@
  
 
 #include <installmgr.h>
+#include <filemgr.h>
 
 #include <fcntl.h>
 #ifndef __GNUC__
@@ -184,8 +185,8 @@ int removeModule(SWMgr *manager, const char *modName) {
 		fileBegin = module->second.lower_bound("File");
 		fileEnd = module->second.upper_bound("File");
 
-		string modFile;
-		string modDir;
+		SWBuf modFile;
+		SWBuf modDir;
 		entry = module->second.find("AbsoluteDataPath");
 		modDir = entry->second.c_str();
 		if (fileBegin != fileEnd) {	// remove each file
@@ -262,6 +263,7 @@ InstallSource::~InstallSource() {
 
 
 int installModule(const char *fromLocation, const char *modName, InstallSource *is) {
+/*
 	SectionMap::iterator module, section;
 	ConfigEntMap::iterator fileBegin;
 	ConfigEntMap::iterator fileEnd;
@@ -277,6 +279,7 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 		sourceDir = (SWBuf)"./sources/" + ist->is.source;
 	else	sourceDir = getLocalDir();
 */	
+/*
 	SWMgr mgr(sourceDir.c_str());
 	
 	module = mgr.config->Sections.find(modName);
@@ -421,11 +424,12 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 		}
 		return (aborted) ? -1 : 0;
 	}
+*/
 	return 1;
 }
 
 
-int copyFileToSWORDInstall(const char *sourceDir, const char *fName) {
+int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName) {
 	SWBuf sourcePath = sourceDir;
 	sourcePath += fName;
 

@@ -67,7 +67,7 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
 int removeModule(SWMgr *manager, const char *modName);
 int installModule(const char *fromLocation, const char *modName, InstallSource *is);
-int copyFileToSWORDInstall(const char *sourceDir, const char *fName);
+int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName);
 
 
 SWORD_NAMESPACE_END

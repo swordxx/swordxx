@@ -7,10 +7,8 @@
 #include "corediatheke.h"
 #include <regex.h>
 #include <iostream>
-#include <string>
 #include <list>
 
-using std::string;
 using std::list;
 using std::cout;
 using std::endl;
@@ -26,8 +24,8 @@ void systemquery(const char * key, ostream* output){
 
 	if (!stricmp(key, "localelist")) {		
 		LocaleMgr *lm = &LocaleMgr::systemLocaleMgr;
-		list<string> loclist =	lm->getAvailableLocales();
-		list<string>::iterator li = loclist.begin();
+		list<SWBuf> loclist =	lm->getAvailableLocales();
+		list<SWBuf>::iterator li = loclist.begin();
 		for (;li != loclist.end(); li++) {
 		  *output << li->c_str() << endl;
 		}
@@ -90,7 +88,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	SWModule * target;
 	char *font = 0;
 	char inputformat = 0;
-	string encoding;
+	SWBuf encoding;
 	char querytype = 0;	
 
 	if (locale) {
@@ -126,7 +124,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			else if (!stricmp((char *)(*eit).second.c_str(), "ThML"))
 				inputformat = FMT_THML;
 		}
-		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (string)"";
+		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (SWBuf)"";
 	}
 
 
