@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.35 2004/01/17 07:00:08 scribe Exp $
+ * $Id: filemgr.cpp,v 1.36 2004/01/17 18:38:06 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -381,7 +381,7 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 				break;
 		}
 		
-		int size = (lseek(fDesc->getFd(), 0, SEEK_CUR) - index) - 1;
+		int size = (lseek(fDesc->getFd(), 0, SEEK_CUR) - index) - len;
 
 		buf = new char [ size + 1 ];
 
@@ -391,9 +391,8 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 			read(fDesc->getFd(), &ch, 1);   //pop terminating char
 			buf[size] = 0;
 
-			more = (line[line.length()-1] == '\\');
 			// clean up any trailing junk on buf
-			for (char *it = buf+(strlen(buf)-1); it > buf; it--) {
+			for (char *it = buf+(strlen(buf)); it > buf; it--) {
 				if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t')) {
 					if (*it == '\\')
 						more = true;
