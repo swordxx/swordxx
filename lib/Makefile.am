@@ -1,5 +1,6 @@
 AUTOMAKE_OPTIONS = 1.5
 INCLUDES = -I$(top_srcdir)/include
+DEFS += -DUSE_AUTOTOOLS
 
 # Global config directory
 globalconfdir := @sysconfdir@
