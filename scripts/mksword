@@ -1,4 +1,5 @@
+REV=1.4.5
 chmod +x *
 chmod +x ../apps/X11/cheatah/configure
-cd ../..; tar -v -c -p -s -z --exclude sword/bin -X sword/modlist -f sword.tgz sword/*
-#cd /dosd/usr/troy/src; tar -c -p -s -z --exclude sword/bin -X sword/modlist -f ~/src/sword.tgz sword
+chmod +x ../apps/X11/cheatah/missing
+cd ../..; tar -v -c -p -s -z --exclude sword-$REV/bin -X sword-$REV/modlist -f sword-$REV.tar.gz sword-$REV/*
