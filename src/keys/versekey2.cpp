@@ -19,6 +19,8 @@
 #include <swlog.h>
 #include <versekey2.h>
 #include <localemgr.h>
+#include <refsys.h>
+#include <refsysmgr.h>
 #include <roman.h>
 
 SWORD_NAMESPACE_START
@@ -35,9 +37,10 @@ SWClass VerseKey2::classdef(classes);
 //struct sbook *VerseKey2::builtin_books[2]       = {0,0};
 struct sbook2 *VerseKey2::builtin_books       = {0};
 //const char    VerseKey2::builtin_BMAX[2]        = {39, 27};
+#if 0
 const char    VerseKey2::builtin_BMAX        = OSISBMAX;
+#endif
 //long         *VerseKey2::offsets[2][2]  = {{VerseKey2::otbks, VerseKey2::otcps}, {VerseKey2::ntbks, VerseKey2::ntcps}};
-bkref         *VerseKey2::offsets[2]  = {VerseKey2::kjvbks, VerseKey2::kjvcps};
 int           VerseKey2::instance       = 0;
 //VerseKey2::LocaleCache   VerseKey2::localeCache;
 VerseKey2::LocaleCache   *VerseKey2::localeCache = 0;
@@ -63,8 +66,12 @@ void VerseKey2::init() {
 	chapter = 0;
 	verse = 0;
 	locale = 0;
-	abbrevsCnt = BUILTINABBREVCNT;
+	abbrevs = 0;
+	//abbrevsCnt = BUILTINABBREVCNT;
+	abbrevsCnt = 0;
 	//oldindexhack = false;
+	if (!m_refsys)
+		m_refsys = new RefSys("KJV");
 
 	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
@@ -76,14 +83,31 @@ void VerseKey2::init() {
  *		VerseKey2::parse for more detailed information)
  */
 
-VerseKey2::VerseKey2(const SWKey *ikey) : SWKey(*ikey)
+VerseKey2::VerseKey2(const SWKey *ikey) : SWKey(*ikey), m_refsys(0)
 {
 	init();
 	if (ikey)
 		parse();
 }
 
+/******************************************************************************
+ * VerseKey2 Constructor - initializes instance of VerseKey2
+ *
+ * ENT:	ikey - base key (will take various forms of 'BOOK CH:VS'.  See
+ *		VerseKey2::parse for more detailed information)
+ */
+VerseKey2::VerseKey2(const char *ikey, const RefSys *ref) : SWKey(ikey)
+{
+	if (ref)
+		m_refsys = ref;
+	else
+		m_refsys = 0;
+	init();
+	if (ikey)
+		parse();
+}
 
+#if 0
 /******************************************************************************
  * VerseKey2 Constructor - initializes instance of VerseKey2
  *
@@ -91,16 +115,17 @@ VerseKey2::VerseKey2(const SWKey *ikey) : SWKey(*ikey)
  *		VerseKey2::parse for more detailed information)
  */
 
-VerseKey2::VerseKey2(const char *ikey) : SWKey(ikey)
+VerseKey2::VerseKey2(const char *ikey) : SWKey(ikey), m_refsys(0)
 {
 	init();
 	if (ikey)
 		parse();
 }
-
+#endif
 
 VerseKey2::VerseKey2(VerseKey2 const &k) : SWKey(k)
 {
+	m_refsys = RefSysMgr::getSystemRefSysMgr()->getRefSys(k.getRefSys());
 	init();
 	autonorm = k.autonorm;
 	headings = k.headings;
@@ -115,7 +140,7 @@ VerseKey2::VerseKey2(VerseKey2 const &k) : SWKey(k)
 }
 
 
-VerseKey2::VerseKey2(const char *min, const char *max) : SWKey()
+VerseKey2::VerseKey2(const char *min, const char *max) : SWKey(), m_refsys(0)
 {
 	init();
 	LowerBound(min);
@@ -143,42 +168,70 @@ VerseKey2::~VerseKey2() {
 		delete lowerBound;
 	if (locale)
 		delete [] locale;
+	//if (m_refsys)
+	//	delete m_refsys;
+	//if (abbrevs)
+	//	delete [] abbrevs;
 
 	--instance;
 	if (!instance) delete localeCache;
 }
 
+void VerseKey2::setRefSys(const char *name) {
+	if (strcmp(name, m_refsys->getName()) !=0) {
+		RefSys *ref = RefSysMgr::getSystemRefSysMgr()->getRefSys(name);
+		if (ref)
+			m_refsys = ref;
+		setLocale(getLocale());
+	}
+}
 
 void VerseKey2::setLocale(const char *name) {
-	char *lBMAX;
 	struct sbook2 **lbooks;
 	bool useCache = false;
+	bool newAbbrevs = false;
+	
+	printf("setLocale %s\n", name);
+	printf("setLocale cache is %s:%s\n",localeCache->name, localeCache->refsys); 
 
 	if (localeCache->name)
 		useCache = (!strcmp(localeCache->name, name));
+	if (localeCache->refsys)
+		newAbbrevs = (strcmp(localeCache->refsys, m_refsys->getName())!=0);
 
 	if (!useCache)	{	// if we're setting params for a new locale
+		printf("setLocale: not using cache for %s\n", name);
 		stdstr(&(localeCache->name), name);
-		localeCache->abbrevsCnt = 0;
+		stdstr(&(localeCache->refsys), m_refsys->getName());
+		//localeCache->abbrevsCnt = 0;
+		newAbbrevs = true;
 	}
+	else printf("setLocale: using cache for %s\n", name);
+	
+	if (newAbbrevs)
+		printf("setLocale: new abbrevs for %s:%s\n", name,m_refsys->getName()); 
 
 	SWLocale *locale = (useCache) ? localeCache->locale : LocaleMgr::getSystemLocaleMgr()->getLocale(name);
 	localeCache->locale = locale;
 
-	if (locale) {
-		#ifdef SPLITLIB
-		locale->getBooks2(&lBMAX, &lbooks, this);
-		#else
-		locale->getBooks(&lBMAX, &lbooks, this);
-		#endif
-		setBooks(lBMAX, lbooks);
-		setBookAbbrevs((struct abbrev2 *)locale->getBookAbbrevs(), localeCache->abbrevsCnt);
-		localeCache->abbrevsCnt = abbrevsCnt;
+	if (!locale) {
+		locale = LocaleMgr::getSystemLocaleMgr()->getLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 	}
-	else {
-		setBooks(&builtin_BMAX, &builtin_books);
-		setBookAbbrevs(builtin_abbrevs, localeCache->abbrevsCnt);
-		localeCache->abbrevsCnt = abbrevsCnt;
+	if (locale) {
+		locale->getBooks2(&lbooks, this);
+		setBooks(lbooks);
+		if (newAbbrevs) {
+			stdstr(&(localeCache->refsys), m_refsys->getName());
+			setBookAbbrevs(locale->getBookAbbrevs2());
+		}
+		else {
+			abbrevsCnt = localeCache->abbrevsCnt;
+			abbrevs = localeCache->abbrevs;
+		}
+	}
+	else
+	{
+		throw "ERROR: NO DEFAULT LOCALE";
 	}
 	stdstr(&(this->locale), localeCache->name);
 
@@ -188,32 +241,53 @@ void VerseKey2::setLocale(const char *name) {
 		UpperBound().setLocale(name);
 }
 
-void VerseKey2::setBooks(const char *iBMAX, struct sbook2 **ibooks) {
-	BMAX = iBMAX;
+void VerseKey2::setBooks(struct sbook2 **ibooks) {
 	books = ibooks;
 }
 
 
-void VerseKey2::setBookAbbrevs(const struct abbrev2 *bookAbbrevs, unsigned int size) {
-	abbrevs = bookAbbrevs;
-	if (!size) {
-			/*
-		for (abbrevsCnt = 0; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
-			if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
-				fprintf(stderr, "ERROR: book abbreviation (canon.h or locale) misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
-				exit(-1);
-			}
+void VerseKey2::setBookAbbrevs(const struct abbrev2 *bookAbbrevs) {
+	if (localeCache->abbrevs)
+		delete[] localeCache->abbrevs;
+	int size;
+	for (size=0; bookAbbrevs[size].book!=ENDOFABBREVS; size++) {/*printf("getsize %d:%s\n", size, bookAbbrevs[size].ab);fflush(NULL);*/}
+	printf("bookAbbrevs size %d\n", size+1);
+	localeCache->abbrevs = new abbrev2[size+1];
+	abbrevsCnt = 0;
+	for (int i=0; bookAbbrevs[i].book!=ENDOFABBREVS; i++) {
+		//printf("%d\n", i);
+		if (m_refsys->isBookInRefSys(bookAbbrevs[i].book)) {
+			localeCache->abbrevs[abbrevsCnt].ab = bookAbbrevs[i].ab;
+			localeCache->abbrevs[abbrevsCnt].book = bookAbbrevs[i].book;
+			//printf("setBookAbbrevs %d:%s:%d\n", abbrevsCnt, abbrevs[abbrevsCnt].ab, abbrevs[abbrevsCnt].book);fflush(NULL);
+			abbrevsCnt++;
 		}
-			*/
-		for (int i = 0; i <= *BMAX; i++) {
+	}
+	localeCache->abbrevs[abbrevsCnt].ab = 0;
+	localeCache->abbrevs[abbrevsCnt].book = ENDOFABBREVS;
+	printf("abbrevs count %d\n", abbrevsCnt);
+	abbrevs = localeCache->abbrevs;
+		/*
+	for (abbrevsCnt = 0; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
+		if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
+			fprintf(stderr, "ERROR: book abbreviation (canon.h or locale) misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
+			exit(-1);
+		}
+	}
+		*/
+	//for (abbrevsCnt = 0; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
+	//}
+	for (int i = 0; i <= MAXOSISBOOKS; i++) {
+		if (m_refsys->isBookInRefSys(i))
+		{
 			int bn = getBookAbbrev((*books)[i].name);
 			if (bn != i) {
-				SWLog::getSystemLog()->logError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", 
-					(*books)[i].name, bn);
+				SWLog::getSystemLog()->logError("VerseKey2::Book: %s(%d) does not have a matching toupper abbrevs entry! book number returned was: %d", 
+					(*books)[i].name, i, bn);
 			}
 		}
-    }
-	else abbrevsCnt = size;
+	}
+	localeCache->abbrevsCnt = abbrevsCnt;
 }
 
 
@@ -255,28 +329,23 @@ void VerseKey2::initstatics() {
 
 char VerseKey2::parse()
 {
-
-	
-	//testament = 2;
-	book      = *BMAX;
+	book      = REVELATION;
 	chapter   = 1;
 	verse     = 1;
 	int booklen   = 0;
 
 	int error = 0;
 
+	printf("VerseKey2::parse keytext %s\n", keytext);
 	if (keytext) {
 		ListKey tmpListKey = VerseKey2::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
 			SWKey::setText((const char *)tmpListKey);
-			for (int j = 0; j <= *BMAX; j++) {
+			for (int j = 0; j <= MAXOSISBOOKS; j++) {
 				int matchlen = strlen((*books)[j].name);
 				if (!strncmp(keytext, (*books)[j].name, matchlen)) {
 					if (matchlen > booklen) {
 						booklen = matchlen;
-						//!!!WDG This is a temporary hack
-						//if (j < OTBOOKS)
-						//	testament = 1;
 						book = j;
 					}
 				}
@@ -313,8 +382,8 @@ void VerseKey2::freshtext() const
 	}
 	else {
 #endif
-		if (realbook > *BMAX) {
-				realbook = *BMAX;
+		if (realbook > MAXOSISBOOKS) {
+				realbook = REVELATION;
 		}
 		buf.appendFormatted("%s %d:%d", (*books)[realbook].name, chapter, verse);
 #if 0
@@ -905,12 +974,12 @@ void VerseKey2::ClearBounds()
 void VerseKey2::initBounds() const
 {
 	if (!upperBound) {
-		upperBound = new VerseKey2();
+		upperBound = new VerseKey2(0, m_refsys);
 		upperBound->AutoNormalize(0);
 		upperBound->Headings(1);
 	}
 	if (!lowerBound) {
-		lowerBound = new VerseKey2();
+		lowerBound = new VerseKey2(0, m_refsys);
 		lowerBound->AutoNormalize(0);
 		lowerBound->Headings(1);
 	}
@@ -921,7 +990,7 @@ void VerseKey2::initBounds() const
 	lowerBound->Verse(0);
 
 	//upperBound->Testament(2);
-	upperBound->Book(*BMAX);
+	upperBound->Book(REVELATION);
 	upperBound->Chapter(getMaxChaptersInBook(upperBound->Book()));
 	upperBound->Verse(getMaxVerseInChapter(upperBound->Book(), upperBound->Chapter()));
 	boundSet = false;
@@ -1104,9 +1173,9 @@ void VerseKey2::Normalize(char autocheck)
 	#endif
 	while (!valid) {
 		
-		if (book <= 0 || book > *BMAX) break;
+		if (book <= 0 || book > MAXOSISBOOKS) break;
 		
-		while (chapter > getMaxChaptersInBook(book) && book <= *BMAX) {
+		while (chapter > getMaxChaptersInBook(book) && book <= MAXOSISBOOKS) {
 			chapter -= getMaxChaptersInBook(book);
 			book++;
 		}
@@ -1124,7 +1193,7 @@ void VerseKey2::Normalize(char autocheck)
 			verse += getMaxVerseInChapter(book, chapter);
 		}
 		
-		if (book > 0 && book <= *BMAX && 
+		if (book > 0 && book <= MAXOSISBOOKS && 
 			chapter >= !headings && chapter <= getMaxChaptersInBook(book) && 
 			verse >= !headings && verse <= getMaxVerseInChapter(book, chapter))
 				valid = true;
@@ -1136,9 +1205,9 @@ void VerseKey2::Normalize(char autocheck)
 	else if (book >= OTBOOKS+1 && book <= *BMAX)
 		testament = 2;
 	#endif
-	if (book > *BMAX) {
+	if (book > MAXOSISBOOKS) {
 		//testament = 2;
-		book      = *BMAX;
+		book      = REVELATION;
 		chapter   = getMaxChaptersInBook(book);
 		verse     = getMaxVerseInChapter(book, chapter);
 		error     = KEYERR_OUTOFBOUNDS;
@@ -1171,17 +1240,6 @@ void VerseKey2::Normalize(char autocheck)
 }
 
 //!!!WDG once it is working and becomes core we need to change these to get/set
-/******************************************************************************
- * VerseKey2::Testament - Gets testament
- *
- * RET:	value of testament
- */
-#if 0
-char VerseKey2::Testament() const
-{
-	return testament;
-}
-#endif
 
 /******************************************************************************
  * VerseKey2::Book - Gets book
@@ -1219,27 +1277,6 @@ int VerseKey2::Verse() const
 }
 
 
-/******************************************************************************
- * VerseKey2::Testament - Sets/gets testament
- *
- * ENT:	itestament - value which to set testament
- *		[MAXPOS(char)] - only get
- *
- * RET:	if unchanged ->          value of testament
- *	if   changed -> previous value of testament
- */
-#if 0
-char VerseKey2::Testament(char itestament)
-{
-	char retval = testament;
-
-	if (itestament != MAXPOS(char)) {
-		testament = itestament;
-		Normalize(1);
-	}
-	return retval;
-}
-#endif
 
 /******************************************************************************
  * VerseKey2::Book - Sets/gets book
@@ -1352,31 +1389,6 @@ char VerseKey2::Headings(char iheadings)
 }
 
 
-/******************************************************************************
- * VerseKey2::findindex - binary search to find the index closest, but less
- *						than the given value.
- *
- * ENT:	array	- long * to array to search
- *		size		- number of elements in the array
- *		value	- value to find
- *
- * RET:	the index into the array that is less than but closest to value
- */
-
-int VerseKey2::findindex(bkref *array, int size, long value)
-{
-	int lbound, ubound, tval;
-
-	lbound = 0;
-	ubound = size - 1;
-	while ((ubound - lbound) > 1) {
-		tval = lbound + (ubound-lbound)/2;
-		if (array[tval].offset <= value)
-			lbound = tval;
-		else ubound = tval;
-	}
-	return (array[ubound].offset <= value) ? ubound : lbound;
-}
 
 
 /******************************************************************************
@@ -1387,40 +1399,25 @@ int VerseKey2::findindex(bkref *array, int size, long value)
 
 long VerseKey2::Index() const
 {
+	if (!book)
+		chapter = 0;
+	if (!chapter)
+		verse   = 0;
+	return m_refsys->getIndex(book, chapter, verse);
+#if 0
 	long  loffset;
-
-	//printf("getting index");fflush(NULL);
-	#if 0
-	if (!testament) { // if we want module heading
-		loffset = 0;
-		verse  = 0;
-	}
-	else {
-	#endif
-		if (!book)
-			chapter = 0;
-		if (!chapter)
-			verse   = 0;
-
-		loffset = offsets[0][book].offset;
-		loffset = offsets[1][(int)loffset + chapter].offset;
-		if (offsets[0][book].maxnext == TESTAMENT_HEADING) // if we want testament heading
-		{
-			chapter = 0;
-			verse = 0;
-		}
-	#if 0
-	}
-	if (oldindexhack && loffset >= NTOFFSET)
+	loffset = offsets[0][book].offset;
+	loffset = offsets[1][(int)loffset + chapter].offset;
+	if (offsets[0][book].maxnext == TESTAMENT_HEADING) // if we want testament heading
 	{
-		//Testament(2);
-		loffset -= NTOFFSET;
+		*chapter = 0;
+		*verse = 0;
 	}
-	#endif
 	#ifdef WDGDEBUG
 	printf("returning index %d\n", loffset+verse);fflush(NULL);
 	#endif
 	return (loffset + verse);
+#endif
 }
 
 
@@ -1451,60 +1448,6 @@ long VerseKey2::Index(long iindex)
 {
 	long  offset;
 
-// This is the dirty stuff --------------------------------------------
-
-	//if (!testament)
-	//	testament = 1;
-/*
-	if (iindex < 1) {				// if (-) or module heading
-		if (testament < 2) {
-			if (iindex < 0) {
-				testament = 0;  // previously we changed 0 -> 1
-				error     = KEYERR_OUTOFBOUNDS;
-			}
-			else testament = 0;		// we want module heading
-		}
-		else {
-			testament--;
-			iindex = (offsets[testament-1][1][offsize[testament-1][1]-1] + 
-				books[testament-1][BMAX[testament-1]-1].versemax[books[testament-1][BMAX[testament-1]-1].chapmax-1]) + 
-				iindex; // What a doozy! ((offset of last chapter + number of verses in the last chapter) + iindex)
-		}
-	}
-*/
-#if 0
-if (oldindexhack)
-{
-	if (iindex < 1) {				// if (-) or module heading
-		if (testament < 2) {
-			if (iindex < 0) {
-				testament = 0;  // previously we changed 0 -> 1
-				error     = KEYERR_OUTOFBOUNDS;
-				verse = iindex;
-			}
-			else testament = 0;		// we want module heading
-		}
-		else {
-			testament--;
-			iindex += NTOFFSET;
-		}
-	}
-	if (testament==2)
-		iindex += NTOFFSET;
-	if (iindex >= NTOFFSET) 
-		testament = 2;
-}
-else
-{
-	if (iindex < 1) {				// if (-) or module heading
-		if (iindex < 0) {
-			testament = 0;  // previously we changed 0 -> 1
-			error     = KEYERR_OUTOFBOUNDS;
-		}
-		else testament = 0;		// we want module heading
-	}
-}	
-#endif
 	if (iindex < 0) {
 		error     = KEYERR_OUTOFBOUNDS;
 	}
@@ -1515,44 +1458,8 @@ else
 
 	// --------------------------------------------------------------------
 
-/*
-	if (testament) {
-		if ((!error) && (iindex)) {
-			offset  = findindex(offsets[testament-1][1], offsize[testament-1][1], iindex);
-			verse   = iindex - offsets[testament-1][1][offset];
-			book    = findindex(offsets[testament-1][0], offsize[testament-1][0], offset);
-			chapter = offset - offsets[testament-1][0][VerseKey2::book];
-			verse   = (chapter) ? verse : 0;  
-				// funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  
-				//Don't know why.  Fix if you figure out.  Think its in the offsets table.
-			if (verse) {		// only check if -1 won't give negative
-				if (verse > books[testament-1][book-1].versemax[chapter-1]) {
-					if (testament > 1) {
-						verse = books[testament-1][book-1].versemax[chapter-1];
-						error = KEYERR_OUTOFBOUNDS;
-					}
-					else {
-						testament++;
-						Index(verse - books[testament-2][book-1].versemax[chapter-1]);
-					}
-				}
-			}
-		}
-	}
-*/
-	//if (testament) {
 	if ((!error) && (iindex>=0)) {
-		offset  = findindex(offsets[1], offsize[1], iindex);
-		verse   = iindex - offsets[1][offset].offset;
-		book    = findindex(offsets[0], offsize[0], offset);
-		chapter = offset - offsets[0][book].offset;
-		#ifdef WDGDEBUG
-		printf("offset %d:%d:%d bcv %d:%d:%d\n", offset, offsets[1][offset].offset, offsets[0][book].offset, 
-			book, chapter, verse);fflush(NULL);
-		#endif
-		//verse   = (chapter) ? verse : 0;  
-			// funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  
-			//Don't know why.  Fix if you figure out.  Think its in the offsets table. !!!WDG fix
+		m_refsys->getBCV(iindex, &book, &chapter, &verse);
 	}
 	#ifdef WDGDEBUG
 	else
@@ -1560,7 +1467,6 @@ else
 		printf("error %d iindex %d\n", error, iindex);fflush(NULL);
 	}
 	#endif
-	//}
 
 	if (_compare(UpperBound()) > 0) {
 		#ifdef WDGDEBUG
@@ -1595,7 +1501,13 @@ else
 
 int VerseKey2::compare(const SWKey &ikey)
 {
+	#ifdef WDGDEBUG
+	printf("VerseKey2::compare with %s\n", (const char *)ikey);fflush(NULL);
+	#endif
 	VerseKey2 ivkey = (const char *)ikey;
+	#ifdef WDGDEBUG
+	printf("VerseKey2::compare comparing %s to %s\n", getText(), (const char *)ivkey);
+	#endif
 	return _compare(ivkey);
 }
 
@@ -1615,8 +1527,6 @@ int VerseKey2::_compare(const VerseKey2 &ivkey)
 	long keyval1 = 0;
 	long keyval2 = 0;
 
-	//keyval1 += Testament() * 1000000000;
-	//keyval2 += ivkey.Testament() * 1000000000;
 	keyval1 += Book() * 1000000;
 	keyval2 += ivkey.Book() * 1000000;
 	keyval1 += Chapter() * 1000;
@@ -1646,24 +1556,42 @@ const char *VerseKey2::getOSISRef() const {
 	return buf.c_str();
 }
 
+#if 0
 const char VerseKey2::getMaxBooks() const {
 	return *BMAX;
 }
+#endif
 
-const char *VerseKey2::getNameOfBook(char book) const {
-	return osisbooks[book].name;
+const char *VerseKey2::getNameOfBook(char cBook) const {
+	return osisbooks[cBook].name;
 }
 
-const char *VerseKey2::getPrefAbbrev(char book) const {
-	return osisbooks[book].prefAbbrev;
+const int VerseKey2::getOSISBookNum(const char *bookab) {
+	int i;
+	//printf("VerseKey2::getOSISBookNum %s...\n", bookab);
+	for (i=0; i <= MAXOSISBOOKS; i++)
+	{
+		if (!strncmp(bookab, osisbooks[i].prefAbbrev, strlen(bookab)))
+		{
+			//printf("VerseKey2::getOSISBookNum %s is %d\n", bookab, i);
+			return i;
+		}
+	}
+	return -1;
 }
 
-const int VerseKey2::getMaxChaptersInBook(char book) const {
-	return (offsets[0][book].maxnext == TESTAMENT_HEADING ? 0 : offsets[0][book].maxnext);
+const char *VerseKey2::getPrefAbbrev(char cBook) const {
+	return osisbooks[cBook].prefAbbrev;
 }
 
-const int VerseKey2::getMaxVerseInChapter(char book, int chapter) const {
-	return offsets[1][(offsets[0][book].offset)+chapter].maxnext;
+const int VerseKey2::getMaxChaptersInBook(char cBook) const {
+	//return (offsets[0][book].maxnext == TESTAMENT_HEADING ? 0 : offsets[0][book].maxnext);
+	return m_refsys->getMaxChaptersInBook(cBook);
+}
+
+const int VerseKey2::getMaxVerseInChapter(char cBook, int iChapter) const {
+	//return offsets[1][(offsets[0][book].offset)+chapter].maxnext;
+	return m_refsys->getMaxVerseInChapter(cBook, iChapter);
 }
 
 
