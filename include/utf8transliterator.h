@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: utf8transliterator.h,v 1.21 2003/09/26 20:19:37 chrislit Exp $
+ * $Id: utf8transliterator.h,v 1.22 2003/10/05 19:07:35 mgruner Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,7 +44,12 @@ struct SWTransData {
 typedef std::map <const UnicodeString, SWTransData> SWTransMap;
 typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
-// This Filter uses ICU for transliteration
+// Chris, please add more javadoc-style documentation in this header file
+// so that the information will show up in the doxygen-generated
+// api-docs.
+
+/** This Filter uses ICU for transliteration
+*/
 class SWDLLEXPORT UTF8Transliterator : public SWFilter {
 private:
 
