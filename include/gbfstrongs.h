@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfstrongs.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: gbfstrongs.h,v 1.7 2001/02/15 21:20:14 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** This Filter shows/hides strong's numbers in a GBF text
+  */
 class SWDLLEXPORT GBFStrongs:public SWFilter
 {
   bool option;

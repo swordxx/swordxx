@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfrtf.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: gbfrtf.h,v 1.6 2001/02/15 21:20:14 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** This filter converts GBF text into RTF text
+  */
 class SWDLLEXPORT GBFRTF:public SWFilter
 {
 public:

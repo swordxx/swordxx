@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** this filter converts ThML text to GBF text
+  */
 class SWDLLEXPORT ThMLGBF:public SWFilter
 {
 public:

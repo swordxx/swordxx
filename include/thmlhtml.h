@@ -23,6 +23,8 @@
 
 #include <defs.h>
 
+  /** this filter converts ThML text to HTML text
+  */
 class SWDLLEXPORT ThMLHTML:public SWFilter
 {
 public:

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbffootnotes.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: gbffootnotes.h,v 1.7 2001/02/15 21:20:14 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** This Filter shows/hides footnotes in a GBF text
+  */
 class SWDLLEXPORT GBFFootnotes:public SWFilter
 {
   bool option;
@@ -34,8 +36,8 @@ class SWDLLEXPORT GBFFootnotes:public SWFilter
   static const char optTip[];
   OptionsList options;
 public:
-    GBFFootnotes ();
-    virtual ~ GBFFootnotes ();
+  GBFFootnotes ();
+  virtual ~ GBFFootnotes ();
   virtual char ProcessText (char *text, int maxlen, const SWKey * key);
   virtual const char *getOptionName ()
   {

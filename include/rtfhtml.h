@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $ */
-/* $Revision: 1.3 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.4 2001/02/15 21:20:14 jansorg Exp $ */
+/* $Revision: 1.4 $ */
 
 #ifndef RTFHTML_H
 #define RTFHTML_H
@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** this filter converts RTF text into HTML text
+  */
 class SWDLLEXPORT RTFHTML:public SWFilter
 {
 public:

@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** this filter converts ThML text to plain text
+  */
 class SWDLLEXPORT ThMLPlain:public SWFilter
 {
 public:

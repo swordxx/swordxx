@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/Attic/rwphtml.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $ */
-/* $Revision: 1.5 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/Attic/rwphtml.h,v 1.6 2001/02/15 21:20:14 jansorg Exp $ */
+/* $Revision: 1.6 $ */
 
 #ifndef RWPHTML_H
 #define RWPHTML_H
@@ -26,6 +26,8 @@
 
 #include <defs.h>
 
+  /** this filter converts RWP text to HTML text
+  */
 class SWDLLEXPORT RWPHTML:public SWFilter
 {
 public:

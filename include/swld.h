@@ -2,7 +2,7 @@
  *  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
  *				types of Lexicon and Dictionary modules (hence the 'LD').
  *
- * $Id: swld.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swld.h,v 1.4 2001/02/15 21:20:14 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,20 +28,32 @@
 
 #include <defs.h>
 
+  /** the basis for all types of Lexicon and
+  * Dictionary modules (hence the 'LD').
+  */
 class SWDLLEXPORT SWLD:public SWModule
 {
 protected:
   char *entkeytxt;
 public:
-  
-    
-    SWLD (const char *imodname = 0, const char *imoddesc =
-	  0, SWDisplay * idisp = 0);
-    virtual ~ SWLD ();
+  /** Initializes data for instance of SWLD
+  *
+  * @param imodname Internal name for module
+  * @param imoddesc Name to display to user for module
+  * @param idisp Display object to use for displaying
+  */
+  SWLD (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0);
+  virtual ~ SWLD ();
   virtual SWKey *CreateKey ()
   {
     return new StrKey ();
   }
+  /** Sets/gets module KeyText, getting from saved text if key is persistent
+  *
+  * @param ikeytext value which to set keytext;
+  *  [0] - only get
+  * @return pointer to keytext
+  */
   virtual const char *KeyText (char *ikeytext);
 };
 

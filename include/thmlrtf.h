@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+  /** this filter converts ThML text to RTF text
+  */
 class SWDLLEXPORT ThMLRTF:public SWFilter
 {
 public:
