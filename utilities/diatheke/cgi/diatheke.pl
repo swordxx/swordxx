@@ -302,11 +302,11 @@ for ($i = 0; $i < $n; $i++) {
 
     }
     else {
-	if ($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "JFB" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK") {
+	if ($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "JFB" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK" || $versions[$i] eq "MHCC") {
 	    $arg .= "c";
 	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
 	}
-	elsif ($versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "StrongsGreek" || $versions[$i] eq "StrongsHebrew" || $versions[$i] eq "Thayer" || $versions[$i] eq "BDB" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths") {
+	elsif ($versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "StrongsGreek" || $versions[$i] eq "StrongsHebrew" || $versions[$i] eq "Thayer" || $versions[$i] eq "BDB" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths" || $versions[$i] eq "MCS" || $versions[$i] eq "Anchor" || $versions[$i] eq "WBE") {
 	    $arg .= "d";
 	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
 	}
@@ -348,7 +348,7 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&Thayer=on\">$1\<\/a\>/g;
     }
     #case for ThML format files
-    elsif($versions[$i] eq "JFB" || $versions[$i] eq "MHCC") {
+    elsif($versions[$i] eq "JFB" || $versions[$i] eq "MHC") {
 	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/<a href=\"diatheke.pl?verse=$2&$1=on\">/g;
 	$line =~ s/<\/scripRef>/<\/a>/g;
     }
