@@ -4,16 +4,14 @@ interface
 
 uses
   SysUtils, StrUtils, Types, Classes, Variants, QGraphics, QControls, QForms, QDialogs,
-  QStdCtrls, QComCtrls, QExtCtrls, Sword, QButtons, QImgList;
+  QStdCtrls, QComCtrls, QExtCtrls, Sword, QButtons, QImgList, QMenus,
+  QTypes;
 
 type
   TForm1 = class(TForm)
     Panel1: TPanel;
     TreeView1: TTreeView;
-    ToolBar1: TToolBar;
-    ToolButton1: TToolButton;
     ImageList1: TImageList;
-    Label1: TLabel;
     Splitter1: TSplitter;
     Panel3: TPanel;
     Splitter2: TSplitter;
@@ -40,15 +38,18 @@ type
     SpinEdit2: TSpinEdit;
     ToolButton4: TToolButton;
     Label2: TLabel;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
-    ToolButton7: TToolButton;
-    ToolButton8: TToolButton;
-    SpeedButton1: TSpeedButton;
-    ToolButton3: TToolButton;
     btnBTFollow: TToolButton;
     btnCMFollow: TToolButton;
     ImageList2: TImageList;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Exit1: TMenuItem;
+    Options1: TMenuItem;
+    Strongs1: TMenuItem;
+    MorphTags1: TMenuItem;
+    Footnotes1: TMenuItem;
+    ChangeTextFont1: TMenuItem;
+    CurrentVerseColor1: TMenuItem;
     procedure Edit1Change(Sender: TObject);
     procedure TreeView1Change(Sender: TObject; Node: TTreeNode);
     procedure Button1Click(Sender: TObject);
@@ -61,6 +62,7 @@ type
     procedure SpinEdit2Changed(Sender: TObject; NewValue: Integer);
     procedure SpinEdit1Changed(Sender: TObject; NewValue: Integer);
     procedure ComboBox1Change(Sender: TObject);
+    procedure CurrentVerseColor1Click(Sender: TObject);
   private
     fontName: string;
     fontSize: integer;
@@ -100,7 +102,7 @@ var
 begin
      pos := LastDelimiter(' ',ref);
      bookname := LeftStr(ref,pos);
-    ComboBox1.Text := bookname;
+     ComboBox1.Text := bookname;
 end;
 
 function TForm1.getChapter(key: String): integer;
@@ -404,6 +406,12 @@ end;
 procedure TForm1.ComboBox1Change(Sender: TObject);
 begin
        	Edit1.Text := ComboBox1.Text + ' ' + '1:1';
+end;
+
+procedure TForm1.CurrentVerseColor1Click(Sender: TObject);
+begin
+	ColorDialog1.Execute
+        //ColorDialog1.Color
 end;
 
 end.
