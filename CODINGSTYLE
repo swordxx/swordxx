@@ -12,8 +12,11 @@ required:
 	switch (variable) {
 	case 1:
 		statement;
+		statement;
 		break;
-	case 2:
+	case 2: statement; break;
+	case 3: statement; break;
+	case 4:
 		statement;
 		break;
 	default:
