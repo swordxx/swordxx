@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 
 	ModMap::iterator it = mgr.Modules.find(argv[1]);
 	if (it == mgr.Modules.end()) {
-		fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
+		fprintf(stderr, "error: %s: couldn't find module: %s\n", argv[0], argv[1]);
 		exit(-2);
 	}
 
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 	}
 
 	if (result) {
-		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+		fprintf(stderr, "error: %s: couldn't create module at path: %s\n", argv[0], argv[2]);
 		exit(-3);
 	}
 
@@ -172,14 +172,14 @@ int main(int argc, char **argv)
 			lastBuffer = inModule->getRawEntry();
 			lastBufferKey = inModule->KeyText();
 			if (lastBuffer.length() > 0) {
-				cout << "Adding [" << bufferKey << "] new text. \n";
+				cout << "Adding [" << bufferKey << "] new text.\n";
 				*outModuleKey = bufferKey;
 //				outModule->getRawEntry();	// snap
 //				outModule->setKey(bufferKey);
 				(*outModule) << lastBuffer.c_str();	// save new text;
 			}
 			else {
-				cout << "Skipping [" << bufferKey << "] no entry in inModule. \n";
+				cout << "Skipping [" << bufferKey << "] no entry in in Module.\n";
 			}
 		}
 		(*inModule)++;
