@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.16 2002/04/15 21:26:44 scribe Exp $
+ * $Id: swkey.h,v 1.17 2002/05/25 15:03:14 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -73,8 +73,7 @@ public:
 * types of keys for indexing into modules (e.g. verse, word,
 * place, etc.)
 */
-class SWDLLEXPORT SWKey:public SWObject
-{
+class SWDLLEXPORT SWKey : public SWObject {
   long index;
   static SWClass classdef;
   void init ();

@@ -10,7 +10,7 @@
 #include <defs.h>
 #include <string.h>
 
-#define SWDYNAMIC_CAST(className, object) (className *)((object->getClass()->isAssignableFrom(#className))?object:0)
+#define SWDYNAMIC_CAST(className, object) (className *)((object)?((object->getClass()->isAssignableFrom(#className))?object:0):0)
 
 /**
 * Class used for SWDYNAMIC_CAST to save the inheritance order.
@@ -20,13 +20,13 @@ private:
 	const char **descends;
 
 public:
-	SWClass (const char **descends) {
+	SWClass(const char **descends) {
 		this->descends = descends;
 	}
 
-	bool isAssignableFrom (const char *className) const {
+	bool isAssignableFrom(const char *className) const {
 		for (int i = 0; descends[i]; i++) {
-			if (!stricmp (descends[i], className))
+			if (!stricmp(descends[i], className))
 				return true;
 		}
 		return false;
