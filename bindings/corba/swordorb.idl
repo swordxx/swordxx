@@ -11,8 +11,9 @@ typedef sequence<string> StringList;
 
 struct ModInfo {
 	string name;
-	string type;
-	string lang;
+	string description;
+	string category;
+	string language;
 };
 
 typedef sequence<ModInfo> ModInfoList;
@@ -33,9 +34,10 @@ interface SWModule {
 	long  getEntrySize();
 	void   setKeyText(in string key);
 	string getKeyText();
+	StringList getKeyChildren();
 	string getName();
 	string getDescription();
-	string getType();
+	string getCategory();
 	void   previous();
 	void   next();
 	void   begin();

@@ -11,8 +11,9 @@ import javax.servlet.http.HttpSessionBindingEvent;
 public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static final String BIBLES = "Biblical Texts";
 	public static final String COMMENTARIES = "Commentaries";
-	public static final String LEXDICT = "Lexicons / Dictionaries";
-	public static final String BOOKS = "Generic Books";
+	public static final String LEXDICTS = "Lexicons / Dictionaries";
+	public static final String GENBOOKS = "Generic Books";
+	public static final String DAILYDEVOS = "Daily Devotional";
 	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, null);
 	String ior = null;
 
@@ -127,7 +128,7 @@ System.out.println("ORB found in session");
 		System.out.println("sequence size: " + modInfoList.length);
 		SWModule module;
 		for (int i = 0; i < modInfoList.length; i++) {
-			System.out.println(modInfoList[i].name + ": " + modInfoList[i].type + ": " + modInfoList[i].lang);
+			System.out.println(modInfoList[i].name + ": " + modInfoList[i].category + ": " + modInfoList[i].language);
 			module = mgr.getModuleByName(modInfoList[i].name);
 			module.setKeyText("jas1:19");
 			System.out.println(module.getRenderText());

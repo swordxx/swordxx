@@ -25,9 +25,10 @@ public:
 	CORBA::Long getEntrySize() throw(CORBA::SystemException) { return delegate->getEntrySize(); }
 	void   setKeyText(const char *key) throw(CORBA::SystemException) { delegate->KeyText(key); }
 	char *getKeyText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->KeyText()); }
+	StringList *getKeyChildren() throw(CORBA::SystemException);
 	char *getName() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Name()); }
 	char *getDescription() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Description()); }
-	char *getType() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Type()); }
+	char *getCategory() throw(CORBA::SystemException);
 	void   previous() throw(CORBA::SystemException) { delegate->decrement(); }
 	void   next() throw(CORBA::SystemException) { delegate->increment(); }
 	void   begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }

@@ -33,7 +33,7 @@ int main (int argc, char *argv[])
 		modInfoList = mgr->getModInfoList();
 		std::cout << "sequence length: " << modInfoList->length() << "\n";
 		for (int i = 0; i < modInfoList->length(); i++) {
-			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].type << ": " << (*modInfoList)[i].lang << "\n";
+			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].category << ": " << (*modInfoList)[i].language << "\n";
 			module = mgr->getModuleByName((*modInfoList)[i].name);
 			module->setKeyText("jas1:19");
 			std::cout << module->getRenderText() << "\n";
