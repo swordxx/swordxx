@@ -226,13 +226,13 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
 			const char* chapterTagEnd = strchr(text.c_str(), '>');
 			const char* titleTagStart = strstr(text.c_str(), "<title");
-			
+
 			if (chapterTagEnd+1 == titleTagStart) {
 				const char* titleTagEnd = strstr(text.c_str(), "</title>");
 				while (strstr(titleTagEnd+8, "</title>")) {
 					titleTagEnd = strstr(titleTagEnd+8, "</title>");
 				}
-				
+
 				
 				const char* textEnd = text.c_str() + text.length();
 				if (titleTagEnd+8 == textEnd) {
@@ -275,22 +275,22 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag() || (token.getAttribute("eID")))) {
         	inVerse = false;
 		if (lastTitle.length()) {
-			char* end = strchr(lastTitle, '>');
+			const char* end = strchr(lastTitle, '>');
 // 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
-			
+
 			SWBuf titleTagText;
 			titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
 // 			printf("tagText: %s\n", titleTagText.c_str());
-			
+
 			XMLTag titleTag(titleTagText);
 			titleTag.setAttribute("type", "section");
 			titleTag.setAttribute("subtype", "x-preverse");
-			
+
 			//we insert the title into the text again - make sure to remove the old title text
-			char* pos = strstr(text, lastTitle);
+			const char* pos = strstr(text, lastTitle);
 			if (pos) {
 				SWBuf temp;
-				temp.append(text, pos-text);
+				temp.append(text, pos-text.c_str());
 				temp.append(pos+lastTitle.length());
 				text = temp;
 			}
@@ -298,9 +298,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			//if a title was already inserted at the beginning insert this one after that first title
 			int titlePos = 0;
 			if (!strncmp(text.c_str(),"<title ",7)) {
-				char* tmp = strstr(text.c_str(), "</title>");
+				const char* tmp = strstr(text.c_str(), "</title>");
 				if (tmp) {
-					titlePos = (tmp-text) + 8;
+					titlePos = (tmp-text.c_str()) + 8;
 				}
 			}
  			text.insert(titlePos, end+1);
