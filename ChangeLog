@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+11-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Helmer Krämer's fix for case insensitive code
+		in SWBasicFilter
+
 04-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added new multimapwithdefault::has(K, V) method to allow
 		a call like module->getConfig().has("Feature", "HebrewDefs")

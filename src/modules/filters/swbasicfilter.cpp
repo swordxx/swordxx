@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.16 2002/03/04 01:56:44 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.17 2002/03/11 19:01:28 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -120,7 +120,16 @@ void SWBasicFilter::pushString(char **buf, const char *format, ...) {
 
 bool SWBasicFilter::substituteToken(char **buf, const char *token) {
 	DualStringMap::iterator it;
+
+	if (!tokenCaseSensitive) {
+	        char *tmp = 0;
+		stdstr(&tmp, token);
+		toupperstr(tmp);
+		it = tokenSubMap.find(tmp);
+		delete [] tmp;
+	} else
 	it = tokenSubMap.find(token);
+
 	if (it != tokenSubMap.end()) {
 		pushString(buf, it->second.c_str());
 		return true;
@@ -131,7 +140,16 @@ bool SWBasicFilter::substituteToken(char **buf, const char *token) {
 
 bool SWBasicFilter::substituteEscapeString(char **buf, const char *escString) {
 	DualStringMap::iterator it;
+
+	if (!escStringCaseSensitive) {
+	        char *tmp = 0;
+		stdstr(&tmp, escString);
+		toupperstr(tmp);
+		it = escSubMap.find(tmp);
+		delete [] tmp;
+	} else 
 	it = escSubMap.find(escString);
+
 	if (it != escSubMap.end()) {
 		pushString(buf, it->second.c_str());
 		return true;

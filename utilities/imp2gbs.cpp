@@ -152,9 +152,9 @@ int main(int argc, char **argv) {
   
   delete treeKey;
   delete book;
-  delete keybuffer;
-  delete linebuffer;
-  delete entbuffer;
+  delete [] keybuffer;
+  delete [] linebuffer;
+  delete [] entbuffer;
 
   return 0;
 }
