@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.10 1999/10/17 04:32:01 scribe Exp $
+ * $Id: swmgr.cpp,v 1.11 1999/11/22 17:37:26 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -99,7 +99,8 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload) {
 	init();
 	
 	path = iConfigPath;
-	path += "/";
+	if ((iConfigPath[strlen(iConfigPath)-1] != '\\') && (iConfigPath[strlen(iConfigPath)-1] != '/'))
+		path += "/";
 	if (existsFile(path.c_str(), "mods.conf")) {
 		stdstr(&prefixPath, path.c_str());
 		path += "mods.conf";
@@ -143,7 +144,8 @@ SWMgr::~SWMgr() {
 char SWMgr::existsFile(const char *ipath, const char *ifileName)
 {
 	string path = ipath;
-	path += "/";
+	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
+		path += "/";
 	int fd;
 	string filePath = path + ifileName;
 	if ((fd = ::open(filePath.c_str(), O_RDONLY)) > 0) {
@@ -158,7 +160,8 @@ char SWMgr::existsDir(const char *ipath, const char *idirName)
 {
 	DIR *dir;
 	string path = ipath;
-	path += "/";
+	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
+		path += "/";
 	string filePath = path + idirName;
 	if ((dir = opendir(filePath.c_str()))) {
 		closedir(dir);
@@ -197,7 +200,8 @@ void SWMgr::findConfig() {
 
 	if (envsworddir != NULL) {
 		path = envsworddir;
-		path += "/";
+		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
+			path += "/";
 		if (existsFile(path.c_str(), "mods.conf")) {
 			stdstr(&prefixPath, path.c_str());
 			path += "mods.conf";
@@ -218,7 +222,9 @@ void SWMgr::findConfig() {
 
 	if (envhomedir != NULL) {
 		path = envhomedir;
-		path += "/.sword/";
+		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
+			path += "/";
+		path += ".sword/";
 		if (existsFile(path.c_str(), "mods.conf")) {
 			stdstr(&prefixPath, "");
 			path += "mods.conf";
@@ -239,7 +245,9 @@ void SWMgr::findConfig() {
 		::close(fd);
 		SWConfig etcconf("/etc/sword.conf");
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
-			path = (*entry).second + "/";
+			path = (*entry).second;
+			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
+				path += "/";
 
 			if (existsFile(path.c_str(), "mods.conf")) {
 				stdstr(&prefixPath, path.c_str());
@@ -270,7 +278,8 @@ void SWMgr::loadConfigDir(const char *ipath)
 		while ((ent = readdir(dir))) {
 			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
 				newmodfile = ipath;
-				newmodfile += "/";
+				if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
+					newmodfile += "/";
 				newmodfile += ent->d_name;
 				if (config) {
 					SWConfig tmpConfig(newmodfile.c_str());
@@ -282,7 +291,9 @@ void SWMgr::loadConfigDir(const char *ipath)
 		closedir(dir);
 		if (!config) {	// if no .conf file exist yet, create a default
 			newmodfile = ipath;
-			newmodfile += "/globals.conf";
+			if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
+				newmodfile += "/";
+			newmodfile += "globals.conf";
 			config = myconfig = new SWConfig(newmodfile.c_str());
 		}
 	}
@@ -335,7 +346,8 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 
 	description = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (string)"";
 	datapath = prefixPath;
-	datapath += "/";
+	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
+		datapath += "/";
 	datapath += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (string)"";
 	
 	if (!stricmp(driver.c_str(), "RawText")) {
@@ -507,13 +519,15 @@ void SWMgr::InstallScan(const char *dirname)
 		while ((ent = readdir(dir))) {
 			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
 				newmodfile = dirname;
-				newmodfile += "/";
+				if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
+					newmodfile += "/";
 				newmodfile += ent->d_name;
 				if (configType) {
 					if (config > 0)
 						close(conffd);
 					targetName = configPath;
-					targetName += "/";
+					if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
+						targetName += "/";
 					targetName += ent->d_name;
 					conffd = open(targetName.c_str(), O_WRONLY|O_CREAT, S_IREAD|S_IWRITE);
 				}
