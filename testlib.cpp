@@ -31,8 +31,8 @@ int main(int argc, char **argv)
 
 	mykey = (argc < 2) ? "James    1:19" : argv[1];
 	mykey.Persist(1);
-	text.SetKey(mykey);
-	commentary.SetKey(mykey);
+	text.setKey(mykey);
+	commentary.setKey(mykey);
 
 
 	max = (argc < 3) ? 1 : atoi(argv[2]);

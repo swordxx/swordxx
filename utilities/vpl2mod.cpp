@@ -185,7 +185,7 @@ int main(int argc, char **argv) {
 	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
 	vk.Persist(1);
 
-	mod.SetKey(vk);
+	mod.setKey(vk);
 
 	// Loop through module from TOP to BOTTOM and set next line from
 	// input file as text for this entry in the module

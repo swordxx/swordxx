@@ -159,10 +159,10 @@ int SWModule_getEntrySize(SWHANDLE hmodule) {
 void SWModule_setKeyText(SWHANDLE hmodule, const char *key) {
 	SWModule *module = (SWModule *)hmodule;
 	if (module)
-		module->Key(key);
+		module->setKey(key);
 }
 
-//  virtual char SetKey (const SWKey &ikey);
+//  virtual char setKey (const SWKey &ikey);
 //  virtual SWKey & Key () const {
   
 const char *SWModule_getKeyText(SWHANDLE hmodule) {

@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 			lastBuffer = inModule->getRawEntry();
 			if (lastBuffer.length() > 0) {
 				cout << "Adding [" << bufferKey << "] new text. \n";
-				outModule->SetKey(bufferKey);
+				outModule->setKey(bufferKey);
 				(*outModule) << lastBuffer.c_str();	// save new text;
 			}
 			else {

@@ -59,7 +59,7 @@ SWKey::~SWKey() {
 
 /******************************************************************************
  * SWKey::Persist - Gets whether this object itself persists within a
- *			module that it was used to SetKey or just a copy.
+ *			module that it was used to setKey or just a copy.
  *			(1 - persists in module; 0 - a copy is attempted
  *
  * RET:	value of persist
@@ -73,7 +73,7 @@ char SWKey::Persist() const
 
 /******************************************************************************
  * SWKey::Persist - Set/gets whether this object itself persists within a
- *			module that it was used to SetKey or just a copy.
+ *			module that it was used to setKey or just a copy.
  *			(1 - persists in module; 0 - a copy is attempted
  *
  * ENT:	ipersist - value which to set persist

@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
 	std::cout << keybuffer << std::endl;
 	*vkey = keybuffer;
-	mod->SetKey(*vkey);
+	mod->setKey(*vkey);
 	if (!vkey->Chapter()) {
 	  // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
 	  int backstep = vkey->Verse();
@@ -135,7 +135,7 @@ int main(int argc, char **argv) {
   if (strlen(keybuffer) && strlen(entbuffer)) {
     std::cout << keybuffer << std::endl;
     *vkey = keybuffer;
-    mod->SetKey(*vkey);
+    mod->setKey(*vkey);
     if (!vkey->Chapter()) {
       // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
       int backstep = vkey->Verse();

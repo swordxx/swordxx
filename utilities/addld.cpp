@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
       
       // Set our VerseKey
       *key = argv[3];
-      mod.SetKey(*key);
+	 mod.setKey(*key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
       
       // Set our VerseKey
       *key = argv[3];
-      mod.SetKey(*key);
+	 mod.setKey(*key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
       
       // Set our VerseKey
       *key = argv[3];
-      mod.SetKey(*key);
+	 mod.setKey(*key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
       key->Persist(1);      // the magical setting
       
       *key = argv[3];
-      mod.SetKey(*key);
+	 mod.setKey(*key);
       SWKey tmpkey = argv[4];
       mod << &(tmpkey);
     }
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
       key->Persist(1);      // the magical setting
       
       *key = argv[3];
-      mod.SetKey(*key);
+	 mod.setKey(*key);
       
       SWKey tmpkey = argv[4];
       mod << &(tmpkey);
@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
       key->Persist(1);      // the magical setting
       
       *key = argv[3];
-      mod.SetKey(*key);
+	 mod.setKey(*key);
       
       SWKey tmpkey = argv[4];
       mod << &(tmpkey);
@@ -148,17 +148,17 @@ int main(int argc, char **argv) {
   else if ((mode == 'd') && argc == 4) {
     if (fourbyte) {
       RawLD4 mod(argv[2]);	// open our datapath with our RawText driver.
-      mod.SetKey(argv[3]);
+	 mod.setKey(argv[3]);
       mod.deleteEntry();
     }
     if (compress) {
       zLD mod(argv[2]);	// open our datapath with our RawText driver.
-      mod.SetKey(argv[3]);
+	 mod.setKey(argv[3]);
       mod.deleteEntry();
     }
     else {
       RawLD mod(argv[2]);	// open our datapath with our RawText driver.
-      mod.SetKey(argv[3]);
+      mod.setKey(argv[3]);
       mod.deleteEntry();
     }
     

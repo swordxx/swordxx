@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
 	if (bbe) {
 		VerseKey vk;
 		vk.Persist(1);
-		bbe->SetKey(vk);
+		bbe->setKey(vk);
 		for (; !bbe->Error(); (*bbe)++ ) {
 			std::cout << vk.NewIndex() << std::endl; 
 		}

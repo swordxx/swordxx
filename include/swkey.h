@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.18 2002/07/28 01:48:38 scribe Exp $
+ * $Id: swkey.h,v 1.19 2002/08/14 09:23:17 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -103,7 +103,7 @@ public:
 	virtual SWKey *clone() const;
 
 	/** Gets whether this object itself persists within a
-	* module that it was used to SetKey or just a copy.
+	* module that it was used to setKey or just a copy.
 	* (1 - persists in module; 0 - a copy is attempted
 	*
 	* @return value of persist
@@ -111,7 +111,7 @@ public:
 	char Persist() const;
 
 	/** Set/gets whether this object itself persists within a
-	* module that it was used to SetKey or just a copy.
+	* module that it was used to setKey or just a copy.
 	* (1 - persists in module; 0 - a copy is attempted
 	*
 	* @param ipersist value which to set persist;
@@ -191,7 +191,7 @@ public:
 	*   srand( time(0) );
 	*   const double newIndex = (double(rand())/RAND_MAX)*(24108+8224);
 	*   vk.Index(newIndex);
-	*   module->SetKey(vk);
+	*   module->setKey(vk);
 	*
 	*   char* text;
 	*   sprintf(text, "%s: %s",(const char*)vk ,module->StripText(&vk));

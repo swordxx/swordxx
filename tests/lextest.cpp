@@ -6,16 +6,16 @@ void main(int argc, char **argv)
 	RawLD::createModule("tmp/lextest");
 	RawLD lex("tmp/lextest");
 
-	lex.SetKey("b");
+	lex.setKey("b");
 	lex << "x";
 
-	lex.SetKey("a");
+	lex.setKey("a");
 	lex << "x";
 
-	lex.SetKey("a");
+	lex.setKey("a");
 	lex.deleteEntry();
 
-//	lex.SetKey("a");
+//	lex.setKey("a");
 //	lex << "y";
 
 	lex = BOTTOM;

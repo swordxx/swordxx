@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 	cout << "\nPress [CTRL-C] to end\n\n";
 	while (true) {
 		cout << "\nModule text:\n";
-		module->SetKey("1jn 1:9");
+		module->setKey("1jn 1:9");
 		cout << "[ " << module->KeyText() << " ]\n";
 		cout << (const char *)*module;
 		cout << "\n\nEnter new cipher key: ";

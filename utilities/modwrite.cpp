@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	}
 
 	SWModule *module = it->second;
-	module->SetKey(argv[2]);
+	module->setKey(argv[2]);
 
 	switch (action) {
 	case 0:

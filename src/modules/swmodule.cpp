@@ -256,20 +256,27 @@ char SWModule::Display()
 
 
 /******************************************************************************
- * SWModule::SetKey - Sets a key to this module for position to a particular
- *			record or set of records
+ * SWModule::getKey - Gets the key from this module that points to the position
+ *			record
+ *
+ * RET:	key object
+ */
+
+SWKey *SWModule::getKey() const {
+	return key;
+}
+
+
+/******************************************************************************
+ * SWModule::setKey - Sets a key to this module for position to a particular
+ *			record
  *
  * ENT:	ikey - key with which to set this module
  *
  * RET:	error status
  */
 
-char SWModule::SetKey(const SWKey &ikey) {
-	return SetKey(&ikey);
-}
-
-char SWModule::SetKey(const SWKey *ikey)
-{
+char SWModule::setKey(const SWKey *ikey) {
 	SWKey *oldKey = 0;
 
 	if (key) {
@@ -287,24 +294,6 @@ char SWModule::SetKey(const SWKey *ikey)
 		delete oldKey;
 
 	return 0;
-}
-
-
-/******************************************************************************
- * SWModule::KeyText - Sets/gets module KeyText
- *
- * ENT:	ikeytext - value which to set keytext
- *		[0] - only get
- *
- * RET:	pointer to keytext
- */
-
-const char *SWModule::KeyText(const char *ikeytext)
-{
-	if (ikeytext)
-		SetKey(ikeytext);
-
-	return *key;
 }
 
 
@@ -405,7 +394,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	searchkey = (scope)?scope->clone():(key->Persist())?key->clone():0;
 	if (searchkey) {
 		searchkey->Persist(1);
-		SetKey(*searchkey);
+		setKey(*searchkey);
 	}
 
 	(*percent)(perc, percentUserData);
@@ -519,7 +508,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		free(wordBuf);
 	}
 
-	SetKey(*savekey);
+	setKey(*savekey);
 
 	if (!savekey->Persist())
 		delete savekey;
@@ -605,11 +594,11 @@ const char *SWModule::StripText(char *buf, int len)
 	}
 	else	savekey = key;
 
-	SetKey(*tmpKey);
+	setKey(*tmpKey);
 
 	retVal = RenderText();
 
-	SetKey(*savekey);
+	setKey(*savekey);
 
 	if (!savekey->Persist())
 		delete savekey;
@@ -637,11 +626,11 @@ const char *SWModule::StripText(SWKey *tmpKey)
 	}
 	else	savekey = key;
 
-	SetKey(*tmpKey);
+	setKey(*tmpKey);
 
 	retVal = StripText();
 
-	SetKey(*savekey);
+	setKey(*savekey);
 
 	if (!savekey->Persist())
 		delete savekey;

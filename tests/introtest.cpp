@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 	vk.Headings(1);
 	vk.AutoNormalize(0);
 	vk.Persist(1);
-	mod.SetKey(vk);
+	mod.setKey(vk);
 
 	vk.Verse(0);
 	vk.Chapter(0);
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 		vk.Persist(1);
 		vk = "jas 0:0";
 		std::cout << vk << ":\n";
-		mhc->SetKey(vk);
+		mhc->setKey(vk);
 		std::cout << (const char *) mhc->Key() << ":\n";
 		std::cout << (const char *) *mhc << "\n";
 	}

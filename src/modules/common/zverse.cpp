@@ -262,7 +262,8 @@ void zVerse::zreadtext(char testmt, long start, unsigned short size, char *inbuf
 {
 	memset(inbuf, 0, size);
 	if (size > 2) {
-		strncpy(inbuf, &(cacheBuf[start]), size-2);
+		if (cacheBuf)
+			strncpy(inbuf, &(cacheBuf[start]), size-2);
 	}
 }
 

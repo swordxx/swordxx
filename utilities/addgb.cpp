@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
     // Link 2 verses
     else if ((mode == 'l') && argc == 5) {
     *key = argv[3];
-    mod.SetKey(*key);
+    mod.setKey(*key);
     
     SWKey tmpkey = argv[4];
     mod << &(tmpkey);
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
     
     // Delete an entry
     else if ((mode == 'd') && argc == 4) {
-    mod.SetKey(argv[3]);
+    mod.setKey(argv[3]);
     mod.deleteEntry();
     }
   */

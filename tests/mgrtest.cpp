@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 		std::cout << "AbsoluteDataPath = " << it->second->getConfigEntry("AbsoluteDataPath") << "\n";
 		std::cout << "Has Feature HebrewDef = " << it->second->getConfig().has("Feature", "HebrewDef") << "\n";
 		if ((!strcmp((*it).second->Type(), "Biblical Texts")) || (!strcmp((*it).second->Type(), "Commentaries"))) {
-			(*it).second->SetKey("James 1:19");
+			it->second->setKey("James 1:19");
 			std::cout << (const char *) *(*it).second << "\n\n";
 		}
 	}

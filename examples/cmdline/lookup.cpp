@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
 	target = (*it).second;
 
-	target->SetKey(argv[2]);
+	target->setKey(argv[2]);
 
 	(const char *)*target;		// force an entry lookup to resolve key so we
 						// get the idxbuf entry for the key

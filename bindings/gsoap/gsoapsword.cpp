@@ -52,7 +52,7 @@ int sword__SWModule_getDescription(xsd__int hmodule, xsd__string &description) {
 int sword__Quick_getModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string &modText) {
 	SWModule *mod = mgr->Modules[modName];
 	if (mod) {
-		mod->SetKey(modKey);
+		mod->setKey(modKey);
 		modText = mod->getRawEntry();
 	}
 	return SOAP_OK;
@@ -62,7 +62,7 @@ int sword__Quick_getModuleRawEntry(xsd__string modName, xsd__string modKey, xsd_
 int sword__Quick_setModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string modText, xsd__int &noop) {
 	SWModule *mod = mgr->Modules[modName];
 	if (mod) {
-		mod->SetKey(modKey);
+		mod->setKey(modKey);
 		(*mod) << modText;
 	}
 	return SOAP_OK;
@@ -72,7 +72,7 @@ int sword__Quick_setModuleRawEntry(xsd__string modName, xsd__string modKey, xsd_
 int sword__Quick_getModuleRenderText(xsd__string modName, xsd__string modKey, xsd__string &modText) {
 	SWModule *mod = mgr->Modules[modName];
 	if (mod) {
-		mod->SetKey(modKey);
+		mod->setKey(modKey);
 		modText = (char *)mod->RenderText();
 	}
 	return SOAP_OK;
@@ -82,7 +82,7 @@ int sword__Quick_getModuleRenderText(xsd__string modName, xsd__string modKey, xs
 int sword__Quick_getJScriptAttribArray(xsd__string modName, xsd__string modKey, xsd__string &arrayText) {
 	SWModule *mod = mgr->Modules[modName];
 	if (mod) {
-		mod->SetKey(modKey);
+		mod->setKey(modKey);
 		AttributeTypeList::iterator i1;
 		AttributeList::iterator i2;
 		AttributeValue::iterator i3;

@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     vkey->Persist(1);      // the magical setting
     *vkey = argv[3];   
     // Set our VerseKey
-    mod->SetKey(*vkey);
+    mod->setKey(*vkey);
     if (!vkey->Chapter()) {
       // bad hack >>
       // 0:0 is Book intro
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
    // Do some initialization stuff
    RawText *mod = new RawText(argv[2]);	// open our datapath with our RawText driver.
    
-   mod->SetKey(argv[4]);    // set key from argument
+   mod->setKey(argv[4]);    // set key from argument
    SWKey tmpkey = (SWKey) argv[3];
    *(SWModule*)mod << &(tmpkey);
    delete mod;
@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
    vkey->Persist(1);      // the magical setting
    
    // Set our VerseKey
-   mod.SetKey(*vkey);
+   mod.setKey(*vkey);
    *vkey = argv[3];
 
    if (!vkey->Chapter())

@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
 	mykey = argv[2];
 	mykey.Persist(1);
-	personal.SetKey(mykey);
+	personal.setKey(mykey);
 
 	max = (argc < 4) ? 1 : atoi(argv[3]);
 

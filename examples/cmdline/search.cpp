@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 		vk.LowerBound(argv[3]);
 		vk.UpperBound(argv[4]);
 		vk.Persist(1);
-		target->SetKey(vk);
+		target->setKey(vk);
 	}
 
 	std::cout << "[0=================================50===============================100]\n ";

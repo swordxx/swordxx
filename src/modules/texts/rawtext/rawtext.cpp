@@ -142,7 +142,7 @@ signed char RawText::createSearchFramework() {
 	searchkey = (key->Persist())?key->clone():0;
 	if (searchkey) {
 		searchkey->Persist(1);
-		SetKey(*searchkey);
+		setKey(*searchkey);
 	}
 
 	// position module at the beginning
@@ -174,7 +174,7 @@ signed char RawText::createSearchFramework() {
 	}
 
 	// reposition module back to where it was before we were called
-	SetKey(*savekey);
+	setKey(*savekey);
 
 	if (!savekey->Persist())
 		delete savekey;

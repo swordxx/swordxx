@@ -266,7 +266,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else if (querytype == QT_LD) {
 		//do dictionary stuff
 		
-		target->SetKey(ref);
+		target->setKey(ref);
 		
 		const char * text = (const char *) *target;
 

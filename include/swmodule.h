@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.49 2002/07/30 10:17:30 scribe Exp $
+* $Id: swmodule.h,v 1.50 2002/08/14 09:23:17 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -40,8 +40,8 @@ using namespace std;
 
 #define SWMODULE_OPERATORS \
 	operator const char *() { return RenderText(); } \
-	operator SWKey &() { return *key; } \
-	operator SWKey *() { return key; } \
+	operator SWKey &() { return *getKey(); } \
+	operator SWKey *() { return getKey(); } \
 	SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
 	SWModule &operator <<(const SWKey *sourceKey) { linkEntry(sourceKey); return *this; } \
 	SWModule &operator -=(int steps) { decrement(steps); return *this; } \
@@ -178,37 +178,55 @@ protected:
 	*
 	* @param ikey key with which to set this module
 	* @return error status
+	* @deprecated See setKey()
 	*/
-	virtual char SetKey(const SWKey *ikey);
+	char SetKey(const SWKey *ikey) { return setKey(ikey); }
+	virtual char setKey(const SWKey *ikey);
+	
 	/**
-	* Sets the key of this module. Similair to @see SetKey(const SWKey*) .
+	* Sets the key of this module. Similar to @see SetKey(const SWKey*) .
 	* @param ikey The SWKey which should be used as new key.
 	* @return Error status
+	* @deprecated See setKey()
 	*/
-	virtual char SetKey(const SWKey &ikey);
+	char SetKey(const SWKey &ikey) { return setKey(ikey); }
+	char setKey(const SWKey &ikey) { return SetKey(&ikey); }
+
 	/** Gets the current module key
 	* @return the current key of this module
+	* @deprecated See getKey()
 	*/
-	virtual SWKey & Key() const { return *key; }
+	SWKey &Key() const { return *getKey(); }
+	SWKey *getKey() const;
+
 	/** Sets the current key of the module to ikey, and returns
 	* the keytext
 	*
 	* @param ikey new current key for the module
 	* @return the keytext of the current module key
+	* @deprecated See setKey()
 	*/
-	virtual char Key(const SWKey & ikey) { return SetKey(ikey); }
-	/** Sets/gets module KeyText
-	*
-	* @param ikeytext value which to set keytext;
-	*  [0] - only get
-	* @return pointer to keytext
-	*/
-	virtual const char *KeyText(const char *imodtype = 0);
+	char Key(const SWKey & ikey) { return setKey(ikey); }
+
+	/******************************************************************************
+	 * SWModule::KeyText - Sets/gets module KeyText
+	 *
+	 * ENT:	ikeytext - value which to set keytext
+	 *		[0] - only get
+	 *
+	 * RET:	pointer to keytext
+	 */
+	const char *KeyText(const char *ikeytext = 0) {
+		if (ikeytext) setKey(ikeytext);
+		return *getKey();
+	}
+
 	/** Calls this modules display object and passes itself
 	*
 	* @return error status
 	*/
 	virtual char Display();
+
 	/** Sets/gets display driver
 	*
 	* @param idisp value which to set disp;
