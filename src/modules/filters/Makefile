@@ -52,6 +52,8 @@ ifeq ($(icu),yes)
 cpp += utf8transliterator.cpp
 cpp += utf8nfc.cpp
 cpp += utf8nfkd.cpp
+cpp += utf8arshaping.cpp
+cpp += utf8bidireorder.cpp
 endif
 
 cpp += utf8cantillation.cpp
