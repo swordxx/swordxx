@@ -1,0 +1,169 @@
+// Latin-Syriac
+
+translit_Latin_Syriac {
+  Rule {
+    ":: NFD (NFC) ;" 
+    
+    // Variable names, derived from the Unicode names.
+    "$ALEF=\u0710;"
+    "$ALEF_SUPERSCRIPT=\u0711;"
+    "$BET=\u0712;"
+    "$GIMEL=\u0713;"
+    "$GIMEL_GARSHUNI=\u0714;"
+    "$DALET=\u0715;"
+    "$DALET_DOTLESS=\u0716;"
+    "$HE=\u0717;"
+    "$VAV=\u0718;"
+    "$ZAYIN=\u0719;"
+    "$HET=\u071A;"
+    "$TET=\u071B;"
+    "$TET_GARSHUNI=\u071C;"
+    "$YOD=\u071D;"
+    "$YOD_HE=\u071E;"
+    "$KAF=\u071F;"
+    "$LAMED=\u0720;"
+    "$MEM=\u0721;"
+    "$NUN=\u0722;"
+    "$SAMEKH=\u0723;"
+    "$FINAL_SAMEKH=\u0724;"
+    "$AYIN=\u0725;"
+    "$PE=\u0726;"
+    "$PE_REVERSED=\u0727;"
+    "$TSADI=\u0728;"
+    "$QOF=\u0729;"
+    "$RESH=\u072A;"
+    "$SHIN=\u072B;"
+    "$TAV=\u072C;"
+
+    "$PARAGRAPH=\u0700;"
+    
+    "$letter=[a-zA-Z];"
+    "$softvowel=[eiyEIY];"
+    "$vowellike=[$ALEF $AYIN $YOD $VAV $ALEF_SUPERSCRIPT];"
+    
+    // [Why is this a special case? -liu]
+    "k''h <> $KAF $HE ;"
+    
+    // Mark non-final forms in final position as x~ -liu
+    "s    <  $SAMEKH   } [[:SYRIAC:]&[:LETTER:]] ;"
+    "s'~' <> $SAMEKH   ;"
+
+    // Mark final forms in non-final position as x^ -liu
+    "s    <  $FINAL_SAMEKH;"
+    
+    // Main rules
+    "a<>$ALEF;"
+    "A>$ALEF;"
+    "a<$ALEF_SUPERSCRIPT;"
+    
+    "b<>$BET;"
+    "B>$BET;"
+    
+    "c}$softvowel>$SAMEKH;"
+    "C}$softvowel>$SAMEKH;"
+    "c>$KAF;"
+    "C>$KAF;"
+    
+    "d<>$DALET;"
+    "D>$DALET;"
+    "d<$DALET_DOTLESS;"
+    
+    "e<>$AYIN;"
+    "E>$AYIN;"
+    
+    "f>$PE;"
+    "F>$PE;"
+    
+    "g<>$GIMEL;"
+    "G>$GIMEL;"
+    "g<$GIMEL_GARSHUNI;"
+    
+    "h<>$HE;"
+    "H>$HE;"
+    
+    "i>$YOD;"
+    "I>$YOD;"
+    "ih<$YOD_HE;"
+    
+    "j>$DALET$SHIN;"
+    "J>$DALET$SHIN;"
+    
+    "kh<>$HET;"
+    "kH>$HET;"
+    "Kh>$HET;"
+    "KH>$HET;"
+    "k<>$KAF;"
+    "K>$KAF;"
+    
+    "l<>$LAMED;"
+    "L>$LAMED;"
+    
+    "m<>$MEM;"
+    "M>$MEM;"
+    
+    "n<>$NUN;"
+    "N>$NUN;"
+    
+    "o>$VAV;"
+    "O>$VAV;"
+    
+    "p<>$PE;"
+    "P>$PE;"
+    "p<$PE_REVERSED;"    
+
+    "q<>$QOF;"
+    "Q>$QOF;"
+    
+    "r<>$RESH;"
+    "R>$RESH;"
+    
+    "sh<>$SHIN;"
+    "sH>$SHIN;"
+    "Sh>$SHIN;"
+    "SH>$SHIN;"
+    
+    "th<>$TAV;"
+    "tH>$TAV;"
+    "Th>$TAV;"
+    "TH>$TAV;"
+    "tS>$TSADI;"
+    "ts<>$TSADI;"
+    "Ts>$TSADI;"
+    "TS>$TSADI;"
+    "t''<$TET}[$HE $SAMEKH $SHIN];"
+    "t<>$TET;"
+    "T>$TET;"
+    "t<$TET_GARSHUNI;"
+
+    "s}$letter>$SAMEKH;"
+    "s>$FINAL_SAMEKH;"
+    "S}$letter>$SAMEKH;"
+    "S>$FINAL_SAMEKH;"
+    
+    "v<$VAV}$vowellike;"
+    "u<>$VAV;"
+    "U>$VAV;"
+    
+    "v>$VAV;"
+    "V>$VAV;"
+    
+    "w>$VAV;"
+    "W>$VAV;"
+    
+    "x>$KAF$SAMEKH;"
+    "X>$KAF$SAMEKH;"
+    
+    "y<>$YOD;"
+    "Y>$YOD;"
+    
+    "z<>$ZAYIN;"
+    "Z>$ZAYIN;"
+
+    "\u00B6<>$PARAGRAPH;"
+
+    //Delete any Syriac we didn't recognize
+    "<[:SYRIAC:];"
+
+    ":: NFC (NFD) ;"    
+  }
+}

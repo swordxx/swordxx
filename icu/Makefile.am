@@ -14,6 +14,7 @@ swicuSOURCES += translit_Latin_Coptic.txt
 swicuSOURCES += translit_Latin_Ethiopic.txt
 swicuSOURCES += translit_Latin_Georgian.txt
 swicuSOURCES += translit_Latin_Gothic.txt
+swicuSOURCES += translit_Latin_Syriac.txt
 swicuSOURCES += translit_Latin_Thai.txt
 swicuSOURCES += translit_Latin_Ugaritic.txt
 swicuSOURCES += translit_Any_Latin1.txt

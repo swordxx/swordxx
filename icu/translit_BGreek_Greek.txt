@@ -147,7 +147,7 @@ translit_BGreek_Greek {
     "h<>$comb_rough_breathing;"
     "h<$rough_breathing;"
 
-    ":: [[:Ll:] & [:Greek:]] (upper);"
+    ":: [[:Ll:] & [:Greek:]] upper;"
     
     ":: NFC (NFD) ;"    
   }
