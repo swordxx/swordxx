@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.21 2001/04/18 19:20:03 jansorg Exp $
+ * $Id: swmgr.h,v 1.22 2001/04/19 15:40:06 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -19,6 +19,26 @@
  * General Public License for more details.
  *
  */
+
+/** @page frontend How to write a frontend for the Sword library
+* This page describes howto create a new frontend using the Sword library.<BR>
+* We do only show how to write a very simple frontend, the GUI and more features have to be 
+* implemented with your own ideas.<BR>
+* The programming language is C++, the toolkit is Qt 2.2 because I do only know Qt and it's 
+* available on Linux and Windows. The IDE I used is KDevelop 1.41.<BR>
+* The app is called SimpleSword and does almoust nothing :) The sourcecode of SimpleSword
+* is available in Swords CVS in the directory examples/X11/SimpleSword/<BR>
+*
+*/
+
+/** @mainpage The Sword library 1.52 - API documentation
+* This page decsribes the structure of the Sword library.
+* Sword provides an interface to different modules (Bibles/Commentaries/Lexicons)
+* on disk. The object to work directly with the modules is SWModule.
+* Use the class SWMgr to manage the modules.
+*
+* Learn how to write a frontend: @ref frontend
+*/
 
 #ifndef SWMGR_H
 #define SWMGR_H
@@ -45,7 +65,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.21 2001/04/18 19:20:03 jansorg Exp $
+  * @version $Id: swmgr.h,v 1.22 2001/04/19 15:40:06 jansorg Exp $
   */
 class SWDLLEXPORT SWMgr
 {

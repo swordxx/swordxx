@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.11 2001/04/06 04:30:46 scribe Exp $
+ * $Id: swconfig.h,v 1.12 2001/04/19 15:40:06 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -50,7 +50,9 @@ public:
 typedef multimapwithdefault < string, string, less < string > >ConfigEntMap;
 typedef map < string, ConfigEntMap, less < string > >SectionMap;
 
-
+/** The class to read and save settings using a file on disk.
+*
+*/
 class SWDLLEXPORT SWConfig
 {
 private:
