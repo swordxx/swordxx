@@ -15,7 +15,7 @@ using sword::AttributeList;
 
 int main(int argc, char **argv)
 {
-	SWMgr manager;
+	SWMgr manager(0, 0, true, 0, true);
 	SWModule *target;
 	ModMap::iterator it;
 

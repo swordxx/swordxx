@@ -68,14 +68,15 @@ typedef std::list < SWBuf >StringList;
 class SWDLLEXPORT SWMgr {
 
 private:
-	void commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr);
+	bool mgrModeMultiMod;
+	void commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod = false);
 
 protected:
 	SWFilterMgr *filterMgr;		//made protected because because BibleTime needs it
 	SWConfig * myconfig;		//made protected because because BibleTime needs it
 	SWConfig *mysysconfig;
 	SWConfig *homeConfig;
-	void CreateMods();
+	void CreateMods(bool multiMod = false);
 	SWModule *CreateMod(const char *name, const char *driver, ConfigEntMap & section);
 	void DeleteMods();
 	char configType;		// 0 = file; 1 = directory
@@ -125,9 +126,6 @@ protected:
 
 
 public:
-	virtual void augmentModules(const char *ipath);
-	void deleteModule(const char *);
-
 	/** Enable / Disable debug output on runtime
 	* Set this to true to get more verbose output of SWMgr at runtime. Set it to false to get no debug output.
 	* The default is "false".
@@ -192,12 +190,12 @@ public:
 	* @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
 	* @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE DELETED BY SWMgr
 	*/
-	SWMgr(SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0);
+	SWMgr(SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
 	/**
 	*
 	* @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE DELETED BY SWMgr
 	*/
-	SWMgr(SWFilterMgr *filterMgr);
+	SWMgr(SWFilterMgr *filterMgr, bool multiMod = false);
 	/**
 	*
 	* @param iConfigPath Path to config files.
@@ -208,13 +206,23 @@ public:
 	* modules THIS WILL BE DELETED BY SWMgr
 	*
 	*/
-	SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0);
+	SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
 	/** The destructor of SWMgr.
 	* This function cleans up the modules and deletes the created object.
 	* Destroy the SWMgr at last object in your application, because otherwise you may experience crashes
 	* because the SWModule objects become invalid.
 	*/
 	virtual ~SWMgr();
+
+	/**
+	* Adds books from a new path to the library
+	* @param path the path in which to search for books
+	* @param multiMod whether or not to keep multiple copies of the same book if found in different paths
+	*		default - false, uses last found version of the book
+	*/
+	virtual void augmentModules(const char *path, bool multiMod = false);
+	void deleteModule(const char *);
+
 	/**Installs a scan for modules in the directory givan as parameter.
 	* @param dir The directory where new modules should be searched.
 	*/

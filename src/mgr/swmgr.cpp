@@ -243,17 +243,8 @@ void SWMgr::init() {
 }
 
 
-SWMgr::SWMgr(SWFilterMgr *filterMgr) {
-	commonInit(0, 0, true, filterMgr);
-}
-
-
-SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr) {
-	commonInit(iconfig, isysconfig, autoload, filterMgr);
-}
-
-
-void SWMgr::commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr) {
+void SWMgr::commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
+	mgrModeMultiMod = multiMod;
 	this->filterMgr = filterMgr;
 	if (filterMgr)
 		filterMgr->setParentMgr(this);
@@ -276,8 +267,19 @@ void SWMgr::commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload,
 }
 
 
-SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr) {
+SWMgr::SWMgr(SWFilterMgr *filterMgr, bool multiMod) {
+	commonInit(0, 0, true, filterMgr, multiMod);
+}
 
+
+SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
+	commonInit(iconfig, isysconfig, autoload, filterMgr, multiMod);
+}
+
+
+SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
+
+	mgrModeMultiMod = multiMod;
 	SWBuf path;
 	
 	this->filterMgr = filterMgr;
@@ -542,7 +544,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 }
 
 
-void SWMgr::augmentModules(const char *ipath) {
+void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 	SWBuf path = ipath;
 	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
 		path += "/";
@@ -559,7 +561,7 @@ void SWMgr::augmentModules(const char *ipath) {
 		config = myconfig = 0;
 		loadConfigDir(configPath);
 
-		CreateMods();
+		CreateMods(multiMod);
 
 		stdstr(&prefixPath, savePrefixPath);
 		delete []savePrefixPath;
@@ -609,10 +611,10 @@ signed char SWMgr::Load() {
 		}
 		else	config->Load();
 
-		CreateMods();
+		CreateMods(mgrModeMultiMod);
 
 		for (std::list<SWBuf>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
-			augmentModules(pathIt->c_str());
+			augmentModules(pathIt->c_str(), mgrModeMultiMod);
 		}
 //	augment config with ~/.sword/mods.d if it exists ---------------------
 		char *envhomedir  = getenv ("HOME");
@@ -621,7 +623,7 @@ signed char SWMgr::Load() {
 			if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
 				path += "/";
 			path += ".sword/";
-			augmentModules(path.c_str());
+			augmentModules(path.c_str(), mgrModeMultiMod);
 		}
 // -------------------------------------------------------------------------
 		if ( !Modules.size() ) // config exists, but no modules
@@ -934,7 +936,7 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 }
 
 
-void SWMgr::CreateMods() {
+void SWMgr::CreateMods(bool multiMod) {
 	SectionMap::iterator it;
 	ConfigEntMap::iterator start;
 	ConfigEntMap::iterator end;
@@ -962,7 +964,30 @@ void SWMgr::CreateMods() {
 				AddRenderFilters(newmod, section);
 				AddEncodingFilters(newmod, section);
 				
-				Modules.insert(ModMap::value_type(newmod->Name(), newmod));
+				printf("Adding Module: %s\n", newmod->Name());
+				SWModule *oldmod = Modules[newmod->Name()];
+
+				if (oldmod) {
+					printf("Found an existing book with the same name\n");
+					if (!multiMod)
+						delete oldmod;
+					else {
+						printf("Keeping additional copy\n");
+						SWBuf name;
+						int i = 1; 
+						SWModule *mod;
+						do {
+							name = newmod->Name();
+							name.appendFormatted("_%d", i);
+							printf("Trying name: %s\n", name.c_str());
+							mod = Modules[name];
+							i++;
+						} while (mod);
+						newmod->Name(name);
+					}
+				}
+				printf("Inserting module: %s\n", newmod->Name());
+				Modules[newmod->Name()] = newmod;
 			}
 		}
 	}
