@@ -46,7 +46,7 @@ source";\
 fi
 echo "*** Recreating the Makefile.in files"
 AUTOMAKE="$AUTODIR""automake"
-if $AUTOMAKE --version | egrep "1\.6$" >/dev/null 2>&1; then \
+if $AUTOMAKE --version | egrep "1\.6" >/dev/null 2>&1; then \
         echo "automake 1.6" ;
 	$AUTOMAKE;\
 elif $AUTOMAKE --version | egrep "1\.5" >/dev/null 2>&1; then \
