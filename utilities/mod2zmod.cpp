@@ -117,6 +117,7 @@ int main(int argc, char **argv)
 
 	string lastBuffer = "Something that would never be first module entry";
 	SWKey bufferKey;
+	SWKey lastBufferKey;
 	SWKey *outModuleKey = outModule->CreateKey();
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, outModuleKey);
 	outModuleKey->Persist(1);
@@ -132,11 +133,13 @@ int main(int argc, char **argv)
 		bufferKey = *(SWKey *)(*inModule);
 		// pseudo-check for link.  Will get most common links.
 		if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
-			outModule->linkEntry(&bufferKey);	// link to last key
-		cout << "Adding [" << bufferKey << "] link to: \n";
+			*outModuleKey = bufferKey;
+			outModule->linkEntry(&lastBufferKey);	// link to last key
+		cout << "Adding [" << bufferKey << "] link to: [" << lastBufferKey << "]\n";
 		}
 		else {
 			lastBuffer = inModule->getRawEntry();
+			lastBufferKey = inModule->KeyText();
 			if (lastBuffer.length() > 0) {
 				cout << "Adding [" << bufferKey << "] new text. \n";
 				*outModuleKey = bufferKey;

@@ -71,10 +71,10 @@ Item0=_DEBUG
 DebugSourceDirs=
 
 [Parameters]
-RunParams=
+RunParams=TEST ~/.sword/ztest/ 3 2
 Launcher=/usr/X11R6/bin/xterm -T KylixDebuggerOutput -e bash -i -c %debuggee%
 UseLauncher=0
-DebugCWD=
+DebugCWD=/space/home/scribe/src/sword/utilities/kylixmake
 HostApplication=
 
 [Compiler]
