@@ -134,7 +134,7 @@ zVerse::~zVerse()
  *	size	- address to store the size of the entry
  */
 
-void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *size)
+void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size)
 {
 	// set start to offset in
 	// set size to
@@ -262,13 +262,15 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
  *
  */
 
-void zVerse::zreadtext(char testmt, long start, unsigned short size, char *inbuf)
-{
-	memset(inbuf, 0, size);
-	if (size > 2) {
+void zVerse::zReadText(char testmt, long start, unsigned short size, SWBuf &inBuf) {
+	inBuf = "";
+	inBuf.setFillByte(0);
+	inBuf.setSize(size+1);
+	if (size > 0) {
 		if (cacheBuf)
-			strncpy(inbuf, &(cacheBuf[start]), size-2);
+			strncpy(inBuf.getRawData(), &(cacheBuf[start]), size);
 	}
+	inBuf.setSize(strlen(inBuf.c_str()));
 }
 
 
@@ -281,7 +283,7 @@ void zVerse::zreadtext(char testmt, long start, unsigned short size, char *inbuf
  *      len     - length of buffer (0 - null terminated)
  */
 
-void zVerse::settext(char testmt, long idxoff, const char *buf, long len) {
+void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 
 	len = (len < 0) ? strlen(buf) : len;
 	if (!testmt) 
@@ -375,7 +377,7 @@ void zVerse::flushCache() {
  *	srcidxoff		- source offset into .vss
  */
 
-void zVerse::linkentry(char testmt, long destidxoff, long srcidxoff) {
+void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 	long bufidx;
 	long start;
 	unsigned short size;
@@ -483,12 +485,11 @@ char zVerse::createModule(const char *ipath, int blockBound)
  *			text.
  */
 
-void zVerse::preptext(char *buf)
-{
-	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
-
-	for (to = from = buf; *from; from++) {
-		switch (*from) {
+void zVerse::prepText(SWBuf &buf) {
+	unsigned int to, from; 
+	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
+	for (to = from = 0; buf[from]; from++) {
+		switch (buf[from]) {
 		case 10:
 			if (!realdata)
 				continue;
@@ -497,14 +498,16 @@ void zVerse::preptext(char *buf)
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				*to++ = nl;
+				buf[to++] = 10;
+//				*to++ = nl[1];
 //				nlcnt = 0;
 			}
 			continue;
 		case 13:
 			if (!realdata)
 				continue;
-			*to++ = nl;
+//			*to++ = nl[0];
+			buf[to++] = 10;
 			space = 0;
 			cr = 1;
 			continue;
@@ -513,23 +516,23 @@ void zVerse::preptext(char *buf)
 		nlcnt = 0;
 		if (space) {
 			space = 0;
-			if (*from != ' ') {
-				*to++ = ' ';
+			if (buf[from] != ' ') {
+				buf[to++] = ' ';
 				from--;
 				continue;
 			}
 		}
-		*to++ = *from;
+		buf[to++] = buf[from];
 	}
-	*to = 0;
+	buf.setSize(to);
 
-     if (to > buf) {
-          for (to--; to > buf; to--) {			// remove trailing excess
-               if ((*to == 10) || (*to == ' '))
-                    *to = 0;
-               else break;
-          }
-     }
+	while (to > 1) {			// remove trailing excess
+		to--;
+		if ((buf[to] == 10) || (buf[to] == ' '))
+			buf.setSize(to);
+		else break;
+	}
 }
+
 
 SWORD_NAMESPACE_END

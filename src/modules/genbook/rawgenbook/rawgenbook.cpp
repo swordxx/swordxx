@@ -37,7 +37,6 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 	int fileMode = O_RDWR;
 	char *buf = new char [ strlen (ipath) + 20 ];
 
-	entryBuf = 0;
 	path = 0;
 	stdstr(&path, ipath);
 
@@ -68,8 +67,6 @@ RawGenBook::~RawGenBook() {
 	if (path)
 		delete [] path;
 
-	if (entryBuf)
-		delete [] entryBuf;
 }
 
 
@@ -80,7 +77,7 @@ RawGenBook::~RawGenBook() {
  * RET: string buffer with verse
  */
 
-char *RawGenBook::getRawEntry() {
+SWBuf &RawGenBook::getRawEntryBuf() {
 
 	__u32 offset = 0;
 	__u32 size = 0;
@@ -96,11 +93,9 @@ char *RawGenBook::getRawEntry() {
 		(*key) = *(this->key);
 	}
 
-	if (entryBuf)
-		delete [] entryBuf;
-
 	int dsize;
 	key->getUserData(&dsize);
+	entryBuf = "";
 	if (dsize > 7) {
 		memcpy(&offset, key->getUserData(), 4);
 		offset = swordtoarch32(offset);
@@ -110,23 +105,16 @@ char *RawGenBook::getRawEntry() {
 
 		entrySize = size;        // support getEntrySize call
 
-		entryBuf = new char [ (size + 2) * FILTERPAD ];
-		*entryBuf = 0;
+		entryBuf.setFillByte(0);
+		entryBuf.setSize(size);
 		lseek(bdtfd->getFd(), offset, SEEK_SET);
-		read(bdtfd->getFd(), entryBuf, size);
-          entryBuf[size] = 0;
+		read(bdtfd->getFd(), entryBuf.getRawData(), size);
 
-		rawFilter(entryBuf, size, 0);	// hack, decipher
-		rawFilter(entryBuf, size*FILTERPAD, key);
+		rawFilter(entryBuf, 0);	// hack, decipher
+		rawFilter(entryBuf, key);
 
 		   if (!isUnicode())
-			RawStr::preptext(entryBuf);
-	}
-	else {
-		entryBuf = new char [2];
-		entryBuf[0] = 0;
-		entryBuf[1] = 0;
-		entrySize = 0;
+			RawStr::prepText(entryBuf);
 	}
 
 	if (key != this->key) // free our key if we created a VerseKey

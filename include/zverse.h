@@ -27,9 +27,9 @@ protected:
 	FileDesc *textfp[2];
 	FileDesc *compfp[2];
 	char *path;
-	void preptext(char *buf);
-	void settext(char testmt, long idxoff, const char *buf, long len = 0);
-	void linkentry(char testmt, long destidxoff, long srcidxoff);
+	void prepText(SWBuf &buf);
+	void doSetText(char testmt, long idxoff, const char *buf, long len = 0);
+	void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 	void flushCache();
 	char *cacheBuf;
 	char cacheTestament;
@@ -48,8 +48,8 @@ public:
 
 	zVerse(const char *ipath, int fileMode = O_RDONLY, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
 	virtual ~zVerse();
-	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
-	void zreadtext(char testmt, long start, unsigned short size, char *buf);
+	void findOffset(char testmt, long idxoff, long *start, unsigned short *end);
+	void zReadText(char testmt, long start, unsigned short size, SWBuf &buf);
 	virtual void rawZFilter(char *buf, long size, char direction = 0) {}
 	static char createModule(const char *path, int blockBound);
 };

@@ -33,8 +33,8 @@ SWORD_NAMESPACE_START
  *		idisp - Display object to use for displaying
  */
 
-zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang)/*, SWCompress()*/
-{
+zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
+		: zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang) {
 	blockType = iblockType;
 	lastWriteKey = 0;
 }
@@ -59,32 +59,23 @@ zText::~zText()
  * RET: buffer with verse
  */
 
-char *zText::getRawEntry()
-{
+SWBuf &zText::getRawEntryBuf() {
 	long  start = 0;
 	unsigned short size = 0;
 	VerseKey &key = getVerseKey();
 
-	findoffset(key.Testament(), key.Index(), &start, &size);
+	findOffset(key.Testament(), key.Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
+			  
+	entryBuf = "";
+	zReadText(key.Testament(), start, size, entryBuf);
 
-	unsigned long newsize = (size + 2) * FILTERPAD;
-	if (newsize > entrybufallocsize) {
-		if (entrybuf)
-			delete [] entrybuf;
-		entrybuf = new char [ newsize ];
-		entrybufallocsize = newsize;
-	}
-	*entrybuf = 0;
-
-	zreadtext(key.Testament(), start, (size + 2), entrybuf);
-
-	rawFilter(entrybuf, size*FILTERPAD, &key);
+	rawFilter(entryBuf, &key);
 
 	if (!isUnicode())
-		preptext(entrybuf);
+		prepText(entryBuf);
 
-	return entrybuf;
+	return entryBuf;
 }
 
 
@@ -118,7 +109,7 @@ void zText::setEntry(const char *inbuf, long len) {
 		delete lastWriteKey;
 	}
 
-	settext(key.Testament(), key.Index(), inbuf, len);
+	doSetText(key.Testament(), key.Index(), inbuf, len);
 
 	lastWriteKey = (VerseKey *)key.clone();	// must delete
 }
@@ -138,7 +129,7 @@ void zText::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	linkentry(destkey.Testament(), destkey.Index(), srckey->Index());
+	doLinkEntry(destkey.Testament(), destkey.Index(), srckey->Index());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -154,7 +145,7 @@ void zText::deleteEntry() {
 
 	VerseKey &key = getVerseKey();
 
-	settext(key.Testament(), key.Index(), "");
+	doSetText(key.Testament(), key.Index(), "");
 }
 
 
@@ -170,7 +161,7 @@ void zText::increment(int steps) {
 	unsigned short size;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+	findOffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -185,7 +176,7 @@ void zText::increment(int steps) {
 			break;
 		}
 		long index = tmpkey->Index();
-		findoffset(tmpkey->Testament(), index, &start, &size);
+		findOffset(tmpkey->Testament(), index, &start, &size);
 
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
