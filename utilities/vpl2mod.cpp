@@ -105,7 +105,7 @@ bool isKJVRef(const char *buf) {
 	vk = buf;
 	test = buf;
 
-	if (vk.Testament() && vk.Book() && vk.Chapter() & vk.Verse()) { // if we're not a heading
+	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
 //		cout << (const char*)vk << " == "  << (const char*)test << endl;
 		return (vk == test);
 	}

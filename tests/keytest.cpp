@@ -155,5 +155,15 @@ int main(int argc, char **argv)
 	bla.Headings(0);
 	for (bla = BOTTOM; !bla.Error(); bla.Book(bla.Book()-1))
 		cout << (const char *)bla << "\n";
+	bla.Testament(1);
+	bla = BOTTOM;
+	cout << bla.Index() << "\n";
+	cout << bla.NewIndex() << "\n";
+	cout << bla << "\n";
+	bla.Testament(2);
+	bla = BOTTOM;
+	cout << bla.Index() << "\n";
+	cout << bla.NewIndex() << "\n";
+	cout << bla << "\n";
 	return 0;
 }
