@@ -18,7 +18,6 @@
 #include <versekey.h>
 #include <stdio.h>
 
-
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to create compressed Sword modules\n";
 	cerr << "version 0.1\n\n";
@@ -107,11 +106,11 @@ int main(int argc, char **argv)
 		}
 		else {
 			delete [] lastBuffer;
-			lastBuffer = new char [ inModule->getEntrySize() + 1 ];
-			memcpy(lastBuffer, inModule->getRawEntry(), inModule->getEntrySize());
+			lastBuffer = new char [ strlen (inModule->getRawEntry()) + 1 ];
+			strcpy(lastBuffer, inModule->getRawEntry());
 			bufferKey = *vkey;
 
-			outModule.setentry(lastBuffer, inModule->getEntrySize());	// save new text;
+			outModule << lastBuffer;	// save new text;
 		}
 		(*vkey)++;
 	}
