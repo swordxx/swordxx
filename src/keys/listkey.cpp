@@ -231,11 +231,12 @@ char ListKey::SetToElement(int ielement, SW_POSITION pos) {
  */
 
 SWKey *ListKey::GetElement(int pos) {
-	if (pos >=0) {
-		if (pos >=arraycnt)
-			error = KEYERR_OUTOFBOUNDS;
-	}
-	else pos = arraypos;
+	if (pos < 0)
+		pos = arraypos;
+		
+	if (pos >=arraycnt)
+		error = KEYERR_OUTOFBOUNDS;
+
 	return (error) ? 0:array[pos];
 }
 	
