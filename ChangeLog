@@ -4,13 +4,19 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 * Release 1.5.2 *
 
+26-Jul-2001     Troy A. Griffitts <scribe@crosswire.org>
+	Applied Tom Wildsmith's patches to cheatah: cleaned up
+		displaying of marked up texts; added nice about
+		box with module about info; handled errors better
+		on startup
+
 27-Jun-2001     Troy A. Griffitts <scribe@crosswire.org>
-    Added roman numeral support in VerseKey parsing
-    Fixed a number of memory bugs
+	Added roman numeral support in VerseKey parsing
+	Fixed a number of memory bugs
 
 20-Jun-2001     Troy A. Griffitts <scribe@crosswire.org>
-    Packaging up for 1.5.2
-    Fixed mod2zmod linking bug
+	Packaging up for 1.5.2
+	Fixed mod2zmod linking bug
 
 11-Jun-2001     Troy A. Griffitts <scribe@crosswire.org>
 	Added limited unicode support
