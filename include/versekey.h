@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.31 2004/04/09 17:43:45 dglassey Exp $
+ * $Id: versekey.h,v 1.32 2004/05/07 17:22:16 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,6 +43,7 @@ SWORD_NAMESPACE_START
 #define MAXVERSE SW_POSITION(POS_MAXVERSE)
 #define MAXCHAPTER SW_POSITION(POS_MAXCHAPTER)
 #define MAXBOOK SW_POSITION(POS_MAXBOOK)
+
 
 struct sbook
 {
@@ -101,10 +102,15 @@ class SWDLLEXPORT VerseKey:public SWKey {
 	static int instance;
 	static struct sbook otbooks[];
 	static struct sbook ntbooks[];
+	static char *osisotbooks[];
+	static char *osisntbooks[];
+	static char **osisbooks[];
+#if 1
 	static long otbks[];
 	static long otcps[];
 	static long ntbks[];
 	static long ntcps[];
+#endif
 	static int vm[];
 	static LocaleCache localeCache;
 	ListKey internalListKey;
@@ -154,6 +160,12 @@ class SWDLLEXPORT VerseKey:public SWKey {
 	mutable VerseKey *lowerBound, *upperBound;
 
 public:
+#if 0
+	static long otbks[];
+	static long otcps[];
+	static long ntbks[];
+	static long ntcps[];
+#endif
 	static const char builtin_BMAX[2];
 	static struct sbook *builtin_books[2];
 	static const struct abbrev builtin_abbrevs[];
@@ -370,6 +382,7 @@ public:
 	virtual long Index(long iindex);
 
 	virtual const char *getOSISRef() const;
+	static const int getOSISBookNum(const char *bookab);
 
 	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = "Genesis 1:1", bool expandRange = false);
 	virtual const char *getRangeText() const;

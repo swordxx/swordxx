@@ -145,7 +145,7 @@ VerseKey::~VerseKey() {
 
 void VerseKey::setLocale(const char *name) {
 	char *BMAX;
-	struct sbook **books;
+	struct sbook **lbooks;
 	bool useCache = false;
 
 	if (localeCache.name)
@@ -160,8 +160,8 @@ void VerseKey::setLocale(const char *name) {
 	localeCache.locale = locale;
 
 	if (locale) {
-		locale->getBooks(&BMAX, &books);
-		setBooks(BMAX, books);
+		locale->getBooks(&BMAX, &lbooks);
+		setBooks(BMAX, lbooks);
 		setBookAbbrevs(locale->getBookAbbrevs(), localeCache.abbrevsCnt);
 		localeCache.abbrevsCnt = abbrevsCnt;
 	}
@@ -199,7 +199,8 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
             for (int i = 0; i < BMAX[t]; i++) {
                 int bn = getBookAbbrev(books[t][i].name);
                 if ((bn-1)%39 != i) {
-				SWLog::getSystemLog()->logError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", books[t][i].name, bn);
+				SWLog::getSystemLog()->logError("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d)", 
+					books[t][i].name, bn, i);
                 }
             }
         }
@@ -1484,6 +1485,21 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	return keyval1;
 }
 
+char *VerseKey::osisotbooks[] = {
+		"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","1Sam","2Sam",
+		"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Ps",
+		"Prov",		// added this.  Was not in OSIS spec
+		"Eccl",
+		"Song","Isa","Jer","Lam","Ezek","Dan","Hos","Joel","Amos","Obad",
+		"Jonah","Mic","Nah","Hab","Zeph","Hag","Zech","Mal","Bar","PrAzar",
+		"Bel","Sus","1Esd","2Esd","AddEsth","EpJer","Jdt","1Macc","2Macc","3Macc",
+		"4Macc","PrMan","Ps151","Sir","Tob","Wis"};
+char *VerseKey::osisntbooks[] = {
+		"Matt","Mark","Luke","John","Acts","Rom","1Cor","2Cor","Gal","Eph",
+		"Phil","Col","1Thess","2Thess","1Tim","2Tim","Titus","Phlm","Heb","Jas",
+		"1Pet","2Pet","1John","2John","3John","Jude","Rev"};
+char **VerseKey::osisbooks[] = { osisotbooks, osisntbooks };
+
 
 const char *VerseKey::getOSISRef() const {
 	static char buf[5][254];
@@ -1492,20 +1508,6 @@ const char *VerseKey::getOSISRef() const {
 	if (loop > 4)
 		loop = 0;
 
-	static char *osisotbooks[] = {
-			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","1Sam","2Sam",
-			"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Ps",
-			"Prov",		// added this.  Was not in OSIS spec
-			"Eccl",
-			"Song","Isa","Jer","Lam","Ezek","Dan","Hos","Joel","Amos","Obad",
-			"Jonah","Mic","Nah","Hab","Zeph","Hag","Zech","Mal","Bar","PrAzar",
-			"Bel","Sus","1Esd","2Esd","AddEsth","EpJer","Jdt","1Macc","2Macc","3Macc",
-			"4Macc","PrMan","Ps151","Sir","Tob","Wis"};
-	static char *osisntbooks[] = {
-			"Matt","Mark","Luke","John","Acts","Rom","1Cor","2Cor","Gal","Eph",
-			"Phil","Col","1Thess","2Thess","1Tim","2Tim","Titus","Phlm","Heb","Jas",
-			"1Pet","2Pet","1John","2John","3John","Jude","Rev"};
-	static char **osisbooks[] = { osisotbooks, osisntbooks };
 	if (Verse())
 		sprintf(buf[loop], "%s.%d.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter(), (int)Verse());
 	else if (Chapter())
@@ -1515,6 +1517,28 @@ const char *VerseKey::getOSISRef() const {
 	else	sprintf(buf[loop], "");
 	return buf[loop++];
 }
+
+const int VerseKey::getOSISBookNum(const char *bookab) {
+	int i;
+	for (i=0; i < 39; i++)
+	{
+		if (!strncmp(bookab, osisotbooks[i], strlen(osisotbooks[i])))
+		{
+			//printf("VerseKey::getOSISBookNum %s is OT %d\n", bookab, i+1);
+			return i+1;
+		}
+	}
+	for (i=0; i < 27; i++)
+	{
+		if (!strncmp(bookab, osisntbooks[i], strlen(osisotbooks[i])))
+		{
+			//printf("VerseKey::getOSISBookNum %s is NT %d\n", bookab, i+1);
+			return i+1;
+		}
+	}
+	return -1;
+}
+
 
 
 /******************************************************************************
