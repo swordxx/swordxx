@@ -1,7 +1,7 @@
 /***************************************************************************
-                     thmlhtml.cpp  -  ThML to HTML filter
+                     thmlhtmlhref.cpp  -  ThML to HTML filter with hrefs  
                              -------------------
-    begin                : 1999-10-27
+    begin                    : 2001-09-03
     copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
@@ -16,10 +16,10 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <thmlhtml.h>
+#include <thmlhtmlhref.h>
 
 
-ThMLHTML::ThMLHTML() {
+ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
 	setEscapeStart("&");
@@ -126,7 +126,7 @@ ThMLHTML::ThMLHTML() {
 	
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("/scripRef", " </A>");	  
+	addTokenSubstitute("/scripRef", "</A>");	  
 	addTokenSubstitute("note place=\"foot\"", " <SMALL>(");
 	addTokenSubstitute("/note", ")</SMALL> ");
 	addTokenSubstitute("foreign lang=\"el\"", "<FONT FACE=\"SIL Galatia\">");
@@ -135,49 +135,63 @@ ThMLHTML::ThMLHTML() {
 }
 
 
-bool ThMLHTML::handleToken(char **buf, const char *token) {
+bool ThMLHTMLHREF::handleToken(char **buf, const char *token) {
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
 			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 5; i < strlen(token); i++)				
+			for (unsigned int i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 28; i < strlen(token); i++)				
+			for (unsigned int i = 28; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>");
 		}
 
 		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
-			pushString(buf, "<SMALL><EM>");
-			for (unsigned int i = 25; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];
-			pushString(buf, "</EM></SMALL>");
-		}
-
-		else if (!strncmp(token, "scripRef", 8)) {
 			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 9; i < strlen(token); i++)				
+			for (unsigned int i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			/*for (unsigned int i = 9; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];*/
+			for (unsigned int i = 28; i < strlen(token)-2; i++)				
+				if(token[i] != '\"') 			
+					*(*buf)++ = token[i];		
+			pushString(buf, "</A>");
+		}
+
+		else if (!strncmp(token, "scripRef ", 9)) {
+			pushString(buf, "<A HREF=\"");
+			for (unsigned int i = 9; i < strlen(token)-1; i++)				
+				if(token[i] != '\"') 			
+					*(*buf)++ = token[i];
+			*(*buf)++ = '\"';
+			*(*buf)++ = '>';
 		} 
 
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			pushString(buf, "<SMALL><I>");
-			for (unsigned int i = 29; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];
-			pushString(buf, "</I></SMALL>");
+			pushString(buf, "<A HREF=\"");
+			for (unsigned int i = 5; i < strlen(token)-1; i++)				
+				if(token[i] != '\"') 			
+					*(*buf)++ = token[i];
+			*(*buf)++ = '\"';
+			*(*buf)++ = '>';
+			for (unsigned int i = 29; i < strlen(token)-2; i++)				
+				if(token[i] != '\"') 			
+					*(*buf)++ = token[i];		
+			pushString(buf, "</A>");
 		}
 
 		else {
-			return false;  // we still didn't handle token
+			*(*buf)++ = '<';
+			for (unsigned int i = 0; i < strlen(token); i++)
+				*(*buf)++ = token[i];
+				*(*buf)++ = '>';
+			//return false;  // we still didn't handle token
 		}
 	}
 	return true;

@@ -9,6 +9,7 @@ include ${root}/Makefile.cfg
 cpp += swbasicfilter.cpp
 
 cpp += gbfhtml.cpp
+cpp += gbfhtmlhref.cpp
 cpp += gbfplain.cpp
 cpp += gbfrtf.cpp
 cpp += plainhtml.cpp
@@ -27,6 +28,7 @@ cpp += gbfthml.cpp
 cpp += thmlgbf.cpp
 cpp += thmlrtf.cpp
 cpp += thmlhtml.cpp
+cpp += thmlhtmlhref.cpp
 cpp += thmlplain.cpp
 
 cpp += unicodertf.cpp
