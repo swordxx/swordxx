@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.4 2000/12/03 03:05:14 scribe Exp $
+ * $Id: filemgr.cpp,v 1.5 2000/12/03 09:10:17 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -120,37 +120,52 @@ char FileMgr::trunc(FileDesc *file) {
 	long size = lseek(file->getFd(), 1, SEEK_CUR);
 	char nibble [ 32767 ];
 	bool writable = write(file->getFd(), writeTest, 1);
+	int bytes = 0;
+
 	if (writable) {
 		// get tmpfilename
 		char *buf = new char [ strlen(file->path) + 10 ];
 		int i;
 		for (i = 0; i < 9999; i++) {
-			sprintf(buf, "%stmp%4d", file->path, i);
+			sprintf(buf, "%stmp%.4d", file->path, i);
 			if (!existsFile(buf))
 				break;
 		}
-		if (i < 9999)
+		if (i == 9999)
 			return -2;
 
-		int fd = ::open(buf, O_CREAT|O_WRONLY, S_IREAD|S_IWRITE);
+		int fd = ::open(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE);
 		if (fd < 0)
 			return -3;
 	
 		lseek(file->getFd(), 0, SEEK_SET);
 		while (size > 0) {
-			int bytes = read(file->getFd(), nibble, 32767);
+			bytes = read(file->getFd(), nibble, 32767);
 			write(fd, nibble, (bytes < size)?bytes:size);
 			size -= bytes;
 		}
+		// zero out the file
+		::close(file->fd);
+		file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE);
+		::close(file->fd);
+		file->fd = -77;	// force file open by filemgr
+		// copy tmp file back (dumb, but must preserve file permissions)
+		lseek(fd, 0, SEEK_SET);
+		do {
+			bytes = read(fd, nibble, 32767);
+			write(file->getFd(), nibble, bytes);
+		} while (bytes == 32767);
+		
 		::close(fd);
 		::close(file->fd);
-		rename(buf, file->path);
+		unlink(buf);		// remove our tmp file
 		file->fd = -77;	// causes file to be swapped out forcing open on next call to getFd()
 	}
 	else { // put offset back and return failure
 		lseek(file->getFd(), -1, SEEK_CUR);
 		return -1;
 	}
+	return 0;
 }
 
 
@@ -186,7 +201,12 @@ int FileMgr::sysOpen(FileDesc *file) {
 
 char FileMgr::existsFile(const char *ipath, const char *ifileName)
 {
-	char *path = new char [ strlen(ipath) + strlen(ifileName) + 1 ];
+	int len = strlen(ipath) + 1;
+	char *ch;
+
+	if (ifileName)
+		len +=  strlen(ifileName);
+	char *path = new char [ len ];
 	strcpy(path, ipath);
 	
 	if ((path[strlen(path)-1] == '\\') || (path[strlen(path)-1] == '/'))
@@ -194,8 +214,8 @@ char FileMgr::existsFile(const char *ipath, const char *ifileName)
 	int fd;
 	
 	if (ifileName) {
-		ipath = path + strlen(path);
-		sprintf(ipath, "/%s", ifileName);
+		ch = path + strlen(path);
+		sprintf(ch, "/%s", ifileName);
 	}
 
 	if ((fd = ::open(path, O_RDONLY)) > 0) {
@@ -209,17 +229,19 @@ char FileMgr::existsFile(const char *ipath, const char *ifileName)
 char FileMgr::existsDir(const char *ipath, const char *idirName)
 {
 	DIR *dir;
-
-	char *path = new char [ strlen(ipath) + strlen(idirName) + 1 ];
+	char *ch;
+	int len = strlen(ipath) + 1;
+	if (idirName)
+		len +=  strlen(idirName);
+	char *path = new char [ len ];
 	strcpy(path, ipath);
 	
 	if ((path[strlen(path)-1] == '\\') || (path[strlen(path)-1] == '/'))
 		path[strlen(path)-1] = 0;
-	int fd;
 	
 	if (idirName) {
-		ipath = path + strlen(path);
-		sprintf(ipath, "/%s", idirName);
+		ch = path + strlen(path);
+		sprintf(ch, "/%s", idirName);
 	}
 
 	if ((dir = opendir(path))) {

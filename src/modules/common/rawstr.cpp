@@ -449,15 +449,13 @@ void RawStr::settext(const char *ikey, const char *buf)
 		*ch = toupper(*ch);
 	ch = 0;
 
-	getidxbuf(start, &dbKey);
+	getidxbufdat(start, &dbKey);
 
 	if (strcmp(key, dbKey) < 0) {
-		idxoff -= 6;
-		if (idxoff < 0)
-			idxoff = 0;
-	} else if (strcmp(key, dbKey) > 0) {
+	}
+	else if (strcmp(key, dbKey) > 0) {
 		idxoff += 6;
-	} else if (!strcmp(key, dbKey)) { // got absolute entry
+	} else if ((!strcmp(key, dbKey)) && (strlen(buf) /*we're not deleting*/)) { // got absolute entry
 		do {
 			tmpbuf = new char [ size + 2 ];
 			memset(tmpbuf, 0, size + 2);
@@ -473,7 +471,7 @@ void RawStr::settext(const char *ikey, const char *buf)
 			memmove(tmpbuf, ch, size - (unsigned short)(ch-tmpbuf));
 
 			// resolve link
-			if (!strncmp(tmpbuf, "@LINK", 5)) {
+			if (!strncmp(tmpbuf, "@LINK", 5) && strlen(buf)) {
 				for (ch = tmpbuf; *ch; ch++) {		// null before nl
 					if (*ch == 10) {
 						*ch = 0;
