@@ -199,7 +199,10 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		  }
 		  else if (!strncmp(token, "scripRef", 8)) {
 			if (inScriptRef) {
-				*to++ = '|';
+				*to++ = '<';
+				*to++ = '/';
+				*to++ = 'a';
+				*to++ = '>';
 				*to++ = '}';
 			}
 			inScriptRef = true;
@@ -209,11 +212,24 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 			*to++ = 'f';
 			*to++ = '2';
 			*to++ = ' ';
-			*to++ = '#';
+			*to++ = '<';
+			*to++ = 'a';
+			*to++ = ' ';
+			*to++ = 'h';
+			*to++ = 'r';
+			*to++ = 'e';
+			*to++ = 'f';
+			*to++ = '=';
+			*to++ = '"';
+			*to++ = '"';
+			*to++ = '>';
 		    continue;
 		  }
 		  else if (!strncmp(token, "/scripRef", 9)) {
-			*to++ = '|';
+			*to++ = '<';
+			*to++ = '/';
+			*to++ = 'a';
+			*to++ = '>';
 			*to++ = '}';
 			inScriptRef = false;
 		    continue;
