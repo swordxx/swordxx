@@ -128,11 +128,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEmpty() && !tag.isEndTag()) {
-				SWBuf footnoteNum = userData["fn"];
 				SWBuf type = tag.getAttribute("type");
 
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-					int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 					VerseKey *vkey;
 					// see if we have a VerseKey * or descendant
 					try {
@@ -140,10 +139,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 					}
 					catch ( ... ) {	}
 					if (vkey) {
-						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%i</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber);
-						SWBuf tmp;
-						tmp.appendFormatted("%i", ++footnoteNumber);
-						userData["fn"] = tmp.c_str();
+						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber.c_str());
 					}
 				}
 				userData["suspendTextPassThru"] = "true";
@@ -180,7 +176,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		}
 
 		// <line> poetry, etc
-		else if (!strcmp(tag.getName(), "line")) {
+		else if ((!strcmp(tag.getName(), "line")) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "{";
 			}

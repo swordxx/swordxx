@@ -9,6 +9,7 @@
 #include <osisfootnotes.h>
 #include <swmodule.h>
 #include <swbuf.h>
+#include <versekey.h>
 #include <utilxml.h>
 #ifndef __GNUC__
 #else
@@ -49,8 +50,10 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	bool hide       = false;
 	SWBuf tagText;
 	XMLTag startTag;
+	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
+	VerseKey parser = key->getText();
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
@@ -74,42 +77,54 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note") && ((!tag.getAttribute("type")) || (strcmp(tag.getAttribute("type"), "crossReference")))) {
+			if (!strcmp(tag.getName(), "note")) {
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
+					refs = "";
 					startTag = tag;
 					hide = true;
 					tagText = "";
-					if (option) {	// we want the tag in the text
-						text += '<';
-						text.append(token);
-						text += '>';
-					}
 					continue;
 				}
 				if (hide && tag.isEndTag()) {
-					if (module->isProcessEntryAttributes() && option) {
+					if (module->isProcessEntryAttributes()) {
 						sprintf(buf, "%i", footnoteNum++);
 						ListString attributes = startTag.getAttributeNames();
 						for (ListString::iterator it = attributes.begin(); it != attributes.end(); it++) {
 							module->getEntryAttributes()["Footnote"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
 						}
 						module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
-						if (option) {	// we want the tag in the text
-							text.append(tagText);
+						startTag.setAttribute("swordFootnote", buf);
+						if ((startTag.getAttribute("type")) && (!strcmp(startTag.getAttribute("type"), "crossReference"))) {
+							if (!refs.length())
+								refs = parser.ParseVerseList(tagText.c_str(), parser, true).getRangeText();
+							module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
 						}
 					}
 					hide = false;
-					if (!option) {	// we don't want the tag in the text anymore
-						continue;
+					if ((option) || ((startTag.getAttribute("type") && (!strcmp(startTag.getAttribute("type"), "crossReference"))))) {	// we want the tag in the text; crossReferences are handled by another filter
+						text += startTag;
+						text.append(tagText);
 					}
+					else	continue;
 				}
 			}
 
 			// if not a heading token, keep token in text
+			if ((!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
+				SWBuf osisRef = tag.getAttribute("osisRef");
+				if (refs.length())
+					refs += "; ";
+				refs += osisRef;
+			}
 			if (!hide) {
 				text += '<';
 				text.append(token);
 				text += '>';
+			}
+			else {
+				tagText += '<';
+				tagText.append(token);
+				tagText += '>';
 			}
 			continue;
 		}

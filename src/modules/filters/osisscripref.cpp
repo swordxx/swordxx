@@ -64,34 +64,26 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note") && !strcmp(tag.getAttribute("type"), "crossReference")) {
+			if (!strcmp(tag.getName(), "note")) {
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
 					startTag = tag;
-					hide = true;
-					tagText = "";
-					if (option) {	// we want the tag in the text
-						text += '<';
-						text.append(token);
-						text += '>';
-					}
-					continue;
-				}
-				if (hide && tag.isEndTag()) {
-					if (module->isProcessEntryAttributes() && option) {
-						sprintf(buf, "%i", footnoteNum++);
-						ListString attributes = startTag.getAttributeNames();
-						for (ListString::iterator it = attributes.begin(); it != attributes.end(); it++) {
-							module->getEntryAttributes()["Footnote"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
-						}
-						module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
+					if ((tag.getAttribute("type")) &&	(!strcmp(tag.getAttribute("type"), "crossReference"))) {
+						hide = true;
+						tagText = "";
 						if (option) {	// we want the tag in the text
-							text.append(tagText);
+							text += '<';
+							text.append(token);
+							text += '>';
 						}
-					}
-					hide = false;
-					if (!option) {	// we don't want the tag in the text anymore
 						continue;
 					}
+				}
+				if (hide && tag.isEndTag()) {
+					hide = false;
+					if (option) {	// we want the tag in the text
+						text.append(tagText);  // end tag gets added further down
+					}
+					else	continue;	// don't let the end tag get added to the text
 				}
 			}
 
@@ -100,6 +92,11 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				text += '<';
 				text.append(token);
 				text += '>';
+			}
+			else {
+				tagText += '<';
+				tagText.append(token);
+				tagText += '>';
 			}
 			continue;
 		}
