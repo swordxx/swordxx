@@ -1,8 +1,12 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-23-Oct-2000
-		Joachim Ansorg <jansorg@crosswire.org> 
+29-Oct-2000	Joachim Ansorg <jansorg@crosswire.org>
+	Reverted the patch from 23-Oct-2000
+	gbfhtml.cpp: Changed the HTML tag for new paragraph from <P> to <BR>
+		because it's bad HTML without a closing </P> tag.
+
+23-Oct-2000		Joachim Ansorg <jansorg@crosswire.org> 
 	Changed the provate section of versekey.h into a protected  one
 because we need the change for current BibleTime!
 
