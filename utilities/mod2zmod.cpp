@@ -107,11 +107,11 @@ int main(int argc, char **argv)
 		}
 		else {
 			delete [] lastBuffer;
-			lastBuffer = new char [ strlen (inModule->getRawEntry()) + 1 ];
-			strcpy(lastBuffer, inModule->getRawEntry());
+			lastBuffer = new char [ inModule->getEntrySize() + 1 ];
+			memcpy(lastBuffer, inModule->getRawEntry(), inModule->getEntrySize());
 			bufferKey = *vkey;
 
-			outModule << lastBuffer;	// save new text;
+			outModule.setentry(lastBuffer, inModule->getEntrySize());	// save new text;
 		}
 		(*vkey)++;
 	}
@@ -120,3 +120,5 @@ int main(int argc, char **argv)
 	if (lastBuffer)
 		delete [] lastBuffer;
 }
+
+

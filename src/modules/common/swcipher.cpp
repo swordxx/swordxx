@@ -30,16 +30,21 @@ SWCipher::~SWCipher()
 }
 
 
-char *SWCipher::Buf(const char *ibuf)
+char *SWCipher::Buf(const char *ibuf, unsigned int ilen)
 {
 	if (ibuf) {
 	
 		if (buf)
 			free(buf);
-			
-		buf = (char *) malloc(strlen(ibuf) + 1);
-		strcpy(buf, ibuf);
-		len = strlen(buf);
+
+		if (!ilen) {
+		        len = strlen(buf);
+			ilen = len + 1;
+		}
+		else len = ilen;
+
+		buf = (char *) malloc(ilen);
+		memcpy(buf, ibuf, ilen);
 		cipher = false;
 	}
 
