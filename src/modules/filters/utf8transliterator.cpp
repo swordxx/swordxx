@@ -17,6 +17,7 @@
 
 #ifndef _ICUSWORD_
 #include "unicode/resbund.h"
+#endif
 #include <swlog.h>
 
 const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
@@ -704,3 +705,6 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 	return 0;
 }
 #endif
+
+
+
