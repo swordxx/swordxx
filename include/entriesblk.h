@@ -2,6 +2,7 @@
 #define ENTRIESBLK_H
 
 class EntriesBlock {
+static const int 
 private:
 	char *block;
 	void setCount(int count);
