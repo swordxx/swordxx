@@ -2,26 +2,30 @@
 #include <rawtext.h>
 #include <swmgr.h>
 #include <regex.h> // GNU
+#include <listkey.h>
+
+#include <pthread.h>
+
+static SWModule* target;
 
 void percentUpdate(char percent, void *userData) {
-	static char printed = 0;
-	char maxHashes = *((char *)userData);
-	
-/*	while ((((float)percent)/100) * maxHashes > printed) {
-		cout << "=";
-		printed++;
-		cout.flush();
-	}
-*/
+	cout << "percentUpdate";
+	cout.flush();
 	cout << (int)percent << "% ";
 	cout.flush();
 }
 
+void* startSearch(void* p) {
+	cout << "startSearch ... " << (char*)p << endl ;
+	cout.flush();
+	ListKey listKey = target->Search((char*)p, -2, 0, 0, 0/*, &percentUpdate */);
+
+	return NULL;
+}
 
 int main(int argc, char **argv)
 {
 	SWMgr manager;
-	SWModule *target;
 	ListKey listkey;
 	VerseKey vk;
 	ModMap::iterator it;
@@ -49,13 +53,17 @@ int main(int argc, char **argv)
 		target->SetKey(vk);
 	}
 
-	cout << "[0=================================50===============================100]\n ";
-	char lineLen = 70;
-	listkey = target->Search(argv[2], -2, 0/*REG_ICASE*/, 0, 0, &percentUpdate/*, &lineLen*/);
-	cout << "\n";
-/*	while (!listkey.Error()) {
-		cout << (const char *)listkey << "\n";
-		listkey++;
-	}
-*/
+	//create thread with, &startSearch is called wirg the argv[2]
+//argument by the thread
+
+	pthread_attr_t *attr = new pthread_attr_t;
+	pthread_attr_init(attr);
+	pthread_attr_setdetachstate(attr, PTHREAD_CREATE_DETACHED);
+
+	pthread_t *thread = new pthread_t;
+	int i = 0;
+	i = pthread_create( thread, attr , &startSearch, argv[2]);
+
+	cout << "Created the thread with result: " << i << endl;
+	cout << "Waiting ..." << endl;
 }
