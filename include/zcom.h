@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.5 2001/06/17 21:20:08 scribe Exp $
+ * $Id: zcom.h,v 1.6 2001/10/22 21:26:16 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,7 +39,7 @@ public:
     
     zCom (const char *ipath, const char *iname = 0, const char *idesc =
 	   0, int blockType = CHAPTERBLOCKS, SWCompress * icomp =
-	   0, SWDisplay * idisp = 0, bool unicode = false);
+	   0, SWDisplay * idisp = 0, bool unicode = false, char dir = DIRECTION_LTR);
     virtual ~ zCom ();
   virtual char *getRawEntry ();
   virtual SWModule & operator += (int increment);

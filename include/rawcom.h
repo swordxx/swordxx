@@ -2,7 +2,7 @@
  *  rawcom.h   - code for class 'RawCom'- a module that reads raw commentary
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawcom.h,v 1.5 2001/06/17 21:20:08 scribe Exp $
+ * $Id: rawcom.h,v 1.6 2001/10/22 21:26:16 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,7 +35,7 @@ public:
   
     
 	RawCom (const char *ipath, const char *iname = 0, const char *idesc = 0,
-		SWDisplay * idisp = 0, bool unicode = false);
+		SWDisplay * idisp = 0, bool unicode = false, char dir = DIRECTION_LTR);
      virtual ~ RawCom ();
      virtual char *getRawEntry ();
 
