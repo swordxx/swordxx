@@ -252,6 +252,12 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 		if (getLocale(nocntry)) {
 			stdstr(&defaultLocaleName, nocntry);
 		}
+		else {
+			if (!defaultLocaleName) {
+				stdstr(&defaultLocaleName, "en_US");
+			}
+
+		}
 		delete [] nocntry;
 	}
 	delete [] tmplang;
