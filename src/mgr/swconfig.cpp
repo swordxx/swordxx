@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.11 2002/10/01 22:04:59 dglassey Exp $
+ * $Id: swconfig.cpp,v 1.12 2003/02/16 02:42:56 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,21 +39,25 @@ char SWConfig::getline(FILE *fp, std::string &line)
 {
 	char retval = 0;
 	char buf[255];
+        int len;
 
 	line = "";
 	
 	while (fgets(buf, 254, fp)) {
 		while (buf[strlen(buf)-1] == '\n' || buf[strlen(buf)-1] == '\r')
 			buf[strlen(buf)-1] = 0;
+                len = strlen(buf);
+                while (len>0 && buf[len-1] == '\n' || buf[len-1] == '\r')
+                        buf[(len--)-1] = 0;
 
-		if (buf[strlen(buf)-1] == '\\') {
-			buf[strlen(buf)-1] = 0;
+                if (len>0 && buf[len-1] == '\\') {
+                        buf[(len--)-1] = 0;
 			line += buf;
 			continue;
 		}
 		line += buf;
 
-		if (strlen(buf) < 253) {
+		if (len < 253) {
 			retval = 1;
 			break;
 		}
