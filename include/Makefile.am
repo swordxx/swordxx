@@ -4,6 +4,7 @@ pkginclude_HEADERS =  $(swincludedir)/Greek2Greek.h
 pkginclude_HEADERS += $(swincludedir)/GreekChars.h
 pkginclude_HEADERS += $(swincludedir)/canon.h
 pkginclude_HEADERS += $(swincludedir)/cipherfil.h
+pkginclude_HEADERS += $(swincludedir)/curlftpt.h
 pkginclude_HEADERS += $(swincludedir)/defs.h
 pkginclude_HEADERS += $(swincludedir)/echomod.h
 pkginclude_HEADERS += $(swincludedir)/encfiltmgr.h
@@ -11,6 +12,9 @@ pkginclude_HEADERS += $(swincludedir)/entriesblk.h
 pkginclude_HEADERS += $(swincludedir)/femain.h
 pkginclude_HEADERS += $(swincludedir)/filemgr.h
 pkginclude_HEADERS += $(swincludedir)/flatapi.h
+pkginclude_HEADERS += $(swincludedir)/ftpparse.h
+pkginclude_HEADERS += $(swincludedir)/ftptrans.h
+pkginclude_HEADERS += $(swincludedir)/ftplibftpt.h
 
 pkginclude_HEADERS += $(swincludedir)/gbffootnotes.h
 pkginclude_HEADERS += $(swincludedir)/gbfheadings.h
@@ -28,6 +32,7 @@ pkginclude_HEADERS += $(swincludedir)/greeklexattribs.h
 
 pkginclude_HEADERS += $(swincludedir)/hebrewmcim.h
 pkginclude_HEADERS += $(swincludedir)/hrefcom.h
+pkginclude_HEADERS += $(swincludedir)/installmgr.h
 pkginclude_HEADERS += $(swincludedir)/latin1utf16.h
 pkginclude_HEADERS += $(swincludedir)/latin1utf8.h
 pkginclude_HEADERS += $(swincludedir)/listkey.h
@@ -148,8 +153,6 @@ pkginclude_HEADERS += $(swincludedir)/zlib.h
 pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
-pkginclude_HEADERS += $(swincludedir)/installmgr.h
-pkginclude_HEADERS += $(swincludedir)/ftpparse.h
 
 #if INSTALLMGR
 REMOTE_HEAD  = $(swincludedir)/swremotemgr.h

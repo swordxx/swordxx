@@ -95,7 +95,7 @@ void uninstallModule(const char *modName) {
 	}
 	module = it->second;
 	installMgr->removeModule(mgr, module->Name());
-	cout << "Removed module: [" << module->Name() << "]\n";
+	cout << "Removed module: [" << modName << "]\n";
 }
 
 

@@ -16,12 +16,19 @@ endif
 
 AM_CPPFLAGS += $(globdef) $(spdefs)
 
+if WITHCURL
+libsword_la_SOURCES += $(mgrdir)/curlftpt.cpp
+else
+libsword_la_SOURCES += $(mgrdir)/ftplibftpt.cpp
+endif
+
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
 libsword_la_SOURCES += $(mgrdir)/swmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swfiltermgr.cpp
 libsword_la_SOURCES += $(mgrdir)/encfiltmgr.cpp
 mgrsplits = $(mgrdir)/markupfiltmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/filemgr.cpp
+libsword_la_SOURCES += $(mgrdir)/ftptrans.cpp
 libsword_la_SOURCES += $(mgrdir)/swlocale.cpp
 libsword_la_SOURCES += $(mgrdir)/localemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swcacher.cpp

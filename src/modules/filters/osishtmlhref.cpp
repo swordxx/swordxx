@@ -40,16 +40,16 @@ OSISHTMLHREF::OSISHTMLHREF() {
 
 	setEscapeStringCaseSensitive(true);
 
-	addEscapeStringSubstitute("amp", "&");
+	addEscapeStringSubstitute("amp",  "&");
 	addEscapeStringSubstitute("apos", "'");
-	addEscapeStringSubstitute("lt", "<");
-	addEscapeStringSubstitute("gt", ">");
+	addEscapeStringSubstitute("lt",   "<");
+	addEscapeStringSubstitute("gt",   ">");
 	addEscapeStringSubstitute("quot", "\"");
 	
 	setTokenCaseSensitive(true);
 	
-	addTokenSubstitute("lg", "<p>"); // line group, seems more logical and beautiful to use <p> for it
-	addTokenSubstitute("/lg","</p>");
+	addTokenSubstitute("lg",  "<br />");
+	addTokenSubstitute("/lg", "<br />");
 }
 
 

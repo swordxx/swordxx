@@ -1,6 +1,28 @@
 ﻿API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+1-Jan-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Extended InstallMgr routines to recurse directories
+	Cleaned up InstallMgr code
+	Created FTPTransport base class used by InstallMgr
+		to allow for any FTP routines to be plugged
+		into InstallMgr by overriding a new
+		createFTPTransport method to return subclass
+		(Joachim's good idea)
+	Moved all CURL and FTPLib code into FTPTransport
+		subclasses CURLFTPTransport and FTPLibFTPTransport
+		classes respectively
+	Moved status reporting methods from InstallMgr to
+		StatusReporter in FTPTransport ftptrans.(h|cpp)
+	Added CopyDir, removeDir, and isDirectory methods
+		to FileMgr
+	Added SWMgr::deleteModule to allow deleting a
+		loaded module from an SWMgr class-- needed
+		before InstallMgr deletes files involved
+		so after destruction of SWModule, all files
+		will be closes (mostly for Windows, but good
+		on any platform).
+
 13-Aug-2004	Troy A. Griffitts <scribe@crosswire.org>
 	Migrated to SVN
 
