@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.10 2002/06/25 02:34:46 scribe Exp $
+ * $Id: canon.h,v 1.11 2002/06/25 03:18:12 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -241,6 +241,7 @@ const struct abbrev
   {"J", 43},			//     John
   {"JAMES", 59},		//    James
   {"JAS", 59},			//    James
+  {"JDGS", 7},		//  Judges
   {"JEREMIAH", 24},		//    Jeremiah
   {"JN", 43},			//    John
   {"JO", 43},			//    John
