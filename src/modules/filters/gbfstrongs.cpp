@@ -65,16 +65,12 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'W') {	// Strongs
-					switch(token[1]) {
-					case 'G':               // Greek
-					case 'H':               // Hebrew
-						if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
-		    					if (lastspace)
-								to--;
-						}
-						continue;	// skip token
-					}
+				if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
+				  if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
+				    if (lastspace)
+				      to--;
+				  }
+				  continue;
 				}
 				// if not a strongs token, keep token in text
 				*to++ = '<';

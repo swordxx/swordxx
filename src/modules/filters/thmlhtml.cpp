@@ -2,8 +2,7 @@
                      thmlhtml.cpp  -  ThML to HTML filter
                              -------------------
     begin                : 1999-10-27
-    copyright            : 1999 by Chris Little
-    email                : chrislit@chiasma.org
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************
@@ -159,8 +158,7 @@ char ThMLHTML::ProcessText(char *text, int maxlen)
       else if (*from == '>' && !ampersand)	{
 	intoken = false;
 	// process desired tokens
-	if (!strncmp(token, "sync type=\"Strongs\" value=\"G", 28) || \
-	    !strncmp(token, "sync type=\"Strongs\" value=\"H", 28)) {
+	if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
 	  *to++ = '<';
 	  *to++ = 'S';
 	  *to++ = 'M';
@@ -173,6 +171,34 @@ char ThMLHTML::ProcessText(char *text, int maxlen)
 	  *to++ = 'M';
 	  *to++ = '>';
 	  for (unsigned int i = 28; token[i] != '\"'; i++)
+	    *to++ = token[i];
+	  *to++ = '<';
+	  *to++ = '/';
+	  *to++ = 'E';
+	  *to++ = 'M';
+	  *to++ = '>';
+	  *to++ = '<';
+	  *to++ = '/';
+	  *to++ = 'S';
+	  *to++ = 'M';
+	  *to++ = 'A';
+	  *to++ = 'L';
+	  *to++ = 'L';
+	  *to++ = '>';
+	}
+	else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+	  *to++ = '<';
+	  *to++ = 'S';
+	  *to++ = 'M';
+	  *to++ = 'A';
+	  *to++ = 'L';
+	  *to++ = 'L';
+	  *to++ = '>';
+	  *to++ = '<';
+	  *to++ = 'E';
+	  *to++ = 'M';
+	  *to++ = '>';
+	  for (unsigned int i = 25; token[i] != '\"'; i++)
 	    *to++ = token[i];
 	  *to++ = '<';
 	  *to++ = '/';

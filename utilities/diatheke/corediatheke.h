@@ -1,5 +1,5 @@
 // Diatheke 4.0 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by Chris Little
+// Copyright 1999, 2000, 2001 by CrossWire Bible Society http://www.crosswire.org
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 
@@ -31,6 +31,7 @@
 #define OP_STRONGS 1
 #define OP_FOOTNOTES 2
 #define OP_HEADINGS 4
+#define OP_MORPH 8
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0

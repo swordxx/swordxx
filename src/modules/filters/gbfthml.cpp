@@ -93,32 +93,38 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			    continue;
 			    
 			  case 'T':               // Tense
-			    *to++ = ' ';
 			    *to++ = '<';
 			    *to++ = 's';
-			    *to++ = 'm';
+			    *to++ = 'y';
+			    *to++ = 'n';
+			    *to++ = 'c';
+			    *to++ = ' ';
+			    *to++ = 't';
+			    *to++ = 'y';
+			    *to++ = 'p';
+			    *to++ = 'e';
+			    *to++ = '=';
+			    *to++ = '"';
+			    *to++ = 'M';
+			    *to++ = 'o';
+			    *to++ = 'r';
+			    *to++ = 'p';
+			    *to++ = 'h';
+			    *to++ = '"';
+			    *to++ = ' ';
+			    *to++ = 'v';
 			    *to++ = 'a';
 			    *to++ = 'l';
-			    *to++ = 'l';
-			    *to++ = '>';
-			    *to++ = '<';
-			    *to++ = 'i';
-			    *to++ = '>';
+			    *to++ = 'u';
+			    *to++ = 'e';
+			    *to++ = '=';
+			    *to++ = '"';
 			    for (i = 2; i < strlen(token); i++)
 			      *to++ = token[i];
-			    *to++ = '<';
-			    *to++ = '/';
-			    *to++ = 'i';
-			    *to++ = '>';
-			    *to++ = '<';
-			    *to++ = '/';
-			    *to++ = 's';
-			    *to++ = 'm';
-			    *to++ = 'a';
-			    *to++ = 'l';
-			    *to++ = 'l';
-			    *to++ = '>';
+			    *to++ = '"';
 			    *to++ = ' ';
+			    *to++ = '/';
+			    *to++ = '>';
 			    continue;
 				}
 			  break;

@@ -17,7 +17,7 @@
 
 ZipCompress::ZipCompress() : SWCompress()
 {
-	printf("init compress\n");
+//	fprintf(stderr, "init compress\n");
 }
 
 

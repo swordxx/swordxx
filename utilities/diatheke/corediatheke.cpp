@@ -1,19 +1,18 @@
 // Diatheke 4.0 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by Chris Little
+// Copyright 1999, 2000, 2001 by CrossWire Bible Society http://www.crosswire.org
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 #include "corediatheke.h"
-
-int hasalpha (char * string) {
-	for (; *string != 0; string++)
-		if (isalpha(*string))
-			return 1;
-		return 0;
+#include <string>
+#include <list>
+extern "C" {
+#include <roman.h>
 }
 
 char * systemquery(const char * key){
-	ModMap::iterator it;
 	SWMgr manager;
+	ModMap::iterator it;
+
 	SWModule *target;
 	string value;
 	
@@ -74,21 +73,21 @@ char * systemquery(const char * key){
 		}
 	}
 
-	delete [] key;
 	char * versevalue = new char[value.length() + 1];
 	strcpy (versevalue, value.c_str());
 	return versevalue;
 }
 
 char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilters = 0, char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0) { 
-	ModMap::iterator it;
-	SWMgr manager;
+	static SWMgr manager;
+	static ModMap::iterator it;
+	static ListKey listkey;
+	static SectionMap::iterator sit;
+	static ConfigEntMap::iterator eit;
+	static VerseKey vk;
+	
 	SWModule *target;
-	ListKey listkey;
-	SectionMap::iterator sit;
-	ConfigEntMap::iterator eit;
 	SWFilter * filter = 0;
-	int i;
 	char *font = 0;
 	char inputformat = 0;
 	string value = "";
@@ -171,6 +170,8 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		manager.setGlobalOption("Headings","On");
 	if (optionfilters & OP_STRONGS)
 		manager.setGlobalOption("Strong's Numbers","On");
+	if (optionfilters & OP_MORPH)
+		manager.setGlobalOption("Morphological Tags","On");
 	
 	if (querytype == QT_SEARCH) {
 		//do search stuff
@@ -230,7 +231,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	
 	else if (querytype == QT_BIBLE || querytype == QT_COMM) {
 		//do commentary/Bible stuff
-		
+
 		if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 			if ((eit = (*sit).second.find("Font")) != (*sit).second.end()) {
 				font = (char *)(*eit).second.c_str();
@@ -243,12 +244,78 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		}
 		if (filter) target->AddRenderFilter(filter);
 		
-		listkey = VerseKey().ParseVerseList(ref2, "Gen1:1", true);
-
-		if (maxverses < 0 || maxverses > listkey.Count())
-		  maxverses = listkey.Count();
-
-		for (i = 0;i < maxverses;i++) {
+ 		listkey = vk.ParseVerseList(ref2, "Gen1:1", true);
+		int i;
+		/*
+		for (i = 0; i < listkey.Count() && maxverses; i++) {
+			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+			if (element) {
+				printf("%s-%s", (const char*)element->LowerBound(), (const char*)element->UpperBound());
+			}
+			else {
+				printf("%s", (const char*)*listkey.GetElement(i));
+			}
+		}
+		*/
+		for (i = 0; i < listkey.Count() && maxverses; i++) {
+			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+			if (element) {
+				target->Key(element->LowerBound());
+				vk = element->UpperBound();
+				while (maxverses && target->Key() <= vk) {
+					if (font && !filter) {
+						value += (char*)target->KeyText();
+						value += ": <font face=\"";
+						value += font;
+						value += "\">";
+						value += (char const*)*target;
+						value += "</font>";
+					} else {
+						value += (char*)target->KeyText();
+						value += ": ";
+						value += (char const*)*target;
+						value += "";
+					}
+					if (inputformat != FMT_THML && !filter)
+						value += "<br />";
+					if (maxverses == 1) {
+						value += " (";
+						value += target->Name();
+						value += ")";
+					}
+					value += "\n";
+					maxverses--;
+					(*target)++;
+				}
+			}
+			else {
+				target->Key(*listkey.GetElement(i));
+				if (font && !filter) {
+					value += (char*)target->KeyText();
+					value += ": <font face=\"";
+					value += font;
+					value += "\">";
+					value += (char const*)*target;
+					value += "</font>";
+				} else {
+					value += (char*)target->KeyText();
+					value += ": ";
+					value += (char const*)*target;
+					value += "";
+				}
+				if (inputformat != FMT_THML && !filter)
+					value += "<br />";
+				if (maxverses == 1) {
+					value += " (";
+					value += target->Name();
+					value += ")";
+				}
+				value += "\n";
+				maxverses--;
+			}
+		}
+		/*
+		for (i = 0;i < listkey.Count() && maxverses;i++) {
 		  target->Key(*listkey.GetElement(i));
 		  if (font && !filter) {
 		    value += (char*)target->KeyText();
@@ -271,157 +338,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		    value += ")";
 		  }
 		  value += "\n";
-		}
-		
-		/*		
-		char * comma = strchr(ref2, ',');
-		char * dash = strchr(ref2, '-');
-		
-		if (comma) {
-			// if we're looking up a sequence of
-			// verses (must be in same chapter)
-			char * vers1 = strchr(ref2, ':') + 1;
-			
-			char * vers2 = new char[strlen(vers1)];
-			strcpy (vers2, vers1);
-			
-			char * chap = new char[strlen(ref2) + 8];
-			strcpy (chap, ref2);
-			
-			char * vers3 = strchr(chap, ':') + 1;
-			*vers3 = 0;
-			char * vers4 = new char;
-			
-			vers4 = strtok(vers2, ",");
-			
-			while (vers4) {
-				strcpy (vers3, vers4);
-				
-				dash = strchr(chap, '-');
-				if (dash) { 			  // if we're looking up a range...
-					*dash = 0;				//break string at the dash
-					dash++;
-					char * temp = new char[strlen(chap) + 8];
-					
-					length = strchr(chap, ':') - chap + 1;
-					
-					strncpy (temp, chap, length);
-					*(temp + length) = 0;
-					strcat (temp, dash);
-					strcpy (dash, temp);
-					delete [] temp;
-				}
-				else dash = chap;
-				
-				for(target->Key(chap); target->Key()<(VerseKey)dash && --maxverses > 0;(*target)++) {					
-					if (font && !filter) {
-						value += (char*)target->KeyText();
-						value += ": <font face=\"";
-						value += font;
-						value += "\">";
-						value += (char const*)*target;
-						value += "</font>\n";
-					} else {
-						value += (char*)target->KeyText();
-						value += ": ";
-						value += (char const*)*target;
-						value += "\n";
-					}
-					if (inputformat != FMT_THML && !filter)
-						value += "<br />\n";					
-				}				
-				if (font && !filter) {
-					value += (char*)target->KeyText();
-					value += ": <font face=\"";
-					value += font;
-					value += "\">";
-					value += (char const*)*target;
-					value += "</font> (";
-					value += target->Name();
-					value += ")\n";
-				} else {
-					value += (char*)target->KeyText();
-					value += ": ";
-					value += (char const*)*target;
-					value += " (";
-					value += target->Name();
-					value += ")\n";
-				}
-				if (inputformat != FMT_THML && !filter)
-					value += "<br />\n";
-				
-				vers4 = strtok(0, ",");
-			}
-			delete vers4;
-			delete [] chap;
-			delete [] vers2;
-		}
-		else {
-			if (dash) { 				// if we're looking up a range...
-				*dash = 0;				  //break string at the dash
-				dash++;
-				char * temp = new char[strlen(ref2)];
-				
-				if (!strchr (dash, ':')) { /// if range supplies only second verse number (no book/chapter) assume same book/chapter
-					length = strchr(ref2, ':') - ref2 + 1;
-					strncpy (temp, ref2, length);
-					*(temp + length) = 0;
-					strcat (temp, dash);
-					strcpy (dash, temp);
-				}
-				else if (!hasalpha (dash)){ /// if range supplies only second chapter/verse (no book--has no letters) assume same book
-					strcpy (temp, ref2);
-					length = 0;
-					while (!isalpha(*temp)) {temp++; length++;}
-					while (isalpha(*temp)) {temp++; length++;}
-					while (!isdigit(*temp)) {temp++; length++;}
-					strncpy (temp, ref2, length);
-					*(temp + length) = 0;
-					strcat (temp, dash);
-					strcpy (dash, temp);
-				}
-				delete [] temp;
-			}
-			else dash = ref2;
-			
-			for(target->Key(ref2); target->Key()<(VerseKey)dash && --maxverses > 0;(*target)++) {				
-				if (font && !filter) {
-					value += (char*)target->KeyText();
-					value += ": <font face=\"";
-					value += font;
-					value += "\">";
-					value += (char const*)*target;
-					value += "</font>\n";
-				} else {
-					value += (char*)target->KeyText();
-					value += ": ";
-					value += (char const*)*target;
-					value += "\n";
-				}
-				if (inputformat != FMT_THML && !filter)
-					value += "<br />\n";
-			}
-			
-			
-			if (font && !filter) {
-				value += (char*)target->KeyText();
-				value += ": <font face=\"";
-				value += font;
-				value += "\">";
-				value += (char const*)*target;
-				value += "</font> (";
-				value += target->Name();
-				value += ")\n";
-			} else {
-				value += (char*)target->KeyText();
-				value += ": ";
-				value += (char const*)*target;
-				value += " (";
-				value += target->Name();
-				value += ")\n";
-			}
-			if (inputformat != FMT_THML && !filter)
-				value += "<br />\n";
+		  maxverses--;
 		}
 		*/
 	}
@@ -432,4 +349,5 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	strcpy (versevalue, value.c_str());
 	
 	return versevalue;
+
 }

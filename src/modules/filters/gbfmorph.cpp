@@ -65,15 +65,12 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'W') {	// Morph
-					switch(token[1]) {
-					case 'T':               // Tense
-						if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
-		    					if (lastspace)
-								to--;
-						}
-						continue;	// skip token
-					}
+				if (*token == 'W' && token[1] == 'T') {	// Morph
+				  if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
+				    if (lastspace)
+				      to--;
+				  }
+				  continue;
 				}
 				// if not a morph tag token, keep token in text
 				*to++ = '<';

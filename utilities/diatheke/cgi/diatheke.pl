@@ -54,7 +54,9 @@ $palm = 0;
 $footnotes = 0;
 $strongs = 0;
 $headings = 0;
+$morph = 0;
 $optionfilters = "";
+$debug=0;
 foreach $i (@values) {
     ($varname, $mydata) = split(/=/,$i);
     if ($varname ne "Submit" && $varname ne "lookup") {
@@ -63,7 +65,7 @@ foreach $i (@values) {
 	    $verse =~ tr/+/ /;
 	    $verse =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
 	}
-	elsif ($varname eq "search") {
+	elsif ($varname eq "search" && $mydata ne "" && $mydata ne "off") {
 	    $search = "-s $mydata";
 	}
 	elsif ($varname eq "strongs") {
@@ -78,8 +80,15 @@ foreach $i (@values) {
 	    $optionfilters .= "h";
 	    $headings = 1;
 	}
+	elsif ($varname eq "morph") {
+	    $optionfilters .= "m";
+	    $morph = 1;
+	}	
 	elsif ($varname eq "palm") {
 	    $palm = 1;
+	}
+	elsif ($varname eq "debug") {
+	    $debug = 1;
 	}
 	elsif ($varname eq "locale") {
 	    $locale = $mydata;
@@ -110,7 +119,7 @@ if ($verse eq "") {
     print <<DEF1;
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Diatheke Insta-Interlinear Bible</title>
 </head>
 
@@ -126,7 +135,11 @@ if ($verse eq "") {
   <p /><input type="checkbox" name="strongs" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
   Stong's Numbers when available (Strong's numbered modules are marked by *)</font>
   <p /><input type="checkbox" name="footnotes" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
-  Footnotes when available</font><br />
+  Footnotes when available</font>
+  <p /><input type="checkbox" name="morph" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
+  Morphological tags when available</font>
+  <p /><input type="checkbox" name="headings" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
+  Section Headings when available</font><br />
   &nbsp;
   <table BORDER="0" WIDTH="100%">
 DEF1
@@ -311,7 +324,9 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
-    print "$diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null<br />";
+    if ($debug) {
+	print "command line: $diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\"\n<br />";
+    }
     $line = `$diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null`;
 
     chomp($line);
@@ -320,6 +335,9 @@ for ($i = 0; $i < $n; $i++) {
     
     $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&StrongsHebrew=on\">&lt;$1&gt;\<\/a\>/g;
     $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&StrongsGreek=on\">&lt;$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&StrongsHebrew=on\">&lt;T$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&StrongsGreek=on\">&lt;T$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Morph\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Packard=on\">&lt;$1&gt;\<\/a\>/g;
     
     $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
     $info =~ /([^\;]+)\;(.*)/;

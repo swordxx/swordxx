@@ -150,7 +150,22 @@ char ThMLPlain::ProcessText(char *text, int maxlen)
     else if (*from == '>' && !ampersand) {
       intoken = false;
       // process desired tokens
-
+      if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
+	*to++ = ' ';
+	*to++ = '<';
+	for (unsigned int i = 27; token[i] != '\"'; i++)
+	  *to++ = token[i];
+	*to++ = '>';
+	continue;
+      }
+      if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+	*to++ = ' ';
+	*to++ = '(';
+	for (unsigned int i = 25; token[i] != '\"'; i++)
+	  *to++ = token[i];
+	*to++ = ')';
+	continue;
+      }
       if (!strncmp("note", token, 4)) {
 	*to++ = ' ';
 	*to++ = '(';

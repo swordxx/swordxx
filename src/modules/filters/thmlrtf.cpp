@@ -2,8 +2,7 @@
                      thmlrtf.cpp  -  ThML to RTF filter
                              -------------------
     begin                : 1999-10-27
-    copyright            : 1999 by Chris Little
-    email                : chrislit@chiasma.org
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************
@@ -162,8 +161,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		{
 		  intoken = false;
 		  // process desired tokens
-		  if (!strncmp(token, "sync type=\"Strongs\" value=\"G", 28) || \
-		      !strncmp(token, "sync type=\"Strongs\" value=\"H", 28)) {
+		  if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
 		    *to++ = '{';
 		    *to++ = '\\';
 		    *to++ = 'f';
@@ -178,7 +176,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = '}';
 		    continue;
 		  }
-		  else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
+		  else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
 		    *to++ = '{';
 		    *to++ = '\\';
 		    *to++ = 'f';
@@ -187,7 +185,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = '5';
 		    *to++ = ' ';
 		    *to++ = '(';
-		    for (unsigned int i = 29; token[i] != '\"'; i++)
+		    for (unsigned int i = 25; token[i] != '\"'; i++)
 		      *to++ = token[i];
 		    *to++ = ')';
 		    *to++ = '}';

@@ -8,7 +8,7 @@
 <body>
 
 <form method="get" action="cgi-bin/diatheke.pl">
-  <p><input type="radio" name="search" checked value="" /><font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <p><input type="radio" name="search" checked value="" /><font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   Verse or Search key:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset"><br />
   <input type="radio" name="search" value="phrase" /><font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
   <input type="radio" name="search" value="multiword" /><font face="Arial, Helvetica, sans-serif">Multiple Word Search</font><br />
@@ -16,7 +16,11 @@
   <p><input type="checkbox" name="strongs" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
   Stong's Numbers when available (Strong's numbered modules are marked by *)</font>
   <p><input type="checkbox" name="footnotes" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
-  Footnotes when available</font><br>
+  Footnotes when available</font>
+  <p /><input type="checkbox" name="morph" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
+  Morphological tags when available</font>
+  <p /><input type="checkbox" name="headings" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
+  Section Headings when available</font><br />
   &nbsp;
   <table BORDER="1" WIDTH="83%">
     <tr>

@@ -2,8 +2,7 @@
                      thmlgbf.cpp  -  ThML to GBF filter
                              -------------------
     begin                : 1999-10-28
-    copyright            : 1999 by Chris Little
-    email                : chrislit@chiasma.org
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************
@@ -160,14 +159,23 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	{
 	  intoken = false;
 	  // process desired tokens
-	  if (!strncmp(token, "sync type=\"Strongs\" value=\"G", 28) || !strncmp(token, "sync type=\"Strongs\" value=\"H", 28)) {
+	  if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
 	      *to++ = '<';
 	      *to++ = 'W';
 	      for (unsigned int i = 27; token[i] != '\"'; i++)
 		*to++ = token[i];
 	      *to++ = '>';
 	      continue;
-	      }
+	  }
+	  if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+	    *to++ = '<';
+	    *to++ = 'W';
+	    *to++ = 'T';
+	    for (unsigned int i = 25; token[i] != '\"'; i++)
+	      *to++ = token[i];
+	    *to++ = '>';
+	    continue;
+	  }
 	  else if (!strncmp(token, "scripRef", 8)) {
 	    *to++ = '#';
 	  }

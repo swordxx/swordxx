@@ -2,8 +2,7 @@
                      thmlolb.cpp  -  ThML to OLB filter
                              -------------------
     begin                : 2001-05-10
-    copyright            : 2001 by Chris Little
-    email                : chrislit@chiasma.org
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************
@@ -160,9 +159,9 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
 	{
 	  intoken = false;
 	  // process desired tokens
-	  if (!strncmp(token, "sync type=\"Strongs\" value=\"G", 28) || !strncmp(token, "sync type=\"Strongs\" value=\"H", 28)) {
-	      continue;
-	      }
+	  if (!strncmp(token, "sync type=\"Strongs\" value=\"G", 27)) {
+	    continue;
+	  }
 	  else if (!strncmp(token, "scripRef", 8)) {
 	    *to++ = '#';
 	    continue;
@@ -172,11 +171,11 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
 	    continue;
 	  }
 	  else if (!strncmp(token, "note place=\"foot\"", 17)) {
-	    *to++ = '\{';
+	    *to++ = '{';
 	    continue;
 	  }
 	  else if (!strncmp(token, "/note", 5)) {
-	    *to++ = '\}';
+	    *to++ = '}';
 	    continue;
 	  }
 	  else if (!strnicmp(token, "font color=#ff0000", 18)) {
