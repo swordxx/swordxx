@@ -10,8 +10,6 @@
 #include <latin1utf8.h>
 #include <swmodule.h>
 
-#include <iostream.h>
-
 SWORD_NAMESPACE_START
 
 Latin1UTF8::Latin1UTF8() {
