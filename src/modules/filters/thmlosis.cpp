@@ -50,7 +50,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
 	bool handled = false;
-	string divEnd = "";
+	std::string divEnd = "";
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
