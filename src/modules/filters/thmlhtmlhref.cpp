@@ -140,7 +140,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 	const char *tok;
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		XMLTag tag(token);
-		if (!strcmp(tag.getName(), "sync")) {
+		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) {
 				buf += "<small><em> (<a href=\"";
 			}
@@ -160,18 +160,18 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			if (value && tag.getAttribute("type") && strcmp(tag.getAttribute("type"), "morph")) { //not morph type
 				value++;
 			}
-			buf += value;
+			buf += value ? value : "";
 
-			if(tag.getAttribute("type") && strcmp(tag.getAttribute("type"), "morph"))
+			if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph"))
 				buf += "</a>&gt; </em></small>";
 			else
 				buf += "</a>) </em></small>";
 		}
-		else if (!strcmp(tag.getName(), "scripture")) {
+		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
 			userData["inscriptRef"] = "true";
 			buf += "<i>";
 		}
-		else if (!strcmp(tag.getName(), "scripRef")) {
+		else if (tag.getName() && !strcmp(tag.getName(), "scripRef")) {
 			if (tag.isEndTag()) {
 				if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
 					userData["inscriptRef"] = "false";
