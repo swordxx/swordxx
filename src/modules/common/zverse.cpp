@@ -341,7 +341,8 @@ void zVerse::flushCache() {
 				compressor->zBuf(&zsize);
 				outzsize = zsize;
 
-				SWBuf buf(zsize + 5);
+				SWBuf buf;
+				buf.setSize(zsize + 5);
 				memcpy(buf.getRawData(), compressor->zBuf(&zsize), zsize);
 				buf.setSize(zsize);
 				rawZFilter(buf, 1); // 1 = encipher

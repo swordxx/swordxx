@@ -617,7 +617,8 @@ void zStr::flushCache() {
 			compressor->Buf(rawBuf, &size);
 			compressor->zBuf(&size);
 
-			SWBuf buf(size + 5);
+			SWBuf buf;
+			buf.setSize(size + 5);
 			memcpy(buf.getRawData(), compressor->zBuf(&size), size); // 1 = encipher
 			buf.setSize(size);
 			rawZFilter(buf, 1); // 1 = encipher
