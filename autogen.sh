@@ -12,4 +12,4 @@ AUTOHEAD="$AUTODIR""autoheader"
 	
 echo "*** Recreating the Makefile.in files"
 AUTOMAKE="$AUTODIR""automake"
-	$AUTOMAKE --foreign;
+	$AUTOMAKE -ac --foreign;
