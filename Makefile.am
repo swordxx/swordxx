@@ -121,7 +121,7 @@ install: install-recursive
 	@echo "sword is installed."
 	@echo ""
 	@echo "if this is your first time, you may need a basic global"
-	@echo "configuration file.  one can be generated to /etc/sword.conf"
+	@echo "configuration file.  one can be generated to $(DESTDIR)$(sysconfdir)/sword.conf"
 	@echo "by typing: \"make install_config\""
 	@echo ""
 	@echo "modules (Bibles, etc.), may then be unzipped to $(pkgdatadir)/"
@@ -145,6 +145,12 @@ register:
 	@echo ""
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
+
+install_config: 
+	@echo "[Install]" > $(DESTDIR)$(sysconfdir)/sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> $(DESTDIR)$(sysconfdir)/sword.conf
+	@echo "sword.conf generated"
+
 
 dist-hook:
 	(cd $(distdir) && ./autogen.sh)
