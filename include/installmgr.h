@@ -7,6 +7,7 @@
 
 SWORD_NAMESPACE_START
 
+class SWMgr;
 
 // move this include to cpp once struct ftpparse isn't exposed anymore
 extern "C" {
@@ -45,6 +46,7 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 // size, type (dir, file, special).  Then change to vector of this class
 // instead of ftpparse
 std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
+int removeModule(SWMgr *manager, const char *modName);
 
 SWORD_NAMESPACE_END
 

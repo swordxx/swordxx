@@ -128,6 +128,9 @@ pkginclude_HEADERS += $(swincludedir)/zlib.h
 pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
+pkginclude_HEADERS += $(swincludedir)/utilxml.h
+pkginclude_HEADERS += $(swincludedir)/installmgr.h
+pkginclude_HEADERS += $(swincludedir)/ftpparse.h
 
 if INSTALLMGR
 REMOTE_HEAD  = $(swincludedir)/swremotemgr.h

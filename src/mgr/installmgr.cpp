@@ -18,9 +18,12 @@
 #define O_BINARY 0
 #endif
 
+#ifdef CURLAVAILABLE
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
+#endif
+
 #include <defs.h>
 #include <vector>
 #include <swmgr.h>
@@ -33,11 +36,19 @@ SWORD_NAMESPACE_START
 static InstallMgr_init _InstallMgr_init;
 
 InstallMgr_init::InstallMgr_init() {
+#ifdef CURLAVAILABLE
 	curl_global_init(CURL_GLOBAL_DEFAULT);
+#else
+//	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+#endif
 }
 
 InstallMgr_init::~InstallMgr_init() {
+#ifdef CURLAVAILABLE
 	curl_global_cleanup();
+#else
+//	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+#endif
 }
 
 
@@ -62,8 +73,9 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 
 
 char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool passive, void (*status_callback)(double dltotal, double dlnow)) {
-	struct FtpFile ftpfile = {dest, NULL};
 	char retVal = 0;
+#ifdef CURLAVAILABLE
+	struct FtpFile ftpfile = {dest, NULL};
 
 	CURL *curl = (CURL *)session;
 	CURLcode res;
@@ -93,6 +105,9 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 
 	if (ftpfile.stream)
 		fclose(ftpfile.stream); /* close the local file */
+#else
+	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+#endif
 	return retVal;
 }
 
@@ -135,16 +150,25 @@ vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool pas
 
 
 void *FTPOpenSession() {
+	void *retVal = 0;
+#ifdef CURLAVAILABLE
 	CURL *curl;
 
-	curl = curl_easy_init();
-	return curl;
+	retVal = curl_easy_init();
+#else
+	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+#endif
+	return retVal;
 }
 
 
 void FTPCloseSession(void *session) {
+#ifdef CURLAVAILABLE
 	CURL *curl = (CURL *)session;
 	curl_easy_cleanup(curl);
+#else
+	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+#endif
 }
 
 
@@ -160,10 +184,17 @@ int removeModule(SWMgr *manager, const char *modName) {
 		fileBegin = module->second.lower_bound("File");
 		fileEnd = module->second.upper_bound("File");
 
+		string modFile;
+		string modDir;
+		entry = module->second.find("AbsoluteDataPath");
+		modDir = entry->second.c_str();
 		if (fileBegin != fileEnd) {	// remove each file
 			while (fileBegin != fileEnd) {
+				modFile = modDir;
+				modFile += "/";
+				modFile += fileBegin->second.c_str();
 				//remove file
-				remove(fileBegin->second.c_str());
+				remove(modFile.c_str());
 				fileBegin++;
 			}
 		}
@@ -172,59 +203,36 @@ int removeModule(SWMgr *manager, const char *modName) {
 			DIR *dir;
 			struct dirent *ent;
 			ConfigEntMap::iterator entry;
-			string modDir;
-			string modFile;
 
-			entry = module->second.find("DataPath");
-			if (entry != module->second.end()) {
-				modDir = entry->second.c_str();
-				entry = module->second.find("ModDrv");
-				if (entry != module->second.end()) {
-					if (!strcmp(entry->second.c_str(), "RawLD") || !strcmp(entry->second.c_str(), "RawLD4") || !strcmp(entry->second.c_str(), "zLD") || !strcmp(entry->second.c_str(), "RawGenBook") || !strcmp(entry->second.c_str(), "zGenBook")) {
-						char *buf = new char [ strlen(modDir.c_str()) + 1 ];
-	
-						strcpy(buf, modDir.c_str());
-						int end = strlen(buf) - 1;
-						while (end) {
-							if (buf[end] == '/')
-								break;
-							end--;
-						}
-						buf[end] = 0;
-						modDir = buf;
-						delete [] buf;
+
+			if (dir = opendir(modDir.c_str())) {
+				rewinddir(dir);
+				while ((ent = readdir(dir))) {
+					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+						modFile = modDir;
+						modFile += "/";
+						modFile += ent->d_name;
+						remove(modFile.c_str());
 					}
 				}
-
-				if (dir = opendir(modDir.c_str())) {
-					rewinddir(dir);
-					while ((ent = readdir(dir))) {
-						if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-							modFile = modDir;
-							modFile += "/";
-							modFile += ent->d_name;
+				closedir(dir);
+			}
+			if (dir = opendir(manager->configPath)) {	// find and remove .conf file
+				rewinddir(dir);
+				while ((ent = readdir(dir))) {
+					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+						modFile = manager->configPath;
+						modFile += "/";
+						modFile += ent->d_name;
+						SWConfig *config = new SWConfig(modFile.c_str());
+						if (config->Sections.find(modName) != config->Sections.end()) {
+							delete config;
 							remove(modFile.c_str());
 						}
+						else	delete config;
 					}
-					closedir(dir);
 				}
-				if (dir = opendir(manager->configPath)) {	// find and remove .conf file
-					rewinddir(dir);
-					while ((ent = readdir(dir))) {
-						if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-							modFile = manager->configPath;
-							modFile += "/";
-							modFile += ent->d_name;
-							SWConfig *config = new SWConfig(modFile.c_str());
-							if (config->Sections.find(modName) != config->Sections.end()) {
-								delete config;
-								remove(modFile.c_str());
-							}
-							else	delete config;
-						}
-					}
-					closedir(dir);
-				}
+				closedir(dir);
 			}
 		}
 		return 0;
