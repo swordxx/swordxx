@@ -110,7 +110,6 @@ USEUNIT("..\..\src\mgr\encfiltmgr.cpp");
 USEUNIT("..\..\src\mgr\markupfiltmgr.cpp");
 USEUNIT("..\..\src\utilfuns\roman.cpp");
 USEUNIT("..\..\src\mgr\swsourcemgr.cpp");
-USEUNIT("..\..\src\mgr\installmgr.cpp");
 USEUNIT("..\..\src\utilfuns\ftpparse.c");
 USEUNIT("..\..\src\modules\filters\osisstrongs.cpp");
 USEUNIT("..\..\src\modules\filters\osismorph.cpp");
@@ -132,6 +131,8 @@ USEUNIT("..\..\src\modules\filters\gbfwebif.cpp");
 USEUNIT("..\..\src\modules\filters\thmlwebif.cpp");
 USEUNIT("..\..\src\utilfuns\utilweb.cpp");
 USEUNIT("..\..\src\modules\filters\osisosis.cpp");
+USEUNIT("..\..\src\utilfuns\swversion.cpp");
+USEUNIT("..\..\src\mgr\stringmgr.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

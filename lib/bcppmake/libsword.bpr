@@ -83,8 +83,8 @@
       ..\..\src\modules\filters\gbfosis.obj 
       ..\..\src\modules\filters\thmlosis.obj ..\..\src\mgr\encfiltmgr.obj 
       ..\..\src\mgr\markupfiltmgr.obj ..\..\src\utilfuns\roman.obj 
-      ..\..\src\mgr\swsourcemgr.obj ..\..\src\mgr\installmgr.obj 
-      ..\..\src\utilfuns\ftpparse.obj ..\..\src\modules\filters\osisstrongs.obj 
+      ..\..\src\mgr\swsourcemgr.obj ..\..\src\utilfuns\ftpparse.obj 
+      ..\..\src\modules\filters\osisstrongs.obj 
       ..\..\src\modules\filters\osismorph.obj 
       ..\..\src\modules\filters\gbfredletterwords.obj 
       ..\..\src\utilfuns\swbuf.obj ..\..\src\utilfuns\utilxml.obj 
@@ -100,7 +100,8 @@
       ..\..\src\modules\filters\swoptfilter.obj ..\..\src\mgr\swsearchable.obj 
       ..\..\src\modules\filters\gbfwebif.obj 
       ..\..\src\modules\filters\thmlwebif.obj ..\..\src\utilfuns\utilweb.obj 
-      ..\..\src\modules\filters\osisosis.obj"/>
+      ..\..\src\modules\filters\osisosis.obj ..\..\src\utilfuns\swversion.obj 
+      ..\..\src\mgr\stringmgr.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -114,7 +115,7 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
     <INCLUDEPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n"/>
@@ -138,9 +139,9 @@
       -I$(BCB)\include -I$(BCB)\include\vcl -I..\..\..\icu-sword\source\i18n 
       -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -DUSBINARY -D_DEBUG 
       -DU_HAVE_PLACEMENT_NEW=0 -boa"/>
-    <CFLAG1 value="-Od -Vx -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
-    <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
-    <AFLAGS value="/mx /w2 /zi"/>
+    <CFLAG1 value="-O2 -Vx -X- -a8 -b- -k- -vi -c -tW -tWM"/>
+    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zn"/>
     <LFLAGS value="/P512"/>
   </OPTIONS>
   <LINKER>
@@ -208,16 +209,17 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=9
-Item0=_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0
-Item1=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
-Item2=_ICU_;_ICUSWORD_;USBINARY
-Item3=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE;_DEBUG
-Item4=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE
-Item5=;USBINARY;_DEBUG
-Item6=_ICU_;_ICUSWORD_
-Item7=_ICU_;_ICUSWORD_;_DEBUG
-Item8=_DEBUG
+Count=10
+Item0=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0
+Item1=_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0
+Item2=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
+Item3=_ICU_;_ICUSWORD_;USBINARY
+Item4=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE;_DEBUG
+Item5=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE
+Item6=;USBINARY;_DEBUG
+Item7=_ICU_;_ICUSWORD_
+Item8=_ICU_;_ICUSWORD_;_DEBUG
+Item9=_DEBUG
 
 [HistoryLists\hlFinalOutputDir]
 Count=3
@@ -247,11 +249,6 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
 
 [Language]
 ActiveLang=
