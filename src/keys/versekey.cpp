@@ -411,7 +411,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		case ' ':
 			inTerm = true;
 			while (true) {
-				if (!*number)
+				if ((!*number) || (chap < 0))
 					break;
 				for (q = 1; ((buf[q]) && (buf[q] != ' ')); q++);
 				if (buf[q] == ':')
