@@ -13,7 +13,7 @@
 #else
 #include <unixstr.h>
 #endif
-
+#include <ctype.h>
 
 const char GBFStrongs::on[] = "On";
 const char GBFStrongs::off[] = "Off";

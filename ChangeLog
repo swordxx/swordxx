@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+22-Jun-2002	Daniel Glassey <dglassey@crosswire.org>
+	Fixes to allow compiling with gcc3
+
 13-Jun-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Fixed Module heading bug
 	Fixed SWConfig += bug again

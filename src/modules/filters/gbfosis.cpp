@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 #include <gbfosis.h>
 #include <swmodule.h>
 #include <versekey.h>

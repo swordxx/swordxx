@@ -15,15 +15,15 @@ int main(int argc, char **argv) {
 	bla = "James 1:19";
 
 	bla.setLocale("de");
-	cout << bla << endl;
+	std::cout << bla << std::endl;
 	bla = "Johannes 1:1";
-	cout << bla << endl;
+	std::cout << bla << std::endl;
 
 	LocaleMgr::systemLocaleMgr.setDefaultLocaleName("de");
 	VerseKey key2;
 	key2.setLocale("en");
 	ListKey list = key2.ParseVerseList("Luke 3:23-28",key2, true);
-	cout << list << endl;
+	std::cout << list << std::endl;
 
 
 }

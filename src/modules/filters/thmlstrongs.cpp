@@ -14,7 +14,7 @@
 #else
 #include <unixstr.h>
 #endif
-
+#include <ctype.h>
 
 const char ThMLStrongs::on[] = "On";
 const char ThMLStrongs::off[] = "Off";
