@@ -312,6 +312,33 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 							*to++ = 'B';
 							*to++ = '>';
 							continue;
+					        case 'N':
+						        *to++ = '<';
+							*to++ = 'f';
+							*to++ = 'o';
+							*to++ = 'n';
+							*to++ = 't';
+							*to++ = ' ';
+							*to++ = 'f';
+							*to++ = 'a';
+							*to++ = 'c';
+							*to++ = 'e';
+							*to++ = '=';
+							*to++ = '"';
+						        for (i = 2; i < strlen(token); i++)
+								*to++ = token[i];
+							*to++ = '"';
+							*to++ = '>';
+							continue;
+					        case 'n':
+						        *to++ = '<';
+							*to++ = '/';
+							*to++ = 'f';
+							*to++ = 'o';
+							*to++ = 'n';
+							*to++ = 't';
+							*to++ = '>';
+							continue;
 					}
 					break;
 				case 'C':			// special character tags

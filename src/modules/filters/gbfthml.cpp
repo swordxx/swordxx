@@ -172,10 +172,10 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = 'c';
 			      *to++ = 'e';
 			      *to++ = '=';
-			      *to++ = '\"';		
+			      *to++ = '"';		
 			      for (i = 2; i < strlen(token); i++)
 				*to++ = token[i];
-			      *to++ = '\"';
+			      *to++ = '"';
 			      *to++ = '>';
 			      continue;
 			    case 'n':

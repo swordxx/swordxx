@@ -175,6 +175,18 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = '0';
 					*to++ = ' ';
 					continue;
+				case 'N':
+				        *to++ = '\\';
+					*to++ = 'f';
+					*to++ = '0';
+					*to++ = ' ';
+					continue;
+				case 'n':
+					*to++ = '\\';
+					*to++ = 'f';
+					*to++ = '1';
+					*to++ = ' ';
+					continue;
 				}
 				break;
 			case 'C':			// special character tags
