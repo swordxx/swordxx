@@ -45,21 +45,6 @@ OSISRTF::OSISRTF() {
         addTokenSubstitute("lg", "\\par ");
         addTokenSubstitute("/lg", "\\par ");
 	setTokenCaseSensitive(true);
-	setStageProcessing(PRECHAR);		// just at top of for loop
-}
-
-
-bool OSISRTF::processStage(char stage, SWBuf &text, char *&from, UserData *userData) {
-	switch (stage) {
-	PRECHAR:
-		if ((strchr(" \t\n\r", *from))) {
-			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
-				from++;
-			}
-			*from = ' ';
-		}
-	}
-	return false;
 }
 
 
@@ -179,9 +164,11 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 			}
 			else if (tag.isEndTag()) {	// end tag
 				buf += "\\par}";
+				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
 				buf += "{\\par\\par}";
+				userData->supressAdjacentWhitespace = true;
 			}
 		}
 
@@ -211,6 +198,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
                 // <milestone type="line"/>
                 else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
         		buf += "\\par ";
+			userData->supressAdjacentWhitespace = true;
                 }
 
 		// <title>

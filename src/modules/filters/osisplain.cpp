@@ -44,21 +44,6 @@ OSISPlain::OSISPlain() {
         addTokenSubstitute("/lg", "\n");
 
         setTokenCaseSensitive(true);
-	setStageProcessing(PRECHAR);		// just at top of for loop
-}
-
-
-bool OSISPlain::processStage(char stage, SWBuf &text, char *&from, UserData *userData) {
-	switch (stage) {
-	PRECHAR:
-		if ((strchr(" \t\n\r", *from))) {
-			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
-				from++;
-			}
-			*from = ' ';
-		}
-	}
-	return false;
 }
 
 
@@ -145,11 +130,13 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 		// <p> paragraph tag
 		else if (((*token == 'p') && ((token[1] == ' ') || (!token[1]))) ||
 			((*token == '/') && (token[1] == 'p') && (!token[2]))) {
+				userData->supressAdjacentWhitespace = true;
 				buf += "\n";
 		}
 
                 // <milestone type="line"/>
                 else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+			userData->supressAdjacentWhitespace = true;
         		buf += "\n";
                 }
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisrtf.h,v 1.7 2003/07/30 02:03:45 scribe Exp $
+ * $Id: osisrtf.h,v 1.8 2003/08/05 09:06:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,7 +41,6 @@ protected:
 		return new MyUserData(module, key);
 	}
 	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
-	virtual bool processStage(char stage, SWBuf &text, char *&from, UserData *userData);
 public:
 	OSISRTF();
 };
