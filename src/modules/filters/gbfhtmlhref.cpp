@@ -57,7 +57,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 }
 
 
-bool GBFHTMLHREF::handleToken(char **buf, const char *token) {
+bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
 			pushString(buf, " <SMALL><EM>&lt;<A HREF=\"#");

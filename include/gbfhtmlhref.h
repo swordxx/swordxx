@@ -25,7 +25,7 @@
  */
 class SWDLLEXPORT GBFHTMLHREF : public SWBasicFilter {
 protected:
-	virtual bool handleToken(char **buf, const char *token);
+	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
 public:
   GBFHTMLHREF ();
 };

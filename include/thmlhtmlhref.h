@@ -25,7 +25,7 @@
  */
 class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
 protected:
-	virtual bool handleToken(char **buf, const char *token);
+	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
 public:
 	ThMLHTMLHREF();
 };
