@@ -1,8 +1,7 @@
 /******************************************************************************
- *  stringmgr.cpp - implementation of class LocaleMgr used to interact with
- *				registered locales for a sword installation
+ *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.1 2004/04/17 17:16:17 joachim Exp $
+ * $Id: stringmgr.cpp,v 1.2 2004/04/19 14:27:48 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -53,9 +52,9 @@ public:
 #ifdef _ICU_
 
 	//here comes our IcuStringMgr reimplementation
-	class IcuStringMgr : public StringMgr {
+	class ICUStringMgr : public StringMgr {
 	public:
-		virtual char* upperUtf8(char*, const unsigned int maxlen = 0);
+		virtual char* upperUTF8(char*, const unsigned int maxlen = 0);
 		virtual char* upperLatin1(char*);
 	
 	protected:
@@ -102,7 +101,7 @@ StringMgr* StringMgr::getSystemStringMgr() {
 		m_systemStringMgr = new StringMgr();
 		SWLog::getSystemLog()->logError("created default StringMgr");
 #else
-		m_systemStringMgr = new IcuStringMgr();
+		m_systemStringMgr = new ICUStringMgr();
 		SWLog::getSystemLog()->logError("created default IcuStringMgr");
 #endif	
 	}
@@ -114,7 +113,7 @@ StringMgr* StringMgr::getSystemStringMgr() {
 /** Converts the param to an upper case Utf8 string
 * @param The text encoded in utf8 which should be turned into an upper case string
 */	
-char* StringMgr::upperUtf8(char* t, const unsigned int maxlen) {
+char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
 	//the default impl does nothing
 // 	SWLog::getSystemLog()->logError("StringMgr::upperUtf8 with %s and %d", t, maxlen);
 
@@ -142,7 +141,7 @@ const bool StringMgr::supportsUnicode() const {
 
 #ifdef _ICU_
 
-	char* IcuStringMgr::upperUtf8(char* buf, const unsigned int maxlen) {
+	char* ICUStringMgr::upperUTF8(char* buf, const unsigned int maxlen) {
 		char *ret = buf;
 		
 		int max = maxlen;
@@ -163,7 +162,7 @@ const bool StringMgr::supportsUnicode() const {
 		return ret;
 	}
 	
-	char* IcuStringMgr::upperLatin1(char* t) {
+	char* ICUStringMgr::upperLatin1(char* t) {
  		StringMgr::upperLatin1(t); //use the default implementation
 	}
 	

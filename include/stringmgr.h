@@ -1,8 +1,8 @@
 /******************************************************************************
  *	stringmgr.h - A class which provides string andling functions which can 
- 			reimplemented by frontends
+ *			reimplemented by frontends
  *
- * $Id: stringmgr.h,v 1.1 2004/04/17 17:16:16 joachim Exp $
+ * $Id: stringmgr.h,v 1.2 2004/04/19 14:27:48 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -40,14 +40,14 @@ public:
 	static StringMgr* getSystemStringMgr();
 	/*
 	*/
-	static const bool hasUtf8Support() {
+	static const bool hasUTF8Support() {
 		return getSystemStringMgr()->supportsUnicode();
 	};
 	
 	/** Converts the param to an upper case Utf8 string
 	* @param The text encoded in utf8 which should be turned into an upper case string
 	*/	
-	virtual char* upperUtf8(char*, const unsigned int max = 0);
+	virtual char* upperUTF8(char*, const unsigned int max = 0);
 	/** Converts the param to an uppercase latin1 string
 	* @param The text encoded in latin1 which should be turned into an upper case string
 	*/	
@@ -79,7 +79,7 @@ namespace utilstr {
 	};
 	
 	inline char* toupperstr_utf8( char* t, const unsigned int max = 0 ) {
-		return StringMgr::getSystemStringMgr()->upperUtf8( t, max );
+		return StringMgr::getSystemStringMgr()->upperUTF8( t, max );
 	};
 };
 using namespace utilstr;
