@@ -17,12 +17,12 @@
   
 #ifndef NULL
 #define NULL 0
-#endif	/*  */
-  class sapphire 
+#endif	/*  */
+  class sapphire 
 {
   
     // These variables comprise the state of the state machine.
-  unsigned char cards[256];	// A permutation of 0-255.
+  unsigned char cards[256];	// A permutation of 0-255.
   unsigned char rotor,		// Index that rotates smoothly
     ratchet,			// Index that moves erratically
     avalanche,			// Index heavily data dependent
@@ -31,9 +31,9 @@
   
     // This function is used by initialize(), which is called by the
     // constructor.
-  unsigned char keyrand (int limit, unsigned char *user_key,
-			  unsigned char keysize, unsigned char *rsum,
-unsigned *keypos); public:sapphire (unsigned char
+  unsigned char keyrand (int limit, unsigned char *user_key,
+			  unsigned char keysize, unsigned char *rsum,
+unsigned *keypos); public:sapphire (unsigned char
 				      *key = NULL,	// Calls initialize if a real
 				      unsigned char keysize = 0);	// key is provided.  If none
   // is provided, call initialize
@@ -50,4 +50,4 @@
   void burn (void);		// Destroy cipher state information.
 };
 
-
+

@@ -18,7 +18,7 @@
 //*****************************************************************************
 /*
  *
- * $Id: GreekChars.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: GreekChars.h,v 1.3 2001/03/18 21:04:25 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -123,7 +123,7 @@ enum GreekFontChars
   gNON_ROUGH_OMICRON = 209,	// hH
   gNON_ROUGH_RHO = 184,		// hR
   gNON_ROUGH_UPSILON = 217,	// hU
-  gNON_ROUGH_OMEGA = 231,	// hW
+  gNON_ROUGH_OMEGA = 231	// hW
 };
 
 // English puntuation as used on bGreek

@@ -85,7 +85,6 @@ char *RawText::getRawEntry() {
 	long  start;
 	unsigned short size;
 	VerseKey *key = 0;
-	FilterList::iterator it;
 
 	// see if we have a VerseKey * or decendant
 #ifndef _WIN32_WCE
