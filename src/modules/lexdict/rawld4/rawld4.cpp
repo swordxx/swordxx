@@ -78,8 +78,8 @@ void RawLD4::strongsPad(char *buf)
 
 char RawLD4::getEntry(long away)
 {
-	long  start;
-	unsigned long size;
+	long  start = 0;
+	unsigned long size = 0;
 	char *idxbuf = 0;
 	char retval = 0;
 

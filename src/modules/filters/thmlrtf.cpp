@@ -193,11 +193,18 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    continue;
 		  }
 		  else if (!strncmp(token, "scripRef", 8)) {
-		    *to++ = '#';
+			*to++ = '{';
+			*to++ = '\\';
+			*to++ = 'c';
+			*to++ = 'f';
+			*to++ = '2';
+			*to++ = ' ';
+			*to++ = '#';
 		    continue;
 		  }
 		  else if (!strncmp(token, "/scripRef", 9)) {
-		    *to++ = '|';
+			*to++ = '|';
+			*to++ = '}';
 		    continue;
 		  }
 		  else if (!strncmp(token, "note place=\"foot\"", 17)) {

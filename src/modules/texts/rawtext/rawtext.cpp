@@ -84,8 +84,8 @@ RawText::~RawText()
  */
 
 char *RawText::getRawEntry() {
-	long  start;
-	unsigned short size;
+	long  start = 0;
+	unsigned short size = 0;
 	VerseKey *key = 0;
 
 	// see if we have a VerseKey * or decendant

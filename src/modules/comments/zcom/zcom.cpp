@@ -59,8 +59,8 @@ zCom::~zCom() {
  * RET: string buffer with verse
  */
 char *zCom::getRawEntry() {
-	long  start;
-	unsigned short size;
+	long  start = 0;
+	unsigned short size = 0;
 	VerseKey *key = 0;
 
 #ifndef _WIN32_WCE

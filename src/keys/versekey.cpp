@@ -258,19 +258,22 @@ char VerseKey::parse()
 
 void VerseKey::freshtext() const
 {
-	char buf[254];
+	char buf[2024];
 	int realtest = testament;
 	int realbook = book;
 
 	if (book < 1) {
 		if (testament < 1)
 			sprintf(buf, "[ Module Heading ]");
-		else sprintf(buf, "[ Testament %d Heading ]", testament);
+		else sprintf(buf, "[ Testament %d Heading ]", (int)testament);
 	}
 	else {
 		if (realbook > BMAX[realtest-1]) {
 			realbook -= BMAX[realtest-1];
-			realtest++;
+			if (realtest < 2)
+				realtest++;
+			if (realbook > BMAX[realtest-1])
+				realbook = BMAX[realtest-1];
 		}
 		sprintf(buf, "%s %d:%d", books[realtest-1][realbook-1].name, chapter, verse);
 	}

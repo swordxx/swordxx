@@ -60,8 +60,8 @@ RawFiles::~RawFiles()
 
 char *RawFiles::getRawEntry() {
 	FileDesc *datafile;
-	long  start;
-	unsigned short size;
+	long  start = 0;
+	unsigned short size = 0;
 	char *tmpbuf;
 	VerseKey *key = 0;
 
