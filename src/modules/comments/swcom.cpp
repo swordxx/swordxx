@@ -28,3 +28,41 @@ SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTex
 SWCom::~SWCom()
 {
 }
+
+
+long SWCom::Index() const {
+	VerseKey *key = 0;
+	try {
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+	}
+	catch ( ... ) {}
+	if (!key)
+		key = new VerseKey(this->key);
+
+	entryIndex = key->NewIndex();
+
+	if (key != this->key)
+		delete key;
+
+	return entryIndex;
+}
+
+long SWCom::Index(long iindex) {
+	VerseKey *key = 0;
+	try {
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+	}
+	catch ( ... ) {}
+	if (!key)
+		key = new VerseKey(this->key);
+
+	key->Testament(1);
+	key->Index(iindex);
+
+	if (key != this->key) {
+		this->key->copyFrom(*key);
+		delete key;
+	}
+
+	return Index();
+}

@@ -1,6 +1,17 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+28-Sep-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added SWModule::Index and SWCom and SWText impls
+
+
+* Release 1.5.4 *
+
+25-Sep-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed zverse zstr zcom ztext zld to work with cipher
+	Added cipher key to mod2zmod
+
 27-Aug-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added Nikolay Igotti's logic for improved non-western
 		locale functionality

@@ -2,7 +2,7 @@
  *  swcom.h   - code for base class 'SWCom'.  SWCom is the basis for all
  *		 types of commentary modules
  *
- * $Id: swcom.h,v 1.10 2002/07/28 01:48:38 scribe Exp $
+ * $Id: swcom.h,v 1.11 2002/09/29 03:21:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -46,6 +46,10 @@ public:
 
 	virtual ~SWCom();
 	virtual SWKey *CreateKey() { return new VerseKey(); }
+
+	virtual long Index() const;
+	virtual long Index(long iindex);
+
 
 
 	// OPERATORS -----------------------------------------------------------------

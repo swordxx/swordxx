@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.52 2002/09/25 22:14:58 scribe Exp $
+* $Id: swmodule.h,v 1.53 2002/09/29 03:21:08 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -121,6 +121,7 @@ protected:
 	FilterList *encodingFilters;
 
 	int entrySize;
+	mutable long entryIndex;	 // internal common storage for index
 
 	public:
 	/**
@@ -183,6 +184,10 @@ protected:
 	char SetKey(const SWKey *ikey) { return setKey(ikey); }
 	virtual char setKey(const SWKey *ikey);
 	
+
+	virtual long Index() const { return entryIndex; }
+	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
+
 	/**
 	* Sets the key of this module. Similar to @see SetKey(const SWKey*) .
 	* @param ikey The SWKey which should be used as new key.

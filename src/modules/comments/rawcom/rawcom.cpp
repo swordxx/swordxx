@@ -221,3 +221,5 @@ void RawCom::deleteEntry() {
 	if (key != this->key)
 		delete key;
 }
+
+
