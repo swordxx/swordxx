@@ -56,12 +56,20 @@ sword::RawText NULLMod("/dev/null", SWNULL, SWNULL);
 	StringList *SWMgr_impl::getGlobalOptions() throw(CORBA::SystemException) {
 	}
 
+
 	StringList *SWMgr_impl::getGlobalOptionValues(const char *option) throw(CORBA::SystemException) {
 	}
+
 
 	void SWMgr_impl::terminate() throw(CORBA::SystemException) {
 		exit(0);
 	}
+
+
+	CORBA::Boolean SWMgr_impl::testConnection() throw(CORBA::SystemException) {
+		return true;
+	}
+
 
 	StringList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException) {
 		int stype = 2;

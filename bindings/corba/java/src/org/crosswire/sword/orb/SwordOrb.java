@@ -19,11 +19,17 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	private SWMgr attach() {
 		SWMgr retVal = null;
 		try {
+System.out.println("attaching...");
 			org.omg.CORBA.Object obj = orb.string_to_object(ior);
 			retVal = SWMgrHelper.narrow(obj);
+System.out.println("calling testConnection");
+			retVal.testConnection();
+System.out.println("testConnection successful");
 		}
 		catch(org.omg.CORBA.SystemException e) {
 			e.printStackTrace();
+			retVal = null;
+System.out.println("failed in attach");
 		}
 		return retVal;
 	}
@@ -35,21 +41,24 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 //	this doesn't seem to work.  Never seems to get called for me
 	public void finalize () throws Throwable {
 		// shut down external process
-System.err.println("finalizing");
 		try {
 			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return property cuz we killed the orb! :)
 
 	}
+
 
 	public void valueBound(HttpSessionBindingEvent httpSessionBindingEvent) {}
+
 	public void valueUnbound(HttpSessionBindingEvent httpSessionBindingEvent) {
 		try {
-			getSWMgrInstance().terminate();
+			throw new Exception("value unbound; showing stacktrace");
+//			getSWMgrInstance().terminate();
 		}
-		catch (Exception e) {}	// we know this doesn't return property cuz we killed the orb! :)
+		catch (Exception e) {e.printStackTrace();}	// we know this doesn't return property cuz we killed the orb! :)
 	}
+
 
 	private void startOrb() {
 		try {
@@ -63,21 +72,32 @@ System.err.println("finalizing");
 			line = input.readLine();
 //		retVal = p.waitFor();
 			ior = line;
+System.out.println("Launched ORB, IOR: " + ior);
 		}
 		catch (Exception e) {e.printStackTrace();}
 	}
 
+
 	public SWMgr getSWMgrInstance() {
 		SWMgr retVal = null;
 		try {
+System.out.println("trying to attach to running ORB");
 			retVal = attach();
-			if (retVal == null) {
-				startOrb();
-				retVal = attach();
-			}
 		}
 		catch(org.omg.CORBA.SystemException e) {
 			e.printStackTrace();
+			retVal = null;
+		}
+		if (retVal == null) {
+			try {
+System.out.println("no ORB running; trying to launch");
+				startOrb();
+System.out.println("trying to attach to newly launched ORB");
+				retVal = attach();
+			}
+			catch(org.omg.CORBA.SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		return retVal;
 	}
@@ -86,10 +106,15 @@ System.err.println("finalizing");
 	public static SWMgr getSWMgrInstance(HttpSession session) {
 		SwordOrb orb = (SwordOrb)session.getAttribute("SwordOrb");
 		if (orb == null) {
+System.out.println("No ORB found in session; constructing a new instance");
 			orb = new SwordOrb();
 			session.setAttribute("SwordOrb", orb);
 		}
-		return orb.getSWMgrInstance();
+		else {
+System.out.println("ORB found in session");
+		}
+		SWMgr mgr = orb.getSWMgrInstance();
+		return mgr;
 	}
 
 

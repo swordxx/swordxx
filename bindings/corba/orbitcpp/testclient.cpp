@@ -27,6 +27,7 @@ int main (int argc, char *argv[])
 		swordorb::SWModule_ptr module;
 		swordorb::ModInfoList *modInfoList;
 
+		std::cout << "Connected: "  << mgr->testConnection() << "\n";
 		std::cout << "PrefixPath: " << mgr->getPrefixPath() << "\n";
 		std::cout << "ConfigPath: " << mgr->getConfigPath() << "\n";
 		modInfoList = mgr->getModInfoList();
