@@ -386,7 +386,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 						*output << "<br />";
 					else if (outputformat == FMT_OSIS)
-						*output << "<milestone type=\"line\"\/>";
+						*output << "<milestone type=\"line\"/>";
 					else if (outputformat == FMT_RTF)
 						*output << "\\par ";
 					else if (outputformat == FMT_GBF)
@@ -425,7 +425,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 					*output << "<br />";
 				else if (outputformat == FMT_OSIS)
-					*output << "<milestone type=\"line\"\/>";
+					*output << "<milestone type=\"line\"/>";
 				else if (outputformat == FMT_RTF)
 					*output << "\\par ";
 				else if (outputformat == FMT_GBF)
