@@ -106,6 +106,7 @@ enable_profile = @enable_profile@
 enable_vcl = @enable_vcl@
 install_sh = @install_sh@
 target_cpu = @target_cpu@
+target_mingw32 = @target_mingw32@
 target_os = @target_os@
 target_system = @target_system@
 target_vendor = @target_vendor@
@@ -120,17 +121,16 @@ globalconfdir := @sysconfdir@
 
 lib_LTLIBRARIES = libsword.la
 
-
-#ifeq (${need_local_regex}, yes)
-#lib_libsword_a_SOURCES += $(utilfunsdir)/regex.c
-#endif
-libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
+libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(SWREGEX) $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
 libsword_la_LIBADD = 
 libsword_la_LDFLAGS = -version-info 1
 
 keysdir = $(top_srcdir)/src/keys
 
 utilfunsdir = $(top_srcdir)/src/utilfuns
+
+@MINGW_TRUE@SWREGEX = $(utilfunsdir)/regex.c
+@MINGW_FALSE@SWREGEX = 
 
 mgrdir = $(top_srcdir)/src/mgr
 
@@ -191,131 +191,386 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libsword_la_DEPENDENCIES =
-@ICU_FALSE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
-@ICU_FALSE@@ZLIB_TRUE@	versekey.lo strkey.lo Greek2Greek.lo \
-@ICU_FALSE@@ZLIB_TRUE@	utilstr.lo unixstr.lo swunicod.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swversion.lo roman.lo swconfig.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swmgr.lo swfiltermgr.lo encfiltmgr.lo \
-@ICU_FALSE@@ZLIB_TRUE@	markupfiltmgr.lo filemgr.lo swlocale.lo \
-@ICU_FALSE@@ZLIB_TRUE@	localemgr.lo swdisp.lo swlog.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swmodule.lo rawstr.lo rawstr4.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swcomprs.lo lzsscomprs.lo zipcomprs.lo \
-@ICU_FALSE@@ZLIB_TRUE@	rawverse.lo swcipher.lo zverse.lo zstr.lo \
-@ICU_FALSE@@ZLIB_TRUE@	entriesblk.lo sapphire.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swbasicfilter.lo gbfhtml.lo \
-@ICU_FALSE@@ZLIB_TRUE@	gbfhtmlhref.lo gbfplain.lo gbfrtf.lo \
-@ICU_FALSE@@ZLIB_TRUE@	plainhtml.lo rwphtml.lo rwprtf.lo \
-@ICU_FALSE@@ZLIB_TRUE@	cipherfil.lo rtfhtml.lo gbfstrongs.lo \
-@ICU_FALSE@@ZLIB_TRUE@	gbffootnotes.lo gbfheadings.lo \
-@ICU_FALSE@@ZLIB_TRUE@	gbfmorph.lo plainfootnotes.lo \
-@ICU_FALSE@@ZLIB_TRUE@	thmlstrongs.lo thmlfootnotes.lo \
-@ICU_FALSE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo thmllemma.lo \
-@ICU_FALSE@@ZLIB_TRUE@	thmlscripref.lo gbfthml.lo thmlgbf.lo \
-@ICU_FALSE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo thmlhtmlhref.lo \
-@ICU_FALSE@@ZLIB_TRUE@	thmlplain.lo unicodertf.lo latin1utf8.lo \
-@ICU_FALSE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo utf16utf8.lo \
-@ICU_FALSE@@ZLIB_TRUE@	scsuutf8.lo utf8html.lo utf8latin1.lo \
-@ICU_FALSE@@ZLIB_TRUE@	thmlolb.lo utf8cantillation.lo \
-@ICU_FALSE@@ZLIB_TRUE@	utf8hebrewpoints.lo utf8greekaccents.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
-@ICU_FALSE@@ZLIB_TRUE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
-@ICU_FALSE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_FALSE@@ZLIB_TRUE@	zld.lo flatapi.lo
-@ICU_FALSE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
-@ICU_FALSE@@ZLIB_FALSE@	versekey.lo strkey.lo Greek2Greek.lo \
-@ICU_FALSE@@ZLIB_FALSE@	utilstr.lo unixstr.lo swunicod.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swversion.lo roman.lo swconfig.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swmgr.lo swfiltermgr.lo encfiltmgr.lo \
-@ICU_FALSE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo swlocale.lo \
-@ICU_FALSE@@ZLIB_FALSE@	localemgr.lo swdisp.lo swlog.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swmodule.lo rawstr.lo rawstr4.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swcomprs.lo lzsscomprs.lo rawverse.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swcipher.lo zverse.lo zstr.lo \
-@ICU_FALSE@@ZLIB_FALSE@	entriesblk.lo sapphire.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swbasicfilter.lo gbfhtml.lo \
-@ICU_FALSE@@ZLIB_FALSE@	gbfhtmlhref.lo gbfplain.lo gbfrtf.lo \
-@ICU_FALSE@@ZLIB_FALSE@	plainhtml.lo rwphtml.lo rwprtf.lo \
-@ICU_FALSE@@ZLIB_FALSE@	cipherfil.lo rtfhtml.lo gbfstrongs.lo \
-@ICU_FALSE@@ZLIB_FALSE@	gbffootnotes.lo gbfheadings.lo \
-@ICU_FALSE@@ZLIB_FALSE@	gbfmorph.lo plainfootnotes.lo \
-@ICU_FALSE@@ZLIB_FALSE@	thmlstrongs.lo thmlfootnotes.lo \
-@ICU_FALSE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
-@ICU_FALSE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo gbfthml.lo \
-@ICU_FALSE@@ZLIB_FALSE@	thmlgbf.lo thmlrtf.lo thmlhtml.lo \
-@ICU_FALSE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_FALSE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
-@ICU_FALSE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo utf16utf8.lo \
-@ICU_FALSE@@ZLIB_FALSE@	scsuutf8.lo utf8html.lo utf8latin1.lo \
-@ICU_FALSE@@ZLIB_FALSE@	thmlolb.lo utf8cantillation.lo \
-@ICU_FALSE@@ZLIB_FALSE@	utf8hebrewpoints.lo utf8greekaccents.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
-@ICU_FALSE@@ZLIB_FALSE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
-@ICU_FALSE@@ZLIB_FALSE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_FALSE@@ZLIB_FALSE@	zld.lo flatapi.lo
-@ICU_TRUE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
-@ICU_TRUE@@ZLIB_TRUE@	versekey.lo strkey.lo Greek2Greek.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utilstr.lo unixstr.lo swunicod.lo \
-@ICU_TRUE@@ZLIB_TRUE@	swversion.lo roman.lo swconfig.lo swmgr.lo \
-@ICU_TRUE@@ZLIB_TRUE@	swfiltermgr.lo encfiltmgr.lo \
-@ICU_TRUE@@ZLIB_TRUE@	markupfiltmgr.lo filemgr.lo swlocale.lo \
-@ICU_TRUE@@ZLIB_TRUE@	localemgr.lo swdisp.lo swlog.lo \
-@ICU_TRUE@@ZLIB_TRUE@	swmodule.lo rawstr.lo rawstr4.lo \
-@ICU_TRUE@@ZLIB_TRUE@	swcomprs.lo lzsscomprs.lo zipcomprs.lo \
-@ICU_TRUE@@ZLIB_TRUE@	rawverse.lo swcipher.lo zverse.lo zstr.lo \
-@ICU_TRUE@@ZLIB_TRUE@	entriesblk.lo sapphire.lo swbasicfilter.lo \
-@ICU_TRUE@@ZLIB_TRUE@	gbfhtml.lo gbfhtmlhref.lo gbfplain.lo \
-@ICU_TRUE@@ZLIB_TRUE@	gbfrtf.lo plainhtml.lo rwphtml.lo \
-@ICU_TRUE@@ZLIB_TRUE@	rwprtf.lo cipherfil.lo rtfhtml.lo \
-@ICU_TRUE@@ZLIB_TRUE@	gbfstrongs.lo gbffootnotes.lo \
-@ICU_TRUE@@ZLIB_TRUE@	gbfheadings.lo gbfmorph.lo \
-@ICU_TRUE@@ZLIB_TRUE@	plainfootnotes.lo thmlstrongs.lo \
-@ICU_TRUE@@ZLIB_TRUE@	thmlfootnotes.lo thmlheadings.lo \
-@ICU_TRUE@@ZLIB_TRUE@	thmlmorph.lo thmllemma.lo thmlscripref.lo \
-@ICU_TRUE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo thmlrtf.lo \
-@ICU_TRUE@@ZLIB_TRUE@	thmlhtml.lo thmlhtmlhref.lo thmlplain.lo \
-@ICU_TRUE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo latin1utf16.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utf8utf16.lo utf16utf8.lo scsuutf8.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo thmlolb.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utf8transliterator.lo utf8nfc.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utf8nfkd.lo utf8arshaping.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utf8bidireorder.lo utf8cantillation.lo \
-@ICU_TRUE@@ZLIB_TRUE@	utf8hebrewpoints.lo utf8greekaccents.lo \
-@ICU_TRUE@@ZLIB_TRUE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
-@ICU_TRUE@@ZLIB_TRUE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
-@ICU_TRUE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_TRUE@@ZLIB_TRUE@	zld.lo flatapi.lo
-@ICU_TRUE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
-@ICU_TRUE@@ZLIB_FALSE@	versekey.lo strkey.lo Greek2Greek.lo \
-@ICU_TRUE@@ZLIB_FALSE@	utilstr.lo unixstr.lo swunicod.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swversion.lo roman.lo swconfig.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swmgr.lo swfiltermgr.lo encfiltmgr.lo \
-@ICU_TRUE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo swlocale.lo \
-@ICU_TRUE@@ZLIB_FALSE@	localemgr.lo swdisp.lo swlog.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swmodule.lo rawstr.lo rawstr4.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swcomprs.lo lzsscomprs.lo rawverse.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swcipher.lo zverse.lo zstr.lo \
-@ICU_TRUE@@ZLIB_FALSE@	entriesblk.lo sapphire.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swbasicfilter.lo gbfhtml.lo \
-@ICU_TRUE@@ZLIB_FALSE@	gbfhtmlhref.lo gbfplain.lo gbfrtf.lo \
-@ICU_TRUE@@ZLIB_FALSE@	plainhtml.lo rwphtml.lo rwprtf.lo \
-@ICU_TRUE@@ZLIB_FALSE@	cipherfil.lo rtfhtml.lo gbfstrongs.lo \
-@ICU_TRUE@@ZLIB_FALSE@	gbffootnotes.lo gbfheadings.lo \
-@ICU_TRUE@@ZLIB_FALSE@	gbfmorph.lo plainfootnotes.lo \
-@ICU_TRUE@@ZLIB_FALSE@	thmlstrongs.lo thmlfootnotes.lo \
-@ICU_TRUE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo thmllemma.lo \
-@ICU_TRUE@@ZLIB_FALSE@	thmlscripref.lo gbfthml.lo thmlgbf.lo \
-@ICU_TRUE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo thmlhtmlhref.lo \
-@ICU_TRUE@@ZLIB_FALSE@	thmlplain.lo unicodertf.lo latin1utf8.lo \
-@ICU_TRUE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo utf16utf8.lo \
-@ICU_TRUE@@ZLIB_FALSE@	scsuutf8.lo utf8html.lo utf8latin1.lo \
-@ICU_TRUE@@ZLIB_FALSE@	thmlolb.lo utf8transliterator.lo \
-@ICU_TRUE@@ZLIB_FALSE@	utf8nfc.lo utf8nfkd.lo utf8arshaping.lo \
-@ICU_TRUE@@ZLIB_FALSE@	utf8bidireorder.lo utf8cantillation.lo \
-@ICU_TRUE@@ZLIB_FALSE@	utf8hebrewpoints.lo utf8greekaccents.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
-@ICU_TRUE@@ZLIB_FALSE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
-@ICU_TRUE@@ZLIB_FALSE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_TRUE@@ZLIB_FALSE@	zld.lo flatapi.lo
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	listkey.lo versekey.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	roman.lo swconfig.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swmgr.lo swfiltermgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	encfiltmgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	markupfiltmgr.lo filemgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swlocale.lo localemgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swdisp.lo swlog.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swmodule.lo rawstr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	rawstr4.lo swcomprs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	lzsscomprs.lo zipcomprs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	rawverse.lo swcipher.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	zverse.lo zstr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	entriesblk.lo sapphire.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swbasicfilter.lo gbfhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbfhtmlhref.lo gbfplain.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbfrtf.lo plainhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	rwphtml.lo rwprtf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	cipherfil.lo rtfhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbfstrongs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbffootnotes.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbfheadings.lo gbfmorph.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	plainfootnotes.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlstrongs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlfootnotes.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8cantillation.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swtext.lo rawtext.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	ztext.lo rawgbf.lo swcom.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	rawcom.lo rawfiles.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	zcom.lo hrefcom.lo swld.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	rawld.lo rawld4.lo zld.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	flatapi.lo
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	listkey.lo versekey.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	roman.lo swconfig.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swmgr.lo swfiltermgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	encfiltmgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swlocale.lo localemgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swdisp.lo swlog.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swmodule.lo rawstr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	rawstr4.lo swcomprs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	lzsscomprs.lo rawverse.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swcipher.lo zverse.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	zstr.lo entriesblk.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	sapphire.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swbasicfilter.lo gbfhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	gbfhtmlhref.lo gbfplain.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	gbfrtf.lo plainhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	rwphtml.lo rwprtf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	cipherfil.lo rtfhtml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	gbfstrongs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	gbffootnotes.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	gbfheadings.lo gbfmorph.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	plainfootnotes.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlstrongs.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlfootnotes.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlheadings.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlmorph.lo thmllemma.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlscripref.lo gbfthml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlgbf.lo thmlrtf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlplain.lo unicodertf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	latin1utf8.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8cantillation.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swtext.lo rawtext.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	ztext.lo rawgbf.lo swcom.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	rawcom.lo rawfiles.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	zcom.lo hrefcom.lo swld.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	rawld.lo rawld4.lo zld.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	flatapi.lo
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	listkey.lo versekey.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	regex.lo roman.lo swconfig.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swmgr.lo swfiltermgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	encfiltmgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	markupfiltmgr.lo filemgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swlocale.lo localemgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swdisp.lo swlog.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swmodule.lo rawstr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawstr4.lo swcomprs.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	lzsscomprs.lo zipcomprs.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawverse.lo swcipher.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	zverse.lo zstr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	entriesblk.lo sapphire.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swbasicfilter.lo gbfhtml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	gbfhtmlhref.lo gbfplain.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	gbfrtf.lo plainhtml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rwphtml.lo rwprtf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	cipherfil.lo rtfhtml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	gbfstrongs.lo gbffootnotes.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	gbfheadings.lo gbfmorph.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	plainfootnotes.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlstrongs.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlfootnotes.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8cantillation.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8greekaccents.lo swtext.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawtext.lo ztext.lo rawgbf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swcom.lo rawcom.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawfiles.lo zcom.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawld4.lo zld.lo flatapi.lo
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	listkey.lo versekey.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	regex.lo roman.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swconfig.lo swmgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swfiltermgr.lo encfiltmgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swlocale.lo localemgr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swdisp.lo swlog.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swmodule.lo rawstr.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	rawstr4.lo swcomprs.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	lzsscomprs.lo rawverse.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swcipher.lo zverse.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	zstr.lo entriesblk.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	sapphire.lo swbasicfilter.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	gbfhtml.lo gbfhtmlhref.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	gbfplain.lo gbfrtf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	plainhtml.lo rwphtml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	rwprtf.lo cipherfil.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	rtfhtml.lo gbfstrongs.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	gbffootnotes.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	gbfheadings.lo gbfmorph.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	plainfootnotes.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlstrongs.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlfootnotes.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	gbfthml.lo thmlgbf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8cantillation.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swtext.lo rawtext.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	ztext.lo rawgbf.lo swcom.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	rawcom.lo rawfiles.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	zcom.lo hrefcom.lo swld.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	rawld.lo rawld4.lo zld.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	flatapi.lo
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	listkey.lo versekey.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	roman.lo swconfig.lo swmgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swfiltermgr.lo encfiltmgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	markupfiltmgr.lo filemgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swlocale.lo localemgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swdisp.lo swlog.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swmodule.lo rawstr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawstr4.lo swcomprs.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	lzsscomprs.lo zipcomprs.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawverse.lo swcipher.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	zverse.lo zstr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	entriesblk.lo sapphire.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swbasicfilter.lo gbfhtml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	gbfhtmlhref.lo gbfplain.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	gbfrtf.lo plainhtml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rwphtml.lo rwprtf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	cipherfil.lo rtfhtml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	gbfstrongs.lo gbffootnotes.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	gbfheadings.lo gbfmorph.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	plainfootnotes.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlstrongs.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlfootnotes.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8transliterator.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8nfc.lo utf8nfkd.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8arshaping.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8bidireorder.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8cantillation.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8greekaccents.lo swtext.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawtext.lo ztext.lo rawgbf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swcom.lo rawcom.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawfiles.lo zcom.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawld4.lo zld.lo flatapi.lo
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	listkey.lo versekey.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	roman.lo swconfig.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swmgr.lo swfiltermgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	encfiltmgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swlocale.lo localemgr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swdisp.lo swlog.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swmodule.lo rawstr.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	rawstr4.lo swcomprs.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	lzsscomprs.lo rawverse.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swcipher.lo zverse.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	zstr.lo entriesblk.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	sapphire.lo swbasicfilter.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	gbfhtml.lo gbfhtmlhref.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	gbfplain.lo gbfrtf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	plainhtml.lo rwphtml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	rwprtf.lo cipherfil.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	rtfhtml.lo gbfstrongs.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	gbffootnotes.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	gbfheadings.lo gbfmorph.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	plainfootnotes.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlstrongs.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlfootnotes.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	gbfthml.lo thmlgbf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8transliterator.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8nfc.lo utf8nfkd.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8arshaping.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8bidireorder.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8cantillation.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swtext.lo rawtext.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	ztext.lo rawgbf.lo swcom.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	rawcom.lo rawfiles.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	zcom.lo hrefcom.lo swld.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	rawld.lo rawld4.lo zld.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	flatapi.lo
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	listkey.lo versekey.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	regex.lo roman.lo swconfig.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swmgr.lo swfiltermgr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	encfiltmgr.lo markupfiltmgr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	filemgr.lo swlocale.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	localemgr.lo swdisp.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swlog.lo swmodule.lo rawstr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rawstr4.lo swcomprs.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	lzsscomprs.lo zipcomprs.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rawverse.lo swcipher.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	zverse.lo zstr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	entriesblk.lo sapphire.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swbasicfilter.lo gbfhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	gbfhtmlhref.lo gbfplain.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	gbfrtf.lo plainhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rwphtml.lo rwprtf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	cipherfil.lo rtfhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	gbfstrongs.lo gbffootnotes.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	gbfheadings.lo gbfmorph.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	plainfootnotes.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlstrongs.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlfootnotes.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8transliterator.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8nfc.lo utf8nfkd.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8arshaping.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8bidireorder.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8cantillation.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8greekaccents.lo swtext.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rawtext.lo ztext.lo rawgbf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swcom.lo rawcom.lo rawfiles.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	zcom.lo hrefcom.lo swld.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rawld.lo rawld4.lo zld.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	flatapi.lo
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	listkey.lo versekey.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	regex.lo roman.lo swconfig.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swmgr.lo swfiltermgr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	encfiltmgr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swlocale.lo localemgr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swdisp.lo swlog.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swmodule.lo rawstr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawstr4.lo swcomprs.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	lzsscomprs.lo rawverse.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swcipher.lo zverse.lo zstr.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	entriesblk.lo sapphire.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swbasicfilter.lo gbfhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	gbfhtmlhref.lo gbfplain.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	gbfrtf.lo plainhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rwphtml.lo rwprtf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	cipherfil.lo rtfhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	gbfstrongs.lo gbffootnotes.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	gbfheadings.lo gbfmorph.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	plainfootnotes.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlstrongs.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlfootnotes.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	gbfthml.lo thmlgbf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8transliterator.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8nfc.lo utf8nfkd.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8arshaping.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8bidireorder.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8cantillation.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8greekaccents.lo swtext.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawtext.lo ztext.lo rawgbf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swcom.lo rawcom.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawfiles.lo zcom.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	hrefcom.lo swld.lo rawld.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawld4.lo zld.lo flatapi.lo
 libsword_la_OBJECTS = $(am_libsword_la_OBJECTS)
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
@@ -340,23 +595,24 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@	$(DEPDIR)/rawld.Plo $(DEPDIR)/rawld4.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/rawstr.Plo $(DEPDIR)/rawstr4.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/rawtext.Plo $(DEPDIR)/rawverse.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/roman.Plo $(DEPDIR)/rtfhtml.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/rwphtml.Plo $(DEPDIR)/rwprtf.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/sapphire.Plo $(DEPDIR)/scsuutf8.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/strkey.Plo $(DEPDIR)/swbasicfilter.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swcipher.Plo $(DEPDIR)/swcom.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swcomprs.Plo $(DEPDIR)/swconfig.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swdisp.Plo $(DEPDIR)/swfiltermgr.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swkey.Plo $(DEPDIR)/swld.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swlocale.Plo $(DEPDIR)/swlog.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swmgr.Plo $(DEPDIR)/swmodule.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swtext.Plo $(DEPDIR)/swunicod.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swversion.Plo $(DEPDIR)/thmlfootnotes.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlgbf.Plo $(DEPDIR)/thmlheadings.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlhtml.Plo $(DEPDIR)/thmlhtmlhref.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmllemma.Plo $(DEPDIR)/thmlmorph.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlolb.Plo $(DEPDIR)/thmlplain.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlrtf.Plo $(DEPDIR)/thmlscripref.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/regex.Plo $(DEPDIR)/roman.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rtfhtml.Plo $(DEPDIR)/rwphtml.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rwprtf.Plo $(DEPDIR)/sapphire.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/scsuutf8.Plo $(DEPDIR)/strkey.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swbasicfilter.Plo $(DEPDIR)/swcipher.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swcom.Plo $(DEPDIR)/swcomprs.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swconfig.Plo $(DEPDIR)/swdisp.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swfiltermgr.Plo $(DEPDIR)/swkey.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swld.Plo $(DEPDIR)/swlocale.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swlog.Plo $(DEPDIR)/swmgr.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swmodule.Plo $(DEPDIR)/swtext.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swunicod.Plo $(DEPDIR)/swversion.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlfootnotes.Plo $(DEPDIR)/thmlgbf.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlheadings.Plo $(DEPDIR)/thmlhtml.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlhtmlhref.Plo $(DEPDIR)/thmllemma.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlmorph.Plo $(DEPDIR)/thmlolb.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlplain.Plo $(DEPDIR)/thmlrtf.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlscripref.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/thmlstrongs.Plo $(DEPDIR)/unicodertf.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/unixstr.Plo $(DEPDIR)/utf16utf8.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/utf8arshaping.Plo \
@@ -519,6 +775,7 @@ rawld.lo: $(rawlddir)/rawld.cpp
 rawld4.lo: $(rawld4dir)/rawld4.cpp
 zld.lo: $(zlddir)/zld.cpp
 flatapi.lo: $(bindingsdir)/flatapi.cpp
+regex.lo: $(utilfunsdir)/regex.c
 utf8transliterator.lo: $(filtersdir)/utf8transliterator.cpp
 utf8nfc.lo: $(filtersdir)/utf8nfc.cpp
 utf8nfkd.lo: $(filtersdir)/utf8nfkd.cpp
@@ -566,6 +823,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawstr4.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawtext.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawverse.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/regex.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/roman.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rtfhtml.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rwphtml.Plo@am__quote@
@@ -662,6 +920,24 @@ roman.lo: $(utilfunsdir)/roman.c
 @AMDEP_TRUE@	depfile='$(DEPDIR)/roman.Plo' tmpdepfile='$(DEPDIR)/roman.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o roman.lo `test -f $(utilfunsdir)/roman.c || echo '$(srcdir)/'`$(utilfunsdir)/roman.c
+
+regex.o: $(utilfunsdir)/regex.c
+@AMDEP_TRUE@	source='$(utilfunsdir)/regex.c' object='regex.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/regex.Po' tmpdepfile='$(DEPDIR)/regex.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o regex.o `test -f $(utilfunsdir)/regex.c || echo '$(srcdir)/'`$(utilfunsdir)/regex.c
+
+regex.obj: $(utilfunsdir)/regex.c
+@AMDEP_TRUE@	source='$(utilfunsdir)/regex.c' object='regex.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/regex.Po' tmpdepfile='$(DEPDIR)/regex.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o regex.obj `cygpath -w $(utilfunsdir)/regex.c`
+
+regex.lo: $(utilfunsdir)/regex.c
+@AMDEP_TRUE@	source='$(utilfunsdir)/regex.c' object='regex.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/regex.Plo' tmpdepfile='$(DEPDIR)/regex.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o regex.lo `test -f $(utilfunsdir)/regex.c || echo '$(srcdir)/'`$(utilfunsdir)/regex.c
 CCDEPMODE = @CCDEPMODE@
 
 .cpp.o:

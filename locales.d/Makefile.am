@@ -27,7 +27,3 @@ uninstalllocaleDATA:
 	  rm -f $(DESTDIR)$(localedatadir)/$$f; \
 	done
 
-install-data-am: installlocaleDATA
-
-uninstall-am: uninstall-info-am  \
-	uninstalllocaleDATA uninstall-sysconfDATA

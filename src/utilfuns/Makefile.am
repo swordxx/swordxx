@@ -6,9 +6,13 @@ libsword_la_SOURCES += $(utilfunsdir)/unixstr.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swunicod.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swversion.cpp
 
-#ifeq (${need_local_regex}, yes)
-#lib_libsword_a_SOURCES += $(utilfunsdir)/regex.c
-#endif
+if MINGW
+SWREGEX = $(utilfunsdir)/regex.c
+else
+SWREGEX =
+endif
+libsword_la_SOURCES += $(SWREGEX)
+
 
 libsword_la_SOURCES += $(utilfunsdir)/roman.c
 

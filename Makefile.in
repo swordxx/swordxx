@@ -88,6 +88,7 @@ enable_profile = @enable_profile@
 enable_vcl = @enable_vcl@
 install_sh = @install_sh@
 target_cpu = @target_cpu@
+target_mingw32 = @target_mingw32@
 target_os = @target_os@
 target_system = @target_system@
 target_vendor = @target_vendor@
@@ -602,11 +603,6 @@ uninstalllocaleDATA:
 	  echo " rm -f $(DESTDIR)$(localedatadir)/$$f"; \
 	  rm -f $(DESTDIR)$(localedatadir)/$$f; \
 	done
-
-install-data-am: installlocaleDATA
-
-uninstall-am: uninstall-info-am  \
-	uninstalllocaleDATA uninstall-sysconfDATA
 
 @INSTCONF_TRUE@installmodsDATA: $(modsDATA)
 @INSTCONF_TRUE@	@$(NORMAL_INSTALL)

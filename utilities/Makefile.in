@@ -84,6 +84,7 @@ enable_profile = @enable_profile@
 enable_vcl = @enable_vcl@
 install_sh = @install_sh@
 target_cpu = @target_cpu@
+target_mingw32 = @target_mingw32@
 target_os = @target_os@
 target_system = @target_system@
 target_vendor = @target_vendor@
