@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.6 2001/09/03 22:01:06 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.7 2001/09/03 22:42:43 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -181,6 +181,9 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 	DualStringMap userData;
 	string lastTextNode;
 
+	bool suspendTextPassThru = false;
+	userData["suspendTextPassThru"] = "false";
+
 	len = strlen(text) + 1;		// shift string to right of buffer
 	if (len < maxlen) {
 		memmove(&text[maxlen - len], text, len);
@@ -224,6 +227,7 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
 					lastTextNode = "";
+					suspendTextPassThru = (!userData["suspendTextPassThru"].compare("true"));
 					continue;
 				}
 			}
@@ -241,6 +245,7 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
 					lastTextNode = "";
+					suspendTextPassThru = (!userData["suspendTextPassThru"].compare("true"));
 					continue;
 				}
 			}
@@ -251,7 +256,8 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 				token[tokpos++] = *from;
 		}
 		else {
-			*to++ = *from;
+			if (!suspendTextPassThru)
+				*to++ = *from;
 			lastTextNode += *from;
 		}
 	}

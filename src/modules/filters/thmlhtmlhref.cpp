@@ -172,12 +172,20 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			*(*buf)++ = '>';
 		} 
 
+		// we're starting a scripRef like "<scripRef>John 3:16</scripRef>"
+		else if (strcmp(token, "scripRef")) {
+			// let's stop text from going to output
+			userData["suspendTextPassThru"] = "true";
+		}
+
 		// we've ended a scripRef like "<scripRef>John 3:16</scripRef>"
 		else if (strcmp(token, "/scripRef")) {
 			pushString(buf, "<A HREF=\"");
 			pushString(buf, userData["lastTextNode"].c_str());
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
+			// let's let text resume to output again
+			userData["suspendTextPassThru"] = "false";
 		}
 			
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
