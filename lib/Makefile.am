@@ -14,5 +14,6 @@ include ../src/utilfuns/Makefile.am
 include ../src/mgr/Makefile.am
 include ../src/frontend/Makefile.am
 include ../src/modules/Makefile.am
+include ../bindings/Makefile.am
 include ../include/Makefile.am
 
