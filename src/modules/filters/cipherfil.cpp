@@ -28,7 +28,7 @@ SWCipher *CipherFilter::getCipher() {
 char CipherFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	unsigned int len;
 //	len = strlen(text);
-	len = text.length();
+	len = text.length()-2;
 	if (len > 0) {
 		if (!key) {	// hack, using key to determine encipher, or decipher
 			cipher->cipherBuf(&len, text);

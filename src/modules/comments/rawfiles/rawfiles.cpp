@@ -113,7 +113,6 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	FileDesc *datafile;
 	long  start;
 	unsigned short size;
-	char *tmpbuf;
 	VerseKey *key = 0;
 
 	len = (len<0)?strlen(inbuf):len;
@@ -130,19 +129,18 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 		SWBuf tmpbuf;
 		entryBuf = path;
 		entryBuf += '/';
-		readText(key->Testament(), start, (size + 2), tmpbuf);
+		readText(key->Testament(), start, size, tmpbuf);
 		entryBuf += tmpbuf;
 	}
 	else {
 		SWBuf tmpbuf;
 		entryBuf = path;
 		entryBuf += '/';
-		entryBuf += getNextFilename();
+		tmpbuf = getNextFilename();
 		doSetText(key->Testament(), key->Index(), tmpbuf);
 		entryBuf += tmpbuf;
 	}
-	datafile = FileMgr::systemFileMgr.open(tmpbuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
-	delete [] tmpbuf;
+	datafile = FileMgr::systemFileMgr.open(entryBuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	if (datafile->getFd() > 0) {
 		write(datafile->getFd(), inbuf, len);
 	}
