@@ -6,9 +6,6 @@ else
 globdef =
 endif
 
-#if BUILDSPLITLIB
-#spdefs = -DSPLITLIB
-#else
 if BUILDNEWVKEY
 spdefs = -DSPLITLIB
 refsrc = $(mgrdir)/refsysmgr.cpp
@@ -16,7 +13,6 @@ else
 spdefs =
 refsrc =
 endif
-#endif
 
 AM_CPPFLAGS += $(globdef) $(spdefs)
 
@@ -33,10 +29,6 @@ libsword_la_SOURCES += $(mgrdir)/swsearchable.cpp
 libsword_la_SOURCES += $(mgrdir)/installmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/stringmgr.cpp
 
-#if BUILDSPLITLIB
-#libsword_imp_la_SOURCES += $(mgrsplits)
-#else
 libsword_la_SOURCES += $(mgrsplits)
 libsword_la_SOURCES += $(refsrc)
-#endif
 

@@ -1,4 +1,4 @@
-#AUTOMAKE_OPTIONS = 1.6
+AUTOMAKE_OPTIONS = 1.6
 AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_CPPFLAGS += -DUSE_AUTOTOOLS -DUNIX -Dunix
 
@@ -13,16 +13,7 @@ AM_CPPFLAGS += $(ZLIBDEF)
 # Global config directory
 globalconfdir := @sysconfdir@
 
-#if BUILDSPLITLIB
-#extralibs = libsword_imp.la libsword_flat.la
-#flatlib = libsword_flat.a
-#else
-extralibs =
-flatlib =
-#endif
-
-lib_LTLIBRARIES = libsword.la $(extralibs)
-#lib_LIBRARIES = $(flatlib)
+lib_LTLIBRARIES = libsword.la
 
 libsword_la_SOURCES =
 if ICU
@@ -45,15 +36,6 @@ endif
 libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) 
 
 libsword_la_LDFLAGS = -release $(VERSION)
-
-#if BUILDSPLITLIB
-#libsword_flat_la_LDFLAGS = -version-info 5
-#libsword_imp_la_LDFLAGS = -version-info 5
-#libsword_flat_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) libsword.la
-#libsword_imp_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) libsword.la
-#libsword_flat_la_SOURCES =
-#libsword_imp_la_SOURCES =
-#endif
 
 include ../src/keys/Makefile.am
 include ../src/utilfuns/Makefile.am

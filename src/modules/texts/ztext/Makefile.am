@@ -1,11 +1,8 @@
 ztextdir = $(top_srcdir)/src/modules/texts/ztext
 
-#if BUILDSPLITLIB
-#libsword_imp_la_SOURCES += $(ztextdir)/ztext.cpp
-#libsword_la_SOURCES += $(ztextdir)/ztext2.cpp
-#else
 if BUILDNEWVKEY
-libsword_la_SOURCES += $(ztextdir)/ztext2.cpp
+zt2 = $(ztextdir)/ztext2.cpp
+else
+zt2 =
 endif
-libsword_la_SOURCES += $(ztextdir)/ztext.cpp
-#endif
+libsword_la_SOURCES += $(ztextdir)/ztext.cpp $(zt2)
