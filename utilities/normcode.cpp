@@ -62,12 +62,12 @@ int main (char argc, char** argv) {
 
     if (argc > 5) {
       if (argv[5][1] == 'c') {
-	Normalizer::normalize(source, UNORM_NFKC, 0, norm, err); //canonical composition
+	Normalizer::normalize(source, UNORM_NFC, 0, norm, err); //canonical composition
       } else {
-	Normalizer::normalize(source, UNORM_NFKD, 0, norm, err); //canonical decomposition
+	Normalizer::normalize(source, UNORM_NFD, 0, norm, err); //canonical decomposition
       }
     } else {
-      Normalizer::normalize(source, UNORM_NFKD, 0, norm, err); //canonical decomposition
+      Normalizer::normalize(source, UNORM_NFD, 0, norm, err); //canonical decomposition
     }
     
     buf32 = BUFSIZE;
