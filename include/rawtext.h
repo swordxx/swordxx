@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawtext.h,v 1.20 2002/02/19 01:20:35 scribe Exp $
+ * $Id: rawtext.h,v 1.21 2002/03/04 17:52:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,48 +29,35 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawText:public SWText, public RawVerse
-{
-  RawStr *fastSearch[2];
+class SWDLLEXPORT RawText:public SWText, public RawVerse {
+	RawStr *fastSearch[2];
 
 public:
   
     
-    RawText (const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
-    const char* ilang = 0);
-    virtual ~ RawText ();
-  virtual char *getRawEntry ();
-  virtual signed char createSearchFramework ();
-  virtual bool hasSearchFramework ()
-  {
-    return true;
-  }
+	RawText (const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
+	const char* ilang = 0);
+	virtual ~ RawText ();
+	virtual char *getRawEntry ();
+     virtual SWModule & operator += (int increment);
+     virtual SWModule & operator -= (int decrement) { return this->operator += (-decrement); }
+	virtual signed char createSearchFramework ();
+	virtual bool hasSearchFramework () { return true; }
 #ifdef _MSC_VER
-  virtual SWModule & operator = (SW_POSITION);
+	virtual SWModule & operator = (SW_POSITION);
 #else
-  virtual RawText & operator = (SW_POSITION);
+	virtual RawText & operator = (SW_POSITION);
 #endif
-  virtual ListKey & Search (const char *istr, int searchType = 0, int flags =
-			    0, SWKey * scope =
-			    0, bool * justCheckIfSupported =
-			    0, void (*percent) (char, void *) =
-			    &SWModule::nullPercent, void *percentUserData =
-			    0);
+	virtual ListKey & Search (const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent) (char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
 
-  // write interface ----------------------------
-  virtual bool isWritable ()
-  {
-    return true;
-  }
-  static char createModule (const char *path)
-  {
-    return RawVerse::createModule (path);
-  }
-  virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
-  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
-  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
-  virtual void deleteEntry ();	// Delete current module entry
-  // end write interface ------------------------
+	// write interface ----------------------------
+	virtual bool isWritable () { return true; }
+	static char createModule (const char *path) { return RawVerse::createModule (path); }
+	virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
+	virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
+	virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
+	virtual void deleteEntry ();	// Delete current module entry
+	// end write interface ------------------------
 };
 
 

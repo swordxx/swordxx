@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+04-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Changed SWText subclasses to work like SWCom subclasses,
+		in that they increment to next valid entry on ++
+
 03-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added image support to thmlhtml and thmlhtmlhref
 		filters
@@ -11,8 +15,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		methods that tbiggs pointed out with .sword
 
 01-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
-	Added Helmer Krämer's speed improvements to SWModule for multiword
-		searches
+	Added Helmer Krämer's speed improvements to SWModule for
+	multiword searches
 	Fixed RawGenBook memory bugs
 	Isolated all byte swapping logic to sysdata.h
 	Changed BIGENDIAN to SWBIGENDIAN

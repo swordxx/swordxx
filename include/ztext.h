@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext.h,v 1.18 2002/02/19 01:20:35 scribe Exp $
+ * $Id: ztext.h,v 1.19 2002/03/04 17:52:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -46,6 +46,9 @@ public:
            const char* ilang = 0);
 	virtual ~zText ();
  	virtual char *getRawEntry();
+
+     virtual SWModule & operator += (int increment);
+     virtual SWModule & operator -= (int decrement) { return this->operator += (-decrement); }
 
   // write interface ----------------------------
 	virtual bool isWritable() { return true; }

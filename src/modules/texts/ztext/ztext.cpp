@@ -278,3 +278,66 @@ void zText::deleteEntry() {
 	if (key != this->key)
 		delete key;
 }
+
+
+/******************************************************************************
+ * zText::operator +=	- Increments module key a number of entries
+ *
+ * ENT:	increment	- Number of entries to jump forward
+ *
+ * RET: *this
+ */
+
+SWModule &zText::operator +=(int increment)
+{
+	long  start;
+	unsigned short size;
+	VerseKey *tmpkey = 0;
+
+#ifndef _WIN32_WCE
+	try {
+#endif
+		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
+#ifndef _WIN32_WCE
+	}
+	catch ( ... ) {}
+#endif
+	if (!tmpkey)
+		tmpkey = new VerseKey(key);
+
+	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+
+	while (increment) {
+		long laststart = start;
+		unsigned short lastsize = size;
+		SWKey lasttry = *tmpkey;
+		(increment > 0) ? (*key)++ : (*key)--;
+		if (tmpkey != key)
+			delete tmpkey;
+		tmpkey = 0;
+#ifndef _WIN32_WCE
+		try {
+#endif
+			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
+#ifndef _WIN32_WCE
+		}
+		catch ( ... ) {}
+#endif
+		if (!tmpkey)
+			tmpkey = new VerseKey(key);
+
+		if ((error = key->Error())) {
+			*key = lasttry;
+			break;
+		}
+		findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+		if (((laststart != start) || (lastsize != size)) && (start >= 0) && (size)) 
+			increment += (increment < 0) ? 1 : -1;
+	}
+	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
+
+	if (tmpkey != key)
+		delete tmpkey;
+
+	return *this;
+}
