@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: utf8transliterator.h,v 1.18 2003/02/20 07:25:20 scribe Exp $
+ * $Id: utf8transliterator.h,v 1.19 2003/07/07 00:25:59 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -70,7 +70,7 @@ private:
 	static const char SW_RB_RULE_BASED_IDS[];
 	static const char SW_RB_RULE[];
 	static const char SW_RESDATA[];
-	OptionsList options;
+	StringList options;
 	static SWTransMap transMap;
 	UErrorCode utf8status;
 
@@ -86,7 +86,7 @@ public:
 	virtual const char *getOptionTip() { return optTip; }
 	virtual void setOptionValue(const char *ival);
 	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
+	virtual StringList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

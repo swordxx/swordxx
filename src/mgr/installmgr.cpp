@@ -34,6 +34,9 @@ using namespace std;
 
 SWORD_NAMESPACE_START
 
+int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
+int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
+
 static InstallMgr_init _InstallMgr_init;
 
 InstallMgr_init::InstallMgr_init() {
@@ -67,13 +70,55 @@ int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 
 int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
 	if (clientp) {
-		(*(void (*)(double, double))clientp)(dltotal, dlnow);
+		((InstallMgr *)clientp)->statusUpdate(dltotal, dlnow);
 	}
 	return 0;
 }
 
 
-char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool passive, void (*status_callback)(double dltotal, double dlnow)) {
+InstallMgr::InstallMgr(const char *privatePath) {
+	this->privatePath = 0;
+	stdstr(&(this->privatePath), privatePath);
+	installConf = new SWConfig(((SWBuf)privatePath + "/InstallMgr.conf").c_str());
+
+	SectionMap::iterator sourcesSection;
+	ConfigEntMap::iterator sourceBegin;
+	ConfigEntMap::iterator sourceEnd;
+
+	sources.clear();
+	
+	sourcesSection = installConf->Sections.find("Sources");
+	passive = (!stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "true"));
+
+	if (sourcesSection != installConf->Sections.end()) {
+		sourceBegin = sourcesSection->second.lower_bound("FTPSource");
+		sourceEnd = sourcesSection->second.upper_bound("FTPSource");
+
+		while (sourceBegin != sourceEnd) {
+			InstallSource *is = new InstallSource(sourceBegin->second.c_str(), "FTP");
+			sources[is->caption] = is;
+			SWBuf parent = (SWBuf)privatePath + "/" + is->source + "/file";
+			FileMgr::createParent(parent.c_str());
+			is->localShadow = (SWBuf)privatePath + "/" + is->source;
+			sourceBegin++;
+		}
+	}
+}
+
+
+InstallMgr::~InstallMgr() {
+	delete [] privatePath;
+	delete installConf;
+}
+
+
+void InstallMgr::statusUpdate(double dltotal, double dlnow) {
+}
+
+void InstallMgr::preDownloadStatus(long totalBytes, long completedBytes, const char *message) {
+}
+
+char InstallMgr::FTPURLGetFile(void *session, const char *dest, const char *sourceurl) {
 	char retVal = 0;
 #ifdef CURLAVAILABLE
 	struct FtpFile ftpfile = {dest, NULL};
@@ -89,7 +134,7 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 		if (!passive)
 			curl_easy_setopt(curl, CURLOPT_FTPPORT, "-");
 		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
-		curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, status_callback);
+		curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
 		curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, my_fprogress);
 		/* Set a pointer to our struct to pass to the callback */
 		curl_easy_setopt(curl, CURLOPT_FILE, &ftpfile);
@@ -114,11 +159,11 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 
 
 
-vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive) {
+vector<struct ftpparse> InstallMgr::FTPURLGetDir(void *session, const char *dirurl) {
 
 	vector<struct ftpparse> dirList;
 	
-	if (!FTPURLGetFile(session, "dirlist", dirurl, passive)) {
+	if (!FTPURLGetFile(session, "dirlist", dirurl)) {
 		int fd = open("dirlist", O_RDONLY|O_BINARY);
 		long size = lseek(fd, 0, SEEK_END);
 		lseek(fd, 0, SEEK_SET);
@@ -150,7 +195,7 @@ vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool pas
 }
 
 
-void *FTPOpenSession() {
+void *InstallMgr::FTPOpenSession() {
 	void *retVal = 0;
 #ifdef CURLAVAILABLE
 	CURL *curl;
@@ -163,7 +208,7 @@ void *FTPOpenSession() {
 }
 
 
-void FTPCloseSession(void *session) {
+void InstallMgr::FTPCloseSession(void *session) {
 #ifdef CURLAVAILABLE
 	CURL *curl = (CURL *)session;
 	curl_easy_cleanup(curl);
@@ -173,7 +218,7 @@ void FTPCloseSession(void *session) {
 }
 
 
-int removeModule(SWMgr *manager, const char *modName) {
+int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
 	SectionMap::iterator module;
 	ConfigEntMap::iterator fileBegin;
 	ConfigEntMap::iterator fileEnd, entry;
@@ -253,6 +298,7 @@ InstallSource::InstallSource(const char *confEnt, const char *type) {
 	delete [] buf;
 	this->type = type;
 	mgr = 0;
+	userData = 0;
 }
 
 
@@ -262,8 +308,71 @@ InstallSource::~InstallSource() {
 }
 
 
-int installModule(const char *fromLocation, const char *modName, InstallSource *is) {
-/*
+int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
+	terminate = false;
+	void *session = FTPOpenSession();
+	SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/"; //dont forget the final slash
+	if (FTPURLGetFile(session, "dirlist", url.c_str())) {
+		return -1;
+	}
+	if (dirTransfer) {
+		SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src + "/"; //dont forget the final slash
+		vector<struct ftpparse> dirList = FTPURLGetDir(session, url.c_str());
+
+		if (!dirList.size()) {
+			return -1;
+		}
+					
+		long totalBytes = 0;
+		for (int i = 0; i < dirList.size(); i++)
+			totalBytes += dirList[i].size;
+		long completedBytes = 0;
+		for (int i = 0; i < dirList.size(); i++) {
+			if (dirList[i].flagtrycwd != 1) {
+				SWBuf buffer = (SWBuf)dest + "/" + (dirList[i].name);
+				if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
+					SWBuf buffer2 = "Downloading (";
+					buffer2.appendFormatted("%d", i+1);
+					buffer2 += " of ";
+					buffer2.appendFormatted("%d", dirList.size());
+					buffer2 += "): ";
+					buffer2 += (dirList[i].name);
+					preDownloadStatus(totalBytes, completedBytes, buffer2.c_str());
+					FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
+					try {
+						SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src + "/" + dirList[i].name; //dont forget the final slash
+						if (FTPURLGetFile(session, buffer.c_str(), url.c_str())) {
+							return -2;
+						}
+						completedBytes += dirList[i].size;
+					}
+					catch (...) {}
+					if (terminate)
+						break;
+				}
+			}
+		}
+	}
+	else {
+//		Synchronize((TThreadMethod)&PreDownload2);
+		try {
+			SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src; //dont forget the final slash
+			if (FTPURLGetFile(session, dest, url.c_str())) {
+				return -1;
+			}
+		}
+		catch(...) {
+			terminate = true;
+		}
+	}
+	try {
+		FTPCloseSession(session);
+	}
+	catch(...){}
+}
+
+
+int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is) {
 	SectionMap::iterator module, section;
 	ConfigEntMap::iterator fileBegin;
 	ConfigEntMap::iterator fileEnd;
@@ -273,13 +382,11 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 	bool aborted = false;
 	bool cipher = false;
 
-	sourceDir = fromLocation;
-/*	
-	if (ist)
-		sourceDir = (SWBuf)"./sources/" + ist->is.source;
-	else	sourceDir = getLocalDir();
-*/	
-/*
+
+	if (is)
+		sourceDir = (SWBuf)privatePath + "/" + is->source;
+	else	sourceDir = fromLocation;
+
 	SWMgr mgr(sourceDir.c_str());
 	
 	module = mgr.config->Sections.find(modName);
@@ -309,7 +416,7 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 			if (!aborted) {
 				// DO THE INSTALL
 				while (fileBegin != fileEnd) {
-					copyFileToCWD(sourceDir.c_str(), fileBegin->second.c_str());
+					copyFileToSWORDInstall(destMgr, sourceDir.c_str(), fileBegin->second.c_str());
 					fileBegin++;
 				}
 			}
@@ -369,7 +476,7 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 								modFile = modDir;
 								modFile += "/";
 								modFile += ent->d_name;
-								copyFileToSWORDInstall(sourceOrig.c_str(), modFile.c_str());
+								copyFileToSWORDInstall(destMgr, sourceOrig.c_str(), modFile.c_str());
 							}
 						}
 						closedir(dir);
@@ -401,17 +508,19 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 								SWConfig *config = new SWConfig(modFile.c_str());
 								if (config->Sections.find(modName) != config->Sections.end()) {
 									delete config;
-									SWBuf targetFile = manager->configPath; //"./mods.d/";
+									SWBuf targetFile = destMgr->configPath; //"./mods.d/";
 									targetFile += "/";
 									targetFile += ent->d_name;
 									FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
 									if (cipher) {
+/*									
 										CipherForm->modName = modName;
 										CipherForm->confFile = targetFile;
 										if (CipherForm->ShowModal() == mrCancel) {
 											removeModule(modName);
 											aborted = true;
 										}
+*/											
 									}
 								}
 								else	delete config;
@@ -424,12 +533,11 @@ int installModule(const char *fromLocation, const char *modName, InstallSource *
 		}
 		return (aborted) ? -1 : 0;
 	}
-*/
 	return 1;
 }
 
 
-int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName) {
+int InstallMgr::copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName) {
 	SWBuf sourcePath = sourceDir;
 	sourcePath += fName;
 

@@ -129,6 +129,7 @@ USEUNIT("..\..\src\utilfuns\swversion.cpp");
 USEUNIT("..\..\src\modules\filters\osisredletterwords.cpp");
 USEUNIT("..\..\src\modules\filters\osisscripref.cpp");
 USEUNIT("..\..\src\modules\filters\osislemma.cpp");
+USEUNIT("..\..\src\modules\filters\swoptfilter.cpp");
 //---------------------------------------------------------------------------
 USE("\\			preptext(entrybuf);
 ", File);

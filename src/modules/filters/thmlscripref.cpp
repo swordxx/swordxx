@@ -47,11 +47,11 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				intoken = false;
 				if (!strnicmp(token.c_str(), "scripRef", 8)) {
 				  hide = true;
-                                  continue;
+						    continue;
 				}
 				else if (!strnicmp(token.c_str(), "/scripRef", 9)) {
 				  hide = false;
-                                  continue;
+						    continue;
 				}
 
 				// if not a scripref token, keep token in text

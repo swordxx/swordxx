@@ -5,6 +5,8 @@
 #include <vector>
 #include <defs.h>
 #include <swbuf.h>
+#include <swconfig.h>
+#include <map>
 
 SWORD_NAMESPACE_START
 
@@ -41,33 +43,45 @@ public:
 	SWBuf source;
 	SWBuf directory;
 	SWBuf caption;
+	SWBuf localShadow;
 	SWMgr *mgr;
+	void *userData;
 };
 
+typedef std::map < SWBuf, InstallSource * >InstallSourceMap;
+
+class InstallMgr {
+
+protected:
+	char *privatePath;
+	// probably change to group these ftp functions into some kind of FTPSession
+	// class, and open/close functions become c_tor/d_tor.
+public:
+	SWConfig *installConf;
+	InstallSourceMap sources;
+	void *FTPOpenSession();
+	void FTPCloseSession(void *session);
+	char FTPURLGetFile(void *session, const char *dest, const char *sourceurl);
+
+	// probably change to not expose struct ftpparse.  We probably need our
+	// own FTPFile class or something that contains things like file name,
+	// size, type (dir, file, special).  Then change to vector of this class
+	// instead of ftpparse
+	std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl);
 
 
-
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
-
-//public stuff
-
-
-// probably change to group these ftp functions into some kind of FTPSession
-// class, and open/close functions become c_tor/d_tor.
-
-void *FTPOpenSession();
-void FTPCloseSession(void *session);
-char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool passive = true, void (*status_callback)(double dltotal, double dlnow)=0);
-
-// probably change to not expose struct ftpparse.  We probably need our
-// own FTPFile class or something that contains things like file name,
-// size, type (dir, file, special).  Then change to vector of this class
-// instead of ftpparse
-std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
-int removeModule(SWMgr *manager, const char *modName);
-int installModule(const char *fromLocation, const char *modName, InstallSource *is);
-int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName);
+public:
+	InstallMgr(const char *privatePath = "./");
+	virtual ~InstallMgr();
+	bool passive;
+	bool terminate;
+	virtual int removeModule(SWMgr *manager, const char *modName);
+	virtual int FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
+	virtual int installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is = 0);
+	virtual int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName);
+	virtual void statusUpdate(double dltotal, double dlnow);
+	virtual void preDownloadStatus(long totalBytes, long completedBytes, const char *message);
+};
 
 
 SWORD_NAMESPACE_END
