@@ -135,6 +135,12 @@ USEUNIT("..\..\src\modules\filters\thmlwebif.cpp");
 USEUNIT("..\..\src\utilfuns\utilweb.cpp");
 USEUNIT("..\..\src\utilfuns\swversion.cpp");
 USEUNIT("..\..\src\utilfuns\url.cpp");
+USEUNIT("..\..\src\mgr\curlftpt.cpp");
+USEUNIT("..\..\src\mgr\ftptrans.cpp");
+USEUNIT("..\..\src\mgr\installmgr.cpp");
+USEUNIT("..\..\src\mgr\ftplibftpt.cpp");
+USEUNIT("..\..\src\mgr\refsysmgr.cpp");
+USEUNIT("..\..\src\utilfuns\swunicod.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
