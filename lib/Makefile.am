@@ -17,7 +17,11 @@ lib_LTLIBRARIES = libsword.la
 
 libsword_la_SOURCES =
 if ICU
-ICULIBADD = -licui18n -licuuc -lustdio
+#ICU 2.1
+#ICULIBADD = -licui18n -licuuc -lustdio
+#ICU 2.6
+ICULIBADD = -licui18n -licuuc -licuio
+INCLUDES += -DSWICU_DATA=\"${pkglibdir}/icu${ICU_VER}\" 
 else
 ICULIBADD =
 endif
@@ -30,7 +34,7 @@ endif
 
 libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD)
 
-libsword_la_LDFLAGS = -version-info 1
+libsword_la_LDFLAGS = -version-info 3
 
 include ../src/keys/Makefile.am
 include ../src/utilfuns/Makefile.am
