@@ -14,8 +14,8 @@ endif
 
 SUBDIRS = $(refsysdir)
 
-noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
-compnone complzss localetest introtest indextest configtest keycast \
+noinst_PROGRAMS = ciphertest keytest mgrtest parsekey listtest casttest \
+modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
 genbooktest treeidxtest swbuftest xmltest webiftest
 
@@ -64,6 +64,7 @@ endif
 
 keytest_SOURCES = keytest.cpp
 mgrtest_SOURCES = mgrtest.cpp
+ciphertest_SOURCES = ciphertest.cpp
 parsekey_SOURCES = parsekey.cpp
 listtest_SOURCES = listtest.cpp
 casttest_SOURCES = casttest.cpp

@@ -7,7 +7,7 @@ INCLUDES = -I $(top_srcdir)/include
 #else
 LDADD = $(top_builddir)/lib/libsword.la
 #endif
-noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump \
+noinst_PROGRAMS = cipherraw lexdump \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
 addgb imp2gbs mod2imp xml2gbs
 
@@ -47,8 +47,6 @@ if ICU
 endif
 
 cipherraw_SOURCES = cipherraw.cpp
-ciphertest_SOURCES = ciphertest.cpp
-ciphertest2_SOURCES = ciphertest2.cpp
 lexdump_SOURCES = lexdump.c
 lexdump_LDADD = -lstdc++
 mkfastmod_SOURCES = mkfastmod.cpp
