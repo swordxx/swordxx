@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = 1.5
+AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I$(top_srcdir)/include
 DEFS += -DUSE_AUTOTOOLS
 
@@ -8,7 +8,11 @@ globalconfdir := @sysconfdir@
 lib_LTLIBRARIES = libsword.la
 
 libsword_la_SOURCES =
+if ICU
+libsword_la_LIBADD = -licuuc -licui18n
+else
 libsword_la_LIBADD =
+endif
 libsword_la_LDFLAGS = -version-info 1
 
 include ../src/keys/Makefile.am

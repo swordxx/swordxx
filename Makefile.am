@@ -1,7 +1,7 @@
-AUTOMAKE_OPTIONS = 1.5
+AUTOMAKE_OPTIONS = 1.6
 # General defines
 
-version := 1.5.3
+version := 1.5.4
 
 
 # this WILL NOT WORK for you. only inhouse patched version of
@@ -59,7 +59,7 @@ icu := @with_icu@
 # Global config directory
 globalconfdir := @sysconfdir@
 
-SUBDIRS = lib . tests utilities examples apps
+SUBDIRS = lib . icu tests utilities examples apps
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 

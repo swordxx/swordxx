@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = 1.5
+AUTOMAKE_OPTIONS = 1.6
 
 INCLUDES = -I$(top_srcdir)/include
 

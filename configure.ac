@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # Initialisation
 # ---------------------------------------------------------------------
-AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
+AC_INIT(sword, 1.5.4, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.10 $)
+AC_REVISION($Revision: 1.11 $)
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(sword,1.5.3)
+AM_INIT_AUTOMAKE(sword,1.5.4)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -23,7 +23,6 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 AC_C_BIGENDIAN
-
 # ---------------------------------------------------------------------
 # Check libraries
 # ---------------------------------------------------------------------
@@ -46,6 +45,16 @@ AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,
 AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
 AM_MAINTAINER_MODE
 
+
+# ---------------------------------------------------------------------
+# Find ICU tools
+# ---------------------------------------------------------------------
+if test x$with_icu = xyes; then
+	AC_PATH_PROG([PKGDATA], [pkgdata],[/usr/sbin/pkgdata],[$PATH:/usr/sbin:.])
+	AC_PATH_PROG([GENCCODE], [genccode], [/usr/sbin/genccode], [$PATH:/usr/sbin:.])
+	AC_PATH_PROG([GENCMN], [gencmn], [/usr/sbin/gencmn], [$PATH:/usr/sbin:.])
+	AC_PATH_PROG([GENRB], [genrb], [/usr/sbin/genrb], [$PATH:/usr/sbin:.])
+fi
 
 # ---------------------------------------------------------------------
 # Debug and profile
@@ -170,5 +179,5 @@ AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 # ---------------------------------------------------------------------
 AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile utilities/Makefile examples/Makefile \
 	examples/cmdline/Makefile apps/Makefile apps/console/Makefile \
-	apps/console/diatheke/Makefile)
+	apps/console/diatheke/Makefile icu/Makefile)
 AC_OUTPUT
