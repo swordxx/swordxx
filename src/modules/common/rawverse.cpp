@@ -24,15 +24,7 @@
 #include <versekey.h>
 
 #ifdef BIGENDIAN
-#ifdef MACOSX
-#include <architecture/byte_order.h>
-#else
-#ifdef PPC
-#include <byteswap.h>
-#else
-#include <sys/pctypes.h>
-#endif
-#endif
+#include <swbyteswap.h>
 #endif
 
 #ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
@@ -130,20 +122,10 @@ void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short 
 		read(idxfp[testmt-1]->getFd(), start, 4);
 		long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
 #ifdef BIGENDIAN
-	#ifdef MACOSX
-		*start = NXSwapLittleLongToHost(*start);
-		*size  = NXSwapLittleShortToHost(*size);
-	#else
-	#ifdef PPC
-		*start = bswap_32(*start);
-		*size = bswap_16(*size);
-	#else
-		*start = lelong(*start);
-		*size  = leshort(*size);
-	#endif
-	#endif
+		*start = SWAP32(*start);
+		*size  = SWAP16(*size);
 #endif
-		if (len < 2) {
+	        if (len < 2) {
 			*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
 		}
 	}
@@ -256,18 +238,8 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 #ifdef BIGENDIAN
-	#ifdef MACOSX
-		outstart = NXSwapLittleLongToHost(start);
-		outsize  = NXSwapLittleShortToHost(size);
-	#else
-        #ifdef PPC
-		outstart = bswap_32(start);
-		outsize = bswap_16(size);
-	#else
-		outstart = lelong(start);
-		outsize  = leshort(size);
-	#endif
-	#endif
+	outstart = SWAP32(start);
+	outsize  = SWAP16(size);
 #endif
 	if (size) {
 		lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);

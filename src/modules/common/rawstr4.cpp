@@ -23,15 +23,7 @@
 #include <rawstr4.h>
 
 #ifdef BIGENDIAN
-#ifdef MACOSX
-#include <architecture/byte_order.h>
-#else
-#ifdef PPC
-#include <byteswap.h>
-#else
-#include <sys/pctypes.h>
-#endif
-#endif
+#include <swbyteswap.h>
 #endif
 /******************************************************************************
  * RawStr Statics
@@ -156,15 +148,7 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
 		lseek(idxfd->getFd(), ioffset, SEEK_SET);
 		read(idxfd->getFd(), &offset, 4);
 #ifdef BIGENDIAN
-	#ifdef MACOSX
-		offset = NXSwapLittleLongToHost(offset);
-	#else
-	#ifdef PPC
-		offset = bswap_32(offset);
-	#else
-		offset = lelong(offset);
-	#endif
-	#endif
+		offset = SWAP32(offset);
 #endif
 		getidxbufdat(offset, buf);
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
@@ -258,20 +242,10 @@ char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, lon
 		if (idxoff)
 			*idxoff = tryoff;
 
-	#ifdef BIGENDIAN
-		#ifdef MACOSX
-			*start = NXSwapLittleLongToHost(*start);
-			*size  = NXSwapLittleLongToHost(*size);
-		#else
-		#ifdef PPC
-			*start = bswap_32(*start);
-			*size = bswap_32(*size);
-		#else
-			*start = lelong(*start);
-			*size  = lelong(*size);
-		#endif
-		#endif
-	#endif
+#ifdef BIGENDIAN
+		*start = SWAP32(*start);
+		*size  = SWAP32(*size);
+#endif
 
 		while (away) {
 			long laststart = *start;
@@ -293,20 +267,10 @@ char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, lon
 			if (idxoff)
 				*idxoff = tryoff;
 
-	#ifdef BIGENDIAN
-		#ifdef MACOSX
-			*start = NXSwapLittleLongToHost(*start);
-			*size  = NXSwapLittleLongToHost(*size);
-		#else
-		#ifdef PPC
-			*start = bswap_32(*start);
-			*size = bswap_32(*size);
-		#else
-			*start = lelong(*start);
-			*size  = lelong(*size);
-		#endif
-		#endif
-	#endif
+#ifdef BIGENDIAN
+			*start = SWAP32(*start);
+			*size  = SWAP32(*size);
+#endif
 
 			if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
 				away += (away < 0) ? 1 : -1;
@@ -519,20 +483,10 @@ void RawStr4::settext(const char *ikey, const char *buf)
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
 
-	#ifdef BIGENDIAN
-		#ifdef MACOSX
-			outstart = NXSwapLittleLongToHost(start);
-			outsize  = NXSwapLittleLongToHost(size);
-		#else
-		#ifdef PPC
-			outstart = bswap_32(start);
-			outsize = bswap_32(size);
-		#else
-			outstart = lelong(start);
-			outsize  = lelong(size);
-		#endif
-		#endif
-	#endif
+#ifdef BIGENDIAN
+	outstart = SWAP32(start);
+	outsize  = SWAP32(size);
+#endif
 
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
 	if (strlen(buf)) {

@@ -26,17 +26,7 @@
 // remove
 //#include <lzsscomprs.h>
 
-#ifdef BIGENDIAN
-#ifdef MACOSX
-#include <architecture/byte_order.h>
-#else
-#ifdef PPC
-#include <byteswap.h>
-#else
-#include <sys/pctypes.h>
-#endif
-#endif
-#endif
+#include <swbyteswap.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -154,17 +144,6 @@ zVerse::~zVerse()
 
 void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *size)
 {
-	/*
-	idxoff *= 6;
-	if (!testmt)
-		testmt = ((idxfp[1]) ? 1:2);
-
-	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-	read(idxfp[testmt-1]->getFd(), start, 4);
-	if (read(idxfp[testmt-1]->getFd(), size, 2) < 2) { 		// read size
-		*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
-	}
-	 */
 	// set start to offset in
 	// set size to
 	// set
@@ -208,21 +187,8 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 	*size = usVerseSize;
 
 #ifdef BIGENDIAN
-	#ifdef MACOSX
-		ulBuffNum  = NXSwapLittleLongToHost(ulBuffNum);
-		*start  = NXSwapLittleLongToHost(*start);
-		*size   = NXSwapLittleShortToHost(*size);
-	#else
-        #ifdef PPC
-		ulBuffNum  = bswap_32(ulBuffNum);
-		*start  = bswap_32(*start);
-		*size   = bswap_16(*size);
-	#else
-		ulBuffNum  = lelong(ulBuffNum);
-		*start  = lelong(*start);
-		*size   = leshort(*size);
-	#endif
-	#endif
+	*start  = SWAP32(*start);
+	*size   = SWAP16(*size);
 #endif
 
 	if (*size) {
@@ -232,6 +198,10 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 		}
 
 		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
+
+#ifdef BIGENDIAN
+		ulBuffNum = SWAP32(ulBuffNum);
+#endif
 
 		if (lseek(idxfp[testmt-1]->getFd(), ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
 		{
@@ -255,21 +225,9 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 		}
 
 #ifdef BIGENDIAN
-	#ifdef MACOSX
-		ulCompOffset  = NXSwapLittleLongToHost(ulCompOffSet);
-		ulCompSize  = NXSwapLittleLongToHost(ulCompSize);
-		ulUnCompSize  = NXSwapLittleLongToHost(ulUnCompSize);
-	#else
-        #ifdef PPC
-		ulCompOffset = bswap_32(ulCompOffset);
-		ulCompSize = bswap_32(ulCompSize);
-		ulUnCompSize = bswap_32(ulUnCompSize);
-	#else
-		ulCompOffset  = lelong(ulCompOffset);
-		ulCompSize  = lelong(ulCompSize);
-		ulUnCompSize  = lelong(ulUnCompSize);
-	#endif
-	#endif
+		ulCompOffset  = SWAP32(ulCompOffset);
+		ulCompSize  = SWAP32(ulCompSize);
+		ulUnCompSize  = SWAP32(ulUnCompSize);
 #endif
 
 		if (lseek(textfp[testmt-1]->getFd(), ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
@@ -349,21 +307,9 @@ void zVerse::settext(char testmt, long idxoff, const char *buf)
 
 	start = outstart = strlen(cacheBuf);
 #ifdef BIGENDIAN
-	#ifdef MACOSX
-		outBufIdx = NXSwapLittleLongToHost(outBufIdx);
-		outstart  = NXSwapLittleLongToHost(start);
-		outsize   = NXSwapLittleShortToHost(size);
-	#else
-        #ifdef PPC
-		outBufIdx = bswap_32(outBufIdx);
-		outstart  = bswap_32(start);
-		outsize   = bswap_16(size);
-	#else
-		outBufIdx = lelong(outBufIdx);
-		outstart  = lelong(start);
-		outsize   = leshort(size);
-	#endif
-	#endif
+	outBufIdx = SWAP32(outBufIdx);
+	outstart  = SWAP32(start);
+	outsize   = SWAP16(size);
 #endif
 	if (!size) {
 		outstart = outsize = outBufIdx = 0;
@@ -395,23 +341,11 @@ void zVerse::flushCache() {
 			outzsize = zsize;
 
 			start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
-	#ifdef BIGENDIAN
-		#ifdef MACOSX
-			outstart  = NXSwapLittleLongToHost(start);
-			outsize   = NXSwapLittleLongToHost(size);
-			outzsize  = NXSwapLittleLongToHost(zsize);
-		#else
-		#ifdef PPC
-			outstart  = bswap_32(start);
-			outsize   = bswap_32(size);
-			outzsize  = bswap_32(zsize);
-		#else
-			outstart  = lelong(start);
-			outsize   = lelong(size);
-			outzsize  = lelong(zsize);
-		#endif
-		#endif
-	#endif
+#ifdef BIGENDIAN
+			outstart  = SWAP32(start);
+			outsize   = SWAP32(size);
+			outzsize  = SWAP32(zsize);
+#endif
 			write(textfp[cacheTestament-1]->getFd(), compressor->zBuf(&zsize), zsize);
 
 			lseek(idxfp[cacheTestament-1]->getFd(), idxoff, SEEK_SET);
