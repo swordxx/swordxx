@@ -10,14 +10,14 @@
 #include <unistd.h>
 #endif
 
-#include <swcrypt.h>
+#include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
 
 
 main(int argc, char **argv)
 {
-	SWCrypt *zobj;
+	SWCipher *zobj;
 	VerseKey key;
 	RawVerse *rawdrv;
 	long offset;
@@ -31,7 +31,7 @@ main(int argc, char **argv)
 	}
 
 	rawdrv = new RawVerse(argv[1]);
-	zobj = new SWCrypt((unsigned char *)argv[2]);
+	zobj = new SWCipher((unsigned char *)argv[2]);
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -47,7 +47,7 @@ main(int argc, char **argv)
 		tmpbuf = (char *) calloc(size + 1, 1);
 		rawdrv->gettext(key.Testament(), offset, size, tmpbuf);
 		len = size;
-		zobj->cryptBuf(&len, tmpbuf);
+		zobj->cipherBuf(&len, tmpbuf);
 		printf("%s\n", zobj->Buf());
 				free(tmpbuf);
 	}

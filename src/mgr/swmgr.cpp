@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.8 1999/09/05 07:15:22 scribe Exp $
+ * $Id: swmgr.cpp,v 1.9 1999/09/05 21:42:50 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,20 +44,31 @@
 #include <gbfplain.h>
 #include <gbfstrongs.h>
 #include <gbffootnotes.h>
-#include <cryptfilt.h>
+#include <cipherfil.h>
 #include <rawfiles.h>
 
 
 void SWMgr::init() {
+	SWFilter *tmpFilter = 0;
 	configPath  = 0;
 	prefixPath  = 0;
 	configType  = 0;
 	myconfig    = 0;
 	mysysconfig = 0;
 
-	optionFilters.insert(FilterMap::value_type("GBFStrongs", new GBFStrongs()));
-	optionFilters.insert(FilterMap::value_type("GBFFootnotes", new GBFFootnotes()));
+	optionFilters.clear();
+	cleanupFilters.clear();
+
+	tmpFilter = new GBFStrongs();
+	optionFilters.insert(FilterMap::value_type("GBFStrongs", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new GBFFootnotes();
+	optionFilters.insert(FilterMap::value_type("GBFFootnotes", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
 	gbfplain = new GBFPlain();
+	cleanupFilters.push_back(gbfplain);
 }
 
 
@@ -115,11 +126,8 @@ SWMgr::~SWMgr() {
 
 	DeleteMods();
 
-	if (gbfplain)
-		delete gbfplain;
-
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++)
-		delete (*it).second;			
+	for (FilterList::iterator it = cleanupFilters.begin(); it != cleanupFilters.end(); it++)
+		delete (*it);
 			
 	if (myconfig)
 		delete myconfig;
@@ -387,19 +395,20 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 
 
 void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
-	string sourceformat, cryptKey;
+	string sourceformat, cipherKey;
 	ConfigEntMap::iterator entry;
 
-	cryptKey = ((entry = section.find("CryptKey")) != section.end()) ? (*entry).second : (string)"";
-	if (!cryptKey.empty()) {
-		printf("Using key: %s", cryptKey.c_str());
-		module->AddRawFilter(new CryptFilter(cryptKey.c_str()));
+	cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (string)"";
+	if (!cipherKey.empty()) {
+		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
+		cleanupFilters.push_back(cipherFilter);
+		module->AddRawFilter(cipherFilter);
 	}
 }
 
 
 void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
-	string sourceformat, cryptKey;
+	string sourceformat;
 	ConfigEntMap::iterator entry;
 
 	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
@@ -422,7 +431,7 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 
 void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 {
-	string sourceformat, cryptKey;
+	string sourceformat;
 	ConfigEntMap::iterator entry;
 
 	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";

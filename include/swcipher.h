@@ -1,7 +1,7 @@
 /******************************************************************************
- *  swcrypt.h   - definition of Class SWCrypt used for data en/decryption
+ *  swcipher.h   - definition of Class SWCipher used for data cipher/decipher
  *
- * $Id: swcrypt.h,v 1.1 1999/09/05 02:21:35 scribe Exp $
+ * $Id: swcipher.h,v 1.1 1999/09/05 21:47:16 scribe Exp $
  *
  * Copyright 1999 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -19,23 +19,25 @@
  *
  */
 
-#ifndef SWCRYPT_H
-#define SWCRYPT_H
+#ifndef SWCIPHER_H
+#define SWCIPHER_H
 
 #include "sapphire.h"
 
-class SWCrypt {
+class SWCipher {
+
 	sapphire master;
 	sapphire work;
+
 	char *buf;
-	bool encrypt;
+	bool cipher;
 	int len;
 protected:
 public:
-	SWCrypt(unsigned char *key);
-	virtual ~SWCrypt();
+	SWCipher(unsigned char *key);
+	virtual ~SWCipher();
 	virtual char *Buf(const char *buf = 0);
-	virtual char *cryptBuf(unsigned int *len, const char *buf = 0);
+	virtual char *cipherBuf(unsigned int *len, const char *buf = 0);
 	virtual void Encode(void);
 	virtual void Decode(void);
 };

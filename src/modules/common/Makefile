@@ -9,8 +9,9 @@ UNIX=true
 cpp += rawstr.cpp
 cpp += swcomprs.cpp
 cpp += rawverse.cpp
-cpp += swcrypt.cpp
+cpp += swcipher.cpp
+
+DEFINES  += -DUNIX
 cpp += sapphire.cpp
-CFLAGS += -DUNIX
 
 include ${root}/Makefile.post

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: cryptfilt.h,v 1.1 1999/09/05 02:21:59 scribe Exp $
+ * $Id: cipherfil.h,v 1.1 1999/09/05 21:47:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -18,17 +18,17 @@
  *
  */
 
-#ifndef CRYPTFILT_H
-#define CRYPTFILT_H
+#ifndef CIPHERFIL_H
+#define CIPHERFIL_H
 
 #include <swfilter.h>
-#include <swcrypt.h>
+#include <swcipher.h>
 
-class CryptFilter : public SWFilter {
-	SWCrypt *crypt;
+class CipherFilter : public SWFilter {
+	SWCipher *cipher;
 public:
-	CryptFilter(const char *key);
-	virtual ~CryptFilter();
+	CipherFilter(const char *key);
+	virtual ~CipherFilter();
 	virtual char ProcessText(char *text, int maxlen = -1);
 };
 

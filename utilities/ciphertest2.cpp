@@ -10,7 +10,7 @@
 #include <unistd.h>
 #endif
 
-#include <cryptfilt.h>
+#include <cipherfil.h>
 #include <versekey.h>
 #include <rawtext.h>
 
@@ -25,7 +25,7 @@ main(int argc, char **argv) {
 	}
 
 	rawdrv = new RawText(argv[1]);
-	rawdrv->AddRawFilter(new CryptFilter(argv[2]));
+	rawdrv->AddRawFilter(new CipherFilter(argv[2]));
 
 	printf("\n");
 

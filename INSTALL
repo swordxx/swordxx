@@ -1,3 +1,34 @@
+                       INSTALLATION NOTES
+
+
+CONFIGURATION
+
+You may want to have a look in the configuration file Makefile.cfg to be
+sure everything is being built the way that you would like.
+
+
+DECIPHER MECHANISM
+
+Cipher tools are not included by default, so if you are planning on using
+any copyrighted texts or any other ciphered modules, you will need to
+add the necessary files before building.  SWORD uses the SAPPHIRE II cipher
+which is not exportable in source form outside of the US and CANADA.  The
+necessary cipher package MUST BE DOWNLOADED AND ADDED TO THE SOURCE
+TREE BEFORE COMPILING.  SAPPHIRE may be obtained from:
+
+    http://cryptography.org/cgi-bin/crypto.cgi/libraries/sapphire.zip
+
+These files must be replaced with files from this package:
+
+    .../sword/include/sapphire.h
+    .../sword/src/modules/common/sapphire.cpp
+
+If you are outside of these countries, you will have to obtain this package
+elsewhere.
+
+
+BUILDING
+
 A 'make' at the top level directory of the SWORD package should build the
 libraries necessary for building any of the frontends.  The libraries will
 be built in the ./lib directory.  If you encounter an error, you may need
@@ -10,7 +41,8 @@ build is the cheatah frontend (./apps/X11/cheatah).  These frontends
 each have their own make system, so read the help in their respective
 directories if a problem is encountered while building.
 
-___________________________________________________________________________
+
+MODULES
 
 To be useful the software needs to find SWORD 'modules' installed somewhere
 accessible.  These module plugins consist of Bible texts, commentaries,
@@ -37,7 +69,7 @@ The API looks for its module configuration in the following sequence:
 Using the above scheme, SWORD will also determine the path to prefix to the
 specified datafile location found in the config files.  The prefix path will
 be the directory where SWORD finds mods.[conf|d], WITH ONE EXCEPTION: if SWORD
-find its configuration in the user's home directory
+finds its configuration in the user's home directory,
 $HOME/.sword/mods.[conf|d], no prefix will be prepended to the data file
 locations; hence, the config files must contain absolute path names.
 

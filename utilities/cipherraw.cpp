@@ -10,14 +10,14 @@
 #include <unistd.h>
 #endif
 
-#include <swcrypt.h>
+#include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
 
 
 main(int argc, char **argv)
 {
-	SWCrypt *zobj;
+	SWCipher *zobj;
 	VerseKey key;
 	RawVerse *rawdrv;
 	int ofd[2], oxfd[2];
@@ -31,7 +31,7 @@ main(int argc, char **argv)
 	}
 
 	rawdrv = new RawVerse(argv[1]);
-	zobj = new SWCrypt((unsigned char *)argv[2]);
+	zobj = new SWCipher((unsigned char *)argv[2]);
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -74,14 +74,14 @@ main(int argc, char **argv)
 				tmpbuf = (char *) calloc(size + 1, 1);
 				rawdrv->gettext(key.Testament(), offset, size, tmpbuf);
 				zobj->Buf(tmpbuf);
-				zobj->cryptBuf((unsigned int *)&size);
+				zobj->cipherBuf((unsigned int *)&size);
 				free(tmpbuf);
 			}
 			offset = lseek(ofd[key.Testament() - 1], 0, SEEK_END);
 			printf("%s: NEW offset: %d; size: %d\n", (const char *)key, offset, size);
 			write(oxfd[key.Testament() - 1], &offset, 4);
 			if (size) 
-				write(ofd[key.Testament() - 1], zobj->cryptBuf((unsigned int *)&size), size);
+				write(ofd[key.Testament() - 1], zobj->cipherBuf((unsigned int *)&size), size);
 			lzoffset = offset;
 			write(oxfd[key.Testament() - 1], &size, 2);
 			lzsize = size;

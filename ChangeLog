@@ -1,6 +1,12 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+05-Sep-1999
+	Why is it always the 5th?
+	Added RawFilters to facilitate cryptography
+	Added SWCrypt which uses Michael Paul Johnson's SapphireII crypt
+	Added CryptFilter which uses SWCrypt and .conf CryptKey= entry
+
 05-Jul-1999
 	Added MAXCHAPTER and MAXVERSE as POSITIONs in VerseKey
 	Added Key() method for setting / getting key on SWModule

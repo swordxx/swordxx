@@ -1,19 +1,19 @@
 /******************************************************************************
- *  swcrypt.cpp   - code for class 'SWCrypt'- a driver class that provides
- *				cryption utilities.
+ *  swcipher.cpp   - code for class 'SWCipher'- a driver class that provides
+ *				cipher utilities.
  */
 
 #include <string.h>
 #include <stdlib.h>
-#include <swcrypt.h>
+#include <swcipher.h>
 
 
 /******************************************************************************
- * SWCrypt Constructor - Initializes data for instance of SWCrypt
+ * SWCipher Constructor - Initializes data for instance of SWCipher
  *
  */
 
-SWCrypt::SWCrypt(unsigned char *key)
+SWCipher::SWCipher(unsigned char *key)
 {
 	master.initialize(key, strlen((char *)key));
 	buf = 0;
@@ -21,23 +21,23 @@ SWCrypt::SWCrypt(unsigned char *key)
 
 
 /******************************************************************************
- * SWCrypt Destructor - Cleans up instance of SWCrypt
+ * SWCipher Destructor - Cleans up instance of SWCipher
  */
 
-SWCrypt::~SWCrypt()
+SWCipher::~SWCipher()
 {
 	if (buf)
 		free(buf);
 }
 
 
-char *SWCrypt::Buf(const char *ibuf)
+char *SWCipher::Buf(const char *ibuf)
 {
 	if (ibuf) {
 		buf = (char *) malloc(strlen(ibuf) + 1);
 		strcpy(buf, ibuf);
 		len = strlen(buf);
-		encrypt = false;
+		cipher = false;
 	}
 
 	Decode();
@@ -46,13 +46,13 @@ char *SWCrypt::Buf(const char *ibuf)
 }
 
 
-char *SWCrypt::cryptBuf(unsigned int *ilen, const char *ibuf)
+char *SWCipher::cipherBuf(unsigned int *ilen, const char *ibuf)
 {
 	if (ibuf) {
 		buf = (char *) malloc(*ilen);
 		memcpy(buf, ibuf, *ilen);
 		len = *ilen;
-		encrypt = true;
+		cipher = true;
 	}
 
 	Encode();
@@ -63,38 +63,38 @@ char *SWCrypt::cryptBuf(unsigned int *ilen, const char *ibuf)
 
 
 /******************************************************************************
- * SWCompress::Encode	- This function "encodes" the input stream into the
+ * SWCipher::Encode	- This function "encodes" the input stream into the
  *						output stream.
  *						The GetChars() and SendChars() functions are
  *						used to separate this method from the actual
  *						i/o.
  */
 
-void SWCrypt::Encode(void)
+void SWCipher::Encode(void)
 {
-	if (!encrypt) {
+	if (!cipher) {
 		work = master;
 		for (int i = 0; i < len; i++)
 			buf[i] = work.encrypt(buf[i]);
-		encrypt = true;
+		cipher = true;
 	}
 }
 
 
 /******************************************************************************
- * SWCrypt::Decode	- This function "decodes" the input stream into the
+ * SWCipher::Decode	- This function "decodes" the input stream into the
  *						output stream.
  *						The GetChars() and SendChars() functions are
  *						used to separate this method from the actual
  *						i/o.
  */
 
-void SWCrypt::Decode(void)
+void SWCipher::Decode(void)
 {
-	if (encrypt) {
+	if (cipher) {
 		work = master;
 		for (int i = 0; i < len; i++)
 			buf[i] = work.decrypt(buf[i]);
-		encrypt = false;
+		cipher = false;
 	}
 }
