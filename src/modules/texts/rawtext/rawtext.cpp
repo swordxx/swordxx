@@ -456,9 +456,9 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 }
 
 #ifdef WIN32
-SWModule &RawText::operator =(POSITION p) {
+SWModule &RawText::operator =(SW_POSITION p) {
 #else
-RawText &RawText::operator =(POSITION p) {
+RawText &RawText::operator =(SW_POSITION p) {
 #endif
 	SWModule::operator =(p);
 	return *this;

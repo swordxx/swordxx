@@ -154,10 +154,10 @@ SWModule &RawLD::operator +=(int increment)
 
 
 /******************************************************************************
- * RawLD::operator =(POSITION)	- Positions this key if applicable
+ * RawLD::operator =(SW_POSITION)	- Positions this key if applicable
  */
 
-SWModule &RawLD::operator =(POSITION p)
+SWModule &RawLD::operator =(SW_POSITION p)
 {
 	if (!key->Traversable()) {
 		switch (p) {

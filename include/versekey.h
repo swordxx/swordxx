@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.14 2001/02/21 05:53:00 scribe Exp $
+ * $Id: versekey.h,v 1.15 2001/04/08 09:03:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,9 +33,9 @@
 #define POS_MAXCHAPTER ((char)4)
 #define POS_MAXBOOK ((char)5)
 
-#define MAXVERSE POSITION(POS_MAXVERSE)
-#define MAXCHAPTER POSITION(POS_MAXCHAPTER)
-#define MAXBOOK POSITION(POS_MAXBOOK)
+#define MAXVERSE SW_POSITION(POS_MAXVERSE)
+#define MAXCHAPTER SW_POSITION(POS_MAXCHAPTER)
+#define MAXBOOK SW_POSITION(POS_MAXBOOK)
 
 struct sbook
 {
@@ -246,7 +246,7 @@ public:
   * @param p position
   * @return *this
   */
-  virtual SWKey & operator = (POSITION);
+  virtual SWKey & operator = (SW_POSITION);
   
   /** Decrements key a number of verses
   *

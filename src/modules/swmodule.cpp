@@ -226,14 +226,14 @@ const char *SWModule::KeyText(const char *ikeytext)
 
 
 /******************************************************************************
- * SWModule::operator =(POSITION)	- Positions this modules to an entry
+ * SWModule::operator =(SW_POSITION)	- Positions this modules to an entry
  *
  * ENT:	p	- position (e.g. TOP, BOTTOM)
  *
  * RET: *this
  */
 
-SWModule &SWModule::operator =(POSITION p)
+SWModule &SWModule::operator =(SW_POSITION p)
 {
 	*key = p;
 	error = key->Error();

@@ -769,14 +769,14 @@ VerseKey::operator const char *() const
 
 
 /******************************************************************************
- * VerseKey::operator =(POSITION)	- Positions this key
+ * VerseKey::operator =(SW_POSITION)	- Positions this key
  *
  * ENT:	p	- position
  *
  * RET:	*this
  */
 
-SWKey &VerseKey::operator =(POSITION p)
+SWKey &VerseKey::operator =(SW_POSITION p)
 {
 	switch (p) {
 	case POS_TOP:

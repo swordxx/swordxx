@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.8 2001/02/15 17:38:35 jansorg Exp $
+ * $Id: swkey.h,v 1.9 2001/04/08 09:03:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,11 +32,11 @@
 
 // For use with = operator to position key.
 
-class POSITION
+class SW_POSITION
 {
   char pos;
 public:
-    POSITION (char ipos)
+    SW_POSITION (char ipos)
   {
     pos = ipos;
   }
@@ -49,8 +49,8 @@ public:
 #define POS_TOP ((char)1)
 #define POS_BOTTOM ((char)2)
 
-#define TOP POSITION(POS_TOP)
-#define BOTTOM POSITION(POS_BOTTOM)
+#define TOP SW_POSITION(POS_TOP)
+#define BOTTOM SW_POSITION(POS_BOTTOM)
 
   /** SWKey is the basis for all
   * types of keys for indexing into modules (e.g. verse, word,
@@ -169,7 +169,7 @@ public:
   }
   /** Positions this key if applicable
   */
-  virtual SWKey & operator = (POSITION);
+  virtual SWKey & operator = (SW_POSITION);
   /** Decrements key a number of entries
   *
   * @param decrement Number of entries to jump backward

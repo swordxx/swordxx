@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.8 2001/02/21 04:35:09 scribe Exp $
+ * $Id: listkey.h,v 1.9 2001/04/08 09:03:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -69,7 +69,7 @@ public:
   * @param ielement element number to set to
   * @return error status
   */
-  virtual char SetToElement (int ielement, POSITION = TOP);
+  virtual char SetToElement (int ielement, SW_POSITION = TOP);
   /** Gets a key element number
   *
   * @param pos element number to get (or default current)
@@ -94,7 +94,7 @@ public:
   * @param p position
   * @return *this
   */
-  virtual SWKey & operator = (POSITION);
+  virtual SWKey & operator = (SW_POSITION);
   /** Decrements a number of elements
   */
   virtual SWKey & operator -= (int decrement);

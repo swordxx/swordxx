@@ -119,14 +119,14 @@ ListKey &ListKey::operator <<(const SWKey &ikey)
 
 
 /******************************************************************************
- * ListKey::operator =(POSITION)	- Positions this key
+ * ListKey::operator =(SW_POSITION)	- Positions this key
  *
  * ENT:	p	- position
  *
  * RET:	*this
  */
 
-SWKey &ListKey::operator =(POSITION p)
+SWKey &ListKey::operator =(SW_POSITION p)
 {
 	switch (p) {
 	case 1:	// GCC won't compile P_TOP
@@ -205,7 +205,7 @@ int ListKey::Count()
  * RET:	error status
  */
 
-char ListKey::SetToElement(int ielement, POSITION pos)
+char ListKey::SetToElement(int ielement, SW_POSITION pos)
 {
 	arraypos = ielement;
 	if (arraypos >= arraycnt) {

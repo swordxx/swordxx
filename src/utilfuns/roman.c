@@ -56,19 +56,19 @@ Changes made 2001-02-25 by Chris Little <chrislit@crosswire.org> to code
 for use in the SWORD Projct <http://www.crosswire.org/sword>
 */
 
-//#include <stdio.h>
+/*#include <stdio.h>*/
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-//#define VERSION "1.1"
+/*#define VERSION "1.1"*/
 
 /*
  * prototypes
  */
 char* to_rom(int num, char *p);
 int from_rom(char *s);
-//void usage( char *argv);
+/*void usage( char *argv);*/
 
 /*
  * globals
@@ -239,7 +239,7 @@ int from_rom(char *s)
 			* to one more array, units, tens, hundreds, etc
 			* c_points above is same but points to not integers but to
 			* the roman equivalent */
-		       y = (count)*(power(10,c3));//( i_points[ c3 ] + count) ;
+		      y = (count)*(power(10,c3));/*( i_points[ c3 ] + count) ;*/
 		       p2 = s;
 		    }
 		  else

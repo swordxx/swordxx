@@ -161,10 +161,10 @@ int SWKey::compare(const SWKey &ikey)
 
 
 /******************************************************************************
- * SWKey::operator =(POSITION)	- Positions this key if applicable
+ * SWKey::operator =(SW_POSITION)	- Positions this key if applicable
  */
 
-SWKey &SWKey::operator =(POSITION p)
+SWKey &SWKey::operator =(SW_POSITION p)
 {
 	switch (p) {
 	case POS_TOP:
