@@ -12,7 +12,8 @@
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\..\icu-sword\as_is\borland\icuin.lib 
       ..\..\..\icu-sword\as_is\borland\icudatab.lib 
-      ..\..\..\icu-sword\as_is\borland\icuuc.lib ..\..\lib\libsword.lib"/>
+      ..\..\..\icu-sword\as_is\borland\icuuc.lib ..\..\lib\libsword.lib 
+      ..\..\..\biblecs\clucene\clucene.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi QRPT50.bpi VCLDB50.bpi VCLBDE50.bpi 
@@ -29,13 +30,13 @@
     <USERDEFINES value="_ICU_;_ICUSWORD_"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="installmgr.bpf"/>
-    <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\;..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\src\mgr;..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\src\mgr;..\;..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\. -I.. -I..\..\include -I$(BCB)\include -I$(BCB)\include\vcl 
-      -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -boa"/>
+    <IDLCFLAGS value="-I..\..\src\mgr -I..\. -I.. -I..\..\include -I$(BCB)\include 
+      -I$(BCB)\include\vcl -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -boa"/>
     <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -tWC -tWM -c"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
