@@ -76,6 +76,12 @@ testlib_SOURCES = testlib.cpp
 testlib_LDADD = -Llib -lsword
 
 include locales.d/Makefile.am
+include samples/Makefile.am
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh
+
+install-data-am: installlocaleDATA installmodsDATA
+
+uninstall-am: uninstall-info-am uninstalllocaleDATA \
+	uninstallmodsDATA uninstall-sysconfDATA
