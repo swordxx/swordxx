@@ -21,7 +21,8 @@ void printsyntax() {
 	fprintf (stderr, "\n");
 	fprintf (stderr, "Valid search_type values are: regex, multiword, and phrase(def).\n");
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
-	fprintf (stderr, "  f (Footnotes), m (Morphology), and h (Section Headings)\n");
+	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
+	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents),\n");
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OLB, and plain(def)\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
 	
 	int maxverses = -1;
 	char outputformat = FMT_PLAIN, optionfilters = OP_NONE, searchtype = ST_NONE;
-	char *text = 0, *locale = 0, *ref = 0;
+	char *text = 0, *locale = 0, *ref = 0, *script = 0;
 	
 	char runquery = 0; // used to check that we have enough arguments to perform a legal query
 	// (a querytype & text = 1 and a ref = 2)
@@ -133,12 +134,23 @@ int main(int argc, char **argv)
 					runquery |= RQ_REF;
 			}
 		}
+#ifdef ICU
+
+		else if (!stricmp("-t", argv[i])) {
+			if (i+1 <= argc) {
+				script = argv[i+1];
+				optionfilters |= OP_TRANSLITERATOR;
+				i++;
+			}
+		}
+
+#endif
 	}
 	
 	
 	if (runquery == (RQ_BOOK | RQ_REF))
 	{
-		doquery(maxverses, outputformat, optionfilters, searchtype, text, locale, ref, &cout);
+		doquery(maxverses, outputformat, optionfilters, searchtype, text, locale, ref, &cout, script);
 	}
 	else
 		printsyntax();

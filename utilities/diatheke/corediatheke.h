@@ -16,6 +16,13 @@
 #include <unicodertf.h>
 #include <latin1utf8.h>
 #include <localemgr.h>
+#include <utf8cantillation.h>
+#include <utf8hebrewpoints.h>
+#include <utf8greekaccents.h>
+
+#ifdef ICU
+#include <utf8transliterator.h>
+#endif
 
 #define FMT_PLAIN 0
 #define FMT_THML 1
@@ -41,6 +48,7 @@
 #define OP_CANTILLATION 16
 #define OP_HEBREWPOINTS 32
 #define OP_GREEKACCENTS 64
+#define OP_TRANSLITERATOR 128
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0
@@ -48,5 +56,5 @@
 #define ST_MULTIWORD 3 // -2
 
 int hasalpha (char * string);
-void doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref, ostream* outputt); 
+void doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref, ostream* output, const char* script); 
 

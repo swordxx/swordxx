@@ -71,7 +71,7 @@ void systemquery(const char * key, ostream* output){
 	}
 }
 
-void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilters = 0, char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout) { 
+void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilters = 0, char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0) { 
 	static SWMgr manager;
 	static ModMap::iterator it;
 	static ListKey listkey;
@@ -187,6 +187,13 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		manager.setGlobalOption("Greek Accents","On");
 	else
 		manager.setGlobalOption("Greek Accents","Off");
+
+#ifdef ICU
+	if (optionfilters & OP_TRANSLITERATOR)
+		manager.setGlobalOption("Transliteration", script);
+	else
+		manager.setGlobalOption("Transliteration", "Off");
+#endif
 	
 	if (querytype == QT_SEARCH) {
 		//do search stuff
