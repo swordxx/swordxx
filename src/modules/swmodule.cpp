@@ -62,6 +62,10 @@ SWModule::~SWModule()
 		if (!key->Persist())
 			delete key;
 	}
+	stripfilters.clear();
+     rawfilters.clear();
+     renderfilters.clear();
+     optionfilters.clear();
 }
 
 
