@@ -216,11 +216,11 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				userData["SecHead"] = "false";
 			}
 			else if (tag.getAttribute("class")) {
-				if (!strcasecmp(tag.getAttribute("class"), "sechead")) {
+				if (!stricmp(tag.getAttribute("class"), "sechead")) {
 					userData["SecHead"] = "true";
 					buf += "<br /><b><i>";
 				}
-				else if (!strcasecmp(tag.getAttribute("class"), "title")) {
+				else if (!stricmp(tag.getAttribute("class"), "title")) {
 					userData["SecHead"] = "true";
 					buf += "<br /><b><i>";
 				}
