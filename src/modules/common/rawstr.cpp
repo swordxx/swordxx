@@ -130,10 +130,12 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 		read(idxfd->getFd(), &offset, 4);
 		getidxbufdat(offset, buf);
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
+/*
 			if (*trybuf == '-') {		// ignore '-' because alphabetized silly in file
 				targetbuf--;
 				continue;
 			}
+*/
 			*targetbuf = toupper(*trybuf);
 		}
 		*targetbuf = 0;
@@ -167,10 +169,12 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 		strcpy(key, ikey);
 
 		for (trybuf = targetbuf = key; *trybuf; trybuf++, targetbuf++) {
+/*
 			if (*trybuf == '-') {		// ignore '-' because alphabetized silly in file
 				targetbuf--;
 				continue;
 			}
+*/
 			*targetbuf = toupper(*trybuf);
 		}
 		*targetbuf = 0;
