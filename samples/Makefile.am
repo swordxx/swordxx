@@ -20,4 +20,6 @@ uninstallmodsDATA:
 	  echo " rm -f $(DESTDIR)$(modsdatadir)/$$f"; \
 	  rm -f $(DESTDIR)$(modsdatadir)/$$f; \
 	done
+else
+installmodsDATA:
 endif

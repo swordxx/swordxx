@@ -4,6 +4,7 @@
  * __xx is ok: it doesn't pollute the POSIX namespace. Use these in the
  * header files exported to user space
  */
+#include "config.h"
 
 typedef signed char __s8;
 typedef unsigned char __u8;
@@ -48,7 +49,7 @@ typedef unsigned int __u32;
 
 
 
-#ifndef SWBIGENDIAN
+#ifndef WORDS_BIGENDIAN
 
 #define swordtoarch16(x) (x)
 #define swordtoarch32(x) (x)

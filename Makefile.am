@@ -84,7 +84,18 @@ include samples/Makefile.am
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh
 
+install: install-recursive
+	@echo ""
+	@echo "sword is installed"
+	@echo "Type \"make register\" to help us keep track of how many"
+	@echo "people have seen it."
+	@echo ""
+
+
 install-data-am: installlocaleDATA installmodsDATA
 
 uninstall-am: uninstall-info-am uninstalllocaleDATA \
 	uninstallmodsDATA uninstall-sysconfDATA
+
+register:
+	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}" | mail sword.users@crosswire.org
