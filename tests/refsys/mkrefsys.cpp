@@ -23,13 +23,17 @@
 
 #include <stdio.h>
 #include <expat.h>
+#include "defs.h"
 #include "versekey2.h"
+#include "refsys.h"
+SWORD_NAMESPACE_START
+#include "kjvref.h"
+SWORD_NAMESPACE_END
 //#include <map>
 
 using namespace sword;
 
 #define BUFFSIZE        8192
-#define MAXOB 92
 #define TESTAMENT_HEADING 255
 #define NOTINREFSYS -1
 
@@ -38,14 +42,14 @@ char Buff[BUFFSIZE];
 
 int Depth;
 VerseKey2 vk;
-const char *abbrevs[MAXOB+1];
+const char *abbrevs[MAXOSISBOOKS+1];
 int totalchaps = 0;
 
 //struct bkref newbks[96], *newcps;
-sword::bkref newbks[MAXOB+1], *newcps;
+sword::bkref newbks[MAXOSISBOOKS+1], *newcps;
 
 void init() {
-	for (int i=0; i <= MAXOB; i++) {
+	for (int i=0; i <= MAXOSISBOOKS; i++) {
 		//printf("%s\n", vk.getPrefAbbrev(i));
 		abbrevs[i] = vk.getPrefAbbrev(i);
 		newbks[i].offset = 0;
@@ -54,13 +58,13 @@ void init() {
 }
 
 void outputbks() {
-	for (int i = 0; i <= MAXOB; i++) {
+	for (int i = 0; i <= MAXOSISBOOKS; i++) {
 		printf("book %d, offset %d, maxchapters %d\n", i, newbks[i].offset, newbks[i].maxnext);
 	}
 }
 
 void outputcps() {
-	for (int i = 0; i <= MAXOB; i++) {
+	for (int i = 0; i <= MAXOSISBOOKS; i++) {
 		printf("book %d: (%d:%d){", i, newbks[i].offset, newbks[i].maxnext);
 		if (newbks[i].offset != NOTINREFSYS && newbks[i].maxnext != TESTAMENT_HEADING)
 			for (int j = 0; j <= newbks[i].maxnext; j++)
@@ -76,7 +80,7 @@ void outputcps() {
 
 void makebksoffsets() {
 	int lastgood = 0, lastnext = 0;
-	for (int i = 1; i <= MAXOB; i++) {
+	for (int i = 1; i <= MAXOSISBOOKS; i++) {
 		if (newbks[i].maxnext == 0)
 			newbks[i].offset = NOTINREFSYS; 
 		else if (newbks[i-1].maxnext == TESTAMENT_HEADING) {
@@ -103,7 +107,7 @@ void makebksoffsets() {
 void makecpsoffsets() {
 	int lastone;
 	newcps[0].offset = 1;
-	for (int i = 1; i <= MAXOB; i++) {
+	for (int i = 1; i <= MAXOSISBOOKS; i++) {
 		if (newbks[i].offset != NOTINREFSYS) {
 			int chapoff = newbks[i].offset;
 			if ((i>1) && newbks[i-1].maxnext == TESTAMENT_HEADING) {
@@ -128,16 +132,18 @@ void outputfiles(const char *fname) {
 	bksbuf += ".bks";
 	SWBuf cpsbuf = fname;
 	cpsbuf += ".cps";
+	SWBuf confbuf = fname;
+	confbuf += ".conf";
 	FILE *bksfile = fopen(bksbuf.c_str(), "w");
 	if (!bksfile)
 	{
 		fprintf(stderr, "Couldn't open file to parse %s\n", bksbuf.c_str());
 		return;
 	}
-	int numbkswrite = fwrite(newbks, sizeof(sword::bkref), MAXOB+1, bksfile);
-	if (numbkswrite != MAXOB+1)
+	int numbkswrite = fwrite(newbks, sizeof(sword::bkref), MAXOSISBOOKS+1, bksfile);
+	if (numbkswrite != MAXOSISBOOKS+1)
 	{
-		printf("only wrote %d of %d entries\n", numbkswrite, MAXOB+1);
+		printf("only wrote %d of %d entries\n", numbkswrite, MAXOSISBOOKS+1);
 	}
 	fclose(bksfile);
 	FILE *cpsfile = fopen(cpsbuf.c_str(), "w");
@@ -152,6 +158,16 @@ void outputfiles(const char *fname) {
 		printf("only wrote %d of %d entries\n", numcpswrite, totalchaps);
 	}
 	fclose(cpsfile);
+	FILE *conffile = fopen(confbuf.c_str(), "w");
+	if (!conffile)
+	{
+		fprintf(stderr, "Couldn't open file to parse %s\n", confbuf.c_str());
+		return;
+	}
+	fprintf(conffile, "[RefSys]\n");
+	fprintf(conffile, "Name=%s\n", fname);
+	fprintf(conffile, "CpsSize=%d\n", totalchaps);
+	fclose(conffile);
 }
 
 static void
@@ -177,7 +193,7 @@ bksstart(void *data, const char *el, const char **attr)
 	else if (!strncmp("Ps151", attr[i + 1], 5)) {
 		book = 92;
 	}
-	else for (int j=0; j <= MAXOB; j++) {
+	else for (int j=0; j <= MAXOSISBOOKS; j++) {
 		if (!strncmp(abbrevs[j], attr[i + 1], strlen(abbrevs[j])))
 		{
 			book = j;
@@ -217,7 +233,7 @@ cpsstart(void *data, const char *el, const char **attr)
 	else if (!strncmp("Ps151", attr[i + 1], 5)) {
 		book = 92;
 	}
-	else for (int j=0; j <= MAXOB; j++) {
+	else for (int j=0; j <= MAXOSISBOOKS; j++) {
 		if (!strncmp(abbrevs[j], attr[i + 1], strlen(abbrevs[j])))
 		{
 			book = j;
@@ -265,10 +281,32 @@ void runparser(FILE *parsefile, XML_Parser p) {
   }
 }
 
+void outputkjv() {
+	for (int i=0; i <= MAXOSISBOOKS; i++) {
+		//newbks[i].offset = kjvbks[i].offset;
+		newbks[i].maxnext = kjvbks[i].maxnext;
+	}
+	makebksoffsets();
+	newcps = new sword::bkref[totalchaps];
+	for (int i=0; i < totalchaps; i++) {
+		//newbks[i].offset = kjvbks[i].offset;
+		newcps[i].maxnext = kjvcps[i].maxnext;
+	}
+	makecpsoffsets();
+	
+	outputfiles("KJV");
+	delete [] newcps;
+}
+
+
 int
 main(int argc, char *argv[])
 {
 	init();
+	if (!strcmp(argv[1], "KJV")) {
+		outputkjv();
+		return 0;
+	}
   XML_Parser p = XML_ParserCreate(NULL);
   if (! p) {
     fprintf(stderr, "Couldn't allocate memory for parser\n");
@@ -316,3 +354,4 @@ main(int argc, char *argv[])
   delete [] newcps;
   return 0;
 }
+
