@@ -37,6 +37,8 @@ cpp += latin1utf16.cpp
 cpp += utf8utf16.cpp
 cpp += utf16utf8.cpp
 cpp += scsuutf8.cpp
+cpp += utf8html.cpp
+cpp += utf8latin1.cpp
 
 cpp += thmlolb.cpp
 

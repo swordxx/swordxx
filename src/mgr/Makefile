@@ -6,6 +6,8 @@ include ${root}/Makefile.cfg
 
 cpp += swconfig.cpp
 cpp += swmgr.cpp
+cpp += swencodingmgr.cpp
+cpp += swmarkupmgr.cpp
 cpp += filemgr.cpp
 cpp += swlocale.cpp
 cpp += localemgr.cpp
