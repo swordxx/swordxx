@@ -74,6 +74,28 @@ char readline(int fd, char **buf) {
 	return !len;
 }
 
+char* deleteSubverses(char *buf) {
+        // remove subverse elements from osisIDs
+        // (this is a hack and should be handled better with VerseKey2)
+        int dots = 0;
+        for (int i = 0; buf[i]; i++) {
+               	if (buf[i] == ' ') {
+               		dots = 0;
+                }
+                else if (buf[i] == '.') {
+                      	dots++;
+                        if (dots > 2) {
+                               	while (buf[i] && buf[i] != ' ') {
+                                        buf[i] = ' ';
+                               		i++;
+                                }
+                                i--;
+                                dots = 0;
+                        }
+                }
+        }
+        return buf;
+}
 
 bool isKJVRef(const char *buf) {
 	VerseKey vk, test;
@@ -91,14 +113,39 @@ bool isKJVRef(const char *buf) {
 	else return true;	// no check if we're a heading... Probably bad.
 }
 
+void makeKJVRef(VerseKey &key) {
+	cout << "re-versified " << key;
+//        cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+       	if (key.Chapter() > key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) {
+		key.Chapter(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax);
+		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+        }
+	else if (key.Verse() > key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]) {
+		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+        }
+       	cout << "\tas " << key << endl;
+}
 
 void writeEntry(VerseKey &key, SWBuf &text) {
 //	cout << "Verse: " << key << "\n";
 //	cout << "TEXT: " << text << "\n\n";
+	VerseKey saveKey;
+	saveKey.AutoNormalize(0);
+	saveKey.Headings(1);
+        saveKey = key;
+
+        if (!isKJVRef(key)) {
+		makeKJVRef(key);
+        }
+
 	SWBuf currentText = module->getRawEntry();
-	if (currentText.length())
+	if (currentText.length()) {
+        	cout << "Overwriting entry: " << key << endl;
 		text = currentText + " " + text;
+        }
 	module->setEntry(text);
+
+        key = saveKey;
 }
 
 void linkToEntry(VerseKey& dest) {
@@ -107,9 +154,17 @@ void linkToEntry(VerseKey& dest) {
 	//SWBuf currentText = module->getRawEntry();
 	//if (currentText.length())
 	//	text = currentText + " " + text;
-	
+	VerseKey saveKey;
+	saveKey.AutoNormalize(0);
+	saveKey.Headings(1);
+        saveKey = *currentVerse;
+
+        makeKJVRef(*currentVerse);
+
 	cout << "Linking " << module->KeyText() << " to " << dest.getText() << "\n";
 	module->linkEntry(&dest);
+
+	*currentVerse = saveKey;
 }
 
 
@@ -119,19 +174,18 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	static SWBuf header = "";
 	static SWBuf lastTitle = "";
 	static int titleOffset = -1;
-	
 	static ListKey lastVerseIDs = ListKey();
 
 	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag())) {
 		titleOffset = text.length();
 		return false;
 	}
-	if ((!strcmp(token.getName(), "title")) && (token.isEndTag())) {
+	else if ((!strcmp(token.getName(), "title")) && (token.isEndTag())) {
 		lastTitle = (text.c_str() + titleOffset);
 		lastTitle += token;
 		return false;
 	}
-	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
+	else if (((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
 		if (inHeader) {	// this one should never happen, but just in case
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
@@ -159,21 +213,26 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		lastTitle = "";
 		text = "";
 	}
-	if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
+	else if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
 		if (inHeader) {
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
 			inHeader = false;
 		}
 
-		*currentVerse = token.getAttribute("osisID");
-		
 		string str = token.getAttribute("osisID");
+                char *subverseBuf = new char[str.length()+1];
+                strcpy(subverseBuf, str.c_str());
+		str = deleteSubverses(subverseBuf);
+                delete subverseBuf;
+
+		*currentVerse = str.c_str();
+
 		int pos = 0;
 		while ((pos = str.find(' ', pos)) != string::npos) {
 			str.replace(pos, 1, ";");
 		}
-		
+
 		//cout << "set the list\n" << token.getAttribute("osisID");
 		lastVerseIDs = currentVerse->ParseVerseList(str.c_str());
 //		if (lastVerseIDs.Count() > 1)
@@ -181,12 +240,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 		if (lastVerseIDs.Count())
 			*currentVerse = lastVerseIDs.getElement(0)->getText();
-		
-		text = "";
-		
+
+		text = token;
+
 		return true;
 	}
-	if ((!strcmp(token.getName(), "verse")) && (token.isEndTag())) {
+	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag())) {
 		if (lastTitle.length()) {
 			SWBuf titleHead = lastTitle;
 			char *end = strchr(lastTitle.getRawData(), '>');
@@ -196,13 +255,19 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			titleTag.setAttribute("subtype", "x-preverse");
 			text = SWBuf(titleTag) + SWBuf(end+1) + text;
 		}
+		text += token;
 		writeEntry(*currentVerse, text);
-		
-		// If we found an osisID like osisID="Gen1.1 Gen1.2 Gen 1.3" we have to link Gen1.2 and Gen1.3 to Gen1.1
+
+		// If we found an osisID like osisID="Gen.1.1 Gen.1.2 Gen.1.3" we have to link Gen.1.2 and Gen.1.3 to Gen.1.1
 		VerseKey dest = *currentVerse;
 		for (int i = 0; i < lastVerseIDs.Count(); ++i) {
-			VerseKey linkKey = lastVerseIDs.getElement(i)->getText();
-			if (linkKey != *currentVerse) {
+			VerseKey linkKey;
+                        linkKey.AutoNormalize(0);
+			linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
+			linkKey.Persist(1);
+                        linkKey = lastVerseIDs.getElement(i)->getText();
+
+			if (linkKey.Verse() != currentVerse->Verse() || linkKey.Chapter() != currentVerse->Chapter() || linkKey.Book() != currentVerse->Book() || linkKey.Testament() != currentVerse->Testament()) {
 				*currentVerse = linkKey;
 				linkToEntry(dest);
 			}
@@ -254,8 +319,6 @@ int main(int argc, char **argv) {
 	module->setKey(*currentVerse);
 
 	(*module) = TOP;
-	  
-	int successive = 0;  //part of hack below
 
 	char *from;
 	SWBuf token;
@@ -295,93 +358,3 @@ int main(int argc, char **argv) {
 	close(fd);
 }
 
-
-
-		
-/*
-		string verseText = "";
-
-		// chapter number
-		if (!strncmp("$$$ ", buffer, 4)) {
-			buffer[7] = 0;
-			chapter = atoi(buffer+4);
-			continue;
-		}
-		// header
-		if (!strncmp("<TD COLSPAN=4 VALIGN=TOP><FONT SIZE=2><B>", buffer, 41)) {
-			char *end = strstr(buffer+41, "</B>");
-			*end = 0;
-			header = buffer+41;
-			continue;
-		}
-		// verse number
-		if (!strncmp("<TD VALIGN=TOP ALIGN=RIGHT WIDTH=12><FONT SIZE=2 COLOR=RED><B><SUP>", buffer, 67)) {
-			char *end = strstr(buffer+67, "</SUP>");
-			*end = 0;
-			verse = atoi(buffer+67);
-			continue;
-		}
-		// Actual verse data
-		if (!strncmp("<TD VALIGN=TOP><FONT SIZE=2>", buffer, 28)) {
-			char *end = strstr(buffer+28, "</FONT>");
-			*end = 0;
-		}
-		// extra
-		else {
-			continue;
-		}
-
-		verseText = buffer + 28;
-
-		if (header.length()) {
-			verseText = "<title type=\"section\" subtype=\"x-preverse\">" + header + "</title>" + verseText;
-			header = "";
-		}
-
-		string vsbuf = argv[3];
-		sprintf(tmpBuf, "%i", chapter);
-		vsbuf += ((string)" ") + tmpBuf;
-		sprintf(tmpBuf, "%i", verse);
-		vsbuf += ((string)":") + tmpBuf;
-		vk = vsbuf.c_str();
-		if (vk.Error()) {
-			std::cerr << "Error parsing key: " << vsbuf << "\n";
-			exit(-5);
-		}
-		string orig = mod.getRawEntry();
-
-		if (!isKJVRef(vsbuf.c_str())) {
-			VerseKey origVK = vk;
-//	This block is functioning improperly -- problem with AutoNormalize???
-//			do {
-//				vk--;
-//			}
-//			while (!vk.Error() && !isKJVRef(vk));
-
-			//hack to replace above:
-			successive++;
-			vk -= successive;
-			orig = mod.getRawEntry();
-
-			std::cerr << "Not a valid KJV ref: " << origVK << "\n";
-			std::cerr << "appending to ref: " << vk << "\n";
-			orig += " [ (";
-			orig += origVK;
-			orig += ") ";
-			orig += verseText;
-			orig += " ] ";
-			verseText = orig.c_str();
-		}
-		else {
-		  successive = 0;
-		}
-
-		if (orig.length() > 1)
-			   std::cerr << "Warning, overwriting verse: " << vk << std::endl;
-		  
-		// ------------- End verse tests -----------------
-		std::cout << "adding "<< vk << "\n";
-		mod << verseText.c_str();	// save text to module at current position
-	}
-
-*/
