@@ -1,13 +1,15 @@
 root := ..
 subdirs := 
 pre-targets := 
-targets := cipherraw ciphertest ciphertest2
+targets := cipherraw ciphertest ciphertest2 lexdump
 bin := cipherraw
 include ${root}/Makefile.cfg
 
 cpp += cipherraw.cpp
 cpp += ciphertest.cpp
 cpp += ciphertest2.cpp
+
+c += lexdump.c
 
 s = $(c) $(cpp)
 d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
@@ -23,6 +25,9 @@ ciphertest: ciphertest.o
 
 ciphertest2: ciphertest2.o
 	$(CC) $(LFLAGS) -o $@ ciphertest2.o $(l) $(l) -O0
+
+lexdump: lexdump.o
+	$(CC) $(LFLAGS) -o $@ lexdump.o $(l) $(l) -O0
 
 
 ifneq ($(nodeps),yes)
