@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+20-Nov-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Added new utility, step2vpl, for dumping BSISG STEP module in
+		vpl format.
+
 17-Nov-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added new utility, stepdump, for dumping BSISG STEP modules.
 
