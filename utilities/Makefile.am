@@ -4,7 +4,7 @@ LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
 mod2vpl vpl2mod stepdump step2vpl mod2zmod modwrite addvs addld emptyvss \
-txt2sword addgb
+txt2sword addgb imp2gbs imp2ld imp2vs thml2gbs
 
 if ICU
 ICUPROG = normcode

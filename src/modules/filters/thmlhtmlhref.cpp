@@ -129,6 +129,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 	addTokenSubstitute("note", " <font color=\"#800000\"><small>(");
 	addTokenSubstitute("/note", ")</small></font> ");
+	addTokenSubstitute("/scripture", "</i> ");
 }
 
 
@@ -154,6 +155,11 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			}
 			pushString(buf, "</a>");
 		}
+		
+		else if (!strncmp(token, "scripture ", 10)) {
+			userData["inscriptRef"] = "true";
+			pushString(buf, "<i>");
+		} 
 
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
 			userData["inscriptRef"] = "true";

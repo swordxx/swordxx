@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.6 $)
+AC_REVISION($Revision: 1.7 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.3)
@@ -44,6 +44,7 @@ AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=ye
 AC_ARG_ENABLE(vcl,[  --enable-vcl            build VCL library [default=no]],,enable_vcl=no)
 AC_ARG_ENABLE(debug,[  --enable-debug          build debug library [default=no]],,enable_debug=no)
 AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,enable_profile=no)
+AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
 AM_MAINTAINER_MODE
 
 
@@ -72,6 +73,11 @@ fi
 if test x$enable_profile = xyes; then
   CFLAGS="$CFLAGS -pg"
   CXXFLAGS="$CXXFLAGS -pg"
+fi
+if test x$enable_profilefn = xyes; then
+  CFLAGS="$CFLAGS -g -finstrument-functions"
+  CXXFLAGS="$CXXFLAGS -g -finstrument-functions"
+  LIBS="$LIBS -g -finstrument-functions -lfnccheck"
 fi
 
 # ---------------------------------------------------------------------

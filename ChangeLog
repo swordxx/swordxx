@@ -2,6 +2,12 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+27-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Commited tbiggs' update to thmlhtmlhref.cpp
+	Commited dglassey's update to make system
+	Fixed SWModule to allow setting it's own key back to
+		itself
+
 26-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added chrislit's update imp2gbs and new imp2vs
 		and new imp2ld
