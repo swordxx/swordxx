@@ -11,7 +11,7 @@
 
 extern "C" {
 
-#define SWHANDLE int
+#define SWHANDLE long
 
 //using namespace sword;
 

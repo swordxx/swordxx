@@ -1,7 +1,7 @@
 /******************************************************************************
  *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.3 2004/05/18 19:34:46 joachim Exp $
+ * $Id: stringmgr.cpp,v 1.4 2004/07/03 18:10:50 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -99,10 +99,10 @@ StringMgr* StringMgr::getSystemStringMgr() {
 	if (!m_systemStringMgr) {
 #ifndef _ICU_
 		m_systemStringMgr = new StringMgr();
-		SWLog::getSystemLog()->logError("created default StringMgr");
+		SWLog::getSystemLog()->logInformation("created default StringMgr");
 #else
 		m_systemStringMgr = new ICUStringMgr();
-		SWLog::getSystemLog()->logError("created default IcuStringMgr");
+		SWLog::getSystemLog()->logInformation("created default IcuStringMgr");
 #endif	
 	}
 	
