@@ -151,16 +151,16 @@ void RawVerse::preptext(char *buf)
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				*to++ = nl[0];
-				*to++ = nl[1];
+				*to++ = 10;
+//				*to++ = nl[1];
 //				nlcnt = 0;
 			}
 			continue;
 		case 13:
 			if (!realdata)
 				continue;
-			*to++ = nl[0];
-			*to++ = nl[1];
+//			*to++ = nl[0];
+			*to++ = 10;
 			space = 0;
 			cr = 1;
 			continue;
