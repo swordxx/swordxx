@@ -1,6 +1,6 @@
 Summary:	The SWORD Project framework for manipulating Bible texts
 Name:		sword
-%define version 1.5.7
+%define version @VERSION@
 Version:	%{version}
 Release:	1
 #Icon:		sword.gif
@@ -9,7 +9,7 @@ Packager:	CrossWire Bible Society
 URL:		http://www.crosswire.org/sword
 Source:		http://www.crosswire.org/download/ftpmirror.tmp/pub/sword/source/v1.5/sword-%{version}.tar.gz
 Group:		System Environment/Libraries
-BuildRoot:	/var/tmp/sword-root
+BuildRoot:	%{_tmppath}/sword-root
 Requires:	curl
 Requires:	zlib
 # Requires:	icu >= 2.6
@@ -23,7 +23,7 @@ An installed module set may be shared between any frontend using the framework.
 %package devel
 Summary: Include files and static libraries for developing sword applications.
 Group: Development/Libraries
-Requires:	sword = 1.5.7
+Requires:	sword = %{version}
 Requires:	curl-devel >= 7.10.5
 Requires:	zlib-devel
 

@@ -149,8 +149,8 @@ register:
 	@echo ""
 
 install_config: 
-	@echo "[Install]" > $(sysconfdir)/sword.conf
-	@echo "DataPath=$(pkgdatadir)/" >> $(sysconfdir)/sword.conf
+	@echo "[Install]" > $(DESTDIR)$(sysconfdir)/sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> $(DESTDIR)$(sysconfdir)/sword.conf
 	@echo "sword.conf generated"
 
 dist-hook:
