@@ -45,19 +45,6 @@ zText::zText(const char *ipath, const char *iname, const char *idesc, int iblock
 		: zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang) {
 	blockType = iblockType;
 	lastWriteKey = 0;
-#ifdef USELUCENE
-	SWBuf fname;
-	fname = path;
-	ir = 0;
-	is = 0;
-	char ch = fname.c_str()[strlen(fname.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
-		fname += "/lucene";
-	if (IndexReader::indexExists(fname.c_str())) {
-		ir = &IndexReader::open(fname);
-		is = new IndexSearcher(*ir);
-	}
-#endif
 }
 
 
@@ -72,13 +59,6 @@ zText::~zText()
 	if (lastWriteKey)
 		delete lastWriteKey;
 
-#ifdef USELUCENE
-	if (is)
-		is->close();
-
-	if (ir)
-		delete ir;
-#endif
 }
 
 
@@ -253,7 +233,7 @@ VerseKey &zText::getVerseKey() {
 #define O_BINARY 0
 #endif
 
-signed char zText::createSearchFramework() {
+signed char zText::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 #ifdef USELUCENE
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
@@ -261,6 +241,8 @@ signed char zText::createSearchFramework() {
 	char *word = 0;
 	char *wordBuf = 0;
 
+	// be sure we give CLucene enough file handles	
+	FileMgr::getSystemFileMgr()->flush();
 
 	// save key information so as not to disrupt original
 	// module position
@@ -283,14 +265,15 @@ signed char zText::createSearchFramework() {
 
 	// iterate thru each entry in module
 
-	IndexWriter* writer = NULL;
-	Directory* d = NULL;
+	IndexWriter *writer = NULL;
+	Directory *d = NULL;
  
-	lucene::analysis::SimpleAnalyzer& an = *new lucene::analysis::SimpleAnalyzer();
+	lucene::analysis::SimpleAnalyzer *an = new lucene::analysis::SimpleAnalyzer();
 	SWBuf target = path;
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
 		target += "/lucene";
+	FileMgr::createParent(target+"/dummy");
 
 	if (IndexReader::indexExists(target.c_str())) {
 		d = &FSDirectory::getDirectory(target.c_str(), false);
@@ -298,20 +281,43 @@ signed char zText::createSearchFramework() {
 			IndexReader::unlock(*d);
 		}
 																		   
-		writer = new IndexWriter(*d, an, false);
+		writer = new IndexWriter(*d, *an, false);
 	} else {
 		d = &FSDirectory::getDirectory(target.c_str(), true);
-		writer = new IndexWriter( *d ,an, true);
+		writer = new IndexWriter( *d ,*an, true);
 	}
 
 
  
+	char perc = 1;
+	VerseKey *vkcheck = 0;
+	SWTRY {
+		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+	}
+	SWCATCH (...) {}
+	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
+	if (!highIndex)
+		highIndex = 1;		// avoid division by zero errors.
+
 	while (!Error()) {
-		Document &doc = *new Document();
-		doc.add( Field::Text(_T("key"), (const char *)*lkey ) );
-		doc.add( Field::Text(_T("content"), StripText()) );
-		writer->addDocument(doc);
-		delete &doc;
+		long mindex = 0;
+		if (vkcheck)
+			mindex = vkcheck->NewIndex();
+		else mindex = key->Index();
+		float per = (float)mindex / highIndex;
+		per *= 93;
+		per += 5;
+		char newperc = (char)per;
+//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
+		if (newperc > perc) {
+			perc = newperc;
+			(*percent)(perc, percentUserData);
+		}
+		Document *doc = new Document();
+		doc->add( Field::Text(_T("key"), (const char *)*lkey ) );
+		doc->add( Field::Text(_T("content"), StripText()) );
+		writer->addDocument(*doc);
+		delete doc;
 
 		(*this)++;
 	}
@@ -319,7 +325,7 @@ signed char zText::createSearchFramework() {
 	writer->optimize();
 	writer->close();
 	delete writer;
-	delete &an;
+	delete an;
 
 	// reposition module back to where it was before we were called
 	setKey(*savekey);
@@ -330,11 +336,17 @@ signed char zText::createSearchFramework() {
 	if (searchkey)
 		delete searchkey;
 
-	
 #endif
 	return 0;
 }
 
+void zText::deleteSearchFramework() {
+	SWBuf target = path;
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target += "/lucene";
+	FileMgr::removeDir(target.c_str());
+}
 
 /******************************************************************************
  * SWModule::Search 	- Searches a module for a string
@@ -355,7 +367,11 @@ ListKey &zText::search(const char *istr, int searchType, int flags, SWKey *scope
 #ifdef USELUCENE
 	listkey.ClearList();
 
-	if ((is) && (ir)) {
+	SWBuf target = path;
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target += "/lucene";
+	if (IndexReader::indexExists(target.c_str())) {
 
 		switch (searchType) {
 		case -2: {	// let lucene replace multiword for now
@@ -382,6 +398,10 @@ ListKey &zText::search(const char *istr, int searchType, int flags, SWKey *scope
 				return listkey;
 			}
 
+			lucene::index::IndexReader *ir;
+			lucene::search::IndexSearcher *is;
+			ir = &IndexReader::open(target);
+			is = new IndexSearcher(*ir);
 			(*percent)(10, percentUserData);
 
 			standard::StandardAnalyzer analyzer;
@@ -418,6 +438,9 @@ ListKey &zText::search(const char *istr, int searchType, int flags, SWKey *scope
 
 			delete &h;
 			delete &q;
+
+			delete is;
+			ir->close();
 
 			listkey = TOP;
 			(*percent)(100, percentUserData);

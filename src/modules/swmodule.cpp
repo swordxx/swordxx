@@ -375,6 +375,13 @@ void SWModule::decrement(int steps) {
 
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 
+	listkey.ClearList();
+
+	if (justCheckIfSupported) {
+		*justCheckIfSupported = (searchType >= -3);
+		return listkey;
+	}
+	
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	regex_t preg;
@@ -389,7 +396,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	processEntryAttributes(searchType == -3);
 	
-	listkey.ClearList();
 
 	if (!key->Persist()) {
 		savekey = CreateKey();

@@ -68,12 +68,17 @@ public:
 	/** ask the object to build any framework it need to do it searching.
 	*
 	*/
-	virtual signed char createSearchFramework();	// special search framework
+	virtual signed char createSearchFramework(
+			void (*percent) (char, void *) = &nullPercent,
+			void *percentUserData = 0);	// special search framework
 
+	virtual void deleteSearchFramework();
+	
 	/** does this class have a search framework built?
 	*
 	*/
 	virtual bool hasSearchFramework() { return false; }				// special search framework
+
 	/** Check if the search is optimally supported (e.g. if index files are presnt and working)
 	* This function checks whether the search framework may work in the best way.
 	* @return True if the the search is optimally supported, false if it's not working in the best way.

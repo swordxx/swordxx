@@ -44,13 +44,9 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT RawText : public SWText, public RawVerse {
 
 	VerseKey &getVerseKey();
-#ifdef USELUCENE
-	lucene::index::IndexReader *ir;
-	lucene::search::IndexSearcher *is;
-#else
+#ifndef USELUCENE
 	RawStr *fastSearch[2];
 #endif
-
 
 public:
   
@@ -60,7 +56,10 @@ public:
 	virtual SWBuf &getRawEntryBuf();
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
-	virtual signed char createSearchFramework();
+	virtual signed char createSearchFramework(
+			void (*percent) (char, void *) = &nullPercent,
+			void *percentUserData = 0);
+	virtual void deleteSearchFramework();
 	virtual bool hasSearchFramework() { return true; }
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
 

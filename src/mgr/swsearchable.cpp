@@ -34,9 +34,11 @@ SWSearchable::~SWSearchable() {
 }
 
 	// special search framework
-signed char SWSearchable::createSearchFramework() {
+signed char SWSearchable::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 	return 0;
 }
 
+void SWSearchable::deleteSearchFramework() {
+}
 
 SWORD_NAMESPACE_END

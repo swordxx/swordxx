@@ -27,6 +27,7 @@
 
 #include <defs.h>
 #include <swbuf.h>
+#include <swcacher.h>
 
 SWORD_NAMESPACE_START
 
@@ -74,7 +75,7 @@ public:
 * It keeps a list of all open files internally and closes them
 * when the destructor is called.
 */
-class FileMgr {
+class FileMgr : public SWCacher {
 
 	friend class FileDesc;
 	friend class __staticsystemFileMgr;
@@ -128,6 +129,11 @@ public:
 	* @param file The file to close.
 	*/
 	void close(FileDesc * file);
+
+	/** Cacher methods overridden
+	 */
+	virtual void flush();
+	virtual long resourceConsumption();
 
 	/** Checks for the existence of a file.
 	* @param ipath Path to file.

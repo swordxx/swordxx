@@ -50,21 +50,9 @@ typedef list<long> longlist;
 
 RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
 		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
-          RawVerse(ipath) {
-          
-#ifdef USELUCENE
-	SWBuf fname;
-	fname = path;
-	ir = 0;
-	is = 0;
-	char ch = fname.c_str()[strlen(fname.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
-		fname += "/lucene";
-	if (IndexReader::indexExists(fname.c_str())) {
-		ir = &IndexReader::open(fname);
-		is = new IndexSearcher(*ir);
-	}
-#else
+		RawVerse(ipath) {
+		
+#ifndef USELUCENE
 	SWBuf fname;
 	fname = path;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
@@ -72,13 +60,13 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 		fname += "/";
 	
 	for (int loop = 0; loop < 2; loop++) {
-     	fastSearch[loop] = 0;
+		fastSearch[loop] = 0;
 		SWBuf fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat"));
 		if (!access(fastidxname.c_str(), 04)) {
 			fastidxname = (fname + ((loop)?"ntwords.idx":"otwords.idx"));
 			if (!access(fastidxname.c_str(), 04))
 				fastSearch[loop] = new RawStr((fname + ((loop)?"ntwords":"otwords")).c_str());
-        	}
+		}
 	}
 #endif
 }
@@ -89,13 +77,7 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
  */
 
 RawText::~RawText() {
-#ifdef USELUCENE
-	if (is)
-		is->close();
-
-	if (ir)
-		delete ir;
-#else
+#ifndef USELUCENE
 	if (fastSearch[0])
 		delete fastSearch[0];
 
@@ -162,7 +144,7 @@ SWBuf &RawText::getRawEntryBuf() {
 }
 
 
-signed char RawText::createSearchFramework() {
+signed char RawText::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 #ifdef USELUCENE
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
@@ -170,7 +152,8 @@ signed char RawText::createSearchFramework() {
 	char *word = 0;
 	char *wordBuf = 0;
 
-
+	// be sure we give CLucene enough file handles	
+	FileMgr::getSystemFileMgr()->flush();
 	// save key information so as not to disrupt original
 	// module position
 	if (!key->Persist()) {
@@ -200,6 +183,7 @@ signed char RawText::createSearchFramework() {
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
 		target += "/lucene";
+	FileMgr::createParent(target+"/dummy");
 
 	if (IndexReader::indexExists(target.c_str())) {
 		d = &FSDirectory::getDirectory(target.c_str(), false);
@@ -214,8 +198,30 @@ signed char RawText::createSearchFramework() {
 	}
 
 
+	char perc = 1;
+	VerseKey *vkcheck = 0;
+	SWTRY {
+		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+	}
+	SWCATCH (...) {}
+	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
+	if (!highIndex)
+		highIndex = 1;		// avoid division by zero errors.
  
 	while (!Error()) {
+		long mindex = 0;
+		if (vkcheck)
+			mindex = vkcheck->NewIndex();
+		else mindex = key->Index();
+		float per = (float)mindex / highIndex;
+		per *= 93;
+		per += 5;
+		char newperc = (char)per;
+//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
+		if (newperc > perc) {
+			perc = newperc;
+			(*percent)(perc, percentUserData);
+		}
 		Document &doc = *new Document();
 		doc.add( Field::Text(_T("key"), (const char *)*lkey ) );
 		doc.add( Field::Text(_T("content"), StripText()) );
@@ -239,7 +245,6 @@ signed char RawText::createSearchFramework() {
 	if (searchkey)
 		delete searchkey;
 
-	
 #else
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
@@ -370,6 +375,13 @@ signed char RawText::createSearchFramework() {
 	return 0;
 }
 
+void RawText::deleteSearchFramework() {
+	SWBuf target = path;
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target += "/lucene";
+	FileMgr::removeDir(target.c_str());
+}
 
 /******************************************************************************
  * SWModule::search 	- Searches a module for a string
@@ -390,7 +402,11 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 #ifdef USELUCENE
 	listkey.ClearList();
 
-	if ((is) && (ir)) {
+	SWBuf target = path;
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target += "/lucene";
+	if (IndexReader::indexExists(target.c_str())) {
 
 		switch (searchType) {
 		case -2: {	// let lucene replace multiword for now
@@ -417,6 +433,10 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 				return listkey;
 			}
 
+			lucene::index::IndexReader *ir;
+			lucene::search::IndexSearcher *is;
+			ir = &IndexReader::open(target);
+			is = new IndexSearcher(*ir);
 			(*percent)(10, percentUserData);
 
 			standard::StandardAnalyzer analyzer;
@@ -453,6 +473,9 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 
 			delete &h;
 			delete &q;
+
+			delete is;
+			ir->close();
 
 			listkey = TOP;
 			(*percent)(100, percentUserData);

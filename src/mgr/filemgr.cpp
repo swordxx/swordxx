@@ -491,4 +491,28 @@ int FileMgr::removeDir(const char *targetDir) {
 }
 
 
+void FileMgr::flush() {
+	FileDesc **loop;
+	
+	for (loop = &files; *loop; loop = &((*loop)->next)) {
+		if ((*loop)->fd > 0) {
+			(*loop)->offset = lseek((*loop)->fd, 0, SEEK_CUR);
+			::close((*loop)->fd);
+			(*loop)->fd = -77;
+		}
+	}
+}
+
+long FileMgr::resourceConsumption() {
+	long count = 0;
+	FileDesc **loop;
+	for (loop = &files; *loop; loop = &((*loop)->next)) {
+		if ((*loop)->fd > 0) {
+			count++;
+		}
+	}
+	return count;
+}
+
+
 SWORD_NAMESPACE_END
