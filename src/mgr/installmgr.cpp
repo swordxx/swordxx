@@ -468,28 +468,27 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 		}
 		else {	//copy all files in DataPath directory
 			ConfigEntMap::iterator entry;
-			SWBuf modDir;
 			SWBuf sourceOrig = sourceDir;
 
 			entry = module->second.find("DataPath");
 			if (entry != module->second.end()) {
-				modDir = entry->second.c_str();
+				SWBuf modDir = entry->second.c_str();
 				entry = module->second.find("ModDrv");
 				if (entry != module->second.end()) {
 					if (!strcmp(entry->second.c_str(), "RawLD") || !strcmp(entry->second.c_str(), "RawLD4") || !strcmp(entry->second.c_str(), "zLD") || !strcmp(entry->second.c_str(), "RawGenBook") || !strcmp(entry->second.c_str(), "zGenBook")) {
-						char *buf = new char [ strlen(modDir.c_str()) + 1 ];
-	
-						strcpy(buf, modDir.c_str());
-						int end = strlen(buf) - 1;
-						while (end) {
-							if (buf[end] == '/')
+						int end = modDir.length() - 1;
+						while (end >= 0) { //while(end) wouldn't work for length() == 0
+							if (modDir[end] == '/')
 								break;
+
+							modDir--; //remove last char
 							end--;
 						}
-						buf[end] = 0;
-						modDir = buf;
-						delete [] buf;
 					}
+
+					//make sure there's no trailing slash in modDir, required for Bibles and Commentaries
+					if ( modDir.length() && (modDir[modDir.length()-1] == '/')) //last char is a slash
+						modDir--; //remove the slash
 				}
 
 				if (is) {
