@@ -104,8 +104,8 @@ char *zText::getRawEntry()
 	return versebuf;
 */
 
-	long  start;
-	unsigned short size;
+	long  start = 0;
+	unsigned short size = 0;
 	VerseKey *key = 0;
 
 	//printf ("zText char *\n");
