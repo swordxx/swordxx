@@ -15,7 +15,7 @@
 
 SWORD_NAMESPACE_START
 
-#define FILTERPAD 80
+#define FILTERPAD 16
 
 #if defined(__SWMSW__)
 

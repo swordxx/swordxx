@@ -1,5 +1,5 @@
 /* infcodes.c -- process literals and length/distance pairs
- * Copyright (C) 1995-1998 Mark Adler
+ * Copyright (C) 1995-2002 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
@@ -94,8 +94,7 @@ int r;
   uInt m;               /* bytes to end of window or read pointer */
   Bytef *f;             /* pointer to copy strings from */
   inflate_codes_statef *c = s->sub.decode.codes;  /* codes state */
-  long tryF;
-//      f = q 
+
   /* copy input/output information to locals (UPDATE macro restores) */
   LOAD
 
@@ -197,17 +196,9 @@ int r;
       Tracevv((stderr, "inflate:         distance %u\n", c->sub.copy.dist));
       c->mode = COPY;
     case COPY:          /* o: copying bytes in window, waiting for space */
-#ifndef __TURBOC__ /* Turbo C bug for following expression */
-      f = (uInt)(q - s->window) < c->sub.copy.dist ?
-          s->end - (c->sub.copy.dist - (q - s->window)) :
-          q - c->sub.copy.dist;
-#else
-	tryF = (long)q - c->sub.copy.dist;
-//      f = q - c->sub.copy.dist;
-      if ((uInt)(q - s->window) < c->sub.copy.dist)
-        f = s->end - (c->sub.copy.dist - (uInt)(q - s->window));
-      else f = (Bytef *)tryF;
-#endif
+      f = q - c->sub.copy.dist;
+      while (f < s->window)             /* modulo window size-"while" instead */
+        f += s->end - s->window;        /* of "if" handles invalid distances */
       while (c->len)
       {
         NEEDOUT
