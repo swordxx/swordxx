@@ -39,12 +39,12 @@ OSISRTF::OSISRTF()
   setTokenCaseSensitive(true);  
 }
 
-bool OSISRTF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
   // manually process if it wasn't a simple substitution
   if (!substituteToken(buf, token)) {
     //w
     if (!strncmp(token, "w", 1)) {
-      pushString(buf, "{");
+      buf += "{";
       userData["w"] == token;
     }
     else if (!strncmp(token, "/w", 2)) {
@@ -54,78 +54,78 @@ bool OSISRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-	pushString(buf, " {\\fs15 <%s>}", tagData.c_str());
+  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("gloss=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-	pushString(buf, " {\\fs15 <%s>}", tagData.c_str());
+  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("lemma=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-	pushString(buf, " {\\fs15 <%s>}", tagData.c_str());
+  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("morph=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-	pushString(buf, " {\\fs15 <%s>}", tagData.c_str());
+  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       pos1 = userData["w"].find("POS=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-	pushString(buf, " {\\fs15 <%s>}", tagData.c_str());
+  buf.appendFormatted(" {\\fs15 <%s>}", tagData.c_str() );
       }
       
-      pushString(buf, "}");
+      buf += "}";
     }
     
     //p
     else if (!strncmp(token, "p", 1)) {
-      pushString(buf, "{\\par\\par ");
+      buf += "{\\par\\par ";
     }
     else if (!strncmp(token, "/p", 2)) {
-      pushString(buf, "}");
+      buf += "}";
     }
     
     //reference
     else if (!strncmp(token, "reference", 8)) {
-      pushString(buf, "{<a href=\"\">");
+      buf += "{<a href=\"\">";
     }
     else if (!strncmp(token, "/reference", 9)) {
-      pushString(buf, "</a>}");
+      buf += "</a>}";
     }
     
     //line
     else if (!strncmp(token, "line", 4)) {
-      pushString(buf, "{\\par ");
+      buf += "{\\par ";
     }
     else if (!strncmp(token, "/line", 5)) {
-      pushString(buf, "}");
+      buf += "}";
     }
 
     //note
     else if (!strncmp(token, "note", 4)) {
-      pushString(buf, " {\\i1\\fs15 (");
+      buf += " {\\i1\\fs15 (";
     }
     else if (!strncmp(token, "/note", 5)) {
-      pushString(buf, " ) }");
+      buf += " ) }";
     }
     
     //title
     else if (!strncmp(token, "title", 5)) {
-      pushString(buf, "{\\i1\\b1 ");
+      buf += "{\\i1\\b1 ";
     }
     else if (!strncmp(token, "/title", 6)) {
-      pushString(buf, "\\par}");
+      buf += "\\par}";
     }
 
     //hi
@@ -133,38 +133,38 @@ bool OSISRTF::handleToken(char **buf, const char *token, DualStringMap &userData
       tagData=token;
       pos1 = tagData.find("type=\"b", 0);
       if (pos1 != string::npos) {
-	pushString(buf, "{\\b1 ");
+	buf += "{\\b1 ";
       }
       else {
-	pushString(buf, "{\\i1 ");
+	buf += "{\\i1 ";
       }
     }
     else if (!strncmp(token, "/hi", 3)) {
-      pushString(buf, "}");
+      buf += "}";
     }
 
     //q
     else if (!strncmp(token, "q", 1)) {
-      pushString(buf, "{");
+      buf += "{";
       tagData=token;
       pos1 = tagData.find("who=\"", 0);
       if (pos1 != string::npos) {
 	pos2 = tagData.find("\"", pos1);
 	if (tagData.substr(pos1, pos2).find("Jesus", 0) != string::npos) {
-	  pushString(buf, "\\cf6 ");
+	  buf += "\\cf6 ";
 	}
       }
     }
     else if (!strncmp(token, "/q", 2)) {
-      pushString(buf, "}");
+      buf += "}";
     }
 
     //transChange
     else if (!strncmp(token, "transChange", 11)) {
-      pushString(buf, "{\\i1 ");
+      buf += "{\\i1 ";
     }
     else if (!strncmp(token, "/transChange", 12)) {
-      pushString(buf, "}");
+      buf += "}";
     }
 
     else {
