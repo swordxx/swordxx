@@ -15,7 +15,7 @@
 
 #include <utf8transliterator.h>
 
-const char UTF8Transliterator::optionstring[][NUMSCRIPTS] = {
+const char UTF8Transliterator::optionstring[][NUMTARGETSCRIPTS] = {
 	"Off", 
 		"Latin", 
 		"Greek",
@@ -49,7 +49,7 @@ const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
 UTF8Transliterator::UTF8Transliterator() {
 	option = 0;
         unsigned long i;
-	for (i = 0; i <= NUMSCRIPTS; i++) {
+	for (i = 0; i < NUMTARGETSCRIPTS; i++) {
 		options.push_back(optionstring[i]);
 	}
         for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
@@ -68,7 +68,7 @@ UTF8Transliterator::~UTF8Transliterator() {
 
 void UTF8Transliterator::setOptionValue(const char *ival)
 {
-	unsigned char i = option = NUMSCRIPTS;
+	unsigned char i = option = NUMTARGETSCRIPTS;
 	while (i && stricmp(ival, optionstring[i])) {
 		i--;
 		option = i;
@@ -77,7 +77,7 @@ void UTF8Transliterator::setOptionValue(const char *ival)
 
 const char *UTF8Transliterator::getOptionValue()
 {
-	return (NUMSCRIPTS >= option) ? optionstring[option] : 0;
+	return (NUMTARGETSCRIPTS > option) ? optionstring[option] : 0;
 }
 
 char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
