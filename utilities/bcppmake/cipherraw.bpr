@@ -26,7 +26,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="cipherraw.bpf"/>
     <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
@@ -91,9 +91,10 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=2
-Item0=_ICU_;_ICUSWORD_
-Item1=_DEBUG
+Count=3
+Item0=_ICU_;_ICUSWORD_;USBINARY
+Item1=_ICU_;_ICUSWORD_
+Item2=_DEBUG
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
