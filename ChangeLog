@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+* Release 1.5.2 *
+
+27-Jun-2001     Troy A. Griffitts <scribe@crosswire.org>
+    Added roman numeral support in VerseKey parsing
+    Fixed a number of memory bugs
+
 20-Jun-2001     Troy A. Griffitts <scribe@crosswire.org>
     Packaging up for 1.5.2
     Fixed mod2zmod linking bug
