@@ -222,8 +222,10 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					buf += "<b> ";
 					u->inBold = true;
 				}
-				else	// all other types
+				else {	// all other types
 					buf += "<i> ";
+					u->inBold = false;
+				}
 			}
 			else if (tag.isEndTag()) {
 				if(u->inBold) {
