@@ -8,6 +8,7 @@ UNIX=true
 
 cpp += rawstr.cpp
 cpp += swcomprs.cpp
+cpp += lzsscomprs.cpp
 cpp += rawverse.cpp
 cpp += swcipher.cpp
 

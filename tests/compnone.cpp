@@ -36,14 +36,14 @@ FileCompress::FileCompress(char *fname)
 #define O_BINARY 0
 #endif
 
-	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY);
+	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY, 00644);
 
 	sprintf(buf, "%s.zzz", fname);
-	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY);
+	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY, 00644);
 }
 
 	
-FileCompress::~FileCompress(char *fname) 
+FileCompress::~FileCompress() 
 {
 	close(ufd);
 	close(zfd);
