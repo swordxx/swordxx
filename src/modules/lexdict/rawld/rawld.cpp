@@ -29,7 +29,7 @@
  *		idisp	- Display object to use for displaying
  */
 
-RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char enc, char dir, char mark) : RawStr(ipath), SWLD(iname, idesc, idisp, enc, dir, mark)
+RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char enc, char dir, char mark, const char* ilang) : RawStr(ipath), SWLD(iname, idesc, idisp, enc, dir, mark, ilang)
 {
 }
 

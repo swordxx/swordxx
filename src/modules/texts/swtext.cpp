@@ -14,7 +14,7 @@
  *	idisp	 - Display object to use for displaying
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, char enc, char dir, char mark): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark)
+SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, char enc, char dir, char mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang)
 {
 	delete key;
 	key = CreateKey();

@@ -25,10 +25,10 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
  *	idisp	 - Display object to use for displaying
  *	imodtype - Type of Module (All modules will be displayed with
  *			others of same type under their modtype heading
- *	unicode  - if this module is unicode (widechar)
+ *	unicode  - if this module is unicode
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, char encoding, char direction, char markup)
+SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, char encoding, char direction, char markup, const char* imodlang)
 {
 	key      = CreateKey();
 	entrybuf = new char [1];
@@ -37,6 +37,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	error    = 0;
 	moddesc  = 0;
 	modtype  = 0;
+        modlang = 0;
         this->encoding = encoding;
         this->direction = direction;
         this->markup  = markup;
@@ -45,6 +46,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	stdstr(&modname, imodname);
 	stdstr(&moddesc, imoddesc);
 	stdstr(&modtype, imodtype);
+        stdstr(&modlang, imodlang);
 	render = true;	// for protected method when sometimes need RenderText not to _Render Text_ :)  kludge / rewrite
         stripFilters = new FilterList();
         rawFilters = new FilterList();
@@ -68,6 +70,8 @@ SWModule::~SWModule()
 		delete [] moddesc;
 	if (modtype)
 		delete [] modtype;
+        if (modlang)
+                delete [] modlang;
 	if (key) {
 		if (!key->Persist())
 			delete key;
@@ -198,6 +202,23 @@ char SWModule::Markup(signed char newmark) {
                 markup = newmark;
         return markup;
 }
+
+
+/******************************************************************************
+ * SWModule::Lang - Sets/gets module language
+ *
+ * ENT:	imodlang - value which to set modlang
+ *		[0] - only get
+ *
+ * RET:	pointer to modname
+ */
+
+char *SWModule::Lang(const char *imodlang)
+{
+	return stdstr(&modlang, imodlang);
+}
+
+
 /******************************************************************************
  * SWModule::Disp - Sets/gets display driver
  *

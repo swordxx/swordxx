@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.49 2001/11/05 23:55:36 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.50 2001/11/08 13:22:26 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -549,13 +549,13 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	string description, datapath, misc1;
 	ConfigEntMap::iterator entry;
 	SWModule *newmod = 0;
- 	string sourceformat;
- 	string encoding;
+ 	string sourceformat, encoding, lang;
         signed char direction, enc, markup;
 
 	sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (string)"";
 	encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (string)"";
 	description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (string)"";
+	lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (string)"en";
 	datapath = prefixPath;
 	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
 		datapath += "/";
@@ -620,26 +620,26 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 
 		if (compress) {
 			if (!stricmp(driver.c_str(), "zText"))
-				newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, enc, direction, markup);
-			else	newmod = new zCom(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, enc, direction, markup);
+				newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
+			else	newmod = new zCom(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
 		}
 	}
 
 	if (!stricmp(driver.c_str(), "RawText")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup);
+		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
 	// backward support old drivers
 	if (!stricmp(driver.c_str(), "RawGBF")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup);
+		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
 	if (!stricmp(driver.c_str(), "RawCom")) {
-		newmod = new RawCom(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup);
+		newmod = new RawCom(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
 	if (!stricmp(driver.c_str(), "RawFiles")) {
-		newmod = new RawFiles(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup);
+		newmod = new RawFiles(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
 	if (!stricmp(driver.c_str(), "HREFCom")) {
@@ -648,10 +648,10 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	}
 
 	if (!stricmp(driver.c_str(), "RawLD"))
-		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup);
+		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 
 	if (!stricmp(driver.c_str(), "RawLD4"))
-		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup);
+		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 
     // if a specific module type is set in the config, use this
     if ((entry = section.find("Type")) != section.end())

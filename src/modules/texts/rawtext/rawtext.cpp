@@ -35,8 +35,8 @@
  *	idisp	 - Display object to use for displaying
  */
 
-RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char enc, char dir, char mark)
-		: SWText(iname, idesc, idisp, enc, dir, mark),
+RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char enc, char dir, char mark, const char* ilang)
+		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
           RawVerse(ipath) {
           
 	versebuf = 0;
