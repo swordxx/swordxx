@@ -34,7 +34,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
   // manually process if it wasn't a simple substitution
   if (!substituteToken(buf, token)) {
 	XMLTag tag(token);
-	  printf("token = %s\ntag->name = %s\n",token,tag.getName());
+	 //printf("token = %s\n",token);
     //w
     if (!strncmp(token, "w", 1)) {
       userData["w"] = token;
@@ -46,35 +46,42 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" <%s>", tagData.c_str() );
+        buf.appendFormatted(" %s", tagData.c_str() );
       }
       pos1 = userData["w"].find("gloss=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" <%s>", tagData.c_str() );
+        buf.appendFormatted(" %s", tagData.c_str() );
       }
       pos1 = userData["w"].find("lemma=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) - 1;
+	pos2 = userData["w"].find("\"", pos1) ;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" <%s>", tagData.c_str() );
+        buf.appendFormatted(" <small><em>&lt;<a href=\"type=Strongs value=%s\">", tagData.c_str());
+	const char *tmpbuf = tagData.c_str();
+	++tmpbuf;
+        buf.appendFormatted("%s</a>&gt;</em></small> ", tmpbuf);
       }
       pos1 = userData["w"].find("morph=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) - 1;
+	pos2 = userData["w"].find("\"", pos1) ;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" <%s>", tagData.c_str() );
+	if(strstr(userData["w"].c_str(),"x-Robinson"))
+	    buf.appendFormatted(" <small><em>(<a href=\"type=morph class=Robinson value=%s\">%s</a>)</em></small> ", tagData.c_str(), tagData.c_str());
+	
+	if(strstr(userData["w"].c_str(),"x-StrongsMorph"))
+	    buf.appendFormatted(" <small><em>(<a href=\"type=morph class=StrongsMorph value=%s\">%s</a>)</em></small> ", tagData.c_str(), tagData.c_str());
       }
       pos1 = userData["w"].find("POS=\"", 0);
       if (pos1 != string::npos) {
 	pos1 = userData["w"].find(":", pos1) + 1;
 	pos2 = userData["w"].find("\"", pos1) - 1;
 	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" <%s>", tagData.c_str() );
+        buf.appendFormatted(" %s", tagData.c_str() );
       }
     }
     else if (!strcmp(tag.getName(), "note")) {	
