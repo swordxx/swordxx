@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.6 2004/07/20 09:29:22 joachim Exp $
+* $Id: url.cpp,v 1.7 2004/07/20 11:24:53 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -27,7 +27,7 @@
 #include <ctype.h>
 #include <map>
 #include <stdio.h>
-#include <iostream.h>
+#include <iostream>
 
 SWORD_NAMESPACE_START
 
