@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: canon.h,v 1.2 1999/07/08 07:06:33 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -107,46 +107,61 @@ struct abbrev VerseKey::abbrevs[] = {
 	{"1 C", 46}, //   1 Corinthians
 	{"1 CHRONICLES", 13}, //   1 Chronicles
 	{"1 CORINTHIANS", 46}, //   1 Corinthians
+	{"1 JN", 62}, //    1 John
 	{"1 JOHN", 62}, //    1 John
+	{"1 KGS", 11   }, //    1 Kings
 	{"1 KINGS", 11   }, //    1 Kings
 	{"1 PETER", 60   }, //    1 Peter
+	{"1 PTR", 60   }, //    1 Peter
 	{"1 SAMUEL", 9   }, //    1 Samuel
 	{"1 THESSALONIANS", 52   }, //   1 Thessalonians
 	{"1 TIMOTHY", 54   }, //   1 Timothy
 	{"1C", 46}, //   1 Corinthians
 	{"1CHRONICLES", 13}, //   1 Chronicles
 	{"1CORINTHIANS", 46}, //   1 Corinthians
+	{"1JN", 62}, //    1 John	
 	{"1JOHN", 62}, //    1 John
+	{"1KGS", 11}, // 1 Kings
 	{"1KINGS", 11   }, //    1 Kings
 	{"1PETER", 60   }, //    1 Peter
+	{"1PTR", 60   }, //    1 Peter
 	{"1SAMUEL", 9   }, //    1 Samuel
 	{"1THESSALONIANS", 52   }, //   1 Thessalonians
 	{"1TIMOTHY", 54   }, //   1 Timothy
 	{"2 C", 47   }, //   2 Corinthians
 	{"2 CHRONICLES", 14   }, //   2 Chronicles
 	{"2 CORINTHIANS", 47   }, //   2 Corinthians
+	{"2 JN", 63}, //    2 John
 	{"2 JOHN", 63   }, //    2 John
+	{"2 KGS", 12   }, //    2 Kings
 	{"2 KINGS", 12   }, //    2 Kings
 	{"2 PETER", 61   }, //    2 Peter
+	{"2 PTR", 61   }, //    2 Peter
 	{"2 SAMUEL", 10   }, //    2 Samuel
 	{"2 THESSALONIANS", 53   }, //   2 Thessalonians
 	{"2 TIMOTHY", 55   }, //   2 Timothy
 	{"2C", 47   }, //   2 Corinthians
 	{"2CHRONICLES", 14   }, //   2 Chronicles
 	{"2CORINTHIANS", 47   }, //   2 Corinthians
+	{"2JN", 63   }, //    2 John	
 	{"2JOHN", 63   }, //    2 John
+	{"2KGS", 12 }, // 2 Kings
 	{"2KINGS", 12   }, //    2 Kings
 	{"2PETER", 61   }, //    2 Peter
+	{"2PTR", 61   }, //    2 Peter
 	{"2SAMUEL", 10   }, //    2 Samuel
 	{"2THESSALONIANS", 53   }, //   2 Thessalonians
 	{"2TIMOTHY", 55   }, //   2 Timothy
+	{"3 JN", 64   }, //    3 John
 	{"3 JOHN", 64   }, //    3 John
+	{"3JN", 64   }, //    3 John
 	{"3JOHN", 64   }, //    3 John
 	{"ACTS", 44   }, //     Acts
 	{"AMOS", 30   }, //    Amos
 	{"APOCALYPSE OF ST. JOHN", 66  }, //    Apocalypse of St. John (Rev.)
 	{"C", 51   }, //    Colossians
 	{"CANTICLE OF CANTICLES", 22  }, //    Canticle of Canticles (Song of S.)
+	{"COC", 22  }, //    Canticle of Canticles (Song of S.)
 	{"COLOSSIANS", 51   }, //    Colossians
 	{"D", 5  }, //     Deuteronomy
 	{"DANIEL", 27   }, //    Daniel
@@ -170,9 +185,12 @@ struct abbrev VerseKey::abbrevs[] = {
 	{"I C", 46}, //   1 Corinthians
 	{"I CHRONICLES", 13}, //   1 Chronicles
 	{"I CORINTHIANS", 46}, //   1 Corinthians
+	{"I JN", 62}, //    1 John
 	{"I JOHN", 62}, //    1 John
+	{"I KGS", 11}, // 1 Kings
 	{"I KINGS", 11   }, //    1 Kings
 	{"I PETER", 60   }, //    1 Peter
+	{"I PTR", 60   }, //    1 Peter
 	{"I SAMUEL", 9   }, //    1 Samuel
 	{"I THESSALONIANS", 52   }, //   1 Thessalonians
 	{"I TIMOTHY", 54   }, //   1 Timothy
@@ -182,26 +200,38 @@ struct abbrev VerseKey::abbrevs[] = {
 	{"II C", 47   }, //   2 Corinthians
 	{"II CHRONICLES", 14   }, //   2 Chronicles
 	{"II CORINTHIANS", 47   }, //   2 Corinthians
+	{"II JN", 63   }, //    2 John	
 	{"II JOHN", 63   }, //    2 John
+	{"II KGS", 12}, // 2 Kings
 	{"II KINGS", 12   }, //    2 Kings
 	{"II PETER", 61   }, //    2 Peter
+	{"II PTR", 61   }, //    2 Peter
 	{"II SAMUEL", 10   }, //    2 Samuel
 	{"II THESSALONIANS", 53   }, //   2 Thessalonians
 	{"II TIMOTHY", 55   }, //   2 Timothy
+	{"IIIJN", 64   }, //    3 John
 	{"IIIJOHN", 64   }, //    3 John
 	{"IIC", 47   }, //   2 Corinthians
 	{"IICHRONICLES", 14   }, //   2 Chronicles
 	{"IICORINTHIANS", 47   }, //   2 Corinthians
+	{"III JN", 64   }, //    3 John	
 	{"III JOHN", 64   }, //    3 John
+	{"IIJN", 63   }, //    2 John
 	{"IIJOHN", 63   }, //    2 John
+	{"IIKGS", 12 }, // 2 Kings
 	{"IIKINGS", 12   }, //    2 Kings
 	{"IIPETER", 61   }, //    2 Peter
+	{"IIPTR", 61   }, //    2 Peter
 	{"IISAMUEL", 10   }, //    2 Samuel
 	{"IITHESSALONIANS", 53   }, //   2 Thessalonians
 	{"IITIMOTHY", 55   }, //   2 Timothy
+	{"IJN", 62}, //    1 John
 	{"IJOHN", 62}, //    1 John
+	{"IKGS", 11}, // 1 Kings
 	{"IKINGS", 11   }, //    1 Kings
 	{"IPETER", 60   }, //    1 Peter
+	{"IPTR", 60   }, //    1 Peter
+	{"ISA", 23   }, //     Isaiah
 	{"ISAIAH", 23   }, //     Isaiah
 	{"ISAMUEL", 9   }, //    1 Samuel
 	{"ITHESSALONIANS", 52   }, //   1 Thessalonians
@@ -244,13 +274,16 @@ struct abbrev VerseKey::abbrevs[] = {
 	{"PHILIPPIANS", 50}, // Philippians
 	{"PHM", 57}, //   Philemon
 	{"PHP", 50}, //   Philippians
-	{"PSALMS", 19}, //    Psalms
 	{"PROVERBS", 20}, //    Proverbs
+	{"PSALMS", 19}, //    Psalms
+	{"PSM", 19}, // Psalms
+	{"PSS", 19}, // Psalms
 	{"REVELATION OF JOHN", 66}, //     Revelation
 	{"ROMANS", 45}, //    Romans
 	{"RUTH", 8}, //    Ruth
 	{"SONG OF SOLOMON", 22}, //     Song of Solomon
 	{"SONG OF SONGS", 22}, //     Song of Solomon
+	{"SOS", 22}, //     Song of Solomon
 	{"TITUS", 56}, //     Titus
 	{"ZECHARIAH", 38}, //   Zechariah
 	{"ZEPHANIAH", 36}, //   Zephaniah
