@@ -56,7 +56,6 @@ char *RawCom::getRawEntry() {
 	long  start;
 	unsigned short size;
 	VerseKey *key = 0;
-	FilterList::iterator it;
 
 #ifndef _WIN32_WCE
 	try {

@@ -34,7 +34,6 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 	bool isRightJustified = false;
 	bool isCentered = false;
 	int len;
-	unsigned int i;
 
 	len = strlen(text) + 1;		// shift string to right of buffer
 	if (len < maxlen) {

@@ -650,9 +650,9 @@ void LZSSCompress::Decode(void)
 				r = (short int) ( (r + 1) & (N - 1) );
 			}
 
-			// Add the "len" characters to the output stream.
+			// Add the "len" :characters to the output stream.
 
-			if (SendChars((char *) c, len) != len)
+			if (SendChars((char *) c, len) != (unsigned int)len)
 				break;
 		}
 	}

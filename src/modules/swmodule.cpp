@@ -453,7 +453,6 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 
 const char *SWModule::StripText(char *buf, int len)
 {
-	FilterList::iterator it;
 	SWKey *key = 0;
 
 	if (!buf) {
@@ -480,7 +479,6 @@ const char *SWModule::StripText(char *buf, int len)
 
  const char *SWModule::RenderText(char *buf, int len)
 {
-	FilterList::iterator it;
 	SWKey *key = 0;
 
 	if (!buf) {

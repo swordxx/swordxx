@@ -30,7 +30,6 @@ char RWPHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 	bool inverse = false;
 	bool first_letter = false;
 	int len;
-	char buf[240];	
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
