@@ -1,7 +1,9 @@
-// Diatheke 4.0 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by CrossWire Bible Society http://www.crosswire.org
+// Diatheke 4.1 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999, 2000, 2001 by CrossWire Bible Society
+// http://www.crosswire.org/sword/diatheke
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
+
 #include "corediatheke.h"
 #include <iostream>
 #include <string>
@@ -72,7 +74,7 @@ void systemquery(const char * key, ostream* output){
 }
 
 void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0) { 
-	static SWMarkupMgr manager;
+	static DiathekeMgr manager;
 
 	ModMap::iterator it;
 	ListKey listkey;
@@ -102,11 +104,14 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	//otherwise, we have a real book
 	it = manager.Modules.find(text);
 	if (it == manager.Modules.end()) { //book not found
-		
 		return;
 	}
-
 	target = (*it).second;
+
+	manager.Markup(outputformat);
+	manager.Encoding(outputencoding);
+	manager.bidi = ((OP_BIDI & optionfilters) == OP_BIDI);
+	manager.shape = ((OP_ARSHAPE & optionfilters) == OP_ARSHAPE);
 	
 	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
@@ -144,8 +149,6 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		querytype = QT_COMM;
 	else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
 		querytype = QT_LD;
-
-	manager.Markup(FMT_PLAIN);
 	
 	if (optionfilters & OP_FOOTNOTES)
 		manager.setGlobalOption("Footnotes","On");
@@ -184,9 +187,9 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else
 		manager.setGlobalOption("Scripture Cross-References","Off");
 
-#ifdef ICU
+#ifdef _ICU_
 	if (optionfilters & OP_TRANSLITERATOR && script)
-		manager.setGlobalOption("Transliteration", script);
+                manager.setGlobalOption("Transliteration", script);
 	else
 		manager.setGlobalOption("Transliteration", "Off");
 #endif

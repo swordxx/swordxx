@@ -1,5 +1,6 @@
-// Diatheke 4.0 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999, 2000, 2001 by CrossWire Bible Society http://www.crosswire.org
+// Diatheke 4.1 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999, 2000, 2001 by CrossWire Bible Society
+// http://www.crosswire.org/sword/diatheke
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 
@@ -11,7 +12,9 @@
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.0 by Chris Little \n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.1\n");
+	fprintf (stderr, "Copyright 2001 by the CrossWire Bible Society\n");
+	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "usage: \n  ");
 	fprintf (stderr, "diatheke <-b book> [-s search_type] [-o option_filters]\n");
 	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-l locale]\n");
@@ -24,7 +27,9 @@ void printsyntax() {
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents),\n");
-	fprintf (stderr, "  l (Lemmas), s (Scripture Cross-References),\n");
+	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping,\n");
+	fprintf (stderr, "  b (Bi-Directional Reordering)\n");
+
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OSIS, and plain (def)\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
@@ -101,6 +106,10 @@ int main(int argc, char **argv)
 					optionfilters |= OP_LEMMAS;
 				if (strchr(argv[i+1], 's'))
 					optionfilters |= OP_SCRIPREFS;
+				if (strchr(argv[i+1], 'r'))
+					optionfilters |= OP_ARSHAPE;
+				if (strchr(argv[i+1], 'b'))
+					optionfilters |= OP_BIDI;
 				i++;
 			}
 		}
@@ -167,8 +176,7 @@ int main(int argc, char **argv)
 					runquery |= RQ_REF;
 			}
 		}
-#ifdef ICU
-
+#ifdef _ICU_
 		else if (!stricmp("-t", argv[i])) {
 			if (i+1 <= argc) {
 				script = argv[i+1];
@@ -176,7 +184,6 @@ int main(int argc, char **argv)
 				i++;
 			}
 		}
-
 #endif
 	}
 	
@@ -188,3 +195,5 @@ int main(int argc, char **argv)
 	else
 		printsyntax();
 }
+
+

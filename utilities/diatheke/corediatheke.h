@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-#include <swmarkupmgr.h>
+#include "diathekemgr.h"
 #include <localemgr.h>
 
 #define QT_BIBLE 1
@@ -26,6 +26,8 @@
 #define OP_TRANSLITERATOR 128
 #define OP_LEMMAS 256
 #define OP_SCRIPREFS 512
+#define OP_ARSHAPE 1024
+#define OP_BIDI 2048
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0
