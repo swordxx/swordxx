@@ -93,6 +93,10 @@ RawFiles::operator char*()
 			preptext(versebuf);
 			RenderText(versebuf, size * 2);
 		}
+		else {
+			versebuf = new char [1];
+			versebuf[0] = 0;
+		}
 		FileMgr::systemFileMgr.close(datafile);
 	}
 	else {
