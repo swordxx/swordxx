@@ -22,7 +22,11 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 		bool inAV = false;
 		string phrase;
 		string freq;
-		char *currentPhrase = 0;
+		char val[128], *valto;
+		char wordstr[7];
+		char *currentPhrase = 0, *ch = 0;
+		char *currentPhraseEnd = 0;
+		int number = 0;
 
 
 		for (from = text; *from; from++) {
@@ -32,15 +36,36 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 						currentPhrase = from;
 				}
 				else {
-					if ((!isalpha(*from)) && (*from != ' ')) {
+					if ((!isalpha(*from)) && (*from != ' ') && (*from != '+')) {
+						if (*from == '<') {
+							if (!currentPhraseEnd)
+								currentPhraseEnd = from - 1;
+							for (; *from && *from != '>'; from++) {
+								if (!strncmp(from, "value=\"", 7)) {
+									valto = val;
+									from += 7;
+									for (unsigned int i = 0; from[i] != '\"' && i < 127; i++)
+										*valto++ = from[i];
+									*valto = 0;
+									sprintf(wordstr, "%03d", number+1);
+									module->getEntryAttributes()["AVPhrase"][wordstr]["CompoundedWith"] = val;
+									*from += strlen(val);
+								}
+							}
+							continue;
+						}
+
 						phrase = "";
-						phrase.append(currentPhrase, (int)(from - currentPhrase)-1);
+						phrase.append(currentPhrase, (int)(((currentPhraseEnd)?currentPhraseEnd:from) - currentPhrase)-1);
 						currentPhrase = from;
 						while (*from && isdigit(*from)) from++;
 						freq = "";
 						freq.append(currentPhrase, (int)(from - currentPhrase));
-						module->getEntryAttributes()["AVPhrase"][phrase]["Frequency"] = freq;
+						sprintf(wordstr, "%03d", ++number);
+						module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase;
+						module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq;
 						currentPhrase = 0;
+						currentPhraseEnd = 0;
 					}
 				}
 				if (*from == ';') inAV = false;
