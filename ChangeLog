@@ -1,19 +1,24 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+11-Mar-2001     Troy A. Griffitts <scribe@crosswire.org>
+    Added multimapwithdefault template and changed swconfig to use
+    Added operator [] to SWConfig
+    Added configtest
+
 25-Feb-2001     Chris Little <chirslit@crosswire.org>
 	Added roman.c for Roman Numeral conversion and made GBF to ThML
-	filter produce XML compliant text
+        filter produce XML compliant text
 
 09-Feb-2001	Joachim Ansorg <jansorg@gmx.de>
 	Added beginnings of API documentation in doc/api-documemtation.
-	Formats are HTML and man
+        Formats are HTML and man
 
 08-Feb-2001     Chris Little <chrislit@crosswire.org>
 	Added embedded Visual C++ project to build DLL in
-	apps/windoze/wince/sword but it requires undistributable
-	libraries to build it currently.  MIPS, SH3, and ARM processors
-	are supported.
+        apps/windoze/wince/sword but it requires undistributable
+        libraries to build it currently.  MIPS, SH3, and ARM processors
+        are supported.
 
 08-Feb-2001     Chris Little <chrislit@crosswire.org>
 	Added Visual C++ 6.0 project to build DLL in apps/windoze/vc/Sword
