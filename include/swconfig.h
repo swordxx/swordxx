@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.8 2001/03/15 18:24:39 jansorg Exp $
+ * $Id: swconfig.h,v 1.9 2001/03/17 01:12:04 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,7 +41,7 @@ public:
     T& operator[](const Key& k) {
         typename multimapwithdefault::iterator i = find(k);
         if (i == end()) {
-            insert(typename multimapwithdefault::value_type(k, T()));
+            insert(multimapwithdefault::value_type(k, T()));
             i = find(k);
         }
         return (*(i)).second;
