@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisosis.h,v 1.1 2004/03/14 03:39:54 scribe Exp $
+ * $Id: osisosis.h,v 1.2 2004/03/31 20:47:26 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,6 +44,7 @@ protected:
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
 	}
+	virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	OSISOSIS();

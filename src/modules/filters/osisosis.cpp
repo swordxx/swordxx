@@ -39,6 +39,54 @@ OSISOSIS::OSISOSIS() {
 }
 
 
+char OSISOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) { 
+	char status = SWBasicFilter::processText(text, key, module);
+	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+	if (vkey) {
+		SWBuf ref = "";
+		if (vkey->Verse()) {
+			ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
+		}
+		
+		if (ref.length() > 0) {
+			
+			text = ref + text;
+			
+			if (vkey->Verse()) {
+				VerseKey tmp;
+				tmp = *vkey;
+				tmp.AutoNormalize(0);
+				tmp.Headings(1);
+				
+				text += "</verse>";
+				
+				tmp = MAXVERSE;
+				if (*vkey == tmp) {
+					tmp.Verse(0);
+//					sprintf(ref, "\t</div>");
+//					pushString(&to, ref);
+					tmp = MAXCHAPTER;
+					tmp = MAXVERSE;
+					if (*vkey == tmp) {
+						tmp.Chapter(0);
+						tmp.Verse(0);
+//						sprintf(ref, "\t</div>");
+//						pushString(&to, ref);
+					}
+				}
+			}
+
+//
+//			else if (vkey->Chapter()) {
+//				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+//			}
+//			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
+//
+		}
+	}
+	return status;
+}
+
 bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
@@ -74,10 +122,13 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 						tag.setAttribute("lemma", attr);
 					}
 				}
+				tag.setAttribute("wn", 0);
+				tag.setAttribute("savlm", 0);
+				tag.setAttribute("splitID", 0);
 			}
 
-			tag.setAttribute("wn", 0);
-			buf += tag;
+// just leave w out for now
+//			buf += tag;
 		}
 
 		// <note> tag
@@ -85,6 +136,7 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
+					tag.setAttribute("swordFootnote", 0);
 
 					if (type != "strongsMarkup") {
 						buf += tag;
