@@ -2,7 +2,7 @@
  *  swdisprtf.h   - definition of Class SWDispRTF-- an SWDisplay used to display
  *				a verse in Rich Text Format.
  *
- * $Id: swdisprtf.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swdisprtf.h,v 1.2 1999/09/30 20:51:36 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,15 +35,15 @@
 
 #define	defRTFHeader          "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f2\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f3\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f4\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}{\\f8\\froman\\fcharset2\\fprq2 Symbol;}}{\\colortbl;\\red0\\green0\\blue255;\\red0\\green200\\blue50;\\red0\\green0\\blue255;\\red0\\green200\\blue50;\\red0\\green0\\blue255;\\red255\\green0\\blue0;} "
 #define	defRTFHeadMargin	  "{\\fs8\\cf1\\par\\pard} "
-#define	defRTFTrailer         "{\\fs24 \\par }}"
+#define	defRTFTrailer         "{\\fs%d \\par }}"	// 24
 
-#define	defRTFChapterMarkPre  "\\pard \\qc\\nowidctlpar{\\f1\\fs30\\b Chapter "
-#define	defRTFChapterMarkPost "\\par\\fs10\\par}"
+#define	defRTFChapterMarkPre  "\\pard \\qc\\nowidctlpar{\\f1\\fs%d\\b Chapter " // 30
+#define	defRTFChapterMarkPost "\\par\\fs%d\\par}"	// 10
 
-#define	defRTFVerseMarkPre    "{\\fs20\\cf1\\super "
+#define	defRTFVerseMarkPre    "{\\fs%d\\cf1\\super "	//20
 #define	defRTFVerseMarkPost   "}"
 
-#define	defRTFVersePre        "{\\fs24"
+#define	defRTFVersePre        "{\\fs%d"	// 24
 #define	defRTFVersePost       " }"
 
 
@@ -61,9 +61,13 @@ protected:
 		System::AnsiString FRTFVersePost;
 		bool FExpandNewLine;
 		CHARRANGE FCharRange;
+		int fontSize;
 		
 		int __fastcall GetMySelStart();
 		void __fastcall SetMySelStart(int iselstart);
+		int __fastcall getFontSize();
+		void __fastcall setFontSize(int iFontSize);
+		void recalcHeaders();
 protected:
 		TMemoryStream *RTFStream;
 		
@@ -84,6 +88,7 @@ __published:
 		__property System::AnsiString RTFVersePost       = {read=FRTFVersePost,        write=FRTFVersePost};
 		__property System::AnsiString RTFTrailer         = {read=FRTFTrailer,          write=FRTFTrailer};
 		__property bool               ExpandNewLine      = {read=FExpandNewLine,       write=FExpandNewLine};
+		__property int                FontSize           = {read=getFontSize,          write=setFontSize};
 };
 //---------------------------------------------------------------------------
 #endif
