@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.5 2001/09/02 10:48:15 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.6 2001/09/03 22:01:06 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -136,12 +136,12 @@ bool SWBasicFilter::substituteEscapeString(char **buf, const char *escString) {
 }
 
 
-bool SWBasicFilter::handleToken(char **buf, const char *token) {
+bool SWBasicFilter::handleToken(char **buf, const char *token, DualStringMap &userData) {
 	return substituteToken(buf, token);
 }
 
 
-bool SWBasicFilter::handleEscapeString(char **buf, const char *escString) {
+bool SWBasicFilter::handleEscapeString(char **buf, const char *escString, DualStringMap &userData) {
 	return substituteEscapeString(buf, escString);
 }
 
@@ -178,6 +178,8 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 	char tokenStartLen = strlen(tokenStart);
 	char tokenEndLen   = strlen(tokenEnd);
 	char tokenStartPos = 0, tokenEndPos = 0;
+	DualStringMap userData;
+	string lastTextNode;
 
 	len = strlen(text) + 1;		// shift string to right of buffer
 	if (len < maxlen) {
@@ -214,12 +216,14 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 			if (*from == escEnd[escEndPos]) {
 				if (escEndPos == (escEndLen - 1)) {
 					intoken = false;
-					if ((!handleEscapeString(&to, token)) && (passThruUnknownEsc)) {
+					userData["lastTextNode"] = lastTextNode;
+					if ((!handleEscapeString(&to, token, userData)) && (passThruUnknownEsc)) {
 						pushString(&to, escStart);
 						pushString(&to, token);
 						pushString(&to, escEnd);
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
+					lastTextNode = "";
 					continue;
 				}
 			}
@@ -229,12 +233,14 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 			if (*from == tokenEnd[tokenEndPos]) {
 				if (tokenEndPos == (tokenEndLen - 1)) {
 					intoken = false;
-					if ((!handleToken(&to, token)) && (passThruUnknownToken)) {
+					userData["lastTextNode"] = lastTextNode;
+					if ((!handleToken(&to, token, userData)) && (passThruUnknownToken)) {
 						pushString(&to, tokenStart);
 						pushString(&to, token);
 						pushString(&to, tokenEnd);
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
+					lastTextNode = "";
 					continue;
 				}
 			}
@@ -244,7 +250,10 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 			if (tokpos < 2047)
 				token[tokpos++] = *from;
 		}
-		else	*to++ = *from;
+		else {
+			*to++ = *from;
+			lastTextNode += *from;
+		}
 	}
 	*to++ = 0;
 	*to = 0;

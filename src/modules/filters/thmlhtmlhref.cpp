@@ -126,7 +126,6 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 	
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("/scripRef", "</A>");	  
 	addTokenSubstitute("note place=\"foot\"", " <SMALL>(");
 	addTokenSubstitute("/note", ")</SMALL> ");
 	addTokenSubstitute("foreign lang=\"el\"", "<FONT FACE=\"SIL Galatia\">");
@@ -135,7 +134,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 }
 
 
-bool ThMLHTMLHREF::handleToken(char **buf, const char *token) {
+bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
@@ -173,6 +172,14 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token) {
 			*(*buf)++ = '>';
 		} 
 
+		// we've ended a scripRef like "<scripRef>John 3:16</scripRef>"
+		else if (strcmp(token, "/scripRef")) {
+			pushString(buf, "<A HREF=\"");
+			pushString(buf, userData["lastTextNode"].c_str());
+			*(*buf)++ = '\"';
+			*(*buf)++ = '>';
+		}
+			
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			pushString(buf, "<A HREF=\"");
 			for (unsigned int i = 5; i < strlen(token)-1; i++)				
