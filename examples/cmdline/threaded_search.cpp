@@ -63,7 +63,7 @@ void CSwordModuleSearch::startThread()  {
 void CSwordModuleSearch::search()  {
 	
 	if (!m_module) {
-		printf("Return.");
+		cout << "Return." << endl;
 		return;
 	}
 	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, 0, 0, &percentUpdate);

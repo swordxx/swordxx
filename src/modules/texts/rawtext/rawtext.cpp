@@ -420,11 +420,14 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 
 					// check scope
 					// Try to set our scope key to this verse key
-					*testKeyType = vk;
+					if (scope) {
+						*testKeyType = vk;
 
-					// check to see if it set ok and if so, add to our return list
-					if (*testKeyType == vk)
-						listkey << (const char *) vk;
+						// check to see if it set ok and if so, add to our return list
+						if (*testKeyType == vk)
+							listkey << (const char *) vk;
+					}
+					else listkey << (const char*) vk;
 				}
 			}
 			(*percent)(98, percentUserData);
