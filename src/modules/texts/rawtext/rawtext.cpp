@@ -507,3 +507,25 @@ SWModule &RawText::operator <<(const SWKey *inkey) {
 }
 
 
+/******************************************************************************
+ * RawFiles::deleteEntry	- deletes this entry
+ *
+ * RET: *this
+ */
+
+void RawText::deleteEntry() {
+
+	VerseKey *key = 0;
+
+	try {
+		key = dynamic_cast<VerseKey *>(this->key);
+	}
+	catch ( ... ) {}
+	if (!key)
+		key = new VerseKey(this->key);
+
+	settext(key->Testament(), key->Index(), "");
+
+	if (key != this->key)
+		delete key;
+}

@@ -204,13 +204,12 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 
 
 /******************************************************************************
- * RawFiles::operator << (SWKey *)- Link the modules current key entry with
- *				another module entry
+ * RawFiles::deleteEntry	- deletes this entry
  *
  * RET: *this
  */
 
-void RawFiles::Delete() {
+void RawFiles::deleteEntry() {
 
 	VerseKey *key = 0;
 

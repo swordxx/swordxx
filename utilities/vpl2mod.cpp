@@ -50,10 +50,11 @@ char readline(int fd, char **buf) {
 		read(fd, *buf, size);
 		(*buf)[size] = 0;
 
-		// clean up any trailing 13 on dosfs
-		while (read(fd, &ch, 1) == 1) {
-			if (ch != 13)
+		// clean up any trailing junk on buf
+		for (char *it = *buf+(strlen(*buf)-1); it > *buf; it--) {
+			if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t'))
 				break;
+			else *it = 0;
 		}
 		return 0;
 	}
@@ -130,9 +131,7 @@ int main(int argc, char **argv) {
 
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
-	// This call- CreateModule should probably become part of the standard
-	// module driver interface.
-	if (RawVerse::CreateModule(argv[2])) {
+	if (RawText::createModule(argv[2])) {
 		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
 		exit(-3);
 	}

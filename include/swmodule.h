@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.9 2000/10/15 11:25:31 scribe Exp $
+ * $Id: swmodule.h,v 1.10 2000/10/15 13:36:13 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -86,9 +86,13 @@ public:
 	virtual operator SWKey&() { return *key; }
 	virtual operator SWKey*() { return key; }
 
+	// write interface ----------------------------
+	virtual bool isWritable() { return false; }
+	static char createModule(const char *path) { return -1; }
 	virtual SWModule &operator <<(const char *) { return *this; }  // Modify current module entry
 	virtual SWModule &operator <<(const SWKey *) { return *this; } // Link current module entry to other module entry
-	virtual void Delete() {} // Delete current module entry
+	virtual void deleteEntry() {} // Delete current module entry
+	// end write interface ------------------------
 
 	virtual SWModule &operator -=(int decrement);
 	virtual SWModule &operator +=(int increment);

@@ -3,15 +3,18 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 15-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
-	Added verse ref parsing functionality to vpl2mod
+	Normalized Writable interface to SWModule.
+	Fixed RawVerse settext to correctly append a dos nl.
+	Fixed vpl2mod to correctly strip 10s and 13s from input.
+	Added verse ref parsing functionality to vpl2mod.
 	Added new 'getRawEntry()' pure virtual to each driver.
 		Changed from operator char *().  Moved operator char *
 		to SWModule.
 	Created define FILTERPAD to replace hard coded padding in
 		each driver.
 	Added write link support in RawText.
-	Added new test introtest to test module intros
-	Fixed abbrev parsing to see Phil as Php
+	Added new test introtest to test module intros.
+	Fixed abbrev parsing to see Phil as Php.
 	
 05-Sep-2000	Joachim Ansorg <jansorg@gmx.de>
 	Fixed a problem in Makefile.cfg with profiler support and

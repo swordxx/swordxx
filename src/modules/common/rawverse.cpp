@@ -231,6 +231,7 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 	long start, outstart;
 	unsigned short size;
 	unsigned short outsize;
+	static const char nl[] = {13, 10};
 
 	idxoff *= 6;
 	if (!testmt)
@@ -249,14 +250,20 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 		outsize  = NXSwapLittleShortToHost(size);
 	#endif
 #endif
+	if (size) {
+		lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
+		write(textfp[testmt-1]->getFd(), buf, (int)size);
+
+		// add a new line to make data file easier to read in an editor
+		write(textfp[testmt-1]->getFd(), &nl, 2);
+	}
+	else {
+		outstart = outsize = 0;
+	}
 	write(idxfp[testmt-1]->getFd(), &outstart, 4);
 	write(idxfp[testmt-1]->getFd(), &outsize, 2);
 
-	lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
-	write(textfp[testmt-1]->getFd(), buf, (int)size);
 
-	// add a new line to make data file easier to read in an editor
-	write(textfp[testmt-1]->getFd(), &nl, 1);
 }
 
 
@@ -297,7 +304,7 @@ void RawVerse::linkentry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 
-char RawVerse::CreateModule(char *path)
+char RawVerse::createModule(const char *path)
 {
 	char buf[127];
 	FileDesc *fd, *fd2;

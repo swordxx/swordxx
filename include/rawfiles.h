@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.2 2000/10/15 11:25:31 scribe Exp $
+ * $Id: rawfiles.h,v 1.3 2000/10/15 13:36:13 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,9 +36,14 @@ public:
 	RawFiles(const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay *idisp = 0);
 	virtual ~RawFiles();
 	virtual char *getRawEntry();
-	virtual SWModule &operator <<(const char *inbuf);
-	virtual SWModule &operator <<(const SWKey *inbuf);
-	virtual void Delete();
+
+	// write interface ----------------------------
+	virtual bool isWritable() { return true; }
+	static char createModule(const char *path) { return -1; }
+	virtual SWModule &operator <<(const char *inbuf);    // Modify current module entry
+	virtual SWModule &operator <<(const SWKey *linkKey); // Link current module entry to other module entry
+	virtual void deleteEntry(); // Delete current module entry
+	// end write interface ------------------------
 };
 
 
