@@ -395,7 +395,7 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 	if ((is) && (ir)) {
 
 		switch (searchType) {
-		case -3: {
+		case -2: {	// let lucene replace multiword for now
 
 
 			// test to see if our scope for this search is bounded by a
@@ -443,8 +443,12 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 					// check to see if it set ok and if so, add to our return list
 					if (*testKeyType == vk)
 						listkey << (const char *) vk;
+						listkey.GetElement()->userData = (void *)(int)(h.score(i)*100);
 				}
-				else listkey << (const char*) vk;
+				else {
+					listkey << (const char*) vk;
+					listkey.GetElement()->userData = (void *)(int)(h.score(i)*100);
+				}
 			}
 			(*percent)(98, percentUserData);
 
@@ -647,7 +651,7 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 
 #endif
 	// if we don't support this search, fall back to base class
-	return SWModule::Search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
+	return SWModule::search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
 
 

@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.18 2003/02/28 13:12:43 mgruner Exp $
+ * $Id: listkey.h,v 1.19 2003/08/31 01:58:13 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,51 +37,54 @@ SWORD_NAMESPACE_START
   */
 class SWDLLEXPORT ListKey : public SWKey {
 
-  static SWClass classdef;
-  void init ();
+	static SWClass classdef;
+	void init ();
 protected:
-  int arraypos;
-  int arraymax;
-  int arraycnt;
-  SWKey **array;
+	int arraypos;
+	int arraymax;
+	int arraycnt;
+	SWKey **array;
 public:
 	/** initializes instance of ListKey
 	*
 	* @param ikey text key
 	*/
-	ListKey (const char *ikey = 0);
-	ListKey (ListKey const &k);
+	ListKey(const char *ikey = 0);
+	ListKey(ListKey const &k);
 	/** cleans up instance of ListKey
 	*/
-	virtual ~ ListKey ();
+	virtual ~ ListKey();
 
-	virtual SWKey *clone () const;
+	virtual SWKey *clone() const;
 	/** Clears out elements of list
 	*/
-	virtual void ClearList ();
+	virtual void ClearList();
 	/** Returns number of elements in list
 	* @return number of elements in list
 	*/
-	virtual int Count ();
+	virtual int Count();
 	/** Removes current element from list
 	*/
-	virtual void Remove ();
+	virtual void Remove();
 	/** Sets key to element number
 	*
 	* @param ielement element number to set to
 	* @return error status
 	*/
-	virtual char SetToElement (int ielement, SW_POSITION = TOP);
+	virtual char SetToElement(int ielement, SW_POSITION = TOP);
 	/** Gets a key element number
 	*
 	* @param pos element number to get (or default current)
 	* @return Key or null on error
 	*/
-	virtual SWKey *GetElement (int pos = -1);
+	virtual SWKey *getElement(int pos = -1);
+	// deprecated, use above function
+	virtual SWKey *GetElement(int pos = -1) { return getElement(pos); }
+
 	/** Adds an element to the list
 	* @param ikey the element to add
 	*/
-	ListKey & operator << (const SWKey &ikey) { add(ikey); return *this; }
+	ListKey & operator <<(const SWKey &ikey) { add(ikey); return *this; }
 	virtual void add(const SWKey &ikey);
 
 	/** Equates this ListKey to another ListKey object
@@ -104,15 +107,15 @@ public:
 	*/
 	virtual void increment(int step);
 
-	virtual char Traversable () { return 1; }
-	virtual long Index () const { return arraypos; }
+	virtual char Traversable() { return 1; }
+	virtual long Index() const { return arraypos; }
 	virtual const char *getRangeText() const;
 
 	/**
 	* Returns the index for the new one given as as parameter.
 	* The first parameter is the new index.
 	*/
-	virtual long Index (long index) { SetToElement (index); return Index (); }
+	virtual long Index(long index) { SetToElement (index); return Index (); }
 	virtual const char *getText() const;
 	virtual void setText(const char *ikey);
 

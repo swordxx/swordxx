@@ -17,6 +17,14 @@ struct ModInfo {
 };
 
 typedef sequence<ModInfo> ModInfoList;
+
+struct SearchHit {
+	string modName;
+	string key;
+	long score;
+};
+
+typedef sequence<SearchHit> SearchHitList;
 //-----------------------------------------------------------------
 // SWModule methods
 
@@ -29,7 +37,7 @@ typedef sequence<ModInfo> ModInfoList;
 
 interface SWModule {
 	void   terminateSearch();
-	StringList search(in string istr, in SearchType searchType, in long flags, in string scope);
+	SearchHitList search(in string istr, in SearchType searchType, in long flags, in string scope);
 	char   error();
 	long  getEntrySize();
 	void   setKeyText(in string key);

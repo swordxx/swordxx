@@ -11,6 +11,7 @@ clean:
 	rm src/org/crosswire/sword/orb/SW*.java
 	rm src/org/crosswire/sword/orb/_SW*.java
 	rm src/org/crosswire/sword/orb/Mod*.java
+	rm src/org/crosswire/sword/orb/Search*.java
 	rm src/org/crosswire/sword/orb/String*.java
 	rm -rf classes/*
 

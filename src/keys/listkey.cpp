@@ -234,7 +234,7 @@ char ListKey::SetToElement(int ielement, SW_POSITION pos) {
  * RET:	Key or null on error
  */
 
-SWKey *ListKey::GetElement(int pos) {
+SWKey *ListKey::getElement(int pos) {
 	if (pos < 0)
 		pos = arraypos;
 		

@@ -133,10 +133,10 @@ System.out.println("ORB found in session");
 			module.setKeyText("jas1:19");
 			System.out.println(module.getRenderText());
 		}
-		module = mgr.getModuleByName(modInfoList[0].name);
-		String[] searchResults = module.search("God love world", SearchType.MULTIWORD, 0, "");
+		module = mgr.getModuleByName("WEB");
+		SearchHit[] searchResults = module.search("God love world", SearchType.MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults.length; i++)
-			System.out.println(searchResults[i]);
+			System.out.println(searchResults[i].key);
 
 	}
 }

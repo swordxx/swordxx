@@ -19,7 +19,7 @@ class SWModule_impl : public POA_swordorb::SWModule {
 public:
 	SWModule_impl(sword::SWModule *delegate)  { this->delegate = delegate; }
 
-	StringList *search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException);
+	SearchHitList *search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException);
 	void   terminateSearch() throw(CORBA::SystemException) { delegate->terminateSearch = true; }
 	char   error() throw(CORBA::SystemException) { return delegate->Error(); }
 	CORBA::Long getEntrySize() throw(CORBA::SystemException) { return delegate->getEntrySize(); }

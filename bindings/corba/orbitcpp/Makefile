@@ -1,7 +1,16 @@
 all: server testclient
 
+#comment these out if you didn't compile sword with lucene support
+luceneflags=-DUSELUCENE
+lucenelibs=-lclucene
+#----------------------------------
+
+LIBS += ${lucenelibs}
+CFLAGS += ${luceneflags}
+CXXFLAGS += ${luceneflags}
+
 server: swordorb-common.o server.cpp swordorb-impl.o swordorb-cpp.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-cpp-skels.o swordorb-skels.o swordorb-cpp.o
-	g++ -g -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o server server.cpp swordorb-impl.o swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-cpp-skels.o swordorb-skels.o `orbit2-config --libs` -lORBit-2-cpp -lsword -lz
+	g++ -g -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o server server.cpp swordorb-impl.o swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-cpp-skels.o swordorb-skels.o `orbit2-config --libs` -lORBit-2-cpp -lsword -lz ${LIBS}
 
 testclient: testclient.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o
 	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o testclient testclient.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o `orbit2-config --libs` -lORBit-2-cpp

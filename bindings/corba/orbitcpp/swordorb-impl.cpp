@@ -92,7 +92,7 @@ char *SWModule_impl::getCategory() throw(CORBA::SystemException) {
 }
 
 
-StringList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException) {
+SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException) {
 	int stype = 2;
 	sword::ListKey lscope;
 	sword::VerseKey parser;
@@ -107,13 +107,16 @@ StringList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA
 	}
 	else	result = delegate->Search(istr, stype, flags);
 
-	StringList *retVal = new StringList;
+	SearchHitList *retVal = new SearchHitList;
 	int count = 0;
 	for (result = sword::TOP; !result.Error(); result++) count++;
 	retVal->length(count);
 	int i = 0;
-	for (result = sword::TOP; !result.Error(); result++)
-		(*retVal)[i++] = CORBA::string_dup((const char *)result);
+	for (result = sword::TOP; !result.Error(); result++) {
+		(*retVal)[i].modName = CORBA::string_dup(delegate->Name());
+		(*retVal)[i].key = CORBA::string_dup((const char *)result);
+		(*retVal)[i++].score = (long)result.getElement()->userData;
+	}
 
 	return retVal;
 }

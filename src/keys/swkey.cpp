@@ -25,6 +25,7 @@ SWKey::SWKey(const char *ikey)
 	keytext   = 0;
 	rangeText = 0;
 	error     = 0;
+	userData  = 0;
 	stdstr(&keytext, ikey);
 	init();
 }
