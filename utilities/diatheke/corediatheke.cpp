@@ -5,9 +5,6 @@
 #include "corediatheke.h"
 #include <string>
 #include <list>
-extern "C" {
-#include <roman.h>
-}
 
 char * systemquery(const char * key){
 	SWMgr manager;
@@ -361,11 +358,6 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 					else if (outputformat == FMT_GBF)
 						value += "<CM>";
 
-					if (maxverses == 1) {
-						value += " (";
-						value += target->Name();
-						value += ")";
-					}
 					value += "\n";
 					maxverses--;
 					(*target)++;
@@ -400,15 +392,14 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				else if (outputformat == FMT_GBF)
 					value += "<CM>";
 
-				if (maxverses == 1) {
-					value += " (";
-					value += target->Name();
-					value += ")";
-				}
 				value += "\n";
 				maxverses--;
 			}
 		}
+
+		value += "(";
+		value += target->Name();
+		value += ")\n";
 
 		if (outputformat == FMT_RTF) {
 			value  += "}";
