@@ -188,6 +188,18 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = '>';
 	    continue;
 	  }
+	  else if (!strncmp(token, "sup", 3)) {
+	    *to++ = '<';
+	    *to++ = 'F';
+	    *to++ = 'S';
+	    *to++ = '>';
+	  }
+	  else if (!strncmp(token, "/sup", 4)) {
+	    *to++ = '<';
+	    *to++ = 'F';
+	    *to++ = 's';
+	    *to++ = '>';
+	  }
 	  else if (!strncmp(token, "foreign lang=\"el\"", 17)) {
 	    *to++ = '<';
 	    *to++ = 'F';
@@ -205,6 +217,20 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = 'a';
 	    *to++ = '>';
 	    continue;
+	  }
+	  else if (!strnicmp(token, "font color=#ff0000", 18)) {
+	    *to++ = '<';
+	    *to++ = 'F';
+	    *to++ = 'R';
+	    *to++ = '>';
+	    continue;
+	  }
+	  else if (!strnicmp(token, "\\font", 5)) {
+	    *to++ = '<';
+	    *to++ = 'F';
+	    *to++ = 'r';
+	    *to++ = '>';
+	    continue;	    
 	  }
 	  else if (!strncmp(token, "foreign lang=\"he\"", 17)) {
 	    *to++ = '<';

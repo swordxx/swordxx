@@ -186,6 +186,30 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 				case 'n':
 					*to++ = '}';
 					continue;
+				case 'S':
+				        *to++ = '{';
+				        *to++ = '\\';
+					*to++ = 's';
+					*to++ = 'u';
+					*to++ = 'p';
+					*to++ = 'e';
+					*to++ = 'r';
+					*to++ = ' ';
+					continue;
+				case 's':
+       				        *to++ = '}';
+					continue;
+				case 'R':
+				        *to++ = '{';
+					*to++ = '\\';
+					*to++ = 'c';
+					*to++ = 'f';
+					*to++ = '6';
+					*to++ = ' ';
+					continue;
+				case 'r':
+				        *to++ = '}';
+					continue;
 				}
 				break;
 			case 'C':			// special character tags
