@@ -1,4 +1,4 @@
-REV=1.4.5
+REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
 chmod +x *
 chmod +x ../apps/X11/cheatah/configure
 chmod +x ../apps/X11/cheatah/missing
