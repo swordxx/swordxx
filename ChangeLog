@@ -1,6 +1,8 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+27-Nov-2002     Joachim Ansorg <joachim@ansorgs.de>
+	Worked on Swig bindings. They work now with latest CVS.
 
 25-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Added Chris' ThMLVariants option filter to SWMgr
