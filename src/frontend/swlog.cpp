@@ -2,7 +2,9 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#ifndef WIN32
 #include <iostream.h>
+#endif
 #include "swlog.h"
 //---------------------------------------------------------------------------
 
@@ -31,8 +33,10 @@ void SWLog::LogWarning(char *fmt, ...)
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
 
+#ifndef WIN32
 		cerr << msg;
 		cerr << "\n";
+#endif
 	}
 }
 
@@ -47,8 +51,10 @@ void SWLog::LogError(char *fmt, ...)
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
 
+#ifndef WIN32
 		cerr << msg;
 		cerr << "\n";
+#endif
 	}
 }
 
@@ -63,8 +69,10 @@ void SWLog::LogTimedInformation(char *fmt, ...)
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
 
+#ifndef WIN32
 		cout << msg;
 		cout << "\n";
+#endif
 	}
 }
 
@@ -79,7 +87,9 @@ void SWLog::LogInformation(char *fmt, ...)
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
 
+#ifndef WIN32
 		cout << msg;
 		cout << "\n";
+#endif
 	}
 } 

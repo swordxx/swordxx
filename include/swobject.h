@@ -2,7 +2,7 @@
 #define SWOBJECT_H
 
 #include <utilfuns.h>
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(_WIN32_WCE)
 #else
 #include <unixstr.h>
 #endif

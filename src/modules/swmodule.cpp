@@ -310,10 +310,14 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	// 	VerseKey::NewIndex should be moved to Index and Index should be some
 	// 	VerseKey specific name
 	VerseKey *vkcheck = 0;
+#ifndef _WIN32_WCE
 	try {
+#endif
 		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+#ifndef _WIN32_WCE
 	}
 	catch (...) {}
+#endif
 	// end MAJOR KLUDGE
 
 	*this = BOTTOM;

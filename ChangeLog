@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 08-Feb-2001     Chris Little <chrislit@crosswire.org>
+	Added embedded Visual C++ project to build DLL in apps/windoze/wince/sword but it requires undistributable libraries to build it currently.  MIPS, SH3, and ARM processors are supported.
+
+08-Feb-2001     Chris Little <chrislit@crosswire.org>
 	Added Visual C++ 6.0 project to build DLL in apps/windoze/vc/Sword
 
 18-Jan-2001	Joachim Ansorg <jansorg@gmx.de>

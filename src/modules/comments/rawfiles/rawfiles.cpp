@@ -65,10 +65,14 @@ char *RawFiles::getRawEntry() {
 	char *tmpbuf;
 	VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -124,10 +128,14 @@ SWModule &RawFiles::operator <<(const char *inbuf) {
 	char *tmpbuf;
 	VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -171,10 +179,14 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 	char *tmpbuf;
 	const VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, inkey);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -187,10 +199,15 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 		if (key != inkey)
 			delete key;
 		key = 0;
+
+#ifndef _WIN32_WCE
 		try {
+#endif
 			key = SWDYNAMIC_CAST(VerseKey, inkey);
+#ifndef _WIN32_WCE
 		}
 		catch ( ... ) {}
+#endif
 		if (!key)
 			key = new VerseKey(this->key);
 		settext(key->Testament(), key->Index(), tmpbuf);
@@ -213,10 +230,14 @@ void RawFiles::deleteEntry() {
 
 	VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 

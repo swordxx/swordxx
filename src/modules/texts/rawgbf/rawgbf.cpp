@@ -58,10 +58,14 @@ RawGBF::operator char*()
 	unsigned short size;
 	VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 

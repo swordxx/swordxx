@@ -15,7 +15,7 @@
    & 0xFF or % 0x100, whichever is faster.
 */
 
-#ifdef WIN32
+#ifndef NULL
 #define NULL 0
 #endif
 

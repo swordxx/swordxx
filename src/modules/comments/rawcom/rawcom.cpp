@@ -58,10 +58,14 @@ char *RawCom::getRawEntry() {
 	VerseKey *key = 0;
 	FilterList::iterator it;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -102,10 +106,14 @@ SWModule &RawCom::operator +=(int increment)
 	unsigned short size;
 	VerseKey *tmpkey = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!tmpkey)
 		tmpkey = new VerseKey(key);
 
@@ -119,10 +127,14 @@ SWModule &RawCom::operator +=(int increment)
 		if (tmpkey != key)
 			delete tmpkey;
 		tmpkey = 0;
+#ifndef _WIN32_WCE
 		try {
+#endif
 			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
+#ifndef _WIN32_WCE
 		}
 		catch ( ... ) {}
+#endif
 		if (!tmpkey)
 			tmpkey = new VerseKey(key);
 

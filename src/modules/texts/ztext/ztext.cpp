@@ -112,11 +112,14 @@ char *zText::getRawEntry()
 	//printf ("zText char *\n");
 
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -174,11 +177,14 @@ bool zText::sameBlock(VerseKey *k1, VerseKey *k2) {
 SWModule &zText::operator <<(const char *inbuf) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -207,21 +213,28 @@ SWModule &zText::operator <<(const SWKey *inkey) {
 	VerseKey *destkey = 0;
 	const VerseKey *srckey = 0;
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
+#endif
 		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!destkey)
 		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
+#endif
 		srckey = (const VerseKey *) SWDYNAMIC_CAST(VerseKey, inkey);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {
 	}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
 		srckey = new VerseKey(inkey);
@@ -248,10 +261,14 @@ void zText::deleteEntry() {
 
 	VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 

@@ -93,11 +93,14 @@ char *RawText::getRawEntry() {
 	FilterList::iterator it;
 
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
+#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {	}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -286,11 +289,14 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 			// test to see if our scope for this search is bounded by a
 			// VerseKey
 			VerseKey *testKeyType = 0;
+#ifndef _WIN32_WCE
 			try {
+#endif
 				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
+#ifndef _WIN32_WCE
 			}
-			catch ( ... ) {
-			}
+			catch ( ... ) {}
+#endif
 			// if we don't have a VerseKey * decendant we can't handle
 			// because of scope.
 			// In the future, add bool SWKey::isValid(const char *tryString);
@@ -470,11 +476,14 @@ RawText &RawText::operator =(POSITION p) {
 SWModule &RawText::operator <<(const char *inbuf) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+#endif
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -492,21 +501,27 @@ SWModule &RawText::operator <<(const SWKey *inkey) {
 	VerseKey *destkey = 0;
 	const VerseKey *srckey = 0;
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
-		destkey = dynamic_cast<VerseKey *>(this->key);
+#endif
+		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!destkey)
 		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
+#ifndef _WIN32_WCE
 	try {
-		srckey = dynamic_cast<const VerseKey *>(inkey);
+#endif
+		srckey = SWDYNAMIC_CAST(VerseKey, inkey);
+#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {
-	}
+	catch ( ... ) {}
+#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
 		srckey = new VerseKey(inkey);
@@ -533,10 +548,14 @@ void RawText::deleteEntry() {
 
 	VerseKey *key = 0;
 
+#ifndef _WIN32_WCE
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+#endif
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
+#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
