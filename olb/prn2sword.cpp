@@ -8,6 +8,11 @@ USEUNIT("..\src\keys\strkey.cpp");
 USEUNIT("..\src\keys\swkey.cpp");
 USEUNIT("..\src\keys\listkey.cpp");
 USEUNIT("..\src\utilfuns\utilstr.cpp");
+USEUNIT("..\src\mgr\localemgr.cpp");
+USEUNIT("..\src\mgr\swlocale.cpp");
+USEUNIT("..\src\mgr\swconfig.cpp");
+USEUNIT("..\src\mgr\swmgr.cpp");
+USEUNIT("..\src\mgr\filemgr.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = libsword.lib mod2vpl.exe vpl2mod.exe mkfastmod.exe
+PROJECTS = libsword.lib mod2vpl.exe vpl2mod.exe mkfastmod.exe diatheke.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -27,6 +27,10 @@ vpl2mod.exe: vpl2mod.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 mkfastmod.exe: mkfastmod.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+diatheke.exe: diatheke.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

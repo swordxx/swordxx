@@ -1,65 +1,53 @@
-# ---------------------------------------------------------------------------
-!if !$d(BCB)
-BCB = $(MAKEDIR)\..
-!endif
-
-# ---------------------------------------------------------------------------
-# IDE SECTION
-# ---------------------------------------------------------------------------
-# The following section of the project makefile is managed by the BCB IDE.
-# It is recommended to use the IDE to change any of the values in this
-# section.
-# ---------------------------------------------------------------------------
-
-VERSION = BCB.04.04
-# ---------------------------------------------------------------------------
-PROJECT = Convert.exe
-OBJFILES = Convert.obj Mainfrm.obj all.obj ..\src\keys\versekey.obj ..\src\keys\strkey.obj \
-  ..\src\keys\swkey.obj ..\src\keys\listkey.obj ..\src\utilfuns\utilstr.obj
-RESFILES = Convert.res
-DEFFILE =
-RESDEPEN = $(RESFILES) Mainfrm.dfm
-LIBFILES =
-IDLGENFILES =
-IDLFILES =
-LIBRARIES =
-SPARELIBS = vcl40.lib
-PACKAGES = vclx40.bpi vcl40.bpi vcldb40.bpi vcldbx40.bpi bcbsmp40.bpi dclocx40.bpi \
-  qrpt40.bpi teeui40.bpi vclsmp40.bpi teedb40.bpi tee40.bpi ibsmp40.bpi \
-  nmfast40.bpi inetdb40.bpi inet40.bpi
-# ---------------------------------------------------------------------------
-PATHCPP = .;..\src\keys;..\src\utilfuns
-PATHASM = .;
-PATHPAS = .;
-PATHRC = .;
-DEBUGLIBPATH = $(BCB)\lib\debug
-RELEASELIBPATH = $(BCB)\lib\release
-SYSDEFINES = NO_STRICT;_RTLDLL;USEPACKAGES
-USERDEFINES =
-# ---------------------------------------------------------------------------
-CFLAG1 = -I..\src\utilfuns;..\src\keys;$(BCB)\include;$(BCB)\include\vcl;..\include -Od \
-  -Hc -H=$(BCB)\lib\vcl40.csm -w-par -w-inl -Ve -Tkh30000 -r- -a1 -k -y -v -vi- \
-  -D$(SYSDEFINES);$(USERDEFINES) -c -b- -Vx -tW -tWM
-CFLAG2 =
-CFLAG3 =
-IDLCFLAGS = -I..\src\utilfuns -I..\src\keys -I$(BCB)\include -I$(BCB)\include\vcl \
-  -I..\include -src_suffixcpp
-PFLAGS = -U..\src\utilfuns;..\src\keys;$(BCB)\lib\obj;$(BCB)\lib;$(RELEASELIBPATH) \
-  -I..\src\utilfuns;..\src\keys;$(BCB)\include;$(BCB)\include\vcl;..\include -$YD \
-  -$W -$O- -v -M -JPHNE
-RFLAGS = -i..\src\utilfuns;..\src\keys;$(BCB)\include;$(BCB)\include\vcl;..\include
-AFLAGS = /i..\src\utilfuns /i..\src\keys /i$(BCB)\include /i$(BCB)\include\vcl \
-  /i../include /mx /w2 /zd /d_RTLDLL /dUSEPACKAGES
-LFLAGS = -L..\src\utilfuns;..\src\keys;$(BCB)\lib\obj;$(BCB)\lib;$(RELEASELIBPATH) -aa \
-  -Tpe -x -Gn -v
-IFLAGS =
-# ---------------------------------------------------------------------------
-ALLOBJ = c0w32.obj Memmgr.Lib $(PACKAGES) sysinit.obj $(OBJFILES)
-ALLRES = $(RESFILES)
-ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib
-# ---------------------------------------------------------------------------
-!ifdef IDEOPTIONS
-
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="Convert.exe"/>
+    <OBJFILES value="Convert.obj Mainfrm.obj all.obj ..\src\keys\versekey.obj 
+      ..\src\keys\strkey.obj ..\src\keys\swkey.obj ..\src\keys\listkey.obj 
+      ..\src\utilfuns\utilstr.obj"/>
+    <RESFILES value="Convert.res"/>
+    <IDLFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) Mainfrm.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="vcl50.lib"/>
+    <PACKAGES value="vclx50.bpi vcl50.bpi vcldb50.bpi vclbde50.bpi vcldbx50.bpi bcbsmp50.bpi 
+      dclocx50.bpi qrpt50.bpi teeui50.bpi vclsmp50.bpi teedb50.bpi tee50.bpi 
+      ibsmp50.bpi nmfast50.bpi inetdb50.bpi inet50.bpi"/>
+    <PATHCPP value=".;..\src\keys;..\src\utilfuns"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;_RTLDLL;_VIS_NOLIB;USEPACKAGES"/>
+    <MAINSOURCE value="Convert.cpp"/>
+    <INCLUDEPATH value="..\src\utilfuns;..\src\keys;$(BCB)\include;$(BCB)\include\vcl;..\include"/>
+    <LIBPATH value="..\src\utilfuns;..\src\keys;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <WARNOPTSTR value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I..\src\utilfuns -I..\src\keys -I$(BCB)\include -I$(BCB)\include\vcl 
+      -I..\include -src_suffix cpp -boa"/>
+    <CFLAG1 value="-Od -H=c:\PROGRA~1\BORLAND\CBUILD~1\lib\vcl50.csm -Hc -Vx -Ve -Tkh30000 
+      -X- -r- -a1 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -M -JPHNE"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0
@@ -116,91 +104,13 @@ RemotePath=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
 
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
-
-!endif
-
-# ---------------------------------------------------------------------------
-# MAKE SECTION
-# ---------------------------------------------------------------------------
-# This section of the project file is not used by the BCB IDE.  It is for
-# the benefit of building from the command-line using the MAKE utility.
-# ---------------------------------------------------------------------------
-
-.autodepend
-# ---------------------------------------------------------------------------
-!if !$d(BCC32)
-BCC32 = bcc32
-!endif
-
-!if !$d(DCC32)
-DCC32 = dcc32
-!endif
-
-!if !$d(TASM32)
-TASM32 = tasm32
-!endif
-
-!if !$d(LINKER)
-LINKER = ilink32
-!endif
-
-!if !$d(BRCC32)
-BRCC32 = brcc32
-!endif
-
-!if !$d(IDL2CPP)
-IDL2CPP = idl2cpp
-!endif
-# ---------------------------------------------------------------------------
-!if $d(PATHCPP)
-.PATH.CPP = $(PATHCPP)
-.PATH.C   = $(PATHCPP)
-!endif
-
-!if $d(PATHPAS)
-.PATH.PAS = $(PATHPAS)
-!endif
-
-!if $d(PATHASM)
-.PATH.ASM = $(PATHASM)
-!endif
-
-!if $d(PATHRC)
-.PATH.RC  = $(PATHRC)
-!endif
-# ---------------------------------------------------------------------------
-$(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
-    $(BCB)\BIN\$(LINKER) @&&!
-    $(LFLAGS) +
-    $(ALLOBJ), +
-    $(PROJECT),, +
-    $(ALLLIB), +
-    $(DEFFILE), +
-    $(ALLRES)
-!
-# ---------------------------------------------------------------------------
-.pas.hpp:
-    $(BCB)\BIN\$(DCC32) $(PFLAGS) {$< }
-
-.pas.obj:
-    $(BCB)\BIN\$(DCC32) $(PFLAGS) {$< }
-
-.cpp.obj:
-    $(BCB)\BIN\$(BCC32) $(CFLAG1) $(CFLAG2) $(CFLAG3) -n$(@D) {$< }
-
-.c.obj:
-    $(BCB)\BIN\$(BCC32) $(CFLAG1) $(CFLAG2) $(CFLAG3) -n$(@D) {$< }
-
-.asm.obj:
-    $(BCB)\BIN\$(TASM32) $(AFLAGS) $<, $@
-
-.rc.res:
-    $(BCB)\BIN\$(BRCC32) $(RFLAGS) -fo$@ $<
-# ---------------------------------------------------------------------------
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>
