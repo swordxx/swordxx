@@ -23,6 +23,7 @@ libsword_la_SOURCES += $(filtersdir)/thmlheadings.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlmorph.cpp
 libsword_la_SOURCES += $(filtersdir)/thmllemma.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlscripref.cpp
+libsword_la_SOURCES += $(filtersdir)/thmlvariants.cpp
 
 libsword_la_SOURCES += $(filtersdir)/gbfthml.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlgbf.cpp

@@ -1,0 +1,177 @@
+/******************************************************************************
+ *
+ * thmlvariants -	SWFilter decendant to hide or show textual variants
+ *			in a ThML module.
+ */
+
+
+#include <stdlib.h>
+#include <string.h>
+#include <thmlvariants.h>
+#ifndef __GNUC__
+#else
+#include <unixstr.h>
+#endif
+
+
+const char ThMLVariants::primary[] = "Primary Reading";
+const char ThMLVariants::secondary[] = "Secondary Reading";
+const char ThMLVariants::all[] = "All Readings";
+
+const char ThMLVariants::optName[] = "Textual Variants";
+const char ThMLVariants::optTip[] = "Switch between Textual Variants modes";
+
+
+ThMLVariants::ThMLVariants() {
+	option = false;
+	options.push_back(primary);
+	options.push_back(secondary);
+	options.push_back(all);
+}
+
+
+ThMLVariants::~ThMLVariants() {
+}
+
+void ThMLVariants::setOptionValue(const char *ival)
+{
+	option = (!stricmp(ival, primary));
+}
+
+const char *ThMLVariants::getOptionValue()
+{
+        if (option == 0) {
+	        return primary;
+	}
+	else if (option == 1) {
+	        return secondary;
+	}
+	else {
+	        return all;
+	}
+}
+
+char ThMLVariants::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+{
+        if (option == 0) { //we want primary only
+		char *to, *from, token[2048]; // cheese.  Fix.
+		int tokpos = 0;
+		bool intoken = false;
+		int len;
+		bool hide = false;
+
+		len = strlen(text) + 1;	// shift string to right of buffer
+		if (len < maxlen) {
+			memmove(&text[maxlen - len], text, len);
+			from = &text[maxlen - len];
+		}
+		else	from = text;
+		
+		// -------------------------------
+
+		for (to = text; *from; from++) {
+			if (*from == '<') {
+				intoken = true;
+				tokpos = 0;
+				memset(token, 0, 2048);
+				continue;
+			}
+			if (*from == '>') {	// process tokens
+				intoken = false;
+				if (!strncmp(token, "div type=\"variant\"", 19)) {
+				  hide = true;
+                                  continue;
+				}
+				else if (!strncmp(token, "/div", 4)) {
+				  hide = false;
+                                  continue;
+				}
+
+				// if not a footnote token, keep token in text
+				if (!hide) {
+					*to++ = '<';
+					for (unsigned int i = 0; i < strlen(token); i++)
+						*to++ = token[i];
+					*to++ = '>';
+				}
+				continue;
+			}
+			if (intoken) {
+				if (tokpos < 2047)
+					token[tokpos++] = *from;
+			}
+			else	{
+				if (!hide) {
+					*to++ = *from;
+				}
+			}
+		}
+		*to++ = 0;
+		*to = 0;
+
+	}
+        else if (option == 1) { //we want variant only
+		char *to, *from, token[2048]; // cheese.  Fix.
+		int tokpos = 0;
+		bool intoken = false;
+		int len;
+		bool hide = false;
+
+		len = strlen(text) + 1;	// shift string to right of buffer
+		if (len < maxlen) {
+			memmove(&text[maxlen - len], text, len);
+			from = &text[maxlen - len];
+		}
+		else	from = text;
+		
+		// -------------------------------
+
+		for (to = text; *from; from++) {
+			if (*from == '<') {
+				intoken = true;
+				tokpos = 0;
+				memset(token, 0, 2048);
+				continue;
+			}
+			if (*from == '>') {	// process tokens
+				intoken = false;
+				if (!strncmp(token, "div type=\"primary\"", 19)) {
+				  hide = true;
+                                  continue;
+				}
+				else if (!strncmp(token, "/div", 4)) {
+				  hide = false;
+                                  continue;
+				}
+
+				// if not a footnote token, keep token in text
+				if (!hide) {
+					*to++ = '<';
+					for (unsigned int i = 0; i < strlen(token); i++)
+						*to++ = token[i];
+					*to++ = '>';
+				}
+				continue;
+			}
+			if (intoken) {
+				if (tokpos < 2047)
+					token[tokpos++] = *from;
+			}
+			else	{
+				if (!hide) {
+					*to++ = *from;
+				}
+			}
+		}
+		*to++ = 0;
+		*to = 0;
+
+	}
+	return 0;
+}
+
+
+
+
+
+

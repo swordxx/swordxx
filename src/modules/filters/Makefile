@@ -29,6 +29,7 @@ cpp += thmlheadings.cpp
 cpp += thmlmorph.cpp
 cpp += thmllemma.cpp
 cpp += thmlscripref.cpp
+cpp += thmlvariants.cpp
 
 cpp += gbfthml.cpp
 cpp += thmlgbf.cpp
