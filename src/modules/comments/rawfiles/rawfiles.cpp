@@ -82,7 +82,7 @@ char *RawFiles::getRawEntry() {
 		delete [] versebuf;
 
 	if (size) {
-		tmpbuf   = new char [ size + strlen(path) + 1 ];
+		tmpbuf   = new char [ size + strlen(path) + 5 ];
 		sprintf(tmpbuf,"%s/",path);
 		gettext(key->Testament(), start, size + 1, tmpbuf+strlen(tmpbuf));
 		datafile = FileMgr::systemFileMgr.open(tmpbuf, O_RDONLY|O_BINARY);
@@ -272,3 +272,21 @@ char *RawFiles::getnextfilename() {
 	sprintf(incfile, "%.7ld", number-1);
 	return incfile;
 }
+
+
+char RawFiles::createModule (const char *path) {
+	char *incfile = new char [ strlen (path) + 16 ];
+    static long zero = 0;
+	FileDesc *datafile;
+
+	sprintf(incfile, "%s/incfile", path);
+	datafile = FileMgr::systemFileMgr.open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+    delete [] incfile;
+	write(datafile->getFd(), &zero, 4);
+	FileMgr::systemFileMgr.close(datafile);
+
+    return RawVerse::createModule (path);
+}
+
+
+

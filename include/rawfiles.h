@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: rawfiles.h,v 1.6 2001/05/21 02:32:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,17 +44,35 @@ public:
   virtual char *getRawEntry ();
 
   // write interface ----------------------------
-  virtual bool isWritable ()
-  {
+  /** Is the module writable? :)
+  * @return yes or no
+  */
+  virtual bool isWritable () {
     return true;
   }
-  static char createModule (const char *path)
-  {
-    return -1;
-  }
-  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
-  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
-  virtual void deleteEntry ();	// Delete current module entry
+  
+  /** Creates a new module
+  * @param path The first parameter is path of the new module
+  * @return error
+  */
+  static char createModule (const char *);
+  
+  /** Modify the current module entry text
+  * - only if module @ref isWritable
+  * @return *this
+  */
+  virtual SWModule & operator << (const char *);
+  
+  /** Link the current module entry to another module entry
+  * - only if module @ref isWritable
+  * @return *this
+  */
+  virtual SWModule & operator << (const SWKey *);
+  
+  /** Delete current module entry - only if module @ref isWritable
+  *
+  */
+  virtual void deleteEntry ();
   // end write interface ------------------------
 };
 
