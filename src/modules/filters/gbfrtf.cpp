@@ -85,39 +85,10 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 								}
 							}
 							break;
-						case 'P':
-							separate = true;
-							*to++ = 'p';
-							*to++ = 'l';
-							*to++ = 'u';
-							*to++ = 'r';
-							*to++ = 'a';
-							*to++ = 'l';
-							break;
-						case 'S':
-							separate = true;
-							*to++ = 's';
-							*to++ = 'i';
-							*to++ = 'n';
-							*to++ = 'g';
-							*to++ = 'u';
-							*to++ = 'l';
-							*to++ = 'a';
-							*to++ = 'r';
-							break;
-						case 'A':
-							separate = true;
-							*to++ = 'a';
-							*to++ = 'o';
-							*to++ = 'r';
-							*to++ = 't';
-							*to++ = 'i';
-							*to++ = 's';
-							*to++ = 't';
-							break;
 						default:
-							break;
-							// some token we don't understand
+							for (i++; i < strlen(token); i++) {
+							       *to++ = token[i];
+							}
 						}
 					}
 					*to++ = ')';

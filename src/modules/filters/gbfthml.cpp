@@ -104,7 +104,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			    *to++ = '<';
 			    *to++ = 'i';
 			    *to++ = '>';
-			    for (i = 3; i < strlen(token); i++)
+			    for (i = 2; i < strlen(token); i++)
 			      *to++ = token[i];
 			    *to++ = '<';
 			    *to++ = '/';

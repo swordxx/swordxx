@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+02-Jun-2001 Chris Little <chrislit@crosswire.org>
+	Added GBFMorph OptionFilter to handle <WT...> tags and adjusted
+	GBFStrongs & other filters to not handle <WTG/H...> as a Strong's
+	number
+	
 20-May-2001 Joachim Ansorg <jansorg@gmx.de>
 	Updated the Czech translation of booknames (cs.conf)
 
@@ -140,8 +145,8 @@ Kolatzek.
 		because it's bad HTML without a closing </P> tag.
 
 23-Oct-2000		Joachim Ansorg <jansorg@crosswire.org> 
-	Changed the private section of versekey.h into a protected  one
-because we need the change for current BibleTime!
+	Changed the private section of versekey.h into a protected one
+	because we need the change for current BibleTime!
 
 15-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Normalized Writable interface to SWModule.

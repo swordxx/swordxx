@@ -44,20 +44,12 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key)
 				switch(token[1]) {
 					case 'G':               // Greek
 					case 'H':               // Hebrew
+					case 'T':               // Tense
 						*to++ = ' ';
 						*to++ = '<';
 						for (i = 2; i < strlen(token); i++)
 							*to++ = token[i];
 						*to++ = '>';
-						*to++ = ' ';
-						continue;
-
-					case 'T':               // Tense
-						*to++ = ' ';
-						*to++ = '(';
-						for (i = 3; i < strlen(token); i++)
-							*to++ = token[i];
-						*to++ = ')';
 						*to++ = ' ';
 						continue;
 				}

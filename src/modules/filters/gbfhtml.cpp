@@ -64,6 +64,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 					{
 						case 'G':               // Greek
 						case 'H':               // Hebrew
+						case 'T':               // Tense
 							*to++ = ' ';
 							*to++ = '<';
 							*to++ = 'S';
@@ -82,35 +83,6 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 							*to++ = '/';
 							*to++ = 'E';
 							*to++ = 'M';
-							*to++ = '>';
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'S';
-							*to++ = 'M';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'L';
-							*to++ = '>';
-							*to++ = ' ';
-							continue;
-
-						case 'T':               // Tense
-							*to++ = ' ';
-							*to++ = '<';
-							*to++ = 'S';
-							*to++ = 'M';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'L';
-							*to++ = '>';
-							*to++ = '<';
-							*to++ = 'I';
-							*to++ = '>';
-							for (i = 3; i < strlen(token); i++)
-								*to++ = token[i];
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'I';
 							*to++ = '>';
 							*to++ = '<';
 							*to++ = '/';

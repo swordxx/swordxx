@@ -1,48 +1,48 @@
 /******************************************************************************
  *
- * gbfstrongs -	SWFilter decendant to hide or show strongs number
+ * gbfmorph -	SWFilter decendant to hide or show morph tags
  *			in a GBF module.
  */
 
 
 #include <stdlib.h>
 #include <string.h>
-#include <gbfstrongs.h>
+#include <gbfmorph.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
 #endif
 
 
-const char GBFStrongs::on[] = "On";
-const char GBFStrongs::off[] = "Off";
-const char GBFStrongs::optName[] = "Strong's Numbers";
-const char GBFStrongs::optTip[] = "Toggles Strong's Numbers On and Off In Bible Texts If They Exist";
+const char GBFMorph::on[] = "On";
+const char GBFMorph::off[] = "Off";
+const char GBFMorph::optName[] = "Morphological Tags";
+const char GBFMorph::optTip[] = "Toggles Morphological Tags On and Off In Bible Texts If They Exist";
 
 
-GBFStrongs::GBFStrongs() {
+GBFMorph::GBFMorph() {
 	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }
 
 
-GBFStrongs::~GBFStrongs() {
+GBFMorph::~GBFMorph() {
 }
 
-void GBFStrongs::setOptionValue(const char *ival)
+void GBFMorph::setOptionValue(const char *ival)
 {
 	option = (!stricmp(ival, on));
 }
 
-const char *GBFStrongs::getOptionValue()
+const char *GBFMorph::getOptionValue()
 {
 	return (option) ? on:off;
 }
 
-char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key)
+char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	if (!option) {	// if we don't want strongs
+	if (!option) {	// if we don't want morph tags
 		char *to, *from, token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
@@ -65,10 +65,9 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'W') {	// Strongs
+				if (*token == 'W') {	// Morph
 					switch(token[1]) {
-					case 'G':               // Greek
-					case 'H':               // Hebrew
+					case 'T':               // Tense
 						if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
 		    					if (lastspace)
 								to--;
@@ -76,7 +75,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key)
 						continue;	// skip token
 					}
 				}
-				// if not a strongs token, keep token in text
+				// if not a morph tag token, keep token in text
 				*to++ = '<';
 				for (unsigned int i = 0; i < strlen(token); i++)
 					*to++ = token[i];

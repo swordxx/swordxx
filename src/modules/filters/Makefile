@@ -18,6 +18,7 @@ cpp += rtfhtml.cpp
 cpp += gbfstrongs.cpp
 cpp += gbffootnotes.cpp
 cpp += gbfheadings.cpp
+cpp += gbfmorph.cpp
 cpp += plainfootnotes.cpp
 
 cpp += gbfthml.cpp
