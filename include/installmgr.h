@@ -4,6 +4,7 @@
 #include <defs.h>
 #include <swbuf.h>
 #include <map>
+#include <set>
 #include <ftptrans.h>
 
 SWORD_NAMESPACE_START
@@ -30,11 +31,12 @@ public:
 	void flush();
 };
 
-typedef std::map < SWBuf, InstallSource * >InstallSourceMap;
+typedef std::map<SWBuf, InstallSource *> InstallSourceMap;
 
 class InstallMgr {
 
 protected:
+	std::set<SWBuf> defaultMods;
 	char *privatePath;
 	StatusReporter *statusReporter;
 	bool passive;
@@ -61,6 +63,20 @@ public:
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
 	void setFTPPassive(bool passive) { this->passive = passive; }
 	void terminate() { if (transport) transport->terminate(); }
+
+	/************************************************************************
+	 * isDefaultModule - allows an installation to provide a set of modules
+	 *   in installMgr.conf like:
+	 *     [General]
+	 *     DefaultMod=KJV
+	 *     DefaultMod=StrongsGreek
+	 *     DefaultMod=Personal
+	 *   This method allows a user interface to ask if a module is specified
+	 *   as a default in the above way.  The logic is, if no modules are
+	 *   installed then all default modules should be automatically selected for install
+	 *   to help the user select a basic foundation of useful modules
+	 */
+	bool isDefaultModule(const char *modName);
 };
 
 

@@ -50,7 +50,7 @@ RawLD4::~RawLD4()
  * ENT: buf -	buffer to check and pad
  */
 
-void RawLD::strongsPad(char *buf)
+void RawLD4::strongsPad(char *buf)
 {
 	char *check;
 	int size = 0;

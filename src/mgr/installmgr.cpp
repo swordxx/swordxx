@@ -68,9 +68,9 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
 
 	sources.clear();
 	
-	sourcesSection = installConf->Sections.find("Sources");
 	setFTPPassive(!stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "true"));
 
+	sourcesSection = installConf->Sections.find("Sources");
 	if (sourcesSection != installConf->Sections.end()) {
 		sourceBegin = sourcesSection->second.lower_bound("FTPSource");
 		sourceEnd = sourcesSection->second.upper_bound("FTPSource");
@@ -81,6 +81,18 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
 			SWBuf parent = (SWBuf)privatePath + "/" + is->source + "/file";
 			FileMgr::createParent(parent.c_str());
 			is->localShadow = (SWBuf)privatePath + "/" + is->source;
+			sourceBegin++;
+		}
+	}
+
+	defaultMods.clear();
+	sourcesSection = installConf->Sections.find("General");
+	if (sourcesSection != installConf->Sections.end()) {
+		sourceBegin = sourcesSection->second.lower_bound("DefaultMod");
+		sourceEnd = sourcesSection->second.upper_bound("DefaultMod");
+
+		while (sourceBegin != sourceEnd) {
+			defaultMods.insert(sourceBegin->second.c_str());
 			sourceBegin++;
 		}
 	}
@@ -448,6 +460,12 @@ void InstallMgr::refreshRemoteSource(InstallSource *is) {
 	ftpCopy(is, "mods.d", target.c_str(), true, ".conf");
 	is->flush();
 }
+
+
+bool InstallMgr::isDefaultModule(const char *modName) {
+	return defaultMods.count(modName);
+}
+
 
 SWORD_NAMESPACE_END
 
