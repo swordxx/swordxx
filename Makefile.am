@@ -147,7 +147,7 @@ register:
 	@echo ""
 
 install_config: 
-	@echo "[Install]" > /etc/sword.conf
-	@echo "DataPath=$(pkgdatadir)/" >> /etc/sword.conf
+	@echo "[Install]" > $(sysconfdir)/sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> $(sysconfdir)/sword.conf
 	@echo "sword.conf generated"
 
