@@ -31,6 +31,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 	bool intoken 	= false;
 	int len;
 	bool ampersand = false;
+	bool inScriptRef = false;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -193,6 +194,11 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    continue;
 		  }
 		  else if (!strncmp(token, "scripRef", 8)) {
+			if (inScriptRef) {
+				*to++ = '|';
+				*to++ = '}';
+			}
+			inScriptRef = true;
 			*to++ = '{';
 			*to++ = '\\';
 			*to++ = 'c';
@@ -205,6 +211,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		  else if (!strncmp(token, "/scripRef", 9)) {
 			*to++ = '|';
 			*to++ = '}';
+			inScriptRef = false;
 		    continue;
 		  }
 		  else if (!strncmp(token, "note place=\"foot\"", 17)) {
@@ -240,18 +247,18 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		  else if (!strnicmp(token, "font", 4)) {
 		    *to++ = '{';
 		    if (!strnicmp(token, "font face=\"Symbol\"", 18)) {
-		      *to++ = '\\';
-		      *to++ = 'f';
-		      *to++ = '7';
-		      *to++ = ' ';
+			 *to++ = '\\';
+			 *to++ = 'f';
+			 *to++ = '7';
+			 *to++ = ' ';
 		    }
 			else if (!strnicmp(token, "font size=+1", 12)) {
-		      *to++ = '\\';
-		      *to++ = 'f';
-		      *to++ = 's';
-		      *to++ = '2';
-		      *to++ = '4';
-		      *to++ = ' ';
+			 *to++ = '\\';
+			 *to++ = 'f';
+			 *to++ = 's';
+			 *to++ = '2';
+			 *to++ = '4';
+			 *to++ = ' ';
 			}
 		    continue;
 		  }
@@ -278,26 +285,26 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    switch(token[1]) {
 		    case 'p':
 		    case 'P':
-		      *to++ = '\\';
-		      *to++ = 'p';
-		      *to++ = 'a';
-		      *to++ = 'r';
-		      *to++ = ' ';
-		      continue;
+			 *to++ = '\\';
+			 *to++ = 'p';
+			 *to++ = 'a';
+			 *to++ = 'r';
+			 *to++ = ' ';
+			 continue;
 		    case 'i':		// italic end
 		    case 'I':
-		      *to++ = '\\';
-		      *to++ = 'i';
-		      *to++ = '0';
-		      *to++ = ' ';
-		      continue;
+			 *to++ = '\\';
+			 *to++ = 'i';
+			 *to++ = '0';
+			 *to++ = ' ';
+			 continue;
 		    case 'b':		// bold end
 		    case 'B':
-		      *to++ = '\\';
-		      *to++ = 'b';
-		      *to++ = '0';
-		      *to++ = ' ';
-		      continue;
+			 *to++ = '\\';
+			 *to++ = 'b';
+			 *to++ = '0';
+			 *to++ = ' ';
+			 continue;
 		    }
 		  }
 		  continue;
@@ -305,8 +312,12 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		if (intoken) {
 				if (tokpos < 2047)
 			token[tokpos++] = *from;
-          }
+		}
 		else	*to++ = *from;
+	}
+	if (inScriptRef) {
+		*to++ = '|';
+		*to++ = '}';
 	}
 	*to++ = 0;
 	*to = 0;
