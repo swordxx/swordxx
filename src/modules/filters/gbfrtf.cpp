@@ -255,7 +255,16 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			      continue;
 			    }
 			  break;
-
+			case 'J':	// Strongs
+				switch(token[1]) {
+				case 'L':
+					text += "\\ql ";
+				case 'C':
+					text += "\\qc ";
+				case 'R':
+					text += "\\qr ";
+                                case 'F':
+                                	text += "\\qj ";
 			}
 			continue;
 		}
