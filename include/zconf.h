@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: zconf.h,v 1.3 2002/10/07 22:48:50 scribe Exp $ */
+/* @(#) $Id: zconf.h,v 1.4 2003/07/07 02:50:05 scribe Exp $ */
 
 #ifndef _ZCONF_H
 #define _ZCONF_H
@@ -220,7 +220,7 @@ typedef unsigned long  uLong; /* 32 bits or more */
    /* Borland C/C++ and some old MSC versions ignore FAR inside typedef */
 #  define Bytef Byte FAR
 #else
-   typedef Byte  FAR Bytef;
+   typedef unsigned char FAR Bytef;
 #endif
 typedef char  FAR charf;
 typedef int   FAR intf;

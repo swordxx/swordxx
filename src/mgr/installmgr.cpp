@@ -5,6 +5,14 @@
  */
  
 
+// stupid hack to make untgz stuff compile
+#define VCL
+
+extern "C" {
+#include <untgz.h>
+}
+
+
 #include <installmgr.h>
 #include <filemgr.h>
 
@@ -307,7 +315,11 @@ InstallSource::~InstallSource() {
 		delete mgr;
 }
 
-
+SWMgr *InstallSource::getMgr() {
+	if (!mgr)
+		mgr = new SWMgr(localShadow.c_str());
+	return mgr;
+}
 int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	terminate = false;
 	void *session = FTPOpenSession();
@@ -550,6 +562,40 @@ int InstallMgr::copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, co
 	return FileMgr::copyFile(sourcePath.c_str(), dest.c_str());
 }
 
+
+void InstallMgr::refreshRemoteSource(InstallSource *is) {
+	DIR *dir;
+	struct dirent *ent;
+	ConfigEntMap::iterator entry;
+	SWBuf modDir;
+	SWBuf modFile;
+	SWBuf root = privatePath;
+	root += (SWBuf)"/" + is->source.c_str();
+	SWBuf target = root + "/mods.d";
+
+	if (dir = opendir(target.c_str())) {
+		rewinddir(dir);
+		while ((ent = readdir(dir))) {
+			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+				modFile = target;
+				modFile += "/";
+				modFile += ent->d_name;
+				remove(modFile.c_str());
+			}
+		}
+		closedir(dir);
+	}
+
+
+	SWBuf archive = root + "/mods.d.tar.gz";
+	if (!FTPCopy(is, "mods.d.tar.gz", archive.c_str(), false)) {
+		int fd = open(archive.c_str(), O_RDONLY|O_BINARY);
+		untargz(fd, root.c_str());
+		close(fd);
+	}
+	else	FTPCopy(is, "mods.d", target.c_str(), true, ".conf");
+	is->flush();
+}
 
 SWORD_NAMESPACE_END
 

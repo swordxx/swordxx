@@ -33,6 +33,7 @@ struct FtpFile {
 
 
 class InstallSource {
+	SWMgr *mgr;
 public:
 	InstallSource(const char *confEnt, const char *type);
 	virtual ~InstallSource();
@@ -44,8 +45,9 @@ public:
 	SWBuf directory;
 	SWBuf caption;
 	SWBuf localShadow;
-	SWMgr *mgr;
 	void *userData;
+	SWMgr *getMgr();
+	void flush() { if (mgr) delete mgr; mgr = 0; }
 };
 
 typedef std::map < SWBuf, InstallSource * >InstallSourceMap;
@@ -79,6 +81,7 @@ public:
 	virtual int FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
 	virtual int installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is = 0);
 	virtual int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName);
+	virtual void refreshRemoteSource(InstallSource *is);
 	virtual void statusUpdate(double dltotal, double dlnow);
 	virtual void preDownloadStatus(long totalBytes, long completedBytes, const char *message);
 };
