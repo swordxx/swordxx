@@ -41,7 +41,7 @@ const char *ThMLScripref::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want scriprefs
 		bool intoken = false;
@@ -49,7 +49,7 @@ char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key, const S
 
 		SWBuf token;
 		SWBuf orig = text;
- 	 	const char *from = orig.c_str();
+		const char *from = orig.c_str();
 		for (text = ""; *from; from++) {
 			if (*from == '<') { //new token was found
 				intoken = true;
@@ -82,8 +82,6 @@ char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key, const S
 				text += *from;
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }
