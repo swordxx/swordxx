@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 01-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
+	work on sword swig perl binding
+
+01-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
 	change sword to use a sword namespace
 	fix to build with gcc3.2 again after yesterday
 
