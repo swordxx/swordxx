@@ -165,9 +165,15 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 			lastoff = -1;
 			getidxbuf(tryoff, &trybuf);
 
-			if (!strcmp(key, trybuf) || (!*trybuf)) {
+			if (!*trybuf) {
+				tryoff += (tryoff > (maxoff / 2))?-6:6;
+				retval = -1;
+//				getidxbuf(tryoff, &trybuf);
 				break;
 			}
+					
+			if (!strcmp(key, trybuf))
+				break;
 
 			if (strcmp(key, trybuf) < 0)
 				tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -193,6 +199,16 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 		unsigned short lastsize = *size;
 		long lasttry = tryoff;
 		tryoff += (away > 0) ? 6 : -6;
+		
+//		getidxbuf(tryoff, &trybuf);
+//
+//		if (!*trybuf) {
+//			retval = -1;
+//			tryoff += (tryoff > (maxoff / 2))?-6:6;
+//			break;
+//		}
+					
+
 		if ((lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0) || ((tryoff + (away*6)) < -6) || (tryoff + (away*6) > (maxoff+6))) {
 			retval = -1;
 			*start = laststart;
