@@ -37,9 +37,8 @@ OSISPlain::OSISPlain() {
 	addEscapeStringSubstitute("quot", "\"");
 
         setTokenCaseSensitive(true);
-
-        addTokenSubstitute("title", "\n");
-        addTokenSubstitute("/title", "\n");
+//        addTokenSubstitute("title", "\n");
+//        addTokenSubstitute("/title", "\n");
         addTokenSubstitute("/l", "\n");
         addTokenSubstitute("lg", "\n");
         addTokenSubstitute("/lg", "\n");

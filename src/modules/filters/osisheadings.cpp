@@ -14,6 +14,9 @@
 #include <unixstr.h>
 #endif
 
+#include <iostream>
+using namespace std;
+
 SWORD_NAMESPACE_START
 
 const char oName[] = "Headings";
@@ -32,6 +35,7 @@ OSISHeadings::~OSISHeadings() {
 
 
 char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+
 	SWBuf token;
 	bool intoken    = false;
 	bool hide       = false;
@@ -45,28 +49,28 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	SWBuf orig = text;
 	const char *from = orig.c_str();
 	
-	XMLTag tag;
+ 	XMLTag tag;
 
 	for (text = ""; *from; ++from) {
 		if (*from == '<') {
 			intoken = true;
 			token = "";
+			
 			continue;
 		}
 		if (*from == '>') {	// process tokens
 			intoken = false;
 
-			//if (!stricmp(tag.getName(), "title")) {
 			if (!strncmp(token.c_str(), "title", 5) || !strncmp(token.c_str(), "/title", 6)) {
-				
 				tag = token;
-				if ((tag.getAttribute("subtype")) && (!stricmp(tag.getAttribute("subtype"), "x-preverse"))) {
+				
+				if (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse")) {
 					hide = true;
 					preverse = true;
 					header = "";
 					continue;
 				}
-				if (!tag.isEndTag()) {
+				if (!tag.isEndTag()) { //start tag
 					if (!tag.isEmpty()) {
 						startTag = tag;
 					}
@@ -80,9 +84,8 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					continue;
 				}
 				if (hide && tag.isEndTag()) {
-
 					SWBuf subType = startTag.getAttribute("subType");
-					if (module->isProcessEntryAttributes() && ((option) || (subType != "x-Section"))) {
+					if (module->isProcessEntryAttributes() && (option || (subType != "x-Section"))) {
 						if (preverse) {
 							sprintf(buf, "%i", pvHeaderNum++);
 							module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;
@@ -100,8 +103,9 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 							module->getEntryAttributes()["Heading"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
 						}
 					}
+					
 					hide = false;
-					if ((!option) || (preverse)) {	// we don't want the tag in the text anymore
+					if (!option || preverse) {	// we don't want the tag in the text anymore
 						preverse = false;
 						continue;
 					}
