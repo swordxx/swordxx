@@ -8,7 +8,11 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
-class SwordOrb extends Object implements HttpSessionBindingListener {
+public class SwordOrb extends Object implements HttpSessionBindingListener {
+	public static final String BIBLES = "Biblical Texts";
+	public static final String COMMENTARIES = "Commentaries";
+	public static final String LEXDICT = "Lexicons / Dictionaries";
+	public static final String BOOKS = "Generic Books";
 	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, null);
 	String ior = null;
 
@@ -50,7 +54,7 @@ System.err.println("finalizing");
 	private void startOrb() {
 		try {
 			// start external process
-			java.lang.Process p = Runtime.getRuntime().exec("./swordorbserver");
+			java.lang.Process p = Runtime.getRuntime().exec("swordorbserver");
 			InputStream is = p.getInputStream();
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader input = new BufferedReader(isr);
