@@ -15,8 +15,11 @@
 #include "unicode/normlzr.h"
 
 #define BUFSIZE 65536
+#endif
 
 int main (char argc, char** argv) {
+
+#ifdef _ICU_
 
   if (argc < 5) {
     cout << "usage: " << argv[0] << " -[8|l] <input file> -[8|s] <outputfile> -[c|d]" << endl;
@@ -93,11 +96,11 @@ int main (char argc, char** argv) {
   inf.close();
 
   delete buffer;
+#endif
 
   return 0;
 }
 
-#endif
 
 
 
