@@ -5,6 +5,7 @@
 #include "url.h"
 
 using namespace sword;
+using namespace std;
 
 class URLTest : public CppUnit::TestFixture  {
 CPPUNIT_TEST_SUITE( URLTest );
@@ -73,32 +74,34 @@ public:
 	
 	void testParameterValue()
 	{	
- 		CPPUNIT_ASSERT( !strcmp(m_url1->getParamterValue("page"), "help") );
-		CPPUNIT_ASSERT( !strcmp(m_url1->getParamterValue("user"), "foo") );
-		CPPUNIT_ASSERT( !strcmp(m_url1->getParamterValue("name"), "bar") );
+ 		CPPUNIT_ASSERT( !strcmp(m_url1->getParameterValue("page"), "help") );
+		CPPUNIT_ASSERT( !strcmp(m_url1->getParameterValue("user"), "foo") );
+		CPPUNIT_ASSERT( !strcmp(m_url1->getParameterValue("name"), "bar") );
 		
-		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("page"), "help") );
-		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("user"), "foo") );
-		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("name"), "foo bar") );
+		CPPUNIT_ASSERT( !strcmp(m_url2->getParameterValue("page"), "help") );
+		CPPUNIT_ASSERT( !strcmp(m_url2->getParameterValue("user"), "foo") );
+		CPPUNIT_ASSERT( !strcmp(m_url2->getParameterValue("name"), "foo bar") );
 		
 		CPPUNIT_ASSERT( m_url3->getParameterValue("page") && strlen(m_url3->getParameterValue("page")) == 0 );
 	}	
 
 	void testEncode() {	
-		const char* encoded = URL::encode("this is a test");
-		CPPUNIT_ASSERT( !strcmp(encoded, "this%20is%20a%20test") || !strcmp(encoded, "this+is+a+test") );
+		cout << URL::encode("this is a test") << endl;
 		
-		CPPUNIT_ASSERT( !strcmp(URL::encode("this-is-a-test"), "this-is-a-test") );
-		CPPUNIT_ASSERT( !strcmp(URL::encode(""), "") );
+		SWBuf encoded = URL::encode("this is a test");
+		CPPUNIT_ASSERT( !strcmp(encoded.c_str(), "this%20is%20a%20test") || !strcmp(encoded.c_str(), "this+is+a+test") );
+
+		CPPUNIT_ASSERT( !strcmp(URL::encode("this-is-a-test").c_str(), "this-is-a-test") );
+		CPPUNIT_ASSERT( !strcmp(URL::encode("").c_str(), "") );
 	}
 	
 	void testDecode() {
-		CPPUNIT_ASSERT( !strcmp(URL::decode("this%3Eis%3Ea%3Etest"), "this>is>a>test") );
-		CPPUNIT_ASSERT( !strcmp(URL::decode("this%3Eis%3Ea%3Etest%3E"), "this>is>a>test>") );
-		CPPUNIT_ASSERT( !strcmp(URL::decode("%3E%3E%3E%3E%3E%3E%3E%3E%3E%3E%20%20%20%20%20"), ">>>>>>>>>>     ") );
-		CPPUNIT_ASSERT( !strcmp(URL::decode("nothing%20"), "nothing ") );
-		CPPUNIT_ASSERT( !strcmp(URL::decode("nothing"), "nothing") );
-		CPPUNIT_ASSERT( !strcmp(URL::decode(""), "") );
+		CPPUNIT_ASSERT( !strcmp(URL::decode("this%3Eis%3Ea%3Etest").c_str(), "this>is>a>test") );
+		CPPUNIT_ASSERT( !strcmp(URL::decode("this%3Eis%3Ea%3Etest%3E").c_str(), "this>is>a>test>") );
+		CPPUNIT_ASSERT( !strcmp(URL::decode("%3E%3E%3E%3E%3E%3E%3E%3E%3E%3E%20%20%20%20%20").c_str(), ">>>>>>>>>>     ") );
+		CPPUNIT_ASSERT( !strcmp(URL::decode("nothing%20").c_str(), "nothing ") );
+		CPPUNIT_ASSERT( !strcmp(URL::decode("nothing").c_str(), "nothing") );
+		CPPUNIT_ASSERT( !strcmp(URL::decode("").c_str(), "") );
 	}
 };
 

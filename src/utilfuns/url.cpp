@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.10 2004/07/20 22:48:33 scribe Exp $
+* $Id: url.cpp,v 1.11 2004/07/21 06:52:47 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -199,7 +199,7 @@ void URL::parse () {
 }
 
 const SWBuf URL::encode(const char *urlText) {
-	static SWBuf url;
+	/*static*/ SWBuf url;
 	url = urlText;
 	
 	typedef std::map< unsigned char, SWBuf > DataMap;
@@ -209,18 +209,18 @@ const SWBuf URL::encode(const char *urlText) {
 				continue; //we don't need an encoding for this char
 			}
 
-			char s[5];
 			SWBuf buf;
 			buf.setFormatted("%%-.2X", c);
+			m[c] = buf;
 	}
 	//the special encodings for certain chars
 	m[' '] = '+';
 
 	SWBuf buf;
 	const int length = url.length();
-	for (int i = 0; i <= length; i++) { //fill "buf"
+	for (int i = 0; i < length; i++) { //fill "buf"
 		const char& c = url[i];
-		buf += (!m[c].length()) ? (SWBuf)c : (SWBuf)m[c];
+		buf.append( m[c].length() ? m[c] : SWBuf(c) );
 	}
 
 	url = buf;
@@ -228,7 +228,7 @@ const SWBuf URL::encode(const char *urlText) {
 }
 
 const SWBuf URL::decode(const char *encoded) {
-	static SWBuf text;
+	/*static*/ SWBuf text;
 	text = encoded;	
 
 	SWBuf decoded;	
