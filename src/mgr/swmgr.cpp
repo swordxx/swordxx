@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.97 2004/01/16 03:42:41 scribe Exp $
+ * $Id: swmgr.cpp,v 1.98 2004/01/21 06:14:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -95,7 +95,7 @@ bool SWMgr::isICU = false;
 #endif
 
 
-bool SWMgr::debug = false;
+bool SWMgr::debug = true;
 
 #ifdef GLOBCONFPATH
 const char *SWMgr::globalConfPath = GLOBCONFPATH;
@@ -331,11 +331,10 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	*configType = 0;
 
-#ifndef _MSC_VER
 	// check working directory
 if (debug)
-	std::cerr << "Checking working directory for mods.conf...";
-#endif
+//	SWLog::systemlog->LogInformation("Checking working directory for mods.conf...");
+//	std::cerr << "Checking working directory for mods.conf...";
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
 

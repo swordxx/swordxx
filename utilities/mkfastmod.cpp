@@ -1,17 +1,25 @@
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>
+#include <markupfiltmgr.h>
+#include <swbuf.h>
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::SWModule;
 using sword::ListKey;
 using sword::VerseKey;
 using sword::ModMap;
+using sword::SWBuf;
 #endif
 
 int main(int argc, char **argv)
 {
-	SWMgr manager(0,0,true);
+	SWMgr manager(new sword::MarkupFilterMgr(sword::FMT_HTMLHREF, sword::ENC_UTF16));
+	SWModule &kjv = *(manager.Modules["KJV"]);
+	for (kjv.setKey("Gen 1:1"); ((VerseKey *)kjv.getKey())->Chapter() == 1; kjv++) {
+		SWBuf x = kjv.RenderText();
+	}
+	
 	SWModule *target;
 	ListKey listkey;
 	VerseKey vk;

@@ -18,6 +18,7 @@ SWORD_NAMESPACE_START
 #ifdef _WIN32_WCE
 #define SWTRY
 #define SWCATCH(x) if (0)
+#define GLOBCONFPATH "/Program Files/sword/sword.conf"
 #else
 #define SWTRY try
 #define SWCATCH(x) catch (x)
