@@ -23,6 +23,8 @@
 %include "swkey.i"
 %include "versekey.i"
 %include "listkey.i"
+%include "treekey.i"
+%include "treekeyidx.i"
 
 %include "localemgr.i"
 %include "swfiltermgr.i"
@@ -42,3 +44,7 @@
 %include "rawld.i"
 %include "rawld4.i"
 %include "zld.i"
+
+%include "swcompress.i"
+%include "lzsscompress.i"
+%include "zipcompress.i"

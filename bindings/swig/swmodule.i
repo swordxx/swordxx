@@ -2,26 +2,14 @@
  #include "swmodule.h"
 %}
 
-//%rename(write) operator<<(const char *);
-//%rename(writeLink) operator<<(const SWKey*);
-//%rename(data) operator const char *();
-
-//%rename(decrement) operator-=(int decrement);
-//%rename(increment) operator+=(int increment);
-//%rename(next) operator++(int);
-//%rename(prev) operator--(int);
-%rename(setPosition) operator=(SW_POSITION p);
-
 class SWModule {
 public:
-//member data
   bool terminateSearch;
 
-//member functions
   SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
   virtual char Error();
   virtual const bool isUnicode() const;
-  //virtual const ConfigEntMap& getConfig() const;
+  virtual const ConfigEntMap& getConfig() const;
   virtual const char *getConfigEntry(const char *key) const;
 
   virtual char SetKey (const SWKey *ikey);
@@ -30,28 +18,39 @@ public:
   virtual const char* KeyText(const char *imodtype = 0);
   virtual char Display();
 
-//Search functions  
+//Search functions
   static void nullPercent (char percent, void *userData);
-  virtual ListKey & Search (const char *istr, int searchType = 0, int flags = 0,
-                  SWKey * scope = 0,
-                  bool * justCheckIfSupported = 0,
-                  void (*percent) (char, void *) = &nullPercent,
-                  void *percentUserData = 0);
-
+  virtual ListKey & Search (const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent) (char, void *) = &nullPercent, void *percentUserData = 0);
+  virtual signed char createSearchFramework();
+  virtual bool hasSearchFramework();
+  virtual bool isSearchOptimallySupported (const char *istr, int searchType, int flags, SWKey * scope);
 
 //navigation functions
 %extend {
-  void next() {
+  const bool next() {
 	(*self)++;
+	return !self->Error();
   };
-  void prev() {
-	(*self)++;
+  const bool prev() {
+	(*self)--;
+	return !self->Error();
   };
-  void inc(const int howFar) {
+  const bool inc(const int howFar) {
   	(*self)+=howFar;
+	return !self->Error();
   };
-  void dec(const int howFar) {
+  const bool dec(const int howFar) {
   	(*self)-=howFar;
+	return !self->Error();
+  };
+  void setPosition(SW_POSITION pos) {
+  	(*self) = pos;
+  };
+  void top() {
+	(*self) = TOP;
+  };
+  void bottom() {
+	(*self) = BOTTOM;
   };
 }
 
@@ -63,8 +62,15 @@ public:
   const char* StripText() {
   	return self->StripText();
   };
-
 }
+
+  virtual char *getRawEntry();
+
+  virtual void setSkipConsecutiveLinks(bool val);
+  virtual bool getSkipConsecutiveLinks();
+  virtual AttributeTypeList &getEntryAttributes() const;
+  virtual void processEntryAttributes(bool val) const;
+  virtual bool isProcessEntryAttributes() const;
 
 //module info functions
   virtual char* Name (const char *imodname = 0);
