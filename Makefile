@@ -40,10 +40,10 @@ o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
 l = $(o) -lsword -lstdc++
 
 #testlib: $(o)
-#	$(CC) $(LFLAGS) -o $@ $(l)
+#	$(CROSS_COMPILE)$(CC) $(LFLAGS) -o $@ $(l)
 
 buildso:
-	$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
+	$(CROSS_COMPILE)$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
 
 
 # Maintenance targets

@@ -11,12 +11,12 @@ endif
 
 ifeq (${buildshare},yes)
 ${root}/lib/libsword.a: $(o)
-	$(AR) $(arflags) $@ $(o)
-	$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
+	$(CROSS_COMPILE)$(AR) $(arflags) $@ $(o)
+	$(CROSS_COMPILE)$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
 
 else
 ${root}/lib/libsword.a: $(o)
-	$(AR) $(arflags) $@ $(o)
+	$(CROSS_COMPILE)$(AR) $(arflags) $@ $(o)
 endif
 
 
