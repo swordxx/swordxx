@@ -50,6 +50,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	std::string tmp;
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
+	bool handled = false;
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
@@ -82,7 +83,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			keepToken = false;
 			suspendTextPassThru = false;
 			newWord = true;
-
+			handled = false;
 
 			while (wordStart < (text+maxlen)) {
 //				if (strchr(" ,;.?!()'\"", *wordStart))
@@ -101,6 +102,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
 				suspendTextPassThru = true;
 				newText = true;
+				handled = true;
 			}
 			else	if (!strncmp(token, "/scripRef", 9)) {
 				tmp = "";
@@ -108,6 +110,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				pushString(&to, convertToOSIS(tmp.c_str(), key));
 				lastspace = false;
 				suspendTextPassThru = false;
+				handled = true;
 			}
 
 			// Footnote
@@ -116,17 +119,39 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				pushString(&to, "<note type=\"x-StudyNote\">");
 				newText = true;
 				lastspace = false;
+				handled = true;
 			}
 			else	if (!strcmp(token, "Rf")) {
 				pushString(&to, "</note>");
 				lastspace = false;
+				handled = true;
+			}
+			// Italics assume transchange
+			if (!strcmp(token, "FI")) {
+				pushString(&to, "<transChange changeType=\"added\">");
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
+			else	if (!strcmp(token, "Fi")) {
+				pushString(&to, "</transChange>");
+				lastspace = false;
+				handled = true;
+			}
+			// Paragraph break.  For now use empty paragraph element
+			if (!strcmp(token, "CM")) {
+				pushString(&to, "<p />");
+				newText = true;
+				lastspace = false;
+				handled = true;
 			}
 
 			// Figure
 			else	if (!strncmp(token, "img ", 4)) {
 				const char *src = strstr(token, "src");
 				if (!src)		// assert we have a src attribute
-					return false;
+					continue;
+//					return false;
 
 				pushString(&to, "<figure src=\"");
 				const char *c;
@@ -146,7 +171,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 
 				pushString(&to, "\" />");
 				lastspace = false;
-				return true;
+				handled = true;
 			}
 
 			// Strongs numbers
@@ -184,6 +209,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 						lastspace = false;
 					}
 				}
+				handled = true;
 			}
 
 			// Morphology
@@ -217,9 +243,14 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 					pushString(&to, "</w>");
 					lastspace = false;
 				}
+				handled = true;
 			}
 
-			if (!keepToken) {	// if we don't want strongs
+			if (!keepToken) {	
+				if (!handled) {
+					SWLog::systemlog->LogError("Unprocessed Token: <%s>", token);
+//					exit(-1);
+				}
 				if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
 					if (lastspace)
 						to--;
