@@ -145,5 +145,8 @@ int main(int argc, char **argv)
 	bla++;
 	cout << "bla.Error() = " << (int)bla.Error() << " \n";
 
+	bla.Headings(0);
+	for (bla = BOTTOM; !bla.Error(); bla.Book(bla.Book()-1))
+		cout << (const char *)bla << "\n";
 	return 0;
 }

@@ -889,10 +889,10 @@ char VerseKey::Book(char ibook)
 {
 	char retval = book;
 
-	if (ibook != MAXPOS(char)) {
-		book = ibook;
-		Normalize(1);
-	}
+	Chapter(1);
+	book = ibook;
+	Normalize(1);
+
 	return retval;
 }
 
@@ -911,10 +911,10 @@ int VerseKey::Chapter(int ichapter)
 {
 	int retval = chapter;
 
-	if (ichapter != MAXPOS(int)) {
-		chapter = ichapter;
-		Normalize(1);
-	}
+	Verse(1);
+	chapter = ichapter;
+	Normalize(1);
+
 	return retval;
 }
 
@@ -933,10 +933,9 @@ int VerseKey::Verse(int iverse)
 {
 	int retval = verse;
 
-	if (iverse != MAXPOS(int)) {
-		verse = iverse;
-		Normalize(1);
-	}
+	verse = iverse;
+	Normalize(1);
+
 	return retval;
 }
 

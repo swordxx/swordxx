@@ -67,7 +67,7 @@ const char *stristr(const char *s1, const char *s2) {
 
 	strcpy(target, s2);
 	for (i = 0; i < tLen; i++)
-		target[i] = toupper(target[i]);
+		target[i] = (target[i] > 0) ? toupper(target[i]):target[i];
 
 	for (i = 0; i < (cLen - tLen)+1; i++) {
 		if (toupper(s1[i]) == *target) {
