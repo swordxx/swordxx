@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.69 2003/12/21 10:42:01 scribe Exp $
+* $Id: swmodule.h,v 1.70 2004/01/18 18:34:27 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -62,10 +62,6 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 #define SWTextDirection char
 #define SWTextEncoding char
 #define SWTextMarkup char
-
-enum {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};
-enum {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS, FMT_WEBIF};
-enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
 
 /**
  * The class SWModule is the base class for all modules used in Sword.
