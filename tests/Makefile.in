@@ -109,7 +109,7 @@ LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
 compnone complzss localetest keycast introtest indextest configtest \
-romantest testblocks filtertest lextest swaptest genbooktest treeidxtest\
+romantest testblocks filtertest rawldidxtest lextest swaptest genbooktest treeidxtest\
 $(ICUPROG) $(ZLIBPROG)
 
 @ICU_TRUE@ICUPROG = icutest translittest tlitmgrtest
@@ -142,6 +142,7 @@ romantest_SOURCES = romantest.cpp
 testblocks_SOURCES = testblocks.cpp
 filtertest_SOURCES = filtertest.cpp
 lextest_SOURCES = lextest.cpp
+rawldidxtest_SOURCES = rawldidxtest.cpp
 swaptest_SOURCES = swaptest.cpp
 treeidxtest_SOURCES = treeidxtest.cpp
 genbooktest_SOURCES = genbooktest.cpp
@@ -157,9 +158,10 @@ CONFIG_CLEAN_FILES =
 @ICU_FALSE@@ZLIB_TRUE@	keycast$(EXEEXT) introtest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_TRUE@	indextest$(EXEEXT) configtest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_TRUE@	romantest$(EXEEXT) testblocks$(EXEEXT) \
-@ICU_FALSE@@ZLIB_TRUE@	filtertest$(EXEEXT) lextest$(EXEEXT) \
-@ICU_FALSE@@ZLIB_TRUE@	swaptest$(EXEEXT) genbooktest$(EXEEXT) \
-@ICU_FALSE@@ZLIB_TRUE@	treeidxtest$(EXEEXT) compzip$(EXEEXT)
+@ICU_FALSE@@ZLIB_TRUE@	filtertest$(EXEEXT) rawldidxtest$(EXEEXT) \
+@ICU_FALSE@@ZLIB_TRUE@	lextest$(EXEEXT) swaptest$(EXEEXT) \
+@ICU_FALSE@@ZLIB_TRUE@	genbooktest$(EXEEXT) treeidxtest$(EXEEXT) \
+@ICU_FALSE@@ZLIB_TRUE@	compzip$(EXEEXT)
 @ICU_FALSE@@ZLIB_FALSE@noinst_PROGRAMS = keytest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_FALSE@	mgrtest$(EXEEXT) parsekey$(EXEEXT) \
 @ICU_FALSE@@ZLIB_FALSE@	listtest$(EXEEXT) casttest$(EXEEXT) \
@@ -168,7 +170,8 @@ CONFIG_CLEAN_FILES =
 @ICU_FALSE@@ZLIB_FALSE@	keycast$(EXEEXT) introtest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_FALSE@	indextest$(EXEEXT) configtest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_FALSE@	romantest$(EXEEXT) testblocks$(EXEEXT) \
-@ICU_FALSE@@ZLIB_FALSE@	filtertest$(EXEEXT) lextest$(EXEEXT) \
+@ICU_FALSE@@ZLIB_FALSE@	filtertest$(EXEEXT) \
+@ICU_FALSE@@ZLIB_FALSE@	rawldidxtest$(EXEEXT) lextest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_FALSE@	swaptest$(EXEEXT) genbooktest$(EXEEXT) \
 @ICU_FALSE@@ZLIB_FALSE@	treeidxtest$(EXEEXT)
 @ICU_TRUE@@ZLIB_TRUE@noinst_PROGRAMS = keytest$(EXEEXT) mgrtest$(EXEEXT) \
@@ -179,10 +182,11 @@ CONFIG_CLEAN_FILES =
 @ICU_TRUE@@ZLIB_TRUE@	introtest$(EXEEXT) indextest$(EXEEXT) \
 @ICU_TRUE@@ZLIB_TRUE@	configtest$(EXEEXT) romantest$(EXEEXT) \
 @ICU_TRUE@@ZLIB_TRUE@	testblocks$(EXEEXT) filtertest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_TRUE@	lextest$(EXEEXT) swaptest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_TRUE@	genbooktest$(EXEEXT) treeidxtest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_TRUE@	icutest$(EXEEXT) translittest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_TRUE@	tlitmgrtest$(EXEEXT) compzip$(EXEEXT)
+@ICU_TRUE@@ZLIB_TRUE@	rawldidxtest$(EXEEXT) lextest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_TRUE@	swaptest$(EXEEXT) genbooktest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_TRUE@	treeidxtest$(EXEEXT) icutest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_TRUE@	translittest$(EXEEXT) tlitmgrtest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_TRUE@	compzip$(EXEEXT)
 @ICU_TRUE@@ZLIB_FALSE@noinst_PROGRAMS = keytest$(EXEEXT) \
 @ICU_TRUE@@ZLIB_FALSE@	mgrtest$(EXEEXT) parsekey$(EXEEXT) \
 @ICU_TRUE@@ZLIB_FALSE@	listtest$(EXEEXT) casttest$(EXEEXT) \
@@ -191,10 +195,10 @@ CONFIG_CLEAN_FILES =
 @ICU_TRUE@@ZLIB_FALSE@	keycast$(EXEEXT) introtest$(EXEEXT) \
 @ICU_TRUE@@ZLIB_FALSE@	indextest$(EXEEXT) configtest$(EXEEXT) \
 @ICU_TRUE@@ZLIB_FALSE@	romantest$(EXEEXT) testblocks$(EXEEXT) \
-@ICU_TRUE@@ZLIB_FALSE@	filtertest$(EXEEXT) lextest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_FALSE@	swaptest$(EXEEXT) genbooktest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_FALSE@	treeidxtest$(EXEEXT) icutest$(EXEEXT) \
-@ICU_TRUE@@ZLIB_FALSE@	translittest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_FALSE@	filtertest$(EXEEXT) rawldidxtest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_FALSE@	lextest$(EXEEXT) swaptest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_FALSE@	genbooktest$(EXEEXT) treeidxtest$(EXEEXT) \
+@ICU_TRUE@@ZLIB_FALSE@	icutest$(EXEEXT) translittest$(EXEEXT) \
 @ICU_TRUE@@ZLIB_FALSE@	tlitmgrtest$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
@@ -288,6 +292,11 @@ parsekey_OBJECTS = $(am_parsekey_OBJECTS)
 parsekey_LDADD = $(LDADD)
 parsekey_DEPENDENCIES =
 parsekey_LDFLAGS =
+am_rawldidxtest_OBJECTS = rawldidxtest.$(OBJEXT)
+rawldidxtest_OBJECTS = $(am_rawldidxtest_OBJECTS)
+rawldidxtest_LDADD = $(LDADD)
+rawldidxtest_DEPENDENCIES =
+rawldidxtest_LDFLAGS =
 am_romantest_OBJECTS = romantest.$(OBJEXT)
 romantest_OBJECTS = $(am_romantest_OBJECTS)
 romantest_LDADD = $(LDADD)
@@ -335,6 +344,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/lextest.Po ./$(DEPDIR)/listtest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/localetest.Po ./$(DEPDIR)/mgrtest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/modtest.Po ./$(DEPDIR)/parsekey.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/rawldidxtest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/romantest.Po ./$(DEPDIR)/swaptest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/testblocks.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/tlitmgrtest.Po \
@@ -355,11 +365,12 @@ DIST_SOURCES = $(casttest_SOURCES) $(complzss_SOURCES) \
 	$(indextest_SOURCES) $(introtest_SOURCES) $(keycast_SOURCES) \
 	$(keytest_SOURCES) $(lextest_SOURCES) $(listtest_SOURCES) \
 	$(localetest_SOURCES) $(mgrtest_SOURCES) $(modtest_SOURCES) \
-	$(parsekey_SOURCES) $(romantest_SOURCES) $(swaptest_SOURCES) \
-	$(testblocks_SOURCES) $(tlitmgrtest_SOURCES) \
-	$(translittest_SOURCES) $(treeidxtest_SOURCES)
+	$(parsekey_SOURCES) $(rawldidxtest_SOURCES) \
+	$(romantest_SOURCES) $(swaptest_SOURCES) $(testblocks_SOURCES) \
+	$(tlitmgrtest_SOURCES) $(translittest_SOURCES) \
+	$(treeidxtest_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(casttest_SOURCES) $(complzss_SOURCES) $(compnone_SOURCES) $(compzip_SOURCES) $(configtest_SOURCES) $(filtertest_SOURCES) $(genbooktest_SOURCES) $(icutest_SOURCES) $(indextest_SOURCES) $(introtest_SOURCES) $(keycast_SOURCES) $(keytest_SOURCES) $(lextest_SOURCES) $(listtest_SOURCES) $(localetest_SOURCES) $(mgrtest_SOURCES) $(modtest_SOURCES) $(parsekey_SOURCES) $(romantest_SOURCES) $(swaptest_SOURCES) $(testblocks_SOURCES) $(tlitmgrtest_SOURCES) $(translittest_SOURCES) $(treeidxtest_SOURCES)
+SOURCES = $(casttest_SOURCES) $(complzss_SOURCES) $(compnone_SOURCES) $(compzip_SOURCES) $(configtest_SOURCES) $(filtertest_SOURCES) $(genbooktest_SOURCES) $(icutest_SOURCES) $(indextest_SOURCES) $(introtest_SOURCES) $(keycast_SOURCES) $(keytest_SOURCES) $(lextest_SOURCES) $(listtest_SOURCES) $(localetest_SOURCES) $(mgrtest_SOURCES) $(modtest_SOURCES) $(parsekey_SOURCES) $(rawldidxtest_SOURCES) $(romantest_SOURCES) $(swaptest_SOURCES) $(testblocks_SOURCES) $(tlitmgrtest_SOURCES) $(translittest_SOURCES) $(treeidxtest_SOURCES)
 
 all: all-am
 
@@ -431,6 +442,9 @@ modtest$(EXEEXT): $(modtest_OBJECTS) $(modtest_DEPENDENCIES)
 parsekey$(EXEEXT): $(parsekey_OBJECTS) $(parsekey_DEPENDENCIES) 
 	@rm -f parsekey$(EXEEXT)
 	$(CXXLINK) $(parsekey_LDFLAGS) $(parsekey_OBJECTS) $(parsekey_LDADD) $(LIBS)
+rawldidxtest$(EXEEXT): $(rawldidxtest_OBJECTS) $(rawldidxtest_DEPENDENCIES) 
+	@rm -f rawldidxtest$(EXEEXT)
+	$(CXXLINK) $(rawldidxtest_LDFLAGS) $(rawldidxtest_OBJECTS) $(rawldidxtest_LDADD) $(LIBS)
 romantest$(EXEEXT): $(romantest_OBJECTS) $(romantest_DEPENDENCIES) 
 	@rm -f romantest$(EXEEXT)
 	$(CXXLINK) $(romantest_LDFLAGS) $(romantest_OBJECTS) $(romantest_LDADD) $(LIBS)
@@ -474,6 +488,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mgrtest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modtest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parsekey.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawldidxtest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/romantest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swaptest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testblocks.Po@am__quote@

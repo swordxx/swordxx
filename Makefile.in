@@ -168,7 +168,7 @@ testlib_SOURCES = testlib.cpp
 
 @ICU_TRUE@testlib_LDADD = -L./lib -lsword -licui18n -licuuc
 @ICU_FALSE@testlib_LDADD = -L./lib -lsword
-localeDATA = locales.d/abbr.conf locales.d/cs.conf locales.d/da.conf locales.d/de.conf locales.d/de_abbrev.conf locales.d/es.conf locales.d/fr.conf locales.d/fr_FR.ISO-8859-1.conf locales.d/it.conf locales.d/la.conf locales.d/nl.conf locales.d/no.conf locales.d/pl.conf locales.d/pt.conf locales.d/id.conf locales.d/pt_BR.conf locales.d/sk.conf
+localeDATA = locales.d/abbr.conf locales.d/cs.conf locales.d/da.conf locales.d/de.conf locales.d/de_abbrev.conf locales.d/es.conf locales.d/fr.conf locales.d/fr_FR.ISO-8859-1.conf locales.d/it.conf locales.d/la.conf locales.d/nl.conf locales.d/no.conf locales.d/pl.conf locales.d/pt.conf locales.d/id.conf locales.d/pt_BR.conf locales.d/sk.conf locales.d/ru.conf
 
 localedatadir = $(pkgdatadir)/locales.d
 @INSTCONF_TRUE@modsDATA = samples/mods.d/globals.conf

@@ -80,7 +80,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 
 			while (wordStart < (text+maxlen)) {
 //				if (strchr(" ,;.?!()'\"", *wordStart))
-				if (strchr(";, .:?!()'\"", *wordStart))
+				if (strchr(";, .:?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
 					wordStart++;
 				else break;
 			}
@@ -100,21 +100,20 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				tmp = "";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
 				pushString(&to, convertToOSIS(tmp.c_str(), key));
+				lastspace = false;
 				suspendTextPassThru = false;
 			}
 
 			// Footnote
 			if (!strcmp(token, "RF")) {
 	//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
-				suspendTextPassThru = true;
+				pushString(&to, "<note type=\"x-StudyNote\">");
 				newText = true;
+				lastspace = false;
 			}
 			else	if (!strcmp(token, "Rf")) {
-				tmp = "<note type=\"x-StudyNote\"><notePart type=\"x-MainText\">";
-				tmp.append(textStart, (int)(textEnd - textStart)+1);
-				tmp += "</notePart></note>";
-				pushString(&to, tmp.c_str());
-				suspendTextPassThru = false;
+				pushString(&to, "</note>");
+				lastspace = false;
 			}
 
 			// Figure
@@ -140,6 +139,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 					*to++ = *c;
 
 				pushString(&to, "\" />");
+				lastspace = false;
 				return true;
 			}
 
@@ -153,18 +153,29 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 					// normal strongs number
 					strstrip(val);
 					if (!strncmp(wordStart, "<w ", 3)) {
-						sprintf(buf, "lemma=\"x-Strong:%s\" ", val);
-						memmove(wordStart+3+strlen(buf), wordStart+3, (to-wordStart)+1);
-						memcpy(wordStart+3, buf, strlen(buf));
+						strtok(wordStart, ">");
+						char *attStart = strstr(wordStart, "lemma");
+						if (attStart) {
+							attStart += 7;
+							sprintf(buf, "x-Strongs:%s|", val);
+						}
+						else {
+							attStart = wordStart + 3;
+							sprintf(buf, "lemma=\"x-Strongs:%s\" ", val);
+						}
+						wordStart[strlen(wordStart)] = '>';
+						memmove(attStart+strlen(buf), attStart, (to-attStart)+1);
+						memcpy(attStart, buf, strlen(buf));
 						to+=strlen(buf);
 					}
 					else {
-						sprintf(buf, "<w lemma=\"x-Strong:%s\">", val);
+						sprintf(buf, "<w lemma=\"x-Strongs:%s\">", val);
 						memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
 						memcpy(wordStart, buf, strlen(buf));
 						to+=strlen(buf);
 						pushString(&to, "</w>");
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+						lastspace = false;
 					}
 				}
 			}
@@ -177,9 +188,19 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				*valto = 0;
 				strstrip(val);
 				if (!strncmp(wordStart, "<w ", 3)) {
-					sprintf(buf, "morph=\"x-%s:%s\" ", "StrongsMorph", val);
-					memmove(wordStart+3+strlen(buf), wordStart+3, (to-wordStart)+1);
-					memcpy(wordStart+3, buf, strlen(buf));
+					strtok(wordStart, ">");
+					char *attStart = strstr(wordStart, "morph");
+					if (attStart) {
+						attStart += 7;
+						sprintf(buf, "x-%s:%s|", "StrongsMorph", val);
+					}
+					else {
+						attStart = wordStart + 3;
+						sprintf(buf, "morph=\"x-%s:%s\" ", "StrongsMorph", val);
+					}
+					wordStart[strlen(wordStart)] = '>';
+					memmove(attStart+strlen(buf), attStart, (to-attStart)+1);
+					memcpy(attStart, buf, strlen(buf));
 					to+=strlen(buf);
 				}
 				else {
@@ -188,6 +209,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 					memcpy(wordStart, buf, strlen(buf));
 					to+=strlen(buf);
 					pushString(&to, "</w>");
+					lastspace = false;
 				}
 			}
 
