@@ -12,8 +12,7 @@
  * RET:	*ipstr
  */
 
-char *stdstr(char **ipstr, const char *istr)
-{
+char *stdstr(char **ipstr, const char *istr) {
 	if (istr) {
 		if (*ipstr)
 			delete [] *ipstr;
@@ -72,7 +71,7 @@ const char *stristr(const char *s1, const char *s2) {
 	for (i = 0; i < (cLen - tLen)+1; i++) {
 		if (toupper(s1[i]) == (unsigned char)*target) {
 			for (j = 1; j < tLen; j++) {
-				if (toupper(s1[i+j]) != target[j])
+				if (toupper(s1[i+j]) != (unsigned char)target[j])
 					break;
 			}
 			if (j == tLen) {
