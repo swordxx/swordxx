@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.10 2001/04/28 18:05:27 jansorg Exp $
+ * $Id: swkey.h,v 1.11 2001/08/08 09:17:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,22 @@
 #include <defs.h>
 
 #define KEYERR_OUTOFBOUNDS 1
+
+#define SWKEY_OPERATORS \
+  SWKey & operator = (const char *ikey) { setText(ikey); return *this; } \
+  SWKey & operator = (SW_POSITION pos) { setPosition(pos); return *this; } \
+  operator const char *() const { return getText(); } \
+  bool operator == (const SWKey & ikey) { return equals(ikey); } \
+  bool operator != (const SWKey & ikey) { return !equals(ikey); } \
+  virtual bool operator > (const SWKey & ikey) { return (compare (ikey) > 0); } \
+  virtual bool operator < (const SWKey & ikey) { return (compare (ikey) < 0); } \
+  virtual bool operator >= (const SWKey & ikey) { return (compare (ikey) > -1); }  \
+  virtual bool operator <= (const SWKey & ikey) { return (compare (ikey) < 1); } \
+  SWKey & operator -= (int steps) { decrement(steps); return *this; } \
+  SWKey & operator += (int steps) { increment(steps); return *this; } \
+  SWKey & operator++ (int) { return *this += 1; } \
+  SWKey & operator-- (int) { return *this -= 1; }
+
 
 // For use with = operator to position key.
 
@@ -117,17 +133,17 @@ public:
   *
   * @param ikey string to set this key to
   */
-  virtual SWKey & operator = (const char *ikey);
+  virtual void setText(const char *ikey);
 
   /** Equates this SWKey to another SWKey object
   *
   * @param ikey other swkey object
   */
-  virtual SWKey & operator = (const SWKey & ikey);
+  virtual void copyFrom(const SWKey &ikey);
 
   /** returns text key if (char *) cast is requested
   */
-  virtual operator const char *() const;
+  virtual const char *getText() const;
 
   /** Compares another VerseKey object
   *
@@ -141,93 +157,27 @@ public:
   /** Compares another VerseKey object
   *
   * @param ikey key to compare with this one
-  * @return <> 0 if the keys are the same
+  * @return true if the keys are the same
   */
-  virtual bool operator == (const SWKey & ikey) { return !compare (ikey);
-  }
+  virtual bool equals(const SWKey &ikey) { return !compare(ikey); }
 
-  /** Compares another VerseKey object
-  *
-  * @param ikey key to compare with this one
-  * @return 0 if the keys are the same
-  */
-  virtual bool operator != (const SWKey & ikey)
-  {
-    return compare (ikey);
-  }
-
-  /**
-  * see @ref compare
-  */
-  virtual bool operator > (const SWKey & ikey)
-  {
-    return (compare (ikey) > 0);
-  }
-
-  /**
-  * see @ref compare
-  */
-  virtual bool operator < (const SWKey & ikey)
-  {
-    return (compare (ikey) < 0);
-  }
-
-  /**
-  * see @ref compare
-  */
-  virtual bool operator >= (const SWKey & ikey)
-  {
-    return (compare (ikey) > -1);
-  }
-
-  /**
-  * see @ref compare
-  */
-  virtual bool operator <= (const SWKey & ikey)
-  {
-    return (compare (ikey) < 1);
-  }
-
-  /** Positions this key if applicable
-  */
-  virtual SWKey & operator = (SW_POSITION);
+  virtual void setPosition(SW_POSITION);
 
   /** Decrements key a number of entries
   *
-  * @param decrement Number of entries to jump backward
+  * @param steps Number of entries to jump backward
   * @return *this
   */
-  virtual SWKey & operator -= (int decrement);
+  virtual void decrement(int steps = 1);
 
   /** Increments key a number of entries
   *
   * @param increment Number of entries to jump forward
   * @return *this
   */
-  virtual SWKey & operator += (int increment);
+  virtual void increment(int steps = 1);
 
-  /** Increments key by 1 entry
-  *
-  * @return *this
-  */
-  virtual SWKey & operator++ (int)
-  {
-    return *this += 1;
-  }
-
-  /** Decrements key by 1 entry
-  *
-  * @return *this
-  */
-  virtual SWKey & operator-- (int)
-  {
-    return *this -= 1;
-  }
-
-  virtual char Traversable ()
-  {
-    return 0;
-  }
+  virtual char Traversable () { return 0; }
 
   /** Use this function to get te current position withing a module.
   * Here's a small example how to use this function and @ref Index(long).
@@ -250,16 +200,12 @@ public:
   *   return text;
   * @endcode
   */
-  virtual long Index () const
-  {
-    return index;
-  }
+  virtual long Index () const { return index; }
 
-  virtual long Index (long iindex)
-  {
-    index = iindex;
-    return index;
-  }
+  virtual long Index (long iindex) { index = iindex; return index; }
+
+  SWKEY_OPERATORS
+
 };
 
 

@@ -106,40 +106,33 @@ char SWKey::Error()
 
 
 /******************************************************************************
- * SWKey::operator = Equates this SWKey to a character string
+ * SWKey::setText Equates this SWKey to a character string
  *
  * ENT:	ikey - other swkey object
  */
 
-SWKey &SWKey::operator =(const char *ikey)
-{
+void SWKey::setText(const char *ikey) {
 	stdstr(&keytext, ikey);
-
-	return *this;
 }
 
 
 /******************************************************************************
- * SWKey::operator = Equates this SWKey to another SWKey object
+ * SWKey::copyFrom Equates this SWKey to another SWKey object
  *
  * ENT:	ikey - other swkey object
  */
 
-SWKey &SWKey::operator =(const SWKey &ikey)
-{
+void SWKey::copyFrom(const SWKey &ikey) {
 // not desirable	Persist(ikey.Persist());
 	stdstr(&keytext, (const char *)ikey);
-
-	return *this;
 }
 
 
 /******************************************************************************
- * SWKey::operator char * - returns text key if (char *) cast is requested
+ * SWKey::getText - returns text key if (char *) cast is requested
  */
 
-SWKey::operator const char *() const
-{
+const char *SWKey::getText() const {
 	return keytext;
 }
 
@@ -161,11 +154,10 @@ int SWKey::compare(const SWKey &ikey)
 
 
 /******************************************************************************
- * SWKey::operator =(SW_POSITION)	- Positions this key if applicable
+ * SWKey::setPosition(SW_POSITION)	- Positions this key if applicable
  */
 
-SWKey &SWKey::operator =(SW_POSITION p)
-{
+void SWKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case POS_TOP:
 //		*this = "";
@@ -174,35 +166,30 @@ SWKey &SWKey::operator =(SW_POSITION p)
 //		*this = "zzzzzzzzz";
 		break;
 	} 
-	return *this;
 }
 
 
 /******************************************************************************
- * SWKey::operator +=	- Increments key a number of entries
+ * SWKey::increment	- Increments key a number of entries
  *
  * ENT:	increment	- Number of entries to jump forward
  *
  * RET: *this
  */
 
-SWKey &SWKey::operator += (int)
-{
+void SWKey::increment(int) {
 	error = KEYERR_OUTOFBOUNDS;
-	return *this;
 }
 
 
 /******************************************************************************
- * SWKey::operator -=	- Decrements key a number of entries
+ * SWKey::decrement	- Decrements key a number of entries
  *
  * ENT:	decrement	- Number of entries to jump backward
  *
  * RET: *this
  */
 
-SWKey &SWKey::operator -= (int)
-{
+void SWKey::decrement(int) {
 	error = KEYERR_OUTOFBOUNDS;
-	return *this;
 }

@@ -79,13 +79,12 @@ void ListKey::ClearList()
 
 
 /******************************************************************************
- * ListKey::operator = Equates this ListKey to another ListKey object
+ * ListKey::copyFrom Equates this ListKey to another ListKey object
  *
  * ENT:	ikey - other ListKey object
  */
 
-ListKey &ListKey::operator =(const ListKey &ikey)
-{
+void ListKey::copyFrom(const ListKey &ikey) {
 	ClearList();
 
 	arraymax = ikey.arraymax;
@@ -96,38 +95,33 @@ ListKey &ListKey::operator =(const ListKey &ikey)
 		array[i] = ikey.array[i]->clone();
 
 	SetToElement(0);
-	return *this;
 }
 
 
 /******************************************************************************
- * ListKey::operator << - Adds an element to the list
+ * ListKey::add - Adds an element to the list
  */
 
-ListKey &ListKey::operator <<(const SWKey &ikey)
-{
+void ListKey::add(const SWKey &ikey) {
 	if (++arraycnt > arraymax) {
 		array = (SWKey **) ((array) ? realloc(array, (arraycnt + 32) * sizeof(SWKey *)) : calloc(arraycnt + 32, sizeof(SWKey *)));
 		arraymax = arraycnt + 32;
 	}
 	array[arraycnt-1] = ikey.clone();
 	SetToElement(arraycnt-1);
-
-	return *this;
 }
 
 
 
 /******************************************************************************
- * ListKey::operator =(SW_POSITION)	- Positions this key
+ * ListKey::setPosition(SW_POSITION)	- Positions this key
  *
  * ENT:	p	- position
  *
  * RET:	*this
  */
 
-SWKey &ListKey::operator =(SW_POSITION p)
-{
+void ListKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case 1:	// GCC won't compile P_TOP
 		SetToElement(0);
@@ -136,20 +130,18 @@ SWKey &ListKey::operator =(SW_POSITION p)
 		SetToElement(arraycnt-1);
 		break;
 	}
-	return *this;
 }
 
 
 /******************************************************************************
- * ListKey::operator += - Increments a number of elements
+ * ListKey::increment - Increments a number of elements
  */
 
-SWKey &ListKey::operator +=(int increment)
-{
-	if (increment < 0)
-		return operator -=(increment*-1);
+void ListKey::increment(int step) {
+	if (step < 0)
+		return decrement(step*-1);
 	Error();		// clear error
-	for(; increment && !Error(); increment--) {
+	for(; step && !Error(); step--) {
 		if (arraypos < arraycnt) {
 			(*(array[arraypos]))++;
 			if (array[arraypos]->Error()) {
@@ -159,21 +151,19 @@ SWKey &ListKey::operator +=(int increment)
 		}
 		else error = KEYERR_OUTOFBOUNDS;
 	}
-	return *this;
 }
 
 
 /******************************************************************************
- * ListKey::operator -= - Decrements a number of elements
+ * ListKey::decrement - Decrements a number of elements
  */
 
-SWKey &ListKey::operator -=(int decrement)
-{
-	if (decrement < 0)
-		return operator +=(decrement*-1);
+void ListKey::decrement(int step) {
+	if (step < 0)
+		return increment(step*-1);
 
 	Error();		// clear error
-	for(; decrement && !Error(); decrement--) {
+	for(; step && !Error(); step--) {
 		if (arraypos > -1) {
 			(*(array[arraypos]))--;
 			if (array[arraypos]->Error()) {
@@ -183,7 +173,6 @@ SWKey &ListKey::operator -=(int decrement)
 		}
 		else error = KEYERR_OUTOFBOUNDS;
 	}
-	return *this;
 }
 
 
@@ -191,8 +180,7 @@ SWKey &ListKey::operator -=(int decrement)
  * ListKey::Count	- Returns number of elements in list
  */
 
-int ListKey::Count()
-{
+int ListKey::Count() {
 	return arraycnt;
 }
 
@@ -205,8 +193,7 @@ int ListKey::Count()
  * RET:	error status
  */
 
-char ListKey::SetToElement(int ielement, SW_POSITION pos)
-{
+char ListKey::SetToElement(int ielement, SW_POSITION pos) {
 	arraypos = ielement;
 	if (arraypos >= arraycnt) {
 		arraypos = (arraycnt>0)?arraycnt - 1:0;

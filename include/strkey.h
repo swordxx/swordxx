@@ -1,7 +1,7 @@
 /******************************************************************************
  *  strkey.h - code for class 'strkey'- a standard Biblical verse key
  *
- * $Id: strkey.h,v 1.5 2001/02/15 17:38:35 jansorg Exp $
+ * $Id: strkey.h,v 1.6 2001/08/08 09:17:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -45,6 +45,9 @@ public:
   /** cleans up instance of StrKey
   */
   virtual ~ StrKey ();
+
+  SWKEY_OPERATORS
+
 };
 
 

@@ -111,7 +111,7 @@ VerseKey::VerseKey(const char *min, const char *max) : SWKey()
 	init();
 	LowerBound(min);
 	UpperBound(max);
-	(*this) = TOP;
+	setPosition(TOP);
 }
 
 
@@ -228,7 +228,7 @@ char VerseKey::parse()
 	if (keytext) {
 		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
-			SWKey::operator =((const char *)tmpListKey);
+			SWKey::setText((const char *)tmpListKey);
 			for (testament = 1; testament < 3; testament++) {
 				for (book = 1; book <= BMAX[testament-1]; book++) {
 					if (!strncmp(keytext, books[testament-1][book-1].name, strlen(books[testament-1][book-1].name)))
@@ -463,7 +463,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
 					VerseKey newElement;
 					newElement.LowerBound(curkey);
-					newElement = TOP;
+					newElement.setPosition(TOP);
 					tmpListKey << newElement;
 				}
 				else {
@@ -472,7 +472,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							VerseKey newElement;
 							newElement.LowerBound(curkey);
 							if (partial > 1)
-								curkey = MAXCHAPTER;
+								curkey.setPosition(MAXCHAPTER);
 							if (partial > 0)
 								curkey = MAXVERSE;
 							newElement.UpperBound(curkey);
@@ -783,55 +783,47 @@ void VerseKey::initBounds() const
 
 
 /******************************************************************************
- * VerseKey::operator = - Equates this VerseKey to another VerseKey
+ * VerseKey::copyFrom - Equates this VerseKey to another VerseKey
  */
 
-SWKey &VerseKey::operator =(const VerseKey &ikey)
-{
-	SWKey::operator =(ikey);
+void VerseKey::copyFrom(const VerseKey &ikey) {
+	SWKey::copyFrom(ikey);
 
 	parse();
-
-	return *this;
 }
 
 
 /******************************************************************************
- * VerseKey::operator = - Equates this VerseKey to another SWKey
+ * VerseKey::copyFrom - Equates this VerseKey to another SWKey
  */
 
-SWKey &VerseKey::operator =(const SWKey &ikey)
-{
-	SWKey::operator =(ikey);
+void VerseKey::copyFrom(const SWKey &ikey) {
+	SWKey::copyFrom(ikey);
 
 	parse();
-
-	return *this;
 }
 
 
 /******************************************************************************
- * VerseKey::operator char * - refreshes keytext before returning if cast to
+ * VerseKey::getText - refreshes keytext before returning if cast to
  *				a (char *) is requested
  */
 
-VerseKey::operator const char *() const
-{
+const char *VerseKey::getText() const {
 	freshtext();
 	return keytext;
 }
 
 
 /******************************************************************************
- * VerseKey::operator =(SW_POSITION)	- Positions this key
+ * VerseKey::setPosition(SW_POSITION)	- Positions this key
  *
  * ENT:	p	- position
  *
  * RET:	*this
  */
 
-SWKey &VerseKey::operator =(SW_POSITION p)
-{
+void VerseKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case POS_TOP:
 		testament = LowerBound().Testament();
@@ -857,45 +849,41 @@ SWKey &VerseKey::operator =(SW_POSITION p)
 	} 
 	Normalize(1);
 	Error();	// clear error from normalize
-	return *this;
 }
 
 
 /******************************************************************************
- * VerseKey::operator +=	- Increments key a number of verses
+ * VerseKey::increment	- Increments key a number of verses
  *
- * ENT:	increment	- Number of verses to jump forward
+ * ENT:	step	- Number of verses to jump forward
  *
  * RET: *this
  */
 
-SWKey &VerseKey::operator += (int increment)
-{
+void VerseKey::increment(int step) {
 	char ierror = 0;
-	Index(Index() + increment);
+	Index(Index() + step);
 	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() + 1);
 		ierror = Error();
 	}
 
 	error = (ierror) ? ierror : error;
-	return *this;
 }
 
 
 /******************************************************************************
- * VerseKey::operator -=	- Decrements key a number of verses
+ * VerseKey::decrement	- Decrements key a number of verses
  *
- * ENT:	decrement	- Number of verses to jump backward
+ * ENT:	step	- Number of verses to jump backward
  *
  * RET: *this
  */
 
-SWKey &VerseKey::operator -= (int decrement)
-{
+void VerseKey::decrement(int step) {
 	char ierror = 0;
 
-	Index(Index() - decrement);
+	Index(Index() - step);
 	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() - 1);
 		ierror = Error();
@@ -904,7 +892,6 @@ SWKey &VerseKey::operator -= (int decrement)
 		(*this)++;
 
 	error = (ierror) ? ierror : error;
-	return *this;
 }
 
 

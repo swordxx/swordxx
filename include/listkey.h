@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.11 2001/04/20 02:17:32 scribe Exp $
+ * $Id: listkey.h,v 1.12 2001/08/08 09:17:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -79,45 +79,40 @@ public:
   /** Adds an element to the list
   * @param ikey the element to add
   */
-  virtual ListKey & operator << (const SWKey &ikey);
+  ListKey & operator << (const SWKey &ikey) { add(ikey); return *this; }
+  virtual void add(const SWKey &ikey);
+
   /** Equates this ListKey to another ListKey object
   *
   * @param ikey other ListKey object
   */
-  virtual ListKey & operator = (const ListKey & ikey);
-  virtual SWKey & operator = (const char *ikey) { return SWKey::operator =
-      (ikey);}
-  virtual SWKey & operator = (const SWKey & ikey) { return SWKey::operator =
-      (ikey);}
+  virtual void copyFrom(const ListKey & ikey);
+  virtual void copyFrom(const SWKey & ikey) { SWKey::copyFrom(ikey); }
+
   /** Positions this key
   *
   * @param p position
   * @return *this
   */
-  virtual SWKey & operator = (SW_POSITION);
+  virtual void setPosition(SW_POSITION);
   /** Decrements a number of elements
   */
-  virtual SWKey & operator -= (int decrement);
+  virtual void decrement(int step);
   /** Increments a number of elements
   */
-  virtual SWKey & operator += (int increment);
-  virtual char Traversable ()
-  {
-    return 1;
-  }
-  virtual long Index () const
-  {
-    return arraypos;
-  }
+  virtual void increment(int step);
+
+  virtual char Traversable () { return 1; }
+  virtual long Index () const { return arraypos; }
+
   /**
   * Returns the index for the new one given as as parameter.
   * The first parameter is the new index.
   */
-  virtual long Index (long index)
-  {
-    SetToElement (index);
-    return Index ();
-  }
+  virtual long Index (long index) { SetToElement (index); return Index (); }
+
+  SWKEY_OPERATORS
+
 };
 
 

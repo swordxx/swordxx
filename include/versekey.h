@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.16 2001/05/25 10:39:07 jansorg Exp $
+ * $Id: versekey.h,v 1.17 2001/08/08 09:17:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -224,49 +224,35 @@ public:
   /** refreshes keytext before returning if cast to
   * a (char *) is requested
   */
-  virtual operator const char *() const;
-  virtual SWKey & operator = (const char *ikey) { SWKey & retval =
-      SWKey::operator = (ikey);
-    parse ();
-    return retval;
-  }
-  
-  /** Equates this VerseKey to another SWKey
-  */
-  virtual SWKey & operator = (const SWKey & ikey);
+  virtual const char *getText() const;
+  virtual void setText(const char *ikey) { SWKey::setText(ikey); parse (); }
+  virtual void copyFrom(const SWKey & ikey);
   
   /** Equates this VerseKey to another VerseKey
   */
-  virtual SWKey & operator = (const VerseKey & ikey);
+  virtual void copyFrom(const VerseKey & ikey);
   
   /** Positions this key
   *
   * @param p position
   * @return *this
   */
-  virtual SWKey & operator = (SW_POSITION);
+  virtual void setPosition(SW_POSITION);
   
   /** Decrements key a number of verses
   *
   * @param decrement Number of verses to jump backward
   * @return *this
   */
-  virtual SWKey & operator -= (int decrement);
+  virtual void decrement(int step);
   
   /** Increments key a number of verses
   *
   * @param increment Number of verses to jump forward
   * @return *this
   */
-  virtual SWKey & operator += (int increment);
-/*
-	virtual VerseKey &operator ++(int) { return *this += 1; }
-	virtual VerseKey &operator --(int) { return *this -= 1; }
-*/
-  virtual char Traversable ()
-  {
-    return 1;
-  }
+  virtual void increment(int step);
+  virtual char Traversable () { return 1; }
 
   /** Gets testament
   *
@@ -396,6 +382,10 @@ public:
 			       0 /* default determine size */ );
   virtual void setBooks (const char *iBMAX, struct sbook **ibooks);
   virtual void setLocale (const char *name);
+
+  SWKEY_OPERATORS
+
+  virtual SWKey & operator = (const VerseKey & ikey) { copyFrom(ikey); return *this; }
 };
 
 
