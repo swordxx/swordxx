@@ -19,7 +19,8 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 {
 	const unsigned char *from;
 	char digit[10];
-	short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
+	unsigned long ch;
+        signed short utf16;
 	unsigned char from2[7];
 
 	SWBuf orig = text;
@@ -55,11 +56,28 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		
 		ch |= (((short)from2[0]) << (((6*subsequent)+significantFirstBits)-8));
 		from += subsequent;
-		text += '\\';
-		text += 'u';
-		sprintf(digit, "%d", ch);
-                text += digit;
-		text += '?';
+                if (ch < 0x10000) {
+                        utf16 = (signed short)ch;
+        		text += '\\';
+        		text += 'u';
+        		sprintf(digit, "%d", utf16);
+                        text += digit;
+        		text += '?';
+                }
+                else {
+                        utf16 = (signed short)((ch - 0x10000) / 0x400 + 0xD800);
+        		text += '\\';
+        		text += 'u';
+        		sprintf(digit, "%d", utf16);
+                        text += digit;
+        		text += '?';
+                        utf16 = (signed short)((ch - 0x10000) % 0x400 + 0xDC00);
+        		text += '\\';
+        		text += 'u';
+        		sprintf(digit, "%d", utf16);
+                        text += digit;
+        		text += '?';
+                }
 	}
 	   
 	return 0;
