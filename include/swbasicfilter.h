@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.16 2003/07/30 00:51:33 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.17 2003/07/30 02:03:45 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -130,7 +130,7 @@ protected:
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
 	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
-	virtual bool processStage(char stage, SWBuf &text, const char *&from, UserData *userData) {}
+	virtual bool processStage(char stage, SWBuf &text, char *&from, UserData *userData) {}
 	virtual void setStageProcessing(char stages) { processStages = stages; }	// see STATICs up above
 
 	/** This function is called for every escape sequence encountered in the input text.

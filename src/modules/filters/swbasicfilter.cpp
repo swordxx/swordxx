@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.27 2003/07/30 01:32:20 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.28 2003/07/30 02:03:45 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -204,7 +204,7 @@ void SWBasicFilter::setTokenEnd(const char *tokenEnd) {
 
 
 char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-        const char *from;
+        char *from;
         char token[4096];
 	int tokpos = 0;
 	bool intoken = false;
@@ -215,7 +215,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	UserData *userData = createUserData(module, key);
 
 	SWBuf orig = text;
-	from = orig.c_str();
+	from = orig.getRawData();
 	text = "";
 
 	if (processStages & INITIALIZE) {

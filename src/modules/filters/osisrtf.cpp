@@ -49,15 +49,14 @@ OSISRTF::OSISRTF() {
 }
 
 
-bool OSISRTF::processStage(char stage, SWBuf &text, const char *&from, UserData *userData) {
+bool OSISRTF::processStage(char stage, SWBuf &text, char *&from, UserData *userData) {
 	switch (stage) {
 	PRECHAR:
 		if ((strchr(" \t\n\r", *from))) {
 			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
 				from++;
 			}
-			text += " ";
-			return true;
+			*from = ' ';
 		}
 	}
 	return false;
