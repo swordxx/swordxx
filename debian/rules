@@ -34,7 +34,7 @@ configure-stamp:
 	chmod 755 configure
 	./configure $(confflags) --prefix=/usr --mandir=\$${prefix}/share/man \
 		--infodir=\$${prefix}/share/info --with-zlib \
-		--sysconfdir=/etc --enable-shared --with-icu \
+		--sysconfdir=/etc --enable-shared --without-icu \
 		--without-lucene
 	touch configure.stamp
 

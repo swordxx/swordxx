@@ -1,3 +1,9 @@
+sword (1.5.7-99) unstable; urgency=low
+
+  * unofficial.
+
+ -- Daniel Glassey <wdg@debian.org>  Thu, 15 Jan 2004 15:50:07 +0000
+ 
 sword (1.5.7-2) unstable; urgency=low
 
   * Fix problem building with current libcurl2-dev - TRUE has
