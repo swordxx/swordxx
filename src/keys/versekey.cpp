@@ -195,16 +195,19 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
 			}
 			*/
 		}
-        for (int t = 0; t < 2; t++) {
-            for (int i = 0; i < BMAX[t]; i++) {
-                int bn = getBookAbbrev(books[t][i].name);
-                if ((bn-1)%39 != i) {
-				SWLog::getSystemLog()->logError("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d)", 
-					books[t][i].name, bn, i);
-                }
-            }
-        }
-    }
+        
+		if (SWLog::getSystemLog()->getLogLevel() > 0) { //make sure log is wanted, this loop stuff costs a lot of time
+			for (int t = 0; t < 2; t++) {
+				for (int i = 0; i < BMAX[t]; i++) {
+					const int bn = getBookAbbrev(books[t][i].name);
+					if ((bn-1)%39 != i) {
+						SWLog::getSystemLog()->logError("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d)", 
+							books[t][i].name, bn, i);
+					}
+				}
+			}
+		}
+    	}
 	else abbrevsCnt = size;
 }
 
@@ -322,22 +325,25 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 
 	char *abbr = 0;
 
+	StringMgr* stringMgr = StringMgr::getSystemStringMgr();
+	const bool hasUTF8Support = StringMgr::hasUTF8Support();
+	
 	for (int i = 0; i < 2; i++) {
 		stdstr(&abbr, iabbr);
 		strstrip(abbr);
-		if (!i && StringMgr::hasUTF8Support()) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-			toupperstr_utf8(abbr);
+		if (!i && hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+			abbr = stringMgr->upperUTF8(abbr);
 		}
 		else if (!i) {
-			toupperstr(abbr);
+			abbr = stringMgr->upperLatin1(abbr);
 		}
 			
 		abLen = strlen(abbr);
 
 		if (abLen) {
 			min = 0;
-//			max = abbrevsCnt - 1;
 			max 	= abbrevsCnt;
+			
 			while(1) {
 				target = min + ((max - min) / 2);
 				diff = strncmp(abbr, abbrevs[target].ab, abLen);
@@ -347,6 +353,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 					min = target;
 				else	max = target;
 			}
+			
 			for (; target > 0; target--) {
 				if (strncmp(abbr, abbrevs[target-1].ab, abLen))
 					break;
