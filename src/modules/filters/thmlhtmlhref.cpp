@@ -141,15 +141,17 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
+			const char* value = tag.getAttribute("value");
 			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
 				buf += "<small><em>(<a href=\"";
 				buf += "type=";
 				buf += tag.getAttribute("type");
 	
-				const char* value = tag.getAttribute("value");
+				//const char* value = tag.getAttribute("value");
 				buf += " value=";
 				buf += value ? value : "";
 				buf += "\">";
+				buf += value ? value : "";
 				buf += "</a>) </em></small>";
 			}
 			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
@@ -157,11 +159,12 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				buf += "type=";
 				buf += tag.getAttribute("type");
 	
-				const char* value = tag.getAttribute("value");
+				//const char* value = tag.getAttribute("value");
 				buf += " value=";
 				buf += value ? value : "";
 				buf += "\">";
 				value++;
+				buf += value ? value : "";
 				buf += "</a>&gt; </em></small>";
 			}
 			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
