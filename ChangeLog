@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+28-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Gregor Anzelj's Slovenian (sl.conf) locale.
+
 27-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
 	lex/dict drivers use new toupperstr_utf8 to allow
 		keys to be encoded in utf8 (hopefully will
