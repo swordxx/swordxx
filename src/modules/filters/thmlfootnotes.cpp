@@ -1,46 +1,46 @@
 /******************************************************************************
  *
- * gbffootnotes -	SWFilter decendant to hide or show footnotes
- *			in a GBF module.
+ * thmlfootnotes -	SWFilter decendant to hide or show footnotes
+ *			in a ThML module.
  */
 
 
 #include <stdlib.h>
 #include <string.h>
-#include <gbffootnotes.h>
+#include <thmlfootnotes.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
 #endif
 
 
-const char GBFFootnotes::on[] = "On";
-const char GBFFootnotes::off[] = "Off";
-const char GBFFootnotes::optName[] = "Footnotes";
-const char GBFFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
+const char ThMLFootnotes::on[] = "On";
+const char ThMLFootnotes::off[] = "Off";
+const char ThMLFootnotes::optName[] = "Footnotes";
+const char ThMLFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
 
 
-GBFFootnotes::GBFFootnotes() {
+ThMLFootnotes::ThMLFootnotes() {
 	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }
 
 
-GBFFootnotes::~GBFFootnotes() {
+ThMLFootnotes::~ThMLFootnotes() {
 }
 
-void GBFFootnotes::setOptionValue(const char *ival)
+void ThMLFootnotes::setOptionValue(const char *ival)
 {
 	option = (!stricmp(ival, on));
 }
 
-const char *GBFFootnotes::getOptionValue()
+const char *ThMLFootnotes::getOptionValue()
 {
 	return (option) ? on:off;
 }
 
-char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 {
 	if (!option) {	// if we don't want footnotes
 		char *to, *from, token[2048]; // cheese.  Fix.
@@ -65,29 +65,13 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				switch (*token) {
-				case 'R':				// Reference
-					switch(token[1]) {
-					case 'F':               // Begin footnote
-						hide = true;
-						break;
-					case 'f':               // end footnote
-						hide = false;
-						break;
-					}
-					continue;	// skip token
-				case 'W':
-					if (token[1] == 'T') {
-						switch (token[2]) {
-						case 'P':
-						case 'S':
-						case 'A':
-							continue; // remove this token
-						default:
-							break;
-						}
-					}
+				if (!strnicmp(token, "note", 4)) {
+				  hide = true;
 				}
+				else if (!strnicmp(token, "/note", 5)) {
+				  hide = false;
+				}
+
 				// if not a footnote token, keep token in text
 				if (!hide) {
 					*to++ = '<';

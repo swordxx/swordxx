@@ -1,48 +1,47 @@
 /******************************************************************************
  *
- * gbfmorph -	SWFilter decendant to hide or show morph tags
- *			in a GBF module.
+ * thmllemma -	SWFilter decendant to hide or show lemmas
+ *			in a ThML module.
  */
 
 
 #include <stdlib.h>
 #include <string.h>
-#include <gbfmorph.h>
+#include <thmllemma.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
 #endif
 
 
-const char GBFMorph::on[] = "On";
-const char GBFMorph::off[] = "Off";
-const char GBFMorph::optName[] = "Morphological Tags";
-const char GBFMorph::optTip[] = "Toggles Morphological Tags On and Off if they exist";
+const char ThMLLemma::on[] = "On";
+const char ThMLLemma::off[] = "Off";
+const char ThMLLemma::optName[] = "Lemmas";
+const char ThMLLemma::optTip[] = "Toggles Lemmas On and Off if they exist";
 
-
-GBFMorph::GBFMorph() {
+ThMLLemma::ThMLLemma() {
 	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }
 
 
-GBFMorph::~GBFMorph() {
+ThMLLemma::~ThMLLemma() {
 }
 
-void GBFMorph::setOptionValue(const char *ival)
+void ThMLLemma::setOptionValue(const char *ival)
 {
 	option = (!stricmp(ival, on));
 }
 
-const char *GBFMorph::getOptionValue()
+const char *ThMLLemma::getOptionValue()
 {
 	return (option) ? on:off;
 }
 
-char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLLemma::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	if (!option) {	// if we don't want morph tags
+	if (!option) {	// if we don't want lemmas
 		char *to, *from, token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
@@ -65,14 +64,14 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'W' && token[1] == 'T') {	// Morph
+				if (!strnicmp(token, "sync type=\"lemma\" ", 18)) {	// Lemma
 				  if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
 				    if (lastspace)
 				      to--;
 				  }
 				  continue;
 				}
-				// if not a morph tag token, keep token in text
+				// if not a lemma token, keep token in text
 				*to++ = '<';
 				for (unsigned int i = 0; i < strlen(token); i++)
 					*to++ = token[i];

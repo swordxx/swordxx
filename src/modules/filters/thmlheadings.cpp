@@ -1,48 +1,48 @@
 /******************************************************************************
  *
- * gbffootnotes -	SWFilter decendant to hide or show footnotes
- *			in a GBF module.
+ * thmlheadings -	SWFilter decendant to hide or show headings
+ *			in a ThML module.
  */
 
 
 #include <stdlib.h>
 #include <string.h>
-#include <gbffootnotes.h>
+#include <thmlheadings.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
 #endif
 
 
-const char GBFFootnotes::on[] = "On";
-const char GBFFootnotes::off[] = "Off";
-const char GBFFootnotes::optName[] = "Footnotes";
-const char GBFFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
+const char ThMLHeadings::on[] = "On";
+const char ThMLHeadings::off[] = "Off";
+const char ThMLHeadings::optName[] = "Headings";
+const char ThMLHeadings::optTip[] = "Toggles Headings On and Off if they exist";
 
 
-GBFFootnotes::GBFFootnotes() {
+ThMLHeadings::ThMLHeadings() {
 	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }
 
 
-GBFFootnotes::~GBFFootnotes() {
+ThMLHeadings::~ThMLHeadings() {
 }
 
-void GBFFootnotes::setOptionValue(const char *ival)
+void ThMLHeadings::setOptionValue(const char *ival)
 {
 	option = (!stricmp(ival, on));
 }
 
-const char *GBFFootnotes::getOptionValue()
+const char *ThMLHeadings::getOptionValue()
 {
 	return (option) ? on:off;
 }
 
-char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLHeadings::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	if (!option) {	// if we don't want footnotes
+	if (!option) {	// if we don't want headings
 		char *to, *from, token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
@@ -65,30 +65,15 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				switch (*token) {
-				case 'R':				// Reference
-					switch(token[1]) {
-					case 'F':               // Begin footnote
+				if (!strnicmp(token, "div class=\"sechead\"", 19)) {
 						hide = true;
-						break;
-					case 'f':               // end footnote
-						hide = false;
-						break;
-					}
-					continue;	// skip token
-				case 'W':
-					if (token[1] == 'T') {
-						switch (token[2]) {
-						case 'P':
-						case 'S':
-						case 'A':
-							continue; // remove this token
-						default:
-							break;
-						}
-					}
+						
+				} 
+				else if (hide && !strnicmp(token, "/div", 4)) {
+               				        hide = true;
 				}
-				// if not a footnote token, keep token in text
+
+				// if not a heading token, keep token in text
 				if (!hide) {
 					*to++ = '<';
 					for (unsigned int i = 0; i < strlen(token); i++)

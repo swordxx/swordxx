@@ -1,48 +1,48 @@
 /******************************************************************************
  *
- * gbffootnotes -	SWFilter decendant to hide or show footnotes
- *			in a GBF module.
+ * thmlscripref -	SWFilter decendant to hide or show scripture references
+ *			in a ThML module.
  */
 
 
 #include <stdlib.h>
 #include <string.h>
-#include <gbffootnotes.h>
+#include <thmlscripref.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
 #endif
 
 
-const char GBFFootnotes::on[] = "On";
-const char GBFFootnotes::off[] = "Off";
-const char GBFFootnotes::optName[] = "Footnotes";
-const char GBFFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
+const char ThMLScripref::on[] = "On";
+const char ThMLScripref::off[] = "Off";
+const char ThMLScripref::optName[] = "Scripture Cross-references";
+const char ThMLScripref::optTip[] = "Toggles Scripture Cross-references On and Off if they exist";
 
 
-GBFFootnotes::GBFFootnotes() {
+ThMLScripref::ThMLScripref() {
 	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }
 
 
-GBFFootnotes::~GBFFootnotes() {
+ThMLScripref::~ThMLScripref() {
 }
 
-void GBFFootnotes::setOptionValue(const char *ival)
+void ThMLScripref::setOptionValue(const char *ival)
 {
 	option = (!stricmp(ival, on));
 }
 
-const char *GBFFootnotes::getOptionValue()
+const char *ThMLScripref::getOptionValue()
 {
 	return (option) ? on:off;
 }
 
-char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	if (!option) {	// if we don't want footnotes
+	if (!option) {	// if we don't want scriprefs
 		char *to, *from, token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
@@ -65,30 +65,14 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				switch (*token) {
-				case 'R':				// Reference
-					switch(token[1]) {
-					case 'F':               // Begin footnote
-						hide = true;
-						break;
-					case 'f':               // end footnote
-						hide = false;
-						break;
-					}
-					continue;	// skip token
-				case 'W':
-					if (token[1] == 'T') {
-						switch (token[2]) {
-						case 'P':
-						case 'S':
-						case 'A':
-							continue; // remove this token
-						default:
-							break;
-						}
-					}
+				if (!strnicmp(token, "scripRef", 8)) {
+				  hide = true;
 				}
-				// if not a footnote token, keep token in text
+				else if (!strnicmp(token, "/scripRef", 9)) {
+				  hide = false;
+				}
+
+				// if not a scripref token, keep token in text
 				if (!hide) {
 					*to++ = '<';
 					for (unsigned int i = 0; i < strlen(token); i++)

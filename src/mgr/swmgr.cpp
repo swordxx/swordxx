@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.48 2001/10/30 00:01:50 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.49 2001/11/05 23:55:36 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -51,6 +51,12 @@
 #include <gbffootnotes.h>
 #include <gbfheadings.h>
 #include <gbfmorph.h>
+#include <thmlstrongs.h>
+#include <thmlfootnotes.h>
+#include <thmlheadings.h>
+#include <thmlmorph.h>
+#include <thmllemma.h>
+#include <thmlscripref.h>
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
@@ -95,6 +101,30 @@ void SWMgr::init() {
 
 	tmpFilter = new GBFHeadings();
 	optionFilters.insert(FilterMap::value_type("GBFHeadings", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new ThMLStrongs();
+	optionFilters.insert(FilterMap::value_type("ThMLStrongs", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new ThMLFootnotes();
+	optionFilters.insert(FilterMap::value_type("ThMLFootnotes", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new ThMLMorph();
+	optionFilters.insert(FilterMap::value_type("ThMLMorph", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new ThMLHeadings();
+	optionFilters.insert(FilterMap::value_type("ThMLHeadings", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new ThMLLemma();
+	optionFilters.insert(FilterMap::value_type("ThMLLemma", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new ThMLScripref();
+	optionFilters.insert(FilterMap::value_type("ThMLScripref", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new UTF8GreekAccents();

@@ -1,46 +1,46 @@
 /******************************************************************************
  *
- * gbfmorph -	SWFilter decendant to hide or show morph tags
- *			in a GBF module.
+ * thmlmorph -	SWFilter decendant to hide or show morph tags
+ *			in a ThML module.
  */
 
 
 #include <stdlib.h>
 #include <string.h>
-#include <gbfmorph.h>
+#include <thmlmorph.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
 #endif
 
 
-const char GBFMorph::on[] = "On";
-const char GBFMorph::off[] = "Off";
-const char GBFMorph::optName[] = "Morphological Tags";
-const char GBFMorph::optTip[] = "Toggles Morphological Tags On and Off if they exist";
+const char ThMLMorph::on[] = "On";
+const char ThMLMorph::off[] = "Off";
+const char ThMLMorph::optName[] = "Morphological Tags";
+const char ThMLMorph::optTip[] = "Toggles Morphological Tags On and Off if they exist";
 
 
-GBFMorph::GBFMorph() {
+ThMLMorph::ThMLMorph() {
 	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }
 
 
-GBFMorph::~GBFMorph() {
+ThMLMorph::~ThMLMorph() {
 }
 
-void GBFMorph::setOptionValue(const char *ival)
+void ThMLMorph::setOptionValue(const char *ival)
 {
 	option = (!stricmp(ival, on));
 }
 
-const char *GBFMorph::getOptionValue()
+const char *ThMLMorph::getOptionValue()
 {
 	return (option) ? on:off;
 }
 
-char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLMorph::ProcessText(char *text, int maxlen, const SWKey *key)
 {
 	if (!option) {	// if we don't want morph tags
 		char *to, *from, token[2048]; // cheese.  Fix.
@@ -65,7 +65,7 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'W' && token[1] == 'T') {	// Morph
+				if (!strnicmp(token, "sync type=\"morph\" ", 18)) {	// Morph
 				  if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
 				    if (lastspace)
 				      to--;

@@ -23,6 +23,12 @@ cpp += gbffootnotes.cpp
 cpp += gbfheadings.cpp
 cpp += gbfmorph.cpp
 cpp += plainfootnotes.cpp
+cpp += thmlstrongs.cpp
+cpp += thmlfootnotes.cpp
+cpp += thmlheadings.cpp
+cpp += thmlmorph.cpp
+cpp += thmllemma.cpp
+cpp += thmlscripref.cpp
 
 cpp += gbfthml.cpp
 cpp += thmlgbf.cpp

@@ -17,7 +17,7 @@
 const char GBFHeadings::on[] = "On";
 const char GBFHeadings::off[] = "Off";
 const char GBFHeadings::optName[] = "Headings";
-const char GBFHeadings::optTip[] = "Toggles Headings On and Off In Bible Texts If They Exist";
+const char GBFHeadings::optTip[] = "Toggles Headings On and Off if they exist";
 
 
 GBFHeadings::GBFHeadings() {
