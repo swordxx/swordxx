@@ -60,7 +60,7 @@ char GreekLexAttribs::processText(SWBuf &text, const SWKey *key, const SWModule 
 						}
 
 						phrase = "";
-						phrase.append(currentPhrase, (int)(((currentPhraseEnd)?currentPhraseEnd:from) - currentPhrase)-1);
+						phrase.append(currentPhrase, (int)(((currentPhraseEnd>currentPhrase)?currentPhraseEnd:from) - currentPhrase)-1);
 						currentPhrase = from;
 						while (*from && isdigit(*from)) from++;
 						freq = "";
