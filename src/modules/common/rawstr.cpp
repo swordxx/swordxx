@@ -230,6 +230,8 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 		else	tryoff = 0;
 
 		lseek(idxfd->getFd(), tryoff, SEEK_SET);
+
+		*start = *size = 0;
 		read(idxfd->getFd(), start, 4);
 		read(idxfd->getFd(), size, 2);
 

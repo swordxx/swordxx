@@ -369,7 +369,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 						// check to see if it starts with our target word
 						if (strlen(idxbuf) > strlen(words[i]))
 							idxbuf[strlen(words[i])] = 0;
-						else	words[i][strlen(idxbuf)] = 0;
+//						else	words[i][strlen(idxbuf)] = 0;
 						if (!strcmp(idxbuf, words[i])) {
 
 							// get data for this word from database
