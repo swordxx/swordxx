@@ -30,6 +30,9 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 	char *to, *from, token[2048];
 	int tokpos = 0;
 	bool intoken 	= false;
+	bool hasFootnotePreTag = false;
+	bool isRightJustified = false;
+	bool isCentered = false;
 	int len;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
@@ -123,13 +126,16 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = '<';
 						*to++ = 'I';					
 						*to++ = '>';						
+						hasFootnotePreTag = true; //we have the RB tag
 						continue;
 					case 'F':               // footnote begin
-						*to++ = '<';
-						*to++ = '/';
-						*to++ = 'I';
-						*to++ = '>';						
-						*to++ = ' ';
+						if (hasFootnotePreTag) {
+							*to++ = '<';
+							*to++ = '/';
+							*to++ = 'I';
+							*to++ = '>';						
+							*to++ = ' ';
+						}
  						*to++ = '<';
 						*to++ = 'F';
 						*to++ = 'O';
@@ -142,6 +148,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = 'O';
 						*to++ = 'R';
 						*to++ = '=';
+						*to++ = '\"';
 						*to++ = '#';
 						*to++ = '8';
 						*to++ = '0';
@@ -149,6 +156,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = '0';
 						*to++ = '0';
 						*to++ = '0';
+						*to++ = '\"';
 						*to++ = '>';
 						
 						*to++ = ' ';
@@ -160,7 +168,6 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = 'L';
 						*to++ = '>';
 						*to++ = '(';
-
 												
 						continue;
 					case 'f':               // footnote end
@@ -181,7 +188,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = 'N';
 						*to++ = 'T';
 						*to++ = '>';
-						
+						hasFootnotePreTag = false;
 						continue;
 				}
 				break;
@@ -328,6 +335,68 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						continue;
 				}
 				break;
+			case 'J':
+				switch(token[1]) 
+				{
+					case 'R':
+						*to++ = '<';
+						*to++ = 'D';
+						*to++ = 'I';
+						*to++ = 'V';
+						*to++ = ' ';
+						*to++ = 'A';
+						*to++ = 'L';
+						*to++ = 'I';
+						*to++ = 'G';
+						*to++ = 'N';
+						*to++ = '=';
+						*to++ = '\"';
+						*to++ = 'R';
+						*to++ = 'I';
+						*to++ = 'G';
+						*to++ = 'H';
+						*to++ = 'T';
+						*to++ = '\"';
+						*to++ = '>';
+						isRightJustified = true;
+						continue;
+
+					case 'C':
+						*to++ = '<';
+						*to++ = 'D';
+						*to++ = 'I';
+						*to++ = 'V';
+						*to++ = ' ';
+						*to++ = 'A';
+						*to++ = 'L';
+						*to++ = 'I';
+						*to++ = 'G';
+						*to++ = 'N';
+						*to++ = '=';
+						*to++ = '\"';
+						*to++ = 'C';
+						*to++ = 'E';
+						*to++ = 'N';
+						*to++ = 'T';
+						*to++ = 'E';
+						*to++ = 'R';
+						*to++ = '\"';
+						*to++ = '>';
+						isCentered = true;
+						continue;
+
+					case 'L': //left, reset right and center
+						if (isCentered || isRightJustified) {
+							*to++ = '<';
+							*to++ = '/';
+							*to++ = 'D';
+							*to++ = 'I';
+							*to++ = 'V';
+							*to++ = '>';
+							isCentered = false;
+							isRightJustified = false;
+						}
+				}
 			case 'P':			// special formatting
 				switch(token[1])
 				{
