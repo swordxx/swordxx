@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.36 2004/05/04 07:03:44 scribe Exp $
+* $Id: swbuf.h,v 1.37 2004/05/05 21:33:27 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -25,7 +25,6 @@
 #include <defs.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mem.h>
 
 SWORD_NAMESPACE_START
 
