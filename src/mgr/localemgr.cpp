@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.7 2000/11/01 09:26:09 scribe Exp $
+ * $Id: localemgr.cpp,v 1.8 2000/12/03 03:05:14 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,6 +37,7 @@
 #include <utilfuns.h>
 
 #include <localemgr.h>
+#include <filemgr.h>
 
 
 LocaleMgr LocaleMgr::systemLocaleMgr;
@@ -78,7 +79,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 
 			break;
 		}
-		if (SWMgr::existsDir(path.c_str(), "locales.d")) {
+		if (FileMgr::existsDir(path.c_str(), "locales.d")) {
 			path += "locales.d";
 			loadConfigDir(path.c_str());
 		}

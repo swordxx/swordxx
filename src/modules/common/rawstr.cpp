@@ -44,9 +44,10 @@ int RawStr::instance = 0;
  *		(e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStr::RawStr(const char *ipath)
+RawStr::RawStr(const char *ipath, int fileMode)
 {
 	char buf[127];
+	char tries = 1;
 
 	nl = '\n';
 	lastoff = -1;
@@ -57,11 +58,23 @@ RawStr::RawStr(const char *ipath)
 #define O_BINARY 0		// If it hasn't been defined than we probably
 #endif				// don't need it.
 
-	sprintf(buf, "%s.idx", path);
-	idxfd = FileMgr::systemFileMgr.open(buf, O_RDONLY|O_BINARY);
+	if (fileMode == -1) { // try read/write if possible
+		fileMode = O_RDWR;
+		tries = 2;
+	}
+		
+	for (int i = 0; i < tries; i++) {
+		sprintf(buf, "%s.idx", path);
+		idxfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-	sprintf(buf, "%s.dat", path);
-	if ((datfd = FileMgr::systemFileMgr.open(buf, O_RDONLY|O_BINARY)) < 0) {
+		sprintf(buf, "%s.dat", path);
+		datfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+
+		if (idxfd->getFd() >= 0)
+			break;
+	}
+
+	if (datfd < 0) {
 		sprintf(buf, "Error: %d", errno);
 		perror(buf);
 	}
@@ -361,23 +374,41 @@ void RawStr::preptext(char *buf)
  *
  */
 
-void RawStr::gettext(long start, unsigned short size, char *idxbuf, char *buf)
+void RawStr::gettext(long istart, unsigned short isize, char *idxbuf, char *buf)
 {
 	char *ch;
 	char *idxbuflocal = 0;
-	getidxbufdat(start, &idxbuflocal);
+	getidxbufdat(istart, &idxbuflocal);
+	long start = istart;
+	unsigned short size = isize;
 
-	memset(buf, 0, size);
-	lseek(datfd->getFd(), start, SEEK_SET);
-	read(datfd->getFd(), buf, (int)(size - 1));
+	do {
+		memset(buf, 0, size);
+		lseek(datfd->getFd(), start, SEEK_SET);
+		read(datfd->getFd(), buf, (int)(size - 1));
 
-	for (ch = buf; *ch; ch++) {		// skip over index string
-		if (*ch == 10) {
-			ch++;
-			break;
+		for (ch = buf; *ch; ch++) {		// skip over index string
+			if (*ch == 10) {
+				ch++;
+				break;
+			}
 		}
+		memmove(buf, ch, size - (unsigned short)(ch-buf));
+
+		// resolve link
+		if (!strncmp(buf, "@LINK", 5)) {
+			for (ch = buf; *ch; ch++) {		// null before nl
+				if (*ch == 10) {
+					*ch = 0;
+					break;
+				}
+			}
+			findoffset(buf + 6, &start, &size);
+		}
+		else break;
 	}
-	memmove(buf, ch, size - (unsigned short)(ch-buf));
+	while (true);	// while we're resolving links
+
 	if (idxbuflocal) {
 		int localsize = strlen(idxbuflocal);
 		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
@@ -407,17 +438,54 @@ void RawStr::settext(const char *ikey, const char *buf)
 	static const char nl[] = {13, 10};
 	char *tmpbuf = 0;
 	char *key = 0;
+	char *dbKey = 0;
 	char *idxBytes = 0;
+	char *outbuf = 0;
+	char *ch = 0;
 
-	findoffset(key, &start, &size, 0, &idxoff);
+	findoffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
-	for (tmpbuf = key; *tmpbuf; tmpbuf++)
-		*tmpbuf = toupper(*tmpbuf);
-	tmpbuf = 0;
-	getidxbuf(start, &tmpbuf);
+	for (ch = key; *ch; ch++)
+		*ch = toupper(*ch);
+	ch = 0;
 
-	if (strcmp(key, tmpbuf) > 0)
+	getidxbuf(start, &dbKey);
+
+	if (strcmp(key, dbKey) < 0) {
+		idxoff -= 6;
+		if (idxoff < 0)
+			idxoff = 0;
+	} else if (strcmp(key, dbKey) > 0) {
 		idxoff += 6;
+	} else if (!strcmp(key, dbKey)) { // got absolute entry
+		do {
+			tmpbuf = new char [ size + 2 ];
+			memset(tmpbuf, 0, size + 2);
+			lseek(datfd->getFd(), start, SEEK_SET);
+			read(datfd->getFd(), tmpbuf, (int)(size - 1));
+
+			for (ch = tmpbuf; *ch; ch++) {		// skip over index string
+				if (*ch == 10) {
+					ch++;
+					break;
+				}
+			}
+			memmove(tmpbuf, ch, size - (unsigned short)(ch-tmpbuf));
+
+			// resolve link
+			if (!strncmp(tmpbuf, "@LINK", 5)) {
+				for (ch = tmpbuf; *ch; ch++) {		// null before nl
+					if (*ch == 10) {
+						*ch = 0;
+						break;
+					}
+				}
+				findoffset(tmpbuf + 6, &start, &size, 0, &idxoff);
+			}
+			else break;
+		}
+		while (true);	// while we're resolving links
+	}
 
 	endoff = lseek(idxfd->getFd(), 0, SEEK_END);
 
@@ -429,7 +497,9 @@ void RawStr::settext(const char *ikey, const char *buf)
 		read(idxfd->getFd(), idxBytes, shiftSize);
 	}
 
-	size = outsize = strlen(buf);
+	outbuf = new char [ strlen(buf) + strlen(key) + 5 ];
+	sprintf(outbuf, "%s%c%c%s", key, 13, 10, buf);
+	size = outsize = strlen(outbuf);
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
 #ifdef BIGENDIAN
@@ -442,10 +512,9 @@ void RawStr::settext(const char *ikey, const char *buf)
 	#endif
 #endif
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
-	if (size) {
-		// TODO: write key info first
+	if (strlen(buf)) {
 		lseek(datfd->getFd(), start, SEEK_SET);
-		write(datfd->getFd(), buf, (int)size);
+		write(datfd->getFd(), outbuf, (int)size);
 
 		// add a new line to make data file easier to read in an editor
 		write(datfd->getFd(), &nl, 2);
@@ -460,13 +529,15 @@ void RawStr::settext(const char *ikey, const char *buf)
 	else {	// delete entry
 		if (idxBytes) {
 			write(idxfd->getFd(), idxBytes+6, shiftSize-6);
-			// TODO: truncate the index (shrink by 6);
+			lseek(idxfd->getFd(), -1, SEEK_CUR);	// last valid byte
+			FileMgr::systemFileMgr.trunc(idxfd);	// truncate index
 			delete [] idxBytes;
 		}
 	}
 
 	delete [] key;
-	free(tmpbuf);
+	delete [] outbuf;
+	free(dbKey);
 }
 
 

@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.17 2000/11/06 12:47:10 scribe Exp $
+ * $Id: swmgr.h,v 1.18 2000/12/03 03:05:14 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,8 +64,6 @@ protected:
 public:
 	static bool debug;
 	static void findConfig(char *configType, char **prefixPath, char **configPath);
-	static char existsFile(const char *ipath, const char *ifileName);
-	static char existsDir(const char *ipath, const char *idirName);
 	
 	SWConfig *config;
 	SWConfig *sysconfig;

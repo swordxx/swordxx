@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.23 2000/11/07 20:20:32 scribe Exp $
+ * $Id: swmgr.cpp,v 1.24 2000/12/03 03:05:14 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -108,13 +108,13 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload) {
 	path = iConfigPath;
 	if ((iConfigPath[strlen(iConfigPath)-1] != '\\') && (iConfigPath[strlen(iConfigPath)-1] != '/'))
 		path += "/";
-	if (existsFile(path.c_str(), "mods.conf")) {
+	if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 		stdstr(&prefixPath, path.c_str());
 		path += "mods.conf";
 		stdstr(&configPath, path.c_str());
 	}
 	else {
-		if (existsDir(path.c_str(), "mods.d")) {
+		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 			stdstr(&prefixPath, path.c_str());
 			path += "mods.d";
 			stdstr(&configPath, path.c_str());
@@ -148,36 +148,6 @@ SWMgr::~SWMgr() {
 }
 
 
-char SWMgr::existsFile(const char *ipath, const char *ifileName)
-{
-	string path = ipath;
-	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-		path += "/";
-	int fd;
-	string filePath = path + ifileName;
-	if ((fd = ::open(filePath.c_str(), O_RDONLY)) > 0) {
-		::close(fd);
-		return 1;
-	}
-	return 0;
-}
-
-
-char SWMgr::existsDir(const char *ipath, const char *idirName)
-{
-	DIR *dir;
-	string path = ipath;
-	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-		path += "/";
-	string filePath = path + idirName;
-	if ((dir = opendir(filePath.c_str()))) {
-		closedir(dir);
-		return 1;
-	}
-	return 0;
-}
-
-
 void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 	string path;
 	ConfigEntMap::iterator entry;
@@ -192,7 +162,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 if (debug)
 	cerr << "Checking working directory for mods.conf...";
 
-	if (existsFile(".", "mods.conf")) {
+	if (FileMgr::existsFile(".", "mods.conf")) {
 
 if (debug)
 	cerr << "found\n";
@@ -205,7 +175,7 @@ if (debug)
 if (debug)
 	cerr << "\nChecking working directory for mods.d...";
 
-	if (existsDir(".", "mods.d")) {
+	if (FileMgr::existsDir(".", "mods.d")) {
 
 if (debug)
 	cerr << "found\n";
@@ -235,7 +205,7 @@ if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.conf...";
 
 
-		if (existsFile(path.c_str(), "mods.conf")) {
+		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
 if (debug)
 	cerr << "found\n";
@@ -249,7 +219,7 @@ if (debug)
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.d...";
 
-		if (existsDir(path.c_str(), "mods.d")) {
+		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
 if (debug)
 	cerr << "found\n";
@@ -286,7 +256,7 @@ if (debug)
 if (debug)
 	cerr << "\nChecking for mods.conf in DataPath ";
 
-			if (existsFile(path.c_str(), "mods.conf")) {
+			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
 if (debug)
 	cerr << "found\n";
@@ -300,7 +270,7 @@ if (debug)
 if (debug)
 	cerr << "\nChecking for mods.d in DataPath ";
 
-			if (existsDir(path.c_str(), "mods.d")) {
+			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
 if (debug)
 	cerr << "found\n";
@@ -325,7 +295,7 @@ if (debug)
 		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
 			path += "/";
 		path += ".sword/";
-		if (existsFile(path.c_str(), "mods.conf")) {
+		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
 if (debug)
 	cerr << "found\n";
@@ -339,7 +309,7 @@ if (debug)
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
 
-		if (existsDir(path.c_str(), "mods.d")) {
+		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
 if (debug)
 	cerr << "found\n";
@@ -424,7 +394,7 @@ void SWMgr::Load() {
 				if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
 					path += "/";
 				path += ".sword/";
-				if (existsDir(path.c_str(), "mods.d")) {
+				if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 					char *savePrefixPath = 0;
 					char *saveConfigPath = 0;
 					SWConfig *saveConfig = 0;
