@@ -1,5 +1,8 @@
-API ChangeLog	(see the ChangeLog in each 'apps' directory for
+﻿API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
+
+13-Aug-2004	Troy A. Griffitts <scribe@crosswire.org>
+	Migrated to SVN
 
 11-May-2004	Troy A. Griffitts <scribe@crosswire.org>
 	Updated to support ARM cross-compile, and that
