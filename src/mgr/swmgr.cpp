@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.56 2002/01/04 23:36:32 scribe Exp $
+ * $Id: swmgr.cpp,v 1.57 2002/01/24 08:55:27 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -40,6 +40,7 @@
 #endif
 #include <swmgr.h>
 #include <rawtext.h>
+#include <rawgenbook.h>
 #include <rawcom.h>
 #include <hrefcom.h>
 #include <rawld.h>
@@ -701,6 +702,10 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		if (compress) {
 			newmod = new zLD(datapath.c_str(), name.c_str(), description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str());
 		}
+	}
+
+	if (!stricmp(driver.c_str(), "RawGenBook")) {
+		newmod = new RawGenBook(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
     // if a specific module type is set in the config, use this
     if ((entry = section.find("Type")) != section.end())

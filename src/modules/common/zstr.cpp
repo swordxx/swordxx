@@ -76,7 +76,7 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp) 
 	sprintf(buf, "%s.zdt", path);
 	zdtfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-	if (datfd < 0) {
+	if (datfd->getFd() < 0) {
 		sprintf(buf, "Error: %d", errno);
 		perror(buf);
 	}

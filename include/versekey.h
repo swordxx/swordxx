@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.19 2002/01/10 13:34:12 dglassey Exp $
+ * $Id: versekey.h,v 1.20 2002/01/24 08:55:27 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -181,7 +181,7 @@ public:
   *
   * @param k the  VerseKey to copy from
   */
-  VerseKey (VerseKey const &k);
+  VerseKey (const VerseKey &k);
   
   /**  VerseKey Destructor
   * Cleans up an instance of VerseKey

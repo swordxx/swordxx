@@ -27,6 +27,7 @@
  */
 
 int RawStr::instance = 0;
+char RawStr::nl = '\n';
 
 
 /******************************************************************************
@@ -42,7 +43,6 @@ RawStr::RawStr(const char *ipath, int fileMode)
 	char buf[127];
 	char tries = 1;
 
-	nl = '\n';
 	lastoff = -1;
 	path = 0;
 	stdstr(&path, ipath);
@@ -296,8 +296,7 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
  *				text.
  */
 
-void RawStr::preptext(char *buf)
-{
+static void RawStr::preptext(char *buf) {
 	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
 
 	for (to = from = buf; *from; from++) {

@@ -2,6 +2,11 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+24-Jan-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added TreeKey and TreeKeyIdx decendants
+	Added SWGenBook, and RawGenBook general book support
+		and test programs
+
 04-Jan-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Happy B-Day MOM!
 	Added new property in Makefile.cfg: globalconfdir
