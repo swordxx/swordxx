@@ -1,0 +1,10 @@
+package org.crosswire.web.i18n;
+
+import javax.servlet.jsp.tagext.*;
+
+public class ContextStart extends TagSupport {
+
+	public ContextStart() {
+	}
+
+}
