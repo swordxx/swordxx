@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.73 2002/07/14 15:16:15 joachim Exp $
+ * $Id: swmgr.cpp,v 1.74 2002/07/15 18:57:21 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -70,7 +70,7 @@
 
 
 
-#ifdef ICU
+#ifdef _ICU_
 #include <utf8transliterator.h>
 bool SWMgr::isICU = true;
 #else
@@ -160,7 +160,7 @@ void SWMgr::init() {
 	cleanupFilters.push_back(tmpFilter);
 
 /* UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
-#ifdef ICU
+#ifdef _ICU_
 	tmpFilter = new UTF8Transliterator();
 	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);

@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.4, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.11 $)
+AC_REVISION($Revision: 1.12 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.4)
@@ -27,7 +27,7 @@ AC_C_BIGENDIAN
 # Check libraries
 # ---------------------------------------------------------------------
 AC_CHECK_LIB(z, compress)
-AC_CHECK_LIB(stdc++, cerr)
+#AC_CHECK_LIB(stdc++, cerr)
 
 # ---------------------------------------------------------------------
 # With options
@@ -40,6 +40,7 @@ AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=ye
 # ---------------------------------------------------------------------
 # Enable options
 # ---------------------------------------------------------------------
+AC_ARG_ENABLE(installmgr,[  --enable-installmgr     build install manager suport [default=yes]],,enable_installmgr=yes)
 AC_ARG_ENABLE(debug,[  --enable-debug          build debug library [default=no]],,enable_debug=no)
 AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,enable_profile=no)
 AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
@@ -54,6 +55,25 @@ if test x$with_icu = xyes; then
 	AC_PATH_PROG([GENCCODE], [genccode], [/usr/sbin/genccode], [$PATH:/usr/sbin:.])
 	AC_PATH_PROG([GENCMN], [gencmn], [/usr/sbin/gencmn], [$PATH:/usr/sbin:.])
 	AC_PATH_PROG([GENRB], [genrb], [/usr/sbin/genrb], [$PATH:/usr/sbin:.])
+fi
+
+# ---------------------------------------------------------------------
+# Check for curl for installmgr suport
+# ---------------------------------------------------------------------
+
+CURL_CFLAGS=
+CURL_LIBS=
+if test x$enable_installmgr = xyes; then
+	AC_PATH_PROG(CURL_CONFIG, curl-config, no)
+	if test "$CURL_CONFIG" = "no" ; then
+		echo "*** The curl-config script installed by curl could not be found"
+		echo "*** compiling without install manager support"
+		enable_installmgr=no
+	else
+		echo "curl found - install manager support ok"
+		CURL_CFLAGS=`$CURL_CONFIG --cflags`
+		CURL_LIBS=`$CURL_CONFIG --libs`
+	fi
 fi
 
 # ---------------------------------------------------------------------
@@ -150,6 +170,8 @@ AC_SUBST(with_icu)
 AC_SUBST(with_conf)
 AC_SUBST(dir_confdef)
 AC_SUBST(CC)
+AC_SUBST(CURL_CFLAGS)
+AC_SUBST(CURL_LIBS)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 
@@ -169,6 +191,7 @@ AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
+AM_CONDITIONAL(INSTALLMGR, test x$enable_installmgr = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
 #AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)

@@ -125,4 +125,13 @@ else
 ICU_HEAD =
 endif
 
+if INSTALLMGR
+REMOTE_HEAD  = $(swincludedir)/swremotemgr.h
+REMOTE_HEAD += $(swincludedir)/swinstallmgr.h
+else
+REMOTE_HEAD =
+endif
+
+
 pkginclude_HEADERS += ICU_HEAD
+pkginclude_HEADERS += REMOTE_HEAD
