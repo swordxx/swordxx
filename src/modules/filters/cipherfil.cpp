@@ -26,20 +26,19 @@ SWCipher *CipherFilter::getCipher() {
 
 
 char CipherFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	int len = text.length()-2; //not unsigned, this eould lead to an overflow if text.length() < 2
-	if (len > 0) {
+	if (text.length() > 2) { //check if it's large enough to substract 2 in the next step.
+		unsigned int len = text.length() - 2;
 		if (!key) {	// hack, using key to determine encipher, or decipher
-			cipher->cipherBuf(&(unsigned int)len, text);
+			cipher->cipherBuf(&len, text); //set buffer to enciphered text
 			//memcpy(text, cipher->Buf(), (len < (unsigned int)(maxlen)) ? len : maxlen);
-			text = cipher->Buf();
+			text = cipher->Buf(); //get the deciphered buffer
 		}
 		else if ((unsigned long)key == 1) {
 			cipher->Buf(text, len);
-			text = cipher->cipherBuf(&(unsigned int)len);
+			text = cipher->cipherBuf(&len);
 			//memcpy(text, cipher->cipherBuf(&len), (len < (unsigned int)(maxlen)) ? len : maxlen);
 		}
 	}
-//	text[maxlen] = 0;
 	return 0;
 }
 
