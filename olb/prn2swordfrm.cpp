@@ -121,7 +121,7 @@ void TForm2::ProcessFile(char *fileName)
 		write(dfp, verseBuf, size);
 		mykey++;
 	} while (!end);
-	
+
 	close(vfp);	// verse
 	close(cfp);	// chapter
 	close(bfp);	// book
@@ -134,28 +134,40 @@ void TForm2::ProcessFile(char *fileName)
 
 char TForm2::getVerse(int fp, int *verseNum, char *verseBuf, char testament)
 {
-	char buf[17];
+	char buf[21];
 	char retVal = 0;
 	*verseNum=-1;
 	char *finalBuf = verseBuf;
 	int paridx;
 	const char *parchar = "\\par";
-	
-	memset(buf, 0, 17);
+
+	memset(buf, 0, 21);
 
 	while (1) {
-		if (!memcmp(buf, "\\f1 \\b0 \\fs22", 13)) {
-			lseek(fp, -3, SEEK_CUR);
+
+		if (!memcmp(buf, "\\f1 \\b0 \\fs22  \\f", 17)) {
+                        if (isdigit(buf[18])) {
+                                lseek(fp, -1, SEEK_CUR);
+                                break;
+                        }
+                        else if (isdigit(buf[17])) {
+	        		lseek(fp, -2, SEEK_CUR);
+        			break;
+                        }
+		}
+		if (!memcmp(buf, "\\f1 \\b0 \\fs22 ", 14)) {
+			lseek(fp, -7, SEEK_CUR);
 			break;
 		}
 		if (!memcmp(buf, "\\li0\\fi0 \\par \\u", 16)) {
-			while(read(fp, buf, 1) == 1) {
+			lseek(fp, -4, SEEK_CUR);
+                        while(read(fp, buf, 1) == 1) {
 				if (*buf == 10)
 					break;
 			}
-			memset(buf, 0, 17);
+			memset(buf, 0, 21);
 		}
-		memmove(buf, &buf[1], 16);
+		memmove(buf, &buf[1], 20);
 		if (*buf) {
 			*verseBuf++ = *buf;
 			if (*verseNum == -1) {
@@ -164,7 +176,7 @@ char TForm2::getVerse(int fp, int *verseNum, char *verseBuf, char testament)
 				}
 			}
 		}
-		if (read(fp, &buf[16], 1) != 1) {
+		if (read(fp, &buf[20], 1) != 1) {
 			retVal = 1;
 			for (int i = 1; i < 12; i++)
 				*verseBuf++ = buf[i];
@@ -195,7 +207,7 @@ char TForm2::getVerse(int fp, int *verseNum, char *verseBuf, char testament)
 	*++verseBuf = 0;
 	
 	// check for Paragraph marker on next verse
-	for (int i = 7; i < 16; i++) {
+	for (int i = 7; i < 48; i++) {
 		if (buf[i] == '¶') {
 			*verseBuf++ = '<';
 			*verseBuf++ = 'C';
@@ -284,10 +296,23 @@ void TForm2::filterVerse(char *text, char lang)
 				*to++ = 'R';
 				*to++ = 'f';
 				*to++ = '>';
+                                if (from[1] == '\\' && from[2] == 'i' && from[3] == '0') {
+                                        from += 3;
+					if (from[1] == ' ') {
+						if (lastspace)
+							from++;
+					}
+                                }
 				continue;
 			}
 			if (*from == 'i') {
 				if (from[1] == '1') {
+                                        if (from[2] == ' ' && from[3] == '\\' && from[4] == '{') {
+                                                from++;
+						if (lastspace)
+							from++;
+        					continue;
+                                        }
 					*to++ = '<';
 					*to++ = 'F';
 					*to++ = 'I';
@@ -315,6 +340,17 @@ void TForm2::filterVerse(char *text, char lang)
 					continue;
 				}
 			}
+                        if (*from == 'f' && from[1] == 's') {
+                                from++;
+                                while (isdigit(from[1])) {
+                                        from++;
+                                }
+				if (from[1] == ' ') {
+                                        if (lastspace)
+        					from++;
+				}
+                                continue;
+                        }
 			*to++ = '\\';
 			*to++ = *from;
 			lastspace = (*from == ' ');
@@ -366,10 +402,18 @@ void TForm2::filterVerse(char *text, char lang)
 		if ((*from == 13) || (*from == 10)) {
 			continue;
 		}
-		
+
+		if (*from == '¶') {
+                        if (from[1] == ' ') {
+                                from++;
+                        }
+			continue;
+		}
+
 		if (intoken || intoken2)
 			token[tokpos++] = *from;
-		else	*to++ = *from;
+		else
+                	*to++ = *from;
 		lastspace = (*from == ' ');
 	}
 	*to-- = 0;

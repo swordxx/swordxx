@@ -13,6 +13,7 @@ USEUNIT("..\src\mgr\swlocale.cpp");
 USEUNIT("..\src\mgr\swconfig.cpp");
 USEUNIT("..\src\mgr\swmgr.cpp");
 USEUNIT("..\src\mgr\filemgr.cpp");
+USEUNIT("..\src\utilfuns\roman.c");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -20,7 +21,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		Application->Initialize();
 		Application->CreateForm(__classid(TForm2), &Form2);
-		Application->Run();
+                 Application->Run();
 	}
 	catch (Exception &exception)
 	{
