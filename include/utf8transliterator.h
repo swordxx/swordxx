@@ -26,16 +26,18 @@ enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATI
 #include <swfilter.h>
 #include <swmodule.h>
 
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/ustring.h>
-#include <unicode/uchar.h>
+//#include <unicode/utypes.h>
+//#include <unicode/ucnv.h>
+//#include <unicode/ustring.h>
+//#include <unicode/uchar.h>
 
-#include <unicode/unistr.h>
-#include <unicode/translit.h>
+//#include <unicode/unistr.h>
+//#include <unicode/translit.h>
 
 #include <defs.h>
 #include <map>
+
+class UnicodeString;
 
 struct SWTransData {
 	UnicodeString resource;

@@ -20,6 +20,7 @@
 #endif
 #include <swlog.h>
 
+#if 0
 #ifdef _ICU_
 class UnicodeCaster {
 	const UnicodeString &ustr;
@@ -27,6 +28,7 @@ public:
 	UnicodeCaster(const UnicodeString &ustr):ustr(ustr) {}; operator const char *() { return ""; };
 };
 
+#endif
 #endif
 const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Off",
@@ -160,7 +162,8 @@ void UTF8Transliterator::Load(UErrorCode &status)
 						   0x0046 /*F*/) ?
 						  UTRANS_FORWARD : UTRANS_REVERSE;
 					   //registry->put(id, resString, dir, visible);
-			    SWLog::systemlog->LogInformation("instantiating %s ...", (const char *)(UnicodeCaster)resString);
+			    //SWLog::systemlog->LogInformation("instantiating %s ...", (const char *)(UnicodeCaster)resString);
+				SWLog::systemlog->LogInformation("instantiating %s ...", resString.getBuffer());
 			    registerTrans(id, resString, dir, status);
 				SWLog::systemlog->LogInformation("done.");
 				    }
@@ -194,7 +197,8 @@ void  UTF8Transliterator::registerTrans(const UnicodeString& ID, const UnicodeSt
 		UTransDirection dir, UErrorCode &status )
 {
 #ifndef _ICUSWORD_
-		SWLog::systemlog->LogInformation("registering ID locally %s", (const char *)(UnicodeCaster)ID);
+		//SWLog::systemlog->LogInformation("registering ID locally %s", (const char *)(UnicodeCaster)ID);
+		SWLog::systemlog->LogInformation("registering ID locally %s", ID.getBuffer());
 		SWTransData swstuff; 
 		swstuff.resource = resource;
 		swstuff.dir = dir;
@@ -212,7 +216,8 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		if (!U_FAILURE(status))
 		{
 			// already have it, clean up and return true
-			SWLog::systemlog->LogInformation("already have it %s", (const char *)(UnicodeCaster)ID);
+			//SWLog::systemlog->LogInformation("already have it %s", (const char *)(UnicodeCaster)ID);
+			SWLog::systemlog->LogInformation("already have it %s", ID.getBuffer());
 			delete trans;
 			return true;
 		}
@@ -227,7 +232,8 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		//UErrorCode status;
 		//std::cout << "unregistering " << ID << std::endl;
 		//Transliterator::unregister(ID);
-		SWLog::systemlog->LogInformation("resource is %s", (const char *)(UnicodeCaster)swstuff.resource);
+		//SWLog::systemlog->LogInformation("resource is %s", (const char *)(UnicodeCaster)swstuff.resource);
+		SWLog::systemlog->LogInformation("resource is %s", swstuff.resource.getBuffer());
 		
 		// Get the rules
 		//std::cout << "importing: " << ID << ", " << resource << std::endl;

@@ -14,6 +14,6 @@ endif
 libsword_la_SOURCES += $(SWREGEX)
 
 
-libsword_la_SOURCES += $(utilfunsdir)/roman.c
+libsword_la_SOURCES += $(utilfunsdir)/roman.cpp
 
 

@@ -5,6 +5,11 @@
 #ifndef _MSC_VER
 #include <iostream>
 #endif
+#if defined(_ICU_) && !defined(_ICUSWORD_)
+#define _USTDIO_
+#include <unicode/ustdio.h>
+#include <unicode/ustream.h>
+#endif
 #include "swlog.h"
 //---------------------------------------------------------------------------
 
@@ -25,12 +30,20 @@ public:
 
 void SWLog::LogWarning(char *fmt, ...)
 {
+	#ifdef _USTDIO_
+	UChar msg[2048];
+	#else
 	char msg[2048];
+	#endif
 	va_list argptr;
 
 	if (logLevel >= 2) {
 		va_start(argptr, fmt);
+		#ifdef _USTDIO_
+		u_vsprintf(msg, NULL, fmt, argptr);
+		#else
 		vsprintf(msg, fmt, argptr);
+		#endif
 		va_end(argptr);
 
 #ifndef _MSC_VER
@@ -43,12 +56,20 @@ void SWLog::LogWarning(char *fmt, ...)
 
 void SWLog::LogError(char *fmt, ...)
 {
+	#ifdef _USTDIO_
+	UChar msg[2048];
+	#else
 	char msg[2048];
+	#endif
 	va_list argptr;
 
 	if (logLevel) {
 		va_start(argptr, fmt);
+		#ifdef _USTDIO_
+		u_vsprintf(msg, NULL, fmt, argptr);
+		#else
 		vsprintf(msg, fmt, argptr);
+		#endif
 		va_end(argptr);
 
 #ifndef _MSC_VER
@@ -61,12 +82,20 @@ void SWLog::LogError(char *fmt, ...)
 
 void SWLog::LogTimedInformation(char *fmt, ...)
 {
+	#ifdef _USTDIO_
+	UChar msg[2048];
+	#else
 	char msg[2048];
+	#endif
 	va_list argptr;
 
 	if (logLevel >= 4) {
 		va_start(argptr, fmt);
+		#ifdef _USTDIO_
+		u_vsprintf(msg, NULL, fmt, argptr);
+		#else
 		vsprintf(msg, fmt, argptr);
+		#endif
 		va_end(argptr);
 
 #ifndef _MSC_VER
@@ -79,12 +108,20 @@ void SWLog::LogTimedInformation(char *fmt, ...)
 
 void SWLog::LogInformation(char *fmt, ...)
 {
+	#ifdef _USTDIO_
+	UChar msg[2048];
+	#else
 	char msg[2048];
+	#endif
 	va_list argptr;
 
 	if (logLevel >= 3) {
 		va_start(argptr, fmt);
+		#ifdef _USTDIO_
+		u_vsprintf(msg, NULL, fmt, argptr);
+		#else
 		vsprintf(msg, fmt, argptr);
+		#endif
 		va_end(argptr);
 
 #ifndef _MSC_VER
