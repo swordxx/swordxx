@@ -182,7 +182,7 @@ int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
 	if (argc < 3) {
-		fprintf(stderr, "usage: %s <path/to/mod/files> <osisDoc> [0|1 - create|augment module]\n\n", argv[0]);
+		fprintf(stderr, "usage: %s <path/to/mod/files> <osisDoc> [0|1 - augment|create module]\n\n", argv[0]);
 		exit(-1);
 	}
 
