@@ -188,7 +188,7 @@ public:
 
 	virtual bool isTraversable() { return false; }
 
-	/** Use this function to get te current position withing a module.
+	/** Use this function to get te current position within a module.
 	* Here's a small example how to use this function and @ref Index(long).
 	* This function uses the GerLut module and chooses a random verse from the
 	* Bible and returns it.
@@ -209,8 +209,9 @@ public:
 	*   return text;
 	* @endcode
 	*/
-
 	virtual long Index() const { return index; }
+	/** See documentation for @ref Index()
+	*/
 	virtual long Index(long iindex) { index = iindex; return index; }
 
 	SWKEY_OPERATORS

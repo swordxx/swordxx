@@ -41,7 +41,7 @@ public:
 	* @return The global string handle
 	*/
 	static StringMgr* getSystemStringMgr();
-	/* Checks whether Utf8 support is available.
+	/** Checks whether Utf8 support is available.
 	* Override the function supportsUnicode() to tell whether your implementation has utf8 support.
 	* @return True if this implementation provides support for Utf8 handling or false if just latin1 handling is available
 	*/
@@ -50,13 +50,14 @@ public:
 	};
 	
 	/** Converts the param to an upper case Utf8 string
-	* @param The text encoded in utf8 which should be turned into an upper case string
+	* @param text The text encoded in utf8 which should be turned into an upper case string
+	* @param max Only change max chars
 	*/	
-	virtual char* upperUTF8(char*, const unsigned int max = 0);
+	virtual char* upperUTF8(char* text, const unsigned int max = 0);
 	/** Converts the param to an uppercase latin1 string
-	* @param The text encoded in latin1 which should be turned into an upper case string
+	* @param text The text encoded in latin1 which should be turned into an upper case string
 	*/	
-	virtual char* upperLatin1(char*);
+	virtual char* upperLatin1(char* text);
 	
 
 protected:

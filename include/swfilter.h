@@ -73,9 +73,9 @@ public:
 	 * e.g maybe a strong's filter mioght be set to "on" / "off" -
 	 * that would mean to show or not to show the strongs in the text,
 	 * see also getOptionValues()
-	 * @param ival the new option valus
+	 * @param ival the new option value
 	 */
-	virtual void setOptionValue (const char */*ival*/) { }
+	virtual void setOptionValue (const char * ival) { }
 
 	/** This is the main filter function
 	 * @param text The text to be filtered/converted
