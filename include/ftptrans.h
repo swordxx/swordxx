@@ -15,17 +15,21 @@ extern "C" {
 
 SWORD_NAMESPACE_START
 
-//class for reporting status
+/** Class for reporting status
+*/
 class StatusReporter {
 public:
-	// Messages before stages of a batch download
+	/** Messages before stages of a batch download */
 	virtual void preStatus(long totalBytes, long completedBytes, const char *message);
 	
-	// frequently called throughout a download, to report status
+	/** frequently called throughout a download, to report status */
 	virtual void statusUpdate(double dtTotal, double dlNow);
 };
 
 
+/** TODO: document
+* A base class to be used for reimplementation of network services.
+*/
 class FTPTransport {
 
 protected:

@@ -12,7 +12,8 @@ SWORD_NAMESPACE_START
 class SWMgr;
 class SWConfig;
 
-
+/** TODO: document
+*/
 class InstallSource {
 	SWMgr *mgr;
 public:
@@ -33,6 +34,8 @@ public:
 
 typedef std::map<SWBuf, InstallSource *> InstallSourceMap;
 
+/** TODO: document
+*/
 class InstallMgr {
 
 protected:

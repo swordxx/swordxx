@@ -31,8 +31,8 @@
 SWORD_NAMESPACE_START
 
 /**
- * Class VerseKey
- * The SWKey implementation used for verse based modules like Bibles or commentaries.
+ * Class TreeKey
+ * The base class for all tree-based key implementations in Sword.
  */
 class SWDLLEXPORT TreeKey : public SWKey {
 	static SWClass classdef;
