@@ -94,9 +94,22 @@ char *RawText::getRawEntry() {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {	}
+	if (!key) {
+		ListKey *lkTest = 0;
+		try {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		catch ( ... ) {	}
+		if (lkTest) {
+			try {
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+			}
+			catch ( ... ) {	}
+		}
+	}
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
-		key = new VerseKey(this->key);
+			key = new VerseKey(this->key);
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
