@@ -1,9 +1,9 @@
 EXTRA_DIST += samples/mods.d/globals.conf
 
+modsdatadir = $(pkgdatadir)/mods.d
+
 if INSTCONF
 modsDATA = samples/mods.d/globals.conf
-
-modsdatadir = $(pkgdatadir)/mods.d
 
 installmodsDATA: $(modsDATA)
 	@$(NORMAL_INSTALL)
@@ -23,7 +23,10 @@ uninstallmodsDATA:
 	  rm -f $(DESTDIR)$(modsdatadir)/$$f; \
 	done
 else
-installmodsDATA:
+installmodsDATA: 
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(modsdatadir) \
+	done
 
 uninstallmodsDATA:
 
