@@ -2,6 +2,11 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+18-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added dglassey's conditional reallocation of entrybuf to drivers
+	Added dglassey's update to makesystem for icu
+	Added other optimizations for prep of 1.5.3
+
 16-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added getBookName and getBookAbbrev to VerseKey along
 		with struct book :: prefAbbrev member and data
