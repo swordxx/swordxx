@@ -81,7 +81,7 @@ public:
 		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("user"), "foo") );
 		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("name"), "foo bar") );
 		
-		CPPUNIT_ASSERT( m_url3->getParamterValue("page") && strlen(m_url3->getParamterValue("page")) == 0 );
+		CPPUNIT_ASSERT( m_url3->getParameterValue("page") && strlen(m_url3->getParameterValue("page")) == 0 );
 	}	
 
 	void testEncode() {	

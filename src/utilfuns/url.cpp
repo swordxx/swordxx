@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.7 2004/07/20 11:24:53 joachim Exp $
+* $Id: url.cpp,v 1.8 2004/07/20 19:06:41 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -66,11 +66,18 @@ const URL::ParameterMap &URL::getParameters() const {
  * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".
  * If the parameter is not set an empty string is returned.
  */
-const char* URL::getParamterValue(const char* name) const {
-	ParameterMap::const_iterator it = parameterMap.find(name);
-	
+const char* URL::getParameterValue(const char* name) const {
 	static SWBuf emptyStr("");
-	return (it != parameterMap.end()) ? it->second.c_str() : emptyStr.c_str();
+
+	ParameterMap::const_iterator it = parameterMap.find(name);
+	static SWBuf retVal;
+
+	if (it != parameterMap.end())
+		retVal = it->second.c_str();
+    	else
+		retVal = emptyStr.c_str();
+
+	return retVal.c_str();
 }
 
 

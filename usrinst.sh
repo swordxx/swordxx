@@ -8,6 +8,7 @@ OPTIONS="--sysconfdir=/etc $OPTIONS"
 OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 OPTIONS="--without-lucene $OPTIONS"
+OPTIONS="--enable-tests $OPTIONS"
 
 CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*
 

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.6 2004/07/20 09:29:22 joachim Exp $
+* $Id: url.h,v 1.7 2004/07/20 19:06:41 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -63,7 +63,7 @@ public:
 	 * @param name The name of the paramter.
 	 * @return The value of the given paramter of an empty string if the name could not be found in the list of available paramters
 	 */
-	const char *getParamterValue(const char *name) const;
+	const char *getParameterValue(const char *name) const;
 	
 	/** Encodes and URL
 	* Encodes a string into a valid URL, e.g. changes http://www.crosswire.org/test.jsp?force=1&help=1 into
