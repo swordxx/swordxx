@@ -2,12 +2,18 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+30-Nov-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Fixed memory leak in write methods of RawText
+	Added some initial support for writing to zText
+	Added a 'not working yet' mod2zmod utility
+
+
 20-Nov-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added new utility, step2vpl, for dumping BSISG STEP module in
 		vpl format.
-    Added new make target: install_config to put a basic install on
-        a box.
-    Added a QUICKSTART section to INSTALL file
+	Added new make target: install_config to put a basic install on
+		a box.
+	Added a QUICKSTART section to INSTALL file
 
 17-Nov-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added new utility, stepdump, for dumping BSISG STEP modules.

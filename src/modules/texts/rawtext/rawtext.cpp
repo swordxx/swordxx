@@ -474,6 +474,9 @@ SWModule &RawText::operator <<(const char *inbuf) {
 
 	settext(key->Testament(), key->Index(), inbuf);
 
+	if (this->key != key) // free our key if we created a VerseKey
+		delete key;
+
 	return *this;
 }
 
@@ -502,6 +505,12 @@ SWModule &RawText::operator <<(const SWKey *inkey) {
 		srckey = new VerseKey(inkey);
 
 	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
+
+	if (this->key != destkey) // free our key if we created a VerseKey
+		delete destkey;
+
+	if (inkey != srckey) // free our key if we created a VerseKey
+		delete srckey;
 
 	return *this;
 }

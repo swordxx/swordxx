@@ -24,20 +24,27 @@ protected:
 	FileDesc *compfp[2];
 	char *path;
 	void preptext(char *buf);
-	void swsettext(char testmt, long idxoff, const char *buf);
+	void settext(char testmt, long idxoff, const char *buf);
+	void linkentry(char testmt, long destidxoff, long srcidxoff);
+	void flushCache();
 	//RawVerse();
-	long ulcache;
+	char *cacheBuf;
+	char cacheTestament;
+	long cacheBufIdx;
+	bool dirtyCache;
 
 public:
 	static const int VERSEBLOCKS;
 	static const int CHAPTERBLOCKS;
 	static const int BOOKBLOCKS;
+	static const char uniqueIndexID[];
 	char nl;
 	zVerse(const char *ipath, int fileMode = O_RDONLY, int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0);
 	virtual ~zVerse();
 	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void swgettext(char testmt, long start, unsigned short size, char *buf);
 	//static char CreateModule(char *path);
+	static char createModule(const char *path, int blockBound);
 };
 
 
