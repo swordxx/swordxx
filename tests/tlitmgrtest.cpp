@@ -261,6 +261,8 @@ static const char SW_RESDATA[] = "/usr/local/lib/sword/";
 
 #include <map>
 
+using namespace std;
+
 struct SWTransData {
 	UnicodeString resource;
 	UTransDirection dir;

@@ -29,6 +29,5 @@ int main(int argc, char **argv) {
 		for (mhc->Key("Gen 1:1"); mhc->Key() < (VerseKey) "Gen 1:10"; (*mhc)++)
 			std::cout << (const char *) *mhc << "\n";
 	}
-	std::cin >> keypress;
 	return 0;
 }

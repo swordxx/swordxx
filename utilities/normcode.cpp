@@ -14,6 +14,8 @@
 
 #define BUFSIZE 65536
 
+using namespace std;
+
 int main (char argc, char** argv) {
 
   if (argc < 5) {

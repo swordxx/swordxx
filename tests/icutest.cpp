@@ -8,6 +8,8 @@
 
 #include "unicode/translit.h"
 
+using namespace std;
+
 int main() {
 
   UChar * uBuf;

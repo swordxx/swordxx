@@ -12,6 +12,8 @@
 
 #include "utf8transliterator.h"
 
+using namespace std;
+
 // Print the given string to stdout
 void uprintf(const UnicodeString &str) {
     char *buf = 0;
