@@ -16,6 +16,7 @@ pkginclude_HEADERS += $(swincludedir)/gbfheadings.h
 pkginclude_HEADERS += $(swincludedir)/gbfhtml.h
 pkginclude_HEADERS += $(swincludedir)/gbfhtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/gbfmorph.h
+pkginclude_HEADERS += $(swincludedir)/gbfosis.h
 pkginclude_HEADERS += $(swincludedir)/gbfplain.h
 pkginclude_HEADERS += $(swincludedir)/gbfrtf.h
 pkginclude_HEADERS += $(swincludedir)/gbfstrongs.h
