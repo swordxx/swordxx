@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.30 2003/08/07 23:23:32 chrislit Exp $
+ * $Id: filemgr.cpp,v 1.31 2003/08/15 08:52:15 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -183,7 +183,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		
 		::close(fd);
 		::close(file->fd);
-		unlink(buf);		// remove our tmp file
+		removeFile(buf);		// remove our tmp file
 		file->fd = -77;	// causes file to be swapped out forcing open on next call to getFd()
 	}
 	else { // put offset back and return failure
@@ -288,7 +288,7 @@ int FileMgr::createParent(const char *pName) {
 	strcpy(buf, pName);
 	int end = strlen(buf) - 1;
 	while (end) {
-		if (buf[end] == '/')
+		if ((buf[end] == '/') || (buf[end] == '\\'))
 			break;
 		end--;
 	}
@@ -296,16 +296,16 @@ int FileMgr::createParent(const char *pName) {
 	if (strlen(buf)>0) {
 		if (access(buf, 02)) {  // not exists with write access?
 			if ((retCode = mkdir(buf
-                                        #ifndef WIN32
-                                        , 0755
-                                        #endif
-                                        ))) {
+#ifndef WIN32
+					, 0755
+#endif
+					))) {
 				createParent(buf);
 				retCode = mkdir(buf
-                                        #ifndef WIN32
-                                        , 0755
-                                        #endif
-                                        );
+#ifndef WIN32
+					, 0755
+#endif
+					);
 			}
 		}
 	}
@@ -345,6 +345,11 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 	::close(sfd);
 	
 	return 0;
+}
+
+
+int FileMgr::removeFile(const char *fName) {
+	::remove(fName);
 }
 
 

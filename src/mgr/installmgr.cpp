@@ -86,7 +86,10 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 InstallMgr::InstallMgr(const char *privatePath) {
 	this->privatePath = 0;
 	stdstr(&(this->privatePath), privatePath);
-	installConf = new SWConfig(((SWBuf)privatePath + "/InstallMgr.conf").c_str());
+	SWBuf confPath = (SWBuf)privatePath + "/InstallMgr.conf";
+	FileMgr::createParent(confPath.c_str());
+	
+	installConf = new SWConfig(confPath.c_str());
 
 	SectionMap::iterator sourcesSection;
 	ConfigEntMap::iterator sourceBegin;

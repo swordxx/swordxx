@@ -1,7 +1,7 @@
 /******************************************************************************
 *  filemgr.h   - definition of class FileMgr used for pooling file handles
 *
-* $Id: filemgr.h,v 1.18 2003/06/27 01:41:06 scribe Exp $
+* $Id: filemgr.h,v 1.19 2003/08/15 08:52:15 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -141,6 +141,7 @@ public:
 	static int createParent(const char *pName);
 	static int createPathAndFile(const char *fName);
 	static int copyFile(const char *sourceFile, const char *targetFile);
+	static int removeFile(const char *fName);
 
 };
 
