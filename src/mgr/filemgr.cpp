@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.21 2002/03/16 17:34:41 scribe Exp $
+ * $Id: filemgr.cpp,v 1.22 2002/07/31 20:26:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -126,6 +126,8 @@ signed char FileMgr::trunc(FileDesc *file) {
 
 	static const char *writeTest = "x";
 	long size = lseek(file->getFd(), 1, SEEK_CUR);
+	if (size == 1) // was empty
+		size = 0;
 	char nibble [ 32767 ];
 	bool writable = write(file->getFd(), writeTest, 1);
 	int bytes = 0;
@@ -147,7 +149,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 			return -3;
 	
 		lseek(file->getFd(), 0, SEEK_SET);
-		while (size > 0) {
+		while (size > 0) {	 
 			bytes = read(file->getFd(), nibble, 32767);
 			write(fd, nibble, (bytes < size)?bytes:size);
 			size -= bytes;

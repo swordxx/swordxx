@@ -1,29 +1,22 @@
+#include <iostream>
 #include <rawld.h>
 
-void main(int argc, char **argv) {
-
+void main(int argc, char **argv)
+{
 	RawLD::createModule("tmp/lextest");
 	RawLD lex("tmp/lextest");
 
+	lex.SetKey("b");
+	lex << "x";
+
 	lex.SetKey("a");
-	lex << "aaa";
+	lex << "x";
 
-	lex.SetKey("c");
-	lex << "ccc";
+	lex.SetKey("a");
+	lex.deleteEntry();
 
-	lex.SetKey("b");
-	lex << "bbb";
+//	lex.SetKey("a");
+//	lex << "y";
 
-	lex.SetKey("d");
-	lex << "ddd";
-
-	lex.SetKey("b");
-	SWKey linkKey("yoyoyo");
-	lex.linkEntry(&linkKey);
-
-	for (lex = BOTTOM; !lex.Error(); lex--) {
-		cout << lex.KeyText() << ":\n";
-		cout << lex << "\n------------------\n";
-	}
-	return 0;
+	lex = BOTTOM;
 }
