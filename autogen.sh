@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "*** Sword build system generation"
 echo "*** Recreating libtool"
-if test -z $LTIZE; then
+if test -z "$LTIZE"; then
 LTIZE="$AUTODIR""libtoolize"
 fi
 echo "$LTIZE"
