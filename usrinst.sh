@@ -2,7 +2,7 @@
 
 ./configure --prefix=/usr \
 	--enable-debug --without-conf --sysconfdir=/etc --with-vcl \
-	--disable-shared
+	--disable-shared --with-icu
 
 echo ""
 echo ""
