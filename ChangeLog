@@ -1,7 +1,7 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-01-Jun-2003     Troy A. Griffitts <scribe@crosswire.org>
+01-Jun-2003     Joachim Ansorg <junkmail@joachim.ansorgs.de>
 	Added WEBIF filters, based on HTMLHREF filters.
 	Added new utilweb stuff for working with urls etc.
 	Fixed SWORD_NAMESPACE_START and SWORD_NAMESPACE_END in defs.h if NO_SWORD_NAMESPACE was defined
