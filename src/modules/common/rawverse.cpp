@@ -198,6 +198,8 @@ void RawVerse::preptext(char *buf)
 
 void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf) {
 	memset(buf, 0, size+1);
+	if (!testmt)
+		testmt = ((idxfp[1]) ? 1:2);
 	if (size) {
 		if (textfp[testmt-1]->getFd() >= 0) {
 			lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);

@@ -276,6 +276,8 @@ void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf
 
 void zVerse::settext(char testmt, long idxoff, const char *buf, long len)
 {
+	if (!testmt) 
+		testmt = ((idxfp[0]) ? 1:2);
 	if ((!dirtyCache) || (cacheBufIdx < 0)) {
 		cacheBufIdx = lseek(idxfp[testmt-1]->getFd(), 0, SEEK_END) / 12;
 		cacheTestament = testmt;
