@@ -129,7 +129,8 @@ int main(int argc, char **argv) {
    RawText *mod = new RawText(argv[2]);	// open our datapath with our RawText driver.
    
    mod->SetKey(argv[4]);    // set key from argument
-   *(SWModule*)mod << &((SWKey) argv[3]);
+   SWKey tmpkey = (SWKey) argv[3];
+   *(SWModule*)mod << &(tmpkey);
    delete mod;
  }
  

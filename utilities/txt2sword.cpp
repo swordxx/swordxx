@@ -113,7 +113,7 @@ void ProcessFile(char *fileName, char *testament)
 		write(vfp, &size, 2);
 		sprintf(buf, "%2d:%3d:%3d (%s) found at offset: %7ld; size: %d\n", curbook, mykey.Chapter(), mykey.Verse(), (const char *)mykey, pos, size);
 		printf(buf);
-		if ((size < 0) || (size > 1000)) {
+		if (size > 1000) {
 			printf("WARNING: Strange Size.");
 		}
 		write(dfp, verseBuf, size);
