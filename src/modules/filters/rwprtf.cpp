@@ -14,7 +14,7 @@ RWPRTF::RWPRTF() {
 }
 
 
-char RWPRTF::ProcessText(char *text, int maxlen)
+char RWPRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 {
 	char *to, *from;
 	bool ingreek = false;

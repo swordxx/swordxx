@@ -40,7 +40,7 @@ const char *GBFFootnotes::getOptionValue()
 	return (option) ? on:off;
 }
 
-char GBFFootnotes::ProcessText(char *text, int maxlen)
+char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 {
 	if (!option) {	// if we don't want footnotes
 		char *to, *from, token[2048]; // cheese.  Fix.

@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+15-Oct-1999
+	Changed sig of ProcessText to include SWKey *, and calls approp.
+	Changed SWMgr::optionFilters security to protected
+
 05-Sep-1999
 	Why is it always the 5th?
 	Added RawFilters to facilitate on-the-fly deciphering of entries
@@ -27,7 +32,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	
 09-Jan-1999
 	Various API bug fixes.
-	Added naviation support for all module types
+	Added navigation support for all module types
 	Added search support for all module types
 	Added standard mods.conf location lookups to SWMgr
 

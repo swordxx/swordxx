@@ -1,10 +1,11 @@
 root := ..
 subdirs := 
 pre-targets := 
-targets := cipherraw ciphertest ciphertest2 lexdump
+targets := cipherrawld cipherraw ciphertest ciphertest2 lexdump
 include ${root}/Makefile.cfg
 
 cpp += cipherraw.cpp
+cpp += cipherrawld.cpp
 cpp += ciphertest.cpp
 cpp += ciphertest2.cpp
 
@@ -18,6 +19,9 @@ l =  -lsword -lstdc++
 
 cipherraw: cipherraw.o
 	$(CC) $(LFLAGS) -o $@ cipherraw.o $(l) $(l) -O0
+
+cipherrawld: cipherrawld.o
+	$(CC) $(LFLAGS) -o $@ cipherrawld.o $(l) $(l) -O0
 
 ciphertest: ciphertest.o
 	$(CC) $(LFLAGS) -o $@ ciphertest.o $(l) $(l) -O0

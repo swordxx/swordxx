@@ -385,15 +385,18 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 const char *SWModule::StripText(char *buf, int len)
 {
 	FilterList::iterator it;
+	SWKey *key = 0;
 
-	if (!buf)
+	if (!buf) {
+		key = (SWKey *)*this;
 		buf = (char *)*this;
+	}
 
 	for (it = optionfilters.begin(); it != optionfilters.end(); it++) {
-		(*it)->ProcessText(buf, len);
+		(*it)->ProcessText(buf, len, key);
 	}
 	for (it = stripfilters.begin(); it != stripfilters.end(); it++) {
-		(*it)->ProcessText(buf, len);
+		(*it)->ProcessText(buf, len, key);
 	}
 
 	return buf;
@@ -411,15 +414,18 @@ const char *SWModule::StripText(char *buf, int len)
  const char *SWModule::RenderText(char *buf, int len)
 {
 	FilterList::iterator it;
+	SWKey *key = 0;
 
-	if (!buf)
+	if (!buf) {
+		key = (SWKey *)*this;
 		buf = (char *)*this;
+	}
 
 	for (it = optionfilters.begin(); it != optionfilters.end(); it++) {
-		(*it)->ProcessText(buf, len);
+		(*it)->ProcessText(buf, len, key);
 	}
 	for (it = renderfilters.begin(); it != renderfilters.end(); it++) {
-		(*it)->ProcessText(buf, len);
+		(*it)->ProcessText(buf, len, key);
 	}
 
 	return buf;

@@ -25,7 +25,7 @@ RWPHTML::RWPHTML()
 }
 
 
-char RWPHTML::ProcessText(char *text, int maxlen)
+char RWPHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 {
 	char *to, *from;
 	bool ingreek = false;

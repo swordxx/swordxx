@@ -78,7 +78,7 @@ RawText::operator char*()
 	gettext(key->Testament(), start, size + 1, versebuf);
 
 	for (it = rawfilters.begin(); it != rawfilters.end(); it++) {
-		(*it)->ProcessText(versebuf, size + 1);
+		(*it)->ProcessText(versebuf, size + 1, key);
 	}
 
 	preptext(versebuf);

@@ -19,7 +19,7 @@ CipherFilter::~CipherFilter() {
 }
 
 
-char CipherFilter::ProcessText(char *text, int maxlen) {
+char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key) {
 	unsigned int len;
 //	len = strlen(text);
 	len = maxlen - 1;

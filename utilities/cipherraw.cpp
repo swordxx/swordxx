@@ -21,11 +21,12 @@ main(int argc, char **argv)
 	VerseKey key;
 	RawVerse *rawdrv;
 	int ofd[2], oxfd[2];
-	long offset, loffset = 0, lzoffset = 0;
+	long tmpoff = 0, offset, loffset = 0, lzoffset = 0;
 	unsigned short size, lsize = 0, lzsize;
 	char *tmpbuf;
 	
 	if (argc != 3) {
+		printf("%d %d\n", sizeof(long), sizeof(unsigned short));
 		fprintf(stderr, "usage: %s <datapath> \"<key>\"\n", argv[0]);
 		exit(1);
 	}
@@ -63,6 +64,8 @@ main(int argc, char **argv)
 
 		if ((offset == loffset) && (size == lsize)) {
 			printf("using previous offset,size\n", size);
+			offset = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);
+			printf("%ld %ld %d \n", offset, lzoffset, lzsize);
 			write(oxfd[key.Testament() - 1], &lzoffset, 4);
 			write(oxfd[key.Testament() - 1], &lzsize, 2);
 		}
@@ -77,8 +80,9 @@ main(int argc, char **argv)
 				zobj->cipherBuf((unsigned int *)&size);
 				free(tmpbuf);
 			}
-			offset = lseek(ofd[key.Testament() - 1], 0, SEEK_END);
-			printf("%s: NEW offset: %d; size: %d\n", (const char *)key, offset, size);
+			offset = lseek(ofd[key.Testament() - 1], 0, SEEK_CUR);
+			tmpoff = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);
+			printf("%s: (%ld) NEW offset: %ld; size: %d\n", (const char *)key, tmpoff, offset, size);
 			write(oxfd[key.Testament() - 1], &offset, 4);
 			if (size) 
 				write(ofd[key.Testament() - 1], zobj->cipherBuf((unsigned int *)&size), size);
@@ -88,4 +92,8 @@ main(int argc, char **argv)
 		}
 	}
 	delete zobj;
+	close(ofd[0]);
+	close(oxfd[0]);
+	close(ofd[1]);
+	close(oxfd[1]);
 }
