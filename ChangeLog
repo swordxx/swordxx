@@ -5,6 +5,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
         Added addvs utility for adding single verses to modules
 	Added Diatheke (and CGI/Tcl/PQA frontends to it) to source
 	        tree
+	ThML filters (all) fixed to support longer tag lengths and
+	        decode HTML ampersand codes (e.g. &nbsp;)
+	ThMLRTF filter fixed to avoid printing extra '>'s
 
 02-Dec-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added write support for RawLD
