@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.27 2001/10/05 20:37:00 mgruner Exp $
+ * $Id: swmgr.h,v 1.28 2001/10/06 07:44:33 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,7 +30,7 @@
 * Well knwon frontends are:\n
 * 	-BibleCS for Windows (the sourcecode is availble in the CVS of crosswire.org)\n
 *	-GnomeSword (http://gnomesword.sourceforge.net/)\n
-*	-BibleTime (www.bibletime.de)\n
+*	-BibleTime (http://www.bibletime.de/)\n
 */
 
 #ifndef SWMGR_H
@@ -58,7 +58,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.27 2001/10/05 20:37:00 mgruner Exp $
+  * @version $Id: swmgr.h,v 1.28 2001/10/06 07:44:33 mgruner Exp $
   */
 class SWDLLEXPORT SWMgr
 {
