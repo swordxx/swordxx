@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+18-Jun-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Joachim added OSISFootnotes.  Added entryAttributes
+		parsing in OSISFootnotes
+	Added = operator and empty constructor to XMLTag
+	Fixed OSISHeadings to passthru non x-preverse note
+		bodies
+
 10-Jun-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added tests/testsuite for building a good set
 		of regression tests

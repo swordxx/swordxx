@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.3 2003/05/31 17:34:43 mgruner Exp $
+ * $Id: utilxml.h,v 1.4 2003/06/18 20:14:59 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,9 +47,10 @@ private:
 
 	
 public:
-	XMLTag(const char *tagString);
+	XMLTag(const char *tagString = 0);
 	~XMLTag();
 
+	void setText(const char *tagString);
 	inline const char *getName() const { return name; }
 
 	inline bool isEmpty() const {
@@ -66,6 +67,8 @@ public:
 	const char *setAttribute(const char *attribName, const char *attribValue);
 	const char *toString() const;
 	inline operator const char *() const { return toString(); }
+	inline XMLTag & operator =(const char *tagString) { setText(tagString); return *this; }
+	inline XMLTag & operator =(const XMLTag &other) { setText(other.toString()); return *this; }
 };
 
 SWORD_NAMESPACE_END

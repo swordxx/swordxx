@@ -53,9 +53,21 @@ XMLTag::XMLTag(const char *tagString) {
 
 	name   = 0;
 	buf    = 0;
+	setText(tagString);
+}
+
+void XMLTag::setText(const char *tagString) {
 	parsed = false;
 	empty  = false;
 	endTag = false;
+
+	if (buf) {
+		delete buf;
+		buf = 0;
+	}
+
+	if (!tagString)		// assert tagString before proceeding
+		return;
 
 	stdstr(&buf, tagString);
 
@@ -68,6 +80,8 @@ XMLTag::XMLTag(const char *tagString) {
 	start = i;
 	for (; ((tagString[i]) && (!strchr(" />", tagString[i]))); i++);
 	if (i-start) {
+		if (name)
+			delete [] name;
 		name = new char [ (i-start) + 1 ];
 		strncpy(name, tagString+start, i-start);
 		name[i-start] = 0;

@@ -96,6 +96,9 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 						else {
 							sprintf(buf, "%i", headerNum++);
 							module->getEntryAttributes()["Heading"]["Interverse"][buf] = header;
+							if (option) {	// we want the tag in the text
+								text.append(header);
+							}
 						}
 					}
 					hide = false;
