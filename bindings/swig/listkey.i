@@ -1,5 +1,6 @@
 %{
 #include "listkey.h"
+using namespace sword;
 %}
 
 class ListKey : public SWKey {
