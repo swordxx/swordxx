@@ -478,7 +478,7 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 		}
 		//		int32_t newlen = ((unsigned int)maxlen) > sizeof(text) ? maxlen : sizeof(text);
-		conv.fromUnicodeString(text, maxlen, ustr, status);
+		conv.fromUnicodeString(text, (long&)maxlen, ustr, status);
 	}
 	return 0;
 }
