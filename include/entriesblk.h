@@ -16,7 +16,7 @@ public:
 	int getCount();
 	int addEntry(const char *entry);
 	const char *getEntry(int entryIndex);
-	void deleteEntry(int entryIndex);
+	void removeEntry(int entryIndex);
 	const char *getRawData(long *size);
 };
 

@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.14 2001/04/18 04:56:59 scribe Exp $
+ * $Id: filemgr.cpp,v 1.15 2001/05/04 22:21:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -198,7 +198,7 @@ int FileMgr::sysOpen(FileDesc *file) {
 				file->next = files;
 				files = file;
 			}
-			if ( (file->mode & O_CREAT) ? true : !access(file->path, 04) ) {
+               if ((!access(file->path, 04)) || (file->mode & O_CREAT == O_CREAT)) {	// check for at least file exists / read access before we try to open
 				file->fd = ::open(file->path, file->mode, file->perms);
 			        if (file->fd >= 0)
 					lseek(file->fd, file->offset, SEEK_SET);

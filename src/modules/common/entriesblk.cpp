@@ -90,11 +90,11 @@ int EntriesBlock::addEntry(const char *entry) {
 	offset = dataSize;	// original dataSize before realloc
 	size = len + 1;
 	// add our text to the end
-	memcpy(block+offset, entry, size);
+	memcpy(block+offset+6, entry, size);
 	// increment count
 	setCount(count+1);
 	// add our meta entry
-	setMetaEntry(count, offset, size);
+	setMetaEntry(count, offset+6, size);
 	// return index of our new entry
 	return count;
 }
@@ -109,7 +109,7 @@ const char *EntriesBlock::getEntry(int entryIndex) {
 }
 
 
-void EntriesBlock::deleteEntry(int entryIndex) {
+void EntriesBlock::removeEntry(int entryIndex) {
 	long offset;
 	short size;
 	getMetaEntry(entryIndex, &offset, &size);

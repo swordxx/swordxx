@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: zcom.h,v 1.4 2001/05/04 22:21:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,12 +29,38 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT zCom:public RawVerse, public SWCom, public SWCompress
-{
+class SWDLLEXPORT zCom:public zVerse, public SWCom {
+  char *versebuf;
+  VerseKey *lastWriteKey;
+  bool sameBlock (VerseKey * lastWriteKey, VerseKey * key);
+  int blockType;
 public:
-  zCom (char *ipath, char *iname = 0, char *idesc = 0, SWDisplay * idisp = 0);
+  
+    
+    zCom (const char *ipath, const char *iname = 0, const char *idesc =
+	   0, int blockType = CHAPTERBLOCKS, SWCompress * icomp =
+	   0, SWDisplay * idisp = 0);
     virtual ~ zCom ();
-  virtual operator char *();
+  virtual char *getRawEntry ();
+  virtual SWModule & operator += (int increment);
+  virtual SWModule & operator -= (int decrement)
+  {
+    return this->operator += (-decrement);
+  }
+
+  // write interface ----------------------------
+  virtual bool isWritable ()
+  {
+    return true;
+  }
+  static char createModule (const char *path, int blockBound)
+  {
+    return zVerse::createModule (path, blockBound);
+  }
+  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
+  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
+  virtual void deleteEntry ();	// Delete current module entry
+  // end write interface ------------------------
 };
 
 

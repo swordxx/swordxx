@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.35 2001/04/18 19:20:03 jansorg Exp $
+ * $Id: swmgr.cpp,v 1.36 2001/05/04 22:21:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,6 +41,7 @@
 #include <rawcom.h>
 #include <hrefcom.h>
 #include <rawld.h>
+#include <rawld4.h>
 #include <utilfuns.h>
 #include <gbfplain.h>
 #include <thmlplain.h>
@@ -49,6 +50,7 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
+#include <zcom.h>
 #include <lzsscomprs.h>
 
 #ifdef ZLIBSUPPORTED
@@ -495,7 +497,7 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		datapath += buf2;
 	delete [] buf;
 	
-	if (!stricmp(driver.c_str(), "zText")) {
+	if ((!stricmp(driver.c_str(), "zText")) || (!stricmp(driver.c_str(), "zCom"))) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
 		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (string)"CHAPTER";
@@ -515,8 +517,11 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		if (!stricmp(misc1.c_str(), "LZSS"))
 			compress = new LZSSCompress();
 		
-		if (compress)
-			newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress);
+		if (compress) {
+			if (!stricmp(driver.c_str(), "zText"))
+				newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress);
+			else	newmod = new zCom(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress);
+		}
 	}
 	
 	if (!stricmp(driver.c_str(), "RawText")) {
@@ -543,6 +548,9 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 				
 	if (!stricmp(driver.c_str(), "RawLD"))
 		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str());
+
+	if (!stricmp(driver.c_str(), "RawLD4"))
+		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str());
 
     // if a specific module type is set in the config, use this
     if ((entry = section.find("Type")) != section.end()) 
