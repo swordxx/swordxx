@@ -491,7 +491,9 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 		initBounds();
 
 // need to set upperbound parsing to resolve to max verse/chap if not specified
-	(*upperBound) = ub;
+        (*upperBound) = ub;
+	if (*upperBound < *lowerBound)
+		*upperBound = *lowerBound;
 	upperBound->Normalize();
 
 // until we have a proper method to resolve max verse/chap use this kludge

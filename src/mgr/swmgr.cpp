@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.11 1999/11/22 17:37:26 scribe Exp $
+ * $Id: swmgr.cpp,v 1.12 1999/11/23 12:47:23 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -348,7 +348,14 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	datapath = prefixPath;
 	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
 		datapath += "/";
-	datapath += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (string)"";
+	misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (string)"";
+	char *buf = new char [ strlen(misc1.c_str()) + 1 ];
+	char *buf2 = buf;
+	strcpy(buf, misc1.c_str());
+	for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
+	if (*buf2)
+		datapath += buf2;
+	delete [] buf;
 	
 	if (!stricmp(driver.c_str(), "RawText")) {
 		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
