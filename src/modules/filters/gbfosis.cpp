@@ -43,6 +43,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	char *ch;
 	char *textStart, *textEnd;
 	char *wordStart, *wordEnd;
+	char *fromStart;
 	bool newText = false;
 	bool newWord = false;
 	std::string tmp;
@@ -57,7 +58,10 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	else	from = text;
 	
 	textStart = from;
+	fromStart = from;
 	wordStart = text;
+
+	QuoteStack quoteStack;
 
 	// -------------------------------
 
@@ -239,10 +243,18 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			}
 		}
 		else	{
-			if (newWord && (*from != ' ')) {wordStart = to; newWord = false; memset(to, 0, 10); }
-			if (!suspendTextPassThru) {
-				*to++ = *from;
-				lastspace = (*from == ' ');
+			switch (*from) {
+			case '\'':
+			case '\"':
+			case '`':
+				quoteStack.handleQuote(fromStart, from, to);
+				break;
+			default:
+				if (newWord && (*from != ' ')) {wordStart = to; newWord = false; memset(to, 0, 10); }
+				if (!suspendTextPassThru) {
+					*to++ = *from;
+					lastspace = (*from == ' ');
+				}
 			}
 		}
 	}
@@ -334,5 +346,20 @@ const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 	}
 	return outRef.c_str();
 }
+
+
+QuoteStack::QuoteStack() {
+	while (!quotes.empty()) quotes.pop();
+}
+
+
+QuoteStack::~QuoteStack() {
+	while (!quotes.empty()) quotes.pop();
+}
+
+
+void QuoteStack::handleQuote(char *buf, char *quotePos, char *to) {
+}
+
 
 SWORD_NAMESPACE_END
