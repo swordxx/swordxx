@@ -19,6 +19,7 @@
 #include <string.h>
 #include <thmlosis.h>
 #include <versekey.h>
+#include <swmodule.h>
 
 
 ThMLOSIS::ThMLOSIS() {
@@ -50,6 +51,30 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 			);
 			pushString(buf, "\" />");
 			userData["suspendTextPassThru"] = "false";
+			return true;
+		}
+		if (!strncmp(token, "img ", 4)) {
+			const char *src = strstr(token, "src");
+			if (!src)		// assert we have a src attribute
+				return false;
+
+			pushString(buf, "<figure entity=\"");
+			const char *c;
+			for (c = src;((*c) && (*c != '"')); c++);
+
+			/* uncomment for SWORD absolute path logic
+			if (*(c+1) == '/') {
+				pushString(buf, "file:");
+				pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
+				if (*((*buf)-1) == '/')
+					c++;		// skip '/'
+			}
+			end of uncomment for asolute path logic */
+
+			for (c++;((*c) && (*c != '"')); c++)
+				*(*buf)++ = *c;
+
+			pushString(buf, "\" />");
 			return true;
 		}
 //	addTokenSubstitute("/scripRef", "|}");
