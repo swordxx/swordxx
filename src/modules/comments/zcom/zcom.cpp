@@ -58,15 +58,7 @@ zCom::~zCom() {
 char *zCom::getRawEntry() {
 	long  start = 0;
 	unsigned short size = 0;
-	VerseKey *key = 0;
-
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
+	VerseKey *key = &getVerseKey();
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
@@ -86,9 +78,6 @@ char *zCom::getRawEntry() {
 
 	if (!isUnicode())
 		preptext(entrybuf);
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
 
 	return entrybuf;
 }
@@ -113,16 +102,7 @@ bool zCom::sameBlock(VerseKey *k1, VerseKey *k2) {
 }
 
 void zCom::setEntry(const char *inbuf, long len) {
-	VerseKey *key = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey *key = &getVerseKey();
 
 	// see if we've jumped across blocks since last write
 	if (lastWriteKey) {
@@ -135,23 +115,12 @@ void zCom::setEntry(const char *inbuf, long len) {
 	settext(key->Testament(), key->Index(), inbuf, len);
 
 	lastWriteKey = (VerseKey *)key->clone();	// must delete
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
 }
 
 
 void zCom::linkEntry(const SWKey *inkey) {
-	VerseKey *destkey = 0;
+	VerseKey *destkey = &getVerseKey();
 	const VerseKey *srckey = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!destkey)
-		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
 	try {
@@ -165,9 +134,6 @@ void zCom::linkEntry(const SWKey *inkey) {
 
 	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
 
-	if (this->key != destkey) // free our key if we created a VerseKey
-		delete destkey;
-
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
 }
@@ -180,19 +146,8 @@ void zCom::linkEntry(const SWKey *inkey) {
 
 void zCom::deleteEntry() {
 
-	VerseKey *key = 0;
-
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey *key = &getVerseKey();
 	settext(key->Testament(), key->Index(), "");
-
-	if (key != this->key)
-		delete key;
 }
 
 
@@ -207,14 +162,7 @@ void zCom::deleteEntry() {
 void zCom::increment(int steps) {
 	long  start;
 	unsigned short size;
-	VerseKey *tmpkey = 0;
-
-	try {
-		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	catch ( ... ) {}
-	if (!tmpkey)
-		tmpkey = new VerseKey(key);
+	VerseKey *tmpkey = &getVerseKey();
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
@@ -224,15 +172,7 @@ void zCom::increment(int steps) {
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
 		(steps > 0) ? (*key)++ : (*key)--;
-		if (tmpkey != key)
-			delete tmpkey;
-		tmpkey = 0;
-		try {
-			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-		}
-		catch ( ... ) {}
-		if (!tmpkey)
-			tmpkey = new VerseKey(key);
+		tmpkey = &getVerseKey();
 
 		if ((error = key->Error())) {
 			*key = lastgood;
@@ -249,9 +189,36 @@ void zCom::increment(int steps) {
 		}
 	}
 	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
-
-	if (tmpkey != key)
-		delete tmpkey;
 }
+
+
+VerseKey &zCom::getVerseKey() {
+	static VerseKey tmpVK;
+	VerseKey *key;
+	// see if we have a VerseKey * or decendant
+	try {
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+	}
+	catch ( ... ) {	}
+	if (!key) {
+		ListKey *lkTest = 0;
+		try {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		catch ( ... ) {	}
+		if (lkTest) {
+			try {
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+			}
+			catch ( ... ) {	}
+		}
+	}
+	if (!key) {
+		tmpVK = *(this->key);
+		return tmpVK;
+	}
+	else	return *key;
+}
+
 
 SWORD_NAMESPACE_END

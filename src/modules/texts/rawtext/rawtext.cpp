@@ -77,18 +77,9 @@ RawText::~RawText()
 }
 
 
-/******************************************************************************
- * RawText::getRawEntry	- Returns the correct verse when char * cast
- *					is requested
- *
- * RET: string buffer with verse
- */
-
-char *RawText::getRawEntry() {
-	long  start = 0;
-	unsigned short size = 0;
-	VerseKey *key = 0;
-
+VerseKey &RawText::getVerseKey() {
+	static VerseKey tmpVK;
+	VerseKey *key;
 	// see if we have a VerseKey * or decendant
 	try {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
@@ -107,11 +98,27 @@ char *RawText::getRawEntry() {
 			catch ( ... ) {	}
 		}
 	}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-			key = new VerseKey(this->key);
+	if (!key) {
+		tmpVK = *(this->key);
+		return tmpVK;
+	}
+	else	return *key;
+}
 
-	findoffset(key->Testament(), key->Index(), &start, &size);
+
+/******************************************************************************
+ * RawText::getRawEntry	- Returns the correct verse when char * cast
+ *					is requested
+ *
+ * RET: string buffer with verse
+ */
+
+char *RawText::getRawEntry() {
+	long  start = 0;
+	unsigned short size = 0;
+	VerseKey &key = getVerseKey();
+
+	findoffset(key.Testament(), key.Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
 	unsigned long newsize = (size + 2) * FILTERPAD;
@@ -123,17 +130,14 @@ char *RawText::getRawEntry() {
 	}
 	*entrybuf = 0;
 
-	readtext(key->Testament(), start, (size + 2), entrybuf);
+	readtext(key.Testament(), start, (size + 2), entrybuf);
      entrybuf[size] = 0;
 
 	rawFilter(entrybuf, size, 0);	// hack, decipher
-	rawFilter(entrybuf, size*FILTERPAD, key);
+	rawFilter(entrybuf, size*FILTERPAD, &key);
 
 	if (!isUnicode())
 		preptext(entrybuf);
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
 
 	return entrybuf;
 }
@@ -471,34 +475,14 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 
 
 void RawText::setEntry(const char *inbuf, long len) {
-	VerseKey *key = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
-
-	settext(key->Testament(), key->Index(), inbuf, len);
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
+	VerseKey &key = getVerseKey();
+	settext(key.Testament(), key.Index(), inbuf, len);
 }
 
 
 void RawText::linkEntry(const SWKey *inkey) {
-	VerseKey *destkey = 0;
+	VerseKey &destkey = getVerseKey();
 	const VerseKey *srckey = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!destkey)
-		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
 	try {
@@ -509,10 +493,7 @@ void RawText::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
-
-	if (this->key != destkey) // free our key if we created a VerseKey
-		delete destkey;
+	linkentry(destkey.Testament(), destkey.Index(), srckey->Index());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -526,20 +507,8 @@ void RawText::linkEntry(const SWKey *inkey) {
  */
 
 void RawText::deleteEntry() {
-
-	VerseKey *key = 0;
-
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
-	settext(key->Testament(), key->Index(), "");
-
-	if (key != this->key)
-		delete key;
+	VerseKey &key = getVerseKey();
+	settext(key.Testament(), key.Index(), "");
 }
 
 /******************************************************************************
@@ -553,14 +522,7 @@ void RawText::deleteEntry() {
 void RawText::increment(int steps) {
 	long  start;
 	unsigned short size;
-	VerseKey *tmpkey = 0;
-
-	try {
-		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	catch ( ... ) {}
-	if (!tmpkey)
-		tmpkey = new VerseKey(key);
+	VerseKey *tmpkey = &getVerseKey();
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
@@ -570,15 +532,7 @@ void RawText::increment(int steps) {
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
 		(steps > 0) ? (*key)++ : (*key)--;
-		if (tmpkey != key)
-			delete tmpkey;
-		tmpkey = 0;
-		try {
-			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-		}
-		catch ( ... ) {}
-		if (!tmpkey)
-			tmpkey = new VerseKey(key);
+		tmpkey = &getVerseKey();
 
 		if ((error = key->Error())) {
 			*key = lastgood;
@@ -595,9 +549,6 @@ void RawText::increment(int steps) {
 		}
 	}
 	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
-
-	if (tmpkey != key)
-		delete tmpkey;
 }
 
 SWORD_NAMESPACE_END

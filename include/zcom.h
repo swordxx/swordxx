@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.17 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: zcom.h,v 1.18 2002/10/21 00:30:37 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,11 +32,14 @@
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT zCom:public zVerse, public SWCom {
+
 	VerseKey *lastWriteKey;
 	bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
 	int blockType;
-public:
+	VerseKey &getVerseKey();
 
+
+public:
 
 	zCom(const char *ipath, const char *iname = 0, const char *idesc = 0,
 			int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0,
@@ -45,8 +48,8 @@ public:
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 	virtual ~zCom();
 	virtual char *getRawEntry();
-     virtual void increment(int steps);
-     virtual void decrement(int steps) { increment(-steps); }
+     virtual void increment(int steps = 1);
+     virtual void decrement(int steps = 1) { increment(-steps); }
 
 	// write interface ----------------------------
 	virtual bool isWritable() {
@@ -66,12 +69,10 @@ public:
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
 
-
-	// OPERATORS -----------------------------------------------------------------
-	
 	SWMODULE_OPERATORS
 
 };
 
 SWORD_NAMESPACE_END
+
 #endif

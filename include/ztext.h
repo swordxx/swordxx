@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext.h,v 1.26 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: ztext.h,v 1.27 2002/10/21 00:30:37 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,11 +36,14 @@ SWORD_NAMESPACE_START
 * It should not be used in frontends, unless you are doing very special things.
 */
 class SWDLLEXPORT zText:public zVerse, public SWText {
+
      VerseKey *lastWriteKey;
      bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
 	int blockType;
+	VerseKey &getVerseKey();
+
+
 public:
-  
     
 	zText(const char *ipath, const char *iname = 0, const char *idesc = 0,
 			int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0,
@@ -71,9 +74,6 @@ public:
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
 
-
-	// OPERATORS -----------------------------------------------------------------
-	
 	SWMODULE_OPERATORS
 
 };

@@ -54,15 +54,7 @@ RawCom::~RawCom()
 char *RawCom::getRawEntry() {
 	long  start = 0;
 	unsigned short size = 0;
-	VerseKey *key = 0;
-
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey *key = &getVerseKey();
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
@@ -85,9 +77,6 @@ char *RawCom::getRawEntry() {
         if (!isUnicode())
 		preptext(entrybuf);
 
-	if (key != this->key)
-		delete key;
-
 	return entrybuf;
 }
 
@@ -103,14 +92,7 @@ char *RawCom::getRawEntry() {
 void RawCom::increment(int steps) {
 	long  start;
 	unsigned short size;
-	VerseKey *tmpkey = 0;
-
-	try {
-		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	catch ( ... ) {}
-	if (!tmpkey)
-		tmpkey = new VerseKey(key);
+	VerseKey *tmpkey = &getVerseKey();
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
@@ -120,15 +102,7 @@ void RawCom::increment(int steps) {
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
 		(steps > 0) ? (*key)++ : (*key)--;
-		if (tmpkey != key)
-			delete tmpkey;
-		tmpkey = 0;
-		try {
-			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-		}
-		catch ( ... ) {}
-		if (!tmpkey)
-			tmpkey = new VerseKey(key);
+		tmpkey = &getVerseKey();
 
 		if ((error = key->Error())) {
 			*key = lastgood;
@@ -145,41 +119,18 @@ void RawCom::increment(int steps) {
 		}
 	}
 	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
-
-	if (tmpkey != key)
-		delete tmpkey;
 }
 
 
 void RawCom::setEntry(const char *inbuf, long len) {
-	VerseKey *key = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey *key = &getVerseKey();
 	settext(key->Testament(), key->Index(), inbuf, len);
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
 }
 
 
 void RawCom::linkEntry(const SWKey *inkey) {
-	VerseKey *destkey = 0;
+	VerseKey *destkey = &getVerseKey();
 	const VerseKey *srckey = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!destkey)
-		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
 	try {
@@ -191,9 +142,6 @@ void RawCom::linkEntry(const SWKey *inkey) {
 		srckey = new VerseKey(inkey);
 
 	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
-
-	if (this->key != destkey) // free our key if we created a VerseKey
-		delete destkey;
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -208,19 +156,37 @@ void RawCom::linkEntry(const SWKey *inkey) {
 
 void RawCom::deleteEntry() {
 
-	VerseKey *key = 0;
+	VerseKey *key = &getVerseKey();
+	settext(key->Testament(), key->Index(), "");
+}
 
+
+VerseKey &RawCom::getVerseKey() {
+	static VerseKey tmpVK;
+	VerseKey *key;
+	// see if we have a VerseKey * or decendant
 	try {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
-	settext(key->Testament(), key->Index(), "");
-
-	if (key != this->key)
-		delete key;
+	catch ( ... ) {	}
+	if (!key) {
+		ListKey *lkTest = 0;
+		try {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		catch ( ... ) {	}
+		if (lkTest) {
+			try {
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+			}
+			catch ( ... ) {	}
+		}
+	}
+	if (!key) {
+		tmpVK = *(this->key);
+		return tmpVK;
+	}
+	else	return *key;
 }
 
 

@@ -63,18 +63,9 @@ char *zText::getRawEntry()
 {
 	long  start = 0;
 	unsigned short size = 0;
-	VerseKey *key = 0;
+	VerseKey &key = getVerseKey();
 
-	// see if we have a VerseKey * or decendant
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
-
-	findoffset(key->Testament(), key->Index(), &start, &size);
+	findoffset(key.Testament(), key.Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
 	unsigned long newsize = (size + 2) * FILTERPAD;
@@ -86,15 +77,12 @@ char *zText::getRawEntry()
 	}
 	*entrybuf = 0;
 
-	zreadtext(key->Testament(), start, (size + 2), entrybuf);
+	zreadtext(key.Testament(), start, (size + 2), entrybuf);
 
-	rawFilter(entrybuf, size*FILTERPAD, key);
+	rawFilter(entrybuf, size*FILTERPAD, &key);
 
 	if (!isUnicode())
 		preptext(entrybuf);
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
 
 	return entrybuf;
 }
@@ -120,45 +108,25 @@ bool zText::sameBlock(VerseKey *k1, VerseKey *k2) {
 
 
 void zText::setEntry(const char *inbuf, long len) {
-	VerseKey *key = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey &key = getVerseKey();
 
 	// see if we've jumped across blocks since last write
 	if (lastWriteKey) {
-		if (!sameBlock(lastWriteKey, key)) {
+		if (!sameBlock(lastWriteKey, &key)) {
 			flushCache();
 		}
 		delete lastWriteKey;
 	}
 
-	settext(key->Testament(), key->Index(), inbuf, len);
+	settext(key.Testament(), key.Index(), inbuf, len);
 
-	lastWriteKey = (VerseKey *)key->clone();	// must delete
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
+	lastWriteKey = (VerseKey *)key.clone();	// must delete
 }
 
 
 void zText::linkEntry(const SWKey *inkey) {
-	VerseKey *destkey = 0;
+	VerseKey &destkey = getVerseKey();
 	const VerseKey *srckey = 0;
-	// see if we have a VerseKey * or decendant
-	try {
-		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!destkey)
-		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
 	try {
@@ -170,10 +138,7 @@ void zText::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
-
-	if (this->key != destkey) // free our key if we created a VerseKey
-		delete destkey;
+	linkentry(destkey.Testament(), destkey.Index(), srckey->Index());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -187,19 +152,9 @@ void zText::linkEntry(const SWKey *inkey) {
 
 void zText::deleteEntry() {
 
-	VerseKey *key = 0;
+	VerseKey &key = getVerseKey();
 
-	try {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	catch ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
-	settext(key->Testament(), key->Index(), "");
-
-	if (key != this->key)
-		delete key;
+	settext(key.Testament(), key.Index(), "");
 }
 
 
@@ -213,14 +168,7 @@ void zText::deleteEntry() {
 void zText::increment(int steps) {
 	long  start;
 	unsigned short size;
-	VerseKey *tmpkey = 0;
-
-	try {
-		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	catch ( ... ) {}
-	if (!tmpkey)
-		tmpkey = new VerseKey(key);
+	VerseKey *tmpkey = &getVerseKey();
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
@@ -230,15 +178,7 @@ void zText::increment(int steps) {
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
 		(steps > 0) ? (*key)++ : (*key)--;
-		if (tmpkey != key)
-			delete tmpkey;
-		tmpkey = 0;
-		try {
-			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-		}
-		catch ( ... ) {}
-		if (!tmpkey)
-			tmpkey = new VerseKey(key);
+		tmpkey = &getVerseKey();
 
 		if ((error = key->Error())) {
 			*key = lastgood;
@@ -256,9 +196,36 @@ void zText::increment(int steps) {
 		}
 	}
 	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
-
-	if (tmpkey != key)
-		delete tmpkey;
 }
+
+
+VerseKey &zText::getVerseKey() {
+	static VerseKey tmpVK;
+	VerseKey *key;
+	// see if we have a VerseKey * or decendant
+	try {
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+	}
+	catch ( ... ) {	}
+	if (!key) {
+		ListKey *lkTest = 0;
+		try {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		catch ( ... ) {	}
+		if (lkTest) {
+			try {
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+			}
+			catch ( ... ) {	}
+		}
+	}
+	if (!key) {
+		tmpVK = *(this->key);
+		return tmpVK;
+	}
+	else	return *key;
+}
+
 
 SWORD_NAMESPACE_END

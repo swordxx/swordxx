@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+20-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Added optimizations for ListKey persistent keys
+		in VerseKey drivers
+
 09-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
 	Add debian directory so you can build debs from cvs
 

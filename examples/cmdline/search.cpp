@@ -33,11 +33,12 @@ int main(int argc, char **argv)
 	SWMgr manager;
 	SWModule *target;
 	ListKey listkey;
-	VerseKey vk;
+	ListKey scope;
+	VerseKey parser;
 	ModMap::iterator it;
 
-	if ((argc != 3) && (argc != 5)) {
-		fprintf(stderr, "usage: %s <modname> <\"search string\"> [\"min\" \"max\"]\n", argv[0]);
+	if ((argc != 3) && (argc != 4)) {
+		fprintf(stderr, "usage: %s <modname> <\"search string\"> [\"search_scope\"]\n", argv[0]);
 		exit(-1);
 	}
 
@@ -52,11 +53,10 @@ int main(int argc, char **argv)
 
 	target = (*it).second;
 
-	if (argc == 5) {			// if min / max specified
-		vk.LowerBound(argv[3]);
-		vk.UpperBound(argv[4]);
-		vk.Persist(1);
-		target->setKey(vk);
+	if (argc == 4) {			// if min / max specified
+		scope = parser.ParseVerseList(argv[3], parser, true);
+		scope.Persist(1);
+		target->setKey(scope);
 	}
 
 	std::cout << "[0=================================50===============================100]\n ";

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.12 2002/10/08 00:36:00 scribe Exp $
+ * $Id: treekeyidx.cpp,v 1.13 2002/10/21 00:30:37 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -341,7 +341,7 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 	
 	if (ioffset < 0) {
 		ioffset = 0;
-		error = 7777;	// out of bounds but still position to 0;
+		error = 77;	// out of bounds but still position to 0;
 	}
 
 	node->offset = ioffset;
@@ -350,7 +350,7 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 			lseek(idxfd->getFd(), ioffset, SEEK_SET);
 			if (read(idxfd->getFd(), &offset, 4) == 4) {
 				offset = swordtoarch32(offset);
-				error = (error == 7777) ? KEYERR_OUTOFBOUNDS : 0;
+				error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
 				getTreeNodeFromDatOffset(offset, node);
 			}
 			else {
