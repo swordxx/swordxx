@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.4 2003/02/25 04:12:47 scribe Exp $
+* $Id: swbuf.h,v 1.5 2003/02/25 05:01:14 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -73,7 +73,7 @@ public:
 	SWBuf &operator +=(const char *str) { append(str); return *this; }
 	SWBuf &operator +=(char ch) { append(ch); return *this; }
 	SWBuf &operator -=(unsigned int len) { setSize(length()-len); return *this; }
-	SWBuf &operator --() { operator -=(1); return *this; }
+	SWBuf &operator --(int) { operator -=(1); return *this; }
 	SWBuf operator +(const SWBuf &other) const;
 	SWBuf operator +(char ch) const { return (*this) + SWBuf(ch); }
 };
