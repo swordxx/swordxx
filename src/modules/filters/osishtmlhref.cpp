@@ -138,13 +138,13 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "<br />";
+				buf += "<!P><br />";
 			}
 			else if (tag.isEndTag()) {	// end tag
-				buf += "<br />";
+				buf += "<!/P><br />";
 			}
 			else {					// empty paragraph break marker
-				buf += "<br /><br />";
+				buf += "<!P><br />";
 			}
 		}
 		
@@ -223,19 +223,23 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				/*buf += "{";*/
 
 				//alternate " and '
-				buf += (level % 2) ? '\'' : '\"';
+				if(lev)
+					buf += (level % 2) ? '\'' : '\"';
 				
-				if (who == "Jesus")
+				if (who == "Jesus") {
 					buf += "<font color=\"red\"> ";
+				}
 			}
 			else if (tag.isEndTag()) {
 				//alternate " and '
-				buf += (level % 2) ? '\'' : '\"';
-				buf += "</font>";
+				if(lev)
+					buf += (level % 2) ? '\'' : '\"';
+				//buf += "</font>";
 			}
 			else {	// empty quote marker
 				//alternate " and '
-				buf += (level % 2) ? '\'' : '\"';
+				if(lev)
+					buf += (level % 2) ? '\'' : '\"';
 			}
 		}
 
