@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.62 2003/03/04 22:32:55 mgruner Exp $
+* $Id: swmodule.h,v 1.63 2003/05/06 03:27:56 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -306,7 +306,7 @@ protected:
 	*
 	* @param istr string for which to search
 	* @param searchType type of search to perform
-	*   <=0 ->regex;  1->phrase; 2->multiword;
+	*   >=0 ->regex;  -1 ->phrase; -2 ->multiword;
 	* @param flags options flags for search
 	* @param scope Key containing the scope. VerseKey or ListKey are useful here.
 	* @param justCheckIfSupported if set, don't search,

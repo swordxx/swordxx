@@ -24,19 +24,27 @@ int main (int argc, char *argv[])
 		CORBA::Object_var obj = orb->string_to_object(argv[1]);
 		swordorb::SWMgr_var mgr = swordorb::SWMgr::_narrow(obj);
 
+		swordorb::SWModule_ptr module;
 		swordorb::ModInfoList *modInfoList;
 
 		std::cout << "PrefixPath: " << mgr->getPrefixPath() << "\n";
 		std::cout << "ConfigPath: " << mgr->getConfigPath() << "\n";
 		modInfoList = mgr->getModInfoList();
 		std::cout << "sequence length: " << modInfoList->length() << "\n";
-		swordorb::SWModule_ptr module;
 		for (int i = 0; i < modInfoList->length(); i++) {
 			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].type << ": " << (*modInfoList)[i].lang << "\n";
 			module = mgr->getModuleByName((*modInfoList)[i].name);
 			module->setKeyText("jas1:19");
 			std::cout << module->getRenderText() << "\n";
 		}
+		module = mgr->getModuleByName((*modInfoList)[0].name);
+		swordorb::StringList *searchResults;
+		searchResults = module->search("God love world", swordorb::MULTIWORD, 0, "act-Rev");
+		for (int i = 0; i < searchResults->length(); i++) {
+			std::cout << (*searchResults)[i] << "\n";
+		}
+
+
 		
 	} catch(const CORBA::Exception& ex) {
 		std::cout << "Exception caught. Maybe the server is not running, or the IOR is wrong." << std::endl;

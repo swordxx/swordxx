@@ -1,6 +1,7 @@
 #include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
+#include <versekey.h>
 
 /*
 char* swordorb::SWModule_impl::helloWorld(const char* greeting) throw(CORBA::SystemException) {
@@ -11,6 +12,7 @@ char* swordorb::SWModule_impl::helloWorld(const char* greeting) throw(CORBA::Sys
 
 namespace swordorb {
 	ModInfoList *SWMgr_impl::getModInfoList() throw(CORBA::SystemException) {
+
 		ModInfoList *milist = new ModInfoList;
 		sword::SWModule *module = 0;
 		int size = 0;
@@ -44,13 +46,45 @@ namespace swordorb {
 	}
 
 
-	StringList *SWMgr_impl::getGlobalOptionsIterator() throw(CORBA::SystemException) {
+	StringList *SWMgr_impl::getGlobalOptions() throw(CORBA::SystemException) {
 	}
 
-	StringList *SWMgr_impl::getGlobalOptionValuesIterator(const char *option) throw(CORBA::SystemException) {
+	StringList *SWMgr_impl::getGlobalOptionValues(const char *option) throw(CORBA::SystemException) {
 	}
 
 	void SWMgr_impl::terminate() throw(CORBA::SystemException) {
 		exit(0);
 	}
+
+	StringList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException) {
+		int stype = 2;
+		sword::ListKey lscope;
+		sword::VerseKey parser;
+		if (searchType == REGEX) stype = 0;
+		if (searchType == PHRASE) stype = -1;
+		if (searchType == MULTIWORD) stype = -2;
+		sword::ListKey result;
+
+		if ((scope) && (strlen(scope)) > 0) {
+			lscope = parser.ParseVerseList(scope, parser, true);
+			result = delegate->Search(istr, stype, flags, &lscope);
+		}
+		else	result = delegate->Search(istr, stype, flags);
+
+		StringList *retVal = new StringList;
+		int count = 0;
+		for (result = sword::TOP; !result.Error(); result++) count++;
+		retVal->length(count);
+		int i = 0;
+		for (result = sword::TOP; !result.Error(); result++)
+			(*retVal)[i++] = CORBA::string_dup((const char *)result);
+
+		return retVal;
+	}
+		
+
+
+
+
+
 }

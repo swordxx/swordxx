@@ -37,8 +37,6 @@ System.err.println("finalizing");
 		}
 		catch (Exception e) {}	// we know this doesn't return property cuz we killed the orb! :)
 
-		// release thread
-		waitor.setFinished();
 	}
 
 	public void valueBound(HttpSessionBindingEvent httpSessionBindingEvent) {}
@@ -51,8 +49,6 @@ System.err.println("finalizing");
 
 	private void startOrb() {
 		try {
-			waitor = new Waitor ();
-			new Thread (waitor).run ();
 			// start external process
 			java.lang.Process p = Runtime.getRuntime().exec("./swordorbserver");
 			InputStream is = p.getInputStream();
@@ -94,36 +90,23 @@ System.err.println("finalizing");
 
 
 	public static void main(String args[]) throws Exception {
-		new SwordOrb ();
-		Thread.sleep(100);
-		/*
 		SWMgr mgr = new SwordOrb().getSWMgrInstance();
 
 		System.out.println("PrefixPath: " + mgr.getPrefixPath());
 		System.out.println("ConfigPath: " + mgr.getConfigPath());
 		ModInfo[] modInfoList = mgr.getModInfoList();
 		System.out.println("sequence size: " + modInfoList.length);
+		SWModule module;
 		for (int i = 0; i < modInfoList.length; i++) {
 			System.out.println(modInfoList[i].name + ": " + modInfoList[i].type + ": " + modInfoList[i].lang);
+			module = mgr.getModuleByName(modInfoList[i].name);
+			module.setKeyText("jas1:19");
+			System.out.println(module.getRenderText());
 		}
-		*/
+		module = mgr.getModuleByName(modInfoList[0].name);
+		String[] searchResults = module.search("God love world", SearchType.MULTIWORD, 0, "");
+		for (int i = 0; i < searchResults.length; i++)
+			System.out.println(searchResults[i]);
+
 	}
-
-public class Waitor implements Runnable {
-  protected boolean finished = false;
-  public Waitor () {
-  }
-  public void setFinished () {
-    finished = true;
-  }
-  public void run () {
-    while (!finished) {
-	    try { Thread.sleep (100); } catch (Exception e) { e.printStackTrace(); }
-	 // possibly even:
-	 // System.gc();
-    }
-  }
-}
-  protected Waitor waitor;
-
 }

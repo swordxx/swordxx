@@ -19,8 +19,16 @@ typedef sequence<ModInfo> ModInfoList;
 //-----------------------------------------------------------------
 // SWModule methods
 
+	enum SearchType {
+		REGEX,
+		PHRASE,
+		MULTIWORD
+	};
+
+
 interface SWModule {
 	void   terminateSearch();
+	StringList search(in string istr, in SearchType searchType, in long flags, in string scope);
 	char   error();
 	long  getEntrySize();
 	void   setKeyText(in string key);
@@ -64,8 +72,8 @@ interface SWMgr {
 	void   setGlobalOption(in string option, in string value);
 	string getGlobalOption(in string option);
 	string getGlobalOptionTip(in string option);
-	StringList getGlobalOptionsIterator();
-	StringList getGlobalOptionValuesIterator(in string option);
+	StringList getGlobalOptions();
+	StringList getGlobalOptionValues(in string option);
 	void     setCipherKey(in string modName, in string key);
 	void     terminate();
 
