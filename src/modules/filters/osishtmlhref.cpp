@@ -1,7 +1,7 @@
 /***************************************************************************
-                     osisrtf.cpp  -  OSIS to RTF filter
+                     osishtmlhref.cpp  -  OSIS to HTML wiht hrefs filter
                              -------------------
-    begin                : 2003-02-15
+    begin                : 2003-06-24
     copyright            : 2003 by CrossWire Bible Society
  ***************************************************************************/
 

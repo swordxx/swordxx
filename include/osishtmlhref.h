@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osishtmlhref.h,v 1.1 2003/06/24 12:07:20 tbiggs Exp $
+ * $Id: osishtmlhref.h,v 1.2 2003/06/24 12:19:56 tbiggs Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,7 +29,7 @@ using std::string;
 
 SWORD_NAMESPACE_START
 
-/** this filter converts OSIS text to RTF text
+/** this filter converts OSIS text to HTML text with hrefs
  */
 class SWDLLEXPORT OSISHTMLHref : public SWBasicFilter {
 private:
