@@ -3,9 +3,17 @@ INCLUDES = -I $(top_srcdir)/include
 LDADD = -L$(top_builddir)/lib -lsword 
 
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
-mod2vpl vpl2mod stepdump step2vpl mod2zmod gbfidx modwrite addvs addld emptyvss \
-txt2sword addgb imp2gbs imp2ld imp2vs mod2imp thml2gbs mod2osis xml2gbs osis2mod \
-vs2osisref installmgr
+stepdump step2vpl gbfidx modwrite addvs addld emptyvss \
+txt2sword addgb imp2gbs imp2ld mod2imp thml2gbs xml2gbs
+
+bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2zmod mod2vpl \
+	vpl2mod imp2vs
+
+if INSTALLMGR
+IMGRPROG = installmgr 
+else
+IMGRPROG = 
+endif
 
 if ICU
 ICUPROG = 
@@ -13,7 +21,7 @@ else
 ICUPROG =
 endif
 
-noinst_PROGRAMS += $(ICUPROG)
+noinst_PROGRAMS += $(ICUPROG) $(IMGRPROG)
 
 if ICU
 endif

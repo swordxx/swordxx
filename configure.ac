@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.20 $)
+AC_REVISION($Revision: 1.21 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -102,17 +102,19 @@ fi
 
 CURL_CFLAGS=
 CURL_LIBS=
-AC_PATH_PROG(CURL_CONFIG, curl-config, no)
-if test "$CURL_CONFIG" = "no" ; then
+if test x$enable_installmgr = xyes; then
+  AC_PATH_PROG(CURL_CONFIG, curl-config, no)
+  if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
 	echo "*** compiling without install manager support"
 	enable_installmgr=no
-else
+  else
 	echo "curl found - remote install options available"
 	CURL_CFLAGS=`$CURL_CONFIG --cflags`
 	CURL_LIBS=`$CURL_CONFIG --libs`
 	CXXFLAGS="$CXXFLAGS -DCURLAVAILABLE"
 	CFLAGS="$CFLAGS -DCURLAVAILABLE"
+  fi
 fi
 
 # ---------------------------------------------------------------------
