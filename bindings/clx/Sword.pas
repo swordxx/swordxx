@@ -17,6 +17,7 @@ interface
    function  SWModule_getRenderText(h: integer) : PChar; cdecl; external 'libsword.so';
    function  SWModule_getKeyText(h: integer) : PChar; cdecl; external 'libsword.so';
    procedure SWModule_setKeyText(h: integer; key: PChar); cdecl; external 'libsword.so';
+   procedure SWModule_begin(h: integer); cdecl; external 'libsword.so';
    procedure SWModule_next(h: integer); cdecl; external 'libsword.so';
    procedure SWModule_previous(h: integer); cdecl; external 'libsword.so';
 type
@@ -33,6 +34,7 @@ type
       function getRenderText : WideString;                
       function getKeyText : String;                
       procedure setKeyText(keyText : String);
+      procedure modBegin;
       procedure modNext;
       procedure modPrevious;
    end;
@@ -185,6 +187,12 @@ procedure SWModule.setKeyText(keyText: String);
 begin
    SWModule_setKeyText(handle, PChar(keyText));
 end;
+
+
+procedure SWModule.modBegin;
+begin
+   SWModule_begin(handle);
+end; 
 
 
 procedure SWModule.modNext;

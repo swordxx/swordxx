@@ -13,7 +13,6 @@ type
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ImageList1: TImageList;
-    ToolButton2: TToolButton;
     Label1: TLabel;
     Splitter1: TSplitter;
     Panel3: TPanel;
@@ -28,7 +27,6 @@ type
     StatusBar1: TStatusBar;
     ColorDialog1: TColorDialog;
     FontDialog1: TFontDialog;
-    ToolButton3: TToolButton;
     Panel8: TPanel;
     Splitter4: TSplitter;
     Panel7: TPanel;
@@ -42,6 +40,15 @@ type
     SpinEdit2: TSpinEdit;
     ToolButton4: TToolButton;
     Label2: TLabel;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    SpeedButton1: TSpeedButton;
+    ToolButton3: TToolButton;
+    btnBTFollow: TToolButton;
+    btnCMFollow: TToolButton;
+    ImageList2: TImageList;
     procedure Edit1Change(Sender: TObject);
     procedure TreeView1Change(Sender: TObject; Node: TTreeNode);
     procedure Button1Click(Sender: TObject);
@@ -51,12 +58,18 @@ type
     procedure Edit2Change(Sender: TObject);
     procedure ListViewItemClick(Sender: TObject; Button: TMouseButton;
       Item: TListItem; const Pt: TPoint; ColIndex: Integer);
+    procedure SpinEdit2Changed(Sender: TObject; NewValue: Integer);
+    procedure SpinEdit1Changed(Sender: TObject; NewValue: Integer);
+    procedure ComboBox1Change(Sender: TObject);
   private
     fontName: string;
     fontSize: integer;
+    doOnChange: boolean;
+    procedure setBookCombo(ref: String);
     procedure lookup();
     procedure lookupLD();
-    function getChapter(key: String): integer;
+    function getChapter(key: String): integer; 
+    function getVerse(key: String): integer;
     procedure FillDictKeys(key: String);
   public
     { Public declarations }
@@ -75,9 +88,20 @@ implementation
 
 procedure TForm1.Edit1Change(Sender: TObject);
 begin
-   lookup();
+	if (doOnChange) then
+   		lookup();
 end;
 
+procedure TForm1.setBookCombo(ref: string);
+var
+    pos: integer;
+    bookname: string;
+
+begin
+     pos := LastDelimiter(' ',ref);
+     bookname := LeftStr(ref,pos);
+    ComboBox1.Text := bookname;
+end;
 
 function TForm1.getChapter(key: String): integer;
 var
@@ -102,28 +126,61 @@ begin
        Result := StrToInt(tmpbuf);
 end;
 
+
+function TForm1.getVerse(key: String): integer;
+var
+   len:     integer;
+   pos:     integer;
+   j:	    integer;
+   i:       integer;
+   tmpbuf:  String;
+begin
+       len := Length(key);
+       pos := LastDelimiter(':',key);
+       tmpbuf := '    ';
+       j := 1;
+       for i := pos+1 to len do
+       begin
+           if(key[i] <> '') then
+           begin
+           	tmpbuf[j] := key[i];
+                j := j + 1;
+           end
+           else break;
+       end;
+       tmpbuf := TrimRight(tmpbuf);
+       Result := StrToInt(tmpbuf);
+end;
+
+
 procedure TForm1.lookup();
 var
-   module : SWModule;
-   chapter: integer;
-   buf: string;
+   module 	: SWModule;
+   chapter	: integer;
+   buf		: string;
    currentVerse : string;
-   text: string;
-   key : string;
-   j: integer;
+   text		: string;
+   key 		: string;
+   verse	: integer;
+   j		: integer;
 begin
-//   node := TreeView1.Selected;
- //  if (node <> nil) then
- //  begin
       module := mgr.getModuleByName(curModBT);
       if (module <> nil) then
       begin
          module.setKeyText(Edit1.Text);
          currentVerse :=  module.getKeyText;
          chapter := getChapter(currentVerse);
+         verse := getVerse(currentVerse);
+
+         doOnChange := false;
+         setBookCombo(currentVerse);
+         SpinEdit1.Value := chapter;
+         SpinEdit2.Value := verse;
+         doOnChange := true;
+         
          buf := '                                           ';
          key := module.getKeyText;
-         j := 0;
+         j := 1;
          if(AnsiContainsText(key,':')) then
          begin
        		while key[j] <> ':' do
@@ -153,7 +210,7 @@ begin
                                 fontName +   '" size="' + IntToStr(fontSize) + '">' +
                 		module.getRenderText() +  '</font><br>';
                	//buf := IntToStr(chapter);
-                //Label1.Caption := IntToStr(fontSize);
+                //Label1.Caption := IntToStr(chapter) + ':' + IntToStr(verse);
          	module.modNext;
          end;
           text := text + '</body></html>';
@@ -161,7 +218,11 @@ begin
           TextBrowser1.ScrollToAnchor('cv');
           StatusBar1.SimpleText := currentVerse;
       end;
+   //end;
 
+
+   if(btnCMFollow.Down)  then
+   begin
       module := mgr.getModuleByName(curModCM);
       if (module <> nil) then
       begin
@@ -177,6 +238,7 @@ begin
 
                 //Label1.Caption := ': ' + module.getKeyText();
       end;
+   end;
 end;
 
 procedure TForm1.lookupLD();
@@ -244,15 +306,14 @@ var
    module : SWModule;
    modIt : ModIterator;
    found : Boolean;
-   
+
 begin
-//   root := TreeView1.TopItem;
-//   root := TreeView1.Items.AddChild(TreeView1.TopItem, 'Modules');
+   doOnChange := true;
+   fontName := '';
+   fontSize := 3;   // html font size
 
    modIt := mgr.getModulesIterator;
    module := modIt.getValue;
-   fontName := 'lucida';
-   fontSize := 3;
    while (module <> nil) do
    begin
         node := TreeView1.Items.GetFirstNode;
@@ -328,6 +389,21 @@ procedure TForm1.ListViewItemClick(Sender: TObject; Button: TMouseButton;
   Item: TListItem; const Pt: TPoint; ColIndex: Integer);
 begin
 	Edit2.Text := Item.Caption;
+end;
+
+procedure TForm1.SpinEdit2Changed(Sender: TObject; NewValue: Integer);
+begin
+     	Edit1.Text := ComboBox1.Text + ' ' + SpinEdit1.Text + ':' + SpinEdit2.Text;
+end;
+
+procedure TForm1.SpinEdit1Changed(Sender: TObject; NewValue: Integer);
+begin
+     	Edit1.Text := ComboBox1.Text + ' ' + SpinEdit1.Text + ':1';
+end;
+
+procedure TForm1.ComboBox1Change(Sender: TObject);
+begin
+       	Edit1.Text := ComboBox1.Text + ' ' + '1:1';
 end;
 
 end.
