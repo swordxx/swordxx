@@ -1,0 +1,66 @@
+/******************************************************************************
+ *	sword.idl	- This file contains a simple idl for accessing sword
+ */
+
+#ifndef SWORD_IDL
+#define SWORD_IDL
+
+module sword {
+
+typedef sequence<string> StringList;
+
+//-----------------------------------------------------------------
+// SWModule methods
+
+interface SWModule {
+	void   terminateSearch();
+	char   error();
+	long  getEntrySize();
+	void   setKeyText(in string key);
+	string getKeyText();
+	string getName();
+	string getDescription();
+	string getType();
+	void   previous();
+	void   next();
+	void   begin();
+	string getStripText();
+	string getRenderText();
+};
+
+//-----------------------------------------------------------------
+// modmap methods
+//
+interface ModListIterator {
+	boolean next();
+	SWModule val();
+};
+
+
+//-----------------------------------------------------------------
+// SWMgr methods
+//
+interface SWMgr {
+//	SWHANDLE SWDLLEXPORT SWMgr_new();
+		// SWConfig *, SWConfig *, bool, SWFilterMgr *
+//	SWHANDLE SWDLLEXPORT SWMgr_newEx(SWHANDLE hiconfig, SWHANDLE hisysconfig, char autoload, SWHANDLE hfilterMgr);
+//	void     SWDLLEXPORT SWMgr_delete(SWHANDLE hmgr);
+
+//	SWHANDLE SWDLLEXPORT SWMgr_getConfig(SWHANDLE hmgr);
+
+	ModListIterator getModListIterator();
+	SWModule getModuleByName(in string name);
+	string getPrefixPath();
+	string getConfigPath();
+	void   setGlobalOption(in string option, in string value);
+	string getGlobalOption(in string option);
+	string getGlobalOptionTip(in string option);
+	StringList getGlobalOptionsIterator();
+	StringList getGlobalOptionValuesIterator(in string option);
+	void     setCipherKey(in string modName, in string key);
+
+};
+
+};
+
+#endif
