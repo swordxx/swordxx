@@ -136,29 +136,23 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
+		if (!strncmp(token, "sync ", 5)) {
 			pushString(buf, "<a href=\"");
-			for (i = 5; i < strlen(token)-1; i++)				
-				if(token[i] != '\"') 			
+			for (i = 5; i < strlen(token)-1; i++)
+				if(token[i] != '\"')
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (i = 28; i < strlen(token)-2; i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];		
-			pushString(buf, "</a>");
-		}
 
-		else if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
-			pushString(buf, "<a href=\"");
-			for (i = 5; i < strlen(token)-1; i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
-			for (i = 28; i < strlen(token)-2; i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];		
+                        //scan for value and add it to the buffer
+			for (unsigned int j = 5; j < strlen(token); j++) {
+                                if (!strncmp(token+j, "value=\"", 7)) {
+                                        j += 7;
+                                        for (;token[j] != '\"'; j++)
+                				*(*buf)++ = token[j];
+                                        break;
+                                }
+                        }
 			pushString(buf, "</a>");
 		}
 
