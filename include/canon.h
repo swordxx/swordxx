@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.16 2003/04/20 08:25:39 chrislit Exp $
+ * $Id: canon.h,v 1.17 2003/05/10 00:55:43 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -287,7 +287,7 @@ const struct abbrev
   {"PSALMS", 19},		//    Psalms
   {"PSM", 19},			// Psalms
   {"PSS", 19},			// Psalms
-  {"QOHELETH", 21},              // Qohelot (Ecclesiastes)
+  {"QOHELETH", 21},              // Qohelet (Ecclesiastes)
   {"REVELATION OF JOHN", 66},	//     Revelation
   {"ROMANS", 45},		//    Romans
   {"RUTH", 8},			//    Ruth
@@ -299,7 +299,7 @@ const struct abbrev
   {"TITUS", 56},		//     Titus
   {"ZECHARIAH", 38},		//   Zechariah
   {"ZEPHANIAH", 36},		//   Zephaniah
-  {"", -1}			//   Zephaniah
+  {"", -1}
 };
 
 
