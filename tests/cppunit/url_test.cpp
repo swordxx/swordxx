@@ -34,7 +34,7 @@ public:
 	{
 		CPPUNIT_ASSERT( !strcmp(m_url1->getProtocol(), "http") );
 		CPPUNIT_ASSERT( !strcmp(m_url2->getProtocol(), "ftp") );
-		CPPUNIT_ASSERT( strlen( m_url3->getProtocol() ) == 0 );
+		CPPUNIT_ASSERT( m_url3->getProtocol() && strlen( m_url3->getProtocol() ) == 0 );
 	}
 	
 	void testHostName()
@@ -70,7 +70,6 @@ public:
 	void testParameterValue()
 	{	
  		CPPUNIT_ASSERT( !strcmp(m_url1->getParamterValue("page"), "help") );
-		
 		CPPUNIT_ASSERT( !strcmp(m_url1->getParamterValue("user"), "foo") );
 		CPPUNIT_ASSERT( !strcmp(m_url1->getParamterValue("name"), "bar") );
 		
@@ -78,7 +77,7 @@ public:
 		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("user"), "foo") );
 		CPPUNIT_ASSERT( !strcmp(m_url2->getParamterValue("name"), "bar") );
 		
-		CPPUNIT_ASSERT( strlen(m_url3->getParamterValue("page")) == 0 );
+		CPPUNIT_ASSERT( m_url3->getParamterValue("page") && strlen(m_url3->getParamterValue("page")) == 0 );
 	}	
 };
 

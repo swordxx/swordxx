@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.4 2004/07/17 12:20:50 scribe Exp $
+* $Id: url.h,v 1.5 2004/07/17 16:28:04 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -27,12 +27,13 @@
 
 SWORD_NAMESPACE_START
 
-// Class URL
-// The URL class provides an interface to work on the data of an URL like "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody"
-// 
+/** URL provides URL parsing
+ * The URL class provides an interface to work on the data of an URL like "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody"
+ */
 class URL {
 public:
-typedef std::map<SWBuf, SWBuf> ParameterMap;
+	typedef std::map<SWBuf, SWBuf> ParameterMap;
+	
 	/** Constructor.
 	 * @param url The url string which should be parsed into protocol, hostname, path and paramters
 	 */
@@ -63,15 +64,23 @@ typedef std::map<SWBuf, SWBuf> ParameterMap;
 	 * @return The value of the given paramter of an empty string if the name could not be found in the list of available paramters
 	 */
 	const char *getParamterValue(const char *name) const;
-		
+	
+	/** Encodes and URL
+	* Encodes a string into a valid URL, e.g. changes http://www.crosswire.org/test.jsp?force=1&help=1 into
+	* http://www.crosswire.org/test.jsp?force=1&amp;help=1
+	* This function works on the data of the buf parameter.
+	*
+	* WARNING: It doesn't check if the URL is encoded already, so http://www.crosswire.org/test.jsp?force=1&amp;help=1 becomes http://www.crosswire.org/test.jsp?force=1&amp;amp;help=1
+	*/
 	static const char *encode(const char *urlText);
+	
 private:
 	/** Parse
 	 * Parse the URL into protocol, hostname, path, page and paramters
 	 */
 	void parse();
 		
-	SWBuf url;	
+	SWBuf url;
 	SWBuf protocol;
 	SWBuf hostname;
 	SWBuf path;
