@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.15 2003/01/27 03:25:03 chrislit Exp $
+ * $Id: canon.h,v 1.16 2003/04/20 08:25:39 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,17 +37,17 @@ struct sbook
   {"Joshua", "Josh", 24},
   {"Judges", "Judg", 21},
   {"Ruth", "Ruth", 4},
-  {"I Samuel", "I Sam", 31},
-  {"II Samuel", "II Sam", 24},
-  {"I Kings", "I Kin", 22},
-  {"II Kings", "II Kin", 25},
-  {"I Chronicles", "I Chr", 29},
-  {"II Chronicles", "II Chr", 36},
+  {"I Samuel", "1Sam", 31},
+  {"II Samuel", "2Sam", 24},
+  {"I Kings", "1Kgs", 22},
+  {"II Kings", "2Kgs", 25},
+  {"I Chronicles", "1Chr", 29},
+  {"II Chronicles", "2Chr", 36},
   {"Ezra", "Ezra", 10},
   {"Nehemiah", "Neh", 13},
   {"Esther", "Esth", 10},
   {"Job", "Job", 42},
-  {"Psalms", "Psa", 150},
+  {"Psalms", "Pss", 150},
   {"Proverbs", "Prov", 31},
   {"Ecclesiastes", "Eccl", 12},
   {"Song of Solomon", "Song", 8},
@@ -72,33 +72,33 @@ struct sbook
 
 struct sbook
   VerseKey::ntbooks[] = {
-  {"Matthew", "Mat", 28},
+  {"Matthew", "Matt", 28},
   {"Mark", "Mark", 16},
   {"Luke", "Luke", 24},
   {"John", "John", 21},
   {"Acts", "Acts", 28},
   {"Romans", "Rom", 16},
-  {"I Corinthians", "I Cor", 16},
-  {"II Corinthians", "II Cor", 13},
+  {"I Corinthians", "1Cor", 16},
+  {"II Corinthians", "2Cor", 13},
   {"Galatians", "Gal", 6},
   {"Ephesians", "Eph", 6},
-  {"Philippians", "Philip", 4},
+  {"Philippians", "Phil", 4},
   {"Colossians", "Col", 4},
-  {"I Thessalonians", "I Thes", 5},
-  {"II Thessalonians", "II Thes", 3},
-  {"I Timothy", "I Tim", 6},
-  {"II Timothy", "II Tim", 4},
+  {"I Thessalonians", "1Thess", 5},
+  {"II Thessalonians", "2Thess", 3},
+  {"I Timothy", "1Tim", 6},
+  {"II Timothy", "2Tim", 4},
   {"Titus", "Titus", 3},
-  {"Philemon", "Philem", 1},
+  {"Philemon", "Phlm", 1},
   {"Hebrews", "Heb", 13},
   {"James", "Jas", 5},
-  {"I Peter", "I Pet", 5},
-  {"II Peter", "II Pet", 3},
-  {"I John", "I Jo", 5},
-  {"II John", "II Jo", 1},
-  {"III John", "III Jo", 1},
+  {"I Peter", "1Pet", 5},
+  {"II Peter", "2Pet", 3},
+  {"I John", "1John", 5},
+  {"II John", "2John", 1},
+  {"III John", "3John", 1},
   {"Jude", "Jude", 1},
-  {"Revelation of John", "Rev", 22}
+  {"Revelation", "Rev", 22}
 };
 
 
