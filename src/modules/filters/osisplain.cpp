@@ -36,24 +36,26 @@ OSISPlain::OSISPlain() {
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
 
+        setTokenCaseSensitive(true);
 
         addTokenSubstitute("title", "\n");
         addTokenSubstitute("/title", "\n");
         addTokenSubstitute("/l", "\n");
         addTokenSubstitute("lg", "\n");
         addTokenSubstitute("/lg", "\n");
-
-        setTokenCaseSensitive(true);
 }
 
 
 bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
         // manually process if it wasn't a simple substitution
+	XMLTag tag;
+	
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;
-                XMLTag tag(token);
 		if (((*token == 'w') && (token[1] == ' ')) ||
 		((*token == '/') && (token[1] == 'w') && (!token[2]))) {
+	                tag = token;
+			
 			bool start = false;
 			if (*token == 'w') {
 				if (token[strlen(token)-1] != '/') {
@@ -72,12 +74,20 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if (attrib = tag.getAttribute("xlit")) {
 				val = strchr(attrib, ':');
 				val = (val) ? (val + 1) : attrib;
-				buf.appendFormatted(" <%s>", val);
+				buf.append(" <");
+				buf.append(val);
+				buf.append(">");
+				
+				//buf.appendFormatted(" <%s>", val);
 			}
 			if (attrib = tag.getAttribute("gloss")) {
 				val = strchr(attrib, ':');
 				val = (val) ? (val + 1) : attrib;
-				buf.appendFormatted(" <%s>", val);
+				buf.append(" <");
+				buf.append(val);
+				buf.append(">");
+
+// 				buf.appendFormatted(" <%s>", val);
 			}
 			if (attrib = tag.getAttribute("lemma")) {
 				int count = tag.getAttributePartCount("lemma");
@@ -91,7 +101,13 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						val++;
 					if ((!strcmp(val, "3588")) && (lastText.length() < 1))
 						show = false;
-					else	buf.appendFormatted(" <%s>}", val);
+					else	{
+						buf.append(" <");
+						buf.append(val);
+						buf.append(">}");
+
+// 						buf.appendFormatted(" <%s>}", val);
+					}
 				} while (++i < count);
 			}
 			if ((attrib = tag.getAttribute("morph")) && (show)) {
@@ -104,26 +120,33 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					val = (val) ? (val + 1) : attrib;
 					if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 						val+=2;
-					buf.appendFormatted(" (%s)", val);
+					buf.append(" (");
+					buf.append(val);
+					buf.append(')');
+// 					buf.appendFormatted(" (%s)", val);
 				} while (++i < count);
 			}
 			if (attrib = tag.getAttribute("POS")) {
 				val = strchr(attrib, ':');
 				val = (val) ? (val + 1) : attrib;
-				buf.appendFormatted(" <%s>", val);
+				
+				buf.append(" <");
+				buf.append(val);
+				buf.append(">");
+// 				buf.appendFormatted(" <%s>", val);
 			}
 		}
 
 		// <note> tag
 		else if (!strncmp(token, "note", 4)) {
 				if (!strstr(token, "strongsMarkup")) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-					buf += " (";
+					buf.append(" (");
 				}
 				else	u->suspendTextPassThru = true;
 			}
 		else if (!strncmp(token, "/note", 5)) {
 			if (!u->suspendTextPassThru)
-				buf += ")";
+				buf.append(")");
 			else	u->suspendTextPassThru = false;
 		}
 
@@ -131,13 +154,18 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (((*token == 'p') && ((token[1] == ' ') || (!token[1]))) ||
 			((*token == '/') && (token[1] == 'p') && (!token[2]))) {
 				userData->supressAdjacentWhitespace = true;
-				buf += "\n";
+				buf.append("\n");
 		}
 
                 // <milestone type="line"/>
-                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-			userData->supressAdjacentWhitespace = true;
-        		buf += "\n";
+                else if (!strncmp(token, "milestone", 9)) {
+			const char* type = strstr(token+9, "type=\"");
+			if (type && strncmp(type, "line", 4)) { //we check for type != line
+			
+		// && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+				userData->supressAdjacentWhitespace = true;
+        			buf.append("\n");
+			}
                 }
 
 		else {

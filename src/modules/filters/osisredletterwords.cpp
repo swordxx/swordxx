@@ -49,18 +49,32 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 		if (*from == '>') {	// process tokens
 			intoken = false;
 
-			XMLTag tag(token);
-			if (!stricmp(tag.getName(), "q")) {
+			//XMLTag tag(token);
+			/*if (!stricmp(tag.getName(), "q")) {
 				if ((tag.getAttribute("who")) && (!stricmp(tag.getAttribute("who"), "Jesus"))) {
 					tag.setAttribute("who", 0);
 					text += tag;	// tag toString already has < and >
 					continue;
 				}
+			}*/
+			if (*token == 'q') {
+				char* start = strstr(token, "who=\"Jesus\"");
+				const int len = strlen(token);
+				if (start && (len>11)) {
+					char* end = start+11;
+					text.append(token, start-token); //the text before the who attr
+					text.append(end, len-(end - token)); //text after the who attr
+				}
 			}
+			else {
+				text.append(token);
+			}
+			
+			
 			// if we haven't modified, still use original token instead of tag, so we don't reorder attribs and stuff.  It doesn't really matter, but this is less intrusive to the original markup.
-			text += '<';
+			text.append('<');
 			text.append(token);
-			text += '>';
+			text.append('>');
 			continue;
 		}
 		if (intoken) { //copy token

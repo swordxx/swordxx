@@ -19,10 +19,9 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 	char token[2048];
 	int tokpos = 0;
 	bool intoken = false;
-	const char *from;
 	SWBuf orig = text;
-	from = orig.c_str();
-	for (text = ""; *from; from++) {
+	const char* from = orig.c_str();
+	for (text = ""; *from; ++from) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
@@ -40,30 +39,31 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 					case 'G':               // Greek
 					case 'H':               // Hebrew
 					case 'T':               // Tense
-						text += " <";
-						for (char *tok = token + 2; *tok; tok++)
-							text += *tok;
-						text += "> ";
+						text.append(" <");
+						//for (char *tok = token + 2; *tok; tok++)
+						//	text += *tok;
+						text.append(token+2);
+						text.append("> ");
 						continue;
 				}
 				break;
 			case 'R':
 				switch(token[1]) {
 				case 'F':               // footnote begin
-					text += " [";
+					text.append(" [");
 					continue;
 				case 'f':               // footnote end
-					text += "] ";
+					text.append("] ");
 					continue;
 				}
 				break;
 			case 'C':
 				switch(token[1]) {
 				case 'A':               // ASCII value
-					text += (char)atoi(&token[2]);
+					text.append((char)atoi(&token[2]));
 					continue;
 				case 'G':
-					text += ">";
+					text.append(">");
 					continue;
 /*								Bug in WEB
 				case 'L':
@@ -72,10 +72,10 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 */
 				case 'L':	//        Bug in WEB.  Use above entry when fixed
 				case 'N':               // new line
-					text += '\n';
+					text.append('\n');
 					continue;
 				case 'M':               // new paragraph
-					text += "\n\n";
+					text.append("\n\n");
 					continue;
 				}
 				break;
@@ -87,7 +87,7 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 				token[tokpos++] = *from;
 				token[tokpos+2] = 0;
 		}
-		else	text += *from;
+		else	text.append(*from);
 	}
 	return 0;
 }

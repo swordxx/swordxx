@@ -32,13 +32,12 @@ OSISMorph::~OSISMorph() {
 
 char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want morph tags
-		const char *from;
 		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		bool lastspace = false;
 		SWBuf orig = text;
-		from = orig.c_str();
+		const char *from = orig.c_str();
 
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
@@ -49,13 +48,30 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				XMLTag tag(token);
+				
+				/*XMLTag tag(token);
 				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Morph
 					if (tag.getAttribute("morph"))
 						tag.setAttribute("morph", 0);
+				}*/
+				
+				if (*token == 'w') {
+					char* start = strstr(token, "morph=\"");
+					const int len = strlen(token);
+					if (start && (len>8)) {
+						char* end = strchr(start+8, '"');
+						if (end) { //remove the morph value
+							text.append(token, start-token); //the text before the morph attr
+							text.append(end, len-(end - token)); //text after the morph attr
+						}
+					}
 				}
+				else {
+					text.append(token);
+				}
+				
 				// keep tag, possibly with the morph removed
-				text += tag;
+				//text.append(tag);
 				continue;
 			}
 			if (intoken) {
@@ -64,7 +80,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 					token[tokpos] = 0;
 			}
 			else	{
-				text += *from;
+				text.append(*from);
 				lastspace = (*from == ' ');
 			}
 		}

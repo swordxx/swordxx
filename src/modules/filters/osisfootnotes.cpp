@@ -46,13 +46,15 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
+	
+	XMLTag tag;
 
 	for (text = ""; *from; from++) {
 
 		// remove all newlines temporarily to fix kjv2003 module
 		if ((*from == 10) || (*from == 13)) {
 			if ((text.length()>1) && (text[text.length()-2] != ' ') && (*(from+1) != ' '))
-				text += ' ';
+				text.append(' ');
 			continue;
 		}
 
@@ -63,12 +65,12 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			continue;
 		}
 		if (*from == '>') {	// process tokens
-			intoken = false;
-
-			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note")) {
+			intoken = false;			
+// 			if (!strcmp(tag.getName(), "note")) {
+			if (!strncmp(token, "note", 4)) {
+				tag = token;
 				if (!tag.isEndTag()) {
-					if (SWBuf("strongsMarkup") == tag.getAttribute("type")) {  // handle bug in KJV2003 module where some note open tags were <note ... />
+					if (!strcmp("strongsMarkup", tag.getAttribute("type"))) {  // handle bug in KJV2003 module where some note open tags were <note ... />
 						tag.setEmpty(false);
 					}
 					if (!tag.isEmpty()) {
@@ -84,7 +86,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					if (module->isProcessEntryAttributes()) {
 						sprintf(buf, "%i", footnoteNum++);
 						StringList attributes = startTag.getAttributeNames();
-						for (StringList::iterator it = attributes.begin(); it != attributes.end(); it++) {
+						for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
 							module->getEntryAttributes()["Footnote"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
 						}
 						module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
@@ -97,7 +99,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					}
 					hide = false;
 					if ((option) || ((startTag.getAttribute("type") && (!strcmp(startTag.getAttribute("type"), "crossReference"))))) {	// we want the tag in the text; crossReferences are handled by another filter
-						text += startTag;
+						text.append(startTag);
 						text.append(tagText);
 					}
 					else	continue;
@@ -105,31 +107,39 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			}
 
 			// if not a heading token, keep token in text
-			if ((!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
-				SWBuf osisRef = tag.getAttribute("osisRef");
-				if (refs.length())
-					refs += "; ";
-				refs += osisRef;
+			//if ((!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
+			//	SWBuf osisRef = tag.getAttribute("osisRef");
+			if (!strncmp(token, "reference", 9)) {
+				if (refs.length()) {
+					refs.append("; ");
+				}
+				
+				char* attr = strstr(token.c_str() + 9, "osisRef=\"");
+				char* end = attr ? strchr(attr+10, '"') : 0;
+				
+				if (attr && end) {
+					refs.append(attr+9, end-(attr+9));
+				}
 			}
 			if (!hide) {
-				text += '<';
+				text.append('<');
 				text.append(token);
-				text += '>';
+				text.append('>');
 			}
 			else {
-				tagText += '<';
+				tagText.append('<');
 				tagText.append(token);
-				tagText += '>';
+				tagText.append('>');
 			}
 			continue;
 		}
 		if (intoken) { //copy token
-			token += *from;
+			token.append(*from);
 		}
 		else if (!hide) { //copy text which is not inside a token
-			text += *from;
+			text.append(*from);
 		}
-		else tagText += *from;
+		else tagText.append(*from);
 	}
 	return 0;
 }

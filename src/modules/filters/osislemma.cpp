@@ -49,7 +49,8 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				XMLTag tag(token);
+								
+				/*XMLTag tag(token);
 				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Lemma
 					SWBuf lemma = tag.getAttribute("lemma");
 					if (lemma.length()) {
@@ -57,8 +58,25 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 					 	tag.setAttribute("savlm", lemma.c_str());
 					}
 				}
+				*/
+				
+				if (*token == 'w') {
+					const int len = strlen(token);
+					
+					const char* start = strstr(token, "lemma=\"");
+					const char* end = start ? strchr(start+6, '"') : 0;
+					if (start && end) { //we wan to leave out the moprh attribute
+						text.append(token, start-token); //the text before the morph attr
+						text.append(end, len-(end - token)); //text after the morph attr
+					}
+				}
+				else {
+					text.append(token);
+				}
+				
 				// keep tag, possibly with the lemma removed
-				text += tag;
+				//text += tag;
+				
 				continue;
 			}
 			if (intoken) {
@@ -67,7 +85,7 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 					token[tokpos] = 0;
 			}
 			else	{
-				text += *from;
+				text.append(*from);
 				lastspace = (*from == ' ');
 			}
 		}

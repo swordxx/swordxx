@@ -44,6 +44,8 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
+	
+	XMLTag tag;
 
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
@@ -54,8 +56,10 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		if (*from == '>') {	// process tokens
 			intoken = false;
 
-			XMLTag tag(token);
-			if (!stricmp(tag.getName(), "title")) {
+			//if (!stricmp(tag.getName(), "title")) {
+			if (!strncmp(token, "title", 5)) {
+				tag = token;
+				
 				if ((tag.getAttribute("subtype")) && (!stricmp(tag.getAttribute("subtype"), "x-preverse"))) {
 					hide = true;
 					preverse = true;
@@ -69,9 +73,9 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					hide = true;
 					header = "";
 					if (option) {	// we want the tag in the text
-						text += '<';
+						text.append('<');
 						text.append(token);
-						text += '>';
+						text.append('>');
 					}
 					continue;
 				}
@@ -91,7 +95,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 							}
 						}
 						StringList attributes = startTag.getAttributeNames();
-						for (StringList::iterator it = attributes.begin(); it != attributes.end(); it++) {
+						for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
 							module->getEntryAttributes()["Heading"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
 						}
 					}
@@ -106,19 +110,19 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 			// if not a heading token, keep token in text
 			if (!hide) {
-				text += '<';
+				text.append('<');
 				text.append(token);
-				text += '>';
+				text.append('>');
 			}
 			continue;
 		}
 		if (intoken) { //copy token
-			token += *from;
+			token.append(*from);
 		}
 		else if (!hide) { //copy text which is not inside a token
-			text += *from;
+			text.append(*from);
 		}
-		else header += *from;
+		else header.append(*from);
 	}
 	return 0;
 }

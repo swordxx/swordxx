@@ -33,7 +33,6 @@ OSISStrongs::~OSISStrongs() {
 
 
 char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	const char *from;
 	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
@@ -46,7 +45,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	char *ch;
 
 	SWBuf orig = text;
-	from = orig.c_str();
+	const char *from = orig.c_str();
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 
@@ -124,11 +123,12 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				}
 			}
 			// if not a strongs token, keep token in text
-			text += '<';
-			for (char *tok = token; *tok; tok++) {
-				text += *tok;
-			}
-			text += '>';
+			text.append('<');
+			//for (char *tok = token; *tok; tok++) {
+			//	text += *tok;
+			//}
+			text.append(token);
+			text.append('>');
 			
 			continue;
 		}
@@ -138,7 +138,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				token[tokpos+2] = 0;
 		}
 		else	{
-			text += *from;
+			text.append(*from);
 			lastspace = (*from == ' ');
 		}
 	}

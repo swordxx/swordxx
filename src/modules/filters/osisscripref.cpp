@@ -43,6 +43,8 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
+	
+	XMLTag tag;
 
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
@@ -53,11 +55,13 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		if (*from == '>') {	// process tokens
 			intoken = false;
 
-			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note")) {
+			
+			//if (!strcmp(tag.getName(), "note")) {
+			if (!strncmp(token, "note", 4)) {
+				tag = token;
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
 					startTag = tag;
-					if ((tag.getAttribute("type")) &&	(!strcmp(tag.getAttribute("type"), "crossReference"))) {
+					if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "crossReference")) {
 						hide = true;
 						tagText = "";
 						if (option) {	// we want the tag in the text
@@ -79,24 +83,24 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 			// if not a heading token, keep token in text
 			if (!hide) {
-				text += '<';
+				text.append('<');
 				text.append(token);
-				text += '>';
+				text.append('>');
 			}
 			else {
-				tagText += '<';
+				tagText.append('<');
 				tagText.append(token);
-				tagText += '>';
+				tagText.append('>');
 			}
 			continue;
 		}
 		if (intoken) { //copy token
-			token += *from;
+			token.append(*from);
 		}
 		else if (!hide) { //copy text which is not inside a token
-			text += *from;
+			text.append(*from);
 		}
-		else tagText += *from;
+		else tagText.append(*from);
 	}
 	return 0;
 }
