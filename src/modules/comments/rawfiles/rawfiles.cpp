@@ -96,14 +96,16 @@ char *RawFiles::getRawEntry() {
 			preptext(versebuf);
 		}
 		else {
-			versebuf = new char [1];
+			versebuf = new char [2];
 			versebuf[0] = 0;
+			versebuf[1] = 0;
 		}
 		FileMgr::systemFileMgr.close(datafile);
 	}
 	else {
-		versebuf = new char [1];
+		versebuf = new char [2];
 		versebuf[0] = 0;
+		versebuf[1] = 0;
 	}
 
 	if (key != this->key)

@@ -17,29 +17,29 @@
 
 const char UTF8Transliterator::optionstring[][NUMTARGETSCRIPTS] = {
 	"Off", 
-		"Latin", 
-		"Greek",
-		"Hebrew",
-		"Cyrillic",
-		"Arabic",
-                "Syriac",
-		"Kana",
-		"Jamo",
-		"Hangul",
-		"Devanagari",
-		"Tamil",
-		"Bengali",
-		"Gurmukhi",
-		"Gujarati",
-		"Oriya",
-		"Telugu",
-		"Kannada",
-		"Malayalam",
-		"Maltese",
-		"BETA",
-		"BGreek",
-		"MCHebrew",
-                "MCSyriac"
+	"Latin", 
+	"Greek",
+	"Hebrew",
+	"Cyrillic",
+	"Arabic",
+	"Syriac",
+	"Kana",
+	"Jamo",
+	"Hangul",
+	"Devanagari",
+	"Tamil",
+	"Bengali",
+	"Gurmukhi",
+	"Gujarati",
+	"Oriya",
+	"Telugu",
+	"Kannada",
+	"Malayalam",
+	"Maltese",
+	"BETA",
+	"BGreek",
+	"MCHebrew",
+	"MCSyriac"
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -48,22 +48,23 @@ const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
 
 UTF8Transliterator::UTF8Transliterator() {
 	option = 0;
-        unsigned long i;
+	   unsigned long i;
 	for (i = 0; i < NUMTARGETSCRIPTS; i++) {
 		options.push_back(optionstring[i]);
 	}
-        for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
-                xlitNames[i] = NULL;
-        }
+	for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
+		xlitNames[i] = 0;
+	}
 }
 
 UTF8Transliterator::~UTF8Transliterator() {
-        unsigned long i;
-        for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
-                if (xlitNames[i]) {
-                        delete xlitNames[i];
-                }
-        }
+	unsigned long i;
+	for (i = 0; i < TRANSLITERATOR_CACHE_SIZE; i++) {
+		if (xlitNames[i]) {
+			delete xlitNames[i];
+			xlitNames[i] = 0;
+		}
+	}
 }
 
 void UTF8Transliterator::setOptionValue(const char *ival)
