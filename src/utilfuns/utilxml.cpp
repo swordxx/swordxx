@@ -13,10 +13,7 @@ void XMLTag::parse() const {
 	for (i = 0; ((buf[i]) && (!isalpha(buf[i]))); i++);
 	for (; buf[i]; i++) {
 		if (buf[i] == ' ') {
-			for (; ((buf[i]) && (!isalpha(buf[i]))); i++) {
-				if (buf[i] == '/')
-					empty = true;
-			}
+			for (; ((buf[i]) && (!isalpha(buf[i]))); i++);
 			if (buf[i]) {		// we have an attribute name
 				start = i;
 				for (; ((buf[i]) && (!strchr(" =", buf[i]))); i++);
