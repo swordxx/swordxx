@@ -101,5 +101,5 @@ register:
 	@echo ""
 	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}" | mail sword.users@crosswire.org
 	@echo ""
-	@echo "The output of this command has been sent to CrossWire, thank you. Enjoy!"
+	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
