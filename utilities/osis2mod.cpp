@@ -182,12 +182,12 @@ int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
 	if (argc < 3) {
-		fprintf(stderr, "usage: %s <path/to/mod/files> <osisDoc> [0|1 - augment|create module]\n\n", argv[0]);
+		fprintf(stderr, "usage: %s <path/to/mod/files> <osisDoc> [0|1 - create module|augment]\n\n", argv[0]);
 		exit(-1);
 	}
 
 
-	if ((argc<4)||(strcmp(argv[3], "0"))) {	// != 1 then create module
+	if ((argc<4)||(!strcmp(argv[3], "0"))) {	// == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if (RawText::createModule(argv[1])) {
