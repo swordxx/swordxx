@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+06-Jun-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Dominique Corbex' fr locale updates
+	Added new resultBuffer protected member to SWBasicFilter
+
 04-Apr-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added VerseKey::getOSISRef()
 	Added the beginnings of ThMLOSIS filter

@@ -1,12 +1,19 @@
 localeDATA = locales.d/abbr.conf
+localeDATA += locales.d/cs.conf
 localeDATA += locales.d/da.conf
 localeDATA += locales.d/de.conf
+localeDATA += locales.d/de_abbrev.conf
 localeDATA += locales.d/es.conf
 localeDATA += locales.d/fr.conf
+localeDATA += locales.d/fr_FR.ISO-8859-1.conf
 localeDATA += locales.d/it.conf
+localeDATA += locales.d/la.conf
+localeDATA += locales.d/nl.conf
 localeDATA += locales.d/no.conf
+localeDATA += locales.d/pl.conf
 localeDATA += locales.d/pt.conf
 localeDATA += locales.d/pt_BR.conf
+localeDATA += locales.d/sk.conf
 
 localedatadir = $(pkgdatadir)/locales.d
 
