@@ -61,20 +61,16 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 
 			XMLTag tag(token);
 			if (!strcmp(tag.getName(), "RF")) {
-				if (!tag.isEndTag()) {
-					if (!tag.isEmpty()) {
-						refs = "";
-						startTag = tag;
-						hide = true;
-						tagText = "";
-						continue;
-					}
-				}
+				refs = "";
+				startTag = tag;
+				hide = true;
+				tagText = "";
+				continue;
 			}
 			else if (!strcmp(tag.getName(), "Rf")) {
 				if (module->isProcessEntryAttributes()) {
 					if(tagText.length() == 1) {
-						if (option) {
+						if (option) { // for ASV marks text in verse then put explanation at end of verse
 							text += " <FA>(";
 							text.append(tagText);
 							text += ")<Fr>";
@@ -92,11 +88,6 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 					}
 					module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
 					startTag.setAttribute("swordFootnote", buf);
-					if ((startTag.getAttribute("type")) && (!strcmp(startTag.getAttribute("type"), "crossReference"))) {
-						if (!refs.length())
-							refs = parser.ParseVerseList(tagText.c_str(), parser, true).getRangeText();
-						module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
-					}
 				}
 				hide = false;
 				if (option) {	

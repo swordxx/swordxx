@@ -31,7 +31,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	setTokenCaseSensitive(true);
 
 	//addTokenSubstitute("Rf", ")</small></font>");
-	addTokenSubstitute("FA", "<font color=\"#800000\">");
+	addTokenSubstitute("FA", "<font color=\"#800000\">"); // for ASV footnotes to mark text
 	addTokenSubstitute("Rx", "</a>");
 	addTokenSubstitute("FI", "<i>"); // italics begin
 	addTokenSubstitute("Fi", "</i>");
@@ -153,7 +153,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			buf += "</a>)</em></small>";
 		}
 
-		else if (!strncmp(token, "RX", 2)) {
+		else if (!strcmp(tag.getName(), "RX")) {
 			buf += "<a href=\"";
 			for (tok = token + 3; *tok; tok++) {
 			  if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -166,29 +166,25 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			buf += "\">";
 		}
 		else if (!strcmp(tag.getName(), "RF")) {
-			if (!tag.isEndTag()) {
-				if (!tag.isEmpty()) {
-					SWBuf type = tag.getAttribute("type");
-					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					VerseKey *vkey;
-					// see if we have a VerseKey * or descendant
-					try {
-						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-					}
-					catch ( ... ) {	}
-					if (vkey) {
-						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
-					}
-					u->suspendTextPassThru = true;
-				}
+			SWBuf type = tag.getAttribute("type");
+			SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+			VerseKey *vkey;
+			// see if we have a VerseKey * or descendant
+			try {
+				vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 			}
+			catch ( ... ) {	}
+			if (vkey) {
+				// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+				//char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+				buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), 'n', footnoteNumber.c_str(), 'n');
+			}
+			u->suspendTextPassThru = true;
 		}
-/*		else if (!strcmp(tag.getName(), "Rf")) {
+		else if (!strcmp(tag.getName(), "Rf")) {
 			u->suspendTextPassThru = false;
 		}
-
+/*
 		else if (!strncmp(token, "RB", 2)) {
 			buf += "<i> ";
 			u->hasFootnotePreTag = true;
