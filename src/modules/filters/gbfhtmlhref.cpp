@@ -25,8 +25,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("RF", "<FONT COLOR=\"#800000\"> <SMALL> (");
-	addTokenSubstitute("Rf", ") </SMALL> </FONT>");
+	addTokenSubstitute("Rf", ")</SMALL></FONT>");
 	addTokenSubstitute("FI", "<I>"); // italics begin
 	addTokenSubstitute("Fi", "</I>");
 	addTokenSubstitute("FB", "<B>"); // bold begin
@@ -47,7 +46,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	addTokenSubstitute("Pp", "</CITE>");
 	addTokenSubstitute("Fn", "</FONT>"); //  font  end
 	addTokenSubstitute("CL", "<BR>"); //  new line
-	addTokenSubstitute("CM", "<P>"); //  paragraph
+	addTokenSubstitute("CM", "<!P><BR>"); //  paragraph <!P> is a non showing comment that can be changed in the front end to <P> if desired
 	addTokenSubstitute("CG", ""); //  ???
 	addTokenSubstitute("CT", ""); // ???
 	addTokenSubstitute("JR", "<DIV ALIGN=\"RIGHT\">"); // right align begin
@@ -69,7 +68,7 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 			for (unsigned int i = 2; i < strlen(token); i++)				
 				//if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
-			pushString(buf, "</A>&gt</EM></SMALL>");
+			pushString(buf, "</A>&gt;</EM></SMALL>");
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
@@ -96,6 +95,19 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>)</EM></SMALL>");
+		}
+
+		else if (!strncmp(token, "RB", 2)) {
+			pushString(buf, "<I>");
+			userData["hasFootnotePreTag"] = "true";
+		}
+
+		else if (!strncmp(token, "RF", 2)) {
+			if(userData["hasFootnotePreTag"] == "true") {
+				userData["hasFootnotePreTag"] = "false";
+				pushString(buf, "</I> ");
+			}
+			pushString(buf, "<FONT COLOR=\"#800000\"><SMALL> (");			
 		}
 
 		else if (!strncmp(token, "FN", 2)) {

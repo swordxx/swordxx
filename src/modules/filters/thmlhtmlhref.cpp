@@ -189,11 +189,11 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
 				pushString(buf, "<A HREF=\"passage=");
-				char *strbuf = (char *)userData["lastTextNode"].c_str();
-				pushString(buf, strbuf);
+				//char *strbuf = (char *)userData["lastTextNode"].c_str();
+				pushString(buf, userData["lastTextNode"].c_str());
 				*(*buf)++ = '\"';
 				*(*buf)++ = '>';
-				pushString(buf, strbuf);
+				pushString(buf, userData["lastTextNode"].c_str());
 				// let's let text resume to output again
 				userData["suspendTextPassThru"] = "false";	
 				pushString(buf, "</A>");
