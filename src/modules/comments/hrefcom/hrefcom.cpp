@@ -58,8 +58,7 @@ HREFCom::~HREFCom()
  * RET: string buffer with verse
  */
 
-HREFCom::operator char*()
-{
+char *HREFCom::getRawEntry() {
 	long  start;
 	unsigned short size;
 	char *tmpbuf;
@@ -76,13 +75,12 @@ HREFCom::operator char*()
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ size + strlen(prefix) * 2 ];
+	versebuf = new char [ size + strlen(prefix) * FILTERPAD ];
 	tmpbuf   = new char [ size + 1 ];
 
 	gettext(key->Testament(), start, size + 1, tmpbuf);
 	sprintf(versebuf, "%s%s", prefix, tmpbuf);
 	preptext(versebuf);
-	RenderText(versebuf, size * 2);
 
 	delete [] tmpbuf;
 

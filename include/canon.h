@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.4 2000/03/13 09:36:02 scribe Exp $
+ * $Id: canon.h,v 1.5 2000/10/15 11:25:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -269,7 +269,7 @@ const struct abbrev VerseKey::builtin_abbrevs[] = {
 	{"NUMBERS", 4}, //    Numbers
 	{"OBADIAH", 31}, //     Obadiah
 	{"P", 19}, //     Psalms
-	{"PH", 50}, //    Philippians
+	{"PHIL", 50}, //    Philippians
 	{"PHILEMON", 57}, // Philemon
 	{"PHILIPPIANS", 50}, // Philippians
 	{"PHM", 57}, //   Philemon

@@ -57,7 +57,7 @@ zText::~zText()
  * RET: string buffer with verse
  */
 
-zText::operator char*()
+char *zText::getRawEntry()
 {
 /*
 	long  start;
@@ -123,7 +123,7 @@ zText::operator char*()
 		//printf ("deleting previous buffer\n");
 		if (versebuf)
 			delete [] versebuf;
-		versebuf = new char [ size * 3 ];
+		versebuf = new char [ size * FILTERPAD ];
 
 		//printf ("getting text\n");
 		swgettext(key->Testament(), start, size + 1, versebuf);
@@ -138,7 +138,6 @@ zText::operator char*()
 
 	//printf ("preparing text\n");
 	preptext(versebuf);
-	RenderText(versebuf, size * 3);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;

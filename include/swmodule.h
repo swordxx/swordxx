@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.8 2000/08/19 03:36:46 scribe Exp $
+ * $Id: swmodule.h,v 1.9 2000/10/15 11:25:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,8 @@
 #include <listkey.h>
 #include <swfilter.h>
 #include <list>
+
+#define FILTERPAD 3
 
 using namespace std;
 
@@ -79,7 +81,8 @@ public:
 
 	virtual SWKey *CreateKey();
 
-	virtual operator char*() = 0;
+	virtual operator char*();
+	virtual char *getRawEntry() = 0;
 	virtual operator SWKey&() { return *key; }
 	virtual operator SWKey*() { return key; }
 

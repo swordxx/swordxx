@@ -1,9 +1,22 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+15-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Added verse ref parsing functionality to vpl2mod
+	Added new 'getRawEntry()' pure virtual to each driver.
+		Changed from operator char *().  Moved operator char *
+		to SWModule.
+	Created define FILTERPAD to replace hard coded padding in
+		each driver.
+	Added write link support in RawText.
+	Added new test introtest to test module intros
+	Fixed abbrev parsing to see Phil as Php
+	
 05-Sep-2000	Joachim Ansorg <jansorg@gmx.de>
 	Fixed a problem in Makefile.cfg with profiler support and
-non-debugging lib (-s removes the profiler support, changed it)
+		non-debugging lib (-s removes the profiler support,
+		changed it)
 
 30-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed mod2vpl to strip any existing \n's from data before

@@ -13,6 +13,7 @@
 #include <swmgr.h>
 #include <rawtext.h>
 #include <iostream.h>
+#include <string>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -25,7 +26,16 @@ char readline(int fd, char **buf) {
 	*buf = 0;
 	int len;
 
+
 	long index = lseek(fd, 0, SEEK_CUR);
+	// clean up any preceding white space
+	while ((len = read(fd, &ch, 1)) == 1) {
+		if ((ch != 10) && (ch != 13) && (ch != ' ') && (ch != '\t'))
+			break;
+		else index++;
+	}
+
+
 	while ((len = read(fd, &ch, 1)) == 1) {
 		if (ch == 10)
 			break;
@@ -51,12 +61,63 @@ char readline(int fd, char **buf) {
 }
 
 
+char *parseVReg(char *buf) {
+	char stage = 0;
+
+	while (*buf) {
+		switch (stage) {
+		case 0:
+			if (isalpha(*buf))
+				stage++;
+			break;
+		case 1:
+			if (isdigit(*buf))
+				stage++;
+			break;
+		case 2:
+			if (*buf == ':')
+				stage++;
+			break;
+		case 3:
+			if (isdigit(*buf))
+				stage++;
+			break;
+		case 4:
+			if (*buf == ' ') {
+				*buf = 0;
+				return ++buf;
+			}
+			break;
+		}
+		buf++;
+	}
+	return 0;
+}
+
+
+bool isKJVRef(const char *buf) {
+	VerseKey vk, test;
+	vk.AutoNormalize(0);
+	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
+	vk.Persist(1);
+	// lets do some tests on the verse --------------
+	vk = buf;
+	test = buf;
+
+	if (vk.Testament() || vk.Book() || vk.Chapter() || vk.Verse()) { // if we're not a heading
+		return (vk == test);
+	}
+	else return true;	// no check if we're a heading... Probably bad.
+}
+
+
+
 int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
 	if (argc < 2) {
 //		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod> [0|1 - file includes prepended verse references]\n", argv[0]);
-		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod/>\n", argv[0]);
+		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod/> [0|1 - verse ref prepended to lines]\n", argv[0]);
 		exit(-1);
 	}
 
@@ -85,18 +146,51 @@ int main(int argc, char **argv) {
 	// Do some initialization stuff
 	char *buffer = 0;
 	RawText mod(argv[2]);	// open our datapath with our RawText driver.
+	VerseKey vk;
+	vk.AutoNormalize(0);
+	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
+	vk.Persist(1);
 
-	VerseKey *vkey = (VerseKey *)(SWKey *)mod;
-	vkey->Headings(1);	// turn on mod/testmnt/book/chap headings
-
+	mod.SetKey(vk);
 
 	// Loop through module from TOP to BOTTOM and set next line from
 	// input file as text for this entry in the module
 	mod = TOP;
 
 	while ((!mod.Error()) && (!readline(fd, &buffer))) {
-		mod << buffer;	// save text to module at current position
-		mod++;	// increment module position
+		if (*buffer == '|')	// comments, ignore line
+			continue;
+		if (vref) {
+			const char *verseText = parseVReg(buffer);
+			if (!verseText) {	// if we didn't find a valid verse ref
+				cerr << "No valid verse ref found on line: " << buffer << "\n";
+				exit(-4);
+			}
+
+			vk = buffer;
+			if (!isKJVRef(buffer)) {
+				VerseKey origVK = vk;
+				do {
+					vk--;
+				}
+				while (!vk.Error() && !isKJVRef(vk));
+				cout << "Not a valid KJV ref: " << origVK << "\n";
+				cout << "appending to ref: " << vk << "\n";
+				string orig = mod.getRawEntry();
+				orig += " [ (";
+				orig += origVK;
+				orig += ") ";
+				orig += verseText;
+				orig += " ] ";
+				verseText = orig.c_str();
+			}
+			// ------------- End verse tests -----------------
+			mod << verseText;	// save text to module at current position
+		}
+		else {
+			mod << buffer;	// save text to module at current position
+			mod++;	// increment module position
+		}
 	}
 
 	// clear up our buffer that readline might have allocated

@@ -52,8 +52,7 @@ RawCom::~RawCom()
  * RET: string buffer with verse
  */
 
-RawCom::operator char*()
-{
+char *RawCom::getRawEntry() {
 	long  start;
 	unsigned short size;
 	VerseKey *key = 0;
@@ -71,7 +70,7 @@ RawCom::operator char*()
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ ++size * 3 ];
+	versebuf = new char [ ++size * FILTERPAD ];
 
 	gettext(key->Testament(), start, size, versebuf);
 
@@ -80,7 +79,6 @@ RawCom::operator char*()
 	}
 
 	preptext(versebuf);
-	RenderText(versebuf, size * 3);
 
 	if (key != this->key)
 		delete key;

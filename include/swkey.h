@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.3 2000/08/19 03:36:46 scribe Exp $
+ * $Id: swkey.h,v 1.4 2000/10/15 11:25:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -66,6 +66,7 @@ public:
 
 	virtual int compare(const SWKey &ikey);
 	virtual bool operator ==(const SWKey &ikey) { return !compare(ikey); }
+	virtual bool operator !=(const SWKey &ikey) { return compare(ikey); }
 	virtual bool operator  >(const SWKey &ikey) { return (compare(ikey) > 0); }
 	virtual bool operator  <(const SWKey &ikey) { return (compare(ikey) < 0); }
 	virtual bool operator >=(const SWKey &ikey) { return (compare(ikey) > -1); }

@@ -86,8 +86,7 @@ RawText::~RawText()
  * RET: string buffer with verse
  */
 
-RawText::operator char*()
-{
+char *RawText::getRawEntry() {
 	long  start;
 	unsigned short size;
 	VerseKey *key = 0;
@@ -107,7 +106,7 @@ RawText::operator char*()
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ ++size * 3 ];
+	versebuf = new char [ ++size * FILTERPAD ];
 
 	gettext(key->Testament(), start, size, versebuf);
 
@@ -116,7 +115,6 @@ RawText::operator char*()
 	}
 
 	preptext(versebuf);
-	RenderText(versebuf, size * 3);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;

@@ -519,3 +519,14 @@ const char *SWModule::StripText(char *buf, int len)
 
 	return retVal;
 }
+
+
+SWModule::operator char*() {
+	char *versebuf = getRawEntry();
+	if (versebuf) {
+		int size = strlen(versebuf);
+		if (size)
+			RenderText(versebuf, size * FILTERPAD);
+	}
+	return versebuf;
+}

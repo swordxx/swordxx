@@ -92,8 +92,8 @@ char RawLD::getEntry(long away)
 	if (!(retval = findoffset(buf, &start, &size, away))) {
 		if (entrybuf)
 			delete [] entrybuf;
-		entrybuf = new char [ ++size * 3 ];
-		idxbuf   = new char [ size * 2 ];
+		entrybuf = new char [ ++size * FILTERPAD ];
+		idxbuf   = new char [ size * FILTERPAD ];
 
 		gettext(start, size, idxbuf, entrybuf);
 		if (!key->Persist())			// If we have our own key
@@ -119,11 +119,9 @@ char RawLD::getEntry(long away)
  * RET: string buffer with entry
  */
 
-RawLD::operator char*()
-{
+char *RawLD::getRawEntry() {
 	if (!getEntry()) {
 		preptext(entrybuf);
-		RenderText(entrybuf, strlen(entrybuf) * 2);
 	}
 
 	return entrybuf;

@@ -58,8 +58,7 @@ RawFiles::~RawFiles()
  * RET: string buffer with verse
  */
 
-RawFiles::operator char*()
-{
+char *RawFiles::getRawEntry() {
 	FileDesc *datafile;
 	long  start;
 	unsigned short size;
@@ -86,12 +85,11 @@ RawFiles::operator char*()
 		delete [] tmpbuf;
 		if (datafile->getFd() > 0) {
 			size = lseek(datafile->getFd(), 0, SEEK_END);
-			versebuf = new char [ size * 2 ];
-			memset(versebuf, 0, size * 2);
+			versebuf = new char [ size * FILTERPAD ];
+			memset(versebuf, 0, size * FILTERPAD);
 			lseek(datafile->getFd(), 0, SEEK_SET);
 			read(datafile->getFd(), versebuf, size);
 			preptext(versebuf);
-			RenderText(versebuf, size * 2);
 		}
 		else {
 			versebuf = new char [1];
