@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.16 2004/04/02 23:54:44 willthimbleby Exp $
+* $Id: swbuf.cpp,v 1.17 2004/04/15 11:17:52 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -139,8 +139,9 @@ void SWBuf::setFormatted(const char *format, ...) {
 /******************************************************************************
 * SWBuf::append - appends a value to the current value of this SWBuf
 */
-void SWBuf::append(const char *str, long max) {
-	unsigned long len = (max > -1) ? max : strlen(str);
+void SWBuf::append(const char *str, const long max) {
+	//make sure we only copy strlen(str) bytes if max is larger than strlen(str) is
+	unsigned long len = (max > -1) ? ((max <= strlen(str)) ? max : strlen(str)) : strlen(str);
 	assureMore(++len);
 	memcpy(end, str, len-1);
 	end += (len-1);

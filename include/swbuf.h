@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.34 2004/04/10 09:27:34 mgruner Exp $
+* $Id: swbuf.h,v 1.35 2004/04/15 11:17:52 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -182,7 +182,7 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
  	*/
-	void append(const char *str, long max = -1);
+	void append(const char *str, const long max = -1);
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
@@ -190,14 +190,14 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
 	*/
-	inline void append(const SWBuf &str, long max = -1) { append(str.c_str(), max); }
+	inline void append(const SWBuf &str, const long max = -1) { append(str.c_str(), max); }
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param ch Append this.
 	*/
-	inline void append(char ch) {
+	inline void append(const char ch) {
 		assureMore(1);
 		*end++ = ch;
 		*end = 0;
