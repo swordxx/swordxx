@@ -107,7 +107,7 @@ bool isKJVRef(const char *buf) {
 	test = buf;
 
 	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
-//		cout << (const char*)vk << " == "  << (const char*)test << endl;
+//		cerr << (const char*)vk << " == "  << (const char*)test << endl;
 		return (vk == test);
 	}
 	else return true;	// no check if we're a heading... Probably bad.
@@ -216,9 +216,10 @@ int main(int argc, char **argv) {
 				//hack to replace above:
 				successive++;
 				vk -= successive;
+				orig = mod.getRawEntry();
 
-				cout << "Not a valid KJV ref: " << origVK << "\n";
-				cout << "appending to ref: " << vk << "\n";
+				cerr << "Not a valid KJV ref: " << origVK << "\n";
+				cerr << "appending to ref: " << vk << "\n";
 				orig += " [ (";
 				orig += origVK;
 				orig += ") ";
@@ -229,10 +230,10 @@ int main(int argc, char **argv) {
 			else {
 			  successive = 0;
 			}
-		       
-			if (orig.length() > 1)
-			  cout << "Warning, overwriting verse: " << vk << endl;
 
+			if (orig.length() > 1)
+			        cerr << "Warning, overwriting verse: " << vk << endl;
+		       
 			// ------------- End verse tests -----------------
 			mod << verseText;	// save text to module at current position
 		}
