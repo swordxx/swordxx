@@ -147,8 +147,13 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 			        		*(*buf)++ = token[i];
         			pushString(buf, "</em></small>");
                         }
+                        else if (token[27] == 'T') {
+        			pushString(buf, "<small><i>");
+        			for (unsigned int i = 29; token[i] != '\"'; i++)
+        				*(*buf)++ = token[i];
+        			pushString(buf, "</i></small>");
+                        }
 		}
-
 		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
 			pushString(buf, "<small><em>");
 			for (unsigned int i = 25; token[i] != '\"'; i++)
@@ -158,18 +163,11 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 
 		else if (!strncmp(token, "scripRef", 8)) {
 			pushString(buf, "<a href=\"");
-			for (unsigned int i = 9; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
+			for (unsigned int i = 9; i < strlen(token); i++)
+				if(token[i] != '\"')
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-		} 
-
-		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			pushString(buf, "<small><i>");
-			for (unsigned int i = 29; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];
-			pushString(buf, "</i></small>");
 		}
 
 		else {
