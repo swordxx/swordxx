@@ -16,6 +16,7 @@ noinst_PROGRAMS += $(ICUPROG)
 
 if ICU
 normcode_SOURCES = normcode.cpp
+normcode_LDADD = -licui18n -licuuc
 endif
 
 cipherraw_SOURCES = cipherraw.cpp

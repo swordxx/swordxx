@@ -17,6 +17,7 @@ noinst_PROGRAMS += $(ICUPROG)
 
 if ICU
 icutest_SOURCES = icutest.cpp
+icutest_LDADD = -licui18n -licuuc
 endif
 
 if ZLIB

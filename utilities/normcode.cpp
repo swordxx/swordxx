@@ -2,8 +2,6 @@
  *  Transcodes Latin-1/UTF-8 to canonically normalized UTF-8/SCSU
  */
 
-#ifdef _ICU_
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -96,7 +94,3 @@ int main (char argc, char** argv) {
 
   return 0;
 }
-
-#endif
-
-
