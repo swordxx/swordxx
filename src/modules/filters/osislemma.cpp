@@ -39,12 +39,11 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		SWBuf orig = text;
 		const char *from = orig.c_str();
 
-		int len = 0; //taken out of the loop for speed
+		//taken out of the loop for speed
 		const char* start = 0;
 		const char* end = 0;
 		
-		
-		for (text = ""; *from; from++) {
+		for (text = ""; *from; ++from) {
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
@@ -53,20 +52,8 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-								
-				/*XMLTag tag(token);
-				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Lemma
-					SWBuf lemma = tag.getAttribute("lemma");
-					if (lemma.length()) {
-						tag.setAttribute("lemma", 0);
-					 	tag.setAttribute("savlm", lemma.c_str());
-					}
-				}
-				*/
 				
 				if ((*token == 'w') && (token[1] == ' ')) {
-// 					len = strlen(token);
-					
 					start = strstr(token, "lemma=\""); //we leave out the "w " at the start
 					end = (start && (strlen(start)>7)) ? strchr(start+7, '"') : 0;
 					if (start && end) { //we want to leave out the morph attribute
@@ -81,9 +68,6 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 					text.append(token);
 					text.append('>');
 				}
-				
-				// keep tag, possibly with the lemma removed
-				//text += tag;
 				
 				continue;
 			}

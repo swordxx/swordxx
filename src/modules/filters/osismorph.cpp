@@ -42,9 +42,8 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		//taken out of the loop for speed
 		const char* start = 0;
 		const char* end = 0;
-		int len = 0;
 
-		for (text = ""; *from; from++) {
+		for (text = ""; *from; ++from) {
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
@@ -54,22 +53,15 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			if (*from == '>') {	// process tokens
 				intoken = false;
 				
-				/*XMLTag tag(token);
-				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Morph
-					if (tag.getAttribute("morph"))
-						tag.setAttribute("morph", 0);
-				}*/
-				
 				if ((*token == 'w') && (token[1] == ' ')) {
-					len = strlen(token);
-					start = strstr(token, "morph=\""); //we leave out "w " at the start
+					start = strstr(token+2, "morph=\""); //we leave out "w " at the start
 					end = (start && (strlen(start)>7)) ? strchr(start+7, '"') : 0;
 
 					if (start && end) {
-						text.append("<");
+						text.append('<');
 						text.append(token, start-token); //the text before the morph attr
-						text.append(end+1, len-(end+1 - token)); //text after the morph attr
-						text.append(">");
+						text.append(end+1, strlen(token)-(end+1 - token)); //text after the morph attr
+						text.append('>');
 					}
 				}
 				else {
@@ -78,8 +70,6 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 					text.append('>');
 				}
 				
-				// keep tag, possibly with the morph removed
-				//text.append(tag);
 				continue;
 			}
 			if (intoken) {

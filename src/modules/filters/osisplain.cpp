@@ -37,8 +37,8 @@ OSISPlain::OSISPlain() {
 	addEscapeStringSubstitute("quot", "\"");
 
         setTokenCaseSensitive(true);
-//        addTokenSubstitute("title", "\n");
-//        addTokenSubstitute("/title", "\n");
+        addTokenSubstitute("title", "\n");
+        addTokenSubstitute("/title", "\n");
         addTokenSubstitute("/l", "\n");
         addTokenSubstitute("lg", "\n");
         addTokenSubstitute("/lg", "\n");
@@ -74,8 +74,6 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf.append(" <");
 				buf.append(val);
 				buf.append('>');
-				
-				//buf.appendFormatted(" <%s>", val);
 			}
 			if ((attrib = u->tag.getAttribute("gloss"))) {
 				val = strchr(attrib, ':');
@@ -83,8 +81,6 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf.append(" <");
 				buf.append(val);
 				buf.append('>');
-
-// 				buf.appendFormatted(" <%s>", val);
 			}
 			if ((attrib = u->tag.getAttribute("lemma"))) {
 				int count = u->tag.getAttributePartCount("lemma");
@@ -102,8 +98,6 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						buf.append(" {<");
 						buf.append(val);
 						buf.append(">}");
-
-// 						buf.appendFormatted(" <%s>}", val);
 					}
 				} while (++i < count);
 			}
@@ -120,7 +114,6 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					buf.append(" (");
 					buf.append(val);
 					buf.append(')');
-// 					buf.appendFormatted(" (%s)", val);
 				} while (++i < count);
 			}
 			if ((attrib = u->tag.getAttribute("POS"))) {
@@ -130,7 +123,6 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf.append(" <");
 				buf.append(val);
 				buf.append('>');
-// 				buf.appendFormatted(" <%s>", val);
 			}
 		}
 
@@ -143,7 +135,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		else if (!strncmp(token, "/note", 5)) {
 			if (!u->suspendTextPassThru)
-				buf.append(")");
+				buf.append(')');
 			else	u->suspendTextPassThru = false;
 		}
 
@@ -156,10 +148,8 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
                 // <milestone type="line"/>
                 else if (!strncmp(token, "milestone", 9)) {
-			const char* type = strstr(token+9, "type=\"");
+			const char* type = strstr(token+10, "type=\"");
 			if (type && strncmp(type+6, "line", 4)) { //we check for type != line
-			
-		// && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
 				userData->supressAdjacentWhitespace = true;
         			buf.append('\n');
 			}

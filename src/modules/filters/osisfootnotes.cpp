@@ -24,6 +24,8 @@ const char oTip[] = "Toggles Footnotes On and Off if they exist";
 const SWBuf choices[3] = {"On", "Off", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
+VerseKey parser;
+
 OSISFootnotes::OSISFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");
 }
@@ -42,14 +44,15 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
-	VerseKey parser = key->getText();
+// 	VerseKey parser = key->getText();
+	parser = key->getText();
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
 	
-	XMLTag tag = "";
+	XMLTag tag;
 
-	for (text = ""; *from; from++) {
+	for (text = ""; *from; ++from) {
 
 		// remove all newlines temporarily to fix kjv2003 module
 		if ((*from == 10) || (*from == 13)) {
@@ -69,7 +72,6 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 		
 		if (*from == '>') {	// process tokens
 			intoken = false;			
-// 			if (!strcmp(tag.getName(), "note")) {
 			if (!strncmp(token, "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
 				tag = token;
 				
