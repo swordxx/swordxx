@@ -135,7 +135,7 @@ VerseKey::~VerseKey() {
 	if (lowerBound)
 		delete lowerBound;
 	if (locale)
-		delete locale;
+		delete [] locale;
 
 	--instance;
 }

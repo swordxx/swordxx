@@ -146,23 +146,25 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 	unsigned long ulUnCompSize=0;	          // buffer size uncompressed
 	char *pcCompText=NULL;					 // compressed text
 
-
+	*start = *size = 0;
 	//printf ("Finding offset %ld\n", idxoff);
 	idxoff *= 10;
 	if (!testmt) {
 		testmt = ((idxfp[0]) ? 1:2);
 	}
-     
+	
 	// assert we have and valid file descriptor
 	if (compfp[testmt-1]->getFd() < 1)
 		return;
 		
-	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-	if (read(compfp[testmt-1]->getFd(), &ulBuffNum, 4) < 4)
-	{
-		printf ("Error reading ulBuffNum\n");
-		return;
+	long newOffset = lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
+	if (newOffset == idxoff) {
+		if (read(compfp[testmt-1]->getFd(), &ulBuffNum, 4) != 4) {
+			printf ("Error reading ulBuffNum\n");
+			return;
+		}
 	}
+	else return;
 
 	if (read(compfp[testmt-1]->getFd(), &ulVerseStart, 4) < 2)
 	{

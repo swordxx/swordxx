@@ -10,7 +10,7 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = libsword.lib mod2vpl.exe vpl2mod.exe mkfastmod.exe diatheke.exe \
-  imp2gbs.exe imp2ld.exe imp2vs.exe thml2gbs.exe
+  imp2gbs.exe imp2ld.exe imp2vs.exe thml2gbs.exe mod2zmod.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -48,6 +48,10 @@ imp2vs.exe: imp2vs.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 thml2gbs.exe: thml2gbs.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+mod2zmod.exe: mod2zmod.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

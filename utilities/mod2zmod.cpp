@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 		bufferKey = *(SWKey *)(*inModule);
 		cout << "Adding [" << bufferKey << "]\n";
 		// pseudo-check for link.  Will get most common links.
-		if (lastBuffer == inModule->getRawEntry()) {
+		if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
 			(*outModule) << &bufferKey;	// link to last key
 		}
 		else {
