@@ -61,12 +61,12 @@ void initConfig() {
 	remove(confPath.c_str());
 
 	InstallSource is("FTP");
-	is.caption = "crosswire";
+	is.caption = "CrossWire";
 	is.source = "ftp.crosswire.org";
 	is.directory = "/pub/sword/raw";
 
 	SWConfig config(confPath.c_str());
-	config["General"]["PassiveFTF"] = "true";
+	config["General"]["PassiveFTP"] = "true";
 	if (enable) {
 		config["Sources"]["FTPSource"] = is.getConfEnt();
 	}
