@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: zstr.h,v 1.1 2001/12/20 10:01:00 scribe Exp $
+ * $Id: zstr.h,v 1.2 2002/01/06 22:27:03 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -49,8 +49,8 @@ private:
 	SWCompress *compressor;
 
 protected:
-	static const int IDXENTRYSIZE = 8;
-	static const int ZDXENTRYSIZE = 8;
+	static const int IDXENTRYSIZE;
+	static const int ZDXENTRYSIZE;
 
 	void getCompressedText(long block, long entry, char **buf);
 	void flushCache();

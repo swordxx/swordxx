@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+const int EntriesBlock::METAHEADERSIZE = 4;
+	// count(4);
+const int EntriesBlock::METAENTRYSIZE = 8;
+	// offset(4); size(4);
+
 EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
 	block = (char *)calloc(1, size);
 	memcpy(block, iBlock, size);

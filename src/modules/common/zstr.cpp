@@ -28,6 +28,8 @@
  */
 
 int zStr::instance = 0;
+const int zStr::IDXENTRYSIZE = 8;
+const int zStr::ZDXENTRYSIZE = 8;
 
 
 /******************************************************************************

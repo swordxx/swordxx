@@ -4,11 +4,8 @@
 #include <sysdata.h>
 
 class EntriesBlock {
-	static const int METAHEADERSIZE = 4;
-		// count(4);
-
-	static const int METAENTRYSIZE = 8;
-		// offset(4); size(4);
+	static const int METAHEADERSIZE;
+	static const int METAENTRYSIZE;
 
 private:
 	char *block;
