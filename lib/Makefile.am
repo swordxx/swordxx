@@ -9,7 +9,7 @@ lib_LTLIBRARIES = libsword.la
 
 libsword_la_SOURCES =
 if ICU
-libsword_la_LIBADD = -licuuc -licui18n
+libsword_la_LIBADD = -licui18n -licuuc -lustdio
 else
 libsword_la_LIBADD =
 endif
