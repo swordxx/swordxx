@@ -65,9 +65,9 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 			if (!stricmp(tag.getName(), "q")) {
 				if ((tag.getAttribute("who")) && (!stricmp(tag.getAttribute("who"), "Jesus"))) {
 				        tag.setAttribute("who", 0);
+					token = tag;
 				}
 			}
-
 			text += '<';
 			text.append(token);
 			text += '>';
