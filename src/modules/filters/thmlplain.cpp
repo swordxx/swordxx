@@ -159,7 +159,7 @@ char ThMLPlain::ProcessText(char *text, int maxlen)
 	*to++ = '>';
 	continue;
       }
-      if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+      if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
 	*to++ = ' ';
 	*to++ = '(';
 	for (unsigned int i = 25; token[i] != '\"'; i++)
