@@ -32,6 +32,9 @@ OSISRedLetterWords::~OSISRedLetterWords() {
 
 
 char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+	if (option) //leave in the red lettered words
+		return 0;
+	
 	SWBuf token;
 	bool intoken    = false;
 	char buf[254];
@@ -40,50 +43,39 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 	const char *from = orig.c_str();
 
 	//taken out of the loop
-	const char* start;
-	const char* end;
-
-	if (!option)
+	const char* start = 0;
+	const char* end = 0;
+		
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			token = "";
 			continue;
 		}
-		if (*from == '>') {	// process tokens
+		else if (*from == '>') {	// process tokens
 			intoken = false;
 
-			//XMLTag tag(token);
-			/*if (!stricmp(tag.getName(), "q")) {
-				if ((tag.getAttribute("who")) && (!stricmp(tag.getAttribute("who"), "Jesus"))) {
-					tag.setAttribute("who", 0);
-					text += tag;	// tag toString already has < and >
+			if ((token[0] == 'q') && (token[1] == ' ')) { //q tag
+				start = strstr(token.c_str(), " who=\"Jesus\"");
+				if (start && (strlen(start) >= 12)) { //we found a quote of Jesus Christ
+					end = start+12; //marks the end of the who attribute value
+					
+					text.append('<');
+					text.append(token, start - (token.c_str())); //the text before the who attr
+					text.append(end, token.c_str() + token.length() - end);  //text after the who attr
+					text.append('>');
+					
 					continue;
 				}
-			}*/
-			if (*token == 'q') {
-				start = strstr(token, "who=\"Jesus\"");
-				if (start && (strlen(start) > 11)) {
-					end = start+11;
-					text.append('<');
-					text.append(token, start-(token.c_str())); //the text before the who attr
-					text.append(end, strlen(token)-(end-(token.c_str()))); //text after the who attr
-					text.append('>');
-				}
-			}
-			else {
-				text.append('<');
-				text.append(token);
-				text.append('>');
 			}
 			
-			
-			// if we haven't modified, still use original token instead of tag, so we don't reorder attribs and stuff.  It doesn't really matter, but this is less intrusive to the original markup.
+			//token not processed, append it. We don't want to alter the text
 			text.append('<');
 			text.append(token);
 			text.append('>');
 			continue;
 		}
+		
 		if (intoken) { //copy token
 			token.append(*from);
 		}
