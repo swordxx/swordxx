@@ -26,6 +26,17 @@
 // remove
 //#include <lzsscomprs.h>
 
+#ifdef BIGENDIAN
+#ifdef MACOSX
+#include <architecture/byte_order.h>
+#else
+#ifdef PPC
+#include <byteswap.h>
+#else
+#include <sys/pctypes.h>
+#endif
+#endif
+#endif
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -300,14 +311,20 @@ void zVerse::settext(char testmt, long idxoff, const char *buf)
 
 	start = outstart = strlen(cacheBuf);
 #ifdef BIGENDIAN
-	#ifndef MACOSX
-		outBufIdx = lelong(outBufIdx);
-		outstart  = lelong(start);
-		outsize   = leshort(size);
-	#else
+	#ifdef MACOSX
 		outBufIdx = NXSwapLittleLongToHost(outBufIdx);
 		outstart  = NXSwapLittleLongToHost(start);
 		outsize   = NXSwapLittleShortToHost(size);
+	#else
+        #ifdef PPC
+		outBufIdx = bswap_32(outBufIdx);
+		outstart  = bswap_32(start);
+		outsize   = bswap_16(size);
+	#else
+		outBufIdx = lelong(outBufIdx);
+		outstart  = lelong(start);
+		outsize   = leshort(size);
+	#endif
 	#endif
 #endif
 	if (!size) {
@@ -341,14 +358,20 @@ void zVerse::flushCache() {
 
 			start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
 	#ifdef BIGENDIAN
-		#ifndef MACOSX
-			outstart  = lelong(start);
-			outsize   = lelong(size);
-			outzsize  = lelong(zsize);
-		#else
+		#ifdef MACOSX
 			outstart  = NXSwapLittleLongToHost(start);
 			outsize   = NXSwapLittleLongToHost(size);
 			outzsize  = NXSwapLittleLongToHost(zsize);
+		#else
+		#ifdef PPC
+			outstart  = bswap_32(start);
+			outsize   = bswap_32(size);
+			outzsize  = bswap_32(zsize);
+		#else
+			outstart  = lelong(start);
+			outsize   = lelong(size);
+			outzsize  = lelong(zsize);
+		#endif
 		#endif
 	#endif
 			write(textfp[cacheTestament-1]->getFd(), compressor->zBuf(&zsize), zsize);

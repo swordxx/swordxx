@@ -23,10 +23,14 @@
 #include <rawstr4.h>
 
 #ifdef BIGENDIAN
-#ifndef MACOSX
-#include <sys/pctypes.h>
-#else
+#ifdef MACOSX
 #include <architecture/byte_order.h>
+#else
+#ifdef PPC
+#include <byteswap.h>
+#else
+#include <sys/pctypes.h>
+#endif
 #endif
 #endif
 /******************************************************************************
@@ -152,10 +156,14 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
 		lseek(idxfd->getFd(), ioffset, SEEK_SET);
 		read(idxfd->getFd(), &offset, 4);
 #ifdef BIGENDIAN
-	#ifndef MACOSX
-		offset = lelong(offset);
-	#else
+	#ifdef MACOSX
 		offset = NXSwapLittleLongToHost(offset);
+	#else
+	#ifdef PPC
+		offset = bswap_32(offset);
+	#else
+		offset = lelong(offset);
+	#endif
 	#endif
 #endif
 		getidxbufdat(offset, buf);
@@ -251,12 +259,17 @@ char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, lon
 			*idxoff = tryoff;
 
 	#ifdef BIGENDIAN
-		#ifndef MACOSX
-			*start = lelong(*start);
-			*size  = lelong(*size);
-		#else
+		#ifdef MACOSX
 			*start = NXSwapLittleLongToHost(*start);
 			*size  = NXSwapLittleLongToHost(*size);
+		#else
+		#ifdef PPC
+			*start = bswap_32(*start);
+			*size = bswap_32(*size);
+		#else
+			*start = lelong(*start);
+			*size  = lelong(*size);
+		#endif
 		#endif
 	#endif
 
@@ -281,12 +294,17 @@ char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, lon
 				*idxoff = tryoff;
 
 	#ifdef BIGENDIAN
-		#ifndef MACOSX
-			*start = lelong(*start);
-			*size  = lelong(*size);
-		#else
+		#ifdef MACOSX
 			*start = NXSwapLittleLongToHost(*start);
 			*size  = NXSwapLittleLongToHost(*size);
+		#else
+		#ifdef PPC
+			*start = bswap_32(*start);
+			*size = bswap_32(*size);
+		#else
+			*start = lelong(*start);
+			*size  = lelong(*size);
+		#endif
 		#endif
 	#endif
 
@@ -500,15 +518,22 @@ void RawStr4::settext(const char *ikey, const char *buf)
 	size = outsize = strlen(outbuf);
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
-#ifdef BIGENDIAN
-	#ifndef MACOSX
-		outstart = lelong(start);
-		outsize  = lelong(size);
-	#else
-		outstart = NXSwapLittleLongToHost(start);
-		outsize  = NXSwapLittleLongToHost(size);
+
+	#ifdef BIGENDIAN
+		#ifdef MACOSX
+			outstart = NXSwapLittleLongToHost(start);
+			outsize  = NXSwapLittleLongToHost(size);
+		#else
+		#ifdef PPC
+			outstart = bswap_32(start);
+			outsize = bswap_32(size);
+		#else
+			outstart = lelong(start);
+			outsize  = lelong(size);
+		#endif
+		#endif
 	#endif
-#endif
+
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
 	if (strlen(buf)) {
 		lseek(datfd->getFd(), start, SEEK_SET);

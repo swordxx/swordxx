@@ -24,10 +24,14 @@
 #include <versekey.h>
 
 #ifdef BIGENDIAN
-#ifndef MACOSX
-#include <sys/pctypes.h>
-#else
+#ifdef MACOSX
 #include <architecture/byte_order.h>
+#else
+#ifdef PPC
+#include <byteswap.h>
+#else
+#include <sys/pctypes.h>
+#endif
 #endif
 #endif
 
@@ -126,12 +130,17 @@ void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short 
 		read(idxfp[testmt-1]->getFd(), start, 4);
 		long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
 #ifdef BIGENDIAN
-	#ifndef MACOSX
-		*start = lelong(*start);
-		*size  = leshort(*size);
-	#else
+	#ifdef MACOSX
 		*start = NXSwapLittleLongToHost(*start);
 		*size  = NXSwapLittleShortToHost(*size);
+	#else
+	#ifdef PPC
+		*start = bswap_32(*start);
+		*size = bswap_16(*size);
+	#else
+		*start = lelong(*start);
+		*size  = leshort(*size);
+	#endif
 	#endif
 #endif
 		if (len < 2) {
@@ -247,12 +256,17 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 #ifdef BIGENDIAN
-	#ifndef MACOSX
-		outstart = lelong(start);
-		outsize  = leshort(size);
-	#else
+	#ifdef MACOSX
 		outstart = NXSwapLittleLongToHost(start);
 		outsize  = NXSwapLittleShortToHost(size);
+	#else
+        #ifdef PPC
+		outstart = bswap_32(start);
+		outsize = bswap_16(size);
+	#else
+		outstart = lelong(start);
+		outsize  = leshort(size);
+	#endif
 	#endif
 #endif
 	if (size) {
