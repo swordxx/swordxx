@@ -54,18 +54,21 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			SWBuf value = tag.getAttribute("value");
 			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
-				buf.appendFormatted("<small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\">", (value.length()) ? value.c_str() : "");
-				buf += (value.length()) ? value.c_str() : "";
-				buf += "</a>) </em></small>";
+				if(value.length())
+					buf.appendFormatted("<small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\">*s</a>) </em></small>", 
+						URL::encode(value.c_str()).c_str(),
+						value.c_str());
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
 				if(*value == 'H') {
 					value<<1;
-					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=%s\">",(value.length()) ? value.c_str() : "");
+					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=%s\">",
+						URL::encode(value.c_str()).c_str());
 				}
 				else if(*value == 'G') {
 					value<<1;
-					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=%s\">",(value.length()) ? value.c_str() : "");
+					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=%s\">",
+						URL::encode(value.c_str()).c_str());
 				}
 				buf += (value.length()) ? value.c_str() : "";
 				buf += "</a>&gt; </em></small>";
