@@ -214,7 +214,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = '}';
 		    continue;
 		  }
-		  else if (!strncasecmp(token, "br", 2)) {
+		  else if (!strnicmp(token, "br", 2)) {
 		    *to++ = '\\';
 		    *to++ = 'l';
 		    *to++ = 'i';
@@ -223,9 +223,9 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = ' ';
 		    continue;
 		  }
-		  else if (!strncasecmp(token, "font", 4)) {
+		  else if (!strnicmp(token, "font", 4)) {
 		    *to++ = '{';
-		    if (!strncasecmp(token, "font face=\"Symbol\"", 18)) {
+		    if (!strnicmp(token, "font face=\"Symbol\"", 18)) {
 		      *to++ = '\\';
 		      *to++ = 'f';
 		      *to++ = '7';
@@ -233,7 +233,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    }
 		    continue;
 		  }
-		  else if (!strncasecmp(token, "/font", 2)) {
+		  else if (!strnicmp(token, "/font", 2)) {
 		    *to++ = '}';
 		    continue;
 		  }

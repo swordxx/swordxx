@@ -176,7 +176,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					continue;
 				case 'N':
 				        *to++ = '{';
-				        if (!strncasecmp(token+2, "Symbol", 6)) {
+				        if (!strnicmp(token+2, "Symbol", 6)) {
 					  *to++ = '\\';
 					  *to++ = 'f';
 					  *to++ = '7';

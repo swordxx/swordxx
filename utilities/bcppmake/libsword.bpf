@@ -47,6 +47,8 @@ USEUNIT("..\..\src\modules\lexdict\swld.cpp");
 USEUNIT("..\..\src\modules\lexdict\rawld\rawld.cpp");
 USEUNIT("..\..\src\modules\texts\swtext.cpp");
 USEUNIT("..\..\src\modules\texts\rawtext\rawtext.cpp");
+USEUNIT("..\..\src\modules\texts\ztext\ztext.cpp");
+USEUNIT("..\..\src\modules\common\zverse.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
