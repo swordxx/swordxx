@@ -18,7 +18,8 @@ void percentUpdate(char percent, void *userData) {
 void* startSearch(void* p) {
 	cout << "startSearch ... " << (char*)p << endl ;
 	cout.flush();
-	ListKey listKey = target->Search((char*)p, -2, 0, 0, 0/*, &percentUpdate */);
+	char lineLen = 70;
+	ListKey listKey = target->Search((char*)p, -2, 0, 0, 0, &percentUpdate, &lineLen );
 
 	return NULL;
 }
