@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.20 2003/07/17 00:30:34 scribe Exp $
+* $Id: swbuf.h,v 1.21 2003/07/17 23:20:41 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -39,13 +39,13 @@ class SWDLLEXPORT SWBuf {
 	char *end;
 	char *endAlloc;
 	char fillByte;
-	unsigned int allocSize;
+	unsigned long allocSize;
 	static char *nullStr;
 	static char junkBuf[JUNKBUFSIZE];
 
-	inline void assureMore(unsigned int pastEnd) {
+	inline void assureMore(unsigned long pastEnd) {
 		if (end+pastEnd>=endAlloc) {
-			int newsize = (end-buf)+pastEnd;
+			long newsize = (end-buf)+pastEnd;
 			allocSize = newsize + 16;
 			long size = (end - buf);
 			buf = (char *)((buf) ? realloc(buf, allocSize) : calloc(allocSize, 1));
@@ -53,7 +53,7 @@ class SWDLLEXPORT SWBuf {
 			endAlloc = buf + allocSize-1;
 		}
 	}
-	inline void assureSize(unsigned int newsize) {
+	inline void assureSize(unsigned long newsize) {
 		if (newsize > allocSize) {
 			allocSize = newsize + 16;
 			long size = (end - buf);
@@ -63,7 +63,7 @@ class SWDLLEXPORT SWBuf {
 		}
 	}
 
-	void init(unsigned int initSize);
+	void init(unsigned long initSize);
 
 public:
 	/**
@@ -71,21 +71,21 @@ public:
  	* 		to a value from a const char *
  	*
  	*/
-	SWBuf(const char *initVal = 0, unsigned int initSize = 0);
+	SWBuf(const char *initVal = 0, unsigned long initSize = 0);
 
 	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
 	* 		to a value from a char
 	*
 	*/
-	SWBuf(char initVal, unsigned int initSize = 0);
+	SWBuf(char initVal, unsigned long initSize = 0);
 
 	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
 	* 		to a value from another SWBuf
 	*
 	*/
-	SWBuf(const SWBuf &other, unsigned int initSize = 0);
+	SWBuf(const SWBuf &other, unsigned long initSize = 0);
 
 	inline void setFillByte(char ch) { fillByte = ch; }
 	inline char getFillByte() { return fillByte; }
@@ -104,20 +104,20 @@ public:
 	*	@param pos The position of the requested character.
 	* @return The character at the specified position
 	*/
-	inline char &charAt(unsigned int pos) { return ((pos <= (unsigned int)(end - buf)) ? buf[pos] : nullStr[0]); }
+	inline char &charAt(unsigned long pos) { return ((pos <= (unsigned long)(end - buf)) ? buf[pos] : nullStr[0]); }
 //	inline char &charAt(unsigned int pos) { return ((buf+pos)<=end) ? buf[pos] : nullStr[0]; }
 
 	/** 
 	* size() and length() return only the number of characters of the string.
 	* Add one for the following null and one for each char to be appended!
 	*/
-	inline unsigned int size() const { return length(); }
+	inline unsigned long size() const { return length(); }
 
 	/**
 	* size() and length() return only the number of characters of the string.
 	* Add one for the following null and one for each char to be appended!
 	*/
-	inline unsigned int length() const { return end - buf; }
+	inline unsigned long length() const { return end - buf; }
 
 	/**
  	* SWBuf::set - sets this buf to a new value.
@@ -137,7 +137,8 @@ public:
  	* SWBuf::setSize - Size this buffer to a specific length.
 	* @param len The new size of the buffer. One byte for the null will be added.
  	*/
-	void setSize(unsigned int len);
+	void setSize(unsigned long len);
+	inline void resize(unsigned long len) { setSize(len); }
 
 	/**
  	* SWBuf::append - appends a value to the current value of this SWBuf.
@@ -145,7 +146,7 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
  	*/
-	void append(const char *str, int max = -1);
+	void append(const char *str, long max = -1);
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
@@ -153,7 +154,7 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
 	*/
-	inline void append(const SWBuf &str, int max = -1) { append(str.c_str(), max); }
+	inline void append(const SWBuf &str, long max = -1) { append(str.c_str(), max); }
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
@@ -178,13 +179,15 @@ public:
 	inline char *getRawData() { return buf; }	// be careful!  Probably setSize needs to be called in conjunction before and maybe after
 
 	inline operator const char *() const { return c_str(); }
-	inline char &operator[](unsigned int pos) { return charAt(pos); }
-	inline char &operator[](int pos) { return charAt((unsigned int)pos); }
+	inline char &operator[](unsigned long pos) { return charAt(pos); }
+	inline char &operator[](long pos) { return charAt((unsigned long)pos); }
+	inline char &operator[](unsigned int pos) { return charAt((unsigned long)pos); }
+	inline char &operator[](int pos) { return charAt((unsigned long)pos); }
 	inline SWBuf &operator =(const char *newVal) { set(newVal); return *this; }
 	inline SWBuf &operator =(const SWBuf &other) { set(other); return *this; }
 	inline SWBuf &operator +=(const char *str) { append(str); return *this; }
 	inline SWBuf &operator +=(char ch) { append(ch); return *this; }
-	inline SWBuf &operator -=(unsigned int len) { setSize(length()-len); return *this; }
+	inline SWBuf &operator -=(unsigned long len) { setSize(length()-len); return *this; }
 	inline SWBuf &operator --(int) { operator -=(1); return *this; }
 	inline SWBuf operator +(const SWBuf &other) const {
 		SWBuf retVal = buf;

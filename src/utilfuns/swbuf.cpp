@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.11 2003/07/16 12:26:09 scribe Exp $
+* $Id: swbuf.cpp,v 1.12 2003/07/17 23:20:41 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -35,7 +35,7 @@ char SWBuf::junkBuf[JUNKBUFSIZE];
 * 		to a value from a const char *
 *
 */
-SWBuf::SWBuf(const char *initVal, unsigned int initSize) {
+SWBuf::SWBuf(const char *initVal, unsigned long initSize) {
 	init(initSize);
 	set(initVal);
 }
@@ -45,7 +45,7 @@ SWBuf::SWBuf(const char *initVal, unsigned int initSize) {
 * 		to a value from another SWBuf
 *
 */
-SWBuf::SWBuf(const SWBuf &other, unsigned int initSize) {
+SWBuf::SWBuf(const SWBuf &other, unsigned long initSize) {
 	init(initSize);
 	set(other);
 }
@@ -55,7 +55,7 @@ SWBuf::SWBuf(const SWBuf &other, unsigned int initSize) {
 * 		to a value from a char
 *
 */
-SWBuf::SWBuf(char initVal, unsigned int initSize) {
+SWBuf::SWBuf(char initVal, unsigned long initSize) {
 	init(initSize);
 
 	allocSize = 15;
@@ -65,7 +65,7 @@ SWBuf::SWBuf(char initVal, unsigned int initSize) {
 	endAlloc = buf + allocSize-1;
 }
 
-void SWBuf::init(unsigned int initSize) {
+void SWBuf::init(unsigned long initSize) {
 	fillByte = ' ';
 	allocSize = 0;
 	endAlloc = 0;
@@ -88,7 +88,7 @@ SWBuf::~SWBuf() {
 */
 void SWBuf::set(const char *newVal) {
 	if (newVal) {
-		unsigned int len = strlen(newVal) + 1;
+		unsigned long len = strlen(newVal) + 1;
 		assureSize(len);
 		memcpy(buf, newVal, len);
 		end = buf + (len - 1);
@@ -105,7 +105,7 @@ void SWBuf::set(const char *newVal) {
 * SWBuf::set - sets this buf to a new value
 */
 void SWBuf::set(const SWBuf &newVal) {
-	unsigned int len = newVal.length() + 1;
+	unsigned long len = newVal.length() + 1;
 	assureSize(len);
 	memcpy(buf, newVal.c_str(), len);
 	end = buf + (len-1);
@@ -115,11 +115,9 @@ void SWBuf::set(const SWBuf &newVal) {
 /******************************************************************************
 * SWBuf::append - appends a value to the current value of this SWBuf
 */
-void SWBuf::append(const char *str, int max) {
-	unsigned int len = strlen(str) + 1;
-	if ((max > -1) && (len > max + 1))
-		len = max + 1;
-	assureMore(len);
+void SWBuf::append(const char *str, long max) {
+	unsigned long len = (max > -1) ? max : strlen(str);
+	assureMore(++len);
 	memcpy(end, str, len-1);
 	end += (len-1);
 	*end = 0;
@@ -129,7 +127,7 @@ void SWBuf::append(const char *str, int max) {
 /******************************************************************************
 * SWBuf::setSize - Size this buffer to a specific length
 */
-void SWBuf::setSize(unsigned int len) {
+void SWBuf::setSize(unsigned long len) {
 	assureSize(len+1);
 	if ((end - buf) < len)
 		memset(end, fillByte, len - (end-buf));
