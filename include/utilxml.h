@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.1 2003/05/26 04:32:45 scribe Exp $
+ * $Id: utilxml.h,v 1.2 2003/05/28 01:53:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -61,11 +61,7 @@ public:
 
 	const ListString getAttributeNames() const;
 	const char *getAttribute(const char *attribName) const;
-	const char *setAttribute(const char *attribName, const char *attribValue) {
-		if (!parsed)
-			parse();
-		attributes[attribName] = attribValue;
-	}
+	const char *setAttribute(const char *attribName, const char *attribValue);
 	const char *toString() const;
 	inline operator const char *() const { return toString(); }
 };

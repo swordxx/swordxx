@@ -9,6 +9,7 @@
 #include <string.h>
 #include <osisheadings.h>
 #include <swmodule.h>
+#include <utilxml.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
@@ -65,44 +66,45 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		if (*from == '>') {	// process tokens
 			intoken = false;
 
-			if (!strnicmp(token, "title type=\"section\" subtype=\"x-preverse\"", 39)) {
-				hide = true;
-				preverse = true;
-				header = "";
-				continue;
-			}
-				
-			if (!strnicmp(token, "title type=\"section\"", 20)) {
-				hide = true;
-				header = "";
-				if (option) {	// we want the tag in the text
-					text += '<';
-					text.append(token);
-					text += '>';
-				}
-				continue;
-			}
-				
-			else if (hide && !strnicmp(token, "/title", 6)) {
-
-				if (module->isProcessEntryAttributes() && option) {
-					if (preverse) {
-						sprintf(buf, "%i", pvHeaderNum++);
-						module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;
+			XMLTag tag(token);
+			if (!stricmp(tag.getName(), "title")) {
+				if (!stricmp(tag.getAttribute("type"), "section")) {
+					if (!stricmp(tag.getAttribute("subtype"), "x-preverse")) {
+						hide = true;
+						preverse = true;
+						header = "";
+						continue;
 					}
 					else {
-						sprintf(buf, "%i", headerNum++);
-						module->getEntryAttributes()["Heading"]["Interverse"][buf] = header;
+						hide = true;
+						header = "";
+						if (option) {	// we want the tag in the text
+							text += '<';
+							text.append(token);
+							text += '>';
+						}
+						continue;
 					}
 				}
+				if (hide && tag.isEndTag()) {
 
-
-				hide = false;
-				if ((!option) || (preverse)) {	// we don't want the tag in the text anymore
+					if (module->isProcessEntryAttributes() && option) {
+						if (preverse) {
+							sprintf(buf, "%i", pvHeaderNum++);
+							module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;
+						}
+						else {
+							sprintf(buf, "%i", headerNum++);
+							module->getEntryAttributes()["Heading"]["Interverse"][buf] = header;
+						}
+					}
+					hide = false;
+					if ((!option) || (preverse)) {	// we don't want the tag in the text anymore
+						preverse = false;
+						continue;
+					}
 					preverse = false;
-					continue;
 				}
-				preverse = false;
 			}
 
 			// if not a heading token, keep token in text

@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <osismorph.h>
+#include <utilxml.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
@@ -45,7 +46,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 {
 	if (!option) {	// if we don't want morph tags
 		const char *from;
-    char token[2048]; // cheese.  Fix.
+		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		bool lastspace = false;
@@ -63,21 +64,13 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'w' && token[1] == ' ') {	// Morph
-					char *num = strstr(token, "morph=\"x-Robinson:");
-					if (num) {
-						for (int i = 0; i < 18; i++)
-							*num++ = ' ';
-						for (; ((*num) && (*num!='\"')); num++)
-							*num = ' ';
-						if (*num)
-							*num = ' ';
-					}
+				XMLTag tag(token);
+				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Morph
+					if (tag.getAttribute("morph"))
+						tag.setAttribute("morph", 0);
 				}
-				// if not a morph tag token, keep token in text
-				text += '<';
-				text += token;
-				text += '>';
+				// keep tag, possibly with the morph removed
+				text += tag;
 				continue;
 			}
 			if (intoken) {

@@ -26,6 +26,9 @@ using namespace sword;
 
 using namespace std;
 
+RawText *module;
+VerseKey currentVerse;
+
 char readline(int fd, char **buf) {
 	char ch;
 	if (*buf)
@@ -90,19 +93,19 @@ bool isKJVRef(const char *buf) {
 void writeEntry(VerseKey &key, SWBuf &text) {
 	cout << "Verse: " << key << "\n";
 	cout << "TEXT: " << text << "\n\n";
+	SWBuf currentText = module->getRawEntry();
+	if (currentText.length())
+		text = currentText + " " + text;
+	module->setEntry(text);
 }
 
 
 bool handleToken(SWBuf &text, XMLTag token) {
-	static VerseKey currentVerse;
 	static bool inHeader = false;
 	static SWBuf headerType = "";
 	static SWBuf header = "";
 	static SWBuf lastTitle = "";
 	static int titleOffset = -1;
-
-	currentVerse.Headings(0);
-	currentVerse.AutoNormalize(0);
 
 	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag())) {
 		titleOffset = text.length();
@@ -184,14 +187,13 @@ int main(int argc, char **argv) {
 	}
 
 
-	if ((argc>3)&&(strcmp(argv[3], "1"))) {	// != 1 then create module
+	if ((argc<4)||(strcmp(argv[3], "0"))) {	// != 1 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if (RawText::createModule(argv[1])) {
 			fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[1]);
 			exit(-3);
 		}
-		exit(0);
 	}
 
 	// Let's see if we can open our input file
@@ -203,15 +205,14 @@ int main(int argc, char **argv) {
 
 	// Do some initialization stuff
 	char *buffer = 0;
-	RawText mod(argv[1]);	// open our datapath with our RawText driver.
-	VerseKey vk;
-	vk.AutoNormalize(0);
-	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
-	vk.Persist(1);
+	module = new RawText(argv[1]);	// open our datapath with our RawText driver.
+	currentVerse.AutoNormalize(0);
+	currentVerse.Headings(1);	// turn on mod/testmnt/book/chap headings
+	currentVerse.Persist(1);
 
-	mod.setKey(vk);
+	module->setKey(currentVerse);
 
-	mod = TOP;
+	(*module) = TOP;
 	  
 	int successive = 0;  //part of hack below
 

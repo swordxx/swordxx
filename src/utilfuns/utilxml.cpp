@@ -103,6 +103,14 @@ const char *XMLTag::getAttribute(const char *attribName) const {
 }
 
 
+const char *XMLTag::setAttribute(const char *attribName, const char *attribValue) {
+	if (!parsed)
+		parse();
+	if (attribValue)
+		attributes[attribName] = attribValue;
+	else	attributes.erase(attribName);
+}
+
 const char *XMLTag::toString() const {
 	SWBuf tag = "<";
 	if (!parsed)
