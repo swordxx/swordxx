@@ -151,7 +151,7 @@ icu := no
 # Global config directory
 globalconfdir := /etc
 
-SUBDIRS = lib . tests utilities
+SUBDIRS = lib . tests utilities examples
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 

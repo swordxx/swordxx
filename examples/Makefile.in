@@ -11,86 +11,86 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
+@SET_MAKE@
 
+SHELL = @SHELL@
 
-SHELL = /bin/sh
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
 
-srcdir = .
-top_srcdir = ..
-
-prefix = /usr
-exec_prefix = ${prefix}
-
-bindir = ${exec_prefix}/bin
-sbindir = ${exec_prefix}/sbin
-libexecdir = ${exec_prefix}/libexec
-datadir = ${prefix}/share
-sysconfdir = /etc
-sharedstatedir = ${prefix}/com
-localstatedir = ${prefix}/var
-libdir = ${exec_prefix}/lib
-infodir = ${prefix}/info
-mandir = ${prefix}/man
-includedir = ${prefix}/include
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
 oldincludedir = /usr/include
-pkgdatadir = $(datadir)/sword
-pkglibdir = $(libdir)/sword
-pkgincludedir = $(includedir)/sword
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal
-AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake
-AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
 
-INSTALL = /usr/bin/install -c
-INSTALL_PROGRAM = ${INSTALL}
-INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_SCRIPT = ${INSTALL}
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_HEADER = $(INSTALL_DATA)
-transform = s,x,x,
+transform = @program_transform_name@
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = 
-host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
-AS = as
-AWK = gawk
-CC = gcc
-CXX = g++
-DEPDIR = .deps
-DLLTOOL = dlltool
-ECHO = echo
-EXEEXT = 
-INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-LIBTOOL = $(SHELL) $(top_builddir)/libtool
-LN_S = ln -s
-MAINT = #
-OBJDUMP = objdump
-OBJEXT = o
-PACKAGE = sword
-RANLIB = ranlib
-STRIP = strip
-VERSION = 1.5.3
-am__include = include
-am__quote = 
-dir_confdef = no
-enable_debug = yes
-enable_profile = no
-enable_vcl = no
-install_sh = /space/home/scribe/src/sword/install-sh
-target_cpu = i686
-target_mingw32 = no
-target_os = linux-gnu
-target_system = intel
-target_vendor = pc
-with_conf = no
-with_icu = no
-with_zlib = yes
+host_alias = @host_alias@
+host_triplet = @host@
+AMTAR = @AMTAR@
+AS = @AS@
+AWK = @AWK@
+CC = @CC@
+CXX = @CXX@
+DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+MAINT = @MAINT@
+OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
+PACKAGE = @PACKAGE@
+RANLIB = @RANLIB@
+STRIP = @STRIP@
+VERSION = @VERSION@
+am__include = @am__include@
+am__quote = @am__quote@
+dir_confdef = @dir_confdef@
+enable_debug = @enable_debug@
+enable_profile = @enable_profile@
+enable_vcl = @enable_vcl@
+install_sh = @install_sh@
+target_cpu = @target_cpu@
+target_mingw32 = @target_mingw32@
+target_os = @target_os@
+target_system = @target_system@
+target_vendor = @target_vendor@
+with_conf = @with_conf@
+with_icu = @with_icu@
+with_zlib = @with_zlib@
 
 AUTOMAKE_OPTIONS = 1.5
 INCLUDES = -I $(top_srcdir)/include
@@ -125,14 +125,14 @@ threaded_search_OBJECTS = $(am_threaded_search_OBJECTS)
 threaded_search_DEPENDENCIES =
 threaded_search_LDFLAGS =
 
-DEFS = -DHAVE_CONFIG_H
+DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
-CPPFLAGS = 
-LDFLAGS = 
-LIBS = -lstdc++ -lz 
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
-DEP_FILES = $(DEPDIR)/lookup.Po $(DEPDIR)/search.Po \
-	$(DEPDIR)/threaded_search.Po
+@AMDEP_TRUE@DEP_FILES = $(DEPDIR)/lookup.Po $(DEPDIR)/search.Po \
+@AMDEP_TRUE@	$(DEPDIR)/threaded_search.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -141,7 +141,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O0 -Werror
+CXXFLAGS = @CXXFLAGS@
 DIST_SOURCES = $(lookup_SOURCES) $(search_SOURCES) \
 	$(threaded_search_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
@@ -160,10 +160,10 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool
-$(srcdir)/Makefile.in: # Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --foreign  examples/Makefile
-Makefile: # $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \
 	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
@@ -189,85 +189,85 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include $(DEPDIR)/lookup.Po
-include $(DEPDIR)/search.Po
-include $(DEPDIR)/threaded_search.Po
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/lookup.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/search.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/threaded_search.Po@am__quote@
 
 distclean-depend:
 	-rm -rf $(DEPDIR)
 
 .cpp.o:
-	source='$<' object='$@' libtool=no \
-	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXXCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
 
 .cpp.obj:
-	source='$<' object='$@' libtool=no \
-	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXXCOMPILE) -c -o $@ `cygpath -w $<`
 
 .cpp.lo:
-	source='$<' object='$@' libtool=yes \
-	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LTCXXCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
 
 lookup.o: cmdline/lookup.cpp
-	source='cmdline/lookup.cpp' object='lookup.o' libtool=no \
-	depfile='$(DEPDIR)/lookup.Po' tmpdepfile='$(DEPDIR)/lookup.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/lookup.cpp' object='lookup.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/lookup.Po' tmpdepfile='$(DEPDIR)/lookup.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lookup.o `test -f cmdline/lookup.cpp || echo '$(srcdir)/'`cmdline/lookup.cpp
 
 lookup.obj: cmdline/lookup.cpp
-	source='cmdline/lookup.cpp' object='lookup.obj' libtool=no \
-	depfile='$(DEPDIR)/lookup.Po' tmpdepfile='$(DEPDIR)/lookup.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/lookup.cpp' object='lookup.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/lookup.Po' tmpdepfile='$(DEPDIR)/lookup.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lookup.obj `cygpath -w cmdline/lookup.cpp`
 
 lookup.lo: cmdline/lookup.cpp
-	source='cmdline/lookup.cpp' object='lookup.lo' libtool=yes \
-	depfile='$(DEPDIR)/lookup.Plo' tmpdepfile='$(DEPDIR)/lookup.TPlo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/lookup.cpp' object='lookup.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/lookup.Plo' tmpdepfile='$(DEPDIR)/lookup.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lookup.lo `test -f cmdline/lookup.cpp || echo '$(srcdir)/'`cmdline/lookup.cpp
 
 search.o: cmdline/search.cpp
-	source='cmdline/search.cpp' object='search.o' libtool=no \
-	depfile='$(DEPDIR)/search.Po' tmpdepfile='$(DEPDIR)/search.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/search.cpp' object='search.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/search.Po' tmpdepfile='$(DEPDIR)/search.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o search.o `test -f cmdline/search.cpp || echo '$(srcdir)/'`cmdline/search.cpp
 
 search.obj: cmdline/search.cpp
-	source='cmdline/search.cpp' object='search.obj' libtool=no \
-	depfile='$(DEPDIR)/search.Po' tmpdepfile='$(DEPDIR)/search.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/search.cpp' object='search.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/search.Po' tmpdepfile='$(DEPDIR)/search.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o search.obj `cygpath -w cmdline/search.cpp`
 
 search.lo: cmdline/search.cpp
-	source='cmdline/search.cpp' object='search.lo' libtool=yes \
-	depfile='$(DEPDIR)/search.Plo' tmpdepfile='$(DEPDIR)/search.TPlo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/search.cpp' object='search.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/search.Plo' tmpdepfile='$(DEPDIR)/search.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o search.lo `test -f cmdline/search.cpp || echo '$(srcdir)/'`cmdline/search.cpp
 
 threaded_search.o: cmdline/threaded_search.cpp
-	source='cmdline/threaded_search.cpp' object='threaded_search.o' libtool=no \
-	depfile='$(DEPDIR)/threaded_search.Po' tmpdepfile='$(DEPDIR)/threaded_search.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/threaded_search.cpp' object='threaded_search.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/threaded_search.Po' tmpdepfile='$(DEPDIR)/threaded_search.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o threaded_search.o `test -f cmdline/threaded_search.cpp || echo '$(srcdir)/'`cmdline/threaded_search.cpp
 
 threaded_search.obj: cmdline/threaded_search.cpp
-	source='cmdline/threaded_search.cpp' object='threaded_search.obj' libtool=no \
-	depfile='$(DEPDIR)/threaded_search.Po' tmpdepfile='$(DEPDIR)/threaded_search.TPo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/threaded_search.cpp' object='threaded_search.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/threaded_search.Po' tmpdepfile='$(DEPDIR)/threaded_search.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o threaded_search.obj `cygpath -w cmdline/threaded_search.cpp`
 
 threaded_search.lo: cmdline/threaded_search.cpp
-	source='cmdline/threaded_search.cpp' object='threaded_search.lo' libtool=yes \
-	depfile='$(DEPDIR)/threaded_search.Plo' tmpdepfile='$(DEPDIR)/threaded_search.TPlo' \
-	$(CXXDEPMODE) $(depcomp) \
+@AMDEP_TRUE@	source='cmdline/threaded_search.cpp' object='threaded_search.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/threaded_search.Plo' tmpdepfile='$(DEPDIR)/threaded_search.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o threaded_search.lo `test -f cmdline/threaded_search.cpp || echo '$(srcdir)/'`cmdline/threaded_search.cpp
-CXXDEPMODE = depmode=gcc3
+CXXDEPMODE = @CXXDEPMODE@
 uninstall-info-am:
 
 tags: TAGS
