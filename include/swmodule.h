@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.44 2002/03/20 01:52:21 scribe Exp $
+ * $Id: swmodule.h,v 1.45 2002/03/20 23:43:49 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -146,7 +146,7 @@ public:
   /**
   * @return  True if this module is encoded in Unicode, otherwise return false.
   */
-  virtual const bool isUnicode() const {return (encoding == ENC_UTF8 || encoding == ENC_SCSU);}
+  virtual const bool isUnicode() const {return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU);}
 
   // These methods are useful for modules that come from a standard SWORD install (most do).
   // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
