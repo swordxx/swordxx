@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -16,6 +15,7 @@
 #include <unistd.h>
 #endif
 
+#include <utilstr.h>
 #include <swkey.h>
 #include <swlog.h>
 #include <versekey.h>
@@ -301,7 +301,7 @@ void VerseKey::freshtext() const
 
 int VerseKey::getBookAbbrev(const char *iabbr)
 {
-	int loop, diff, abLen, min, max, target, retVal = -1;
+    int loop, diff, abLen, min, max, target, retVal = -1;
 
     char *abbr = 0;
 
@@ -309,7 +309,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	strstrip(abbr);
 	abLen = strlen(abbr);
 	for (loop = 0; loop < abLen; loop++)
-		abbr[loop] = toupper(abbr[loop]);
+		abbr[loop] = SW_toupper(abbr[loop]);
 
 	if (abLen) {
 		min = 0;
@@ -404,8 +404,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						continue;
 					}
 					else {
-						if ((toupper(book[loop])=='F')&&(loop)) {
-							if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (toupper(book[loop-1]) == 'F')) {
+						if ((SW_toupper(book[loop])=='F')&&(loop)) {
+							if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (SW_toupper(book[loop-1]) == 'F')) {
 								book[loop] = 0;
 								continue;
 							}
@@ -543,7 +543,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				}
 			}
 			if (chap == -1)
-				book[tobook++] = toupper(*buf);
+				book[tobook++] = SW_toupper(*buf);
 		}
 		buf++;
 	}
@@ -564,8 +564,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				continue;
 			}
 			else {
-				if ((toupper(book[loop])=='F')&&(loop)) {
-					if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (toupper(book[loop-1]) == 'F')) {
+				if ((SW_toupper(book[loop])=='F')&&(loop)) {
+					if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (SW_toupper(book[loop-1]) == 'F')) {
 						book[loop] = 0;
 						continue;
 					}

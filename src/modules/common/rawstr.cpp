@@ -6,7 +6,6 @@
  */
 
 
-#include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -119,7 +118,7 @@ void RawStr::getidxbufdat(long ioffset, char **buf)
 		}
 		(*buf)[size] = 0;
 		for (size--; size > 0; size--)
-			(*buf)[size] = toupper((*buf)[size]);
+			(*buf)[size] = SW_toupper((*buf)[size]);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -157,7 +156,7 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 				continue;
 			}
 */
-			*targetbuf = toupper(*trybuf);
+			*targetbuf = SW_toupper(*trybuf);
 		}
 		*targetbuf = 0;
 		trybuf = 0;
@@ -198,7 +197,7 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
 					continue;
 				}
 	*/
-				*targetbuf = toupper(*trybuf);
+				*targetbuf = SW_toupper(*trybuf);
 			}
 			*targetbuf = 0;
 			trybuf = 0;
@@ -432,7 +431,7 @@ void RawStr::settext(const char *ikey, const char *buf)
 	findoffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
 	for (ch = key; *ch; ch++)
-		*ch = toupper(*ch);
+		*ch = SW_toupper(*ch);
 	ch = 0;
 
 	getidxbufdat(start, &dbKey);

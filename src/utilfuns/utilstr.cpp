@@ -66,12 +66,12 @@ const char *stristr(const char *s1, const char *s2) {
 
 	strcpy(target, s2);
 	for (i = 0; i < tLen; i++)
-		target[i] = toupper(target[i]);
+		target[i] = SW_toupper(target[i]);
 
 	for (i = 0; i < (cLen - tLen)+1; i++) {
-		if (toupper(s1[i]) == (unsigned char)*target) {
+		if (SW_toupper(s1[i]) == (unsigned char)*target) {
 			for (j = 1; j < tLen; j++) {
-				if (toupper(s1[i+j]) != (unsigned char)target[j])
+				if (SW_toupper(s1[i+j]) != (unsigned char)target[j])
 					break;
 			}
 			if (j == tLen) {
@@ -99,7 +99,7 @@ const char strnicmp(const char *s1, const char *s2, int len) {
      char diff;
      int i;
      for (i = 0; ((i < len) && (i < tLen) && (i < cLen)); i++) {
-     	if ((diff = toupper(*s1) - toupper(*s2)))
+     	if ((diff = SW_toupper(*s1) - SW_toupper(*s2)))
           	return diff;
 	s1++;
 	s2++;
@@ -140,7 +140,7 @@ unsigned int strlenw(const char *s1) {
 char *toupperstr(char *buf) {
 	char *ret = buf;
 	while (*buf)
-		*buf = toupper(*buf++);
+		*buf = SW_toupper(*buf++);
 
 	return ret;
 }
