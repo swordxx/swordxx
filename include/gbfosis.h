@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfosis.h,v 1.7 2003/02/27 00:56:30 scribe Exp $
+ * $Id: gbfosis.h,v 1.8 2003/02/28 13:31:37 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,7 +64,7 @@ protected:
 public:
 	GBFOSIS();
 	virtual ~GBFOSIS();
-	char processText(SWBuf &text, const SWKey * = 0, const SWModule * = 0);
+	char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

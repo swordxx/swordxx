@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.15 2003/02/20 07:25:20 scribe Exp $
+ * $Id: swfilter.h,v 1.16 2003/02/28 13:31:37 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,13 +35,12 @@ SWORD_NAMESPACE_START
 */
 typedef std::list < SWBuf > OptionsList;
 
+class SWModule;
 
 /** Base class for all filters in sword.
 * Filters are used to filter/convert text between different formats
 * like GBF, HTML, RTF ...
 */
-class SWModule;
-
 class SWDLLEXPORT  SWFilter {
 public:
 	virtual ~SWFilter() {}
@@ -58,7 +57,7 @@ public:
 	virtual const char *getOptionTip () { return 0; }
 
 	/** returns a list of the possible option values
-	 * might be
+	 * 
 	 * @return list of option values
 	 */
 	virtual OptionsList getOptionValues () {
@@ -66,22 +65,25 @@ public:
 		return options;
 	}
 
+	/** @return The value of the current option.
+	*/
+	virtual const char *getOptionValue () { return 0; }
+
 	/** sets the value of the option of this filter,
 	 * e.g maybe a strong's filter mioght be set to "on" / "off" -
 	 * that would mean to show or not to show the strongs in the text,
-	 * see also @ref getOptionValues
+	 * see also getOptionValues()
 	 * @param ival the new option valus
 	 */
-	virtual void setOptionValue (const char *) { }
-	virtual const char *getOptionValue () { return 0; }
+	virtual void setOptionValue (const char *ival) { }
 
 	/** This is the main filter function
-	 * @param text the text to be filtered/converted
-	 * @param maxlen maximal length of text to be processed
-	 * @param key sorry I don't know
+	 * @param text The text to be filtered/converted
+	 * @param key Current key That was used.
+	 * @param module Current module.
 	 * @return 0
 	 */
-	virtual char processText(SWBuf &text, const SWKey * = 0, const SWModule * = 0) = 0;
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0) = 0;
 };
 
 	SWORD_NAMESPACE_END

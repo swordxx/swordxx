@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfplain.h,v 1.11 2003/02/20 07:25:19 scribe Exp $
+ * $Id: gbfplain.h,v 1.12 2003/02/28 13:31:37 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,7 +30,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT GBFPlain : public SWFilter {
 public:
 	GBFPlain();
-	virtual char processText (SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
+	virtual char processText (SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbffootnotes.h,v 1.11 2003/02/20 07:25:19 scribe Exp $
+ * $Id: gbffootnotes.h,v 1.12 2003/02/28 13:31:37 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,7 +37,7 @@ class SWDLLEXPORT GBFFootnotes:public SWFilter {
 public:
 	GBFFootnotes();
 	virtual ~GBFFootnotes();
-	virtual char processText(SWBuf &text, const SWKey * key = 0, const SWModule * = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 	virtual const char *getOptionName() { return optName; }
 	virtual const char *getOptionTip() { return optTip; }
 	virtual void setOptionValue(const char *ival);
