@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.7 2002/03/04 01:56:44 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.8 2002/06/06 07:48:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,7 +31,17 @@
 #include <map>
 using namespace std;
 
-
+/** A filter providing commonly used functionality.
+* This filter has facilities for handling SGML/HTML/XML like tokens and
+* escape strings (like SGML entities). It has the facility for just
+* substituting the given tokens and escape strings to other strings and for
+* "manual" custom token handling.
+*
+* In this class the functions with arguments looking as <code>char
+* **buf</code> write a character sequnce at address specified by
+* <code>*buf</code> address and change <code>*buf</code> to point past
+* the last char of the written sequence.
+*/
 class SWDLLEXPORT SWBasicFilter : public SWFilter {
 
 	char *tokenStart;
@@ -54,21 +64,52 @@ protected:
 	typedef map<string, string> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;
+
+	/** Sets the beginning of escape sequence (by default "&").*/
 	void setEscapeStart(const char *escStart);
+
+	/** Sets the end of escape sequence (by default ";").*/
 	void setEscapeEnd(const char *escEnd);
+
+	/** Sets the beginning of token start sequence (by default "<").*/
 	void setTokenStart(const char *tokenStart);
+
+	/** Sets the end of token start sequence (by default ">").*/
 	void setTokenEnd(const char *tokenEnd);
+
+	/** Sets whether pass thru unknown tokens unchanged or just ignore (remove) them.
+	 * Default is false.*/
 	void setPassThruUnknownToken(bool val);
+
+	/** Sets whether pass thru unknown escape sequences unchanged or just ignore (remove) them.
+	 * Default is false.*/
 	void setPassThruUnknownEscapeString(bool val);
+
 	void setTokenCaseSensitive(bool val);
 	void setEscapeStringCaseSensitive(bool val);
+
 	void addTokenSubstitute(const char *findString, const char *replaceString);
 	void addEscapeStringSubstitute(const char *findString, const char *replaceString);
 	bool substituteToken(char **buf, const char *token);
 	bool substituteEscapeString(char **buf, const char *escString);
+
+	/** Like sprintf*/
 	void pushString(char **buf, const char *format, ...);
 
+	/** This function is called for every token encountered in the input text.
+	* @param buf the output buffer (FIXME: what is its size?)
+	* @param token the token (e.g. <code>"p align='left'"</code>
+	* @param userData FIXME: document this
+	* @return <code>false</code> if was not handled and should be handled in
+	* the default way (by just substituting).*/
 	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+
+	/** This function is called for every escape sequence encountered in the input text.
+	* @param buf the output buffer (FIXME: what is its size?)
+	* @param escString the escape sequence (e.g. <code>"amp"</code> for &amp;amp;)
+	* @param userData FIXME: document this
+	* @return <code>false</code> if was not handled and should be handled in
+	* the default way (by just substituting).*/
 	virtual bool handleEscapeString(char **buf, const char *escString, DualStringMap &userData);
 };
 
