@@ -26,10 +26,18 @@ SWORD_NAMESPACE_START
 const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Off",
         "Latin",
+        "IPA",
         "Basic Latin",
-        "UNGEGN",
+        "SBL",
+        "TC",
         "Beta",
         "BGreek",
+        "SERA",
+        "Hugoye",
+        "UNGEGN",
+        "ISO",
+        "ALA-LC",
+        "BGN-PCGN",
         "Greek",
         "Hebrew",
         "Cyrillic",
@@ -53,7 +61,16 @@ const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Ethiopic",
         "Gothic",
         "Ugaritic",
-        "Coptic"
+        "Coptic",
+        "Meroitic",
+        "Linear B",
+        "Cypriot",
+        "Runic",
+        "Ogham",
+        "Thaana",
+	"Glagolitic",
+        "Tengwar",
+        "Cirth"
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -362,6 +379,15 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                         case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
                         case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
                         case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
+//                        case UBLOCK_MEROITIC: scripts[SE_MEROITIC] = true; break;
+//                        case UBLOCK_LINEARB: scripts[SE_LINEARB] = true; break;
+//                        case UBLOCK_CYPRIOT: scripts[SE_CYPRIOT] = true; break;
+                        case UBLOCK_RUNIC: scripts[SE_RUNIC] = true; break;
+                        case UBLOCK_OGHAM: scripts[SE_OGHAM] = true; break;
+                        case UBLOCK_THAANA: scripts[SE_THAANA] = true; break;
+//                        case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
+//                        case UBLOCK_TENGWAR: scripts[SE_TENGWAR] = true; break;
+//                        case UBLOCK_CIRTH: scripts[SE_CIRTH] = true; break;
 			case UBLOCK_CJK_RADICALS_SUPPLEMENT:
 			case UBLOCK_KANGXI_RADICALS:
 			case UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
@@ -405,25 +431,56 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 
 		//Simple X to Latin transliterators
 		if (scripts[SE_GREEK]) {
-			if (option == SE_BETA)
-				addTrans("Greek-Latin/Beta", &ID);
-			else if (option == SE_BGREEK)
-				addTrans("Greek-Latin/BGreek", &ID);
-                        else if (option == SE_UNGEGN)
-                        	addTrans("Greek-Latin/UNGEGN", &ID);
+			if (strnicmp (((SWModule*)module)->Lang(), "cop", 3)) {
+				if (option == SE_SBL)
+					addTrans("Greek-Latin/SBL", &ID);
+				else if (option == SE_TC)
+					addTrans("Greek-Latin/TC", &ID);
+				else if (option == SE_BETA)
+					addTrans("Greek-Latin/Beta", &ID);
+				else if (option == SE_BGREEK)
+					addTrans("Greek-Latin/BGreek", &ID);
+	                        else if (option == SE_UNGEGN)
+        	                	addTrans("Greek-Latin/UNGEGN", &ID);
+				else if (option == SE_ISO)
+        	                	addTrans("Greek-Latin/ISO", &ID);
+                                else if (option == SE_ALALC)
+        	                	addTrans("Greek-Latin/ALALC", &ID);
+                                else if (option == SE_BGNPCGN)
+        	                	addTrans("Greek-Latin/BGNPCGN", &ID);
+                                else if (option == SE_IPA)
+        	                	addTrans("Greek-IPA/Ancient", &ID);
+                                else {
+        	                	addTrans("Greek-Latin", &ID);
+					scripts[SE_LATIN] = true;
+                                }
+			}
 			else {
-				if (!strnicmp (((SWModule*)module)->Lang(), "cop", 3)) {
-        				addTrans("Coptic-Latin", &ID);
-                		}
-                		else {
-		   			addTrans("Greek-Latin", &ID);
-		                }
-				scripts[SE_LATIN] = true;
+				if (option == SE_SBL)
+					addTrans("Coptic-Latin/SBL", &ID);
+				else if (option == SE_TC)
+					addTrans("Coptic-Latin/TC", &ID);
+				else if (option == SE_BETA)
+					addTrans("Coptic-Latin/Beta", &ID);
+                                else if (option == SE_IPA)
+        	                	addTrans("Coptic-IPA", &ID);
+                                else {
+        	                	addTrans("Coptic-Latin", &ID);
+					scripts[SE_LATIN] = true;
+                                }
 			}
 		}
 		if (scripts[SE_HEBREW]) {
-			if (option == SE_BETA)
+                        if (option == SE_SBL)
+                                addTrans("Hebrew-Latin/SBL", &ID);
+                        else if (option == SE_TC)
+                                addTrans("Hebrew-Latin/TC", &ID);
+			else if (option == SE_BETA)
 				addTrans("Hebrew-Latin/Beta", &ID);
+                        else if (option == SE_UNGEGN)
+                                addTrans("Hebrew-Latin/UNGEGN", &ID);
+                        else if (option == SE_ALALC)
+                                addTrans("Hebrew-Latin/ALALC", &ID);
                         else if (option == SE_SYRIAC)
                                 addTrans("Hebrew-Syriac", &ID);
 			else {
@@ -432,16 +489,24 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 			}
 		}
 		if (scripts[SE_CYRILLIC]) {
-			addTrans("Cyrillic-Latin", &ID);
-			scripts[SE_LATIN] = true;
+                	if (option == SE_GLAGOLITIC)
+                        	addTrans("Cyrillic-Glagolitic", &ID);
+                	else {
+				addTrans("Cyrillic-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
 		}
 		if (scripts[SE_ARABIC]) {
 			addTrans("Arabic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_SYRIAC]) {
-                        if (option == SE_BETA)
+                        if (option == SE_TC)
+                                addTrans("Syriac-Latin/TC", &ID);
+                        else if (option == SE_BETA)
         			addTrans("Syriac-Latin/Beta", &ID);
+                        else if (option == SE_HUGOYE)
+        			addTrans("Syriac-Latin/Hugoye", &ID);
                         else if (option == SE_HEBREW)
                                 addTrans("Syriac-Hebrew", &ID);
                         else {
@@ -454,25 +519,116 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_GEORGIAN]) {
-			addTrans("Georgian-Latin", &ID);
-			scripts[SE_LATIN] = true;
+                        if (option == SE_ISO)
+        			addTrans("Georgian-Latin/ISO", &ID);
+                        else if (option == SE_ALALC)
+        			addTrans("Georgian-Latin/ALALC", &ID);
+                        else if (option == SE_BGNPCGN)
+        			addTrans("Georgian-Latin/BGNPCGN", &ID);
+                        else if (option == SE_IPA)
+        			addTrans("Georgian-IPA", &ID);
+                        else {
+				addTrans("Georgian-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
 		}
 		if (scripts[SE_ARMENIAN]) {
-			addTrans("Armenian-Latin", &ID);
-			scripts[SE_LATIN] = true;
+                        if (option == SE_ISO)
+        			addTrans("Armenian-Latin/ISO", &ID);
+                        else if (option == SE_ALALC)
+        			addTrans("Armenian-Latin/ALALC", &ID);
+                        else if (option == SE_BGNPCGN)
+        			addTrans("Armenian-Latin/BGNPCGN", &ID);
+                        else if (option == SE_IPA)
+        			addTrans("Armenian-IPA", &ID);
+                        else {
+				addTrans("Armenian-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                	}
 		}
 		if (scripts[SE_ETHIOPIC]) {
-			addTrans("Ethiopic-Latin", &ID);
-			scripts[SE_LATIN] = true;
+                        if (option == SE_UNGEGN)
+        			addTrans("Ethiopic-Latin/UNGEGN", &ID);
+                        else if (option == SE_ISO)
+        			addTrans("Ethiopic-Latin/ISO", &ID);
+                        else if (option == SE_ALALC)
+        			addTrans("Ethiopic-Latin/ALALC", &ID);
+                        else if (option == SE_SERA)
+        			addTrans("Ethiopic-Latin/SERA", &ID);
+                	else {
+				addTrans("Ethiopic-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
 		}
 		if (scripts[SE_GOTHIC]) {
-			addTrans("Gothic-Latin", &ID);
-			scripts[SE_LATIN] = true;
+                        if (option == SE_BASICLATIN)
+        			addTrans("Gothic-Latin/Basic", &ID);
+                        else if (option == SE_IPA)
+        			addTrans("Gothic-IPA", &ID);
+                	else {
+				addTrans("Gothic-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
 		}
 		if (scripts[SE_UGARITIC]) {
-			addTrans("Ugaritic-Latin", &ID);
+                	if (option == SE_SBL)
+                        	addTrans("Ugaritic-Latin/SBL", &ID);
+                        else {
+				addTrans("Ugaritic-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
+		}
+		if (scripts[SE_MEROITIC]) {
+			addTrans("Meroitic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
+		if (scripts[SE_LINEARB]) {
+			addTrans("LinearB-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_CYPRIOT]) {
+			addTrans("Cypriot-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_RUNIC]) {
+			addTrans("Runic-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_OGHAM]) {
+			addTrans("Ogham-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_THAANA]) {
+			if (option == SE_ALALC)
+                        	addTrans("Thaana-Latin/ALALC", &ID);
+			else if (option == SE_BGNPCGN)
+                        	addTrans("Thaana-Latin/BGNPCGN", &ID);
+			else {
+				addTrans("Thaana-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
+		}
+		if (scripts[SE_GLAGOLITIC]) {
+			if (option == SE_ISO)
+                        	addTrans("Glagolitic-Latin/ISO", &ID);
+			else if (option == SE_ALALC)
+                        	addTrans("Glagolitic-Latin/ALALC", &ID);
+			else if (option == SE_ALALC)
+                        	addTrans("Glagolitic-Cyrillic", &ID);
+			else {
+				addTrans("Glagolitic-Latin", &ID);
+				scripts[SE_LATIN] = true;
+                        }
+		}
+		if (scripts[SE_THAI]) {
+			addTrans("Thai-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_THAI]) {
+			addTrans("Thai-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+
 		if (scripts[SE_HAN]) {
 	        	if (!strnicmp (((SWModule*)module)->Lang(), "ja", 2)) {
      				addTrans("Kanji-Romaji", &ID);
@@ -616,6 +772,15 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 			}
 		}
 
+		if (scripts[SE_TENGWAR]) {
+			addTrans("Tengwar-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_CIRTH]) {
+			addTrans("Cirth-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
+
 		if (scripts[SE_LATIN]) {
                 switch (option) {
                         case SE_GREEK:
@@ -665,6 +830,33 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                                 break;
                         case SE_HANGUL:
 				addTrans("Latin-Hangul", &ID);
+                                break;
+                        case SE_MEROITIC:
+				addTrans("Latin-Meroitic", &ID);
+                                break;
+                        case SE_LINEARB:
+				addTrans("Latin-LinearB", &ID);
+                                break;
+                        case SE_CYPRIOT:
+				addTrans("Latin-Cypriot", &ID);
+                                break;
+                        case SE_RUNIC:
+				addTrans("Latin-Runic", &ID);
+                                break;
+                        case SE_OGHAM:
+				addTrans("Latin-Ogham", &ID);
+                                break;
+                        case SE_THAANA:
+				addTrans("Latin-Thaana", &ID);
+                                break;
+                        case SE_GLAGOLITIC:
+				addTrans("Latin-Glagolitic", &ID);
+                                break;
+                        case SE_TENGWAR:
+				addTrans("Latin-Tengwar", &ID);
+                                break;
+                        case SE_CIRTH:
+				addTrans("Latin-Cirth", &ID);
                                 break;
                         }
                 }
