@@ -50,7 +50,7 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			if (*from == '>') {	// process tokens
 				intoken = false;
 				XMLTag tag(token);
-				if ((tag.getName()) && (!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Lemma
+				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Lemma
 					SWBuf lemma = tag.getAttribute("lemma");
 					if (lemma.length()) {
 						tag.setAttribute("lemma", 0);

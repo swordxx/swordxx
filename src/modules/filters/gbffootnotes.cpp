@@ -60,14 +60,14 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 			intoken = false;
 
 			XMLTag tag(token);
-			if ((tag.getName()) && !strcmp(tag.getName(), "RF")) {
+			if (!strcmp(tag.getName(), "RF")) {
 				refs = "";
 				startTag = tag;
 				hide = true;
 				tagText = "";
 				continue;
 			}
-			else if ((tag.getName()) && !strcmp(tag.getName(), "Rf")) {
+			else if (!strcmp(tag.getName(), "Rf")) {
 				if (module->isProcessEntryAttributes()) {
 					if(tagText.length() == 1 || !strcmp(module->Name(), "IGNT")) {
 						if (option) { // for ASV marks text in verse then put explanation at end of verse

@@ -62,7 +62,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		XMLTag tag(token);
 
 		// <w> tag
-		if ((tag.getName()) && !strcmp(tag.getName(), "w")) {
+		if (!strcmp(tag.getName(), "w")) {
 
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -139,7 +139,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <note> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
+		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
@@ -168,7 +168,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <p> paragraph tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "p")) {
+		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
 				buf += "{\\par ";
 			}
@@ -183,7 +183,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <reference> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "reference")) {
+		else if (!strcmp(tag.getName(), "reference")) {
 			if (!u->inXRefNote) {	// only show these if we're not in an xref note
 				if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 					buf += "{<a href=\"\">";
@@ -195,7 +195,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <l> poetry
-		else if ((tag.getName()) && !strcmp(tag.getName(), "l")) {
+		else if (!strcmp(tag.getName(), "l")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "{";
 			}
@@ -208,13 +208,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <milestone type="line"/>
-		else if ((tag.getName()) && (!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
 			buf += "{\\par}";
 			userData->supressAdjacentWhitespace = true;
 		}
 
 		// <title>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "title")) {
+		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "{\\par\\i1\\b1 ";
 			}
@@ -224,7 +224,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <hi>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "hi")) {
+		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b")
@@ -238,7 +238,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <q> quote
-		else if ((tag.getName()) && !strcmp(tag.getName(), "q")) {
+		else if (!strcmp(tag.getName(), "q")) {
 			SWBuf type = tag.getAttribute("type");
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
@@ -268,7 +268,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <transChange>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "transChange")) {
+		else if (!strcmp(tag.getName(), "transChange")) {
 			SWBuf type = tag.getAttribute("type");
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -283,7 +283,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// image
-		else if ((tag.getName()) && !strcmp(tag.getName(), "figure")) {
+		else if (!strcmp(tag.getName(), "figure")) {
 			const char *src = tag.getAttribute("src");
 			if (!src)		// assert we have a src attribute
 				return false;

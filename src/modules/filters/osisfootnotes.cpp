@@ -66,7 +66,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			intoken = false;
 
 			XMLTag tag(token);
-			if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
+			if (!strcmp(tag.getName(), "note")) {
 				if (!tag.isEndTag()) {
 					if (SWBuf("strongsMarkup") == tag.getAttribute("type")) {  // handle bug in KJV2003 module where some note open tags were <note ... />
 						tag.setEmpty(false);
@@ -105,7 +105,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			}
 
 			// if not a heading token, keep token in text
-			if ((tag.getName()) && (!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
+			if ((!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
 				SWBuf osisRef = tag.getAttribute("osisRef");
 				if (refs.length())
 					refs += "; ";

@@ -85,7 +85,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				
 		}
 		// <note> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
+		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
@@ -109,7 +109,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 		}
 		// <scripRef> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "scripRef")) {
+		else if (!strcmp(tag.getName(), "scripRef")) {
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
 					u->suspendTextPassThru = true;

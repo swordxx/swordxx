@@ -56,7 +56,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		XMLTag tag(token);
 
 		// <w> tag
-		if ((tag.getName()) && !strcmp(tag.getName(), "w")) {
+		if (!strcmp(tag.getName(), "w")) {
 
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -134,7 +134,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <note> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
+		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
@@ -161,7 +161,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <p> paragraph tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "p")) {
+		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
 				buf += "<!P><br />";
 			}
@@ -176,7 +176,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <reference> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "reference")) {
+		else if (!strcmp(tag.getName(), "reference")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "<a href=\"\">";
 			}
@@ -186,7 +186,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <l> poetry, etc
-		else if ((tag.getName()) && !strcmp(tag.getName(), "l")) {
+		else if (!strcmp(tag.getName(), "l")) {
 			if (tag.isEmpty()) {
 				buf += "<br />";
 			}
@@ -199,13 +199,13 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <milestone type="line"/>
-		else if ((tag.getName()) && (!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
 			buf += "<br />";
 			userData->supressAdjacentWhitespace = true;
 		}
 
 		// <title>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "title")) {
+		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "<b>";
 			}
@@ -215,7 +215,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <hi> hi?  hi contrast?
-		else if ((tag.getName()) && !strcmp(tag.getName(), "hi")) {
+		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b") {
@@ -241,7 +241,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <q> quote
-		else if ((tag.getName()) && !strcmp(tag.getName(), "q")) {
+		else if (!strcmp(tag.getName(), "q")) {
 			SWBuf type = tag.getAttribute("type");
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
@@ -272,7 +272,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <transChange>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "transChange")) {
+		else if (!strcmp(tag.getName(), "transChange")) {
 			SWBuf type = tag.getAttribute("type");
 			
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -289,7 +289,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// image
-		else if ((tag.getName()) && !strcmp(tag.getName(), "figure")) {
+		else if (!strcmp(tag.getName(), "figure")) {
 			const char *src = tag.getAttribute("src");
 			if (!src)		// assert we have a src attribute
 				return false;

@@ -56,7 +56,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		XMLTag tag(token);
 
 		// <w> tag
-		if ((tag.getName()) && !strcmp(tag.getName(), "w")) {
+		if (!strcmp(tag.getName(), "w")) {
 
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -149,7 +149,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <note> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
+		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
@@ -176,7 +176,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <p> paragraph tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "p")) {
+		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
 				buf += "<p><br />";
 			}
@@ -191,7 +191,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <reference> tag
-		else if ((tag.getName()) && !strcmp(tag.getName(), "reference")) {
+		else if (!strcmp(tag.getName(), "reference")) {
 		        const char *attrib;
 		        const char *val;
 
@@ -210,7 +210,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <l> poetry, etc
-		else if ((tag.getName()) && !strcmp(tag.getName(), "l")) {
+		else if (!strcmp(tag.getName(), "l")) {
 			if (tag.isEmpty()) {
 				buf += "<br />";
 			}
@@ -223,13 +223,13 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <milestone type="line"/>
-		else if ((tag.getName()) && (!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
 			buf += "<br />";
 			userData->supressAdjacentWhitespace = true;
 		}
 
 		// <title>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "title")) {
+		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "<b>";
 			}
@@ -239,7 +239,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <hi> hi?  hi contrast?
-		else if ((tag.getName()) && !strcmp(tag.getName(), "hi")) {
+		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "bold" || type == "x-b") {
@@ -265,7 +265,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <q> quote
-		else if ((tag.getName()) && !strcmp(tag.getName(), "q")) {
+		else if (!strcmp(tag.getName(), "q")) {
 			SWBuf type = tag.getAttribute("type");
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
@@ -296,7 +296,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <transChange>
-		else if ((tag.getName()) && !strcmp(tag.getName(), "transChange")) {
+		else if (!strcmp(tag.getName(), "transChange")) {
 			SWBuf type = tag.getAttribute("type");
 			
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {

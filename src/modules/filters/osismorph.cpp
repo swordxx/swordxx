@@ -50,7 +50,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			if (*from == '>') {	// process tokens
 				intoken = false;
 				XMLTag tag(token);
-				if ((tag.getName()) && (!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Morph
+				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Morph
 					if (tag.getAttribute("morph"))
 						tag.setAttribute("morph", 0);
 				}

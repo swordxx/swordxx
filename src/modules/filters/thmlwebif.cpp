@@ -34,7 +34,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 		SWBuf url;
-		if ((tag.getName()) && !strcmp(tag.getName(), "sync")) {
+		if (!strcmp(tag.getName(), "sync")) {
 			const char* value = tag.getAttribute("value");
 			url = value;
 			if ((url.length() > 1) && strchr("GH", url[0])) {
@@ -66,7 +66,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf += "&gt; </em></small>";
 			}
 		}
-		else if ((tag.getName()) && !strcmp(tag.getName(), "scripRef")) {
+		else if (!strcmp(tag.getName(), "scripRef")) {
 			if (tag.isEndTag()) {
 				if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
 					u->inscriptRef = false;
