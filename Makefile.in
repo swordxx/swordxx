@@ -165,7 +165,9 @@ EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
-testlib_LDADD = -L./lib -lsword
+
+@ICU_TRUE@testlib_LDADD = -L./lib -lsword -licui18n -licuuc
+@ICU_FALSE@testlib_LDADD = -L./lib -lsword
 localeDATA = locales.d/abbr.conf locales.d/cs.conf locales.d/da.conf locales.d/de.conf locales.d/de_abbrev.conf locales.d/es.conf locales.d/fr.conf locales.d/fr_FR.ISO-8859-1.conf locales.d/it.conf locales.d/la.conf locales.d/nl.conf locales.d/no.conf locales.d/pl.conf locales.d/pt.conf locales.d/id.conf locales.d/pt_BR.conf locales.d/sk.conf
 
 localedatadir = $(pkgdatadir)/locales.d
@@ -182,7 +184,8 @@ PROGRAMS = $(noinst_PROGRAMS)
 
 am_testlib_OBJECTS = testlib.$(OBJEXT)
 testlib_OBJECTS = $(am_testlib_OBJECTS)
-testlib_DEPENDENCIES =
+@ICU_TRUE@testlib_DEPENDENCIES =
+@ICU_FALSE@testlib_DEPENDENCIES =
 testlib_LDFLAGS =
 
 DEFS = @DEFS@

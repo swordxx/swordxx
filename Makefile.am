@@ -72,7 +72,12 @@ endif
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
+
+if ICU
+testlib_LDADD = -L./lib -lsword -licui18n -licuuc
+else
 testlib_LDADD = -L./lib -lsword
+endif
 
 include locales.d/Makefile.am
 include samples/Makefile.am

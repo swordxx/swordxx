@@ -3,8 +3,14 @@
 #include <ctype.h>
 
 #ifdef _ICU_
-#include <unicode/unistr.h>
+#include <unicode/utypes.h>
 #include <unicode/ucnv.h>
+#include <unicode/ustring.h>
+#include <unicode/uchar.h>
+
+#include <unicode/unistr.h>
+#include <unicode/translit.h>
+
 #endif
 
 /******************************************************************************
