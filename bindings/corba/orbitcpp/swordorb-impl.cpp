@@ -153,13 +153,25 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		retVal->length(2);
+		retVal->length(6);
 		SWBuf num;
-		num.appendFormatted("%d", vkey->books[vkey->Testament()-1][vkey->Book()-1].chapmax);
+		num.appendFormatted("%d", vkey->Testament());
 		(*retVal)[0] = CORBA::string_dup(num.c_str());
 		num = "";
-		num.appendFormatted("%d", vkey->books[vkey->Testament()-1][vkey->Book()-1].versemax[vkey->Chapter()-1]);
+		num.appendFormatted("%d", vkey->Book());
 		(*retVal)[1] = CORBA::string_dup(num.c_str());
+		num = "";
+		num.appendFormatted("%d", vkey->Chapter());
+		(*retVal)[2] = CORBA::string_dup(num.c_str());
+		num = "";
+		num.appendFormatted("%d", vkey->Verse());
+		(*retVal)[3] = CORBA::string_dup(num.c_str());
+		num = "";
+		num.appendFormatted("%d", vkey->books[vkey->Testament()-1][vkey->Book()-1].chapmax);
+		(*retVal)[4] = CORBA::string_dup(num.c_str());
+		num = "";
+		num.appendFormatted("%d", vkey->books[vkey->Testament()-1][vkey->Book()-1].versemax[vkey->Chapter()-1]);
+		(*retVal)[5] = CORBA::string_dup(num.c_str());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
