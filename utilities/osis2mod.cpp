@@ -165,15 +165,15 @@ void linkToEntry(VerseKey& dest) {
 
 
 bool handleToken(SWBuf &text, XMLTag token) {
-	static bool inHeader = true;
-        static bool inVerse = true;
-//	static SWBuf headerType = "";
-//	static SWBuf header = "";
-//	static SWBuf lastTitle = "";
-//	static int titleOffset = -1;
+	static bool inHeader = false;
+	static bool inVerse = true;
+	static SWBuf headerType = "";
+	static SWBuf header = "";
+	static SWBuf lastTitle = "";
+	static int titleOffset = -1;
 	static ListKey lastVerseIDs = ListKey();
 
-	/*if ((!strcmp(token.getName(), "title")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
+	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
 		titleOffset = text.length();
 		return false;
 	}
@@ -181,27 +181,27 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		lastTitle = (text.c_str() + titleOffset);
 		lastTitle += token;
 		return false;
-	}*/
+	}
 	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag() && !(token.getAttribute("eID"))) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
         	inVerse = false;
 		if (inHeader) {	// this one should never happen, but just in case
 //			cout << "HEADING ";
 			currentVerse->Testament(0);
-                        currentVerse->Book(0);
-                        currentVerse->Chapter(0);
-                        currentVerse->Verse(0);
-                        writeEntry(*currentVerse, text);
+			currentVerse->Book(0);
+			currentVerse->Chapter(0);
+			currentVerse->Verse(0);
+			writeEntry(*currentVerse, text);
 			inHeader = false;
 		}
 		*currentVerse = token.getAttribute("osisID");
 		currentVerse->Chapter(0);
 		currentVerse->Verse(0);
 		inHeader = true;
-//		headerType = "book";
-//		lastTitle = "";
+		headerType = "book";
+		lastTitle = "";
 		text = "";
 	}
-	else if (((!strcmp(token.getName(), "chapter")) && (!token.isEndTag() || (token.getAttribute("eID"))) && (token.getAttribute("osisID")))) {
+	else if ((((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag() || (token.getAttribute("eID"))) && (token.getAttribute("osisID")))) {
         	inVerse = false;
 		if (inHeader) {
 //			cout << "HEADING ";
@@ -212,8 +212,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		*currentVerse = token.getAttribute("osisID");
 		currentVerse->Verse(0);
 		inHeader = true;
-//		headerType = "chap";
-//		lastTitle = "";
+		headerType = "chap";
+		lastTitle = "";
 		text = "";
 	}
 	else if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
@@ -252,7 +252,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	}
 	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag() || (token.getAttribute("eID")))) {
         	inVerse = false;
-/*		if (lastTitle.length()) {
+		if (lastTitle.length()) {
 			SWBuf titleHead = lastTitle;
 			char *end = strchr(lastTitle.getRawData(), '>');
 			titleHead.setSize((end - lastTitle.getRawData())+1);
@@ -260,8 +260,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			titleTag.setAttribute("type", "section");
 			titleTag.setAttribute("subtype", "x-preverse");
 			text = SWBuf(titleTag) + SWBuf(end+1) + text;
-		}*/
-		text += token;
+		}
+//		text += token;
 		writeEntry(*currentVerse, text);
 
 		// If we found an osisID like osisID="Gen.1.1 Gen.1.2 Gen.1.3" we have to link Gen.1.2 and Gen.1.3 to Gen.1.1
@@ -279,7 +279,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 		}
 
-//		lastTitle = "";
+		lastTitle = "";
 		text = "";
 		return true;
 	}
