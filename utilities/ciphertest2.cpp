@@ -15,7 +15,7 @@
 #include <rawtext.h>
 
 
-main(int argc, char **argv) {
+int main(int argc, char **argv) {
 	VerseKey key;
 	RawText *rawdrv;
 	
@@ -35,4 +35,5 @@ main(int argc, char **argv) {
 		rawdrv->Key(key);
 		printf("%s: %s\n", (const char *)key, (const char *)*rawdrv);
 	}
+	return 0;
 }

@@ -15,8 +15,7 @@
 #include <rawverse.h>
 
 
-main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	SWCipher *zobj;
 	VerseKey key;
 	RawVerse *rawdrv;
@@ -52,4 +51,5 @@ main(int argc, char **argv)
 				free(tmpbuf);
 	}
 	delete zobj;
+	return 0;
 }

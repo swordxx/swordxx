@@ -2,7 +2,7 @@
 #include <swtext.h>
 #include <iostream.h>
 
-main() {
+int main(int argc, char **argv) {
 	SWMgr mymgr;
 	ModMap::iterator it;
 	SWModule *module;
@@ -24,4 +24,5 @@ main() {
 				
 		}
 	}
+	return 0;
 }

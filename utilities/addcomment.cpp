@@ -36,4 +36,5 @@ int main(int argc, char **argv)
 		mykey++;
 	}
 	cout << "Added Comment\n";
+	return 0;
 }

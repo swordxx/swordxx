@@ -4,8 +4,7 @@
 
 #include <versekey.h>
 
-main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	if (argc != 2) {
 		fprintf(stderr, "usage: %s <\"string to parse\">\n", *argv);
 		exit(-1);
@@ -20,4 +19,5 @@ main(int argc, char **argv)
 		cout << (const char *)list << "\n";
 		list++;
 	}
+	return 0;
 }

@@ -2,7 +2,7 @@
 #include <iostream.h>
 #include <versekey.h>
 
-main() {
+int main(int argc, char **argv) {
 	SWMgr mymgr;
 	ModMap::iterator it;
 
@@ -18,4 +18,5 @@ main() {
 		for (mhc->Key("Gen 1:1"); mhc->Key() < (VerseKey) "Gen 1:10"; (*mhc)++)
 			cout << (const char *) *mhc << "\n";
 	}
+	return 0;
 }
