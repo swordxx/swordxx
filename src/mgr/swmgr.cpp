@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.2 1999/05/04 22:50:30 scribe Exp $
+ * $Id: swmgr.cpp,v 1.3 1999/05/14 17:21:48 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -500,6 +500,16 @@ const char *SWMgr::getGlobalOption(const char *option)
 	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if (!stricmp(option, (*it).second->getOptionName()))
 			return (*it).second->getOptionValue();
+	}
+	return 0;
+}
+
+
+const char *SWMgr::getGlobalOptionTip(const char *option)
+{
+	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+		if (!stricmp(option, (*it).second->getOptionName()))
+			return (*it).second->getOptionTip();
 	}
 	return 0;
 }

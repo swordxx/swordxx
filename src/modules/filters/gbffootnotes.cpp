@@ -17,6 +17,7 @@
 const char GBFFootnotes::on[] = "On";
 const char GBFFootnotes::off[] = "Off";
 const char GBFFootnotes::optName[] = "Footnotes";
+const char GBFFootnotes::optTip[] = "Toggles Footnotes On and Off In Bible Texts If They Exist";
 
 
 GBFFootnotes::GBFFootnotes() {

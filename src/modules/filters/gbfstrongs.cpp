@@ -17,6 +17,7 @@
 const char GBFStrongs::on[] = "On";
 const char GBFStrongs::off[] = "Off";
 const char GBFStrongs::optName[] = "Strong's Numbers";
+const char GBFStrongs::optTip[] = "Toggles Strong's Numbers On and Off In Bible Texts If They Exist";
 
 
 GBFStrongs::GBFStrongs() {
