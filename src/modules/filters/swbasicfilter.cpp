@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.32 2003/08/12 05:36:30 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.33 2003/10/24 02:43:46 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -94,10 +94,10 @@ void SWBasicFilter::addTokenSubstitute(const char *findString, const char *repla
 	if (!tokenCaseSensitive) {
 		stdstr(&buf, findString);
 		toupperstr(buf);
-		tokenSubMap.insert(DualStringMap::value_type(buf, replaceString));
+		tokenSubMap[buf] = replaceString;
 		delete [] buf;
 	}
-	else tokenSubMap.insert(DualStringMap::value_type(findString, replaceString));
+	else tokenSubMap[findString] = replaceString;
 }
 
 

@@ -300,7 +300,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			strcat(filepath, src);
 
 // we do this because BibleCS looks for this EXACT format for an image tag
-			buf+="<figure src=\"";
+			buf+="<image src=\"";
 			buf+=filepath;
 			buf+="\" />";
 /*
