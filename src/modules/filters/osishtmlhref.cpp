@@ -25,9 +25,14 @@ SWORD_NAMESPACE_START
 
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-	if (module) 
+	if (module) {
+		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 		version = module->Name();
+	}
+	else {
+		osisQToTick = true;	// default
+		version = "";
+	}
 }
 
 
@@ -344,10 +349,13 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			if (!src)		// assert we have a src attribute
 				return false;
 
-			char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
-			*filepath = 0;
-			strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-			strcat(filepath, src);
+			SWBuf filepath;
+			if (userData->module) {
+				filepath = userData->module->getConfigEntry("AbsoluteDataPath");
+				if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (src[0] != '/'))
+					filepath += '/';
+			}
+			filepath += src;
 
 // we do this because BibleCS looks for this EXACT format for an image tag
 				if (!u->suspendTextPassThru) {
@@ -355,29 +363,6 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					buf+=filepath;
 					buf+="\" />";
 				}
-/*
-			char imgc;
-			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
-			c++;
-			FILE* imgfile;
-				    if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
-						  imgfile = fopen(filepath, "r");
-						  if (imgfile != NULL) {
-								buf += "{\\nonshppict {\\pict\\jpegblip ";
-								while (feof(imgfile) != EOF) {
-									   buf.appendFormatted("%2x", fgetc(imgfile));
-								}
-								fclose(imgfile);
-								buf += "}}";
-						  }
-				    }
-				    else if (stricmp(c, "png")) {
-						  buf += "{\\*\\shppict {\\pict\\pngblip ";
-
-						  buf += "}}";
-				    }
-*/
-			delete [] filepath;
 		}
 		
 		else {
