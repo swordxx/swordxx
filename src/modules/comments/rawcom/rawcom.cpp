@@ -28,9 +28,9 @@
  *	idisp	 - Display object to use for displaying
  */
 
-RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode)
+RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode, char dir)
 		: RawVerse(ipath),
-            SWCom(iname, idesc, idisp, unicode) {
+            SWCom(iname, idesc, idisp, unicode, dir) {
 	versebuf = 0;
 }
 
@@ -75,7 +75,7 @@ char *RawCom::getRawEntry() {
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ (size + 2) * FILTERPAD * ((unicode) ? 9 : 1 ) ];
+	versebuf = new char [ (size + 2) * FILTERPAD ];
 	*versebuf = 0;
 
 	gettext(key->Testament(), start, (size + 2), versebuf);

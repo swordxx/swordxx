@@ -33,7 +33,7 @@
  *		idisp - Display object to use for displaying
  */
 
-zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, bool unicode) : zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, unicode)/*, SWCompress()*/
+zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, bool unicode, char dir) : zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, unicode, dir)/*, SWCompress()*/
 {
 	blockType = iblockType;
 	versebuf = 0;
@@ -131,7 +131,7 @@ char *zText::getRawEntry()
 	if (versebuf)
 		delete [] versebuf;
 
-	versebuf = new char [ (size + 2) * FILTERPAD * ((unicode) ? 9 : 1 ) ];
+	versebuf = new char [ (size + 2) * FILTERPAD ];
 	*versebuf = 0;
 
 	//printf ("getting text\n");
@@ -141,7 +141,7 @@ char *zText::getRawEntry()
 	rawFilter(versebuf, size, key);
 
 	//printf ("preparing text\n");
-     if (!unicode)
+        if (!unicode)
 		preptext(versebuf);
 
 	if (this->key != key) // free our key if we created a VerseKey
