@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <thmlrtf.h>
+#include <swmodule.h>
 
 SWORD_NAMESPACE_START
 
@@ -213,7 +214,47 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		else if (!strncmp(token, "note", 4)) {
 			buf += " {\\i1\\fs15 (";
 		}
+		else if (!strncmp(token, "img ", 4)) {
+			const char *src = strstr(token, "src");
+			if (!src)		// assert we have a src attribute
+				return false;
 
+                        char* filepath = new char[strlen(module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
+                        *filepath = 0;
+                        strcpy(filepath, module->getConfigEntry("AbsoluteDataPath"));
+                        unsigned long i = strlen(filepath);
+                        const char *c;
+			for (c = (src + 5); *c != '"'; c++) {
+				filepath[i] = *c;
+                                i++;
+			}
+                        filepath[i] = 0;
+
+                        for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
+                        c++;
+
+                        char imgc;
+                        FILE* imgfile;
+/*
+                        if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
+                                imgfile = fopen(filepath, "r");
+                                if (imgfile != NULL) {
+                                        buf += "{\\nonshppict {\\pict\\jpegblip ";
+                                        while (feof(imgfile) != EOF) {
+                                                buf.appendFormatted("%2x", fgetc(imgfile));
+                                        }
+                                        fclose(imgfile);
+                                        buf += "}}";
+                                }
+                        }
+                        else if (stricmp(c, "png")) {
+                                buf += "{\\*\\shppict {\\pict\\pngblip ";
+
+                                buf += "}}";
+                        }
+*/
+                        delete filepath;
+		}
 		else {
 			return false;  // we still didn't handle token
 		}

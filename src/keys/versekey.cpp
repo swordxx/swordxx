@@ -437,28 +437,28 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					break;
 				}
 
-                    for (loop = strlen(book) - 1; loop+1; loop--) {
-                         if (book[loop] == ' ') {
-						if (isroman(&book[loop+1])) {
-                                   if (verse == -1) {
-                                        verse = chap;
-								chap = from_rom(&book[loop+1]);
-								book[loop] = 0;
-							}
-						}
-						break;
-					}
-				}
+                                for (loop = strlen(book) - 1; loop+1; loop--) {
+                                if (book[loop] == ' ') {
+                                        if (isroman(&book[loop+1])) {
+                                                if (verse == -1) {
+                                                        verse = chap;
+				        		chap = from_rom(&book[loop+1]);
+					        	book[loop] = 0;
+					       	        }
+                                                }
+	        				break;
+                                        }
+                                }
 
-				if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
-                         if (verse == -1) {
-                              verse = chap;
-						chap = VerseKey(tmpListKey).Chapter();
-                              *book = 0;
-                         }
-				}
-				
-				bookno = getBookAbbrev(book);
+                                if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
+                                        if (verse == -1) {
+                                                verse = chap;
+		                		chap = VerseKey(tmpListKey).Chapter();
+                                                *book = 0;
+                                        }
+                                }
+
+		        	bookno = getBookAbbrev(book);
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
 				char partial = 0;
