@@ -145,8 +145,9 @@ void ListKey::increment(int step) {
 	Error();		// clear error
 	for(; step && !Error(); step--) {
 		if (arraypos < arraycnt) {
-			(*(array[arraypos]))++;
-			if (array[arraypos]->Error()) {
+			if (array[arraypos]->isBoundSet())
+				(*(array[arraypos]))++;
+			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
 				SetToElement(arraypos+1);
 			}
 			else *this = (const char *)(*array[arraypos]);
@@ -168,8 +169,9 @@ void ListKey::decrement(int step) {
 	Error();		// clear error
 	for(; step && !Error(); step--) {
 		if (arraypos > -1) {
-			(*(array[arraypos]))--;
-			if (array[arraypos]->Error()) {
+			if (array[arraypos]->isBoundSet())
+				(*(array[arraypos]))--;
+			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
 				SetToElement(arraypos-1, BOTTOM);
 			}
 			else *this = (const char *)(*array[arraypos]);
@@ -259,7 +261,7 @@ void ListKey::Remove() {
 
 
 /******************************************************************************
- * VerseKey::getRangeText - returns parsable range text for this key
+ * ListKey::getRangeText - returns parsable range text for this key
  */
 
 const char *ListKey::getRangeText() const {
@@ -271,6 +273,19 @@ const char *ListKey::getRangeText() const {
 			strcat(buf, "; ");
 	}
 	stdstr(&rangeText, buf);
+	delete [] buf;
 	return rangeText;
 }
+
+
+/******************************************************************************
+ * ListKey::getText - returns text key if (const char *) cast is requested
+ */
+
+const char *ListKey::getText() const {
+	SWKey *key = GetElement();
+	return (key) ? key->getText() : keytext;
+}
+
+
 

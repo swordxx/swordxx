@@ -27,8 +27,8 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mod2osis.bpf"/>
-    <INCLUDEPATH value="..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.7 2002/04/15 21:26:44 scribe Exp $
+ * $Id: treekeyidx.cpp,v 1.8 2002/09/11 07:04:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -588,3 +588,10 @@ TreeKeyIdx::TreeNode::~TreeNode() {
 	if (userData)
 		delete [] userData;
 }
+
+
+SWKey *TreeKeyIdx::clone() const
+{
+	return new TreeKeyIdx(*this);
+}
+

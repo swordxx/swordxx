@@ -42,6 +42,7 @@ SWKey::SWKey(SWKey const &k)
 
 void SWKey::init() {
 	myclass = &classdef;
+	boundSet = false;
 }
 
 SWKey *SWKey::clone() const

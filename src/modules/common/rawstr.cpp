@@ -168,7 +168,7 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
 		if (*ikey) {
 			headoff = 0;
 
-			key = new char [ strlen(ikey) + 1 ];
+			key = new char [ strlen(ikey) + 10 ]; // just in case toupper needs a few extra
 			strcpy(key, ikey);
 			toupperstr_utf8(key);
 
