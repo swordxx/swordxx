@@ -71,19 +71,19 @@ zVerse2::zVerse2(const char *ipath, int fileMode, int blockType,
 		fileMode = O_RDWR;
 	}
 		
-	buf.setFormatted("%s/ot.%czs", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/text.%czs", path, uniqueIndexID[blockType]);
 	idxfp = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	buf.setFormatted("%s/ot.%czz", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/text.%czz", path, uniqueIndexID[blockType]);
 	textfp = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	buf.setFormatted("%s/ot.%czv", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/text.%czv", path, uniqueIndexID[blockType]);
 	compfp = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	buf.setFormatted("%s/ot.%czm", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/text.%czm", path, uniqueIndexID[blockType]);
 	markupfp = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	buf.setFormatted("%s/ot.%czr", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/text.%czr", path, uniqueIndexID[blockType]);
 	midxfp = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	
@@ -157,22 +157,25 @@ void zVerse2::findOffsetText(long idxoff, long *start, unsigned short *size)
 	long newOffset = lseek(compfp->getFd(), idxoff, SEEK_SET);
 	if (newOffset == idxoff) {
 		if (read(compfp->getFd(), &ulBuffNum, 4) != 4) {
-			printf ("Error reading ulBuffNum\n");
+			printf ("Error reading ulBuffNum from %d\n", idxoff);
 			return;
 		}
 	}
-	else return;
+	else {
+		printf ("Error seeking to ulBuffNum from %d\n", idxoff);
+		return;
+	}
 
 	ulBuffNum = swordtoarch32(ulBuffNum);
 
 	if (read(compfp->getFd(), &ulVerseStart, 4) != 4)
 	{
-		printf ("Error reading ulVerseStart\n");
+		printf ("Error reading ulVerseStartfrom %d\n", idxoff);
 		return;
 	}
 	if (read(compfp->getFd(), &usVerseSize, 2) != 2)
 	{
-		printf ("Error reading usVerseSize\n");
+		printf ("Error reading usVerseSize from %d\n", idxoff);
 		return;
 	}
 
@@ -438,32 +441,30 @@ char zVerse2::createModule(const char *ipath, int blockBound, int indxPerBlock)
 	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
 		path[strlen(path)-1] = 0;
 
-	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockBound]);
+	sprintf(buf, "%s/text.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
-	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockBound]);
+	sprintf(buf, "%s/text.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
-	sprintf(buf, "%s/ot.%czm", path, uniqueIndexID[blockBound]);
+	sprintf(buf, "%s/text.%czm", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
-	sprintf(buf, "%s/ot.%czr", path, uniqueIndexID[blockBound]);
+	sprintf(buf, "%s/text.%czr", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::getSystemFileMgr()->close(fd);
 
-	
-	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockBound]);
+	sprintf(buf, "%s/text.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
@@ -473,6 +474,7 @@ char zVerse2::createModule(const char *ipath, int blockBound, int indxPerBlock)
 	long offset = 0;
 	short size = 0;
 	for (vk = TOP; !vk.Error(); vk++) {
+		//printf("vk %s %d\n", vk.getText(), vk.Index());
 		write(fd->getFd(), &offset, 4);	//compBufIdxOffset
 		write(fd->getFd(), &offset, 4);
 		write(fd->getFd(), &size, 2);
