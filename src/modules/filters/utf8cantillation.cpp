@@ -35,19 +35,11 @@ const char *UTF8Cantillation::getOptionValue()
 
 char UTF8Cantillation::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-    unsigned char *to, *from;
-	int len;
-	
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-	  memmove(&text[maxlen - len], text, len);
-	  from = (unsigned char*)&text[maxlen - len];
-	}
-	else	
-	  from = (unsigned char*)text;							// -------------------------------
-
+	if (!option) {
+	unsigned char *to, *from;
+	to = (unsigned char*)text;
 	//The UTF-8 range 0xD6 0x90 to 0xD6 0xAF and 0xD7 0x84 consist of Hebrew cantillation marks so block those out.
-	for (to = (unsigned char*)text; *from; from++) {
+	for (from = (unsigned char*)text; *from; from++) {
 	  if (*from != 0xD6) {
 	    if (*from == 0xD7 && *(from + 1) == 0x84) {
 	      from++;
@@ -56,12 +48,14 @@ char UTF8Cantillation::ProcessText(char *text, int maxlen, const SWKey *key)
 	      *to++ = *from;
 	    }
 	  }
-	  else if (*from && (*(from + 1) < 0x90 || *(from + 1) > 0xAF)) {
+	  else if (*(from + 1) < 0x90 || *(from + 1) > 0xAF) {
+	    *to++ = *from;
 	    from++;
 	    *to++ = *from;
 	  }
 	}
 	*to++ = 0;
 	*to = 0;
+     }
 	return 0;
 }

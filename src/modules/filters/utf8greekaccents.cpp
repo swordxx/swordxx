@@ -16,7 +16,7 @@ const char UTF8GreekAccents::optName[] = "Greek Accents";
 const char UTF8GreekAccents::optTip[] = "Toggles Greek Accents";
 
 UTF8GreekAccents::UTF8GreekAccents() {
-	option = false;
+	option = true;
 	options.push_back(on);
 	options.push_back(off);
 }
@@ -35,18 +35,11 @@ const char *UTF8GreekAccents::getOptionValue()
 
 char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key)
 {
+	if (!option) {
     unsigned char *to, *from;
-	int len;
-	
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-	  memmove(&text[maxlen - len], text, len);
-	  from = (unsigned char*)&text[maxlen - len];
-	}
-	else	
-	  from = (unsigned char*)text;							// -------------------------------
 
-	for (to = (unsigned char*)text; *from; from++) {
+	to = (unsigned char*)text;
+	for (from = (unsigned char*)text; *from; from++) {
 	  //first just remove combining characters
 	  if (*from == 0xE2 && *(from + 1) == 0x80 && *(from + 2) == 0x99)
 	    from += 2;
@@ -57,7 +50,7 @@ char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key)
 	  else if (*from == 0xCD && *(from + 1) == 0xBA)
 	    from++;
 	  //now converted pre-composed characters to their alphabetic bases, discarding the accents
-	  
+
 	  //Greek
 	  //capital alpha
 	  else if ((*from == 0xCE && *(from + 1) == 0x86)) {
@@ -248,6 +241,7 @@ char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key)
 	}
 	*to++ = 0;
 	*to = 0;
+     }
 	return 0;
 }
 
