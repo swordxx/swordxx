@@ -25,7 +25,7 @@ UTF8arShaping::~UTF8arShaping() {
         ucnv_close(conv);
 }
 
-char UTF8arShaping::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8arShaping::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
         UChar *ustr, *ustr2;
 

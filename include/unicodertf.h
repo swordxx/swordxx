@@ -1,6 +1,6 @@
 /*
  *
- * $Id: unicodertf.h,v 1.2 2001/06/15 01:07:46 chrislit Exp $
+ * $Id: unicodertf.h,v 1.3 2001/12/11 22:35:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,7 +30,7 @@
 class SWDLLEXPORT UnicodeRTF:public SWFilter {
 public:
   UnicodeRTF();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
 #endif

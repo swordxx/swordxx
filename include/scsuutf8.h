@@ -35,7 +35,7 @@ class SWDLLEXPORT SCSUUTF8:public SWFilter {
 
  public:
   SCSUUTF8();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
 #endif

@@ -29,7 +29,7 @@
 class SWDLLEXPORT Latin1UTF8:public SWFilter {
 public:
   Latin1UTF8();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
 #endif

@@ -25,7 +25,7 @@ PLAINHTML::PLAINHTML()
 }
 
 
-char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key)
+char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	char *to, *from;
 	int len;

@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $ */
-/* $Revision: 1.3 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.4 2001/12/11 22:35:10 scribe Exp $ */
+/* $Revision: 1.4 $ */
 
 #ifndef PLAINFOOTNOTES_H
 #define PLAINFOOTNOTES_H
@@ -42,8 +42,7 @@ class SWDLLEXPORT PLAINFootnotes:public SWFilter
 public:
     PLAINFootnotes ();
     virtual ~ PLAINFootnotes ();
-  virtual char ProcessText (char *text, int maxlen = -1, const SWKey * key =
-			    0);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

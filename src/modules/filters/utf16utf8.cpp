@@ -13,7 +13,7 @@ UTF16UTF8::UTF16UTF8() {
 }
 
 
-char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
   unsigned short *from;
   unsigned char *to;

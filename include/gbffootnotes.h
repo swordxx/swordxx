@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbffootnotes.h,v 1.8 2001/05/25 10:39:07 jansorg Exp $
+ * $Id: gbffootnotes.h,v 1.9 2001/12/11 22:35:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,7 +38,7 @@ class SWDLLEXPORT GBFFootnotes:public SWFilter
 public:
   GBFFootnotes ();
   virtual ~ GBFFootnotes ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

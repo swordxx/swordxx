@@ -39,7 +39,7 @@ class SWDLLEXPORT UTF8BiDiReorder : public SWFilter
  public:
   UTF8BiDiReorder();
   ~UTF8BiDiReorder();  
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
 #endif

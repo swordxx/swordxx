@@ -13,7 +13,7 @@ Latin1UTF16::Latin1UTF16() {
 }
 
 
-char Latin1UTF16::ProcessText(char *text, int maxlen, const SWKey *key)
+char Latin1UTF16::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
     unsigned char *from;
     unsigned short *to;

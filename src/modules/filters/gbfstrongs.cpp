@@ -40,7 +40,7 @@ const char *GBFStrongs::getOptionValue()
 	return (option) ? on:off;
 }
 
-char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key)
+char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want strongs
 		char *to, *from, token[2048]; // cheese.  Fix.

@@ -37,7 +37,7 @@ class SWDLLEXPORT UTF8GreekAccents:public SWFilter
 public:
     UTF8GreekAccents ();
     virtual ~ UTF8GreekAccents ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

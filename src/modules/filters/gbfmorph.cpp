@@ -40,7 +40,7 @@ const char *GBFMorph::getOptionValue()
 	return (option) ? on:off;
 }
 
-char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
+char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want morph tags
 		char *to, *from, token[2048]; // cheese.  Fix.

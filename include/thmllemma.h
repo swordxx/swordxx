@@ -38,7 +38,7 @@ class SWDLLEXPORT ThMLLemma:public SWFilter
 public:
     ThMLLemma ();
     virtual ~ ThMLLemma ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

@@ -40,7 +40,7 @@ const char *ThMLFootnotes::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want footnotes
 		char *to, *from, token[2048]; // cheese.  Fix.

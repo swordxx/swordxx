@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.4 2001/02/15 21:20:14 jansorg Exp $ */
-/* $Revision: 1.4 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.5 2001/12/11 22:35:10 scribe Exp $ */
+/* $Revision: 1.5 $ */
 
 #ifndef RTFHTML_H
 #define RTFHTML_H
@@ -31,7 +31,7 @@ class SWDLLEXPORT RTFHTML:public SWFilter
 {
 public:
   RTFHTML ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
 #endif

@@ -23,7 +23,7 @@ UTF8NFC::~UTF8NFC() {
          ucnv_close(conv);
 }
 
-char UTF8NFC::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8NFC::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
         int32_t len = strlen(text) * 2;
         source = new UChar[len + 1]; //each char could become a surrogate pair

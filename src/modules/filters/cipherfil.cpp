@@ -24,7 +24,7 @@ SWCipher *CipherFilter::getCipher() {
 }
 
 
-char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key) {
+char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
 	unsigned int len;
 //	len = strlen(text);
 	len = maxlen;

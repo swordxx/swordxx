@@ -37,7 +37,7 @@ class SWDLLEXPORT UTF8HebrewPoints:public SWFilter
 public:
     UTF8HebrewPoints ();
     virtual ~ UTF8HebrewPoints ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

@@ -24,7 +24,7 @@ RWPHTML::RWPHTML()
 }
 
 
-char RWPHTML::ProcessText(char *text, int maxlen, const SWKey *key)
+char RWPHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	char *to, *from, greek_str[500];
 	bool inverse = false;

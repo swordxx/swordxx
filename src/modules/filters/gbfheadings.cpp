@@ -40,7 +40,7 @@ const char *GBFHeadings::getOptionValue()
 	return (option) ? on:off;
 }
 
-char GBFHeadings::ProcessText(char *text, int maxlen, const SWKey *key)
+char GBFHeadings::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want headings
 		char *to, *from, token[2048]; // cheese.  Fix.

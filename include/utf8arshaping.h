@@ -39,7 +39,7 @@ class SWDLLEXPORT UTF8arShaping : public SWFilter
  public:
   UTF8arShaping();
   ~UTF8arShaping();  
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
 #endif

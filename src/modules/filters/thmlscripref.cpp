@@ -40,7 +40,7 @@ const char *ThMLScripref::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want scriprefs
 		char *to, *from, token[2048]; // cheese.  Fix.

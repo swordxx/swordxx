@@ -25,7 +25,7 @@ UTF8BiDiReorder::~UTF8BiDiReorder() {
         ucnv_close(conv);
 }
 
-char UTF8BiDiReorder::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8BiDiReorder::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
         UChar *ustr, *ustr2;
         

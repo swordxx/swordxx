@@ -51,8 +51,9 @@ class SWDLLEXPORT UTF8Transliterator : public SWFilter
 
  public:
   char lang[2];
-  UTF8Transliterator();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  UTF8Transliterator ();
+  virtual ~ UTF8Transliterator ();
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
     {
       return optName;

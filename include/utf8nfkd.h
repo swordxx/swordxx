@@ -38,7 +38,7 @@ class SWDLLEXPORT UTF8NFKD : public SWFilter
  public:
   UTF8NFKD();
   ~UTF8NFKD();  
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
 #endif

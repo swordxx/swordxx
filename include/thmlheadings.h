@@ -38,7 +38,7 @@ class SWDLLEXPORT ThMLHeadings:public SWFilter
 public:
   ThMLHeadings ();
   virtual ~ ThMLHeadings ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

@@ -33,7 +33,7 @@ const char *UTF8Cantillation::getOptionValue()
 	return (option) ? on:off;
 }
 
-char UTF8Cantillation::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8Cantillation::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {
 	unsigned char *to, *from;

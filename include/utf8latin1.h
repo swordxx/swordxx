@@ -30,7 +30,7 @@ class SWDLLEXPORT UTF8Latin1:public SWFilter {
   char replacementChar;
 public:
   UTF8Latin1(char rchar = '?');
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
 #endif

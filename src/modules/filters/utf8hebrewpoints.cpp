@@ -33,7 +33,7 @@ const char *UTF8HebrewPoints::getOptionValue()
 	return (option) ? on:off;
 }
 
-char UTF8HebrewPoints::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8HebrewPoints::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {
 		unsigned char *to, *from;

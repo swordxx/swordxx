@@ -13,7 +13,7 @@ UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
 }
 
 
-char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
   unsigned char *from;
   unsigned short *to;

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfheadings.h,v 1.1 2001/05/06 03:31:52 chrislit Exp $
+ * $Id: gbfheadings.h,v 1.2 2001/12/11 22:35:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,7 +38,7 @@ class SWDLLEXPORT GBFHeadings:public SWFilter
 public:
   GBFHeadings ();
   virtual ~ GBFHeadings ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

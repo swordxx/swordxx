@@ -59,7 +59,7 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
   return text;
 }
 
-char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key)
+char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule *module)
 {
   unsigned char *to, *from;
   unsigned long buflen = len * FILTERPAD;

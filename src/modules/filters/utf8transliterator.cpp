@@ -65,7 +65,7 @@ const char *UTF8Transliterator::getOptionValue()
 	return (NUMTARGETSCRIPTS > option) ? optionstring[option] : 0;
 }
 
-char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (option) {	// if we want transliteration
                 UErrorCode err;

@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.7 2001/05/25 10:39:07 jansorg Exp $ */
-/* $Revision: 1.7 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.8 2001/12/11 22:35:10 scribe Exp $ */
+/* $Revision: 1.8 $ */
 
 #ifndef GBFHTML_H
 #define GBFHTML_H
@@ -32,7 +32,7 @@ class SWDLLEXPORT GBFHTML:public SWFilter
 {
 public:
   GBFHTML ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
 #endif

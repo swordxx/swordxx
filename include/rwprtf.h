@@ -3,7 +3,7 @@
  *				special tags in Robertsons Word Pictures commentary into
  *				Rich Text Format tags
  *
- * $Id: rwprtf.h,v 1.6 2001/02/15 21:20:14 jansorg Exp $
+ * $Id: rwprtf.h,v 1.7 2001/12/11 22:35:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,7 +34,7 @@ class SWDLLEXPORT RWPRTF:public SWFilter
 {
 public:
   RWPRTF ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
 #endif

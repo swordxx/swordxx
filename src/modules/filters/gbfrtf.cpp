@@ -13,7 +13,7 @@ GBFRTF::GBFRTF() {
 }
 
 
-char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
+char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	unsigned char *to, *from;
 	char token[2048];

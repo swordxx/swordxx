@@ -13,7 +13,7 @@ UTF8HTML::UTF8HTML() {
 }
 
 
-char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key)
+char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	unsigned char *to, *from;
 	int len;

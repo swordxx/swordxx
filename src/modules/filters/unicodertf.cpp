@@ -13,7 +13,7 @@ UnicodeRTF::UnicodeRTF() {
 }
 
 
-char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key)
+char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	unsigned char *to, *from;
 	int len;

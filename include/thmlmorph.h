@@ -37,7 +37,7 @@ class SWDLLEXPORT ThMLMorph:public SWFilter
 public:
     ThMLMorph ();
     virtual ~ ThMLMorph ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfstrongs.h,v 1.7 2001/02/15 21:20:14 jansorg Exp $
+ * $Id: gbfstrongs.h,v 1.8 2001/12/11 22:35:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,7 +38,7 @@ class SWDLLEXPORT GBFStrongs:public SWFilter
 public:
     GBFStrongs ();
     virtual ~ GBFStrongs ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()
   {
     return optName;

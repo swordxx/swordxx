@@ -14,7 +14,7 @@ GBFPlain::GBFPlain() {
 }
 
 
-char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key)
+char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	char *to, *from, token[2048];
 	int tokpos = 0;

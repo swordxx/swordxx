@@ -40,7 +40,7 @@ const char *ThMLMorph::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLMorph::ProcessText(char *text, int maxlen, const SWKey *key)
+char ThMLMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want morph tags
 		char *to, *from, token[2048]; // cheese.  Fix.

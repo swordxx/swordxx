@@ -51,7 +51,7 @@ const char *PLAINFootnotes::getOptionValue()
 }
 
 
-char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
+char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	char token[2048];
 	int tokpos = 0;

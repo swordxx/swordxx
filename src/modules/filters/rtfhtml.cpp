@@ -25,7 +25,7 @@ RTFHTML::RTFHTML() {
 }
 
 
-char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
+char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	char *to, *from;
 	int len;

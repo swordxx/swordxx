@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.31 2001/11/08 13:21:22 chrislit Exp $
+ * $Id: swmodule.h,v 1.32 2001/12/11 22:35:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -529,7 +529,7 @@ public:
   virtual void filterBuffer (FilterList *filters, char *buf, long size, SWKey *key) {
 	FilterList::iterator it;
 	for (it = filters->begin(); it != filters->end(); it++) {
-		(*it)->ProcessText(buf, size, key);
+		(*it)->ProcessText(buf, size, key, this);
 	}
   }
 
