@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext.h,v 1.21 2002/03/14 16:56:49 scribe Exp $
+ * $Id: ztext.h,v 1.22 2002/03/16 04:18:34 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -61,6 +61,10 @@ public:
      virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
      virtual void deleteEntry ();	// Delete current module entry
   // end write interface ------------------------
+  
+	// swcacher interface ----------------------
+	virtual void flush() { flushCache(); }
+	// end swcacher interface ----------------------
 };
 
 #endif
