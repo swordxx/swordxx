@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = 1.6
-INCLUDES = -I$(top_srcdir)/include
-INCLUDES += -DUSE_AUTOTOOLS -DUNIX -Dunix
+AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS += -DUSE_AUTOTOOLS -DUNIX -Dunix
 
 if ZLIB
 ZLIBDEF = 
@@ -8,12 +8,21 @@ else
 ZLIBDEF = -DEXCLUDEZLIB
 endif
 
-INCLUDES += $(ZLIBDEF)
+AM_CPPFLAGS += $(ZLIBDEF)
 
 # Global config directory
 globalconfdir := @sysconfdir@
 
-lib_LTLIBRARIES = libsword.la
+if BUILDSPLITLIB
+extralibs = libsword_imp.la libsword_flat.la
+flatlib = libsword_flat.a
+else
+extralibs =
+flatlib =
+endif
+
+lib_LTLIBRARIES = libsword.la $(extralibs)
+#lib_LIBRARIES = $(flatlib)
 
 libsword_la_SOURCES =
 if ICU
@@ -24,7 +33,7 @@ ICULIBADD =
 ICUDEF =
 endif
 
-INCLUDES += $(ICUDEF)
+AM_CPPFLAGS += $(ICUDEF)
 
 if INSTALLMGR
 IMGRLIBADD = -lcurl $(CURL_LIBS)
@@ -36,6 +45,15 @@ endif
 libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) 
 
 libsword_la_LDFLAGS = -version-info 5
+
+if BUILDSPLITLIB
+libsword_flat_la_LDFLAGS = -version-info 5
+libsword_imp_la_LDFLAGS = -version-info 5
+libsword_flat_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) libsword.la
+libsword_imp_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) libsword.la
+libsword_flat_la_SOURCES =
+libsword_imp_la_SOURCES =
+endif
 
 include ../src/keys/Makefile.am
 include ../src/utilfuns/Makefile.am
