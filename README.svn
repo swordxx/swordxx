@@ -1,1 +1,3 @@
-To generate the configure script you must run ./autogen.sh
+To generate the configure script you must run 
+
+./autogen.sh
