@@ -1,9 +1,9 @@
 all: server testclient
 
 server: server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o
-	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o server server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o `orbit2-config --libs` -lORBit-2-cpp
+	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o server server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-cpp-skels.o swordorb-skels.o `orbit2-config --libs` -lORBit-2-cpp -lsword -lz
 
-testclient: server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o
+testclient: testclient.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o
 	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o testclient testclient.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o `orbit2-config --libs` -lORBit-2-cpp
 
 swordorb-common.o: swordorb-common.c

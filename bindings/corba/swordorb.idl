@@ -9,6 +9,13 @@ module swordorb {
 
 typedef sequence<string> StringList;
 
+struct ModInfo {
+	string name;
+	string type;
+	string lang;
+};
+
+typedef sequence<ModInfo> ModInfoList;
 //-----------------------------------------------------------------
 // SWModule methods
 
@@ -31,11 +38,12 @@ interface SWModule {
 //-----------------------------------------------------------------
 // modmap methods
 //
+/*
 interface ModListIterator {
 	boolean next();
 	SWModule val();
 };
-
+*/
 
 //-----------------------------------------------------------------
 // SWMgr methods
@@ -48,7 +56,8 @@ interface SWMgr {
 
 //	SWHANDLE SWDLLEXPORT SWMgr_getConfig(SWHANDLE hmgr);
 
-	ModListIterator getModListIterator();
+//	ModListIterator getModListIterator();
+	ModInfoList getModInfoList();
 	SWModule getModuleByName(in string name);
 	string getPrefixPath();
 	string getConfigPath();

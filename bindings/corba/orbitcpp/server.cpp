@@ -2,11 +2,12 @@
 
 #include "sword-impl.hpp"
 #include <iostream>
+#include <swmgr.h>
 
-int main (int argc, char* argv[])
-{
-  try
-  {
+sword::SWMgr swordmgr;
+
+int main (int argc, char* argv[]) {
+  try {
  	  // Initialize the CORBA orb
  	  CORBA::ORB_ptr orb = CORBA::ORB_init (argc, argv);
 	
@@ -22,18 +23,18 @@ int main (int argc, char* argv[])
  	  mgr->activate();
 
  	  // Create a Servant and explicitly create a CORBA object
-// 	  swordorb::SWModule_impl servant;
-// 	  CORBA::Object_var object = servant._this();
+ 	  swordorb::SWMgr_impl servant(&swordmgr);
+ 	  CORBA::Object_var object = servant._this();
 
  	  // Here we get the IOR for the Hello server object.
  	  // Our "client" will use the IOR to find the object to connect to
-// 	  CORBA::String_var ref = orb->object_to_string( object );
+ 	  CORBA::String_var ref = orb->object_to_string( object );
 
  	  // print out the IOR
-// 	  std::cout << ref << std::endl;
+ 	  std::cout << ref << std::endl;
 
  	  // run the server event loop
-// 	  orb->run();
+ 	  orb->run();
   }
   catch(const CORBA::Exception& ex)
   {

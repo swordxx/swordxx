@@ -22,19 +22,15 @@ int main (int argc, char *argv[])
 		// Get a reference to the server from the IOR passed on the
 		// command line
 		CORBA::Object_var obj = orb->string_to_object(argv[1]);
-		swordorb::SWModule_var ptr = swordorb::SWModule::_narrow(obj);
+		swordorb::SWMgr_var ptr = swordorb::SWMgr::_narrow(obj);
 
-		// The argument is a simple string
-		const char* message = "Hello server, from client!";
-
-		// The result is stored in a CORBA-aware smartpointer
-		CORBA::String_var reply;
-
+		swordorb::ModInfoList *modInfoList;
 		// Do the actual CORBA call here
-		reply = ptr->getName();
-
-		// Print reply
-		std::cout << "Client: Reply was \"" << reply << "\"" << std::endl;
+		modInfoList = ptr->getModInfoList();
+		std::cout << "sequence length: " << modInfoList->length() << "\n";
+		for (int i = 0; i < modInfoList->length(); i++) {
+			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].type << ": " << (*modInfoList)[i].lang << "\n";
+		}
 		
 	} catch(const CORBA::Exception& ex) {
 		std::cout << "Exception caught. Maybe the server is not running, or the IOR is wrong." << std::endl;
