@@ -45,3 +45,7 @@ required:
 	ClassDef classDef;
 	classDef.method(1, '2');
 
+	var1      = 1;
+	variable2 = 2;
+	var3      = 3;
+	variable4 = 4;
