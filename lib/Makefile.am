@@ -12,7 +12,14 @@ ICULIBADD = -licui18n -licuuc -lustdio
 else
 ICULIBADD =
 endif
-libsword_la_LIBADD = $(ICULIBADD)
+
+if INSTALLMGR
+IMGRLIBADD = $(CURL_LIBS)
+else
+IMGRLIBADD =
+endif
+
+libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD)
 
 libsword_la_LDFLAGS = -version-info 1
 
