@@ -439,13 +439,14 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 					*testKeyType = vk;
 
 					// check to see if it set ok and if so, add to our return list
-					if (*testKeyType == vk)
+					if (*testKeyType == vk) {
 						listkey << (const char *) vk;
-						listkey.GetElement()->userData = (void *)(int)(h.score(i)*100);
+						listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
+					}
 				}
 				else {
 					listkey << (const char*) vk;
-					listkey.GetElement()->userData = (void *)(int)(h.score(i)*100);
+					listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
 				}
 			}
 			(*percent)(98, percentUserData);

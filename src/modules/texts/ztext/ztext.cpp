@@ -404,13 +404,14 @@ ListKey &zText::search(const char *istr, int searchType, int flags, SWKey *scope
 					*testKeyType = vk;
 
 					// check to see if it set ok and if so, add to our return list
-					if (*testKeyType == vk)
+					if (*testKeyType == vk) {
 						listkey << (const char *) vk;
-						listkey.GetElement()->userData = (void *)(int)(h.score(i)*100);
+						listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
+					}
 				}
 				else {
 					listkey << (const char*) vk;
-					listkey.GetElement()->userData = (void *)(int)(h.score(i)*100);
+					listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
 				}
 			}
 			(*percent)(98, percentUserData);
