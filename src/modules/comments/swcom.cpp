@@ -14,7 +14,7 @@
  *	idisp	 - Display object to use for displaying
  */
 
-SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, bool unicode, char dir): SWModule(imodname, imoddesc, idisp, "Commentaries", unicode, dir)
+SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, char enc, char dir, char mark): SWModule(imodname, imoddesc, idisp, "Commentaries", enc, dir, mark)
 {
 	delete key;
 	key = CreateKey();
