@@ -13,5 +13,6 @@ c += regex.c
 endif
 
 c += utilstr.c
+c += roman.c
 
 include ${root}/Makefile.post

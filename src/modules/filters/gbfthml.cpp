@@ -314,12 +314,16 @@ char GBFThML::ProcessText(char *text, int maxlen)
 				  *to++ = '<';
 				  *to++ = 'b';
 				  *to++ = 'r';
+				  *to++ = ' ';
+				  *to++ = '/';
 				  *to++ = '>';
 				  *to++ = ' ';
 				  continue;
 				case 'M':               // new paragraph
 				  *to++ = '<';
 				  *to++ = 'p';
+				  *to++ = ' ';
+				  *to++ = '/';
 				  *to++ = '>';
 				  continue;
 				case 'T':
