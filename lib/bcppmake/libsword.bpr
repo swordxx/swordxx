@@ -87,21 +87,21 @@
       ..\..\src\modules\filters\osisstrongs.obj 
       ..\..\src\modules\filters\osismorph.obj 
       ..\..\src\modules\filters\gbfredletterwords.obj 
-      ..\..\src\utilfuns\swbuf.obj ..\..\src\utilfuns\utilxml.obj 
+      ..\..\src\utilfuns\swbuf.obj ..\..\src\mgr\stringmgr.obj 
+      ..\..\src\modules\filters\swoptfilter.obj ..\..\src\utilfuns\utilxml.obj 
       ..\..\src\modules\filters\osiswebif.obj 
       ..\..\src\modules\filters\osisheadings.obj 
       ..\..\src\modules\filters\osishtmlhref.obj 
       ..\..\src\modules\filters\osislemma.obj 
+      ..\..\src\modules\filters\osisosis.obj 
       ..\..\src\modules\filters\osisplain.obj 
       ..\..\src\modules\filters\osisredletterwords.obj 
       ..\..\src\modules\filters\osisrtf.obj 
       ..\..\src\modules\filters\osisscripref.obj 
-      ..\..\src\modules\filters\osisfootnotes.obj 
-      ..\..\src\modules\filters\swoptfilter.obj ..\..\src\mgr\swsearchable.obj 
+      ..\..\src\modules\filters\osisfootnotes.obj ..\..\src\mgr\swsearchable.obj 
       ..\..\src\modules\filters\gbfwebif.obj 
       ..\..\src\modules\filters\thmlwebif.obj ..\..\src\utilfuns\utilweb.obj 
-      ..\..\src\modules\filters\osisosis.obj ..\..\src\utilfuns\swversion.obj 
-      ..\..\src\mgr\stringmgr.obj"/>
+      ..\..\src\utilfuns\swversion.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -209,17 +209,18 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=10
+Count=11
 Item0=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0
-Item1=_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0
-Item2=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
-Item3=_ICU_;_ICUSWORD_;USBINARY
-Item4=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE;_DEBUG
-Item5=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE
-Item6=;USBINARY;_DEBUG
-Item7=_ICU_;_ICUSWORD_
-Item8=_ICU_;_ICUSWORD_;_DEBUG
-Item9=_DEBUG
+Item1=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG
+Item2=_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0
+Item3=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
+Item4=_ICU_;_ICUSWORD_;USBINARY
+Item5=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE;_DEBUG
+Item6=_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE
+Item7=;USBINARY;_DEBUG
+Item8=_ICU_;_ICUSWORD_
+Item9=_ICU_;_ICUSWORD_;_DEBUG
+Item10=_DEBUG
 
 [HistoryLists\hlFinalOutputDir]
 Count=3
