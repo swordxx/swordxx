@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
   const char * helptext ="thml2gbs 1.0 General Book module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [0|1 - long names] [0|1 - output in 'import format']\n";
 
   signed long i = 0;
-  string divs[6];
+  std::string divs[6];
   int level = 0;
   char* keybuffer = new char[2048];
   char* entbuffer = new char[1048576];

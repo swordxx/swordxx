@@ -28,6 +28,8 @@
 #include "gbfcgi.h"
 #include "thmlcgi.h"
 
+using std::string;
+
 //---------------------------------------------------------------------------
 DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc, char mark, bool ibidi, bool ishape)
         : SWMgr(iconfig, isysconfig, autoload, new DiathekeFilterMgr(mark, enc))

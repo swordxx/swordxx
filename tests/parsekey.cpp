@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 	for (int i = 0; i < verses.Count(); i++) {
 		VerseKey *element = dynamic_cast<VerseKey *>(verses.GetElement(i));
 		if (element) {
-			std::cout << (string(element->LowerBound()) + " - " + string(element->UpperBound())).c_str() << "\n";
+			std::cout << (std::string(element->LowerBound()) + " - " + std::string(element->UpperBound())).c_str() << "\n";
 		}
 		else	std::cout << (const char *)*verses.GetElement(i) << "\n";
 //		else	{

@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <stdarg.h>
 #include <thmlosis.h>
 #include <swmodule.h>
@@ -45,7 +45,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	char *wordStart, *wordEnd;
 	bool newText = false;
 	bool newWord = false;
-	string tmp;
+	std::string tmp;
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
 
@@ -304,7 +304,7 @@ void ThMLOSIS::pushString(char **buf, const char *format, ...) {
 
 
 const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
-	static string outRef;
+	static std::string outRef;
 
 	outRef = "";
 

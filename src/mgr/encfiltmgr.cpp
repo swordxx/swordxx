@@ -82,7 +82,7 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
 	ConfigEntMap::iterator entry;
 
-	string encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (string)"";
+	std::string encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (std::string)"";
 	if (encoding.empty() || !stricmp(encoding.c_str(), "Latin-1")) {
                 module->AddRawFilter(latin1utf8);
 	}

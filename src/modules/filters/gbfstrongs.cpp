@@ -57,7 +57,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	char *ch;
 	char *textStart = text, *textEnd = 0;
 	bool newText = false;
-	string tmp;
+	std::string tmp;
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {

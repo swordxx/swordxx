@@ -31,9 +31,9 @@ using sword::SW_POSITION;
 
 
 void errorOutHelp(char *appName) {
-	cerr << appName << " - a tool to output a Sword module in SWORD's 'imp' import format\n";
-	cerr << "usage: "<< appName << " <modname> \n";
-	cerr << "\n\n";
+	std::cerr << appName << " - a tool to output a Sword module in SWORD's 'imp' import format\n";
+	std::cerr << "usage: "<< appName << " <modname> \n";
+	std::cerr << "\n\n";
 	exit(-1);
 }
 
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 		vkey->Headings(1);
 
 	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
-		cout << "$$$" << inModule->KeyText() << endl;
-		cout << inModule->getRawEntry() << endl;
+		std::cout << "$$$" << inModule->KeyText() << std::endl;
+		std::cout << inModule->getRawEntry() << std::endl;
 	}
 	return 0;
 }

@@ -56,7 +56,7 @@ void viewEntryText(RawGenBook *book) {
 
 
 void setEntryText(RawGenBook *book) {
-	string body;
+	std::string body;
 	TreeKeyIdx *treeKey = (TreeKeyIdx *)(SWKey *)(*book);
 	if (treeKey->getOffset()) {
 		char buf[1023];
@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 	TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
 	treeKey = (TreeKeyIdx *)(SWKey *)(*book);
 
-	string input;
+	std::string input;
 	char line[1024];
 
 	do {

@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: swlocale.h,v 1.10 2002/10/01 22:04:58 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,7 +33,7 @@
 
 SWORD_NAMESPACE_START
 
-typedef map < string, string, less < string > >LookupMap;
+typedef std::map < std::string, std::string, std::less < std::string > >LookupMap;
 
 /** SWLocale is used for the localisation of the booknames
 * The SWLocale is a class which holds the information of one language.

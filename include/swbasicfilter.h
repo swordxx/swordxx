@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.11 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: swbasicfilter.h,v 1.12 2002/10/01 22:04:58 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -63,7 +63,7 @@ protected:
 	const SWModule *module;
 	const SWKey *key;
 	char *resultBuffer;
-	typedef map<string, string> DualStringMap;
+	typedef std::map<std::string, std::string> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;
 

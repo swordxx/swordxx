@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <iostream>
 #include <fstream>
-#include <string>
+//#include <string>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -20,6 +20,8 @@ using sword::SWModule;
 using sword::ModMap;
 using sword::SWKey;
 #endif
+
+using std::cerr;
 
 int main(int argc, char **argv)
 {

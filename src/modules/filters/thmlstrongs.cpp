@@ -57,7 +57,7 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	char *valto;
 	char *ch;
 	char *textStart = text, *textEnd = 0;
-	string tmp;
+	std::string tmp;
 	bool newText = false;
 
 	len = strlen(text) + 1;	// shift string to right of buffer

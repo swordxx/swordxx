@@ -25,7 +25,9 @@
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
-
+using std::endl;
+using std::cerr;
+using std::cout;
 
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to output a Sword module in OSIS format\n";

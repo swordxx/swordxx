@@ -9,6 +9,12 @@
 #include <string>
 #include <list>
 
+using std::string;
+using std::list;
+using std::cout;
+using std::endl;
+using std::ostream;
+
 void systemquery(const char * key, ostream* output){
 	DiathekeMgr manager;
 	ModMap::iterator it;

@@ -3,7 +3,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 01-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
 	change sword to use a sword namespace
+	fix to build with gcc3.2 again after yesterday
 
+30-Sep-2002	Daniel Glassey <dglassey@crosswire.org>
+	remove using namespace std from all headers
 
 28-Sep-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added SWModule::Index and SWCom and SWText impls

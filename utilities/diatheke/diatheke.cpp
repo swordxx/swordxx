@@ -10,6 +10,8 @@
 #include "diafiltmgr.h"
 #include <iostream>
 
+using std::string;
+using std::cout;
 
 #define RQ_REF 1
 #define RQ_BOOK 2

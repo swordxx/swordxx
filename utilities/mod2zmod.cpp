@@ -37,6 +37,10 @@ using sword::ZipCompress;
 using sword::LZSSCompress;
 #endif
 
+using std::cerr;
+using std::string;
+using std::cout;
+
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to create compressed Sword modules\n";
 	cerr << "version 0.1\n\n";

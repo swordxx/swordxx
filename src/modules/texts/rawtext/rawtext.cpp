@@ -13,7 +13,7 @@
 #include <unistd.h>
 #endif
 
-#include <string.h>
+#include <string>
 #include <utilfuns.h>
 #include <rawverse.h>
 #include <rawtext.h>
@@ -26,6 +26,10 @@
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
+
+using std::string;
+using std::map;
+using std::list;
 
 SWORD_NAMESPACE_START
 

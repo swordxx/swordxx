@@ -36,4 +36,4 @@
 #define ST_MULTIWORD 3 // -2
 
 int hasalpha (char * string);
-void doquery(unsigned long maxverses, unsigned char outputformat, unsigned char outputencoding, unsigned long optionfilters, unsigned char searchtype, const char *text, const char *locale, const char *ref, ostream* output, const char* script, signed short variants); 
+void doquery(unsigned long maxverses, unsigned char outputformat, unsigned char outputencoding, unsigned long optionfilters, unsigned char searchtype, const char *text, const char *locale, const char *ref, std::ostream* output, const char* script, signed short variants); 

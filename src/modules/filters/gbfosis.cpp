@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <stdarg.h>
 #include <gbfosis.h>
 #include <swmodule.h>
@@ -45,7 +45,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	char *wordStart, *wordEnd;
 	bool newText = false;
 	bool newWord = false;
-	string tmp;
+	std::string tmp;
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
 
@@ -307,7 +307,7 @@ void GBFOSIS::pushString(char **buf, const char *format, ...) {
 
 
 const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
-	static string outRef;
+	static std::string outRef;
 
 	outRef = "";
 

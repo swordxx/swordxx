@@ -26,6 +26,8 @@ using sword::VerseKey;
 using sword::SW_POSITION;
 #endif
 
+using std::string;
+
 char readline(int fd, char **buf) {
 	char ch;
 	if (*buf)

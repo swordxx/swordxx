@@ -70,7 +70,7 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
       treeKey->save();
     }
     
-    //DEBUG      std::cout << treeKey->getLocalName() << " : " << tok << endl;
+    //DEBUG      std::cout << treeKey->getLocalName() << " : " << tok << std::endl;
     
     tok = strtok(NULL, "/");
     
@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
   while (readline(infile, linebuffer)) {
     if (!strncmp(linebuffer, "$$$", 3)) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
-	std::cout << keybuffer << endl;
+	std::cout << keybuffer << std::endl;
 	treeKey->root();
 	setkey(treeKey, keybuffer);
 	book->setEntry(entbuffer, strlen(entbuffer));
@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
 
   //handle final entry
   if (strlen(keybuffer) && strlen(entbuffer)) {
-    std::cout << keybuffer << endl;
+    std::cout << keybuffer << std::endl;
     treeKey->root();
     setkey(treeKey, keybuffer);
     book->setEntry(entbuffer, strlen(entbuffer));

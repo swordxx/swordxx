@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.10 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: treekeyidx.cpp,v 1.11 2002/10/01 22:04:58 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -129,12 +129,12 @@ void TreeKeyIdx::save() {
 
 const char *TreeKeyIdx::getFullName() const {
 	TreeNode parent;
-	static string fullPath;
+	static std::string fullPath;
 	fullPath = currentNode.name;
 	parent.parent = currentNode.parent;
 	while (parent.parent > -1) {
 		getTreeNodeFromIdxOffset(parent.parent, &parent);
-		fullPath = ((string)parent.name) + (string) "/" + fullPath;
+		fullPath = ((std::string)parent.name) + (std::string) "/" + fullPath;
 	}
 	return fullPath.c_str();
 }
@@ -305,7 +305,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 		read(datfd->getFd(), &tmp, 4);
 		node->firstChild = swordtoarch32(tmp);
 
-		string name;
+		std::string name;
 		do {
 			read(datfd->getFd(), &ch, 1);
 			name += ch;

@@ -7,9 +7,11 @@
 
 #include <stdlib.h>
 #include <ctype.h>
-#include <string.h>
+#include <string>
 #include <greeklexattribs.h>
 #include <swmodule.h>
+
+using std::string;
 
 SWORD_NAMESPACE_START
 

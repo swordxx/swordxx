@@ -11,6 +11,7 @@ using sword::RawText;
 using sword::RawCom;
 using sword::SWKey;
 #endif
+using std::cout;
 
 int main(int argc, char **argv)
 {
