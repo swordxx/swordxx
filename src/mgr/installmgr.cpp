@@ -538,23 +538,23 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 						modFile += ent->d_name;
 						SWConfig *config = new SWConfig(modFile.c_str());
 						if (config->Sections.find(modName) != config->Sections.end()) {
-							delete config;
 							SWBuf targetFile = destMgr->configPath; //"./mods.d/";
 							targetFile += "/";
 							targetFile += ent->d_name;
 							FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
 							if (cipher) {
-/*									
-								CipherForm->modName = modName;
-								CipherForm->confFile = targetFile;
-								if (CipherForm->ShowModal() == mrCancel) {
-									removeModule(modName);
+								if (getCipherCode(modName, config)) {
+									SWMgr newDest(destMgr->prefixPath);
+									removeModule(&newDest, modName);
 									aborted = true;
 								}
-*/											
+								else {
+									config->Save();
+									FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
+								}
 							}
 						}
-						else	delete config;
+						delete config;
 					}
 				}
 				closedir(dir);
@@ -565,6 +565,11 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	return 1;
 }
 
+
+// return aborted
+bool InstallMgr::getCipherCode(const char *modName, SWConfig *config) {
+	return false;
+}
 
 int InstallMgr::copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName) {
 	SWBuf sourcePath = sourceDir;

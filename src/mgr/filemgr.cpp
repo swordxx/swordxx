@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.28 2003/07/07 23:32:33 chrislit Exp $
+ * $Id: filemgr.cpp,v 1.29 2003/08/07 22:51:21 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -93,7 +93,7 @@ FileMgr::~FileMgr() {
 
 
 FileDesc *FileMgr::open(const char *path, int mode, bool tryDowngrade) {
-	return open(path, mode, S_IREAD | S_IWRITE, tryDowngrade);
+	return open(path, mode, S_IREAD | S_IWRITE|S_IRGRP|S_IROTH, tryDowngrade);
 }
 
 FileDesc *FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade) {
@@ -150,7 +150,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		if (i == 9999)
 			return -2;
 
-		int fd = ::open(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE);
+		int fd = ::open(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 		if (fd < 0)
 			return -3;
 	
@@ -162,7 +162,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		}
 		// zero out the file
 		::close(file->fd);
-		file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE);
+		file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 		::close(file->fd);
 		file->fd = -77;	// force file open by filemgr
 		// copy tmp file back (dumb, but must preserve file permissions)
@@ -309,10 +309,10 @@ int FileMgr::createParent(const char *pName) {
 int FileMgr::createPathAndFile(const char *fName) {
 	int fd;
 	
-	fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	if (fd < 1) {
 		createParent(fName);
-		fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+		fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	}
 	return fd;
 }

@@ -84,6 +84,7 @@ public:
 	virtual void refreshRemoteSource(InstallSource *is);
 	virtual void statusUpdate(double dltotal, double dlnow);
 	virtual void preDownloadStatus(long totalBytes, long completedBytes, const char *message);
+	virtual bool getCipherCode(const char *modName, SWConfig *config);
 };
 
 
