@@ -87,14 +87,12 @@ endif
 if INSTCONF
 sysconf_DATA = sword.conf
 sword.conf:
-	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)
-	@echo "[Install]" > $(DESTDIR)$(sysconfdir)/sword.conf
-	@echo "DataPath=$(pkgdatadir)/" >> $(DESTDIR)$(sysconfdir)/sword.conf
+	@echo "[Install]" > sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> sword.conf
 
 clean-generic:
 	-rm -f sword.conf
 endif
-
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
@@ -147,11 +145,6 @@ register:
 	@echo ""
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
-
-install_config: 
-	@echo "[Install]" > $(DESTDIR)$(sysconfdir)/sword.conf
-	@echo "DataPath=$(pkgdatadir)/" >> $(DESTDIR)$(sysconfdir)/sword.conf
-	@echo "sword.conf generated"
 
 dist-hook:
 	(cd $(distdir) && ./autogen.sh)
