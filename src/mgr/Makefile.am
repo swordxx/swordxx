@@ -11,8 +11,10 @@ endif
 #else
 if BUILDNEWVKEY
 spdefs = -DSPLITLIB
+refsrc = $(mgrdir)/refsysmgr.cpp
 else
 spdefs =
+refsrc =
 endif
 #endif
 
@@ -30,11 +32,11 @@ libsword_la_SOURCES += $(mgrdir)/swcacher.cpp
 libsword_la_SOURCES += $(mgrdir)/swsearchable.cpp
 libsword_la_SOURCES += $(mgrdir)/installmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/stringmgr.cpp
-libsword_la_SOURCES += $(mgrdir)/refsysmgr.cpp
 
 #if BUILDSPLITLIB
 #libsword_imp_la_SOURCES += $(mgrsplits)
 #else
 libsword_la_SOURCES += $(mgrsplits)
+libsword_la_SOURCES += $(refsrc)
 #endif
 
