@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+23-Oct-2000
+		Joachim Ansorg <jansorg@crosswire.org> 
+	Changed the provate section of versekey.h into a protected  one
+because we need the change for current BibleTime!
 
 15-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Normalized Writable interface to SWModule.
