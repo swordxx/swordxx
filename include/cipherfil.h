@@ -1,6 +1,6 @@
 /*
  *
- * $Id: cipherfil.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: cipherfil.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,13 +26,14 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT CipherFilter : public SWFilter {
-	SWCipher *cipher;
+class SWDLLEXPORT CipherFilter:public SWFilter
+{
+  SWCipher *cipher;
 public:
-	CipherFilter(const char *key);
-	virtual ~CipherFilter();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *key);
-	virtual SWCipher *getCipher();
+    CipherFilter (const char *key);
+    virtual ~ CipherFilter ();
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual SWCipher *getCipher ();
 };
 
 #endif

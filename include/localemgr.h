@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: localemgr.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,27 +33,28 @@
 
 // using namespace std;
 
-typedef map <string, SWLocale *, less<string> > LocaleMap;
+typedef map < string, SWLocale *, less < string > >LocaleMap;
 
-class SWDLLEXPORT LocaleMgr {
+class SWDLLEXPORT LocaleMgr
+{
 private:
-	void deleteLocales();
-	char *defaultLocaleName;
+  void deleteLocales ();
+  char *defaultLocaleName;
 
 protected:
-	LocaleMap locales;
-	virtual void loadConfigDir(const char *ipath);
+    LocaleMap locales;
+  virtual void loadConfigDir (const char *ipath);
 
 public:
-	
-	LocaleMgr(const char *iConfigPath = 0);
-	virtual ~LocaleMgr();
-	virtual SWLocale *getLocale(const char *name);
-	virtual list<string> getAvailableLocales();
-	virtual const char *translate(const char *name, const char *text);
-	virtual const char *getDefaultLocaleName();
-	virtual void setDefaultLocaleName(const char *name);
 
-	static LocaleMgr systemLocaleMgr;
+    LocaleMgr (const char *iConfigPath = 0);
+    virtual ~ LocaleMgr ();
+  virtual SWLocale *getLocale (const char *name);
+  virtual list < string > getAvailableLocales ();
+  virtual const char *translate (const char *name, const char *text);
+  virtual const char *getDefaultLocaleName ();
+  virtual void setDefaultLocaleName (const char *name);
+
+  static LocaleMgr systemLocaleMgr;
 };
 #endif

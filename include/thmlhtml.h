@@ -23,11 +23,11 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT ThMLHTML : public SWFilter {
+class SWDLLEXPORT ThMLHTML:public SWFilter
+{
 public:
-	ThMLHTML();
-	virtual char ProcessText(char *text, int maxlen = -1);
+  ThMLHTML ();
+  virtual char ProcessText (char *text, int maxlen = -1);
 };
 
 #endif
-

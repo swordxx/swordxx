@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawtext.h,v 1.8 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: rawtext.h,v 1.9 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,30 +29,48 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawText : public SWText, public RawVerse {
-	char *versebuf;
-	RawStr *fastSearch[2];
+class SWDLLEXPORT RawText:public SWText, public RawVerse
+{
+  char *versebuf;
+  RawStr *fastSearch[2];
 
 public:
-	RawText(const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay *idisp = 0);
-	virtual ~RawText();
-	virtual char *getRawEntry();
-	virtual char createSearchFramework();
-	virtual bool hasSearchFramework() { return true; }
+  
+    
+    RawText (const char *ipath, const char *iname = 0, const char *idesc =
+	     0, SWDisplay * idisp = 0);
+    virtual ~ RawText ();
+  virtual char *getRawEntry ();
+  virtual char createSearchFramework ();
+  virtual bool hasSearchFramework ()
+  {
+    return true;
+  }
 #ifdef WIN32
-	virtual SWModule &operator =(POSITION);
+  virtual SWModule & operator = (POSITION);
 #else
-	virtual RawText &operator =(POSITION);
+  virtual RawText & operator = (POSITION);
 #endif
-	virtual ListKey &Search(const char *istr, int searchType = 0, int flags = 0, SWKey *scope = 0, bool *justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
+  virtual ListKey & Search (const char *istr, int searchType = 0, int flags =
+			    0, SWKey * scope =
+			    0, bool * justCheckIfSupported =
+			    0, void (*percent) (char, void *) =
+			    &SWModule::nullPercent, void *percentUserData =
+			    0);
 
-	// write interface ----------------------------
-	virtual bool isWritable() { return true; }
-	static char createModule(const char *path) { return RawVerse::createModule(path); }
-	virtual SWModule &operator <<(const char *inbuf);    // Modify current module entry
-	virtual SWModule &operator <<(const SWKey *linkKey); // Link current module entry to other module entry
-	virtual void deleteEntry(); // Delete current module entry
-	// end write interface ------------------------
+  // write interface ----------------------------
+  virtual bool isWritable ()
+  {
+    return true;
+  }
+  static char createModule (const char *path)
+  {
+    return RawVerse::createModule (path);
+  }
+  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
+  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
+  virtual void deleteEntry ();	// Delete current module entry
+  // end write interface ------------------------
 };
 
 

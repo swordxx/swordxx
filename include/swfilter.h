@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: swfilter.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,17 +28,48 @@
 
 #include <defs.h>
 
-typedef std::list<std::string> OptionsList;
+typedef
+  std::list < std::string > OptionsList;
 
-class SWDLLEXPORT SWFilter {
+class SWDLLEXPORT
+  SWFilter
+{
 public:
-	virtual const char *getOptionName() { return 0; }
-	virtual const char *getOptionTip() { return 0; }
-	virtual OptionsList getOptionValues() { OptionsList options; return options; }
-	virtual void setOptionValue(const char *ival) {}
-	virtual const char *getOptionValue() { return 0; }
-	virtual char ProcessText(char *text, int maxlen, const SWKey *key) { return ProcessText(text, maxlen); }
-	virtual char ProcessText(char *text, int maxlen = -1) { return ProcessText(text, maxlen, 0); }
+  virtual const char *
+  getOptionName ()
+  {
+    return 0;
+  }
+  virtual const char *
+  getOptionTip ()
+  {
+    return 0;
+  }
+  virtual OptionsList
+  getOptionValues ()
+  {
+    OptionsList
+      options;
+    return options;
+  }
+  virtual void
+  setOptionValue (const char *ival)
+  {
+  }
+  virtual const char *
+  getOptionValue ()
+  {
+    return 0;
+  }
+  virtual char
+  ProcessText (char *text, int maxlen, const SWKey * key)
+  {
+    return ProcessText (text, maxlen);
+  }
+  virtual char
+  ProcessText (char *text, int maxlen =
+	       -1) { return ProcessText (text, maxlen, 0);
+  }
 };
 
 #endif

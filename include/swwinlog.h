@@ -2,7 +2,7 @@
  *  swwinlog.h   - definition of SWWinLog-- a derivitive of SWLog used to
  *			handle logging in the MSWindows environment
  *
- * $Id: swwinlog.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swwinlog.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,16 +27,16 @@
 
 #include <swlog.h>
 
-class SWWinLog : public SWLog {
-	HWND parent;
+class SWWinLog:public SWLog
+{
+  HWND parent;
 public:
-	SWWinLog(HWND iparent);
-	virtual void LogWarning(char *fmt, ...);
-	virtual void LogError(char *fmt, ...);
-	virtual void LogTimedInformation(char *fmt, ...);
-	virtual void LogInformation(char *fmt, ...);
+    SWWinLog (HWND iparent);
+  virtual void LogWarning (char *fmt, ...);
+  virtual void LogError (char *fmt, ...);
+  virtual void LogTimedInformation (char *fmt, ...);
+  virtual void LogInformation (char *fmt, ...);
 };
 
 
 #endif
- 

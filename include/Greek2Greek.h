@@ -17,7 +17,7 @@
 //*****************************************************************************
 /*
  *
- * $Id: Greek2Greek.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: Greek2Greek.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,78 +43,71 @@
 // Sword Project to a string that conforms to the b-Greek discussion list 
 // method of transliteration.
 //*****************************************************************************
-unsigned char Greek2bGreek(unsigned char *sResult, unsigned char *sGreekText, int nMaxResultBuflen);
+unsigned char Greek2bGreek (unsigned char *sResult, unsigned char *sGreekText,
+			    int nMaxResultBuflen);
 
 //*****************************************************************************
 // Used to convert a string created by using the b-Greek method of 
 // transliteration to a string that can be converted to a Greek-font readable 
 // string.
 //*****************************************************************************
-unsigned char bGreek2Greek(
-         unsigned char *sResult, 
-         unsigned char *sGreekText, 
-         int nMaxResultBuflen);
+unsigned char bGreek2Greek (unsigned char *sResult,
+			    unsigned char *sGreekText, int nMaxResultBuflen);
 
 //*****************************************************************************
 // Parse a Greek font created string and return the b-Greek equivalent
 //*****************************************************************************
-int ParseGreek(
-         unsigned char *sResult, 
-         unsigned char *sGreekText, 
-         int nMaxResultBuflen);
+int ParseGreek (unsigned char *sResult,
+		unsigned char *sGreekText, int nMaxResultBuflen);
 
 //*****************************************************************************
 // Parse a b-Greek string and return the Greek font equivalent
 //*****************************************************************************
-int ParsebGreek(
-         unsigned char *sResult, 
-         unsigned char *sGreekText, 
-         int nMaxResultBuflen);
+int ParsebGreek (unsigned char *sResult,
+		 unsigned char *sGreekText, int nMaxResultBuflen);
 
 //*****************************************************************************
 // Convert a unsigned character to a GREEK font unsigned character
 //*****************************************************************************
-unsigned char char2Font(
-               unsigned char letter,      // bGreek letter to convert to Font letter
-               bool finalSigma,  // Is it a final SIGMA
-               bool iota,        // TRUE = IOTA subscript; FALSE = No IOTA
-               bool breathing,   // TRUE = add breathing; FALSE = no breathing
-               bool rough);      // TRUE = rough breathing; False = smooth
+unsigned char char2Font (unsigned char letter,	// bGreek letter to convert to Font letter
+			 bool finalSigma,	// Is it a final SIGMA
+			 bool iota,	// TRUE = IOTA subscript; FALSE = No IOTA
+			 bool breathing,	// TRUE = add breathing; FALSE = no breathing
+			 bool rough);	// TRUE = rough breathing; False = smooth
 
 //*****************************************************************************
 // Convert a GREEK font unsigned character to a unsigned character
 //*****************************************************************************
-unsigned char Font2char(
-               unsigned char letter,       // bGreek letter to convert to Font letter
-               bool &iota,        // TRUE = IOTA subscript; FALSE = No IOTA
-               bool &breathing,   // TRUE = add breathing; FALSE = no breathing
-               bool &rough);      // TRUE = rough breathing; False = smooth
+unsigned char Font2char (unsigned char letter,	// bGreek letter to convert to Font letter
+			 bool & iota,	// TRUE = IOTA subscript; FALSE = No IOTA
+			 bool & breathing,	// TRUE = add breathing; FALSE = no breathing
+			 bool & rough);	// TRUE = rough breathing; False = smooth
 
 
 //*****************************************************************************
 // Identify and return a bGreek letter from a special font char
 //*****************************************************************************
-bool getSpecialChar(unsigned char Font, unsigned char &letter);
+bool getSpecialChar (unsigned char Font, unsigned char &letter);
 
 //*****************************************************************************
 // true if the font character is a special character; false it isn't
 //*****************************************************************************
-bool SpecialGreek(unsigned char Font);
+bool SpecialGreek (unsigned char Font);
 
 //*****************************************************************************
 // Return Greek font puntuation from bGreek punstuation
 //*****************************************************************************
-unsigned char getGreekPunct(unsigned char bGreek);
+unsigned char getGreekPunct (unsigned char bGreek);
 
 //*****************************************************************************
 // Return bGreek puntuation from Greek font punstuation
 //*****************************************************************************
-unsigned char getbGreekPunct(unsigned char Greek);
+unsigned char getbGreekPunct (unsigned char Greek);
 
 //*****************************************************************************
 // Is the character punctuation or a space: true it is, false it isn't
 //*****************************************************************************
-bool isPunctSpace(unsigned char c);
+bool isPunctSpace (unsigned char c);
 
 
 

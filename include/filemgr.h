@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: filemgr.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,51 +28,53 @@
 
 class SWDLLEXPORT FileMgr;
 
-class SWDLLEXPORT FileDesc {
+class SWDLLEXPORT FileDesc
+{
 
-friend class FileMgr;
+  friend class FileMgr;
 
-	char *path;
-	int mode;
-	int perms;
-	long offset;
-	int fd;		// -77 closed;
-	FileMgr *parent;
-	FileDesc *next;
-	
+  char *path;
+  int mode;
+  int perms;
+  long offset;
+  int fd;			// -77 closed;
+  FileMgr *parent;
+  FileDesc *next;
+
 public:
-	FileDesc(FileMgr *parent, char *path, int mode, int perms);
-	~FileDesc();
-	int getFd();
+    FileDesc (FileMgr * parent, char *path, int mode, int perms);
+   ~FileDesc ();
+  int getFd ();
 };
 
-	
-class FileMgr {
 
-friend class FileDesc;
+class FileMgr
+{
 
-	FileDesc *files;
-	int sysOpen(FileDesc *file);
+  friend class FileDesc;
+
+  FileDesc *files;
+  int sysOpen (FileDesc * file);
 public:
-	
-	FileMgr(int maxFiles = 35);
-	~FileMgr();
-	FileDesc *open(char *path, int mode, int perms = S_IREAD|S_IWRITE);
-	void close(FileDesc *);
 
-	static char existsFile(const char *ipath, const char *ifileName = 0);
-	static char existsDir(const char *ipath, const char *idirName = 0);
-	// to truncate a file at its current position
-	// leaving byte at current possition intact
-	// deleting everything afterward.
-	char trunc(FileDesc *);
+    FileMgr (int maxFiles = 35);
+   ~FileMgr ();
+  FileDesc *open (char *path, int mode, int perms = S_IREAD | S_IWRITE);
+  void close (FileDesc *);
 
-	int maxFiles;
+  static char existsFile (const char *ipath, const char *ifileName = 0);
+  static char existsDir (const char *ipath, const char *idirName = 0);
+  // to truncate a file at its current position
+  // leaving byte at current possition intact
+  // deleting everything afterward.
+  char trunc (FileDesc *);
 
-	static FileMgr systemFileMgr;
+  int maxFiles;
+
+  static FileMgr systemFileMgr;
 };
-	
-	
+
+
 
 
 #endif

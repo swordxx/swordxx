@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: swlocale.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,27 +33,28 @@
 
 using namespace std;
 
-typedef map <string, string, less <string> > LookupMap;
+typedef map < string, string, less < string > >LookupMap;
 
-class SWDLLEXPORT SWLocale {
-	LookupMap lookupTable;
-	SWConfig *localeSource;
-	char *name;
-	char *description;
-	struct abbrev *bookAbbrevs;
-	char *BMAX;
-	struct sbook **books;
+class SWDLLEXPORT SWLocale
+{
+  LookupMap lookupTable;
+  SWConfig *localeSource;
+  char *name;
+  char *description;
+  struct abbrev *bookAbbrevs;
+  char *BMAX;
+  struct sbook **books;
 
 public:
-	SWLocale(const char *ifilename);
-	virtual ~SWLocale();
+    SWLocale (const char *ifilename);
+    virtual ~ SWLocale ();
 
-	virtual const char *getName();
-	virtual const char *getDescription();
-	virtual const char *translate(const char *text);
-	virtual SWLocale &operator +=(SWLocale &addFrom);
-	virtual const struct abbrev *getBookAbbrevs();
-	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
+  virtual const char *getName ();
+  virtual const char *getDescription ();
+  virtual const char *translate (const char *text);
+  virtual SWLocale & operator += (SWLocale & addFrom);
+  virtual const struct abbrev *getBookAbbrevs ();
+  virtual void getBooks (char **iBMAX, struct sbook ***ibooks);
 };
 
 #endif

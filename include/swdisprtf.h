@@ -2,7 +2,7 @@
  *  swdisprtf.h   - definition of Class SWDispRTF-- an SWDisplay used to display
  *				a verse in Rich Text Format.
  *
- * $Id: swdisprtf.h,v 1.2 1999/09/30 20:51:36 scribe Exp $
+ * $Id: swdisprtf.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,7 +37,7 @@
 #define	defRTFHeadMargin	  "{\\fs8\\cf1\\par\\pard} "
 #define	defRTFTrailer         "{\\fs%d \\par }}"	// 24
 
-#define	defRTFChapterMarkPre  "\\pard \\qc\\nowidctlpar{\\f1\\fs%d\\b Chapter " // 30
+#define	defRTFChapterMarkPre  "\\pard \\qc\\nowidctlpar{\\f1\\fs%d\\b Chapter "	// 30
 #define	defRTFChapterMarkPost "\\par\\fs%d\\par}"	// 10
 
 #define	defRTFVerseMarkPre    "{\\fs%d\\cf1\\super "	//20
@@ -47,49 +47,60 @@
 #define	defRTFVersePost       " }"
 
 
-class SWDispRTF : public TRichEdit {
+class SWDispRTF:public TRichEdit
+{
 protected:
 
-		System::AnsiString FRTFHeader;
-		System::AnsiString FRTFHeadMargin;
-		System::AnsiString FRTFTrailer;
-		System::AnsiString FRTFChapterMarkPre;
-		System::AnsiString FRTFChapterMarkPost;
-		System::AnsiString FRTFVerseMarkPre;
-		System::AnsiString FRTFVerseMarkPost;
-		System::AnsiString FRTFVersePre;
-		System::AnsiString FRTFVersePost;
-		bool FExpandNewLine;
-		CHARRANGE FCharRange;
-		int fontSize;
-		
-		int __fastcall GetMySelStart();
-		void __fastcall SetMySelStart(int iselstart);
-		int __fastcall getFontSize();
-		void __fastcall setFontSize(int iFontSize);
-		void recalcHeaders();
+  System::AnsiString FRTFHeader;
+  System::AnsiString FRTFHeadMargin;
+  System::AnsiString FRTFTrailer;
+  System::AnsiString FRTFChapterMarkPre;
+  System::AnsiString FRTFChapterMarkPost;
+  System::AnsiString FRTFVerseMarkPre;
+  System::AnsiString FRTFVerseMarkPost;
+  System::AnsiString FRTFVersePre;
+  System::AnsiString FRTFVersePost;
+  bool FExpandNewLine;
+  CHARRANGE FCharRange;
+  int fontSize;
+
+  int __fastcall GetMySelStart ();
+  void __fastcall SetMySelStart (int iselstart);
+  int __fastcall getFontSize ();
+  void __fastcall setFontSize (int iFontSize);
+  void recalcHeaders ();
 protected:
-		TMemoryStream *RTFStream;
-		
-		virtual void __fastcall Loaded(void);
+    TMemoryStream * RTFStream;
+
+  virtual void __fastcall Loaded (void);
 public:
-	__fastcall SWDispRTF(TComponent* Owner);
-	__fastcall ~SWDispRTF();
+    __fastcall SWDispRTF (TComponent * Owner);
+    __fastcall ~ SWDispRTF ();
 
-	virtual char Display(SWModule &imodule);
-__published:
-		__property System::AnsiString RTFHeader          = {read=FRTFHeader,           write=FRTFHeader};
-		__property System::AnsiString RTFHeadMargin      = {read=FRTFHeadMargin,       write=FRTFHeadMargin};
-		__property System::AnsiString RTFChapterMarkPre  = {read=FRTFChapterMarkPre,   write=FRTFChapterMarkPre};
-		__property System::AnsiString RTFChapterMarkPost = {read=FRTFChapterMarkPost,  write=FRTFChapterMarkPost};
-		__property System::AnsiString RTFVerseMarkPre    = {read=FRTFVerseMarkPre,     write=FRTFVerseMarkPre};
-		__property System::AnsiString RTFVerseMarkPost   = {read=FRTFVerseMarkPost,    write=FRTFVerseMarkPost};
-		__property System::AnsiString RTFVersePre        = {read=FRTFVersePre,         write=FRTFVersePre};
-		__property System::AnsiString RTFVersePost       = {read=FRTFVersePost,        write=FRTFVersePost};
-		__property System::AnsiString RTFTrailer         = {read=FRTFTrailer,          write=FRTFTrailer};
-		__property bool               ExpandNewLine      = {read=FExpandNewLine,       write=FExpandNewLine};
-		__property int                FontSize           = {read=getFontSize,          write=setFontSize};
+  virtual char Display (SWModule & imodule);
+    __published:__property System::AnsiString RTFHeader =
+  {
+  read = FRTFHeader, write = FRTFHeader};
+  __property System::AnsiString RTFHeadMargin = { read =
+      FRTFHeadMargin, write = FRTFHeadMargin };
+  __property System::AnsiString RTFChapterMarkPre = { read =
+      FRTFChapterMarkPre, write = FRTFChapterMarkPre };
+  __property System::AnsiString RTFChapterMarkPost = { read =
+      FRTFChapterMarkPost, write = FRTFChapterMarkPost };
+  __property System::AnsiString RTFVerseMarkPre = { read =
+      FRTFVerseMarkPre, write = FRTFVerseMarkPre };
+  __property System::AnsiString RTFVerseMarkPost = { read =
+      FRTFVerseMarkPost, write = FRTFVerseMarkPost };
+  __property System::AnsiString RTFVersePre = { read = FRTFVersePre, write =
+      FRTFVersePre };
+  __property System::AnsiString RTFVersePost = { read = FRTFVersePost, write =
+      FRTFVersePost };
+  __property System::AnsiString RTFTrailer = { read = FRTFTrailer, write =
+      FRTFTrailer };
+  __property bool ExpandNewLine = { read = FExpandNewLine, write =
+      FExpandNewLine };
+  __property int FontSize = { read = getFontSize, write = setFontSize };
 };
+
 //---------------------------------------------------------------------------
 #endif
-

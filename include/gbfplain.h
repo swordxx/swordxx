@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfplain.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: gbfplain.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,10 +25,11 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT GBFPlain : public SWFilter {
+class SWDLLEXPORT GBFPlain:public SWFilter
+{
 public:
-	GBFPlain();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *key);
+  GBFPlain ();
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
 };
 
 #endif

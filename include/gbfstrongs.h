@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfstrongs.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: gbfstrongs.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,22 +25,32 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT GBFStrongs : public SWFilter {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT GBFStrongs:public SWFilter
+{
+  bool option;
+  static const char on[];
+  static const char off[];
+  static const char optName[];
+  static const char optTip[];
+  OptionsList options;
 public:
-	GBFStrongs();
-	virtual ~GBFStrongs();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *key);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
+    GBFStrongs ();
+    virtual ~ GBFStrongs ();
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
+  virtual const char *getOptionName ()
+  {
+    return optName;
+  }
+  virtual const char *getOptionTip ()
+  {
+    return optTip;
+  }
+  virtual void setOptionValue (const char *ival);
+  virtual const char *getOptionValue ();
+  virtual OptionsList getOptionValues ()
+  {
+    return options;
+  }
 };
 
 #endif

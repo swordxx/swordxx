@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/Attic/rwphtml.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $ */
-/* $Revision: 1.4 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/Attic/rwphtml.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $ */
+/* $Revision: 1.5 $ */
 
 #ifndef RWPHTML_H
 #define RWPHTML_H
@@ -26,10 +26,11 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RWPHTML : public SWFilter {
+class SWDLLEXPORT RWPHTML:public SWFilter
+{
 public:
-	RWPHTML();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *key);
+  RWPHTML ();
+  virtual char ProcessText (char *text, int maxlen, const SWKey * key);
 };
 
 #endif

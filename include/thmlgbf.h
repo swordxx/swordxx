@@ -25,10 +25,11 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT ThMLGBF : public SWFilter {
+class SWDLLEXPORT ThMLGBF:public SWFilter
+{
 public:
-	ThMLGBF();
-	virtual char ProcessText(char *text, int maxlen = -1);
+  ThMLGBF ();
+  virtual char ProcessText (char *text, int maxlen = -1);
 };
 
 #endif

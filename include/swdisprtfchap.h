@@ -2,7 +2,7 @@
  *  swdisprtfchap.h	- definition of class SWDispRTFChap, an SWDisplay used to
  *				display an entire chapter in Rich Text Format
  *
- * $Id: swdisprtfchap.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swdisprtfchap.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,26 +34,31 @@
 #include <swdisprtf.h>
 //---------------------------------------------------------------------------
 
-class SWDispRTFChap : public SWDispRTF {
+class SWDispRTFChap:public SWDispRTF
+{
 protected:
 
-		bool FCurVerseMrk;
-		bool FCurVersePos;
-		bool FMarkCurrentVerse;
-		bool FAutoPosition;
-		
-		virtual void __fastcall Loaded(void);
-public:
-	__fastcall SWDispRTFChap(TComponent* Owner);
-	__fastcall ~SWDispRTFChap();
+  bool FCurVerseMrk;
+  bool FCurVersePos;
+  bool FMarkCurrentVerse;
+  bool FAutoPosition;
 
-	virtual char Display(SWModule &imodule);
-__published:
-		__property bool               CurVersePos        = {read=FCurVersePos,         write=FCurVersePos,        default=true};
-		__property bool               CurVerseMrk        = {read=FCurVerseMrk,         write=FCurVerseMrk,        default=true};
-		__property bool               MarkCurrentVerse   = {read=FMarkCurrentVerse,    write=FMarkCurrentVerse,   default=true};
-		__property bool               AutoPosition       = {read=FAutoPosition,        write=FAutoPosition,       default=true};
+  virtual void __fastcall Loaded (void);
+public:
+    __fastcall SWDispRTFChap (TComponent * Owner);
+    __fastcall ~ SWDispRTFChap ();
+
+  virtual char Display (SWModule & imodule);
+    __published:__property bool CurVersePos =
+  {
+  read = FCurVersePos, write = FCurVersePos, default = true};
+    __property bool CurVerseMrk = { read = FCurVerseMrk, write =
+      FCurVerseMrk, default = true };
+  __property bool MarkCurrentVerse = { read = FMarkCurrentVerse, write =
+      FMarkCurrentVerse, default = true };
+  __property bool AutoPosition = { read = FAutoPosition, write =
+      FAutoPosition, default = true };
 };
+
 //---------------------------------------------------------------------------
 #endif
-

@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: rawfiles.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,23 +29,33 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawFiles : public RawVerse, public SWCom {
-	char *versebuf;
+class SWDLLEXPORT RawFiles:public RawVerse, public SWCom
+{
+  char *versebuf;
 
-	char *getnextfilename();
+  char *getnextfilename ();
 
 public:
-	RawFiles(const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay *idisp = 0);
-	virtual ~RawFiles();
-	virtual char *getRawEntry();
+  
+    
+    RawFiles (const char *ipath, const char *iname = 0, const char *idesc =
+	      0, SWDisplay * idisp = 0);
+    virtual ~ RawFiles ();
+  virtual char *getRawEntry ();
 
-	// write interface ----------------------------
-	virtual bool isWritable() { return true; }
-	static char createModule(const char *path) { return -1; }
-	virtual SWModule &operator <<(const char *inbuf);    // Modify current module entry
-	virtual SWModule &operator <<(const SWKey *linkKey); // Link current module entry to other module entry
-	virtual void deleteEntry(); // Delete current module entry
-	// end write interface ------------------------
+  // write interface ----------------------------
+  virtual bool isWritable ()
+  {
+    return true;
+  }
+  static char createModule (const char *path)
+  {
+    return -1;
+  }
+  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
+  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
+  virtual void deleteEntry ();	// Delete current module entry
+  // end write interface ------------------------
 };
 
 

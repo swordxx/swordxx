@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext.h,v 1.9 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: ztext.h,v 1.10 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,23 +29,34 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT zText : public zVerse, public SWText {
-	char *versebuf;
-	VerseKey *lastWriteKey;
-	bool sameBlock(VerseKey *lastWriteKey, VerseKey *key);
-	int blockType;
+class SWDLLEXPORT zText:public zVerse, public SWText
+{
+  char *versebuf;
+  VerseKey *lastWriteKey;
+  bool sameBlock (VerseKey * lastWriteKey, VerseKey * key);
+  int blockType;
 public:
-	zText(const char *ipath, const char *iname = 0, const char *idesc = 0, int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0, SWDisplay *idisp = 0);
-	virtual ~zText();
-	virtual char *getRawEntry();
+  
+    
+    zText (const char *ipath, const char *iname = 0, const char *idesc =
+	   0, int blockType = CHAPTERBLOCKS, SWCompress * icomp =
+	   0, SWDisplay * idisp = 0);
+    virtual ~ zText ();
+  virtual char *getRawEntry ();
 
-	// write interface ----------------------------
-	virtual bool isWritable() { return true; }
-	static char createModule(const char *path, int blockBound) { return zVerse::createModule(path, blockBound); }
-	virtual SWModule &operator <<(const char *inbuf);    // Modify current module entry
-	virtual SWModule &operator <<(const SWKey *linkKey); // Link current module entry to other module entry
-	virtual void deleteEntry(); // Delete current module entry
-	// end write interface ------------------------
+  // write interface ----------------------------
+  virtual bool isWritable ()
+  {
+    return true;
+  }
+  static char createModule (const char *path, int blockBound)
+  {
+    return zVerse::createModule (path, blockBound);
+  }
+  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
+  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
+  virtual void deleteEntry ();	// Delete current module entry
+  // end write interface ------------------------
 };
 
 

@@ -22,11 +22,11 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT GBFThML : public SWFilter {
+class SWDLLEXPORT GBFThML:public SWFilter
+{
 public:
-	GBFThML();
-	virtual char ProcessText(char *text, int maxlen = -1);
+  GBFThML ();
+  virtual char ProcessText (char *text, int maxlen = -1);
 };
 
 #endif
-

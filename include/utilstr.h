@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: utilstr.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,9 +23,9 @@
 #define UTILSTR_H
 
 
-char *stdstr(char **iistr, const char *istr);
-char *strstrip(char *istr);
-const char *stristr(const char *s1, const char *s2);
+char *stdstr (char **iistr, const char *istr);
+char *strstrip (char *istr);
+const char *stristr (const char *s1, const char *s2);
 /*
 extern "C" {
 int stricmp(const char *s1, const char *s2);

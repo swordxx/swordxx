@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: listkey.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,36 +29,49 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT ListKey: public SWKey {
+class SWDLLEXPORT ListKey:public SWKey
+{
 
-	static SWClass classdef;
-	void init();
+  static SWClass classdef;
+  void init ();
 protected:
-	int arraypos;
-	int arraymax;
-	int arraycnt;
-	SWKey **array;
+  int arraypos;
+  int arraymax;
+  int arraycnt;
+  SWKey **array;
 public:
-	ListKey(const char *ikey = 0);
-	ListKey(ListKey const &k);
-	virtual ~ListKey();
+    ListKey (const char *ikey = 0);
+    ListKey (ListKey const &k);
+    virtual ~ ListKey ();
 
-	virtual SWKey *clone() const;
-	virtual void ClearList();	// delete all elements
-	virtual int Count();
-	virtual void Remove();	// remove current element
-	virtual char SetToElement(int, POSITION = TOP);
-	virtual SWKey *GetElement(int pos = -1);
-	virtual ListKey &operator <<(const SWKey &); // add to list
-	virtual ListKey &operator =(const ListKey &ikey);
-	virtual SWKey &operator =(const char *ikey){ return SWKey::operator =(ikey); }
-	virtual SWKey &operator =(const SWKey &ikey){ return SWKey::operator =(ikey); }
-	virtual SWKey &operator =(POSITION);
-	virtual SWKey &operator -=(int decrement);
-	virtual SWKey &operator +=(int increment);
-	virtual char Traversable() { return 1; }
-	virtual long Index() const { return arraypos; }
-	virtual long Index(long iindex) { SetToElement(arraypos); return Index(); }
+  virtual SWKey *clone () const;
+  virtual void ClearList ();	// delete all elements
+  virtual int Count ();
+  virtual void Remove ();	// remove current element
+  virtual char SetToElement (int, POSITION = TOP);
+  virtual SWKey *GetElement (int pos = -1);
+  virtual ListKey & operator << (const SWKey &);	// add to list
+  virtual ListKey & operator = (const ListKey & ikey);
+  virtual SWKey & operator = (const char *ikey) { return SWKey::operator =
+      (ikey);}
+  virtual SWKey & operator = (const SWKey & ikey) { return SWKey::operator =
+      (ikey);}
+  virtual SWKey & operator = (POSITION);
+  virtual SWKey & operator -= (int decrement);
+  virtual SWKey & operator += (int increment);
+  virtual char Traversable ()
+  {
+    return 1;
+  }
+  virtual long Index () const
+  {
+    return arraypos;
+  }
+  virtual long Index (long iindex)
+  {
+    SetToElement (arraypos);
+    return Index ();
+  }
 };
 
 

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  lzsscomprs.h   - definition of Class SWCompress used for data compression
  *
- * $Id: lzsscomprs.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: lzsscomprs.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -58,21 +58,22 @@
 
 
 
-class SWDLLEXPORT LZSSCompress : public SWCompress {
-	static unsigned char m_ring_buffer[N + F - 1];
-	static short int m_match_position;
-	static short int m_match_length;
-	static short int m_lson[N + 1];
-	static short int m_rson[N + 257];
-	static short int m_dad[N + 1];
-	void InitTree();
-	void InsertNode(short int Pos);
-	void DeleteNode(short int Node);
+class SWDLLEXPORT LZSSCompress:public SWCompress
+{
+  static unsigned char m_ring_buffer[N + F - 1];
+  static short int m_match_position;
+  static short int m_match_length;
+  static short int m_lson[N + 1];
+  static short int m_rson[N + 257];
+  static short int m_dad[N + 1];
+  void InitTree ();
+  void InsertNode (short int Pos);
+  void DeleteNode (short int Node);
 public:
-	LZSSCompress();
-	virtual ~LZSSCompress();
-	virtual void Encode(void);
-	virtual void Decode(void);
+    LZSSCompress ();
+    virtual ~ LZSSCompress ();
+  virtual void Encode (void);
+  virtual void Decode (void);
 };
 
 #endif

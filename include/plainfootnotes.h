@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $ */
-/* $Revision: 1.2 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $ */
+/* $Revision: 1.3 $ */
 
 #ifndef PLAINFOOTNOTES_H
 #define PLAINFOOTNOTES_H
@@ -30,27 +30,34 @@ class SWKey;
 /**Shows or hides footnotes in plain text.
   *@author The team of BibleTime
   */
-class SWDLLEXPORT PLAINFootnotes : public SWFilter  {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT PLAINFootnotes:public SWFilter
+{
+  bool option;
+  static const char on[];
+  static const char off[];
+  static const char optName[];
+  static const char optTip[];
+  OptionsList options;
 
 public:
-	PLAINFootnotes();
-	virtual ~PLAINFootnotes();
-	virtual char ProcessText(char *text, int maxlen = -1, const SWKey *key = 0);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
+    PLAINFootnotes ();
+    virtual ~ PLAINFootnotes ();
+  virtual char ProcessText (char *text, int maxlen = -1, const SWKey * key =
+			    0);
+  virtual const char *getOptionName ()
+  {
+    return optName;
+  }
+  virtual const char *getOptionTip ()
+  {
+    return optTip;
+  }
+  virtual void setOptionValue (const char *ival);
+  virtual const char *getOptionValue ();
+  virtual OptionsList getOptionValues ()
+  {
+    return options;
+  }
 };
 
 #endif
-
-
-
-

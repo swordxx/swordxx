@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swlog.h	- definition of class SWLog used for logging messages
  *
- * $Id: swlog.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: swlog.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,18 +26,21 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT SWLog {
+class SWDLLEXPORT SWLog
+{
 public:
-	static SWLog *systemlog;
-	
-	bool log;
-	SWLog() { log = true; }
-	virtual void LogWarning(char *fmt, ...);
-	virtual void LogError(char *fmt, ...);
-	virtual void LogTimedInformation(char *fmt, ...);
-	virtual void LogInformation(char *fmt, ...);
+  static SWLog *systemlog;
+
+  bool log;
+    SWLog ()
+  {
+    log = true;
+  }
+  virtual void LogWarning (char *fmt, ...);
+  virtual void LogError (char *fmt, ...);
+  virtual void LogTimedInformation (char *fmt, ...);
+  virtual void LogInformation (char *fmt, ...);
 };
 
 
 #endif
- 

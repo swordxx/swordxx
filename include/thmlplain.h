@@ -25,15 +25,11 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT ThMLPlain : public SWFilter {
+class SWDLLEXPORT ThMLPlain:public SWFilter
+{
 public:
-	ThMLPlain();
-	virtual char ProcessText(char *text, int maxlen = -1);
+  ThMLPlain ();
+  virtual char ProcessText (char *text, int maxlen = -1);
 };
 
 #endif
-
-
-
-
-
