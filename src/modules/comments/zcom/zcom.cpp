@@ -81,8 +81,6 @@ char *zCom::getRawEntry() {
 
 	zreadtext(key->Testament(), start, (size + 2), entrybuf);
 
-	rawFilter(entrybuf, size, key);
-
 	if (!isUnicode())
 		preptext(entrybuf);
 
