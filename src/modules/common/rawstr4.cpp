@@ -405,9 +405,10 @@ void RawStr4::gettext(long istart, unsigned long isize, char *idxbuf, char *buf)
  *
  * ENT: key	- key for this entry
  *	buf	- buffer to store
+ *      len     - length of buffer (0 - null terminated)
  */
 
-void RawStr4::settext(const char *ikey, const char *buf)
+void RawStr4::settext(const char *ikey, const char *buf, long len)
 {
 
 	long start, outstart;
@@ -436,7 +437,7 @@ void RawStr4::settext(const char *ikey, const char *buf)
 	}
 	else if (strcmp(key, dbKey) > 0) {
 		idxoff += 8;
-	} else if ((!strcmp(key, dbKey)) && (strlen(buf) /*we're not deleting*/)) { // got absolute entry
+	} else if ((!strcmp(key, dbKey)) && (len || strlen(buf) /*we're not deleting*/)) { // got absolute entry
 		do {
 			tmpbuf = new char [ size + 2 ];
 			memset(tmpbuf, 0, size + 2);
@@ -452,7 +453,7 @@ void RawStr4::settext(const char *ikey, const char *buf)
 			memmove(tmpbuf, ch, size - (unsigned long)(ch-tmpbuf));
 
 			// resolve link
-			if (!strncmp(tmpbuf, "@LINK", 5) && strlen(buf)) {
+			if (!strncmp(tmpbuf, "@LINK", 5) && (len ? len : strlen(buf))) {
 				for (ch = tmpbuf; *ch; ch++) {		// null before nl
 					if (*ch == 10) {
 						*ch = 0;
@@ -476,9 +477,11 @@ void RawStr4::settext(const char *ikey, const char *buf)
 		read(idxfd->getFd(), idxBytes, shiftSize);
 	}
 
-	outbuf = new char [ strlen(buf) + strlen(key) + 5 ];
-	sprintf(outbuf, "%s%c%c%s", key, 13, 10, buf);
-	size = outsize = strlen(outbuf);
+	outbuf = new char [ (len ? len : strlen(buf)) + strlen(key) + 5 ];
+	sprintf(outbuf, "%s%c%c", key, 13, 10);
+	size = strlen(outbuf);
+	memcpy (outbuf + size, buf, len ? len : strlen(buf));
+	size = outsize = size + (len ? len : strlen(buf));
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
 
@@ -488,7 +491,7 @@ void RawStr4::settext(const char *ikey, const char *buf)
 #endif
 
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
-	if (strlen(buf)) {
+	if (len ? len : strlen(buf)) {
 		lseek(datfd->getFd(), start, SEEK_SET);
 		write(datfd->getFd(), outbuf, (long)size);
 

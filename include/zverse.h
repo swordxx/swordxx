@@ -27,7 +27,7 @@ protected:
   FileDesc *compfp[2];
   char *path;
   void preptext (char *buf);
-  void settext (char testmt, long idxoff, const char *buf);
+  void settext (char testmt, long idxoff, const char *buf, long len = 0);
   void linkentry (char testmt, long destidxoff, long srcidxoff);
   void flushCache ();
   //RawVerse();

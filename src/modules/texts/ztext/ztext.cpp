@@ -172,7 +172,7 @@ bool zText::sameBlock(VerseKey *k1, VerseKey *k2) {
 }
 
 
-SWModule &zText::operator <<(const char *inbuf) {
+SWModule &zText::setentry(const char *inbuf, long len) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
 #ifndef _WIN32_WCE
@@ -196,7 +196,7 @@ SWModule &zText::operator <<(const char *inbuf) {
 		delete lastWriteKey;
 	}
 
-	settext(key->Testament(), key->Index(), inbuf);
+	settext(key->Testament(), key->Index(), inbuf, len);
 
 	lastWriteKey = (VerseKey *)key->clone();	// must delete
 
@@ -204,6 +204,10 @@ SWModule &zText::operator <<(const char *inbuf) {
 		delete key;
 
 	return *this;
+}
+
+SWModule &zText::operator <<(const char *inbuf) {
+        return setentry(inbuf, 0);
 }
 
 

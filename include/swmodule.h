@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.29 2001/10/30 00:01:50 chrislit Exp $
+ * $Id: swmodule.h,v 1.30 2001/11/04 22:50:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -330,6 +330,14 @@ public:
     return -1;
   }
   
+  /** Modify the current module entry text
+  * - only if module @ref isWritable
+  * @return *this
+  */
+  virtual SWModule & setentry (const char *inbuf, long len) {
+    return *this;
+  }
+
   /** Modify the current module entry text
   * - only if module @ref isWritable
   * @return *this

@@ -22,7 +22,7 @@ class SWDLLEXPORT RawVerse
 protected:
   char *path;
   void preptext (char *buf);
-  void settext (char testmt, long idxoff, const char *buf);
+  void settext (char testmt, long idxoff, const char *buf, long len = 0);
   void linkentry (char testmt, long destidxoff, long srcidxoff);
 
 public:

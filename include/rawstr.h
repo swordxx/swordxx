@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: rawstr.h,v 1.7 2001/10/30 00:01:50 chrislit Exp $
+ * $Id: rawstr.h,v 1.8 2001/11/04 22:50:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,7 +39,7 @@ class SWDLLEXPORT RawStr
 
 protected:
   void preptext (char *buf);
-  void settext (const char *key, const char *buf);
+  void settext (const char *key, const char *buf, long len = 0);
   void linkentry (const char *destkey, const char *srckey);
 public:
   char nl;

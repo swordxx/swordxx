@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.7 2001/10/24 19:38:02 chrislit Exp $
+ * $Id: zcom.h,v 1.8 2001/11/04 22:50:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -57,6 +57,7 @@ public:
   {
     return zVerse::createModule (path, blockBound);
   }
+  virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
   virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
   virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
   virtual void deleteEntry ();	// Delete current module entry

@@ -220,9 +220,10 @@ void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf) 
  * ENT: testmt	- testament to find (0 - Bible/module introduction)
  *	idxoff	- offset into .vss
  *	buf	- buffer to store
+ *      len     - length of buffer (0 - null terminated)
  */
 
-void RawVerse::settext(char testmt, long idxoff, const char *buf)
+void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
 {
 	long start, outstart;
 	unsigned short size;
@@ -233,7 +234,7 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
 
-	size = outsize = strlen(buf);
+	size = outsize = len ? len : strlen(buf);
 
 	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);

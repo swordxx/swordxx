@@ -282,18 +282,19 @@ void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf
  * ENT: testmt	- testament to find (0 - Bible/module introduction)
  *	idxoff	- offset into .vss
  *	buf	- buffer to store
+ *      len     - length of buffer (0 - null terminated)
  */
 
-void zVerse::settext(char testmt, long idxoff, const char *buf)
+void zVerse::settext(char testmt, long idxoff, const char *buf, long len)
 {
 	if ((!dirtyCache) || (cacheBufIdx < 0)) {
 		cacheBufIdx = lseek(idxfp[testmt-1]->getFd(), 0, SEEK_END) / 12;
 		cacheTestament = testmt;
 		if (cacheBuf)
 			free(cacheBuf);
-		cacheBuf = (char *)calloc(strlen(buf)+1, 1);
+		cacheBuf = (char *)calloc(len ? len : strlen(buf)+1, 1);
 	}
-	else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, strlen(cacheBuf)+strlen(buf)+1):calloc(strlen(buf)+1, 1));
+	else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, strlen(cacheBuf)+(len ? len : strlen(buf)+1)):calloc((len ? len : strlen(buf)+1), 1));
 
 	dirtyCache = true;
 
@@ -303,7 +304,7 @@ void zVerse::settext(char testmt, long idxoff, const char *buf)
 	unsigned short outsize;
 
 	idxoff *= 10;
-	size = outsize = strlen(buf);
+	size = outsize = len ? len : strlen(buf);
 
 	start = outstart = strlen(cacheBuf);
 #ifdef BIGENDIAN

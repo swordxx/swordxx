@@ -2,7 +2,7 @@
  *  rawcom.h   - code for class 'RawCom'- a module that reads raw commentary
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawcom.h,v 1.7 2001/10/24 19:38:02 chrislit Exp $
+ * $Id: rawcom.h,v 1.8 2001/11/04 22:50:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,7 +43,21 @@ public:
      virtual SWModule & operator -= (int decrement) {
      	return this->operator += (-decrement);
      }
+
+  // write interface ----------------------------
+  virtual bool isWritable ()
+  {
+    return true;
+  }
+  static char createModule (const char *path)
+  {
+    return RawVerse::createModule (path);
+  }
+  virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
+  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
+  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
+  virtual void deleteEntry ();	// Delete current module entry
+  // end write interface ------------------------
+
 };
-
-
 #endif

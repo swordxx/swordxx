@@ -175,10 +175,14 @@ SWModule &RawLD4::operator =(SW_POSITION p)
 }
 
 
-SWModule &RawLD4::operator <<(const char *inbuf) {
-	settext(*key, inbuf);
+SWModule &RawLD4::setentry(const char *inbuf, long len) {
+	settext(*key, inbuf, len);
 
 	return *this;
+}
+
+SWModule &RawLD4::operator <<(const char *inbuf) {
+	return setentry(inbuf, 0);
 }
 
 

@@ -467,8 +467,7 @@ RawText &RawText::operator =(SW_POSITION p) {
 	return *this;
 }
 
-
-SWModule &RawText::operator <<(const char *inbuf) {
+SWModule &RawText::setentry(const char *inbuf, long len) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
 #ifndef _WIN32_WCE
@@ -483,12 +482,16 @@ SWModule &RawText::operator <<(const char *inbuf) {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	settext(key->Testament(), key->Index(), inbuf);
+	settext(key->Testament(), key->Index(), inbuf, len);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
 
 	return *this;
+}
+
+SWModule &RawText::operator <<(const char *inbuf) {
+        return setentry(inbuf, 0);
 }
 
 
@@ -534,7 +537,7 @@ SWModule &RawText::operator <<(const SWKey *inkey) {
 
 
 /******************************************************************************
- * RawFiles::deleteEntry	- deletes this entry
+ * RawText::deleteEntry	- deletes this entry
  *
  * RET: *this
  */
