@@ -112,7 +112,9 @@ char *RawGenBook::getRawEntry() {
 		*entryBuf = 0;
 		lseek(bdtfd->getFd(), offset, SEEK_SET);
 		read(bdtfd->getFd(), entryBuf, size);
+          entryBuf[size] = 0;
 
+		rawFilter(entryBuf, size, 0);	// hack, decipher
 		rawFilter(entryBuf, size, key);
 
 		   if (!isUnicode())

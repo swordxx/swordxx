@@ -19,6 +19,8 @@ char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	int len;
         char digit[10];
         unsigned long ch;
+	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+		return -1;
 
 	len = strlenw(text) + 2;						// shift string to right of buffer
 	if (len < maxlen) {

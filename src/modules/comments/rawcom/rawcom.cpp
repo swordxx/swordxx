@@ -76,7 +76,9 @@ char *RawCom::getRawEntry() {
 	*entrybuf = 0;
 
 	readtext(key->Testament(), start, (size + 2), entrybuf);
+     entrybuf[size] = 0;
 
+	rawFilter(entrybuf, size, 0);	// hack, decipher
 	rawFilter(entrybuf, size, key);
 
         if (!isUnicode())

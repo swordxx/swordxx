@@ -18,7 +18,9 @@ char Latin1UTF16::ProcessText(char *text, int maxlen, const SWKey *key, const SW
     unsigned char *from;
     unsigned short *to;
     int len;
-    
+	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+		return -1;
+   
     len = strlen(text) + 1;						// shift string to right of buffer
     if (len < maxlen) {
       memmove(&text[maxlen - len], text, len);

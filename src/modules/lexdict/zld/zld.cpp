@@ -93,6 +93,8 @@ char zLD::getEntry(long away) {
 		entrybuf = new char [ size * FILTERPAD ];
 		strcpy(entrybuf, ebuf);
 
+		rawFilter(entrybuf, size, key);
+
 		entrySize = size;        // support getEntrySize call
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer

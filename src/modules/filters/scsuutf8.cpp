@@ -64,6 +64,8 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule
   unsigned char *to, *from;
   unsigned long buflen = len * FILTERPAD;
   char active = 0, mode = 0;
+	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+		return -1;
 
   static unsigned short start[8] = {0x0000,0x0080,0x0100,0x0300,0x2000,0x2080,0x2100,0x3000};
   static unsigned short slide[8] = {0x0080,0x00C0,0x0400,0x0600,0x0900,0x3040,0x30A0,0xFF00};

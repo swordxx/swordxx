@@ -33,7 +33,7 @@ char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key, const S
 			cipher->cipherBuf(&len, text);
 			memcpy(text, cipher->Buf(), (len < (unsigned int)(maxlen)) ? len : maxlen);
 		}
-		else {
+		else if ((unsigned long)key == 1) {
 			cipher->Buf(text, len);
 			cipher->cipherBuf(&len);
 			memcpy(text, cipher->cipherBuf(&len), (len < (unsigned int)(maxlen)) ? len : maxlen);

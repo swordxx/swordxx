@@ -74,15 +74,17 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=3
-Item0=..\;..\..\utilities;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item1=..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item2=..;$(BCB)\include;$(BCB)\include\vcl
+Count=4
+Item0=..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\;..\..\utilities;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item2=..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item3=..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=2
-Item0=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..;$(BCB)\lib\obj;$(BCB)\lib
+Count=3
+Item0=..\;..;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1

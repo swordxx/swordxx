@@ -60,49 +60,9 @@ zText::~zText()
 
 char *zText::getRawEntry()
 {
-/*
-	long  start;
-	unsigned long size;
-	unsigned long destsize;
-	char *tmpbuf;
-	char *dest;
-	VerseKey *lkey = (VerseKey *) SWModule::key;
-	char sizebuf[3];
-
-	lkey->Verse(0);
-	if (chapcache != lkey->Index()) {
-		findoffset(lkey->Testament(), lkey->Index(), &start, &((unsigned short) size));
-		readtext(lkey->Testament(), start, 3, sizebuf);
-		memcpy(&size, sizebuf, 2);
-		tmpbuf = new char [ size + 1 ];
-		readtext(lkey->Testament(), start + 2, size + 1 , tmpbuf);
-		//zBuf(&size, tmpbuf);
-		dest = new char [ (size*4) + 1 ];
-		uncompress((Bytef *)dest, &destsize, (Bytef *) tmpbuf, size);
-		chapcache = lkey->Index();
-		delete [] tmpbuf;
-	}
-
-	//findoffset(key->Testament(), key->Index(), &start, &size);
-	findoffset(lkey->Testament(), lkey->Index(), &start, &((unsigned short) size));
-
-	if (versebuf)
-		delete [] versebuf;
-	versebuf = new char [ size + 1 ];
-	//memcpy(versebuf, Buf(), size);
-	memcpy(versebuf, dest, destsize);
-	delete [] dest;
-
-	preptext(versebuf);
-
-	return versebuf;
-*/
-
 	long  start = 0;
 	unsigned short size = 0;
 	VerseKey *key = 0;
-
-	//printf ("zText char *\n");
 
 	// see if we have a VerseKey * or decendant
 	try {
@@ -113,12 +73,9 @@ char *zText::getRawEntry()
 	if (!key)
 		key = new VerseKey(this->key);
 
-	//printf ("checking cache\n");
-	//printf ("finding offset\n");
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
-	//printf ("deleting previous buffer\n");
 	unsigned long newsize = (size + 2) * FILTERPAD;
 	if (newsize > entrybufallocsize) {
 		if (entrybuf)
@@ -128,20 +85,17 @@ char *zText::getRawEntry()
 	}
 	*entrybuf = 0;
 
-	//printf ("getting text\n");
 	zreadtext(key->Testament(), start, (size + 2), entrybuf);
-	//printf ("got text\n");
 
-	//printf ("preparing text\n");
-        if (!isUnicode())
+	rawFilter(entrybuf, size, key);
+
+	if (!isUnicode())
 		preptext(entrybuf);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
 
-	//printf ("returning text\n");
 	return entrybuf;
-
 }
 
 

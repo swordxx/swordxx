@@ -23,6 +23,8 @@ char UTF8UTF16::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
   unsigned char significantFirstBits, subsequent;
   unsigned short schar;
   
+	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+		return -1;
   len = strlen(text) + 1;						// shift string to right of buffer
   if (len < maxlen) {
     memmove(&text[maxlen - len], text, len);

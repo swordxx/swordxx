@@ -28,6 +28,8 @@ UTF8arShaping::~UTF8arShaping() {
 char UTF8arShaping::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
         UChar *ustr, *ustr2;
+	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+		return -1;
 
         int32_t len = strlen(text);
         ustr = new UChar[len];

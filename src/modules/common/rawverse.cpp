@@ -199,7 +199,7 @@ void RawVerse::preptext(char *buf)
  */
 
 void RawVerse::readtext(char testmt, long start, unsigned short size, char *buf) {
-	memset(buf, 0, size+1);
+	memset(buf, 0, size);
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
 	if (size) {
