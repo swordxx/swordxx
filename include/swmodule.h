@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.7 2000/08/14 21:37:23 scribe Exp $
+ * $Id: swmodule.h,v 1.8 2000/08/19 03:36:46 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -52,6 +52,7 @@ protected:
 	bool render;
 
 public:
+	static void nullPercent(char percent, void *userData);
 	bool terminateSearch;	// for ending a search from another thread
 	SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay *idisp = 0, char *imodtype = 0);
 	virtual ~SWModule();
@@ -67,7 +68,7 @@ public:
 	virtual char *Type(char *imodtype = 0);
 
 	// search methods
-	virtual ListKey &Search(const char *istr, int searchType = 0, int flags = 0, SWKey *scope = 0, bool *justCheckIfSupported = 0);
+	virtual ListKey &Search(const char *istr, int searchType = 0, int flags = 0, SWKey *scope = 0, bool *justCheckIfSupported = 0, void (*percent)(char, void *) = &nullPercent, void *percentUserData = 0);
 	virtual char createSearchFramework() { return 0; } // special search framework
 	virtual bool hasSearchFramework() { return false; } // special search framework
 	virtual bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope) {

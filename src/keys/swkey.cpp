@@ -16,6 +16,7 @@
 
 SWKey::SWKey(const char *ikey)
 {
+	index   = 0;
 	persist = 0;
 	keytext = 0;
 	error   = 0;
@@ -24,6 +25,7 @@ SWKey::SWKey(const char *ikey)
 
 SWKey::SWKey(SWKey const &k)
 {
+	index   = k.index;
 	persist = k.persist;
 	keytext = 0;
 	error = k.error;

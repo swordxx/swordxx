@@ -3,6 +3,17 @@
 #include <swmgr.h>
 #include <regex.h> // GNU
 
+void percentUpdate(char percent, void *userData) {
+	static char printed = 0;
+	
+	while ((((float)percent)/100)*70 > printed) {
+		cout << "=";
+		printed++;
+		cout.flush();
+	}
+}
+
+
 int main(int argc, char **argv)
 {
 	SWMgr manager;
@@ -34,8 +45,10 @@ int main(int argc, char **argv)
 		target->SetKey(vk);
 	}
 
+	cout << "[0=================================50===============================100]\n ";
 //	for (listkey = target->Search(argv[2]);!listkey.Error();listkey++)
-	listkey = target->Search(argv[2], -2, REG_ICASE);
+	listkey = target->Search(argv[2], -2, REG_ICASE, 0, 0, &percentUpdate);
+	cout << "\n";
 	while (!listkey.Error()) {
 		cout << (const char *)listkey << "\n";
 		listkey++;

@@ -9,9 +9,11 @@
 #include <utilfuns.h>
 #include <regex.h>	// GNU
 #include <swfilter.h>
+#include <versekey.h>	// KLUDGE for Search
 
 
 SWDisplay SWModule::rawdisp;
+void SWModule::nullPercent(char percent, void *percentUserData) {}
 
 /******************************************************************************
  * SWModule Constructor - Initializes data for instance of SWModule
@@ -274,7 +276,7 @@ SWModule &SWModule::operator -=(int increment)
  * RET: listkey set to verses that contain istr
  */
 
-ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported)
+ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData)
 {
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
@@ -300,12 +302,25 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		SetKey(*searchkey);
 	}
 
+	// MAJOR KLUDGE: VerseKey::Index still return index within testament.
+	// 	VerseKey::NewIndex should be moved to Index and Index should be some
+	// 	VerseKey specific name
+	VerseKey *vkcheck = 0;
+	try {
+		vkcheck = dynamic_cast<VerseKey *>(key);
+	}
+	catch (...) {}
+	// end MAJOR KLUDGE
+
+	*this = BOTTOM;
+	long highIndex = (vkcheck)?vkcheck->NewIndex():key->Index();
 	*this = TOP;
 	if (searchType >= 0) {
 		flags |=searchType|REG_NOSUB|REG_EXTENDED;
 		regcomp(&preg, istr, flags);
 	}
 
+	(*percent)(2, percentUserData);
 	if (searchType == -2) {
 		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
 		strcpy(wordBuf, istr);
@@ -322,10 +337,10 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 	}
 
-
-
+	(*percent)(5, percentUserData);
 
 	while (!Error() && !terminateSearch) {
+		(*percent)((char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex))), percentUserData);
 		if (searchType >= 0) {
 			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
 				textkey = KeyText();
@@ -373,6 +388,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		delete searchkey;
 
 	listkey = TOP;
+	(*percent)(100, percentUserData);
 	return listkey;
 }
 

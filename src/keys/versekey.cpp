@@ -1189,6 +1189,19 @@ long VerseKey::Index() const
 
 
 /******************************************************************************
+ * VerseKey::Index - Gets index based upon current verse
+ *
+ * RET:	offset
+ */
+
+long VerseKey::NewIndex() const
+{
+	static long otMaxIndex = offsets[0][1][(int)offsets[0][0][BMAX[0]] + books[0][BMAX[0]].chapmax];
+	return ((testament-1) * otMaxIndex) + Index();
+}
+
+
+/******************************************************************************
  * VerseKey::Index - Sets index based upon current verse
  *
  * ENT:	iindex - value to set index to

@@ -232,7 +232,7 @@ char RawText::createSearchFramework() {
  * RET: listkey set to verses that contain istr
  */
 
-ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported)
+ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData)
 {
 	listkey.ClearList();
 
@@ -277,6 +277,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 			VerseKey vk;
 			vk = TOP;
 
+			(*percent)(10, percentUserData);
 			// toupper our copy of search string
 			stdstr(&wordBuf, istr);
 			for (unsigned int i = 0; i < strlen(wordBuf); i++)
@@ -295,6 +296,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 				words[wordCount] = strtok(NULL, " ");
 			}
 
+			(*percent)(20, percentUserData);
 			indexes.erase(indexes.begin(), indexes.end());
 
 			// search both old and new testament indexes
@@ -332,6 +334,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 						free(idxbuf);
 					}
 					indexes = indexes2;
+					percent((char)(20 + (float)((j*wordCount)+i)/(wordCount * 2) * 78), percentUserData);
 				}
 
 				// indexes contains our good verses, lets return them in a listkey
@@ -347,6 +350,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 						listkey << (const char *) vk;
 				}
 			}
+			(*percent)(98, percentUserData);
 
 			free(words);
 			free(wordBuf);
@@ -354,6 +358,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 			*testKeyType = saveKey;	// set current place back to original
 
 			listkey = TOP;
+			(*percent)(100, percentUserData);
 			return listkey;
 		}
 
@@ -367,7 +372,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 		*justCheckIfSupported = false;
 		return listkey;
 	}
-	return SWModule::Search(istr, searchType, flags, scope);
+	return SWModule::Search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
 
 

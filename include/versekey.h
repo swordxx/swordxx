@@ -1,7 +1,7 @@
 /****************************************************************************** 
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.5 2000/08/18 03:23:00 scribe Exp $
+ * $Id: versekey.h,v 1.6 2000/08/19 03:36:46 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,9 +30,11 @@
 
 #define POS_MAXVERSE ((char)3)
 #define POS_MAXCHAPTER ((char)4)
+#define POS_MAXBOOK ((char)5)
 
 #define MAXVERSE POSITION(POS_MAXVERSE)
 #define MAXCHAPTER POSITION(POS_MAXCHAPTER)
+#define MAXBOOK POSITION(POS_MAXBOOK)
 
 struct sbook {
 	const char *name;		// Name of book
@@ -140,6 +142,7 @@ public:
 	virtual void Normalize(char autocheck = 0);
 	virtual char AutoNormalize(char iautonorm = MAXPOS(char));
 	virtual char Headings(char iheadings = MAXPOS(char));
+	virtual long NewIndex() const;
 	virtual long Index() const;
 	virtual long Index(long iindex);
 

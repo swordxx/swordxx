@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.2 1999/07/06 04:45:49 scribe Exp $
+ * $Id: swkey.h,v 1.3 2000/08/19 03:36:46 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,10 +42,13 @@ public:
 #define BOTTOM POSITION(POS_BOTTOM)
 
 class SWKey {
+	long index;
+
 protected:
 	char *keytext;
 	char persist;
 	char error;
+
 public:
 	SWKey(const char *ikey = 0);
 	SWKey(SWKey const &k);
@@ -73,6 +76,8 @@ public:
 	virtual SWKey &operator ++(int) { return *this += 1; }
 	virtual SWKey &operator --(int) { return *this -= 1; }
 	virtual char Traversable() { return 0; }
+	virtual long Index() const { return index; }
+	virtual long Index(long iindex) { index = iindex; return index; }
 };
 
 
