@@ -35,8 +35,6 @@ SWEncodingMgr::SWEncodingMgr (SWConfig * iconfig, SWConfig * isysconfig, bool au
         scsuutf8 = new SCSUUTF8();
         latin1utf8 = new Latin1UTF8();
 
-        targetenc = NULL;
-
         encoding = enc;
 
         switch (encoding) {
@@ -51,6 +49,9 @@ SWEncodingMgr::SWEncodingMgr (SWConfig * iconfig, SWConfig * isysconfig, bool au
                 break;
         case ENC_HTML:
                 targetenc = new UTF8HTML();
+                break;
+        default: // i.e. case ENC_UTF8
+                targetenc = NULL;
         }
 }
 
@@ -79,7 +80,8 @@ void SWEncodingMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
 void SWEncodingMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
         SWMgr::AddEncodingFilters(module, section);
-        module->AddEncodingFilter(targetenc);
+        if (targetenc)
+                module->AddEncodingFilter(targetenc);
 }
 
 char SWEncodingMgr::Encoding(char enc) {
@@ -110,7 +112,7 @@ char SWEncodingMgr::Encoding(char enc) {
                         if (oldfilter) {
                                 if (!targetenc) {
                                         for (module = Modules.begin(); module != Modules.end(); module++)
-                                                module->second->RemoveRenderFilter(targetenc);
+                                                module->second->RemoveRenderFilter(oldfilter);
                                 }
                                 else {
                                         for (module = Modules.begin(); module != Modules.end(); module++)
