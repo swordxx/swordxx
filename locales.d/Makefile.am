@@ -6,7 +6,6 @@ localeDATA += locales.d/de_abbrev.conf
 localeDATA += locales.d/es.conf
 localeDATA += locales.d/fi.conf
 localeDATA += locales.d/fr.conf
-localeDATA += locales.d/fr_FR.ISO-8859-1.conf
 localeDATA += locales.d/it.conf
 localeDATA += locales.d/la.conf
 localeDATA += locales.d/nl.conf
