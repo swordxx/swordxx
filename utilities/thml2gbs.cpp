@@ -103,9 +103,8 @@ int main(int argc, char **argv) {
   char* n = new char[256];
   char* type = new char[256];
   char* title= new char[512];
-  
-  char* strtmp;
 
+  char* strtmp;
   if (argc > 2) {
     strcpy (modname, argv[2]);
   }
@@ -120,7 +119,6 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
-
   FILE *infile;
   infile = fopen(argv[1], "r");
   FILE *outfile;
@@ -128,7 +126,7 @@ int main(int argc, char **argv) {
     strcat (modname, ".imp");
     outfile = fopen(modname, "w");
   }
-  
+
   TreeKeyIdx * treeKey;
   RawGenBook *book;
 
@@ -142,7 +140,7 @@ int main(int argc, char **argv) {
     //DEBUG  TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
     treeKey = ((TreeKeyIdx *)((SWKey *)(*book)));
   }
-  
+
   int c;
   while ((c = fgetc(infile)) != EOF) {
     if (c == '<') {
@@ -160,7 +158,7 @@ int main(int argc, char **argv) {
 	    }
 
 	    if (level) {
-	      std::cout << keybuffer << std::endl;
+	      printf ("%s\n", keybuffer);
 	      if (exportfile) {
 		fprintf (outfile, "$$$%s\n%s\n", keybuffer, entbuffer);
 	      }
@@ -200,7 +198,7 @@ int main(int argc, char **argv) {
 	    }
 	    
 	    if (level) {
-	      std::cout << keybuffer << std::endl;
+	      printf ("%s\n", keybuffer);
 	      if (exportfile) {
 		fprintf (outfile, "$$$%s\n%s\n", keybuffer, entbuffer);
 	      }
@@ -227,7 +225,7 @@ int main(int argc, char **argv) {
 	    }
 	  }
 	  keybuffer[keysize] = 0;
-	  
+
 	  type[0] = 0;
 	  strtmp = strstr(keybuffer, "type=\"");
 	  if (strtmp) {
@@ -303,7 +301,9 @@ int main(int argc, char **argv) {
       entbuffer[entrysize] = 0;
     }
   }
+
 //DEBUG  printTree(root, treeKey);
+  return 0;
 
   delete treeKey;
   delete book;
