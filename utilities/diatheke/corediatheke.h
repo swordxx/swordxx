@@ -21,6 +21,7 @@
 #define FMT_GBF 2
 #define FMT_RTF 3
 #define FMT_HTML 4
+#define FMT_OLB 5
 
 #define QT_BIBLE 1
 #define QT_COMM 2
@@ -41,4 +42,5 @@
 #define ST_PHRASE 3 // -2
 
 int hasalpha (char * string);
-char* doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref);
+void doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref, ostream* outputt); 
+

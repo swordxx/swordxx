@@ -48,7 +48,11 @@ int main(int argc, char **argv)
 		}
 		else if (!stricmp("-s", argv[i])) {
 			if (i+1 <= argc) {
-				if (!stricmp("regex", argv[i+1])) {
+				if (!stricmp("phrase", argv[i+1])) {
+					searchtype = ST_PHRASE;
+					i++;
+				}
+				else if (!stricmp("regex", argv[i+1])) {
 					searchtype = ST_REGEX;
 					i++;
 				}
@@ -123,9 +127,7 @@ int main(int argc, char **argv)
 	
 	if (runquery == (RQ_BOOK | RQ_REF))
 	{
-		char * returnstring  = doquery(maxverses, outputformat, optionfilters, searchtype, text, locale, ref);
-		printf ("%s", returnstring);
-		delete [] returnstring;
+		doquery(maxverses, outputformat, optionfilters, searchtype, text, locale, ref, &cout);
 	}
 	else
 		printsyntax();

@@ -5,13 +5,13 @@
 #include "corediatheke.h"
 #include <string>
 #include <list>
+#include <iostream.h>
 
-char * systemquery(const char * key){
+void systemquery(const char * key, ostream* output){
 	SWMgr manager;
 	ModMap::iterator it;
 
 	SWModule *target;
-	string value;
 	
 	bool types = false, descriptions = false, names = false;
 
@@ -20,8 +20,8 @@ char * systemquery(const char * key){
 		list<string> loclist =	lm.getAvailableLocales();
 		list<string>::iterator li = loclist.begin();
 		for (;li != loclist.end(); li++) {
-			value += li->c_str();
-			value += "\n";
+		  *output << li->c_str();
+		  *output << "\n";
 		}
 	}
 	else if (!stricmp(key, "modulelist")) {
@@ -38,44 +38,40 @@ char * systemquery(const char * key){
 	
 	
 	if (types || descriptions || names) {
-		if (types) value += "Biblical Texts:\n";
+		if (types) *output << "Biblical Texts:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
 			if (!strcmp(target->Type(), "Biblical Texts")) {
-				if (names) value += target->Name();
-				if (names && descriptions) value += " : ";
-				if (descriptions) value += target->Description();
-				value += "\n";
+				if (names) *output << target->Name();
+				if (names && descriptions) *output << " : ";
+				if (descriptions) *output << target->Description();
+				*output << "\n";
 			}
 		}
-		if (types) value += "Commentaries:\n";
+		if (types) *output << "Commentaries:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
 			if (!strcmp(target->Type(), "Commentaries")) {
-				if (names) value += target->Name();
-				if (names && descriptions) value += " : ";
-				if (descriptions) value += target->Description();
-				value += "\n";
+				if (names) *output << target->Name();
+				if (names && descriptions) *output << " : ";
+				if (descriptions) *output << target->Description();
+				*output << "\n";
 			} 
 		}
-		if (types) value += "Dictionaries:\n";
+		if (types) *output << "Dictionaries:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
 			if (!strcmp(target->Type(), "Lexicons / Dictionaries")) {
-				if (names) value += target->Name();
-				if (names && descriptions) value += " : ";
-				if (descriptions) value += target->Description();
-				value += "\n";
+				if (names) *output << target->Name();
+				if (names && descriptions) *output << " : ";
+				if (descriptions) *output << target->Description();
+				*output << "\n";
 			}
 		}
 	}
-
-	char * versevalue = new char[value.length() + 1];
-	strcpy (versevalue, value.c_str());
-	return versevalue;
 }
 
-char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilters = 0, char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0) { 
+void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilters = 0, char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout) { 
 	static SWMgr manager;
 	static ModMap::iterator it;
 	static ListKey listkey;
@@ -89,19 +85,13 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	SWFilter * chfilter = 0;
 	char *font = 0;
 	char inputformat = 0;
-	string value = "";
 	string encoding;
 	char querytype = 0;	
-
-	//char * ref2 = new char[strlen(ref)];
-	//strcpy(ref2, ref);
 
 	//deal with queries to "system"
 	if (!stricmp(text, "system")) {
 		querytype = QT_SYSTEM;
-		char * ret = systemquery(ref);
-		
-		return ret;
+		systemquery(ref, output);
 	}
 	if (!strnicmp(text, "info", 4)) {
 	        querytype = QT_INFO;
@@ -111,7 +101,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	it = manager.Modules.find(text);
 	if (it == manager.Modules.end()) { //book not found
 		
-		return NULL;
+		return;
 	}
 
 	target = (*it).second;
@@ -130,21 +120,16 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	if (querytype == QT_INFO) {
 	  switch (inputformat) {
 	  case FMT_THML :
-	    value += "ThML";
+	    *output << "ThML";
 	    break;
 	  case FMT_GBF :
-	    value += "GBF";
+	    *output << "GBF";
 	    break;
 	  default:
-	    value += "Other";
+	    *output << "Other";
 	  }	 
-	  value += ";";
-	  value += target->Type();
-	  
-	  char * versevalue = new char[value.length() + 1];
-	  strcpy (versevalue, value.c_str());
-	  
-	  return versevalue;
+	  *output << ";";
+	  *output << target->Type();
 	}
 
 	if (searchtype)
@@ -189,36 +174,36 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	if (querytype == QT_SEARCH) {
 		//do search stuff
 		searchtype = 1 - searchtype;
-		value += "Verse(s) containing \"";
-		value += ref;
-		value += "\": ";
+		*output << "Verse(s) containing \"";
+	        *output << ref;
+		*output << "\": ";
 		
 		listkey = target->Search(ref, searchtype);
 		
 		if (strlen((const char*)listkey)) {
 			if (!listkey.Error())
-				value += (const char *)listkey;
+				*output << (const char *)listkey;
 			listkey++;
 			while (!listkey.Error()) {
-				value += " ; ";
-				value += (const char *)listkey;
+				*output << " ; ";
+				*output << (const char *)listkey;
 				listkey++;
 			}
-			value += " -- ";
+			*output << " -- ";
 
 			char *temp = new char[10];
 			sprintf(temp, "%u", listkey.Count());
-			value += temp;
+			*output << temp;
 			delete [] temp;
 
-			value += " matches total (";
-			value += target->Name();
-			value += ")\n";
+			*output << " matches total (";
+			*output << target->Name();
+			*output << ")\n";
 		}
 		else {
-			value += "none (";
-			value += target->Name();
-			value += ")\n";
+			*output << "none (";
+			*output << target->Name();
+			*output << ")\n";
 		}
 	}
 	
@@ -243,45 +228,45 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		}
 
 		if (outputformat == FMT_RTF) {
-			value  = "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
+			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
 			if (font)
-				value += font;
+				*output << font;
 			else
-				value += "Times New Roman";
-			value += ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
+				*output << "Times New Roman";
+			*output << ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
 		}
 		else if (outputformat == FMT_HTML) {
-			value = "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
+			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
 		}		
 	
 		if (strlen(text)) {
-			value += (char*)target->KeyText();
+			*output << (char*)target->KeyText();
 			if (font && !filter) {
-				value += ": <font face=\"";
-				value += font;
-				value += "\">";
+				*output << ": <font face=\"";
+				*output << font;
+				*output << "\">";
 			}
 			else if (outputformat == FMT_RTF) {
-				value += ": {\\f1 ";
+				*output << ": {\\f1 ";
 			}
 			else {
-				value += ": ";
+				*output << ": ";
 			}
-			value += text;
+			*output << text;
 			if (font && !filter) {
-				value += "</font>";
+				*output << "</font>";
 			}
 			else if (outputformat == FMT_RTF) {
-				value += "}";
+				*output << "}";
 			}
 
-			value += "(";
-			value += target->Name();
-			value += ")\n";
+			*output << "(";
+			*output << target->Name();
+			*output << ")\n";
 		}	
 
 		if (outputformat == FMT_RTF) {
-			value  += "}";
+			*output << "}";
 		}
 
 	}
@@ -314,15 +299,15 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		int i;
 
 		if (outputformat == FMT_RTF) {
-			value  = "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
+			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
 			if (font)
-				value += font;
+				*output << font;
 			else
-				value += "Times New Roman";
-			value += ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
+				*output << "Times New Roman";
+			*output << ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
 		}
 		else if (outputformat == FMT_HTML) {
-			value = "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
+			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
 		}
 
 		for (i = 0; i < listkey.Count() && maxverses; i++) {
@@ -331,85 +316,85 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				target->Key(element->LowerBound());
 				vk = element->UpperBound();
 				while (maxverses && target->Key() <= vk) {
-					value += (char*)target->KeyText();
+					*output << (char*)target->KeyText();
 					if (font && !filter) {
-						value += ": <font face=\"";
-						value += font;
-						value += "\">";
+						*output << ": <font face=\"";
+						*output << font;
+						*output << "\">";
 					}
 					else if (outputformat == FMT_RTF) {
-						value += ": {\\f1 ";
+						*output << ": {\\f1 ";
 					}
 					else {
-						value += ": ";
+						*output << ": ";
 					}
-					value += (char const*)*target;
+					*output << (char const*)*target;
 					if (font && !filter) {
-						value += "</font>";
+						*output << "</font>";
 					}
 					else if (outputformat == FMT_RTF) {
-						value += "}";
+						*output << "}";
 					}
 
 					if (inputformat != FMT_THML && !filter)
-						value += "<br />";
+						*output << "<br />";
 					else if (outputformat == FMT_RTF)
-						value += "\\par ";
+						*output << "\\par ";
 					else if (outputformat == FMT_GBF)
-						value += "<CM>";
+						*output << "<CM>";
 
-					value += "\n";
+					*output << "\n";
+					
+					if (target->Key() == vk)
+					  break;
 					maxverses--;
 					(*target)++;
 				}
 			}
 			else {
 				target->Key(*listkey.GetElement(i));
-				value += (char*)target->KeyText();
+				*output << (char*)target->KeyText();
 				if (font && !filter) {
-					value += ": <font face=\"";
-					value += font;
-					value += "\">";
+					*output << ": <font face=\"";
+					*output << font;
+					*output << "\">";
 				}
 				else if (outputformat == FMT_RTF) {
-					value += ": {\\f1 ";
+					*output << ": {\\f1 ";
 				}
 				else {
-					value += ": ";
+					*output << ": ";
 				}
-				value += (char const*)*target;
+				*output << (char const*)*target;
 				if (font && !filter) {
-					value += "</font>";
+					*output << "</font>";
 				}
 				else if (outputformat == FMT_RTF) {
-					value += "}";
+					*output << "}";
 				}
 					
 				if (inputformat != FMT_THML && !filter)
-					value += "<br />";
+					*output << "<br />";
 				else if (outputformat == FMT_RTF)
-					value += "\\par ";
+					*output << "\\par ";
 				else if (outputformat == FMT_GBF)
-					value += "<CM>";
+					*output << "<CM>";
 
-				value += "\n";
+				*output << "\n";
 				maxverses--;
 			}
 		}
 
-		value += "(";
-		value += target->Name();
-		value += ")\n";
+		*output << "(";
+		*output << target->Name();
+		*output << ")\n";
 
 		if (outputformat == FMT_RTF) {
-			value  += "}";
+			*output << "}";
 		}
 
 	}
 			
-	char * versevalue = new char[value.length() + 1];
-	strcpy (versevalue, value.c_str());
-
 	if (filter) {
 		target->RemoveRenderFilter(filter);
 		delete filter;
@@ -422,6 +407,4 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		target->RemoveRenderFilter(gbffilter);
 		delete gbffilter;
 	}
-
-	return versevalue;
 }
