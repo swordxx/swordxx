@@ -7,8 +7,6 @@ libsword_la_SOURCES += $(filtersdir)/gbfhtmlhref.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfplain.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfrtf.cpp
 libsword_la_SOURCES += $(filtersdir)/plainhtml.cpp
-libsword_la_SOURCES += $(filtersdir)/rwphtml.cpp
-libsword_la_SOURCES += $(filtersdir)/rwprtf.cpp
 libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp
 libsword_la_SOURCES += $(filtersdir)/rtfhtml.cpp
 
