@@ -496,18 +496,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 		}
 		if (searchType >= 0) {
-			if (!regexec(&preg,  getRawEntry(), 0, 0, 0) && !regexec(&preg,  StripText(), 0, 0, 0)) {
+			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
 				textkey = KeyText();
 				listkey << textkey;
 			}
 		}
 		else if (searchType == -1) {
-			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(getRawEntry(), istr) : strstr(getRawEntry(), istr);
-			
-			if (sres) { //the raw text has the search text, check the stripped text for the text to be sure the text wasn't a tag value or similair
-				sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
-			}
-			
+			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
 			if (sres) { //it's also in the StripText(), so we have a valid search result item now
 				textkey = KeyText();
 				listkey << textkey;
