@@ -1,0 +1,6 @@
+*.lo
+Makefile
+Makefile.in
+libsword.la
+.deps
+.libs
