@@ -1,8 +1,8 @@
 /******************************************************************************
- *  cdcachemgr.h	- definition of class SWCacheMgr used to provide an interface for
+ *  cdsourcemgr.h	- definition of class SWCacheMgr used to provide an interface for
  *  	caching information of module sources
  *
- * $Id: cdcachemgr.h,v 1.1 2002/10/23 22:11:32 dglassey Exp $
+ * $Id: cdsourcemgr.h,v 1.1 2002/10/23 23:13:35 dglassey Exp $
  *
  * Copyright 2002 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,20 +20,21 @@
  *
  */
  
-#ifndef CDCACHEMGR_H
-#define CDCACHEMGR_H
+#ifndef CDSOURCEMGR_H
+#define CDSOURCEMGR_H
  
  #include <defs.h>
- #include "swcachemgr.h"
+ #include "swsourcemgr.h"
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT CDCacheMgr: public SWCacheMgr {
+class SWDLLEXPORT CDSourceMgr: public SWSourceMgr {
 public:	
-	CDCacheMgr(const char *iConfigPath, bool autoload = false);
-	//SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0);
+	CDSourceMgr(const char *iConfigPath);
 	char Refresh();
 }
+
+CDSourceMgr *DetectCD(const char *iCDPath);
 
 SWORD_NAMESPACE_END
 #endif
