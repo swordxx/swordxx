@@ -472,8 +472,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	(*percent)(perc, percentUserData);
 
 	while (!Error() && !terminateSearch) {
-
-	
 		long mindex = 0;
 		if (vkcheck)
 			mindex = vkcheck->NewIndex();
@@ -504,21 +502,36 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			}
 		}
 		else if (searchType == -1) {
-			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
-			if (sres) {
+			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(getRawEntry(), istr) : strstr(getRawEntry(), istr);
+			
+			if (sres) { //the raw text has the search text, check the stripped text for the text to be sure the text wasn't a tag value or similair
+				sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
+			}
+			
+			if (sres) { //it's also in the StripText(), so we have a valid search result item now
 					textkey = KeyText();
 					listkey << textkey;
 			}
 		}
 		else if (searchType == -2) {
-			int i;
-			const char *stripBuf = StripText();
-			for (i = 0; i < wordCount; i++) {
-				sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(stripBuf, words[i]) : strstr(stripBuf, words[i]);
-				if (!sres)
-					break;
-			}
-			if (i == wordCount) {
+			int loopCount = 0;
+			int foundWords = 0;
+			do {
+				const char* textBuf = (loopCount == 0) ? getRawEntry() : StripText();
+				foundWords = 0;
+				
+				for (int i = 0; i < wordCount; ++i) {
+					sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(textBuf, words[i]) : strstr(textBuf, words[i]);
+					if (!sres) {
+						break; //for loop
+					}
+					++foundWords;
+				}
+				
+				++loopCount;
+			} while ( (loopCount < 2) && (foundWords == wordCount));
+			
+			if ((loopCount == 2) && (foundWords == wordCount)) { //we found the right words in both raw and stripped text, which means it's a valid result item
 				textkey = KeyText();
 				listkey << textkey;
 			}
@@ -580,6 +593,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 		(*this)++;
 	}
+	
 	if (searchType >= 0)
 		regfree(&preg);
 
