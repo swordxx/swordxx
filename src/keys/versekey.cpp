@@ -169,8 +169,12 @@ void VerseKey::setLocale(const char *name) {
 		localeCache.abbrevsCnt = abbrevsCnt;
 	}
 	stdstr(&(this->locale), localeCache.name);
-}
 
+	if (lowerBound)
+		LowerBound().setLocale(name);
+	if (upperBound) 
+		UpperBound().setLocale(name);
+}
 
 void VerseKey::setBooks(const char *iBMAX, struct sbook **ibooks) {
 	BMAX = iBMAX;
@@ -709,6 +713,7 @@ VerseKey &VerseKey::LowerBound(const char *lb)
 
 	(*lowerBound) = lb;
 	lowerBound->Normalize();
+	lowerBound->setLocale( this->getLocale() );
 
 	return (*lowerBound);
 }
@@ -728,6 +733,7 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 	if (*upperBound < *lowerBound)
 		*upperBound = *lowerBound;
 	upperBound->Normalize();
+	upperBound->setLocale( this->getLocale() );
 
 // until we have a proper method to resolve max verse/chap use this kludge
 	int len = strlen(ub);
