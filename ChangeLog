@@ -2,6 +2,11 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+19-Jan-2000
+	Added zText, zVerse, etc. code utilizing Daniel Glassey's comp
+		drivers
+	Fixed alloc bug in RawLD
+
 25-Nov-1999
 	Fixed double // bug in swmgr
 	Fixed /./ bug in swmgr
