@@ -36,9 +36,9 @@ int main(int argc, char **argv) {
   const char * helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
   
   signed long i = 0;
-  char keybuffer[2048];
-  char entbuffer[1048576];
-  char linebuffer[1048576];
+  char* keybuffer = new char[2048];
+  char* entbuffer = new char[1048576];
+  char* linebuffer = new char[1048576];
   char modname[16];
   
   if (argc > 2) {
@@ -189,6 +189,10 @@ int main(int argc, char **argv) {
   }
 
   //DEBUG  printTree(root, treeKey);
-  
+
+  delete entbuffer;
+  delete linebuffer;
+  delete keybuffer;
+
   return 0;
 }

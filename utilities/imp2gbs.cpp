@@ -89,9 +89,9 @@ int main(int argc, char **argv) {
   const char * helptext ="imp2gbs 1.0 General Book module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname]\n";
   
   signed long i = 0;
-  char keybuffer[2048];
-  char entbuffer[1048576];
-  char linebuffer[1048576];
+  char* keybuffer = new char[2048];
+  char* entbuffer = new char[1048576];
+  char* linebuffer = new char[1048576];
   char modname[16];
   
   if (argc > 2) {
@@ -152,6 +152,10 @@ int main(int argc, char **argv) {
   
   delete treeKey;
   delete book;
+  delete keybuffer;
+  delete linebuffer;
+  delete entbuffer;
+
   return 0;
 }
 

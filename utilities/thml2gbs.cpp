@@ -78,13 +78,13 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
 
 int main(int argc, char **argv) {
   
-  const char * helptext ="thml2gbs 1.0 General Book module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [0|1 - long names] [0|1 - import format]\n";
+  const char * helptext ="thml2gbs 1.0 General Book module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [0|1 - long names] [0|1 - output in 'import format']\n";
 
   signed long i = 0;
   string divs[6];
   int level = 0;
-  char keybuffer[2048];
-  char entbuffer[1048576];
+  char* keybuffer = new char[2048];
+  char* entbuffer = new char[1048576];
   char modname[16];
   unsigned long entrysize = 0;
   unsigned long keysize = 0;
@@ -100,9 +100,9 @@ int main(int argc, char **argv) {
       exportfile = true;
 
 
-  char n[256];
-  char type[256];
-  char title[512];
+  char* n = new char[256];
+  char* type = new char[256];
+  char* title= new char[512];
   
   char* strtmp;
 
@@ -282,7 +282,7 @@ int main(int argc, char **argv) {
 	    title[i] = 0;
 	  }
 	  strcpy (keybuffer, type);
-	  if (strlen(keybuffer))
+	  if (strlen(keybuffer) && strlen(n))
 	    strcat (keybuffer, " ");
 	  strcat (keybuffer, n);
 
@@ -307,6 +307,12 @@ int main(int argc, char **argv) {
 
   delete treeKey;
   delete book;
+  delete n;
+  delete type;
+  delete title;
+  delete keybuffer;
+  delete entbuffer;
+
   return 0;
 }
 

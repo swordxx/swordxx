@@ -39,9 +39,9 @@ int main(int argc, char **argv) {
   const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
   
   signed long i = 0;
-  char keybuffer[2048];
-  char entbuffer[1048576];
-  char linebuffer[1048576];
+  char* keybuffer = new char[2048];
+  char* entbuffer = new char[1048576];
+  char* linebuffer = new char[1048576];
   char modname[16];
   
   if (argc > 2) {
@@ -146,6 +146,10 @@ int main(int argc, char **argv) {
   }
   
   //DEBUG  printTree(root, treeKey);
+
+  delete keybuffer;
+  delete entbuffer;
+  delete linebuffer;
   
   return 0;
 }
