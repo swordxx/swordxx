@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.63 2002/03/15 07:47:35 scribe Exp $
+ * $Id: swmgr.cpp,v 1.64 2002/03/16 17:34:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -82,7 +82,7 @@ bool SWMgr::debug = false;
 #ifdef GLOBCONFPATH
 const char *SWMgr::globalConfPath = GLOBCONFPATH;
 #else
-const char *SWMgr::globalConfPath = "/etc/sword.conf";
+const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif
 
 void SWMgr::init() {
@@ -364,17 +364,31 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking for " << globalConfPath << "...";
+	cerr << "\nParsing " << globalConfPath << "...";
 #endif
 
-	if (!::access(globalConfPath, 04)) {
+	char *globPaths = 0;
+	char *gfp;
+	stdstr(&globPaths, globalConfPath);
+	for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(0, ":")) {
+
+	#ifndef _MSC_VER
+if (debug)
+	cerr << "\nChecking for " << gfp << "...";
+#endif
+
+		if (FileMgr::existsFile(gfp))
+			break;
+	}
+
+	if (gfp) {
 
 #ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
 
-		SWConfig etcconf(globalConfPath);
+		SWConfig etcconf(gfp);
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
 			path = (*entry).second;
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
@@ -399,6 +413,7 @@ if (debug)
 				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
 				stdstr(configPath, path.c_str());
+				delete [] globPaths;
 				return;
 			}
 
@@ -418,11 +433,13 @@ if (debug)
 				path += "mods.d";
 				stdstr(configPath, path.c_str());
 				*configType = 1;
+				delete [] globPaths;
 				return;
 			}
 		}
 	}
 
+	delete [] globPaths;
 
 	// check ~/.sword/
 
