@@ -19,10 +19,8 @@
 #include <stdlib.h>
 #include <utilfuns.h>
 #include <rawstr4.h>
+#include <sysdata.h>
 
-#ifdef BIGENDIAN
-#include <swbyteswap.h>
-#endif
 /******************************************************************************
  * RawStr Statics
  */
@@ -145,9 +143,9 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
 	if (idxfd > 0) {
 		lseek(idxfd->getFd(), ioffset, SEEK_SET);
 		read(idxfd->getFd(), &offset, 4);
-#ifdef BIGENDIAN
-		offset = SWAP32(offset);
-#endif
+
+		offset = swordtoarch32(offset);
+
 		getidxbufdat(offset, buf);
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
 /*
@@ -241,10 +239,8 @@ signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *si
 		if (idxoff)
 			*idxoff = tryoff;
 
-#ifdef BIGENDIAN
-		*start = SWAP32(*start);
-		*size  = SWAP32(*size);
-#endif
+		*start = swordtoarch32(*start);
+		*size  = swordtoarch32(*size);
 
 		while (away) {
 			long laststart = *start;
@@ -271,10 +267,8 @@ signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *si
 			if (idxoff)
 				*idxoff = tryoff;
 
-#ifdef BIGENDIAN
-			*start = SWAP32(*start);
-			*size  = SWAP32(*size);
-#endif
+			*start = swordtoarch32(*start);
+			*size  = swordtoarch32(*size);
 
 			if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
 				away += (away < 0) ? 1 : -1;
@@ -490,10 +484,8 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
 
-#ifdef BIGENDIAN
-	outstart = SWAP32(start);
-	outsize  = SWAP32(size);
-#endif
+	outstart = archtosword32(start);
+	outsize  = archtosword32(size);
 
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
 	if (len ? len : strlen(buf)) {

@@ -133,6 +133,7 @@ char *RawGenBook::getRawEntry() {
 		entryBuf = new char [2];
 		entryBuf[0] = 0;
 		entryBuf[1] = 0;
+		entrySize = 0;
 	}
 
 	if (key != this->key) // free our key if we created a VerseKey

@@ -22,10 +22,7 @@
 #include <utilfuns.h>
 #include <rawverse.h>
 #include <versekey.h>
-
-#ifdef BIGENDIAN
-#include <swbyteswap.h>
-#endif
+#include <sysdata.h>
 
 #ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
 #define O_BINARY 0		// If it hasn't been defined than we probably
@@ -123,11 +120,11 @@ void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short 
 		lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 		read(idxfp[testmt-1]->getFd(), start, 4);
 		long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
-#ifdef BIGENDIAN
-		*start = SWAP32(*start);
-		*size  = SWAP16(*size);
-#endif
-	        if (len < 2) {
+
+		*start = swordtoarch32(*start);
+		*size  = swordtoarch16(*size);
+
+		if (len < 2) {
 			*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
 		}
 	}
@@ -240,10 +237,7 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
 
 	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-#ifdef BIGENDIAN
-	outstart = SWAP32(start);
-	outsize  = SWAP16(size);
-#endif
+
 	if (size) {
 		lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
 		write(textfp[testmt-1]->getFd(), buf, (int)size);
@@ -252,8 +246,12 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
 		write(textfp[testmt-1]->getFd(), &nl, 2);
 	}
 	else {
-		outstart = outsize = 0;
+		start = 0;
 	}
+
+	outstart = archtosword32(start);
+	outsize  = archtosword16(size);
+
 	write(idxfp[testmt-1]->getFd(), &outstart, 4);
 	write(idxfp[testmt-1]->getFd(), &outsize, 2);
 

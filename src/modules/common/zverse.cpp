@@ -22,11 +22,8 @@
 #include <utilfuns.h>
 #include <versekey.h>
 #include <zverse.h>
+#include <sysdata.h>
 
-// remove
-//#include <lzsscomprs.h>
-
-#include <swbyteswap.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -162,10 +159,10 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 		testmt = ((idxfp[0]) ? 1:2);
 	}
      
-     // assert we have and valid file descriptor
-     if (compfp[testmt-1]->getFd() < 1)
-     	return;
-          
+	// assert we have and valid file descriptor
+	if (compfp[testmt-1]->getFd() < 1)
+		return;
+		
 	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 	if (read(compfp[testmt-1]->getFd(), &ulBuffNum, 4) < 4)
 	{
@@ -183,13 +180,9 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 		printf ("Error reading usVerseSize\n");
 		return;
 	}
-	*start = ulVerseStart;
-	*size = usVerseSize;
 
-#ifdef BIGENDIAN
-	*start  = SWAP32(*start);
-	*size   = SWAP16(*size);
-#endif
+	*start = swordtoarch32(ulVerseStart);
+	*size = swordtoarch16(usVerseSize);
 
 	if (*size) {
 		if (((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf)) {
@@ -199,9 +192,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
 
-#ifdef BIGENDIAN
-		ulBuffNum = SWAP32(ulBuffNum);
-#endif
+		ulBuffNum = swordtoarch32(ulBuffNum);
 
 		if (lseek(idxfp[testmt-1]->getFd(), ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
 		{
@@ -224,11 +215,9 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 			return;
 		}
 
-#ifdef BIGENDIAN
-		ulCompOffset  = SWAP32(ulCompOffset);
-		ulCompSize  = SWAP32(ulCompSize);
-		ulUnCompSize  = SWAP32(ulUnCompSize);
-#endif
+		ulCompOffset  = swordtoarch32(ulCompOffset);
+		ulCompSize  = swordtoarch32(ulCompSize);
+		ulUnCompSize  = swordtoarch32(ulUnCompSize);
 
 		if (lseek(textfp[testmt-1]->getFd(), ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
 		{
@@ -306,15 +295,15 @@ void zVerse::settext(char testmt, long idxoff, const char *buf, long len)
 	idxoff *= 10;
 	size = outsize = len ? len : strlen(buf);
 
-	start = outstart = strlen(cacheBuf);
-#ifdef BIGENDIAN
-	outBufIdx = SWAP32(outBufIdx);
-	outstart  = SWAP32(start);
-	outsize   = SWAP16(size);
-#endif
-	if (!size) {
-		outstart = outsize = outBufIdx = 0;
-	}
+	start = strlen(cacheBuf);
+
+	if (!size)
+		start = outBufIdx = 0;
+
+	outBufIdx = archtosword32(outBufIdx);
+	outstart  = archtosword32(start);
+	outsize   = archtosword16(size);
+
 	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 	write(compfp[testmt-1]->getFd(), &outBufIdx, 4);
 	write(compfp[testmt-1]->getFd(), &outstart, 4);
@@ -342,11 +331,11 @@ void zVerse::flushCache() {
 			outzsize = zsize;
 
 			start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
-#ifdef BIGENDIAN
-			outstart  = SWAP32(start);
-			outsize   = SWAP32(size);
-			outzsize  = SWAP32(zsize);
-#endif
+
+			outstart  = archtosword32(start);
+			outsize   = archtosword32(size);
+			outzsize  = archtosword32(zsize);
+
 			write(textfp[cacheTestament-1]->getFd(), compressor->zBuf(&zsize), zsize);
 
 			lseek(idxfp[cacheTestament-1]->getFd(), idxoff, SEEK_SET);

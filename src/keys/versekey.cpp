@@ -305,7 +305,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 
     char *abbr = 0;
 
-    stdstr(&abbr, iabbr);
+	stdstr(&abbr, iabbr);
 	strstrip(abbr);
 	abLen = strlen(abbr);
 	for (loop = 0; loop < abLen; loop++)
@@ -324,15 +324,15 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 				min = target;
 			else	max = target;
 		}
-          for (; target > 0; target--) {
-          	if (strncmp(abbr, abbrevs[target-1].ab, abLen))
-               	break;
-          }
-               
-		return (!diff) ? abbrevs[target].book : -1;
- 		retVal = (!diff) ? abbrevs[target].book : -1;
+		for (; target > 0; target--) {
+			if (strncmp(abbr, abbrevs[target-1].ab, abLen))
+				break;
+		}
+			
+		retVal = (!diff) ? abbrevs[target].book : -1;
 	}
-    return retVal;
+	delete [] abbr;
+	return retVal;
 }
 
 /******************************************************************************
