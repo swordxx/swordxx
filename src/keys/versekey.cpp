@@ -1446,7 +1446,7 @@ const char *VerseKey::getOSISRef() const {
 
 	static char *osisotbooks[] = {
 			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","1Sam","2Sam",
-			"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Ps",
+			"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Pss",
 			"Prov",		// added this.  Was not in OSIS spec
 			"Eccl",
 			"Song","Isa","Jer","Lam","Ezek","Dan","Hos","Joel","Amos","Obad",
