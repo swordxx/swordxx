@@ -94,6 +94,11 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 
 		/* Switch on full protocol/debug output */
 		curl_easy_setopt(session, CURLOPT_VERBOSE, true);
+		
+		/* FTP connection settings */
+#ifdef LIBCURL_VERSION_MAJOR>=7 && LIBCURL_VERSION_MINOR>=10 && LIBCURL_VERSION_PATCH>=6
+		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0);
+#endif
 
 		res = curl_easy_perform(session);
 
