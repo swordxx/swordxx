@@ -10,9 +10,9 @@
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="..\..\..\icu-sword\as_is\borland\icui18n.lib 
+    <LIBFILES value="..\..\..\icu-sword\as_is\borland\icuin.lib 
       ..\..\..\icu-sword\as_is\borland\icudatab.lib 
-      ..\..\..\icu-sword\as_is\borland\icucommon.lib ..\..\lib\libsword.lib"/>
+      ..\..\..\icu-sword\as_is\borland\icuuc.lib ..\..\lib\libsword.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Qrpt50.bpi Vcldb50.bpi Vclbde50.bpi 

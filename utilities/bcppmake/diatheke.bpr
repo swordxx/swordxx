@@ -15,8 +15,8 @@
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="..\..\lib\libsword.lib ..\..\..\icu-sword\as_is\borland\icui18n.lib 
-      ..\..\..\icu-sword\as_is\borland\icucommon.lib 
+    <LIBFILES value="..\..\lib\libsword.lib ..\..\..\icu-sword\as_is\borland\icuin.lib 
+      ..\..\..\icu-sword\as_is\borland\icuuc.lib 
       ..\..\..\icu-sword\as_is\borland\icudatab.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>

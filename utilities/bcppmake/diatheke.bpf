@@ -5,8 +5,8 @@ USEUNIT("..\..\apps\console\diatheke\diafiltmgr.cpp");
 USEUNIT("..\..\apps\console\diatheke\diathekemgr.cpp");
 USEUNIT("..\..\apps\console\diatheke\gbfcgi.cpp");
 USELIB("..\..\lib\libsword.lib");
-USELIB("..\..\..\icu-sword\as_is\borland\icui18n.lib");
-USELIB("..\..\..\icu-sword\as_is\borland\icucommon.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icuin.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icuuc.lib");
 USELIB("..\..\..\icu-sword\as_is\borland\icudatab.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
