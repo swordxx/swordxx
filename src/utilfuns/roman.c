@@ -79,4 +79,4 @@ int from_rom(const char* str) {
 	}
      free(num);
 	return n;
-};
+}
