@@ -8,6 +8,9 @@
 #include <string.h>
 #include <gbfrtf.h>
 #include <ctype.h>
+#include <string>
+
+using std::string;
 
 SWORD_NAMESPACE_START
 
@@ -19,10 +22,15 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 {
 	unsigned char *to, *from;
 	char token[2048];
+	char val[128];
+	char *valto;
+	char *num;
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
 	const char *tok;
+	string strongnum;
+	string strongtense;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -43,6 +51,77 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 			intoken = false;
 						// process desired tokens
 			switch (*token) {
+			case 'w':	// OSIS Word (temporary until OSISRTF is done)
+				strongnum = "";
+				strongtense = "";
+				valto = val;
+				num = strstr(token, "lemma=\"x-Strongs:");
+				if (num) {
+					for (num+=17; ((*num) && (*num != '\"')); num++)
+						*valto++ = *num;
+					*valto = 0;
+					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+						// normal strongs number
+						strongnum += '{';
+						strongnum += '\\';
+						strongnum += 'c';
+						strongnum += 'f';
+						strongnum += '3';
+						strongnum += ' ';
+						strongnum += '\\';
+						strongnum += 's';
+						strongnum += 'u';
+						strongnum += 'b';
+						strongnum += ' ';
+						strongnum += '<';
+						for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+							strongnum += *tok;
+						strongnum += '>';
+						strongnum += '}';
+					}
+					/*	forget these for now
+					else {
+						// verb morph
+						sprintf(wordstr, "%03d", word-1);
+						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+					}
+					*/
+				}
+				valto = val;
+				num = strstr(token, "morph=\"x-Robinson:");
+				if (num) {
+					for (num+=18; ((*num) && (*num != '\"')); num++)
+						*valto++ = *num;
+					*valto = 0;
+					// normal robinsons tense
+					strongtense += '{';
+					strongtense += '\\';
+					strongtense += 'c';
+					strongtense += 'f';
+					strongtense += '4';
+					strongtense += ' ';
+					strongtense += '\\';
+					strongtense += 's';
+					strongtense += 'u';
+					strongtense += 'b';
+					strongtense += ' ';
+					strongtense += '(';
+					for (tok = val; *tok; tok++)
+						strongtense += *tok;
+					strongtense += ')';
+					strongtense += '}';
+				}
+				continue;
+
+			case '/':
+				if (token[1] == 'w') {
+					for (int i = 0; i < strongnum.length(); i++)
+						*to++ = strongnum[i];
+					for (int i = 0; i < strongtense.length(); i++)
+						*to++ = strongtense[i];
+				}
+				continue;
+
 			case 'W':	// Strongs
 				switch(token[1]) {
 				case 'G':               // Greek

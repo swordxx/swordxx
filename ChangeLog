@@ -2,11 +2,16 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+08-Jan-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added new osisstrongs and osismorph option filters.
+	Hacked gbfrtf to support the osis <w> tag for now.
+
 19-Dec-2002	Joachim Ansorg <joachim@ansorgs.de>
-	Removed old russian book locale file, because it wasn't working in
-Linux AND Windows
-	Added book locale files (cp1251 and koi8-r) submitted by Pavlo
-Bohmat bohm@ukr.net to support Windows and Linux.
+	Removed old russian book locale file, because it wasn't
+		working in Linux AND Windows
+	Added book locale files (cp1251 and koi8-r) submitted by
+		Pavlo Bohmat bohm@ukr.net to support Windows
+		and Linux.
 
 30-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Added Finnish locale files contributed by Tero

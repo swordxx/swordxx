@@ -5,23 +5,24 @@
 #include <thmlosis.h>
 #include <versekey.h>
 #include <swmgr.h>
+#include <markupfiltmgr.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
+using namespace std;
 
 #define MAXBUF 30000
 int main(int argc, char **argv) {
-	SWMgr mgr;
-	SWModule *module = mgr.Modules["TR"];
+	SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
+	mgr.setGlobalOption("Strong's Numbers", "on");
+	mgr.setGlobalOption("Morphological Tags", "on");
+	SWModule *module = mgr.Modules["KJV2003"];
 	if (!module)
 		module = mgr.Modules.begin()->second;
 
-	((VerseKey *)(SWKey *)*module)->AutoNormalize(0);
-	((VerseKey *)(SWKey *)*module)->Headings(1);
-//    ThMLHTMLHREF filter;
-//    GBFOSIS filter;
-    ThMLOSIS filter;
-    module->Key() = ((argc > 1) ? argv[1] : "mat4:15");
+    //ThMLOSIS filter;
+    module->Key() = ((argc > 1) ? argv[1] : "acts 1:5");
+    /*
     char *buf = new char [ MAXBUF ];
     memset(buf, 0, MAXBUF);
 //    strcpy(buf, "This is a verse reference: <scripRef>jas1:22,23-25;3;5:1;rom1-9</scripRef> with an <img src=\"/images/yoyo.jpg\">");
@@ -32,5 +33,7 @@ int main(int argc, char **argv) {
 
     std::cout << buf << "\n\n+++++++\n";
     delete [] buf;
+    */
+    cout << *module << "\n";
     return 0;
 }
