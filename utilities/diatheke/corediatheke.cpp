@@ -10,7 +10,7 @@
 #include <list>
 
 void systemquery(const char * key, ostream* output){
-	SWMarkupMgr manager;
+	DiathekeMgr manager;
 	ModMap::iterator it;
 
 	SWModule *target;
@@ -212,25 +212,29 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		else *output << "Entries containing \"";
 	        *output << ref;
 		*output << "\"-- ";
-		
+
 		listkey = target->Search(ref, searchtype);
 		
 		if (strlen((const char*)listkey)) {
 		  if (!listkey.Error()) {
+		    if (outputformat == FMT_CGI) *output << "<entry>";
 		    if (querytype == QT_BIBLE) {
 		      vk = listkey;
 		      *output << (const char *)vk;
 		    }
 		    else *output << (const char *)listkey;
+		    if (outputformat == FMT_CGI) *output << "</entry>";
 		  }
 		  listkey++;
 		  while (!listkey.Error()) {
 		    *output << " ; ";
+		    if (outputformat == FMT_CGI) *output << "<entry>";
 		    if (querytype == QT_BIBLE) {
 		      vk = listkey;
 		      *output << (const char *)vk;
 		    }
 		    else *output << (const char *)listkey;
+		    if (outputformat == FMT_CGI) *output << "</entry>";
 		    listkey++;
 		  }
 		  *output << " -- ";
@@ -272,7 +276,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	
 		if (strlen(text)) {
 			*output << (char*)target->KeyText();
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
+			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 				*output << ": <font face=\"";
 				*output << font;
 				*output << "\">";
@@ -284,7 +288,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << ": ";
 			}
 			*output << text;
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
+			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 				*output << "</font>";
 			}
 			else if (outputformat == FMT_RTF) {
@@ -334,7 +338,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				vk = element->UpperBound();
 				while (maxverses && target->Key() <= vk) {
 					*output << (char*)target->KeyText();
-					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << ": <font face=\"";
 						*output << font;
 						*output << "\">";
@@ -346,14 +350,14 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 						*output << ": ";
 					}
 					*output << (const char*)*target;
-					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << "</font>";
 					}
 					else if (outputformat == FMT_RTF) {
 						*output << "}";
 					}
 
-					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML))
+					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 						*output << "<br />";
 					else if (outputformat == FMT_RTF)
 						*output << "\\par ";
@@ -371,7 +375,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			else {
 				target->Key(*listkey.GetElement(i));
 				*output << (char*)target->KeyText();
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << ": <font face=\"";
 					*output << font;
 					*output << "\">";
@@ -383,14 +387,14 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					*output << ": ";
 				}
 				*output << (const char*)*target;
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << "</font>";
 				}
 				else if (outputformat == FMT_RTF) {
 					*output << "}";
 				}
 					
-				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML))
+				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 					*output << "<br />";
 				else if (outputformat == FMT_RTF)
 					*output << "\\par ";

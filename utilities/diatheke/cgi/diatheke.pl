@@ -22,12 +22,11 @@ sub plussifyaddress  {
 }
 
 sub urlvers {
-    $u_ender = @_[1];
     $u_verse = @_[0];
-    $u_version = @_[2];
+    $u_version = @_[1];
     $u_oldverse = $u_verse;
     $u_verse =~ tr/ /+/;
-    $u_newline = " <a href=\"diatheke.pl?verse=$u_verse&$u_version=on\">$u_oldverse</a> $u_ender";
+    $u_newline = "<a href=\"diatheke.pl?verse=$u_verse&$u_version=on\">$u_oldverse</a>";
     return $u_newline;
 }
 
@@ -398,7 +397,7 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
-    $line = "$diatheke $search $optionfilters $latinxlit -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null";
+    $line = "$diatheke $search $optionfilters $latinxlit -l $locale -m $maxverses -f cgi -b $versions[$i] -k \"$verse\" 2> /dev/null";
 
     if ($debug) {
 	print "command line: $line\n<br />";
@@ -407,17 +406,19 @@ for ($i = 0; $i < $n; $i++) {
 
     chomp($line);
 
+    $line =~ s/!DIATHEKE_URL!/diatheke\.pl\?/g;
+
 #    Parse and link to Strong's references if present
     
-    $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;T$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;T$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Morph\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Packard=on\">&lt;$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"([^\"]+)\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$2&$1=on\">&lt;$1 $2&gt;\<\/a\>/g;
+#    $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;$1&gt;\<\/a\>/g;
+#    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;$1&gt;\<\/a\>/g;
+#    $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;T$1&gt;\<\/a\>/g;
+#    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;T$1&gt;\<\/a\>/g;
+#    $line =~ s/<sync type=\"Morph\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Packard=on\">&lt;$1&gt;\<\/a\>/g;
+#    $line =~ s/<sync type=\"([^\"]+)\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$2&$1=on\">&lt;$1 $2&gt;\<\/a\>/g;
 
-    $line =~ s/<note [^>]+>/<small>{/g;
-    $line =~ s/<\/note[^>]*>/}<\/small>/g;
+#    $line =~ s/<note [^>]+>/<small>{/g;
+#    $line =~ s/<\/note[^>]*>/}<\/small>/g;
     
     $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
     $info =~ /([^\;]+)\;([^\;]+)/;
@@ -432,20 +433,19 @@ for ($i = 0; $i < $n; $i++) {
     }
     #case for searches
     elsif($search ne "") {
-	$line =~ s/ ([^;\-]+:[^;]+) ([;\-])/urlvers($1, $2, $versions[$i])/eg;
+	$line =~ s/<entry>([^<]+)<\/entry>/urlvers($1, $versions[$i])/eg;
     }
     #case for ThML format texts
-    elsif($format eq "ThML") {
-	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/&plussifyaddress($2,$1)/ge;
-	$line =~ s/<\/scripRef>/<\/a>/g;
-    }
+#    elsif($format eq "ThML") {
+#	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/&plussifyaddress($2,$1)/ge;
+#	$line =~ s/<\/scripRef>/<\/a>/g;
+#    }
     #case for non-ThML, non-Bible texts
     elsif($type ne "Biblical Texts") {
 	$book = $verse;
 	$book =~ s/^([A-Za-z0-9]+) [0-9]+:[0-9]+.*/$1/;
 	$chapter = $verse;
 	$chapter =~ s/[A-Za-z0-9]+ ([0-9]+):[0-9]+.*/$1/;
-	
 	$line =~ s/\#*([1-9]*[A-Z][a-z]+\.*) ([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$defversion=on\">$1 $2:$3\<\/a\>/g;
 	$line =~ s/\#([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$1%3A$2&$defversion=on\">$book $1:$2\<\/a\>/g;
 	$line =~ s/\#([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$chapter%3A$1&$defversion=on\">$book $chapter:$1\<\/a\>/g;

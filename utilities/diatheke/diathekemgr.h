@@ -1,15 +1,22 @@
 #ifndef DIATHEKEMGR_H
 #define DIATHEKEMGR_H
-#include <swmarkupmgr.h>
+#include <swencodingmgr.h>
 
 #define FMT_CGI 127
 
 enum PlatformIDs { WIN32S = 0, WIN9X, WINNT, WINCE };
 
-class DiathekeMgr : public SWMarkupMgr {
+class DiathekeMgr : public SWEncodingMgr {
+	SWFilter *fromthml;
+	SWFilter *fromgbf;
+	SWFilter *fromplain;
+	SWFilter *fromosis;
+
 	SWFilter *arshaping;
 	SWFilter *bidireorder;
         SWFilter *transliterator;
+
+	char markup;
 
 #ifdef WIN32
         char platformID;
@@ -25,7 +32,7 @@ public:
 	bool shape;
 	bool bidi;
 
-	virtual char Markup(char markup = NULL);
+	virtual char Markup(char markup = FMT_UNKNOWN);
 	DiathekeMgr(SWConfig * iconf = NULL, SWConfig * isysconfig = NULL, bool autoload = false, char enc = ENC_UTF8, char mark = FMT_PLAIN, bool bidi = false, bool shape = false);
 	virtual ~DiathekeMgr();
 };

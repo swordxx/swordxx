@@ -41,7 +41,6 @@ void printsyntax() {
 
 int main(int argc, char **argv)
 {
-	
 	int maxverses = -1;
 	unsigned char outputformat = FMT_PLAIN, searchtype = ST_NONE, outputencoding = ENC_UTF8;
 	unsigned long optionfilters = OP_NONE;
@@ -195,7 +194,7 @@ int main(int argc, char **argv)
 	
 	if (runquery == (RQ_BOOK | RQ_REF))
 	{
-		doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script);
+	        doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script);
 	}
 	else
 		printsyntax();

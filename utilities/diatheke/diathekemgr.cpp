@@ -11,7 +11,7 @@
 #include <thmlrtf.h>
 #include <gbfrtf.h>
 
-#include <swmarkupmgr.h>
+#include <swencodingmgr.h>
 #include <swconfig.h>
 
 #ifdef _ICU_
@@ -26,8 +26,9 @@
 
 //---------------------------------------------------------------------------
 DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc, char mark, bool ibidi, bool ishape)
-        : SWMarkupMgr(iconfig, isysconfig, autoload, enc, mark)
+        : SWEncodingMgr(iconfig, isysconfig, autoload, enc)
 {
+  
         markup = mark;
 	bidi = ibidi;
 	shape = ishape;
@@ -48,6 +49,7 @@ DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autolo
 	GetVersionEx(&osvi);
 	platformID = osvi.dwPlatformId;
 #endif
+
 }
 
 
@@ -119,7 +121,7 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 }
 
 void DiathekeMgr::Load () {
-        SWMarkupMgr::Load();
+        SWEncodingMgr::Load();
 #ifdef _ICU_
 	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", transliterator));
         options.push_back(transliterator->getOptionName());
@@ -130,14 +132,11 @@ void DiathekeMgr::AddGlobalOptions (SWModule * module, ConfigEntMap & section,
                                    ConfigEntMap::iterator start,
                                    ConfigEntMap::iterator end) {
 
-        SWMarkupMgr::AddGlobalOptions(module, section, start, end);
+        SWEncodingMgr::AddGlobalOptions(module, section, start, end);
 #ifdef _ICU_
         module->AddOptionFilter(transliterator);
 #endif
 };
-
-
-
 
 
 char DiathekeMgr::Markup(char mark) {

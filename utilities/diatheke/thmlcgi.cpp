@@ -63,34 +63,33 @@ bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData
                                 }
                         }
 			if (*cls && *val) {
-			        pushString(buf, "%s=on&value=%s", cls, val);
+			        pushString(buf, "%s=on&verse=%s", cls, val);
 			}
 			else if (*typ && *val) {
 			  if (!strnicmp(typ, "Strongs", 7)) {
 			    if (*val == 'G') {
-			      pushString(buf, "Thayer=on&value=%s", val + 1);
+			      pushString(buf, "Thayer=on&verse=%s", val + 1);
 			    }
 			    else if (*val == 'H') {
-			      pushString(buf, "BDB=on&value=%s", val + 1);
+			      pushString(buf, "BDB=on&verse=%s", val + 1);
 			    }
 			  }
 
 			  else if (!strnicmp(typ, "Morph", 5)) {
 			    if (*val == 'G') {
-			      pushString(buf, "Thayer=on&value=%s", val + 1);
+			      pushString(buf, "Thayer=on&verse=%s", val + 1);
 			    }
 			    else if (*val == 'H') {
-			      pushString(buf, "BDB=on&value=%s", val + 1);
+			      pushString(buf, "BDB=on&verse=%s", val + 1);
 			    }
 			    else {
-			      pushString(buf, "Packard=on&value=%s", val);
+			      pushString(buf, "Packard=on&verse=%s", val);
 			    }
 			  }
+			  else {
+			    pushString(buf, "%s=on&verse=%s", typ, val);
+			  }
 			}
-
-			for (i = 5; i < strlen(token)-1; i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 			
@@ -103,10 +102,21 @@ bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
         		userData["inscriptRef"] = "true";
 			pushString(buf, "<a href=\"!DIATHEKE_URL!");
-			for (i = 9; i < strlen(token)-1; i++) {
-			  if(token[i] != '\"') {
-			    if (token[i] == ' ') *(*buf)++ = '+';
-			    else *(*buf)++ = token[i];
+			for (i = 9; i < strlen(token); i++) {
+			  if (!strncmp(token+i, "version=\"", 9)) {
+			    i += 9;
+			    for (;token[i] != '\"'; i++)
+			      *(*buf)++ = token[i];
+			    pushString(buf, "=on&");
+			  }
+			  if (!strncmp(token+i, "passage=\"", 9)) {
+			    i += 9;
+			    pushString(buf, "verse=");
+			    for (;token[i] != '\"'; i++) {
+			      if (token[i] == ' ') *(*buf)++ = '+';
+			      else *(*buf)++ = token[i];
+			    }
+			    *(*buf)++ = '&';
 			  }
 			}
 			*(*buf)++ = '\"';
@@ -128,8 +138,8 @@ bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData
 			}
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
-				pushString(buf, "<a href=\"passage=");
-				//char *strbuf = (char *)userData["lastTextNode"].c_str();
+				pushString(buf, "<a href=\"!DIATHEKE_URL!verse=");
+
 				char* vref = (char*)userData["lastTextNode"].c_str();
 				while (*vref) {
 				  if (*vref == ' ') *(*buf)++ = '+';
