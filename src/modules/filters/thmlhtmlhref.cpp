@@ -18,16 +18,15 @@
 #include <thmlhtmlhref.h>
 #include <swmodule.h>
 #include <utilxml.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
 
 ThMLHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	SWModule *vmodule;
-	vmodule = (SWModule*) module;
-	if(vmodule) {
-		version = vmodule->Name();
-		BiblicalText = (!strcmp(vmodule->Type(), "Biblical Texts"));
+	if (module) {
+		version = module->Name();
+		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
 	}	
 }
 
@@ -47,7 +46,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		MyUserData *u = (MyUserData *)userData;		
 		XMLTag tag(token);
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-			const char* value = tag.getAttribute("value");
+			SWBuf value = tag.getAttribute("value");
 			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
 				buf += "<small><em>(<a href=\"";
 				buf += "type=";
@@ -55,9 +54,9 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	
 				//const char* value = tag.getAttribute("value");
 				buf += " value=";
-				buf += value ? value : "";
+				buf += (value.length()) ? value : "";
 				buf += "\">";
-				buf += value ? value : "";
+				buf += (value.length()) ? value : "";
 				buf += "</a>) </em></small>";
 			}
 			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
@@ -67,10 +66,10 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	
 				//const char* value = tag.getAttribute("value");
 				buf += " value=";
-				buf += value ? value : "";
+				buf += (value.length()) ? value : "";
 				buf += "\">";
-				value++;
-				buf += value ? value : "";
+				value<<1;
+				buf += (value.length()) ? value : "";
 				buf += "</a>&gt; </em></small>";
 			}
 			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
@@ -80,28 +79,34 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				buf += "</b>";
 			}
 		}
-		else if (tag.getName() && !strcmp(tag.getName(), "note")) {
+		// <note> tag
+		else if (!strcmp(tag.getName(), "note")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf type = tag.getAttribute("type");
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+					VerseKey *vkey;
+					// see if we have a VerseKey * or descendant
+					try {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					catch ( ... ) {	}
+					if (vkey) {
+						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
+					}
+					u->suspendTextPassThru = true;
+				}
+			}
 			if (tag.isEndTag()) {
-				buf += "&nbsp<a href=\"note=";
-				buf += u->lastTextNode.c_str();
-				buf += "\">";
-				buf += "<small><sup>*n</sup></small></a>&nbsp";
-				// let's let text resume to output again
 				u->suspendTextPassThru = false;
 			}
-			else {
-				// let's stop text from going to output
-				u->suspendTextPassThru = true;
-			}
-		}
-		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
-			u->inscriptRef = true;
-			buf += "<i>";
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "scripRef")) {
 			if (tag.isEndTag()) {
 				if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
-					if(u->BiblicalText)
+					if (u->BiblicalText)
 						buf += "<small><sup>*x</sup></small>";
 					buf += "</a>&nbsp";
 					u->inscriptRef = false;
@@ -109,16 +114,17 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				}
 				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
 					buf += "&nbsp<a href=\"";
-					if(u->BiblicalText)					
+					if (u->BiblicalText) {
 						if (u->version) {
 							buf += "version=";
 							buf += u->version;
 							buf += " ";
 						}
+					}
 					buf += "passage=";
 					buf += u->lastTextNode.c_str();
 					buf += "\">";
-					if(u->BiblicalText)
+					if (u->BiblicalText)
 						buf += "<small><sup>*x</sup></small>";
 					else {
 						buf += u->lastTextNode.c_str();
@@ -132,23 +138,29 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				u->inscriptRef = true;
 
 				buf += "&nbsp<a href=\"";
-				if (const char* version = tag.getAttribute("version")) {
+				SWBuf version = tag.getAttribute("version");
+				if (version.length()) {
 					buf += "version=";
 					buf += version;
 					buf += " ";
 				}
-				if (const char* passage = tag.getAttribute("passage")) {
+				SWBuf passage = tag.getAttribute("passage");
+				if (passage.length()) {
 					buf += "passage=";
 					buf += passage;
 				}
 				buf += "\">";
-				//u->suspendTextPassThru = true;
+				u->suspendTextPassThru = true;
 			}
 			else { //no passage or version given
 				u->inscriptRef = false;
 				// let's stop text from going to output
 				u->suspendTextPassThru = true;
 			}
+		}
+		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
+			u->inscriptRef = true;
+			buf += "<i>";
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && u->SecHead) {

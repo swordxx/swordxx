@@ -127,9 +127,12 @@ char SWModule::Error()
  * RET:	pointer to modname
  */
 
-char *SWModule::Name(const char *imodname)
-{
+char *SWModule::Name(const char *imodname) {
 	return stdstr(&modname, imodname);
+}
+
+char *SWModule::Name() const {
+	return modname;
 }
 
 
@@ -142,9 +145,12 @@ char *SWModule::Name(const char *imodname)
  * RET:	pointer to moddesc
  */
 
-char *SWModule::Description(const char *imoddesc)
-{
+char *SWModule::Description(const char *imoddesc) {
 	return stdstr(&moddesc, imoddesc);
+}
+
+char *SWModule::Description() const {
+	return moddesc;
 }
 
 
@@ -157,9 +163,12 @@ char *SWModule::Description(const char *imoddesc)
  * RET:	pointer to modtype
  */
 
-char *SWModule::Type(const char *imodtype)
-{
+char *SWModule::Type(const char *imodtype) {
 	return stdstr(&modtype, imodtype);
+}
+
+char *SWModule::Type() const {
+	return modtype;
 }
 
 /******************************************************************************
