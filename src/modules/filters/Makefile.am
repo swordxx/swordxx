@@ -3,53 +3,53 @@ filtersdir = $(top_srcdir)/src/modules/filters
 libsword_la_SOURCES += $(filtersdir)/swbasicfilter.cpp
 libsword_la_SOURCES += $(filtersdir)/swoptfilter.cpp
 
-libsword_la_SOURCES += $(filtersdir)/gbfhtml.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfhtmlhref.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfwebif.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfplain.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfrtf.cpp
+GBFFIL = $(filtersdir)/gbfhtml.cpp
+GBFFIL += $(filtersdir)/gbfhtmlhref.cpp
+GBFFIL += $(filtersdir)/gbfwebif.cpp
+GBFFIL += $(filtersdir)/gbfplain.cpp
+GBFFIL += $(filtersdir)/gbfrtf.cpp
+GBFFIL += $(filtersdir)/gbfstrongs.cpp
+GBFFIL += $(filtersdir)/gbffootnotes.cpp
+GBFFIL += $(filtersdir)/gbfheadings.cpp
+GBFFIL += $(filtersdir)/gbfredletterwords.cpp
+GBFFIL += $(filtersdir)/gbfmorph.cpp
+
 libsword_la_SOURCES += $(filtersdir)/plainhtml.cpp
 libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp
 libsword_la_SOURCES += $(filtersdir)/rtfhtml.cpp
-
-libsword_la_SOURCES += $(filtersdir)/gbfstrongs.cpp
-libsword_la_SOURCES += $(filtersdir)/gbffootnotes.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfheadings.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfredletterwords.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfmorph.cpp
 libsword_la_SOURCES += $(filtersdir)/plainfootnotes.cpp
 
-libsword_la_SOURCES += $(filtersdir)/thmlstrongs.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlfootnotes.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlheadings.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlmorph.cpp
-libsword_la_SOURCES += $(filtersdir)/thmllemma.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlscripref.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlvariants.cpp
+THMLFIL = $(filtersdir)/thmlstrongs.cpp
+THMLFIL += $(filtersdir)/thmlfootnotes.cpp
+THMLFIL += $(filtersdir)/thmlheadings.cpp
+THMLFIL += $(filtersdir)/thmlmorph.cpp
+THMLFIL += $(filtersdir)/thmllemma.cpp
+THMLFIL += $(filtersdir)/thmlscripref.cpp
+THMLFIL += $(filtersdir)/thmlvariants.cpp
+THMLFIL += $(filtersdir)/thmlgbf.cpp
+THMLFIL += $(filtersdir)/thmlrtf.cpp
+THMLFIL += $(filtersdir)/thmlhtml.cpp
+THMLFIL += $(filtersdir)/thmlhtmlhref.cpp
+THMLFIL += $(filtersdir)/thmlwebif.cpp
 
-libsword_la_SOURCES += $(filtersdir)/gbfthml.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlgbf.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlrtf.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlhtml.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlhtmlhref.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlwebif.cpp
+CONVFIL = $(filtersdir)/gbfthml.cpp
+CONVFIL += $(filtersdir)/gbfosis.cpp
+CONVFIL += $(filtersdir)/thmlosis.cpp
+CONVFIL += $(filtersdir)/thmlplain.cpp
+CONVFIL += $(filtersdir)/osisosis.cpp
 
-libsword_la_SOURCES += $(filtersdir)/thmlosis.cpp
-libsword_la_SOURCES += $(filtersdir)/gbfosis.cpp
-libsword_la_SOURCES += $(filtersdir)/thmlplain.cpp
 
-libsword_la_SOURCES += $(filtersdir)/osisheadings.cpp
-libsword_la_SOURCES += $(filtersdir)/osisfootnotes.cpp 
-libsword_la_SOURCES += $(filtersdir)/osishtmlhref.cpp
-libsword_la_SOURCES += $(filtersdir)/osiswebif.cpp
-libsword_la_SOURCES += $(filtersdir)/osismorph.cpp
-libsword_la_SOURCES += $(filtersdir)/osisstrongs.cpp
-libsword_la_SOURCES += $(filtersdir)/osisplain.cpp
-libsword_la_SOURCES += $(filtersdir)/osisrtf.cpp
-libsword_la_SOURCES += $(filtersdir)/osisosis.cpp
-libsword_la_SOURCES += $(filtersdir)/osislemma.cpp
-libsword_la_SOURCES += $(filtersdir)/osisredletterwords.cpp
-libsword_la_SOURCES += $(filtersdir)/osisscripref.cpp
+OSISFIL = $(filtersdir)/osisheadings.cpp
+OSISFIL += $(filtersdir)/osisfootnotes.cpp 
+OSISFIL += $(filtersdir)/osishtmlhref.cpp
+OSISFIL += $(filtersdir)/osiswebif.cpp
+OSISFIL += $(filtersdir)/osismorph.cpp
+OSISFIL += $(filtersdir)/osisstrongs.cpp
+OSISFIL += $(filtersdir)/osisplain.cpp
+OSISFIL += $(filtersdir)/osisrtf.cpp
+OSISFIL += $(filtersdir)/osislemma.cpp
+OSISFIL += $(filtersdir)/osisredletterwords.cpp
+OSISFIL += $(filtersdir)/osisscripref.cpp
 
 libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
@@ -87,7 +87,12 @@ SWREALICUSRC =
 endif
 endif
 
-INCLUDES += $(ICUDEFS)
+AM_CPPFLAGS += $(ICUDEFS)
 libsword_la_SOURCES += $(SWREALICUSRC)
 EXTRA_DIST = $(DISTSWICUSRC)
 
+if BUILDSPLITLIB
+libsword_imp_la_SOURCES += $(OSISFIL) $(GBFFIL) $(THMLFIL) $(CONVFIL)
+else
+libsword_la_SOURCES += $(OSISFIL) $(GBFFIL) $(THMLFIL) $(CONVFIL)
+endif

@@ -11,11 +11,18 @@ else
 SWZLIB =
 endif
 libsword_la_SOURCES += $(SWZLIB)
-libsword_la_SOURCES += $(commondir)/rawverse.cpp
+SPLITS = $(commondir)/rawverse.cpp
 libsword_la_SOURCES += $(commondir)/swcipher.cpp
-libsword_la_SOURCES += $(commondir)/zverse.cpp
+SPLITS += $(commondir)/zverse.cpp
 libsword_la_SOURCES += $(commondir)/zstr.cpp
 libsword_la_SOURCES += $(commondir)/entriesblk.cpp
+
+if BUILDSPLITLIB
+libsword_la_SOURCES += $(commondir)/zverse2.cpp
+libsword_imp_la_SOURCES += $(SPLITS)
+else
+libsword_la_SOURCES += $(SPLITS)
+endif
 
 libsword_la_SOURCES += $(commondir)/sapphire.cpp
 
