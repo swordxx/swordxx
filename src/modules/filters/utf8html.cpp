@@ -22,7 +22,7 @@ char UTF8HTML::processText(SWBuf &text, const SWKey *key, const SWModule *module
         char digit[10];
         unsigned long ch;
 	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
-		return -1;
+		return (char)-1;
 
 	len = strlenw(text.c_str()) + 2;						// shift string to right of buffer
 

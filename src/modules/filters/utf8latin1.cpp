@@ -24,7 +24,7 @@ char UTF8Latin1::processText(SWBuf &text, const SWKey *key, const SWModule *modu
   unsigned char significantFirstBits, subsequent;
   
   if ((unsigned long)key < 2) {// hack, we're en(1)/de(0)ciphering
-	return -1;
+	return (char)-1;
   }
   len = strlen(text.c_str()) + 1;						// shift string to right of buffer
 

@@ -19,7 +19,7 @@ char Latin1UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *mod
     const unsigned char *from;
     int len;
 	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
-		return -1;
+		return (char)-1;
    
     
 	SWBuf orig = text;

@@ -421,7 +421,7 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 	if (strcmp(key, dbKey) < 0) {
 	}
 	else if (strcmp(key, dbKey) > 0) {
-		if (errorStatus != -2)	// not a new file
+		if (errorStatus != (char)-2)	// not a new file
 			idxoff += 8;
 		else idxoff = 0;
 	}

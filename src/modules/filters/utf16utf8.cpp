@@ -23,7 +23,7 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
   unsigned long uchar;
   unsigned short schar;
 	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
-		return -1;
+		return (char)-1;
 
   len = 0;
   from = (unsigned short*) text.c_str();

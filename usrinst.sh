@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OPTIONS="--prefix=/usr"
+OPTIONS="--prefix=/usr $OPTIONS"
 OPTIONS="--disable-shared $OPTIONS"
 OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--sysconfdir=/etc $OPTIONS"
