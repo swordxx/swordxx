@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+31-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
+	Minor change to use iostream not iostream.h (more gcc3)
+
 31-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Fixed FileMgr::trunc if trunc should be empty was
 		leaving a 1 byte (null) file, instead of empty.
