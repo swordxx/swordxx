@@ -28,10 +28,10 @@ GBFHTMLHREF::GBFHTMLHREF() {
 
 	addTokenSubstitute("Rf", ")</small></font>");
 	addTokenSubstitute("Rx", "</a>");
-	addTokenSubstitute("FI", "<i> "); // italics begin
-	addTokenSubstitute("Fi", " </i>");
-	addTokenSubstitute("FB", "<n>"); // bold begin
-	addTokenSubstitute("Fb", "</n>");
+	addTokenSubstitute("FI", "<i>"); // italics begin
+	addTokenSubstitute("Fi", "</i>");
+	addTokenSubstitute("FB", "<b>"); // bold begin
+	addTokenSubstitute("Fb", "</b>");
 	addTokenSubstitute("FR", "<font color=\"#FF0000\">"); // words of Jesus begin
 	addTokenSubstitute("Fr", "</font>");
 	addTokenSubstitute("FU", "<u>"); // underline begin
