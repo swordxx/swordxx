@@ -94,7 +94,10 @@
       ..\..\src\modules\filters\thmlwebif.obj 
       ..\..\src\modules\filters\gbfwebif.obj ..\..\src\utilfuns\utilweb.obj 
       ..\..\src\modules\filters\osisfootnotes.obj 
-      ..\..\src\modules\filters\osishtmlhref.obj ..\..\src\utilfuns\swversion.obj"/>
+      ..\..\src\modules\filters\osishtmlhref.obj 
+      ..\..\src\utilfuns\swversion.obj ..\..\src\modules\filters\osisredletterwords.obj 
+      ..\..\src\modules\filters\osisscripref.obj 
+      ..\..\src\modules\filters\osislemma.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

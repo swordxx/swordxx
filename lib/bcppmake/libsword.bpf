@@ -126,6 +126,9 @@ USEUNIT("..\..\src\utilfuns\utilweb.cpp");
 USEUNIT("..\..\src\modules\filters\osisfootnotes.cpp");
 USEUNIT("..\..\src\modules\filters\osishtmlhref.cpp");
 USEUNIT("..\..\src\utilfuns\swversion.cpp");
+USEUNIT("..\..\src\modules\filters\osisredletterwords.cpp");
+USEUNIT("..\..\src\modules\filters\osisscripref.cpp");
+USEUNIT("..\..\src\modules\filters\osislemma.cpp");
 //---------------------------------------------------------------------------
 USE("\\			preptext(entrybuf);
 ", File);
