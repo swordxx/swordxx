@@ -14,6 +14,7 @@
 #include <unistd.h>
 #endif
 
+#include <stdiostream.h>
 #include <string.h>
 #include <utilfuns.h>
 //#include <rawverse.h>
@@ -37,7 +38,7 @@ zText::zText(const char *ipath, const char *iname, const char *idesc, int iblock
 	blockType = iblockType;
 	versebuf = 0;
 	lastWriteKey = 0;
-	printf("init ztext\n");
+	cerr << "init ztext" << endl;
 }
 
 
