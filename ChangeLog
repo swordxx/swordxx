@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+02-Apr-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added gsoap bindings and test client.
+	Added gbfstrongs parsing of entry attributes
+
 30-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added mod2imp to export a sword module in 'imp'
 		format

@@ -87,9 +87,9 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
 					}
 					else {
-						// verse morph
+						// verb morph
 						sprintf(wordstr, "%03d", word-1);
-						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
+						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 					}
 				}
 
