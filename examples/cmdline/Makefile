@@ -2,7 +2,7 @@ root := ../..
 subdirs := 
 pre-targets := 
 bin := yes
-targets := lookup search threaded_search
+targets := lookup search 
 include ${root}/Makefile.cfg
 
 ifneq ($(nodeps),yes)

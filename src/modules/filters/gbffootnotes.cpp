@@ -104,7 +104,6 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 			else	{
 				if (!hide) {
 					*to++ = *from;
-					lastspace = (*from == ' ');
 				}
 			}
 		}

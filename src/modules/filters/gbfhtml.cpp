@@ -36,13 +36,13 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 	int len;
 	unsigned int i;
 
-	len = strlen(text) + 1;						// shift string to right of buffer
+	len = strlen(text) + 1;		// shift string to right of buffer
 	if (len < maxlen) {
 		memmove(&text[maxlen - len], text, len);
 		from = &text[maxlen - len];
 	}
 	else
-		from = text;							// -------------------------------
+		from = text;			// -------------------------------
 	
 	for (to = text; *from; from++)
 	{
@@ -55,8 +55,8 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 			memset(token, 0, 2048);
 			continue;
 		}
-		if (*from == '>')
-		{
+		if (*from == '>') {
+			unsigned int i;
 			intoken = false;
 			// process desired tokens
 			switch (*token) {

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.15 2001/02/19 16:59:51 mgruner Exp $
+ * $Id: swmodule.h,v 1.16 2001/02/20 06:12:14 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -132,7 +132,7 @@ public:
   *  [0] - only get
   * @return pointer to keytext
   */
-  virtual const char *KeyText (char *imodtype = 0);
+  virtual const char *KeyText (const char *imodtype = 0);
   /** Calls this modules display object and passes itself
   *
   * @return error status
@@ -151,21 +151,21 @@ public:
   *  [0] - only get
   * @return pointer to modname
   */
-  virtual char *Name (char *imodname = 0);
+  virtual char *Name (const char *imodname = 0);
   /** Sets/gets module description
   *
   * @param imoddesc value which to set moddesc;
   *  [0] - only get
   * @return pointer to moddesc
   */
-  virtual char *Description (char *imoddesc = 0);
+  virtual char *Description (const char *imoddesc = 0);
   /** Sets/gets module type
   *
   * @param imodtype value which to set modtype;
   *  [0] - only get
   * @return pointer to modtype
   */
-  virtual char *Type (char *imodtype = 0);
+  virtual char *Type (const char *imodtype = 0);
 
   // search methods
 

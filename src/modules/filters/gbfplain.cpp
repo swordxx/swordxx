@@ -37,6 +37,7 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key)
 			continue;
 		}
 		if (*from == '>') {
+			unsigned int i;
 			intoken = false;
 						// process desired tokens
 			switch (*token) {
