@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.48 2002/10/01 22:04:58 dglassey Exp $
+* $Id: swmgr.h,v 1.49 2002/10/29 00:15:08 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -64,7 +64,7 @@ typedef std::map < std::string, SWFilter * >FilterMap;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.48 2002/10/01 22:04:58 dglassey Exp $
+* @version $Id: swmgr.h,v 1.49 2002/10/29 00:15:08 scribe Exp $
 */
 class SWDLLEXPORT SWMgr {
 
@@ -152,7 +152,7 @@ public:
 	*/
 	SWConfig *sysconfig;
 	/** The map of available modules.
-	* This map contains thew list of available modules in Sword.
+	* This map contains the list of available modules in Sword.
 	* Here's an example how to got through the map and how toc ehck for the module type.
 	*
 	*@code
@@ -174,6 +174,7 @@ public:
 	* @endcode
 	*/
 	ModMap Modules;
+	SWModule *getModule(const char *modName) { ModMap::iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
 	/** The path to your Sword directory
 	*
 	*/

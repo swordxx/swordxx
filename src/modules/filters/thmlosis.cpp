@@ -11,6 +11,7 @@
 #include <stdarg.h>
 #include <thmlosis.h>
 #include <swmodule.h>
+#include <swlog.h>
 #include <versekey.h>
 #include <stdarg.h>
 #ifndef __GNUC__
