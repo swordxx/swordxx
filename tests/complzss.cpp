@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -80,7 +82,7 @@ void FileCompress::Decode()
 }
 
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	int decomp = 0;
 	SWCompress *fobj;
