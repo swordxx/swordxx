@@ -66,7 +66,7 @@ char *SWCompress::Buf(char *ibuf)
 }
 
 
-char *SWCompress::zBuf(unsigned short *len, char *ibuf)
+char *SWCompress::zBuf(unsigned long *len, char *ibuf)
 {
 	if (ibuf) {
 		Init();

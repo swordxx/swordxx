@@ -12,6 +12,7 @@ cpp += swcomprs.cpp
 cpp += lzsscomprs.cpp
 cpp += rawverse.cpp
 cpp += swcipher.cpp
+cpp += zverse.cpp
 
 DEFINES  += -DUNIX
 cpp += sapphire.cpp
