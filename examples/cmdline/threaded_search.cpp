@@ -66,7 +66,14 @@ void CSwordModuleSearch::search()  {
 		cout << "Return." << endl;
 		return;
 	}
-	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, 0, 0, &percentUpdate);
+
+	ListKey scopeList = VerseKey().ParseVerseList("Luke;Revelation","", true);
+	SWKey* scope = new ListKey(scopeList);
+
+	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
+
+	if (!scope)
+		cout << "bad scope!" << endl;
 	m_isSearching = false;
 }
 
@@ -104,12 +111,11 @@ int main(int argc, char **argv) {
 			cout.flush();
 	};
 
-	cout << endl << "Number of found items: " <<
-moduleSearch->m_searchResult.Count() << endl;
+	cout << endl << "Number of found items: " << moduleSearch->m_searchResult.Count() << endl;
 	cout << "Finished program" << endl;
-	delete moduleSearch;
-
 	cout.flush();
+
+	delete moduleSearch;
 	exit(0);
 }
 
