@@ -167,11 +167,12 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=4
+Count=5
 Item0=_ICU_;_ICUSWORD_;USBINARY
-Item1=_ICU_;_ICUSWORD_
-Item2=_ICU_;_ICUSWORD_;_DEBUG
-Item3=_DEBUG
+Item1=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
+Item2=_ICU_;_ICUSWORD_
+Item3=_ICU_;_ICUSWORD_;_DEBUG
+Item4=_DEBUG
 
 [HistoryLists\hlTlibPageSize]
 Count=5
