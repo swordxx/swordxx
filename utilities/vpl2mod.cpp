@@ -140,12 +140,12 @@ int main(int argc, char **argv) {
 	// not used yet, but for future support of a vpl file with each line
 	// prepended with verse reference, eg. "Gen 1:1 In the beginning..."
 	bool vref = false;
-	if (argc > 2)
+	if (argc > 3)
 		vref = (argv[3][0] == '0') ? false : true;
 
 	// if 'nt' is the 4th arg, our vpl file only has the NT
 	bool ntonly = false;
-	if (argc > 3)
+	if (argc > 4)
                 ntonly = (argv[4][0] == '0') ? false : true;
 	
 	// Do some initialization stuff
