@@ -5,6 +5,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 14-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Changed all make system files to dglassey's ./configure
 		autotool system
+	Applied ChrisLit's patch for macosx
 
 12-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added new option to filemgr open to allow downgrade

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.62 2002/03/04 01:56:44 scribe Exp $
+ * $Id: swmgr.cpp,v 1.63 2002/03/15 07:47:35 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,10 +20,6 @@
  *
  */
 
-#ifdef MACOSX
-#include <sys/types.h>
-#endif
-#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -38,6 +34,8 @@
 #ifndef _MSC_VER
 #include <iostream.h>
 #endif
+#include <dirent.h>
+
 #include <swmgr.h>
 #include <rawtext.h>
 #include <rawgenbook.h>

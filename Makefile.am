@@ -76,7 +76,7 @@ endif
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
-testlib_LDADD = -Llib -lsword
+testlib_LDADD = -L./lib -lsword
 
 include locales.d/Makefile.am
 include samples/Makefile.am

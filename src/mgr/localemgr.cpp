@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.10 2001/09/10 00:16:07 chrislit Exp $
+ * $Id: localemgr.cpp,v 1.11 2002/03/15 07:47:35 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,10 +20,6 @@
  *
  */
 
-#ifdef MACOSX
-#include <sys/types.h>
-#endif
-#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -35,6 +31,7 @@
 #include <unixstr.h>
 #endif
 #include <sys/stat.h>
+#include <dirent.h>
 
 #include <swmgr.h>
 #include <utilfuns.h>
