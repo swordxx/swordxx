@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+06-Jun-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed SWConfig += bug
+	Added Efata's Indonesian locale
+
 09-Jun-2002   Joachim Ansorg <jansorg@crosswire.org>
        	Added Perl bindings by J. Kaiser to the CVS
 

@@ -12,6 +12,7 @@ localeDATA += locales.d/nl.conf
 localeDATA += locales.d/no.conf
 localeDATA += locales.d/pl.conf
 localeDATA += locales.d/pt.conf
+localeDATA += locales.d/id.conf
 localeDATA += locales.d/pt_BR.conf
 localeDATA += locales.d/sk.conf
 
