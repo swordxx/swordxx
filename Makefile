@@ -51,6 +51,7 @@ buildso:
 other-install:
 	@echo ""
 	@echo "sword is installed"
+	@echo "type \"make install_config\" to install a basic configuration"
 	@echo "Type \"make register\" to help us keep track of how many"
 	@echo "people have seen it."
 	@echo ""
