@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.25 2001/06/24 01:30:33 scribe Exp $
+ * $Id: swmodule.h,v 1.26 2001/07/03 23:26:06 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -365,6 +365,15 @@ public:
     return *this;
   }
 
+  /** Removes a RenderFilter to this module's @see renderfilters queue
+  * @param oldfilter the filter to remove
+  * @return *this
+  */
+  virtual SWModule & RemoveRenderFilter (SWFilter * oldfilter) {
+    renderFilters->remove (oldfilter);
+    return *this;
+  }
+
   /** RenderFilter a text buffer
   * @param buf the buffer to filter
   * @param size the allocated size of the buffer
@@ -374,7 +383,7 @@ public:
   virtual void renderFilter (char *buf, long size, SWKey *key) {
   	filterBuffer(renderFilters, buf, size, key);
   }
-  
+
   /** Adds a StripFilter to this module's @ref stripfilters queue
   * @param newfilter the filter to add
   * @return *this
