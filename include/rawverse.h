@@ -18,15 +18,15 @@ class RawVerse {
 
 protected:
 	char *path;
-	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void preptext(char *buf);
-	void gettext(char testmt, long start, unsigned short size, char *buf);
 	void settext(char testmt, long idxoff, const char *buf);
 	
 public:
 	char nl;
 	RawVerse(const char *ipath, int fileMode = O_RDONLY);
 	virtual ~RawVerse();
+	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
+	void gettext(char testmt, long start, unsigned short size, char *buf);
 	static char CreateModule(char *path);
 };
 

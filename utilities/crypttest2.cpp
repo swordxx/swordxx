@@ -31,7 +31,7 @@ main(int argc, char **argv)
 	}
 
 	rawdrv = new RawText(argv[1]);
-	rawdrv->AddOptionFilter(new CryptFilter(argv[2]));
+	rawdrv->AddRawFilter(new CryptFilter(argv[2]));
 
 	printf("\n");
 
@@ -39,6 +39,6 @@ main(int argc, char **argv)
 	key.Headings(1);
 	for (key.Index(0); (!key.Error()); key++) {
 		rawdrv->Key(key);
-		printf("%s\n", (const char *)*rawdrv);
+		printf("%s: %s\n", (const char *)key, (const char *)*rawdrv);
 	}
 }
