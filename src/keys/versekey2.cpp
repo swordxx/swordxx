@@ -35,7 +35,7 @@ SWClass VerseKey::classdef(classes);
 //struct sbook *VerseKey::builtin_books[2]       = {0,0};
 struct sbook *VerseKey::builtin_books       = {0};
 //const char    VerseKey::builtin_BMAX[2]        = {39, 27};
-const char    VerseKey::builtin_BMAX        = 67;
+const char    VerseKey::builtin_BMAX        = OSISBMAX;
 //long         *VerseKey::offsets[2][2]  = {{VerseKey::otbks, VerseKey::otcps}, {VerseKey::ntbks, VerseKey::ntcps}};
 bkref         *VerseKey::offsets[2]  = {VerseKey::kjvbks, VerseKey::kjvcps};
 int           VerseKey::instance       = 0;
@@ -63,7 +63,7 @@ void VerseKey::init() {
 	chapter = 0;
 	verse = 0;
 	locale = 0;
-	abbrevsCnt = 192;
+	abbrevsCnt = BUILTINABBREVCNT;
 	oldindexhack = true;
 
 	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
@@ -771,7 +771,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 /******************************************************************************
  * VerseKey::LowerBound	- sets / gets the lower boundary for this key
  */
-
+/*
 VerseKey &VerseKey::LowerBound(const char *lb)
 {
 	if (!lowerBound) 
@@ -783,12 +783,31 @@ VerseKey &VerseKey::LowerBound(const char *lb)
 	boundSet = true;
 	return (*lowerBound);
 }
+*/
+VerseKey &VerseKey::LowerBound(const VerseKey & ikey)
+{
+	if (!lowerBound) 
+		initBounds();
+
+	lowerBound->Testament(ikey.Testament());
+	lowerBound->Book(ikey.Book());
+	lowerBound->Chapter(ikey.Chapter());
+	lowerBound->Verse(ikey.Verse());
+	#ifdef WDGDEBUG
+	printf("setting lower bound to %d:%d:%d\n",lowerBound->Book(), lowerBound->Chapter(), 
+		lowerBound->Verse());fflush(NULL);
+	#endif
+	//lowerBound->Normalize();
+	lowerBound->setLocale( this->getLocale() );
+	boundSet = true;
+	return (*lowerBound);
+}
 
 
 /******************************************************************************
  * VerseKey::UpperBound	- sets / gets the upper boundary for this key
  */
-
+/*
 VerseKey &VerseKey::UpperBound(const char *ub)
 {
 	if (!upperBound) 
@@ -821,6 +840,21 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 	
 
 // -- end kludge
+	boundSet = true;
+	return (*upperBound);
+}
+*/
+VerseKey &VerseKey::UpperBound(const VerseKey & ikey)
+{
+	if (!upperBound) 
+		initBounds();
+
+	upperBound->Testament(ikey.Testament());
+	upperBound->Book(ikey.Book());
+	upperBound->Chapter(ikey.Chapter());
+	upperBound->Verse(ikey.Verse());
+	//upperBound->Normalize();
+	upperBound->setLocale( this->getLocale() );
 	boundSet = true;
 	return (*upperBound);
 }
@@ -893,9 +927,16 @@ void VerseKey::initBounds() const
  */
 
 void VerseKey::copyFrom(const VerseKey &ikey) {
-	SWKey::copyFrom(ikey);
+	//SWKey::copyFrom(ikey);
 
-	parse();
+	//parse();
+	testament = ikey.Testament();
+	book = ikey.Book();
+	chapter = ikey.Chapter();
+	verse = ikey.Verse();
+	LowerBound(ikey.LowerBound());
+	UpperBound(ikey.UpperBound());
+	//Normalize();
 }
 
 
@@ -997,6 +1038,7 @@ void VerseKey::setPosition(SW_POSITION p) {
 
 void VerseKey::increment(int step) {
 	char ierror = 0;
+	printf("incrementing by %d\n", step);
 	Index(Index() + step);
 	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() + 1);
@@ -1018,13 +1060,16 @@ void VerseKey::increment(int step) {
 void VerseKey::decrement(int step) {
 	char ierror = 0;
 
+	printf("decrementing by %d\n", step);
 	Index(Index() - step);
 	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() - 1);
 		ierror = Error();
 	}
 	if ((ierror) && (!headings))
-		(*this)++;
+	{
+		Normalize();
+	}
 
 	error = (ierror) ? ierror : error;
 }
@@ -1048,7 +1093,9 @@ void VerseKey::Normalize(char autocheck)
 	if ((headings) && (!verse))		// this is cheeze and temporary until deciding what actions should be taken.
 		return;					// so headings should only be turned on when positioning with Index() or incrementors
 
+	#ifdef WDGDEBUG
 	printf("normalizing %d:%d:%d\n", book, chapter, verse);fflush(NULL);
+	#endif
 	while (!valid) {
 		
 		if (book <= 0 || book > *BMAX) break;
@@ -1078,7 +1125,13 @@ void VerseKey::Normalize(char autocheck)
 		
 	}
 	
+	if (book >= 0 && book <= OTBOOKS)
+		testament = 1;
+	else if (book >= OTBOOKS+1 && book <= *BMAX)
+		testament = 2;
+	
 	if (book > *BMAX) {
+		testament = 2;
 		book      = *BMAX;
 		chapter   = getMaxChaptersInBook(book);
 		verse     = getMaxVerseInChapter(book, chapter);
@@ -1094,12 +1147,21 @@ void VerseKey::Normalize(char autocheck)
 	}
 	if (_compare(UpperBound()) > 0) {
 		*this = UpperBound();
+		#ifdef WDGDEBUG
+		printf("error beyond upper bound in normalize\n");fflush(NULL);
+		#endif
 		error = KEYERR_OUTOFBOUNDS;
 	}
 	if (_compare(LowerBound()) < 0) {
 		*this = LowerBound();
+		#ifdef WDGDEBUG
+		printf("error beyond lower bound in normalize\n");fflush(NULL);
+		#endif
 		error = KEYERR_OUTOFBOUNDS;
 	}
+	#ifdef WDGDEBUG
+	printf("normalized %d:%d:%d\n", book, chapter, verse);fflush(NULL);
+	#endif
 }
 
 //!!!WDG once it is working and becomes core we need to change these to get/set
@@ -1321,6 +1383,7 @@ long VerseKey::Index() const
 {
 	long  loffset;
 
+	//printf("getting index");fflush(NULL);
 	if (!testament) { // if we want module heading
 		loffset = 0;
 		verse  = 0;
@@ -1339,10 +1402,14 @@ long VerseKey::Index() const
 			verse = 0;
 		}
 	}
-	if (oldindexhack && testament==2)
+	if (oldindexhack && loffset >= NTOFFSET)
 	{
-		loffset -= 24115; //24115 is offset to start of NT
+		//Testament(2);
+		loffset -= NTOFFSET;
 	}
+	#ifdef WDGDEBUG
+	printf("returning index %d\n", loffset+verse);fflush(NULL);
+	#endif
 	return (loffset + verse);
 }
 
@@ -1357,8 +1424,7 @@ long VerseKey::NewIndex() const
 {
 	//static long otMaxIndex = 32300 - 8245;  // total positions - new testament positions
 //	static long otMaxIndex = offsets[0][1][(int)offsets[0][0][BMAX[0]] + books[0][BMAX[0]].chapmax];
-	//return ((testament-1) * otMaxIndex) + Index();
-	return Index();
+	return oldindexhack ? ((testament-1) * NTOFFSET) + Index() : Index();
 }
 
 
@@ -1395,6 +1461,29 @@ long VerseKey::Index(long iindex)
 		}
 	}
 */
+if (oldindexhack)
+{
+	if (iindex < 1) {				// if (-) or module heading
+		if (testament < 2) {
+			if (iindex < 0) {
+				testament = 0;  // previously we changed 0 -> 1
+				error     = KEYERR_OUTOFBOUNDS;
+				verse = iindex;
+			}
+			else testament = 0;		// we want module heading
+		}
+		else {
+			testament--;
+			iindex += NTOFFSET;
+		}
+	}
+	if (testament==2)
+		iindex += NTOFFSET;
+	if (iindex >= NTOFFSET) 
+		testament = 2;
+}
+else
+{
 	if (iindex < 1) {				// if (-) or module heading
 		if (iindex < 0) {
 			testament = 0;  // previously we changed 0 -> 1
@@ -1402,6 +1491,10 @@ long VerseKey::Index(long iindex)
 		}
 		else testament = 0;		// we want module heading
 	}
+}	
+	#ifdef WDGDEBUG
+	printf("setting index %d(%d)\n", iindex, testament);fflush(NULL);
+	#endif
 
 	// --------------------------------------------------------------------
 
@@ -1435,19 +1528,31 @@ long VerseKey::Index(long iindex)
 			offset  = findindex(offsets[1], offsize[1], iindex);
 			verse   = iindex - offsets[1][offset].offset;
 			book    = findindex(offsets[0], offsize[0], offset);
-			chapter = offset - offsets[0][VerseKey::book].offset;
-			verse   = (chapter) ? verse : 0;  
+			chapter = offset - offsets[0][book].offset;
+			#ifdef WDGDEBUG
+			printf("offset %d bcv %d:%d:%d\n", offset, book, chapter, verse);fflush(NULL);
+			#endif
+			//verse   = (chapter) ? verse : 0;  
 				// funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  
 				//Don't know why.  Fix if you figure out.  Think its in the offsets table. !!!WDG fix
 		}
 	}
 
 	if (_compare(UpperBound()) > 0) {
+		#ifdef WDGDEBUG
+		printf("beyond upper bound in Index\n");fflush(NULL);
+		#endif
 		*this = UpperBound();
 		error = KEYERR_OUTOFBOUNDS;
 	}
 	if (_compare(LowerBound()) < 0) {
+		#ifdef WDGDEBUG
+		printf("beyond lower bound in Index\n");fflush(NULL);
+		#endif
 		*this = LowerBound();
+		#ifdef WDGDEBUG
+		printf("now set to %d:%d:%d\n", book, chapter, verse);fflush(NULL);
+		#endif
 		error = KEYERR_OUTOFBOUNDS;
 	}
 	return Index();
@@ -1494,6 +1599,9 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	keyval2 += ivkey.Chapter() * 1000;
 	keyval1 += Verse();
 	keyval2 += ivkey.Verse();
+	#ifdef WDGDEBUG
+	printf("comparing %d to %d\n", keyval1, keyval2);fflush(NULL);
+	#endif
 	keyval1 -= keyval2;
 	keyval1 = (keyval1) ? ((keyval1 > 0) ? 1 : -1) /*keyval1/labs(keyval1)*/:0; // -1 | 0 | 1
 	return keyval1;
