@@ -5,7 +5,7 @@ if ICU
 #else
 #endif
 
-swicuSOURCES = translit_BETA_Greek.txt 
+swicuSOURCES = translit_BETA_Greek.txt
 swicuSOURCES += translit_BGreek_Greek.txt
 swicuSOURCES += translit_CCAT_Hebrew.txt
 swicuSOURCES += translit_CCAT_Syriac.txt
@@ -18,6 +18,7 @@ swicuSOURCES += translit_Latin_Syriac.txt
 swicuSOURCES += translit_Latin_Thai.txt
 swicuSOURCES += translit_Latin_Ugaritic.txt
 swicuSOURCES += translit_Any_Latin1.txt
+swicuSOURCES += translit_Any_Latex.txt
 #swicuSOURCES += translit_HTMLEnt_Unicode.txt
 #swicuSOURCES += translit_Han_Pinyin.txt
 #swicuSOURCES += translit_Kanji_English.txt
