@@ -49,7 +49,7 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 			pushString(buf,
 				convertToOSIS(userData["lastTextNode"].c_str())
 			);
-			pushString(buf, "\" />");
+//			pushString(buf, "\" />");
 			userData["suspendTextPassThru"] = "false";
 			return true;
 		}
@@ -77,7 +77,6 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 			pushString(buf, "\" />");
 			return true;
 		}
-//	addTokenSubstitute("/scripRef", "|}");
 //	addTokenSubstitute("/note", ") }");
 
 //        addTokenSubstitute("br", "\\line ");
@@ -218,10 +217,12 @@ const char *ThMLOSIS::convertToOSIS(const char *inRef) {
 		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		char buf[512];
 		if (element) {
-			sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" referenceEnd=\"%s\" />", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef());
+			sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" referenceEnd=\"%s\">%s-%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), (const char *)element->LowerBound(), (const char *)element->UpperBound());
 		}
-		else sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" />", VerseKey(*verses.GetElement(i)).getOSISRef());
+		else sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), (const char *)*verses.GetElement(i));
 		outRef+=buf;
+		if (i<(verses.Count()-1))
+			outRef+="; ";
 	}
 	return outRef.c_str();
 }

@@ -1,7 +1,7 @@
 #include "soapH.h"
 #include <iostream.h>
 
-char server[] = "http://crosswire.org:18083";
+char server[] = "http://localhost:18083";
 
 int main(int argc, char **argv) {
 	xsd__int mgr;
@@ -32,12 +32,12 @@ int main(int argc, char **argv) {
 		if (module) {
 			char *name;
 			char *desc;
-			if (soap_call_sword__SWModule_getName(server, NULL, module, &name)) {
+			if (soap_call_sword__SWModule_getName(server, NULL, module, name)) {
 				soap_print_fault(stderr);
 				soap_print_fault_location(stderr);
 				exit(-1);
 			}
-			if (soap_call_sword__SWModule_getDescription(server, NULL, module, &desc)) {
+			if (soap_call_sword__SWModule_getDescription(server, NULL, module, desc)) {
 				soap_print_fault(stderr);
 				soap_print_fault_location(stderr);
 				exit(-1);
@@ -60,6 +60,14 @@ int main(int argc, char **argv) {
 		soap_print_fault_location(stderr);
 		exit(-1);
 	}
+	char *text;
+	if (soap_call_sword__Quick_getModuleRenderText(server, NULL, "MHC", "jas1:19", text)) {
+		soap_print_fault(stderr);
+		soap_print_fault_location(stderr);
+		exit(-1);
+	}
+	cout << text << endl;
+
 	printf("success: %d\n", mgr);
 	soap_free();
 	return 0;

@@ -48,8 +48,8 @@ int sword__SWMgr_getModuleByName(xsd__int hmgr, xsd__string name, xsd__int &hmod
 //int   sword__SWModule_getEntrySize(xsd__int hmodule);
 //void  sword__SWModule_setKeyText(xsd__int hmodule, char *key);
 //char *sword__SWModule_getKeyText(xsd__int hmodule);
-int sword__SWModule_getName(xsd__int hmodule, char **name);
-int sword__SWModule_getDescription(xsd__int hmodule, char **description);
+int sword__SWModule_getName(xsd__int hmodule, xsd__string &name);
+int sword__SWModule_getDescription(xsd__int hmodule, xsd__string &description);
 //char *sword__SWModule_getType(xsd__int hmodule);
 //void  sword__SWModule_previous(xsd__int hmodule);
 //void  sword__SWModule_next(xsd__int hmodule);
@@ -57,4 +57,8 @@ int sword__SWModule_getDescription(xsd__int hmodule, char **description);
 //char *sword__SWModule_getStripText(xsd__int hmodule);
 //char *sword__SWModule_getRenderText(xsd__int hmodule);
 
+
+int sword__Quick_getModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string &modText);
+int sword__Quick_setModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string modText, xsd__int &noop);
+int sword__Quick_getModuleRenderText(xsd__string modName, xsd__string modKey, xsd__string &modText);
 #endif

@@ -1,6 +1,10 @@
 #include "soapH.h"
 #include <flatapi.h>
+#include <swmgr.h>
+#include <markupfiltmgr.h>
 
+
+SWMgr *mgr;
 
 int sword__ModList_iterator_next(xsd__int hmmi, xsd__int &noop) {
 	ModList_iterator_next(hmmi);
@@ -34,13 +38,43 @@ int sword__SWMgr_getModuleByName(xsd__int hmgr, xsd__string name, xsd__int &hmod
 
 
 
-int sword__SWModule_getName(xsd__int hmodule, char **name) {
-	*name = SWModule_getName(hmodule);
+int sword__SWModule_getName(xsd__int hmodule, xsd__string &name) {
+	name = (char *)SWModule_getName(hmodule);
 	return SOAP_OK;
 }
 
-int sword__SWModule_getDescription(xsd__int hmodule, char **description) {
-	*description = SWModule_getDescription(hmodule);
+int sword__SWModule_getDescription(xsd__int hmodule, xsd__string &description) {
+	description = (char *)SWModule_getDescription(hmodule);
+	return SOAP_OK;
+}
+
+
+int sword__Quick_getModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string &modText) {
+	SWModule *mod = mgr->Modules[modName];
+	if (mod) {
+		mod->SetKey(modKey);
+		modText = mod->getRawEntry();
+	}
+	return SOAP_OK;
+}
+
+
+int sword__Quick_setModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string modText, xsd__int &noop) {
+	SWModule *mod = mgr->Modules[modName];
+	if (mod) {
+		mod->SetKey(modKey);
+		(*mod) << modText;
+	}
+	return SOAP_OK;
+}
+
+
+int sword__Quick_getModuleRenderText(xsd__string modName, xsd__string modKey, xsd__string &modText) {
+	SWModule *mod = mgr->Modules[modName];
+	if (mod) {
+		mod->SetKey(modKey);
+		modText = (char *)mod->RenderText();
+	}
 	return SOAP_OK;
 }
 
@@ -48,8 +82,11 @@ int sword__SWModule_getDescription(xsd__int hmodule, char **description) {
 
 
 main() {
-    int m, s;
-     m = soap_bind("crosswire.org", 18083, 100);
+
+
+	int m, s;
+	mgr = new SWMgr(new MarkupFilterMgr());
+     m = soap_bind("localhost", 18083, 100);
 	if (m < 0) {
 		soap_print_fault(stderr);
 		exit(-1);
@@ -66,6 +103,7 @@ main() {
 		fprintf(stderr, "request served\n");
 		soap_end(); // clean up everything and close socket
 	}
+	delete mgr;
 }
 
 #include "sword.nsmap"

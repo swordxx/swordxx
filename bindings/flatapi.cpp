@@ -61,40 +61,40 @@ SWHANDLE SWMgr_getModulesIterator(SWHANDLE hmgr) {
 }
 
 
-SWHANDLE SWMgr_getModuleByName(SWHANDLE hmgr, char *name) {
+SWHANDLE SWMgr_getModuleByName(SWHANDLE hmgr, const char *name) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	return (mgr) ? (SWHANDLE) mgr->Modules[name] : 0;
 }
 
 
-char *SWMgr_getPrefixPath(SWHANDLE hmgr) {
+const char *SWMgr_getPrefixPath(SWHANDLE hmgr) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	return (mgr) ? mgr->prefixPath : 0;
 }
 
 
-char *SWMgr_getConfigPath(SWHANDLE hmgr) {
+const char *SWMgr_getConfigPath(SWHANDLE hmgr) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	return (mgr) ? mgr->configPath : 0;
 }
 
 
-void SWMgr_setGlobalOption(SWHANDLE hmgr, char *option, char *value) {
+void SWMgr_setGlobalOption(SWHANDLE hmgr, const char *option, const char *value) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	if (mgr)
 		mgr->setGlobalOption(option, value);
 }
 
 
-char *SWMgr_getGlobalOption(SWHANDLE hmgr, char *option) {
+const char *SWMgr_getGlobalOption(SWHANDLE hmgr, const char *option) {
 	SWMgr *mgr = (SWMgr *)hmgr;
-	return (mgr) ? (char *)mgr->getGlobalOption(option) : 0;
+	return (mgr) ? (const char *)mgr->getGlobalOption(option) : 0;
 }
 
 
-char *SWMgr_getGlobalOptionTip(SWHANDLE hmgr, char *option) {
+const char *SWMgr_getGlobalOptionTip(SWHANDLE hmgr, const char *option) {
 	SWMgr *mgr = (SWMgr *)hmgr;
-	return (mgr) ? (char *)mgr->getGlobalOptionTip(option) : 0;
+	return (mgr) ? (const char *)mgr->getGlobalOptionTip(option) : 0;
 }
 
 
@@ -110,7 +110,7 @@ SWHANDLE SWMgr_getGlobalOptionsIterator(SWHANDLE hmgr) {
 
 
 // ret: forward_iterator
-SWHANDLE SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, char *option) {
+SWHANDLE SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, const char *option) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	static OptionsList::iterator it;
 	
@@ -120,7 +120,7 @@ SWHANDLE SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, char *option) {
 }
 
 
-void SWMgr_setCipherKey(SWHANDLE hmgr, char *modName, char *key) {
+void SWMgr_setCipherKey(SWHANDLE hmgr, const char *modName, const char *key) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	if (mgr)
 		mgr->setCipherKey(modName, key);
@@ -137,7 +137,7 @@ void SWModule_terminateSearch(SWHANDLE hmodule) {
 		module->terminateSearch = true;
 }
 
-// SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
+// SWModule (const const char *imodname = 0, const const char *imoddesc = 0, SWDisplay * idisp = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
 // virtual ~ SWModule ();
 
   /** Gets and clears error status
@@ -156,7 +156,7 @@ int SWModule_getEntrySize(SWHANDLE hmodule) {
 }
 
 
-void SWModule_setKeyText(SWHANDLE hmodule, char *key) {
+void SWModule_setKeyText(SWHANDLE hmodule, const char *key) {
 	SWModule *module = (SWModule *)hmodule;
 	if (module)
 		module->Key(key);
@@ -165,30 +165,30 @@ void SWModule_setKeyText(SWHANDLE hmodule, char *key) {
 //  virtual char SetKey (const SWKey &ikey);
 //  virtual SWKey & Key () const {
   
-char *SWModule_getKeyText(SWHANDLE hmodule) {
+const char *SWModule_getKeyText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (char *)((module) ? module->KeyText() : 0);
+	return (const char *)((module) ? module->KeyText() : 0);
 }
   
 
 //  virtual char Display ();
 //  virtual SWDisplay *Disp (SWDisplay * idisp = 0);
   
-char *SWModule_getName(SWHANDLE hmodule) {
+const char *SWModule_getName(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (char *)((module) ? module->Name() : 0);
+	return (const char *)((module) ? module->Name() : 0);
 }
   
 
-char *SWModule_getDescription(SWHANDLE hmodule) {
+const char *SWModule_getDescription(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (char *)((module) ? module->Description() : 0);
+	return (const char *)((module) ? module->Description() : 0);
 }
 
 
-char *SWModule_getType(SWHANDLE hmodule) {
+const char *SWModule_getType(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (char *)((module) ? module->Type() : 0);
+	return (const char *)((module) ? module->Type() : 0);
 }
 
 
@@ -213,15 +213,15 @@ void SWModule_begin(SWHANDLE hmodule) {
 }
   
   
-char *SWModule_getStripText(SWHANDLE hmodule) {
+const char *SWModule_getStripText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (char *)((module) ? module->StripText() : 0);
+	return (const char *)((module) ? module->StripText() : 0);
 }
   
   
-char *SWModule_getRenderText(SWHANDLE hmodule) {
+const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (char *)((module) ? module->RenderText() : 0);
+	return (const char *)((module) ? module->RenderText() : 0);
 }
 
 
@@ -235,9 +235,9 @@ void stringlist_iterator_next(SWHANDLE hsli) {
 }
 
 
-char *stringlist_iterator_val(SWHANDLE hsli) {
+const char *stringlist_iterator_val(SWHANDLE hsli) {
 	OptionsList::iterator *sli = (OptionsList::iterator *)hsli;
-	return (char *)(*sli)->c_str();
+	return (const char *)(*sli)->c_str();
 }
 
 

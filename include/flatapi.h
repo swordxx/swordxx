@@ -22,7 +22,7 @@ typedef struct {
 // stringlist_iterator methods
 
 void stringlist_iterator_next(SWHANDLE hsli);
-char *stringlist_iterator_val(SWHANDLE hsli);
+const char *stringlist_iterator_val(SWHANDLE hsli);
 
 
 //-----------------------------------------------------------------
@@ -41,17 +41,17 @@ SWHANDLE SWMgr_newEx(SWHANDLE hiconfig, SWHANDLE hisysconfig, char autoload, SWH
 void     SWMgr_delete(SWHANDLE hmgr);
 SWHANDLE SWMgr_getConfig(SWHANDLE hmgr);
 SWHANDLE SWMgr_getModulesIterator(SWHANDLE hmgr);
-SWHANDLE SWMgr_getModuleByName(SWHANDLE hmgr, char *name);
-char *   SWMgr_getPrefixPath(SWHANDLE hmgr);
-char *   SWMgr_getConfigPath(SWHANDLE hmgr);
-void     SWMgr_setGlobalOption(SWHANDLE hmgr, char *option, char *value);
-char *   SWMgr_getGlobalOption(SWHANDLE hmgr, char *option);
-char *   SWMgr_getGlobalOptionTip(SWHANDLE hmgr, char *option);
+SWHANDLE SWMgr_getModuleByName(SWHANDLE hmgr, const char *name);
+const char *   SWMgr_getPrefixPath(SWHANDLE hmgr);
+const char *   SWMgr_getConfigPath(SWHANDLE hmgr);
+void     SWMgr_setGlobalOption(SWHANDLE hmgr, const char *option, const char *value);
+const char *   SWMgr_getGlobalOption(SWHANDLE hmgr, const char *option);
+const char *   SWMgr_getGlobalOptionTip(SWHANDLE hmgr, const char *option);
 // ret: forward_iterator
 SWHANDLE SWMgr_getGlobalOptionsIterator(SWHANDLE hmgr);
 // ret: forward_iterator
-SWHANDLE SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, char *option);
-void     SWMgr_setCipherKey(SWHANDLE hmgr, char *modName, char *key);
+SWHANDLE SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, const char *option);
+void     SWMgr_setCipherKey(SWHANDLE hmgr, const char *modName, const char *key);
 
 
 //-----------------------------------------------------------------
@@ -60,16 +60,16 @@ void     SWMgr_setCipherKey(SWHANDLE hmgr, char *modName, char *key);
 void  SWModule_terminateSearch(SWHANDLE hmodule);
 char  SWModule_error(SWHANDLE hmodule);
 int   SWModule_getEntrySize(SWHANDLE hmodule);
-void  SWModule_setKeyText(SWHANDLE hmodule, char *key);
-char *SWModule_getKeyText(SWHANDLE hmodule);
-char *SWModule_getName(SWHANDLE hmodule);
-char *SWModule_getDescription(SWHANDLE hmodule);
-char *SWModule_getType(SWHANDLE hmodule);
+void  SWModule_setKeyText(SWHANDLE hmodule, const char *key);
+const char *SWModule_getKeyText(SWHANDLE hmodule);
+const char *SWModule_getName(SWHANDLE hmodule);
+const char *SWModule_getDescription(SWHANDLE hmodule);
+const char *SWModule_getType(SWHANDLE hmodule);
 void  SWModule_previous(SWHANDLE hmodule);
 void  SWModule_next(SWHANDLE hmodule);
 void  SWModule_begin(SWHANDLE hmodule);
-char *SWModule_getStripText(SWHANDLE hmodule);
-char *SWModule_getRenderText(SWHANDLE hmodule);
+const char *SWModule_getStripText(SWHANDLE hmodule);
+const char *SWModule_getRenderText(SWHANDLE hmodule);
 
 }
 #ifdef __cplusplus
