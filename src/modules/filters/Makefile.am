@@ -15,6 +15,7 @@ libsword_la_SOURCES += $(filtersdir)/rtfhtml.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfstrongs.cpp
 libsword_la_SOURCES += $(filtersdir)/gbffootnotes.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfheadings.cpp
+libsword_la_SOURCES += $(filtersdir)/gbfredletterwords.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfmorph.cpp
 libsword_la_SOURCES += $(filtersdir)/plainfootnotes.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlstrongs.cpp
