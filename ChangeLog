@@ -2,6 +2,15 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+* Release 1.5.5 *
+
+22-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Updated hu locale submitted from Mentler Gyula
+	Fixed bug in Book parsing that took first matching
+		book, not best matching book.
+	Added VCL autoconf/automake files and updated to
+		compile on gcc 3.2
+
 21-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed ListKey bugs dealing with TOP and BOTTOM and
 		added at least an attempt to position the
