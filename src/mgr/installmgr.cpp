@@ -439,10 +439,11 @@ bool InstallMgr::getCipherCode(const char *modName, SWConfig *config) {
 }
 
 
-void InstallMgr::refreshRemoteSource(InstallSource *is) {
+int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->source.c_str();
 	SWBuf target = root + "/mods.d";
-
+	int errorCode = -1; //0 means successful
+	
 	FileMgr::removeDir(target.c_str());
 
 	if (!FileMgr::existsDir(target))
@@ -450,15 +451,19 @@ void InstallMgr::refreshRemoteSource(InstallSource *is) {
 
 #ifndef EXCLUDEZLIB
 	SWBuf archive = root + "/mods.d.tar.gz";
-	if (!ftpCopy(is, "mods.d.tar.gz", archive.c_str(), false)) {
+	
+	errorCode = ftpCopy(is, "mods.d.tar.gz", archive.c_str(), false);
+	if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
 		int fd = open(archive.c_str(), O_RDONLY|O_BINARY);
 		untargz(fd, root.c_str());
 		close(fd);
 	}
-	else
+	else if (!term) //if the tar.gz download was canceled don't continue with another download
 #endif
-	ftpCopy(is, "mods.d", target.c_str(), true, ".conf");
+	errorCode = ftpCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
+	
 	is->flush();
+	return errorCode;
 }
 
 

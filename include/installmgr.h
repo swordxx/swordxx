@@ -59,7 +59,8 @@ public:
 	virtual int removeModule(SWMgr *manager, const char *modName);
 	virtual int ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
 	virtual int installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is = 0);
-	virtual void refreshRemoteSource(InstallSource *is);
+	
+	virtual int refreshRemoteSource(InstallSource *is);
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
 	void setFTPPassive(bool passive) { this->passive = passive; }
 	void terminate() { if (transport) transport->terminate(); }
