@@ -157,4 +157,16 @@ else
 REMOTE_HEAD =
 endif
 
-pkginclude_HEADERS += $(REMOTE_HEAD)
+NEWVKEY_HEAD  = $(swincludedir)/versekey2.h
+NEWVKEY_HEAD += $(swincludedir)/ztext2.h
+NEWVKEY_HEAD += $(swincludedir)/zverse2.h
+
+SPLIT_HEAD =
+if BUILDNEWVKEY
+SPLIT_HEAD += $(NEWVKEY_HEAD)
+endif
+#if BUILDSPLITLIB
+#SPLIT_HEAD += $(NEWVKEY_HEAD)
+#endif
+
+pkginclude_HEADERS += $(REMOTE_HEAD) $(SPLIT_HEAD)
