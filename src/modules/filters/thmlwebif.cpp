@@ -19,6 +19,7 @@
 #include <swmodule.h>
 #include <utilweb.h>
 #include <utilxml.h>
+#include <ctype.h>
 
 SWORD_NAMESPACE_START
 
@@ -36,9 +37,14 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		if (!strcmp(tag.getName(), "sync")) {
 			const char* value = tag.getAttribute("value");
 			url = value;
+			if ((url.length() > 1) && strchr("GH", url[0])) {
+				if (isdigit(url[1]))
+					url = url.c_str()+1;
+			}
 
 			if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")){
 				buf += "<small><em> (";
+				buf.appendFormatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
 			}
 			else {
 				if (value) {
@@ -47,9 +53,9 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 
 				buf += "<small><em> &lt;";
+				buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
 			}
 
-			buf.appendFormatted("<a href=\"%s?showStrong=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
 			buf += value;
 			buf += "</a>";
 
@@ -68,7 +74,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
 					url = u->lastTextNode;
-					buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str());
+					buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str());
 					buf += u->lastTextNode.c_str();
 					buf += "</a>";
 
@@ -79,7 +85,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			else if (tag.getAttribute("passage")) { //passage given
 				u->inscriptRef = true;
 
-				buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(tag.getAttribute("passage")).c_str());
+				buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), encodeURL(tag.getAttribute("passage")).c_str());
 			}
 			else { //no passage given
 				u->inscriptRef = false;
