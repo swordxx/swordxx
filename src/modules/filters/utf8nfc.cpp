@@ -35,7 +35,6 @@ char UTF8NFC::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
         //canonical composition
         unorm_normalize(source, len, UNORM_NFC, 0, target, len, &err);
 
-        len = maxlen;
         ucnv_fromUChars(conv, text, maxlen, target, -1, &err);
 
         delete [] source;

@@ -35,7 +35,6 @@ char UTF8NFKD::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
         //compatability decomposition
         unorm_normalize(source, len, UNORM_NFKD, 0, target, len, &err);
 
-        len = maxlen;
         ucnv_fromUChars(conv, text, maxlen, target, -1, &err);
 
         delete [] source;

@@ -15,22 +15,23 @@ UnicodeRTF::UnicodeRTF() {
 
 char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
-	unsigned char *to, *from;
+	unsigned char *to, *from, *maxto;
 	int len;
         char digit[10];
         short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
-	
+
 	len = strlenw(text) + 2;						// shift string to right of buffer
 	if (len < maxlen) {
 	        memmove(&text[maxlen - len], text, len);
 		from = (unsigned char*)&text[maxlen - len];
 	}
 	else	from = (unsigned char*)text;
+        maxto =(unsigned char*)text + maxlen;
+
 	// -------------------------------
-	for (to = (unsigned char*)text; *from; from++) {
+	for (to = (unsigned char*)text; *from && (to <= maxto); from++) {
 	  ch = 0;
           if ((*from & 128) != 128) {
-//          	if (*from != ' ')
 	       *to++ = *from;
                continue;
           }
@@ -60,7 +61,10 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	    *to++ = digit[i];
           *to++ = '?';
 	}
-	*to++ = 0;
-	*to = 0;
+        
+        if (to != maxto) {
+              	*to++ = 0;
+        }
+        *to = 0;
 	return 0;
 }
