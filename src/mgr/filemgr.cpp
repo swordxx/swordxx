@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.7 2001/02/16 03:06:14 scribe Exp $
+ * $Id: filemgr.cpp,v 1.8 2001/02/20 02:08:53 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -218,12 +218,7 @@ char FileMgr::existsFile(const char *ipath, const char *ifileName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", ifileName);
 	}
-
-	if ((fd = ::open(path, O_RDONLY)) > 0) {
-		::close(fd);
-		return 1;
-	}
-	return 0;
+	return !access(path, 04);
 }
 
 
@@ -244,10 +239,5 @@ char FileMgr::existsDir(const char *ipath, const char *idirName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", idirName);
 	}
-
-	if ((dir = opendir(path))) {
-		closedir(dir);
-		return 1;
-	}
-	return 0;
+	return !access(path, 04);
 }

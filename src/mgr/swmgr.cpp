@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.28 2001/02/15 08:51:22 scribe Exp $
+ * $Id: swmgr.cpp,v 1.29 2001/02/20 02:08:53 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -260,8 +260,7 @@ if (debug)
 	cerr << "\nChecking for /etc/sword.conf...";
 #endif
 
-	if ((fd = ::open("/etc/sword.conf", O_RDONLY)) > 0) {
-		::close(fd);
+	if (!::access("/etc/sword.conf", 04)) {
 
 #ifndef WIN32
 if (debug)

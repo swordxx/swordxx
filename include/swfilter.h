@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.8 2001/02/16 20:19:22 jansorg Exp $
+ * $Id: swfilter.h,v 1.9 2001/02/20 02:08:53 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,7 +38,7 @@ typedef std::list < std::string > OptionsList;
 * Filters are used to filter/convert text between different formats
 * like GBF, HTML, RTF ...
 */
-class SWDLLEXPORT  SWFilter{
+class SWDLLEXPORT  SWFilter {
 public:
   /** the type definition for option lists,
   * see @ref getOptionValues
@@ -87,18 +87,18 @@ public:
   * @param key sorry I don't know
   * @return 0
   */
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key)
+  virtual char ProcessText(char *text, int maxlen, const SWKey *key)
   {
-    return ProcessText (text, maxlen);
+    return ProcessText(text, maxlen);
   }
   /** This is the main filter function without the 3rd parameter
   * @param text the text to be filtered/converted
   * @param maxlen maximal length of text to be processed
   * @return 0
   */
-  virtual char ProcessText (char *text, int maxlen = -1)
+  virtual char ProcessText(char *text, int maxlen = -1)
   {
-    return ProcessText (text, maxlen, 0);
+    return ProcessText(text, maxlen, 0);
   }
 };
 

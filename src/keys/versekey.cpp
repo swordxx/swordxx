@@ -335,7 +335,6 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	char number[255];
 	char tobook = 0;
 	char tonumber = 0;
-	char lastchar = 0;
 	int chap = -1, verse = -1;
 	int bookno = 0;
 	VerseKey curkey, lBound;
@@ -502,7 +501,6 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			if (chap == -1)
 				book[tobook++] = toupper(*buf);
 		}
-		lastchar = *buf;
 		buf++;
 	}
 	number[tonumber] = 0;

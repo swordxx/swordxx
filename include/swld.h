@@ -2,7 +2,7 @@
  *  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
  *				types of Lexicon and Dictionary modules (hence the 'LD').
  *
- * $Id: swld.h,v 1.4 2001/02/15 21:20:14 jansorg Exp $
+ * $Id: swld.h,v 1.5 2001/02/20 02:08:53 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -54,7 +54,7 @@ public:
   *  [0] - only get
   * @return pointer to keytext
   */
-  virtual const char *KeyText (char *ikeytext);
+  virtual const char *KeyText (const char *ikeytext);
 };
 
 

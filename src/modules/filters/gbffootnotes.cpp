@@ -47,7 +47,6 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 		int tokpos = 0;
 		bool intoken = false;
 		int len;
-		bool lastspace = false;
 		bool hide = false;
 
 		len = strlen(text) + 1;	// shift string to right of buffer

@@ -44,7 +44,7 @@ SWLD::~SWLD()
  * RET:	pointer to keytext
  */
 
-const char *SWLD::KeyText(char *ikeytext)
+const char *SWLD::KeyText(const char *ikeytext)
 {
 	if (key->Persist() && !ikeytext) {
 		(char *) *this;	// force module key to snap to entry
