@@ -113,17 +113,27 @@ protected:
 	 * Default is false.*/
 	void setPassThruUnknownEscapeString(bool val);
 
-	void setTokenCaseSensitive(bool val);
+	/** Are escapeStrings case sensitive or not? Call this
+	function before addEscapeStingSubstitute()*/
 	void setEscapeStringCaseSensitive(bool val);
-
-	void addTokenSubstitute(const char *findString, const char *replaceString);
+	/** Use this to add your own escapeString substitutes. It will replace them
+	if they already exist.*/
 	void addEscapeStringSubstitute(const char *findString, const char *replaceString);
-	
-	void replaceTokenSubstitute(const char *findString, const char *replaceString);
-	void replaceEscapeStringSubstitute(const char *findString, const char *replaceString);
-	
-	bool substituteToken(SWBuf &buf, const char *token);
+	/** Remove excapeStringSubstitutes from the list */
+	void deleteEscapeStringSubstitute(const char *findString);
+	/** This function performs the substitution of escapeStrings */
 	bool substituteEscapeString(SWBuf &buf, const char *escString);
+
+	/** Are tokens case sensitive (like in OSIS) or not? Call this
+	function before addTokenSubstitute()*/
+	void setTokenCaseSensitive(bool val);
+	/** Use this to add your own token substitutes. It will replace them
+	if they already exist.*/
+	void addTokenSubstitute(const char *findString, const char *replaceString);
+	/** Remove tokenSubstitutes from the list */
+	void deleteTokenSubstitute(const char *findString);
+	/** This function performs the substitution of tokens */
+	bool substituteToken(SWBuf &buf, const char *token);
 
 	/** This function is called for every token encountered in the input text.
 	* @param buf the output buffer (FIXME: what is its size?)

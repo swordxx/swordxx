@@ -101,13 +101,11 @@ void SWBasicFilter::addTokenSubstitute(const char *findString, const char *repla
 }
 
 
-void SWBasicFilter::replaceTokenSubstitute(const char *findString, const char *replaceString) {
+void SWBasicFilter::deleteTokenSubstitute(const char *findString) {
 	if (tokenSubMap.find(findString) != tokenSubMap.end()) {
-		tokenSubMap.erase( tokenSubMap.find(findString) ); //erase entry
+		tokenSubMap.erase( tokenSubMap.find(findString) );
 	}
-	addTokenSubstitute(findString, replaceString);
 }
-
 
 void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char *replaceString) {
 	char *buf = 0;
@@ -121,13 +119,11 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 	else escSubMap.insert(DualStringMap::value_type(findString, replaceString));
 }
 
-void SWBasicFilter::replaceEscapeStringSubstitute(const char *findString, const char *replaceString) {
-        if (escSubMap.find(findString) != escSubMap.end()) {
-                escSubMap.erase( escSubMap.find(findString) ); //erase entry
-        }
-        addEscapeStringSubstitute(findString, replaceString);
+void SWBasicFilter::deleteEscapeStringSubstitute(const char *findString) {
+	if (escSubMap.find(findString) != escSubMap.end()) {
+		escSubMap.erase( escSubMap.find(findString) );
+	}
 }
-
 
 bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 	DualStringMap::iterator it;
@@ -147,7 +143,6 @@ bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 	}
 	return false;
 }
-
 
 bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 	DualStringMap::iterator it;
