@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.30 2004/03/14 03:39:54 scribe Exp $
+* $Id: swbuf.h,v 1.31 2004/03/27 09:24:35 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -182,6 +182,8 @@ public:
 	/** 
 	* SWBuf::insert - inserts the given string at position into this string
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
+	* @param str Append this.
+	* @param max Append only max chars.
 	*/
 	void insert(const unsigned long pos, const char* str, const signed long max = -1 );
 	void insert(const unsigned long pos, const SWBuf &str, const signed long max = -1 ) {

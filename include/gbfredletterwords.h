@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfredletterwords.h,v 1.4 2003/07/05 04:58:42 scribe Exp $
+ * $Id: gbfredletterwords.h,v 1.5 2004/03/27 09:24:35 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,7 +33,7 @@ class SWDLLEXPORT GBFRedLetterWords : public SWOptionFilter {
 public:
 	GBFRedLetterWords();
 	virtual ~GBFRedLetterWords();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

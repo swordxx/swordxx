@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.71 2004/02/28 20:14:29 scribe Exp $
+* $Id: swmodule.h,v 1.72 2004/03/27 09:24:35 mgruner Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -257,26 +257,38 @@ public:
 	}
 
 
-	/** Sets/gets module name
+	/** Gets module name
+	*
+	* @return pointer to modname
+	*/
+	virtual char *Name() const;
+	/** Sets module name
 	*
 	* @param imodname Value which to set modname; [0]-only get
 	* @return pointer to modname
 	*/
-	virtual char *Name() const;
 	virtual char *Name(const char *imodname);
-	/** Sets/gets module description
+	/** Gets module description
+	*
+	* @return pointer to moddesc
+	*/
+	virtual char *Description() const;
+	/** Sets module description
 	*
 	* @param imoddesc Value which to set moddesc; [0]-only get
 	* @return pointer to moddesc
 	*/
-	virtual char *Description() const;
 	virtual char *Description(const char *imoddesc);
-	/** Sets/gets module type
+	/** Gets module type
+	*
+	* @return pointer to modtype
+	*/
+	virtual char *Type() const;
+	/** Sets module type
 	*
 	* @param imodtype Value which to set modtype; [0]-only get
 	* @return pointer to modtype
 	*/
-	virtual char *Type() const;
 	virtual char *Type(const char *imodtype);
 	/** Sets/gets module direction
 	*
