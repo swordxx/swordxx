@@ -377,7 +377,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 					break;
 				}
 			}
-			findKeyIndex(*buf + IDXENTRYSIZE, &offset);
+			findKeyIndex(*buf + 6, &offset);
 		}
 		else break;
 	}

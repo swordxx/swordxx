@@ -2,6 +2,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 30-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed zLD link bug where resolving incorrectly
+		skipped IDXENTRYSIZE instead of 6 ("@LINK ").
 	Fixed RawLD link errors.
 	Allocate buffer for RawStr* drivers in readtext
 		to allow realloc if link
