@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.7 1999/09/05 02:29:28 scribe Exp $
+ * $Id: swmgr.cpp,v 1.8 1999/09/05 07:15:22 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -386,17 +386,22 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 }
 
 
-void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
-{
+void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 	string sourceformat, cryptKey;
 	ConfigEntMap::iterator entry;
 
 	cryptKey = ((entry = section.find("CryptKey")) != section.end()) ? (*entry).second : (string)"";
 	if (!cryptKey.empty()) {
 		printf("Using key: %s", cryptKey.c_str());
-		module->AddRenderFilter(new CryptFilter(cryptKey.c_str()));
+		module->AddRawFilter(new CryptFilter(cryptKey.c_str()));
 	}
-		
+}
+
+
+void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
+	string sourceformat, cryptKey;
+	ConfigEntMap::iterator entry;
+
 	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
 
 	// Temporary: To support old module types
@@ -420,9 +425,6 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 	string sourceformat, cryptKey;
 	ConfigEntMap::iterator entry;
 
-	cryptKey = ((entry = section.find("CryptKey")) != section.end()) ? (*entry).second : (string)"";
-	if (!cryptKey.empty())
-		module->AddStripFilter(new CryptFilter(cryptKey.c_str()));
 	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
 	// Temporary: To support old module types
 	if (sourceformat.empty()) {
@@ -461,6 +463,7 @@ void SWMgr::CreateMods() {
 				end   = (*it).second.upper_bound("LocalOptionFilter");
 				AddLocalOptions(newmod, section, start, end);
 
+				AddRawFilters(newmod, section);
 				AddStripFilters(newmod, section);
 				AddRenderFilters(newmod, section);
 				

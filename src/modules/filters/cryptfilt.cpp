@@ -22,7 +22,8 @@ CryptFilter::~CryptFilter() {
 
 char CryptFilter::ProcessText(char *text, int maxlen) {
 	unsigned int len;
-	len = strlen(text);
+//	len = strlen(text);
+	len = maxlen - 1;
 	crypt->cryptBuf(&len, text);
 	strncpy(text, crypt->Buf(), (len < (unsigned int)maxlen) ? len : maxlen);
 	text[maxlen] = 0;

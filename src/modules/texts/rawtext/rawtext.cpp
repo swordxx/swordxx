@@ -57,6 +57,7 @@ RawText::operator char*()
 	long  start;
 	unsigned short size;
 	VerseKey *key = 0;
+	FilterList::iterator it;
 
 	// see if we have a VerseKey * or decendant
 	try {
@@ -75,6 +76,11 @@ RawText::operator char*()
 	versebuf = new char [ size * 3 ];
 
 	gettext(key->Testament(), start, size + 1, versebuf);
+
+	for (it = rawfilters.begin(); it != rawfilters.end(); it++) {
+		(*it)->ProcessText(versebuf, size + 1);
+	}
+
 	preptext(versebuf);
 	RenderText(versebuf, size * 3);
 
