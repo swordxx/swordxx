@@ -28,7 +28,7 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
  *	unicode  - if this module is unicode (widechar)
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, bool unicode)
+SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, bool unicode, char dir)
 {
 	key      = CreateKey();
 	entrybuf = new char [1];
@@ -37,8 +37,9 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	error    = 0;
 	moddesc  = 0;
 	modtype  = 0;
-     this->unicode  = unicode;
-     entrySize= -1;
+        this->unicode  = unicode;
+        this->direction = dir;
+        entrySize= -1;
 	disp     = (idisp) ? idisp : &rawdisp;
 	stdstr(&modname, imodname);
 	stdstr(&moddesc, imoddesc);
@@ -152,6 +153,19 @@ char *SWModule::Type(const char *imodtype)
 	return stdstr(&modtype, imodtype);
 }
 
+/******************************************************************************
+ * SWModule::Direction - Sets/gets module direction
+ *
+ * ENT:	newdir - value which to set direction
+ *		[-1] - only get
+ *
+ * RET:	char direction
+ */
+char SWModule::Direction(char newdir) {
+        if (newdir != -1)
+                direction = newdir;
+        return direction;
+}
 
 /******************************************************************************
  * SWModule::Disp - Sets/gets display driver
@@ -573,7 +587,7 @@ SWModule::operator char*() {
           if (size == -1)
           	size = strlen(versebuf);
 		if (size)
-			RenderText(versebuf, size * FILTERPAD * ((unicode) ? 9 : 1));
+			RenderText(versebuf, size * FILTERPAD);
 	}
 	return versebuf;
 }
