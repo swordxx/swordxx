@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.37 2002/02/27 01:30:02 scribe Exp $
+ * $Id: swmodule.h,v 1.38 2002/02/27 03:34:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,7 +59,7 @@ class SWDLLEXPORT SWModule {
 
 protected:
 
-  bool ownConfig;
+  ConfigEntMap ownConfig;
   ConfigEntMap *config;
 
   char error;

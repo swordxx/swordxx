@@ -33,8 +33,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	key       = CreateKey();
 	entrybuf  = new char [1];
 	*entrybuf = 0;
-	config    = new ConfigEntMap();
-	ownConfig = true;
+	config    = &ownConfig;
 	entrybufallocsize = 0;
 	modname   = 0;
 	error     = 0;
@@ -85,9 +84,6 @@ SWModule::~SWModule()
      renderFilters->clear();
      optionFilters->clear();
      encodingFilters->clear();
-
-	if (ownConfig)
-		delete config;
 
      delete stripFilters;
      delete rawFilters;
@@ -649,9 +645,5 @@ const char *SWModule::getConfigEntry(const char *key) {
 
 
 void SWModule::setConfig(ConfigEntMap *config) {
-	if (ownConfig) {
-		delete config;
-		ownConfig = false;
-	}
 	this->config = config;
 }
