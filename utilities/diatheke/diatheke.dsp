@@ -161,6 +161,10 @@ SOURCE=.\gbfcgi.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\osiscgi.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\thmlcgi.cpp
 # End Source File
 # End Group
@@ -182,6 +186,10 @@ SOURCE=.\diathekemgr.h
 # Begin Source File
 
 SOURCE=.\gbfcgi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\osiscgi.h
 # End Source File
 # Begin Source File
 
