@@ -2,44 +2,44 @@
 #include <flatapi.h>
 
 
-int sword__ModList_iterator_next(SWHANDLE hmmi, int &noop) {
+int sword__ModList_iterator_next(xsd__int hmmi, xsd__int &noop) {
 	ModList_iterator_next(hmmi);
 	return SOAP_OK;
 }
 
-int sword__ModList_iterator_val(SWHANDLE hmmi, SWHANDLE &hmodule) {
+int sword__ModList_iterator_val(xsd__int hmmi, xsd__int &hmodule) {
 	hmodule = ModList_iterator_val(hmmi);
 	return SOAP_OK;
 }
 
-int sword__SWMgr_new(SWHANDLE &retVal) {
+int sword__SWMgr_new(xsd__int &retVal) {
 	retVal = SWMgr_new();
 	return SOAP_OK;
 }
 
-int sword__SWMgr_delete(SWHANDLE hmgr, int &noop) {
+int sword__SWMgr_delete(xsd__int hmgr, xsd__int &noop) {
 	SWMgr_delete(hmgr);
 	return SOAP_OK;
 }
 
-int sword__SWMgr_getModulesIterator(SWHANDLE hmgr, SWHANDLE &hmodIterator) {
+int sword__SWMgr_getModulesIterator(xsd__int hmgr, xsd__int &hmodIterator) {
 	hmodIterator = SWMgr_getModulesIterator(hmgr);
 	return SOAP_OK;
 }
 
-int sword__SWMgr_getModuleByName(SWHANDLE hmgr, char *name, SWHANDLE &hmodule) {
+int sword__SWMgr_getModuleByName(xsd__int hmgr, xsd__string name, xsd__int &hmodule) {
 	hmodule = SWMgr_getModuleByName(hmodule, name);
 	return SOAP_OK;
 }
 
 
 
-int sword__SWModule_getName(SWHANDLE hmodule, char **name) {
+int sword__SWModule_getName(xsd__int hmodule, char **name) {
 	*name = SWModule_getName(hmodule);
 	return SOAP_OK;
 }
 
-int sword__SWModule_getDescription(SWHANDLE hmodule, char **description) {
+int sword__SWModule_getDescription(xsd__int hmodule, char **description) {
 	*description = SWModule_getDescription(hmodule);
 	return SOAP_OK;
 }
@@ -49,7 +49,7 @@ int sword__SWModule_getDescription(SWHANDLE hmodule, char **description) {
 
 main() {
     int m, s;
-     m = soap_bind("localhost", 18083, 100);
+     m = soap_bind("crosswire.org", 18083, 100);
 	if (m < 0) {
 		soap_print_fault(stderr);
 		exit(-1);
