@@ -27,7 +27,7 @@ endif
 INCLUDES += $(ICUDEF)
 
 if INSTALLMGR
-IMGRLIBADD = $(CURL_LIBS)
+IMGRLIBADD = -lcurl $(CURL_LIBS)
 else
 IMGRLIBADD =
 endif

@@ -60,7 +60,7 @@ osis2mod_SOURCES = osis2mod.cpp
 vs2osisref_SOURCES = vs2osisref.cpp
 
 installmgr_SOURCES = installmgr.cpp
-installmgr_LDADD = -lcurl $(CURL_LIBS) $(LDADD)
+#installmgr_LDADD = -lcurl $(CURL_LIBS) $(LDADD)
 
 if ZLIB
 mod2zmod_SOURCES = mod2zmod.cpp
