@@ -1,0 +1,60 @@
+
+root := ..
+subdirs :=
+pre-targets := 
+targets :=
+headers += Greek2Greek.h
+headers += GreekChars.h
+headers += canon.h
+headers += cipherfil.h
+headers += echomod.h
+headers += femain.h
+headers += filemgr.h
+headers += gbffootnotes.h
+headers += gbfhtml.h
+headers += gbfplain.h
+headers += gbfrtf.h
+headers += gbfstrongs.h
+headers += hrefcom.h
+headers += listkey.h
+headers += plainhtml.h
+headers += rawcom.h
+headers += rawfiles.h
+headers += rawgbf.h
+headers += rawld.h
+headers += rawstr.h
+headers += rawtext.h
+headers += rawverse.h
+headers += regex.h
+headers += rwphtml.h
+headers += rwprtf.h
+headers += sapphire.h
+headers += strkey.h
+headers += swcipher.h
+headers += swcom.h
+headers += swcomprs.h
+headers += swconfig.h
+headers += swdisp.h
+headers += swdisprtf.h
+headers += swdisprtfchap.h
+headers += swfilter.h
+headers += swkey.h
+headers += swld.h
+headers += swlog.h
+headers += swmacs.h
+headers += swmgr.h
+headers += swmodule.h
+headers += swtext.h
+headers += swwinlog.h
+headers += tbdisp.h
+headers += unixstr.h
+headers += utilconf.h
+headers += utilfuns.h
+headers += utilstr.h
+headers += versekey.h
+headers += zcom.h
+headers += ztext.h
+
+
+include ${root}/Makefile.cfg
+include ${root}/Makefile.post

@@ -2,7 +2,6 @@ root := ..
 subdirs := 
 pre-targets := 
 targets := keytest mgrtest parsekey listtest casttest modtest 
-bin := keytest mgrtest parsekey listtest modtest 
 include ${root}/Makefile.cfg
 
 cpp += keytest.cpp

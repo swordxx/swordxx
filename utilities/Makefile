@@ -2,7 +2,6 @@ root := ..
 subdirs := 
 pre-targets := 
 targets := cipherraw ciphertest ciphertest2 lexdump
-bin := cipherraw
 include ${root}/Makefile.cfg
 
 cpp += cipherraw.cpp
