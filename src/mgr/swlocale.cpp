@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.10 2004/04/17 17:16:17 joachim Exp $
+ * $Id: swlocale.cpp,v 1.11 2004/05/07 18:11:24 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,6 +36,7 @@ SWLocale::SWLocale(const char * ifilename) {
 	books        = 0;
 	#ifdef SPLITLIB
 	books2        = 0;
+	bookAbbrevs2  = 0;
 	#endif
 	localeSource = new SWConfig(ifilename);
 
@@ -69,6 +70,11 @@ SWLocale::~SWLocale() {
 	if (bookAbbrevs)
 		delete [] bookAbbrevs;
 
+	#ifdef SPLITLIB
+	if (bookAbbrevs2)
+		delete [] bookAbbrevs2;
+	#endif
+	
 	if (BMAX) {
 		#ifndef VK2
 		for (int i = 0; i < 2; i++)
@@ -149,7 +155,13 @@ const struct abbrev *SWLocale::getBookAbbrevs() {
 		bookAbbrevs = new struct abbrev[size + 1];
 		for (i = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
 			bookAbbrevs[i].ab = (*it).first.c_str();
+			#ifdef NONNUMERICLOCALETHING
+			bookAbbrevs[i].book = VerseKey::getOSISBookNum((*it).second.c_str());
+			#else
 			bookAbbrevs[i].book = atoi((*it).second.c_str());
+			#endif
+			//printf("SWLocale::getBookAbbrevs %s:%s %d\n",bookAbbrevs[i].ab,
+			//	(*it).second.c_str(), bookAbbrevs[i].book); 
 		}
 		bookAbbrevs[i].ab = nullstr;
 		bookAbbrevs[i].book = -1;
@@ -159,43 +171,40 @@ const struct abbrev *SWLocale::getBookAbbrevs() {
 }
 
 
-#if defined(VK2) || defined(SPLITLIB)
-#ifdef VK2
-void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk) {
-	if (!BMAX) {
-		BMAX = new char[1];
-		BMAX[0] = vk->getMaxBooks();
-
-		books = new struct sbook*[1];
-		books[0] = new struct sbook[*BMAX];
-		for (int j = 0; j < *BMAX; j++) {
-				books[0][j].name = translate(vk->getNameOfBook(j));
-				books[0][j].prefAbbrev = translate(vk->getPrefAbbrev(j));
+#ifdef SPLITLIB
+const struct abbrev2 *SWLocale::getBookAbbrevs2() {
+	static const char *nullstr = "";
+	if (!bookAbbrevs2) {
+		ConfigEntMap::iterator it;
+		int i;
+		int size = localeSource->Sections["Book Abbrevs"].size();
+		bookAbbrevs2 = new struct abbrev2[size + 1];
+		for (i = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
+			bookAbbrevs2[i].ab = (*it).first.c_str();
+			bookAbbrevs2[i].book = VerseKey2::getOSISBookNum((*it).second.c_str());
+			//printf("SWLocale::getBookAbbrevs2 %d:%s:%s %d\n",i,bookAbbrevs2[i].ab,
+			//	(*it).second.c_str(), bookAbbrevs2[i].book); 
 		}
+		bookAbbrevs2[i].ab = nullstr;
+		bookAbbrevs2[i].book = ENDOFABBREVS;
 	}
-
-	iBMAX  = &BMAX;
-	ibooks = &books;
-#else
-void SWLocale::getBooks2(char **iBMAX, struct sbook2 ***ibooks, VerseKey2 *vk) {
-	if (!BMAX) {
-		BMAX2 = new char[1];
-		BMAX2[0] = vk->getMaxBooks();
+		
+	return bookAbbrevs2;
+}
+void SWLocale::getBooks2(struct sbook2 ***ibooks, VerseKey2 *vk) {
+	if (!books2) {
 
 		books2 = new struct sbook2*[1];
-		books2[0] = new struct sbook2[*BMAX2];
-		for (int j = 0; j < *BMAX2; j++) {
+		books2[0] = new struct sbook2[MAXOSISBOOKS+1];
+		for (int j = 0; j <= MAXOSISBOOKS; j++) {
 				books2[0][j].name = translate(vk->getNameOfBook(j));
 				books2[0][j].prefAbbrev = translate(vk->getPrefAbbrev(j));
 		}
 	}
 
-	iBMAX  = &BMAX2;
-	ibooks = &books2;
-#endif
+	*ibooks = books2;
 }
 #endif
-#ifndef VK2
 void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	if (!BMAX) {
 		BMAX = new char [2];
@@ -217,7 +226,6 @@ void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	*iBMAX  = BMAX;
 	*ibooks = books;
 }
-#endif
 
 
 SWORD_NAMESPACE_END
