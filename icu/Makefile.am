@@ -39,7 +39,7 @@ SUFFIXES = .txt .res .dat
 
 
 if ICU
-swicudir = $(pkglibdir)/icu$(ICU_VER)
+swicudir = $(pkglibdir)/${VERSION}_icu_${ICU_VER}
 
 #installswicu_DATA: $(swicu_DATA)
 #	@$(NORMAL_INSTALL)
