@@ -39,14 +39,36 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key)
 			intoken = false;
 						// process desired tokens
 			switch (*token) {
+			case 'W':	// Strongs
+				switch(token[1]) {
+					case 'G':               // Greek
+					case 'H':               // Hebrew
+						*to++ = ' ';
+						*to++ = '<';
+						for (unsigned int i = 2; i < strlen(token); i++)
+							*to++ = token[i];
+						*to++ = '>';
+						*to++ = ' ';
+						continue;
+
+					case 'T':               // Tense
+						*to++ = ' ';
+						*to++ = '(';
+						for (unsigned int i = 3; i < strlen(token); i++)
+							*to++ = token[i];
+						*to++ = ')';
+						*to++ = ' ';
+						continue;
+				}
+				break;
 			case 'R':
 				switch(token[1]) {
 				case 'F':               // footnote begin
 					*to++ = ' ';
-					*to++ = '(';
+					*to++ = '[';
 					continue;
 				case 'f':               // footnote end
-					*to++ = ')';
+					*to++ = ']';
 					*to++ = ' ';
 					continue;
 				}
