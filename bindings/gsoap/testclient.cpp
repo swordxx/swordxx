@@ -3,7 +3,7 @@
 
 typedef int SWHANDLE;
 
-char server[] = "http://localhost:18083";
+char server[] = "http://crosswire.org:18083";
 
 int main(int argc, char **argv) {
 	SWHANDLE mgr;
