@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.78 2002/08/08 21:35:05 scribe Exp $
+ * $Id: swmgr.cpp,v 1.79 2002/08/09 05:53:48 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -423,8 +423,7 @@ if (debug)
 				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
 				stdstr(configPath, path.c_str());
-				delete [] globPaths;
-				return;
+				*configType = 1;
 			}
 
 #ifndef _MSC_VER
@@ -443,8 +442,6 @@ if (debug)
 				path += "mods.d";
 				stdstr(configPath, path.c_str());
 				*configType = 1;
-				delete [] globPaths;
-				return;
 			}
 		}
 		if (augPaths) {
@@ -461,6 +458,8 @@ if (debug)
 	}
 
 	delete [] globPaths;
+	if (*configType)
+		return;
 
 	// check ~/.sword/
 
@@ -546,7 +545,6 @@ void SWMgr::augmentModules(const char *ipath) {
 	string path = ipath;
 	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
 		path += "/";
-	path += ".sword/";
 	if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 		char *savePrefixPath = 0;
 		char *saveConfigPath = 0;
@@ -618,7 +616,11 @@ signed char SWMgr::Load() {
 //	augment config with ~/.sword/mods.d if it exists ---------------------
 		char *envhomedir  = getenv ("HOME");
 		if (envhomedir != NULL && configType != 2) { // 2 = user only
-			augmentModules(envhomedir);
+			string path = envhomedir;
+			if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
+				path += "/";
+			path += ".sword/";
+			augmentModules(path.c_str());
 		}
 // -------------------------------------------------------------------------
 		if ( !Modules.size() ) // config exists, but no modules

@@ -59,8 +59,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = 
-host_triplet = i686-pc-linux-gnu
+host_alias = arm-v4l-linux
+host_triplet = arm-v4l-linux-gnu
 
 EXEEXT = 
 OBJEXT = o
@@ -68,40 +68,40 @@ PATH_SEPARATOR = :
 AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
 AS = @AS@
 AWK = gawk
-CC = gcc
+CC = arm-v4l-linux-gcc
 CURL_CFLAGS = 
 CURL_CONFIG = /usr/bin/curl-config
-CURL_LIBS = -lssl -lcrypto -ldl
-CXX = g++
+CURL_LIBS =  -lcurl  -lssl -lcrypto -ldl
+CXX = arm-v4l-linux-g++
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
-GENCCODE = /usr/sbin/genccode
-GENCMN = /usr/sbin/gencmn
-GENRB = /usr/sbin/genrb
+GENCCODE = 
+GENCMN = 
+GENRB = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 MAINT = #
 OBJDUMP = @OBJDUMP@
 PACKAGE = sword
-PKGDATA = /usr/sbin/pkgdata
-RANLIB = ranlib
-STRIP = strip
+PKGDATA = 
+RANLIB = arm-v4l-linux-ranlib
+STRIP = arm-v4l-linux-strip
 VERSION = 1.5.4
 am__include = include
 am__quote = 
 dir_confdef = no
-enable_debug = yes
+enable_debug = no
 enable_profile = no
 install_sh = /space/home/scribe/src/sword/install-sh
-target_cpu = i686
+target_cpu = arm
 target_mingw32 = no
 target_os = linux-gnu
-target_system = intel
-target_vendor = pc
+target_system = arm
+target_vendor = v4l
 with_conf = no
-with_icu = yes
+with_icu = no
 with_zlib = yes
 AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
@@ -153,7 +153,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O0 -Werror
+CXXFLAGS = -I/usr/include/g++-3 -O3 -ftemplate-depth-25
 DIST_SOURCES = $(lookup_SOURCES) $(search_SOURCES) \
 	$(threaded_search_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
@@ -215,7 +215,7 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' \
 	$(CXXDEPMODE) $(depcomp) \
 	$(LTCXXCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CXXDEPMODE = depmode=gcc3
+CXXDEPMODE = depmode=gcc
 
 mostlyclean-libtool:
 	-rm -f *.lo
