@@ -126,7 +126,7 @@
       -I..\..\apps\windoze\CBuilder5\InstallMgr\curl\include -I..\..\include 
       -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_ICU_ -D_ICUSWORD_ 
       -DUSBINARY -D_DEBUG -boa"/>
-    <CFLAG1 value="-Od -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <CFLAG1 value="-vGc -vGt -vGd -Od -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zi"/>
     <LFLAGS value="/P512"/>
@@ -231,7 +231,7 @@ RemoteDebug=0
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
-LinkCGLIB=0
+LinkCGLIB=1
 
 [Language]
 ActiveLang=
