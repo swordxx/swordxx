@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.19 2003/07/04 21:45:24 scribe Exp $
+ * $Id: canon.h,v 1.20 2004/07/15 10:57:35 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -694,8 +694,8 @@ long
 
 int
   VerseKey::offsize[2][2] =
-  { {sizeof (VerseKey::otbks) / 4, sizeof (VerseKey::otcps) / 4}
-, {sizeof (VerseKey::ntbks) / 4, sizeof (VerseKey::ntcps) / 4}
+  { {sizeof (VerseKey::otbks) / sizeof(long), sizeof (VerseKey::otcps) / sizeof(long)}
+, {sizeof (VerseKey::ntbks) / sizeof(long), sizeof (VerseKey::ntcps) / sizeof(long)}
 };
 
 //SWORD_NAMESPACE_END
