@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.47 2001/10/24 19:45:47 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.48 2001/10/30 00:01:50 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -521,7 +521,7 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	SWModule *newmod = 0;
  	string sourceformat;
  	string encoding;
-        char direction, enc, markup;
+        signed char direction, enc, markup;
 
 	sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (string)"";
 	encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (string)"";
@@ -877,7 +877,7 @@ OptionsList SWMgr::getGlobalOptionValues(const char *option)
 }
 
 
-char SWMgr::setCipherKey(const char *modName, const char *key) {
+signed char SWMgr::setCipherKey(const char *modName, const char *key) {
 	FilterMap::iterator it;
 	ModMap::iterator it2;
 

@@ -178,9 +178,10 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
  * RET: error status
  */
 
-char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
+signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
 {
-	char *trybuf, *targetbuf, *key, quitflag = 0, retval = 0;
+	char *trybuf, *targetbuf, *key, quitflag = 0;
+        signed char retval = 0;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
@@ -541,7 +542,7 @@ void RawStr4::linkentry(const char *destkey, const char *srckey) {
  * RET: error status
  */
 
-char RawStr4::createModule(const char *ipath)
+signed char RawStr4::createModule(const char *ipath)
 {
 	char *path = 0;
 	char *buf = new char [ strlen (ipath) + 20 ];

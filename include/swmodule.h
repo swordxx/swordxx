@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.28 2001/10/24 19:43:57 chrislit Exp $
+ * $Id: swmodule.h,v 1.29 2001/10/30 00:01:50 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,9 +38,9 @@ using namespace std;
 
 typedef list < SWFilter * >FilterList;
 
-enum DIRECTION {DIRECTION_LTR, DIRECTION_RTL, DIRECTION_BIDI};
-enum FORMATS {FMT_UNKNOWN, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS};
-enum ENCODINGS {ENC_UNKNOWN, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
+enum DIRECTION {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};
+enum FORMATS {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS};
+enum ENCODINGS {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
 
 /**
   * The class SWModule is the base class for all modules used in Sword.
@@ -223,7 +223,7 @@ public:
   *  [-1] - only get
   * @return char direction
   */
-  virtual char Direction(char newdir = -1);
+  virtual char Direction(signed char newdir = -1);
 
   /** Sets/gets module encoding
   *
@@ -231,7 +231,7 @@ public:
   *  [-1] - only get
   * @return char encoding
   */
-  virtual char Encoding(char enc = -1);
+  virtual char Encoding(signed char enc = -1);
 
   /** Sets/gets module markup
   *
@@ -239,7 +239,7 @@ public:
   *  [-1] - only get
   * @return char markup
   */
-  virtual char Markup(char enc = -1);
+  virtual char Markup(signed char enc = -1);
 
   // search methods
 
@@ -262,7 +262,7 @@ public:
   /**
   *
   */
-  virtual char createSearchFramework () {
+  virtual signed char createSearchFramework () {
     return 0;
   }				// special search framework
   
@@ -326,7 +326,7 @@ public:
   * @param path The first parameter is path of the new module
   * @return error
   */
-  static char createModule (const char *) {
+  static signed char createModule (const char *) {
     return -1;
   }
   

@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.29 2001/10/24 19:40:00 chrislit Exp $
+ * $Id: swmgr.h,v 1.30 2001/10/30 00:01:50 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -58,7 +58,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.29 2001/10/24 19:40:00 chrislit Exp $
+  * @version $Id: swmgr.h,v 1.30 2001/10/30 00:01:50 chrislit Exp $
   */
 class SWDLLEXPORT SWMgr
 {
@@ -236,7 +236,7 @@ public:
     * @param modName For this module we change the unlockKey
     * @paran key This is the new unlck key we use for te module.
     */
-  virtual char setCipherKey (const char *modName, const char *key);
+  virtual signed char setCipherKey (const char *modName, const char *key);
   
   /** Get the Sword version.
   * Function to get the used version of Sword. This is required, because

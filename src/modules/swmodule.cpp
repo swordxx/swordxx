@@ -165,7 +165,7 @@ char *SWModule::Type(const char *imodtype)
  *
  * RET:	char direction
  */
-char SWModule::Direction(char newdir) {
+char SWModule::Direction(signed char newdir) {
         if (newdir != -1)
                 direction = newdir;
         return direction;
@@ -179,7 +179,7 @@ char SWModule::Direction(char newdir) {
  *
  * RET:	char encoding
  */
-char SWModule::Encoding(char newenc) {
+char SWModule::Encoding(signed char newenc) {
         if (newenc != -1)
                 encoding = newenc;
         return encoding;
@@ -193,7 +193,7 @@ char SWModule::Encoding(char newenc) {
  *
  * RET:	char markup
  */
-char SWModule::Markup(char newmark) {
+char SWModule::Markup(signed char newmark) {
         if (newmark != -1)
                 markup = newmark;
         return markup;

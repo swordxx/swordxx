@@ -123,7 +123,7 @@ char *RawText::getRawEntry() {
 }
 
 
-char RawText::createSearchFramework() {
+signed char RawText::createSearchFramework() {
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	SWKey textkey;

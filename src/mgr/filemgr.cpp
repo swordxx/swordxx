@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.16 2001/05/11 05:50:24 chrislit Exp $
+ * $Id: filemgr.cpp,v 1.17 2001/10/30 00:01:50 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -117,7 +117,7 @@ void FileMgr::close(FileDesc *file) {
 // to truncate a file at its current position
 // leaving byte at current possition intact
 // deleting everything afterward.
-char FileMgr::trunc(FileDesc *file) {
+signed char FileMgr::trunc(FileDesc *file) {
 
 	static const char *writeTest = "x";
 	long size = lseek(file->getFd(), 1, SEEK_CUR);
@@ -206,7 +206,7 @@ int FileMgr::sysOpen(FileDesc *file) {
 }
 
 
-char FileMgr::existsFile(const char *ipath, const char *ifileName)
+signed char FileMgr::existsFile(const char *ipath, const char *ifileName)
 {
 	int len = strlen(ipath) + ((ifileName)?strlen(ifileName):0) + 1;
 	char *ch;
@@ -223,13 +223,13 @@ char FileMgr::existsFile(const char *ipath, const char *ifileName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", ifileName);
 	}
-	char retVal = !access(path, 04);
+	signed char retVal = !access(path, 04);
     delete [] path;
     return retVal;
 }
 
 
-char FileMgr::existsDir(const char *ipath, const char *idirName)
+signed char FileMgr::existsDir(const char *ipath, const char *idirName)
 {
 	char *ch;
 	int len = strlen(ipath) + ((idirName)?strlen(idirName):0) + 1;
@@ -245,7 +245,7 @@ char FileMgr::existsDir(const char *ipath, const char *idirName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", idirName);
 	}
-	char retVal = !access(path, 04);
+	signed char retVal = !access(path, 04);
      delete [] path;
      return retVal;
 }

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.11 2001/10/18 21:11:10 chrislit Exp $
+ * $Id: filemgr.h,v 1.12 2001/10/30 00:01:49 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -65,12 +65,12 @@ public:
   FileDesc *open (char *path, int mode, int perms = S_IREAD | S_IWRITE);
   void close (FileDesc *);
 
-  static char existsFile (const char *ipath, const char *ifileName = 0);
-  static char existsDir (const char *ipath, const char *idirName = 0);
+  static signed char existsFile (const char *ipath, const char *ifileName = 0);
+  static signed char existsDir (const char *ipath, const char *idirName = 0);
   // to truncate a file at its current position
   // leaving byte at current possition intact
   // deleting everything afterward.
-  char trunc (FileDesc *);
+  signed char trunc (FileDesc *);
 
   int maxFiles;
   static FileMgr systemFileMgr;
