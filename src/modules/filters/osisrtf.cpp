@@ -42,24 +42,25 @@ OSISRTF::OSISRTF() {
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-	setStageProcessing(POSTCHAR);		// just at bottom of for loop
         addTokenSubstitute("lg", "\\par ");
         addTokenSubstitute("/lg", "\\par ");
 	setTokenCaseSensitive(true);
+	setStageProcessing(PRECHAR);		// just at top of for loop
 }
 
 
 bool OSISRTF::processStage(char stage, SWBuf &text, const char *&from, UserData *userData) {
 	switch (stage) {
-	POSTCHAR:
+	PRECHAR:
 		if ((strchr(" \t\n\r", *from))) {
 			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
 				from++;
 			}
 			text += " ";
-			from++;
+			return true;
 		}
 	}
+	return false;
 }
 
 

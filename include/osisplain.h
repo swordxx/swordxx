@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisplain.h,v 1.5 2003/07/30 00:51:33 scribe Exp $
+ * $Id: osisplain.h,v 1.6 2003/07/30 01:32:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,7 +39,7 @@ protected:
 		return new MyUserData(module, key);
 	}
 	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
-        virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
+	virtual bool processStage(char stage, SWBuf &text, const char *&from, UserData *userData);
 public:
 	OSISPlain();
 };
