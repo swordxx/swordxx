@@ -5,8 +5,8 @@
 #define SWORDDEFS_H
 
 #ifdef NO_SWORD_NAMESPACE
- #define SWORD_NAMESPACE_START
- #define SWORD_NAMESPACE_END
+ #define SWORD_NAMESPACE_START namespace sword {
+ #define SWORD_NAMESPACE_END }; using namespace sword;
 #else
  #define SWORD_NAMESPACE_START namespace sword {
  #define SWORD_NAMESPACE_END }

@@ -1,7 +1,6 @@
 /******************************************************************************
- *  utilfuns.h	- utility function prototypes
  *
- * $Id: utilfuns.h,v 1.2 2003/06/01 14:32:09 joachim Exp $
+ * $Id: gbfwebif.h,v 1.1 2003/06/01 14:32:09 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -18,12 +17,26 @@
  * General Public License for more details.
  *
  */
-#ifndef UTILFUNS_H
-#define UTILFUNS_H
 
+#ifndef GBFWEBIF_H
+#define GBFWEBIF_H
 
-#include <utilstr.h>
-#include <utilconf.h>
-#include <utilweb.h>
+#include <gbfhtmlhref.h>
+#include <string>
 
+SWORD_NAMESPACE_START
+
+/** this filter converts GBF  text to HTML text with hrefs
+ */
+class SWDLLEXPORT GBFWEBIF : public GBFHTMLHREF {
+	const std::string baseURL;
+	const std::string passageStudyURL;
+
+protected:
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+public:
+	GBFWEBIF();
+};
+
+SWORD_NAMESPACE_END
 #endif

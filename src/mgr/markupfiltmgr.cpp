@@ -33,6 +33,8 @@
 #include <gbfosis.h>
 #include <thmlosis.h>
 #include <osisrtf.h>
+#include <gbfwebif.h>
+#include <thmlwebif.h>
 
 #include <markupfiltmgr.h>
 
@@ -231,6 +233,12 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromplain = NULL;
                         fromthml = new ThMLOSIS();
                         fromgbf = new GBFOSIS();
+                        fromosis = NULL;
+                        break;
+                case FMT_WEBIF:
+                        fromplain = NULL;
+                        fromthml = new ThMLWEBIF();
+                        fromgbf = new GBFWEBIF();
                         fromosis = NULL;
                         break;
                 }

@@ -4,6 +4,7 @@ libsword_la_SOURCES += $(filtersdir)/swbasicfilter.cpp
 
 libsword_la_SOURCES += $(filtersdir)/gbfhtml.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfhtmlhref.cpp
+libsword_la_SOURCES += $(filtersdir)/gbfwebif.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfplain.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfrtf.cpp
 libsword_la_SOURCES += $(filtersdir)/plainhtml.cpp
@@ -16,6 +17,7 @@ libsword_la_SOURCES += $(filtersdir)/gbfheadings.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfredletterwords.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfmorph.cpp
 libsword_la_SOURCES += $(filtersdir)/plainfootnotes.cpp
+
 libsword_la_SOURCES += $(filtersdir)/thmlstrongs.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlfootnotes.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlheadings.cpp
@@ -29,6 +31,8 @@ libsword_la_SOURCES += $(filtersdir)/thmlgbf.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlrtf.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlhtml.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlhtmlhref.cpp
+libsword_la_SOURCES += $(filtersdir)/thmlwebif.cpp
+
 libsword_la_SOURCES += $(filtersdir)/thmlosis.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfosis.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlplain.cpp

@@ -11,10 +11,12 @@ pkginclude_HEADERS += $(swincludedir)/entriesblk.h
 pkginclude_HEADERS += $(swincludedir)/femain.h
 pkginclude_HEADERS += $(swincludedir)/filemgr.h
 pkginclude_HEADERS += $(swincludedir)/flatapi.h
+
 pkginclude_HEADERS += $(swincludedir)/gbffootnotes.h
 pkginclude_HEADERS += $(swincludedir)/gbfheadings.h
 pkginclude_HEADERS += $(swincludedir)/gbfhtml.h
 pkginclude_HEADERS += $(swincludedir)/gbfhtmlhref.h
+pkginclude_HEADERS += $(swincludedir)/gbfwebif.h
 pkginclude_HEADERS += $(swincludedir)/gbfmorph.h
 pkginclude_HEADERS += $(swincludedir)/gbfosis.h
 pkginclude_HEADERS += $(swincludedir)/gbfplain.h
@@ -23,6 +25,7 @@ pkginclude_HEADERS += $(swincludedir)/gbfrtf.h
 pkginclude_HEADERS += $(swincludedir)/gbfstrongs.h
 pkginclude_HEADERS += $(swincludedir)/gbfthml.h
 pkginclude_HEADERS += $(swincludedir)/greeklexattribs.h
+
 pkginclude_HEADERS += $(swincludedir)/hebrewmcim.h
 pkginclude_HEADERS += $(swincludedir)/hrefcom.h
 pkginclude_HEADERS += $(swincludedir)/latin1utf16.h
@@ -85,11 +88,13 @@ pkginclude_HEADERS += $(swincludedir)/swversion.h
 pkginclude_HEADERS += $(swincludedir)/swwinlog.h
 pkginclude_HEADERS += $(swincludedir)/sysdata.h
 pkginclude_HEADERS += $(swincludedir)/tbdisp.h
+
 pkginclude_HEADERS += $(swincludedir)/thmlfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/thmlgbf.h
 pkginclude_HEADERS += $(swincludedir)/thmlheadings.h
 pkginclude_HEADERS += $(swincludedir)/thmlhtml.h
 pkginclude_HEADERS += $(swincludedir)/thmlhtmlhref.h
+pkginclude_HEADERS += $(swincludedir)/thmlwebif.h
 pkginclude_HEADERS += $(swincludedir)/thmllemma.h
 pkginclude_HEADERS += $(swincludedir)/thmlmorph.h
 pkginclude_HEADERS += $(swincludedir)/thmlolb.h
@@ -99,6 +104,7 @@ pkginclude_HEADERS += $(swincludedir)/thmlrtf.h
 pkginclude_HEADERS += $(swincludedir)/thmlscripref.h
 pkginclude_HEADERS += $(swincludedir)/thmlstrongs.h
 pkginclude_HEADERS += $(swincludedir)/thmlvariants.h
+
 pkginclude_HEADERS += $(swincludedir)/treekey.h
 pkginclude_HEADERS += $(swincludedir)/treekeyidx.h
 pkginclude_HEADERS += $(swincludedir)/unicodertf.h
@@ -119,6 +125,9 @@ pkginclude_HEADERS += $(swincludedir)/utf8utf16.h
 pkginclude_HEADERS += $(swincludedir)/utilconf.h
 pkginclude_HEADERS += $(swincludedir)/utilfuns.h
 pkginclude_HEADERS += $(swincludedir)/utilstr.h
+pkginclude_HEADERS += $(swincludedir)/utilxml.h
+pkginclude_HEADERS += $(swincludedir)/utilweb.h
+
 pkginclude_HEADERS += $(swincludedir)/versekey.h
 pkginclude_HEADERS += $(swincludedir)/zcom.h
 pkginclude_HEADERS += $(swincludedir)/zconf.h
@@ -128,7 +137,6 @@ pkginclude_HEADERS += $(swincludedir)/zlib.h
 pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
-pkginclude_HEADERS += $(swincludedir)/utilxml.h
 pkginclude_HEADERS += $(swincludedir)/installmgr.h
 pkginclude_HEADERS += $(swincludedir)/ftpparse.h
 

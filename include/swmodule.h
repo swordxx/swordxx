@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.63 2003/05/06 03:27:56 scribe Exp $
+* $Id: swmodule.h,v 1.64 2003/06/01 14:32:09 joachim Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -62,7 +62,7 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
 #define SWTextMarkup char
 
 enum {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};
-enum {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS};
+enum {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS, FMT_WEBIF};
 enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
 
 /**
