@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     
     // Do some initialization stuff
     if (fourbyte) {
-      char buffer[4194304];  //this is the max size of any entry
+      char buffer[1048576];  //this is the max size of any entry
       RawLD4 mod(argv[2]);	// open our datapath with our RawText driver.
       SWKey* key = mod.CreateKey();
       key->Persist(1);      // the magical setting
