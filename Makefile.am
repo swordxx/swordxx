@@ -81,11 +81,12 @@ SUBDIRS += $(TESTSDIR) $(UTILSDIR) $(EXAMPLESDIR)
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh sword.pc.in
 
+if USE_PKGCONF
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = sword.pc
 
 $(pkgconfig_DATA): config.status
-
+endif
 
 if INSTCONF
 sysconf_DATA = sword.conf

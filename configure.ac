@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.25 $)
+AC_REVISION($Revision: 1.26 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -55,15 +55,20 @@ fi
 # ---------------------------------------------------------------------
 # Find pkg-config
 # ---------------------------------------------------------------------
+use_pkgconfig=yes
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 if test x$PKG_CONFIG = xno ; then
-  AC_MSG_ERROR([*** pkg-config not found. See http://www.freedesktop.org/software/pkgconfig/])
+  AC_MSG_WARN([*** pkg-config not found. See http://www.freedesktop.org/software/pkgconfig/])
+  AC_MSG_WARN([not using pkg-config])
+  use_pkgconfig=no
 fi
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.14 ; then
   :
 else
-  AC_MSG_ERROR([*** pkg-config too old; version 0.14 or better required.])
+  AC_MSG_WARN([*** pkg-config too old; version 0.14 or better required.])
+  AC_MSG_WARN([not using pkg-config])
+  use_pkgconfig=no
 fi
 
 
@@ -226,6 +231,7 @@ AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
+AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
 #AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)
 AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
