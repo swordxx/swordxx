@@ -10,3 +10,5 @@ diatheke_SOURCES = diatheke.cpp corediatheke.cpp diathekemgr.cpp \
 diatheke_LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_HEADERS = corediatheke.h diafiltmgr.h diathekemgr.h gbfcgi.h thmlcgi.h
+
+include cgi/Makefile.am
