@@ -7,13 +7,14 @@ stepdump step2vpl gbfidx modwrite addvs emptyvss \
 txt2sword addgb imp2gbs mod2imp thml2gbs xml2gbs
 
 bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2vpl \
-	vpl2mod imp2vs
+	vpl2mod imp2vs installmgr
 
 if INSTALLMGR
-IMGRPROG = installmgr 
+IMGRPROG =
 else
 IMGRPROG = 
 endif
+
 
 if ICU
 ICUPROG = 
@@ -27,8 +28,8 @@ else
 ZLIBPROG =
 endif
 
-noinst_PROGRAMS += $(ICUPROG) $(IMGRPROG)
-bin_PROGRAMS += $(ZLIBPROG)
+noinst_PROGRAMS += $(ICUPROG)
+bin_PROGRAMS += $(ZLIBPROG) $(IMGRPROG)
 
 if ICU
 endif
@@ -58,10 +59,8 @@ xml2gbs_SOURCES = xml2gbs.cpp
 osis2mod_SOURCES = osis2mod.cpp
 vs2osisref_SOURCES = vs2osisref.cpp
 
-if INSTALLMGR
 installmgr_SOURCES = installmgr.cpp
 installmgr_LDADD = -lcurl $(CURL_LIBS) $(LDADD)
-endif
 
 if ZLIB
 mod2zmod_SOURCES = mod2zmod.cpp
