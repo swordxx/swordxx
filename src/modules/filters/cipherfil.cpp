@@ -27,15 +27,16 @@ SWCipher *CipherFilter::getCipher() {
 char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
 	unsigned int len;
 //	len = strlen(text);
-	len = maxlen;
+	len = maxlen - 1;
 	if (len > 0) {
-		if (!key) {	// hack, use key to determine encipher, or decipher
+		if (!key) {	// hack, using key to determine encipher, or decipher
 			cipher->cipherBuf(&len, text);
-			strncpy(text, cipher->Buf(), (len < (unsigned int)maxlen) ? len : maxlen);
+			memcpy(text, cipher->Buf(), (len < (unsigned int)(maxlen-1)) ? len : maxlen-1);
 		}
 		else {
 			cipher->Buf(text, len);
-			strncpy(text, cipher->cipherBuf(&len), (len < (unsigned int)maxlen) ? len : maxlen);
+			cipher->cipherBuf(&len);
+			memcpy(text, cipher->cipherBuf(&len), (len < (unsigned int)(maxlen-1)) ? len : maxlen-1);
 		}
 	}
 	text[maxlen] = 0;

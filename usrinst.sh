@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./configure --prefix=/usr \
+CPPFLAGS=-DUSBINARY ./configure --prefix=/usr \
 	--disable-shared --enable-debug --without-conf --sysconfdir=/etc --with-vcl \
 	$*
 

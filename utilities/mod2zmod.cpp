@@ -19,11 +19,12 @@
 #include <zipcomprs.h>
 #include <versekey.h>
 #include <stdio.h>
+#include <cipherfil.h>
 
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to create compressed Sword modules\n";
 	cerr << "version 0.1\n\n";
-	cerr << "usage: "<< appName << " <modname> <datapath> [blockType [compressType]]\n\n";
+	cerr << "usage: "<< appName << " <modname> <datapath> [blockType [compressType [cipherKey]]]\n\n";
 	cerr << "datapath: the directory in which to write the zModule\n";
 	cerr << "blockType  : (default 4)\n\t2 - verses\n\t3 - chapters\n\t4 - books\n";
 	cerr << "compressType: (default 1):\n\t1 - LZSS\n\t2 - Zip\n";
@@ -36,12 +37,13 @@ int main(int argc, char **argv)
 {
 	int iType = 4;
 	int compType = 1;
+	string cipherKey = "";
 	SWCompress *compressor = 0;
 	SWModule *inModule     = 0;
 	SWModule *outModule    = 0;
 	
 
-	if ((argc < 3) || (argc > 5)) {
+	if ((argc < 3) || (argc > 6)) {
 		errorOutHelp(argv[0]);
 	}
 
@@ -49,6 +51,9 @@ int main(int argc, char **argv)
 		iType = atoi(argv[3]);
 		if (argc > 4) {
 			compType = atoi(argv[4]);
+			if (argc > 5) {
+				cipherKey = argv[5];
+			}
 		}
 	}
 
@@ -113,6 +118,11 @@ int main(int argc, char **argv)
 		outModule = new zCom(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
 		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
 		break;
+	}
+
+	if (!cipherKey.empty()) {
+		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
+		outModule->AddRawFilter(cipherFilter);
 	}
 
 	string lastBuffer = "Something that would never be first module entry";
