@@ -43,26 +43,22 @@ const char *GBFRedLetterWords::getOptionValue()
 	return (option) ? on:off;
 }
 
-char GBFRedLetterWords::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 /** This function removes the red letter words in Bible like the WEB
 * The words are marked by <FR> as start and <Fr> as end tag.
 */
 	if (!option) {	// if we don't want footnotes
-		char *to, *from, token[4096]; // cheese.  Fix.
+		char token[4096]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		int len;
 		bool hide = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
-
-		for (to = text; *from; from++) {
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
@@ -92,10 +88,10 @@ char GBFRedLetterWords::ProcessText(char *text, int maxlen, const SWKey *key, co
 
 				// if not a red letter word token, keep token in text
 				if (!hide) {
-					*to++ = '<';
+					text += '<';
 					for (char *tok = token; *tok; tok++)
-						*to++ = *tok;
-					*to++ = '>';
+						text += *tok;
+					text += '>';
 				}
 				continue;
 			}
@@ -105,11 +101,9 @@ char GBFRedLetterWords::ProcessText(char *text, int maxlen, const SWKey *key, co
 					token[tokpos+2] = 0;	// +2 cuz we init token with 2 extra '0' because of switch statement
 			}
 			else {
-				*to++ = *from;
+				text += *from;
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }
