@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.3 1999/05/14 17:21:48 scribe Exp $
+ * $Id: swmgr.cpp,v 1.4 1999/05/17 19:16:47 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,13 +47,20 @@
 #include <rawfiles.h>
 
 
-SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload) {
+void SWMgr::init() {
 	configPath = 0;
 	prefixPath = 0;
+	configType = 0;
 
 	optionFilters.insert(FilterMap::value_type("GBFStrongs", new GBFStrongs()));
 	optionFilters.insert(FilterMap::value_type("GBFFootnotes", new GBFFootnotes()));
 	gbfplain = new GBFPlain();
+}
+
+
+SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload) {
+
+	init();
 	
 	if (iconfig) {
 		config   = iconfig;
@@ -67,6 +74,36 @@ SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload) {
 	else sysconfig = 0;
 
 	if (autoload)
+		Load();
+}
+
+
+SWMgr::SWMgr(const char *iConfigPath, bool autoload) {
+
+	string path;
+	
+	init();
+	
+	path = iConfigPath;
+	path += "/";
+	if (existsFile(path.c_str(), "mods.conf")) {
+		stdstr(&prefixPath, path.c_str());
+		path += "mods.conf";
+		stdstr(&configPath, path.c_str());
+	}
+	else {
+		if (existsDir(path.c_str(), "mods.d")) {
+			stdstr(&prefixPath, path.c_str());
+			path += "mods.d";
+			stdstr(&configPath, path.c_str());
+			configType = 1;
+		}
+	}
+
+	config = 0;
+	sysconfig = 0;
+
+	if (autoload && configPath)
 		Load();
 }
 
@@ -237,8 +274,9 @@ void SWMgr::loadConfigDir(const char *ipath)
 
 
 void SWMgr::Load() {
-	if (!config) {	// If we weren't passes a config object at construction, find a config file
-		findConfig();
+	if (!config) {	// If we weren't passed a config object at construction, find a config file
+		if (!configPath)	// If we weren't passed a config path at construction...
+			findConfig();
 		if (configPath) {
 			if (configType)
 				loadConfigDir(configPath);
@@ -267,7 +305,7 @@ void SWMgr::Load() {
 		CreateMods();
 	}
 	else {
-		fprintf(stderr, "SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options");
+		SWLog::systemlog->LogError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", configPath);
 		exit(-1);
 	}
 }
