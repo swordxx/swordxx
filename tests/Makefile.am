@@ -2,6 +2,13 @@ AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
 LDADD = $(top_builddir)/lib/libsword.la 
 
+if BUILDREFSYS
+refsysdir = refsys
+else
+refsysdir =
+endif
+
+SUBDIRS = $(refsysdir)
 
 noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
 compnone complzss localetest introtest indextest configtest keycast \

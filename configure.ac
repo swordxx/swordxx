@@ -7,7 +7,7 @@
 AC_INIT(sword, 1.5.7, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.36 $)
+AC_REVISION($Revision: 1.37 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.7)
@@ -30,23 +30,37 @@ AC_C_BIGENDIAN
 # ---------------------------------------------------------------------
 # With options
 # ---------------------------------------------------------------------
-AC_ARG_WITH(zlib,[  --with-zlib             allow zlib compressed modules [default=yes]],,with_zlib=yes)
-AC_ARG_WITH(icu,[  --with-icu              use ICU for unicode [default=no]],,with_icu=no)
-AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=yes]],,with_conf=yes)
-AC_ARG_WITH(curl,[  --with-curl             build install manager support using libcurl [default=yes]],,with_curl=yes)
-AC_ARG_WITH(lucene,[  --with-lucene         include lucene support for searching [default=no]],,with_lucene=no)
+AC_ARG_WITH(zlib,
+	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
+AC_ARG_WITH(icu,
+	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=no)]),,with_icu=no)
+AC_ARG_WITH(conf,
+	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
+AC_ARG_WITH(curl,
+	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
+AC_ARG_WITH(lucene,
+	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 
 
 # ---------------------------------------------------------------------
 # Enable options
 # ---------------------------------------------------------------------
-AC_ARG_ENABLE(debug,[  --enable-debug          build debug library [default=no]],,enable_debug=no)
-AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,enable_profile=no)
-AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
-AC_ARG_ENABLE(tests,[  --enable-tests          build test programs [default=no]],,enable_tests=no)
-AC_ARG_ENABLE(utilities,[  --enable-utilities      build utilities [default=yes]],,enable_utilities=yes)
-AC_ARG_ENABLE(examples,[  --enable-examples       build examples [default=no]],,enable_examples=no)
-AC_ARG_ENABLE(versekey2,[  --enable-versekey2      build with experimental versekey [default=no]],,enable_versekey2=no)
+AC_ARG_ENABLE(debug,
+	AC_HELP_STRING([--enable-debug],[build debug library (default=no)]),,enable_debug=no)
+AC_ARG_ENABLE(profile,
+	AC_HELP_STRING([--enable-profile],[allow profiling (default=no)]),,enable_profile=no)
+AC_ARG_ENABLE(profilefn,
+	AC_HELP_STRING([--enable-profilefn],[allow functioncheck profiling (default=no)]),,enable_profilefn=no)
+AC_ARG_ENABLE(tests,
+	AC_HELP_STRING([--enable-tests],[build test programs (default=no)]),,enable_tests=no)
+AC_ARG_ENABLE(utilities,
+	AC_HELP_STRING([--enable-utilities],[build utilities (default=yes)]),,enable_utilities=yes)
+AC_ARG_ENABLE(examples,
+	AC_HELP_STRING([--enable-examples],[build examples (default=no)]),,enable_examples=no)
+AC_ARG_ENABLE(versekey2,
+	AC_HELP_STRING([--enable-versekey2],[build with experimental versekey (default=no)]),,enable_versekey2=no)
+AC_ARG_ENABLE(refsys,
+	AC_HELP_STRING([--enable-refsys],[build alternative versification data files - requires expat (default=no)]),,enable_refsys=no)
 AM_MAINTAINER_MODE
 
 # ---------------------------------------------------------------------
@@ -174,6 +188,20 @@ if test x$with_lucene = xyes; then
 fi
 
 # ---------------------------------------------------------------------
+# Check for XML parser for refsys
+# ---------------------------------------------------------------------
+XML_LIBS=
+if test x$enable_refsys = xyes; then
+	AC_CHECK_HEADER(expat.h,[
+		AC_CHECK_LIB(expat,XML_Parse,[
+			XML_LIBS="-lexpat"
+		],[	AC_MSG_ERROR([* * * require expat-devel * * *])
+		])
+	],[	AC_MSG_ERROR([* * * require expat-devel * * *])
+	])
+fi
+
+# ---------------------------------------------------------------------
 # Alter global conf directory only if not /etc
 # ---------------------------------------------------------------------
 
@@ -238,6 +266,7 @@ AC_SUBST(LUCENE_LIBS)
 AC_SUBST(ICU_LIBS)
 AC_SUBST(ICU_IOLIBS)
 AC_SUBST(ICU_VER)
+AC_SUBST(XML_LIBS)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 
@@ -269,11 +298,13 @@ AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
 AM_CONDITIONAL(BUILDUTILS, test x$enable_utilities = xyes)
 AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 AM_CONDITIONAL(BUILDNEWVKEY, test x$enable_versekey2 = xyes)
+AM_CONDITIONAL(BUILDREFSYS, test x$enable_refsys = xyes)
 
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile utilities/Makefile examples/Makefile \
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/refsys/Makefile \
+	utilities/Makefile examples/Makefile \
 	examples/cmdline/Makefile \
 	utilities/diatheke/Makefile icu/Makefile sword.pc)
 AC_OUTPUT
