@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.32 2001/11/30 11:26:53 scribe Exp $
+ * $Id: swmgr.h,v 1.33 2001/12/04 23:12:40 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,7 +59,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.32 2001/11/30 11:26:53 scribe Exp $
+  * @version $Id: swmgr.h,v 1.33 2001/12/04 23:12:40 scribe Exp $
   */
 class SWDLLEXPORT SWMgr {
 
@@ -172,11 +172,14 @@ public:
 
 
   /**
-    *
-    * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
-    * @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE
-    *		DELETED BY SWMgr
-    */
+   *
+   * @param autoload If this bool is true the constructor starts loading the
+   * installed modules. If you reimplemented SWMgr you can set autoload=false
+   * to load the modules with your own reimplemented function.
+   * @param filterMgr an SWFilterMgr subclass to use to manager filters on
+   * modules THIS WILL BE DELETED BY SWMgr
+   *
+   */
   SWMgr (const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0);
   /**
     * The destructor of SWMgr.
@@ -194,11 +197,12 @@ public:
     */
   virtual void Load ();
   /** Set a global option
-    * Set a global option using the parameters. A global option could be for example
-    * footnotes.
-    * @param option The name of the option, for which you want to change the value. Well known and often used values are "Footnotes" or "Strongs"
-    * @param value The value. Common values are "On" and "Off"
-    */
+   * Set a global option using the parameters. A global option could be for
+   * example footnotes.
+   * @param option The name of the option, for which you want to change the
+   * value. Well known and often used values are "Footnotes" or "Strongs"
+   * @param value The value. Common values are "On" and "Off"
+   */
   virtual void setGlobalOption (const char *option, const char *value);
   /** Gives the value of the given option
     * @param The option, which should be used to return the value of it
@@ -220,46 +224,46 @@ public:
     */
   virtual OptionsList getGlobalOptionValues (const char *option);
   /**
-    * Sets the cipher key for the given module. This function updates the key at runtime,
-    * but it does not write to the config file.
-    * To write the new unlock key to the config file use code like this:
-    *
-    * @code
-    * SectionMap::iterator section;
-    * ConfigEntMap::iterator entry;
-    * DIR *dir = opendir(configPath);
-    * struct dirent *ent;
-    * char* modFile;
-    * if (dir) {    // find and update .conf file
-    *   rewinddir(dir);
-    *   while ((ent = readdir(dir)))
-    *   {
-    *     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, "..")))
-    *     {
-    *       modFile = m_backend->configPath;
-    *       modFile += "/";
-    *       modFile += ent->d_name;
-    *       SWConfig *myConfig = new SWConfig( modFile );
-    *       section = myConfig->Sections.find( m_module->Name() );
-    *       if ( section != myConfig->Sections.end() )
-    *       {
-    *         entry = section->second.find("CipherKey");
-    *         if (entry != section->second.end())
-    *         {
-    *           entry->second = unlockKey;//set cipher key
-    *           myConfig->Save();//save config file
-    *         }
-    *       }
-    *       delete myConfig;
-    *     }
-    *   }
-    * }
-    * closedir(dir);
-    * @endcode
-    *
-    * @param modName For this module we change the unlockKey
-    * @paran key This is the new unlck key we use for te module.
-    */
+   * Sets the cipher key for the given module. This function updates the key
+   * at runtime, but it does not write to the config file.
+   * To write the new unlock key to the config file use code like this:
+   *
+   * @code
+   * SectionMap::iterator section;
+   * ConfigEntMap::iterator entry;
+   * DIR *dir = opendir(configPath);
+   * struct dirent *ent;
+   * char* modFile;
+   * if (dir) {    // find and update .conf file
+   *   rewinddir(dir);
+   *   while ((ent = readdir(dir)))
+   *   {
+   *     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, "..")))
+   *     {
+   *       modFile = m_backend->configPath;
+   *       modFile += "/";
+   *       modFile += ent->d_name;
+   *       SWConfig *myConfig = new SWConfig( modFile );
+   *       section = myConfig->Sections.find( m_module->Name() );
+   *       if ( section != myConfig->Sections.end() )
+   *       {
+   *         entry = section->second.find("CipherKey");
+   *         if (entry != section->second.end())
+   *         {
+   *           entry->second = unlockKey;//set cipher key
+   *           myConfig->Save();//save config file
+   *         }
+   *       }
+   *       delete myConfig;
+   *     }
+   *   }
+   * }
+   * closedir(dir);
+   * @endcode
+   *
+   * @param modName For this module we change the unlockKey
+   * @paran key This is the new unlck key we use for te module.
+   */
   virtual signed char setCipherKey (const char *modName, const char *key);
   
 };
