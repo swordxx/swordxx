@@ -32,4 +32,8 @@ cpp += latin1utf8.cpp
 
 cpp += thmlolb.cpp
 
+cpp += utf8cantillation.cpp
+cpp += utf8hebrewpoints.cpp
+cpp += utf8greekaccents.cpp
+
 include ${root}/Makefile.post
