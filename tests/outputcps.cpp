@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <versekey.h>
 
+/*
+This program requires versekey.h to be changed locally so that
+otbks, otcps, ntbks and ntcps are public
+*/
+
 using namespace sword;
 
 int
@@ -17,7 +22,8 @@ main(int argc, char *argv[])
 	//tk->Chapter(0);
 	//tk->Verse(0);
 	//printf("bcv %d %d:%d\n", tk->Book(), tk->Chapter(), tk->Verse());
-	printf("{0, 0}, // OT Header\n");
+	printf("{0, 0}, // Module Header\n");
+	printf("{1, 0}, // OT Header\n");
 	while (tk->Testament() == 1)
 	{
 		offset1 = tk->otbks[tk->Book()];
@@ -39,13 +45,13 @@ main(int argc, char *argv[])
 		offset1 = tk->ntbks[tk->Book()];
 		if (tk->Chapter() == 1) {
 			offset2 = tk->ntcps[(int)offset1]+otoffset;
-			printf("{%d, 0}, // %s:0\n", offset2, tk->getBookName());
+			printf("{%d, 0}, // %s:0\n", offset2-1, tk->getBookName());
 		}
 		offset2 = tk->ntcps[(int)offset1 + tk->Chapter()] + otoffset;
 		vmaxarray = tk->builtin_books[tk->Testament()-1][tk->Book()-1].versemax;
 		vmax = vmaxarray[tk->Chapter()-1];
 
-		printf("{%d, %d}, // %s:%d\n", offset2, vmax, tk->getBookName(), tk->Chapter());
+		printf("{%d, %d}, // %s:%d\n", offset2-1, vmax, tk->getBookName(), tk->Chapter());
 		tk->Chapter(tk->Chapter()+1);
 	}
 	delete tk;
