@@ -18,6 +18,7 @@
 #include <osisrtf.h>
 #include <utilxml.h>
 #include <versekey.h>
+#include <swmodule.h>
 
 SWORD_NAMESPACE_START
 
@@ -43,6 +44,9 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		XMLTag tag(token);
+		bool osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+
+		
 		
 		// <w> tag
 		if (!strcmp(tag.getName(), "w")) {
@@ -230,19 +234,22 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 				buf += "{";
 
 				//alternate " and '
-				buf += (level % 2) ? '\'' : '\"';
+				if (osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 				
 				if (who == "Jesus")
 					buf += "\\cf6 ";
 			}
 			else if (tag.isEndTag()) {
 				//alternate " and '
-				buf += (level % 2) ? '\'' : '\"';
+				if (osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 				buf += "}";
 			}
 			else {	// empty quote marker
 				//alternate " and '
-				buf += (level % 2) ? '\'' : '\"';
+				if (osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 			}
 		}
 
