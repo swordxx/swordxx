@@ -35,6 +35,8 @@
 
 
 
+
+
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -121,7 +123,7 @@ globalconfdir := @sysconfdir@
 
 lib_LTLIBRARIES = libsword.la
 
-libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(SWREGEX) $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
+libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(SWREGEX) $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/genbook.cpp $(modulesdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
 libsword_la_LIBADD = 
 libsword_la_LDFLAGS = -version-info 1
 
@@ -153,6 +155,10 @@ filtersdir = $(top_srcdir)/src/modules/filters
 @ICU_TRUE@SWICUSRC = $(filtersdir)/utf8transliterator.cpp $(filtersdir)/utf8nfc.cpp $(filtersdir)/utf8nfkd.cpp $(filtersdir)/utf8arshaping.cpp $(filtersdir)/utf8bidireorder.cpp
 @ICU_FALSE@SWICUSRC = 
 
+genbookdir = $(top_srcdir)/src/modules/genbook
+
+rawgenbookdir = $(top_srcdir)/src/modules/genbook/rawgenbook
+
 textsdir = $(top_srcdir)/src/modules/texts
 
 rawtextdir = $(top_srcdir)/src/modules/texts/rawtext
@@ -183,7 +189,7 @@ bindingsdir = $(top_srcdir)/bindings
 
 swincludedir = $(top_srcdir)/include
 
-pkginclude_HEADERS = $(swincludedir)/Greek2Greek.h $(swincludedir)/GreekChars.h $(swincludedir)/canon.h $(swincludedir)/cipherfil.h $(swincludedir)/defs.h $(swincludedir)/echomod.h $(swincludedir)/encfiltmgr.h $(swincludedir)/entriesblk.h $(swincludedir)/femain.h $(swincludedir)/filemgr.h $(swincludedir)/gbffootnotes.h $(swincludedir)/gbfheadings.h $(swincludedir)/gbfhtml.h $(swincludedir)/gbfhtmlhref.h $(swincludedir)/gbfmorph.h $(swincludedir)/gbfplain.h $(swincludedir)/gbfrtf.h $(swincludedir)/gbfstrongs.h $(swincludedir)/gbfthml.h $(swincludedir)/hebrewmcim.h $(swincludedir)/hrefcom.h $(swincludedir)/latin1utf16.h $(swincludedir)/latin1utf8.h $(swincludedir)/listkey.h $(swincludedir)/localemgr.h $(swincludedir)/lzsscomprs.h $(swincludedir)/markupfiltmgr.h $(swincludedir)/nullim.h $(swincludedir)/plainfootnotes.h $(swincludedir)/plainhtml.h $(swincludedir)/rawcom.h $(swincludedir)/rawfiles.h $(swincludedir)/rawgbf.h $(swincludedir)/rawld.h $(swincludedir)/rawld4.h $(swincludedir)/rawstr.h $(swincludedir)/rawstr4.h $(swincludedir)/rawtext.h $(swincludedir)/rawverse.h $(swincludedir)/regex.h $(swincludedir)/roman.h $(swincludedir)/rtfhtml.h $(swincludedir)/rwphtml.h $(swincludedir)/rwprtf.h $(swincludedir)/sapphire.h $(swincludedir)/scsuutf8.h $(swincludedir)/strkey.h $(swincludedir)/swbasicfilter.h $(swincludedir)/swbyteswap.h $(swincludedir)/swcipher.h $(swincludedir)/swcom.h $(swincludedir)/swcomprs.h $(swincludedir)/swconfig.h $(swincludedir)/swdisp.h $(swincludedir)/swdisprtf.h $(swincludedir)/swdisprtfchap.h $(swincludedir)/swfilter.h $(swincludedir)/swfiltermgr.h $(swincludedir)/swinputmeth.h $(swincludedir)/swkey.h $(swincludedir)/swld.h $(swincludedir)/swlocale.h $(swincludedir)/swlog.h $(swincludedir)/swmacs.h $(swincludedir)/swmgr.h $(swincludedir)/swmodule.h $(swincludedir)/swobject.h $(swincludedir)/swtext.h $(swincludedir)/swunicod.h $(swincludedir)/swwinlog.h $(swincludedir)/sysdata.h $(swincludedir)/tbdisp.h $(swincludedir)/thmlfootnotes.h $(swincludedir)/thmlgbf.h $(swincludedir)/thmlheadings.h $(swincludedir)/thmlhtml.h $(swincludedir)/thmlhtmlhref.h $(swincludedir)/thmllemma.h $(swincludedir)/thmlmorph.h $(swincludedir)/thmlolb.h $(swincludedir)/thmlplain.h $(swincludedir)/thmlrtf.h $(swincludedir)/thmlscripref.h $(swincludedir)/thmlstrongs.h $(swincludedir)/unicodertf.h $(swincludedir)/unixstr.h $(swincludedir)/untgz.h $(swincludedir)/utf16utf8.h $(swincludedir)/utf8arshaping.h $(swincludedir)/utf8bidireorder.h $(swincludedir)/utf8cantillation.h $(swincludedir)/utf8greekaccents.h $(swincludedir)/utf8hebrewpoints.h $(swincludedir)/utf8html.h $(swincludedir)/utf8latin1.h $(swincludedir)/utf8nfc.h $(swincludedir)/utf8nfkd.h $(swincludedir)/utf8transliterator.h $(swincludedir)/utf8utf16.h $(swincludedir)/utilconf.h $(swincludedir)/utilfuns.h $(swincludedir)/utilstr.h $(swincludedir)/versekey.h $(swincludedir)/zcom.h $(swincludedir)/zconf.h $(swincludedir)/zipcomprs.h $(swincludedir)/zld.h $(swincludedir)/zlib.h $(swincludedir)/ztext.h $(swincludedir)/zverse.h
+pkginclude_HEADERS = $(swincludedir)/Greek2Greek.h $(swincludedir)/GreekChars.h $(swincludedir)/canon.h $(swincludedir)/cipherfil.h $(swincludedir)/defs.h $(swincludedir)/echomod.h $(swincludedir)/encfiltmgr.h $(swincludedir)/entriesblk.h $(swincludedir)/femain.h $(swincludedir)/filemgr.h $(swincludedir)/gbffootnotes.h $(swincludedir)/gbfheadings.h $(swincludedir)/gbfhtml.h $(swincludedir)/gbfhtmlhref.h $(swincludedir)/gbfmorph.h $(swincludedir)/gbfplain.h $(swincludedir)/gbfrtf.h $(swincludedir)/gbfstrongs.h $(swincludedir)/gbfthml.h $(swincludedir)/hebrewmcim.h $(swincludedir)/hrefcom.h $(swincludedir)/latin1utf16.h $(swincludedir)/latin1utf8.h $(swincludedir)/listkey.h $(swincludedir)/localemgr.h $(swincludedir)/lzsscomprs.h $(swincludedir)/markupfiltmgr.h $(swincludedir)/nullim.h $(swincludedir)/plainfootnotes.h $(swincludedir)/plainhtml.h $(swincludedir)/rawcom.h $(swincludedir)/rawfiles.h $(swincludedir)/rawgbf.h $(swincludedir)/rawld.h $(swincludedir)/rawld4.h $(swincludedir)/rawstr.h $(swincludedir)/rawstr4.h $(swincludedir)/rawtext.h $(swincludedir)/rawverse.h $(swincludedir)/regex.h $(swincludedir)/roman.h $(swincludedir)/rtfhtml.h $(swincludedir)/rwphtml.h $(swincludedir)/rwprtf.h $(swincludedir)/sapphire.h $(swincludedir)/scsuutf8.h $(swincludedir)/strkey.h $(swincludedir)/swbasicfilter.h $(swincludedir)/swbyteswap.h $(swincludedir)/swcipher.h $(swincludedir)/swcom.h $(swincludedir)/swcomprs.h $(swincludedir)/swconfig.h $(swincludedir)/swdisp.h $(swincludedir)/swdisprtf.h $(swincludedir)/swdisprtfchap.h $(swincludedir)/swfilter.h $(swincludedir)/swfiltermgr.h $(swincludedir)/swinputmeth.h $(swincludedir)/swkey.h $(swincludedir)/swld.h $(swincludedir)/swlocale.h $(swincludedir)/swlog.h $(swincludedir)/swmacs.h $(swincludedir)/swmgr.h $(swincludedir)/swmodule.h $(swincludedir)/swobject.h $(swincludedir)/swtext.h $(swincludedir)/swunicod.h $(swincludedir)/swwinlog.h $(swincludedir)/sysdata.h $(swincludedir)/tbdisp.h $(swincludedir)/thmlfootnotes.h $(swincludedir)/thmlgbf.h $(swincludedir)/thmlheadings.h $(swincludedir)/thmlhtml.h $(swincludedir)/thmlhtmlhref.h $(swincludedir)/thmllemma.h $(swincludedir)/thmlmorph.h $(swincludedir)/thmlolb.h $(swincludedir)/thmlplain.h $(swincludedir)/thmlrtf.h $(swincludedir)/thmlscripref.h $(swincludedir)/thmlstrongs.h $(swincludedir)/thmlvariants.h $(swincludedir)/treekey.h $(swincludedir)/treekeyidx.h $(swincludedir)/unicodertf.h $(swincludedir)/unixstr.h $(swincludedir)/untgz.h $(swincludedir)/utf16utf8.h $(swincludedir)/utf8arshaping.h $(swincludedir)/utf8bidireorder.h $(swincludedir)/utf8cantillation.h $(swincludedir)/utf8greekaccents.h $(swincludedir)/utf8hebrewpoints.h $(swincludedir)/utf8html.h $(swincludedir)/utf8latin1.h $(swincludedir)/utf8nfc.h $(swincludedir)/utf8nfkd.h $(swincludedir)/utf8transliterator.h $(swincludedir)/utf8utf16.h $(swincludedir)/utilconf.h $(swincludedir)/utilfuns.h $(swincludedir)/utilstr.h $(swincludedir)/versekey.h $(swincludedir)/zcom.h $(swincludedir)/zconf.h $(swincludedir)/zipcomprs.h $(swincludedir)/zld.h $(swincludedir)/zlib.h $(swincludedir)/ztext.h $(swincludedir)/zverse.h
 subdir = lib
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -193,7 +199,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	listkey.lo versekey.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	strkey.lo treekey.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	roman.lo swconfig.lo \
@@ -221,17 +228,18 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlfootnotes.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlvariants.lo gbfthml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlgbf.lo thmlrtf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	thmlplain.lo unicodertf.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	latin1utf8.lo latin1utf16.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8utf16.lo utf16utf8.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	scsuutf8.lo utf8html.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8latin1.lo thmlolb.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8cantillation.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	genbook.lo rawgenbook.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	swtext.lo rawtext.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	ztext.lo rawgbf.lo swcom.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	rawcom.lo rawfiles.lo \
@@ -240,11 +248,13 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_TRUE@	flatapi.lo
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	listkey.lo versekey.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	roman.lo swconfig.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swmgr.lo swfiltermgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	strkey.lo treekey.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	treekeyidx.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	Greek2Greek.lo utilstr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	unixstr.lo swunicod.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swversion.lo roman.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swconfig.lo swmgr.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swfiltermgr.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	encfiltmgr.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	markupfiltmgr.lo filemgr.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swlocale.lo localemgr.lo \
@@ -268,7 +278,8 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlfootnotes.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlheadings.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlmorph.lo thmllemma.lo \
-@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlscripref.lo gbfthml.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlscripref.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlvariants.lo gbfthml.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlgbf.lo thmlrtf.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlhtml.lo thmlhtmlhref.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	thmlplain.lo unicodertf.lo \
@@ -280,6 +291,7 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8cantillation.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	genbook.lo rawgenbook.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	swtext.lo rawtext.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	ztext.lo rawgbf.lo swcom.lo \
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	rawcom.lo rawfiles.lo \
@@ -288,7 +300,8 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_FALSE@@ZLIB_FALSE@	flatapi.lo
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	listkey.lo versekey.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	strkey.lo treekey.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	regex.lo roman.lo swconfig.lo \
@@ -315,25 +328,27 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlfootnotes.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlvariants.lo gbfthml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlgbf.lo thmlrtf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	thmlplain.lo unicodertf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	latin1utf8.lo latin1utf16.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8utf16.lo utf16utf8.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	scsuutf8.lo utf8html.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8latin1.lo thmlolb.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8cantillation.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8greekaccents.lo swtext.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawtext.lo ztext.lo rawgbf.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swcom.lo rawcom.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	genbook.lo rawgenbook.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	swtext.lo rawtext.lo ztext.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawgbf.lo swcom.lo rawcom.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawfiles.lo zcom.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_TRUE@	rawld4.lo zld.lo flatapi.lo
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	listkey.lo versekey.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	strkey.lo treekey.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	regex.lo roman.lo \
@@ -360,17 +375,18 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlfootnotes.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	gbfthml.lo thmlgbf.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
-@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlvariants.lo gbfthml.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlgbf.lo thmlrtf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	thmlplain.lo unicodertf.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	latin1utf8.lo latin1utf16.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8utf16.lo utf16utf8.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	scsuutf8.lo utf8html.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8latin1.lo thmlolb.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8cantillation.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	genbook.lo rawgenbook.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	swtext.lo rawtext.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	ztext.lo rawgbf.lo swcom.lo \
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	rawcom.lo rawfiles.lo \
@@ -379,7 +395,8 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@MINGW_TRUE@@ZLIB_FALSE@	flatapi.lo
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	listkey.lo versekey.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	strkey.lo treekey.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	roman.lo swconfig.lo swmgr.lo \
@@ -405,29 +422,31 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlfootnotes.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlvariants.lo gbfthml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlgbf.lo thmlrtf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	thmlplain.lo unicodertf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	latin1utf8.lo latin1utf16.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8utf16.lo utf16utf8.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	scsuutf8.lo utf8html.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8latin1.lo thmlolb.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8transliterator.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8nfc.lo utf8nfkd.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8arshaping.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8bidireorder.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8cantillation.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8greekaccents.lo swtext.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawtext.lo ztext.lo rawgbf.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swcom.lo rawcom.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	utf8greekaccents.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	genbook.lo rawgenbook.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	swtext.lo rawtext.lo ztext.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawgbf.lo swcom.lo rawcom.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawfiles.lo zcom.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_TRUE@	rawld4.lo zld.lo flatapi.lo
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	listkey.lo versekey.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	strkey.lo treekey.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	roman.lo swconfig.lo \
@@ -454,14 +473,14 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlfootnotes.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	gbfthml.lo thmlgbf.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
-@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlvariants.lo gbfthml.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlgbf.lo thmlrtf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	thmlplain.lo unicodertf.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	latin1utf8.lo latin1utf16.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8utf16.lo utf16utf8.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	scsuutf8.lo utf8html.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8latin1.lo thmlolb.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8transliterator.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8nfc.lo utf8nfkd.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8arshaping.lo \
@@ -469,6 +488,7 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8cantillation.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	genbook.lo rawgenbook.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	swtext.lo rawtext.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	ztext.lo rawgbf.lo swcom.lo \
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	rawcom.lo rawfiles.lo \
@@ -477,7 +497,8 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_FALSE@@ZLIB_FALSE@	flatapi.lo
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	listkey.lo versekey.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	strkey.lo treekey.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utilstr.lo unixstr.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swunicod.lo swversion.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	regex.lo roman.lo swconfig.lo \
@@ -503,21 +524,22 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlfootnotes.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlheadings.lo thmlmorph.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmllemma.lo thmlscripref.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	gbfthml.lo thmlgbf.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlrtf.lo thmlhtml.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	unicodertf.lo latin1utf8.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	latin1utf16.lo utf8utf16.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf16utf8.lo scsuutf8.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8html.lo utf8latin1.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlvariants.lo gbfthml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlgbf.lo thmlrtf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	thmlplain.lo unicodertf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	latin1utf8.lo latin1utf16.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8utf16.lo utf16utf8.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	scsuutf8.lo utf8html.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8latin1.lo thmlolb.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8transliterator.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8nfc.lo utf8nfkd.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8arshaping.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8bidireorder.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8cantillation.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8hebrewpoints.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8greekaccents.lo swtext.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	utf8greekaccents.lo genbook.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rawgenbook.lo swtext.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	rawtext.lo ztext.lo rawgbf.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	swcom.lo rawcom.lo rawfiles.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	zcom.lo hrefcom.lo swld.lo \
@@ -525,7 +547,8 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_TRUE@	flatapi.lo
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	listkey.lo versekey.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	strkey.lo Greek2Greek.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	strkey.lo treekey.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	treekeyidx.lo Greek2Greek.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utilstr.lo unixstr.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swunicod.lo swversion.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	regex.lo roman.lo swconfig.lo \
@@ -551,23 +574,24 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlfootnotes.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlheadings.lo thmlmorph.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmllemma.lo thmlscripref.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	gbfthml.lo thmlgbf.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlrtf.lo thmlhtml.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlhtmlhref.lo thmlplain.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	unicodertf.lo latin1utf8.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	latin1utf16.lo utf8utf16.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf16utf8.lo scsuutf8.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8html.lo utf8latin1.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlolb.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlvariants.lo gbfthml.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlgbf.lo thmlrtf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlhtml.lo thmlhtmlhref.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	thmlplain.lo unicodertf.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	latin1utf8.lo latin1utf16.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8utf16.lo utf16utf8.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	scsuutf8.lo utf8html.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8latin1.lo thmlolb.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8transliterator.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8nfc.lo utf8nfkd.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8arshaping.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8bidireorder.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8cantillation.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8hebrewpoints.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8greekaccents.lo swtext.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawtext.lo ztext.lo rawgbf.lo \
-@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swcom.lo rawcom.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	utf8greekaccents.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	genbook.lo rawgenbook.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	swtext.lo rawtext.lo ztext.lo \
+@ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawgbf.lo swcom.lo rawcom.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawfiles.lo zcom.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	hrefcom.lo swld.lo rawld.lo \
 @ICU_TRUE@@MINGW_TRUE@@ZLIB_FALSE@	rawld4.lo zld.lo flatapi.lo
@@ -585,35 +609,38 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@	$(DEPDIR)/gbfhtmlhref.Plo $(DEPDIR)/gbfmorph.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/gbfplain.Plo $(DEPDIR)/gbfrtf.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/gbfstrongs.Plo $(DEPDIR)/gbfthml.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/hrefcom.Plo $(DEPDIR)/latin1utf16.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/latin1utf8.Plo $(DEPDIR)/listkey.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/localemgr.Plo $(DEPDIR)/lzsscomprs.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/genbook.Plo $(DEPDIR)/hrefcom.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/latin1utf16.Plo $(DEPDIR)/latin1utf8.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/listkey.Plo $(DEPDIR)/localemgr.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/lzsscomprs.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/markupfiltmgr.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/plainfootnotes.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/plainhtml.Plo $(DEPDIR)/rawcom.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/rawfiles.Plo $(DEPDIR)/rawgbf.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/rawld.Plo $(DEPDIR)/rawld4.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/rawstr.Plo $(DEPDIR)/rawstr4.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/rawtext.Plo $(DEPDIR)/rawverse.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/regex.Plo $(DEPDIR)/roman.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/rtfhtml.Plo $(DEPDIR)/rwphtml.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/rwprtf.Plo $(DEPDIR)/sapphire.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/scsuutf8.Plo $(DEPDIR)/strkey.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swbasicfilter.Plo $(DEPDIR)/swcipher.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swcom.Plo $(DEPDIR)/swcomprs.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swconfig.Plo $(DEPDIR)/swdisp.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swfiltermgr.Plo $(DEPDIR)/swkey.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swld.Plo $(DEPDIR)/swlocale.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swlog.Plo $(DEPDIR)/swmgr.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swmodule.Plo $(DEPDIR)/swtext.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/swunicod.Plo $(DEPDIR)/swversion.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlfootnotes.Plo $(DEPDIR)/thmlgbf.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlheadings.Plo $(DEPDIR)/thmlhtml.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlhtmlhref.Plo $(DEPDIR)/thmllemma.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlmorph.Plo $(DEPDIR)/thmlolb.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlplain.Plo $(DEPDIR)/thmlrtf.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlscripref.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/thmlstrongs.Plo $(DEPDIR)/unicodertf.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rawgenbook.Plo $(DEPDIR)/rawld.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rawld4.Plo $(DEPDIR)/rawstr.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rawstr4.Plo $(DEPDIR)/rawtext.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rawverse.Plo $(DEPDIR)/regex.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/roman.Plo $(DEPDIR)/rtfhtml.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/rwphtml.Plo $(DEPDIR)/rwprtf.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/sapphire.Plo $(DEPDIR)/scsuutf8.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/strkey.Plo $(DEPDIR)/swbasicfilter.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swcipher.Plo $(DEPDIR)/swcom.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swcomprs.Plo $(DEPDIR)/swconfig.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swdisp.Plo $(DEPDIR)/swfiltermgr.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swkey.Plo $(DEPDIR)/swld.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swlocale.Plo $(DEPDIR)/swlog.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swmgr.Plo $(DEPDIR)/swmodule.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swtext.Plo $(DEPDIR)/swunicod.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/swversion.Plo $(DEPDIR)/thmlfootnotes.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlgbf.Plo $(DEPDIR)/thmlheadings.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlhtml.Plo $(DEPDIR)/thmlhtmlhref.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmllemma.Plo $(DEPDIR)/thmlmorph.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlolb.Plo $(DEPDIR)/thmlplain.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlrtf.Plo $(DEPDIR)/thmlscripref.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlstrongs.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/thmlvariants.Plo $(DEPDIR)/treekey.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/treekeyidx.Plo $(DEPDIR)/unicodertf.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/unixstr.Plo $(DEPDIR)/utf16utf8.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/utf8arshaping.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/utf8bidireorder.Plo \
@@ -664,7 +691,7 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/genbook/Makefile.am $(srcdir)/../src/modules/genbook/rawgenbook/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -694,6 +721,8 @@ swkey.lo: $(keysdir)/swkey.cpp
 listkey.lo: $(keysdir)/listkey.cpp
 versekey.lo: $(keysdir)/versekey.cpp
 strkey.lo: $(keysdir)/strkey.cpp
+treekey.lo: $(keysdir)/treekey.cpp
+treekeyidx.lo: $(keysdir)/treekeyidx.cpp
 Greek2Greek.lo: $(utilfunsdir)/Greek2Greek.cpp
 utilstr.lo: $(utilfunsdir)/utilstr.cpp
 unixstr.lo: $(utilfunsdir)/unixstr.cpp
@@ -743,6 +772,7 @@ thmlheadings.lo: $(filtersdir)/thmlheadings.cpp
 thmlmorph.lo: $(filtersdir)/thmlmorph.cpp
 thmllemma.lo: $(filtersdir)/thmllemma.cpp
 thmlscripref.lo: $(filtersdir)/thmlscripref.cpp
+thmlvariants.lo: $(filtersdir)/thmlvariants.cpp
 gbfthml.lo: $(filtersdir)/gbfthml.cpp
 thmlgbf.lo: $(filtersdir)/thmlgbf.cpp
 thmlrtf.lo: $(filtersdir)/thmlrtf.cpp
@@ -761,6 +791,8 @@ thmlolb.lo: $(filtersdir)/thmlolb.cpp
 utf8cantillation.lo: $(filtersdir)/utf8cantillation.cpp
 utf8hebrewpoints.lo: $(filtersdir)/utf8hebrewpoints.cpp
 utf8greekaccents.lo: $(filtersdir)/utf8greekaccents.cpp
+genbook.lo: $(genbookdir)/genbook.cpp
+rawgenbook.lo: $(modulesdir)/rawgenbook.cpp
 swtext.lo: $(textsdir)/swtext.cpp
 rawtext.lo: $(rawtextdir)/rawtext.cpp
 ztext.lo: $(ztextdir)/ztext.cpp
@@ -805,6 +837,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gbfrtf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gbfstrongs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gbfthml.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/genbook.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/hrefcom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/latin1utf16.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/latin1utf8.Plo@am__quote@
@@ -817,6 +850,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawcom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawfiles.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawgbf.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawgenbook.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawld.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawld4.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/rawstr.Plo@am__quote@
@@ -859,6 +893,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/thmlrtf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/thmlscripref.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/thmlstrongs.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/thmlvariants.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/treekey.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/treekeyidx.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/unicodertf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/unixstr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/utf16utf8.Plo@am__quote@
@@ -1029,6 +1066,42 @@ strkey.lo: $(keysdir)/strkey.cpp
 @AMDEP_TRUE@	depfile='$(DEPDIR)/strkey.Plo' tmpdepfile='$(DEPDIR)/strkey.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o strkey.lo `test -f $(keysdir)/strkey.cpp || echo '$(srcdir)/'`$(keysdir)/strkey.cpp
+
+treekey.o: $(keysdir)/treekey.cpp
+@AMDEP_TRUE@	source='$(keysdir)/treekey.cpp' object='treekey.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/treekey.Po' tmpdepfile='$(DEPDIR)/treekey.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o treekey.o `test -f $(keysdir)/treekey.cpp || echo '$(srcdir)/'`$(keysdir)/treekey.cpp
+
+treekey.obj: $(keysdir)/treekey.cpp
+@AMDEP_TRUE@	source='$(keysdir)/treekey.cpp' object='treekey.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/treekey.Po' tmpdepfile='$(DEPDIR)/treekey.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o treekey.obj `cygpath -w $(keysdir)/treekey.cpp`
+
+treekey.lo: $(keysdir)/treekey.cpp
+@AMDEP_TRUE@	source='$(keysdir)/treekey.cpp' object='treekey.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/treekey.Plo' tmpdepfile='$(DEPDIR)/treekey.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o treekey.lo `test -f $(keysdir)/treekey.cpp || echo '$(srcdir)/'`$(keysdir)/treekey.cpp
+
+treekeyidx.o: $(keysdir)/treekeyidx.cpp
+@AMDEP_TRUE@	source='$(keysdir)/treekeyidx.cpp' object='treekeyidx.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/treekeyidx.Po' tmpdepfile='$(DEPDIR)/treekeyidx.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o treekeyidx.o `test -f $(keysdir)/treekeyidx.cpp || echo '$(srcdir)/'`$(keysdir)/treekeyidx.cpp
+
+treekeyidx.obj: $(keysdir)/treekeyidx.cpp
+@AMDEP_TRUE@	source='$(keysdir)/treekeyidx.cpp' object='treekeyidx.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/treekeyidx.Po' tmpdepfile='$(DEPDIR)/treekeyidx.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o treekeyidx.obj `cygpath -w $(keysdir)/treekeyidx.cpp`
+
+treekeyidx.lo: $(keysdir)/treekeyidx.cpp
+@AMDEP_TRUE@	source='$(keysdir)/treekeyidx.cpp' object='treekeyidx.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/treekeyidx.Plo' tmpdepfile='$(DEPDIR)/treekeyidx.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o treekeyidx.lo `test -f $(keysdir)/treekeyidx.cpp || echo '$(srcdir)/'`$(keysdir)/treekeyidx.cpp
 
 Greek2Greek.o: $(utilfunsdir)/Greek2Greek.cpp
 @AMDEP_TRUE@	source='$(utilfunsdir)/Greek2Greek.cpp' object='Greek2Greek.o' libtool=no @AMDEPBACKSLASH@
@@ -1894,6 +1967,24 @@ thmlscripref.lo: $(filtersdir)/thmlscripref.cpp
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o thmlscripref.lo `test -f $(filtersdir)/thmlscripref.cpp || echo '$(srcdir)/'`$(filtersdir)/thmlscripref.cpp
 
+thmlvariants.o: $(filtersdir)/thmlvariants.cpp
+@AMDEP_TRUE@	source='$(filtersdir)/thmlvariants.cpp' object='thmlvariants.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/thmlvariants.Po' tmpdepfile='$(DEPDIR)/thmlvariants.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o thmlvariants.o `test -f $(filtersdir)/thmlvariants.cpp || echo '$(srcdir)/'`$(filtersdir)/thmlvariants.cpp
+
+thmlvariants.obj: $(filtersdir)/thmlvariants.cpp
+@AMDEP_TRUE@	source='$(filtersdir)/thmlvariants.cpp' object='thmlvariants.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/thmlvariants.Po' tmpdepfile='$(DEPDIR)/thmlvariants.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o thmlvariants.obj `cygpath -w $(filtersdir)/thmlvariants.cpp`
+
+thmlvariants.lo: $(filtersdir)/thmlvariants.cpp
+@AMDEP_TRUE@	source='$(filtersdir)/thmlvariants.cpp' object='thmlvariants.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/thmlvariants.Plo' tmpdepfile='$(DEPDIR)/thmlvariants.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o thmlvariants.lo `test -f $(filtersdir)/thmlvariants.cpp || echo '$(srcdir)/'`$(filtersdir)/thmlvariants.cpp
+
 gbfthml.o: $(filtersdir)/gbfthml.cpp
 @AMDEP_TRUE@	source='$(filtersdir)/gbfthml.cpp' object='gbfthml.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@	depfile='$(DEPDIR)/gbfthml.Po' tmpdepfile='$(DEPDIR)/gbfthml.TPo' @AMDEPBACKSLASH@
@@ -2217,6 +2308,42 @@ utf8greekaccents.lo: $(filtersdir)/utf8greekaccents.cpp
 @AMDEP_TRUE@	depfile='$(DEPDIR)/utf8greekaccents.Plo' tmpdepfile='$(DEPDIR)/utf8greekaccents.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o utf8greekaccents.lo `test -f $(filtersdir)/utf8greekaccents.cpp || echo '$(srcdir)/'`$(filtersdir)/utf8greekaccents.cpp
+
+genbook.o: $(genbookdir)/genbook.cpp
+@AMDEP_TRUE@	source='$(genbookdir)/genbook.cpp' object='genbook.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/genbook.Po' tmpdepfile='$(DEPDIR)/genbook.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o genbook.o `test -f $(genbookdir)/genbook.cpp || echo '$(srcdir)/'`$(genbookdir)/genbook.cpp
+
+genbook.obj: $(genbookdir)/genbook.cpp
+@AMDEP_TRUE@	source='$(genbookdir)/genbook.cpp' object='genbook.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/genbook.Po' tmpdepfile='$(DEPDIR)/genbook.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o genbook.obj `cygpath -w $(genbookdir)/genbook.cpp`
+
+genbook.lo: $(genbookdir)/genbook.cpp
+@AMDEP_TRUE@	source='$(genbookdir)/genbook.cpp' object='genbook.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/genbook.Plo' tmpdepfile='$(DEPDIR)/genbook.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o genbook.lo `test -f $(genbookdir)/genbook.cpp || echo '$(srcdir)/'`$(genbookdir)/genbook.cpp
+
+rawgenbook.o: $(modulesdir)/rawgenbook.cpp
+@AMDEP_TRUE@	source='$(modulesdir)/rawgenbook.cpp' object='rawgenbook.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/rawgenbook.Po' tmpdepfile='$(DEPDIR)/rawgenbook.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rawgenbook.o `test -f $(modulesdir)/rawgenbook.cpp || echo '$(srcdir)/'`$(modulesdir)/rawgenbook.cpp
+
+rawgenbook.obj: $(modulesdir)/rawgenbook.cpp
+@AMDEP_TRUE@	source='$(modulesdir)/rawgenbook.cpp' object='rawgenbook.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/rawgenbook.Po' tmpdepfile='$(DEPDIR)/rawgenbook.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rawgenbook.obj `cygpath -w $(modulesdir)/rawgenbook.cpp`
+
+rawgenbook.lo: $(modulesdir)/rawgenbook.cpp
+@AMDEP_TRUE@	source='$(modulesdir)/rawgenbook.cpp' object='rawgenbook.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/rawgenbook.Plo' tmpdepfile='$(DEPDIR)/rawgenbook.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rawgenbook.lo `test -f $(modulesdir)/rawgenbook.cpp || echo '$(srcdir)/'`$(modulesdir)/rawgenbook.cpp
 
 swtext.o: $(textsdir)/swtext.cpp
 @AMDEP_TRUE@	source='$(textsdir)/swtext.cpp' object='swtext.o' libtool=no @AMDEPBACKSLASH@

@@ -114,6 +114,9 @@ legalexport := no
 @MINGW_TRUE@need_local_regex := yes
 @MINGW_FALSE@need_local_regex := no
 
+# shared library - set to yes if you would like to build
+#buildshare := @enable_shared@
+
 # VCL library- set to yes if you would like to build
 buildvcl := @enable_vcl@
 
