@@ -951,6 +951,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 		if (content && *content) {
 
+			// get "key" field
+			SWBuf keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
+			
 			// build "strong" field
 			SWBuf strong;
 		
@@ -976,7 +979,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 			// add our entry to the clucene index		
 			Document *doc = new Document();
-			doc->add( Field::UnIndexed(_T("key"), getKeyText() ) );
+			doc->add( Field::UnIndexed(_T("key"), keyText ) );
 			doc->add( Field::UnStored(_T("content"), content) );
 			if (strong.length() > 0)
 				doc->add( Field::UnStored(_T("strong"), strong) );

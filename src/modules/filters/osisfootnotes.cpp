@@ -24,7 +24,6 @@ const char oTip[] = "Toggles Footnotes On and Off if they exist";
 const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
-VerseKey parser;
 
 OSISFootnotes::OSISFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");
@@ -44,8 +43,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
-// 	VerseKey parser = key->getText();
-	parser = key->getText();
+	VerseKey parser(key->getText());
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();

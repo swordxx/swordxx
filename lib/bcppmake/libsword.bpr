@@ -118,7 +118,7 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
     <INCLUDEPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include"/>
@@ -144,9 +144,9 @@
       -I..\..\..\biblecs\apps\InstallMgr\curl\include -src_suffix cpp -D_ICU_ 
       -D_ICUSWORD_ -DUSBINARY -DU_HAVE_PLACEMENT_NEW=0 -DUSELUCENE 
       -DLUCENE_DISABLE_MULTITHREADING -D_WIN32 -DHAVE_DIRENT -boa"/>
-    <CFLAG1 value="-O2 -Vx -X- -a8 -b- -k- -vi -c -tW -tWM"/>
-    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
-    <AFLAGS value="/mx /w2 /zn"/>
+    <CFLAG1 value="-vGc -vGt -vGd -Od -Vx -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zi"/>
     <LFLAGS value="/P512"/>
   </OPTIONS>
   <LINKER>
@@ -218,8 +218,8 @@ Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
 Count=15
-Item0=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT
-Item1=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG
+Item0=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG
+Item1=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT
 Item2=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT
 Item3=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE
 Item4=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG
@@ -261,12 +261,7 @@ RemoteDebug=0
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
-LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
+LinkCGLIB=1
 
 [Language]
 ActiveLang=

@@ -170,10 +170,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "{\\par ";
+				buf += "{\\par}";
 			}
 			else if (tag.isEndTag()) {	// end tag
-				buf += "\\par}";
+				buf += "{\\par}";
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
@@ -197,10 +197,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		// <l> poetry
 		else if (!strcmp(tag.getName(), "l")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{";
+				buf += "";
 			}
 			else if (tag.isEndTag()) {
-				buf += "\\par}";
+				buf += "{\\par}";
 			}
 			else if (tag.getAttribute("sID")) {	// empty line marker
 				buf += "{\\par}";
