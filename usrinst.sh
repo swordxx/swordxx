@@ -1,7 +1,8 @@
 #!/bin/sh
 
 CPPFLAGS=-DUSBINARY ./configure --prefix=/usr \
-	--disable-shared --enable-debug --without-conf --sysconfdir=/etc --with-vcl \
+	--disable-shared --disable-debug --without-conf --sysconfdir=/etc
+--with-vcl \
 	$*
 
 echo ""
