@@ -5,33 +5,8 @@
 
 #include <stdio.h>
 
-#include <rawtext.h>
-#include <swmgr.h>
-#include <gbfthml.h>
-#include <thmlgbf.h>
-#include <thmlplain.h>
-#include <thmlhtml.h>
-#include <thmlrtf.h>
-#include <thmlolb.h>
-#include <unicodertf.h>
-#include <latin1utf8.h>
+#include <swmarkupmgr.h>
 #include <localemgr.h>
-#include <utf8cantillation.h>
-#include <utf8hebrewpoints.h>
-#include <utf8greekaccents.h>
-
-#ifdef ICU
-#include <utf8transliterator.h>
-#endif
-
-#define FMT_PLAIN 0
-#define FMT_THML 1
-#define FMT_GBF 2
-#define FMT_RTF 3
-#define FMT_HTML 4
-#define FMT_OLB 5
-#define FMT_ASIF 6
-#define FMT_OSIS 7
 
 #define QT_BIBLE 1
 #define QT_COMM 2
@@ -49,6 +24,8 @@
 #define OP_HEBREWPOINTS 32
 #define OP_GREEKACCENTS 64
 #define OP_TRANSLITERATOR 128
+#define OP_LEMMAS 256
+#define OP_SCRIPREFS 512
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0
@@ -56,5 +33,12 @@
 #define ST_MULTIWORD 3 // -2
 
 int hasalpha (char * string);
-void doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref, ostream* output, const char* script); 
+void doquery(unsigned long maxverses, unsigned char outputformat, unsigned char outputencoding, unsigned long optionfilters, unsigned char searchtype, const char *text, const char *locale, const char *ref, ostream* output, const char* script); 
+
+
+
+
+
+
+
 

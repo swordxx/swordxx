@@ -8,7 +8,7 @@
 #include <list>
 
 void systemquery(const char * key, ostream* output){
-	SWMgr manager;
+	SWMarkupMgr manager;
 	ModMap::iterator it;
 
 	SWModule *target;
@@ -71,22 +71,24 @@ void systemquery(const char * key, ostream* output){
 	}
 }
 
-void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilters = 0, char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0) { 
-	static SWMgr manager;
-	static ModMap::iterator it;
-	static ListKey listkey;
-	static SectionMap::iterator sit;
-	static ConfigEntMap::iterator eit;
-	static VerseKey vk;
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0) { 
+	static SWMarkupMgr manager;
+
+	ModMap::iterator it;
+	ListKey listkey;
+	SectionMap::iterator sit;
+	ConfigEntMap::iterator eit;
 	
 	SWModule * target;
-	SWFilter * filter = 0;
-	SWFilter * gbffilter = 0;
-	SWFilter * chfilter = 0;
 	char *font = 0;
 	char inputformat = 0;
 	string encoding;
 	char querytype = 0;	
+
+	if (locale) {
+		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(locale);
+	}
+	VerseKey vk;
 
 	//deal with queries to "system"
 	if (!stricmp(text, "system")) {
@@ -143,21 +145,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 	else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
 		querytype = QT_LD;
 
-	if (locale) {
-		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(locale);
-		vk.setLocale(locale);
-	}
-	
-	if (outputformat == FMT_PLAIN)
-		filter = new ThMLPlain();
-	else if (outputformat == FMT_HTML)
-		filter = new ThMLHTML();
-	else if (outputformat == FMT_GBF)
-		filter = new ThMLGBF();
-	else if (outputformat == FMT_RTF)
-		filter = new ThMLRTF();
-	else if (outputformat == FMT_OLB)
-		filter = new ThMLOLB();
+	manager.Markup(FMT_PLAIN);
 	
 	if (optionfilters & OP_FOOTNOTES)
 		manager.setGlobalOption("Footnotes","On");
@@ -187,9 +175,17 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		manager.setGlobalOption("Greek Accents","On");
 	else
 		manager.setGlobalOption("Greek Accents","Off");
+	if (optionfilters & OP_LEMMAS)
+		manager.setGlobalOption("Lemmas","On");
+	else
+		manager.setGlobalOption("Lemmas","Off");
+	if (optionfilters & OP_SCRIPREFS)
+		manager.setGlobalOption("Scripture Cross-References","On");
+	else
+		manager.setGlobalOption("Scripture Cross-References","Off");
 
 #ifdef ICU
-	if (optionfilters & OP_TRANSLITERATOR)
+	if (optionfilters & OP_TRANSLITERATOR && script)
 		manager.setGlobalOption("Transliteration", script);
 	else
 		manager.setGlobalOption("Transliteration", "Off");
@@ -240,19 +236,6 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		target->SetKey(ref);
 		
 		char * text = (char *) *target;
-		if (inputformat == FMT_GBF) {
-		        gbffilter = new GBFThML();
-		        target->AddRenderFilter(gbffilter);
-		}
-		if (filter) target->AddRenderFilter(filter);
-		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
-			chfilter = new UnicodeRTF();
-		        target->AddRenderFilter(chfilter);
-		}
-		else if ((outputformat == FMT_HTML || outputformat == FMT_THML) && strcmp(encoding.c_str(), "UTF-8")) {
-		        chfilter = new Latin1UTF8();
-			target->AddRenderFilter(chfilter);
-		}
 
 		if (outputformat == FMT_RTF) {
 			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
@@ -260,7 +243,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 				*output << font;
 			else
 				*output << "Times New Roman";
-			*output << ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
+			*output << ";}}";
 		}
 		else if (outputformat == FMT_HTML) {
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
@@ -268,7 +251,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 	
 		if (strlen(text)) {
 			*output << (char*)target->KeyText();
-			if (font && !filter) {
+			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
 				*output << ": <font face=\"";
 				*output << font;
 				*output << "\">";
@@ -280,7 +263,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 				*output << ": ";
 			}
 			*output << text;
-			if (font && !filter) {
+			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
 				*output << "</font>";
 			}
 			else if (outputformat == FMT_RTF) {
@@ -308,20 +291,6 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 			}
 		}
 		
-		if (inputformat == FMT_GBF) {
-			gbffilter = new GBFThML();
-			target->AddRenderFilter(gbffilter);
-		}
-		if (filter) target->AddRenderFilter(filter);
-		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
-				chfilter = new UnicodeRTF();
-		        target->AddRenderFilter(chfilter);
-		}
-		else if ((outputformat == FMT_HTML || outputformat == FMT_THML) && strcmp(encoding.c_str(), "UTF-8")) {
-				chfilter = new Latin1UTF8();
-				target->AddRenderFilter(chfilter);
-		}
-		
  		listkey = vk.ParseVerseList(ref, "Gen1:1", true);
 		int i;
 
@@ -344,7 +313,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 				vk = element->UpperBound();
 				while (maxverses && target->Key() <= vk) {
 					*output << (char*)target->KeyText();
-					if (font && !filter) {
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
 						*output << ": <font face=\"";
 						*output << font;
 						*output << "\">";
@@ -356,14 +325,14 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 						*output << ": ";
 					}
 					*output << (const char*)*target;
-					if (font && !filter) {
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
 						*output << "</font>";
 					}
 					else if (outputformat == FMT_RTF) {
 						*output << "}";
 					}
 
-					if (inputformat != FMT_THML && !filter)
+					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML))
 						*output << "<br />";
 					else if (outputformat == FMT_RTF)
 						*output << "\\par ";
@@ -381,7 +350,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 			else {
 				target->Key(*listkey.GetElement(i));
 				*output << (char*)target->KeyText();
-				if (font && !filter) {
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
 					*output << ": <font face=\"";
 					*output << font;
 					*output << "\">";
@@ -393,14 +362,14 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 					*output << ": ";
 				}
 				*output << (const char*)*target;
-				if (font && !filter) {
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML)) {
 					*output << "</font>";
 				}
 				else if (outputformat == FMT_RTF) {
 					*output << "}";
 				}
 					
-				if (inputformat != FMT_THML && !filter)
+				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML))
 					*output << "<br />";
 				else if (outputformat == FMT_RTF)
 					*output << "\\par ";
@@ -420,19 +389,6 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 			*output << "}";
 		}
 
-	}
-			
-	if (filter) {
-		target->RemoveRenderFilter(filter);
-		delete filter;
-	}
-	if (chfilter) {
-		target->RemoveRenderFilter(chfilter);
-		delete chfilter;
-	}
-	if (gbffilter) {
-		target->RemoveRenderFilter(gbffilter);
-		delete gbffilter;
 	}
 }
 
