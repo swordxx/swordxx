@@ -72,6 +72,7 @@ char UTF8UTF16::ProcessText(char *text, int maxlen, const SWKey *key)
       *to++ = (unsigned short)uchar;
     }
   }
+  *to = (unsigned short)0;
 
   return 0;
 }
