@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.14 2004/04/12 13:49:12 dglassey Exp $
+ * $Id: swlocale.h,v 1.15 2004/05/07 18:03:36 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,6 +35,7 @@
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+#define ENDOFABBREVS -2
 
 typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
 
@@ -55,7 +56,7 @@ class SWDLLEXPORT SWLocale {
 	struct sbook **books;
 	#ifdef SPLITLIB
 	struct sbook2 **books2;
-	char *BMAX2;
+	struct abbrev2 *bookAbbrevs2;
 	#endif
 
 public:
@@ -76,13 +77,10 @@ public:
 	virtual void augment(SWLocale &addFrom);
 	virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
 	virtual const struct abbrev *getBookAbbrevs();
-	#ifdef VK2
-	virtual void getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk);
-	#else
 	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
-	#endif
 	#ifdef SPLITLIB
-	virtual void getBooks2(char **iBMAX, struct sbook2 ***ibooks, VerseKey2 *vk);
+	virtual void getBooks2(struct sbook2 ***ibooks, VerseKey2 *vk);
+	virtual const struct abbrev2 *getBookAbbrevs2();
 	#endif
 };
 
