@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.13 2003/08/12 05:36:31 scribe Exp $
+* $Id: swbuf.cpp,v 1.14 2003/08/13 03:56:14 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -153,7 +153,9 @@ void SWBuf::appendFormatted(const char *format, ...) {
 
 	va_start(argptr, format);
 	int len = vsprintf(junkBuf, format, argptr)+1;
+	va_end(argptr);
 	assureMore(len);
+	va_start(argptr, format);
 	end += vsprintf(end, format, argptr);
 	va_end(argptr);
 }
