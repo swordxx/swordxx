@@ -15,7 +15,7 @@ void appendChTest() {
 	}
 	speed.resize(BASEI/100L);
 	cout << "\nappend ch test -------\n";
-	cout << speed << "\n";
+// 	cout << speed << "\n";
 }
 
 
@@ -31,7 +31,7 @@ void appendStringTest() {
 	cout << "\nappend string test -------\n";
 	speed = SWBuf(speed.c_str() + iterations);
 	speed.resize(BASEI/100L);
-	cout << speed << "\n";
+// 	cout << speed << "\n";
 }
 
 
@@ -45,7 +45,7 @@ void subscriptTest() {
 		}
 	}
 	cout << "\nsubscript access test -------\n";
-	cout << speed << "\n";
+// 	cout << speed << "\n";
 }
 
 void ctorAssignTest() {
@@ -59,7 +59,7 @@ void ctorAssignTest() {
 	cout << "\nconstructor and assign test -------\n";
 	SWBuf speedl;
 	speedl = speed;
-	cout << speedl << "\n";
+// 	cout << speedl << "\n";
 }
 
 void compareTest() {
@@ -93,7 +93,7 @@ void insertStringTest() {
 	
 	//speed = SWBuf(speed.c_str() + iterations);
 	//speed.resize(BASEI/100L);
-	cout << speed << "\n";
+// 	cout << speed << "\n";
 }
 
 int main(int argc, char **argv) {
@@ -123,6 +123,6 @@ int main(int argc, char **argv) {
 	appendStringTest();
 	subscriptTest();
 	ctorAssignTest();
-	compareTest();
+// 	compareTest();
 }
 
