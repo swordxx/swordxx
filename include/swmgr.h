@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.56 2004/01/21 06:14:40 scribe Exp $
+* $Id: swmgr.h,v 1.57 2004/04/07 12:33:53 dglassey Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -30,7 +30,7 @@
 * Use the class SWMgr to manage the modules.
 *
 * If you want to write your own frontend for Sword please have a look at the already existing ones.
-* Well knwon frontends are:\n
+* Well known frontends are:\n
 *	-BibleCS for Windows (the sourcecode is availble in the CVS of crosswire.org)\n
 *	-GnomeSword (http://gnomesword.sourceforge.net/)\n
 *	-BibleTime (http://www.bibletime.info/)\n
@@ -63,7 +63,7 @@ typedef std::list < SWBuf >StringList;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.56 2004/01/21 06:14:40 scribe Exp $
+* @version $Id: swmgr.h,v 1.57 2004/04/07 12:33:53 dglassey Exp $
 */
 class SWDLLEXPORT SWMgr {
 
