@@ -29,7 +29,7 @@
  *		idisp	- Display object to use for displaying
  */
 
-RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode, char dir) : RawStr4(ipath), SWLD(iname, idesc, idisp, unicode, dir)
+RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char enc, char dir, char mark) : RawStr4(ipath), SWLD(iname, idesc, idisp, enc, dir, mark)
 {
 }
 
@@ -121,7 +121,7 @@ char RawLD4::getEntry(long away)
  */
 
 char *RawLD4::getRawEntry() {
-	if (!getEntry() && !unicode) {
+	if (!getEntry() && !isUnicode()) {
 		preptext(entrybuf);
 	}
 

@@ -28,9 +28,9 @@
  *	idisp	 - Display object to use for displaying
  */
 
-RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode, char dir)
+RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char encoding, char dir, char markup)
 		: RawVerse(ipath),
-            SWCom(iname, idesc, idisp, unicode, dir) {
+            SWCom(iname, idesc, idisp, encoding, dir, markup) {
 	versebuf = 0;
 }
 
@@ -82,7 +82,7 @@ char *RawCom::getRawEntry() {
 
 	rawFilter(versebuf, size, key);
 
-     if (!unicode)
+        if (!isUnicode())
 		preptext(versebuf);
 
 	if (key != this->key)

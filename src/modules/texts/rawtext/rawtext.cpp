@@ -36,8 +36,8 @@
  *	idisp	 - Display object to use for displaying
  */
 
-RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode, char dir)
-		: SWText(iname, idesc, idisp, unicode, dir),
+RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, char enc, char dir, char mark)
+		: SWText(iname, idesc, idisp, enc, dir, mark),
           RawVerse(ipath) {
           
 	versebuf = 0;
@@ -113,7 +113,7 @@ char *RawText::getRawEntry() {
 
 	rawFilter(versebuf, size, key);
 
-        if (!unicode)
+        if (!isUnicode())
 		preptext(versebuf);
 
 	if (this->key != key) // free our key if we created a VerseKey

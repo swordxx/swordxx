@@ -14,7 +14,7 @@
  *	idisp	 - Display object to use for displaying
  */
 
-SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, bool unicode, char dir) : SWModule(imodname, imoddesc, idisp, "Lexicons / Dictionaries", unicode, dir)
+SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, char enc, char dir, char mark) : SWModule(imodname, imoddesc, idisp, "Lexicons / Dictionaries", enc, dir, mark)
 {
 	delete key;
 	key = CreateKey();
