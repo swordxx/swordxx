@@ -1,0 +1,3 @@
+TYPEMAP
+VerseIterator *         O_OBJECT
+const char *            T_PV
