@@ -49,7 +49,6 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	bool hide       = false;
 	SWBuf tagText;
 	XMLTag startTag;
-	int tagTextNum  = 1;
 	int footnoteNum = 1;
 	char buf[254];
 
@@ -57,6 +56,15 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	const char *from = orig.c_str();
 
 	for (text = ""; *from; from++) {
+
+		// remove all newlines temporarily to fix kjv2003 module
+		if ((*from == 10) || (*from == 13)) {
+			if ((text.length()>1) && (text[text.length()-2] != ' ') && (*(from+1) != ' '))
+				text += ' ';
+			continue;
+		}
+
+		
 		if (*from == '<') {
 			intoken = true;
 			token = "";

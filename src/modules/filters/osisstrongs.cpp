@@ -103,12 +103,15 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				if (!option) {
 					char *num = strstr(token, "lemma=\"x-Strongs:");
 					if (num) {
+						memcpy(num, "savlm", 5);
+/*						
 						for (int i = 0; i < 17; i++)
 							*num++ = ' ';
 						for (; ((*num) && (*num!='\"')); num++)
 							*num = ' ';
 						if (*num)
 							*num = ' ';
+*/
 					}
 				}
 			}

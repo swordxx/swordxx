@@ -93,17 +93,22 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 					} while (++i < count);
 				}
 				if ((attrib = tag.getAttribute("morph")) && (show)) {
-					int count = tag.getAttributePartCount("morph");
-					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
-					do {
-						attrib = tag.getAttribute("morph", i);
-						if (i < 0) i = 0;	// to handle our -1 condition
-						val = strchr(attrib, ':');
-						val = (val) ? (val + 1) : attrib;
-						if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
-							val+=2;
-						buf.appendFormatted(" {\\cf4 \\sub (%s)}", val);
-					} while (++i < count);
+					SWBuf savelemma = tag.getAttribute("savlm");
+					if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
+						show = false;
+					if (show) {
+						int count = tag.getAttributePartCount("morph");
+						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+						do {
+							attrib = tag.getAttribute("morph", i);
+							if (i < 0) i = 0;	// to handle our -1 condition
+							val = strchr(attrib, ':');
+							val = (val) ? (val + 1) : attrib;
+							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
+								val+=2;
+							buf.appendFormatted(" {\\cf4 \\sub (%s)}", val);
+						} while (++i < count);
+					}
 				}
 				if (attrib = tag.getAttribute("POS")) {
 					val = strchr(attrib, ':');

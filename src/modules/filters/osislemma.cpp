@@ -63,8 +63,11 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				intoken = false;
 				XMLTag tag(token);
 				if ((!strcmp(tag.getName(), "w")) && (!tag.isEndTag())) {	// Lemma
-					if (tag.getAttribute("lemma"))
+					SWBuf lemma = tag.getAttribute("lemma");
+					if (lemma.length()) {
 						tag.setAttribute("lemma", 0);
+					 	tag.setAttribute("savlm", lemma.c_str());
+					}
 				}
 				// keep tag, possibly with the lemma removed
 				text += tag;
