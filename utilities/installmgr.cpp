@@ -51,9 +51,8 @@ void initConfig() {
 	cout << "if you understand this and are willing to enable remote source features\n";
 	cout << "then type yes at the prompt\n\n";
 	cout << "enable? [no] ";
-	char *prompt = 0;
-	size_t size = 0;
-	getline(&prompt, &size, stdin);
+	char prompt[10];
+	fgets(prompt, 9, stdin);
 	bool enable = (!strcmp(prompt, "yes\n"));
 	free(prompt);
 	char *envhomedir  = getenv ("HOME");
