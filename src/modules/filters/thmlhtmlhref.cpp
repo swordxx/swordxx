@@ -269,8 +269,9 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 		}                
 		else {
 			buf += '<';
-			for (const char *tok = token; *tok; tok++)
-				buf += *tok;
+			/*for (const char *tok = token; *tok; tok++)
+				buf += *tok;*/
+			buf += token;
 			buf += '>';
 			//return false;  // we still didn't handle token
 		}
