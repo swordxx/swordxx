@@ -496,7 +496,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 		}
 		if (searchType >= 0) {
-			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
+			if (!regexec(&preg,  getRawEntry(), 0, 0, 0) && !regexec(&preg,  StripText(), 0, 0, 0)) {
 				textkey = KeyText();
 				listkey << textkey;
 			}
@@ -509,8 +509,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			}
 			
 			if (sres) { //it's also in the StripText(), so we have a valid search result item now
-					textkey = KeyText();
-					listkey << textkey;
+				textkey = KeyText();
+				listkey << textkey;
 			}
 		}
 		else if (searchType == -2) {
