@@ -44,7 +44,7 @@ z_streamp z;
   uInt md;              /* mask for distance tree */
   uInt c;               /* bytes to copy */
   uInt d;               /* distance back to copy from */
-  Bytef *r;             /* copy source pointer */
+  unsigned long csp;             /* copy source pointer */
 
   /* load input, output, bit values */
   LOAD
@@ -59,107 +59,107 @@ z_streamp z;
     GRABBITS(20)                /* max bits for literal/length code */
     if ((e = (t = tl + ((uInt)b & ml))->exop) == 0)
     {
-      DUMPBITS(t->bits)
-      Tracevv((stderr, t->base >= 0x20 && t->base < 0x7f ?
-                "inflate:         * literal '%c'\n" :
-                "inflate:         * literal 0x%02x\n", t->base));
-      *q++ = (Byte)t->base;
-      m--;
-      continue;
+	 DUMPBITS(t->bits)
+	 Tracevv((stderr, t->base >= 0x20 && t->base < 0x7f ?
+			 "inflate:         * literal '%c'\n" :
+			 "inflate:         * literal 0x%02x\n", t->base));
+	 *q++ = (Byte)t->base;
+	 m--;
+	 continue;
     }
     do {
-      DUMPBITS(t->bits)
-      if (e & 16)
-      {
-        /* get extra bits for length */
-        e &= 15;
-        c = t->base + ((uInt)b & inflate_mask[e]);
-        DUMPBITS(e)
-        Tracevv((stderr, "inflate:         * length %u\n", c));
+	 DUMPBITS(t->bits)
+	 if (e & 16)
+	 {
+	   /* get extra bits for length */
+	   e &= 15;
+	   c = t->base + ((uInt)b & inflate_mask[e]);
+	   DUMPBITS(e)
+	   Tracevv((stderr, "inflate:         * length %u\n", c));
 
-        /* decode distance base of block to copy */
-        GRABBITS(15);           /* max bits for distance code */
-        e = (t = td + ((uInt)b & md))->exop;
-        do {
-          DUMPBITS(t->bits)
-          if (e & 16)
-          {
-            /* get extra bits to add to distance base */
-            e &= 15;
-            GRABBITS(e)         /* get extra bits (up to 13) */
-            d = t->base + ((uInt)b & inflate_mask[e]);
-            DUMPBITS(e)
-            Tracevv((stderr, "inflate:         * distance %u\n", d));
+	   /* decode distance base of block to copy */
+	   GRABBITS(15);           /* max bits for distance code */
+	   e = (t = td + ((uInt)b & md))->exop;
+	   do {
+		DUMPBITS(t->bits)
+		if (e & 16)
+		{
+		  /* get extra bits to add to distance base */
+		  e &= 15;
+		  GRABBITS(e)         /* get extra bits (up to 13) */
+		  d = t->base + ((uInt)b & inflate_mask[e]);
+		  DUMPBITS(e)
+		  Tracevv((stderr, "inflate:         * distance %u\n", d));
 
-            /* do the copy */
-            m -= c;
-            r = q - d;
-            if (r < s->window)                  /* wrap if needed */
-            {
-              do {
-                r += s->end - s->window;        /* force pointer in window */
-              } while (r < s->window);          /* covers invalid distances */
-              e = s->end - r;
-              if (c > e)
-              {
-                c -= e;                         /* wrapped copy */
-                do {
-                    *q++ = *r++;
-                } while (--e);
-                r = s->window;
-                do {
-                    *q++ = *r++;
-                } while (--c);
-              }
-              else                              /* normal copy */
-              {
-                *q++ = *r++;  c--;
-                *q++ = *r++;  c--;
-                do {
-                    *q++ = *r++;
-                } while (--c);
-              }
-            }
-            else                                /* normal copy */
-            {
-              *q++ = *r++;  c--;
-              *q++ = *r++;  c--;
-              do {
-                *q++ = *r++;
-              } while (--c);
-            }
-            break;
-          }
-          else if ((e & 64) == 0)
-          {
-            t += t->base;
-            e = (t += ((uInt)b & inflate_mask[e]))->exop;
-          }
-          else
-          {
-            z->msg = (char*)"invalid distance code";
-            UNGRAB
-            UPDATE
-            return Z_DATA_ERROR;
-          }
-        } while (1);
-        break;
-      }
-      if ((e & 64) == 0)
-      {
-        t += t->base;
-        if ((e = (t += ((uInt)b & inflate_mask[e]))->exop) == 0)
-        {
-          DUMPBITS(t->bits)
-          Tracevv((stderr, t->base >= 0x20 && t->base < 0x7f ?
-                    "inflate:         * literal '%c'\n" :
-                    "inflate:         * literal 0x%02x\n", t->base));
-          *q++ = (Byte)t->base;
-          m--;
-          break;
-        }
-      }
-      else if (e & 32)
+		  /* do the copy */
+		  m -= c;
+		  csp = (unsigned long)q - d;
+		  if (csp < (unsigned long)s->window)                  /* wrap if needed */
+		  {
+		    do {
+			 csp += (unsigned long)(s->end - s->window);        /* force pointer in window */
+		    } while (csp < (unsigned long)s->window);          /* covers invalid distances */
+		    e = (unsigned long)s->end - csp;
+		    if (c > e)
+		    {
+			 c -= e;                         /* wrapped copy */
+			 do {
+				*q++ = *(Bytef *)csp++;
+			 } while (--e);
+			 csp = s->window;
+			 do {
+				*q++ = *(Bytef *)csp++;
+			 } while (--c);
+		    }
+		    else                              /* normal copy */
+		    {
+			 *q++ = *(Bytef *)csp++;  c--;
+			 *q++ = *(Bytef *)csp++;  c--;
+			 do {
+				*q++ = *(Bytef *)csp++;
+			 } while (--c);
+		    }
+		  }
+		  else                                /* normal copy */
+		  {
+		    *q++ = *(Bytef *)csp++;  c--;
+		    *q++ = *(Bytef *)csp++;  c--;
+		    do {
+			 *q++ = *(Bytef *)csp++;
+		    } while (--c);
+		  }
+		  break;
+		}
+		else if ((e & 64) == 0)
+		{
+		  t += t->base;
+		  e = (t += ((uInt)b & inflate_mask[e]))->exop;
+		}
+		else
+		{
+		  z->msg = (char*)"invalid distance code";
+		  UNGRAB
+		  UPDATE
+		  return Z_DATA_ERROR;
+		}
+	   } while (1);
+	   break;
+	 }
+	 if ((e & 64) == 0)
+	 {
+	   t += t->base;
+	   if ((e = (t += ((uInt)b & inflate_mask[e]))->exop) == 0)
+	   {
+		DUMPBITS(t->bits)
+		Tracevv((stderr, t->base >= 0x20 && t->base < 0x7f ?
+				"inflate:         * literal '%c'\n" :
+				"inflate:         * literal 0x%02x\n", t->base));
+		*q++ = (Byte)t->base;
+		m--;
+		break;
+	   }
+	 }
+	 else if (e & 32)
       {
         Tracevv((stderr, "inflate:         * end of block\n"));
         UNGRAB

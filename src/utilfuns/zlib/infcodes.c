@@ -92,7 +92,7 @@ int r;
   uInt n;               /* bytes available there */
   Bytef *q;             /* output window write pointer */
   uInt m;               /* bytes to end of window or read pointer */
-  Bytef *f;             /* pointer to copy strings from */
+  unsigned long csf;             /* pointer to copy strings from */
   inflate_codes_statef *c = s->sub.decode.codes;  /* codes state */
 
   /* copy input/output information to locals (UPDATE macro restores) */
@@ -103,120 +103,120 @@ int r;
   {             /* waiting for "i:"=input, "o:"=output, "x:"=nothing */
     case START:         /* x: set up for LEN */
 #ifndef SLOW
-      if (m >= 258 && n >= 10)
-      {
-        UPDATE
-        r = inflate_fast(c->lbits, c->dbits, c->ltree, c->dtree, s, z);
-        LOAD
-        if (r != Z_OK)
-        {
-          c->mode = r == Z_STREAM_END ? WASH : BADCODE;
-          break;
-        }
-      }
+	 if (m >= 258 && n >= 10)
+	 {
+	   UPDATE
+	   r = inflate_fast(c->lbits, c->dbits, c->ltree, c->dtree, s, z);
+	   LOAD
+	   if (r != Z_OK)
+	   {
+		c->mode = r == Z_STREAM_END ? WASH : BADCODE;
+		break;
+	   }
+	 }
 #endif /* !SLOW */
-      c->sub.code.need = c->lbits;
-      c->sub.code.tree = c->ltree;
-      c->mode = LEN;
+	 c->sub.code.need = c->lbits;
+	 c->sub.code.tree = c->ltree;
+	 c->mode = LEN;
     case LEN:           /* i: get length/literal/eob next */
-      j = c->sub.code.need;
-      NEEDBITS(j)
-      t = c->sub.code.tree + ((uInt)b & inflate_mask[j]);
-      DUMPBITS(t->bits)
-      e = (uInt)(t->exop);
-      if (e == 0)               /* literal */
-      {
-        c->sub.lit = t->base;
-        Tracevv((stderr, t->base >= 0x20 && t->base < 0x7f ?
-                 "inflate:         literal '%c'\n" :
-                 "inflate:         literal 0x%02x\n", t->base));
-        c->mode = LIT;
-        break;
-      }
-      if (e & 16)               /* length */
-      {
-        c->sub.copy.get = e & 15;
-        c->len = t->base;
-        c->mode = LENEXT;
-        break;
-      }
-      if ((e & 64) == 0)        /* next table */
-      {
-        c->sub.code.need = e;
-        c->sub.code.tree = t + t->base;
-        break;
-      }
-      if (e & 32)               /* end of block */
-      {
-        Tracevv((stderr, "inflate:         end of block\n"));
-        c->mode = WASH;
-        break;
-      }
-      c->mode = BADCODE;        /* invalid code */
-      z->msg = (char*)"invalid literal/length code";
-      r = Z_DATA_ERROR;
-      LEAVE
+	 j = c->sub.code.need;
+	 NEEDBITS(j)
+	 t = c->sub.code.tree + ((uInt)b & inflate_mask[j]);
+	 DUMPBITS(t->bits)
+	 e = (uInt)(t->exop);
+	 if (e == 0)               /* literal */
+	 {
+	   c->sub.lit = t->base;
+	   Tracevv((stderr, t->base >= 0x20 && t->base < 0x7f ?
+			  "inflate:         literal '%c'\n" :
+			  "inflate:         literal 0x%02x\n", t->base));
+	   c->mode = LIT;
+	   break;
+	 }
+	 if (e & 16)               /* length */
+	 {
+	   c->sub.copy.get = e & 15;
+	   c->len = t->base;
+	   c->mode = LENEXT;
+	   break;
+	 }
+	 if ((e & 64) == 0)        /* next table */
+	 {
+	   c->sub.code.need = e;
+	   c->sub.code.tree = t + t->base;
+	   break;
+	 }
+	 if (e & 32)               /* end of block */
+	 {
+	   Tracevv((stderr, "inflate:         end of block\n"));
+	   c->mode = WASH;
+	   break;
+	 }
+	 c->mode = BADCODE;        /* invalid code */
+	 z->msg = (char*)"invalid literal/length code";
+	 r = Z_DATA_ERROR;
+	 LEAVE
     case LENEXT:        /* i: getting length extra (have base) */
-      j = c->sub.copy.get;
-      NEEDBITS(j)
-      c->len += (uInt)b & inflate_mask[j];
-      DUMPBITS(j)
-      c->sub.code.need = c->dbits;
-      c->sub.code.tree = c->dtree;
-      Tracevv((stderr, "inflate:         length %u\n", c->len));
-      c->mode = DIST;
+	 j = c->sub.copy.get;
+	 NEEDBITS(j)
+	 c->len += (uInt)b & inflate_mask[j];
+	 DUMPBITS(j)
+	 c->sub.code.need = c->dbits;
+	 c->sub.code.tree = c->dtree;
+	 Tracevv((stderr, "inflate:         length %u\n", c->len));
+	 c->mode = DIST;
     case DIST:          /* i: get distance next */
-      j = c->sub.code.need;
-      NEEDBITS(j)
-      t = c->sub.code.tree + ((uInt)b & inflate_mask[j]);
-      DUMPBITS(t->bits)
-      e = (uInt)(t->exop);
-      if (e & 16)               /* distance */
-      {
-        c->sub.copy.get = e & 15;
-        c->sub.copy.dist = t->base;
-        c->mode = DISTEXT;
-        break;
-      }
-      if ((e & 64) == 0)        /* next table */
-      {
-        c->sub.code.need = e;
-        c->sub.code.tree = t + t->base;
-        break;
-      }
-      c->mode = BADCODE;        /* invalid code */
-      z->msg = (char*)"invalid distance code";
-      r = Z_DATA_ERROR;
-      LEAVE
+	 j = c->sub.code.need;
+	 NEEDBITS(j)
+	 t = c->sub.code.tree + ((uInt)b & inflate_mask[j]);
+	 DUMPBITS(t->bits)
+	 e = (uInt)(t->exop);
+	 if (e & 16)               /* distance */
+	 {
+	   c->sub.copy.get = e & 15;
+	   c->sub.copy.dist = t->base;
+	   c->mode = DISTEXT;
+	   break;
+	 }
+	 if ((e & 64) == 0)        /* next table */
+	 {
+	   c->sub.code.need = e;
+	   c->sub.code.tree = t + t->base;
+	   break;
+	 }
+	 c->mode = BADCODE;        /* invalid code */
+	 z->msg = (char*)"invalid distance code";
+	 r = Z_DATA_ERROR;
+	 LEAVE
     case DISTEXT:       /* i: getting distance extra */
-      j = c->sub.copy.get;
-      NEEDBITS(j)
-      c->sub.copy.dist += (uInt)b & inflate_mask[j];
-      DUMPBITS(j)
-      Tracevv((stderr, "inflate:         distance %u\n", c->sub.copy.dist));
-      c->mode = COPY;
+	 j = c->sub.copy.get;
+	 NEEDBITS(j)
+	 c->sub.copy.dist += (uInt)b & inflate_mask[j];
+	 DUMPBITS(j)
+	 Tracevv((stderr, "inflate:         distance %u\n", c->sub.copy.dist));
+	 c->mode = COPY;
     case COPY:          /* o: copying bytes in window, waiting for space */
-      f = q - c->sub.copy.dist;
-      while (f < s->window)             /* modulo window size-"while" instead */
-        f += s->end - s->window;        /* of "if" handles invalid distances */
-      while (c->len)
-      {
-        NEEDOUT
-        OUTBYTE(*f++)
-        if (f == s->end)
-          f = s->window;
-        c->len--;
-      }
-      c->mode = START;
-      break;
+	 csf = (unsigned long)q - c->sub.copy.dist;
+	 while (csf < (unsigned long)s->window)             /* modulo window size-"while" instead */
+	   csf += (unsigned long)(s->end - s->window);        /* of "if" handles invalid distances */
+	 while (c->len)
+	 {
+	   NEEDOUT
+	   OUTBYTE(*(Bytef *)csf++)
+	   if (csf == (unsigned long)s->end)
+		csf = (unsigned long)s->window;
+	   c->len--;
+	 }
+	 c->mode = START;
+	 break;
     case LIT:           /* o: got literal, waiting for output space */
-      NEEDOUT
-      OUTBYTE(c->sub.lit)
-      c->mode = START;
-      break;
+	 NEEDOUT
+	 OUTBYTE(c->sub.lit)
+	 c->mode = START;
+	 break;
     case WASH:          /* o: got eob, possibly more output */
-      if (k > 7)        /* return unused byte, if any */
-      {
+	 if (k > 7)        /* return unused byte, if any */
+	 {
         Assert(k < 16, "inflate_codes grabbed too many bytes")
         k -= 8;
         n++;
