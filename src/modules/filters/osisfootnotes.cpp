@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *osishmlheadings -	SWFilter decendant to hide or show headings
+ * osisfootnotes -	SWFilter descendant to hide or show footnotes
  *			in an OSIS module.
  */
 
@@ -66,7 +66,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!stricmp(tag.getName(), "note")) {
+			if (!strcmp(tag.getName(), "note") && strcmp(tag.getAttribute("type"), "crossReference")) {
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
 					startTag = tag;
 					hide = true;
