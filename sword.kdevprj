@@ -50,7 +50,7 @@ install_location=
 type=HEADER
 
 [include/Makefile.am]
-files=include/canon.h,include/cipherfil.h,include/defs.h,include/echomod.h,include/entriesblk.h,include/femain.h,include/filemgr.h,include/gbffootnotes.h,include/gbfheadings.h,include/gbfhtml.h,include/swfilter.h,include/gbfhtmlhref.h,include/gbfmorph.h,include/gbfplain.h,include/gbfrtf.h,include/gbfstrongs.h,include/gbfthml.h,include/Greek2Greek.h,include/GreekChars.h,include/hrefcom.h,include/latin1utf16.h,include/latin1utf8.h,include/listkey.h,include/localemgr.h,include/lzsscomprs.h,include/plainfootnotes.h,include/plainhtml.h,include/rawcom.h,include/rawfiles.h,include/rawgbf.h,include/rawld.h,include/rawld4.h,include/rawstr.h,include/rawstr4.h,include/rawtext.h,include/rawverse.h,include/regex.h,include/roman.h,include/rtfhtml.h,include/rwphtml.h,include/rwprtf.h,include/sapphire.h,include/scsuutf8.h,include/strkey.h,include/swbasicfilter.h,include/swbyteswap.h,include/swcipher.h,include/swcom.h,include/swcomprs.h,include/swconfig.h,include/swdisp.h,include/swdisprtf.h,include/swdisprtfchap.h,include/swencodingmgr.h,include/swkey.h,include/swld.h,include/swlocale.h,include/swlog.h,include/swmacs.h,include/swmarkupmgr.h,include/swmgr.h,include/swmodule.h,include/swobject.h,include/swtext.h,include/swunicod.h,include/swwinlog.h,include/tbdisp.h,include/thmlgbf.h,include/thmlhtml.h,include/thmlhtmlhref.h,include/thmlolb.h,include/thmlplain.h,include/thmlrtf.h,include/unicodertf.h,include/unixstr.h,include/untgz.h,include/utf16utf8.h,include/utf8cantillation.h,include/utf8greekaccents.h,include/utf8hebrewpoints.h,include/utf8html.h,include/utf8latin1.h,include/utf8transliterator.h,include/utf8utf16.h,include/utilconf.h,include/utilfuns.h,include/utilstr.h,include/versekey.h,include/zcom.h,include/zconf.h,include/zipcomprs.h,include/zlib.h,include/ztext.h,include/zverse.h,include/thmlfootnotes.h,include/thmlheadings.h,include/thmllemma.h,include/thmlmorph.h,include/thmlscripref.h,include/thmlstrongs.h,include/utf8cnormalizer.h,include/utf8arshaping.h,include/utf8bidireorder.h,include/utf8nfc.h,include/utf8nfkd.h
+files=include/canon.h,include/cipherfil.h,include/defs.h,include/echomod.h,include/entriesblk.h,include/femain.h,include/filemgr.h,include/gbffootnotes.h,include/gbfheadings.h,include/gbfhtml.h,include/swfilter.h,include/gbfhtmlhref.h,include/gbfmorph.h,include/gbfplain.h,include/gbfrtf.h,include/gbfstrongs.h,include/gbfthml.h,include/Greek2Greek.h,include/GreekChars.h,include/hrefcom.h,include/latin1utf16.h,include/latin1utf8.h,include/listkey.h,include/localemgr.h,include/lzsscomprs.h,include/plainfootnotes.h,include/plainhtml.h,include/rawcom.h,include/rawfiles.h,include/rawgbf.h,include/rawld.h,include/rawld4.h,include/rawstr.h,include/rawstr4.h,include/rawtext.h,include/rawverse.h,include/regex.h,include/roman.h,include/rtfhtml.h,include/rwphtml.h,include/rwprtf.h,include/sapphire.h,include/scsuutf8.h,include/strkey.h,include/swbasicfilter.h,include/swbyteswap.h,include/swcipher.h,include/swcom.h,include/swcomprs.h,include/swconfig.h,include/swdisp.h,include/swdisprtf.h,include/swdisprtfchap.h,include/swencodingmgr.h,include/swkey.h,include/swld.h,include/swlocale.h,include/swlog.h,include/swmacs.h,include/swmarkupmgr.h,include/swmgr.h,include/swmodule.h,include/swobject.h,include/swtext.h,include/swunicod.h,include/swwinlog.h,include/tbdisp.h,include/thmlgbf.h,include/thmlhtml.h,include/thmlhtmlhref.h,include/thmlolb.h,include/thmlplain.h,include/thmlrtf.h,include/unicodertf.h,include/unixstr.h,include/untgz.h,include/utf16utf8.h,include/utf8cantillation.h,include/utf8greekaccents.h,include/utf8hebrewpoints.h,include/utf8html.h,include/utf8latin1.h,include/utf8transliterator.h,include/utf8utf16.h,include/utilconf.h,include/utilfuns.h,include/utilstr.h,include/versekey.h,include/zcom.h,include/zconf.h,include/zipcomprs.h,include/zlib.h,include/ztext.h,include/zverse.h,include/thmlfootnotes.h,include/thmlheadings.h,include/thmllemma.h,include/thmlmorph.h,include/thmlscripref.h,include/thmlstrongs.h,include/utf8cnormalizer.h,include/utf8arshaping.h,include/utf8bidireorder.h,include/utf8nfc.h,include/utf8nfkd.h,include/encfiltmgr.h,include/swversion.h,include/swfiltermgr.h,include/markupfiltmgr.h
 sub_dirs=
 type=normal
 
@@ -73,6 +73,12 @@ install_location=
 type=HEADER
 
 [include/echomod.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[include/encfiltmgr.h]
 dist=true
 install=false
 install_location=
@@ -181,6 +187,12 @@ install_location=
 type=HEADER
 
 [include/lzsscomprs.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[include/markupfiltmgr.h]
 dist=true
 install=false
 install_location=
@@ -366,6 +378,12 @@ install=false
 install_location=
 type=HEADER
 
+[include/swfiltermgr.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [include/swkey.h]
 dist=true
 install=false
@@ -427,6 +445,12 @@ install_location=
 type=HEADER
 
 [include/swunicod.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[include/swversion.h]
 dist=true
 install=false
 install_location=
@@ -737,11 +761,17 @@ install_location=
 type=SOURCE
 
 [src/mgr/Makefile.am]
-files=src/mgr/filemgr.cpp,src/mgr/localemgr.cpp,src/mgr/swconfig.cpp,src/mgr/swencodingmgr.cpp,src/mgr/swlocale.cpp,src/mgr/swmarkupmgr.cpp,src/mgr/swmgr.cpp
+files=src/mgr/filemgr.cpp,src/mgr/localemgr.cpp,src/mgr/swconfig.cpp,src/mgr/swencodingmgr.cpp,src/mgr/swlocale.cpp,src/mgr/swmarkupmgr.cpp,src/mgr/swmgr.cpp,src/mgr/markupfiltmgr.cpp,src/mgr/encfiltmgr.cpp,src/mgr/swfiltermgr.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=mgr
 sub_dirs=
 type=static_library
+
+[src/mgr/encfiltmgr.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
 
 [src/mgr/filemgr.cpp]
 dist=true
@@ -755,6 +785,12 @@ install=false
 install_location=
 type=SOURCE
 
+[src/mgr/markupfiltmgr.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
 [src/mgr/swconfig.cpp]
 dist=true
 install=false
@@ -762,6 +798,12 @@ install_location=
 type=SOURCE
 
 [src/mgr/swencodingmgr.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/mgr/swfiltermgr.cpp]
 dist=true
 install=false
 install_location=
@@ -1305,7 +1347,7 @@ install_location=
 type=SOURCE
 
 [src/utilfuns/Makefile.am]
-files=src/utilfuns/Greek2Greek.cpp,src/utilfuns/regex.c,src/utilfuns/roman.c,src/utilfuns/sub.c,src/utilfuns/swunicod.cpp,src/utilfuns/unixstr.cpp,src/utilfuns/utilconf.cpp,src/utilfuns/utilstr.cpp
+files=src/utilfuns/Greek2Greek.cpp,src/utilfuns/regex.c,src/utilfuns/roman.c,src/utilfuns/sub.c,src/utilfuns/swunicod.cpp,src/utilfuns/unixstr.cpp,src/utilfuns/utilconf.cpp,src/utilfuns/utilstr.cpp,src/utilfuns/swversion.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=utilfuns
 sub_dirs=zlib
@@ -1330,6 +1372,12 @@ install_location=
 type=SOURCE
 
 [src/utilfuns/swunicod.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/utilfuns/swversion.cpp]
 dist=true
 install=false
 install_location=
