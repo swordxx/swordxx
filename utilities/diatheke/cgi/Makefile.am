@@ -1,4 +1,4 @@
-swcgidir = $(top_srcdir)/apps/console/diatheke/cgi
+swcgidir = $(top_srcdir)/utilities/diatheke/cgi
 
 EXTRA_DIST = $(swcgidir)/dia-def.pl
 EXTRA_DIST += $(swcgidir)/diatheke.pl

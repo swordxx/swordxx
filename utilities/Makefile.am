@@ -68,3 +68,8 @@ mod2zmod_SOURCES = mod2zmod.cpp
 addld_SOURCES = addld.cpp
 imp2ld_SOURCES = imp2ld.cpp
 endif
+
+EXTRA_DIST = 
+include bcppmake/Makefile.am
+include kylixmake/Makefile.am
+include perl/Makefile.am

@@ -147,3 +147,6 @@ install_config:
 	@echo "DataPath=$(pkgdatadir)/" >> $(sysconfdir)/sword.conf
 	@echo "sword.conf generated"
 
+dist-hook:
+	(cd $(distdir) && ./autogen.sh)
+	rm -r $(distdir)/autom4te.cache

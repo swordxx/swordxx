@@ -61,3 +61,7 @@ swbuftest_SOURCES = swbuftest.cpp
 webiftest_SOURCES = webiftest.cpp
 xmltest_SOURCES = xmltest.cpp
 
+EXTRA_DIST = 
+include bcppmake/Makefile.am
+include testsuite/Makefile.am
+include tmp/Makefile.am
