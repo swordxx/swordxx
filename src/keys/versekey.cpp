@@ -17,6 +17,7 @@
 #endif
 
 #include <swkey.h>
+#include <swlog.h>
 #include <versekey.h>
 #include <localemgr.h>
 extern "C" {
@@ -186,10 +187,8 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < BMAX[t]; i++) {
                 int bn = getBookAbbrev(books[t][i].name);
-                if (getBookAbbrev(books[t][i].name) != i+1) {
-                    char numBuf[24];
-                    sprintf(numBuf, "%d", bn);
-                    throw (((string)"Book: " + (string)books[t][i].name + (string)" does not have a matching toupper abbrevs entry! book number returned was: " + (string)numBuf).c_str());
+                if ((bn-1)%39 != i) {
+                    SWLog::systemlog->LogError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", books[t][i].name, bn);
                 }
             }
         }
@@ -304,7 +303,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 {
 	int loop, diff, abLen, min, max, target, retVal = -1;
 
-    char *abbr;
+    char *abbr = 0;
 
     stdstr(&abbr, iabbr);
 	strstrip(abbr);
