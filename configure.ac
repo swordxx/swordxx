@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.23 $)
+AC_REVISION($Revision: 1.24 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -105,12 +105,6 @@ fi
 CURL_CFLAGS=
 CURL_LIBS=
 if test x$with_curl = xyes; then
-  if test x$with_zlib  = xno; then
-	echo "*** Install manager support requires zlib"
-	echo "*** However you have specified no zlib"
-	echo "*** compiling without install manager support"
-	enable_installmgr=no
-  else
     AC_PATH_PROG(CURL_CONFIG, curl-config, no)
     if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
@@ -123,7 +117,6 @@ if test x$with_curl = xyes; then
 	CXXFLAGS="$CXXFLAGS -DCURLAVAILABLE"
 	CFLAGS="$CFLAGS -DCURLAVAILABLE"
     fi
-  fi
 fi
 
 # ---------------------------------------------------------------------
