@@ -2,13 +2,13 @@
 # Initialisation
 # ---------------------------------------------------------------------
 
-AC_INIT(sword, 1.5.7, sword-bugs@crosswire.org)
+AC_INIT(sword, 1.5.8, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.31 $)
+AC_REVISION($Revision: 1.32 $)
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(sword, 1.5.7)
+AM_INIT_AUTOMAKE(sword, 1.5.8Â)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -32,7 +32,7 @@ AC_ARG_WITH(zlib,[  --with-zlib             allow zlib compressed modules [defau
 AC_ARG_WITH(icu,[  --with-icu              use ICU for unicode [default=no]],,with_icu=no)
 AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=yes]],,with_conf=yes)
 AC_ARG_WITH(curl,[  --with-curl             build install manager support using libcurl [default=yes]],,with_curl=yes)
-AC_ARG_WITH(lucene,[  --with-lucene         include lucene support for searching [default=yes]],,with_lucene=yes)
+AC_ARG_WITH(lucene,[  --with-lucene         include lucene support for searching [default=no]],,with_lucene=no)
 
 
 # ---------------------------------------------------------------------
