@@ -2,6 +2,14 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+13-Dec-2001     Troy A. Griffitts <scribe@crosswire.org>
+	Added __u16, __u32, and __u64 raw data types
+	Added byte swapping macros
+	Added standard swordtoarch and archtosword macros
+		in 16, 32, and 64 bit versions
+	Added remove to entriesblk
+	Added tests for byte swapping
+
 08-Dec-2001     Troy A. Griffitts <scribe@crosswire.org>
 	Added new SWInputMethod class for keyboard mapping support.
 	Added null input method which returns what it gets
