@@ -1,6 +1,0 @@
-Revision history for Perl extension sword.
-
-1.5.5  Wed Oct  2 23:52:35 2002
-	- original version; created by h2xs 1.21 with options
-		-X -n Sword -v 1.5.5
-
