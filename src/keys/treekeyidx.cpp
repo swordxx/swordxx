@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.11 2002/10/01 22:04:58 dglassey Exp $
+ * $Id: treekeyidx.cpp,v 1.12 2002/10/08 00:36:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -337,27 +337,29 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 
 char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 	__u32 offset;
-	char error = 0;
+	char error = KEYERR_OUTOFBOUNDS;
 	
 	if (ioffset < 0) {
 		ioffset = 0;
-		error = KEYERR_OUTOFBOUNDS;
+		error = 7777;	// out of bounds but still position to 0;
 	}
 
 	node->offset = ioffset;
 	if (idxfd > 0) {
-		lseek(idxfd->getFd(), ioffset, SEEK_SET);
-		if (read(idxfd->getFd(), &offset, 4) == 4) {
-			offset = swordtoarch32(offset);
-			getTreeNodeFromDatOffset(offset, node);
-		}
-		else {
-			lseek(idxfd->getFd(), -4, SEEK_END);
+		if (idxfd->getFd() > 0) {
+			lseek(idxfd->getFd(), ioffset, SEEK_SET);
 			if (read(idxfd->getFd(), &offset, 4) == 4) {
 				offset = swordtoarch32(offset);
+				error = (error == 7777) ? KEYERR_OUTOFBOUNDS : 0;
 				getTreeNodeFromDatOffset(offset, node);
 			}
-			error = KEYERR_OUTOFBOUNDS;
+			else {
+				lseek(idxfd->getFd(), -4, SEEK_END);
+				if (read(idxfd->getFd(), &offset, 4) == 4) {
+					offset = swordtoarch32(offset);
+					getTreeNodeFromDatOffset(offset, node);
+				}
+			}
 		}
 	}
 	return error;
