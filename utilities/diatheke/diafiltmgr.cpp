@@ -28,12 +28,18 @@
 #include <gbfhtmlhref.h>
 #include <thmlrtf.h>
 #include <gbfrtf.h>
+#include <osisrtf.h>
+#include <osishtmlhref.h>
+#include <osisplain.h>
+#include <thmlosis.h>
+#include <gbfosis.h>
 
 #include <swmgr.h>
 
 #include "diafiltmgr.h"
 #include "thmlcgi.h"
 #include "gbfcgi.h"
+#include "osiscgi.h"
 
 DiathekeFilterMgr::DiathekeFilterMgr (char mark, char enc)
 		   : EncodingFilterMgr(enc) {
@@ -172,13 +178,13 @@ void DiathekeFilterMgr::CreateFilters(char markup) {
 			fromplain = NULL;
 			fromthml = new ThMLCGI();
 			fromgbf = new GBFCGI();
-			fromosis = NULL;
+			fromosis = new OSISCGI();
 			break;
                 case FMT_PLAIN:
                         fromplain = NULL;
                         fromthml = new ThMLPlain();
                         fromgbf = new GBFPlain();
-                        fromosis = NULL;
+                        fromosis = new OSISPlain();
                         break;
                 case FMT_THML:
                         fromplain = NULL;
@@ -202,18 +208,18 @@ void DiathekeFilterMgr::CreateFilters(char markup) {
                         fromplain = NULL;
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
-                        fromosis = NULL;
+                        fromosis = new OSISHTMLHREF();
                         break;
                 case FMT_RTF:
                         fromplain = NULL;
                         fromthml = new ThMLRTF();
                         fromgbf = new GBFRTF();
-                        fromosis = NULL;
+                        fromosis = new OSISRTF();
                         break;
                 case FMT_OSIS:
                         fromplain = NULL;
-                        fromthml = NULL;
-                        fromgbf = NULL;
+                        fromthml = new ThMLOSIS();
+                        fromgbf = new GBFOSIS();
                         fromosis = NULL;
                         break;
                 }

@@ -123,6 +123,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				inputformat = FMT_GBF;
 			else if (!stricmp((char *)(*eit).second.c_str(), "ThML"))
 				inputformat = FMT_THML;
+			else if (!stricmp((char *)(*eit).second.c_str(), "OSIS"))
+				inputformat = FMT_OSIS;
 		}
 		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (SWBuf)"";
 	}
@@ -135,6 +137,9 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	    break;
 	  case FMT_GBF :
 	    *output << "GBF";
+	    break;
+	  case FMT_OSIS :
+	    *output << "OSIS";
 	    break;
 	  default:
 	    *output << "Other";
@@ -380,6 +385,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 						*output << "<br />";
+					else if (outputformat == FMT_OSIS)
+						*output << "<milestone type=\"line\"\/>";
 					else if (outputformat == FMT_RTF)
 						*output << "\\par ";
 					else if (outputformat == FMT_GBF)
@@ -417,6 +424,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					
 				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 					*output << "<br />";
+				else if (outputformat == FMT_OSIS)
+					*output << "<milestone type=\"line\"\/>";
 				else if (outputformat == FMT_RTF)
 					*output << "\\par ";
 				else if (outputformat == FMT_GBF)
