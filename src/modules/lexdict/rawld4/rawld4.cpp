@@ -137,7 +137,7 @@ SWBuf &RawLD4::getRawEntryBuf() {
 void RawLD4::increment(int steps) {
 	char tmperror;
 
-	if (key->Traversable()) {
+	if (key->isTraversable()) {
 		*key += steps;
 		error = key->Error();
 		steps = 0;

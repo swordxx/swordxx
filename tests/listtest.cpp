@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 		std::cout << (const char *) lk2 << "\n";
 
 
-	lk2 = VerseKey().ParseVerseList("mat-john", 0, true);
+	lk2 = VerseKey().ParseVerseList("mat-mark", 0, true);
 
 	VerseKey yoyo("john");
 	yoyo = MAXCHAPTER;
@@ -57,5 +57,17 @@ int main(int argc, char **argv)
 	for (lk2 = TOP; !lk2.Error(); lk2++)
 		std::cout << (const char *) lk2 << "\n";
 
+	lk.ClearList();
+	lk << "john 3:16";
+	std::cout << "\nCount should be 1: " << lk.Count();
+
+	lk = vk.ParseVerseList("mat;mark;luke", vk, true);
+	lk = (VerseKey)"john 3:16";
+	std::cout << "\nError should be set: " << ((lk.Error()) ? "set":"not set");
+	lk = vk.ParseVerseList("mk 3:16", vk, true);
+	lk = (VerseKey)"john 3:16";
+	std::cout << "\nError should be set: " << ((lk.Error()) ? "set":"not set");
+
+	std::cout << "\n\n";
 	return 0;
 }

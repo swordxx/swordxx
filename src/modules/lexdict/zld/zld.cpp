@@ -135,7 +135,7 @@ SWBuf &zLD::getRawEntryBuf() {
 void zLD::increment(int steps) {
 	char tmperror;
 
-	if (key->Traversable()) {
+	if (key->isTraversable()) {
 		*key += steps;
 		error = key->Error();
 		steps = 0;

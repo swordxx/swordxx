@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey2.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey2.h,v 1.6 2004/05/07 17:02:32 dglassey Exp $
+ * $Id: versekey2.h,v 1.7 2004/05/08 21:04:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -250,7 +250,7 @@ public:
 	* @return *this
 	*/
 	virtual void increment(int steps);
-	virtual char Traversable() { return 1; }
+	virtual bool isTraversable() { return true; }
 
 	virtual const char *getBookName() const;
 	virtual const char *getBookAbbrev() const;

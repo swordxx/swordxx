@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.26 2004/02/06 21:01:00 scribe Exp $
+ * $Id: swkey.h,v 1.27 2004/05/08 21:04:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -181,7 +181,12 @@ public:
 	*/
 	virtual void increment(int steps = 1);
 
-	virtual char Traversable() { return 0; }
+	/** Increments key a number of entries
+	* deprecated, use isTraversible
+	*/
+	char Traversable() { return (isTraversable()) ? 1:0; }
+
+	virtual bool isTraversable() { return false; }
 
 	/** Use this function to get te current position withing a module.
 	* Here's a small example how to use this function and @ref Index(long).

@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.19 2003/08/31 01:58:13 scribe Exp $
+ * $Id: listkey.h,v 1.20 2004/05/08 21:04:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -107,7 +107,7 @@ public:
 	*/
 	virtual void increment(int step);
 
-	virtual char Traversable() { return 1; }
+	virtual bool isTraversable() { return true; }
 	virtual long Index() const { return arraypos; }
 	virtual const char *getRangeText() const;
 

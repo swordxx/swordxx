@@ -296,9 +296,15 @@ void ListKey::setText(const char *ikey) {
 	for (arraypos = 0; arraypos < arraycnt; arraypos++) {
 		SWKey *key = array[arraypos];
 		if (key) {
-			key->setText(ikey);
-			if (!key->Error())
-				break;
+			if (key->isTraversable()) {
+				key->setText(ikey);
+				if (!key->Error())
+					break;
+			}
+			else {
+				if (!strcmp(key->getText(), ikey))
+					break;
+			}
 		}
 	}
 	if (arraypos >= arraycnt) {

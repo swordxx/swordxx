@@ -32,4 +32,6 @@ const SWBuf encodeURL( const SWBuf& url ) {
 	return buf;
 }
 
+
+
 SWORD_NAMESPACE_END

@@ -60,7 +60,7 @@ const char *SWLD::KeyText(const char *ikeytext)
  */
 
 void SWLD::setPosition(SW_POSITION p) {
-	if (!key->Traversable()) {
+	if (!key->isTraversable()) {
 		switch (p) {
 		case POS_TOP:
 			*key = "";

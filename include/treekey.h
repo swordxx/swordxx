@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekey.h,v 1.4 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: treekey.h,v 1.5 2004/05/08 21:04:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -78,7 +78,7 @@ public:
 	virtual int compare(const SWKey &ikey) = 0;
 	virtual void decrement(int steps = 1) = 0;
 	virtual void increment(int steps = 1) = 0;
-	virtual char Traversable () { return 1; }
+	virtual bool isTraversable() { return true; }
 	virtual long Index () const { return getOffset(); }
 	virtual long Index (long iindex) { setOffset(iindex); return getOffset(); }
 
