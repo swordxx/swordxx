@@ -223,9 +223,22 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	else if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
 		inVerse = true;
 		if (inHeader) {
-//			cout << "HEADING ";
+			//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
+			const char* chapterTagEnd = strchr(text.c_str(), '>');
+			const char* titleTagStart = strstr(text.c_str(), "<title");
+			
+			if (chapterTagEnd+1 == titleTagStart) {
+				const char* titleTagEnd = strstr(text.c_str(), "</title>");
+				const char* textEnd = text.c_str() + text.length();
+				if (titleTagEnd+8 == textEnd) {
+					text.setSize(chapterTagEnd+1-text.c_str()); //only insert the <chapter...> part
+				}
+			}
+			
+// 			cout << "HEADING "<< text.c_str() << endl;
 			writeEntry(*currentVerse, text);
-                        text = "";
+			
+			text = "";
 			inHeader = false;
 		}
 
