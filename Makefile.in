@@ -643,9 +643,11 @@ restore:
 
 install: install-recursive
 	@echo ""
-	@echo "sword is installed"
+	@echo "sword is installed."
 	@echo "Type \"make register\" to help us keep track of how many"
 	@echo "people have seen it."
+	@echo "(You may consider exiting from 'root', first, to make this"
+	@echo "a little more personal)"
 	@echo ""
 
 install-data-am: installlocaleDATA installmodsDATA
