@@ -573,7 +573,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			break;
 		case '.':
 			if (buf > orig)			// ignore (break) if preceeding char is not a digit
-				if (!isdigit(*(buf-1)))
+				if ((chap < 0) || (!isdigit(*(buf-1))))
 					break;
 
 			number[tonumber] = 0;
