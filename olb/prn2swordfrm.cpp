@@ -144,8 +144,8 @@ char TForm2::getVerse(int fp, int *verseNum, char *verseBuf, char testament)
 	memset(buf, 0, 17);
 
 	while (1) {
-		if (!memcmp(buf, "\\f1 \\b0", 7)) {
-			lseek(fp, -9, SEEK_CUR);
+		if (!memcmp(buf, "\\f1 \\b0 \\fs22", 13)) {
+			lseek(fp, -3, SEEK_CUR);
 			break;
 		}
 		if (!memcmp(buf, "\\li0\\fi0 \\par \\u", 16)) {

@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+30-Dec-2000	Chris Little <chrislit@crosswire.org>
+	Fixed prn2sword so that it should work with new OLBs
+
 22-Dec-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added 'micros' a mini GUI for PDAs
 
