@@ -162,7 +162,7 @@ EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
 testlib_LDADD = -L./lib -lsword
-localeDATA = locales.d/abbr.conf locales.d/da.conf locales.d/de.conf locales.d/es.conf locales.d/fr.conf locales.d/it.conf locales.d/no.conf locales.d/pt.conf
+localeDATA = locales.d/abbr.conf locales.d/da.conf locales.d/de.conf locales.d/es.conf locales.d/fr.conf locales.d/it.conf locales.d/no.conf locales.d/pt.conf locales.d/pt_BR.conf
 
 localedatadir = $(pkgdatadir)/locales.d
 @INSTCONF_TRUE@modsDATA = samples/mods.d/globals.conf

@@ -6,6 +6,7 @@ localeDATA += locales.d/fr.conf
 localeDATA += locales.d/it.conf
 localeDATA += locales.d/no.conf
 localeDATA += locales.d/pt.conf
+localeDATA += locales.d/pt_BR.conf
 
 localedatadir = $(pkgdatadir)/locales.d
 
