@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.9 2001/04/08 09:03:37 chrislit Exp $
+ * $Id: listkey.h,v 1.10 2001/04/19 10:17:36 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -109,7 +109,11 @@ public:
   {
     return arraypos;
   }
-  virtual long Index (long iindex)
+  /**
+  * Returns the index for the new one given as as parameter.
+  * The first parameter is the new index.
+  */
+  virtual long Index (long)
   {
     SetToElement (arraypos);
     return Index ();

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.21 2001/04/18 10:21:47 scribe Exp $
+ * $Id: swmodule.h,v 1.22 2001/04/19 10:17:36 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -272,9 +272,10 @@ public:
   }
   
   /** Creates a new module
+  * @param path The first parameter is path of the new module
   * @return error
   */
-  static char createModule (const char *path) {
+  static char createModule (const char *) {
     return -1;
   }
   

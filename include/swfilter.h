@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.11 2001/03/07 11:11:38 scribe Exp $
+ * $Id: swfilter.h,v 1.12 2001/04/19 10:17:36 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -75,7 +75,7 @@ public:
   * see also @ref getOptionValues
   * @param ival the new option valus
   */
-  virtual void setOptionValue (const char *ival)
+  virtual void setOptionValue (const char *)
   {
   }
   virtual const char * getOptionValue ()
@@ -88,7 +88,7 @@ public:
   * @param key sorry I don't know
   * @return 0
   */
-  virtual char ProcessText(char *text, int maxlen, const SWKey *key)
+  virtual char ProcessText(char *text, int maxlen, const SWKey *)
   {
     return ProcessText(text, maxlen);
   }
