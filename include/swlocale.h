@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.11 2003/06/27 01:41:06 scribe Exp $
+ * $Id: swlocale.h,v 1.12 2004/01/18 20:24:04 mgruner Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -45,6 +45,7 @@ class SWDLLEXPORT SWLocale {
 	SWConfig *localeSource;
 	char *name;
 	char *description;
+	char *encoding;
 	struct abbrev *bookAbbrevs;
 	char *BMAX;
 	struct sbook **books;
@@ -62,6 +63,7 @@ public:
 	* @return The description. A possible example is "German".
 	*/
 	virtual const char *getDescription();
+	virtual const char *getEncoding();
 	virtual const char *translate(const char *text);
 	virtual void augment(SWLocale &addFrom);
 	virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
