@@ -26,7 +26,7 @@
 
 SWORD_NAMESPACE_START
 
-  /** This filter converts Latin-1 encoded text to UTF-8
+  /** This filter converts Latin-1 encoded text to UTF-16
   */
 class SWDLLEXPORT Latin1UTF16:public SWFilter {
 public:

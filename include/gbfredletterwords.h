@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfredletterwords.h,v 1.1 2003/01/14 19:30:18 joachim Exp $
+ * $Id: gbfredletterwords.h,v 1.2 2003/02/13 20:16:35 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,9 @@
 
 SWORD_NAMESPACE_START
 
-  /** This Filter shows/hides strong's numbers in a GBF text
+  /** This Filter shows/hides "red letter tags" (marking the
+	* words of Jesus) in a GBF text. Turn this off if you don't want
+	* to have this kind of markup in the text.
   */
 class SWDLLEXPORT GBFRedLetterWords : public SWFilter
 {

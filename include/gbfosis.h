@@ -53,7 +53,7 @@ public:
 	bool empty() { return quotes.empty(); }
 };
 
-/** this filter converts GBF text to HTML text with hrefs
+/** this filter converts GBF text to OSIS text
  */
 class SWDLLEXPORT GBFOSIS : public SWFilter {
 protected:

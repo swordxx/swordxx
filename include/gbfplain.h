@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfplain.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: gbfplain.h,v 1.10 2003/02/13 20:16:35 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,7 @@
 
 SWORD_NAMESPACE_START
 
-  /** This filter converts GBF text into plain text
+  /** This filter converts GBF text to plain text
   */
 class SWDLLEXPORT GBFPlain:public SWFilter
 {

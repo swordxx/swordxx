@@ -29,7 +29,7 @@
 #include <defs.h>
 SWORD_NAMESPACE_START
 
-  /** This Filter shows/hides reorders UTF-8 text according to Unicode BiDi
+  /** This Filter reorders UTF-8 text according to Unicode BiDi
   */
 class SWDLLEXPORT UTF8BiDiReorder : public SWFilter
 {

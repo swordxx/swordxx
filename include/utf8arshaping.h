@@ -29,7 +29,8 @@
 #include <defs.h>
 SWORD_NAMESPACE_START
 
-  /** This Filter shows/hides reorders UTF-8 text according to Unicode BiDi
+  /** This Filter controls the arabic shaping of UTF-8 text
+	* FIXME: is that correct? how to control it?
   */
 class SWDLLEXPORT UTF8arShaping : public SWFilter
 {

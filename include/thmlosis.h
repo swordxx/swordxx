@@ -22,7 +22,7 @@
 
 SWORD_NAMESPACE_START
 
-/** this filter converts ThML text to HTML text with hrefs
+/** this filter converts ThML text to OSIS text
  */
 class SWDLLEXPORT ThMLOSIS : public SWFilter {
 protected:
