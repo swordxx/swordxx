@@ -4,7 +4,7 @@ using namespace sword;
 %}
 
 typedef map < SWBuf, SWModule *, less < SWBuf > > ModMap;
-typedef list < SWBuf > OptionsList;
+typedef list < SWBuf > StringList;
 typedef map < SWBuf, SWFilter * > FilterMap;
 
 class SWMgr {
@@ -27,8 +27,8 @@ public:
   virtual void setGlobalOption (const char *option, const char *value);
   virtual const char *getGlobalOption (const char *option);
   virtual const char *getGlobalOptionTip (const char *option);
-  virtual OptionsList getGlobalOptions ();
-  virtual OptionsList getGlobalOptionValues (const char *option);
+  virtual StringList getGlobalOptions ();
+  virtual StringList getGlobalOptionValues (const char *option);
   virtual signed char setCipherKey (const char *modName, const char *key);
 	
   SWModule *getModule(const char *modName);
