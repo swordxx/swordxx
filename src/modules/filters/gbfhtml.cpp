@@ -66,7 +66,7 @@ bool GBFHTML::handleToken(char **buf, const char *token, DualStringMap &userData
 	const char *tok;
 	char val[128];
 	char *valto;
-	char *num;
+	const char *num;
 
 	if (!substituteToken(buf, token)) {		
 		// deal with OSIS note tags.  Just hide till OSISRTF		
