@@ -255,3 +255,21 @@ void ListKey::Remove() {
 		SetToElement((arraypos)?arraypos-1:0);
 	}
 }
+
+
+/******************************************************************************
+ * VerseKey::getRangeText - returns parsable range text for this key
+ */
+
+const char *ListKey::getRangeText() const {
+	char *buf = new char[(arraycnt + 1) * 255];
+	buf[0] = 0;
+	for (int i = 0; i < arraycnt; i++) {
+		strcat(buf, array[i]->getRangeText());
+		if (i < arraycnt-1)
+			strcat(buf, "; ");
+	}
+	stdstr(&rangeText, buf);
+	return rangeText;
+}
+

@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.13 2001/08/09 10:39:51 scribe Exp $
+ * $Id: listkey.h,v 1.14 2002/08/27 22:52:36 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -104,6 +104,7 @@ public:
 
 	virtual char Traversable () { return 1; }
 	virtual long Index () const { return arraypos; }
+	virtual const char *getRangeText() const;
 
 	/**
 	* Returns the index for the new one given as as parameter.

@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.26 2002/07/28 01:48:38 scribe Exp $
+ * $Id: versekey.h,v 1.27 2002/08/27 22:52:36 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -370,6 +370,7 @@ public:
 	virtual const char *getOSISRef() const;
 
 	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = "Genesis 1:1", bool expandRange = false);
+	virtual const char *getRangeText() const;
 	/** Compares another	SWKey object
 	*
 	* @param ikey key to compare with this one

@@ -1459,3 +1459,19 @@ const char *VerseKey::getOSISRef() const {
 	else	sprintf(buf[loop], "");
 	return buf[loop++];
 }
+
+
+/******************************************************************************
+ * VerseKey::getRangeText - returns parsable range text for this key
+ */
+
+const char *VerseKey::getRangeText() const {
+	if ((upperBound) && (lowerBound)) {
+		char buf[1023];
+		sprintf(buf, "%s-%s", (const char *)lowerBound, (const char *)upperBound);
+		stdstr(&rangeText, buf);
+	}
+	else stdstr(&rangeText, getText());
+	return rangeText;
+}
+

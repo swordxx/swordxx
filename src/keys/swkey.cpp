@@ -19,21 +19,23 @@ SWClass SWKey::classdef(classes);
 
 SWKey::SWKey(const char *ikey)
 {
-	index   = 0;
-	persist = 0;
-	keytext = 0;
-	error   = 0;
+	index     = 0;
+	persist   = 0;
+	keytext   = 0;
+	rangeText = 0;
+	error     = 0;
 	stdstr(&keytext, ikey);
 	init();
 }
 
 SWKey::SWKey(SWKey const &k)
 {
-	index    = k.index;
-	persist  = k.persist;
-	userData = k.userData;
-	keytext  = 0;
-	error    = k.error;
+	index     = k.index;
+	persist   = k.persist;
+	userData  = k.userData;
+	keytext   = 0;
+	rangeText = 0;
+	error     = k.error;
 	stdstr(&keytext, k.keytext);
 	init();
 }
@@ -54,6 +56,8 @@ SWKey *SWKey::clone() const
 SWKey::~SWKey() {
 	if (keytext)
 		delete [] keytext;
+	if (rangeText)
+		delete [] rangeText;
 }
 
 
@@ -130,11 +134,21 @@ void SWKey::copyFrom(const SWKey &ikey) {
 
 
 /******************************************************************************
- * SWKey::getText - returns text key if (char *) cast is requested
+ * SWKey::getText - returns text key if (const char *) cast is requested
  */
 
 const char *SWKey::getText() const {
 	return keytext;
+}
+
+
+/******************************************************************************
+ * SWKey::getRangeText - returns parsable range text for this key
+ */
+
+const char *SWKey::getRangeText() const {
+	stdstr(&rangeText, keytext);
+	return rangeText;
 }
 
 
