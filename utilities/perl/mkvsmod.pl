@@ -2,7 +2,7 @@
 
 open (INF, $ARGV[0]);
 
-`./addvs -c ./`;
+`addvs -c ./`;
 while (<INF>) {
     
     $line = $_;
@@ -13,7 +13,7 @@ while (<INF>) {
     open (BUF, ">buffer");
     print BUF "$ver";
     close (BUF);
-    $x = `./addvs -a ./ \"$ref\" buffer`;
+    $x = `addvs -a ./ \"$ref\" buffer`;
     print "$ref\n";
 
 }
