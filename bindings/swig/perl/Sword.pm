@@ -531,6 +531,10 @@ sub ParseVerseList {
 *_compare = *Swordc::VerseKey__compare;
 *setLocale = *Swordc::VerseKey_setLocale;
 *getLocale = *Swordc::VerseKey_getLocale;
+*bookCount = *Swordc::VerseKey_bookCount;
+*bookName = *Swordc::VerseKey_bookName;
+*chapterCount = *Swordc::VerseKey_chapterCount;
+*verseCount = *Swordc::VerseKey_verseCount;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

@@ -225,7 +225,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.7 2003/01/13 23:52:09 joachim Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.8 2003/01/31 00:24:04 joachim Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
@@ -696,6 +696,46 @@ VerseKey *SWKey_toVerseKey(SWKey *self){
 #include "listkey.h"
 using namespace sword;
 
+int const VerseKey_bookCount(VerseKey *self,int const testament){
+		if ( (testament < 1) || (testament > 2) ) {
+			return 0;
+		};
+		return self->BMAX[testament-1];
+	}
+char const *VerseKey_bookName(VerseKey *self,int const testament,int const book){
+		if ( (testament < 1) || (testament > 2) ) {
+			return "";
+		};
+		if ( (book < 1) || (book > self->BMAX[testament-1]) ) {
+			return "";
+		}
+
+		return self->books[testament-1][book-1].name;
+	}
+int const VerseKey_chapterCount(VerseKey *self,int const testament,int const book){
+		if ( (testament < 1) || (testament > 2) ) {
+			return 0;
+		};
+		if ( (book < 1) || (book > self->BMAX[testament-1]) ) {
+			return 0;
+		}
+
+		return self->books[testament-1][book-1].chapmax;
+	}
+int const VerseKey_verseCount(VerseKey *self,int const testament,int const book,int const chapter){
+		if ( (testament < 1) || (testament > 2) ) {
+			return 0;
+		};
+		if ( (book < 1) || (book > self->BMAX[testament-1]) ) {
+			return 0;
+		}
+		if ( (chapter < 1) || (chapter > self->books[testament-1][book-1].chapmax) ) {
+			return 0;
+		}
+
+		return self->books[testament-1][book-1].versemax[chapter-1];
+
+	}
 
 #include "listkey.h"
 using namespace sword;
@@ -5057,6 +5097,142 @@ XS(_wrap_VerseKey_getLocale) {
 }
 
 
+XS(_wrap_VerseKey_bookCount) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        VerseKey *arg1 = (VerseKey *) 0 ;
+        int arg2 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: VerseKey_bookCount(self,testament);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_VerseKey,0) < 0) {
+                SWIG_croak("Type error in argument 1 of VerseKey_bookCount. Expected _p_VerseKey");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        result = (int)VerseKey_bookCount(arg1,arg2);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_VerseKey_bookName) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        VerseKey *arg1 = (VerseKey *) 0 ;
+        int arg2 ;
+        int arg3 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 3) || (items > 3)) {
+            SWIG_croak("Usage: VerseKey_bookName(self,testament,book);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_VerseKey,0) < 0) {
+                SWIG_croak("Type error in argument 1 of VerseKey_bookName. Expected _p_VerseKey");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        arg3 = (int) SvIV(ST(2));
+        result = (char *)VerseKey_bookName(arg1,arg2,arg3);
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        }else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_VerseKey_chapterCount) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        VerseKey *arg1 = (VerseKey *) 0 ;
+        int arg2 ;
+        int arg3 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 3) || (items > 3)) {
+            SWIG_croak("Usage: VerseKey_chapterCount(self,testament,book);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_VerseKey,0) < 0) {
+                SWIG_croak("Type error in argument 1 of VerseKey_chapterCount. Expected _p_VerseKey");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        arg3 = (int) SvIV(ST(2));
+        result = (int)VerseKey_chapterCount(arg1,arg2,arg3);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_VerseKey_verseCount) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        VerseKey *arg1 = (VerseKey *) 0 ;
+        int arg2 ;
+        int arg3 ;
+        int arg4 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 4) || (items > 4)) {
+            SWIG_croak("Usage: VerseKey_verseCount(self,testament,book,chapter);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_VerseKey,0) < 0) {
+                SWIG_croak("Type error in argument 1 of VerseKey_verseCount. Expected _p_VerseKey");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        arg3 = (int) SvIV(ST(2));
+        arg4 = (int) SvIV(ST(3));
+        result = (int)VerseKey_verseCount(arg1,arg2,arg3,arg4);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
 XS(_wrap_new_ListKey__SWIG_0) {
     char _swigmsg[SWIG_MAX_ERRMSG] = "";
     const char *_swigerr = _swigmsg;
@@ -8717,6 +8893,10 @@ static swig_command_info swig_commands[] = {
 {"Swordc::VerseKey__compare", _wrap_VerseKey__compare},
 {"Swordc::VerseKey_setLocale", _wrap_VerseKey_setLocale},
 {"Swordc::VerseKey_getLocale", _wrap_VerseKey_getLocale},
+{"Swordc::VerseKey_bookCount", _wrap_VerseKey_bookCount},
+{"Swordc::VerseKey_bookName", _wrap_VerseKey_bookName},
+{"Swordc::VerseKey_chapterCount", _wrap_VerseKey_chapterCount},
+{"Swordc::VerseKey_verseCount", _wrap_VerseKey_verseCount},
 {"Swordc::new_ListKey", _wrap_new_ListKey},
 {"Swordc::delete_ListKey", _wrap_delete_ListKey},
 {"Swordc::ListKey_clone", _wrap_ListKey_clone},
