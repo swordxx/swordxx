@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
 #ifndef __GNUC__
 #include <io.h>
