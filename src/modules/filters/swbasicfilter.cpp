@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.9 2001/11/03 20:54:05 chrislit Exp $
+ * $Id: swbasicfilter.cpp,v 1.10 2001/11/03 21:41:45 chrislit Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <swbasicfilter.h>
-
+#include <stdio.h>
 
 SWBasicFilter::SWBasicFilter() {
 	tokenStart = 0;
@@ -106,41 +106,12 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 }
 
 
-void SWBasicFilter::pushString(char **buf, const char *fragToPush, const char *fragToPush2, const char *fragToPush3, const char *fragToPush4, const char *fragToPush5, const char *fragToPush6) {
-  while (*fragToPush) {
-    **buf = *fragToPush++;
-    (*buf)++;
-  }
-  if (fragToPush2) {
-    while (*fragToPush2) {
-      **buf = *fragToPush2++;
-      (*buf)++;
-    }
-    if (fragToPush3) {
-      while (*fragToPush3) {
-	**buf = *fragToPush3++;
-	(*buf)++;
-      }
-      if (fragToPush4) {
-	while (*fragToPush4) {
-	  **buf = *fragToPush4++;
-	  (*buf)++;
-	}
-	if (fragToPush5) {
-	  while (*fragToPush5) {
-	    **buf = *fragToPush5++;
-	    (*buf)++;
-	  }
-	  if (fragToPush6) {
-	    while (*fragToPush6) {
-	      **buf = *fragToPush6++;
-	      (*buf)++;
-	    }
-	  }
-	}
-      }
-    }
-  }
+void SWBasicFilter::pushString(char **buf, const char *fragToPush, ...) {
+  va_list argptr;
+
+  va_start(argptr, fragToPush);
+  vsprintf(*buf, fragToPush, argptr);
+  va_end(argptr);
 }
 
 
