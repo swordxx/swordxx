@@ -42,7 +42,7 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		from2[0] = *from;
 		from2[0] <<= 1;
 		int subsequent;
-		for (subsequent = 1; (from[0] & 128) && (subsequent < 7); subsequent++) {
+		for (subsequent = 1; (from2[0] & 128) && (subsequent < 7); subsequent++) {
 			from2[0] <<= 1;
 			from2[subsequent] = from[subsequent];
 			from2[subsequent] &= 63;
