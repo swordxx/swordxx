@@ -9,9 +9,9 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = icucommon.lib icui18n.lib libsword.lib mod2vpl.exe vpl2mod.exe \
-  mkfastmod.exe imp2gbs.exe imp2ld.exe imp2vs.exe thml2gbs.exe mod2zmod.exe \
-  mod2imp.exe cipherraw.exe stepdump.exe step2vpl.exe
+PROJECTS = libsword.lib mod2vpl.exe vpl2mod.exe mkfastmod.exe imp2gbs.exe \
+  imp2ld.exe imp2vs.exe thml2gbs.exe mod2zmod.exe mod2imp.exe cipherraw.exe \
+  stepdump.exe step2vpl.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -58,14 +58,6 @@ mod2zmod.exe: mod2zmod.bpr
 
 mod2imp.exe: mod2imp.bpr
   $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-icucommon.lib: ..\..\..\icu-sword\as_is\borland\common.bpr
-  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-icui18n.lib: ..\..\..\icu-sword\as_is\borland\i18n.bpr
-  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 stepdump.exe: stepdump.bpr

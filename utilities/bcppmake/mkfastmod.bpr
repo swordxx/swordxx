@@ -6,11 +6,13 @@
     <PROJECT value="mkfastmod.exe"/>
     <OBJFILES value="..\mkfastmod.obj"/>
     <RESFILES value=""/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\borland\icui18n.lib 
-      ..\..\..\icu-sword\as_is\borland\icudatab.lib 
-      ..\..\..\icu-sword\as_is\borland\icucommon.lib"/>
+    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\win32\borland\icui18n.lib 
+      ..\..\..\icu-sword\as_is\win32\borland\icudatab.lib 
+      ..\..\..\icu-sword\as_is\win32\borland\icucommon.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi QRPT50.bpi VCLDB50.bpi VCLBDE50.bpi 
