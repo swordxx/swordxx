@@ -1,6 +1,14 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+* Release 1.5.6 *
+
+26-Aug-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Packaged up 1.5.6
+	Updated CORBA services to expose a little more
+		functionality for the OSIS webapp
+
 12-Aug-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added Enciphering code that works with SWBuf
 	Fixed appendFormatted to re-init var_args
