@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #ifndef _MSC_VER
-#include <iostream.h>
+#include <iostream>
 #endif
 #include "swlog.h"
 //---------------------------------------------------------------------------
@@ -34,8 +34,8 @@ void SWLog::LogWarning(char *fmt, ...)
 		va_end(argptr);
 
 #ifndef _MSC_VER
-		cerr << msg;
-		cerr << "\n";
+		std::cerr << msg;
+		std::cerr << std::endl;
 #endif
 	}
 }
@@ -52,8 +52,8 @@ void SWLog::LogError(char *fmt, ...)
 		va_end(argptr);
 
 #ifndef _MSC_VER
-		cerr << msg;
-		cerr << "\n";
+		std::cerr << msg;
+		std::cerr << std::endl;
 #endif
 	}
 }
@@ -70,8 +70,8 @@ void SWLog::LogTimedInformation(char *fmt, ...)
 		va_end(argptr);
 
 #ifndef _MSC_VER
-		cout << msg;
-		cout << "\n";
+		std::cout << msg;
+		std::cout << std::endl;
 #endif
 	}
 }
@@ -88,8 +88,8 @@ void SWLog::LogInformation(char *fmt, ...)
 		va_end(argptr);
 
 #ifndef _MSC_VER
-		cout << msg;
-		cout << "\n";
+		std::cout << msg;
+		std::cout << std::endl;
 #endif
 	}
 } 

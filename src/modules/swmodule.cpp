@@ -11,7 +11,7 @@
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
 #ifndef _MSC_VER
-#include <iostream.h>
+#include <iostream>
 #endif
 
 SWDisplay SWModule::rawdisp;
@@ -472,12 +472,12 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 		else if (newperc < perc) {
 #ifndef _MSC_VER
-			cerr << "Serious error: new percentage complete is less than previous value\n";
-			cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
-			cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";
-			cerr << "highIndex: " << highIndex << "\n";
-			cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
-			cerr << "perc == "  << (int )perc << "% \n";
+			std::cerr << "Serious error: new percentage complete is less than previous value\n";
+			std::cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
+			std::cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";
+			std::cerr << "highIndex: " << highIndex << "\n";
+			std::cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
+			std::cerr << "perc == "  << (int )perc << "% \n";
 #endif
 		}
 		if (searchType >= 0) {

@@ -14,7 +14,6 @@
 #include <unistd.h>
 #endif
 
-#include <iostream.h>
 #include <string.h>
 #include <utilfuns.h>
 //#include <rawverse.h>

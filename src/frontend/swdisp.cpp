@@ -3,7 +3,7 @@
  *		  types of displays (e.g. raw textout, curses, xwindow, etc.)
  */
 
-#include <iostream.h>
+#include <iostream>
 #include <swmodule.h>
 #include <swdisp.h>
 
@@ -22,6 +22,6 @@ SWClass SWDisplay::classdef(classes);
 
 char SWDisplay::Display(SWModule &imodule)
 {
-	cout << (const char *)imodule;
+	std::cout << (const char *)imodule;
 	return 0;
 }

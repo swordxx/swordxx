@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.76 2002/07/23 19:47:42 scribe Exp $
+ * $Id: swmgr.cpp,v 1.77 2002/07/31 22:08:18 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,7 @@
 #endif
 #include <sys/stat.h>
 #ifndef _MSC_VER
-#include <iostream.h>
+#include <iostream>
 #endif
 #include <dirent.h>
 
@@ -279,14 +279,14 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 #ifndef _MSC_VER
 	// check working directory
 if (debug)
-	cerr << "Checking working directory for mods.conf...";
+	std::cerr << "Checking working directory for mods.conf...";
 #endif
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 		stdstr(prefixPath, "./");
@@ -296,14 +296,14 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking working directory for mods.d...";
+	std::cerr << "\nChecking working directory for mods.d...";
 #endif
 
 	if (FileMgr::existsDir(".", "mods.d")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 		stdstr(prefixPath, "./");
@@ -316,14 +316,14 @@ if (debug)
 	// check environment variable SWORD_PATH
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking SWORD_PATH...";
+	std::cerr << "\nChecking SWORD_PATH...";
 #endif
 
 	if (envsworddir != NULL) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found (" << envsworddir << ")\n";
+	std::cerr << "found (" << envsworddir << ")\n";
 #endif
 
 		path = envsworddir;
@@ -332,14 +332,14 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking $SWORD_PATH for mods.conf...";
+	std::cerr << "\nChecking $SWORD_PATH for mods.conf...";
 #endif
 
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 			stdstr(prefixPath, path.c_str());
@@ -350,14 +350,14 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking $SWORD_PATH for mods.d...";
+	std::cerr << "\nChecking $SWORD_PATH for mods.d...";
 #endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 			stdstr(prefixPath, path.c_str());
@@ -373,7 +373,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nParsing " << globalConfPath << "...";
+	std::cerr << "\nParsing " << globalConfPath << "...";
 #endif
 
 	char *globPaths = 0;
@@ -383,7 +383,7 @@ if (debug)
 
 	#ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking for " << gfp << "...";
+	std::cerr << "\nChecking for " << gfp << "...";
 #endif
 
 		if (FileMgr::existsFile(gfp))
@@ -394,7 +394,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 		SWConfig etcconf(gfp);
@@ -405,18 +405,18 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "DataPath in " << gfp << " is set to: " << path;
+	std::cerr << "DataPath in " << gfp << " is set to: " << path;
 #endif
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking for mods.conf in DataPath ";
+	std::cerr << "\nChecking for mods.conf in DataPath ";
 #endif
 			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 				stdstr(prefixPath, path.c_str());
@@ -428,14 +428,14 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking for mods.d in DataPath ";
+	std::cerr << "\nChecking for mods.d in DataPath ";
 #endif
 
 			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 				stdstr(prefixPath, path.c_str());
@@ -454,7 +454,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
+	std::cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
 #endif
 
 	if (envhomedir != NULL) {
@@ -466,7 +466,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << " found\n";
+	std::cerr << " found\n";
 #endif
 
 			stdstr(prefixPath, path.c_str());
@@ -477,14 +477,14 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
+	std::cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
 #endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	std::cerr << "found\n";
 #endif
 
 			stdstr(prefixPath, path.c_str());
