@@ -534,7 +534,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					}
 				}
 
-				if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
+				// check for '-'
+				for (q = 0; ((buf[q]) && (buf[q] == ' ')); q++);
+				if ((buf[q] == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
+					buf+=q;
 					VerseKey newElement;
 					newElement.LowerBound(curkey);
 					newElement.setPosition(TOP);
