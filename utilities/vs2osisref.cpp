@@ -44,8 +44,10 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 		char frag[800];
 		char preJunk[800];
 		char postJunk[800];
-		*preJunk = 0;
-		*postJunk = 0;
+		memset(buf, 0, 5120);
+		memset(frag, 0, 800);
+		memset(preJunk, 0, 800);
+		memset(postJunk, 0, 800);
 		while ((*startFrag) && (strchr(" ;,()[].", *startFrag))) {
 			outRef += *startFrag;
 			startFrag++;
