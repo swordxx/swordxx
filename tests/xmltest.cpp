@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 	XMLTag x((argc > 1) ? argv[1] : "<verse osisID=\"John.1.1\" type=\"test type\" yeah = \"stuff\" />");
-	x.setAttribute("newOne", "oneValue");
+//	x.setAttribute("newOne", "oneValue");
 	cout << x.toString() << "\n";
 	cout << "Tag name: [" << x.getName() << "]\n";
 	ListString attributes = x.getAttributeNames();

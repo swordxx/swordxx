@@ -75,6 +75,8 @@ void XMLTag::setText(const char *tagString) {
 
 	int start = 0;
 	int i;
+
+	// skip beginning silliness
 	for (i = 0; ((tagString[i]) && (!isalpha(tagString[i]))); i++) {
 		if (tagString[i] == '/')
 			endTag = true;
@@ -87,6 +89,8 @@ void XMLTag::setText(const char *tagString) {
 		name = new char [ (i-start) + 1 ];
 		strncpy(name, tagString+start, i-start);
 		name[i-start] = 0;
+		if (tagString[i] == '/')
+			empty = true;
 	}
 }
 
