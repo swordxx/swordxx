@@ -1,5 +1,7 @@
 %{
 #include "rawgenbook.h"
+#include "treekeyidx.h"
+#include "swkey.h"
 using namespace sword;
 %}
 
@@ -9,6 +11,12 @@ public:
 	virtual ~ RawGenBook ();
 	
 	static char createModule (const char *ipath);
+
+%extend {
+	TreeKeyIdx* getTreeKey() {
+		return ( (TreeKeyIdx *) ( (SWKey *) (*self) ) );
+	};
+}
 };
 
 
