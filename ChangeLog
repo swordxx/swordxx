@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+13-Jan-2001	Chris Little <chrislit@crosswire.org>
+	Added arg to vpl2mod to work with NT-only translations
+
 30-Dec-2000	Chris Little <chrislit@crosswire.org>
 	Fixed prn2sword so that it should work with new OLBs
 

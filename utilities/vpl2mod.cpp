@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
 	// Let's test our command line arguments
 	if (argc < 2) {
 //		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod> [0|1 - file includes prepended verse references]\n", argv[0]);
-		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod/> [0|1 - verse ref prepended to lines]\n", argv[0]);
+		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod/> [0|1 - verse ref prepended to lines] [0|1 - NT only]\n", argv[0]);
 		exit(-1);
 	}
 
@@ -143,6 +143,11 @@ int main(int argc, char **argv) {
 	if (argc > 2)
 		vref = (argv[3][0] == '0') ? false : true;
 
+	// if 'nt' is the 4th arg, our vpl file only has the NT
+	bool ntonly = false;
+	if (argc > 3)
+                ntonly = (argv[4][0] == '0') ? false : true;
+	
 	// Do some initialization stuff
 	char *buffer = 0;
 	RawText mod(argv[2]);	// open our datapath with our RawText driver.
@@ -156,6 +161,8 @@ int main(int argc, char **argv) {
 	// Loop through module from TOP to BOTTOM and set next line from
 	// input file as text for this entry in the module
 	mod = TOP;
+	if (ntonly) vk = "Matthew 1:1";
+	  
 
 	while ((!mod.Error()) && (!readline(fd, &buffer))) {
 		if (*buffer == '|')	// comments, ignore line
