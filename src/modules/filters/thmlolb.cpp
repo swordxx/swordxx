@@ -31,6 +31,7 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
   bool intoken 	= false;
   int len;
   bool ampersand = false;
+  int i;
   
   len = strlen(text) + 1;						// shift string to right of buffer
   if (len < maxlen) {
@@ -161,6 +162,17 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
 	  intoken = false;
 	  // process desired tokens
 	  if (!strncmp(token, "sync type=\"Strongs\" value=\"G", 27)) {
+		*to++ = '<';
+		for (i = 28; token[i] != '\"'; i++)
+			*to++ = token[i];
+		*to++ = '>';
+	    continue;
+	  }
+	  else if (!strncmp(token, "sync type=\"Strongs\" value=\"H", 27)) {
+		*to++ = '<';
+		for (i = 28; token[i] != '\"'; i++)
+			*to++ = token[i];
+		*to++ = '>';
 	    continue;
 	  }
 	  else if (!strncmp(token, "scripRef", 8)) {
@@ -171,7 +183,7 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
 	    *to++ = ' ';
 	    continue;
 	  }
-	  else if (!strncmp(token, "note place=\"foot\"", 17)) {
+	  else if (!strncmp(token, "note ", 5)) {
 	    *to++ = '{';
 	    continue;
 	  }
@@ -179,12 +191,12 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
 	    *to++ = '}';
 	    continue;
 	  }
-	  else if (!strnicmp(token, "font color=#ff0000", 18)) {
+	  else if (!strnicmp(token, "font", 4)) {
 	    *to++ = '\\';
 	    *to++ = '\\';
 	    continue;
 	  }
-	  else if (!strnicmp(token, "\\font", 5)) {
+	  else if (!strnicmp(token, "/font", 5)) {
 	    *to++ = '\\';
 	    *to++ = '\\';
 	    continue;	    
