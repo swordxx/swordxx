@@ -1,7 +1,6 @@
 /******************************************************************************
  *
- * osisstrongs -	SWFilter descendant to hide or show strongs number
- *			in a OSIS module.
+ * swoptfilter -	SWFilter descendant and base class for all option filters
  */
 
 

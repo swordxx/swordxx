@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: swoptfilter.h,v 1.1 2003/07/05 04:58:42 scribe Exp $
+ * $Id: swoptfilter.h,v 1.2 2003/07/05 08:53:05 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,7 +25,7 @@
 
 SWORD_NAMESPACE_START
 
-  /** This Filter shows/hides strong's numbers in a OSIS text
+  /** Base class for all option filters.
   */
 class SWDLLEXPORT SWOptionFilter : public SWFilter {
 protected:
