@@ -179,9 +179,10 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 					continue;
 				case 'N':
 					text += '{';
-					   if (!strnicmp(token+2, "Symbol", 6)) {
-						   text += "\\f7 ";
-					}
+					if (!strnicmp(token+2, "Symbol", 6))
+						text += "\\f7 ";
+                                        if (!strnicmp(token+2, "Courier", 7))
+						text += "\\f8 ";
 					continue;
 				case 'n':
 					text += '}';
