@@ -283,7 +283,8 @@ const char *ListKey::getRangeText() const {
  */
 
 const char *ListKey::getText() const {
-	SWKey *key = GetElement();
+	int pos = arraypos;
+	SWKey *key = (pos >= arraycnt) ? 0:array[pos];
 	return (key) ? key->getText() : keytext;
 }
 
