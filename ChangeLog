@@ -3,6 +3,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 03-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added dynamic entry "AbsoluteDataPath" to module config
+		information
 	Fixed an error in the new SWModule::getConfig*
 		methods that tbiggs pointed out with .sword
 

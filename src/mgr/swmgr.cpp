@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.60 2002/03/03 12:06:12 scribe Exp $
+ * $Id: swmgr.cpp,v 1.61 2002/03/04 00:45:14 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -605,6 +605,8 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	if (*buf2)
 		datapath += buf2;
 	delete [] buf;
+
+	section["AbsoluteDataPath"] = datapath;
 
         if (!stricmp(sourceformat.c_str(), "GBF"))
                 markup = FMT_GBF;
