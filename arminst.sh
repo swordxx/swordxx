@@ -1,8 +1,11 @@
 #!/bin/sh
 
-./configure --prefix=/usr \
+export PATH=$PATH:/usr/local/arm/bin
+export CXXFLAGS="-I/usr/include/g++-3 -O3"
+export CFLAGS="-O3"
+./configure --host=arm-v4l-linux --prefix=/usr \
 	--disable-shared \
-	--enable-debug --without-conf --sysconfdir=/etc --with-vcl
+	--without-conf --sysconfdir=/etc 
 
 echo ""
 echo ""

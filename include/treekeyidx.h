@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.h,v 1.1 2002/01/24 08:55:27 scribe Exp $
+ * $Id: treekeyidx.h,v 1.2 2002/04/15 21:26:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,6 +59,7 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 	char getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const;
 	void saveTreeNode(TreeNode *node);
 	void saveTreeNodeOffsets(TreeNode *node);
+	void init();
 
 public:
 	TreeKeyIdx(const TreeKeyIdx &ikey);

@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.15 2002/04/07 23:12:38 scribe Exp $
+ * $Id: swkey.h,v 1.16 2002/04/15 21:26:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -149,6 +149,7 @@ public:
   /** returns text key if (char *) cast is requested
   */
   virtual const char *getText() const;
+  virtual const char *getShortText() const { return getText(); }
 
   /** Compares another VerseKey object
   *

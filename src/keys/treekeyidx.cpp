@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.6 2002/04/07 23:12:38 scribe Exp $
+ * $Id: treekeyidx.cpp,v 1.7 2002/04/15 21:26:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,12 +33,13 @@
 #endif
 
 using namespace std;
-static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
 static const char nl = '\n';
+static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKeyIdx::classdef(classes);
 
 
 TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
+	init();
 	path = 0;
 	idxfd = 0;
 	datfd = 0;
@@ -48,6 +49,7 @@ TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
 TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	char buf[127];
 
+	init();
 	path = 0;
 	stdstr(&path, idxPath);
 
@@ -72,6 +74,11 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	else {
 		root();
 	}
+}
+
+
+void TreeKeyIdx::init() {
+	myclass = &classdef;
 }
 
 
