@@ -2,7 +2,7 @@ root := ..
 subdirs := 
 pre-targets := 
 bin := yes
-targets := keytest mgrtest parsekey listtest casttest modtest compnone complzss
+targets := keytest mgrtest parsekey listtest casttest modtest compnone complzss compzip
 include ${root}/Makefile.cfg
 
 
@@ -31,6 +31,9 @@ compnone: compnone.o
 
 complzss: complzss.o
 	$(CC) $(LFLAGS) -o $@ complzss.o $(l) $(l) -O0
+
+compzip: compzip.o
+	$(CC) $(LFLAGS) -o $@ compzip.o $(l) $(l) -O0
 
 
 ifneq ($(nodeps),yes)
