@@ -10,5 +10,7 @@ cpp += unixstr.cpp
 
 c += regex.c
 c += utilstr.c
+c += crypt_util.c
+c += crypt.c
 
 include ${root}/Makefile.post
