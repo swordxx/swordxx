@@ -1,6 +1,16 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+05-Jun-1999
+	Sorry for not keeping the ChangeLog current
+	Lots of other stuff I'm sure I forgot
+	New mods.d configuration
+	Begin phase out of RawGBF.  Move to RawText with SourceType=GBF
+	Added OptionFilters
+	Added scoped searches
+	More bug fixes, as always
+	Profiling to speed up some sections of code
+	
 09-Jan-1999
 	Various API bug fixes.
 	Added naviation support for all module types

@@ -19,7 +19,7 @@ UNIX developers	You can try a make from this directory.  This should compile
 
 
 C++Builder developers	You may find project file and source for the WIN32
-		frontend under apps/windows/CBuilder3/BibleCS
+		frontend under apps/windows/CBuilder4/BibleCS
 
 
 Delphi developers	You will need to place sword32.dll in your winsys

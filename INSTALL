@@ -4,7 +4,7 @@ be built in the ./lib directory.  If you encounter an error, you may need
 to change a setting in the Makefile.cfg file.  Most obviously watch for:
 CC=gcc or CC=egcs
 
-After the libraries are built, one, then, may proceed to the ./apps
+After the libraries are built, one then may proceed to the ./apps
 directory.  The most basic application that is stable and easy to
 build is the cheatah frontend (./apps/X11/cheatah).  These frontends
 each have their own make system, so read the help in their respective
@@ -16,7 +16,7 @@ To be useful the software needs to find SWORD 'modules' installed somewhere
 accessible.  These module plugins consist of Bible texts, commentaries,
 dictionaries, and the like.  New plugins are constantly being added.  They
 may be obtained from:
-http://www.crosswire.org or various mirrors
+http://www.crosswire.org or various mirrors.
 A file named 'mods.conf' or directory named mods.d contains all configuration
 information regarding the installed modules available to the API.  The format
 of a config file is fairly straight-forward, and most modules come with their
