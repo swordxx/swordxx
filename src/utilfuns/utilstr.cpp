@@ -84,7 +84,6 @@ const char *stristr(const char *s1, const char *s2) {
 	return retVal;
 }
 
-
 /******************************************************************************
  * strnicmp - compares the first n bytes of 2 string ignoring case
  *
@@ -94,14 +93,16 @@ const char *stristr(const char *s1, const char *s2) {
  */
 
 const char strnicmp(const char *s1, const char *s2, int len) {
-	int tLen = strlen(s2);
-	int cLen = strlen(s1);
+
+     int tLen = strlen(s2);
+     int cLen = strlen(s1);
      char diff;
      int i;
      for (i = 0; ((i < len) && (i < tLen) && (i < cLen)); i++) {
      	if ((diff = toupper(*s1) - toupper(*s2)))
           	return diff;
+	s1++;
+	s2++;
      }
      return (i < len) ? cLen - tLen : 0;
 }
-
