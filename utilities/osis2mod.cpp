@@ -27,7 +27,7 @@ using namespace sword;
 using namespace std;
 
 RawText *module;
-VerseKey currentVerse;
+VerseKey *currentVerse = 0;
 
 char readline(int fd, char **buf) {
 	char ch;
@@ -119,12 +119,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
 		if (inHeader) {	// this one should never happen, but just in case
 //			cout << "HEADING ";
-			writeEntry(currentVerse, text);
+			writeEntry(*currentVerse, text);
 			inHeader = false;
 		}
-		currentVerse = token.getAttribute("osisID");
-		currentVerse.Chapter(0);
-		currentVerse.Verse(0);
+		*currentVerse = token.getAttribute("osisID");
+		currentVerse->Chapter(0);
+		currentVerse->Verse(0);
 		inHeader = true;
 		headerType = "book";
 		lastTitle = "";
@@ -133,12 +133,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	else if ((((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag()) && (token.getAttribute("osisID")))) {
 		if (inHeader) {
 //			cout << "HEADING ";
-			writeEntry(currentVerse, text);
+			writeEntry(*currentVerse, text);
 			inHeader = false;
 		}
 
-		currentVerse = token.getAttribute("osisID");
-		currentVerse.Verse(0);
+		*currentVerse = token.getAttribute("osisID");
+		currentVerse->Verse(0);
 		inHeader = true;
 		headerType = "chap";
 		lastTitle = "";
@@ -147,11 +147,11 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
 		if (inHeader) {
 //			cout << "HEADING ";
-			writeEntry(currentVerse, text);
+			writeEntry(*currentVerse, text);
 			inHeader = false;
 		}
 
-		currentVerse = token.getAttribute("osisID");
+		*currentVerse = token.getAttribute("osisID");
 		text = "";
 		return true;
 	}
@@ -165,7 +165,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			titleTag.setAttribute("subtype", "x-preverse");
 			text = SWBuf(titleTag) + SWBuf(end+1) + text;
 		}
-		writeEntry(currentVerse, text);
+		writeEntry(*currentVerse, text);
 		lastTitle = "";
 		text = "";
 		return true;
@@ -204,11 +204,12 @@ int main(int argc, char **argv) {
 	// Do some initialization stuff
 	char *buffer = 0;
 	module = new RawText(argv[1]);	// open our datapath with our RawText driver.
-	currentVerse.AutoNormalize(0);
-	currentVerse.Headings(1);	// turn on mod/testmnt/book/chap headings
-	currentVerse.Persist(1);
+	currentVerse = new VerseKey();
+	currentVerse->AutoNormalize(0);
+	currentVerse->Headings(1);	// turn on mod/testmnt/book/chap headings
+	currentVerse->Persist(1);
 
-	module->setKey(currentVerse);
+	module->setKey(*currentVerse);
 
 	(*module) = TOP;
 	  
@@ -230,8 +231,11 @@ int main(int argc, char **argv) {
 			if (*from == '>') {
 				intoken = false;
 				token += ">";
-				if (!handleToken(text, token.c_str())) {
-					text += token;
+				// take this isalpha if out to check for bugs in text
+				if ((isalpha(token[1])) || (isalpha(token[2]))) {
+					if (!handleToken(text, token.c_str())) {
+						text += token;
+					}
 				}
 				continue;
 			}
@@ -244,6 +248,9 @@ int main(int argc, char **argv) {
 	// clear up our buffer that readline might have allocated
 	if (buffer)
 		delete [] buffer;
+	delete module;
+	delete currentVerse;
+	close(fd);
 }
 
 

@@ -341,6 +341,7 @@ char RawVerse::createModule(const char *ipath)
 	FileMgr::systemFileMgr.close(fd2);
 
 	delete [] path;
+	delete [] buf;
 /*
 	RawVerse rv(path);
 	VerseKey mykey("Rev 22:21");

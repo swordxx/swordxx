@@ -103,7 +103,7 @@ Item0=_DEBUG
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=KJV
+RunParams=./nasb nasb.xml
 HostApplication=
 RemoteHost=
 RemotePath=
