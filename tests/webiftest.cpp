@@ -29,14 +29,26 @@ int main(int argc, char **argv) {
 	mgr.setGlobalOption("Strong's Numbers", "on");
 	mgr.setGlobalOption("Morphological Tags", "on");
 
-	SWModule *module = mgr.Modules["KJV"];
+	SWModule *module = mgr.Modules["TSK"];
 	if (!module) {
 		module = mgr.Modules.begin()->second;
+	}
+	module->setKey("John");
+	std::cout << module->RenderText() << std::endl<< std::endl<< std::endl;
+
+	//------------------------
+
+	SWMgr mgr2(0, 0, true, new MarkupFilterMgr(FMT_HTML, ENC_UTF8));
+	mgr2.setGlobalOption("Strong's Numbers", "on");
+	mgr2.setGlobalOption("Morphological Tags", "on");
+	module = mgr2.Modules["TSK"];
+	if (!module) {
+		module = mgr2.Modules.begin()->second;
 	}
 
 	module->setKey("John");
 	std::cout << module->RenderText() << std::endl;
 
-    	return 0;
+	return 0;
 }
 

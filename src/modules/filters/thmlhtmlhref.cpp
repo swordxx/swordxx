@@ -18,6 +18,7 @@
 #include <string.h>
 #include <thmlhtmlhref.h>
 #include <swmodule.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
  
@@ -137,13 +138,13 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	const char *tok;
-	if (!substituteToken(buf, token)) {
-	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync ", 5)) {
+	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		XMLTag tag(token);
+		if (!strcmp(tag.getName(), "sync")) {
 			if(strstr(token,"type=\"morph\"")){
 				buf += "<small><em> (<a href=\"";
 			}				
-			else 
+			else
 				buf += "<small><em> &lt;<a href=\"";
 			for (tok = token + 5; *(tok+1); tok++)
 				if(*tok != '\"')
@@ -162,73 +163,75 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 					break;
 				}
 			}
-			if(strstr(token,"type=\"morph\"")) 
+
+			if(strstr(token,"type=\"morph\""))
 				buf += "</a>) </em></small>";
-			else 				
+			else
 				buf += "</a>&gt; </em></small>";
 		}
-		
-		else if (!strncmp(token, "scripture ", 10)) {
+		else if (!strcmp(tag.getName(), "scripture")) {
 			userData["inscriptRef"] = "true";
 			buf += "<i>";
-		} 
-
-		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
-			userData["inscriptRef"] = "true";
-			buf += "<a href=\"";
-			for (const char *tok = token + 9; *(tok+1); tok++)				
-				if(*tok != '\"') 			
-					buf += *tok;
-			buf += '\"';
-			buf += '>';
-		} 
-
-		// we're starting a scripRef like "<scripRef>John 3:16</scripRef>"
-		else if (!strcmp(token, "scripRef")) {
-			userData["inscriptRef"] = "false";
-			// let's stop text from going to output
-			userData["suspendTextPassThru"] = "true";
 		}
+		else if (!strcmp(tag.getName(), "scripRef")) {
+			if (tag.isEndTag()) {
+				if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+					userData["inscriptRef"] = "false";
+					buf += "</a>";
+				}
+				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
+					buf += "<a href=\"passage=";
+					buf += userData["lastTextNode"].c_str();
+					buf += "\">";
 
-		// we've ended a scripRef 
-		else if (!strcmp(token, "/scripRef")) {
-			if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
-				userData["inscriptRef"] = "false";
-				buf +="</a>";
+					buf += userData["lastTextNode"].c_str();
+					buf += "</a>";
+
+					// let's let text resume to output again
+					userData["suspendTextPassThru"] = "false";
+				}
 			}
-			
-			else { // like "<scripRef>John 3:16</scripRef>"
-				buf += "<a href=\"passage=";
-				//char *strbuf = (char *)userData["lastTextNode"].c_str();
-				buf += userData["lastTextNode"].c_str();
+			else if (tag.getAttribute("passage")) { //passage given
+				userData["inscriptRef"] = "true";
+
+				buf += "<a href=\"";
+				if (const char* version = tag.getAttribute("version")) {
+					buf += "version=";
+					buf += version;
+					buf += " ";
+				}
+				if (const char* passage = tag.getAttribute("passage")) {
+					buf += "passage=";
+					buf += passage;
+				}
 				buf += "\">";
-				//buf += '>';
-				buf += userData["lastTextNode"].c_str();
-				// let's let text resume to output again
-				userData["suspendTextPassThru"] = "false";	
-				buf += "</a>";
+			}
+			else { //no passage or version given
+				userData["inscriptRef"] = "false";
+				// let's stop text from going to output
+				userData["suspendTextPassThru"] = "true";
 			}
 		}
-			
-		else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-		        userData["SecHead"] = "true";
-			buf += "<br /><b><i>";
-		}
-		else if (!strncmp(token, "div class=\"title\"", 19)) {
-		        userData["SecHead"] = "true";
-			buf += "<br /><b><i>";
-		}
-		else if (!strncmp(token, "/div", 4)) {
-		        if (userData["SecHead"] == "true") {
-			        buf += "</i></b><br />";
+		else if (!strcmp(tag.getName(), "div")) {
+			if (tag.isEndTag() && userData["SecHead"] == "true") {
+				buf += "</i></b><br />";
 				userData["SecHead"] = "false";
 			}
+			else if (tag.getAttribute("class")) {
+				if (!strcasecmp(tag.getAttribute("class"), "sechead")) {
+					userData["SecHead"] = "true";
+					buf += "<br /><b><i>";
+				}
+				else if (!strcasecmp(tag.getAttribute("class"), "title")) {
+					userData["SecHead"] = "true";
+					buf += "<br /><b><i>";
+				}
+			}
 		}
-/*
-		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
+/*		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			buf +="<a href=\"");
-			for (tok = token + 5; *(tok+1); tok++)				
-				if(*tok != '\"') 			
+			for (tok = token + 5; *(tok+1); tok++)
+				if(*tok != '\"')
 					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
@@ -238,7 +241,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			buf +="</a>");
 		}
 */
-		else if (!strncmp(token, "img ", 4)) {
+		else if (!strcmp(tag.getName(), "img")) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
 				return false;
@@ -264,9 +267,6 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			}
 			buf += '>';
 		}
-		else if (!strncmp(token, "note", 4)) {
-			buf += " <small><font color=\"#800000\">(";
-		}                
 		else {
 			buf += '<';
 			/*for (const char *tok = token; *tok; tok++)

@@ -1,6 +1,4 @@
-
 #include <utilxml.h>
-#include <ctype.h>
 #include <string>
 #include <map>
 
@@ -8,30 +6,27 @@ SWORD_NAMESPACE_START
 
 using std::string;
 using std::map;
-using std::pair;
 
-typedef pair<string,string> DataPair;
-typedef map<string,string> DataMap;
+typedef map<unsigned char,string> DataMap;
 
 const std::string encodeURL( const std::string& url ) {
-	string buf( url );
+    	DataMap m;
+	for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
+			if ( (c>='A' && c<='Z') || (c>='a' && c<='z') || (c>='0' && c<='9') || strchr("-_.!~*'()", c)) {
+				continue; //we don't need an encoding for this char
+			}
 
-    DataMap m;
-	m[" "] = "+";
-	m[":"] = "%3A";
+			char s[3];
+			snprintf(s, 3, "%-.2X", c); //left-aligned, 2 digits, uppercase hex
+			m[c] = string("%") + s; //encoded char is "% + 2 digit hex code of char"
+	}
+	//the special encodings for certain chars
+	m[' '] = '+';
 
-	DataMap::iterator it;
-
-	for (it = m.begin(); it != m.end(); ++it) {
-		string search =  it->first;
-		string replace = it->second;
-		while (true) {
-			string::size_type idx = buf.find(search);
-			if (idx == string::npos)
-				break;
-
-			buf.replace(idx, search.length(), replace);
-		}
+	string buf;
+	for (int i = 0; i <= url.length(); i++) { //fill "buf"
+		const char c = url[i];
+		buf += m[c].empty() ? string(1,c) : m[c];
 	}
 
 	return buf;

@@ -18,6 +18,7 @@
 #include <string.h>
 #include <thmlhtml.h>
 #include <swmodule.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
@@ -129,51 +130,59 @@ ThMLHTML::ThMLHTML() {
 */
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("/scripRef", " </a>");
 	addTokenSubstitute("note", " <font color=\"#800000\"><small>(");
 	addTokenSubstitute("/note", ")</small></font> ");
 }
 
 
 bool ThMLHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
-	if (!substituteToken(buf, token)) {
-	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
-                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
-        			buf += "<small><em>";
-	        		for (const char *tok = token + 5; *tok; tok++)
-		        		if(*tok != '\"')
-			        		buf += *tok;
-        			buf += "</em></small>";
-                        }
-                        else if (token[27] == 'T') {
-        			buf += "<small><i>";
-        			for (unsigned int i = 29; token[i] != '\"'; i++)
-        				buf += token[i];
-        			buf += "</i></small>";
-                        }
+	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		XMLTag tag(token);
+		if (!strcmp(tag.getName(), "sync")) {
+			if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "Strongs")) {
+				const char* value = tag.getAttribute("value");
+				if (*value == 'H' || *value == 'G' || *value == 'A') {
+					value++;
+					buf += "<small><em>";
+					buf += value;
+					buf += "</em></small>";
+				}
+				else if (*value == 'T') {
+					value += 2;
+
+					buf += "<small><i>";
+					buf += value;
+					buf += "</i></small>";
+				}
+			}
+			else if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "morph")) {
+				buf += "<small><em>";
+				buf += tag.getAttribute("value");
+				buf += "</em></small>";
+			}
+			else if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "lemma")) {
+				buf += "<small><em>(";
+				buf += tag.getAttribute("value");
+				buf += ")</em></small>";
+			}
 		}
-		else if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
-			buf += "<small><em>";
-			for (unsigned int i = 25; token[i] != '\"'; i++)
-				buf += token[i];
-			buf += "</em></small>";
+		else if (!strcmp(tag.getName(), "div")) {
+			if (tag.isEndTag() && (userData["SecHead"] == "true")) {
+				buf += "</i></b><br />";
+				userData["SecHead"] = "false";
+			}
+			else if (tag.getAttribute("class")) {
+				if (!strcasecmp(tag.getAttribute("class"), "sechead")) {
+					userData["SecHead"] = "true";
+					buf += "<br /><b><i>";
+				}
+				else if (!strcasecmp(tag.getAttribute("class"), "title")) {
+					userData["SecHead"] = "true";
+					buf += "<br /><b><i>";
+				}
+			}
 		}
-		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
-			buf += "<small><em>(";
-			for (unsigned int i = 25; token[i] != '\"'; i++)
-				buf += token[i];
-			buf += ")</em></small>";
-		}
-		else if (!strncmp(token, "scripRef", 8)) {
-			buf += "<a href=\"";
-			for (const char *tok = token + 9; *tok; tok++)
-				if(*tok != '\"')
-					buf += *tok;
-			buf += '\"';
-			buf += '>';
-		}
-		else if (!strncmp(token, "img ", 4)) {
+		else if (!strcmp(tag.getName(), "img")) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
 				return false;
@@ -199,12 +208,15 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userDat
 			}
 			buf += '>';
 		}
-		else if(!strncmp(token, "note", 4)) {
-                        buf += " <font color=\"#800000\"><small>(";
-                }
+		else if (!strcmp(tag.getName(), "scripRef")) { //do nothing with scrip refs, we leave them out
 
+		}
 		else {
-			return false;  // we still didn't handle token
+			buf += '<';
+			buf += token;
+			buf += '>';
+
+//			return false;  // we still didn't handle token
 		}
 	}
 	return true;

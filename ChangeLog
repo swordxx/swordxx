@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+06-Jun-2003     Joachim Ansorg <junkmail@joachim.ansorgs.de>
+	Implemented encodeURL() function in utilweb.cpp
+	Converted ThMLHTML filter to XMLTag, removed handling of scripRefs
+		because this shouldn't be done in FMT_HTML
+	Converted ThMLHTMLHREF to XMLTag. Fixed some things.
+	Simplified some small things in filters, nothing big.
+
 01-Jun-2003     Joachim Ansorg <junkmail@joachim.ansorgs.de>
 	Added WEBIF filters, based on HTMLHREF filters.
 	Added new utilweb stuff for working with urls etc.

@@ -47,7 +47,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 					url += *tok;
 				}
 			}
-			buf.appendFormatted("<a href=\"%s?sync_key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
+			buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
 
                         //scan for value and add it to the buffer
 			for (tok = token + 5; *tok; tok++) {
@@ -76,7 +76,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 					url += *tok;
 			}
 
-			buf.appendFormatted("<a href=\"%s?p_key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str());
+			buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str());
 		}
 
 		// we've ended a scripRef
