@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -15,6 +16,7 @@
 #include <iostream>
 #include <swbuf.h>
 #include <utilxml.h>
+#include <listkey.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -99,6 +101,17 @@ void writeEntry(VerseKey &key, SWBuf &text) {
 	module->setEntry(text);
 }
 
+void linkToEntry(VerseKey& dest) {
+//	cout << "Verse: " << key << "\n";
+//	cout << "TEXT: " << text << "\n\n";
+	//SWBuf currentText = module->getRawEntry();
+	//if (currentText.length())
+	//	text = currentText + " " + text;
+	
+	cout << "Linking " << module->KeyText() << " to " << dest.getText() << "\n";
+	module->linkEntry(&dest);
+}
+
 
 bool handleToken(SWBuf &text, XMLTag token) {
 	static bool inHeader = false;
@@ -106,6 +119,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	static SWBuf header = "";
 	static SWBuf lastTitle = "";
 	static int titleOffset = -1;
+	
+	static ListKey lastVerseIDs = ListKey();
 
 	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag())) {
 		titleOffset = text.length();
@@ -152,7 +167,23 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		}
 
 		*currentVerse = token.getAttribute("osisID");
+		
+		string str = token.getAttribute("osisID");
+		int pos = 0;
+		while ((pos = str.find(' ', pos)) != string::npos) {
+			str.replace(pos, 1, ";");
+		}
+		
+		//cout << "set the list\n" << token.getAttribute("osisID");
+		lastVerseIDs = currentVerse->ParseVerseList(str.c_str());
+//		if (lastVerseIDs.Count() > 1)
+//			cout << "count is" << lastVerseIDs.Count();
+
+		if (lastVerseIDs.Count())
+			*currentVerse = lastVerseIDs.getElement(0)->getText();
+		
 		text = "";
+		
 		return true;
 	}
 	if ((!strcmp(token.getName(), "verse")) && (token.isEndTag())) {
@@ -166,6 +197,17 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			text = SWBuf(titleTag) + SWBuf(end+1) + text;
 		}
 		writeEntry(*currentVerse, text);
+		
+		// If we found an osisID like osisID="Gen1.1 Gen1.2 Gen 1.3" we have to link Gen1.2 and Gen1.3 to Gen1.1
+		VerseKey dest = *currentVerse;
+		for (int i = 0; i < lastVerseIDs.Count(); ++i) {
+			VerseKey linkKey = lastVerseIDs.getElement(i)->getText();
+			if (linkKey != *currentVerse) {
+				*currentVerse = linkKey;
+				linkToEntry(dest);
+			}
+		}
+		
 		lastTitle = "";
 		text = "";
 		return true;
