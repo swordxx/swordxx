@@ -23,14 +23,16 @@ int main(int argc, char **argv)
 		}
 		exit(-1);
 	}
+	target = it->second;
 
-	// currently only rawtext knows how to optimize searches, better to use something
-	// like bool SWModule::canSearchBeOptimized() in the future.
 	if (!target->hasSearchFramework()) {
 		fprintf(stderr, "%s: error: %s does not support a search framework.\n", *argv, it->second->Name());
 		exit(-2);
 	}
 
 	printf("Building framework, please wait...\n");
-	target->createSearchFramework();
+	char error = target->createSearchFramework();
+	if (error) {
+		fprintf(stderr, "%s: couldn't create search framework (permissions?)\n", *argv);
+	}
 }
