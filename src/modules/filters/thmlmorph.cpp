@@ -41,59 +41,38 @@ const char *ThMLMorph::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want morph tags
-		char *to, *from, token[2048]; // cheese.  Fix.
-		int tokpos = 0;
 		bool intoken = false;
-		int len;
-		bool lastspace = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
-
-		for (to = text; *from; from++) {
+		SWBuf token;
+		SWBuf orig = text;
+		const char *from = orig.c_str();
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
-				tokpos = 0;
-				token[0] = 0;
-				token[1] = 0;
-				token[2] = 0;
+				token = "";
 				continue;
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strnicmp(token, "sync type=\"morph\" ", 18)) {	// Morph
-				  if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
-				    if (lastspace)
-				      to--;
-				  }
+				if (!strnicmp(token, "sync", 4) && strstr(token, "type=\"morph\"")) {	// Morph
 				  continue;
 				}
 				// if not a morph tag token, keep token in text
-				*to++ = '<';
-				for (char *tok = token; *tok; tok++)
-					*to++ = *tok;
-				*to++ = '>';
+				text += '<';
+                                text.append(token);
+				text += '>';
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
+				token += *from
 			}
 			else	{
-				*to++ = *from;
-				lastspace = (*from == ' ');
+				text += *from;
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }

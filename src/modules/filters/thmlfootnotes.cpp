@@ -41,29 +41,19 @@ const char *ThMLFootnotes::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want footnotes
-		char *to, *from, token[2048]; // cheese.  Fix.
-		int tokpos = 0;
 		bool intoken = false;
-		int len;
 		bool hide = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
-
-		for (to = text; *from; from++) {
+		SWBuf token;
+		SWBuf orig = text;
+		const char *from = orig.c_str();
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
-				tokpos = 0;
-				token[0] = 0;
-				token[1] = 0;
-				token[2] = 0;
+				token = "";
 				continue;
 			}
 			if (*from == '>') {	// process tokens
@@ -79,26 +69,19 @@ char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const 
 
 				// if not a footnote token, keep token in text
 				if (!hide) {
-					*to++ = '<';
-					for (char *tok = token; *tok; tok++)
-						*to++ = *tok;
-					*to++ = '>';
+					text += '<';
+					text.append(token);
+					text += '>';
 				}
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
+				token += *from; //copy chars of found token
 			}
-			else	{
-				if (!hide) {
-					*to++ = *from;
-				}
+			else if (!hide) {
+        			text += *from;
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }
