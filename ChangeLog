@@ -1,0 +1,161 @@
+API ChangeLog	(see the ChangeLog in each 'apps' directory for
+		app specific changes
+
+09-Jan-1999
+	Various API bug fixes.
+	Added naviation support for all module types
+	Added search support for all module types
+	Added standard mods.conf location lookups to SWMgr
+
+15-Dec-1999
+	Added cheatah, a simple lookup and search gtk GUI
+
+12-Nov-1998
+	1.3.1 release.
+	Started making entries in ChangeLog again! :)
+	Moved directory structure.
+	Added Luis Cortes' wxSword frontend to apps tree. GREAT START!
+	Fixed bug in canon.h that incorrectly assumed static structures were
+		allocated on the heap sequential if they were in the source 
+		sequentially.
+	Changed SWModule::Search(char *... to SWModule::Search(const char *
+	Removed -Werror from Makefile.cfg to avoid problems with different
+		warnings that get displayed with different versions of egcs
+	
+12-Dec-1997
+	Fixed typo in about box of BibleCS
+	Changed font copyright notice in n27u4
+
+09-Dec-1997
+	Fixed Search window in BibleCS to search currently focused Bible Text module
+		and report such in the title bar.
+	Added ALPHA website to the CD Loader
+	Added a full report of the About section of a module when installing. (BibleCS)
+	Renamed module n26u4 to n27u4.
+
+04-Dec-1997
+	Added DDE to BibleCS frontend.  Thanx to Franklin Bratcher for the idea.
+		Service = sword; Topic = Bible;
+		Item = [Lookup|Search]; Data = "<module name> <arg>".  E.g.:
+			sword Bible Lookup MHC "Matthew 1:1"
+			sword Bible Search WEB knee[ls]
+		WARNING: case sensitive module names
+		See ddetest program under BibleCS directory
+		
+29-Nov-1997
+	Added SWFilter and modified appropriate modules to use these.
+	Added RawGBF class that automatically adds a GBFPlain filter to
+		strip GBF tags before searching.
+	Added sword/frontend/windoze/cbuilder/biblecs frontend.  To build, use cmdline
+		compiler: make -fsword  DO NOT OPEN sword.mak WITH C++BUILDER
+	Added sword/frontend/windoze/cbuilder/biblecs/cdstartup for autorun
+		CDROMs.
+	Made some functions const.
+	Added sword/install/complete for install.
+	Added module 'rwp' (Robertson's Word Pictures)
+	Added module 'kjv' (King James 1611 with some RTF)
+	Added module 'n26u4' (Nestle Aland 26th ed. / UBS 4th. ed. Greek NT)
+	Added module 'orthjbc' (Orthodox Jewish Brit Chadasha)
+	Added module 'sve' (Swedish Bible 1917 New Testament)
+	Added module 'vnt' (Valera 1858 Spanish New Testament Text)
+	Added module 'web' (The World English Bible)
+	Added swmgr class for module management.
+	Added swconfig class for .conf file manipulation.
+	
+05-Oct-1997
+	Added regular expression functionality to SWModule.Search() Used GNU
+		regex.h and regex.c with slight modifications to #define's
+13-Jul-1996
+	Added .Search() method to SWModule
+	Added SWListKey key type to facilitate lists of verses (used by .Search)
+	Added .Headings() boolean method to VerseKey to allow incrementor to
+		work including or excluding headers (e.g. chapter/book/testm/mod)
+	Started z series of modules for compression access using the compression
+		algorithms in the STEP specs.  (These are either not done or
+		extremely unstable, be warned ;)
+	Added .Index() method to VerseKey
+	Changed VerseKey incrementors to use Index(Index() [+-] val) instead of
+		counting on Normalize();
+	Added checks and output appropriate in VerseKey.freshtext() for headings.
+		This also fixed some bugs when trying to display VerseKey when
+		indexed to a heading.
+	Added frontend/widoze/Delphi20/swtxtdsp: the beginings of a Delphi RTF
+		control.
+	Changed Makefiles slightly for more logical compiles.
+	Added search test program (currently at ./)
+	Added keytest test program (currently ./tests)
+	Various Delphi component changes.
+
+	once again.. probably many other things I forgot to list, but I'm
+		getting better! ;)  Sorry for the time lapse.
+	
+
+8-Apr-1996
+
+	Fixed bug in VerseKey for old testament references!
+	Fixed VerseKey from crashing when set with text that it cannot parse.
+	Removed the need for Keys data files.  Added information instead to canon.h
+	Added procedural API (frontend/windoze/bcowl25/swordapi) and 16 & 32
+		bit DLLs for windoze (sword16.dll; sword32.dll).
+	Added Delphi components (frontend/windoze/delphi20/swordvc) and
+		examples (examples/windoze/delphi/multimo[1-3])
+
+
+14-Mar-1996
+
+	Renamed RawDrv to RawVerse
+	Moved RawVerse common index files and Index() to VerseKey
+	Added StrKey, a VerseKey counterpart that accepts a string for its
+		key information (for words, cities, people, etc.)
+	Added RawStr, a RawVerse counterpart that operates on a StrKey
+	Added SWLD- a lexicon/dictionary base class
+	Added raw lexicon/dictionary support with class RawLD and utilities
+		(modules/lexdict/rawld/rawld.cpp)
+	Added module 'eastons' (Easton's Bible Dictionary)
+	Added module 'vines' (Vine's Bible Dictionary)
+	Added executable demo 'lookup' that used RawLD and the 'eastons'and
+		'vines' modules to lookup argv[1] (module decided by argv[2])
+	Moved sword/frontend/windows/bcowl25 to examples/windoze/bcowl25/multimod
+		and added lexicon/dictionary support to demo. (Highligh a word and
+		right-click for menu)
+	Fixed VerseKey post-increment bug (operator ++(int))
+	... once again: probably more that I forgot ...
+
+
+15-Feb-1996
+
+	Many small changes.
+	Moved raw file support to RawDrv class (modules/common/rawdrv.cpp)
+	Added Module/Testament/Book/Chapter intro entries in RawDrv index
+		files.  This means that YOU WILL NEED TO DOWNLOAD NEW VERSIONS
+		OF THE RAW MODULES (or at least run the new 'makeidx' programs
+		against your old texts to re-index them (new versions save
+		some space so ideally the new copies are recommended).
+	Added size field into .vss RawDrv index files
+	Added logical comparison operators to VerseKey
+	Added Error() method to SWKey and return value KEYERR_OUTOFBOUNDS
+		This is set when VerseKey tries to increment or decrement
+		past valid canonical bounds (when Normalize() is attempted).
+	Added raw commentary support with class RawCom and utilities
+		(modules/comments/rawcom/rawcom.cpp)
+	Added module 'mhc' (Matthew Henry's Commentary on the Entire Bible)
+	Added AutoNormalize() method for toggling the automatic normalization
+		feature and moved normalize() to Normalize() (public).
+	Modified existing 'makeidx' utilities to support new format.
+	Removed ^M (0x0d) from RawDrv text files (sorry DOS users if this is
+		an inconvenience but it saves bandwidth for download time.
+		If you really feel the need to have them in your files, you
+		can always resave with most nonprogramming editors and it will
+		replace them, but be sure to run makeidx on 'ot' and 'nt' again
+		or your index files will be off.
+	Almost useful .exe in frontend/windoze/bcowl25/ (at least it shows an
+		example of coding direction for use of the API)
+	... probably more that I forgot ...
+	
+	
+22-Jan-1996
+
+	Added chapmax and versemax information (canon.h)
+	Made sword.cpp test program accept parameters:
+		usage: sword ["Book CH:VS"] [number of verses to display]
+	enabled normalize function (try sword "Matthew 1:-7" 12)

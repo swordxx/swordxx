@@ -1,0 +1,81 @@
+
+                TRANSLITERATING GREEK into ASCII
+
+     B-Greek has from the beginning allowed every poster to use
+any scheme he/she found comfortable, since we all could usually
+figure out what text was meant.     For those who wish some
+guidance, a generally accepted scheme has evolved on the List,
+with two or three matters still not fully settled.
+
+(1) CAPITALS are used when transliterating Greek letters, on a
+one-to-one basis, reserving lower-case {i} to represent
+iota-subscript and lower-case {h} to represent rough breathing.
+No accents, no smooth breathings.  And no distinction between
+medial and final Sigma.
+
+(2) If accents are really necessary, to distinguish otherwise
+identical words, acute is represented by {/}, grave by {\}, and
+circumflex either by tilde {~ [preferable]} or {=} -- always
+AFTER the vowel over which it would be written.
+
+(3) A few characters without Roman single-character form are
+usually done with almost-look-alike Roman characters otherwise
+unused:
+
+     Theta = Q
+     Eta   = H
+     Psi   = Y    (upsilon is always U)
+     Omega = W
+
+(4) Digraphs (in the usual Roman transliteration) are handled in
+three different ways to avoid two-letter transliterations, all
+involving otherwise-unused Roman letters:
+
+     THeta uses Q ("look-alike", as above).
+     PSi   uses Y ("look-alike", as above).
+     PHi   uses F (sound equivalence).
+     CHi   uses C (first letter of traditional digraph).
+
+(5) Xi and Chi:  There being no single Roman letter for "Xi"
+other than X, the "look-alike" use of X for "Chi" is confusing,
+though some use it.  And some seem to like to use C for "Sigma."
+Since S is otherwise unused, and poses no confusion whatever,
+using C for "Sigma" makes for problems in decoding back to Greek,
+especially since it is the only letter available for "Chi"
+(unless X is used, thus posing a problem for "Xi").  And
+occasionally someone uses P for "Rho", making problems for how to
+represent "Pi".
+
+*****************************************************************
+
+               Usual in            Traditional
+               B-Greek             (uses macrons and digraphs)
+
+
+alpha              A                    a
+beta               B                    b
+gamma              G                    g
+delta              D                    d
+epsilon            E                    e
+zeta               Z                    z
+eta                H                    e with macron
+theta              Q                    th
+iota               I                    i
+kappa              K                    k
+lambda             L                    l
+mu                 M                    m
+nu                 N                    n
+xi                 X                    x
+omicron            O                    o
+pi                 P                    p
+rho                R                    r
+sigma              S                    s
+tau                T                    t
+upsilon            U                    u
+phi                F                    ph
+chi                C                    ch
+psi                Y                    ps
+omega              W                    o with macron
+
+rough breathing    h                    h
+iota-subscript     i                   (i)

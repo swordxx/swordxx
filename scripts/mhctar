@@ -1,0 +1,1 @@
+cd /dosc/usr/troy/src/; tar -v -c -p -s -z -f ~/src/mhc.tgz sword/modules/comments/rawcom/mhc

@@ -1,0 +1,1 @@
+cd /dosc/usr/troy/src/; tar -v -c -p -s -z -f ~/src/eastons.tgz sword/modules/lexdict/rawld/eastons

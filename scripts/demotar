@@ -1,0 +1,1 @@
+cd /dosc/usr/troy/src; tar -v -c -p -s -z -f ~/src/multimo4.tgz sword/examples/windoze/delphi20/multimo4/multimod.exe

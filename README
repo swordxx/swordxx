@@ -1,0 +1,45 @@
+Be sure to read INSTALL for information on how to get the software
+built, configured, and running properly.
+___________________________________________________________________
+Get the latest source and info at:
+	http://www.crosswire.org
+
+UNIX developers	You can try a make from this directory.  This should compile
+		everthing needed.  You may need to edit Makefile.cfg to change,
+		at least, CC=gcc or egcs.  If the src directory compiles, you
+		have the libraries needed to develop, you may try any of the
+		other directory independently thereafter (e.g. apps, examples).
+		Remember to do a 'make clean; make'
+
+		apps/X11 contains the makings of frontends
+
+		./testlib.cpp compiles to the executable 'testlib' as a test to
+		see if the libraries compiled and can be linked to successfully.
+		This is NOT the final target of the build. :)
+
+
+C++Builder developers	You may find project file and source for the WIN32
+		frontend under apps/windows/CBuilder3/BibleCS
+
+
+Delphi developers	You will need to place sword32.dll in your winsys
+		directory or elsewhere in your path.  You can find source in
+		./apps/windoze/bcowl25/swordapi
+		or executable in ./bin (or from the homepage if it's not there.
+		If you wish to add components to your toolbar, install
+		./apps/windoze/delphi20/swordvc/swmodule.pas and
+		./apps/windoze/delphi20/swordvc/swvskey.pas
+
+./sword.ide	This project file was built in Borland C++ v4.53 and targets
+		an MSDOS executable.
+
+./sword.prj	This project file was built using Turbo C++ for DOS v3.0 and
+		targets an MSDOS executable.
+
+./examples/	This directory and below contains various examples using the
+		SWORD libraries.
+
+Enjoy!
+
+Please email any questions or comments to: sword-feedback@crosswire.org
+

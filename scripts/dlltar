@@ -1,0 +1,1 @@
+cp /dosc/winnt/system32/sword32.dll ../bin; cd /dosc/usr/troy/src; tar -v -c -p -s -z -f ~/src/dlls.tgz sword/bin/sword32.dll

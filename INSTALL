@@ -1,0 +1,44 @@
+A 'make' at the top level directory of the SWORD package should build the
+libraries necessary for building any of the frontends.  The libraries will
+be built in the ./lib directory.  If you encounter an error, you may need
+to change a setting in the Makefile.cfg file.  Most obviously watch for:
+CC=gcc or CC=egcs
+
+After the libraries are built, one, then, may proceed to the ./apps
+directory.  The most basic application that is stable and easy to
+build is the cheatah frontend (./apps/X11/cheatah).  These frontends
+each have their own make system, so read the help in their respective
+directories if a problem is encountered while building.
+
+___________________________________________________________________________
+
+To be useful the software needs to find SWORD 'modules' installed somewhere
+accessible.  These module plugins consist of Bible texts, commentaries,
+dictionaries, and the like.  New plugins are constantly being added.  They
+may be obtained from:
+http://www.crosswire.org or various mirrors
+A file named 'mods.conf' or directory named mods.d contains all configuration
+information regarding the installed modules available to the API.  The format
+of a config file is fairly straight-forward, and most modules come with their
+own .conf file, of which the contents may be appended to the mods.conf file
+or placed in the mods.d directory.
+
+The API looks for its module configuration in the following sequence:
+	./mods.[conf|d]
+	$SWORD_PATH/mods.[conf|d]
+	$HOME/.sword/mods.[conf|d]
+	or finally from information found in a system-wide configuration file
+		/etc/sword.conf in the format:
+			[Install]
+			DataPath=/where/your/datafiles/are/installed
+		then the API will look for DataPath/mods.[conf|d]
+
+* NOTE:
+Using the above scheme, SWORD will also determine the path to prefix to the
+specified datafile location found in the config files.  The prefix path will
+be the directory where SWORD finds mods.[conf|d], WITH ONE EXCEPTION: if SWORD
+find its configuration in the user's home directory
+$HOME/.sword/mods.[conf|d], no prefix will be prepended to the data file
+locations; hence, the config files must contain absolute path names.
+
+Sample config files can be found in: .../sword/samples

@@ -1,0 +1,20 @@
+s = $(c) $(cpp)
+d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
+o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
+so = $(o:%.o=%.so)
+
+
+ifeq (${buildshare},yes)
+${root}/lib/libsword.a: $(o)
+	$(AR) crs $@ $(o)
+	$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
+
+else
+${root}/lib/libsword.a: $(o)
+	$(AR) crs $@ $(o)
+endif
+
+
+ifneq ($(nodeps),yes)
+-include $(d)
+endif

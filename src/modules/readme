@@ -1,0 +1,9 @@
+This directory contains all different module types that are usable by the SWORD
+API.
+
+	comments		Commentaries
+	common		common utility objects
+	lexdict		Lexicons/Dictionaries
+	maps			Maps
+	parsers		Language Parsers
+	texts		Scripture Texts
