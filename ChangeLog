@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+12-Aug-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added Enciphering code that works with SWBuf
+	Fixed appendFormatted to re-init var_args
+	Other small fixes to build on Opteron 64-bit
+
 07-Jul-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added enough functionality to remotely install
 		into installmgr, but Daniel Glassey needs

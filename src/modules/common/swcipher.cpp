@@ -70,7 +70,7 @@ char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
 
 	Encode();
 
-	*ilen = (short)len;
+	*ilen = len;
 	return buf;
 }
 
