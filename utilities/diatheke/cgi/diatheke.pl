@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#version 4.0
+#version 4.1
 
 $diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program -- if you are using a MS Windows server, you might need to remove the "nice"
 $defaultfontface = "Times New Roman, Times, Roman, serif"; # default font name
@@ -9,26 +9,27 @@ $maxverses = 50; # maximum number of verses diatheke will return per query (prev
 $defaultbook = "KJV"; # book to query when none is selected, but a verse/search is entered
 $deflocale = "abbr";  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locael=<locale> in the GET URL
 
-sub plussifyaddress  {
-    ($ver = @_[0]) =~ tr/ /+/; 
-    $newline = "<a href=\"diatheke.pl?verse=$ver&@_[1]=on\">";
-    return $newline;
-}
-
-sub urlvers {
-    $ender = @_[1];
-    $verse = @_[0];
-    $version = @_[2];
-    $oldverse = $verse;
-    $verse =~ tr/ /+/;
-    $newline = " <a href=\"diatheke.pl?verse=$verse&$version=on\">$oldverse</a> $ender";
-    return $newline;
-}
 
 ###############################################################################
 ## You should not need to edit anything below this line.
 ## Unless you want to modify functionality of course. :)
 ###############################################################################
+
+sub plussifyaddress  {
+    ($p_ver = @_[0]) =~ tr/ /+/; 
+    $p_newline = "<a href=\"diatheke.pl?verse=$p_ver&@_[1]=on\">";
+    return $p_newline;
+}
+
+sub urlvers {
+    $u_ender = @_[1];
+    $u_verse = @_[0];
+    $u_version = @_[2];
+    $u_oldverse = $u_verse;
+    $u_verse =~ tr/ /+/;
+    $u_newline = " <a href=\"diatheke.pl?verse=$u_verse&$u_version=on\">$u_oldverse</a> $u_ender";
+    return $u_newline;
+}
 
 $ENV{'SWORD_PATH'} = $sword_path;
 
@@ -63,10 +64,9 @@ $hostname = $ENV{'REMOTE_ADDR'};
 @values = split(/\&/,$ENV{'QUERY_STRING'});
 $n = 0;
 $palm = 0;
-$footnotes = 0;
-$strongs = 0;
-$headings = 0;
-$morph = 0;
+
+$latinxlit = "";
+
 $optionfilters = "";
 $debug=0;
 foreach $i (@values) {
@@ -80,22 +80,45 @@ foreach $i (@values) {
 	elsif ($varname eq "search" && $mydata ne "" && $mydata ne "off") {
 	    $search = "-s $mydata";
 	}
+
 	elsif ($varname eq "strongs") {
 	    $optionfilters .= "n";
-	    $strongs = 1;
 	}
 	elsif ($varname eq "footnotes") {
 	    $optionfilters .= "f";
-	    $footnotes = 1;
 	}
 	elsif ($varname eq "headings") {
 	    $optionfilters .= "h";
-	    $headings = 1;
 	}
 	elsif ($varname eq "morph") {
 	    $optionfilters .= "m";
-	    $morph = 1;
 	}	
+	elsif ($varname eq "hebcant") {
+	    $optionfilters .= "c";
+	}
+	elsif ($varname eq "hebvowels") {
+	    $optionfilters .= "v";
+	}
+	elsif ($varname eq "grkacc") {
+	    $optionfilters .= "a";
+	}
+	elsif ($varname eq "lemmas") {
+	    $optionfilters .= "l";
+	}	
+	elsif ($varname eq "scriprefs") {
+	    $optionfilters .= "s";
+	}
+	elsif ($varname eq "arshape") {
+	    $optionfilters .= "r";
+	}
+	elsif ($varname eq "bidi") {
+	    $optionfilters .= "b";
+	}
+
+	elsif ($varname eq "latinxlit") {
+	    $latinxlit = "-t Latin";
+	}	
+
 	elsif ($varname eq "palm") {
 	    $palm = 1;
 	}
@@ -135,7 +158,7 @@ if ($verse eq "") {
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Diatheke Insta-Interlinear Bible</title>
+<title>Diatheke Online Bible</title>
 </head>
 
 <body>
@@ -146,16 +169,52 @@ if ($verse eq "") {
   <input type="radio" name="search" value="phrase" /><font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
   <input type="radio" name="search" value="multiword" /><font face="Arial, Helvetica, sans-serif">Multiple Word Search</font><br />
   <input type="radio" name="search" value="regex" /><font face="Arial, Helvetica, sans-serif">Regular Expression Search</font><br />
-
-  <p /><input type="checkbox" name="strongs" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
-  Stong's Numbers when available (Strong's numbered modules are marked by *)</font>
-  <p /><input type="checkbox" name="footnotes" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
-  Footnotes when available</font>
-  <p /><input type="checkbox" name="morph" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
-  Morphological tags when available</font>
-  <p /><input type="checkbox" name="headings" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
-  Section Headings when available</font><br />
-  &nbsp;
+  <table width="100%" border="0">
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="strongs" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Strong's Numbers</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="headings" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Section Headings</font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="footnotes" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Footnotes</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="scriprefs" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Scripture Cross-References</font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="morph" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Morphology</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="hebvowels" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Hebrew Vowels</font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="lemmas" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Lemmas</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="hebcant" value="on">
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Hebrew Cantillation 
+        Marks </font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="latinxlit" value="on">
+        <font face="Arial, Helvetica, sans-serif" size="-1">Latin Transliterate</font> 
+      </td>
+      <td width="50%"> 
+        <input type="checkbox" name="grkacc" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Greek Accents</font> 
+      </td>
+    </tr>
+  </table>
+  <br />
   <table BORDER="0" WIDTH="100%">
 DEF1
     
@@ -235,7 +294,7 @@ print <<END;
 <meta name="historylisttext" content="Diatheke">
 <style type="text/css">
 #divBottom{position:absolute; visibility:hidden; font-family:arial,helvetica; height:30; width:100; font-size:10pt; font-weight:bold}
-#A:link, A:visited, A:active{text-decoration: none}
+A:link, A:visited, A:active{text-decoration: none}
 </style>
 <script type="text/javascript" language="JavaScript">
 /********************************************************************************
@@ -248,7 +307,7 @@ I will also appriciate any links you could give me.
 function checkBrowser(){
     this.ver=navigator.appVersion;
     this.dom=document.getElementById?1:0;
-    this.ie5=(this.ver.indexOf("MSIE 5")>-1 && this.dom)?1:0;
+    this.ie5=( (this.ver.indexOf("MSIE 6")>-1 || this.ver.indexOf("MSIE 5")>-1) && this.dom)?1:0;
     this.ie4=(document.all && !this.dom)?1:0;
     this.ns5=(this.dom && parseInt(this.ver) >= 5) ?1:0;
     this.ns4=(document.layers && !this.dom)?1:0;
@@ -316,7 +375,7 @@ function resized(){
 if(bw.bw && !bw.ns5) onload=geoInit;
 
 //Here we will write the div out so that lower browser won't see it.'
-if(bw.bw && !bw.ns5) document.write('<div id="divBottom"><center>Powered by<br /><img src="http://www.crosswire.org/sword/pbsword.gif"><br /><a href="http://www.crosswire.org/">www.crosswire.org</a></center></div>')
+if(bw.bw && !bw.ns5) document.write('<div id="divBottom"><table><tr><td align="center">Powered by<br /><img src="http://www.crosswire.org/sword/pbsword.gif"><br /><a href="http://www.crosswire.org/">www.crosswire.org</td></tr></table></div>')
 </script>
 
 </head>
@@ -339,10 +398,12 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
+    $line = "$diatheke $search $optionfilters $latinxlit -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null";
+
     if ($debug) {
-	print "command line: $diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\"\n<br />";
+	print "command line: $line\n<br />";
     }
-    $line = `$diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null`;
+    $line = `$line`;
 
     chomp($line);
 
@@ -402,15 +463,6 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/href=\"diatheke.pl([^\"]+)\"/href=\"http:\/\/bible.gotjesus.org\/cgi-bin\/diatheke.pl$1&palm=on\"/g;
     }
 
-
-# These should really be handled by option filters somehow instead
-#    if ($footnotes == 0) {
-#	$line =~ s/<note[^<]+<\/note>//g;
-#    }
-#    if ($strongs == 0) {
-#	$line =~ s/<a href=[^>]+Strongs(Greek|Hebrew)[^<]+<\/a>//g;
-#    }
-    
     print "$line <br /><br />\n";
 }
 

@@ -1,43 +1,74 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Diatheke Insta-Interlinear Bible</title>
+<title>Diatheke Online Bible</title>
 </head>
 
 <body>
 
 <form method="get" action="cgi-bin/diatheke.pl">
-  <p />
-    <font face="Arial, Helvetica, sans-serif">Verse or Search key:</font> 
+  <p /> <font face="Arial, Helvetica, sans-serif">Verse or Search key:</font> 
     <input type="text" name="verse" size="20">
     <input type="submit" name="Submit" value="Submit">
     <input type="reset" name="Reset" value="Reset">
     <br />
     <br />
     <input type="radio" name="search" checked value="" />
-    <font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup</font>
-    <br />
+    <font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup</font> <br />
     <input type="radio" name="search" value="phrase" />
     <font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
     <input type="radio" name="search" value="multiword" />
     <font face="Arial, Helvetica, sans-serif">Multiple Word Search</font><br />
     <input type="radio" name="search" value="regex" />
-    <font face="Arial, Helvetica, sans-serif">Regular Expression Search</font>
-  <p /> 
-    <input type="checkbox" name="strongs" value="on">
-    <font size="-1" face="Arial, Helvetica, sans-serif">Show Stong's Numbers when 
-    available<br>
-    </font> 
-    <input type="checkbox" name="footnotes" value="on">
-    <font size="-1" face="Arial, Helvetica, sans-serif">Show Footnotes when available</font> 
+    <font face="Arial, Helvetica, sans-serif">Regular Expression Search</font> 
     <br>
-    <input type="checkbox" name="morph" value="on">
-    <font size="-1" face="Arial, Helvetica, sans-serif">Show Morphological tags 
-    when available</font> <br>
-    <input type="checkbox" name="headings" value="on">
-    <font size="-1" face="Arial, Helvetica, sans-serif">Show Section Headings 
-    when available</font><br />
-    &nbsp; 
+  <p />&nbsp; 
+  <table width="100%" border="0">
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="strongs" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Strong's Numbers</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="headings" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Section Headings</font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="footnotes" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Footnotes</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="scriprefs" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Scripture Cross-References</font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="morph" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Morphology</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="hebvowels" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Hebrew Vowels</font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="lemmas" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Lemmas</font></td>
+      <td width="50%"> 
+        <input type="checkbox" name="hebcant" value="on">
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Hebrew Cantillation 
+        Marks </font></td>
+    </tr>
+    <tr> 
+      <td width="50%"> 
+        <input type="checkbox" name="latinxlit" value="on">
+        <font face="Arial, Helvetica, sans-serif" size="-1">Latin Transliterate</font> 
+      </td>
+      <td width="50%"> 
+        <input type="checkbox" name="grkacc" value="on" checked>
+        <font size="-1" face="Arial, Helvetica, sans-serif">Show Greek Accents</font> 
+      </td>
+    </tr>
+  </table>
+  <br>
   <table BORDER="0" WIDTH="100%">
     <tr> 
       <td width="48%"><font face=Times New Roman, Times, serif><b>English Biblical 

@@ -5,7 +5,11 @@ targets := diatheke
 bin := diatheke
 include ${root}/Makefile.cfg
 
-cpp = diatheke.cpp corediatheke.cpp diathekemgr.cpp
+cpp = diatheke.cpp
+cpp += corediatheke.cpp
+cpp += diathekemgr.cpp
+cpp += thmlcgi.cpp
+cpp += gbfcgi.cpp
 
 s = $(c) $(cpp)
 d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)

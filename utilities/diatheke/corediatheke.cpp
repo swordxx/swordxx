@@ -195,9 +195,21 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 #endif
 	
 	if (querytype == QT_SEARCH) {
+
+	        //this test is just to determine if we've got SWKeys or VerseKeys
+	        if (!strcmp(target->Type(), "Biblical Texts"))
+		  querytype = QT_BIBLE;
+		else if (!strcmp(target->Type(), "Commentaries"))
+		  querytype = QT_BIBLE;
+		else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
+		  querytype = QT_LD;
+		
 		//do search stuff
 		searchtype = 1 - searchtype;
-		*output << "Verse(s) containing \"";
+		if (querytype == QT_BIBLE) {
+		  *output << "Verses containing \"";
+		}
+		else *output << "Entries containing \"";
 	        *output << ref;
 		*output << "\"-- ";
 		
@@ -205,14 +217,20 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		
 		if (strlen((const char*)listkey)) {
 		  if (!listkey.Error()) {
-		    vk = listkey;
-		    *output << (const char *)vk;
+		    if (querytype == QT_BIBLE) {
+		      vk = listkey;
+		      *output << (const char *)vk;
+		    }
+		    else *output << (const char *)listkey;
 		  }
 		  listkey++;
 		  while (!listkey.Error()) {
 		    *output << " ; ";
-		    vk = listkey;
-		    *output << (const char *)vk;
+		    if (querytype == QT_BIBLE) {
+		      vk = listkey;
+		      *output << (const char *)vk;
+		    }
+		    else *output << (const char *)listkey;
 		    listkey++;
 		  }
 		  *output << " -- ";

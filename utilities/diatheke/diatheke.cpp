@@ -5,6 +5,7 @@
 // see accompanying LICENSE file for license details
 
 #include "corediatheke.h"
+#include "diathekemgr.h"
 #include <iostream>
 
 #define RQ_REF 1
@@ -31,7 +32,7 @@ void printsyntax() {
 	fprintf (stderr, "  b (Bi-Directional Reordering)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
-	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OSIS, and plain (def)\n");
+	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OSIS, CGI, and plain (def)\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
@@ -117,6 +118,10 @@ int main(int argc, char **argv)
 			if (i+1 <= argc) {
 				if (!stricmp("thml", argv[i+1])) {
 					outputformat = FMT_THML;
+					i++;
+				}
+				else if (!stricmp("cgi", argv[i+1])) {
+					outputformat = FMT_CGI;
 					i++;
 				}
 				else if (!stricmp("gbf", argv[i+1])) {
