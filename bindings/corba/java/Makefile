@@ -1,0 +1,16 @@
+all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
+
+src/org/crosswire/sword/orb/SWMgr.java: ../swordorb.idl
+	idlj -pkgTranslate swordorb org.crosswire.sword.orb -td src ../swordorb.idl
+
+classes/org/crosswire/sword/orb/SwordOrb.class: src/org/crosswire/sword/orb/SwordOrb.java
+	javac -d classes -sourcepath src src/org/crosswire/sword/orb/*.java
+
+
+clean:
+	rm src/org/crosswire/sword/orb/SW*.java
+	rm src/org/crosswire/sword/orb/_SW*.java
+	rm src/org/crosswire/sword/orb/Mod*.java
+	rm src/org/crosswire/sword/orb/String*.java
+	rm -rf classes/*
+

@@ -45,6 +45,7 @@ public:
 	StringList *getGlobalOptionsIterator() throw(CORBA::SystemException);
 	StringList *getGlobalOptionValuesIterator(const char *option) throw(CORBA::SystemException);
 	void     setCipherKey(const char *modName, const char *key) throw(CORBA::SystemException) { delegate->setCipherKey(modName, key); }
+	void     terminate() throw(CORBA::SystemException);
 
 };
 }; // namespace hellomodule

@@ -34,4 +34,8 @@ namespace swordorb {
 
 	StringList *SWMgr_impl::getGlobalOptionValuesIterator(const char *option) throw(CORBA::SystemException) {
 	}
+
+	void SWMgr_impl::terminate() throw(CORBA::SystemException) {
+		exit(0);
+	}
 }

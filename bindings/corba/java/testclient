@@ -1,0 +1,2 @@
+#!/bin/sh
+java -cp classes org.crosswire.sword.orb.SwordOrb $*

@@ -67,6 +67,7 @@ interface SWMgr {
 	StringList getGlobalOptionsIterator();
 	StringList getGlobalOptionValuesIterator(in string option);
 	void     setCipherKey(in string modName, in string key);
+	void     terminate();
 
 };
 
