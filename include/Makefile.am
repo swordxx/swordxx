@@ -95,7 +95,6 @@ pkginclude_HEADERS += $(swincludedir)/swsearchable.h
 pkginclude_HEADERS += $(swincludedir)/swtext.h
 pkginclude_HEADERS += $(swincludedir)/swunicod.h
 pkginclude_HEADERS += $(swincludedir)/swversion.h
-pkginclude_HEADERS += $(swincludedir)/swwinlog.h
 pkginclude_HEADERS += $(swincludedir)/sysdata.h
 pkginclude_HEADERS += $(swincludedir)/tbdisp.h
 
