@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+11-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
+	simple fixes to allow compiling with gcc 3.1
+	rename gettext to readtext as unobtrusively as
+		possible.
+	fix BGreek_Greek trans to work with icu2.1
+	add SWMgr::isICU for apps to check if ICU stuff is
+		available
 
 10-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
 	Initial support for using sword transliterators
