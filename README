@@ -23,7 +23,7 @@ UNIX developers	You can try a './configure' (or optionally './usrinst.sh'
 
 
 Other language bindings can be found in the ./bindings directory:
-
+flatapi.cpp is a useful extern "C" interface for making bindings easier
 Kylix bindings (and maybe Delphi bindings) may be found in sword/bindings/clx
 CORBA (orbit-c++) bindings with Java example classes in /bindings/corba
 SWIG stuff in bindings/swig
