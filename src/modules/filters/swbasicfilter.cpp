@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.3 2001/09/02 09:10:14 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.4 2001/09/02 09:39:52 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,11 +32,16 @@ SWBasicFilter::SWBasicFilter() {
 	tokenEnd = 0;
 	escStart = 0;
 	escEnd = 0;
+
+	setTokenStart("<");
+	setTokenEnd(">");
+	setEscapeStart("&");
+	setEscapeEnd(";");
+
 	escStringCaseSensitive = false;
 	tokenCaseSensitive = false;
 	passThruUnknownToken = false;
 	passThruUnknownEsc = false;
-	init();
 }
 
 
@@ -101,123 +106,6 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 }
 
 
-void SWBasicFilter::init() {
-	setTokenStart("<");
-	setTokenEnd(">");
-	setEscapeStart("&");
-	setEscapeEnd(";");
-
-	setEscapeStringCaseSensitive(true);
-
-	addEscapeStringSubstitute("nbsp", " ");
-	addEscapeStringSubstitute("quot", "\"");
-	addEscapeStringSubstitute("amp", "&");
-	addEscapeStringSubstitute("lt", "<");
-	addEscapeStringSubstitute("gt", ">");
-	addEscapeStringSubstitute("brvbar", "|");
-	addEscapeStringSubstitute("sect", "§");
-	addEscapeStringSubstitute("copy", "©");
-	addEscapeStringSubstitute("laquo", "«");
-	addEscapeStringSubstitute("reg", "®");
-	addEscapeStringSubstitute("acute", "´");
-	addEscapeStringSubstitute("para", "¶");
-	addEscapeStringSubstitute("raquo", "»");
-
-	addEscapeStringSubstitute("Aacute", "Á");
-	addEscapeStringSubstitute("Agrave", "À");
-	addEscapeStringSubstitute("Acirc", "Â");
-	addEscapeStringSubstitute("Auml", "Ä");
-	addEscapeStringSubstitute("Atilde", "Ã");
-	addEscapeStringSubstitute("Aring", "Å");
-	addEscapeStringSubstitute("aacute", "á");
-	addEscapeStringSubstitute("agrave", "à");
-	addEscapeStringSubstitute("acirc", "â");
-	addEscapeStringSubstitute("auml", "ä");
-	addEscapeStringSubstitute("atilde", "ã");
-	addEscapeStringSubstitute("aring", "å");
-	addEscapeStringSubstitute("Eacute", "É");
-	addEscapeStringSubstitute("Egrave", "È");
-	addEscapeStringSubstitute("Ecirc", "Ê");
-	addEscapeStringSubstitute("Euml", "Ë");
-	addEscapeStringSubstitute("eacute", "é");
-	addEscapeStringSubstitute("egrave", "è");
-	addEscapeStringSubstitute("ecirc", "ê");
-	addEscapeStringSubstitute("euml", "ë");
-	addEscapeStringSubstitute("Iacute", "Í");
-	addEscapeStringSubstitute("Igrave", "Ì");
-	addEscapeStringSubstitute("Icirc", "Î");
-	addEscapeStringSubstitute("Iuml", "Ï");
-	addEscapeStringSubstitute("iacute", "í");
-	addEscapeStringSubstitute("igrave", "ì");
-	addEscapeStringSubstitute("icirc", "î");
-	addEscapeStringSubstitute("iuml", "ï");
-	addEscapeStringSubstitute("Oacute", "Ó");
-	addEscapeStringSubstitute("Ograve", "Ò");
-	addEscapeStringSubstitute("Ocirc", "Ô");
-	addEscapeStringSubstitute("Ouml", "Ö");
-	addEscapeStringSubstitute("Otilde", "Õ");
-	addEscapeStringSubstitute("oacute", "ó");
-	addEscapeStringSubstitute("ograve", "ò");
-	addEscapeStringSubstitute("ocirc", "ô");
-	addEscapeStringSubstitute("ouml", "ö");
-	addEscapeStringSubstitute("otilde", "õ");
-	addEscapeStringSubstitute("Uacute", "Ú");
-	addEscapeStringSubstitute("Ugrave", "Ù");
-	addEscapeStringSubstitute("Ucirc", "Û");
-	addEscapeStringSubstitute("Uuml", "Ü");
-	addEscapeStringSubstitute("uacute", "ú");
-	addEscapeStringSubstitute("ugrave", "ù");
-	addEscapeStringSubstitute("ucirc", "û");
-	addEscapeStringSubstitute("uuml", "ü");
-	addEscapeStringSubstitute("Yacute", "Ý");
-	addEscapeStringSubstitute("yacute", "ý");
-	addEscapeStringSubstitute("yuml", "ÿ");
-
-	addEscapeStringSubstitute("deg", "°");
-	addEscapeStringSubstitute("plusmn", "±");
-	addEscapeStringSubstitute("sup2", "²");
-	addEscapeStringSubstitute("sup3", "³");
-	addEscapeStringSubstitute("sup1", "¹");
-	addEscapeStringSubstitute("nbsp", "º");
-	addEscapeStringSubstitute("pound", "£");
-	addEscapeStringSubstitute("cent", "¢");
-	addEscapeStringSubstitute("frac14", "¼");
-	addEscapeStringSubstitute("frac12", "½");
-	addEscapeStringSubstitute("frac34", "¾");
-	addEscapeStringSubstitute("iquest", "¿");
-	addEscapeStringSubstitute("iexcl", "¡");
-	addEscapeStringSubstitute("ETH", "Ð");
-	addEscapeStringSubstitute("eth", "ð");
-	addEscapeStringSubstitute("THORN", "Þ");
-	addEscapeStringSubstitute("thorn", "þ");
-	addEscapeStringSubstitute("AElig", "Æ");
-	addEscapeStringSubstitute("aelig", "æ");
-	addEscapeStringSubstitute("Oslash", "Ø");
-	addEscapeStringSubstitute("curren", "¤");
-	addEscapeStringSubstitute("Ccedil", "Ç");
-	addEscapeStringSubstitute("ccedil", "ç");
-	addEscapeStringSubstitute("szlig", "ß");
-	addEscapeStringSubstitute("Ntilde", "Ñ");
-	addEscapeStringSubstitute("ntilde", "ñ");
-	addEscapeStringSubstitute("yen", "¥");
-	addEscapeStringSubstitute("not", "¬");
-	addEscapeStringSubstitute("ordf", "ª");
-	addEscapeStringSubstitute("uml", "¨");
-	addEscapeStringSubstitute("shy", "­");
-	addEscapeStringSubstitute("macr", "¯");
-	
-	setTokenCaseSensitive(true);
-
-	addTokenSubstitute("/scripRef", " </A>");	  
-	addTokenSubstitute("note place=\"foot\"", " <SMALL>(");
-	addTokenSubstitute("/note", ")</SMALL> ");
-	addTokenSubstitute("foreign lang=\"el\"", "<FONT FACE=\"SIL Galatia\">");
-	addTokenSubstitute("foreign lang=\"he\"", "<FONT FACE=\"SIL Ezra\">");
-	addTokenSubstitute("/foreign", "</FONT>");
-
-}
-
-
 void SWBasicFilter::pushString(char **buf, const char *fragToPush) {
 	while (*fragToPush) {
 		**buf = *fragToPush;
@@ -249,42 +137,7 @@ bool SWBasicFilter::substituteEscapeString(char **buf, const char *escString) {
 
 
 bool SWBasicFilter::handleToken(char **buf, const char *token) {
-	if (!substituteToken(buf, token)) {
-	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
-			pushString(buf, "<SMALL><EM>");
-			for (unsigned int i = 28; token[i] != '\"'; i++)
-				**buf++ = token[i];
-			pushString(buf, "</EM></SMALL>");
-		}
-
-		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
-			pushString(buf, "<SMALL><EM>");
-			for (unsigned int i = 25; token[i] != '\"'; i++)
-				**buf++ = token[i];
-			pushString(buf, "</EM></SMALL>");
-		}
-
-		else if (!strncmp(token, "scripRef version", 16)) {
-			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 32; token[i] != '\"'; i++)
-				**buf++ = token[i];
-			**buf++ = '\"';
-			**buf++ = '>';
-		} 
-
-		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			pushString(buf, "<SMALL><I>");
-			for (unsigned int i = 29; token[i] != '\"'; i++)
-				**buf++ = token[i];
-			pushString(buf, "</I></SMALL>");
-		}
-
-		else {
-			return false;  // we still didn't handle token
-		}
-	}
-	return true;
+	return substituteToken(buf, token);
 }
 
 

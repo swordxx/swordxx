@@ -19,7 +19,7 @@
 #include <thmlhtml.h>
 
 
-void ThMLHTML::init() {
+ThMLHTML::ThMLHTML() {
 	setTokenStart("<");
 	setTokenEnd(">");
 	setEscapeStart("&");

@@ -27,8 +27,9 @@
  */
 class SWDLLEXPORT ThMLHTML : public SWBasicFilter {
 protected:
-	virtual void init();
 	virtual bool handleToken(char **buf, const char *token);
+public:
+	ThMLHTML();
 };
 
 #endif
