@@ -2,7 +2,7 @@
  *  swdisprtf.h   - definition of Class SWDispRTF-- an SWDisplay used to display
  *				a verse in Rich Text Format.
  *
- * $Id: swdisprtf.h,v 1.7 2001/06/27 03:50:52 scribe Exp $
+ * $Id: swdisprtf.h,v 1.8 2001/08/15 02:40:12 dtrotzjr Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -40,7 +40,7 @@
 #define	defRTFHeadMargin	  "{\\fs8\\cf1\\par\\pard} "
 #define	defRTFTrailer         "{\\fs%d \\par }}"	// 24
 
-#define	defRTFChapterMarkPre  "\\pard \\qc\\nowidctlpar{\\f1\\fs%d\\b Chapter "	// 30
+#define	defRTFChapterMarkPre  "\\pard \\qc\\nowidctlpar{\\f1\\cf7\\fs%d\\b Chapter "	// 30
 #define	defRTFChapterMarkPost "\\par\\fs%d\\par}"	// 10
 
 #define	defRTFVerseMarkPre    "{\\fs%d\\cf1\\super "	//20
