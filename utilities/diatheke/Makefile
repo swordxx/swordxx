@@ -8,6 +8,7 @@ include ${root}/Makefile.cfg
 cpp = diatheke.cpp
 cpp += corediatheke.cpp
 cpp += diathekemgr.cpp
+cpp += diafiltmgr.cpp
 cpp += thmlcgi.cpp
 cpp += gbfcgi.cpp
 

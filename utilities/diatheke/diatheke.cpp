@@ -6,6 +6,7 @@
 
 #include "corediatheke.h"
 #include "diathekemgr.h"
+#include "diafiltmgr.h"
 #include <iostream>
 
 #define RQ_REF 1
