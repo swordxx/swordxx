@@ -27,9 +27,11 @@ SWCipher *CipherFilter::getCipher() {
 char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key) {
 	unsigned int len;
 //	len = strlen(text);
-	len = maxlen - 1;
-	cipher->cipherBuf(&len, text);
-	strncpy(text, cipher->Buf(), (len < (unsigned int)maxlen) ? len : maxlen);
+	len = maxlen;
+     if (len > 0) {
+		cipher->cipherBuf(&len, text);
+		strncpy(text, cipher->Buf(), (len < (unsigned int)maxlen) ? len : maxlen);
+     }
 	text[maxlen] = 0;
 	return 0;
 }
