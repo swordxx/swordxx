@@ -21,6 +21,13 @@ else
 # need regular expression stuff?
 need_local_regex := no
 
+<<<<<<< Makefile.am
+
+# shared library - set to yes if you would like to build
+buildshare := @enable_shared@
+
+=======
+>>>>>>> 1.4
 endif
 
 # VCL library- set to yes if you would like to build
