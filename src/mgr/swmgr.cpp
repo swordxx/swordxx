@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.103 2004/04/12 13:49:12 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.104 2004/05/06 10:46:25 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -69,6 +69,9 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
+#ifdef SPLITLIB
+#include <ztext2.h>
+#endif
 #include <zld.h>
 #include <zcom.h>
 #include <lzsscomprs.h>
@@ -103,6 +106,12 @@ const char *SWMgr::globalConfPath = GLOBCONFPATH;
 const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif
 
+#ifdef _MSC_VER
+#define DEBUGSTR(x)
+#else
+#define DEBUGSTR(x) if (debug) std::cerr << x;
+#endif  
+
 void SWMgr::init() {
 	SWFilter *tmpFilter = 0;
 	configPath  = 0;
@@ -116,7 +125,7 @@ void SWMgr::init() {
 	cipherFilters.clear();
 	optionFilters.clear();
 	cleanupFilters.clear();
-#ifndef SPLITLIB
+//#ifndef SPLITLIB
 	tmpFilter = new ThMLVariants();
 	optionFilters.insert(FilterMap::value_type("ThMLVariants", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
@@ -225,7 +234,7 @@ void SWMgr::init() {
 
 	osisplain = new OSISPlain();
 	cleanupFilters.push_back(osisplain);
-#endif
+//#endif
 }
 
 
@@ -331,36 +340,21 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	char *envhomedir  = getenv ("HOME");
 
 	*configType = 0;
+	debug=1;
 
 	// check working directory
-if (debug)
-//	SWLog::getSystemLog()->logInformation("Checking working directory for mods.conf...");
-//	std::cerr << "Checking working directory for mods.conf...";
+	DEBUGSTR("Checking working directory for mods.conf...");
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+		DEBUGSTR("found\n");
 		stdstr(prefixPath, "./");
 		stdstr(configPath, "./mods.conf");
 		return;
 	}
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking working directory for mods.d...";
-#endif
-
+	DEBUGSTR("\nChecking working directory for mods.d...");
 	if (FileMgr::existsDir(".", "mods.d")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+		DEBUGSTR("found\n");
 		stdstr(prefixPath, "./");
 		stdstr(configPath, "./mods.d");
 		*configType = 1;
@@ -369,52 +363,27 @@ if (debug)
 
 
 	// check environment variable SWORD_PATH
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking SWORD_PATH...";
-#endif
+	DEBUGSTR("\nChecking SWORD_PATH...");
 
 	if (envsworddir != NULL) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found (" << envsworddir << ")\n";
-#endif
-
+		
+		DEBUGSTR("found (" << envsworddir << ")\n");
 		path = envsworddir;
 		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 			path += "/";
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking $SWORD_PATH for mods.conf...";
-#endif
-
+		DEBUGSTR("\nChecking $SWORD_PATH for mods.conf...");
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+			DEBUGSTR("found\n");
 			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
 			stdstr(configPath, path.c_str());
 			return;
 		}
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking $SWORD_PATH for mods.d...";
-#endif
-
+		DEBUGSTR("\nChecking $SWORD_PATH for mods.d...");
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+			DEBUGSTR("found\n");
 			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
 			stdstr(configPath, path.c_str());
@@ -426,21 +395,13 @@ if (debug)
 
 	// check for systemwide globalConfPath
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nParsing " << globalConfPath << "...";
-#endif
-
+	DEBUGSTR("\nParsing " << globalConfPath << "...");
 	char *globPaths = 0;
 	char *gfp;
 	stdstr(&globPaths, globalConfPath);
 	for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(0, ":")) {
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking for " << gfp << "...";
-#endif
-
+	DEBUGSTR("\nChecking for " << gfp << "...");
 		if (FileMgr::existsFile(gfp))
 			break;
 	}
@@ -454,62 +415,35 @@ if (debug)
 			homeDir += "/";
 		homeDir += ".sword/sword.conf";
 		if (FileMgr::existsFile(homeDir)) {
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nOverriding any systemwide sword.conf with one found in users home directory." << gfp << "...";
-#endif
+			DEBUGSTR("\nOverriding any systemwide sword.conf with one found in users home directory." << gfp << "...");
 			sysConfPath = homeDir;
 		}
 	}
 
 
 	if (sysConfPath.size()) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+		DEBUGSTR("found\n");
 		SWConfig etcconf(sysConfPath);
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
 			path = (*entry).second;
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
 				path += "/";
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "DataPath in " << sysConfPath << " is set to: " << path;
-#endif
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking for mods.conf in DataPath ";
-#endif
+			DEBUGSTR("DataPath in " << sysConfPath << " is set to: " << path);
+			DEBUGSTR("\nChecking for mods.conf in DataPath ");
+			
 			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+				DEBUGSTR("found\n");
 				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
 				stdstr(configPath, path.c_str());
 				*configType = 1;
 			}
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking for mods.d in DataPath ";
-#endif
+			DEBUGSTR("\nChecking for mods.d in DataPath ");
 
 			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+				DEBUGSTR("found\n");
 				stdstr(prefixPath, path.c_str());
 				path += "mods.d";
 				stdstr(configPath, path.c_str());
@@ -535,10 +469,7 @@ if (debug)
 
 	// check ~/.sword/
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
-#endif
+	DEBUGSTR("\nChecking home directory for ~/.sword/mods.conf" << path);
 
 	if (envhomedir != NULL) {
 		path = envhomedir;
@@ -546,30 +477,17 @@ if (debug)
 			path += "/";
 		path += ".sword/";
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << " found\n";
-#endif
-
+			DEBUGSTR("found\n");
 			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
 			stdstr(configPath, path.c_str());
 			return;
 		}
 
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
-#endif
+		DEBUGSTR("\nChecking home directory for ~/.sword/mods.d" << path);
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-
-#ifndef _MSC_VER
-if (debug)
-	std::cerr << "found\n";
-#endif
-
+			DEBUGSTR("found\n");
 			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
 			stdstr(configPath, path.c_str());
@@ -772,9 +690,14 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 		direction = DIRECTION_LTR;
 	}
 
-	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))) {
+	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))
+#ifdef SPLITLIB
+	|| (!stricmp(driver, "zText2"))
+#endif
+	) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
+		int blockNum = 1;
 		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (SWBuf)"CHAPTER";
 		if (!stricmp(misc1.c_str(), "VERSE"))
 			blockType = VERSEBLOCKS;
@@ -782,6 +705,9 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 			blockType = CHAPTERBLOCKS;
 		else if (!stricmp(misc1.c_str(), "BOOK"))
 			blockType = BOOKBLOCKS;
+		
+		misc1 = ((entry = section.find("BlockNumber")) != section.end()) ? (*entry).second : (SWBuf)"1";
+		blockNum = atoi(misc1.c_str());
 
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
 #ifndef EXCLUDEZLIB
@@ -793,6 +719,11 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 			compress = new LZSSCompress();
 
 		if (compress) {
+#ifdef SPLITLIB
+			if (!stricmp(driver, "zText2"))
+				newmod = new zText2(datapath.c_str(), name, description.c_str(), blockType, blockNum, compress, 0, enc, direction, markup, lang.c_str());
+			else
+#endif
 			if (!stricmp(driver, "zText"))
 				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
 			else	newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
