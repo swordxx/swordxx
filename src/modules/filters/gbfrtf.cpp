@@ -265,6 +265,7 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 					text += "\\qr ";
                                 case 'F':
                                 	text += "\\qj ";
+                                }
 			}
 			continue;
 		}
@@ -284,3 +285,4 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 }
 
 SWORD_NAMESPACE_END
+
