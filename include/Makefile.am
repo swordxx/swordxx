@@ -112,6 +112,7 @@ pkginclude_HEADERS += $(swincludedir)/zconf.h
 pkginclude_HEADERS += $(swincludedir)/zipcomprs.h
 pkginclude_HEADERS += $(swincludedir)/zld.h
 pkginclude_HEADERS += $(swincludedir)/zlib.h
+pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
 

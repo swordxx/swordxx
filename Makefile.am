@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = 1.6
 # General defines
 
-version := 1.5.4
+version := 1.5.5
 
 
 # this WILL NOT WORK for you. only inhouse patched version of
