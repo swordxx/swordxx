@@ -1,5 +1,5 @@
 // Compression on variable granularity
-#include <fcntl.h>
+#include <fcntl.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,7 +41,7 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 	for (int i = 0; i < verses.Count(); i++) {
 		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		char buf[5120];
-		char frag[5120];
+		char frag[800];
 		if (element) {
 			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 			frag[((const char *)element->userData - startFrag) + 1] = 0;
@@ -63,19 +63,25 @@ int main(int argc, char **argv)
 {
         if (argc < 2) {
         	cerr << argv[0] << " - a tool to convert verse references from English to OSIS\n";
-	        cerr << "usage: "<< argv[0] << " <verse ref>\n";
+	        cerr << "usage: "<< argv[0] << " <verse ref> [verse context]\n";
         	cerr << "\n\n";
 	        exit(-1);
         }
         VerseKey verseKey;
-        char * verseString = new char[1024];
+        int i = strlen(argv[1]) + 1;
+        char * verseString = new char[i];
         *verseString = 0;
-        for (int i = 1; i < argc; i++) {
-                strcat (verseString, argv[i]);
-                strcat (verseString, " ");
+        strcpy (verseString, argv[1]);
+        verseString[i + 1] = 0;
+        
+        if (argc > 2) {
+                verseKey = argv[2];
         }
-        *(verseString + strlen(verseString) - 1) = 0;
-        std::cout << convertToOSIS(verseString, &verseKey) << endl;
+        else {
+                verseKey = "Gen 1:1";
+        }
+
+        std::cout << convertToOSIS(verseString, &verseKey);
 
 	return 0;
 }
