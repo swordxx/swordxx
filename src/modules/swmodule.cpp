@@ -287,6 +287,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	int wordCount = 0;
 	const char *sres;
 	terminateSearch = false;
+	char perc = 1;
 
 	listkey.ClearList();
 
@@ -302,6 +303,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		SetKey(*searchkey);
 	}
 
+	(*percent)(perc, percentUserData);
 	// MAJOR KLUDGE: VerseKey::Index still return index within testament.
 	// 	VerseKey::NewIndex should be moved to Index and Index should be some
 	// 	VerseKey specific name
@@ -320,7 +322,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		regcomp(&preg, istr, flags);
 	}
 
-	(*percent)(2, percentUserData);
+	(*percent)(++perc, percentUserData);
 	if (searchType == -2) {
 		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
 		strcpy(wordBuf, istr);
@@ -337,10 +339,21 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 	}
 
-	(*percent)(5, percentUserData);
+	perc = 5;
+	(*percent)(perc, percentUserData);
 
 	while (!Error() && !terminateSearch) {
-		(*percent)((char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex))), percentUserData);
+		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
+		if (newperc > perc) {
+			perc = newperc;
+			(*percent)(perc, percentUserData);
+		}
+		else if (newperc < perc) {
+			cerr << "Serious error: new percentage complete is less than previous value\n";
+			cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
+			cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";
+			cerr << "highIndex: " << highIndex << "\n";
+		}
 		if (searchType >= 0) {
 			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
 				textkey = KeyText();

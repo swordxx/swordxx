@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 	cout << "[0=================================50===============================100]\n ";
 //	for (listkey = target->Search(argv[2]);!listkey.Error();listkey++)
 	char lineLen = 70;
-	listkey = target->Search(argv[2], -2, REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(argv[2], -2, 0/*REG_ICASE*/, 0, 0, &percentUpdate, &lineLen);
 	cout << "\n";
 	while (!listkey.Error()) {
 		cout << (const char *)listkey << "\n";
