@@ -287,6 +287,10 @@ SOURCE=..\..\..\src\mgr\markupfiltmgr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\osisheadings.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\osismorph.cpp
 # End Source File
 # Begin Source File
@@ -584,6 +588,10 @@ SOURCE=..\..\..\src\utilfuns\utilconf.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\utilfuns\utilstr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\utilfuns\utilxml.cpp
 # End Source File
 # Begin Source File
 
