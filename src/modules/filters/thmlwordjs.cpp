@@ -192,11 +192,13 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 
 
 
+/*
 							if (sMorph) {
-								SWBuf popMorph = "";
-								popMorph.appendFormatted("<a onclick=\"p(\'%s\',\'%s\','%s_%s','');\" >%s</a>", sMorph->Name(), morph.c_str(), layer.c_str(), wstr, morph.c_str());
+								SWBuf popMorph = "<a onclick=\"";
+								popMorph.appendFormatted("p(\'%s\',\'%s\','%s_%s','');\" >%s</a>", sMorph->Name(), morph.c_str(), layer.c_str(), wstr, morph.c_str());
 								morph = popMorph;
 							}
+*/
 
 
 

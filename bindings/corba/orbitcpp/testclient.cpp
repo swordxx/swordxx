@@ -44,6 +44,11 @@ int main (int argc, char *argv[])
 			std::cout << "\n";
 		}
 */
+		swordorb::StringList *localeNames = mgr->getAvailableLocales();
+		for (int i = 0; i < localeNames->length(); i++) {
+			std::cout << (*localeNames)[i] << "\n";
+		}
+		mgr->setDefaultLocale("de");
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
 		module = mgr->getModuleByName("WHNU");

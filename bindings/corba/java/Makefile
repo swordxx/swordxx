@@ -1,4 +1,4 @@
-TOMCAT_HOME=/home/tomcat/jakarta-tomcat
+TOMCAT_HOME=/usr/local/tomcat
 instdir=/home/swordweb/livehtml
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 

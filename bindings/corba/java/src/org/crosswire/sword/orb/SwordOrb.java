@@ -16,6 +16,7 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static final String DAILYDEVOS = "Daily Devotional";
 	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, null);
 	String ior = null;
+	String localeName = null;
 
 	private SWMgr attach() {
 		SWMgr retVal = null;
@@ -96,6 +97,11 @@ System.out.println("no ORB running; trying to launch");
 				startOrb();
 System.out.println("trying to attach to newly launched ORB");
 				retVal = attach();
+				if (retVal != null) {
+					if (localeName != null) {
+						retVal.setDefaultLocale(localeName);
+					}
+				}
 			}
 			catch(org.omg.CORBA.SystemException e) {
 				e.printStackTrace();
@@ -104,17 +110,34 @@ System.out.println("trying to attach to newly launched ORB");
 		return retVal;
 	}
 
+	public static void setSessionLocale(String localeName, HttpSession session) {
+		session.setAttribute("SwordOrbLocale", localeName);
+		SWMgr mgr = getSWMgrInstance(session);
+		if (mgr != null) {
+			mgr.setDefaultLocale(localeName);
+		}
+	}
 
-	public static SWMgr getSWMgrInstance(HttpSession session) {
+	public static SwordOrb getSessionOrb(HttpSession session) {
 		SwordOrb orb = (SwordOrb)session.getAttribute("SwordOrb");
 		if (orb == null) {
 System.out.println("No ORB found in session; constructing a new instance");
 			orb = new SwordOrb();
+
+			String locName = (String)session.getAttribute("SwordOrbLocale");
+			if (locName != null)
+				orb.localeName = locName;
+
 			session.setAttribute("SwordOrb", orb);
 		}
 		else {
 System.out.println("ORB found in session");
 		}
+		return orb;
+	}
+
+	public static SWMgr getSWMgrInstance(HttpSession session) {
+		SwordOrb orb = getSessionOrb(session);
 		SWMgr mgr = orb.getSWMgrInstance();
 		return mgr;
 	}

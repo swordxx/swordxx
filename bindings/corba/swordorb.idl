@@ -78,7 +78,8 @@ interface SWMgr {
 	void     terminate();
 	boolean testConnection();
 	void setJavascript(in boolean val);
-
+	StringList getAvailableLocales();
+	void setDefaultLocale(in string name);
 };
 
 };

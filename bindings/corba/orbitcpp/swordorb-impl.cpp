@@ -4,6 +4,7 @@
 #include <versekey.h>
 #include <treekeyidx.h>
 #include <swbuf.h>
+#include <localemgr.h>
 
 /*
 char* swordorb::SWModule_impl::helloWorld(const char* greeting) throw(CORBA::SystemException) {
@@ -230,6 +231,27 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 		}
 	}
 	return retVal;
+}
+
+
+StringList *SWMgr_impl::getAvailableLocales() throw(CORBA::SystemException) {
+	sword::StringList localeNames = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();
+	StringList *retVal = new StringList;
+	int count = 0;
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+		count++;
+	}
+	retVal->length(count);
+	count = 0;
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+		(*retVal)[count++] = CORBA::string_dup(it->c_str());
+	}
+	return retVal;
+}
+
+
+void SWMgr_impl::setDefaultLocale(const char *name) throw(CORBA::SystemException) {
+	LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(name);
 }
 
 }

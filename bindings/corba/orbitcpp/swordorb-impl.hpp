@@ -64,6 +64,8 @@ public:
 	void     terminate() throw(CORBA::SystemException);
 	CORBA::Boolean     testConnection() throw(CORBA::SystemException);
 	void setJavascript(CORBA::Boolean) throw(CORBA::SystemException);
+	StringList *getAvailableLocales() throw(CORBA::SystemException);
+	void setDefaultLocale(const char *name) throw(CORBA::SystemException);
 
 };
 }; // namespace hellomodule
