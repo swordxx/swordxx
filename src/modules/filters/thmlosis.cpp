@@ -94,9 +94,9 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				else break;
 			}
 
-			// hebrew titles
+			// section titles
 			if (!strcmp(token, "div class=\"sechead\"")) {
-				pushString(&to, "<title type=\"psalm\">");
+				pushString(&to, "<title>");
 				divEnd = "</title>";
 				newText = true;
 				lastspace = false;
@@ -121,32 +121,61 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				suspendTextPassThru = false;
 				handled = true;
 			}
-			// Italics assume transchange
-			if (!stricmp(token, "i")) {
-				pushString(&to, "<transChange type=\"added\">");
-				newText = true;
-				lastspace = false;
-				handled = true;
-			}
-			else	if (!stricmp(token, "/i")) {
-				pushString(&to, "</transChange>");
-				lastspace = false;
-				handled = true;
-			}
+/*      Usage of italics to represent transChange isn't domaninant;
+        solution: mark in OSIS instead, assume no semantics other than emphasis
+                of italicized text
+                        if (!strcmp(module->Type(), "Biblical Texts")) {
+        			// Italics assume transchange for Biblical texts
+	        		if (!stricmp(token, "i")) {
+		        		pushString(&to, "<transChange type=\"added\">");
+			        	newText = true;
+				        lastspace = false;
+        				handled = true;
+	        		}
+		        	else	if (!stricmp(token, "/i")) {
+			        	pushString(&to, "</transChange>");
+        				lastspace = false;
+	        			handled = true;
+		        	}
+                        }
+                        else {
+                        	// otherwise, italics are just italics
+*/
+	        		if (!stricmp(token, "i")) {
+		        		pushString(&to, "<hi type=\"i\">");
+			        	newText = true;
+				        lastspace = false;
+        				handled = true;
+	        		}
+		        	else	if (!stricmp(token, "/i")) {
+			        	pushString(&to, "</hi>");
+        				lastspace = false;
+	        			handled = true;
+		        	}
+//                        }
+
+	        	if (!strcmp(token, "b")) {
+		        	pushString(&to, "<hi type=\"b\">");
+			       	newText = true;
+			        lastspace = false;
+        			handled = true;
+	        	}
+		        else	if (!strcmp(token, "/b")) {
+			       	pushString(&to, "</hi>");
+        			lastspace = false;
+	        		handled = true;
+                        }
 
 			// Footnote
 			if (!strcmp(token, "note")) {
-	//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
-				suspendTextPassThru = true;
+		        	pushString(&to, "<note>");
 				newText = true;
+                                lastspace = false;
 				handled = true;
 			}
 			else	if (!strcmp(token, "/note")) {
-				tmp = "<note type=\"x-StudyNote\">";
-				tmp.append(textStart, (int)(textEnd - textStart)+1);
-				tmp += "</note>";
-				pushString(&to, tmp.c_str());
-				suspendTextPassThru = false;
+				pushString(&to, "</note>");
+                                lastspace = false;
 				handled = true;
 			}
 
@@ -287,7 +316,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	if (vkey) {
 		char ref[254];
 		if (vkey->Verse())
-			sprintf(ref, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
+			sprintf(ref, "<verse osisID=\"%s\">", vkey->getOSISRef());
 		else *ref = 0;
 		if (*ref) {
 			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
