@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.12 2004/01/18 20:24:04 mgruner Exp $
+ * $Id: swlocale.h,v 1.13 2004/04/09 17:41:47 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -68,7 +68,11 @@ public:
 	virtual void augment(SWLocale &addFrom);
 	virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
 	virtual const struct abbrev *getBookAbbrevs();
+	#ifdef VK2
+	virtual void getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk);
+	#else
 	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
+	#endif
 };
 
 SWORD_NAMESPACE_END

@@ -1,7 +1,7 @@
 /******************************************************************************
- * osisbook.h - Canonical text information to be included by VerseKey2.cpp
+ * osisbook.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: osisbook.h,v 1.1 2004/04/08 22:52:09 dglassey Exp $
+ * $Id: osisbook.h,v 1.2 2004/04/09 17:41:47 dglassey Exp $
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,10 +25,13 @@
  *	taken from http://whi.wts.edu/OSIS/Projects/Markup/specs/BibleBookNames.html
  */
 
-struct sbook
-VerseKey2::osisbooks[] = {
+#define TESTAMENT_HEADING 255
+#define OTBOOKS 39
+#define NTBOOKS 27
+ 
+struct sbook VerseKey::osisbooks[] = {
 //Old Testament
-{"Old Testament", "OT"},
+{"Old Testament", "OT"},//0
 {"Genesis", "Gen"},
 {"Exodus", "Exod"},
 {"Leviticus", "Lev"},
@@ -38,7 +41,7 @@ VerseKey2::osisbooks[] = {
 {"Judges", "Judg"},
 {"Ruth", "Ruth"},
 {"1 Samuel", "1Sam"},
-{"2 Samuel", "2Sam"},
+{"2 Samuel", "2Sam"},//10
 {"1 Kings", "1Kgs"},
 {"2 Kings", "2Kgs"},
 {"1 Chronicles", "1Chr"},
@@ -48,7 +51,7 @@ VerseKey2::osisbooks[] = {
 {"Esther", "Esth"},
 {"Job", "Job"},
 {"Psalms", "Pss"},
-{"Proverbs", "Prov"},
+{"Proverbs", "Prov"},//20
 {"Ecclesiastes", "Eccl"},		// 	Qohelot
 {"Song of Solomon", "Song"}, 	// 	Canticle of Canticles
 {"Isaiah", "Isa"},
@@ -58,7 +61,7 @@ VerseKey2::osisbooks[] = {
 {"Daniel", "Dan"},
 {"Hosea", "Hos"},
 {"Joel", "Joel"},
-{"Amos", "Amos"},
+{"Amos", "Amos"},//30
 {"Obadiah", "Obad"},
 {"Jonah", "Jonah"},
 {"Micah", "Mic"},
@@ -71,7 +74,7 @@ VerseKey2::osisbooks[] = {
  
  
 //New Testament
-{"New Testament", "NT"},
+{"New Testament", "NT"},//40
 {"Matthew", "Matt"},
 {"Mark", "Mark"},
 {"Luke", "Luke"},
@@ -81,7 +84,7 @@ VerseKey2::osisbooks[] = {
 {"1 Corinthians", "1Cor"},
 {"2 Corinthians", "2Cor"},
 {"Galatians", "Gal"},
-{"Ephesians", "Eph"},
+{"Ephesians", "Eph"},//50
 {"Philippians", "Phil"},
 {"Colossians", "Col"},
 {"1 Thessalonians", "1Thess"},
@@ -91,17 +94,17 @@ VerseKey2::osisbooks[] = {
 {"Titus", "Titus"},
 {"Philemon", "Phlm"},
 {"Hebrews", "Heb"},
-{"James", "Jas"},
+{"James", "Jas"},//60
 {"1 Peter", "1Pet"},
 {"2 Peter", "2Pet"},
 {"1 John", "1John"},
 {"2 John", "2John"},
 {"3 John", "3John"},
 {"Jude", "Jude"},
-{"Revelation", "Rev"},
- 
+{"Revelation", "Rev"},//68
  
 //Roman Catholic Deuterocanon
+{"Deuterocanon", "DC"},
 {"Tobit", "Tob"},
 {"Judith", "Jdt"},
 {"Wisdom", "Wis"},			// 		Wisdom of Solomon
@@ -131,6 +134,7 @@ VerseKey2::osisbooks[] = {
  
  
 //Protestant Apocrypha
+{"Apocrypha", "Apoc"},
 {"Additions to Esther", "AddEsth"},
 {"Prayer of Azariah", "PrAzar"},	// 	Song of the Three Children
 {"Susanna", "Sus"},
@@ -141,71 +145,71 @@ VerseKey2::osisbooks[] = {
 };
 
 const struct abbrev
-  VerseKey2::builtin_abbrevs[] = {
+  VerseKey::builtin_abbrevs[] = {
   {"1 C", 46},			//   1 Corinthians
   {"1 CHRONICLES", 13},		//   1 Chronicles
-  {"1 CORINTHIANS", 46},	//   1 Corinthians
-  {"1 JN", 62},			//    1 John
-  {"1 JOHN", 62},		//    1 John
+  {"1 CORINTHIANS", 47},	//   1 Corinthians
+  {"1 JN", 63},			//    1 John
+  {"1 JOHN", 63},		//    1 John
   {"1 KGS", 11},		//    1 Kings
   {"1 KINGS", 11},		//    1 Kings
-  {"1 PETER", 60},		//    1 Peter
-  {"1 PTR", 60},		//    1 Peter
+  {"1 PETER", 61},		//    1 Peter
+  {"1 PTR", 61},		//    1 Peter
   {"1 SAMUEL", 9},		//    1 Samuel
-  {"1 THESSALONIANS", 52},	//   1 Thessalonians
-  {"1 TIMOTHY", 54},		//   1 Timothy
-  {"1C", 46},			//   1 Corinthians
+  {"1 THESSALONIANS", 53},	//   1 Thessalonians
+  {"1 TIMOTHY", 55},		//   1 Timothy
+  {"1C", 47},			//   1 Corinthians
   {"1CHRONICLES", 13},		//   1 Chronicles
-  {"1CORINTHIANS", 46},		//   1 Corinthians
-  {"1JN", 62},			//    1 John       
-  {"1JOHN", 62},		//    1 John
+  {"1CORINTHIANS", 47},		//   1 Corinthians
+  {"1JN", 63},			//    1 John       
+  {"1JOHN", 63},		//    1 John
   {"1KGS", 11},			// 1 Kings
   {"1KINGS", 11},		//    1 Kings
-  {"1PETER", 60},		//    1 Peter
-  {"1PTR", 60},			//    1 Peter
+  {"1PETER", 61},		//    1 Peter
+  {"1PTR", 61},			//    1 Peter
   {"1SAMUEL", 9},		//    1 Samuel
-  {"1THESSALONIANS", 52},	//   1 Thessalonians
-  {"1TIMOTHY", 54},		//   1 Timothy
-  {"2 C", 47},			//   2 Corinthians
+  {"1THESSALONIANS", 53},	//   1 Thessalonians
+  {"1TIMOTHY", 55},		//   1 Timothy
+  {"2 C", 48},			//   2 Corinthians
   {"2 CHRONICLES", 14},		//   2 Chronicles
-  {"2 CORINTHIANS", 47},	//   2 Corinthians
-  {"2 JN", 63},			//    2 John
-  {"2 JOHN", 63},		//    2 John
+  {"2 CORINTHIANS", 48},	//   2 Corinthians
+  {"2 JN", 64},			//    2 John
+  {"2 JOHN", 64},		//    2 John
   {"2 KGS", 12},		//    2 Kings
   {"2 KINGS", 12},		//    2 Kings
-  {"2 PETER", 61},		//    2 Peter
-  {"2 PTR", 61},		//    2 Peter
+  {"2 PETER", 62},		//    2 Peter
+  {"2 PTR", 62},		//    2 Peter
   {"2 SAMUEL", 10},		//    2 Samuel
-  {"2 THESSALONIANS", 53},	//   2 Thessalonians
-  {"2 TIMOTHY", 55},		//   2 Timothy
-  {"2C", 47},			//   2 Corinthians
+  {"2 THESSALONIANS", 54},	//   2 Thessalonians
+  {"2 TIMOTHY", 56},		//   2 Timothy
+  {"2C", 48},			//   2 Corinthians
   {"2CHRONICLES", 14},		//   2 Chronicles
-  {"2CORINTHIANS", 47},		//   2 Corinthians
-  {"2JN", 63},			//    2 John    
-  {"2JOHN", 63},		//    2 John
+  {"2CORINTHIANS", 48},		//   2 Corinthians
+  {"2JN", 64},			//    2 John    
+  {"2JOHN", 64},		//    2 John
   {"2KGS", 12},			// 2 Kings
   {"2KINGS", 12},		//    2 Kings
-  {"2PETER", 61},		//    2 Peter
-  {"2PTR", 61},			//    2 Peter
+  {"2PETER", 62},		//    2 Peter
+  {"2PTR", 62},			//    2 Peter
   {"2SAMUEL", 10},		//    2 Samuel
-  {"2THESSALONIANS", 53},	//   2 Thessalonians
-  {"2TIMOTHY", 55},		//   2 Timothy
-  {"3 JN", 64},			//    3 John
-  {"3 JOHN", 64},		//    3 John
-  {"3JN", 64},			//    3 John
-  {"3JOHN", 64},		//    3 John
-  {"ACTS", 44},			//     Acts
+  {"2THESSALONIANS", 54},	//   2 Thessalonians
+  {"2TIMOTHY", 56},		//   2 Timothy
+  {"3 JN", 65},			//    3 John
+  {"3 JOHN", 65},		//    3 John
+  {"3JN", 65},			//    3 John
+  {"3JOHN", 65},		//    3 John
+  {"ACTS", 45},			//     Acts
   {"AMOS", 30},			//    Amos
   {"APOCALYPSE OF ST. JOHN", 66},	//    Apocalypse of St. John (Rev.)
-  {"C", 51},			//    Colossians
+  {"C", 52},			//    Colossians
   {"CANTICLE OF CANTICLES", 22},	//    Canticle of Canticles (Song of S.)
-  {"COLOSSIANS", 51},		//    Colossians
+  {"COLOSSIANS", 52},		//    Colossians
   {"D", 5},			//     Deuteronomy
   {"DANIEL", 27},		//    Daniel
   {"DEUTERONOMY", 5},		//    Deuteronomy
-  {"E", 49},			//     Ephesians
+  {"E", 50},			//     Ephesians
   {"ECCLESIASTES", 21},		//    Ecclesiastes
-  {"EPHESIANS", 49},		//    Ephesians
+  {"EPHESIANS", 50},		//    Ephesians
   {"ESTER", 17},		//    Esther
   {"ESTHER", 17},		//    Esther
   {"EXODUS", 2},		//    Exodus
@@ -213,123 +217,125 @@ const struct abbrev
   {"EZK", 26},		//   Ezekiel
   {"EZRA", 15},			//   Ezra
   {"G", 1},			//     Genesis
-  {"GALATIANS", 48},		//    Galatians
+  {"GALATIANS", 49},		//    Galatians
   {"GENESIS", 1},		//    Genesis
-  {"H", 58},			//     Hebrews
+  {"H", 59},			//     Hebrews
   {"HABAKKUK", 35},		//    Habakkuk
   {"HAGGAI", 37},		//   Haggai
-  {"HEBREWS", 58},		//    Hebrews
+  {"HEBREWS", 59},		//    Hebrews
   {"HOSEA", 28},		//    Hosea
-  {"I C", 46},			//   1 Corinthians
+  {"I C", 47},			//   1 Corinthians
   {"I CHRONICLES", 13},		//   1 Chronicles
-  {"I CORINTHIANS", 46},	//   1 Corinthians
-  {"I JN", 62},			//    1 John
-  {"I JOHN", 62},		//    1 John
+  {"I CORINTHIANS", 47},	//   1 Corinthians
+  {"I JN", 63},			//    1 John
+  {"I JOHN", 63},		//    1 John
   {"I KGS", 11},		// 1 Kings
   {"I KINGS", 11},		//    1 Kings
-  {"I PETER", 60},		//    1 Peter
-  {"I PTR", 60},		//    1 Peter
+  {"I PETER", 61},		//    1 Peter
+  {"I PTR", 61},		//    1 Peter
   {"I SAMUEL", 9},		//    1 Samuel
-  {"I THESSALONIANS", 52},	//   1 Thessalonians
-  {"I TIMOTHY", 54},		//   1 Timothy
-  {"IC", 46},			//   1 Corinthians
+  {"I THESSALONIANS", 53},	//   1 Thessalonians
+  {"I TIMOTHY", 55},		//   1 Timothy
+  {"IC", 47},			//   1 Corinthians
   {"ICHRONICLES", 13},		//   1 Chronicles
-  {"ICORINTHIANS", 46},		//   1 Corinthians
-  {"II C", 47},			//   2 Corinthians
+  {"ICORINTHIANS", 47},		//   1 Corinthians
+  {"II C", 48},			//   2 Corinthians
   {"II CHRONICLES", 14},	//   2 Chronicles
-  {"II CORINTHIANS", 47},	//   2 Corinthians
-  {"II JN", 63},		//    2 John  
-  {"II JOHN", 63},		//    2 John
+  {"II CORINTHIANS", 48},	//   2 Corinthians
+  {"II JN", 64},		//    2 John  
+  {"II JOHN", 64},		//    2 John
   {"II KGS", 12},		// 2 Kings
   {"II KINGS", 12},		//    2 Kings
-  {"II PETER", 61},		//    2 Peter
-  {"II PTR", 61},		//    2 Peter
+  {"II PETER", 62},		//    2 Peter
+  {"II PTR", 62},		//    2 Peter
   {"II SAMUEL", 10},		//    2 Samuel
-  {"II THESSALONIANS", 53},	//   2 Thessalonians
-  {"II TIMOTHY", 55},		//   2 Timothy
-  {"IIC", 47},			//   2 Corinthians
+  {"II THESSALONIANS", 54},	//   2 Thessalonians
+  {"II TIMOTHY", 56},		//   2 Timothy
+  {"IIC", 48},			//   2 Corinthians
   {"IICHRONICLES", 14},		//   2 Chronicles
-  {"IICORINTHIANS", 47},	//   2 Corinthians
-  {"III JN", 64},		//    3 John 
-  {"III JOHN", 64},		//    3 John
-  {"IIIJN", 64},		//    3 John
-  {"IIIJOHN", 64},		//    3 John
-  {"IIJN", 63},			//    2 John
-  {"IIJOHN", 63},		//    2 John
+  {"IICORINTHIANS", 48},	//   2 Corinthians
+  {"III JN", 65},		//    3 John 
+  {"III JOHN", 65},		//    3 John
+  {"IIIJN", 65},		//    3 John
+  {"IIIJOHN", 65},		//    3 John
+  {"IIJN", 64},			//    2 John
+  {"IIJOHN", 64},		//    2 John
   {"IIKGS", 12},		// 2 Kings
   {"IIKINGS", 12},		//    2 Kings
-  {"IIPETER", 61},		//    2 Peter
-  {"IIPTR", 61},		//    2 Peter
+  {"IIPETER", 62},		//    2 Peter
+  {"IIPTR", 62},		//    2 Peter
   {"IISAMUEL", 10},		//    2 Samuel
-  {"IITHESSALONIANS", 53},	//   2 Thessalonians
-  {"IITIMOTHY", 55},		//   2 Timothy
-  {"IJN", 62},			//    1 John
-  {"IJOHN", 62},		//    1 John
+  {"IITHESSALONIANS", 54},	//   2 Thessalonians
+  {"IITIMOTHY", 56},		//   2 Timothy
+  {"IJN", 63},			//    1 John
+  {"IJOHN", 63},		//    1 John
   {"IKGS", 11},			// 1 Kings
   {"IKINGS", 11},		//    1 Kings
-  {"IPETER", 60},		//    1 Peter
-  {"IPTR", 60},			//    1 Peter
+  {"IPETER", 61},		//    1 Peter
+  {"IPTR", 61},			//    1 Peter
   {"ISA", 23},			//     Isaiah
   {"ISAIAH", 23},		//     Isaiah
   {"ISAMUEL", 9},		//    1 Samuel
-  {"ITHESSALONIANS", 52},	//   1 Thessalonians
-  {"ITIMOTHY", 54},		//   1 Timothy
-  {"J", 43},			//     John
-  {"JAMES", 59},		//    James
-  {"JAS", 59},			//    James
+  {"ITHESSALONIANS", 53},	//   1 Thessalonians
+  {"ITIMOTHY", 55},		//   1 Timothy
+  {"J", 44},			//     John
+  {"JAMES", 60},		//    James
+  {"JAS", 60},			//    James
   {"JDGS", 7},		//  Judges
   {"JEREMIAH", 24},		//    Jeremiah
-  {"JHN", 43},			//    John
-  {"JN", 43},			//    John
-  {"JO", 43},			//    John
+  {"JHN", 44},			//    John
+  {"JN", 44},			//    John
+  {"JO", 44},			//    John
   {"JOB", 18},			//   Job
   {"JOEL", 29},			//   Joel
-  {"JOHN", 43},			//   John
+  {"JOHN", 44},			//   John
   {"JOL", 29},			//   Joel
   {"JONAH", 32},		//   Jonah
   {"JOSHUA", 6},		//   Joshua
-  {"JUDE", 65},			//  Jude
+  {"JUDE", 66},			//  Jude
   {"JUDGES", 7},		//  Judges
-  {"L", 42},			//     Luke
+  {"L", 43},			//     Luke
   {"LAMENTATIONS", 25},		//    Lamentations
   {"LEVITICUS", 3},		//    Leviticus
-  {"LK", 42},			//    Luke
-  {"LUKE", 42},			//    Luke
-  {"MA", 40},			//    Matthew
+  {"LK", 43},			//    Luke
+  {"LUKE", 43},			//    Luke
+  {"MA", 41},			//    Matthew
   {"MALACHI", 39},		//   Malachi
-  {"MARK", 41},			//   Mark
-  {"MATTHEW", 40},		//   Matthew
+  {"MARK", 42},			//   Mark
+  {"MATTHEW", 41},		//   Matthew
   {"MICAH", 33},		//    Micah
-  {"MK", 41},			//    Mark
-  {"MRK", 41},			//    Mark
-  {"MT", 40},			//    Matthew
+  {"MK", 42},			//    Mark
+  {"MRK", 42},			//    Mark
+  {"MT", 41},			//    Matthew
   {"N", 4},			//     Numbers
   {"NAHUM", 34},		//    Nahum
   {"NAM", 34},		//    Nahum
   {"NEHEMIAH", 16},		//    Nehemiah
+  {"NEW TESTAMENT", 40},		//     New Testament
   {"NUMBERS", 4},		//    Numbers
   {"OBADIAH", 31},		//     Obadiah
+  {"OLD TESTAMENT", 0},		//     Old Testament
   {"P", 19},			//     Psalms
-  {"PHIL", 50},			//    Philippians
-  {"PHILEMON", 57},		// Philemon
-  {"PHILIPPIANS", 50},		// Philippians
-  {"PHLM", 57},		// Philemon
-  {"PHM", 57},			//   Philemon
-  {"PHP", 50},			//   Philippians
+  {"PHIL", 51},			//    Philippians
+  {"PHILEMON", 58},		// Philemon
+  {"PHILIPPIANS", 51},		// Philippians
+  {"PHLM", 58},		// Philemon
+  {"PHM", 58},			//   Philemon
+  {"PHP", 51},			//   Philippians
   {"PROVERBS", 20},		//    Proverbs
   {"PSALMS", 19},		//    Psalms
   {"PSM", 19},			// Psalms
   {"PSS", 19},			// Psalms
   {"QOHELETH", 21},              // Qohelet (Ecclesiastes)
-  {"REVELATION OF JOHN", 66},	//     Revelation
-  {"ROMANS", 45},		//    Romans
+  {"REVELATION OF JOHN", 67},	//     Revelation
+  {"ROMANS", 46},		//    Romans
   {"RUTH", 8},			//    Ruth
   {"SNG", 22},	//     Song of Solomon
   {"SOLOMON", 22},	//     Song of Solomon
   {"SONG OF SOLOMON", 22},	//     Song of Solomon
   {"SONG OF SONGS", 22},	//     Song of Solomon
   {"SOS", 22},			//     Song of Solomon
-  {"TITUS", 56},		//     Titus
+  {"TITUS", 57},		//     Titus
   {"ZECHARIAH", 38},		//   Zechariah
   {"ZEPHANIAH", 36},		//   Zephaniah
   {"", -1}
@@ -345,14 +351,17 @@ const struct abbrev
   877, 890, 905, 909, 919, 921, 926,
   934, 938, 942, 946, 949, 964
 */
+
+
+
 /* We are allowing one extra chapter per book for summary */
 /* And an extra chapter for each testament for testament summary */
 /* These are for commentaries */
 
 struct bkref
-  VerseKey2::kjvbks[] = {
+  VerseKey::kjvbks[] = {
 //Header
-{0, 1},
+{0, TESTAMENT_HEADING},
 	//Old Testament
 {1, 50},	// Genesis", "Gen
 {52, 40},	// Exodus", "Exod
@@ -403,7 +412,7 @@ struct bkref
 */
  
 //Header
-{969, 1},
+{969, TESTAMENT_HEADING},
 //New Testament
 {970, 28},	// Matthew", "Matt
 {999, 16},	// Mark", "Mark
@@ -435,6 +444,7 @@ struct bkref
  
  
 //Roman Catholic Deuterocanon
+{0, 0},	// Deuterocanon", "DC
 {0, 0},	// Tobit", "Tob
 {0, 0},	// Judith", "Jdt
 {0, 0},	// Wisdom", "Wis
@@ -464,6 +474,7 @@ struct bkref
  
  
 //Protestant Apocrypha
+{0, 0},	// Apocrypha", "Apoc
 {0, 0},	// Additions to Esther", "AddEsth
 {0, 0},	// Prayer of Azariah", "PrAzar
 {0, 0},	// Susanna", "Sus
@@ -474,8 +485,8 @@ struct bkref
 };
 
 struct bkref
-  VerseKey2::kjvcps[] = {
-{0, 0}, // OT Header
+  VerseKey::kjvcps[] = {
+{1, 0}, // OT Header
 {2, 0}, // Genesis:0
 {3, 31}, // Genesis:1
 {35, 25}, // Genesis:2
@@ -1733,3 +1744,9 @@ struct bkref
 {32311, 27}, // Revelation of John:21
 {32339, 21} // Revelation of John:22
 };
+
+int
+  VerseKey::offsize[2] =
+  { sizeof (VerseKey::kjvbks) / sizeof(bkref), sizeof (VerseKey::kjvcps) / sizeof(bkref)
+};
+

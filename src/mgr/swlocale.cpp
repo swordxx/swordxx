@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.7 2004/01/18 20:27:08 mgruner Exp $
+ * $Id: swlocale.cpp,v 1.8 2004/04/09 17:41:47 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,8 +64,10 @@ SWLocale::~SWLocale() {
 		delete [] bookAbbrevs;
 
 	if (BMAX) {
+		#ifndef VK2
 		for (int i = 0; i < 2; i++)
 			delete [] books[i];
+		#endif
 		delete [] BMAX;
 		delete [] books;
 	}
@@ -125,7 +127,24 @@ const struct abbrev *SWLocale::getBookAbbrevs() {
 	return bookAbbrevs;
 }
 
+#ifdef VK2
+void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk) {
+	if (!BMAX) {
+		BMAX = new char[1];
+		BMAX[0] = vk->getMaxBooks();
 
+		books = new struct sbook*[1];
+		books[0] = new struct sbook[*BMAX];
+		for (int j = 0; j < *BMAX; j++) {
+				books[0][j].name = translate(vk->getNameOfBook(j));
+				books[0][j].prefAbbrev = translate(vk->getPrefAbbrev(j));
+		}
+	}
+
+	iBMAX  = &BMAX;
+	ibooks = &books;
+}
+#else
 void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	if (!BMAX) {
 		BMAX = new char [2];
@@ -147,5 +166,6 @@ void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	*iBMAX  = BMAX;
 	*ibooks = books;
 }
+#endif
 
 SWORD_NAMESPACE_END

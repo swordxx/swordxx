@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey2.h,v 1.1 2004/04/09 17:39:29 dglassey Exp $
+ * $Id: versekey2.h,v 1.2 2004/04/09 17:41:47 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
