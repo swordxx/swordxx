@@ -89,7 +89,6 @@ zText2::~zText2()
  *
  * RET: buffer with verse
  */
-#if 0 // do we really want this any more
 SWBuf &zText2::getRawEntryBuf() {
 	long  start = 0;
 	unsigned short size = 0;
@@ -110,22 +109,33 @@ SWBuf &zText2::getRawEntryBuf() {
 
 	return entryBuf;
 }
-#endif
 
 bool zText2::sameBlock(VerseKey2 *k1, VerseKey2 *k2) {
 	switch (blockType) {
 	case VERSEBLOCKS:
-		if (k1->Verse() != k2->Verse())
+		if ((k1->Verse() / m_idxPerBlock) != (k2->Verse() / m_idxPerBlock) || 
+			(k1->Chapter() != k2->Chapter()) || (k1->Book() != k2->Book()))
+		{
 			return false;
+		}
+		break;
 	case CHAPTERBLOCKS:
-		if (k1->Chapter() != k2->Chapter())
+		if ((k1->Chapter() / m_idxPerBlock) != (k2->Chapter() / m_idxPerBlock)
+			|| (k1->Book() != k2->Book()))
+		{
 			return false;
+		}
+		break;
 	case BOOKBLOCKS:
-		if (k1->Book() != k2->Book())
+		if ((k1->Book() / m_idxPerBlock) != (k2->Book() / m_idxPerBlock))
+		{
 			return false;
+		}
+		break;
 	case INDEXBLOCKS:
-		if ((k1->Index() % m_idxPerBlock) != (k2->Index() % m_idxPerBlock))
+		if ((k1->Index() / m_idxPerBlock) != (k2->Index() / m_idxPerBlock))
 			return false;
+		break;
 	}
 	return true;
 }
