@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swlocale.h,v 1.6 2001/03/23 22:15:14 jansorg Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,6 +35,12 @@ using namespace std;
 
 typedef map < string, string, less < string > >LookupMap;
 
+/** SWLocale is used for the localisation of the booknames
+* The SWLocale is a class which holds the information of one language.
+* Every language supported by Sword has one SWLocale object, 
+* get the name of the Language using @see getname of this class.
+* Another functions useful for frontend developers is @see getDescription.
+*/
 class SWDLLEXPORT SWLocale
 {
   LookupMap lookupTable;
@@ -46,10 +52,17 @@ class SWDLLEXPORT SWLocale
   struct sbook **books;
 
 public:
-    SWLocale (const char *ifilename);
-    virtual ~ SWLocale ();
+  SWLocale (const char *ifilename);
+  virtual ~ SWLocale ();
 
+  /**
+  * This function is used to get the name of the languages which this object is handling.
+  * @return The name of the managed language. A possible example is "de".
+  */
   virtual const char *getName ();
+  /**
+  * @return The description. A possible example is "German".
+  */
   virtual const char *getDescription ();
   virtual const char *translate (const char *text);
   virtual SWLocale & operator += (SWLocale & addFrom);

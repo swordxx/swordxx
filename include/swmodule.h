@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.18 2001/03/03 21:24:19 scribe Exp $
+ * $Id: swmodule.h,v 1.19 2001/03/23 22:15:14 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -336,7 +336,7 @@ public:
   */
   virtual SWModule & operator = (POSITION p);
   
-  /** Adds a RenderFilter to this module's @ref renderfilters queue
+  /** Adds a RenderFilter to this module's @see renderfilters queue
   * @param newfilter the filter to add
   * @return *this
   */
