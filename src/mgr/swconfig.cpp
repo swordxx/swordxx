@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.7 2002/06/13 01:23:51 scribe Exp $
+ * $Id: swconfig.cpp,v 1.8 2002/06/13 05:19:03 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -135,16 +135,30 @@ SWConfig &SWConfig::operator +=(SWConfig &addFrom)
 {
 
 	SectionMap::iterator section;
-	ConfigEntMap::iterator entry;
+	ConfigEntMap::iterator entry, start, end;
 
 	for (section = addFrom.Sections.begin(); section != addFrom.Sections.end(); section++) {
 		for (entry = (*section).second.begin(); entry != (*section).second.end(); entry++) {
-//			Sections[section->first][entry->first] = entry->second;
-			Sections[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
+			start = Sections[section->first].lower_bound(entry->first);
+			end   = Sections[section->first].upper_bound(entry->first);
+			if (start != end) {
+				if (((++start) != end)
+						|| ((++(addFrom.Sections[section->first].lower_bound(entry->first))) != addFrom.Sections[section->first].upper_bound(entry->first))) {
+					for (--start; start != end; start++) {
+						if (!strcmp(start->second.c_str(), entry->second.c_str()))
+							break;
+					}
+					if (start == end)
+						Sections[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
+				}
+				else	Sections[section->first][entry->first.c_str()] = entry->second.c_str();
+			}		
+			else	Sections[section->first][entry->first.c_str()] = entry->second.c_str();
 		}
 	}
 	return *this;
 }
+
 
 ConfigEntMap & SWConfig::operator [] (const char *section) {
     return Sections[section];
