@@ -46,8 +46,7 @@ OSISPlain::OSISPlain() {
         setTokenCaseSensitive(true);
 }
 
-char OSISPlain::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char OSISPlain::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
         SWBasicFilter::processText(text, key, module);  //handle tokens as usual
 	const char *from;
 	SWBuf orig = text;
@@ -67,24 +66,26 @@ char OSISPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
         return 0;
 }
 
-bool OSISPlain::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+
+bool OSISPlain::handleToken(SWBuf &buf, const char *token, UserData *userData) {
         // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
+		MyUserData *u = (MyUserData *)userData;
                 XMLTag tag(token);
 		if (((*token == 'w') && (token[1] == ' ')) ||
 		((*token == '/') && (token[1] == 'w') && (!token[2]))) {
 			bool start = false;
 			if (*token == 'w') {
 				if (token[strlen(token)-1] != '/') {
-					userData["w"] = token;
+					u->w = token;
 					return true;
 				}
 				start = true;
 			}
-			tag = (start) ? token : userData["w"].c_str();
+			tag = (start) ? token : u->w.c_str();
 			bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
-			SWBuf lastText = (start) ? "stuff" : userData["lastTextNode"].c_str();
+			SWBuf lastText = (start) ? "stuff" : u->lastTextNode.c_str();
 
 			const char *attrib;
 			const char *val;
@@ -138,12 +139,12 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 				if (!strstr(token, "strongsMarkup")) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 					buf += " (";
 				}
-				else	userData["suspendTextPassThru"] = "true";
+				else	u->suspendTextPassThru = true;
 			}
 		else if (!strncmp(token, "/note", 5)) {
-			if (userData["suspendTextPassThru"] == "false")
+			if (!u->suspendTextPassThru)
 				buf += ")";
-			else	userData["suspendTextPassThru"] = "false";
+			else	u->suspendTextPassThru = false;
 		}
 
 		// <p> paragraph tag

@@ -22,6 +22,12 @@
 
 SWORD_NAMESPACE_START
 
+
+OSISHTMLHref::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : UserData(module, key) {
+	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+}
+
+
 OSISHTMLHref::OSISHTMLHref()
 {
         setTokenStart("<");
@@ -41,11 +47,11 @@ OSISHTMLHref::OSISHTMLHref()
         setTokenCaseSensitive(true);
 }
 
-bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, UserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
+		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
-		bool osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 
 		//printf("token = %s\n",token);
 		// <w> tag
@@ -53,7 +59,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-				userData["w"] = token;
+				u->w = token;
 			}
 
 			// end or empty <w> tag
@@ -63,8 +69,8 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
 				if (endTag) {
-					tag = userData["w"].c_str();
-					lastText = userData["lastTextNode"].c_str();
+					tag = u->w.c_str();
+					lastText = u->lastTextNode.c_str();
 				}
 				else lastText = "stuff";
 
@@ -124,7 +130,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEmpty() && !tag.isEndTag()) {
-				SWBuf footnoteNum = userData["fn"];
+				SWBuf footnoteNum = u->fn;
 				SWBuf type = tag.getAttribute("type");
 
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
@@ -132,7 +138,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 					VerseKey *vkey;
 					// see if we have a VerseKey * or descendant
 					try {
-						vkey = SWDYNAMIC_CAST(VerseKey, this->key);
+						vkey = SWDYNAMIC_CAST(VerseKey, userData->key);
 					}
 					catch ( ... ) {	}
 					if (vkey) {
@@ -140,13 +146,13 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 						    buf.appendFormatted("<a href=\"noteID=%s.%c.%i\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber, ch);
 						SWBuf tmp;
 						tmp.appendFormatted("%i", ++footnoteNumber);
-						userData["fn"] = tmp.c_str();
+						u->fn = tmp.c_str();
 					}
 				}
-				userData["suspendTextPassThru"] = "true";
+				u->suspendTextPassThru = true;
 			}
 			if (tag.isEndTag()) {
-				userData["suspendTextPassThru"] = "false";
+				u->suspendTextPassThru = false;
 			}
 		}
 		// <p> paragraph tag
@@ -208,15 +214,15 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b") {
 					buf += "<b> ";
-					userData["inBold"] = "true";
+					u->inBold = true;
 				}
 				else	// all other types
 					buf += "<i> ";
 			}
 			else if (tag.isEndTag()) {
-				if(userData["inBold"] == "true") {
+				if(u->inBold) {
 					buf += "</b>";
-					userData["inBold"] = "false";
+					u->inBold = false;
 				}
 				else
 				      buf += "</i>";
@@ -237,7 +243,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				/*buf += "{";*/
 
 				//alternate " and '
-				if(osisQToTick)
+				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 				
 				if (who == "Jesus") {
@@ -246,13 +252,13 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			}
 			else if (tag.isEndTag()) {
 				//alternate " and '
-				if(osisQToTick)
+				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 				//buf += "</font>";
 			}
 			else {	// empty quote marker
 				//alternate " and '
-				if(osisQToTick)
+				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 			}
 		}

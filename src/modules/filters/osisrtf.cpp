@@ -22,6 +22,12 @@
 
 SWORD_NAMESPACE_START
 
+
+OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : UserData(module, key) {
+	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+}
+
+
 OSISRTF::OSISRTF() {
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -36,39 +42,32 @@ OSISRTF::OSISRTF() {
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-
+	setStageProcessing(POSTCHAR);		// just at bottom of for loop
         addTokenSubstitute("lg", "\\par ");
         addTokenSubstitute("/lg", "\\par ");
-
 	setTokenCaseSensitive(true);
 }
 
-char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
-        SWBasicFilter::processText(text, key, module);  //handle tokens as usual
-	const char *from;
-	SWBuf orig = text;
-	from = orig.c_str();
-	for (text = ""; *from; from++) {  //loop to remove extra spaces
-                if ((strchr(" \t\n\r", *from))) {
-                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
-                                from++;
-                        }
-                        text += " ";
-                }
-                else {
-                        text += *from;
-                }
-        }
-        text += (char)0;
-        return 0;
+
+bool OSISRTF::processStage(char stage, SWBuf &text, const char *&from, UserData *userData) {
+	switch (stage) {
+	POSTCHAR:
+		if ((strchr(" \t\n\r", *from))) {
+			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+				from++;
+			}
+			text += " ";
+			from++;
+		}
+	}
 }
 
-bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+
+bool OSISRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
+		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
-		bool osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 
 		// <w> tag
 		if (!strcmp(tag.getName(), "w")) {
@@ -76,7 +75,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
 				buf += "{";
-				userData["w"] = token;
+				u->w = token;
 			}
 
 			// end or empty <w> tag
@@ -86,8 +85,8 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 				bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
 				if (endTag) {
-					tag = userData["w"].c_str();
-					lastText = userData["lastTextNode"].c_str();
+					tag = u->w.c_str();
+					lastText = u->lastTextNode.c_str();
 				}
 				else lastText = "stuff";
 
@@ -158,18 +157,18 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 						VerseKey *vkey;
 						// see if we have a VerseKey * or descendant
 						try {
-							vkey = SWDYNAMIC_CAST(VerseKey, this->key);
+							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
 						catch ( ... ) {	}
 						if (vkey) {
 							buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber.c_str());
 						}
 					}
-					userData["suspendTextPassThru"] = "true";
+					u->suspendTextPassThru = true;
 				}
 			}
 			if (tag.isEndTag()) {
-				userData["suspendTextPassThru"] = "false";
+				u->suspendTextPassThru = false;
 			}
 		}
 
@@ -249,7 +248,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 				buf += "{";
 
 				//alternate " and '
-				if (osisQToTick)
+				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 
 				if (who == "Jesus")
@@ -257,13 +256,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			}
 			else if (tag.isEndTag()) {
 				//alternate " and '
-				if (osisQToTick)
+				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 				buf += "}";
 			}
 			else {	// empty quote marker
 				//alternate " and '
-				if (osisQToTick)
+				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 			}
 		}

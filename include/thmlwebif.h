@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlwebif.h,v 1.2 2003/06/27 01:41:07 scribe Exp $
+ * $Id: thmlwebif.h,v 1.3 2003/07/30 00:51:33 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,7 @@ class SWDLLEXPORT ThMLWEBIF : public ThMLHTMLHREF {
 	const SWBuf passageStudyURL;
 
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
 public:
 	ThMLWEBIF();
 };

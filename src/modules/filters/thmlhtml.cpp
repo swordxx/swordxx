@@ -134,8 +134,9 @@ ThMLHTML::ThMLHTML() {
 }
 
 
-bool ThMLHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool ThMLHTML::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 		if (!strcmp(tag.getName(), "sync")) {
 			if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "Strongs")) {
@@ -166,17 +167,17 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userDat
 			}
 		}
 		else if (!strcmp(tag.getName(), "div")) {
-			if (tag.isEndTag() && (userData["SecHead"] == "true")) {
+			if (tag.isEndTag() && (u->SecHead)) {
 				buf += "</i></b><br />";
-				userData["SecHead"] = "false";
+				u->SecHead = false;
 			}
 			else if (tag.getAttribute("class")) {
 				if (!strcmp(tag.getAttribute("class"), "sechead")) {
-					userData["SecHead"] = "true";
+					u->SecHead = true;
 					buf += "<br /><b><i>";
 				}
 				else if (!strcmp(tag.getAttribute("class"), "title")) {
-					userData["SecHead"] = "true";
+					u->SecHead = true;
 					buf += "<br /><b><i>";
 				}
 			}
@@ -197,7 +198,7 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userDat
 					buf += '"';
 					if (*(c+1) == '/') {
 						buf += "file:";
-						buf += module->getConfigEntry("AbsoluteDataPath");
+						buf += userData->module->getConfigEntry("AbsoluteDataPath");
 						if (buf[buf.length()-2] == '/')
 							c++;		// skip '/'
 					}

@@ -170,7 +170,8 @@ char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
         return 0;
 }
 
-bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool ThMLRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+	MyUserData *u = (MyUserData *)userData;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
@@ -217,17 +218,17 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			buf += '{';
 			if (!strncmp(token, "div class=\"title\"", 17)) {
 				buf += "\\par\\i1\\b1 ";
-				userData["sechead"] = "true";
+				u->sechead = true;
 			}
 			else if (!strncmp(token, "div class=\"sechead\"", 19)) {
 				buf += "\\par\\i1\\b1 ";
-				userData["sechead"] = "true";
+				u->sechead = true;
 			}
 		}
 		else if (!strncmp(token, "/div", 4)) {
-			if (userData["sechead"] == "true") {
+			if (u->sechead) {
 				buf += "\\par ";
-				userData["sechead"] = "false";
+				u->sechead = false;
 			}
 			buf += '}';
 		}
@@ -239,9 +240,9 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			if (!src)		// assert we have a src attribute
 				return false;
 
-                        char* filepath = new char[strlen(module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
+                        char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
                         *filepath = 0;
-                        strcpy(filepath, module->getConfigEntry("AbsoluteDataPath"));
+                        strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
                         unsigned long i = strlen(filepath);
                         const char *c;
 			for (c = (src + 5); *c != '"'; c++) {

@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.15 2003/07/12 22:58:48 joachim Exp $
+ * $Id: swbasicfilter.h,v 1.16 2003/07/30 00:51:33 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,19 +47,46 @@ class SWDLLEXPORT SWBasicFilter : public SWFilter {
 	char *tokenEnd;
 	char *escStart;
 	char *escEnd;
+	char escStartLen;
+	char escEndLen;
+	char tokenStartLen;
+	char tokenEndLen;
 	bool escStringCaseSensitive;
 	bool tokenCaseSensitive;
 	bool passThruUnknownToken;
 	bool passThruUnknownEsc;
+	char processStages;
 
 public:
+
 	SWBasicFilter();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 	virtual ~SWBasicFilter();
 
 protected:
-	const SWModule *module;
-	const SWKey *key;
+
+	class UserData {
+	public:
+		UserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; }
+		virtual ~UserData() {}
+		const SWModule *module;
+		const SWKey *key;
+		SWBuf lastTextNode;
+		bool suspendTextPassThru;
+	};
+
+
+	virtual UserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new UserData(module, key);
+	}
+
+	// STAGEs
+	static const char INITIALIZE;	// flag for indicating processing before char loop
+	static const char PRECHAR;	// flag for indicating processing at top in char loop
+	static const char POSTCHAR;	// flag for indicating processing at bottom in char loop
+	static const char FINALIZE;	// flag for indicating processing after char loop
+
+
 	typedef std::map<SWBuf, SWBuf> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;
@@ -102,7 +129,9 @@ protected:
 	* @param userData FIXME: document this
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
-	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
+	virtual bool processStage(char stage, SWBuf &text, const char *&from, UserData *userData) {}
+	virtual void setStageProcessing(char stages) { processStages = stages; }	// see STATICs up above
 
 	/** This function is called for every escape sequence encountered in the input text.
 	* @param buf the output buffer (FIXME: what is its size?)
@@ -110,7 +139,7 @@ protected:
 	* @param userData FIXME: document this
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
-	virtual bool handleEscapeString(SWBuf &buf, const char *escString, DualStringMap &userData);
+	virtual bool handleEscapeString(SWBuf &buf, const char *escString, UserData *userData);
 };
 
 SWORD_NAMESPACE_END

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlhtmlhref.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
+ * $Id: thmlhtmlhref.h,v 1.5 2003/07/30 00:51:33 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,7 +29,16 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+	class MyUserData : public UserData {
+	public:
+		MyUserData(const SWModule *module, const SWKey *key) : UserData(module, key) {}
+		bool inscriptRef;
+		bool SecHead;
+	};
+	virtual UserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new MyUserData(module, key);
+	}
+	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
 public:
 	ThMLHTMLHREF();
 };

@@ -135,9 +135,10 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 }
 
 
-bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 	const char *tok;
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
@@ -167,29 +168,29 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				buf += "</a>&gt; </em></small>";
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
-			userData["inscriptRef"] = "true";
+			u->inscriptRef = true;
 			buf += "<i>";
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "scripRef")) {
 			if (tag.isEndTag()) {
-				if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
-					userData["inscriptRef"] = "false";
+				if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+					u->inscriptRef = false;
 					buf += "</a>";
 				}
 				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
 					buf += "<a href=\"passage=";
-					buf += userData["lastTextNode"].c_str();
+					buf += u->lastTextNode.c_str();
 					buf += "\">";
 
-					buf += userData["lastTextNode"].c_str();
+					buf += u->lastTextNode.c_str();
 					buf += "</a>";
 
 					// let's let text resume to output again
-					userData["suspendTextPassThru"] = "false";
+					u->suspendTextPassThru = false;
 				}
 			}
 			else if (tag.getAttribute("passage")) { //passage given
-				userData["inscriptRef"] = "true";
+				u->inscriptRef = true;
 
 				buf += "<a href=\"";
 				if (const char* version = tag.getAttribute("version")) {
@@ -204,23 +205,23 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				buf += "\">";
 			}
 			else { //no passage or version given
-				userData["inscriptRef"] = "false";
+				u->inscriptRef = false;
 				// let's stop text from going to output
-				userData["suspendTextPassThru"] = "true";
+				u->suspendTextPassThru = true;
 			}
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
-			if (tag.isEndTag() && userData["SecHead"] == "true") {
+			if (tag.isEndTag() && u->SecHead) {
 				buf += "</i></b><br />";
-				userData["SecHead"] = "false";
+				u->SecHead = false;
 			}
 			else if (tag.getAttribute("class")) {
 				if (!stricmp(tag.getAttribute("class"), "sechead")) {
-					userData["SecHead"] = "true";
+					u->SecHead = true;
 					buf += "<br /><b><i>";
 				}
 				else if (!stricmp(tag.getAttribute("class"), "title")) {
-					userData["SecHead"] = "true";
+					u->SecHead = true;
 					buf += "<br /><b><i>";
 				}
 			}
@@ -254,7 +255,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 					buf += '"';
 					if (*(c+1) == '/') {
 						buf += "file:";
-						buf += module->getConfigEntry("AbsoluteDataPath");
+						buf += userData->module->getConfigEntry("AbsoluteDataPath");
 						if (buf[buf.length()-2] == '/')
 							c++;		// skip '/'
 					}

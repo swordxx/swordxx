@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisrtf.h,v 1.5 2003/07/25 22:56:46 scribe Exp $
+ * $Id: osisrtf.h,v 1.6 2003/07/30 00:51:33 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,8 +31,17 @@ class SWDLLEXPORT OSISRTF : public SWBasicFilter {
 private:
 
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
-	virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
+	class MyUserData : public UserData {
+	public:
+		bool osisQToTick;
+		SWBuf w;
+		MyUserData(const SWModule *module, const SWKey *key);
+	};
+	virtual UserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new MyUserData(module, key);
+	}
+	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
+	virtual bool processStage(char stage, SWBuf &text, const char *&from, UserData *userData);
 public:
 	OSISRTF();
 };

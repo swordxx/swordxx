@@ -26,10 +26,11 @@ ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.js
   //all's done in ThMLHTMLHREF
 }
 
-bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 	const char *tok;
 
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 		SWBuf url;
 		if (!strcmp(tag.getName(), "sync")) {
@@ -61,29 +62,29 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 		}
 		else if (!strcmp(tag.getName(), "scripRef")) {
 			if (tag.isEndTag()) {
-				if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
-					userData["inscriptRef"] = "false";
+				if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+					u->inscriptRef = false;
 					buf += "</a>";
 				}
 				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
-					url = userData["lastTextNode"];
+					url = u->lastTextNode;
 					buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str());
-					buf += userData["lastTextNode"].c_str();
+					buf += u->lastTextNode.c_str();
 					buf += "</a>";
 
 					// let's let text resume to output again
-					userData["suspendTextPassThru"] = "false";
+					u->suspendTextPassThru = false;
 				}
 			}
 			else if (tag.getAttribute("passage")) { //passage given
-				userData["inscriptRef"] = "true";
+				u->inscriptRef = true;
 
 				buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(tag.getAttribute("passage")).c_str());
 			}
 			else { //no passage given
-				userData["inscriptRef"] = "false";
+				u->inscriptRef = false;
 				// let's stop text from going to output
-				userData["suspendTextPassThru"] = "true";
+				u->suspendTextPassThru = true;
 			}
 		}
 		else {

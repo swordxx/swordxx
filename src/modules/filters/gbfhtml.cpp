@@ -58,21 +58,22 @@ GBFHTML::GBFHTML() {
 }
 
 
-bool GBFHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool GBFHTML::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 	const char *tok;
 	char val[128];
 	char *valto;
 	const char *num;
+	MyUserData *u = (MyUserData *)userData;
 
 	if (!substituteToken(buf, token)) {		
 		// deal with OSIS note tags.  Just hide till OSISRTF		
 		if (!strncmp(token, "note ", 5)) {
 			// let's stop text from going to output
-			userData["suspendTextPassThru"] = "true";
+			u->suspendTextPassThru = true;
 		}
 		
 		else if (!strncmp(token, "/note", 5)) {
-			userData["suspendTextPassThru"] = "false";
+			u->suspendTextPassThru = false;
 		}		
 
 		else if (!strncmp(token, "w", 1)) {
@@ -134,12 +135,12 @@ bool GBFHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 
 		else if (!strncmp(token, "RB", 2)) {
 			buf += "<i>";
-			userData["hasFootnotePreTag"] = "true";
+			u->hasFootnotePreTag = true;
 		}
 
 		else if (!strncmp(token, "RF", 2)) {
-			if(userData["hasFootnotePreTag"] == "true") {
-				userData["hasFootnotePreTag"] = "false";
+			if (u->hasFootnotePreTag) {
+				u->hasFootnotePreTag = false;
 				buf += "</i> ";
 			}
 			buf += "<font color=\"#800000\"><small> (";

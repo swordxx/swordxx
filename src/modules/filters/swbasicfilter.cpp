@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.24 2003/07/12 22:58:48 joachim Exp $
+ * $Id: swbasicfilter.cpp,v 1.25 2003/07/30 00:51:34 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,11 +29,17 @@
 
 SWORD_NAMESPACE_START
 
+const char SWBasicFilter::INITIALIZE = 1;
+const char SWBasicFilter::PRECHAR    = 2;
+const char SWBasicFilter::POSTCHAR   = 4;
+const char SWBasicFilter::FINALIZE   = 8;
+
 SWBasicFilter::SWBasicFilter() {
-	tokenStart = 0;
-	tokenEnd = 0;
-	escStart = 0;
-	escEnd = 0;
+	processStages = 0;
+	tokenStart    = 0;
+	tokenEnd      = 0;
+	escStart      = 0;
+	escEnd        = 0;
 
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -41,9 +47,9 @@ SWBasicFilter::SWBasicFilter() {
 	setEscapeEnd(";");
 
 	escStringCaseSensitive = false;
-	tokenCaseSensitive = false;
-	passThruUnknownToken = false;
-	passThruUnknownEsc = false;
+	tokenCaseSensitive     = false;
+	passThruUnknownToken   = false;
+	passThruUnknownEsc     = false;
 }
 
 
@@ -163,55 +169,50 @@ bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 }
 
 
-bool SWBasicFilter::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool SWBasicFilter::handleToken(SWBuf &buf, const char *token, UserData *userData) {
 	return substituteToken(buf, token);
 }
 
 
-bool SWBasicFilter::handleEscapeString(SWBuf &buf, const char *escString, DualStringMap &userData) {
+bool SWBasicFilter::handleEscapeString(SWBuf &buf, const char *escString, UserData *userData) {
 	return substituteEscapeString(buf, escString);
 }
 
 
 void SWBasicFilter::setEscapeStart(const char *escStart) {
 	stdstr(&(this->escStart), escStart);
+	escStartLen = strlen(escStart);
 }
 
 
 void SWBasicFilter::setEscapeEnd(const char *escEnd) {
 	stdstr(&(this->escEnd), escEnd);
+	escEndLen   = strlen(escEnd);
 }
 
 
 void SWBasicFilter::setTokenStart(const char *tokenStart) {
 	stdstr(&(this->tokenStart), tokenStart);
+	tokenStartLen = strlen(tokenStart);
 }
 
 
 void SWBasicFilter::setTokenEnd(const char *tokenEnd) {
 	stdstr(&(this->tokenEnd), tokenEnd);
+	tokenEndLen   = strlen(tokenEnd);
 }
 
 
 char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	this->key = key;
-	this->module = module;
         const char *from;
         char token[4096];
 	int tokpos = 0;
-	bool intoken 	= false;
+	bool intoken = false;
 	bool inEsc = false;
-	char escStartLen = strlen(escStart);
-	char escEndLen   = strlen(escEnd);
 	char escStartPos = 0, escEndPos = 0;
-	char tokenStartLen = strlen(tokenStart);
-	char tokenEndLen   = strlen(tokenEnd);
 	char tokenStartPos = 0, tokenEndPos = 0;
-	DualStringMap userData;
 	SWBuf lastTextNode;
-
-	bool suspendTextPassThru = false;
-	userData["suspendTextPassThru"] = "false";
+	UserData *userData = createUserData(module, key);
 
 	SWBuf orig = text;
 	from = orig.c_str();
@@ -246,7 +247,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			if (*from == escEnd[escEndPos]) {
 				if (escEndPos == (escEndLen - 1)) {
 					intoken = false;
-					userData["lastTextNode"] = lastTextNode;
+					userData->lastTextNode = lastTextNode;
 					if ((!handleEscapeString(text, token, userData)) && (passThruUnknownEsc)) {
 						text += escStart;
 						text += token;
@@ -254,7 +255,6 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
 					lastTextNode = "";
-					suspendTextPassThru = (!userData["suspendTextPassThru"].compare("true"));
 					continue;
 				}
 			}
@@ -264,7 +264,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			if (*from == tokenEnd[tokenEndPos]) {
 				if (tokenEndPos == (tokenEndLen - 1)) {
 					intoken = false;
-					userData["lastTextNode"] = lastTextNode;
+					userData->lastTextNode = lastTextNode;
 					if ((!handleToken(text, token, userData)) && (passThruUnknownToken)) {
 						text += tokenStart;
 						text += token;
@@ -272,7 +272,6 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
 					lastTextNode = "";
-					suspendTextPassThru = (!userData["suspendTextPassThru"].compare("true"));
 					continue;
 				}
 			}
@@ -284,11 +283,12 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				token[tokpos+2] = 0;
 		}
 		else {
-			if (!suspendTextPassThru)
+			if (!userData->suspendTextPassThru)
 				text += *from;
 			lastTextNode += *from;
 		}
 	}
+	delete userData;
 	return 0;
 }
 
