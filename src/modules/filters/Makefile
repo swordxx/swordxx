@@ -19,5 +19,9 @@ cpp += gbfstrongs.cpp
 cpp += gbffootnotes.cpp
 cpp += plainfootnotes.cpp
 
+cpp += thmlgbf.cpp
+cpp += thmlrtf.cpp
+cpp += thmlhtml.cpp
+cpp += thmlplain.cpp
 
 include ${root}/Makefile.post
