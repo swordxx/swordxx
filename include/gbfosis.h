@@ -30,24 +30,27 @@ SWORD_NAMESPACE_START
 class QuoteStack {
 private:
 	class QuoteInstance {
+	public:
 		char startChar;
 		char level;
 		string uniqueID;
 		char continueCount;
-	public:
 		QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
 			this->startChar     = startChar;
 			this->level         = level;
 			this->uniqueID      = uniqueID;
 			this->continueCount = continueCount;
 		}
+		void pushStartStream(char **to);
 	};
 
 	stack<QuoteInstance> quotes;
 public:
 	QuoteStack();
 	virtual ~QuoteStack();
-	void handleQuote(char *buf, char *quotePos, char *to);
+	void handleQuote(char *buf, char *quotePos, char **to);
+	void clear();
+	bool empty() { return quotes.empty(); }
 };
 
 /** this filter converts GBF text to HTML text with hrefs
@@ -55,11 +58,11 @@ public:
 class SWDLLEXPORT GBFOSIS : public SWFilter {
 protected:
 	virtual const char *convertToOSIS(const char *, const SWKey *key);
-	void pushString(char **buf, const char *format, ...);
 public:
 	GBFOSIS();
 	virtual ~GBFOSIS();
 	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
+	static void pushString(char **buf, const char *format, ...);
 };
 
 SWORD_NAMESPACE_END

@@ -12,6 +12,7 @@
 #include <gbfosis.h>
 #include <swmodule.h>
 #include <versekey.h>
+#include <swlog.h>
 #include <stdarg.h>
 #ifndef __GNUC__
 #else
@@ -61,7 +62,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	fromStart = from;
 	wordStart = text;
 
-	QuoteStack quoteStack;
+	static QuoteStack quoteStack;
 
 	// -------------------------------
 
@@ -247,7 +248,8 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			case '\'':
 			case '\"':
 			case '`':
-				quoteStack.handleQuote(fromStart, from, to);
+				quoteStack.handleQuote(fromStart, from, &to);
+				from++;
 				break;
 			default:
 				if (newWord && (*from != ' ')) {wordStart = to; newWord = false; memset(to, 0, 10); }
@@ -292,6 +294,10 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 						tmp.Verse(0);
 						sprintf(ref, "\t</div>");
 						pushString(&to, ref);
+						if (!quoteStack.empty()) {
+							SWLog::systemlog->LogError("popping unclosed quote at end of book");
+							quoteStack.clear();
+						}
 					}
 				}
 			}
@@ -349,17 +355,41 @@ const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 
 
 QuoteStack::QuoteStack() {
+	clear();
+}
+
+
+void QuoteStack::clear() {
 	while (!quotes.empty()) quotes.pop();
 }
 
 
 QuoteStack::~QuoteStack() {
-	while (!quotes.empty()) quotes.pop();
+	clear();
 }
 
 
-void QuoteStack::handleQuote(char *buf, char *quotePos, char *to) {
+void QuoteStack::handleQuote(char *buf, char *quotePos, char **to) {
+//QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
+	if (!quotes.empty()) {
+		QuoteInstance last = quotes.top();
+		if (last.startChar == *quotePos) {
+			GBFOSIS::pushString(to, "</quote>");
+			quotes.pop();
+		}
+		else {
+			quotes.push(QuoteInstance(*quotePos, last.level+1));
+			quotes.top().pushStartStream(to);
+		}
+	}
+	else {
+		quotes.push(QuoteInstance(*quotePos));
+		quotes.top().pushStartStream(to);
+	}
 }
 
+void QuoteStack::QuoteInstance::pushStartStream(char **to) {
+	GBFOSIS::pushString(to, "<quote level=\"%d\">", level);
+}
 
 SWORD_NAMESPACE_END
