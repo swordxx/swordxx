@@ -205,9 +205,9 @@ char RawText::createSearchFramework() {
 
 	// for old and new testament do...
 	for (int loop = 0; loop < 2; loop++) {
-		if ((datfd = open((fname + ((loop)?"ntwords.dat":"otwords.dat")).c_str(), O_CREAT|O_WRONLY, 00644 )) == -1)
+		if ((datfd = open((fname + ((loop)?"ntwords.dat":"otwords.dat")).c_str(), O_CREAT|O_WRONLY|O_BINARY, 00644 )) == -1)
 			return -1;
-		if ((idxfd = open((fname + ((loop)?"ntwords.idx":"otwords.idx")).c_str(), O_CREAT|O_WRONLY, 00644 )) == -1) {
+		if ((idxfd = open((fname + ((loop)?"ntwords.idx":"otwords.idx")).c_str(), O_CREAT|O_WRONLY|O_BINARY, 00644 )) == -1) {
 			close(datfd);
 			return -1;
 		}
