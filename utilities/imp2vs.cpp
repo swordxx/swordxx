@@ -59,15 +59,18 @@ int main(int argc, char **argv) {
   RawText::createModule(modname);
   RawText modRaw(modname);
   mod = &modRaw;
-  
+
   VerseKey* vkey = new VerseKey;
   vkey->Headings(1);
   vkey->AutoNormalize(0);
   vkey->Persist(1);
   mod->setKey(*vkey);
-  
-  while (readline(infile, linebuffer)) {
-    if (!strncmp(linebuffer, "$$$", 3)) {
+  char final; // 2 == pre-final line; 1 == final line; 0 == EOF
+
+  final = ((bool)(readline(infile, linebuffer)) + 1);
+
+  while (final) {
+    if (!strncmp(linebuffer, "$$$", 3) || final == 1) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
 	std::cout << "from file: " << keybuffer << std::endl;
 	*vkey = keybuffer;
@@ -87,7 +90,7 @@ int main(int argc, char **argv) {
 		  }
 		  vkey->Verse(0);
        }
-	  
+
 	  std::cout << "adding entry: " << *vkey << std::endl;
 	  mod->setEntry(entbuffer, strlen(entbuffer));
 	}
@@ -108,7 +111,7 @@ int main(int argc, char **argv) {
 	      if (!havefirst) {
 		havefirst = true;
 		firstverse = *vkey;
-		
+
 	     std::cout << "adding entry: " << *vkey << std::endl;
 		mod->setEntry(entbuffer, strlen(entbuffer));
 		(*vkey)++;
@@ -129,7 +132,7 @@ int main(int argc, char **argv) {
 		*vkey = (*listkey.GetElement(i));
 		havefirst = true;
 		firstverse = *vkey;
-		
+
 	     std::cout << "adding entry: " << *vkey << std::endl;
 		mod->setEntry(entbuffer, strlen(entbuffer));
 	      }
@@ -144,81 +147,11 @@ int main(int argc, char **argv) {
     else {
       strcat (entbuffer, linebuffer);
     }
-  }
-
-  //handle final entry
-  if (strlen(keybuffer) && strlen(entbuffer)) {
-    std::cout << "from file: " << keybuffer << std::endl;
-    *vkey = keybuffer;
-    if (!vkey->Chapter()) {
-      // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
-	  int backstep = vkey->Verse();
-	  if (backstep) {
-		  vkey->Verse(1);
-		  vkey->Chapter(1);
-		  switch (backstep) {
-		  case 2:
-			  vkey->Book(1);
-			  vkey->Testament(0);
-		  case 1:
-			  vkey->Book(0);
-			  vkey->Chapter(0);
-		  }
-		  vkey->Verse(0);
-       }
-      
-	 std::cout << "adding entry: " << *vkey << std::endl;
-      mod->setEntry(entbuffer, strlen(entbuffer));
-    }
-    else {
-      ListKey listkey = vkey->ParseVerseList(keybuffer, "Gen1:1", true);
-      int i;
-      bool havefirst = false;
-      VerseKey firstverse;
-	  firstverse.Headings(1);
-	  firstverse.AutoNormalize(0);
-      for (i = 0; i < listkey.Count(); i++) {
-	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
-	if (element) {
-	  *vkey = element->LowerBound();
-	  VerseKey finalkey = element->UpperBound();
-	  finalkey.Headings(1);
-	  finalkey.AutoNormalize(0);
-	  if (!havefirst) {
-	    havefirst = true;
-	    firstverse = *vkey;
-	    
-	    std::cout << "adding entry: " << *vkey << std::endl;
-	    mod->setEntry(entbuffer, strlen(entbuffer));
-	    (*vkey)++;
-	  }
-	  while (!(finalkey < (*vkey))) {
-
-		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
-	    *(SWModule*)mod << &firstverse;
-	    (*vkey)++;
-	  }
-	}
-	else {
-	  if (havefirst) {
-	    *vkey = (*listkey.GetElement(i));
-		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
-	    *mod << &firstverse;
-	  }
-	  else {
-	    *vkey = (*listkey.GetElement(i));
-	    havefirst = true;
-	    firstverse = *vkey;
-	    
-	    std::cout << "adding entry: " << *vkey << std::endl;
-	    mod->setEntry(entbuffer, strlen(entbuffer));
-	  }
-	}
-      }
+    final--;
+    if (final) {
+        final = ((bool)(readline(infile, linebuffer)) + 1);
     }
   }
-
-  //DEBUG  printTree(root, treeKey);
 
   delete entbuffer;
   delete linebuffer;
