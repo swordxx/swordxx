@@ -27,6 +27,9 @@ cpp += thmlrtf.cpp
 cpp += thmlhtml.cpp
 cpp += thmlplain.cpp
 
+cpp += unicodertf.cpp
+cpp += latin1utf8.cpp
+
 cpp += thmlolb.cpp
 
 include ${root}/Makefile.post
