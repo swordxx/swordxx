@@ -2,7 +2,7 @@ root := ..
 subdirs := 
 pre-targets := 
 bin := yes
-targets := cipherraw ciphertest ciphertest2 lexdump mkfastmod
+targets := cipherraw ciphertest ciphertest2 lexdump mkfastmod mod2vpl
 include ${root}/Makefile.cfg
 
 ifneq ($(nodeps),yes)
