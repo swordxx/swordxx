@@ -285,8 +285,8 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = '}';
 					continue;
 				case 'S':
-					   *to++ = '{';
-					   *to++ = '\\';
+					*to++ = '{';
+					*to++ = '\\';
 					*to++ = 's';
 					*to++ = 'u';
 					*to++ = 'p';
@@ -295,10 +295,10 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					continue;
 				case 's':
-						   *to++ = '}';
+					*to++ = '}';
 					continue;
 				case 'R':
-					   *to++ = '{';
+					*to++ = '{';
 					*to++ = '\\';
 					*to++ = 'c';
 					*to++ = 'f';
@@ -306,7 +306,54 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					continue;
 				case 'r':
-					   *to++ = '}';
+					*to++ = '}';
+					continue;
+				case 'O':
+				case 'C':
+					*to++ = '\\';
+					*to++ = 's';
+					*to++ = 'c';
+					*to++ = 'a';
+					*to++ = 'p';
+					*to++ = 's';
+					*to++ = '1';
+					*to++ = ' ';
+					continue;
+				case 'o':
+				case 'c':
+					*to++ = '\\';
+					*to++ = 's';
+					*to++ = 'c';
+					*to++ = 'a';
+					*to++ = 'p';
+					*to++ = 's';
+					*to++ = '0';
+					*to++ = ' ';
+					continue;
+				case 'V':
+					*to++ = '{';
+					*to++ = '\\';
+					*to++ = 's';
+					*to++ = 'u';
+					*to++ = 'b';
+					*to++ = ' ';
+					continue;
+				case 'v':
+					*to++ = '}';
+					continue;
+				case 'U':
+					*to++ = '\\';
+					*to++ = 'u';
+					*to++ = 'l';
+					*to++ = '1';
+					*to++ = ' ';
+					continue;
+				case 'u':
+					*to++ = '\\';
+					*to++ = 'u';
+					*to++ = 'l';
+					*to++ = '0';
+					*to++ = ' ';
 					continue;
 				}
 				break;
