@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 	mod = TOP;
 	if (ntonly) vk = "Matthew 1:1";
 	  
-
+	int successive = 0;  //part of hack below
 	while ((!mod.Error()) && (!readline(fd, &buffer))) {
 		if (*buffer == '|')	// comments, ignore line
 			continue;
@@ -177,10 +177,15 @@ int main(int argc, char **argv) {
 			vk = buffer;
 			if (!isKJVRef(buffer)) {
 				VerseKey origVK = vk;
+				/* This block is functioning improperly -- problem with AutoNormalize???
 				do {
 					vk--;
 				}
-				while (!vk.Error() && !isKJVRef(vk));
+				while (!vk.Error() && !isKJVRef(vk)); */
+				//hack to replace above:
+				successive++;
+				vk -= successive;
+
 				cout << "Not a valid KJV ref: " << origVK << "\n";
 				cout << "appending to ref: " << vk << "\n";
 				string orig = mod.getRawEntry();
@@ -190,6 +195,9 @@ int main(int argc, char **argv) {
 				orig += verseText;
 				orig += " ] ";
 				verseText = orig.c_str();
+			}
+			else {
+			  successive = 0;
 			}
 			// ------------- End verse tests -----------------
 			mod << verseText;	// save text to module at current position
