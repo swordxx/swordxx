@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.6 2003/02/27 10:41:18 scribe Exp $
+* $Id: swbuf.h,v 1.7 2003/02/27 19:14:32 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -38,15 +38,18 @@ class SWDLLEXPORT SWBuf {
 	static char *nullStr;
 	static char junkBuf[JUNKBUFSIZE];
 
-	inline void assureSize(unsigned int size) {
-		if (size > allocSize) {
-			allocSize = size + 5;
+	inline void assureSize(unsigned int newsize) {
+		if (newsize > allocSize) {
+			allocSize = newsize + 5;
 			end = (char *)(end - buf);
 			buf = (char *)realloc(buf, allocSize);
 			end = (buf + (unsigned int)end);
 		}
 	}
 	void init();
+
+	inline const char *raw_buf() const{		return buf;	}
+
 
 public:
 	SWBuf(const char *initVal = 0);
@@ -58,8 +61,16 @@ public:
 
 	virtual ~SWBuf();
 
-	inline const char *c_str() const { return buf; }
-	inline char &charAt(unsigned int pos) { return ((pos <= (end - buf)) ? buf[pos] : nullStr[0]); }
+	//return null-terminated strings only!
+	inline const char *c_str(){
+		unsigned int size_cache = size();		
+		if (buf[size_cache - 1] != 0){
+			assureSize(size_cache + 2);
+			buf[size_cache] = 0;
+		}
+		return buf;
+	}
+	inline char &charAt(unsigned int pos) { return ((pos <= (unsigned int)(end - buf)) ? buf[pos] : nullStr[0]); }
 
 	inline unsigned int size() const { return length(); }
 	inline unsigned int length() const { return end - buf; }
@@ -69,7 +80,7 @@ public:
 	void append(const char *str);
 	void append(const SWBuf &str);
 	inline void append(char ch) {
-		assureSize((end-buf)+1);
+		assureSize((end-buf)+2);
 		*end = ch;
 		end++;
 		*end = 0;
@@ -78,13 +89,14 @@ public:
 	
 	inline char *getRawData() { return buf; }	// be careful!  Probably setSize needs to be called in conjunction before and maybe after
 
-	inline operator const char *() const { return c_str(); }
+	inline operator const char *() { return c_str(); }
 	inline char &operator[](unsigned int pos) { return charAt(pos); }
 	inline char &operator[](int pos) { return charAt((unsigned int)pos); }
 	inline SWBuf &operator =(const char *newVal) { set(newVal); return *this; }
 	inline SWBuf &operator =(const SWBuf &other) { set(other); return *this; }
 	inline SWBuf &operator +=(const char *str) { append(str); return *this; }
 	inline SWBuf &operator +=(char ch) { append(ch); return *this; }
+	inline SWBuf &operator +=(const SWBuf &str) { append(str); return *this; }
 	inline SWBuf &operator -=(unsigned int len) { setSize(length()-len); return *this; }
 	inline SWBuf &operator --(int) { operator -=(1); return *this; }
 	inline SWBuf operator +(const SWBuf &other) const {
