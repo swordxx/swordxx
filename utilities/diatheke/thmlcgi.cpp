@@ -70,19 +70,19 @@ bool ThMLCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			else if (*typ && *val) {
 			  if (!strnicmp(typ, "Strongs", 7)) {
 			    if (*val == 'G') {
-			      buf.appendFormatted("Thayer=on&verse=%s", val + 1);
+			      buf.appendFormatted("StrongsGreek=on&verse=%s", val + 1);
 			    }
 			    else if (*val == 'H') {
-			      buf.appendFormatted("BDB=on&verse=%s", val + 1);
+			      buf.appendFormatted("StrongsHebrew=on&verse=%s", val + 1);
 			    }
 			  }
 
 			  else if (!strnicmp(typ, "Morph", 5)) {
 			    if (*val == 'G') {
-			      buf.appendFormatted("Thayer=on&verse=%s", val + 1);
+			      buf.appendFormatted("StrongsGreek=on&verse=%s", val + 1);
 			    }
 			    else if (*val == 'H') {
-			      buf.appendFormatted("BDB=on&verse=%s", val + 1);
+			      buf.appendFormatted("StrongsHebrew=on&verse=%s", val + 1);
 			    }
 			    else {
 			      buf.appendFormatted("Packard=on&verse=%s", val);

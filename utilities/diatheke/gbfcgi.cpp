@@ -63,10 +63,10 @@ bool GBFCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData)
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
 			buf += " <small><em>&lt;<a href=\"!DIATHEKE_URL!";
 			if (token[1] == 'H') {
-			  buf += "BDB";
+			  buf += "StrongsHebrew";
 			}
 			else if (token[1] == 'G') {
-			  buf += "Thayer";
+			  buf += "StrongsGreek";
 			}
 			buf += "=on&verse=";
 			for (i = 2; i < strlen(token); i++)
@@ -80,10 +80,10 @@ bool GBFCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData)
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
 			buf += " <small><em>&lt;<a href=\"!DIATHEKE_URL!";
 			if (token[2] == 'H') {
-			  buf += "BDB";
+			  buf += "StrongsHebrew";
 			}
 			else if (token[2] == 'G') {
-			  buf += "Thayer";
+			  buf += "StrongsGreek";
 			}
 			buf += "=on&verse=";
 			for (i = 3; i < strlen(token); i++)
