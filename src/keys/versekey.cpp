@@ -828,6 +828,31 @@ const char *VerseKey::getText() const {
 }
 
 
+const char *VerseKey::getShortText() const {
+	static char *stext = 0;
+	char buf[2047];
+	freshtext();
+	if (book < 1) {
+		if (testament < 1)
+			sprintf(buf, "[ Module Heading ]");
+		else sprintf(buf, "[ Testament %d Heading ]", (int)testament);
+	}
+	else {
+		sprintf(buf, "%s %d:%d", books[testament-1][book-1].prefAbbrev, chapter, verse);
+	}
+	stdstr(&stext, buf);
+	return stext;
+}
+
+
+const char *VerseKey::getBookName() const {
+	return books[testament-1][book-1].name;
+}
+
+
+const char *VerseKey::getBookAbbrev() const {
+	return books[testament-1][book-1].prefAbbrev;
+}
 /******************************************************************************
  * VerseKey::setPosition(SW_POSITION)	- Positions this key
  *

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.57 2002/01/24 08:55:27 scribe Exp $
+ * $Id: swmgr.cpp,v 1.58 2002/02/17 00:51:17 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -437,10 +437,10 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "found\n";
+	cerr << " found\n";
 #endif
 
-			stdstr(prefixPath, "");
+			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
 			stdstr(configPath, path.c_str());
 			return;
@@ -458,7 +458,7 @@ if (debug)
 	cerr << "found\n";
 #endif
 
-			stdstr(prefixPath, "");
+			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
 			stdstr(configPath, path.c_str());
 			*configType = 2;

@@ -31,6 +31,7 @@
 #define O_BINARY 0		// If it hasn't been defined than we probably
 #endif				// don't need it.
 
+
 /******************************************************************************
  * RawVerse Statics
  */
@@ -78,6 +79,7 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 		if ((idxfp[0]->getFd() >= 0) || (idxfp[1]->getFd() >= 0))
 			break;
 	}
+
 	delete [] buf;
 	instance++;
 }

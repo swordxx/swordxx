@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.20 2002/01/24 08:55:27 scribe Exp $
+ * $Id: versekey.h,v 1.21 2002/02/17 00:50:29 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,6 +43,11 @@ struct sbook
   /**Name of book
   */
   const char *name;
+
+  /**Preferred Abbreviation
+  */
+  const char *prefAbbrev;
+
   /**Maximum chapters in book
   */
   unsigned char chapmax;
@@ -226,6 +231,7 @@ public:
   * a (char *) is requested
   */
   virtual const char *getText() const;
+  virtual const char *getShortText() const;
   virtual void setText(const char *ikey) { SWKey::setText(ikey); parse (); }
   virtual void copyFrom(const SWKey & ikey);
   
@@ -255,6 +261,8 @@ public:
   virtual void increment(int step);
   virtual char Traversable () { return 1; }
 
+  virtual const char *getBookName() const;
+  virtual const char *getBookAbbrev() const;
   /** Gets testament
   *
   * @return value of testament

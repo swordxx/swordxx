@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+16-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added getBookName and getBookAbbrev to VerseKey along
+		with struct book :: prefAbbrev member and data
+
 24-Jan-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added TreeKey and TreeKeyIdx decendants
 	Added SWGenBook, and RawGenBook general book support

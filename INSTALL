@@ -73,11 +73,7 @@ The API looks for its module configuration in the following sequence:
 * NOTE:
 Using the above scheme, SWORD will also determine the path to prefix to the
 specified datafile location found in the config files.  The prefix path will
-be the directory where SWORD finds mods.[conf|d], WITH ONE EXCEPTION: if SWORD
-finds its configuration in the user's home directory,
-$HOME/.sword/mods.[conf|d], no prefix will be prepended to the data file
-locations; hence, config files in $HOME/.sword must contain absolute path
-names.
+be the directory where SWORD finds mods.[conf|d].
 
 Sample config files can be found in: .../sword/samples
 
