@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.2 2004/07/08 19:30:42 joachim Exp $
+* $Id: url.h,v 1.3 2004/07/15 13:51:54 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -53,7 +53,7 @@ public:
 	/** All available paramters
 	* @return The map which contains the parameters and their values
 	*/
-	const std::map< sword::SWBuf, sword::SWBuf >&  getParameters() const;
+	std::map< sword::SWBuf, sword::SWBuf > getParameters() const;
 	
 	/**
 	 * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.2 2004/07/08 19:30:42 joachim Exp $
+* $Id: url.cpp,v 1.3 2004/07/15 13:51:54 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -51,7 +51,7 @@ const char* const URL::getPath() const {
 	return m_path.c_str();
 }
 
-const std::map< SWBuf, SWBuf >& URL::getParameters()  const {
+std::map< SWBuf, SWBuf > URL::getParameters()  const {
 	return m_parameterMap;
 }
 
