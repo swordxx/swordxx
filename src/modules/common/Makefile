@@ -16,6 +16,7 @@ endif
 cpp += rawverse.cpp
 cpp += swcipher.cpp
 cpp += zverse.cpp
+cpp += entriesblk.cpp
 
 DEFINES  += -DUNIX
 cpp += sapphire.cpp
