@@ -42,8 +42,8 @@ OSISRTF::OSISRTF() {
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-        addTokenSubstitute("lg", "\\par ");
-        addTokenSubstitute("/lg", "\\par ");
+        addTokenSubstitute("lg", "{\\par}");
+        addTokenSubstitute("/lg", "{\\par}");
 	setTokenCaseSensitive(true);
 }
 
@@ -191,13 +191,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userD
 				buf += "\\par}";
 			}
 			else if (tag.getAttribute("sID")) {	// empty line marker
-				buf += "\\par ";
+				buf += "{\\par}";
 			}
 		}
 
                 // <milestone type="line"/>
                 else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-        		buf += "\\par ";
+        		buf += "{\\par}";
 			userData->supressAdjacentWhitespace = true;
                 }
 
