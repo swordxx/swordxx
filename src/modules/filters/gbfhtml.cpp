@@ -27,7 +27,8 @@ GBFHTML::GBFHTML()
 
 char GBFHTML::ProcessText(char *text, int maxlen)
 {
-	char *to, *from, token[20], tokpos = 0;
+	char *to, *from, token[2048];
+	int tokpos = 0;
 	bool intoken 	= false;
 	int len;
 
@@ -42,7 +43,7 @@ char GBFHTML::ProcessText(char *text, int maxlen)
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
-			memset(token, 0, 20);
+			memset(token, 0, 2048);
 			continue;
 		}
 		if (*from == '>')
@@ -310,8 +311,12 @@ char GBFHTML::ProcessText(char *text, int maxlen)
 			}
 			continue;
 		}
-		if (intoken)
-			token[tokpos++] = *from;
+		if (intoken) {
+			if (tokpos < 2047) {
+				token[tokpos] = *from;
+				tokpos++;
+			}
+		}
 		else	*to++ = *from;
 	}
 	*to = 0;

@@ -72,7 +72,7 @@ main(int argc, char **argv)
 
 			if (size) {
 				tmpbuf = (char *) calloc(size + 1, 1);
-				rawdrv->gettext(key.Testament(), offset, size, tmpbuf);
+				rawdrv->gettext(key.Testament(), offset, size + 1, tmpbuf);
 				zobj->Buf(tmpbuf);
 				zobj->cipherBuf((unsigned int *)&size);
 				free(tmpbuf);

@@ -44,7 +44,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen)
 {
 	if (!option) {	// if we don't want strongs
 		char *to, *from, token[2048]; // cheese.  Fix.
-		char tokpos = 0;
+		int tokpos = 0;
 		bool intoken = false;
 		int len;
 		bool lastspace = false;
@@ -60,7 +60,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen)
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
-				memset(token, 0, 20);
+				memset(token, 0, 2048);
 				continue;
 			}
 			if (*from == '>') {	// process tokens
@@ -84,8 +84,10 @@ char GBFStrongs::ProcessText(char *text, int maxlen)
 				*to++ = '>';
 				continue;
 			}
-			if (intoken)
-				token[tokpos++] = *from;
+			if (intoken) {
+				if (tokpos < 2047)
+					token[tokpos++] = *from;
+			}
 			else	{
 				*to++ = *from;
 				lastspace = (*from == ' ');
