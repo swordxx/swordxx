@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.50 2001/11/08 13:22:26 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.51 2001/11/30 09:36:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -65,6 +65,10 @@
 #include <utf8greekaccents.h>
 #include <utf8cantillation.h>
 #include <utf8hebrewpoints.h>
+#include <swfiltermgr.h>
+
+
+
 #ifdef ICU
 #include <utf8transliterator.h>
 #endif
@@ -154,7 +158,11 @@ void SWMgr::init() {
 }
 
 
-SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload) {
+SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr) {
+
+	this->filterMgr = filterMgr;
+	if (filterMgr)
+		filterMgr->setParentMgr(this);
 
 	init();
 	
@@ -174,10 +182,14 @@ SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload) {
 }
 
 
-SWMgr::SWMgr(const char *iConfigPath, bool autoload) {
+SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr) {
 
 	string path;
 	
+	this->filterMgr = filterMgr;
+	if (filterMgr)
+		filterMgr->setParentMgr(this);
+
 	init();
 	
 	path = iConfigPath;
@@ -220,6 +232,9 @@ SWMgr::~SWMgr() {
 
 	if (configPath)
 		delete [] configPath;
+
+	if (filterMgr)
+		delete filterMgr;
 }
 
 
@@ -661,8 +676,7 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 }
 
 
-void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
-{
+void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
 	for (;start != end; start++) {
 		FilterMap::iterator it;
 		it = optionFilters.find((*start).second);
@@ -677,6 +691,8 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 				options.push_back((*it).second->getOptionName());
 		}
 	}
+	if (filterMgr)
+		filterMgr->AddGlobalOptions(module, section, start, end);
 }
 
 
@@ -685,6 +701,9 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 	for (;start != end; start++) {
 		printf("%s:%s\n", module->Name(), (*start).second.c_str());
 	}
+
+	if (filterMgr)
+		filterMgr->AddLocalOptions(module, section, start, end);
 }
 
 
@@ -699,10 +718,18 @@ void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 		cleanupFilters.push_back(cipherFilter);
 		module->AddRawFilter(cipherFilter);
 	}
+
+	if (filterMgr)
+		filterMgr->AddRawFilters(module, section);
 }
 
+
 void SWMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
+
+	if (filterMgr)
+		filterMgr->AddEncodingFilters(module, section);
 }
+
 
 void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 	string sourceformat;
@@ -723,6 +750,9 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 //	if (!stricmp(sourceformat.c_str(), "GBF")) {
 //		module->AddRenderFilter(gbftortf);
 //	}
+
+	if (filterMgr)
+		filterMgr->AddRenderFilters(module, section);
 
 }
 
@@ -747,6 +777,10 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 	else if (!stricmp(sourceformat.c_str(), "ThML")) {
 		module->AddStripFilter(thmlplain);
 	}
+
+	if (filterMgr)
+		filterMgr->AddStripFilters(module, section);
+
 }
 
 

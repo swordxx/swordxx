@@ -19,17 +19,19 @@
  *
  */
 
-#ifndef SWENCODINGMGR_H
-#define SWENCODINGMGR_H
+#ifndef ENCFILTERMGR_H
+#define ENCFILTERMGR_H
 
-#include <swmgr.h>
+#include <swfiltermgr.h>
+
 
 /** This class is like a normal @ref SWMgr,
   * but you can additonally specify which encoding
   * you want to use.
   */
-class SWDLLEXPORT SWEncodingMgr : public SWMgr
-{
+
+class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
+
 protected:
         SWFilter *latin1utf8;
         SWFilter *scsuutf8;
@@ -42,6 +44,8 @@ protected:
         char encoding;
 
 public:
+
+
 	/** Constructor of SWEncodingMgr.
 	 *
 	 * @param iconfig
@@ -49,12 +53,12 @@ public:
 	 * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
 	 * @param encoding The desired encoding.
 	 */
-        SWEncodingMgr (SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, char encoding = ENC_UTF8);
+        EncodingFilterMgr (char encoding = ENC_UTF8);
 
 	/**
 	 * The destructor of SWEncodingMgr.
 	 */
-        ~SWEncodingMgr();
+        ~EncodingFilterMgr();
 
 	/** Markup sets/gets the encoding after initialization
 	 * 
@@ -77,4 +81,5 @@ public:
 	 */
         virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
 };
+
 #endif

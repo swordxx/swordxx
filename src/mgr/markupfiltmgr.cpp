@@ -1,5 +1,5 @@
 /******************************************************************************
- *  swmarkupmgr.cpp   - implementaion of class SWMarkupMgr, subclass of
+ *  swmarkupmgr.cpp   - implementaion of class MarkupFilterMgr, subclass of
  *                        used to transcode all module text to a requested
  *                        markup.
  *
@@ -31,29 +31,33 @@
 #include <thmlrtf.h>
 #include <gbfrtf.h>
 
-#include <swmarkupmgr.h>
+#include <markupfiltmgr.h>
+
+#include <swmgr.h>
+
 
 /******************************************************************************
- * SWMarkupMgr Constructor - initializes instance of SWMarkupMgr
+ * MarkupFilterMgr Constructor - initializes instance of MarkupFilterMgr
  *
- * ENT:	iconfig - SWConfig
- *      isysconfig - SWConfig
- *      autoload -
+ * ENT:
  *      enc - Encoding format to emit
  *      mark - Markup format to emit
  */
-SWMarkupMgr::SWMarkupMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc, char mark)
-        : SWEncodingMgr(iconfig, isysconfig, autoload, enc)
-{
+
+MarkupFilterMgr::MarkupFilterMgr (char enc, char mark)
+		   : EncodingFilterMgr(enc) {
+
         markup = mark;
 
         CreateFilters(markup);
 }
 
+
 /******************************************************************************
- * SWMarkupMgr Destructor - Cleans up instance of SWMarkupMgr
+ * MarkupFilterMgr Destructor - Cleans up instance of MarkupFilterMgr
  */
-SWMarkupMgr::~SWMarkupMgr() {
+
+MarkupFilterMgr::~MarkupFilterMgr() {
         if (fromthml)
                 delete (fromthml);
         if (fromgbf)
@@ -65,13 +69,13 @@ SWMarkupMgr::~SWMarkupMgr() {
 }
 
 /******************************************************************************
- * SWMarkupMgr::Markup	- sets/gets markup
+ * MarkupFilterMgr::Markup	- sets/gets markup
  *
  * ENT:	mark	- new encoding or 0 to simply get the current markup
  *
  * RET: markup
  */
-char SWMarkupMgr::Markup(char mark) {
+char MarkupFilterMgr::Markup(char mark) {
         if (mark && mark != markup) {
                 markup = mark;
                 ModMap::const_iterator module;
@@ -83,7 +87,7 @@ char SWMarkupMgr::Markup(char mark) {
 
                 CreateFilters(markup);
 
-                for (module = Modules.begin(); module != Modules.end(); module++)
+                for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
                         switch (module->second->Markup()) {
                         case FMT_THML:
                                 if (oldthml != fromthml) {
@@ -159,8 +163,7 @@ char SWMarkupMgr::Markup(char mark) {
         return markup;
 }
 
-void SWMarkupMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
-        SWMgr::AddRenderFilters(module, section);
+void MarkupFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
         switch (module->Markup()) {
         case FMT_THML:
                 if (fromthml)
@@ -181,7 +184,7 @@ void SWMarkupMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
         }
 }
 
-void SWMarkupMgr::CreateFilters(char markup) {
+void MarkupFilterMgr::CreateFilters(char markup) {
 
                 switch (markup) {
                 case FMT_PLAIN:

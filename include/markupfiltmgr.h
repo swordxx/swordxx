@@ -19,17 +19,16 @@
  *
  */
 
-#ifndef SWMARKUPMGR_H
-#define SWMARKUPMGR_H
+#ifndef MARKUPFILTMGR_H
+#define MARKUPFILTMGR_H
 
-#include <swencodingmgr.h>
+#include <encfiltmgr.h>
 
 /** This class is like a normal @ref SWEncodingMgr,
   * but you can additonally specify which markup
   * you want to use.
   */
-class SWDLLEXPORT SWMarkupMgr : public SWEncodingMgr
-{
+class SWDLLEXPORT MarkupFilterMgr : public EncodingFilterMgr {
 protected:
         SWFilter* fromthml;
         SWFilter* fromgbf;
@@ -51,12 +50,12 @@ public:
 	 * @param encoding The desired encoding.
 	 * @param markup The desired markup format.
 	 */
-        SWMarkupMgr (SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, char encoding = ENC_UTF8, char markup = FMT_THML);
+        MarkupFilterMgr(char encoding = ENC_UTF8, char markup = FMT_THML);
 
 	/**
 	 * The destructor of SWMarkupMgr.
 	 */
-        ~SWMarkupMgr();
+        ~MarkupFilterMgr();
 
 	/** Markup sets/gets the markup after initialization
 	 * 

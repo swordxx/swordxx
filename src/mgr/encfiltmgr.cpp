@@ -1,5 +1,5 @@
 /******************************************************************************
- *  swencodingmgr.cpp   - implementaion of class SWEncodingMgr, subclass of
+ *  swencodingmgr.cpp   - implementaion of class EncodingFilterMgr, subclass of
  *                        used to transcode all module text to a requested
  *                        encoding.
  *
@@ -19,7 +19,7 @@
  *
  */
 
-#include <swencodingmgr.h>
+#include <encfiltmgr.h>
 
 #include <scsuutf8.h>
 #include <latin1utf8.h>
@@ -29,17 +29,18 @@
 #include <utf8utf16.h>
 #include <utf8html.h>
 
+#include <swmgr.h>
+
 /******************************************************************************
- * SWEncodingMgr Constructor - initializes instance of SWEncodingMgr
+ * EncodingFilterMgr Constructor - initializes instance of EncodingFilterMgr
  *
- * ENT:	iconfig - SWConfig
- *      isysconfig - SWConfig
- *      autoload -
+ * ENT:
  *      enc - Encoding format to emit
  */
-SWEncodingMgr::SWEncodingMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc)
-        : SWMgr(iconfig, isysconfig, autoload)
-{
+
+EncodingFilterMgr::EncodingFilterMgr (char enc)
+		   : SWFilterMgr() {
+
         scsuutf8 = new SCSUUTF8();
         latin1utf8 = new Latin1UTF8();
 
@@ -64,9 +65,9 @@ SWEncodingMgr::SWEncodingMgr (SWConfig * iconfig, SWConfig * isysconfig, bool au
 }
 
 /******************************************************************************
- * SWEncodingMgr Destructor - Cleans up instance of SWEncodingMgr
+ * EncodingFilterMgr Destructor - Cleans up instance of EncodingFilterMgr
  */
-SWEncodingMgr::~SWEncodingMgr() {
+EncodingFilterMgr::~EncodingFilterMgr() {
         if (scsuutf8)
                 delete scsuutf8;
         if (latin1utf8)
@@ -75,8 +76,7 @@ SWEncodingMgr::~SWEncodingMgr() {
                 delete targetenc;
 }
 
-void SWEncodingMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
-        SWMgr::AddRawFilters(module, section);
+void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
 	ConfigEntMap::iterator entry;
 
@@ -89,20 +89,19 @@ void SWEncodingMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 	}
 }
 
-void SWEncodingMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
-        SWMgr::AddEncodingFilters(module, section);
+void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
         if (targetenc)
                 module->AddEncodingFilter(targetenc);
 }
 
 /******************************************************************************
- * SWEncodingMgr::Encoding	- sets/gets encoding
+ * EncodingFilterMgr::Encoding	- sets/gets encoding
  *
  * ENT:	enc	- new encoding or 0 to simply get the current encoding
  *
  * RET: encoding
  */
-char SWEncodingMgr::Encoding(char enc) {
+char EncodingFilterMgr::Encoding(char enc) {
         if (enc && enc != encoding) {
                 encoding = enc;
                 SWFilter * oldfilter = targetenc;
@@ -129,17 +128,17 @@ char SWEncodingMgr::Encoding(char enc) {
                 if (oldfilter != targetenc) {
                         if (oldfilter) {
                                 if (!targetenc) {
-                                        for (module = Modules.begin(); module != Modules.end(); module++)
+                                        for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
                                                 module->second->RemoveRenderFilter(oldfilter);
                                 }
                                 else {
-                                        for (module = Modules.begin(); module != Modules.end(); module++)
+                                        for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
                                                 module->second->ReplaceRenderFilter(oldfilter, targetenc);
                                 }
                                 delete oldfilter;
                         }
                         else if (targetenc) {
-                                for (module = Modules.begin(); module != Modules.end(); module++)
+                                for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
                                         module->second->AddRenderFilter(targetenc);
                         }
                 }
