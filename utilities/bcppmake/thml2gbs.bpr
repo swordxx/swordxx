@@ -8,7 +8,9 @@
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="libsword.lib"/>
+    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\borland\icui18n.lib 
+      ..\..\..\icu-sword\as_is\borland\icudatab.lib 
+      ..\..\..\icu-sword\as_is\borland\icucommon.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Qrpt50.bpi Vcldb50.bpi Vclbde50.bpi 
@@ -22,7 +24,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
-    <USERDEFINES value=""/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="thml2gbs.bpf"/>
     <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
@@ -88,8 +90,9 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=1
-Item0=_DEBUG
+Count=2
+Item0=_ICU_;_ICUSWORD_
+Item1=_DEBUG
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl

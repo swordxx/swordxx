@@ -1,5 +1,8 @@
 USEUNIT("..\mkfastmod.cpp");
 USELIB("libsword.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icui18n.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icudatab.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icucommon.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 
