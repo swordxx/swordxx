@@ -6,13 +6,7 @@ else
 globdef =
 endif
 
-if ICU
-icudatadir = -DICUDATA=\"${pkglibdir}\"
-else
-icudatadir =
-endif
-
-INCLUDES += $(globdef) $(icudatadir)
+INCLUDES += $(globdef)
 
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
 libsword_la_SOURCES += $(mgrdir)/swmgr.cpp

@@ -24,7 +24,7 @@ swicuSOURCES += translit_swordindex.txt
 
 
 if ICU
-pkglib_DATA = $(swicuSOURCES:.txt=.res)
+swicu_DATA = $(swicuSOURCES:.txt=.res)
 endif
 EXTRA_DIST = $(swicuSOURCES)
 
@@ -34,3 +34,32 @@ SUFFIXES = .txt .res .dat
 
 .txt.res:
 	$(GENRB) -s . -d . $<
+
+
+if ICU
+swicudir = $(pkglibdir)/icu$(ICU_VER)
+
+installswicu_DATA: $(swicu_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(swicudir)
+	@list='$(modsDATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(swicudir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(swicudir)/$$f; \
+	done
+
+uninstallswicu_DATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(swicu_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(swicudir)/$$f"; \
+	  rm -f $(DESTDIR)$(swicudir)/$$f; \
+	done
+else
+swicudir = $(pkglibdir)
+
+installswicu_DATA:
+
+uninstallswicu_DATA:
+endif
