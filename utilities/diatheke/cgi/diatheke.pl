@@ -334,10 +334,14 @@ for ($i = 0; $i < $n; $i++) {
 #    Parse and link to Strong's references if present
     
     $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&Thayer=on\">&lt;$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;$1&gt;\<\/a\>/g;
     $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;T$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&Thayer=on\">&lt;T$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;T$1&gt;\<\/a\>/g;
     $line =~ s/<sync type=\"Morph\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Packard=on\">&lt;$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"([^\"]+)\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$2&$1=on\">&lt;$1 $2&gt;\<\/a\>/g;
+
+    $line =~ s/<note [^>]+>/<small>{/g;
+    $line =~ s/<\/note[^>]*>/}<\/small>/g;
     
     $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
     $info =~ /([^\;]+)\;(.*)/;
@@ -566,11 +570,10 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/href=\"diatheke.pl([^\"]+)\"/href=\"http:\/\/bible.gotjesus.org\/cgi-bin\/diatheke.pl$1&palm=on\"/g;
     }
 
-    if ($footnotes == 0) {
-	$line =~ s/<note[^<]+<\/note>//g;
-    }
-
-#can't figure out WHAT this was supposed to do
+# These should really be handled by option filters somehow instead
+#    if ($footnotes == 0) {
+#	$line =~ s/<note[^<]+<\/note>//g;
+#    }
 #    if ($strongs == 0) {
 #	$line =~ s/<a href=[^>]+Strongs(Greek|Hebrew)[^<]+<\/a>//g;
 #    }
