@@ -8,11 +8,11 @@
 <body>
 
 <form method="get" action="cgi-bin/diatheke.pl">
-  <p><input type="radio" name="search" checked value="off"><font face="Arial, Helvetica, sans-serif">Verse/Commentary
-  Lookup</font><br>
-  <input type="radio" name="search" value="on"><font face="Arial, Helvetica, sans-serif">Word
-  Search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  Verse or Word:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset">
+  <p><input type="radio" name="search" checked value="" /><font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Verse or Search key:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset"><br />
+  <input type="radio" name="search" value="phrase" /><font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
+  <input type="radio" name="search" value="multiword" /><font face="Arial, Helvetica, sans-serif">Multiple Word Search</font><br />
+  <input type="radio" name="search" value="regex" /><font face="Arial, Helvetica, sans-serif">Regular Expression Search</font><br />
   <p><input type="checkbox" name="strongs" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
   Stong's Numbers when available (Strong's numbered modules are marked by *)</font>
   <p><input type="checkbox" name="footnotes" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show

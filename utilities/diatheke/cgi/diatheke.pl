@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#version 3.1
+#version 4.0
 
 $diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program -- if you are using a MS Windows server, you might need to remove the "nice"
 $defaultfontface = "Arial, Helvetica, sans-serif"; # default font name
@@ -9,6 +9,11 @@ $maxverses = 50; # maximum number of verses diatheke will return per query (prev
 $defaultbook = "KJV"; # book to query when none is selected, but a verse/search is entered
 $deflocale = en;  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locael=<locale> in the GET URL
 
+sub plussifyaddress  {
+    ($ver = @_[0]) =~ tr/ /+/; 
+    $newline = "<a href=\"diatheke.pl?verse=$ver&@_[1]=on\">";
+    return $newline;
+}
 
 ###############################################################################
 ## You should not need to edit anything below this line.
@@ -42,14 +47,14 @@ if ($locale eq "") {
 
 $locale =~ s/(..).*/$1/;
 
-
 $hostname = $ENV{'REMOTE_ADDR'};
 @values = split(/\&/,$ENV{'QUERY_STRING'});
 $n = 0;
 $palm = 0;
 $footnotes = 0;
 $strongs = 0;
-$arg = "-";
+$headings = 0;
+$optionfilters = "";
 foreach $i (@values) {
     ($varname, $mydata) = split(/=/,$i);
     if ($varname ne "Submit" && $varname ne "lookup") {
@@ -59,15 +64,19 @@ foreach $i (@values) {
 	    $verse =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
 	}
 	elsif ($varname eq "search") {
-	    $search = $mydata;
+	    $search = "-s $mydata";
 	}
 	elsif ($varname eq "strongs") {
-	    $arg .= "n";
+	    $optionfilters .= "n";
 	    $strongs = 1;
 	}
 	elsif ($varname eq "footnotes") {
-	    $arg .= "f";
+	    $optionfilters .= "f";
 	    $footnotes = 1;
+	}
+	elsif ($varname eq "headings") {
+	    $optionfilters .= "h";
+	    $headings = 1;
 	}
 	elsif ($varname eq "palm") {
 	    $palm = 1;
@@ -81,6 +90,11 @@ foreach $i (@values) {
 	}
     }
 }
+if ($optionfilters ne "") {
+    $optionfilters = "-o " . $optionfilters;
+}
+
+
 
 if ($n == 0) {
     $versions[0] = $defaultbook;
@@ -89,9 +103,9 @@ if ($n == 0) {
 
 if ($verse eq "") {
 
-    @versionlist = `$diatheke -m 2> /dev/null`;    
+    @versionlist = `$diatheke -b system -k modulelist 2> /dev/null`;    
     @versionlist2 = @versionlist;
-    @localelist = `$diatheke -l 2> /dev/null`;
+    @localelist = `$diatheke -b system -k localelist 2> /dev/null`;
 
     print <<DEF1;
 <html>
@@ -103,11 +117,12 @@ if ($verse eq "") {
 <body>
 
 <form method="get" action="diatheke.pl">
-  <p /><input type="radio" name="search" checked value="off"><font face="Arial, Helvetica, sans-serif">Verse/Commentary
-  Lookup</font><br />
-  <input type="radio" name="search" value="on"><font face="Arial, Helvetica, sans-serif">Word
-  Search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  Verse or Word:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset">
+  <p /><input type="radio" name="search" checked value="" /><font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Verse or Search key:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset"><br />
+  <input type="radio" name="search" value="phrase" /><font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
+  <input type="radio" name="search" value="multiword" /><font face="Arial, Helvetica, sans-serif">Multiple Word Search</font><br />
+  <input type="radio" name="search" value="regex" /><font face="Arial, Helvetica, sans-serif">Regular Expression Search</font><br />
+
   <p /><input type="checkbox" name="strongs" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
   Stong's Numbers when available (Strong's numbered modules are marked by *)</font>
   <p /><input type="checkbox" name="footnotes" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
@@ -296,64 +311,38 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
-    if ($search eq "on") {
-	
-	$line = `$diatheke -s $versions[$i] \"$verse\" $locale 2> /dev/null`;
+    print "$diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null<br />";
+    $line = `$diatheke $search $optionfilters -l $locale -m $maxverses -f thml -b $versions[$i] -k \"$verse\" 2> /dev/null`;
 
-    }
-    else {
-	if ($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "JFB" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK" || $versions[$i] eq "MHCC") {
-	    $arg .= "c";
-	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
-	}
-	elsif ($versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "StrongsGreek" || $versions[$i] eq "StrongsHebrew" || $versions[$i] eq "Thayer" || $versions[$i] eq "BDB" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths" || $versions[$i] eq "MCS" || $versions[$i] eq "Anchor" || $versions[$i] eq "WBE") {
-	    $arg .= "d";
-	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
-	}
-	else {
-	    $arg .= "b";
-	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
-	}
-    }
     chomp($line);
 
-# Parse and link to Strong's references if present
-    
-#    $line =~ s/\n/<br />/g;
-    
-#    $line =~ s/<FI>/<i>/g;
-#    $line =~ s/<Fi>/<\/i>/g;
-#    $line =~ s/<CM>//g;
-#    $line =~ s/<FNgreek>/<FNBSTGreek>/g;
-#    $line =~ s/<FNhebrew>/<FNBSTHebrew>/g;
-#    $line =~ s/<FN([^>]+)>/<\/font><font face=\"$1\" size=+1>/g;
-#    $line =~ s/<Fn>/<\/font><font face=\"$defaultfontface\">/g;
-#    $line =~ s/<RF>/\(Footnote: /g;
-#    $line =~ s/<Rf>/\)/g;		    
+#    Parse and link to Strong's references if present
     
     $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&StrongsHebrew=on\">&lt;$1&gt;\<\/a\>/g;
     $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&StrongsGreek=on\">&lt;$1&gt;\<\/a\>/g;
-
-
+    
+    $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
+    $info =~ /([^\;]+)\;(.*)/;
+    $format = $1;
+    $type = $2;
+    
     if ($versions[$i] eq "StrongsHebrew") {
 	$line =~ s/(see HEBREW for )([0-9]+)/<a href=\"diatheke.pl?verse=$2&StrongsHebrew=on\">$1$2\<\/a\>/g;
     }
     elsif($versions[$i] eq "StrongsGreek") {
 	$line =~ s/(see GREEK for )([0-9]+)/<a href=\"diatheke.pl?verse=$2&StrongsGreek=on\">$1$2\<\/a\>/g;
     }
-    elsif ($versions[$i] eq "BDB") {
-	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&BDB=on\">$1\<\/a\>/g;
+    elsif ($versions[$i] eq "BDB" || $versions[$i] eq "Thayer") {
+	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&$versions[$i]=on\">$1\<\/a\>/g;
     }
-    elsif($versions[$i] eq "Thayer") {
-	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&Thayer=on\">$1\<\/a\>/g;
-    }
-    #case for ThML format files
-    elsif($versions[$i] eq "JFB" || $versions[$i] eq "MHC") {
-	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/<a href=\"diatheke.pl?verse=$2&$1=on\">/g;
+    
+    #case for ThML format texts
+    elsif($format eq "ThML") {
+	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/&plussifyaddress($2,$1)/ge;
 	$line =~ s/<\/scripRef>/<\/a>/g;
     }
-    #case for GBF & other non-ThML files
-    elsif($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK" || $versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths"|| $versions[$i] eq "Gill") {
+    #case for non-ThML, non-Bible texts
+    elsif($type ne "Biblical Texts") {
 	$book = $verse;
 	$book =~ s/^([A-Za-z0-9]+) [0-9]+:[0-9]+.*/$1/;
 	$chapter = $verse;
@@ -365,9 +354,7 @@ for ($i = 0; $i < $n; $i++) {
     }
 #--------- Change full book names to abbreviations
 #>>
-    if ($search ne "on") {
-	
-
+    if ($search eq "") {
 	$line =~ s/^Genesis/Gen/g;
 	$line =~ s/^Exodus/Ex/g;
 	$line =~ s/^Leviticus/Lev/g;
@@ -426,7 +413,6 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/^III John/3Jn/g;
 	$line =~ s/^II John/2Jn/g;
 	$line =~ s/^I John/1Jn/g;
-
 
 	$line =~ s/\nGenesis/Gen/g;
 	$line =~ s/\nExodus/Ex/g;
@@ -488,75 +474,70 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/\nI John/1Jn/g;
 	
     }
-    if ($search eq "on") {
+    elsif ($format ne "ThML") {
 
+	$line =~ s/Genesis/Gen/g;
+	$line =~ s/Exodus/Ex/g;
+	$line =~ s/Leviticus/Lev/g;
+	$line =~ s/Numbers/Num/g;
+	$line =~ s/Deuteronomy/Deut/g;
+	$line =~ s/Joshua/Jos/g;
+	$line =~ s/Judges/Jdg/g;
+	$line =~ s/II Samuel/2Sam/g;
+	$line =~ s/I Samuel/1Sam/g;
+	$line =~ s/II Kings/2Kgs/g;
+	$line =~ s/I Kings/1Kgs/g;
+	$line =~ s/II Chronicles/2Chr/g;
+	$line =~ s/I Chronicles/1Chr/g;
+	$line =~ s/Nehemiah/Neh/g;
+	$line =~ s/Psalms/Ps/g;
+	$line =~ s/Proverbs/Prov/g;
+	$line =~ s/Ecclesiastes/Eccl/g;
+	$line =~ s/Song of Solomon/Song/g;
+	$line =~ s/Isaiah/Isa/g;
+	$line =~ s/Jeremiah/Jer/g;
+	$line =~ s/Lamentations/Lam/g;
+	$line =~ s/Ezekiel/Ezek/g;
+	$line =~ s/Daniel/Dan/g;
+	$line =~ s/Hosea/Hos/g;
+	$line =~ s/Obadiah/Obad/g;
+	$line =~ s/Jonah/Jnh/g;
+	$line =~ s/Nahum/Nah/g;
+	$line =~ s/Habakkuk/Hab/g;
+	$line =~ s/Zephaniah/Zeph/g;
+	$line =~ s/Haggai/Hag/g;
+	$line =~ s/Zechariah/Zech/g;
+	$line =~ s/Malachi/Mal/g;
+	
+	$line =~ s/Revelation of John/Rev/g;
+	$line =~ s/Matthew/Mt/g;
+	$line =~ s/Mark/Mk/g;
+	$line =~ s/Luke/Lk/g;
+	$line =~ s/John/Jn/g;
+	$line =~ s/Romans/Rom/g;
+	$line =~ s/II Corinthians/2Cor/g;
+	$line =~ s/I Corinthians/1Cor/g;
+	$line =~ s/Galatians/Gal/g;
+	$line =~ s/Ephesians/Eph/g;
+	$line =~ s/Philippians/Php/g;
+	$line =~ s/Colossians/Col/g;
+	$line =~ s/II Thessalonians/2Thes/g;
+	$line =~ s/I Thessalonians/1Thes/g;
+	$line =~ s/II Timothy/2Tim/g;
+	$line =~ s/I Timothy/1Tim/g;
+	$line =~ s/Titus/Tit/g;
+	$line =~ s/Philemon/Phlm/g;
+	$line =~ s/Hebrews/Heb/g;
+	$line =~ s/James/Jas/g;
+	$line =~ s/II Peter/2Pet/g;
+	$line =~ s/I Peter/1Pet/g;
+	$line =~ s/III John/3Jn/g;
+	$line =~ s/II John/2Jn/g;
+	$line =~ s/I John/1Jn/g;
 
-    $line =~ s/Genesis/Gen/g;
-    $line =~ s/Exodus/Ex/g;
-    $line =~ s/Leviticus/Lev/g;
-    $line =~ s/Numbers/Num/g;
-    $line =~ s/Deuteronomy/Deut/g;
-    $line =~ s/Joshua/Jos/g;
-    $line =~ s/Judges/Jdg/g;
-    $line =~ s/II Samuel/2Sam/g;
-    $line =~ s/I Samuel/1Sam/g;
-    $line =~ s/II Kings/2Kgs/g;
-    $line =~ s/I Kings/1Kgs/g;
-    $line =~ s/II Chronicles/2Chr/g;
-    $line =~ s/I Chronicles/1Chr/g;
-    $line =~ s/Nehemiah/Neh/g;
-    $line =~ s/Psalms/Ps/g;
-    $line =~ s/Proverbs/Prov/g;
-    $line =~ s/Ecclesiastes/Eccl/g;
-    $line =~ s/Song of Solomon/Song/g;
-    $line =~ s/Isaiah/Isa/g;
-    $line =~ s/Jeremiah/Jer/g;
-    $line =~ s/Lamentations/Lam/g;
-    $line =~ s/Ezekiel/Ezek/g;
-    $line =~ s/Daniel/Dan/g;
-    $line =~ s/Hosea/Hos/g;
-    $line =~ s/Obadiah/Obad/g;
-    $line =~ s/Jonah/Jnh/g;
-    $line =~ s/Nahum/Nah/g;
-    $line =~ s/Habakkuk/Hab/g;
-    $line =~ s/Zephaniah/Zeph/g;
-    $line =~ s/Haggai/Hag/g;
-    $line =~ s/Zechariah/Zech/g;
-    $line =~ s/Malachi/Mal/g;
-
-    $line =~ s/Revelation of John/Rev/g;
-    $line =~ s/Matthew/Mt/g;
-    $line =~ s/Mark/Mk/g;
-    $line =~ s/Luke/Lk/g;
-    $line =~ s/John/Jn/g;
-    $line =~ s/Romans/Rom/g;
-    $line =~ s/II Corinthians/2Cor/g;
-    $line =~ s/I Corinthians/1Cor/g;
-    $line =~ s/Galatians/Gal/g;
-    $line =~ s/Ephesians/Eph/g;
-    $line =~ s/Philippians/Php/g;
-    $line =~ s/Colossians/Col/g;
-    $line =~ s/II Thessalonians/2Thes/g;
-    $line =~ s/I Thessalonians/1Thes/g;
-    $line =~ s/II Timothy/2Tim/g;
-    $line =~ s/I Timothy/1Tim/g;
-    $line =~ s/Titus/Tit/g;
-    $line =~ s/Philemon/Phlm/g;
-    $line =~ s/Hebrews/Heb/g;
-    $line =~ s/James/Jas/g;
-    $line =~ s/II Peter/2Pet/g;
-    $line =~ s/I Peter/1Pet/g;
-    $line =~ s/III John/3Jn/g;
-    $line =~ s/II John/2Jn/g;
-    $line =~ s/I John/1Jn/g;
-
-
-#<<
 	$line =~ s/([0-9]*[A-Za-z]+) ([0-9]+):([0-9]+)/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$versions[$i]=on\">$1 $2:$3\<\/a\>/g;
     }
-
-
-
+#<<
 
 # for the old HREFCom version of JFB
 #    if ($versions[$i] eq "JFB") {
@@ -581,6 +562,8 @@ if ($palm == 1) {
     print "<hr>Powered by Diatheke (bible.gotjesus.org) and the SWORD Project (www.crosswire.org).";
 }
 
-print "</font></body></html>";
+print "<br /><br /><br /><br /></font></body></html>";
 
 }
+
+

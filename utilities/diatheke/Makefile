@@ -5,8 +5,7 @@ targets := diatheke
 bin := diatheke
 include ${root}/Makefile.cfg
 
-cpp += diatheke.cpp
-cpp += corediatheke.cpp
+cpp = diatheke.cpp corediatheke.cpp
 
 s = $(c) $(cpp)
 d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
@@ -15,7 +14,7 @@ l = -lsword -lstdc++ -lz
 
 
 diatheke: $(o)
-	$(CC) $(LFLAGS) -o $@ $@.o $(l) $(l)
+	$(CC) $(LFLAGS) -o $@ $(o) $(l)
 
 ifneq ($(nodeps),yes)
 -include $(d)

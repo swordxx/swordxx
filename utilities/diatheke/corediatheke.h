@@ -25,6 +25,7 @@
 #define QT_LD 3
 #define QT_SEARCH 4
 #define QT_SYSTEM 5
+#define QT_INFO 6
 
 #define OP_NONE 0
 #define OP_STRONGS 1
@@ -38,4 +39,3 @@
 
 int hasalpha (char * string);
 char* doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref);
-	

@@ -13,7 +13,7 @@ void printsyntax() {
 	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.0 by Chris Little \n");
 	fprintf (stderr, "usage: \n  ");
 	fprintf (stderr, "diatheke <-b book> [-s search_type] [-o option_filters]\n");
-	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-e locale] <-k query_key>\n");
+	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-l locale] <-k query_key>\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", and \"localelist\".");
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 	{
 		char * returnstring  = doquery(maxverses, outputformat, optionfilters, searchtype, text, locale, ref);
 		printf ("%s", returnstring);
-		delete returnstring;
+		delete [] returnstring;
 	}
 	else
 		printsyntax();

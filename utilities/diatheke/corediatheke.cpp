@@ -18,8 +18,17 @@ char * systemquery(const char * key){
 	string value;
 	
 	bool types = false, descriptions = false, names = false;
-	
-	if (!stricmp(key, "modulelist")) {
+
+	if (!stricmp(key, "localelist")) {		
+		LocaleMgr lm = LocaleMgr::systemLocaleMgr;
+		list<string> loclist =	lm.getAvailableLocales();
+		list<string>::iterator li = loclist.begin();
+		for (;li != loclist.end(); li++) {
+			value += li->c_str();
+			value += "\n";
+		}
+	}
+	else if (!stricmp(key, "modulelist")) {
 		types = true;
 		descriptions = true;
 		names = true;
@@ -64,16 +73,9 @@ char * systemquery(const char * key){
 			}
 		}
 	}
-/*	else if (!stricmp(key, "localelist")) {		
-		LocaleMgr lm = LocaleMgr::systemLocaleMgr;
-		list<string> loclist =	lm.getAvailableLocales();
-		list<string>::iterator li = loclist.begin();
-		for (;li != loclist.end(); li++) {
-			value += li->c_str();
-			value += "\n";
-		}
-	}
-*/	char * versevalue = new char[value.length() + 1];
+
+	delete [] key;
+	char * versevalue = new char[value.length() + 1];
 	strcpy (versevalue, value.c_str());
 	return versevalue;
 }
@@ -100,13 +102,16 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		querytype = QT_SYSTEM;
 		return systemquery(ref2);
 	}
-	
+	if (!strnicmp(text, "info", 4)) {
+	        querytype = QT_INFO;
+		text = ref;
+	}
 	//otherwise, we have a real book
 	it = manager.Modules.find(text);
 	if (it == manager.Modules.end()) { //book not found
 		return NULL;
 	}
-	
+
 	target = (*it).second;
 	
 	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
@@ -117,6 +122,27 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				inputformat = FMT_THML;
 		}
 	}
+
+	if (querytype == QT_INFO) {
+	  switch (inputformat) {
+	  case FMT_THML :
+	    value += "ThML";
+	    break;
+	  case FMT_GBF :
+	    value += "GBF";
+	    break;
+	  default:
+	    value += "Other";
+	  }	 
+	  value += ";";
+	  value += target->Type();
+	  
+	  char * versevalue = new char[value.length() + 1];
+	  strcpy (versevalue, value.c_str());
+	  
+	  return versevalue;
+	}
+
 	if (searchtype)
 		querytype = QT_SEARCH;
 	else if (!strcmp(target->Type(), "Biblical Texts"))
@@ -125,7 +151,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		querytype = QT_COMM;
 	else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
 		querytype = QT_LD;
-	
+
 	if (locale) {
 		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(locale);
 	}
@@ -165,13 +191,21 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				listkey++;
 			}
 			value += " -- ";
-			value += listkey.Count();
+
+			char *temp = new char[10];
+			sprintf(temp, "%u", listkey.Count());
+			value += temp;
+			delete [] temp;
+
 			value += " matches total (";
 			value += target->Name();
 			value += ")\n";
 		}
-		else
-			value += "none\n";
+		else {
+			value += "none (";
+			value += target->Name();
+			value += ")\n";
+		}
 	}
 	
 	else if (querytype == QT_LD) {
@@ -217,12 +251,10 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			// verses (must be in same chapter)
 			char * vers1 = strchr(ref2, ':') + 1;
 			
-			char * vers_array = new char[strlen(vers1)];
-			char * vers2 = (char*)vers_array;
+			char * vers2 = new char[strlen(vers1)];
 			strcpy (vers2, vers1);
 			
-			char * chap_array = new char[strlen(ref2) + 8];
-			char * chap = (char*)chap_array;
+			char * chap = new char[strlen(ref2) + 8];
 			strcpy (chap, ref2);
 			
 			char * vers3 = strchr(chap, ':') + 1;
@@ -230,6 +262,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			char * vers4 = new char;
 			
 			vers4 = strtok(vers2, ",");
+       
 			while (vers4) {
 				strcpy (vers3, vers4);
 				
@@ -237,8 +270,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				if (dash) { 			  // if we're looking up a range...
 					*dash = 0;				//break string at the dash
 					dash++;
-					char * temp_array = new char[strlen(chap) + 8];
-					char * temp = (char*)temp_array;
+					char * temp = new char[strlen(chap) + 8];
 					
 					length = strchr(chap, ':') - chap + 1;
 					
@@ -246,6 +278,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 					*(temp + length) = 0;
 					strcat (temp, dash);
 					strcpy (dash, temp);
+					delete [] temp;
 				}
 				else dash = chap;
 				
@@ -288,13 +321,15 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 				
 				vers4 = strtok(0, ",");
 			}
+			delete vers4;
+			delete [] chap;
+			delete [] vers2;
 		}
 		else {
 			if (dash) { 				// if we're looking up a range...
 				*dash = 0;				  //break string at the dash
 				dash++;
-				char * temp_array = new char[strlen(ref2)];
-				char * temp = (char*)temp_array;
+				char * temp = new char[strlen(ref2)];
 				
 				if (!strchr (dash, ':')) { /// if range supplies only second verse number (no book/chapter) assume same book/chapter
 					length = strchr(ref2, ':') - ref2 + 1;
@@ -314,6 +349,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 					strcat (temp, dash);
 					strcpy (dash, temp);
 				}
+				delete [] temp;
 			}
 			else dash = ref2;
 			
@@ -358,6 +394,8 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		}
 	}
 	
+	delete filter;
+
 	char * versevalue = new char[value.length() + 1];
 	strcpy (versevalue, value.c_str());
 	
