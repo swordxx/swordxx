@@ -52,7 +52,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /machine:I386 /libpath:"../../windoze/vc/swordlib/Release"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../lib/vcppmake/vc6/Release"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Debug"
 
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../windoze/vc/swordlib/Debug"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/vcppmake/vc6/Debug"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Debug with ICU"
 
@@ -100,8 +100,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../windoze/vc/swordlib/Debug"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib icuin.lib icuuc.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../icu-sword/lib" /libpath:"../../windoze/vc/swordlib/swordlib___Win32_Debug_with_ICU"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/vcppmake/vc6/Debug"
+# ADD LINK32 icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../../icu-sword/lib" /libpath:"../../../lib/vcppmake/vc6/libsword___Win32_Debug_with_ICU"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Release with ICU"
 
@@ -125,8 +125,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib /nologo /subsystem:console /machine:I386 /libpath:"../../windoze/vc/swordlib/Release"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib swordlib.lib icuin.lib icuuc.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../../icu-sword/lib" /libpath:"../../windoze/vc/swordlib/swordlib___Win32_Release_with_ICU"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../lib/vcppmake/vc6/Release"
+# ADD LINK32 icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../../icu-sword/lib" /libpath:"../../../lib/vcppmake/vc6/libsword___Win32_Release_with_ICU"
 
 !ENDIF 
 
