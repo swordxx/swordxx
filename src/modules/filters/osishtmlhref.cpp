@@ -84,12 +84,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if (attrib = tag.getAttribute("xlit")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" %s", val);
+					if (!u->suspendTextPassThru)
+						buf.appendFormatted(" %s", val);
 				}
 				if (attrib = tag.getAttribute("gloss")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" %s", val);
+					if (!u->suspendTextPassThru)
+						buf.appendFormatted(" %s", val);
 				}
 				if (attrib = tag.getAttribute("lemma")) {
 					int count = tag.getAttributePartCount("lemma");
@@ -109,10 +111,13 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 							val2++;
 						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 							show = false;
-						else buf.appendFormatted(" <small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small> ", 
-							(gh.length()) ? gh.c_str() : "", 
-							URL::encode(val2).c_str(), 
-							val2);
+						else {
+							if (!u->suspendTextPassThru)
+								buf.appendFormatted(" <small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small> ", 
+										(gh.length()) ? gh.c_str() : "", 
+										URL::encode(val2).c_str(), 
+										val2);
+						}
 						
 					} while (++i < count);
 				}
@@ -131,17 +136,19 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 							const char *val2 = val;
 							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 								val2+=2;
-							buf.appendFormatted(" <small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\">%s</a>)</em></small> ", 
-								URL::encode(tag.getAttribute("morph")).c_str(),
-								URL::encode(val).c_str(), 
-								val2);
+							if (!u->suspendTextPassThru)
+								buf.appendFormatted(" <small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\">%s</a>)</em></small> ", 
+										URL::encode(tag.getAttribute("morph")).c_str(),
+										URL::encode(val).c_str(), 
+										val2);
 						} while (++i < count);
 					}
 				}
 				if (attrib = tag.getAttribute("POS")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" %s", val);
+					if (!u->suspendTextPassThru)
+						buf.appendFormatted(" %s", val);
 				}
 
 				/*if (endTag)
@@ -185,14 +192,17 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "<!P><br />";
+				if (!u->suspendTextPassThru)
+					buf += "<!P><br />";
 			}
 			else if (tag.isEndTag()) {	// end tag
-				buf += "<!/P><br />";
+				if (!u->suspendTextPassThru)
+					buf += "<!/P><br />";
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				buf += "<!P><br />";
+				if (!u->suspendTextPassThru)
+					buf += "<!P><br />";
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -200,39 +210,47 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {			
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<a href=\"\">";
+				if (!u->suspendTextPassThru)
+					buf += "<a href=\"\">";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</a>";
+				if (!u->suspendTextPassThru)
+					buf += "</a>";
 			}
 		}
 
 		// <l> poetry, etc
 		else if (!strcmp(tag.getName(), "l")) {
 			if (tag.isEmpty()) {
-				buf += "<br />";
+				if (!u->suspendTextPassThru)
+					buf += "<br />";
 			}
 			else if (tag.isEndTag()) {
-				buf += "<br />";
+				if (!u->suspendTextPassThru)
+					buf += "<br />";
 			}
 			else if (tag.getAttribute("sID")) {	// empty line marker
-				buf += "<br />";
+				if (!u->suspendTextPassThru)
+					buf += "<br />";
 			}
 		}
 
 		// <milestone type="line"/>
 		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-			buf += "<br />";
+			if (!u->suspendTextPassThru)
+				buf += "<br />";
 			userData->supressAdjacentWhitespace = true;
 		}
 
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<b>";
+				if (!u->suspendTextPassThru)
+					buf += "<b>";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</b><br />";
+				if (!u->suspendTextPassThru)
+					buf += "</b><br />";
 			}
 		}
 
@@ -241,21 +259,25 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b") {
-					buf += "<b> ";
+					if (!u->suspendTextPassThru)
+						buf += "<b> ";
 					u->inBold = true;
 				}
 				else {	// all other types
-					buf += "<i> ";
+					if (!u->suspendTextPassThru)
+						buf += "<i> ";
 					u->inBold = false;
 				}
 			}
 			else if (tag.isEndTag()) {
 				if(u->inBold) {
-					buf += "</b>";
+					if (!u->suspendTextPassThru)
+						buf += "</b>";
 					u->inBold = false;
 				}
 				else
-				      buf += "</i>";
+					if (!u->suspendTextPassThru)
+						 buf += "</i>";
 			}
 			else {	// empty hi marker
 				// what to do?  is this even valid?
@@ -274,22 +296,26 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 				//alternate " and '
 				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
+					if (!u->suspendTextPassThru)
+						buf += (level % 2) ? '\"' : '\'';
 				
 				if (who == "Jesus") {
-					buf += "<font color=\"red\"> ";
+					if (!u->suspendTextPassThru)
+						buf += "<font color=\"red\"> ";
 				}
 			}
 			else if (tag.isEndTag()) {
 				//alternate " and '
 				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
+					if (!u->suspendTextPassThru)
+						buf += (level % 2) ? '\"' : '\'';
 				//buf += "</font>";
 			}
 			else {	// empty quote marker
 				//alternate " and '
 				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
+					if (!u->suspendTextPassThru)
+						buf += (level % 2) ? '\"' : '\'';
 			}
 		}
 
@@ -301,10 +327,12 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 // just do all transChange tags this way for now
 //				if (type == "supplied")
-					buf += "<i>";
+					if (!u->suspendTextPassThru)
+						buf += "<i>";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</i>";
+				if (!u->suspendTextPassThru)
+					buf += "</i>";
 			}
 			else {	// empty transChange marker?
 			}
@@ -322,9 +350,11 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			strcat(filepath, src);
 
 // we do this because BibleCS looks for this EXACT format for an image tag
-			buf+="<image src=\"";
-			buf+=filepath;
-			buf+="\" />";
+				if (!u->suspendTextPassThru) {
+					buf+="<image src=\"";
+					buf+=filepath;
+					buf+="\" />";
+				}
 /*
 			char imgc;
 			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);

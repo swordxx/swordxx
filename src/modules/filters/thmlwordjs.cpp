@@ -159,11 +159,24 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						if (gh == 'H') {
 							sLex = defaultHebLex;
 						}
+						SWBuf lexName = "";
 						if (sLex) {
-							sLex->setKey(strong.c_str());
-							strong = sLex->RenderText();
+							// we can pass the real lex name in, but we have some
+							// aliases in the javascript to optimize bandwidth
+							lexName = sLex->Name();
+							if (lexName == "StrongsGreek")
+								lexName = "G";
+							if (lexName == "StrongsHebrew")
+								lexName = "H";
 						}
-						SWBuf layer = (vkey)?vkey->getOSISRef():key->getText();
+						SWBuf layer;
+						if (vkey) {
+							// optimize for bandwidth and use only the verse as the unique entry id
+							layer.appendFormatted("%d", vkey->Verse());
+						}
+						else {
+							layer = key->getText();
+						}
 						for (int i = 0; i < layer.size(); i++) {
 							if ((!isdigit(layer[i])) && (!isalpha(layer[i]))) {
 								layer[i] = '_';
@@ -173,8 +186,8 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 							int textStr = atoi(textSt.c_str());
 							textStr += lastAppendLen;
 							SWBuf spanStart = "";
-							spanStart.appendFormatted("<div id=\"%s_%s\" class=\"word-layer\">%s<br/>%s</div>", layer.c_str(), wstr, strong.c_str(), morph.c_str());
-							spanStart.appendFormatted("<span onclick=\"wordInfo(\'%s_%s\', \'i2\');\" >", layer.c_str(), wstr);
+							// 'p' = 'fillpop' to save bandwidth
+							spanStart.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s_%s', '%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(), wstr, morph.c_str());
 							text.insert(textStr, spanStart);
 							lastAppendLen = spanStart.length();
 						}
@@ -223,11 +236,24 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			if (gh == 'H') {
 				sLex = defaultHebLex;
 			}
+			SWBuf lexName = "";
 			if (sLex) {
-				sLex->setKey(strong.c_str());
-				strong = sLex->RenderText();
+				// we can pass the real lex name in, but we have some
+				// aliases in the javascript to optimize bandwidth
+				lexName = sLex->Name();
+				if (lexName == "StrongsGreek")
+					lexName = "G";
+				if (lexName == "StrongsHebrew")
+					lexName = "H";
 			}
-			SWBuf layer = (vkey)?vkey->getOSISRef():key->getText();
+			SWBuf layer;
+			if (vkey) {
+				// optimize for bandwidth and use only the verse as the unique entry id
+				layer.appendFormatted("%d", vkey->Verse());
+			}
+			else {
+				layer = key->getText();
+			}
 			for (int i = 0; i < layer.size(); i++) {
 				if ((!isdigit(layer[i])) && (!isalpha(layer[i]))) {
 					layer[i] = '_';
@@ -237,8 +263,8 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 				int textStr = atoi(textSt.c_str());
 				textStr += lastAppendLen;
 				SWBuf spanStart = "";
-				spanStart.appendFormatted("<div id=\"%s_%s\" class=\"word-layer\">%s<br/>%s</div>", layer.c_str(), wstr, strong.c_str(), morph.c_str());
-				spanStart.appendFormatted("<span onclick=\"wordInfo(\'%s_%s\', \'i2\');\" >", layer.c_str(), wstr);
+				// 'p' = 'fillpop' to save bandwidth
+				spanStart.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s_%s', '%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(), wstr, morph.c_str());
 				text.insert(textStr, spanStart);
 			}
 		}

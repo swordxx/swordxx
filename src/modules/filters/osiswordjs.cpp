@@ -76,6 +76,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					if (key) {
 						vkey = SWDYNAMIC_CAST(VerseKey, key);
 					}
+					SWBuf lexName = "";
 					if ((!strncmp(lemma.c_str(), "x-Strongs:", 10)) || (!strncmp(lemma.c_str(), "strong:", 7))) {
 						char *num = strstr(lemma.c_str(), ":");
 						num++;
@@ -95,18 +96,30 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 							sLex = defaultHebLex;
 						}
 						if (sLex) {
-							sLex->setKey(strong.c_str());
-							strong = sLex->RenderText();
+							// we can pass the real lex name in, but we have some
+							// aliases in the javascript to optimize bandwidth
+							lexName = sLex->Name();
+							if (lexName == "StrongsGreek")
+								lexName = "G";
+							if (lexName == "StrongsHebrew")
+								lexName = "H";
 						}
 					}
-					SWBuf layer = (vkey)?vkey->getOSISRef():key->getText();
+					SWBuf layer;
+					if (vkey) {
+						// optimize for bandwidth and use only the verse as the unique entry id
+						layer.appendFormatted("%d", vkey->Verse());
+					}
+					else {
+						layer = key->getText();
+					}
 					for (int i = 0; i < layer.size(); i++) {
 						if ((!isdigit(layer[i])) && (!isalpha(layer[i]))) {
 							layer[i] = '_';
 						}
 					}
-					text.appendFormatted("<div id=\"%s_%d\" class=\"word-layer\">%s<br/>%s</div>", layer.c_str(), wordNum, strong.c_str(), morph.c_str());
-					text.appendFormatted("<span onclick=\"wordInfo(\'%s_%d\', \'image0002\');\" >", layer.c_str(), wordNum);
+					// 'p' = 'fillpop' to save bandwidth
+					text.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s_%d', '%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(),wordNum,morph.c_str());
 					wordNum++;
 
 
