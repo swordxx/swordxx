@@ -54,128 +54,97 @@ const char *ThMLVariants::getOptionValue()
 	}
 }
 
-char ThMLVariants::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-        if (option == 0) { //we want primary only
-		char *to, *from, token[2048]; // cheese.  Fix.
-		int tokpos = 0;
+        if ( option == 0 || option == 1) { //we want primary or variant only
 		bool intoken = false;
-		int len;
 		bool hide = false;
-
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;
 		
-		// -------------------------------
+		SWBuf token;
+		SWBuf orig = text;
+		const char *from = orig.c_str();
 
-		for (to = text; *from; from++) {
+		//we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code
+		const char* variantCompareString = (option == 0) ? "div type=\"variant\" class=\"1\"" : "div type=\"variant\" class=\"2\"";
+		
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
-				tokpos = 0;
-				token[0] = 0;
-				token[1] = 0;
-				token[2] = 0;
+				token = "";
 				continue;
 			}
-			if (*from == '>') {	// process tokens
+			else if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strncmp(token, "div type=\"variant\" class=\"2\"", 28)) {
-				  hide = true;
-                                  continue;
+				
+				if ( !strncmp(token.c_str(), variantCompareString, 28)) { //only one of the variants, length of the two strings is 28 in both cases 
+					hide = true;
+                                  	continue;
 				}
-				else if (!strncmp(token, "/div", 4)) {
-				  hide = false;
-                                  continue;
+				else if (!strncmp(token.c_str(), "/div", 4)) {
+					hide = false;
+                                	continue;
 				}
 
 				// if not a footnote token, keep token in text
 				if (!hide) {
-					*to++ = '<';
-					for (char *tok = token; *tok; tok++)
-						*to++ = *tok;
-					*to++ = '>';
+					text += '<';
+					text.append(token);
+					text += '>';
 				}
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
+				token += *from;
 			}
-			else	{
-				if (!hide) {
-					*to++ = *from;
-				}
+			else if (!hide) {
+				text += *from;
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 
 	}
-        else if (option == 1) { //we want variant only
-		char *to, *from, token[2048]; // cheese.  Fix.
-		int tokpos = 0;
+/*	else if (option == 1) { //we want variant only
 		bool intoken = false;
-		int len;
 		bool hide = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;
+		SWBuf token;
+		SWBuf orig = text;
+		const char *from = orig.c_str();
 
-		// -------------------------------
-
-		for (to = text; *from; from++) {
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
-				tokpos = 0;
-				token[0] = 0;
-				token[1] = 0;
-				token[2] = 0;
+				token = "";
 				continue;
 			}
-			if (*from == '>') {	// process tokens
+			else if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strncmp(token, "div type=\"variant\" class=\"1\"", 28)) {
+				if (!strncmp(token.c_str(), "div type=\"variant\" class=\"1\"", 28)) {
 				  hide = true;
                                   continue;
 				}
-				else if (!strncmp(token, "/div", 4)) {
+				else if (!strncmp(token.c_str(), "/div", 4)) {
 				  hide = false;
                                   continue;
 				}
 
 				// if not a footnote token, keep token in text
 				if (!hide) {
-					*to++ = '<';
-					for (char *tok = token; *tok; tok++)
-						*to++ = *tok;
-					*to++ = '>';
+					text += '<';
+					text.append( token );
+					text += '>';
 				}
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
+				token += *from;
 			}
-			else	{
-				if (!hide) {
-					*to++ = *from;
-				}
+			else if (!hide) {
+				text += *from;
 			}
 		}
-		*to++ = 0;
-		*to = 0;
-
 	}
+*/
+
 	return 0;
 }
 
