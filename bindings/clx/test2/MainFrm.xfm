@@ -1,0 +1,379 @@
+object Form1: TForm1
+  Left = 331
+  Top = 273
+  Width = 608
+  Height = 407
+  HorzScrollBar.Range = 118
+  VertScrollBar.Range = 48
+  ActiveControl = TreeView1
+  Caption = 'KylixSWORD'
+  Color = clBackground
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 108
+  TextHeight = 15
+  TextWidth = 7
+  object Splitter1: TSplitter
+    Left = 113
+    Top = 29
+    Width = 5
+    Height = 359
+    Beveled = True
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 29
+    Width = 113
+    Height = 359
+    Align = alLeft
+    Caption = 'Panel1'
+    TabOrder = 0
+    object TreeView1: TTreeView
+      Left = 1
+      Top = 1
+      Width = 111
+      Height = 357
+      Align = alClient
+      Columns = <>
+      TabOrder = 0
+      OnChange = TreeView1Change
+    end
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 0
+    Width = 608
+    Height = 29
+    ButtonHeight = 23
+    Caption = 'ToolBar1'
+    Images = ImageList1
+    TabOrder = 1
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 4
+      Height = 23
+      Caption = 'ToolButton1'
+      ImageIndex = 0
+      OnClick = ToolButton1Click
+    end
+    object ToolButton2: TToolButton
+      Left = 24
+      Top = 4
+      Width = 8
+      Height = 23
+      Style = tbsSeparator
+      Caption = 'ToolButton2'
+      ImageIndex = 1
+    end
+    object Label1: TLabel
+      Left = 32
+      Top = 4
+      Width = 200
+      Height = 23
+      Align = alCustom
+      AutoSize = False
+    end
+    object ToolButton3: TToolButton
+      Left = 232
+      Top = 4
+      Height = 23
+      Hint = 'Close Program'
+      Caption = 'Button1'
+      ImageIndex = 1
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = Button1Click
+    end
+  end
+  object Panel3: TPanel
+    Left = 118
+    Top = 29
+    Width = 490
+    Height = 359
+    Align = alClient
+    Caption = 'Panel3'
+    TabOrder = 2
+    object Splitter2: TSplitter
+      Left = 1
+      Top = 227
+      Width = 488
+      Height = 5
+      Cursor = crVSplit
+      Align = alBottom
+    end
+    object Panel4: TPanel
+      Left = 1
+      Top = 232
+      Width = 488
+      Height = 126
+      Align = alBottom
+      TabOrder = 0
+      object Splitter3: TSplitter
+        Left = 283
+        Top = 1
+        Width = 5
+        Height = 124
+        Align = alRight
+      end
+      object TextBrowser2: TTextBrowser
+        Left = 1
+        Top = 1
+        Width = 282
+        Height = 124
+        Align = alClient
+        TabOrder = 0
+      end
+      object Panel5: TPanel
+        Left = 288
+        Top = 1
+        Width = 199
+        Height = 124
+        Align = alRight
+        TabOrder = 1
+        object ListView: TListView
+          Left = 1
+          Top = 25
+          Width = 197
+          Height = 98
+          Align = alClient
+          Columns = <>
+          TabOrder = 0
+          OnItemClick = ListViewItemClick
+        end
+        object Panel6: TPanel
+          Left = 1
+          Top = 1
+          Width = 197
+          Height = 24
+          Align = alTop
+          Caption = 'Panel6'
+          TabOrder = 1
+          object Edit2: TEdit
+            Left = 2
+            Top = 1
+            Width = 193
+            Height = 22
+            AutoSize = False
+            Font.CharSet = fcsUnicode
+            Font.Color = clBlack
+            Font.Height = 13
+            Font.Name = 'arial unicode ms'
+            Font.Pitch = fpVariable
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            Text = 'GRACE'
+            OnChange = Edit2Change
+          end
+        end
+      end
+    end
+    object Panel8: TPanel
+      Left = 1
+      Top = 28
+      Width = 488
+      Height = 199
+      Align = alClient
+      Caption = 'Panel8'
+      TabOrder = 1
+      object Splitter4: TSplitter
+        Left = 249
+        Top = 1
+        Width = 5
+        Height = 197
+        Align = alRight
+      end
+      object Panel7: TPanel
+        Left = 254
+        Top = 1
+        Width = 233
+        Height = 197
+        Align = alRight
+        Caption = 'Panel7'
+        TabOrder = 0
+        object TextBrowser3: TTextBrowser
+          Left = 1
+          Top = 1
+          Width = 231
+          Height = 195
+          Align = alClient
+          TabOrder = 0
+        end
+      end
+      object Panel2: TPanel
+        Left = 1
+        Top = 1
+        Width = 248
+        Height = 197
+        Align = alClient
+        Caption = 'Panel2'
+        TabOrder = 1
+        object TextBrowser1: TTextBrowser
+          Left = 1
+          Top = 1
+          Width = 246
+          Height = 195
+          Align = alClient
+          TabOrder = 0
+        end
+      end
+    end
+    object ToolBar2: TToolBar
+      Left = 1
+      Top = 1
+      Width = 488
+      Height = 27
+      Caption = 'ToolBar2'
+      TabOrder = 2
+      object Edit1: TEdit
+        Left = 51
+        Top = 4
+        Width = 209
+        Height = 22
+        AutoSize = False
+        Font.CharSet = fcsUnicode
+        Font.Color = clBlack
+        Font.Height = 13
+        Font.Name = 'arial unicode ms'
+        Font.Pitch = fpVariable
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        Text = 'Genesis 1:1'
+        OnChange = Edit1Change
+      end
+      object ComboBox1: TComboBox
+        Left = 268
+        Top = 4
+        Width = 120
+        Height = 23
+        ItemHeight = 17
+        Items.Strings = (
+          'Genesis'
+          'Exodus')
+        ItemIndex = 0
+        TabOrder = 1
+        Text = 'Genesis'
+      end
+      object SpinEdit1: TSpinEdit
+        Left = 388
+        Top = 4
+        Width = 45
+        Height = 22
+        Align = alCustom
+        TabOrder = 2
+      end
+      object SpinEdit2: TSpinEdit
+        Left = 433
+        Top = 4
+        Width = 45
+        Height = 22
+        Align = alCustom
+        TabOrder = 3
+      end
+      object ToolButton4: TToolButton
+        Left = 260
+        Top = 4
+        Width = 8
+        Height = 22
+        Style = tbsSeparator
+        Caption = 'ToolButton4'
+      end
+      object Label2: TLabel
+        Left = 1
+        Top = 4
+        Width = 50
+        Height = 20
+        Align = alLeft
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'KJV'
+        Layout = tlCenter
+      end
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 388
+    Width = 608
+    Height = 19
+    Panels = <>
+    SimplePanel = True
+    SimpleText = 'Genesis 1:1'
+  end
+  object ImageList1: TImageList
+    Left = 472
+    Top = 72
+    Bitmap = {
+      494D474C01000100100000001000000002000000424D36060000000000003600
+      0000280000002000000010000000010018000000000000060000120B0000120B
+      00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000
+      0000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000BFBFBFBFBFBF7F
+      7F7F7F7F7F7F7F7F000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000008000FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000BFBFBFBFBFBF7F7F7F00000000
+      00000000007F7F7F7F7F7F7F7F7F000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000008000008000FFFF00FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFF000000BFBFBFBFBFBF000000FFFFFF0000FFFF
+      FFFF0000FFFFFFFF0000007F7F7F7F7F7F000000FFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFF000000BFBFBF000000FFFFFF00000000000000
+      0000000000000000FFFFFF0000007F7F7F000000FFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFF000000BFBFBF7F7F7FFFFFFF0000000000000000FF00
+      0080000080000000000000FFFFFF7F7F7F7F7F7F000000FFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFF000000BFBFBF0000000000FF0000000000FF00008000
+      00FF0000800000800000000000FF0000007F7F7F000000FFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFF0000000000FF0000FF00
+      00FF0000FF000080000000FFFFFF0000007F7F7F000000FFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFF000000FFFFFF0000000000FF000000FFFFFF0000FF00
+      00FF0000800000FF0000000000FF000000BFBFBF000000FFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFF000000FFFFFF7F7F7FFFFFFF000000000000FFFFFFFF
+      FFFF0000FF000000000000FFFFFF7F7F7FBFBFBF000000FFFFFFFFFFFFFFFFFF
+      00000000008000008000008000FFFF00000000FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFF000000BFBFBF000000FFFFFF00000000000000
+      0000000000000000FFFFFF000000BFBFBF000000FFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFBFBFBF000000FFFFFF0000FFFF
+      FFFF0000FFFFFFFF000000BFBFBFBFBFBF000000FFFFFFFFFFFFFFFFFFFFFFFF
+      00000000008000008000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFBFBFBF7F7F7F00000000
+      00000000007F7F7FBFBFBFBFBFBF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      000000000080FFFF0000008000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFF
+      FFFFBFBFBFBFBFBF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      000000000080FFFF00FFFF0000000000FFFF00FFFF00FFFF00FFFF00FFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000
+      0000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FFFFFFFFFFFFFFFFFF424D7E000000000000003E0000002800000020000000
+      10000000010001000000000040000000120B0000120B00000200000002000000
+      FFFFFF0000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000}
+  end
+  object ColorDialog1: TColorDialog
+    Color = clTeal
+    Left = 440
+    Top = 72
+  end
+  object FontDialog1: TFontDialog
+    Font.CharSet = fcsUnicode
+    Font.Color = clBlack
+    Font.Height = 15
+    Font.Name = 'arial unicode ms'
+    Font.Pitch = fpVariable
+    Font.Style = []
+    Left = 408
+    Top = 72
+  end
+end
