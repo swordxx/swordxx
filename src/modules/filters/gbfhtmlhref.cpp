@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <gbfhtmlhref.h>
+#include <ctype.h>
 
 SWORD_NAMESPACE_START
 
