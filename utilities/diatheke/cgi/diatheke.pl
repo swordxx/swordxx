@@ -3,7 +3,7 @@
 #version 4.0
 
 $diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program -- if you are using a MS Windows server, you might need to remove the "nice"
-$defaultfontface = "Arial, Helvetica, sans-serif"; # default font name
+$defaultfontface = "Times New Roman, Times, Roman, serif"; # default font name
 $sword_path = "/home/sword";  # SWORD_PATH environment variable you want to use
 $maxverses = 50; # maximum number of verses diatheke will return per query (prevents people from asking for Gen1:1-Rev22:21)
 $defaultbook = "KJV"; # book to query when none is selected, but a verse/search is entered
@@ -333,10 +333,10 @@ for ($i = 0; $i < $n; $i++) {
 
 #    Parse and link to Strong's references if present
     
-    $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&StrongsHebrew=on\">&lt;$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&StrongsGreek=on\">&lt;$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&StrongsHebrew=on\">&lt;T$1&gt;\<\/a\>/g;
-    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&StrongsGreek=on\">&lt;T$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&Thayer=on\">&lt;$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;T$1&gt;\<\/a\>/g;
+    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&&Thayer=on\">&lt;T$1&gt;\<\/a\>/g;
     $line =~ s/<sync type=\"Morph\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Packard=on\">&lt;$1&gt;\<\/a\>/g;
     
     $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
@@ -350,9 +350,9 @@ for ($i = 0; $i < $n; $i++) {
     elsif($versions[$i] eq "StrongsGreek") {
 	$line =~ s/(see GREEK for )([0-9]+)/<a href=\"diatheke.pl?verse=$2&StrongsGreek=on\">$1$2\<\/a\>/g;
     }
-    elsif ($versions[$i] eq "BDB" || $versions[$i] eq "Thayer") {
-	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&$versions[$i]=on\">$1\<\/a\>/g;
-    }
+#    elsif ($versions[$i] eq "BDB" || $versions[$i] eq "Thayer") {
+#	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&$versions[$i]=on\">$1\<\/a\>/g;
+#    }
     
     #case for ThML format texts
     elsif($format eq "ThML") {
@@ -569,9 +569,11 @@ for ($i = 0; $i < $n; $i++) {
     if ($footnotes == 0) {
 	$line =~ s/<note[^<]+<\/note>//g;
     }
-    if ($strongs == 0) {
-	$line =~ s/<a href=[^>]+Strongs(Greek|Hebrew)[^<]+<\/a>//g;
-    }
+
+#can't figure out WHAT this was supposed to do
+#    if ($strongs == 0) {
+#	$line =~ s/<a href=[^>]+Strongs(Greek|Hebrew)[^<]+<\/a>//g;
+#    }
     
     print "$line <br /><br />\n";
 }
