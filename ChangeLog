@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+30-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Added Finnish locale files contributed by Tero
+		Favorin <tero at favorin dot com>
+
 27-Nov-2002     Joachim Ansorg <joachim@ansorgs.de>
 	Worked on Swig bindings. They work now with latest CVS.
 

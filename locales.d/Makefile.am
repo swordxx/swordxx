@@ -4,6 +4,7 @@ localeDATA += locales.d/da.conf
 localeDATA += locales.d/de.conf
 localeDATA += locales.d/de_abbrev.conf
 localeDATA += locales.d/es.conf
+localeDATA += locales.d/fi.conf
 localeDATA += locales.d/fr.conf
 localeDATA += locales.d/fr_FR.ISO-8859-1.conf
 localeDATA += locales.d/it.conf
