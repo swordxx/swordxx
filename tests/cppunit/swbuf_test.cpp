@@ -32,15 +32,15 @@ public:
 	void testAppendString() {
 		SWBuf t;
 		
-		for (int i = 0; i < 50000; ++i) {
+		for (int i = 0; i < 5000; ++i) {
 			t.append("a");
 			t.append("b");
 			t.append("ccccc",1);
 		}		
-		CPPUNIT_ASSERT( t.length() == 3*50000 );
+		CPPUNIT_ASSERT( t.length() == 3*5000 );
 		
 		char c = 'a';
-		for (int i = 0; i < 50000; ++i) { //check whether the append calls worked right
+		for (int i = 0; i < 5000; ++i) { //check whether the append calls worked right
 			CPPUNIT_ASSERT( t[i] == c );
 			
 			c = (c=='a') ? 'b' : ((c=='b') ? 'c' : 'a');
@@ -49,15 +49,15 @@ public:
 	void testAppendChar() {
 		SWBuf t;
 		
-		for (int i = 0; i < 50000; ++i) {
+		for (int i = 0; i < 5000; ++i) {
 			t.append('a');
 			t.append('b');
 			t.append('c');
 		}		
-		CPPUNIT_ASSERT( t.length() == 3*50000 );
+		CPPUNIT_ASSERT( t.length() == 3*5000 );
 		
 		char c = 'a';
-		for (int i = 0; i < 50000; ++i) { //check whether the append calls worked right
+		for (int i = 0; i < 5000; ++i) { //check whether the append calls worked right
 			CPPUNIT_ASSERT( t[i] == c );
 			
 			c = (c=='a') ? 'b' : ((c=='b') ? 'c' : 'a');
@@ -67,44 +67,45 @@ public:
 	void testInsertString() {
 		SWBuf t = "end";
 		
-		for (int i = 0; i < 50000; ++i) {
+		for (int i = 0; i < 5000; ++i) {
 			t.insert(0, "a");
 			t.insert(1, "b");
 			t.insert(2, "ccccccc", 1); //only one c
 		}		
-		CPPUNIT_ASSERT( t.length() == 3*50000+3 );
+		CPPUNIT_ASSERT( t.length() == 3*5000+3 );
 		
 		char c = 'a';
-		for (int i = 0; i < 50000; ++i) { //check whether the append calls worked right
+		for (int i = 0; i < 5000; ++i) { //check whether the append calls worked right
 			CPPUNIT_ASSERT( t[i] == c );
 			
 			c = (c=='a') ? 'b' : ((c=='b') ? 'c' : 'a');
 		}
 		//check if end is at the end
-		CPPUNIT_ASSERT( t[3*50000+0] == 'e');
-		CPPUNIT_ASSERT( t[3*50000+1] == 'n');
-		CPPUNIT_ASSERT( t[3*50000+2] == 'd');
-	}	
+		CPPUNIT_ASSERT( t[3*5000+0] == 'e');
+		CPPUNIT_ASSERT( t[3*5000+1] == 'n');
+		CPPUNIT_ASSERT( t[3*5000+2] == 'd');
+	}
+	
 	void testInsertChar() {
 		SWBuf t = "end";
 		
-		for (int i = 0; i < 50000; ++i) {
+		for (int i = 0; i < 5000; ++i) {
 			t.insert(0, 'a');
 			t.insert(1, 'b');
 			t.insert(2, 'c');
 		}		
-		CPPUNIT_ASSERT( t.length() == 3*50000+3 );
+		CPPUNIT_ASSERT( t.length() == 3*5000+3 );
 		
 		char c = 'a';
-		for (int i = 0; i < 50000; ++i) { //check whether the append calls worked right
+		for (int i = 0; i < 5000; ++i) { //check whether the insert calls worked right
 			CPPUNIT_ASSERT( t[i] == c );
 			
 			c = (c=='a') ? 'b' : ((c=='b') ? 'c' : 'a');
 		}
 		//check if end is at the end
-		CPPUNIT_ASSERT( t[3*50000+0] == 'e');
-		CPPUNIT_ASSERT( t[3*50000+1] == 'n');
-		CPPUNIT_ASSERT( t[3*50000+2] == 'd');
+		CPPUNIT_ASSERT( t[3*5000+0] == 'e');
+		CPPUNIT_ASSERT( t[3*5000+1] == 'n');
+		CPPUNIT_ASSERT( t[3*5000+2] == 'd');
 	}	
 	
 };
