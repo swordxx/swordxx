@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.20 2001/04/08 09:03:37 chrislit Exp $
+ * $Id: swmodule.h,v 1.21 2001/04/18 10:21:47 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -124,7 +124,8 @@ public:
   * @param ikey key with which to set this module
   * @return error status
   */
-  virtual char SetKey (const SWKey & ikey);
+  virtual char SetKey (const SWKey *ikey);
+  virtual char SetKey (const SWKey &ikey);
 
   /** Gets the current module key
   * @return the current key of this module

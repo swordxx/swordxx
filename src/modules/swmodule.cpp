@@ -190,18 +190,21 @@ char SWModule::Display()
  * RET:	error status
  */
 
-char SWModule::SetKey(const SWKey &ikey)
+char SWModule::SetKey(const SWKey &ikey) {
+	return SetKey(&ikey);
+}
+char SWModule::SetKey(const SWKey *ikey)
 {
 	if (key) {
 		if (!key->Persist())	// if we have our own copy
 			delete key;
 	}
 
-	if (!ikey.Persist()) {		// if we are to keep our own copy
+	if (!ikey->Persist()) {		// if we are to keep our own copy
 		 key = CreateKey();
-		*key = ikey;
+		*key = *ikey;
 	}
-	else	 key = (SWKey *)&ikey;		// if we are to just point to an external key
+	else	 key = (SWKey *)ikey;		// if we are to just point to an external key
 
 	return 0;
 }
