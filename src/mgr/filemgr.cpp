@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.38 2004/02/06 21:01:01 scribe Exp $
+ * $Id: filemgr.cpp,v 1.39 2004/04/10 17:04:19 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -380,7 +380,7 @@ int FileMgr::removeFile(const char *fName) {
 }
 
 char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
-	char ch;
+	char ch=0;
 	int len;
 	char *buf;
 	bool more = true;
