@@ -24,8 +24,10 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key)
 
   len = 0;
   from = (unsigned short*) text;
-  while (*from) len++;
-  len++;
+  while (*from) {
+        len += 2;
+        from++;
+  }
 
   // shift string to right of buffer
   if (len < maxlen) {
@@ -35,9 +37,9 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key)
   else
     from = (unsigned short*)text;
   
-  
+
   // -------------------------------
-  
+
   for (to = (unsigned char*)text; *from; from++) {
     uchar = 0;
 
