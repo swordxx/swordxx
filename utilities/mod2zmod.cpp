@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	VerseKey bufferKey;
 
 	(*vkey) = TOP;
-	while (!inModule->Error()) {
+	while (!vkey->Error()) {
 		// pseudo-check for link.  Will get most common links.
 		if (!strcmp(lastBuffer, (const char *)(*inModule))) {
 			outModule << bufferKey;	// link to last key

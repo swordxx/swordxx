@@ -170,7 +170,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 	idxoff *= 10;
 	if (!testmt)
 	{
-		testmt = ((idxfp[1]) ? 1:2);
+		testmt = ((idxfp[0]) ? 1:2);
 	}
 	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 	if (read(compfp[testmt-1]->getFd(), &ulBuffNum, 4) < 4)
@@ -189,61 +189,60 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 		printf ("Error reading usVerseSize\n");
 		return;
 	}
-	if (((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf)) {
-		// have the text buffered
-		*start = ulVerseStart;
-		*size = usVerseSize;
-		return;
-	}
-
-	//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
-
-	if (lseek(idxfp[testmt-1]->getFd(), ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
-	{
-		printf ("Error seeking compressed file index\n");
-		return;
-	}
-	if (read(idxfp[testmt-1]->getFd(), &ulCompOffset, 4)<4)
-	{
-		printf ("Error reading ulCompOffset\n");
-		return;
-	}
-	if (read(idxfp[testmt-1]->getFd(), &ulCompSize, 4)<4)
-	{
-		printf ("Error reading ulCompSize\n");
-		return;
-	}
-	if (read(idxfp[testmt-1]->getFd(), &ulUnCompSize, 4)<4)
-	{
-		printf ("Error reading ulUnCompSize\n");
-		return;
-	}
-
-	if (lseek(textfp[testmt-1]->getFd(), ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
-	{
-		printf ("Error: could not seek to right place in compressed text\n");
-		return;
-	}
-	pcCompText = new char[ulCompSize];
-	if (read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
-	{
-		printf ("Error reading compressed text\n");
-		return;
-	}
-	compressor->zBuf(&ulCompSize, pcCompText);
-
 	*start = ulVerseStart;
 	*size = usVerseSize;
+	if (*size) {
+		if (((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf)) {
+			// have the text buffered
+			return;
+		}
 
-	if (cacheBuf) {
-		flushCache();
-		free(cacheBuf);
+		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
+
+		if (lseek(idxfp[testmt-1]->getFd(), ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
+		{
+			printf ("Error seeking compressed file index\n");
+			return;
+		}
+		if (read(idxfp[testmt-1]->getFd(), &ulCompOffset, 4)<4)
+		{
+			printf ("Error reading ulCompOffset\n");
+			return;
+		}
+		if (read(idxfp[testmt-1]->getFd(), &ulCompSize, 4)<4)
+		{
+			printf ("Error reading ulCompSize\n");
+			return;
+		}
+		if (read(idxfp[testmt-1]->getFd(), &ulUnCompSize, 4)<4)
+		{
+			printf ("Error reading ulUnCompSize\n");
+			return;
+		}
+
+		if (lseek(textfp[testmt-1]->getFd(), ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
+		{
+			printf ("Error: could not seek to right place in compressed text\n");
+			return;
+		}
+		pcCompText = new char[ulCompSize];
+		if (read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
+		{
+			printf ("Error reading compressed text\n");
+			return;
+		}
+		compressor->zBuf(&ulCompSize, pcCompText);
+
+		if (cacheBuf) {
+			flushCache();
+			free(cacheBuf);
+		}
+		cacheBuf = (char *)calloc(strlen(compressor->Buf()) + 1, 1);
+		strcpy(cacheBuf, compressor->Buf());
+
+		cacheTestament = testmt;
+		cacheBufIdx = ulBuffNum;
 	}
-	cacheBuf = (char *)calloc(strlen(compressor->Buf()) + 1, 1);
-	strcpy(cacheBuf, compressor->Buf());
-
-	cacheTestament = testmt;
-	cacheBufIdx = ulBuffNum;
 }
 
 
@@ -260,8 +259,10 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf)
 {
 	memset(inbuf, 0, size);
-	strncpy(inbuf, &(cacheBuf[start]), size-1);
-	inbuf[size]=0;
+	if (size > 1) {
+		strncpy(inbuf, &(cacheBuf[start]), size-1);
+		inbuf[size]=0;
+	}
 }
 
 
@@ -287,7 +288,7 @@ void zVerse::settext(char testmt, long idxoff, const char *buf)
 	dirtyCache = true;
 
 	unsigned long start, outstart;
-	unsigned long outBufIdx;
+	unsigned long outBufIdx = cacheBufIdx;
 	unsigned short size;
 	unsigned short outsize;
 
@@ -297,22 +298,23 @@ void zVerse::settext(char testmt, long idxoff, const char *buf)
 	start = outstart = strlen(cacheBuf);
 #ifdef BIGENDIAN
 	#ifndef MACOSX
-		outBufIdx = lelong(cacheBufIdx);
+		outBufIdx = lelong(outBufIdx);
 		outstart  = lelong(start);
 		outsize   = leshort(size);
 	#else
-		outBufIdx = NXSwapLittleLongToHost(cacheBufIdx);
+		outBufIdx = NXSwapLittleLongToHost(outBufIdx);
 		outstart  = NXSwapLittleLongToHost(start);
 		outsize   = NXSwapLittleShortToHost(size);
 	#endif
 #endif
 	if (!size) {
-		outstart = outsize = 0;
+		outstart = outsize = outBufIdx = 0;
 	}
 	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 	write(compfp[testmt-1]->getFd(), &outBufIdx, 4);
 	write(compfp[testmt-1]->getFd(), &outstart, 4);
 	write(compfp[testmt-1]->getFd(), &outsize, 2);
+	strcat(cacheBuf, buf);
 }
 
 
@@ -324,11 +326,13 @@ void zVerse::flushCache() {
 		unsigned long zsize, outzsize;
 
 		idxoff = cacheBufIdx * 12;
-		size = outsize = strlen(cacheBuf);
-		compressor->Buf(cacheBuf);
-		compressor->zBuf(&zsize);
+		size = outsize = zsize = outzsize = strlen(cacheBuf);
+		if (size) {
+			compressor->Buf(cacheBuf);
+			compressor->zBuf(&zsize);
+			outzsize = zsize;
 
-		start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
+			start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
 	#ifdef BIGENDIAN
 		#ifndef MACOSX
 			outstart  = lelong(start);
@@ -340,18 +344,13 @@ void zVerse::flushCache() {
 			outzsize  = NXSwapLittleLongToHost(zsize);
 		#endif
 	#endif
-		if (!size) {
-			outstart = outsize = outzsize = 0;
-		}
-		else {
 			write(textfp[cacheTestament-1]->getFd(), compressor->zBuf(&zsize), zsize);
+
+			lseek(idxfp[cacheTestament-1]->getFd(), idxoff, SEEK_SET);
+			write(idxfp[cacheTestament-1]->getFd(), &outstart, 4);
+			write(idxfp[cacheTestament-1]->getFd(), &outzsize, 4);
+			write(idxfp[cacheTestament-1]->getFd(), &outsize, 4);
 		}
-
-		lseek(idxfp[cacheTestament-1]->getFd(), idxoff, SEEK_SET);
-		write(idxfp[cacheTestament-1]->getFd(), &outstart, 4);
-		write(idxfp[cacheTestament-1]->getFd(), &outzsize, 4);
-		write(idxfp[cacheTestament-1]->getFd(), &outsize, 4);
-
 		dirtyCache = false;
 	}
 }

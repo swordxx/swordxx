@@ -107,6 +107,7 @@ char *RawText::getRawEntry() {
 	if (versebuf)
 		delete [] versebuf;
 	versebuf = new char [ ++size * FILTERPAD ];
+	*versebuf = 0;
 
 	gettext(key->Testament(), start, size, versebuf);
 

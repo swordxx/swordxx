@@ -32,7 +32,7 @@
  *		idisp - Display object to use for displaying
  */
 
-zText::zText(const char *ipath, const char *iname, const char *idesc, int blockType, SWCompress *icomp, SWDisplay *idisp) : zVerse(ipath, O_RDONLY, blockType, icomp), SWText(iname, idesc, idisp)/*, SWCompress()*/
+zText::zText(const char *ipath, const char *iname, const char *idesc, int blockType, SWCompress *icomp, SWDisplay *idisp) : zVerse(ipath, -1, blockType, icomp), SWText(iname, idesc, idisp)/*, SWCompress()*/
 {
 	versebuf = 0;
 	lastWriteKey = 0;
@@ -121,25 +121,22 @@ char *zText::getRawEntry()
 		key = new VerseKey(this->key);
 
 	//printf ("checking cache\n");
-	if (chapcache != key->Index())
-	{
-		//printf ("finding offset\n");
-		findoffset(key->Testament(), key->Index(), &start, &size);
+	//printf ("finding offset\n");
+	findoffset(key->Testament(), key->Index(), &start, &size);
 
-		//printf ("deleting previous buffer\n");
-		if (versebuf)
-			delete [] versebuf;
-		versebuf = new char [ size * FILTERPAD ];
+	//printf ("deleting previous buffer\n");
+	if (versebuf)
+		delete [] versebuf;
+	versebuf = new char [ (++size) * FILTERPAD ];
+	*versebuf = 0;
 
-		//printf ("getting text\n");
-		swgettext(key->Testament(), start, size + 1, versebuf);
-		//printf ("got text\n");
-		chapcache = key->Index();
-	}
+	//printf ("getting text\n");
+	swgettext(key->Testament(), start, size, versebuf);
+	//printf ("got text\n");
 
 	//printf ("processing text\n");
 	for (it = rawfilters.begin(); it != rawfilters.end(); it++) {
-		(*it)->ProcessText(versebuf, size + 1);
+		(*it)->ProcessText(versebuf, size);
 	}
 
 	//printf ("preparing text\n");
