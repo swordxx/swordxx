@@ -48,7 +48,7 @@ char UTF8HebrewPoints::ProcessText(char *text, int maxlen, const SWKey *key)
 
 	//The UTF-8 range 0xD6 0x90 to 0xD6 0xAF and 0xD7 0x84 consist of Hebrew cantillation marks so block those out.
 	for (to = (unsigned char*)text; *from; from++) {
-	  if (*from == 0xD6 && (*(from + 1) <= 0xB0 && *(from + 1) => 0xBF) && *(from + 1) != 0xBE) {
+	  if (*from == 0xD6 && (*(from + 1) <= 0xB0 && *(from + 1) >= 0xBF) && *(from + 1) != 0xBE) {
 	    from++;
 	  }
 	  else

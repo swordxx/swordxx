@@ -226,7 +226,7 @@ char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key)
 	    from+=2;
 	  }
 	  //upsilon
-	  else if (*from == 0xE1 && ((*(from + 1) == 0xBD && ((*(from + 2) >= 0x90 && *(from + 2) <= 0x97) || (*(from + 2) == 0xBA || *(from + 2) == 0xBB)) || (*(from + 1) == 0xBF && ((*(from + 2) >= 0xA0 && *(from + 2) <= 0xA3) || (*(from + 2) == 0xA6 || *(from + 2) == 0xA7)))) {
+	  else if (*from == 0xE1 && ((*(from + 1) == 0xBD && ((*(from + 2) >= 0x90 && *(from + 2) <= 0x97) || *(from + 2) == 0xBA || *(from + 2) == 0xBB)) || (*(from + 1) == 0xBF && ((*(from + 2) >= 0xA0 && *(from + 2) <= 0xA3) || *(from + 2) == 0xA6 || *(from + 2) == 0xA7)))) {
 	    *to++ = 0xCF;
 	    *to++ = 0x85;
 	    from+=2;
