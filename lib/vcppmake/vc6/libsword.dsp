@@ -219,6 +219,10 @@ SOURCE=..\..\..\src\modules\filters\gbfthml.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\gbfwebif.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\keys\genarray.c
 # End Source File
 # Begin Source File
@@ -511,6 +515,10 @@ SOURCE=..\..\..\src\modules\filters\thmlvariants.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\thmlwebif.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\keys\treekey.cpp
 # End Source File
 # Begin Source File
@@ -588,6 +596,10 @@ SOURCE=..\..\..\src\utilfuns\utilconf.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\utilfuns\utilstr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\utilfuns\utilweb.cpp
 # End Source File
 # Begin Source File
 
