@@ -38,6 +38,14 @@ void setLocalName(TreeKeyIdx *treeKey) {
 }
 
 
+void gotoPath(TreeKeyIdx *treeKey) {
+	char buf[1023];
+	cout << "Enter Path: ";
+	gets(buf);
+	(*treeKey) = buf;
+}
+
+
 void viewEntryText(RawGenBook *book) {
 	cout << "\n";
 	cout << book->RenderText();
@@ -126,6 +134,7 @@ int main(int argc, char **argv) {
 			switch (input[0]) {
 				case 'n': printLocalName(treeKey); break;
 				case 's': setLocalName(treeKey); break;
+				case 'g': gotoPath(treeKey); break;
 				case 'p':	root.root(); printTree(root, treeKey); break;
 				case 'a':	appendSibbling(treeKey); break;
 				case 'c':	appendChild(treeKey); break;
@@ -147,6 +156,7 @@ int main(int argc, char **argv) {
 					cout << " h - parent\n";
 					cout << " l - first child\n";
 					cout << " r - root\n";
+					cout << " g - goto path\n";
 					cout << " a - append sibbling\n";
 					cout << " c - append child\n";
 					cout << " v - view entry text\n";

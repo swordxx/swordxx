@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.4 2002/03/16 06:29:39 scribe Exp $
+ * $Id: treekeyidx.cpp,v 1.5 2002/03/18 20:52:45 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -454,41 +454,6 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 }
 
 
-TreeKeyIdx::TreeNode::TreeNode() {
-
-	name       = 0;
-	userData   = 0;
-
-	clear();
-}
-
-
-void TreeKeyIdx::TreeNode::clear() {
-	offset     = 0;
-	parent     = -1;
-	next       = -1;
-	firstChild = -1;
-	dsize      = 0;
-
-	if (name)
-		delete [] name;
-	name = 0;
-
-	if (userData)
-		delete [] userData;
-	userData   = 0;
-}
-
-
-TreeKeyIdx::TreeNode::~TreeNode() {
-	if (name)
-		delete [] name;
-	
-	if (userData)
-		delete [] userData;
-}
-
-
 void TreeKeyIdx::setText(const char *ikey) {
 	char *buf = 0;
 	stdstr(&buf, ikey);
@@ -577,3 +542,40 @@ void TreeKeyIdx::increment(int steps) {
 */
 }
 
+
+
+TreeKeyIdx::TreeNode::TreeNode() {
+
+	name       = 0;
+	stdstr(&name, "");
+	userData   = 0;
+
+	clear();
+}
+
+
+void TreeKeyIdx::TreeNode::clear() {
+	offset     = 0;
+	parent     = -1;
+	next       = -1;
+	firstChild = -1;
+	dsize      = 0;
+
+	if (name)
+		delete [] name;
+	name = 0;
+	stdstr(&name, "");
+
+	if (userData)
+		delete [] userData;
+	userData   = 0;
+}
+
+
+TreeKeyIdx::TreeNode::~TreeNode() {
+	if (name)
+		delete [] name;
+	
+	if (userData)
+		delete [] userData;
+}

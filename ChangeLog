@@ -3,6 +3,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 18-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed Joachim's bug report about TreeKeyIdx segfaulting
+		if no data at DataPath
 	Added Joachim's patch to remove throw in SWMgr::Load
 
 16-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
