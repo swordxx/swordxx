@@ -34,24 +34,21 @@ const char *UTF8HebrewPoints::getOptionValue()
 	return (option) ? on:off;
 }
 
-char UTF8HebrewPoints::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UTF8HebrewPoints::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {
-		unsigned char *to, *from;
-
-		to = (unsigned char*)text;	
 		//The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0x consist of Hebrew cantillation marks so block those out.
-		for (from = (unsigned char*)text; *from; from++) {
+		SWBuf orig = text;
+		const unsigned char* from = (unsigned char*)orig.c_str();
+		for (text = ""; *from; from++) {
 			if ((*from == 0xD6) && (*(from + 1) >= 0xB0 && *(from + 1) <= 0xBF) && (*(from + 1) != 0xBE)) {
 				from++;
 			}
 			else {
-     			        *to++ = *from;
+     			        text += *from;
                         }
 		}
-		*to++ = 0;
-		*to = 0;
-     }
+     	}
 	return 0;
 }
 
