@@ -3,7 +3,7 @@
 CPPFLAGS=-DUSBINARY ./configure --prefix=/usr \
 	--disable-shared --without-conf --sysconfdir=/etc \
      --with-vcl \
-     --enable-debug --enable-profile \
+#     --enable-debug --enable-profile \
 	$*
 
 echo ""
