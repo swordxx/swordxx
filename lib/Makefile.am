@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = 1.5
 INCLUDES = -I$(top_srcdir)/include
 
 # Global config directory

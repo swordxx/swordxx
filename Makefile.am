@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = 1.5
 # General defines
 
 version := 1.5.3

@@ -13,8 +13,6 @@
 
 @SET_MAKE@
 
-# General defines
-
 
 
 SHELL = @SHELL@
@@ -96,6 +94,9 @@ with_conf = @with_conf@
 with_icu = @with_icu@
 with_zlib = @with_zlib@
 
+AUTOMAKE_OPTIONS = 1.5
+
+# General defines
 version := 1.5.3
 
 
