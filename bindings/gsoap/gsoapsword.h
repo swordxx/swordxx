@@ -61,4 +61,5 @@ int sword__SWModule_getDescription(xsd__int hmodule, xsd__string &description);
 int sword__Quick_getModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string &modText);
 int sword__Quick_setModuleRawEntry(xsd__string modName, xsd__string modKey, xsd__string modText, xsd__int &noop);
 int sword__Quick_getModuleRenderText(xsd__string modName, xsd__string modKey, xsd__string &modText);
+int sword__Quick_getJScriptAttribArray(xsd__string modName, xsd__string modKey, xsd__string &arrayText);
 #endif
