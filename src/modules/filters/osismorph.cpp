@@ -41,23 +41,21 @@ const char *OSISMorph::getOptionValue()
 	return (option) ? on:off;
 }
 
-char OSISMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want morph tags
-		char *to, *from, token[2048]; // cheese.  Fix.
+		const char *from;
+    char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		int len;
 		bool lastspace = false;
+		SWBuf orig = text;
+		from = orig.c_str();
 
 		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
 
-		for (to = text; *from; from++) {
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
@@ -80,10 +78,10 @@ char OSISMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 					}
 				}
 				// if not a morph tag token, keep token in text
-				*to++ = '<';
+				text += '<';
 				for (char *tok = token; *tok; tok++)
-					*to++ = *tok;
-				*to++ = '>';
+					text += *tok;
+				text += '>';
 				continue;
 			}
 			if (intoken) {
@@ -92,12 +90,10 @@ char OSISMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 					token[tokpos+2] = 0;
 			}
 			else	{
-				*to++ = *from;
+				text += *from;
 				lastspace = (*from == ' ');
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }

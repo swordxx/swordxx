@@ -43,9 +43,10 @@ const char *OSISStrongs::getOptionValue()
 	return (option) ? on:off;
 }
 
-char OSISStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	char *to, *from, token[2048]; // cheese.  Fix.
+	const char *from;
+	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
@@ -55,25 +56,23 @@ char OSISStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	char wordstr[5];
 	char *valto;
 	char *ch;
-	char *textStart = text, *textEnd = 0;
+	unsigned int textStart = 0, textEnd = 0;
 	bool newText = false;
 	std::string tmp;
 
-	len = strlen(text) + 1;	// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;	// -------------------------------
+	SWBuf orig = text;
+	from = orig.c_str();
 
-	for (to = text; *from; from++) {
+	len = strlen(text) + 1;	// shift string to right of buffer
+
+	for (text = ""; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
-			textEnd = to;
+			textEnd = text.size();
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -115,11 +114,11 @@ char OSISStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 				}
 			}
 			// if not a strongs token, keep token in text
-			*to++ = '<';
+			text += '<';
 			for (char *tok = token; *tok; tok++)
-				*to++ = *tok;
-			*to++ = '>';
-			if (newText) {textStart = to; newText = false; }
+				text += *tok;
+			text += '>';
+			if (newText) {textStart = text.size(); newText = false; }
 			continue;
 		}
 		if (intoken) {
@@ -128,12 +127,10 @@ char OSISStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 				token[tokpos+2] = 0;
 		}
 		else	{
-			*to++ = *from;
+			text += *from;
 			lastspace = (*from == ' ');
 		}
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 
