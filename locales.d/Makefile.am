@@ -3,6 +3,7 @@ localeDATA += locales.d/cs.conf
 localeDATA += locales.d/da.conf
 localeDATA += locales.d/de.conf
 localeDATA += locales.d/de_abbrev.conf
+localeDATA += locales.d/en_GB.conf
 localeDATA += locales.d/es.conf
 localeDATA += locales.d/fi.conf
 localeDATA += locales.d/fr.conf
