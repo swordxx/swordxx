@@ -12,6 +12,8 @@
 #endif
 
 #include <ztext.h>
+#include <zld.h>
+#include <zcom.h>
 #include <swmgr.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
@@ -35,6 +37,9 @@ int main(int argc, char **argv)
 	int iType = 4;
 	int compType = 1;
 	SWCompress *compressor = 0;
+	SWModule *inModule     = 0;
+	SWModule *outModule    = 0;
+	
 
 	if ((argc < 3) || (argc > 5)) {
 		errorOutHelp(argv[0]);
@@ -59,65 +64,75 @@ int main(int argc, char **argv)
 		exit(-2);
 	}
 
+	inModule = it->second;
+
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
-	if (zText::createModule(argv[2], iType)) {
-		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-		exit(-3);
-	}
+	
+#define BIBLE 1
+#define LEX 2
+#define COM 3
+
+	int modType = 0;
+	if (!strcmp(inModule->Type(), "Biblical Texts")) modType = BIBLE;
+	if (!strcmp(inModule->Type(), "Lexicons / Dictionaries")) modType = LEX;
+	if (!strcmp(inModule->Type(), "Commentaries")) modType = COM;
 
 	switch (compType) {	// these are deleted by zText
 	case 1: compressor = new LZSSCompress(); break;
 	case 2: compressor = new ZipCompress(); break;
 	}
 
-	zText outModule(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
-	SWModule *inModule = it->second;
-
-	SWKey *key = inModule->CreateKey();
-	VerseKey *vkey = 0;
-	try {
-		vkey = dynamic_cast<VerseKey *>(key);
+	int result = 0;
+	switch (modType) {
+	case BIBLE:
+		result = zText::createModule(argv[2], iType);
+		break;
+	case LEX:
+		result = zLD::createModule(argv[2]);
+		break;
+	case COM:
+		result = zCom::createModule(argv[2], iType);
+		break;
 	}
-	catch (...) {}
 
-	if (!vkey) {
-		fprintf(stderr, "error: %s: %s inModule is not keyed to verses \n", argv[0], argv[1]);
+	if (result) {
+		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
 		exit(-3);
 	}
 
-	vkey->Headings(1);	// turn on mod/testmnt/book/chap headings
-	vkey->Persist(1);
-
-	inModule->SetKey(*vkey);
-	outModule.SetKey(*vkey);
-
-
-	char *lastBuffer = new char [55];
-	strcpy(lastBuffer, "Something that would never be first module entry");
-	VerseKey bufferKey;
-
-	(*vkey) = TOP;
-	while (!vkey->Error()) {
-		cout << "Adding [" << *vkey << "]\n";
-		// pseudo-check for link.  Will get most common links.
-		if (!strcmp(lastBuffer, (const char *)(*inModule))) {
-			outModule << &bufferKey;	// link to last key
-		}
-		else {
-			delete [] lastBuffer;
-			lastBuffer = new char [ strlen (inModule->getRawEntry()) + 1 ];
-			strcpy(lastBuffer, inModule->getRawEntry());
-			bufferKey = *vkey;
-
-			outModule << lastBuffer;	// save new text;
-		}
-		(*vkey)++;
+	switch (modType) {
+	case BIBLE:
+		outModule = new zText(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
+		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
+		break;
+	case LEX:
+		outModule = new zLD(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
+		break;
+	case COM:
+		outModule = new zCom(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
+		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
+		break;
 	}
 
-	// clear up our buffer that readline might have allocated
-	if (lastBuffer)
-		delete [] lastBuffer;
-}
+	string lastBuffer = "Something that would never be first module entry";
+	SWKey bufferKey;
 
+	(*inModule) = TOP;
+	while (!inModule->Error()) {
+		bufferKey = *(SWKey *)(*inModule);
+		cout << "Adding [" << bufferKey << "]\n";
+		// pseudo-check for link.  Will get most common links.
+		if (lastBuffer == (const char *)(*inModule)) {
+			(*outModule) << &bufferKey;	// link to last key
+		}
+		else {
+			lastBuffer = inModule->getRawEntry();
+			outModule->SetKey(bufferKey);
+			(*outModule) << lastBuffer.c_str();	// save new text;
+		}
+		(*inModule)++;
+	}
+	delete outModule;
+}
 
