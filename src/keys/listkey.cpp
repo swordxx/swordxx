@@ -126,10 +126,10 @@ void ListKey::add(const SWKey &ikey) {
 void ListKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case 1:	// GCC won't compile P_TOP
-		SetToElement(0);
+		SetToElement(0, p);
 		break;
 	case 2:	// GCC won't compile P_BOTTOM
-		SetToElement(arraycnt-1);
+		SetToElement(arraycnt-1, p);
 		break;
 	}
 }
@@ -152,7 +152,7 @@ void ListKey::increment(int step) {
 			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
 				SetToElement(arraypos+1);
 			}
-			else *this = (const char *)(*array[arraypos]);
+			else SWKey::setText((const char *)(*array[arraypos]));
 		}
 		else error = KEYERR_OUTOFBOUNDS;
 	}
@@ -176,7 +176,7 @@ void ListKey::decrement(int step) {
 			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
 				SetToElement(arraypos-1, BOTTOM);
 			}
-			else *this = (const char *)(*array[arraypos]);
+			else SWKey::setText((const char *)(*array[arraypos]));
 		}
 		else error = KEYERR_OUTOFBOUNDS;
 	}
@@ -219,9 +219,9 @@ char ListKey::SetToElement(int ielement, SW_POSITION pos) {
 	if (arraycnt) {
 		if (array[arraypos]->isBoundSet())
 			(*array[arraypos]) = pos;
-		*this = (const char *)(*array[arraypos]);
+		SWKey::setText((const char *)(*array[arraypos]));
 	}
-	else *this = "";
+	else SWKey::setText("");
 	
 	return error;
 }
@@ -288,6 +288,16 @@ const char *ListKey::getText() const {
 	int pos = arraypos;
 	SWKey *key = (pos >= arraycnt) ? 0:array[pos];
 	return (key) ? key->getText() : keytext;
+}
+
+
+void ListKey::setText(const char *ikey) {
+	// at least try to set the current element to this text
+	int pos = arraypos;
+	SWKey *key = (pos >= arraycnt) ? 0:array[pos];
+	if (key) key->setText(ikey);
+	
+	SWKey::setText(ikey);
 }
 
 SWORD_NAMESPACE_END

@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.16 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: listkey.h,v 1.17 2002/10/21 22:48:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -114,6 +114,7 @@ public:
 	*/
 	virtual long Index (long index) { SetToElement (index); return Index (); }
 	virtual const char *getText() const;
+	virtual void setText(const char *ikey);
 
 	SWKEY_OPERATORS
 	ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }

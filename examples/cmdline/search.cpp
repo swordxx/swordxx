@@ -1,15 +1,12 @@
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>
+#include <markupfiltmgr.h>
 #include <regex.h> // GNU
 #include <iostream>
 
 #ifndef NO_SWORD_NAMESPACE
-using sword::SWMgr;
-using sword::SWModule;
-using sword::ModMap;
-using sword::VerseKey;
-using sword::ListKey;
+using namespace sword;
 #endif
 
 void percentUpdate(char percent, void *userData) {
@@ -30,7 +27,8 @@ void percentUpdate(char percent, void *userData) {
 
 int main(int argc, char **argv)
 {
-	SWMgr manager;
+	SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
+//	SWMgr manager;
 	SWModule *target;
 	ListKey listkey;
 	ListKey scope;

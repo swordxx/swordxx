@@ -8,24 +8,13 @@ using namespace sword;
 int main(int argc, char **argv) {
 	SWMgr mymgr;
 	ModMap::iterator it;
-	SWModule *module;
+	SWModule *module = mymgr.Modules["RWP"];
+	VerseKey parser;
+	ListKey lk = parser.ParseVerseList("mal4:6-rev", parser, true);
+	lk.Persist(1);
+	module->SetKey(lk);
 
-	for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
-		module = it->second;
-		if (!strcmp(module->Type(), "Biblical Texts")) {
-			std::cout << module->Name() << "\n";
-			for (*module = TOP; (!module->Key().Error()); ((VerseKey *)&module->Key())->Book(((VerseKey *)&module->Key())->Book()+1)) {
-				std::cout << module->KeyText() << "\n";
-			}
-		}
-			
-		if (!strcmp(module->Type(), "Commentaries")) {
-			std::cout << module->Name() << "\n";
-			for (*module = TOP; (!module->Error()); (*module)--) {
-				std::cout << module->KeyText() << "\n";
-			}
-				
-		}
-	}
+	(*module) = TOP;
+	std::cout << module->KeyText() << "\n";
 	return 0;
 }

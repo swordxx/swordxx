@@ -2,6 +2,11 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+21-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Fixed ListKey bugs dealing with TOP and BOTTOM and
+		added at least an attempt to position the
+		current element key on ListKey::setText
+
 20-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Added optimizations for ListKey persistent keys
 		in VerseKey drivers

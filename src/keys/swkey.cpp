@@ -38,7 +38,7 @@ SWKey::SWKey(SWKey const &k)
 	keytext   = 0;
 	rangeText = 0;
 	error     = k.error;
-	stdstr(&keytext, k.keytext);
+	setText(k.getText());
 	init();
 }
 
