@@ -18,7 +18,8 @@ SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp): SWModu
 {
 	delete key;
 	key = CreateKey();
-	entkeytxt = 0;
+	entkeytxt = new char [1];
+	*entkeytxt = 0;
 }
 
 

@@ -111,6 +111,10 @@ void RawStr::getidxbufdat(long ioffset, char **buf)
 		for (size--; size > 0; size--)
 			(*buf)[size] = toupper((*buf)[size]);
 	}
+	else {
+		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
+		**buf = 0;
+	}
 }
 
 
@@ -167,91 +171,98 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 	char *trybuf, *targetbuf, *key, quitflag = 0, retval = 0;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
-	if (*ikey) {
-		headoff = 0;
-		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
+	if (idxfd->getFd() >=0) {
+		if (*ikey) {
+			headoff = 0;
+			tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
 
-		key = new char [ strlen(ikey) + 1 ];
-		strcpy(key, ikey);
+			key = new char [ strlen(ikey) + 1 ];
+			strcpy(key, ikey);
 
-		for (trybuf = targetbuf = key; *trybuf; trybuf++, targetbuf++) {
-/*
-			if (*trybuf == '-') {		// ignore '-' because alphabetized silly in file
-				targetbuf--;
-				continue;
+			for (trybuf = targetbuf = key; *trybuf; trybuf++, targetbuf++) {
+	/*
+				if (*trybuf == '-') {		// ignore '-' because alphabetized silly in file
+					targetbuf--;
+					continue;
+				}
+	*/
+				*targetbuf = toupper(*trybuf);
 			}
-*/
-			*targetbuf = toupper(*trybuf);
-		}
-		*targetbuf = 0;
-		trybuf = 0;
+			*targetbuf = 0;
+			trybuf = 0;
 
-		while (headoff < tailoff) {
-			tryoff = (lastoff == -1) ? headoff + ((((tailoff / 6) - (headoff / 6))) / 2) * 6 : lastoff; 
-			lastoff = -1;
-			getidxbuf(tryoff, &trybuf);
+			while (headoff < tailoff) {
+				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 6) - (headoff / 6))) / 2) * 6 : lastoff; 
+				lastoff = -1;
+				getidxbuf(tryoff, &trybuf);
 
-			if (!*trybuf) {		// In case of extra entry at end of idx
-				tryoff += (tryoff > (maxoff / 2))?-6:6;
-				retval = -1;
-				break;
-			}
+				if (!*trybuf) {		// In case of extra entry at end of idx
+					tryoff += (tryoff > (maxoff / 2))?-6:6;
+					retval = -1;
+					break;
+				}
 					
-			if (!strcmp(key, trybuf))
-				break;
+				if (!strcmp(key, trybuf))
+					break;
 
-			int diff = strcmp(key, trybuf);
-			if (diff < 0)
-				tailoff = (tryoff == headoff) ? headoff : tryoff;
-			else headoff = tryoff;
-			if (tailoff == headoff + 6) {
-				if (quitflag++)
-					headoff = tailoff;
+				int diff = strcmp(key, trybuf);
+				if (diff < 0)
+					tailoff = (tryoff == headoff) ? headoff : tryoff;
+				else headoff = tryoff;
+				if (tailoff == headoff + 6) {
+					if (quitflag++)
+						headoff = tailoff;
+				}
 			}
+			if (headoff >= tailoff)
+				tryoff = headoff;
+			if (trybuf)
+				free(trybuf);
+			delete [] key;
 		}
-		if (headoff >= tailoff)
-			tryoff = headoff;
-		if (trybuf)
-			free(trybuf);
-		delete [] key;
-	}
-	else	tryoff = 0;
+		else	tryoff = 0;
 
-	lseek(idxfd->getFd(), tryoff, SEEK_SET);
-	read(idxfd->getFd(), start, 4);
-	read(idxfd->getFd(), size, 2);
-
-#ifdef BIGENDIAN
-		*start = lelong(*start);
-		*size  = leshort(*size);
-#endif
-
-	while (away) {
-		long laststart = *start;
-		unsigned short lastsize = *size;
-		long lasttry = tryoff;
-		tryoff += (away > 0) ? 6 : -6;
-		
-		if ((lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0) || ((tryoff + (away*6)) < -6) || (tryoff + (away*6) > (maxoff+6))) {
-			retval = -1;
-			*start = laststart;
-			*size = lastsize;
-			tryoff = lasttry;
-			break;
-		}
+		lseek(idxfd->getFd(), tryoff, SEEK_SET);
 		read(idxfd->getFd(), start, 4);
 		read(idxfd->getFd(), size, 2);
 
-#ifdef BIGENDIAN
-		*start = lelong(*start);
-		*size  = leshort(*size);
-#endif
+	#ifdef BIGENDIAN
+			*start = lelong(*start);
+			*size  = leshort(*size);
+	#endif
 
-		if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
-			away += (away < 0) ? 1 : -1;
-	}
+		while (away) {
+			long laststart = *start;
+			unsigned short lastsize = *size;
+			long lasttry = tryoff;
+			tryoff += (away > 0) ? 6 : -6;
+		
+			if ((lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0) || ((tryoff + (away*6)) < -6) || (tryoff + (away*6) > (maxoff+6))) {
+				retval = -1;
+				*start = laststart;
+				*size = lastsize;
+				tryoff = lasttry;
+				break;
+			}
+			read(idxfd->getFd(), start, 4);
+			read(idxfd->getFd(), size, 2);
+
+	#ifdef BIGENDIAN
+			*start = lelong(*start);
+			*size  = leshort(*size);
+	#endif
+
+			if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
+				away += (away < 0) ? 1 : -1;
+		}
 	
-	lastoff = tryoff;
+		lastoff = tryoff;
+	}
+	else {
+		*start = 0;
+		*size  = 0;
+		retval = -1;
+	}
 	return retval;
 }
 
@@ -304,7 +315,8 @@ void RawStr::preptext(char *buf)
 	}
 	*to = 0;
 
-	for (to--; to > buf; to--) {			// remove training excess
+	while (to > (buf+1)) {			// remove trailing excess
+		to--;
 		if ((*to == 10) || (*to == ' '))
 			*to = 0;
 		else break;

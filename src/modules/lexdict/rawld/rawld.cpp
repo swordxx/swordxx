@@ -87,14 +87,15 @@ char RawLD::getEntry(long away)
 	strcpy(buf, *key);
 
 	strongsPad(buf);
-	
-	if (entrybuf)
-		delete [] entrybuf;
-	if (!(retval = findoffset(buf, &start, &size, away))) {
-		entrybuf = new char [ size * 2 ];	// give filters x2 buffer space
-		idxbuf   = new char [ size + 1 ];
 
-		gettext(start, size + 1, idxbuf, entrybuf);
+	*entrybuf = 0;
+	if (!(retval = findoffset(buf, &start, &size, away))) {
+		if (entrybuf)
+			delete [] entrybuf;
+		entrybuf = new char [ ++size * 2 ];
+		idxbuf   = new char [ size ];
+
+		gettext(start, size, idxbuf, entrybuf);
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
 
@@ -105,6 +106,7 @@ char RawLD::getEntry(long away)
 		entrybuf = new char [ 5 ];
 		*entrybuf = 0;
 	}
+		
 	delete [] buf;
 	return retval;
 }
@@ -119,9 +121,10 @@ char RawLD::getEntry(long away)
 
 RawLD::operator char*()
 {
-	getEntry();
-	preptext(entrybuf);
-	RenderText(entrybuf, strlen(entrybuf) * 2);
+	if (!getEntry()) {
+		preptext(entrybuf);
+		RenderText(entrybuf, strlen(entrybuf) * 2);
+	}
 
 	return entrybuf;
 }

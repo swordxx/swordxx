@@ -73,9 +73,9 @@ RawText::operator char*()
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ size * 3 ];
+	versebuf = new char [ ++size * 3 ];
 
-	gettext(key->Testament(), start, size + 1, versebuf);
+	gettext(key->Testament(), start, size, versebuf);
 
 	for (it = rawfilters.begin(); it != rawfilters.end(); it++) {
 		(*it)->ProcessText(versebuf, size + 1, key);

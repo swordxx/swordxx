@@ -5,7 +5,18 @@
 #include <iostream.h>
 #include "swlog.h"
 //---------------------------------------------------------------------------
+
 SWLog *SWLog::systemlog = new SWLog();
+
+class __staticsystemlog {
+public:
+	__staticsystemlog() {
+		SWLog::systemlog = new SWLog();
+	}
+	~__staticsystemlog() {
+		delete SWLog::systemlog;
+	}
+} _staticsystemlog;
 
 void SWLog::LogWarning(char *fmt, ...)
 {

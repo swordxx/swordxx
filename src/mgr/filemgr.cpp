@@ -1,7 +1,8 @@
 /******************************************************************************
- *  filemgr.cpp	- implementation of class FileMgr used for pooling file handles
+ *  filemgr.cpp	- implementation of class FileMgr used for pooling file
+ *  					handles
  *
- * $Id: filemgr.cpp,v 1.2 1999/05/04 22:50:30 scribe Exp $
+ * $Id: filemgr.cpp,v 1.3 2000/04/05 05:43:13 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -128,7 +129,7 @@ int FileMgr::sysOpen(FileDesc *file) {
 				files = file;
 			}
 			file->fd = ::open(file->path, file->mode, file->perms);
-			if (file->fd > 0)
+			if (file->fd >= 0)
 				lseek(file->fd, file->offset, SEEK_SET);
 			return file->fd;
 		}

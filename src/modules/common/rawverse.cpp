@@ -99,21 +99,26 @@ RawVerse::~RawVerse()
  *	size	- address to store the size of the entry
  */
 
-void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *size)
-{
+void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *size) {
 	idxoff *= 6;
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
-
-	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-	read(idxfp[testmt-1]->getFd(), start, 4);
-	long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
+		
+	if (idxfp[testmt-1]->getFd() >= 0) {
+		lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
+		read(idxfp[testmt-1]->getFd(), start, 4);
+		long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
 #ifdef BIGENDIAN
 		*start = lelong(*start);
 		*size  = leshort(*size);
 #endif
-	if (len < 2) {
-		*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
+		if (len < 2) {
+			*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
+		}
+	}
+	else {
+		*start = 0;
+		*size = 0;
 	}
 }
 
@@ -166,7 +171,8 @@ void RawVerse::preptext(char *buf)
 	}
 	*to = 0;
 
-	for (to--; to > buf; to--) {			// remove training excess
+	while (to > (buf+1)) {			// remove trailing excess
+		to--;
 		if ((*to == 10) || (*to == ' '))
 			*to = 0;
 		else break;
@@ -184,11 +190,12 @@ void RawVerse::preptext(char *buf)
  *
  */
 
-void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf)
-{
+void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf) {
 	memset(buf, 0, size);
-	lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
-	read(textfp[testmt-1]->getFd(), buf, (int)size - 1);
+	if (textfp[testmt-1]->getFd() >= 0) {
+		lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
+		read(textfp[testmt-1]->getFd(), buf, (int)size - 1);
+	}
 }
 
 

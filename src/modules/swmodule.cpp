@@ -26,7 +26,8 @@ SWDisplay SWModule::rawdisp;
 SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype)
 {
 	key      = CreateKey();
-	entrybuf = 0;
+	entrybuf = new char [1];
+	*entrybuf = 0;
 	modname  = 0;
 	error    = 0;
 	moddesc  = 0;
