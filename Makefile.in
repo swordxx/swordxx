@@ -90,18 +90,12 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_system = @target_system@
 target_vendor = @target_vendor@
+with_conf = @with_conf@
 with_icu = @with_icu@
 with_zlib = @with_zlib@
 
 version := 1.5.3
 
-
-# ownership (used by 'make install')
-# use group := wheel for MAC OS X instead of root
-user := root
-group := root
-
-#group     := wheel
 
 # this WILL NOT WORK for you. only inhouse patched version of
 # sapphire will omit enciphering code when set to yes, so leave
@@ -154,7 +148,8 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . tests utilities
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
-sysconf_DATA = samples/recommended/sword.conf
+
+@INSTCONF_TRUE@sysconf_DATA = samples/recommended/sword.conf
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp

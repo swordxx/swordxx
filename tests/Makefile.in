@@ -86,6 +86,7 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_system = @target_system@
 target_vendor = @target_vendor@
+with_conf = @with_conf@
 with_icu = @with_icu@
 with_zlib = @with_zlib@
 

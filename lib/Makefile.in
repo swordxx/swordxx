@@ -34,6 +34,7 @@
 
 
 
+
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -107,6 +108,7 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_system = @target_system@
 target_vendor = @target_vendor@
+with_conf = @with_conf@
 with_icu = @with_icu@
 with_zlib = @with_zlib@
 
@@ -121,7 +123,7 @@ lib_LTLIBRARIES = libsword.la
 #ifeq (${need_local_regex}, yes)
 #lib_libsword_a_SOURCES += $(utilfunsdir)/regex.c
 #endif
-libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp
+libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
 libsword_la_LIBADD = 
 libsword_la_LDFLAGS = -version-info 1
 
@@ -173,6 +175,8 @@ rawld4dir = $(top_srcdir)/src/modules/lexdict/rawld4
 
 zlddir = $(top_srcdir)/src/modules/lexdict/zld
 
+bindingsdir = $(top_srcdir)/bindings
+
 swincludedir = $(top_srcdir)/include
 
 pkginclude_HEADERS = $(swincludedir)/Greek2Greek.h $(swincludedir)/GreekChars.h $(swincludedir)/canon.h $(swincludedir)/cipherfil.h $(swincludedir)/defs.h $(swincludedir)/echomod.h $(swincludedir)/encfiltmgr.h $(swincludedir)/entriesblk.h $(swincludedir)/femain.h $(swincludedir)/filemgr.h $(swincludedir)/gbffootnotes.h $(swincludedir)/gbfheadings.h $(swincludedir)/gbfhtml.h $(swincludedir)/gbfhtmlhref.h $(swincludedir)/gbfmorph.h $(swincludedir)/gbfplain.h $(swincludedir)/gbfrtf.h $(swincludedir)/gbfstrongs.h $(swincludedir)/gbfthml.h $(swincludedir)/hebrewmcim.h $(swincludedir)/hrefcom.h $(swincludedir)/latin1utf16.h $(swincludedir)/latin1utf8.h $(swincludedir)/listkey.h $(swincludedir)/localemgr.h $(swincludedir)/lzsscomprs.h $(swincludedir)/markupfiltmgr.h $(swincludedir)/nullim.h $(swincludedir)/plainfootnotes.h $(swincludedir)/plainhtml.h $(swincludedir)/rawcom.h $(swincludedir)/rawfiles.h $(swincludedir)/rawgbf.h $(swincludedir)/rawld.h $(swincludedir)/rawld4.h $(swincludedir)/rawstr.h $(swincludedir)/rawstr4.h $(swincludedir)/rawtext.h $(swincludedir)/rawverse.h $(swincludedir)/regex.h $(swincludedir)/roman.h $(swincludedir)/rtfhtml.h $(swincludedir)/rwphtml.h $(swincludedir)/rwprtf.h $(swincludedir)/sapphire.h $(swincludedir)/scsuutf8.h $(swincludedir)/strkey.h $(swincludedir)/swbasicfilter.h $(swincludedir)/swbyteswap.h $(swincludedir)/swcipher.h $(swincludedir)/swcom.h $(swincludedir)/swcomprs.h $(swincludedir)/swconfig.h $(swincludedir)/swdisp.h $(swincludedir)/swdisprtf.h $(swincludedir)/swdisprtfchap.h $(swincludedir)/swfilter.h $(swincludedir)/swfiltermgr.h $(swincludedir)/swinputmeth.h $(swincludedir)/swkey.h $(swincludedir)/swld.h $(swincludedir)/swlocale.h $(swincludedir)/swlog.h $(swincludedir)/swmacs.h $(swincludedir)/swmgr.h $(swincludedir)/swmodule.h $(swincludedir)/swobject.h $(swincludedir)/swtext.h $(swincludedir)/swunicod.h $(swincludedir)/swwinlog.h $(swincludedir)/sysdata.h $(swincludedir)/tbdisp.h $(swincludedir)/thmlfootnotes.h $(swincludedir)/thmlgbf.h $(swincludedir)/thmlheadings.h $(swincludedir)/thmlhtml.h $(swincludedir)/thmlhtmlhref.h $(swincludedir)/thmllemma.h $(swincludedir)/thmlmorph.h $(swincludedir)/thmlolb.h $(swincludedir)/thmlplain.h $(swincludedir)/thmlrtf.h $(swincludedir)/thmlscripref.h $(swincludedir)/thmlstrongs.h $(swincludedir)/unicodertf.h $(swincludedir)/unixstr.h $(swincludedir)/untgz.h $(swincludedir)/utf16utf8.h $(swincludedir)/utf8arshaping.h $(swincludedir)/utf8bidireorder.h $(swincludedir)/utf8cantillation.h $(swincludedir)/utf8greekaccents.h $(swincludedir)/utf8hebrewpoints.h $(swincludedir)/utf8html.h $(swincludedir)/utf8latin1.h $(swincludedir)/utf8nfc.h $(swincludedir)/utf8nfkd.h $(swincludedir)/utf8transliterator.h $(swincludedir)/utf8utf16.h $(swincludedir)/utilconf.h $(swincludedir)/utilfuns.h $(swincludedir)/utilstr.h $(swincludedir)/versekey.h $(swincludedir)/zcom.h $(swincludedir)/zconf.h $(swincludedir)/zipcomprs.h $(swincludedir)/zld.h $(swincludedir)/zlib.h $(swincludedir)/ztext.h $(swincludedir)/zverse.h
@@ -212,7 +216,7 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@ZLIB_TRUE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
 @ICU_FALSE@@ZLIB_TRUE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
 @ICU_FALSE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_FALSE@@ZLIB_TRUE@	zld.lo
+@ICU_FALSE@@ZLIB_TRUE@	zld.lo flatapi.lo
 @ICU_FALSE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
 @ICU_FALSE@@ZLIB_FALSE@	versekey.lo strkey.lo Greek2Greek.lo \
 @ICU_FALSE@@ZLIB_FALSE@	utilstr.lo unixstr.lo swunicod.lo \
@@ -243,7 +247,7 @@ libsword_la_DEPENDENCIES =
 @ICU_FALSE@@ZLIB_FALSE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
 @ICU_FALSE@@ZLIB_FALSE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
 @ICU_FALSE@@ZLIB_FALSE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_FALSE@@ZLIB_FALSE@	zld.lo
+@ICU_FALSE@@ZLIB_FALSE@	zld.lo flatapi.lo
 @ICU_TRUE@@ZLIB_TRUE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
 @ICU_TRUE@@ZLIB_TRUE@	versekey.lo strkey.lo Greek2Greek.lo \
 @ICU_TRUE@@ZLIB_TRUE@	utilstr.lo unixstr.lo swunicod.lo \
@@ -275,7 +279,7 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@ZLIB_TRUE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
 @ICU_TRUE@@ZLIB_TRUE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
 @ICU_TRUE@@ZLIB_TRUE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_TRUE@@ZLIB_TRUE@	zld.lo
+@ICU_TRUE@@ZLIB_TRUE@	zld.lo flatapi.lo
 @ICU_TRUE@@ZLIB_FALSE@am_libsword_la_OBJECTS = swkey.lo listkey.lo \
 @ICU_TRUE@@ZLIB_FALSE@	versekey.lo strkey.lo Greek2Greek.lo \
 @ICU_TRUE@@ZLIB_FALSE@	utilstr.lo unixstr.lo swunicod.lo \
@@ -307,7 +311,7 @@ libsword_la_DEPENDENCIES =
 @ICU_TRUE@@ZLIB_FALSE@	swtext.lo rawtext.lo ztext.lo rawgbf.lo \
 @ICU_TRUE@@ZLIB_FALSE@	swcom.lo rawcom.lo rawfiles.lo zcom.lo \
 @ICU_TRUE@@ZLIB_FALSE@	hrefcom.lo swld.lo rawld.lo rawld4.lo \
-@ICU_TRUE@@ZLIB_FALSE@	zld.lo
+@ICU_TRUE@@ZLIB_FALSE@	zld.lo flatapi.lo
 libsword_la_OBJECTS = $(am_libsword_la_OBJECTS)
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
@@ -317,7 +321,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@DEP_FILES = $(DEPDIR)/Greek2Greek.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/cipherfil.Plo $(DEPDIR)/encfiltmgr.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/entriesblk.Plo $(DEPDIR)/filemgr.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/gbffootnotes.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/flatapi.Plo $(DEPDIR)/gbffootnotes.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/gbfheadings.Plo $(DEPDIR)/gbfhtml.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/gbfhtmlhref.Plo $(DEPDIR)/gbfmorph.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/gbfplain.Plo $(DEPDIR)/gbfrtf.Plo \
@@ -400,7 +404,7 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -510,6 +514,7 @@ swld.lo: $(lexdictdir)/swld.cpp
 rawld.lo: $(rawlddir)/rawld.cpp
 rawld4.lo: $(rawld4dir)/rawld4.cpp
 zld.lo: $(zlddir)/zld.cpp
+flatapi.lo: $(bindingsdir)/flatapi.cpp
 utf8transliterator.lo: $(filtersdir)/utf8transliterator.cpp
 utf8nfc.lo: $(filtersdir)/utf8nfc.cpp
 utf8nfkd.lo: $(filtersdir)/utf8nfkd.cpp
@@ -529,6 +534,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/encfiltmgr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/entriesblk.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/filemgr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/flatapi.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gbffootnotes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gbfheadings.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gbfhtml.Plo@am__quote@
@@ -2165,6 +2171,24 @@ zld.lo: $(zlddir)/zld.cpp
 @AMDEP_TRUE@	depfile='$(DEPDIR)/zld.Plo' tmpdepfile='$(DEPDIR)/zld.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o zld.lo `test -f $(zlddir)/zld.cpp || echo '$(srcdir)/'`$(zlddir)/zld.cpp
+
+flatapi.o: $(bindingsdir)/flatapi.cpp
+@AMDEP_TRUE@	source='$(bindingsdir)/flatapi.cpp' object='flatapi.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/flatapi.Po' tmpdepfile='$(DEPDIR)/flatapi.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o flatapi.o `test -f $(bindingsdir)/flatapi.cpp || echo '$(srcdir)/'`$(bindingsdir)/flatapi.cpp
+
+flatapi.obj: $(bindingsdir)/flatapi.cpp
+@AMDEP_TRUE@	source='$(bindingsdir)/flatapi.cpp' object='flatapi.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/flatapi.Po' tmpdepfile='$(DEPDIR)/flatapi.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o flatapi.obj `cygpath -w $(bindingsdir)/flatapi.cpp`
+
+flatapi.lo: $(bindingsdir)/flatapi.cpp
+@AMDEP_TRUE@	source='$(bindingsdir)/flatapi.cpp' object='flatapi.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/flatapi.Plo' tmpdepfile='$(DEPDIR)/flatapi.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o flatapi.lo `test -f $(bindingsdir)/flatapi.cpp || echo '$(srcdir)/'`$(bindingsdir)/flatapi.cpp
 
 utf8transliterator.o: $(filtersdir)/utf8transliterator.cpp
 @AMDEP_TRUE@	source='$(filtersdir)/utf8transliterator.cpp' object='utf8transliterator.o' libtool=no @AMDEPBACKSLASH@

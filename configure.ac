@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.3 $)
+AC_REVISION($Revision: 1.4 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.3)
@@ -35,6 +35,7 @@ AC_CHECK_LIB(stdc++, cerr)
 # ---------------------------------------------------------------------
 AC_ARG_WITH(zlib,[  --with-zlib             allow zlib compressed modules [default=yes]],,with_zlib=yes)
 AC_ARG_WITH(icu,[  --with-icu              use ICU for unicode [default=no]],,with_icu=no)
+AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=yes]],,with_conf=yes)
 
 
 # ---------------------------------------------------------------------
@@ -111,6 +112,7 @@ esac
 # ---------------------------------------------------------------------
 AC_SUBST(with_zlib)
 AC_SUBST(with_icu)
+AC_SUBST(with_conf)
 AC_SUBST(CC)
 AC_SUBST(enable_vcl)
 AC_SUBST(enable_debug)
@@ -130,6 +132,7 @@ AC_SUBST(target_system)
 AM_CONDITIONAL(MINGW, test x$target_os = xmingw32*)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
+AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
 #AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)
 

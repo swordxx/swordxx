@@ -3,13 +3,6 @@
 version := 1.5.3
 
 
-# ownership (used by 'make install')
-# use group := wheel for MAC OS X instead of root
-
-user      := root
-group     := root
-#group     := wheel
-
 # this WILL NOT WORK for you. only inhouse patched version of
 # sapphire will omit enciphering code when set to yes, so leave
 # as no, unless you really know what you're doing
@@ -69,7 +62,10 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . tests utilities
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
+
+if INSTCONF
 sysconf_DATA = samples/recommended/sword.conf
+endif
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
