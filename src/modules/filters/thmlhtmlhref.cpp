@@ -198,7 +198,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			}
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
-				buf += "<a href=\"passage=");
+				buf += "<a href=\"passage=";
 				//char *strbuf = (char *)userData["lastTextNode"].c_str();
 				buf += userData["lastTextNode"].c_str();
 				buf += '\"';

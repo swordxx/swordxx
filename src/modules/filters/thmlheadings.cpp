@@ -41,23 +41,19 @@ const char *ThMLHeadings::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLHeadings::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want headings
-		char *to, *from, token[2048]; // cheese.  Fix.
+		const char *from;
+		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		int len;
 		bool hide = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
+		SWBuf orig = text;
+		from = orig.c_str();
 
-		for (to = text; *from; from++) {
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
@@ -77,16 +73,15 @@ char ThMLHeadings::ProcessText(char *text, int maxlen, const SWKey *key, const S
 						continue;
 				}
 				else if (hide && !strnicmp(token, "/div", 4)) {
-               				        hide = false;
-                                                continue;
+								   hide = false;
+									   continue;
 				}
 
 				// if not a heading token, keep token in text
 				if (!hide) {
-					*to++ = '<';
-					for (char *tok = token; *tok; tok++)
-						*to++ = *tok;
-					*to++ = '>';
+					text += '<';
+					text += token;
+					text += '>';
 				}
 				continue;
 			}
@@ -97,12 +92,10 @@ char ThMLHeadings::ProcessText(char *text, int maxlen, const SWKey *key, const S
 			}
 			else	{
 				if (!hide) {
-					*to++ = *from;
+					text += *from;
 				}
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }

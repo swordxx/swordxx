@@ -61,8 +61,8 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
   return text;
 }
 
-char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule *module)
-{
+char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+/*
   unsigned char *to, *from;
   unsigned long buflen = len * FILTERPAD;
   char active = 0, mode = 0;
@@ -107,7 +107,7 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule
   };
 
   if (!len)
-        return 0;
+	   return 0;
 
   memmove(&text[buflen - len], text, len);
   from = (unsigned char*)&text[buflen - len];
@@ -118,95 +118,95 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule
   for (int i = 0; i < len;) {
 
 
-      if (i >= len) break;
-      c = from[i++];
+	 if (i >= len) break;
+	 c = from[i++];
 
-      if (c >= 0x80)
+	 if (c >= 0x80)
 	{
 	  to = UTF8Output (c - 0x80 + slide[active], to);
 	}
-      else if (c >= 0x20 && c <= 0x7F)
+	 else if (c >= 0x20 && c <= 0x7F)
 	{
 	  to = UTF8Output (c, to);
 	}
-      else if (c == 0x0 || c == 0x9 || c == 0xA || c == 0xC || c == 0xD)
+	 else if (c == 0x0 || c == 0x9 || c == 0xA || c == 0xC || c == 0xD)
 	{
 	  to = UTF8Output (c, to);
 	}
-      else if (c >= 0x1 && c <= 0x8) /* SQn */
+	 else if (c >= 0x1 && c <= 0x8) // SQn
 	{
-          if (i >= len) break;
-	  /* single quote */ d = from[i++];
+		if (i >= len) break;
+	  d = from[i++]; // single quote
 
 	  to = UTF8Output (d < 0x80 ? d + start [c - 0x1] :
 		  d - 0x80 + slide [c - 0x1], to);
 	}
-      else if (c >= 0x10 && c <= 0x17) /* SCn */
+	 else if (c >= 0x10 && c <= 0x17) // SCn
 	{
-	  /* change window */ active = c - 0x10;
+	  active = c - 0x10; // change window
 	}
-      else if (c >= 0x18 && c <= 0x1F) /* SDn */
+	 else if (c >= 0x18 && c <= 0x1F) // SDn
 	{
-	  /* define window */ active = c - 0x18;
-          if (i >= len) break;
+	  active = c - 0x18;  // define window
+		if (i >= len) break;
 	  slide [active] = win [from[i++]];
 	}
-      else if (c == 0xB) /* SDX */
+	 else if (c == 0xB) // SDX
 	{
-          if (i >= len) break;
-          c = from[i++];
+		if (i >= len) break;
+		c = from[i++];
 
-          if (i >= len) break;
-          d = from[i++];
+		if (i >= len) break;
+		d = from[i++];
 
 	  slide [active = c>>5] = 0x10000 + (((c & 0x1F) << 8 | d) << 7);
 	}
-      else if (c == 0xE) /* SQU */
+	 else if (c == 0xE) // SQU
 	{
-          if (i >= len) break;
-	  /* SQU */ c = from[i++];
+		if (i >= len) break;
+	  c = from[i++]; // SQU
 
-          if (i >= len) break;
-          to = UTF8Output (c << 8 | from[i++], to);
-      	}
-      else if (c == 0xF) /* SCU */
+		if (i >= len) break;
+		to = UTF8Output (c << 8 | from[i++], to);
+		}
+	 else if (c == 0xF) // SCU
 	{
-	  /* change to Unicode mode */ mode = 1;
+	  mode = 1; // change to Unicode mode
 
 	  while (mode)
 	    {
-              if (i >= len) break;
-	      c = from[i++];
+		    if (i >= len) break;
+		 c = from[i++];
 
-	      if (c <= 0xDF || c >= 0xF3)
+		 if (c <= 0xDF || c >= 0xF3)
 		{
-                  if (i >= len) break;
+			   if (i >= len) break;
 		  to = UTF8Output (c << 8 | from[i++], to);
 		}
-	      else if (c == 0xF0) /* UQU */
+		 else if (c == 0xF0) // UQU
 		{
-                  if (i >= len) break;
+			   if (i >= len) break;
 		  c = from[i++];
 
-                  if (i >= len) break;
-                  to = UTF8Output (c << 8 | from[i++], to);
+			   if (i >= len) break;
+			   to = UTF8Output (c << 8 | from[i++], to);
 		}
-	      else if (c >= 0xE0 && c <= 0xE7) /* UCn */
+		 else if (c >= 0xE0 && c <= 0xE7) // UCn
 		{
 		  active = c - 0xE0; mode = 0;
 		}
-	      else if (c >= 0xE8 && c <= 0xEF) /* UDn */
+		 else if (c >= 0xE8 && c <= 0xEF) // UDn
 		{
-                  if (i >= len) break;
+			   if (i >= len) break;
 		  slide [active=c-0xE8] = win [from[i++]]; mode = 0;
 		}
-	      else if (c == 0xF1) /* UDX */
+		 else if (c == 0xF1) // UDX
 		{
-                  if (i >= len) break;
+			   if (i >= len) break;
 		  c = from[i++];
 
-                  if (i >= len) break;
-                  d = from[i++];
+			   if (i >= len) break;
+			   d = from[i++];
 
 		  slide [active = c>>5] =
 		    0x10000 + (((c & 0x1F) << 8 | d) << 7); mode = 0;
@@ -219,6 +219,7 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule
 
   *to++ = 0;
   *to = 0;
+*/
   return 0;
 }
 

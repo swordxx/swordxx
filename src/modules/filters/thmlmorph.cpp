@@ -67,7 +67,7 @@ char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				continue;
 			}
 			if (intoken) {
-				token += *from
+				token += *from;
 			}
 			else	{
 				text += *from;
