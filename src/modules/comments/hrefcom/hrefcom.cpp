@@ -18,6 +18,7 @@
 #include <utilfuns.h>
 #include <rawverse.h>
 #include <hrefcom.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -60,14 +61,10 @@ SWBuf &HREFCom::getRawEntryBuf() {
 	unsigned short size;
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
-	try {
-#endif
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {}
-#endif
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 

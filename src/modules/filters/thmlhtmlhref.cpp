@@ -92,10 +92,10 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 					VerseKey *vkey;
 					// see if we have a VerseKey * or descendant
-					try {
+					SWTRY {
 						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 					}
-					catch ( ... ) {	}
+					SWCATCH ( ... ) {	}
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
@@ -137,10 +137,10 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
 					VerseKey *vkey;
 					// see if we have a VerseKey * or descendant
-					try {
+					SWTRY {
 						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 					}
-					catch ( ... ) {}
+					SWCATCH ( ... ) {}
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());

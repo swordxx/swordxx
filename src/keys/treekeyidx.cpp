@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.14 2003/06/27 01:41:07 scribe Exp $
+ * $Id: treekeyidx.cpp,v 1.15 2004/01/16 03:42:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -255,13 +255,13 @@ signed char TreeKeyIdx::create(const char *ipath) {
 		path[strlen(path)-1] = 0;
 
 	sprintf(buf, "%s.dat", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%s.idx", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 	FileMgr::systemFileMgr.close(fd2);

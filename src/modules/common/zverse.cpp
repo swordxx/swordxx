@@ -419,36 +419,36 @@ char zVerse::createModule(const char *ipath, int blockBound)
 		path[strlen(path)-1] = 0;
 
 	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockBound]);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockBound]);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockBound]);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockBound]);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockBound]);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 
 	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockBound]);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 

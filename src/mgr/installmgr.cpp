@@ -250,7 +250,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
 				modFile += "/";
 				modFile += fileBegin->second.c_str();
 				//remove file
-				remove(modFile.c_str());
+				FileMgr::removeFile(modFile.c_str());
 				fileBegin++;
 			}
 		}
@@ -268,7 +268,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
 						modFile = modDir;
 						modFile += "/";
 						modFile += ent->d_name;
-						remove(modFile.c_str());
+						FileMgr::removeFile(modFile.c_str());
 					}
 				}
 				closedir(dir);
@@ -283,7 +283,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
 						SWConfig *config = new SWConfig(modFile.c_str());
 						if (config->Sections.find(modName) != config->Sections.end()) {
 							delete config;
-							remove(modFile.c_str());
+							FileMgr::removeFile(modFile.c_str());
 						}
 						else	delete config;
 					}
@@ -367,14 +367,14 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 					buffer2 += (dirList[i].name);
 					preDownloadStatus(totalBytes, completedBytes, buffer2.c_str());
 					FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
-					try {
+					SWTRY {
 						SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src + "/" + dirList[i].name; //dont forget the final slash
 						if (FTPURLGetFile(session, buffer.c_str(), url.c_str())) {
 							return -2;
 						}
 						completedBytes += dirList[i].size;
 					}
-					catch (...) {}
+					SWCATCH (...) {}
 					if (terminate)
 						break;
 				}
@@ -383,20 +383,20 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 	}
 	else {
 //		Synchronize((TThreadMethod)&PreDownload2);
-		try {
+		SWTRY {
 			SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src; //dont forget the final slash
 			if (FTPURLGetFile(session, dest, url.c_str())) {
 				return -1;
 			}
 		}
-		catch(...) {
+		SWCATCH (...) {
 			terminate = true;
 		}
 	}
-	try {
+	SWTRY {
 		FTPCloseSession(session);
 	}
-	catch(...){}
+	SWCATCH (...) {}
 	return 0;
 }
 
@@ -461,7 +461,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 				fileBegin = module->second.lower_bound("File");
 				while (fileBegin != fileEnd) {	// delete each tmp ftp file
 					buffer = sourceDir + "/" + fileBegin->second.c_str();
-					remove(buffer.c_str());
+					FileMgr::removeFile(buffer.c_str());
 					fileBegin++;
 				}
 			}
@@ -521,7 +521,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 								modFile = sourceOrig + "/" + modDir;
 								modFile += "/";
 								modFile += ent->d_name;
-								remove(modFile.c_str());
+								FileMgr::removeFile(modFile.c_str());
 							}
 						}
 						closedir(dir);
@@ -604,7 +604,7 @@ void InstallMgr::refreshRemoteSource(InstallSource *is) {
 				modFile = target;
 				modFile += "/";
 				modFile += ent->d_name;
-				remove(modFile.c_str());
+				FileMgr::removeFile(modFile.c_str());
 			}
 		}
 		closedir(dir);

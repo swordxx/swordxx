@@ -33,10 +33,10 @@ SWCom::~SWCom()
 
 long SWCom::Index() const {
 	VerseKey *key = 0;
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -50,10 +50,10 @@ long SWCom::Index() const {
 
 long SWCom::Index(long iindex) {
 	VerseKey *key = 0;
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 

@@ -687,25 +687,25 @@ signed char zStr::createModule(const char *ipath) {
 		path[strlen(path)-1] = 0;
 
 	sprintf(buf, "%s.dat", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%s.idx", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 	FileMgr::systemFileMgr.close(fd2);
 
 	sprintf(buf, "%s.zdt", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 	FileMgr::systemFileMgr.close(fd2);
 
 	sprintf(buf, "%s.zdx", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 	FileMgr::systemFileMgr.close(fd2);

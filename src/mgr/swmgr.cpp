@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.96 2003/12/05 21:44:33 scribe Exp $
+ * $Id: swmgr.cpp,v 1.97 2004/01/16 03:42:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -1069,7 +1069,7 @@ void SWMgr::InstallScan(const char *dirname)
                               }
                          }
                          AddModToConfig(conffd, newmodfile.c_str());
-                         unlink(newmodfile.c_str());
+                         FileMgr::removeFile(newmodfile.c_str());
                     }
                }
                if (conffd > 0)

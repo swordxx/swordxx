@@ -82,10 +82,10 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 	__u32 size = 0;
 
 	TreeKeyIdx *key = 0;
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(TreeKeyIdx, (this->key));
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 
 	if (!key) {
 		key = (TreeKeyIdx *)CreateKey();
@@ -148,10 +148,10 @@ void RawGenBook::linkEntry(const SWKey *inkey) {
 	TreeKeyIdx *srckey = 0;
 	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
 	// see if we have a VerseKey * or decendant
-	try {
+	SWTRY {
 		srckey = SWDYNAMIC_CAST(TreeKeyIdx, inkey);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey) {
 		srckey = (TreeKeyIdx *)CreateKey();
@@ -190,7 +190,7 @@ char RawGenBook::createModule(const char *ipath) {
 		path[strlen(path)-1] = 0;
 
 	sprintf(buf, "%s.bdt", path);
-	unlink(buf);
+	FileMgr::removeFile(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);

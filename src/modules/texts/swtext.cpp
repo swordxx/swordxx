@@ -43,10 +43,10 @@ SWKey *SWText::CreateKey()
 
 long SWText::Index() const {
 	VerseKey *key = 0;
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -60,10 +60,10 @@ long SWText::Index() const {
 
 long SWText::Index(long iindex) {
 	VerseKey *key = 0;
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 

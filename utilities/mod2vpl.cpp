@@ -50,10 +50,10 @@ int main(int argc, char **argv) {
 
 	SWKey *key = (*mod);
 	VerseKey *vkey = 0;
-	try {
+	SWTRY {
 		vkey = dynamic_cast<VerseKey *>(key);
 	}
-	catch (...) {}
+	SWCATCH (...) {}
 
 	if (!vkey) {
 		fprintf(stderr, "error: %s: %s module is not keyed to verses \n", argv[0], argv[1]);

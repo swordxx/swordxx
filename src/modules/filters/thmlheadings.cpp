@@ -9,8 +9,9 @@
 #include <thmlheadings.h>
 #include <utilxml.h>
 
+#ifndef	_WIN32_WCE
 #include <iostream>
-
+#endif
 #ifndef __GNUC__
 #else
 #include <unixstr.h>

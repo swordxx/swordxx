@@ -15,6 +15,14 @@
 
 SWORD_NAMESPACE_START
 
+#ifdef _WIN32_WCE
+#define SWTRY
+#define SWCATCH(x) if (0)
+#else
+#define SWTRY try
+#define SWCATCH(x) catch (x)
+#endif
+
 // _declspec works in BC++ 5 and later, as well as VC++
 #if defined(_MSC_VER)
 

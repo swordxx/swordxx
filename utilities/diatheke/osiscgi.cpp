@@ -158,10 +158,10 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey;
 						// see if we have a VerseKey * or descendant
-						try {
+						SWTRY {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
-						catch ( ... ) {	}
+						SWCATCH ( ... ) {	}
 						if (vkey) {
 							char ch = ((tag.getAttribute("type") && (!strcmp(tag.getAttribute("type"), "crossReference"))) ? 'x':'n');
 							buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);

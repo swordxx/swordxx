@@ -114,10 +114,10 @@ void zCom::linkEntry(const SWKey *inkey) {
 	const VerseKey *srckey = 0;
 
 	// see if we have a VerseKey * or decendant
-	try {
+	SWTRY {
 		srckey = (const VerseKey *) SWDYNAMIC_CAST(VerseKey, inkey);
 	}
-	catch ( ... ) {
+	SWCATCH ( ... ) {
 	}
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
@@ -188,21 +188,21 @@ VerseKey &zCom::getVerseKey() {
 	static VerseKey tmpVK;
 	VerseKey *key;
 	// see if we have a VerseKey * or decendant
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {	}
+	SWCATCH ( ... ) {	}
 	if (!key) {
 		ListKey *lkTest = 0;
-		try {
+		SWTRY {
 			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
 		}
-		catch ( ... ) {	}
+		SWCATCH ( ... ) {	}
 		if (lkTest) {
-			try {
+			SWTRY {
 				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
 			}
-			catch ( ... ) {	}
+			SWCATCH ( ... ) {	}
 		}
 	}
 	if (!key) {

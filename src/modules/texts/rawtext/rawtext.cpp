@@ -111,21 +111,21 @@ VerseKey &RawText::getVerseKey() {
 	static VerseKey tmpVK;
 	VerseKey *key;
 	// see if we have a VerseKey * or decendant
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {	}
+	SWCATCH ( ... ) {	}
 	if (!key) {
 		ListKey *lkTest = 0;
-		try {
+		SWTRY {
 			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
 		}
-		catch ( ... ) {	}
+		SWCATCH ( ... ) {	}
 		if (lkTest) {
-			try {
+			SWTRY {
 				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
 			}
-			catch ( ... ) {	}
+			SWCATCH ( ... ) {	}
 		}
 	}
 	if (!key) {
@@ -401,10 +401,10 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 			// test to see if our scope for this search is bounded by a
 			// VerseKey
 			VerseKey *testKeyType = 0, vk;
-			try {
+			SWTRY {
 				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
 			}
-			catch ( ... ) {}
+			SWCATCH ( ... ) {}
 			// if we don't have a VerseKey * decendant we can't handle
 			// because of scope.
 			// In the future, add bool SWKey::isValid(const char *tryString);
@@ -485,10 +485,10 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 			// test to see if our scope for this search is bounded by a
 			// VerseKey
 			VerseKey *testKeyType = 0;
-			try {
+			SWTRY {
 				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
 			}
-			catch ( ... ) {}
+			SWCATCH ( ... ) {}
 			// if we don't have a VerseKey * decendant we can't handle
 			// because of scope.
 			// In the future, add bool SWKey::isValid(const char *tryString);
@@ -666,10 +666,10 @@ void RawText::linkEntry(const SWKey *inkey) {
 	const VerseKey *srckey = 0;
 
 	// see if we have a VerseKey * or decendant
-	try {
+	SWTRY {
 		srckey = SWDYNAMIC_CAST(VerseKey, inkey);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
 		srckey = new VerseKey(inkey);

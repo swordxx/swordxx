@@ -148,10 +148,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey;
 						// see if we have a VerseKey * or descendant
-						try {
+						SWTRY {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
-						catch ( ... ) {	}
+						SWCATCH ( ... ) {	}
 						if (vkey) {
 							char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
 							buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());

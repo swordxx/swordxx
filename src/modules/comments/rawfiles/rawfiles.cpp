@@ -62,14 +62,10 @@ SWBuf &RawFiles::getRawEntryBuf() {
 	char *tmpbuf;
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
-	try {
-#endif
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {}
-#endif
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -115,10 +111,10 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	VerseKey *key = 0;
 
 	len = (len<0)?strlen(inbuf):len;
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -164,10 +160,10 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 	char *tmpbuf;
 	const VerseKey *key = 0;
 
-	try {
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, inkey);
 	}
-	catch ( ... ) {}
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -181,10 +177,10 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 			delete key;
 		key = 0;
 
-		try {
+		SWTRY {
 			key = SWDYNAMIC_CAST(VerseKey, inkey);
 		}
-		catch ( ... ) {}
+		SWCATCH ( ... ) {}
 		if (!key)
 			key = new VerseKey(this->key);
 		doSetText(key->Testament(), key->Index(), tmpbuf.c_str());
@@ -205,14 +201,10 @@ void RawFiles::deleteEntry() {
 
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
-	try {
-#endif
+	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
-	catch ( ... ) {}
-#endif
+	SWCATCH ( ... ) {}
 	if (!key)
 		key = new VerseKey(this->key);
 
