@@ -1,7 +1,7 @@
 /******************************************************************************
  *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.2 2004/04/19 14:27:48 joachim Exp $
+ * $Id: stringmgr.cpp,v 1.3 2004/05/18 19:34:46 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -114,8 +114,15 @@ StringMgr* StringMgr::getSystemStringMgr() {
 * @param The text encoded in utf8 which should be turned into an upper case string
 */	
 char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
-	//the default impl does nothing
-// 	SWLog::getSystemLog()->logError("StringMgr::upperUtf8 with %s and %d", t, maxlen);
+        // try to decide if it's worth trying to toupper.  Do we have more
+        // characters that are probably lower latin than not?
+        long performOp = 0;
+        for (const char *ch = t; *ch; ch++)
+                performOp += (*ch > 0) ? 1 : -1;
+
+        if (performOp) {
+		return upperLatin1(t);
+        }
 
 	return t;
 }
