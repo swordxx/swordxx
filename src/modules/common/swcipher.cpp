@@ -13,8 +13,7 @@
  *
  */
 
-SWCipher::SWCipher(unsigned char *key)
-{
+SWCipher::SWCipher(unsigned char *key) {
 	master.initialize(key, strlen((char *)key));
 	buf = 0;
 }
@@ -105,4 +104,14 @@ void SWCipher::Decode(void)
 			buf[i] = work.decrypt(buf[i]);
 		cipher = false;
 	}
+}
+
+
+/******************************************************************************
+ * SWCipher::setCipherKey	- setter for a new CipherKey
+ *
+ */
+
+void SWCipher::setCipherKey(unsigned char *key) {
+	master.initialize(key, strlen((char *)key));
 }

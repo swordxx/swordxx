@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.4 2000/05/21 20:35:56 scribe Exp $
+ * $Id: swmodule.h,v 1.5 2000/05/21 21:16:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -52,7 +52,7 @@ protected:
 	bool render;
 
 public:
-	bool terminateSearch;
+	bool terminateSearch;	// for ending a search from another thread
 	SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay *idisp = 0, char *imodtype = 0);
 	virtual ~SWModule();
 	virtual char Error();

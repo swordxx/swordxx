@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcipher.h   - definition of Class SWCipher used for data cipher/decipher
  *
- * $Id: swcipher.h,v 1.1 1999/09/05 21:47:16 scribe Exp $
+ * $Id: swcipher.h,v 1.2 2000/05/21 21:16:44 scribe Exp $
  *
  * Copyright 1999 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,6 +35,7 @@ class SWCipher {
 protected:
 public:
 	SWCipher(unsigned char *key);
+	virtual void setCipherKey(unsigned char *key);
 	virtual ~SWCipher();
 	virtual char *Buf(const char *buf = 0);
 	virtual char *cipherBuf(unsigned int *len, const char *buf = 0);
