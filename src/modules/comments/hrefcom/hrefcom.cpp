@@ -73,15 +73,16 @@ char *HREFCom::getRawEntry() {
 		key = new VerseKey(this->key);
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
+	entrySize = size;        // support getEntrySize call
 
-	unsigned long newsize = (size + 2) + strlen(prefix) * FILTERPAD;
+	unsigned long newsize = ((size + 2) + strlen(prefix)) * FILTERPAD;
 	if (newsize > entrybufallocsize) {
 		if (entrybuf)
 			delete [] entrybuf;
 		entrybuf = new char [ newsize ];
 		entrybufallocsize = newsize;
 	}
-	tmpbuf   = new char [ size + 1 ];
+	tmpbuf   = new char [ size + 10 ];
 
 	gettext(key->Testament(), start, size + 2, tmpbuf);
 	sprintf(entrybuf, "%s%s", prefix, tmpbuf);

@@ -3,8 +3,8 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.05.03"/>
-    <PROJECT value="mkfastmod.exe"/>
-    <OBJFILES value="..\mkfastmod.obj"/>
+    <PROJECT value="imp2vs.exe"/>
+    <OBJFILES value="..\imp2vs.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -24,9 +24,9 @@
     <LINKER value="tlink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
-    <MAINSOURCE value="mkfastmod.bpf"/>
-    <INCLUDEPATH value="..\;..\..\utilities;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <MAINSOURCE value="imp2vs.bpf"/>
+    <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
@@ -34,7 +34,7 @@
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>
-    <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn"/>
+    <LFLAGS value="-D&quot;&quot; -S:0x300000 -ap -Tpe -x -Gn"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0x32.obj $(OBJFILES)"/>
@@ -70,15 +70,17 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=3
-Item0=..\;..\..\utilities;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item1=..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item2=..;$(BCB)\include;$(BCB)\include\vcl
+Count=4
+Item0=..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\;..\..\utilities;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item2=..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item3=..\..\utilities;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=2
-Item0=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..;$(BCB)\lib\obj;$(BCB)\lib
+Count=3
+Item0=..\;..;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -92,7 +94,7 @@ Item0=_DEBUG
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=KJV
+RunParams=
 HostApplication=
 RemoteHost=
 RemotePath=

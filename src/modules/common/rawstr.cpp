@@ -252,7 +252,12 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
 			long lasttry = tryoff;
 			tryoff += (away > 0) ? 6 : -6;
 		
-			if ((lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0) || ((tryoff + (away*6)) < -6) || (tryoff + (away*6) > (maxoff+6))) {
+			bool bad = false;
+			if (((tryoff + (away*6)) < -6) || (tryoff + (away*6) > (maxoff+6)))
+				bad = true;
+			else if (lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0)
+				bad = true;
+			if (bad) {
 				retval = -1;
 				*start = laststart;
 				*size = lastsize;

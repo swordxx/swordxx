@@ -15,7 +15,7 @@
       ibsmp50.bpi VCLDBX50.bpi TEEUI50.bpi TEEDB50.bpi TEE50.bpi TEEQR50.bpi 
       VCLIB50.bpi bcbie50.bpi VCLIE50.bpi INETDB50.bpi INET50.bpi NMFAST50.bpi 
       dclocx50.bpi bcb2kaxserver50.bpi"/>
-    <PATHCPP value=".;..\..\utilities"/>
+    <PATHCPP value=".;.."/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>

@@ -242,8 +242,13 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 			__u32 lastsize = size;
 			__s32 lasttry = tryoff;
 			tryoff += (away > 0) ? IDXENTRYSIZE : -IDXENTRYSIZE;
-		
-			if ((lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0) || ((long)(tryoff + (away*IDXENTRYSIZE)) < -IDXENTRYSIZE) || (tryoff + (away*IDXENTRYSIZE) > (maxoff+IDXENTRYSIZE))) {
+
+			bool bad = false;
+			if (((long)(tryoff + (away*IDXENTRYSIZE)) < -IDXENTRYSIZE) || (tryoff + (away*IDXENTRYSIZE) > (maxoff+IDXENTRYSIZE)))
+				bad = true;
+			else	if (lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0)
+				bad = true;
+			if (bad) {
 				retval = -1;
 				start = laststart;
 				size = lastsize;
@@ -391,7 +396,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 		__u32 localsize = strlen(idxbuflocal);
 		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
 		strncpy(*idxbuf, idxbuflocal, localsize);
-		idxbuf[localsize] = 0;
+		(*idxbuf)[localsize] = 0;
 		free(idxbuflocal);
 	}
 	__u32 block = 0;

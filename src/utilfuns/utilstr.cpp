@@ -117,15 +117,19 @@ const char strnicmp(const char *s1, const char *s2, int len) {
  */
 
 unsigned int strlenw(const char *s1) {
+	return strlen(s1);
+// utf8 says no null in string except terminator, so below code is overkill
+/*
 	const char *ch = s1;
-     if (!*ch)
-     	ch++;
-     while (*ch) {
-     	ch++;
-          if (!*ch)
-          	ch++;
-     }
-     return (unsigned int)(ch - s1) - 1;
+	if (!*ch)
+		ch++;
+	while (*ch) {
+		ch++;
+		if (!*ch)
+			ch++;
+	}
+	return (unsigned int)(ch - s1) - 1;
+*/
 }
 
 
