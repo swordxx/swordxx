@@ -383,7 +383,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 						if (!strcmp(idxbuf, words[i])) {
 
 							// get data for this word from database
-							free(idxbuf);
+							delete [] idxbuf;
 							idxbuf = 0;
 							datBuf = "";
 							fastSearch[j]->readText(start, &size, &idxbuf, datBuf);

@@ -30,7 +30,7 @@ char *stdstr(char **ipstr, const char *istr) {
 		if (*ipstr)
 			delete [] *ipstr;
 		int len = strlen(istr) + 1;
-		*ipstr = new char [ len*2 ];	// *2 buffer for unicode manipulations
+		*ipstr = new char [ len ];
 		memcpy(*ipstr, istr, len);
 	}
 	return *ipstr;

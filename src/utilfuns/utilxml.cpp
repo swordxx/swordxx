@@ -42,6 +42,8 @@ void XMLTag::parse() const {
 				}
 			}
 		}
+		if (!buf[i])
+			break;
 	}
 	parsed = true;
 	if (name) delete [] name;
@@ -62,7 +64,7 @@ void XMLTag::setText(const char *tagString) {
 	endTag = false;
 
 	if (buf) {
-		delete buf;
+		delete [] buf;
 		buf = 0;
 	}
 

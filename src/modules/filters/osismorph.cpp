@@ -58,8 +58,6 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				intoken = true;
 				tokpos = 0;
 				token[0] = 0;
-				token[1] = 0;
-				token[2] = 0;
 				continue;
 			}
 			if (*from == '>') {	// process tokens
@@ -76,7 +74,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			if (intoken) {
 				if (tokpos < 2045)
 					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
+					token[tokpos] = 0;
 			}
 			else	{
 				text += *from;
