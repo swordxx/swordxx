@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.91 2003/06/27 01:41:07 scribe Exp $
+ * $Id: swmgr.cpp,v 1.92 2003/06/27 06:25:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -56,6 +56,9 @@
 #include <osisfootnotes.h>
 #include <osisstrongs.h>
 #include <osismorph.h>
+#include <osislemma.h>
+#include <osisredletterwords.h>
+#include <osisscripref.h>
 #include <thmlstrongs.h>
 #include <thmlfootnotes.h>
 #include <thmlheadings.h>
@@ -150,8 +153,20 @@ void SWMgr::init() {
 	optionFilters.insert(FilterMap::value_type("OSISMorph", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
+	tmpFilter = new OSISLemma();
+	optionFilters.insert(FilterMap::value_type("OSISLemma", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
 	tmpFilter = new OSISFootnotes();
 	optionFilters.insert(FilterMap::value_type("OSISFootnotes", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISScripref();
+	optionFilters.insert(FilterMap::value_type("OSISScripref", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISRedLetterWords();
+	optionFilters.insert(FilterMap::value_type("OSISRedLetterWords", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLStrongs();
