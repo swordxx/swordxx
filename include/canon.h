@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.18 2003/05/26 08:36:31 scribe Exp $
+ * $Id: canon.h,v 1.19 2003/07/04 21:45:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -281,6 +281,7 @@ const struct abbrev
   {"PHIL", 50},			//    Philippians
   {"PHILEMON", 57},		// Philemon
   {"PHILIPPIANS", 50},		// Philippians
+  {"PHLM", 57},		// Philemon
   {"PHM", 57},			//   Philemon
   {"PHP", 50},			//   Philippians
   {"PROVERBS", 20},		//    Proverbs

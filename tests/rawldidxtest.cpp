@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	long maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
 	FileMgr::systemFileMgr.close(idxfd);
 
-	std::string last = "";
+	SWBuf last = "";
 	bool first = true;
 	char *trybuf = 0;
 	for (long index = 0; index < maxoff; index+=6) {
