@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
   while (readline(infile, linebuffer)) {
     if (!strncmp(linebuffer, "$$$", 3)) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
-	std::cout << keybuffer << std::endl;
+	std::cout << "from file: " << keybuffer << std::endl;
 	*vkey = keybuffer;
 	if (!vkey->Chapter()) {
 	  // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
@@ -86,6 +86,7 @@ int main(int argc, char **argv) {
 	  }
        vkey->Verse(0);
 	  
+	  std::cout << "adding entry: " << *vkey << std::endl;
 	  mod->setEntry(entbuffer, strlen(entbuffer));
 	}
 	else {
@@ -102,17 +103,16 @@ int main(int argc, char **argv) {
 	      VerseKey finalkey = element->UpperBound();
 		  finalkey.Headings(1);
 		  finalkey.AutoNormalize(0);
-	      std::cout << (const char*)*vkey << "-" << (const char*)finalkey << std::endl;
 	      if (!havefirst) {
 		havefirst = true;
 		firstverse = *vkey;
 		
+	     std::cout << "adding entry: " << *vkey << std::endl;
 		mod->setEntry(entbuffer, strlen(entbuffer));
-		std::cout << "f" << (const char*)firstverse << std::endl;
 		(*vkey)++;
 	      }
 	      while (*vkey <= finalkey) {
-		std::cout << (const char*)(*vkey) << std::endl;
+		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
 		*mod << &firstverse;
 		(*vkey)++;
 	      }
@@ -120,16 +120,16 @@ int main(int argc, char **argv) {
 	    else {
 	      if (havefirst) {
 		*vkey = (*listkey.GetElement(i));
+		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
 		*mod << &firstverse;
-		std::cout << (const char*)*vkey << std::endl;
 	      }
 	      else {
 		*vkey = (*listkey.GetElement(i));
 		havefirst = true;
 		firstverse = *vkey;
 		
+	     std::cout << "adding entry: " << *vkey << std::endl;
 		mod->setEntry(entbuffer, strlen(entbuffer));
-		std::cout << "f" << (const char*)firstverse << std::endl;
 	      }
 	    }
 	  }
@@ -146,7 +146,6 @@ int main(int argc, char **argv) {
 
   //handle final entry
   if (strlen(keybuffer) && strlen(entbuffer)) {
-    std::cout << keybuffer << std::endl;
     *vkey = keybuffer;
     if (!vkey->Chapter()) {
       // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
@@ -163,6 +162,7 @@ int main(int argc, char **argv) {
 	  }
       vkey->Verse(0);
       
+	 std::cout << "adding entry: " << *vkey << std::endl;
       mod->setEntry(entbuffer, strlen(entbuffer));
     }
     else {
@@ -179,17 +179,16 @@ int main(int argc, char **argv) {
 	  VerseKey finalkey = element->UpperBound();
 	  finalkey.Headings(1);
 	  finalkey.AutoNormalize(0);
-	  std::cout << (const char*)*vkey << "-" << (const char*)finalkey << std::endl;
 	  if (!havefirst) {
 	    havefirst = true;
 	    firstverse = *vkey;
 	    
-	    ((SWModule*)mod)->setEntry(entbuffer, strlen(entbuffer));
-	    std::cout << "f" << (const char*)firstverse << std::endl;
+	    std::cout << "adding entry: " << *vkey << std::endl;
+	    mod->setEntry(entbuffer, strlen(entbuffer));
 	    (*vkey)++;
 	  }
 	  while (*vkey <= finalkey) {
-	    std::cout << (const char*)*vkey << std::endl;
+		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
 	    *(SWModule*)mod << &firstverse;
 	    (*vkey)++;
 	  }
@@ -197,16 +196,16 @@ int main(int argc, char **argv) {
 	else {
 	  if (havefirst) {
 	    *vkey = (*listkey.GetElement(i));
+		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
 	    *mod << &firstverse;
-	    std::cout << (const char*)*vkey << std::endl;
 	  }
 	  else {
 	    *vkey = (*listkey.GetElement(i));
 	    havefirst = true;
 	    firstverse = *vkey;
 	    
+	    std::cout << "adding entry: " << *vkey << std::endl;
 	    mod->setEntry(entbuffer, strlen(entbuffer));
-	    std::cout << "f" << (const char*)firstverse << std::endl;
 	  }
 	}
       }
