@@ -12,6 +12,7 @@
 #include <thmlplain.h>
 #include <thmlhtml.h>
 #include <thmlrtf.h>
+#include <thmlolb.h>
 #include <unicodertf.h>
 #include <latin1utf8.h>
 #include <localemgr.h>

@@ -15,6 +15,16 @@ sub plussifyaddress  {
     return $newline;
 }
 
+sub urlvers {
+    $ender = @_[1];
+    $verse = @_[0];
+    $version = @_[2];
+    $oldverse = $verse;
+    $verse =~ tr/ /+/;
+    $newline = " <a href=\"diatheke.pl?verse=$verse&$version=on\">$oldverse</a> $ender";
+    return $newline;
+}
+
 ###############################################################################
 ## You should not need to edit anything below this line.
 ## Unless you want to modify functionality of course. :)
@@ -349,7 +359,7 @@ for ($i = 0; $i < $n; $i++) {
     $line =~ s/<\/note[^>]*>/}<\/small>/g;
     
     $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
-    $info =~ /([^\;]+)\;(.*)/;
+    $info =~ /([^\;]+)\;([^\;]+)/;
     $format = $1;
     $type = $2;
     
@@ -359,10 +369,10 @@ for ($i = 0; $i < $n; $i++) {
     elsif($versions[$i] eq "StrongsGreek") {
 	$line =~ s/(see GREEK for )([0-9]+)/<a href=\"diatheke.pl?verse=$2&StrongsGreek=on\">$1$2\<\/a\>/g;
     }
-#    elsif ($versions[$i] eq "BDB" || $versions[$i] eq "Thayer") {
-#	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&$versions[$i]=on\">$1\<\/a\>/g;
-#    }
-    
+    #case for searches
+    elsif($search ne "") {
+	$line =~ s/ ([^;\-]+:[^;]+) ([;\-])/urlvers($1, $2, $versions[$i])/eg;
+    }
     #case for ThML format texts
     elsif($format eq "ThML") {
 	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/&plussifyaddress($2,$1)/ge;
@@ -379,201 +389,19 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/\#([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$1%3A$2&$defversion=on\">$book $1:$2\<\/a\>/g;
 	$line =~ s/\#([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$chapter%3A$1&$defversion=on\">$book $chapter:$1\<\/a\>/g;
     }
-#--------- Change full book names to abbreviations
-#>>
-    if ($search eq "") {
-	$line =~ s/^Genesis/Gen/g;
-	$line =~ s/^Exodus/Ex/g;
-	$line =~ s/^Leviticus/Lev/g;
-	$line =~ s/^Numbers/Num/g;
-	$line =~ s/^Deuteronomy/Deut/g;
-	$line =~ s/^Joshua/Jos/g;
-	$line =~ s/^Judges/Jdg/g;
-	$line =~ s/^II Samuel/2Sam/g;
-	$line =~ s/^I Samuel/1Sam/g;
-	$line =~ s/^II Kings/2Kgs/g;
-	$line =~ s/^I Kings/1Kgs/g;
-	$line =~ s/^II Chronicles/2Chr/g;
-	$line =~ s/^I Chronicles/1Chr/g;
-	$line =~ s/^Nehemiah/Neh/g;
-	$line =~ s/^Psalms/Ps/g;
-	$line =~ s/^Proverbs/Prov/g;
-	$line =~ s/^Ecclesiastes/Eccl/g;
-	$line =~ s/^Song of Solomon/Song/g;
-	$line =~ s/^Isaiah/Isa/g;
-	$line =~ s/^Jeremiah/Jer/g;
-	$line =~ s/^Lamentations/Lam/g;
-	$line =~ s/^Ezekiel/Ezek/g;
-	$line =~ s/^Daniel/Dan/g;
-	$line =~ s/^Hosea/Hos/g;
-	$line =~ s/^Obadiah/Obad/g;
-	$line =~ s/^Jonah/Jnh/g;
-	$line =~ s/^Nahum/Nah/g;
-	$line =~ s/^Habakkuk/Hab/g;
-	$line =~ s/^Zephaniah/Zeph/g;
-	$line =~ s/^Haggai/Hag/g;
-	$line =~ s/^Zechariah/Zech/g;
-	$line =~ s/^Malachi/Mal/g;
-	
-	$line =~ s/^Revelation of John/Rev/g;
-	$line =~ s/^III John/3Jn/g;
-	$line =~ s/^II John/2Jn/g;
-	$line =~ s/^I John/1Jn/g;
-	$line =~ s/^Matthew/Mt/g;
-	$line =~ s/^Mark/Mk/g;
-	$line =~ s/^Luke/Lk/g;
-	$line =~ s/^John/Jn/g;
-	$line =~ s/^Romans/Rom/g;
-	$line =~ s/^II Corinthians/2Cor/g;
-	$line =~ s/^I Corinthians/1Cor/g;
-	$line =~ s/^Galatians/Gal/g;
-	$line =~ s/^Ephesians/Eph/g;
-	$line =~ s/^Philippians/Php/g;
-	$line =~ s/^Colossians/Col/g;
-	$line =~ s/^II Thessalonians/2Thes/g;
-	$line =~ s/^I Thessalonians/1Thes/g;
-	$line =~ s/^II Timothy/2Tim/g;
-	$line =~ s/^I Timothy/1Tim/g;
-	$line =~ s/^Titus/Tit/g;
-	$line =~ s/^Philemon/Phlm/g;
-	$line =~ s/^Hebrews/Heb/g;
-	$line =~ s/^James/Jas/g;
-	$line =~ s/^II Peter/2Pet/g;
-	$line =~ s/^I Peter/1Pet/g;
-
-	$line =~ s/\nGenesis/Gen/g;
-	$line =~ s/\nExodus/Ex/g;
-	$line =~ s/\nLeviticus/Lev/g;
-	$line =~ s/\nNumbers/Num/g;
-	$line =~ s/\nDeuteronomy/Deut/g;
-	$line =~ s/\nJoshua/Jos/g;
-	$line =~ s/\nJudges/Jdg/g;
-	$line =~ s/\nII Samuel/2Sam/g;
-	$line =~ s/\nI Samuel/1Sam/g;
-	$line =~ s/\nII Kings/2Kgs/g;
-	$line =~ s/\nI Kings/1Kgs/g;
-	$line =~ s/\nII Chronicles/2Chr/g;
-	$line =~ s/\nI Chronicles/1Chr/g;
-	$line =~ s/\nNehemiah/Neh/g;
-	$line =~ s/\nPsalms/Ps/g;
-	$line =~ s/\nProverbs/Prov/g;
-	$line =~ s/\nEcclesiastes/Eccl/g;
-	$line =~ s/\nSong of Solomon/Song/g;
-	$line =~ s/\nIsaiah/Isa/g;
-	$line =~ s/\nJeremiah/Jer/g;
-	$line =~ s/\nLamentations/Lam/g;
-	$line =~ s/\nEzekiel/Ezek/g;
-	$line =~ s/\nDaniel/Dan/g;
-	$line =~ s/\nHosea/Hos/g;
-	$line =~ s/\nObadiah/Obad/g;
-	$line =~ s/\nJonah/Jnh/g;
-	$line =~ s/\nNahum/Nah/g;
-	$line =~ s/\nHabakkuk/Hab/g;
-	$line =~ s/\nZephaniah/Zeph/g;
-	$line =~ s/\nHaggai/Hag/g;
-	$line =~ s/\nZechariah/Zech/g;
-	$line =~ s/\nMalachi/Mal/g;
-	
-	$line =~ s/\nRevelation of John/Rev/g;
-	$line =~ s/\nIII John/3Jn/g;
-	$line =~ s/\nII John/2Jn/g;
-	$line =~ s/\nI John/1Jn/g;
-	$line =~ s/\nMatthew/Mt/g;
-	$line =~ s/\nMark/Mk/g;
-	$line =~ s/\nLuke/Lk/g;
-	$line =~ s/\nJohn/Jn/g;
-	$line =~ s/\nRomans/Rom/g;
-	$line =~ s/\nII Corinthians/2Cor/g;
-	$line =~ s/\nI Corinthians/1Cor/g;
-	$line =~ s/\nGalatians/Gal/g;
-	$line =~ s/\nEphesians/Eph/g;
-	$line =~ s/\nPhilippians/Php/g;
-	$line =~ s/\nColossians/Col/g;
-	$line =~ s/\nII Thessalonians/2Thes/g;
-	$line =~ s/\nI Thessalonians/1Thes/g;
-	$line =~ s/\nII Timothy/2Tim/g;
-	$line =~ s/\nI Timothy/1Tim/g;
-	$line =~ s/\nTitus/Tit/g;
-	$line =~ s/\nPhilemon/Phlm/g;
-	$line =~ s/\nHebrews/Heb/g;
-	$line =~ s/\nJames/Jas/g;
-	$line =~ s/\nII Peter/2Pet/g;
-	$line =~ s/\nI Peter/1Pet/g;
-	
-    }
-    elsif ($format ne "ThML") {
-
-	$line =~ s/Genesis/Gen/g;
-	$line =~ s/Exodus/Ex/g;
-	$line =~ s/Leviticus/Lev/g;
-	$line =~ s/Numbers/Num/g;
-	$line =~ s/Deuteronomy/Deut/g;
-	$line =~ s/Joshua/Jos/g;
-	$line =~ s/Judges/Jdg/g;
-	$line =~ s/II Samuel/2Sam/g;
-	$line =~ s/I Samuel/1Sam/g;
-	$line =~ s/II Kings/2Kgs/g;
-	$line =~ s/I Kings/1Kgs/g;
-	$line =~ s/II Chronicles/2Chr/g;
-	$line =~ s/I Chronicles/1Chr/g;
-	$line =~ s/Nehemiah/Neh/g;
-	$line =~ s/Psalms/Ps/g;
-	$line =~ s/Proverbs/Prov/g;
-	$line =~ s/Ecclesiastes/Eccl/g;
-	$line =~ s/Song of Solomon/Song/g;
-	$line =~ s/Isaiah/Isa/g;
-	$line =~ s/Jeremiah/Jer/g;
-	$line =~ s/Lamentations/Lam/g;
-	$line =~ s/Ezekiel/Ezek/g;
-	$line =~ s/Daniel/Dan/g;
-	$line =~ s/Hosea/Hos/g;
-	$line =~ s/Obadiah/Obad/g;
-	$line =~ s/Jonah/Jnh/g;
-	$line =~ s/Nahum/Nah/g;
-	$line =~ s/Habakkuk/Hab/g;
-	$line =~ s/Zephaniah/Zeph/g;
-	$line =~ s/Haggai/Hag/g;
-	$line =~ s/Zechariah/Zech/g;
-	$line =~ s/Malachi/Mal/g;
-	
-	$line =~ s/Revelation of John/Rev/g;
-	$line =~ s/III John/3Jn/g;
-	$line =~ s/II John/2Jn/g;
-	$line =~ s/I John/1Jn/g;
-	$line =~ s/Matthew/Mt/g;
-	$line =~ s/Mark/Mk/g;
-	$line =~ s/Luke/Lk/g;
-	$line =~ s/John/Jn/g;
-	$line =~ s/Romans/Rom/g;
-	$line =~ s/II Corinthians/2Cor/g;
-	$line =~ s/I Corinthians/1Cor/g;
-	$line =~ s/Galatians/Gal/g;
-	$line =~ s/Ephesians/Eph/g;
-	$line =~ s/Philippians/Php/g;
-	$line =~ s/Colossians/Col/g;
-	$line =~ s/II Thessalonians/2Thes/g;
-	$line =~ s/I Thessalonians/1Thes/g;
-	$line =~ s/II Timothy/2Tim/g;
-	$line =~ s/I Timothy/1Tim/g;
-	$line =~ s/Titus/Tit/g;
-	$line =~ s/Philemon/Phlm/g;
-	$line =~ s/Hebrews/Heb/g;
-	$line =~ s/James/Jas/g;
-	$line =~ s/II Peter/2Pet/g;
-	$line =~ s/I Peter/1Pet/g;
-
-	$line =~ s/([0-9]*[A-Za-z]+) ([0-9]+):([0-9]+)/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$versions[$i]=on\">$1 $2:$3\<\/a\>/g;
-    }
-#<<
 
 # for the old HREFCom version of JFB
 #    if ($versions[$i] eq "JFB") {
 #	$line =~ s/(http:[^ ]+) /<a href="$1">$1<\/a>/g;
 #    }
 
+    if ($locale ne "abbr") {
+	$line =~ s/href=\"diatheke.pl([^\"]+)\"/href=\"diatheke.pl$1&locale=$locale\"/g;
+    }
     if ($palm == 1) {
 	$line =~ s/href=\"diatheke.pl([^\"]+)\"/href=\"http:\/\/bible.gotjesus.org\/cgi-bin\/diatheke.pl$1&palm=on\"/g;
     }
+
 
 # These should really be handled by option filters somehow instead
 #    if ($footnotes == 0) {

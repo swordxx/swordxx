@@ -130,6 +130,8 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 	  }	 
 	  *output << ";";
 	  *output << target->Type();
+	  *output << ";";
+	  return;
 	}
 
 	if (searchtype)
@@ -154,6 +156,8 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		filter = new ThMLGBF();
 	else if (outputformat == FMT_RTF)
 		filter = new ThMLRTF();
+	else if (outputformat == FMT_OLB)
+		filter = new ThMLOLB();
 	
 	if (optionfilters & OP_FOOTNOTES)
 		manager.setGlobalOption("Footnotes","On");
@@ -177,34 +181,37 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		searchtype = 1 - searchtype;
 		*output << "Verse(s) containing \"";
 	        *output << ref;
-		*output << "\": ";
+		*output << "\"-- ";
 		
 		listkey = target->Search(ref, searchtype);
 		
 		if (strlen((const char*)listkey)) {
-			if (!listkey.Error())
-				*output << (const char *)listkey;
-			listkey++;
-			while (!listkey.Error()) {
-				*output << " ; ";
-				*output << (const char *)listkey;
-				listkey++;
-			}
-			*output << " -- ";
-
-			char *temp = new char[10];
-			sprintf(temp, "%u", listkey.Count());
-			*output << temp;
-			delete [] temp;
-
-			*output << " matches total (";
-			*output << target->Name();
-			*output << ")\n";
+		  if (!listkey.Error()) {
+		    vk = listkey;
+		    *output << (const char *)vk;
+		  }
+		  listkey++;
+		  while (!listkey.Error()) {
+		    *output << " ; ";
+		    vk = listkey;
+		    *output << (const char *)vk;
+		    listkey++;
+		  }
+		  *output << " -- ";
+		  
+		  char *temp = new char[10];
+		  sprintf(temp, "%u", listkey.Count());
+		  *output << temp;
+		  delete [] temp;
+		  
+		  *output << " matches total (";
+		  *output << target->Name();
+		  *output << ")\n";
 		}
 		else {
-			*output << "none (";
-			*output << target->Name();
-			*output << ")\n";
+		  *output << "none (";
+		  *output << target->Name();
+		  *output << ")\n";
 		}
 	}
 	
