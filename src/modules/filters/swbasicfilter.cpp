@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.13 2001/11/05 10:07:51 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.14 2001/11/05 11:14:57 chrislit Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,7 @@
 #include <string.h>
 #include <swbasicfilter.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 SWBasicFilter::SWBasicFilter() {
 	tokenStart = 0;
