@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.23 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: swkey.h,v 1.24 2003/02/28 13:12:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -87,12 +87,12 @@ public:
 
 	/** initializes instance of SWKey
 	*
-	* @param ikey text key
+	* @param ikey Initialize from text key.
 	*/
 	SWKey(const char *ikey = 0);
 
 	/** Copy Constructor
-	* @param The SWKey object to copy.
+	* @param k The SWKey object to copy.
 	*/
 	SWKey(SWKey const &k);
 
@@ -122,7 +122,7 @@ public:
 	* [-1] - only get
 	* @return value of persist
 	*/
-	char Persist(signed char ikey);
+	char Persist(signed char ipersist);
 
 	/** Gets and clears error status
 	*
@@ -176,7 +176,7 @@ public:
 
 	/** Increments key a number of entries
 	*
-	* @param increment Number of entries to jump forward
+	* @param steps Number of entries to jump forward
 	* @return *this
 	*/
 	virtual void increment(int steps = 1);

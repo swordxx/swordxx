@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.60 2003/02/27 08:17:05 scribe Exp $
+* $Id: swmodule.h,v 1.61 2003/02/28 13:12:43 mgruner Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -137,25 +137,24 @@ protected:
 	* This is the default callback function for searching.
 	* This function is a placeholder and does nothing.
 	* You can define your own function for search progress
-	* evaluation, and pass it over to @ref Search.
+	* evaluation, and pass it over to Search().
 	*/
 	static void nullPercent(char percent, void *userData);
 	/**
-	* Set this bool to false to terminate the search which is executed by this module (@ref #Search).
+	* Set this bool to false to terminate the search which is executed by this module (Search()).
 	* This is useful for threaded applications to terminate the search in another thread.
 	*/
 	bool terminateSearch;
 	/** Initializes data for instance of SWModule
 	*
-	* @param imodname Internal name for module; see also @ref Name
-	* @param imoddesc Name to display to user for module;
-	*  see also @ref Description
-	* @param idisp Display object to use for displaying
-	*  see also @ref Disp
-	* @param imodtype Type of Module
-	*  (All modules will be displayed with
-	*  others of same type under their modtype heading)
-	*  see also @ref Type
+	* @param imodname Internal name for module; see also Name().
+	* @param imoddesc Name to display to user for module; see also Description()
+	* @param idisp Display object to use for displaying; see also Disp()
+	* @param imodtype Type of Module (All modules will be displayed with others of same type under their modtype heading); see also Type()
+	* @param encoding Encoding of the module.
+	* @param dir Direction of text flow.
+	* @param markup Markup of the module.
+	* @param modlang Language of the module.
 	*/
 	SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
 	/** Cleans up instance of SWModule
@@ -273,23 +272,23 @@ protected:
 	*
 	* @param newdir value which to set direction;
 	*  [-1] - only get
-	* @return char direction
+	* @return new direction
 	*/
 	virtual char Direction(signed char newdir = -1);
 	/** Sets/gets module encoding
 	*
-	* @param newdir value which to set encoding;
+	* @param enc value which to set encoding;
 	*  [-1] - only get
-	* @return char encoding
+	* @return Encoding
 	*/
 	virtual char Encoding(signed char enc = -1);
 	/** Sets/gets module markup
 	*
-	* @param newdir value which to set markup;
+	* @param markup value which to set markup;
 	*  [-1] - only get
-	* @return char markup
+	* @return char Markup
 	*/
-	virtual char Markup(signed char enc = -1);
+	virtual char Markup(signed char markup = -1);
 	/** Sets/gets module language
 	*
 	* @param imodlang value which to set modlang;
@@ -306,8 +305,11 @@ protected:
 	* @param searchType type of search to perform
 	*   <=0 ->regex;  1->phrase; 2->multiword;
 	* @param flags options flags for search
+	* @param scope Key containing the scope. VerseKey or ListKey are useful here.
 	* @param justCheckIfSupported if set, don't search,
 	* only tell if this function supports requested search.
+	* @param percent Callback function to get the current search status in %.
+	* @param percentUserData User data that is given to the callback function as parameter.
 	*
 	* @return listkey set to verses that contain istr
 	*/
@@ -362,17 +364,17 @@ protected:
 	* @param path The first parameter is path of the new module
 	* @return error
 	*/
-	static signed char createModule(const char *) { return -1; }
+	static signed char createModule(const char *path) { return -1; }
 	/** Modify the current module entry text
-	* - only if module @ref isWritable
+	* - only if module isWritable()
 	* @return *this
 	*/
 	virtual void setEntry(const char *inbuf, long len = -1) { }
 	/** Link the current module entry to another module entry
-	* - only if module @ref isWritable
+	* - only if module isWritable()
 	*/
 	virtual void linkEntry(const SWKey *sourceKey) { }
-	/** Delete current module entry - only if module @ref isWritable
+	/** Delete current module entry - only if module isWritable()
 	*
 	*/
 	virtual void deleteEntry() {}
@@ -381,22 +383,22 @@ protected:
 
 	/** Decrements module key a number of entries
 	*
-	* @param decrement Number of entries to jump backward
+	* @param steps Number of entries to jump backward
 	* @return *this
 	*/
 	virtual void decrement(int steps = 1);
 	/** Increments module key a number of entries
 	*
-	* @param increment Number of entries to jump forward
+	* @param steps Number of entries to jump forward
 	* @return *this
 	*/
 	virtual void increment(int steps = 1);
 	/** Positions this modules to an entry
 	*
-	* @param p position (e.g. TOP, BOTTOM)
+	* @param pos position (e.g. TOP, BOTTOM)
 	* @return *this
 	*/
-	virtual void setPosition(SW_POSITION p);
+	virtual void setPosition(SW_POSITION pos);
 	/** Adds a RenderFilter to this module's @see renderfilters queue
 	* @param newfilter the filter to add
 	* @return *this
@@ -428,7 +430,6 @@ protected:
 	}
 	/** RenderFilter a text buffer
 	* @param buf the buffer to filter
-	* @param size the allocated size of the buffer
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
@@ -466,14 +467,13 @@ protected:
 	}
 	/** encodingFilter a text buffer
 	* @param buf the buffer to filter
-	* @param size the allocated size of the buffer
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
 	virtual void encodingFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(encodingFilters, buf, key);
 	}
-	/** Adds a StripFilter to this module's @ref stripfilters queue
+	/** Adds a StripFilter to this module's stripfilters queue
 	* @param newfilter the filter to add
 	* @return *this
 	*/
@@ -483,14 +483,13 @@ protected:
 	}
 	/** StripFilter a text buffer
 	* @param buf the buffer to filter
-	* @param size the allocated size of the buffer
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
 	virtual void stripFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(stripFilters, buf, key);
 	}
-	/** Adds a RawFilter to this module's @ref rawfilters queue
+	/** Adds a RawFilter to this module's rawfilters queue
 	* @param newfilter the filter to add
 	* @return *this
 	*/
@@ -501,7 +500,6 @@ protected:
 	/** FilterBuffer a text buffer
 	* @param filters the FilterList of filters to iterate
 	* @param buf the buffer to filter
-	* @param size the allocated size of the buffer
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
@@ -513,14 +511,13 @@ protected:
 	}
 	/** RawFilter a text buffer
 	* @param buf the buffer to filter
-	* @param size the allocated size of the buffer
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
 	virtual void rawFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(rawFilters, buf, key);
 	}
-	/** Adds an OptionFilter to this module's @ref optionfilters queue
+	/** Adds an OptionFilter to this module's optionfilters queue
 	* @param newfilter the filter to add
 	* @return *this
 	*/
@@ -530,7 +527,6 @@ protected:
 	}
 	/** OptionFilter a text buffer
 	* @param buf the buffer to filter
-	* @param size the allocated size of the buffer
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
@@ -550,6 +546,7 @@ protected:
 	* @param buf buffer to Render instead of current module position;
 	*   if buf is NULL, the current text will be used
 	* @param len max len of buf OR current text -- will be applied anyway
+	* @param render Perform the rendering.
 	* @return this module's text at specified key location massaged by Render filters
 	*/
 	virtual const char *RenderText(char *buf = 0, int len = -1, bool render = true);

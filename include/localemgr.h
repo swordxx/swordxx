@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.13 2003/02/16 02:43:13 chrislit Exp $
+ * $Id: localemgr.h,v 1.14 2003/02/28 13:12:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -76,14 +76,14 @@ public:
 
   /** Get the list of available locales.
   *
-  * @ret Returns a list of strings, which contains the names of the available locales.
+  * @return Returns a list of strings, which contains the names of the available locales.
   */
   virtual std::list < std::string > getAvailableLocales ();
   
   /** Returns translated text.
   * This function uses both parameters to return the translated version of the given text.
   *
-  * @param The text to translate into the language given by the first parameter.
+  * @param text The text to translate into the language given by the first parameter.
   * @param localeName The name of the locale Sword should use
   * @return Returns the translated text.
   */
@@ -91,7 +91,7 @@ public:
 
   /** Get the default locale name. To set it use @see setDefaultLocaleName
   *
-  * @ret Returns the default locale name
+  * @return Returns the default locale name
   */
   virtual const char *getDefaultLocaleName ();
 

@@ -26,7 +26,7 @@
 
 SWORD_NAMESPACE_START
 
-/** This class is like a normal @ref SWMgr,
+/** This class is like a normal SWMgr,
   * but you can additonally specify which encoding
   * you want to use.
   */
@@ -49,9 +49,6 @@ public:
 
 	/** Constructor of SWEncodingMgr.
 	 *
-	 * @param iconfig
-	 * @param isysconfig
-	 * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
 	 * @param encoding The desired encoding.
 	 */
         EncodingFilterMgr (char encoding = ENC_UTF8);
@@ -63,7 +60,7 @@ public:
 
 	/** Markup sets/gets the encoding after initialization
 	 * 
-	 * @param m The new encoding or ENC_UNKNOWN if you just want to get the current markup.
+	 * @param enc The new encoding or ENC_UNKNOWN if you just want to get the current markup.
 	 * @return The current (possibly changed) encoding format.
 	 */
         char Encoding(char enc);

@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.20 2002/10/01 22:04:58 dglassey Exp $
+ * $Id: swconfig.h,v 1.21 2003/02/28 13:12:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -70,7 +70,7 @@ public:
 	virtual void Save();
 
 	/** Merges the values of addFrom
-	* @param The config which values should be merged to this config object. Already existing values will be overwritten.
+	* @param addFrom The config which values should be merged to this config object. Already existing values will be overwritten.
 	*/
 	virtual void augment(SWConfig &addFrom);
 	virtual SWConfig & operator +=(SWConfig &addFrom) { augment(addFrom); return *this; }

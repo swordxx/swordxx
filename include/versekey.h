@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.28 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: versekey.h,v 1.29 2003/02/28 13:12:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -164,7 +164,7 @@ public:
 	* VerseKey Constructor - initializes Instance of VerseKey
 	*
 	* @param ikey text key (will take various forms of 'BOOK CH:VS'.
-	* See @ref #parse for more detailed information)
+	* See parse() for more detailed information)
 	*/
 	VerseKey(const char *ikey = 0);
 	
@@ -172,13 +172,13 @@ public:
 	* VerseKey Constructor - initializes instance of VerseKey
 	*
 	* @param ikey base key (will take various forms of 'BOOK CH:VS'.
-	*	See @ref #parse for more detailed information)
+	*	See parse() for more detailed information)
 	*/	
 	VerseKey(const SWKey * ikey);
 	
 	/** VerseKey Constructor - initializes instance of VerseKey
-	* with boundariess - see also @ref #LowerBound
-	* and @ref #UpperBound
+	* with boundariess - see also LowerBound()
+	* and UpperBound()
 	* @param min the lower boundary of the new	VerseKey
 	* @param max the upper boundary of the new	VerseKey
 	*/	
@@ -206,7 +206,7 @@ public:
 	
 	/** sets the upper boundary for this	VerseKey
 	* and returns the new boundary
-	* @param lb the new upper boundary for this	VerseKey
+	* @param ub the new upper boundary for this	VerseKey
 	* @return the upper boundary the key was set to
 	*/
 	VerseKey & UpperBound(const char *ub);
@@ -244,24 +244,24 @@ public:
 	
 	/** Positions this key
 	*
-	* @param p position
+	* @param newpos Position to set to.
 	* @return *this
 	*/
-	virtual void setPosition(SW_POSITION);
+	virtual void setPosition(SW_POSITION newpos);
 	
 	/** Decrements key a number of verses
 	*
-	* @param decrement Number of verses to jump backward
+	* @param steps Number of verses to jump backward
 	* @return *this
 	*/
-	virtual void decrement(int step);
+	virtual void decrement(int steps);
 	
 	/** Increments key a number of verses
 	*
-	* @param increment Number of verses to jump forward
+	* @param steps Number of verses to jump forward
 	* @return *this
 	*/
-	virtual void increment(int step);
+	virtual void increment(int steps);
 	virtual char Traversable() { return 1; }
 
 	virtual const char *getBookName() const;

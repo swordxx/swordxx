@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.52 2003/02/20 07:25:20 scribe Exp $
+* $Id: swmgr.h,v 1.53 2003/02/28 13:12:43 mgruner Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -63,7 +63,7 @@ typedef std::map < std::string, SWFilter * >FilterMap;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.52 2003/02/20 07:25:20 scribe Exp $
+* @version $Id: swmgr.h,v 1.53 2003/02/28 13:12:43 mgruner Exp $
 */
 class SWDLLEXPORT SWMgr {
 
@@ -199,6 +199,7 @@ public:
 	SWMgr(SWFilterMgr *filterMgr);
 	/**
 	*
+	* @param iConfigPath Path to config files.
 	* @param autoload If this bool is true the constructor starts loading the
 	* installed modules. If you reimplemented SWMgr you can set autoload=false
 	* to load the modules with your own reimplemented function.
@@ -231,7 +232,7 @@ public:
 	*/
 	virtual void setGlobalOption(const char *option, const char *value);
 	/** Gives the value of the given option
-	* @param The option, which should be used to return the value of it
+	* @param option The option, which should be used to return the value of it
 	* @return The value of the given option
 	*/
 	virtual const char *getGlobalOption(const char *option);
@@ -288,7 +289,7 @@ public:
 	* @endcode
 	*
 	* @param modName For this module we change the unlockKey
-	* @paran key This is the new unlck key we use for te module.
+	* @param key This is the new unlck key we use for te module.
 	*/
 	virtual signed char setCipherKey(const char *modName, const char *key);
 };

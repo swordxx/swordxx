@@ -26,10 +26,10 @@
 
 SWORD_NAMESPACE_START
 
-/** This class is like a normal @ref SWEncodingMgr,
-  * but you can additonally specify which markup
-  * you want to use.
-  */
+/** This class is like a normal SWEncodingMgr,
+* but you can additonally specify which markup
+* you want to use.
+*/
 class SWDLLEXPORT MarkupFilterMgr : public EncodingFilterMgr {
 protected:
         SWFilter* fromthml;
@@ -37,18 +37,15 @@ protected:
         SWFilter* fromplain;
         SWFilter* fromosis;
 
-	/*
-	 * current markup value
-	 */
+				/**
+	 			* current markup value
+	 			*/
         char markup;
 
         void CreateFilters(char markup);
 public:
 	/** Constructor of SWMarkupMgr.
 	 *
-	 * @param iconfig
-	 * @param isysconfig
-	 * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
 	 * @param encoding The desired encoding.
 	 * @param markup The desired markup format.
 	 */

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.9 2003/02/27 23:57:55 mgruner Exp $
+* $Id: swbuf.h,v 1.10 2003/02/28 13:12:43 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -52,21 +52,21 @@ class SWDLLEXPORT SWBuf {
 	void init();
 
 public:
-	/******************************************************************************
+	/**
 	* SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
  	* 		to a value from a const char *
  	*
  	*/
   SWBuf(const char *initVal = 0);
 
-	/******************************************************************************
+	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
 	* 		to a value from a char
 	*
 	*/
 	SWBuf(char initVal);
 
-	/******************************************************************************
+	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
 	* 		to a value from another SWBuf
 	*
@@ -76,7 +76,7 @@ public:
 	inline void setFillByte(char ch) { fillByte = ch; }
 	inline char getFillByte() { return fillByte; }
 
-  /******************************************************************************
+  /**
 	* SWBuf Destructor - Cleans up instance of SWBuf
  	*/
 	virtual ~SWBuf();
@@ -87,7 +87,8 @@ public:
 	inline const char *c_str() const{	return buf;	}
 
 	/**
-	*
+	*	@param pos The position of the requested character.
+	* @return The character at the specified position
 	*/
 	inline char &charAt(unsigned int pos) { return ((pos <= (unsigned int)(end - buf)) ? buf[pos] : nullStr[0]); }
 
@@ -103,33 +104,44 @@ public:
 	*/
 	inline unsigned int length() const { return end - buf; }
 
-	/******************************************************************************
- 	* SWBuf::set - sets this buf to a new value
+	/**
+ 	* SWBuf::set - sets this buf to a new value.
+	* If the allocated memory is bigger than the new string, it will NOT be resized.
+	* @param newVal the value to set this buffer to. 
  	*/
 	void set(const char *newVal);
 
-	/******************************************************************************
+	/**
  	* SWBuf::set - sets this buf to a new value
+	* If the allocated memory is bigger than the new string, it will NOT be resized.
+	* @param newVal the value to set this buffer to. 
  	*/
 	void set(const SWBuf &newVal);
 
-	/******************************************************************************
- 	* SWBuf::setSize - Size this buffer to a specific length
+	/**
+ 	* SWBuf::setSize - Size this buffer to a specific length.
+	* @param len The new size of the buffer. One byte for the null will be added.
  	*/
 	void setSize(unsigned int len);
 
-	/******************************************************************************
- 	* SWBuf::append - appends a value to the current value of this SWBuf
+	/**
+ 	* SWBuf::append - appends a value to the current value of this SWBuf.
+	* If the allocated memory is not enough, it will be resized accordingly.
+	* @param str Append this.
  	*/
 	void append(const char *str);
 
-	/******************************************************************************
+	/**
  	* SWBuf::append - appends a value to the current value of this SWBuf
+	* If the allocated memory is not enough, it will be resized accordingly.
+	* @param str Append this.
  	*/
 	void append(const SWBuf &str);
 
-	/******************************************************************************
+	/**
  	* SWBuf::append - appends a value to the current value of this SWBuf
+	* If the allocated memory is not enough, it will be resized accordingly.
+	* @param ch Append this.
  	*/
 	inline void append(char ch) {
 		assureSize((end-buf) + 2);
@@ -138,10 +150,12 @@ public:
 		*end = 0;
 	}
 
-	/******************************************************************************
+	/**
  	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf
 	* WARNING: This function can only write at most
 	* JUNKBUFSIZE to the string per call.
+	* @param format The format string. Same syntax as printf, for example.
+	* @param ... Add all arguments here.
  	*/
 	void appendFormatted(const char *format, ...);
 	

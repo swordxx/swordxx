@@ -108,10 +108,6 @@ unsigned char* UTF32to8 (unsigned long utf32, unsigned char * utf8) {
   return utf8;
 }
 
-/** Converts a UTF-8 encoded 1-6 byte array into a 32-bit unsigned integer UTF-32 value
- * @param utf8 pointer to an array of 6 unsigned chars containing the UTF-8 value, starting in the utf8[0]
- * @param utf32 the UTF-32 Unicode code point value
- */
 unsigned long UTF8to32 (unsigned char * utf8) {
 
   unsigned char i = utf8[0];

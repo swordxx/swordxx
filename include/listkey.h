@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.17 2002/10/21 22:48:24 scribe Exp $
+ * $Id: listkey.h,v 1.18 2003/02/28 13:12:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -93,10 +93,10 @@ public:
 
 	/** Positions this key
 	*
-	* @param p position
+	* @param pos position
 	* @return *this
 	*/
-	virtual void setPosition(SW_POSITION);
+	virtual void setPosition(SW_POSITION pos);
 	/** Decrements a number of elements
 	*/
 	virtual void decrement(int step);

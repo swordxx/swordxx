@@ -2,7 +2,7 @@
  *  swtext.h   - code for base class 'SWText'.  SWText is the basis for all
  *		 types of text modules
  *
- * $Id: swtext.h,v 1.13 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: swtext.h,v 1.14 2003/02/28 13:12:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,10 +36,6 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT SWText : public SWModule {
 public:
 	/** Initializes data for instance of SWText
-	*
-	* @param imodname Internal name for module
-	* @param imoddesc Name to display to user for module
-	* @param idisp Display object to use for displaying
 	*/
 	SWText(const char *imodname = 0, const char *imoddesc = 0,
 			SWDisplay * idisp = 0,
