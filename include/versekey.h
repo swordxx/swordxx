@@ -1,7 +1,7 @@
-/****************************************************************************** 
+/******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.11 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: versekey.h,v 1.12 2001/02/14 21:55:13 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,9 +39,15 @@
 
 struct sbook
 {
-  const char *name;		// Name of book
-  unsigned char chapmax;	// Maximum chapters in book
-  int *versemax;		// Array[chapmax] of maximum verses in chapters
+  /**Name of book
+  */
+  const char *name;
+  /**Maximum chapters in book
+  */
+  unsigned char chapmax;
+  /** Array[chapmax] of maximum verses in chapters
+  */
+  int *versemax;
 };
 
 struct abbrev
@@ -53,13 +59,13 @@ struct abbrev
 
 class SWLocale;
 
-/**
-  * VerseKey
+  /**
+  * Class VerseKey
   */
 class SWDLLEXPORT VerseKey:public SWKey
 {
 /**
-  * LocalCache
+  * LocaleCache
   */
   class LocaleCache
   {
@@ -84,7 +90,9 @@ class SWDLLEXPORT VerseKey:public SWKey
 
   static long *offsets[2][2];
   static int offsize[2][2];
-  static int instance;		// number of instantiated VerseKey objects or derivitives
+  /** number of instantiated VerseKey objects or derivitives 
+  */
+  static int instance;
   static struct sbook otbooks[];
   static struct sbook ntbooks[];
   static long otbks[];
@@ -97,21 +105,45 @@ class SWDLLEXPORT VerseKey:public SWKey
 
   const struct abbrev *abbrevs;
   int abbrevsCnt;
-
-  char testament;		// 0 - Old; 1 - New
+  /** The Testament: 0 - Old; 1 - New
+  */
+  char testament;
   mutable char book;
   mutable int chapter;
   mutable int verse;
-  char autonorm;		// flag for auto normalization
-  char headings;		// flag for headings on/off
+  /** flag for auto normalization 
+  */
+  char autonorm;
+  /** flag for headings on/off
+  */
+  char headings;
 
   int getBookAbbrev (char *abbr);
   void initBounds () const;
-  void initstatics ();		// initialize and allocate books array
-  void init ();			// initializes this VerseKey()
-  void freshtext () const;	// refresh keytext based on testament|book|chapter|verse
-  virtual char parse ();	// Parse a character array into testament|book|chapter|verse
-  int findindex (long *array, int size, long value);	// finds the index of a given value
+  /** initialize and allocate books array
+  */
+  void initstatics ();
+  /** initializes this VerseKey()
+  */
+  void init ();
+  /** Refresh keytext based on testament|book|chapter|verse
+  * default auto normalization to true
+  * default display headings option is false
+  */
+  void freshtext () const;
+  /**  Parse a character array into testament|book|chapter|verse 
+  *
+  */
+  virtual char parse ();
+  /** Binary search to find the index closest, but less
+  * than the given value.
+  *
+  * @param array long * to array to search
+  * @param size number of elements in the array
+  * @param value value to find
+  * @return the index into the array that is less than but closest to value
+  */
+  int findindex (long *array, int size, long value);
   mutable VerseKey *lowerBound, *upperBound;
 
 public:
@@ -121,28 +153,113 @@ public:
   const char *BMAX;
   struct sbook **books;
 
+  /**
+  * VerseKey Constructor - initializes Instance of VerseKey
+  *
+  * @param ikey text key (will take various forms of 'BOOK CH:VS'.
+  * See @ref #parse for more detailed information)
+  */
   VerseKey (const char *ikey = 0);
+  
+  /**
+  * VerseKey Constructor - initializes instance of VerseKey
+  *
+  * @param ikey base key (will take various forms of 'BOOK CH:VS'.
+  *  See @ref #parse for more detailed information)
+  */  
   VerseKey (const SWKey * ikey);
+  
+  /** VerseKey Constructor - initializes instance of VerseKey
+  * with boundariess - see also @ref #LowerBound
+  * and @ref #UpperBound
+  * @param min the lower boundary of the new  VerseKey
+  * @param max the upper boundary of the new  VerseKey
+  */  
   VerseKey (const char *min, const char *max);
+  
+  /**  VerseKey Copy Constructor - will create a new  VerseKey
+  * based on an existing one
+  *
+  * @param k the  VerseKey to copy from
+  */
   VerseKey (VerseKey const &k);
+  
+  /**  VerseKey Destructor
+  * Cleans up an instance of VerseKey
+  */
   virtual ~ VerseKey ();
 
+  /** sets the lower boundary for this  VerseKey
+  * and returns the new boundary
+  *
+  * @param lb the new lower boundary for this  VerseKey
+  * @return the lower boundary the key was set to
+  */
   VerseKey & LowerBound (const char *lb);
+  
+  /** sets the upper boundary for this  VerseKey
+  * and returns the new boundary
+  * @param lb the new upper boundary for this  VerseKey
+  * @return the upper boundary the key was set to
+  */
   VerseKey & UpperBound (const char *ub);
+  
+  /** gets the lower boundary of this  VerseKey
+  * @return the lower boundary of this  VerseKey
+  */
   VerseKey & LowerBound ()const;
+  
+  /** gets the upper boundary of this  VerseKey
+  * @return the upper boundary of this  VerseKey
+  */
   VerseKey & UpperBound ()const;
+  
+  /** clears the boundaries of this  VerseKey
+  */
   void ClearBounds ();
+  
+  /** Creates a new  SWKey based on the current  VerseKey
+  * see also the Copy Constructor
+  */
   virtual SWKey *clone () const;
+  
+  /** refreshes keytext before returning if cast to
+  * a (char *) is requested
+  */
   virtual operator const char *() const;
   virtual SWKey & operator = (const char *ikey) { SWKey & retval =
       SWKey::operator = (ikey);
     parse ();
     return retval;
   }
+  
+  /** Equates this VerseKey to another SWKey
+  */
   virtual SWKey & operator = (const SWKey & ikey);
+  
+  /** Equates this VerseKey to another VerseKey
+  */
   virtual SWKey & operator = (const VerseKey & ikey);
+  
+  /** Positions this key
+  *
+  * @param p position
+  * @return *this
+  */
   virtual SWKey & operator = (POSITION);
+  
+  /** Decrements key a number of verses
+  *
+  * @param decrement Number of verses to jump backward
+  * @return *this
+  */
   virtual SWKey & operator -= (int decrement);
+  
+  /** Increments key a number of verses
+  *
+  * @param increment Number of verses to jump forward
+  * @return *this
+  */
   virtual SWKey & operator += (int increment);
 /*
 	virtual VerseKey &operator ++(int) { return *this += 1; }
@@ -153,25 +270,129 @@ public:
     return 1;
   }
 
+  /** Gets testament
+  *
+  * @return value of testament
+  */
   virtual char Testament () const;
+  
+  /** Gets book
+  *
+  * @return value of book
+  */
   virtual char Book () const;
+  
+  /** Gets chapter
+  *
+  * @return value of chapter
+  */
   virtual int Chapter () const;
+  
+  /** Gets verse
+  *
+  * @return value of verse
+  */
   virtual int Verse () const;
+  
+  /** Sets/gets testament
+  *
+  * @param itestament value which to set testament
+  * [MAXPOS(char)] - only get
+  * @return if unchanged -> value of testament,
+  * if changed -> previous value of testament
+  */
   virtual char Testament (char itestament);
+  
+  /** Sets/gets book
+  *
+  * @param ibook value which to set book
+  * [MAXPOS(char)] - only get
+  * @return if unchanged -> value of book,
+  * if changed -> previous value of book
+  */
   virtual char Book (char ibook);
+  
+  /** Sets/gets chapter
+  *
+  * @param ichapter value which to set chapter
+  * [MAXPOS(int)] - only get
+  * @return if unchanged -> value of chapter,
+  * if changed -> previous value of chapter
+  */
   virtual int Chapter (int ichapter);
+  
+  /** Sets/gets verse
+  *
+  * @param iverse value which to set verse
+  * [MAXPOS(int)] - only get
+  * @return if unchanged -> value of verse,
+  * if changed -> previous value of verse
+  */
   virtual int Verse (int iverse);
+  
+  /** checks limits and normalizes if necessary (e.g.
+  * Matthew 29:47 = Mark 2:2).  If last verse is
+  * exceeded, key is set to last Book CH:VS
+  *
+  * @return *this
+  */
   virtual void Normalize (char autocheck = 0);
+  
+  /** Sets/gets flag that tells VerseKey to
+  * automatically normalize itself when modified
+  *
+  * @param iautonorm value which to set autonorm
+  * [MAXPOS(char)] - only get
+  * @return if unchanged -> value of autonorm,
+  * if changed -> previous value of autonorm
+  */
   virtual char AutoNormalize (char iautonorm = MAXPOS (char));
+  
+  /** Sets/gets flag that tells VerseKey to include
+  * chapter/book/testament/module headings
+  *
+  * @param iheadings value which to set headings
+  * [MAXPOS(char)] - only get
+  * @return if unchanged -> value of headings,
+  * if changed -> previous value of headings
+  */
   virtual char Headings (char iheadings = MAXPOS (char));
+  
   virtual long NewIndex () const;
+  
+  /** Gets index based upon current verse
+  *
+  * @return offset
+  */
   virtual long Index () const;
+  
+  /** Sets index based upon current verse
+  *
+  * @param iindex value to set index to
+  * @return offset
+  */
   virtual long Index (long iindex);
 
   virtual ListKey ParseVerseList (const char *buf, const char *defaultKey =
 				  "Genesis 1:1", bool expandRange = false);
+  /** Compares another  SWKey object
+  *
+  * @param ikey key to compare with this one
+  * @return >0 if this  VerseKey is greater than compare  SWKey,
+  * <0 if this  VerseKey is smaller than compare  SWKey,
+  * 0 if the keys are the same
+  */
   virtual int compare (const SWKey & ikey);
+  
+  /** Compares another  VerseKey object
+  *
+  * @param ikey key to compare with this one
+  * @return >0 if this  VerseKey is greater than compare  VerseKey,
+  * <0 if this  VerseKey is smaller than compare  VerseKey,
+  * 0 if the keys are the same
+  */
   virtual int _compare (const VerseKey & ikey);
+  
   virtual void setBookAbbrevs (const struct abbrev *bookAbbrevs,
 			       unsigned int size =
 			       0 /* default determine size */ );
