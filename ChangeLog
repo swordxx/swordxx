@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+31-Oct-2000	Joachim Ansorg <jansorg@crosswire.org>
+	Fixed vpl2mod to work correctly with headers and files without
+		references.
+
 30-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Hacked SWModule::Search to hardcode high index always to
 		32300 for now until we get NewIndex working properly.
