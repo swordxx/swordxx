@@ -150,7 +150,7 @@ char InstallMgr::FTPURLGetFile(void *session, const char *dest, const char *sour
 		curl_easy_setopt(curl, CURLOPT_FILE, &ftpfile);
 
 		/* Switch on full protocol/debug output */
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, TRUE);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
 
 		res = curl_easy_perform(curl);
 
