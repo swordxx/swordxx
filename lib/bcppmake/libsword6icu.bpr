@@ -51,7 +51,7 @@
       ..\..\obj\osisscripref.obj ..\..\obj\swoptfilter.obj 
       ..\..\obj\osislemma.obj ..\..\obj\osisredletterwords.obj 
       ..\..\obj\osishtmlhref.obj ..\..\obj\swsearchable.obj 
-      ..\..\obj\osiswebif.obj"/>
+      ..\..\obj\osiswebif.obj ..\..\obj\osisosis.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -66,7 +66,7 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
     <INCLUDEPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n"/>
@@ -90,8 +90,8 @@
       -I..\..\apps\windoze\CBuilder5\InstallMgr\curl\include -I..\..\include 
       -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_ICU_ -D_ICUSWORD_ 
       -DUSBINARY -boa"/>
-    <CFLAG1 value="-O2 -Vx -Ve -X- -a8 -b- -k- -vi -c -tW -tWM"/>
-    <PFLAGS value="-N2..\..\obj -N0..\..\obj -$Y- -$L- -$D- -$A8 -v -JPHNE -M"/>
+    <CFLAG1 value="-Od -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-N2..\..\obj -N0..\..\obj -$Y+ -$W -$O- -$A8 -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zn"/>
     <LFLAGS value="/P512"/>
     <OTHERFILES value=""/>
@@ -232,6 +232,7 @@
       <FILE FILENAME="..\..\src\modules\filters\osishtmlhref.cpp" FORMNAME="" UNITNAME="osishtmlhref" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\mgr\swsearchable.cpp" FORMNAME="" UNITNAME="swsearchable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osiswebif.cpp" FORMNAME="" UNITNAME="osiswebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisosis.cpp" FORMNAME="" UNITNAME="osisosis" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -296,15 +297,16 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=8
-Item0=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0
-Item1=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL
-Item2=_ICU_;_ICUSWORD_;USBINARY
-Item3=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
-Item4=;USBINARY;_DEBUG
-Item5=_ICU_;_ICUSWORD_
-Item6=_ICU_;_ICUSWORD_;_DEBUG
-Item7=_DEBUG
+Count=9
+Item0=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0;_DEBUG
+Item1=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0
+Item2=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL
+Item3=_ICU_;_ICUSWORD_;USBINARY
+Item4=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
+Item5=;USBINARY;_DEBUG
+Item6=_ICU_;_ICUSWORD_
+Item7=_ICU_;_ICUSWORD_;_DEBUG
+Item8=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
 Count=2

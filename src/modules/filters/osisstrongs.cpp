@@ -86,11 +86,11 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 							
 							//now try to find the end tag to get the text between <w> and </w> to set the entry attribute
 							
-							char* startTagEnd = strstr(from, ">"); //end of the opening tag
+							const char* startTagEnd = strstr(from, ">"); //end of the opening tag
 							if (startTagEnd) {
 								startTagEnd++;
 								
-								char* endTagStart = strstr(startTagEnd, "</w>"); //end of the opening tag
+								const char* endTagStart = strstr(startTagEnd, "</w>"); //end of the opening tag
 								if (endTagStart && endTagStart > startTagEnd) { //content in between
 									SWBuf tmp;
 									tmp.append(startTagEnd, endTagStart - startTagEnd);
