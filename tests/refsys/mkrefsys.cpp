@@ -21,10 +21,9 @@
  */
 
 
-#define VK2
 #include <stdio.h>
 #include <expat.h>
-#include "versekey.h"
+#include "versekey2.h"
 //#include <map>
 
 using namespace sword;
@@ -38,7 +37,7 @@ using namespace sword;
 char Buff[BUFFSIZE];
 
 int Depth;
-VerseKey vk;
+VerseKey2 vk;
 const char *abbrevs[MAXOB+1];
 int totalchaps = 0;
 
