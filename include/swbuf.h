@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.8 2003/02/27 23:34:22 mgruner Exp $
+* $Id: swbuf.h,v 1.9 2003/02/27 23:57:55 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -59,7 +59,18 @@ public:
  	*/
   SWBuf(const char *initVal = 0);
 
+	/******************************************************************************
+	* SWBuf Constructor - Creates an SWBuf initialized
+	* 		to a value from a char
+	*
+	*/
 	SWBuf(char initVal);
+
+	/******************************************************************************
+	* SWBuf Constructor - Creates an SWBuf initialized
+	* 		to a value from another SWBuf
+	*
+	*/
 	SWBuf(const SWBuf &other);
 
 	inline void setFillByte(char ch) { fillByte = ch; }
