@@ -32,7 +32,12 @@ enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATI
 //#include <unicode/uchar.h>
 
 #include <unicode/unistr.h>
+
+//#ifdef _ICUSWORD_
+//#include <unicode/utrans.h>
+//#else
 #include <unicode/translit.h>
+//#endif
 
 #include <defs.h>
 #include <map>
