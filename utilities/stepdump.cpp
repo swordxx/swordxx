@@ -2,7 +2,12 @@
 #include <string>
 
 #include <fcntl.h>
+
+#ifndef __GNUC__
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <lzsscomprs.h>
 
@@ -163,8 +168,9 @@ void readVersion(int fd, Version *versionRecord) {
 
 	if (skip) {
 		cout << "\nSkipping " << skip << " unknown bytes.\n";
-		char skipbuf[skip];
+		char *skipbuf = new char[skip];
 		read(fd, skipbuf, skip);
+		delete [] skipbuf;
 	}
 }
 
@@ -196,8 +202,9 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 
 	if (skip) {
 		cout << "\nSkipping " << skip << " unknown bytes.\n";
-		char skipbuf[skip];
+		char *skipbuf = new char[skip];
 		read(fd, skipbuf, skip);
+		delete [] skipbuf;
 	}
 }
 

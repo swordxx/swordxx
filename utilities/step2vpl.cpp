@@ -3,7 +3,12 @@
 #include <stdio.h>
 
 #include <fcntl.h>
+
+#ifndef __GNUC__
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <lzsscomprs.h>
 
@@ -211,8 +216,9 @@ void readVersion(int fd, Version *versionRecord) {
 	int skip = versionRecord->versionRecordSize - 16/*sizeof(struct Version*/;
 
 	if (skip) {
-		char skipbuf[skip];
+		char *skipbuf = new char[skip];
 		read(fd, skipbuf, skip);
+		delete [] skipbuf;
 	}
 }
 
@@ -228,8 +234,9 @@ void readSectionsHeader(int fd, SectionsHeader *sectionsHeaderRecord) {
 	int skip = sectionsHeaderRecord->sectionsHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
 
 	if (skip) {
-		char skipbuf[skip];
+		char *skipbuf = new char[skip];
 		read(fd, skipbuf, skip);
+		delete [] skipbuf;
 	}
 }
 
@@ -247,8 +254,9 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 	int skip = viewableHeaderRecord->viewableHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
 
 	if (skip) {
-		char skipbuf[skip];
+		char *skipbuf = new char[skip];
 		read(fd, skipbuf, skip);
+		delete [] skipbuf;
 	}
 }
 
@@ -266,8 +274,9 @@ void readVSyncHeader(int fd, VSyncHeader *vSyncHeaderRecord) {
 	int skip = vSyncHeaderRecord->vSyncHeaderRecordSize - 16/*sizeof(VSyncHeader)*/;
 
 	if (skip) {
-		char skipbuf[skip];
+		char *skipbuf = new char[skip];
 		read(fd, skipbuf, skip);
+		delete [] skipbuf;
 	}
 }
 
