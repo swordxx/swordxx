@@ -16,9 +16,9 @@ void systemquery(const char * key, ostream* output){
 	bool types = false, descriptions = false, names = false;
 
 	if (!stricmp(key, "localelist")) {		
-		LocaleMgr lm = LocaleMgr::systemLocaleMgr;
 		list<string> loclist =	lm.getAvailableLocales();
 		list<string>::iterator li = loclist.begin();
+		static LocaleMgr lm = LocaleMgr::systemLocaleMgr;
 		for (;li != loclist.end(); li++) {
 		  *output << li->c_str();
 		  *output << "\n";

@@ -44,8 +44,8 @@
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0
-#define ST_MULTIWORD 2  // -1
-#define ST_PHRASE 3 // -2
+#define ST_PHRASE 2  // -1
+#define ST_MULTIWORD 3 // -2
 
 int hasalpha (char * string);
 void doquery(int maxverses, char outputformat, char optionfilters, char searchtype, const char *text, const char *locale, const char *ref, ostream* outputt); 
