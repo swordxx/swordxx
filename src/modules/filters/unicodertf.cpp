@@ -15,29 +15,27 @@ UnicodeRTF::UnicodeRTF() {
 }
 
 
-char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	unsigned char *to, *from, *maxto;
+	unsigned char *from;
 	int len;
 	char digit[10];
 	short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
 
-	len = strlenw(text) + 2;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = (unsigned char*)&text[maxlen - len];
-	}
-	else	from = (unsigned char*)text;
-	maxto =(unsigned char*)text + maxlen;
+	SWBuf orig = text;
+
+	len = strlenw(text.c_str()) + 2;						// shift string to right of buffer
+#warning is this right? I needed to cast "const" away.
+	from = (unsigned char*)orig.c_str();
 
 	// -------------------------------
 	bool lastUni = false;
-	for (to = (unsigned char*)text; *from && (to <= maxto); from++) {
+	for (text = ""; *from; from++) {
 		ch = 0;
 		if ((*from & 128) != 128) {
 //			if ((*from == ' ') && (lastUni))
 //				*to++ = ' ';
-			*to++ = *from;
+			text += *from;
 			lastUni = false;
 			continue;
 		}
@@ -60,19 +58,15 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 		
 		ch |= (((short)*from) << (((6*subsequent)+significantFirstBits)-8));
 		from += subsequent;
-		*to++ = '\\';
-		*to++ = 'u';
+		text += '\\';
+		text += 'u';
 		sprintf(digit, "%d", ch);
 		for (char *dig = digit; *dig; dig++)
-			*to++ = *dig;
-		*to++ = '?';
+			text += *dig;
+		text += '?';
 		lastUni = true;
 	}
 	   
-	if (to != maxto) {
-		*to++ = 0;
-	}
-	*to = 0;
 	return 0;
 }
 
