@@ -1,6 +1,7 @@
 swlocaledir = $(top_srcdir)/locales.d
 
 localeDATA = $(swlocaledir)/abbr.conf
+localeDATA += $(swlocaledir)/bg_BG-cp1251.conf
 localeDATA += $(swlocaledir)/cs.conf
 localeDATA += $(swlocaledir)/da.conf
 localeDATA += $(swlocaledir)/de.conf
