@@ -22,6 +22,7 @@ localeDATA += locales.d/ru_RU-cp1251.conf
 localeDATA += locales.d/ru_RU-koi8-r.conf
 localeDATA += locales.d/uk_UA-koi8-u.conf
 localeDATA += locales.d/uk_UA-cp1251.conf
+localeDATA += locales.d/ro.conf
 
 localedatadir = $(pkgdatadir)/locales.d
 
