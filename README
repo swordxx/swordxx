@@ -26,6 +26,8 @@ Other language bindings can be found in the ./bindings directory:
 
 Kylix bindings (and maybe Delphi bindings) may be found in sword/bindings/clx
 
+CORBA (orbit-c++) bindings with Java example classes in /bindings/corba
+
 C++Builder developers	You may find project files and source for the WIN32
 		frontend under apps/windows/CBuilder5/BibleCS
 
