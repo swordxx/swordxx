@@ -353,6 +353,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 
 			*testKeyType = saveKey;	// set current place back to original
 
+			listkey = TOP;
 			return listkey;
 		}
 
