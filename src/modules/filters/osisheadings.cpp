@@ -68,8 +68,8 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 			XMLTag tag(token);
 			if (!stricmp(tag.getName(), "title")) {
-				if (!stricmp(tag.getAttribute("type"), "section")) {
-					if (!stricmp(tag.getAttribute("subtype"), "x-preverse")) {
+				if ((tag.getAttribute("type")) && (!stricmp(tag.getAttribute("type"), "section"))) {
+					if ((tag.getAttribute("subtype")) && (!stricmp(tag.getAttribute("subtype"), "x-preverse"))) {
 						hide = true;
 						preverse = true;
 						header = "";

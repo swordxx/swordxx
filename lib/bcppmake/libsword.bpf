@@ -120,6 +120,7 @@ USEUNIT("..\..\src\modules\filters\osisrtf.cpp");
 USEUNIT("..\..\src\modules\filters\osisplain.cpp");
 USEUNIT("..\..\src\utilfuns\swbuf.cpp");
 USEUNIT("..\..\src\modules\filters\osisheadings.cpp");
+USEUNIT("..\..\src\utilfuns\utilxml.cpp");
 //---------------------------------------------------------------------------
 USE("\\			preptext(entrybuf);
 ", File);
