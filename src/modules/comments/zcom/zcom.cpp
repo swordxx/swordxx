@@ -34,7 +34,6 @@
 zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)/*, SWCompress()*/
 {
 	blockType = iblockType;
-	versebuf = 0;
 	lastWriteKey = 0;
 }
 
@@ -44,9 +43,6 @@ zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockTy
 
 zCom::~zCom() {
 	flushCache();
-
-	if (versebuf)
-		delete [] versebuf;
 
 	if (lastWriteKey)
 		delete lastWriteKey;
@@ -78,22 +74,26 @@ char *zCom::getRawEntry() {
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
-	if (versebuf)
-		delete [] versebuf;
-	versebuf = new char [ (size + 2) * FILTERPAD ];
-	*versebuf = 0;
+	unsigned long newsize = (size + 2) * FILTERPAD;
+	if (newsize > entrybufallocsize) {
+		if (entrybuf)
+			delete [] entrybuf;
+		entrybuf = new char [ newsize ];
+		entrybufallocsize = newsize;
+	}
+	*entrybuf = 0;
 
-	swgettext(key->Testament(), start, (size + 2), versebuf);
+	swgettext(key->Testament(), start, (size + 2), entrybuf);
 
-	rawFilter(versebuf, size, key);
+	rawFilter(entrybuf, size, key);
 
 	if (!isUnicode())
-		preptext(versebuf);
+		preptext(entrybuf);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
 
-	return versebuf;
+	return entrybuf;
 }
 
 

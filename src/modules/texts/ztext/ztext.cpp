@@ -36,7 +36,6 @@
 zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang)/*, SWCompress()*/
 {
 	blockType = iblockType;
-	versebuf = 0;
 	lastWriteKey = 0;
 }
 
@@ -48,9 +47,6 @@ zText::zText(const char *ipath, const char *iname, const char *idesc, int iblock
 zText::~zText()
 {
 	flushCache();
-
-	if (versebuf)
-		delete [] versebuf;
 
 	if (lastWriteKey)
 		delete lastWriteKey;
@@ -128,27 +124,30 @@ char *zText::getRawEntry()
 	entrySize = size;        // support getEntrySize call
 
 	//printf ("deleting previous buffer\n");
-	if (versebuf)
-		delete [] versebuf;
-
-	versebuf = new char [ (size + 2) * FILTERPAD ];
-	*versebuf = 0;
+	unsigned long newsize = (size + 2) * FILTERPAD;
+	if (newsize > entrybufallocsize) {
+		if (entrybuf)
+			delete [] entrybuf;
+		entrybuf = new char [ newsize ];
+		entrybufallocsize = newsize;
+	}
+	*entrybuf = 0;
 
 	//printf ("getting text\n");
-	swgettext(key->Testament(), start, (size + 2), versebuf);
+	swgettext(key->Testament(), start, (size + 2), entrybuf);
 	//printf ("got text\n");
 
-	rawFilter(versebuf, size, key);
+	rawFilter(entrybuf, size, key);
 
 	//printf ("preparing text\n");
         if (!isUnicode())
-		preptext(versebuf);
+		preptext(entrybuf);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
 
 	//printf ("returning text\n");
-	return versebuf;
+	return entrybuf;
 
 }
 

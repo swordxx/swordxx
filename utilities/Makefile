@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/sword
 pkgincludedir = $(includedir)/sword
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal
-AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake
-AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
+ACLOCAL = ${SHELL} /home/scribe/src/sword/missing --run aclocal
+AUTOCONF = ${SHELL} /home/scribe/src/sword/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/scribe/src/sword/missing --run automake
+AUTOHEADER = ${SHELL} /home/scribe/src/sword/missing --run autoheader
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -57,9 +57,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
+AMTAR = ${SHELL} /home/scribe/src/sword/missing --run tar
 AS = as
-AWK = gawk
+AWK = mawk
 CC = gcc
 CXX = g++
 DEPDIR = .deps
@@ -82,7 +82,7 @@ dir_confdef = no
 enable_debug = no
 enable_profile = no
 enable_vcl = no
-install_sh = /space/home/scribe/src/sword/install-sh
+install_sh = /home/scribe/src/sword/install-sh
 target_cpu = i686
 target_mingw32 = no
 target_os = linux-gnu
@@ -277,7 +277,7 @@ distclean-libtool:
 	-rm -f libtool
 $(srcdir)/Makefile.in: # Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  utilities/Makefile
+	  $(AUTOMAKE) --foreign  utilities/Makefile
 Makefile: # $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \

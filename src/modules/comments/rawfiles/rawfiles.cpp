@@ -36,7 +36,6 @@
 
 RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, O_RDWR), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)
 {
-	versebuf = 0;
 }
 
 
@@ -46,8 +45,6 @@ RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDi
 
 RawFiles::~RawFiles()
 {
-	if (versebuf)
-		delete [] versebuf;
 }
 
 
@@ -78,8 +75,8 @@ char *RawFiles::getRawEntry() {
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 
-	if (versebuf)
-		delete [] versebuf;
+	if (entrybuf)
+		delete [] entrybuf;
 
 	if (size) {
 		tmpbuf   = new char [ (size + 2) + strlen(path) + 5 ];
@@ -89,29 +86,29 @@ char *RawFiles::getRawEntry() {
 		delete [] tmpbuf;
 		if (datafile->getFd() > 0) {
 			size = lseek(datafile->getFd(), 0, SEEK_END);
-			versebuf = new char [ size * FILTERPAD ];
-			memset(versebuf, 0, size * FILTERPAD);
+			entrybuf = new char [ size * FILTERPAD ];
+			memset(entrybuf, 0, size * FILTERPAD);
 			lseek(datafile->getFd(), 0, SEEK_SET);
-			read(datafile->getFd(), versebuf, size);
-			preptext(versebuf);
+			read(datafile->getFd(), entrybuf, size);
+			preptext(entrybuf);
 		}
 		else {
-			versebuf = new char [2];
-			versebuf[0] = 0;
-			versebuf[1] = 0;
+			entrybuf = new char [2];
+			entrybuf[0] = 0;
+			entrybuf[1] = 0;
 		}
 		FileMgr::systemFileMgr.close(datafile);
 	}
 	else {
-		versebuf = new char [2];
-		versebuf[0] = 0;
-		versebuf[1] = 0;
+		entrybuf = new char [2];
+		entrybuf[0] = 0;
+		entrybuf[1] = 0;
 	}
 
 	if (key != this->key)
 		delete key;
 
-	return versebuf;
+	return entrybuf;
 }
 
 

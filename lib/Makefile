@@ -62,10 +62,10 @@ pkglibdir = $(libdir)/sword
 pkgincludedir = $(includedir)/sword
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal
-AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake
-AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
+ACLOCAL = ${SHELL} /home/scribe/src/sword/missing --run aclocal
+AUTOCONF = ${SHELL} /home/scribe/src/sword/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/scribe/src/sword/missing --run automake
+AUTOHEADER = ${SHELL} /home/scribe/src/sword/missing --run autoheader
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -81,9 +81,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
+AMTAR = ${SHELL} /home/scribe/src/sword/missing --run tar
 AS = as
-AWK = gawk
+AWK = mawk
 CC = gcc
 CXX = g++
 DEPDIR = .deps
@@ -106,7 +106,7 @@ dir_confdef = no
 enable_debug = no
 enable_profile = no
 enable_vcl = no
-install_sh = /space/home/scribe/src/sword/install-sh
+install_sh = /home/scribe/src/sword/install-sh
 target_cpu = i686
 target_mingw32 = no
 target_os = linux-gnu
@@ -140,7 +140,7 @@ mgrdir = $(top_srcdir)/src/mgr
 #globdef = -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\"
 globdef = 
 
-DEFS = $(globdef) -DUNIX
+DEFS = $(globdef) -DUNIX $(ICUDEFS)
 
 frontenddir = $(top_srcdir)/src/frontend
 
@@ -153,6 +153,8 @@ SWZLIB = $(commondir)/zipcomprs.cpp
 
 filtersdir = $(top_srcdir)/src/modules/filters
 
+#ICUDEFS = -D_ICU_
+ICUDEFS = 
 #SWICUSRC = $(filtersdir)/utf8transliterator.cpp $(filtersdir)/utf8nfc.cpp $(filtersdir)/utf8nfkd.cpp $(filtersdir)/utf8arshaping.cpp $(filtersdir)/utf8bidireorder.cpp
 SWICUSRC = 
 
@@ -694,7 +696,7 @@ distclean-libtool:
 	-rm -f libtool
 $(srcdir)/Makefile.in: # Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/genbook/Makefile.am $(srcdir)/../src/modules/genbook/rawgenbook/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  lib/Makefile
+	  $(AUTOMAKE) --foreign  lib/Makefile
 Makefile: # $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \

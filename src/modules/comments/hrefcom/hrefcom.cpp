@@ -32,7 +32,6 @@
 
 HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, const char *idesc, SWDisplay *idisp) : RawVerse(ipath), SWCom(iname, idesc, idisp)
 {
-	versebuf = 0;
 	prefix   = 0;
 	stdstr(&prefix, iprefix);
 }
@@ -44,8 +43,6 @@ HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, cons
 
 HREFCom::~HREFCom()
 {
-	if (versebuf)
-		delete [] versebuf;
 	if (prefix)
 		delete [] prefix;
 }
@@ -77,19 +74,23 @@ char *HREFCom::getRawEntry() {
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 
-	if (versebuf)
-		delete [] versebuf;
-	versebuf = new char [ (size + 2) + strlen(prefix) * FILTERPAD ];
+	unsigned long newsize = (size + 2) + strlen(prefix) * FILTERPAD;
+	if (newsize > entrybufallocsize) {
+		if (entrybuf)
+			delete [] entrybuf;
+		entrybuf = new char [ newsize ];
+		entrybufallocsize = newsize;
+	}
 	tmpbuf   = new char [ size + 1 ];
 
 	gettext(key->Testament(), start, size + 2, tmpbuf);
-	sprintf(versebuf, "%s%s", prefix, tmpbuf);
-	preptext(versebuf);
+	sprintf(entrybuf, "%s%s", prefix, tmpbuf);
+	preptext(entrybuf);
 
 	delete [] tmpbuf;
 
 	if (key != this->key)
 		delete key;
 
-	return versebuf;
+	return entrybuf;
 }

@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.11 2001/12/18 04:47:40 chrislit Exp $
+ * $Id: rawfiles.h,v 1.12 2002/02/19 01:20:35 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,7 +31,6 @@
 
 class SWDLLEXPORT RawFiles:public RawVerse, public SWCom
 {
-  char *versebuf;
 
   char *getnextfilename ();
 

@@ -44,6 +44,7 @@ libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlolb.cpp
 
 if ICU
+ICUDEFS = -D_ICU_
 SWICUSRC = $(filtersdir)/utf8transliterator.cpp
 SWICUSRC += $(filtersdir)/utf8nfc.cpp
 SWICUSRC += $(filtersdir)/utf8nfkd.cpp
@@ -51,8 +52,10 @@ SWICUSRC += $(filtersdir)/utf8arshaping.cpp
 SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
 else
 SWICUSRC =
+ICUDEFS = 
 endif
 libsword_la_SOURCES += $(SWICUSRC)
+DEFS += $(ICUDEFS)
 
 libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp

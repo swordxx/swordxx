@@ -39,7 +39,6 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
           RawVerse(ipath) {
           
-	versebuf = 0;
 	string fname;
 	fname = path;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
@@ -64,9 +63,6 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 
 RawText::~RawText()
 {
-	if (versebuf)
-		delete [] versebuf;
-
 	if (fastSearch[0])
 		delete fastSearch[0];
 
@@ -102,23 +98,27 @@ char *RawText::getRawEntry() {
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
-	if (versebuf)
-		delete [] versebuf;
 
-	versebuf = new char [ (size + 2) * FILTERPAD ];
-	*versebuf = 0;
+	unsigned long newsize = (size + 2) * FILTERPAD;
+	if (newsize > entrybufallocsize) {
+		if (entrybuf)
+			delete [] entrybuf;
+		entrybuf = new char [ newsize ];
+		entrybufallocsize = newsize;
+	}
+	*entrybuf = 0;
 
-	gettext(key->Testament(), start, (size + 2), versebuf);
+	gettext(key->Testament(), start, (size + 2), entrybuf);
 
-	rawFilter(versebuf, size, key);
+	rawFilter(entrybuf, size, key);
 
         if (!isUnicode())
-		preptext(versebuf);
+		preptext(entrybuf);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
 
-	return versebuf;
+	return entrybuf;
 }
 
 

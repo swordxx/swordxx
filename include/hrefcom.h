@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: hrefcom.h,v 1.4 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: hrefcom.h,v 1.5 2002/02/19 01:20:35 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,7 +31,6 @@
 
 class SWDLLEXPORT HREFCom:public RawVerse, public SWCom
 {
-  char *versebuf;
   char *prefix;
 
 public:

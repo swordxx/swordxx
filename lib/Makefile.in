@@ -140,7 +140,7 @@ mgrdir = $(top_srcdir)/src/mgr
 @CONFDEF_TRUE@globdef = -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\"
 @CONFDEF_FALSE@globdef = 
 
-DEFS = $(globdef) -DUNIX
+DEFS = $(globdef) -DUNIX $(ICUDEFS)
 
 frontenddir = $(top_srcdir)/src/frontend
 
@@ -153,6 +153,8 @@ commondir = $(top_srcdir)/src/modules/common
 
 filtersdir = $(top_srcdir)/src/modules/filters
 
+@ICU_TRUE@ICUDEFS = -D_ICU_
+@ICU_FALSE@ICUDEFS = 
 @ICU_TRUE@SWICUSRC = $(filtersdir)/utf8transliterator.cpp $(filtersdir)/utf8nfc.cpp $(filtersdir)/utf8nfkd.cpp $(filtersdir)/utf8arshaping.cpp $(filtersdir)/utf8bidireorder.cpp
 @ICU_FALSE@SWICUSRC = 
 
@@ -694,7 +696,7 @@ distclean-libtool:
 	-rm -f libtool
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/genbook/Makefile.am $(srcdir)/../src/modules/genbook/rawgenbook/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  lib/Makefile
+	  $(AUTOMAKE) --foreign  lib/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \

@@ -33,6 +33,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	key       = CreateKey();
 	entrybuf  = new char [1];
 	*entrybuf = 0;
+	entrybufallocsize = 0;
 	modname   = 0;
 	error     = 0;
 	moddesc   = 0;
@@ -537,31 +538,31 @@ const char *SWModule::StripText(char *buf, int len)
  */
 
  const char *SWModule::RenderText(char *buf, int len, bool render) {
-	char *versebuf = (buf) ? buf : getRawEntry();
+	char *tmpbuf = (buf) ? buf : getRawEntry();
 	SWKey *key = 0;
+	static char *null = "";
 
-	if (versebuf) {
+	if (tmpbuf) {
 		unsigned long size = (len < 0) ? getEntrySize() * FILTERPAD : len;
           if (size < 0)
-          	size = strlen(versebuf);
+          	size = strlen(tmpbuf);
 		if (size > 0) {
 			key = (SWKey *)*this;
 
-			optionFilter(versebuf, size, key);
+			optionFilter(tmpbuf, size, key);
 	
 			if (render) {
-				renderFilter(versebuf, size, key);
-				encodingFilter(versebuf, size, key);
+				renderFilter(tmpbuf, size, key);
+				encodingFilter(tmpbuf, size, key);
 			}
-			else	stripFilter(versebuf, size, key);
+			else	stripFilter(tmpbuf, size, key);
 		}
 	}
 	else {
-		versebuf = new char [1];
-		*versebuf = 0;
+		tmpbuf = null;
 	}
 
-	return versebuf;
+	return tmpbuf;
 }
 
 

@@ -30,7 +30,6 @@
 
 RawGBF::RawGBF(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp) : SWText(iname, idesc, idisp), RawVerse(ipath)
 {
-	versebuf = 0;
 }
 
 
@@ -40,8 +39,6 @@ RawGBF::RawGBF(const char *ipath, const char *iname, const char *idesc, SWDispla
 
 RawGBF::~RawGBF()
 {
-	if (versebuf)
-		delete [] versebuf;
 }
 
 
@@ -72,16 +69,16 @@ RawGBF::operator char*()
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
 
-	if (versebuf)
-		delete [] versebuf;
-	versebuf = new char [ size * 3 ];		// extra for conversion to RTF or other.
+	if (entrybuf)
+		delete [] entrybuf;
+	entrybuf = new char [ size * 3 ];		// extra for conversion to RTF or other.
 
-	gettext(key->Testament(), start, size + 1, versebuf);
-	preptext(versebuf);
-	RenderText(versebuf, size * 3);
+	gettext(key->Testament(), start, size + 1, entrybuf);
+	preptext(entrybuf);
+	RenderText(entrybuf, size * 3);
 	
 	if (key != this->key)
 		delete key;
 
-	return versebuf;
+	return entrybuf;
 }

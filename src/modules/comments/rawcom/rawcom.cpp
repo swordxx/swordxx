@@ -31,7 +31,6 @@
 RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char* ilang)
 		: RawVerse(ipath),
             SWCom(iname, idesc, idisp, encoding, dir, markup, ilang){
-	versebuf = 0;
 }
 
 
@@ -41,8 +40,6 @@ RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDispla
 
 RawCom::~RawCom()
 {
-	if (versebuf)
-		delete [] versebuf;
 }
 
 
@@ -73,22 +70,26 @@ char *RawCom::getRawEntry() {
 	findoffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
-	if (versebuf)
-		delete [] versebuf;
-	versebuf = new char [ (size + 2) * FILTERPAD ];
-	*versebuf = 0;
+	unsigned long newsize = (size + 2) * FILTERPAD;
+	if (newsize > entrybufallocsize) {
+		if (entrybuf)
+			delete [] entrybuf;
+		entrybuf = new char [ newsize ];
+		entrybufallocsize = newsize;
+	}
+	*entrybuf = 0;
 
-	gettext(key->Testament(), start, (size + 2), versebuf);
+	gettext(key->Testament(), start, (size + 2), entrybuf);
 
-	rawFilter(versebuf, size, key);
+	rawFilter(entrybuf, size, key);
 
         if (!isUnicode())
-		preptext(versebuf);
+		preptext(entrybuf);
 
 	if (key != this->key)
 		delete key;
 
-	return versebuf;
+	return entrybuf;
 }
 
 
