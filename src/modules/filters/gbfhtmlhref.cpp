@@ -197,9 +197,11 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 					buf += *tok;
 			buf += "</a>)</em></small>";
 		}
-/*
+
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
-			buf += " <small><em>(<a href=\"type=morph class=none value=";
+			//buf += " <small><em>(<a href=\"type=morph class=none value=";
+			buf += " <small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=";
+			
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
@@ -209,7 +211,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 					buf += *tok;		
 			buf += "</a>)</em></small>";
 		}
-*/
+
 		else if (!strcmp(tag.getName(), "RX")) {
 			buf += "<a href=\"";
 			for (tok = token + 3; *tok; tok++) {
