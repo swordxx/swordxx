@@ -318,7 +318,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	int loop;
 	char comma = 0;
 	char dash = 0;
-	char *orig = buf;
+	const char *orig = buf;
 	ListKey tmpListKey;
 	ListKey internalListKey;
 	SWKey tmpDefaultKey = defaultKey;
