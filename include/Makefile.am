@@ -88,6 +88,7 @@ pkginclude_HEADERS += $(swincludedir)/swlog.h
 pkginclude_HEADERS += $(swincludedir)/swmacs.h
 pkginclude_HEADERS += $(swincludedir)/swmgr.h
 pkginclude_HEADERS += $(swincludedir)/swmodule.h
+pkginclude_HEADERS += $(swincludedir)/swoptfilter.h
 pkginclude_HEADERS += $(swincludedir)/swobject.h
 pkginclude_HEADERS += $(swincludedir)/swtext.h
 pkginclude_HEADERS += $(swincludedir)/swunicod.h

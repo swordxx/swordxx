@@ -25,9 +25,8 @@ swicuSOURCES += translit_swordindex.txt
 
 if ICU
 pkglib_DATA = $(swicuSOURCES:.txt=.res)
-else
-EXTRA_DIST = $(swicuSOURCES)
 endif
+EXTRA_DIST = $(swicuSOURCES)
 
 CLEANFILES = *.res *.lst *.mk *.mak swicu.dat
 

@@ -86,7 +86,11 @@ sysconf_DATA = sword.conf
 sword.conf:
 	@echo "[Install]" > sword.conf
 	@echo "DataPath=$(pkgdatadir)/" >> sword.conf
+
+clean-generic:
+	-rm -f sword.conf
 endif
+
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
