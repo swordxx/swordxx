@@ -77,21 +77,13 @@ char readline(int fd, char **buf) {
 char* deleteSubverses(char *buf) {
         // remove subverse elements from osisIDs
         // (this is a hack and should be handled better with VerseKey2)
-        int dots = 0;
         for (int i = 0; buf[i]; i++) {
-               	if (buf[i] == ' ') {
-               		dots = 0;
-                }
-                else if (buf[i] == '.') {
-                      	dots++;
-                        if (dots > 2) {
-                               	while (buf[i] && buf[i] != ' ') {
-                                        buf[i] = ' ';
-                               		i++;
-                                }
-                                i--;
-                                dots = 0;
+		if (buf[i] == '!') {
+			while (buf[i] && buf[i] != ' ') {
+                        	buf[i] = ' ';
+                               	i++;
                         }
+                        i--;
                 }
         }
         return buf;
@@ -126,7 +118,7 @@ void makeKJVRef(VerseKey &key) {
        	cout << "\tas " << key << endl;
 }
 
-void writeEntry(VerseKey &key, SWBuf &text) {
+void writeEntry(VerseKey &key, SWBuf &text, bool suppressOutput = false) {
 //	cout << "Verse: " << key << "\n";
 //	cout << "TEXT: " << text << "\n\n";
 	VerseKey saveKey;
@@ -140,7 +132,9 @@ void writeEntry(VerseKey &key, SWBuf &text) {
 
 	SWBuf currentText = module->getRawEntry();
 	if (currentText.length()) {
-        	cout << "Overwriting entry: " << key << endl;
+               	if (!suppressOutput) {
+                	cout << "Overwriting entry: " << key << endl;
+                }
 		text = currentText + " " + text;
         }
 	module->setEntry(text);
@@ -159,7 +153,9 @@ void linkToEntry(VerseKey& dest) {
 	saveKey.Headings(1);
         saveKey = *currentVerse;
 
-        makeKJVRef(*currentVerse);
+        if (!isKJVRef(*currentVerse)) {
+		makeKJVRef(*currentVerse);
+        }
 
 	cout << "Linking " << module->KeyText() << " to " << dest.getText() << "\n";
 	module->linkEntry(&dest);
@@ -169,37 +165,44 @@ void linkToEntry(VerseKey& dest) {
 
 
 bool handleToken(SWBuf &text, XMLTag token) {
-	static bool inHeader = false;
-	static SWBuf headerType = "";
-	static SWBuf header = "";
-	static SWBuf lastTitle = "";
-	static int titleOffset = -1;
+	static bool inHeader = true;
+        static bool inVerse = true;
+//	static SWBuf headerType = "";
+//	static SWBuf header = "";
+//	static SWBuf lastTitle = "";
+//	static int titleOffset = -1;
 	static ListKey lastVerseIDs = ListKey();
 
-	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag())) {
+	/*if ((!strcmp(token.getName(), "title")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
 		titleOffset = text.length();
 		return false;
 	}
-	else if ((!strcmp(token.getName(), "title")) && (token.isEndTag())) {
+	else if ((!strcmp(token.getName(), "title")) && (token.isEndTag() || (token.getAttribute("eID")))) {
 		lastTitle = (text.c_str() + titleOffset);
 		lastTitle += token;
 		return false;
-	}
-	else if (((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
+	}*/
+	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag() && !(token.getAttribute("eID"))) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
+        	inVerse = false;
 		if (inHeader) {	// this one should never happen, but just in case
 //			cout << "HEADING ";
-			writeEntry(*currentVerse, text);
+			currentVerse->Testament(0);
+                        currentVerse->Book(0);
+                        currentVerse->Chapter(0);
+                        currentVerse->Verse(0);
+                        writeEntry(*currentVerse, text);
 			inHeader = false;
 		}
 		*currentVerse = token.getAttribute("osisID");
 		currentVerse->Chapter(0);
 		currentVerse->Verse(0);
 		inHeader = true;
-		headerType = "book";
-		lastTitle = "";
+//		headerType = "book";
+//		lastTitle = "";
 		text = "";
 	}
-	else if ((((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag()) && (token.getAttribute("osisID")))) {
+	else if (((!strcmp(token.getName(), "chapter")) && (!token.isEndTag() || (token.getAttribute("eID"))) && (token.getAttribute("osisID")))) {
+        	inVerse = false;
 		if (inHeader) {
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
@@ -209,14 +212,16 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		*currentVerse = token.getAttribute("osisID");
 		currentVerse->Verse(0);
 		inHeader = true;
-		headerType = "chap";
-		lastTitle = "";
+//		headerType = "chap";
+//		lastTitle = "";
 		text = "";
 	}
-	else if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
+	else if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
+		inVerse = true;
 		if (inHeader) {
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
+                        text = "";
 			inHeader = false;
 		}
 
@@ -241,12 +246,13 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		if (lastVerseIDs.Count())
 			*currentVerse = lastVerseIDs.getElement(0)->getText();
 
-		text = token;
+		text += token;
 
 		return true;
 	}
-	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag())) {
-		if (lastTitle.length()) {
+	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag() || (token.getAttribute("eID")))) {
+        	inVerse = false;
+/*		if (lastTitle.length()) {
 			SWBuf titleHead = lastTitle;
 			char *end = strchr(lastTitle.getRawData(), '>');
 			titleHead.setSize((end - lastTitle.getRawData())+1);
@@ -254,7 +260,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			titleTag.setAttribute("type", "section");
 			titleTag.setAttribute("subtype", "x-preverse");
 			text = SWBuf(titleTag) + SWBuf(end+1) + text;
-		}
+		}*/
 		text += token;
 		writeEntry(*currentVerse, text);
 
@@ -272,11 +278,17 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				linkToEntry(dest);
 			}
 		}
-		
-		lastTitle = "";
+
+//		lastTitle = "";
 		text = "";
 		return true;
 	}
+        else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
+        	text += token;
+		writeEntry(*currentVerse, text, true);
+		text = "";
+                return true;
+        }
 	return false;
 }
 
