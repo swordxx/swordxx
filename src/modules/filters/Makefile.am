@@ -62,8 +62,6 @@ libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8greekaccents.cpp
 
-libsword_la_SOURCES += $(filtersdir)/thmlolb.cpp
-
 libsword_la_SOURCES += $(filtersdir)/greeklexattribs.cpp
 
 SWICUSRC = $(filtersdir)/utf8transliterator.cpp

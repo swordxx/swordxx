@@ -52,7 +52,6 @@
       ..\..\src\modules\filters\thmlhtmlhref.obj 
       ..\..\src\modules\filters\thmllemma.obj 
       ..\..\src\modules\filters\thmlmorph.obj 
-      ..\..\src\modules\filters\thmlolb.obj 
       ..\..\src\modules\filters\thmlscripref.obj 
       ..\..\src\modules\filters\thmlstrongs.obj 
       ..\..\src\modules\filters\thmlvariants.obj 

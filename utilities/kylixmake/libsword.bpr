@@ -47,7 +47,7 @@
       ../../src/modules/filters/thmlhtml.o 
       ../../src/modules/filters/thmlhtmlhref.o 
       ../../src/modules/filters/thmllemma.o 
-      ../../src/modules/filters/thmlmorph.o ../../src/modules/filters/thmlolb.o 
+      ../../src/modules/filters/thmlmorph.o
       ../../src/modules/filters/thmlosis.o ../../src/modules/filters/thmlplain.o 
       ../../src/modules/filters/thmlrtf.o 
       ../../src/modules/filters/thmlscripref.o 
@@ -175,7 +175,6 @@
       <FILE FILENAME="../../src/modules/filters/thmlhtmlhref.cpp" FORMNAME="" UNITNAME="thmlhtmlhref.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/filters/thmllemma.cpp" FORMNAME="" UNITNAME="thmllemma.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/filters/thmlmorph.cpp" FORMNAME="" UNITNAME="thmlmorph.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="../../src/modules/filters/thmlolb.cpp" FORMNAME="" UNITNAME="thmlolb.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/filters/thmlosis.cpp" FORMNAME="" UNITNAME="thmlosis.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/filters/thmlplain.cpp" FORMNAME="" UNITNAME="thmlplain.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/filters/thmlrtf.cpp" FORMNAME="" UNITNAME="thmlrtf.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

@@ -26,7 +26,7 @@
       ..\..\obj\latin1utf16.obj ..\..\obj\latin1utf8.obj ..\..\obj\scsuutf8.obj 
       ..\..\obj\swbasicfilter.obj ..\..\obj\thmlfootnotes.obj 
       ..\..\obj\thmlheadings.obj ..\..\obj\thmlhtmlhref.obj 
-      ..\..\obj\thmllemma.obj ..\..\obj\thmlmorph.obj ..\..\obj\thmlolb.obj 
+      ..\..\obj\thmllemma.obj ..\..\obj\thmlmorph.obj 
       ..\..\obj\thmlscripref.obj ..\..\obj\thmlstrongs.obj 
       ..\..\obj\thmlvariants.obj ..\..\obj\unicodertf.obj 
       ..\..\obj\utf16utf8.obj ..\..\obj\utf8arshaping.obj 
@@ -167,7 +167,6 @@
       <FILE FILENAME="..\..\src\modules\filters\thmlhtmlhref.cpp" FORMNAME="" UNITNAME="thmlhtmlhref" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmllemma.cpp" FORMNAME="" UNITNAME="thmllemma" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlmorph.cpp" FORMNAME="" UNITNAME="thmlmorph" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\modules\filters\thmlolb.cpp" FORMNAME="" UNITNAME="thmlolb" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlscripref.cpp" FORMNAME="" UNITNAME="thmlscripref" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlstrongs.cpp" FORMNAME="" UNITNAME="thmlstrongs" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlvariants.cpp" FORMNAME="" UNITNAME="thmlvariants" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

@@ -67,7 +67,6 @@ USEUNIT("..\..\src\modules\filters\thmlheadings.cpp");
 USEUNIT("..\..\src\modules\filters\thmlhtmlhref.cpp");
 USEUNIT("..\..\src\modules\filters\thmllemma.cpp");
 USEUNIT("..\..\src\modules\filters\thmlmorph.cpp");
-USEUNIT("..\..\src\modules\filters\thmlolb.cpp");
 USEUNIT("..\..\src\modules\filters\thmlscripref.cpp");
 USEUNIT("..\..\src\modules\filters\thmlstrongs.cpp");
 USEUNIT("..\..\src\modules\filters\thmlvariants.cpp");

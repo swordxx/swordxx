@@ -515,10 +515,6 @@ SOURCE=..\..\..\src\modules\filters\thmlmorph.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\modules\filters\thmlolb.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\modules\filters\thmlosis.cpp
 # End Source File
 # Begin Source File
@@ -1048,10 +1044,6 @@ SOURCE=..\..\..\include\thmllemma.h
 # Begin Source File
 
 SOURCE=..\..\..\include\thmlmorph.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\thmlolb.h
 # End Source File
 # Begin Source File
 

@@ -105,7 +105,6 @@ pkginclude_HEADERS += $(swincludedir)/thmlhtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/thmlwebif.h
 pkginclude_HEADERS += $(swincludedir)/thmllemma.h
 pkginclude_HEADERS += $(swincludedir)/thmlmorph.h
-pkginclude_HEADERS += $(swincludedir)/thmlolb.h
 pkginclude_HEADERS += $(swincludedir)/thmlosis.h
 pkginclude_HEADERS += $(swincludedir)/thmlplain.h
 pkginclude_HEADERS += $(swincludedir)/thmlrtf.h
