@@ -57,13 +57,13 @@ http://www.crosswire.org or various mirrors.
 
 In a default SWORD configuration, a module install may look like this:
 
-[download a module with you favourite client]
+[download a module with your favourite client]
 su
 cd /usr/share/sword
 unzip ~/KJV.zip
 
 
-If you want the detail, read on...
+If you want the details, read on...
 
 
 A file named 'mods.conf' or directory named 'mods.d' contains all configuration

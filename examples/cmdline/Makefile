@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/sword
 pkgincludedir = $(includedir)/sword
 top_builddir = ../..
 
-ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
+ACLOCAL = ${SHELL} /home/scribe/src/sword/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /home/scribe/src/sword/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/scribe/src/sword/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /home/scribe/src/sword/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -65,7 +65,7 @@ host_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
+AMTAR = ${SHELL} /home/scribe/src/sword/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -94,7 +94,7 @@ am__quote =
 dir_confdef = no
 enable_debug = yes
 enable_profile = no
-install_sh = /space/home/scribe/src/sword/install-sh
+install_sh = /home/scribe/src/sword/install-sh
 target_cpu = i686
 target_mingw32 = no
 target_os = linux-gnu
