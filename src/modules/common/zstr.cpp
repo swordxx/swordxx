@@ -184,20 +184,20 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) {
 signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 	char *trybuf = 0, *key = 0, quitflag = 0;
 	signed char retval = 0;
-	__u32 headoff, tailoff, tryoff = 0, maxoff = 0;
+	__s32 headoff, tailoff, tryoff = 0, maxoff = 0;
 	__u32 start, size;
 
 	if (idxfd->getFd() >= 0) {
 		if (*ikey) {
 			headoff = 0;
 			tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - IDXENTRYSIZE;
-
 			stdstr(&key, ikey);
 			toupperstr(key);
 
 			while (headoff < tailoff) {
-				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff; 
+				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
 				lastoff = -1;
+
 				getKeyFromIdxOffset(tryoff, &trybuf);
 
 				if (!*trybuf) {		// In case of extra entry at end of idx
@@ -205,7 +205,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 					retval = -1;
 					break;
 				}
-					
+
 				int diff = strcmp(key, trybuf);
 				if (!diff)
 					break;
@@ -240,7 +240,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 		while (away) {
 			__u32 laststart = start;
 			__u32 lastsize = size;
-			__u32 lasttry = tryoff;
+			__s32 lasttry = tryoff;
 			tryoff += (away > 0) ? IDXENTRYSIZE : -IDXENTRYSIZE;
 		
 			if ((lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0) || ((long)(tryoff + (away*IDXENTRYSIZE)) < -IDXENTRYSIZE) || (tryoff + (away*IDXENTRYSIZE) > (maxoff+IDXENTRYSIZE))) {
@@ -452,9 +452,9 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 	__u32 start, outstart;
 	__u32 size, outsize;
-	__u32 endoff;
-	long idxoff;
-	__u32 shiftSize;
+	__s32 endoff;
+	long idxoff = 0;
+	__s32 shiftSize;
 	static const char nl[] = {13, 10};
 	char *tmpbuf = 0;
 	char *key = 0;
@@ -517,17 +517,21 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 	shiftSize = endoff - idxoff;
 
 	if (shiftSize > 0) {
-		idxBytes = new char [ shiftSize ];
+	        idxBytes = new char [ shiftSize ];
 		lseek(idxfd->getFd(), idxoff, SEEK_SET);
 		read(idxfd->getFd(), idxBytes, shiftSize);
 	}
 
-
 	outbuf = new char [ (len ? len : strlen(buf)) + strlen(key) + 5 ];
 	sprintf(outbuf, "%s%c%c", key, 13, 10);
 	size = strlen(outbuf);
-	if (strncmp(tmpbuf, "@LINK", 5) && (len ? len : strlen(buf))) {	// NOT a link
-		if (cacheBlock->getCount() >= blockCount) {
+	if (len ? len : strlen(buf)) {	// NOT a link
+		if (!cacheBlock) {
+			flushCache();
+			cacheBlock = new EntriesBlock();
+			cacheBlockIndex = (lseek(zdxfd->getFd(), 0, SEEK_END) / ZDXENTRYSIZE) + 1;
+		}
+		else if (cacheBlock->getCount() >= blockCount) {
 			flushCache();
 			cacheBlock = new EntriesBlock();
 			cacheBlockIndex = (lseek(zdxfd->getFd(), 0, SEEK_END) / ZDXENTRYSIZE) + 1;
