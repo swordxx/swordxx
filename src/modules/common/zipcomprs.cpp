@@ -61,7 +61,7 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 	char chunk[1024];
 	char *buf = (char *)calloc(1, 1024);
 	char *chunkbuf = buf;
-	int chunklen;
+	unsigned long chunklen;
 	unsigned long len = 0;
 	while((chunklen = GetChars(chunk, 1023))) {
 		memcpy(chunkbuf, chunk, chunklen);
@@ -88,7 +88,7 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 	}
 	else
 	{
-		printf("No buffer to compress\n");
+		fprintf(stderr, "No buffer to compress\n");
 	}
 	delete [] zbuf;
 	free (buf);
@@ -140,16 +140,18 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 
 	//printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
 	if (zlen) {
-		unsigned long blen = zlen*10;	// trust compression is less than 1000%
+		unsigned long blen = zlen*20;	// trust compression is less than 1000%
 		char *buf = new char[blen]; 
 		//printf("Doing decompress {%s}\n", zbuf);
-		uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen);
+		if (uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen) != Z_OK) {
+			fprintf(stderr, "no room in outbuffer to during decompression. see zipcomp.cpp\n");
+		}
 		SendChars(buf, blen);
 		delete [] buf;
 		slen = blen;
 	}
 	else {
-		printf("No buffer to decompress!\n");
+		fprintf(stderr, "No buffer to decompress!\n");
 	}
 	//printf("Finished decoding\n");
 	free (zbuf);
