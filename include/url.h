@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.5 2004/07/17 16:28:04 joachim Exp $
+* $Id: url.h,v 1.6 2004/07/20 09:29:22 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -72,7 +72,8 @@ public:
 	*
 	* WARNING: It doesn't check if the URL is encoded already, so http://www.crosswire.org/test.jsp?force=1&amp;help=1 becomes http://www.crosswire.org/test.jsp?force=1&amp;amp;help=1
 	*/
-	static const char *encode(const char *urlText);
+	static const char *encode(const char *urlText);	
+	static const char *decode(const char *encodedText);
 	
 private:
 	/** Parse

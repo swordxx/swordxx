@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.5 2004/07/17 16:27:17 joachim Exp $
+* $Id: url.cpp,v 1.6 2004/07/20 09:29:22 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -24,8 +24,10 @@
 #include <swlog.h>
 
 //system includes
+#include <ctype.h>
 #include <map>
 #include <stdio.h>
+#include <iostream.h>
 
 SWORD_NAMESPACE_START
 
@@ -148,7 +150,10 @@ void URL::parse () {
 			}
 			
 			if (paramName.length() && paramValue.length()) {//insert the param into the map if it's valid
-				parameterMap[ paramName ] = paramValue;	
+				paramName = decode(paramName.c_str());
+				paramValue = decode(paramValue.c_str());
+				
+				parameterMap[ paramName ] = paramValue;
 			}
 		}
 		else {
@@ -160,9 +165,10 @@ void URL::parse () {
 	}
 }
 
-const char *encode(const char *urlText) {
+const char* URL::encode(const char *urlText) {
 	static SWBuf url;
 	url = urlText;
+	
 	typedef std::map< unsigned char, SWBuf > DataMap;
     	DataMap m;
 	for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
@@ -171,8 +177,8 @@ const char *encode(const char *urlText) {
 			}
 
 			char s[5];
-			sprintf(s, "%-.2X", c); //left-aligned, 2 digits, uppercase hex
-			m[c] = SWBuf("%")+s; //encoded char is "% + 2 digit hex code of char"
+			SWBuf buf;
+			buf.setFormatted("%%-.2X", c);
 	}
 	//the special encodings for certain chars
 	m[' '] = '+';
@@ -187,4 +193,45 @@ const char *encode(const char *urlText) {
 	url = buf;
 	return url.c_str();
 }
+
+const char* URL::decode(const char *encoded) {
+	static SWBuf text;
+	text = encoded;	
+
+	SWBuf decoded;	
+	const int length = text.length();
+	int i = 0;
+	
+	while (i < length) {
+		char a = text[i];
+		
+		if ( a == '+' ) { //handle special cases
+			decoded.append(' ');
+		}		
+		else if ( (a == '%') && (i+2 < length)) { //decode the %ab  hex encoded char
+			const char b = toupper( text[i+1] );
+			const char c = toupper( text[i+2] );
+			
+			if (isxdigit(b) && isxdigit(c)) { //valid %ab part
+				unsigned int dec = 16 * ((b >= 'A' && b <= 'F') ? (b - 'A' + 10) : (b - '0')); //dec value of the most left digit (b)
+				dec += (c >= 'A' && c <= 'F') ? (c - 'A' + 10) : (c - '0'); //dec value of the right digit (c)
+				
+				decoded.append((char)dec); //append the decoded char
+				
+				i += 2; //we jump over the %ab part; we have to leave out three, but the while  loop adds one, too
+			}
+		}
+		else { //just append the char
+			decoded.append(a);
+		}
+		
+		i++;
+	}
+	
+	if (decoded.length()) {
+		text = decoded;
+	}
+	return text.c_str();
+}
+
 SWORD_NAMESPACE_END
