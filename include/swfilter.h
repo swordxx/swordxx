@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.7 2001/02/15 21:20:14 jansorg Exp $
+ * $Id: swfilter.h,v 1.8 2001/02/16 20:19:22 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,17 +28,22 @@
 
 #include <defs.h>
 
+/**
+* The type definitoin for option types
+*/
+typedef std::list < std::string > OptionsList;
 
-  /** Base class for all filters in sword.
-  * Filters are used to filter/convert text between different formats
-  * like GBF, HTML, RTF ...
-  */
+
+/** Base class for all filters in sword.
+* Filters are used to filter/convert text between different formats
+* like GBF, HTML, RTF ...
+*/
 class SWDLLEXPORT  SWFilter{
 public:
   /** the type definition for option lists,
   * see @ref getOptionValues
   */
-  typedef std::list < std::string > OptionsList;
+//  typedef std::list < std::string > OptionsList;
   /** gets the name of the option of this filter
   * @return option name
   */
