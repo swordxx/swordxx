@@ -113,7 +113,7 @@ AUTOMAKE_OPTIONS = 1.6
 #swicuSOURCES += translit_Han_Pinyin.txt
 #swicuSOURCES += translit_Kanji_English.txt
 #swicuSOURCES += translit_Kanji_OnRomaji.txt
-@ICU_TRUE@swicuSOURCES = translit_BETA_Greek.txt  translit_BGreek_Greek.txt translit_CCAT_Hebrew.txt translit_CCAT_Syriac.txt translit_Latin_Armenian.txt translit_Latin_Coptic.txt translit_Latin_Ethiopic.txt translit_Latin_Georgian.txt translit_Latin_Gothic.txt translit_Latin_Syriac.txt translit_Latin_Thai.txt translit_Latin_Ugaritic.txt translit_Any_Latin1.txt translit_Latin_Arabic.txt translit_Latin_Hebrew.txt translit_swordindex.txt 
+@ICU_TRUE@swicuSOURCES = translit_BETA_Greek.txt translit_BGreek_Greek.txt translit_CCAT_Hebrew.txt translit_CCAT_Syriac.txt translit_Latin_Armenian.txt translit_Latin_Coptic.txt translit_Latin_Ethiopic.txt translit_Latin_Georgian.txt translit_Latin_Gothic.txt translit_Latin_Syriac.txt translit_Latin_Thai.txt translit_Latin_Ugaritic.txt translit_Any_Latin1.txt translit_Any_Latex.txt translit_Latin_Arabic.txt translit_Latin_Hebrew.txt translit_swordindex.txt 
 
 CLEANFILES = *.res *.lst *.mk *.mak swicu.dat
 
