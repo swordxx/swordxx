@@ -83,6 +83,7 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key)
       *to++ = 0x80 | uchar & 0x3F;
     }
   }
+  *to++ = 0;
   *to = 0;
   
   return 0;
