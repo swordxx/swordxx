@@ -99,7 +99,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 
 #if (LIBCURL_VERSION_MAJOR > 7) || \
    ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR > 10)) || \
-   ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR == 10) && (LIBCURL_VERSION_PATCH >= 6))
+   ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR == 10) && (LIBCURL_VERSION_PATCH >= 5))
 #      define EPRT_AVAILABLE 1
 #endif
 
