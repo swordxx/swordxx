@@ -38,7 +38,9 @@
 #define OP_FOOTNOTES 2
 #define OP_HEADINGS 4
 #define OP_MORPH 8
-#define OP_DICT 16
+#define OP_CANTILLATION 16
+#define OP_HEBREWPOINTS 32
+#define OP_GREEKACCENTS 64
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0

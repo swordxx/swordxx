@@ -1,44 +1,16 @@
-Diatheke Suite release 3.0
+Diatheke Suite release 4.0
 by Chris Little <chrislit@crosswire.org>
 
 This suite is intended for use with libraries and modules from
 the SWORD Project, available at http://www.crosswire.org/
 
 The latest versions of this suite and its components are available
-at http://www.gotjesus.org/diatheke/
+at http://www.crosswire.org/sword/diatheke
 
-Version 3.0 of this suite consists of the following components:
+Version 4.0 of this suite consists of the following components:
 
-Diatheke 3.1 - a command line utility, good for lots of stuff
-Diatheke/CGI 3.1 - a PERL CGI module interface to Diatheke 3.0
-Diatheke/Tcl 3.0 - an eggdrop Tcl script interface to Diatheke 3.0
-HANDiatheke 3.0 - a Palm Query App (PQA) for Palm VII or PalmOS devices
-              with either Omnisky or Palm Mobile Internet Kit.  
-
-----------------------------------------------------------------------
-COMPILING and INSTALLING Diatheke
-
-Just run make.  Now copy the compiled binary, diatheke, to an
-appropriate binary location such as /usr/bin.
-
-Now you can run diatheke to learn the general syntax.
-
-----------------------------------------------------------------------
-OPTIONS for Diatheke
-
-If you would like Diatheke to log all commands (good for debugging or
-if you want to use the history function of Diatheke/Tcl), it can be
-enabled quite easily.
-
-First modify diatheke.cpp by uncommenting the line that reads:
-#define LOGGING
-Then create a file named /var/log/diatheke.log and make it world
-writeable.  To do this, perform the following pair of commands as
-root:
-	touch /var/log/diatheke.log
-	chmod 666 /var/log/diatheke.log
-
-Logs will print to this file.
+Diatheke 4.0 - a command line utility, good for lots of stuff
+Diatheke/CGI 4.0 - a PERL CGI module interface to Diatheke 4.0
 
 --------------------------------------------------------------------
 INSTALLING Diatheke/CGI
@@ -72,46 +44,14 @@ You may also direct users directly to your perl script since it will
 present a page with all of your modules.  Or you may wish to use this
 default page to create a custom index.html for your users.
 
---------------------------------------------------------------------
-INSTALLING Diatheke/Tcl
-
-To install Diatheke/Tcl, install an eggdrop IRC bot, copy the
-Diatheke/Tcl .tcl file to your eggdrop scripts directory from this
-distribution's ./eggdrop directory, and add a line to the end of
-your bot startup script to load the Diatheke/Tcl script.  This
-script has been tested with eggdrop 1.3.23 but should function fine
-in later versions.
-
-You may need to edit the top of the Diatheke/Tcl file to reflect
-the correct locations of your diatheke and dict (if you use it)
-binaries.
-
-This is script assumes you have every single SWORD module installed
-that was available at the time of release.  Since you probably do not,
-remove all modules listed in the pub_books function that you do not
-have installed to hide them from end-users.
-
-The !history command only works if you have LOGGING turned on in
-diatheke (the command line C program).  This command is commented out
-of the help function and must be uncommented to make it show up for
-end-users.
-
-The !dict command only works if you have a command line dictionary
-program installed on your host such as those listed at 
-http://www.dict.org/links.html.
-
-When you get the script loaded, type !biblehelp in a channel where
-the bot is present and it will give you a full list of commands.
-More commands will appear to you depending upon which mode the bot is
-in and whether you are an op on the bot or voiced in the channel.
-
-----------------------------------------------------------------------
-INSTALLING HANDiatheke
-
-Install on your PalmOS PDA like any other PQA.
-
 ----------------------------------------------------------------------
 VERSION HISTORY
+
+4.0	July 8, 2001.
+	Updated to Sword 1.5.2 with innumerable bug fixes.
+	Now builds properly for Win32 using VC++.
+	Diatheke/Tcl and HANDiatheke were omitted, for the moment
+	from this release, but are still available in the CVS.
 
 3.0	March 31, 2001.
 	Self-generating HTML page for the lazy (Diatheke/CGI).
@@ -128,8 +68,8 @@ VERSION HISTORY
 COPYRIGHT
 
 The Diatheke Suite and its components, Diatheke, Diatheke/CGI, and
-Diatheke/Tcl are Copyright 1999, 2000, 2001 by Chris Little.
-HANDiatheke is Copyright 2000, 2001 by Chris Little.
+Diatheke/Tcl are Copyright 1999, 2000, 2001 by CrossWire Bible Society.
+HANDiatheke is Copyright 2000, 2001 by CrossWire Bible Society.
 The Diatheke Suite and all of its components are licensed through
 the GNU General Public License and are intended for free distribution.
 See http://www.gnu.org/copyleft/gpl.html for details.

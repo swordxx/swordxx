@@ -16,7 +16,7 @@ const char UTF8HebrewPoints::optName[] = "Hebrew Vowel Points";
 const char UTF8HebrewPoints::optTip[] = "Toggles Hebrew Vowel Points";
 
 UTF8HebrewPoints::UTF8HebrewPoints() {
-	option = true;
+	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }

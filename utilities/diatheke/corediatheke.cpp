@@ -175,6 +175,18 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		manager.setGlobalOption("Morphological Tags","On");
 	else
 		manager.setGlobalOption("Morphological Tags","Off");
+	if (optionfilters & OP_CANTILLATION)
+		manager.setGlobalOption("Hebrew Cantillation","On");
+	else
+		manager.setGlobalOption("Hebrew Cantillation","Off");
+	if (optionfilters & OP_HEBREWPOINTS)
+		manager.setGlobalOption("Hebrew Vowel Points","On");
+	else
+		manager.setGlobalOption("Hebrew Vowel Points","Off");
+	if (optionfilters & OP_GREEKACCENTS)
+		manager.setGlobalOption("Greek Accents","On");
+	else
+		manager.setGlobalOption("Greek Accents","Off");
 	
 	if (querytype == QT_SEARCH) {
 		//do search stuff
@@ -416,3 +428,4 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		delete gbffilter;
 	}
 }
+

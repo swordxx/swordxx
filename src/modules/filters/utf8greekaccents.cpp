@@ -16,7 +16,7 @@ const char UTF8GreekAccents::optName[] = "Greek Accents";
 const char UTF8GreekAccents::optTip[] = "Toggles Greek Accents";
 
 UTF8GreekAccents::UTF8GreekAccents() {
-	option = true;
+	option = false;
 	options.push_back(on);
 	options.push_back(off);
 }

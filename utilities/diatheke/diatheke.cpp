@@ -86,6 +86,12 @@ int main(int argc, char **argv)
 					optionfilters |= OP_HEADINGS;
 				if (strchr(argv[i+1], 'm'))
 					optionfilters |= OP_MORPH;
+				if (strchr(argv[i+1], 'c'))
+					optionfilters |= OP_CANTILLATION;
+				if (strchr(argv[i+1], 'v'))
+					optionfilters |= OP_HEBREWPOINTS;
+				if (strchr(argv[i+1], 'a'))
+					optionfilters |= OP_GREEKACCENTS;
 				i++;
 			}
 		}
