@@ -19,8 +19,8 @@ SWORD_NAMESPACE_START
 
 const char GBFRedLetterWords::on[] = "On";
 const char GBFRedLetterWords::off[] = "Off";
-const char GBFRedLetterWords::optName[] = "Red letter words";
-const char GBFRedLetterWords::optTip[] = "Toggles Red letter words  On and Off if they exist";
+const char GBFRedLetterWords::optName[] = "Words of Christ in Red";
+const char GBFRedLetterWords::optTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
 
 GBFRedLetterWords::GBFRedLetterWords() {
