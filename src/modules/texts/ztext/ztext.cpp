@@ -247,9 +247,6 @@ VerseKey &zText::getVerseKey() {
 }
 
 
-
-typedef  map < SWBuf, list<long> > strlist;
-typedef list<long> longlist;
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
