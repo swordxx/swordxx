@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.cpp   - implementaion of utility classes to handle XML processing
  *
- * $Id: utilxml.cpp,v 1.15 2004/01/24 18:47:41 scribe Exp $
+ * $Id: utilxml.cpp,v 1.16 2004/04/16 11:24:56 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,6 +31,8 @@ void XMLTag::parse() const {
 	int start;
 	char *name = 0;
 	char *value = 0;
+	attributes.clear();
+	
 	if (!buf)
 		return;
 	for (i = 0; ((buf[i]) && (!isalpha(buf[i]))); i++);
@@ -134,7 +136,7 @@ const StringList XMLTag::getAttributeNames() const {
 	if (!parsed)
 		parse();
 
-	for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++)
+	for (StringPairMap::const_iterator it = attributes.begin(); it != attributes.end(); it++)
 		retVal.push_back(it->first.c_str());
 
 	return retVal;
@@ -174,7 +176,7 @@ const char *XMLTag::getAttribute(const char *attribName, int partNum, char partS
 	if (!parsed)
 		parse();
 
-	StringPairMap::iterator it = attributes.find(attribName);
+	StringPairMap::const_iterator it = attributes.find(attribName);
 	const char *retVal = (it == attributes.end()) ? 0 : it->second.c_str();
 	if ((retVal) && (partNum > -1))
 		retVal = getPart(retVal, partNum, partSplit);
