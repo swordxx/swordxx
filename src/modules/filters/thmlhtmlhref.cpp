@@ -143,11 +143,34 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
 				buf += "<small><em>(<a href=\"";
+				buf += "type=";
+				buf += tag.getAttribute("type");
+	
+				const char* value = tag.getAttribute("value");
+				buf += " value=";
+				buf += value ? value : "";
+				buf += "\">";
+				buf += "</a>) </em></small>";
 			}
-			else {
+			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
 				buf += "<small><em>&lt;<a href=\"";
+				buf += "type=";
+				buf += tag.getAttribute("type");
+	
+				const char* value = tag.getAttribute("value");
+				buf += " value=";
+				buf += value ? value : "";
+				buf += "\">";
+				value++;
+				buf += "</a>&gt; </em></small>";
 			}
-
+			else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+				buf += "<b>";
+			}
+			else if(tag.isEndTag()) {
+				buf += "</b>";
+			}
+/*
 			buf += "type=";
 			buf += tag.getAttribute("type");
 
@@ -166,6 +189,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				buf += "</a>) </em></small>";
 			else
 				buf += "</a>&gt; </em></small>";
+*/
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
 			u->inscriptRef = true;
