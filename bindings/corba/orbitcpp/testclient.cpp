@@ -46,7 +46,7 @@ int main (int argc, char *argv[])
 */
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
-		module = mgr->getModuleByName("NASB");
+		module = mgr->getModuleByName("WHNU");
 		for (module->setKeyText("jas.1.1"); !module->error(); module->next()) {
 			std::cout << "KeyText: " << module->getKeyText() << "\n";
 			std::cout << "Text: " << module->getRenderText() << "\n";

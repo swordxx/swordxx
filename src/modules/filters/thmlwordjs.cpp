@@ -153,11 +153,14 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						else strong << 1;
 
 						SWModule *sLex = 0;
+						SWModule *sMorph = 0;
 						if (gh == 'G') {
 							sLex = defaultGreekLex;
+							sMorph = defaultGreekParse;
 						}
 						if (gh == 'H') {
 							sLex = defaultHebLex;
+							sMorph = defaultHebParse;
 						}
 						SWBuf lexName = "";
 						if (sLex) {
@@ -186,8 +189,19 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 							int textStr = atoi(textSt.c_str());
 							textStr += lastAppendLen;
 							SWBuf spanStart = "";
+
+
+
+							if (sMorph) {
+								SWBuf popMorph = "";
+								popMorph.appendFormatted("<a onclick=\"p(\'%s\',\'%s\','%s_%s','');\" >%s</a>", sMorph->Name(), morph.c_str(), layer.c_str(), wstr, morph.c_str());
+								morph = popMorph;
+							}
+
+
+
 							// 'p' = 'fillpop' to save bandwidth
-							spanStart.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s_%s', '%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(), wstr, morph.c_str());
+							spanStart.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s_%s','%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(), wstr, morph.c_str());
 							text.insert(textStr, spanStart);
 							lastAppendLen = spanStart.length();
 						}

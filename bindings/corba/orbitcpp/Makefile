@@ -9,9 +9,9 @@ LIBS += -lclucene
 LIBS += -licui18n -licuuc -licudata -lpthread -licuio
 
 #comment out for release
-#CXXFLAGS += -g -O0
-#CFLAGS += -g -O0
-#LDFLAGS += -g -O0
+CXXFLAGS += -g -O0
+CFLAGS += -g -O0
+LDFLAGS += -g -O0
 #----------------------------------
 
 server: swordorb-common.o server.cpp swordorb-impl.o swordorb-cpp.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-cpp-skels.o swordorb-skels.o swordorb-cpp.o
