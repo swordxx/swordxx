@@ -34,7 +34,7 @@ configure-stamp:
 	chmod 755 configure
 	./configure $(confflags) --prefix=/usr --mandir=\$${prefix}/share/man \
 		--infodir=\$${prefix}/share/info --with-zlib \
-		--sysconfdir=/etc --enable-shared --with-icu
+		--sysconfdir=/etc --enable-shared --without-icu
 	touch configure.stamp
 
 build: configure-stamp build-stamp
@@ -69,8 +69,8 @@ install-stamp: build-stamp
 	dh_movefiles -plibsword-dev usr/lib/lib*so usr/lib/lib*.a \
 		usr/lib/lib*.la usr/include/*
 	dh_movefiles -pdiatheke usr/bin/diatheke
-	dh_movefiles -plibsword-runtime usr/bin/*
-	dh_movefiles -plibsword-config etc/* usr/share/sword/mods.d/globals.conf \
+	#dh_movefiles -plibsword-runtime usr/bin/*
+	#dh_movefiles -plibsword-config etc/* usr/share/sword/mods.d/globals.conf \
 		usr/share/sword/locales.d/*
 	#mkdir -p debian/libsword-dev/usr/share/doc/libsword-dev/html
 	#cp -R doc/api-documentation/html debian/libsword-dev/usr/share/doc/libsword-dev
@@ -101,7 +101,7 @@ binary-arch: build install
 	dh_compress 
 	dh_fixperms 
 	dh_installdeb
-	dh_makeshlibs -V 'libsword3c102 (>=1.5.5.99-1)'
+	dh_makeshlibs -V 'libsword3 (>=1.5.6-1)'
 	dh_perl 
 	dh_shlibdeps -ldebian/tmp/usr/lib
 	dh_gencontrol 

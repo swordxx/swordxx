@@ -1,3 +1,61 @@
+sword (1.5.6-8) unstable; urgency=low
+
+  * Remove the recommends of libsword-runtime from libsword-dev, Closes:
+    #220411
+  * That'd better be the last of the control file mistakes :/
+
+ -- Daniel Glassey <wdg@debian.org>  Wed, 12 Nov 2003 14:39:30 +0000
+
+sword (1.5.6-7) unstable; urgency=low
+
+  * Also Replaces libsword-runtime and libsword-config, Closes #220408
+
+ -- Daniel Glassey <wdg@debian.org>  Wed, 12 Nov 2003 14:00:34 +0000
+
+sword (1.5.6-6) unstable; urgency=low
+
+  * Rerun libtool/autoconf/automake, Closes: #220250
+
+ -- Daniel Glassey <wdg@debian.org>  Tue, 11 Nov 2003 19:20:16 +0000
+
+sword (1.5.6-5) unstable; urgency=low
+
+  * libsword3 replaces libsword2c103, Closes: #219463
+  * libsword3 replaces libsword1, Closes: #219463
+  * no libsword-runtime package now so description is irrelevant, Closes: #209977
+
+ -- Daniel Glassey <wdg@debian.org>  Fri,  7 Nov 2003 13:53:46 +0000
+
+sword (1.5.6-4) unstable; urgency=low
+
+  * The 'ok, forget about the config package' release
+  * now at policy 3.6.1.0
+  * add a build-dep for pkg-config
+  * ready to upload to unstable
+
+ -- Daniel Glassey <wdg@debian.org>  Wed,  5 Nov 2003 17:04:44 +0000
+
+sword (1.5.6-3) experimental; urgency=low
+
+  * -runtime package is unnecessary so merge it into lib
+
+ -- Daniel Glassey <wdg@debian.org>  Wed,  3 Sep 2003 20:49:58 +0100
+
+sword (1.5.6-2) experimental; urgency=low
+
+  * Brown paper bug - get shlibs right
+
+ -- Daniel Glassey <wdg@debian.org>  Fri, 29 Aug 2003 11:25:55 +0100
+
+sword (1.5.6-1) experimental; urgency=low
+
+  * Release is done now
+  * Upload to experimental for now til gs and bt are ready
+  * don't need the c102 suffix now
+  * don't build with icu til we get 2.6 packaged and into experimental
+
+ -- Daniel Glassey <wdg@debian.org>  Thu, 28 Aug 2003 17:38:40 +0100
+
 sword (1.5.5.99-2) unstable; urgency=low
 
   * Another prerelease build
