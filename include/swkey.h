@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.12 2001/08/09 10:39:51 scribe Exp $
+ * $Id: swkey.h,v 1.13 2002/01/24 09:49:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -202,7 +202,6 @@ public:
   * @endcode
   */
   virtual long Index () const { return index; }
-
   virtual long Index (long iindex) { index = iindex; return index; }
 
   SWKEY_OPERATORS
