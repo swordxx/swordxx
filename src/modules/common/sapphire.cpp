@@ -24,6 +24,10 @@
 #endif
 #endif
 
+#ifdef _WIN32_WCE
+#include <string.h>
+#endif
+
 #include "sapphire.h"
 
 SWORD_NAMESPACE_START

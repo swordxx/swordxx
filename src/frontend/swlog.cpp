@@ -45,8 +45,10 @@ void SWLog::LogWarning(char *fmt, ...)
 		//#endif
 		va_end(argptr);
 
+#ifndef _WIN32_WCE
 		std::cerr << msg;
 		std::cerr << std::endl;
+#endif
 	}
 }
 
@@ -69,8 +71,10 @@ void SWLog::LogError(char *fmt, ...)
 		//#endif
 		va_end(argptr);
 
+#ifndef _WIN32_WCE
 		std::cerr << msg;
 		std::cerr << std::endl;
+#endif
 	}
 }
 
@@ -93,8 +97,10 @@ void SWLog::LogTimedInformation(char *fmt, ...)
 		//#endif
 		va_end(argptr);
 
+#ifndef _WIN32_WCE
 		std::cout << msg;
 		std::cout << std::endl;
+#endif
 	}
 }
 
@@ -117,8 +123,10 @@ void SWLog::LogInformation(char *fmt, ...)
 		//#endif
 		va_end(argptr);
 
+#ifndef _WIN32_WCE
 		std::cout << msg;
 		std::cout << std::endl;
+#endif
 	}
 }
 

@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.32 2003/08/27 21:47:56 chrislit Exp $
+ * $Id: filemgr.cpp,v 1.33 2003/12/23 01:36:12 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(_WIN32_WCE)
 #include <io.h>
 #include <direct.h>
 #else
