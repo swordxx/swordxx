@@ -192,7 +192,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = ')';
 		    *to++ = '}';
 		    continue;
-			}
+		  }
 		  else if (!strncmp(token, "note place=\"foot\"", 17)) {
 		    *to++ = '{';
 		    *to++ = '\\';
@@ -214,7 +214,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = '}';
 		    continue;
 		  }
-		  else if (!strncmp(token, "br", 2)) {
+		  else if (!strncasecmp(token, "br", 2)) {
 		    *to++ = '\\';
 		    *to++ = 'l';
 		    *to++ = 'i';
@@ -223,28 +223,30 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = ' ';
 		    continue;
 		  }
-		  else if (!strncasecmp(token, "font face=\"Symbol\"", 18)) {
-		    *to++ = '\\';
-		    *to++ = 'f';
-		    *to++ = '7';
-		    *to++ = ' ';
+		  else if (!strncasecmp(token, "font", 4)) {
+		    *to++ = '{';
+		    if (!strncasecmp(token, "font face=\"Symbol\"", 18)) {
+		      *to++ = '\\';
+		      *to++ = 'f';
+		      *to++ = '7';
+		      *to++ = ' ';
+		    }
 		    continue;
 		  }
-		  else if (!strncmp(token, "/font", 2)) {
-		    *to++ = '\\';
-		    *to++ = 'f';
-		    *to++ = '0';
-		    *to++ = ' ';
+		  else if (!strncasecmp(token, "/font", 2)) {
+		    *to++ = '}';
 		    continue;
 		  }
 		  else switch(*token) {
 		  case 'i':			// font tags
+		  case 'I':
 		    *to++ = '\\';
 		    *to++ = 'i';
 		    *to++ = '1';
 		    *to++ = ' ';
 		    continue;
 		  case 'b':		// bold start
+		  case 'B':
 		    *to++ = '\\';
 		    *to++ = 'b';
 		    *to++ = '1';
@@ -253,6 +255,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		  case '/':
 		    switch(token[1]) {
 		    case 'p':
+		    case 'P':
 		      *to++ = '\\';
 		      *to++ = 'p';
 		      *to++ = 'a';
@@ -260,12 +263,14 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		      *to++ = ' ';
 		      continue;
 		    case 'i':		// italic end
+		    case 'I':
 		      *to++ = '\\';
 		      *to++ = 'i';
 		      *to++ = '0';
 		      *to++ = ' ';
 		      continue;
 		    case 'b':		// bold end
+		    case 'B':
 		      *to++ = '\\';
 		      *to++ = 'b';
 		      *to++ = '0';
