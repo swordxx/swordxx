@@ -1,5 +1,8 @@
 USEUNIT("..\parsekey.cpp");
-USELIB("libsword.lib");
+USELIB("..\..\lib\libsword.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icuuc.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icuin.lib");
+USELIB("..\..\..\icu-sword\as_is\borland\icudatab.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

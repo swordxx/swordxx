@@ -14,10 +14,6 @@ PROJECTS = libsword.lib parsekey.exe filtertest.exe mgrtest.exe
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
 
-libsword.lib: libsword.bpr
-  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
 parsekey.exe: parsekey.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
@@ -28,6 +24,10 @@ filtertest.exe: filtertest.bpr
 
 mgrtest.exe: mgrtest.bpr
   $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+libsword.lib: ..\..\lib\bcppmake\libsword.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 

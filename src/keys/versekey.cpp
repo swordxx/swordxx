@@ -421,6 +421,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				if (*number)
 					chap = atoi(number);
 				*number = 0;
+				comma = 0;
 				break;
 			}
 			// otherwise drop down to next case
