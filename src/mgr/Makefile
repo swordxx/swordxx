@@ -10,8 +10,4 @@ cpp += filemgr.cpp
 cpp += swlocale.cpp
 cpp += localemgr.cpp
 
-ifeq ($(zlib),yes)
-CFLAGS += -DZLIBSUPPORTED
-endif
-
 include ${root}/Makefile.post
