@@ -43,15 +43,16 @@
       ..\..\obj\greeklexattribs.obj ..\..\obj\swcacher.obj ..\..\obj\gbfosis.obj 
       ..\..\obj\thmlosis.obj ..\..\obj\encfiltmgr.obj 
       ..\..\obj\markupfiltmgr.obj ..\..\obj\roman.obj ..\..\obj\swsourcemgr.obj 
-      ..\..\obj\installmgr.obj ..\..\obj\ftpparse.obj ..\..\obj\osisstrongs.obj 
-      ..\..\obj\osismorph.obj ..\..\obj\gbfredletterwords.obj 
-      ..\..\obj\osisheadings.obj ..\..\obj\swbuf.obj ..\..\obj\utilxml.obj 
-      ..\..\obj\osisplain.obj ..\..\obj\osisrtf.obj ..\..\obj\thmlwebif.obj 
-      ..\..\obj\gbfwebif.obj ..\..\obj\utilweb.obj ..\..\obj\osisfootnotes.obj 
+      ..\..\obj\ftpparse.obj ..\..\obj\osisstrongs.obj ..\..\obj\osismorph.obj 
+      ..\..\obj\gbfredletterwords.obj ..\..\obj\osisheadings.obj 
+      ..\..\obj\swbuf.obj ..\..\obj\utilxml.obj ..\..\obj\osisplain.obj 
+      ..\..\obj\osisrtf.obj ..\..\obj\thmlwebif.obj ..\..\obj\gbfwebif.obj 
+      ..\..\obj\utilweb.obj ..\..\obj\osisfootnotes.obj 
       ..\..\obj\osisscripref.obj ..\..\obj\swoptfilter.obj 
       ..\..\obj\osislemma.obj ..\..\obj\osisredletterwords.obj 
       ..\..\obj\osishtmlhref.obj ..\..\obj\swsearchable.obj 
-      ..\..\obj\osiswebif.obj ..\..\obj\osisosis.obj"/>
+      ..\..\obj\osiswebif.obj ..\..\obj\osisosis.obj ..\..\obj\stringmgr.obj 
+      ..\..\obj\swversion.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -211,7 +212,6 @@
       <FILE FILENAME="..\..\src\mgr\markupfiltmgr.cpp" FORMNAME="" UNITNAME="markupfiltmgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\roman.cpp" FORMNAME="" UNITNAME="roman" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\mgr\swsourcemgr.cpp" FORMNAME="" UNITNAME="swsourcemgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\mgr\installmgr.cpp" FORMNAME="" UNITNAME="installmgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\ftpparse.c" FORMNAME="" UNITNAME="ftpparse" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osisstrongs.cpp" FORMNAME="" UNITNAME="osisstrongs" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osismorph.cpp" FORMNAME="" UNITNAME="osismorph" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -233,6 +233,8 @@
       <FILE FILENAME="..\..\src\mgr\swsearchable.cpp" FORMNAME="" UNITNAME="swsearchable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osiswebif.cpp" FORMNAME="" UNITNAME="osiswebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osisosis.cpp" FORMNAME="" UNITNAME="osisosis" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\mgr\stringmgr.cpp" FORMNAME="" UNITNAME="stringmgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\utilfuns\swversion.cpp" FORMNAME="" UNITNAME="swversion" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
