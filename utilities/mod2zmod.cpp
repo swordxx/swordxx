@@ -33,7 +33,7 @@ void errorOutHelp(char *appName) {
 
 int main(int argc, char **argv)
 {
-	int iType = 3;
+	int iType = 4;
 	int compType = 1;
 	SWCompress *compressor = 0;
 
