@@ -55,6 +55,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	optionFilters = new FilterList();
 	encodingFilters = new FilterList();
 	skipConsecutiveLinks = true;
+	procEntAttr = true;
 }
 
 
@@ -399,7 +400,9 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	const char *sres;
 	terminateSearch = false;
 	char perc = 1;
+	bool savePEA = isProcessEntryAttributes();
 
+	processEntryAttributes(false);
 	listkey.ClearList();
 
 	if (!key->Persist()) {
@@ -534,7 +537,9 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 		delete searchkey;
 
 	listkey = TOP;
+	processEntryAttributes(savePEA);
 	(*percent)(100, percentUserData);
+
 	return listkey;
 }
 
