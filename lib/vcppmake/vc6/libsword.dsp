@@ -359,14 +359,6 @@ SOURCE=..\..\..\src\modules\filters\rtfhtml.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\modules\filters\rwphtml.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\modules\filters\rwprtf.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\modules\common\sapphire.cpp
 # End Source File
 # Begin Source File
@@ -380,6 +372,10 @@ SOURCE=..\..\..\src\keys\strkey.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\modules\filters\swbasicfilter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\utilfuns\swbuf.cpp
 # End Source File
 # Begin Source File
 
@@ -843,14 +839,6 @@ SOURCE=..\..\..\include\rtfhtml.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\include\rwphtml.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\rwprtf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\include\sapphire.h
 # End Source File
 # Begin Source File
@@ -864,6 +852,10 @@ SOURCE=..\..\..\include\strkey.h
 # Begin Source File
 
 SOURCE=..\..\..\include\swbasicfilter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\swbuf.h
 # End Source File
 # Begin Source File
 
