@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.6 2002/06/12 02:29:31 scribe Exp $
+ * $Id: swconfig.cpp,v 1.7 2002/06/13 01:23:51 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -139,8 +139,8 @@ SWConfig &SWConfig::operator +=(SWConfig &addFrom)
 
 	for (section = addFrom.Sections.begin(); section != addFrom.Sections.end(); section++) {
 		for (entry = (*section).second.begin(); entry != (*section).second.end(); entry++) {
-			Sections[section->first][entry->first] = entry->second;
-//			Sections[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
+//			Sections[section->first][entry->first] = entry->second;
+			Sections[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
 		}
 	}
 	return *this;
