@@ -2,6 +2,13 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+17-Oct-1999
+	Added sparc support
+	Enhanced and debugged build and install system
+	added spec file for building RPMs
+	Added updated GBFHTML and PLAINHTML filters from bibletime team
+	Fixed bug in SWMgr on exit when can't find any config info
+
 15-Oct-1999
 	Changed sig of ProcessText to include SWKey *, and calls approp.
 	Changed SWMgr::optionFilters security to protected
