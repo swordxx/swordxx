@@ -2,7 +2,7 @@
 
 OPTIONS="--prefix=/usr $OPTIONS"
 #OPTIONS="--disable-shared $OPTIONS"
-#OPTIONS="--without-conf $OPTIONS"
+OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--sysconfdir=/etc $OPTIONS"
 #OPTIONS="--with-icu $OPTIONS"
 #OPTIONS="--with-vcl $OPTIONS"
