@@ -91,7 +91,7 @@
       ..\..\src\modules\filters\osismorph.obj 
       ..\..\src\modules\filters\gbfredletterwords.obj 
       ..\..\src\modules\filters\osisrtf.obj 
-      ..\..\src\modules\filters\osisplain.obj"/>
+      ..\..\src\modules\filters\osisplain.obj ..\..\src\utilfuns\swbuf.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

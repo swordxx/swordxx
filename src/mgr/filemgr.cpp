@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.23 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: filemgr.cpp,v 1.24 2003/02/25 04:12:47 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,7 +43,7 @@ FileMgr FileMgr::systemFileMgr;
 // --------------- end statics --------------
 
 
-FileDesc::FileDesc(FileMgr *parent, char *path, int mode, int perms, bool tryDowngrade) {
+FileDesc::FileDesc(FileMgr *parent, const char *path, int mode, int perms, bool tryDowngrade) {
 	this->parent = parent;
 	this->path = 0;
 	stdstr(&this->path, path);
@@ -88,11 +88,11 @@ FileMgr::~FileMgr() {
 }
 
 
-FileDesc *FileMgr::open(char *path, int mode, bool tryDowngrade) {
+FileDesc *FileMgr::open(const char *path, int mode, bool tryDowngrade) {
 	return open(path, mode, S_IREAD | S_IWRITE, tryDowngrade);
 }
 
-FileDesc *FileMgr::open(char *path, int mode, int perms, bool tryDowngrade) {
+FileDesc *FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade) {
 	FileDesc **tmp, *tmp2;
 	
 	for (tmp = &files; *tmp; tmp = &((*tmp)->next)) {

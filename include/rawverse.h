@@ -12,6 +12,7 @@
 #include <fcntl.h>
 
 #include <defs.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -22,17 +23,16 @@ protected:
 	FileDesc *textfp[2];
 
 	char *path;
-	void preptext(char *buf);
-	void settext(char testmt, long idxoff, const char *buf, long len = -1);
-	void linkentry(char testmt, long destidxoff, long srcidxoff);
+	void prepText(SWBuf &buf);
+	void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
+	void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 
 public:
 	static const char *nl;
 	RawVerse(const char *ipath, int fileMode = -1);
-	virtual ~ RawVerse();
-	void findoffset(char testmt, long idxoff, long *start,
-	unsigned short *end);
-	void readtext(char testmt, long start, unsigned short size, char *buf);
+	virtual ~RawVerse();
+	void findOffset(char testmt, long idxoff, long *start,	unsigned short *end);
+	void readText(char testmt, long start, unsigned short size, SWBuf &buf);
 	static char createModule(const char *path);
 };
 

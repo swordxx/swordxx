@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.3 2003/02/24 05:26:15 scribe Exp $
+* $Id: swbuf.h,v 1.4 2003/02/25 04:12:47 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -62,6 +62,8 @@ public:
 	void append(const SWBuf &str);
 	void append(char ch);
 	void appendFormatted(const char *format, ...);
+	
+	char *getRawData() { return buf; }	// be careful!  Probably setSize needs to be called in conjunction before and maybe after
 
 	operator const char *() const { return c_str(); }
 	char &operator[](unsigned int pos) { return charAt(pos); }

@@ -32,10 +32,8 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
 
 SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char* imodlang) {
 	key       = CreateKey();
-	entrybuf  = new char [1];
-	*entrybuf = 0;
+	entryBuf  = "";
 	config    = &ownConfig;
-	entrybufallocsize = 0;
 	modname   = 0;
 	error     = 0;
 	moddesc   = 0;
@@ -66,8 +64,6 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 
 SWModule::~SWModule()
 {
-	if (entrybuf)
-		delete [] entrybuf;
 	if (modname)
 		delete [] modname;
 	if (moddesc)

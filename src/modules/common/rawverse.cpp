@@ -106,7 +106,7 @@ RawVerse::~RawVerse()
  *	size	- address to store the size of the entry
  */
 
-void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *size) {
+void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size) {
 	idxoff *= 6;
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
@@ -138,12 +138,11 @@ void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short 
  *			text.
  */
 
-void RawVerse::preptext(char *buf)
-{
-	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
-
-	for (to = from = buf; *from; from++) {
-		switch (*from) {
+void RawVerse::prepText(SWBuf &buf) {
+	unsigned int to, from; 
+	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
+	for (to = from = 0; buf[from]; from++) {
+		switch (buf[from]) {
 		case 10:
 			if (!realdata)
 				continue;
@@ -152,7 +151,7 @@ void RawVerse::preptext(char *buf)
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				*to++ = 10;
+				buf[to++] = 10;
 //				*to++ = nl[1];
 //				nlcnt = 0;
 			}
@@ -161,7 +160,7 @@ void RawVerse::preptext(char *buf)
 			if (!realdata)
 				continue;
 //			*to++ = nl[0];
-			*to++ = 10;
+			buf[to++] = 10;
 			space = 0;
 			cr = 1;
 			continue;
@@ -170,20 +169,20 @@ void RawVerse::preptext(char *buf)
 		nlcnt = 0;
 		if (space) {
 			space = 0;
-			if (*from != ' ') {
-				*to++ = ' ';
+			if (buf[from] != ' ') {
+				buf[to++] = ' ';
 				from--;
 				continue;
 			}
 		}
-		*to++ = *from;
+		buf[to++] = buf[from];
 	}
-	*to = 0;
+	buf.setSize(to);
 
-	while (to > (buf+1)) {			// remove trailing excess
+	while (to > 1) {			// remove trailing excess
 		to--;
-		if ((*to == 10) || (*to == ' '))
-			*to = 0;
+		if ((buf[to] == 10) || (buf[to] == ' '))
+			buf.setSize(to);
 		else break;
 	}
 }
@@ -199,14 +198,16 @@ void RawVerse::preptext(char *buf)
  *
  */
 
-void RawVerse::readtext(char testmt, long start, unsigned short size, char *buf) {
-	memset(buf, 0, size);
+void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf) {
+	buf = "";
+	buf.setFillByte(0);
+	buf.setSize(size + 1);
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
 	if (size) {
 		if (textfp[testmt-1]->getFd() >= 0) {
 			lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
-			read(textfp[testmt-1]->getFd(), buf, (int)size - 2); 
+			read(textfp[testmt-1]->getFd(), buf.getRawData(), (int)size); 
 		}
 	}
 }
@@ -221,7 +222,7 @@ void RawVerse::readtext(char testmt, long start, unsigned short size, char *buf)
  *      len     - length of buffer (0 - null terminated)
  */
 
-void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
+void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
 	long start, outstart;
 	unsigned short size;
@@ -265,7 +266,7 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
  *	srcidxoff		- source offset into .vss
  */
 
-void RawVerse::linkentry(char testmt, long destidxoff, long srcidxoff) {
+void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 	long start;
 	unsigned short size;
 

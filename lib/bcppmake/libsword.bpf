@@ -120,6 +120,10 @@ USEUNIT("..\..\src\modules\filters\osismorph.cpp");
 USEUNIT("..\..\src\modules\filters\gbfredletterwords.cpp");
 USEUNIT("..\..\src\modules\filters\osisrtf.cpp");
 USEUNIT("..\..\src\modules\filters\osisplain.cpp");
+USEUNIT("..\..\src\utilfuns\swbuf.cpp");
+//---------------------------------------------------------------------------
+USE("\\			preptext(entrybuf);
+", File);
 //---------------------------------------------------------------------------
 #define Library
 

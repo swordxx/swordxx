@@ -56,10 +56,9 @@ HREFCom::~HREFCom()
  * RET: string buffer with verse
  */
 
-char *HREFCom::getRawEntry() {
+SWBuf &HREFCom::getRawEntryBuf() {
 	long  start;
 	unsigned short size;
-	char *tmpbuf;
 	VerseKey *key = 0;
 
 #ifndef _WIN32_WCE
@@ -73,28 +72,20 @@ char *HREFCom::getRawEntry() {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findoffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
-	unsigned long newsize = ((size + 2) + strlen(prefix)) * FILTERPAD;
-	if (newsize > entrybufallocsize) {
-		if (entrybuf)
-			delete [] entrybuf;
-		entrybuf = new char [ newsize ];
-		entrybufallocsize = newsize;
-	}
-	tmpbuf   = new char [ size + 10 ];
+	SWBuf tmpbuf;
 
-	readtext(key->Testament(), start, size + 2, tmpbuf);
-	sprintf(entrybuf, "%s%s", prefix, tmpbuf);
-	preptext(entrybuf);
-
-	delete [] tmpbuf;
+	readText(key->Testament(), start, size, tmpbuf);
+	entryBuf = prefix;
+	entryBuf += tmpbuf.c_str();
+	prepText(entryBuf);
 
 	if (key != this->key)
 		delete key;
 
-	return entrybuf;
+	return entryBuf;
 }
 
 SWORD_NAMESPACE_END

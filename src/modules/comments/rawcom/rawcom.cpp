@@ -51,33 +51,24 @@ RawCom::~RawCom()
  * RET: string buffer with verse
  */
 
-char *RawCom::getRawEntry() {
+SWBuf &RawCom::getRawEntryBuf() {
 	long  start = 0;
 	unsigned short size = 0;
 	VerseKey *key = &getVerseKey();
 
-	findoffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
-	unsigned long newsize = (size + 2) * FILTERPAD;
-	if (newsize > entrybufallocsize) {
-		if (entrybuf)
-			delete [] entrybuf;
-		entrybuf = new char [ newsize ];
-		entrybufallocsize = newsize;
-	}
-	*entrybuf = 0;
+	entryBuf = "";
+	readText(key->Testament(), start, size, entryBuf);
 
-	readtext(key->Testament(), start, (size + 2), entrybuf);
-     entrybuf[size] = 0;
+	rawFilter(entryBuf, 0);	// hack, decipher
+	rawFilter(entryBuf, key);
 
-	rawFilter(entrybuf, size, 0);	// hack, decipher
-	rawFilter(entrybuf, size*FILTERPAD, key);
+	   if (!isUnicode())
+		prepText(entryBuf);
 
-        if (!isUnicode())
-		preptext(entrybuf);
-
-	return entrybuf;
+	return entryBuf;
 }
 
 
@@ -94,7 +85,7 @@ void RawCom::increment(int steps) {
 	unsigned short size;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+	findOffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -109,7 +100,7 @@ void RawCom::increment(int steps) {
 			break;
 		}
 		long index = tmpkey->Index();
-		findoffset(tmpkey->Testament(), index, &start, &size);
+		findOffset(tmpkey->Testament(), index, &start, &size);
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
 //				&& (start > 0)
@@ -125,7 +116,7 @@ void RawCom::increment(int steps) {
 
 void RawCom::setEntry(const char *inbuf, long len) {
 	VerseKey *key = &getVerseKey();
-	settext(key->Testament(), key->Index(), inbuf, len);
+	doSetText(key->Testament(), key->Index(), inbuf, len);
 }
 
 
@@ -142,7 +133,7 @@ void RawCom::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
+	doLinkEntry(destkey->Testament(), destkey->Index(), srckey->Index());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -158,7 +149,7 @@ void RawCom::linkEntry(const SWKey *inkey) {
 void RawCom::deleteEntry() {
 
 	VerseKey *key = &getVerseKey();
-	settext(key->Testament(), key->Index(), "");
+	doSetText(key->Testament(), key->Index(), "");
 }
 
 

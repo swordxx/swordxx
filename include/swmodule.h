@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.58 2003/02/20 07:25:20 scribe Exp $
+* $Id: swmodule.h,v 1.59 2003/02/25 04:12:47 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -112,8 +112,7 @@ protected:
 	SWDisplay *disp;
 
 	static SWDisplay rawdisp;
-	char *entrybuf;
-	unsigned long entrybufallocsize;
+	SWBuf entryBuf;
 
 	/** executed to remove all markup (for searches) */
 	FilterList *stripFilters;

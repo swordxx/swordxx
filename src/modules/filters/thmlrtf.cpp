@@ -149,69 +149,69 @@ ThMLRTF::ThMLRTF()
         addTokenSubstitute("P", "\\par ");
 }
 
-bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
-                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
-        			pushString(buf, " {\\fs15 <");
-                                for (unsigned int i = 28; token[i] != '\"'; i++)
-                		        *(*buf)++ = token[i];
-				pushString(buf, ">}");
-				    }
-				    else if (token[27] == 'T') {
-						  pushString(buf, " {\\fs15 (");
+			if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
+				buf += " {\\fs15 <";
 				for (unsigned int i = 28; token[i] != '\"'; i++)
-					*(*buf)++ = token[i];
-				pushString(buf, ")}");
-				    }
+					buf += token[i];
+				buf += ">}";
+			}
+			else if (token[27] == 'T') {
+				buf += " {\\fs15 (";
+				for (unsigned int i = 28; token[i] != '\"'; i++)
+					buf += token[i];
+				buf += ")}";
+			}
 		}
 		else if (!strncmp(token, "sync type=\"morph\" ", 18)) {
-			pushString(buf, " {\\fs15 (");
+			buf += " {\\fs15 (";
 			for (const char *tok = token + 5; *tok; tok++) {
 				if (!strncmp(tok, "value=\"", 7)) {
 					tok += 7;
 					for (;*tok != '\"'; tok++)
-						*(*buf)++ = *tok;
+						buf += *tok;
 					break;
 				}
 			}
 
-			pushString(buf, ")}");
+			buf += ")}";
 		}
 		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
-			pushString(buf, "{\\fs15 (");
+			buf += "{\\fs15 (";
 			for (unsigned int i = 25; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];
-			pushString(buf, ")}");
+				buf += token[i];
+			buf += ")}";
 		}
 		else if (!strncmp(token, "scripRef", 8)) {
-//			pushString(buf, "{\\cf2 #");
-			pushString(buf, "<a href=\"\">");
+//			buf += "{\\cf2 #";
+			buf += "<a href=\"\">";
 		}
 		else if (!strncmp(token, "/scripRef", 9)) {
-			pushString(buf, "</a>");
+			buf += "</a>";
 		}
 		else if (!strncmp(token, "div", 3)) {
-			*(*buf)++ = '{';
+			buf += '{';
 			if (!strncmp(token, "div class=\"title\"", 17)) {
-				pushString(buf, "\\par\\i1\\b1 ");
+				buf += "\\par\\i1\\b1 ";
 				userData["sechead"] = "true";
 			}
 			else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-				pushString(buf, "\\par\\i1\\b1 ");
+				buf += "\\par\\i1\\b1 ";
 				userData["sechead"] = "true";
 			}
 		}
 		else if (!strncmp(token, "/div", 4)) {
-			*(*buf)++ = '}';
+			buf += '}';
 			if (userData["sechead"] == "true") {
-				pushString(buf, "\\par ");
+				buf += "\\par ";
 				userData["sechead"] == "false";
 			}
 		}
 		else if (!strncmp(token, "note", 4)) {
-			pushString(buf, " {\\i1\\fs15 (");
+			buf += " {\\i1\\fs15 (";
 		}
 
 		else {

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.15 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: filemgr.h,v 1.16 2003/02/25 04:12:47 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,7 +42,7 @@ class SWDLLEXPORT FileDesc
   FileDesc *next;
 
 public:
-   FileDesc (FileMgr * parent, char *path, int mode, int perms, bool tryDowngrade);
+   FileDesc (FileMgr * parent, const char *path, int mode, int perms, bool tryDowngrade);
    virtual ~FileDesc ();
   int getFd ();
   char *path;
@@ -63,8 +63,8 @@ public:
 
     FileMgr (int maxFiles = 35);
    ~FileMgr ();
-  FileDesc *open (char *path, int mode, bool tryDowngrade);
-  FileDesc *open (char *path, int mode, int perms = S_IREAD | S_IWRITE, bool tryDowngrade = false);
+  FileDesc *open (const char *path, int mode, bool tryDowngrade);
+  FileDesc *open (const char *path, int mode, int perms = S_IREAD | S_IWRITE, bool tryDowngrade = false);
   void close (FileDesc *);
 
   static signed char existsFile (const char *ipath, const char *ifileName = 0);

@@ -56,7 +56,7 @@ RawFiles::~RawFiles()
  * RET: string buffer with verse
  */
 
-char *RawFiles::getRawEntry() {
+SWBuf &RawFiles::getRawEntryBuf() {
 	FileDesc *datafile;
 	long  start = 0;
 	unsigned short size = 0;
@@ -74,42 +74,33 @@ char *RawFiles::getRawEntry() {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findoffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->Index(), &start, &size);
 
-	if (entrybuf)
-		delete [] entrybuf;
-
+	entryBuf = "";
 	if (size) {
-		tmpbuf   = new char [ (size + 2) + strlen(path) + 5 ];
-		sprintf(tmpbuf,"%s/",path);
-		readtext(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
-		datafile = FileMgr::systemFileMgr.open(tmpbuf, O_RDONLY|O_BINARY);
-		delete [] tmpbuf;
+		SWBuf tmpbuf = path;
+		tmpbuf += '/';
+		readText(key->Testament(), start, size, entryBuf);
+		tmpbuf += entryBuf;
+		entryBuf = "";
+		datafile = FileMgr::systemFileMgr.open(tmpbuf.c_str(), O_RDONLY|O_BINARY);
 		if (datafile->getFd() > 0) {
 			size = lseek(datafile->getFd(), 0, SEEK_END);
-			entrybuf = new char [ size * FILTERPAD ];
-			memset(entrybuf, 0, size * FILTERPAD);
+			char *tmpBuf = new char [ size + 1 ];
+			memset(tmpBuf, 0, size + 1);
 			lseek(datafile->getFd(), 0, SEEK_SET);
-			read(datafile->getFd(), entrybuf, size);
+			read(datafile->getFd(), tmpBuf, size);
+			entryBuf = tmpBuf;
+			delete [] tmpBuf;
 //			preptext(entrybuf);
 		}
-		else {
-			entrybuf = new char [2];
-			entrybuf[0] = 0;
-			entrybuf[1] = 0;
-		}
 		FileMgr::systemFileMgr.close(datafile);
-	}
-	else {
-		entrybuf = new char [2];
-		entrybuf[0] = 0;
-		entrybuf[1] = 0;
 	}
 
 	if (key != this->key)
 		delete key;
 
-	return entrybuf;
+	return entryBuf;
 }
 
 
@@ -133,17 +124,17 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findoffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
 		tmpbuf   = new char [ (size + 3) + strlen(path) + 1 ];
 		sprintf(tmpbuf, "%s/", path);
-		readtext(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
+		readText(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
 	}
 	else {
 		tmpbuf   = new char [ 16 + strlen(path) + 1 ];
-		sprintf(tmpbuf, "%s/%s", path, getnextfilename());
-		settext(key->Testament(), key->Index(), tmpbuf+strlen(path)+1);
+		sprintf(tmpbuf, "%s/%s", path, getNextFilename());
+		doSetText(key->Testament(), key->Index(), tmpbuf+strlen(path)+1);
 	}
 	datafile = FileMgr::systemFileMgr.open(tmpbuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	delete [] tmpbuf;
@@ -178,11 +169,11 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findoffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
 		tmpbuf   = new char [ size + 2];
-		readtext(key->Testament(), start, size + 2, tmpbuf);
+		readText(key->Testament(), start, size + 2, tmpbuf);
 
 		if (key != inkey)
 			delete key;
@@ -194,7 +185,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 		catch ( ... ) {}
 		if (!key)
 			key = new VerseKey(this->key);
-		settext(key->Testament(), key->Index(), tmpbuf);
+		doSetText(key->Testament(), key->Index(), tmpbuf);
 	}
 	
 	if (key != inkey)
@@ -223,7 +214,7 @@ void RawFiles::deleteEntry() {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	settext(key->Testament(), key->Index(), "");
+	doSetText(key->Testament(), key->Index(), "");
 
 	if (key != this->key)
 		delete key;
@@ -231,13 +222,13 @@ void RawFiles::deleteEntry() {
 
 
 /******************************************************************************
- * RawFiles::getnextfilename - generates a valid filename in which to store
+ * RawFiles::getNextfilename - generates a valid filename in which to store
  *				an entry
  *
  * RET: filename
  */
 
-char *RawFiles::getnextfilename() {
+char *RawFiles::getNextFilename() {
 	static char incfile[255];
 	long number;
 	FileDesc *datafile;
