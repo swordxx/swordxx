@@ -172,3 +172,28 @@ SWModule &RawLD::operator =(POSITION p)
 	else	*key = p;
 	return *this;
 }
+
+
+SWModule &RawLD::operator <<(const char *inbuf) {
+	settext(*key, inbuf);
+
+	return *this;
+}
+
+
+SWModule &RawLD::operator <<(const SWKey *inkey) {
+	linkentry(*key, *inkey);
+
+	return *this;
+}
+
+
+/******************************************************************************
+ * RawFiles::deleteEntry	- deletes this entry
+ *
+ * RET: *this
+ */
+
+void RawLD::deleteEntry() {
+	settext(*key, "");
+}

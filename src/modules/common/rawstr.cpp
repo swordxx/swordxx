@@ -173,7 +173,7 @@ void RawStr::getidxbuf(long ioffset, char **buf)
  * RET: error status
  */
 
-char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, long away)
+char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
 {
 	char *trybuf, *targetbuf, *key, quitflag = 0, retval = 0;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
@@ -234,6 +234,8 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 		*start = *size = 0;
 		read(idxfd->getFd(), start, 4);
 		read(idxfd->getFd(), size, 2);
+		if (idxoff)
+			*idxoff = tryoff;
 
 	#ifdef BIGENDIAN
 		#ifndef MACOSX
@@ -256,10 +258,14 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 				*start = laststart;
 				*size = lastsize;
 				tryoff = lasttry;
+				if (idxoff)
+					*idxoff = tryoff;
 				break;
 			}
 			read(idxfd->getFd(), start, 4);
 			read(idxfd->getFd(), size, 2);
+			if (idxoff)
+				*idxoff = tryoff;
 
 	#ifdef BIGENDIAN
 		#ifndef MACOSX
@@ -280,6 +286,8 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 	else {
 		*start = 0;
 		*size  = 0;
+		if (idxoff)
+			*idxoff = 0;
 		retval = -1;
 	}
 	return retval;
@@ -377,4 +385,138 @@ void RawStr::gettext(long start, unsigned short size, char *idxbuf, char *buf)
 		idxbuf[localsize] = 0;
 		free(idxbuflocal);
 	}
+}
+
+
+/******************************************************************************
+ * RawLD::settext	- Sets text for current offset
+ *
+ * ENT: key	- key for this entry
+ *	buf	- buffer to store
+ */
+
+void RawStr::settext(const char *ikey, const char *buf)
+{
+
+	long start, outstart;
+	long idxoff;
+	long endoff;
+	long shiftSize;
+	unsigned short size;
+	unsigned short outsize;
+	static const char nl[] = {13, 10};
+	char *tmpbuf = 0;
+	char *key = 0;
+	char *idxBytes = 0;
+
+	findoffset(key, &start, &size, 0, &idxoff);
+	stdstr(&key, ikey);
+	for (tmpbuf = key; *tmpbuf; tmpbuf++)
+		*tmpbuf = toupper(*tmpbuf);
+	tmpbuf = 0;
+	getidxbuf(start, &tmpbuf);
+
+	if (strcmp(key, tmpbuf) > 0)
+		idxoff += 6;
+
+	endoff = lseek(idxfd->getFd(), 0, SEEK_END);
+
+	shiftSize = endoff - idxoff;
+
+	if (shiftSize > 0) {
+		idxBytes = new char [ shiftSize ];
+		lseek(idxfd->getFd(), idxoff, SEEK_SET);
+		read(idxfd->getFd(), idxBytes, shiftSize);
+	}
+
+	size = outsize = strlen(buf);
+
+	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
+#ifdef BIGENDIAN
+	#ifndef MACOSX
+		outstart = lelong(start);
+		outsize  = leshort(size);
+	#else
+		outstart = NXSwapLittleLongToHost(start);
+		outsize  = NXSwapLittleShortToHost(size);
+	#endif
+#endif
+	lseek(idxfd->getFd(), idxoff, SEEK_SET);
+	if (size) {
+		// TODO: write key info first
+		lseek(datfd->getFd(), start, SEEK_SET);
+		write(datfd->getFd(), buf, (int)size);
+
+		// add a new line to make data file easier to read in an editor
+		write(datfd->getFd(), &nl, 2);
+		
+		write(idxfd->getFd(), &outstart, 4);
+		write(idxfd->getFd(), &outsize, 2);
+		if (idxBytes) {
+			write(idxfd->getFd(), idxBytes, shiftSize);
+			delete [] idxBytes;
+		}
+	}
+	else {	// delete entry
+		if (idxBytes) {
+			write(idxfd->getFd(), idxBytes+6, shiftSize-6);
+			// TODO: truncate the index (shrink by 6);
+			delete [] idxBytes;
+		}
+	}
+
+	delete [] key;
+	free(tmpbuf);
+}
+
+
+/******************************************************************************
+ * RawLD::linkentry	- links one entry to another
+ *
+ * ENT: testmt	- testament to find (0 - Bible/module introduction)
+ *	destidxoff	- dest offset into .vss
+ *	srcidxoff		- source offset into .vss
+ */
+
+void RawStr::linkentry(const char *destkey, const char *srckey) {
+	char *text = new char [ strlen(destkey) + 7 ];
+	sprintf(text, "@LINK %s", destkey);
+	settext(srckey, text);
+	delete [] text;
+}
+
+
+/******************************************************************************
+ * RawLD::CreateModule	- Creates new module files
+ *
+ * ENT: path	- directory to store module files
+ * RET: error status
+ */
+
+char RawStr::createModule(const char *ipath)
+{
+	char *path = 0;
+	char *buf = new char [ strlen (ipath) + 20 ];
+	FileDesc *fd, *fd2;
+
+	stdstr(&path, ipath);
+
+	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
+		path[strlen(path)-1] = 0;
+
+	sprintf(buf, "%s.dat", path);
+	unlink(buf);
+	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd->getFd();
+	FileMgr::systemFileMgr.close(fd);
+
+	sprintf(buf, "%s.idx", path);
+	unlink(buf);
+	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2->getFd();
+	FileMgr::systemFileMgr.close(fd2);
+
+	delete [] path;
+	
+	return 0;
 }

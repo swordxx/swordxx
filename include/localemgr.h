@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.3 2000/03/13 09:36:02 scribe Exp $
+ * $Id: localemgr.h,v 1.4 2000/12/02 00:54:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -49,7 +49,7 @@ public:
 	virtual SWLocale *getLocale(const char *name);
 	virtual list<string> getAvailableLocales();
 	virtual const char *translate(const char *name, const char *text);
-	virtual const char *LocaleMgr::getDefaultLocaleName();
+	virtual const char *getDefaultLocaleName();
 	virtual void setDefaultLocaleName(const char *name);
 
 	static LocaleMgr systemLocaleMgr;
