@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = 1.6
+#AUTOMAKE_OPTIONS = 1.6
 AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_CPPFLAGS += -DUSE_AUTOTOOLS -DUNIX -Dunix
 
@@ -44,7 +44,7 @@ endif
 
 libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) 
 
-libsword_la_LDFLAGS = -version-info 5
+libsword_la_LDFLAGS = -release $(VERSION)
 
 #if BUILDSPLITLIB
 #libsword_flat_la_LDFLAGS = -version-info 5
