@@ -4,6 +4,7 @@
 // see accompanying LICENSE file for license details
 
 #include "corediatheke.h"
+#include <iostream>
 
 #define RQ_REF 1
 #define RQ_BOOK 2
@@ -20,7 +21,7 @@ void printsyntax() {
 	fprintf (stderr, "\n");
 	fprintf (stderr, "Valid search_type values are: regex, multiword, and phrase(def).\n");
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
-	fprintf (stderr, "  f (Footnotes), and h (Section Headings)\n");
+	fprintf (stderr, "  f (Footnotes), m (Morphology), and h (Section Headings)\n");
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OLB, and plain(def)\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");

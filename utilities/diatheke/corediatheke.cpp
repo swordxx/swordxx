@@ -3,9 +3,9 @@
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 #include "corediatheke.h"
+#include <iostream>
 #include <string>
 #include <list>
-#include <iostream.h>
 
 void systemquery(const char * key, ostream* output){
 	SWMgr manager;
