@@ -24,7 +24,7 @@ const char GBFRedLetterWords::optTip[] = "Toggles Red Coloring for Words of Chri
 
 
 GBFRedLetterWords::GBFRedLetterWords() {
-	option = false;
+	option = true;
 	options.push_back(on);
 	options.push_back(off);
 }
