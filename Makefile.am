@@ -105,3 +105,7 @@ register:
 	@echo ""
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
+
+install_config: sword.conf
+	@echo "sword.conf generated"
+
