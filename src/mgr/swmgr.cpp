@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.6 1999/06/05 23:32:02 scribe Exp $
+ * $Id: swmgr.cpp,v 1.7 1999/09/05 02:29:28 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,6 +44,7 @@
 #include <gbfplain.h>
 #include <gbfstrongs.h>
 #include <gbffootnotes.h>
+#include <cryptfilt.h>
 #include <rawfiles.h>
 
 
@@ -333,8 +334,9 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
 	}
 	
+	// backward support old drivers
 	if (!stricmp(driver.c_str(), "RawGBF")) {
-		newmod = new RawGBF(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
 	}
 
 	if (!stricmp(driver.c_str(), "RawCom")) {
@@ -386,17 +388,23 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 
 void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 {
-	string sourceformat;
+	string sourceformat, cryptKey;
 	ConfigEntMap::iterator entry;
 
+	cryptKey = ((entry = section.find("CryptKey")) != section.end()) ? (*entry).second : (string)"";
+	if (!cryptKey.empty()) {
+		printf("Using key: %s", cryptKey.c_str());
+		module->AddRenderFilter(new CryptFilter(cryptKey.c_str()));
+	}
+		
 	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
+
 	// Temporary: To support old module types
 	if (sourceformat.empty()) {
-		try {
-			if (dynamic_cast<RawGBF *>(module))
-				sourceformat = "GBF";
-		}
-		catch ( ... ) {}
+		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (string)"";
+		if (!stricmp(sourceformat.c_str(), "RawGBF"))
+			sourceformat = "GBF";
+		else sourceformat = "";
 	}
 
 // process module	- eg. follows
@@ -409,17 +417,19 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 
 void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 {
-	string sourceformat;
+	string sourceformat, cryptKey;
 	ConfigEntMap::iterator entry;
 
+	cryptKey = ((entry = section.find("CryptKey")) != section.end()) ? (*entry).second : (string)"";
+	if (!cryptKey.empty())
+		module->AddStripFilter(new CryptFilter(cryptKey.c_str()));
 	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
 	// Temporary: To support old module types
 	if (sourceformat.empty()) {
-		try {
-			if (dynamic_cast<RawGBF *>(module))
-				sourceformat = "GBF";
-		}
-		catch ( ... ) {}
+		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (string)"";
+		if (!stricmp(sourceformat.c_str(), "RawGBF"))
+			sourceformat = "GBF";
+		else sourceformat = "";
 	}
 	
 	if (!stricmp(sourceformat.c_str(), "GBF")) {

@@ -11,6 +11,7 @@ cpp += gbfrtf.cpp
 cpp += plainhtml.cpp
 cpp += rwphtml.cpp
 cpp += rwprtf.cpp
+cpp += cryptfilt.cpp
 
 cpp += gbfstrongs.cpp
 cpp += gbffootnotes.cpp
