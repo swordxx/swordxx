@@ -1,6 +1,7 @@
 #!/bin/sh
 
-TESTSUITE="verseparsing"
+TESTSUITE="verseparsing-utf8 $TESTSUITE"
+TESTSUITE="verseparsing $TESTSUITE"
 
 for i in $TESTSUITE; do
 	./runtest.sh $i -q
