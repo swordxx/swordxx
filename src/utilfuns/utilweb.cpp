@@ -1,4 +1,5 @@
 #include <utilxml.h>
+#include <stdio.h>
 #include <string>
 #include <map>
 
@@ -16,8 +17,8 @@ const std::string encodeURL( const std::string& url ) {
 				continue; //we don't need an encoding for this char
 			}
 
-			char s[3];
-			snprintf(s, 3, "%-.2X", c); //left-aligned, 2 digits, uppercase hex
+			char s[5];
+			sprintf(s, "%-.2X", c); //left-aligned, 2 digits, uppercase hex
 			m[c] = string("%") + s; //encoded char is "% + 2 digit hex code of char"
 	}
 	//the special encodings for certain chars
