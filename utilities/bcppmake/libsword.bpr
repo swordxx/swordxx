@@ -70,7 +70,7 @@
       ..\..\src\modules\filters\utf8nfc.obj 
       ..\..\src\modules\filters\utf8nfkd.obj 
       ..\..\src\modules\filters\utf8transliterator.obj 
-      ..\..\src\utilfuns\roman.obj ..\..\src\modules\comments\zcom\zcom.obj 
+      ..\..\src\modules\comments\zcom\zcom.obj 
       ..\..\src\modules\lexdict\rawld4\rawld4.obj 
       ..\..\src\modules\common\zipcomprs.obj 
       ..\..\src\modules\lexdict\zld\zld.obj 
@@ -85,7 +85,7 @@
       ..\..\src\modules\filters\greeklexattribs.obj ..\..\src\mgr\swcacher.obj 
       ..\..\src\modules\filters\gbfosis.obj 
       ..\..\src\modules\filters\thmlosis.obj ..\..\src\mgr\encfiltmgr.obj 
-      ..\..\src\mgr\markupfiltmgr.obj"/>
+      ..\..\src\mgr\markupfiltmgr.obj ..\..\src\utilfuns\roman.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

@@ -85,7 +85,6 @@ USEUNIT("..\..\src\modules\filters\utf8latin1.cpp");
 USEUNIT("..\..\src\modules\filters\utf8nfc.cpp");
 USEUNIT("..\..\src\modules\filters\utf8nfkd.cpp");
 USEUNIT("..\..\src\modules\filters\utf8transliterator.cpp");
-USEUNIT("..\..\src\utilfuns\roman.c");
 USEUNIT("..\..\src\modules\comments\zcom\zcom.cpp");
 USEUNIT("..\..\src\modules\lexdict\rawld4\rawld4.cpp");
 USEUNIT("..\..\src\modules\common\zipcomprs.cpp");
@@ -112,6 +111,7 @@ USEUNIT("..\..\src\modules\filters\gbfosis.cpp");
 USEUNIT("..\..\src\modules\filters\thmlosis.cpp");
 USEUNIT("..\..\src\mgr\encfiltmgr.cpp");
 USEUNIT("..\..\src\mgr\markupfiltmgr.cpp");
+USEUNIT("..\..\src\utilfuns\roman.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
