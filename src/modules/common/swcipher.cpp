@@ -62,7 +62,7 @@ char *SWCipher::cipherBuf(unsigned int *ilen, const char *ibuf)
 		if (buf)
 			free(buf);
 			
-		buf = (char *) malloc(*ilen);
+		buf = (char *) malloc(*ilen+1);
 		memcpy(buf, ibuf, *ilen);
 		len = *ilen;
 		cipher = true;
@@ -106,8 +106,10 @@ void SWCipher::Decode(void)
 {
 	if (cipher) {
 		work = master;
-		for (int i = 0; i < len; i++)
+		int i;
+		for (i = 0; i < len; i++)
 			buf[i] = work.decrypt(buf[i]);
+		buf[i] = 0;
 		cipher = false;
 	}
 }
