@@ -10,9 +10,9 @@
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\win32\borland\icui18n.lib 
-      ..\..\..\icu-sword\as_is\win32\borland\icudatab.lib 
-      ..\..\..\icu-sword\as_is\win32\borland\icucommon.lib"/>
+    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\borland\icui18n.lib 
+      ..\..\..\icu-sword\as_is\borland\icudatab.lib 
+      ..\..\..\icu-sword\as_is\borland\icucommon.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Qrpt50.bpi Vcldb50.bpi Vclbde50.bpi 
@@ -26,7 +26,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="thml2gbs.bpf"/>
     <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
@@ -34,11 +34,14 @@
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -tWC -tWM- -c"/>
-    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
+    <IDLCFLAGS value="-I..\. -I.. -I..\..\include -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -tWC 
+      -tWM- -c"/>
+    <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
-    <AFLAGS value="/mx /w2 /zn"/>
-    <LFLAGS value="-D&quot;&quot; -S:0x200000 -Sc:0x20000 -ap -Tpe -x -Gn"/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-D&quot;&quot; -S:0x200000 -Sc:0x20000 -ap -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0x32.obj $(OBJFILES)"/>
@@ -92,9 +95,10 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=2
-Item0=_ICU_;_ICUSWORD_
-Item1=_DEBUG
+Count=3
+Item0=_ICU_;_ICUSWORD_;_DEBUG
+Item1=_ICU_;_ICUSWORD_
+Item2=_DEBUG
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
@@ -110,6 +114,11 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
 
 [Language]
 ActiveLang=
