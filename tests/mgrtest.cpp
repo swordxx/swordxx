@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
 	for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
 		cout << "[" << (*it).second->Name() << "] (Writable: " << (it->second->isWritable()?"Yes":"No") << ") [" << (*it).second->Description() << "]\n";
 		cout << "AbsoluteDataPath = " << it->second->getConfigEntry("AbsoluteDataPath") << "\n";
+		cout << "Has Feature HebrewDef = " << it->second->getConfig().has("Feature", "HebrewDef") << "\n";
 		if ((!strcmp((*it).second->Type(), "Biblical Texts")) || (!strcmp((*it).second->Type(), "Commentaries"))) {
 			(*it).second->SetKey("James 1:19");
 			cout << (const char *) *(*it).second << "\n\n";

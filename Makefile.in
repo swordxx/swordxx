@@ -498,8 +498,6 @@ all-am: Makefile $(PROGRAMS) $(DATA) config.h
 installdirs: installdirs-recursive
 installdirs-am:
 	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)
-
-install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
 uninstall: uninstall-recursive
@@ -625,14 +623,25 @@ uninstalllocaleDATA:
 @INSTCONF_TRUE@	  echo " rm -f $(DESTDIR)$(modsdatadir)/$$f"; \
 @INSTCONF_TRUE@	  rm -f $(DESTDIR)$(modsdatadir)/$$f; \
 @INSTCONF_TRUE@	done
+@INSTCONF_FALSE@installmodsDATA:
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh
+
+install: install-recursive
+	@echo ""
+	@echo "sword is installed"
+	@echo "Type \"make register\" to help us keep track of how many"
+	@echo "people have seen it."
+	@echo ""
 
 install-data-am: installlocaleDATA installmodsDATA
 
 uninstall-am: uninstall-info-am uninstalllocaleDATA \
 	uninstallmodsDATA uninstall-sysconfDATA
+
+register:
+	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}" | mail sword.users@crosswire.org
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

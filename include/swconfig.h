@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.14 2001/06/14 08:39:19 jansorg Exp $
+ * $Id: swconfig.h,v 1.15 2002/03/05 09:20:51 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,13 +38,22 @@ using namespace std;
 template <class Key, class T, class Compare>
 class multimapwithdefault : public multimap<Key, T, Compare> {
 public:
-  typedef pair<const Key, T> value_type;
-    T& operator[](const Key& k) {
-        if (find(k) == end()) {
-            insert(value_type(k, T()));
-        }
-        return (*(find(k))).second;
-    }
+	typedef pair<const Key, T> value_type;
+	T& operator[](const Key& k) {
+		if (find(k) == end()) {
+			insert(value_type(k, T()));
+		}
+		return (*(find(k))).second;
+	}
+	bool has(const Key& k, const T &val) const {
+		multimap<Key, T, Compare>::const_iterator start = lower_bound(k);
+		multimap<Key, T, Compare>::const_iterator end = upper_bound(k);
+		for (; start!=end; start++) {
+			if (start->second == val)
+				return true;
+		}
+		return false;
+	}
 };
 
 typedef multimapwithdefault < string, string, less < string > >ConfigEntMap;
