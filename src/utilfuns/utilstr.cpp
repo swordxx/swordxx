@@ -127,3 +127,20 @@ unsigned int strlenw(const char *s1) {
      }
      return (unsigned int)(ch - s1) - 1;
 }
+
+
+/******************************************************************************
+ * toupperstr - converts a string to uppercase string
+ *
+ * ENT:	target - string to convert
+ *
+ * RET:	target
+ */
+
+char *toupperstr(char *buf) {
+	char *ret = buf;
+	while (*buf)
+		*buf = toupper(*buf++);
+
+	return ret;
+}

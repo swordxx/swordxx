@@ -19,17 +19,16 @@
 #ifndef THMLHTML_H
 #define THMLHTML_H
 
-#include <swfilter.h>
+#include <swbasicfilter.h>
 
 #include <defs.h>
 
-  /** this filter converts ThML text to HTML text
-  */
-class SWDLLEXPORT ThMLHTML:public SWFilter
-{
-public:
-  ThMLHTML ();
-  virtual char ProcessText (char *text, int maxlen = -1);
+/** this filter converts ThML text to HTML text
+ */
+class SWDLLEXPORT ThMLHTML : public SWBasicFilter {
+protected:
+	virtual void init();
+	virtual bool handleToken(char **buf, const char *token);
 };
 
 #endif

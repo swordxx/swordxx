@@ -2,6 +2,17 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+02-Sep-2001     Troy A. Griffitts <scribe@crosswire.org>
+	Added new swbasicfilter.cpp that provides many common method needed
+		to make an swfilter implementation.
+	Changed ThMLHTML filter to extend SWBasicFilter to take advantage of
+		the new class.
+	Added new utilstr.cpp method toupperstr to convert a c_str to all
+		uppercase.
+	Added new methods to the key classes to provide non-operator methods
+		to access features to which there were non previously.  Makes
+		other language bindings much easier to produce.
+
 * Release 1.5.2 *
 
 26-Jul-2001     Troy A. Griffitts <scribe@crosswire.org>
