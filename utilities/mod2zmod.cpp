@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 		cout << "Adding [" << *vkey << "]\n";
 		// pseudo-check for link.  Will get most common links.
 		if (!strcmp(lastBuffer, (const char *)(*inModule))) {
-			outModule << bufferKey;	// link to last key
+			outModule << &bufferKey;	// link to last key
 		}
 		else {
 			delete [] lastBuffer;
