@@ -8,7 +8,6 @@
 #include <string.h>
 #include <gbfrtf.h>
 
-
 GBFRTF::GBFRTF() {
 }
 
@@ -176,15 +175,17 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = ' ';
 					continue;
 				case 'N':
-				        *to++ = '\\';
-					*to++ = 'f';
-					*to++ = '0';
-					*to++ = ' ';
+				        if (!strncasecmp(token+2, "symbol", 6)) {
+					  *to++ = '\\';
+					  *to++ = 'f';
+					  *to++ = '7';
+					  *to++ = ' ';
+					}
 					continue;
 				case 'n':
 					*to++ = '\\';
 					*to++ = 'f';
-					*to++ = '1';
+					*to++ = '0';
 					*to++ = ' ';
 					continue;
 				}

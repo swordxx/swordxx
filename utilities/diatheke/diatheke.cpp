@@ -180,6 +180,7 @@ int main(int argc, char **argv)
 	      if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("Font")) != (*sit).second.end()) {
 		  font = (char *)(*eit).second.c_str();
+		  if (strlen(font) == 0) font = 0;
 		}
 	      }
 	      
@@ -231,15 +232,16 @@ int main(int argc, char **argv)
 		    for(target->Key(chap); target->Key()<(VerseKey)dash && --maxverses;(*target)++) {
 		      
 		      if (font && !filter)
-			cout << (char*)target->KeyText() << " " << ": <font face=\"" << font << "\">" << (char const*)*target << "<\font>" << endl;
+			cout << (char*)target->KeyText() << " " << ": <font face=\"" << font << "\">" << (char const*)*target << "</font>" << endl;
 		      else 
 			cout << (char*)target->KeyText() << ": " << (char const*)*target << endl;
 		      if (!ThML && !filter) cout << "<br>" << endl;
 		      
 		    }
+
 		    
 		    if (font && !filter)
-		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "<\font> (" << target->Name() << ")" << endl;
+		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "</font> (" << target->Name() << ")" << endl;
 		    else 
 		      cout << (char*)target->KeyText() << ": " << (char const*)*target << " (" << target->Name() << ")" << endl;
 		    if (!ThML && !filter) cout << "<br>" << endl;
@@ -277,13 +279,13 @@ int main(int argc, char **argv)
 		  
 		  for(target->Key(ref); target->Key()<(VerseKey)dash && --maxverses;(*target)++) {
 		    if (font && !filter)
-		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" <<  (char const*)*target << "<\font>" << endl;
+		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" <<  (char const*)*target << "</font>" << endl;
 		    else 
 		      cout << (char*)target->KeyText() << ": " << (char const*)*target << endl;
 		    if (!ThML && !filter) cout << "<br>" << endl;
 		  }
 		  if (font && !filter)
-		    cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "<\font> (" << target->Name() << ")" << endl;
+		    cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "</font> (" << target->Name() << ")" << endl;
 		  else 
 		    cout << (char*)target->KeyText() << ": " << (char const*)*target << " (" << target->Name() << ")" << endl;
 		  if (!ThML && !filter) cout << "<br>" << endl;
@@ -354,7 +356,7 @@ int main(int argc, char **argv)
 	}
 	
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf(stderr, "Diatheke command-line Bible utility and SWORD frontend Version 3.1 by Chris Little \nusage: \n %s -m                         (print list of available modules)\n %s -b [bible] [verse]         (verse lookup)\n %s -s [book] [word]           (word search)\n %s -d [dictionary] [word]     (dictionary lookup)\n %s -c [commentary] [verse]    (commentary lookup)\n\n To turn Strong's numbers on, add 'n' after the argument '-b'.\n Likewise, add 'f' after '-b' to turn footnotes on.\n Also supported, at the end of the command line are\n format (plain(default), html, gbf, rtf, or thml),\n max-verse (a number), and locale (en(default, de, es, etc.)\n arguments\n", argv[0], argv[0], argv[0], argv[0], argv[0]);
+	fprintf(stderr, "Diatheke command-line Bible utility and SWORD frontend Version 3.1 by Chris Little \nusage: \n %s -m                         (print list of available modules)\n %s -b [bible] [verse]         (verse lookup)\n %s -s [book] [word]           (word search)\n %s -d [dictionary] [word]     (dictionary lookup)\n %s -c [commentary] [verse]    (commentary lookup)\n\n To turn Strong's numbers on, add 'n' after the argument '-b'.\n Likewise, add 'f' after '-b' to turn footnotes on.\n Also supported, at the end of the command line are\n locale (en, de, etc.), format (plain(default), html, gbf, rtf, or thml),\n max-verse (a number), and locale (en(default, de, es, etc.)\n arguments\n", argv[0], argv[0], argv[0], argv[0], argv[0]);
 	exit(-1);
 }
 

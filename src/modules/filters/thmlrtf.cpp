@@ -40,6 +40,8 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 	else	from = text;							// -------------------------------
 	for (to = text; *from; from++)
 	{
+	  if (*from == 10 || *from == 13)
+	    from++;
 	  if (*from == '<') {
 	    intoken = true;
 	    tokpos = 0;
@@ -212,7 +214,7 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = '}';
 		    continue;
 		  }
-		  else if (!strncmp(token, "br", 2) || !strncmp(token, "BR", 2)) {
+		  else if (!strncmp(token, "br", 2)) {
 		    *to++ = '\\';
 		    *to++ = 'l';
 		    *to++ = 'i';
@@ -221,16 +223,28 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    *to++ = ' ';
 		    continue;
 		  }
+		  else if (!strncasecmp(token, "font face=\"Symbol\"", 18)) {
+		    *to++ = '\\';
+		    *to++ = 'f';
+		    *to++ = '7';
+		    *to++ = ' ';
+		    continue;
+		  }
+		  else if (!strncmp(token, "/font", 2)) {
+		    *to++ = '\\';
+		    *to++ = 'f';
+		    *to++ = '0';
+		    *to++ = ' ';
+		    continue;
+		  }
 		  else switch(*token) {
-		  case 'I':			// font tags
-		  case 'i':
+		  case 'i':			// font tags
 		    *to++ = '\\';
 		    *to++ = 'i';
 		    *to++ = '1';
 		    *to++ = ' ';
 		    continue;
-		  case 'B':		// bold start
-		  case 'b':
+		  case 'b':		// bold start
 		    *to++ = '\\';
 		    *to++ = 'b';
 		    *to++ = '1';
@@ -238,7 +252,6 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		    continue;
 		  case '/':
 		    switch(token[1]) {
-		    case 'P':
 		    case 'p':
 		      *to++ = '\\';
 		      *to++ = 'p';
@@ -246,15 +259,13 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		      *to++ = 'r';
 		      *to++ = ' ';
 		      continue;
-		    case 'I':
 		    case 'i':		// italic end
 		      *to++ = '\\';
 		      *to++ = 'i';
 		      *to++ = '0';
 		      *to++ = ' ';
 		      continue;
-		    case 'B':		// bold start
-		    case 'b':
+		    case 'b':		// bold end
 		      *to++ = '\\';
 		      *to++ = 'b';
 		      *to++ = '0';

@@ -29,6 +29,8 @@ char ThMLPlain::ProcessText(char *text, int maxlen)
   else	from = text;							// -------------------------------
 	
   for (to = text; *from; from++) {
+    if (*from == 10 || *from == 13)
+      from++;
     if (*from == '<') {
       intoken = true;
       tokpos = 0;
