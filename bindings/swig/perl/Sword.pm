@@ -655,6 +655,22 @@ sub ACQUIRE {
 package Sword::TreeKeyIdx;
 @ISA = qw( Sword Sword::TreeKey );
 %OWNER = ();
+%ITERATORS = ();
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Swordc::delete_TreeKeyIdx($self);
+        delete $OWNER{$self};
+    }
+}
+
+*save = *Swordc::TreeKeyIdx_save;
+*copyFrom = *Swordc::TreeKeyIdx_copyFrom;
+*_compare = *Swordc::TreeKeyIdx__compare;
+*create = *Swordc::TreeKeyIdx_create;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

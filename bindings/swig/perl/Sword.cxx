@@ -225,7 +225,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.6 2003/01/07 21:19:31 joachim Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.7 2003/01/13 23:52:09 joachim Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
@@ -6250,6 +6250,154 @@ XS(_wrap_TreeKey_Index) {
 }
 
 
+XS(_wrap_delete_TreeKeyIdx) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        TreeKeyIdx *arg1 = (TreeKeyIdx *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: delete_TreeKeyIdx(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_TreeKeyIdx,0) < 0) {
+                SWIG_croak("Type error in argument 1 of delete_TreeKeyIdx. Expected _p_TreeKeyIdx");
+            }
+        }
+        delete arg1;
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_TreeKeyIdx_save) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        TreeKeyIdx *arg1 = (TreeKeyIdx *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: TreeKeyIdx_save(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_TreeKeyIdx,0) < 0) {
+                SWIG_croak("Type error in argument 1 of TreeKeyIdx_save. Expected _p_TreeKeyIdx");
+            }
+        }
+        (arg1)->save();
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_TreeKeyIdx_copyFrom) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        TreeKeyIdx *arg1 = (TreeKeyIdx *) 0 ;
+        TreeKeyIdx *arg2 = 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: TreeKeyIdx_copyFrom(self,ikey);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_TreeKeyIdx,0) < 0) {
+                SWIG_croak("Type error in argument 1 of TreeKeyIdx_copyFrom. Expected _p_TreeKeyIdx");
+            }
+        }
+        {
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_TreeKeyIdx,0) < 0) {
+                SWIG_croak("Type error in argument 2 of TreeKeyIdx_copyFrom. Expected _p_TreeKeyIdx");
+            }
+        }
+        (arg1)->copyFrom((TreeKeyIdx const &)*arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_TreeKeyIdx__compare) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        TreeKeyIdx *arg1 = (TreeKeyIdx *) 0 ;
+        TreeKeyIdx *arg2 = 0 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: TreeKeyIdx__compare(self,ikey);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_TreeKeyIdx,0) < 0) {
+                SWIG_croak("Type error in argument 1 of TreeKeyIdx__compare. Expected _p_TreeKeyIdx");
+            }
+        }
+        {
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_TreeKeyIdx,0) < 0) {
+                SWIG_croak("Type error in argument 2 of TreeKeyIdx__compare. Expected _p_TreeKeyIdx");
+            }
+        }
+        result = (int)(arg1)->_compare((TreeKeyIdx const &)*arg2);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_TreeKeyIdx_create) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        char *arg1 ;
+        signed char result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: TreeKeyIdx_create(path);");
+        }
+        if (!SvOK((SV*) ST(0))) arg1 = 0;
+        else arg1 = (char *) SvPV(ST(0), PL_na);
+        result = (signed char)TreeKeyIdx::create((char const *)arg1);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
 XS(_wrap_new_LocaleMgr) {
     char _swigmsg[SWIG_MAX_ERRMSG] = "";
     const char *_swigerr = _swigmsg;
@@ -8604,6 +8752,11 @@ static swig_command_info swig_commands[] = {
 {"Swordc::TreeKey_setPosition", _wrap_TreeKey_setPosition},
 {"Swordc::TreeKey_Traversable", _wrap_TreeKey_Traversable},
 {"Swordc::TreeKey_Index", _wrap_TreeKey_Index},
+{"Swordc::delete_TreeKeyIdx", _wrap_delete_TreeKeyIdx},
+{"Swordc::TreeKeyIdx_save", _wrap_TreeKeyIdx_save},
+{"Swordc::TreeKeyIdx_copyFrom", _wrap_TreeKeyIdx_copyFrom},
+{"Swordc::TreeKeyIdx__compare", _wrap_TreeKeyIdx__compare},
+{"Swordc::TreeKeyIdx_create", _wrap_TreeKeyIdx_create},
 {"Swordc::new_LocaleMgr", _wrap_new_LocaleMgr},
 {"Swordc::delete_LocaleMgr", _wrap_delete_LocaleMgr},
 {"Swordc::LocaleMgr_getLocale", _wrap_LocaleMgr_getLocale},
