@@ -109,8 +109,7 @@ void RawStr4::getidxbufdat(long ioffset, char **buf)
 			read(datfd->getFd(), *buf, size);
 		}
 		(*buf)[size] = 0;
-		for (size--; size > 0; size--)
-			(*buf)[size] = SW_toupper((*buf)[size]);
+		toupperstr(*buf);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -141,16 +140,11 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
 
 		getidxbufdat(offset, buf);
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
-/*
-			if (*trybuf == '-') {		// ignore '-' because alphabetized silly in file
-				targetbuf--;
-				continue;
-			}
-*/
-			*targetbuf = SW_toupper(*trybuf);
+			*targetbuf = *trybuf;
 		}
 		*targetbuf = 0;
 		trybuf = 0;
+		toupperstr(targetbuf);
 	}
 }
 
@@ -182,16 +176,11 @@ signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *si
 			strcpy(key, ikey);
 
 			for (trybuf = targetbuf = key; *trybuf; trybuf++, targetbuf++) {
-	/*
-				if (*trybuf == '-') {		// ignore '-' because alphabetized silly in file
-					targetbuf--;
-					continue;
-				}
-	*/
-				*targetbuf = SW_toupper(*trybuf);
+				*targetbuf = *trybuf;
 			}
 			*targetbuf = 0;
 			trybuf = 0;
+			toupperstr(targetbuf);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 8) - (headoff / 8))) / 2) * 8 : lastoff; 
@@ -419,9 +408,7 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 
 	findoffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
-	for (ch = key; *ch; ch++)
-		*ch = SW_toupper(*ch);
-	ch = 0;
+	toupperstr(key);
 
 	getidxbufdat(start, &dbKey);
 

@@ -193,7 +193,7 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
             for (int i = 0; i < BMAX[t]; i++) {
                 int bn = getBookAbbrev(books[t][i].name);
                 if ((bn-1)%39 != i) {
-                    SWLog::systemlog->LogError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", books[t][i].name, bn);
+				SWLog::systemlog->LogError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", books[t][i].name, bn);
                 }
             }
         }
@@ -312,9 +312,8 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 
 	stdstr(&abbr, iabbr);
 	strstrip(abbr);
+	toupperstr(abbr);
 	abLen = strlen(abbr);
-	for (loop = 0; loop < abLen; loop++)
-		abbr[loop] = SW_toupper(abbr[loop]);
 
 	if (abLen) {
 		min = 0;
@@ -441,7 +440,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						chap = VerseKey(tmpListKey).Chapter();
                               *book = 0;
                          }
-                    }
+				}
+				
 				bookno = getBookAbbrev(book);
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
@@ -557,7 +557,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				}
 			}
 			if (chap == -1)
-				book[tobook++] = SW_toupper(*buf);
+				book[tobook++] = *buf;
 		}
 		buf++;
 	}
@@ -589,15 +589,15 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		}
 
 		for (loop = strlen(book) - 1; loop+1; loop--) {
-          	if (book[loop] == ' ') {
-               	if (isroman(&book[loop+1])) {
-                    	if (verse == -1) {
-                         	verse = chap;
-                              chap = from_rom(&book[loop+1]);
-                              book[loop] = 0;
-                         }
-                    }
-               	break;
+			if (book[loop] == ' ') {
+				if (isroman(&book[loop+1])) {
+					if (verse == -1) {
+						verse = chap;
+						chap = from_rom(&book[loop+1]);
+						book[loop] = 0;
+					}
+				}
+				break;
 			}
           }
                

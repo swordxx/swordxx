@@ -130,8 +130,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
 			read(datfd->getFd(), *buf, size);
 		}
 		(*buf)[size] = 0;
-		for (size--; size > 0; size--)
-			(*buf)[size] = SW_toupper((*buf)[size]);
+		toupperstr(*buf);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);

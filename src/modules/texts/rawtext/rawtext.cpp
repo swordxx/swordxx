@@ -164,9 +164,8 @@ signed char RawText::createSearchFramework() {
 		word = strtok(wordBuf, " !.,?;:()-=+/\\|{}[]\"<>");
 		while (word) {
 
-			// make work upper case
-			for (unsigned int i = 0; i < strlen(word); i++)
-				word[i] = SW_toupper(word[i]);
+			// make word upper case
+			toupperstr(word);
 
 			// lookup word in dictionary (or make entry in dictionary
 			// for this word) and add this module position (index) to
@@ -325,8 +324,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 
 			// toupper our copy of search string
 			stdstr(&wordBuf, istr);
-			for (unsigned int i = 0; i < strlen(wordBuf); i++)
-				wordBuf[i] = SW_toupper(wordBuf[i]);
+			toupperstr(wordBuf);
 
 			// get list of individual words
 			words = (char **)calloc(sizeof(char *), 10);
