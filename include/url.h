@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.3 2004/07/15 13:51:54 joachim Exp $
+* $Id: url.h,v 1.4 2004/07/17 12:20:50 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -32,28 +32,29 @@ SWORD_NAMESPACE_START
 // 
 class URL {
 public:
+typedef std::map<SWBuf, SWBuf> ParameterMap;
 	/** Constructor.
 	 * @param url The url string which should be parsed into protocol, hostname, path and paramters
 	 */
-	URL ( const char* url );
+	URL(const char *url);
 	
 	/** Get the protocol.
 	* @return The protocol, e.g. "http" for an url like "http://www.crosswire.org/index.jsp?page=help"
 	*/
-	const char* const  getProtocol() const;
+	const char *getProtocol() const;
 	/** Get the hostname
 	* @return The hostname, e.g. "www.crosswire.org" for an url like "http://www.crosswire.org/index.jsp?page=help"
 	*/
-	const char* const  getHostName() const;
+	const char *getHostName() const;
 	/** Get the path
 	* @return The path, e.g. "/index.jsp" for an url like "http://www.crosswire.org/index.jsp?page=help"
 	*/
-	const char* const  getPath() const;
+	const char *getPath() const;
 	
 	/** All available paramters
 	* @return The map which contains the parameters and their values
 	*/
-	std::map< sword::SWBuf, sword::SWBuf > getParameters() const;
+	const ParameterMap &getParameters() const;
 	
 	/**
 	 * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".
@@ -61,19 +62,20 @@ public:
 	 * @param name The name of the paramter.
 	 * @return The value of the given paramter of an empty string if the name could not be found in the list of available paramters
 	 */
-	const char* const getParamterValue (const char* const name);
+	const char *getParamterValue(const char *name) const;
 		
+	static const char *encode(const char *urlText);
 private:
 	/** Parse
 	 * Parse the URL into protocol, hostname, path, page and paramters
 	 */
-	void parse ();
+	void parse();
 		
-	SWBuf m_url;	
-	SWBuf m_protocol;
-	SWBuf m_hostname;
-	SWBuf m_path;
-	std::map< SWBuf, SWBuf > m_parameterMap;
+	SWBuf url;	
+	SWBuf protocol;
+	SWBuf hostname;
+	SWBuf path;
+	ParameterMap parameterMap;
 };
 
 SWORD_NAMESPACE_END

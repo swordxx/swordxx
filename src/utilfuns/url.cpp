@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.3 2004/07/15 13:51:54 joachim Exp $
+* $Id: url.cpp,v 1.4 2004/07/17 12:20:50 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -19,6 +19,7 @@
 *
 */
 
+#include <stdio.h>
 #include <url.h>
 #include <swlog.h>
 
@@ -28,39 +29,40 @@ SWORD_NAMESPACE_START
  * Constructors/Destructors
  */
 URL::URL(const char* url)  
-	: 	m_url(""),
-		m_protocol(""),
-		m_hostname(""),
-		m_path("")
+	: 	url(""),
+		protocol(""),
+		hostname(""),
+		path("")
 {
 	if (url && strlen(url)) {
-		m_url = url;
+		url = url;
 		parse();
 	}
 }
 
-const char* const URL::getProtocol() const {
-	return m_protocol.c_str();
+const char* URL::getProtocol() const {
+	return protocol.c_str();
 }
 
-const char* const URL::getHostName () const {
-	return m_hostname.c_str();
+const char* URL::getHostName () const {
+	return hostname.c_str();
 }
 
-const char* const URL::getPath() const {
-	return m_path.c_str();
+const char* URL::getPath() const {
+	return path.c_str();
 }
 
-std::map< SWBuf, SWBuf > URL::getParameters()  const {
-	return m_parameterMap;
+const URL::ParameterMap &URL::getParameters() const {
+	return parameterMap;
 }
 
 /**
  * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".
  * If the parameter is not set an empty string is returned.
  */
-const char* const URL::getParamterValue(const char* const name) {
-	return m_parameterMap[ SWBuf(name) ].c_str();
+const char* URL::getParamterValue(const char* name) const {
+	ParameterMap::const_iterator it = parameterMap.find(name);
+	return (it != parameterMap.end()) ? it->second.c_str() : 0;
 }
 
 
@@ -75,18 +77,18 @@ void URL::parse () {
 	 */
 	 
 	 //1. Init
-	 const char* urlPtr = m_url.c_str();
+	 const char* urlPtr = url.c_str();
 	 int pos = 0;
 	 	 
-	 m_protocol = "";
-	 m_hostname = "";
-	 m_path = "";
-	 m_parameterMap.clear();
+	 protocol = "";
+	 hostname = "";
+	 path = "";
+	 parameterMap.clear();
 	 
 	 // 2. Get the protocol, which is from the begining to the first ://
 	 char* end = strchr( urlPtr, ':' );
 	 if (end) { //protocol was found
-	 	m_protocol.append(urlPtr, end-urlPtr);
+	 	protocol.append(urlPtr, end-urlPtr);
 	 	pos = end-urlPtr;
 		
 		for (char* c = end; (*c == ':') || (*c == '/') ; ++c, ++pos) {} //find the end of the protocol separator (e.g. "://")
@@ -95,7 +97,7 @@ void URL::parse () {
 	 //3.Get the hostname part. This is the part from pos up to the first slash
 	 end = strchr(urlPtr+pos, '/');
 	 if (end) {
-		m_hostname.append(urlPtr+pos, (end-urlPtr)-pos);
+		hostname.append(urlPtr+pos, (end-urlPtr)-pos);
 	 	
 		pos = end - urlPtr;
 	 }
@@ -104,12 +106,12 @@ void URL::parse () {
 	 char* start = end;
 	 end = strchr(start, '?');
 	 if (end) {
-	 	m_path.append(start, end-start);
+	 	path.append(start, end-start);
 		
 		pos = end-urlPtr;
 	 }
 	 else {
-	 	m_path.append(start);
+	 	path.append(start);
 		return; //WARNING: return already here
 	 }
 
@@ -138,7 +140,7 @@ void URL::parse () {
 			}
 			
 			if (paramName.length() && paramValue.length()) {//insert the param into the map if it's valid
-				m_parameterMap[ paramName ] = paramValue;	
+				parameterMap[ paramName ] = paramValue;	
 			}
 		}
 		else {
@@ -150,4 +152,31 @@ void URL::parse () {
 	}
 }
 
+const char *encode(const char *urlText) {
+	static SWBuf url;
+	url= urlText;
+	typedef map<unsigned char,SWBuf> DataMap;
+    	DataMap m;
+	for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
+			if ( (c>='A' && c<='Z') || (c>='a' && c<='z') || (c>='0' && c<='9') || strchr("-_.!~*'()", c)) {
+				continue; //we don't need an encoding for this char
+			}
+
+			char s[5];
+			sprintf(s, "%-.2X", c); //left-aligned, 2 digits, uppercase hex
+			m[c] = SWBuf("%") + s; //encoded char is "% + 2 digit hex code of char"
+	}
+	//the special encodings for certain chars
+	m[' '] = '+';
+
+	SWBuf buf;
+	const int length = url.length();
+	for (int i = 0; i <= length; i++) { //fill "buf"
+		const char& c = url[i];
+		buf += (!m[c].length()) ? (SWBuf)c : (SWBuf)m[c];
+	}
+
+	url = buf;
+	return url.c_str();
+}
 SWORD_NAMESPACE_END
