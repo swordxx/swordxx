@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.31 2001/11/30 09:36:19 scribe Exp $
+ * $Id: swmgr.h,v 1.32 2001/11/30 11:26:53 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,10 +59,13 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.31 2001/11/30 09:36:19 scribe Exp $
+  * @version $Id: swmgr.h,v 1.32 2001/11/30 11:26:53 scribe Exp $
   */
-class SWDLLEXPORT SWMgr
-{
+class SWDLLEXPORT SWMgr {
+
+private:
+	void commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr);
+
 protected:
   SWFilterMgr *filterMgr;		//made protected because because BibleTime needs it
   SWConfig * myconfig;		//made protected because because BibleTime needs it
@@ -145,6 +148,8 @@ public:
     *
     */
   char *configPath;
+
+
   /** Constructor of SWMgr.
     * 
     * @param iconfig
@@ -153,7 +158,19 @@ public:
     * @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE
     *		DELETED BY SWMgr
     */
-  SWMgr (SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0);
+
+	SWMgr (SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0);
+
+
+  /**
+    *
+    * @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE
+    *		DELETED BY SWMgr
+    */
+
+	SWMgr (SWFilterMgr *filterMgr);
+
+
   /**
     *
     * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.

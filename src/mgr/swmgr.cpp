@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.51 2001/11/30 09:36:20 scribe Exp $
+ * $Id: swmgr.cpp,v 1.52 2001/11/30 11:26:53 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -158,8 +158,17 @@ void SWMgr::init() {
 }
 
 
-SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr) {
+SWMgr::SWMgr(SWFilterMgr *filterMgr) {
+	commonInit(0, 0, true, filterMgr);
+}
 
+
+SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr) {
+	commonInit(iconfig, isysconfig, autoload, filterMgr);
+}
+
+
+void SWMgr::commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr) {
 	this->filterMgr = filterMgr;
 	if (filterMgr)
 		filterMgr->setParentMgr(this);
