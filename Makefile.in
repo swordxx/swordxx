@@ -225,7 +225,8 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . icu apps $(am__append_1) $(am__append_2) $(am__append_3)
 
 INCLUDES = -I $(top_srcdir)/include
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh
+
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh $(localeDATA)
 
 @INSTCONF_TRUE@sysconf_DATA = sword.conf
 
@@ -538,7 +539,7 @@ distcleancheck_listfiles = find . -type f -print
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/./locales.d $(distdir)/./samples
+	$(mkinstalldirs) $(distdir)/./locales.d $(distdir)/./samples $(distdir)/locales.d
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
