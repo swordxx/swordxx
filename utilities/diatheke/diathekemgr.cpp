@@ -16,6 +16,7 @@
 
 #ifdef _ICU_
 #include <utf8arshaping.h>
+#include <utf8bidireorder.h>
 #include <utf8transliterator.h>
 #endif
 
@@ -36,6 +37,7 @@ DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autolo
 
 #ifdef _ICU_
     arshaping = new UTF8arShaping();
+	bidireorder = new UTF8BiDiReorder();
     transliterator = new UTF8Transliterator();
 #endif
 	Load();
@@ -56,6 +58,8 @@ DiathekeMgr::~DiathekeMgr()
 #ifdef _ICU_
         if (arshaping)
                 delete arshaping;
+        if (bidireorder)
+                delete bidireorder;
         if (transliterator)
                 delete transliterator;
 #endif
@@ -65,24 +69,30 @@ DiathekeMgr::~DiathekeMgr()
 void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 {
 	string lang;
+	bool rtl;
 	ConfigEntMap::iterator entry;
 
 	lang = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (string)"en";
+	rtl = ((entry = section.find("Direction")) != section.end()) ? ((*entry).second == "RtoL") : false;
 
 #ifdef _ICU_
     if (shape && !strnicmp(lang.c_str(), "ar", 2)) {
 		module->AddRenderFilter(arshaping);
 	}
+    if (bidi && rtl) {
+		module->AddRenderFilter(bidireorder);
+	}
 #endif
 	SWMgr::AddRenderFilters(module, section);
 }
 
-void DiathekeMgr::Load () {
-        SWMgr::Load();
+const SWMgr::LoadError DiathekeMgr::Load () {
+	SWMgr::LoadError retval =  SWMgr::Load();
 #ifdef _ICU_
 	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", transliterator));
         options.push_back(transliterator->getOptionName());
 #endif
+	return retval;
 };
 
 void DiathekeMgr::AddGlobalOptions (SWModule * module, ConfigEntMap & section,

@@ -3,6 +3,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 18-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added ChrisLit's Diatheke, BibleCS, and InstallMgr updates
 	Fixed Joachim's bug report about TreeKeyIdx segfaulting
 		if no data at DataPath
 	Added Joachim's patch to remove throw in SWMgr::Load

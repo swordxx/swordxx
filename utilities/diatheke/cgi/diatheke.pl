@@ -1,23 +1,33 @@
 #!/usr/bin/perl
 
-#version 4.1
-
-$diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program -- if you are using a MS Windows server, you might need to remove the "nice"
-$defaultfontface = "Times New Roman, Times, Roman, serif"; # default font name
+# Typical Linux/Unix settings
+$err = "2> /dev/null";
 $sword_path = "/home/sword";  # SWORD_PATH environment variable you want to use
+$diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program
+
+# Typical Windows settings
+#$err = "";
+#$sword_path = "C:\\Program Files\\CrossWire\\The SWORD Project";  # SWORD_PATH environment variable you want to use
+#$diatheke = "$sword_path\\diatheke.exe";  # location of diatheke command line program
+
+$cgiurl = "http:\/\/bible.gotjesus.org\/cgi-bin";
+
+$scriptname = "diatheke.pl";
+$defaultfontface = "Times New Roman, Times, Roman, serif"; # default font name
 $maxverses = 50; # maximum number of verses diatheke will return per query (prevents people from asking for Gen1:1-Rev22:21)
 $defaultbook = "KJV"; # book to query when none is selected, but a verse/search is entered
-$deflocale = "abbr";  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locael=<locale> in the GET URL
-
+$deflocale = "abbr";  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locale=<locale> in the GET URL
 
 ###############################################################################
 ## You should not need to edit anything below this line.
 ## Unless you want to modify functionality of course. :)
 ###############################################################################
 
+$version = "4.2";
+
 sub plussifyaddress  {
     ($p_ver = @_[0]) =~ tr/ /+/; 
-    $p_newline = "<a href=\"diatheke.pl?verse=$p_ver&@_[1]=on\">";
+    $p_newline = "<a href=\"$scriptname?verse=$p_ver&@_[1]=on\">";
     return $p_newline;
 }
 
@@ -26,7 +36,7 @@ sub urlvers {
     $u_version = @_[1];
     $u_oldverse = $u_verse;
     $u_verse =~ tr/ /+/;
-    $u_newline = "<a href=\"diatheke.pl?verse=$u_verse&$u_version=on\">$u_oldverse</a>";
+    $u_newline = "<a href=\"$scriptname?verse=$u_verse&$u_version=on\">$u_oldverse</a>";
     return $u_newline;
 }
 
@@ -149,9 +159,9 @@ if ($n == 0) {
 
 if ($verse eq "") {
 
-    @versionlist = `$diatheke -b system -k modulelist 2> /dev/null`;    
+    @versionlist = `$diatheke -b system -k modulelist $err`;    
     @versionlist2 = @versionlist;
-    @localelist = `$diatheke -b system -k localelist 2> /dev/null`;
+    @localelist = `$diatheke -b system -k localelist $err`;
 
     print <<DEF1;
 <html>
@@ -162,7 +172,7 @@ if ($verse eq "") {
 
 <body>
 
-<form method="get" action="diatheke.pl">
+<form method="get" action="$scriptname">
   <p /><input type="radio" name="search" checked value="" /><font face="Arial, Helvetica, sans-serif">Verse/Commentary Lookup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   Verse or Search key:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset"><br />
   <input type="radio" name="search" value="phrase" /><font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
@@ -382,7 +392,7 @@ if(bw.bw && !bw.ns5) document.write('<div id="divBottom"><table><tr><td align="c
 <body bgcolor="#FFFFFF"><font face="$defaultfontface">
 
 END
-							      }
+}
 else {
 print <<END
 
@@ -397,7 +407,7 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
-    $line = "$diatheke $search $optionfilters $latinxlit -l $locale -m $maxverses -f cgi -b $versions[$i] -k \"$verse\" 2> /dev/null";
+    $line = "$diatheke $search $optionfilters $latinxlit -l $locale -m $maxverses -f cgi -b $versions[$i] -k \"$verse\" $err";
 
     if ($debug) {
 	print "command line: $line\n<br />";
@@ -406,68 +416,48 @@ for ($i = 0; $i < $n; $i++) {
 
     chomp($line);
 
-    $line =~ s/!DIATHEKE_URL!/diatheke\.pl\?/g;
+    $line =~ s/!DIATHEKE_URL!/$scriptname\?/g;
 
 #    Parse and link to Strong's references if present
     
-#    $line =~ s/<sync type=\"Strongs\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;$1&gt;\<\/a\>/g;
-#    $line =~ s/<sync type=\"Strongs\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;$1&gt;\<\/a\>/g;
-#    $line =~ s/<sync type=\"Morph\" value=\"\w?H([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&BDB=on\">&lt;T$1&gt;\<\/a\>/g;
-#    $line =~ s/<sync type=\"Morph\" value=\"\w?G([0-9]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Thayer=on\">&lt;T$1&gt;\<\/a\>/g;
-#    $line =~ s/<sync type=\"Morph\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$1&Packard=on\">&lt;$1&gt;\<\/a\>/g;
-#    $line =~ s/<sync type=\"([^\"]+)\" value=\"([^\"]+)\" \/>/<a href=\"diatheke.pl?verse=$2&$1=on\">&lt;$1 $2&gt;\<\/a\>/g;
-
-#    $line =~ s/<note [^>]+>/<small>{/g;
-#    $line =~ s/<\/note[^>]*>/}<\/small>/g;
-    
-    $info = `$diatheke -b info -k $versions[$i] 2> /dev/null`;
+    $info = `$diatheke -b info -k $versions[$i] $err`;
     $info =~ /([^\;]+)\;([^\;]+)/;
     $format = $1;
     $type = $2;
     
     if ($versions[$i] eq "StrongsHebrew") {
-	$line =~ s/(see HEBREW for )([0-9]+)/<a href=\"diatheke.pl?verse=$2&StrongsHebrew=on\">$1$2\<\/a\>/g;
+	$line =~ s/(see HEBREW for )([0-9]+)/<a href=\"$scriptname?verse=$2&StrongsHebrew=on\">$1$2\<\/a\>/g;
     }
     elsif($versions[$i] eq "StrongsGreek") {
-	$line =~ s/(see GREEK for )([0-9]+)/<a href=\"diatheke.pl?verse=$2&StrongsGreek=on\">$1$2\<\/a\>/g;
+	$line =~ s/(see GREEK for )([0-9]+)/<a href=\"$scriptname?verse=$2&StrongsGreek=on\">$1$2\<\/a\>/g;
     }
     #case for searches
     elsif($search ne "") {
 	$line =~ s/<entry>([^<]+)<\/entry>/urlvers($1, $versions[$i])/eg;
     }
-    #case for ThML format texts
-#    elsif($format eq "ThML") {
-#	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/&plussifyaddress($2,$1)/ge;
-#	$line =~ s/<\/scripRef>/<\/a>/g;
-#    }
     #case for non-ThML, non-Bible texts
     elsif($type ne "Biblical Texts") {
 	$book = $verse;
 	$book =~ s/^([A-Za-z0-9]+) [0-9]+:[0-9]+.*/$1/;
 	$chapter = $verse;
 	$chapter =~ s/[A-Za-z0-9]+ ([0-9]+):[0-9]+.*/$1/;
-	$line =~ s/\#*([1-9]*[A-Z][a-z]+\.*) ([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$defversion=on\">$1 $2:$3\<\/a\>/g;
-	$line =~ s/\#([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$1%3A$2&$defversion=on\">$book $1:$2\<\/a\>/g;
-	$line =~ s/\#([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$chapter%3A$1&$defversion=on\">$book $chapter:$1\<\/a\>/g;
+	$line =~ s/\#*([1-9]*[A-Z][a-z]+\.*) ([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"$scriptname?verse=$1+$2%3A$3&$defversion=on\">$1 $2:$3\<\/a\>/g;
+	$line =~ s/\#([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"$scriptname?verse=$book+$1%3A$2&$defversion=on\">$book $1:$2\<\/a\>/g;
+	$line =~ s/\#([0-9]+-*,*[0-9]*)\|*/<a href=\"$scriptname?verse=$book+$chapter%3A$1&$defversion=on\">$book $chapter:$1\<\/a\>/g;
     }
-
-# for the old HREFCom version of JFB
-#    if ($versions[$i] eq "JFB") {
-#	$line =~ s/(http:[^ ]+) /<a href="$1">$1<\/a>/g;
-#    }
 
     if ($locale ne "abbr") {
-	$line =~ s/href=\"diatheke.pl([^\"]+)\"/href=\"diatheke.pl$1&locale=$locale\"/g;
+	$line =~ s/href=\"$scriptname([^\"]+)\"/href=\"$scriptname$1&locale=$locale\"/g;
     }
     if ($palm == 1) {
-	$line =~ s/href=\"diatheke.pl([^\"]+)\"/href=\"http:\/\/bible.gotjesus.org\/cgi-bin\/diatheke.pl$1&palm=on\"/g;
+	$line =~ s/href=\"$scriptname([^\"]+)\"/href=\"$cgiurl\/$scriptname$1&palm=on\"/g;
     }
 
     print "$line <br /><br />\n";
 }
 
 if ($palm == 1) {
-    print "<hr>Powered by Diatheke (bible.gotjesus.org) and the SWORD Project (www.crosswire.org).";
+    print "<hr>Powered by Diatheke (http:\/\/www.gotjesus.org\/sword\/diatheke) and the SWORD Project (http:\/\/www.crosswire.org\/sword).";
 }
 
 print "<br /><br /><br /><br /></font></body></html>";

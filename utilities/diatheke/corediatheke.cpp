@@ -22,8 +22,7 @@ void systemquery(const char * key, ostream* output){
 		list<string> loclist =	lm.getAvailableLocales();
 		list<string>::iterator li = loclist.begin();
 		for (;li != loclist.end(); li++) {
-		  *output << li->c_str();
-		  *output << "\n";
+		  *output << li->c_str() << endl;
 		}
 	}
 	else if (!stricmp(key, "modulelist")) {
@@ -47,7 +46,7 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->Name();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->Description();
-				*output << "\n";
+				*output << endl;
 			}
 		}
 		if (types) *output << "Commentaries:\n";
@@ -57,7 +56,7 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->Name();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->Description();
-				*output << "\n";
+				*output << endl;
 			} 
 		}
 		if (types) *output << "Dictionaries:\n";
@@ -67,13 +66,13 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->Name();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->Description();
-				*output << "\n";
+				*output << endl;
 			}
 		}
 	}
 }
 
-void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0) { 
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) { 
 	static DiathekeMgr manager;
 
 	ModMap::iterator it;
@@ -182,10 +181,19 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		manager.setGlobalOption("Lemmas","On");
 	else
 		manager.setGlobalOption("Lemmas","Off");
-	if (optionfilters & OP_SCRIPREFS)
+	if (optionfilters & OP_SCRIPREF)
 		manager.setGlobalOption("Scripture Cross-References","On");
 	else
 		manager.setGlobalOption("Scripture Cross-References","Off");
+
+	if (optionfilters & OP_VARIANTS && variants) {
+			if (variants == -1)
+                manager.setGlobalOption("Variants", "All Readings");
+			else if (variants == 1)
+				manager.setGlobalOption("Variants", "Secondary Readings");
+	}
+	else
+		manager.setGlobalOption("Transliteration", "Primary Readings");
 
 #ifdef _ICU_
 	if (optionfilters & OP_TRANSLITERATOR && script)

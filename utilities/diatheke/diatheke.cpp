@@ -20,7 +20,8 @@ void printsyntax() {
 	fprintf (stderr, "usage: \n  ");
 	fprintf (stderr, "diatheke <-b book> [-s search_type] [-o option_filters]\n");
 	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-l locale]\n");
-	fprintf (stderr, "[-e output_encoding] [-t script] <-k query_key>\n");
+	fprintf (stderr, "[-e output_encoding] [-t script] [-v variant#(-1=all|0|1)]\n");
+	fprintf (stderr, "<-k query_key>\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", and \"localelist\".");
@@ -46,6 +47,7 @@ int main(int argc, char **argv)
 	unsigned char outputformat = FMT_PLAIN, searchtype = ST_NONE, outputencoding = ENC_UTF8;
 	unsigned long optionfilters = OP_NONE;
 	char *text = 0, *locale = 0, *ref = 0, *script = 0;
+	signed short variants = 0;
 	
 	char runquery = 0; // used to check that we have enough arguments to perform a legal query
 	// (a querytype & text = 1 and a ref = 2)
@@ -106,7 +108,7 @@ int main(int argc, char **argv)
 				if (strchr(argv[i+1], 'l'))
 					optionfilters |= OP_LEMMAS;
 				if (strchr(argv[i+1], 's'))
-					optionfilters |= OP_SCRIPREFS;
+					optionfilters |= OP_SCRIPREF;
 				if (strchr(argv[i+1], 'r'))
 					optionfilters |= OP_ARSHAPE;
 				if (strchr(argv[i+1], 'b'))
@@ -181,6 +183,13 @@ int main(int argc, char **argv)
 					runquery |= RQ_REF;
 			}
 		}
+		else if (!stricmp("-v", argv[i])) {
+			if (i+1 <= argc) {
+				variants = atoi(argv[i+1]);
+				optionfilters |= OP_VARIANTS;
+				i++;
+			}
+		}
 #ifdef _ICU_
 		else if (!stricmp("-t", argv[i])) {
 			if (i+1 <= argc) {
@@ -195,7 +204,7 @@ int main(int argc, char **argv)
 	
 	if (runquery == (RQ_BOOK | RQ_REF))
 	{
-	    doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script);
+	    doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script, variants);
 	}
 	else
 		printsyntax();
