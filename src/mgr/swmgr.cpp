@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.19 2000/05/21 22:36:02 scribe Exp $
+ * $Id: swmgr.cpp,v 1.20 2000/07/11 00:14:13 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,7 +47,10 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
+
+#ifdef ZLIBSUPPORTED
 #include <zipcomprs.h>
+#endif
 
 
 void SWMgr::init() {
@@ -393,9 +396,11 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		datapath += buf2;
 	delete [] buf;
 	
+#ifdef ZLIBSUPPORTED
 	if (!stricmp(driver.c_str(), "zText")) {
 		newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), zVerse::CHAPTERBLOCKS, new ZipCompress());
 	}
+#endif
 	
 	if (!stricmp(driver.c_str(), "RawText")) {
 		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());

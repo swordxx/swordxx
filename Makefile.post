@@ -6,12 +6,12 @@ so = $(o:%.o=%.so)
 
 ifeq (${buildshare},yes)
 ${root}/lib/libsword.a: $(o)
-	$(AR) crs $@ $(o)
+	$(AR) cr $@ $(o)
 	$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
 
 else
 ${root}/lib/libsword.a: $(o)
-	$(AR) crs $@ $(o)
+	$(AR) cr $@ $(o)
 endif
 
 

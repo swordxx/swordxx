@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.14 2000/06/23 12:49:44 scribe Exp $
+ * $Id: swmgr.h,v 1.15 2000/07/11 00:14:13 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,6 +23,7 @@
 #ifndef SWMGR_H
 #define SWMGR_H
 
+#include <sys/types.h>
 #include <string>
 #include <map>
 #include <list>

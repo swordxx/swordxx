@@ -23,9 +23,12 @@
 #include <rawstr.h>
 
 #ifdef BIGENDIAN
+#ifndef MACOSX
 #include <sys/pctypes.h>
+#else
+#include <architecture/byte_order.h>
 #endif
-
+#endif
 /******************************************************************************
  * RawStr Statics
  */
@@ -136,7 +139,11 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 		lseek(idxfd->getFd(), ioffset, SEEK_SET);
 		read(idxfd->getFd(), &offset, 4);
 #ifdef BIGENDIAN
+	#ifndef MACOSX
 		offset = lelong(offset);
+	#else
+		offset = NXSwapLittleLongToHost(offset);
+	#endif
 #endif
 		getidxbufdat(offset, buf);
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
@@ -227,8 +234,13 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 		read(idxfd->getFd(), size, 2);
 
 	#ifdef BIGENDIAN
+		#ifndef MACOSX
 			*start = lelong(*start);
 			*size  = leshort(*size);
+		#else
+			*start = NXSwapLittleLongToHost(*start);
+			*size  = NXSwapLittleShortToHost(*size);
+		#endif
 	#endif
 
 		while (away) {
@@ -248,8 +260,13 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 			read(idxfd->getFd(), size, 2);
 
 	#ifdef BIGENDIAN
+		#ifndef MACOSX
 			*start = lelong(*start);
 			*size  = leshort(*size);
+		#else
+			*start = NXSwapLittleLongToHost(*start);
+			*size  = NXSwapLittleShortToHost(*size);
+		#endif
 	#endif
 
 			if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 

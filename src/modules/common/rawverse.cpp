@@ -24,7 +24,11 @@
 #include <versekey.h>
 
 #ifdef BIGENDIAN
+#ifndef MACOSX
 #include <sys/pctypes.h>
+#else
+#include <architecture/byte_order.h>
+#endif
 #endif
 
 #ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
@@ -109,8 +113,13 @@ void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short 
 		read(idxfp[testmt-1]->getFd(), start, 4);
 		long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
 #ifdef BIGENDIAN
+	#ifndef MACOSX
 		*start = lelong(*start);
 		*size  = leshort(*size);
+	#else
+		*start = NXSwapLittleLongToHost(*start);
+		*size  = NXSwapLittleShortToHost(*size);
+	#endif
 #endif
 		if (len < 2) {
 			*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
@@ -222,8 +231,13 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 	read(idxfp[testmt-1]->getFd(), &start, 4);
 #ifdef BIGENDIAN
+	#ifndef MACOSX
 		start = lelong(start);
 		outsize  = leshort(size);
+	#else
+		start = NXSwapLittleLongToHost(start);
+		outsize  = NXSwapLittleShortToHost(size);
+	#endif
 #endif
 	write(idxfp[testmt-1]->getFd(), &outsize, 2);
 

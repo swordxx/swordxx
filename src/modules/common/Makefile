@@ -10,7 +10,9 @@ UNIX=true
 cpp += rawstr.cpp
 cpp += swcomprs.cpp
 cpp += lzsscomprs.cpp
+ifeq ($(zlib),yes)
 cpp += zipcomprs.cpp
+endif
 cpp += rawverse.cpp
 cpp += swcipher.cpp
 cpp += zverse.cpp
