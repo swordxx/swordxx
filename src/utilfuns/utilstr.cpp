@@ -25,12 +25,12 @@ SWORD_NAMESPACE_START
  * RET:	*ipstr
  */
 
-char *stdstr(char **ipstr, const char *istr) {
+char *stdstr(char **ipstr, const char *istr, unsigned int memPadFactor) {
 	if (istr) {
 		if (*ipstr)
 			delete [] *ipstr;
 		int len = strlen(istr) + 1;
-		*ipstr = new char [ len ];
+		*ipstr = new char [ len * memPadFactor ];
 		memcpy(*ipstr, istr, len);
 	}
 	return *ipstr;
@@ -173,7 +173,7 @@ char *toupperstr(char *buf) {
  * RET:	target
  */
 
-char *toupperstr_utf8(char *buf) {
+char *toupperstr_utf8(char *buf, unsigned int max) {
 	char *ret = buf;
 
 #ifndef _ICU_
@@ -188,11 +188,13 @@ char *toupperstr_utf8(char *buf) {
 			*buf = SW_toupper(*buf++);
 	}
 #else
+	if (!max)
+		max = strlen(ret);
 		UErrorCode err = U_ZERO_ERROR;
 		UConverter *conv = ucnv_open("UTF-8", &err);
 		UnicodeString str(buf, -1, conv, err);
 		UnicodeString ustr = str.toUpper();
-		ustr.extract(ret, strlen(ret)*2, conv, err);
+		ustr.extract(ret, max, conv, err);
 		ucnv_close(conv);
 #endif
 

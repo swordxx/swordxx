@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.10 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: utilstr.h,v 1.11 2003/06/22 23:50:23 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,13 +28,13 @@ SWORD_NAMESPACE_START
 
 /** Use stdstr to copy a const char* to a char*
 */
-char *stdstr (char **iistr, const char *istr);
+char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
 char *strstrip (char *istr);
 const char *stristr (const char *s1, const char *s2);
 const char strnicmp(const char *s1, const char *s2, int len);
 unsigned int strlenw(const char *s1);
 char *toupperstr(char *buf);
-char *toupperstr_utf8(char *buf);
+char *toupperstr_utf8(char *buf, unsigned int max = 0);
 
 /*
 extern "C" {

@@ -110,7 +110,7 @@ void RawStr4::getIDXBufDat(long ioffset, char **buf) {
 			read(datfd->getFd(), *buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr_utf8(*buf);
+		toupperstr_utf8(*buf, size*2);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -140,12 +140,15 @@ void RawStr4::getIDXBuf(long ioffset, char **buf)
 		offset = swordtoarch32(offset);
 
 		getIDXBufDat(offset, buf);
+		
+/* What the heck is this supposed to do??????
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
 			*targetbuf = *trybuf;
 		}
 		*targetbuf = 0;
 		trybuf = 0;
 		toupperstr_utf8(targetbuf);
+*/
 	}
 }
 
@@ -164,7 +167,7 @@ void RawStr4::getIDXBuf(long ioffset, char **buf)
 
 signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
 {
-	char *trybuf, *targetbuf, *key, quitflag = 0;
+	char *trybuf, *targetbuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
@@ -174,9 +177,8 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 		if (*ikey) {
 			headoff = 0;
 
-			key = new char [ strlen(ikey) + 1 ];
-			strcpy(key, ikey);
-			toupperstr_utf8(key);
+			stdstr(&key, ikey, 3);
+			toupperstr_utf8(key, strlen(key)*3);
 
 			trybuf = 0;
 
@@ -411,8 +413,8 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 	char *ch = 0;
 
 	char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
-	stdstr(&key, ikey);
-	toupperstr_utf8(key);
+	stdstr(&key, ikey, 3);
+	toupperstr_utf8(key, strlen(key)*3);
 
 	len = (len < 0) ? strlen(buf) : len;
 	getIDXBufDat(start, &dbKey);

@@ -132,7 +132,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
 			read(datfd->getFd(), *buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr_utf8(*buf);
+		toupperstr_utf8(*buf, size*2);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -184,8 +184,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - IDXENTRYSIZE;
 		if (*ikey) {
 			headoff = 0;
-			stdstr(&key, ikey);
-			toupperstr_utf8(key);
+			stdstr(&key, ikey, 3);
+			toupperstr_utf8(key, strlen(key)*3);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
@@ -468,8 +468,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 	char *ch = 0;
 
 	len = (len < 0) ? strlen(buf) : len;
-	stdstr(&key, ikey);
-	toupperstr_utf8(key);
+	stdstr(&key, ikey, 3);
+	toupperstr_utf8(key, strlen(key)*3);
 
 	char notFound = findKeyIndex(ikey, &idxoff, 0);
 	if (!notFound) {
@@ -658,12 +658,11 @@ void zStr::flushCache() {
 			
 			write(zdxfd->getFd(), &outstart, sizeof(__u32));
 			write(zdxfd->getFd(), &outsize, sizeof(__u32));
-
-			delete cacheBlock;
 		}
+		delete cacheBlock;
+		cacheBlock = 0;
 	}
 	cacheBlockIndex = -1;
-	cacheBlock = 0;
 	cacheDirty = false;
 }
 
