@@ -6,7 +6,7 @@ LDADD = $(top_builddir)/lib/libsword.la
 noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
 compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest genbooktest treeidxtest \
-swbuftest xmltest webiftest
+swbuftest xmltest webiftest outputcps
 
 if ICU
 ICUPROG = icutest translittest tlitmgrtest
@@ -60,6 +60,7 @@ genbooktest_SOURCES = genbooktest.cpp
 swbuftest_SOURCES = swbuftest.cpp
 webiftest_SOURCES = webiftest.cpp
 xmltest_SOURCES = xmltest.cpp
+outputcps_SOURCES = outputcps.cpp
 
 EXTRA_DIST = 
 include bcppmake/Makefile.am
