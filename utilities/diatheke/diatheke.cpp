@@ -35,7 +35,7 @@ void printsyntax() {
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents),\n");
 	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping,\n");
-	fprintf (stderr, "  b (Bi-Directional Reordering)\n");
+	fprintf (stderr, "  b (Bi-Directional Reordering), x (Red Words of Christ)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OSIS, CGI, and plain (def)\n");
@@ -123,6 +123,8 @@ int main(int argc, char **argv)
 					optionfilters |= OP_ARSHAPE;
 				if (strchr(argv[i+1], 'b'))
 					optionfilters |= OP_BIDI;
+				if (strchr(argv[i+1], 'x'))
+					optionfilters |= OP_RED;
 				i++;
 			}
 		}

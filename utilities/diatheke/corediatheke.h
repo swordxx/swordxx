@@ -29,6 +29,7 @@
 #define OP_ARSHAPE 1024
 #define OP_BIDI 2048
 #define OP_VARIANTS 4096
+#define OP_RED 8192
 
 #define ST_NONE 0
 #define ST_REGEX 1 //0
