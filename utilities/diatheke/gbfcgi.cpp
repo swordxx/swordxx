@@ -59,41 +59,49 @@ bool GBFCGI::handleToken(char **buf, const char *token, DualStringMap &userData)
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
-			pushString(buf, " <small><em>&lt;<a href=\"#");
-			for (i = 1; i < strlen(token); i++)
-				//if(token[i] != '\"')
-					*(*buf)++ = token[i];
+			pushString(buf, " <small><em>&lt;<a href=\"!DIATHEKE_URL!");
+			if (token[1] == 'H') {
+			  pushString(buf, "BDB");
+			}
+			else if (token[1] == 'G') {
+			  pushString(buf, "Thayer");
+			}
+			pushString(buf, "=on&verse=");
+			for (i = 2; i < strlen(token); i++)
+			  *(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 			for (i = 2; i < strlen(token); i++)
-				//if(token[i] != '\"')
-					*(*buf)++ = token[i];
+			  *(*buf)++ = token[i];
 			pushString(buf, "</a>&gt;</em></small>");
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
-			pushString(buf, " <small><em>(<A HREF=\"#");
-			for (i = 2; i < strlen(token); i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
+			pushString(buf, " <small><em>&lt;<a href=\"!DIATHEKE_URL!");
+			if (token[2] == 'H') {
+			  pushString(buf, "BDB");
+			}
+			else if (token[2] == 'G') {
+			  pushString(buf, "Thayer");
+			}
+			pushString(buf, "=on&verse=");
+			for (i = 3; i < strlen(token); i++)
+			  *(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 			for (i = 3; i < strlen(token); i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
-			pushString(buf, "</a>)</em></small>");
+			  *(*buf)++ = token[i];
+			pushString(buf, "</a>&gt;</em></small>");
 		}
 
-		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
-			pushString(buf, " <small><em>(<a href=\"M");
-			for (i = 2; i < strlen(token); i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
+		else if (!strncmp(token, "WT", 2)) { // morph tags
+			pushString(buf, " <small><em>(<a href=\"!DIATHEKE_URL!Packard=on&verse=");
+			for (i = 1; i < strlen(token); i++)
+			  *(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (i = 2; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];		
+			for (i = 1; i < strlen(token); i++)
+			  *(*buf)++ = token[i];		
 			pushString(buf, "</a>)</em></small>");
 		}
 
@@ -112,9 +120,8 @@ bool GBFCGI::handleToken(char **buf, const char *token, DualStringMap &userData)
 
 		else if (!strncmp(token, "FN", 2)) {
 			pushString(buf, "<font face=\"");
-			for (i = 2; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];
+			for (i = 2; i < strlen(token); i++)		       
+			  *(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 		}
