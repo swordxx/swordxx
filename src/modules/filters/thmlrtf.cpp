@@ -31,6 +31,7 @@ ThMLRTF::ThMLRTF()
 	setEscapeStringCaseSensitive(true);
 
 	addEscapeStringSubstitute("nbsp", " ");
+	addEscapeStringSubstitute("apos", "'");
 	addEscapeStringSubstitute("quot", "\"");
 	addEscapeStringSubstitute("amp", "&");
 	addEscapeStringSubstitute("lt", "<");
