@@ -324,7 +324,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	for (int i = 0; i < 2; i++) {
 		stdstr(&abbr, iabbr);
 		strstrip(abbr);
-		if (!i && StringMgr::hasUtf8Support()) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+		if (!i && StringMgr::hasUTF8Support()) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
 			toupperstr_utf8(abbr);
 		}
 		else if (!i) {
