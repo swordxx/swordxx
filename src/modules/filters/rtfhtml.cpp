@@ -26,34 +26,22 @@ RTFHTML::RTFHTML() {
 }
 
 
-char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	char *to, *from;
-	int len;
 	bool center = false;
 
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;							// -------------------------------
-	for (to = text; *from; from++) {
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++)
+	{
 		if (*from == '\\') // a RTF command
 		{
 			if ((from[1] == 'p') && (from[2] == 'a') && (from[3] == 'r') && (from[4] == 'd'))
 			{ // switch all modifier off
 				if (center)
 				{
-					*to++ = '<';
-					*to++ = '/';
-					*to++ = 'C';
-					*to++ = 'E';
-					*to++ = 'N';
-					*to++ = 'T';
-					*to++ = 'E';
-					*to++ = 'R';
-					*to++ = '>';
+					text += "</CENTER>";
 					center = false;
 				}
 				from += 4;
@@ -61,10 +49,7 @@ char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			}
 			if ((from[1] == 'p') && (from[2] == 'a') && (from[3] == 'r'))
 			{
-				*to++ = '<';
-				*to++ = 'P';
-				*to++ = '>';
-				*to++ = '\n';
+				text += "<P>\n";
 				from += 3;
 				continue;
 			}
@@ -77,14 +62,7 @@ char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			{
 				if (!center)
 				{
-					*to++ = '<';
-					*to++ = 'C';
-					*to++ = 'E';
-					*to++ = 'N';
-					*to++ = 'T';
-					*to++ = 'E';
-					*to++ = 'R';
-					*to++ = '>';
+					text += "<CENTER>";
 					center = true;
 				}
 				from += 2;
@@ -92,10 +70,8 @@ char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			}
 		}
 
-		*to++ = *from;
+		text += *from;
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 
