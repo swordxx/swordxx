@@ -12,8 +12,6 @@
 
 #include <entriesblk.h>
 #include <iostream.h>
-#include <string>
-#include <stdio.h>
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
@@ -140,6 +138,14 @@ int main(int argc, char **argv) {
     else {
       strcat (entbuffer, linebuffer);
     }
+  }
+
+  //handle final entry
+  if (strlen(keybuffer) && strlen(entbuffer)) {
+    cout << keybuffer << endl;
+    treeKey->root();
+    setkey(treeKey, keybuffer);
+    book->setentry(entbuffer, strlen(entbuffer));
   }
   
   //DEBUG  printTree(root, treeKey);

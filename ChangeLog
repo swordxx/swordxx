@@ -3,6 +3,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 26-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added chrislit's update imp2gbs and new imp2vs
+		and new imp2ld
 	Make mod2zmod work with modules other than verse
 		keyed modules
 	Fixed zLD

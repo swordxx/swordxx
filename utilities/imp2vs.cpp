@@ -1,0 +1,194 @@
+#include <ctype.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdlib.h>
+
+#ifndef __GNUC__
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
+#include <iostream.h>
+#include <string>
+#include <rawtext.h>
+
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
+int readline(FILE* infile, char* linebuffer) {
+  char c;
+  char* lbPtr = linebuffer;
+  while ((c = fgetc(infile)) != EOF) {
+    *lbPtr++ = c;
+    if (c == 10) {
+      *lbPtr = 0;
+      return (strlen(linebuffer));
+    }
+  }
+  return 0;
+}
+
+int main(int argc, char **argv) {
+  
+  const char * helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
+  
+  signed long i = 0;
+  char keybuffer[2048];
+  char entbuffer[1048576];
+  char linebuffer[1048576];
+  char modname[16];
+  
+  if (argc > 2) {
+    strcpy (modname, argv[2]);
+  }
+  else if (argc > 1) {
+    strcpy (modname, "./");
+  }
+  else {
+    fprintf(stderr, helptext, argv[0]);
+    exit(-1);
+  }
+  
+  FILE *infile;
+  infile = fopen(argv[1], "r");
+
+  SWText* mod;
+  RawText::createModule(modname);
+  RawText modRaw(modname);
+  mod = &modRaw;
+  
+  VerseKey* vkey = new VerseKey;
+  vkey->Headings(1);
+  vkey->AutoNormalize(0);
+  vkey->Persist(1);
+  
+  while (readline(infile, linebuffer)) {
+    if (!strncmp(linebuffer, "$$$", 3)) {
+      if (strlen(keybuffer) && strlen(entbuffer)) {
+	cout << keybuffer << endl;
+	*vkey = keybuffer;
+	mod->SetKey(*vkey);
+	if (!vkey->Chapter()) {
+	  // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
+	  int backstep = vkey->Verse();
+	  vkey->Verse(0);
+	  *mod -= backstep;       
+	  
+	  mod->setentry(entbuffer, strlen(entbuffer));
+	}
+	else {
+	  ListKey listkey = vkey->ParseVerseList(argv[3], "Gen1:1", true);
+	  int i;
+	  bool havefirst = false;
+	  VerseKey firstverse;
+	  for (i = 0; i < listkey.Count(); i++) {
+	    VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+	    if (element) {
+	      mod->Key(element->LowerBound());
+	      VerseKey finalkey = element->UpperBound();
+	      cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
+	      if (!havefirst) {
+		havefirst = true;
+		firstverse = mod->Key();
+		
+		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+		cout << "f" << (const char*)firstverse << endl;
+		(*mod)++;
+	      }
+	      while (mod->Key() <= finalkey) {
+		cout << (const char*)mod->Key() << endl;
+		*(SWModule*)mod << &firstverse;
+		(*mod)++;
+	      }
+	    }
+	    else {
+	      if (havefirst) {
+		mod->Key(*listkey.GetElement(i));
+		*(SWModule*)mod << &firstverse;
+		cout << (const char*)mod->Key() << endl;
+	      }
+	      else {
+		mod->Key(*listkey.GetElement(i));
+		havefirst = true;
+		firstverse = mod->Key();
+		
+		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+		cout << "f" << (const char*)firstverse << endl;
+	      }
+	    }
+	  }
+	}
+      }
+      linebuffer[strlen(linebuffer) - 1] = 0;
+      strcpy (keybuffer, linebuffer + 3);
+      *entbuffer = 0;
+    }
+    else {
+      strcat (entbuffer, linebuffer);
+    }
+  }
+
+  //handle final entry
+  if (strlen(keybuffer) && strlen(entbuffer)) {
+    cout << keybuffer << endl;
+    *vkey = keybuffer;
+    mod->SetKey(*vkey);
+    if (!vkey->Chapter()) {
+      // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
+      int backstep = vkey->Verse();
+      vkey->Verse(0);
+      *mod -= backstep;       
+      
+      mod->setentry(entbuffer, strlen(entbuffer));
+    }
+    else {
+      ListKey listkey = vkey->ParseVerseList(argv[3], "Gen1:1", true);
+      int i;
+      bool havefirst = false;
+      VerseKey firstverse;
+      for (i = 0; i < listkey.Count(); i++) {
+	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+	if (element) {
+	  mod->Key(element->LowerBound());
+	  VerseKey finalkey = element->UpperBound();
+	  cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
+	  if (!havefirst) {
+	    havefirst = true;
+	    firstverse = mod->Key();
+	    
+	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+	    cout << "f" << (const char*)firstverse << endl;
+	    (*mod)++;
+	  }
+	  while (mod->Key() <= finalkey) {
+	    cout << (const char*)mod->Key() << endl;
+	    *(SWModule*)mod << &firstverse;
+	    (*mod)++;
+	  }
+	}
+	else {
+	  if (havefirst) {
+	    mod->Key(*listkey.GetElement(i));
+	    *(SWModule*)mod << &firstverse;
+	    cout << (const char*)mod->Key() << endl;
+	  }
+	  else {
+	    mod->Key(*listkey.GetElement(i));
+	    havefirst = true;
+	    firstverse = mod->Key();
+	    
+	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+	    cout << "f" << (const char*)firstverse << endl;
+	  }
+	}
+      }
+    }
+  }
+
+  //DEBUG  printTree(root, treeKey);
+  
+  return 0;
+}
