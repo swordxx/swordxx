@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.46 2002/03/24 21:37:28 scribe Exp $
+ * $Id: swmodule.h,v 1.47 2002/06/21 20:13:30 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -313,7 +313,11 @@ public:
   * of module objects
   * @return the raw module text of the current entry
   */
+#ifndef SWIG 
   virtual char *getRawEntry () = 0;
+#else
+  virtual char *getRawEntry() {};
+#endif  
   /** Cast operator to cast to a  @ref SWKey reference.
   * This operator may be used to cast this module to a SWKey
   * object.
