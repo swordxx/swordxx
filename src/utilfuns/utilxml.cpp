@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.cpp   - implementaion of utility classes to handle XML processing
  *
- * $Id: utilxml.cpp,v 1.17 2004/05/16 20:59:05 scribe Exp $
+ * $Id: utilxml.cpp,v 1.18 2004/05/19 22:03:36 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -181,7 +181,8 @@ const char *XMLTag::getAttribute(const char *attribName, int partNum, char partS
 
 	const char *retVal = 0;
 	if (it != attributes.end()) 
-		it->second.c_str();
+		retVal = it->second.c_str();		
+		
 	if ((retVal) && (partNum > -1))
 		retVal = getPart(retVal, partNum, partSplit);
 
@@ -204,17 +205,22 @@ const char *XMLTag::toString() const {
 		parse();
 
 	if (isEndTag())
-		tag += "/";
+		tag.append('/');
 
-	tag += getName();
+	tag.append(getName());
 	for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++) {
-		tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
+		//tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
+		tag.append(' ');
+		tag.append(it->first.c_str());
+		tag.append("=\"");
+		tag.append(it->second.c_str());
+		tag.append('"');
 	}
 
 	if (isEmpty())
-		tag += "/";
+		tag.append('/');
 
-	tag += ">";
+	tag.append('>');
 
 
 	if (buf)
