@@ -19,21 +19,21 @@ GreekLexAttribs::GreekLexAttribs() {
 }
 
 
-char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
+char GreekLexAttribs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 
 	if (module->isProcessEntryAttributes()) {
-		char *from;
+		const char *from;
 		bool inAV = false;
 		string phrase;
 		string freq;
 		char val[128], *valto;
 		char wordstr[7];
-		char *currentPhrase = 0, *ch = 0;
-		char *currentPhraseEnd = 0;
+		const char *currentPhrase = 0, *ch = 0;
+		const char *currentPhraseEnd = 0;
 		int number = 0;
 
 
-		for (from = text; *from; from++) {
+		for (from = text.c_str(); *from; from++) {
 			if (inAV) {
 				if (currentPhrase == 0) {
 					if (isalpha(*from))

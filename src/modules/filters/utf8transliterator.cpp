@@ -319,7 +319,7 @@ const char *UTF8Transliterator::getOptionValue()
 	return (NUMTARGETSCRIPTS > option) ? optionstring[option] : 0;
 }
 
-char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (option) {	// if we want transliteration
 		unsigned long i, j;
