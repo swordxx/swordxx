@@ -35,5 +35,7 @@
 #define ST_PHRASE 2  // -1
 #define ST_MULTIWORD 3 // -2
 
+using namespace std;
+
 int hasalpha (char * string);
 void doquery(unsigned long maxverses, unsigned char outputformat, unsigned char outputencoding, unsigned long optionfilters, unsigned char searchtype, const char *range, const char *text, const char *locale, const char *ref, ostream* output, const char* script, signed short variants); 
