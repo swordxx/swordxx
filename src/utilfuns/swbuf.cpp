@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.4 2003/02/27 10:41:18 scribe Exp $
+* $Id: swbuf.cpp,v 1.5 2003/02/27 18:21:57 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -104,7 +104,7 @@ void SWBuf::set(const char *newVal) {
 void SWBuf::set(const SWBuf &newVal) {
 	unsigned int len = newVal.length() + 1;
 	assureSize(len);
-	memcpy(buf, newVal.c_str(), len);
+	memcpy(buf, newVal.raw_buf(), len);
 	end = buf + (len-1);
 }
 
@@ -128,7 +128,7 @@ void SWBuf::append(const char *str) {
 void SWBuf::append(const SWBuf &str) {
 	unsigned int len = str.length() + 1;
 	assureSize((end-buf)+len);
-	memcpy(end, str.c_str(), len);
+	memcpy(end, str.raw_buf(), len);
 	end += (len-1);
 }
 
