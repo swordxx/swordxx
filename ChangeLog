@@ -3,6 +3,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 17-Oct-1999
+	Fixed bug in rawstr.cpp that would overwrite buffer size if
+		idxkey info was larger than buffer size
 	Added sparc support
 	Enhanced and debugged build and install system
 	added spec file for building RPMs
