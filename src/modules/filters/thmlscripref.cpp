@@ -17,8 +17,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Scripture Cross-references";
 const char oTip[] = "Toggles Scripture Cross-references On and Off if they exist";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 ThMLScripref::ThMLScripref() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");

@@ -18,8 +18,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Morphological Tags";
 const char oTip[] = "Toggles Morphological Tags On and Off if they exist";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 OSISMorph::OSISMorph() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");

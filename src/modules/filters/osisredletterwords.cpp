@@ -19,8 +19,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Words of Christ in Red";
 const char oTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 OSISRedLetterWords::OSISRedLetterWords() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("On");

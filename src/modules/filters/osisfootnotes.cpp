@@ -21,8 +21,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Footnotes";
 const char oTip[] = "Toggles Footnotes On and Off if they exist";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 OSISFootnotes::OSISFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");

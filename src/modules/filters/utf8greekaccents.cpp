@@ -14,8 +14,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Greek Accents";
 const char oTip[] = "Toggles Greek Accents";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 UTF8GreekAccents::UTF8GreekAccents() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("On");

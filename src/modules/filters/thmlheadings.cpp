@@ -21,8 +21,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Headings";
 const char oTip[] = "Toggles Headings On and Off if they exist";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 ThMLHeadings::ThMLHeadings() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");

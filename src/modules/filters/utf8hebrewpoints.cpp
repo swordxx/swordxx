@@ -14,8 +14,8 @@ SWORD_NAMESPACE_START
 const char oName[] = "Hebrew Vowel Points";
 const char oTip[] = "Toggles Hebrew Vowel Points";
 
-const SWBuf choices[2] = {"On", "Off"};
-const StringList oValues(&choices[0], &choices[1]);
+const SWBuf choices[3] = {"On", "Off", ""};
+const StringList oValues(&choices[0], &choices[2]);
 
 UTF8HebrewPoints::UTF8HebrewPoints() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("On");
