@@ -140,23 +140,32 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync ", 5)) {
-			pushString(buf, "<a href=\"");
+			if(strstr(token,"type=\"morph\"")){
+				pushString(buf, "<small><em> (<a href=\"");
+			}				
+			else 
+				pushString(buf, "<small><em> &lt;<a href=\"");
 			for (tok = token + 5; *(tok+1); tok++)
 				if(*tok != '\"')
 					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
-
+			pushString(buf, "\">");
+				
                         //scan for value and add it to the buffer
 			for (tok = token + 5; *tok; tok++) {
 				if (!strncmp(tok, "value=\"", 7)) {
-					tok += 7;
+					if(strstr(token,"type=\"morph\"")) 
+						tok += 7;
+					else
+						tok += 8;
 					for (;*tok != '\"'; tok++)
 						*(*buf)++ = *tok;
 					break;
 				}
 			}
-			pushString(buf, "</a>");
+			if(strstr(token,"type=\"morph\"")) 
+				pushString(buf, "</a>) </em></small>");
+			else 				
+				pushString(buf, "</a>&gt; </em></small>");
 		}
 		
 		else if (!strncmp(token, "scripture ", 10)) {
@@ -215,7 +224,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 				userData["SecHead"] = "false";
 			}
 		}
-
+/*
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			pushString(buf, "<a href=\"");
 			for (tok = token + 5; *(tok+1); tok++)				
@@ -228,6 +237,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 					*(*buf)++ = *tok;		
 			pushString(buf, "</a>");
 		}
+*/
 		else if (!strncmp(token, "img ", 4)) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute

@@ -64,7 +64,7 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
-			pushString(buf, " <small><em>&lt;<a href=\"#");
+			pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
 			for (tok = token+1; *tok; tok++)
 				//if(token[i] != '\"')
 					*(*buf)++ = *tok;
@@ -77,7 +77,7 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
-			pushString(buf, " <small><em>(<A HREF=\"#");
+			pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					*(*buf)++ = *tok;
@@ -90,7 +90,7 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 		}
 
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
-			pushString(buf, " <small><em>(<a href=\"M");
+			pushString(buf, " <small><em>(<a href=\"type=morph class=none value=");
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					*(*buf)++ = *tok;
