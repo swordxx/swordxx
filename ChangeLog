@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+03-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed an error in the new SWModule::getConfig*
+		methods that tbiggs pointed out with .sword
+
 01-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added Helmer Krämer's speed improvements to SWModule for multiword
 		searches
