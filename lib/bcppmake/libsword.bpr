@@ -99,7 +99,8 @@
       ..\..\src\modules\filters\osisfootnotes.obj 
       ..\..\src\modules\filters\swoptfilter.obj ..\..\src\mgr\swsearchable.obj 
       ..\..\src\modules\filters\gbfwebif.obj 
-      ..\..\src\modules\filters\thmlwebif.obj ..\..\src\utilfuns\utilweb.obj"/>
+      ..\..\src\modules\filters\thmlwebif.obj ..\..\src\utilfuns\utilweb.obj 
+      ..\..\src\modules\filters\osisosis.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -137,7 +138,7 @@
       -I$(BCB)\include -I$(BCB)\include\vcl -I..\..\..\icu-sword\source\i18n 
       -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -DUSBINARY -D_DEBUG 
       -DU_HAVE_PLACEMENT_NEW=0 -boa"/>
-    <CFLAG1 value="-vGc -vGt -vGd -Od -Vx -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <CFLAG1 value="-Od -Vx -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zi"/>
     <LFLAGS value="/P512"/>
@@ -245,7 +246,12 @@ RemoteDebug=0
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
-LinkCGLIB=1
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
 
 [Language]
 ActiveLang=
