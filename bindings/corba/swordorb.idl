@@ -2,10 +2,10 @@
  *	sword.idl	- This file contains a simple idl for accessing sword
  */
 
-#ifndef SWORD_IDL
-#define SWORD_IDL
+#ifndef SWORDORB_IDL
+#define SWORDORB_IDL
 
-module sword {
+module swordorb {
 
 typedef sequence<string> StringList;
 

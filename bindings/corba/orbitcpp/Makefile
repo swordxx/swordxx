@@ -1,0 +1,33 @@
+all: server testclient
+
+server: server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o
+	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o server server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o `orbit2-config --libs` -lORBit-2-cpp
+
+testclient: server.cpp swordorb-impl.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o
+	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -o testclient testclient.cpp swordorb-common.o swordorb-cpp-common.o swordorb-stubs.o swordorb-cpp-stubs.o swordorb-skels.o swordorb-cpp-skels.o `orbit2-config --libs` -lORBit-2-cpp
+
+swordorb-common.o: swordorb-common.c
+	gcc -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -g -c swordorb-common.c
+
+swordorb-common.c: ./../swordorb.idl
+	orbit-idl-2 -l c ./../swordorb.idl
+	orbit-idl-2 -l cpp ./../swordorb.idl
+
+swordorb-cpp-common.o: swordorb-cpp-common.cc
+	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -g -c swordorb-cpp-common.cc
+
+swordorb-stubs.o: swordorb-stubs.c
+	gcc -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -g -c swordorb-stubs.c
+
+swordorb-cpp-stubs.o: swordorb-cpp-stubs.cc
+	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -g -c swordorb-cpp-stubs.cc
+
+swordorb-skels.o: swordorb-skels.c
+	gcc -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -g -c swordorb-skels.c
+
+swordorb-cpp-skels.o: swordorb-cpp-skels.cc
+	g++ -I. -I../../../include -I/usr/include/orbitcpp-2.0/ `orbit2-config --cflags` -g -c swordorb-cpp-skels.cc
+
+clean:
+	rm -f *.h *.cc *.o *.c server testclient
+
