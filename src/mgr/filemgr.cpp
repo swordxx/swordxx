@@ -429,7 +429,8 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		int size = (end - start) + 1;
 
 		if (size > 0) {
-			line.appendFormatted("%.*s", size, chunk+start);
+			// line.appendFormatted("%.*s", size, chunk+start);
+			line.append(chunk+start, size);
 		}
 	}
 	return ((len>0) || line.length());
