@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.6 2001/11/03 21:56:51 chrislit Exp $
+ * $Id: swbasicfilter.h,v 1.7 2002/03/04 01:56:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -45,10 +45,12 @@ class SWDLLEXPORT SWBasicFilter : public SWFilter {
 
 public:
 	SWBasicFilter();
-	virtual char ProcessText(char *text, int maxlen = -1);
+	virtual char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
 	virtual ~SWBasicFilter();
 
 protected:
+	const SWModule *module;
+	const SWKey *key;
 	typedef map<string, string> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.38 2002/02/27 03:34:08 scribe Exp $
+ * $Id: swmodule.h,v 1.39 2002/03/04 01:56:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -143,9 +143,9 @@ public:
   // These methods are useful for modules that come from a standard SWORD install (most do).
   // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
   // are not comfortable with, or don't wish to use  stl maps).
-  virtual const ConfigEntMap &getConfig() { return *config; }
+  virtual const ConfigEntMap &getConfig() const { return *config; }
   virtual void setConfig(ConfigEntMap *config);
-  virtual const char *getConfigEntry(const char *key);
+  virtual const char *getConfigEntry(const char *key) const;
 
   /**
   * @return The size of the current entry.

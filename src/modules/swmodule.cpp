@@ -645,7 +645,7 @@ SWModule::operator const char*() {
 }
 
 
-const char *SWModule::getConfigEntry(const char *key) {
+const char *SWModule::getConfigEntry(const char *key) const {
 	ConfigEntMap::iterator it = config->find(key);
 	return (it != config->end()) ? it->second.c_str() : 0;
 }

@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <thmlhtml.h>
+#include <swmodule.h>
 
 
 ThMLHTML::ThMLHTML() {
@@ -171,7 +172,32 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 		}
-                else if(!strncmp(token, "note", 4)) {
+		else if (!strncmp(token, "img ", 4)) {
+			const char *src = strstr(token, "src");
+			if (!src)		// assert we have a src attribute
+				return false;
+
+			*(*buf)++ = '<';
+			for (const char *c = token; *c; c++) {
+				if (c == src) {
+					for (;((*c) && (*c != '"')); c++)
+						*(*buf)++ = *c;
+
+					if (!*c) { c--; continue; }
+
+					*(*buf)++ = '"';
+					if (*(c+1) == '/') {
+						pushString(buf, "file:");
+						pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
+						c++;		// skip '/'
+					}
+					continue;
+				}
+				*(*buf)++ = *c;
+			}
+			*(*buf)++ = '>';
+		}
+		else if(!strncmp(token, "note", 4)) {
                         pushString(buf, " <font color=\"#800000\"><small>(");
                 }
 

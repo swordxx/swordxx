@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <thmlhtmlhref.h>
+#include <swmodule.h>
 
 
 ThMLHTMLHREF::ThMLHTMLHREF() {
@@ -225,10 +226,34 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 					*(*buf)++ = *tok;		
 			pushString(buf, "</a>");
 		}
-                else if(!strncmp(token, "note", 4)) {
-                        pushString(buf, " <small><font color=\"#800000\">(");
-                }                
+		else if (!strncmp(token, "img ", 4)) {
+			const char *src = strstr(token, "src");
+			if (!src)		// assert we have a src attribute
+				return false;
 
+			*(*buf)++ = '<';
+			for (const char *c = token; *c; c++) {
+				if (c == src) {
+					for (;((*c) && (*c != '"')); c++)
+						*(*buf)++ = *c;
+
+					if (!*c) { c--; continue; }
+
+					*(*buf)++ = '"';
+					if (*(c+1) == '/') {
+						pushString(buf, "file:");
+						pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
+						c++;		// skip '/'
+					}
+					continue;
+				}
+				*(*buf)++ = *c;
+			}
+			*(*buf)++ = '>';
+		}
+		else if (!strncmp(token, "note", 4)) {
+			pushString(buf, " <small><font color=\"#800000\">(");
+		}                
 		else {
 			*(*buf)++ = '<';
 			for (const char *tok = token; *tok; tok++)
