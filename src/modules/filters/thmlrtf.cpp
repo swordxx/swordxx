@@ -130,10 +130,9 @@ ThMLRTF::ThMLRTF()
 
        	addTokenSubstitute("scripRef", " {\\cf2 #");
 	addTokenSubstitute("/scripRef", "|}");
-	addTokenSubstitute("note place=\"foot\"", " {\\i1\\fs15 (");
+	addTokenSubstitute("note", " {\\i1\\fs15 (");
 	addTokenSubstitute("/note", ") }");
         addTokenSubstitute("div", "{");
-        addTokenSubstitute("/div", "}");
 
         addTokenSubstitute("br", "\\line ");
         addTokenSubstitute("br /", "\\line ");
@@ -191,8 +190,23 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 		else if (!strncmp(token, "scripRef", 8)) {
 			pushString(buf, "{\\cf2 #");
 		}
+                else if (!strncmp(token, "div class=\"title\"", 17)) {
+                        pushString(buf, "{\\par\\i1\\b1 ");
+                        userData["sechead"] = "true";
+                }
                 else if (!strncmp(token, "div class=\"sechead\"", 19)) {
                         pushString(buf, "{\\par\\i1\\b1 ");
+                        userData["sechead"] = "true";
+                }
+                else if (!strncmp(token, "/div", 4)) {
+                        *(*buf)++ = '}';
+                        if (userData["sechead"] == "true") {
+                                pushString(buf, "\\par ");
+                                userData["sechead"] == "false";
+                        }
+                }
+                else if (!strncmp(token, "note", 4)) {
+                        pushString(buf, " {\\i1\\fs15 (");
                 }
 
 		else {

@@ -50,6 +50,8 @@ cpp += thmlolb.cpp
 
 ifeq ($(icu),yes)
 cpp += utf8transliterator.cpp
+cpp += utf8nfc.cpp
+cpp += utf8nfkd.cpp
 endif
 
 cpp += utf8cantillation.cpp

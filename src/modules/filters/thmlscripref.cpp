@@ -67,9 +67,11 @@ char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key)
 				intoken = false;
 				if (!strnicmp(token, "scripRef", 8)) {
 				  hide = true;
+                                  continue;
 				}
 				else if (!strnicmp(token, "/scripRef", 9)) {
 				  hide = false;
+                                  continue;
 				}
 
 				// if not a scripref token, keep token in text

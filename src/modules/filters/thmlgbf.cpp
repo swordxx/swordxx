@@ -32,6 +32,7 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
   int len;
   bool ampersand = false;
   bool sechead = false;
+  bool title = false;  
   
   len = strlen(text) + 1;						// shift string to right of buffer
   if (len < maxlen) {
@@ -184,7 +185,7 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	  else if (!strncmp(token, "/scripRef", 9)) {
 	    *to++ = '|';
 	  }
-	  else if (!strncmp(token, "note place=\"foot\"", 17)) {
+	  else if (!strncmp(token, "note", 4)) {
 	    *to++ = '<';
 	    *to++ = 'R';
 	    *to++ = 'F';
@@ -238,6 +239,22 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = 's';
 	    *to++ = '>';
 	    sechead = false;
+	    continue;
+	  }
+	  else if (!strncmp(token, "div class=\"title\"", 19)) {
+	    *to++ = '<';
+	    *to++ = 'T';
+	    *to++ = 'T';
+	    *to++ = '>';
+	    title = true;
+	    continue;
+	  }
+	  else if (title && !strncmp(token, "/div", 19)) {
+	    *to++ = '<';
+	    *to++ = 'T';
+	    *to++ = 't';
+	    *to++ = '>';
+	    title = false;
 	    continue;
 	  }
 	  else if (!strnicmp(token, "br", 2)) {

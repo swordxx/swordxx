@@ -128,7 +128,7 @@ ThMLHTML::ThMLHTML() {
 	setTokenCaseSensitive(true);
 
 	addTokenSubstitute("/scripRef", " </a>");
-	addTokenSubstitute("note place=\"foot\"", " <small>(");
+	addTokenSubstitute("note", " <small>(");
 	addTokenSubstitute("/note", ")</small> ");
 }
 
@@ -171,6 +171,9 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 		}
+                else if(!strncmp(token, "note", 4)) {
+                        pushString(buf, "<small>(");
+                }
 
 		else {
 			return false;  // we still didn't handle token

@@ -67,10 +67,15 @@ char ThMLHeadings::ProcessText(char *text, int maxlen, const SWKey *key)
 				intoken = false;
 				if (!strnicmp(token, "div class=\"sechead\"", 19)) {
 						hide = true;
-						
-				} 
+						continue;
+				}
+				if (!strnicmp(token, "div class=\"title\"", 17)) {
+						hide = true;
+						continue;
+				}
 				else if (hide && !strnicmp(token, "/div", 4)) {
-               				        hide = true;
+               				        hide = false;
+                                                continue;
 				}
 
 				// if not a heading token, keep token in text

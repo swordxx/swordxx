@@ -17,23 +17,26 @@
  */
 #ifdef _ICU_
 
-#ifndef UTF8CNORMALIZER_H
-#define UTF8CNORMALIZER_H
+#ifndef UTF8NFC_H
+#define UTF8NFC_H
 
 #include <swfilter.h>
 
 #include <unicode/utypes.h>
-#include <unicode/convert.h>
-#include <unicode/ustring.h>
-#include <unicode/normlzr.h>
+#include <unicode/ucnv.h>
+#include <unicode/uchar.h>
+#include <unicode/unorm.h>
 
 #include <defs.h>
 
-  /** This Filter shows/hides strong's numbers in a GBF text
-  */
-class SWDLLEXPORT UTF8CNormalizer : public SWFilter
+class SWDLLEXPORT UTF8NFC : public SWFilter
 {
+ private:
+  UConverter* conv;
+  UChar *source, *target;
+  UErrorCode err;
  public:
+  UTF8NFC();
   virtual char ProcessText (char *text, int maxlen, const SWKey * key);
 };
 

@@ -65,11 +65,13 @@ char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strnicmp(token, "note", 4)) {
+				if (!strncmp(token, "note", 4)) {
 				  hide = true;
+                                  continue;
 				}
-				else if (!strnicmp(token, "/note", 5)) {
+				else if (!strncmp(token, "/note", 5)) {
 				  hide = false;
+                                  continue;
 				}
 
 				// if not a footnote token, keep token in text

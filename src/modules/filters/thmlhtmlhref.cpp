@@ -127,7 +127,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 */
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("note place=\"foot\"", " <small>(");
+	addTokenSubstitute("note", " <small>(");
 	addTokenSubstitute("/note", ")</small> ");
 }
 
@@ -197,6 +197,10 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 		        userData["SecHead"] = "true";
 			pushString(buf, "<br /><b><i>");
 		}
+		else if (!strncmp(token, "div class=\"title\"", 19)) {
+		        userData["SecHead"] = "true";
+			pushString(buf, "<br /><b><i>");
+		}
 		else if (!strncmp(token, "/div", 4)) {
 		        if (userData["SecHead"] == "true") {
 			        pushString(buf, "</i></b><br />");
@@ -216,6 +220,9 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 					*(*buf)++ = token[i];		
 			pushString(buf, "</a>");
 		}
+                else if(!strncmp(token, "note", 4)) {
+                        pushString(buf, "<small>(");
+                }                
 
 		else {
 			*(*buf)++ = '<';
