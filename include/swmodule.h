@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.30 2001/11/04 22:50:37 chrislit Exp $
+ * $Id: swmodule.h,v 1.31 2001/11/08 13:21:22 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,7 @@
 
 #include <defs.h>
 
-#define FILTERPAD 72
+#define FILTERPAD 80
 
 using namespace std;
 
@@ -60,6 +60,7 @@ protected:
   char *modname;
   char *moddesc;
   char *modtype;
+  char *modlang;  
 
   char direction;
   char markup;
@@ -117,7 +118,7 @@ public:
   *  others of same type under their modtype heading)
   *  see also @ref Type
   */
-  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, char encoding = ENC_UNKNOWN, char dir = DIRECTION_LTR, char markup = FMT_UNKNOWN);
+  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, char encoding = ENC_UNKNOWN, char dir = DIRECTION_LTR, char markup = FMT_UNKNOWN, const char* modlang = 0);
 
   /** Cleans up instance of SWModule
   */
@@ -240,6 +241,16 @@ public:
   * @return char markup
   */
   virtual char Markup(signed char enc = -1);
+
+
+  /** Sets/gets module language
+  *
+  * @param imodlang value which to set modlang;
+  *  [0] - only get
+  * @return pointer to modlang
+  */
+  virtual char *Lang (const char *imodlang = 0);
+
 
   // search methods
 
