@@ -238,12 +238,12 @@ char *SWModule::Lang(const char *imodlang)
  * RET:	pointer to disp
  */
 
-SWDisplay *SWModule::Disp(SWDisplay *idisp)
-{
-	if (idisp)
-		disp = idisp;
-
+SWDisplay *SWModule::getDisplay() const {
 	return disp;
+}
+
+void SWModule::setDisplay(SWDisplay *idisp) {
+	disp = idisp;
 }
 
 
@@ -253,8 +253,7 @@ SWDisplay *SWModule::Disp(SWDisplay *idisp)
  * RET:	error status
  */
 
-char SWModule::Display()
-{
+char SWModule::Display() {
 	disp->Display(*this);
 	return 0;
 }
@@ -375,6 +374,7 @@ void SWModule::decrement(int steps) {
  */
 
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
+
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	regex_t preg;
@@ -613,8 +613,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(const char *buf, int len)
-{
+const char *SWModule::StripText(const char *buf, int len) {
 	return RenderText(buf, len, false);
 }
 
@@ -668,8 +667,7 @@ const char *SWModule::StripText(const char *buf, int len)
  * RET: this module's text at specified key location massaged by RenderFilers
  */
 
- const char *SWModule::RenderText(SWKey *tmpKey)
-{
+ const char *SWModule::RenderText(SWKey *tmpKey) {
 	SWKey *savekey;
 	const char *retVal;
 
@@ -700,8 +698,7 @@ const char *SWModule::StripText(const char *buf, int len)
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(SWKey *tmpKey)
-{
+const char *SWModule::StripText(SWKey *tmpKey) {
 	SWKey *savekey;
 	const char *retVal;
 

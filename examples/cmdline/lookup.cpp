@@ -33,6 +33,8 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
+	manager.setGlobalOption("Headings", "On");
+
 	target = (*it).second;
 
 	target->setKey(argv[2]);

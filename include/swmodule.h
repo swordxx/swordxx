@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.70 2004/01/18 18:34:27 scribe Exp $
+* $Id: swmodule.h,v 1.71 2004/02/28 20:14:29 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -76,7 +76,7 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 // check if we are an SWCacher.  Maybe make SWModule extend SWObject (which
 // it probably should anyway.  But then we need to add all the cheezy
 // heirarchy info to all he decendent classes for our SWDYNAMIC_CAST and
-// then we can see if we implement SWCacher so we know whether or not add
+// then we can see if we implement SWCacher so we know whether or not to add
 // to the yet to be developed cachemgr.
 // Just leave for now.  This lets us always able to call module->flush()
 // to manually flush a cache, and doesn't hurt if there is no work done.
@@ -112,119 +112,108 @@ protected:
 	static SWDisplay rawdisp;
 	SWBuf entryBuf;
 
-	/** executed to remove all markup (for searches) */
+	/** filters to be executed to remove all markup (for searches) */
 	FilterList *stripFilters;
 
-	/** executed immediately upon fileread */
+	/** filters to be executed immediately upon fileread */
 	FilterList *rawFilters;
 
-	/** executed to format for display */
+	/** filters to be executed to format for display */
 	FilterList *renderFilters;
 
-	/** executed to change markup to user prefs */
+	/** filters to be executed to change markup to user prefs */
 	FilterList *optionFilters;
 
-	/** executed to decode text for display */
+	/** filters to be executed to decode text for display */
 	FilterList *encodingFilters;
 
 	int entrySize;
 	mutable long entryIndex;	 // internal common storage for index
 
-	public:
+
+public:
+
 	/**
-	* Set this bool to false to terminate the search which is executed by this module (Search()).
-	* This is useful for threaded applications to terminate the search in another thread.
-	*/
+	 * Set this bool to false to terminate the search which is executed by this module (search()).
+	 * This is useful for threaded applications to terminate the search from another thread.
+	 */
 	bool terminateSearch;
-	/** Initializes data for instance of SWModule
-	*
-	* @param imodname Internal name for module; see also Name().
-	* @param imoddesc Name to display to user for module; see also Description()
-	* @param idisp Display object to use for displaying; see also Disp()
-	* @param imodtype Type of Module (All modules will be displayed with others of same type under their modtype heading); see also Type()
-	* @param encoding Encoding of the module.
-	* @param dir Direction of text flow.
-	* @param markup Markup of the module.
-	* @param modlang Language of the module.
-	*/
+
+	/** SWModule c-tor
+	 *
+	 * @param imodname Internal name for module; see also getName()
+	 * @param imoddesc Name to display to user for module; see also getDescription()
+	 * @param idisp Display object to use for displaying; see also getDisplay()
+	 * @param imodtype Type of module (e.g. Biblical Text, Commentary, etc.); see also getType()
+	 * @param encoding Encoding of the module (e.g. UTF-8)
+	 * @param dir Direction of text flow (e.g. Right to Left for Hebrew)
+	 * @param markup Source Markup of the module (e.g. OSIS)
+	 * @param modlang Language of the module (e.g. en)
+	 */
 	SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
-	/** Cleans up instance of SWModule
-	*/
+
+	/** SWModule d-tor
+	 */
 	virtual ~SWModule();
+
 	/** Gets and clears error status
-	*
-	* @return error status
-	*/
+	 *
+	 * @return error status
+	 */
 	virtual char Error();
+
 	/**
-	* @return  True if this module is encoded in Unicode, otherwise return false.
-	*/
+	 * @return  True if this module is encoded in Unicode, otherwise returns false.
+	 */
 	virtual const bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
 
 	// These methods are useful for modules that come from a standard SWORD install (most do).
 	// SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
 	// are not comfortable with, or don't wish to use  stl maps).
-	virtual const ConfigEntMap &getConfig() const { return *config; }
 	virtual void setConfig(ConfigEntMap *config);
+	virtual const ConfigEntMap &getConfig() const { return *config; }
 	virtual const char *getConfigEntry(const char *key) const;
 
 	/**
-	* @return The size of the current entry.
-	*/
+	 * @return The size of the text entry for the module's current key position.
+	 */
 	virtual const int getEntrySize() const { return entrySize; }
+
 	/**
-	* Sets a key to this module for position to a
-	* particular record or set of records
-	*
-	* @param ikey key with which to set this module
-	* @return error status
-	* @deprecated Use setKey() instead.
-	*/
-	char SetKey(const SWKey *ikey) { return setKey(ikey); }
-	/**
-	* Sets a key to this module for position to a
-	* particular record or set of records
-	*
-	* @param ikey key with which to set this module
-	* @return error status
-	*/
+	 * Sets a key to this module for position to a particular record
+	 *
+	 * @param ikey key with which to set this module
+	 * @return error status
+	 */
 	virtual char setKey(const SWKey *ikey);
 
-
-	virtual long Index() const { return entryIndex; }
-	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
-
 	/**
-	* Sets the key of this module.
-	* @param ikey The SWKey which should be used as new key.
-	* @return Error status
-	* @deprecated Use setKey() instead.
-	*/
+	 * Sets a key to this module for position to a particular record
+	 * @param ikey The SWKey which should be used as new key.
+	 * @return Error status
+	 */
+	char setKey(const SWKey &ikey) { return setKey(&ikey); }
+	/**
+	 * @deprecated Use setKey() instead.
+	 */
+	char SetKey(const SWKey *ikey) { return setKey(ikey); }
+	/**
+	 * @deprecated Use setKey() instead.
+	 */
 	char SetKey(const SWKey &ikey) { return setKey(ikey); }
-	/**
-	* Sets the key of this module.
-	* @param ikey The SWKey which should be used as new key.
-	* @return Error status
-	*/
-	char setKey(const SWKey &ikey) { return SetKey(&ikey); }
-
-	/** Gets the current module key
-	* @return the current key of this module
-	*/
-	SWKey &Key() const { return *getKey(); }
-	/** Gets the current module key
-	* @return the current key of this module
-	*/
-	SWKey *getKey() const;
-
-	/** Sets the current key of the module to ikey, and returns
-	* the keytext
-	*
-	* @param ikey new current key for the module
-	* @return the keytext of the current module key
-	* @deprecated Use setKey() instead.
-	*/
+	/** 
+	 * @deprecated Use setKey() instead.
+	 */
 	char Key(const SWKey & ikey) { return setKey(ikey); }
+
+	/** Gets the current module key
+	 * @return the current key of this module
+	 */
+	virtual SWKey *getKey() const;
+	/**
+	 * @deprecated Use getKey() instead.
+	 */
+	SWKey &Key() const { return *getKey(); }
 
 	/**
 	 * Sets/gets module KeyText
@@ -236,18 +225,38 @@ protected:
 		if (ikeytext) setKey(ikeytext);
 		return *getKey();
 	}
-	/** Calls this modules display object and passes itself
-	*
-	* @return error status
-	*/
+
+	virtual long Index() const { return entryIndex; }
+	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
+
+	/** Calls this module's display object and passes itself
+	 *
+	 * @return error status
+	 */
 	virtual char Display();
 
-	/** Sets/gets display driver
-	*
-	* @param idisp Value which to set disp; [0]-only get
-	* @return pointer to disp
-	*/
-	virtual SWDisplay *Disp(SWDisplay * idisp = 0);
+	/** Gets display driver
+	 *
+	 * @return pointer to SWDisplay class for this module
+	 */
+	virtual SWDisplay *getDisplay() const;
+
+	/** Sets display driver
+	 *
+	 * @param idisp pointer to SWDisplay class to assign to this module
+	 */
+	virtual void setDisplay(SWDisplay * idisp);
+
+	/** 
+	 * @deprecated Use get/setDisplay() instead.
+	 */
+	SWDisplay *Disp(SWDisplay * idisp = 0) {
+		if (idisp)
+			setDisplay(idisp);
+		return getDisplay();
+	}
+
+
 	/** Sets/gets module name
 	*
 	* @param imodname Value which to set modname; [0]-only get
@@ -531,7 +540,7 @@ protected:
 	/** calls all RenderFilters on buffer or current text
 	*
 	* @param buf buffer to Render instead of current module position;
-	*   if buf is NULL, the current text will be used
+	*   if buf is 0, the current module position text will be used
 	* @param len max len of buf OR current text -- will be applied anyway
 	* @param render Perform the rendering.
 	* @return this module's text at specified key location massaged by Render filters

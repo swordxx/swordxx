@@ -40,6 +40,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	int headerNum   = 0;
 	int pvHeaderNum = 0;
 	char buf[254];
+	XMLTag startTag;
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
@@ -62,6 +63,9 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					continue;
 				}
 				if (!tag.isEndTag()) {
+					if (!tag.isEmpty()) {
+						startTag = tag;
+					}
 					hide = true;
 					header = "";
 					if (option) {	// we want the tag in the text
@@ -73,7 +77,8 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				}
 				if (hide && tag.isEndTag()) {
 
-					if (module->isProcessEntryAttributes() && option) {
+					SWBuf subType = startTag.getAttribute("subType");
+					if (module->isProcessEntryAttributes() && ((option) || (subType != "x-Section"))) {
 						if (preverse) {
 							sprintf(buf, "%i", pvHeaderNum++);
 							module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;
@@ -84,6 +89,10 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 							if (option) {	// we want the tag in the text
 								text.append(header);
 							}
+						}
+						StringList attributes = startTag.getAttributeNames();
+						for (StringList::iterator it = attributes.begin(); it != attributes.end(); it++) {
+							module->getEntryAttributes()["Heading"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
 						}
 					}
 					hide = false;
