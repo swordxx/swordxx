@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.33 2004/04/09 21:42:27 dglassey Exp $
+* $Id: swbuf.h,v 1.34 2004/04/10 09:27:34 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -89,11 +89,21 @@ public:
 	*
 	*/
 	SWBuf(const SWBuf &other, unsigned long initSize = 0);
-
+	/**
+	* SWBuf::setFillByte - Set the fillByte character
+	*
+	* @param ch This character is used when the SWBuf is (re)sized.
+	*   The memory will be filled with this character. \see setSize() \see resize()
+ 	*/
 	inline void setFillByte(char ch) { fillByte = ch; }
+	/**
+	* SWBuf::getFillByte - Get the fillByte character
+	*
+	* @return The character used for filling memory. \see setFillByte.
+ 	*/
 	inline char getFillByte() { return fillByte; }
 
-  /**
+	/**
 	* SWBuf Destructor - Cleans up instance of SWBuf
  	*/
 	virtual ~SWBuf();
@@ -111,13 +121,13 @@ public:
 //	inline char &charAt(unsigned int pos) { return ((buf+pos)<=end) ? buf[pos] : nullStr[0]; }
 
 	/** 
-	* size() and length() return only the number of characters of the string.
+	* @return size() and length() return only the number of characters of the string.
 	* Add one for the following null and one for each char to be appended!
 	*/
 	inline unsigned long size() const { return length(); }
 
 	/**
-	* size() and length() return only the number of characters of the string.
+	* @return size() and length() return only the number of characters of the string.
 	* Add one for the following null and one for each char to be appended!
 	*/
 	inline unsigned long length() const { return end - buf; }
@@ -137,10 +147,19 @@ public:
 	void set(const SWBuf &newVal);
 
 	/**
- 	* SWBuf::setFormatted - sets this buf to a formatted strings
+ 	* SWBuf::setFormatted - sets this buf to a formatted string.
 	* If the allocated memory is bigger than the new string, it will NOT be resized.
-	* WARNING: This function can only write at most
-	* JUNKBUFSIZE to the string per call.
+	*
+	* @warning This function can only write at most JUNKBUFSIZE to the string per call.
+	*
+	* @warning This function is not very fast. For loops with many iterations you might
+	*  consider replacing it by other calls. 
+	*  Example: 
+	*    \code SWBuf buf.setFormatted("<%s>", stringVal); \endcode 
+	*  should be replaced by: 
+	*    \code buf.set("<"); buf.append(stringVal); buf.append(">"); \endcode
+	*  This will produce much faster results.
+	*
 	* @param format The format string. Same syntax as printf, for example.
 	* @param ... Add all arguments here.
  	*/
@@ -151,6 +170,10 @@ public:
 	* @param len The new size of the buffer. One byte for the null will be added.
  	*/
 	void setSize(unsigned long len);
+	/**
+ 	* SWBuf::resize - Resize this buffer to a specific length.
+	* @param len The new size of the buffer. One byte for the null will be added.
+ 	*/
 	inline void resize(unsigned long len) { setSize(len); }
 
 	/**
@@ -181,9 +204,18 @@ public:
 	}
 
 	/**
-	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf
-	* WARNING: This function can only write at most
-	* JUNKBUFSIZE to the string per call.
+	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf.
+	*
+	* @warning This function can only write at most JUNKBUFSIZE to the string per call.
+	*
+	* @warning This function is not very fast. For loops with many iterations you might
+	*  consider replacing it by other calls. 
+	*  Example: 
+	*    \code SWBuf buf.appendFormatted("<%s>", stringVal); \endcode 
+	*  should be replaced by: 
+	*    \code buf.append("<"); buf.append(stringVal); buf.append(">"); \endcode
+	*  This will produce much faster results.
+	*
 	* @param format The format string. Same syntax as printf, for example.
 	* @param ... Add all arguments here.
  	*/
@@ -192,18 +224,34 @@ public:
 	/** 
 	* SWBuf::insert - inserts the given string at position into this string
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
-	* @param str Append this.
-	* @param max Append only max chars.
+	* @param str Insert this.
+	* @param max Insert only max chars.
 	*/
 	void insert(const unsigned long pos, const char* str, const signed long max = -1 );
+	/** 
+	* SWBuf::insert - inserts the given string at position into this string
+	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
+	* @param str Insert this.
+	* @param max Insert only max chars.
+	*/
 	void insert(const unsigned long pos, const SWBuf &str, const signed long max = -1 ) {
 		insert(pos, str.c_str(), max);
 	};
+	/** 
+	* SWBuf::insert - inserts the given character at position into this string
+	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
+	* @param c Insert this.
+	*/
 	void insert(const unsigned long pos, const char c) {
 		insert(pos, SWBuf(c));
 	}
-	
-	inline char *getRawData() { return buf; }	// be careful!  Probably setSize needs to be called in conjunction before and maybe after
+	/** SWBuf::getRawData
+	*
+	* @warning be careful! Probably setSize needs to be called in conjunction before and maybe after
+	*
+	* @return Pointer to the allocated memory of the SWBuf.
+	*/
+	inline char *getRawData() { return buf; }
 
 	inline operator const char *() const { return c_str(); }
 	inline char &operator[](unsigned long pos) { return charAt(pos); }
