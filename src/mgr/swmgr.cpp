@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.27 2001/02/08 09:20:48 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.28 2001/02/15 08:51:22 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -537,6 +537,10 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 				
 	if (!stricmp(driver.c_str(), "RawLD"))
 		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str());
+
+    // if a specific module type is set in the config, use this
+    if ((entry = section.find("Type")) != section.end()) 
+        newmod->Type(entry->second.c_str());
 
 	return newmod;
 }

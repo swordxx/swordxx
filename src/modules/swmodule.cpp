@@ -101,7 +101,7 @@ char SWModule::Error()
  * RET:	pointer to modname
  */
 
-char *SWModule::Name(char *imodname)
+char *SWModule::Name(const char *imodname)
 {
 	return stdstr(&modname, imodname);
 }
@@ -116,7 +116,7 @@ char *SWModule::Name(char *imodname)
  * RET:	pointer to moddesc
  */
 
-char *SWModule::Description(char *imoddesc)
+char *SWModule::Description(const char *imoddesc)
 {
 	return stdstr(&moddesc, imoddesc);
 }
@@ -131,7 +131,7 @@ char *SWModule::Description(char *imoddesc)
  * RET:	pointer to modtype
  */
 
-char *SWModule::Type(char *imodtype)
+char *SWModule::Type(const char *imodtype)
 {
 	return stdstr(&modtype, imodtype);
 }
@@ -203,10 +203,10 @@ char SWModule::SetKey(const SWKey &ikey)
  * RET:	pointer to keytext
  */
 
-const char *SWModule::KeyText(char *ikeytext)
+const char *SWModule::KeyText(const char *ikeytext)
 {
 	if (ikeytext)
-		SetKey((const char *)ikeytext);
+		SetKey(ikeytext);
 
 	return *key;
 }

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.12 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swmodule.h,v 1.13 2001/02/15 08:51:22 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -110,7 +110,7 @@ public:
 /**
   *
   */
-  virtual const char *KeyText (char *imodtype = 0);
+  virtual const char *KeyText (const char *imodtype = 0);
 /**
   *
   */
@@ -124,15 +124,15 @@ public:
   * @param imodname If this parameter is 0 the module name will be returned. If imodname is not 0 the parameter is used as new modulename.
   * @return Returns the original name of this module (the name before the new name is applied)
   */
-  virtual char *Name (char *imodname = 0);
+  virtual char *Name (const char *imodname = 0);
 /**
   *
   */
-  virtual char *Description (char *imoddesc = 0);
+  virtual char *Description (const char *imoddesc = 0);
 /**
   *
   */
-  virtual char *Type (char *imodtype = 0);
+  virtual char *Type (const char *imodtype = 0);
 
   // search methods
 /**
