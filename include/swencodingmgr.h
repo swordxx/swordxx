@@ -24,6 +24,10 @@
 
 #include <swmgr.h>
 
+/** This class is like a normal @ref SWMgr,
+  * but you can additonally specify which encoding
+  * you want to use.
+  */
 class SWDLLEXPORT SWEncodingMgr : public SWMgr
 {
 protected:

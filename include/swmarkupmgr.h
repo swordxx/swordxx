@@ -24,6 +24,10 @@
 
 #include <swencodingmgr.h>
 
+/** This class is like a normal @ref SWEncodingMgr,
+  * but you can additonally specify which markup
+  * you want to use.
+  */
 class SWDLLEXPORT SWMarkupMgr : public SWEncodingMgr
 {
 protected:
