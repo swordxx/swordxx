@@ -35,7 +35,7 @@ endif
 
 libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) 
 
-libsword_la_LDFLAGS = -version-info 3
+libsword_la_LDFLAGS = -version-info 5
 
 include ../src/keys/Makefile.am
 include ../src/utilfuns/Makefile.am
