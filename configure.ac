@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.24 $)
+AC_REVISION($Revision: 1.25 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -52,15 +52,38 @@ if test x$with_zlib  = xyes; then
 	AC_CHECK_LIB(z, compress)
 fi
 
+# ---------------------------------------------------------------------
+# Find pkg-config
+# ---------------------------------------------------------------------
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+if test x$PKG_CONFIG = xno ; then
+  AC_MSG_ERROR([*** pkg-config not found. See http://www.freedesktop.org/software/pkgconfig/])
+fi
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.14 ; then
+  :
+else
+  AC_MSG_ERROR([*** pkg-config too old; version 0.14 or better required.])
+fi
+
 
 # ---------------------------------------------------------------------
 # Find ICU tools
 # ---------------------------------------------------------------------
+ICU_VER=
 if test x$with_icu = xyes; then
 	AC_PATH_PROG([PKGDATA], [pkgdata],[/usr/sbin/pkgdata],[$PATH:/usr/sbin:.])
 	AC_PATH_PROG([GENCCODE], [genccode], [/usr/sbin/genccode], [$PATH:/usr/sbin:.])
 	AC_PATH_PROG([GENCMN], [gencmn], [/usr/sbin/gencmn], [$PATH:/usr/sbin:.])
 	AC_PATH_PROG([GENRB], [genrb], [/usr/sbin/genrb], [$PATH:/usr/sbin:.])
+	
+	AC_PATH_PROG(ICU_CONFIG, icu-config, no)
+	if test "$ICU_CONFIG" = "no" ; then
+	   echo "*** The icu-config script installed by icu could not be found"
+	   echo "*** continuing anyway"
+	else
+	   ICU_VER=`$ICU_CONFIG --version`
+	fi
 fi
 
 # ---------------------------------------------------------------------
@@ -180,6 +203,7 @@ AC_SUBST(dir_confdef)
 AC_SUBST(CC)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
+AC_SUBST(ICU_VER)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 
@@ -213,5 +237,6 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile utilities/Makefile examples/Makefile \
 	examples/cmdline/Makefile apps/Makefile apps/console/Makefile \
-	apps/console/diatheke/Makefile icu/Makefile)
+	apps/console/diatheke/Makefile icu/Makefile sword.pc)
 AC_OUTPUT
+

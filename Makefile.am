@@ -79,7 +79,13 @@ endif
 SUBDIRS += $(TESTSDIR) $(UTILSDIR) $(EXAMPLESDIR)
 
 INCLUDES = -I $(top_srcdir)/include
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh sword.pc.in
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = sword.pc
+
+$(pkgconfig_DATA): config.status
+
 
 if INSTCONF
 sysconf_DATA = sword.conf
@@ -103,6 +109,8 @@ endif
 
 include locales.d/Makefile.am
 include samples/Makefile.am
+include debian/Makefile.am
+include doc/Makefile.am
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh

@@ -1,0 +1,6 @@
+swcgidir = $(top_srcdir)/apps/console/diatheke/cgi
+
+EXTRA_DIST = $(swcgidir)/dia-def.pl
+EXTRA_DIST += $(swcgidir)/diatheke.pl
+EXTRA_DIST += $(swcgidir)/index-private.html
+EXTRA_DIST += $(swcgidir)/index-public.html
