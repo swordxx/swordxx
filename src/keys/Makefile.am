@@ -1,7 +1,7 @@
 keysdir = $(top_srcdir)/src/keys
 
-lib_libsword_la_SOURCES += $(keysdir)/swkey.cpp
-lib_libsword_la_SOURCES += $(keysdir)/listkey.cpp
-lib_libsword_la_SOURCES += $(keysdir)/versekey.cpp
-lib_libsword_la_SOURCES += $(keysdir)/strkey.cpp
+libsword_la_SOURCES += $(keysdir)/swkey.cpp
+libsword_la_SOURCES += $(keysdir)/listkey.cpp
+libsword_la_SOURCES += $(keysdir)/versekey.cpp
+libsword_la_SOURCES += $(keysdir)/strkey.cpp
 

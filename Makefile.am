@@ -79,16 +79,17 @@ INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 
 #lib_LIBRARIES = lib/libsword.a
-lib_LTLIBRARIES = lib/libsword.la
+lib_LTLIBRARIES = libsword.la
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
-testlib_LDADD = -L$(top_srcdir)/lib -lsword
+testlib_LDADD = -L. -lsword
 
 #lib_libsword_a_SOURCES =
-lib_libsword_la_SOURCES =
-lib_libsword_la_LIBADD =
-lib_libsword_la_LDFLAGS = -version-info 1
+libsword_la_SOURCES =
+libsword_la_LIBADD =
+#lib_libsword_la_LDFLAGS = -version-info 1
+libsword_la_LDFLAGS = -release 1.5.3
 include src/keys/Makefile.am
 include src/utilfuns/Makefile.am
 include src/mgr/Makefile.am

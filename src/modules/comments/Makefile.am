@@ -1,6 +1,6 @@
 commentsdir = $(top_srcdir)/src/modules/comments
 
-lib_libsword_la_SOURCES += $(commentsdir)/swcom.cpp
+libsword_la_SOURCES += $(commentsdir)/swcom.cpp
 
 include src/modules/comments/rawcom/Makefile.am
 include src/modules/comments/rawfiles/Makefile.am

@@ -1,6 +1,6 @@
 INCLUDES = -I $(top_srcdir)/include
 #LIBS = -L$(top_builddir)/../lib -lsword 
-LDADD = -L$(top_builddir)/lib -lsword 
+LDADD = -L$(top_builddir) -lsword 
 #LDADD = $(top_builddir)/../lib/libsword.a
 #if ZLIB
 #ZLIBLIBS = -lz
