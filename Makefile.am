@@ -64,7 +64,10 @@ INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 
 if INSTCONF
-sysconf_DATA = samples/recommended/sword.conf
+sysconf_DATA = sword.conf
+sword.conf:
+	@echo "[Install]" > sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> sword.conf
 endif
 
 noinst_PROGRAMS = testlib

@@ -100,6 +100,7 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
+dir_confdef = @dir_confdef@
 enable_debug = @enable_debug@
 enable_profile = @enable_profile@
 enable_vcl = @enable_vcl@
@@ -133,7 +134,10 @@ utilfunsdir = $(top_srcdir)/src/utilfuns
 
 mgrdir = $(top_srcdir)/src/mgr
 
-DEFS = -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\" -DUNIX
+@CONFDEF_TRUE@globdef = -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\"
+@CONFDEF_FALSE@globdef = 
+
+DEFS = $(globdef) -DUNIX
 
 frontenddir = $(top_srcdir)/src/frontend
 

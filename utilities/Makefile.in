@@ -78,6 +78,7 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
+dir_confdef = @dir_confdef@
 enable_debug = @enable_debug@
 enable_profile = @enable_profile@
 enable_vcl = @enable_vcl@

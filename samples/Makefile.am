@@ -1,3 +1,4 @@
+if INSTCONF
 modsDATA = samples/mods.d/globals.conf
 
 modsdatadir = $(pkgdatadir)/mods.d
@@ -19,4 +20,4 @@ uninstallmodsDATA:
 	  echo " rm -f $(DESTDIR)$(modsdatadir)/$$f"; \
 	  rm -f $(DESTDIR)$(modsdatadir)/$$f; \
 	done
-
+endif

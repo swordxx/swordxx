@@ -1,6 +1,12 @@
 mgrdir = $(top_srcdir)/src/mgr
 
-DEFS += -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\"
+if CONFDEF
+globdef = -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\"
+else
+globdef =
+endif
+
+DEFS += $(globdef)
 
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
 libsword_la_SOURCES += $(mgrdir)/swmgr.cpp

@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.4 $)
+AC_REVISION($Revision: 1.5 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.3)
@@ -63,17 +63,26 @@ if test x$enable_debug = xyes; then
   fi
   CFLAGS="$CFLAGS -Werror"
   CXXFLAGS="$CXXFLAGS -Werror"
-  AC_DEFINE(DEBUG)
-else
-  AC_DEFINE(NDEBUG)
 fi
+#  AC_DEFINE(DEBUG)
+#else
+#  AC_DEFINE(NDEBUG)
+#fi
 
 if test x$enable_profile = xyes; then
   CFLAGS="$CFLAGS -pg"
   CXXFLAGS="$CXXFLAGS -pg"
 fi
 
+# ---------------------------------------------------------------------
+# Alter global conf directory only if not /etc
+# ---------------------------------------------------------------------
 
+if test "x$sysconfdir" = "x/etc"; then
+  dir_confdef="no"
+else
+  dir_confdef="yes"
+fi
 
 
 # ---------------------------------------------------------------------
@@ -113,6 +122,7 @@ esac
 AC_SUBST(with_zlib)
 AC_SUBST(with_icu)
 AC_SUBST(with_conf)
+AC_SUBST(dir_confdef)
 AC_SUBST(CC)
 AC_SUBST(enable_vcl)
 AC_SUBST(enable_debug)
@@ -133,6 +143,7 @@ AM_CONDITIONAL(MINGW, test x$target_os = xmingw32*)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
+AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
 #AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)
 
