@@ -66,7 +66,7 @@ char *RawFiles::getRawEntry() {
 	VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)
@@ -125,7 +125,7 @@ SWModule &RawFiles::operator <<(const char *inbuf) {
 	VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)
@@ -172,7 +172,7 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 	const VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<const VerseKey *>(inkey);
+		key = SWDYNAMIC_CAST(VerseKey, inkey);
 	}
 	catch ( ... ) {}
 	if (!key)
@@ -188,7 +188,7 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 			delete key;
 		key = 0;
 		try {
-			key = dynamic_cast<const VerseKey *>(inkey);
+			key = SWDYNAMIC_CAST(VerseKey, inkey);
 		}
 		catch ( ... ) {}
 		if (!key)
@@ -214,7 +214,7 @@ void RawFiles::deleteEntry() {
 	VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)

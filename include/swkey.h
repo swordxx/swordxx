@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.4 2000/10/15 11:25:31 scribe Exp $
+ * $Id: swkey.h,v 1.5 2001/02/07 05:03:56 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,6 +24,8 @@
 #ifndef SWKEY_H
 #define SWKEY_H
 
+#include <swobject.h>
+
 #define KEYERR_OUTOFBOUNDS 1
 
 // For use with = operator to position key.
@@ -41,9 +43,10 @@ public:
 #define TOP POSITION(POS_TOP)
 #define BOTTOM POSITION(POS_BOTTOM)
 
-class SWKey {
+class SWKey : public SWObject {
 	long index;
-
+	static SWClass classdef;
+	void init();
 protected:
 	char *keytext;
 	char persist;

@@ -8,6 +8,9 @@
 #include <utilfuns.h>
 #include <string.h>
 
+static const char *classes[] = {"SWKey", "SWObjects"};
+SWClass SWKey::classdef(classes);
+
 /******************************************************************************
  * SWKey Constructor - initializes instance of SWKey
  *
@@ -21,6 +24,7 @@ SWKey::SWKey(const char *ikey)
 	keytext = 0;
 	error   = 0;
 	stdstr(&keytext, ikey);
+	init();
 }
 
 SWKey::SWKey(SWKey const &k)
@@ -30,6 +34,11 @@ SWKey::SWKey(SWKey const &k)
 	keytext = 0;
 	error = k.error;
 	stdstr(&keytext, k.keytext);
+	init();
+}
+
+void SWKey::init() {
+	myclass = &classdef;
 }
 
 SWKey *SWKey::clone() const

@@ -65,7 +65,7 @@ char *HREFCom::getRawEntry() {
 	VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)

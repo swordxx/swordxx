@@ -94,7 +94,7 @@ char *RawText::getRawEntry() {
 
 	// see if we have a VerseKey * or decendant
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {
 	}
@@ -287,7 +287,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 			// VerseKey
 			VerseKey *testKeyType = 0;
 			try {
-				testKeyType = dynamic_cast<VerseKey *>((scope)?scope:key);
+				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
 			}
 			catch ( ... ) {
 			}

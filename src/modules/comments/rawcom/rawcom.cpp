@@ -59,7 +59,7 @@ char *RawCom::getRawEntry() {
 	FilterList::iterator it;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)
@@ -103,7 +103,7 @@ SWModule &RawCom::operator +=(int increment)
 	VerseKey *tmpkey = 0;
 
 	try {
-		tmpkey = dynamic_cast<VerseKey *>(key);
+		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
 	}
 	catch ( ... ) {}
 	if (!tmpkey)
@@ -120,7 +120,7 @@ SWModule &RawCom::operator +=(int increment)
 			delete tmpkey;
 		tmpkey = 0;
 		try {
-			tmpkey = dynamic_cast<VerseKey *>(key);
+			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
 		}
 		catch ( ... ) {}
 		if (!tmpkey)

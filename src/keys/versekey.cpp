@@ -20,6 +20,10 @@
 #include <versekey.h>
 #include <localemgr.h>
 
+
+static const char *classes[] = {"VerseKey", "SWKey", "SWObjects"};
+SWClass VerseKey::classdef(classes);
+
 /******************************************************************************
  *  Initialize static members of VerseKey
  */
@@ -38,6 +42,7 @@ VerseKey::LocaleCache   VerseKey::localeCache;
  */
 
 void VerseKey::init() {
+	myclass = &classdef;
 	if (!instance)
 		initstatics();
 
@@ -447,7 +452,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						else tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
 					}
 					else	if (expandRange) {
-						VerseKey *newElement = dynamic_cast<VerseKey *>(tmpListKey.GetElement());
+						VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
 						if (newElement) {
 							if (partial > 1)
 								curkey = MAXCHAPTER;
@@ -587,7 +592,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				else tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
 			}
 			else if (expandRange) {
-				VerseKey *newElement = dynamic_cast<VerseKey *>(tmpListKey.GetElement());
+				VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
 				if (newElement) {
 					if (partial > 1)
 						curkey = MAXCHAPTER;

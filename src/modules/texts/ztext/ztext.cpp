@@ -113,7 +113,7 @@ char *zText::getRawEntry()
 
 	// see if we have a VerseKey * or decendant
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {
 	}
@@ -175,7 +175,7 @@ SWModule &zText::operator <<(const char *inbuf) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {
 	}
@@ -208,7 +208,7 @@ SWModule &zText::operator <<(const SWKey *inkey) {
 	const VerseKey *srckey = 0;
 	// see if we have a VerseKey * or decendant
 	try {
-		destkey = dynamic_cast<VerseKey *>(this->key);
+		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {
 	}
@@ -218,7 +218,7 @@ SWModule &zText::operator <<(const SWKey *inkey) {
 
 	// see if we have a VerseKey * or decendant
 	try {
-		srckey = dynamic_cast<const VerseKey *>(inkey);
+		srckey = (const VerseKey *) SWDYNAMIC_CAST(VerseKey, inkey);
 	}
 	catch ( ... ) {
 	}
@@ -249,7 +249,7 @@ void zText::deleteEntry() {
 	VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)

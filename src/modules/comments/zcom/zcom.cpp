@@ -58,7 +58,7 @@ zCom::operator char*()
 	VerseKey *key = 0;
 
 	try {
-		key = dynamic_cast<VerseKey *>(this->key);
+		key = (VerseKey *)SWDYNAMIC_CAST("VerseKey", this->key);
 	}
 	catch ( ... ) {}
 	if (!key)

@@ -1,17 +1,15 @@
 #include <iostream.h>
 #include <versekey.h>
-#include <swmodule.h>
 int main(int argc, char **argv) {
 	VerseKey x("jas");
 	SWKey *y = &x;
-	SWModule *yoyo;
+	VerseKey *v = &x;
 
-	try {
-		yoyo = dynamic_cast<SWModule *>(y);
-		cout << "cast succeeded\n";
-	}
-	catch(...) {
+	v = SWDYNAMIC_CAST(VerseKey, y);
+	if (v)
+		cout << (const char *)(*v);
+	else
 		cout << "cast failed\n";
-	}
+
 	return 0;
 }

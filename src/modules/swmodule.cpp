@@ -310,7 +310,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	// 	VerseKey specific name
 	VerseKey *vkcheck = 0;
 	try {
-		vkcheck = dynamic_cast<VerseKey *>(key);
+		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
 	}
 	catch (...) {}
 	// end MAJOR KLUDGE

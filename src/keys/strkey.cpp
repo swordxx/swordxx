@@ -11,6 +11,9 @@
 #include <stdio.h>
 
 
+static const char *classes[] = {"StrKey", "SWKey", "SWObjects"};
+SWClass StrKey::classdef(classes);
+
 /******************************************************************************
  * StrKey Constructor - initializes instance of StrKey
  *
@@ -19,6 +22,12 @@
 
 StrKey::StrKey(const char *ikey) : SWKey(ikey)
 {
+	init();
+}
+
+
+void StrKey::init() {
+	myclass = &classdef;
 }
 
 

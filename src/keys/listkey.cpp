@@ -10,6 +10,9 @@
 #include <swkey.h>
 #include <listkey.h>
 
+static const char *classes[] = {"ListKey", "SWKey", "SWObjects"};
+SWClass ListKey::classdef(classes);
+
 /******************************************************************************
  * ListKey Constructor - initializes instance of ListKey
  *
@@ -19,6 +22,7 @@
 ListKey::ListKey(const char *ikey): SWKey(ikey) {
 	arraymax = 0;
 	ClearList();
+	init();
 }
 
 
@@ -29,7 +33,14 @@ ListKey::ListKey(ListKey const &k) : SWKey(k.keytext) {
 	array = (arraymax)?(SWKey **)malloc(k.arraymax * sizeof(SWKey *)):0;
 	for (int i = 0; i < arraycnt; i++)
 		array[i] = k.array[i]->clone();
+	init();
 }
+
+
+void ListKey::init() {
+	myclass = &classdef;
+}
+
 
 SWKey *ListKey::clone() const
 {

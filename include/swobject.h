@@ -1,9 +1,17 @@
 #ifndef SWOBJECT_H
 #define SWOBJECT_H
 
+#include <utilfuns.h>
+#ifndef __GNUC__
+#else
+#include <unixstr.h>
+#endif
+
+#define SWDYNAMIC_CAST(className, object) (className *)((object->getClass()->isAssignableFrom(#className))?object:0)
+
 class SWClass {
 private:
-        char **descends;
+        const char **descends;
 
 public:
 
@@ -11,18 +19,20 @@ public:
         this->descends = descends;
     }
 
-    bool isAssignableFrom(const char *className) {
-        for (int i = 0; descendents[i]; i++) {
-            if (!stricmp(descentents[i], className))
+    bool isAssignableFrom(const char *className) const {
+        for (int i = 0; descends[i]; i++) {
+            if (!stricmp(descends[i], className))
                 return true;
         }
         return false;
     }
-}
+};
 
 class SWObject {
-    private SWClass *myclass;
-    SWClass *getClass() { return myclass; }
-}
+protected:
+	SWClass *myclass;
+public:
+	const SWClass *getClass() const { return myclass; }
+};
 
 #endif
