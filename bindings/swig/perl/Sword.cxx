@@ -225,7 +225,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.8 2003/01/31 00:24:04 joachim Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.9 2003/02/24 06:59:16 joachim Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
@@ -627,9 +627,25 @@ char const *SWConfig_get(SWConfig *self,char const *group,char const *entry){
 #include <swmgr.h>
 using namespace sword;
 
-SWModule *SWMgr_module(SWMgr *self,char const *modulename){
-  	return self->Modules[modulename];
-  }
+int const SWMgr_moduleCount(SWMgr *self){
+		return self->Modules.size();
+	}
+SWModule *SWMgr_getModuleAt(SWMgr *self,int const pos){
+		if (pos < 0 || pos > self->Modules.size() )
+			return 0;
+	
+		ModMap::iterator it = self->Modules.begin(); 
+		
+		for (int i = 0; i < pos; ++i) {
+			it++;
+		}
+
+		if ( it != self->Modules.end() ) {
+			return (*it).second;
+		}
+		
+		return 0;
+	}
 
 #include "swmodule.h"
 using namespace sword;
@@ -1522,7 +1538,7 @@ XS(_wrap_SWMgr_configPath_get) {
 }
 
 
-XS(_wrap_new_SWMgr) {
+XS(_wrap_new_SWMgr__SWIG_0) {
     char _swigmsg[SWIG_MAX_ERRMSG] = "";
     const char *_swigerr = _swigmsg;
     {
@@ -1570,6 +1586,134 @@ XS(_wrap_new_SWMgr) {
         (void) _swigerr;
     }
     croak(_swigerr);
+}
+
+
+XS(_wrap_new_SWMgr__SWIG_1) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        char *arg1 ;
+        bool arg2 = (bool) true ;
+        SWFilterMgr *arg3 = (SWFilterMgr *) 0 ;
+        SWMgr *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 3)) {
+            SWIG_croak("Usage: new_SWMgr(iConfigPath,autoload,filterMgr);");
+        }
+        if (!SvOK((SV*) ST(0))) arg1 = 0;
+        else arg1 = (char *) SvPV(ST(0), PL_na);
+        if (items > 1) {
+            arg2 = (bool) SvIV(ST(1));
+        }
+        if (items > 2) {
+            {
+                if (SWIG_ConvertPtr(ST(2), (void **) &arg3, SWIGTYPE_p_SWFilterMgr,0) < 0) {
+                    SWIG_croak("Type error in argument 3 of new_SWMgr. Expected _p_SWFilterMgr");
+                }
+            }
+        }
+        result = (SWMgr *)new SWMgr((char const *)arg1,arg2,arg3);
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWMgr,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_new_SWMgr) {
+    dXSARGS;
+    
+    if ((items >= 0) && (items <= 4)) {
+        int _v;
+        if (items <= 0) {
+            (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_0); return;
+        }
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWConfig, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            if (items <= 1) {
+                (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_0); return;
+            }
+            {
+                void *tmp;
+                if (SWIG_ConvertPtr(ST(1), (void **) &tmp, SWIGTYPE_p_SWConfig, 0) == -1) {
+                    _v = 0;
+                }else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                if (items <= 2) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_0); return;
+                }
+                {
+                    _v = SvIOK(ST(2)) ? 1 : 0;
+                }
+                if (_v) {
+                    if (items <= 3) {
+                        (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_0); return;
+                    }
+                    {
+                        void *tmp;
+                        if (SWIG_ConvertPtr(ST(3), (void **) &tmp, SWIGTYPE_p_SWFilterMgr, 0) == -1) {
+                            _v = 0;
+                        }else {
+                            _v = 1;
+                        }
+                    }
+                    if (_v) {
+                        (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_0); return;
+                    }
+                }
+            }
+        }
+    }
+    if ((items >= 1) && (items <= 3)) {
+        int _v;
+        {
+            _v = SvPOK(ST(0)) ? 1 : 0;
+        }
+        if (_v) {
+            if (items <= 1) {
+                (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_1); return;
+            }
+            {
+                _v = SvIOK(ST(1)) ? 1 : 0;
+            }
+            if (_v) {
+                if (items <= 2) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_1); return;
+                }
+                {
+                    void *tmp;
+                    if (SWIG_ConvertPtr(ST(2), (void **) &tmp, SWIGTYPE_p_SWFilterMgr, 0) == -1) {
+                        _v = 0;
+                    }else {
+                        _v = 1;
+                    }
+                }
+                if (_v) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWMgr__SWIG_1); return;
+                }
+            }
+        }
+    }
+    
+    croak("No matching function for overloaded 'new_SWMgr'");
+    XSRETURN(0);
 }
 
 
@@ -1836,7 +1980,7 @@ XS(_wrap_SWMgr_setCipherKey) {
 }
 
 
-XS(_wrap_SWMgr_module) {
+XS(_wrap_SWMgr_getModule) {
     char _swigmsg[SWIG_MAX_ERRMSG] = "";
     const char *_swigerr = _swigmsg;
     {
@@ -1847,16 +1991,106 @@ XS(_wrap_SWMgr_module) {
         dXSARGS;
         
         if ((items < 2) || (items > 2)) {
-            SWIG_croak("Usage: SWMgr_module(self,modulename);");
+            SWIG_croak("Usage: SWMgr_getModule(self,modName);");
         }
         {
             if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWMgr,0) < 0) {
-                SWIG_croak("Type error in argument 1 of SWMgr_module. Expected _p_SWMgr");
+                SWIG_croak("Type error in argument 1 of SWMgr_getModule. Expected _p_SWMgr");
             }
         }
         if (!SvOK((SV*) ST(1))) arg2 = 0;
         else arg2 = (char *) SvPV(ST(1), PL_na);
-        result = (SWModule *)SWMgr_module(arg1,(char const *)arg2);
+        result = (SWModule *)(arg1)->getModule((char const *)arg2);
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWModule,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWMgr_InstallScan) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWMgr *arg1 = (SWMgr *) 0 ;
+        char *arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWMgr_InstallScan(self,dir);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWMgr,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWMgr_InstallScan. Expected _p_SWMgr");
+            }
+        }
+        if (!SvOK((SV*) ST(1))) arg2 = 0;
+        else arg2 = (char *) SvPV(ST(1), PL_na);
+        (arg1)->InstallScan((char const *)arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWMgr_moduleCount) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWMgr *arg1 = (SWMgr *) 0 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: SWMgr_moduleCount(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWMgr,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWMgr_moduleCount. Expected _p_SWMgr");
+            }
+        }
+        result = (int)SWMgr_moduleCount(arg1);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWMgr_getModuleAt) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWMgr *arg1 = (SWMgr *) 0 ;
+        int arg2 ;
+        SWModule *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWMgr_getModuleAt(self,pos);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWMgr,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWMgr_getModuleAt. Expected _p_SWMgr");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        result = (SWModule *)SWMgr_getModuleAt(arg1,arg2);
         
         ST(argvi) = sv_newmortal();
         SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWModule,0);
@@ -8798,7 +9032,10 @@ static swig_command_info swig_commands[] = {
 {"Swordc::SWMgr_getGlobalOptions", _wrap_SWMgr_getGlobalOptions},
 {"Swordc::SWMgr_getGlobalOptionValues", _wrap_SWMgr_getGlobalOptionValues},
 {"Swordc::SWMgr_setCipherKey", _wrap_SWMgr_setCipherKey},
-{"Swordc::SWMgr_module", _wrap_SWMgr_module},
+{"Swordc::SWMgr_getModule", _wrap_SWMgr_getModule},
+{"Swordc::SWMgr_InstallScan", _wrap_SWMgr_InstallScan},
+{"Swordc::SWMgr_moduleCount", _wrap_SWMgr_moduleCount},
+{"Swordc::SWMgr_getModuleAt", _wrap_SWMgr_getModuleAt},
 {"Swordc::SWModule_terminateSearch_set", _wrap_SWModule_terminateSearch_set},
 {"Swordc::SWModule_terminateSearch_get", _wrap_SWModule_terminateSearch_get},
 {"Swordc::new_SWModule", _wrap_new_SWModule},

@@ -160,9 +160,19 @@ sub DESTROY {
 *getGlobalOptions = *Swordc::SWMgr_getGlobalOptions;
 *getGlobalOptionValues = *Swordc::SWMgr_getGlobalOptionValues;
 *setCipherKey = *Swordc::SWMgr_setCipherKey;
-sub module {
+sub getModule {
     my @args = @_;
-    my $result = Swordc::SWMgr_module(@args);
+    my $result = Swordc::SWMgr_getModule(@args);
+    return undef if (!defined($result));
+    my %resulthash;
+    tie %resulthash, ref($result), $result;
+    return bless \%resulthash, ref($result);
+}
+*InstallScan = *Swordc::SWMgr_InstallScan;
+*moduleCount = *Swordc::SWMgr_moduleCount;
+sub getModuleAt {
+    my @args = @_;
+    my $result = Swordc::SWMgr_getModuleAt(@args);
     return undef if (!defined($result));
     my %resulthash;
     tie %resulthash, ref($result), $result;

@@ -10,8 +10,6 @@ typedef map < string, SWFilter * > FilterMap;
 class SWMgr {
 public:
 //member data
-//  static bool debug;
-//  static const char *globalConfPath;
   static void findConfig (char *configType, char **prefixPath, char **configPath);
 
   SWConfig *config;
@@ -22,8 +20,7 @@ public:
 
 //member functions
   SWMgr (SWConfig* iconfig = 0, SWConfig* isysconfig = 0, bool autoload = true, SWFilterMgr* filterMgr = 0);
-//  SWMgr (SWFilterMgr *filterMgr);
-//  SWMgr (const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0);
+  SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0);
   virtual ~SWMgr();
 
   virtual signed char Load ();
@@ -33,10 +30,30 @@ public:
   virtual OptionsList getGlobalOptions ();
   virtual OptionsList getGlobalOptionValues (const char *option);
   virtual signed char setCipherKey (const char *modName, const char *key);
-
+	
+  SWModule *getModule(const char *modName);
+  virtual void InstallScan(const char *dir);
+  
 %extend {
-  SWModule* module(const char* modulename) {
-  	return self->Modules[modulename];
-  };
-}
+	const int moduleCount() {
+		return self->Modules.size();
+	}
+	
+	SWModule* getModuleAt( const int pos ) {
+		if (pos < 0 || pos > self->Modules.size() )
+			return 0;
+	
+		ModMap::iterator it = self->Modules.begin(); 
+		
+		for (int i = 0; i < pos; ++i) {
+			it++;
+		}
+
+		if ( it != self->Modules.end() ) {
+			return (*it).second;
+		}
+		
+		return 0;
+	}
+} 
 };
