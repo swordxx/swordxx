@@ -77,14 +77,6 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	
 	defaultLocaleName = 0;
 	
-	char *lang = getenv ("LANG");
-	if (lang) {
-		if (strlen(lang) > 0)
-			setDefaultLocaleName(lang);
-		else setDefaultLocaleName("en_US");
-	}
-	else setDefaultLocaleName("en_US");
-
 	if (!iConfigPath)
 		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths);
 	else configPath = (char *)iConfigPath;
@@ -122,6 +114,15 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 			}
 		}
 	}
+
+	char *lang = getenv ("LANG");
+	if (lang) {
+		if (strlen(lang) > 0)
+			setDefaultLocaleName(lang);
+		else stdstr(&defaultLocaleName, "en_US");
+
+	}
+	else stdstr(&defaultLocaleName, "en_US");
 
 	if (prefixPath)
 		delete [] prefixPath;
