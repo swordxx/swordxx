@@ -1013,6 +1013,14 @@ sub DESTROY {
 }
 
 *createModule = *Swordc::RawGenBook_createModule;
+sub getTreeKey {
+    my @args = @_;
+    my $result = Swordc::RawGenBook_getTreeKey(@args);
+    return undef if (!defined($result));
+    my %resulthash;
+    tie %resulthash, ref($result), $result;
+    return bless \%resulthash, ref($result);
+}
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

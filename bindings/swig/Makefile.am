@@ -19,7 +19,7 @@ perl_make: perl_makebuild
 
 perlswig: sword.i
 	mkdir -p perl
-	$(SWIG) -perl -c++ -shadow -o perl/Sword.cxx -I$(top_srcdir) $(top_srcdir)/sword.i
+	$(SWIG) -perl -c++ -shadow -o perl/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
 perl_makebuild: $(PERLSWIG)
 	mkdir -p perl
@@ -91,5 +91,5 @@ python_makebuild: $(PYTHONSWIG)
 
 phpswig: sword.i
 	mkdir -p php
-	$(SWIG) -php -c++ -o php/Sword.cxx -I$(top_srcdir) $(top_srcdir)/sword.i
+	$(SWIG) -php4 -c++ -fullmake -o php/Sword.cxx -I$(top_srcdir) $(top_srcdir)/sword.i
 

@@ -225,7 +225,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.5 2002/11/27 21:21:30 joachim Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.6 2003/01/07 21:19:31 joachim Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
@@ -755,8 +755,13 @@ using namespace sword;
 
 
 #include "rawgenbook.h"
+#include "treekeyidx.h"
+#include "swkey.h"
 using namespace sword;
 
+TreeKeyIdx *RawGenBook_getTreeKey(RawGenBook *self){
+		return ( (TreeKeyIdx *) ( (SWKey *) (*self) ) );
+	}
 
 #include "swld.h"
 using namespace sword;
@@ -7241,6 +7246,35 @@ XS(_wrap_RawGenBook_createModule) {
 }
 
 
+XS(_wrap_RawGenBook_getTreeKey) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        RawGenBook *arg1 = (RawGenBook *) 0 ;
+        TreeKeyIdx *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: RawGenBook_getTreeKey(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_RawGenBook,0) < 0) {
+                SWIG_croak("Type error in argument 1 of RawGenBook_getTreeKey. Expected _p_RawGenBook");
+            }
+        }
+        result = (TreeKeyIdx *)RawGenBook_getTreeKey(arg1);
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_TreeKeyIdx,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
 XS(_wrap_new_SWLD) {
     char _swigmsg[SWIG_MAX_ERRMSG] = "";
     const char *_swigerr = _swigmsg;
@@ -8594,6 +8628,7 @@ static swig_command_info swig_commands[] = {
 {"Swordc::new_RawGenBook", _wrap_new_RawGenBook},
 {"Swordc::delete_RawGenBook", _wrap_delete_RawGenBook},
 {"Swordc::RawGenBook_createModule", _wrap_RawGenBook_createModule},
+{"Swordc::RawGenBook_getTreeKey", _wrap_RawGenBook_getTreeKey},
 {"Swordc::new_SWLD", _wrap_new_SWLD},
 {"Swordc::delete_SWLD", _wrap_delete_SWLD},
 {"Swordc::new_RawLD", _wrap_new_RawLD},

@@ -2,10 +2,12 @@
 
 # This program converts a given module into a compressed module of the same type.
 # This is just an example to demomstrate the power of the Perl Sword bindings.
-
-$appname = "mod2zmod.pl";
+# The code is almost written the same way the C++ of mod2zmod.cpp code was written
 
 use Sword;
+use strict;
+
+my $appname = "mod2zmod.pl";
 
 sub printUsage()
 {
@@ -24,12 +26,14 @@ if (scalar(@ARGV) < 2 || scalar(@ARGV) > 4) {
 }
 
 #initialization stuff
-$datapath = $ARGV[1];
-$blockType = defined $ARGV[2] ? $ARGV[2] : 4;
-$compressType = defined $ARGV[3] ? $ARGV[3] : 1;
-$mgr = new Sword::SWMgr();
-$module = $mgr->module($ARGV[0]);
-$compressor = ($compressType == 1) ? new Sword::LZSSCompress() : new Sword::ZipCompress();
+my $datapath = $ARGV[1];
+my $blockType = defined $ARGV[2] ? $ARGV[2] : 4;
+my $compressType = defined $ARGV[3] ? $ARGV[3] : 1;
+my $mgr = new Sword::SWMgr();
+my $module = $mgr->module($ARGV[0]);
+my $compressor = ($compressType == 1) ? new Sword::LZSSCompress() : new Sword::ZipCompress();
+
+my $newmod;
 
 if ($module->Type() eq "Biblical Texts") {
 	if (!Sword::zText::createModule( $datapath, $blockType )) {
@@ -52,11 +56,14 @@ if ($module->Type() eq "Biblical Texts") {
 	$newmod = new Sword::zCom( $datapath, 0, 0, $blockType, $compressor)
 }
 
-#now copy the content!
+# now copy the content of the module!
+
+my $buffer;
+
 $module->top();
-$module->setSkipConsecutiveLinks(false);
+$module->setSkipConsecutiveLinks(0);
 do {
-	$key = $module->Key();
+	my $key = $module->Key();
 	if (($buffer eq $module->getRawEntry()) &&($buffer ne "")) {
                 print "Adding [", $key->getText(), "] link to: \n";
 		$newmod->writeLink($key);
