@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 
 	if (argc > 3) {
 		verses.setText(argv[3]);
-		cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
+		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
 	}
 
 	return 0;
