@@ -40,7 +40,6 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 {
 	versebuf = 0;
 	int datfd, idxfd;
-
 	string fname;
 	fname = path;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
@@ -48,16 +47,18 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 		fname += "/";
 	
 	for (int loop = 0; loop < 2; loop++) {
-		const char *fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat")).c_str();
-		datfd = open(fastidxname, O_RDONLY|O_BINARY);
-		fastidxname = (fname + ((loop)?"ntwords.idx":"otwords.idx")).c_str();
-		idxfd = open(fastidxname, O_RDONLY|O_BINARY);
-		if ((datfd > 0) && (idxfd > 0)) {
+		string fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat"));
+		datfd = open(fastidxname.c_str(), O_RDONLY|O_BINARY);
+		fastidxname = (fname + ((loop)?"ntwords.idx":"otwords.idx"));
+		idxfd = open(fastidxname.c_str(), O_RDONLY|O_BINARY);
+		if ((datfd > -1) && (idxfd > -1)) {
 			fastSearch[loop] = new RawStr((fname + ((loop)?"ntwords":"otwords")).c_str());
 		}
 		else	fastSearch[loop] = 0;
-		close(idxfd);
-		close(datfd);
+          if (idxfd > -1)
+		     close(idxfd);
+          if (datfd > -1)
+	     	close(datfd);
 	}
 }
 
