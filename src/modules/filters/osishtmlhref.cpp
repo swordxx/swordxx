@@ -173,8 +173,8 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 								ch);
 						}
 					}
-					u->suspendTextPassThru = true;
 				}
+				u->suspendTextPassThru = true;
 			}
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = false;
@@ -197,16 +197,12 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <reference> tag
-		else if (!strcmp(tag.getName(), "reference")) {
-			if (!tag.isEmpty()) {
-				u->suspendTextPassThru = true;
+		else if (!strcmp(tag.getName(), "reference")) {			
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<a href=\"\">";
 			}
-			if (tag.isEndTag()) {
-				SWBuf refList = u->lastTextNode;
-				buf.appendFormatted("&nbsp<a href=\"passagestudy.jsp?action=showRef&type=reference&value=%s\">%s</a>&nbsp",
-					(refList.length()) ? URL::encode(refList.c_str()).c_str() : "",
-					(u->lastTextNode.length()) ? u->lastTextNode.c_str() : "");
-				u->suspendTextPassThru = false;
+			else if (tag.isEndTag()) {
+				buf += "</a>";
 			}
 		}
 
