@@ -1,6 +1,6 @@
-/*
+/***************************************************************************
  *
- * $Id: cipherfil.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: cipherfil.h,v 1.10 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,8 +24,6 @@
 #include <swfilter.h>
 #include <swcipher.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT CipherFilter:public SWFilter {
@@ -33,7 +31,7 @@ class SWDLLEXPORT CipherFilter:public SWFilter {
 public:
 	CipherFilter(const char *key);
 	virtual ~CipherFilter();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *key, const SWModule * = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
 	virtual SWCipher *getCipher();
 };
 

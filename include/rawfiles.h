@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.16 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: rawfiles.h,v 1.17 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,7 +43,7 @@ public:
 			SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
 			const char *ilang = 0);
 	virtual ~RawFiles();
-	virtual char *getRawEntry();
+	virtual SWBuf &getRawEntryBuf();
 
 	// write interface ----------------------------
 	/** Is the module writable? :)

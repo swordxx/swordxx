@@ -1,4 +1,6 @@
-/*
+/******************************************************************************
+ *
+ * $Id: thmlvariants.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,42 +24,30 @@
 #include <swfilter.h>
 #include <swmodule.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** This Filter shows/hides textual variants
-  */
-class SWDLLEXPORT ThMLVariants : public SWFilter
-{
-  char option;
+/** This Filter shows/hides textual variants
+ */
+class SWDLLEXPORT ThMLVariants : public SWFilter {
+	char option;
 
-  static const char primary[];
-  static const char secondary[];
-  static const char all[];
+	static const char primary[];
+	static const char secondary[];
+	static const char all[];
 
-  static const char optName[];
-  static const char optTip[];
-  OptionsList options;
+	static const char optName[];
+	static const char optTip[];
+	OptionsList options;
 
- public:
-  ThMLVariants ();
-  virtual ~ ThMLVariants ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
-  virtual const char *getOptionName ()
-    {
-      return optName;
-    }
-  virtual const char *getOptionTip ()
-    {
-      return optTip;
-    }
-  virtual void setOptionValue (const char *ival);
-  virtual const char *getOptionValue ();
-  virtual OptionsList getOptionValues ()
-    {
-      return options;
-    }
+public:
+	ThMLVariants();
+	virtual ~ThMLVariants();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual const char *getOptionName() { return optName; }
+	virtual const char *getOptionTip() { return optTip; }
+	virtual void setOptionValue(const char *ival);
+	virtual const char *getOptionValue();
+	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

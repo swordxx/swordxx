@@ -1,4 +1,6 @@
-/*
+/******************************************************************************
+ *
+ * $Id: utf8arshaping.h,v 1.6 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,23 +28,20 @@
 #include <unicode/uchar.h>
 #include <unicode/ushape.h>
 
-#include <defs.h>
 SWORD_NAMESPACE_START
 
-  /** This Filter controls the arabic shaping of UTF-8 text
-	* FIXME: is that correct? how to control it?
-  */
-class SWDLLEXPORT UTF8arShaping : public SWFilter
-{
- private:
-  UConverter* conv;
-  UErrorCode err;
- public:
-  UTF8arShaping();
-  ~UTF8arShaping();  
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
+/** This Filter controls the arabic shaping of UTF-8 text
+ * FIXME: is that correct? how to control it?
+ */
+class SWDLLEXPORT UTF8arShaping : public SWFilter {
+private:
+	UConverter* conv;
+	UErrorCode err;
+public:
+	UTF8arShaping();
+	~UTF8arShaping();  
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
-
 
 SWORD_NAMESPACE_END
 #endif

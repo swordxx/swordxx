@@ -1,5 +1,6 @@
-/*
+/******************************************************************************
  *
+ * $Id: scsuutf8.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,22 +23,17 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** This filter converts SCSU compressed (encoded) text to UTF-8
-  */
-class SWDLLEXPORT SCSUUTF8:public SWFilter {
- private:
+/** This filter converts SCSU compressed (encoded) text to UTF-8
+ */
+class SWDLLEXPORT SCSUUTF8 : public SWFilter {
+  unsigned long c, d;
   unsigned char* UTF8Output(unsigned long, unsigned char* text);
   
-  unsigned long c, d;
-  
-
- public:
-  SCSUUTF8();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
+public:
+	SCSUUTF8();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

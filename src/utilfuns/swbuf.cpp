@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.1 2003/02/20 03:12:37 scribe Exp $
+* $Id: swbuf.cpp,v 1.2 2003/02/20 07:25:20 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -23,10 +23,13 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 SWORD_NAMESPACE_START
 
 char *SWBuf::nullStr = "";
+char SWBuf::junkBuf[JUNKBUFSIZE];
 
 /******************************************************************************
  * SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
@@ -152,5 +155,17 @@ void SWBuf::assureSize(unsigned int size) {
 	}
 }
 
+
+// WARNING: This function can only write at most
+// JUNKBUFSIZE to the string per call.
+void SWBuf::appendFormatted(const char *format, ...) {
+	va_list argptr;
+
+	va_start(argptr, format);
+	int len = vsprintf(junkBuf, format, argptr);
+	assureSize((end-buf)+len);
+	end += vsprintf(end, format, argptr);
+	va_end(argptr);
+}
 
 SWORD_NAMESPACE_END

@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.57 2002/12/14 21:20:15 scribe Exp $
+* $Id: swmodule.h,v 1.58 2003/02/20 07:25:20 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -31,6 +31,7 @@
 #include <swconfig.h>
 #include <swcacher.h>
 #include <list>
+#include <swbuf.h>
 
 #include <defs.h>
 #include <multimapwdef.h>
@@ -346,11 +347,10 @@ protected:
 	* @return the raw module text of the current entry
 	*/
 #ifndef SWIG 
-	virtual char *getRawEntry() = 0;
+	virtual SWBuf &getRawEntryBuf() = 0;
 #else
-	virtual char *getRawEntry() {};
+	virtual SWBuf &getRawEntryBuf() {};
 #endif  
-
 
 	// write interface ----------------------------
 	/** Is the module writable? :)
@@ -431,8 +431,8 @@ protected:
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
-	virtual void renderFilter(char *buf, long size, SWKey *key) {
-		filterBuffer(renderFilters, buf, size, key);
+	virtual void renderFilter(SWBuf &buf, SWKey *key) {
+		filterBuffer(renderFilters, buf, key);
 	}
 	/** Adds an EncodingFilter to this module's @see encodingfilters queue
 	* @param newfilter the filter to add
@@ -469,8 +469,8 @@ protected:
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
-	virtual void encodingFilter(char *buf, long size, SWKey *key) {
-		filterBuffer(encodingFilters, buf, size, key);
+	virtual void encodingFilter(SWBuf &buf, SWKey *key) {
+		filterBuffer(encodingFilters, buf, key);
 	}
 	/** Adds a StripFilter to this module's @ref stripfilters queue
 	* @param newfilter the filter to add
@@ -486,8 +486,8 @@ protected:
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
-	virtual void stripFilter(char *buf, long size, SWKey *key) {
-		filterBuffer(stripFilters, buf, size, key);
+	virtual void stripFilter(SWBuf &buf, SWKey *key) {
+		filterBuffer(stripFilters, buf, key);
 	}
 	/** Adds a RawFilter to this module's @ref rawfilters queue
 	* @param newfilter the filter to add
@@ -504,10 +504,10 @@ protected:
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
-	virtual void filterBuffer(FilterList *filters, char *buf, long size, SWKey *key) {
+	virtual void filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
 		FilterList::iterator it;
 		for (it = filters->begin(); it != filters->end(); it++) {
-			(*it)->ProcessText(buf, size, key, this);
+			(*it)->processText(buf, key, this);
 		}
 	}
 	/** RawFilter a text buffer
@@ -516,8 +516,8 @@ protected:
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
-	virtual void rawFilter(char *buf, long size, SWKey *key) {
-		filterBuffer(rawFilters, buf, size, key);
+	virtual void rawFilter(SWBuf &buf, SWKey *key) {
+		filterBuffer(rawFilters, buf, key);
 	}
 	/** Adds an OptionFilter to this module's @ref optionfilters queue
 	* @param newfilter the filter to add
@@ -533,8 +533,8 @@ protected:
 	* @param key key location from where this buffer was extracted
 	* @return *this
 	*/
-	virtual void optionFilter(char *buf, long size, SWKey *key) {
-		filterBuffer(optionFilters, buf, size, key);
+	virtual void optionFilter(SWBuf &buf, SWKey *key) {
+		filterBuffer(optionFilters, buf, key);
 	}
 	/** calls all StripFilters on buffer or current text
 	*

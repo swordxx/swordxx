@@ -2,7 +2,7 @@
  *  zld.cpp - code for class 'zLD'- a module that reads compressed lexicon and
  *				dictionary files.
  *
- * $Id: zld.h,v 1.7 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: zld.h,v 1.8 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,7 +41,7 @@ public:
 	zLD(const char *ipath, const char *iname = 0, const char *idesc = 0, long blockCount = 200, SWCompress *icomp = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
 	const char* ilang = 0);
 	virtual ~zLD();
-	virtual char *getRawEntry();
+	virtual SWBuf &getRawEntryBuf();
 
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
@@ -59,7 +59,7 @@ public:
 	virtual void deleteEntry();	// Delete current module entry
 	// end write interface ------------------------
 
-	virtual void rawZFilter(char *buf, long size, char direction = 0) { rawFilter(buf, size, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
   
 	// swcacher interface ----------------------
 	virtual void flush() { flushCache(); }

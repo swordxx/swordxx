@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawgenbook.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: rawgenbook.h,v 1.6 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -43,7 +43,7 @@ public:
 			SWTextDirection dir = DIRECTION_LTR,
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 	virtual ~RawGenBook();
-	virtual char *getRawEntry();
+	virtual SWBuf &getRawEntryBuf();
 	// write interface ----------------------------
 	virtual bool isWritable() {
 		return ((bdtfd->getFd() > 0) && ((bdtfd->mode & O_RDWR) == O_RDWR));

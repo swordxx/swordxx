@@ -1,39 +1,36 @@
 /***************************************************************************
-                          rtfhtml.h  -  description                              
-                             -------------------                                         
-    begin                : Wed Oct 13 1999                                           
-    copyright            : (C) 1999 by The team of BibleTime                         
-    email                : info@bibletime.de                                     
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
- *                                                                         *
- ***************************************************************************/
-
-/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.6 2002/10/01 19:52:40 dglassey Exp $ */
-/* $Revision: 1.6 $ */
+ *
+ * $Id: rtfhtml.h,v 1.7 2003/02/20 07:25:19 scribe Exp $
+ *
+ * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #ifndef RTFHTML_H
 #define RTFHTML_H
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** this filter converts RTF text into HTML text
-  */
-class SWDLLEXPORT RTFHTML:public SWFilter
-{
+/** this filter converts RTF text into HTML text
+ */
+class SWDLLEXPORT RTFHTML : public SWFilter {
 public:
-  RTFHTML ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
+	RTFHTML();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

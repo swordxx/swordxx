@@ -551,22 +551,27 @@ const char *SWModule::StripText(char *buf, int len)
 
  const char *SWModule::RenderText(char *buf, int len, bool render) {
 	entryAttributes.clear();
-	char *tmpbuf = (buf) ? buf : getRawEntry();
+
+	SWBuf local;
+	if (buf)
+		local = buf;
+
+	SWBuf &tmpbuf = (buf) ? local : getRawEntryBuf();
 	SWKey *key = 0;
 	static char *null = "";
 
 	if (tmpbuf) {
-		unsigned long size = (len < 0) ? ((getEntrySize()<0) ? strlen(tmpbuf) : getEntrySize()) * FILTERPAD : len;
+		unsigned long size = (len < 0) ? ((getEntrySize()<0) ? strlen(tmpbuf) : getEntrySize()) : len;
 		if (size > 0) {
 			key = (SWKey *)*this;
 
-			optionFilter(tmpbuf, size, key);
+			optionFilter(tmpbuf, key);
 	
 			if (render) {
-				renderFilter(tmpbuf, size, key);
-				encodingFilter(tmpbuf, size, key);
+				renderFilter(tmpbuf, key);
+				encodingFilter(tmpbuf, key);
 			}
-			else	stripFilter(tmpbuf, size, key);
+			else	stripFilter(tmpbuf, key);
 		}
 	}
 	else {

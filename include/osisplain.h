@@ -1,6 +1,6 @@
-/*
+/******************************************************************************
  *
- * osisplain.h
+ * $Id: osisplain.h,v 1.2 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,26 +23,24 @@
 
 #include <swbasicfilter.h>
 
-#include <defs.h>
 #include <string>
 
 using std::string;
 
 SWORD_NAMESPACE_START
 
-  /** this filter converts OSIS text to plain text
-  */
-class SWDLLEXPORT OSISPlain:public SWBasicFilter
-{
+/** this filter converts OSIS text to plain text
+ */
+class SWDLLEXPORT OSISPlain : public SWBasicFilter {
 public:
-  string tagData;
-  string::size_type pos1;
-  string::size_type pos2;
+	string tagData;
+	string::size_type pos1;
+	string::size_type pos2;
 
 protected:
-  virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:
-  OSISPlain ();
+	OSISPlain();
 };
 
 SWORD_NAMESPACE_END

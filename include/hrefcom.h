@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: hrefcom.h,v 1.7 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: hrefcom.h,v 1.8 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -40,7 +40,7 @@ public:
 	HREFCom(const char *ipath, const char *prefix, const char *iname = 0,
 			const char *idesc = 0, SWDisplay * idisp = 0);
 	virtual ~HREFCom();
-	virtual char *getRawEntry();
+	virtual SWBuf &getRawEntryBuf();
 
 	// OPERATORS -----------------------------------------------------------------
 	

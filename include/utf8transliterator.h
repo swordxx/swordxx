@@ -1,4 +1,6 @@
-/*
+/******************************************************************************
+ *
+ * $Id: utf8transliterator.h,v 1.18 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -56,47 +58,35 @@ typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
   /** This Filter uses ICU for transliteration
   */
-class SWDLLEXPORT UTF8Transliterator : public SWFilter
-{
+class SWDLLEXPORT UTF8Transliterator : public SWFilter {
 private:
 
-  char option;
+	char option;
 
-  static const char optionstring[NUMTARGETSCRIPTS][16];
+	static const char optionstring[NUMTARGETSCRIPTS][16];
 
-  static const char optName[];
-  static const char optTip[];
-  static const char SW_RB_RULE_BASED_IDS[];
-  static const char SW_RB_RULE[];
-  static const char SW_RESDATA[];
-  OptionsList options;
-  static SWTransMap transMap;
-  UErrorCode utf8status;
-  
-  void Load(UErrorCode &status);
-  void  registerTrans(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UErrorCode &status );
-  bool checkTrans(const UnicodeString& ID, UErrorCode &status );
-  Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID, 
-  	const UnicodeString& postID, UTransDirection dir, UErrorCode &status );
-  
- public:
-  UTF8Transliterator ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
-  virtual const char *getOptionName ()
-    {
-      return optName;
-    }
-  virtual const char *getOptionTip ()
-    {
-      return optTip;
-    }
-  virtual void setOptionValue (const char *ival);
-  virtual const char *getOptionValue ();
-  virtual OptionsList getOptionValues ()
-    {
-      return options;
-    }
+	static const char optName[];
+	static const char optTip[];
+	static const char SW_RB_RULE_BASED_IDS[];
+	static const char SW_RB_RULE[];
+	static const char SW_RESDATA[];
+	OptionsList options;
+	static SWTransMap transMap;
+	UErrorCode utf8status;
+
+	void Load(UErrorCode &status);
+	void registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status);
+	bool checkTrans(const UnicodeString& ID, UErrorCode &status);
+	Transliterator *createTrans(const UnicodeString& preID, const UnicodeString& ID, const UnicodeString& postID, UTransDirection dir, UErrorCode &status);
+
+public:
+	UTF8Transliterator();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual const char *getOptionName() { return optName; }
+	virtual const char *getOptionTip() { return optTip; }
+	virtual void setOptionValue(const char *ival);
+	virtual const char *getOptionValue();
+	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

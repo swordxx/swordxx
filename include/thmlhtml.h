@@ -1,27 +1,27 @@
-/***************************************************************************
-                          thmlhtml.h  -  description
-                             -------------------
-    begin                : 1999-10-28
-
-    copyright            : 1999 by Chris Little
-    email                : chrislit@chiasma.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/******************************************************************************
+ *
+ * $Id: thmlhtml.h,v 1.9 2003/02/20 07:25:20 scribe Exp $
+ *
+ * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #ifndef THMLHTML_H
 #define THMLHTML_H
 
 #include <swbasicfilter.h>
-
-#include <defs.h>
 
 SWORD_NAMESPACE_START
 
@@ -29,9 +29,10 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT ThMLHTML : public SWBasicFilter {
 protected:
-	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:
 	ThMLHTML();
 };
+
 SWORD_NAMESPACE_END
 #endif

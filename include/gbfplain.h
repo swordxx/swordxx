@@ -1,6 +1,6 @@
-/*
+/***************************************************************************
  *
- * $Id: gbfplain.h,v 1.10 2003/02/13 20:16:35 mgruner Exp $
+ * $Id: gbfplain.h,v 1.11 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,17 +23,14 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
   /** This filter converts GBF text to plain text
   */
-class SWDLLEXPORT GBFPlain:public SWFilter
-{
+class SWDLLEXPORT GBFPlain : public SWFilter {
 public:
-  GBFPlain ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
+	GBFPlain();
+	virtual char processText (SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
 };
 
 SWORD_NAMESPACE_END

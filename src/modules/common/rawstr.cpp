@@ -342,8 +342,8 @@ void RawStr::readtext(long istart, unsigned short *isize, char **idxbuf, char **
 			delete [] *idxbuf;
 		if (*buf)
 			delete [] *buf;
-		*buf    = new char [ ++(*isize) * FILTERPAD ];
-		*idxbuf = new char [ (*isize) * FILTERPAD ];
+		*buf    = new char [ ++(*isize) ];
+		*idxbuf = new char [ (*isize) ];
 
 		memset(*buf, 0, *isize);
 		lseek(datfd->getFd(), start, SEEK_SET);

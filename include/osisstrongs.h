@@ -1,6 +1,6 @@
-/*
+/***************************************************************************
  *
- * $Id: osisstrongs.h,v 1.1 2003/01/08 09:39:57 scribe Exp $
+ * $Id: osisstrongs.h,v 1.2 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,38 +23,26 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
   /** This Filter shows/hides strong's numbers in a OSIS text
   */
-class SWDLLEXPORT OSISStrongs:public SWFilter
-{
-  bool option;
-  static const char on[];
-  static const char off[];
-  static const char optName[];
-  static const char optTip[];
-  OptionsList options;
+class SWDLLEXPORT OSISStrongs : public SWFilter {
+	bool option;
+	static const char on[];
+	static const char off[];
+	static const char optName[];
+	static const char optTip[];
+	OptionsList options;
 public:
-    OSISStrongs ();
-    virtual ~ OSISStrongs ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
-  virtual const char *getOptionName ()
-  {
-    return optName;
-  }
-  virtual const char *getOptionTip ()
-  {
-    return optTip;
-  }
-  virtual void setOptionValue (const char *ival);
-  virtual const char *getOptionValue ();
-  virtual OptionsList getOptionValues ()
-  {
-    return options;
-  }
+	OSISStrongs();
+	virtual ~OSISStrongs();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual const char *getOptionName() { return optName; }
+	virtual const char *getOptionTip() { return optTip; }
+	virtual void setOptionValue(const char *ival);
+	virtual const char *getOptionValue();
+	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

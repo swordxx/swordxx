@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.12 2002/10/01 22:04:58 dglassey Exp $
+ * $Id: swbasicfilter.h,v 1.13 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,23 +26,22 @@
 #define SWBASICFILTER_H
 
 #include <swfilter.h>
-
-#include <defs.h>
 #include <map>
+#include <string>
 
 SWORD_NAMESPACE_START
 
 /** A filter providing commonly used functionality.
-* This filter has facilities for handling SGML/HTML/XML like tokens and
-* escape strings (like SGML entities). It has the facility for just
-* substituting the given tokens and escape strings to other strings and for
-* "manual" custom token handling.
-*
-* In this class the functions with arguments looking as <code>char
-* **buf</code> write a character sequnce at address specified by
-* <code>*buf</code> address and change <code>*buf</code> to point past
-* the last char of the written sequence.
-*/
+ * This filter has facilities for handling SGML/HTML/XML like tokens and
+ * escape strings (like SGML entities). It has the facility for just
+ * substituting the given tokens and escape strings to other strings and for
+ * "manual" custom token handling.
+ *
+ * In this class the functions with arguments looking as <code>char
+ * **buf</code> write a character sequnce at address specified by
+ * <code>*buf</code> address and change <code>*buf</code> to point past
+ * the last char of the written sequence.
+ */
 class SWDLLEXPORT SWBasicFilter : public SWFilter {
 
 	char *tokenStart;
@@ -56,13 +55,12 @@ class SWDLLEXPORT SWBasicFilter : public SWFilter {
 
 public:
 	SWBasicFilter();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 	virtual ~SWBasicFilter();
 
 protected:
 	const SWModule *module;
 	const SWKey *key;
-	char *resultBuffer;
 	typedef std::map<std::string, std::string> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;
@@ -92,11 +90,8 @@ protected:
 
 	void addTokenSubstitute(const char *findString, const char *replaceString);
 	void addEscapeStringSubstitute(const char *findString, const char *replaceString);
-	bool substituteToken(char **buf, const char *token);
-	bool substituteEscapeString(char **buf, const char *escString);
-
-	/** Like sprintf*/
-	void pushString(char **buf, const char *format, ...);
+	bool substituteToken(SWBuf &buf, const char *token);
+	bool substituteEscapeString(SWBuf &buf, const char *escString);
 
 	/** This function is called for every token encountered in the input text.
 	* @param buf the output buffer (FIXME: what is its size?)
@@ -104,7 +99,7 @@ protected:
 	* @param userData FIXME: document this
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
-	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 
 	/** This function is called for every escape sequence encountered in the input text.
 	* @param buf the output buffer (FIXME: what is its size?)
@@ -112,7 +107,7 @@ protected:
 	* @param userData FIXME: document this
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
-	virtual bool handleEscapeString(char **buf, const char *escString, DualStringMap &userData);
+	virtual bool handleEscapeString(SWBuf &buf, const char *escString, DualStringMap &userData);
 };
 
 SWORD_NAMESPACE_END

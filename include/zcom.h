@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.18 2002/10/21 00:30:37 scribe Exp $
+ * $Id: zcom.h,v 1.19 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,9 +47,9 @@ public:
 			SWTextDirection dir = DIRECTION_LTR,
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 	virtual ~zCom();
-	virtual char *getRawEntry();
-     virtual void increment(int steps = 1);
-     virtual void decrement(int steps = 1) { increment(-steps); }
+	virtual SWBuf &getRawEntryBuf();
+	virtual void increment(int steps = 1);
+	virtual void decrement(int steps = 1) { increment(-steps); }
 
 	// write interface ----------------------------
 	virtual bool isWritable() {
@@ -63,7 +63,7 @@ public:
 	virtual void deleteEntry();	// Delete current module entry
 	// end write interface ------------------------
 
-	virtual void rawZFilter(char *buf, long size, char direction = 0) { rawFilter(buf, size, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
 	// swcacher interface ----------------------
 	virtual void flush() { flushCache(); }

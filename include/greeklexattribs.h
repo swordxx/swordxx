@@ -1,6 +1,6 @@
-/*
+/***************************************************************************
  *
- * thmlplain.h
+ * $Id: greeklexattribs.h,v 1.3 2003/02/20 07:25:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,16 +23,14 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** this filter converts ThML text to plain text
-  */
-class SWDLLEXPORT GreekLexAttribs:public SWFilter {
+/** this filter converts ThML text to plain text
+ */
+class SWDLLEXPORT GreekLexAttribs : public SWFilter {
 public:
 	GreekLexAttribs();
-	virtual char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

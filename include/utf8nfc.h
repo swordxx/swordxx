@@ -1,4 +1,6 @@
-/*
+/******************************************************************************
+ *
+ * $Id: utf8nfc.h,v 1.6 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,19 +28,17 @@
 #include <unicode/uchar.h>
 #include <unicode/unorm.h>
 
-#include <defs.h>
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT UTF8NFC : public SWFilter
-{
- private:
-  UConverter* conv;
-  UChar *source, *target;
-  UErrorCode err;
- public:
-  UTF8NFC();
-  ~UTF8NFC();  
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
+class SWDLLEXPORT UTF8NFC : public SWFilter {
+private:
+	UConverter* conv;
+	UChar *source, *target;
+	UErrorCode err;
+public:
+	UTF8NFC();
+	~UTF8NFC();  
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

@@ -1,23 +1,26 @@
-/***************************************************************************
-                          thmlosis.h  -  description
-                             -------------------
-    begin                : 2001-09-03
-    copyright            : 2001 by CrossWire Bible Society
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/******************************************************************************
+ *
+ * $Id: thmlosis.h,v 1.6 2003/02/20 07:25:20 scribe Exp $
+ *
+ * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #ifndef THMLOSIS_H
 #define THMLOSIS_H
 
-#include <defs.h>
 #include <swfilter.h>
 
 SWORD_NAMESPACE_START
@@ -27,11 +30,11 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT ThMLOSIS : public SWFilter {
 protected:
 	virtual const char *convertToOSIS(const char *, const SWKey *key);
-	void pushString(char **buf, const char *format, ...);
 public:
 	ThMLOSIS();
 	virtual ~ThMLOSIS();
-	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
+
 SWORD_NAMESPACE_END
 #endif /* THMLOSIS_H */

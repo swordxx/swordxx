@@ -1,4 +1,6 @@
-/*
+/******************************************************************************
+ *
+ * $Id: utf8bidireorder.h,v 1.7 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,20 +28,18 @@
 #include <unicode/uchar.h>
 #include <unicode/ubidi.h>
 
-#include <defs.h>
 SWORD_NAMESPACE_START
 
-  /** This Filter reorders UTF-8 text according to Unicode BiDi
-  */
-class SWDLLEXPORT UTF8BiDiReorder : public SWFilter
-{
- private:
-  UConverter* conv;
-  UErrorCode err;
- public:
-  UTF8BiDiReorder();
-  ~UTF8BiDiReorder();  
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
+/** This Filter reorders UTF-8 text according to Unicode BiDi
+ */
+class SWDLLEXPORT UTF8BiDiReorder : public SWFilter {
+private:
+	UConverter* conv;
+	UErrorCode err;
+public:
+	UTF8BiDiReorder();
+	~UTF8BiDiReorder();  
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

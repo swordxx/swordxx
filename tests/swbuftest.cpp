@@ -19,5 +19,9 @@ int main(int argc, char **argv) {
 	cout << "x should be (hello wurld): (" << x << ")\n";
 	SWBuf y = x + " " + x;
 	cout << "should be (hello wurld hello world): (" << y << ")\n";
+	y.appendFormatted(" from %d %s running %02.05f miles", 4, "dogs", 1.9f);
+	cout << "should be (hello wurld hello world from 4 dogs running 1.90000 miles): (" << y << ")\n";
+	y += '!';
+	cout << "should be (hello wurld hello world from 4 dogs running 1.90000 miles!): (" << y << ")\n";
 }
 

@@ -1,6 +1,6 @@
-/*
+/******************************************************************************
  *
- * thmlolb.h
+ * $Id: thmlolb.h,v 1.3 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,17 +23,15 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** this filter converts ThML text to OLB text
-  */
-class SWDLLEXPORT ThMLOLB:public SWFilter
-{
+/** this filter converts ThML text to OLB text
+ */
+class SWDLLEXPORT ThMLOLB : public SWFilter {
 public:
-  ThMLOLB ();
-  virtual char ProcessText (char *text, int maxlen = -1);
+	ThMLOLB();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
+
 SWORD_NAMESPACE_END
 #endif

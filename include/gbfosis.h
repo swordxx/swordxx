@@ -1,23 +1,26 @@
 /***************************************************************************
-                          gbfosis.h  -  description
-                             -------------------
-    begin                : 2001-09-03
-    copyright            : 2001 by CrossWire Bible Society
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+ *
+ * $Id: gbfosis.h,v 1.6 2003/02/20 07:25:19 scribe Exp $
+ *
+ * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #ifndef GBFOSIS_H
 #define GBFOSIS_H
 
-#include <defs.h>
 #include <swfilter.h>
 #include <string>
 #include <stack>
@@ -61,8 +64,7 @@ protected:
 public:
 	GBFOSIS();
 	virtual ~GBFOSIS();
-	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
-	static void pushString(char **buf, const char *format, ...);
+	char processText(SWBuf &text, const SWKey * = 0, const SWModule * = 0);
 };
 
 SWORD_NAMESPACE_END

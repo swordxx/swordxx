@@ -4,6 +4,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 19-Feb-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added utilfuns/swbuf.cpp and tests/swbuftest
 	Fixed make system to include osisrtf and osisplain
+	Started HUGE task of moving all char **buf over
+		to SWBuf &buf
 
 06-Feb-2003	Joachim Ansorg <joachim@ansorgs.de>
 	Added ro.conf (Romanian) in locales.d

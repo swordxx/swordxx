@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.1 2003/02/20 03:12:37 scribe Exp $
+* $Id: swbuf.h,v 1.2 2003/02/20 07:25:20 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -27,12 +27,14 @@
 SWORD_NAMESPACE_START
 
 
+#define JUNKBUFSIZE 8191
 
 class SWDLLEXPORT SWBuf {
 	char *buf;
 	char *end;
 	unsigned int allocSize;
 	static char *nullStr;
+	static char junkBuf[JUNKBUFSIZE];
 
 	void assureSize(unsigned int size);
 
@@ -53,6 +55,7 @@ public:
 	void append(const char *str);
 	void append(const SWBuf &str);
 	void append(char ch);
+	void appendFormatted(const char *format, ...);
 
 	operator const char *() const { return c_str(); }
 	char &operator[](unsigned int pos) { return charAt(pos); }

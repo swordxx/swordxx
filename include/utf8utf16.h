@@ -1,5 +1,6 @@
-/*
+/******************************************************************************
  *
+ * $Id: utf8utf16.h,v 1.5 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,16 +23,14 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** This filter converts UTF-8 encoded text to UTF-16
-  */
-class SWDLLEXPORT UTF8UTF16:public SWFilter {
+/** This filter converts UTF-8 encoded text to UTF-16
+ */
+class SWDLLEXPORT UTF8UTF16 : public SWFilter {
 public:
-  UTF8UTF16();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
+	UTF8UTF16();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

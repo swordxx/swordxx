@@ -1,5 +1,6 @@
-/*
+/******************************************************************************
  *
+ * $Id: utf8latin1.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,17 +23,15 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** This filter converts UTF-8 encoded text to Latin-1
-  */
-class SWDLLEXPORT UTF8Latin1:public SWFilter {
-  char replacementChar;
+/** This filter converts UTF-8 encoded text to Latin-1
+ */
+class SWDLLEXPORT UTF8Latin1 : public SWFilter {
+	char replacementChar;
 public:
-  UTF8Latin1(char rchar = '?');
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
+	UTF8Latin1(char rchar = '?');
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

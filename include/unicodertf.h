@@ -1,6 +1,6 @@
-/*
+/******************************************************************************
  *
- * $Id: unicodertf.h,v 1.4 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: unicodertf.h,v 1.5 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,16 +23,14 @@
 
 #include <swfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** This filter converts UTF-8 text into RTF Unicode tags
-  */
-class SWDLLEXPORT UnicodeRTF:public SWFilter {
+/** This filter converts UTF-8 text into RTF Unicode tags
+ */
+class SWDLLEXPORT UnicodeRTF : public SWFilter {
 public:
-  UnicodeRTF();
-  virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
+	UnicodeRTF();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

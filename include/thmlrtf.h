@@ -1,6 +1,6 @@
-/*
+/******************************************************************************
  *
- * thmlrtf.h
+ * $Id: thmlrtf.h,v 1.7 2003/02/20 07:25:20 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,18 +23,15 @@
 
 #include <swbasicfilter.h>
 
-#include <defs.h>
-
 SWORD_NAMESPACE_START
 
-  /** this filter converts ThML text to RTF text
-  */
-class SWDLLEXPORT ThMLRTF:public SWBasicFilter
-{
+/** this filter converts ThML text to RTF text
+ */
+class SWDLLEXPORT ThMLRTF : public SWBasicFilter {
 protected:
-  virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:
-  ThMLRTF ();
+	ThMLRTF();
 };
 
 SWORD_NAMESPACE_END
