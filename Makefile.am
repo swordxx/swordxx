@@ -71,7 +71,7 @@ SUBDIRS += examples
 endif
 
 INCLUDES = -I $(top_srcdir)/include
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp 
 
 if INSTCONF
 sysconf_DATA = sword.conf
