@@ -90,7 +90,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 								startTagEnd++;
 								
 								char* endTagStart = strstr(startTagEnd, "</w>"); //end of the opening tag
-								if (endTagStart) {
+								if (endTagStart && endTagStart > startTagEnd) { //content in between
 									SWBuf tmp;
 									tmp.append(startTagEnd, endTagStart - startTagEnd);
 									module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
