@@ -45,7 +45,11 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	const char *tok;
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		MyUserData *u = (MyUserData *)userData;		
+
 		XMLTag tag(token);
+		if ((!tag.isEndTag()) && (!tag.isEmpty()))
+			u->startTag = tag;
+
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			SWBuf value = tag.getAttribute("value");
 			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
@@ -108,50 +112,45 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		else if (!strcmp(tag.getName(), "scripRef")) {
 			if (!tag.isEndTag()) {
 				if (!tag.isEmpty()) {
-					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					if (u->BiblicalText) {
-						VerseKey *vkey;
-						// see if we have a VerseKey * or descendant
-						try {
-							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-						}
-						catch ( ... ) {}
-						if (vkey) {
-							// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-							buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-						}
-						u->suspendTextPassThru = true;
-					}
-					else {
-						SWBuf refList = u->module->getEntryAttributes()["Footnote"][footnoteNumber]["refList"];
-						SWBuf version = tag.getAttribute("version");
-						buf += "&nbsp<a href=\"";
-						if (version.length()) {
-							buf += "version=";
-							buf += version;
-							buf += " ";
-						}
-						buf += "passage=";
-						buf += refList.c_str();
-						buf += "\">";
-					}
+					u->suspendTextPassThru = true;
 				}
 			}
 			if (tag.isEndTag()) {	//	</scripRef>
 				if (!u->BiblicalText) {
+					SWBuf refList = u->startTag.getAttribute("passage");
+					if (!refList.length())
+						refList = u->lastTextNode;
+					SWBuf version = tag.getAttribute("version");
+					buf += "&nbsp<a href=\"";
+					if (version.length()) {
+						buf += "version=";
+						buf += version;
+						buf += " ";
+					}
+					buf += "passage=";
+					buf += refList.c_str();
+					buf += "\">";
 					buf += u->lastTextNode.c_str();
 					buf += "</a>&nbsp";
 				}
+				else {
+					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
+					VerseKey *vkey;
+					// see if we have a VerseKey * or descendant
+					try {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					catch ( ... ) {}
+					if (vkey) {
+						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+						buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
+					}
+				}
+
 				// let's let text resume to output again
 				u->suspendTextPassThru = false;
 			}
 		}
-/* not sure what this is but looked at the spec and this is just around quoted Scripture, not Scripture references; plus needs to check if it's not an endtag; added to simple replacement at top of this file.
-		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
-			u->inscriptRef = true;
-			buf += "<i>";
-		}
-*/
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && u->SecHead) {
 				buf += "</i></b><br />";
@@ -168,19 +167,6 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				}
 			}
 		}
-/*		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			buf +="<a href=\"");
-			for (tok = token + 5; *(tok+1); tok++)
-				if(*tok != '\"')
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
-			for (tok = token + 29; *(tok+2); tok++)				
-				if(*tok != '\"') 			
-					*(*buf)++ = *tok;		
-			buf +="</a>");
-		}
-*/
 		else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
