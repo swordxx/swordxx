@@ -30,6 +30,15 @@ public:
   virtual const char* KeyText(const char *imodtype = 0);
   virtual char Display();
 
+//Search functions  
+  static void nullPercent (char percent, void *userData);
+  virtual ListKey & Search (const char *istr, int searchType = 0, int flags = 0,
+                  SWKey * scope = 0,
+                  bool * justCheckIfSupported = 0,
+                  void (*percent) (char, void *) = &nullPercent,
+                  void *percentUserData = 0);
+
+
 //navigation functions
 %extend {
   void next() {

@@ -45,3 +45,57 @@ $key->setText("John 3:16");
 #$module->SetKey($key);
 $module->write("This is a test entry! This tests the write abilities of the Sword Perl classes");
 print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
+
+print "Seraching for God: ";
+$list = $module->Search("Gott");
+print $list->Count(), " entries found!\n";
+#for ( $i = 0; $i < $list->Count(); $i++) {
+#  print "(", $i, ")\t", $list->GetElement()->getText(), "\n";
+#  $list->next();
+#}
+
+print "Creating new module! Writing search result...";
+#sword::RawText::createModule("/usr/share/sword/modules/texts/ztext/testmodule/");
+#$newmod = new sword::RawText("/usr/share/sword/modules/texts/ztext/testmodule/");
+
+#$key->setText("Genesis 1:1");
+$newkey = $key->clone();
+#$newmod->SetKey($newkey);
+#
+#for ($i = 0; $i < $list->Count(); $i++, $list->next()) {
+#	$key->setText($list->GetElement()->getText());
+#	$newkey->setText($list->GetElement()->getText());	
+#
+#	$newmod->write( $module->StripText() );
+#}
+
+print "Now create the LD module\n";
+
+ mkdir("ldmod");
+sword::zText::createModule("ldmod/",4);
+
+print "first step}\n";
+
+$newmod = new sword::zText("ldmod/");
+
+print "Created module;\n";
+
+$newkey = $newmod->CreateKey();
+$newkey->setPersist(1);
+$newkey->setText(" ");
+$module->SetKey($newkey);
+
+print "Loop! \n";
+
+for ($i = 0; $i < $list->Count(); $i++) {
+	print $list->GetElement()->getText() . "\n";
+
+        $key->setText($list->GetElement()->getText());
+        $newkey->setText($list->GetElement()->getText());
+
+	$newmod->SetKey($newkey);
+
+        $newmod->write( $module->StripText() );
+	$list->next();
+}
+

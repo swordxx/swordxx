@@ -7,6 +7,9 @@ public:
   SW_POSITION(char ipos);
 };
 
+/**
+* The SWKey class for the SWIG-Perl interface.
+*/
 class SWKey {
 public:
   SWKey(const char *ikey = 0);
@@ -14,19 +17,20 @@ public:
   virtual SWKey *clone () const;
 
   char Persist() const;
+
 %extend {
+  
   void setPersist(signed char persists) {
   	self->Persist(persists);
   };
-}
-//  char Persist (signed char ikey);
 
+}
   virtual char Error ();
 
   virtual void setText(const char *ikey);
   virtual const char *getText() const;
   virtual const char *getShortText() const;
-  
+
   virtual int compare (const SWKey & ikey);
   virtual bool equals(const SWKey &ikey);
   //virtual void setPosition(SW_POSITION);
@@ -39,15 +43,20 @@ public:
   //virtual long Index(long iindex);
   
 %extend {
+
+  /**
+  * Goes to the next key. Only useful for VerseKeys at the moment.
+  */
   void next() {
   	(*self)++;
   };
   void prev() {
   	(*self)++;
   };
-  void set(const SWKey* key) {
+  void setKey(const SWKey* key) {
   	self->copyFrom(*key);
   };
+
 }
 
 };

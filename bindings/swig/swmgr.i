@@ -2,8 +2,6 @@
 #include <swmgr.h>
 %}
 
-%include "stl.i"
-
 typedef map < string, SWModule *, less < string > > ModMap;
 typedef list < string > OptionsList;
 typedef map < string, SWFilter * > FilterMap;
