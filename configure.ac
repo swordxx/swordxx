@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.5, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.14 $)
+AC_REVISION($Revision: 1.15 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.5)
@@ -44,6 +44,9 @@ AC_ARG_ENABLE(installmgr,[  --enable-installmgr     build install manager suport
 AC_ARG_ENABLE(debug,[  --enable-debug          build debug library [default=no]],,enable_debug=no)
 AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,enable_profile=no)
 AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
+AC_ARG_ENABLE(tests,[  --enable-tests          build test programs [default=yes]],,enable_tests=yes)
+AC_ARG_ENABLE(utilities,[  --enable-utilities      build utilities [default=yes]],,enable_utilities=yes)
+
 AM_MAINTAINER_MODE
 
 
