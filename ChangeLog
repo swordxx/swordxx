@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+11-May-2004	Troy A. Griffitts <scribe@crosswire.org>
+	Updated to support ARM cross-compile, and that
+		without errors
+
 03-Apr-2004	Will Thimbleby <will@thimbleby.net>
 	Added SWBuf method setFormatted()
 	Altered all remaining uses of char[127]
