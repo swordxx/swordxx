@@ -22,8 +22,14 @@
 
 enum scriptEnum {SE_OFF, SE_LATIN, SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, /*one-way (to) transliterators*/ SE_MALTESE, SE_BETA, SE_BGREEK, SE_MCHEBREW, SE_MCSYRIAC, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
 #define NUMSCRIPTS 26
+#define TRANSLITERATOR_CACHE_SIZE 4
 
 #include <swfilter.h>
+
+#include <unicode/utypes.h>
+#include <unicode/translit.h>
+#include <unicode/convert.h>
+#include <unicode/ustring.h>
 
 #include <defs.h>
 
@@ -38,6 +44,11 @@ class SWDLLEXPORT UTF8Transliterator : public SWFilter
   static const char optName[];
   static const char optTip[];
   OptionsList options;
+
+  UnicodeString* xlitNames[TRANSLITERATOR_CACHE_SIZE];
+  Transliterator* xlitPtrs[TRANSLITERATOR_CACHE_SIZE];
+  Transliterator* SetTransliterator(UnicodeString* name);  
+
  public:
   char lang[2];
   UTF8Transliterator ();
