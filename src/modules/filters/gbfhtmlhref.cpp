@@ -18,6 +18,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gbfhtmlhref.h>
+#include <ctype.h>
+#include <string>
+
+using std::string;
 
 SWORD_NAMESPACE_START
 
@@ -61,9 +65,69 @@ GBFHTMLHREF::GBFHTMLHREF() {
 
 bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
 	const char *tok;
+	char val[128];
+	char *valto;
+	char *num;
 
-	if (!substituteToken(buf, token)) {
-		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
+	if (!substituteToken(buf, token)) {		
+		// deal with OSIS note tags.  Just hide till OSISRTF		
+		if (!strncmp(token, "note ", 5)) {
+			// let's stop text from going to output
+			userData["suspendTextPassThru"] = "true";
+		}
+		
+		else if (!strncmp(token, "/note", 5)) {
+			userData["suspendTextPassThru"] = "false";
+		}		
+
+		else if (!strncmp(token, "w", 1)) {
+			// OSIS Word (temporary until OSISRTF is done)
+			valto = val;
+			num = strstr(token, "lemma=\"x-Strongs:");
+			if (num) {
+				for (num+=17; ((*num) && (*num != '\"')); num++)
+					*valto++ = *num;
+				*valto = 0;
+				if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+					pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
+					for (tok = val; *tok; tok++)
+							*(*buf)++ = *tok;
+					*(*buf)++ = '\"';
+					*(*buf)++ = '>';
+					for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+							*(*buf)++ = *tok;
+					pushString(buf, "</a>&gt;</em></small> ");
+					//cout << buf;
+					
+				}
+				/*	forget these for now
+				else {
+					// verb morph
+					sprintf(wordstr, "%03d", word-1);
+					module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+				}
+				*/
+			}
+			valto = val;
+			num = strstr(token, "morph=\"x-Robinson:");
+			if (num) {
+				for (num+=18; ((*num) && (*num != '\"')); num++)
+					*valto++ = *num;
+				*valto = 0;
+				pushString(buf, " <small><em>(<a href=\"type=morph class=Robinson value=");
+				for (tok = val; *tok; tok++)
+				// normal robinsons tense
+						*(*buf)++ = *tok;
+				*(*buf)++ = '\"';
+				*(*buf)++ = '>';
+				for (tok = val; *tok; tok++)				
+					//if(*tok != '\"') 			
+						*(*buf)++ = *tok;		
+				pushString(buf, "</a>)</em></small> ");					
+			}
+		}
+		
+		else if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
 			pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
 			for (tok = token+1; *tok; tok++)
 				//if(token[i] != '\"')

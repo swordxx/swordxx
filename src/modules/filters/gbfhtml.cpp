@@ -1,9 +1,8 @@
 /***************************************************************************
-                          gbfhtml.cpp  -  description
+                          gbfhtml.cpp  -   GBF to HTML filter 
                              -------------------
-    begin                : Thu Jun 24 1999
-    copyright            : (C) 1999 by Torsten Uhlmann
-    email                : TUhlmann@gmx.de
+    begin                    : 2001-09-03
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,523 +17,156 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gbfhtml.h>
+#include <ctype.h>
+#include <string>
+
+using std::string;
 
 SWORD_NAMESPACE_START
 
+GBFHTML::GBFHTML() {
+	setTokenStart("<");
+	setTokenEnd(">");
+	
+	setTokenCaseSensitive(true);
 
-GBFHTML::GBFHTML()
-{
+	addTokenSubstitute("Rf", ")</small></font>");
+	addTokenSubstitute("Rx", "</a>");
+	addTokenSubstitute("FI", "<i>"); // italics begin
+	addTokenSubstitute("Fi", "</i>");
+	addTokenSubstitute("FB", "<n>"); // bold begin
+	addTokenSubstitute("Fb", "</n>");
+	addTokenSubstitute("FR", "<font color=\"#FF0000\">"); // words of Jesus begin
+	addTokenSubstitute("Fr", "</font>");
+	addTokenSubstitute("FU", "<u>"); // underline begin
+	addTokenSubstitute("Fu", "</u>");
+	addTokenSubstitute("FO", "<cite>"); //  Old Testament quote begin
+	addTokenSubstitute("Fo", "</cite>");
+	addTokenSubstitute("FS", "<sup>"); // Superscript begin// Subscript begin
+	addTokenSubstitute("Fs", "</sup>");
+	addTokenSubstitute("FV", "<sub>"); // Subscript begin
+	addTokenSubstitute("Fv", "</sub>");
+	addTokenSubstitute("TT", "<big>"); // Book title begin
+	addTokenSubstitute("Tt", "</big>");
+	addTokenSubstitute("PP", "<cite>"); //  poetry  begin
+	addTokenSubstitute("Pp", "</cite>");
+	addTokenSubstitute("Fn", "</font>"); //  font  end
+	addTokenSubstitute("CL", "<br />"); //  new line
+	addTokenSubstitute("CM", "<!P><br />"); //  paragraph <!P> is a non showing comment that can be changed in the front end to <P> if desired
+	addTokenSubstitute("CG", ""); //  ???
+	addTokenSubstitute("CT", ""); // ???
+	addTokenSubstitute("JR", "<div align=\"right\">"); // right align begin
+	addTokenSubstitute("JC", "<div align=\"center\">"); // center align begin
+	addTokenSubstitute("JL", "</div>"); // align end
+	
 }
 
 
-char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
-{
-	char *to, *from, token[2048];
-	int tokpos = 0;
-	bool intoken 	= false;
-	bool hasFootnotePreTag = false;
-	bool isRightJustified = false;
-	bool isCentered = false;
-	int len;
+bool GBFHTML::handleToken(char **buf, const char *token, DualStringMap &userData) {
 	const char *tok;
+	char val[128];
+	char *valto;
+	char *num;
 
-	len = strlen(text) + 1;		// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else
-		from = text;			// -------------------------------
-	
-	for (to = text; *from; from++)
-	{
-		if (*from == '\n') {
-			*from = ' ';
-		}			
-		if (*from == '<') {
-			intoken = true;
-			tokpos = 0;
-			token[0] = 0;
-			token[1] = 0;
-			token[2] = 0;
-			continue;
+	if (!substituteToken(buf, token)) {		
+		// deal with OSIS note tags.  Just hide till OSISRTF		
+		if (!strncmp(token, "note ", 5)) {
+			// let's stop text from going to output
+			userData["suspendTextPassThru"] = "true";
 		}
-		if (*from == '>') {
-			intoken = false;
-			// process desired tokens
-			switch (*token) {
-				case 'W':	// Strongs
-					switch(token[1])
-					{
-						case 'G':               // Greek
-						case 'H':               // Hebrew
-						case 'T':               // Tense
-							*to++ = ' ';
-							*to++ = '<';
-							*to++ = 's';
-							*to++ = 'm';
-							*to++ = 'a';
-							*to++ = 'l';
-							*to++ = 'l';
-							*to++ = '>';
-							*to++ = '<';
-							*to++ = 'e';
-							*to++ = 'm';
-							*to++ = '>';
-							for (tok = token+2; *tok; tok++)
-								*to++ = *tok;
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'e';
-							*to++ = 'm';
-							*to++ = '>';
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 's';
-							*to++ = 'm';
-							*to++ = 'a';
-							*to++ = 'l';
-							*to++ = 'l';
-							*to++ = '>';
-							*to++ = ' ';
-							continue;
-					}
-					break;
-				case 'R':
-					switch(token[1])
-					{
-					case 'X':
-					  *to++ = '<';
-					  *to++ = 'a';
-					  *to++ = ' ';
-					  *to++ = 'h';
-					  *to++ = 'r';
-					  *to++ = 'e';
-					  *to++ = 'f';
-					  *to++ = '=';
-					  *to++ = '\"';
-					  for (tok = token + 3; *tok; tok++) {
-					    if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
-					      *to++ = *tok;
-					    }
-					    else {
-					      break;
-					    }
-					  }
-					  *to++ = '\"';
-					  *to++ = '>';
-					  continue;
-					case 'x':
-					  *to++ = '<';
-					  *to++ = '/';
-					  *to++ = 'a';
-					  *to++ = '>';
-					  continue;
-					  case 'B':								//word(s) explained in footnote
-							*to++ = '<';
-							*to++ = 'i';
-							*to++ = '>';
-							hasFootnotePreTag = true; //we have the RB tag
-							continue;
-						case 'F':               // footnote begin
-							if (hasFootnotePreTag) {
-								*to++ = '<';
-								*to++ = '/';
-								*to++ = 'i';
-								*to++ = '>';
-								*to++ = ' ';
-							}
-	 						*to++ = '<';
-							*to++ = 'f';
-							*to++ = 'o';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = ' ';
-							*to++ = 'c';
-							*to++ = 'o';
-							*to++ = 'l';
-							*to++ = 'o';
-							*to++ = 'r';
-							*to++ = '=';
-							*to++ = '\"';
-							*to++ = '#';
-							*to++ = '8';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '\"';
-							*to++ = '>';
+		
+		else if (!strncmp(token, "/note", 5)) {
+			userData["suspendTextPassThru"] = "false";
+		}		
 
-							*to++ = ' ';
-							*to++ = '<';
-							*to++ = 's';
-							*to++ = 'm';
-							*to++ = 'a';
-							*to++ = 'l';
-							*to++ = 'l';
-							*to++ = '>';
-							*to++ = '(';
-
-							continue;
-						case 'f':               // footnote end
-							*to++ = ')';
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 's';
-							*to++ = 'm';
-							*to++ = 'a';
-							*to++ = 'l';
-							*to++ = 'l';
-							*to++ = '>';
-							*to++ = ' ';
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'f';
-							*to++ = 'o';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = '>';
-							hasFootnotePreTag = false;
-							continue;
-					}
-					break;
-
-				case 'F':			// font tags
-					switch(token[1])
-					{
-						case 'I':		// italic start
-							*to++ = '<';
-							*to++ = 'i';
-							*to++ = '>';
-							continue;
-						case 'i':		// italic end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'i';
-							*to++ = '>';
-							continue;
-						case 'B':		// bold start
-							*to++ = '<';
-							*to++ = 'b';
-							*to++ = '>';
-							continue;
-						case 'b':		// bold end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'b';
-							*to++ = '>';
-							continue;
-						case 'R':		// words of Jesus begin
-							*to++ = '<';
-							*to++ = 'f';
-							*to++ = 'o';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = ' ';
-							*to++ = 'c';
-							*to++ = 'o';
-							*to++ = 'l';
-							*to++ = 'o';
-							*to++ = 'r';
-							*to++ = '=';
-							*to++ = '#';
-							*to++ = 'F';
-							*to++ = 'F';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '0';
-							*to++ = '>';
-							continue;
-						case 'r':		// words of Jesus end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'f';
-							*to++ = 'o';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = '>';
-							continue;
-						case 'U':		// Underline start
-							*to++ = '<';
-							*to++ = 'u';
-							*to++ = '>';
-							continue;
-							case 'u':		// Underline end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'u';
-							*to++ = '>';
-							continue;
-						case 'O':		// Old Testament quote begin
-							*to++ = '<';
-							*to++ = 'c';
-							*to++ = 'i';
-							*to++ = 't';
-							*to++ = 'e';
-							*to++ = '>';
-							continue;
-						case 'o':		// Old Testament quote end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'c';
-							*to++ = 'i';
-							*to++ = 't';
-							*to++ = 'e';
-							*to++ = '>';
-							continue;
-						case 'S':		// Superscript begin
-							*to++ = '<';
-							*to++ = 's';
-							*to++ = 'u';
-							*to++ = 'p';
-							*to++ = '>';
-							continue;
-						case 's':		// Superscript end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 's';
-							*to++ = 'u';
-							*to++ = 'p';
-							*to++ = '>';
-							continue;
-						case 'V':		// Subscript begin
-							*to++ = '<';
-							*to++ = 's';
-							*to++ = 'u';
-	  						*to++ = 'b';
-							*to++ = '>';
-							continue;
-						case 'v':		// Subscript end
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 's';
-							*to++ = 'u';
-							*to++ = 'b';
-							*to++ = '>';
-							continue;
-					        case 'N':
-						        *to++ = '<';
-							*to++ = 'f';
-							*to++ = 'o';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = ' ';
-							*to++ = 'f';
-							*to++ = 'a';
-							*to++ = 'c';
-							*to++ = 'e';
-							*to++ = '=';
-							*to++ = '"';
-						        for (tok = token + 2; *tok; tok++)
-								*to++ = *tok;
-							*to++ = '"';
-							*to++ = '>';
-							continue;
-					        case 'n':
-						        *to++ = '<';
-							*to++ = '/';
-							*to++ = 'f';
-							*to++ = 'o';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = '>';
-							continue;
-					}
-					break;
-				case 'C':			// special character tags
-					switch(token[1])
-					{
-						case 'A':               // ASCII value
-							*to++ = (char)atoi(&token[2]);
-							continue;
-						case 'G':
-							//*to++ = ' ';
-							continue;
-						case 'L':               // line break
-							*to++ = '<';
-							*to++ = 'b';
-							*to++ = 'r';
-							*to++ = ' ';
-							*to++ = '/';
-							*to++ = '>';
-							*to++ = ' ';
-							continue;
-						case 'M':               // new paragraph
-							*to++ = '<';
-							*to++ = 'b';
-							*to++ = 'r';
-							*to++ = ' ';
-							*to++ = '/';
-							*to++ = '>';
-							continue;
-						case 'T':
-							//*to++ = ' ';
-							continue;
-					}
-					break;
-				case 'J':	//Justification
-					switch(token[1])
-					{
-						case 'R':	//right
-							*to++ = '<';
-							*to++ = 'd';
-							*to++ = 'i';
-							*to++ = 'v';
-							*to++ = ' ';
-							*to++ = 'a';
-							*to++ = 'l';
-							*to++ = 'i';
-							*to++ = 'g';
-							*to++ = 'n';
-							*to++ = '=';
-							*to++ = '\"';
-							*to++ = 'r';
-							*to++ = 'i';
-							*to++ = 'g';
-							*to++ = 'h';
-							*to++ = 't';
-							*to++ = '\"';
-							*to++ = '>';
-							isRightJustified = true;
-							continue;
-
-						case 'C':	//center
-							*to++ = '<';
-							*to++ = 'd';
-							*to++ = 'i';
-							*to++ = 'v';
-							*to++ = ' ';
-							*to++ = 'a';
-							*to++ = 'l';
-							*to++ = 'i';
-							*to++ = 'g';
-							*to++ = 'n';
-							*to++ = '=';
-							*to++ = '\"';
-							*to++ = 'c';
-							*to++ = 'e';
-							*to++ = 'n';
-							*to++ = 't';
-							*to++ = 'e';
-							*to++ = 'r';
-							*to++ = '\"';
-							*to++ = '>';
-							isCentered = true;
-							continue;
-
-						case 'L': //left, reset right and center
-							if (isCentered) {
-								*to++ = '<';
-								*to++ = '/';
-								*to++ = 'c';
-								*to++ = 'e';
-								*to++ = 'n';
-								*to++ = 't';
-								*to++ = 'e';
-								*to++ = 'r';
-								*to++ = '>';
-								isCentered = false;
-							}
-							if (isRightJustified) {
-								*to++ = '<';
-								*to++ = '/';
-								*to++ = 'd';
-								*to++ = 'i';
-								*to++ = 'v';
-								*to++ = '>';
-								isRightJustified = false;
-							}
-							continue;
-					}
-					break;
-				case 'T':			// title formatting
-					switch(token[1])
-					{
-						case 'T':               // Book title begin
-							*to++ = '<';
-							*to++ = 'b';
-							*to++ = 'i';
-							*to++ = 'g';
-							*to++ = '>';
-							continue;
-						case 't':
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'b';
-							*to++ = 'i';
-							*to++ = 'g';
-							*to++ = '>';
-							continue;/*
-                    				case 'S':
-						        *to++ = '<';
-						        *to++ = 'b';
-						        *to++ = 'r';
-						        *to++ = ' ';
-						        *to++ = '/';
-						        *to++ = '>';
-						        *to++ = '<';
-						        *to++ = 'b';
-						        *to++ = 'i';
-							*to++ = 'g';
-						        *to++ = '>';
-							continue;
-                    				case 's':
-						        *to++ = '<';
-						        *to++ = '/';
-						        *to++ = 'b';
-						        *to++ = 'i';
-						        *to++ = 'g';
-						        *to++ = '>';
-						        *to++ = '<';
-						        *to++ = 'b';
-						        *to++ = 'r';
-						        *to++ = ' ';
-						        *to++ = '/';
-						        *to++ = '>';
-							continue;*/
-					}
-					break;
-	
-				case 'P': // special formatting
-					switch(token[1])
-					{
-						case 'P': // Poetry begin
-							*to++ = '<';
-							*to++ = 'c';
-							*to++ = 'i';
-							*to++ = 't';
-							*to++ = 'e';
-							*to++ = '>';
-							continue;
-						case 'p':
-							*to++ = '<';
-							*to++ = '/';
-							*to++ = 'c';
-							*to++ = 'i';
-							*to++ = 't';
-							*to++ = 'e';
-							*to++ = '>';
-							continue;
-					}
-					break;
+		else if (!strncmp(token, "w", 1)) {
+			// OSIS Word (temporary until OSISRTF is done)
+			valto = val;
+			num = strstr(token, "lemma=\"x-Strongs:");
+			if (num) {
+				for (num+=17; ((*num) && (*num != '\"')); num++)
+					*valto++ = *num;
+				*valto = 0;
+				if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+					pushString(buf, " <small><em>&lt;");
+					for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+							*(*buf)++ = *tok;
+					pushString(buf, "&gt;</em></small> ");					
+				}
 			}
-			continue;
+			valto = val;
+			num = strstr(token, "morph=\"x-Robinson:");
+			if (num) {
+				for (num+=18; ((*num) && (*num != '\"')); num++)
+					*valto++ = *num;
+				*valto = 0;
+				pushString(buf, " <small><em>(");
+				for (tok = val; *tok; tok++)
+				// normal robinsons tense
+						*(*buf)++ = *tok;		
+				pushString(buf, ")</em></small> ");					
+			}
 		}
-		if (intoken) {
-		 	if (tokpos < 2045) {
-		 		token[tokpos++] = *from;
-		 		token[tokpos+2] = 0;
-		 	}
-		 }
-		else
-			*to++ = *from;
+		
+		else if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
+			pushString(buf, " <small><em>&lt;");
+			for (tok = token + 2; *tok; tok++)
+					*(*buf)++ = *tok;
+			pushString(buf, "&gt;</em></small> ");
+		}
+
+		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
+			pushString(buf, " <small><em>&lt;");
+			for (tok = token + 3; *tok; tok++)
+				if(*tok != '\"')
+					*(*buf)++ = *tok;
+			pushString(buf, ")</em></small> ");
+		}
+
+		else if (!strncmp(token, "RX", 2)) {
+			pushString(buf, "<i>");
+			for (tok = token + 3; *tok; tok++) {
+			  if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
+			    *(*buf)++ = *tok;
+			  }
+			  else {
+			    break;
+			  }
+			}
+			pushString(buf, "</i>");
+		}
+
+		else if (!strncmp(token, "RB", 2)) {
+			pushString(buf, "<i>");
+			userData["hasFootnotePreTag"] = "true";
+		}
+
+		else if (!strncmp(token, "RF", 2)) {
+			if(userData["hasFootnotePreTag"] == "true") {
+				userData["hasFootnotePreTag"] = "false";
+				pushString(buf, "</i> ");
+			}
+			pushString(buf, "<font color=\"#800000\"><small> (");
+		}
+
+		else if (!strncmp(token, "FN", 2)) {
+			pushString(buf, "<font face=\"");
+			for (tok = token + 2; *tok; tok++)				
+				if(*tok != '\"') 			
+					*(*buf)++ = *tok;
+			*(*buf)++ = '\"';
+			*(*buf)++ = '>';
+		}
+
+		else if (!strncmp(token, "CA", 2)) {	// ASCII value
+			*(*buf)++ = (char)atoi(&token[2]);
+		}
+		
+		else {
+			return false;
+		}
 	}
-	*to++ = 0;
-	*to = 0;
-	return 0;
+	return true;
 }
 
 SWORD_NAMESPACE_END

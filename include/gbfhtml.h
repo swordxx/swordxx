@@ -1,10 +1,8 @@
-/***************************************************************************
+/*-*************************************************************************
                           gbfhtml.h  -  description
                              -------------------
-    begin                : Tue Jun 15 15:34:26 CEST 1999
-
-    copyright            : (C) 1999 by Torsten Uhlmann
-    email                : TUhlmann@gmx.de
+    begin                    : 2001-09-03
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************
@@ -16,26 +14,24 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $ */
-/* $Revision: 1.9 $ */
-
 #ifndef GBFHTML_H
 #define GBFHTML_H
 
-#include <swfilter.h>
+#include <swbasicfilter.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
-/** This filter converts GBF Text into HTML
+/** this filter converts GBF  text to HTML text 
  */
-class SWDLLEXPORT GBFHTML:public SWFilter
-{
+class SWDLLEXPORT GBFHTML : public SWBasicFilter {
+protected:
+	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
 public:
   GBFHTML ();
-  virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
+
 
 SWORD_NAMESPACE_END
 #endif
