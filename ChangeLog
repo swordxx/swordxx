@@ -4,7 +4,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 08-Jan-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added new osisstrongs and osismorph option filters.
-	Hacked gbfrtf to support the osis <w> tag for now.
+	Hacked gbfrtf to support, for now:
+		the osis <w> tag,
+		Removed OSIS <note>...</note>,
+		Removed any empty strongs tags for the article.
 
 19-Dec-2002	Joachim Ansorg <joachim@ansorgs.de>
 	Removed old russian book locale file, because it wasn't

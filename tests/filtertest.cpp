@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 		module = mgr.Modules.begin()->second;
 
     //ThMLOSIS filter;
-    module->Key() = ((argc > 1) ? argv[1] : "acts 1:5");
+    module->Key() = ((argc > 1) ? argv[1] : "acts 2:1");
     /*
     char *buf = new char [ MAXBUF ];
     memset(buf, 0, MAXBUF);

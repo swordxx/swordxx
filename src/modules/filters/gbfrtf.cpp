@@ -31,6 +31,9 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	const char *tok;
 	string strongnum;
 	string strongtense;
+	bool hideText = false;
+	int wordLen = 0;
+	int wordCount = 0;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -40,6 +43,8 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	else	from = (unsigned char *)text;							// -------------------------------
 	for (to = (unsigned char *)text; *from; from++) {
 		if (*from == '<') {
+			wordLen = wordCount;
+			wordCount = 0;
 			intoken = true;
 			tokpos = 0;
 			token[0] = 0;
@@ -50,6 +55,14 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 		if (*from == '>') {
 			intoken = false;
 						// process desired tokens
+			// deal with OSIS note tags.  Just hide till OSISRTF
+			if (!strncmp(token, "note ", 5)) {
+				hideText = true;
+			}
+			if (!strncmp(token, "/note", 5)) {
+				hideText = false;
+			}
+
 			switch (*token) {
 			case 'w':	// OSIS Word (temporary until OSISRTF is done)
 				strongnum = "";
@@ -115,10 +128,12 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 
 			case '/':
 				if (token[1] == 'w') {
-					for (int i = 0; i < strongnum.length(); i++)
-						*to++ = strongnum[i];
+					if ((wordCount > 0) || (strongnum != "{\\cf3 \\sub <3588>}")) {
+						for (int i = 0; i < strongnum.length(); i++)
+							*to++ = strongnum[i];
 					for (int i = 0; i < strongtense.length(); i++)
 						*to++ = strongtense[i];
+					}
 				}
 				continue;
 
@@ -371,7 +386,12 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 				token[tokpos++] = *from;
 				token[tokpos+2] = 0;
 		}
-		else	*to++ = *from;
+		else {
+			if (!hideText) {
+				wordCount++;
+				*to++ = *from;
+			}
+		}
 	}
 	*to++ = 0;
 	*to = 0;

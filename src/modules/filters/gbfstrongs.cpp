@@ -78,6 +78,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 		}
 		if (*from == '>') {	// process tokens
 			intoken = false;
+
 			if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
 				if (module->isProcessEntryAttributes()) {
 					valto = val;
