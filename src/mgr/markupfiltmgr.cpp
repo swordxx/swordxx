@@ -222,7 +222,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromplain = new PLAINHTML();
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
-                        fromosis = new OSISHTMLHref();
+                        fromosis = new OSISHTMLHREF();
                         break;
                 case FMT_RTF:
                         fromplain = NULL;

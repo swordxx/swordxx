@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osishtmlhref.h,v 1.6 2003/08/12 05:36:30 scribe Exp $
+ * $Id: osishtmlhref.h,v 1.7 2003/10/22 03:10:27 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,7 @@ SWORD_NAMESPACE_START
 
 /** this filter converts OSIS text to HTML text with hrefs
  */
-class SWDLLEXPORT OSISHTMLHref : public SWBasicFilter {
+class SWDLLEXPORT OSISHTMLHREF : public SWBasicFilter {
 private:
 protected:
 	class MyUserData : public BasicFilterUserData {
@@ -43,7 +43,7 @@ protected:
 	}
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	OSISHTMLHref();
+	OSISHTMLHREF();
 };
 
 SWORD_NAMESPACE_END
