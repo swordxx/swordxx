@@ -234,8 +234,9 @@ const char *LocaleMgr::getDefaultLocaleName() {
 void LocaleMgr::setDefaultLocaleName(const char *name) {
 	char *tmplang=0;
 	stdstr(&tmplang, name);
+	// discard everything after '.' usually encoding e.g. .UTF-8
 	strtok(tmplang, ".");
-	// check for @ so e.g. @euro locales are found
+	// also discard after '@' so e.g. @euro locales are found
 	strtok(tmplang, "@");
 	// Before we set it we want to verify that it is an existing locale
 	// First check for what we ask for
@@ -252,6 +253,8 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 		}
 		else {
 			if (!defaultLocaleName) {
+				// make sure we have a default locale name
+				// even though the one asked for doesn't exist
 				stdstr(&defaultLocaleName, "en_US");
 			}
 
