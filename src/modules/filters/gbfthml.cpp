@@ -167,19 +167,6 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = 'o';
 			      *to++ = 't';
 			      *to++ = 'e';
-			      *to++ = ' ';
-			      *to++ = 'p';
-			      *to++ = 'l';
-			      *to++ = 'a';
-			      *to++ = 'c';
-			      *to++ = 'e';
-			      *to++ = '=';
-			      *to++ = '"';
-			      *to++ = 'f';
-			      *to++ = 'o';
-			      *to++ = 'o';
-			      *to++ = 't';
-			      *to++ = '"';
 			      *to++ = '>';
 			      continue;
 			    case 'f':               // footnote end
