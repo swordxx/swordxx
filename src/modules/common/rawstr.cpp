@@ -139,12 +139,7 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 		offset = swordtoarch32(offset);
 
 		getidxbufdat(offset, buf);
-		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
-			*targetbuf = *trybuf;
-		}
-		*targetbuf = 0;
-		trybuf = 0;
-		toupperstr_utf8(targetbuf);
+		toupperstr_utf8(*buf);
 	}
 }
 
@@ -163,8 +158,8 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 
 signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
 {
-        char *trybuf, *targetbuf, *key, quitflag = 0;
-        signed char retval = -1;
+	char *trybuf, *targetbuf, *key, quitflag = 0;
+	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
@@ -175,13 +170,9 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
 
 			key = new char [ strlen(ikey) + 1 ];
 			strcpy(key, ikey);
+			toupperstr_utf8(key);
 
-			for (trybuf = targetbuf = key; *trybuf; trybuf++, targetbuf++) {
-				*targetbuf = *trybuf;
-			}
-			*targetbuf = 0;
 			trybuf = 0;
-			toupperstr_utf8(targetbuf);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 6) - (headoff / 6))) / 2) * 6 : lastoff; 

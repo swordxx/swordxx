@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+29-Jul-2002     Victor Porton <porton@narod.ru>
+	Fixed RawLD and RawLD4 drivers not reporting errors in
+	getRawEntry()
+
 28-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added Gregor Anzelj's Slovenian (sl.conf) locale.
 

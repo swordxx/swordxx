@@ -121,9 +121,13 @@ char RawLD::getEntry(long away)
  */
 
 char *RawLD::getRawEntry() {
-	if (!getEntry() && !isUnicode()) {
-		preptext(entrybuf);
+
+	char ret = getEntry();
+	if (!ret) {
+		if (!isUnicode())
+			preptext(entrybuf);
 	}
+	else error = ret;
 
 	return entrybuf;
 }

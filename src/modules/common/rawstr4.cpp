@@ -163,7 +163,7 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
 signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
 {
 	char *trybuf, *targetbuf, *key, quitflag = 0;
-        signed char retval = -1;
+	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
@@ -174,13 +174,9 @@ signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *si
 
 			key = new char [ strlen(ikey) + 1 ];
 			strcpy(key, ikey);
+			toupperstr_utf8(key);
 
-			for (trybuf = targetbuf = key; *trybuf; trybuf++, targetbuf++) {
-				*targetbuf = *trybuf;
-			}
-			*targetbuf = 0;
 			trybuf = 0;
-			toupperstr_utf8(targetbuf);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 8) - (headoff / 8))) / 2) * 8 : lastoff; 
