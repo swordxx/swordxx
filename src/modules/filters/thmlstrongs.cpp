@@ -44,9 +44,9 @@ const char *ThMLStrongs::getOptionValue()
 	return (option) ? on:off;
 }
 
-char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
-{
-	char *to, *from, token[2048]; // cheese.  Fix.
+char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+	char token[2048]; // cheese.  Fix.
+	const char *from;
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
@@ -56,27 +56,21 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	char wordstr[5];
 	char *valto;
 	char *ch;
-	char *textStart = text, *textEnd = 0;
+	unsigned int textStart = 0, textEnd = 0;
 	std::string tmp;
 	bool newText = false;
 
-	len = strlen(text) + 1;	// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;
-	
-	// -------------------------------
+		SWBuf orig = text;
+		from = orig.c_str();
 
-	for (to = text; *from; from++) {
+		for (text = ""; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
-			textEnd = to;
+			textEnd = text.length();
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -92,7 +86,7 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 						sprintf(wordstr, "%03d", word++);
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
 						tmp = "";
-						tmp.append(textStart, (int)(textEnd - textStart));
+						tmp.append(text.c_str()+textStart, text.c_str()+((int)(textEnd - textStart)));
 						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
 						newText = true;
 					}
@@ -106,9 +100,9 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 				if (!option) {	// if we don't want strongs
 					if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
 						if (lastspace)
-							to--;
+							text--;
 					}
-					if (newText) {textStart = to; newText = false; }
+					if (newText) {textStart = text.length(); newText = false; }
 					continue;
 				}
 			}
@@ -135,11 +129,10 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 				}
 			}
 			// if not a strongs token, keep token in text
-			*to++ = '<';
-			for (char *tok = token; *tok; tok++)
-				*to++ = *tok;
-			*to++ = '>';
-			if (newText) {textStart = to; newText = false; }
+			text += '<';
+			text += token;
+			text += '>';
+			if (newText) {textStart = text.length(); newText = false; }
 			continue;
 		}
 		if (intoken) {
@@ -148,12 +141,10 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 				token[tokpos+2] = 0;
 		}
 		else	{
-			*to++ = *from;
+			text += *from;
 			lastspace = (*from == ' ');
 		}
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 

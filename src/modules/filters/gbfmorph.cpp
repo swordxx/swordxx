@@ -41,23 +41,19 @@ const char *GBFMorph::getOptionValue()
 	return (option) ? on:off;
 }
 
-char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
-{
+char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want morph tags
-		char *to, *from, token[2048]; // cheese.  Fix.
+		const char *from;
+		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		int len;
 		bool lastspace = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen) {
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
+		SWBuf orig = text;
+		from = orig.c_str();
 
-		for (to = text; *from; from++) {
+		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
@@ -71,15 +67,14 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				if (*token == 'W' && token[1] == 'T') {	// Morph
 				  if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
 				    if (lastspace)
-				      to--;
+				      text--;
 				  }
 				  continue;
 				}
 				// if not a morph tag token, keep token in text
-				*to++ = '<';
-				for (char *tok = token; *tok; tok++)
-					*to++ = *tok;
-				*to++ = '>';
+				text += '<';
+				text += token;
+				text += '>';
 				continue;
 			}
 			if (intoken) {
@@ -88,12 +83,10 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 					token[tokpos+2] = 0;
 			}
 			else	{
-				*to++ = *from;
+				text += *from;
 				lastspace = (*from == ' ');
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }
