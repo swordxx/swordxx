@@ -1,3 +1,7 @@
 .deps
+.libs
 Makefile
 Makefile.in
+lookup
+search
+threaded_search
