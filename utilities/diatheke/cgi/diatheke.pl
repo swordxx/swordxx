@@ -7,7 +7,7 @@ $defaultfontface = "Times New Roman, Times, Roman, serif"; # default font name
 $sword_path = "/home/sword";  # SWORD_PATH environment variable you want to use
 $maxverses = 50; # maximum number of verses diatheke will return per query (prevents people from asking for Gen1:1-Rev22:21)
 $defaultbook = "KJV"; # book to query when none is selected, but a verse/search is entered
-$deflocale = en;  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locael=<locale> in the GET URL
+$deflocale = "abbr";  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locael=<locale> in the GET URL
 
 sub plussifyaddress  {
     ($ver = @_[0]) =~ tr/ /+/; 
@@ -40,12 +40,14 @@ if ($defversion eq "") {
 }
 if ($locale eq "") {
     $locale = $ENV{'HTTP_ACCEPT_LANGUAGE'};
+    $locale =~ s/(..).*/$1/;
     if ($locale eq "") {
 	$locale = $deflocale;
     }
+    elsif ($locale eq "en") {
+	$locale = "abbr";
+    }
 }
-
-$locale =~ s/(..).*/$1/;
 
 $hostname = $ENV{'REMOTE_ADDR'};
 @values = split(/\&/,$ENV{'QUERY_STRING'});
@@ -92,6 +94,9 @@ foreach $i (@values) {
 	}
 	elsif ($varname eq "locale") {
 	    $locale = $mydata;
+	}
+	elsif ($varname eq "maxverses") {
+	    $maxverses = $mydata;
 	}
 	elsif ($mydata eq "on" || $mydata eq "ON") {
 	    $versions[$n] = $varname;

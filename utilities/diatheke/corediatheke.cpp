@@ -143,6 +143,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 
 	if (locale) {
 		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(locale);
+		vk.setLocale(locale);
 	}
 	
 	if (outputformat == FMT_PLAIN)
@@ -214,17 +215,17 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		
 		char * text = (char *) *target;
 		if (inputformat == FMT_GBF) {
-				gbffilter = new GBFThML();
+		        gbffilter = new GBFThML();
 		        target->AddRenderFilter(gbffilter);
 		}
 		if (filter) target->AddRenderFilter(filter);
 		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
-				chfilter = new UnicodeRTF();
+			chfilter = new UnicodeRTF();
 		        target->AddRenderFilter(chfilter);
 		}
 		else if ((outputformat == FMT_HTML || outputformat == FMT_THML) && strcmp(encoding.c_str(), "UTF-8")) {
 		        chfilter = new Latin1UTF8();
-				target->AddRenderFilter(chfilter);
+			target->AddRenderFilter(chfilter);
 		}
 
 		if (outputformat == FMT_RTF) {
@@ -313,7 +314,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 		for (i = 0; i < listkey.Count() && maxverses; i++) {
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 			if (element) {
-				target->Key(element->LowerBound());
+			  target->Key(element->LowerBound());
 				vk = element->UpperBound();
 				while (maxverses && target->Key() <= vk) {
 					*output << (char*)target->KeyText();
@@ -328,7 +329,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 					else {
 						*output << ": ";
 					}
-					*output << (char const*)*target;
+					*output << (const char*)*target;
 					if (font && !filter) {
 						*output << "</font>";
 					}
@@ -365,7 +366,7 @@ void doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilte
 				else {
 					*output << ": ";
 				}
-				*output << (char const*)*target;
+				*output << (const char*)*target;
 				if (font && !filter) {
 					*output << "</font>";
 				}
