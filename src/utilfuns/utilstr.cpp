@@ -183,7 +183,7 @@ char *toupperstr_utf8(char *buf, unsigned int max) {
 	for (const char *ch = buf; *ch; ch++)
 		performOp += (*ch > 0) ? 1 : -1;
 
-	if (performOp) {
+	if (performOp > 0) {
 		while (*buf)
 			*buf = SW_toupper(*buf++);
 	}
