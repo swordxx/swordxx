@@ -23,8 +23,8 @@ class FileCompress: public LZSSCompress {
 public:
 	FileCompress(char *);
 	~FileCompress();
-	int GetChars(char *, int len);
-	int SendChars(char *, int len);
+	unsigned long GetChars(char *, unsigned long len);
+	unsigned long SendChars(char *, unsigned long len);
 	void Encode();
 	void Decode();
 };
@@ -52,13 +52,13 @@ FileCompress::~FileCompress()
 }
 
 
-int FileCompress::GetChars(char *buf, int len) 
+unsigned long FileCompress::GetChars(char *buf, unsigned long len) 
 {
 	return read(ifd, buf, len);
 }
 
 
-int FileCompress::SendChars(char *buf, int len) 
+unsigned long FileCompress::SendChars(char *buf, unsigned long len) 
 {
 	return write(ofd, buf, len);
 }
