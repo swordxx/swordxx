@@ -57,79 +57,75 @@ GBFCGI::GBFCGI() {
 }
 
 
-bool GBFCGI::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool GBFCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
-			pushString(buf, " <small><em>&lt;<a href=\"!DIATHEKE_URL!");
+			buf += " <small><em>&lt;<a href=\"!DIATHEKE_URL!";
 			if (token[1] == 'H') {
-			  pushString(buf, "BDB");
+			  buf += "BDB";
 			}
 			else if (token[1] == 'G') {
-			  pushString(buf, "Thayer");
+			  buf += "Thayer";
 			}
-			pushString(buf, "=on&verse=");
+			buf += "=on&verse=";
 			for (i = 2; i < strlen(token); i++)
-			  *(*buf)++ = token[i];
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			  buf += token[i];
+			buf += "\">";
 			for (i = 2; i < strlen(token); i++)
-			  *(*buf)++ = token[i];
-			pushString(buf, "</a>&gt;</em></small>");
+			  buf += token[i];
+			buf += "</a>&gt;</em></small>";
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
-			pushString(buf, " <small><em>&lt;<a href=\"!DIATHEKE_URL!");
+			buf += " <small><em>&lt;<a href=\"!DIATHEKE_URL!";
 			if (token[2] == 'H') {
-			  pushString(buf, "BDB");
+			  buf += "BDB";
 			}
 			else if (token[2] == 'G') {
-			  pushString(buf, "Thayer");
+			  buf += "Thayer";
 			}
-			pushString(buf, "=on&verse=");
+			buf += "=on&verse=";
 			for (i = 3; i < strlen(token); i++)
-			  *(*buf)++ = token[i];
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			  buf += token[i];
+			buf += "\">";
 			for (i = 3; i < strlen(token); i++)
-			  *(*buf)++ = token[i];
-			pushString(buf, "</a>&gt;</em></small>");
+			  buf += token[i];
+			buf += "</a>&gt;</em></small>";
 		}
 
 		else if (!strncmp(token, "WT", 2)) { // morph tags
-			pushString(buf, " <small><em>(<a href=\"!DIATHEKE_URL!Packard=on&verse=");
+			buf += " <small><em>(<a href=\"!DIATHEKE_URL!Packard=on&verse=";
 			for (i = 1; i < strlen(token); i++)
-			  *(*buf)++ = token[i];
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			  buf += token[i];
+			buf += "\">";
 			for (i = 1; i < strlen(token); i++)
-			  *(*buf)++ = token[i];		
-			pushString(buf, "</a>)</em></small>");
+			  buf += token[i];		
+			buf += "</a>)</em></small>";
 		}
 
 		else if (!strncmp(token, "RB", 2)) {
-			pushString(buf, "<i>");
+			buf += "<i>";
 			userData["hasFootnotePreTag"] = "true";
 		}
 
 		else if (!strncmp(token, "RF", 2)) {
 			if(userData["hasFootnotePreTag"] == "true") {
 				userData["hasFootnotePreTag"] = "false";
-				pushString(buf, "</i> ");
+				buf += "</i> ";
 			}
-			pushString(buf, "<font color=\"#800000\"><small> (");
+			buf += "<font color=\"#800000\"><small> (";
 		}
 
 		else if (!strncmp(token, "FN", 2)) {
-			pushString(buf, "<font face=\"");
+			buf += "<font face=\"";
 			for (i = 2; i < strlen(token); i++)		       
-			  *(*buf)++ = token[i];
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			  buf += token[i];
+			buf += "\">";
 		}
 
 		else if (!strncmp(token, "CA", 2)) {	// ASCII value
-			*(*buf)++ = (char)atoi(&token[2]);
+			buf += (char)atoi(&token[2]);
 		}
 		
 		else {

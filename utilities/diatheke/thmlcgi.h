@@ -27,7 +27,7 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT ThMLCGI : public SWBasicFilter {
 protected:
-	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:
 	ThMLCGI();
 };

@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.59 2003/02/25 04:12:47 scribe Exp $
+* $Id: swmodule.h,v 1.60 2003/02/27 08:17:05 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -350,6 +350,8 @@ protected:
 #else
 	virtual SWBuf &getRawEntryBuf() {};
 #endif  
+
+	virtual const char *getRawEntry() { return getRawEntryBuf().c_str(); }
 
 	// write interface ----------------------------
 	/** Is the module writable? :)

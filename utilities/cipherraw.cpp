@@ -14,10 +14,9 @@
 #include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
+#include <swbuf.h>
 #ifndef NO_SWORD_NAMESPACE
-using sword::SWCipher;
-using sword::VerseKey;
-using sword::RawVerse;
+using namespace sword;
 #endif
 
 int main(int argc, char **argv) {
@@ -63,7 +62,7 @@ int main(int argc, char **argv) {
 	key.AutoNormalize(0);
 	key.Headings(1);
 	for (key.Index(0); (!key.Error()); key++) {
-		rawdrv->findoffset(key.Testament(), key.Index(), &offset, &size);
+		rawdrv->findOffset(key.Testament(), key.Index(), &offset, &size);
 		printf("%s: OLD offset: %d; size: %d\n", (const char *)key, offset, size);
 
 		if ((offset == loffset) && (size == lsize)) {
@@ -78,11 +77,10 @@ int main(int argc, char **argv) {
 			loffset = offset;
 
 			if (size) {
-				tmpbuf = (char *) calloc(size + 2, 1);
-				rawdrv->readtext(key.Testament(), offset, size + 2, tmpbuf);
-				zobj->Buf(tmpbuf, size);
+				SWBuf tmpbuf;
+				rawdrv->readText(key.Testament(), offset, size, tmpbuf);
+				zobj->Buf(tmpbuf.c_str(), size);
 				zobj->cipherBuf((unsigned int *)&size);
-				free(tmpbuf);
 			}
 			offset = lseek(ofd[key.Testament() - 1], 0, SEEK_CUR);
 			tmpoff = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);

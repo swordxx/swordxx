@@ -13,10 +13,9 @@
 #include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
+#include <swbuf.h>
 #ifndef NO_SWORD_NAMESPACE
-using sword::SWCipher;
-using sword::VerseKey;
-using sword::RawVerse;
+using namespace sword;
 #endif
 
 int main(int argc, char **argv) {
@@ -46,13 +45,12 @@ int main(int argc, char **argv) {
 	key.AutoNormalize(0);
 	key.Headings(1);
 	for (key.Index(0); (!key.Error()); key++) {
-		rawdrv->findoffset(key.Testament(), key.Index(), &offset, &size);
-		tmpbuf = (char *) calloc(size + 2, 1);
-		rawdrv->readtext(key.Testament(), offset, size + 2, tmpbuf);
+		rawdrv->findOffset(key.Testament(), key.Index(), &offset, &size);
+		SWBuf tmpbuf;
+		rawdrv->readText(key.Testament(), offset, size, tmpbuf);
 		len = size;
-		zobj->cipherBuf(&len, tmpbuf);
+		zobj->cipherBuf(&len, tmpbuf.c_str());
 		printf("%s\n", zobj->Buf());
-				free(tmpbuf);
 	}
 	delete zobj;
 	return 0;

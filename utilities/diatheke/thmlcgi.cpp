@@ -31,12 +31,12 @@ ThMLCGI::ThMLCGI() {
 }
 
 
-bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool ThMLCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync ", 5)) {
-			pushString(buf, "<a href=\"!DIATHEKE_URL!");
+			buf += "<a href=\"!DIATHEKE_URL!";
 			char* pbuf;
 			char typ[32]; typ[0] = 0;
 			char val[32]; val[0] = 0;
@@ -65,64 +65,62 @@ bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData
                                 }
                         }
 			if (*cls && *val) {
-			        pushString(buf, "%s=on&verse=%s", cls, val);
+			        buf.appendFormatted("%s=on&verse=%s", cls, val);
 			}
 			else if (*typ && *val) {
 			  if (!strnicmp(typ, "Strongs", 7)) {
 			    if (*val == 'G') {
-			      pushString(buf, "Thayer=on&verse=%s", val + 1);
+			      buf.appendFormatted("Thayer=on&verse=%s", val + 1);
 			    }
 			    else if (*val == 'H') {
-			      pushString(buf, "BDB=on&verse=%s", val + 1);
+			      buf.appendFormatted("BDB=on&verse=%s", val + 1);
 			    }
 			  }
 
 			  else if (!strnicmp(typ, "Morph", 5)) {
 			    if (*val == 'G') {
-			      pushString(buf, "Thayer=on&verse=%s", val + 1);
+			      buf.appendFormatted("Thayer=on&verse=%s", val + 1);
 			    }
 			    else if (*val == 'H') {
-			      pushString(buf, "BDB=on&verse=%s", val + 1);
+			      buf.appendFormatted("BDB=on&verse=%s", val + 1);
 			    }
 			    else {
-			      pushString(buf, "Packard=on&verse=%s", val);
+			      buf.appendFormatted("Packard=on&verse=%s", val);
 			    }
 			  }
 			  else {
-			    pushString(buf, "%s=on&verse=%s", typ, val);
+			    buf.appendFormatted("%s=on&verse=%s", typ, val);
 			  }
 			}
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			buf += "\">";
 			
 			if (*val) {
-			        pushString(buf, val);
+			        buf += val;
 			}
-			pushString(buf, "</a>");
+			buf += "</a>";
 		}
 
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
         		userData["inscriptRef"] = "true";
-			pushString(buf, "<a href=\"!DIATHEKE_URL!");
+			buf += "<a href=\"!DIATHEKE_URL!";
 			for (i = 9; i < strlen(token); i++) {
 			  if (!strncmp(token+i, "version=\"", 9)) {
 			    i += 9;
 			    for (;token[i] != '\"'; i++)
-			      *(*buf)++ = token[i];
-			    pushString(buf, "=on&");
+			      buf += token[i];
+			    buf += "=on&";
 			  }
 			  if (!strncmp(token+i, "passage=\"", 9)) {
 			    i += 9;
-			    pushString(buf, "verse=");
+			    buf += "verse=";
 			    for (;token[i] != '\"'; i++) {
-			      if (token[i] == ' ') *(*buf)++ = '+';
-			      else *(*buf)++ = token[i];
+			      if (token[i] == ' ') buf += '+';
+			      else buf += token[i];
 			    }
-			    *(*buf)++ = '&';
+			    buf += '&';
 			  }
 			}
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			buf += "\">";
 		} 
 
 		// we're starting a scripRef like "<scripRef>John 3:16</scripRef>"
@@ -136,51 +134,50 @@ bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData
 		else if (!strcmp(token, "/scripRef")) {
 			if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
 				userData["inscriptRef"] = "false";
-				pushString(buf, "</a>");
+				buf += "</a>";
 			}
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
-				pushString(buf, "<a href=\"!DIATHEKE_URL!verse=");
+				buf += "<a href=\"!DIATHEKE_URL!verse=";
 
 				char* vref = (char*)userData["lastTextNode"].c_str();
 				while (*vref) {
-				  if (*vref == ' ') *(*buf)++ = '+';
-				  else *(*buf)++ = *vref;
+				  if (*vref == ' ') buf += '+';
+				  else buf += *vref;
 				  vref++;
 				}
-				*(*buf)++ = '\"';
-				*(*buf)++ = '>';
-				pushString(buf, userData["lastTextNode"].c_str());
+				buf += "\">";
+				buf += userData["lastTextNode"].c_str();
 				// let's let text resume to output again
 				userData["suspendTextPassThru"] = "false";	
-				pushString(buf, "</a>");
+				buf += "</a>";
 			}
 		}
 
 		else if (!strncmp(token, "div class=\"sechead\"", 19)) {
 		        userData["SecHead"] = "true";
-			pushString(buf, "<br /><b><i>");
+			buf += "<br /><b><i>";
 		}
 		else if (!strncmp(token, "div class=\"title\"", 19)) {
 		        userData["SecHead"] = "true";
-			pushString(buf, "<br /><b><i>");
+			buf += "<br /><b><i>";
 		}
 		else if (!strncmp(token, "/div", 4)) {
 		        if (userData["SecHead"] == "true") {
-			        pushString(buf, "</i></b><br />");
+			        buf += "</i></b><br />";
 				userData["SecHead"] = "false";
 			}
 		}
 
                 else if(!strncmp(token, "note", 4)) {
-                        pushString(buf, " <small><font color=\"#008000\">{");
+                        buf += " <small><font color=\"#008000\">{";
                 }                
 
 		else {
-			*(*buf)++ = '<';
+			buf += '<';
 			for (i = 0; i < strlen(token); i++)
-				*(*buf)++ = token[i];
-				*(*buf)++ = '>';
+				buf += token[i];
+				buf += '>';
 			//return false;  // we still didn't handle token
 		}
 	}

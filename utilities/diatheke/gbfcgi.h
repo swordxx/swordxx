@@ -18,7 +18,7 @@
 #define GBFCGI_H
 
 #include <swbasicfilter.h>
-
+#include <swbuf.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
@@ -27,7 +27,7 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT GBFCGI : public SWBasicFilter {
 protected:
-	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:
   GBFCGI ();
 };
