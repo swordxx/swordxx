@@ -20,12 +20,12 @@
 #ifndef UTF8TRANSLITERATOR_H
 #define UTF8TRANSLITERATOR_H
 
-enum scriptEnum {SE_OFF, SE_LATIN, SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KATAKANA, SE_HIRAGANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, /*one-way (to) transliterators*/ SE_CCAT, SE_BGREEK, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
-#define NUMSCRIPTS 24
-#define NUMTARGETSCRIPTS 22
-#define TRANSLITERATOR_CACHE_SIZE 4
+enum scriptEnum {SE_OFF, SE_LATIN, SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KATAKANA, SE_HIRAGANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, SE_THAI, SE_GEORGIAN, SE_ARMENIAN, SE_ETHIOPIC, SE_GOTHIC, SE_UGARITIC, SE_COPTIC, /*one-way (to) transliterators*/ SE_CCAT, SE_BGREEK, SE_BASICLATIN, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
+#define NUMSCRIPTS 32
+#define NUMTARGETSCRIPTS 30
 
 #include <swfilter.h>
+#include <swmodule.h>
 
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
@@ -50,7 +50,6 @@ class SWDLLEXPORT UTF8Transliterator : public SWFilter
   OptionsList options;
 
  public:
-  char lang[2];
   UTF8Transliterator ();
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
   virtual const char *getOptionName ()

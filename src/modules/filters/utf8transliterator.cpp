@@ -16,28 +16,36 @@
 #include <utf8transliterator.h>
 
 const char UTF8Transliterator::optionstring[][NUMTARGETSCRIPTS] = {
-       	"Off",
-		"Latin", 
-		"Greek",
-		"Hebrew",
-		"Cyrillic",
-		"Arabic",
+        "Off",
+        "Latin",
+        "Greek",
+        "Hebrew",
+        "Cyrillic",
+        "Arabic",
         "Syriac",
-		"Kana",
-		"Jamo",
-		"Hangul",
-		"Devanagari",
-		"Tamil",
-		"Bengali",
-		"Gurmukhi",
-		"Gujarati",
-		"Oriya",
-		"Telugu",
-		"Kannada",
-		"Malayalam",
-		"Maltese",
-		"Beta/CCAT",
-		"BGreek"
+        "Katakana",
+        "Hiragana",
+        "Jamo",
+        "Hangul",
+        "Devanagari",
+        "Tamil",
+        "Bengali",
+        "Gurmukhi",
+        "Gujarati",
+        "Oriya",
+        "Telugu",
+        "Kannada",
+        "Malayalam",
+        "Thai",
+        "Georgian",
+        "Armenian",
+        "Ethiopic",
+        "Gothic",
+        "Ugaritic",
+        "Coptic",
+        "Beta/CCAT",
+        "BGreek",
+        "Basic Latin"
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -45,7 +53,7 @@ const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
 
 UTF8Transliterator::UTF8Transliterator() {
 	option = 0;
-	   unsigned long i;
+        unsigned long i;
 	for (i = 0; i < NUMTARGETSCRIPTS; i++) {
 		options.push_back(optionstring[i]);
 	}
@@ -68,65 +76,78 @@ const char *UTF8Transliterator::getOptionValue()
 char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (option) {	// if we want transliteration
-                UErrorCode err;
-                bool noNFC = false;
+		unsigned long i, j;
+                UErrorCode err = U_ZERO_ERROR;
+                UConverter * conv = NULL;
+                conv = ucnv_open("UTF-8", &err);
+
                 bool compat = false;
+                bool noNFC = false;
+
+                if (option == SE_JAMO) {
+                        noNFC = true;
+                }
 
 		// Convert UTF-8 string to UTF-16 (UChars)
-                int32_t len;
-                u_strFromUTF8(NULL, NULL, &len, text, -1, &err);
-                len++;
+                j = strlen(text);
+                int32_t len = (j * 2) + 1;
                 UChar *source = new UChar[len];
-                u_strFromUTF8(source, len, &len, text, -1, &err);
+                err = U_ZERO_ERROR;
+                len = ucnv_toUChars(conv, source, len, text, j, &err);
+                source[len] = 0;
 
 		// Figure out which scripts are used in the string
-		unsigned long i, j;
 		unsigned char scripts[NUMSCRIPTS];
+
+                for (i = 0; i < NUMSCRIPTS; i++) {
+                        scripts[i] = false;
+                }
 
                 for (i = 0; i < len; i++) {
                         j = ublock_getCode(source[i]);
 			switch (j) {
-			case U_BASIC_LATIN: scripts[SE_LATIN] = true; break;
-			case U_GREEK: scripts[SE_GREEK] = true; break;
-			case U_HEBREW: scripts[SE_HEBREW] = true; break;
-			case U_CYRILLIC: scripts[SE_CYRILLIC] = true; break;
-			case U_ARABIC: scripts[SE_ARABIC] = true; break;
-			case U_SYRIAC: scripts[SE_SYRIAC] = true; break;                        
-			case U_KATAKANA: scripts[SE_KATAKANA] = true; break;
-			case U_HIRAGANA: scripts[SE_HIRAGANA] = true; break;
-			case U_HANGUL_SYLLABLES: scripts[SE_HANGUL] = true;
-			case U_HANGUL_JAMO: scripts[SE_JAMO] = true; break;
-			case U_DEVANAGARI: scripts[SE_DEVANAGARI] = true; break;
-			case U_TAMIL: scripts[SE_TAMIL] = true; break;
-			case U_BENGALI: scripts[SE_BENGALI] = true; break;
-			case U_GURMUKHI: scripts[SE_GURMUKHI] = true; break;
-			case U_GUJARATI: scripts[SE_GUJARATI] = true; break;
-			case U_ORIYA: scripts[SE_ORIYA] = true; break;
-			case U_TELUGU: scripts[SE_TELUGU] = true; break;
-			case U_KANNADA: scripts[SE_KANNADA] = true; break;
-			case U_MALAYALAM: scripts[SE_MALAYALAM] = true; break;
-			case U_CJK_RADICALS_SUPPLEMENT:
-			case U_KANGXI_RADICALS:
-			case U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
-			case U_CJK_SYMBOLS_AND_PUNCTUATION:
-			case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
-			case U_CJK_UNIFIED_IDEOGRAPHS:
-                                if (lang[0] == 'z' && lang[1] == 'h')
-                                        scripts[SE_HAN] = true;
-                                else if (lang[0] == 'j' && lang[1] == 'a')
-        				scripts[SE_KANJI] = true;
-        			break;
-			case U_CJK_COMPATIBILITY:
-			case U_CJK_COMPATIBILITY_IDEOGRAPHS:
-			case U_CJK_COMPATIBILITY_FORMS:
-                                if (lang[0] == 'z' && lang[1] == 'h')
-                                        scripts[SE_HAN] = true;
-                                else if (lang[0] == 'j' && lang[1] == 'a')
-        				scripts[SE_KANJI] = true;
+			case UBLOCK_BASIC_LATIN: scripts[SE_LATIN] = true; break;
+			case UBLOCK_GREEK: scripts[SE_GREEK] = true; break;
+			case UBLOCK_HEBREW: scripts[SE_HEBREW] = true; break;
+			case UBLOCK_CYRILLIC: scripts[SE_CYRILLIC] = true; break;
+			case UBLOCK_ARABIC: scripts[SE_ARABIC] = true; break;
+			case UBLOCK_SYRIAC: scripts[SE_SYRIAC] = true; break;
+			case UBLOCK_KATAKANA: scripts[SE_KATAKANA] = true; break;
+			case UBLOCK_HIRAGANA: scripts[SE_HIRAGANA] = true; break;
+			case UBLOCK_HANGUL_SYLLABLES: scripts[SE_HANGUL] = true; break;
+			case UBLOCK_HANGUL_JAMO: scripts[SE_JAMO] = true; break;
+			case UBLOCK_DEVANAGARI: scripts[SE_DEVANAGARI] = true; break;
+			case UBLOCK_TAMIL: scripts[SE_TAMIL] = true; break;
+			case UBLOCK_BENGALI: scripts[SE_BENGALI] = true; break;
+			case UBLOCK_GURMUKHI: scripts[SE_GURMUKHI] = true; break;
+			case UBLOCK_GUJARATI: scripts[SE_GUJARATI] = true; break;
+			case UBLOCK_ORIYA: scripts[SE_ORIYA] = true; break;
+			case UBLOCK_TELUGU: scripts[SE_TELUGU] = true; break;
+			case UBLOCK_KANNADA: scripts[SE_KANNADA] = true; break;
+			case UBLOCK_MALAYALAM: scripts[SE_MALAYALAM] = true; break;
+			case UBLOCK_THAI: scripts[SE_THAI] = true; break;
+			case UBLOCK_GEORGIAN: scripts[SE_GEORGIAN] = true; break;
+      			case UBLOCK_ARMENIAN: scripts[SE_ARMENIAN] = true; break;
+                        case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
+                        case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
+                        // needs Unicode 3.2? or 4.0? support from ICU
+                        //case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
+			case UBLOCK_CJK_RADICALS_SUPPLEMENT:
+			case UBLOCK_KANGXI_RADICALS:
+			case UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
+			case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
+			case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
+			case UBLOCK_CJK_UNIFIED_IDEOGRAPHS:
+                                scripts[SE_HAN] = true;
+                                break;
+			case UBLOCK_CJK_COMPATIBILITY:
+			case UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS:
+			case UBLOCK_CJK_COMPATIBILITY_FORMS:
+                                scripts[SE_HAN] = true;
                                 compat = true;
         			break;
-			case U_HANGUL_COMPATIBILITY_JAMO:
-                                scripts[SE_JAMO] = true;
+			case UBLOCK_HANGUL_COMPATIBILITY_JAMO:
+                                scripts[SE_HANGUL] = true;
                                 compat = true;
                                 break;
 
@@ -136,10 +157,14 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 		scripts[option] = false; //turn off the reflexive transliteration
 		
 		//return if we have no transliteration to do for this text
-		for (i = 0; !j && i < NUMSCRIPTS; i++) {
-			if (scripts[i]) j++;
-		}
-		if (!j) return 0;
+                j = 0;
+               	for (i = 0; !j && i < NUMSCRIPTS; i++) {
+	        	if (scripts[i]) j++;
+        	}
+	       	if (!j) {
+                        ucnv_close(conv);
+                        return 0;
+                }
 
                 UnicodeString id;
                 if (compat) {
@@ -156,7 +181,12 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 			else if (option == SE_BGREEK)
 				id += UnicodeString(";Greek-BGreek");
 			else {
-				id += UnicodeString(";Greek-Latin");
+                                if (!strnicmp (module->Lang(), "cop", 3)) {
+        				id += UnicodeString(";Coptic-Latin");
+                                }
+                                else {
+        				id += UnicodeString(";Greek-Latin");
+                                }
 				scripts[SE_LATIN] = true;
 			}
 		}
@@ -188,12 +218,37 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
         			scripts[SE_LATIN] = true;
                         }
 		}
-                if (scripts[SE_HAN]) {
-			id += UnicodeString(";Han-Pinyin");
+		if (scripts[SE_THAI]) {
+			id += UnicodeString(";Thai-Latin");
 			scripts[SE_LATIN] = true;
 		}
-		if (scripts[SE_KANJI]) {
-			id += UnicodeString(";Kanji-OnRomaji");
+		if (scripts[SE_GEORGIAN]) {
+			id += UnicodeString(";Georgian-Latin");
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_ARMENIAN]) {
+			id += UnicodeString(";Armenian-Latin");
+			scripts[SE_LATIN] = true;
+		}                
+		if (scripts[SE_ETHIOPIC]) {
+			id += UnicodeString(";Ethiopic-Latin");
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_GOTHIC]) {
+			id += UnicodeString(";Gothic-Latin");
+			scripts[SE_LATIN] = true;
+		}
+		if (scripts[SE_UGARITIC]) {
+			id += UnicodeString(";Ugaritic-Latin");
+			scripts[SE_LATIN] = true;
+		}
+                if (scripts[SE_HAN]) {
+                        if (!strnicmp (module->Lang(), "ja", 2)) {
+        			id += UnicodeString(";Kanji-OnRomaji");
+                        }
+                        else {
+        			id += UnicodeString(";Han-Pinyin");
+                        }
 			scripts[SE_LATIN] = true;
 		}
 
@@ -219,17 +274,17 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 
 		// Inter-Korean and Korean to Latin transliterators
 		if (option == SE_HANGUL && scripts[SE_JAMO]) {
-			id += UnicodeString(";Jamo-Hangul");
+			noNFC = false;
 			scripts[SE_HANGUL] = true;
 		}
 		else if (option == SE_JAMO && scripts[SE_HANGUL]) {
-			id += UnicodeString(";Hangul-Jamo");
+			noNFC = true;
 			scripts[SE_JAMO] = true;
 		}
 		else {
 			if (scripts[SE_HANGUL]) {
-				id += UnicodeString(";Hangul-Jamo");
-				scripts[SE_JAMO] = true;
+				id += UnicodeString(";Hangul-Latin");
+				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_JAMO]) {
 				id += UnicodeString(";Jamo-Latin");
@@ -357,6 +412,27 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
                         case SE_SYRIAC:
 				id += UnicodeString(";Latin-Syriac");
                                 break;
+                        case SE_THAI:
+				id += UnicodeString(";Latin-Thai");
+                                break;
+                        case SE_GEORGIAN:
+				id += UnicodeString(";Latin-Georgian");
+                                break;
+                        case SE_ARMENIAN:
+				id += UnicodeString(";Latin-Armenian");
+                                break;
+                        case SE_ETHIOPIC:
+				id += UnicodeString(";Latin-Ethiopic");
+                                break;
+                        case SE_GOTHIC:
+				id += UnicodeString(";Latin-Gothic");
+                                break;
+                        case SE_UGARITIC:
+				id += UnicodeString(";Latin-Ugaritic");
+                                break;
+                        case SE_COPTIC:
+				id += UnicodeString(";Latin-Coptic");
+                                break;
                         case SE_KATAKANA:
 				id += UnicodeString(";Latin-Katakana");
                                 break;
@@ -365,26 +441,40 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
                                 break;
                         case SE_JAMO:
 				id += UnicodeString(";Latin-Jamo");
-                                noNFC = true;
                                 break;
                         case SE_HANGUL:
 				id += UnicodeString(";Latin-Hangul");
                                 break;
+                        }
                 }
-		}
 
-        if (!noNFC) {
-				id += UnicodeString(";NFC");
-		}
+                if (option == SE_BASICLATIN) {
+                        id += UnicodeString(";Any-Latin1");
+                }
+                                
+                if (noNFC) {
+                        id += UnicodeString(";NFD");
+                } else {
+                        id += UnicodeString(";NFC");
+                }
 
-        UParseError perr;
-        Transliterator * trans = Transliterator::createFromRules("", id.getBuffer(), UTRANS_FORWARD, perr, err);
-        UnicodeString target = UnicodeString(source);
-        trans->transliterate(target);
-        u_strToUTF8(text, maxlen, NULL, target.getBuffer(), target.length(), &err);
-        *(text + maxlen) = 0;
-        delete trans;
-	}
+                UParseError perr;
+
+                err = U_ZERO_ERROR;
+                Transliterator * trans = Transliterator::createInstance(id, UTRANS_FORWARD, perr, err);
+                if (trans) {
+                        UnicodeString target = UnicodeString(source);
+                        trans->transliterate(target);
+                        len = ucnv_fromUChars(conv, text, maxlen, target.getBuffer(), target.length(), &err);
+                        if (len < maxlen) *(text + len) = 0;
+                        else *(text + maxlen) = 0;
+                        delete trans;
+                }
+                else {
+                        trans++;
+                }
+                ucnv_close(conv);
+        }
 	return 0;
 }
 #endif
