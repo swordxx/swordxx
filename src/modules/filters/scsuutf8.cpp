@@ -62,7 +62,7 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
 char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key)
 {
   unsigned char *to, *from;
-  unsigned long buflen = len * 9 * FILTERPAD;
+  unsigned long buflen = len * FILTERPAD;
   char active = 0, mode = 0;
   
   static unsigned short start[8] = {0x0000,0x0080,0x0100,0x0300,0x2000,0x2080,0x2100,0x3000};
