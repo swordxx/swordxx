@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.17 2000/03/22 19:36:26 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.18 2000/05/21 22:30:05 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -58,6 +58,7 @@ void SWMgr::init() {
 	myconfig    = 0;
 	mysysconfig = 0;
 
+	cipherFilters.clear();
 	optionFilters.clear();
 	cleanupFilters.clear();
 
@@ -459,6 +460,7 @@ void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 	cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (string)"";
 	if (!cipherKey.empty()) {
 		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
+		cipherFilters.insert(FilterMap::value_type(module->Name(), cipherFilter));
 		cleanupFilters.push_back(cipherFilter);
 		module->AddRawFilter(cipherFilter);
 	}
@@ -661,3 +663,26 @@ OptionsList SWMgr::getGlobalOptionValues(const char *option)
 }
 
 
+char SWMgr::setCipherKey(const char *modName, unsigned char *key) {
+	FilterMap::iterator it;
+	ModMap::iterator it2;
+
+	// check for filter that already exists
+	it = cipherFilters.find(modName);
+	if (it != cipherFilters.end()) {
+		((CipherFilter *)(*it).second)->getCipher()->setCipherKey(key);
+		return 0;
+	}
+	// check if module exists
+	else {
+		it2 = Modules.find(modName);
+		if (it2 != Modules.end()) {
+			SWFilter *cipherFilter = new CipherFilter((const char *)key);
+			cipherFilters.insert(FilterMap::value_type(modName, cipherFilter));
+			cleanupFilters.push_back(cipherFilter);
+			(*it2).second->AddRawFilter(cipherFilter);
+			return 0;
+		}
+	}
+	return -1;
+}

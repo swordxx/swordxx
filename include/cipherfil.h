@@ -1,6 +1,6 @@
 /*
  *
- * $Id: cipherfil.h,v 1.3 1999/10/25 04:31:24 scribe Exp $
+ * $Id: cipherfil.h,v 1.4 2000/05/21 22:30:05 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,6 +30,7 @@ public:
 	CipherFilter(const char *key);
 	virtual ~CipherFilter();
 	virtual char ProcessText(char *text, int maxlen, const SWKey *key);
+	virtual SWCipher *getCipher();
 };
 
 #endif

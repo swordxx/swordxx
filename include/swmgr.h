@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.10 2000/04/05 05:43:13 dglassey Exp $
+ * $Id: swmgr.h,v 1.11 2000/05/21 22:30:05 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -48,6 +48,7 @@ private:
 
 protected:
 	FilterMap optionFilters;
+	FilterMap cipherFilters;
 	SWFilter *gbfplain;
 	FilterList cleanupFilters;
 	OptionsList options;
@@ -81,5 +82,6 @@ public:
 	virtual const char *getGlobalOptionTip(const char *option);
 	virtual OptionsList getGlobalOptions();
 	virtual OptionsList getGlobalOptionValues(const char *option);
+	virtual char setCipherKey(const char *modName, unsigned char *key);
 };
 #endif

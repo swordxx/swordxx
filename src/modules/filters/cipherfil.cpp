@@ -19,6 +19,11 @@ CipherFilter::~CipherFilter() {
 }
 
 
+SWCipher *CipherFilter::getCipher() {
+	return cipher;
+}
+
+
 char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key) {
 	unsigned int len;
 //	len = strlen(text);
