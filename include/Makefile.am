@@ -43,6 +43,7 @@ pkginclude_HEADERS += $(swincludedir)/osiswebif.h
 pkginclude_HEADERS += $(swincludedir)/osismorph.h
 pkginclude_HEADERS += $(swincludedir)/osisplain.h
 pkginclude_HEADERS += $(swincludedir)/osisrtf.h
+pkginclude_HEADERS += $(swincludedir)/osisosis.h
 pkginclude_HEADERS += $(swincludedir)/osisstrongs.h
 pkginclude_HEADERS += $(swincludedir)/osisfootnotes.h   
 pkginclude_HEADERS += $(swincludedir)/osislemma.h   

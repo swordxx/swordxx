@@ -150,6 +150,20 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				lastspace = false;
 				handled = true;
 			}
+			// less than
+			if (!strcmp(token, "CT")) {
+				text += "&lt;";
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
+			// greater than
+			if (!strcmp(token, "CG")) {
+				text += "&gt;";
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
 			// Paragraph break.  For now use empty paragraph element
 			if (!strcmp(token, "CM")) {
 				text += "<milestone type=\"x-p\" />";
@@ -201,13 +215,13 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 							attStart += 7;
 							
 							buf = "";
-							buf.appendFormatted("x-Strongs:%s|", value.c_str());
+							buf.appendFormatted("strong:%s ", value.c_str());
 						}
 						else { // no lemma attribute
 							attStart = wordStart + 3;
 							
 							buf = "";
-							buf.appendFormatted(buf, "lemma=\"x-Strongs:%s\" ", value.c_str());
+							buf.appendFormatted(buf, "lemma=\"strong:%s\" ", value.c_str());
 						}
 
 						text.insert(attStart - text.c_str(), buf);
@@ -215,13 +229,13 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 					else { //wordStart doesn't point to an existing <w> attribute!
 						if (!strcmp(value.c_str(), "H03068")) {	//divineName
 							buf = "";
-							buf.appendFormatted("<divineName><w lemma=\"x-Strongs:%s\">", value.c_str());
+							buf.appendFormatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
 							
 							divineName = true;
 						}
 						else {
 							buf = "";
-							buf.appendFormatted("<w lemma=\"x-Strongs:%s\">", value.c_str());
+							buf.appendFormatted("<w lemma=\"strong:%s\">", value.c_str());
 						}
 
 						text.insert(wordStart - text.c_str(), buf);
@@ -248,19 +262,19 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 					if (attStart) { //existing morph attribute, append this one to it
 						attStart += 7;
 						buf = "";
-						buf.appendFormatted("x-%s:%s|", "StrongsMorph", value.c_str());
+						buf.appendFormatted("%s:%s ", "strongsMorph", value.c_str());
 					}
 					else {
 						attStart = wordStart + 3;
 						buf = "";
-						buf.appendFormatted("morph=\"x-%s:%s\" ", "StrongsMorph", value.c_str());
+						buf.appendFormatted("morph=\"%s:%s\" ", "strongsMorph", value.c_str());
 					}
 					
 					text.insert(attStart - text.c_str(), buf); //hack, we have to
 				}
 				else { //no existing <w> attribute fond
 					buf = "";
-					buf.appendFormatted("<w morph=\"x-%s:%s\">", "StrongsMorph", value.c_str());
+					buf.appendFormatted("<w morph=\"%s:%s\">", "strongsMorph", value.c_str());
 					
 					text.insert(wordStart - text.c_str(), buf);
 					

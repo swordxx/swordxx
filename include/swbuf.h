@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.29 2004/02/29 23:26:17 joachim Exp $
+* $Id: swbuf.h,v 1.30 2004/03/14 03:39:54 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -206,6 +206,7 @@ public:
 	inline SWBuf &operator --(int) { operator -=(1); return *this; }
 
 	inline SWBuf &operator <<(int n) { n = (n<length())?n:(length()-1); memmove(buf, buf+n, length()-n); (*this)-=n; return *this; }
+	inline SWBuf &operator >>(int n) { setSize(length()+n); memmove(buf+n, buf, length()-n); return *this; }
 	inline SWBuf operator +(const SWBuf &other) const {
 		SWBuf retVal = buf;
 		retVal += other;

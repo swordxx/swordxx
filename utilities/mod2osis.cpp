@@ -97,12 +97,17 @@ int main(int argc, char **argv)
 
 
 	cout << "<osis";
+		cout << " xmlns=\"http://www.bibletechnologies.net/2003/OSIS/namespace\"";
 		cout << " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
-		cout << " xsi:noNamespaceSchemaLocation=\"http://www.bibletechnologies.net/osisCore.1.1.1.xsd\">\n\n";
+		cout << " xsi:schemaLocation=\"http://www.bibletechnologies.net/2003/OSIS/namespace osisCore.2.5.xsd\">\n\n";
 	cout << "<osisText";
 		cout << " osisIDWork=\"";
 		cout << inModule->Name() << "\"";
 		cout << " osisRefWork=\"defaultReferenceScheme\"";
+		if (inModule->Lang()) {
+			if (strlen(inModule->Lang()))
+				cout << " xml:lang=\"" << inModule->Lang() << "\"";
+		}
 		cout << ">\n\n";
 
 	cout << "\t<header>\n";
@@ -110,10 +115,6 @@ int main(int argc, char **argv)
 	cout << inModule->Name() << "\">\n";
 	cout << "\t\t\t<title>" << inModule->Description() << "</title>\n";
 	cout << "\t\t\t<identifier type=\"OSIS\">Bible." << inModule->Name() << "</identifier>\n";
-	if (inModule->Lang()) {
-		if (strlen(inModule->Lang()))
-			cout << "\t\t\t<language>" << inModule->Lang() << "</language>\n";
-	}
 	cout << "\t\t\t<refSystem>Bible.KJV</refSystem>\n";
 	cout << "\t\t</work>\n";
 	cout << "\t\t<work osisWork=\"defaultReferenceScheme\">\n";
@@ -145,7 +146,7 @@ int main(int argc, char **argv)
 				cout << "\t</div>\n";
 			if (opentest)
 				cout << "\t</div>\n";
-			cout << "\t<div type=\"testament\">\n";
+			cout << "\t<div type=\"x-testament\">\n";
 			opentest = true;
 			newTest = true;
 		}
@@ -192,6 +193,7 @@ int main(int argc, char **argv)
 		filter.ProcessText(buf,  len - 3, vkey, inModule);
 		cout << buf << endl;
 		*/
+//		cout << "<verse osisID=\"" << vkey->getOSISRef() << "\">" << inModule->RenderText() << "</verse>" << endl;
 		cout << inModule->RenderText() << endl;
 		lastChap = vkey->Chapter();
 		lastBook = vkey->Book();
