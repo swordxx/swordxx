@@ -455,7 +455,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 	return SWModule::Search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
 
-#ifdef WIN32
+#ifdef __VISUALC__
 SWModule &RawText::operator =(SW_POSITION p) {
 #else
 RawText &RawText::operator =(SW_POSITION p) {

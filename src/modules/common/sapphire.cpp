@@ -19,7 +19,7 @@
 #include <unistd.h>
 #else
 
-#ifndef __VCBUILD__
+#ifndef __VISUALC__
 #include <mem.h>
 #endif
 

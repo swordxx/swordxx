@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.32 2001/03/18 21:04:25 scribe Exp $
+ * $Id: swmgr.cpp,v 1.33 2001/04/08 09:18:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,7 @@
 #include <unixstr.h>
 #endif
 #include <sys/stat.h>
-#ifndef WIN32
+#ifndef __VISUALC__
 #include <iostream.h>
 #endif
 #include <swmgr.h>
@@ -159,7 +159,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 
 	*configType = 0;
 
-#ifndef WIN32
+#ifndef __VISUALC__
 	// check working directory
 if (debug)
 	cerr << "Checking working directory for mods.conf...";
@@ -167,7 +167,7 @@ if (debug)
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -177,14 +177,14 @@ if (debug)
 		return;
 	}
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking working directory for mods.d...";
 #endif
 
 	if (FileMgr::existsDir(".", "mods.d")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -197,14 +197,14 @@ if (debug)
 
 
 	// check environment variable SWORD_PATH
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking SWORD_PATH...";
 #endif
 
 	if (envsworddir != NULL) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found (" << envsworddir << ")\n";
 #endif
@@ -213,14 +213,14 @@ if (debug)
 		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 			path += "/";
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.conf...";
 #endif
 
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -231,14 +231,14 @@ if (debug)
 			return;
 		}
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.d...";
 #endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -254,14 +254,14 @@ if (debug)
 
 	// check for systemwide /etc/sword.conf
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking for /etc/sword.conf...";
 #endif
 
 	if (!::access("/etc/sword.conf", 04)) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -272,18 +272,18 @@ if (debug)
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
 				path += "/";
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "DataPath in /etc/sword.conf is set to: " << path;
 #endif
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking for mods.conf in DataPath ";
 #endif
 			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -294,14 +294,14 @@ if (debug)
 				return;
 			}
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking for mods.d in DataPath ";
 #endif
 
 			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -318,7 +318,7 @@ if (debug)
 
 	// check ~/.sword/
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
 #endif
@@ -330,7 +330,7 @@ if (debug)
 		path += ".sword/";
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
@@ -341,14 +341,14 @@ if (debug)
 			return;
 		}
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
 #endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
-#ifndef WIN32
+#ifndef __VISUALC__
 if (debug)
 	cerr << "found\n";
 #endif
