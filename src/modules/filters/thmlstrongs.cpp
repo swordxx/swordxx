@@ -48,10 +48,10 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	SWBuf tmp;
 	bool newText = false;
 
-		SWBuf orig = text;
-		from = orig.c_str();
+	SWBuf orig = text;
+	from = orig.c_str();
 
-		for (text = ""; *from; from++) {
+	for (text = ""; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;

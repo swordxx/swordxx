@@ -58,6 +58,7 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
         if ( option == 0 || option == 1) { //we want primary or variant only
 		bool intoken = false;
 		bool hide = false;
+		bool invar = false;
 		
 		SWBuf token;
 		SWBuf orig = text;
@@ -76,17 +77,25 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				intoken = false;
 				
 				if ( !strncmp(token.c_str(), variantCompareString, 28)) { //only one of the variants, length of the two strings is 28 in both cases 
+					invar = true;
 					hide = true;
-                                  	continue;
+					continue;
+				}
+				if (!strncmp(token.c_str(), "div type=\"variant\"", 18)) {
+					invar = true;
+					continue;
+				}
+				if (!strncmp(token.c_str(), "/div", 4)) {
+					hide = false;
+					if (invar) {
+						invar = false;
+						continue;
+					}
 				}
 				if (!hide) {
 					text += '<';
 					text.append(token);
 					text += '>';
-				}
-                                if (!strncmp(token.c_str(), "/div", 4)) {
-					hide = false;
-                                	continue;
 				}
 
 				continue;

@@ -28,6 +28,7 @@ ThMLHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 	if (module) {
 		version = module->Name();
 		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		SecHead = false;
 	}	
 }
 
@@ -166,6 +167,12 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					u->SecHead = true;
 					buf += "<br /><b><i>";
 				}
+				else {
+					buf += tag;
+				}
+			}
+			else {
+				buf += tag;
 			}
 		}
 		else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {

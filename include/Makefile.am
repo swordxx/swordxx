@@ -54,6 +54,7 @@ pkginclude_HEADERS += $(swincludedir)/osisfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/osislemma.h   
 pkginclude_HEADERS += $(swincludedir)/osisredletterwords.h   
 pkginclude_HEADERS += $(swincludedir)/osisscripref.h   
+pkginclude_HEADERS += $(swincludedir)/osiswordjs.h   
 
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
@@ -119,6 +120,7 @@ pkginclude_HEADERS += $(swincludedir)/thmlrtf.h
 pkginclude_HEADERS += $(swincludedir)/thmlscripref.h
 pkginclude_HEADERS += $(swincludedir)/thmlstrongs.h
 pkginclude_HEADERS += $(swincludedir)/thmlvariants.h
+pkginclude_HEADERS += $(swincludedir)/thmlwordjs.h
 
 pkginclude_HEADERS += $(swincludedir)/treekey.h
 pkginclude_HEADERS += $(swincludedir)/treekeyidx.h

@@ -26,6 +26,7 @@ THMLFIL += $(filtersdir)/thmlrtf.cpp
 THMLFIL += $(filtersdir)/thmlhtml.cpp
 THMLFIL += $(filtersdir)/thmlhtmlhref.cpp
 THMLFIL += $(filtersdir)/thmlwebif.cpp
+THMLFIL += $(filtersdir)/thmlwordjs.cpp
 
 CONVFIL = $(filtersdir)/gbfthml.cpp
 CONVFIL += $(filtersdir)/gbfosis.cpp
@@ -44,6 +45,7 @@ OSISFIL += $(filtersdir)/osisrtf.cpp
 OSISFIL += $(filtersdir)/osislemma.cpp
 OSISFIL += $(filtersdir)/osisredletterwords.cpp
 OSISFIL += $(filtersdir)/osisscripref.cpp
+OSISFIL += $(filtersdir)/osiswordjs.cpp
 
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp

@@ -26,7 +26,7 @@
 SWORD_NAMESPACE_START
 
 
-OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
+OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp"), javascript(false) {
 }
 
 bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
@@ -199,6 +199,16 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 			else {	// empty transChange marker?
 			}
+		}
+		// ok to leave these in
+		else if (!strcmp(tag.getName(), "div")) {
+			buf += tag;
+		}
+		else if (!strcmp(tag.getName(), "span")) {
+			buf += tag;
+		}
+		else if (!strcmp(tag.getName(), "br")) {
+			buf += tag;
 		}
 		else {
 			return OSISHTMLHREF::handleToken(buf, token, userData);

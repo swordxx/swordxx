@@ -30,11 +30,13 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT OSISWEBIF : public OSISHTMLHREF {
 	const SWBuf baseURL;
 	const SWBuf passageStudyURL;
+	bool javascript;
 
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	OSISWEBIF();
+	void setJavascript(bool mode) { javascript = mode; }
 };
 
 SWORD_NAMESPACE_END

@@ -3,9 +3,11 @@
 #include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
-#include <markupfiltmgr.h>
+#include "webmgr.hpp"
 
-sword::SWMgr swordmgr(new sword::MarkupFilterMgr(sword::FMT_WEBIF));
+WebMgr swordmgr;
+
+
 
 int main (int argc, char* argv[]) {
   try {

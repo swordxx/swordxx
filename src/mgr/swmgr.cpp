@@ -964,29 +964,24 @@ void SWMgr::CreateMods(bool multiMod) {
 				AddRenderFilters(newmod, section);
 				AddEncodingFilters(newmod, section);
 				
-				printf("Adding Module: %s\n", newmod->Name());
 				SWModule *oldmod = Modules[newmod->Name()];
 
 				if (oldmod) {
-					printf("Found an existing book with the same name\n");
 					if (!multiMod)
 						delete oldmod;
 					else {
-						printf("Keeping additional copy\n");
 						SWBuf name;
 						int i = 1; 
 						SWModule *mod;
 						do {
 							name = newmod->Name();
 							name.appendFormatted("_%d", i);
-							printf("Trying name: %s\n", name.c_str());
 							mod = Modules[name];
 							i++;
 						} while (mod);
 						newmod->Name(name);
 					}
 				}
-				printf("Inserting module: %s\n", newmod->Name());
 				Modules[newmod->Name()] = newmod;
 			}
 		}

@@ -105,6 +105,9 @@ CORBA::Boolean SWMgr_impl::testConnection() throw(CORBA::SystemException) {
 	return true;
 }
 
+void SWMgr_impl::setJavascript(CORBA::Boolean val) throw(CORBA::SystemException) {
+	delegate->setJavascript(val);
+}
 
 char *SWModule_impl::getCategory() throw(CORBA::SystemException) {
 	SWBuf type = delegate->Type();

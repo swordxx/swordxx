@@ -3,6 +3,7 @@
 #include "swordorb-cpp-stubs.h"
 #include "swordorb-cpp-common.h"
 #include <iostream>
+#include <swbuf.h>
 	
 int main (int argc, char *argv[])
 {
@@ -30,8 +31,8 @@ int main (int argc, char *argv[])
 		std::cout << "Connected: "  << mgr->testConnection() << "\n";
 		std::cout << "PrefixPath: " << mgr->getPrefixPath() << "\n";
 		std::cout << "ConfigPath: " << mgr->getConfigPath() << "\n";
-		modInfoList = mgr->getModInfoList();
-		std::cout << "sequence length: " << modInfoList->length() << "\n";
+//		modInfoList = mgr->getModInfoList();
+//		std::cout << "sequence length: " << modInfoList->length() << "\n";
 /*
 		for (int i = 0; i < modInfoList->length(); i++) {
 			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].category << ": " << (*modInfoList)[i].language << "\n";
@@ -43,13 +44,19 @@ int main (int argc, char *argv[])
 			std::cout << "\n";
 		}
 */
+		mgr->setJavascript(true);
+		module = mgr->getModuleByName("WHNU");
+		module->setKeyText("jas.1.9");
+		std::cout << "KeyText: " << module->getKeyText() << "\n";
+		std::cout << "Text: " << module->getRenderText() << "\n";
+/*
 		swordorb::SearchHitList *searchResults;
-		module = mgr->getModuleByName("KJV");
 		bool lucene = module->hasSearchFramework();
 		searchResults = module->search("God love world", (lucene)?swordorb::LUCENE:swordorb::MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults->length(); i++) {
 			std::cout << (*searchResults)[i].key << "\n";
 		}
+*/
 
 
 		

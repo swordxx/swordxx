@@ -76,6 +76,7 @@ interface SWMgr {
 	void     setCipherKey(in string modName, in string key);
 	void     terminate();
 	boolean testConnection();
+	void setJavascript(in boolean val);
 
 };
 

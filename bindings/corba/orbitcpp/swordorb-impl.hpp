@@ -2,6 +2,7 @@
 #define _ORBIT_CPP_IDL_sword_IMPL_HH
 
 #include "swordorb-cpp-skels.h"
+#include "webmgr.hpp"
 #include <swmodule.h>
 #include <swmgr.h>
 #include <rawtext.h>
@@ -44,10 +45,10 @@ public:
 typedef std::map<std::string, SWModule_impl *> SWModuleMap;
 
 class SWMgr_impl : public POA_swordorb::SWMgr {
-	sword::SWMgr *delegate;
+	WebMgr *delegate;
 	SWModuleMap moduleImpls;
 public:
-	SWMgr_impl(sword::SWMgr *delegate)  { this->delegate = delegate; }
+	SWMgr_impl(WebMgr *delegate)  { this->delegate = delegate; }
 
 	ModInfoList *getModInfoList() throw(CORBA::SystemException);
 	SWModule_ptr getModuleByName(const char *name) throw(CORBA::SystemException);
@@ -61,6 +62,7 @@ public:
 	void     setCipherKey(const char *modName, const char *key) throw(CORBA::SystemException) { delegate->setCipherKey(modName, key); }
 	void     terminate() throw(CORBA::SystemException);
 	CORBA::Boolean     testConnection() throw(CORBA::SystemException);
+	void setJavascript(CORBA::Boolean) throw(CORBA::SystemException);
 
 };
 }; // namespace hellomodule
