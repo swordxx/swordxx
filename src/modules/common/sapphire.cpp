@@ -10,21 +10,22 @@
    and renamed to Sapphire II 2 January 1995
 */
 
+
 #ifdef WIN32
 #include <memory.h>
-#else
+#endif
 
 #ifdef UNIX
 #include <memory.h>
 #include <unistd.h>
 #else
-
 #ifndef __VISUALC__
 #include <mem.h>
 #endif
-
 #endif
 
+#ifdef _WIN32_WCE
+#include <string.h>
 #endif
 
 #include "sapphire.h"
