@@ -6,11 +6,16 @@
 #include <versekey.h>
 
 #ifdef __cplusplus
-extern "C" {
 #endif
 
+extern "C" {
 
-#define SWHANDLE long
+#define SWHANDLE int
+
+typedef struct {
+	ModMap::iterator it;
+	ModMap::iterator end;
+} ModItType;
 
 //-----------------------------------------------------------------
 // stringlist_iterator methods
@@ -35,6 +40,7 @@ SWHANDLE SWMgr_newEx(SWHANDLE hiconfig, SWHANDLE hisysconfig, char autoload, SWH
 void     SWMgr_delete(SWHANDLE hmgr);
 SWHANDLE SWMgr_getConfig(SWHANDLE hmgr);
 SWHANDLE SWMgr_getModulesIterator(SWHANDLE hmgr);
+SWHANDLE SWMgr_getModuleByName(SWHANDLE hmgr, char *name);
 char *   SWMgr_getPrefixPath(SWHANDLE hmgr);
 char *   SWMgr_getConfigPath(SWHANDLE hmgr);
 void     SWMgr_setGlobalOption(SWHANDLE hmgr, char *option, char *value);
@@ -64,8 +70,8 @@ void  SWModule_begin(SWHANDLE hmodule);
 char *SWModule_getStripText(SWHANDLE hmodule);
 char *SWModule_getRenderText(SWHANDLE hmodule);
 
-#ifdef __cplusplus
 }
+#ifdef __cplusplus
 #endif
 
 #endif
