@@ -223,6 +223,7 @@ char RawGenBook::createModule(const char *ipath) {
 	char *path = 0;
 	char *buf = new char [ strlen (ipath) + 20 ];
 	FileDesc *fd;
+	signed char retval;
 
 	stdstr(&path, ipath);
 
@@ -235,9 +236,9 @@ char RawGenBook::createModule(const char *ipath) {
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
+	retval = TreeKeyIdx::create(path);
 	delete [] path;
-	
-	return TreeKeyIdx::create(path);
+	return retval;	
 }
 
 
