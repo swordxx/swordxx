@@ -234,7 +234,7 @@ int main(int argc, char **argv)
 			cout << (char*)target->KeyText() << " " << ": <font face=\"" << font << "\">" << (char const*)*target << "</font>" << endl;
 		      else 
 			cout << (char*)target->KeyText() << ": " << (char const*)*target << endl;
-		      if (!ThML && !filter) cout << "<br>" << endl;
+		      if (!ThML && !filter) cout << "<br />" << endl;
 		      
 		    }
 
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "</font> (" << target->Name() << ")" << endl;
 		    else 
 		      cout << (char*)target->KeyText() << ": " << (char const*)*target << " (" << target->Name() << ")" << endl;
-		    if (!ThML && !filter) cout << "<br>" << endl;
+		    if (!ThML && !filter) cout << "<br />" << endl;
 		    
 		    vers4 = strtok(0, ",");
 		  }
@@ -282,13 +282,13 @@ int main(int argc, char **argv)
 		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" <<  (char const*)*target << "</font>" << endl;
 		    else 
 		      cout << (char*)target->KeyText() << ": " << (char const*)*target << endl;
-		    if (!ThML && !filter) cout << "<br>" << endl;
+		    if (!ThML && !filter) cout << "<br />" << endl;
 		  }
 		  if (font && !filter)
 		    cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "</font> (" << target->Name() << ")" << endl;
 		  else 
 		    cout << (char*)target->KeyText() << ": " << (char const*)*target << " (" << target->Name() << ")" << endl;
-		  if (!ThML && !filter) cout << "<br>" << endl;
+		  if (!ThML && !filter) cout << "<br />" << endl;
 		}
 		
 	      }
