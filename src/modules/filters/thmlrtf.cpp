@@ -185,11 +185,10 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 		}
 		else if (!strncmp(token, "scripRef", 8)) {
 //			pushString(buf, "{\\cf2 #");
-			userData["suspendTextPassThru"] = true;
+			pushString(buf, "<a href=\"\">");
 		}
 		else if (!strncmp(token, "/scripRef", 9)) {
-			pushString(buf, "<a href=\"%s\">%s</a>", userData["lastTextNode"].c_str(), userData["lastTextNode"].c_str());
-			userData["suspendTextPassThru"] = false;
+			pushString(buf, "</a>");
 		}
 		else if (!strncmp(token, "div", 3)) {
 			*(*buf)++ = '{';
