@@ -8,7 +8,7 @@ OPTIONS="--with-vcl $OPTIONS"
 #OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 
-CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" GCC="m68k-palmos-gcc" ./configure $OPTIONS $*
+CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*
 
 echo ""
 echo ""
