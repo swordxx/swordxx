@@ -61,6 +61,7 @@ CC = @CC@
 CXX = @CXX@
 LIBZ = @LIBZ@
 LIB_SWORD = @LIB_SWORD@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
@@ -95,19 +96,19 @@ TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.ac 
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.ac 
 	cd $(srcdir) && $(ACLOCAL)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: @MAINTAINER_MODE_TRUE@$(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 tags: TAGS
 TAGS:
@@ -253,8 +254,24 @@ perlswig: sword.i
 	@echo "			(ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module" >> perl/Makefile.PL
 	@echo "			AUTHOR		=> 'Sword Project <sword-devel@crosswire.org>') : ())," >> perl/Makefile.PL 
 	@echo ");" >> perl/Makefile.PL
-	cd perl && perl Makefile.PL && make clean && rm -f MANIFEST* && rm -f *.old && perl Makefile.PL && make manifest
-	cd perl && sed -e 's/-lsword/-lsword -lstdc++/' Makefile > Makefile.tmp && mv Makefile.tmp Makefile
+	@echo "" >> perl/Makefile.PL
+	@echo "rename 'Makefile', 'Makefile.old' or die \"can't rename Makefile\";" >> perl/Makefile.PL
+	@echo "open(INPUT, '<Makefile.old') or die \"can't open input Makefile.old\";" >> perl/Makefile.PL
+	@echo "open(OUTPUT, '>Makefile') or die \"can't open output Makefile\";" >> perl/Makefile.PL
+	@echo "while (<INPUT>) {" >> perl/Makefile.PL
+	@echo "	s/\-lsword/\-lsword \-lstdc\+\+/;" >> perl/Makefile.PL
+	@echo "	print OUTPUT \"$$""_\";" >> perl/Makefile.PL
+	@echo "}" >> perl/Makefile.PL
+	@echo "" >> perl/Makefile.PL
+	@echo "close INPUT;" >> perl/Makefile.PL
+	@echo "close OUTPUT;" >> perl/Makefile.PL	
+	cd perl && $(PERL) Makefile.PL && make clean
+	@echo "\.old" > perl/MANIFEST.SKIP
+	@echo "~$$" >> perl/MANIFEST.SKIP
+	@echo "\.bak" >> perl/MANIFEST.SKIP
+	@echo "^CVS" >> perl/MANIFEST.SKIP
+	@echo "Makefile$$" >> perl/MANIFEST.SKIP
+	cd perl && $(PERL) Makefile.PL && make manifest
 
 tclswig: sword.i
 	mkdir -p tcl

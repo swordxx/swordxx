@@ -4,7 +4,7 @@
 AC_INIT(swordbindings, 1.5.5, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.i)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision: 1.3 $)
 AM_INIT_AUTOMAKE(swordbindings,1.5.5)
 
 # ---------------------------------------------------------------------
@@ -19,6 +19,11 @@ AC_PROG_INSTALL
 # Check libraries
 # ---------------------------------------------------------------------
 AC_CHECK_SWORD(1.5.5)
+
+# ---------------------------------------------------------------------
+# Misc
+# ---------------------------------------------------------------------
+AM_MAINTAINER_MODE
 
 # ---------------------------------------------------------------------
 # Check Scripting languages

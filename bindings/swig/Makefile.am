@@ -23,8 +23,24 @@ perlswig: sword.i
 	@echo "			(ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module" >> perl/Makefile.PL
 	@echo "			AUTHOR		=> 'Sword Project <sword-devel@crosswire.org>') : ())," >> perl/Makefile.PL 
 	@echo ");" >> perl/Makefile.PL
-	cd perl && perl Makefile.PL && make clean && rm -f MANIFEST* && rm -f *.old && perl Makefile.PL && make manifest
-	cd perl && sed -e 's/-lsword/-lsword -lstdc++/' Makefile > Makefile.tmp && mv Makefile.tmp Makefile
+	@echo "" >> perl/Makefile.PL
+	@echo "rename 'Makefile', 'Makefile.old' or die \"can't rename Makefile\";" >> perl/Makefile.PL
+	@echo "open(INPUT, '<Makefile.old') or die \"can't open input Makefile.old\";" >> perl/Makefile.PL
+	@echo "open(OUTPUT, '>Makefile') or die \"can't open output Makefile\";" >> perl/Makefile.PL
+	@echo "while (<INPUT>) {" >> perl/Makefile.PL
+	@echo "	s/\-lsword/\-lsword \-lstdc\+\+/;" >> perl/Makefile.PL
+	@echo "	print OUTPUT \"$$""_\";" >> perl/Makefile.PL
+	@echo "}" >> perl/Makefile.PL
+	@echo "" >> perl/Makefile.PL
+	@echo "close INPUT;" >> perl/Makefile.PL
+	@echo "close OUTPUT;" >> perl/Makefile.PL	
+	cd perl && $(PERL) Makefile.PL && make clean
+	@echo "\.old" > perl/MANIFEST.SKIP
+	@echo "~$$" >> perl/MANIFEST.SKIP
+	@echo "\.bak" >> perl/MANIFEST.SKIP
+	@echo "^CVS" >> perl/MANIFEST.SKIP
+	@echo "Makefile$$" >> perl/MANIFEST.SKIP
+	cd perl && $(PERL) Makefile.PL && make manifest
 
 tclswig: sword.i
 	mkdir -p tcl
