@@ -50,6 +50,10 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	int len;
 	bool lastspace = false;
 	int word = 1;
+	char val[128];
+	char wordstr[5];
+	char *valto;
+	char *ch;
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
@@ -72,9 +76,7 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 		if (*from == '>') {	// process tokens
 			intoken = false;
 			if (!strnicmp(token, "sync type=\"Strongs\" ", 20)) {	// Strongs
-				char val[128];
-				char wordstr[5];
-				char *valto = val;
+				valto = val;
 				for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
 					*valto++ = token[i];
 				*valto = 0;
@@ -87,6 +89,26 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 							to--;
 					}
 					continue;
+				}
+			}
+			if (!strncmp(token, "sync type=\"morph\"", 17)) {
+				for (ch = token+17; *ch; ch++) {
+					if (!strncmp(ch, "class=\"", 7)) {
+						valto = val;
+						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
+							*valto++ = ch[i];
+						*valto = 0;
+						sprintf(wordstr, "%03d", word-1);
+						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
+					}
+					if (!strncmp(ch, "value=\"", 7)) {
+						valto = val;
+						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
+							*valto++ = ch[i];
+						*valto = 0;
+						sprintf(wordstr, "%03d", word-1);
+						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+					}
 				}
 			}
 			// if not a strongs token, keep token in text
