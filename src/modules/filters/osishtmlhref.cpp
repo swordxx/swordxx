@@ -198,11 +198,15 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<a href=\"\">";
+			if (!tag.isEmpty()) {
+				u->suspendTextPassThru = true;
 			}
-			else if (tag.isEndTag()) {
-				buf += "</a>";
+			if (tag.isEndTag()) {
+				SWBuf refList = u->lastTextNode;
+				buf.appendFormatted("&nbsp<a href=\"passagestudy.jsp?action=showRef&type=reference&value=%s\">%s</a>&nbsp",
+					(refList.length()) ? URL::encode(refList.c_str()).c_str() : "",
+					(u->lastTextNode.length()) ? u->lastTextNode.c_str() : "");
+				u->suspendTextPassThru = false;
 			}
 		}
 
