@@ -1,5 +1,5 @@
 /***************************************************************************
-                     ThMLWEBIF.cpp  -  ThML to HTML filter with hrefs  
+                     ThMLWEBIF.cpp  -  ThML to HTML filter with hrefs
                              -------------------
     begin                    : 2001-09-03
     copyright            : 2001 by CrossWire Bible Society
@@ -19,6 +19,7 @@
 #include <thmlwebif.h>
 #include <swmodule.h>
 #include <utilweb.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
@@ -28,78 +29,64 @@ ThMLWEBIF::ThMLWEBIF() : baseURL("/"), passageStudyURL(baseURL + "passagestudy.j
 
 bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	const char *tok;
-	std::string url;
 
-	if (!substituteToken(buf, token)) {
-	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync ", 5)) {
-			url = "";
+	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		XMLTag tag(token);
+		std::string url;
+		if (!strcmp(tag.getName(), "sync")) {
+			const char* value = tag.getAttribute("value");
+			url = value;
 
-			if(strstr(token,"type=\"morph\"")){
+			if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")){
 				buf += "<small><em> (";
 			}
 			else {
+				if (value) {
+					value++; //skip leading G, H or T
+					//url = value;
+				}
+
 				buf += "<small><em> &lt;";
 			}
 
-			for (tok = token + 5; *(tok+1); tok++) {
-				if(*tok != '\"') {
-					url += *tok;
-				}
-			}
 			buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
+			buf += value;
+			buf += "</a>";
 
-                        //scan for value and add it to the buffer
-			for (tok = token + 5; *tok; tok++) {
-				if (!strncmp(tok, "value=\"", 7)) {
-					if(strstr(token,"type=\"morph\""))
-						tok += 7;
-					else
-						tok += 8;
-					for (;*tok != '\"'; tok++)
-						buf += *tok;
-					break;
+			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) {
+				buf += ") </em></small>";
+			}
+			else {
+				buf += "&gt; </em></small>";
+			}
+		}
+		else if (!strcmp(tag.getName(), "scripRef")) {
+			if (tag.isEndTag()) {
+				if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+					userData["inscriptRef"] = "false";
+					buf += "</a>";
+				}
+				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
+					url = userData["lastTextNode"];
+					buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str());
+					buf += userData["lastTextNode"].c_str();
+					buf += "</a>";
+
+					// let's let text resume to output again
+					userData["suspendTextPassThru"] = "false";
 				}
 			}
-			if(strstr(token,"type=\"morph\""))
-				buf += "</a>) </em></small>";
-			else
-				buf += "</a>&gt; </em></small>";
-		}
+			else if (tag.getAttribute("passage")) { //passage given
+				userData["inscriptRef"] = "true";
 
-		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
-			userData["inscriptRef"] = "true";
-			url = "";
-
-			for (const char *tok = token + 9; *(tok+1); tok++) {
-				if(*tok != '\"')
-					url += *tok;
+				buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(tag.getAttribute("passage")).c_str());
 			}
-
-			buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str());
-		}
-
-		// we've ended a scripRef
-		else if (!strcmp(token, "/scripRef")) {
-			if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+			else { //no passage given
 				userData["inscriptRef"] = "false";
-				buf +="</a>";
-			}
-
-			else { // like "<scripRef>John 3:16</scripRef>"
-				url = userData["lastTextNode"].c_str();
-
-				buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
-
-				buf += userData["lastTextNode"].c_str();
-
-				// let's let text resume to output again
-				userData["suspendTextPassThru"] = "false";
-
-				buf += "</a>";
+				// let's stop text from going to output
+				userData["suspendTextPassThru"] = "true";
 			}
 		}
-
 		else {
 			return ThMLHTMLHREF::handleToken(buf,token,userData);
 		}

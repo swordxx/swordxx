@@ -25,28 +25,32 @@ using namespace std;
 #define MAXBUF 30000
 
 int main(int argc, char **argv) {
+
+	const char* modName = (argc >= 2) ? argv[1] : "KJV";
+	const char* keyName = (argc == 3) ? argv[2] : "John 1:1";
+
 	SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_WEBIF, ENC_UTF8));
 	mgr.setGlobalOption("Strong's Numbers", "on");
 	mgr.setGlobalOption("Morphological Tags", "on");
 
-	SWModule *module = mgr.Modules["TSK"];
+	SWModule *module = mgr.Modules[modName];
 	if (!module) {
 		module = mgr.Modules.begin()->second;
 	}
-	module->setKey("John");
+	module->setKey(keyName);
 	std::cout << module->RenderText() << std::endl<< std::endl<< std::endl;
 
 	//------------------------
 
-	SWMgr mgr2(0, 0, true, new MarkupFilterMgr(FMT_HTML, ENC_UTF8));
+	SWMgr mgr2(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_UTF8));
 	mgr2.setGlobalOption("Strong's Numbers", "on");
 	mgr2.setGlobalOption("Morphological Tags", "on");
-	module = mgr2.Modules["TSK"];
+	module = mgr2.Modules[modName];
 	if (!module) {
 		module = mgr2.Modules.begin()->second;
 	}
 
-	module->setKey("John");
+	module->setKey(keyName);
 	std::cout << module->RenderText() << std::endl;
 
 	return 0;

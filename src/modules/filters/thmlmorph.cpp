@@ -60,10 +60,12 @@ char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				if (!strnicmp(token.c_str(), "sync", 4) && strstr(token.c_str(), "type=\"morph\"")) {	// Morph
 				  continue;
 				}
+
 				// if not a morph tag token, keep token in text
 				text += '<' + token + '>';
 				continue;
 			}
+
 			if (intoken) {
 				token += *from;
 			}

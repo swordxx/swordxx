@@ -141,33 +141,31 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		XMLTag tag(token);
 		if (!strcmp(tag.getName(), "sync")) {
-			if(strstr(token,"type=\"morph\"")){
+			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) {
 				buf += "<small><em> (<a href=\"";
-			}				
-			else
+			}
+			else {
 				buf += "<small><em> &lt;<a href=\"";
-			for (tok = token + 5; *(tok+1); tok++)
-				if(*tok != '\"')
-					buf += *tok;
-			buf += "\">";
-				
-                        //scan for value and add it to the buffer
-			for (tok = token + 5; *tok; tok++) {
-				if (!strncmp(tok, "value=\"", 7)) {
-					if(strstr(token,"type=\"morph\"")) 
-						tok += 7;
-					else
-						tok += 8;
-					for (;*tok != '\"'; tok++)
-						buf += *tok;
-					break;
-				}
 			}
 
-			if(strstr(token,"type=\"morph\""))
-				buf += "</a>) </em></small>";
-			else
+			buf += "type=";
+			buf += tag.getAttribute("type");
+
+			const char* value = tag.getAttribute("value");
+			buf += " value=";
+			buf += value ? value : "";
+			buf += "\">";
+
+			//add the value
+			if (value && tag.getAttribute("type") && strcmp(tag.getAttribute("type"), "morph")) { //not morph type
+				value++;
+			}
+			buf += value;
+
+			if(tag.getAttribute("type") && strcmp(tag.getAttribute("type"), "morph"))
 				buf += "</a>&gt; </em></small>";
+			else
+				buf += "</a>) </em></small>";
 		}
 		else if (!strcmp(tag.getName(), "scripture")) {
 			userData["inscriptRef"] = "true";
