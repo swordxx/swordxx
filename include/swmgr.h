@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.34 2001/12/18 04:47:40 chrislit Exp $
+ * $Id: swmgr.h,v 1.35 2001/12/21 04:14:47 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,7 +59,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.34 2001/12/18 04:47:40 chrislit Exp $
+  * @version $Id: swmgr.h,v 1.35 2001/12/21 04:14:47 chrislit Exp $
   */
 class SWDLLEXPORT SWMgr {
 
@@ -196,49 +196,6 @@ public:
     * for example to use your own filters.
     */
   virtual void Load ();
-
-  /** Get the text encoding for a module
-    * Gets the native text encoding for a module.
-    * This value is important for setting the proper filters for displaying text
-    * from a module.
-    *
-    * @param section The configuration section for the module that we want the source encoding for
-    * @return The source encoding for text from the module.
-    */
-   virtual SWTextEncoding getTextEncoding (ConfigEntMap & section);
-
-  /** Get the text encoding for a module
-    * Gets the native text encoding for a module.
-    * This value is important for setting the proper filters for displaying text
-    * from a module.  Looks up the correct section based on the module name,
-    * then calls the sister function getTextEncoding( ConfigEntMap &section ).
-    *
-    * @param section The name of the module that we want the source encoding for.
-    * @return The source encoding for text from the SWModule module.
-    */
-   virtual SWTextEncoding getTextEncoding (string name);
-
-  /** Get the text format for a module
-    * Gets the native text format for a module.
-    * This value is important for setting the proper filters for displaying text
-    * from a module.  This function is passed a name in addition
-    * to a section because it needs the module name in some cases.
-    *
-    * @param section The configuration section for the module that we want the source format for.
-    * @return The source format for text from the SWModule module.
-    */
-   virtual SWTextMarkup getTextMarkup (ConfigEntMap & section);
-
-  /** Get the text format for a module
-    * Gets the native text format for a module.
-    * This value is important for setting the proper filters for displaying text
-    * from a module.  Looks up the correct section based on the module name,
-    * then calls the sister function getTextMarkup( string name, ConfigEntMap &section ).
-    *
-    * @param module The name of the module for which we want the source format.
-    * @return The source format for text from the SWModule module.
-    */
-   virtual SWTextMarkup getTextMarkup (string name);
 
   /** Set a global option
    * Set a global option using the parameters. A global option could be for
