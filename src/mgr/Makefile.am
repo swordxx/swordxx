@@ -25,6 +25,7 @@ libsword_la_SOURCES += $(mgrdir)/localemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swcacher.cpp
 libsword_la_SOURCES += $(mgrdir)/swsearchable.cpp
 libsword_la_SOURCES += $(mgrdir)/installmgr.cpp
+libsword_la_SOURCES += $(mgrdir)/stringmgr.cpp
 
 if BUILDSPLITLIB
 libsword_imp_la_SOURCES += $(mgrsplits)

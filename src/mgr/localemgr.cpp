@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.18 2004/02/06 21:01:01 scribe Exp $
+ * $Id: localemgr.cpp,v 1.19 2004/04/17 17:16:17 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,8 +36,9 @@
 #include <swmgr.h>
 #include <utilfuns.h>
 
-#include <localemgr.h>
+#include <stringmgr.h>
 #include <filemgr.h>
+#include <localemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -120,7 +121,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 LocaleMgr::~LocaleMgr() {
 	if (defaultLocaleName)
 		delete [] defaultLocaleName;
-     deleteLocales();
+     	deleteLocales();
 	delete locales;
 }
 
@@ -140,15 +141,29 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 					newmodfile += "/";
 				newmodfile += ent->d_name;
 				SWLocale *locale = new SWLocale(newmodfile.c_str());
-				if (locale->getName()) {
+				
+				if (locale->getName()) {					
+					bool supported = false;
+					if (StringMgr::hasUtf8Support()) {
+						supported = (locale->getEncoding() && (!strcmp(locale->getEncoding(), "UTF-8") /*|| !strcmp(locale->getEncoding(), "ISO8859-1")*/) );
+					}
+					else {
+						supported = !locale->getEncoding() || (locale->getEncoding() && strcmp(locale->getEncoding(), "UTF-8"));
+					}
+					
+					if (!supported) { //not supported
+						delete locale;						
+						continue;
+					}
+				
 					it = locales->find(locale->getName());
-					if (it != locales->end()) {
+					if (it != locales->end()) { // already present
 						*((*it).second) += *locale;
 						delete locale;
 					}
 					else locales->insert(LocaleMap::value_type(locale->getName(), locale));
 				}
-                    else	delete locale;
+				else	delete locale;
 			}
 		}
 		closedir(dir);

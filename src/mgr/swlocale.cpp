@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.9 2004/04/12 13:49:12 dglassey Exp $
+ * $Id: swlocale.cpp,v 1.10 2004/04/17 17:16:17 joachim Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,7 +30,7 @@ SWLocale::SWLocale(const char * ifilename) {
 
 	name         = 0;
 	description  = 0;
-	encoding		 = 0;
+	encoding     = 0;
 	bookAbbrevs  = 0;
 	BMAX         = 0;
 	books        = 0;
@@ -47,7 +47,7 @@ SWLocale::SWLocale(const char * ifilename) {
 	if (confEntry != localeSource->Sections["Meta"].end())
 		stdstr(&description, (*confEntry).second.c_str());
 
-	confEntry = localeSource->Sections["Meta"].find("Encoding");
+	confEntry = localeSource->Sections["Meta"].find("Encoding"); //Either empty (==Latin1) or UTF-8
 	if (confEntry != localeSource->Sections["Meta"].end())
 		stdstr(&encoding, (*confEntry).second.c_str());
 }
@@ -57,6 +57,9 @@ SWLocale::~SWLocale() {
 
 	delete localeSource;
 
+	if (encoding)
+		delete [] encoding;
+	
 	if (description)
 		delete [] description;
 
@@ -90,7 +93,29 @@ const char *SWLocale::translate(const char *text) {
 		confEntry = localeSource->Sections["Text"].find(text);
 		if (confEntry == localeSource->Sections["Text"].end())
 			lookupTable.insert(LookupMap::value_type(text, text));
-		else	lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
+		else {//valid value found
+			/*
+			- If Encoding==Latin1 and we have a StringHelper, convert to UTF-8
+			- If StringHelper present and Encoding is UTF-8, use UTF8
+			- If StringHelper not present and Latin1, use Latin1
+			- If StringHelper not present and UTF-8, no idea what to do. Should't happen
+			*/
+/*			if (StringHelper::getSystemStringHelper()) {
+				if (!strcmp(encoding, "UTF-8")) {
+					lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
+				}
+				else { //latin1 expected, convert to UTF-8
+					SWBuf t((*confEntry).second.c_str());
+					t = StringHelper::getSystemStringHelper()->latin2unicode( t );
+					
+					lookupTable.insert(LookupMap::value_type(text, t.c_str()));
+				}
+			}
+			else { //no stringhelper, just insert. Nothing we can do*/
+				lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
+// 			}
+			
+		}
 		entry = lookupTable.find(text);
 	}
 	return (*entry).second.c_str();

@@ -2,6 +2,9 @@
 #include <ctype.h>
 #include <string.h>
 
+#include <localemgr.h>
+
+
 #ifdef _ICU_
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
@@ -14,6 +17,7 @@
 #endif
 
 SWORD_NAMESPACE_START
+
 
 /******************************************************************************
  * stdstr - Sets/gets a string
@@ -155,14 +159,19 @@ unsigned int strlenw(const char *s1) {
  * RET:	target
  */
 
-char *toupperstr(char *buf) {
-	char *ret = buf;
-
-	while (*buf)
-		*buf++ = SW_toupper(*buf);
-
-	return ret;
-}
+// char *toupperstr(char *buf) {
+// 	char *ret = buf;
+// 
+// 	/*if (StringHelper::getSystemStringHelper()) {
+// 		StringHelper::getSystemStringHelper()->upperStringLatin1( ret );
+// 	}
+// 	else*/ {
+// 		while (*buf) {
+// 			*buf++ = SW_toupper(*buf);
+// 		}
+// // 	}
+// 	return ret;
+// }
 
 
 /******************************************************************************
@@ -173,32 +182,37 @@ char *toupperstr(char *buf) {
  * RET:	target
  */
 
-char *toupperstr_utf8(char *buf, unsigned int max) {
-	char *ret = buf;
-
-#ifndef _ICU_
-	// try to decide if it's worth trying to toupper.  Do we have more
-	// characters that are probably lower latin than not?
-	long performOp = 0;
-	for (const char *ch = buf; *ch; ch++)
-		performOp += (*ch > 0) ? 1 : -1;
-
-	if (performOp > 0) {
-		while (*buf)
-			*buf = SW_toupper(*buf++);
-	}
-#else
-	if (!max)
-		max = strlen(ret);
-		UErrorCode err = U_ZERO_ERROR;
-		UConverter *conv = ucnv_open("UTF-8", &err);
-		UnicodeString str(buf, -1, conv, err);
-		UnicodeString ustr = str.toUpper();
-		ustr.extract(ret, max, conv, err);
-		ucnv_close(conv);
-#endif
-
-	return ret;
-}
+// char *toupperstr_utf8(char *buf, unsigned int max) {
+// 	char *ret = buf;
+// 
+// /*	if (StringHelper::getSystemStringHelper()) {
+// 		StringHelper::getSystemStringHelper()->upperStringUtf8( ret );
+// 		return ret;
+// 	}*/
+// 	
+// #ifndef _ICU_
+// 	// try to decide if it's worth trying to toupper.  Do we have more
+// 	// characters that are probably lower latin than not?
+// 	long performOp = 0;
+// 	for (const char *ch = buf; *ch; ch++)
+// 		performOp += (*ch > 0) ? 1 : -1;
+// 
+// 	if (performOp > 0) {
+// 		while (*buf)
+// 			*buf = SW_toupper(*buf++);
+// 	}
+// #else
+// 	if (!max)
+// 		max = strlen(ret);
+// 	UErrorCode err = U_ZERO_ERROR;
+// 	UConverter *conv = ucnv_open("UTF-8", &err);
+// 	UnicodeString str(buf, -1, conv, err);
+// 	UnicodeString ustr = str.toUpper();
+// 	ustr.extract(ret, max, conv, err);
+// 	ucnv_close(conv);
+// #endif
+// 
+// 	return ret;
+// }
 
 SWORD_NAMESPACE_END

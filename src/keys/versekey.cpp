@@ -15,6 +15,7 @@
 #endif
 
 #include <utilstr.h>
+#include <stringmgr.h>
 #include <swkey.h>
 #include <swlog.h>
 #include <versekey.h>
@@ -323,8 +324,13 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	for (int i = 0; i < 2; i++) {
 		stdstr(&abbr, iabbr);
 		strstrip(abbr);
-		if (!i)
+		if (!i && StringMgr::hasUtf8Support()) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+			toupperstr_utf8(abbr);
+		}
+		else if (!i) {
 			toupperstr(abbr);
+		}
+			
 		abLen = strlen(abbr);
 
 		if (abLen) {

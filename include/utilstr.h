@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.11 2003/06/22 23:50:23 scribe Exp $
+ * $Id: utilstr.h,v 1.12 2004/04/17 17:16:16 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,6 +22,8 @@
 #ifndef UTILSTR_H
 #define UTILSTR_H
 
+#include <swbuf.h>
+#include <stringmgr.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
@@ -33,8 +35,8 @@ char *strstrip (char *istr);
 const char *stristr (const char *s1, const char *s2);
 const char strnicmp(const char *s1, const char *s2, int len);
 unsigned int strlenw(const char *s1);
-char *toupperstr(char *buf);
-char *toupperstr_utf8(char *buf, unsigned int max = 0);
+// char *toupperstr(char *buf);
+// char *toupperstr_utf8(char *buf, unsigned int max = 0);
 
 /*
 extern "C" {
