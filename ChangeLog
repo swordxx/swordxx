@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+22-Dec-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Added 'micros' a mini GUI for PDAs
+
 20-Dec-2000	Troy A. Griffitts <scribe@crosswire.org>
     Added new compile target architecture: arm
     Changed the simple lookup cmdline example to work with any
