@@ -42,6 +42,10 @@ d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
 o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
 l = $(o) -lsword -lstdc++
 
+ifeq ($(system),beos)
+l = $(o) -lsword -lstdc++.r4
+endif
+
 #testlib: $(o)
 #	$(CROSS_COMPILE)$(CC) $(LFLAGS) -o $@ $(l)
 
