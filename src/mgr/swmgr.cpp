@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.42 2001/09/10 00:16:07 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.43 2001/09/23 06:53:00 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -515,8 +515,8 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		datapath += buf2;
 	delete [] buf;
 	
-    	if ((!stricmp(sourceformat.c_str(), "PlainUnicode")) || (!stricmp(encoding.c_str(), "UTF-8")))
-     	unicode = true;
+    	if ((!stricmp(sourceformat.c_str(), "SCSU")) || (!stricmp(encoding.c_str(), "UTF-8")))
+	        unicode = true;
 
 	if ((!stricmp(driver.c_str(), "zText")) || (!stricmp(driver.c_str(), "zCom"))) {
 		SWCompress *compress = 0;
