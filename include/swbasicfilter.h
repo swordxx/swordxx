@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.9 2002/06/06 21:08:47 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.10 2002/09/30 10:34:43 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,7 +29,6 @@
 
 #include <defs.h>
 #include <map>
-using namespace std;
 
 /** A filter providing commonly used functionality.
 * This filter has facilities for handling SGML/HTML/XML like tokens and

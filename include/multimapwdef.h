@@ -3,7 +3,6 @@
 
 #include <map>
 
-using namespace std;
 
 // multmap that still lets you use [] to reference FIRST
 // entry of a key if multiples exist

@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.53 2002/09/29 03:21:08 scribe Exp $
+* $Id: swmodule.h,v 1.54 2002/09/30 10:34:43 dglassey Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -35,7 +35,6 @@
 #include <defs.h>
 #include <multimapwdef.h>
 
-using namespace std;
 
 
 #define SWMODULE_OPERATORS \

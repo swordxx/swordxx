@@ -12,7 +12,6 @@
 
 #include <swinputmeth.h>
 #include <map>
-using namespace std;
 
 class HebrewMCIM : public SWInputMethod {
 
