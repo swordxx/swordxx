@@ -2,7 +2,7 @@
  *  swdisprtfchap.h	- definition of class SWDispRTFChap, an SWDisplay used to
  *				display an entire chapter in Rich Text Format
  *
- * $Id: swdisprtfchap.h,v 1.3 2001/11/08 13:20:24 chrislit Exp $
+ * $Id: swdisprtfchap.h,v 1.4 2002/06/26 12:53:05 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,7 +33,7 @@
 #include <swtext.h>
 #include <swdisprtf.h>
 //---------------------------------------------------------------------------
-
+class SWDispRTFChap_init;
 class SWDispRTFChap:public SWDispRTF
 {
 protected:
@@ -43,10 +43,12 @@ protected:
   bool FMarkCurrentVerse;
   bool FAutoPosition;
   
-  char platformID;
 
   virtual void __fastcall Loaded (void);
 public:
+	static char platformID;
+	static SWDispRTFChap_init _init;
+	
     __fastcall SWDispRTFChap (TComponent * Owner);
     __fastcall ~ SWDispRTFChap ();
 
@@ -55,11 +57,11 @@ public:
   {
   read = FCurVersePos, write = FCurVersePos, default = true};
     __property bool CurVerseMrk = { read = FCurVerseMrk, write =
-      FCurVerseMrk, default = true };
+	 FCurVerseMrk, default = true };
   __property bool MarkCurrentVerse = { read = FMarkCurrentVerse, write =
-      FMarkCurrentVerse, default = true };
+	 FMarkCurrentVerse, default = true };
   __property bool AutoPosition = { read = FAutoPosition, write =
-      FAutoPosition, default = true };
+	 FAutoPosition, default = true };
 };
 
 //---------------------------------------------------------------------------
