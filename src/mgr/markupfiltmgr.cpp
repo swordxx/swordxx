@@ -33,6 +33,7 @@
 #include <gbfosis.h>
 #include <thmlosis.h>
 #include <osisrtf.h>
+#include <osishtmlhref.h>
 #include <gbfwebif.h>
 #include <thmlwebif.h>
 
@@ -218,10 +219,10 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromosis = NULL;
                         break;
                 case FMT_HTMLHREF:
-                        fromplain = NULL;
+                        fromplain = new PLAINHTML();
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
-                        fromosis = NULL;
+                        fromosis = new OSISHTMLHref();
                         break;
                 case FMT_RTF:
                         fromplain = NULL;

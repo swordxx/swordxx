@@ -38,6 +38,7 @@ pkginclude_HEADERS += $(swincludedir)/multimapwdef.h
 pkginclude_HEADERS += $(swincludedir)/nullim.h
 
 pkginclude_HEADERS += $(swincludedir)/osisheadings.h
+pkginclude_HEADERS += $(swincludedir)/osishtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/osismorph.h
 pkginclude_HEADERS += $(swincludedir)/osisplain.h
 pkginclude_HEADERS += $(swincludedir)/osisrtf.h
