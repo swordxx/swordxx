@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: canon.h,v 1.7 2001/06/18 01:09:44 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -164,7 +164,6 @@ const struct abbrev
   {"APOCALYPSE OF ST. JOHN", 66},	//    Apocalypse of St. John (Rev.)
   {"C", 51},			//    Colossians
   {"CANTICLE OF CANTICLES", 22},	//    Canticle of Canticles (Song of S.)
-  {"COC", 22},			//    Canticle of Canticles (Song of S.)
   {"COLOSSIANS", 51},		//    Colossians
   {"D", 5},			//     Deuteronomy
   {"DANIEL", 27},		//    Daniel
@@ -281,6 +280,7 @@ const struct abbrev
   {"PSALMS", 19},		//    Psalms
   {"PSM", 19},			// Psalms
   {"PSS", 19},			// Psalms
+  {"QOHELETH", 21},              // Qohelot (Ecclesiastes)
   {"REVELATION OF JOHN", 66},	//     Revelation
   {"ROMANS", 45},		//    Romans
   {"RUTH", 8},			//    Ruth
