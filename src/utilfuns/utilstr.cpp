@@ -159,7 +159,7 @@ char *toupperstr(char *buf) {
 	char *ret = buf;
 
 	while (*buf)
-		*buf = SW_toupper(*buf++);
+		*buf++ = SW_toupper(*buf);
 
 	return ret;
 }
