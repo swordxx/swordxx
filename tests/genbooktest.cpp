@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
 	delete treeKey;
 
 	RawGenBook *book = new RawGenBook(argv[1]);
-	TreeKeyIdx root = *(TreeKeyIdx *)(SWKey *)(*book);
+	TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
 	treeKey = (TreeKeyIdx *)(SWKey *)(*book);
 
 	string input;
