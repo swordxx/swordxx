@@ -1,7 +1,15 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-01-Sep-2000	Joachim Ansorg <jansorg@crosswire.org> 
+
+* Release 1.5.1 *
+
+
+06-Nov-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Added more debug for tests/mgrtest.cpp
+	Hardcoded VerseKey::NewIndex to KJV max index
+
+01-Nov-2000	Joachim Ansorg <jansorg@crosswire.org> 
 	Added test program for indexes using VerseKey::NewIndex()
 
 31-Oct-2000	Joachim Ansorg <jansorg@crosswire.org>

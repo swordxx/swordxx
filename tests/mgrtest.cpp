@@ -3,7 +3,12 @@
 #include <versekey.h>
 
 int main(int argc, char **argv) {
+	SWMgr::debug = true;
 	SWMgr mymgr;
+	cerr << "\n\nprefixPath: " << mymgr.prefixPath;
+	cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
+
+
 	ModMap::iterator it;
 
 	for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {

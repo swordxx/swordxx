@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.21 2000/08/23 02:16:43 scribe Exp $
+ * $Id: swmgr.cpp,v 1.22 2000/11/06 12:47:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -52,6 +52,7 @@
 #include <zipcomprs.h>
 #endif
 
+bool SWMgr::debug = false;
 
 void SWMgr::init() {
 	SWFilter *tmpFilter = 0;
@@ -188,13 +189,27 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 	*configType = 0;
 
 	// check working directory
+if (debug)
+	cerr << "Checking working directory for mods.conf...";
 
 	if (existsFile(".", "mods.conf")) {
+
+if (debug)
+	cerr << "found\n";
+
 		stdstr(prefixPath, "./");
 		stdstr(configPath, "./mods.conf");
 		return;
 	}
+
+if (debug)
+	cerr << "\nChecking working directory for mods.d...";
+
 	if (existsDir(".", "mods.d")) {
+
+if (debug)
+	cerr << "found\n";
+
 		stdstr(prefixPath, "./");
 		stdstr(configPath, "./mods.d");
 		*configType = 1;
@@ -204,17 +219,41 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 
 	// check environment variable SWORD_PATH
 
+if (debug)
+	cerr << "\nChecking SWORD_PATH...";
+
 	if (envsworddir != NULL) {
+
+if (debug)
+	cerr << "found (" << envsworddir << ")\n";
+
 		path = envsworddir;
 		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 			path += "/";
+
+if (debug)
+	cerr << "\nChecking $SWORD_PATH for mods.conf...";
+
+
 		if (existsFile(path.c_str(), "mods.conf")) {
+
+if (debug)
+	cerr << "found\n";
+
 			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
 			stdstr(configPath, path.c_str());
 			return;
 		}
+
+if (debug)
+	cerr << "\nChecking $SWORD_PATH for mods.d...";
+
 		if (existsDir(path.c_str(), "mods.d")) {
+
+if (debug)
+	cerr << "found\n";
+
 			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
 			stdstr(configPath, path.c_str());
@@ -224,21 +263,48 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 	}
 
 
+	// check for systemwide /etc/sword.conf
+
+if (debug)
+	cerr << "\nChecking for /etc/sword.conf...";
+
 	if ((fd = ::open("/etc/sword.conf", O_RDONLY)) > 0) {
 		::close(fd);
+
+if (debug)
+	cerr << "found\n";
+
 		SWConfig etcconf("/etc/sword.conf");
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
 			path = (*entry).second;
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
 				path += "/";
 
+if (debug)
+	cerr << "DataPath in /etc/sword.conf is set to: " << path;
+
+if (debug)
+	cerr << "\nChecking for mods.conf in DataPath ";
+
 			if (existsFile(path.c_str(), "mods.conf")) {
+
+if (debug)
+	cerr << "found\n";
+
 				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
 				stdstr(configPath, path.c_str());
 				return;
 			}
+
+if (debug)
+	cerr << "\nChecking for mods.d in DataPath ";
+
 			if (existsDir(path.c_str(), "mods.d")) {
+
+if (debug)
+	cerr << "found\n";
+
 				stdstr(prefixPath, path.c_str());
 				path += "mods.d";
 				stdstr(configPath, path.c_str());
@@ -251,18 +317,33 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 
 	// check ~/.sword/
 
+if (debug)
+	cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
+
 	if (envhomedir != NULL) {
 		path = envhomedir;
 		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
 			path += "/";
 		path += ".sword/";
 		if (existsFile(path.c_str(), "mods.conf")) {
+
+if (debug)
+	cerr << "found\n";
+
 			stdstr(prefixPath, "");
 			path += "mods.conf";
 			stdstr(configPath, path.c_str());
 			return;
 		}
+
+if (debug)
+	cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
+
 		if (existsDir(path.c_str(), "mods.d")) {
+
+if (debug)
+	cerr << "found\n";
+
 			stdstr(prefixPath, "");
 			path += "mods.d";
 			stdstr(configPath, path.c_str());
