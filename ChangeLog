@@ -2,6 +2,13 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+* Release 1.5.7 *
+
+28-Dec-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Updated many filters
+	Split cvs, removing apps
+	Updated OSIS importer
+
 28-Aug-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Abstracted the search interface from SWModule
 	Added experimental implementation of fast
