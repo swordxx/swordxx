@@ -17,6 +17,12 @@
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
+#include <defs.h>
+#include <vector>
+
+using namespace std;
+
+SWORD_NAMESPACE_START
 
 static InstallMgr_init _InstallMgr_init;
 
@@ -134,4 +140,6 @@ void FTPCloseSession(void *session) {
 	CURL *curl = (CURL *)session;
 	curl_easy_cleanup(curl);
 }
-    
+
+SWORD_NAMESPACE_END
+

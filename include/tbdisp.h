@@ -3,7 +3,7 @@
  *			MSWindows TextBox (or any other control that takes a
  *			SetDialogItemText
  *
- * $Id: tbdisp.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: tbdisp.h,v 1.3 2002/10/03 04:26:46 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,6 +25,9 @@
 #define TBDISP_H
 
 #include <windows.h>
+
+SWORD_NAMESPACE_START
+
 class SWModule;
 
 class TBDisp:public SWDisplay
@@ -36,4 +39,7 @@ public:
     TBDisp (HWND iwnd, int ictrlid);
   virtual char Display (SWModule & imodule);
 };
+
+SWORD_NAMESPACE_END
+
 #endif

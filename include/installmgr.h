@@ -3,12 +3,16 @@
 
 #include <stdio.h>
 #include <vector>
+#include <defs.h>
+
+SWORD_NAMESPACE_START
 
 
 // move this include to cpp once struct ftpparse isn't exposed anymore
 extern "C" {
 #include <ftpparse.h>
 }
+
 
 // initialize/cleanup SYSTEMWIDE library with life of this static.
 class InstallMgr_init {
@@ -41,5 +45,7 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 // size, type (dir, file, special).  Then change to vector of this class
 // instead of ftpparse
 std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
+
+SWORD_NAMESPACE_END
 
 #endif
