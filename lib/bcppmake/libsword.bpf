@@ -118,6 +118,8 @@ USEUNIT("..\..\src\utilfuns\ftpparse.c");
 USEUNIT("..\..\src\modules\filters\osisstrongs.cpp");
 USEUNIT("..\..\src\modules\filters\osismorph.cpp");
 USEUNIT("..\..\src\modules\filters\gbfredletterwords.cpp");
+USEUNIT("..\..\src\modules\filters\osisrtf.cpp");
+USEUNIT("..\..\src\modules\filters\osisplain.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
