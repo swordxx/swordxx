@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+09-Dec-2000     Chris Little <chrislit@crosswire.org>
+        Added addvs utility for adding single verses to modules
+
 02-Dec-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added write support for RawLD
 	Added new utility modwrite to call a write interface
