@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.8 2001/11/03 20:50:19 chrislit Exp $
+ * $Id: swbasicfilter.cpp,v 1.9 2001/11/03 20:54:05 chrislit Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -107,30 +107,40 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 
 
 void SWBasicFilter::pushString(char **buf, const char *fragToPush, const char *fragToPush2, const char *fragToPush3, const char *fragToPush4, const char *fragToPush5, const char *fragToPush6) {
-	while (*fragToPush) {
-		**buf = *fragToPush++;
-		(*buf)++;
-	}
-	while (*fragToPush2) {
-		**buf = *fragToPush2++;
-		(*buf)++;
-	}
-	while (*fragToPush3) {
-		**buf = *fragToPush3++;
-		(*buf)++;
-	}
+  while (*fragToPush) {
+    **buf = *fragToPush++;
+    (*buf)++;
+  }
+  if (fragToPush2) {
+    while (*fragToPush2) {
+      **buf = *fragToPush2++;
+      (*buf)++;
+    }
+    if (fragToPush3) {
+      while (*fragToPush3) {
+	**buf = *fragToPush3++;
+	(*buf)++;
+      }
+      if (fragToPush4) {
 	while (*fragToPush4) {
-		**buf = *fragToPush4++;
-		(*buf)++;
+	  **buf = *fragToPush4++;
+	  (*buf)++;
 	}
-	while (*fragToPush5) {
-		**buf = *fragToPush5++;
-		(*buf)++;
+	if (fragToPush5) {
+	  while (*fragToPush5) {
+	    **buf = *fragToPush5++;
+	    (*buf)++;
+	  }
+	  if (fragToPush6) {
+	    while (*fragToPush6) {
+	      **buf = *fragToPush6++;
+	      (*buf)++;
+	    }
+	  }
 	}
-	while (*fragToPush6) {
-		**buf = *fragToPush6++;
-		(*buf)++;
-	}
+      }
+    }
+  }
 }
 
 
