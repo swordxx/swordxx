@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.86 2003/02/16 06:54:52 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.87 2003/04/22 22:00:02 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -768,11 +768,16 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 		newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
 	}
 
-	if (!stricmp(driver.c_str(), "RawLD"))
+        string::size_type pos;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
+	if (!stricmp(driver.c_str(), "RawLD")) {
 		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+                pos = 1;
+        }
 
-	if (!stricmp(driver.c_str(), "RawLD4"))
+	if (!stricmp(driver.c_str(), "RawLD4")) {
 		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+                pos = 1;
+        }
 
 	if (!stricmp(driver.c_str(), "zLD")) {
 		SWCompress *compress = 0;
@@ -793,17 +798,25 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 		if (compress) {
 			newmod = new zLD(datapath.c_str(), name.c_str(), description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str());
 		}
+                pos = 1;
 	}
 
 	if (!stricmp(driver.c_str(), "RawGenBook")) {
 		newmod = new RawGenBook(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+                pos = 1;
 	}
-    // if a specific module type is set in the config, use this
-    if ((entry = section.find("Type")) != section.end())
-        newmod->Type(entry->second.c_str());
 
-     newmod->setConfig(&section);
-	return newmod;
+        if (pos == 1) {
+                pos = section["AbsoluteDataPath"].rfind("/");
+                section["AbsoluteDataPath"].erase(pos, section["AbsoluteDataPath"].length() - pos);
+        }
+
+        // if a specific module type is set in the config, use this
+        if ((entry = section.find("Type")) != section.end())
+                newmod->Type(entry->second.c_str());
+
+        newmod->setConfig(&section);
+                return newmod;
 }
 
 
