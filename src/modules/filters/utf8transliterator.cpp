@@ -27,6 +27,7 @@ const char UTF8Transliterator::optionstring[][NUMSCRIPTS] = {
 		"Hebrew",
 		"Cyrillic",
 		"Arabic",
+                "Syriac",
 		"Kana",
 		"Jamo",
 		"Hangul",
@@ -42,7 +43,8 @@ const char UTF8Transliterator::optionstring[][NUMSCRIPTS] = {
 		"Maltese",
 		"BETA",
 		"BGreek",
-		"BHebrew"
+		"MCHebrew",
+                "MCSyriac"
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -103,6 +105,7 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			case U_HEBREW: scripts[SE_HEBREW] = true; break;
 			case U_CYRILLIC: scripts[SE_CYRILLIC] = true; break;
 			case U_ARABIC: scripts[SE_ARABIC] = true; break;
+			case U_SYRIAC: scripts[SE_SYRIAC] = true; break;                        
 			case U_KATAKANA:
 			case U_HIRAGANA: scripts[SE_KANA] = true; break;
 			case U_HANGUL_SYLLABLES: scripts[SE_HANGUL] = true;
@@ -125,9 +128,12 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
 			case U_CJK_UNIFIED_IDEOGRAPHS:
 			case U_CJK_COMPATIBILITY_IDEOGRAPHS:
-			case U_CJK_COMPATIBILITY_FORMS: scripts[SE_HAN] = true;
-				scripts[SE_KANJI] = true;
-				break;
+			case U_CJK_COMPATIBILITY_FORMS:
+                                if (lang[0] == 'z' && lang[1] == 'h')
+                                        scripts[SE_HAN] = true;
+                                else if (lang[0] == 'j' && lang[1] == 'a')
+        				scripts[SE_KANJI] = true;
+        			break;
 				//default: scripts[SE_LATIN] = true;
 			}
 		} 
@@ -157,8 +163,10 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 			delete trans;
 		}
 		if (scripts[SE_HEBREW]) {
-			if (option == SE_BHEBREW)
-				id = UnicodeString("Hebrew-BHebrew", "");
+			if (option == SE_MCHEBREW)
+				id = UnicodeString("Hebrew-MCHebrew", "");
+                        else if (option == SE_SYRIAC)
+                                id = UnicodeString("Hebrew-Syriac", "");
 			else {
 				id = UnicodeString("Hebrew-Latin", "");
 				scripts[SE_LATIN] = true;
@@ -177,6 +185,19 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 		if (scripts[SE_ARABIC]) {
 			id = UnicodeString("Arabic-Latin", "");
 			scripts[SE_LATIN] = true;
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
+			trans->transliterate(ustr);
+			delete trans;
+		}
+		if (scripts[SE_SYRIAC]) {
+                        if (option == SE_MCSYRIAC)
+        			id = UnicodeString("Syriac-MCSyriac", "");
+                        else if (option == SE_HEBREW)
+                                id = UnicodeString("Syriac-Hebrew", "");
+                        else {
+        			id = UnicodeString("Syriac-Latin", "");
+        			scripts[SE_LATIN] = true;
+                        }
 			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 			trans->transliterate(ustr);
 			delete trans;
@@ -422,60 +443,35 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 				break;
 			}
 		}
-		
+
 		if (scripts[SE_LATIN]) {
-			if (option == SE_GREEK) {
+			if (option == SE_GREEK)
 				id = UnicodeString("Latin-Greek", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
-			else if (option == SE_HEBREW) {
+			else if (option == SE_HEBREW)
 				id = UnicodeString("Latin-Hebrew", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
-			else if (option == SE_CYRILLIC) {
+			else if (option == SE_CYRILLIC)
 				id = UnicodeString("Latin-Cyrillic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
-			else if (option == SE_ARABIC) {
+			else if (option == SE_ARABIC)
 				id = UnicodeString("Latin-Arabic", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
-			else if (option == SE_KANA) {
+			else if (option == SE_SYRIAC)
+				id = UnicodeString("Latin-Syriac", "");
+			else if (option == SE_KANA)
 				id = UnicodeString("Latin-Kana", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
-			else if (option == SE_JAMO) {
+			else if (option == SE_JAMO)
 				id = UnicodeString("Latin-Jamo", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
 			else if (option == SE_HANGUL) {
 				id = UnicodeString("Latin-Jamo", "");
 				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
 				trans->transliterate(ustr);
 				delete trans;
 				id = UnicodeString("Jamo-Hangul", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
 			}
-			else if (option == SE_MALTESE) {
+			else if (option == SE_MALTESE)
 				id = UnicodeString("Latin-Maltese", "");
-				trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
-				trans->transliterate(ustr);
-				delete trans;
-			}
+
+			trans = Transliterator::createInstance(id, UTRANS_FORWARD, status);
+			trans->transliterate(ustr);
+        		delete trans;
 		}
 		//		int32_t newlen = ((unsigned int)maxlen) > sizeof(text) ? maxlen : sizeof(text);
 		conv.fromUnicodeString(text, (long&)maxlen, ustr, status);
