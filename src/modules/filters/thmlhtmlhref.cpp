@@ -141,11 +141,11 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		XMLTag tag(token);
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) {
-				buf += "<small><em> (<a href=\"";
+			if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
+				buf += "<small><em>(<a href=\"";
 			}
 			else {
-				buf += "<small><em> &lt;<a href=\"";
+				buf += "<small><em>&lt;<a href=\"";
 			}
 
 			buf += "type=";
@@ -163,9 +163,9 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			buf += value ? value : "";
 
 			if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph"))
-				buf += "</a>&gt; </em></small>";
-			else
 				buf += "</a>) </em></small>";
+			else
+				buf += "</a>&gt; </em></small>";
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
 			userData["inscriptRef"] = "true";
