@@ -1,89 +1,79 @@
 // Any_Latex
 
-translit_Any_Latin1 {
+// This transliterator is supposed to convert Unicode text into
+// the (language-specific) transliterated format that latex (babel and arabtex)
+// expects. For the start, only ancient greek will be supported. Feel free to
+// add support for your language if desired.
+// I am just starting to use ICU, so please forgive my mistakes.
+
+// Author Martin Gruner
+// Copyright the Crosswire Bible Society
+
+translit_Any_Latex {
   Rule {
 
-  //NFKD then NFC; then NFD all non-Latin-1 codepoints
-  ":: NFKC ();"
-  ":: [^\u0000-\u00FF] NFD ();"
+  //Decompose combined characters
+  ":: NFD (NFC) ;"
+	
+	//How to handle accents now?
 
-  //remove non-spacing marks
-  "[:Mn:] > ;"
+	//The letters:
+  " \u0307A > | ;" //Iota subscriptum
+  " \u03084 > ' ;" //Accent acute
 
-  //change some non-Latin-1 codepoints to similar characters in Latin-1 range
-  " [\u2000-\u200A\u3000] > ' ' ;"
-  " [\u01C3\u2762]> '!' ;"
-  " \u203C > '!!' ;"
-  " [\u203D\u2048] > '?!' ;"
-  " [\u02BA\u030B\u030E\u2033\u3003\u201C-\u201F] > '\"' ;"
-  " [\u066A\u2030\u2031] > '%' ;"
-  " [\u02B9\u02BC\u02C8\u0301\u2032\u2018-\u201B] > '' ;"
-  " [\u066D\u2217\u2731] > '*' ;"
-  " [\u060C\u201A\u3001] > ',' ;"
-  " [\u2010-\u2013\u2212] > '-' ;"
-  " [\u2023\u06D4\u3002\u0589] > '.' ;"
-  " [\u0338\u2044\u2215] > '/' ;"
-  " \u2236 > ':' ;"
-  " \u061B > ';' ;"
-  " [\u2039\u2329\u3008] > '<' ;"
-  " \u2261 > '=' ;"
-  " [\u203A\u232A\u3009] > '>' ;"
-  " [\u037E\u061F] > '?' ;"
-  " \u2049 > '!?' ;"
-  " \u212C > B ;"
-  " [\u2102\u212D] > C ;"
-  " [\u2107\u2130] > E ;"
-  " [\u2131\u2132] > F ;"
-  " [\u210B\u210C\u210D] > H ;"
-  " [\u2110\u2111\u2160] > I ;"
-  " \u212A > K ;"
-  " \u2112 > L ;"
-  " \u2133 > L ;"
-  " \u2115 > N ;"
-  " \u2119 > P ;"
-  " \u211A > Q ;"
-  " [\u211B\u211C\u211D] > R ;"
-  " [\u2124\u2128] > Z ;"
-  " \u2216 > '\\' ;"
-  " [\u02C4\u02C6\u0302\u2303] > '^' ;"
-  " [\u02CD\u0331\u0332\u2017] > '_' ;"
-  " [\u02CB\u0300\u2035] > '`' ;"
-  " [\u212E\u212F] > e ;"
-  " [\u0261\u210A] > g ;"
-  " [\u04BB\u210E] > h ;"
-  " \u0131 > i ;"
-  " \u207F > n ;"
-  " \u2134 > o ;"
-  " \u01B6 > z ;"
-  " [\u01C0\u2223\u2758] > '|' ;"
-  " [\u02DC\u0303\u223C\uFF5E] > '~' ;"
-  " \u202F > \u00A0 ;"
-  " \uFFFD > \u001A;"
-  " \u20A4 > \u00A3 ;"
-  " [\u20A0-\u20AF] > \u00A4 ;"
-  " \u0308 > \u00A8 ;"
-  " \u2117 > \u00A9 ;"
-  " [\u226A\u300A] > \u00AB ;"
-  " \u2310 > \u00AC ;"
-  " \u1806 > \u00AD ;"
-  " [\u02C9\u0304\u0305] > \u00AF ;"
-  " [\u02DA\u030A\u2070\u2218] > \u00B0 ;"
-  " \u2213 > \u00B1 ;"
-  " [\u02B9\u02CA\u0301\u2032] > \u00B4 ;"
-  " [\u204B\u2761] > \u00B6 ;"
-  " [\u2022\u2024\u2027\u2219\u22C5\u30FB] > \u00B7 ;"
-  " \u0327 > \u00B8 ;"
-  " [\u226B\u300B] > \u00BB ;"
-  " \u2014 > '--';"
-  " \u2015 > '---';"
-  " \u2024 > '..';"
-  " \u2025 > '...';"
-  " \u2016 > '||';"
-  " \uFEFF > ;"
+  " \u03091 > A ;" //Alpha
+  " \u03092 > B ;" //Beta
+  " \u03093 > D ;" //Gamma
+  " \u03094 > G ;" //Delta
+  " \u03095 > E ;" //Epsilon
+  " \u03096 > Z ;" //Zeta
+  " \u03097 > J ;" //Thetha !!
+  " \u03098 > H ;" //Eta
+  " \u03099 > I ;" //Iota
+  " \u0309A > K ;" //Kappa
+  " \u0309B > L ;" //Lambda
+  " \u0309C > M ;" //My
+  " \u0309D > N ;" //Ny
+  " \u0309E > X ;" //Xi
+  " \u0309F > O ;" //Omikron
+  " \u030A0 > P ;" //Pi
+  " \u030A1 > R ;" //Rho
+  " \u030A3 > S ;" //Sigma
+  " \u030A4 > T ;" //Tau
+  " \u030A5 > U ;" //Ypsilon !!
+  " \u030A6 > F ;" //Phi
+  " \u030A7 > Q ;" //Chi  !!
+  " \u030A8 > Y ;" //Psi  !!
+  " \u030A9 > W ;" //Omikron
+  
+  " \u030B1 > a ;" //alpha
+  " \u030B2 > b ;" //beta
+  " \u030B3 > d ;" //gamma
+  " \u030B4 > g ;" //delta
+  " \u030B5 > e ;" //epsilon
+  " \u030B6 > z ;" //zeta
+  " \u030B7 > j ;" //thetha !!
+  " \u030B8 > h ;" //eta
+  " \u030B9 > i ;" //iota
+  " \u030BA > k ;" //kappa
+  " \u030BB > l ;" //lambda
+  " \u030BC > m ;" //my
+  " \u030BD > n ;" //ny
+  " \u030BE > x ;" //xi
+  " \u030BF > o ;" //omikron
+  " \u030C0 > p ;" //pi
+  " \u030C1 > r ;" //rho
+  " \u030C3 > s ;" //sigma
+  " \u030C4 > t ;" //tau
+  " \u030C5 > u ;" //ypsilon !!
+  " \u030C6 > f ;" //phi
+  " \u030C7 > q ;" //chi  !!
+  " \u030C8 > y ;" //psi  !!
+  " \u030C9 > w ;" //omikron
 
-  //change all spacing character to space
-  "[^\u0000-\u00FF] > ' ';"   
 
-  }
+  ":: NFC (NFD);"
+
+	}
 }
 
