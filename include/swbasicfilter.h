@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.3 2001/09/03 22:02:47 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.4 2001/11/03 20:51:47 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,7 +64,7 @@ protected:
 	void addEscapeStringSubstitute(const char *findString, const char *replaceString);
 	bool substituteToken(char **buf, const char *token);
 	bool substituteEscapeString(char **buf, const char *escString);
-	void pushString(char **buf, const char *fragToPush);
+	void pushString(char **buf, const char *fragToPush, const char *fragToPush2 = 0, const char *fragToPush3 = 0, const char *fragToPush4 = 0, const char *fragToPush5 = 0, const char *fragToPush6 = 0);
 
 	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
 	virtual bool handleEscapeString(char **buf, const char *escString, DualStringMap &userData);
