@@ -11,6 +11,13 @@ template <class Key, class T, class Compare>
 class multimapwithdefault : public multimap<Key, T, Compare> {
 public:
 	typedef pair<const Key, T> value_type;
+	T& getWithDefault(const Key& k, const T& defaultValue) {
+		if (find(k) == end()) {
+			insert(value_type(k, defaultValue));
+		}
+		return (*(find(k))).second;
+	}
+
 	T& operator[](const Key& k) {
 		if (find(k) == end()) {
 			insert(value_type(k, T()));
