@@ -22,10 +22,10 @@
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to create compressed Sword modules\n";
 	cerr << "version 0.1\n\n";
-	cerr << "usage: "<< appName << " datapath [block_bound [compress_type]]\n\n";
+	cerr << "usage: "<< appName << " <modname> <datapath> [blockType [compressType]]\n\n";
 	cerr << "datapath: the directory in which to write the zModule\n";
-	cerr << "block_bound  : (default 3)\n\t1 - bytes\n\t2 - verses\n\t3 - chapters\n\t4 - books\n";
-	cerr << "compress_type: (default 1):\n\t1 - LZSS\n\t2 - Zip\n";
+	cerr << "blockType  : (default 4)\n\t2 - verses\n\t3 - chapters\n\t4 - books\n";
+	cerr << "compressType: (default 1):\n\t1 - LZSS\n\t2 - Zip\n";
 	cerr << "\n\n";
 	exit(-1);
 }
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if ((iType < 1) || (iType > 4) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
+	if ((iType < 2) || (iType > 4) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
 		errorOutHelp(argv[0]);
 	}
 
