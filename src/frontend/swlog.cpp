@@ -28,7 +28,7 @@ void SWLog::LogWarning(char *fmt, ...)
 	char msg[2048];
 	va_list argptr;
 
-	if (log) {
+	if (logLevel >= 2) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
@@ -46,7 +46,7 @@ void SWLog::LogError(char *fmt, ...)
 	char msg[2048];
 	va_list argptr;
 
-	if (log) {
+	if (logLevel) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
@@ -64,7 +64,7 @@ void SWLog::LogTimedInformation(char *fmt, ...)
 	char msg[2048];
 	va_list argptr;
 
-	if (log) {
+	if (logLevel >= 4) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
@@ -82,7 +82,7 @@ void SWLog::LogInformation(char *fmt, ...)
 	char msg[2048];
 	va_list argptr;
 
-	if (log) {
+	if (logLevel >= 3) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
