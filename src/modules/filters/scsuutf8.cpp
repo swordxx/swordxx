@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * SCSUUTF8 -	SWFilter decendant to convert a SCSU character to UTF-8
+ * SCSUUTF8 -	SWFilter descendant to convert a SCSU character to UTF-8
  *
  */
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * unicodertf -	SWFilter decendant to convert a double byte unicode file
+ * unicodertf -	SWFilter descendant to convert a double byte unicode file
  *				 to RTF tags
  */
 

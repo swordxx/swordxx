@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * UTF8HebrewPoints - SWFilter decendant to remove UTF-8 Hebrew vowel points
+ * UTF8HebrewPoints - SWFilter descendant to remove UTF-8 Hebrew vowel points
  *
  */
 

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
- * thmlscripref -	SWFilter decendant to hide or show scripture references
- *			in a ThML module.
+ * thmlscripref -	SWFilter descendant to hide or show scripture
+ *			referebces in a ThML module.
  */
 
 

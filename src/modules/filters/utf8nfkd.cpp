@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* utf8nfkd - SWFilter decendant to perform NFKD (compatability decomposition
+* utf8nfkd - SWFilter descendant to perform NFKD (compatability decomposition
 *                   normalization) on UTF-8 text
 */
 

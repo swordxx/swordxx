@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * gbfrtf -	SWFilter decendant to convert all GBF tags to RTF tags
+ * gbfrtf -	SWFilter descendant to convert all GBF tags to RTF tags
  */
 
 

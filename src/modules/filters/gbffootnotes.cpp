@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * gbffootnotes -	SWFilter decendant to hide or show footnotes
+ * gbffootnotes -	SWFilter descendant to hide or show footnotes
  *			in a GBF module.
  */
 

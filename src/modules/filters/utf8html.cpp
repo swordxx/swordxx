@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * utf8html -	SWFilter decendant to convert a UTF-8 stream to HTML escapes
+ * utf8html -	SWFilter descendant to convert a UTF-8 stream to HTML escapes
  *
  */
 

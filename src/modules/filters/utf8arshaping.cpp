@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* utf8arshaping - SWFilter decendant to perform Arabic shaping on
+* utf8arshaping - SWFilter descendant to perform Arabic shaping on
 *                   UTF-8 text
 */
 

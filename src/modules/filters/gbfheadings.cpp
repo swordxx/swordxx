@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * gbfheadings -	SWFilter decendant to hide or show headings
+ * gbfheadings -	SWFilter descendant to hide or show headings
  *			in a GBF module.
  */
 

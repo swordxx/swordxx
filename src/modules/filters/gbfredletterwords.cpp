@@ -1,7 +1,7 @@
 /******************************************************************************
  *
- * GBFRedLetterWords -	SWFilter decendant to hide or show strongs number
- *			in a GBF module.
+ * GBFRedLetterWords -	SWFilter descendant to toggle red coloring of words of
+ *			Christ in a GBF module.
  */
 
 

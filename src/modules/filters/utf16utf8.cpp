@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * UTF16UTF8 -	SWFilter decendant to convert UTF-16 to UTF-8
+ * UTF16UTF8 -	SWFilter descendant to convert UTF-16 to UTF-8
  *
  */
 

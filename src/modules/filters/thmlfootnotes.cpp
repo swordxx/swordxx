@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmlfootnotes -	SWFilter decendant to hide or show footnotes
+ * thmlfootnotes -	SWFilter descendant to hide or show footnotes
  *			in a ThML module.
  */
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmlstrongs -	SWFilter decendant to hide or show strongs number
+ * thmlstrongs -	SWFilter descendant to hide or show strongs number
  *			in a ThML module.
  */
 

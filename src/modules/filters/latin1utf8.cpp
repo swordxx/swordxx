@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Latin1UTF8 -	SWFilter decendant to convert a Latin-1 character to UTF-8
+ * Latin1UTF8 -	SWFilter descendant to convert a Latin-1 character to UTF-8
  *
  */
 

@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* utf8cnormalizer - SWFilter decendant to perform reordering of UTF-8
+* utf8cnormalizer - SWFilter descendant to perform reordering of UTF-8
 *                   text to visual order according to Unicode BiDi
 */
 

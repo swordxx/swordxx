@@ -1,7 +1,7 @@
 /******************************************************************************
  *
- * greeklexattribs -	SWFilter decendant to set entry attributes for greek
- * 	lexicons
+ * greeklexattribs -	SWFilter descendant to set entry attributes for greek
+ * 	                lexicons
  */
 
 

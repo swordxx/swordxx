@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * gbfmorph -	SWFilter decendant to hide or show morph tags
+ * gbfmorph -	SWFilter descendant to hide or show morph tags
  *			in a GBF module.
  */
 

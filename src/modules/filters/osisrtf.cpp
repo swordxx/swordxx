@@ -125,7 +125,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 					int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
 					VerseKey *vkey;
-					// see if we have a VerseKey * or decendant
+					// see if we have a VerseKey * or descendant
 					try {
 						vkey = SWDYNAMIC_CAST(VerseKey, this->key);
 					}

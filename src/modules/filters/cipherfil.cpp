@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * cipherfil -	SWFilter decendant to decipher a module
+ * cipherfil -	SWFilter descendant to decipher a module
  */
 
 

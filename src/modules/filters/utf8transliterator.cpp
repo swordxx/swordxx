@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* utf8transliterators - SWFilter decendant to transliterate between
+* utf8transliterators - SWFilter descendant to transliterate between
 *			 ICU-supported scripts.
 */
 

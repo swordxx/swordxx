@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * gbfplain -	SWFilter decendant to strip out all GBF tags or convert to
+ * gbfplain -	SWFilter descendant to strip out all GBF tags or convert to
  *		ASCII rendered symbols.
  */
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * UTF8Cantillation - SWFilter decendant to remove UTF-8 Hebrew cantillation
+ * UTF8Cantillation - SWFilter descendant to remove UTF-8 Hebrew cantillation
  *
  */
 

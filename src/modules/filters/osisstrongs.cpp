@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * osisstrongs -	SWFilter decendant to hide or show strongs number
+ * osisstrongs -	SWFilter descendant to hide or show strongs number
  *			in a OSIS module.
  */
 

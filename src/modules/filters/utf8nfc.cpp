@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* utf8nfc - SWFilter decendant to perform NFC (canonical composition
+* utf8nfc - SWFilter descendant to perform NFC (canonical composition
 *                   normalization) on UTF-8 text
 */
 

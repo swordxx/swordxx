@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmllemma -	SWFilter decendant to hide or show lemmas
+ * thmllemma -	SWFilter descendant to hide or show lemmas
  *			in a ThML module.
  */
 

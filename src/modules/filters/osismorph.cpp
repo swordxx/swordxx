@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * osismorph -	SWFilter decendant to hide or show morph tags
+ * osismorph -	SWFilter descendant to hide or show morph tags
  *			in a OSIS module.
  */
 

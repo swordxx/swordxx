@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * UTF8GreekAccents - SWFilter decendant to remove UTF-8 Greek accents
+ * UTF8GreekAccents - SWFilter descendant to remove UTF-8 Greek accents
  *
  */
 

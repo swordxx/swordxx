@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmlmorph -	SWFilter decendant to hide or show morph tags
+ * thmlmorph -	SWFilter descendant to hide or show morph tags
  *			in a ThML module.
  */
 

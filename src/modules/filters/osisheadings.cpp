@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *osishmlheadings -	SWFilter decendant to hide or show headings
+ *osisheadings -	SWFilter descendant to hide or show headings
  *			in an OSIS module.
  */
 

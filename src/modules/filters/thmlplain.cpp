@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmlplain -	SWFilter decendant to strip out all ThML tags or convert to
+ * thmlplain -	SWFilter descendant to strip out all ThML tags or convert to
  *		ASCII rendered symbols.
  */
 

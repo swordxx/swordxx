@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmlheadings -	SWFilter decendant to hide or show headings
+ * thmlheadings -	SWFilter descendant to hide or show headings
  *			in a ThML module.
  */
 

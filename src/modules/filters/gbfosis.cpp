@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * gbfstrongs -	SWFilter decendant to hide or show strongs number
+ * gbfstrongs -	SWFilter descendant to hide or show strongs number
  *			in a GBF module.
  */
 

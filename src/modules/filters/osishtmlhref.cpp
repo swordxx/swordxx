@@ -1,5 +1,5 @@
 /***************************************************************************
-                     osishtmlhref.cpp  -  OSIS to HTML wiht hrefs filter
+                     osishtmlhref.cpp  -  OSIS to HTML with hrefs filter
                              -------------------
     begin                : 2003-06-24
     copyright            : 2003 by CrossWire Bible Society
@@ -116,7 +116,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 					int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
 					VerseKey *vkey;
-					// see if we have a VerseKey * or decendant
+					// see if we have a VerseKey * or descendant
 					try {
 						vkey = SWDYNAMIC_CAST(VerseKey, this->key);
 					}

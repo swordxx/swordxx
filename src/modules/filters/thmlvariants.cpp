@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * thmlvariants -	SWFilter decendant to hide or show textual variants
+ * thmlvariants -	SWFilter descendant to hide or show textual variants
  *			in a ThML module.
  */
 
