@@ -83,7 +83,8 @@
       ..\..\src\utilfuns\zlib\trees.obj ..\..\src\utilfuns\zlib\uncompr.obj 
       ..\..\src\utilfuns\zlib\untgz.obj ..\..\src\utilfuns\zlib\adler32.obj 
       ..\..\src\modules\filters\thmlosis.obj 
-      ..\..\src\modules\filters\greeklexattribs.obj ..\..\src\mgr\swcacher.obj"/>
+      ..\..\src\modules\filters\greeklexattribs.obj ..\..\src\mgr\swcacher.obj 
+      ..\..\src\modules\filters\gbfosis.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

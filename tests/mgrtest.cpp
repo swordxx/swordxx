@@ -5,6 +5,7 @@
 int main(int argc, char **argv) {
 	SWMgr::debug = true;
 	SWMgr mymgr;
+	char keypress[2];
 	cerr << "\n\nprefixPath: " << mymgr.prefixPath;
 	cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
 
@@ -25,5 +26,6 @@ int main(int argc, char **argv) {
 		for (mhc->Key("Gen 1:1"); mhc->Key() < (VerseKey) "Gen 1:10"; (*mhc)++)
 			cout << (const char *) *mhc << "\n";
 	}
+	cin >> keypress;
 	return 0;
 }

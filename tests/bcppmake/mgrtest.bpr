@@ -3,8 +3,8 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.05.03"/>
-    <PROJECT value="parsekey.exe"/>
-    <OBJFILES value="..\parsekey.obj"/>
+    <PROJECT value="mgrtest.exe"/>
+    <OBJFILES value="..\mgrtest.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -24,7 +24,7 @@
     <LINKER value="tlink32"/>
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
-    <MAINSOURCE value="parsekey.bpf"/>
+    <MAINSOURCE value="mgrtest.bpf"/>
     <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>

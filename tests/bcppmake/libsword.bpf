@@ -109,6 +109,7 @@ USEUNIT("..\..\src\utilfuns\zlib\adler32.c");
 USEUNIT("..\..\src\modules\filters\thmlosis.cpp");
 USEUNIT("..\..\src\modules\filters\greeklexattribs.cpp");
 USEUNIT("..\..\src\mgr\swcacher.cpp");
+USEUNIT("..\..\src\modules\filters\gbfosis.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
