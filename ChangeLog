@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+07-Jul-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added enough functionality to remotely install
+		into installmgr, but Daniel Glassey needs
+		to fix the linux autobuild stuff :)
+	Added SWOptionFilter and made most option filters
+		extent this class.
+
 26-Jun-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Removed all std::string references from API and
 		mostly replaced with SWBuf
