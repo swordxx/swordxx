@@ -30,7 +30,7 @@ public:
     virtual ~ RawVerse ();
   void findoffset (char testmt, long idxoff, long *start,
 		   unsigned short *end);
-  void gettext (char testmt, long start, unsigned short size, char *buf);
+  void readtext (char testmt, long start, unsigned short size, char *buf);
   static char createModule (const char *path);
 };
 

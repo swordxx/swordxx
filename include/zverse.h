@@ -48,7 +48,7 @@ public:
 	zVerse (const char *ipath, int fileMode = O_RDONLY, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
 	virtual ~ zVerse ();
 	void findoffset (char testmt, long idxoff, long *start, unsigned short *end);
-	void swgettext (char testmt, long start, unsigned short size, char *buf);
+	void zreadtext (char testmt, long start, unsigned short size, char *buf);
 	static char createModule (const char *path, int blockBound);
 };
 
