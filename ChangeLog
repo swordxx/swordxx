@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+23-Mar-2001	Joachim Ansorg <jansorg@gmx.de>
+   Made some changes to the API documentation in the headers (documented new
+classes).
+
 11-Mar-2001     Troy A. Griffitts <scribe@crosswire.org>
     Added multimapwithdefault template and changed swconfig to use
     Added operator [] to SWConfig
