@@ -5,6 +5,7 @@
 #include "stringmgr.h"
 
 using namespace sword;
+using namespace std;
 
 class StringMgrTest : public CppUnit::TestFixture  {
 CPPUNIT_TEST_SUITE( StringMgrTest );
@@ -22,13 +23,19 @@ public:
 		StringMgr* mgr = StringMgr::getSystemStringMgr();
 		
 		CPPUNIT_ASSERT( !strcmp(mgr->upperLatin1(""), "") );
-		CPPUNIT_ASSERT( !strcmp(mgr->upperLatin1("hi this is a test"), "HI THIS IS A TEST") );
+		
+		char t[10] = "Test!";
+		const char* ret = mgr->upperLatin1(t);
+		cout << ret << endl;
+		CPPUNIT_ASSERT( ret && !strcmp(ret, "TEST!") );
 	}
 	
 	void testUpperUTF8() {
 		StringMgr* mgr = StringMgr::getSystemStringMgr();
 		if (mgr->hasUTF8Support()) {
-			CPPUNIT_ASSERT( !strcmp(mgr->upperUTF8("äüöß"), "ÄÜÖß") );
+			char t[10] = "hi";
+			char* ret = mgr->upperUTF8(t);
+			CPPUNIT_ASSERT( ret && !strcmp(ret, "HI") );
 		}	
 	}
 };

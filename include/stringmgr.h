@@ -2,7 +2,7 @@
  *	stringmgr.h - A class which provides string andling functions which can 
  *			reimplemented by frontends
  *
- * $Id: stringmgr.h,v 1.2 2004/04/19 14:27:48 joachim Exp $
+ * $Id: stringmgr.h,v 1.3 2004/07/20 12:53:36 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,9 @@
 
 SWORD_NAMESPACE_START
 
+/** StringMgr is a way to provide UTf8 handling by the Sword frontend
+ * Each platform, if it's up-to-date, should provide functions to handle unicode and utf8. This class makes it possible to implement Unicode support on the user-side and not in Sword itself.
+ */
 class StringMgr {
 public:
 	/** Sets the global StringMgr handle
@@ -38,7 +41,9 @@ public:
 	* @return The global string handle
 	*/
 	static StringMgr* getSystemStringMgr();
-	/*
+	/* Checks whether Utf8 support is available.
+	* Override the function supportsUnicode() to tell whether your implementation has utf8 support.
+	* @return True if this implementation provides support for Utf8 handling or false if just latin1 handling is available
 	*/
 	static const bool hasUTF8Support() {
 		return getSystemStringMgr()->supportsUnicode();
@@ -57,7 +62,7 @@ public:
 protected:
 	friend class __staticsystemStringMgr;
 	
-	/** Default constructor
+	/** Default constructor. Protected to make instances on user side impossible, because this is a Singleton
 	*/		
 	StringMgr();
 	/** Copy constructor
