@@ -11,15 +11,18 @@ using std::map;
 using std::pair;
 
 typedef pair<string,string> DataPair;
+typedef map<string,string> DataMap;
 
 const std::string encodeURL( const std::string& url ) {
 	string buf( url );
 
-        map<string, string> m;
+    DataMap m;
 	m[" "] = "+";
 	m[":"] = "%3A";
 
-	for (map<string,string>::iterator it = m.begin(); it != m.end(); ++it) {
+	DataMap::iterator it;
+
+	for (it = m.begin(); it != m.end(); ++it) {
 		string search =  it->first;
 		string replace = it->second;
 		while (true) {
