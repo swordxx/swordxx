@@ -19,7 +19,7 @@ docssmodsd += samples/mods.d/web.conf
 docssmodsd += samples/mods.d/websters.conf
 
 modsconf += samples/mods.d/globals.conf
-localesconf += locales.d/cs.conf
+# localesconf += locales.d/cs.conf
 localesconf += locales.d/da.conf
 localesconf += locales.d/de.conf
 localesconf += locales.d/es.conf
@@ -27,11 +27,10 @@ localesconf += locales.d/fr.conf
 localesconf += locales.d/it.conf
 localesconf += locales.d/nl.conf
 localesconf += locales.d/no.conf
-localesconf += locales.d/pl.conf
+# localesconf += locales.d/pl.conf
 localesconf += locales.d/pt.conf
-localesconf += locales.d/sk.conf
+# localesconf += locales.d/sk.conf
 localesconf += locales.d/abbr.conf
-
 
 include ${root}/Makefile.cfg
 
@@ -54,8 +53,11 @@ endif
 #	$(CROSS_COMPILE)$(CC) $(LFLAGS) -o $@ $(l)
 
 buildso:
+ifneq (${mingw},yes)
 	$(CROSS_COMPILE)$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
-
+else
+	$(CROSS_COMPILE)$(CC) --shared -o ${root}/lib/libsword.dll -Wl,--out-implib,${root}/lib/libsword.dll.a ${objdir}/*.so -lz.dll -lstdc++
+endif
 
 # Maintenance targets
 
