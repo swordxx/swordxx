@@ -33,6 +33,7 @@ public:
 	void   next() throw(CORBA::SystemException) { delegate->increment(); }
 	void   begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
+	StringList *getEntryAttribute(const char *level1, const char *level2, const char *level3) throw(CORBA::SystemException);
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
 	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }
 

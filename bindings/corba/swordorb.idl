@@ -40,6 +40,7 @@ interface SWModule {
 	SearchHitList search(in string istr, in SearchType searchType, in long flags, in string scope);
 	char   error();
 	long  getEntrySize();
+	StringList getEntryAttribute(in string level1, in string level2, in string level3);
 	void   setKeyText(in string key);
 	string getKeyText();
 	StringList getKeyChildren();

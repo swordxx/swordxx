@@ -96,7 +96,6 @@ StringList *SWMgr_impl::getGlobalOptionValues(const char *option) throw(CORBA::S
 	return retVal;
 }
 
-
 void SWMgr_impl::terminate() throw(CORBA::SystemException) {
 	exit(0);
 }
@@ -141,6 +140,38 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 		(*retVal)[i].key = CORBA::string_dup((const char *)result);
 		(*retVal)[i++].score = (long)result.getElement()->userData;
 	}
+
+	return retVal;
+}
+
+
+
+StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *level2, const char *level3) throw(CORBA::SystemException) {
+	delegate->RenderText();	// force parse
+	sword::AttributeTypeList &entryAttribs = delegate->getEntryAttributes();
+	sword::AttributeTypeList::iterator i1 = entryAttribs.find(level1);
+	sword::AttributeList::iterator i2;
+	sword::AttributeValue::iterator i3, j3;
+	StringList *retVal = new StringList;
+	int count = 0;
+
+	if (i1 != entryAttribs.end()) {
+		i2 = i1->second.find(level2);
+		if (i2 != i1->second.end()) {
+			i3 = i2->second.find(level3);
+			if (i3 != i2->second.end()) {
+				for (j3 = i3; j3 != i2->second.end(); j3++)
+					count++;
+				retVal->length(count);
+				count = 0;
+				for (j3 = i3; j3 != i2->second.end(); j3++) {
+					(*retVal)[count++] = CORBA::string_dup(i3->second.c_str());
+				}
+			}
+		}
+	}
+	if (!count)
+		retVal->length(count);
 
 	return retVal;
 }
