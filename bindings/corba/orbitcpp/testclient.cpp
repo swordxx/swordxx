@@ -32,24 +32,22 @@ int main (int argc, char *argv[])
 		std::cout << "ConfigPath: " << mgr->getConfigPath() << "\n";
 		modInfoList = mgr->getModInfoList();
 		std::cout << "sequence length: " << modInfoList->length() << "\n";
-/*
 		for (int i = 0; i < modInfoList->length(); i++) {
 			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].category << ": " << (*modInfoList)[i].language << "\n";
-			module = mgr->getModuleByName((*modInfoList)[i].name);
-			module->setKeyText("jas1:19");
-			std::cout << module->getRenderText() << "\n";
+			if (!strncmp((*modInfoList)[i].category, "Bibl", 4)) {
+				module = mgr->getModuleByName((*modInfoList)[i].name);
+				module->setKeyText("jas1:19");
+				std::cout << module->getRenderText() << "\n";
+			}
+			std::cout << "\n";
 		}
-*/
-		module = mgr->getModuleByName("NASB");
-		module->setKeyText("jn3:1");
-		std::cout << module->getRenderText();
 		/*
 		swordorb::SearchHitList *searchResults;
 		searchResults = module->search("God love world", swordorb::MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults->length(); i++) {
 			std::cout << (*searchResults)[i].key << "\n";
 		}
-		*/;
+		*/
 
 
 		
