@@ -17,8 +17,6 @@
  *
  */
 
-#ifdef ICU
-
 #ifndef UTF8UTF16_H
 #define UTF8UTF16_H
 
@@ -34,5 +32,4 @@ public:
   virtual char ProcessText (char *text, int maxlen, const SWKey *key);
 };
 
-#endif
 #endif

@@ -18,8 +18,8 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key)
 {
   unsigned short *from;
   unsigned char *to;
-  int32_t len;
 
+  int len;
   unsigned long uchar;
   unsigned short schar;
 
