@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.22 2002/03/05 01:15:58 scribe Exp $
+ * $Id: versekey.h,v 1.23 2002/03/06 00:35:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -200,14 +200,14 @@ public:
 	* @param lb the new lower boundary for this	VerseKey
 	* @return the lower boundary the key was set to
 	*/
-	VerseKey & LowerBound(const char *lb, bool norecurse = false);
+	VerseKey & LowerBound(const char *lb);
 	
 	/** sets the upper boundary for this	VerseKey
 	* and returns the new boundary
 	* @param lb the new upper boundary for this	VerseKey
 	* @return the upper boundary the key was set to
 	*/
-	VerseKey & UpperBound(const char *ub, bool norecurse = false);
+	VerseKey & UpperBound(const char *ub);
 	
 	/** gets the lower boundary of this	VerseKey
 	* @return the lower boundary of this	VerseKey
