@@ -16,13 +16,12 @@
       ..\..\obj\gbfhtml.obj ..\..\obj\gbfplain.obj ..\..\obj\gbfrtf.obj 
       ..\..\obj\gbfstrongs.obj ..\..\obj\gbfthml.obj 
       ..\..\obj\plainfootnotes.obj ..\..\obj\plainhtml.obj ..\..\obj\rtfhtml.obj 
-      ..\..\obj\rwphtml.obj ..\..\obj\rwprtf.obj ..\..\obj\thmlgbf.obj 
-      ..\..\obj\thmlhtml.obj ..\..\obj\thmlplain.obj ..\..\obj\cipherfil.obj 
-      ..\..\obj\swld.obj ..\..\obj\rawld.obj ..\..\obj\swtext.obj 
-      ..\..\obj\rawtext.obj ..\..\obj\ztext.obj ..\..\obj\zverse.obj 
-      ..\..\obj\treekey.obj ..\..\obj\treekeyidx.obj ..\..\obj\rawstr4.obj 
-      ..\..\obj\zstr.obj ..\..\obj\swgenbook.obj ..\..\obj\rawgenbook.obj 
-      ..\..\obj\swfiltermgr.obj ..\..\obj\utf8utf16.obj 
+      ..\..\obj\thmlgbf.obj ..\..\obj\thmlhtml.obj ..\..\obj\thmlplain.obj 
+      ..\..\obj\cipherfil.obj ..\..\obj\swld.obj ..\..\obj\rawld.obj 
+      ..\..\obj\swtext.obj ..\..\obj\rawtext.obj ..\..\obj\ztext.obj 
+      ..\..\obj\zverse.obj ..\..\obj\treekey.obj ..\..\obj\treekeyidx.obj 
+      ..\..\obj\rawstr4.obj ..\..\obj\zstr.obj ..\..\obj\swgenbook.obj 
+      ..\..\obj\rawgenbook.obj ..\..\obj\swfiltermgr.obj ..\..\obj\utf8utf16.obj 
       ..\..\obj\gbfheadings.obj ..\..\obj\gbfhtmlhref.obj ..\..\obj\gbfmorph.obj 
       ..\..\obj\latin1utf16.obj ..\..\obj\latin1utf8.obj ..\..\obj\scsuutf8.obj 
       ..\..\obj\swbasicfilter.obj ..\..\obj\thmlfootnotes.obj 
@@ -45,7 +44,13 @@
       ..\..\obj\gbfosis.obj ..\..\obj\thmlosis.obj ..\..\obj\encfiltmgr.obj 
       ..\..\obj\markupfiltmgr.obj ..\..\obj\roman.obj ..\..\obj\swsourcemgr.obj 
       ..\..\obj\installmgr.obj ..\..\obj\ftpparse.obj ..\..\obj\osisstrongs.obj 
-      ..\..\obj\osismorph.obj ..\..\obj\gbfredletterwords.obj"/>
+      ..\..\obj\osismorph.obj ..\..\obj\gbfredletterwords.obj 
+      ..\..\obj\osisheadings.obj ..\..\obj\swbuf.obj ..\..\obj\utilxml.obj 
+      ..\..\obj\osisplain.obj ..\..\obj\osisrtf.obj ..\..\obj\thmlwebif.obj 
+      ..\..\obj\gbfwebif.obj ..\..\obj\utilweb.obj ..\..\obj\osisfootnotes.obj 
+      ..\..\obj\osisscripref.obj ..\..\obj\swoptfilter.obj 
+      ..\..\obj\osislemma.obj ..\..\obj\osisredletterwords.obj 
+      ..\..\obj\osishtmlhref.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -55,7 +60,7 @@
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\src\keys;..\..\src\keys;..\..\src\keys;..\..\src\keys;..\..\src\mgr;..\..\src\mgr;..\..\src\mgr;..\..\src\mgr;..\..\src\mgr;..\..\src\utilfuns;..\..\src\utilfuns;..\..\src\utilfuns;..\..\src\frontend;..\..\src\frontend;..\..\src\modules;..\..\src\modules\comments;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\rawfiles;..\..\src\modules\common;..\..\src\modules\common;..\..\src\modules\common;..\..\src\modules\common;..\..\src\modules\common;..\..\src\modules\common;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\lexdict;..\..\src\modules\lexdict\rawld;..\..\src\modules\texts;..\..\src\modules\texts\rawtext;..\..\src\modules\texts\ztext;..\..\src\modules\common;..\..\src\keys;..\..\src\keys;..\..\src\modules\common;..\..\src\modules\common;..\..\src\modules\genbook;..\..\src\modules\genbook\rawgenbook;..\..\src\mgr;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\comments\zcom;..\..\src\modules\lexdict\rawld4;..\..\src\modules\common;..\..\src\modules\lexdict\zld;..\..\src\modules\common;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\utilfuns\zlib;..\..\src\modules\filters;..\..\src\mgr;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\mgr;..\..\src\mgr;..\..\src\utilfuns;..\..\src\mgr;..\..\src\mgr;..\..\src\utilfuns;..\..\src\modules\filters;..\..\src\modules\filters;..\..\src\modules\filters"/>
+    <PATHCPP value=".;..\..\src\keys;..\..\src\mgr;..\..\src\utilfuns;..\..\src\frontend;..\..\src\modules;..\..\src\modules\comments;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\rawfiles;..\..\src\modules\common;..\..\src\modules\filters;..\..\src\modules\lexdict;..\..\src\modules\lexdict\rawld;..\..\src\modules\texts;..\..\src\modules\texts\rawtext;..\..\src\modules\texts\ztext;..\..\src\modules\genbook;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\comments\zcom;..\..\src\modules\lexdict\rawld4;..\..\src\modules\lexdict\zld;..\..\src\utilfuns\zlib"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -132,8 +137,6 @@
       <FILE FILENAME="..\..\src\modules\filters\plainfootnotes.cpp" FORMNAME="" UNITNAME="plainfootnotes" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\plainhtml.cpp" FORMNAME="" UNITNAME="plainhtml" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\rtfhtml.cpp" FORMNAME="" UNITNAME="rtfhtml" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\modules\filters\rwphtml.cpp" FORMNAME="" UNITNAME="rwphtml" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\modules\filters\rwprtf.cpp" FORMNAME="" UNITNAME="rwprtf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlgbf.cpp" FORMNAME="" UNITNAME="thmlgbf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlhtml.cpp" FORMNAME="" UNITNAME="thmlhtml" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlplain.cpp" FORMNAME="" UNITNAME="thmlplain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -213,6 +216,20 @@
       <FILE FILENAME="..\..\src\modules\filters\osisstrongs.cpp" FORMNAME="" UNITNAME="osisstrongs" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osismorph.cpp" FORMNAME="" UNITNAME="osismorph" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\gbfredletterwords.cpp" FORMNAME="" UNITNAME="gbfredletterwords" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisheadings.cpp" FORMNAME="" UNITNAME="osisheadings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\utilfuns\swbuf.cpp" FORMNAME="" UNITNAME="swbuf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\utilfuns\utilxml.cpp" FORMNAME="" UNITNAME="utilxml" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisplain.cpp" FORMNAME="" UNITNAME="osisplain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisrtf.cpp" FORMNAME="" UNITNAME="osisrtf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\thmlwebif.cpp" FORMNAME="" UNITNAME="thmlwebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\gbfwebif.cpp" FORMNAME="" UNITNAME="gbfwebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\utilfuns\utilweb.cpp" FORMNAME="" UNITNAME="utilweb" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisfootnotes.cpp" FORMNAME="" UNITNAME="osisfootnotes.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisscripref.cpp" FORMNAME="" UNITNAME="osisscripref.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\swoptfilter.cpp" FORMNAME="" UNITNAME="swoptfilter.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osislemma.cpp" FORMNAME="" UNITNAME="osislemma.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osisredletterwords.cpp" FORMNAME="" UNITNAME="osisredletterwords.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osishtmlhref.cpp" FORMNAME="" UNITNAME="osishtmlhref" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
