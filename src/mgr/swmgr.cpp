@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.18 2000/05/21 22:30:05 scribe Exp $
+ * $Id: swmgr.cpp,v 1.19 2000/05/21 22:36:02 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -663,7 +663,7 @@ OptionsList SWMgr::getGlobalOptionValues(const char *option)
 }
 
 
-char SWMgr::setCipherKey(const char *modName, unsigned char *key) {
+char SWMgr::setCipherKey(const char *modName, const char *key) {
 	FilterMap::iterator it;
 	ModMap::iterator it2;
 
@@ -677,7 +677,7 @@ char SWMgr::setCipherKey(const char *modName, unsigned char *key) {
 	else {
 		it2 = Modules.find(modName);
 		if (it2 != Modules.end()) {
-			SWFilter *cipherFilter = new CipherFilter((const char *)key);
+			SWFilter *cipherFilter = new CipherFilter(key);
 			cipherFilters.insert(FilterMap::value_type(modName, cipherFilter));
 			cleanupFilters.push_back(cipherFilter);
 			(*it2).second->AddRawFilter(cipherFilter);

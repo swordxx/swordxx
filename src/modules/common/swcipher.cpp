@@ -112,6 +112,7 @@ void SWCipher::Decode(void)
  *
  */
 
-void SWCipher::setCipherKey(unsigned char *key) {
+void SWCipher::setCipherKey(const char *ikey) {
+	unsigned char *key = (unsigned char *)ikey;
 	master.initialize(key, strlen((char *)key));
 }
