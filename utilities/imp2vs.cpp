@@ -96,12 +96,12 @@ int main(int argc, char **argv) {
 		
 		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
 		cout << "f" << (const char*)firstverse << endl;
-		(*mod)++;
+		(mod->Key())++;
 	      }
 	      while (mod->Key() <= finalkey) {
 		cout << (const char*)mod->Key() << endl;
 		*(SWModule*)mod << &firstverse;
-		(*mod)++;
+		(mod->Key())++;
 	      }
 	    }
 	    else {
@@ -161,12 +161,12 @@ int main(int argc, char **argv) {
 	    
 	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
 	    cout << "f" << (const char*)firstverse << endl;
-	    (*mod)++;
+	    (mod->Key())++;
 	  }
 	  while (mod->Key() <= finalkey) {
 	    cout << (const char*)mod->Key() << endl;
 	    *(SWModule*)mod << &firstverse;
-	    (*mod)++;
+	    (mod->Key())++;
 	  }
 	}
 	else {
