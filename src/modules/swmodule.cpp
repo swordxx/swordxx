@@ -487,8 +487,9 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 			}
 			if (searchType == -2) {
 				int i;
+				const char *stripBuf = StripText();
 				for (i = 0; i < wordCount; i++) {
-					sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), words[i]) : strstr(StripText(), words[i]);
+					sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(stripBuf, words[i]) : strstr(stripBuf, words[i]);
 					if (!sres)
 						break;
 				}
