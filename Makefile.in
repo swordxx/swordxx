@@ -226,7 +226,7 @@ SUBDIRS = lib . icu apps $(am__append_1) $(am__append_2) $(am__append_3)
 
 INCLUDES = -I $(top_srcdir)/include
 
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh $(localeDATA)
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh $(localeDATA) samples/mods.d/globals.conf
 
 @INSTCONF_TRUE@sysconf_DATA = sword.conf
 
@@ -238,6 +238,7 @@ testlib_SOURCES = testlib.cpp
 localeDATA = locales.d/abbr.conf locales.d/cs.conf locales.d/da.conf locales.d/de.conf locales.d/de_abbrev.conf locales.d/es.conf locales.d/fi.conf locales.d/fr.conf locales.d/fr_FR.ISO-8859-1.conf locales.d/it.conf locales.d/la.conf locales.d/nl.conf locales.d/no.conf locales.d/pl.conf locales.d/pt.conf locales.d/id.conf locales.d/pt_BR.conf locales.d/sk.conf locales.d/et.conf locales.d/et_abbr.conf locales.d/ru_RU-cp1251.conf locales.d/ru_RU-koi8-r.conf locales.d/uk_UA-koi8-u.conf locales.d/uk_UA-cp1251.conf locales.d/ro.conf
 
 localedatadir = $(pkgdatadir)/locales.d
+
 @INSTCONF_TRUE@modsDATA = samples/mods.d/globals.conf
 
 @INSTCONF_TRUE@modsdatadir = $(pkgdatadir)/mods.d
@@ -539,7 +540,7 @@ distcleancheck_listfiles = find . -type f -print
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/./locales.d $(distdir)/./samples $(distdir)/locales.d
+	$(mkinstalldirs) $(distdir)/./locales.d $(distdir)/./samples $(distdir)/locales.d $(distdir)/samples/mods.d
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
