@@ -13,6 +13,7 @@ EchoMod::EchoMod() : SWText("echomod", "Echos back key")
 
 EchoMod::~EchoMod()
 {
+    this->SWText::~SWText();
 }
 
 

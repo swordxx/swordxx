@@ -27,4 +27,5 @@ SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp): SWMo
 
 SWCom::~SWCom()
 {
+    this->SWModule::~SWModule();
 }

@@ -39,4 +39,5 @@ void StrKey::init() {
 
 StrKey::~StrKey()
 {
+        this->SWKey::~SWKey();
 }

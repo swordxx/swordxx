@@ -28,6 +28,7 @@ GBFFootnotes::GBFFootnotes() {
 
 
 GBFFootnotes::~GBFFootnotes() {
+    this->SWFilter::~SWFilter();
 }
 
 void GBFFootnotes::setOptionValue(const char *ival)

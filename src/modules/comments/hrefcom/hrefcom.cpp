@@ -48,6 +48,8 @@ HREFCom::~HREFCom()
 		delete [] versebuf;
 	if (prefix)
 		delete [] prefix;
+    this->RawVerse::~RawVerse();
+    this->SWCom::~SWCom();
 }
 
 

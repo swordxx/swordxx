@@ -43,8 +43,8 @@ RawCom::~RawCom()
 	if (versebuf)
 		delete [] versebuf;
 
-     SWCom::~SWCom();	// clean up parents
-     RawVerse::~RawVerse();
+     this->SWCom::~SWCom();	// clean up parents
+     this->RawVerse::~RawVerse();
 }
 
 

@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.7 2001/02/15 17:38:35 jansorg Exp $
+ * $Id: listkey.h,v 1.8 2001/02/21 04:35:09 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,8 +33,7 @@
   * types of keys that have lists of specified indexes
   * (e.g. a list of verses, place, etc.)
   */
-class SWDLLEXPORT ListKey:public SWKey
-{
+class SWDLLEXPORT ListKey : public SWKey {
 
   static SWClass classdef;
   void init ();

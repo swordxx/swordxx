@@ -42,6 +42,8 @@ RawGBF::~RawGBF()
 {
 	if (versebuf)
 		delete [] versebuf;
+    this->SWText::~SWText();
+    this->RawVerse::~RawVerse();
 }
 
 

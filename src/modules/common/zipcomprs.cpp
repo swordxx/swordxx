@@ -27,6 +27,7 @@ ZipCompress::ZipCompress() : SWCompress()
 
 ZipCompress::~ZipCompress()
 {
+    this->SWCompress::~SWCompress();
 }
 
 

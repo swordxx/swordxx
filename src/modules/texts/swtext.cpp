@@ -27,7 +27,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp): SW
 
 SWText::~SWText()
 {
-	SWModule::~SWModule()	// clean up parent
+	this->SWModule::~SWModule();	// clean up parent
 }
 
 

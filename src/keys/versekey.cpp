@@ -131,6 +131,7 @@ VerseKey::~VerseKey()
 	if (lowerBound)
 		delete lowerBound;
 	--instance;
+    this->SWKey::~SWKey();
 }
 
 

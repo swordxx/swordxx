@@ -40,6 +40,9 @@ zCom::zCom(char *ipath, char *iname, char *idesc, SWDisplay *idisp) : RawVerse(i
 
 zCom::~zCom()
 {
+    this->SWCompress::~SWCompress();
+    this->SWCom::~SWCom();
+    this->RawVerse::~RawVerse();
 }
 
 

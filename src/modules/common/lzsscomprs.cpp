@@ -75,6 +75,7 @@ LZSSCompress::LZSSCompress() : SWCompress() {
  */
 
 LZSSCompress::~LZSSCompress() {
+    this->SWCompress::~SWCompress();
 }
 
 

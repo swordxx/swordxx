@@ -16,6 +16,7 @@ CipherFilter::CipherFilter(const char *key) {
 
 CipherFilter::~CipherFilter() {
 	delete cipher;
+    this->SWFilter::~SWFilter();
 }
 
 

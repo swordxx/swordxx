@@ -48,6 +48,8 @@ RawFiles::~RawFiles()
 {
 	if (versebuf)
 		delete [] versebuf;
+    this->RawVerse::~RawVerse();
+    this->SWCom::~SWCom();
 }
 
 

@@ -72,7 +72,7 @@ RawText::~RawText()
 	if (fastSearch[1])
 		delete fastSearch[1];
 
-     SWText::~SWText();	// clean up parent
+     this->SWText::~SWText();	// clean up parent
 }
 
 
