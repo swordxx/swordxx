@@ -1,7 +1,12 @@
 #!/bin/sh
 echo "*** Sword build system generation"
 echo "*** Recreating libtool"
-libtoolize --force --copy;
+if test -z $LTIZE; then
+LTIZE="$AUTODIR""libtoolize"
+fi
+echo "$LTIZE"
+	$LTIZE --force --copy;
+
 ACLOCAL="$AUTODIR""aclocal"
 echo "*** Recreating aclocal.m4"
 echo "$ACLOCAL"
