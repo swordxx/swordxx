@@ -15,27 +15,26 @@ UTF8HTML::UTF8HTML() {
 }
 
 
-char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UTF8HTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	unsigned char *to, *from;
+	unsigned char *from;
 	int len;
         char digit[10];
         unsigned long ch;
 	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
 		return -1;
 
-	len = strlenw(text) + 2;						// shift string to right of buffer
-	if (len < maxlen) {
-	        memmove(&text[maxlen - len], text, len);
-		from = (unsigned char*)&text[maxlen - len];
-	}
-	else	from = (unsigned char*)text;
+	len = strlenw(text.c_str()) + 2;						// shift string to right of buffer
+
+	SWBuf orig = text;
+  from = (unsigned char *)orig.c_str();
+
 	// -------------------------------
-	for (to = (unsigned char*)text; *from; from++) {
+	for (text = ""; *from; from++) {
 	  ch = 0;
           if ((*from & 128) != 128) {
 //          	if (*from != ' ')
-	       *to++ = *from;
+	       text += *from;
                continue;
           }
           if ((*from & 128) && ((*from & 64) != 64)) {
@@ -57,15 +56,13 @@ char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
           
           ch |= (((short)*from) << (((6*subsequent)+significantFirstBits)-8));
           from += subsequent;
-          *to++ = '&';
-          *to++ = '#';
+          text += '&';
+          text += '#';
 	  sprintf(digit, "%d", ch);
 		for (char *dig = digit; *dig; dig++)
-			*to++ = *dig;
-		*to++ = ';';
+			text += *dig;
+		text += ';';
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 

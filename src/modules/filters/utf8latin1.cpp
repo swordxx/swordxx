@@ -15,10 +15,9 @@ UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
 }
 
 
-char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UTF8Latin1::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
   unsigned char *from;
-  unsigned short *to;
 
   int len;
   unsigned long uchar;
@@ -26,18 +25,15 @@ char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
   
 	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
 		return -1;
-  len = strlen(text) + 1;						// shift string to right of buffer
-  if (len < maxlen) {
-    memmove(&text[maxlen - len], text, len);
-    from = (unsigned char*)&text[maxlen - len];
-  }
-  else
-    from = (unsigned char*)text;
-  
+  len = strlen(text.c_str()) + 1;						// shift string to right of buffer
+
+	SWBuf orig = text;
+  from = (unsigned char*)orig.c_str();
+
   
   // -------------------------------
   
-  for (to = (unsigned short*)text; *from; from++) {
+  for (text = ""; *from; from++) {
     uchar = 0;
     if ((*from & 128) != 128) {
       //          	if (*from != ' ')
@@ -64,15 +60,12 @@ char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
     }
 
     if (uchar < 0xff) {
-        *to++ = (unsigned char)uchar;
+        text += (unsigned char)uchar;
     }
     else {
-        *to++ = replacementChar;
+        text += replacementChar;
     }
   }
-  *to++ = 0;
-  *to = 0;
-
   return 0;
 }
 
