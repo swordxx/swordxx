@@ -28,17 +28,17 @@
 #define SWAP16(x) NXSwapLittleShortToHost(x)
 
 #else
-#ifdef PPC
-
-#include <byteswap.h>
-#define SWAP32(x) bswap_32(x)
-#define SWAP16(x) bswap_16(x)
-
-#else
+#ifdef SPARC_SOLARIS
 
 #include <sys/pctypes.h>
 #define SWAP32(x) lelong(x)
 #define SWAP16(x) leshort(x)
+
+#else // all big endian GNU systems
+
+#include <byteswap.h>
+#define SWAP32(x) bswap_32(x)
+#define SWAP16(x) bswap_16(x)
 
 #endif
 #endif
