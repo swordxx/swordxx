@@ -44,9 +44,6 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	char wordstr[5];
 	char *valto;
 	char *ch;
-	unsigned int textStart = 0, textEnd = 0;
-	bool newText = false;
-	SWBuf tmp;
 
 	SWBuf orig = text;
 	from = orig.c_str();
@@ -60,7 +57,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
-			textEnd = text.size();
+			//textEnd = text.size();
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -68,46 +65,42 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 			if ((*token == 'w') && (token[1] == ' ')) {	// Word
 				if (module->isProcessEntryAttributes()) {
 					valto = val;
-					char *num = strstr(token, "lemma=\"x-Strongs:");
+					char *num = strstr(token, "lemma=\"x-Strongs:");					
+					int strongMarkerLength = 17;
+					if (!num) { //try alternative strong marker value
+						num = strstr(token, "lemma=\"strong:");
+						strongMarkerLength = 14;
+					}
+
 					if (num) {
-						for (num+=17; ((*num) && (*num != '\"')); num++)
+						for (num+=strongMarkerLength; ((*num) && (*num != '\"')); num++) {
 							*valto++ = *num;
+						}
 						*valto = 0;
+						
 						if (atoi((!isdigit(*val))?val+1:val) < 5627) {
 							// normal strongs number
 							sprintf(wordstr, "%03d", word++);
 							module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
-							tmp = "";
-							tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
-							module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
-							newText = true;
+							
+							//now try to find the end tag to get the text between <w> and </w> to set the entry attribute
+							
+							char* startTagEnd = index(from, '>'); //end of the opening tag
+							if (startTagEnd) {
+								startTagEnd++;
+								
+								char* endTagStart = strstr(startTagEnd, "</w>"); //end of the opening tag
+								if (endTagStart) {
+									SWBuf tmp;
+									tmp.append(startTagEnd, endTagStart - startTagEnd);
+									module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
+								}
+							}
 						}
 						else {
 							// verb morph
 							sprintf(wordstr, "%03d", word-1);
 							module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
-						}
-					}
-					else {
-						num = strstr(token, "lemma=\"strong:");
-						if (num) {
-							for (num+=14; ((*num) && (*num != '\"')); num++)
-								*valto++ = *num;
-							*valto = 0;
-							if (atoi((!isdigit(*val))?val+1:val) < 5627) {
-								// normal strongs number
-								sprintf(wordstr, "%03d", word++);
-								module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
-								tmp = "";
-								tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
-								module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
-								newText = true;
-							}
-							else {
-								// verb morph
-								sprintf(wordstr, "%03d", word-1);
-								module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
-							}
 						}
 					}
 				}
@@ -117,7 +110,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						memcpy(num, "savlm", 5);
 					}
 					else {
-						char *num = strstr(token, "lemma=\"strong:");
+						num = strstr(token, "lemma=\"strong:");
 						if (num) {
 							memcpy(num, "savlm", 5);
 						}
@@ -126,10 +119,11 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 			}
 			// if not a strongs token, keep token in text
 			text += '<';
-			for (char *tok = token; *tok; tok++)
+			for (char *tok = token; *tok; tok++) {
 				text += *tok;
+			}
 			text += '>';
-			if (newText) {textStart = text.size(); newText = false; }
+			
 			continue;
 		}
 		if (intoken) {
