@@ -1,6 +1,14 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+22-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Saulo Rodrigues e Silva's <saulo@jatai.ufg.br>
+		locale for pt_BR
+	Added entry attributes for Thayer and ThMLStrongs
+		(which includes morph also)
+
+
 * Release 1.5.3 *
 
 22-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
@@ -148,6 +156,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	Added new methods to the key classes to provide non-operator methods
 		to access features to which there were non previously.  Makes
 		other language bindings much easier to produce.
+
 
 * Release 1.5.2 *
 
