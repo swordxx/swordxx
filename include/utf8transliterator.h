@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: utf8transliterator.h,v 1.19 2003/07/07 00:25:59 scribe Exp $
+ * $Id: utf8transliterator.h,v 1.20 2003/09/09 23:32:46 chrislit Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,31 +21,19 @@
 #ifndef UTF8TRANSLITERATOR_H
 #define UTF8TRANSLITERATOR_H
 
-enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATIN, SE_BETA, SE_BGREEK, /*two-way transliterators*/ SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KATAKANA, SE_HIRAGANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, SE_THAI, SE_GEORGIAN, SE_ARMENIAN, SE_ETHIOPIC, SE_GOTHIC, SE_UGARITIC, SE_COPTIC, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
-#define NUMSCRIPTS 32
-#define NUMTARGETSCRIPTS 5
+enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATIN, SE_UNGEGN, SE_BETA, SE_BGREEK, /*two-way transliterators*/ SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KATAKANA, SE_HIRAGANA, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, SE_THAI, SE_GEORGIAN, SE_ARMENIAN, SE_ETHIOPIC, SE_GOTHIC, SE_UGARITIC, SE_COPTIC, /*one-way (from) transliterators*/ SE_JAMO, SE_HAN, SE_KANJI};
+#define NUMSCRIPTS 33
+#define NUMTARGETSCRIPTS NUMSCRIPTS-3//6
 
 #include <swfilter.h>
 #include <swmodule.h>
 
-//#include <unicode/utypes.h>
-//#include <unicode/ucnv.h>
-//#include <unicode/ustring.h>
-//#include <unicode/uchar.h>
-
 #include <unicode/unistr.h>
 
-//#ifdef _ICUSWORD_
-//#include <unicode/utrans.h>
-//#else
 #include <unicode/translit.h>
-//#endif
 
 #include <defs.h>
 #include <map>
-
-
-//class UnicodeString;
 
 SWORD_NAMESPACE_START
 
@@ -56,8 +44,7 @@ struct SWTransData {
 typedef std::map <const UnicodeString, SWTransData> SWTransMap;
 typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
-  /** This Filter uses ICU for transliteration
-  */
+// This Filter uses ICU for transliteration
 class SWDLLEXPORT UTF8Transliterator : public SWFilter {
 private:
 
@@ -76,8 +63,9 @@ private:
 
 	void Load(UErrorCode &status);
 	void registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status);
+	bool addTrans(const char* newTrans, SWBuf* transList);
 	bool checkTrans(const UnicodeString& ID, UErrorCode &status);
-	Transliterator *createTrans(const UnicodeString& preID, const UnicodeString& ID, const UnicodeString& postID, UTransDirection dir, UErrorCode &status);
+	Transliterator *createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status);
 
 public:
 	UTF8Transliterator();

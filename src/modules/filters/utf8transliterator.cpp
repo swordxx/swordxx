@@ -23,31 +23,20 @@
 
 SWORD_NAMESPACE_START
 
-#if 0
-#ifdef _ICU_
-class UnicodeCaster {
-	const UnicodeString &ustr;
-public:
-	UnicodeCaster(const UnicodeString &ustr):ustr(ustr) {}; operator const char *() { return ""; };
-};
-
-#endif
-#endif
 const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Off",
         "Latin",
         "Basic Latin",
+        "UNGEGN",
         "Beta",
         "BGreek",
-/*
         "Greek",
         "Hebrew",
         "Cyrillic",
-	   "Arabic",
+        "Arabic",
         "Syriac",
         "Katakana",
         "Hiragana",
-        "Jamo",
         "Hangul",
         "Devanagari",
         "Tamil",
@@ -65,7 +54,6 @@ const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Gothic",
         "Ugaritic",
         "Coptic"
-        */
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -129,70 +117,68 @@ void UTF8Transliterator::Load(UErrorCode &status)
 #ifndef _ICUSWORD_
 	static const char translit_swordindex[] = "translit_swordindex";
 	
-    UResourceBundle *bundle, *transIDs, *colBund;
-    bundle = ures_openDirect(SW_RESDATA, translit_swordindex, &status);
-    if (U_FAILURE(status)) {
+	UResourceBundle *bundle, *transIDs, *colBund;
+	bundle = ures_openDirect(SW_RESDATA, translit_swordindex, &status);
+	if (U_FAILURE(status)) {
 		SWLog::systemlog->LogError("no resource index to load");
 		SWLog::systemlog->LogError("status %s", u_errorName(status));
 		return;
 	}
 
-    transIDs = ures_getByKey(bundle, SW_RB_RULE_BASED_IDS, 0, &status);
+	transIDs = ures_getByKey(bundle, SW_RB_RULE_BASED_IDS, 0, &status);
 	UParseError parseError;
 
-    int32_t row, maxRows;
-    if (U_SUCCESS(status)) {
-	   maxRows = ures_getSize(transIDs);
-	   for (row = 0; row < maxRows; row++) {
-		  colBund = ures_getByIndex(transIDs, row, 0, &status);
+	int32_t row, maxRows;
+	if (U_SUCCESS(status)) {
+		maxRows = ures_getSize(transIDs);
+        	for (row = 0; row < maxRows; row++) {
+			colBund = ures_getByIndex(transIDs, row, 0, &status);
 
-		  if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
-			 UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
-			 UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
-			 UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
-				SWLog::systemlog->LogInformation("ok so far");
+			if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
+				UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
+                        	UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
+				UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
+                        	SWLog::systemlog->LogInformation("ok so far");
 
-			 if (U_SUCCESS(status)) {
-				switch (type) {
-				case 0x66: // 'f'
-				case 0x69: // 'i'
-				    // 'file' or 'internal';
-				    // row[2]=resource, row[3]=direction
-				    {
-					   UBool visible = (type == 0x0066 /*f*/);
-					   UTransDirection dir =
-						  (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
-						   0x0046 /*F*/) ?
-						  UTRANS_FORWARD : UTRANS_REVERSE;
-					   //registry->put(id, resString, dir, visible);
-			    //SWLog::systemlog->LogInformation("instantiating %s ...", (const char *)(UnicodeCaster)resString);
-				SWLog::systemlog->LogInformation("instantiating %s ...", resString.getBuffer());
-			    registerTrans(id, resString, dir, status);
-				SWLog::systemlog->LogInformation("done.");
-				    }
-				    break;
-				case 0x61: // 'a'
-				    // 'alias'; row[2]=createInstance argument
-				    //registry->put(id, resString, TRUE);
-				    break;
-				}
-			 }
-		else SWLog::systemlog->LogError("Failed to get resString");
-		  }
-	    else SWLog::systemlog->LogError("Failed to get row");
-
-		  ures_close(colBund);
-	   }
-    }
+				 if (U_SUCCESS(status)) {
+					switch (type) {
+					case 0x66: // 'f'
+					case 0x69: // 'i'
+						// 'file' or 'internal';
+						// row[2]=resource, row[3]=direction
+						{
+							UBool visible = (type == 0x0066 /*f*/);
+							UTransDirection dir =
+								(ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
+								0x0046 /*F*/) ?
+								UTRANS_FORWARD : UTRANS_REVERSE;
+		                                        //registry->put(id, resString, dir, visible);
+							SWLog::systemlog->LogInformation("instantiating %s ...", resString.getBuffer());
+					    		registerTrans(id, resString, dir, status);
+							SWLog::systemlog->LogInformation("done.");
+	                                	}
+						break;
+					case 0x61: // 'a'
+                	                	// 'alias'; row[2]=createInstance argument
+                        	        	//registry->put(id, resString, TRUE);
+                                		break;
+					}
+        	                 }
+                	         else SWLog::systemlog->LogError("Failed to get resString");
+	                }
+			else SWLog::systemlog->LogError("Failed to get row");
+			ures_close(colBund);
+		}
+	}
 	else
 	{
 		SWLog::systemlog->LogError("no resource index to load");
 		SWLog::systemlog->LogError("status %s", u_errorName(status));
 	}
 
-    ures_close(transIDs);
-    ures_close(bundle);
-	
+	ures_close(transIDs);
+	ures_close(bundle);
+
 #endif // _ICUSWORD_
 }
 
@@ -200,9 +186,8 @@ void  UTF8Transliterator::registerTrans(const UnicodeString& ID, const UnicodeSt
 		UTransDirection dir, UErrorCode &status )
 {
 #ifndef _ICUSWORD_
-		//SWLog::systemlog->LogInformation("registering ID locally %s", (const char *)(UnicodeCaster)ID);
 		SWLog::systemlog->LogInformation("registering ID locally %s", ID.getBuffer());
-		SWTransData swstuff; 
+		SWTransData swstuff;
 		swstuff.resource = resource;
 		swstuff.dir = dir;
 		SWTransPair swpair;
@@ -219,7 +204,6 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		if (!U_FAILURE(status))
 		{
 			// already have it, clean up and return true
-			//SWLog::systemlog->LogInformation("already have it %s", (const char *)(UnicodeCaster)ID);
 			SWLog::systemlog->LogInformation("already have it %s", ID.getBuffer());
 			delete trans;
 			return true;
@@ -235,9 +219,8 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		//UErrorCode status;
 		//std::cout << "unregistering " << ID << std::endl;
 		//Transliterator::unregister(ID);
-		//SWLog::systemlog->LogInformation("resource is %s", (const char *)(UnicodeCaster)swstuff.resource);
 		SWLog::systemlog->LogInformation("resource is %s", swstuff.resource.getBuffer());
-		
+
 		// Get the rules
 		//std::cout << "importing: " << ID << ", " << resource << std::endl;
 		SWCharString ch(swstuff.resource);
@@ -282,25 +265,31 @@ return true;
 #endif // _ICUSWORD_
 }
 
-Transliterator * UTF8Transliterator::createTrans(const UnicodeString& preID, const UnicodeString& ID, 
-	const UnicodeString& postID, UTransDirection dir, UErrorCode &status )
+bool UTF8Transliterator::addTrans(const char* newTrans, SWBuf* transList) {
+#ifdef _ICUSWORD_
+        UErrorCode status;
+	if (checkTrans(UnicodeString(newTrans), status)) {
+#endif
+		*transList += newTrans;
+                *transList += ";";
+                return true;
+#ifdef _ICUSWORD_
+        }
+        else {
+        	return false;
+        }
+#endif
+}
+
+Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status )
 {
-	// extract id to check from ID xxx;id;xxx
-	if (checkTrans(ID, status)) {
-		UnicodeString fullID = preID;
-		fullID += ID;
-		fullID += postID;
-		Transliterator *trans = Transliterator::createInstance(fullID,UTRANS_FORWARD,status);
-		if (U_FAILURE(status)) {
-			delete trans;
-			return NULL;
-		}
-		else {
-			return trans;
-		}
+	Transliterator *trans = Transliterator::createInstance(ID,UTRANS_FORWARD,status);
+	if (U_FAILURE(status)) {
+		delete trans;
+		return NULL;
 	}
 	else {
-		return NULL;
+		return trans;
 	}
 }
 
@@ -325,13 +314,9 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                 UErrorCode err = U_ZERO_ERROR;
                 UConverter * conv = NULL;
                 conv = ucnv_open("UTF-8", &err);
+                SWBuf ID;
 
                 bool compat = false;
-                bool noNFC = false;
-
-                if (option == SE_JAMO) {
-                        noNFC = true;
-                }
 
 		// Convert UTF-8 string to UTF-16 (UChars)
                 j = strlen(text);
@@ -350,8 +335,9 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 
                 for (i = 0; i < len; i++) {
                         j = ublock_getCode(source[i]);
+			scripts[SE_LATIN] = true;
 			switch (j) {
-			case UBLOCK_BASIC_LATIN: scripts[SE_LATIN] = true; break;
+			//case UBLOCK_BASIC_LATIN: scripts[SE_LATIN] = true; break;
 			case UBLOCK_GREEK: scripts[SE_GREEK] = true; break;
 			case UBLOCK_HEBREW: scripts[SE_HEBREW] = true; break;
 			case UBLOCK_CYRILLIC: scripts[SE_CYRILLIC] = true; break;
@@ -375,8 +361,7 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
       			case UBLOCK_ARMENIAN: scripts[SE_ARMENIAN] = true; break;
                         case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
                         case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
-                        // needs Unicode 3.2? or 4.0? support from ICU
-                        //case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
+                        case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
 			case UBLOCK_CJK_RADICALS_SUPPLEMENT:
 			case UBLOCK_KANGXI_RADICALS:
 			case UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
@@ -396,11 +381,11 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                                 compat = true;
                                 break;
 
-                        default: scripts[SE_LATIN] = true;
+                        //default: scripts[SE_LATIN] = true;
 			}
-		} 
+		}
 		scripts[option] = false; //turn off the reflexive transliteration
-		
+
 		//return if we have no transliteration to do for this text
                 j = 0;
                	for (i = 0; !j && i < NUMSCRIPTS; i++) {
@@ -411,231 +396,221 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                         return 0;
                 }
 
-                UnicodeString preid;
                 if (compat) {
-                        preid = UnicodeString("NFKD;");
+                        addTrans("NFKD", &ID);
                 }
                 else {
-                        preid = UnicodeString("NFD;");
+                        addTrans("NFD", &ID);
                 }
 
 		//Simple X to Latin transliterators
-		UnicodeString id;
 		if (scripts[SE_GREEK]) {
 			if (option == SE_BETA)
-				id = UnicodeString("Greek-Beta");
+				addTrans("Greek-Latin/Beta", &ID);
 			else if (option == SE_BGREEK)
-				id = UnicodeString("Greek-BGreek");
+				addTrans("Greek-Latin/BGreek", &ID);
+                        else if (option == SE_UNGEGN)
+                        	addTrans("Greek-Latin/UNGEGN", &ID);
 			else {
-	            if (!strnicmp (((SWModule*)module)->Lang(), "cop", 3)) {
-        				id = UnicodeString("Coptic-Latin");
-                }
-                else {
-		   				id = UnicodeString("Greek-Latin");
-                }
+				if (!strnicmp (((SWModule*)module)->Lang(), "cop", 3)) {
+        				addTrans("Coptic-Latin", &ID);
+                		}
+                		else {
+		   			addTrans("Greek-Latin", &ID);
+		                }
 				scripts[SE_LATIN] = true;
 			}
 		}
 		if (scripts[SE_HEBREW]) {
 			if (option == SE_BETA)
-				id = UnicodeString("Hebrew-CCAT");
+				addTrans("Hebrew-Latin/Beta", &ID);
                         else if (option == SE_SYRIAC)
-                                id = UnicodeString("Hebrew-Syriac");
+                                addTrans("Hebrew-Syriac", &ID);
 			else {
-				id = UnicodeString("Hebrew-Latin");
-				scripts[SE_LATIN] = true;
+				addTrans("Hebrew-Latin", &ID);
+                                scripts[SE_LATIN] = true;
 			}
 		}
 		if (scripts[SE_CYRILLIC]) {
-			id = UnicodeString("Cyrillic-Latin");
+			addTrans("Cyrillic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_ARABIC]) {
-			id = UnicodeString("Arabic-Latin");
+			addTrans("Arabic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_SYRIAC]) {
                         if (option == SE_BETA)
-        			id = UnicodeString("Syriac-CCAT");
+        			addTrans("Syriac-Latin/Beta", &ID);
                         else if (option == SE_HEBREW)
-                                id = UnicodeString("Syriac-Hebrew");
+                                addTrans("Syriac-Hebrew", &ID);
                         else {
-        			id = UnicodeString("Syriac-Latin");
+        			addTrans("Syriac-Latin", &ID);
         			scripts[SE_LATIN] = true;
                         }
 		}
 		if (scripts[SE_THAI]) {
-			id = UnicodeString("Thai-Latin");
+			addTrans("Thai-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_GEORGIAN]) {
-			id = UnicodeString("Georgian-Latin");
+			addTrans("Georgian-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_ARMENIAN]) {
-			id = UnicodeString("Armenian-Latin");
+			addTrans("Armenian-Latin", &ID);
 			scripts[SE_LATIN] = true;
-		}                
+		}
 		if (scripts[SE_ETHIOPIC]) {
-			id = UnicodeString("Ethiopic-Latin");
+			addTrans("Ethiopic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_GOTHIC]) {
-			id = UnicodeString("Gothic-Latin");
+			addTrans("Gothic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_UGARITIC]) {
-			id = UnicodeString("Ugaritic-Latin");
+			addTrans("Ugaritic-Latin", &ID);
 			scripts[SE_LATIN] = true;
 		}
-        if (scripts[SE_HAN]) {
-	        if (!strnicmp (((SWModule*)module)->Lang(), "ja", 2)) {
-     			id = UnicodeString("Kanji-OnRomaji");
-            }
-            else {
-       			id = UnicodeString("Han-Pinyin");
-            }
+		if (scripts[SE_HAN]) {
+	        	if (!strnicmp (((SWModule*)module)->Lang(), "ja", 2)) {
+     				addTrans("Kanji-Romaji", &ID);
+			}
+			else {
+       				addTrans("Han-Latin", &ID);
+			}
 			scripts[SE_LATIN] = true;
 		}
 
        		// Inter-Kana and Kana to Latin transliterators
 		if (option == SE_HIRAGANA && scripts[SE_KATAKANA]) {
-			id = UnicodeString("Katakana-Hiragana");
+			addTrans("Katakana-Hiragana", &ID);
 			scripts[SE_HIRAGANA] = true;
 		}
 		else if (option == SE_KATAKANA && scripts[SE_HIRAGANA]) {
-			id = UnicodeString("Hiragana-Katakana");
+			addTrans("Hiragana-Katakana", &ID);
 			scripts[SE_KATAKANA] = true;
 		}
 		else {
         		if (scripts[SE_KATAKANA]) {
-	        		id = UnicodeString("Katakana-Latin");
+	        		addTrans("Katakana-Latin", &ID);
 		        	scripts[SE_LATIN] = true;
         		}
 	        	if (scripts[SE_HIRAGANA]) {
-		        	id = UnicodeString("Hiragana-Latin");
+		        	addTrans("Hiragana-Latin", &ID);
 			        scripts[SE_LATIN] = true;
         		}
                 }
 
-		// Inter-Korean and Korean to Latin transliterators
-		if (option == SE_HANGUL && scripts[SE_JAMO]) {
-			noNFC = false;
-			scripts[SE_HANGUL] = true;
+		// Korean to Latin transliterators
+		if (scripts[SE_HANGUL]) {
+			addTrans("Hangul-Latin", &ID);
+			scripts[SE_LATIN] = true;
 		}
-		else if (option == SE_JAMO && scripts[SE_HANGUL]) {
-			noNFC = true;
-			scripts[SE_JAMO] = true;
-		}
-		else {
-			if (scripts[SE_HANGUL]) {
-				id = UnicodeString("Hangul-Latin");
-				scripts[SE_LATIN] = true;
-			}
-			if (scripts[SE_JAMO]) {
-				id = UnicodeString("Jamo-Latin");
-				scripts[SE_LATIN] = true;
-			}
+		if (scripts[SE_JAMO]) {
+			addTrans("Jamo-Latin", &ID);
+			scripts[SE_LATIN] = true;
 		}
 
 		// Indic-Latin
 		if (option < SE_DEVANAGARI || option > SE_MALAYALAM) {
 			// Indic to Latin
 			if (scripts[SE_TAMIL]) {
-				id = UnicodeString("Tamil-Latin");
+				addTrans("Tamil-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_BENGALI]) {
-				id = UnicodeString("Bengali-Latin");
+				addTrans("Bengali-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_GURMUKHI]) {
-				id = UnicodeString("Gurmukhi-Latin");
+				addTrans("Gurmukhi-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_GUJARATI]) {
-				id = UnicodeString("Gujarati-Latin");
+				addTrans("Gujarati-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_ORIYA]) {
-				id = UnicodeString("Oriya-Latin");
+				addTrans("Oriya-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_TELUGU]) {
-				id = UnicodeString("Telugu-Latin");
+				addTrans("Telugu-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_KANNADA]) {
-				id = UnicodeString("Kannada-Latin");
+				addTrans("Kannada-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 			if (scripts[SE_MALAYALAM]) {
-				id = UnicodeString("Malayalam-Latin");
+				addTrans("Malayalam-Latin", &ID);
 				scripts[SE_LATIN] = true;
 			}
 		}
 		else {
 			if (scripts[SE_LATIN]) {
-				id = UnicodeString("Latin-InterIndic");
+				addTrans("Latin-InterIndic", &ID);
 			}
 			if (scripts[SE_DEVANAGARI]) {
-				id = UnicodeString("Devanagari-InterIndic");
+				addTrans("Devanagari-InterIndic", &ID);
 			}
 			if (scripts[SE_TAMIL]) {
-				id = UnicodeString("Tamil-InterIndic");
+				addTrans("Tamil-InterIndic", &ID);
 			}
 			if (scripts[SE_BENGALI]) {
-				id = UnicodeString("Bengali-InterIndic");
+				addTrans("Bengali-InterIndic", &ID);
 			}
 			if (scripts[SE_GURMUKHI]) {
-				id = UnicodeString("Gurmurkhi-InterIndic");
+				addTrans("Gurmurkhi-InterIndic", &ID);
 			}
 			if (scripts[SE_GUJARATI]) {
-				id = UnicodeString("Gujarati-InterIndic");
+				addTrans("Gujarati-InterIndic", &ID);
 			}
 			if (scripts[SE_ORIYA]) {
-				id = UnicodeString("Oriya-InterIndic");
+				addTrans("Oriya-InterIndic", &ID);
 			}
 			if (scripts[SE_TELUGU]) {
-				id = UnicodeString("Telugu-InterIndic");
+				addTrans("Telugu-InterIndic", &ID);
 			}
 			if (scripts[SE_KANNADA]) {
-				id = UnicodeString("Kannada-InterIndic");
+				addTrans("Kannada-InterIndic", &ID);
 			}
 			if (scripts[SE_MALAYALAM]) {
-				id = UnicodeString("Malayalam-InterIndic");
+				addTrans("Malayalam-InterIndic", &ID);
 			}
 
 			switch(option) {
 			case SE_DEVANAGARI:
-				id = UnicodeString("InterIndic-Devanagari");
+				addTrans("InterIndic-Devanagari", &ID);
 				break;
 			case SE_TAMIL:
-				id = UnicodeString("InterIndic-Tamil");
+				addTrans("InterIndic-Tamil", &ID);
 				break;
 			case SE_BENGALI:
-				id = UnicodeString("InterIndic-Bengali");
+				addTrans("InterIndic-Bengali", &ID);
 				break;
 			case SE_GURMUKHI:
-				id = UnicodeString("InterIndic-Gurmukhi");
+				addTrans("InterIndic-Gurmukhi", &ID);
 				break;
 			case SE_GUJARATI:
-				id = UnicodeString("InterIndic-Gujarati");
+				addTrans("InterIndic-Gujarati", &ID);
 				break;
 			case SE_ORIYA:
-				id = UnicodeString("InterIndic-Oriya");
+				addTrans("InterIndic-Oriya", &ID);
 				break;
 			case SE_TELUGU:
-				id = UnicodeString("InterIndic-Telugu");
+				addTrans("InterIndic-Telugu", &ID);
 				break;
 			case SE_KANNADA:
-				id = UnicodeString("InterIndic-Kannada");
+				addTrans("InterIndic-Kannada", &ID);
 				break;
 			case SE_MALAYALAM:
-				id = UnicodeString("InterIndic-Malayalam");
+				addTrans("InterIndic-Malayalam", &ID);
 				break;
 			default:
-				id = UnicodeString("InterIndic-Latin");
+				addTrans("InterIndic-Latin", &ID);
 				scripts[SE_LATIN] = true;
 				break;
 			}
@@ -644,78 +619,71 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 		if (scripts[SE_LATIN]) {
                 switch (option) {
                         case SE_GREEK:
-				id = UnicodeString("Latin-Greek");
+				addTrans("Latin-Greek", &ID);
                                 break;
                         case SE_HEBREW:
-				id = UnicodeString("Latin-Hebrew");
+				addTrans("Latin-Hebrew", &ID);
                                 break;
                         case SE_CYRILLIC:
-				id = UnicodeString("Latin-Cyrillic");
+				addTrans("Latin-Cyrillic", &ID);
                                 break;
                         case SE_ARABIC:
-				id = UnicodeString("Latin-Arabic");
+				addTrans("Latin-Arabic", &ID);
                                 break;
                         case SE_SYRIAC:
-				id = UnicodeString("Latin-Syriac");
+				addTrans("Latin-Syriac", &ID);
                                 break;
                         case SE_THAI:
-				id = UnicodeString("Latin-Thai");
+				addTrans("Latin-Thai", &ID);
                                 break;
                         case SE_GEORGIAN:
-				id = UnicodeString("Latin-Georgian");
+				addTrans("Latin-Georgian", &ID);
                                 break;
                         case SE_ARMENIAN:
-				id = UnicodeString("Latin-Armenian");
+				addTrans("Latin-Armenian", &ID);
                                 break;
                         case SE_ETHIOPIC:
-				id = UnicodeString("Latin-Ethiopic");
+				addTrans("Latin-Ethiopic", &ID);
                                 break;
                         case SE_GOTHIC:
-				id = UnicodeString("Latin-Gothic");
+				addTrans("Latin-Gothic", &ID);
                                 break;
                         case SE_UGARITIC:
-				id = UnicodeString("Latin-Ugaritic");
+				addTrans("Latin-Ugaritic", &ID);
                                 break;
                         case SE_COPTIC:
-				id = UnicodeString("Latin-Coptic");
+				addTrans("Latin-Coptic", &ID);
                                 break;
                         case SE_KATAKANA:
-				id = UnicodeString("Latin-Katakana");
+				addTrans("Latin-Katakana", &ID);
                                 break;
                         case SE_HIRAGANA:
-				id = UnicodeString("Latin-Hiragana");
+				addTrans("Latin-Hiragana", &ID);
                                 break;
                         case SE_JAMO:
-				id = UnicodeString("Latin-Jamo");
+				addTrans("Latin-Jamo", &ID);
                                 break;
                         case SE_HANGUL:
-				id = UnicodeString("Latin-Hangul");
+				addTrans("Latin-Hangul", &ID);
                                 break;
                         }
                 }
 
                 if (option == SE_BASICLATIN) {
-                        id = UnicodeString("Any-Latin1");
-                }
-                UnicodeString postid;                
-                if (noNFC) {
-                        postid = UnicodeString(";NFD");
-                } else {
-                        postid = UnicodeString(";NFC");
+                        addTrans("Any-Latin1", &ID);
                 }
 
-                //UParseError perr;
+                addTrans("NFC", &ID);
 
                 err = U_ZERO_ERROR;
-                //Transliterator * trans = Transliterator::createInstance(id, UTRANS_FORWARD, perr, err);
-				Transliterator * trans = createTrans(preid, id, postid, UTRANS_FORWARD, err);
+                Transliterator * trans = createTrans(UnicodeString(ID), UTRANS_FORWARD, err);
                 if (trans && !U_FAILURE(err)) {
                         UnicodeString target = UnicodeString(source);
-				    trans->transliterate(target);
-				    text.setSize(text.size()*2);
-				    len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target.getBuffer(), target.length(), &err);
-					text.setSize(len);
-				    delete trans;
+			trans->transliterate(target);
+			text.setSize(text.size()*2);
+			len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target.getBuffer(), target.length(), &err);
+			text.setSize(len);
+			delete trans;
                 }
                 ucnv_close(conv);
         }
