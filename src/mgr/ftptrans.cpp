@@ -32,8 +32,9 @@ void StatusReporter::statusUpdate(double dtTotal, double dlNow) {
 }
 
 
-FTPTransport::FTPTransport(const char *host, StatusReporter *sr) {
-	statusReporter = sr;
+FTPTransport::FTPTransport(const char *host, StatusReporter *statusReporter) {
+	this->statusReporter = statusReporter;
+	this->host = host;
 	term = false;
 }
 

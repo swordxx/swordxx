@@ -33,7 +33,7 @@ if ICU
 icutest_SOURCES = icutest.cpp
 translittest_SOURCES = translittest.cpp
 tlitmgrtest_SOURCES = tlitmgrtest.cpp
-tlitmgrtest_LDADD = -lustdio
+#tlitmgrtest_LDADD = -lustdio
 endif
 
 if ZLIB

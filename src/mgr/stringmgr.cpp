@@ -97,13 +97,13 @@ void StringMgr::setSystemStringMgr( StringMgr* newStringMgr ) {
 */
 StringMgr* StringMgr::getSystemStringMgr() {
 	if (!m_systemStringMgr) {
-/*#ifndef _ICU_*/
+#ifdef _ICU_
+		m_systemStringMgr = new ICUStringMgr();
+// 		SWLog::getSystemLog()->logInformation("created default ICUStringMgr");
+#else
 		m_systemStringMgr = new StringMgr();
 //  		SWLog::getSystemLog()->logInformation("created default StringMgr");
-/*#else
-		m_systemStringMgr = new ICUStringMgr();
- 		SWLog::getSystemLog()->logInformation("created default IcuStringMgr");
-#endif	*/
+#endif
 	}
 	
 	return m_systemStringMgr;

@@ -53,21 +53,23 @@ FTPLibFTPTransport::~FTPLibFTPTransport() {
 
 char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 	char retVal = 0;
-	fprintf(stderr, "getting file %s to %s\n", sourceURL, destPath);
+	SWBuf sourcePath = sourceURL;
+	sourcePath << (6 + host.length()); // shift << "ftp://hostname";
+	fprintf(stderr, "getting file %s to %s\n", sourcePath.c_str(), destPath);
 	if (passive)
 		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PASSIVE, (netbuf *)nControl);
 	else
 		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PORT, (netbuf *)nControl);
 	// !!!WDG also want to set callback options
 	if (!strcmp(destPath, "dirlist")) {
-		fprintf(stderr, "getting test directory %s\n", sourceURL);
-		FtpDir(NULL, sourceURL, (netbuf *)nControl);
-		fprintf(stderr, "getting real directory %s\n", sourceURL);
-		retVal = FtpDir(destPath, sourceURL, (netbuf *)nControl) - 1;
+		fprintf(stderr, "getting test directory %s\n", sourcePath.c_str());
+		FtpDir(NULL, sourcePath, (netbuf *)nControl);
+		fprintf(stderr, "getting real directory %s\n", sourcePath.c_str());
+		retVal = FtpDir(destPath, sourcePath, (netbuf *)nControl) - 1;
 	}
 	else {
-		fprintf(stderr, "getting file %s\n", sourceURL);
-		retVal = FtpGet(destPath, sourceURL, FTPLIB_IMAGE, (netbuf *)nControl) - 1;
+		fprintf(stderr, "getting file %s\n", sourcePath.c_str());
+		retVal = FtpGet(destPath, sourcePath, FTPLIB_IMAGE, (netbuf *)nControl) - 1;
 	}
 
 	return retVal;

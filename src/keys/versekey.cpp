@@ -414,6 +414,16 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	
 	while (*buf) {
 		switch (*buf) {
+		case ':':
+			if (buf[1] != ' ') {		// for silly Mat 1:1: this verse....
+				number[tonumber] = 0;
+				tonumber = 0;
+				if (*number)
+					chap = atoi(number);
+				*number = 0;
+				break;
+			}
+			// otherwise drop down to next case
 		case ' ':
 			inTerm = true;
 			while (true) {
@@ -429,16 +439,6 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				book[tobook++] = ' ';
 				break;
 			}
-		case ':':
-			if (buf[1] != ' ') {		// for silly Mat 1:1: this verse....
-				number[tonumber] = 0;
-				tonumber = 0;
-				if (*number)
-					chap = atoi(number);
-				*number = 0;
-				break;
-			}
-			// otherwise drop down to next case
 
 		case '-': 
 		case ',': // on number new verse

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <defs.h>
+#include <swbuf.h>
 
 //SWORD_NAMESPACE_START
 
@@ -31,6 +32,7 @@ protected:
 	StatusReporter *statusReporter;
 	bool passive;
 	bool term;
+	SWBuf host;
 	
 public:
 	FTPTransport(const char *host, StatusReporter *statusReporter = 0);
