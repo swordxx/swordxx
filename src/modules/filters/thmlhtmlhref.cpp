@@ -201,8 +201,8 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				buf += "<a href=\"passage=";
 				//char *strbuf = (char *)userData["lastTextNode"].c_str();
 				buf += userData["lastTextNode"].c_str();
-				buf += '\"';
-				buf += '>';
+				buf += "\">";
+				//buf += '>';
 				buf += userData["lastTextNode"].c_str();
 				// let's let text resume to output again
 				userData["suspendTextPassThru"] = "false";	

@@ -56,13 +56,13 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				token = "";
 				continue;
 			}
-			if (*from == '>') {	// process tokens
+			else if (*from == '>') { // process tokens
 				intoken = false;
-				if (!strncmp(token, "note", 4)) {
+				if (!strncmp(token.c_str(), "note", 4)) {
 				  hide = true;
                                   continue;
 				}
-				else if (!strncmp(token, "/note", 5)) {
+				else if (!strncmp(token.c_str(), "/note", 5)) {
 				  hide = false;
                                   continue;
 				}

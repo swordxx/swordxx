@@ -54,17 +54,19 @@ char ThMLLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                                 token = "";
 				continue;
 			}
-			if (*from == '>') {	// process tokens
+			else if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strnicmp(token, "sync", 4) && strstr(token, "type=\"lemma\" ")) {	// Lemma
-                                        continue;
+				if (!strnicmp(token.c_str(), "sync", 4) && strstr(token.c_str(), " type=\"lemma\"")) {	// Lemma
+					continue;
 				}
+				
 				// if not a lemma token, keep token in text
-				text = '<';
+				text += '<';
                                 text.append(token);
       				text += '>';
 				continue;
 			}
+			
 			if (intoken) {
 				token += *from;
 			}
