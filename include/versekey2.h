@@ -1,7 +1,7 @@
 /******************************************************************************
- *	versekey.h - code for class 'versekey'- a standard Biblical verse key
+ *	versekey2.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey2.h,v 1.3 2004/04/10 22:07:03 dglassey Exp $
+ * $Id: versekey2.h,v 1.4 2004/04/12 13:49:12 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -49,7 +49,7 @@ struct bkref
 };
 
 
-struct sbook
+struct sbook2
 {
 	/**Name of book
 	*/
@@ -67,7 +67,7 @@ struct sbook
 	//const bkref *versemax;
 };
 
-struct abbrev
+struct abbrev2
 {
 	const char *ab;
 	int book;
@@ -78,10 +78,10 @@ struct abbrev
 class SWLocale;
 
 /**
- * Class VerseKey
+ * Class VerseKey2
  * The SWKey implementation used for verse based modules like Bibles or commentaries.
  */
-class SWDLLEXPORT VerseKey:public SWKey {
+class SWDLLEXPORT VerseKey2:public SWKey {
 	class LocaleCache {
 	public:
 		char *name;
@@ -100,7 +100,7 @@ class SWDLLEXPORT VerseKey:public SWKey {
 	static bkref *offsets[2];
 	//static int offsize[2][2];
 	static int offsize[2];
-	/** number of instantiated VerseKey objects or derivitives 
+	/** number of instantiated VerseKey2 objects or derivitives 
 	*/
 	static int instance;
 /*	static struct sbook otbooks[];
@@ -111,13 +111,13 @@ class SWDLLEXPORT VerseKey:public SWKey {
 	static long ntcps[];
 	static int vm[];
 */
-	static struct sbook osisbooks[];
+	static struct sbook2 osisbooks[];
 	static bkref kjvbks[];
 	static bkref kjvcps[];
 	static LocaleCache *localeCache;
 	ListKey internalListKey;
 
-	const struct abbrev *abbrevs;
+	const struct abbrev2 *abbrevs;
 	char *locale;
 	int abbrevsCnt;
 	/** The Testament: 0 - Old; 1 - New
@@ -141,7 +141,7 @@ class SWDLLEXPORT VerseKey:public SWKey {
 	/** initialize and allocate books array
 	*/
 	void initstatics();
-	/** initializes this VerseKey()
+	/** initializes this VerseKey2()
 	*/
 	void init();
 	/** Refresh keytext based on testament|book|chapter|verse
@@ -162,85 +162,85 @@ class SWDLLEXPORT VerseKey:public SWKey {
 	* @return the index into the array that is less than but closest to value
 	*/
 	int findindex(bkref *array, int size, long value);
-	mutable VerseKey *lowerBound, *upperBound;
+	mutable VerseKey2 *lowerBound, *upperBound;
 
 	static const char builtin_BMAX;
 	//static struct sbook *builtin_books[2];
-	static struct sbook *builtin_books;
-	static const struct abbrev builtin_abbrevs[];
+	static struct sbook2 *builtin_books;
+	static const struct abbrev2 builtin_abbrevs[];
 	const char *BMAX;
-	struct sbook **books;
+	struct sbook2 **books;
 public:
 	//static const char builtin_BMAX[2];
 
 	/**
-	* VerseKey Constructor - initializes Instance of VerseKey
+	* VerseKey2 Constructor - initializes Instance of VerseKey2
 	*
 	* @param ikey text key (will take various forms of 'BOOK CH:VS'.
 	* See parse() for more detailed information)
 	*/
-	VerseKey(const char *ikey = 0);
+	VerseKey2(const char *ikey = 0);
 	
 	/**
-	* VerseKey Constructor - initializes instance of VerseKey
+	* VerseKey2 Constructor - initializes instance of VerseKey2
 	*
 	* @param ikey base key (will take various forms of 'BOOK CH:VS'.
 	*	See parse() for more detailed information)
 	*/	
-	VerseKey(const SWKey * ikey);
+	VerseKey2(const SWKey * ikey);
 	
-	/** VerseKey Constructor - initializes instance of VerseKey
+	/** VerseKey2 Constructor - initializes instance of VerseKey2
 	* with boundariess - see also LowerBound()
 	* and UpperBound()
-	* @param min the lower boundary of the new	VerseKey
-	* @param max the upper boundary of the new	VerseKey
+	* @param min the lower boundary of the new	VerseKey2
+	* @param max the upper boundary of the new	VerseKey2
 	*/	
-	VerseKey(const char *min, const char *max);
+	VerseKey2(const char *min, const char *max);
 	
-	/**	VerseKey Copy Constructor - will create a new	VerseKey
+	/**	VerseKey2 Copy Constructor - will create a new	VerseKey2
 	* based on an existing one
 	*
-	* @param k the	VerseKey to copy from
+	* @param k the	VerseKey2 to copy from
 	*/
-	VerseKey(const VerseKey &k);
+	VerseKey2(const VerseKey2 &k);
 	
-	/**	VerseKey Destructor
-	* Cleans up an instance of VerseKey
+	/**	VerseKey2 Destructor
+	* Cleans up an instance of VerseKey2
 	*/
-	virtual ~ VerseKey();
+	virtual ~ VerseKey2();
 
-	/** sets the lower boundary for this	VerseKey
+	/** sets the lower boundary for this	VerseKey2
 	* and returns the new boundary
 	*
-	* @param lb the new lower boundary for this	VerseKey
+	* @param lb the new lower boundary for this	VerseKey2
 	* @return the lower boundary the key was set to
 	*/
-	//VerseKey & LowerBound(const char *lb);
-	VerseKey & LowerBound(const VerseKey & ikey);
+	//VerseKey2 & LowerBound(const char *lb);
+	VerseKey2 & LowerBound(const VerseKey2 & ikey);
 	
-	/** sets the upper boundary for this	VerseKey
+	/** sets the upper boundary for this	VerseKey2
 	* and returns the new boundary
-	* @param ub the new upper boundary for this	VerseKey
+	* @param ub the new upper boundary for this	VerseKey2
 	* @return the upper boundary the key was set to
 	*/
-	//VerseKey & UpperBound(const char *ub);
-	VerseKey & UpperBound(const VerseKey & ikey);
+	//VerseKey2 & UpperBound(const char *ub);
+	VerseKey2 & UpperBound(const VerseKey2 & ikey);
 	
-	/** gets the lower boundary of this	VerseKey
-	* @return the lower boundary of this	VerseKey
+	/** gets the lower boundary of this	VerseKey2
+	* @return the lower boundary of this	VerseKey2
 	*/
-	VerseKey & LowerBound() const;
+	VerseKey2 & LowerBound() const;
 	
-	/** gets the upper boundary of this	VerseKey
-	* @return the upper boundary of this	VerseKey
+	/** gets the upper boundary of this	VerseKey2
+	* @return the upper boundary of this	VerseKey2
 	*/
-	VerseKey & UpperBound() const;
+	VerseKey2 & UpperBound() const;
 	
-	/** clears the boundaries of this	VerseKey
+	/** clears the boundaries of this	VerseKey2
 	*/
 	void ClearBounds();
 	
-	/** Creates a new	SWKey based on the current	VerseKey
+	/** Creates a new	SWKey based on the current	VerseKey2
 	* see also the Copy Constructor
 	*/
 	virtual SWKey *clone() const;
@@ -253,9 +253,9 @@ public:
 	virtual void setText(const char *ikey) { SWKey::setText(ikey); parse (); }
 	virtual void copyFrom(const SWKey & ikey);
 	
-	/** Equates this VerseKey to another VerseKey
+	/** Equates this VerseKey2 to another VerseKey2
 	*/
-	virtual void copyFrom(const VerseKey & ikey);
+	virtual void copyFrom(const VerseKey2 & ikey);
 	
 	/** Positions this key
 	*
@@ -349,7 +349,7 @@ public:
 	*/
 	virtual void Normalize(char autocheck = 0);
 	
-	/** Sets/gets flag that tells VerseKey to
+	/** Sets/gets flag that tells VerseKey2 to
 	* automatically normalize itself when modified
 	*
 	* @param iautonorm value which to set autonorm
@@ -359,7 +359,7 @@ public:
 	*/
 	virtual char AutoNormalize(char iautonorm = MAXPOS (char));
 	
-	/** Sets/gets flag that tells VerseKey to include
+	/** Sets/gets flag that tells VerseKey2 to include
 	* chapter/book/testament/module headings
 	*
 	* @param iheadings value which to set headings
@@ -397,23 +397,23 @@ public:
 	/** Compares another	SWKey object
 	*
 	* @param ikey key to compare with this one
-	* @return >0 if this	VerseKey is greater than compare	SWKey,
-	* <0 if this	VerseKey is smaller than compare	SWKey,
+	* @return >0 if this	VerseKey2 is greater than compare	SWKey,
+	* <0 if this	VerseKey2 is smaller than compare	SWKey,
 	* 0 if the keys are the same
 	*/
 	virtual int compare(const SWKey & ikey);
 	
-	/** Compares another	VerseKey object
+	/** Compares another	VerseKey2 object
 	*
 	* @param ikey key to compare with this one
-	* @return >0 if this	VerseKey is greater than compare	VerseKey,
-	* <0 if this	VerseKey is smaller than compare	VerseKey,
+	* @return >0 if this	VerseKey2 is greater than compare	VerseKey2,
+	* <0 if this	VerseKey2 is smaller than compare	VerseKey2,
 	* 0 if the keys are the same
 	*/
-	virtual int _compare(const VerseKey & ikey);
+	virtual int _compare(const VerseKey2 & ikey);
 	
-	virtual void setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int size = 0 /* default determine size */ );
-	virtual void setBooks(const char *iBMAX, struct sbook **ibooks);
+	virtual void setBookAbbrevs(const struct abbrev2 *bookAbbrevs, unsigned int size = 0 /* default determine size */ );
+	virtual void setBooks(const char *iBMAX, struct sbook2 **ibooks);
 	virtual void setLocale(const char *name);
 	virtual const char *getLocale() const { return locale; }
 
@@ -424,8 +424,14 @@ public:
 
 	SWKEY_OPERATORS
 
-	virtual SWKey & operator = (const VerseKey & ikey) { copyFrom(ikey); return *this; }
+	virtual SWKey & operator = (const VerseKey2 & ikey) { copyFrom(ikey); return *this; }
 };
+
+#ifdef VK2
+typedef VerseKey2 VerseKey;
+typedef sbook2 sbook;
+typedef abbrev2 abbrev;
+#endif
 
 SWORD_NAMESPACE_END
 #endif

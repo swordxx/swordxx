@@ -1,7 +1,7 @@
 /******************************************************************************
- * osisbook.h - Canonical text information to be included by VerseKey.cpp
+ * osisbook.h - Canonical text information to be included by VerseKey2.cpp
  *
- * $Id: osisbook.h,v 1.3 2004/04/10 22:07:03 dglassey Exp $
+ * $Id: osisbook.h,v 1.4 2004/04/12 13:49:12 dglassey Exp $
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,7 +34,7 @@
 #define NOTINREFSYS -1
 #define BUILTINABBREVCNT 195
  
-struct sbook VerseKey::osisbooks[] = {
+struct sbook2 VerseKey2::osisbooks[] = {
 //Old Testament
 {"Old Testament", "OT"},//0
 {"Genesis", "Gen"},
@@ -150,8 +150,8 @@ struct sbook VerseKey::osisbooks[] = {
 };
 
 
-const struct abbrev
-  VerseKey::builtin_abbrevs[] = {
+const struct abbrev2
+  VerseKey2::builtin_abbrevs[] = {
   {"1 C", 46},			//   1 Corinthians
   {"1 CHRONICLES", 13},		//   1 Chronicles
   {"1 CORINTHIANS", 47},	//   1 Corinthians
@@ -353,7 +353,7 @@ const struct abbrev
 
 /* includes all osis books - use the locale osis.conf instead
 const struct abbrev
-  VerseKey::builtin_abbrevs[] = {
+  VerseKey2::builtin_abbrevs[] = {
   {"1 C", 46},			//   1 Corinthians
   {"1 CHRONICLES", 13},		//   1 Chronicles
   {"1 CORINTHIANS", 47},	//   1 Corinthians
@@ -638,7 +638,7 @@ const struct abbrev
 /* These are for commentaries */
 
 struct bkref
-  VerseKey::kjvbks[] = {
+  VerseKey2::kjvbks[] = {
 //Header
 {0, TESTAMENT_HEADING},//0
 	//Old Testament
@@ -764,7 +764,7 @@ struct bkref
 };
 
 struct bkref
-  VerseKey::kjvcps[] = {
+  VerseKey2::kjvcps[] = {
 {1, 0}, // OT Header
 {2, 0}, // Genesis:0
 {3, 31}, // Genesis:1
@@ -2025,7 +2025,7 @@ struct bkref
 };
 
 int
-  VerseKey::offsize[2] =
-  { NTBOOKS+OTBOOKS+2, sizeof (VerseKey::kjvcps) / sizeof(bkref)
+  VerseKey2::offsize[2] =
+  { NTBOOKS+OTBOOKS+2, sizeof (VerseKey2::kjvcps) / sizeof(bkref)
 };
 

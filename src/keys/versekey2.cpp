@@ -1,5 +1,5 @@
 /******************************************************************************
- *  VerseKey.cpp - code for class 'VerseKey'- the new version of a standard Biblical verse key
+ *  VerseKey2.cpp - code for class 'VerseKey2'- the new version of a standard Biblical verse key
  */
 
 #include <swmacs.h>
@@ -23,31 +23,31 @@
 
 SWORD_NAMESPACE_START
 
-static const char *classes[] = {"VerseKey", "SWKey", "SWObject", 0};
-SWClass VerseKey::classdef(classes);
+static const char *classes[] = {"VerseKey2", "SWKey", "SWObject", 0};
+SWClass VerseKey2::classdef(classes);
 
 /******************************************************************************
- *  Initialize static members of VerseKey
+ *  Initialize static members of VerseKey2
  */
 
 #include <osisbook.h>	// Initialize static members of canonical books structure
 
-//struct sbook *VerseKey::builtin_books[2]       = {0,0};
-struct sbook *VerseKey::builtin_books       = {0};
-//const char    VerseKey::builtin_BMAX[2]        = {39, 27};
-const char    VerseKey::builtin_BMAX        = OSISBMAX;
-//long         *VerseKey::offsets[2][2]  = {{VerseKey::otbks, VerseKey::otcps}, {VerseKey::ntbks, VerseKey::ntcps}};
-bkref         *VerseKey::offsets[2]  = {VerseKey::kjvbks, VerseKey::kjvcps};
-int           VerseKey::instance       = 0;
-//VerseKey::LocaleCache   VerseKey::localeCache;
-VerseKey::LocaleCache   *VerseKey::localeCache = 0;
+//struct sbook *VerseKey2::builtin_books[2]       = {0,0};
+struct sbook2 *VerseKey2::builtin_books       = {0};
+//const char    VerseKey2::builtin_BMAX[2]        = {39, 27};
+const char    VerseKey2::builtin_BMAX        = OSISBMAX;
+//long         *VerseKey2::offsets[2][2]  = {{VerseKey2::otbks, VerseKey2::otcps}, {VerseKey2::ntbks, VerseKey2::ntcps}};
+bkref         *VerseKey2::offsets[2]  = {VerseKey2::kjvbks, VerseKey2::kjvcps};
+int           VerseKey2::instance       = 0;
+//VerseKey2::LocaleCache   VerseKey2::localeCache;
+VerseKey2::LocaleCache   *VerseKey2::localeCache = 0;
 
 
 /******************************************************************************
- * VerseKey::init - initializes instance of VerseKey
+ * VerseKey2::init - initializes instance of VerseKey2
  */
 
-void VerseKey::init() {
+void VerseKey2::init() {
 	myclass = &classdef;
 	if (!instance)
 		initstatics();
@@ -70,13 +70,13 @@ void VerseKey::init() {
 }
 
 /******************************************************************************
- * VerseKey Constructor - initializes instance of VerseKey
+ * VerseKey2 Constructor - initializes instance of VerseKey2
  *
  * ENT:	ikey - base key (will take various forms of 'BOOK CH:VS'.  See
- *		VerseKey::parse for more detailed information)
+ *		VerseKey2::parse for more detailed information)
  */
 
-VerseKey::VerseKey(const SWKey *ikey) : SWKey(*ikey)
+VerseKey2::VerseKey2(const SWKey *ikey) : SWKey(*ikey)
 {
 	init();
 	if (ikey)
@@ -85,13 +85,13 @@ VerseKey::VerseKey(const SWKey *ikey) : SWKey(*ikey)
 
 
 /******************************************************************************
- * VerseKey Constructor - initializes instance of VerseKey
+ * VerseKey2 Constructor - initializes instance of VerseKey2
  *
  * ENT:	ikey - text key (will take various forms of 'BOOK CH:VS'.  See
- *		VerseKey::parse for more detailed information)
+ *		VerseKey2::parse for more detailed information)
  */
 
-VerseKey::VerseKey(const char *ikey) : SWKey(ikey)
+VerseKey2::VerseKey2(const char *ikey) : SWKey(ikey)
 {
 	init();
 	if (ikey)
@@ -99,7 +99,7 @@ VerseKey::VerseKey(const char *ikey) : SWKey(ikey)
 }
 
 
-VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
+VerseKey2::VerseKey2(VerseKey2 const &k) : SWKey(k)
 {
 	init();
 	autonorm = k.autonorm;
@@ -115,7 +115,7 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 }
 
 
-VerseKey::VerseKey(const char *min, const char *max) : SWKey()
+VerseKey2::VerseKey2(const char *min, const char *max) : SWKey()
 {
 	init();
 	LowerBound(min);
@@ -124,19 +124,19 @@ VerseKey::VerseKey(const char *min, const char *max) : SWKey()
 }
 
 
-SWKey *VerseKey::clone() const
+SWKey *VerseKey2::clone() const
 {
-	return new VerseKey(*this);
+	return new VerseKey2(*this);
 }
 
 
 /******************************************************************************
- * VerseKey Destructor - cleans up instance of VerseKey
+ * VerseKey2 Destructor - cleans up instance of VerseKey2
  *
  * ENT:	ikey - text key
  */
 
-VerseKey::~VerseKey() {
+VerseKey2::~VerseKey2() {
 	if (upperBound)
 		delete upperBound;
 	if (lowerBound)
@@ -149,9 +149,9 @@ VerseKey::~VerseKey() {
 }
 
 
-void VerseKey::setLocale(const char *name) {
+void VerseKey2::setLocale(const char *name) {
 	char *lBMAX;
-	struct sbook **lbooks;
+	struct sbook2 **lbooks;
 	bool useCache = false;
 
 	if (localeCache->name)
@@ -166,9 +166,13 @@ void VerseKey::setLocale(const char *name) {
 	localeCache->locale = locale;
 
 	if (locale) {
+		#ifdef SPLITLIB
+		locale->getBooks2(&lBMAX, &lbooks, this);
+		#else
 		locale->getBooks(&lBMAX, &lbooks, this);
+		#endif
 		setBooks(lBMAX, lbooks);
-		setBookAbbrevs(locale->getBookAbbrevs(), localeCache->abbrevsCnt);
+		setBookAbbrevs((struct abbrev2 *)locale->getBookAbbrevs(), localeCache->abbrevsCnt);
 		localeCache->abbrevsCnt = abbrevsCnt;
 	}
 	else {
@@ -184,13 +188,13 @@ void VerseKey::setLocale(const char *name) {
 		UpperBound().setLocale(name);
 }
 
-void VerseKey::setBooks(const char *iBMAX, struct sbook **ibooks) {
+void VerseKey2::setBooks(const char *iBMAX, struct sbook2 **ibooks) {
 	BMAX = iBMAX;
 	books = ibooks;
 }
 
 
-void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int size) {
+void VerseKey2::setBookAbbrevs(const struct abbrev2 *bookAbbrevs, unsigned int size) {
 	abbrevs = bookAbbrevs;
 	if (!size) {
 			/*
@@ -214,11 +218,11 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
 
 
 /******************************************************************************
- * VerseKey::initstatics - initializes statics.  Performed only when first
- *						instance on VerseKey (or descendent) is created.
+ * VerseKey2::initstatics - initializes statics.  Performed only when first
+ *						instance on VerseKey2 (or descendent) is created.
  */
 
-void VerseKey::initstatics() {
+void VerseKey2::initstatics() {
 	int l1, l2, chaptmp = 0;
 
 	//builtin_books[0] = otbooks;
@@ -244,12 +248,12 @@ void VerseKey::initstatics() {
 
 
 /******************************************************************************
- * VerseKey::parse - parses keytext into testament|book|chapter|verse
+ * VerseKey2::parse - parses keytext into testament|book|chapter|verse
  *
  * RET:	error status
  */
 
-char VerseKey::parse()
+char VerseKey2::parse()
 {
 
 	
@@ -262,7 +266,7 @@ char VerseKey::parse()
 	int error = 0;
 
 	if (keytext) {
-		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
+		ListKey tmpListKey = VerseKey2::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
 			SWKey::setText((const char *)tmpListKey);
 			for (int j = 0; j <= *BMAX; j++) {
@@ -293,11 +297,11 @@ char VerseKey::parse()
 
 
 /******************************************************************************
- * VerseKey::freshtext - refreshes keytext based on
+ * VerseKey2::freshtext - refreshes keytext based on
  *				testament|book|chapter|verse
  */
 
-void VerseKey::freshtext() const
+void VerseKey2::freshtext() const
 {
 	SWBuf buf = "";
 	int realbook = book;
@@ -320,13 +324,13 @@ void VerseKey::freshtext() const
 
 
 /******************************************************************************
- * VerseKey::getBookAbbrev - Attempts to find a book from an abbreviation for a buffer
+ * VerseKey2::getBookAbbrev - Attempts to find a book from an abbreviation for a buffer
  *
  * ENT:	abbr - key for which to search;
  * RET:	book number or < 0 = not valid
  */
 
-int VerseKey::getBookAbbrev(const char *iabbr)
+int VerseKey2::getBookAbbrev(const char *iabbr)
 {
 	int loop, diff, abLen, min, max, target, retVal = -1;
 
@@ -367,7 +371,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 }
 
 /******************************************************************************
- * VerseKey::ParseVerseList - Attempts to parse a buffer into separate
+ * VerseKey2::ParseVerseList - Attempts to parse a buffer into separate
  *				verse entries returned in a ListKey
  *
  * ENT:	buf		- buffer to parse;
@@ -382,7 +386,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
  * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
  */
 
-ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange) {
+ListKey VerseKey2::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange) {
 	SWKey textkey;
 
 	char book[2048];
@@ -391,7 +395,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	int tonumber = 0;
 	int chap = -1, verse = -1;
 	int bookno = 0;
-	VerseKey curkey, lBound;
+	VerseKey2 curkey, lBound;
 	curkey.setLocale(getLocale());
 	lBound.setLocale(getLocale());
 	int loop;
@@ -485,12 +489,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
 					if (verse == -1) {
 						verse = chap;
-						chap = VerseKey(tmpListKey).Chapter();
+						chap = VerseKey2(tmpListKey).Chapter();
 						*book = 0;
 					}
 				}
 				if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
-					strcpy(book, VerseKey(tmpListKey).getBookName());
+					strcpy(book, VerseKey2(tmpListKey).getBookName());
 				}
 				bookno = getBookAbbrev(book);
 			}
@@ -501,8 +505,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				curkey.Book(1);
 
 				if (bookno < 0) {
-					curkey.Testament(VerseKey(tmpListKey).Testament());
-					curkey.Book(VerseKey(tmpListKey).Book());
+					curkey.Testament(VerseKey2(tmpListKey).Testament());
+					curkey.Book(VerseKey2(tmpListKey).Book());
 				}
 				else {
 					curkey.Testament(1);
@@ -511,7 +515,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 				if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
 //				if (comma) {
-					curkey.Chapter(VerseKey(tmpListKey).Chapter());
+					curkey.Chapter(VerseKey2(tmpListKey).Chapter());
 					curkey.Verse(chap);  // chap because this is the first number captured
 				}
 				else {
@@ -532,7 +536,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				}
 
 				if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
-					VerseKey newElement;
+					VerseKey2 newElement;
 					newElement.LowerBound(curkey);
 					newElement.setPosition(TOP);
 					tmpListKey << newElement;
@@ -541,7 +545,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
 						if (expandRange && partial) {
-							VerseKey newElement;
+							VerseKey2 newElement;
 							newElement.LowerBound(curkey);
 							if (partial > 1)
 								curkey.setPosition(MAXCHAPTER);
@@ -558,7 +562,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						}
 					}
 					else	if (expandRange) {
-						VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
+						VerseKey2 *newElement = SWDYNAMIC_CAST(VerseKey2, tmpListKey.GetElement());
 						if (newElement) {
 							if (partial > 1)
 								curkey = MAXCHAPTER;
@@ -671,13 +675,13 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev.
 			if (verse == -1) {
 				verse = chap;
-				chap = VerseKey(tmpListKey).Chapter();
+				chap = VerseKey2(tmpListKey).Chapter();
 				*book = 0;
 			}
 		}
 			
 		if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
-			strcpy(book, VerseKey(tmpListKey).getBookName());
+			strcpy(book, VerseKey2(tmpListKey).getBookName());
 		}
 		bookno = getBookAbbrev(book);
 	}
@@ -688,8 +692,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		curkey.Book(1);
 
 		if (bookno < 0) {
-			curkey.Testament(VerseKey(tmpListKey).Testament());
-			curkey.Book(VerseKey(tmpListKey).Book());
+			curkey.Testament(VerseKey2(tmpListKey).Testament());
+			curkey.Book(VerseKey2(tmpListKey).Book());
 		}
 		else {
 			curkey.Testament(1);
@@ -698,7 +702,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 		if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
 //		if (comma) {
-			curkey.Chapter(VerseKey(tmpListKey).Chapter());
+			curkey.Chapter(VerseKey2(tmpListKey).Chapter());
 			curkey.Verse(chap);  // chap because this is the first number captured
 		}
 		else {
@@ -719,7 +723,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		}
 
 		if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
-			VerseKey newElement;
+			VerseKey2 newElement;
 			newElement.LowerBound(curkey);
 			newElement = TOP;
 			tmpListKey << newElement;
@@ -728,7 +732,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
 				if (expandRange && partial) {
-					VerseKey newElement;
+					VerseKey2 newElement;
 					newElement.LowerBound(curkey);
 					if (partial > 1)
 						curkey = MAXCHAPTER;
@@ -745,7 +749,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				}
 			}
 			else if (expandRange) {
-				VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
+				VerseKey2 *newElement = SWDYNAMIC_CAST(VerseKey2, tmpListKey.GetElement());
 				if (newElement) {
 					if (partial > 1)
 						curkey = MAXCHAPTER;
@@ -769,10 +773,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 
 /******************************************************************************
- * VerseKey::LowerBound	- sets / gets the lower boundary for this key
+ * VerseKey2::LowerBound	- sets / gets the lower boundary for this key
  */
 /*
-VerseKey &VerseKey::LowerBound(const char *lb)
+VerseKey2 &VerseKey2::LowerBound(const char *lb)
 {
 	if (!lowerBound) 
 		initBounds();
@@ -784,7 +788,7 @@ VerseKey &VerseKey::LowerBound(const char *lb)
 	return (*lowerBound);
 }
 */
-VerseKey &VerseKey::LowerBound(const VerseKey & ikey)
+VerseKey2 &VerseKey2::LowerBound(const VerseKey2 & ikey)
 {
 	if (!lowerBound) 
 		initBounds();
@@ -805,10 +809,10 @@ VerseKey &VerseKey::LowerBound(const VerseKey & ikey)
 
 
 /******************************************************************************
- * VerseKey::UpperBound	- sets / gets the upper boundary for this key
+ * VerseKey2::UpperBound	- sets / gets the upper boundary for this key
  */
 /*
-VerseKey &VerseKey::UpperBound(const char *ub)
+VerseKey2 &VerseKey2::UpperBound(const char *ub)
 {
 	if (!upperBound) 
 		initBounds();
@@ -844,7 +848,7 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 	return (*upperBound);
 }
 */
-VerseKey &VerseKey::UpperBound(const VerseKey & ikey)
+VerseKey2 &VerseKey2::UpperBound(const VerseKey2 & ikey)
 {
 	if (!upperBound) 
 		initBounds();
@@ -861,10 +865,10 @@ VerseKey &VerseKey::UpperBound(const VerseKey & ikey)
 
 
 /******************************************************************************
- * VerseKey::LowerBound	- sets / gets the lower boundary for this key
+ * VerseKey2::LowerBound	- sets / gets the lower boundary for this key
  */
 
-VerseKey &VerseKey::LowerBound() const
+VerseKey2 &VerseKey2::LowerBound() const
 {
 	if (!lowerBound) 
 		initBounds();
@@ -874,10 +878,10 @@ VerseKey &VerseKey::LowerBound() const
 
 
 /******************************************************************************
- * VerseKey::UpperBound	- sets / gets the upper boundary for this key
+ * VerseKey2::UpperBound	- sets / gets the upper boundary for this key
  */
 
-VerseKey &VerseKey::UpperBound() const
+VerseKey2 &VerseKey2::UpperBound() const
 {
 	if (!upperBound) 
 		initBounds();
@@ -887,24 +891,24 @@ VerseKey &VerseKey::UpperBound() const
 
 
 /******************************************************************************
- * VerseKey::ClearBounds	- clears bounds for this VerseKey
+ * VerseKey2::ClearBounds	- clears bounds for this VerseKey2
  */
 
-void VerseKey::ClearBounds()
+void VerseKey2::ClearBounds()
 {
 	initBounds();
 }
 
 
-void VerseKey::initBounds() const
+void VerseKey2::initBounds() const
 {
 	if (!upperBound) {
-		upperBound = new VerseKey();
+		upperBound = new VerseKey2();
 		upperBound->AutoNormalize(0);
 		upperBound->Headings(1);
 	}
 	if (!lowerBound) {
-		lowerBound = new VerseKey();
+		lowerBound = new VerseKey2();
 		lowerBound->AutoNormalize(0);
 		lowerBound->Headings(1);
 	}
@@ -923,10 +927,10 @@ void VerseKey::initBounds() const
 
 
 /******************************************************************************
- * VerseKey::copyFrom - Equates this VerseKey to another VerseKey
+ * VerseKey2::copyFrom - Equates this VerseKey2 to another VerseKey2
  */
 
-void VerseKey::copyFrom(const VerseKey &ikey) {
+void VerseKey2::copyFrom(const VerseKey2 &ikey) {
 	//SWKey::copyFrom(ikey);
 
 	//parse();
@@ -941,10 +945,10 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
 
 
 /******************************************************************************
- * VerseKey::copyFrom - Equates this VerseKey to another SWKey
+ * VerseKey2::copyFrom - Equates this VerseKey2 to another SWKey
  */
 
-void VerseKey::copyFrom(const SWKey &ikey) {
+void VerseKey2::copyFrom(const SWKey &ikey) {
 	SWKey::copyFrom(ikey);
 
 	parse();
@@ -952,17 +956,17 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 
 
 /******************************************************************************
- * VerseKey::getText - refreshes keytext before returning if cast to
+ * VerseKey2::getText - refreshes keytext before returning if cast to
  *				a (char *) is requested
  */
 
-const char *VerseKey::getText() const {
+const char *VerseKey2::getText() const {
 	freshtext();
 	return keytext;
 }
 
 
-const char *VerseKey::getShortText() const {
+const char *VerseKey2::getShortText() const {
 	static SWBuf buf = "";
 	freshtext();
 	/*
@@ -983,23 +987,23 @@ const char *VerseKey::getShortText() const {
 }
 
 
-const char *VerseKey::getBookName() const {
+const char *VerseKey2::getBookName() const {
 	return (*books)[book].name;
 }
 
 
-const char *VerseKey::getBookAbbrev() const {
+const char *VerseKey2::getBookAbbrev() const {
 	return (*books)[book].prefAbbrev;
 }
 /******************************************************************************
- * VerseKey::setPosition(SW_POSITION)	- Positions this key
+ * VerseKey2::setPosition(SW_POSITION)	- Positions this key
  *
  * ENT:	p	- position
  *
  * RET:	*this
  */
 
-void VerseKey::setPosition(SW_POSITION p) {
+void VerseKey2::setPosition(SW_POSITION p) {
 	switch (p) {
 	case POS_TOP:
 		testament = LowerBound().Testament();
@@ -1029,14 +1033,14 @@ void VerseKey::setPosition(SW_POSITION p) {
 
 
 /******************************************************************************
- * VerseKey::increment	- Increments key a number of verses
+ * VerseKey2::increment	- Increments key a number of verses
  *
  * ENT:	step	- Number of verses to jump forward
  *
  * RET: *this
  */
 
-void VerseKey::increment(int step) {
+void VerseKey2::increment(int step) {
 	char ierror = 0;
 	printf("incrementing by %d\n", step);
 	Index(Index() + step);
@@ -1050,14 +1054,14 @@ void VerseKey::increment(int step) {
 
 
 /******************************************************************************
- * VerseKey::decrement	- Decrements key a number of verses
+ * VerseKey2::decrement	- Decrements key a number of verses
  *
  * ENT:	step	- Number of verses to jump backward
  *
  * RET: *this
  */
 
-void VerseKey::decrement(int step) {
+void VerseKey2::decrement(int step) {
 	char ierror = 0;
 
 	printf("decrementing by %d\n", step);
@@ -1076,13 +1080,13 @@ void VerseKey::decrement(int step) {
 
 
 /******************************************************************************
- * VerseKey::Normalize	- checks limits and normalizes if necessary (e.g.
+ * VerseKey2::Normalize	- checks limits and normalizes if necessary (e.g.
  *				Matthew 29:47 = Mark 2:2).  If last verse is
  *				exceeded, key is set to last Book CH:VS
  * RET: *this
  */
 
-void VerseKey::Normalize(char autocheck)
+void VerseKey2::Normalize(char autocheck)
 {
 	error = 0;
 	bool valid = false;
@@ -1166,55 +1170,55 @@ void VerseKey::Normalize(char autocheck)
 
 //!!!WDG once it is working and becomes core we need to change these to get/set
 /******************************************************************************
- * VerseKey::Testament - Gets testament
+ * VerseKey2::Testament - Gets testament
  *
  * RET:	value of testament
  */
 
-char VerseKey::Testament() const
+char VerseKey2::Testament() const
 {
 	return testament;
 }
 
 
 /******************************************************************************
- * VerseKey::Book - Gets book
+ * VerseKey2::Book - Gets book
  *
  * RET:	value of book
  */
 
-char VerseKey::Book() const
+char VerseKey2::Book() const
 {
 	return book;
 }
 
 
 /******************************************************************************
- * VerseKey::Chapter - Gets chapter
+ * VerseKey2::Chapter - Gets chapter
  *
  * RET:	value of chapter
  */
 
-int VerseKey::Chapter() const
+int VerseKey2::Chapter() const
 {
 	return chapter;
 }
 
 
 /******************************************************************************
- * VerseKey::Verse - Gets verse
+ * VerseKey2::Verse - Gets verse
  *
  * RET:	value of verse
  */
 
-int VerseKey::Verse() const
+int VerseKey2::Verse() const
 {
 	return verse;
 }
 
 
 /******************************************************************************
- * VerseKey::Testament - Sets/gets testament
+ * VerseKey2::Testament - Sets/gets testament
  *
  * ENT:	itestament - value which to set testament
  *		[MAXPOS(char)] - only get
@@ -1223,7 +1227,7 @@ int VerseKey::Verse() const
  *	if   changed -> previous value of testament
  */
 
-char VerseKey::Testament(char itestament)
+char VerseKey2::Testament(char itestament)
 {
 	char retval = testament;
 
@@ -1236,7 +1240,7 @@ char VerseKey::Testament(char itestament)
 
 
 /******************************************************************************
- * VerseKey::Book - Sets/gets book
+ * VerseKey2::Book - Sets/gets book
  *
  * ENT:	ibook - value which to set book
  *		[MAXPOS(char)] - only get
@@ -1245,7 +1249,7 @@ char VerseKey::Testament(char itestament)
  *	if   changed -> previous value of book
  */
 
-char VerseKey::Book(char ibook)
+char VerseKey2::Book(char ibook)
 {
 	char retval = book;
 
@@ -1258,7 +1262,7 @@ char VerseKey::Book(char ibook)
 
 
 /******************************************************************************
- * VerseKey::Chapter - Sets/gets chapter
+ * VerseKey2::Chapter - Sets/gets chapter
  *
  * ENT:	ichapter - value which to set chapter
  *		[MAXPOS(int)] - only get
@@ -1267,7 +1271,7 @@ char VerseKey::Book(char ibook)
  *	if   changed -> previous value of chapter
  */
 
-int VerseKey::Chapter(int ichapter)
+int VerseKey2::Chapter(int ichapter)
 {
 	int retval = chapter;
 
@@ -1280,7 +1284,7 @@ int VerseKey::Chapter(int ichapter)
 
 
 /******************************************************************************
- * VerseKey::Verse - Sets/gets verse
+ * VerseKey2::Verse - Sets/gets verse
  *
  * ENT:	iverse - value which to set verse
  *		[MAXPOS(int)] - only get
@@ -1289,7 +1293,7 @@ int VerseKey::Chapter(int ichapter)
  *	if   changed -> previous value of verse
  */
 
-int VerseKey::Verse(int iverse)
+int VerseKey2::Verse(int iverse)
 {
 	int retval = verse;
 
@@ -1301,7 +1305,7 @@ int VerseKey::Verse(int iverse)
 
 
 /******************************************************************************
- * VerseKey::AutoNormalize - Sets/gets flag that tells VerseKey to auto-
+ * VerseKey2::AutoNormalize - Sets/gets flag that tells VerseKey2 to auto-
  *				matically normalize itself when modified
  *
  * ENT:	iautonorm - value which to set autonorm
@@ -1311,7 +1315,7 @@ int VerseKey::Verse(int iverse)
  *		if   changed -> previous value of autonorm
  */
 
-char VerseKey::AutoNormalize(char iautonorm)
+char VerseKey2::AutoNormalize(char iautonorm)
 {
 	char retval = autonorm;
 
@@ -1324,7 +1328,7 @@ char VerseKey::AutoNormalize(char iautonorm)
 
 
 /******************************************************************************
- * VerseKey::Headings - Sets/gets flag that tells VerseKey to include
+ * VerseKey2::Headings - Sets/gets flag that tells VerseKey2 to include
  *					chap/book/testmnt/module headings
  *
  * ENT:	iheadings - value which to set headings
@@ -1334,7 +1338,7 @@ char VerseKey::AutoNormalize(char iautonorm)
  *		if   changed -> previous value of headings
  */
 
-char VerseKey::Headings(char iheadings)
+char VerseKey2::Headings(char iheadings)
 {
 	char retval = headings;
 
@@ -1347,7 +1351,7 @@ char VerseKey::Headings(char iheadings)
 
 
 /******************************************************************************
- * VerseKey::findindex - binary search to find the index closest, but less
+ * VerseKey2::findindex - binary search to find the index closest, but less
  *						than the given value.
  *
  * ENT:	array	- long * to array to search
@@ -1357,7 +1361,7 @@ char VerseKey::Headings(char iheadings)
  * RET:	the index into the array that is less than but closest to value
  */
 
-int VerseKey::findindex(bkref *array, int size, long value)
+int VerseKey2::findindex(bkref *array, int size, long value)
 {
 	int lbound, ubound, tval;
 
@@ -1374,12 +1378,12 @@ int VerseKey::findindex(bkref *array, int size, long value)
 
 
 /******************************************************************************
- * VerseKey::Index - Gets index based upon current verse
+ * VerseKey2::Index - Gets index based upon current verse
  *
  * RET:	offset
  */
 
-long VerseKey::Index() const
+long VerseKey2::Index() const
 {
 	long  loffset;
 
@@ -1415,12 +1419,12 @@ long VerseKey::Index() const
 
 
 /******************************************************************************
- * VerseKey::Index - Gets index based upon current verse
+ * VerseKey2::Index - Gets index based upon current verse
  *
  * RET:	offset
  */
 
-long VerseKey::NewIndex() const
+long VerseKey2::NewIndex() const
 {
 	//static long otMaxIndex = 32300 - 8245;  // total positions - new testament positions
 //	static long otMaxIndex = offsets[0][1][(int)offsets[0][0][BMAX[0]] + books[0][BMAX[0]].chapmax];
@@ -1429,14 +1433,14 @@ long VerseKey::NewIndex() const
 
 
 /******************************************************************************
- * VerseKey::Index - Sets index based upon current verse
+ * VerseKey2::Index - Sets index based upon current verse
  *
  * ENT:	iindex - value to set index to
  *
  * RET:	offset
  */
 
-long VerseKey::Index(long iindex)
+long VerseKey2::Index(long iindex)
 {
 	long  offset;
 
@@ -1504,7 +1508,7 @@ else
 			offset  = findindex(offsets[testament-1][1], offsize[testament-1][1], iindex);
 			verse   = iindex - offsets[testament-1][1][offset];
 			book    = findindex(offsets[testament-1][0], offsize[testament-1][0], offset);
-			chapter = offset - offsets[testament-1][0][VerseKey::book];
+			chapter = offset - offsets[testament-1][0][VerseKey2::book];
 			verse   = (chapter) ? verse : 0;  
 				// funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  
 				//Don't know why.  Fix if you figure out.  Think its in the offsets table.
@@ -1560,33 +1564,33 @@ else
 
 
 /******************************************************************************
- * VerseKey::compare	- Compares another SWKey object
+ * VerseKey2::compare	- Compares another SWKey object
  *
  * ENT:	ikey - key to compare with this one
  *
- * RET:	>0 if this VerseKey is greater than compare VerseKey
+ * RET:	>0 if this VerseKey2 is greater than compare VerseKey2
  *	<0 <
  *	 0 =
  */
 
-int VerseKey::compare(const SWKey &ikey)
+int VerseKey2::compare(const SWKey &ikey)
 {
-	VerseKey ivkey = (const char *)ikey;
+	VerseKey2 ivkey = (const char *)ikey;
 	return _compare(ivkey);
 }
 
 
 /******************************************************************************
- * VerseKey::_compare	- Compares another VerseKey object
+ * VerseKey2::_compare	- Compares another VerseKey2 object
  *
  * ENT:	ikey - key to compare with this one
  *
- * RET:	>0 if this VerseKey is greater than compare VerseKey
+ * RET:	>0 if this VerseKey2 is greater than compare VerseKey2
  *	<0 <
  *	 0 =
  */
 
-int VerseKey::_compare(const VerseKey &ivkey)
+int VerseKey2::_compare(const VerseKey2 &ivkey)
 {
 	long keyval1 = 0;
 	long keyval2 = 0;
@@ -1608,7 +1612,7 @@ int VerseKey::_compare(const VerseKey &ivkey)
 }
 
 
-const char *VerseKey::getOSISRef() const {
+const char *VerseKey2::getOSISRef() const {
 	static SWBuf buf = "";
 	freshtext();
 	if (Verse())
@@ -1622,33 +1626,33 @@ const char *VerseKey::getOSISRef() const {
 	return buf.c_str();
 }
 
-const char VerseKey::getMaxBooks() const {
+const char VerseKey2::getMaxBooks() const {
 	return *BMAX;
 }
 
-const char *VerseKey::getNameOfBook(char book) const {
+const char *VerseKey2::getNameOfBook(char book) const {
 	return osisbooks[book].name;
 }
 
-const char *VerseKey::getPrefAbbrev(char book) const {
+const char *VerseKey2::getPrefAbbrev(char book) const {
 	return osisbooks[book].prefAbbrev;
 }
 
-const int VerseKey::getMaxChaptersInBook(char book) const {
+const int VerseKey2::getMaxChaptersInBook(char book) const {
 	return (offsets[0][book].maxnext == TESTAMENT_HEADING ? 0 : offsets[0][book].maxnext);
 }
 
-const int VerseKey::getMaxVerseInChapter(char book, int chapter) const {
+const int VerseKey2::getMaxVerseInChapter(char book, int chapter) const {
 	return offsets[1][(offsets[0][book].offset)+chapter].maxnext;
 }
 
 
 
 /******************************************************************************
- * VerseKey::getRangeText - returns parsable range text for this key
+ * VerseKey2::getRangeText - returns parsable range text for this key
  */
 
-const char *VerseKey::getRangeText() const {
+const char *VerseKey2::getRangeText() const {
 	if (isBoundSet()) {
 		SWBuf buf;
 		buf.appendFormatted("%s-%s", (const char *)LowerBound(), (const char *)UpperBound());

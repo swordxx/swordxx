@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.13 2004/04/09 17:41:47 dglassey Exp $
+ * $Id: swlocale.h,v 1.14 2004/04/12 13:49:12 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,7 +26,11 @@
 #include <map>
 
 #include <swconfig.h>
+
 #include <versekey.h>
+#ifdef SPLITLIB
+#include <versekey2.h>
+#endif
 
 #include <defs.h>
 
@@ -49,6 +53,10 @@ class SWDLLEXPORT SWLocale {
 	struct abbrev *bookAbbrevs;
 	char *BMAX;
 	struct sbook **books;
+	#ifdef SPLITLIB
+	struct sbook2 **books2;
+	char *BMAX2;
+	#endif
 
 public:
 	SWLocale(const char *ifilename);
@@ -72,6 +80,9 @@ public:
 	virtual void getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk);
 	#else
 	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
+	#endif
+	#ifdef SPLITLIB
+	virtual void getBooks2(char **iBMAX, struct sbook2 ***ibooks, VerseKey2 *vk);
 	#endif
 };
 

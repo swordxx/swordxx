@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.8 2004/04/09 17:41:47 dglassey Exp $
+ * $Id: swlocale.cpp,v 1.9 2004/04/12 13:49:12 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,6 +34,9 @@ SWLocale::SWLocale(const char * ifilename) {
 	bookAbbrevs  = 0;
 	BMAX         = 0;
 	books        = 0;
+	#ifdef SPLITLIB
+	books2        = 0;
+	#endif
 	localeSource = new SWConfig(ifilename);
 
 	confEntry = localeSource->Sections["Meta"].find("Name");
@@ -70,6 +73,9 @@ SWLocale::~SWLocale() {
 		#endif
 		delete [] BMAX;
 		delete [] books;
+		#ifdef SPLITLIB
+		delete [] books2;
+		#endif
 	}
 }
 
@@ -127,6 +133,8 @@ const struct abbrev *SWLocale::getBookAbbrevs() {
 	return bookAbbrevs;
 }
 
+
+#if defined(VK2) || defined(SPLITLIB)
 #ifdef VK2
 void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk) {
 	if (!BMAX) {
@@ -143,8 +151,26 @@ void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks, VerseKey *vk) {
 
 	iBMAX  = &BMAX;
 	ibooks = &books;
-}
 #else
+void SWLocale::getBooks2(char **iBMAX, struct sbook2 ***ibooks, VerseKey2 *vk) {
+	if (!BMAX) {
+		BMAX2 = new char[1];
+		BMAX2[0] = vk->getMaxBooks();
+
+		books2 = new struct sbook2*[1];
+		books2[0] = new struct sbook2[*BMAX2];
+		for (int j = 0; j < *BMAX2; j++) {
+				books2[0][j].name = translate(vk->getNameOfBook(j));
+				books2[0][j].prefAbbrev = translate(vk->getPrefAbbrev(j));
+		}
+	}
+
+	iBMAX  = &BMAX2;
+	ibooks = &books2;
+#endif
+}
+#endif
+#ifndef VK2
 void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	if (!BMAX) {
 		BMAX = new char [2];
@@ -167,5 +193,6 @@ void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	*ibooks = books;
 }
 #endif
+
 
 SWORD_NAMESPACE_END
