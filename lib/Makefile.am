@@ -1,5 +1,8 @@
 INCLUDES = -I$(top_srcdir)/include
 
+# Global config directory
+globalconfdir := @sysconfdir@
+
 lib_LTLIBRARIES = libsword.la
 
 libsword_la_SOURCES =

@@ -15,6 +15,7 @@
 
 # General defines
 
+
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -152,10 +153,15 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . tests utilities
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
+sysconf_DATA = samples/recommended/sword.conf
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
 testlib_LDADD = -Llib -lsword
+
+localeDATA = locales.d/abbr.conf locales.d/da.conf locales.d/de.conf locales.d/es.conf locales.d/fr.conf locales.d/it.conf locales.d/no.conf locales.d/pt.conf
+
+localedatadir = $(pkgdatadir)/locales.d
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -186,6 +192,8 @@ CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = @CXXFLAGS@
 DIST_SOURCES = $(testlib_SOURCES)
+DATA = $(sysconf_DATA)
+
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
@@ -212,7 +220,7 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/locales.d/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -289,6 +297,23 @@ distclean-depend:
 	$(LTCXXCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
 CXXDEPMODE = @CXXDEPMODE@
 uninstall-info-am:
+install-sysconfDATA: $(sysconf_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)
+	@list='$(sysconf_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(sysconfdir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(sysconfdir)/$$f; \
+	done
+
+uninstall-sysconfDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(sysconf_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(sysconfdir)/$$f"; \
+	  rm -f $(DESTDIR)$(sysconfdir)/$$f; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -463,9 +488,10 @@ distcheck: dist
 	  sed 'h;s/./=/g;p;x;p;x'
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(PROGRAMS) config.h
+all-am: Makefile $(PROGRAMS) $(DATA) config.h
 installdirs: installdirs-recursive
 installdirs-am:
+	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)
 
 install: install-recursive
 install-exec: install-exec-recursive
@@ -514,7 +540,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am:
+install-exec-am: install-sysconfDATA
 
 install-info: install-info-recursive
 
@@ -531,7 +557,7 @@ mostlyclean: mostlyclean-recursive
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-info-am uninstall-sysconfDATA
 
 uninstall-info: uninstall-info-recursive
 
@@ -545,14 +571,38 @@ uninstall-info: uninstall-info-recursive
 	install-data-recursive install-exec install-exec-am \
 	install-exec-recursive install-info install-info-am \
 	install-info-recursive install-man install-recursive \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am installdirs-recursive maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	mostlyclean-recursive tags tags-recursive uninstall \
-	uninstall-am uninstall-info-am uninstall-info-recursive \
-	uninstall-recursive
+	install-strip install-sysconfDATA installcheck installcheck-am \
+	installdirs installdirs-am installdirs-recursive \
+	maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
+	tags tags-recursive uninstall uninstall-am uninstall-info-am \
+	uninstall-info-recursive uninstall-recursive \
+	uninstall-sysconfDATA
 
+
+installlocaleDATA: $(localeDATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(localedatadir)
+	@list='$(localeDATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(localedatadir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(localedatadir)/$$f; \
+	done
+
+uninstalllocaleDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(localeDATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(localedatadir)/$$f"; \
+	  rm -f $(DESTDIR)$(localedatadir)/$$f; \
+	done
+
+install-data-am: installlocaleDATA
+
+uninstall-am: uninstall-info-am  \
+	uninstalllocaleDATA uninstall-sysconfDATA
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh

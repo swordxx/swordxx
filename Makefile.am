@@ -69,10 +69,13 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . tests utilities
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
+sysconf_DATA = samples/recommended/sword.conf
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
 testlib_LDADD = -Llib -lsword
+
+include locales.d/Makefile.am
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh
