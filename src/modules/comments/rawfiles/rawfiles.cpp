@@ -135,7 +135,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	findoffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
-		tmpbuf   = new char [ (size + 2) + strlen(path) + 1 ];
+		tmpbuf   = new char [ (size + 3) + strlen(path) + 1 ];
 		sprintf(tmpbuf, "%s/", path);
 		readtext(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
 	}
