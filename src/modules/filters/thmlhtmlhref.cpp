@@ -210,7 +210,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				userData["suspendTextPassThru"] = "true";
 			}
 		}
-		else if (!strcmp(tag.getName(), "div")) {
+		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && userData["SecHead"] == "true") {
 				buf += "</i></b><br />";
 				userData["SecHead"] = "false";
@@ -239,7 +239,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			buf +="</a>");
 		}
 */
-		else if (!strcmp(tag.getName(), "img")) {
+		else if (tag.getName() && !strcmp(tag.getName(), "img")) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
 				return false;
