@@ -88,7 +88,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	SectionMap::iterator sit;
 	ConfigEntMap::iterator eit;
 	SWFilter * filter = 0;
-	int length;
+	int i;
 	char *font = 0;
 	char inputformat = 0;
 	string value = "";
@@ -243,6 +243,37 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		}
 		if (filter) target->AddRenderFilter(filter);
 		
+		listkey = VerseKey().ParseVerseList(ref2, "Gen1:1", true);
+
+		if (maxverses < 0 || maxverses > listkey.Count())
+		  maxverses = listkey.Count();
+
+		for (i = 0;i < maxverses;i++) {
+		  target->Key(*listkey.GetElement(i));
+		  if (font && !filter) {
+		    value += (char*)target->KeyText();
+		    value += ": <font face=\"";
+		    value += font;
+		    value += "\">";
+		    value += (char const*)*target;
+		    value += "</font>";
+		  } else {
+		    value += (char*)target->KeyText();
+		    value += ": ";
+		    value += (char const*)*target;
+		    value += "";
+		  }
+		  if (inputformat != FMT_THML && !filter)
+		    value += "<br />";
+		  if (i + 1 == maxverses) {
+		    value += " (";
+		    value += target->Name();
+		    value += ")";
+		  }
+		  value += "\n";
+		}
+		
+		/*		
 		char * comma = strchr(ref2, ',');
 		char * dash = strchr(ref2, '-');
 		
@@ -262,7 +293,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			char * vers4 = new char;
 			
 			vers4 = strtok(vers2, ",");
-       
+			
 			while (vers4) {
 				strcpy (vers3, vers4);
 				
@@ -392,8 +423,9 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			if (inputformat != FMT_THML && !filter)
 				value += "<br />\n";
 		}
+		*/
 	}
-	
+			
 	delete filter;
 
 	char * versevalue = new char[value.length() + 1];
