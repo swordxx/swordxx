@@ -33,7 +33,7 @@ int readline(FILE* infile, char* linebuffer) {
 
 int main(int argc, char **argv) {
   
-  const char * helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
+  const char * helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [output dir] \n";
   
   signed long i = 0;
   char* keybuffer = new char[2048];
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
 	  mod->setentry(entbuffer, strlen(entbuffer));
 	}
 	else {
-	  ListKey listkey = vkey->ParseVerseList(argv[3], "Gen1:1", true);
+	  ListKey listkey = vkey->ParseVerseList(keybuffer, "Gen1:1", true);
 	  int i;
 	  bool havefirst = false;
 	  VerseKey firstverse;
@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
       mod->setentry(entbuffer, strlen(entbuffer));
     }
     else {
-      ListKey listkey = vkey->ParseVerseList(argv[3], "Gen1:1", true);
+      ListKey listkey = vkey->ParseVerseList(keybuffer, "Gen1:1", true);
       int i;
       bool havefirst = false;
       VerseKey firstverse;
