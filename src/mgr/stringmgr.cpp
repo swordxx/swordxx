@@ -1,7 +1,7 @@
 /******************************************************************************
  *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.4 2004/07/03 18:10:50 scribe Exp $
+ * $Id: stringmgr.cpp,v 1.5 2004/07/15 10:36:15 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -170,7 +170,7 @@ const bool StringMgr::supportsUnicode() const {
 	}
 	
 	char* ICUStringMgr::upperLatin1(char* t) {
- 		StringMgr::upperLatin1(t); //use the default implementation
+ 		return StringMgr::upperLatin1(t); //use the default implementation
 	}
 	
 #endif
