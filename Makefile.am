@@ -99,3 +99,4 @@ uninstall-am: uninstall-info-am uninstalllocaleDATA \
 
 register:
 	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}" | mail sword.users@crosswire.org
+	@echo "The output of this command has been send to CrossWire, thank you."

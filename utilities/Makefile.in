@@ -109,6 +109,7 @@ $(ICUPROG)
 @ICU_FALSE@ICUPROG = 
 
 @ICU_TRUE@normcode_SOURCES = normcode.cpp
+@ICU_TRUE@normcode_LDADD = -licui18n -licuuc
 
 cipherraw_SOURCES = cipherraw.cpp
 ciphertest_SOURCES = ciphertest.cpp
@@ -229,8 +230,8 @@ modwrite_DEPENDENCIES =
 modwrite_LDFLAGS =
 @ICU_TRUE@am_normcode_OBJECTS = normcode.$(OBJEXT)
 normcode_OBJECTS = $(am_normcode_OBJECTS)
-normcode_LDADD = $(LDADD)
-normcode_DEPENDENCIES =
+@ICU_TRUE@normcode_DEPENDENCIES =
+@ICU_FALSE@normcode_DEPENDENCIES =
 normcode_LDFLAGS =
 am_step2vpl_OBJECTS = step2vpl.$(OBJEXT)
 step2vpl_OBJECTS = $(am_step2vpl_OBJECTS)

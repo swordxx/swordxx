@@ -109,6 +109,7 @@ $(ICUPROG) $(ZLIBPROG)
 @ICU_FALSE@ICUPROG = 
 
 @ICU_TRUE@icutest_SOURCES = icutest.cpp
+@ICU_TRUE@icutest_LDADD = -licui18n -licuuc
 
 @ZLIB_TRUE@ZLIBPROG = compzip
 @ZLIB_FALSE@ZLIBPROG = 
@@ -221,8 +222,8 @@ genbooktest_DEPENDENCIES =
 genbooktest_LDFLAGS =
 @ICU_TRUE@am_icutest_OBJECTS = icutest.$(OBJEXT)
 icutest_OBJECTS = $(am_icutest_OBJECTS)
-icutest_LDADD = $(LDADD)
-icutest_DEPENDENCIES =
+@ICU_TRUE@icutest_DEPENDENCIES =
+@ICU_FALSE@icutest_DEPENDENCIES =
 icutest_LDFLAGS =
 am_indextest_OBJECTS = indextest.$(OBJEXT)
 indextest_OBJECTS = $(am_indextest_OBJECTS)
