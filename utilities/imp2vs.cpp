@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
 		mod->setEntry(entbuffer, strlen(entbuffer));
 		(*vkey)++;
 	      }
-	      while (*vkey <= finalkey) {
+	      while (! (finalkey < (*vkey))) {
 		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
 		*mod << &firstverse;
 		(*vkey)++;
@@ -192,7 +192,8 @@ int main(int argc, char **argv) {
 	    mod->setEntry(entbuffer, strlen(entbuffer));
 	    (*vkey)++;
 	  }
-	  while (*vkey <= finalkey) {
+	  while (!(finalkey < (*vkey))) {
+
 		std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
 	    *(SWModule*)mod << &firstverse;
 	    (*vkey)++;
