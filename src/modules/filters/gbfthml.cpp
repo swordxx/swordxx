@@ -2,8 +2,7 @@
                      gbfthml.cpp  -  GBF to ThML filter
                              -------------------
     begin                : 1999-10-27
-    copyright            : 1999 by Chris Little
-    email                : chrislit@chiasma.org
+    copyright            : 2001 by CrossWire Bible Society
  ***************************************************************************/
 
 /***************************************************************************

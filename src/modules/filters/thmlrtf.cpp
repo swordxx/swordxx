@@ -237,6 +237,14 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 		      *to++ = '7';
 		      *to++ = ' ';
 		    }
+			else if (!strnicmp(token, "font size=+1", 12)) {
+		      *to++ = '\\';
+		      *to++ = 'f';
+		      *to++ = 's';
+		      *to++ = '2';
+		      *to++ = '4';
+		      *to++ = ' ';
+			}
 		    continue;
 		  }
 		  else if (!strnicmp(token, "/font", 5)) {
