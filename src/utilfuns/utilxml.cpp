@@ -109,6 +109,7 @@ const char *XMLTag::setAttribute(const char *attribName, const char *attribValue
 	if (attribValue)
 		attributes[attribName] = attribValue;
 	else	attributes.erase(attribName);
+	return attribValue;
 }
 
 const char *XMLTag::toString() const {
