@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.55 2001/12/21 04:21:14 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.56 2002/01/04 23:36:32 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -79,6 +79,12 @@
 #endif
 
 bool SWMgr::debug = false;
+
+#ifdef GLOBCONFPATH
+const char *SWMgr::globalConfPath = GLOBCONFPATH;
+#else
+const char *SWMgr::globalConfPath = "/etc/sword.conf";
+#endif
 
 void SWMgr::init() {
 	SWFilter *tmpFilter = 0;
@@ -350,21 +356,21 @@ if (debug)
 	}
 
 
-	// check for systemwide /etc/sword.conf
+	// check for systemwide globalConfPath
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "\nChecking for /etc/sword.conf...";
+	cerr << "\nChecking for " << globalConfPath << "...";
 #endif
 
-	if (!::access("/etc/sword.conf", 04)) {
+	if (!::access(globalConfPath, 04)) {
 
 #ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
 
-		SWConfig etcconf("/etc/sword.conf");
+		SWConfig etcconf(globalConfPath);
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
 			path = (*entry).second;
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
@@ -372,7 +378,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	cerr << "DataPath in /etc/sword.conf is set to: " << path;
+	cerr << "DataPath in " << globalConfPath << " is set to: " << path;
 #endif
 
 #ifndef _MSC_VER

@@ -2,6 +2,11 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+04-Jan-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Happy B-Day MOM!
+	Added new property in Makefile.cfg: globalconfdir
+		defaulted to /etc
+
 20-Dec-2001     Troy A. Griffitts <scribe@crosswire.org>
 	Added first cut of zLD
 

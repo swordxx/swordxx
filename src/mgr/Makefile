@@ -4,6 +4,8 @@ targets := ${root}/lib/libsword.a
 clean-targets := none
 include ${root}/Makefile.cfg
 
+CFLAGS += -DGLOBCONFPATH=\"${globalconfdir}/sword.conf\"
+
 cpp += swconfig.cpp
 cpp += swmgr.cpp
 cpp += swfiltermgr.cpp
