@@ -279,7 +279,8 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			case '\'':
 			case '\"':
 			case '`':
-				quoteStack.handleQuote(fromStart, from, &to);
+//				quoteStack.handleQuote(fromStart, from, &to);
+				*to++ = *from;
 				from++;
 				break;
 			default:

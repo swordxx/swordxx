@@ -48,6 +48,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	std::string tmp;
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
+	bool handled = false;
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
@@ -77,7 +78,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 			keepToken = false;
 			suspendTextPassThru = false;
 			newWord = true;
-
+			handled = false;
 
 			while (wordStart < (text+maxlen)) {
 //				if (strchr(" ,;.?!()'\"", *wordStart))
@@ -96,12 +97,14 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	//			pushString(buf, "<reference osisRef=\"");
 				suspendTextPassThru = true;
 				newText = true;
+				handled = true;
 			}
 			else	if (!strncmp(token, "/scripRef", 9)) {
 				tmp = "";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
 				pushString(&to, convertToOSIS(tmp.c_str(), key));
 				suspendTextPassThru = false;
+				handled = true;
 			}
 
 			// Footnote
@@ -109,6 +112,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
 				suspendTextPassThru = true;
 				newText = true;
+				handled = true;
 			}
 			else	if (!strcmp(token, "/note")) {
 				tmp = "<note type=\"x-StudyNote\"><notePart type=\"x-MainText\">";
@@ -116,13 +120,15 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				tmp += "</notePart></note>";
 				pushString(&to, tmp.c_str());
 				suspendTextPassThru = false;
+				handled = true;
 			}
 
 			// Figure
 			else	if (!strncmp(token, "img ", 4)) {
 				const char *src = strstr(token, "src");
 				if (!src)		// assert we have a src attribute
-					return false;
+					continue;
+//					return false;
 
 				pushString(&to, "<figure src=\"");
 				const char *c;
@@ -141,7 +147,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 					*to++ = *c;
 
 				pushString(&to, "\" />");
-				return true;
+				handled = true;
 			}
 
 			// Strongs numbers
@@ -170,6 +176,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 					}
 				}
+				handled = true;
 			}
 
 			// Morphology
@@ -209,9 +216,14 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 						to+=strlen(buf);
 					}
 				}
+				handled = true;
 			}
 
 			if (!keepToken) {	// if we don't want strongs
+				if (!handled) {
+					SWLog::systemlog->LogError("Unprocessed Token: <%s>", token);
+//					exit(-1);
+				}
 				if (strchr(" ,:;.?!()'\"", from[1])) {
 					if (lastspace)
 						to--;
