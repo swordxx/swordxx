@@ -318,6 +318,8 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	*this = BOTTOM;
 	// fix below when we find out the bug
 	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
+	if (!highIndex)
+		highIndex = 1;		// avoid division by zero errors.
 	*this = TOP;
 	if (searchType >= 0) {
 		flags |=searchType|REG_NOSUB|REG_EXTENDED;
@@ -345,7 +347,17 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	(*percent)(perc, percentUserData);
 
 	while (!Error() && !terminateSearch) {
-		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
+
+	
+		long mindex = 0;
+		if (vkcheck)
+			mindex = vkcheck->NewIndex();
+		else mindex = key->Index();
+		float per = (float)mindex / highIndex;
+		per *= 93;
+		per += 5;
+		char newperc = (char)per;
+//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
 		if (newperc > perc) {
 			perc = newperc;
 			(*percent)(perc, percentUserData);

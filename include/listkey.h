@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.2 2000/05/21 20:35:56 scribe Exp $
+ * $Id: listkey.h,v 1.3 2000/11/05 12:31:59 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -53,6 +53,8 @@ public:
 	virtual SWKey &operator -=(int decrement);
 	virtual SWKey &operator +=(int increment);
 	virtual char Traversable() { return 1; }
+	virtual long Index() const { return arraypos; }
+	virtual long Index(long iindex) { SetToElement(arraypos); return Index(); }
 };
 
 

@@ -1198,7 +1198,8 @@ long VerseKey::Index() const
 
 long VerseKey::NewIndex() const
 {
-	static long otMaxIndex = offsets[0][1][(int)offsets[0][0][BMAX[0]] + books[0][BMAX[0]].chapmax];
+	static long otMaxIndex = 32300 - 8245;  // total positions - new testament positions
+//	static long otMaxIndex = offsets[0][1][(int)offsets[0][0][BMAX[0]] + books[0][BMAX[0]].chapmax];
 	return ((testament-1) * otMaxIndex) + Index();
 }
 
