@@ -36,11 +36,14 @@ pkginclude_HEADERS += $(swincludedir)/lzsscomprs.h
 pkginclude_HEADERS += $(swincludedir)/markupfiltmgr.h
 pkginclude_HEADERS += $(swincludedir)/multimapwdef.h
 pkginclude_HEADERS += $(swincludedir)/nullim.h
+
 pkginclude_HEADERS += $(swincludedir)/osisheadings.h
 pkginclude_HEADERS += $(swincludedir)/osismorph.h
 pkginclude_HEADERS += $(swincludedir)/osisplain.h
 pkginclude_HEADERS += $(swincludedir)/osisrtf.h
 pkginclude_HEADERS += $(swincludedir)/osisstrongs.h
+pkginclude_HEADERS += $(swincludedir)/osisfootnotes.h   
+
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/plainhtml.h
