@@ -67,8 +67,11 @@ void CSwordModuleSearch::search()  {
 		return;
 	}
 
-	ListKey scopeList = VerseKey().ParseVerseList("Luke;Revelation","", true);
-	SWKey* scope = new ListKey(scopeList);
+	ListKey scopeList = VerseKey().ParseVerseList("Luke;John;Revelation","", true);
+	for (int i=0; i < scopeList.Count(); ++i) {
+		cout << (const char*)*scopeList.GetElement(i) << endl;
+	}
+	SWKey* scope = &scopeList;
 
 	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
 
