@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.9 2001/02/20 02:08:53 scribe Exp $
+ * $Id: swfilter.h,v 1.10 2001/02/21 05:26:55 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -40,6 +40,7 @@ typedef std::list < std::string > OptionsList;
 */
 class SWDLLEXPORT  SWFilter {
 public:
+       ~SWFilter() {}
   /** the type definition for option lists,
   * see @ref getOptionValues
   */
