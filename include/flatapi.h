@@ -21,7 +21,12 @@ extern "C" {
 void SWDLLEXPORT stringlist_iterator_next(SWHANDLE hsli);
 const char * SWDLLEXPORT stringlist_iterator_val(SWHANDLE hsli);
 
+//-----------------------------------------------------------------
+// listkey_iterator methods
 
+void SWDLLEXPORT listkey_iterator_next(SWHANDLE lki);
+const char * SWDLLEXPORT listkey_iterator_val(SWHANDLE hsli);
+	
 //-----------------------------------------------------------------
 // modmap methods
 //
@@ -32,7 +37,7 @@ SWHANDLE SWDLLEXPORT ModList_iterator_val(SWHANDLE hmmi);
 //-----------------------------------------------------------------
 // SWMgr methods
 //
-SWHANDLE SWDLLEXPORT SWMgr_new();
+SWHANDLE SWDLLEXPORT SWMgr_new(char filterType);
 // SWConfig *, SWConfig *, bool, SWFilterMgr *
 SWHANDLE SWDLLEXPORT SWMgr_newEx(SWHANDLE hiconfig, SWHANDLE hisysconfig, char autoload, SWHANDLE hfilterMgr);
 void     SWDLLEXPORT SWMgr_delete(SWHANDLE hmgr);
@@ -55,6 +60,7 @@ void     SWDLLEXPORT SWMgr_setCipherKey(SWHANDLE hmgr, const char *modName, cons
 // SWModule methods
 
 void  SWDLLEXPORT SWModule_terminateSearch(SWHANDLE hmodule);
+SWHANDLE SWDLLEXPORT SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type, int params,  void (*percent) (char, void *), void *percentUserData);
 char  SWDLLEXPORT SWModule_error(SWHANDLE hmodule);
 int   SWDLLEXPORT SWModule_getEntrySize(SWHANDLE hmodule);
 void  SWDLLEXPORT SWModule_setKeyText(SWHANDLE hmodule, const char *key);

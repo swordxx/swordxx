@@ -5,7 +5,7 @@
 
 #include <string.h>
 #include <stdio.h>
-
+ 
 #include <rawtext.h>
 #include <rawcom.h>
 #include <rawld.h>
@@ -32,8 +32,8 @@ typedef struct {
 //-----------------------------------------------------------------
 // SWMgr methods
 //
-extern "C" SWHANDLE SWMgr_new() {
-	return (SWHANDLE) new SWMgr(new MarkupFilterMgr());
+extern "C" SWHANDLE SWMgr_new(char filterType) { 
+	return (SWHANDLE) new SWMgr(new MarkupFilterMgr(filterType));
 }
 
 
@@ -113,9 +113,11 @@ const char *SWMgr_getGlobalOptionTip(SWHANDLE hmgr, const char *option) {
 SWHANDLE SWMgr_getGlobalOptionsIterator(SWHANDLE hmgr) {
 	SWMgr *mgr = (SWMgr *)hmgr;
 	static StringList::iterator it;
-	
-	if (mgr) 
-		it = mgr->getGlobalOptions().begin();
+	static StringList optionslist;
+	if (mgr) {
+		optionslist = mgr->getGlobalOptions();
+		it = optionslist.begin();
+	}
 	return (SWHANDLE)&it;
 }
 
@@ -151,6 +153,19 @@ void SWModule_terminateSearch(SWHANDLE hmodule) {
 // SWModule (const const char *imodname = 0, const const char *imoddesc = 0, SWDisplay * idisp = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
 // virtual ~ SWModule ();
 
+SWHANDLE SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type, int params ,void (*percent) (char, void *), void *percentUserData) {
+	
+	static ListKey results;
+	SWKey * scope = 0;
+	SWModule *module = (SWModule *)hmodule;
+	if (!module) 	
+		return -1;
+	
+	results.ClearList();
+	results = module->Search(searchString, type, params, scope, 0, percent, (void *) &percentUserData);
+	
+	return (SWHANDLE)&results;
+}
   /** Gets and clears error status
   *
   * @return error status
@@ -254,6 +269,24 @@ const char *stringlist_iterator_val(SWHANDLE hsli) {
 
 
 //-----------------------------------------------------------------
+// listkey_iterator methods
+
+void listkey_iterator_next(SWHANDLE lki) {
+	ListKey *lk = (ListKey*)lki;
+	(*lk)++;
+}
+
+
+const char *listkey_iterator_val(SWHANDLE lki) {	
+	ListKey *lk = (ListKey*)lki;
+	if(!lk->Error())
+		return (const char *) lk->getText();
+	return NULL;
+}
+
+
+
+//-----------------------------------------------------------------
 // modmap methods
 
 void ModList_iterator_next(SWHANDLE hmmi) {
@@ -267,4 +300,3 @@ SWHANDLE ModList_iterator_val(SWHANDLE hmmi) {
 	ModItType *it  = (ModItType *)hmmi;
 	return (it->it != it->end) ? (SWHANDLE)it->it->second : 0;
 }
-
