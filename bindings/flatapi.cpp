@@ -13,6 +13,7 @@
 #include <listkey.h>
 #include <versekey.h>
 #include <swmgr.h>
+#include <markupfiltmgr.h>
 
 #include "flatapi.h"
 
@@ -20,8 +21,8 @@
 //-----------------------------------------------------------------
 // SWMgr methods
 //
-SWHANDLE SWMgr_new() {
-	return (SWHANDLE) new SWMgr();
+extern "C" SWHANDLE SWMgr_new() {
+	return (SWHANDLE) new SWMgr(new MarkupFilterMgr());
 }
 
 
@@ -49,11 +50,20 @@ SWHANDLE SWMgr_getConfig(SWHANDLE hmgr) {
 
 
 SWHANDLE SWMgr_getModulesIterator(SWHANDLE hmgr) {
+	static ModItType it;
+
 	SWMgr *mgr = (SWMgr *)hmgr;
-	static ModMap::iterator it;
-	if (mgr)
-	    it = mgr->Modules.begin();
+	if (mgr) {
+	    it.it = mgr->Modules.begin();
+	    it.end = mgr->Modules.end();
+	}
 	return (SWHANDLE)&it;
+}
+
+
+SWHANDLE SWMgr_getModuleByName(SWHANDLE hmgr, char *name) {
+	SWMgr *mgr = (SWMgr *)hmgr;
+	return (mgr) ? (SWHANDLE) mgr->Modules[name] : 0;
 }
 
 
@@ -236,13 +246,14 @@ char *stringlist_iterator_val(SWHANDLE hsli) {
 // modmap methods
 
 void ModList_iterator_next(SWHANDLE hmmi) {
-	ModMap::iterator *mmi = (ModMap::iterator *)hmmi;
-	(*mmi)++;
+	ModItType *it  = (ModItType *)hmmi;
+	if (it->it != it->end)
+		it->it++;
 }
 
 
 SWHANDLE ModList_iterator_val(SWHANDLE hmmi) {
-	ModMap::iterator *mmi = (ModMap::iterator *)hmmi;
-	return (SWHANDLE)(*mmi)->second;
+	ModItType *it  = (ModItType *)hmmi;
+	return (it->it != it->end) ? (SWHANDLE)it->it->second : 0;
 }
 
