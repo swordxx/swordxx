@@ -24,19 +24,26 @@ SWORD_NAMESPACE_START
 OSISPlain::OSISPlain() {
 	setTokenStart("<");
 	setTokenEnd(">");
-  
+
 	setEscapeStart("&");
 	setEscapeEnd(";");
-  
+
 	setEscapeStringCaseSensitive(true);
-  
+
 	addEscapeStringSubstitute("amp", "&");
 	addEscapeStringSubstitute("apos", "'");
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-  
-	setTokenCaseSensitive(true);  
+
+
+        addTokenSubstitute("title", "\n");
+        addTokenSubstitute("/title", "\n");
+        addTokenSubstitute("/l", "\n");
+        addTokenSubstitute("lg", "\n");
+        addTokenSubstitute("/lg", "\n");
+
+        setTokenCaseSensitive(true);
 }
 
 char OSISPlain::processText(SWBuf &text, const SWKey *key, const SWModule *module)
@@ -61,8 +68,9 @@ char OSISPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 }
 
 bool OSISPlain::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
-  // manually process if it wasn't a simple substitution
+        // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
+                XMLTag tag(token);
 		if (((*token == 'w') && (token[1] == ' ')) ||
 		((*token == '/') && (token[1] == 'w') && (!token[2]))) {
 			bool start = false;
@@ -73,11 +81,11 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 				}
 				start = true;
 			}
-			XMLTag tag = (start) ? token : userData["w"].c_str();
+			tag = (start) ? token : userData["w"].c_str();
 			bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
 			SWBuf lastText = (start) ? "stuff" : userData["lastTextNode"].c_str();
-					
+
 			const char *attrib;
 			const char *val;
 			if (attrib = tag.getAttribute("xlit")) {
@@ -144,16 +152,10 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 				buf += "\n";
 		}
 
-		// <line> poetry, etc
-		else if ((!strncmp(token, "line", 4)) ||
-			(!strncmp(token, "/line", 5))) {
-				buf += "\n";
-		}
-
-		// <title>
-		else if (!strncmp(token, "/title", 6)) {
-			buf += "\n";
-		}
+                // <milestone type="line"/>
+                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+        		buf += "\n";
+                }
 
 		else {
 			return false;  // we still didn't handle token

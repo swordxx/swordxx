@@ -30,14 +30,17 @@ OSISRTF::OSISRTF() {
 	setEscapeEnd(";");
   
 	setEscapeStringCaseSensitive(true);
-  
+
 	addEscapeStringSubstitute("amp", "&");
 	addEscapeStringSubstitute("apos", "'");
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-  
-	setTokenCaseSensitive(true);  
+
+        addTokenSubstitute("lg", "\\par ");
+        addTokenSubstitute("/lg", "\\par ");
+
+	setTokenCaseSensitive(true);
 }
 
 char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
@@ -191,9 +194,6 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			else if (tag.isEndTag()) {
 				buf += "</a>}";
 			}
-			else {	// empty reference marker
-				// -- what should we do?  nothing for now.
-			}
 		}
 
 		// <l> poetry
@@ -204,14 +204,16 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			else if (tag.isEndTag()) {
 				buf += "\\par}";
 			}
-			else {	// empty line marker
-				buf += "\\par";
+			else if (tag.getAttribute("sID")) {	// empty line marker
+				buf += "\\par ";
 			}
 		}
+
                 // <milestone type="line"/>
                 else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-        		buf += "\\par";
+        		buf += "\\par ";
                 }
+
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -220,13 +222,9 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			else if (tag.isEndTag()) {
 				buf += "\\par}";
 			}
-			else {	// empty title marker
-				// what to do?  is this even valid?
-				buf += "\\par";
-			}
 		}
 
-		// <hi> hi?  hi contrast?
+		// <hi>
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -237,9 +235,6 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			}
 			else if (tag.isEndTag()) {
 				buf += "}";
-			}
-			else {	// empty hi marker
-				// what to do?  is this even valid?
 			}
 		}
 
@@ -285,8 +280,6 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			}
 			else if (tag.isEndTag()) {
 				buf += "}";
-			}
-			else {	// empty transChange marker?
 			}
 		}
 

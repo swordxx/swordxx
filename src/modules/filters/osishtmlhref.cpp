@@ -24,10 +24,21 @@ SWORD_NAMESPACE_START
 
 OSISHTMLHref::OSISHTMLHref()
 {
-  setTokenStart("<");
-  setTokenEnd(">");
-	
-  setTokenCaseSensitive(true);  
+        setTokenStart("<");
+        setTokenEnd(">");
+
+	setEscapeStart("&");
+	setEscapeEnd(";");
+
+	setEscapeStringCaseSensitive(true);
+
+	addEscapeStringSubstitute("amp", "&");
+	addEscapeStringSubstitute("apos", "'");
+	addEscapeStringSubstitute("lt", "<");
+	addEscapeStringSubstitute("gt", ">");
+	addEscapeStringSubstitute("quot", "\"");
+
+        setTokenCaseSensitive(true);
 }
 
 bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
@@ -56,7 +67,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 					lastText = userData["lastTextNode"].c_str();
 				}
 				else lastText = "stuff";
-					
+
 				const char *attrib;
 				const char *val;
 				if (attrib = tag.getAttribute("xlit")) {
@@ -94,7 +105,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 						val = strchr(attrib, ':');
 						val = (val) ? (val + 1) : attrib;
 						const char *val2 = val;
-						if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2]))) 
+						if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 							val2+=2;
 						buf.appendFormatted(" <small><em>(<a href=\"type=morph class=%s value=%s\">%s</a>)</em></small> ", tag.getAttribute("morph"), val, val2);
 					} while (++i < count);
@@ -108,14 +119,14 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				/*if (endTag)
 					buf += "}";*/
 			}
-		}				
- 
+		}
+
 		// <note> tag
-		else if (!strcmp(tag.getName(), "note")) {	
-			if (!tag.isEmpty() && !tag.isEndTag()) {		
+		else if (!strcmp(tag.getName(), "note")) {
+			if (!tag.isEmpty() && !tag.isEndTag()) {
 				SWBuf footnoteNum = userData["fn"];
 				SWBuf type = tag.getAttribute("type");
-				
+
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 					int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
 					VerseKey *vkey;
@@ -133,8 +144,8 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 					}
 				}
 				userData["suspendTextPassThru"] = "true";
-			}	   
-			if (tag.isEndTag()) {	
+			}
+			if (tag.isEndTag()) {
 				userData["suspendTextPassThru"] = "false";
 			}
 		}
@@ -150,7 +161,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				buf += "<!P><br />";
 			}
 		}
-		
+
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -159,23 +170,27 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			else if (tag.isEndTag()) {
 				buf += "</a>";
 			}
-			else {	// empty reference marker
-				// -- what should we do?  nothing for now.
-			}
 		}
 
-		// <line> poetry, etc
-		else if (!strcmp(tag.getName(), "line")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<>";
+		// <l> poetry, etc
+		else if (!strcmp(tag.getName(), "l")) {
+			if (tag.isEmpty()) {
+				buf += "<br />";
 			}
 			else if (tag.isEndTag()) {
 				buf += "<br />";
 			}
-			else {	// empty line marker
-				buf += "<br />";
-			}
 		}
+
+                // <lg>
+                else if (!strcmp(tag.getName(), "lg")) {
+                        buf += "<br />";
+                }
+
+                // <milestone type="line"/>
+                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+        		buf += "<br />";
+                }
 
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
@@ -185,17 +200,13 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			else if (tag.isEndTag()) {
 				buf += "</b><br />";
 			}
-			else {	// empty title marker
-				// what to do?  is this even valid?
-				buf += "<br />";
-			}
 		}
 
 		// <hi> hi?  hi contrast?
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (type == "b") {
+				if (type == "b" || type == "x-b") {
 					buf += "<b> ";
 					userData["inBold"] = "true";
 				}
