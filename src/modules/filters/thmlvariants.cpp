@@ -80,17 +80,16 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					hide = true;
                                   	continue;
 				}
-				else if (!strncmp(token.c_str(), "/div", 4)) {
-					hide = false;
-                                	continue;
-				}
-
-				// if not a footnote token, keep token in text
 				if (!hide) {
 					text += '<';
 					text.append(token);
 					text += '>';
 				}
+                                if (!strncmp(token.c_str(), "/div", 4)) {
+					hide = false;
+                                	continue;
+				}
+
 				continue;
 			}
 			if (intoken) {
@@ -102,51 +101,6 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		}
 
 	}
-	
-	//the above code should work, it combines this part in it. (jansorg)
-	
-/*	else if (option == 1) { //we want variant only
-		bool intoken = false;
-		bool hide = false;
-
-		SWBuf token;
-		SWBuf orig = text;
-		const char *from = orig.c_str();
-
-		for (text = ""; *from; from++) {
-			if (*from == '<') {
-				intoken = true;
-				token = "";
-				continue;
-			}
-			else if (*from == '>') {	// process tokens
-				intoken = false;
-				if (!strncmp(token.c_str(), "div type=\"variant\" class=\"1\"", 28)) {
-				  hide = true;
-                                  continue;
-				}
-				else if (!strncmp(token.c_str(), "/div", 4)) {
-				  hide = false;
-                                  continue;
-				}
-
-				// if not a footnote token, keep token in text
-				if (!hide) {
-					text += '<';
-					text.append( token );
-					text += '>';
-				}
-				continue;
-			}
-			if (intoken) {
-				token += *from;
-			}
-			else if (!hide) {
-				text += *from;
-			}
-		}
-	}
-*/
 
 	return 0;
 }
