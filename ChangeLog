@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+26-May-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Improved verse reference parsing to include proper
+		parsing of osisRef attributes and other
+		misc. anomalies.
+	Returned canon.h back to previous state to
+		avoid locale key mismatches
+
 25-May-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added utilfuns/utilxml.cpp and test/xmltest which
 		include basic xml utility classes

@@ -99,9 +99,6 @@ const char *XMLTag::getAttribute(const char *attribName) const {
 		parse();
 
 	MapStringPair::iterator it = attributes.find(attribName);
-	if (it == attributes.end()) {
-		return 0;
-	}
 	return (it == attributes.end()) ? 0 : it->second.c_str();
 }
 

@@ -452,12 +452,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				}
 
                                 for (loop = strlen(book) - 1; loop+1; loop--) {
-                                if (book[loop] == ' ') {
-                                        if (isroman(&book[loop+1])) {
-                                                if (verse == -1) {
-                                                        verse = chap;
-				        		chap = from_rom(&book[loop+1]);
-					        	book[loop] = 0;
+					if (book[loop] == ' ') {
+						if (isroman(&book[loop+1])) {
+							if (verse == -1) {
+								verse = chap;
+								chap = from_rom(&book[loop+1]);
+								book[loop] = 0;
 					       	        }
                                                 }
 	        				break;
@@ -471,8 +471,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
                                                 *book = 0;
                                         }
                                 }
-
-		        	bookno = getBookAbbrev(book);
+                                if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
+					strcpy(book, VerseKey(tmpListKey).getBookName());
+                                }
+				bookno = getBookAbbrev(book);
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
 				char partial = 0;
@@ -564,11 +566,22 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			break;
 		case 10:	// ignore these
 		case 13: 
+		case '[': 
+		case ']': 
+		case '(': 
+		case ')': 
 			break;
 		case '.':
 			if (buf > orig)			// ignore (break) if preceeding char is not a digit
 				if (!isdigit(*(buf-1)))
 					break;
+
+			number[tonumber] = 0;
+			tonumber = 0;
+			if (*number)
+				chap = atoi(number);
+			*number = 0;
+			break;
 			
 		default:
 			if (isdigit(*buf)) {
@@ -639,6 +652,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			}
 		}
 			
+		if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
+			strcpy(book, VerseKey(tmpListKey).getBookName());
+		}
 		bookno = getBookAbbrev(book);
 	}
 	if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
@@ -1460,7 +1476,7 @@ const char *VerseKey::getOSISRef() const {
 
 	static char *osisotbooks[] = {
 			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","1Sam","2Sam",
-			"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Pss",
+			"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Ps",
 			"Prov",		// added this.  Was not in OSIS spec
 			"Eccl",
 			"Song","Isa","Jer","Lam","Ezek","Dan","Hos","Joel","Amos","Obad",

@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.17 2003/05/10 00:55:43 chrislit Exp $
+ * $Id: canon.h,v 1.18 2003/05/26 08:36:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,7 +47,7 @@ struct sbook
   {"Nehemiah", "Neh", 13},
   {"Esther", "Esth", 10},
   {"Job", "Job", 42},
-  {"Psalms", "Pss", 150},
+  {"Psalms", "Ps", 150},
   {"Proverbs", "Prov", 31},
   {"Ecclesiastes", "Eccl", 12},
   {"Song of Solomon", "Song", 8},
@@ -98,7 +98,7 @@ struct sbook
   {"II John", "2John", 1},
   {"III John", "3John", 1},
   {"Jude", "Jude", 1},
-  {"Revelation", "Rev", 22}
+  {"Revelation of John", "Rev", 22}
 };
 
 

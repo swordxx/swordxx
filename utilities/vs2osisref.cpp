@@ -42,20 +42,39 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		char buf[5120];
 		char frag[800];
+		char preJunk[800];
+		char postJunk[800];
+		*preJunk = 0;
+		*postJunk = 0;
+		while ((*startFrag) && (strchr(" ;,()[].", *startFrag))) {
+			outRef += *startFrag;
+			startFrag++;
+		}
 		if (element) {
 			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 			frag[((const char *)element->userData - startFrag) + 1] = 0;
-			startFrag = (const char *)element->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s-%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
+			int j;
+			for (j = strlen(frag)-1; j && (strchr(" ;,()[].", frag[j])); j--);
+			if (frag[j+1])
+				strcpy(postJunk, frag+j+1);
+			frag[j+1]=0;
+			startFrag += ((const char *)element->userData - startFrag) + 1;
+			sprintf(buf, "<reference osisRef=\"%s-%s\">%s</reference>%s", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag, postJunk);
 		}
 		else {
 			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
 			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
-			startFrag = (const char *)verses.GetElement(i)->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), frag);
+			int j;
+			for (j = strlen(frag)-1; j && (strchr(" ;,()[].", frag[j])); j--);
+			if (frag[j+1])
+				strcpy(postJunk, frag+j+1);
+			frag[j+1]=0;
+			startFrag += ((const char *)verses.GetElement(i)->userData - startFrag) + 1;
+			sprintf(buf, "<reference osisRef=\"%s\">%s</reference>%s", VerseKey(*verses.GetElement(i)).getOSISRef(), frag, postJunk);
 		}
 		outRef+=buf;
 	}
+	outRef+=startFrag;
 	return outRef.c_str();
 }
 
@@ -81,7 +100,7 @@ int main(int argc, char **argv)
                 verseKey = "Gen 1:1";
         }
 
-        std::cout << convertToOSIS(verseString, &verseKey);
+        std::cout << convertToOSIS(verseString, &verseKey) << "\n";
 
 	return 0;
 }
