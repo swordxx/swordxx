@@ -334,6 +334,7 @@ SWMgr *InstallSource::getMgr() {
 
 int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	terminate = false;
+	long i;
 	void *session = FTPOpenSession();
 	SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/"; //dont forget the final slash
 	if (FTPURLGetFile(session, "dirlist", url.c_str())) {
@@ -348,10 +349,10 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 		}
 					
 		long totalBytes = 0;
-		for (int i = 0; i < dirList.size(); i++)
+		for (i = 0; i < dirList.size(); i++)
 			totalBytes += dirList[i].size;
 		long completedBytes = 0;
-		for (int i = 0; i < dirList.size(); i++) {
+		for (i = 0; i < dirList.size(); i++) {
 			if (dirList[i].flagtrycwd != 1) {
 				SWBuf buffer = (SWBuf)dest + "/" + (dirList[i].name);
 				if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
