@@ -27,7 +27,8 @@ GBFHTML::GBFHTML()
 
 char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	char *to, *from, token[2048], tokpos = 0;
+	char *to, *from, token[2048];
+	int tokpos = 0;
 	bool intoken 	= false;
 	int len;
 

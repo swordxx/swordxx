@@ -31,7 +31,7 @@ unsigned char sapphire::keyrand(int limit,
     if (!limit) return 0;   // Avoid divide by zero error.
     retry_limiter = 0;
     mask = 1;               // Fill mask with enough bits to cover
-    while (mask < limit)    // the desired range.
+    while (mask < (unsigned)limit)    // the desired range.
         mask = (mask << 1) + 1;
     do
         {
@@ -45,7 +45,7 @@ unsigned char sapphire::keyrand(int limit,
         if (++retry_limiter > 11)
             u %= limit;     // Prevent very rare long loops.
         }
-    while (u > limit);
+    while (u > (unsigned)limit);
     return u;
     }
 

@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/plainhtml.h,v 1.2 1999/10/15 18:26:09 scribe Exp $ */
-/* $Revision: 1.2 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/plainhtml.h,v 1.3 1999/10/25 04:31:24 scribe Exp $ */
+/* $Revision: 1.3 $ */
 
 #ifndef PLAINHTML_H
 #define PLAINHTML_H
@@ -27,7 +27,7 @@
 class PLAINHTML : public SWFilter {
 public:
 	PLAINHTML();
-	virtual char ProcessText(char *text, int maxlen = -1, const SWKey *key = 0);
+	virtual char ProcessText(char *text, int maxlen, const SWKey *key);
 };
 
 #endif
