@@ -15,7 +15,7 @@
  * General Public License for more details.
  *
  */
-#ifdef ICU
+#ifdef _ICU_
 
 #ifndef UTF8TRANSLITERATOR_H
 #define UTF8TRANSLITERATOR_H

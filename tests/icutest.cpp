@@ -1,3 +1,5 @@
+#ifdef _ICU_
+
 #include <iostream>
 #include <string>
 
@@ -32,3 +34,4 @@ int main() {
 
   return 0;
 }
+#endif

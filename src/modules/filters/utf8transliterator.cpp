@@ -4,7 +4,7 @@
 *			 ICU-supported scripts.
 */
 
-#ifdef ICU
+#ifdef _ICU_
 
 #include <stdlib.h>
 #include <string.h>
