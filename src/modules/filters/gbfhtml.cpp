@@ -448,19 +448,46 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 					{
 						case 'T':               // Book title begin
 							*to++ = '<';
-							*to++ = 'B';
-							*to++ = 'I';
-							*to++ = 'G';
+							*to++ = 'b';
+							*to++ = 'i';
+							*to++ = 'g';
 							*to++ = '>';
 							continue;
 						case 't':
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'B';
-							*to++ = 'I';
-							*to++ = 'G';
+							*to++ = 'b';
+							*to++ = 'i';
+							*to++ = 'g';
 							*to++ = '>';
+							continue;/*
+                    				case 'S':
+						        *to++ = '<';
+						        *to++ = 'b';
+						        *to++ = 'r';
+						        *to++ = ' ';
+						        *to++ = '/';
+						        *to++ = '>';
+						        *to++ = '<';
+						        *to++ = 'b';
+						        *to++ = 'i';
+							*to++ = 'g';
+						        *to++ = '>';
 							continue;
+                    				case 's':
+						        *to++ = '<';
+						        *to++ = '/';
+						        *to++ = 'b';
+						        *to++ = 'i';
+						        *to++ = 'g';
+						        *to++ = '>';
+						        *to++ = '<';
+						        *to++ = 'b';
+						        *to++ = 'r';
+						        *to++ = ' ';
+						        *to++ = '/';
+						        *to++ = '>';
+							continue;*/
 					}
 					break;
 	

@@ -1,6 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+06-May-2001	Chris Little <chrislit@crosswire.org>
+	Added GBFHeadings OptionFilter & support for <TS><Ts> tags to
+	all GBF filters
+	Added emptyvss utility to list empty verses in a module
+	Added warning to vpl2mod for cases where a verse is being
+	overwritten
+	
 23-Mar-2001	Joachim Ansorg <jansorg@gmx.de>
 	Made some changes to the API documentation in the headers
 		(documented new classes).

@@ -197,12 +197,10 @@ int main(int argc, char **argv)
 		  // verses (must be in same chapter)
 		  char * vers1 = strchr(ref, ':') + 1;
 		  
-		  char vers_array[strlen(vers1)];
-		  char * vers2 = (char*)vers_array;
+		  char * vers2 = new char[strlen(vers1)];
 		  strcpy (vers2, vers1);
 		  
-		  char chap_array[strlen(ref) + 8];
-		  char * chap = (char*)chap_array;
+		  char * chap = new char[strlen(ref) + 8];
 		  strcpy (chap, ref);
 		  
 		  char * vers3 = strchr(chap, ':') + 1;
@@ -210,6 +208,7 @@ int main(int argc, char **argv)
 		  char * vers4 = new char;
 		  
 		  vers4 = strtok(vers2, ",");
+		  delete vers2;
 		  while (vers4) {
 		    strcpy (vers3, vers4);
 		    
@@ -217,8 +216,7 @@ int main(int argc, char **argv)
 		    if (dash) {               // if we're looking up a range...
 		      *dash = 0;              //break string at the dash
 		      dash++;
-		      char temp_array[strlen(chap) + 8];
-		      char * temp = (char*)temp_array;
+		      char * temp = new char[strlen(chap) + 8];
 		      
 		      length = strchr(chap, ':') - chap + 1;
 		      
@@ -226,6 +224,7 @@ int main(int argc, char **argv)
 		      *(temp + length) = 0;
 		      strcat (temp, dash);
 		      strcpy (dash, temp);
+		      delete temp;
 		    }
 		    else dash = chap;
 		    
@@ -248,13 +247,13 @@ int main(int argc, char **argv)
 		    
 		    vers4 = strtok(0, ",");
 		  }
+		  delete chap;
 		}
 		else {
 		  if (dash) {                 // if we're looking up a range...
 		    *dash = 0;                //break string at the dash
 		    dash++;
-		    char temp_array[strlen(ref)];
-		    char * temp = (char*)temp_array;
+		    char * temp = new char[strlen(ref)];
 		    
 		    if (!strchr (dash, ':')) { /// if range supplies only second verse number (no book/chapter) assume same book/chapter
 		      length = strchr(ref, ':') - ref + 1;
@@ -274,6 +273,7 @@ int main(int argc, char **argv)
 		      strcat (temp, dash);
 		      strcpy (dash, temp);
 		    }
+		    delete temp;
 		  }
 		  else dash = ref;	       
 		  

@@ -331,6 +331,58 @@ char GBFThML::ProcessText(char *text, int maxlen)
 				  continue;
 				}
 			  break;
+			case 'T':			// title formatting
+			  switch(token[1])
+			    {
+			    case 'T':               // Book title begin
+			      *to++ = '<';
+			      *to++ = 'b';
+			      *to++ = 'i';
+			      *to++ = 'g';
+			      *to++ = '>';
+			      continue;
+			    case 't':
+			      *to++ = '<';
+			      *to++ = '/';
+			      *to++ = 'b';
+			      *to++ = 'i';
+			      *to++ = 'g';
+			      *to++ = '>';
+			      continue;
+			    case 'S':
+			      *to++ = '<';
+			      *to++ = 'b';
+			      *to++ = 'r';
+			      *to++ = ' ';
+			      *to++ = '/';
+			      *to++ = '>';
+			      *to++ = '<';
+			      *to++ = 'b';
+			      *to++ = '>';
+			      *to++ = '<';
+			      *to++ = 'i';
+			      *to++ = '>';
+			      continue;
+			    case 's':
+			      *to++ = '<';
+			      *to++ = '/';
+			      *to++ = 'i';
+			      *to++ = '>';
+			      *to++ = '<';
+			      *to++ = '/';
+			      *to++ = 'b';
+			      *to++ = '>';
+			      *to++ = '<';
+			      *to++ = 'b';
+			      *to++ = 'r';
+			      *to++ = ' ';
+			      *to++ = '/';
+			      *to++ = '>';
+			      
+			      continue;
+			    }
+			  break;
+
 			case 'P':			// special formatting
 			  switch(token[1])
 			    {

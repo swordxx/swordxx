@@ -239,6 +239,47 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = '<';
 				}
 				break;
+			case 'T':			// title formatting
+			  switch(token[1])
+			    {
+			    case 'T':               // Book title begin
+			      *to++ = '{';
+			      *to++ = '\\';
+			      *to++ = 'f';
+			      *to++ = 's';
+			      *to++ = '2';
+			      *to++ = '2';
+			      *to++ = ' ';
+			      continue;
+			    case 't':
+			      *to++ = '}';
+			      continue;
+			    case 'S':
+			      *to++ = '\\';
+			      *to++ = 'p';
+			      *to++ = 'a';
+			      *to++ = 'r';
+			      *to++ = ' ';
+			      *to++ = '{';
+			      *to++ = '\\';
+			      *to++ = 'i';
+			      *to++ = '1';
+			      *to++ = '\\';
+			      *to++ = 'b';
+			      *to++ = '1';
+			      *to++ = ' ';
+			      continue;
+			    case 's':
+			      *to++ = '}';
+			      *to++ = '\\';
+			      *to++ = 'p';
+			      *to++ = 'a';
+			      *to++ = 'r';
+			      *to++ = ' ';
+			      continue;
+			    }
+			  break;
+
 			}
 			continue;
 		}
