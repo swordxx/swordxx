@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.68 2002/03/20 00:22:31 scribe Exp $
+ * $Id: swmgr.cpp,v 1.69 2002/03/20 20:07:02 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -976,8 +976,10 @@ char SWMgr::AddModToConfig(int conffd, const char *fname)
 void SWMgr::setGlobalOption(const char *option, const char *value)
 {
 	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName()))
-			(*it).second->setOptionValue(value);
+		if ((*it).second->getOptionName()) {
+			if (!stricmp(option, (*it).second->getOptionName()))
+				(*it).second->setOptionValue(value);
+		}
 	}
 }
 
@@ -985,8 +987,10 @@ void SWMgr::setGlobalOption(const char *option, const char *value)
 const char *SWMgr::getGlobalOption(const char *option)
 {
 	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName()))
-			return (*it).second->getOptionValue();
+		if ((*it).second->getOptionName()) {
+			if (!stricmp(option, (*it).second->getOptionName()))
+				return (*it).second->getOptionValue();
+		}
 	}
 	return 0;
 }
@@ -995,8 +999,10 @@ const char *SWMgr::getGlobalOption(const char *option)
 const char *SWMgr::getGlobalOptionTip(const char *option)
 {
 	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName()))
-			return (*it).second->getOptionTip();
+		if ((*it).second->getOptionName()) {
+			if (!stricmp(option, (*it).second->getOptionName()))
+				return (*it).second->getOptionTip();
+		}
 	}
 	return 0;
 }
@@ -1012,9 +1018,11 @@ OptionsList SWMgr::getGlobalOptionValues(const char *option)
 {
 	OptionsList options;
 	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName())) {
-			options = (*it).second->getOptionValues();
-			break;	// just find the first one.  All option filters with the same option name should expect the same values
+		if ((*it).second->getOptionName()) {
+			if (!stricmp(option, (*it).second->getOptionName())) {
+				options = (*it).second->getOptionValues();
+				break;	// just find the first one.  All option filters with the same option name should expect the same values
+			}
 		}
 	}
 	return options;

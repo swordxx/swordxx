@@ -1,24 +1,29 @@
-#include <iostream.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <swmgr.h>
 
-#include <versekey.h>
-#include <localemgr.h>
+int main (int argc, char* argv[]) {
+        SWMgr mgr;
 
-int main(int argc, char **argv) {
-	if ((argc != 2) && (argc != 3)) {
-		fprintf(stderr, "usage: %s <\"string to parse\"> [locale name]\n", *argv);
-		exit(-1);
-	}
+//the commented out code works
+/* 
+        OptionsList globalOptions = mgr.getGlobalOptions();
+        for (OptionsList::iterator it = globalOptions.begin(); it != globalOptions.end(); it++) {
+                cout << *it << endl;
 
-	if (argc == 3)
-		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(argv[2]);
+                OptionsList values = mgr.getGlobalOptionValues((*it).c_str());
+                for (OptionsList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
+                        cout << "\t"<< *it2 << endl;
+                }
+        }
+*/
 
-	VerseKey DefaultVSKey;
+//crashes
+	OptionsList values = mgr.getGlobalOptionValues("Footnotes");
+        for (OptionsList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
+              cout << "\t"<< *it2 << endl;
+        }    
+};
 
-	DefaultVSKey = (const char*)argv[1];
-	const char* text = (const char*)(DefaultVSKey);
-	
-	cout << text << endl;
-	return 0;
-}
+
+
+
+
