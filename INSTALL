@@ -1,7 +1,7 @@
                        INSTALLATION NOTES
 
 
-CONFIGURATION
+BUILD CONFIGURATION
 
 You may want to have a look in the configuration file Makefile.cfg to be
 sure everything is being built the way that you would like.
@@ -79,3 +79,11 @@ locations; hence, config files in $HOME/.sword must contain absolute path
 names.
 
 Sample config files can be found in: .../sword/samples
+
+
+LOCALE
+
+If you would like to include support for localization, you may copy the
+locales.d directory and any of the locale files contained therein into
+the directory where your mods.d or mods.conf file exists
+(eg. to /usr/share/sword/locales.d/).

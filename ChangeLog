@@ -1,6 +1,17 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+13-Mar-2000
+	Added SWLocale and LocaleMgr classes to support localization
+	Made GBFPlain filter support plain text parsing of strongs
+		numbers to allow searching for such.
+	Added VCL library port to support porting of InstallMgr to gtk
+	Added basic InstallMgr gtk port.
+	Included Chris Little's initial cut of ThML filters
+	Added Torsten's Uhlmann's plainfootnotes, an option filter for
+		footnotes in plain format Biblical texts.
+	Added Torsten's rtfhtml filter (at the moment only usable for
+	the About comment)
 
 19-Jan-2000
 	Added zText, zVerse, etc. code utilizing Daniel Glassey's comp
