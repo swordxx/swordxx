@@ -10,6 +10,7 @@
 #include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
+#include <iostream.h>
 
 
 SWDisplay SWModule::rawdisp;
