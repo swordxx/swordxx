@@ -1,10 +1,6 @@
+#include <iostream>
 #include <swbuf.h>
 using namespace sword;
-
-//#include <string>
-//#define SWBuf string
-
-#include <iostream>
 using namespace std;
 
 #define BASEI 32000000L
