@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText2'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext2.h,v 1.1 2004/04/13 23:41:40 dglassey Exp $
+ * $Id: ztext2.h,v 1.2 2004/05/07 17:02:32 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef ZTEXT_H
-#define ZTEXT_H
+#ifndef ZTEXT2_H
+#define ZTEXT2_H
 
 #include <zverse2.h>
 #include <versekey2.h>
@@ -66,16 +66,14 @@ public:
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 
 	virtual ~zText2();
-#if 0
 	virtual SWBuf &getRawEntryBuf();
-#endif
 
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
 
   // write interface ----------------------------
 	virtual bool isWritable() { return ((idxfp->getFd() > 0) && ((idxfp->mode & O_RDWR) == O_RDWR)); }
-	static char createModule(const char *path, int blockBound, int indxPerBlock) {
+	static char createModule(const char *path, int blockBound, int indxPerBlock = 10) {
 		return zVerse2::createModule(path, blockBound, indxPerBlock);
 	}
 

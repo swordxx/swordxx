@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey2.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey2.h,v 1.5 2004/04/29 15:59:54 dglassey Exp $
+ * $Id: versekey2.h,v 1.6 2004/05/07 17:02:32 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,7 @@
 #include <swmacs.h>
 #include <listkey.h>
 #include <ctype.h>
-
+#include <refsys.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
@@ -42,11 +42,9 @@ SWORD_NAMESPACE_START
 
 #define KEYERR_FAILEDPARSE 2
 
-struct bkref
-{
-	long offset;
-	unsigned char maxnext;
-};
+#define GENESIS 2
+#define REVELATION 93
+#define MAXOSISBOOKS 93
 
 
 struct sbook2
@@ -58,13 +56,6 @@ struct sbook2
 	/**Preferred Abbreviation
 	*/
 	const char *prefAbbrev;
-
-	/**Maximum chapters in book
-	*/
-	//unsigned char chapmax;
-	/** Array[chapmax] of maximum verses in chapters
-	*/
-	//const bkref *versemax;
 };
 
 struct abbrev2
@@ -85,56 +76,45 @@ class SWDLLEXPORT VerseKey2:public SWKey {
 	class LocaleCache {
 	public:
 		char *name;
+		char *refsys;
 		unsigned int abbrevsCnt;
+		struct abbrev2 *abbrevs;
 		SWLocale *locale;
-		LocaleCache() : name(0), abbrevsCnt(0), locale(0) {};
+		LocaleCache() : name(0), refsys(0), abbrevsCnt(0), abbrevs(0), locale(0) {};
 		virtual ~LocaleCache() {
 		if (name)
 			delete[]name;
+		if (refsys)
+			delete[]refsys;
+		if (abbrevs)
+			delete[] abbrevs;
 		}
 	};
 
 	static SWClass classdef;
 
-	//static long *offsets[2][2];
-	static bkref *offsets[2];
-	//static int offsize[2][2];
-	static int offsize[2];
+	static struct sbook2 osisbooks[];
 	/** number of instantiated VerseKey2 objects or derivitives 
 	*/
 	static int instance;
-/*	static struct sbook otbooks[];
-	static struct sbook ntbooks[];
-	static long otbks[];
-	static long otcps[];
-	static long ntbks[];
-	static long ntcps[];
-	static int vm[];
-*/
-	static struct sbook2 osisbooks[];
-	static bkref kjvbks[];
-	static bkref kjvcps[];
 	static LocaleCache *localeCache;
 	ListKey internalListKey;
+	const RefSys *m_refsys;
 
 	const struct abbrev2 *abbrevs;
 	char *locale;
 	int abbrevsCnt;
 	/** The Testament: 0 - Old; 1 - New
 	*/
-	//signed char testament;
-	mutable signed char book;
-	mutable signed int chapter;
-	mutable signed int verse;
+	mutable char book;
+	mutable int chapter;
+	mutable int verse;
 	/** flag for auto normalization 
 	*/
 	char autonorm;
 	/** flag for headings on/off
 	*/
 	char headings;
-	/** flag to use old ot/nt indexes for old modules
-	*/
-	//bool oldindexhack;
 
 	int getBookAbbrev(const char *abbr);
 	void initBounds() const;
@@ -153,33 +133,26 @@ class SWDLLEXPORT VerseKey2:public SWKey {
 	*
 	*/
 	virtual char parse();
-	/** Binary search to find the index closest, but less
-	* than the given value.
-	*
-	* @param array long * to array to search
-	* @param size number of elements in the array
-	* @param value value to find
-	* @return the index into the array that is less than but closest to value
-	*/
-	int findindex(bkref *array, int size, long value);
 	mutable VerseKey2 *lowerBound, *upperBound;
-
-	static const char builtin_BMAX;
-	//static struct sbook *builtin_books[2];
 	static struct sbook2 *builtin_books;
-	static const struct abbrev2 builtin_abbrevs[];
-	const char *BMAX;
 	struct sbook2 **books;
 public:
-	//static const char builtin_BMAX[2];
-
 	/**
 	* VerseKey2 Constructor - initializes Instance of VerseKey2
 	*
 	* @param ikey text key (will take various forms of 'BOOK CH:VS'.
 	* See parse() for more detailed information)
 	*/
-	VerseKey2(const char *ikey = 0);
+	//VerseKey2(const char *ikey = 0);
+
+	/**
+	* VerseKey2 Constructor - initializes Instance of VerseKey2
+	*
+	* @param ikey text key (will take various forms of 'BOOK CH:VS'.
+	* See parse() for more detailed information)
+	* @param ref Reference system to use for the key
+	*/
+	VerseKey2(const char *ikey = 0, const RefSys *ref=0);
 	
 	/**
 	* VerseKey2 Constructor - initializes instance of VerseKey2
@@ -250,7 +223,7 @@ public:
 	*/
 	virtual const char *getText() const;
 	virtual const char *getShortText() const;
-	virtual void setText(const char *ikey) { SWKey::setText(ikey); parse (); }
+	virtual void setText(const char *ikey) { printf("VerseKey2::setText %s\n", ikey);SWKey::setText(ikey); parse (); }
 	virtual void copyFrom(const SWKey & ikey);
 	
 	/** Equates this VerseKey2 to another VerseKey2
@@ -281,11 +254,6 @@ public:
 
 	virtual const char *getBookName() const;
 	virtual const char *getBookAbbrev() const;
-	/** Gets testament
-	*
-	* @return value of testament
-	*/
-	//virtual char Testament() const;
 	
 	/** Gets book
 	*
@@ -304,16 +272,7 @@ public:
 	* @return value of verse
 	*/
 	virtual int Verse() const;
-	
-	/** Sets/gets testament
-	*
-	* @param itestament value which to set testament
-	* [MAXPOS(char)] - only get
-	* @return if unchanged -> value of testament,
-	* if changed -> previous value of testament
-	*/
-	//virtual char Testament(char itestament);
-	
+		
 	/** Sets/gets book
 	*
 	* @param ibook value which to set book
@@ -385,12 +344,15 @@ public:
 	virtual long Index(long iindex);
 
 	virtual const char *getOSISRef() const;
+	static const int getOSISBookNum(const char *bookab);
 	
+	#if 0
 	virtual const char getMaxBooks() const;
-	virtual const char *getNameOfBook(char book) const;
-	virtual const char *getPrefAbbrev(char book) const;
-	virtual const int getMaxChaptersInBook(char book) const;
-	virtual const int getMaxVerseInChapter(char book, int chapter) const;
+	#endif
+	virtual const char *getNameOfBook(char cBook) const;
+	virtual const char *getPrefAbbrev(char cBook) const;
+	virtual const int getMaxChaptersInBook(char cBook) const;
+	virtual const int getMaxVerseInChapter(char cBook, int iChapter) const;
 
 	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = "Genesis 1:1", bool expandRange = false);
 	virtual const char *getRangeText() const;
@@ -412,10 +374,12 @@ public:
 	*/
 	virtual int _compare(const VerseKey2 & ikey);
 	
-	virtual void setBookAbbrevs(const struct abbrev2 *bookAbbrevs, unsigned int size = 0 /* default determine size */ );
-	virtual void setBooks(const char *iBMAX, struct sbook2 **ibooks);
+	virtual void setBookAbbrevs(const struct abbrev2 *bookAbbrevs);
+	virtual void setBooks(struct sbook2 **ibooks);
 	virtual void setLocale(const char *name);
 	virtual const char *getLocale() const { return locale; }
+	virtual void setRefSys(const char *name);
+	virtual const char *getRefSys() const { return m_refsys->getName(); }
 
 
 
@@ -425,6 +389,7 @@ public:
 	SWKEY_OPERATORS
 
 	virtual SWKey & operator = (const VerseKey2 & ikey) { copyFrom(ikey); return *this; }
+	bool operator ==(const VerseKey2 & ikey) { return !_compare(ikey); } \
 };
 
 #ifdef VK2

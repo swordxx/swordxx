@@ -5,8 +5,8 @@
  *			class VerseKey2
  */
 
-#ifndef ZVERSE_H
-#define ZVERSE_H
+#ifndef ZVERSE2_H
+#define ZVERSE2_H
 
 #include <filemgr.h>
 #include <fcntl.h>
