@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 	char *buffer = 0;
 
 	if (argc < 2) {
-		fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference]\n", argv[0]);
+		fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference to each line]\n", argv[0]);
 		exit(-1);
 	}
 

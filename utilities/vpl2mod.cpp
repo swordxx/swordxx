@@ -30,25 +30,26 @@ char readline(int fd, char **buf) {
 	long index = lseek(fd, 0, SEEK_CUR);
 	// clean up any preceding white space
 	while ((len = read(fd, &ch, 1)) == 1) {
-		if ((ch != 10) && (ch != 13) && (ch != ' ') && (ch != '\t'))
+		if ((ch != 13) && (ch != ' ') && (ch != '\t'))
 			break;
 		else index++;
 	}
 
 
-	while ((len = read(fd, &ch, 1)) == 1) {
-		if (ch == 10)
+	while (ch != 10) {
+        if ((len = read(fd, &ch, 1)) != 1)
 			break;
 	}
 	
 	int size = (lseek(fd, 0, SEEK_CUR) - index) - 1;
 
-	if (size >= 0) {
-		*buf = new char [ size + 1 ];
+    *buf = new char [ size + 1 ];
 
-		lseek(fd, index, SEEK_SET);
-		read(fd, *buf, size);
-		(*buf)[size] = 0;
+    if (size > 0) {
+        lseek(fd, index, SEEK_SET);
+        read(fd, *buf, size);
+        read(fd, &ch, 1);   //pop terminating char
+        (*buf)[size] = 0;
 
 		// clean up any trailing junk on buf
 		for (char *it = *buf+(strlen(*buf)-1); it > *buf; it--) {
@@ -56,9 +57,8 @@ char readline(int fd, char **buf) {
 				break;
 			else *it = 0;
 		}
-		return 0;
 	}
-	return -1;
+	return !len;
 }
 
 
@@ -83,7 +83,7 @@ char *parseVReg(char *buf) {
 			if (isdigit(*buf))
 				stage++;
 			break;
-		case 4:
+        case 4:
 			if (*buf == ' ') {
 				*buf = 0;
 				return ++buf;
@@ -92,7 +92,7 @@ char *parseVReg(char *buf) {
 		}
 		buf++;
 	}
-	return 0;
+	return (stage == 4) ? buf : 0;  // if we got to stage 4 return empty buf, else return error
 }
 
 
@@ -119,7 +119,22 @@ int main(int argc, char **argv) {
 	// Let's test our command line arguments
 	if (argc < 2) {
 //		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod> [0|1 - file includes prepended verse references]\n", argv[0]);
-		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod/> [0|1 - verse ref prepended to lines] [0|1 - NT only]\n", argv[0]);
+		fprintf(stderr, "usage: %s <source_vpl_file> </path/to/output/mod/> [0|1 - prepended verse refs] [0|1 - NT only]\n\n", argv[0]);
+		fprintf(stderr, "\tWith no verse refs, source file must contain exactly 31102 lines.\n");
+		fprintf(stderr, "\tThis is KJV verse count plus headings for MODULE,\n");
+		fprintf(stderr, "\tTESTAMENT, BOOK, CHAPTER. An example snippet follows:\n\n");
+		fprintf(stderr, "\t\tMODULE HEADER\n");
+		fprintf(stderr, "\t\tOLD TESTAMENT HEADER\n");
+		fprintf(stderr, "\t\tGENESIS HEADER\n");
+		fprintf(stderr, "\t\tCHAPTER 1 HEADER\n");
+		fprintf(stderr, "\t\tIn the beginning...\n\n");
+		fprintf(stderr, "\t... implying there must also be a CHAPTER2 HEADER,\n");
+        fprintf(stderr, "\tEXODUS HEADER, NEW TESTAMENT HEADER, etc.  If there is no text for\n");
+		fprintf(stderr, "\tthe header, a blank line must, at least, hold place.\n\n");
+		fprintf(stderr, "\tWith verse refs, source file must simply contain any number of lines,\n");
+		fprintf(stderr, "\tthat begin with the verse reference for which it is an entry.  e.g.:\n\n");
+		fprintf(stderr, "\t\tgen 1:0 CHAPTER 1 HEADER\n");
+		fprintf(stderr, "\t\tgen 1:1 In the beginning...\n\n");
 		exit(-1);
 	}
 
