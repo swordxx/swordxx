@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.26 2001/06/24 01:30:33 scribe Exp $
+ * $Id: swmgr.h,v 1.27 2001/10/05 20:37:00 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,7 +20,7 @@
  *
  */
 
-/** @mainpage The Sword library 1.52 - API documentation
+/** @mainpage The Sword Project 1.5.2 - API documentation
 * This page describes the structure of the Sword library.
 * Sword provides an interface to different modules (Bibles/Commentaries/Lexicons)
 * on disk. The object to work directly with the modules is SWModule.
@@ -58,7 +58,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.26 2001/06/24 01:30:33 scribe Exp $
+  * @version $Id: swmgr.h,v 1.27 2001/10/05 20:37:00 mgruner Exp $
   */
 class SWDLLEXPORT SWMgr
 {
