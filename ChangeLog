@@ -23,7 +23,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	Added addld utility for adding single entries to LD modules
 	
 09-Dec-2000     Chris Little <chrislit@crosswire.org>
-        Added addvs utility for adding single verses to modules
+	Added addvs utility for adding single verses to modules
 	Added Diatheke (and CGI/Tcl/PQA frontends to it) to source
 	        tree
 	ThML filters (all) fixed to support longer tag lengths and
@@ -85,7 +85,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		because it's bad HTML without a closing </P> tag.
 
 23-Oct-2000		Joachim Ansorg <jansorg@crosswire.org> 
-	Changed the provate section of versekey.h into a protected  one
+	Changed the private section of versekey.h into a protected  one
 because we need the change for current BibleTime!
 
 15-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
