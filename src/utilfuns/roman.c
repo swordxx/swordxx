@@ -59,6 +59,7 @@ for use in the SWORD Projct <http://www.crosswire.org/sword>
 //#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 //#define VERSION "1.1"
 
@@ -136,6 +137,12 @@ void usage( char *argv )
    exit(1);
 }
 */
+long power(int base, int n) {
+	int p = 1, i;
+	for (i = 0; i < n; i++)
+		p *= base;
+	return p;
+}
 
 /*
  * decimal TO roman function
@@ -144,6 +151,7 @@ char* to_rom(int dec, char *p)
 {
    int one = dec , ten[6], c;
    
+   *p = 0;
    for(c = 0; c < 6; c++)
      {
 	/* code beings */
@@ -158,18 +166,24 @@ char* to_rom(int dec, char *p)
 /******************************************************/
 int from_rom(char *s)
 {
+	/*
    int ones_n[] = {0,1,2,3,4,5,6,7,8,9};
    int tens_n[] = {0,10,20,30,40,50,60,70,80,90};
    int huns_n[] = {0,100,200,300,400,500,600,700,800,900};
    int thos_n[] = {0,1000,2000,3000,4000,5000,6000,7000,8000,9000};
    int ttos_n[] = {0,10000,20000,30000,40000,50000,60000,70000,80000,90000};
    int hhos_n[] = {0,100000,200000,300000,400000,500000,600000,700000,800000,900000};
+   */
    /* an array (set of pointers) of pointers that point to more pointers :-)*/
+   /*
    int *i_points[] = {  ones_n, tens_n, huns_n, thos_n, ttos_n, hhos_n };
+   */
    
    
    int c1,c2,c3, count, len,decimal = 0, y = 0;
    char *p1, *p2 = NULL , *p3 = NULL , last = '\0', holding[5];
+   for (y = 0; y < strlen(s); y++)
+	   s[y] = toupper(s[y]);
    
    p1 = s;
    len = strlen(s);
@@ -225,7 +239,7 @@ int from_rom(char *s)
 			* to one more array, units, tens, hundreds, etc
 			* c_points above is same but points to not integers but to
 			* the roman equivalent */
-		       y = *( i_points[ c3 ] + count) ;
+		       y = (count)*(power(10,c3));//( i_points[ c3 ] + count) ;
 		       p2 = s;
 		    }
 		  else
