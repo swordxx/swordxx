@@ -315,7 +315,8 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 	// end MAJOR KLUDGE
 
 	*this = BOTTOM;
-	long highIndex = (vkcheck)?vkcheck->NewIndex():key->Index();
+	// fix below when we find out the bug
+	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
 	*this = TOP;
 	if (searchType >= 0) {
 		flags |=searchType|REG_NOSUB|REG_EXTENDED;
