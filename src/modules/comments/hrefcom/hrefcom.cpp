@@ -79,10 +79,10 @@ char *HREFCom::getRawEntry() {
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ size + strlen(prefix) * FILTERPAD ];
+	versebuf = new char [ (size + 2) + strlen(prefix) * FILTERPAD ];
 	tmpbuf   = new char [ size + 1 ];
 
-	gettext(key->Testament(), start, size + 1, tmpbuf);
+	gettext(key->Testament(), start, size + 2, tmpbuf);
 	sprintf(versebuf, "%s%s", prefix, tmpbuf);
 	preptext(versebuf);
 

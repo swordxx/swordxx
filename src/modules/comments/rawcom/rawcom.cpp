@@ -75,10 +75,10 @@ char *RawCom::getRawEntry() {
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ ++size * FILTERPAD * ((unicode) ? 9 : 1 ) ];
+	versebuf = new char [ (size + 2) * FILTERPAD * ((unicode) ? 9 : 1 ) ];
 	*versebuf = 0;
 
-	gettext(key->Testament(), start, size, versebuf);
+	gettext(key->Testament(), start, (size + 2), versebuf);
 
 	rawFilter(versebuf, size, key);
 

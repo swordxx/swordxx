@@ -82,9 +82,9 @@ char *RawFiles::getRawEntry() {
 		delete [] versebuf;
 
 	if (size) {
-		tmpbuf   = new char [ size + strlen(path) + 5 ];
+		tmpbuf   = new char [ (size + 2) + strlen(path) + 5 ];
 		sprintf(tmpbuf,"%s/",path);
-		gettext(key->Testament(), start, size + 1, tmpbuf+strlen(tmpbuf));
+		gettext(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
 		datafile = FileMgr::systemFileMgr.open(tmpbuf, O_RDONLY|O_BINARY);
 		delete [] tmpbuf;
 		if (datafile->getFd() > 0) {
@@ -141,9 +141,9 @@ SWModule &RawFiles::operator <<(const char *inbuf) {
 	findoffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
-		tmpbuf   = new char [ size + strlen(path) + 1 ];
+		tmpbuf   = new char [ (size + 2) + strlen(path) + 1 ];
 		sprintf(tmpbuf, "%s/", path);
-		gettext(key->Testament(), start, size + 1, tmpbuf+strlen(tmpbuf));
+		gettext(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
 	}
 	else {
 		tmpbuf   = new char [ 16 + strlen(path) + 1 ];
@@ -192,8 +192,8 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 	findoffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
-		tmpbuf   = new char [ size + 1 ];
-		gettext(key->Testament(), start, size + 1, tmpbuf);
+		tmpbuf   = new char [ size + 2];
+		gettext(key->Testament(), start, size + 2, tmpbuf);
 
 		if (key != inkey)
 			delete key;

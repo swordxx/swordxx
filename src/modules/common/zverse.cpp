@@ -262,9 +262,9 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf)
 {
-	memset(inbuf, 0, size+2);
+	memset(inbuf, 0, size);
 	if (size > 1) {
-		strncpy(inbuf, &(cacheBuf[start]), size-1);
+		strncpy(inbuf, &(cacheBuf[start]), size-2);
 		inbuf[size]=0;
 	}
 }
