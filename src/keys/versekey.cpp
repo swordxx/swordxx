@@ -1406,7 +1406,12 @@ int VerseKey::_compare(const VerseKey &ivkey)
 
 
 const char *VerseKey::getOSISRef() const {
-	static char buf[254];
+	static char buf[5][254];
+	static char loop = 0;
+
+	if (loop > 4)
+		loop = 0;
+
 	static char *osisotbooks[] = {
 			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","Sam1","Sam2",
 			"Kgs1","Kgs2","Chr1","Chr2","Ezra","Neh","Esth","Job","Ps","Eccl",
@@ -1420,6 +1425,6 @@ const char *VerseKey::getOSISRef() const {
 			"Pet1","Pet2","John1","John2","John3","Jude","Rev"};
 	static char **osisbooks[] = { osisotbooks, osisntbooks };
 
-	sprintf(buf, "%s.%d.%d", books[Testament()-1][Book()-1]);
-	return buf;
+	sprintf(buf[loop], "%s.%d.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter(), (int)Verse());
+	return buf[loop++];
 }

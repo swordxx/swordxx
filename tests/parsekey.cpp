@@ -26,6 +26,9 @@ int main(int argc, char **argv) {
 			cout << (string(element->LowerBound()) + " - " + string(element->UpperBound())).c_str() << "\n";
 		}
 		else	cout << (const char *)*verses.GetElement(i) << "\n";
+//		else	{
+//			cout << VerseKey(verses.GetElement(i)).getOSISRef() << "\n";
+//		}
 	}
 	return 0;
 }

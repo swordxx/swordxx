@@ -26,6 +26,7 @@
 class SWDLLEXPORT ThMLOSIS : public SWBasicFilter {
 protected:
 	virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
+	virtual const char *convertToOSIS(const char *);
 public:
 	ThMLOSIS();
 	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);

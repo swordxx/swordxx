@@ -15,8 +15,10 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <thmlosis.h>
+#include <versekey.h>
 
 
 ThMLOSIS::ThMLOSIS() {
@@ -42,7 +44,7 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 			userData["suspendTextPassThru"] = "true";
 		}
 		if (!strncmp(token, "/scripRef", 9)) {
-			pushString(
+			pushString(buf,
 				convertToOSIS(userData["lastTextNode"].c_str())
 			);
 			pushString(buf, "\" />");
@@ -133,10 +135,35 @@ bool ThMLOSIS::handleToken(char **buf, const char *token, DualStringMap &userDat
 
 char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
 	char retVal = SWBasicFilter::ProcessText(text, maxlen, key, module);
-	memmove(text+strlen(refstart), text, maxlen-strlen(refstart)-1);
-	memcpy(text, refstart, strlen(refstart));
-	strcat(text, refend);
+	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+	if (vkey) {
+		char ref[254];
+		sprintf(ref, "<verseStart VerseStart=\"%s\" />", vkey->getOSISRef());
+		memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
+		memcpy(text, ref, strlen(ref));
+		sprintf(ref, "<verseEnd refVerseStart=\"%s\" />", vkey->getOSISRef());
+		strcat(text, ref);
+	}
 	return retVal;
 }
 
+
+const char *ThMLOSIS::convertToOSIS(const char *inRef) {
+	static string outRef;
+
+	outRef = "";
+
+	VerseKey defLanguage;
+	ListKey verses = defLanguage.ParseVerseList(inRef, (*key), true);
+	for (int i = 0; i < verses.Count(); i++) {
+		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
+		char buf[512];
+		if (element) {
+			sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" referenceEnd=\"%s\" />", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef());
+		}
+		else sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" />", VerseKey(*verses.GetElement(i)).getOSISRef());
+		outRef+=buf;
+	}
+	return outRef.c_str();
+}
 

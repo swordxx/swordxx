@@ -30,6 +30,7 @@ libsword_la_SOURCES += $(filtersdir)/thmlgbf.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlrtf.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlhtml.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlhtmlhref.cpp
+libsword_la_SOURCES += $(filtersdir)/thmlosis.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlplain.cpp
 
 libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
