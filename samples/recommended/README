@@ -1,0 +1,20 @@
+In this configuration, a system-wide file is created
+/etc/sword.conf
+which points to the installation of common sword modules located under:
+/usr/share/sword/
+
+To use, as root, copy the sword.conf file located in this directory to /etc
+
+$ su
+Password: ********
+# cp sword.conf /etc
+
+then create a sword directory under /usr/share
+
+# cd /usr/share
+# mkdir sword
+
+then install modules in /usr/share/sword
+
+# cd /usr/share/sword
+# unzip ~/SwordMod.zip

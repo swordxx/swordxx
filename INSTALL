@@ -12,9 +12,10 @@ DECIPHER MECHANISM
 Cipher tools are not included by default, so if you are planning on using
 any copyrighted texts or any other ciphered modules, you will need to
 add the necessary files before building.  SWORD uses the SAPPHIRE II cipher
-which is not exportable in source form outside of the US and CANADA.  The
-necessary cipher package MUST BE DOWNLOADED AND ADDED TO THE SOURCE
-TREE BEFORE COMPILING.  SAPPHIRE may be obtained from:
+which is not exportable in source form outside of the US and CANADA.  To
+include encipher / decipher functionality, the necessary cipher package
+MUST BE DOWNLOADED AND ADDED TO THE SOURCE TREE BEFORE COMPILING.
+SAPPHIRE may be obtained from:
 
     http://cryptography.org/cgi-bin/crypto.cgi/libraries/sapphire.zip
 
@@ -23,7 +24,7 @@ These files must be replaced with files from this package:
     .../sword/include/sapphire.h
     .../sword/src/modules/common/sapphire.cpp
 
-If you are outside of these countries, you will have to obtain this package
+If you are outside of the US or Canada, you will have to obtain this package
 elsewhere.
 
 
@@ -55,6 +56,9 @@ of a config file is fairly straight-forward, and most modules come with their
 own .conf file, of which the contents may be appended to the mods.conf file
 or placed in the mods.d directory.
 
+FOR A RECOMMENDED MODULE INSTALLATION SCHEME, SEE
+.../sword/samples/recommended, otherwise, the specific details follow:
+
 The API looks for its module configuration in the following sequence:
 	./mods.[conf|d]
 	$SWORD_PATH/mods.[conf|d]
@@ -71,6 +75,7 @@ specified datafile location found in the config files.  The prefix path will
 be the directory where SWORD finds mods.[conf|d], WITH ONE EXCEPTION: if SWORD
 finds its configuration in the user's home directory,
 $HOME/.sword/mods.[conf|d], no prefix will be prepended to the data file
-locations; hence, the config files must contain absolute path names.
+locations; hence, config files in $HOME/.sword must contain absolute path
+names.
 
 Sample config files can be found in: .../sword/samples
