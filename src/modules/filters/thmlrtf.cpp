@@ -205,11 +205,11 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			}
 		}
 		else if (!strncmp(token, "/div", 4)) {
-			buf += '}';
 			if (userData["sechead"] == "true") {
 				buf += "\\par ";
 				userData["sechead"] = "false";
 			}
+			buf += '}';
 		}
 		else if (!strncmp(token, "note", 4)) {
 			buf += " {\\i1\\fs15 (";
