@@ -77,7 +77,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 						const char *val2 = val;
 						if ((strchr("GH", *val)) && (isdigit(val[1])))
 							val2++;
-						if ((!strcmp(val, "3588")) && (lastText.length() < 1))
+						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 							show = false;
 						else	buf.appendFormatted(" <small><em>&lt;<a href=\"type=Strongs value=%s\">%s</a>&gt;</em></small> ", val, val2);
 					} while (++i < count);
