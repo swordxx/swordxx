@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.21 2003/02/20 07:25:20 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.22 2003/02/20 07:53:15 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -106,17 +106,6 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 		delete [] buf;
 	}
 	else escSubMap.insert(DualStringMap::value_type(findString, replaceString));
-}
-
-
-void SWBasicFilter::pushString(char **buf, const char *format, ...) {
-  va_list argptr;
-
-  va_start(argptr, format);
-  *buf += vsprintf(*buf, format, argptr);
-  va_end(argptr);
-
-//  *buf += strlen(*buf);
 }
 
 
