@@ -150,12 +150,12 @@ pkginclude_HEADERS += $(swincludedir)/zverse.h
 pkginclude_HEADERS += $(swincludedir)/installmgr.h
 pkginclude_HEADERS += $(swincludedir)/ftpparse.h
 
-if INSTALLMGR
+#if INSTALLMGR
 REMOTE_HEAD  = $(swincludedir)/swremotemgr.h
 REMOTE_HEAD += $(swincludedir)/swinstallmgr.h
-else
-REMOTE_HEAD =
-endif
+#else
+#REMOTE_HEAD =
+#endif
 
 NEWVKEY_HEAD  = $(swincludedir)/versekey2.h
 NEWVKEY_HEAD += $(swincludedir)/ztext2.h

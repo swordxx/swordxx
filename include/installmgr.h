@@ -54,6 +54,7 @@ typedef std::map < SWBuf, InstallSource * >InstallSourceMap;
 
 class InstallMgr {
 
+	void *nControl;
 protected:
 	char *privatePath;
 	// probably change to group these ftp functions into some kind of FTPSession
@@ -61,7 +62,7 @@ protected:
 public:
 	SWConfig *installConf;
 	InstallSourceMap sources;
-	void *FTPOpenSession();
+	void *FTPOpenSession(const char *host);
 	void FTPCloseSession(void *session);
 	char FTPURLGetFile(void *session, const char *dest, const char *sourceurl);
 

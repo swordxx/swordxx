@@ -14,18 +14,18 @@ txt2sword addgb imp2gbs mod2imp thml2gbs xml2gbs
 bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2vpl \
 	mkfastmod vpl2mod imp2vs installmgr
 
-if INSTALLMGR
-IMGRPROG =
-else
-IMGRPROG = 
-endif
+#if INSTALLMGR
+#IMGRPROG =
+#else
+#IMGRPROG = 
+#endif
 
 
-if ICU
-ICUPROG = 
-else
-ICUPROG =
-endif
+#if ICU
+#ICUPROG = 
+#else
+#ICUPROG =
+#endif
 
 if ZLIB
 if BUILDNEWVKEY
@@ -39,8 +39,9 @@ endif
 
 
 
-noinst_PROGRAMS += $(ICUPROG)
-bin_PROGRAMS += $(ZLIBPROG) $(IMGRPROG)
+#noinst_PROGRAMS += $(ICUPROG)
+bin_PROGRAMS += $(ZLIBPROG) 
+#$(IMGRPROG)
 
 if ICU
 endif

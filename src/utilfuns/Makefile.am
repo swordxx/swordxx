@@ -10,13 +10,20 @@ libsword_la_SOURCES += $(utilfunsdir)/swversion.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swbuf.cpp
 libsword_la_SOURCES += $(utilfunsdir)/ftpparse.c
 
+if INTERNALFTPLIB
+ftpsrc = $(utilfunsdir)/ftplib.c
+else
+ftpsrc =
+endif
+
 if ZLIB
 UNTGZ = $(utilfunsdir)/zlib/untgz.c
 else
 UNTGZ =
 endif
-libsword_la_SOURCES += $(UNTGZ)
 
+libsword_la_SOURCES += $(UNTGZ) 
+libsword_la_SOURCES += $(ftpsrc)
 
 if MINGW
 SWREGEX = $(utilfunsdir)/regex.c

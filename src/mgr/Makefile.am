@@ -30,5 +30,5 @@ libsword_la_SOURCES += $(mgrdir)/installmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/stringmgr.cpp
 
 libsword_la_SOURCES += $(mgrsplits)
-libsword_la_SOURCES += $(refsrc)
+libsword_la_SOURCES += $(refsrc) 
 

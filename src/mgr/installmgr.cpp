@@ -1,4 +1,4 @@
-/*****************************************************************************
+ /*****************************************************************************
  * InstallMgr functions to be made into something usefully exposed by
  * master Glassey
  *
@@ -30,6 +30,8 @@ extern "C" {
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
+#else
+#include <ftplib.h>
 #endif
 
 #include <defs.h>
@@ -41,8 +43,10 @@ using namespace std;
 
 SWORD_NAMESPACE_START
 
+#ifdef CURLAVAILABLE
 int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
 int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
+#endif
 
 static InstallMgr_init _InstallMgr_init;
 
@@ -50,6 +54,7 @@ InstallMgr_init::InstallMgr_init() {
 #ifdef CURLAVAILABLE
 	//curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
 #else
+	FtpInit();
 //	fprintf(stderr, "libCURL is needed for remote installation functions\n");
 #endif
 }
@@ -62,7 +67,7 @@ InstallMgr_init::~InstallMgr_init() {
 #endif
 }
 
-
+#ifdef CURLAVAILABLE
 int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 	struct FtpFile *out=(struct FtpFile *)stream;
 	if (out && !out->stream) {
@@ -81,7 +86,7 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 	}
 	return 0;
 }
-
+#endif
 
 InstallMgr::InstallMgr(const char *privatePath) {
 	this->privatePath = 0;
@@ -162,7 +167,23 @@ char InstallMgr::FTPURLGetFile(void *session, const char *dest, const char *sour
 	if (ftpfile.stream)
 		fclose(ftpfile.stream); /* close the local file */
 #else
-	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+	fprintf(stderr, "getting file %s to %s\n", sourceurl, dest);
+	if (passive)
+		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PASSIVE, (netbuf *)nControl);
+	else
+		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PORT, (netbuf *)nControl);
+	// !!!WDG also want to set callback options
+	if (!strcmp(dest, "dirlist")) {
+		fprintf(stderr, "getting test directory %s\n", sourceurl);
+		FtpDir(NULL, sourceurl, (netbuf *)nControl);
+		fprintf(stderr, "getting real directory %s\n", sourceurl);
+		retVal = FtpDir(dest, sourceurl, (netbuf *)nControl) - 1;
+	}
+	else {
+		fprintf(stderr, "getting file %s\n", sourceurl);
+		retVal = FtpGet(dest, sourceurl, FTPLIB_IMAGE, (netbuf *)nControl) - 1;
+	}
+	//fprintf(stderr, "libCURL is needed for remote installation functions\n");
 #endif
 	return retVal;
 }
@@ -173,6 +194,8 @@ vector<struct ftpparse> InstallMgr::FTPURLGetDir(void *session, const char *diru
 
 	vector<struct ftpparse> dirList;
 	
+	fprintf(stderr, "FTPURLGetDir: getting dir %s\n", dirurl);
+
 	if (!FTPURLGetFile(session, "dirlist", dirurl)) {
 		int fd = open("dirlist", O_RDONLY|O_BINARY);
 		long size = lseek(fd, 0, SEEK_END);
@@ -195,24 +218,37 @@ vector<struct ftpparse> InstallMgr::FTPURLGetDir(void *session, const char *diru
 				else if ((*end != 10) && (*end != 13))
 					break;
 			}
+			fprintf(stderr, "FTPURLGetDir: parsing item %s(%d)\n", start, end-start);
 			int status = ftpparse(&item, start, end - start);
+			fprintf(stderr, "FTPURLGetDir: got item %s\n", item.name);
 			if (status)
 				dirList.push_back(item);
 			start = end;
 		}
 	}
+	else
+	{
+		fprintf(stderr, "FTPURLGetDir: failed to get dir %s\n", dirurl);
+	}
 	return dirList;
 }
 
 
-void *InstallMgr::FTPOpenSession() {
+void *InstallMgr::FTPOpenSession(const char *host) {
 	void *retVal = 0;
 #ifdef CURLAVAILABLE
 	CURL *curl;
 
 	retVal = curl_easy_init();
 #else
-	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+	fprintf(stderr, "connecting to host %s\n", host);
+	if (FtpConnect(host, (netbuf **)&nControl))
+		retVal = nControl;
+	else
+	fprintf(stderr, "Failed to connect to %s\n", host);
+	if (!FtpLogin("anonymous", "installmgr@user.com", (netbuf *)nControl))
+		fprintf(stderr, "Failed to login to %s\n", host);
+	//fprintf(stderr, "libCURL is needed for remote installation functions\n");
 #endif
 	return retVal;
 }
@@ -223,7 +259,8 @@ void InstallMgr::FTPCloseSession(void *session) {
 	CURL *curl = (CURL *)session;
 	curl_easy_cleanup(curl);
 #else
-	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+	FtpQuit((netbuf *) nControl);
+	//fprintf(stderr, "libCURL is needed for remote installation functions\n");
 #endif
 }
 
@@ -338,16 +375,24 @@ SWMgr *InstallSource::getMgr() {
 int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	terminate = false;
 	long i;
-	void *session = FTPOpenSession();
-	SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/"; //dont forget the final slash
+	void *session = FTPOpenSession(is->source);
+#ifdef CURLAVAILABLE
+	SWBuf urlprefix = (SWBuf)"ftp://" + is->source;
+#else
+	SWBuf urlprefix = "";
+#endif
+	SWBuf url = urlprefix + is->directory.c_str() + "/"; //dont forget the final slash
 	if (FTPURLGetFile(session, "dirlist", url.c_str())) {
+		fprintf(stderr, "FTPCopy: failed to get dir %s\n", url.c_str());
 		return -1;
 	}
 	if (dirTransfer) {
-		SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src + "/"; //dont forget the final slash
+		SWBuf url = urlprefix + is->directory.c_str() + "/" + src + "/"; //dont forget the final slash
+		fprintf(stderr, "FTPCopy: getting dir %s\n", url.c_str());
 		vector<struct ftpparse> dirList = FTPURLGetDir(session, url.c_str());
 
 		if (!dirList.size()) {
+			fprintf(stderr, "FTPCopy: failed to read dir %s\n", url.c_str());
 			return -1;
 		}
 					
@@ -368,8 +413,9 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 					preDownloadStatus(totalBytes, completedBytes, buffer2.c_str());
 					FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
 					SWTRY {
-						SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src + "/" + dirList[i].name; //dont forget the final slash
+						SWBuf url = urlprefix + is->directory.c_str() + "/" + src + "/" + dirList[i].name; //dont forget the final slash
 						if (FTPURLGetFile(session, buffer.c_str(), url.c_str())) {
+							fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
 							return -2;
 						}
 						completedBytes += dirList[i].size;
@@ -384,8 +430,9 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 	else {
 //		Synchronize((TThreadMethod)&PreDownload2);
 		SWTRY {
-			SWBuf url = (SWBuf)"ftp://" + is->source + is->directory.c_str() + "/" + src; //dont forget the final slash
+			SWBuf url = urlprefix + is->directory.c_str() + "/" + src; //dont forget the final slash
 			if (FTPURLGetFile(session, dest, url.c_str())) {
+				fprintf(stderr, "FTPCopy: failed to get file %s", url.c_str());
 				return -1;
 			}
 		}

@@ -8,7 +8,7 @@
 AC_INIT(sword, 1.5.8, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.42 $)
+AC_REVISION($Revision: 1.43 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
@@ -37,8 +37,12 @@ AC_ARG_WITH(icu,
 	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=no)]),,with_icu=no)
 AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
-AC_ARG_WITH(curl,
-	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
+AC_ARG_WITH(installmgr,
+	AC_HELP_STRING([--with-installmgr],[build install manager support: 
+	curl=using libcurl, 
+	ftplib=using external ftplib, 
+	internal=using internal ftplib 
+	(default=internal)]),,with_installmgr=internal)
 AC_ARG_WITH(lucene,
 	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 
@@ -71,6 +75,10 @@ AM_MAINTAINER_MODE
 # ---------------------------------------------------------------------
 if test x$with_zlib  = xyes; then
 	AC_CHECK_LIB(z, compress)
+fi
+
+if test x$with_installmgr  = xftplib; then
+	AC_CHECK_LIB(ftplib, FtpGet)
 fi
 
 # ---------------------------------------------------------------------
@@ -161,7 +169,7 @@ fi
 
 CURL_AM_CFLAGS=
 CURL_LIBS=
-if test x$with_curl = xyes; then
+if test x$with_installmgr = xcurl; then
     AC_PATH_PROG(CURL_CONFIG, curl-config, no)
     if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
@@ -226,46 +234,6 @@ fi
 
 
 # ---------------------------------------------------------------------
-# Determine target system (obsolete?)
-# ---------------------------------------------------------------------
-case "$target_cpu" in
-  i?86)
-    target_system="intel"
-    ;;
-  sparc)
-	case "$target_os" in
-  	solaris*)
-    	target_system="sparc_solaris"
-    	;;
-  	*)
-    	target_system="gnu_bigendian"
-    	;;
-	esac
-    ;;
-  *)
-    target_system="$target_cpu"
-    ;;
-esac
-
-case "$target_os" in
-  beos)
-    target_system="beos"
-    ;;
-  *)
-    target_system="$target_system"
-    ;;
-esac
-
-case "$target_os" in
-  mingw*)
-    target_mingw32="yes"
-    ;;
-  *)
-    target_mingw32="no"
-    ;;
-esac
-
-# ---------------------------------------------------------------------
 # Substitute variables into makefiles
 # ---------------------------------------------------------------------
 AC_SUBST(with_zlib)
@@ -302,7 +270,10 @@ AM_CONDITIONAL(USELUCENE, test x$with_lucene = xyes)
 AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
-AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
+#AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
+AM_CONDITIONAL(INTERNALFTPLIB, test x$with_installmgr = xinternal)
+AM_CONDITIONAL(WITHCURL, test x$with_installmgr = xcurl)
+AM_CONDITIONAL(WITHFTPLIB, test x$with_installmgr = xftplib)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
