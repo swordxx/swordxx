@@ -8,18 +8,18 @@ UNIX developers	You can try a make from this directory.  This should compile
 		everthing needed.  You may need to edit Makefile.cfg to change,
 		at least, CC=gcc or egcs.  If the src directory compiles, you
 		have the libraries needed to develop, you may try any of the
-		other directory independently thereafter (e.g. apps, examples).
+		other directories independently thereafter (e.g. apps, examples).
 		Remember to do a 'make clean; make'
 
 		apps/X11 contains the makings of frontends
 
 		./testlib.cpp compiles to the executable 'testlib' as a test to
-		see if the libraries compiled and can be linked to successfully.
+		see if the libraries compiled and can be linked against successfully.
 		This is NOT the final target of the build. :)
 
 
-C++Builder developers	You may find project file and source for the WIN32
-		frontend under apps/windows/CBuilder4/BibleCS
+C++Builder developers	You may find project files and source for the WIN32
+		frontend under apps/windows/CBuilder5/BibleCS
 
 
 Delphi developers	You will need to place sword32.dll in your winsys

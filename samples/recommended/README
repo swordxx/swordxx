@@ -9,12 +9,16 @@ $ su
 Password: ********
 # cp sword.conf /etc
 
-then create a sword directory under /usr/share
+then create a sword repository under /usr/share
 
-# cd /usr/share
-# mkdir sword
+# mkdir /usr/share/sword
+
+You may also want to copy the locales directory to your new sword repository
+
+# cp -R ../../locales.d/ /usr/share/sword
 
 then install modules in /usr/share/sword
 
 # cd /usr/share/sword
-# unzip ~/SwordMod.zip
+# unzip ~/DownloadedSwordModule.zip
+

@@ -1,6 +1,28 @@
                        INSTALLATION NOTES
 
 
+QUICKSTART
+
+Try:
+
+    make
+    su
+    make install
+
+If you have never installed sword before and/or are happy with a default
+configuration, you may wish to type:
+
+    make install_config
+
+for a basic configuration.  WARNING: THIS WILL OVERWRITE AN EXISTING
+CONFIGURATION.  It is OK to rerun this if you have not changed any
+parameters in /etc/sword.conf or /usr/share/sword/mods.d/globals.conf, and
+may actually be a good thing, as it will copy the latest locales, etc.
+
+If the above steps do not work, or if you're particular about your
+configuration, please read on.
+
+
 BUILD CONFIGURATION
 
 You may want to have a look in the configuration file Makefile.cfg to be
@@ -50,7 +72,7 @@ accessible.  These module plugins consist of Bible texts, commentaries,
 dictionaries, and the like.  New plugins are constantly being added.  They
 may be obtained from:
 http://www.crosswire.org or various mirrors.
-A file named 'mods.conf' or directory named mods.d contains all configuration
+A file named 'mods.conf' or directory named 'mods.d' contains all configuration
 information regarding the installed modules available to the API.  The format
 of a config file is fairly straight-forward, and most modules come with their
 own .conf file, of which the contents may be appended to the mods.conf file

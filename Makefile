@@ -18,6 +18,14 @@ docssmodsd += samples/mods.d/vines.conf
 docssmodsd += samples/mods.d/web.conf
 docssmodsd += samples/mods.d/websters.conf
 
+modsconf += samples/mods.d/globals.conf
+localesconf += locales.d/cs.conf
+localesconf += locales.d/da.conf
+localesconf += locales.d/de.conf
+localesconf += locales.d/no.conf
+localesconf += locales.d/pt.conf
+localesconf += locales.d/sk.conf
+
 include ${root}/Makefile.cfg
 
 ifeq ($(buildshare),yes)
