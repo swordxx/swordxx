@@ -59,5 +59,3 @@ class SWDLLEXPORT ThMLVariants : public SWFilter
 };
 
 #endif
-
-#endif
