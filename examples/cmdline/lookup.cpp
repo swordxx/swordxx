@@ -40,7 +40,8 @@ int main(int argc, char **argv)
 	(const char *)*target;		// force an entry lookup to resolve key so we
 						// get the idxbuf entry for the key
 	std::cout << (const char *)(SWKey &)*target << ":\n";
-	std::cout << target->StripText();
+//	std::cout << target->StripText();
+	std::cout << target->getRawEntry();
 	std::cout << "\n";
 	std::cout << "==========================\n";
 	std::cout << "Entry Attributes:\n\n";
