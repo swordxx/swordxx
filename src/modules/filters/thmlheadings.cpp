@@ -54,7 +54,7 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 				XMLTag tag(token);
 
-				if (!stricmp(tag.getName(), "div")) { //we only want a div tag
+				if ((tag.getName()) && !stricmp(tag.getName(), "div")) { //we only want a div tag
 					//std::cout << tag.toString() << " " << tag.isEndTag() << std::endl;
 
 					if (tag.getAttribute("class") && !stricmp(tag.getAttribute("class"), "sechead")) {

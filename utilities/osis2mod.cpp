@@ -107,16 +107,16 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	static SWBuf lastTitle = "";
 	static int titleOffset = -1;
 
-	if ((!strcmp(token.getName(), "title")) && (!token.isEndTag())) {
+	if ((tag.getName()) && (!strcmp(token.getName(), "title")) && (!token.isEndTag())) {
 		titleOffset = text.length();
 		return false;
 	}
-	if ((!strcmp(token.getName(), "title")) && (token.isEndTag())) {
+	if ((tag.getName()) && (!strcmp(token.getName(), "title")) && (token.isEndTag())) {
 		lastTitle = (text.c_str() + titleOffset);
 		lastTitle += token;
 		return false;
 	}
-	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
+	if (((tag.getName()) && (!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
 		if (inHeader) {	// this one should never happen, but just in case
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
@@ -130,7 +130,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		lastTitle = "";
 		text = "";
 	}
-	else if ((((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag()) && (token.getAttribute("osisID")))) {
+	else if ((((tag.getName()) && (!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag()) && (token.getAttribute("osisID")))) {
 		if (inHeader) {
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
@@ -144,7 +144,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		lastTitle = "";
 		text = "";
 	}
-	if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
+	if ((tag.getName()) && (!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
 		if (inHeader) {
 //			cout << "HEADING ";
 			writeEntry(*currentVerse, text);
@@ -155,7 +155,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		text = "";
 		return true;
 	}
-	if ((!strcmp(token.getName(), "verse")) && (token.isEndTag())) {
+	if ((tag.getName()) && (!strcmp(token.getName(), "verse")) && (token.isEndTag())) {
 		if (lastTitle.length()) {
 			SWBuf titleHead = lastTitle;
 			char *end = strchr(lastTitle.getRawData(), '>');

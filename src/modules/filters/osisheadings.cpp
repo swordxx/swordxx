@@ -54,7 +54,8 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!stricmp(tag.getName(), "title")) {
+			SWBuf name = tag.getName();
+			if (name == "title") {
 				if ((tag.getAttribute("subtype")) && (!stricmp(tag.getAttribute("subtype"), "x-preverse"))) {
 					hide = true;
 					preverse = true;
@@ -94,7 +95,6 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					preverse = false;
 				}
 			}
-
 			// if not a heading token, keep token in text
 			if (!hide) {
 				text += '<';

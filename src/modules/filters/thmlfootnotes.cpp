@@ -57,7 +57,7 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note")) {
+			if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
 				if (!tag.isEndTag()) {
 					if (!tag.isEmpty()) {
 						refs = "";
@@ -95,7 +95,7 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			}
 
 			// if not a note token, keep token in text
-			if ((!strcmp(tag.getName(), "scripRef")) && (!tag.isEndTag())) {
+			if ((tag.getName()) && (!strcmp(tag.getName(), "scripRef")) && (!tag.isEndTag())) {
 				SWBuf osisRef = tag.getAttribute("passage");
 				if (refs.length())
 					refs += "; ";

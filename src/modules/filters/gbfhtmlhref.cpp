@@ -153,7 +153,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			buf += "</a>)</em></small>";
 		}
 
-		else if (!strcmp(tag.getName(), "RX")) {
+		else if ((tag.getName()) && !strcmp(tag.getName(), "RX")) {
 			buf += "<a href=\"";
 			for (tok = token + 3; *tok; tok++) {
 			  if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -165,7 +165,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			}
 			buf += "\">";
 		}
-		else if (!strcmp(tag.getName(), "RF")) {
+		else if ((tag.getName()) && !strcmp(tag.getName(), "RF")) {
 			SWBuf type = tag.getAttribute("type");
 			SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 			VerseKey *vkey;
@@ -181,7 +181,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			}
 			u->suspendTextPassThru = true;
 		}
-		else if (!strcmp(tag.getName(), "Rf")) {
+		else if ((tag.getName()) && !strcmp(tag.getName(), "Rf")) {
 			u->suspendTextPassThru = false;
 		}
 /*

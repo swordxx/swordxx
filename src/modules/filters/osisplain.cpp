@@ -135,7 +135,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 
                 // <milestone type="line"/>
-                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+                else if ((tag.getName()) && (!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
 			userData->supressAdjacentWhitespace = true;
         		buf += "\n";
                 }

@@ -50,7 +50,8 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!stricmp(tag.getName(), "q")) {
+			SWBuf name = tag.getName();
+			if (name == "q") {
 				if ((tag.getAttribute("who")) && (!stricmp(tag.getAttribute("who"), "Jesus"))) {
 					tag.setAttribute("who", 0);
 					text += tag;	// tag toString already has < and >

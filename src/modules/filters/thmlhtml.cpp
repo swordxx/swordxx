@@ -138,7 +138,7 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
-		if (!strcmp(tag.getName(), "sync")) {
+		if ((tag.getName()) && !strcmp(tag.getName(), "sync")) {
 			if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "Strongs")) {
 				const char* value = tag.getAttribute("value");
 				if (*value == 'H' || *value == 'G' || *value == 'A') {
@@ -166,7 +166,7 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				buf += ")</em></small>";
 			}
 		}
-		else if (!strcmp(tag.getName(), "div")) {
+		else if ((tag.getName()) && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && (u->SecHead)) {
 				buf += "</i></b><br />";
 				u->SecHead = false;
@@ -182,7 +182,7 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				}
 			}
 		}
-		else if (!strcmp(tag.getName(), "img")) {
+		else if ((tag.getName()) && !strcmp(tag.getName(), "img")) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
 				return false;
@@ -208,7 +208,7 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			}
 			buf += '>';
 		}
-		else if (!strcmp(tag.getName(), "scripRef")) { //do nothing with scrip refs, we leave them out
+		else if ((tag.getName()) && !strcmp(tag.getName(), "scripRef")) { //do nothing with scrip refs, we leave them out
 
 		}
 		else {

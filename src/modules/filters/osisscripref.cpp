@@ -54,7 +54,7 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note")) {
+			if ((tag.getName()) && !strcmp(tag.getName(), "note")) {
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
 					startTag = tag;
 					if ((tag.getAttribute("type")) &&	(!strcmp(tag.getAttribute("type"), "crossReference"))) {
