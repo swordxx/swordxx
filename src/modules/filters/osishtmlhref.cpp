@@ -32,164 +32,236 @@ OSISHTMLHref::OSISHTMLHref()
 
 bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
   // manually process if it wasn't a simple substitution
-  if (!substituteToken(buf, token)) {
-	XMLTag tag(token);
-	 //printf("token = %s\n",token);
-    //w
-    if (!strncmp(token, "w", 1)) {
-      userData["w"] = token;
-    }
-    else if (!strncmp(token, "/w", 2)) {
+	if (!substituteToken(buf, token)) {
+		XMLTag tag(token);
+		//printf("token = %s\n",token);
+		// <w> tag
+		if (!strcmp(tag.getName(), "w")) {
 
-      pos1 = userData["w"].find("xlit=\"", 0);
-      if (pos1 != string::npos) {
-	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) - 1;
-	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" %s", tagData.c_str() );
-      }
-      pos1 = userData["w"].find("gloss=\"", 0);
-      if (pos1 != string::npos) {
-	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) - 1;
-	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" %s", tagData.c_str() );
-      }
-      pos1 = userData["w"].find("lemma=\"", 0);
-      if (pos1 != string::npos) {
-	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) ;
-	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" <small><em>&lt;<a href=\"type=Strongs value=%s\">", tagData.c_str());
-	const char *tmpbuf = tagData.c_str();
-	++tmpbuf;
-        buf.appendFormatted("%s</a>&gt;</em></small> ", tmpbuf);
-      }
-      pos1 = userData["w"].find("morph=\"", 0);
-      if (pos1 != string::npos) {
-	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) ;
-	tagData = userData["w"].substr(pos1, pos2-pos1);
-	if(strstr(userData["w"].c_str(),"x-Robinson"))
-	    buf.appendFormatted(" <small><em>(<a href=\"type=morph class=Robinson value=%s\">%s</a>)</em></small> ", tagData.c_str(), tagData.c_str());
-	
-	if(strstr(userData["w"].c_str(),"x-StrongsMorph"))
-	    buf.appendFormatted(" <small><em>(<a href=\"type=morph class=StrongsMorph value=%s\">%s</a>)</em></small> ", tagData.c_str(), tagData.c_str());
-      }
-      pos1 = userData["w"].find("POS=\"", 0);
-      if (pos1 != string::npos) {
-	pos1 = userData["w"].find(":", pos1) + 1;
-	pos2 = userData["w"].find("\"", pos1) - 1;
-	tagData = userData["w"].substr(pos1, pos2-pos1);
-        buf.appendFormatted(" %s", tagData.c_str() );
-      }
-    }
-    else if (!strcmp(tag.getName(), "note")) {	
-	if (!tag.isEmpty() && !tag.isEndTag()) {		
-	    string footnoteNum = userData["fn"];
-	    int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
-	    VerseKey *vkey;
-	    // see if we have a VerseKey * or decendant
-	    try {
-		vkey = SWDYNAMIC_CAST(VerseKey, this->key);
-	    }
-	    catch ( ... ) {	}
-	    if (vkey) {
-		buf.appendFormatted("<a href=\"noteID=%s.%i\"><small><sup>*%c</sup></small></a> ", tag.getAttribute("osisID"), footnoteNumber, ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'));
-		SWBuf tmp;
-		tmp.appendFormatted("%i", ++footnoteNumber);
-		userData["fn"] = tmp.c_str();
-	    }
-	    userData["suspendTextPassThru"] = "true";
-	}	   
-	if (tag.isEndTag()) {	
-		userData["suspendTextPassThru"] = "false";
+			// start <w> tag
+			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
+				userData["w"] = token;
+			}
+
+			// end or empty <w> tag
+			else {
+				bool endTag = tag.isEndTag();
+				SWBuf lastText;
+				bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
+
+				if (endTag) {
+					tag = userData["w"].c_str();
+					lastText = userData["lastTextNode"].c_str();
+				}
+				else lastText = "stuff";
+					
+				const char *attrib;
+				const char *val;
+				if (attrib = tag.getAttribute("xlit")) {
+					val = strchr(attrib, ':');
+					val = (val) ? (val + 1) : attrib;
+					buf.appendFormatted(" %s", val);
+				}
+				if (attrib = tag.getAttribute("gloss")) {
+					val = strchr(attrib, ':');
+					val = (val) ? (val + 1) : attrib;
+					buf.appendFormatted(" %s", val);
+				}
+				if (attrib = tag.getAttribute("lemma")) {
+					int count = tag.getAttributePartCount("lemma");
+					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+					do {
+						attrib = tag.getAttribute("lemma", i);
+						if (i < 0) i = 0;	// to handle our -1 condition
+						val = strchr(attrib, ':');
+						val = (val) ? (val + 1) : attrib;
+						const char *val2 = val;
+						if ((strchr("GH", *val)) && (isdigit(val[1])))
+							val2++;
+						if ((!strcmp(val, "3588")) && (lastText.length() < 1))
+							show = false;
+						else	buf.appendFormatted(" <small><em>&lt;<a href=\"type=Strongs value=%s\">%s</a>&gt;</em></small> ", val, val2);
+					} while (++i < count);
+				}
+				if ((attrib = tag.getAttribute("morph")) && (show)) {
+					int count = tag.getAttributePartCount("morph");
+					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+					do {
+						attrib = tag.getAttribute("morph", i);
+						if (i < 0) i = 0;	// to handle our -1 condition
+						val = strchr(attrib, ':');
+						val = (val) ? (val + 1) : attrib;
+						const char *val2 = val;
+						if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2]))) 
+							val2+=2;
+						buf.appendFormatted(" <small><em>(<a href=\"type=morph class=%s value=%s\">%s</a>)</em></small> ", tag.getAttribute("morph"), val, val2);
+					} while (++i < count);
+				}
+				if (attrib = tag.getAttribute("POS")) {
+					val = strchr(attrib, ':');
+					val = (val) ? (val + 1) : attrib;
+					buf.appendFormatted(" %s", val);
+				}
+
+				/*if (endTag)
+					buf += "}";*/
+			}
+		}				
+ 
+		// <note> tag
+		else if (!strcmp(tag.getName(), "note")) {	
+			if (!tag.isEmpty() && !tag.isEndTag()) {		
+				string footnoteNum = userData["fn"];
+				SWBuf type = tag.getAttribute("type");
+				
+				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+					int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
+					VerseKey *vkey;
+					// see if we have a VerseKey * or decendant
+					try {
+						vkey = SWDYNAMIC_CAST(VerseKey, this->key);
+					}
+					catch ( ... ) {	}
+					if (vkey) {
+						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						    buf.appendFormatted("<a href=\"noteID=%s.%c.%i\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber, ch);
+						SWBuf tmp;
+						tmp.appendFormatted("%i", ++footnoteNumber);
+						userData["fn"] = tmp.c_str();
+					}
+				}
+				userData["suspendTextPassThru"] = "true";
+			}	   
+			if (tag.isEndTag()) {	
+				userData["suspendTextPassThru"] = "false";
+			}
+		}
+		// <p> paragraph tag
+		else if (!strcmp(tag.getName(), "p")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
+				buf += "<br />";
+			}
+			else if (tag.isEndTag()) {	// end tag
+				buf += "<br />";
+			}
+			else {					// empty paragraph break marker
+				buf += "<br /><br />";
+			}
+		}
+		
+		// <reference> tag
+		else if (!strcmp(tag.getName(), "reference")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<a href=\"\">";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</a>";
+			}
+			else {	// empty reference marker
+				// -- what should we do?  nothing for now.
+			}
+		}
+
+		// <line> poetry, etc
+		else if (!strcmp(tag.getName(), "line")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "<br />";
+			}
+			else {	// empty line marker
+				buf += "<br />";
+			}
+		}
+
+		// <title>
+		else if (!strcmp(tag.getName(), "title")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<b>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</b><br />";
+			}
+			else {	// empty title marker
+				// what to do?  is this even valid?
+				buf += "<br />";
+			}
+		}
+
+		// <hi> hi?  hi contrast?
+		else if (!strcmp(tag.getName(), "hi")) {
+			SWBuf type = tag.getAttribute("type");
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				if (type == "b") {
+					buf += "<b> ";
+					userData["inBold"] = "true";
+				}
+				else	// all other types
+					buf += "<i> ";
+			}
+			else if (tag.isEndTag()) {
+				if(userData["inBold"] == "true") {
+					buf += "</b>";
+					userData["inBold"] = "false";
+				}
+				else
+				      buf += "</i>";
+			}
+			else {	// empty hi marker
+				// what to do?  is this even valid?
+			}
+		}
+
+		// <q> quote
+		else if (!strcmp(tag.getName(), "q")) {
+			SWBuf type = tag.getAttribute("type");
+			SWBuf who = tag.getAttribute("who");
+			const char *lev = tag.getAttribute("level");
+			int level = (lev) ? atoi(lev) : 1;
+			
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				/*buf += "{";*/
+
+				//alternate " and '
+				buf += (level % 2) ? '\'' : '\"';
+				
+				if (who == "Jesus")
+					buf += "<font color=\"red\"> ";
+			}
+			else if (tag.isEndTag()) {
+				//alternate " and '
+				buf += (level % 2) ? '\'' : '\"';
+				buf += "</font>";
+			}
+			else {	// empty quote marker
+				//alternate " and '
+				buf += (level % 2) ? '\'' : '\"';
+			}
+		}
+
+		// <transChange>
+		else if (!strcmp(tag.getName(), "transChange")) {
+			SWBuf type = tag.getAttribute("type");
+			
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+
+// just do all transChange tags this way for now
+//				if (type == "supplied")
+					buf += "<i>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</i>";
+			}
+			else {	// empty transChange marker?
+			}
+		}
+		
+		else {
+		      return false;  // we still didn't handle token
+		}
 	}
-    }
-
-    //p
-    else if (!strncmp(token, "p", 1)) {
-      buf += "<br /> ";
-    }
-    else if (!strncmp(token, "/p", 2)) {
-      buf += "<br /> ";
-    }
-
-    //reference
-    else if (!strncmp(token, "reference", 8)) {
-      buf += "<a href=\"\">";
-    }
-    else if (!strncmp(token, "/reference", 9)) {
-      buf += "</a>";
-    }
-
-    //line
-    else if (!strncmp(token, "line", 4)) {
-      buf += "<br />";
-    }
-    else if (!strncmp(token, "/line", 5)) {
-      buf += "<br />";
-    }
-
-
-    //title
-    else if (!strncmp(token, "title", 5)) {
-      buf += "<b> ";
-    }
-    else if (!strncmp(token, "/title", 6)) {
-      buf += "</b><br />";
-    }
-
-    //hi
-    else if (!strncmp(token, "hi", 2)) {
-      tagData=token;
-      pos1 = tagData.find("type=\"b", 0);
-      if (pos1 != string::npos) {
-	buf += "<b> ";
-	userData["inBold"] = "true";
-      }
-      else {
-	buf += "<i> ";
-      }
-    }
-    else if (!strncmp(token, "/hi", 3)) { 
-	if(userData["inBold"] == "true") {
-	      buf += "</b>";
-	      userData["inBold"] = "false";
-	}
-	else
-	      buf += "</i>";
-    }
-
-    //q
-    else if (!strncmp(token, "q", 1)) {
-	
-      tagData=token;
-      pos1 = tagData.find("who=\"", 0);
-      if (pos1 != string::npos) {
-	pos2 = tagData.find("\"", pos1);
-	if (tagData.substr(pos1, pos2).find("Jesus", 0) != string::npos) {
-	  buf += "<font color=\"red\"> ";
-	}
-      }
-    }
-    else if (!strncmp(token, "/q", 2)) {
-      buf += "</font>";
-    }
-
-    //transChange
-    else if (!strncmp(token, "transChange", 11)) {
-      buf += "<i> ";
-    }
-    else if (!strncmp(token, "/transChange", 12)) {
-      buf += "</i>";
-    }
-
-    else {
-      return false;  // we still didn't handle token
-    }
-  }
-  return true;
+	return true;
 }
 
 
