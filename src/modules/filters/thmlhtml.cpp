@@ -22,6 +22,7 @@
 ThMLHTML::ThMLHTML() {
 	setTokenStart("<");
 	setTokenEnd(">");
+/*
 	setEscapeStart("&");
 	setEscapeEnd(";");
 
@@ -123,15 +124,15 @@ ThMLHTML::ThMLHTML() {
 	addEscapeStringSubstitute("uml", "¨");
 	addEscapeStringSubstitute("shy", "­");
 	addEscapeStringSubstitute("macr", "¯");
-	
+*/
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("/scripRef", " </A>");	  
-	addTokenSubstitute("note place=\"foot\"", " <SMALL>(");
-	addTokenSubstitute("/note", ")</SMALL> ");
-	addTokenSubstitute("foreign lang=\"el\"", "<FONT FACE=\"SIL Galatia\">");
-	addTokenSubstitute("foreign lang=\"he\"", "<FONT FACE=\"SIL Ezra\">");
-	addTokenSubstitute("/foreign", "</FONT>");
+	addTokenSubstitute("/scripRef", " </a>");
+	addTokenSubstitute("note place=\"foot\"", " <small>(");
+	addTokenSubstitute("/note", ")</small> ");
+	addTokenSubstitute("foreign lang=\"el\"", "<font face=\"SIL Galatia\">");
+	addTokenSubstitute("foreign lang=\"he\"", "<font face=\"SIL Ezra\">");
+	addTokenSubstitute("/foreign", "</font>");
 }
 
 
@@ -139,22 +140,22 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
-			pushString(buf, "<SMALL><EM>");
-			for (unsigned int i = 5; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];	
-			pushString(buf, "</EM></SMALL>");
+			pushString(buf, "<small><em>");
+			for (unsigned int i = 5; i < strlen(token); i++)
+				if(token[i] != '\"')
+					*(*buf)++ = token[i];
+			pushString(buf, "</em></small>");
 		}
 
 		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
-			pushString(buf, "<SMALL><EM>");
+			pushString(buf, "<small><em>");
 			for (unsigned int i = 25; token[i] != '\"'; i++)
 				*(*buf)++ = token[i];
-			pushString(buf, "</EM></SMALL>");
+			pushString(buf, "</em></small>");
 		}
 
 		else if (!strncmp(token, "scripRef", 8)) {
-			pushString(buf, "<A HREF=\"");
+			pushString(buf, "<a href=\"");
 			for (unsigned int i = 9; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
@@ -163,10 +164,10 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 		} 
 
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			pushString(buf, "<SMALL><I>");
+			pushString(buf, "<small><i>");
 			for (unsigned int i = 29; token[i] != '\"'; i++)
 				*(*buf)++ = token[i];
-			pushString(buf, "</I></SMALL>");
+			pushString(buf, "</i></small>");
 		}
 
 		else {

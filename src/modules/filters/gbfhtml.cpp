@@ -67,30 +67,30 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						case 'T':               // Tense
 							*to++ = ' ';
 							*to++ = '<';
-							*to++ = 'S';
-							*to++ = 'M';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'L';
+							*to++ = 's';
+							*to++ = 'm';
+							*to++ = 'a';
+							*to++ = 'l';
+							*to++ = 'l';
 							*to++ = '>';
 							*to++ = '<';
-							*to++ = 'E';
-							*to++ = 'M';
+							*to++ = 'e';
+							*to++ = 'm';
 							*to++ = '>';
 							for (i = 2; i < strlen(token); i++)
 								*to++ = token[i];
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'E';
-							*to++ = 'M';
+							*to++ = 'e';
+							*to++ = 'm';
 							*to++ = '>';
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'S';
-							*to++ = 'M';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'L';
+							*to++ = 's';
+							*to++ = 'm';
+							*to++ = 'a';
+							*to++ = 'l';
+							*to++ = 'l';
 							*to++ = '>';
 							*to++ = ' ';
 							continue;
@@ -101,29 +101,29 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 					{
 					  case 'B':								//word(s) explained in footnote
 							*to++ = '<';
-							*to++ = 'I';					
-							*to++ = '>';						
+							*to++ = 'i';
+							*to++ = '>';
 							hasFootnotePreTag = true; //we have the RB tag
 							continue;
 						case 'F':               // footnote begin
 							if (hasFootnotePreTag) {
 								*to++ = '<';
 								*to++ = '/';
-								*to++ = 'I';
-								*to++ = '>';						
+								*to++ = 'i';
+								*to++ = '>';
 								*to++ = ' ';
 							}
 	 						*to++ = '<';
-							*to++ = 'F';
-							*to++ = 'O';
-							*to++ = 'N';
-							*to++ = 'T';
+							*to++ = 'f';
+							*to++ = 'o';
+							*to++ = 'n';
+							*to++ = 't';
 							*to++ = ' ';
-							*to++ = 'C';
-							*to++ = 'O';
-							*to++ = 'L';
-							*to++ = 'O';
-							*to++ = 'R';
+							*to++ = 'c';
+							*to++ = 'o';
+							*to++ = 'l';
+							*to++ = 'o';
+							*to++ = 'r';
 							*to++ = '=';
 							*to++ = '\"';
 							*to++ = '#';
@@ -135,78 +135,78 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 							*to++ = '0';
 							*to++ = '\"';
 							*to++ = '>';
-							
+
 							*to++ = ' ';
 							*to++ = '<';
-							*to++ = 'S';
-							*to++ = 'M';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'L';
+							*to++ = 's';
+							*to++ = 'm';
+							*to++ = 'a';
+							*to++ = 'l';
+							*to++ = 'l';
 							*to++ = '>';
 							*to++ = '(';
-													
+
 							continue;
 						case 'f':               // footnote end
 							*to++ = ')';
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'S';
-							*to++ = 'M';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'L';
+							*to++ = 's';
+							*to++ = 'm';
+							*to++ = 'a';
+							*to++ = 'l';
+							*to++ = 'l';
 							*to++ = '>';
 							*to++ = ' ';
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'F';
-							*to++ = 'O';
-							*to++ = 'N';
-							*to++ = 'T';
+							*to++ = 'f';
+							*to++ = 'o';
+							*to++ = 'n';
+							*to++ = 't';
 							*to++ = '>';
 							hasFootnotePreTag = false;
 							continue;
 					}
 					break;
-				
+
 				case 'F':			// font tags
 					switch(token[1])
 					{
 						case 'I':		// italic start
 							*to++ = '<';
-							*to++ = 'I';
+							*to++ = 'i';
 							*to++ = '>';
 							continue;
 						case 'i':		// italic end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'I';
+							*to++ = 'i';
 							*to++ = '>';
 							continue;
 						case 'B':		// bold start
 							*to++ = '<';
-							*to++ = 'B';
+							*to++ = 'b';
 							*to++ = '>';
 							continue;
 						case 'b':		// bold end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'B';
+							*to++ = 'b';
 							*to++ = '>';
 							continue;
 						case 'R':		// words of Jesus begin
 							*to++ = '<';
-							*to++ = 'F';
-							*to++ = 'O';
-							*to++ = 'N';
-							*to++ = 'T';
+							*to++ = 'f';
+							*to++ = 'o';
+							*to++ = 'n';
+							*to++ = 't';
 							*to++ = ' ';
-							*to++ = 'C';
-							*to++ = 'O';
-							*to++ = 'L';
-							*to++ = 'O';
-							*to++ = 'R';
+							*to++ = 'c';
+							*to++ = 'o';
+							*to++ = 'l';
+							*to++ = 'o';
+							*to++ = 'r';
 							*to++ = '=';
 							*to++ = '#';
 							*to++ = 'F';
@@ -220,68 +220,68 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						case 'r':		// words of Jesus end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'F';
-							*to++ = 'O';
-							*to++ = 'N';
-							*to++ = 'T';
+							*to++ = 'f';
+							*to++ = 'o';
+							*to++ = 'n';
+							*to++ = 't';
 							*to++ = '>';
 							continue;
 						case 'U':		// Underline start
 							*to++ = '<';
-							*to++ = 'U';
+							*to++ = 'u';
 							*to++ = '>';
 							continue;
 							case 'u':		// Underline end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'U';
+							*to++ = 'u';
 							*to++ = '>';
 							continue;
 						case 'O':		// Old Testament quote begin
 							*to++ = '<';
-							*to++ = 'C';
-							*to++ = 'I';
-							*to++ = 'T';
-							*to++ = 'E';
+							*to++ = 'c';
+							*to++ = 'i';
+							*to++ = 't';
+							*to++ = 'e';
 							*to++ = '>';
 							continue;
 						case 'o':		// Old Testament quote end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'C';
-							*to++ = 'I';
-							*to++ = 'T';
-							*to++ = 'E';
+							*to++ = 'c';
+							*to++ = 'i';
+							*to++ = 't';
+							*to++ = 'e';
 							*to++ = '>';
 							continue;
 						case 'S':		// Superscript begin
 							*to++ = '<';
-							*to++ = 'S';
-							*to++ = 'U';
-							*to++ = 'P';
+							*to++ = 's';
+							*to++ = 'u';
+							*to++ = 'p';
 							*to++ = '>';
 							continue;
 						case 's':		// Superscript end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'S';
-							*to++ = 'U';
-							*to++ = 'P';
+							*to++ = 's';
+							*to++ = 'u';
+							*to++ = 'p';
 							*to++ = '>';
 							continue;
 						case 'V':		// Subscript begin
 							*to++ = '<';
-							*to++ = 'S';
-							*to++ = 'U';
-	  						*to++ = 'B';
+							*to++ = 's';
+							*to++ = 'u';
+	  						*to++ = 'b';
 							*to++ = '>';
 							continue;
 						case 'v':		// Subscript end
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'S';
-							*to++ = 'U';
-							*to++ = 'B';
+							*to++ = 's';
+							*to++ = 'u';
+							*to++ = 'b';
 							*to++ = '>';
 							continue;
 					        case 'N':
@@ -324,15 +324,19 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 							continue;
 						case 'L':               // line break
 							*to++ = '<';
-							*to++ = 'B';
-							*to++ = 'R';
+							*to++ = 'b';
+							*to++ = 'r';
+							*to++ = ' ';
+							*to++ = '/';
 							*to++ = '>';
 							*to++ = ' ';
 							continue;
 						case 'M':               // new paragraph
 							*to++ = '<';
-							*to++ = 'B';
-							*to++ = 'R';
+							*to++ = 'b';
+							*to++ = 'r';
+							*to++ = ' ';
+							*to++ = '/';
 							*to++ = '>';
 							continue;
 						case 'T':
@@ -341,74 +345,74 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 					}
 					break;
 				case 'J':	//Justification
-					switch(token[1]) 
+					switch(token[1])
 					{
 						case 'R':	//right
 							*to++ = '<';
-							*to++ = 'D';
-							*to++ = 'I';
-							*to++ = 'V';
+							*to++ = 'd';
+							*to++ = 'i';
+							*to++ = 'v';
 							*to++ = ' ';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'I';
-							*to++ = 'G';
-							*to++ = 'N';
+							*to++ = 'a';
+							*to++ = 'l';
+							*to++ = 'i';
+							*to++ = 'g';
+							*to++ = 'n';
 							*to++ = '=';
 							*to++ = '\"';
-							*to++ = 'R';
-							*to++ = 'I';
-							*to++ = 'G';
-							*to++ = 'H';
-							*to++ = 'T';
+							*to++ = 'r';
+							*to++ = 'i';
+							*to++ = 'g';
+							*to++ = 'h';
+							*to++ = 't';
 							*to++ = '\"';
 							*to++ = '>';
 							isRightJustified = true;
 							continue;
-	
+
 						case 'C':	//center
 							*to++ = '<';
-							*to++ = 'D';
-							*to++ = 'I';
-							*to++ = 'V';
+							*to++ = 'd';
+							*to++ = 'i';
+							*to++ = 'v';
 							*to++ = ' ';
-							*to++ = 'A';
-							*to++ = 'L';
-							*to++ = 'I';
-							*to++ = 'G';
-							*to++ = 'N';
+							*to++ = 'a';
+							*to++ = 'l';
+							*to++ = 'i';
+							*to++ = 'g';
+							*to++ = 'n';
 							*to++ = '=';
 							*to++ = '\"';
-							*to++ = 'C';
-							*to++ = 'E';
-							*to++ = 'N';
-							*to++ = 'T';
-							*to++ = 'E';
-							*to++ = 'R';
+							*to++ = 'c';
+							*to++ = 'e';
+							*to++ = 'n';
+							*to++ = 't';
+							*to++ = 'e';
+							*to++ = 'r';
 							*to++ = '\"';
 							*to++ = '>';
 							isCentered = true;
 							continue;
-	
+
 						case 'L': //left, reset right and center
 							if (isCentered) {
 								*to++ = '<';
 								*to++ = '/';
-								*to++ = 'C';
-								*to++ = 'E';
-								*to++ = 'N';
-								*to++ = 'T';
-								*to++ = 'E';
-								*to++ = 'R';
+								*to++ = 'c';
+								*to++ = 'e';
+								*to++ = 'n';
+								*to++ = 't';
+								*to++ = 'e';
+								*to++ = 'r';
 								*to++ = '>';
 								isCentered = false;
 							}
 							if (isRightJustified) {
 								*to++ = '<';
 								*to++ = '/';
-								*to++ = 'D';
-								*to++ = 'I';
-								*to++ = 'V';
+								*to++ = 'd';
+								*to++ = 'i';
+								*to++ = 'v';
 								*to++ = '>';
 								isRightJustified = false;
 							}
@@ -468,19 +472,19 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 					{
 						case 'P': // Poetry begin
 							*to++ = '<';
-							*to++ = 'C';
-							*to++ = 'I';
-							*to++ = 'T';
-							*to++ = 'E';
+							*to++ = 'c';
+							*to++ = 'i';
+							*to++ = 't';
+							*to++ = 'e';
 							*to++ = '>';
 							continue;
 						case 'p':
 							*to++ = '<';
 							*to++ = '/';
-							*to++ = 'C';
-							*to++ = 'I';
-							*to++ = 'T';
-							*to++ = 'E';
+							*to++ = 'c';
+							*to++ = 'i';
+							*to++ = 't';
+							*to++ = 'e';
 							*to++ = '>';
 							continue;
 					}

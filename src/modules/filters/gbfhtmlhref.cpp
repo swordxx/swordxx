@@ -25,33 +25,33 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("Rf", ")</SMALL></FONT>");
-	addTokenSubstitute("FI", "<I>"); // italics begin
-	addTokenSubstitute("Fi", "</I>");
-	addTokenSubstitute("FB", "<B>"); // bold begin
-	addTokenSubstitute("Fb", "</B>");
-	addTokenSubstitute("FR", "<FONT COLOR=\"#FF0000\">"); // words of Jesus begin
-	addTokenSubstitute("Fr", "</FONT>");
-	addTokenSubstitute("FU", "<U>"); // underline begin
-	addTokenSubstitute("Fu", "</U>");
-	addTokenSubstitute("FO", "<CITE>"); //  Old Testament quote begin
-	addTokenSubstitute("Fo", "</CITE>");
-	addTokenSubstitute("FS", "<SUP>"); // Superscript begin// Subscript begin
-	addTokenSubstitute("Fs", "</SUP>");
-	addTokenSubstitute("FV", "<SUB>"); // Subscript begin
-	addTokenSubstitute("Fv", "</SUB>");
-	addTokenSubstitute("TT", "<BIG>"); // Book title begin
-	addTokenSubstitute("Tt", "</BIG>");
-	addTokenSubstitute("PP", "<CITE>"); //  poetry  begin
-	addTokenSubstitute("Pp", "</CITE>");
-	addTokenSubstitute("Fn", "</FONT>"); //  font  end
-	addTokenSubstitute("CL", "<BR>"); //  new line
-	addTokenSubstitute("CM", "<!P><BR>"); //  paragraph <!P> is a non showing comment that can be changed in the front end to <P> if desired
+	addTokenSubstitute("Rf", ")</small></font>");
+	addTokenSubstitute("FI", "<i>"); // italics begin
+	addTokenSubstitute("Fi", "</i>");
+	addTokenSubstitute("FB", "<n>"); // bold begin
+	addTokenSubstitute("Fb", "</n>");
+	addTokenSubstitute("FR", "<font color=\"#FF0000\">"); // words of Jesus begin
+	addTokenSubstitute("Fr", "</font>");
+	addTokenSubstitute("FU", "<u>"); // underline begin
+	addTokenSubstitute("Fu", "</u>");
+	addTokenSubstitute("FO", "<cite>"); //  Old Testament quote begin
+	addTokenSubstitute("Fo", "</cite>");
+	addTokenSubstitute("FS", "<sup>"); // Superscript begin// Subscript begin
+	addTokenSubstitute("Fs", "</sup>");
+	addTokenSubstitute("FV", "<sub>"); // Subscript begin
+	addTokenSubstitute("Fv", "</sub>");
+	addTokenSubstitute("TT", "<big>"); // Book title begin
+	addTokenSubstitute("Tt", "</big>");
+	addTokenSubstitute("PP", "<cite>"); //  poetry  begin
+	addTokenSubstitute("Pp", "</cite>");
+	addTokenSubstitute("Fn", "</font>"); //  font  end
+	addTokenSubstitute("CL", "<br />"); //  new line
+	addTokenSubstitute("CM", "<!P><br />"); //  paragraph <!P> is a non showing comment that can be changed in the front end to <P> if desired
 	addTokenSubstitute("CG", ""); //  ???
 	addTokenSubstitute("CT", ""); // ???
-	addTokenSubstitute("JR", "<DIV ALIGN=\"RIGHT\">"); // right align begin
-	addTokenSubstitute("JC", "<DIV ALIGN=\"CENTER\">"); // center align begin
-	addTokenSubstitute("JL", "</DIV>"); // align end
+	addTokenSubstitute("JR", "<div align=\"right\">"); // right align begin
+	addTokenSubstitute("JC", "<div align=\"center\">"); // center align begin
+	addTokenSubstitute("JL", "</div>"); // align end
 	
 }
 
@@ -60,59 +60,59 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
-			pushString(buf, " <SMALL><EM>&lt;<A HREF=\"#");
-			for (i = 1; i < strlen(token); i++)				
-				//if(token[i] != '\"') 			
+			pushString(buf, " <small><em>&lt;<a href=\"#");
+			for (i = 1; i < strlen(token); i++)
+				//if(token[i] != '\"')
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (i = 2; i < strlen(token); i++)				
-				//if(token[i] != '\"') 			
-					*(*buf)++ = token[i];		
-			pushString(buf, "</A>&gt;</EM></SMALL>");
+			for (i = 2; i < strlen(token); i++)
+				//if(token[i] != '\"')
+					*(*buf)++ = token[i];
+			pushString(buf, "</a>&gt;</em></small>");
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
-			pushString(buf, " <SMALL><EM>(<A HREF=\"#");
-			for (i = 2; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
+			pushString(buf, " <small><em>(<A HREF=\"#");
+			for (i = 2; i < strlen(token); i++)
+				if(token[i] != '\"')
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (i = 3; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];		
-			pushString(buf, "</A>)</EM></SMALL>");
+			for (i = 3; i < strlen(token); i++)
+				if(token[i] != '\"')
+					*(*buf)++ = token[i];
+			pushString(buf, "</a>)</em></small>");
 		}
 
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
-			pushString(buf, " <SMALL><EM>(<A HREF=\"M");
-			for (i = 2; i < strlen(token); i++)				
-				if(token[i] != '\"') 			
+			pushString(buf, " <small><em>(<a href=\"M");
+			for (i = 2; i < strlen(token); i++)
+				if(token[i] != '\"')
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 			for (i = 2; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
-			pushString(buf, "</A>)</EM></SMALL>");
+			pushString(buf, "</a>)</em></small>");
 		}
 
 		else if (!strncmp(token, "RB", 2)) {
-			pushString(buf, "<I>");
+			pushString(buf, "<i>");
 			userData["hasFootnotePreTag"] = "true";
 		}
 
 		else if (!strncmp(token, "RF", 2)) {
 			if(userData["hasFootnotePreTag"] == "true") {
 				userData["hasFootnotePreTag"] = "false";
-				pushString(buf, "</I> ");
+				pushString(buf, "</i> ");
 			}
-			pushString(buf, "<FONT COLOR=\"#800000\"><SMALL> (");			
+			pushString(buf, "<font color=\"#800000\"><small> (");
 		}
 
 		else if (!strncmp(token, "FN", 2)) {
-			pushString(buf, "<FONT FACE=\"");
+			pushString(buf, "<font face=\"");
 			for (i = 2; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];

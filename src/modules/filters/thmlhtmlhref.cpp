@@ -22,6 +22,7 @@
 ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
+/*        
 	setEscapeStart("&");
 	setEscapeEnd(";");
 
@@ -123,14 +124,14 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 	addEscapeStringSubstitute("uml", "¨");
 	addEscapeStringSubstitute("shy", "­");
 	addEscapeStringSubstitute("macr", "¯");
-	
+*/
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("note place=\"foot\"", " <SMALL>(");
-	addTokenSubstitute("/note", ")</SMALL> ");
-	addTokenSubstitute("foreign lang=\"el\"", "<FONT FACE=\"SIL Galatia\">");
-	addTokenSubstitute("foreign lang=\"he\"", "<FONT FACE=\"SIL Ezra\">");
-	addTokenSubstitute("/foreign", "</FONT>");
+	addTokenSubstitute("note place=\"foot\"", " <small>(");
+	addTokenSubstitute("/note", ")</small> ");
+	addTokenSubstitute("foreign lang=\"el\"", "<font face=\"SIL Galatia\">");
+	addTokenSubstitute("foreign lang=\"he\"", "<font face=\"SIL Ezra\">");
+	addTokenSubstitute("/foreign", "</font>");
 }
 
 
@@ -139,7 +140,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
-			pushString(buf, "<A HREF=\"");
+			pushString(buf, "<a href=\"");
 			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
@@ -148,11 +149,11 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			for (i = 28; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
-			pushString(buf, "</A>");
+			pushString(buf, "</a>");
 		}
 
 		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
-			pushString(buf, "<A HREF=\"");
+			pushString(buf, "<a href=\"");
 			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
@@ -161,12 +162,12 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			for (i = 28; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
-			pushString(buf, "</A>");
+			pushString(buf, "</a>");
 		}
 
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
 			userData["inscriptRef"] = "true";
-			pushString(buf, "<A HREF=\"");
+			pushString(buf, "<a href=\"");
 			for (i = 9; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
@@ -185,11 +186,11 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 		else if (!strcmp(token, "/scripRef")) {
 			if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
 				userData["inscriptRef"] = "false";
-				pushString(buf, "</A>");
+				pushString(buf, "</a>");
 			}
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
-				pushString(buf, "<A HREF=\"passage=");
+				pushString(buf, "<a href=\"passage=");
 				//char *strbuf = (char *)userData["lastTextNode"].c_str();
 				pushString(buf, userData["lastTextNode"].c_str());
 				*(*buf)++ = '\"';
@@ -197,7 +198,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 				pushString(buf, userData["lastTextNode"].c_str());
 				// let's let text resume to output again
 				userData["suspendTextPassThru"] = "false";	
-				pushString(buf, "</A>");
+				pushString(buf, "</a>");
 			}
 		}
 			
@@ -213,7 +214,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 		}
 
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			pushString(buf, "<A HREF=\"");
+			pushString(buf, "<a href=\"");
 			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
@@ -222,7 +223,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			for (i = 29; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
-			pushString(buf, "</A>");
+			pushString(buf, "</a>");
 		}
 
 		else {
