@@ -5,7 +5,7 @@
 #if defined(__SWMSW__)
 
 // _declspec works in BC++ 5 and later, as well as VC++
-#if defined(__VISUALC__)
+#if defined(_MSC_VER)
 
 #  ifdef SWMAKINGDLL
 #    define SWDLLEXPORT _declspec( dllexport )

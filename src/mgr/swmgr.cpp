@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.44 2001/09/23 11:00:37 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.45 2001/10/18 14:03:03 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,7 +35,7 @@
 #include <unixstr.h>
 #endif
 #include <sys/stat.h>
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 #include <iostream.h>
 #endif
 #include <swmgr.h>
@@ -203,7 +203,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 
 	*configType = 0;
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 	// check working directory
 if (debug)
 	cerr << "Checking working directory for mods.conf...";
@@ -211,7 +211,7 @@ if (debug)
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -221,14 +221,14 @@ if (debug)
 		return;
 	}
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking working directory for mods.d...";
 #endif
 
 	if (FileMgr::existsDir(".", "mods.d")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -241,14 +241,14 @@ if (debug)
 
 
 	// check environment variable SWORD_PATH
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking SWORD_PATH...";
 #endif
 
 	if (envsworddir != NULL) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found (" << envsworddir << ")\n";
 #endif
@@ -257,14 +257,14 @@ if (debug)
 		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 			path += "/";
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.conf...";
 #endif
 
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -275,14 +275,14 @@ if (debug)
 			return;
 		}
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.d...";
 #endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -298,14 +298,14 @@ if (debug)
 
 	// check for systemwide /etc/sword.conf
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking for /etc/sword.conf...";
 #endif
 
 	if (!::access("/etc/sword.conf", 04)) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -316,18 +316,18 @@ if (debug)
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
 				path += "/";
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "DataPath in /etc/sword.conf is set to: " << path;
 #endif
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking for mods.conf in DataPath ";
 #endif
 			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -338,14 +338,14 @@ if (debug)
 				return;
 			}
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking for mods.d in DataPath ";
 #endif
 
 			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -362,7 +362,7 @@ if (debug)
 
 	// check ~/.sword/
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
 #endif
@@ -374,7 +374,7 @@ if (debug)
 		path += ".sword/";
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif
@@ -385,14 +385,14 @@ if (debug)
 			return;
 		}
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
 #endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 if (debug)
 	cerr << "found\n";
 #endif

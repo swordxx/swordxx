@@ -10,7 +10,7 @@
 #include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 #include <iostream.h>
 #endif
 
@@ -387,7 +387,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 			(*percent)(perc, percentUserData);
 		}
 		else if (newperc < perc) {
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 			cerr << "Serious error: new percentage complete is less than previous value\n";
 			cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
 			cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";

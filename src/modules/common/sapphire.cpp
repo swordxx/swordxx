@@ -19,7 +19,7 @@
 #include <memory.h>
 #include <unistd.h>
 #else
-#ifndef __VISUALC__
+#ifndef _MSC_VER
 #include <mem.h>
 #endif
 #endif

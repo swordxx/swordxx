@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawtext.h,v 1.12 2001/06/12 06:27:24 scribe Exp $
+ * $Id: rawtext.h,v 1.13 2001/10/18 14:02:42 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -45,7 +45,7 @@ public:
   {
     return true;
   }
-#ifdef __VISUALC__
+#ifdef _MSC_VER
   virtual SWModule & operator = (SW_POSITION);
 #else
   virtual RawText & operator = (SW_POSITION);
