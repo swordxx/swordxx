@@ -58,7 +58,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 }
 
 
-bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
 	const char *tok;
 	char val[128];
 	char *valto;

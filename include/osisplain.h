@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisplain.h,v 1.8 2003/08/05 09:06:30 scribe Exp $
+ * $Id: osisplain.h,v 1.9 2003/08/07 23:23:24 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,15 +30,15 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT OSISPlain : public SWBasicFilter {
 public:
 protected:
-	class MyUserData : public UserData {
+	class MyUserData : public SWFilterUserData {
 	public:
 		SWBuf w;
-		MyUserData(const SWModule *module, const SWKey *key) : UserData(module, key) {}
+		MyUserData(const SWModule *module, const SWKey *key) : SWFilterUserData(module, key) {}
 	};
-	virtual UserData *createUserData(const SWModule *module, const SWKey *key) {
+	virtual SWFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
 	}
-	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData);
 public:
 	OSISPlain();
 };

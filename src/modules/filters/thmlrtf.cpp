@@ -170,7 +170,7 @@ char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
         return 0;
 }
 
-bool ThMLRTF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool ThMLRTF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution

@@ -23,7 +23,7 @@
 SWORD_NAMESPACE_START
 
 
-OSISHTMLHref::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : UserData(module, key) {
+OSISHTMLHref::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : SWFilterUserData(module, key) {
 	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 }
 
@@ -47,7 +47,7 @@ OSISHTMLHref::OSISHTMLHref()
         setTokenCaseSensitive(true);
 }
 
-bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;

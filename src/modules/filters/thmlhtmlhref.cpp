@@ -135,7 +135,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 }
 
 
-bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
 	const char *tok;
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		MyUserData *u = (MyUserData *)userData;

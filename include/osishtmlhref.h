@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osishtmlhref.h,v 1.4 2003/07/30 00:51:33 scribe Exp $
+ * $Id: osishtmlhref.h,v 1.5 2003/08/07 23:23:24 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,7 +30,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT OSISHTMLHref : public SWBasicFilter {
 private:
 protected:
-	class MyUserData : public UserData {
+	class MyUserData : public SWFilterUserData {
 	public:
 		bool osisQToTick;
 		bool inBold;
@@ -38,10 +38,10 @@ protected:
 		SWBuf fn;
 		MyUserData(const SWModule *module, const SWKey *key);
 	};
-	virtual UserData *createUserData(const SWModule *module, const SWKey *key) {
+	virtual SWFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
 	}
-	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData);
 public:
 	OSISHTMLHref();
 };

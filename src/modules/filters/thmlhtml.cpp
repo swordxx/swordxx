@@ -134,7 +134,7 @@ ThMLHTML::ThMLHTML() {
 }
 
 
-bool ThMLHTML::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool ThMLHTML::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);

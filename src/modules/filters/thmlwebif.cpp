@@ -26,7 +26,7 @@ ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.js
   //all's done in ThMLHTMLHREF
 }
 
-bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
 	const char *tok;
 
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution

@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.29 2003/08/07 22:51:21 scribe Exp $
+ * $Id: filemgr.cpp,v 1.30 2003/08/07 23:23:32 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,6 +39,15 @@
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
+
+#ifndef S_IRGRP
+#define S_IRGRP 0
+#endif
+
+#ifndef S_IROTH
+#define S_IROTH 0
+#endif
+
 SWORD_NAMESPACE_START
 
 // ---------------- statics -----------------

@@ -58,7 +58,7 @@ GBFHTML::GBFHTML() {
 }
 
 
-bool GBFHTML::handleToken(SWBuf &buf, const char *token, UserData *userData) {
+bool GBFHTML::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
 	const char *tok;
 	char val[128];
 	char *valto;

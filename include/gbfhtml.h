@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: gbfhtml.h,v 1.12 2003/07/30 00:51:33 scribe Exp $
+ * $Id: gbfhtml.h,v 1.13 2003/08/07 23:23:24 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,15 +29,15 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT GBFHTML : public SWBasicFilter {
 protected:
-	class MyUserData : public UserData {
+	class MyUserData : public SWFilterUserData {
 	public:
-		MyUserData(const SWModule *module, const SWKey *key) : UserData(module, key) {}
+		MyUserData(const SWModule *module, const SWKey *key) : SWFilterUserData(module, key) {}
 		bool hasFootnotePreTag;
 	};
-	virtual UserData *createUserData(const SWModule *module, const SWKey *key) {
+	virtual SWFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
 	}
-	virtual bool handleToken(SWBuf &buf, const char *token, UserData *userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData);
 public:
 	GBFHTML();
 };
