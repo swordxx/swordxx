@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.11 2004/07/21 06:52:47 joachim Exp $
+* $Id: url.cpp,v 1.12 2004/07/21 16:44:15 tbiggs Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -210,7 +210,7 @@ const SWBuf URL::encode(const char *urlText) {
 			}
 
 			SWBuf buf;
-			buf.setFormatted("%%-.2X", c);
+			buf.setFormatted("%%%-.2X", c);
 			m[c] = buf;
 	}
 	//the special encodings for certain chars
