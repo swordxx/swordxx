@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: greeklexattribs.h,v 1.3 2003/02/20 07:25:19 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

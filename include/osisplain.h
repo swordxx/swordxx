@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisplain.h,v 1.11 2004/04/09 12:31:18 joachim Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.15 2004/05/07 18:03:36 dglassey Exp $
+ * $Id$
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

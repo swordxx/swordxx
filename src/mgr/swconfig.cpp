@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.15 2004/02/06 21:01:01 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

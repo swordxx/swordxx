@@ -3,7 +3,7 @@
  *			MSWindows TextBox (or any other control that takes a
  *			SetDialogItemText
  *
- * $Id: tbdisp.h,v 1.3 2002/10/03 04:26:46 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

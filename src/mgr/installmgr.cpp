@@ -11,7 +11,6 @@ extern "C" {
 }
 #endif
 
-#include <time.h>
 #include <installmgr.h>
 #include <filemgr.h>
 
@@ -26,70 +25,37 @@ extern "C" {
 #define O_BINARY 0
 #endif
 
-#ifdef CURLAVAILABLE
-#include <curl/curl.h>
-#include <curl/types.h>
-#include <curl/easy.h>
-#else
-#include <ftplib.h>
-#endif
-
-#include <defs.h>
-#include <vector>
 #include <swmgr.h>
 #include <dirent.h>
 
-using namespace std;
+#ifdef CURLAVAILABLE
+#include <curlftpt.h>
+#else
+#include <ftplibftpt.h>
+#endif
+
 
 SWORD_NAMESPACE_START
 
-#ifdef CURLAVAILABLE
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
-#endif
 
-static InstallMgr_init _InstallMgr_init;
-
-InstallMgr_init::InstallMgr_init() {
+// override this method and provide your own custom FTPTransport subclass
+// here we try a couple defaults if sword was compiled with support for them.
+// see these classes for examples of how to make your own
+FTPTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *statusReporter) {
 #ifdef CURLAVAILABLE
-	//curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
+	return new CURLFTPTransport(host, statusReporter);
 #else
-	FtpInit();
-//	fprintf(stderr, "libCURL is needed for remote installation functions\n");
+	return new FTPLibFTPTransport(host, statusReporter);
 #endif
 }
 
-InstallMgr_init::~InstallMgr_init() {
-#ifdef CURLAVAILABLE
-	curl_global_cleanup();
-#else
-//	fprintf(stderr, "libCURL is needed for remote installation functions\n");
-#endif
-}
-
-#ifdef CURLAVAILABLE
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
-	struct FtpFile *out=(struct FtpFile *)stream;
-	if (out && !out->stream) {
-		/* open file for writing */
-		out->stream=fopen(out->filename, "wb");
-		if (!out->stream)
-			return -1; /* failure, can't open file to write */
-	}
-	return fwrite(buffer, size, nmemb, out->stream);
-}
 
 
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
-	if (clientp) {
-		((InstallMgr *)clientp)->statusUpdate(dltotal, dlnow);
-	}
-	return 0;
-}
-#endif
 
-InstallMgr::InstallMgr(const char *privatePath) {
+InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
+	statusReporter = sr;
 	this->privatePath = 0;
+	this->transport = 0;
 	stdstr(&(this->privatePath), privatePath);
 	SWBuf confPath = (SWBuf)privatePath + "/InstallMgr.conf";
 	FileMgr::createParent(confPath.c_str());
@@ -103,7 +69,7 @@ InstallMgr::InstallMgr(const char *privatePath) {
 	sources.clear();
 	
 	sourcesSection = installConf->Sections.find("Sources");
-	passive = (!stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "true"));
+	setFTPPassive(!stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "true"));
 
 	if (sourcesSection != installConf->Sections.end()) {
 		sourceBegin = sourcesSection->second.lower_bound("FTPSource");
@@ -127,152 +93,20 @@ InstallMgr::~InstallMgr() {
 }
 
 
-void InstallMgr::statusUpdate(double dltotal, double dlnow) {
-}
-
-void InstallMgr::preDownloadStatus(long totalBytes, long completedBytes, const char *message) {
-}
-
-char InstallMgr::FTPURLGetFile(void *session, const char *dest, const char *sourceurl) {
-	char retVal = 0;
-#ifdef CURLAVAILABLE
-	struct FtpFile ftpfile = {dest, NULL};
-
-	CURL *curl = (CURL *)session;
-	CURLcode res;
-	
-	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_URL, sourceurl);
-	
-		curl_easy_setopt(curl, CURLOPT_USERPWD, "ftp:installmgr@user.com");
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
-		if (!passive)
-			curl_easy_setopt(curl, CURLOPT_FTPPORT, "-");
-		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
-		curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
-		curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, my_fprogress);
-		/* Set a pointer to our struct to pass to the callback */
-		curl_easy_setopt(curl, CURLOPT_FILE, &ftpfile);
-
-		/* Switch on full protocol/debug output */
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
-
-		res = curl_easy_perform(curl);
-
-		if(CURLE_OK != res) {
-			retVal = -1;
-		}
-	}
-
-	if (ftpfile.stream)
-		fclose(ftpfile.stream); /* close the local file */
-#else
-	fprintf(stderr, "getting file %s to %s\n", sourceurl, dest);
-	if (passive)
-		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PASSIVE, (netbuf *)nControl);
-	else
-		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PORT, (netbuf *)nControl);
-	// !!!WDG also want to set callback options
-	if (!strcmp(dest, "dirlist")) {
-		fprintf(stderr, "getting test directory %s\n", sourceurl);
-		FtpDir(NULL, sourceurl, (netbuf *)nControl);
-		fprintf(stderr, "getting real directory %s\n", sourceurl);
-		retVal = FtpDir(dest, sourceurl, (netbuf *)nControl) - 1;
-	}
-	else {
-		fprintf(stderr, "getting file %s\n", sourceurl);
-		retVal = FtpGet(dest, sourceurl, FTPLIB_IMAGE, (netbuf *)nControl) - 1;
-	}
-	//fprintf(stderr, "libCURL is needed for remote installation functions\n");
-#endif
-	return retVal;
-}
-
-
-
-vector<struct ftpparse> InstallMgr::FTPURLGetDir(void *session, const char *dirurl) {
-
-	vector<struct ftpparse> dirList;
-	
-	fprintf(stderr, "FTPURLGetDir: getting dir %s\n", dirurl);
-
-	if (!FTPURLGetFile(session, "dirlist", dirurl)) {
-		int fd = open("dirlist", O_RDONLY|O_BINARY);
-		long size = lseek(fd, 0, SEEK_END);
-		lseek(fd, 0, SEEK_SET);
-		char *buf = new char [ size + 1 ];
-		read(fd, buf, size);
-		close(fd);
-		char *start = buf;
-		char *end = start;
-		while (start < (buf+size)) {
-			struct ftpparse item;
-			bool looking = true;
-			for (end = start; *end; end++) {
-				if (looking) {
-					if ((*end == 10) || (*end == 13)) {
-						*end = 0;
-						looking = false;
-					}
-				}
-				else if ((*end != 10) && (*end != 13))
-					break;
-			}
-			fprintf(stderr, "FTPURLGetDir: parsing item %s(%d)\n", start, end-start);
-			int status = ftpparse(&item, start, end - start);
-			fprintf(stderr, "FTPURLGetDir: got item %s\n", item.name);
-			if (status)
-				dirList.push_back(item);
-			start = end;
-		}
-	}
-	else
-	{
-		fprintf(stderr, "FTPURLGetDir: failed to get dir %s\n", dirurl);
-	}
-	return dirList;
-}
-
-
-void *InstallMgr::FTPOpenSession(const char *host) {
-	void *retVal = 0;
-#ifdef CURLAVAILABLE
-	CURL *curl;
-
-	retVal = curl_easy_init();
-#else
-	fprintf(stderr, "connecting to host %s\n", host);
-	if (FtpConnect(host, (netbuf **)&nControl))
-		retVal = nControl;
-	else
-	fprintf(stderr, "Failed to connect to %s\n", host);
-	if (!FtpLogin("anonymous", "installmgr@user.com", (netbuf *)nControl))
-		fprintf(stderr, "Failed to login to %s\n", host);
-	//fprintf(stderr, "libCURL is needed for remote installation functions\n");
-#endif
-	return retVal;
-}
-
-
-void InstallMgr::FTPCloseSession(void *session) {
-#ifdef CURLAVAILABLE
-	CURL *curl = (CURL *)session;
-	curl_easy_cleanup(curl);
-#else
-	FtpQuit((netbuf *) nControl);
-	//fprintf(stderr, "libCURL is needed for remote installation functions\n");
-#endif
-}
-
-
-int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
+int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 	SectionMap::iterator module;
 	ConfigEntMap::iterator fileBegin;
 	ConfigEntMap::iterator fileEnd, entry;
 
+	// save our own copy, cuz when we remove the module from the SWMgr
+	// it's likely we'll free the memory passed to us in moduleName
+	SWBuf modName = moduleName;
 	module = manager->config->Sections.find(modName);
 
 	if (module != manager->config->Sections.end()) {
+		// to be sure all files are closed
+		// this does not remove the .conf information from SWMgr
+		manager->deleteModule(modName);
 			
 		fileBegin = module->second.lower_bound("File");
 		fileEnd = module->second.upper_bound("File");
@@ -297,19 +131,8 @@ int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
 			struct dirent *ent;
 			ConfigEntMap::iterator entry;
 
+			FileMgr::removeDir(modDir.c_str());
 
-			if (dir = opendir(modDir.c_str())) {
-				rewinddir(dir);
-				while ((ent = readdir(dir))) {
-					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-						modFile = modDir;
-						modFile += "/";
-						modFile += ent->d_name;
-						FileMgr::removeFile(modFile.c_str());
-					}
-				}
-				closedir(dir);
-			}
 			if (dir = opendir(manager->configPath)) {	// find and remove .conf file
 				rewinddir(dir);
 				while ((ent = readdir(dir))) {
@@ -372,90 +195,46 @@ SWMgr *InstallSource::getMgr() {
 }
 
 
-
-int InstallMgr::FTPCopyDirectoryRecurse(void *session, const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
-	int i;
-
-	SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/"; //dont forget the final slash
-	fprintf(stderr, "FTPCopy: getting dir %s\n", url.c_str());
-	vector<struct ftpparse> dirList = FTPURLGetDir(session, url.c_str());
-
-	if (!dirList.size()) {
-		fprintf(stderr, "FTPCopy: failed to read dir %s\n", url.c_str());
-		return -1;
-	}
-				
-	long totalBytes = 0;
-	for (i = 0; i < dirList.size(); i++)
-		totalBytes += dirList[i].size;
-	long completedBytes = 0;
-	for (i = 0; i < dirList.size(); i++) {
-		struct ftpparse &dirEntry = dirList[i];
-		if (dirEntry.flagtrycwd != 1) {
-			SWBuf buffer = (SWBuf)dest + "/" + (dirEntry.name);
-			if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
-				SWBuf buffer2 = "Downloading (";
-				buffer2.appendFormatted("%d", i+1);
-				buffer2 += " of ";
-				buffer2.appendFormatted("%d", dirList.size());
-				buffer2 += "): ";
-				buffer2 += (dirEntry.name);
-				preDownloadStatus(totalBytes, completedBytes, buffer2.c_str());
-				FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
-				SWTRY {
-					SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/" + dirEntry.name; //dont forget the final slash
-					if (FTPURLGetFile(session, buffer.c_str(), url.c_str())) {
-						fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
-						return -2;
-					}
-					completedBytes += dirEntry.size;
-				}
-				SWCATCH (...) {}
-				if (terminate)
-					break;
-			}
-		}
-	}
-}
-
-
-int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
+int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	int retVal = 0;
-	terminate = false;
+	term = false;
 	long i;
-	void *session = FTPOpenSession(is->source);
-#ifdef CURLAVAILABLE
+	FTPTransport *transport = createFTPTransport(is->source, statusReporter);
 	SWBuf urlPrefix = (SWBuf)"ftp://" + is->source;
-#else
-	SWBuf urlPrefix = "";
-#endif
-	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
-	if (FTPURLGetFile(session, "dirlist", url.c_str())) {
-		fprintf(stderr, "FTPCopy: failed to get dir %s\n", url.c_str());
-		return -1;
-	}
+
+	// let's be sure we can connect.  This seems to be necessary but sucks
+//	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
+//	if (transport->getURL("dirlist", url.c_str())) {
+//		 fprintf(stderr, "FTPCopy: failed to get dir %s\n", url.c_str());
+//		 return -1;
+//	}
+
+	   
 	if (dirTransfer) {
 		SWBuf dir = (SWBuf)is->directory.c_str() + "/" + src; //dont forget the final slash
 
-		retVal = FTPCopyDirectoryRecurse(session, urlPrefix, dir, dest, suffix);
+		retVal = transport->copyDirectory(urlPrefix, dir, dest, suffix);
 
 
 	}
 	else {
-//		Synchronize((TThreadMethod)&PreDownload2);
 		SWTRY {
 			SWBuf url = urlPrefix + is->directory.c_str() + "/" + src; //dont forget the final slash
-			if (FTPURLGetFile(session, dest, url.c_str())) {
+			if (transport->getURL(dest, url.c_str())) {
 				fprintf(stderr, "FTPCopy: failed to get file %s", url.c_str());
 				return -1;
 			}
 		}
 		SWCATCH (...) {
-			terminate = true;
+			term = true;
 		}
 	}
 	SWTRY {
-		FTPCloseSession(session);
+		FTPTransport *deleteMe = transport;
+		// do this order for threadsafeness
+		// (see terminate())
+		transport = 0;
+		delete deleteMe;
 	}
 	SWCATCH (...) {}
 	return retVal;
@@ -493,6 +272,10 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 		if (entry != module->second.end())
 			cipher = true;
 		
+		//
+		// This first check is a method to allow a module to specify each
+		// file that needs to be copied
+		//
 		fileEnd = module->second.upper_bound("File");
 		fileBegin = module->second.lower_bound("File");
 
@@ -500,7 +283,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			if (is) {
 				while (fileBegin != fileEnd) {	// ftp each file first
 					buffer = sourceDir + "/" + fileBegin->second.c_str();
-					if (FTPCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
+					if (ftpCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
 						aborted = true;
 						break;	// user aborted
 					}
@@ -512,7 +295,14 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			if (!aborted) {
 				// DO THE INSTALL
 				while (fileBegin != fileEnd) {
-					copyFileToSWORDInstall(destMgr, sourceDir.c_str(), fileBegin->second.c_str());
+					SWBuf sourcePath = sourceDir;
+					sourcePath += fileBegin->second.c_str();
+					SWBuf dest = destMgr->prefixPath;
+					if ((destMgr->prefixPath[strlen(destMgr->prefixPath)-1] != '\\') && (destMgr->prefixPath[strlen(destMgr->prefixPath)-1] != '/'))
+						dest += "/";
+					dest += fileBegin->second.c_str();
+					FileMgr::copyFile(sourcePath.c_str(), dest.c_str());
+
 					fileBegin++;
 				}
 			}
@@ -527,77 +317,43 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 				}
 			}
 		}
-		else {	//copy all files in DataPath directory
+
+		// This is the REAL install code, the above code I don't think has
+		// ever been used
+		//
+		// Copy all files in DataPath directory
+		// 
+		else {
 			ConfigEntMap::iterator entry;
-			SWBuf sourceOrig = sourceDir;
 
-			entry = module->second.find("DataPath");
+			entry = module->second.find("AbsoluteDataPath");
 			if (entry != module->second.end()) {
-				SWBuf modDir = entry->second.c_str();
-				entry = module->second.find("ModDrv");
-				if (entry != module->second.end()) {
-					if (!strcmp(entry->second.c_str(), "RawLD") || !strcmp(entry->second.c_str(), "RawLD4") || !strcmp(entry->second.c_str(), "zLD") || !strcmp(entry->second.c_str(), "RawGenBook") || !strcmp(entry->second.c_str(), "zGenBook")) {
-						int end = modDir.length() - 1;
-						while (end >= 0) { //while(end) wouldn't work for length() == 0
-							if (modDir[end] == '/')
-								break;
-
-							modDir--; //remove last char
-							end--;
-						}
-					}
-
-					//make sure there's no trailing slash in modDir, required for Bibles and Commentaries
-					if ( modDir.length() && (modDir[modDir.length()-1] == '/')) //last char is a slash
-						modDir--; //remove the slash
-				}
+				SWBuf absolutePath = entry->second.c_str();
+				SWBuf relativePath = absolutePath;
+				relativePath << strlen(mgr.prefixPath);
 
 				if (is) {
-					buffer = sourceDir + "/" + modDir;
-					if (FTPCopy(is, modDir.c_str(), buffer.c_str(), true)) {
+					if (ftpCopy(is, relativePath.c_str(), absolutePath.c_str(), true)) {
 						aborted = true;	// user aborted
 					}
 				}
-				sourceDir += "/";
-				sourceDir += modDir;
 				if (!aborted) {
-					if (dir = opendir(sourceDir.c_str())) {
-						rewinddir(dir);
-						while ((ent = readdir(dir))) {
-							if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-								modFile = modDir;
-								modFile += "/";
-								modFile += ent->d_name;
-								copyFileToSWORDInstall(destMgr, sourceOrig.c_str(), modFile.c_str());
-							}
-						}
-						closedir(dir);
-					}
+					SWBuf destPath = (SWBuf)destMgr->prefixPath + relativePath;
+					FileMgr::copyDir(absolutePath.c_str(), destPath.c_str());
 				}
 				if (is) {		// delete tmp ftp files
-					if (dir = opendir(sourceDir.c_str())) {
-						rewinddir(dir);
-						while ((ent = readdir(dir))) {
-							if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-								modFile = sourceOrig + "/" + modDir;
-								modFile += "/";
-								modFile += ent->d_name;
-								FileMgr::removeFile(modFile.c_str());
-							}
-						}
-						closedir(dir);
-					}
+//					mgr->deleteModule(modName);
+					FileMgr::removeDir(absolutePath.c_str());
 				}
-				sourceDir = sourceOrig;
-				sourceDir += "/mods.d/";
 			}
 		}
 		if (!aborted) {
-			if (dir = opendir(sourceDir.c_str())) {	// find and copy .conf file
+			SWBuf confDir = sourceDir + "/mods.d/";
+			if (dir = opendir(confDir.c_str())) {	// find and copy .conf file
 				rewinddir(dir);
 				while ((ent = readdir(dir))) {
 					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-						modFile = sourceDir;
+						modFile = confDir;
 						modFile += ent->d_name;
 						SWConfig *config = new SWConfig(modFile.c_str());
 						if (config->Sections.find(modName) != config->Sections.end()) {
@@ -629,62 +385,65 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 }
 
 
-// return aborted
+// override this and provide an input mechanism to allow your users
+// to enter the decipher code for a module.
+// return true you added the cipher code to the config.
+// default to return 'aborted'
 bool InstallMgr::getCipherCode(const char *modName, SWConfig *config) {
 	return false;
-}
 
-int InstallMgr::copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName) {
-	SWBuf sourcePath = sourceDir;
-	sourcePath += fName;
+/* a sample implementation, roughly taken from the windows installmgr
 
-	SWBuf dest;
-	dest = manager->prefixPath;
-	if ((manager->prefixPath[strlen(manager->prefixPath)-1] != '\\') && ( manager->prefixPath[strlen(manager->prefixPath)-1] != '/'))
-	   dest += "/";
-	  dest += fName;
+	SectionMap::iterator section;
+	ConfigEntMap::iterator entry;
+	SWBuf tmpBuf;
+	section = config->Sections.find(modName);
+	if (section != config->Sections.end()) {
+		entry = section->second.find("CipherKey");
+		if (entry != section->second.end()) {
+			entry->second = GET_USER_INPUT();
+			config->Save();
 
-	return FileMgr::copyFile(sourcePath.c_str(), dest.c_str());
+			// LET'S SHOW THE USER SOME SAMPLE TEXT FROM THE MODULE
+			SWMgr *mgr = new SWMgr();
+			SWModule *mod = mgr->Modules[modName];
+			mod->setKey("Ipet 2:12");
+			tmpBuf = mod->StripText();
+			mod->setKey("gen 1:10");
+			tmpBuf += "\n\n";
+			tmpBuf += mod->StripText();
+			SOME_DIALOG_CONTROL->SETTEXT(tmpBuf.c_str());
+			delete mgr;
+
+			// if USER CLICKS OK means we should return true
+			return true;
+		}
+	}
+	return false;
+*/
+
 }
 
 
 void InstallMgr::refreshRemoteSource(InstallSource *is) {
-	DIR *dir;
-	struct dirent *ent;
-	ConfigEntMap::iterator entry;
-	SWBuf modDir;
-	SWBuf modFile;
-	SWBuf root = privatePath;
-	root += (SWBuf)"/" + is->source.c_str();
+	SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->source.c_str();
 	SWBuf target = root + "/mods.d";
 
-	if (dir = opendir(target.c_str())) {
-		rewinddir(dir);
-		while ((ent = readdir(dir))) {
-			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-				modFile = target;
-				modFile += "/";
-				modFile += ent->d_name;
-				FileMgr::removeFile(modFile.c_str());
-			}
-		}
-		closedir(dir);
-	}
+	FileMgr::removeDir(target.c_str());
+
 	if (!FileMgr::existsDir(target))
 		FileMgr::createPathAndFile(target+"/globals.conf");
 
-
-
 #ifndef EXCLUDEZLIB
 	SWBuf archive = root + "/mods.d.tar.gz";
-	if (!FTPCopy(is, "mods.d.tar.gz", archive.c_str(), false)) {
+	if (!ftpCopy(is, "mods.d.tar.gz", archive.c_str(), false)) {
 		int fd = open(archive.c_str(), O_RDONLY|O_BINARY);
 		untargz(fd, root.c_str());
 		close(fd);
 	}
 	else
 #endif
-	FTPCopy(is, "mods.d", target.c_str(), true, ".conf");
+	ftpCopy(is, "mods.d", target.c_str(), true, ".conf");
 	is->flush();
 }
 

@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.23 2004/01/17 04:33:25 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

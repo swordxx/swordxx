@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.57 2004/04/07 12:33:53 dglassey Exp $
+* $Id$
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -63,7 +63,7 @@ typedef std::list < SWBuf >StringList;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.57 2004/04/07 12:33:53 dglassey Exp $
+* @version $Id$
 */
 class SWDLLEXPORT SWMgr {
 
@@ -126,6 +126,7 @@ protected:
 
 public:
 	virtual void augmentModules(const char *ipath);
+	void deleteModule(const char *);
 
 	/** Enable / Disable debug output on runtime
 	* Set this to true to get more verbose output of SWMgr at runtime. Set it to false to get no debug output.

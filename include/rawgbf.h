@@ -2,7 +2,7 @@
  *  rawgbf.h   - code for class 'RawGBF'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawgbf.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

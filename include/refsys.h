@@ -1,7 +1,7 @@
 /******************************************************************************
  *	refsys.h - code for class 'refsys'- Biblical reference system
  *
- * $Id: refsys.h,v 1.1 2004/05/07 17:02:32 dglassey Exp $
+ * $Id$
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

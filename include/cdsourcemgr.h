@@ -2,7 +2,7 @@
  *  cdsourcemgr.h	- definition of class SWCacheMgr used to provide an interface for
  *  	caching information of module sources
  *
- * $Id: cdsourcemgr.h,v 1.1 2002/10/23 23:13:35 dglassey Exp $
+ * $Id$
  *
  * Copyright 2002 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

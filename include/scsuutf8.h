@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: scsuutf8.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

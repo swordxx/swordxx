@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisrtf.h,v 1.11 2003/12/24 20:51:36 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

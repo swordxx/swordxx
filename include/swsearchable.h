@@ -2,7 +2,7 @@
  *  swsearchable.h	- definition of class SWSearchable used to provide an
  *	interface for objects that be searched.
  *
- * $Id: swsearchable.h,v 1.1 2003/08/29 06:00:16 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfrtf.h,v 1.10 2003/02/28 13:31:37 mgruner Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

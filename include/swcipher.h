@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcipher.h   - definition of Class SWCipher used for data cipher/decipher
  *
- * $Id: swcipher.h,v 1.8 2003/08/12 10:37:06 scribe Exp $
+ * $Id$
  *
  * Copyright 1999 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

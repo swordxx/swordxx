@@ -17,7 +17,7 @@
 //*****************************************************************************
 /*
  *
- * $Id: Greek2Greek.h,v 1.3 2002/10/01 19:52:40 dglassey Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

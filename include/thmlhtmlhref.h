@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlhtmlhref.h,v 1.10 2003/12/22 04:28:09 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

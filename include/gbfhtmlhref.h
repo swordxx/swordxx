@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: gbfhtmlhref.h,v 1.10 2004/07/21 16:49:34 tbiggs Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

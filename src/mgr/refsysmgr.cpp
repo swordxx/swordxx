@@ -2,7 +2,7 @@
  *  refsysmgr.cpp   - definition of class RefSysMgr used to interact with
  *				registered biblical reference systems for a sword installation
  *
- * $Id: refsysmgr.cpp,v 1.1 2004/05/07 17:10:46 dglassey Exp $
+ * $Id$
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

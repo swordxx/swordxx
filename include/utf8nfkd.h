@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: utf8nfkd.h,v 1.6 2003/02/20 07:25:20 scribe Exp $
+ * $Id$
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

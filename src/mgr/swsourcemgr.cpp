@@ -2,7 +2,7 @@
  *  swsourcemgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swsourcemgr.cpp,v 1.2 2003/06/27 01:41:07 scribe Exp $
+ * $Id$
  *
  * Copyright 2002 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -2,7 +2,7 @@
  *  swcom.h   - code for base class 'SWCom'.  SWCom is the basis for all
  *		 types of commentary modules
  *
- * $Id: swcom.h,v 1.13 2003/02/28 13:12:43 mgruner Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

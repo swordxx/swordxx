@@ -2,7 +2,7 @@
  *  refsysmgr.h   - definition of class RefSysMgr used to interact with
  *				registered biblical reference systems for a sword installation
  *
- * $Id: refsysmgr.h,v 1.1 2004/05/07 17:02:32 dglassey Exp $
+ * $Id$
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlrtf.h,v 1.13 2003/12/22 06:30:44 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

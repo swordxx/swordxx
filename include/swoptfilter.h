@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: swoptfilter.h,v 1.2 2003/07/05 08:53:05 mgruner Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -60,6 +60,12 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			if (!strncmp(token.c_str(), "title", 5) || !strncmp(token.c_str(), "/title", 6)) {
 				tag = token;
 				
+				if (!tag.isEndTag()) { //start tag
+					if (!tag.isEmpty()) {
+						startTag = tag;
+					}
+				}
+				
 				if (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse")) {
 					hide = true;
 					preverse = true;
@@ -67,9 +73,6 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					continue;
 				}
 				if (!tag.isEndTag()) { //start tag
-					if (!tag.isEmpty()) {
-						startTag = tag;
-					}
 					hide = true;
 					header = "";
 					if (option) {	// we want the tag in the text

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: utf8bidireorder.h,v 1.7 2003/02/20 07:25:20 scribe Exp $
+ * $Id$
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

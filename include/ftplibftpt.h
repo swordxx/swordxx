@@ -1,0 +1,29 @@
+#ifndef FTPLIBFTPT_H
+#define FTPLIBFTPT_H
+
+#include <defs.h>
+#include <ftptrans.h>
+
+SWORD_NAMESPACE_START
+
+// initialize/cleanup SYSTEMWIDE library with life of this static.
+class FTPLibFTPTransport_init {
+public:
+	FTPLibFTPTransport_init();
+	~FTPLibFTPTransport_init();
+};
+
+
+class FTPLibFTPTransport : public FTPTransport {
+	void *nControl;
+
+public:
+	FTPLibFTPTransport(const char *host, StatusReporter *statusReporter = 0);
+	~FTPLibFTPTransport();
+	char getURL(const char *destPath, const char *sourceURL);
+};
+
+
+SWORD_NAMESPACE_END
+
+#endif

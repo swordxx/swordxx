@@ -2,7 +2,7 @@
  *	stringmgr.h - A class which provides string andling functions which can 
  *			reimplemented by frontends
  *
- * $Id: stringmgr.h,v 1.3 2004/07/20 12:53:36 joachim Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

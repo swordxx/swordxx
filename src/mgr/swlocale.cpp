@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.12 2004/05/08 16:52:24 dglassey Exp $
+ * $Id$
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

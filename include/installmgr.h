@@ -1,35 +1,15 @@
 #ifndef INSTALLMGR_H
 #define INSTALLMGR_H
 
-#include <stdio.h>
-#include <vector>
 #include <defs.h>
 #include <swbuf.h>
-#include <swconfig.h>
 #include <map>
+#include <ftptrans.h>
 
 SWORD_NAMESPACE_START
 
 class SWMgr;
-
-// move this include to cpp once struct ftpparse isn't exposed anymore
-extern "C" {
-#include <ftpparse.h>
-}
-
-
-// initialize/cleanup SYSTEMWIDE library with life of this static.
-class InstallMgr_init {
-public:
-	InstallMgr_init();
-	~InstallMgr_init();
-};
-
-
-struct FtpFile {
-  const char *filename;
-  FILE *stream;
-};
+class SWConfig;
 
 
 class InstallSource {
@@ -54,39 +34,33 @@ typedef std::map < SWBuf, InstallSource * >InstallSourceMap;
 
 class InstallMgr {
 
-	void *nControl;
-	int FTPCopyDirectoryRecurse(void *session, const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 protected:
 	char *privatePath;
-	// probably change to group these ftp functions into some kind of FTPSession
-	// class, and open/close functions become c_tor/d_tor.
+	StatusReporter *statusReporter;
+	bool passive;
+	
+	// override this method and provide your own custom FTPTransport subclass
+	virtual FTPTransport *createFTPTransport(const char *host, StatusReporter *statusReporter);
+
+	// we have a transport member to set as current running transport so we
+	// can ask it to terminate below, if user requests
+	FTPTransport *transport;	
+	
 public:
 	SWConfig *installConf;
 	InstallSourceMap sources;
-	void *FTPOpenSession(const char *host);
-	void FTPCloseSession(void *session);
-	char FTPURLGetFile(void *session, const char *dest, const char *sourceurl);
+	bool term;
 
-	// probably change to not expose struct ftpparse.  We probably need our
-	// own FTPFile class or something that contains things like file name,
-	// size, type (dir, file, special).  Then change to vector of this class
-	// instead of ftpparse
-	std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl);
-
-
-public:
-	InstallMgr(const char *privatePath = "./");
+	InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0);
 	virtual ~InstallMgr();
-	bool passive;
-	bool terminate;
+
 	virtual int removeModule(SWMgr *manager, const char *modName);
-	virtual int FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
+	virtual int ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
 	virtual int installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is = 0);
-	virtual int copyFileToSWORDInstall(SWMgr *manager, const char *sourceDir, const char *fName);
 	virtual void refreshRemoteSource(InstallSource *is);
-	virtual void statusUpdate(double dltotal, double dlnow);
-	virtual void preDownloadStatus(long totalBytes, long completedBytes, const char *message);
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
+	void setFTPPassive(bool passive) { this->passive = passive; }
+	void terminate() { if (transport) transport->terminate(); }
 };
 
 

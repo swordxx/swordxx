@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: utf8transliterator.h,v 1.22 2003/10/05 19:07:35 mgruner Exp $
+ * $Id$
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

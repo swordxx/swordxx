@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.8 2004/01/24 18:47:41 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swversion.h   - definition of class SWVersion used to compare version info
  *
- * $Id: swversion.h,v 1.17 2004/02/10 18:15:54 joachim Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

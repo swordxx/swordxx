@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfredletterwords.h,v 1.5 2004/03/27 09:24:35 mgruner Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

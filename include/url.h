@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.8 2004/07/20 22:48:33 scribe Exp $
+* $Id$
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: osismorph.h,v 1.3 2003/07/05 04:58:42 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swlog.h	- definition of class SWLog used for logging messages
  *
- * $Id: swlog.h,v 1.6 2004/02/06 21:01:00 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

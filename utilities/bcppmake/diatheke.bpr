@@ -4,12 +4,9 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="diatheke.exe"/>
-    <OBJFILES value="..\..\apps\console\diatheke\diatheke.obj 
-      ..\..\apps\console\diatheke\thmlcgi.obj 
-      ..\..\apps\console\diatheke\corediatheke.obj 
-      ..\..\apps\console\diatheke\diafiltmgr.obj 
-      ..\..\apps\console\diatheke\diathekemgr.obj 
-      ..\..\apps\console\diatheke\gbfcgi.obj"/>
+    <OBJFILES value="..\diatheke\diatheke.obj ..\diatheke\thmlcgi.obj 
+      ..\diatheke\corediatheke.obj ..\diatheke\diafiltmgr.obj 
+      ..\diatheke\diathekemgr.obj ..\diatheke\gbfcgi.obj ..\diatheke\osiscgi.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -24,7 +21,7 @@
       ibsmp50.bpi VCLDBX50.bpi TEEUI50.bpi TEEDB50.bpi TEE50.bpi TEEQR50.bpi 
       VCLIB50.bpi bcbie50.bpi VCLIE50.bpi INETDB50.bpi INET50.bpi NMFAST50.bpi 
       dclocx50.bpi bcb2kaxserver50.bpi"/>
-    <PATHCPP value=".;"/>
+    <PATHCPP value=".;..\diatheke"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -34,13 +31,13 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="diatheke.bpf"/>
-    <INCLUDEPATH value="..\..\apps\console\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include"/>
-    <LIBPATH value="..\..\apps\console\diatheke;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include"/>
+    <LIBPATH value="..\diatheke;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\..\apps\console\diatheke -I$(BCB)\include -I$(BCB)\include\vcl 
-      -I..\..\include -src_suffix cpp -D_DEBUG -boa"/>
+    <IDLCFLAGS value="-I..\diatheke -I$(BCB)\include -I$(BCB)\include\vcl -I..\..\include 
+      -src_suffix cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -tWC -tWM -c"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -82,14 +79,14 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=3
-Item0=..\..\apps\console\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include
-Item1=..\..\apps\console\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include\
-Item2=..\..\apps\console\diatheke;$(BCB)\include;$(BCB)\include\vcl
+Item0=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include
+Item1=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include\
+Item2=..\diatheke;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=2
-Item0=..\..\apps\console\diatheke;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\apps\console\diatheke;$(BCB)\lib\obj;$(BCB)\lib
+Item0=..\diatheke;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\diatheke;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1

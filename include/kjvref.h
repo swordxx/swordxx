@@ -1,7 +1,7 @@
 /******************************************************************************
  * kjvref.h - KJV versification used as default by Sword
  *
- * $Id: kjvref.h,v 1.1 2004/05/07 17:02:32 dglassey Exp $
+ * $Id$
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

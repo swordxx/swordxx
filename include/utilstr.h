@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.13 2004/05/07 17:55:39 dglassey Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -2,7 +2,7 @@
  *  swdisprtf.h   - definition of Class SWDispRTF-- an SWDisplay used to display
  *				a verse in Rich Text Format.
  *
- * $Id: swdisprtf.h,v 1.10 2002/07/30 11:33:17 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: compress.c,v 1.2 2002/10/07 22:28:15 scribe Exp $ */
+/* @(#) $Id$ */
 
 #include "zlib.h"
 

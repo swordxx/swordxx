@@ -1,7 +1,7 @@
 /******************************************************************************
  * apocrypha.h - Apocryphal text information to be included by VerseKey.cpp
  *
- * $Id: apocrypha.h,v 1.3 2003/05/10 00:55:43 chrislit Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilfuns.h	- utility function prototypes
  *
- * $Id: utilfuns.h,v 1.2 2003/06/01 14:32:09 joachim Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

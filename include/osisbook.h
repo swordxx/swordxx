@@ -1,7 +1,7 @@
 /******************************************************************************
  * osisbook.h - Canonical text information to be included by VerseKey2.cpp
  *
- * $Id: osisbook.h,v 1.6 2004/05/07 17:02:32 dglassey Exp $
+ * $Id$
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

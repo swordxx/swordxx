@@ -1,7 +1,7 @@
 // Include only if your UNIX compiler does not include stricmp but does include strcasecmp
 /*
  *
- * $Id: unixstr.h,v 1.4 2003/06/27 01:41:07 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

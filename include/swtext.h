@@ -2,7 +2,7 @@
  *  swtext.h   - code for base class 'SWText'.  SWText is the basis for all
  *		 types of text modules
  *
- * $Id: swtext.h,v 1.14 2003/02/28 13:12:43 mgruner Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: femain.h,v 1.3 2001/02/21 05:53:00 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

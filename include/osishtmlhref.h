@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osishtmlhref.h,v 1.11 2004/07/21 16:47:26 tbiggs Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

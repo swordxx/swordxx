@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText2'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext2.h,v 1.2 2004/05/07 17:02:32 dglassey Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

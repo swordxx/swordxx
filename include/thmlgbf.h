@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlgbf.h,v 1.7 2003/07/26 23:10:55 chrislit Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

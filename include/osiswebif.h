@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osiswebif.h,v 1.1 2003/10/24 02:43:46 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

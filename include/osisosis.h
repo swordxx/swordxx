@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisosis.h,v 1.2 2004/03/31 20:47:26 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

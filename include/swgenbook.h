@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swgenbook.h
 *
-* $Id: swgenbook.h,v 1.5 2003/03/04 22:32:55 mgruner Exp $
+* $Id$
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society

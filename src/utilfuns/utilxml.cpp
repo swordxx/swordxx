@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.cpp   - implementaion of utility classes to handle XML processing
  *
- * $Id: utilxml.cpp,v 1.18 2004/05/19 22:03:36 joachim Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -1,6 +1,6 @@
 {*
  *
- * $Id: SwordAPI.pas,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

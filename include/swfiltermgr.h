@@ -2,7 +2,7 @@
  *  swfiltermgr.h   - definition of class SWFilterMgr used as an interface to
  *				manage filters on a module
  *
- * $Id: swfiltermgr.h,v 1.3 2003/03/04 11:35:52 mgruner Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

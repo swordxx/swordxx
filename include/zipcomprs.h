@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcomprs.h   - definition of Class SWCompress used for data compression
  *
- * $Id: zipcomprs.h,v 1.4 2002/10/01 19:52:40 dglassey Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

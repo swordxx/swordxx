@@ -161,6 +161,51 @@ void FileMgr::close(FileDesc *file) {
 }
 
 
+int FileMgr::sysOpen(FileDesc *file) {
+	FileDesc **loop;
+	int openCount = 1;		// because we are presently opening 1 file, and we need to be sure to close files to accomodate, if necessary
+	
+	for (loop = &files; *loop; loop = &((*loop)->next)) {
+
+		if ((*loop)->fd > 0) {
+			if (++openCount > maxFiles) {
+				(*loop)->offset = lseek((*loop)->fd, 0, SEEK_CUR);
+				::close((*loop)->fd);
+				(*loop)->fd = -77;
+			}
+		}
+
+		if (*loop == file) {
+			if (*loop != files) {
+				*loop = (*loop)->next;
+				file->next = files;
+				files = file;
+			}
+			if ((!access(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {	// check for at least file exists / read access before we try to open
+				char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
+				for (int i = 0; i < tries; i++) {
+					if (i > 0) {
+						file->mode = (file->mode & ~O_RDWR);	// remove write access
+						file->mode = (file->mode | O_RDONLY);// add read access
+					}
+					file->fd = ::open(file->path, file->mode, file->perms);
+
+					if (file->fd >= 0)
+						break;
+				}
+
+				if (file->fd >= 0)
+					lseek(file->fd, file->offset, SEEK_SET);
+			}
+			else file->fd = -1;
+			if (!*loop)
+				break;
+		}
+	}
+	return file->fd;
+}
+
+
 // to truncate a file at its current position
 // leaving byte at current possition intact
 // deleting everything afterward.
@@ -218,51 +263,6 @@ signed char FileMgr::trunc(FileDesc *file) {
 		return -1;
 	}
 	return 0;
-}
-
-
-int FileMgr::sysOpen(FileDesc *file) {
-	FileDesc **loop;
-	int openCount = 1;		// because we are presently opening 1 file, and we need to be sure to close files to accomodate, if necessary
-	
-	for (loop = &files; *loop; loop = &((*loop)->next)) {
-
-		if ((*loop)->fd > 0) {
-			if (++openCount > maxFiles) {
-				(*loop)->offset = lseek((*loop)->fd, 0, SEEK_CUR);
-				::close((*loop)->fd);
-				(*loop)->fd = -77;
-			}
-		}
-
-		if (*loop == file) {
-			if (*loop != files) {
-				*loop = (*loop)->next;
-				file->next = files;
-				files = file;
-			}
-			if ((!access(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {	// check for at least file exists / read access before we try to open
-				char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
-				for (int i = 0; i < tries; i++) {
-					if (i > 0) {
-						file->mode = (file->mode & ~O_RDWR);	// remove write access
-						file->mode = (file->mode | O_RDONLY);// add read access
-					}
-					file->fd = ::open(file->path, file->mode, file->perms);
-
-					if (file->fd >= 0)
-						break;
-				}
-
-				if (file->fd >= 0)
-					lseek(file->fd, file->offset, SEEK_SET);
-			}
-			else file->fd = -1;
-			if (!*loop)
-				break;
-		}
-	}
-	return file->fd;
 }
 
 
@@ -435,6 +435,60 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		delete [] buf;
 	}
 	return ((len>0) || line.length());
+}
+
+
+char FileMgr::isDirectory(const char *path) {
+	struct stat stats;
+	if (stat(path, &stats))
+		return 0;
+	return ((stats.st_mode & S_IFDIR) == S_IFDIR);
+}
+
+
+int FileMgr::copyDir(const char *srcDir, const char *destDir) {
+	DIR *dir;
+	struct dirent *ent;
+	if (dir = opendir(srcDir)) {
+		rewinddir(dir);
+		while ((ent = readdir(dir))) {
+			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+				SWBuf srcPath  = (SWBuf)srcDir  + (SWBuf)"/" + ent->d_name;
+				SWBuf destPath = (SWBuf)destDir + (SWBuf)"/" + ent->d_name;
+				if (!isDirectory(srcPath.c_str())) {
+					copyFile(srcPath.c_str(), destPath.c_str());
+				}
+				else {
+					copyDir(srcPath.c_str(), destPath.c_str());
+				}
+			}
+		}
+		closedir(dir);
+	}
+	return 0;
+}
+
+
+int FileMgr::removeDir(const char *targetDir) {
+	DIR *dir = opendir(targetDir);
+	struct dirent *ent;
+	if (dir) {
+		rewinddir(dir);
+		while ((ent = readdir(dir))) {
+			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+				SWBuf targetPath = (SWBuf)targetDir + (SWBuf)"/" + ent->d_name;
+				if (!isDirectory(targetPath.c_str())) {
+					FileMgr::removeFile(targetPath.c_str());
+				}
+				else {
+					removeDir(targetPath.c_str());
+				}
+			}
+		}
+		closedir(dir);
+		removeFile(targetDir);
+	}
+	return 0;
 }
 
 

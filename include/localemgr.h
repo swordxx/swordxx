@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.18 2004/02/06 21:01:00 scribe Exp $
+ * $Id$
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
