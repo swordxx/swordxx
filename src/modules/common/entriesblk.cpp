@@ -19,7 +19,7 @@ EntriesBlock::~EntriesBlock() {
 
 
 void EntriesBlock::setCount(int count) {
-	__u32 rawCount = count;
+	__u32 rawCount = archtosword32(count);
 	memcpy(block, &rawCount, sizeof(__u32));
 }
 
@@ -27,6 +27,7 @@ void EntriesBlock::setCount(int count) {
 int EntriesBlock::getCount() {
 	__u32 count = 0;
 	memcpy(&count, block, sizeof(__u32));
+	count = swordtoarch32(count);
 	return count;
 }
 
@@ -43,14 +44,14 @@ void EntriesBlock::getMetaEntry(int index, long *offset, short *size) {
 	memcpy(&rawOffset, block + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
 	memcpy(&rawSize, block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
 
-	*offset = (long)rawOffset;
-	*size   = (short)rawSize;
+	*offset = (long)swordtoarch32(rawOffset);
+	*size   = (short)swordtoarch32(rawSize);
 }
 
 
 void EntriesBlock::setMetaEntry(int index, long offset, short size) {
-	__u32 rawOffset = (__u32)offset;
-	__u32 rawSize = (__u32)size;
+	__u32 rawOffset = archtosword32(offset);
+	__u32 rawSize = archtosword32(size);
 
 	if (index >= getCount())	// assert index < count
 		return;
@@ -127,6 +128,10 @@ void EntriesBlock::removeEntry(int entryIndex) {
 	int len = size - 1;
 	int count = getCount();
 	long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
+
+	if (!offset)	// already deleted
+		return;
+
 	// shift left to retrieve space used for old entry
 	memmove(block + offset, block + offset + size, dataSize - (offset + size));
 

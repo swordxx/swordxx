@@ -70,6 +70,7 @@ int main(int argc, char **argv) {
 					cout << "\n a - add a new entry\n";
 					cout << " p <entry_index> - print entry\n";
 					cout << " r <entry_index> - remove entry\n";
+					cout << " s - print size of raw data\n";
 					cout << " q - quit\n\n";
 					break;
 			}
