@@ -33,6 +33,9 @@
 
 int zVerse::instance = 0;
 
+const int zVerse::VERSEBLOCKS = 2;
+const int zVerse::CHAPTERBLOCKS = 3;
+const int zVerse::BOOKBLOCKS = 4;
 
 /******************************************************************************
  * zVerse Constructor - Initializes data for instance of zVerse
@@ -78,7 +81,7 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 			sprintf(buf, "%snt.rzv", path);
 			compfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
 			break;
-		case 2 :
+		case VERSEBLOCKS :
 			sprintf(buf, "%sot.vzs", path);
 			idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
 
@@ -97,7 +100,7 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 			sprintf(buf, "%snt.vzv", path);
 			compfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
 			break;
-		case 3 :
+		case CHAPTERBLOCKS :
 			sprintf(buf, "%sot.czs", path);
 			idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
 
@@ -116,7 +119,7 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 			sprintf(buf, "%snt.czv", path);
 			compfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
 			break;
-		case 4 :
+		case BOOKBLOCKS :
 			sprintf(buf, "%sot.bzs", path);
 			idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
 

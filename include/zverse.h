@@ -18,6 +18,7 @@ SWCompress *compressor;
 
 protected:
 	static int instance;	// number of instantiated RawVerse objects or derivitives
+
 	FileDesc *idxfp[2];
 	FileDesc *textfp[2];
 	FileDesc *compfp[2];
@@ -28,8 +29,11 @@ protected:
 	long ulcache;
 
 public:
+	static const int VERSEBLOCKS;
+	static const int CHAPTERBLOCKS;
+	static const int BOOKBLOCKS;
 	char nl;
-	zVerse(const char *ipath, int fileMode = O_RDONLY, int blockType = 2, SWCompress *icomp = 0);
+	zVerse(const char *ipath, int fileMode = O_RDONLY, int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0);
 	virtual ~zVerse();
 	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void swgettext(char testmt, long start, unsigned short size, char *buf);
