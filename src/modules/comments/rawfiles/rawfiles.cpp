@@ -83,7 +83,7 @@ char *RawFiles::getRawEntry() {
 
 	if (size) {
 		tmpbuf   = new char [ size + strlen(path) + 1 ];
-		strcpy(tmpbuf, path);
+		sprintf(tmpbuf,"%s/",path);
 		gettext(key->Testament(), start, size + 1, tmpbuf+strlen(tmpbuf));
 		datafile = FileMgr::systemFileMgr.open(tmpbuf, O_RDONLY|O_BINARY);
 		delete [] tmpbuf;
@@ -121,7 +121,6 @@ char *RawFiles::getRawEntry() {
  */
 
 SWModule &RawFiles::operator <<(const char *inbuf) {
-
 	FileDesc *datafile;
 	long  start;
 	unsigned short size;
@@ -143,13 +142,13 @@ SWModule &RawFiles::operator <<(const char *inbuf) {
 
 	if (size) {
 		tmpbuf   = new char [ size + strlen(path) + 1 ];
-		strcpy(tmpbuf, path);
+		sprintf(tmpbuf, "%s/", path);
 		gettext(key->Testament(), start, size + 1, tmpbuf+strlen(tmpbuf));
 	}
 	else {
 		tmpbuf   = new char [ 16 + strlen(path) + 1 ];
-		sprintf(tmpbuf, "%s%s", path, getnextfilename());
-		settext(key->Testament(), key->Index(), tmpbuf+strlen(path));
+		sprintf(tmpbuf, "%s/%s", path, getnextfilename());
+		settext(key->Testament(), key->Index(), tmpbuf+strlen(path)+1);
 	}
 	datafile = FileMgr::systemFileMgr.open(tmpbuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	delete [] tmpbuf;
@@ -260,7 +259,7 @@ char *RawFiles::getnextfilename() {
 	long number;
 	FileDesc *datafile;
 
-	sprintf(incfile, "%sincfile", path);
+	sprintf(incfile, "%s/incfile", path);
 	datafile = FileMgr::systemFileMgr.open(incfile, O_RDONLY|O_BINARY);
 	if (read(datafile->getFd(), &number, 4) != 4)
 		number = 0;
