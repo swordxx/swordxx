@@ -2,6 +2,12 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+30-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added mod2imp to export a sword module in 'imp'
+		format
+	Better entry attribute parsing in greekdef* and
+		thmlstrongs*
+
 22-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added Saulo Rodrigues e Silva's <saulo@jatai.ufg.br>
 		locale for pt_BR

@@ -4,7 +4,7 @@ LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
 mod2vpl vpl2mod stepdump step2vpl mod2zmod modwrite addvs addld emptyvss \
-txt2sword addgb imp2gbs imp2ld imp2vs thml2gbs
+txt2sword addgb imp2gbs imp2ld imp2vs mod2imp thml2gbs
 
 if ICU
 ICUPROG = normcode
@@ -39,4 +39,5 @@ addgb_SOURCES = addgb.cpp
 imp2gbs_SOURCES = imp2gbs.cpp
 imp2ld_SOURCES = imp2ld.cpp
 imp2vs_SOURCES = imp2vs.cpp
+mod2imp_SOURCES = mod2imp.cpp
 thml2gbs_SOURCES = thml2gbs.cpp

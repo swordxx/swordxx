@@ -102,7 +102,7 @@ LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
 mod2vpl vpl2mod stepdump step2vpl mod2zmod modwrite addvs addld emptyvss \
-txt2sword addgb imp2gbs imp2ld imp2vs thml2gbs\
+txt2sword addgb imp2gbs imp2ld imp2vs mod2imp thml2gbs\
 $(ICUPROG)
 
 @ICU_TRUE@ICUPROG = normcode
@@ -131,6 +131,7 @@ addgb_SOURCES = addgb.cpp
 imp2gbs_SOURCES = imp2gbs.cpp
 imp2ld_SOURCES = imp2ld.cpp
 imp2vs_SOURCES = imp2vs.cpp
+mod2imp_SOURCES = mod2imp.cpp
 thml2gbs_SOURCES = thml2gbs.cpp
 subdir = utilities
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -143,7 +144,7 @@ CONFIG_CLEAN_FILES =
 @ICU_TRUE@	modwrite$(EXEEXT) addvs$(EXEEXT) addld$(EXEEXT) \
 @ICU_TRUE@	emptyvss$(EXEEXT) txt2sword$(EXEEXT) addgb$(EXEEXT) \
 @ICU_TRUE@	imp2gbs$(EXEEXT) imp2ld$(EXEEXT) imp2vs$(EXEEXT) \
-@ICU_TRUE@	thml2gbs$(EXEEXT) normcode$(EXEEXT)
+@ICU_TRUE@	mod2imp$(EXEEXT) thml2gbs$(EXEEXT) normcode$(EXEEXT)
 @ICU_FALSE@noinst_PROGRAMS = cipherraw$(EXEEXT) ciphertest$(EXEEXT) \
 @ICU_FALSE@	ciphertest2$(EXEEXT) lexdump$(EXEEXT) \
 @ICU_FALSE@	mkfastmod$(EXEEXT) mod2vpl$(EXEEXT) vpl2mod$(EXEEXT) \
@@ -151,7 +152,7 @@ CONFIG_CLEAN_FILES =
 @ICU_FALSE@	mod2zmod$(EXEEXT) modwrite$(EXEEXT) addvs$(EXEEXT) \
 @ICU_FALSE@	addld$(EXEEXT) emptyvss$(EXEEXT) txt2sword$(EXEEXT) \
 @ICU_FALSE@	addgb$(EXEEXT) imp2gbs$(EXEEXT) imp2ld$(EXEEXT) \
-@ICU_FALSE@	imp2vs$(EXEEXT) thml2gbs$(EXEEXT)
+@ICU_FALSE@	imp2vs$(EXEEXT) mod2imp$(EXEEXT) thml2gbs$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_addgb_OBJECTS = addgb.$(OBJEXT)
@@ -213,6 +214,11 @@ mkfastmod_OBJECTS = $(am_mkfastmod_OBJECTS)
 mkfastmod_LDADD = $(LDADD)
 mkfastmod_DEPENDENCIES =
 mkfastmod_LDFLAGS =
+am_mod2imp_OBJECTS = mod2imp.$(OBJEXT)
+mod2imp_OBJECTS = $(am_mod2imp_OBJECTS)
+mod2imp_LDADD = $(LDADD)
+mod2imp_DEPENDENCIES =
+mod2imp_LDFLAGS =
 am_mod2vpl_OBJECTS = mod2vpl.$(OBJEXT)
 mod2vpl_OBJECTS = $(am_mod2vpl_OBJECTS)
 mod2vpl_LDADD = $(LDADD)
@@ -272,11 +278,12 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/ciphertest2.Po ./$(DEPDIR)/emptyvss.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/imp2gbs.Po ./$(DEPDIR)/imp2ld.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/imp2vs.Po ./$(DEPDIR)/lexdump.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/mkfastmod.Po ./$(DEPDIR)/mod2vpl.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/mod2zmod.Po ./$(DEPDIR)/modwrite.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/normcode.Po ./$(DEPDIR)/step2vpl.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/stepdump.Po ./$(DEPDIR)/thml2gbs.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/txt2sword.Po ./$(DEPDIR)/vpl2mod.Po
+@AMDEP_TRUE@	./$(DEPDIR)/mkfastmod.Po ./$(DEPDIR)/mod2imp.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/mod2vpl.Po ./$(DEPDIR)/mod2zmod.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/modwrite.Po ./$(DEPDIR)/normcode.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/step2vpl.Po ./$(DEPDIR)/stepdump.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/thml2gbs.Po ./$(DEPDIR)/txt2sword.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/vpl2mod.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -298,12 +305,12 @@ DIST_SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) \
 	$(cipherraw_SOURCES) $(ciphertest_SOURCES) \
 	$(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) \
 	$(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) \
-	$(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) \
-	$(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) \
-	$(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) \
-	$(vpl2mod_SOURCES)
+	$(mkfastmod_SOURCES) $(mod2imp_SOURCES) $(mod2vpl_SOURCES) \
+	$(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) \
+	$(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) \
+	$(txt2sword_SOURCES) $(vpl2mod_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
+SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2imp_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
 
 all: all-am
 
@@ -362,6 +369,9 @@ lexdump$(EXEEXT): $(lexdump_OBJECTS) $(lexdump_DEPENDENCIES)
 mkfastmod$(EXEEXT): $(mkfastmod_OBJECTS) $(mkfastmod_DEPENDENCIES) 
 	@rm -f mkfastmod$(EXEEXT)
 	$(CXXLINK) $(mkfastmod_LDFLAGS) $(mkfastmod_OBJECTS) $(mkfastmod_LDADD) $(LIBS)
+mod2imp$(EXEEXT): $(mod2imp_OBJECTS) $(mod2imp_DEPENDENCIES) 
+	@rm -f mod2imp$(EXEEXT)
+	$(CXXLINK) $(mod2imp_LDFLAGS) $(mod2imp_OBJECTS) $(mod2imp_LDADD) $(LIBS)
 mod2vpl$(EXEEXT): $(mod2vpl_OBJECTS) $(mod2vpl_DEPENDENCIES) 
 	@rm -f mod2vpl$(EXEEXT)
 	$(CXXLINK) $(mod2vpl_LDFLAGS) $(mod2vpl_OBJECTS) $(mod2vpl_LDADD) $(LIBS)
@@ -408,6 +418,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imp2vs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lexdump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mkfastmod.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod2imp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod2vpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod2zmod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modwrite.Po@am__quote@
