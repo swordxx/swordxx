@@ -19,10 +19,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	Added Visual C++ 6.0 project to build DLL in apps/windoze/vc/Sword
 
 18-Jan-2001	Joachim Ansorg <jansorg@gmx.de>
-	RawText::Search: Do not check for a valid key if we don't use a scope,
-	this speeds up the normal search of indexed modules
-	(IMHO a lot for large result sets)
-
+	RawText::Search: Do not check for a valid key if we don't use a
+		scope, this speeds up the normal search of indexed modules
+		(IMHO a lot for large result sets)
 	Updated examples/cmdline/threaded_search.cpp
 
 14-Jan-2001	Joachim Ansorg <jansorg@gmx.de>
