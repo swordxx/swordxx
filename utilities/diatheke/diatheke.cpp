@@ -22,7 +22,7 @@ void printsyntax() {
 	fprintf (stderr, "Copyright 1999-2002 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "usage: \n  ");
-	fprintf (stderr, "diatheke <-b book> [-s search_type] [-o option_filters]\n");
+ 	fprintf (stderr, "diatheke <-b book> [-s search_type] [-r search_range] [-o option_filters]\n");
 	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-l locale]\n");
 	fprintf (stderr, "[-e output_encoding] [-t script] [-v variant#(-1=all|0|1)]\n");
 	fprintf (stderr, "<-k query_key>\n");
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	int maxverses = -1;
 	unsigned char outputformat = FMT_PLAIN, searchtype = ST_NONE, outputencoding = ENC_UTF8;
 	unsigned long optionfilters = OP_NONE;
-	char *text = 0, *locale = 0, *ref = 0, *script = 0;
+ 	char *text = 0, *locale = 0, *ref = 0, *script = 0, *range = 0;
 	signed short variants = 0;
 	
 	char runquery = 0; // used to check that we have enough arguments to perform a legal query
@@ -81,6 +81,12 @@ int main(int argc, char **argv)
 				else i++;
 			}
 		}
+ 		else if (!stricmp("-r", argv[i])) {
+ 			if (i+1 <= argc) {
+ 				range = argv[i+1];
+ 				i++;
+ 			}	
+ 		}
 		else if (!stricmp("-l", argv[i])) {
 			if (i+1 <= argc) {
 				locale = argv[i+1];
@@ -206,12 +212,10 @@ int main(int argc, char **argv)
 	}
 	
 	
-	if (runquery == (RQ_BOOK | RQ_REF))
-	{
-	    doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, text, locale, ref, &cout, script, variants);
+	if (runquery == (RQ_BOOK | RQ_REF)) {
+ 	    doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, range, text, locale, ref, &cout, script, variants);
 	}
-	else
-		printsyntax();
+	else printsyntax();
 
 	return 0;
 }

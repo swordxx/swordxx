@@ -10,7 +10,7 @@ $diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line progr
 #$sword_path = "C:\\Program Files\\CrossWire\\The SWORD Project";  # SWORD_PATH environment variable you want to use
 #$diatheke = "$sword_path\\diatheke.exe";  # location of diatheke command line program
 
-$cgiurl = "http:\/\/bible.gotjesus.org\/cgi-bin";
+$cgiurl = "http:\/\/www.crosswire.org\/cgi-bin";
 
 $scriptname = "diatheke.pl";
 $defaultfontface = "Times New Roman, Times, Roman, serif"; # default font name
@@ -77,7 +77,7 @@ $palm = 0;
 $latinxlit = "";
 
 $optionfilters = "";
-$debug=0;
+$debug=1;
 foreach $i (@values) {
     ($varname, $mydata) = split(/=/,$i);
     if ($varname ne "Submit" && $varname ne "lookup") {
@@ -88,6 +88,12 @@ foreach $i (@values) {
 	}
 	elsif ($varname eq "search" && $mydata ne "" && $mydata ne "off") {
 	    $search = "-s $mydata";
+	}
+	elsif ($varname eq "range" && $mydata ne "" && $mydata ne "off") {
+	    $range = $mydata;
+	    $range =~ tr/+/ /;
+	    $range =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+	    $range = "-r \"$range\"";
 	}
 
 	elsif ($varname eq "strongs") {
@@ -178,7 +184,25 @@ if ($verse eq "") {
   <input type="radio" name="search" value="phrase" /><font face="Arial, Helvetica, sans-serif">Phrase Search</font><br />
   <input type="radio" name="search" value="multiword" /><font face="Arial, Helvetica, sans-serif">Multiple Word Search</font><br />
   <input type="radio" name="search" value="regex" /><font face="Arial, Helvetica, sans-serif">Regular Expression Search</font><br />
+<br />
   <table width="100%" border="0">
+    <tr> 
+      <td colspan="2" width="100%"> 
+
+      <table>
+      <tr>
+        <td> 
+          <font size="-1" face="Arial, Helvetica, sans-serif">Custom Range Restriction</font>
+        </td>
+        <td> 
+          <input type="text" name="range" size="20">
+        </td>
+      </tr>
+      </table>
+
+      </td>
+    </tr>
+
     <tr> 
       <td width="50%"> 
         <input type="checkbox" name="strongs" value="on" checked>
@@ -407,10 +431,10 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
-    $line = "$diatheke $search $optionfilters $latinxlit -l $locale -m $maxverses -f cgi -b $versions[$i] -k \"$verse\" $err";
+    $line = "$diatheke $search $range $optionfilters $latinxlit -l $locale -m $maxverses -f cgi -b $versions[$i] -k \"$verse\" $err";
 
     if ($debug) {
-	print "command line: $line\n<br />";
+	print "<br /><i>command line: $line\n</i><br /><br />";
     }
     $line = `$line`;
 

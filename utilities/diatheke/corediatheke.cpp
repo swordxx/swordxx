@@ -79,7 +79,7 @@ void systemquery(const char * key, ostream* output){
 	}
 }
 
-void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) { 
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) { 
 	static DiathekeMgr manager;
 
 	ModMap::iterator it;
@@ -228,7 +228,12 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	        *output << ref;
 		*output << "\"-- ";
 
-		listkey = target->Search(ref, st, REG_ICASE);
+ 		if (range) {
+ 			VerseKey parser;
+ 			ListKey scope = parser.ParseVerseList(range, parser, true);
+ 			listkey = target->Search(ref, st, REG_ICASE, &scope);
+ 		}
+ 		else listkey = target->Search(ref, st, REG_ICASE);
 		
 		if (strlen((const char*)listkey)) {
 		  if (!listkey.Error()) {
