@@ -251,7 +251,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
                 char *subverseBuf = new char[str.length()+1];
                 strcpy(subverseBuf, str.c_str());
 		str = deleteSubverses(subverseBuf);
-                delete subverseBuf;
+                delete []subverseBuf;
 
 		*currentVerse = str.c_str();
 
