@@ -189,7 +189,8 @@ void zText::increment(int steps) {
 
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
-				&& (start > 0) && (size))	// and we actually have a size
+//				&& (start > 0)
+				&& (size))	// and we actually have a size
 				||(!skipConsecutiveLinks)) {	// or we don't want to skip consecutive links
 			steps += (steps < 0) ? 1 : -1;
 			lastgood = *tmpkey;
