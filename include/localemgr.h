@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.7 2001/03/23 22:15:14 jansorg Exp $
+ * $Id: localemgr.h,v 1.8 2001/06/24 01:30:33 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,7 +31,7 @@
 
 #include <defs.h>
 
-// using namespace std;
+using namespace std;
 
 typedef map < string, SWLocale *, less < string > >LocaleMap;
 
