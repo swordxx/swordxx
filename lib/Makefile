@@ -103,7 +103,7 @@ VERSION = 1.5.3
 am__include = include
 am__quote = 
 dir_confdef = no
-enable_debug = yes
+enable_debug = no
 enable_profile = no
 enable_vcl = no
 install_sh = /space/home/scribe/src/sword/install-sh
@@ -665,7 +665,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -g -O0 -Werror
+CFLAGS = -g -O2
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -674,7 +674,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O0 -Werror
+CXXFLAGS = -g -O2
 DIST_SOURCES = $(libsword_la_SOURCES)
 HEADERS = $(pkginclude_HEADERS)
 

@@ -81,7 +81,7 @@ VERSION = 1.5.3
 am__include = include
 am__quote = 
 dir_confdef = no
-enable_debug = yes
+enable_debug = no
 enable_profile = no
 enable_vcl = no
 install_sh = /space/home/scribe/src/sword/install-sh
@@ -122,7 +122,7 @@ need_local_regex := no
 buildvcl := no
 
 # Debugging options etc...
-debug := yes
+debug := no
 profile := no
 
 
@@ -196,7 +196,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O0 -Werror
+CXXFLAGS = -g -O2
 DIST_SOURCES = $(testlib_SOURCES)
 DATA = $(sysconf_DATA)
 

@@ -79,7 +79,7 @@ VERSION = 1.5.3
 am__include = include
 am__quote = 
 dir_confdef = no
-enable_debug = yes
+enable_debug = no
 enable_profile = no
 enable_vcl = no
 install_sh = /space/home/scribe/src/sword/install-sh
@@ -141,7 +141,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O0 -Werror
+CXXFLAGS = -g -O2
 DIST_SOURCES = $(lookup_SOURCES) $(search_SOURCES) \
 	$(threaded_search_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
