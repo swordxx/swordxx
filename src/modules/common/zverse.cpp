@@ -274,8 +274,9 @@ void zVerse::zreadtext(char testmt, long start, unsigned short size, char *inbuf
  *      len     - length of buffer (0 - null terminated)
  */
 
-void zVerse::settext(char testmt, long idxoff, const char *buf, long len)
-{
+void zVerse::settext(char testmt, long idxoff, const char *buf, long len) {
+
+	len = (len < 0) ? strlen(buf) : len;
 	if (!testmt) 
 		testmt = ((idxfp[0]) ? 1:2);
 	if ((!dirtyCache) || (cacheBufIdx < 0)) {
@@ -283,9 +284,9 @@ void zVerse::settext(char testmt, long idxoff, const char *buf, long len)
 		cacheTestament = testmt;
 		if (cacheBuf)
 			free(cacheBuf);
-		cacheBuf = (char *)calloc(len ? len : strlen(buf)+1, 1);
+		cacheBuf = (char *)calloc(len + 1, 1);
 	}
-	else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, strlen(cacheBuf)+(len ? len : strlen(buf)+1)):calloc((len ? len : strlen(buf)+1), 1));
+	else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, strlen(cacheBuf)+(len + 1)):calloc((len + 1), 1));
 
 	dirtyCache = true;
 
@@ -295,7 +296,7 @@ void zVerse::settext(char testmt, long idxoff, const char *buf, long len)
 	unsigned short outsize;
 
 	idxoff *= 10;
-	size = outsize = len ? len : strlen(buf);
+	size = outsize = len;
 
 	start = strlen(cacheBuf);
 

@@ -2,7 +2,7 @@
  *  zld.cpp - code for class 'zLD'- a module that reads compressed lexicon and
  *				dictionary files.
  *
- * $Id: zld.h,v 1.4 2002/03/16 04:18:34 scribe Exp $
+ * $Id: zld.h,v 1.5 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,10 +28,10 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT zLD:public zStr, public SWLD {
+class SWDLLEXPORT zLD : public zStr, public SWLD {
 
-	void strongsPad (char *buf);
-	char getEntry (long away = 0);
+	void strongsPad(char *buf);
+	char getEntry(long away = 0);
 
 public:
 
@@ -41,26 +41,31 @@ public:
 	virtual ~zLD();
 	virtual char *getRawEntry();
 
-	virtual SWModule & operator =(SW_POSITION pos);
-	virtual SWModule & operator +=(int increment);
-	virtual SWModule & operator -=(int decrement) {
-		return this->operator +=(-decrement);
-	}
+	virtual void increment(int steps = 1);
+	virtual void decrement(int steps = 1) { increment(-steps); }
+
 	// write interface ----------------------------
-	virtual bool isWritable () { return ((idxfd->getFd() > 0) && ((idxfd->mode & O_RDWR) == O_RDWR)); }
-	static char createModule (const char *path) {
-		return zStr::createModule (path);
+	virtual bool isWritable() {
+		return ((idxfd->getFd() > 0) && ((idxfd->mode & O_RDWR) == O_RDWR));
+	}
+	static char createModule(const char *path) {
+		return zStr::createModule(path);
 	}
 
-	virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
-	virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
-	virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
-	virtual void deleteEntry ();	// Delete current module entry
+	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
+	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry
+	virtual void deleteEntry();	// Delete current module entry
 	// end write interface ------------------------
   
 	// swcacher interface ----------------------
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
+
+
+	// OPERATORS -----------------------------------------------------------------
+	
+	SWMODULE_OPERATORS
+
 };
 
 

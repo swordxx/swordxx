@@ -44,7 +44,7 @@ RawCom::~RawCom()
 
 
 /******************************************************************************
- * RawCom::operator char *	- Returns the correct verse when char * cast
+ * RawCom::getRawEntry()	- Returns the correct verse when char * cast
  *					is requested
  *
  * RET: string buffer with verse
@@ -55,14 +55,10 @@ char *RawCom::getRawEntry() {
 	unsigned short size = 0;
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -94,49 +90,40 @@ char *RawCom::getRawEntry() {
 
 
 /******************************************************************************
- * RawCom::operator +=	- Increments module key a number of entries
+ * RawCom::increment	- Increments module key a number of entries
  *
- * ENT:	increment	- Number of entries to jump forward
+ * ENT:	steps	- Number of entries to jump forward
  *
  * RET: *this
  */
 
-SWModule &RawCom::operator +=(int increment)
-{
+void RawCom::increment(int steps) {
 	long  start;
 	unsigned short size;
 	VerseKey *tmpkey = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!tmpkey)
 		tmpkey = new VerseKey(key);
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
-	while (increment) {
+	while (steps) {
 		long laststart = start;
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
-		(increment > 0) ? (*key)++ : (*key)--;
+		(steps > 0) ? (*key)++ : (*key)--;
 		if (tmpkey != key)
 			delete tmpkey;
 		tmpkey = 0;
-#ifndef _WIN32_WCE
 		try {
-#endif
 			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-#ifndef _WIN32_WCE
 		}
 		catch ( ... ) {}
-#endif
 		if (!tmpkey)
 			tmpkey = new VerseKey(key);
 
@@ -147,7 +134,7 @@ SWModule &RawCom::operator +=(int increment)
 		long index = tmpkey->Index();
 		findoffset(tmpkey->Testament(), index, &start, &size);
 		if ((((laststart != start) || (lastsize != size))||(!skipConsecutiveLinks)) && (start >= 0) && (size)) {
-			increment += (increment < 0) ? 1 : -1;
+			steps += (steps < 0) ? 1 : -1;
 			lastgood = *tmpkey;
 		}
 	}
@@ -155,21 +142,16 @@ SWModule &RawCom::operator +=(int increment)
 
 	if (tmpkey != key)
 		delete tmpkey;
-
-	return *this;
 }
 
-SWModule &RawCom::setentry(const char *inbuf, long len) {
+
+void RawCom::setEntry(const char *inbuf, long len) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -178,59 +160,26 @@ SWModule &RawCom::setentry(const char *inbuf, long len) {
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
-
-	return *this;
-}
-
-SWModule &RawCom::operator <<(const char *inbuf) {
-	VerseKey *key = 0;
-	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
-	try {
-#endif
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
-	}
-	catch ( ... ) {}
-#endif
-	// if we don't have a VerseKey * decendant, create our own
-	if (!key)
-		key = new VerseKey(this->key);
-
-	settext(key->Testament(), key->Index(), inbuf);
-
-	if (this->key != key) // free our key if we created a VerseKey
-		delete key;
-
-	return *this;
 }
 
 
-SWModule &RawCom::operator <<(const SWKey *inkey) {
+void RawCom::linkEntry(const SWKey *inkey) {
 	VerseKey *destkey = 0;
 	const VerseKey *srckey = 0;
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!destkey)
 		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		srckey = SWDYNAMIC_CAST(VerseKey, inkey);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
 		srckey = new VerseKey(inkey);
@@ -242,8 +191,6 @@ SWModule &RawCom::operator <<(const SWKey *inkey) {
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
-
-	return *this;
 }
 
 
@@ -257,14 +204,10 @@ void RawCom::deleteEntry() {
 
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!key)
 		key = new VerseKey(this->key);
 

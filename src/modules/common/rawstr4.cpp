@@ -93,8 +93,7 @@ RawStr4::~RawStr4()
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr4::getidxbufdat(long ioffset, char **buf)
-{
+void RawStr4::getidxbufdat(long ioffset, char **buf) {
 	int size;
 	char ch;
 	if (datfd > 0) {
@@ -158,19 +157,20 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
  *		away		- number of entries before of after to jump
  *					(default = 0)
  *
- * RET: error status
+ * RET: error status -1 general error; -2 new file
  */
 
 signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
 {
 	char *trybuf, *targetbuf, *key, quitflag = 0;
-        signed char retval = 0;
+        signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
+		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 8;
+		retval = (tailoff >= 0) ? 0 : -2;	// if NOT new file
 		if (*ikey) {
 			headoff = 0;
-			tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 8;
 
 			key = new char [ strlen(ikey) + 1 ];
 			strcpy(key, ikey);
@@ -389,8 +389,7 @@ void RawStr4::readtext(long istart, unsigned long isize, char *idxbuf, char *buf
  *      len     - length of buffer (0 - null terminated)
  */
 
-void RawStr4::settext(const char *ikey, const char *buf, long len)
-{
+void RawStr4::setText(const char *ikey, const char *buf, long len) {
 
 	long start, outstart;
 	long idxoff;
@@ -406,17 +405,21 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 	char *outbuf = 0;
 	char *ch = 0;
 
-	findoffset(ikey, &start, &size, 0, &idxoff);
+	char errorStatus = findoffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
 	toupperstr(key);
 
+	len = (len < 0) ? strlen(buf) : len;
 	getidxbufdat(start, &dbKey);
 
 	if (strcmp(key, dbKey) < 0) {
 	}
 	else if (strcmp(key, dbKey) > 0) {
-		idxoff += 8;
-	} else if ((!strcmp(key, dbKey)) && (len || strlen(buf) /*we're not deleting*/)) { // got absolute entry
+		if (errorStatus != -2)	// not a new file
+			idxoff += 8;
+		else idxoff = 0;
+	}
+	else if ((!strcmp(key, dbKey)) && (len>0/*we're not deleting*/)) { // got absolute entry
 		do {
 			tmpbuf = new char [ size + 2 ];
 			memset(tmpbuf, 0, size + 2);
@@ -432,7 +435,7 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 			memmove(tmpbuf, ch, size - (unsigned long)(ch-tmpbuf));
 
 			// resolve link
-			if (!strncmp(tmpbuf, "@LINK", 5) && (len ? len : strlen(buf))) {
+			if (!strncmp(tmpbuf, "@LINK", 5) && (len > 0)) {
 				for (ch = tmpbuf; *ch; ch++) {		// null before nl
 					if (*ch == 10) {
 						*ch = 0;
@@ -456,11 +459,11 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 		read(idxfd->getFd(), idxBytes, shiftSize);
 	}
 
-	outbuf = new char [ (len ? len : strlen(buf)) + strlen(key) + 5 ];
+	outbuf = new char [ len + strlen(key) + 5 ];
 	sprintf(outbuf, "%s%c%c", key, 13, 10);
 	size = strlen(outbuf);
-	memcpy (outbuf + size, buf, len ? len : strlen(buf));
-	size = outsize = size + (len ? len : strlen(buf));
+	memcpy(outbuf + size, buf, len);
+	size = outsize = size + len;
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
 
@@ -468,7 +471,7 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 	outsize  = archtosword32(size);
 
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
-	if (len ? len : strlen(buf)) {
+	if (len>0) {
 		lseek(datfd->getFd(), start, SEEK_SET);
 		write(datfd->getFd(), outbuf, (long)size);
 
@@ -508,7 +511,7 @@ void RawStr4::settext(const char *ikey, const char *buf, long len)
 void RawStr4::linkentry(const char *destkey, const char *srckey) {
 	char *text = new char [ strlen(destkey) + 7 ];
 	sprintf(text, "@LINK %s", destkey);
-	settext(srckey, text);
+	setText(srckey, text);
 	delete [] text;
 }
 

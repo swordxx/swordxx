@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 	  vkey->Verse(0);
 	  *mod -= backstep;       
 	  
-	  mod->setentry(entbuffer, strlen(entbuffer));
+	  mod->setEntry(entbuffer, strlen(entbuffer));
 	}
 	else {
 	  ListKey listkey = vkey->ParseVerseList(keybuffer, "Gen1:1", true);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 		havefirst = true;
 		firstverse = mod->Key();
 		
-		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+		mod->setEntry(entbuffer, strlen(entbuffer));
 		std::cout << "f" << (const char*)firstverse << std::endl;
 		(mod->Key())++;
 	      }
@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
 		havefirst = true;
 		firstverse = mod->Key();
 		
-		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+		mod->setEntry(entbuffer, strlen(entbuffer));
 		std::cout << "f" << (const char*)firstverse << std::endl;
 	      }
 	    }
@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
       vkey->Verse(0);
       *mod -= backstep;       
       
-      mod->setentry(entbuffer, strlen(entbuffer));
+      mod->setEntry(entbuffer, strlen(entbuffer));
     }
     else {
       ListKey listkey = vkey->ParseVerseList(keybuffer, "Gen1:1", true);
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
 	    havefirst = true;
 	    firstverse = mod->Key();
 	    
-	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+	    ((SWModule*)mod)->setEntry(entbuffer, strlen(entbuffer));
 	    std::cout << "f" << (const char*)firstverse << std::endl;
 	    (mod->Key())++;
 	  }
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
 	else {
 	  if (havefirst) {
 	    mod->Key(*listkey.GetElement(i));
-	    *(SWModule*)mod << &firstverse;
+	    *mod << &firstverse;
 	    std::cout << (const char*)mod->Key() << std::endl;
 	  }
 	  else {
@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
 	    havefirst = true;
 	    firstverse = mod->Key();
 	    
-	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
+	    mod->setEntry(entbuffer, strlen(entbuffer));
 	    std::cout << "f" << (const char*)firstverse << std::endl;
 	  }
 	}

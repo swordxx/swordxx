@@ -28,8 +28,7 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
  *	unicode  - if this module is unicode
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char* imodlang)
-{
+SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char* imodlang) {
 	key       = CreateKey();
 	entrybuf  = new char [1];
 	*entrybuf = 0;
@@ -310,15 +309,14 @@ const char *SWModule::KeyText(const char *ikeytext)
 
 
 /******************************************************************************
- * SWModule::operator =(SW_POSITION)	- Positions this modules to an entry
+ * SWModule::setPosition(SW_POSITION)	- Positions this modules to an entry
  *
  * ENT:	p	- position (e.g. TOP, BOTTOM)
  *
  * RET: *this
  */
 
-SWModule &SWModule::operator =(SW_POSITION p)
-{
+void SWModule::setPosition(SW_POSITION p) {
 	*key = p;
 	char saveError = key->Error();
 
@@ -335,41 +333,34 @@ SWModule &SWModule::operator =(SW_POSITION p)
 	}
 
 	error = saveError;
-	return *this;
 }
 
 
 /******************************************************************************
- * SWModule::operator +=	- Increments module key a number of entries
+ * SWModule::increment	- Increments module key a number of entries
  *
  * ENT:	increment	- Number of entries to jump forward
  *
  * RET: *this
  */
 
-SWModule &SWModule::operator +=(int increment)
-{
-	(*key) += increment;
+void SWModule::increment(int steps) {
+	(*key) += steps;
 	error = key->Error();
-
-	return *this;
 }
 
 
 /******************************************************************************
- * SWModule::operator -=	- Decrements module key a number of entries
+ * SWModule::decrement	- Decrements module key a number of entries
  *
  * ENT:	decrement	- Number of entries to jump backward
  *
  * RET: *this
  */
 
-SWModule &SWModule::operator -=(int increment)
-{
-	(*key) -= increment;
+void SWModule::decrement(int steps) {
+	(*key) -= steps;
 	error = key->Error();
-
-	return *this;
 }
 
 
@@ -656,11 +647,6 @@ const char *SWModule::StripText(SWKey *tmpKey)
 		delete savekey;
 
 	return retVal;
-}
-
-
-SWModule::operator const char*() {
-	return RenderText();
 }
 
 

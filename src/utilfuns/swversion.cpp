@@ -57,7 +57,7 @@ int SWVersion::compare(const SWVersion &vi) const {
 }
 
 
-SWVersion::operator const char *() const {
+const char *SWVersion::getText() const {
 
 	// 255 is safe because there is no way 4 integers (plus 3 '.'s) can have
 	// a string representation that will overrun this buffer

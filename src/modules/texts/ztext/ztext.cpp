@@ -106,14 +106,10 @@ char *zText::getRawEntry()
 	//printf ("zText char *\n");
 
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -171,17 +167,13 @@ bool zText::sameBlock(VerseKey *k1, VerseKey *k2) {
 }
 
 
-SWModule &zText::setentry(const char *inbuf, long len) {
+void zText::setEntry(const char *inbuf, long len) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -201,41 +193,27 @@ SWModule &zText::setentry(const char *inbuf, long len) {
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
-
-	return *this;
-}
-
-SWModule &zText::operator <<(const char *inbuf) {
-        return setentry(inbuf, 0);
 }
 
 
-SWModule &zText::operator <<(const SWKey *inkey) {
+void zText::linkEntry(const SWKey *inkey) {
 	VerseKey *destkey = 0;
 	const VerseKey *srckey = 0;
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!destkey)
 		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		srckey = (const VerseKey *) SWDYNAMIC_CAST(VerseKey, inkey);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {
 	}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
 		srckey = new VerseKey(inkey);
@@ -247,29 +225,22 @@ SWModule &zText::operator <<(const SWKey *inkey) {
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
-
-	return *this;
 }
 
 
 /******************************************************************************
  * zFiles::deleteEntry	- deletes this entry
  *
- * RET: *this
  */
 
 void zText::deleteEntry() {
 
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -281,49 +252,39 @@ void zText::deleteEntry() {
 
 
 /******************************************************************************
- * zText::operator +=	- Increments module key a number of entries
+ * zText::increment	- Increments module key a number of entries
  *
  * ENT:	increment	- Number of entries to jump forward
  *
- * RET: *this
  */
 
-SWModule &zText::operator +=(int increment)
-{
+void zText::increment(int steps) {
 	long  start;
 	unsigned short size;
 	VerseKey *tmpkey = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!tmpkey)
 		tmpkey = new VerseKey(key);
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
-	while (increment) {
+	while (steps) {
 		long laststart = start;
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
-		(increment > 0) ? (*key)++ : (*key)--;
+		(steps > 0) ? (*key)++ : (*key)--;
 		if (tmpkey != key)
 			delete tmpkey;
 		tmpkey = 0;
-#ifndef _WIN32_WCE
 		try {
-#endif
 			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-#ifndef _WIN32_WCE
 		}
 		catch ( ... ) {}
-#endif
 		if (!tmpkey)
 			tmpkey = new VerseKey(key);
 
@@ -334,7 +295,7 @@ SWModule &zText::operator +=(int increment)
 		long index = tmpkey->Index();
 		findoffset(tmpkey->Testament(), index, &start, &size);
 		if ((((laststart != start) || (lastsize != size))||(!skipConsecutiveLinks)) && (start >= 0) && (size)) {
-			increment += (increment < 0) ? 1 : -1;
+			steps += (steps < 0) ? 1 : -1;
 			lastgood = *tmpkey;
 		}
 	}
@@ -342,6 +303,4 @@ SWModule &zText::operator +=(int increment)
 
 	if (tmpkey != key)
 		delete tmpkey;
-
-	return *this;
 }

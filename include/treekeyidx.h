@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.h,v 1.2 2002/04/15 21:26:44 scribe Exp $
+ * $Id: treekeyidx.h,v 1.3 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -94,10 +94,15 @@ public:
 	virtual void copyFrom(const TreeKeyIdx &ikey);
 	virtual void copyFrom(const SWKey & ikey);
 
-	virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
 	void setOffset(unsigned long offset);
 	unsigned long getOffset() const;
 
+
+
+	// OPERATORS ------------------------------------------------------------
+
+
+	virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
 	SWKEY_OPERATORS
 
 	virtual void setText(const char *ikey);

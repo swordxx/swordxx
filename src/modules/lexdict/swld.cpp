@@ -53,3 +53,24 @@ const char *SWLD::KeyText(const char *ikeytext)
 	else return SWModule::KeyText(ikeytext);
 }
 
+
+/******************************************************************************
+ * SWLD::setPosition(SW_POSITION)	- Positions this key if applicable
+ */
+
+void SWLD::setPosition(SW_POSITION p) {
+	if (!key->Traversable()) {
+		switch (p) {
+		case POS_TOP:
+			*key = "";
+			break;
+		case POS_BOTTOM:
+			*key = "zzzzzzzzz";
+			break;
+		} 
+	}
+	else	*key = p;
+	getRawEntry();
+}
+
+

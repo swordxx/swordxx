@@ -114,7 +114,7 @@ char RawLD::getEntry(long away)
 
 
 /******************************************************************************
- * RawLD::operator char *	- Returns the correct entry when char * cast
+ * RawLD::getRawEntry	- Returns the correct entry when char * cast
  *							is requested
  *
  * RET: string buffer with entry
@@ -130,66 +130,35 @@ char *RawLD::getRawEntry() {
 
 
 /******************************************************************************
- * RawLD::operator +=	- Increments module key a number of entries
+ * RawLD::increment	- Increments module key a number of entries
  *
  * ENT:	increment	- Number of entries to jump forward
  *
  * RET: *this
  */
 
-SWModule &RawLD::operator +=(int increment)
-{
+void RawLD::increment(int steps) {
 	char tmperror;
 
 	if (key->Traversable()) {
-		*key += increment;
+		*key += steps;
 		error = key->Error();
-		increment = 0;
+		steps = 0;
 	}
 	
-	tmperror = (getEntry(increment)) ? KEYERR_OUTOFBOUNDS : 0;
+	tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
 	error = (error)?error:tmperror;
 	*key = entkeytxt;
-	return *this;
 }
 
 
-/******************************************************************************
- * RawLD::operator =(SW_POSITION)	- Positions this key if applicable
- */
-
-SWModule &RawLD::operator =(SW_POSITION p)
-{
-	if (!key->Traversable()) {
-		switch (p) {
-		case POS_TOP:
-			*key = "";
-			break;
-		case POS_BOTTOM:
-			*key = "zzzzzzzzz";
-			break;
-		} 
-	}
-	else	*key = p;
-	return *this;
-}
-
-
-SWModule &RawLD::setentry(const char *inbuf, long len) {
+void RawLD::setEntry(const char *inbuf, long len) {
 	settext(*key, inbuf, len);
-
-	return *this;
-}
-
-SWModule &RawLD::operator <<(const char *inbuf) {
-	return setentry(inbuf, 0);
 }
 
 
-SWModule &RawLD::operator <<(const SWKey *inkey) {
+void RawLD::linkEntry(const SWKey *inkey) {
 	linkentry(*key, *inkey);
-
-	return *this;
 }
 
 

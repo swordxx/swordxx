@@ -158,17 +158,18 @@ void RawStr::getidxbuf(long ioffset, char **buf)
  *		away		- number of entries before of after to jump
  *					(default = 0)
  *
- * RET: error status
+ * RET: error status -1 general error; -2 new file
  */
 
 signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
 {
         char *trybuf, *targetbuf, *key, quitflag = 0;
-        signed char retval = 0;
+        signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
 		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
+		retval = (tailoff >= 0) ? 0 : -2;	// if NOT new file
 		if (*ikey) {
 			headoff = 0;
 
@@ -409,17 +410,22 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
 	char *outbuf = 0;
 	char *ch = 0;
 
-	findoffset(ikey, &start, &size, 0, &idxoff);
+	char errorStatus = findoffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
 	toupperstr(key);
+
+	len = (len < 0) ? strlen(buf) : len;
 
 	getidxbufdat(start, &dbKey);
 
 	if (strcmp(key, dbKey) < 0) {
 	}
 	else if (strcmp(key, dbKey) > 0) {
-		idxoff += 6;
-	} else if ((!strcmp(key, dbKey)) && (len || strlen(buf) /*we're not deleting*/)) { // got absolute entry
+		if (errorStatus != -2)	// not a new file
+			idxoff += 6;
+		else idxoff = 0;
+	}
+	else if ((!strcmp(key, dbKey)) && (len>0 /*we're not deleting*/)) { // got absolute entry
 		do {
 			tmpbuf = new char [ size + 2 ];
 			memset(tmpbuf, 0, size + 2);
@@ -435,7 +441,7 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
 			memmove(tmpbuf, ch, size - (unsigned short)(ch-tmpbuf));
 
 			// resolve link
-			if (!strncmp(tmpbuf, "@LINK", 5) && (len ? len : strlen(buf))) {
+			if (!strncmp(tmpbuf, "@LINK", 5) && (len)) {
 				for (ch = tmpbuf; *ch; ch++) {		// null before nl
 					if (*ch == 10) {
 						*ch = 0;
@@ -459,11 +465,11 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
 		read(idxfd->getFd(), idxBytes, shiftSize);
 	}
 
-	outbuf = new char [ (len ? len : strlen(buf)) + strlen(key) + 5 ];
+	outbuf = new char [ len + strlen(key) + 5 ];
 	sprintf(outbuf, "%s%c%c", key, 13, 10);
 	size = strlen(outbuf);
-	memcpy (outbuf + size, buf, len ? len : strlen(buf));
-	size = outsize = size + (len ? len : strlen(buf));
+	memcpy(outbuf + size, buf, len);
+	size = outsize = size + (len);
 
 	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
 
@@ -471,7 +477,7 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
 	outsize  = archtosword16(size);
 
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
-	if (len ? len : strlen(buf)) {
+	if (len > 0) {
 		lseek(datfd->getFd(), start, SEEK_SET);
 		write(datfd->getFd(), outbuf, (int)size);
 

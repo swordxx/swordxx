@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
       else infile = stdin;
       
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-      mod.setentry(buffer, entrysize);	// save text to module at current position
+      mod.setEntry(buffer, entrysize);	// save text to module at current position
     }
     else if (compress) {
       char buffer[1048576];  //this is the max size of any entry
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
       else infile = stdin;
       
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-      mod.setentry(buffer, entrysize);	// save text to module at current position
+      mod.setEntry(buffer, entrysize);	// save text to module at current position
     }
     else {
       char buffer[65536];  //this is the max size of any entry
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
       else infile = stdin;
       
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-      mod.setentry(buffer, entrysize);	// save text to module at current position
+      mod.setEntry(buffer, entrysize);	// save text to module at current position
     }
     
   }

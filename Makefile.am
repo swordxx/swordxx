@@ -88,7 +88,7 @@ install: install-recursive
 	@echo "configuration file.  one can be generated to /etc/sword.conf"
 	@echo "by typing: \"make install_config\""
 	@echo ""
-	@echo "modules (Bible, etc.), may then be unzipped to $(pkgdatadir)/"
+	@echo "modules (Bibles, etc.), may then be unzipped to $(pkgdatadir)/"
 	@echo ""
 	@echo "type \"make register\" to help us keep track of how many"
 	@echo "people are using sword."

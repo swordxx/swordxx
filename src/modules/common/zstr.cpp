@@ -460,6 +460,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 	char *outbuf = 0;
 	char *ch = 0;
 
+	len = (len < 0) ? strlen(buf) : len;
 	stdstr(&key, ikey);
 	toupperstr(key);
 
@@ -472,7 +473,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		else if (diff > 0) {
 			idxoff += IDXENTRYSIZE;
 		}
-		else if ((!diff) && (len || strlen(buf) /*we're not deleting*/)) { // got absolute entry
+		else if ((!diff) && (len > 0 /*we're not deleting*/)) { // got absolute entry
 			do {
 				lseek(idxfd->getFd(), idxoff, SEEK_SET);
 				read(idxfd->getFd(), &start, sizeof(__u32));
@@ -494,7 +495,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 				memmove(tmpbuf, ch, size - (unsigned long)(ch-tmpbuf));
 
 				// resolve link
-				if (!strncmp(tmpbuf, "@LINK", 5) && (len ? len : strlen(buf))) {
+				if (!strncmp(tmpbuf, "@LINK", 5) && (len)) {
 					for (ch = tmpbuf; *ch; ch++) {		// null before nl
 						if (*ch == 10) {
 							*ch = 0;
@@ -520,10 +521,10 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		read(idxfd->getFd(), idxBytes, shiftSize);
 	}
 
-	outbuf = new char [ (len ? len : strlen(buf)) + strlen(key) + 5 ];
+	outbuf = new char [ len + strlen(key) + 5 ];
 	sprintf(outbuf, "%s%c%c", key, 13, 10);
 	size = strlen(outbuf);
-	if (len ? len : strlen(buf)) {	// NOT a link
+	if (len > 0) {	// NOT a link
 		if (!cacheBlock) {
 			flushCache();
 			cacheBlock = new EntriesBlock();
@@ -543,8 +544,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		size += (sizeof(__u32) * 2);
 	}
 	else {	// link
-		memcpy(outbuf + size, buf, len ? len : strlen(buf));
-		size += (len ? len : strlen(buf));
+		memcpy(outbuf + size, buf, len);
+		size += len;
 	}
 
 	start = lseek(datfd->getFd(), 0, SEEK_END);
@@ -553,7 +554,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 	outsize  = archtosword32(size);
 
 	lseek(idxfd->getFd(), idxoff, SEEK_SET);
-	if (len ? len : strlen(buf)) {
+	if (len > 0) {
 		lseek(datfd->getFd(), start, SEEK_SET);
 		write(datfd->getFd(), outbuf, size);
 

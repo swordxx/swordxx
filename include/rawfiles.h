@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.14 2002/03/14 16:56:49 scribe Exp $
+ * $Id: rawfiles.h,v 1.15 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,49 +29,57 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawFiles:public RawVerse, public SWCom
-{
+class SWDLLEXPORT RawFiles : public RawVerse, public SWCom {
 
-  char *getnextfilename ();
+	char *getnextfilename();
 
 public:
-  
-    
-    RawFiles (const char *ipath, const char *iname = 0, const char *idesc =
-	      0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
-              const char* ilang = 0);
-    virtual ~RawFiles ();
-  virtual char *getRawEntry ();
 
-  // write interface ----------------------------
-  /** Is the module writable? :)
-  * @return yes or no
-  */
-	virtual bool isWritable () { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & O_RDWR) == O_RDWR)); }
-  
-  /** Creates a new module
-  * @param path The first parameter is path of the new module
-  * @return error
-  */
-  static char createModule (const char *);
-  
-  /** Modify the current module entry text
-  * - only if module @ref isWritable
-  * @return *this
-  */
-  virtual SWModule & operator << (const char *);
-  
-  /** Link the current module entry to another module entry
-  * - only if module @ref isWritable
-  * @return *this
-  */
-  virtual SWModule & operator << (const SWKey *);
-  
-  /** Delete current module entry - only if module @ref isWritable
-  *
-  */
-  virtual void deleteEntry ();
-  // end write interface ------------------------
+
+	RawFiles(const char *ipath, const char *iname = 0, const char *idesc = 0,
+			SWDisplay *idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
+			SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
+			const char *ilang = 0);
+	virtual ~RawFiles();
+	virtual char *getRawEntry();
+
+	// write interface ----------------------------
+	/** Is the module writable? :)
+	* @return yes or no
+	*/
+	virtual bool isWritable() {
+		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & O_RDWR) == O_RDWR));
+	}
+
+	/** Creates a new module
+	* @param path The first parameter is path of the new module
+	* @return error
+	*/
+	static char createModule(const char *);
+
+	/** Modify the current module entry text
+	* - only if module @ref isWritable
+	* @return *this
+	*/
+	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
+
+	/** Link the current module entry to another module entry
+	* - only if module @ref isWritable
+	* @return *this
+	*/
+	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry
+
+	/** Delete current module entry - only if module @ref isWritable
+	*
+	*/
+	virtual void deleteEntry();
+	// end write interface ------------------------
+
+
+	// OPERATORS -----------------------------------------------------------------
+	
+	SWMODULE_OPERATORS
+
 };
 
 

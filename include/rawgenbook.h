@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawgenbook.h,v 1.3 2002/03/14 16:56:49 scribe Exp $
+ * $Id: rawgenbook.h,v 1.4 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawGenBook:public SWGenBook {
+class SWDLLEXPORT RawGenBook : public SWGenBook {
 	char *entryBuf;
 	char *path;
 	FileDesc *bdtfd;
@@ -36,23 +36,28 @@ class SWDLLEXPORT RawGenBook:public SWGenBook {
 public:
   
     
-	RawGenBook (const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
-	virtual ~ RawGenBook ();
-	virtual char *getRawEntry ();
-#ifdef _MSC_VER
-	virtual SWModule & operator = (SW_POSITION);
-#else
-	virtual RawGenBook & operator = (SW_POSITION);
-#endif
+	RawGenBook(const char *ipath, const char *iname = 0, const char *idesc = 0,
+			SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
+			SWTextDirection dir = DIRECTION_LTR,
+			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+	virtual ~RawGenBook();
+	virtual char *getRawEntry();
 	// write interface ----------------------------
-	virtual bool isWritable () { return ((bdtfd->getFd() > 0) && ((bdtfd->mode & O_RDWR) == O_RDWR)); }
-	static char createModule (const char *ipath);
-	virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
-	virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
-	virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
-	virtual void deleteEntry ();	// Delete current module entry
-	virtual SWKey *CreateKey ();
+	virtual bool isWritable() {
+		return ((bdtfd->getFd() > 0) && ((bdtfd->mode & O_RDWR) == O_RDWR));
+	}
+	static char createModule(const char *ipath);
+	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
+	virtual void linkEntry(const SWKey * linkKey);	// Link current module entry to other module entry
+	virtual void deleteEntry();	// Delete current module entry
+	virtual SWKey *CreateKey();
 	// end write interface ------------------------
+
+
+	// OPERATORS -----------------------------------------------------------------
+	
+	SWMODULE_OPERATORS
+
 };
 
 

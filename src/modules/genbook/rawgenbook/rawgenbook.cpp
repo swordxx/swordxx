@@ -72,7 +72,7 @@ RawGenBook::~RawGenBook() {
 
 
 /******************************************************************************
- * RawGenBook::operator char *	- Returns the correct verse when char * cast
+ * RawGenBook::getRawEntry	- Returns the correct verse when char * cast
  *					is requested
  *
  * RET: string buffer with verse
@@ -84,14 +84,10 @@ char *RawGenBook::getRawEntry() {
 	__u32 size = 0;
 
 	TreeKeyIdx *key = 0;
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(TreeKeyIdx, (this->key));
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 
 	if (!key) {
 		key = (TreeKeyIdx *)CreateKey();
@@ -136,17 +132,7 @@ char *RawGenBook::getRawEntry() {
 }
 
 
-
-#ifdef _MSC_VER
-SWModule &RawGenBook::operator =(SW_POSITION p) {
-#else
-RawGenBook &RawGenBook::operator =(SW_POSITION p) {
-#endif
-	SWModule::operator =(p);
-	return *this;
-}
-
-SWModule &RawGenBook::setentry(const char *inbuf, long len) {
+void RawGenBook::setEntry(const char *inbuf, long len) {
 
 	__u32 offset = archtosword32(lseek(bdtfd->getFd(), 0, SEEK_END));
 	__u32 size = 0;
@@ -164,27 +150,17 @@ SWModule &RawGenBook::setentry(const char *inbuf, long len) {
 	memcpy(userData+4, &size, 4);
 	key->setUserData(userData, 8);
 	key->save();
-
-	return *this;
-}
-
-SWModule &RawGenBook::operator <<(const char *inbuf) {
-        return setentry(inbuf, 0);
 }
 
 
-SWModule &RawGenBook::operator <<(const SWKey *inkey) {
+void RawGenBook::linkEntry(const SWKey *inkey) {
 	TreeKeyIdx *srckey = 0;
 	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		srckey = SWDYNAMIC_CAST(TreeKeyIdx, inkey);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey) {
 		srckey = (TreeKeyIdx *)CreateKey();
@@ -196,8 +172,6 @@ SWModule &RawGenBook::operator <<(const SWKey *inkey) {
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
-
-	return *this;
 }
 
 

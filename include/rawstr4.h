@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: rawstr4.h,v 1.5 2002/07/12 08:53:40 dglassey Exp $
+ * $Id: rawstr4.h,v 1.6 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,28 +29,27 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawStr4
-{
-  static int instance;		// number of instantiated RawStr4 objects or derivitives
-  char *path;
-  long lastoff;
+class SWDLLEXPORT RawStr4 {
+	static int instance;		// number of instantiated RawStr4 objects or derivitives
+	char *path;
+	long lastoff;
 
 protected:
-  FileDesc *idxfd;
-  FileDesc *datfd;
-  void preptext (char *buf);
-  void settext (const char *key, const char *buf, long len = 0);
-  void linkentry (const char *destkey, const char *srckey);
+	FileDesc *idxfd;
+	FileDesc *datfd;
+	void preptext(char *buf);
+	void setText(const char *key, const char *buf, long len = -1);
+	void linkentry(const char *destkey, const char *srckey);
 public:
-  char nl;
-    RawStr4(const char *ipath, int fileMode = -1);
-    virtual ~ RawStr4();
-  void getidxbuf (long ioffset, char **buf);
-  void getidxbufdat (long ioffset, char **buf);
-  signed char findoffset (const char *key, long *start, unsigned long *size,
-		   long away = 0, long *idxoff = 0);
-  void readtext (long start, unsigned long size, char *idxbuf, char *buf);
-  static signed char createModule (const char *path);
+	char nl;
+	RawStr4(const char *ipath, int fileMode = -1);
+	virtual ~RawStr4();
+	void getidxbuf(long ioffset, char **buf);
+	void getidxbufdat(long ioffset, char **buf);
+	signed char findoffset(const char *key, long *start, unsigned long *size,
+	long away = 0, long *idxoff = 0);
+	void readtext(long start, unsigned long size, char *idxbuf, char *buf);
+	static signed char createModule(const char *path);
 };
 
 #endif

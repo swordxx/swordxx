@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.25 2002/04/05 04:58:49 scribe Exp $
+ * $Id: versekey.h,v 1.26 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -392,6 +392,11 @@ public:
 	virtual void setBooks(const char *iBMAX, struct sbook **ibooks);
 	virtual void setLocale(const char *name);
 	virtual const char *getLocale() const { return locale; }
+
+
+
+	// OPERATORS --------------------------------------------------------------------
+
 
 	SWKEY_OPERATORS
 

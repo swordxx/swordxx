@@ -29,8 +29,8 @@
  *		idisp	- Display object to use for displaying
  */
 
-zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zStr(ipath, -1, blockCount, icomp), SWLD(iname, idesc, idisp, enc, dir, mark, ilang)
-{
+zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zStr(ipath, -1, blockCount, icomp), SWLD(iname, idesc, idisp, enc, dir, mark, ilang) {
+
 }
 
 
@@ -38,8 +38,8 @@ zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCoun
  * RawLD Destructor - Cleans up instance of RawLD
  */
 
-zLD::~zLD()
-{
+zLD::~zLD() {
+
 }
 
 
@@ -49,8 +49,7 @@ zLD::~zLD()
  * ENT: buf -	buffer to check and pad
  */
 
-void zLD::strongsPad(char *buf)
-{
+void zLD::strongsPad(char *buf) {
 	const char *check;
 	long size = 0;
 	int len = strlen(buf);
@@ -76,8 +75,7 @@ void zLD::strongsPad(char *buf)
  * RET: error status
  */
 
-char zLD::getEntry(long away)
-{
+char zLD::getEntry(long away) {
 	char *idxbuf = 0;
 	char *ebuf = 0;
 	char retval = 0;
@@ -115,7 +113,7 @@ char zLD::getEntry(long away)
 
 
 /******************************************************************************
- * zLD::operator char *	- Returns the correct entry when char * cast
+ * zLD::getRawEntry	- Returns the correct entry when char * cast
  *							is requested
  *
  * RET: string buffer with entry
@@ -131,66 +129,35 @@ char *zLD::getRawEntry() {
 
 
 /******************************************************************************
- * zLD::operator +=	- Increments module key a number of entries
+ * zLD::increment	- Increments module key a number of entries
  *
  * ENT:	increment	- Number of entries to jump forward
  *
  * RET: *this
  */
 
-SWModule &zLD::operator +=(int increment)
-{
+void zLD::increment(int steps) {
 	char tmperror;
 
 	if (key->Traversable()) {
-		*key += increment;
+		*key += steps;
 		error = key->Error();
-		increment = 0;
+		steps = 0;
 	}
 	
-	tmperror = (getEntry(increment)) ? KEYERR_OUTOFBOUNDS : 0;
+	tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
 	error = (error)?error:tmperror;
 	*key = entkeytxt;
-	return *this;
 }
 
 
-/******************************************************************************
- * zLD::operator =(SW_POSITION)	- Positions this key if applicable
- */
-
-SWModule &zLD::operator =(SW_POSITION p)
-{
-	if (!key->Traversable()) {
-		switch (p) {
-		case POS_TOP:
-			*key = "";
-			break;
-		case POS_BOTTOM:
-			*key = "zzzzzzzzz";
-			break;
-		} 
-	}
-	else	*key = p;
-	return *this;
-}
-
-
-SWModule &zLD::setentry(const char *inbuf, long len) {
+void zLD::setEntry(const char *inbuf, long len) {
 	setText(*key, inbuf, len);
-
-	return *this;
-}
-
-SWModule &zLD::operator <<(const char *inbuf) {
-	return setentry(inbuf, 0);
 }
 
 
-SWModule &zLD::operator <<(const SWKey *inkey) {
-	linkEntry(*key, *inkey);
-
-	return *this;
+void zLD::linkEntry(const SWKey *inkey) {
+	zStr::linkEntry(*key, *inkey);
 }
 
 

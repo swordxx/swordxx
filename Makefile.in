@@ -226,7 +226,7 @@ all: config.h
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/locales.d/Makefile.am $(srcdir)/samples/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  Makefile
+	  $(AUTOMAKE) --gnu  Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)
 
@@ -662,7 +662,7 @@ install: install-recursive
 	@echo "configuration file.  one can be generated to /etc/sword.conf"
 	@echo "by typing: \"make install_config\""
 	@echo ""
-	@echo "modules (Bible, etc.), may then be unzipped to $(pkgdatadir)/"
+	@echo "modules (Bibles, etc.), may then be unzipped to $(pkgdatadir)/"
 	@echo ""
 	@echo "type \"make register\" to help us keep track of how many"
 	@echo "people are using sword."

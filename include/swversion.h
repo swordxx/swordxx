@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swversion.h   - definition of class SWVersion used to compare version info
  *
- * $Id: swversion.h,v 1.3 2002/01/06 22:26:23 chrislit Exp $
+ * $Id: swversion.h,v 1.4 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,8 @@ class SWVersion {
 	
 	SWVersion(const char *version = "0.0");
 	int compare(const SWVersion &vi) const;
-	operator const char *() const;
+	const char *getText() const;
+	operator const char *() const { return getText(); }
 	bool operator>(const SWVersion &vi) const {return (compare(vi) > 0);}
 	bool operator<(const SWVersion &vi) const {return (compare(vi) < 0);}
 	bool operator==(const SWVersion &vi) const {return (compare(vi) == 0);}

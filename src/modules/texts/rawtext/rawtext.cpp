@@ -72,7 +72,7 @@ RawText::~RawText()
 
 
 /******************************************************************************
- * RawText::operator char *	- Returns the correct verse when char * cast
+ * RawText::getRawEntry	- Returns the correct verse when char * cast
  *					is requested
  *
  * RET: string buffer with verse
@@ -84,14 +84,10 @@ char *RawText::getRawEntry() {
 	VerseKey *key = 0;
 
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {	}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -283,14 +279,10 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 			// test to see if our scope for this search is bounded by a
 			// VerseKey
 			VerseKey *testKeyType = 0;
-#ifndef _WIN32_WCE
 			try {
-#endif
 				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
-#ifndef _WIN32_WCE
 			}
 			catch ( ... ) {}
-#endif
 			// if we don't have a VerseKey * decendant we can't handle
 			// because of scope.
 			// In the future, add bool SWKey::isValid(const char *tryString);
@@ -456,26 +448,14 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 	return SWModule::Search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
 
-#ifdef _MSC_VER
-SWModule &RawText::operator =(SW_POSITION p) {
-#else
-RawText &RawText::operator =(SW_POSITION p) {
-#endif
-	SWModule::operator =(p);
-	return *this;
-}
 
-SWModule &RawText::setentry(const char *inbuf, long len) {
+void RawText::setEntry(const char *inbuf, long len) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!key)
 		key = new VerseKey(this->key);
@@ -484,40 +464,26 @@ SWModule &RawText::setentry(const char *inbuf, long len) {
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;
-
-	return *this;
-}
-
-SWModule &RawText::operator <<(const char *inbuf) {
-        return setentry(inbuf, 0);
 }
 
 
-SWModule &RawText::operator <<(const SWKey *inkey) {
+void RawText::linkEntry(const SWKey *inkey) {
 	VerseKey *destkey = 0;
 	const VerseKey *srckey = 0;
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		destkey = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!destkey)
 		destkey = new VerseKey(this->key);
 
 	// see if we have a VerseKey * or decendant
-#ifndef _WIN32_WCE
 	try {
-#endif
 		srckey = SWDYNAMIC_CAST(VerseKey, inkey);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey)
 		srckey = new VerseKey(inkey);
@@ -529,8 +495,6 @@ SWModule &RawText::operator <<(const SWKey *inkey) {
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
-
-	return *this;
 }
 
 
@@ -544,14 +508,10 @@ void RawText::deleteEntry() {
 
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -562,49 +522,40 @@ void RawText::deleteEntry() {
 }
 
 /******************************************************************************
- * RawText::operator +=	- Increments module key a number of entries
+ * RawText::increment	- Increments module key a number of entries
  *
  * ENT:	increment	- Number of entries to jump forward
  *
  * RET: *this
  */
 
-SWModule &RawText::operator +=(int increment)
-{
+void RawText::increment(int steps) {
 	long  start;
 	unsigned short size;
 	VerseKey *tmpkey = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!tmpkey)
 		tmpkey = new VerseKey(key);
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
-	while (increment) {
+	while (steps) {
 		long laststart = start;
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
-		(increment > 0) ? (*key)++ : (*key)--;
+		(steps > 0) ? (*key)++ : (*key)--;
 		if (tmpkey != key)
 			delete tmpkey;
 		tmpkey = 0;
-#ifndef _WIN32_WCE
 		try {
-#endif
 			tmpkey = SWDYNAMIC_CAST(VerseKey, key);
-#ifndef _WIN32_WCE
 		}
 		catch ( ... ) {}
-#endif
 		if (!tmpkey)
 			tmpkey = new VerseKey(key);
 
@@ -615,7 +566,7 @@ SWModule &RawText::operator +=(int increment)
 		long index = tmpkey->Index();
 		findoffset(tmpkey->Testament(), index, &start, &size);
 		if ((((laststart != start) || (lastsize != size))||(!skipConsecutiveLinks)) && (start >= 0) && (size)) {
-			increment += (increment < 0) ? 1 : -1;
+			steps += (steps < 0) ? 1 : -1;
 			lastgood = *tmpkey;
 		}
 	}
@@ -623,6 +574,4 @@ SWModule &RawText::operator +=(int increment)
 
 	if (tmpkey != key)
 		delete tmpkey;
-
-	return *this;
 }

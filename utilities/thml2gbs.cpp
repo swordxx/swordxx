@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
 	      else {
 		treeKey->root();
 		setkey(treeKey, keybuffer);
-		book->setentry(entbuffer, entrysize); // save text to module at current position
+		book->setEntry(entbuffer, entrysize); // save text to module at current position
 	      }
 	    }
 	  }	    
@@ -207,7 +207,7 @@ int main(int argc, char **argv) {
 	      else {
 		treeKey->root();
 		setkey(treeKey, keybuffer);
-		book->setentry(entbuffer, entrysize); // save text to module at current position
+		book->setEntry(entbuffer, entrysize); // save text to module at current position
 	      }
 	    }
 	  }

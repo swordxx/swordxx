@@ -14,24 +14,24 @@
 #include <defs.h>
 
 class SWDLLEXPORT RawVerse {
-  static int instance;		// number of instantiated RawVerse objects or derivitives
+	static int instance;		// number of instantiated RawVerse objects or derivitives
 protected:
-  FileDesc *idxfp[2];
-  FileDesc *textfp[2];
+	FileDesc *idxfp[2];
+	FileDesc *textfp[2];
 
-  char *path;
-  void preptext (char *buf);
-  void settext (char testmt, long idxoff, const char *buf, long len = 0);
-  void linkentry (char testmt, long destidxoff, long srcidxoff);
+	char *path;
+	void preptext(char *buf);
+	void settext(char testmt, long idxoff, const char *buf, long len = -1);
+	void linkentry(char testmt, long destidxoff, long srcidxoff);
 
 public:
-  char nl;
-    RawVerse (const char *ipath, int fileMode = -1);
-    virtual ~ RawVerse ();
-  void findoffset (char testmt, long idxoff, long *start,
-		   unsigned short *end);
-  void readtext (char testmt, long start, unsigned short size, char *buf);
-  static char createModule (const char *path);
+	char nl;
+	RawVerse(const char *ipath, int fileMode = -1);
+	virtual ~ RawVerse();
+	void findoffset(char testmt, long idxoff, long *start,
+	unsigned short *end);
+	void readtext(char testmt, long start, unsigned short size, char *buf);
+	static char createModule(const char *path);
 };
 
 

@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
     else infile = stdin;
     
     entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-    book->setentry(buffer, entrysize); // save text to module at current position
+    book->setEntry(buffer, entrysize); // save text to module at current position
   }
   
   /*

@@ -1,6 +1,14 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+27-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Make all operators have real name methods
+	Isolated SWModule operators in define
+	Fixed RawLD and RawLD4 drivers where there was
+		a blank entry created at the beginning
+	Added test lextest
+	Consolidated setPosition for lexicons in SWLD
+
 16-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
 	utf8transliterator now loads translators from local
 		sword ICU data on demand

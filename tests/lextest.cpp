@@ -1,9 +1,9 @@
-#include <rawld.h>
+#include <rawld4.h>
 
 void main(int argc, char **argv) {
 
-	RawLD::createModule("tmp/lextest");
-	RawLD lex("tmp/lextest");
+	RawLD4::createModule("tmp/lextest");
+	RawLD4 lex("tmp/lextest");
 
 	lex.SetKey("a");
 	lex << "aaa";
@@ -14,7 +14,10 @@ void main(int argc, char **argv) {
 	lex.SetKey("b");
 	lex << "bbb";
 
-	for (lex = TOP; !lex.Error(); lex++) {
+	lex.SetKey("d");
+	lex << "ddd";
+
+	for (lex = BOTTOM; !lex.Error(); lex--) {
 		cout << lex.KeyText() << ":\n";
 		cout << lex << "\n------------------\n";
 	}

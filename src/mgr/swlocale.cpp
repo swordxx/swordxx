@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.3 2000/03/13 09:36:03 scribe Exp $
+ * $Id: swlocale.cpp,v 1.4 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -93,9 +93,8 @@ const char *SWLocale::getDescription() {
 }
 
 
-SWLocale &SWLocale::operator +=(SWLocale &addFrom) {
+void SWLocale::augment(SWLocale &addFrom) {
 	*localeSource += *addFrom.localeSource;
-	return *this;
 }
 
 

@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 	std::cout << keybuffer << endl;
 	treeKey->root();
 	setkey(treeKey, keybuffer);
-	book->setentry(entbuffer, strlen(entbuffer));
+	book->setEntry(entbuffer, strlen(entbuffer));
       }
       linebuffer[strlen(linebuffer) - 1] = 0;
       strcpy (keybuffer, linebuffer + 3);
@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
     std::cout << keybuffer << endl;
     treeKey->root();
     setkey(treeKey, keybuffer);
-    book->setentry(entbuffer, strlen(entbuffer));
+    book->setEntry(entbuffer, strlen(entbuffer));
   }
   
   //DEBUG  printTree(root, treeKey);

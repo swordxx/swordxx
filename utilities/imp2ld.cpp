@@ -106,15 +106,15 @@ int main(int argc, char **argv) {
 
 	if (mode == 3) {
 	  modZ->SetKey(*key);
-	  modZ->setentry(entbuffer, strlen(entbuffer));
+	  modZ->setEntry(entbuffer, strlen(entbuffer));
 	}
 	else if (mode == 2) {
 	  mod2->SetKey(*key);
-	  mod2->setentry(entbuffer, strlen(entbuffer));
+	  mod2->setEntry(entbuffer, strlen(entbuffer));
 	}
 	else if (mode == 1) {
 	  mod4->SetKey(*key);
-	  mod4->setentry(entbuffer, strlen(entbuffer));
+	  mod4->setEntry(entbuffer, strlen(entbuffer));
 	}
       }
       linebuffer[strlen(linebuffer) - 1] = 0;
@@ -133,15 +133,15 @@ int main(int argc, char **argv) {
 
     if (mode == 3) {
       modZ->SetKey(*key);
-      modZ->setentry(entbuffer, strlen(entbuffer));
+      modZ->setEntry(entbuffer, strlen(entbuffer));
     }
     else if (mode == 2) {
       mod2->SetKey(*key);
-      mod2->setentry(entbuffer, strlen(entbuffer));
+      mod2->setEntry(entbuffer, strlen(entbuffer));
     }
     else if (mode == 1) {
       mod4->SetKey(*key);
-      mod4->setentry(entbuffer, strlen(entbuffer));
+      mod4->setEntry(entbuffer, strlen(entbuffer));
     }
   }
   

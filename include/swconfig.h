@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.16 2002/03/19 23:59:41 scribe Exp $
+ * $Id: swconfig.h,v 1.17 2002/07/28 01:48:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,51 +41,51 @@ typedef map < string, ConfigEntMap, less < string > >SectionMap;
 /** The class to read and save settings using a file on disk.
 *
 */
-class SWDLLEXPORT SWConfig
-{
+class SWDLLEXPORT SWConfig {
 private:
-  char getline (FILE * fp, string & line);
+	char getline(FILE * fp, string & line);
 public:
-  /** The filename used by this SWConfig object
-  *
-  */
-  string filename;
-  /** Map of available sections
-  * The map of available sections.
-  */
-  SectionMap Sections;
+	/** The filename used by this SWConfig object
+	*
+	*/
+	string filename;
+	/** Map of available sections
+	* The map of available sections.
+	*/
+	SectionMap Sections;
 
-  /** Constructor of SWConfig
-  * @param ifilename The file, which should be used for this config.
-  */
-  SWConfig (const char *ifilename);
-  virtual ~ SWConfig ();
+	/** Constructor of SWConfig
+	* @param ifilename The file, which should be used for this config.
+	*/
+	SWConfig(const char *ifilename);
+	virtual ~SWConfig();
 
-  /** Load from disk
-  * Load the contzent from disk.
-  */
-  virtual void Load ();
+	/** Load from disk
+	* Load the contzent from disk.
+	*/
+	virtual void Load();
 
-  /** Save to disk
-  * Save the content of this config object to disk.
-  */
-  virtual void Save ();
+	/** Save to disk
+	* Save the content of this config object to disk.
+	*/
+	virtual void Save();
 
-  /** Merges the values of addFrom
-  * @param The config which values should be merged to this config object. Already existing values will be overwritten.
-  */
-  virtual SWConfig & operator += (SWConfig & addFrom);
+	/** Merges the values of addFrom
+	* @param The config which values should be merged to this config object. Already existing values will be overwritten.
+	*/
+	virtual void augment(SWConfig &addFrom);
+	virtual SWConfig & operator +=(SWConfig &addFrom) { augment(addFrom); return *this; }
 
-  /** Get a section
-  * This is an easy way to get and store config values.
-  * The following will work:\n
-  *
-  * @code
-  * SWConfig config("/home/user/.setttings");
-  * config["Colors"]["Background"] = "red";
-  * @endcode
-  */
-  virtual ConfigEntMap & operator [] (const char *section);
-};
+	/** Get a section
+	* This is an easy way to get and store config values.
+	* The following will work:\n
+	*
+	* @code
+	* SWConfig config("/home/user/.setttings");
+	* config["Colors"]["Background"] = "red";
+	* @endcode
+	*/
+	virtual ConfigEntMap & operator [](const char *section);
+	};
 
 #endif

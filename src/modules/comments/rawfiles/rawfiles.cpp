@@ -49,7 +49,7 @@ RawFiles::~RawFiles()
 
 
 /******************************************************************************
- * RawFiles::operator char *	- Returns the correct verse when char * cast
+ * RawFiles::getRawEntry	- Returns the correct verse when char * cast
  *					is requested
  *
  * RET: string buffer with verse
@@ -113,27 +113,22 @@ char *RawFiles::getRawEntry() {
 
 
 /******************************************************************************
- * RawFiles::operator << (char *)- Update the modules current key entry with
+ * RawFiles::setEntry(char *)- Update the modules current key entry with
  *				provided text
- *
- * RET: *this
  */
 
-SWModule &RawFiles::operator <<(const char *inbuf) {
+void RawFiles::setEntry(const char *inbuf, long len) {
 	FileDesc *datafile;
 	long  start;
 	unsigned short size;
 	char *tmpbuf;
 	VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
+	len = (len<0)?strlen(inbuf):len;
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -152,39 +147,33 @@ SWModule &RawFiles::operator <<(const char *inbuf) {
 	datafile = FileMgr::systemFileMgr.open(tmpbuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	delete [] tmpbuf;
 	if (datafile->getFd() > 0) {
-		write(datafile->getFd(), inbuf, strlen(inbuf));
+		write(datafile->getFd(), inbuf, len);
 	}
 	FileMgr::systemFileMgr.close(datafile);
 	
 	if (key != this->key)
 		delete key;
-
-	return *this;
 }
 
 
 /******************************************************************************
- * RawFiles::operator << (SWKey *)- Link the modules current key entry with
+ * RawFiles::linkEntry(SWKey *)- Link the modules current key entry with
  *				another module entry
  *
  * RET: *this
  */
 
-SWModule &RawFiles::operator <<(const SWKey *inkey) {
+void RawFiles::linkEntry(const SWKey *inkey) {
 
 	long  start;
 	unsigned short size;
 	char *tmpbuf;
 	const VerseKey *key = 0;
 
-#ifndef _WIN32_WCE
 	try {
-#endif
 		key = SWDYNAMIC_CAST(VerseKey, inkey);
-#ifndef _WIN32_WCE
 	}
 	catch ( ... ) {}
-#endif
 	if (!key)
 		key = new VerseKey(this->key);
 
@@ -198,14 +187,10 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 			delete key;
 		key = 0;
 
-#ifndef _WIN32_WCE
 		try {
-#endif
 			key = SWDYNAMIC_CAST(VerseKey, inkey);
-#ifndef _WIN32_WCE
 		}
 		catch ( ... ) {}
-#endif
 		if (!key)
 			key = new VerseKey(this->key);
 		settext(key->Testament(), key->Index(), tmpbuf);
@@ -213,8 +198,6 @@ SWModule &RawFiles::operator <<(const SWKey *inkey) {
 	
 	if (key != inkey)
 		delete key;
-
-	return *this;
 }
 
 
