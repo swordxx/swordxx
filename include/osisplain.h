@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisplain.h,v 1.10 2003/08/12 05:36:30 scribe Exp $
+ * $Id: osisplain.h,v 1.11 2004/04/09 12:31:18 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,6 +22,7 @@
 #define OSISPLAIN_H
 
 #include <swbasicfilter.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,6 +34,7 @@ protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
 		SWBuf w;
+		XMLTag tag;
 		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {

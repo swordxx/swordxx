@@ -65,9 +65,9 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 						hide = true;
 						tagText = "";
 						if (option) {	// we want the tag in the text
-							text += '<';
+							text.append('<');
 							text.append(token);
-							text += '>';
+							text.append('>');
 						}
 						continue;
 					}

@@ -39,6 +39,10 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 	SWBuf orig = text;
 	const char *from = orig.c_str();
 
+	//taken out of the loop
+	char* start;
+	char* end;
+	
 	if (!option)
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
@@ -58,16 +62,19 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 				}
 			}*/
 			if (*token == 'q') {
-				char* start = strstr(token, "who=\"Jesus\"");
-				const int len = strlen(token);
-				if (start && (len>11)) {
-					char* end = start+11;
+				start = strstr(token, "who=\"Jesus\"");
+				if (start && (strlen(start) > 11)) {
+					end = start+11;
+					text.append('<');
 					text.append(token, start-token); //the text before the who attr
-					text.append(end, len-(end - token)); //text after the who attr
+					text.append(end, strlen(token)-(end - token)); //text after the who attr
+					text.append('>');
 				}
 			}
 			else {
+				text.append('<');
 				text.append(token);
+				text.append('>');
 			}
 			
 			
@@ -78,10 +85,10 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 			continue;
 		}
 		if (intoken) { //copy token
-			token += *from;
+			token.append(*from);
 		}
 		else { //copy text which is not inside a token
-			text += *from;
+			text.append(*from);
 		}
 	}
 	return 0;

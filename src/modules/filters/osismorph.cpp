@@ -38,6 +38,11 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		bool lastspace = false;
 		SWBuf orig = text;
 		const char *from = orig.c_str();
+		
+		//taken out of the loop for speed
+		const char* start = 0;
+		const char* end = 0;
+		int len = 0;
 
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
@@ -55,19 +60,22 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 						tag.setAttribute("morph", 0);
 				}*/
 				
-				if (*token == 'w') {
-					char* start = strstr(token, "morph=\"");
-					const int len = strlen(token);
-					if (start && (len>8)) {
-						char* end = strchr(start+8, '"');
-						if (end) { //remove the morph value
-							text.append(token, start-token); //the text before the morph attr
-							text.append(end, len-(end - token)); //text after the morph attr
-						}
+				if ((*token == 'w') && (token[1] == ' ')) {
+					len = strlen(token);
+					start = strstr(token, "morph=\""); //we leave out "w " at the start
+					end = (start && (strlen(start)>7)) ? strchr(start+7, '"') : 0;
+
+					if (start && end) {
+						text.append("<");
+						text.append(token, start-token); //the text before the morph attr
+						text.append(end+1, len-(end+1 - token)); //text after the morph attr
+						text.append(">");
 					}
 				}
 				else {
+					text.append('<');
 					text.append(token);
+					text.append('>');
 				}
 				
 				// keep tag, possibly with the morph removed

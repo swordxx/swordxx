@@ -21,6 +21,7 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 	bool intoken = false;
 	SWBuf orig = text;
 	const char* from = orig.c_str();
+	
 	for (text = ""; *from; ++from) {
 		if (*from == '<') {
 			intoken = true;
@@ -36,15 +37,15 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 			switch (*token) {
 			case 'W':	// Strongs
 				switch(token[1]) {
-					case 'G':               // Greek
-					case 'H':               // Hebrew
-					case 'T':               // Tense
-						text.append(" <");
-						//for (char *tok = token + 2; *tok; tok++)
-						//	text += *tok;
-						text.append(token+2);
-						text.append("> ");
-						continue;
+				case 'G':               // Greek
+				case 'H':               // Hebrew
+				case 'T':               // Tense
+					text.append(" <");
+					//for (char *tok = token + 2; *tok; tok++)
+					//	text += *tok;
+					text.append(token+2);
+					text.append("> ");
+					continue;
 				}
 				break;
 			case 'R':
@@ -63,7 +64,7 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 					text.append((char)atoi(&token[2]));
 					continue;
 				case 'G':
-					text.append(">");
+					text.append('>');
 					continue;
 /*								Bug in WEB
 				case 'L':

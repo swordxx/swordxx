@@ -50,7 +50,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf orig = text;
 	const char *from = orig.c_str();
 	
-	XMLTag tag;
+	//XMLTag tag;
 
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
@@ -63,18 +63,18 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 
 			//XMLTag tag(token);
 			if (!strncmp(token, "RF",2)) {
-				tag = token;
+// 				tag = token;
 				
 				refs = "";
-				startTag = tag;
+				startTag = token;
 				hide = true;
 				tagText = "";
 				continue;
 			}
 			else if (!strncmp(token, "Rf",2)) {
-				tag = token;
-				
 				if (module->isProcessEntryAttributes()) {
+					//tag = token;
+				
 					if((tagText.length() == 1) || !strcmp(module->Name(), "IGNT")) {
 						if (option) { // for ASV marks text in verse then put explanation at end of verse
 							text.append(" <FA>(");

@@ -48,13 +48,11 @@ OSISPlain::OSISPlain() {
 
 bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
         // manually process if it wasn't a simple substitution
-	XMLTag tag;
-	
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;
 		if (((*token == 'w') && (token[1] == ' ')) ||
-		((*token == '/') && (token[1] == 'w') && (!token[2]))) {
-	                tag = token;
+		    ((*token == '/') && (token[1] == 'w') && (!token[2]))) {
+	                u->tag = token;
 			
 			bool start = false;
 			if (*token == 'w') {
@@ -64,36 +62,36 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 				start = true;
 			}
-			tag = (start) ? token : u->w.c_str();
+			u->tag = (start) ? token : u->w.c_str();
 			bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
 			SWBuf lastText = (start) ? "stuff" : u->lastTextNode.c_str();
 
 			const char *attrib;
 			const char *val;
-			if (attrib = tag.getAttribute("xlit")) {
+			if ((attrib = u->tag.getAttribute("xlit"))) {
 				val = strchr(attrib, ':');
 				val = (val) ? (val + 1) : attrib;
 				buf.append(" <");
 				buf.append(val);
-				buf.append(">");
+				buf.append('>');
 				
 				//buf.appendFormatted(" <%s>", val);
 			}
-			if (attrib = tag.getAttribute("gloss")) {
+			if ((attrib = u->tag.getAttribute("gloss"))) {
 				val = strchr(attrib, ':');
 				val = (val) ? (val + 1) : attrib;
 				buf.append(" <");
 				buf.append(val);
-				buf.append(">");
+				buf.append('>');
 
 // 				buf.appendFormatted(" <%s>", val);
 			}
-			if (attrib = tag.getAttribute("lemma")) {
-				int count = tag.getAttributePartCount("lemma");
+			if ((attrib = u->tag.getAttribute("lemma"))) {
+				int count = u->tag.getAttributePartCount("lemma");
 				int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 				do {
-					attrib = tag.getAttribute("lemma", i);
+					attrib = u->tag.getAttribute("lemma", i);
 					if (i < 0) i = 0;	// to handle our -1 condition
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
@@ -110,11 +108,11 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					}
 				} while (++i < count);
 			}
-			if ((attrib = tag.getAttribute("morph")) && (show)) {
-				int count = tag.getAttributePartCount("morph");
+			if ((attrib = u->tag.getAttribute("morph")) && (show)) {
+				int count = u->tag.getAttributePartCount("morph");
 				int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 				do {
-					attrib = tag.getAttribute("morph", i);
+					attrib = u->tag.getAttribute("morph", i);
 					if (i < 0) i = 0;	// to handle our -1 condition
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
@@ -126,13 +124,13 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 // 					buf.appendFormatted(" (%s)", val);
 				} while (++i < count);
 			}
-			if (attrib = tag.getAttribute("POS")) {
+			if ((attrib = u->tag.getAttribute("POS"))) {
 				val = strchr(attrib, ':');
 				val = (val) ? (val + 1) : attrib;
 				
 				buf.append(" <");
 				buf.append(val);
-				buf.append(">");
+				buf.append('>');
 // 				buf.appendFormatted(" <%s>", val);
 			}
 		}
@@ -154,17 +152,17 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (((*token == 'p') && ((token[1] == ' ') || (!token[1]))) ||
 			((*token == '/') && (token[1] == 'p') && (!token[2]))) {
 				userData->supressAdjacentWhitespace = true;
-				buf.append("\n");
+				buf.append('\n');
 		}
 
                 // <milestone type="line"/>
                 else if (!strncmp(token, "milestone", 9)) {
 			const char* type = strstr(token+9, "type=\"");
-			if (type && strncmp(type, "line", 4)) { //we check for type != line
+			if (type && strncmp(type+6, "line", 4)) { //we check for type != line
 			
 		// && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
 				userData->supressAdjacentWhitespace = true;
-        			buf.append("\n");
+        			buf.append('\n');
 			}
                 }
 

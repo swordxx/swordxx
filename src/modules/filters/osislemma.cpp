@@ -32,14 +32,18 @@ OSISLemma::~OSISLemma() {
 
 char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want lemmas
-		const char *from;
 		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		bool lastspace = false;
 		SWBuf orig = text;
-		from = orig.c_str();
+		const char *from = orig.c_str();
 
+		int len = 0; //taken out of the loop for speed
+		const char* start = 0;
+		const char* end = 0;
+		
+		
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
@@ -60,18 +64,22 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				}
 				*/
 				
-				if (*token == 'w') {
-					const int len = strlen(token);
+				if ((*token == 'w') && (token[1] == ' ')) {
+// 					len = strlen(token);
 					
-					const char* start = strstr(token, "lemma=\"");
-					const char* end = start ? strchr(start+6, '"') : 0;
-					if (start && end) { //we wan to leave out the moprh attribute
+					start = strstr(token, "lemma=\""); //we leave out the "w " at the start
+					end = (start && (strlen(start)>7)) ? strchr(start+7, '"') : 0;
+					if (start && end) { //we want to leave out the morph attribute
+						text.append('<');
 						text.append(token, start-token); //the text before the morph attr
-						text.append(end, len-(end - token)); //text after the morph attr
+						text.append(end+1, strlen(token) - (end+1 - token)); //text after the morph attr
+						text.append('>');
 					}
 				}
 				else {
+					text.append('<');
 					text.append(token);
+					text.append('>');
 				}
 				
 				// keep tag, possibly with the lemma removed
