@@ -340,7 +340,10 @@ void RawStr::gettext(long start, unsigned short size, char *idxbuf, char *buf)
 	}
 	memmove(buf, ch, strlen(ch) + 1);
 	if (idxbuflocal) {
-		strcpy(idxbuf, idxbuflocal);
+		int localsize = strlen(idxbuflocal);
+		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
+		strncpy(idxbuf, idxbuflocal, localsize);
+		idxbuf[localsize] = 0;
 		free(idxbuflocal);
 	}
 }
