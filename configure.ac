@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.5 $)
+AC_REVISION($Revision: 1.6 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.3)
@@ -116,6 +116,15 @@ case "$target_os" in
     ;;
 esac
 
+case "$target_os" in
+  mingw*)
+    target_mingw32="yes"
+    ;;
+  *)
+    target_mingw32="no"
+    ;;
+esac
+
 # ---------------------------------------------------------------------
 # Substitute variables into makefiles
 # ---------------------------------------------------------------------
@@ -133,13 +142,14 @@ AC_SUBST(target_vendor)
 AC_SUBST(target_os)
 
 AC_SUBST(target_system)
+AC_SUBST(target_mingw32)
 
 
 
 # ---------------------------------------------------------------------
 # Conditional variables
 # ---------------------------------------------------------------------
-AM_CONDITIONAL(MINGW, test x$target_os = xmingw32*)
+AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
