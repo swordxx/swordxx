@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.7 2001/09/03 22:42:43 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.8 2001/11/03 20:50:19 chrislit Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -106,9 +106,29 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 }
 
 
-void SWBasicFilter::pushString(char **buf, const char *fragToPush) {
+void SWBasicFilter::pushString(char **buf, const char *fragToPush, const char *fragToPush2, const char *fragToPush3, const char *fragToPush4, const char *fragToPush5, const char *fragToPush6) {
 	while (*fragToPush) {
 		**buf = *fragToPush++;
+		(*buf)++;
+	}
+	while (*fragToPush2) {
+		**buf = *fragToPush2++;
+		(*buf)++;
+	}
+	while (*fragToPush3) {
+		**buf = *fragToPush3++;
+		(*buf)++;
+	}
+	while (*fragToPush4) {
+		**buf = *fragToPush4++;
+		(*buf)++;
+	}
+	while (*fragToPush5) {
+		**buf = *fragToPush5++;
+		(*buf)++;
+	}
+	while (*fragToPush6) {
+		**buf = *fragToPush6++;
 		(*buf)++;
 	}
 }
