@@ -1,372 +1,130 @@
-// Diatheke 3.1 by Chris Little <chrislit@gotjesus.org>
-// Copyright 1999 by Chris Little
+// Diatheke 4.0 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999, 2000, 2001 by Chris Little
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 
-#include <stdio.h>
-#include <rawtext.h>
-#include <swmgr.h>
-#include <iostream.h>
-#include <time.h>
+#include "corediatheke.h"
 
-#include <gbfthml.h>
+#define RQ_REF 1
+#define RQ_BOOK 2
 
-#include <thmlgbf.h>
-#include <thmlplain.h>
-#include <thmlhtml.h>
-#include <thmlrtf.h>
-
-#include <localemgr.h>
-
-// if you want to do logging of lookups, uncomment this #define and make /var/log/diatheke.log world writeable (chmod 666 it)
-//#define LOGGING
-
-int hasalpha (char * string) {
-  for (; *string != 0; string++)
-    if (isalpha(*string))
-      return 1;
-  return 0;
+void printsyntax() { 
+	//if we got this far without exiting, something went wrong, so print syntax
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.0 by Chris Little \n");
+	fprintf (stderr, "usage: \n  ");
+	fprintf (stderr, "diatheke <-b book> [-s search_type] [-o option_filters]\n");
+	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-e locale] <-k query_key>\n");
+	fprintf (stderr, "\n");
+	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
+	fprintf (stderr, "\"modulelistnames\", and \"localelist\".");
+	fprintf (stderr, "\n");
+	fprintf (stderr, "Valid search_type values are: regex, multiword, and phrase(def).\n");
+	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
+	fprintf (stderr, "  f (Footnotes), and h (Section Headings)\n");
+	fprintf (stderr, "Maximum verses may be any integer value\n");
+	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, and plain(def)\n");
+	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
+	fprintf (stderr, "The query_key must be the last argument because all following\n");
+	fprintf (stderr, "  arguments are added to the key.\n");
 }
-
 
 int main(int argc, char **argv)
 {
-	SWMgr manager;
-	SWModule *target;
-	ListKey listkey;
-	//VerseKey *vk;
-	ModMap::iterator it;
-	SectionMap::iterator sit;
-	ConfigEntMap::iterator eit;
-	int maxverses;
-	SWFilter * filter = 0;
-	int length;
-	char *font = 0;
-	bool GBF = 0;
-	bool ThML = 0;
-
-	if (argc > 1) {
-	  char * flags = argv[1];
-
-	  if (argc > 3) {
-	    char * book = argv[2];
-	    char * ref = argv[3]; // ie the lexicon key, a verse reference, or search string
-  
-	    it = manager.Modules.find(book);
-	    target = (*it).second;	  
-	    
-	    if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
-	      if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
-		if (!strcmp((char *)(*eit).second.c_str(), "GBF"))
-		  GBF = 1;
-		else if (!strcmp((char *)(*eit).second.c_str(), "ThML"))
-		  ThML = 1;
-	      }
-	    }
-	    
-	    if (argc > 4) {
-	      LocaleMgr::systemLocaleMgr.setDefaultLocaleName(argv[4]);
-	    }
-	    if (argc > 5) {
-	      if (!strcmp(argv[5], "thml")) {
-	      }
-	      else if (!strcmp(argv[5], "html")) {
-		filter = new ThMLHTML();
-	      }
-	      else if (!strcmp(argv[5], "gbf")) {
-		filter = new ThMLGBF();
-	      }
-	      else if (!strcmp(argv[5], "rtf")) {
-		filter = new ThMLRTF();
-	      }
-	    }
-	    else filter = new ThMLPlain();
-	    
-	    if (argc > 6)
-	      maxverses = atoi(argv[6]);
-	    else
-	      maxverses = -1;
-	    
-#ifdef LOGGING
-	    FILE* logfile = fopen("/var/log/diatheke.log", "a");
-	    int n = time(NULL);
-	    char* time = ctime((const long int *)&n);
-	    time[strlen(time) - 1] = 0;
-	    fprintf(logfile, time);
-	    fprintf(logfile, " ");
-	    n = 0;
-	    while (argv[n] != NULL) {
-	      fprintf(logfile, argv[n]);
-	      fprintf(logfile, " | ");
-	      n++;
-	    }
-#endif
-	    
-	    if (strchr (flags, 'f'))
-	      manager.setGlobalOption("Footnotes","On");
-	    else
-	      manager.setGlobalOption("Footnotes","Off");
-	    if (strchr (flags, 'h'))
-	      manager.setGlobalOption("Headings","On");
-	    else
-	      manager.setGlobalOption("Headings","Off");
-	    if (strchr (flags, 'n'))
-	      manager.setGlobalOption("Strong's Numbers","On");
-	    else
-	      manager.setGlobalOption("Strong's Numbers","Off");
-	    
-	    if (strchr (flags, 's')) {
-	      //do search stuff
-	      
-	      int searchtype;
-	      if (*ref == '@') { //regex
-		searchtype = 0;
-		ref++;
-	      }
-	      else if (*ref == '#') { //multi-word
-		searchtype = -2;
-		ref++;
-	      }
-	      else searchtype = -1; //phrase
-	      
-	      cout << "Verse(s) containing \"" << ref << "\": ";
-	      listkey = target->Search(ref, searchtype);
-	      
-	      if (strlen((const char*)listkey)) {
-		if (!listkey.Error())
-		  cout << (const char *)listkey;
-		listkey++;
-		while (!listkey.Error()) {
-		  cout << " ; " << (const char *)listkey;
-		  listkey++;
+	
+	int maxverses = -1;
+	char outputformat = FMT_PLAIN, optionfilters = OP_NONE, searchtype = ST_NONE;
+	char *text = 0, *locale = 0, *ref = 0;
+	
+	char runquery = 0; // used to check that we have enough arguments to perform a legal query
+	// (a querytype & text = 1 and a ref = 2)
+	
+	for (int i = 1; i < argc; i++) {
+		if (!stricmp("-b", argv[i])) {
+			if (i+1 <= argc) {
+				text = argv[i+1];
+				i++;
+				runquery |= RQ_BOOK;
+			}
 		}
-		cout << " -- " << listkey.Count() << " matches total (" << target->Name() << ")" << endl;
-	      }
-	      else
-		cout << "none";
-	      
-#ifdef LOGGING	    
-	      fprintf (logfile, "\n");
-	      fclose(logfile);
-#endif
-	      return(0);
-	    }
-	    
-	    else if (strchr(flags, 'd')) {
-	      //do dictionary stuff
-	      
-	      if (!strcmp(target->Type(), "Lexicons / Dictionaries")) {
-		
-		target->SetKey(ref);
-		
-		char * text = (char *) *target;
-		if (GBF) {
-		  target->AddRenderFilter(new GBFThML());
+		else if (!stricmp("-s", argv[i])) {
+			if (i+1 <= argc) {
+				if (!stricmp("regex", argv[i+1])) {
+					searchtype = ST_REGEX;
+					i++;
+				}
+				else if (!stricmp("multiword", argv[i+1])) {
+					searchtype = ST_MULTIWORD;
+					i++;
+				}
+				else i++;
+			}
 		}
-		if (filter) target->AddRenderFilter(filter);
-		if (strlen(text)) {
-		  cout << target->KeyText() << " : " <<  text << "\n(" << target->Name() << ")" << endl;
+		else if (!stricmp("-l", argv[i])) {
+			if (i+1 <= argc) {
+				locale = argv[i+1];
+				i++;
+			}
 		}
-#ifdef LOGGING
-		else
-		  fprintf(logfile, "  FAILED\n");
-		
-		fprintf (logfile, "\n");
-		fclose(logfile);
-#endif
-		return(0);
-	      }
-	    }
-	    
-	    else if (strchr(flags, 'b') || strchr(flags, 'c')) {
-	      //do commentary/verse stuff
-	      
-	      if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
-		if ((eit = (*sit).second.find("Font")) != (*sit).second.end()) {
-		  font = (char *)(*eit).second.c_str();
-		  if (strlen(font) == 0) font = 0;
+		else if (!stricmp("-m", argv[i])) {
+			if (i+1 <= argc) {
+				maxverses = atoi(argv[i+1]);
+				i++;
+			}
 		}
-	      }
-	      
-	      if (!strcmp(target->Type(), "Biblical Texts") || !strcmp(target->Type(), "Commentaries")) {
-		if (GBF) {
-		  target->AddRenderFilter(new GBFThML());
+		else if (!stricmp("-o", argv[i])) {
+			if (i+1 <= argc) {
+				if (strchr(argv[i+1], 'f'))
+					optionfilters |= OP_FOOTNOTES;
+				if (strchr(argv[i+1], 'n'))
+					optionfilters |= OP_STRONGS;
+				if (strchr(argv[i+1], 'h'))
+					optionfilters |= OP_HEADINGS;
+				i++;
+			}
 		}
-		if (filter) target->AddRenderFilter(filter);
-		
-		char * comma = strchr(ref, ',');
-		char * dash = strchr(ref, '-');
-		
-		if (comma) {              // if we're looking up a sequence of
-		  // verses (must be in same chapter)
-		  char * vers1 = strchr(ref, ':') + 1;
-		  
-		  char * vers2 = new char[strlen(vers1)];
-		  strcpy (vers2, vers1);
-		  
-		  char * chap = new char[strlen(ref) + 8];
-		  strcpy (chap, ref);
-		  
-		  char * vers3 = strchr(chap, ':') + 1;
-		  *vers3 = 0;
-		  char * vers4 = new char;
-		  
-		  vers4 = strtok(vers2, ",");
-		  delete vers2;
-		  while (vers4) {
-		    strcpy (vers3, vers4);
-		    
-		    dash = strchr(chap, '-');
-		    if (dash) {               // if we're looking up a range...
-		      *dash = 0;              //break string at the dash
-		      dash++;
-		      char * temp = new char[strlen(chap) + 8];
-		      
-		      length = strchr(chap, ':') - chap + 1;
-		      
-		      strncpy (temp, chap, length);
-		      *(temp + length) = 0;
-		      strcat (temp, dash);
-		      strcpy (dash, temp);
-		      delete temp;
-		    }
-		    else dash = chap;
-		    
-		    for(target->Key(chap); target->Key()<(VerseKey)dash && --maxverses;(*target)++) {
-		      
-		      if (font && !filter)
-			cout << (char*)target->KeyText() << " " << ": <font face=\"" << font << "\">" << (char const*)*target << "</font>" << endl;
-		      else 
-			cout << (char*)target->KeyText() << ": " << (char const*)*target << endl;
-		      if (!ThML && !filter) cout << "<br />" << endl;
-		      
-		    }
-
-		    
-		    if (font && !filter)
-		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "</font> (" << target->Name() << ")" << endl;
-		    else 
-		      cout << (char*)target->KeyText() << ": " << (char const*)*target << " (" << target->Name() << ")" << endl;
-		    if (!ThML && !filter) cout << "<br />" << endl;
-		    
-		    vers4 = strtok(0, ",");
-		  }
-		  delete chap;
+		else if (!stricmp("-f", argv[i])) {
+			if (i+1 <= argc) {
+				if (!stricmp("thml", argv[i+1])) {
+					outputformat = FMT_THML;
+					i++;
+				}
+				else if (!stricmp("gbf", argv[i+1])) {
+					outputformat = FMT_GBF;
+					i++;
+				}
+				else if (!stricmp("html", argv[i+1])) {
+					outputformat = FMT_HTML;
+					i++;
+				}
+				else if (!stricmp("rtf", argv[i+1])) {
+					outputformat = FMT_RTF;
+					i++;
+				}
+				else i++;
+			}
 		}
-		else {
-		  if (dash) {                 // if we're looking up a range...
-		    *dash = 0;                //break string at the dash
-		    dash++;
-		    char * temp = new char[strlen(ref)];
-		    
-		    if (!strchr (dash, ':')) { /// if range supplies only second verse number (no book/chapter) assume same book/chapter
-		      length = strchr(ref, ':') - ref + 1;
-		      strncpy (temp, ref, length);
-		      *(temp + length) = 0;
-		      strcat (temp, dash);
-		      strcpy (dash, temp);
-		    }
-		    else if (!hasalpha (dash)){ /// if range supplies only second chapter/verse (no book--has no letters) assume same book
-		      strcpy (temp, ref);
-		      length = 0;
-		      while (!isalpha(*temp)) {temp++; length++;}
-		      while (isalpha(*temp)) {temp++; length++;}
-		      while (!isdigit(*temp)) {temp++; length++;}
-		      strncpy (temp, ref, length);
-		      *(temp + length) = 0;
-		      strcat (temp, dash);
-		      strcpy (dash, temp);
-		    }
-		    delete temp;
-		  }
-		  else dash = ref;	       
-		  
-		  for(target->Key(ref); target->Key()<(VerseKey)dash && --maxverses;(*target)++) {
-		    if (font && !filter)
-		      cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" <<  (char const*)*target << "</font>" << endl;
-		    else 
-		      cout << (char*)target->KeyText() << ": " << (char const*)*target << endl;
-		    if (!ThML && !filter) cout << "<br />" << endl;
-		  }
-		  if (font && !filter)
-		    cout << (char*)target->KeyText() << ": <font face=\"" << font << "\">" << (char const*)*target << "</font> (" << target->Name() << ")" << endl;
-		  else 
-		    cout << (char*)target->KeyText() << ": " << (char const*)*target << " (" << target->Name() << ")" << endl;
-		  if (!ThML && !filter) cout << "<br />" << endl;
+		else if (!stricmp("-k", argv[i])) {
+			i++;	
+			if (i < argc) {
+				string key = argv[i];
+				i++;
+				for (; i < argc; i++)
+					key = key + " " + argv[i];
+				ref = new char[key.length() + 1];
+				strcpy (ref, key.c_str());
+				if (strlen(ref))
+					runquery |= RQ_REF;
+			}
 		}
-		
-	      }
-#ifdef LOGGING	    
-	      fprintf (logfile, "\n");
-	      fclose(logfile);
-#endif
-	      return(0);	    
-	      
-	    }
-	  }    
-	  else {
-	    if (strchr(flags, 'm')) {
-	      // print a list of available modules
-	      SWMgr mymgr;
-	      ModMap::iterator it;
-	      SWModule *module;
-	      
-	      cout << "Biblical Texts:\n";
-	      for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
-		module = it->second;
-		if (!strcmp(module->Type(), "Biblical Texts")) {
-		  cout << module->Name() << " : " << module->Description() << "\n";
-		}
-	      }
-	      cout << "Commentaries:\n";
-	      for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
-		module = it->second;
-		if (!strcmp(module->Type(), "Commentaries")) {
-		  cout << module->Name() << " : " << module->Description() << "\n";
-		} 
-	      }
-	      cout << "Dictionaries:\n";
-	      for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
-		module = it->second;
-		if (!strcmp(module->Type(), "Lexicons / Dictionaries")) {
-		  cout << module->Name() << " : " << module->Description() << "\n";
-	 	}
-	      }
-		
-#ifdef LOGGING	    
-	      fprintf (logfile, "\n");
-	      fclose(logfile);
-#endif
-	      return(0);
-	    }
-	    else if (strchr(flags, 'l')) {
-
-	      
-	      LocaleMgr lm = LocaleMgr::systemLocaleMgr;
-	      list<string> loclist =  lm.getAvailableLocales();
-	      copy (loclist.begin(), loclist.end(), ostream_iterator<string> (cout, "\n"));
-
-#ifdef LOGGING	    
-	      fprintf (logfile, "\n");
-	      fclose(logfile);
-#endif
-	      return(0);
-	    }
-	  }
-#ifdef LOGGING
-	  fprintf(logfile, "  FAILED\n");
-	  fclose(logfile);
-#endif
 	}
 	
-	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf(stderr, "Diatheke command-line Bible utility and SWORD frontend Version 3.1 by Chris Little \nusage: \n %s -m                         (print list of available modules)\n %s -b [bible] [verse]         (verse lookup)\n %s -s [book] [word]           (word search)\n %s -d [dictionary] [word]     (dictionary lookup)\n %s -c [commentary] [verse]    (commentary lookup)\n\n To turn on Strong's numbers, add 'n' after the argument '-b'.\n Likewise, add 'f' after '-b' to turn on footnotes or 'h' for section headings.\n Also supported, at the end of the command line are\n locale (en, de, etc.), format (plain(default), html, gbf, rtf, or thml),\n max-verse (a number), and locale (en(default, de, es, etc.)\n arguments\n", argv[0], argv[0], argv[0], argv[0], argv[0]);
-	exit(-1);
-}
-
 	
-
-
-
-
-
+	if (runquery == (RQ_BOOK | RQ_REF))
+	{
+		char * returnstring  = doquery(maxverses, outputformat, optionfilters, searchtype, text, locale, ref);
+		printf ("%s", returnstring);
+		delete returnstring;
+	}
+	else
+		printsyntax();
+}

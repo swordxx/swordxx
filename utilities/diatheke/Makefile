@@ -6,6 +6,7 @@ bin := diatheke
 include ${root}/Makefile.cfg
 
 cpp += diatheke.cpp
+cpp += corediatheke.cpp
 
 s = $(c) $(cpp)
 d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
