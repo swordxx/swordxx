@@ -106,6 +106,10 @@ int main(int argc, char **argv)
 	      manager.setGlobalOption("Footnotes","On");
 	    else
 	      manager.setGlobalOption("Footnotes","Off");
+	    if (strchr (flags, 'h'))
+	      manager.setGlobalOption("Headings","On");
+	    else
+	      manager.setGlobalOption("Headings","Off");
 	    if (strchr (flags, 'n'))
 	      manager.setGlobalOption("Strong's Numbers","On");
 	    else
@@ -356,7 +360,7 @@ int main(int argc, char **argv)
 	}
 	
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf(stderr, "Diatheke command-line Bible utility and SWORD frontend Version 3.1 by Chris Little \nusage: \n %s -m                         (print list of available modules)\n %s -b [bible] [verse]         (verse lookup)\n %s -s [book] [word]           (word search)\n %s -d [dictionary] [word]     (dictionary lookup)\n %s -c [commentary] [verse]    (commentary lookup)\n\n To turn Strong's numbers on, add 'n' after the argument '-b'.\n Likewise, add 'f' after '-b' to turn footnotes on.\n Also supported, at the end of the command line are\n locale (en, de, etc.), format (plain(default), html, gbf, rtf, or thml),\n max-verse (a number), and locale (en(default, de, es, etc.)\n arguments\n", argv[0], argv[0], argv[0], argv[0], argv[0]);
+	fprintf(stderr, "Diatheke command-line Bible utility and SWORD frontend Version 3.1 by Chris Little \nusage: \n %s -m                         (print list of available modules)\n %s -b [bible] [verse]         (verse lookup)\n %s -s [book] [word]           (word search)\n %s -d [dictionary] [word]     (dictionary lookup)\n %s -c [commentary] [verse]    (commentary lookup)\n\n To turn on Strong's numbers, add 'n' after the argument '-b'.\n Likewise, add 'f' after '-b' to turn on footnotes or 'h' for section headings.\n Also supported, at the end of the command line are\n locale (en, de, etc.), format (plain(default), html, gbf, rtf, or thml),\n max-verse (a number), and locale (en(default, de, es, etc.)\n arguments\n", argv[0], argv[0], argv[0], argv[0], argv[0]);
 	exit(-1);
 }
 
