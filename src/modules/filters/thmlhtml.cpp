@@ -188,6 +188,28 @@ char ThMLHTML::ProcessText(char *text, int maxlen)
 	  *to++ = 'L';
 	  *to++ = '>';
 	}
+	else if (!strncmp(token, "scripRef version", 16)) {
+	  *to++ = '<';
+	  *to++ = 'A';
+	  *to++ = ' ';
+	  *to++ = 'H';
+	  *to++ = 'R';
+	  *to++ = 'E';	
+	  *to++ = 'F';	
+	  *to++ = '=';
+	  *to++ = '\"';	
+	  for (unsigned int i = 32; token[i] != '\"'; i++)
+	    *to++ = token[i];
+	  *to++ = '\"';
+	  *to++ = '>';
+  	} 
+	else if (!strncmp(token, "/scripRef", 9)) { 
+	  *to++ = ' ';
+	  *to++ = '<';
+	  *to++ = '/';
+	  *to++ = 'A';
+	  *to++ = '>';	  
+	}	
 	else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 	  *to++ = '<';
 	  *to++ = 'S';
