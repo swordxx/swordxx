@@ -4,10 +4,14 @@
 #include "swordorb-cpp-skels.h"
 #include <swmodule.h>
 #include <swmgr.h>
+#include <rawtext.h>
 #include <map>
 
 
 namespace swordorb {
+
+static const char *SWNULL = "<SWNULL>";
+extern sword::RawText NULLMod;
 
 //Inherit from abstract Skeleton:
 class SWModule_impl : public POA_swordorb::SWModule {
@@ -29,7 +33,7 @@ public:
 	void   begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
-	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):""); }
+	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }
 
 };
 

@@ -1,6 +1,8 @@
 package org.crosswire.util;
 
 /**
+ * Changed last char from '/' to '-' because cookies can't use '/' so we're not really a BASE64
+ * standard encoder anymore
  * Changed package name.  --crosswire.
  * Thanks to Robert Harder for placing this code into the public domain
  *
@@ -40,7 +42,7 @@ public class Base64
     
     
     /** Maximum line length (76) of Base64 output. */
-    private final static int MAX_LINE_LENGTH = 76;
+    private final static int MAX_LINE_LENGTH = java.lang.Integer.MAX_VALUE;
     
     
     /** The equals sign (=) as a byte. */
@@ -63,7 +65,7 @@ public class Base64
         (byte)'o', (byte)'p', (byte)'q', (byte)'r', (byte)'s', (byte)'t', (byte)'u', 
         (byte)'v', (byte)'w', (byte)'x', (byte)'y', (byte)'z',
         (byte)'0', (byte)'1', (byte)'2', (byte)'3', (byte)'4', (byte)'5', 
-        (byte)'6', (byte)'7', (byte)'8', (byte)'9', (byte)'+', (byte)'/'
+        (byte)'6', (byte)'7', (byte)'8', (byte)'9', (byte)'+', (byte)'-'  // changed last char from '/' to '-' because cookies can't use '/'
     };
     
     /** 

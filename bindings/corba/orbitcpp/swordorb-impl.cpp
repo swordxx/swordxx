@@ -11,19 +11,27 @@ char* swordorb::SWModule_impl::helloWorld(const char* greeting) throw(CORBA::Sys
 */
 
 namespace swordorb {
+
+sword::RawText NULLMod("/dev/null", SWNULL, SWNULL);
+
 	ModInfoList *SWMgr_impl::getModInfoList() throw(CORBA::SystemException) {
 
 		ModInfoList *milist = new ModInfoList;
 		sword::SWModule *module = 0;
 		int size = 0;
-		for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); it++) size++;
+		for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); it++) {
+			if ((!(it->second->getConfigEntry("CipherKey"))) || (*(it->second->getConfigEntry("CipherKey"))))
+				size++;
+		}
 		milist->length(size);
 		int i = 0;
 		for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); it++) {
 			module = it->second;
-			(*milist)[i].name = CORBA::string_dup(module->Name());
-			(*milist)[i].type = CORBA::string_dup(module->Type());
-			(*milist)[i++].lang = CORBA::string_dup(module->Lang());
+			if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
+				(*milist)[i].name = CORBA::string_dup(module->Name());
+				(*milist)[i].type = CORBA::string_dup(module->Type());
+				(*milist)[i++].lang = CORBA::string_dup(module->Lang());
+			}
 		}
 		return milist;
 	}
@@ -32,12 +40,11 @@ namespace swordorb {
 	SWModule_ptr SWMgr_impl::getModuleByName(const char *name) throw(CORBA::SystemException) {
 		SWModuleMap::iterator it;
 		SWModule_ptr retVal;
-		it = moduleImpls.find(name);
+		sword::SWModule *mod = delegate->Modules[name];
+		it = moduleImpls.find((mod)?name:SWNULL);
 		if (it == moduleImpls.end()) {
-			sword::SWModule *mod = delegate->Modules[name];
-			if (mod)
-				moduleImpls[name] = new SWModule_impl(mod);
-			it = moduleImpls.find(name);
+			moduleImpls[(mod)?name:SWNULL] = new SWModule_impl((mod)?mod:&NULLMod);
+			it = moduleImpls.find((mod)?name:SWNULL);
 		}
 		if (it != moduleImpls.end()) {
 			retVal = it->second->_this();
