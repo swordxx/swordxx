@@ -2,7 +2,7 @@
 
 #version 3.0
 
-$diatheke = "/usr/bin/diatheke";  # location of diatheke command line program
+$diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program -- if you are using a MS Windows server, you might need to remove the "nice"
 $defaultfontface = "Arial, Helvetica, sans-serif"; # default font name
 $sword_path = "/home/sword";  # SWORD_PATH environment variable you want to use
 
@@ -175,21 +175,21 @@ for ($i = 0; $i < $n; $i++) {
     
     if ($search eq "on") {
 	
-	$line = `nice $diatheke -s $versions[$i] \"$verse\" 2> /dev/null`;
+	$line = `$diatheke -s $versions[$i] \"$verse\" 2> /dev/null`;
 
     }
     else {
 	if ($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "JFB" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK") {
 	    $arg .= "c";
-	    $line = `nice $diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
+	    $line = `$diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
 	}
 	elsif ($versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "StrongsGreek" || $versions[$i] eq "StrongsHebrew" || $versions[$i] eq "Thayer" || $versions[$i] eq "BDB" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths") {
 	    $arg .= "d";
-	    $line = `nice $diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
+	    $line = `$diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
 	}
 	else {
 	    $arg .= "b";
-	    $line = `nice $diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
+	    $line = `$diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
 	}
     }
     chomp($line);
@@ -224,15 +224,21 @@ for ($i = 0; $i < $n; $i++) {
     elsif($versions[$i] eq "Thayer") {
 	$line =~ s/([0-9][0-9][0-9][0-9]+)/<a href=\"diatheke.pl?verse=$1&Thayer=on\">$1\<\/a\>/g;
     }
-    elsif($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "JFB" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK" || $versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths"|| $versions[$i] eq "Gill") {
+    #case for ThML format files
+    elsif($versions[$i] eq "JFB" || $versions[$i] eq "MHCC") {
+	$line =~ s/<scripRef version=\"([^\"]+)\" passage=\"([^\"]+)\">/<a href=\"diatheke.pl?verse=$2&$1=on\">/g;
+	$line =~ s/<\/scripRef>/<\/a>/g;
+    }
+    #case for GBF & other non-ThML files
+    elsif($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK" || $versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths"|| $versions[$i] eq "Gill") {
 	$book = $verse;
 	$book =~ s/^([A-Za-z0-9]+) [0-9]+:[0-9]+.*/$1/;
 	$chapter = $verse;
 	$chapter =~ s/[A-Za-z0-9]+ ([0-9]+):[0-9]+.*/$1/;
 	
-	$line =~ s/\#*([1-9]*[A-Z][a-z]+\.*) ([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?search=off&verse=$1+$2%3A$3&$defversion=on\">$1 $2:$3\<\/a\>/g;
-	$line =~ s/\#([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?search=off&verse=$book+$1%3A$2&$defversion=on\">$book $1:$2\<\/a\>/g;
-	$line =~ s/\#([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?search=off&verse=$book+$chapter%3A$1&$defversion=on\">$book $chapter:$1\<\/a\>/g;
+	$line =~ s/\#*([1-9]*[A-Z][a-z]+\.*) ([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$defversion=on\">$1 $2:$3\<\/a\>/g;
+	$line =~ s/\#([0-9]+):([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$1%3A$2&$defversion=on\">$book $1:$2\<\/a\>/g;
+	$line =~ s/\#([0-9]+-*,*[0-9]*)\|*/<a href=\"diatheke.pl?verse=$book+$chapter%3A$1&$defversion=on\">$book $chapter:$1\<\/a\>/g;
     }
 #--------- Change full book names to abbreviations
 #>>
@@ -423,9 +429,11 @@ for ($i = 0; $i < $n; $i++) {
 
 
 #<<
-
-	$line =~ s/([0-9]*[A-Za-z]+) ([0-9]+):([0-9]+)/<a href=\"diatheke.pl?search=off&verse=$1+$2%3A$3&$versions[$i]=on\">$1 $2:$3\<\/a\>/g;
+	$line =~ s/([0-9]*[A-Za-z]+) ([0-9]+):([0-9]+)/<a href=\"diatheke.pl?verse=$1+$2%3A$3&$versions[$i]=on\">$1 $2:$3\<\/a\>/g;
     }
+
+
+
 
 # for the old HREFCom version of JFB
 #    if ($versions[$i] eq "JFB") {
@@ -451,5 +459,3 @@ if ($palm == 1) {
 }
 
 print "</font></body></html>";
-`rm /tmp/diatheke.$hostname`;
-

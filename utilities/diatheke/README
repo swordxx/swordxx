@@ -49,12 +49,10 @@ Apache that is capable of running PERL CGIs.  Installing mod_perl is
 recommended for a speed improvement, but is by no means necessary.
 
 Then copy the two .pl files from the ./cgi directory of this
-distribution into your cgi-bin directory.  Modify the file
-dia-def.pl, inserting your hostname at the top, where it reads
-"bible.yourhost.com".  Also modify the top of diatheke.pl to reflect
-the correct location of your your diatheke command line utility
-binary and the default font if necessary. The CGI is now installed
-and ready for access.
+distribution into your cgi-bin directory.  Modify the top of
+diatheke.pl to reflect the correct location of your your diatheke
+command line utility binary and the default font if necessary. The
+CGI is now installed and ready for access.
 
 diatheke.pl is the main lookup script.  dia-def.pl is a supplemental
 script used to set a default Bible translation (saved on the 
