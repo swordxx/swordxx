@@ -1,3 +1,9 @@
+sword (1.5.7-1) unstable; urgency=low
+
+  * New upstream release: 1.5.7
+
+ -- Daniel Glassey <wdg@debian.org>  Wed, 12 Nov 2003 14:39:30 +0000
+
 sword (1.5.6-8) unstable; urgency=low
 
   * Remove the recommends of libsword-runtime from libsword-dev, Closes:

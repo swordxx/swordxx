@@ -34,7 +34,7 @@ configure-stamp:
 	chmod 755 configure
 	./configure $(confflags) --prefix=/usr --mandir=\$${prefix}/share/man \
 		--infodir=\$${prefix}/share/info --with-zlib \
-		--sysconfdir=/etc --enable-shared --without-icu
+		--sysconfdir=/etc --enable-shared --without-icu --without-lucene
 	touch configure.stamp
 
 build: configure-stamp build-stamp
@@ -75,9 +75,9 @@ install-stamp: build-stamp
 	#mkdir -p debian/libsword-dev/usr/share/doc/libsword-dev/html
 	#cp -R doc/api-documentation/html debian/libsword-dev/usr/share/doc/libsword-dev
 	mkdir -p debian/diatheke/usr/share/doc/diatheke/examples
-	cp -a apps/console/diatheke/cgi/index-public.html debian/diatheke/usr/share/doc/diatheke/examples
-	cp -a apps/console/diatheke/cgi/*.pl debian/diatheke/usr/lib/cgi-bin
-	cp -a apps/console/diatheke/README debian/diatheke/usr/share/doc/diatheke
+#	cp -a apps/console/diatheke/cgi/index-public.html debian/diatheke/usr/share/doc/diatheke/examples
+#	cp -a apps/console/diatheke/cgi/*.pl debian/diatheke/usr/lib/cgi-bin
+#	cp -a apps/console/diatheke/README debian/diatheke/usr/share/doc/diatheke
 	touch install-stamp
 
 # Build architecture-independent files here.
