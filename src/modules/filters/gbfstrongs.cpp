@@ -87,7 +87,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						sprintf(wordstr, "%03d", word++);
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
 						tmp = "";
-						tmp.append(text.c_str()+textStart, text.c_str()+((int)(textEnd - textStart)));
+						tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
 						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
 						newText = true;
 					}
