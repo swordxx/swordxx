@@ -14,7 +14,7 @@ class SWConfig;
 
 /** TODO: document
 */
-class InstallSource {
+class SWDLLEXPORT InstallSource {
 	SWMgr *mgr;
 public:
 	InstallSource(const char *type, const char *confEnt = 0);
@@ -36,7 +36,7 @@ typedef std::map<SWBuf, InstallSource *> InstallSourceMap;
 
 /** TODO: document
 */
-class InstallMgr {
+class SWDLLEXPORT InstallMgr {
 
 protected:
 	std::set<SWBuf> defaultMods;

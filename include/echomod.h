@@ -28,7 +28,7 @@
 
 SWORD_NAMESPACE_START
 
-class EchoMod:public SWText
+class SWDLLEXPORT EchoMod:public SWText
 {
 public:
   EchoMod ();

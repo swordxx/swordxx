@@ -32,7 +32,7 @@ SWORD_NAMESPACE_START
 
 
 // not a protected inner class because MSVC++ sucks and can't handle it
-class BasicFilterUserData {
+class SWDLLEXPORT BasicFilterUserData {
 public:
 	BasicFilterUserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; supressAdjacentWhitespace = false; }
 	virtual ~BasicFilterUserData() {}

@@ -75,7 +75,7 @@ public:
 * It keeps a list of all open files internally and closes them
 * when the destructor is called.
 */
-class FileMgr : public SWCacher {
+class SWDLLEXPORT FileMgr : public SWCacher {
 
 	friend class FileDesc;
 	friend class __staticsystemFileMgr;

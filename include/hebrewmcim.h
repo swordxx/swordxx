@@ -16,7 +16,7 @@
 SWORD_NAMESPACE_START
 
 
-class HebrewMCIM : public SWInputMethod {
+class SWDLLEXPORT HebrewMCIM : public SWInputMethod {
 
     void init();
     int subst[255];

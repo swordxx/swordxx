@@ -5,7 +5,7 @@
 #include <defs.h>
 SWORD_NAMESPACE_START
 
-class NullIM : public SWInputMethod {
+class SWDLLEXPORT NullIM : public SWInputMethod {
 
 public:
 	NullIM();

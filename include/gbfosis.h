@@ -27,7 +27,7 @@
 SWORD_NAMESPACE_START
 
 
-class QuoteStack {
+class SWDLLEXPORT QuoteStack {
 private:
 	class QuoteInstance {
 	public:

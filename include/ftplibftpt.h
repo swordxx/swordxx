@@ -14,7 +14,7 @@ public:
 };
 
 
-class FTPLibFTPTransport : public FTPTransport {
+class SWDLLEXPORT FTPLibFTPTransport : public FTPTransport {
 	void *nControl;
 
 public:

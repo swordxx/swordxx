@@ -13,7 +13,7 @@
 #include <defs.h>
 SWORD_NAMESPACE_START
 
-class SWInputMethod {
+class SWDLLEXPORT SWInputMethod {
 
 private:
     int state;

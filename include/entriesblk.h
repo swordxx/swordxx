@@ -6,7 +6,7 @@
 
 SWORD_NAMESPACE_START
 
-class EntriesBlock {
+class SWDLLEXPORT EntriesBlock {
 	static const int METAHEADERSIZE;
 	static const int METAENTRYSIZE;
 

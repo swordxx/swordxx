@@ -30,7 +30,7 @@ SWORD_NAMESPACE_START
 /** URL provides URL parsing
  * The URL class provides an interface to work on the data of an URL like "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody"
  */
-class URL {
+class SWDLLEXPORT URL {
 public:
 	typedef std::map<SWBuf, SWBuf> ParameterMap;
 	

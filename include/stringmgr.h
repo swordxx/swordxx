@@ -31,7 +31,7 @@ SWORD_NAMESPACE_START
 /** StringMgr is a way to provide UTf8 handling by the Sword frontend
  * Each platform, if it's up-to-date, should provide functions to handle unicode and utf8. This class makes it possible to implement Unicode support on the user-side and not in Sword itself.
  */
-class StringMgr {
+class SWDLLEXPORT StringMgr {
 public:
 	/** Sets the global StringMgr handle
 	* @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr

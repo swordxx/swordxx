@@ -17,7 +17,7 @@ SWORD_NAMESPACE_START
 
 /** Class for reporting status
 */
-class StatusReporter {
+class SWDLLEXPORT StatusReporter {
 public:
 	/** Messages before stages of a batch download */
 	virtual void preStatus(long totalBytes, long completedBytes, const char *message);
@@ -30,7 +30,7 @@ public:
 /** TODO: document
 * A base class to be used for reimplementation of network services.
 */
-class FTPTransport {
+class SWDLLEXPORT FTPTransport {
 
 protected:
 	StatusReporter *statusReporter;

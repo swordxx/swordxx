@@ -16,7 +16,7 @@ public:
 };
 
 
-class CURLFTPTransport : public FTPTransport {
+class SWDLLEXPORT CURLFTPTransport : public FTPTransport {
 	CURL *session;
 
 public:

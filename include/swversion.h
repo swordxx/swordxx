@@ -27,7 +27,7 @@ SWORD_NAMESPACE_START
 
 /** A basic tool class to handle program version numbers.
 */
-class SWVersion {
+class SWDLLEXPORT SWVersion {
 	public:
 	/** The different version subnumbers.
 	*/
