@@ -27,7 +27,7 @@ char UTF8HTML::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	len = strlenw(text.c_str()) + 2;						// shift string to right of buffer
 
 	SWBuf orig = text;
-  from = (unsigned char *)orig.c_str();
+  	from = (unsigned char *)orig.c_str();
 
 	// -------------------------------
 	for (text = ""; *from; from++) {

@@ -44,56 +44,48 @@ const char *ThMLHeadings::getOptionValue()
 char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want headings
-		const char *from;
-		char token[2048]; // cheese.  Fix.
-		int tokpos = 0;
+		SWBuf token;
 		bool intoken = false;
 		bool hide = false;
 
 		SWBuf orig = text;
-		from = orig.c_str();
+		const char *from = orig.c_str();
 
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
-				tokpos = 0;
-				token[0] = 0;
-				token[1] = 0;
-				token[2] = 0;
+				token = "";
 				continue;
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
 				if (!strnicmp(token, "div class=\"sechead\"", 19)) {
-						hide = true;
-						continue;
+					hide = true;
+					continue;
 				}
+				
 				if (!strnicmp(token, "div class=\"title\"", 17)) {
-						hide = true;
-						continue;
+					hide = true;
+					continue;
 				}
 				else if (hide && !strnicmp(token, "/div", 4)) {
-								   hide = false;
-									   continue;
+					hide = false;
+					continue;
 				}
 
 				// if not a heading token, keep token in text
 				if (!hide) {
 					text += '<';
-					text += token;
+					text.append(token);
 					text += '>';
 				}
 				continue;
 			}
-			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
+			if (intoken) { //copy token
+				token += *from;
 			}
-			else	{
-				if (!hide) {
-					text += *from;
-				}
+			else if (!hide) { //copy text which is not inside a token
+				text += *from;
 			}
 		}
 	}

@@ -55,39 +55,40 @@ const char *PLAINFootnotes::getOptionValue()
 
 char PLAINFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	char token[2048];
-	int tokpos = 0;
-	bool intoken 	= false;
-	bool lastspace = false;
-
 	if (!option) {	// if we don't want footnotes
+		//char token[2048];
+		//SWBuf token;
+		//int tokpos = 0;
+		//bool intoken 	= false;
+		//bool lastspace = false;
+
 		bool hide = false;
 
-		const char *from;
 		SWBuf orig = text;
-		from = orig.c_str();
+		const char *from = orig.c_str();
 		for (text = ""; *from; from++) {
-		 if (*from == '{') // Footnote start
+		 	if (*from == '{') // Footnote start
 			{
 				hide = true;
 				continue;
 			}
-			if (*from == '}') // Footnote end
+			else if (*from == '}') // Footnote end
 			{
-				hide=false;
+				hide = false;
 				continue;
 			}
-			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos+2] = 0;
-			}
-			else	{
+			
+			//if (intoken) {
+				//if (tokpos < 2045)
+			//		token += *from;
+				//	token[tokpos+2] = 0;
+			//}
+			//else	{
 				if (!hide) {
 					text = *from;
-					lastspace = (*from == ' ');
+					//lastspace = (*from == ' ');
 				}
-			}
+			//}
 		}
 	}
 	return 0;

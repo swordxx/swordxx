@@ -28,36 +28,33 @@ char PLAINHTML::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 {
 	int count = 0;
 
-	const char *from;
 	SWBuf orig = text;
-	from = orig.c_str();
-	for (text = ""; *from; from++)
+	const char *from = orig.c_str();
+	for (text = ""; *from; from++) 
 	{
-		if ((*from == '\n') && (from[1] == '\n')) // paragraph
+		if ((*from == '\n') && (from[1] == '\n')) // two newlinea are a paragraph
 		{
 			text += "<P>";
 			from++;
 			continue;
 		} else {
-			if ((*from == '\n')) // && (from[1] != '\n')) // new line
+			if ((*from == '\n')) // && (from[1] != '\n')) // only one new line
 			{
 				text += "<BR>";
 				continue;
 			}
 		}
 		
-		if (*from == '{') {
-			text += "<FONT COLOR=#80000><SMALL> (";
+		if (*from == '{') { //footnote start
+			text += "<FONT COLOR=\"#80000\"><SMALL> (";
 			continue;
 		}
-
-		if (*from == '}')
+		else if (*from == '}') //footnote end
 		{
 			text += ") </SMALL></FONT>";
 			continue;
 		}
-
-		if ((*from == ' ') && (count > 5000))
+		else if ((*from == ' ') && (count > 5000))
 		{
 			text += "<WBR>";
 			count = 0;

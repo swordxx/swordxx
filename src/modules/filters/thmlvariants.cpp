@@ -102,6 +102,9 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		}
 
 	}
+	
+	//the above code should work, it combines this part in it. (jansorg)
+	
 /*	else if (option == 1) { //we want variant only
 		bool intoken = false;
 		bool hide = false;
