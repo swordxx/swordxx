@@ -208,12 +208,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else
 		manager.setGlobalOption("Transliteration", "Primary Readings");
 
-#ifdef _ICU_
 	if (optionfilters & OP_TRANSLITERATOR && script)
                 manager.setGlobalOption("Transliteration", script);
 	else
 		manager.setGlobalOption("Transliteration", "Off");
-#endif
 	
 	if (querytype == QT_SEARCH) {
 

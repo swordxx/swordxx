@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#include <sysdata.h>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -19,7 +20,7 @@
 
 #include <regex.h>	// GNU
 #ifdef USELUCENE
-#include <CLucene/CLucene.h>
+#include <CLucene.h>
 using namespace lucene::search;
 using namespace lucene::queryParser;
 #else

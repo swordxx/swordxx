@@ -1,12 +1,12 @@
-instbase=/var/tomcat
-webapp=swordweb
+TOMCAT_HOME=/home/tomcat/jakarta-tomcat
+instdir=/home/swordweb/livehtml
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 
 src/org/crosswire/sword/orb/SWMgr.java: ../swordorb.idl
 	idlj -pkgTranslate swordorb org.crosswire.sword.orb -td src ../swordorb.idl
 
 classes/org/crosswire/sword/orb/SwordOrb.class: src/org/crosswire/sword/orb/SwordOrb.java
-	javac -classpath ${instbase}/common/lib/servlet-api.jar -d classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
+	javac -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
 
 
 clean:
@@ -18,4 +18,4 @@ clean:
 	rm -rf classes/*
 
 install:
-	cp -a classes/org/ ${instbase}/webapps/${webapp}/WEB-INF/classes/
+	cp -a classes/org/ ${instdir}/WEB-INF/classes/

@@ -201,7 +201,6 @@ int main(int argc, char **argv)
 				i++;
 			}
 		}
-#ifdef _ICU_
 		else if (!stricmp("-t", argv[i])) {
 			if (i+1 <= argc) {
 				script = argv[i+1];
@@ -209,7 +208,6 @@ int main(int argc, char **argv)
 				i++;
 			}
 		}
-#endif
 	}
 	
 	
