@@ -53,6 +53,7 @@ zText::zText(const char *ipath, const char *iname, const char *idesc, int iblock
 		: zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang) {
 	blockType = iblockType;
 	lastWriteKey = 0;
+#ifdef USELUCENE
 	SWBuf fname;
 	fname = path;
 	ir = 0;
@@ -64,6 +65,7 @@ zText::zText(const char *ipath, const char *iname, const char *idesc, int iblock
 		ir = &IndexReader::open(fname);
 		is = new IndexSearcher(*ir);
 	}
+#endif
 }
 
 
@@ -78,11 +80,13 @@ zText::~zText()
 	if (lastWriteKey)
 		delete lastWriteKey;
 
+#ifdef USELUCENE
 	if (is)
-		((IndexSearcher *)is)->close();
+		is->close();
 
 	if (ir)
-		delete (IndexReader *)ir;
+		delete ir;
+#endif
 }
 
 

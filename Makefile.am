@@ -106,11 +106,7 @@ if ICU
 iculibs = -licui18n -licuuc
 endif
 
-if USELUCENE
-lucenelibs = -lclucene
-endif
-
-testlib_LDADD = -L./lib -lsword $(iculibs) $(lucenelibs)
+testlib_LDADD = -L./lib -lsword $(iculibs)
 
 include locales.d/Makefile.am
 include samples/Makefile.am
