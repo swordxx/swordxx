@@ -228,11 +228,11 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	if (vkey) {
 		char ref[254];
 		if (vkey->Verse())
-			sprintf(ref, "<verseStart ref=\"%s\" />", vkey->getOSISRef());
+			sprintf(ref, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
 		else if (vkey->Chapter())
-			sprintf(ref, "<chapterStart ref=\"%s\" />", vkey->getOSISRef());
+			sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
 		else if (vkey->Book())
-			sprintf(ref, "<bookStart ref=\"%s\" />", vkey->getOSISRef());
+			sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		else *ref = 0;
 		if (*ref) {
 			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
@@ -243,27 +243,27 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				tmp = *vkey;
 				tmp.AutoNormalize(0);
 				tmp.Headings(1);
-				sprintf(ref, "<verseEnd ref=\"%s\" />", vkey->getOSISRef());
+				sprintf(ref, "</verse>");
 				pushString(&to, ref);
 				tmp = MAXVERSE;
 				if (*vkey == tmp) {
 					tmp.Verse(0);
-					sprintf(ref, "<chapterEnd ref=\"%s\" />", tmp.getOSISRef());
+					sprintf(ref, "\t</div>");
 					pushString(&to, ref);
 					tmp = MAXCHAPTER;
 					tmp = MAXVERSE;
 					if (*vkey == tmp) {
 						tmp.Chapter(0);
 						tmp.Verse(0);
-						sprintf(ref, "<bookEnd ref=\"%s\" />", tmp.getOSISRef());
+						sprintf(ref, "\t</div>");
 						pushString(&to, ref);
 					}
 				}
 			}
 
 			else if (vkey->Chapter())
-				sprintf(ref, "<chapterStart ref=\"%s\" />", vkey->getOSISRef());
-			else sprintf(ref, "<bookStart ref=\"%s\" />", vkey->getOSISRef());
+				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		}
 	}
 	*to++ = 0;
@@ -299,13 +299,13 @@ const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 			frag[((const char *)element->userData - startFrag) + 1] = 0;
 			startFrag = (const char *)element->userData + 1;
-			sprintf(buf, "<reference refStart=\"KJV:%s\" refEnd=\"%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
+			sprintf(buf, "<reference osisRef=\"%s-\"%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
 		}
 		else {
 			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
 			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
 			startFrag = (const char *)verses.GetElement(i)->userData + 1;
-			sprintf(buf, "<reference refStart=\"KJV:%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), frag);
+			sprintf(buf, "<reference osisRef=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), frag);
 		}
 		outRef+=buf;
 	}

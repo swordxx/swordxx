@@ -67,15 +67,21 @@ int main(int argc, char **argv)
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 
 	char *buf;
-	bool opendiv = false;
+	bool opentest = false;
+	bool openbook = false;
+	bool openchap = false;
 	VerseKey lastHeading;
 	lastHeading.Headings(1);
 	lastHeading.AutoNormalize(0);
 	lastHeading.Testament(5);
 	lastHeading = BOTTOM;
 
-	if (vkey)
-		vkey->Headings(1);
+	if (!vkey) {
+		cerr << "Currently mod2zmod only works with verse keyed modules\n\n";
+		exit(-1);
+	}
+
+	vkey->Headings(1);
 
 	cout << "<?xml version=\"1.0\" ";
 		if (inModule->getConfigEntry("Encoding")) {
@@ -86,57 +92,71 @@ int main(int argc, char **argv)
 		else cout << "encoding=\"UTF-8\" ";
 		cout << "?>\n\n";
 
-	cout << "<text ";
-		cout << "xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\" ";
-		cout << "refSys=\"KJV\" ";
-		cout << "work=\"";
-		cout << inModule->Name() << "\" ";
-		if (inModule->Lang()) {
-			if (strlen(inModule->Lang()))
-				cout << "lang=\"" << inModule->Lang() << "\" ";
-		}
-		cout << "xsi:noNamespaceSchemaLocation=\"OSISCore_1.0.2.xsd\" ";
-		cout << " >\n\n";
+	cout << "<osis";
+		cout << " xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"";
+		cout << " xsi:noNamespaceSchemaLocation=\"osisCore.1.1.xsd\">\n\n";
+	cout << "<osisText";
+		cout << " osisIDWork=\"";
+		cout << inModule->Name() << "\"";
+		cout << " osisRefWork=\"defaultReferenceScheme\"";
+		cout << ">\n\n";
 
-	cout << "\t<front>\n";
-	cout << "\t\t<title>\n";
-	cout << "\t\t\t<titlePart>" << inModule->Description() << "</titlePart>\n";
-	cout << "\t\t</title>\n";
-	cout << "\t</front>\n\n";
+	cout << "\t<header>\n";
+	cout << "\t\t<work osisWork=\"";
+	cout << inModule->Name() << "\">\n";
+	cout << "\t\t\t<identifier type=\"OSIS\">" << inModule->Name() << "</identifier>\n";
+	cout << "\t\t\t<title>" << inModule->Description() << "</title>\n";
+	if (inModule->Lang()) {
+		if (strlen(inModule->Lang()))
+			cout << "\t\t\t<language>" << inModule->Lang() << "</language>\n";
+	}
+	cout << "\t\t\t<refSystem>Bible.KJV</title>\n";
+	cout << "\t\t</work>\n";
+	cout << "\t\t<work osisWork=\"defaultReferenceScheme\">\n";
+	cout << "\t\t\t<identifier type=\"OSIS\">Bible.KJV</identifier>\n";
+	cout << "\t\t</work>\n";
+	cout << "\t</header>\n\n";
 
-	cout << "\t<body><div>\n";
 
+	(*inModule) = TOP; 
 	int testament = vkey->Testament();		
 //	for ((*inModule) = TOP; (inModule->Key() < (VerseKey)"Mat 2:1"); (*inModule)++) {
 	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
 //	for ((*vkey) = "Mark6:29"; !inModule->Error(); (*inModule)++) {
 		if (vkey->Testament() != lastHeading.Testament()) {
-			if (opendiv)
+			if (opentest)
 				cout << "\t</div>\n";
-			cout << "\t<div>";
-			opendiv = true;
+			cout << "\t<div type=\"testament\">";
+			lastHeading = *vkey;
+			lastHeading.Book(0);
+			lastHeading.Chapter(0);
+			lastHeading.Verse(0);
+			opentest = true;
 		}
 		if (vkey->Book() != lastHeading.Book()) {
+			if (openbook)
+				cout << "\t</div>\n";
 			buf = new char [205];
-			lastHeading.Testament(vkey->Testament());
-			lastHeading.Book(vkey->Book());
+			lastHeading = *vkey;
 			lastHeading.Chapter(0);
 			lastHeading.Verse(0);
 			*buf = 0;
 			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf << endl;
 			delete [] buf;
+			openbook = true;
 		}
 		if (vkey->Chapter() != lastHeading.Chapter()) {
+			if (openchap)
+				cout << "\t</div>\n";
 			buf = new char [205];
-			lastHeading.Testament(vkey->Testament());
-			lastHeading.Book(vkey->Book());
-			lastHeading.Chapter(vkey->Chapter());
+			lastHeading = *vkey;
 			lastHeading.Verse(0);
 			*buf = 0;
 			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf;
 			delete [] buf;
+			openbook = true;
 		}
 		/*
 		char *text = inModule->getRawEntry();
@@ -149,10 +169,14 @@ int main(int argc, char **argv)
 		*/
 		cout << inModule->RenderText() << endl;
 	}
-	if (opendiv)
+	if (openchap)
 		cout << "\t</div>\n";
-	cout << "\t</div></body>\n";
-	cout << "\t</text>\n";
+	if (openbook)
+		cout << "\t</div>\n";
+	if (opentest)
+		cout << "\t</div>\n";
+	cout << "\t</osisText>\n";
+	cout << "</osis>\n";
 	return 0;
 }
 
