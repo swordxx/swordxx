@@ -24,4 +24,7 @@ uninstallmodsDATA:
 	done
 else
 installmodsDATA:
+
+uninstallmodsDATA:
+
 endif
