@@ -296,7 +296,7 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
  *				text.
  */
 
-static void RawStr::preptext(char *buf) {
+void RawStr::preptext(char *buf) {
 	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
 
 	for (to = from = buf; *from; from++) {
