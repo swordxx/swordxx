@@ -40,7 +40,9 @@ char UTF8arShaping::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
         len = u_shapeArabic(ustr, len, ustr2, len, U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN, &err);
 
-        ucnv_fromUChars(conv, text.c_str(), maxlen, ustr2, len, &err);
+	   text.setSize(text.size()*2);
+	   len = ucnv_fromUChars(conv, text.getRawData(), text.size(), ustr2, len, &err);
+	   text.setSize(len);
 
         delete [] ustr2;
         delete [] ustr;

@@ -89,21 +89,17 @@ char RawLD4::getEntry(long away)
 
 	strongsPad(buf);
 
-	*entrybuf = 0;
-	if (!(retval = findoffset(buf, &start, &size, away))) {
-		readtext(start, &size, &idxbuf, &entrybuf);
-		rawFilter(entrybuf, size, 0);	// hack, decipher
-		rawFilter(entrybuf, size*FILTERPAD, key);
+	entryBuf = "";
+	if (!(retval = findOffset(buf, &start, &size, away))) {
+		readText(start, &size, &idxbuf, entryBuf);
+		rawFilter(entryBuf, 0);	// hack, decipher
+		rawFilter(entryBuf, key);
 		entrySize = size;        // support getEntrySize call
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
 
 		stdstr(&entkeytxt, idxbuf);	// set entry key text that module 'snapped' to.
 		delete [] idxbuf;
-	}
-	else {
-		entrybuf = new char [ 5 ];
-		*entrybuf = 0;
 	}
 		
 	delete [] buf;
@@ -118,16 +114,16 @@ char RawLD4::getEntry(long away)
  * RET: string buffer with entry
  */
 
-char *RawLD4::getRawEntry() {
+SWBuf &RawLD4::getRawEntryBuf() {
 
 	char ret = getEntry();
 	if (!ret) {
 		if (!isUnicode())
-			preptext(entrybuf);
+			prepText(entryBuf);
 	}
 	else error = ret;
 
-	return entrybuf;
+	return entryBuf;
 }
 
 
@@ -155,12 +151,12 @@ void RawLD4::increment(int steps) {
 
 
 void RawLD4::setEntry(const char *inbuf, long len) {
-	setText(*key, inbuf, len);
+	doSetText(*key, inbuf, len);
 }
 
 
 void RawLD4::linkEntry(const SWKey *inkey) {
-	linkentry(*key, *inkey);
+	doLinkEntry(*key, *inkey);
 }
 
 
@@ -171,7 +167,7 @@ void RawLD4::linkEntry(const SWKey *inkey) {
  */
 
 void RawLD4::deleteEntry() {
-	setText(*key, "");
+	doSetText(*key, "");
 }
 
 SWORD_NAMESPACE_END

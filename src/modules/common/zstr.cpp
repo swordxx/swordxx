@@ -282,11 +282,11 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
  *				text.
  */
 
-void zStr::prepText(char *buf) {
-	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
-
-	for (to = from = buf; *from; from++) {
-		switch (*from) {
+void zStr::prepText(SWBuf &buf) {
+	unsigned int to, from; 
+	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
+	for (to = from = 0; buf[from]; from++) {
+		switch (buf[from]) {
 		case 10:
 			if (!realdata)
 				continue;
@@ -295,14 +295,16 @@ void zStr::prepText(char *buf) {
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				*to++ = nl;
+				buf[to++] = 10;
+//				*to++ = nl[1];
 //				nlcnt = 0;
 			}
 			continue;
 		case 13:
 			if (!realdata)
 				continue;
-			*to++ = nl;
+//			*to++ = nl[0];
+			buf[to++] = 10;
 			space = 0;
 			cr = 1;
 			continue;
@@ -311,20 +313,20 @@ void zStr::prepText(char *buf) {
 		nlcnt = 0;
 		if (space) {
 			space = 0;
-			if (*from != ' ') {
-				*to++ = ' ';
+			if (buf[from] != ' ') {
+				buf[to++] = ' ';
 				from--;
 				continue;
 			}
 		}
-		*to++ = *from;
+		buf[to++] = buf[from];
 	}
-	*to = 0;
+	buf.setSize(to);
 
-	while (to > (buf+1)) {			// remove trailing excess
+	while (to > 1) {			// remove trailing excess
 		to--;
-		if ((*to == 10) || (*to == ' '))
-			*to = 0;
+		if ((buf[to] == 10) || (buf[to] == ' '))
+			buf.setSize(to);
 		else break;
 	}
 }

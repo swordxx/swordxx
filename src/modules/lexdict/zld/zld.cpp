@@ -87,14 +87,13 @@ char zLD::getEntry(long away) {
 
 	strongsPad(buf);
 
-	*entrybuf = 0;
+	entryBuf = "";
 	if (!(retval = findKeyIndex(buf, &index, away))) {
 		getText(index, &idxbuf, &ebuf);
 		size = strlen(ebuf) + 1;
-		entrybuf = new char [ size * FILTERPAD ];
-		strcpy(entrybuf, ebuf);
+		entryBuf = ebuf;
 
-		rawFilter(entrybuf, size*FILTERPAD, key);
+		rawFilter(entryBuf, key);
 
 		entrySize = size;        // support getEntrySize call
 		if (!key->Persist())			// If we have our own key
@@ -103,11 +102,6 @@ char zLD::getEntry(long away) {
 		stdstr(&entkeytxt, idxbuf);	// set entry key text that module 'snapped' to.
 		free(idxbuf);
 		free(ebuf);
-	}
-	else {
-		entrybuf = new char [ 5 ];
-		entrybuf[0] = 0;
-		entrybuf[1] = 0;
 	}
 		
 	delete [] buf;
@@ -122,12 +116,12 @@ char zLD::getEntry(long away) {
  * RET: string buffer with entry
  */
 
-char *zLD::getRawEntry() {
+SWBuf &zLD::getRawEntryBuf() {
 	if (!getEntry() && !isUnicode()) {
-		prepText(entrybuf);
+		prepText(entryBuf);
 	}
 
-	return entrybuf;
+	return entryBuf;
 }
 
 

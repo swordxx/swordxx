@@ -40,10 +40,12 @@ char UTF8NFKD::processText(SWBuf &text, const SWKey *key, const SWModule *module
         //compatability decomposition
         unorm_normalize(source, len, UNORM_NFKD, 0, target, len, &err);
 
-        ucnv_fromUChars(conv, text.c_str(), maxlen, target, -1, &err);
+	   text.setSize(text.size()*2);
+	   len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target, -1, &err);
+	   text.setSize(len);
 
-        delete [] source;
-        delete [] target;
+	   delete [] source;
+	   delete [] target;
 
 	return 0;
 }

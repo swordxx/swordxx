@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: zstr.h,v 1.6 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: zstr.h,v 1.7 2003/02/27 07:39:37 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,7 +26,7 @@
 #define ZSTR_H
 
 #include <filemgr.h>
-
+#include <swbuf.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
@@ -56,7 +56,7 @@ protected:
 
 	void getCompressedText(long block, long entry, char **buf);
 	void flushCache();
-	void prepText(char *buf);
+	void prepText(SWBuf &buf);
 	void getKeyFromDatOffset(long ioffset, char **buf);
 	void getKeyFromIdxOffset(long ioffset, char **buf);
 

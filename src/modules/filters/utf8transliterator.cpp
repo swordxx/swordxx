@@ -712,11 +712,11 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 				Transliterator * trans = createTrans(preid, id, postid, UTRANS_FORWARD, err);
                 if (trans && !U_FAILURE(err)) {
                         UnicodeString target = UnicodeString(source);
-                        trans->transliterate(target);
-                        len = ucnv_fromUChars(conv, text, maxlen, target.getBuffer(), target.length(), &err);
-                        if (len < maxlen) *(text + len) = 0;
-                        else *(text + maxlen) = 0;
-                        delete trans;
+				    trans->transliterate(target);
+				    text.setSize(text.size()*2);
+				    len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target.getBuffer(), target.length(), &err);
+					text.setSize(len);
+				    delete trans;
                 }
                 ucnv_close(conv);
         }

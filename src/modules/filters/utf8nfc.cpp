@@ -40,7 +40,9 @@ char UTF8NFC::processText(SWBuf &text, const SWKey *key, const SWModule *module)
         //canonical composition
         unorm_normalize(source, len, UNORM_NFC, 0, target, len, &err);
 
-        ucnv_fromUChars(conv, text.c_str(), maxlen, target, -1, &err);
+	   text.setSize(text.size()*2);
+	   len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target, -1, &err);
+	   text.setSize(len);
 
         delete [] source;
         delete [] target;

@@ -49,7 +49,9 @@ char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule 
 //        len = ubidi_writeReverse(ustr, len, ustr2, len,
 //                UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &err);
 
-        ucnv_fromUChars(conv, text.c_str(), maxlen, ustr2, len, &err);
+	   text.setSize(text.size()*2);
+	   len = ucnv_fromUChars(conv, text.getRawData(), text.size(), ustr2, len, &err);
+	   text.setSize(len);
 
         delete [] ustr2;
         delete [] ustr;
