@@ -67,12 +67,14 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
 			XMLTag tag(token);
 			if (!strcmp(tag.getName(), "note")) {
-				if (!tag.isEndTag() && (!tag.isEmpty())) {
-					refs = "";
-					startTag = tag;
-					hide = true;
-					tagText = "";
-					continue;
+				if (!tag.isEndTag()) {
+					if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {
+						refs = "";
+						startTag = tag;
+						hide = true;
+						tagText = "";
+						continue;
+					}
 				}
 				if (hide && tag.isEndTag()) {
 					if (module->isProcessEntryAttributes()) {

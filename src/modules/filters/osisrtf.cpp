@@ -127,22 +127,24 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
-			if (!tag.isEmpty() && !tag.isEndTag()) {
-				SWBuf type = tag.getAttribute("type");
+			if (!tag.isEndTag()) {
+				if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {  // handle bug in KJV2003 module where some note open tags were <note ... />
+					SWBuf type = tag.getAttribute("type");
 
-				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					VerseKey *vkey;
-					// see if we have a VerseKey * or descendant
-					try {
-						vkey = SWDYNAMIC_CAST(VerseKey, this->key);
+					if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						VerseKey *vkey;
+						// see if we have a VerseKey * or descendant
+						try {
+							vkey = SWDYNAMIC_CAST(VerseKey, this->key);
+						}
+						catch ( ... ) {	}
+						if (vkey) {
+							buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber.c_str());
+						}
 					}
-					catch ( ... ) {	}
-					if (vkey) {
-						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber.c_str());
-					}
+					userData["suspendTextPassThru"] = "true";
 				}
-				userData["suspendTextPassThru"] = "true";
 			}
 			if (tag.isEndTag()) {
 				userData["suspendTextPassThru"] = "false";
@@ -275,3 +277,4 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 
 
 SWORD_NAMESPACE_END
+

@@ -45,8 +45,13 @@ void XMLTag::parse() const {
 		if (!buf[i])
 			break;
 	}
-	if (buf[i-1] == '/')
-		empty = true;
+	for (;i;i--) {
+		if (buf[i] == '/')
+			empty = true;
+		if (!strchr(" \n>\t", buf[i]))
+			break;
+	}
+		
 	parsed = true;
 	if (name) delete [] name;
 	if (value) delete [] value;
