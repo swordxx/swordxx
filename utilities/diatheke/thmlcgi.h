@@ -1,5 +1,5 @@
 /***************************************************************************
-                          thmlcgi.h  -  description
+                   thmlcgi.h  -  OSIS to Diatheke/CGI format
                              -------------------
     begin                : 2001-11-12
     copyright            : 2001 by CrossWire Bible Society
