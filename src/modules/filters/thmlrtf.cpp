@@ -171,7 +171,7 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 		}
 		else if (!strncmp(token, "sync type=\"morph\" ", 18)) {
                         pushString(buf, " {\\fs15 (");
-			for (unsigned int i = 25; i < strlen(token); i++) {
+			for (unsigned int i = 5; i < strlen(token); i++) {
                                 if (!strncmp(token+i, "value=\"", 7)) {
                                         i += 7;
                                         for (;token[i] != '\"'; i++)
