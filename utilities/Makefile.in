@@ -112,11 +112,8 @@ mod2vpl vpl2mod stepdump step2vpl mod2zmod gbfidx modwrite addvs addld emptyvss 
 txt2sword addgb imp2gbs imp2ld imp2vs mod2imp thml2gbs mod2osis\
 $(ICUPROG)
 
-@ICU_TRUE@ICUPROG = normcode
+@ICU_TRUE@ICUPROG = 
 @ICU_FALSE@ICUPROG = 
-
-@ICU_TRUE@normcode_SOURCES = normcode.cpp
-@ICU_TRUE@normcode_LDADD = -licui18n -licuuc
 
 cipherraw_SOURCES = cipherraw.cpp
 ciphertest_SOURCES = ciphertest.cpp
@@ -154,7 +151,7 @@ CONFIG_CLEAN_FILES =
 @ICU_TRUE@	addld$(EXEEXT) emptyvss$(EXEEXT) txt2sword$(EXEEXT) \
 @ICU_TRUE@	addgb$(EXEEXT) imp2gbs$(EXEEXT) imp2ld$(EXEEXT) \
 @ICU_TRUE@	imp2vs$(EXEEXT) mod2imp$(EXEEXT) thml2gbs$(EXEEXT) \
-@ICU_TRUE@	mod2osis$(EXEEXT) normcode$(EXEEXT)
+@ICU_TRUE@	mod2osis$(EXEEXT)
 @ICU_FALSE@noinst_PROGRAMS = cipherraw$(EXEEXT) ciphertest$(EXEEXT) \
 @ICU_FALSE@	ciphertest2$(EXEEXT) lexdump$(EXEEXT) \
 @ICU_FALSE@	mkfastmod$(EXEEXT) mod2vpl$(EXEEXT) vpl2mod$(EXEEXT) \
@@ -255,11 +252,6 @@ modwrite_OBJECTS = $(am_modwrite_OBJECTS)
 modwrite_LDADD = $(LDADD)
 modwrite_DEPENDENCIES =
 modwrite_LDFLAGS =
-@ICU_TRUE@am_normcode_OBJECTS = normcode.$(OBJEXT)
-normcode_OBJECTS = $(am_normcode_OBJECTS)
-@ICU_TRUE@normcode_DEPENDENCIES =
-@ICU_FALSE@normcode_DEPENDENCIES =
-normcode_LDFLAGS =
 am_step2vpl_OBJECTS = step2vpl.$(OBJEXT)
 step2vpl_OBJECTS = $(am_step2vpl_OBJECTS)
 step2vpl_LDADD = $(LDADD)
@@ -302,7 +294,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/lexdump.Po ./$(DEPDIR)/mkfastmod.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/mod2imp.Po ./$(DEPDIR)/mod2osis.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/mod2vpl.Po ./$(DEPDIR)/mod2zmod.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/modwrite.Po ./$(DEPDIR)/normcode.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/modwrite.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/step2vpl.Po ./$(DEPDIR)/stepdump.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/thml2gbs.Po ./$(DEPDIR)/txt2sword.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/vpl2mod.Po
@@ -329,11 +321,11 @@ DIST_SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) \
 	$(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) \
 	$(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2imp_SOURCES) \
 	$(mod2osis_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) \
-	$(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) \
+	$(modwrite_SOURCES) $(step2vpl_SOURCES) \
 	$(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) \
 	$(vpl2mod_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(gbfidx_SOURCES) $(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2imp_SOURCES) $(mod2osis_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
+SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(gbfidx_SOURCES) $(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2imp_SOURCES) $(mod2osis_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
 
 all: all-am
 
@@ -405,9 +397,6 @@ mod2zmod$(EXEEXT): $(mod2zmod_OBJECTS) $(mod2zmod_DEPENDENCIES)
 modwrite$(EXEEXT): $(modwrite_OBJECTS) $(modwrite_DEPENDENCIES) 
 	@rm -f modwrite$(EXEEXT)
 	$(CXXLINK) $(modwrite_LDFLAGS) $(modwrite_OBJECTS) $(modwrite_LDADD) $(LIBS)
-normcode$(EXEEXT): $(normcode_OBJECTS) $(normcode_DEPENDENCIES) 
-	@rm -f normcode$(EXEEXT)
-	$(CXXLINK) $(normcode_LDFLAGS) $(normcode_OBJECTS) $(normcode_LDADD) $(LIBS)
 step2vpl$(EXEEXT): $(step2vpl_OBJECTS) $(step2vpl_DEPENDENCIES) 
 	@rm -f step2vpl$(EXEEXT)
 	$(CXXLINK) $(step2vpl_LDFLAGS) $(step2vpl_OBJECTS) $(step2vpl_LDADD) $(LIBS)
@@ -448,7 +437,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod2vpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mod2zmod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modwrite.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normcode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/step2vpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stepdump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thml2gbs.Po@am__quote@

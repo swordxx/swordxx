@@ -7,7 +7,7 @@ mod2vpl vpl2mod stepdump step2vpl mod2zmod gbfidx modwrite addvs addld emptyvss 
 txt2sword addgb imp2gbs imp2ld imp2vs mod2imp thml2gbs mod2osis
 
 if ICU
-ICUPROG = normcode
+ICUPROG = 
 else
 ICUPROG =
 endif
@@ -15,8 +15,6 @@ endif
 noinst_PROGRAMS += $(ICUPROG)
 
 if ICU
-normcode_SOURCES = normcode.cpp
-normcode_LDADD = -licui18n -licuuc
 endif
 
 cipherraw_SOURCES = cipherraw.cpp
