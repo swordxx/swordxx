@@ -1,7 +1,7 @@
 #include <iostream>
 #include <rawld.h>
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	RawLD::createModule("tmp/lextest");
 	RawLD lex("tmp/lextest");
