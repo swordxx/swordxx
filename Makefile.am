@@ -16,25 +16,17 @@ group     := root
 
 legalexport := no
 
-
 ##### Customizable stuff. Set it how you like it #####
 
 # if building dll with gcc on windoze (www.mingw.org)
 # note you must set need_local_regex and buildshare to yes
-#ifeq (@target_os@,mingw32)
 if MINGW
 mingw = yes
-#buildshare := yes
 need_local_regex := yes
 else
 
-
 # need regular expression stuff?
 need_local_regex := no
-
-
-# shared library - set to yes if you would like to build
-#buildshare := @enable_shared@
 
 endif
 
@@ -74,28 +66,13 @@ icu := @with_icu@
 # Global config directory
 globalconfdir := @sysconfdir@
 
-SUBDIRS = . tests utilities
+SUBDIRS = lib . tests utilities
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 
-#lib_LIBRARIES = lib/libsword.a
-lib_LTLIBRARIES = libsword.la
-
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
-testlib_LDADD = -L. -lsword
-
-#lib_libsword_a_SOURCES =
-libsword_la_SOURCES =
-libsword_la_LIBADD =
-#lib_libsword_la_LDFLAGS = -version-info 1
-libsword_la_LDFLAGS = -release 1.5.3
-include src/keys/Makefile.am
-include src/utilfuns/Makefile.am
-include src/mgr/Makefile.am
-include src/frontend/Makefile.am
-include src/modules/Makefile.am
-include include/Makefile.am
+testlib_LDADD = -Llib -lsword
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh

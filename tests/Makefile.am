@@ -1,5 +1,5 @@
 INCLUDES = -I $(top_srcdir)/include
-LDADD = -L$(top_builddir) -lsword 
+LDADD = -L$(top_builddir)/lib -lsword 
 
 
 noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
