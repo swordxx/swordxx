@@ -135,72 +135,72 @@ ThMLHTML::ThMLHTML() {
 }
 
 
-bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool ThMLHTML::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
                         if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
-        			pushString(buf, "<small><em>");
+        			buf += "<small><em>";
 	        		for (const char *tok = token + 5; *tok; tok++)
 		        		if(*tok != '\"')
-			        		*(*buf)++ = *tok;
-        			pushString(buf, "</em></small>");
+			        		buf += *tok;
+        			buf += "</em></small>";
                         }
                         else if (token[27] == 'T') {
-        			pushString(buf, "<small><i>");
+        			buf += "<small><i>";
         			for (unsigned int i = 29; token[i] != '\"'; i++)
-        				*(*buf)++ = token[i];
-        			pushString(buf, "</i></small>");
+        				buf += token[i];
+        			buf += "</i></small>";
                         }
 		}
 		else if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
-			pushString(buf, "<small><em>");
+			buf += "<small><em>";
 			for (unsigned int i = 25; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];
-			pushString(buf, "</em></small>");
+				buf += token[i];
+			buf += "</em></small>";
 		}
 		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
-			pushString(buf, "<small><em>(");
+			buf += "<small><em>(";
 			for (unsigned int i = 25; token[i] != '\"'; i++)
-				*(*buf)++ = token[i];
-			pushString(buf, ")</em></small>");
+				buf += token[i];
+			buf += ")</em></small>";
 		}
 		else if (!strncmp(token, "scripRef", 8)) {
-			pushString(buf, "<a href=\"");
+			buf += "<a href=\"";
 			for (const char *tok = token + 9; *tok; tok++)
 				if(*tok != '\"')
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+					buf += *tok;
+			buf += '\"';
+			buf += '>';
 		}
 		else if (!strncmp(token, "img ", 4)) {
 			const char *src = strstr(token, "src");
 			if (!src)		// assert we have a src attribute
 				return false;
 
-			*(*buf)++ = '<';
+			buf += '<';
 			for (const char *c = token; *c; c++) {
 				if (c == src) {
 					for (;((*c) && (*c != '"')); c++)
-						*(*buf)++ = *c;
+						buf += *c;
 
 					if (!*c) { c--; continue; }
 
-					*(*buf)++ = '"';
+					buf += '"';
 					if (*(c+1) == '/') {
-						pushString(buf, "file:");
-						pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
-						if (*((*buf)-1) == '/')
+						buf += "file:";
+						buf += module->getConfigEntry("AbsoluteDataPath");
+						if (buf[buf.length()-2] == '/')
 							c++;		// skip '/'
 					}
 					continue;
 				}
-				*(*buf)++ = *c;
+				buf += *c;
 			}
-			*(*buf)++ = '>';
+			buf += '>';
 		}
 		else if(!strncmp(token, "note", 4)) {
-                        pushString(buf, " <font color=\"#800000\"><small>(");
+                        buf += " <font color=\"#800000\"><small>(";
                 }
 
 		else {

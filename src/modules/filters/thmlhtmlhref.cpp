@@ -135,20 +135,20 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 }
 
 
-bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	const char *tok;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync ", 5)) {
 			if(strstr(token,"type=\"morph\"")){
-				pushString(buf, "<small><em> (<a href=\"");
+				buf += "<small><em> (<a href=\"";
 			}				
 			else 
-				pushString(buf, "<small><em> &lt;<a href=\"");
+				buf += "<small><em> &lt;<a href=\"";
 			for (tok = token + 5; *(tok+1); tok++)
 				if(*tok != '\"')
-					*(*buf)++ = *tok;
-			pushString(buf, "\">");
+					buf += *tok;
+			buf += "\">";
 				
                         //scan for value and add it to the buffer
 			for (tok = token + 5; *tok; tok++) {
@@ -158,29 +158,29 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 					else
 						tok += 8;
 					for (;*tok != '\"'; tok++)
-						*(*buf)++ = *tok;
+						buf += *tok;
 					break;
 				}
 			}
 			if(strstr(token,"type=\"morph\"")) 
-				pushString(buf, "</a>) </em></small>");
+				buf += "</a>) </em></small>";
 			else 				
-				pushString(buf, "</a>&gt; </em></small>");
+				buf += "</a>&gt; </em></small>";
 		}
 		
 		else if (!strncmp(token, "scripture ", 10)) {
 			userData["inscriptRef"] = "true";
-			pushString(buf, "<i>");
+			buf += "<i>";
 		} 
 
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
 			userData["inscriptRef"] = "true";
-			pushString(buf, "<a href=\"");
+			buf += "<a href=\"";
 			for (const char *tok = token + 9; *(tok+1); tok++)				
 				if(*tok != '\"') 			
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+					buf += *tok;
+			buf += '\"';
+			buf += '>';
 		} 
 
 		// we're starting a scripRef like "<scripRef>John 3:16</scripRef>"
@@ -194,39 +194,39 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 		else if (!strcmp(token, "/scripRef")) {
 			if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
 				userData["inscriptRef"] = "false";
-				pushString(buf, "</a>");
+				buf +="</a>";
 			}
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
-				pushString(buf, "<a href=\"passage=");
+				buf += "<a href=\"passage=");
 				//char *strbuf = (char *)userData["lastTextNode"].c_str();
-				pushString(buf, userData["lastTextNode"].c_str());
-				*(*buf)++ = '\"';
-				*(*buf)++ = '>';
-				pushString(buf, userData["lastTextNode"].c_str());
+				buf += userData["lastTextNode"].c_str();
+				buf += '\"';
+				buf += '>';
+				buf += userData["lastTextNode"].c_str();
 				// let's let text resume to output again
 				userData["suspendTextPassThru"] = "false";	
-				pushString(buf, "</a>");
+				buf += "</a>";
 			}
 		}
 			
 		else if (!strncmp(token, "div class=\"sechead\"", 19)) {
 		        userData["SecHead"] = "true";
-			pushString(buf, "<br /><b><i>");
+			buf += "<br /><b><i>";
 		}
 		else if (!strncmp(token, "div class=\"title\"", 19)) {
 		        userData["SecHead"] = "true";
-			pushString(buf, "<br /><b><i>");
+			buf += "<br /><b><i>";
 		}
 		else if (!strncmp(token, "/div", 4)) {
 		        if (userData["SecHead"] == "true") {
-			        pushString(buf, "</i></b><br />");
+			        buf += "</i></b><br />";
 				userData["SecHead"] = "false";
 			}
 		}
 /*
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
-			pushString(buf, "<a href=\"");
+			buf +="<a href=\"");
 			for (tok = token + 5; *(tok+1); tok++)				
 				if(*tok != '\"') 			
 					*(*buf)++ = *tok;
@@ -235,7 +235,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			for (tok = token + 29; *(tok+2); tok++)				
 				if(*tok != '\"') 			
 					*(*buf)++ = *tok;		
-			pushString(buf, "</a>");
+			buf +="</a>");
 		}
 */
 		else if (!strncmp(token, "img ", 4)) {
@@ -243,35 +243,35 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			if (!src)		// assert we have a src attribute
 				return false;
 
-			*(*buf)++ = '<';
+			buf += '<';
 			for (const char *c = token; *c; c++) {
 				if (c == src) {
 					for (;((*c) && (*c != '"')); c++)
-						*(*buf)++ = *c;
+						buf += *c;
 
 					if (!*c) { c--; continue; }
 
-					*(*buf)++ = '"';
+					buf += '"';
 					if (*(c+1) == '/') {
-						pushString(buf, "file:");
-						pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
-						if (*((*buf)-1) == '/')
+						buf += "file:";
+						buf += module->getConfigEntry("AbsoluteDataPath");
+						if (buf[buf.length()-2] == '/')
 							c++;		// skip '/'
 					}
 					continue;
 				}
-				*(*buf)++ = *c;
+				buf += *c;
 			}
-			*(*buf)++ = '>';
+			buf += '>';
 		}
 		else if (!strncmp(token, "note", 4)) {
-			pushString(buf, " <small><font color=\"#800000\">(");
+			buf += " <small><font color=\"#800000\">(";
 		}                
 		else {
-			*(*buf)++ = '<';
+			buf += '<';
 			for (const char *tok = token; *tok; tok++)
-				*(*buf)++ = *tok;
-			*(*buf)++ = '>';
+				buf += *tok;
+			buf += '>';
 			//return false;  // we still didn't handle token
 		}
 	}
