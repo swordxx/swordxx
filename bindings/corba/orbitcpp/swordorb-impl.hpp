@@ -36,6 +36,7 @@ public:
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
 	StringList *getEntryAttribute(const char *level1, const char *level2, const char *level3) throw(CORBA::SystemException);
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
+	char *getRawEntry() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->getRawEntry()); }
 	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }
 	void deleteSearchFramework() throw(CORBA::SystemException) { return delegate->deleteSearchFramework(); }
 	CORBA::Boolean hasSearchFramework() throw(CORBA::SystemException) { return (delegate->hasSearchFramework() && delegate->isSearchOptimallySupported("God", -4, 0, 0)); }

@@ -41,32 +41,32 @@ OSISWordJS::~OSISWordJS() {
 
 
 char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	char token[2112]; // cheese.  Fix.
-	int tokpos = 0;
-	bool intoken = false;
-	bool lastspace = false;
-	int wordNum = 1;
-	char val[128];
-	char *valto;
-	char *ch;
-	
+	if (option) {
+		char token[2112]; // cheese.  Fix.
+		int tokpos = 0;
+		bool intoken = false;
+		bool lastspace = false;
+		int wordNum = 1;
+		char val[128];
+		char *valto;
+		char *ch;
+		
 
-	const SWBuf orig = text;
-	const char * from = orig.c_str();
+		const SWBuf orig = text;
+		const char * from = orig.c_str();
 
-	for (text = ""; *from; ++from) {
-		if (*from == '<') {
-			intoken = true;
-			tokpos = 0;
-			token[0] = 0;
-			token[1] = 0;
-			token[2] = 0;
-			continue;
-		}
-		if (*from == '>') {	// process tokens
-			intoken = false;
-			if ((*token == 'w') && (token[1] == ' ')) {	// Word
-				if (option) {
+		for (text = ""; *from; ++from) {
+			if (*from == '<') {
+				intoken = true;
+				tokpos = 0;
+				token[0] = 0;
+				token[1] = 0;
+				token[2] = 0;
+				continue;
+			}
+			if (*from == '>') {	// process tokens
+				intoken = false;
+				if ((*token == 'w') && (token[1] == ' ')) {	// Word
 					XMLTag wtag(token);
 					SWBuf lemma = wtag.getAttribute("lemma");
 					SWBuf strong = "";
@@ -112,27 +112,27 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 
 
 				}
-			}
-			if ((*token == '/') && (token[1] == 'w') && option) {	// Word
-				text += "</w></span>";
+				if ((*token == '/') && (token[1] == 'w') && option) {	// Word
+					text += "</w></span>";
+					continue;
+				}
+				
+				// if not a strongs token, keep token in text
+				text.append('<');
+				text.append(token);
+				text.append('>');
+				
 				continue;
 			}
-			
-			// if not a strongs token, keep token in text
-			text.append('<');
-			text.append(token);
-			text.append('>');
-			
-			continue;
-		}
-		if (intoken) {
-			if (tokpos < 2045)
-				token[tokpos++] = *from;
-				token[tokpos+2] = 0;
-		}
-		else	{
-			text.append(*from);
-			lastspace = (*from == ' ');
+			if (intoken) {
+				if (tokpos < 2045)
+					token[tokpos++] = *from;
+					token[tokpos+2] = 0;
+			}
+			else	{
+				text.append(*from);
+				lastspace = (*from == ' ');
+			}
 		}
 	}
 	return 0;

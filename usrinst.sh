@@ -6,11 +6,12 @@ OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--sysconfdir=/etc $OPTIONS"
 OPTIONS="--with-icu $OPTIONS"
 #OPTIONS="--with-vcl $OPTIONS"
-#OPTIONS="--enable-debug $OPTIONS"
+OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 OPTIONS="--with-lucene $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
 #OPTIONS="--enable-tests $OPTIONS"
+#OPTIONS="--disable-utilities $OPTIONS"
 
 
 CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*

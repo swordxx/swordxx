@@ -45,10 +45,12 @@ int main (int argc, char *argv[])
 		}
 */
 		mgr->setJavascript(true);
-		module = mgr->getModuleByName("WHNU");
-		module->setKeyText("jas.1.9");
-		std::cout << "KeyText: " << module->getKeyText() << "\n";
-		std::cout << "Text: " << module->getRenderText() << "\n";
+		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
+		module = mgr->getModuleByName("NASB");
+		for (module->setKeyText("mat.1.1"); !module->error(); module->next()) {
+			std::cout << "KeyText: " << module->getKeyText() << "\n";
+			std::cout << "Text: " << module->getRenderText() << "\n";
+		}
 /*
 		swordorb::SearchHitList *searchResults;
 		bool lucene = module->hasSearchFramework();
