@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 
-use sword;
+use Sword;
 
-print "Version (should be 1.0): " , $sword::VERSION , "\n";
+print "Version (should be 1.0): " , $Sword::VERSION , "\n";
 
 print "Create SWConfig object!\n";
-$config = new sword::SWConfig("test.conf");
+$config = new Sword::SWConfig("test.conf");
 
 print "Load\n";
 $config->Load();
@@ -22,17 +22,17 @@ $config->Save();
 
 #testing SWMgr
 print "testing SWMgr\n";
-#$localemgr = sword::LocaleMgr::getSystemLocaleMgr();
+#$localemgr = Sword::LocaleMgr::getSystemLocaleMgr();
 #$localemgr->setDefaultLocaleName("de");
 
-$mgr = new sword::SWMgr();
+$mgr = new Sword::SWMgr();
 print "init ... ";
 #$module = $mgr->module("GerLut1545-temp");
 $module = $mgr->module("WEB");
 print "Printing WEB Module information: \n";
 print "Name:\t", $module->Name(),"\nDescription:\t", $module->Description(), "\nLang:\t", $module->Lang(), "\n";
 
-$key = new sword::VerseKey("Matthew 3:16");
+$key = new Sword::VerseKey("Matthew 3:16");
 $key->setPersist(1);
 $module->SetKey($key);
 
@@ -49,7 +49,7 @@ $key->setText("John 3:16");
 $module->write("This is a test entry! This tests the write abilities of the Sword Perl classes");
 print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
 
-print "Seraching for God: ";
+print "Searching for God: ";
 $list = $module->Search("Gott");
 print $list->Count(), " entries found!\n";
 #for ( $i = 0; $i < $list->Count(); $i++) {
@@ -58,8 +58,8 @@ print $list->Count(), " entries found!\n";
 #}
 
 print "Creating new module! Writing search result...";
-#sword::RawText::createModule("/usr/share/sword/modules/texts/ztext/testmodule/");
-#$newmod = new sword::RawText("/usr/share/sword/modules/texts/ztext/testmodule/");
+#Sword::RawText::createModule("/usr/share/sword/modules/texts/ztext/testmodule/");
+#$newmod = new Sword::RawText("/usr/share/sword/modules/texts/ztext/testmodule/");
 
 #$key->setText("Genesis 1:1");
 $newkey = $key->clone();
@@ -75,11 +75,11 @@ $newkey = $key->clone();
 print "Now create the LD module\n";
 
  mkdir("ldmod");
-sword::zText::createModule("ldmod/",4);
+Sword::zText::createModule("ldmod/",4);
 
 print "first step}\n";
 
-$newmod = new sword::zText("ldmod/");
+$newmod = new Sword::zText("ldmod/");
 
 print "Created module;\n";
 

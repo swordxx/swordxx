@@ -13,13 +13,8 @@ public:
   virtual ~LocaleMgr ();
   virtual SWLocale *getLocale (const char *name);
   virtual std::list < SWBuf > getAvailableLocales ();
-  //virtual const char *translate (const char *name, const char *text);
   virtual const char *getDefaultLocaleName();
   virtual void setDefaultLocaleName (const char *name);
 
-%extend {
-  static LocaleMgr* const getSystemLocaleMgr() {
-  	return &(LocaleMgr::systemLocaleMgr);
-  };
-}
+  static LocaleMgr* const getSystemLocaleMgr();
 };
