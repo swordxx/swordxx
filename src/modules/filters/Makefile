@@ -33,8 +33,14 @@ cpp += thmlplain.cpp
 
 cpp += unicodertf.cpp
 cpp += latin1utf8.cpp
+cpp += latin1utf16.cpp
+cpp += utf8utf16.cpp
+cpp += utf16utf8.cpp
+cpp += scsuutf8.cpp
 
 cpp += thmlolb.cpp
+
+cpp += utf8transliterator.cpp
 
 cpp += utf8cantillation.cpp
 cpp += utf8hebrewpoints.cpp

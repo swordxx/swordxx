@@ -15,29 +15,27 @@ UnicodeRTF::UnicodeRTF() {
 
 char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	unsigned char *to, *from, token[2048];
-	int tokpos = 0;
-	bool intoken = false;
+	unsigned char *to, *from;
 	int len;
-	unsigned int i;
-     char digit[10];
-     short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
-
+        char digit[10];
+        short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
+	
 	len = strlenw(text) + 2;						// shift string to right of buffer
 	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
+	        memmove(&text[maxlen - len], text, len);
 		from = (unsigned char*)&text[maxlen - len];
 	}
-	else	from = (unsigned char*)text;							// -------------------------------
+	else	from = (unsigned char*)text;
+	// -------------------------------
 	for (to = (unsigned char*)text; *from; from++) {
-     	ch = 0;
+	  ch = 0;
           if ((*from & 128) != 128) {
 //          	if (*from != ' ')
-	               *to++ = *from;
+	       *to++ = *from;
                continue;
           }
           if ((*from & 128) && ((*from & 64) != 64)) {
-			// error
+	    // error
                *from = 'x';
                continue;
           }
@@ -57,11 +55,11 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key)
           from += subsequent;
           *to++ = '\\';
           *to++ = 'u';
-          sprintf(digit, "%d", ch);
-          for (int i = 0; i < strlen(digit); i++)
-               *to++ = digit[i];
+	  sprintf(digit, "%d", ch);
+	  for (int i = 0; i < strlen(digit); i++)
+	    *to++ = digit[i];
           *to++ = '?';
-     }
+	}
 	*to++ = 0;
 	*to = 0;
 	return 0;
