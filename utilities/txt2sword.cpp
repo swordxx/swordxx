@@ -6,7 +6,6 @@
 #include <versekey.h>
 #include <sys/stat.h>
 #include <iostream.h>
-#include <stdlib.h>
 const long MAXVLEN = 8192;
 
 int fp, vfp, cfp, bfp, dfp;
@@ -140,9 +139,10 @@ char getVerse(int fp, int *verseNum, char *verseBuf, char testament)
   *verseBuf = 0;
 
   while (1) {
-    retVal = read(fp, &temp_char, 1);
+    retVal = read(fp, temp_char, 1);
+
     if (isdigit(temp_char[0]))
-      tvn = (10 * tvn) + atoi(temp_char);
+      tvn = (10 * tvn) + temp_char[0] - '0';
     else
       break;
   }
@@ -218,8 +218,6 @@ void openFiles(char *fileName)
 	write(vfp, &size, 2);
 	write(vfp, &pos, 4);  /* Testament intro */
 	write(vfp, &size, 2);
-
-
 }
 
 
