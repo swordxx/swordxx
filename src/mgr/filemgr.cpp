@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.36 2004/01/17 18:38:06 scribe Exp $
+ * $Id: filemgr.cpp,v 1.37 2004/01/17 23:12:46 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -365,6 +365,11 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 	bool more = true;
 
 	line = "";
+
+	// assert we have a valid file handle
+	if (fDesc->getFd() < 1)
+		return 0;
+
 	while (more) {
 		more = false;
 		long index = lseek(fDesc->getFd(), 0, SEEK_CUR);
@@ -375,6 +380,9 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 			else index++;
 		}
 
+		// assert we have a readable file (not a directory)
+		if (len < 0)
+			break;
 
 		while (ch != 10) {
 		   if ((len = read(fDesc->getFd(), &ch, 1)) != 1)
@@ -405,7 +413,7 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		line += buf;
 		delete [] buf;
 	}
-	return (len || line.length());
+	return ((len>0) || line.length());
 }
 
 
