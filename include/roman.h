@@ -18,8 +18,8 @@
  */
 #ifndef ROMAN_H
 #define ROMAN_H
-
-char* to_rom(int num, char *p);
-int from_rom(char *s);
+char isroman(const char *);
+//char* to_rom(int num, char *p);
+int from_rom(const char *s);
 
 #endif

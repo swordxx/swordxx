@@ -94,7 +94,8 @@ int r;
   uInt m;               /* bytes to end of window or read pointer */
   Bytef *f;             /* pointer to copy strings from */
   inflate_codes_statef *c = s->sub.decode.codes;  /* codes state */
-
+  long tryF;
+//      f = q 
   /* copy input/output information to locals (UPDATE macro restores) */
   LOAD
 
@@ -201,9 +202,11 @@ int r;
           s->end - (c->sub.copy.dist - (q - s->window)) :
           q - c->sub.copy.dist;
 #else
-      f = q - c->sub.copy.dist;
+	tryF = (long)q - c->sub.copy.dist;
+//      f = q - c->sub.copy.dist;
       if ((uInt)(q - s->window) < c->sub.copy.dist)
         f = s->end - (c->sub.copy.dist - (uInt)(q - s->window));
+      else f = (Bytef *)tryF;
 #endif
       while (c->len)
       {

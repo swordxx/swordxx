@@ -19,6 +19,9 @@
 #include <swkey.h>
 #include <versekey.h>
 #include <localemgr.h>
+extern "C" {
+#include <roman.h>
+}
 
 
 static const char *classes[] = {"VerseKey", "SWKey", "SWObject", 0};
@@ -306,6 +309,11 @@ int VerseKey::getBookAbbrev(char *abbr)
 				min = target;
 			else	max = target;
 		}
+          for (; target > 0; target--) {
+          	if (strncmp(abbr, abbrevs[target-1].ab, abLen))
+               	break;
+          }
+               
 		return (!diff) ? abbrevs[target].book : -1;
 	}
 	else	return -1;
@@ -332,8 +340,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 	char book[255];
 	char number[255];
-	char tobook = 0;
-	char tonumber = 0;
+	int tobook = 0;
+	int tonumber = 0;
 	int chap = -1, verse = -1;
 	int bookno = 0;
 	VerseKey curkey, lBound;
@@ -389,6 +397,27 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					}
 					break;
 				}
+
+                    for (loop = strlen(book) - 1; loop+1; loop--) {
+                         if (book[loop] == ' ') {
+                              if (isroman(&book[loop+1])) {
+                                   if (verse == -1) {
+                                        verse = chap;
+                                        chap = from_rom(&book[loop+1]);
+                                        book[loop] = 0;
+                                   }
+                              }
+                              break;
+                         }
+                    }
+
+                    if (!stricmp(book, "V")) {
+                         if (verse == -1) {
+                              verse = chap;
+						chap = VerseKey(tmpListKey).Chapter();
+                              *book = 0;
+                         }
+                    }
 				bookno = getBookAbbrev(book);
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
@@ -528,6 +557,28 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			}
 			break;
 		}
+
+		for (loop = strlen(book) - 1; loop+1; loop--) {
+          	if (book[loop] == ' ') {
+               	if (isroman(&book[loop+1])) {
+                    	if (verse == -1) {
+                         	verse = chap;
+                              chap = from_rom(&book[loop+1]);
+                              book[loop] = 0;
+                         }
+                    }
+               	break;
+               }
+          }
+               
+		if (!stricmp(book, "V")) {
+          	if (verse == -1) {
+               	verse = chap;
+				chap = VerseKey(tmpListKey).Chapter();
+                    *book = 0;
+               }
+          }
+               
 		bookno = getBookAbbrev(book);
 	}
 	if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {

@@ -19,8 +19,9 @@
  * 
  */
 
+#include <stdlib.h>
 #include <string.h>
-
+#include <roman.h>
 char isroman (const char* str) {
 	char * ch = (char*)str;
 		for (; *ch; ch++)
@@ -76,5 +77,6 @@ int from_rom(const char* str) {
 	for (i = 0; str[i]; i++) {
 		n += num[i];
 	}
+     free(num);
 	return n;
 };
