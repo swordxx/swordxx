@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.23 2002/03/06 00:35:01 scribe Exp $
+ * $Id: versekey.h,v 1.24 2002/03/22 05:26:34 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -112,10 +112,10 @@ class SWDLLEXPORT VerseKey:public SWKey
 	int abbrevsCnt;
 	/** The Testament: 0 - Old; 1 - New
 	*/
-	char testament;
-	mutable char book;
-	mutable int chapter;
-	mutable int verse;
+	signed char testament;
+	mutable signed char book;
+	mutable signed int chapter;
+	mutable signed int verse;
 	/** flag for auto normalization 
 	*/
 	char autonorm;

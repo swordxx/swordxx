@@ -148,7 +148,7 @@ char RWPHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			to += strlen(to);
 			continue;
 		}
-		if ((*from == '#') || (*from == -81)) {	// verse markings (e.g. "#Mark 1:1|")
+		if (*from == '#') {	// verse markings (e.g. "#Mark 1:1|")
 			inverse = true;
 			strcpy(to,"<FONT COLOR=#0000FF>");
 			to += strlen(to);			

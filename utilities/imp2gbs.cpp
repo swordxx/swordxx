@@ -72,7 +72,7 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
 }
 
 int readline(FILE* infile, char* linebuffer) {
-  char c;
+  signed char c;
   char* lbPtr = linebuffer;
   while ((c = fgetc(infile)) != EOF) {
     *lbPtr++ = c;

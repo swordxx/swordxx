@@ -81,7 +81,7 @@ char SWKey::Persist() const
  * RET:	value of persist
  */
 
-char SWKey::Persist(char ipersist)
+char SWKey::Persist(signed char ipersist)
 {
 	if (ipersist != -1)
 		persist = ipersist;

@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+21-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Changed SWMgr::Load ONE MORE TIME (blame Osk) to return
+		signed char for mac ppc to work correctly
+
 19-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Changed SWMgr::Load to return char status to be more
 		consistent with rest of api.  Sorry guys.

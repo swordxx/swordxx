@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.13 2002/01/24 09:49:30 scribe Exp $
+ * $Id: swkey.h,v 1.14 2002/03/22 05:26:34 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -122,7 +122,7 @@ public:
   * [-1] - only get
   * @return value of persist
   */
-  char Persist (char ikey);
+  char Persist (signed char ikey);
 
   /** Gets and clears error status
   *

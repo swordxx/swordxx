@@ -17,7 +17,7 @@ class DiathekeMgr : public SWMgr {
 
 protected:
 	virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
-        virtual char Load ();
+        virtual signed char Load ();
         virtual void AddGlobalOptions (SWModule * module, ConfigEntMap & section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
 
 public:
