@@ -97,7 +97,7 @@ Item1=_DEBUG
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=RWP ./ 3 2 abc
 HostApplication=
 RemoteHost=
 RemotePath=

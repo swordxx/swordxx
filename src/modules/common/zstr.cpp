@@ -427,7 +427,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) {
 
 		unsigned long len = size;
 
-		rawZFilter(*buf, len+1, 0); // 0 = decipher
+		rawZFilter(*buf, len, 0); // 0 = decipher
 
 		compressor->zBuf(&len, *buf);
 		char * rawBuf = compressor->Buf(0, &len);
@@ -615,7 +615,7 @@ void zStr::flushCache() {
 
 			char *buf = new char [ size * 2 ];
 			memcpy(buf, compressor->zBuf(&size), size); // 1 = encipher
-			rawZFilter(buf, size+1, 1); // 1 = encipher
+			rawZFilter(buf, size, 1); // 1 = encipher
 
 			long zdxSize = lseek(zdxfd->getFd(), 0, SEEK_END);
 			long zdtSize = lseek(zdtfd->getFd(), 0, SEEK_END);

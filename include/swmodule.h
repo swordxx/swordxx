@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.51 2002/08/28 13:02:57 scribe Exp $
+* $Id: swmodule.h,v 1.52 2002/09/25 22:14:58 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -503,7 +503,6 @@ protected:
 	* @return *this
 	*/
 	virtual void rawFilter(char *buf, long size, SWKey *key) {
-		buf[size] = 0;
 		filterBuffer(rawFilters, buf, size, key);
 	}
 	/** Adds an OptionFilter to this module's @ref optionfilters queue

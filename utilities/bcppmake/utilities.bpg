@@ -9,8 +9,8 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = libsword.lib mod2vpl.exe vpl2mod.exe mkfastmod.exe imp2gbs.exe \
-  imp2ld.exe imp2vs.exe thml2gbs.exe mod2zmod.exe mod2imp.exe cipherraw.exe \
+PROJECTS = libsword.lib mod2zmod.exe mod2vpl.exe vpl2mod.exe mkfastmod.exe \
+  imp2gbs.exe imp2ld.exe imp2vs.exe thml2gbs.exe mod2imp.exe cipherraw.exe \
   stepdump.exe step2vpl.exe mod2osis.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)

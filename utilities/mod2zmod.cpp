@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 		}
 		(*inModule)++;
 	}
-	delete outModuleKey;
 	delete outModule;
+	delete outModuleKey;
 }
 

@@ -221,7 +221,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 			printf ("Error: could not seek to right place in compressed text\n");
 			return;
 		}
-		pcCompText = new char[ulCompSize+1];
+		pcCompText = new char[ulCompSize];
 
 		if (read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
 		{
@@ -229,7 +229,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 			return;
 		}
 
-		rawZFilter(pcCompText, ulCompSize+1, 0); // 0 = decipher
+		rawZFilter(pcCompText, ulCompSize, 0); // 0 = decipher
 		
 		compressor->zBuf(&ulCompSize, pcCompText);
 
@@ -342,7 +342,7 @@ void zVerse::flushCache() {
 
 				char *buf = new char [ zsize * 2 ];
 				memcpy(buf, compressor->zBuf(&zsize), zsize);
-				rawZFilter(buf, zsize+1, 1); // 1 = encipher
+				rawZFilter(buf, zsize, 1); // 1 = encipher
 
 				start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
 
