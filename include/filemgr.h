@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.7 2001/04/18 04:56:59 scribe Exp $
+ * $Id: filemgr.h,v 1.8 2001/04/22 00:55:04 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-#ifdef WIN32
+#ifdef _WIN32_WCE
 #define access(path, access) FileMgr::cheezyAccess(path, access)
 #endif
 
