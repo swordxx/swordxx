@@ -84,6 +84,7 @@ pkginclude_HEADERS += $(swincludedir)/thmlplain.h
 pkginclude_HEADERS += $(swincludedir)/thmlrtf.h
 pkginclude_HEADERS += $(swincludedir)/thmlscripref.h
 pkginclude_HEADERS += $(swincludedir)/thmlstrongs.h
+pkginclude_HEADERS += $(swincludedir)/thmlvariants.h
 pkginclude_HEADERS += $(swincludedir)/unicodertf.h
 pkginclude_HEADERS += $(swincludedir)/unixstr.h
 pkginclude_HEADERS += $(swincludedir)/untgz.h
