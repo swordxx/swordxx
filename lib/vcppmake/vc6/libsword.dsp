@@ -291,6 +291,14 @@ SOURCE=..\..\..\src\modules\filters\osismorph.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\osisplain.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\osisrtf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\osisstrongs.cpp
 # End Source File
 # Begin Source File
