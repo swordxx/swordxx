@@ -1,7 +1,7 @@
 /******************************************************************************
  * apocrypha.h - Apocryphal text information to be included by VerseKey.cpp
  *
- * $Id: apocrypha.h,v 1.1 2003/04/20 08:26:03 chrislit Exp $
+ * $Id: apocrypha.h,v 1.2 2003/04/21 01:33:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -46,7 +46,7 @@ VerseKey::atbooks[] = {
   //LXX
   {"3 Maccabees", "3Macc", 7},                 //77
   {"4 Maccabees", "4Macc", 18},                //78
-  {"Odes of Solomon", "OdesSol", 14},          //79   //based on LXX
+  {"Odes", "Odes", 14},                        //79   //based on LXX (Rahlf's)
   {"Psalms of Solomon", "PssSol", 18},         //80   //based on LXX, compared with Charlesworth
 
   //Protestant Apocrypha
