@@ -73,6 +73,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	char *configPath = 0;
 	char configType = 0;
 	SWBuf path;
+	std::list<SWBuf> augPaths;
 	
 	defaultLocaleName = 0;
 	
@@ -85,7 +86,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	else setDefaultLocaleName("en_US");
 
 	if (!iConfigPath)
-		SWMgr::findConfig(&configType, &prefixPath, &configPath);
+		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths);
 	else configPath = (char *)iConfigPath;
 	
 	if (prefixPath) {
@@ -107,6 +108,18 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		if (FileMgr::existsDir(path.c_str(), "locales.d")) {
 			path += "locales.d";
 			loadConfigDir(path.c_str());
+		}
+	}
+	
+	if (augPaths.size()) { //load locale files from all augmented paths
+		std::list<SWBuf>::iterator it = augPaths.begin();
+		std::list<SWBuf>::iterator end = augPaths.end();
+		
+		for (;it != end; ++it) {
+			if (FileMgr::existsDir((*it).c_str(), "locales.d")) {
+				SWBuf path = (*it) + "locales.d";
+				loadConfigDir(path.c_str());
+			}
 		}
 	}
 
@@ -153,7 +166,7 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 					}
 					
 					if (!supported) { //not supported
-						delete locale;						
+						delete locale;
 						continue;
 					}
 				
