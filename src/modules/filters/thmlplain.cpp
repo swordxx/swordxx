@@ -13,7 +13,6 @@ SWORD_NAMESPACE_START
 ThMLPlain::ThMLPlain() {
 }
 
-
 char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	char token[2048];
@@ -188,6 +187,21 @@ char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		}
 		else	text += *from;
 	}
+
+	orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {  //loop to remove extra spaces
+                if ((strchr(" \t\n\r", *from))) {
+                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+                                from++;
+                        }
+                        text += " ";
+                }
+                else {
+                        text += *from;
+                }
+        }
+        text += (char)0;
 
 	return 0;
 }

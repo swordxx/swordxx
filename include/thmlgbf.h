@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlgbf.h,v 1.6 2003/02/20 07:25:20 scribe Exp $
+ * $Id: thmlgbf.h,v 1.7 2003/07/26 23:10:55 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,9 +28,10 @@ SWORD_NAMESPACE_START
 /** this filter converts ThML text to GBF text
  */
 class SWDLLEXPORT ThMLGBF : public SWFilter {
+protected:
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
 	ThMLGBF();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

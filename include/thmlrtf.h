@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlrtf.h,v 1.7 2003/02/20 07:25:20 scribe Exp $
+ * $Id: thmlrtf.h,v 1.8 2003/07/26 23:10:55 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,6 +30,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT ThMLRTF : public SWBasicFilter {
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
 	ThMLRTF();
 };

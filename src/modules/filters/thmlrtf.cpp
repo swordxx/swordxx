@@ -149,6 +149,27 @@ ThMLRTF::ThMLRTF()
         addTokenSubstitute("P", "\\par ");
 }
 
+char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+{
+        SWBasicFilter::processText(text, key, module);  //handle tokens as usual
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {  //loop to remove extra spaces
+                if ((strchr(" \t\n\r", *from))) {
+                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+                                from++;
+                        }
+                        text += " ";
+                }
+                else {
+                        text += *from;
+                }
+        }
+        text += (char)0;
+        return 0;
+}
+
 bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution

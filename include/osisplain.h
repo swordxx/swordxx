@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisplain.h,v 1.3 2003/06/27 01:41:06 scribe Exp $
+ * $Id: osisplain.h,v 1.4 2003/07/26 23:10:55 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,6 +31,7 @@ class SWDLLEXPORT OSISPlain : public SWBasicFilter {
 public:
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+        virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
 public:
 	OSISPlain();
 };
