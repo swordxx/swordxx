@@ -32,6 +32,7 @@ libsword_la_SOURCES += $(filtersdir)/thmlhtmlhref.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlosis.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfosis.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlplain.cpp
+libsword_la_SOURCES += $(filtersdir)/osisheadings.cpp
 libsword_la_SOURCES += $(filtersdir)/osismorph.cpp
 libsword_la_SOURCES += $(filtersdir)/osisstrongs.cpp
 libsword_la_SOURCES += $(filtersdir)/osisplain.cpp

@@ -72,40 +72,6 @@ char readline(int fd, char **buf) {
 }
 
 
-char *parseVReg(char *buf) {
-	char stage = 0;
-
-	while (*buf) {
-		switch (stage) {
-		case 0:
-			if (isalpha(*buf))
-				stage++;
-			break;
-		case 1:
-			if (isdigit(*buf))
-				stage++;
-			break;
-		case 2:
-			if (*buf == ':')
-				stage++;
-			break;
-		case 3:
-			if (isdigit(*buf))
-				stage++;
-			break;
-	   case 4:
-			if (*buf == ' ') {
-				*buf = 0;
-				return ++buf;
-			}
-			break;
-		}
-		buf++;
-	}
-	return (stage == 4) ? buf : 0;  // if we got to stage 4 return after key buf, else return 0;
-}
-
-
 bool isKJVRef(const char *buf) {
 	VerseKey vk, test;
 	vk.AutoNormalize(0);
@@ -123,72 +89,36 @@ bool isKJVRef(const char *buf) {
 }
 
 
-void fixText(char *text) {
-	char *to = text;
-	while(*text) {
-		*to++ = *text++;
-		*to++ = *text++;
-		if (!*text)
-			break;
-		if (*text != ' ')
-			std::cerr << "problem\n";
-		else	text++;
-	}
-	*to = 0;
-}
-
 int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
-	if (argc < 2) {
+	if (argc < 3) {
 //		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod> [0|1 - file includes prepended verse references]\n", argv[0]);
-		fprintf(stderr, "usage: %s <source_vpl_file> </path/to/output/mod/> [0|1 - prepended verse refs] [0|1 - NT only]\n\n", argv[0]);
-		fprintf(stderr, "\tWith no verse refs, source file must contain exactly 31102 lines.\n");
-		fprintf(stderr, "\tThis is KJV verse count plus headings for MODULE,\n");
-		fprintf(stderr, "\tTESTAMENT, BOOK, CHAPTER. An example snippet follows:\n\n");
-		fprintf(stderr, "\t\tMODULE HEADER\n");
-		fprintf(stderr, "\t\tOLD TESTAMENT HEADER\n");
-		fprintf(stderr, "\t\tGENESIS HEADER\n");
-		fprintf(stderr, "\t\tCHAPTER 1 HEADER\n");
-		fprintf(stderr, "\t\tIn the beginning...\n\n");
-		fprintf(stderr, "\t... implying there must also be a CHAPTER2 HEADER,\n");
-        fprintf(stderr, "\tEXODUS HEADER, NEW TESTAMENT HEADER, etc.  If there is no text for\n");
-		fprintf(stderr, "\tthe header, a blank line must, at least, hold place.\n\n");
-		fprintf(stderr, "\tWith verse refs, source file must simply contain any number of lines,\n");
-		fprintf(stderr, "\tthat begin with the verse reference for which it is an entry.  e.g.:\n\n");
-		fprintf(stderr, "\t\tgen 1:0 CHAPTER 1 HEADER\n");
-		fprintf(stderr, "\t\tgen 1:1 In the beginning...\n\n");
+		fprintf(stderr, "usage: %s </mod/files/path> <sourceFile> <verseBookPrefix_ie_Jn>\n\n", argv[0]);
 		exit(-1);
 	}
 
 	// Let's see if we can open our input file
-	int fd = open(argv[1], O_RDONLY|O_BINARY);
+	int fd = open(argv[2], O_RDONLY|O_BINARY);
 	if (fd < 0) {
-		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[1]);
+		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[2]);
 		exit(-2);
 	}
-
+/*
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
-	if (RawText::createModule(argv[2])) {
-		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+	if (RawText::createModule(argv[1])) {
+		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[1]);
 		exit(-3);
 	}
 
-	// not used yet, but for future support of a vpl file with each line
-	// prepended with verse reference, eg. "Gen 1:1 In the beginning..."
-	bool vref = false;
-	if (argc > 3)
-		vref = (argv[3][0] == '0') ? false : true;
-
-	// if 'nt' is the 4th arg, our vpl file only has the NT
-	bool ntonly = false;
-	if (argc > 4)
-                ntonly = (argv[4][0] == '0') ? false : true;
-	
+*/
 	// Do some initialization stuff
 	char *buffer = 0;
-	RawText mod(argv[2]);	// open our datapath with our RawText driver.
+	int chapter  = 0;
+	int verse    = 0;
+	char tmpBuf[254];
+	RawText mod(argv[1]);	// open our datapath with our RawText driver.
 	VerseKey vk;
 	vk.AutoNormalize(0);
 	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
@@ -199,62 +129,93 @@ int main(int argc, char **argv) {
 	// Loop through module from TOP to BOTTOM and set next line from
 	// input file as text for this entry in the module
 	mod = TOP;
-	if (ntonly) vk = "Matthew 1:1";
 	  
 	int successive = 0;  //part of hack below
+	string header = "";
+
 	while ((!mod.Error()) && (!readline(fd, &buffer))) {
-		if (*buffer == '|')	// comments, ignore line
+		string verseText = "";
+
+		// chapter number
+		if (!strncmp("$$$ ", buffer, 4)) {
+			buffer[7] = 0;
+			chapter = atoi(buffer+4);
 			continue;
-		if (vref) {
-			const char *verseText = parseVReg(buffer);
-			if (!verseText) {	// if we didn't find a valid verse ref
-				std::cerr << "No valid verse ref found on line: " << buffer << "\n";
-				exit(-4);
-			}
+		}
+		// header
+		if (!strncmp("<TD COLSPAN=4 VALIGN=TOP><FONT SIZE=2><B>", buffer, 41)) {
+			char *end = strstr(buffer+41, "</B>");
+			*end = 0;
+			header = buffer+41;
+			continue;
+		}
+		// verse number
+		if (!strncmp("<TD VALIGN=TOP ALIGN=RIGHT WIDTH=12><FONT SIZE=2 COLOR=RED><B><SUP>", buffer, 67)) {
+			char *end = strstr(buffer+67, "</SUP>");
+			*end = 0;
+			verse = atoi(buffer+67);
+			continue;
+		}
+		// Actual verse data
+		if (!strncmp("<TD VALIGN=TOP><FONT SIZE=2>", buffer, 28)) {
+			char *end = strstr(buffer+28, "</FONT>");
+			*end = 0;
+		}
+		// extra
+		else {
+			continue;
+		}
 
-			vk = buffer;
-			if (vk.Error()) {
-				std::cerr << "Error parsing key: " << buffer << "\n";
-				exit(-5);
-			}
-			string orig = mod.getRawEntry();
+		verseText = buffer + 28;
 
-			if (!isKJVRef(buffer)) {
-				VerseKey origVK = vk;
-				/* This block is functioning improperly -- problem with AutoNormalize???
-				do {
-					vk--;
-				}
-				while (!vk.Error() && !isKJVRef(vk)); */
-				//hack to replace above:
-				successive++;
-				vk -= successive;
-				orig = mod.getRawEntry();
+		if (header.length()) {
+			verseText = "<title type=\"section\" subtype=\"x-preverse\">" + header + "</title>" + verseText;
+			header = "";
+		}
 
-				std::cerr << "Not a valid KJV ref: " << origVK << "\n";
-				std::cerr << "appending to ref: " << vk << "\n";
-				orig += " [ (";
-				orig += origVK;
-				orig += ") ";
-				orig += verseText;
-				orig += " ] ";
-				verseText = orig.c_str();
-			}
-			else {
-			  successive = 0;
-			}
+		string vsbuf = argv[3];
+		sprintf(tmpBuf, "%i", chapter);
+		vsbuf += ((string)" ") + tmpBuf;
+		sprintf(tmpBuf, "%i", verse);
+		vsbuf += ((string)":") + tmpBuf;
+		vk = vsbuf.c_str();
+		if (vk.Error()) {
+			std::cerr << "Error parsing key: " << vsbuf << "\n";
+			exit(-5);
+		}
+		string orig = mod.getRawEntry();
 
-			if (orig.length() > 1)
-				   std::cerr << "Warning, overwriting verse: " << vk << std::endl;
-			  
-			// ------------- End verse tests -----------------
-			mod << verseText;	// save text to module at current position
+		if (!isKJVRef(vsbuf.c_str())) {
+			VerseKey origVK = vk;
+			/* This block is functioning improperly -- problem with AutoNormalize???
+			do {
+				vk--;
+			}
+			while (!vk.Error() && !isKJVRef(vk)); */
+			//hack to replace above:
+			successive++;
+			vk -= successive;
+			orig = mod.getRawEntry();
+
+			std::cerr << "Not a valid KJV ref: " << origVK << "\n";
+			std::cerr << "appending to ref: " << vk << "\n";
+			orig += " [ (";
+			orig += origVK;
+			orig += ") ";
+			orig += verseText;
+			orig += " ] ";
+			verseText = orig.c_str();
 		}
 		else {
-			fixText(buffer);
-			mod << buffer;	// save text to module at current position
-			mod++;	// increment module position
+		  successive = 0;
 		}
+
+		if (orig.length() > 1)
+			   std::cerr << "Warning, overwriting verse: " << vk << std::endl;
+		  
+		// ------------- End verse tests -----------------
+		std::cout << "adding "<< vk << "\n";
+		mod << verseText.c_str();	// save text to module at current position
 	}
 
 	// clear up our buffer that readline might have allocated
