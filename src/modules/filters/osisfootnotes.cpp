@@ -76,7 +76,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				tag = token;
 				
 				if (!tag.isEndTag()) {
-					if (!strcmp("strongsMarkup", tag.getAttribute("type"))) {  // handle bug in KJV2003 module where some note open tags were <note ... />
+					if (tag.getAttribute("type") && !strcmp("strongsMarkup", tag.getAttribute("type"))) {  // handle bug in KJV2003 module where some note open tags were <note ... />
 						tag.setEmpty(false);
 					}
 					if (!tag.isEmpty()) {
