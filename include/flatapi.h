@@ -73,10 +73,13 @@ void  SWDLLEXPORT SWModule_next(SWHANDLE hmodule);
 void  SWDLLEXPORT SWModule_begin(SWHANDLE hmodule);
 const char * SWDLLEXPORT SWModule_getStripText(SWHANDLE hmodule);
 const char * SWDLLEXPORT SWModule_getRenderText(SWHANDLE hmodule);
+const char * SWDLLEXPORT SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3);
 const char * SWDLLEXPORT SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pvHeading);
 const char * SWDLLEXPORT SWModule_getFootnoteType(SWHANDLE hmodule, const char *key, const char *note);
 const char * SWDLLEXPORT SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const char *note);
 const char * SWDLLEXPORT SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const char *note);
+
+SWHANDLE SWDLLEXPORT listkey_getVerselistIterator(const char * list, const char * key);
 
 }
 #ifdef __cplusplus

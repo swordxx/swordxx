@@ -250,6 +250,14 @@ const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	return (const char *)((module) ? module->RenderText() : 0);
 }
 
+const char *SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3) {
+	SWModule *module = (SWModule *)hmodule;
+	static SWBuf retval;	
+	module->RenderText();                 	
+	retval = module->getEntryAttributes()[level1][level2][level3].c_str();
+	return (retval.length()) ? (const char*)retval.c_str() : NULL;
+}
+
 const char *SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pvHeading) {
 	SWModule *module = (SWModule *)hmodule;
 	static SWBuf preverseHeading;
@@ -291,6 +299,18 @@ const char *SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const
 	module->RenderText();	
 	refList = module->getEntryAttributes()["Footnote"][note]["refList"].c_str();
 	return (refList) ? (const char*)refList.c_str() : NULL;
+}
+
+
+
+SWHANDLE listkey_getVerselistIterator(const char * list, const char * key) {
+	VerseKey versekey;
+	static ListKey verses;
+	
+	versekey.setText(key);
+	verses.ClearList();
+	verses = versekey.ParseVerseList(list, versekey);
+	return (SWHANDLE)&verses;
 }
 
 //-----------------------------------------------------------------
