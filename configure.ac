@@ -8,7 +8,7 @@
 AC_INIT(sword, 1.5.8, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.41 $)
+AC_REVISION($Revision: 1.42 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
@@ -60,8 +60,8 @@ AC_ARG_ENABLE(examples,
 	AC_HELP_STRING([--enable-examples],[build examples (default=no)]),,enable_examples=no)
 AC_ARG_ENABLE(versekey2,
 	AC_HELP_STRING([--enable-versekey2],[build with experimental versekey (default=no)]),,enable_versekey2=no)
-AC_ARG_ENABLE(splitlib,
-	AC_HELP_STRING([--enable-splitlib],[split lib into core and import/export legacy part and flatapi (default=no)]),,enable_splitlib=no)
+#AC_ARG_ENABLE(splitlib,
+#	AC_HELP_STRING([--enable-splitlib],[split lib into core and import/export legacy part and flatapi (default=no)]),,enable_splitlib=no)
 AC_ARG_ENABLE(refsys,
 	AC_HELP_STRING([--enable-refsys],[build alternative versification data files - requires expat (default=no)]),,enable_refsys=no)
 AM_MAINTAINER_MODE
@@ -204,14 +204,14 @@ if test x$enable_refsys = xyes; then
 	])
 fi
 
-if test x$enable_splitlib = xyes; then
-  enable_versekey2=no
-fi
+#if test x$enable_splitlib = xyes; then
+#  enable_versekey2=no
+#fi
 
-if test x$enable_versekey2 = xyes; then
-  AM_CFLAGS="$AM_CFLAGS -DVK2"
-  AM_CXXFLAGS="$AM_CXXFLAGS -DVK2"
-fi
+#if test x$enable_versekey2 = xyes; then
+#  AM_CFLAGS="$AM_CFLAGS -DVK2"
+#  AM_CXXFLAGS="$AM_CXXFLAGS -DVK2"
+#fi
 
 
 # ---------------------------------------------------------------------
@@ -311,7 +311,7 @@ AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
 AM_CONDITIONAL(BUILDUTILS, test x$enable_utilities = xyes)
 AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 AM_CONDITIONAL(BUILDNEWVKEY, test x$enable_versekey2 = xyes)
-AM_CONDITIONAL(BUILDSPLITLIB, test x$enable_splitlib = xyes)
+#AM_CONDITIONAL(BUILDSPLITLIB, test x$enable_splitlib = xyes)
 AM_CONDITIONAL(BUILDREFSYS, test x$enable_refsys = xyes)
 
 # ---------------------------------------------------------------------

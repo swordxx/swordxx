@@ -103,12 +103,12 @@ iculibs = -licui18n -licuuc
 endif
 
 #testlib_LDADD = -L./lib -lsword -lsword_imp $(iculibs)
-if BUILDSPLITLIB
-testlib_LDADD = $(top_builddir)/lib/libsword_imp.la \
-	$(top_builddir)/lib/libsword.la
-else
+#if BUILDSPLITLIB
+#testlib_LDADD = $(top_builddir)/lib/libsword_imp.la \
+#	$(top_builddir)/lib/libsword.la
+#else
 testlib_LDADD = $(top_builddir)/lib/libsword.la
-endif
+#endif
 
 include locales.d/Makefile.am
 include samples/Makefile.am

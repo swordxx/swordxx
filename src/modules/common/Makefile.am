@@ -17,12 +17,15 @@ SPLITS += $(commondir)/zverse.cpp
 libsword_la_SOURCES += $(commondir)/zstr.cpp
 libsword_la_SOURCES += $(commondir)/entriesblk.cpp
 
-if BUILDSPLITLIB
+#if BUILDSPLITLIB
+#libsword_la_SOURCES += $(commondir)/zverse2.cpp
+#libsword_imp_la_SOURCES += $(SPLITS)
+#else
+if BUILDNEWVKEY
 libsword_la_SOURCES += $(commondir)/zverse2.cpp
-libsword_imp_la_SOURCES += $(SPLITS)
-else
-libsword_la_SOURCES += $(SPLITS)
 endif
+libsword_la_SOURCES += $(SPLITS)
+#endif
 
 libsword_la_SOURCES += $(commondir)/sapphire.cpp
 
