@@ -115,6 +115,8 @@ USEUNIT("..\..\src\utilfuns\roman.cpp");
 USEUNIT("..\..\src\mgr\swsourcemgr.cpp");
 USEUNIT("..\..\src\mgr\installmgr.cpp");
 USEUNIT("..\..\src\utilfuns\ftpparse.c");
+USEUNIT("..\..\src\modules\filters\osisstrongs.cpp");
+USEUNIT("..\..\src\modules\filters\osismorph.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

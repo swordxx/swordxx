@@ -87,7 +87,8 @@
       ..\..\src\modules\filters\thmlosis.obj ..\..\src\mgr\encfiltmgr.obj 
       ..\..\src\mgr\markupfiltmgr.obj ..\..\src\utilfuns\roman.obj 
       ..\..\src\mgr\swsourcemgr.obj ..\..\src\mgr\installmgr.obj 
-      ..\..\src\utilfuns\ftpparse.obj"/>
+      ..\..\src\utilfuns\ftpparse.obj ..\..\src\modules\filters\osisstrongs.obj 
+      ..\..\src\modules\filters\osismorph.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
