@@ -9,14 +9,15 @@ AC_DEFUN(SW_FIND_PERL,
 PERLBIN=
 PERLSWIG=
 
-AC_ARG_WITH(perl5,[  --with-perl5=path       Set location of Perl5 executable],[ PERLBIN="$withval"], [PERLBIN=])
+AC_ARG_WITH(perl,[  --with-perl=path       Set location of Perl5 executable],[ PERLBIN="$withval"], [PERLBIN=])
 
 # First figure out what the name of Perl5 is
 
 if test -z "$PERLBIN"; then
-AC_CHECK_PROGS(PERL, perl perl5.6.1 perl5.6.0 perl5.004 perl5.003 perl5.002 perl5.001 perl5 perl)
+AC_PATH_PROGS(PERL, perl perl5.6.1 perl5.6.0 perl5.004 perl5.003 perl5.002 perl5.001 perl5 perl)
 else
-PERL="$PERLBIN"
+AC_PATH_PROG(PERL, perl, , $PERLBIN)
+#PERL="$PERLBIN"
 fi
 
 
@@ -26,7 +27,7 @@ if test -n "$PERL"; then
 	if test "$PERL5DIR" != ""; then
 		dirs="$PERL5DIR $PERL5DIR/CORE"
 		PERL5EXT=none
-		PERLSWIG=perlswig
+		PERLBUILD=perl_make
 		for i in $dirs; do
 			if test -r $i/perl.h; then
 				AC_MSG_RESULT($i)
@@ -65,6 +66,6 @@ esac
 AC_SUBST(PERL5EXT)
 AC_SUBST(PERL5DYNAMICLINKING)
 AC_SUBST(PERL5LIB)
-AC_SUBST(PERLSWIG)
+AC_SUBST(PERLBUILD)
 
 ])

@@ -8,6 +8,7 @@ AC_DEFUN(SW_FIND_PYTHON,
 PYINCLUDE=
 PYLIB=
 PYPACKAGE=
+PYTHONBUILD=
 
 # I don't think any of this commented stuff works anymore
 
@@ -37,7 +38,7 @@ AC_ARG_WITH(python,[  --with-python=path       Set location of Python executable
 # First figure out the name of the Python executable
 
 if test -z "$PYBIN"; then
-AC_CHECK_PROGS(PYTHON, $prefix/bin/python python python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 python1.4 python)
+AC_PATH_PROGS(PYTHON, $prefix/bin/python python python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 python1.4 python)
 else
 PYTHON="$PYBIN"
 fi
@@ -80,6 +81,7 @@ if test -n "$PYTHON"; then
     for i in $dirs; do
         if test -d $PYEPREFIX/lib/$i; then
            PYLIB="$PYEPREFIX/lib/$i"
+	   PYTHONBUILD=python_make
            break
         fi
     done
@@ -109,6 +111,7 @@ esac
 AC_SUBST(PYINCLUDE)
 AC_SUBST(PYLIB)
 AC_SUBST(PYLINK)
+AC_SUBST(PYTHONBUILD)
 AC_SUBST(PYTHONDYNAMICLINKING)
 
 ])

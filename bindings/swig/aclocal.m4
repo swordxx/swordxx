@@ -132,6 +132,49 @@ else
 fi
 AC_SUBST($1)])
 
+#----------------------------------------------------------------
+# Look for SWIG
+#----------------------------------------------------------------
+
+AC_DEFUN(SW_PROG_SWIG,
+[
+
+AC_ARG_WITH(swigbin,[  --with-swigbin=path        Set location of swig executable],[ SWIGBIN="$withval"], [SWIGBIN=])
+AC_ARG_ENABLE(swig,[  --enable-swig=path       Run swig to generate new source default=no],, enable_swig=no)
+
+if test -z "$SWIGBIN"; then
+AC_PATH_PROG(SWIG, swig)
+else
+AC_PATH_PROG(SWIG, swig, "not found", $SWIGBIN)
+fi
+
+runswig=true
+if test x"$SWIG"="xnot found"; then
+	runswig=false
+fi
+if test x"$enable_swig"="xno"; then
+	runswig=false
+fi
+
+AM_CONDITIONAL(RUNSWIG, test x$runswig = xtrue)
+
+#ac_cv_swigversion=``
+
+])
+
+# Define a conditional.
+
+AC_DEFUN([AM_CONDITIONAL],
+[AC_SUBST($1_TRUE)
+AC_SUBST($1_FALSE)
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi])
+
 dnl This file was created by Joachim Ansorg <jansorg@gmx.de>
 dnl It provides macord for the autoconf package to find the Sword library on your system.
 
@@ -140,7 +183,7 @@ dnl		Check wheter to use static linking
 dnl		first parameter is the required version
 dnl		second is whether to use static sword library
 dnl ----------------------------------------------------------------------
-AC_DEFUN(AC_CHECK_SWORD,
+AC_DEFUN(SW_CHECK_SWORD,
 [
 dnl AC_MSG_CHECKING([for a Sword installation])
 
@@ -435,19 +478,6 @@ AC_DEFUN([AM_MAINTAINER_MODE],
 ]
 )
 
-# Define a conditional.
-
-AC_DEFUN([AM_CONDITIONAL],
-[AC_SUBST($1_TRUE)
-AC_SUBST($1_FALSE)
-if $2; then
-  $1_TRUE=
-  $1_FALSE='#'
-else
-  $1_TRUE='#'
-  $1_FALSE=
-fi])
-
 #----------------------------------------------------------------
 # Look for Perl5
 #----------------------------------------------------------------
@@ -459,14 +489,15 @@ AC_DEFUN(SW_FIND_PERL,
 PERLBIN=
 PERLSWIG=
 
-AC_ARG_WITH(perl5,[  --with-perl5=path       Set location of Perl5 executable],[ PERLBIN="$withval"], [PERLBIN=])
+AC_ARG_WITH(perl,[  --with-perl=path       Set location of Perl5 executable],[ PERLBIN="$withval"], [PERLBIN=])
 
 # First figure out what the name of Perl5 is
 
 if test -z "$PERLBIN"; then
-AC_CHECK_PROGS(PERL, perl perl5.6.1 perl5.6.0 perl5.004 perl5.003 perl5.002 perl5.001 perl5 perl)
+AC_PATH_PROGS(PERL, perl perl5.6.1 perl5.6.0 perl5.004 perl5.003 perl5.002 perl5.001 perl5 perl)
 else
-PERL="$PERLBIN"
+AC_PATH_PROG(PERL, perl, , $PERLBIN)
+#PERL="$PERLBIN"
 fi
 
 
@@ -476,7 +507,7 @@ if test -n "$PERL"; then
 	if test "$PERL5DIR" != ""; then
 		dirs="$PERL5DIR $PERL5DIR/CORE"
 		PERL5EXT=none
-		PERLSWIG=perlswig
+		PERLBUILD=perl_make
 		for i in $dirs; do
 			if test -r $i/perl.h; then
 				AC_MSG_RESULT($i)
@@ -515,7 +546,7 @@ esac
 AC_SUBST(PERL5EXT)
 AC_SUBST(PERL5DYNAMICLINKING)
 AC_SUBST(PERL5LIB)
-AC_SUBST(PERLSWIG)
+AC_SUBST(PERLBUILD)
 
 ])
 
@@ -529,6 +560,7 @@ AC_DEFUN(SW_FIND_PYTHON,
 PYINCLUDE=
 PYLIB=
 PYPACKAGE=
+PYTHONBUILD=
 
 # I don't think any of this commented stuff works anymore
 
@@ -558,7 +590,7 @@ AC_ARG_WITH(python,[  --with-python=path       Set location of Python executable
 # First figure out the name of the Python executable
 
 if test -z "$PYBIN"; then
-AC_CHECK_PROGS(PYTHON, $prefix/bin/python python python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 python1.4 python)
+AC_PATH_PROGS(PYTHON, $prefix/bin/python python python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 python1.4 python)
 else
 PYTHON="$PYBIN"
 fi
@@ -601,6 +633,7 @@ if test -n "$PYTHON"; then
     for i in $dirs; do
         if test -d $PYEPREFIX/lib/$i; then
            PYLIB="$PYEPREFIX/lib/$i"
+	   PYTHONBUILD=python_make
            break
         fi
     done
@@ -630,6 +663,7 @@ esac
 AC_SUBST(PYINCLUDE)
 AC_SUBST(PYLIB)
 AC_SUBST(PYLINK)
+AC_SUBST(PYTHONBUILD)
 AC_SUBST(PYTHONDYNAMICLINKING)
 
 ])
@@ -646,12 +680,12 @@ PHP4BIN=
 AC_ARG_WITH(php4,[  --with-php4=path	  Set location of PHP4 executable],[ PHP4BIN="$withval"], [PHP4BIN=])
 
 if test -z "$PHP4BIN"; then
-AC_CHECK_PROGS(PHP4, php, php4)
+AC_PATH_PROGS(PHP4, php php4)
 else
 PHP4="$PHP4BIN"
 fi
 AC_MSG_CHECKING(for PHP4 header files)
-dirs="/usr/include/php /usr/local/include/php /usr/local/apache/php"
+dirs="/usr/include/php /usr/local/include/php /usr/local/apache/php /usr/include/php4 /usr/local/include/php4 /usr/local/apache/php4"
 for i in $dirs; do
 	if test -r $i/php_config.h -o -r $i/php_version.h; then
 		AC_MSG_RESULT($i)
