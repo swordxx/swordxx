@@ -1,7 +1,7 @@
 #ifndef MULTIMAPWDEF
 #define MULTIMAPWDEF
 
-#include <multimap>
+#include <map>
 
 using namespace std;
 

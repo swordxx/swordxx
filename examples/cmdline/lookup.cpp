@@ -33,5 +33,12 @@ int main(int argc, char **argv)
 	cout << target->StripText();
 	cout << "\n";
 	cout << "==========================\n";
+	cout << "Entry Attributes:\n\n";
+	AttributeTypeList::iterator i1;
+	AttributeList::iterator i2;
+	AttributeValue::iterator i3;
+	for (i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); i1++) {
+		cout << "[ " << i1->first << " ]\n";
+	}
 	return 0;
 }
