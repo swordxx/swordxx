@@ -14,11 +14,6 @@ GBFFIL += $(filtersdir)/gbfheadings.cpp
 GBFFIL += $(filtersdir)/gbfredletterwords.cpp
 GBFFIL += $(filtersdir)/gbfmorph.cpp
 
-libsword_la_SOURCES += $(filtersdir)/plainhtml.cpp
-libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp
-libsword_la_SOURCES += $(filtersdir)/rtfhtml.cpp
-libsword_la_SOURCES += $(filtersdir)/plainfootnotes.cpp
-
 THMLFIL = $(filtersdir)/thmlstrongs.cpp
 THMLFIL += $(filtersdir)/thmlfootnotes.cpp
 THMLFIL += $(filtersdir)/thmlheadings.cpp
@@ -38,7 +33,6 @@ CONVFIL += $(filtersdir)/thmlosis.cpp
 CONVFIL += $(filtersdir)/thmlplain.cpp
 CONVFIL += $(filtersdir)/osisosis.cpp
 
-
 OSISFIL = $(filtersdir)/osisheadings.cpp
 OSISFIL += $(filtersdir)/osisfootnotes.cpp 
 OSISFIL += $(filtersdir)/osishtmlhref.cpp
@@ -51,7 +45,6 @@ OSISFIL += $(filtersdir)/osislemma.cpp
 OSISFIL += $(filtersdir)/osisredletterwords.cpp
 OSISFIL += $(filtersdir)/osisscripref.cpp
 
-libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8utf16.cpp
@@ -64,7 +57,14 @@ libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8greekaccents.cpp
 
-libsword_la_SOURCES += $(filtersdir)/greeklexattribs.cpp
+libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp
+
+PLFIL = $(filtersdir)/rtfhtml.cpp
+PLFIL += $(filtersdir)/plainfootnotes.cpp
+PLFIL += $(filtersdir)/plainhtml.cpp
+PLFIL += $(filtersdir)/greeklexattribs.cpp
+PLFIL += $(filtersdir)/unicodertf.cpp
+
 
 SWICUSRC = $(filtersdir)/utf8transliterator.cpp
 SWICUSRC += $(filtersdir)/utf8nfc.cpp
@@ -92,7 +92,9 @@ libsword_la_SOURCES += $(SWREALICUSRC)
 EXTRA_DIST = $(DISTSWICUSRC)
 
 if BUILDSPLITLIB
-libsword_imp_la_SOURCES += $(OSISFIL) $(GBFFIL) $(THMLFIL) $(CONVFIL)
+libsword_imp_la_SOURCES += $(OSISFIL) $(GBFFIL) \
+	$(THMLFIL) $(CONVFIL) $(PLFIL)
 else
-libsword_la_SOURCES += $(OSISFIL) $(GBFFIL) $(THMLFIL) $(CONVFIL)
+libsword_la_SOURCES += $(OSISFIL) $(GBFFIL) \
+	$(THMLFIL) $(CONVFIL) $(PLFIL)
 endif
