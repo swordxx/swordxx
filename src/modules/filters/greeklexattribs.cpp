@@ -36,7 +36,7 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 						currentPhrase = from;
 				}
 				else {
-					if ((!isalpha(*from)) && (*from != ' ') && (*from != '+')) {
+					if ((!isalpha(*from)) && (*from != ' ') && (*from != '+') && (*from !='(') && (*from != ')')) {
 						if (*from == '<') {
 							if (!currentPhraseEnd)
 								currentPhraseEnd = from - 1;
@@ -61,11 +61,15 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 						while (*from && isdigit(*from)) from++;
 						freq = "";
 						freq.append(currentPhrase, (int)(from - currentPhrase));
-						sprintf(wordstr, "%03d", ++number);
-						module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase;
-						module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq;
-						currentPhrase = 0;
-						currentPhraseEnd = 0;
+						freq = freq.substr(freq.find_first_not_of(' '), freq.find_last_not_of(' '));
+						phrase = phrase.substr(phrase.find_first_not_of(' '), phrase.find_last_not_of(' '));
+						if ((freq.length() > 0) && (phrase.length() > 0)) {
+							sprintf(wordstr, "%03d", ++number);
+							module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase;
+							module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq;
+							currentPhrase = 0;
+							currentPhraseEnd = 0;
+						}
 					}
 				}
 				if (*from == ';') inAV = false;
