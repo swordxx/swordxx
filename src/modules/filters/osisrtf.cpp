@@ -101,12 +101,12 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			}
 			catch ( ... ) {	}
 			if (vkey) {
-				buf.appendFormatted("{<a href=\"\">*n%i.%i</a>}", vkey->Verse(), footnoteNumber);
+				buf.appendFormatted("{\\super <a href=\"\">*%c%i.%i</a>} ", ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n'), vkey->Verse(), footnoteNumber);
 				SWBuf tmp;
 				tmp.appendFormatted("%i", ++footnoteNumber);
 				userData["fn"] = tmp.c_str();
-				userData["suspendTextPassThru"] = "true";
 			}
+			userData["suspendTextPassThru"] = "true";
 		}
 		if (tag.isEndTag()) {
 			userData["suspendTextPassThru"] = "false";

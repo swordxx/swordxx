@@ -531,7 +531,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(char *buf, int len)
+const char *SWModule::StripText(const char *buf, int len)
 {
 	return RenderText(buf, len, false);
 }
@@ -545,10 +545,10 @@ const char *SWModule::StripText(char *buf, int len)
  * RET: listkey set to verses that contain istr
  */
 
- const char *SWModule::RenderText(char *buf, int len, bool render) {
+ const char *SWModule::RenderText(const char *buf, int len, bool render) {
 	entryAttributes.clear();
 
-	SWBuf local;
+	static SWBuf local;
 	if (buf)
 		local = buf;
 

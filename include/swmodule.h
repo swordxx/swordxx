@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.64 2003/06/01 14:32:09 joachim Exp $
+* $Id: swmodule.h,v 1.65 2003/06/18 23:37:21 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -540,7 +540,7 @@ protected:
 	* @param len max len of buf OR current text -- will be applied anyway
 	* @return this module's text at specified key location massaged by Strip filters
 	*/
-	virtual const char *StripText(char *buf = 0, int len = -1);
+	virtual const char *StripText(const char *buf = 0, int len = -1);
 	/** calls all RenderFilters on buffer or current text
 	*
 	* @param buf buffer to Render instead of current module position;
@@ -549,7 +549,7 @@ protected:
 	* @param render Perform the rendering.
 	* @return this module's text at specified key location massaged by Render filters
 	*/
-	virtual const char *RenderText(char *buf = 0, int len = -1, bool render = true);
+	virtual const char *RenderText(const char *buf = 0, int len = -1, bool render = true);
 	/** calls all StripFilters on current text
 	*
 	* @param tmpKey key to use to grab text
