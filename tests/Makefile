@@ -12,8 +12,6 @@ cpp += listtest.cpp
 cpp += casttest.cpp
 cpp += modtest.cpp
 
-c += crypttest.c
-
 s = $(c) $(cpp)
 d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
 o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
