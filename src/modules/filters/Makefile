@@ -5,10 +5,15 @@ pre-targets :=
 targets := ${root}/lib/libsword.a
 include ${root}/Makefile.cfg
 
+cpp += gbfhtml.cpp
 cpp += gbfplain.cpp
 cpp += gbfrtf.cpp
+cpp += plainhtml.cpp
+cpp += rwphtml.cpp
+cpp += rwprtf.cpp
+
 cpp += gbfstrongs.cpp
 cpp += gbffootnotes.cpp
-cpp += rwprtf.cpp
+
 
 include ${root}/Makefile.post
