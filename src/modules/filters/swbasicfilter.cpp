@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.2 2001/09/02 09:09:08 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.3 2001/09/02 09:10:14 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,7 +28,6 @@
 
 
 SWBasicFilter::SWBasicFilter() {
-	init();
 	tokenStart = 0;
 	tokenEnd = 0;
 	escStart = 0;
@@ -37,6 +36,7 @@ SWBasicFilter::SWBasicFilter() {
 	tokenCaseSensitive = false;
 	passThruUnknownToken = false;
 	passThruUnknownEsc = false;
+	init();
 }
 
 
