@@ -7,7 +7,15 @@ bin_PROGRAMS = diatheke
 diatheke_SOURCES = diatheke.cpp corediatheke.cpp diathekemgr.cpp \
 	diafiltmgr.cpp thmlcgi.cpp gbfcgi.cpp
 
-diatheke_LDADD = -L$(top_builddir)/lib -lsword
+if ICU
+iculibs = -licui18n -licuuc
+endif
+
+if USELUCENE
+lucenelibs = -lclucene
+endif
+
+diatheke_LDADD = -L$(top_builddir)/lib -lsword $(iculibs) $(lucenelibs)
 
 noinst_HEADERS = corediatheke.h diafiltmgr.h diathekemgr.h gbfcgi.h thmlcgi.h
 

@@ -1,8 +1,8 @@
 /******************************************************************************
- *  swcacher.h	- definition of class SWCacher used to provide an interface for
- *  	objects that cache and want a standard interface for cleaning up.
+ *  swsearchable.h	- definition of class SWSearchable used to provide an
+ *	interface for objects that be searched.
  *
- * $Id: swcacher.h,v 1.5 2003/08/29 06:00:16 scribe Exp $
+ * $Id: swsearchable.cpp,v 1.1 2003/08/29 06:00:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,24 +20,23 @@
  *
  */
 
-#ifndef SWCACHER_H
-#define SWCACHER_H
-
-#include <defs.h>
+#include <swsearchable.h>
 
 SWORD_NAMESPACE_START
 
-/** used to provide an interface for objects that cache and want
- *	a standard interface for cleaning up.
- */
-class SWDLLEXPORT  SWCacher {
-public:
-	SWCacher();
-	virtual ~SWCacher();
-	virtual void flush();
-	virtual long resourceConsumption();
-	virtual long lastAccess();
-};
+void SWSearchable::nullPercent(char percent, void *percentUserData) {}
+
+SWSearchable::SWSearchable() {
+}
+
+
+SWSearchable::~SWSearchable() {
+}
+
+	// special search framework
+signed char SWSearchable::createSearchFramework() {
+	return 0;
+}
+
 
 SWORD_NAMESPACE_END
-#endif

@@ -2,6 +2,12 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+28-Aug-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Abstracted the search interface from SWModule
+	Added experimental implementation of fast
+		search framework to zText using
+		clucene
+
 * Release 1.5.6 *
 
 26-Aug-2003	Troy A. Griffitts <scribe@crosswire.org>

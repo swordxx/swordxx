@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext.h,v 1.28 2003/02/20 07:25:20 scribe Exp $
+ * $Id: ztext.h,v 1.29 2003/08/29 06:00:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,10 +24,19 @@
 #define ZTEXT_H
 
 #include <zverse.h>
+#include <rawstr.h>
 #include <swtext.h>
 //#include <swcomprs.h>
 
 #include <defs.h>
+
+namespace lucene { namespace index {
+class IndexReader;
+}}
+
+namespace lucene { namespace search {
+class IndexSearcher;
+}}
 
 SWORD_NAMESPACE_START
 
@@ -37,9 +46,11 @@ SWORD_NAMESPACE_START
 */
 class SWDLLEXPORT zText:public zVerse, public SWText {
 
-     VerseKey *lastWriteKey;
-     bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
+	VerseKey *lastWriteKey;
+	bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
 	int blockType;
+	lucene::index::IndexReader *ir;
+	lucene::search::IndexSearcher *is;
 	VerseKey &getVerseKey();
 
 
@@ -73,6 +84,11 @@ public:
 	// swcacher interface ----------------------
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
+
+	virtual signed char createSearchFramework();
+	virtual bool hasSearchFramework() { return true; }
+	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
+
 
 	SWMODULE_OPERATORS
 

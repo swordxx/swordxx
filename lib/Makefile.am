@@ -32,7 +32,11 @@ else
 IMGRLIBADD =
 endif
 
-libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD)
+if USELUCENE
+endif
+LUCLIBADD = -lclucene $(LUCENE_LIBS)
+
+libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) $(LUCLIBADD)
 
 libsword_la_LDFLAGS = -version-info 3
 

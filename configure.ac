@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.6, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.28 $)
+AC_REVISION($Revision: 1.29 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.6)
@@ -31,7 +31,8 @@ AC_C_BIGENDIAN
 AC_ARG_WITH(zlib,[  --with-zlib             allow zlib compressed modules [default=yes]],,with_zlib=yes)
 AC_ARG_WITH(icu,[  --with-icu              use ICU for unicode [default=no]],,with_icu=no)
 AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=yes]],,with_conf=yes)
-AC_ARG_WITH(curl,[  --with-curl             build install manager suport using libcurl [default=yes]],,with_curl=yes)
+AC_ARG_WITH(curl,[  --with-curl             build install manager support using libcurl [default=yes]],,with_curl=yes)
+AC_ARG_WITH(lucene,[  --with-lucene         include lucene support for searching [default=yes]],,with_lucene=yes)
 
 
 # ---------------------------------------------------------------------
@@ -156,6 +157,20 @@ if test x$with_curl = xyes; then
 fi
 
 # ---------------------------------------------------------------------
+# Check for clucene for lucene searching support
+# ---------------------------------------------------------------------
+
+#FIXME: always make lucene available without checking for lib and headers
+if test x$with_lucene = xyes; then
+   echo "lucene found - lucene searching options available"
+   LUCENE_CFLAGS=""
+   LUCENE_LIBS="-lclucene"
+   CXXFLAGS="$CXXFLAGS -DUSELUCENE"
+   CFLAGS="$CFLAGS -DUSELUCENE"
+   LIBS="$LIBS $LUCENE_LIBS"
+fi
+
+# ---------------------------------------------------------------------
 # Alter global conf directory only if not /etc
 # ---------------------------------------------------------------------
 
@@ -216,6 +231,7 @@ AC_SUBST(dir_confdef)
 AC_SUBST(CC)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
+AC_SUBST(LUCENE_LIBS)
 AC_SUBST(ICU_LIBS)
 AC_SUBST(ICU_IOLIBS)
 AC_SUBST(ICU_VER)
@@ -236,10 +252,12 @@ AC_SUBST(target_mingw32)
 # ---------------------------------------------------------------------
 AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
+AM_CONDITIONAL(USELUCENE, test x$with_lucene = xyes)
 AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
+AM_CONDITIONAL(USELUCENE, test x$with_lucene = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)

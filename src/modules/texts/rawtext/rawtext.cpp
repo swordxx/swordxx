@@ -267,7 +267,7 @@ signed char RawText::createSearchFramework() {
 
 
 /******************************************************************************
- * SWModule::Search 	- Searches a module for a string
+ * SWModule::search 	- Searches a module for a string
  *
  * ENT:	istr		- string for which to search
  * 	searchType	- type of search to perform
@@ -281,7 +281,7 @@ signed char RawText::createSearchFramework() {
  * RET: listkey set to verses that contain istr
  */
 
-ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData)
+ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData)
 {
 	listkey.ClearList();
 

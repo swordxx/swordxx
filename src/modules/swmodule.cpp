@@ -16,7 +16,6 @@
 SWORD_NAMESPACE_START
 
 SWDisplay SWModule::rawdisp;
-void SWModule::nullPercent(char percent, void *percentUserData) {}
 
 /******************************************************************************
  * SWModule Constructor - Initializes data for instance of SWModule
@@ -365,8 +364,7 @@ void SWModule::decrement(int steps) {
  * RET: listkey set to verses that contain istr
  */
 
-ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData)
-{
+ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	regex_t preg;

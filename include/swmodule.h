@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.67 2003/07/05 04:58:42 scribe Exp $
+* $Id: swmodule.h,v 1.68 2003/08/29 06:00:16 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -29,9 +29,12 @@
 #include <listkey.h>
 #include <swfilter.h>
 #include <swconfig.h>
-#include <swcacher.h>
-#include <list>
 #include <swbuf.h>
+
+#include <swcacher.h>
+#include <swsearchable.h>
+
+#include <list>
 
 #include <defs.h>
 #include <multimapwdef.h>
@@ -82,7 +85,7 @@ enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_H
 // Just leave for now.  This lets us always able to call module->flush()
 // to manually flush a cache, and doesn't hurt if there is no work done.
 
-class SWDLLEXPORT SWModule : public SWCacher {
+class SWDLLEXPORT SWModule : public SWCacher, public SWSearchable {
 
 protected:
 
@@ -132,13 +135,6 @@ protected:
 	mutable long entryIndex;	 // internal common storage for index
 
 	public:
-	/**
-	* This is the default callback function for searching.
-	* This function is a placeholder and does nothing.
-	* You can define your own function for search progress
-	* evaluation, and pass it over to Search().
-	*/
-	static void nullPercent(char percent, void *userData);
 	/**
 	* Set this bool to false to terminate the search which is executed by this module (Search()).
 	* This is useful for threaded applications to terminate the search in another thread.
@@ -299,8 +295,8 @@ protected:
 	*/
 	virtual char *Lang(const char *imodlang = 0);
 
-	// search methods
 
+	// search interface
 	/** Searches a module for a string
 	*
 	* @param istr string for which to search
@@ -315,29 +311,22 @@ protected:
 	*
 	* @return listkey set to verses that contain istr
 	*/
-	virtual ListKey & Search(const char *istr, int searchType = 0, int flags = 0,
+	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
 			SWKey * scope = 0,
 			bool * justCheckIfSupported = 0,
 			void (*percent) (char, void *) = &nullPercent,
 			void *percentUserData = 0);
-	/**
-	*
-	*/
-	virtual signed char createSearchFramework() { return 0; }				// special search framework
-	/** Not yet useful.
-	*
-	*/
-	virtual bool hasSearchFramework() { return false; }				// special search framework
-	/** Check if the search is optimally supported (e.g. if index files are presnt and working)
-	* This function checks whether the search framework may work in the best way.
-	* @return True if the the search is optimally supported, false if it's not working in the best way.
-	*/
-	virtual bool isSearchOptimallySupported(const char *istr, int searchType,
-			int flags, SWKey * scope) {
-		bool retVal = false;
-		Search(istr, searchType, flags, scope, &retVal);
-		return retVal;
+
+	// for backward compat-- deprecated
+	virtual ListKey &Search(const char *istr, int searchType = 0, int flags = 0,
+			SWKey * scope = 0,
+			bool * justCheckIfSupported = 0,
+			void (*percent) (char, void *) = &nullPercent,
+			void *percentUserData = 0) {
+		return search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 	}
+
+
 	/** Allocates a key of specific type for module
 	* The different reimplementatiosn of SWModule (e.g. SWText) support SWKey implementations, which support special.
 	* This functions returns a SWKey object which works with the current implementation of SWModule. For example for the SWText class it returns a VerseKey object.

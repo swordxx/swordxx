@@ -46,28 +46,11 @@ interface SWModule {
 	string getConfigEntry(in string key);
 };
 
-//-----------------------------------------------------------------
-// modmap methods
-//
-/*
-interface ModListIterator {
-	boolean next();
-	SWModule val();
-};
-*/
 
 //-----------------------------------------------------------------
 // SWMgr methods
 //
 interface SWMgr {
-//	SWHANDLE SWDLLEXPORT SWMgr_new();
-		// SWConfig *, SWConfig *, bool, SWFilterMgr *
-//	SWHANDLE SWDLLEXPORT SWMgr_newEx(SWHANDLE hiconfig, SWHANDLE hisysconfig, char autoload, SWHANDLE hfilterMgr);
-//	void     SWDLLEXPORT SWMgr_delete(SWHANDLE hmgr);
-
-//	SWHANDLE SWDLLEXPORT SWMgr_getConfig(SWHANDLE hmgr);
-
-//	ModListIterator getModListIterator();
 	ModInfoList getModInfoList();
 	SWModule getModuleByName(in string name);
 	string getPrefixPath();
