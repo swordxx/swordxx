@@ -114,9 +114,9 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					refs.append("; ");
 				}
 				
-				char* attr = strstr(token.c_str() + 9, "osisRef=\"");
-				char* end  = attr ? strchr(attr+9, '"') : 0;
-				
+				const char* attr = strstr(token.c_str() + 9, "osisRef=\"");
+				const char* end  = attr ? strchr(attr+9, '"') : 0;
+
 				if (attr && end) {
 					refs.append(attr+9, end-(attr+9));
 				}

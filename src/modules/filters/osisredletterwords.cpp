@@ -40,9 +40,9 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 	const char *from = orig.c_str();
 
 	//taken out of the loop
-	char* start;
-	char* end;
-	
+	const char* start;
+	const char* end;
+
 	if (!option)
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
@@ -66,8 +66,8 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 				if (start && (strlen(start) > 11)) {
 					end = start+11;
 					text.append('<');
-					text.append(token, start-token); //the text before the who attr
-					text.append(end, strlen(token)-(end - token)); //text after the who attr
+					text.append(token, start-(token.c_str())); //the text before the who attr
+					text.append(end, strlen(token)-(end-(token.c_str()))); //text after the who attr
 					text.append('>');
 				}
 			}
