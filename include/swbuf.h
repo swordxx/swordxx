@@ -50,7 +50,7 @@ class SWDLLEXPORT SWBuf {
 	inline void assureMore(signed long pastEnd) {
 		if (endAlloc-end < pastEnd) {
 			long newsize = (end-buf)+pastEnd;
-			allocSize = newsize + 16;
+			allocSize = newsize + 128;
 			long size = (end - buf);
 			buf = (char *)((buf) ? realloc(buf, allocSize) : malloc(allocSize));
 			end = (buf + size);
@@ -60,7 +60,7 @@ class SWDLLEXPORT SWBuf {
 	}
 	inline void assureSize(unsigned long newsize) {
 		if (newsize > allocSize) {
-			allocSize = newsize + 16;
+			allocSize = newsize + 128;
 			long size = (end - buf);
 			buf = (char *)((buf) ? realloc(buf, allocSize) : malloc(allocSize));
 			end = (buf + size);
