@@ -238,10 +238,11 @@ char VerseKey::parse()
 {
 
 	
-	testament = 1;
-	book      = 1;
+	testament = 2;
+	book      = BMAX[1];
 	chapter   = 1;
 	verse     = 1;
+	int booklen   = 0;
 
 	int error = 0;
 
@@ -249,17 +250,21 @@ char VerseKey::parse()
 		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
 			SWKey::setText((const char *)tmpListKey);
-			for (testament = 1; testament < 3; testament++) {
-				for (book = 1; book <= BMAX[testament-1]; book++) {
-					if (!strncmp(keytext, books[testament-1][book-1].name, strlen(books[testament-1][book-1].name)))
-						break;
+			for (int i = 1; i < 3; i++) {
+				for (int j = 1; j <= BMAX[i-1]; j++) {
+					int matchlen = strlen(books[i-1][j-1].name);
+					if (!strncmp(keytext, books[i-1][j-1].name, matchlen)) {
+						if (matchlen > booklen) {
+							booklen = matchlen;
+							testament = i;
+							book = j;
+						}
+					}
 				}
-				if (book <= BMAX[testament-1])
-					break;
 			}
 
-			if (testament < 3) {
-				sscanf(&keytext[strlen(books[testament-1][book-1].name)], "%d:%d", &chapter, &verse);
+			if (booklen) {
+				sscanf(&keytext[booklen], "%d:%d", &chapter, &verse);
 			}
 			else	error = 1;
 		} else error = 1;
