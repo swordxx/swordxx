@@ -58,13 +58,13 @@ void VerseKey2::init() {
 	upperBound = 0;
 	lowerBound = 0;
 	boundSet = false;
-	testament = 0;
+	//testament = 0;
 	book = 0;
 	chapter = 0;
 	verse = 0;
 	locale = 0;
 	abbrevsCnt = BUILTINABBREVCNT;
-	oldindexhack = true;
+	//oldindexhack = false;
 
 	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
@@ -104,7 +104,7 @@ VerseKey2::VerseKey2(VerseKey2 const &k) : SWKey(k)
 	init();
 	autonorm = k.autonorm;
 	headings = k.headings;
-	testament = k.Testament();
+	//testament = k.Testament();
 	book = k.Book();
 	chapter = k.Chapter();
 	verse = k.Verse();
@@ -257,7 +257,7 @@ char VerseKey2::parse()
 {
 
 	
-	testament = 2;
+	//testament = 2;
 	book      = *BMAX;
 	chapter   = 1;
 	verse     = 1;
@@ -275,8 +275,8 @@ char VerseKey2::parse()
 					if (matchlen > booklen) {
 						booklen = matchlen;
 						//!!!WDG This is a temporary hack
-						if (j < OTBOOKS)
-							testament = 1;
+						//if (j < OTBOOKS)
+						//	testament = 1;
 						book = j;
 					}
 				}
@@ -305,19 +305,21 @@ void VerseKey2::freshtext() const
 {
 	SWBuf buf = "";
 	int realbook = book;
-
+#if 0
 	if (book < 1) {
 		if (testament < 1)
 			buf = "[ Module Heading ]";
 		else buf.appendFormatted("[ Testament %d Heading ]", (int)testament);
 	}
 	else {
+#endif
 		if (realbook > *BMAX) {
 				realbook = *BMAX;
 		}
 		buf.appendFormatted("%s %d:%d", (*books)[realbook].name, chapter, verse);
+#if 0
 	}
-
+#endif
 	stdstr((char **)&keytext, buf.c_str());
 }
 
@@ -505,11 +507,11 @@ ListKey VerseKey2::ParseVerseList(const char *buf, const char *defaultKey, bool 
 				curkey.Book(1);
 
 				if (bookno < 0) {
-					curkey.Testament(VerseKey2(tmpListKey).Testament());
+					//curkey.Testament(VerseKey2(tmpListKey).Testament());
 					curkey.Book(VerseKey2(tmpListKey).Book());
 				}
 				else {
-					curkey.Testament(1);
+					//curkey.Testament(1);
 					curkey.Book(bookno);
 				}
 
@@ -692,11 +694,11 @@ ListKey VerseKey2::ParseVerseList(const char *buf, const char *defaultKey, bool 
 		curkey.Book(1);
 
 		if (bookno < 0) {
-			curkey.Testament(VerseKey2(tmpListKey).Testament());
+			//curkey.Testament(VerseKey2(tmpListKey).Testament());
 			curkey.Book(VerseKey2(tmpListKey).Book());
 		}
 		else {
-			curkey.Testament(1);
+			//curkey.Testament(1);
 			curkey.Book(bookno);
 		}
 
@@ -793,7 +795,7 @@ VerseKey2 &VerseKey2::LowerBound(const VerseKey2 & ikey)
 	if (!lowerBound) 
 		initBounds();
 
-	lowerBound->Testament(ikey.Testament());
+	//lowerBound->Testament(ikey.Testament());
 	lowerBound->Book(ikey.Book());
 	lowerBound->Chapter(ikey.Chapter());
 	lowerBound->Verse(ikey.Verse());
@@ -853,7 +855,7 @@ VerseKey2 &VerseKey2::UpperBound(const VerseKey2 & ikey)
 	if (!upperBound) 
 		initBounds();
 
-	upperBound->Testament(ikey.Testament());
+	//upperBound->Testament(ikey.Testament());
 	upperBound->Book(ikey.Book());
 	upperBound->Chapter(ikey.Chapter());
 	upperBound->Verse(ikey.Verse());
@@ -913,12 +915,12 @@ void VerseKey2::initBounds() const
 		lowerBound->Headings(1);
 	}
 
-	lowerBound->Testament(0);
+	//lowerBound->Testament(0);
 	lowerBound->Book(0);
 	lowerBound->Chapter(0);
 	lowerBound->Verse(0);
 
-	upperBound->Testament(2);
+	//upperBound->Testament(2);
 	upperBound->Book(*BMAX);
 	upperBound->Chapter(getMaxChaptersInBook(upperBound->Book()));
 	upperBound->Verse(getMaxVerseInChapter(upperBound->Book(), upperBound->Chapter()));
@@ -934,7 +936,7 @@ void VerseKey2::copyFrom(const VerseKey2 &ikey) {
 	//SWKey::copyFrom(ikey);
 
 	//parse();
-	testament = ikey.Testament();
+	//testament = ikey.Testament();
 	book = ikey.Book();
 	chapter = ikey.Chapter();
 	verse = ikey.Verse();
@@ -977,10 +979,10 @@ const char *VerseKey2::getShortText() const {
 	}
 	else {
 		*/
-	if (book < 0)
+	if (book == 0)
 		buf = "[ Module Heading ]";
 	else if (getMaxChaptersInBook(book) == TESTAMENT_HEADING) // !!!WDG needs testament support
-		buf.appendFormatted("[ Testament %d Heading ]", (int)testament);
+		buf.appendFormatted("[ %s Heading ]", (*books)[book].name);
 	else
 		buf.appendFormatted("%s %d:%d", (*books)[book].prefAbbrev, chapter, verse);
 	return buf.c_str();
@@ -1006,13 +1008,13 @@ const char *VerseKey2::getBookAbbrev() const {
 void VerseKey2::setPosition(SW_POSITION p) {
 	switch (p) {
 	case POS_TOP:
-		testament = LowerBound().Testament();
+		//testament = LowerBound().Testament();
 		book      = LowerBound().Book();
 		chapter   = LowerBound().Chapter();
 		verse     = LowerBound().Verse();
 		break;
 	case POS_BOTTOM:
-		testament = UpperBound().Testament();
+		//testament = UpperBound().Testament();
 		book      = UpperBound().Book();
 		chapter   = UpperBound().Chapter();
 		verse     = UpperBound().Verse();
@@ -1042,7 +1044,7 @@ void VerseKey2::setPosition(SW_POSITION p) {
 
 void VerseKey2::increment(int step) {
 	char ierror = 0;
-	printf("incrementing by %d\n", step);
+	//printf("incrementing by %d\n", step);
 	Index(Index() + step);
 	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() + 1);
@@ -1064,7 +1066,7 @@ void VerseKey2::increment(int step) {
 void VerseKey2::decrement(int step) {
 	char ierror = 0;
 
-	printf("decrementing by %d\n", step);
+	//printf("decrementing by %d\n", step);
 	Index(Index() - step);
 	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() - 1);
@@ -1128,14 +1130,14 @@ void VerseKey2::Normalize(char autocheck)
 				valid = true;
 		
 	}
-	
+	#if 0
 	if (book >= 0 && book <= OTBOOKS)
 		testament = 1;
 	else if (book >= OTBOOKS+1 && book <= *BMAX)
 		testament = 2;
-	
+	#endif
 	if (book > *BMAX) {
-		testament = 2;
+		//testament = 2;
 		book      = *BMAX;
 		chapter   = getMaxChaptersInBook(book);
 		verse     = getMaxVerseInChapter(book, chapter);
@@ -1144,8 +1146,8 @@ void VerseKey2::Normalize(char autocheck)
 
 	if (book <= 0) {
 		error     = ((!headings) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
-		testament = ((headings) ? 0 : 1);
-		book      = ((headings) ? 0 : 1);
+		//testament = ((headings) ? 0 : 1);
+		book      = ((headings) ? 0 : 2);
 		chapter   = ((headings) ? 0 : 1);
 		verse     = ((headings) ? 0 : 1);
 	}
@@ -1174,12 +1176,12 @@ void VerseKey2::Normalize(char autocheck)
  *
  * RET:	value of testament
  */
-
+#if 0
 char VerseKey2::Testament() const
 {
 	return testament;
 }
-
+#endif
 
 /******************************************************************************
  * VerseKey2::Book - Gets book
@@ -1226,7 +1228,7 @@ int VerseKey2::Verse() const
  * RET:	if unchanged ->          value of testament
  *	if   changed -> previous value of testament
  */
-
+#if 0
 char VerseKey2::Testament(char itestament)
 {
 	char retval = testament;
@@ -1237,7 +1239,7 @@ char VerseKey2::Testament(char itestament)
 	}
 	return retval;
 }
-
+#endif
 
 /******************************************************************************
  * VerseKey2::Book - Sets/gets book
@@ -1388,11 +1390,13 @@ long VerseKey2::Index() const
 	long  loffset;
 
 	//printf("getting index");fflush(NULL);
+	#if 0
 	if (!testament) { // if we want module heading
 		loffset = 0;
 		verse  = 0;
 	}
 	else {
+	#endif
 		if (!book)
 			chapter = 0;
 		if (!chapter)
@@ -1405,12 +1409,14 @@ long VerseKey2::Index() const
 			chapter = 0;
 			verse = 0;
 		}
+	#if 0
 	}
 	if (oldindexhack && loffset >= NTOFFSET)
 	{
 		//Testament(2);
 		loffset -= NTOFFSET;
 	}
+	#endif
 	#ifdef WDGDEBUG
 	printf("returning index %d\n", loffset+verse);fflush(NULL);
 	#endif
@@ -1428,7 +1434,8 @@ long VerseKey2::NewIndex() const
 {
 	//static long otMaxIndex = 32300 - 8245;  // total positions - new testament positions
 //	static long otMaxIndex = offsets[0][1][(int)offsets[0][0][BMAX[0]] + books[0][BMAX[0]].chapmax];
-	return oldindexhack ? ((testament-1) * NTOFFSET) + Index() : Index();
+	//return oldindexhack ? ((testament-1) * NTOFFSET) + Index() : Index();
+	return Index();
 }
 
 
@@ -1465,6 +1472,7 @@ long VerseKey2::Index(long iindex)
 		}
 	}
 */
+#if 0
 if (oldindexhack)
 {
 	if (iindex < 1) {				// if (-) or module heading
@@ -1496,8 +1504,13 @@ else
 		else testament = 0;		// we want module heading
 	}
 }	
+#endif
+	if (iindex < 0) {
+		error     = KEYERR_OUTOFBOUNDS;
+	}
 	#ifdef WDGDEBUG
-	printf("setting index %d(%d)\n", iindex, testament);fflush(NULL);
+	//printf("setting index %d(%d)\n", iindex, testament);fflush(NULL);
+	printf("setting index %d\n", iindex);fflush(NULL);
 	#endif
 
 	// --------------------------------------------------------------------
@@ -1527,20 +1540,27 @@ else
 		}
 	}
 */
-	if (testament) {
-		if ((!error) && (iindex)) {
-			offset  = findindex(offsets[1], offsize[1], iindex);
-			verse   = iindex - offsets[1][offset].offset;
-			book    = findindex(offsets[0], offsize[0], offset);
-			chapter = offset - offsets[0][book].offset;
-			#ifdef WDGDEBUG
-			printf("offset %d bcv %d:%d:%d\n", offset, book, chapter, verse);fflush(NULL);
-			#endif
-			//verse   = (chapter) ? verse : 0;  
-				// funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  
-				//Don't know why.  Fix if you figure out.  Think its in the offsets table. !!!WDG fix
-		}
+	//if (testament) {
+	if ((!error) && (iindex>=0)) {
+		offset  = findindex(offsets[1], offsize[1], iindex);
+		verse   = iindex - offsets[1][offset].offset;
+		book    = findindex(offsets[0], offsize[0], offset);
+		chapter = offset - offsets[0][book].offset;
+		#ifdef WDGDEBUG
+		printf("offset %d:%d:%d bcv %d:%d:%d\n", offset, offsets[1][offset].offset, offsets[0][book].offset, 
+			book, chapter, verse);fflush(NULL);
+		#endif
+		//verse   = (chapter) ? verse : 0;  
+			// funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  
+			//Don't know why.  Fix if you figure out.  Think its in the offsets table. !!!WDG fix
 	}
+	#ifdef WDGDEBUG
+	else
+	{
+		printf("error %d iindex %d\n", error, iindex);fflush(NULL);
+	}
+	#endif
+	//}
 
 	if (_compare(UpperBound()) > 0) {
 		#ifdef WDGDEBUG
