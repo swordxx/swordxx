@@ -8,7 +8,7 @@
 AC_INIT(sword, 1.5.8, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.44 $)
+AC_REVISION($Revision: 1.45 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
@@ -37,12 +37,14 @@ AC_ARG_WITH(icu,
 	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=no)]),,with_icu=no)
 AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
-AC_ARG_WITH(installmgr,
-	AC_HELP_STRING([--with-installmgr],[build install manager support: 
-	curl=using libcurl, 
-	ftplib=using external ftplib, 
-	internal=using internal ftplib 
-	(default=internal)]),,with_installmgr=internal)
+#AC_ARG_WITH(installmgr,
+#	AC_HELP_STRING([--with-installmgr],[build install manager support: 
+#	curl=using libcurl, 
+#	ftplib=using external ftplib, 
+#	internal=using internal ftplib 
+#	(default=internal)]),,with_installmgr=internal)
+AC_ARG_WITH(curl,
+	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
 AC_ARG_WITH(lucene,
 	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 
@@ -77,9 +79,20 @@ if test x$with_zlib  = xyes; then
 	AC_CHECK_LIB(z, compress)
 fi
 
-if test x$with_installmgr  = xftplib; then
-	AC_CHECK_LIB(ftplib, FtpGet)
-fi
+#if test x$with_installmgr  = xftplib; then
+#	AC_CHECK_LIB(ftplib, FtpGet)
+#fi
+
+# ---------------------------------------------------------------------
+# Find CppUnit
+# ---------------------------------------------------------------------
+# Locate CppUnit (minimum version 1.8.0) for testing.  
+#AM_PATH_CPPUNIT(1.8.0)
+
+# You can set up an automake conditional and use it to conditionally
+# build cppunit-using test programs.
+#AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
+
 
 # ---------------------------------------------------------------------
 # Find pkg-config
@@ -169,7 +182,8 @@ fi
 
 CURL_AM_CFLAGS=
 CURL_LIBS=
-if test x$with_installmgr = xcurl; then
+#if test x$with_installmgr = xcurl; then
+if test x$with_curl = xyes; then
     AC_PATH_PROG(CURL_CONFIG, curl-config, no)
     if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
@@ -270,10 +284,10 @@ AM_CONDITIONAL(USELUCENE, test x$with_lucene = xyes)
 AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
-#AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
-AM_CONDITIONAL(INTERNALFTPLIB, test x$with_installmgr = xinternal)
-AM_CONDITIONAL(WITHCURL, test x$with_installmgr = xcurl)
-AM_CONDITIONAL(WITHFTPLIB, test x$with_installmgr = xftplib)
+AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
+#AM_CONDITIONAL(INTERNALFTPLIB, test x$with_installmgr = xinternal)
+#AM_CONDITIONAL(WITHCURL, test x$with_installmgr = xcurl)
+#AM_CONDITIONAL(WITHFTPLIB, test x$with_installmgr = xftplib)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
