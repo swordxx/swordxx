@@ -15,7 +15,7 @@ SWVersion SWVersion::currentVersion(SWORDVER);
 SWVersion::SWVersion(const char *version) {
 	char *buf = new char[ strlen(version) + 1 ];
 	char *tok;
-	major = minor = minor2 = minor3 = 0;
+	major = minor = minor2 = minor3 = -1;
 		
 	strcpy(buf, version);
 	tok = strtok(buf, ".");
