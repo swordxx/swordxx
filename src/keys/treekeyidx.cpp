@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.3 2002/01/30 05:52:39 dtrotzjr Exp $
+ * $Id: treekeyidx.cpp,v 1.4 2002/03/16 06:29:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,7 +47,6 @@ TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
 
 TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	char buf[127];
-	char tries = 1;
 
 	path = 0;
 	stdstr(&path, idxPath);
@@ -58,28 +57,20 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 
 	if (fileMode == -1) { // try read/write if possible
 		fileMode = O_RDWR;
-		tries = 2;
 	}
 		
-	int i;
-	for (i = 0; i < tries; i++) {
-		sprintf(buf, "%s.idx", path);
-		idxfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
-
-		if (idxfd->getFd() >= 0)
-			break;
-	}
-
+	sprintf(buf, "%s.idx", path);
+	idxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 	sprintf(buf, "%s.dat", path);
-	datfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	datfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-	if (datfd->getFd() < 0) {
+	if (datfd <= 0) {
 		sprintf(buf, "Error: %d", errno);
 		perror(buf);
 		error = errno;
 	}
 	else {
-		getTreeNodeFromIdxOffset(0, &currentNode);
+		root();
 	}
 }
 
