@@ -34,6 +34,10 @@ SWCipher::~SWCipher()
 char *SWCipher::Buf(const char *ibuf)
 {
 	if (ibuf) {
+	
+		if (buf)
+			free(buf);
+			
 		buf = (char *) malloc(strlen(ibuf) + 1);
 		strcpy(buf, ibuf);
 		len = strlen(buf);
@@ -49,6 +53,10 @@ char *SWCipher::Buf(const char *ibuf)
 char *SWCipher::cipherBuf(unsigned int *ilen, const char *ibuf)
 {
 	if (ibuf) {
+	
+		if (buf)
+			free(buf);
+			
 		buf = (char *) malloc(*ilen);
 		memcpy(buf, ibuf, *ilen);
 		len = *ilen;

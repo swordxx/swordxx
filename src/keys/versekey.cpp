@@ -30,7 +30,7 @@ struct sbook *VerseKey::builtin_books[2]       = {0,0};
 const char    VerseKey::builtin_BMAX[2]        = {39, 27};
 long         *VerseKey::offsets[2][2]  = {{VerseKey::otbks, VerseKey::otcps}, {VerseKey::ntbks, VerseKey::ntcps}};
 int           VerseKey::instance       = 0;
-ListKey     VerseKey::internalListKey;
+//ListKey     VerseKey::internalListKey;
 
 
 /******************************************************************************
@@ -200,7 +200,7 @@ char VerseKey::parse()
 	error     = 0;
 
 	if (keytext) {
-		ListKey &tmpListKey = VerseKey::ParseVerseList(keytext);
+		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
 			SWKey::operator =((const char *)tmpListKey);
 			for (testament = 1; testament < 3; testament++) {
@@ -232,7 +232,7 @@ char VerseKey::parse()
 
 void VerseKey::freshtext() const
 {
-	char buf[45];
+	char buf[254];
 	int realtest = testament;
 	int realbook = book;
 
@@ -296,14 +296,15 @@ int VerseKey::getBookAbbrev(char *abbr)
  *	defaultKey	- if verse, chap, book, or testament is left off,
  *				pull info from this key (ie. Gen 2:3; 4:5;
  *				Gen would be used when parsing the 4:5 section)
+ *	expandRange	- whether or not to expand eg. John 1:10-12 or just
+ *				save John 1:10
  *
  * RET:	ListKey reference filled with verse entries contained in buf
  *
  * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
  */
 
-ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
-{
+ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange) {
 	SWKey textkey;
 
 	char book[255];
@@ -313,13 +314,15 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 	char lastchar = 0;
 	int chap = -1, verse = -1;
 	int bookno = 0;
-	VerseKey curkey;
+	VerseKey curkey, lBound;
 	int loop;
 	char comma = 0;
 	char dash = 0;
 	char *orig = buf;
 	ListKey tmpListKey;
+	ListKey internalListKey;
 	SWKey tmpDefaultKey = defaultKey;
+	char lastPartial = 0;
 
 	curkey.AutoNormalize(0);
 	tmpListKey << tmpDefaultKey;
@@ -334,9 +337,9 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 			*number = 0;
 			break;
 
-		case '-':
-		case ',':
-		case ';':
+		case '-': 
+		case ',': // on number new verse
+		case ';': // on number new chapter
 			number[tonumber] = 0;
 			tonumber = 0;
 			if (*number) {
@@ -367,6 +370,7 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 				bookno = getBookAbbrev(book);
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
+				char partial = 0;
 				curkey.Verse(1);
 				curkey.Chapter(1);
 				curkey.Book(1);
@@ -380,17 +384,62 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 					curkey.Book(bookno);
 				}
 
-				if ((comma)||((verse < 0)&&(bookno < 0))) {
+				if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
+//				if (comma) {
 					curkey.Chapter(VerseKey(tmpListKey).Chapter());
 					curkey.Verse(chap);  // chap because this is the first number captured
 				}
 				else {
-					curkey.Chapter(((chap >=0)?chap:1));
-					curkey.Verse(((verse >=0)?verse:1));
+					if (chap >= 0) {
+						curkey.Chapter(chap);
+					}
+					else {
+						partial++;
+						curkey.Chapter(1);
+					}
+					if (verse >= 0) {
+						curkey.Verse(verse);
+					}
+					else {
+						partial++;
+						curkey.Verse(1);
+					}
 				}
 
-				if (!dash)
-					tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+				if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
+					VerseKey newElement;
+					newElement.LowerBound(curkey);
+					newElement = TOP;
+					tmpListKey << newElement;
+				}
+				else {
+					if (!dash) { 	// if last separator was not a dash just add
+						if (expandRange && partial) {
+							VerseKey newElement;
+							newElement.LowerBound(curkey);
+							if (partial > 1)
+								curkey = MAXCHAPTER;
+							if (partial > 0)
+								curkey = MAXVERSE;
+							newElement.UpperBound(curkey);
+							newElement = TOP;
+							tmpListKey << newElement;
+						}
+						else tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+					}
+					else	if (expandRange) {
+						VerseKey *newElement = dynamic_cast<VerseKey *>(tmpListKey.GetElement());
+						if (newElement) {
+							if (partial > 1)
+								curkey = MAXCHAPTER;
+							if (partial > 0)
+								curkey = MAXVERSE;
+							newElement->UpperBound(curkey);
+							*newElement = TOP;
+						}
+					}
+				}
+				lastPartial = partial;
 			}
 			*book = 0;
 			chap = -1;
@@ -461,6 +510,7 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 		bookno = getBookAbbrev(book);
 	}
 	if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
+		char partial = 0;
 		curkey.Verse(1);
 		curkey.Chapter(1);
 		curkey.Book(1);
@@ -474,17 +524,61 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 			curkey.Book(bookno);
 		}
 
-		if ((comma)||((verse < 0)&&(bookno < 0))) {
+		if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
+//		if (comma) {
 			curkey.Chapter(VerseKey(tmpListKey).Chapter());
 			curkey.Verse(chap);  // chap because this is the first number captured
 		}
 		else {
-			curkey.Chapter(((chap >=0)?chap:1));
-			curkey.Verse(((verse >=0)?verse:1));
+			if (chap >= 0) {
+				curkey.Chapter(chap);
+			}
+			else {
+				partial++;
+				curkey.Chapter(1);
+			}
+			if (verse >= 0) {
+				curkey.Verse(verse);
+			}
+			else {
+				partial++;
+				curkey.Verse(1);
+			}
 		}
 
-		if (!dash)
-			tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+		if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
+			VerseKey newElement;
+			newElement.LowerBound(curkey);
+			newElement = TOP;
+			tmpListKey << newElement;
+		}
+		else {
+			if (!dash) { 	// if last separator was not a dash just add
+				if (expandRange && partial) {
+					VerseKey newElement;
+					newElement.LowerBound(curkey);
+					if (partial > 1)
+						curkey = MAXCHAPTER;
+					if (partial > 0)
+						curkey = MAXVERSE;
+					newElement.UpperBound(curkey);
+					newElement = TOP;
+					tmpListKey << newElement;
+				}
+				else tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+			}
+			else if (expandRange) {
+				VerseKey *newElement = dynamic_cast<VerseKey *>(tmpListKey.GetElement());
+				if (newElement) {
+					if (partial > 1)
+						curkey = MAXCHAPTER;
+					if (partial > 0)
+						curkey = MAXVERSE;
+					newElement->UpperBound(curkey);
+					*newElement = TOP;
+				}
+			}
+		}
 	}
 	*book = 0;
 	tmpListKey = TOP;
@@ -522,7 +616,7 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 		initBounds();
 
 // need to set upperbound parsing to resolve to max verse/chap if not specified
-        (*upperBound) = ub;
+	   (*upperBound) = ub;
 	if (*upperBound < *lowerBound)
 		*upperBound = *lowerBound;
 	upperBound->Normalize();
@@ -677,10 +771,12 @@ SWKey &VerseKey::operator =(POSITION p)
 		verse     = UpperBound().Verse();
 		break;
 	case POS_MAXVERSE:
+		Normalize();
 		verse     = books[testament-1][book-1].versemax[chapter-1];
 		break;
 	case POS_MAXCHAPTER:
 		verse     = 1;
+		Normalize();
 		chapter   = books[testament-1][book-1].chapmax;
 		break;
 	} 

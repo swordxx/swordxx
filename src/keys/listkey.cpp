@@ -16,14 +16,13 @@
  * ENT:	ikey - text key
  */
 
-ListKey::ListKey(const char *ikey): SWKey(ikey)
-{
+ListKey::ListKey(const char *ikey): SWKey(ikey) {
 	arraymax = 0;
 	ClearList();
 }
 
-ListKey::ListKey(ListKey const &k) : SWKey(k.keytext)
-{
+
+ListKey::ListKey(ListKey const &k) : SWKey(k.keytext) {
 	arraymax = k.arraymax;
 	arraypos = k.arraypos;
 	arraycnt = k.arraycnt;
@@ -74,7 +73,7 @@ void ListKey::ClearList()
  * ENT:	ikey - other ListKey object
  */
 
-ListKey &ListKey::operator =(ListKey &ikey)
+ListKey &ListKey::operator =(const ListKey &ikey)
 {
 	ClearList();
 
@@ -221,6 +220,24 @@ char ListKey::SetToElement(int ielement, POSITION pos)
 	return error;
 }
 
+
+/******************************************************************************
+ * ListKey::GetElement	- Gets a key element number
+ *
+ * ENT:	pos	- element number to get (or default current)
+ *
+ * RET:	Key or null on error
+ */
+
+SWKey *ListKey::GetElement(int pos) {
+	if (pos >=0) {
+		if (pos >=arraycnt)
+			error = KEYERR_OUTOFBOUNDS;
+	}
+	else pos = arraypos;
+	return (error) ? 0:array[pos];
+}
+	
 
 /******************************************************************************
  * ListKey::Remove	- Removes current element from list

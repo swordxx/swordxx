@@ -18,11 +18,14 @@ int main(int argc, char **argv) {
 
 	DefaultVSKey = "jas3:1";
 	
-	ListKey &list = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey);
+	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
 
-	while (!list.Error()) {
-		cout << (const char *)list << "\n";
-		list++;
+	for (int i = 0; i < verses.Count(); i++) {
+		VerseKey *element = dynamic_cast<VerseKey *>(verses.GetElement(i));
+		if (element) {
+			cout << (string(element->LowerBound()) + " - " + string(element->UpperBound())).c_str() << "\n";
+		}
+		else	cout << (const char *)*verses.GetElement(i) << "\n";
 	}
 	return 0;
 }

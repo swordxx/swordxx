@@ -66,7 +66,8 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (*token == 'R') {	// Reference
+				switch (*token) {
+				case 'R':				// Reference
 					switch(token[1]) {
 					case 'F':               // Begin footnote
 						hide = true;
@@ -76,6 +77,17 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 						break;
 					}
 					continue;	// skip token
+				case 'W':
+					if (token[1] == 'T') {
+						switch (token[2]) {
+						case 'P':
+						case 'S':
+						case 'A':
+							continue; // remove this token
+						default:
+							break;
+						}
+					}
 				}
 				// if not a footnote token, keep token in text
 				if (!hide) {

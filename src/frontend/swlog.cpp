@@ -6,7 +6,9 @@
 #include "swlog.h"
 //---------------------------------------------------------------------------
 
-SWLog *SWLog::systemlog = new SWLog();
+
+SWLog *SWLog::systemlog = 0;
+
 
 class __staticsystemlog {
 public:
@@ -17,6 +19,7 @@ public:
 		delete SWLog::systemlog;
 	}
 } _staticsystemlog;
+
 
 void SWLog::LogWarning(char *fmt, ...)
 {

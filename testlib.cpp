@@ -1,28 +1,26 @@
-#include <stdio.h>
 #include <iostream.h>
 #include <versekey.h>
 #include <rawtext.h>
-#include <zcom.h>
+//#include <zcom.h>
 #include <rawcom.h>
-#include <rawgbf.h>
-#include <stdlib.h>
-#include <rawfiles.h>
+//#include <rawgbf.h>
+//#include <rawfiles.h>
 
 
 int main(int argc, char **argv)
 {
 	int loop;
 	int max;
+	VerseKey mykey;
 //	RawText text("src/modules/texts/rawtext/sve/", "Sven Text", "Sven Text");
-//	RawText text("src/modules/texts/rawtext/webster/", "Webster", "Webster Text");
+	RawText text("src/modules/texts/rawtext/webster/", "Webster", "Webster Text");
 //	RawText text("src/modules/texts/rawtext/orthjbc/", "Webster", "Webster Text");
-	RawGBF text("src/modules/texts/rawgbf/newtext/", "WEB", "World English Bible");
+//	RawGBF text("src/modules/texts/rawgbf/newtext/", "WEB", "World English Bible");
 //	RawText text("src/modules/texts/rawtext/kjv/", "KJV", "KJV Text");
 //	RawText text("src/modules/texts/rawtext/vnt/", "VNT", "Valera Spanish NT");
 //	RawCom  commentary("src/modules/comments/rawcom/rwp/", "RWP", "Robertson's Word Pictures");
 	RawCom  commentary("src/modules/comments/rawcom/mhc/", "MHC", "Matthew Henry's Commentary on the Whole Bible");
 //	RawFiles  commentary("src/modules/comments/rawfiles/personal/", "MHC", "Matthew Henry's Commentary on the Whole Bible");
-	VerseKey mykey;
 
 
 	if (argc > 3)

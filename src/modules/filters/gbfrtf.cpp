@@ -46,7 +46,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = 'f';
 					*to++ = 's';
 					*to++ = '1';
-					*to++ = '5';
+					*to++ = '7';
 					*to++ = ' ';
 					*to++ = '<';
 					for (unsigned int i = 2; i < strlen(token); i++)
@@ -61,11 +61,65 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = 'f';
 					*to++ = 's';
 					*to++ = '1';
-					*to++ = '5';
+					*to++ = '7';
 					*to++ = ' ';
 					*to++ = '(';
-					for (unsigned int i = 3; i < strlen(token); i++)
-						*to++ = token[i];
+					bool separate = false;
+					for (unsigned int i = 2; i < strlen(token); i++) {
+						if (separate) {
+							*to++ = ';';
+							*to++ = ' ';
+							separate = false;
+						}
+						switch (token[i]) {
+						case 'G':
+						case 'H':
+							for (i++; i < strlen(token); i++) {
+								if (isdigit(token[i])) {
+									*to++ = token[i];
+									separate = true;
+								}
+								else {
+									i--;
+									break;
+								}
+							}
+							break;
+						case 'P':
+							separate = true;
+							*to++ = 'p';
+							*to++ = 'l';
+							*to++ = 'u';
+							*to++ = 'r';
+							*to++ = 'a';
+							*to++ = 'l';
+							break;
+						case 'S':
+							separate = true;
+							*to++ = 's';
+							*to++ = 'i';
+							*to++ = 'n';
+							*to++ = 'g';
+							*to++ = 'u';
+							*to++ = 'l';
+							*to++ = 'a';
+							*to++ = 'r';
+							break;
+						case 'A':
+							separate = true;
+							*to++ = 'a';
+							*to++ = 'o';
+							*to++ = 'r';
+							*to++ = 't';
+							*to++ = 'i';
+							*to++ = 's';
+							*to++ = 't';
+							break;
+						default:
+							break;
+							// some token we don't understand
+						}
+					}
 					*to++ = ')';
 					*to++ = '}';
 					continue;
@@ -83,7 +137,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = 'f';
 					*to++ = 's';
 					*to++ = '1';
-					*to++ = '5';
+					*to++ = '7';
 					*to++ = ' ';
 					*to++ = '(';
 					continue;

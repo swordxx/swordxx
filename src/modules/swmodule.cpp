@@ -36,6 +36,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	stdstr(&modname, imodname);
 	stdstr(&moddesc, imoddesc);
 	stdstr(&modtype, imodtype);
+	render = true;	// for protected method when sometimes need RenderText not to _Render Text_ :)  kludge / rewrite
 }
 
 
@@ -390,7 +391,9 @@ const char *SWModule::StripText(char *buf, int len)
 
 	if (!buf) {
 		key = (SWKey *)*this;
+		render = false;
 		buf = (char *)*this;
+		render = true;
 	}
 
 	for (it = optionfilters.begin(); it != optionfilters.end(); it++) {
@@ -425,8 +428,11 @@ const char *SWModule::StripText(char *buf, int len)
 	for (it = optionfilters.begin(); it != optionfilters.end(); it++) {
 		(*it)->ProcessText(buf, len, key);
 	}
-	for (it = renderfilters.begin(); it != renderfilters.end(); it++) {
-		(*it)->ProcessText(buf, len, key);
+	
+	if (render) {
+		for (it = renderfilters.begin(); it != renderfilters.end(); it++) {
+			(*it)->ProcessText(buf, len, key);
+		}
 	}
 
 	return buf;

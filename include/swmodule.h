@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.3 1999/09/05 07:32:36 scribe Exp $
+ * $Id: swmodule.h,v 1.4 2000/05/21 20:35:56 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -49,6 +49,7 @@ protected:
 	FilterList rawfilters;	// executed immediately upon fileread
 	FilterList renderfilters;// executed to format for display
 	FilterList optionfilters;// executed to change markup to user prefs
+	bool render;
 
 public:
 	bool terminateSearch;
