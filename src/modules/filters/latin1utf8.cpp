@@ -40,9 +40,6 @@ char Latin1UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	    *to++ = *from;
 	  }
 	  else if (*from < 0xc0) {
-		if (!to) {
-			cerr << "to pointer not valid!" << endl;
-		}
                 switch(*from) {
         	case 0x80: // '€'
 	        	*to++ = 0xe2; // 'â'
