@@ -112,6 +112,9 @@ USEUNIT("..\..\src\modules\filters\thmlosis.cpp");
 USEUNIT("..\..\src\mgr\encfiltmgr.cpp");
 USEUNIT("..\..\src\mgr\markupfiltmgr.cpp");
 USEUNIT("..\..\src\utilfuns\roman.cpp");
+USEUNIT("..\..\src\mgr\swsourcemgr.cpp");
+USEUNIT("..\..\src\mgr\installmgr.cpp");
+USEUNIT("..\..\src\utilfuns\ftpparse.c");
 //---------------------------------------------------------------------------
 #define Library
 

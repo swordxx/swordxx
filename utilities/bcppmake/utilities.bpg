@@ -9,16 +9,13 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = libsword.lib mod2zmod.exe mod2vpl.exe vpl2mod.exe mkfastmod.exe \
-  imp2gbs.exe imp2ld.exe imp2vs.exe thml2gbs.exe mod2imp.exe cipherraw.exe \
-  stepdump.exe step2vpl.exe mod2osis.exe vs2osisref.exe
+PROJECTS = icucommon.lib icui18n.lib libsword.lib mod2zmod.exe mod2vpl.exe \
+  mkfastmod.exe imp2gbs.exe vpl2mod.exe imp2ld.exe imp2vs.exe thml2gbs.exe \
+  mod2imp.exe cipherraw.exe step2vpl.exe stepdump.exe mod2osis.exe vs2osisref.exe \
+  diatheke.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
-
-libsword.lib: libsword.bpr
-  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 mod2vpl.exe: mod2vpl.bpr
   $(ROOT)\bin\bpr2mak $**
@@ -75,4 +72,21 @@ mod2osis.exe: mod2osis.bpr
 vs2osisref.exe: vs2osisref.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+libsword.lib: ..\..\lib\bcppmake\libsword.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+diatheke.exe: diatheke.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+icucommon.lib: ..\..\..\icu-sword\as_is\borland\common.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+icui18n.lib: ..\..\..\icu-sword\as_is\borland\i18n.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
 

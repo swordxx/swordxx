@@ -10,9 +10,9 @@
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\borland\icui18n.lib 
+    <LIBFILES value="..\..\..\icu-sword\as_is\borland\icui18n.lib 
       ..\..\..\icu-sword\as_is\borland\icudatab.lib 
-      ..\..\..\icu-sword\as_is\borland\icucommon.lib"/>
+      ..\..\..\icu-sword\as_is\borland\icucommon.lib ..\..\lib\libsword.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi QRPT50.bpi VCLDB50.bpi VCLBDE50.bpi 
@@ -30,10 +30,12 @@
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mod2vpl.bpf"/>
     <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <LIBPATH value="..\;..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
+    <IDLCFLAGS value="-I..\. -I.. -I..\..\include -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -boa"/>
     <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -tWC -tWM -c"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -81,10 +83,11 @@ Item2=..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
 Item3=..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=3
-Item0=..\;..;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..;$(BCB)\lib\obj;$(BCB)\lib
+Count=4
+Item0=..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\;..;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -109,6 +112,11 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
 
 [Language]
 ActiveLang=

@@ -10,9 +10,9 @@
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="libsword.lib ..\..\..\icu-sword\as_is\borland\icui18n.lib 
+    <LIBFILES value="..\..\..\icu-sword\as_is\borland\icui18n.lib 
       ..\..\..\icu-sword\as_is\borland\icudatab.lib 
-      ..\..\..\icu-sword\as_is\borland\icucommon.lib"/>
+      ..\..\..\icu-sword\as_is\borland\icucommon.lib ..\..\lib\libsword.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Qrpt50.bpi Vcldb50.bpi Vclbde50.bpi 
@@ -30,12 +30,12 @@
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="thml2gbs.bpf"/>
     <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\;..;C:\INDY\C5\;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <LIBPATH value="..\;..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I..\. -I.. -I..\..\include -I$(BCB)\include -I$(BCB)\include\vcl 
-      -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -D_DEBUG -boa"/>
+      -src_suffix cpp -D_ICU_ -D_ICUSWORD_ -boa"/>
     <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -tWC -tWM- -c"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -83,11 +83,12 @@ Item2=../../include;$(BCB)\include;$(BCB)\include\vcl
 Item3=..\;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=4
-Item0=..\;..;C:\INDY\C5\;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\;C:\INDY\C5\;..;$(BCB)\lib\obj;$(BCB)\lib
-Item2=C:\INDY\C5;..\;..;$(BCB)\lib\obj;$(BCB)\lib
-Item3=..\;$(BCB)\lib\obj;$(BCB)\lib
+Count=5
+Item0=..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\;..;C:\INDY\C5\;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\;C:\INDY\C5\;..;$(BCB)\lib\obj;$(BCB)\lib
+Item3=C:\INDY\C5;..\;..;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -113,6 +114,11 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
 
 [Language]
 ActiveLang=
