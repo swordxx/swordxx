@@ -2,7 +2,6 @@
 #include <fcntl.h>
 #include <iostream>
 #include <fstream>
-#include <string>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -31,7 +30,7 @@ using std::cout;
 
 
 const char *convertToOSIS(const char *inRef, const SWKey *key) {
-	static std::string outRef;
+	static SWBuf outRef;
 
 	outRef = "";
 
@@ -76,7 +75,8 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 		}
 		outRef+=buf;
 	}
-	outRef+=startFrag;
+	if (startFrag < (inRef + strlen(inRef)))
+		outRef+=startFrag;
 	return outRef.c_str();
 }
 
@@ -91,9 +91,8 @@ int main(int argc, char **argv)
         VerseKey verseKey;
         int i = strlen(argv[1]) + 1;
         char * verseString = new char[i];
-        *verseString = 0;
-        strcpy (verseString, argv[1]);
-        verseString[i + 1] = 0;
+	   strcpy (verseString, argv[1]);
+        verseString[i - 1] = 0;
         
         if (argc > 2) {
                 verseKey = argv[2];
