@@ -79,7 +79,7 @@ char *RawCom::getRawEntry() {
 	}
 	*entrybuf = 0;
 
-	gettext(key->Testament(), start, (size + 2), entrybuf);
+	readtext(key->Testament(), start, (size + 2), entrybuf);
 
 	rawFilter(entrybuf, size, key);
 

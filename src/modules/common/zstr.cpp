@@ -330,7 +330,7 @@ void zStr::prepText(char *buf) {
 
 
 /******************************************************************************
- * zStr::gettext	- gets text at a given offset
+ * zStr::getText	- gets text at a given offset
  *
  * ENT:
  *	offset	- idxoffset where the key is located.

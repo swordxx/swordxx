@@ -108,7 +108,7 @@ char *RawText::getRawEntry() {
 	}
 	*entrybuf = 0;
 
-	gettext(key->Testament(), start, (size + 2), entrybuf);
+	readtext(key->Testament(), start, (size + 2), entrybuf);
 
 	rawFilter(entrybuf, size, key);
 
@@ -376,7 +376,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 							free(idxbuf);
 							idxbuf = (char *)calloc(size+2, 1);
 							datbuf = (char *)calloc(size+2, 1);
-							fastSearch[j]->gettext(start, size + 2, idxbuf, datbuf);
+							fastSearch[j]->readtext(start, size + 2, idxbuf, datbuf);
 
 							// we know that the data consists of sizof(long)
 							// records each a valid module position that constains

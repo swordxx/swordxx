@@ -73,7 +73,7 @@ RawGBF::operator char*()
 		delete [] entrybuf;
 	entrybuf = new char [ size * 3 ];		// extra for conversion to RTF or other.
 
-	gettext(key->Testament(), start, size + 1, entrybuf);
+	readtext(key->Testament(), start, size + 1, entrybuf);
 	preptext(entrybuf);
 	RenderText(entrybuf, size * 3);
 	

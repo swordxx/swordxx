@@ -337,7 +337,7 @@ void RawStr::preptext(char *buf) {
 
 
 /******************************************************************************
- * RawStr::gettext	- gets text at a given offset
+ * RawStr::readtext	- gets text at a given offset
  *
  * ENT:
  *	start	- starting offset where the text is located in the file
@@ -346,7 +346,7 @@ void RawStr::preptext(char *buf) {
  *
  */
 
-void RawStr::gettext(long istart, unsigned short isize, char *idxbuf, char *buf)
+void RawStr::readtext(long istart, unsigned short isize, char *idxbuf, char *buf)
 {
 	char *ch;
 	char *idxbuflocal = 0;

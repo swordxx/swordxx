@@ -84,7 +84,7 @@ char *HREFCom::getRawEntry() {
 	}
 	tmpbuf   = new char [ size + 10 ];
 
-	gettext(key->Testament(), start, size + 2, tmpbuf);
+	readtext(key->Testament(), start, size + 2, tmpbuf);
 	sprintf(entrybuf, "%s%s", prefix, tmpbuf);
 	preptext(entrybuf);
 

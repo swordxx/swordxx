@@ -187,7 +187,7 @@ void RawVerse::preptext(char *buf)
 
 
 /******************************************************************************
- * RawVerse::gettext	- gets text at a given offset
+ * RawVerse::readtext	- gets text at a given offset
  *
  * ENT:	testmt	- testament file to search in (0 - Old; 1 - New)
  *	start	- starting offset where the text is located in the file
@@ -196,7 +196,7 @@ void RawVerse::preptext(char *buf)
  *
  */
 
-void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf) {
+void RawVerse::readtext(char testmt, long start, unsigned short size, char *buf) {
 	memset(buf, 0, size+1);
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);

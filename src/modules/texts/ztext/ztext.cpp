@@ -73,10 +73,10 @@ char *zText::getRawEntry()
 	lkey->Verse(0);
 	if (chapcache != lkey->Index()) {
 		findoffset(lkey->Testament(), lkey->Index(), &start, &((unsigned short) size));
-		gettext(lkey->Testament(), start, 3, sizebuf);
+		readtext(lkey->Testament(), start, 3, sizebuf);
 		memcpy(&size, sizebuf, 2);
 		tmpbuf = new char [ size + 1 ];
-		gettext(lkey->Testament(), start + 2, size + 1 , tmpbuf);
+		readtext(lkey->Testament(), start + 2, size + 1 , tmpbuf);
 		//zBuf(&size, tmpbuf);
 		dest = new char [ (size*4) + 1 ];
 		uncompress((Bytef *)dest, &destsize, (Bytef *) tmpbuf, size);
@@ -134,7 +134,7 @@ char *zText::getRawEntry()
 	*entrybuf = 0;
 
 	//printf ("getting text\n");
-	swgettext(key->Testament(), start, (size + 2), entrybuf);
+	zreadtext(key->Testament(), start, (size + 2), entrybuf);
 	//printf ("got text\n");
 
 	rawFilter(entrybuf, size, key);

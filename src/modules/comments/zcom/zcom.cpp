@@ -83,7 +83,7 @@ char *zCom::getRawEntry() {
 	}
 	*entrybuf = 0;
 
-	swgettext(key->Testament(), start, (size + 2), entrybuf);
+	zreadtext(key->Testament(), start, (size + 2), entrybuf);
 
 	rawFilter(entrybuf, size, key);
 

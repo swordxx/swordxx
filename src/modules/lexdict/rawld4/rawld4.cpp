@@ -96,7 +96,7 @@ char RawLD4::getEntry(long away)
 		entrybuf = new char [ ++size * FILTERPAD ];
 		idxbuf   = new char [ size * FILTERPAD ];
 
-		gettext(start, size, idxbuf, entrybuf);
+		readtext(start, size, idxbuf, entrybuf);
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
 

@@ -247,7 +247,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 
 /******************************************************************************
- * zVerse::swgettext	- gets text at a given offset
+ * zVerse::zreadtext	- gets text at a given offset
  *
  * ENT:	testmt	- testament file to search in (0 - Old; 1 - New)
  *	start	- starting offset where the text is located in the file
@@ -256,7 +256,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
  *
  */
 
-void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf)
+void zVerse::zreadtext(char testmt, long start, unsigned short size, char *inbuf)
 {
 	memset(inbuf, 0, size);
 	if (size > 2) {
