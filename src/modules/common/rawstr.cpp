@@ -22,6 +22,9 @@
 #include <utilfuns.h>
 #include <rawstr.h>
 
+#ifdef BIGENDIAN
+#include <sys/pctypes.h>
+#endif
 
 /******************************************************************************
  * RawStr Statics
@@ -128,6 +131,9 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 	if (idxfd > 0) {
 		lseek(idxfd->getFd(), ioffset, SEEK_SET);
 		read(idxfd->getFd(), &offset, 4);
+#ifdef BIGENDIAN
+		offset = lelong(offset);
+#endif
 		getidxbufdat(offset, buf);
 		for (trybuf = targetbuf = *buf; *trybuf; trybuf++, targetbuf++) {
 /*
@@ -159,7 +165,7 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, long away)
 {
 	char *trybuf, *targetbuf, *key, quitflag = 0, retval = 0;
-	long headoff, tailoff, tryoff, maxoff = 0;
+	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (*ikey) {
 		headoff = 0;
@@ -214,6 +220,12 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 	lseek(idxfd->getFd(), tryoff, SEEK_SET);
 	read(idxfd->getFd(), start, 4);
 	read(idxfd->getFd(), size, 2);
+
+#ifdef BIGENDIAN
+		*start = lelong(*start);
+		*size  = leshort(*size);
+#endif
+
 	while (away) {
 		long laststart = *start;
 		unsigned short lastsize = *size;
@@ -229,6 +241,12 @@ char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, lon
 		}
 		read(idxfd->getFd(), start, 4);
 		read(idxfd->getFd(), size, 2);
+
+#ifdef BIGENDIAN
+		*start = lelong(*start);
+		*size  = leshort(*size);
+#endif
+
 		if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
 			away += (away < 0) ? 1 : -1;
 	}

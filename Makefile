@@ -6,6 +6,19 @@ subdirs := src obj lib tests utilities include
 other-dist := yes
 other-install := yes
 
+docs += README
+docs += INSTALL
+docs += LICENSE
+docssamples += samples/mods.conf.large
+docssamples += samples/mods.conf.small
+docssmodsd += samples/mods.d/globals.conf
+docssmodsd += samples/mods.d/rwp.conf
+docssmodsd += samples/mods.d/strongsnt.conf
+docssmodsd += samples/mods.d/strongsot.conf
+docssmodsd += samples/mods.d/vines.conf
+docssmodsd += samples/mods.d/web.conf
+docssmodsd += samples/mods.d/websters.conf
+
 include ${root}/Makefile.cfg
 
 ifeq ($(buildshare),yes)

@@ -58,6 +58,27 @@ char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 		}
 		
 		if (*from == '{') {
+		  *to++ = '<';
+	  	*to++ = 'F';
+  		*to++ = 'O';
+			*to++ = 'N';
+			*to++ = 'T';
+			*to++ = ' ';
+			*to++ = 'C';
+			*to++ = 'O';
+			*to++ = 'L';
+			*to++ = 'O';
+			*to++ = 'R';
+			*to++ = '=';
+			*to++ = '#';
+			*to++ = '8';
+			*to++ = '0';
+			*to++ = '0';
+			*to++ = '0';
+			*to++ = '0';
+			*to++ = '0';
+			*to++ = '>';
+
 			*to++ = '<';
 			*to++ = 'S';
 			*to++ = 'M';
@@ -82,8 +103,17 @@ char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 			*to++ = 'L';
 			*to++ = 'L';
 			*to++ = '>';
+			
+			*to++ = '<';
+			*to++ = '/';
+  		*to++ = 'F';
+			*to++ = 'O';
+			*to++ = 'N';
+			*to++ = 'T';
+			*to++ = '>';
 			continue;
 		}
+
 		if ((*from == ' ') && (count > 5000))
 		{
 			*to++ = '<';
@@ -101,6 +131,3 @@ char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 	*to = 0;
 	return 0;
 }
-
-
-

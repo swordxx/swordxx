@@ -27,8 +27,7 @@ GBFHTML::GBFHTML()
 
 char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	char *to, *from, token[2048];
-	int tokpos = 0;
+	char *to, *from, token[2048], tokpos = 0;
 	bool intoken 	= false;
 	int len;
 
@@ -119,7 +118,37 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 			case 'R':
 				switch(token[1])
 				{
+				  case 'B':								//word(s) explained in footnote
+						*to++ = '<';
+						*to++ = 'I';					
+						*to++ = '>';						
+						continue;
 					case 'F':               // footnote begin
+						*to++ = '<';
+						*to++ = '/';
+						*to++ = 'I';
+						*to++ = '>';						
+ 						*to++ = '<';
+						*to++ = 'F';
+						*to++ = 'O';
+						*to++ = 'N';
+						*to++ = 'T';
+						*to++ = ' ';
+						*to++ = 'C';
+						*to++ = 'O';
+						*to++ = 'L';
+						*to++ = 'O';
+						*to++ = 'R';
+						*to++ = '=';
+						*to++ = '#';
+						*to++ = '8';
+						*to++ = '0';
+						*to++ = '0';
+						*to++ = '0';
+						*to++ = '0';
+						*to++ = '0';
+						*to++ = '>';
+						
 						*to++ = ' ';
 						*to++ = '<';
 						*to++ = 'S';
@@ -129,6 +158,8 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = 'L';
 						*to++ = '>';
 						*to++ = '(';
+
+												
 						continue;
 					case 'f':               // footnote end
 						*to++ = ')';
@@ -141,9 +172,18 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = 'L';
 						*to++ = '>';
 						*to++ = ' ';
+						*to++ = '<';
+						*to++ = '/';
+						*to++ = 'F';
+						*to++ = 'O';
+						*to++ = 'N';
+						*to++ = 'T';
+						*to++ = '>';
+						
 						continue;
 				}
 				break;
+			
 			case 'F':			// font tags
 				switch(token[1])
 				{
@@ -247,7 +287,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = '<';
 						*to++ = 'S';
 						*to++ = 'U';
-						*to++ = 'B';
+  						*to++ = 'B';
 						*to++ = '>';
 						continue;
 					case 'v':		// Subscript end
@@ -306,22 +346,20 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = 'E';
 						*to++ = '>';
 						continue;
-					}
-					break;
+				}
+				break;
 			}
 			continue;
 		}
-		if (intoken) {
-			if (tokpos < 2047) {
-				token[tokpos] = *from;
-				tokpos++;
-			}
-		}
+ 		if (intoken) {
+ 			if (tokpos < 2047) {
+ 				token[tokpos] = *from;
+ 				tokpos++;
+ 			}
+ 		}
+
 		else	*to++ = *from;
 	}
 	*to = 0;
 	return 0;
 }
-
-
-
