@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osishtmlhref.h,v 1.7 2003/10/22 03:10:27 chrislit Exp $
+ * $Id: osishtmlhref.h,v 1.8 2003/11/22 05:27:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,6 +34,7 @@ protected:
 	public:
 		bool osisQToTick;
 		bool inBold;
+		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
 		MyUserData(const SWModule *module, const SWKey *key);

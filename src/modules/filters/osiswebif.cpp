@@ -113,6 +113,33 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 
+		// <note> tag
+		else if (!strcmp(tag.getName(), "note")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf type = tag.getAttribute("type");
+
+					if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						VerseKey *vkey;
+						// see if we have a VerseKey * or descendant
+						try {
+							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+						}
+						catch ( ... ) {	}
+						if (vkey) {
+							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+//							buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
+						}
+					}
+					u->suspendTextPassThru = true;
+				}
+			}
+			if (tag.isEndTag()) {
+				u->suspendTextPassThru = false;
+			}
+		}
+
 		// <q> quote
 		else if (!strcmp(tag.getName(), "q")) {
 			SWBuf type = tag.getAttribute("type");
@@ -146,9 +173,9 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 		// <transChange>
 		else if (!strcmp(tag.getName(), "transChange")) {
-			SWBuf type = tag.getAttribute("type");
-			
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				SWBuf type = tag.getAttribute("type");
+				u->lastTransChange = type;
 
 // just do all transChange tags this way for now
 				if ((type == "added") || (type == "supplied"))
@@ -157,6 +184,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					buf += "*";
 			}
 			else if (tag.isEndTag()) {
+				SWBuf type = u->lastTransChange;
 				if ((type == "added") || (type == "supplied"))
 					buf += "</i>";
 			}
