@@ -1,0 +1,47 @@
+recommended:
+	tab = 5
+	shiftwidth = 5
+
+required:
+	use tab character for indents
+
+	for (init; condition; increment) {
+		statement;
+	}
+
+	switch (variable) {
+	case 1:
+		statement;
+		break;
+	case 2:
+		statement;
+		break;
+	default:
+		statement;
+		break;
+	}
+
+	if (condition)
+		statement;
+	else	statement;
+
+	if (condition) {
+		statement;
+		statement;
+	}
+	else	{
+		statement;
+		statement;
+	}
+
+	class ClassDef {
+	private:
+	protected:
+		void method(int param1, char param2);
+	public:
+		ClassDef();
+	};
+
+	ClassDef classDef;
+	classDef.method(1, '2');
+
