@@ -140,8 +140,9 @@ int main(int argc, char **argv)
 		break;
 	}
 
+	SWFilter *cipherFilter = 0;
 	if (!cipherKey.empty()) {
-		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
+		cipherFilter = new CipherFilter(cipherKey.c_str());
 		outModule->AddRawFilter(cipherFilter);
 	}
 
@@ -185,5 +186,7 @@ int main(int argc, char **argv)
 	}
 	delete outModule;
 	delete outModuleKey;
+	if (cipherFilter)
+		delete cipherFilter;
 }
 

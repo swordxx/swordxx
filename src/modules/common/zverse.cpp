@@ -466,6 +466,7 @@ char zVerse::createModule(const char *ipath, int blockBound)
 	FileMgr::systemFileMgr.close(fd2);
 
 	delete [] path;
+	delete [] buf;
 /*
 	RawVerse rv(path);
 	VerseKey mykey("Rev 22:21");
