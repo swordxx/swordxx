@@ -1,7 +1,7 @@
 /******************************************************************************
  * osisbook.h - Canonical text information to be included by VerseKey2.cpp
  *
- * $Id: osisbook.h,v 1.4 2004/04/12 13:49:12 dglassey Exp $
+ * $Id: osisbook.h,v 1.5 2004/04/29 15:59:54 dglassey Exp $
  *
  * Copyright 2004 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,15 +28,17 @@
 #define TESTAMENT_HEADING 255
 #define OTBOOKS 39
 #define NTBOOKS 27
-#define NTOFFSET 24115  //24115 is offset to start of NT
-#define OSISBMAX 67
-#define MAXOSISBOOKS 92
+//#define NTOFFSET 24115  //24115 is offset to start of NT
+#define OSISBMAX 68
+//#define MAXOSISBOOKS 93
 #define NOTINREFSYS -1
 #define BUILTINABBREVCNT 195
  
 struct sbook2 VerseKey2::osisbooks[] = {
+//Module Heading
+{"Module Heading", "ZZZ"},//0
 //Old Testament
-{"Old Testament", "OT"},//0
+{"Old Testament", "OT"},//1
 {"Genesis", "Gen"},
 {"Exodus", "Exod"},
 {"Leviticus", "Lev"},
@@ -45,8 +47,8 @@ struct sbook2 VerseKey2::osisbooks[] = {
 {"Joshua", "Josh"},
 {"Judges", "Judg"},
 {"Ruth", "Ruth"},
-{"1 Samuel", "1Sam"},
-{"2 Samuel", "2Sam"},//10
+{"1 Samuel", "1Sam"},//10
+{"2 Samuel", "2Sam"},
 {"1 Kings", "1Kgs"},
 {"2 Kings", "2Kgs"},
 {"1 Chronicles", "1Chr"},
@@ -55,8 +57,8 @@ struct sbook2 VerseKey2::osisbooks[] = {
 {"Nehemiah", "Neh"},
 {"Esther", "Esth"},
 {"Job", "Job"},
-{"Psalms", "Ps"},
-{"Proverbs", "Prov"},//20
+{"Psalms", "Ps"},//20
+{"Proverbs", "Prov"},
 {"Ecclesiastes", "Eccl"},		// 	Qohelot
 {"Song of Solomon", "Song"}, 	// 	Canticle of Canticles
 {"Isaiah", "Isa"},
@@ -65,8 +67,8 @@ struct sbook2 VerseKey2::osisbooks[] = {
 {"Ezekiel", "Ezek"},
 {"Daniel", "Dan"},
 {"Hosea", "Hos"},
-{"Joel", "Joel"},
-{"Amos", "Amos"},//30
+{"Joel", "Joel"},//30
+{"Amos", "Amos"},
 {"Obadiah", "Obad"},
 {"Jonah", "Jonah"},
 {"Micah", "Mic"},
@@ -75,11 +77,11 @@ struct sbook2 VerseKey2::osisbooks[] = {
 {"Zephaniah", "Zeph"},
 {"Haggai", "Hag"},
 {"Zechariah", "Zech"},
-{"Malachi", "Mal"},
+{"Malachi", "Mal"},//40
  
  
 //New Testament
-{"New Testament", "NT"},//40
+{"New Testament", "NT"},
 {"Matthew", "Matt"},
 {"Mark", "Mark"},
 {"Luke", "Luke"},
@@ -88,8 +90,8 @@ struct sbook2 VerseKey2::osisbooks[] = {
 {"Romans", "Rom"},
 {"1 Corinthians", "1Cor"},
 {"2 Corinthians", "2Cor"},
-{"Galatians", "Gal"},
-{"Ephesians", "Eph"},//50
+{"Galatians", "Gal"},//50
+{"Ephesians", "Eph"},
 {"Philippians", "Phil"},
 {"Colossians", "Col"},
 {"1 Thessalonians", "1Thess"},
@@ -98,255 +100,255 @@ struct sbook2 VerseKey2::osisbooks[] = {
 {"2 Timothy", "2Tim"},
 {"Titus", "Titus"},
 {"Philemon", "Phlm"},
-{"Hebrews", "Heb"},
-{"James", "Jas"},//60
+{"Hebrews", "Heb"},//60
+{"James", "Jas"},
 {"1 Peter", "1Pet"},
 {"2 Peter", "2Pet"},
 {"1 John", "1John"},
 {"2 John", "2John"},
 {"3 John", "3John"},
 {"Jude", "Jude"},
-{"Revelation", "Rev"},//67
+{"Revelation", "Rev"},//68
  
 //Roman Catholic Deuterocanon
 {"Deuterocanon", "DC"},
-{"Tobit", "Tob"},
-{"Judith", "Jdt"},//70
+{"Tobit", "Tob"},//70
+{"Judith", "Jdt"},
 {"Wisdom", "Wis"},			// 		Wisdom of Solomon
 {"Sirach", "Sir"},			//  	Ecclesiasticus
 {"Baruch", "Bar"},			//  	1 Baruch
-{"Letter of Jeremiah", "EpJer"},
-{"1 Esdras", "1Esd"},//75		//  	3Ezra 	Esdras A
+{"Letter of Jeremiah", "EpJer"},//75
+{"1 Esdras", "1Esd"},		//  	3Ezra 	Esdras A
 {"2 Esdras", "2Esd"},		// 		4Ezra 	Esdras B
-{"1 Maccabees", "1Macc"},//77
+{"1 Maccabees", "1Macc"},//78
 {"2 Maccabees", "2Macc"},
  
  
 //Septuagint
-{"3 Maccabees", "3Macc"},
-{"4 Maccabees", "4Macc"},//80
+{"3 Maccabees", "3Macc"},//80
+{"4 Maccabees", "4Macc"},
 {"Odes of Solomon", "OdesSol"},
 {"Psalms of Solomon", "PssSol"},
  
  
 //Vulgate
-{"Epistle to the Laodiceans", "EpLao"},//83
+{"Epistle to the Laodiceans", "EpLao"},//84
  
  
 //Orthodox Canon
-{"1 Enoch", "1En"},//84		// 	Ethiopic Apocalypse of Enoch
-{"Jubilees", "Jub"},//85
+{"1 Enoch", "1En"},//85		// 	Ethiopic Apocalypse of Enoch
+{"Jubilees", "Jub"},//86
  
  
 //Protestant Apocrypha
-{"Apocrypha", "Apoc"},//86
+{"Apocrypha", "Apoc"},//87
 {"Additions to Esther", "AddEsth"},
 {"Prayer of Azariah", "PrAzar"},	// 	Song of the Three Children
-{"Susanna", "Sus"},
-{"Bel and the Dragon", "Bel"},//90
+{"Susanna", "Sus"},//90
+{"Bel and the Dragon", "Bel"},
 {"Prayer of Manasses", "PrMan"},
-{"Psalm 151", "Ps151"},//92
+{"Psalm 151", "Ps151"},//93
 
 };
 
 
 const struct abbrev2
   VerseKey2::builtin_abbrevs[] = {
-  {"1 C", 46},			//   1 Corinthians
-  {"1 CHRONICLES", 13},		//   1 Chronicles
-  {"1 CORINTHIANS", 47},	//   1 Corinthians
-  {"1 JN", 63},			//    1 John
-  {"1 JOHN", 63},		//    1 John
-  {"1 KGS", 11},		//    1 Kings
-  {"1 KINGS", 11},		//    1 Kings
-  {"1 PETER", 61},		//    1 Peter
-  {"1 PTR", 61},		//    1 Peter
-  {"1 SAMUEL", 9},		//    1 Samuel
-  {"1 THESSALONIANS", 53},	//   1 Thessalonians
-  {"1 TIMOTHY", 55},		//   1 Timothy
-  {"1C", 47},			//   1 Corinthians
-  {"1CHRONICLES", 13},		//   1 Chronicles
-  {"1CORINTHIANS", 47},		//   1 Corinthians
-  {"1JN", 63},			//    1 John       
-  {"1JOHN", 63},		//    1 John
-  {"1KGS", 11},			// 1 Kings
-  {"1KINGS", 11},		//    1 Kings
-  {"1PETER", 61},		//    1 Peter
-  {"1PTR", 61},			//    1 Peter
-  {"1SAMUEL", 9},		//    1 Samuel
-  {"1THESSALONIANS", 53},	//   1 Thessalonians
-  {"1TIMOTHY", 55},		//   1 Timothy
-  {"2 C", 48},			//   2 Corinthians
-  {"2 CHRONICLES", 14},		//   2 Chronicles
-  {"2 CORINTHIANS", 48},	//   2 Corinthians
-  {"2 JN", 64},			//    2 John
-  {"2 JOHN", 64},		//    2 John
-  {"2 KGS", 12},		//    2 Kings
-  {"2 KINGS", 12},		//    2 Kings
-  {"2 PETER", 62},		//    2 Peter
-  {"2 PTR", 62},		//    2 Peter
-  {"2 SAMUEL", 10},		//    2 Samuel
-  {"2 THESSALONIANS", 54},	//   2 Thessalonians
-  {"2 TIMOTHY", 56},		//   2 Timothy
-  {"2C", 48},			//   2 Corinthians
-  {"2CHRONICLES", 14},		//   2 Chronicles
-  {"2CORINTHIANS", 48},		//   2 Corinthians
-  {"2JN", 64},			//    2 John    
-  {"2JOHN", 64},		//    2 John
-  {"2KGS", 12},			// 2 Kings
-  {"2KINGS", 12},		//    2 Kings
-  {"2PETER", 62},		//    2 Peter
-  {"2PTR", 62},			//    2 Peter
-  {"2SAMUEL", 10},		//    2 Samuel
-  {"2THESSALONIANS", 54},	//   2 Thessalonians
-  {"2TIMOTHY", 56},		//   2 Timothy
-  {"3 JN", 65},			//    3 John
-  {"3 JOHN", 65},		//    3 John
-  {"3JN", 65},			//    3 John
-  {"3JOHN", 65},		//    3 John
-  {"ACTS", 45},			//     Acts
-  {"AMOS", 30},			//    Amos
-  {"APOCALYPSE OF ST. JOHN", 67},	//    Apocalypse of St. John (Rev.)
-  {"C", 52},			//    Colossians
-  {"CANTICLE OF CANTICLES", 22},	//    Canticle of Canticles (Song of S.)
-  {"COLOSSIANS", 52},		//    Colossians
-  {"D", 5},			//     Deuteronomy
-  {"DANIEL", 27},		//    Daniel
-  {"DEUTERONOMY", 5},		//    Deuteronomy
-  {"E", 50},			//     Ephesians
-  {"ECCLESIASTES", 21},		//    Ecclesiastes
-  {"EPHESIANS", 50},		//    Ephesians
-  {"ESTER", 17},		//    Esther
-  {"ESTHER", 17},		//    Esther
-  {"EXODUS", 2},		//    Exodus
-  {"EZEKIEL", 26},		//   Ezekiel
-  {"EZK", 26},		//   Ezekiel
-  {"EZRA", 15},			//   Ezra
-  {"G", 1},			//     Genesis
-  {"GALATIANS", 49},		//    Galatians
-  {"GENESIS", 1},		//    Genesis
-  {"H", 59},			//     Hebrews
-  {"HABAKKUK", 35},		//    Habakkuk
-  {"HAGGAI", 37},		//   Haggai
-  {"HEBREWS", 59},		//    Hebrews
-  {"HOSEA", 28},		//    Hosea
-  {"I C", 47},			//   1 Corinthians
-  {"I CHRONICLES", 13},		//   1 Chronicles
-  {"I CORINTHIANS", 47},	//   1 Corinthians
-  {"I JN", 63},			//    1 John
-  {"I JOHN", 63},		//    1 John
-  {"I KGS", 11},		// 1 Kings
-  {"I KINGS", 11},		//    1 Kings
-  {"I PETER", 61},		//    1 Peter
-  {"I PTR", 61},		//    1 Peter
-  {"I SAMUEL", 9},		//    1 Samuel
-  {"I THESSALONIANS", 53},	//   1 Thessalonians
-  {"I TIMOTHY", 55},		//   1 Timothy
-  {"IC", 47},			//   1 Corinthians
-  {"ICHRONICLES", 13},		//   1 Chronicles
-  {"ICORINTHIANS", 47},		//   1 Corinthians
-  {"II C", 48},			//   2 Corinthians
-  {"II CHRONICLES", 14},	//   2 Chronicles
-  {"II CORINTHIANS", 48},	//   2 Corinthians
-  {"II JN", 64},		//    2 John  
-  {"II JOHN", 64},		//    2 John
-  {"II KGS", 12},		// 2 Kings
-  {"II KINGS", 12},		//    2 Kings
-  {"II PETER", 62},		//    2 Peter
-  {"II PTR", 62},		//    2 Peter
-  {"II SAMUEL", 10},		//    2 Samuel
-  {"II THESSALONIANS", 54},	//   2 Thessalonians
-  {"II TIMOTHY", 56},		//   2 Timothy
-  {"IIC", 48},			//   2 Corinthians
-  {"IICHRONICLES", 14},		//   2 Chronicles
-  {"IICORINTHIANS", 48},	//   2 Corinthians
-  {"III JN", 65},		//    3 John 
-  {"III JOHN", 65},		//    3 John
-  {"IIIJN", 65},		//    3 John
-  {"IIIJOHN", 65},		//    3 John
-  {"IIJN", 64},			//    2 John
-  {"IIJOHN", 64},		//    2 John
-  {"IIKGS", 12},		// 2 Kings
-  {"IIKINGS", 12},		//    2 Kings
-  {"IIPETER", 62},		//    2 Peter
-  {"IIPTR", 62},		//    2 Peter
-  {"IISAMUEL", 10},		//    2 Samuel
-  {"IITHESSALONIANS", 54},	//   2 Thessalonians
-  {"IITIMOTHY", 56},		//   2 Timothy
-  {"IJN", 63},			//    1 John
-  {"IJOHN", 63},		//    1 John
-  {"IKGS", 11},			// 1 Kings
-  {"IKINGS", 11},		//    1 Kings
-  {"IPETER", 61},		//    1 Peter
-  {"IPTR", 61},			//    1 Peter
-  {"ISA", 23},			//     Isaiah
-  {"ISAIAH", 23},		//     Isaiah
-  {"ISAMUEL", 9},		//    1 Samuel
-  {"ITHESSALONIANS", 53},	//   1 Thessalonians
-  {"ITIMOTHY", 55},		//   1 Timothy
-  {"J", 44},			//     John
-  {"JAMES", 60},		//    James
-  {"JAS", 60},			//    James
-  {"JDGS", 7},		//  Judges
-  {"JEREMIAH", 24},		//    Jeremiah
-  {"JHN", 44},			//    John
-  {"JN", 44},			//    John
-  {"JO", 44},			//    John
-  {"JOB", 18},			//   Job
-  {"JOEL", 29},			//   Joel
-  {"JOHN", 44},			//   John
-  {"JOL", 29},			//   Joel
-  {"JONAH", 32},		//   Jonah
-  {"JOSHUA", 6},		//   Joshua
-  {"JUDE", 66},			//  Jude
-  {"JUDGES", 7},		//  Judges
-  {"L", 43},			//     Luke
-  {"LAMENTATIONS", 25},		//    Lamentations
-  {"LEVITICUS", 3},		//    Leviticus
-  {"LK", 43},			//    Luke
-  {"LUKE", 43},			//    Luke
-  {"MA", 41},			//    Matthew
-  {"MALACHI", 39},		//   Malachi
-  {"MARK", 42},			//   Mark
-  {"MATTHEW", 41},		//   Matthew
-  {"MICAH", 33},		//    Micah
-  {"MK", 42},			//    Mark
-  {"MRK", 42},			//    Mark
-  {"MT", 41},			//    Matthew
-  {"N", 4},			//     Numbers
-  {"NAHUM", 34},		//    Nahum
-  {"NAM", 34},		//    Nahum
-  {"NEHEMIAH", 16},		//    Nehemiah
-  {"NEW TESTAMENT", 40},		//     New Testament
-  {"NUMBERS", 4},		//    Numbers
-  {"OBADIAH", 31},		//     Obadiah
-  {"OLD TESTAMENT", 0},		//     Old Testament
-  {"P", 19},			//     Psalms
-  {"PHIL", 51},			//    Philippians
-  {"PHILEMON", 58},		// Philemon
-  {"PHILIPPIANS", 51},		// Philippians
-  {"PHLM", 58},		// Philemon
-  {"PHM", 58},			//   Philemon
-  {"PHP", 51},			//   Philippians
-  {"PR", 20},		//    Proverbs
-  {"PROVERBS", 20},		//    Proverbs
-  {"PSA", 19},		//    Psalms
-  {"PSALMS", 19},		//    Psalms
-  {"PSALMS OF SOLOMON", 82},
-  {"PSM", 19},			// Psalms
-  {"PSS", 19},			// Psalms
-  {"QOHELETH", 21},              // Qohelet (Ecclesiastes)
-  {"REVELATION OF JOHN", 67},	//     Revelation
-  {"ROMANS", 46},		//    Romans
-  {"RUTH", 8},			//    Ruth
-  {"SNG", 22},	//     Song of Solomon
-  {"SOLOMON", 22},	//     Song of Solomon
-  {"SONG OF SOLOMON", 22},	//     Song of Solomon
-  {"SONG OF SONGS", 22},	//     Song of Solomon
-  {"SOS", 22},			//     Song of Solomon
-  {"TITUS", 57},		//     Titus
-  {"ZECHARIAH", 38},		//   Zechariah
-  {"ZEPHANIAH", 36},		//   Zephaniah
+  {"1 C", 48},			//   1 Corinthians
+  {"1 CHRONICLES", 14},		//   1 Chronicles
+  {"1 CORINTHIANS", 48},	//   1 Corinthians
+  {"1 JN", 64},			//    1 John
+  {"1 JOHN", 64},		//    1 John
+  {"1 KGS", 12},		//    1 Kings
+  {"1 KINGS", 12},		//    1 Kings
+  {"1 PETER", 62},		//    1 Peter
+  {"1 PTR", 62},		//    1 Peter
+  {"1 SAMUEL", 10},		//    1 Samuel
+  {"1 THESSALONIANS", 54},	//   1 Thessalonians
+  {"1 TIMOTHY", 56},		//   1 Timothy
+  {"1C", 48},			//   1 Corinthians
+  {"1CHRONICLES", 14},		//   1 Chronicles
+  {"1CORINTHIANS", 48},		//   1 Corinthians
+  {"1JN", 64},			//    1 John       
+  {"1JOHN", 64},		//    1 John
+  {"1KGS", 12},			// 1 Kings
+  {"1KINGS", 12},		//    1 Kings
+  {"1PETER", 62},		//    1 Peter
+  {"1PTR", 62},			//    1 Peter
+  {"1SAMUEL", 10},		//    1 Samuel
+  {"1THESSALONIANS", 54},	//   1 Thessalonians
+  {"1TIMOTHY", 56},		//   1 Timothy
+  {"2 C", 49},			//   2 Corinthians
+  {"2 CHRONICLES", 15},		//   2 Chronicles
+  {"2 CORINTHIANS", 49},	//   2 Corinthians
+  {"2 JN", 65},			//    2 John
+  {"2 JOHN", 65},		//    2 John
+  {"2 KGS", 13},		//    2 Kings
+  {"2 KINGS", 13},		//    2 Kings
+  {"2 PETER", 63},		//    2 Peter
+  {"2 PTR", 63},		//    2 Peter
+  {"2 SAMUEL", 11},		//    2 Samuel
+  {"2 THESSALONIANS", 55},	//   2 Thessalonians
+  {"2 TIMOTHY", 57},		//   2 Timothy
+  {"2C", 49},			//   2 Corinthians
+  {"2CHRONICLES", 15},		//   2 Chronicles
+  {"2CORINTHIANS", 49},		//   2 Corinthians
+  {"2JN", 65},			//    2 John    
+  {"2JOHN", 65},		//    2 John
+  {"2KGS", 13},			// 2 Kings
+  {"2KINGS", 13},		//    2 Kings
+  {"2PETER", 63},		//    2 Peter
+  {"2PTR", 63},			//    2 Peter
+  {"2SAMUEL", 11},		//    2 Samuel
+  {"2THESSALONIANS", 55},	//   2 Thessalonians
+  {"2TIMOTHY", 57},		//   2 Timothy
+  {"3 JN", 66},			//    3 John
+  {"3 JOHN", 66},		//    3 John
+  {"3JN", 66},			//    3 John
+  {"3JOHN", 66},		//    3 John
+  {"ACTS", 46},			//     Acts
+  {"AMOS", 31},			//    Amos
+  {"APOCALYPSE OF ST. JOHN", 68},	//    Apocalypse of St. John (Rev.)
+  {"C", 53},			//    Colossians
+  {"CANTICLE OF CANTICLES", 23},	//    Canticle of Canticles (Song of S.)
+  {"COLOSSIANS", 53},		//    Colossians
+  {"D", 6},			//     Deuteronomy
+  {"DANIEL", 28},		//    Daniel
+  {"DEUTERONOMY", 6},		//    Deuteronomy
+  {"E", 51},			//     Ephesians
+  {"ECCLESIASTES", 22},		//    Ecclesiastes
+  {"EPHESIANS", 51},		//    Ephesians
+  {"ESTER", 18},		//    Esther
+  {"ESTHER", 18},		//    Esther
+  {"EXODUS", 3},		//    Exodus
+  {"EZEKIEL", 27},		//   Ezekiel
+  {"EZK", 27},		//   Ezekiel
+  {"EZRA", 16},			//   Ezra
+  {"G", 2},			//     Genesis
+  {"GALATIANS", 50},		//    Galatians
+  {"GENESIS", 2},		//    Genesis
+  {"H", 60},			//     Hebrews
+  {"HABAKKUK", 36},		//    Habakkuk
+  {"HAGGAI", 38},		//   Haggai
+  {"HEBREWS", 60},		//    Hebrews
+  {"HOSEA", 29},		//    Hosea
+  {"I C", 48},			//   1 Corinthians
+  {"I CHRONICLES", 14},		//   1 Chronicles
+  {"I CORINTHIANS", 48},	//   1 Corinthians
+  {"I JN", 64},			//    1 John
+  {"I JOHN", 64},		//    1 John
+  {"I KGS", 12},		// 1 Kings
+  {"I KINGS", 12},		//    1 Kings
+  {"I PETER", 62},		//    1 Peter
+  {"I PTR", 62},		//    1 Peter
+  {"I SAMUEL", 10},		//    1 Samuel
+  {"I THESSALONIANS", 54},	//   1 Thessalonians
+  {"I TIMOTHY", 56},		//   1 Timothy
+  {"IC", 48},			//   1 Corinthians
+  {"ICHRONICLES", 14},		//   1 Chronicles
+  {"ICORINTHIANS", 48},		//   1 Corinthians
+  {"II C", 49},			//   2 Corinthians
+  {"II CHRONICLES", 15},	//   2 Chronicles
+  {"II CORINTHIANS", 49},	//   2 Corinthians
+  {"II JN", 65},		//    2 John  
+  {"II JOHN", 65},		//    2 John
+  {"II KGS", 13},		// 2 Kings
+  {"II KINGS", 13},		//    2 Kings
+  {"II PETER", 63},		//    2 Peter
+  {"II PTR", 63},		//    2 Peter
+  {"II SAMUEL", 11},		//    2 Samuel
+  {"II THESSALONIANS", 55},	//   2 Thessalonians
+  {"II TIMOTHY", 57},		//   2 Timothy
+  {"IIC", 49},			//   2 Corinthians
+  {"IICHRONICLES", 15},		//   2 Chronicles
+  {"IICORINTHIANS", 49},	//   2 Corinthians
+  {"III JN", 66},		//    3 John 
+  {"III JOHN", 66},		//    3 John
+  {"IIIJN", 66},		//    3 John
+  {"IIIJOHN", 66},		//    3 John
+  {"IIJN", 65},			//    2 John
+  {"IIJOHN", 65},		//    2 John
+  {"IIKGS", 13},		// 2 Kings
+  {"IIKINGS", 13},		//    2 Kings
+  {"IIPETER", 63},		//    2 Peter
+  {"IIPTR", 63},		//    2 Peter
+  {"IISAMUEL", 11},		//    2 Samuel
+  {"IITHESSALONIANS", 55},	//   2 Thessalonians
+  {"IITIMOTHY", 55},		//   2 Timothy
+  {"IJN", 64},			//    1 John
+  {"IJOHN", 64},		//    1 John
+  {"IKGS", 12},			// 1 Kings
+  {"IKINGS", 12},		//    1 Kings
+  {"IPETER", 62},		//    1 Peter
+  {"IPTR", 62},			//    1 Peter
+  {"ISA", 24},			//     Isaiah
+  {"ISAIAH", 24},		//     Isaiah
+  {"ISAMUEL", 10},		//    1 Samuel
+  {"ITHESSALONIANS", 54},	//   1 Thessalonians
+  {"ITIMOTHY", 56},		//   1 Timothy
+  {"J", 45},			//     John
+  {"JAMES", 61},		//    James
+  {"JAS", 61},			//    James
+  {"JDGS", 8},		//  Judges
+  {"JEREMIAH", 25},		//    Jeremiah
+  {"JHN", 45},			//    John
+  {"JN", 45},			//    John
+  {"JO", 45},			//    John
+  {"JOB", 19},			//   Job
+  {"JOEL", 30},			//   Joel
+  {"JOHN", 45},			//   John
+  {"JOL", 30},			//   Joel
+  {"JONAH", 33},		//   Jonah
+  {"JOSHUA", 7},		//   Joshua
+  {"JUDE", 67},			//  Jude
+  {"JUDGES", 8},		//  Judges
+  {"L", 44},			//     Luke
+  {"LAMENTATIONS", 26},		//    Lamentations
+  {"LEVITICUS", 4},		//    Leviticus
+  {"LK", 44},			//    Luke
+  {"LUKE", 44},			//    Luke
+  {"MA", 42},			//    Matthew
+  {"MALACHI", 40},		//   Malachi
+  {"MARK", 43},			//   Mark
+  {"MATTHEW", 42},		//   Matthew
+  {"MICAH", 34},		//    Micah
+  {"MODULE HEADING", 0},		//   Module Heading
+  {"MK", 43},			//    Mark
+  {"MRK", 43},			//    Mark
+  {"MT", 42},			//    Matthew
+  {"N", 5},			//     Numbers
+  {"NAHUM", 35},		//    Nahum
+  {"NAM", 35},		//    Nahum
+  {"NEHEMIAH", 17},		//    Nehemiah
+  {"NEW TESTAMENT", 41},		//     New Testament
+  {"NUMBERS", 5},		//    Numbers
+  {"OBADIAH", 32},		//     Obadiah
+  {"OLD TESTAMENT", 1},		//     Old Testament
+  {"P", 20},			//     Psalms
+  {"PHIL", 52},			//    Philippians
+  {"PHILEMON", 59},		// Philemon
+  {"PHILIPPIANS", 52},		// Philippians
+  {"PHLM", 59},		// Philemon
+  {"PHM", 59},			//   Philemon
+  {"PHP", 52},			//   Philippians
+  {"PR", 21},		//    Proverbs
+  {"PROVERBS", 21},		//    Proverbs
+  {"PSA", 20},		//    Psalms
+  {"PSALMS", 20},		//    Psalms
+  {"PSM", 20},			// Psalms
+  {"PSS", 20},			// Psalms
+  {"QOHELETH", 22},              // Qohelet (Ecclesiastes)
+  {"REVELATION OF JOHN", 68},	//     Revelation
+  {"ROMANS", 47},		//    Romans
+  {"RUTH", 9},			//    Ruth
+  {"SNG", 23},	//     Song of Solomon
+  {"SOLOMON", 23},	//     Song of Solomon
+  {"SONG OF SOLOMON", 23},	//     Song of Solomon
+  {"SONG OF SONGS", 23},	//     Song of Solomon
+  {"SOS", 23},			//     Song of Solomon
+  {"TITUS", 58},		//     Titus
+  {"ZECHARIAH", 39},		//   Zechariah
+  {"ZEPHANIAH", 37},		//   Zephaniah
   {"", -1}
 };
 
@@ -639,48 +641,49 @@ const struct abbrev
 
 struct bkref
   VerseKey2::kjvbks[] = {
-//Header
-{0, TESTAMENT_HEADING},//0
+//Headers
+{0, TESTAMENT_HEADING},//0 Module
+{1, TESTAMENT_HEADING},//1 OT
 	//Old Testament
-{1, 50},	// Genesis", "Gen
-{52, 40},	// Exodus", "Exod
-{93, 27},	// Leviticus", "Lev
-{121, 36},	// Numbers", "Num
-{158, 34},	// Deuteronomy", "Deut
-{193, 24},	// Joshua", "Josh
-{218, 21},	// Judges", "Judg
-{240, 4},	// Ruth", "Ruth
-{245, 31},	// 1 Samuel", "1Sam
-{277, 24},	// 2 Samuel", "2Sam//10
-{302, 22},	// 1 Kings", "1Kgs
-{325, 25},	// 2 Kings", "2Kgs
-{351, 29},	// 1 Chronicles", "1Chr
-{381, 36},	// 2 Chronicles", "2Chr
-{418, 10},	// Ezra", "Ezra
-{429, 13},	// Nehemiah", "Neh
-{443, 10},	// Esther", "Esth
-{454, 42},	// Job", "Job
-{497, 150},	// Psalms", "Pss
-{648, 31},	// Proverbs", "Prov//20
-{680, 12},	// Ecclesiastes", "Eccl
-{693, 8},	// Song of Solomon", "Song
-{702, 66},	// Isaiah", "Isa
-{769, 52},	// Jeremiah", "Jer
-{822, 5},	// Lamentations", "Lam
-{828, 48},	// Ezekiel", "Ezek
-{877, 12},	// Daniel", "Dan
-{890, 14},	// Hosea", "Hos
-{905, 3},	// Joel", "Joel
-{909, 9},	// Amos", "Amos//30
-{919, 1},	// Obadiah", "Obad
-{921, 4},	// Jonah", "Jonah
-{926, 7},	// Micah", "Mic
-{934, 3},	// Nahum", "Nah
-{938, 3},	// Habakkuk", "Hab
-{942, 3},	// Zephaniah", "Zeph
-{946, 2},	// Haggai", "Hag
-{949, 14},	// Zechariah", "Zech
-{964, 4},	// Malachi", "Mal//39
+{2, 50},	// Genesis", "Gen
+{53, 40},	// Exodus", "Exod
+{94, 27},	// Leviticus", "Lev
+{122, 36},	// Numbers", "Num
+{159, 34},	// Deuteronomy", "Deut
+{194, 24},	// Joshua", "Josh
+{219, 21},	// Judges", "Judg
+{241, 4},	// Ruth", "Ruth
+{246, 31},	// 1 Samuel", "1Sam
+{278, 24},	// 2 Samuel", "2Sam//10
+{303, 22},	// 1 Kings", "1Kgs
+{326, 25},	// 2 Kings", "2Kgs
+{352, 29},	// 1 Chronicles", "1Chr
+{382, 36},	// 2 Chronicles", "2Chr
+{419, 10},	// Ezra", "Ezra
+{430, 13},	// Nehemiah", "Neh
+{444, 10},	// Esther", "Esth
+{455, 42},	// Job", "Job
+{498, 150},	// Psalms", "Pss
+{649, 31},	// Proverbs", "Prov//20
+{681, 12},	// Ecclesiastes", "Eccl
+{694, 8},	// Song of Solomon", "Song
+{703, 66},	// Isaiah", "Isa
+{770, 52},	// Jeremiah", "Jer
+{823, 5},	// Lamentations", "Lam
+{829, 48},	// Ezekiel", "Ezek
+{878, 12},	// Daniel", "Dan
+{891, 14},	// Hosea", "Hos
+{906, 3},	// Joel", "Joel
+{910, 9},	// Amos", "Amos//30
+{920, 1},	// Obadiah", "Obad
+{922, 4},	// Jonah", "Jonah
+{927, 7},	// Micah", "Mic
+{935, 3},	// Nahum", "Nah
+{939, 3},	// Habakkuk", "Hab
+{943, 3},	// Zephaniah", "Zeph
+{947, 2},	// Haggai", "Hag
+{950, 14},	// Zechariah", "Zech
+{965, 4},	// Malachi", "Mal//39
 
 /*
   0, 1, 30, 47, 72, 94,
@@ -691,35 +694,35 @@ struct bkref
 */
  
 //Header
-{969, TESTAMENT_HEADING},//40
+{970, TESTAMENT_HEADING},//40
 //New Testament
-{970, 28},	// Matthew", "Matt
-{999, 16},	// Mark", "Mark
-{1016, 24},	// Luke", "Luke
-{1041, 21},	// John", "John
-{1063, 28},	// Acts", "Acts
-{1092, 16},	// Romans", "Rom
-{1109, 16},	// 1 Corinthians", "1Cor
-{1126, 13},	// 2 Corinthians", "2Cor
-{1140, 6},	// Galatians", "Gal
-{1147, 6},	// Ephesians", "Eph//50
-{1154, 4},	// Philippians", "Phil
-{1159, 4},	// Colossians", "Col
-{1164, 5},	// 1 Thessalonians", "1Thess
-{1170, 3},	// 2 Thessalonians", "2Thess
-{1174, 6},	// 1 Timothy", "1Tim
-{1181, 4},	// 2 Timothy", "2Tim
-{1186, 3},	// Titus", "Titus
-{1190, 1},	// Philemon", "Phlm
-{1192, 13},	// Hebrews", "Heb
-{1206, 5},	// James", "Jas//60
-{1212, 5},	// 1 Peter", "1Pet
-{1218, 3},	// 2 Peter", "2Pet
-{1222, 5},	// 1 John", "1John
-{1228, 1},	// 2 John", "2John
-{1230, 1},	// 3 John", "3John
-{1232, 1},	// Jude", "Jude
-{1234, 22},	// Revelation", "Rev//67
+{971, 28},	// Matthew", "Matt
+{1000, 16},	// Mark", "Mark
+{1017, 24},	// Luke", "Luke
+{1042, 21},	// John", "John
+{1064, 28},	// Acts", "Acts
+{1093, 16},	// Romans", "Rom
+{1110, 16},	// 1 Corinthians", "1Cor
+{1127, 13},	// 2 Corinthians", "2Cor
+{1141, 6},	// Galatians", "Gal
+{1148, 6},	// Ephesians", "Eph//50
+{1155, 4},	// Philippians", "Phil
+{1160, 4},	// Colossians", "Col
+{1165, 5},	// 1 Thessalonians", "1Thess
+{1171, 3},	// 2 Thessalonians", "2Thess
+{1175, 6},	// 1 Timothy", "1Tim
+{1182, 4},	// 2 Timothy", "2Tim
+{1187, 3},	// Titus", "Titus
+{1191, 1},	// Philemon", "Phlm
+{1193, 13},	// Hebrews", "Heb
+{1207, 5},	// James", "Jas//60
+{1213, 5},	// 1 Peter", "1Pet
+{1219, 3},	// 2 Peter", "2Pet
+{1223, 5},	// 1 John", "1John
+{1229, 1},	// 2 John", "2John
+{1231, 1},	// 3 John", "3John
+{1233, 1},	// Jude", "Jude
+{1235, 22},	// Revelation", "Rev//67
  
  
 //Roman Catholic Deuterocanon
@@ -765,6 +768,7 @@ struct bkref
 
 struct bkref
   VerseKey2::kjvcps[] = {
+{0, 0}, // Module Header
 {1, 0}, // OT Header
 {2, 0}, // Genesis:0
 {3, 31}, // Genesis:1
@@ -775,7 +779,7 @@ struct bkref
 {146, 22}, // Genesis:6
 {169, 24}, // Genesis:7
 {194, 22}, // Genesis:8
-{217, 29}, // Genesis:9//10
+{217, 29}, // Genesis:9
 {247, 32}, // Genesis:10
 {280, 32}, // Genesis:11
 {313, 20}, // Genesis:12
@@ -785,7 +789,7 @@ struct bkref
 {400, 16}, // Genesis:16
 {417, 27}, // Genesis:17
 {445, 33}, // Genesis:18
-{479, 38}, // Genesis:19//20
+{479, 38}, // Genesis:19
 {518, 18}, // Genesis:20
 {537, 34}, // Genesis:21
 {572, 24}, // Genesis:22
@@ -795,7 +799,7 @@ struct bkref
 {721, 35}, // Genesis:26
 {757, 46}, // Genesis:27
 {804, 22}, // Genesis:28
-{827, 35}, // Genesis:29//30
+{827, 35}, // Genesis:29
 {863, 43}, // Genesis:30
 {907, 55}, // Genesis:31
 {963, 32}, // Genesis:32
@@ -805,7 +809,7 @@ struct bkref
 {1079, 43}, // Genesis:36
 {1123, 36}, // Genesis:37
 {1160, 30}, // Genesis:38
-{1191, 23}, // Genesis:39//40
+{1191, 23}, // Genesis:39
 {1215, 23}, // Genesis:40
 {1239, 57}, // Genesis:41
 {1297, 38}, // Genesis:42
@@ -815,7 +819,7 @@ struct bkref
 {1435, 34}, // Genesis:46
 {1470, 31}, // Genesis:47
 {1502, 22}, // Genesis:48
-{1525, 33}, // Genesis:49//50
+{1525, 33}, // Genesis:49
 {1559, 26}, // Genesis:50
 {1586, 0}, // Exodus:0
 {1587, 22}, // Exodus:1
@@ -825,7 +829,7 @@ struct bkref
 {1691, 23}, // Exodus:5
 {1715, 30}, // Exodus:6
 {1746, 25}, // Exodus:7
-{1772, 32}, // Exodus:8//60
+{1772, 32}, // Exodus:8
 {1805, 35}, // Exodus:9
 {1841, 29}, // Exodus:10
 {1871, 10}, // Exodus:11
@@ -835,7 +839,7 @@ struct bkref
 {1989, 27}, // Exodus:15
 {2017, 36}, // Exodus:16
 {2054, 16}, // Exodus:17
-{2071, 27}, // Exodus:18//70
+{2071, 27}, // Exodus:18
 {2099, 25}, // Exodus:19
 {2125, 26}, // Exodus:20
 {2152, 36}, // Exodus:21
@@ -845,7 +849,7 @@ struct bkref
 {2274, 40}, // Exodus:25
 {2315, 37}, // Exodus:26
 {2353, 21}, // Exodus:27
-{2375, 43}, // Exodus:28//80
+{2375, 43}, // Exodus:28
 {2419, 46}, // Exodus:29
 {2466, 38}, // Exodus:30
 {2505, 18}, // Exodus:31
@@ -855,7 +859,7 @@ struct bkref
 {2620, 35}, // Exodus:35
 {2656, 38}, // Exodus:36
 {2695, 29}, // Exodus:37
-{2725, 31}, // Exodus:38//90
+{2725, 31}, // Exodus:38
 {2757, 43}, // Exodus:39
 {2801, 38}, // Exodus:40
 {2840, 0}, // Leviticus:0
@@ -865,7 +869,7 @@ struct bkref
 {2894, 35}, // Leviticus:4
 {2930, 19}, // Leviticus:5
 {2950, 30}, // Leviticus:6
-{2981, 38}, // Leviticus:7//100
+{2981, 38}, // Leviticus:7
 {3020, 36}, // Leviticus:8
 {3057, 24}, // Leviticus:9
 {3082, 20}, // Leviticus:10
@@ -875,7 +879,7 @@ struct bkref
 {3220, 57}, // Leviticus:14
 {3278, 33}, // Leviticus:15
 {3312, 34}, // Leviticus:16
-{3347, 16}, // Leviticus:17//110
+{3347, 16}, // Leviticus:17
 {3364, 30}, // Leviticus:18
 {3395, 37}, // Leviticus:19
 {3433, 27}, // Leviticus:20
@@ -885,7 +889,7 @@ struct bkref
 {3565, 23}, // Leviticus:24
 {3589, 55}, // Leviticus:25
 {3645, 46}, // Leviticus:26
-{3692, 34}, // Leviticus:27//120
+{3692, 34}, // Leviticus:27
 {3727, 0}, // Numbers:0
 {3728, 54}, // Numbers:1
 {3783, 34}, // Numbers:2
@@ -895,7 +899,7 @@ struct bkref
 {3952, 27}, // Numbers:6
 {3980, 89}, // Numbers:7
 {4070, 26}, // Numbers:8
-{4097, 23}, // Numbers:9//130
+{4097, 23}, // Numbers:9
 {4121, 36}, // Numbers:10
 {4158, 35}, // Numbers:11
 {4194, 16}, // Numbers:12
@@ -905,7 +909,7 @@ struct bkref
 {4333, 50}, // Numbers:16
 {4384, 13}, // Numbers:17
 {4398, 32}, // Numbers:18
-{4431, 22}, // Numbers:19//140
+{4431, 22}, // Numbers:19
 {4454, 29}, // Numbers:20
 {4484, 35}, // Numbers:21
 {4520, 41}, // Numbers:22
@@ -915,7 +919,7 @@ struct bkref
 {4638, 65}, // Numbers:26
 {4704, 23}, // Numbers:27
 {4728, 31}, // Numbers:28
-{4760, 40}, // Numbers:29//150
+{4760, 40}, // Numbers:29
 {4801, 16}, // Numbers:30
 {4818, 54}, // Numbers:31
 {4873, 42}, // Numbers:32
@@ -965,7 +969,7 @@ struct bkref
 {6109, 24}, // Joshua:4
 {6134, 15}, // Joshua:5
 {6150, 27}, // Joshua:6
-{6178, 26}, // Joshua:7//200
+{6178, 26}, // Joshua:7
 {6205, 35}, // Joshua:8
 {6241, 27}, // Joshua:9
 {6269, 43}, // Joshua:10
@@ -1015,7 +1019,7 @@ struct bkref
 {7489, 36}, // I Samuel:2
 {7526, 21}, // I Samuel:3
 {7548, 22}, // I Samuel:4
-{7571, 12}, // I Samuel:5//250
+{7571, 12}, // I Samuel:5
 {7584, 21}, // I Samuel:6
 {7606, 17}, // I Samuel:7
 {7624, 22}, // I Samuel:8
@@ -1065,7 +1069,7 @@ struct bkref
 {8853, 26}, // II Samuel:20
 {8880, 22}, // II Samuel:21
 {8903, 51}, // II Samuel:22
-{8955, 39}, // II Samuel:23//300
+{8955, 39}, // II Samuel:23
 {8995, 25}, // II Samuel:24
 {9021, 0}, // I Kings:0
 {9022, 53}, // I Kings:1
@@ -1115,7 +1119,7 @@ struct bkref
 {10494, 20}, // II Kings:22
 {10515, 37}, // II Kings:23
 {10553, 20}, // II Kings:24
-{10574, 30}, // II Kings:25//350
+{10574, 30}, // II Kings:25
 {10605, 0}, // I Chronicles:0
 {10606, 54}, // I Chronicles:1
 {10661, 55}, // I Chronicles:2
@@ -1165,7 +1169,7 @@ struct bkref
 {11908, 14}, // II Chronicles:16
 {11923, 19}, // II Chronicles:17
 {11943, 34}, // II Chronicles:18
-{11978, 11}, // II Chronicles:19//400
+{11978, 11}, // II Chronicles:19
 {11990, 37}, // II Chronicles:20
 {12028, 20}, // II Chronicles:21
 {12049, 12}, // II Chronicles:22
@@ -1215,7 +1219,7 @@ struct bkref
 {13211, 17}, // Esther:4
 {13229, 14}, // Esther:5
 {13244, 14}, // Esther:6
-{13259, 10}, // Esther:7//450
+{13259, 10}, // Esther:7
 {13270, 17}, // Esther:8
 {13288, 32}, // Esther:9
 {13321, 3}, // Esther:10
@@ -1265,7 +1269,7 @@ struct bkref
 {14438, 0}, // Psalms:0
 {14439, 6}, // Psalms:1
 {14446, 12}, // Psalms:2
-{14459, 8}, // Psalms:3//500
+{14459, 8}, // Psalms:3
 {14468, 8}, // Psalms:4
 {14477, 12}, // Psalms:5
 {14490, 10}, // Psalms:6
@@ -1315,7 +1319,7 @@ struct bkref
 {15217, 23}, // Psalms:50
 {15241, 19}, // Psalms:51
 {15261, 9}, // Psalms:52
-{15271, 6}, // Psalms:53//550
+{15271, 6}, // Psalms:53
 {15278, 7}, // Psalms:54
 {15286, 23}, // Psalms:55
 {15310, 13}, // Psalms:56
@@ -1365,7 +1369,7 @@ struct bkref
 {16107, 5}, // Psalms:100
 {16113, 8}, // Psalms:101
 {16122, 28}, // Psalms:102
-{16151, 22}, // Psalms:103//600
+{16151, 22}, // Psalms:103
 {16174, 35}, // Psalms:104
 {16210, 45}, // Psalms:105
 {16256, 48}, // Psalms:106
@@ -1415,7 +1419,7 @@ struct bkref
 {17043, 6}, // Psalms:150
 {17050, 0}, // Proverbs:0
 {17051, 33}, // Proverbs:1
-{17085, 22}, // Proverbs:2//650
+{17085, 22}, // Proverbs:2
 {17108, 35}, // Proverbs:3
 {17144, 27}, // Proverbs:4
 {17172, 23}, // Proverbs:5
@@ -1465,7 +1469,7 @@ struct bkref
 {18281, 16}, // Song of Solomon:4
 {18298, 16}, // Song of Solomon:5
 {18315, 13}, // Song of Solomon:6
-{18329, 13}, // Song of Solomon:7//700
+{18329, 13}, // Song of Solomon:7
 {18343, 14}, // Song of Solomon:8
 {18358, 0}, // Isaiah:0
 {18359, 31}, // Isaiah:1
@@ -1515,7 +1519,7 @@ struct bkref
 {19310, 25}, // Isaiah:45
 {19336, 13}, // Isaiah:46
 {19350, 15}, // Isaiah:47
-{19366, 22}, // Isaiah:48//750
+{19366, 22}, // Isaiah:48
 {19389, 26}, // Isaiah:49
 {19416, 11}, // Isaiah:50
 {19428, 23}, // Isaiah:51
@@ -1565,7 +1569,7 @@ struct bkref
 {20417, 17}, // Jeremiah:28
 {20435, 32}, // Jeremiah:29
 {20468, 24}, // Jeremiah:30
-{20493, 40}, // Jeremiah:31//800
+{20493, 40}, // Jeremiah:31
 {20534, 44}, // Jeremiah:32
 {20579, 26}, // Jeremiah:33
 {20606, 22}, // Jeremiah:34
@@ -1615,7 +1619,7 @@ struct bkref
 {21730, 14}, // Ezekiel:19
 {21745, 49}, // Ezekiel:20
 {21795, 32}, // Ezekiel:21
-{21828, 31}, // Ezekiel:22//850
+{21828, 31}, // Ezekiel:22
 {21860, 49}, // Ezekiel:23
 {21910, 27}, // Ezekiel:24
 {21938, 17}, // Ezekiel:25
@@ -1665,7 +1669,7 @@ struct bkref
 {23077, 16}, // Hosea:7
 {23094, 14}, // Hosea:8
 {23109, 17}, // Hosea:9
-{23127, 15}, // Hosea:10//900
+{23127, 15}, // Hosea:10
 {23143, 12}, // Hosea:11
 {23156, 14}, // Hosea:12
 {23171, 16}, // Hosea:13
@@ -1715,7 +1719,7 @@ struct bkref
 {23789, 15}, // Haggai:1
 {23805, 23}, // Haggai:2
 {23829, 0}, // Zechariah:0
-{23830, 21}, // Zechariah:1//950
+{23830, 21}, // Zechariah:1
 {23852, 13}, // Zechariah:2
 {23866, 10}, // Zechariah:3
 {23877, 14}, // Zechariah:4
@@ -1725,7 +1729,7 @@ struct bkref
 {23935, 23}, // Zechariah:8
 {23959, 17}, // Zechariah:9
 {23977, 12}, // Zechariah:10
-{23990, 17}, // Zechariah:11//960
+{23990, 17}, // Zechariah:11
 {24008, 14}, // Zechariah:12
 {24023, 9}, // Zechariah:13
 {24033, 21}, // Zechariah:14
@@ -1735,297 +1739,297 @@ struct bkref
 {24089, 18}, // Malachi:3
 {24108, 6}, // Malachi:4
 {24115, 0}, // NT Header
-{24117, 0}, // Matthew:0//970
-{24118, 25}, // Matthew:1
-{24144, 23}, // Matthew:2
-{24168, 17}, // Matthew:3
-{24186, 25}, // Matthew:4
-{24212, 48}, // Matthew:5
-{24261, 34}, // Matthew:6
-{24296, 29}, // Matthew:7
-{24326, 34}, // Matthew:8
-{24361, 38}, // Matthew:9
-{24400, 42}, // Matthew:10
-{24443, 30}, // Matthew:11
-{24474, 50}, // Matthew:12
-{24525, 58}, // Matthew:13
-{24584, 36}, // Matthew:14
-{24621, 39}, // Matthew:15
-{24661, 28}, // Matthew:16
-{24690, 27}, // Matthew:17
-{24718, 35}, // Matthew:18
-{24754, 30}, // Matthew:19
-{24785, 34}, // Matthew:20
-{24820, 46}, // Matthew:21
-{24867, 46}, // Matthew:22
-{24914, 39}, // Matthew:23
-{24954, 51}, // Matthew:24
-{25006, 46}, // Matthew:25
-{25053, 75}, // Matthew:26
-{25129, 66}, // Matthew:27
-{25196, 20}, // Matthew:28
-{25217, 0}, // Mark:0
-{25218, 45}, // Mark:1//1000
-{25264, 28}, // Mark:2
-{25293, 35}, // Mark:3
-{25329, 41}, // Mark:4
-{25371, 43}, // Mark:5
-{25415, 56}, // Mark:6
-{25472, 37}, // Mark:7
-{25510, 38}, // Mark:8
-{25549, 50}, // Mark:9
-{25600, 52}, // Mark:10
-{25653, 33}, // Mark:11
-{25687, 44}, // Mark:12
-{25732, 37}, // Mark:13
-{25770, 72}, // Mark:14
-{25843, 47}, // Mark:15
-{25891, 20}, // Mark:16
-{25912, 0}, // Luke:0
-{25913, 80}, // Luke:1
-{25994, 52}, // Luke:2
-{26047, 38}, // Luke:3
-{26086, 44}, // Luke:4
-{26131, 39}, // Luke:5
-{26171, 49}, // Luke:6
-{26221, 50}, // Luke:7
-{26272, 56}, // Luke:8
-{26329, 62}, // Luke:9
-{26392, 42}, // Luke:10
-{26435, 54}, // Luke:11
-{26490, 59}, // Luke:12
-{26550, 35}, // Luke:13
-{26586, 35}, // Luke:14
-{26622, 32}, // Luke:15
-{26655, 31}, // Luke:16
-{26687, 37}, // Luke:17
-{26725, 43}, // Luke:18
-{26769, 48}, // Luke:19
-{26818, 47}, // Luke:20
-{26866, 38}, // Luke:21
-{26905, 71}, // Luke:22
-{26977, 56}, // Luke:23
-{27034, 53}, // Luke:24
-{27088, 0}, // John:0
-{27089, 51}, // John:1
-{27141, 25}, // John:2
-{27167, 36}, // John:3
-{27204, 54}, // John:4
-{27259, 47}, // John:5
-{27307, 71}, // John:6
-{27379, 53}, // John:7
-{27433, 59}, // John:8
-{27493, 41}, // John:9//1050
-{27535, 42}, // John:10
-{27578, 57}, // John:11
-{27636, 50}, // John:12
-{27687, 38}, // John:13
-{27726, 31}, // John:14
-{27758, 27}, // John:15
-{27786, 33}, // John:16
-{27820, 26}, // John:17
-{27847, 40}, // John:18
-{27888, 42}, // John:19
-{27931, 31}, // John:20
-{27963, 25}, // John:21
-{27989, 0}, // Acts:0
-{27990, 26}, // Acts:1
-{28017, 47}, // Acts:2
-{28065, 26}, // Acts:3
-{28092, 37}, // Acts:4
-{28130, 42}, // Acts:5
-{28173, 15}, // Acts:6
-{28189, 60}, // Acts:7
-{28250, 40}, // Acts:8
-{28291, 43}, // Acts:9
-{28335, 48}, // Acts:10
-{28384, 30}, // Acts:11
-{28415, 25}, // Acts:12
-{28441, 52}, // Acts:13
-{28494, 28}, // Acts:14
-{28523, 41}, // Acts:15
-{28565, 40}, // Acts:16
-{28606, 34}, // Acts:17
-{28641, 28}, // Acts:18
-{28670, 41}, // Acts:19
-{28712, 38}, // Acts:20
-{28751, 40}, // Acts:21
-{28792, 30}, // Acts:22
-{28823, 35}, // Acts:23
-{28859, 27}, // Acts:24
-{28887, 27}, // Acts:25
-{28915, 32}, // Acts:26
-{28948, 44}, // Acts:27
-{28993, 31}, // Acts:28
-{29025, 0}, // Romans:0
-{29026, 32}, // Romans:1
-{29059, 29}, // Romans:2
-{29089, 31}, // Romans:3
-{29121, 25}, // Romans:4
-{29147, 21}, // Romans:5
-{29169, 23}, // Romans:6
-{29193, 25}, // Romans:7
-{29219, 39}, // Romans:8//1100
-{29259, 33}, // Romans:9
-{29293, 21}, // Romans:10
-{29315, 36}, // Romans:11
-{29352, 21}, // Romans:12
-{29374, 14}, // Romans:13
-{29389, 23}, // Romans:14
-{29413, 33}, // Romans:15
-{29447, 27}, // Romans:16
-{29475, 0}, // I Corinthians:0
-{29476, 31}, // I Corinthians:1
-{29508, 16}, // I Corinthians:2
-{29525, 23}, // I Corinthians:3
-{29549, 21}, // I Corinthians:4
-{29571, 13}, // I Corinthians:5
-{29585, 20}, // I Corinthians:6
-{29606, 40}, // I Corinthians:7
-{29647, 13}, // I Corinthians:8
-{29661, 27}, // I Corinthians:9
-{29689, 33}, // I Corinthians:10
-{29723, 34}, // I Corinthians:11
-{29758, 31}, // I Corinthians:12
-{29790, 13}, // I Corinthians:13
-{29804, 40}, // I Corinthians:14
-{29845, 58}, // I Corinthians:15
-{29904, 24}, // I Corinthians:16
-{29929, 0}, // II Corinthians:0
-{29930, 24}, // II Corinthians:1
-{29955, 17}, // II Corinthians:2
-{29973, 18}, // II Corinthians:3
-{29992, 18}, // II Corinthians:4
-{30011, 21}, // II Corinthians:5
-{30033, 18}, // II Corinthians:6
-{30052, 16}, // II Corinthians:7
-{30069, 24}, // II Corinthians:8
-{30094, 15}, // II Corinthians:9
-{30110, 18}, // II Corinthians:10
-{30129, 33}, // II Corinthians:11
-{30163, 21}, // II Corinthians:12
-{30185, 14}, // II Corinthians:13
-{30200, 0}, // Galatians:0
-{30201, 24}, // Galatians:1
-{30226, 21}, // Galatians:2
-{30248, 29}, // Galatians:3
-{30278, 31}, // Galatians:4
-{30310, 26}, // Galatians:5
-{30337, 18}, // Galatians:6
-{30356, 0}, // Ephesians:0
-{30357, 23}, // Ephesians:1
-{30381, 22}, // Ephesians:2
-{30404, 21}, // Ephesians:3//1150
-{30426, 32}, // Ephesians:4
-{30459, 33}, // Ephesians:5
-{30493, 24}, // Ephesians:6
-{30518, 0}, // Philippians:0
-{30519, 30}, // Philippians:1
-{30550, 30}, // Philippians:2
-{30581, 21}, // Philippians:3
-{30603, 23}, // Philippians:4
-{30627, 0}, // Colossians:0
-{30628, 29}, // Colossians:1
-{30658, 23}, // Colossians:2
-{30682, 25}, // Colossians:3
-{30708, 18}, // Colossians:4
-{30727, 0}, // I Thessalonians:0
-{30728, 10}, // I Thessalonians:1
-{30739, 20}, // I Thessalonians:2
-{30760, 13}, // I Thessalonians:3
-{30774, 18}, // I Thessalonians:4
-{30793, 28}, // I Thessalonians:5
-{30822, 0}, // II Thessalonians:0
-{30823, 12}, // II Thessalonians:1
-{30836, 17}, // II Thessalonians:2
-{30854, 18}, // II Thessalonians:3
-{30873, 0}, // I Timothy:0
-{30874, 20}, // I Timothy:1
-{30895, 15}, // I Timothy:2
-{30911, 16}, // I Timothy:3
-{30928, 16}, // I Timothy:4
-{30945, 25}, // I Timothy:5
-{30971, 21}, // I Timothy:6
-{30993, 0}, // II Timothy:0
-{30994, 18}, // II Timothy:1
-{31013, 26}, // II Timothy:2
-{31040, 17}, // II Timothy:3
-{31058, 22}, // II Timothy:4
-{31081, 0}, // Titus:0
-{31082, 16}, // Titus:1
-{31099, 15}, // Titus:2
-{31115, 15}, // Titus:3
-{31131, 0}, // Philemon:0
-{31132, 25}, // Philemon:1
-{31158, 0}, // Hebrews:0
-{31159, 14}, // Hebrews:1
-{31174, 18}, // Hebrews:2
-{31193, 19}, // Hebrews:3
-{31213, 16}, // Hebrews:4
-{31230, 14}, // Hebrews:5
-{31245, 20}, // Hebrews:6
-{31266, 28}, // Hebrews:7
-{31295, 13}, // Hebrews:8//1200
-{31309, 28}, // Hebrews:9
-{31338, 39}, // Hebrews:10
-{31378, 40}, // Hebrews:11
-{31419, 29}, // Hebrews:12
-{31449, 25}, // Hebrews:13
-{31475, 0}, // James:0
-{31476, 27}, // James:1
-{31504, 26}, // James:2
-{31531, 18}, // James:3
-{31550, 17}, // James:4
-{31568, 20}, // James:5
-{31589, 0}, // I Peter:0
-{31590, 25}, // I Peter:1
-{31616, 25}, // I Peter:2
-{31642, 22}, // I Peter:3
-{31665, 19}, // I Peter:4
-{31685, 14}, // I Peter:5
-{31700, 0}, // II Peter:0
-{31701, 21}, // II Peter:1
-{31723, 22}, // II Peter:2
-{31746, 18}, // II Peter:3
-{31765, 0}, // I John:0
-{31766, 10}, // I John:1
-{31777, 29}, // I John:2
-{31807, 24}, // I John:3
-{31832, 21}, // I John:4
-{31854, 21}, // I John:5
-{31876, 0}, // II John:0
-{31877, 13}, // II John:1
-{31891, 0}, // III John:0
-{31892, 14}, // III John:1
-{31907, 0}, // Jude:0
-{31908, 25}, // Jude:1
-{31934, 0}, // Revelation of John:0
-{31935, 20}, // Revelation of John:1
-{31956, 29}, // Revelation of John:2
-{31986, 22}, // Revelation of John:3
-{32009, 11}, // Revelation of John:4
-{32021, 14}, // Revelation of John:5
-{32036, 17}, // Revelation of John:6
-{32054, 17}, // Revelation of John:7
-{32072, 13}, // Revelation of John:8
-{32086, 21}, // Revelation of John:9
-{32108, 11}, // Revelation of John:10
-{32120, 19}, // Revelation of John:11
-{32140, 17}, // Revelation of John:12
-{32158, 18}, // Revelation of John:13
-{32177, 20}, // Revelation of John:14
-{32198, 8}, // Revelation of John:15
-{32207, 21}, // Revelation of John:16//1250
-{32229, 18}, // Revelation of John:17
-{32248, 24}, // Revelation of John:18
-{32273, 21}, // Revelation of John:19
-{32295, 15}, // Revelation of John:20
-{32311, 27}, // Revelation of John:21
-{32339, 21} // Revelation of John:22
+{24116, 0}, // Matthew:0
+{24117, 25}, // Matthew:1
+{24143, 23}, // Matthew:2
+{24167, 17}, // Matthew:3
+{24185, 25}, // Matthew:4
+{24211, 48}, // Matthew:5
+{24260, 34}, // Matthew:6
+{24295, 29}, // Matthew:7
+{24325, 34}, // Matthew:8
+{24360, 38}, // Matthew:9
+{24399, 42}, // Matthew:10
+{24442, 30}, // Matthew:11
+{24473, 50}, // Matthew:12
+{24524, 58}, // Matthew:13
+{24583, 36}, // Matthew:14
+{24620, 39}, // Matthew:15
+{24660, 28}, // Matthew:16
+{24689, 27}, // Matthew:17
+{24717, 35}, // Matthew:18
+{24753, 30}, // Matthew:19
+{24784, 34}, // Matthew:20
+{24819, 46}, // Matthew:21
+{24866, 46}, // Matthew:22
+{24913, 39}, // Matthew:23
+{24953, 51}, // Matthew:24
+{25005, 46}, // Matthew:25
+{25052, 75}, // Matthew:26
+{25128, 66}, // Matthew:27
+{25195, 20}, // Matthew:28
+{25216, 0}, // Mark:0
+{25217, 45}, // Mark:1
+{25263, 28}, // Mark:2
+{25292, 35}, // Mark:3
+{25328, 41}, // Mark:4
+{25370, 43}, // Mark:5
+{25414, 56}, // Mark:6
+{25471, 37}, // Mark:7
+{25509, 38}, // Mark:8
+{25548, 50}, // Mark:9
+{25599, 52}, // Mark:10
+{25652, 33}, // Mark:11
+{25686, 44}, // Mark:12
+{25731, 37}, // Mark:13
+{25769, 72}, // Mark:14
+{25842, 47}, // Mark:15
+{25890, 20}, // Mark:16
+{25911, 0}, // Luke:0
+{25912, 80}, // Luke:1
+{25993, 52}, // Luke:2
+{26046, 38}, // Luke:3
+{26085, 44}, // Luke:4
+{26130, 39}, // Luke:5
+{26170, 49}, // Luke:6
+{26220, 50}, // Luke:7
+{26271, 56}, // Luke:8
+{26328, 62}, // Luke:9
+{26391, 42}, // Luke:10
+{26434, 54}, // Luke:11
+{26489, 59}, // Luke:12
+{26549, 35}, // Luke:13
+{26585, 35}, // Luke:14
+{26621, 32}, // Luke:15
+{26654, 31}, // Luke:16
+{26686, 37}, // Luke:17
+{26724, 43}, // Luke:18
+{26768, 48}, // Luke:19
+{26817, 47}, // Luke:20
+{26865, 38}, // Luke:21
+{26904, 71}, // Luke:22
+{26976, 56}, // Luke:23
+{27033, 53}, // Luke:24
+{27087, 0}, // John:0
+{27088, 51}, // John:1
+{27140, 25}, // John:2
+{27166, 36}, // John:3
+{27203, 54}, // John:4
+{27258, 47}, // John:5
+{27306, 71}, // John:6
+{27378, 53}, // John:7
+{27432, 59}, // John:8
+{27492, 41}, // John:9
+{27534, 42}, // John:10
+{27577, 57}, // John:11
+{27635, 50}, // John:12
+{27686, 38}, // John:13
+{27725, 31}, // John:14
+{27757, 27}, // John:15
+{27785, 33}, // John:16
+{27819, 26}, // John:17
+{27846, 40}, // John:18
+{27887, 42}, // John:19
+{27930, 31}, // John:20
+{27962, 25}, // John:21
+{27988, 0}, // Acts:0
+{27989, 26}, // Acts:1
+{28016, 47}, // Acts:2
+{28064, 26}, // Acts:3
+{28091, 37}, // Acts:4
+{28129, 42}, // Acts:5
+{28172, 15}, // Acts:6
+{28188, 60}, // Acts:7
+{28249, 40}, // Acts:8
+{28290, 43}, // Acts:9
+{28334, 48}, // Acts:10
+{28383, 30}, // Acts:11
+{28414, 25}, // Acts:12
+{28440, 52}, // Acts:13
+{28493, 28}, // Acts:14
+{28522, 41}, // Acts:15
+{28564, 40}, // Acts:16
+{28605, 34}, // Acts:17
+{28640, 28}, // Acts:18
+{28669, 41}, // Acts:19
+{28711, 38}, // Acts:20
+{28750, 40}, // Acts:21
+{28791, 30}, // Acts:22
+{28822, 35}, // Acts:23
+{28858, 27}, // Acts:24
+{28886, 27}, // Acts:25
+{28914, 32}, // Acts:26
+{28947, 44}, // Acts:27
+{28992, 31}, // Acts:28
+{29024, 0}, // Romans:0
+{29025, 32}, // Romans:1
+{29058, 29}, // Romans:2
+{29088, 31}, // Romans:3
+{29120, 25}, // Romans:4
+{29146, 21}, // Romans:5
+{29168, 23}, // Romans:6
+{29192, 25}, // Romans:7
+{29218, 39}, // Romans:8
+{29258, 33}, // Romans:9
+{29292, 21}, // Romans:10
+{29314, 36}, // Romans:11
+{29351, 21}, // Romans:12
+{29373, 14}, // Romans:13
+{29388, 23}, // Romans:14
+{29412, 33}, // Romans:15
+{29446, 27}, // Romans:16
+{29474, 0}, // I Corinthians:0
+{29475, 31}, // I Corinthians:1
+{29507, 16}, // I Corinthians:2
+{29524, 23}, // I Corinthians:3
+{29548, 21}, // I Corinthians:4
+{29570, 13}, // I Corinthians:5
+{29584, 20}, // I Corinthians:6
+{29605, 40}, // I Corinthians:7
+{29646, 13}, // I Corinthians:8
+{29660, 27}, // I Corinthians:9
+{29688, 33}, // I Corinthians:10
+{29722, 34}, // I Corinthians:11
+{29757, 31}, // I Corinthians:12
+{29789, 13}, // I Corinthians:13
+{29803, 40}, // I Corinthians:14
+{29844, 58}, // I Corinthians:15
+{29903, 24}, // I Corinthians:16
+{29928, 0}, // II Corinthians:0
+{29929, 24}, // II Corinthians:1
+{29954, 17}, // II Corinthians:2
+{29972, 18}, // II Corinthians:3
+{29991, 18}, // II Corinthians:4
+{30010, 21}, // II Corinthians:5
+{30032, 18}, // II Corinthians:6
+{30051, 16}, // II Corinthians:7
+{30068, 24}, // II Corinthians:8
+{30093, 15}, // II Corinthians:9
+{30109, 18}, // II Corinthians:10
+{30128, 33}, // II Corinthians:11
+{30162, 21}, // II Corinthians:12
+{30184, 14}, // II Corinthians:13
+{30199, 0}, // Galatians:0
+{30200, 24}, // Galatians:1
+{30225, 21}, // Galatians:2
+{30247, 29}, // Galatians:3
+{30277, 31}, // Galatians:4
+{30309, 26}, // Galatians:5
+{30336, 18}, // Galatians:6
+{30355, 0}, // Ephesians:0
+{30356, 23}, // Ephesians:1
+{30380, 22}, // Ephesians:2
+{30403, 21}, // Ephesians:3
+{30425, 32}, // Ephesians:4
+{30458, 33}, // Ephesians:5
+{30492, 24}, // Ephesians:6
+{30517, 0}, // Philippians:0
+{30518, 30}, // Philippians:1
+{30549, 30}, // Philippians:2
+{30580, 21}, // Philippians:3
+{30602, 23}, // Philippians:4
+{30626, 0}, // Colossians:0
+{30627, 29}, // Colossians:1
+{30657, 23}, // Colossians:2
+{30681, 25}, // Colossians:3
+{30707, 18}, // Colossians:4
+{30726, 0}, // I Thessalonians:0
+{30727, 10}, // I Thessalonians:1
+{30738, 20}, // I Thessalonians:2
+{30759, 13}, // I Thessalonians:3
+{30773, 18}, // I Thessalonians:4
+{30792, 28}, // I Thessalonians:5
+{30821, 0}, // II Thessalonians:0
+{30822, 12}, // II Thessalonians:1
+{30835, 17}, // II Thessalonians:2
+{30853, 18}, // II Thessalonians:3
+{30872, 0}, // I Timothy:0
+{30873, 20}, // I Timothy:1
+{30894, 15}, // I Timothy:2
+{30910, 16}, // I Timothy:3
+{30927, 16}, // I Timothy:4
+{30944, 25}, // I Timothy:5
+{30970, 21}, // I Timothy:6
+{30992, 0}, // II Timothy:0
+{30993, 18}, // II Timothy:1
+{31012, 26}, // II Timothy:2
+{31039, 17}, // II Timothy:3
+{31057, 22}, // II Timothy:4
+{31080, 0}, // Titus:0
+{31081, 16}, // Titus:1
+{31098, 15}, // Titus:2
+{31114, 15}, // Titus:3
+{31130, 0}, // Philemon:0
+{31131, 25}, // Philemon:1
+{31157, 0}, // Hebrews:0
+{31158, 14}, // Hebrews:1
+{31173, 18}, // Hebrews:2
+{31192, 19}, // Hebrews:3
+{31212, 16}, // Hebrews:4
+{31229, 14}, // Hebrews:5
+{31244, 20}, // Hebrews:6
+{31265, 28}, // Hebrews:7
+{31294, 13}, // Hebrews:8
+{31308, 28}, // Hebrews:9
+{31337, 39}, // Hebrews:10
+{31377, 40}, // Hebrews:11
+{31418, 29}, // Hebrews:12
+{31448, 25}, // Hebrews:13
+{31474, 0}, // James:0
+{31475, 27}, // James:1
+{31503, 26}, // James:2
+{31530, 18}, // James:3
+{31549, 17}, // James:4
+{31567, 20}, // James:5
+{31588, 0}, // I Peter:0
+{31589, 25}, // I Peter:1
+{31615, 25}, // I Peter:2
+{31641, 22}, // I Peter:3
+{31664, 19}, // I Peter:4
+{31684, 14}, // I Peter:5
+{31699, 0}, // II Peter:0
+{31700, 21}, // II Peter:1
+{31722, 22}, // II Peter:2
+{31745, 18}, // II Peter:3
+{31764, 0}, // I John:0
+{31765, 10}, // I John:1
+{31776, 29}, // I John:2
+{31806, 24}, // I John:3
+{31831, 21}, // I John:4
+{31853, 21}, // I John:5
+{31875, 0}, // II John:0
+{31876, 13}, // II John:1
+{31890, 0}, // III John:0
+{31891, 14}, // III John:1
+{31906, 0}, // Jude:0
+{31907, 25}, // Jude:1
+{31933, 0}, // Revelation of John:0
+{31934, 20}, // Revelation of John:1
+{31955, 29}, // Revelation of John:2
+{31985, 22}, // Revelation of John:3
+{32008, 11}, // Revelation of John:4
+{32020, 14}, // Revelation of John:5
+{32035, 17}, // Revelation of John:6
+{32053, 17}, // Revelation of John:7
+{32071, 13}, // Revelation of John:8
+{32085, 21}, // Revelation of John:9
+{32107, 11}, // Revelation of John:10
+{32119, 19}, // Revelation of John:11
+{32139, 17}, // Revelation of John:12
+{32157, 18}, // Revelation of John:13
+{32176, 20}, // Revelation of John:14
+{32197, 8}, // Revelation of John:15
+{32206, 21}, // Revelation of John:16
+{32228, 18}, // Revelation of John:17
+{32247, 24}, // Revelation of John:18
+{32272, 21}, // Revelation of John:19
+{32294, 15}, // Revelation of John:20
+{32310, 27}, // Revelation of John:21
+{32338, 21} // Revelation of John:22
 };
 
 int
   VerseKey2::offsize[2] =
-  { NTBOOKS+OTBOOKS+2, sizeof (VerseKey2::kjvcps) / sizeof(bkref)
+  { NTBOOKS+OTBOOKS+3, sizeof (VerseKey2::kjvcps) / sizeof(bkref)
 };
 

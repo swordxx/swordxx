@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey2.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey2.h,v 1.4 2004/04/12 13:49:12 dglassey Exp $
+ * $Id: versekey2.h,v 1.5 2004/04/29 15:59:54 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -122,7 +122,7 @@ class SWDLLEXPORT VerseKey2:public SWKey {
 	int abbrevsCnt;
 	/** The Testament: 0 - Old; 1 - New
 	*/
-	signed char testament;
+	//signed char testament;
 	mutable signed char book;
 	mutable signed int chapter;
 	mutable signed int verse;
@@ -134,7 +134,7 @@ class SWDLLEXPORT VerseKey2:public SWKey {
 	char headings;
 	/** flag to use old ot/nt indexes for old modules
 	*/
-	bool oldindexhack;
+	//bool oldindexhack;
 
 	int getBookAbbrev(const char *abbr);
 	void initBounds() const;
@@ -285,7 +285,7 @@ public:
 	*
 	* @return value of testament
 	*/
-	virtual char Testament() const;
+	//virtual char Testament() const;
 	
 	/** Gets book
 	*
@@ -312,7 +312,7 @@ public:
 	* @return if unchanged -> value of testament,
 	* if changed -> previous value of testament
 	*/
-	virtual char Testament(char itestament);
+	//virtual char Testament(char itestament);
 	
 	/** Sets/gets book
 	*
