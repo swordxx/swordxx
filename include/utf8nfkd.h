@@ -37,6 +37,7 @@ class SWDLLEXPORT UTF8NFKD : public SWFilter
   UErrorCode err;
  public:
   UTF8NFKD();
+  ~UTF8NFKD();  
   virtual char ProcessText (char *text, int maxlen, const SWKey * key);
 };
 

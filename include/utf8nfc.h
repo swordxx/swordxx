@@ -37,6 +37,7 @@ class SWDLLEXPORT UTF8NFC : public SWFilter
   UErrorCode err;
  public:
   UTF8NFC();
+  ~UTF8NFC();  
   virtual char ProcessText (char *text, int maxlen, const SWKey * key);
 };
 
