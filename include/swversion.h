@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swversion.h   - definition of class SWVersion used to compare version info
  *
- * $Id: swversion.h,v 1.6 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: swversion.h,v 1.7 2002/10/02 23:43:43 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,7 +20,7 @@
  */
 
 #ifndef SWORDVER
-#define SWORDVER "1.5.4"
+#define SWORDVER "1.5.5"
 #endif
 
 #ifndef SWVERSION_H
