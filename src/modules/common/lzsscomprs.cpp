@@ -552,6 +552,7 @@ void LZSSCompress::Decode(void)
 	int flag_count;					 // which flag we're on
 	short int pos;					  // position in the ring buffer
 	short int len;					  // number of chars in ring buffer
+	unsigned long totalLen = 0;
 
 	direct = 1;	// set direction needed by parent [Get|Send]Chars()
 
@@ -599,8 +600,10 @@ void LZSSCompress::Decode(void)
 			if (GetChars((char *) c, 1) != 1)
 				break;
 
-			if (SendChars((char *) c, 1) != 1)
+			if (SendChars((char *) c, 1) != 1) {
+				totalLen++;
 				break;
+			}
 
 			// Add to buffer, and increment to next spot. Wrap at end.
 
@@ -652,8 +655,11 @@ void LZSSCompress::Decode(void)
 
 			// Add the "len" :characters to the output stream.
 
-			if (SendChars((char *) c, len) != (unsigned int)len)
+			if (SendChars((char *) c, len) != (unsigned int)len) {
+				totalLen += len;
 				break;
+			}
 		}
 	}
+	slen = totalLen;
 }

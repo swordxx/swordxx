@@ -31,7 +31,7 @@ void printEntry(EntriesBlock *eb, int index) {
 
 
 void printSize(EntriesBlock *eb) {
-	long size;
+	unsigned long size;
 	eb->getRawData(&size);
 	cout << "Size of raw data: " << size << "\n\n";
 }

@@ -13,19 +13,20 @@ class EntriesBlock {
 private:
 	char *block;
 	void setCount(int count);
-	void getMetaEntry(int index, long *offset, short *size);
-	void setMetaEntry(int index, long offset, short size);
+	void getMetaEntry(int index, unsigned long *offset, unsigned long *size);
+	void setMetaEntry(int index, unsigned long offset, unsigned long size);
 
 public:
-	EntriesBlock(const char *iBlock, long size);
+	EntriesBlock(const char *iBlock, unsigned long size);
 	EntriesBlock();
 	~EntriesBlock();
 
 	int getCount();
 	int addEntry(const char *entry);
 	const char *getEntry(int entryIndex);
+	unsigned long getEntrySize(int entryIndex);
 	void removeEntry(int entryIndex);
-	const char *getRawData(long *size);
+	const char *getRawData(unsigned long *size);
 };
 
 

@@ -1,11 +1,11 @@
 
-root := ../../..
-subdirs := rawld rawld4 zld
+root := ../../../..
+subdirs := 
 pre-targets := 
 targets := ${root}/lib/libsword.a
 clean-targets := none
 include ${root}/Makefile.cfg
 
-cpp += swld.cpp
+cpp += zld.cpp
 
 include ${root}/Makefile.post

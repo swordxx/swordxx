@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-EntriesBlock::EntriesBlock(const char *iBlock, long size) {
+EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
 	block = (char *)calloc(1, size);
 	memcpy(block, iBlock, size);
 }
@@ -32,7 +32,7 @@ int EntriesBlock::getCount() {
 }
 
 
-void EntriesBlock::getMetaEntry(int index, long *offset, short *size) {
+void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long *size) {
 	__u32 rawOffset = 0;
 	__u32 rawSize = 0;
 	*offset = 0;
@@ -44,12 +44,12 @@ void EntriesBlock::getMetaEntry(int index, long *offset, short *size) {
 	memcpy(&rawOffset, block + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
 	memcpy(&rawSize, block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
 
-	*offset = (long)swordtoarch32(rawOffset);
-	*size   = (short)swordtoarch32(rawSize);
+	*offset = (unsigned long)swordtoarch32(rawOffset);
+	*size   = (unsigned long)swordtoarch32(rawSize);
 }
 
 
-void EntriesBlock::setMetaEntry(int index, long offset, short size) {
+void EntriesBlock::setMetaEntry(int index, unsigned long offset, unsigned long size) {
 	__u32 rawOffset = archtosword32(offset);
 	__u32 rawSize = archtosword32(size);
 
@@ -62,11 +62,11 @@ void EntriesBlock::setMetaEntry(int index, long offset, short size) {
 }
 
 
-const char *EntriesBlock::getRawData(long *retSize) {
-	long max = 4;
+const char *EntriesBlock::getRawData(unsigned long *retSize) {
+	unsigned long max = 4;
 	int loop;
-	long offset;
-	short size;
+	unsigned long offset;
+	unsigned long size;
 	for (loop = 0; loop < getCount(); loop++) {
 		getMetaEntry(loop, &offset, &size);
 		max = ((offset + size) > max) ? (offset + size) : max;
@@ -77,13 +77,13 @@ const char *EntriesBlock::getRawData(long *retSize) {
 
 
 int EntriesBlock::addEntry(const char *entry) {
-	long dataSize;
+	unsigned long dataSize;
 	getRawData(&dataSize);
 	int len = strlen(entry);
-	long offset;
-	short size;
+	unsigned long offset;
+	unsigned long size;
 	int count = getCount();
-	long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
+	unsigned long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
 	// new meta entry + new data size + 1 because null 
 	block = (char *)realloc(block, dataSize + METAENTRYSIZE + len + 1);
 	// shift right to make room for new meta entry
@@ -111,23 +111,33 @@ int EntriesBlock::addEntry(const char *entry) {
 
 
 const char *EntriesBlock::getEntry(int entryIndex) {
-	long offset;
-	short size;
+	unsigned long offset;
+	unsigned long size;
 	static char *empty = "";
+
 	getMetaEntry(entryIndex, &offset, &size);
 	return (offset) ? block+offset : empty;
 }
 
 
+unsigned long EntriesBlock::getEntrySize(int entryIndex) {
+	unsigned long offset;
+	unsigned long size;
+
+	getMetaEntry(entryIndex, &offset, &size);
+	return (offset) ? size : 0;
+}
+
+
 void EntriesBlock::removeEntry(int entryIndex) {
-	long offset;
-	short size, size2;
-	long dataSize;
+	unsigned long offset;
+	unsigned long size, size2;
+	unsigned long dataSize;
 	getRawData(&dataSize);
 	getMetaEntry(entryIndex, &offset, &size);
 	int len = size - 1;
 	int count = getCount();
-	long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
+	unsigned long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
 
 	if (!offset)	// already deleted
 		return;

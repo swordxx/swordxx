@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.53 2001/12/18 04:47:05 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.54 2001/12/20 10:01:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -60,6 +60,7 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
+#include <zld.h>
 #include <zcom.h>
 #include <lzsscomprs.h>
 #include <utf8greekaccents.h>
@@ -736,6 +737,26 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	if (!stricmp(driver.c_str(), "RawLD4"))
 		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
 
+	if (!stricmp(driver.c_str(), "zLD")) {
+		SWCompress *compress = 0;
+		int blockCount;
+		misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : (string)"200";
+		blockCount = atoi(misc1.c_str());
+		blockCount = (blockCount) ? blockCount : 200;
+
+		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (string)"LZSS";
+#ifndef EXCLUDEZLIB
+		if (!stricmp(misc1.c_str(), "ZIP"))
+			compress = new ZipCompress();
+		else
+#endif
+		if (!stricmp(misc1.c_str(), "LZSS"))
+			compress = new LZSSCompress();
+
+		if (compress) {
+			newmod = new zLD(datapath.c_str(), name.c_str(), description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str());
+		}
+	}
     // if a specific module type is set in the config, use this
     if ((entry = section.find("Type")) != section.end())
         newmod->Type(entry->second.c_str());

@@ -52,14 +52,13 @@ void SWCompress::Init()
 }
 
 
-char *SWCompress::Buf(char *ibuf)
-{
+char *SWCompress::Buf(const char *ibuf, unsigned long *len) {
 	// setting an uncompressed buffer
 	if (ibuf) {
 		Init();
-		slen = strlen(ibuf);
-		buf = (char *) malloc(slen + 1);
-		strcpy(buf, ibuf);
+		slen = (len) ? *len : strlen(ibuf);
+		buf = (char *) calloc(slen + 1, 1);
+		memcpy(buf, ibuf, slen);
 	}
 
 	// getting an uncompressed buffer
@@ -67,9 +66,10 @@ char *SWCompress::Buf(char *ibuf)
 		buf = (char *)calloc(1,1); // be sure we at least allocate an empty buf for return;
 		direct = 1;
 		Decode();
-		slen = strlen(buf);
+//		slen = strlen(buf);
+		if (len)
+			*len = slen;
 	}
-
 	return buf;
 }
 

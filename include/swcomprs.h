@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcomprs.h   - definition of Class SWCompress used for data compression
  *
- * $Id: swcomprs.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swcomprs.h,v 1.7 2001/12/20 10:01:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,7 +34,7 @@ protected:
 public:
     SWCompress ();
     virtual ~ SWCompress ();
-  virtual char *Buf (char *buf = 0);
+  virtual char *Buf (const char *buf = 0, unsigned long *len = 0);
   virtual char *zBuf (unsigned long *len, char *buf = 0);
   virtual unsigned long GetChars (char *buf, unsigned long len);	// override for other than buffer compression
   virtual unsigned long SendChars (char *buf, unsigned long len);	// override for other than buffer compression

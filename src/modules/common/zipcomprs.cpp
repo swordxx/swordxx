@@ -146,6 +146,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 		uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen);
 		SendChars(buf, blen);
 		delete [] buf;
+		slen = blen;
 	}
 	else {
 		printf("No buffer to decompress!\n");
