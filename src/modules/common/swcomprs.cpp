@@ -46,6 +46,7 @@ void SWCompress::Init()
 		zbuf   = 0;
 		direct  = 0;
 		zlen    = 0;
+		slen    = 0;
 		zpos    = 0;
 		pos     = 0;
 }
@@ -56,13 +57,18 @@ char *SWCompress::Buf(char *ibuf)
 	// setting an uncompressed buffer
 	if (ibuf) {
 		Init();
-		buf = (char *) malloc(strlen(ibuf) + 1);
+		slen = strlen(ibuf);
+		buf = (char *) malloc(slen + 1);
 		strcpy(buf, ibuf);
 	}
 
 	// getting an uncompressed buffer
-	if (!buf)
+	if (!buf) {
+		buf = (char *)calloc(1,1); // be sure we at least allocate an empty buf for return;
+		direct = 1;
 		Decode();
+		slen = strlen(buf);
+	}
 
 	return buf;
 }
@@ -79,28 +85,28 @@ char *SWCompress::zBuf(unsigned long *len, char *ibuf)
 	}
 
 	// getting a compressed buffer
-	if (!zbuf)
+	if (!zbuf) {
+		direct = 0;
 		Encode();
+	}
 
-	*len = (short)zlen;
+	*len = zlen;
 	return zbuf;
 }
 
 
-int SWCompress::GetChars(char *ibuf, int len)
+unsigned long SWCompress::GetChars(char *ibuf, unsigned long len)
 {
-	int slen;
-
 	if (direct) {
-		len = (((zlen - zpos) > len) ? len : zlen - zpos);
+		len = (((zlen - zpos) > (unsigned)len) ? len : zlen - zpos);
 		if (len > 0) {
 			memmove(ibuf, &zbuf[zpos], len);
 			zpos += len;
 		}
 	}
 	else {
-		slen = strlen(buf);
-		len = (((slen - pos) > len) ? len : slen - pos);
+//		slen = strlen(buf);
+		len = (((slen - pos) > (unsigned)len) ? len : slen - pos);
 		if (len > 0) {
 			memmove(ibuf, &buf[pos], len);
 			pos += len;
@@ -110,14 +116,12 @@ int SWCompress::GetChars(char *ibuf, int len)
 }
 	
 
-int SWCompress::SendChars(char *ibuf, int len)
+unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
 {
-	int slen;
-
 	if (direct) {
 		if (buf) {
-			slen = strlen(buf);
-			if ((pos + len) > slen) {
+//			slen = strlen(buf);
+			if ((pos + len) > (unsigned)slen) {
 				buf = (char *) realloc(buf, pos + len + 1024);
 				memset(&buf[pos], 0, len + 1024);
 			}
@@ -174,7 +178,7 @@ void SWCompress::Decode(void)
 
 void SWCompress::cycleStream() {
 	char buf[1024];
-	int len, totlen = 0;
+	unsigned long len, totlen = 0;
 
 	do {
 		len = GetChars(buf, 1024);
@@ -182,5 +186,5 @@ void SWCompress::cycleStream() {
 			totlen += SendChars(buf, len);
 	} while (len == 1024);
 
-	zlen = totlen;
+	zlen = slen = totlen;
 }

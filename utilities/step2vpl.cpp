@@ -345,24 +345,26 @@ void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevel
 	ViewableBlock vb;
 	int len = 0;
 	static long lastEntryOffset = -1;
-	static char *entryText = 0;
 	static class FreeCachedEntryText {
-		public: ~FreeCachedEntryText() { if (entryText) delete [] entryText; }
+	public:
+		char *entryText;
+		FreeCachedEntryText() { entryText = 0; }
+		~FreeCachedEntryText() { if (entryText) delete [] entryText; }
 	} _freeCachedEntryText;
 
 	if (sectionLevelInfo->viewableOffset != lastEntryOffset) {
-		if (entryText)
-			delete [] entryText;
+		if (_freeCachedEntryText.entryText)
+			delete [] _freeCachedEntryText.entryText;
 	
 		lseek(fdviewable, sectionLevelInfo->viewableOffset, SEEK_SET);
 		readViewableBlock(fdviewable, &vb);
-		readViewableBlockText(fdbook, &vb, &entryText);
+		readViewableBlockText(fdbook, &vb, &(_freeCachedEntryText.entryText));
 		lastEntryOffset = sectionLevelInfo->viewableOffset;
 	}
 	sprintf(numberBuf, "%d", sectionLevelInfo->startLevel);
 	startToken = "\\stepstartlevel";
 	startToken += numberBuf;
-	char *start = strstr(entryText, startToken.c_str());
+	char *start = strstr(_freeCachedEntryText.entryText, startToken.c_str());
 	if (start) {
 		start += strlen(startToken.c_str());
 		char *end = strstr(start, "\\stepstartlevel");

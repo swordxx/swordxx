@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.25 2000/12/07 19:16:03 scribe Exp $
+ * $Id: swmgr.cpp,v 1.26 2000/12/15 09:59:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -449,11 +449,29 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		datapath += buf2;
 	delete [] buf;
 	
-#ifdef ZLIBSUPPORTED
 	if (!stricmp(driver.c_str(), "zText")) {
-		newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), zVerse::CHAPTERBLOCKS, new LZSSCompress());
-	}
+		SWCompress *compress = 0;
+		int blockType = CHAPTERBLOCKS;
+		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (string)"CHAPTER";
+		if (!stricmp(misc1.c_str(), "VERSE"))
+			blockType = VERSEBLOCKS;
+		else if (!stricmp(misc1.c_str(), "CHAPTER"))
+			blockType = CHAPTERBLOCKS;
+		else if (!stricmp(misc1.c_str(), "BOOK"))
+			blockType = BOOKBLOCKS;
+
+		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (string)"LZSS";
+#ifdef ZLIBSUPPORTED
+		if (!stricmp(misc1.c_str(), "ZIP"))
+			compress = new ZipCompress();
+		else
 #endif
+		if (!stricmp(misc1.c_str(), "LZSS"))
+			compress = new LZSSCompress();
+		
+		if (compress)
+			newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress);
+	}
 	
 	if (!stricmp(driver.c_str(), "RawText")) {
 		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());

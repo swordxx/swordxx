@@ -38,8 +38,7 @@ int main(int argc, char **argv)
 	SWCompress *compressor = 0;
 
 	if ((argc < 3) || (argc > 5)) {
-		cerr << "usage: " << argv[0] << " <mod_name> <output_dir> [compression type [buffer size]]\n";
-		exit(1);
+		errorOutHelp(argv[0]);
 	}
 
 	if (argc > 3) {
@@ -49,7 +48,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if ((iType < 1) || (iType > 4) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-help"))) {
+	if ((iType < 1) || (iType > 4) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
 		errorOutHelp(argv[0]);
 	}
 
@@ -101,6 +100,7 @@ int main(int argc, char **argv)
 
 	(*vkey) = TOP;
 	while (!vkey->Error()) {
+		cout << "Adding [" << *vkey << "]\n";
 		// pseudo-check for link.  Will get most common links.
 		if (!strcmp(lastBuffer, (const char *)(*inModule))) {
 			outModule << bufferKey;	// link to last key

@@ -295,6 +295,8 @@ void LZSSCompress::DeleteNode(short int Node)
  *						The GetChars() and SendChars() functions are
  *						used to separate this method from the actual
  *						i/o.
+ * 		NOTE:			must set zlen for parent class to know length of
+ * 						compressed buffer.
  */
 
 void LZSSCompress::Encode(void)

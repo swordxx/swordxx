@@ -34,9 +34,11 @@ protected:
 	bool dirtyCache;
 
 public:
-	static const int VERSEBLOCKS;
-	static const int CHAPTERBLOCKS;
-	static const int BOOKBLOCKS;
+
+#define	VERSEBLOCKS 2
+#define	CHAPTERBLOCKS 3
+#define	BOOKBLOCKS 4
+
 	static const char uniqueIndexID[];
 	char nl;
 	zVerse(const char *ipath, int fileMode = O_RDONLY, int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0);

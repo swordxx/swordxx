@@ -36,6 +36,8 @@ ZipCompress::~ZipCompress()
  *						The GetChars() and SendChars() functions are
  *						used to separate this method from the actual
  *						i/o.
+ * 		NOTE:			must set zlen for parent class to know length of
+ * 						compressed buffer.
  */
 
 void ZipCompress::Encode(void)
@@ -64,16 +66,16 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 	unsigned long len = 0;
 	while((chunklen = GetChars(chunk, 1023))) {
 		memcpy(chunkbuf, chunk, chunklen);
-		chunkbuf += chunklen;
 		len += chunklen;
 		if (chunklen < 1023)
 			break;
 		else	buf = (char *)realloc(buf, len + 1024);
+		chunkbuf = buf+len;
 	}
 
 
 	zlen = (long) (len*1.001)+15;
-	char *zbuf = new char[len];
+	char *zbuf = new char[zlen+1];
 	if (len)
 	{
 		//printf("Doing compress\n");
@@ -130,11 +132,11 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 	unsigned long zlen = 0;
 	while((chunklen = GetChars(chunk, 1023))) {
 		memcpy(chunkbuf, chunk, chunklen);
-		chunkbuf += chunklen;
 		zlen += chunklen;
 		if (chunklen < 1023)
 			break;
 		else	zbuf = (char *)realloc(zbuf, zlen + 1024);
+		chunkbuf = zbuf + zlen;
 	}
 
 	//printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
@@ -150,5 +152,5 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 		printf("No buffer to decompress!\n");
 	}
 	//printf("Finished decoding\n");
-	free (buf);
+	free (zbuf);
 }

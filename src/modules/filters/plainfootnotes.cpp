@@ -53,7 +53,7 @@ const char *PLAINFootnotes::getOptionValue()
 
 char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	char *to, *from, token[20], tokpos = 0;
+	char token[20], tokpos = 0;
 	bool intoken 	= false;
 	bool lastspace = false;
 

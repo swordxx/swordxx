@@ -23,6 +23,9 @@
 #include <versekey.h>
 #include <zverse.h>
 
+// remove
+//#include <lzsscomprs.h>
+
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -35,9 +38,6 @@
 
 int zVerse::instance = 0;
 
-const int zVerse::VERSEBLOCKS = 2;
-const int zVerse::CHAPTERBLOCKS = 3;
-const int zVerse::BOOKBLOCKS = 4;
 const char zVerse::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
 
 /******************************************************************************
@@ -328,6 +328,10 @@ void zVerse::flushCache() {
 		idxoff = cacheBufIdx * 12;
 		size = outsize = zsize = outzsize = strlen(cacheBuf);
 		if (size) {
+//			if (compressor) {
+//				delete compressor;
+//				compressor = new LZSSCompress();
+//			}
 			compressor->Buf(cacheBuf);
 			compressor->zBuf(&zsize);
 			outzsize = zsize;

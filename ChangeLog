@@ -1,6 +1,15 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+15-Dec-2000	Troy A. Griffitts <scribe@crosswire.org>
+	zText compess driver working
+	Fixed ZipCompress
+	Optimized SWCompress
+	mod2zmod conversion utility working
+	Added support for zText modules in SWMgr with 2 new
+		parameters: BlockType=[VERSE|CHAPTER|BOOK]
+		CompressType=[LZSS|ZIP]
+
 10-Dec-2000     Chris Little <chrislit@crosswire.org>
 	Added addld utility for adding single entries to LD modules
 	

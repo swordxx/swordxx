@@ -152,8 +152,22 @@ char *zText::getRawEntry()
 }
 
 
-bool zText::sameBlock(VerseKey *lastWriteKey, VerseKey *key) {
-	return false;
+bool zText::sameBlock(VerseKey *k1, VerseKey *k2) {
+	if (k1->Testament() != k2->Testament())
+		return false;
+
+	switch (blockType) {
+	case VERSEBLOCKS:
+		if (k1->Verse() != k2->Verse())
+			return false;
+	case CHAPTERBLOCKS:
+		if (k1->Chapter() != k2->Chapter())
+			return false;
+	case BOOKBLOCKS:
+		if (k1->Book() != k2->Book())
+			return false;
+	}
+	return true;
 }
 
 
