@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+10-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
+	Initial support for using sword transliterators
+	with offical ICU
+
 24-Jun-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added a few english abbrevs to better parse BW exported
 		texts.
