@@ -1,8 +1,8 @@
 /******************************************************************************
- *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
- *				base of sword modules.
+ *  localemgr.cpp - implementation of class LocaleMgr used to interact with
+ *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.1 2000/03/12 01:09:43 scribe Exp $
+ * $Id: localemgr.cpp,v 1.2 2000/03/12 23:12:32 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,247 +33,42 @@
 #endif
 #include <sys/stat.h>
 
-
 #include <swmgr.h>
-#include <rawtext.h>
-#include <rawgbf.h>
-#include <rawcom.h>
-#include <hrefcom.h>
-#include <rawld.h>
 #include <utilfuns.h>
-#include <gbfplain.h>
-#include <gbfstrongs.h>
-#include <gbffootnotes.h>
-#include <cipherfil.h>
-#include <rawfiles.h>
-#include <ztext.h>
-#include <zipcomprs.h>
+
+#include <localemgr.h>
 
 
-void SWMgr::init() {
-	SWFilter *tmpFilter = 0;
-	configPath  = 0;
-	prefixPath  = 0;
-	configType  = 0;
-	myconfig    = 0;
-	mysysconfig = 0;
-
-	optionFilters.clear();
-	cleanupFilters.clear();
-
-	tmpFilter = new GBFStrongs();
-	optionFilters.insert(FilterMap::value_type("GBFStrongs", tmpFilter));
-	cleanupFilters.push_back(tmpFilter);
-
-	tmpFilter = new GBFFootnotes();
-	optionFilters.insert(FilterMap::value_type("GBFFootnotes", tmpFilter));
-	cleanupFilters.push_back(tmpFilter);
-
-	gbfplain = new GBFPlain();
-	cleanupFilters.push_back(gbfplain);
-}
-
-
-SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload) {
-
-	init();
-	
-	if (iconfig) {
-		config   = iconfig;
-		myconfig = 0;
-	}
-	else config = 0;
-	if (isysconfig) {
-		sysconfig   = isysconfig;
-		mysysconfig = 0;
-	}
-	else sysconfig = 0;
-
-	if (autoload)
-		Load();
-}
-
-
-SWMgr::SWMgr(const char *iConfigPath, bool autoload) {
-
+LocaleMgr::LocaleMgr(const char *iConfigPath) {
+	char *prefixPath = 0;
+	char *configPath = 0;
+	char configType = 0;
 	string path;
 	
-	init();
-	
-	path = iConfigPath;
-	if ((iConfigPath[strlen(iConfigPath)-1] != '\\') && (iConfigPath[strlen(iConfigPath)-1] != '/'))
+	if (!iConfigPath)
+		SWMgr::findConfig(&configType, &configPath, &prefixPath);
+	else configPath = (char *)iConfigPath;
+
+	path = configPath;
+	if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
 		path += "/";
-	if (existsFile(path.c_str(), "mods.conf")) {
-		stdstr(&prefixPath, path.c_str());
-		path += "mods.conf";
-		stdstr(&configPath, path.c_str());
-	}
-	else {
-		if (existsDir(path.c_str(), "mods.d")) {
-			stdstr(&prefixPath, path.c_str());
-			path += "mods.d";
-			stdstr(&configPath, path.c_str());
-			configType = 1;
-		}
-	}
 
-	config = 0;
-	sysconfig = 0;
-
-	if (autoload && configPath)
-		Load();
+	if (SWMgr::existsDir(path.c_str(), "locale.d")) {
+		path += "locale.d";
+		loadConfigDir(path.c_str());
+	}
 }
 
 
-SWMgr::~SWMgr() {
-
-	DeleteMods();
-
-	for (FilterList::iterator it = cleanupFilters.begin(); it != cleanupFilters.end(); it++)
-		delete (*it);
-			
-	if (myconfig)
-		delete myconfig;
-
-	if (prefixPath)
-		delete [] prefixPath;
-
-	if (configPath)
-		delete [] configPath;
+LocaleMgr::~LocaleMgr() {
 }
 
 
-char SWMgr::existsFile(const char *ipath, const char *ifileName)
-{
-	string path = ipath;
-	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-		path += "/";
-	int fd;
-	string filePath = path + ifileName;
-	if ((fd = ::open(filePath.c_str(), O_RDONLY)) > 0) {
-		::close(fd);
-		return 1;
-	}
-	return 0;
-}
-
-
-char SWMgr::existsDir(const char *ipath, const char *idirName)
-{
+void LocaleMgr::loadConfigDir(const char *ipath) {
 	DIR *dir;
-	string path = ipath;
-	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-		path += "/";
-	string filePath = path + idirName;
-	if ((dir = opendir(filePath.c_str()))) {
-		closedir(dir);
-		return 1;
-	}
-	return 0;
-}
-
-
-void SWMgr::findConfig() {
-	string path;
-	ConfigEntMap::iterator entry;
-	int fd;
-
-	char *envsworddir = getenv ("SWORD_PATH");
-	char *envhomedir  = getenv ("HOME");
-
-	configType = 0;
-
-	// check working directory
-
-	if (existsFile(".", "mods.conf")) {
-		stdstr(&prefixPath, "./");
-		stdstr(&configPath, "./mods.conf");
-		return;
-	}
-	if (existsDir(".", "mods.d")) {
-		stdstr(&prefixPath, "./");
-		stdstr(&configPath, "./mods.d");
-		configType = 1;
-		return;
-	}
-
-
-	// check environment variable SWORD_PATH
-
-	if (envsworddir != NULL) {
-		path = envsworddir;
-		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
-			path += "/";
-		if (existsFile(path.c_str(), "mods.conf")) {
-			stdstr(&prefixPath, path.c_str());
-			path += "mods.conf";
-			stdstr(&configPath, path.c_str());
-			return;
-		}
-		if (existsDir(path.c_str(), "mods.d")) {
-			stdstr(&prefixPath, path.c_str());
-			path += "mods.d";
-			stdstr(&configPath, path.c_str());
-			configType = 1;
-			return;
-		}
-	}
-
-
-	// check ~/.sword/
-
-	if (envhomedir != NULL) {
-		path = envhomedir;
-		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
-			path += "/";
-		path += ".sword/";
-		if (existsFile(path.c_str(), "mods.conf")) {
-			stdstr(&prefixPath, "");
-			path += "mods.conf";
-			stdstr(&configPath, path.c_str());
-			return;
-		}
-		if (existsDir(path.c_str(), "mods.d")) {
-			stdstr(&prefixPath, "");
-			path += "mods.d";
-			stdstr(&configPath, path.c_str());
-			configType = 1;
-			return;
-		}
-	}
-
-
-	if ((fd = ::open("/etc/sword.conf", O_RDONLY)) > 0) {
-		::close(fd);
-		SWConfig etcconf("/etc/sword.conf");
-		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
-			path = (*entry).second;
-			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
-				path += "/";
-
-			if (existsFile(path.c_str(), "mods.conf")) {
-				stdstr(&prefixPath, path.c_str());
-				path += "mods.conf";
-				stdstr(&configPath, path.c_str());
-				return;
-			}
-			if (existsDir(path.c_str(), "mods.d")) {
-				stdstr(&prefixPath, path.c_str());
-				path += "mods.d";
-				stdstr(&configPath, path.c_str());
-				configType = 1;
-				return;
-			}
-		}
-	}
-}
-
-
-void SWMgr::loadConfigDir(const char *ipath)
-{
-   DIR *dir;
-   struct dirent *ent;
-   string newmodfile;
+	struct dirent *ent;
+	string newmodfile;
+	LocaleMap::iterator it;
  
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);
@@ -283,348 +78,57 @@ void SWMgr::loadConfigDir(const char *ipath)
 				if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
 					newmodfile += "/";
 				newmodfile += ent->d_name;
-				if (config) {
-					SWConfig tmpConfig(newmodfile.c_str());
-					*config += tmpConfig;
+				SWLocale *locale = new SWLocale(newmodfile.c_str());
+				if (locale->getName()) {
+					it = locales.find(locale->getName());
+					if (it != locales.end()) {
+						*((*it).second) += *locale;
+						delete locale;
+					}
+					else locales.insert(LocaleMap::value_type(locale->getName(), locale));
 				}
-				else	config = myconfig = new SWConfig(newmodfile.c_str());
 			}
 		}
 		closedir(dir);
-		if (!config) {	// if no .conf file exist yet, create a default
-			newmodfile = ipath;
-			if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-				newmodfile += "/";
-			newmodfile += "globals.conf";
-			config = myconfig = new SWConfig(newmodfile.c_str());
-		}
 	}
 }
 
 
-void SWMgr::Load() {
-	if (!config) {	// If we weren't passed a config object at construction, find a config file
-		if (!configPath)	// If we weren't passed a config path at construction...
-			findConfig();
-		if (configPath) {
-			if (configType)
-				loadConfigDir(configPath);
-			else	config = myconfig = new SWConfig(configPath);
-		}
-	}
+void LocaleMgr::deleteLocales() {
 
-	if (config) {
-		SectionMap::iterator Sectloop, Sectend;
-		ConfigEntMap::iterator Entryloop, Entryend;
+	LocaleMap::iterator it;
 
-		DeleteMods();
-
-		for (Sectloop = config->Sections.lower_bound("Globals"), Sectend = config->Sections.upper_bound("Globals"); Sectloop != Sectend; Sectloop++) {		// scan thru all 'Globals' sections
-			for (Entryloop = (*Sectloop).second.lower_bound("AutoInstall"), Entryend = (*Sectloop).second.upper_bound("AutoInstall"); Entryloop != Entryend; Entryloop++)	// scan thru all AutoInstall entries
-				InstallScan((*Entryloop).second.c_str());		// Scan AutoInstall entry directory for new modules and install
-		}		
-		if (configType) {	// force reload on config object because we may have installed new modules
-			delete myconfig;
-			config = myconfig = 0;
-			loadConfigDir(configPath);
-		}
-		else	config->Load();
-
-
-		CreateMods();
-	}
-	else {
-		SWLog::systemlog->LogError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", (configPath) ? configPath : "<configPath is null>");
-		exit(-1);
-	}
-}
-
-
-SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
-{
-	string description, datapath, misc1;
-	ConfigEntMap::iterator entry;
-	SWModule *newmod = 0;
-
-	description = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (string)"";
-	datapath = prefixPath;
-	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
-		datapath += "/";
-	misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (string)"";
-	char *buf = new char [ strlen(misc1.c_str()) + 1 ];
-	char *buf2 = buf;
-	strcpy(buf, misc1.c_str());
-	for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
-	if (*buf2)
-		datapath += buf2;
-	delete [] buf;
-	
-	if (!stricmp(driver.c_str(), "zText")) {
-		newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), zVerse::CHAPTERBLOCKS, new ZipCompress());
-	}
-	
-	if (!stricmp(driver.c_str(), "RawText")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
-	}
-	
-	// backward support old drivers
-	if (!stricmp(driver.c_str(), "RawGBF")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
-	}
-
-	if (!stricmp(driver.c_str(), "RawCom")) {
-		newmod = new RawCom(datapath.c_str(), name.c_str(), description.c_str());
-	}
-				
-	if (!stricmp(driver.c_str(), "RawFiles")) {
-		newmod = new RawFiles(datapath.c_str(), name.c_str(), description.c_str());
-	}
-				
-	if (!stricmp(driver.c_str(), "HREFCom")) {
-		misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : (string)"";
-		newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
-	}
-				
-	if (!stricmp(driver.c_str(), "RawLD"))
-		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str());
-
-	return newmod;
-}
-
-
-void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
-{
-	for (;start != end; start++) {
-		FilterMap::iterator it;
-		it = optionFilters.find((*start).second);
-		if (it != optionFilters.end()) {
-			module->AddOptionFilter((*it).second);	// add filter to module and option as a valid option
-			OptionsList::iterator loop;
-			for (loop = options.begin(); loop != options.end(); loop++) {
-				if (!strcmp((*loop).c_str(), (*it).second->getOptionName()))
-					break;
-			}
-			if (loop == options.end())	// if we have not yet included the option
-				options.push_back((*it).second->getOptionName());
-		}
-	}
-}
-
-
-void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
-{
-	for (;start != end; start++) {
-		printf("%s:%s\n", module->Name(), (*start).second.c_str());
-	}
-}
-
-
-void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
-	string sourceformat, cipherKey;
-	ConfigEntMap::iterator entry;
-
-	cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (string)"";
-	if (!cipherKey.empty()) {
-		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
-		cleanupFilters.push_back(cipherFilter);
-		module->AddRawFilter(cipherFilter);
-	}
-}
-
-
-void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
-	string sourceformat;
-	ConfigEntMap::iterator entry;
-
-	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
-
-	// Temporary: To support old module types
-	if (sourceformat.empty()) {
-		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (string)"";
-		if (!stricmp(sourceformat.c_str(), "RawGBF"))
-			sourceformat = "GBF";
-		else sourceformat = "";
-	}
-
-// process module	- eg. follows
-//	if (!stricmp(sourceformat.c_str(), "GBF")) {
-//		module->AddRenderFilter(gbftortf);
-//	}
-
-}
-
-
-void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
-{
-	string sourceformat;
-	ConfigEntMap::iterator entry;
-
-	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (string)"";
-	// Temporary: To support old module types
-	if (sourceformat.empty()) {
-		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (string)"";
-		if (!stricmp(sourceformat.c_str(), "RawGBF"))
-			sourceformat = "GBF";
-		else sourceformat = "";
-	}
-	
-	if (!stricmp(sourceformat.c_str(), "GBF")) {
-		module->AddStripFilter(gbfplain);
-	}
-}
-
-
-void SWMgr::CreateMods() {
-	SectionMap::iterator it;
-	ConfigEntMap::iterator start;
-	ConfigEntMap::iterator end;
-	ConfigEntMap::iterator entry;
-	SWModule *newmod;
-	string driver, misc1;
-	for (it = config->Sections.begin(); it != config->Sections.end(); it++) {
-		ConfigEntMap &section = (*it).second;
-		newmod = 0;
-		
-		driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (string)"";
-		if (!driver.empty()) {
-			newmod = CreateMod((*it).first, driver, section);
-			if (newmod) {
-				start = (*it).second.lower_bound("GlobalOptionFilter");
-				end   = (*it).second.upper_bound("GlobalOptionFilter");
-				AddGlobalOptions(newmod, section, start, end);
-
-				start = (*it).second.lower_bound("LocalOptionFilter");
-				end   = (*it).second.upper_bound("LocalOptionFilter");
-				AddLocalOptions(newmod, section, start, end);
-
-				AddRawFilters(newmod, section);
-				AddStripFilters(newmod, section);
-				AddRenderFilters(newmod, section);
-				
-				Modules.insert(ModMap::value_type(newmod->Name(), newmod));
-			}
-		}
-	}
-}
-
-
-void SWMgr::DeleteMods() {
-
-	ModMap::iterator it;
-
-	for (it = Modules.begin(); it != Modules.end(); it++)
+	for (it = locales.begin(); it != locales.end(); it++)
 		delete (*it).second;
 
-	Modules.erase(Modules.begin(), Modules.end());
+	locales.erase(locales.begin(), locales.end());
 }
 
 
-void SWMgr::InstallScan(const char *dirname)
-{
-   DIR *dir;
-   struct dirent *ent;
-   int conffd = 0;
-   string newmodfile;
-   string targetName;
- 
-	if ((dir = opendir(dirname))) {
-		rewinddir(dir);
-		while ((ent = readdir(dir))) {
-			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-				newmodfile = dirname;
-				if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
-					newmodfile += "/";
-				newmodfile += ent->d_name;
-				if (configType) {
-					if (config > 0)
-						close(conffd);
-					targetName = configPath;
-					if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
-						targetName += "/";
-					targetName += ent->d_name;
-					conffd = open(targetName.c_str(), O_WRONLY|O_CREAT, S_IREAD|S_IWRITE);
-				}
-				else {
-					if (conffd < 1) {
-						conffd = open(config->filename.c_str(), O_WRONLY|O_APPEND);
-						if (conffd > 0)
-							lseek(conffd, 0L, SEEK_END);
-					}
-				}
-				AddModToConfig(conffd, newmodfile.c_str());
-				unlink(newmodfile.c_str());
-			}
-		}
-		if (conffd > 0)
-			close(conffd);
-		closedir(dir);
-	}
-}
+SWLocale *LocaleMgr::getLocale(const char *name) {
+	LocaleMap::iterator it;
 
+	it = locales.find(name);
+	if (it != locales.end())
+		return (*it).second;
 
-char SWMgr::AddModToConfig(int conffd, const char *fname)
-{
-	int modfd;
-	char ch;
-
-	SWLog::systemlog->LogTimedInformation("Found new module [%s]. Installing...", fname);
-	modfd = open(fname, O_RDONLY);
-	ch = '\n';
-	write(conffd, &ch, 1);
-	while (read(modfd, &ch, 1) == 1)
-		write(conffd, &ch, 1);
-	ch = '\n';
-	write(conffd, &ch, 1);
-	close(modfd);
 	return 0;
 }
 
 
-void SWMgr::setGlobalOption(const char *option, const char *value)
-{
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName()))
-			(*it).second->setOptionValue(value);
-	}
+list <string> LocaleMgr::getAvailableLocales() {
+	list <string> retVal;
+	for (LocaleMap::iterator it = locales.begin(); it != locales.end(); it++) 
+		retVal.push_back((*it).second->getName());
+
+	return retVal;
 }
 
 
-const char *SWMgr::getGlobalOption(const char *option)
-{
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName()))
-			return (*it).second->getOptionValue();
-	}
-	return 0;
+const char *LocaleMgr::translate(const char *name, const char *text) {
+	SWLocale *target;
+	target = getLocale(name);
+	if (target)
+		return target->translate(text);
+	return text;
 }
-
-
-const char *SWMgr::getGlobalOptionTip(const char *option)
-{
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName()))
-			return (*it).second->getOptionTip();
-	}
-	return 0;
-}
-
-
-OptionsList SWMgr::getGlobalOptions()
-{
-	return options;
-}
-
-
-OptionsList SWMgr::getGlobalOptionValues(const char *option)
-{
-	OptionsList options;
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-		if (!stricmp(option, (*it).second->getOptionName())) {
-			options = (*it).second->getOptionValues();
-			break;	// just find the first one.  All option filters with the same option name should expect the same values
-		}
-	}
-	return options;
-}
-
-

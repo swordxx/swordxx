@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.1 2000/03/12 01:09:43 scribe Exp $
+ * $Id: swlocale.h,v 1.2 2000/03/12 23:12:32 scribe Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,11 +36,17 @@ typedef map <string, string, less <string> > LookupMap;
 class SWLocale {
 	LookupMap lookupTable;
 	SWConfig *localeSource;
+	char *name;
+	char *description;
+
 public:
 	SWLocale(const char *ifilename);
 	virtual ~SWLocale();
 
+	virtual const char *getName();
+	virtual const char *getDescription();
 	virtual const char *translate(const char *text);
+	virtual SWLocale &operator +=(SWLocale &addFrom);
 };
 
 #endif

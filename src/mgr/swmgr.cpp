@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.14 2000/01/19 23:15:28 scribe Exp $
+ * $Id: swmgr.cpp,v 1.15 2000/03/12 23:12:32 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -173,7 +173,7 @@ char SWMgr::existsDir(const char *ipath, const char *idirName)
 }
 
 
-void SWMgr::findConfig() {
+void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 	string path;
 	ConfigEntMap::iterator entry;
 	int fd;
@@ -181,19 +181,19 @@ void SWMgr::findConfig() {
 	char *envsworddir = getenv ("SWORD_PATH");
 	char *envhomedir  = getenv ("HOME");
 
-	configType = 0;
+	*configType = 0;
 
 	// check working directory
 
 	if (existsFile(".", "mods.conf")) {
-		stdstr(&prefixPath, "./");
-		stdstr(&configPath, "./mods.conf");
+		stdstr(prefixPath, "./");
+		stdstr(configPath, "./mods.conf");
 		return;
 	}
 	if (existsDir(".", "mods.d")) {
-		stdstr(&prefixPath, "./");
-		stdstr(&configPath, "./mods.d");
-		configType = 1;
+		stdstr(prefixPath, "./");
+		stdstr(configPath, "./mods.d");
+		*configType = 1;
 		return;
 	}
 
@@ -205,16 +205,16 @@ void SWMgr::findConfig() {
 		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 			path += "/";
 		if (existsFile(path.c_str(), "mods.conf")) {
-			stdstr(&prefixPath, path.c_str());
+			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
-			stdstr(&configPath, path.c_str());
+			stdstr(configPath, path.c_str());
 			return;
 		}
 		if (existsDir(path.c_str(), "mods.d")) {
-			stdstr(&prefixPath, path.c_str());
+			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
-			stdstr(&configPath, path.c_str());
-			configType = 1;
+			stdstr(configPath, path.c_str());
+			*configType = 1;
 			return;
 		}
 	}
@@ -228,16 +228,16 @@ void SWMgr::findConfig() {
 			path += "/";
 		path += ".sword/";
 		if (existsFile(path.c_str(), "mods.conf")) {
-			stdstr(&prefixPath, "");
+			stdstr(prefixPath, "");
 			path += "mods.conf";
-			stdstr(&configPath, path.c_str());
+			stdstr(configPath, path.c_str());
 			return;
 		}
 		if (existsDir(path.c_str(), "mods.d")) {
-			stdstr(&prefixPath, "");
+			stdstr(prefixPath, "");
 			path += "mods.d";
-			stdstr(&configPath, path.c_str());
-			configType = 1;
+			stdstr(configPath, path.c_str());
+			*configType = 1;
 			return;
 		}
 	}
@@ -252,16 +252,16 @@ void SWMgr::findConfig() {
 				path += "/";
 
 			if (existsFile(path.c_str(), "mods.conf")) {
-				stdstr(&prefixPath, path.c_str());
+				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
-				stdstr(&configPath, path.c_str());
+				stdstr(configPath, path.c_str());
 				return;
 			}
 			if (existsDir(path.c_str(), "mods.d")) {
-				stdstr(&prefixPath, path.c_str());
+				stdstr(prefixPath, path.c_str());
 				path += "mods.d";
-				stdstr(&configPath, path.c_str());
-				configType = 1;
+				stdstr(configPath, path.c_str());
+				*configType = 1;
 				return;
 			}
 		}
@@ -305,7 +305,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 void SWMgr::Load() {
 	if (!config) {	// If we weren't passed a config object at construction, find a config file
 		if (!configPath)	// If we weren't passed a config path at construction...
-			findConfig();
+			findConfig(&configType, &prefixPath, &configPath);
 		if (configPath) {
 			if (configType)
 				loadConfigDir(configPath);

@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.1 2000/03/12 01:09:43 scribe Exp $
+ * $Id: swlocale.cpp,v 1.2 2000/03/12 23:12:32 scribe Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,12 +25,31 @@
 
 
 SWLocale::SWLocale(const char * ifilename) {
+	ConfigEntMap::iterator confEntry;
+
+	name         = 0;
+	description  = 0;
 	localeSource = new SWConfig(ifilename);
+
+	confEntry = localeSource->Sections["Meta"].find("Name");
+	if (confEntry != localeSource->Sections["Meta"].end())
+		stdstr(&name, (*confEntry).second.c_str());
+	
+	confEntry = localeSource->Sections["Meta"].find("Description");
+	if (confEntry != localeSource->Sections["Meta"].end())
+		stdstr(&description, (*confEntry).second.c_str());
 }
 
 
 SWLocale::~SWLocale() {
+
 	delete localeSource;
+
+	if (description)
+		delete description;
+
+	if (name)
+		delete name;
 }
 
 
@@ -50,3 +69,18 @@ const char *SWLocale::translate(const char *text) {
 	return (*entry).second.c_str();
 }
 
+
+const char *SWLocale::getName() {
+	return name;
+}
+
+
+const char *SWLocale::getDescription() {
+	return description;
+}
+
+
+SWLocale &SWLocale::operator +=(SWLocale &addFrom) {
+	*localeSource += *addFrom.localeSource;
+	return *this;
+}
