@@ -24,5 +24,10 @@ libsword_la_SOURCES += $(mgrdir)/swlocale.cpp
 libsword_la_SOURCES += $(mgrdir)/localemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swcacher.cpp
 if INSTALLMGR
-libsword_la_SOURCES += $(mgrdir)/installmgr.cpp
+IMGRSRCMGR = $(mgrdir)/installmgr.cpp
+else
+IMGRSRCMGR = 
 endif
+
+libsword_la_SOURCES += $(IMGRSRCMGR)
+
