@@ -61,8 +61,8 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 						while (*from && isdigit(*from)) from++;
 						freq = "";
 						freq.append(currentPhrase, (int)(from - currentPhrase));
-						freq = freq.substr(freq.find_first_not_of(' '), freq.find_last_not_of(' '));
-						phrase = phrase.substr(phrase.find_first_not_of(' '), phrase.find_last_not_of(' '));
+//						freq = freq.substr(freq.find_first_not_of(' '), freq.find_last_not_of(' '));
+//						phrase = phrase.substr(phrase.find_first_not_of(' '), phrase.find_last_not_of(' '));
 						if ((freq.length() > 0) && (phrase.length() > 0)) {
 							sprintf(wordstr, "%03d", ++number);
 							module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase;
