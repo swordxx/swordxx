@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.13 2000/05/23 19:37:04 jansorg Exp $
+ * $Id: swmgr.h,v 1.14 2000/06/23 12:49:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,15 +37,15 @@ typedef list<string> OptionsList;
 typedef map <string, SWFilter *> FilterMap;
 
 class SWMgr {
-protected:	//made protected because because BibleTime needs it
-	SWConfig *myconfig;
+private:	
+
+protected:
+	SWConfig *myconfig;	//made protected because because BibleTime needs it
 	SWConfig *mysysconfig;
 	void SWMgr::CreateMods();
 	SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section);
 	void SWMgr::DeleteMods();
 	char configType;	// 0 = file; 1 = directory
-
-protected:
 	FilterMap optionFilters;
 	FilterMap cipherFilters;
 	SWFilter *gbfplain;
