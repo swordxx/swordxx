@@ -17,6 +17,7 @@ cpp += rtfhtml.cpp
 
 cpp += gbfstrongs.cpp
 cpp += gbffootnotes.cpp
+cpp += plainfootnotes.cpp
 
 
 include ${root}/Makefile.post
