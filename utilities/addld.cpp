@@ -13,6 +13,8 @@
 #include <swmgr.h>
 #include <rawld.h>
 #include <rawld4.h>
+#include <zld.h>
+#include <zipcomprs.h>
 #include <iostream.h>
 
 
@@ -22,10 +24,11 @@
 
 int main(int argc, char **argv) {
   
-  const char * helptext ="addld 1.0 Lexicon & Dictionary module creation tool for the SWORD Project\nUse -a to add a new LD entry from standard input or a file, -d to delete an\nentry, -l to link two LD entries, -c to create a new module.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n   %s -c <filename>\nTo use 4-byte LD instead of 2-byte, insert a 4 immediately after the '-'.\n";
+  const char * helptext ="addld 1.0 Lexicon & Dictionary module creation tool for the SWORD Project\nUse -a to add a new LD entry from standard input or a file, -d to delete an\nentry, -l to link two LD entries, -c to create a new module.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n   %s -c <filename>\nTo use 4-byte LD instead of 2-byte, insert a 4 immediately after the '-'.\nTo use zLD instead of 2-byte, insert a z immediately after the '-'.\n";
   long entrysize;
   
   bool fourbyte = false;
+  bool compress = false;
   char mode;
   
   if (argc < 3) {
@@ -34,7 +37,11 @@ int main(int argc, char **argv) {
   }
   
   if (argv[1][1] == '4') {
-    fourbyte = 1;
+    fourbyte = false;
+    mode = argv[1][2];
+  }
+  else if (argv[1][1] == 'z') {
+    compress = true;
     mode = argv[1][2];
   }
   else {
@@ -47,6 +54,25 @@ int main(int argc, char **argv) {
     if (fourbyte) {
       char buffer[1048576];  //this is the max size of any entry
       RawLD4 mod(argv[2]);	// open our datapath with our RawText driver.
+      SWKey* key = mod.CreateKey();
+      key->Persist(1);      // the magical setting
+      
+      // Set our VerseKey
+      *key = argv[3];
+      mod.SetKey(*key);
+      FILE *infile;
+      // case: add from text file
+      //Open our data file and read its contents into the buffer
+      if (argc == 5) infile = fopen(argv[4], "r");
+      // case: add from stdin
+      else infile = stdin;
+      
+      entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
+      mod.setentry(buffer, entrysize);	// save text to module at current position
+    }
+    else if (compress) {
+      char buffer[1048576];  //this is the max size of any entry
+      zLD mod(argv[2], 0, 0, 200, new ZipCompress());	// open our datapath with our RawText driver.
       SWKey* key = mod.CreateKey();
       key->Persist(1);      // the magical setting
       
@@ -97,6 +123,16 @@ int main(int argc, char **argv) {
       
       mod << &((SWKey) argv[4]);
     }
+    else if (compress) {
+      zLD mod(argv[2]);	// open our datapath with our RawText driver.
+      SWKey* key = mod.CreateKey();
+      key->Persist(1);      // the magical setting
+      
+      *key = argv[3];
+      mod.SetKey(*key);
+      
+      mod << &((SWKey) argv[4]);
+    }
     else {
       RawLD mod(argv[2]);	// open our datapath with our RawText driver.
       SWKey* key = mod.CreateKey();
@@ -114,6 +150,11 @@ int main(int argc, char **argv) {
       mod.SetKey(argv[3]);
       mod.deleteEntry();
     }
+    if (compress) {
+      zLD mod(argv[2]);	// open our datapath with our RawText driver.
+      mod.SetKey(argv[3]);
+      mod.deleteEntry();
+    }
     else {
       RawLD mod(argv[2]);	// open our datapath with our RawText driver.
       mod.SetKey(argv[3]);
@@ -127,6 +168,12 @@ int main(int argc, char **argv) {
     // datapath location passed to us from the user.
     if (fourbyte) {
       if (RawLD4::createModule(argv[2])) {
+	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+	exit(-2);
+      }
+    }
+    if (compress) {
+      if (zLD::createModule(argv[2])) {
 	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
 	exit(-2);
       }
