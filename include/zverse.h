@@ -48,6 +48,7 @@ public:
 	virtual ~zVerse();
 	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void zreadtext(char testmt, long start, unsigned short size, char *buf);
+	virtual void rawZFilter(char *buf, long size, char direction = 0) {}
 	static char createModule(const char *path, int blockBound);
 };
 

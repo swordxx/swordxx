@@ -228,6 +228,9 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 			printf ("Error reading compressed text\n");
 			return;
 		}
+
+		rawZFilter(pcCompText, ulCompSize, 0); // 0 = decipher
+		
 		compressor->zBuf(&ulCompSize, pcCompText);
 
 		if (cacheBuf) {
@@ -335,6 +338,8 @@ void zVerse::flushCache() {
 			compressor->Buf(cacheBuf);
 			compressor->zBuf(&zsize);
 			outzsize = zsize;
+
+			rawZFilter(compressor->zBuf(&zsize), outzsize, 1); // 1 = encipher
 
 			start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
 
