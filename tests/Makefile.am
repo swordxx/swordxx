@@ -1,12 +1,15 @@
 AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
-LDADD = -L$(top_builddir)/lib -lsword 
+#LDADD = -L$(top_builddir)/lib -lsword 
+LDADD = $(top_builddir)/lib/libsword.la 
 
 
 noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
-compnone complzss localetest keycast introtest indextest configtest \
+compnone complzss localetest introtest indextest configtest \
 romantest testblocks filtertest rawldidxtest lextest swaptest genbooktest treeidxtest \
 swbuftest xmltest webiftest
+
+#keycast deprecated as it uses OptionsList which doesn't exist any more
 
 if ICU
 ICUPROG = icutest translittest tlitmgrtest
@@ -45,7 +48,7 @@ modtest_SOURCES = modtest.cpp
 compnone_SOURCES = compnone.cpp
 complzss_SOURCES = complzss.cpp
 localetest_SOURCES = localetest.cpp
-keycast_SOURCES = keycast.cpp
+#keycast_SOURCES = keycast.cpp
 introtest_SOURCES = introtest.cpp
 indextest_SOURCES = indextest.cpp
 configtest_SOURCES = configtest.cpp
