@@ -135,16 +135,17 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 
 bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+	unsigned long i;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
 			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 5; i < strlen(token)-1; i++)				
+			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 28; i < strlen(token)-2; i++)				
+			for (i = 28; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>");
@@ -152,12 +153,12 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 
 		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
 			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 5; i < strlen(token)-1; i++)				
+			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 28; i < strlen(token)-2; i++)				
+			for (i = 28; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>");
@@ -166,7 +167,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
 			userData["inscriptRef"] = "true";
 			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 9; i < strlen(token)-1; i++)				
+			for (i = 9; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
@@ -202,12 +203,12 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			pushString(buf, "<A HREF=\"");
-			for (unsigned int i = 5; i < strlen(token)-1; i++)				
+			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 29; i < strlen(token)-2; i++)				
+			for (i = 29; i < strlen(token)-2; i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>");
@@ -215,7 +216,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 
 		else {
 			*(*buf)++ = '<';
-			for (unsigned int i = 0; i < strlen(token); i++)
+			for (i = 0; i < strlen(token); i++)
 				*(*buf)++ = token[i];
 				*(*buf)++ = '>';
 			//return false;  // we still didn't handle token

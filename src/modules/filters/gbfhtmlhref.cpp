@@ -57,15 +57,16 @@ GBFHTMLHREF::GBFHTMLHREF() {
 
 
 bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+	unsigned long i;
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
 			pushString(buf, " <SMALL><EM>&lt;<A HREF=\"#");
-			for (unsigned int i = 1; i < strlen(token); i++)				
+			for (i = 1; i < strlen(token); i++)				
 				//if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 2; i < strlen(token); i++)				
+			for (i = 2; i < strlen(token); i++)				
 				//if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>&gt;</EM></SMALL>");
@@ -73,12 +74,12 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
 			pushString(buf, " <SMALL><EM>(<A HREF=\"#");
-			for (unsigned int i = 2; i < strlen(token); i++)				
+			for (i = 2; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 3; i < strlen(token); i++)				
+			for (i = 3; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>)</EM></SMALL>");
@@ -86,12 +87,12 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
 			pushString(buf, " <SMALL><EM>(<A HREF=\"M");
-			for (unsigned int i = 2; i < strlen(token); i++)				
+			for (i = 2; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (unsigned int i = 2; i < strlen(token); i++)				
+			for (i = 2; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];		
 			pushString(buf, "</A>)</EM></SMALL>");
@@ -112,7 +113,7 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 
 		else if (!strncmp(token, "FN", 2)) {
 			pushString(buf, "<FONT FACE=\"");
-			for (unsigned int i = 2; i < strlen(token); i++)				
+			for (i = 2; i < strlen(token); i++)				
 				if(token[i] != '\"') 			
 					*(*buf)++ = token[i];
 			*(*buf)++ = '\"';

@@ -138,8 +138,10 @@ void ListKey::setPosition(SW_POSITION p) {
  */
 
 void ListKey::increment(int step) {
-	if (step < 0)
-		return decrement(step*-1);
+	if (step < 0) {
+		decrement(step*-1);
+		return;
+	}
 	Error();		// clear error
 	for(; step && !Error(); step--) {
 		if (arraypos < arraycnt) {
@@ -159,9 +161,10 @@ void ListKey::increment(int step) {
  */
 
 void ListKey::decrement(int step) {
-	if (step < 0)
-		return increment(step*-1);
-
+	if (step < 0) {
+		increment(step*-1);
+		return;
+	}
 	Error();		// clear error
 	for(; step && !Error(); step--) {
 		if (arraypos > -1) {
