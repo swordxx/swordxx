@@ -27,6 +27,7 @@ public:
   virtual void setText(const char *ikey);
   virtual const char* getText () const;
   virtual const char *getRangeText() const;
+  virtual const char *getShortText() const;
 
 
   virtual char Traversable();

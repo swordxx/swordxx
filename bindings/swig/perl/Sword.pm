@@ -524,6 +524,7 @@ sub ParseVerseList {
 *setText = *Swordc::VerseKey_setText;
 *getText = *Swordc::VerseKey_getText;
 *getRangeText = *Swordc::VerseKey_getRangeText;
+*getShortText = *Swordc::VerseKey_getShortText;
 *Traversable = *Swordc::VerseKey_Traversable;
 *decrement = *Swordc::VerseKey_decrement;
 *increment = *Swordc::VerseKey_increment;
