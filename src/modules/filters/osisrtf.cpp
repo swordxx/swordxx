@@ -40,14 +40,33 @@ OSISRTF::OSISRTF() {
 	setTokenCaseSensitive(true);  
 }
 
+char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+{
+        SWBasicFilter::processText(text, key, module);  //handle tokens as usual
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {  //loop to remove extra spaces
+                if ((strchr(" \t\n\r", *from))) {
+                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+                                from++;
+                        }
+                        text += " ";
+                }
+                else {
+                        text += *from;
+                }
+        }
+        text += (char)0;
+        return 0;
+}
+
 bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		XMLTag tag(token);
 		bool osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 
-		
-		
 		// <w> tag
 		if (!strcmp(tag.getName(), "w")) {
 
@@ -68,7 +87,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 					lastText = userData["lastTextNode"].c_str();
 				}
 				else lastText = "stuff";
-					
+
 				const char *attrib;
 				const char *val;
 				if (attrib = tag.getAttribute("xlit")) {
@@ -177,8 +196,8 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			}
 		}
 
-		// <line> poetry, etc
-		else if ((!strcmp(tag.getName(), "line")) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
+		// <l> poetry
+		else if (!strcmp(tag.getName(), "l")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "{";
 			}
@@ -186,21 +205,24 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 				buf += "\\par}";
 			}
 			else {	// empty line marker
-				buf += "{\\par}";
+				buf += "\\par";
 			}
 		}
-
+                // <milestone type="line"/>
+                else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+        		buf += "\\par";
+                }
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\i1\\b1 ";
+				buf += "{\\par\\i1\\b1 ";
 			}
 			else if (tag.isEndTag()) {
 				buf += "\\par}";
 			}
 			else {	// empty title marker
 				// what to do?  is this even valid?
-				buf += "{\\par}";
+				buf += "\\par";
 			}
 		}
 
@@ -208,7 +230,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (type == "b")
+				if (type == "b" || type == "x-b")
 					buf += "{\\b1 ";
 				else	// all other types
 					buf += "{\\i1 ";
@@ -227,14 +249,14 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
 			int level = (lev) ? atoi(lev) : 1;
-			
+
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "{";
 
 				//alternate " and '
 				if (osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
-				
+
 				if (who == "Jesus")
 					buf += "\\cf6 ";
 			}
@@ -254,7 +276,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		// <transChange>
 		else if (!strcmp(tag.getName(), "transChange")) {
 			SWBuf type = tag.getAttribute("type");
-			
+
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 
 // just do all transChange tags this way for now
