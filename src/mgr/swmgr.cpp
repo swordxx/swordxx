@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.77 2002/07/31 22:08:18 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.78 2002/08/08 21:35:05 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -267,9 +267,10 @@ SWMgr::~SWMgr() {
 }
 
 
-void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
+void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, list<string> *augPaths) {
 	string path;
 	ConfigEntMap::iterator entry;
+	ConfigEntMap::iterator lastEntry;
 
 	char *envsworddir = getenv ("SWORD_PATH");
 	char *envhomedir  = getenv ("HOME");
@@ -446,6 +447,17 @@ if (debug)
 				return;
 			}
 		}
+		if (augPaths) {
+			augPaths->clear();
+			entry     = etcconf.Sections["Install"].lower_bound("AugmentPath");
+			lastEntry = etcconf.Sections["Install"].upper_bound("AugmentPath");
+			for (;entry != lastEntry; entry++) {
+				path = entry->second;
+				if ((entry->second.c_str()[strlen(entry->second.c_str())-1] != '\\') && (entry->second.c_str()[strlen(entry->second.c_str())-1] != '/'))
+					path += "/";
+				augPaths->push_back(path);
+			}
+		}
 	}
 
 	delete [] globPaths;
@@ -530,6 +542,37 @@ void SWMgr::loadConfigDir(const char *ipath)
 }
 
 
+void SWMgr::augmentModules(const char *ipath) {
+	string path = ipath;
+	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
+		path += "/";
+	path += ".sword/";
+	if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+		char *savePrefixPath = 0;
+		char *saveConfigPath = 0;
+		SWConfig *saveConfig = 0;
+		stdstr(&savePrefixPath, prefixPath);
+		stdstr(&prefixPath, path.c_str());
+		path += "mods.d";
+		stdstr(&saveConfigPath, configPath);
+		stdstr(&configPath, path.c_str());
+		saveConfig = config;
+		config = myconfig = 0;
+		loadConfigDir(configPath);
+
+		CreateMods();
+
+		stdstr(&prefixPath, savePrefixPath);
+		delete []savePrefixPath;
+		stdstr(&configPath, saveConfigPath);
+		delete []saveConfigPath;
+		(*saveConfig) += *config;
+		homeConfig = myconfig;
+		config = myconfig = saveConfig;
+	}
+}
+
+
 /***********************************************************************
  * SWMgr::Load - loads actual modules
  *
@@ -542,7 +585,7 @@ signed char SWMgr::Load() {
 
 	if (!config) {	// If we weren't passed a config object at construction, find a config file
 		if (!configPath)	// If we weren't passed a config path at construction...
-			findConfig(&configType, &prefixPath, &configPath);
+			findConfig(&configType, &prefixPath, &configPath, &augPaths);
 		if (configPath) {
 			if (configType)
 				loadConfigDir(configPath);
@@ -569,37 +612,14 @@ signed char SWMgr::Load() {
 
 		CreateMods();
 
+		for (list<string>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
+			augmentModules(pathIt->c_str());
+		}
 //	augment config with ~/.sword/mods.d if it exists ---------------------
-			char *envhomedir  = getenv ("HOME");
-			if (envhomedir != NULL && configType != 2) { // 2 = user only
-				string path = envhomedir;
-				if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
-					path += "/";
-				path += ".sword/";
-				if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-					char *savePrefixPath = 0;
-					char *saveConfigPath = 0;
-					SWConfig *saveConfig = 0;
-					stdstr(&savePrefixPath, prefixPath);
-					stdstr(&prefixPath, path.c_str());
-					path += "mods.d";
-					stdstr(&saveConfigPath, configPath);
-					stdstr(&configPath, path.c_str());
-					saveConfig = config;
-					config = myconfig = 0;
-					loadConfigDir(configPath);
-
-					CreateMods();
-
-					stdstr(&prefixPath, savePrefixPath);
-					delete []savePrefixPath;
-					stdstr(&configPath, saveConfigPath);
-					delete []saveConfigPath;
-					(*saveConfig) += *config;
-					homeConfig = myconfig;
-					config = myconfig = saveConfig;
-				}
-			}
+		char *envhomedir  = getenv ("HOME");
+		if (envhomedir != NULL && configType != 2) { // 2 = user only
+			augmentModules(envhomedir);
+		}
 // -------------------------------------------------------------------------
 		if ( !Modules.size() ) // config exists, but no modules
 			ret = 1;

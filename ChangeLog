@@ -1,6 +1,12 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+08-Aug-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added support for new entry in /etc/sword.conf
+		[Install]
+			AugmentPath=/where/ever
+		multiple entries can exist.
+
 31-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
 	Minor change to use iostream not iostream.h (more gcc3)
 
