@@ -22,16 +22,20 @@ int main (int argc, char *argv[])
 		// Get a reference to the server from the IOR passed on the
 		// command line
 		CORBA::Object_var obj = orb->string_to_object(argv[1]);
-		swordorb::SWMgr_var ptr = swordorb::SWMgr::_narrow(obj);
+		swordorb::SWMgr_var mgr = swordorb::SWMgr::_narrow(obj);
 
 		swordorb::ModInfoList *modInfoList;
 
-		std::cout << "PrefixPath: " << ptr->getPrefixPath() << "\n";
-		std::cout << "ConfigPath: " << ptr->getConfigPath() << "\n";
-		modInfoList = ptr->getModInfoList();
+		std::cout << "PrefixPath: " << mgr->getPrefixPath() << "\n";
+		std::cout << "ConfigPath: " << mgr->getConfigPath() << "\n";
+		modInfoList = mgr->getModInfoList();
 		std::cout << "sequence length: " << modInfoList->length() << "\n";
+		swordorb::SWModule_ptr module;
 		for (int i = 0; i < modInfoList->length(); i++) {
 			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].type << ": " << (*modInfoList)[i].lang << "\n";
+			module = mgr->getModuleByName((*modInfoList)[i].name);
+			module->setKeyText("jas1:19");
+			std::cout << module->getRenderText() << "\n";
 		}
 		
 	} catch(const CORBA::Exception& ex) {

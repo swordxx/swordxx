@@ -1,4 +1,4 @@
-#include "sword-impl.hpp"
+#include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
 
@@ -26,8 +26,23 @@ namespace swordorb {
 		return milist;
 	}
 
+
 	SWModule_ptr SWMgr_impl::getModuleByName(const char *name) throw(CORBA::SystemException) {
+		SWModuleMap::iterator it;
+		SWModule_ptr retVal;
+		it = moduleImpls.find(name);
+		if (it == moduleImpls.end()) {
+			sword::SWModule *mod = delegate->Modules[name];
+			if (mod)
+				moduleImpls[name] = new SWModule_impl(mod);
+			it = moduleImpls.find(name);
+		}
+		if (it != moduleImpls.end()) {
+			retVal = it->second->_this();
+		}
+		return ::swordorb::SWModule::_duplicate(retVal);
 	}
+
 
 	StringList *SWMgr_impl::getGlobalOptionsIterator() throw(CORBA::SystemException) {
 	}

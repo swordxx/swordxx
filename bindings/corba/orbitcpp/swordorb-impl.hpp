@@ -1,10 +1,10 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t;c-basic-offset: 4 -*- */
 #ifndef _ORBIT_CPP_IDL_sword_IMPL_HH
 #define _ORBIT_CPP_IDL_sword_IMPL_HH
 
 #include "swordorb-cpp-skels.h"
 #include <swmodule.h>
 #include <swmgr.h>
+#include <map>
 
 
 namespace swordorb {
@@ -30,8 +30,11 @@ public:
 	char *getRenderText() throw(CORBA::SystemException) { return (char *)delegate->RenderText(); }
 };
 
+typedef std::map<std::string, SWModule_impl *> SWModuleMap;
+
 class SWMgr_impl : public POA_swordorb::SWMgr {
 	sword::SWMgr *delegate;
+	SWModuleMap moduleImpls;
 public:
 	SWMgr_impl(sword::SWMgr *delegate)  { this->delegate = delegate; }
 

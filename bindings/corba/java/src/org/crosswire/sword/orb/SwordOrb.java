@@ -29,12 +29,16 @@ class SwordOrb extends Object implements HttpSessionBindingListener {
 
 
 //	this doesn't seem to work.  Never seems to get called for me
-	protected void finalize() throws Throwable {
-System.out.println("finalizing");
+	public void finalize () throws Throwable {
+		// shut down external process
+System.err.println("finalizing");
 		try {
 			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return property cuz we killed the orb! :)
+
+		// release thread
+		waitor.setFinished();
 	}
 
 	public void valueBound(HttpSessionBindingEvent httpSessionBindingEvent) {}
@@ -47,8 +51,10 @@ System.out.println("finalizing");
 
 	private void startOrb() {
 		try {
+			waitor = new Waitor ();
+			new Thread (waitor).run ();
+			// start external process
 			java.lang.Process p = Runtime.getRuntime().exec("./swordorbserver");
-
 			InputStream is = p.getInputStream();
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader input = new BufferedReader(isr);
@@ -87,7 +93,10 @@ System.out.println("finalizing");
 	}
 
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
+		new SwordOrb ();
+		Thread.sleep(100);
+		/*
 		SWMgr mgr = new SwordOrb().getSWMgrInstance();
 
 		System.out.println("PrefixPath: " + mgr.getPrefixPath());
@@ -97,8 +106,24 @@ System.out.println("finalizing");
 		for (int i = 0; i < modInfoList.length; i++) {
 			System.out.println(modInfoList[i].name + ": " + modInfoList[i].type + ": " + modInfoList[i].lang);
 		}
+		*/
 	}
 
+public class Waitor implements Runnable {
+  protected boolean finished = false;
+  public Waitor () {
+  }
+  public void setFinished () {
+    finished = true;
+  }
+  public void run () {
+    while (!finished) {
+	    try { Thread.sleep (100); } catch (Exception e) { e.printStackTrace(); }
+	 // possibly even:
+	 // System.gc();
+    }
+  }
 }
+  protected Waitor waitor;
 
-
+}

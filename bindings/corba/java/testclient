@@ -1,2 +1,3 @@
 #!/bin/sh
-java -cp /var/tomcat4/common/lib/servlet.jar:classes org.crosswire.sword.orb.SwordOrb $*
+#java -cp /var/tomcat4/common/lib/servlet.jar:classes org.crosswire.sword.orb.SwordOrb $*
+java -cp /var/tomcat4/common/lib/servlet.jar:classes org.crosswire.sword.orb.TestMain $*
