@@ -15,9 +15,13 @@
 
 #include <utf8transliterator.h>
 
-const char UTF8Transliterator::optionstring[][NUMTARGETSCRIPTS] = {
+const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Off",
         "Latin",
+        "Basic Latin",
+        "Beta",
+        "BGreek",
+/*
         "Greek",
         "Hebrew",
         "Cyrillic",
@@ -42,10 +46,8 @@ const char UTF8Transliterator::optionstring[][NUMTARGETSCRIPTS] = {
         "Ethiopic",
         "Gothic",
         "Ugaritic",
-        "Coptic",
-        "Beta/CCAT",
-        "BGreek",
-        "Basic Latin"
+        "Coptic"
+        */
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -176,7 +178,7 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 
 		//Simple X to Latin transliterators
 		if (scripts[SE_GREEK]) {
-			if (option == SE_CCAT)
+			if (option == SE_BETA)
 				id += UnicodeString(";Greek-Beta");
 			else if (option == SE_BGREEK)
 				id += UnicodeString(";Greek-BGreek");
@@ -191,7 +193,7 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 			}
 		}
 		if (scripts[SE_HEBREW]) {
-			if (option == SE_CCAT)
+			if (option == SE_BETA)
 				id += UnicodeString(";Hebrew-CCAT");
                         else if (option == SE_SYRIAC)
                                 id += UnicodeString(";Hebrew-Syriac");
@@ -209,7 +211,7 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
 			scripts[SE_LATIN] = true;
 		}
 		if (scripts[SE_SYRIAC]) {
-                        if (option == SE_CCAT)
+                        if (option == SE_BETA)
         			id += UnicodeString(";Syriac-CCAT");
                         else if (option == SE_HEBREW)
                                 id += UnicodeString(";Syriac-Hebrew");
@@ -469,9 +471,6 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
                         if (len < maxlen) *(text + len) = 0;
                         else *(text + maxlen) = 0;
                         delete trans;
-                }
-                else {
-                        trans++;
                 }
                 ucnv_close(conv);
         }

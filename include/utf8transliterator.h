@@ -20,9 +20,9 @@
 #ifndef UTF8TRANSLITERATOR_H
 #define UTF8TRANSLITERATOR_H
 
-enum scriptEnum {SE_OFF, SE_LATIN, SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KATAKANA, SE_HIRAGANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, SE_THAI, SE_GEORGIAN, SE_ARMENIAN, SE_ETHIOPIC, SE_GOTHIC, SE_UGARITIC, SE_COPTIC, /*one-way (to) transliterators*/ SE_CCAT, SE_BGREEK, SE_BASICLATIN, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
+enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATIN, SE_BETA, SE_BGREEK, /*two-way transliterators*/ SE_GREEK, SE_HEBREW, SE_CYRILLIC, SE_ARABIC, SE_SYRIAC, SE_KATAKANA, SE_HIRAGANA, SE_JAMO, SE_HANGUL, SE_DEVANAGARI, SE_TAMIL, SE_BENGALI, SE_GURMUKHI, SE_GUJARATI, SE_ORIYA, SE_TELUGU, SE_KANNADA, SE_MALAYALAM, SE_THAI, SE_GEORGIAN, SE_ARMENIAN, SE_ETHIOPIC, SE_GOTHIC, SE_UGARITIC, SE_COPTIC, /*one-way (from) transliterators*/ SE_HAN, SE_KANJI};
 #define NUMSCRIPTS 32
-#define NUMTARGETSCRIPTS 30
+#define NUMTARGETSCRIPTS 5
 
 #include <swfilter.h>
 #include <swmodule.h>
@@ -43,7 +43,7 @@ class SWDLLEXPORT UTF8Transliterator : public SWFilter
 {
   char option;
 
-  static const char optionstring[][NUMTARGETSCRIPTS];
+  static const char optionstring[NUMTARGETSCRIPTS][16];
 
   static const char optName[];
   static const char optTip[];
