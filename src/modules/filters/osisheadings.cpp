@@ -47,7 +47,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	
 	XMLTag tag;
 
-	for (text = ""; *from; from++) {
+	for (text = ""; *from; ++from) {
 		if (*from == '<') {
 			intoken = true;
 			token = "";
@@ -57,9 +57,9 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			intoken = false;
 
 			//if (!stricmp(tag.getName(), "title")) {
-			if (!strncmp(token, "title", 5)) {
-				tag = token;
+			if (!strncmp(token.c_str(), "title", 5) || !strncmp(token.c_str(), "/title", 6)) {
 				
+				tag = token;
 				if ((tag.getAttribute("subtype")) && (!stricmp(tag.getAttribute("subtype"), "x-preverse"))) {
 					hide = true;
 					preverse = true;
@@ -94,6 +94,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 								text.append(header);
 							}
 						}
+						
 						StringList attributes = startTag.getAttributeNames();
 						for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
 							module->getEntryAttributes()["Heading"][buf][it->c_str()] = startTag.getAttribute(it->c_str());

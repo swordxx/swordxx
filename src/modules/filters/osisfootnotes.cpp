@@ -47,7 +47,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf orig = text;
 	const char *from = orig.c_str();
 	
-	XMLTag tag;
+	XMLTag tag = "";
 
 	for (text = ""; *from; from++) {
 
@@ -64,11 +64,15 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			token = "";
 			continue;
 		}
+		
+		
+		
 		if (*from == '>') {	// process tokens
 			intoken = false;			
 // 			if (!strcmp(tag.getName(), "note")) {
-			if (!strncmp(token, "note", 4)) {
+			if (!strncmp(token, "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
 				tag = token;
+				
 				if (!tag.isEndTag()) {
 					if (!strcmp("strongsMarkup", tag.getAttribute("type"))) {  // handle bug in KJV2003 module where some note open tags were <note ... />
 						tag.setEmpty(false);
@@ -98,7 +102,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 						}
 					}
 					hide = false;
-					if ((option) || ((startTag.getAttribute("type") && (!strcmp(startTag.getAttribute("type"), "crossReference"))))) {	// we want the tag in the text; crossReferences are handled by another filter
+					if (option || (startTag.getAttribute("type") && !strcmp(startTag.getAttribute("type"), "crossReference"))) {	// we want the tag in the text; crossReferences are handled by another filter
 						text.append(startTag);
 						text.append(tagText);
 					}

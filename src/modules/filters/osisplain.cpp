@@ -100,7 +100,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if ((!strcmp(val, "3588")) && (lastText.length() < 1))
 						show = false;
 					else	{
-						buf.append(" <");
+						buf.append(" {<");
 						buf.append(val);
 						buf.append(">}");
 

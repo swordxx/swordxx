@@ -46,7 +46,7 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	
 	XMLTag tag;
 
-	for (text = ""; *from; from++) {
+	for (text = ""; *from; ++from) {
 		if (*from == '<') {
 			intoken = true;
 			token = "";
@@ -54,14 +54,13 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		}
 		if (*from == '>') {	// process tokens
 			intoken = false;
-
 			
-			//if (!strcmp(tag.getName(), "note")) {
-			if (!strncmp(token, "note", 4)) {
-				tag = token;
-				if (!tag.isEndTag() && (!tag.isEmpty())) {
+			tag = token;
+			
+			if (!strncmp(token.c_str(), "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
+				if (!tag.isEndTag() && !tag.isEmpty()) {
 					startTag = tag;
-					if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "crossReference")) {
+					if ((tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "crossReference"))) {
 						hide = true;
 						tagText = "";
 						if (option) {	// we want the tag in the text
