@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+15-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added DTrotz' fix for CBuilder6
+
 14-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Changed all make system files to dglassey's ./configure
 		autotool system
