@@ -21,360 +21,185 @@
 
 ThMLRTF::ThMLRTF()
 {
+	setTokenStart("<");
+	setTokenEnd(">");
+
+	setEscapeStart("&");
+	setEscapeEnd(";");
+
+	setEscapeStringCaseSensitive(true);
+
+	addEscapeStringSubstitute("nbsp", " ");
+	addEscapeStringSubstitute("quot", "\"");
+	addEscapeStringSubstitute("amp", "&");
+	addEscapeStringSubstitute("lt", "<");
+	addEscapeStringSubstitute("gt", ">");
+	addEscapeStringSubstitute("brvbar", "|");
+	addEscapeStringSubstitute("sect", "§");
+	addEscapeStringSubstitute("copy", "©");
+	addEscapeStringSubstitute("laquo", "«");
+	addEscapeStringSubstitute("reg", "®");
+	addEscapeStringSubstitute("acute", "´");
+	addEscapeStringSubstitute("para", "¶");
+	addEscapeStringSubstitute("raquo", "»");
+
+	addEscapeStringSubstitute("Aacute", "Á");
+	addEscapeStringSubstitute("Agrave", "À");
+	addEscapeStringSubstitute("Acirc", "Â");
+	addEscapeStringSubstitute("Auml", "Ä");
+	addEscapeStringSubstitute("Atilde", "Ã");
+	addEscapeStringSubstitute("Aring", "Å");
+	addEscapeStringSubstitute("aacute", "á");
+	addEscapeStringSubstitute("agrave", "à");
+	addEscapeStringSubstitute("acirc", "â");
+	addEscapeStringSubstitute("auml", "ä");
+	addEscapeStringSubstitute("atilde", "ã");
+	addEscapeStringSubstitute("aring", "å");
+	addEscapeStringSubstitute("Eacute", "É");
+	addEscapeStringSubstitute("Egrave", "È");
+	addEscapeStringSubstitute("Ecirc", "Ê");
+	addEscapeStringSubstitute("Euml", "Ë");
+	addEscapeStringSubstitute("eacute", "é");
+	addEscapeStringSubstitute("egrave", "è");
+	addEscapeStringSubstitute("ecirc", "ê");
+	addEscapeStringSubstitute("euml", "ë");
+	addEscapeStringSubstitute("Iacute", "Í");
+	addEscapeStringSubstitute("Igrave", "Ì");
+	addEscapeStringSubstitute("Icirc", "Î");
+	addEscapeStringSubstitute("Iuml", "Ï");
+	addEscapeStringSubstitute("iacute", "í");
+	addEscapeStringSubstitute("igrave", "ì");
+	addEscapeStringSubstitute("icirc", "î");
+	addEscapeStringSubstitute("iuml", "ï");
+	addEscapeStringSubstitute("Oacute", "Ó");
+	addEscapeStringSubstitute("Ograve", "Ò");
+	addEscapeStringSubstitute("Ocirc", "Ô");
+	addEscapeStringSubstitute("Ouml", "Ö");
+	addEscapeStringSubstitute("Otilde", "Õ");
+	addEscapeStringSubstitute("oacute", "ó");
+	addEscapeStringSubstitute("ograve", "ò");
+	addEscapeStringSubstitute("ocirc", "ô");
+	addEscapeStringSubstitute("ouml", "ö");
+	addEscapeStringSubstitute("otilde", "õ");
+	addEscapeStringSubstitute("Uacute", "Ú");
+	addEscapeStringSubstitute("Ugrave", "Ù");
+	addEscapeStringSubstitute("Ucirc", "Û");
+	addEscapeStringSubstitute("Uuml", "Ü");
+	addEscapeStringSubstitute("uacute", "ú");
+	addEscapeStringSubstitute("ugrave", "ù");
+	addEscapeStringSubstitute("ucirc", "û");
+	addEscapeStringSubstitute("uuml", "ü");
+	addEscapeStringSubstitute("Yacute", "Ý");
+	addEscapeStringSubstitute("yacute", "ý");
+	addEscapeStringSubstitute("yuml", "ÿ");
+
+	addEscapeStringSubstitute("deg", "°");
+	addEscapeStringSubstitute("plusmn", "±");
+	addEscapeStringSubstitute("sup2", "²");
+	addEscapeStringSubstitute("sup3", "³");
+	addEscapeStringSubstitute("sup1", "¹");
+	addEscapeStringSubstitute("nbsp", "º");
+	addEscapeStringSubstitute("pound", "£");
+	addEscapeStringSubstitute("cent", "¢");
+	addEscapeStringSubstitute("frac14", "¼");
+	addEscapeStringSubstitute("frac12", "½");
+	addEscapeStringSubstitute("frac34", "¾");
+	addEscapeStringSubstitute("iquest", "¿");
+	addEscapeStringSubstitute("iexcl", "¡");
+	addEscapeStringSubstitute("ETH", "Ð");
+	addEscapeStringSubstitute("eth", "ð");
+	addEscapeStringSubstitute("THORN", "Þ");
+	addEscapeStringSubstitute("thorn", "þ");
+	addEscapeStringSubstitute("AElig", "Æ");
+	addEscapeStringSubstitute("aelig", "æ");
+	addEscapeStringSubstitute("Oslash", "Ø");
+	addEscapeStringSubstitute("curren", "¤");
+	addEscapeStringSubstitute("Ccedil", "Ç");
+	addEscapeStringSubstitute("ccedil", "ç");
+	addEscapeStringSubstitute("szlig", "ß");
+	addEscapeStringSubstitute("Ntilde", "Ñ");
+	addEscapeStringSubstitute("ntilde", "ñ");
+	addEscapeStringSubstitute("yen", "¥");
+	addEscapeStringSubstitute("not", "¬");
+	addEscapeStringSubstitute("ordf", "ª");
+	addEscapeStringSubstitute("uml", "¨");
+	addEscapeStringSubstitute("shy", "­");
+	addEscapeStringSubstitute("macr", "¯");
+
+	setTokenCaseSensitive(true);
+
+       	addTokenSubstitute("scripRef", " {\\cf2 #");
+	addTokenSubstitute("/scripRef", "|}");
+	addTokenSubstitute("note place=\"foot\"", " {\\i1\\fs15 (");
+	addTokenSubstitute("/note", ") }");
+        addTokenSubstitute("div", "{");
+        addTokenSubstitute("/div", "}");
+
+        addTokenSubstitute("br", "\\line ");
+        addTokenSubstitute("br /", "\\line ");
+        addTokenSubstitute("i", "{\\i1 ");
+        addTokenSubstitute("/i", "}");
+        addTokenSubstitute("b", "{\\b1 ");
+        addTokenSubstitute("/b", "}");
+        addTokenSubstitute("p", "\\par ");
+
+        //we need uppercase forms for the moment to support a few early ThML modules that aren't XHTML compliant
+        addTokenSubstitute("BR", "\\line ");
+        addTokenSubstitute("I", "{\\i1 ");
+        addTokenSubstitute("/I", "}");
+        addTokenSubstitute("B", "{\\b1 ");
+        addTokenSubstitute("/B", "}");
+        addTokenSubstitute("P", "\\par ");
 }
 
-
-char ThMLRTF::ProcessText(char *text, int maxlen)
-{
-	char *to, *from, token[2048];
-	int tokpos = 0;
-	bool intoken 	= false;
-	int len;
-	bool ampersand = false;
-	bool inScriptRef = false;
-
-	len = strlen(text) + 2;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;							// -------------------------------
-	for (to = text; *from; from++)
-	{
-	  if (*from == 10 || *from == 13)
-	    from++;
-	  if (*from == '{' || *from == '}') {
-	    *to++ = '\\';
-	    *to++ = *from;
-	  }
-	  if (*from == '<') {
-	    intoken = true;
-	    tokpos = 0;
-	    memset(token, 0, 2048);
-	    ampersand = false;
-	    continue;
-	  }
-	  else if (*from == '&') {
-	    intoken = true;
-	    tokpos = 0;
-	    memset(token, 0, 2048);
-	    ampersand = true;
-	    continue;
-	  }
-	  if (*from == ';' && ampersand) {
-	    intoken = false;
-	    
-	    if (!strncmp("nbsp", token, 4)) *to++ = ' ';
-	    else if (!strncmp("quot", token, 4)) *to++ = '"';
-	    else if (!strncmp("amp", token, 3)) *to++ = '&';
-	    else if (!strncmp("lt", token, 2)) *to++ = '<';
-	    else if (!strncmp("gt", token, 2)) *to++ = '>';
-	    else if (!strncmp("brvbar", token, 6)) *to++ = '|';
-	    else if (!strncmp("sect", token, 4)) *to++ = '§';
-	    else if (!strncmp("copy", token, 4)) *to++ = '©';
-	    else if (!strncmp("laquo", token, 5)) *to++ = '«';
-	    else if (!strncmp("reg", token, 3)) *to++ = '®';
-	    else if (!strncmp("acute", token, 5)) *to++ = '´';
-	    else if (!strncmp("para", token, 4)) *to++ = '¶';
-	    else if (!strncmp("raquo", token, 5)) *to++ = '»';
-	    
-	    else if (!strncmp("Aacute", token, 6)) *to++ = 'Á';
-	    else if (!strncmp("Agrave", token, 6)) *to++ = 'À';
-	    else if (!strncmp("Acirc", token, 5)) *to++ = 'Â';
-	    else if (!strncmp("Auml", token, 4)) *to++ = 'Ä';
-	    else if (!strncmp("Atilde", token, 6)) *to++ = 'Ã';
-	    else if (!strncmp("Aring", token, 5)) *to++ = 'Å';
-	    else if (!strncmp("aacute", token, 6)) *to++ = 'á';
-	    else if (!strncmp("agrave", token, 6)) *to++ = 'à';
-	    else if (!strncmp("acirc", token, 5)) *to++ = 'â';
-	    else if (!strncmp("auml", token, 4)) *to++ = 'ä';
-	    else if (!strncmp("atilde", token, 6)) *to++ = 'ã';
-	    else if (!strncmp("aring", token, 5)) *to++ = 'å';
-	    else if (!strncmp("Eacute", token, 6)) *to++ = 'É';
-	    else if (!strncmp("Egrave", token, 6)) *to++ = 'È';
-	    else if (!strncmp("Ecirc", token, 5)) *to++ = 'Ê';
-	    else if (!strncmp("Euml", token, 4)) *to++ = 'Ë';
-	    else if (!strncmp("eacute", token, 6)) *to++ = 'é';
-	    else if (!strncmp("egrave", token, 6)) *to++ = 'è';
-	    else if (!strncmp("ecirc", token, 5)) *to++ = 'ê';
-	    else if (!strncmp("euml", token, 4)) *to++ = 'ë';
-	    else if (!strncmp("Iacute", token, 6)) *to++ = 'Í';
-	    else if (!strncmp("Igrave", token, 6)) *to++ = 'Ì';
-	    else if (!strncmp("Icirc", token, 5)) *to++ = 'Î';
-	    else if (!strncmp("Iuml", token, 4)) *to++ = 'Ï';
-	    else if (!strncmp("iacute", token, 6)) *to++ = 'í';
-	    else if (!strncmp("igrave", token, 6)) *to++ = 'ì';
-	    else if (!strncmp("icirc", token, 5)) *to++ = 'î';
-	    else if (!strncmp("iuml", token, 4)) *to++ = 'ï';
-	    else if (!strncmp("Oacute", token, 6)) *to++ = 'Ó';
-	    else if (!strncmp("Ograve", token, 6)) *to++ = 'Ò';
-	    else if (!strncmp("Ocirc", token, 5)) *to++ = 'Ô';
-	    else if (!strncmp("Ouml", token, 4)) *to++ = 'Ö';
-	    else if (!strncmp("Otilde", token, 6)) *to++ = 'Õ';
-	    else if (!strncmp("oacute", token, 6)) *to++ = 'ó';
-	    else if (!strncmp("ograve", token, 6)) *to++ = 'ò';
-	    else if (!strncmp("ocirc", token, 5)) *to++ = 'ô';
-	    else if (!strncmp("ouml", token, 4)) *to++ = 'ö';
-	    else if (!strncmp("otilde", token, 6)) *to++ = 'õ';
-	    else if (!strncmp("Uacute", token, 6)) *to++ = 'Ú';
-	    else if (!strncmp("Ugrave", token, 6)) *to++ = 'Ù';
-	    else if (!strncmp("Ucirc", token, 5)) *to++ = 'Û';
-	    else if (!strncmp("Uuml", token, 4)) *to++ = 'Ü';
-	    else if (!strncmp("uacute", token, 6)) *to++ = 'ú';
-	    else if (!strncmp("ugrave", token, 6)) *to++ = 'ù';
-	    else if (!strncmp("ucirc", token, 5)) *to++ = 'û';
-	    else if (!strncmp("uuml", token, 4)) *to++ = 'ü';
-	    else if (!strncmp("Yacute", token, 6)) *to++ = 'Ý';
-	    else if (!strncmp("yacute", token, 6)) *to++ = 'ý';
-	    else if (!strncmp("yuml", token, 4)) *to++ = 'ÿ';
-	    
-	    else if (!strncmp("deg", token, 3)) *to++ = '°';
-	    else if (!strncmp("plusmn", token, 6)) *to++ = '±';
-	    else if (!strncmp("sup2", token, 4)) *to++ = '²';
-	    else if (!strncmp("sup3", token, 4)) *to++ = '³';
-	    else if (!strncmp("sup1", token, 4)) *to++ = '¹';
-	    else if (!strncmp("nbsp", token, 4)) *to++ = 'º';
-	    else if (!strncmp("pound", token, 5)) *to++ = '£';
-	    else if (!strncmp("cent", token, 4)) *to++ = '¢';
-	    else if (!strncmp("frac14", token, 6)) *to++ = '¼';
-	    else if (!strncmp("frac12", token, 6)) *to++ = '½';
-	    else if (!strncmp("frac34", token, 6)) *to++ = '¾';
-	    else if (!strncmp("iquest", token, 6)) *to++ = '¿';
-	    else if (!strncmp("iexcl", token, 5)) *to++ = '¡';
-	    else if (!strncmp("ETH", token, 3)) *to++ = 'Ð';
-	    else if (!strncmp("eth", token, 3)) *to++ = 'ð';
-	    else if (!strncmp("THORN", token, 5)) *to++ = 'Þ';
-	    else if (!strncmp("thorn", token, 5)) *to++ = 'þ';
-	    else if (!strncmp("AElig", token, 5)) *to++ = 'Æ';
-	    else if (!strncmp("aelig", token, 5)) *to++ = 'æ';
-	    else if (!strncmp("Oslash", token, 6)) *to++ = 'Ø';
-	    else if (!strncmp("curren", token, 6)) *to++ = '¤';
-	    else if (!strncmp("Ccedil", token, 6)) *to++ = 'Ç';
-	    else if (!strncmp("ccedil", token, 6)) *to++ = 'ç';
-	    else if (!strncmp("szlig", token, 5)) *to++ = 'ß';
-	    else if (!strncmp("Ntilde", token, 6)) *to++ = 'Ñ';
-	    else if (!strncmp("ntilde", token, 6)) *to++ = 'ñ';
-	    else if (!strncmp("yen", token, 3)) *to++ = '¥';
-	    else if (!strncmp("not", token, 3)) *to++ = '¬';
-	    else if (!strncmp("ordf", token, 4)) *to++ = 'ª';
-	    else if (!strncmp("uml", token, 3)) *to++ = '¨';
-	    else if (!strncmp("shy", token, 3)) *to++ = '­';
-	    else if (!strncmp("macr", token, 4)) *to++ = '¯';
-	    continue;
-      
-	  }
-	  else if (*from == '>' && !ampersand)
-		{
-		  intoken = false;
-		  // process desired tokens
-		  if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
-		    *to++ = '{';
-		    *to++ = '\\';
-		    *to++ = 'f';
-		    *to++ = 's';
-		    *to++ = '1';
-		    *to++ = '5';
-		    *to++ = ' ';
-		    *to++ = '<';
-		    for (unsigned int i = 28; token[i] != '\"'; i++)
-		      *to++ = token[i];
-		    *to++ = '>';
-		    *to++ = '}';
-		    continue;
-		  }
-		  else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
-		    *to++ = '{';
-		    *to++ = '\\';
-		    *to++ = 'f';
-		    *to++ = 's';
-		    *to++ = '1';
-		    *to++ = '5';
-		    *to++ = ' ';
-		    *to++ = '(';
-		    for (unsigned int i = 25; token[i] != '\"'; i++)
-		      *to++ = token[i];
-		    *to++ = ')';
-		    *to++ = '}';
-		    continue;
-		  }
-		  else if (!strncmp(token, "scripRef", 8)) {
-			if (inScriptRef) {
-                                *to++ = '|';
-/*  Why's all this HTML in here?
-				*to++ = '<';
-				*to++ = '/';
-				*to++ = 'a';
-				*to++ = '>';
-*/
-				*to++ = '}';
-			}
-			inScriptRef = true;
-			*to++ = '{';
-			*to++ = '\\';
-			*to++ = 'c';
-			*to++ = 'f';
-			*to++ = '2';
-			*to++ = ' ';
-                        *to++ = '#';                        
-/*
-			*to++ = '<';
-			*to++ = 'a';
-			*to++ = ' ';
-			*to++ = 'h';
-			*to++ = 'r';
-			*to++ = 'e';
-			*to++ = 'f';
-			*to++ = '=';
-			*to++ = '"';
-			*to++ = '"';
-			*to++ = '>';
-*/
-		    continue;
-		  }
-		  else if (!strncmp(token, "/scripRef", 9)) {
-                        *to++ = '|';
-/*
-			*to++ = '<';
-			*to++ = '/';
-			*to++ = 'a';
-			*to++ = '>';
-*/
-			*to++ = '}';
-			inScriptRef = false;
-		    continue;
-		  }
-		  else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-		    *to++ = '{';
-		    *to++ = '\\';
-		    *to++ = 'p';
-		    *to++ = 'a';
-		    *to++ = 'r';
-		    *to++ = '\\';
-		    *to++ = 'i';
-		    *to++ = '1';
-		    *to++ = '\\';
-		    *to++ = 'b';
-		    *to++ = '1';
-		    *to++ = ' ';
-		    continue;
-		  }
-		  else if (!strncmp(token, "div", 3)) {
-		    *to++ = '{';
-		    continue;
-                  }
-		  else if (!strncmp(token, "/div", 4)) {
-		    *to++ = '}';
-		    continue;
-		  }
-		  else if (!strncmp(token, "note place=\"foot\"", 17)) {
-		    *to++ = '{';
-		    *to++ = '\\';
-		    *to++ = 'i';
-		    *to++ = '1';
-		    *to++ = ' ';
-		    *to++ = '\\';
-		    *to++ = 'f';
-		    *to++ = 's';
-		    *to++ = '1';
-		    *to++ = '5';
-		    *to++ = ' ';
-		    *to++ = '(';
-		    continue;
-		  }
-		  else if (!strncmp(token, "/note", 5)) {
-		    *to++ = ')';
-		    *to++ = ' ';
-		    *to++ = '}';
-		    continue;
-		  }
-		  else if (!strnicmp(token, "br", 2)) {
-		    *to++ = '\\';
-		    *to++ = 'l';
-		    *to++ = 'i';
-		    *to++ = 'n';
-		    *to++ = 'e';
-		    *to++ = ' ';
-		    continue;
-		  }
-		  else if (!strnicmp(token, "font", 4)) {
-		    *to++ = '{';
-		    if (!strnicmp(token, "font face=\"Symbol\"", 18)) {
-			 *to++ = '\\';
-			 *to++ = 'f';
-			 *to++ = '7';
-			 *to++ = ' ';
-		    }
-			else if (!strnicmp(token, "font size=+1", 12)) {
-			 *to++ = '\\';
-			 *to++ = 'f';
-			 *to++ = 's';
-			 *to++ = '2';
-			 *to++ = '4';
-			 *to++ = ' ';
-			}
-		    continue;
-		  }
-		  else if (!strnicmp(token, "/font", 5)) {
-		    *to++ = '}';
-		    continue;
-		  }
-		  else switch(*token) {
-		  case 'i':			// font tags
-		  case 'I':
-		    *to++ = '\\';
-		    *to++ = 'i';
-		    *to++ = '1';
-		    *to++ = ' ';
-		    continue;
-		  case 'b':		// bold start
-		  case 'B':
-		    *to++ = '\\';
-		    *to++ = 'b';
-		    *to++ = '1';
-		    *to++ = ' ';
-		    continue;
-		  case '/':
-		    switch(token[1]) {
-		    case 'p':
-		    case 'P':
-			 *to++ = '\\';
-			 *to++ = 'p';
-			 *to++ = 'a';
-			 *to++ = 'r';
-			 *to++ = ' ';
-			 continue;
-		    case 'i':		// italic end
-		    case 'I':
-			 *to++ = '\\';
-			 *to++ = 'i';
-			 *to++ = '0';
-			 *to++ = ' ';
-			 continue;
-		    case 'b':		// bold end
-		    case 'B':
-			 *to++ = '\\';
-			 *to++ = 'b';
-			 *to++ = '0';
-			 *to++ = ' ';
-			 continue;
-		    }
-		  }
-		  continue;
+bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+	if (!substituteToken(buf, token)) {
+	// manually process if it wasn't a simple substitution
+		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
+                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
+        			pushString(buf, " {\\fs15 <");
+                                for (unsigned int i = 28; token[i] != '\"'; i++)
+                		        *(*buf)++ = token[i];
+        			pushString(buf, ">}");
+                        }
+                        else if (token[27] == 'T') {
+                                pushString(buf, " {\\fs15 (");
+        			for (unsigned int i = 28; token[i] != '\"'; i++)
+        				*(*buf)++ = token[i];
+        			pushString(buf, ")}");
+                        }
 		}
-		if (intoken) {
-				if (tokpos < 2047)
-			token[tokpos++] = *from;
+		else if (!strncmp(token, "sync type=\"morph\" ", 18)) {
+                        pushString(buf, " {\\fs15 (");
+			for (unsigned int i = 25; i < strlen(token); i++) {
+                                if (!strncmp(token+i, "value=\"", 7)) {
+                                        i += 7;
+                                        for (;token[i] != '\"'; i++)
+                				*(*buf)++ = token[i];
+                                        break;
+                                }
+                        }
+
+      			pushString(buf, ")}");
 		}
-		else	*to++ = *from;
+		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
+			pushString(buf, "{\\fs15 (");
+			for (unsigned int i = 25; token[i] != '\"'; i++)
+				*(*buf)++ = token[i];
+			pushString(buf, ")}");
+		}
+		else if (!strncmp(token, "scripRef", 8)) {
+			pushString(buf, "{\\cf2 #");
+		}
+                else if (!strncmp(token, "div class=\"sechead\"", 19)) {
+                        pushString(buf, "{\\par\\i1\\b1 ");
+                }
+
+		else {
+			return false;  // we still didn't handle token
+		}
 	}
-	if (inScriptRef) {
-		*to++ = '|';
-		*to++ = '}';
-	}
-	*to++ = 0;
-	*to = 0;
-	return 0;
+	return true;
 }
-
 
 

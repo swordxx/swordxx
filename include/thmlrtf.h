@@ -21,17 +21,18 @@
 #ifndef THMLRTF_H
 #define THMLRTF_H
 
-#include <swfilter.h>
+#include <swbasicfilter.h>
 
 #include <defs.h>
 
   /** this filter converts ThML text to RTF text
   */
-class SWDLLEXPORT ThMLRTF:public SWFilter
+class SWDLLEXPORT ThMLRTF:public SWBasicFilter
 {
+protected:
+  virtual bool handleToken(char **buf, const char *token, DualStringMap &userData);
 public:
   ThMLRTF ();
-  virtual char ProcessText (char *text, int maxlen = -1);
 };
 
 #endif
