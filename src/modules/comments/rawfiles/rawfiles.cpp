@@ -90,7 +90,7 @@ char *RawFiles::getRawEntry() {
 			memset(entrybuf, 0, size * FILTERPAD);
 			lseek(datafile->getFd(), 0, SEEK_SET);
 			read(datafile->getFd(), entrybuf, size);
-			preptext(entrybuf);
+//			preptext(entrybuf);
 		}
 		else {
 			entrybuf = new char [2];

@@ -574,9 +574,7 @@ const char *SWModule::StripText(char *buf, int len)
 	static char *null = "";
 
 	if (tmpbuf) {
-		unsigned long size = (len < 0) ? getEntrySize() * FILTERPAD : len;
-          if (size < 0)
-          	size = strlen(tmpbuf);
+		unsigned long size = (len < 0) ? ((getEntrySize()<0) ? strlen(tmpbuf) : getEntrySize()) * FILTERPAD : len;
 		if (size > 0) {
 			key = (SWKey *)*this;
 
