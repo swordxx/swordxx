@@ -26,7 +26,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("Rf", ")</small></font>");
+	//addTokenSubstitute("Rf", ")</small></font>");
 	addTokenSubstitute("Rx", "</a>");
 	addTokenSubstitute("FI", "<i>"); // italics begin
 	addTokenSubstitute("Fi", "</i>");
@@ -175,12 +175,21 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			u->hasFootnotePreTag = true;
 		}
 
+		else if (!strncmp(token, "Rf", 2)) {
+			buf += "&nbsp<a href=\"note=";
+			buf += u->lastTextNode.c_str();
+			buf += "\">";
+			buf += "<small><sup>*n</sup></small></a>&nbsp";
+			// let's let text resume to output again
+			u->suspendTextPassThru = false;
+		}
+		
 		else if (!strncmp(token, "RF", 2)) {
 			if (u->hasFootnotePreTag) {
 				u->hasFootnotePreTag = false;
 				buf += "</i> ";
 			}
-			buf += "<font color=\"#800000\"><small> (";
+			u->suspendTextPassThru = true;
 		}
 
 		else if (!strncmp(token, "FN", 2)) {

@@ -20,117 +20,23 @@
 #include <utilxml.h>
 
 SWORD_NAMESPACE_START
- 
+
+
+ThMLHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	SWModule *vmodule;
+	vmodule = (SWModule*) module;
+	if(vmodule) {
+		version = vmodule->Name();
+		BiblicalText = (!strcmp(vmodule->Type(), "Biblical Texts"));
+	}	
+}
+
+
 ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
-/*        
-	setEscapeStart("&");
-	setEscapeEnd(";");
 
-	setEscapeStringCaseSensitive(true);
-
-	addEscapeStringSubstitute("nbsp", " ");
-	addEscapeStringSubstitute("quot", "\"");
-	addEscapeStringSubstitute("amp", "&");
-	addEscapeStringSubstitute("lt", "<");
-	addEscapeStringSubstitute("gt", ">");
-	addEscapeStringSubstitute("brvbar", "|");
-	addEscapeStringSubstitute("sect", "§");
-	addEscapeStringSubstitute("copy", "©");
-	addEscapeStringSubstitute("laquo", "«");
-	addEscapeStringSubstitute("reg", "®");
-	addEscapeStringSubstitute("acute", "´");
-	addEscapeStringSubstitute("para", "¶");
-	addEscapeStringSubstitute("raquo", "»");
-
-	addEscapeStringSubstitute("Aacute", "Á");
-	addEscapeStringSubstitute("Agrave", "À");
-	addEscapeStringSubstitute("Acirc", "Â");
-	addEscapeStringSubstitute("Auml", "Ä");
-	addEscapeStringSubstitute("Atilde", "Ã");
-	addEscapeStringSubstitute("Aring", "Å");
-	addEscapeStringSubstitute("aacute", "á");
-	addEscapeStringSubstitute("agrave", "à");
-	addEscapeStringSubstitute("acirc", "â");
-	addEscapeStringSubstitute("auml", "ä");
-	addEscapeStringSubstitute("atilde", "ã");
-	addEscapeStringSubstitute("aring", "å");
-	addEscapeStringSubstitute("Eacute", "É");
-	addEscapeStringSubstitute("Egrave", "È");
-	addEscapeStringSubstitute("Ecirc", "Ê");
-	addEscapeStringSubstitute("Euml", "Ë");
-	addEscapeStringSubstitute("eacute", "é");
-	addEscapeStringSubstitute("egrave", "è");
-	addEscapeStringSubstitute("ecirc", "ê");
-	addEscapeStringSubstitute("euml", "ë");
-	addEscapeStringSubstitute("Iacute", "Í");
-	addEscapeStringSubstitute("Igrave", "Ì");
-	addEscapeStringSubstitute("Icirc", "Î");
-	addEscapeStringSubstitute("Iuml", "Ï");
-	addEscapeStringSubstitute("iacute", "í");
-	addEscapeStringSubstitute("igrave", "ì");
-	addEscapeStringSubstitute("icirc", "î");
-	addEscapeStringSubstitute("iuml", "ï");
-	addEscapeStringSubstitute("Oacute", "Ó");
-	addEscapeStringSubstitute("Ograve", "Ò");
-	addEscapeStringSubstitute("Ocirc", "Ô");
-	addEscapeStringSubstitute("Ouml", "Ö");
-	addEscapeStringSubstitute("Otilde", "Õ");
-	addEscapeStringSubstitute("oacute", "ó");
-	addEscapeStringSubstitute("ograve", "ò");
-	addEscapeStringSubstitute("ocirc", "ô");
-	addEscapeStringSubstitute("ouml", "ö");
-	addEscapeStringSubstitute("otilde", "õ");
-	addEscapeStringSubstitute("Uacute", "Ú");
-	addEscapeStringSubstitute("Ugrave", "Ù");
-	addEscapeStringSubstitute("Ucirc", "Û");
-	addEscapeStringSubstitute("Uuml", "Ü");
-	addEscapeStringSubstitute("uacute", "ú");
-	addEscapeStringSubstitute("ugrave", "ù");
-	addEscapeStringSubstitute("ucirc", "û");
-	addEscapeStringSubstitute("uuml", "ü");
-	addEscapeStringSubstitute("Yacute", "Ý");
-	addEscapeStringSubstitute("yacute", "ý");
-	addEscapeStringSubstitute("yuml", "ÿ");
-
-	addEscapeStringSubstitute("deg", "°");
-	addEscapeStringSubstitute("plusmn", "±");
-	addEscapeStringSubstitute("sup2", "²");
-	addEscapeStringSubstitute("sup3", "³");
-	addEscapeStringSubstitute("sup1", "¹");
-	addEscapeStringSubstitute("nbsp", "º");
-	addEscapeStringSubstitute("pound", "£");
-	addEscapeStringSubstitute("cent", "¢");
-	addEscapeStringSubstitute("frac14", "¼");
-	addEscapeStringSubstitute("frac12", "½");
-	addEscapeStringSubstitute("frac34", "¾");
-	addEscapeStringSubstitute("iquest", "¿");
-	addEscapeStringSubstitute("iexcl", "¡");
-	addEscapeStringSubstitute("ETH", "Ð");
-	addEscapeStringSubstitute("eth", "ð");
-	addEscapeStringSubstitute("THORN", "Þ");
-	addEscapeStringSubstitute("thorn", "þ");
-	addEscapeStringSubstitute("AElig", "Æ");
-	addEscapeStringSubstitute("aelig", "æ");
-	addEscapeStringSubstitute("Oslash", "Ø");
-	addEscapeStringSubstitute("curren", "¤");
-	addEscapeStringSubstitute("Ccedil", "Ç");
-	addEscapeStringSubstitute("ccedil", "ç");
-	addEscapeStringSubstitute("szlig", "ß");
-	addEscapeStringSubstitute("Ntilde", "Ñ");
-	addEscapeStringSubstitute("ntilde", "ñ");
-	addEscapeStringSubstitute("yen", "¥");
-	addEscapeStringSubstitute("not", "¬");
-	addEscapeStringSubstitute("ordf", "ª");
-	addEscapeStringSubstitute("uml", "¨");
-	addEscapeStringSubstitute("shy", "­");
-	addEscapeStringSubstitute("macr", "¯");
-*/
 	setTokenCaseSensitive(true);
-
-	addTokenSubstitute("note", " <font color=\"#800000\"><small>(");
-	addTokenSubstitute("/note", ")</small></font> ");
 	addTokenSubstitute("/scripture", "</i> ");
 }
 
@@ -138,7 +44,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	const char *tok;
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
-		MyUserData *u = (MyUserData *)userData;
+		MyUserData *u = (MyUserData *)userData;		
 		XMLTag tag(token);
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			const char* value = tag.getAttribute("value");
@@ -173,26 +79,20 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			else if(tag.isEndTag()) {
 				buf += "</b>";
 			}
-/*
-			buf += "type=";
-			buf += tag.getAttribute("type");
-
-			const char* value = tag.getAttribute("value");
-			buf += " value=";
-			buf += value ? value : "";
-			buf += "\">";
-
-			//add the value
-			if (value && tag.getAttribute("type") && strcmp(tag.getAttribute("type"), "morph")) { //not morph type
-				value++;
+		}
+		else if (tag.getName() && !strcmp(tag.getName(), "note")) {
+			if (tag.isEndTag()) {
+				buf += "&nbsp<a href=\"note=";
+				buf += u->lastTextNode.c_str();
+				buf += "\">";
+				buf += "<small><sup>*n</sup></small></a>&nbsp";
+				// let's let text resume to output again
+				u->suspendTextPassThru = false;
 			}
-			buf += value ? value : "";
-
-			if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph"))
-				buf += "</a>) </em></small>";
-			else
-				buf += "</a>&gt; </em></small>";
-*/
+			else {
+				// let's stop text from going to output
+				u->suspendTextPassThru = true;
+			}
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "scripture")) {
 			u->inscriptRef = true;
@@ -201,17 +101,29 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		else if (tag.getName() && !strcmp(tag.getName(), "scripRef")) {
 			if (tag.isEndTag()) {
 				if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+					if(u->BiblicalText)
+						buf += "<small><sup>*x</sup></small>";
+					buf += "</a>&nbsp";
 					u->inscriptRef = false;
-					buf += "</a>";
+					u->suspendTextPassThru = false;
 				}
 				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
-					buf += "<a href=\"passage=";
+					buf += "&nbsp<a href=\"";
+					if(u->BiblicalText)					
+						if (u->version) {
+							buf += "version=";
+							buf += u->version;
+							buf += " ";
+						}
+					buf += "passage=";
 					buf += u->lastTextNode.c_str();
 					buf += "\">";
-
-					buf += u->lastTextNode.c_str();
-					buf += "</a>";
-
+					if(u->BiblicalText)
+						buf += "<small><sup>*x</sup></small>";
+					else {
+						buf += u->lastTextNode.c_str();
+					}
+					buf += "</a>&nbsp";
 					// let's let text resume to output again
 					u->suspendTextPassThru = false;
 				}
@@ -219,7 +131,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			else if (tag.getAttribute("passage")) { //passage given
 				u->inscriptRef = true;
 
-				buf += "<a href=\"";
+				buf += "&nbsp<a href=\"";
 				if (const char* version = tag.getAttribute("version")) {
 					buf += "version=";
 					buf += version;
@@ -230,6 +142,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					buf += passage;
 				}
 				buf += "\">";
+				//u->suspendTextPassThru = true;
 			}
 			else { //no passage or version given
 				u->inscriptRef = false;

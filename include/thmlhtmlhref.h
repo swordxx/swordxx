@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlhtmlhref.h,v 1.7 2003/08/12 05:36:30 scribe Exp $
+ * $Id: thmlhtmlhref.h,v 1.8 2003/12/21 01:35:01 tbiggs Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,9 +31,11 @@ class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
-		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+		MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
 		bool inscriptRef;
 		bool SecHead;
+		bool BiblicalText;
+		SWBuf version;
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
