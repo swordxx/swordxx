@@ -54,7 +54,6 @@ void initConfig() {
 	char prompt[10];
 	fgets(prompt, 9, stdin);
 	bool enable = (!strcmp(prompt, "yes\n"));
-	free(prompt);
 	char *envhomedir  = getenv ("HOME");
 	SWBuf confPath = (envhomedir) ? envhomedir : ".";
 	confPath += "/.sword/InstallMgr/InstallMgr.conf";
