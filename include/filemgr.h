@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.6 2001/02/21 05:53:00 scribe Exp $
+ * $Id: filemgr.h,v 1.7 2001/04/18 04:56:59 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,10 @@
 
 #include <defs.h>
 
+#ifdef WIN32
+#define access(path, access) FileMgr::cheezyAccess(path, access)
+#endif
+
 class SWDLLEXPORT FileMgr;
 
 class SWDLLEXPORT FileDesc
@@ -42,7 +46,7 @@ class SWDLLEXPORT FileDesc
   FileDesc *next;
 
 public:
-    FileDesc (FileMgr * parent, char *path, int mode, int perms);
+   FileDesc (FileMgr * parent, char *path, int mode, int perms);
    virtual ~FileDesc ();
   int getFd ();
 };
@@ -70,7 +74,7 @@ public:
   char trunc (FileDesc *);
 
   int maxFiles;
-
+  static char cheezyAccess(const char *path, int access);  // used if no 'access' method exists (for weezy microsoft).
   static FileMgr systemFileMgr;
 };
 
