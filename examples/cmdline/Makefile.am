@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
-LDADD = -L$(top_builddir)/lib -lsword 
+LDADD = $(top_builddir)/lib/libsword.la 
 
 noinst_PROGRAMS = lookup search threaded_search
 
