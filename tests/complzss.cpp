@@ -40,7 +40,7 @@ FileCompress::FileCompress(char *fname)
 
 	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY, 00644);
 
-	sprintf(buf, "%s.zzz", fname);
+	sprintf(buf, "%s.lzs", fname);
 	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY, 00644);
 }
 
@@ -88,12 +88,12 @@ int main(int argc, char **argv)
 	SWCompress *fobj;
 	
 	if (argc != 2) {
-		fprintf(stderr, "usage: %s <filename|filename.zzz>\n", argv[0]);
+		fprintf(stderr, "usage: %s <filename|filename.lzs>\n", argv[0]);
 		exit(1);
 	}
 
 	if (strlen(argv[1]) > 4) {
-		if (!strcmp(&argv[1][strlen(argv[1])-4], ".zzz")) {
+		if (!strcmp(&argv[1][strlen(argv[1])-4], ".lzs")) {
 			argv[1][strlen(argv[1])-4] = 0;
 			decomp = 1;
 		}
