@@ -2,6 +2,11 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+08-Dec-2001     Troy A. Griffitts <scribe@crosswire.org>
+	Added new SWInputMethod class for keyboard mapping support.
+	Added null input method which returns what it gets
+	Added Hebrew Michigan-Claremont input method
+
 02-Sep-2001     Troy A. Griffitts <scribe@crosswire.org>
 	Added new swbasicfilter.cpp that provides many common method needed
 		to make an swfilter implementation.
