@@ -1,8 +1,7 @@
 /******************************************************************************
-*  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
-*				types of Lexicon and Dictionary modules (hence the 'LD').
+*  swgenbook.h
 *
-* $Id: swgenbook.h,v 1.4 2003/02/28 13:12:43 mgruner Exp $
+* $Id: swgenbook.h,v 1.5 2003/03/04 22:32:55 mgruner Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -30,8 +29,7 @@
 
 SWORD_NAMESPACE_START
 
-/** the basis for all types of Lexicon and
-* Dictionary modules (hence the 'LD').
+/** The basis for all Book modules.
 */
 class SWDLLEXPORT SWGenBook : public SWModule {
 
@@ -39,7 +37,7 @@ protected:
 	char *entkeytxt;
 
 public:
-	/** Initializes data for instance of SWLD
+	/** Initializes data for instance of SWGenBook
 	*/
 	SWGenBook(const char *imodname = 0, const char *imoddesc = 0,
 			SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,

@@ -22,8 +22,14 @@
 #include <defs.h>
 SWORD_NAMESPACE_START
 
+/** Checks if a string is a roman numeral.
+*/
 char isroman(const char *);
 /* char* to_rom(int num, char *p); */
+
+/** Converts a roman numeral to a string.
+* @param s Roman numeral to convert.
+*/
 int from_rom(const char *s);
 
 SWORD_NAMESPACE_END

@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.61 2003/02/28 13:12:43 mgruner Exp $
+* $Id: swmodule.h,v 1.62 2003/03/04 22:32:55 mgruner Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -187,29 +187,43 @@ protected:
 	*
 	* @param ikey key with which to set this module
 	* @return error status
-	* @deprecated See setKey()
+	* @deprecated Use setKey() instead.
 	*/
 	char SetKey(const SWKey *ikey) { return setKey(ikey); }
+	/**
+	* Sets a key to this module for position to a
+	* particular record or set of records
+	*
+	* @param ikey key with which to set this module
+	* @return error status
+	*/
 	virtual char setKey(const SWKey *ikey);
-	
+
 
 	virtual long Index() const { return entryIndex; }
 	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
 
 	/**
-	* Sets the key of this module. Similar to @see SetKey(const SWKey*) .
+	* Sets the key of this module.
 	* @param ikey The SWKey which should be used as new key.
 	* @return Error status
-	* @deprecated See setKey()
+	* @deprecated Use setKey() instead.
 	*/
 	char SetKey(const SWKey &ikey) { return setKey(ikey); }
+	/**
+	* Sets the key of this module.
+	* @param ikey The SWKey which should be used as new key.
+	* @return Error status
+	*/
 	char setKey(const SWKey &ikey) { return SetKey(&ikey); }
 
 	/** Gets the current module key
 	* @return the current key of this module
-	* @deprecated See getKey()
 	*/
 	SWKey &Key() const { return *getKey(); }
+	/** Gets the current module key
+	* @return the current key of this module
+	*/
 	SWKey *getKey() const;
 
 	/** Sets the current key of the module to ikey, and returns
@@ -217,23 +231,20 @@ protected:
 	*
 	* @param ikey new current key for the module
 	* @return the keytext of the current module key
-	* @deprecated See setKey()
+	* @deprecated Use setKey() instead.
 	*/
 	char Key(const SWKey & ikey) { return setKey(ikey); }
 
-	/******************************************************************************
-	 * SWModule::KeyText - Sets/gets module KeyText
+	/**
+	 * Sets/gets module KeyText
 	 *
-	 * ENT:	ikeytext - value which to set keytext
-	 *		[0] - only get
-	 *
-	 * RET:	pointer to keytext
+	 * @param ikeytext Value which to set keytext; [0]-only get
+	 * @return pointer to keytext
 	 */
 	virtual const char *KeyText(const char *ikeytext = 0) {
 		if (ikeytext) setKey(ikeytext);
 		return *getKey();
 	}
-
 	/** Calls this modules display object and passes itself
 	*
 	* @return error status
@@ -242,57 +253,49 @@ protected:
 
 	/** Sets/gets display driver
 	*
-	* @param idisp value which to set disp;
-	*  [0] - only get
+	* @param idisp Value which to set disp; [0]-only get
 	* @return pointer to disp
 	*/
 	virtual SWDisplay *Disp(SWDisplay * idisp = 0);
 	/** Sets/gets module name
 	*
-	* @param imodname value which to set modname;
-	*  [0] - only get
+	* @param imodname Value which to set modname; [0]-only get
 	* @return pointer to modname
 	*/
 	virtual char *Name(const char *imodname = 0);
 	/** Sets/gets module description
 	*
-	* @param imoddesc value which to set moddesc;
-	*  [0] - only get
+	* @param imoddesc Value which to set moddesc; [0]-only get
 	* @return pointer to moddesc
 	*/
 	virtual char *Description(const char *imoddesc = 0);
 	/** Sets/gets module type
 	*
-	* @param imodtype value which to set modtype;
-	*  [0] - only get
+	* @param imodtype Value which to set modtype; [0]-only get
 	* @return pointer to modtype
 	*/
 	virtual char *Type(const char *imodtype = 0);
 	/** Sets/gets module direction
 	*
-	* @param newdir value which to set direction;
-	*  [-1] - only get
+	* @param newdir Value which to set direction; [-1]-only get
 	* @return new direction
 	*/
 	virtual char Direction(signed char newdir = -1);
 	/** Sets/gets module encoding
 	*
-	* @param enc value which to set encoding;
-	*  [-1] - only get
+	* @param enc Value which to set encoding; [-1]-only get
 	* @return Encoding
 	*/
 	virtual char Encoding(signed char enc = -1);
 	/** Sets/gets module markup
 	*
-	* @param markup value which to set markup;
-	*  [-1] - only get
-	* @return char Markup
+	* @param markup Vvalue which to set markup; [-1]-only get
+	* @return Markup
 	*/
 	virtual char Markup(signed char markup = -1);
 	/** Sets/gets module language
 	*
-	* @param imodlang value which to set modlang;
-	*  [0] - only get
+	* @param imodlang Value which to set modlang; [0]-only get
 	* @return pointer to modlang
 	*/
 	virtual char *Lang(const char *imodlang = 0);
@@ -322,7 +325,7 @@ protected:
 	*
 	*/
 	virtual signed char createSearchFramework() { return 0; }				// special search framework
-	/**
+	/** Not yet useful.
 	*
 	*/
 	virtual bool hasSearchFramework() { return false; }				// special search framework
@@ -365,17 +368,14 @@ protected:
 	* @return error
 	*/
 	static signed char createModule(const char *path) { return -1; }
-	/** Modify the current module entry text
-	* - only if module isWritable()
+	/** Modify the current module entry text - only if module isWritable()
 	* @return *this
 	*/
 	virtual void setEntry(const char *inbuf, long len = -1) { }
-	/** Link the current module entry to another module entry
-	* - only if module isWritable()
+	/** Link the current module entry to another module entry - only if module isWritable()
 	*/
 	virtual void linkEntry(const SWKey *sourceKey) { }
 	/** Delete current module entry - only if module isWritable()
-	*
 	*/
 	virtual void deleteEntry() {}
 
@@ -399,7 +399,7 @@ protected:
 	* @return *this
 	*/
 	virtual void setPosition(SW_POSITION pos);
-	/** Adds a RenderFilter to this module's @see renderfilters queue
+	/** Adds a RenderFilter to this module's renderfilters queue
 	* @param newfilter the filter to add
 	* @return *this
 	*/
@@ -407,7 +407,7 @@ protected:
 		renderFilters->push_back (newfilter);
 		return *this;
 	}
-	/** Removes a RenderFilter from this module's @see renderfilters queue
+	/** Removes a RenderFilter from this module's renderfilters queue
 	* @param oldfilter the filter to remove
 	* @return *this
 	*/
@@ -415,7 +415,7 @@ protected:
 		renderFilters->remove (oldfilter);
 		return *this;
 	}
-	/** Replaces a RenderFilter in this module's @see renderfilters queue
+	/** Replaces a RenderFilter in this module's renderfilters queue
 	* @param oldfilter the filter to remove
 	* @param newfilter the filter to add in its place
 	* @return *this
@@ -444,7 +444,7 @@ protected:
 		encodingFilters->push_back (newfilter);
 		return *this;
 	}
-	/** Removes an EncodingFilter from this module's @see encodingfilters queue
+	/** Removes an EncodingFilter from this module's encodingfilters queue
 	* @param oldfilter the filter to remove
 	* @return *this
 	*/
@@ -452,7 +452,7 @@ protected:
 		encodingFilters->remove (oldfilter);
 		return *this;
 	}
-	/** Replaces an EncodingFilter in this module's @see encodingfilters queue
+	/** Replaces an EncodingFilter in this module's encodingfilters queue
 	* @param oldfilter the filter to remove
 	* @param newfilter the filter to add in its place
 	* @return *this
@@ -562,23 +562,28 @@ protected:
 	* @return this module's text at specified key location massaged by Render filters
 	*/
 	virtual const char *RenderText(SWKey * tmpKey);
-
-	/** 
+	/**
 	*
 	*  option to specify behaviour when iterating over consecutive entried linked
 	*  to same text
 	* @param val = true means only include entry once in iteration
 	*/
 	virtual void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
+	/** DOCS NEEDED.
+	*/
 	virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+	/** DOCS NEEDED.
+	*/
 	virtual AttributeTypeList &getEntryAttributes() const { return entryAttributes; }
+	/** DOCS NEEDED.
+	*/
 	virtual void processEntryAttributes(bool val) const { procEntAttr = val; }
+	/** DOCS NEEDED.
+	*/
 	virtual bool isProcessEntryAttributes() const { return procEntAttr; }
 
-
-
 	// OPERATORS -----------------------------------------------------------------
-	
+
 	SWMODULE_OPERATORS
 
 };
