@@ -317,6 +317,7 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 	int loop;
 	char comma = 0;
 	char dash = 0;
+	char *orig = buf;
 	ListKey tmpListKey;
 	SWKey tmpDefaultKey = defaultKey;
 
@@ -403,8 +404,12 @@ ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 			break;
 		case 10:	// ignore these
 		case 13: 
-		case '.':
 			break;
+		case '.':
+			if (buf > orig)			// ignore (break) if preceeding char is not a digit
+				if (!isdigit(*(buf-1)))
+					break;
+			
 		default:
 			if (isdigit(*buf)) {
 				number[tonumber++] = *buf;
