@@ -50,7 +50,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	bool newText = false;
 	bool lastspace = false;
 	
-	const char* wordStart = orig.c_str();
+	const char* wordStart = text.c_str();
 	const char* wordEnd;
 	
 	const char* textStart;
@@ -70,10 +70,8 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
-			//textEnd = from-1; //end of last text node found
-			textEnd = orig.c_str() + orig.length(); //text or orig?
-			
-			wordEnd = orig.c_str() + orig.length();//not good, instead of wordEnd = to!
+			textEnd = from-1; //end of last text node found
+			wordEnd = text.c_str() + text.length();//not good, instead of wordEnd = to!
 			
 			continue;
 		}
@@ -86,11 +84,11 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			handled = false;
 
 			
-			while (wordStart < orig.c_str() + orig.length()) { //not good, fix it
+			while (wordStart < (text.c_str() + text.length())) { //hack
 				if (strchr(";, .:?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
 					wordStart++;
 				else break;
-			}
+			}			
 			
 			
 			while (wordEnd > wordStart) {
@@ -183,8 +181,8 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				for (c++;((*c) && (*c != '"')); c++) {
 					text += *c;
 				}
-
 				text += "\" />";
+				
 				lastspace = false;
 				handled = true;
 			}
@@ -193,28 +191,28 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			else if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
 				bool divineName = false;
 				if (module->isProcessEntryAttributes()) {
-					value = token;
-					//for (unsigned int i = 1; ((token[i]) && (i < 150)); i++) {
-					//	value += token[i];
-					//}
-					
+					value = token+1;
+				
 					// normal strongs number
 					//strstrip(val);
-					if (wordStart && !strncmp(wordStart, "<w ", 3)) {
-						XMLTag tag(wordStart);
-						
-						buf = tag.getAttribute("lemma");
-						if (buf.length()) {
-							buf.appendFormatted("|x-Strongs:%s", value.c_str());
+					if (!strncmp(wordStart, "<w ", 3)) {
+						const char *attStart = strstr(wordStart, "lemma");
+						if (attStart) {
+							attStart += 7;
+							
+							buf = "";
+							buf.appendFormatted("x-Strongs:%s|", value.c_str());
 						}
-						else {
-							buf.appendFormatted("x-Strongs:%s", value.c_str());
+						else { // no lemma attribute
+							attStart = wordStart + 3;
+							
+							buf = "";
+							buf.appendFormatted(buf, "lemma=\"x-Strongs:%s\" ", value.c_str());
 						}
-						
-						tag.setAttribute("lemma", buf.c_str());	
-						text += tag.toString();
+
+						text.insert(attStart - text.c_str(), buf);
 					}
-					else {
+					else { //wordStart doesn't point to an existing <w> attribute!
 						if (!strcmp(value.c_str(), "H03068")) {	//divineName
 							buf = "";
 							buf.appendFormatted("<divineName><w lemma=\"x-Strongs:%s\">", value.c_str());
@@ -226,11 +224,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 							buf.appendFormatted("<w lemma=\"x-Strongs:%s\">", value.c_str());
 						}
 
-						//memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
-						//memcpy(wordStart, buf, strlen(buf));
-						//to+=strlen(buf);
-						
-						text += buf; //buf has to be inserted at position wordstart!
+						text.insert(wordStart - text.c_str(), buf);
 
 						if (divineName) {
 							wordStart += 12;
@@ -247,56 +241,44 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
 			// Morphology
 			else if (*token == 'W' && token[1] == 'T' && (token[2] == 'G' || token[2] == 'H')) {	// Strongs
-				value = token;
+				value = token+2;
 				
-				//strstrip(val);
 				if (!strncmp(wordStart, "<w ", 3)) {
-					XMLTag tag(wordStart);
-					buf = tag.getAttribute("morph");
-					if (buf.length()) {//attribute already present
-						buf.appendFormatted("|x-%s:%s", "StrongsMorph", value.c_str());
+					const char *attStart = strstr(wordStart, "morph");
+					if (attStart) { //existing morph attribute, append this one to it
+						attStart += 7;
+						buf = "";
+						buf.appendFormatted("x-%s:%s|", "StrongsMorph", value.c_str());
 					}
 					else {
-						buf.appendFormatted("x-%s:%s", "StrongsMorph", value.c_str());
+						attStart = wordStart + 3;
+						buf = "";
+						buf.appendFormatted("morph=\"x-%s:%s\" ", "StrongsMorph", value.c_str());
 					}
 					
-					tag.setAttribute("morph", buf.c_str());
-					text += tag.toString();
+					text.insert(attStart - text.c_str(), buf); //hack, we have to
 				}
-				else {
-					//buf = "";
-					//buf.appendFormatted("<w morph=\"x-%s:%s\">", "StrongsMorph", value.c_str(), textNode.c_str());
+				else { //no existing <w> attribute fond
+					buf = "";
+					buf.appendFormatted("<w morph=\"x-%s:%s\">", "StrongsMorph", value.c_str());
 					
-					//sprintf(buf, "<w morph=\"x-%s:%s\">", "StrongsMorph", val);
-					//memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
-					//memcpy(wordStart, buf, strlen(buf));
-					//to+=strlen(buf);
+					text.insert(wordStart - text.c_str(), buf);
 					
-					//text += buf; //fix this, we have to insert at position of wordStart
-					
-					text.appendFormatted("<w morph=\"x-StrongsMorph:%s\">", value.c_str());
-					if (wordStart) {
-						text.append ( 
-							wordStart
-							, 
-							(orig.c_str() + orig.length()) - wordStart
-						);
-					}
 					text += "</w>";
-					
 					lastspace = false;
+
 				}
 				handled = true;
 			}
 
 			if (!keepToken) {	
 				if (!handled) {
-					SWLog::getSystemLog()->logError("Unprocessed Token: <%s>", token);
+					SWLog::getSystemLog()->logError("Unprocessed Token: <%s> in key %s", token, key ? (const char*)*key : "<unknown>");
 //					exit(-1);
 				}
 				if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
 					if (lastspace)
-						text--; //delete last char of text
+						text--;
 				}
 				if (newText) {
 					textStart = from+1;
@@ -309,11 +291,9 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			text.appendFormatted("<%s>", token);
 			
 			if (newText) {
-				textStart = text.c_str() + text.length();  //hack, not good, instad of textStart = to;
+				textStart = text.c_str() + text.length();  //hack, instad of textStart = to;
 				newWord = false; 
 			}
-			
-//			if (newWord) {wordStart = to; newWord = false; }
 			continue;
 		}
 		if (intoken) {
@@ -329,13 +309,12 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			case '`':
 //				quoteStack.handleQuote(fromStart, from, &to);
 				text += *from;
-				from++;
+				//from++; //this line removes chars after an apostrophe! Needs fixing.
 				break;
 			default:
 				if (newWord && (*from != ' ')) {
-					//wordStart = to; 
-					wordStart = orig.c_str() + orig.length();
-					newWord = false; 
+					wordStart = text.c_str() + text.length();
+					newWord = false;
 					
 					//fix this if required?
 					//memset(to, 0, 10); 
@@ -343,7 +322,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				}
 				
 				if (!suspendTextPassThru) {
-					text += *from;
+					text += (*from);
 					lastspace = (*from == ' ');
 				}
 			}
