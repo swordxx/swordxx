@@ -66,10 +66,34 @@ SWModule_ptr SWMgr_impl::getModuleByName(const char *name) throw(CORBA::SystemEx
 
 
 StringList *SWMgr_impl::getGlobalOptions() throw(CORBA::SystemException) {
+	sword::StringList options = delegate->getGlobalOptions();
+	StringList *retVal = new StringList;
+	int count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		count++;
+	}
+	retVal->length(count);
+	count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		(*retVal)[count++] = CORBA::string_dup(it->c_str());
+	}
+	return retVal;
 }
 
 
 StringList *SWMgr_impl::getGlobalOptionValues(const char *option) throw(CORBA::SystemException) {
+	sword::StringList options = delegate->getGlobalOptionValues(option);
+	StringList *retVal = new StringList;
+	int count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		count++;
+	}
+	retVal->length(count);
+	count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		(*retVal)[count++] = CORBA::string_dup(it->c_str());
+	}
+	return retVal;
 }
 
 
