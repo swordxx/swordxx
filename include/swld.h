@@ -2,7 +2,7 @@
  *  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
  *				types of Lexicon and Dictionary modules (hence the 'LD').
  *
- * $Id: swld.h,v 1.5 2001/02/20 02:08:53 scribe Exp $
+ * $Id: swld.h,v 1.6 2001/06/17 21:20:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,7 +42,7 @@ public:
   * @param imoddesc Name to display to user for module
   * @param idisp Display object to use for displaying
   */
-  SWLD (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0);
+  SWLD (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, bool unicode = false);
   virtual ~ SWLD ();
   virtual SWKey *CreateKey ()
   {

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.40 2001/06/12 06:27:24 scribe Exp $
+ * $Id: swmgr.cpp,v 1.41 2001/06/17 21:20:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -537,8 +537,8 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		
 		if (compress) {
 			if (!stricmp(driver.c_str(), "zText"))
-				newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress);
-			else	newmod = new zCom(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress);
+				newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, unicode);
+			else	newmod = new zCom(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, unicode);
 		}
 	}
 	
@@ -548,15 +548,15 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	
 	// backward support old drivers
 	if (!stricmp(driver.c_str(), "RawGBF")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, unicode);
 	}
 
 	if (!stricmp(driver.c_str(), "RawCom")) {
-		newmod = new RawCom(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawCom(datapath.c_str(), name.c_str(), description.c_str(), 0, unicode);
 	}
 				
 	if (!stricmp(driver.c_str(), "RawFiles")) {
-		newmod = new RawFiles(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawFiles(datapath.c_str(), name.c_str(), description.c_str(), 0, unicode);
 	}
 				
 	if (!stricmp(driver.c_str(), "HREFCom")) {
@@ -565,10 +565,10 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	}
 				
 	if (!stricmp(driver.c_str(), "RawLD"))
-		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str(), 0, unicode);
 
 	if (!stricmp(driver.c_str(), "RawLD4"))
-		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str(), 0, unicode);
 
     // if a specific module type is set in the config, use this
     if ((entry = section.find("Type")) != section.end()) 

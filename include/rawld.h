@@ -2,7 +2,7 @@
  *  rawld.cpp - code for class 'RawLD'- a module that reads raw lexicon and
  *				dictionary files: *.dat *.idx
  *
- * $Id: rawld.h,v 1.6 2001/04/08 09:03:37 chrislit Exp $
+ * $Id: rawld.h,v 1.7 2001/06/17 21:20:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,7 +37,7 @@ public:
   
     
     RawLD (const char *ipath, const char *iname = 0, const char *idesc =
-	   0, SWDisplay * idisp = 0);
+	   0, SWDisplay * idisp = 0, bool unicode = false);
     virtual ~ RawLD ();
   virtual char *getRawEntry ();
 

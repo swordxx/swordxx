@@ -34,7 +34,7 @@
  *	idisp	 - Display object to use for displaying
  */
 
-RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp) : RawVerse(ipath, O_RDWR), SWCom(iname, idesc, idisp)
+RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode) : RawVerse(ipath, O_RDWR), SWCom(iname, idesc, idisp, unicode)
 {
 	versebuf = 0;
 }

@@ -168,10 +168,14 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 	//printf ("Finding offset %ld\n", idxoff);
 	idxoff *= 10;
-	if (!testmt)
-	{
+	if (!testmt) {
 		testmt = ((idxfp[0]) ? 1:2);
 	}
+     
+     // assert we have and valid file descriptor
+     if (compfp[testmt-1]->getFd() < 1)
+     	return;
+          
 	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
 	if (read(compfp[testmt-1]->getFd(), &ulBuffNum, 4) < 4)
 	{
@@ -258,7 +262,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 void zVerse::swgettext(char testmt, long start, unsigned short size, char *inbuf)
 {
-	memset(inbuf, 0, size);
+	memset(inbuf, 0, size+2);
 	if (size > 1) {
 		strncpy(inbuf, &(cacheBuf[start]), size-1);
 		inbuf[size]=0;
@@ -515,9 +519,11 @@ void zVerse::preptext(char *buf)
 	}
 	*to = 0;
 
-	for (to--; to > buf; to--) {			// remove training excess
-		if ((*to == 10) || (*to == ' '))
-			*to = 0;
-		else break;
-	}
+     if (to > buf) {
+          for (to--; to > buf; to--) {			// remove trailing excess
+               if ((*to == 10) || (*to == ' '))
+                    *to = 0;
+               else break;
+          }
+     }
 }

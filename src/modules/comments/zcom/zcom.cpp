@@ -31,7 +31,7 @@
  *		idisp - Display object to use for displaying
  */
 
-zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, idisp)/*, SWCompress()*/
+zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, bool unicode) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, idisp, unicode)/*, SWCompress()*/
 {
 	blockType = iblockType;
 	versebuf = 0;
@@ -76,17 +76,19 @@ char *zCom::getRawEntry() {
 		key = new VerseKey(this->key);
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
+	entrySize = size;        // support getEntrySize call
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ (++size) * FILTERPAD ];
+	versebuf = new char [ ++size * FILTERPAD * ((unicode) ? 9 : 1 ) ];
 	*versebuf = 0;
 
 	swgettext(key->Testament(), start, size, versebuf);
 
 	rawFilter(versebuf, size, key);
 
-	preptext(versebuf);
+	if (!unicode)
+		preptext(versebuf);
 
 	if (this->key != key) // free our key if we created a VerseKey
 		delete key;

@@ -28,8 +28,9 @@
  *	idisp	 - Display object to use for displaying
  */
 
-RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp) : RawVerse(ipath), SWCom(iname, idesc, idisp)
-{
+RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode)
+		: RawVerse(ipath),
+            SWCom(iname, idesc, idisp, unicode) {
 	versebuf = 0;
 }
 
@@ -70,17 +71,19 @@ char *RawCom::getRawEntry() {
 
 
 	findoffset(key->Testament(), key->Index(), &start, &size);
+	entrySize = size;        // support getEntrySize call
 
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ ++size * FILTERPAD ];
+	versebuf = new char [ ++size * FILTERPAD * ((unicode) ? 9 : 1 ) ];
 	*versebuf = 0;
 
 	gettext(key->Testament(), start, size, versebuf);
 
 	rawFilter(versebuf, size, key);
 
-	preptext(versebuf);
+     if (!unicode)
+		preptext(versebuf);
 
 	if (key != this->key)
 		delete key;

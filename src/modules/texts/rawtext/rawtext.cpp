@@ -37,13 +37,12 @@
  */
 
 RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode)
-		: SWText(iname, idesc, idisp),
+		: SWText(iname, idesc, idisp, unicode),
           RawVerse(ipath) {
           
 	versebuf = 0;
 	string fname;
 	fname = path;
-     this->unicode = unicode;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
 		fname += "/";
@@ -106,7 +105,7 @@ char *RawText::getRawEntry() {
 	entrySize = size;        // support getEntrySize call
 	if (versebuf)
 		delete [] versebuf;
-	versebuf = new char [ ++size * FILTERPAD * ((unicode) ? 9 : 1 )];
+	versebuf = new char [ ++size * FILTERPAD * ((unicode) ? 9 : 1 ) ];
 	*versebuf = 0;
 
 	gettext(key->Testament(), start, size, versebuf);

@@ -2,7 +2,7 @@
  *  rawcom.h   - code for class 'RawCom'- a module that reads raw commentary
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawcom.h,v 1.4 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: rawcom.h,v 1.5 2001/06/17 21:20:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,23 +28,21 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawCom:public RawVerse, public SWCom
-{
-  char *versebuf;
+class SWDLLEXPORT RawCom:public RawVerse, public SWCom {
+	char *versebuf;
 
 public:
   
     
-    RawCom (const char *ipath, const char *iname = 0, const char *idesc =
-	    0, SWDisplay * idisp = 0);
-    virtual ~ RawCom ();
-  virtual char *getRawEntry ();
+	RawCom (const char *ipath, const char *iname = 0, const char *idesc = 0,
+		SWDisplay * idisp = 0, bool unicode = false);
+     virtual ~ RawCom ();
+     virtual char *getRawEntry ();
 
-  virtual SWModule & operator += (int increment);
-  virtual SWModule & operator -= (int decrement)
-  {
-    return this->operator += (-decrement);
-  }
+     virtual SWModule & operator += (int increment);
+     virtual SWModule & operator -= (int decrement) {
+     	return this->operator += (-decrement);
+     }
 };
 
 

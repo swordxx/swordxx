@@ -88,6 +88,7 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key)
 				lastspace = (*from == ' ');
 			}
 		}
+		*to++ = 0;
 		*to = 0;
 	}
 	return 0;

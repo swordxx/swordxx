@@ -29,7 +29,7 @@
  *		idisp	- Display object to use for displaying
  */
 
-RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp) : RawStr(ipath), SWLD(iname, idesc, idisp)
+RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, bool unicode) : RawStr(ipath), SWLD(iname, idesc, idisp, unicode)
 {
 }
 
@@ -90,9 +90,10 @@ char RawLD::getEntry(long away)
 
 	*entrybuf = 0;
 	if (!(retval = findoffset(buf, &start, &size, away))) {
+		entrySize = size;        // support getEntrySize call
 		if (entrybuf)
 			delete [] entrybuf;
-		entrybuf = new char [ ++size * FILTERPAD ];
+		entrybuf = new char [ ++size * FILTERPAD * ((unicode) ? 9 : 1 ) ];
 		idxbuf   = new char [ size * FILTERPAD ];
 
 		gettext(start, size, idxbuf, entrybuf);
@@ -120,7 +121,7 @@ char RawLD::getEntry(long away)
  */
 
 char *RawLD::getRawEntry() {
-	if (!getEntry()) {
+	if (!getEntry() && !unicode) {
 		preptext(entrybuf);
 	}
 

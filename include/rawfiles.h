@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.6 2001/05/21 02:32:31 scribe Exp $
+ * $Id: rawfiles.h,v 1.7 2001/06/17 21:20:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,8 +39,8 @@ public:
   
     
     RawFiles (const char *ipath, const char *iname = 0, const char *idesc =
-	      0, SWDisplay * idisp = 0);
-    virtual ~ RawFiles ();
+	      0, SWDisplay * idisp = 0, bool unicode = false);
+    virtual ~RawFiles ();
   virtual char *getRawEntry ();
 
   // write interface ----------------------------
