@@ -53,6 +53,9 @@ char UTF8Cantillation::ProcessText(char *text, int maxlen, const SWKey *key)
 	    from++;
 	    *to++ = *from;
 	  }
+          else {
+                from++;
+          }
 	}
 	*to++ = 0;
 	*to = 0;
