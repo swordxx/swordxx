@@ -35,3 +35,7 @@ addld_SOURCES = addld.cpp
 emptyvss_SOURCES = emptyvss.cpp
 txt2sword_SOURCES = txt2sword.cpp
 addgb_SOURCES = addgb.cpp
+imp2gbs_SOURCES = imp2gbs.cpp
+imp2ld_SOURCES = imp2ld.cpp
+imp2vs_SOURCES = imp2vs.cpp
+thml2gbs_SOURCES = thml2gbs.cpp

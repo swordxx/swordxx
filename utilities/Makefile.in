@@ -123,6 +123,10 @@ addld_SOURCES = addld.cpp
 emptyvss_SOURCES = emptyvss.cpp
 txt2sword_SOURCES = txt2sword.cpp
 addgb_SOURCES = addgb.cpp
+imp2gbs_SOURCES = imp2gbs.cpp
+imp2ld_SOURCES = imp2ld.cpp
+imp2vs_SOURCES = imp2vs.cpp
+thml2gbs_SOURCES = thml2gbs.cpp
 subdir = utilities
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -180,18 +184,18 @@ emptyvss_OBJECTS = $(am_emptyvss_OBJECTS)
 emptyvss_LDADD = $(LDADD)
 emptyvss_DEPENDENCIES =
 emptyvss_LDFLAGS =
-imp2gbs_SOURCES = imp2gbs.c
-imp2gbs_OBJECTS = imp2gbs.$(OBJEXT)
+am_imp2gbs_OBJECTS = imp2gbs.$(OBJEXT)
+imp2gbs_OBJECTS = $(am_imp2gbs_OBJECTS)
 imp2gbs_LDADD = $(LDADD)
 imp2gbs_DEPENDENCIES =
 imp2gbs_LDFLAGS =
-imp2ld_SOURCES = imp2ld.c
-imp2ld_OBJECTS = imp2ld.$(OBJEXT)
+am_imp2ld_OBJECTS = imp2ld.$(OBJEXT)
+imp2ld_OBJECTS = $(am_imp2ld_OBJECTS)
 imp2ld_LDADD = $(LDADD)
 imp2ld_DEPENDENCIES =
 imp2ld_LDFLAGS =
-imp2vs_SOURCES = imp2vs.c
-imp2vs_OBJECTS = imp2vs.$(OBJEXT)
+am_imp2vs_OBJECTS = imp2vs.$(OBJEXT)
+imp2vs_OBJECTS = $(am_imp2vs_OBJECTS)
 imp2vs_LDADD = $(LDADD)
 imp2vs_DEPENDENCIES =
 imp2vs_LDFLAGS =
@@ -235,8 +239,8 @@ stepdump_OBJECTS = $(am_stepdump_OBJECTS)
 stepdump_LDADD = $(LDADD)
 stepdump_DEPENDENCIES =
 stepdump_LDFLAGS =
-thml2gbs_SOURCES = thml2gbs.c
-thml2gbs_OBJECTS = thml2gbs.$(OBJEXT)
+am_thml2gbs_OBJECTS = thml2gbs.$(OBJEXT)
+thml2gbs_OBJECTS = $(am_thml2gbs_OBJECTS)
 thml2gbs_LDADD = $(LDADD)
 thml2gbs_DEPENDENCIES =
 thml2gbs_LDFLAGS =
@@ -287,13 +291,14 @@ CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 CXXFLAGS = @CXXFLAGS@
 DIST_SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) \
 	$(cipherraw_SOURCES) $(ciphertest_SOURCES) \
-	$(ciphertest2_SOURCES) $(emptyvss_SOURCES) imp2gbs.c imp2ld.c \
-	imp2vs.c $(lexdump_SOURCES) $(mkfastmod_SOURCES) \
-	$(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) \
-	$(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) \
-	thml2gbs.c $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
+	$(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) \
+	$(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) \
+	$(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) \
+	$(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) \
+	$(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) \
+	$(vpl2mod_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) imp2gbs.c imp2ld.c imp2vs.c $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) thml2gbs.c $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
+SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
 
 all: all-am
 
@@ -341,13 +346,13 @@ emptyvss$(EXEEXT): $(emptyvss_OBJECTS) $(emptyvss_DEPENDENCIES)
 	$(CXXLINK) $(emptyvss_LDFLAGS) $(emptyvss_OBJECTS) $(emptyvss_LDADD) $(LIBS)
 imp2gbs$(EXEEXT): $(imp2gbs_OBJECTS) $(imp2gbs_DEPENDENCIES) 
 	@rm -f imp2gbs$(EXEEXT)
-	$(LINK) $(imp2gbs_LDFLAGS) $(imp2gbs_OBJECTS) $(imp2gbs_LDADD) $(LIBS)
+	$(CXXLINK) $(imp2gbs_LDFLAGS) $(imp2gbs_OBJECTS) $(imp2gbs_LDADD) $(LIBS)
 imp2ld$(EXEEXT): $(imp2ld_OBJECTS) $(imp2ld_DEPENDENCIES) 
 	@rm -f imp2ld$(EXEEXT)
-	$(LINK) $(imp2ld_LDFLAGS) $(imp2ld_OBJECTS) $(imp2ld_LDADD) $(LIBS)
+	$(CXXLINK) $(imp2ld_LDFLAGS) $(imp2ld_OBJECTS) $(imp2ld_LDADD) $(LIBS)
 imp2vs$(EXEEXT): $(imp2vs_OBJECTS) $(imp2vs_DEPENDENCIES) 
 	@rm -f imp2vs$(EXEEXT)
-	$(LINK) $(imp2vs_LDFLAGS) $(imp2vs_OBJECTS) $(imp2vs_LDADD) $(LIBS)
+	$(CXXLINK) $(imp2vs_LDFLAGS) $(imp2vs_OBJECTS) $(imp2vs_LDADD) $(LIBS)
 lexdump$(EXEEXT): $(lexdump_OBJECTS) $(lexdump_DEPENDENCIES) 
 	@rm -f lexdump$(EXEEXT)
 	$(LINK) $(lexdump_LDFLAGS) $(lexdump_OBJECTS) $(lexdump_LDADD) $(LIBS)
@@ -374,7 +379,7 @@ stepdump$(EXEEXT): $(stepdump_OBJECTS) $(stepdump_DEPENDENCIES)
 	$(CXXLINK) $(stepdump_LDFLAGS) $(stepdump_OBJECTS) $(stepdump_LDADD) $(LIBS)
 thml2gbs$(EXEEXT): $(thml2gbs_OBJECTS) $(thml2gbs_DEPENDENCIES) 
 	@rm -f thml2gbs$(EXEEXT)
-	$(LINK) $(thml2gbs_LDFLAGS) $(thml2gbs_OBJECTS) $(thml2gbs_LDADD) $(LIBS)
+	$(CXXLINK) $(thml2gbs_LDFLAGS) $(thml2gbs_OBJECTS) $(thml2gbs_LDADD) $(LIBS)
 txt2sword$(EXEEXT): $(txt2sword_OBJECTS) $(txt2sword_DEPENDENCIES) 
 	@rm -f txt2sword$(EXEEXT)
 	$(CXXLINK) $(txt2sword_LDFLAGS) $(txt2sword_OBJECTS) $(txt2sword_LDADD) $(LIBS)
