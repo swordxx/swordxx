@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.2 2003/02/20 07:25:20 scribe Exp $
+* $Id: swbuf.cpp,v 1.3 2003/02/24 05:26:15 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -50,6 +50,7 @@ SWBuf::SWBuf(const char *initVal) {
 		buf = (char *)calloc(allocSize, 1);
 		end = buf;
 	}
+	init();
 }
 
 
@@ -59,6 +60,7 @@ SWBuf::SWBuf(const SWBuf &other) {
 	memcpy(buf, other.buf, allocSize);
 	end = buf + allocSize - 1;
 	allocSize += 5;
+	init();
 }
 
 
@@ -67,8 +69,12 @@ SWBuf::SWBuf(char initVal) {
 	buf = (char *)calloc(allocSize, 1);
 	*buf = initVal;
 	end = buf+1;
+	init();
 }
 
+void SWBuf::init() {
+	fillByte = ' ';
+}
 
 /******************************************************************************
  * SWBuf Destructor - Cleans up instance of SWBuf
@@ -139,7 +145,20 @@ void SWBuf::append(char ch) {
 }
 
 
-SWBuf SWBuf::operator +(const SWBuf &other) {
+/******************************************************************************
+ * SWBuf::setSize - Size this buffer to a specific length
+ */
+
+void SWBuf::setSize(unsigned int len) {
+	assureSize(len+1);
+	if ((end - buf) < len)
+		memset(end, fillByte, len - (end-buf));
+	end = buf + len;
+	end[1] = 0;
+}
+
+
+SWBuf SWBuf::operator + (const SWBuf &other) const {
 	SWBuf retVal = buf;
 	retVal += other;
 	return retVal;

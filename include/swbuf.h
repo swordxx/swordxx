@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.2 2003/02/20 07:25:20 scribe Exp $
+* $Id: swbuf.h,v 1.3 2003/02/24 05:26:15 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -32,16 +32,21 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT SWBuf {
 	char *buf;
 	char *end;
+	char fillByte;
 	unsigned int allocSize;
 	static char *nullStr;
 	static char junkBuf[JUNKBUFSIZE];
 
 	void assureSize(unsigned int size);
+	void init();
 
 public:
 	SWBuf(const char *initVal = 0);
 	SWBuf(char initVal);
 	SWBuf(const SWBuf &other);
+
+	void setFillByte(char ch) { fillByte = ch; }
+	char getFillByte() { return fillByte; }
 
 	virtual ~SWBuf();
 
@@ -52,6 +57,7 @@ public:
 	unsigned int length() const { return end - buf; }
 	void set(const char *newVal);
 	void set(const SWBuf &newVal);
+	void setSize(unsigned int len);
 	void append(const char *str);
 	void append(const SWBuf &str);
 	void append(char ch);
@@ -64,8 +70,10 @@ public:
 	SWBuf &operator =(const SWBuf &other) { set(other); return *this; }
 	SWBuf &operator +=(const char *str) { append(str); return *this; }
 	SWBuf &operator +=(char ch) { append(ch); return *this; }
-	SWBuf operator +(const SWBuf &other);
-	SWBuf operator +(char ch) { return (*this) + SWBuf(ch); }
+	SWBuf &operator -=(unsigned int len) { setSize(length()-len); return *this; }
+	SWBuf &operator --() { operator -=(1); return *this; }
+	SWBuf operator +(const SWBuf &other) const;
+	SWBuf operator +(char ch) const { return (*this) + SWBuf(ch); }
 };
 
 
