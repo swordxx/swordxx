@@ -130,9 +130,6 @@ ThMLHTML::ThMLHTML() {
 	addTokenSubstitute("/scripRef", " </a>");
 	addTokenSubstitute("note place=\"foot\"", " <small>(");
 	addTokenSubstitute("/note", ")</small> ");
-	addTokenSubstitute("foreign lang=\"el\"", "<font face=\"SIL Galatia\">");
-	addTokenSubstitute("foreign lang=\"he\"", "<font face=\"SIL Ezra\">");
-	addTokenSubstitute("/foreign", "</font>");
 }
 
 
@@ -154,13 +151,18 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
         			pushString(buf, "</i></small>");
                         }
 		}
-		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+		else if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
 			pushString(buf, "<small><em>");
 			for (unsigned int i = 25; token[i] != '\"'; i++)
 				*(*buf)++ = token[i];
 			pushString(buf, "</em></small>");
 		}
-
+		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
+			pushString(buf, "<small><em>(");
+			for (unsigned int i = 25; token[i] != '\"'; i++)
+				*(*buf)++ = token[i];
+			pushString(buf, ")</em></small>");
+		}
 		else if (!strncmp(token, "scripRef", 8)) {
 			pushString(buf, "<a href=\"");
 			for (unsigned int i = 9; i < strlen(token); i++)
