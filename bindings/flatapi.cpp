@@ -250,7 +250,48 @@ const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	return (const char *)((module) ? module->RenderText() : 0);
 }
 
+const char *SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pvHeading) {
+	SWModule *module = (SWModule *)hmodule;
+	static SWBuf preverseHeading;
+	char buf[12];	
+	sprintf(buf, "%i", pvHeading);  
+	module->SetKey(key);	
+	module->RenderText();                 	
+	preverseHeading = module->getEntryAttributes()["Heading"]["Preverse"][buf].c_str();
+	return (preverseHeading.length()) ? (const char*)preverseHeading.c_str() : NULL;
+}
 
+const char *SWModule_getFootnoteType(SWHANDLE hmodule, const char *key, const char *note) {
+	SWModule *module = (SWModule *)hmodule;
+	static SWBuf type;
+	module->Error();
+	module->SetKey(key);
+	module->RenderText();	
+	type = module->getEntryAttributes()["Footnote"][note]["type"].c_str();
+	return (type) ? (const char*)type.c_str() : NULL;
+}
+
+const char *SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const char *note) {
+	SWModule *module = (SWModule *)hmodule;
+	static SWBuf body;
+	module->Error();
+	module->setKey(key);
+	module->RenderText();
+	body = module->getEntryAttributes()["Footnote"][note]["body"].c_str();
+	SWKey *keybuf = module->getKey();;
+	module->renderFilter(body, keybuf);
+	return (body) ? (const char*)body.c_str() : NULL;
+}
+
+const char *SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const char *note) {
+	SWModule *module = (SWModule *)hmodule;
+	static SWBuf refList;
+	module->Error();
+	module->SetKey(key);
+	module->RenderText();	
+	refList = module->getEntryAttributes()["Footnote"][note]["refList"].c_str();
+	return (refList) ? (const char*)refList.c_str() : NULL;
+}
 
 //-----------------------------------------------------------------
 // stringlist_iterator methods
