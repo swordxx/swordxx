@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.18 2003/07/13 16:00:46 mgruner Exp $
+* $Id: swbuf.h,v 1.19 2003/07/16 12:26:09 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -37,20 +37,33 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT SWBuf {
 	char *buf;
 	char *end;
+	char *endAlloc;
 	char fillByte;
 	unsigned int allocSize;
 	static char *nullStr;
 	static char junkBuf[JUNKBUFSIZE];
 
-	inline void assureSize(unsigned int newsize) {
-		if (newsize > allocSize) {
-			allocSize = newsize + 5;
+	inline void assureMore(unsigned int pastEnd) {
+		if (end+pastEnd>=endAlloc) {
+			int newsize = (end-buf)+pastEnd;
+			allocSize = newsize + 16;
 			long size = (end - buf);
 			buf = (char *)((buf) ? realloc(buf, allocSize) : calloc(allocSize, 1));
 			end = (buf + size);
+			endAlloc = buf + allocSize-1;
 		}
 	}
-	void init();
+	inline void assureSize(unsigned int newsize) {
+		if (newsize > allocSize) {
+			allocSize = newsize + 16;
+			long size = (end - buf);
+			buf = (char *)((buf) ? realloc(buf, allocSize) : calloc(allocSize, 1));
+			end = (buf + size);
+			endAlloc = buf + allocSize-1;
+		}
+	}
+
+	void init(unsigned int initSize);
 
 public:
 	/**
@@ -58,21 +71,21 @@ public:
  	* 		to a value from a const char *
  	*
  	*/
-	SWBuf(const char *initVal = 0);
+	SWBuf(const char *initVal = 0, unsigned int initSize = 0);
 
 	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
 	* 		to a value from a char
 	*
 	*/
-	SWBuf(char initVal);
+	SWBuf(char initVal, unsigned int initSize = 0);
 
 	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
 	* 		to a value from another SWBuf
 	*
 	*/
-	SWBuf(const SWBuf &other);
+	SWBuf(const SWBuf &other, unsigned int initSize = 0);
 
 	inline void setFillByte(char ch) { fillByte = ch; }
 	inline char getFillByte() { return fillByte; }
@@ -85,13 +98,14 @@ public:
 	/**
 	* @return a pointer to the buffer content (null-terminated string)
 	*/
-	inline const char *c_str() const{	return buf;	}
+	inline const char *c_str() const{ return buf; }
 
 	/**
 	*	@param pos The position of the requested character.
 	* @return The character at the specified position
 	*/
 	inline char &charAt(unsigned int pos) { return ((pos <= (unsigned int)(end - buf)) ? buf[pos] : nullStr[0]); }
+//	inline char &charAt(unsigned int pos) { return ((buf+pos)<=end) ? buf[pos] : nullStr[0]; }
 
 	/** 
 	* size() and length() return only the number of characters of the string.
@@ -147,9 +161,8 @@ public:
 	* @param ch Append this.
 	*/
 	inline void append(char ch) {
-		assureSize((end-buf) + 2);
-		*end = ch;
-		end++;
+		assureMore(1);
+		*end++ = ch;
 		*end = 0;
 	}
 

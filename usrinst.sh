@@ -5,7 +5,7 @@ OPTIONS="--disable-shared $OPTIONS"
 OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--sysconfdir=/etc $OPTIONS"
 #OPTIONS="--with-vcl $OPTIONS"
-OPTIONS="--enable-debug $OPTIONS"
+#OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 
 CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.10 2003/06/27 01:41:08 scribe Exp $
+* $Id: swbuf.cpp,v 1.11 2003/07/16 12:26:09 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -35,8 +35,8 @@ char SWBuf::junkBuf[JUNKBUFSIZE];
 * 		to a value from a const char *
 *
 */
-SWBuf::SWBuf(const char *initVal) {
-	init();
+SWBuf::SWBuf(const char *initVal, unsigned int initSize) {
+	init(initSize);
 	set(initVal);
 }
 
@@ -45,8 +45,8 @@ SWBuf::SWBuf(const char *initVal) {
 * 		to a value from another SWBuf
 *
 */
-SWBuf::SWBuf(const SWBuf &other) {
-	init();
+SWBuf::SWBuf(const SWBuf &other, unsigned int initSize) {
+	init(initSize);
 	set(other);
 }
 
@@ -55,20 +55,24 @@ SWBuf::SWBuf(const SWBuf &other) {
 * 		to a value from a char
 *
 */
-SWBuf::SWBuf(char initVal) {
-	init();
+SWBuf::SWBuf(char initVal, unsigned int initSize) {
+	init(initSize);
 
 	allocSize = 15;
 	buf = (char *)calloc(allocSize, 1);
 	*buf = initVal;
 	end = buf+1;
+	endAlloc = buf + allocSize-1;
 }
 
-void SWBuf::init() {
+void SWBuf::init(unsigned int initSize) {
 	fillByte = ' ';
 	allocSize = 0;
+	endAlloc = 0;
 	buf = 0;
 	end = 0;
+	if (initSize)
+		assureSize(initSize);
 }
 
 /******************************************************************************
@@ -115,7 +119,7 @@ void SWBuf::append(const char *str, int max) {
 	unsigned int len = strlen(str) + 1;
 	if ((max > -1) && (len > max + 1))
 		len = max + 1;
-	assureSize((end-buf)+len);
+	assureMore(len);
 	memcpy(end, str, len-1);
 	end += (len-1);
 	*end = 0;
@@ -143,7 +147,7 @@ void SWBuf::appendFormatted(const char *format, ...) {
 
 	va_start(argptr, format);
 	int len = vsprintf(junkBuf, format, argptr)+1;
-	assureSize((end-buf)+len);
+	assureMore(len);
 	end += vsprintf(end, format, argptr);
 	va_end(argptr);
 }

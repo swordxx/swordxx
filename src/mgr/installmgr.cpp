@@ -407,6 +407,9 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	SWBuf buffer;
 	bool aborted = false;
 	bool cipher = false;
+	DIR *dir;
+	struct dirent *ent;
+	SWBuf modFile;
 
 
 	if (is)
@@ -461,11 +464,8 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			}
 		}
 		else {	//copy all files in DataPath directory
-			DIR *dir;
-			struct dirent *ent;
 			ConfigEntMap::iterator entry;
 			SWBuf modDir;
-			SWBuf modFile;
 			SWBuf sourceOrig = sourceDir;
 
 			entry = module->second.find("DataPath");
@@ -527,37 +527,37 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 				}
 				sourceDir = sourceOrig;
 				sourceDir += "/mods.d/";
-				if (!aborted) {
-					if (dir = opendir(sourceDir.c_str())) {	// find and copy .conf file
-						rewinddir(dir);
-						while ((ent = readdir(dir))) {
-							if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-								modFile = sourceDir;
-								modFile += ent->d_name;
-								SWConfig *config = new SWConfig(modFile.c_str());
-								if (config->Sections.find(modName) != config->Sections.end()) {
-									delete config;
-									SWBuf targetFile = destMgr->configPath; //"./mods.d/";
-									targetFile += "/";
-									targetFile += ent->d_name;
-									FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
-									if (cipher) {
+			}
+		}
+		if (!aborted) {
+			if (dir = opendir(sourceDir.c_str())) {	// find and copy .conf file
+				rewinddir(dir);
+				while ((ent = readdir(dir))) {
+					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+						modFile = sourceDir;
+						modFile += ent->d_name;
+						SWConfig *config = new SWConfig(modFile.c_str());
+						if (config->Sections.find(modName) != config->Sections.end()) {
+							delete config;
+							SWBuf targetFile = destMgr->configPath; //"./mods.d/";
+							targetFile += "/";
+							targetFile += ent->d_name;
+							FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
+							if (cipher) {
 /*									
-										CipherForm->modName = modName;
-										CipherForm->confFile = targetFile;
-										if (CipherForm->ShowModal() == mrCancel) {
-											removeModule(modName);
-											aborted = true;
-										}
-*/											
-									}
+								CipherForm->modName = modName;
+								CipherForm->confFile = targetFile;
+								if (CipherForm->ShowModal() == mrCancel) {
+									removeModule(modName);
+									aborted = true;
 								}
-								else	delete config;
+*/											
 							}
 						}
-						closedir(dir);
+						else	delete config;
 					}
 				}
+				closedir(dir);
 			}
 		}
 		return (aborted) ? -1 : 0;

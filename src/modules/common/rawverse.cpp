@@ -140,8 +140,9 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
 void RawVerse::prepText(SWBuf &buf) {
 	unsigned int to, from; 
 	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
-	for (to = from = 0; buf[from]; from++) {
-		switch (buf[from]) {
+	char *rawBuf = buf.getRawData();
+	for (to = from = 0; rawBuf[from]; from++) {
+		switch (rawBuf[from]) {
 		case 10:
 			if (!realdata)
 				continue;
@@ -150,7 +151,7 @@ void RawVerse::prepText(SWBuf &buf) {
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				buf[to++] = 10;
+				rawBuf[to++] = 10;
 //				*to++ = nl[1];
 //				nlcnt = 0;
 			}
@@ -159,7 +160,7 @@ void RawVerse::prepText(SWBuf &buf) {
 			if (!realdata)
 				continue;
 //			*to++ = nl[0];
-			buf[to++] = 10;
+			rawBuf[to++] = 10;
 			space = 0;
 			cr = 1;
 			continue;
@@ -168,19 +169,19 @@ void RawVerse::prepText(SWBuf &buf) {
 		nlcnt = 0;
 		if (space) {
 			space = 0;
-			if (buf[from] != ' ') {
-				buf[to++] = ' ';
+			if (rawBuf[from] != ' ') {
+				rawBuf[to++] = ' ';
 				from--;
 				continue;
 			}
 		}
-		buf[to++] = buf[from];
+		rawBuf[to++] = rawBuf[from];
 	}
 	buf.setSize(to);
 
 	while (to > 1) {			// remove trailing excess
 		to--;
-		if ((buf[to] == 10) || (buf[to] == ' '))
+		if ((rawBuf[to] == 10) || (rawBuf[to] == ' '))
 			buf.setSize(to);
 		else break;
 	}
