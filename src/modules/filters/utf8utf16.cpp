@@ -72,6 +72,8 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			*((unsigned short *)(text.getRawData()+(text.size()-2))) = (unsigned short)uchar;
 		}
 	}
+	text.setSize(text.size()+2);
+	*((unsigned short *)(text.getRawData()+(text.size()-2))) = (unsigned short)0;
 	return 0;
 }
 
