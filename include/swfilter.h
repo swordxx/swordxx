@@ -75,7 +75,7 @@ public:
 	 * see also getOptionValues()
 	 * @param ival the new option valus
 	 */
-	virtual void setOptionValue (const char *ival) { }
+	virtual void setOptionValue (const char */*ival*/) { }
 
 	/** This is the main filter function
 	 * @param text The text to be filtered/converted
