@@ -2,6 +2,17 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+25-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Added Chris' ThMLVariants option filter to SWMgr
+
+21-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Added support to ListKey to test for inclusion in
+		set. eg. listKey.setText("mat 2:2") will set
+		listKey.Error() to true if Matthew 2:2 is not
+		in the listkey set.  listKey will also be set
+		to the correct subKey and position if it IS
+		in the set.
+
 09-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Updated ICU headers and Thai transliterator per
 		Steven Loomis' recommendations.

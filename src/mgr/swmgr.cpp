@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.82 2002/11/22 04:46:03 scribe Exp $
+ * $Id: swmgr.cpp,v 1.83 2002/11/25 22:12:13 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -54,6 +54,7 @@
 #include <thmlfootnotes.h>
 #include <thmlheadings.h>
 #include <thmlmorph.h>
+#include <thmlvariants.h>
 #include <thmllemma.h>
 #include <thmlscripref.h>
 #include <cipherfil.h>
@@ -106,6 +107,10 @@ void SWMgr::init() {
 	cipherFilters.clear();
 	optionFilters.clear();
 	cleanupFilters.clear();
+
+	tmpFilter = new ThMLVariants();
+	optionFilters.insert(FilterMap::value_type("ThMLVariants", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GBFStrongs();
 	optionFilters.insert(FilterMap::value_type("GBFStrongs", tmpFilter));
