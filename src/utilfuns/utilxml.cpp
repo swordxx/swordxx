@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.cpp   - implementaion of utility classes to handle XML processing
  *
- * $Id: utilxml.cpp,v 1.14 2004/01/16 03:42:42 scribe Exp $
+ * $Id: utilxml.cpp,v 1.15 2004/01/24 18:47:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,6 +25,7 @@
 
 SWORD_NAMESPACE_START
 
+const char *XMLTag::nullstr = "";
 void XMLTag::parse() const {
 	int i;
 	int start;
