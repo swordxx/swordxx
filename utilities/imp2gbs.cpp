@@ -150,7 +150,6 @@ int main(int argc, char **argv) {
   
   //DEBUG  printTree(root, treeKey);
   
-  delete treeKey;
   delete book;
   delete [] keybuffer;
   delete [] linebuffer;
