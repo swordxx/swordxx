@@ -8,6 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <thmlheadings.h>
+#include <utilxml.h>
+
+#include <iostream>
+
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
@@ -59,28 +63,38 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strnicmp(token, "div class=\"sechead\"", 19)) {
-					hide = true;
-					continue;
-				}
-				
-				if (!strnicmp(token, "div class=\"title\"", 17)) {
-					hide = true;
-					continue;
-				}
-				else if (hide && !strnicmp(token, "/div", 4)) {
-					hide = false;
-					continue;
+
+				XMLTag tag(token);
+
+				if (!stricmp(tag.getName(), "div")) { //we only want a div tag
+					//std::cout << tag.toString() << " " << tag.isEndTag() << std::endl;
+
+					if (tag.getAttribute("class") && !stricmp(tag.getAttribute("class"), "sechead")) {
+						hide = true;
+						continue;
+					}
+
+					if (tag.getAttribute("class") && !stricmp(tag.getAttribute("class"), "title")) {
+						hide = true;
+						continue;
+					}
+
+					if (hide && tag.isEndTag()) {
+						hide = false;
+						continue;
+					}
+
 				}
 
 				// if not a heading token, keep token in text
 				if (!hide) {
 					text += '<';
-					text.append(token);
+					text += token;
 					text += '>';
 				}
 				continue;
 			}
+
 			if (intoken) { //copy token
 				token += *from;
 			}
