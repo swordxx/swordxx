@@ -6,7 +6,7 @@ includedir=@includedir@
 
 Name: Sword
 Description: Biblical Text Engine
-Version: 1.5.99
+Version: @VERSION@
 Libs: -L${libdir} -lsword
 Cflags: -I${includedir}/sword
 
