@@ -2,7 +2,7 @@
  *  swdisprtfchap.h	- definition of class SWDispRTFChap, an SWDisplay used to
  *				display an entire chapter in Rich Text Format
  *
- * $Id: swdisprtfchap.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swdisprtfchap.h,v 1.3 2001/11/08 13:20:24 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,6 +42,8 @@ protected:
   bool FCurVersePos;
   bool FMarkCurrentVerse;
   bool FAutoPosition;
+  
+  char platformID;
 
   virtual void __fastcall Loaded (void);
 public:
