@@ -12,14 +12,14 @@ class multimapwithdefault : public std::multimap<Key, T, Compare> {
 public:
 	typedef std::pair<const Key, T> value_type;
 	T& getWithDefault(const Key& k, const T& defaultValue) {
-		if (find(k) == end()) {
+		if (find(k) == this->end()) {
 			insert(value_type(k, defaultValue));
 		}
 		return (*(find(k))).second;
 	}
 
 	T& operator[](const Key& k) {
-		if (find(k) == end()) {
+		if (find(k) == this->end()) {
 			insert(value_type(k, T()));
 		}
 		return (*(find(k))).second;
