@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.4 2004/07/17 12:20:50 scribe Exp $
+* $Id: url.cpp,v 1.5 2004/07/17 16:27:17 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -19,9 +19,13 @@
 *
 */
 
-#include <stdio.h>
+//Sword includes
 #include <url.h>
 #include <swlog.h>
+
+//system includes
+#include <map>
+#include <stdio.h>
 
 SWORD_NAMESPACE_START
 
@@ -35,7 +39,7 @@ URL::URL(const char* url)
 		path("")
 {
 	if (url && strlen(url)) {
-		url = url;
+		this->url = url;
 		parse();
 	}
 }
@@ -62,7 +66,9 @@ const URL::ParameterMap &URL::getParameters() const {
  */
 const char* URL::getParamterValue(const char* name) const {
 	ParameterMap::const_iterator it = parameterMap.find(name);
-	return (it != parameterMap.end()) ? it->second.c_str() : 0;
+	
+	static SWBuf emptyStr("");
+	return (it != parameterMap.end()) ? it->second.c_str() : emptyStr.c_str();
 }
 
 
@@ -101,10 +107,13 @@ void URL::parse () {
 	 	
 		pos = end - urlPtr;
 	 }
+	 else { //no slash found means there's only the host in the url
+	 	return; //WARNING: return already here!
+	 }
 	 
-	 //4. Get the path, e.g. /dir/script.jsp, this is the part up to the first question mark, if it exisrs. Otherwise up to the end.
+	 //4. Get the path, e.g. /dir/script.jsp, this is the part up to the first question mark, if it exists. Otherwise up to the end.
 	 char* start = end;
-	 end = strchr(start, '?');
+	 end = start ? strchr(start, '?') : 0;
 	 if (end) {
 	 	path.append(start, end-start);
 		
@@ -119,14 +128,13 @@ void URL::parse () {
 	SWBuf paramName;
 	SWBuf paramValue;
 			
-	end = strchr(start, '?') ? strchr(start, '?')+1 :0;
+	end = (start && strchr(start, '?')) ? strchr(start, '?')+1 :0;
 	while (end) {
 		paramName = "";
 		paramValue = "";
 		
 		//search for the equal sign to find the value part
-		const char* valueStart = strchr(end, '=');
-		
+		const char* valueStart = strchr(end, '=');		
 		if (valueStart) {
 			const char* valueEnd = strstr(valueStart, "&amp;") ? strstr(valueStart, "&amp;") : strstr(valueStart, "&"); //try to find a new paramter part
 			
@@ -154,17 +162,17 @@ void URL::parse () {
 
 const char *encode(const char *urlText) {
 	static SWBuf url;
-	url= urlText;
-	typedef map<unsigned char,SWBuf> DataMap;
+	url = urlText;
+	typedef std::map< unsigned char, SWBuf > DataMap;
     	DataMap m;
 	for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
-			if ( (c>='A' && c<='Z') || (c>='a' && c<='z') || (c>='0' && c<='9') || strchr("-_.!~*'()", c)) {
+			if ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || strchr("-_.!~*'()", c)) {
 				continue; //we don't need an encoding for this char
 			}
 
 			char s[5];
 			sprintf(s, "%-.2X", c); //left-aligned, 2 digits, uppercase hex
-			m[c] = SWBuf("%") + s; //encoded char is "% + 2 digit hex code of char"
+			m[c] = SWBuf("%")+s; //encoded char is "% + 2 digit hex code of char"
 	}
 	//the special encodings for certain chars
 	m[' '] = '+';
