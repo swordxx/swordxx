@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <latin1utf8.h>
+#include <swmodule.h>
 
 Latin1UTF8::Latin1UTF8() {
 }
@@ -17,8 +18,11 @@ char Latin1UTF8::ProcessText(char *text, int maxlen, const SWKey *key)
 {
     unsigned char *to, *from;
 	int len;
-	
-	len = strlen(text) + 1;						// shift string to right of buffer
+
+        len = strlen(text) + 1;
+	if (len == maxlen + 1)
+        	maxlen = (maxlen + 1) * FILTERPAD;
+        // shift string to right of buffer
 	if (len < maxlen) {
 	  memmove(&text[maxlen - len], text, len);
 	  from = (unsigned char*)&text[maxlen - len];
