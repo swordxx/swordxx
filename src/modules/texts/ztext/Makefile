@@ -6,6 +6,6 @@ targets := ${root}/lib/libsword.a
 clean-targets := none
 include ${root}/Makefile.cfg
 
-cpp += 
+cpp += ztext.cpp
 
 include ${root}/Makefile.post
