@@ -35,12 +35,12 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 
 void *FTPOpenSession();
 void FTPCloseSession(void *session);
-char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, void (*status_callback)(double dltotal, double dlnow)=0);
+char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool passive = true, void (*status_callback)(double dltotal, double dlnow)=0);
 
 // probably change to not expose struct ftpparse.  We probably need our
 // own FTPFile class or something that contains things like file name,
 // size, type (dir, file, special).  Then change to vector of this class
 // instead of ftpparse
-vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl);
+vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
 
 #endif

@@ -49,7 +49,7 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 }
 
 
-char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, void (*status_callback)(double dltotal, double dlnow)) {
+char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool passive, void (*status_callback)(double dltotal, double dlnow)) {
 	struct FtpFile ftpfile = {dest, NULL};
 	char retVal = 0;
 
@@ -61,6 +61,9 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, void 
 	
 		curl_easy_setopt(curl, CURLOPT_USERPWD, "ftp:installmgr@user.com");
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
+		if (!passive)
+			curl_easy_setopt(curl, CURLOPT_FTPPORT, "-");
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
 		curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, status_callback);
 		curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, my_fprogress);
 		/* Set a pointer to our struct to pass to the callback */
@@ -83,11 +86,11 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, void 
 
 
 
-vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl) {
+vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive) {
 
 	vector<struct ftpparse> dirList;
 	
-	if (!FTPURLGetFile(session, "dirlist", dirurl)) {
+	if (!FTPURLGetFile(session, "dirlist", dirurl, passive)) {
 		int fd = open("dirlist", O_RDONLY|O_BINARY);
 		long size = lseek(fd, 0, SEEK_END);
 		lseek(fd, 0, SEEK_SET);
