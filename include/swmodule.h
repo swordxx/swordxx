@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.50 2002/08/14 09:23:17 scribe Exp $
+* $Id: swmodule.h,v 1.51 2002/08/28 13:02:57 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -216,7 +216,7 @@ protected:
 	 *
 	 * RET:	pointer to keytext
 	 */
-	const char *KeyText(const char *ikeytext = 0) {
+	virtual const char *KeyText(const char *ikeytext = 0) {
 		if (ikeytext) setKey(ikeytext);
 		return *getKey();
 	}

@@ -136,10 +136,9 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = '1';
 					*to++ = ' ';
 					*to++ = '\\';
-					*to++ = 'f';
 					*to++ = 's';
-					*to++ = '1';
-					*to++ = '7';
+					*to++ = 'u';
+					*to++ = 'b';
 					*to++ = ' ';
 					*to++ = '(';
 					continue;
@@ -177,8 +176,8 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					continue;
 				case 'N':
-				        *to++ = '{';
-				        if (!strnicmp(token+2, "Symbol", 6)) {
+					   *to++ = '{';
+					   if (!strnicmp(token+2, "Symbol", 6)) {
 					  *to++ = '\\';
 					  *to++ = 'f';
 					  *to++ = '7';
@@ -189,8 +188,8 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = '}';
 					continue;
 				case 'S':
-				        *to++ = '{';
-				        *to++ = '\\';
+					   *to++ = '{';
+					   *to++ = '\\';
 					*to++ = 's';
 					*to++ = 'u';
 					*to++ = 'p';
@@ -199,10 +198,10 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					continue;
 				case 's':
-       				        *to++ = '}';
+						   *to++ = '}';
 					continue;
 				case 'R':
-				        *to++ = '{';
+					   *to++ = '{';
 					*to++ = '\\';
 					*to++ = 'c';
 					*to++ = 'f';
@@ -210,7 +209,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					continue;
 				case 'r':
-				        *to++ = '}';
+					   *to++ = '}';
 					continue;
 				}
 				break;
@@ -247,22 +246,23 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 			    case 'T':               // Book title begin
 			      *to++ = '{';
 			      *to++ = '\\';
-			      *to++ = 'f';
-			      *to++ = 's';
-			      *to++ = '2';
-			      *to++ = '2';
-			      *to++ = ' ';
-			      continue;
+				 *to++ = 'l';
+				 *to++ = 'a';
+				 *to++ = 'r';
+				 *to++ = 'g';
+				 *to++ = 'e';
+				 *to++ = ' ';
+				 continue;
 			    case 't':
-			      *to++ = '}';
-			      continue;
+				 *to++ = '}';
+				 continue;
 			    case 'S':
-			      *to++ = '\\';
-			      *to++ = 'p';
-			      *to++ = 'a';
-			      *to++ = 'r';
-			      *to++ = ' ';
-			      *to++ = '{';
+				 *to++ = '\\';
+				 *to++ = 'p';
+				 *to++ = 'a';
+				 *to++ = 'r';
+				 *to++ = ' ';
+				 *to++ = '{';
 			      *to++ = '\\';
 			      *to++ = 'i';
 			      *to++ = '1';
