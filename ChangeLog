@@ -2,6 +2,12 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+19-Dec-2002	Joachim Ansorg <joachim@ansorgs.de>
+	Removed old russian book locale file, because it wasn't working in
+Linux AND Windows
+	Added book locale files (cp1251 and koi8-r) submitted by Pavlo
+Bohmat bohm@ukr.net to support Windows and Linux.
+
 30-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Added Finnish locale files contributed by Tero
 		Favorin <tero at favorin dot com>
