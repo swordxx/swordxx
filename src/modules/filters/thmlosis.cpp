@@ -29,12 +29,12 @@ ThMLOSIS::~ThMLOSIS() {
 
 
 char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	/*
-
-	const char *from;
+// 	const char *from;
+	
 	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
+	
 	int len;
 	bool lastspace = false;
 	int word = 1;
@@ -43,34 +43,40 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	char wordstr[5];
 	char *valto;
 	char *ch;
-	char *textStart, *textEnd;
-	char *wordStart, *wordEnd;
-	bool newText = false;
-	bool newWord = false;
-	SWBuf tmp;
+	
+	const char*wordStart = text.c_str();
+	const char* wordEnd;
+	
+	const char *textStart;
+	const char *textEnd;
+		
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
 	bool handled = false;
+	bool newText = false;
+	bool newWord = false;
+	
+// 	SWBuf tmp;
 	SWBuf divEnd = "";
 
-
-	wordStart = text;
-
 	SWBuf orig = text;
-	from = orig.c_str();
+	const char* from = orig.c_str();
 
-	for (text = ""; *from; from++) {
-
-		if (*from == '<') {
+	text = "";
+	for (const char* from = orig.c_str(); *from; ++from) {
+		if (*from == '<') { //start of new token detected
 			intoken = true;
 			tokpos = 0;
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
 			textEnd = from-1;
-			wordEnd = to;
+			wordEnd = text.c_str() + text.length();//not good, instead of wordEnd = to!
+
+// 			wordEnd = to;
 			continue;
 		}
+		
 		if (*from == '>') {	// process tokens
 			intoken = false;
 			keepToken = false;
@@ -78,9 +84,10 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			newWord = true;
 			handled = false;
 
-			while (wordStart < (text+maxlen)) {
+// 			while (wordStart < (text+maxlen)) {
+			while (wordStart < (text.c_str() + text.length())) { //hack
 //				if (strchr(" ,;.?!()'\"", *wordStart))
-				if (strchr(";,: .?!()'\"", *wordStart))
+				if (strchr(";,: .?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
 					wordStart++;
 				else break;
 			}
@@ -92,14 +99,16 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 			// section titles
 			if (!strcmp(token, "div class=\"sechead\"")) {
-				pushString(&to, "<title>");
+// 				pushString(&to, "<title>");
+				text.append("<title>");
 				divEnd = "</title>";
 				newText = true;
 				lastspace = false;
 				handled = true;
 			}
 			else	if (!strcmp(token, "/div")) {
-				pushString(&to, divEnd.c_str());
+				//pushString(&to, divEnd.c_str());
+				text.append(divEnd);
 				lastspace = false;
 				handled = true;
 			}
@@ -111,9 +120,11 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 				handled = true;
 			}
 			else	if (!strncmp(token, "/scripRef", 9)) {
+				SWBuf tmp;
 				tmp = "";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
-				pushString(&to, convertToOSIS(tmp.c_str(), key));
+				//pushString(&to, convertToOSIS(tmp.c_str(), key));
+				text.append(convertToOSIS(tmp.c_str(), key));
 				suspendTextPassThru = false;
 				handled = true;
 			}
@@ -138,40 +149,46 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 //                        	// otherwise, italics are just italics
 //-- end italics for transchange
 	        		if (!stricmp(token, "i")) {
-		        		pushString(&to, "<hi type=\"i\">");
+// 		        		pushString(&to, "<hi type=\"i\">");
+					text.append("<hi type=\"i\">");
 			        	newText = true;
-				        lastspace = false;
+				     lastspace = false;
         				handled = true;
 	        		}
 		        	else	if (!stricmp(token, "/i")) {
-			        	pushString(&to, "</hi>");
+// 			        	pushString(&to, "</hi>");
+					text.append("</hi>");
         				lastspace = false;
 	        			handled = true;
 		        	}
 //                        }
 
 	        	if (!strcmp(token, "b")) {
-		        	pushString(&to, "<hi type=\"b\">");
-			       	newText = true;
-			        lastspace = false;
+// 		        	pushString(&to, "<hi type=\"b\">");
+				text.append("<hi type=\"b\">");
+				newText = true;
+				lastspace = false;
         			handled = true;
 	        	}
-		        else	if (!strcmp(token, "/b")) {
-			       	pushString(&to, "</hi>");
+			else if (!strcmp(token, "/b")) {
+// 			     pushString(&to, "</hi>");
+				text.append("</hi>");
         			lastspace = false;
 	        		handled = true;
-                        }
+			}
 
 			// Footnote
 			if (!strcmp(token, "note")) {
-		        	pushString(&to, "<note>");
+		        	//pushString(&to, "<note>");
+				text.append("<note>");
 				newText = true;
-                                lastspace = false;
+				lastspace = false;
 				handled = true;
 			}
 			else	if (!strcmp(token, "/note")) {
-				pushString(&to, "</note>");
-                                lastspace = false;
+				// pushString(&to, "</note>");
+				text.append("</note>");
+				lastspace = false;
 				handled = true;
 			}
 
@@ -182,9 +199,17 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 					continue;
 //					return false;
 
-				pushString(&to, "<figure src=\"");
-				const char *c;
-				for (c = src;((*c) && (*c != '"')); c++);
+				//pushString(&to, "<figure src=\"");
+				text.append("<figure src=\"");
+
+				const char* end = strchr(src+2, '"'); //start search behind src="
+				
+				if (end) { //append the path
+					text.append(src+2, end - (src+2));
+				}
+								
+// 				const char *c;
+// 				for (c = src;((*c) && (*c != '"')); c++);
 
 // uncomment for SWORD absolute path logic
 //				if (*(c+1) == '/') {
@@ -195,16 +220,17 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 //				}
 //				end of uncomment for asolute path logic 
 
-				for (c++;((*c) && (*c != '"')); c++)
-					*to++ = *c;
+// 				for (c++;((*c) && (*c != '"')); c++)
+// 					*to++ = *c;
 
-				pushString(&to, "\" />");
+				//pushString(&to, "\" />");
+				text.append("\" />");
 				handled = true;
 			}
 
 			// Strongs numbers
 			else	if (!strnicmp(token, "sync type=\"Strongs\" ", 20)) {	// Strongs
-				if (module->isProcessEntryAttributes()) {
+/*				if (module->isProcessEntryAttributes()) {
 					valto = val;
 					for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
 						*valto++ = token[i];
@@ -227,13 +253,13 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 						sprintf(wordstr, "%03d", word-1);
 						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 					}
-				}
+				}*/
 				handled = true;
 			}
 
 			// Morphology
 			else	if (!strncmp(token, "sync type=\"morph\"", 17)) {
-				for (ch = token+17; *ch; ch++) {
+/*				for (ch = token+17; *ch; ch++) {
 					if (!strncmp(ch, "class=\"", 7)) {
 						valto = val;
 						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
@@ -267,7 +293,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 						memcpy(wordStart+3, buf, strlen(buf));
 						to+=strlen(buf);
 					}
-				}
+				}*/
 				handled = true;
 			}
 
@@ -277,19 +303,27 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 //					exit(-1);
 				}
 				if (strchr(" ,:;.?!()'\"", from[1])) {
-					if (lastspace)
-						to--;
+					if (lastspace) {
+						text--;//to--;
+					}
 				}
-				if (newText) {textStart = from+1; newText = false; }
+				if (newText) {
+					textStart = from+1; 
+					newText = false; 
+				}
 //				if (newWord) {wordStart = to; newWord = false; }
-				continue;
+					continue;
 			}
+			
 			// if not a strongs token, keep token in text
-			*to++ = '<';
-			for (char *tok = token; *tok; tok++)
-				*to++ = *tok;
-			*to++ = '>';
-			if (newText) {textStart = to; newWord = false; }
+			text.append('<');
+			text.append(token);
+			text.append('>');
+			
+			if (newText) {
+				textStart = text.c_str()+text.length(); 
+				newWord = false; 
+			}
 //			if (newWord) {wordStart = to; newWord = false; }
 			continue;
 		}
@@ -300,9 +334,15 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			}
 		}
 		else	{
-			if (newWord && (*from != ' ')) {wordStart = to; newWord = false; memset(to, 0, 10); }
+			if (newWord && (*from != ' ')) {
+				// wordStart = to; 
+				wordStart = text.c_str()+text.length();
+				newWord = false; 
+// 				memset(to, 0, 10); 
+			}
 			if (!suspendTextPassThru) {
-				*to++ = *from;
+// 				*to++ = *from;
+				text.append(*from);
 				lastspace = (*from == ' ');
 			}
 		}
@@ -310,21 +350,33 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		char ref[254];
-		if (vkey->Verse())
-			sprintf(ref, "<verse osisID=\"%s\">", vkey->getOSISRef());
-		else *ref = 0;
+// 		char ref[254];
+		SWBuf ref;
+		if (vkey->Verse()) {
+			ref.setFormatted("<verse osisID=\"%s\">", vkey->getOSISRef());
+		}
+		else {
+// 			*ref = 0;
+			ref = "";
+		}
+			
 		if (*ref) {
-			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
+/*			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
 			memcpy(text, ref, strlen(ref));
-			to+=strlen(ref);
+			to+=strlen(ref);*/
+			
+			text = ref + text;
+			
 			if (vkey->Verse()) {
 				VerseKey tmp;
 				tmp = *vkey;
 				tmp.AutoNormalize(0);
 				tmp.Headings(1);
-				sprintf(ref, "</verse>");
-				pushString(&to, ref);
+				
+// 				sprintf(ref, "</verse>");
+// 				pushString(&to, ref);
+				text.append("</verse>");
+				
 				tmp = MAXVERSE;
 				if (*vkey == tmp) {
 					tmp.Verse(0);
@@ -346,9 +398,10 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 //			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		}
 	}
-	*to++ = 0;
-	*to = 0;
-*/
+	
+// 	*to++ = 0;
+// 	*to = 0;
+
 	return 0;
 }
 

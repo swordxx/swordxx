@@ -63,7 +63,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	SWBuf buf;
 		
 	text = "";
-	for (const char* from = orig.c_str(); *from; from++) {
+	for (const char* from = orig.c_str(); *from; ++from) {
 		if (*from == '<') { //start of new token detected
 			intoken = true;
 			tokpos = 0;
@@ -83,7 +83,6 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			newWord = true;
 			handled = false;
 
-			
 			while (wordStart < (text.c_str() + text.length())) { //hack
 				if (strchr(";, .:?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
 					wordStart++;
@@ -343,7 +342,8 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 		}
 	}
 
-	if ( VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key) ) {
+	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+	if ( vkey ) {
 		SWBuf ref = "";
 		//char ref[254];
 		if (vkey->Verse()) {
