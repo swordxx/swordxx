@@ -14,7 +14,7 @@
  *	idisp	 - Display object to use for displaying
  */
 
-SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, "Generic Book", enc, dir, mark, ilang) {
+SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, "Generic Books", enc, dir, mark, ilang) {
 }
 
 

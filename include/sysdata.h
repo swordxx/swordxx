@@ -4,7 +4,7 @@
  * __xx is ok: it doesn't pollute the POSIX namespace. Use these in the
  * header files exported to user space
  */
-#include "config.h"
+//#include "config.h"
 
 typedef signed char __s8;
 typedef unsigned char __u8;
