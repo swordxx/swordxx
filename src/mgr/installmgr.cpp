@@ -372,65 +372,79 @@ SWMgr *InstallSource::getMgr() {
 }
 
 
+
+int InstallMgr::FTPCopyDirectoryRecurse(void *session, const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
+	int i;
+
+	SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/"; //dont forget the final slash
+	fprintf(stderr, "FTPCopy: getting dir %s\n", url.c_str());
+	vector<struct ftpparse> dirList = FTPURLGetDir(session, url.c_str());
+
+	if (!dirList.size()) {
+		fprintf(stderr, "FTPCopy: failed to read dir %s\n", url.c_str());
+		return -1;
+	}
+				
+	long totalBytes = 0;
+	for (i = 0; i < dirList.size(); i++)
+		totalBytes += dirList[i].size;
+	long completedBytes = 0;
+	for (i = 0; i < dirList.size(); i++) {
+		struct ftpparse &dirEntry = dirList[i];
+		if (dirEntry.flagtrycwd != 1) {
+			SWBuf buffer = (SWBuf)dest + "/" + (dirEntry.name);
+			if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
+				SWBuf buffer2 = "Downloading (";
+				buffer2.appendFormatted("%d", i+1);
+				buffer2 += " of ";
+				buffer2.appendFormatted("%d", dirList.size());
+				buffer2 += "): ";
+				buffer2 += (dirEntry.name);
+				preDownloadStatus(totalBytes, completedBytes, buffer2.c_str());
+				FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
+				SWTRY {
+					SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/" + dirEntry.name; //dont forget the final slash
+					if (FTPURLGetFile(session, buffer.c_str(), url.c_str())) {
+						fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
+						return -2;
+					}
+					completedBytes += dirEntry.size;
+				}
+				SWCATCH (...) {}
+				if (terminate)
+					break;
+			}
+		}
+	}
+}
+
+
 int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
+	int retVal = 0;
 	terminate = false;
 	long i;
 	void *session = FTPOpenSession(is->source);
 #ifdef CURLAVAILABLE
-	SWBuf urlprefix = (SWBuf)"ftp://" + is->source;
+	SWBuf urlPrefix = (SWBuf)"ftp://" + is->source;
 #else
-	SWBuf urlprefix = "";
+	SWBuf urlPrefix = "";
 #endif
-	SWBuf url = urlprefix + is->directory.c_str() + "/"; //dont forget the final slash
+	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
 	if (FTPURLGetFile(session, "dirlist", url.c_str())) {
 		fprintf(stderr, "FTPCopy: failed to get dir %s\n", url.c_str());
 		return -1;
 	}
 	if (dirTransfer) {
-		SWBuf url = urlprefix + is->directory.c_str() + "/" + src + "/"; //dont forget the final slash
-		fprintf(stderr, "FTPCopy: getting dir %s\n", url.c_str());
-		vector<struct ftpparse> dirList = FTPURLGetDir(session, url.c_str());
+		SWBuf dir = (SWBuf)is->directory.c_str() + "/" + src; //dont forget the final slash
 
-		if (!dirList.size()) {
-			fprintf(stderr, "FTPCopy: failed to read dir %s\n", url.c_str());
-			return -1;
-		}
-					
-		long totalBytes = 0;
-		for (i = 0; i < dirList.size(); i++)
-			totalBytes += dirList[i].size;
-		long completedBytes = 0;
-		for (i = 0; i < dirList.size(); i++) {
-			if (dirList[i].flagtrycwd != 1) {
-				SWBuf buffer = (SWBuf)dest + "/" + (dirList[i].name);
-				if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
-					SWBuf buffer2 = "Downloading (";
-					buffer2.appendFormatted("%d", i+1);
-					buffer2 += " of ";
-					buffer2.appendFormatted("%d", dirList.size());
-					buffer2 += "): ";
-					buffer2 += (dirList[i].name);
-					preDownloadStatus(totalBytes, completedBytes, buffer2.c_str());
-					FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
-					SWTRY {
-						SWBuf url = urlprefix + is->directory.c_str() + "/" + src + "/" + dirList[i].name; //dont forget the final slash
-						if (FTPURLGetFile(session, buffer.c_str(), url.c_str())) {
-							fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
-							return -2;
-						}
-						completedBytes += dirList[i].size;
-					}
-					SWCATCH (...) {}
-					if (terminate)
-						break;
-				}
-			}
-		}
+		retVal = FTPCopyDirectoryRecurse(session, urlPrefix, dir, dest, suffix);
+
+
 	}
 	else {
 //		Synchronize((TThreadMethod)&PreDownload2);
 		SWTRY {
-			SWBuf url = urlprefix + is->directory.c_str() + "/" + src; //dont forget the final slash
+			SWBuf url = urlPrefix + is->directory.c_str() + "/" + src; //dont forget the final slash
 			if (FTPURLGetFile(session, dest, url.c_str())) {
 				fprintf(stderr, "FTPCopy: failed to get file %s", url.c_str());
 				return -1;
@@ -444,7 +458,7 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 		FTPCloseSession(session);
 	}
 	SWCATCH (...) {}
-	return 0;
+	return retVal;
 }
 
 

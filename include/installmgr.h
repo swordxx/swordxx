@@ -55,6 +55,7 @@ typedef std::map < SWBuf, InstallSource * >InstallSourceMap;
 class InstallMgr {
 
 	void *nControl;
+	int FTPCopyDirectoryRecurse(void *session, const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 protected:
 	char *privatePath;
 	// probably change to group these ftp functions into some kind of FTPSession
