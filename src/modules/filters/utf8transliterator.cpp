@@ -4,7 +4,6 @@
  *			 ICU-supported scripts.
  */
 
-#ifdef ICU
 
 #include <stdlib.h>
 #include <string.h>
@@ -398,4 +397,3 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key)
 	}
 	return 0;
 }
-#endif

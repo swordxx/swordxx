@@ -40,7 +40,9 @@ cpp += scsuutf8.cpp
 
 cpp += thmlolb.cpp
 
+ifeq ($(icu),yes)
 cpp += utf8transliterator.cpp
+endif
 
 cpp += utf8cantillation.cpp
 cpp += utf8hebrewpoints.cpp
