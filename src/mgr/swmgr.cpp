@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.79 2002/08/09 05:53:48 scribe Exp $
+ * $Id: swmgr.cpp,v 1.80 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -67,19 +67,23 @@
 #include <utf8hebrewpoints.h>
 #include <greeklexattribs.h>
 #include <swfiltermgr.h>
-
+#ifndef EXCLUDEZLIB
+#include "zipcomprs.h"
+#endif
 
 
 #ifdef _ICU_
 #include <utf8transliterator.h>
+#endif
+
+SWORD_NAMESPACE_START
+
+#ifdef _ICU_
 bool SWMgr::isICU = true;
 #else
 bool SWMgr::isICU = false;
 #endif
 
-#ifndef EXCLUDEZLIB
-#include <zipcomprs.h>
-#endif
 
 bool SWMgr::debug = false;
 
@@ -1082,3 +1086,5 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
 	}
 	return -1;
 }
+
+SWORD_NAMESPACE_END

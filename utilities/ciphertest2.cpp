@@ -14,6 +14,11 @@
 #include <versekey.h>
 #include <rawtext.h>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::VerseKey;
+using sword::RawText;
+using sword::CipherFilter;
+#endif
 
 int main(int argc, char **argv) {
 	VerseKey key;

@@ -21,6 +21,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts ThML text to Diatheke/CGI format
  */
 class SWDLLEXPORT ThMLCGI : public SWBasicFilter {
@@ -30,4 +32,5 @@ public:
 	ThMLCGI();
 };
 
+SWORD_NAMESPACE_END
 #endif

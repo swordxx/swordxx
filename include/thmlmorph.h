@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This Filter shows/hides morph tags in a ThML text
   */
 class SWDLLEXPORT ThMLMorph:public SWFilter
@@ -53,5 +55,5 @@ public:
     return options;
   }
 };
-
+SWORD_NAMESPACE_END
 #endif

@@ -19,6 +19,7 @@
 #include <zverse.h>
 #include <zcom.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * zCom Constructor - Initializes data for instance of zCom
@@ -253,3 +254,4 @@ void zCom::increment(int steps) {
 		delete tmpkey;
 }
 
+SWORD_NAMESPACE_END

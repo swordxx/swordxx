@@ -15,6 +15,8 @@
 #endif
 #include <ctype.h>
 
+SWORD_NAMESPACE_START
+
 const char GBFStrongs::on[] = "On";
 const char GBFStrongs::off[] = "Off";
 const char GBFStrongs::optName[] = "Strong's Numbers";
@@ -128,3 +130,5 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

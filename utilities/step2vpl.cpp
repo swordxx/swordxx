@@ -17,6 +17,9 @@
 #endif
 
 using namespace std;
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 long SECTIONSLEVELSTART = 38;
 long SECTIONSLEVELSIZE = 29;

@@ -6,6 +6,11 @@
 #include <versekey.h>
 #include <sys/stat.h>
 #include <iostream>
+
+#ifndef NO_SWORD_NAMESPACE
+using sword::VerseKey;
+#endif
+
 const long MAXVLEN = 8192;
 
 int fp, vfp, cfp, bfp, dfp;

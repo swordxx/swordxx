@@ -17,6 +17,9 @@
 
 
 using namespace std;
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 typedef struct {
 	short versionRecordSize;

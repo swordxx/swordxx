@@ -2,6 +2,10 @@
 #include <versekey.h>
 #include <treekeyidx.h>
 #include <listkey.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
+
 int main(int argc, char **argv) {
 //	VerseKey x("jas");
 	TreeKeyIdx x("jas");

@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <unicodertf.h>
 
+SWORD_NAMESPACE_START
+
 UnicodeRTF::UnicodeRTF() {
 }
 
@@ -73,3 +75,5 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

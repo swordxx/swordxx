@@ -1,6 +1,9 @@
 #include <localemgr.h>
 #include <versekey.h>
 #include <iostream>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 int main(int argc, char **argv) {
 	if (argc != 3) {

@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.13 2001/12/11 22:35:10 scribe Exp $
+ * $Id: swfilter.h,v 1.14 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <swkey.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 /**
 * The type definitoin for option types
@@ -105,4 +107,5 @@ public:
   }
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -17,7 +17,7 @@
 //*****************************************************************************
 /*
  *
- * $Id: Greek2Greek.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: Greek2Greek.h,v 1.3 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,6 +37,9 @@
 
 #ifndef __GREEK2GREEK
 #define __GREEK2GREEK
+
+#include <defs.h>
+SWORD_NAMESPACE_START
 
 //*****************************************************************************
 // Used to convert a string created by using the Greek font supplied with the
@@ -109,6 +112,6 @@ unsigned char getbGreekPunct (unsigned char Greek);
 //*****************************************************************************
 bool isPunctSpace (unsigned char c);
 
-
+SWORD_NAMESPACE_END
 
 #endif // __GREEK2GREEK

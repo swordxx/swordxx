@@ -23,6 +23,9 @@
 #define FMT_CGI 127
 
 #include <encfiltmgr.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 class SWDLLEXPORT DiathekeFilterMgr : public EncodingFilterMgr {
 protected:

@@ -38,7 +38,7 @@ public:
 	//virtual char SetToElement (int ielement, SW_POSITION = TOP);
 %extend {
 	virtual char SetToElement(int element) {
-		self->SetToElement(element, TOP);
+		return self->SetToElement(element, TOP);
 	};
 }
 

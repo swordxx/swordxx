@@ -10,6 +10,8 @@
 #include <latin1utf8.h>
 #include <swmodule.h>
 
+SWORD_NAMESPACE_START
+
 Latin1UTF8::Latin1UTF8() {
 }
 
@@ -178,3 +180,5 @@ char Latin1UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

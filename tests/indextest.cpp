@@ -1,6 +1,9 @@
 #include <swmgr.h>
 #include <iostream>
 #include <versekey.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 int main(int argc, char **argv) {
 	SWMgr mymgr;

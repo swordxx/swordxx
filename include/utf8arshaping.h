@@ -27,6 +27,7 @@
 #include <unicode/ushape.h>
 
 #include <defs.h>
+SWORD_NAMESPACE_START
 
   /** This Filter shows/hides reorders UTF-8 text according to Unicode BiDi
   */
@@ -41,6 +42,8 @@ class SWDLLEXPORT UTF8arShaping : public SWFilter
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
+
+SWORD_NAMESPACE_END
 #endif
 
 

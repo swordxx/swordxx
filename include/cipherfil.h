@@ -1,6 +1,6 @@
 /*
  *
- * $Id: cipherfil.h,v 1.8 2002/07/28 01:48:38 scribe Exp $
+ * $Id: cipherfil.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT CipherFilter:public SWFilter {
 	SWCipher *cipher;
 public:
@@ -35,4 +37,5 @@ public:
 	virtual SWCipher *getCipher();
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -9,6 +9,7 @@
 #include <string.h>
 #include <thmlplain.h>
 
+SWORD_NAMESPACE_START
 
 ThMLPlain::ThMLPlain() {
 }
@@ -199,3 +200,4 @@ char ThMLPlain::ProcessText(char *text, int maxlen)
 }
 
 
+SWORD_NAMESPACE_END

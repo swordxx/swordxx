@@ -5,7 +5,12 @@
 #include <rawcom.h>
 //#include <rawgbf.h>
 //#include <rawfiles.h>
-
+#ifndef NO_SWORD_NAMESPACE
+using sword::VerseKey;
+using sword::RawText;
+using sword::RawCom;
+using sword::SWKey;
+#endif
 
 int main(int argc, char **argv)
 {

@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** This Filter shows/hides footnotes in a ThML text
   */
 class SWDLLEXPORT ThMLFootnotes:public SWFilter
@@ -54,5 +56,5 @@ public:
     return options;
   }
 };
-
+SWORD_NAMESPACE_END
 #endif

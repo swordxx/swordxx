@@ -18,6 +18,11 @@
 #ifndef NULL
 #define NULL 0
 #endif	/*  */
+
+#include <defs.h>
+
+SWORD_NAMESPACE_START
+
   class sapphire 
 {
   
@@ -51,3 +56,4 @@ unsigned *keypos); public:sapphire (unsigned char
 };
 
 
+SWORD_NAMESPACE_END

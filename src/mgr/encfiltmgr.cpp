@@ -31,6 +31,8 @@
 
 #include <swmgr.h>
 
+SWORD_NAMESPACE_START
+
 /******************************************************************************
  * EncodingFilterMgr Constructor - initializes instance of EncodingFilterMgr
  *
@@ -146,3 +148,5 @@ char EncodingFilterMgr::Encoding(char enc) {
         }
         return encoding;
 }
+
+SWORD_NAMESPACE_END

@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <latin1utf16.h>
 
+SWORD_NAMESPACE_START
+
 Latin1UTF16::Latin1UTF16() {
 }
 
@@ -120,3 +122,5 @@ char Latin1UTF16::ProcessText(char *text, int maxlen, const SWKey *key, const SW
     *to = 0;
     return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -4,6 +4,14 @@
 #include <regex.h> // GNU
 #include <iostream>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::SWModule;
+using sword::ModMap;
+using sword::VerseKey;
+using sword::ListKey;
+#endif
+
 void percentUpdate(char percent, void *userData) {
 	static char printed = 0;
 	char maxHashes = *((char *)userData);

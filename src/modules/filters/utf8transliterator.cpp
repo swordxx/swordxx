@@ -13,12 +13,16 @@
 #include <unixstr.h>
 #endif
 
+#include <unicode/ucnv.h>
+#include <unicode/uchar.h>
 #include <utf8transliterator.h>
 
 #ifndef _ICUSWORD_
 #include "unicode/resbund.h"
 #endif
 #include <swlog.h>
+
+SWORD_NAMESPACE_START
 
 #if 0
 #ifdef _ICU_
@@ -718,6 +722,8 @@ char UTF8Transliterator::ProcessText(char *text, int maxlen, const SWKey *key, c
         }
 	return 0;
 }
+
+SWORD_NAMESPACE_END
 #endif
 
 

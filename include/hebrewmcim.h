@@ -12,6 +12,9 @@
 
 #include <swinputmeth.h>
 #include <map>
+#include <defs.h>
+SWORD_NAMESPACE_START
+
 
 class HebrewMCIM : public SWInputMethod {
 
@@ -25,4 +28,5 @@ public:
     int *translate(char in);
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -2,7 +2,7 @@
  *  swlocale.h   - definition of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.h,v 1.8 2002/09/30 10:34:43 dglassey Exp $
+ * $Id: swlocale.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,6 +31,7 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
 
 typedef map < string, string, less < string > >LookupMap;
 
@@ -69,4 +70,5 @@ public:
 	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
 };
 
+SWORD_NAMESPACE_END
 #endif

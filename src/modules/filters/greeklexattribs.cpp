@@ -11,6 +11,7 @@
 #include <greeklexattribs.h>
 #include <swmodule.h>
 
+SWORD_NAMESPACE_START
 
 GreekLexAttribs::GreekLexAttribs() {
 }
@@ -94,3 +95,4 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 }
 
 
+SWORD_NAMESPACE_END

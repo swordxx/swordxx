@@ -15,6 +15,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT zVerse {
 	SWCompress *compressor;
 
@@ -52,5 +54,5 @@ public:
 	static char createModule(const char *path, int blockBound);
 };
 
-
+SWORD_NAMESPACE_END
 #endif

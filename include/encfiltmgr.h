@@ -24,6 +24,7 @@
 
 #include <swfiltermgr.h>
 
+SWORD_NAMESPACE_START
 
 /** This class is like a normal @ref SWMgr,
   * but you can additonally specify which encoding
@@ -82,4 +83,5 @@ public:
         virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
 };
 
+SWORD_NAMESPACE_END
 #endif

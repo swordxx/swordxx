@@ -9,6 +9,7 @@
 #include <string.h>
 #include <gbfplain.h>
 
+SWORD_NAMESPACE_START
 
 GBFPlain::GBFPlain() {
 }
@@ -104,3 +105,5 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
  	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

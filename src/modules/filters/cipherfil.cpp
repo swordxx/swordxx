@@ -8,6 +8,7 @@
 #include <string.h>
 #include <cipherfil.h>
 
+SWORD_NAMESPACE_START
 
 CipherFilter::CipherFilter(const char *key) {
 	cipher = new SWCipher((unsigned char *)key);
@@ -42,3 +43,5 @@ char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key, const S
 //	text[maxlen] = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <utf8hebrewpoints.h>
 
+SWORD_NAMESPACE_START
 
 const char UTF8HebrewPoints::on[] = "On";
 const char UTF8HebrewPoints::off[] = "Off";
@@ -53,3 +54,5 @@ char UTF8HebrewPoints::ProcessText(char *text, int maxlen, const SWKey *key, con
      }
 	return 0;
 }
+
+SWORD_NAMESPACE_END

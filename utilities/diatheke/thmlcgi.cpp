@@ -18,6 +18,8 @@
 #include <string.h>
 #include "thmlcgi.h"
 
+SWORD_NAMESPACE_START
+
 ThMLCGI::ThMLCGI() {
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -190,3 +192,4 @@ bool ThMLCGI::handleToken(char **buf, const char *token, DualStringMap &userData
 
 
 
+SWORD_NAMESPACE_END

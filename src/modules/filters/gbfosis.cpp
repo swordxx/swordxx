@@ -18,6 +18,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 GBFOSIS::GBFOSIS() {
 }
@@ -333,3 +334,5 @@ const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 	}
 	return outRef.c_str();
 }
+
+SWORD_NAMESPACE_END

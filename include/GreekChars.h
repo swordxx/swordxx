@@ -18,7 +18,7 @@
 //*****************************************************************************
 /*
  *
- * $Id: GreekChars.h,v 1.3 2001/03/18 21:04:25 scribe Exp $
+ * $Id: GreekChars.h,v 1.4 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,6 +41,9 @@
 
 // This enum represents the values of the characters used for the 
 // transliteration as used on the b-greek discussion list.
+
+#include <defs.h>
+SWORD_NAMESPACE_START
 
 enum bGreekChars
 {
@@ -145,5 +148,7 @@ enum GreekPunct
   gSEMI_COLON = ':',
   gQUESTION = ';'
 };
+
+SWORD_NAMESPACE_END
 
 #endif // __GREEKCHARS_H

@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This Filter shows/hides strong's numbers in a ThML text
   */
 class SWDLLEXPORT ThMLStrongs:public SWFilter
@@ -55,4 +57,5 @@ public:
   }
 };
 
+SWORD_NAMESPACE_END
 #endif

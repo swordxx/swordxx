@@ -15,6 +15,8 @@
 
 #include <utf8nfkd.h>
 
+SWORD_NAMESPACE_START
+
 UTF8NFKD::UTF8NFKD() {
         conv = ucnv_open("UTF-8", &err);
 }
@@ -45,4 +47,5 @@ char UTF8NFKD::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	return 0;
 }
 
+SWORD_NAMESPACE_END
 #endif

@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This Filter shows/hides Greek Accents marks in UTF8 text
   */
 class SWDLLEXPORT UTF8GreekAccents:public SWFilter
@@ -54,4 +56,5 @@ public:
   }
 };
 
+SWORD_NAMESPACE_END
 #endif

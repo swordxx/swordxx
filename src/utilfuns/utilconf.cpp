@@ -13,7 +13,11 @@
  * RET:	error status
  */
 
+SWORD_NAMESPACE_START
+
 char getconfent(char *filename, char *entryname, char *buf, int len)
 {
 	return 0;
 }
+
+SWORD_NAMESPACE_END

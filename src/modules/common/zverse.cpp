@@ -29,6 +29,7 @@
 #define O_BINARY 0
 #endif
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * zVerse Statics
@@ -530,3 +531,5 @@ void zVerse::preptext(char *buf)
           }
      }
 }
+
+SWORD_NAMESPACE_END

@@ -5,6 +5,7 @@
 
 #include <swld.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * SWLD Constructor - Initializes data for instance of SWLD
@@ -74,3 +75,4 @@ void SWLD::setPosition(SW_POSITION p) {
 }
 
 
+SWORD_NAMESPACE_END

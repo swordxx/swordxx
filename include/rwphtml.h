@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/Attic/rwphtml.h,v 1.7 2001/12/11 22:35:10 scribe Exp $ */
-/* $Revision: 1.7 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/Attic/rwphtml.h,v 1.8 2002/10/01 19:52:40 dglassey Exp $ */
+/* $Revision: 1.8 $ */
 
 #ifndef RWPHTML_H
 #define RWPHTML_H
@@ -25,6 +25,8 @@
 #include <swfilter.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
   /** this filter converts RWP text to HTML text
   */
@@ -35,4 +37,5 @@ public:
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

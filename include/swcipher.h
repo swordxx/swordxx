@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcipher.h   - definition of Class SWCipher used for data cipher/decipher
  *
- * $Id: swcipher.h,v 1.6 2001/11/05 07:59:10 chrislit Exp $
+ * $Id: swcipher.h,v 1.7 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1999 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT SWCipher
 {
 
@@ -46,4 +48,5 @@ public:
   virtual void Decode (void);
 };
 
+SWORD_NAMESPACE_END
 #endif

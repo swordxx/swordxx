@@ -20,6 +20,22 @@
 #include <versekey.h>
 #include <stdio.h>
 #include <cipherfil.h>
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWCompress;
+using sword::CipherFilter;
+using sword::SWModule;
+using sword::SWMgr;
+using sword::ModMap;
+using sword::zText;
+using sword::zLD;
+using sword::zCom;
+using sword::SWFilter;
+using sword::VerseKey;
+using sword::SWKey;
+using sword::SW_POSITION;
+using sword::ZipCompress;
+using sword::LZSSCompress;
+#endif
 
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to create compressed Sword modules\n";

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.14 2002/03/13 06:55:39 scribe Exp $
+ * $Id: filemgr.h,v 1.15 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,8 @@
 #include <fcntl.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWDLLEXPORT FileMgr;
 
@@ -77,6 +79,5 @@ public:
 };
 
 
-
-
+SWORD_NAMESPACE_END
 #endif

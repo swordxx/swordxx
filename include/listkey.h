@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.15 2002/09/11 07:04:20 scribe Exp $
+ * $Id: listkey.h,v 1.16 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,8 @@
 #include <swkey.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
   /** ListKey is the basis for all
   * types of keys that have lists of specified indexes
@@ -117,5 +119,5 @@ public:
 	ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
 };
 
-
+SWORD_NAMESPACE_END
 #endif

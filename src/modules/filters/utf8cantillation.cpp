@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <utf8cantillation.h>
 
+SWORD_NAMESPACE_START
 
 const char UTF8Cantillation::on[] = "On";
 const char UTF8Cantillation::off[] = "Off";
@@ -62,3 +63,5 @@ char UTF8Cantillation::ProcessText(char *text, int maxlen, const SWKey *key, con
      }
 	return 0;
 }
+
+SWORD_NAMESPACE_END

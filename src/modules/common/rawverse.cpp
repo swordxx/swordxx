@@ -28,6 +28,7 @@
 #define O_BINARY 0		// If it hasn't been defined than we probably
 #endif				// don't need it.
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * RawVerse Statics
@@ -346,3 +347,5 @@ char RawVerse::createModule(const char *ipath)
 	
 	return 0;
 }
+
+SWORD_NAMESPACE_END

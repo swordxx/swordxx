@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.22 2002/09/29 03:21:08 scribe Exp $
+ * $Id: swkey.h,v 1.23 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <swobject.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 #define KEYERR_OUTOFBOUNDS 1
 
@@ -210,5 +212,5 @@ public:
 
 	};
 
-
+SWORD_NAMESPACE_END
 #endif

@@ -19,6 +19,7 @@
 #include <zstr.h>
 #include <zld.h>
 
+SWORD_NAMESPACE_START
 
  /******************************************************************************
  * RawLD Constructor - Initializes data for instance of RawLD
@@ -172,3 +173,5 @@ void zLD::linkEntry(const SWKey *inkey) {
 void zLD::deleteEntry() {
 	setText(*key, "");
 }
+
+SWORD_NAMESPACE_END

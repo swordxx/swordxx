@@ -15,6 +15,8 @@
 
 #include <utf8arshaping.h>
 
+SWORD_NAMESPACE_START
+
 UTF8arShaping::UTF8arShaping() {
 
         conv = ucnv_open("UTF-8", &err);
@@ -47,4 +49,5 @@ char UTF8arShaping::ProcessText(char *text, int maxlen, const SWKey *key, const 
 	return 0;
 }
 
+SWORD_NAMESPACE_END
 #endif

@@ -21,6 +21,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts GBF  text to HTML text with hrefs
  */
 class SWDLLEXPORT GBFHTMLHREF : public SWBasicFilter {
@@ -30,4 +32,6 @@ public:
   GBFHTMLHREF ();
 };
 
+
+SWORD_NAMESPACE_END
 #endif

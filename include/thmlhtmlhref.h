@@ -21,6 +21,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
@@ -29,5 +31,5 @@ protected:
 public:
 	ThMLHTMLHREF();
 };
-
+SWORD_NAMESPACE_END
 #endif /* _THMLHTMLHREF_H */

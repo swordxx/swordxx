@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char ThMLMorph::on[] = "On";
 const char ThMLMorph::off[] = "Off";
@@ -96,3 +97,5 @@ char ThMLMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <utf8greekaccents.h>
 
+SWORD_NAMESPACE_START
 
 const char UTF8GreekAccents::on[] = "On";
 const char UTF8GreekAccents::off[] = "Off";
@@ -250,3 +251,4 @@ char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key, con
 
 
 
+SWORD_NAMESPACE_END

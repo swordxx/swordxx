@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char GBFMorph::on[] = "On";
 const char GBFMorph::off[] = "Off";
@@ -96,3 +97,5 @@ char GBFMorph::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

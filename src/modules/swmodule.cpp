@@ -14,6 +14,8 @@
 #include <iostream>
 #endif
 
+SWORD_NAMESPACE_START
+
 SWDisplay SWModule::rawdisp;
 void SWModule::nullPercent(char percent, void *percentUserData) {}
 
@@ -648,3 +650,5 @@ const char *SWModule::getConfigEntry(const char *key) const {
 void SWModule::setConfig(ConfigEntMap *config) {
 	this->config = config;
 }
+
+SWORD_NAMESPACE_END

@@ -21,6 +21,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts GBF text to Diatheke/CGI format
  */
 class SWDLLEXPORT GBFCGI : public SWBasicFilter {
@@ -30,4 +32,5 @@ public:
   GBFCGI ();
 };
 
+SWORD_NAMESPACE_END
 #endif

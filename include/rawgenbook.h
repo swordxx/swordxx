@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawgenbook.h,v 1.4 2002/07/28 01:48:38 scribe Exp $
+ * $Id: rawgenbook.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <filemgr.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawGenBook : public SWGenBook {
 	char *entryBuf;
@@ -60,5 +62,5 @@ public:
 
 };
 
-
+SWORD_NAMESPACE_END
 #endif

@@ -15,6 +15,8 @@
 
 #include <utf8bidireorder.h>
 
+SWORD_NAMESPACE_START
+
 UTF8BiDiReorder::UTF8BiDiReorder() {
 
         conv = ucnv_open("UTF-8", &err);
@@ -54,4 +56,5 @@ char UTF8BiDiReorder::ProcessText(char *text, int maxlen, const SWKey *key, cons
 	return 0;
 }
 
+SWORD_NAMESPACE_END
 #endif

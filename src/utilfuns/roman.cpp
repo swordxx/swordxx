@@ -22,6 +22,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <roman.h>
+
+SWORD_NAMESPACE_START
+
 char isroman (const char* str) {
 	char * ch = (char*)str;
 		for (; *ch; ch++)
@@ -32,7 +35,7 @@ char isroman (const char* str) {
 
 int from_rom(const char* str) {
 	int i, n = strlen(str);
-	short * num= calloc(n, sizeof(short));
+	short * num= (short *) calloc(n, sizeof(short));
 	for (i = 0; str[i]; i++) {
 		switch(str[i]) {
 		case 'i':
@@ -80,3 +83,5 @@ int from_rom(const char* str) {
      free(num);
 	return n;
 }
+
+SWORD_NAMESPACE_END

@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.18 2002/06/06 21:08:47 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.19 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <swbasicfilter.h>
 #include <stdio.h>
 #include <stdarg.h>
+
+SWORD_NAMESPACE_START
 
 SWBasicFilter::SWBasicFilter() {
 	tokenStart = 0;
@@ -297,4 +299,4 @@ char SWBasicFilter::ProcessText(char *text, int maxlen, const SWKey *key, const 
 }
 
 
-
+SWORD_NAMESPACE_END

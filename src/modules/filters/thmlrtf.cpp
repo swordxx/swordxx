@@ -18,6 +18,7 @@
 #include <string.h>
 #include <thmlrtf.h>
 
+SWORD_NAMESPACE_START
 
 ThMLRTF::ThMLRTF()
 {
@@ -220,3 +221,4 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 }
 
 
+SWORD_NAMESPACE_END

@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This filter converts SCSU compressed (encoded) text to UTF-8
   */
 class SWDLLEXPORT SCSUUTF8:public SWFilter {
@@ -38,4 +40,5 @@ class SWDLLEXPORT SCSUUTF8:public SWFilter {
   virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

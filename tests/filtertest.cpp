@@ -4,6 +4,9 @@
 #include <gbfosis.h>
 #include <versekey.h>
 #include <swmgr.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 #define MAXBUF 30000
 int main(int argc, char **argv) {

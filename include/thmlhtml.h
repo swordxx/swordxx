@@ -23,6 +23,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts ThML text to HTML text
  */
 class SWDLLEXPORT ThMLHTML : public SWBasicFilter {
@@ -31,5 +33,5 @@ protected:
 public:
 	ThMLHTML();
 };
-
+SWORD_NAMESPACE_END
 #endif

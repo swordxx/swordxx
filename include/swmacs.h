@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swmacs.h	- generic macros
  *
- * $Id: swmacs.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swmacs.h,v 1.2 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,9 +22,11 @@
 #ifndef SWMACS_H
 #define SWMACS_H
 
+#include <defs.h>
 
+SWORD_NAMESPACE_START
 // Maximum positive value of a signed numeric type
 #define MAXPOS(x) ((x)((unsigned x)(1L << (sizeof(x)*8-1)) - 1))
 
-
+SWORD_NAMESPACE_END
 #endif

@@ -19,6 +19,13 @@
 #define O_BINARY 0
 #endif
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::RawText;
+using sword::VerseKey;
+using sword::SW_POSITION;
+#endif
+
 char readline(int fd, char **buf) {
 	char ch;
 	if (*buf)

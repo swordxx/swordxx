@@ -2,7 +2,8 @@
 #define NULLIM_H
 
 #include <swinputmeth.h>
-
+#include <defs.h>
+SWORD_NAMESPACE_START
 
 class NullIM : public SWInputMethod {
 
@@ -11,4 +12,5 @@ public:
 	int * translate(char ch);
 };
 
+SWORD_NAMESPACE_END
 #endif

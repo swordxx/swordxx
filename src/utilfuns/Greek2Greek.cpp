@@ -34,6 +34,8 @@
 // method of transliteration.
 //*****************************************************************************
 
+SWORD_NAMESPACE_START
+
 unsigned char Greek2bGreek(
          unsigned char *sResult, 
          unsigned char *sGreekText, 
@@ -899,3 +901,5 @@ int main()
 }
 
 #endif // __TEST
+
+SWORD_NAMESPACE_END

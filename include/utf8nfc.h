@@ -27,6 +27,7 @@
 #include <unicode/unorm.h>
 
 #include <defs.h>
+SWORD_NAMESPACE_START
 
 class SWDLLEXPORT UTF8NFC : public SWFilter
 {
@@ -40,4 +41,5 @@ class SWDLLEXPORT UTF8NFC : public SWFilter
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

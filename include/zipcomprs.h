@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcomprs.h   - definition of Class SWCompress used for data compression
  *
- * $Id: zipcomprs.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: zipcomprs.h,v 1.4 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT ZipCompress:public SWCompress
 {
 protected:
@@ -36,4 +38,5 @@ public:
   virtual void Decode (void);
 };
 
+SWORD_NAMESPACE_END
 #endif

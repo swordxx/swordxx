@@ -14,6 +14,9 @@
 #endif
 
 #include <lzsscomprs.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 class FileCompress: public LZSSCompress {
 	int ifd;

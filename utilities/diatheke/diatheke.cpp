@@ -4,10 +4,12 @@
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
 
+
 #include "corediatheke.h"
 #include "diathekemgr.h"
 #include "diafiltmgr.h"
 #include <iostream>
+
 
 #define RQ_REF 1
 #define RQ_BOOK 2

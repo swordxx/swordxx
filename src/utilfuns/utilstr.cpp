@@ -13,6 +13,8 @@
 
 #endif
 
+SWORD_NAMESPACE_START
+
 /******************************************************************************
  * stdstr - Sets/gets a string
  *
@@ -196,3 +198,5 @@ char *toupperstr_utf8(char *buf) {
 
 	return ret;
 }
+
+SWORD_NAMESPACE_END

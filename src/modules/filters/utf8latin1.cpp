@@ -9,6 +9,8 @@
 
 #include <utf8latin1.h>
 
+SWORD_NAMESPACE_START
+
 UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
 }
 
@@ -74,3 +76,4 @@ char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
   return 0;
 }
 
+SWORD_NAMESPACE_END

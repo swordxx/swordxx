@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.h,v 1.4 2002/09/11 07:04:20 scribe Exp $
+ * $Id: treekeyidx.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,7 @@
 #include <sysdata.h>
 #include <filemgr.h>
 
+SWORD_NAMESPACE_START
 
 /**
  * Class VerseKey
@@ -118,5 +119,6 @@ public:
 	static signed char create(const char *path);
 };
 
+SWORD_NAMESPACE_END
 
 #endif

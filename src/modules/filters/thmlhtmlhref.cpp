@@ -19,6 +19,7 @@
 #include <thmlhtmlhref.h>
 #include <swmodule.h>
 
+SWORD_NAMESPACE_START
 
 ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenStart("<");
@@ -267,3 +268,5 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 	return true;
 }
 
+
+SWORD_NAMESPACE_END

@@ -1,5 +1,8 @@
 #include <iostream>
 #include <rawld.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 int main(int argc, char **argv)
 {
@@ -19,4 +22,5 @@ int main(int argc, char **argv)
 //	lex << "y";
 
 	lex = BOTTOM;
+	return 0;
 }

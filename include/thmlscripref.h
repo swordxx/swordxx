@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 /** This Filter shows/hides scripture references in a ThML text
   */
 class SWDLLEXPORT ThMLScripref:public SWFilter
@@ -54,5 +56,7 @@ public:
     return options;
   }
 };
+
+SWORD_NAMESPACE_END
 
 #endif

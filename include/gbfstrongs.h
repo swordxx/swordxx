@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfstrongs.h,v 1.8 2001/12/11 22:35:10 scribe Exp $
+ * $Id: gbfstrongs.h,v 1.9 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,6 +24,8 @@
 #include <swfilter.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
   /** This Filter shows/hides strong's numbers in a GBF text
   */
@@ -55,4 +57,5 @@ public:
   }
 };
 
+SWORD_NAMESPACE_END
 #endif

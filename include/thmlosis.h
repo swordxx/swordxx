@@ -20,6 +20,8 @@
 #include <defs.h>
 #include <swfilter.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLOSIS : public SWFilter {
@@ -31,5 +33,5 @@ public:
 	virtual ~ThMLOSIS();
 	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
 };
-
+SWORD_NAMESPACE_END
 #endif /* THMLOSIS_H */

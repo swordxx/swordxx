@@ -20,6 +20,16 @@
 #include <versekey.h>
 #include <stdio.h>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWModule;
+using sword::SWMgr;
+using sword::ModMap;
+using sword::SWKey;
+using sword::VerseKey;
+using sword::SW_POSITION;
+#endif
+
+
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to output a Sword module in SWORD's 'imp' import format\n";
 	cerr << "usage: "<< appName << " <modname> \n";

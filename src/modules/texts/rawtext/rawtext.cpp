@@ -27,6 +27,8 @@
 #define O_BINARY 0
 #endif
 
+SWORD_NAMESPACE_START
+
 /******************************************************************************
  * RawText Constructor - Initializes data for instance of RawText
  *
@@ -580,3 +582,5 @@ void RawText::increment(int steps) {
 	if (tmpkey != key)
 		delete tmpkey;
 }
+
+SWORD_NAMESPACE_END

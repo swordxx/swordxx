@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::SWModule;
+using sword::ListKey;
+using sword::VerseKey;
+using sword::ModMap;
+#endif
 
 int main(int argc, char **argv)
 {

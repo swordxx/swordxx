@@ -22,6 +22,8 @@
 
 #include <scsuutf8.h>
 
+SWORD_NAMESPACE_START
+
 SCSUUTF8::SCSUUTF8() {
 }
 
@@ -220,3 +222,4 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key, const SWModule
   return 0;
 }
 
+SWORD_NAMESPACE_END

@@ -12,6 +12,9 @@
 #endif
 
 #include <zipcomprs.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 class FileCompress: public ZipCompress {
 	int ifd;

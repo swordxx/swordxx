@@ -30,6 +30,8 @@
 
 #include "sapphire.h"
 
+SWORD_NAMESPACE_START
+
 unsigned char sapphire::keyrand(int limit,
                                 unsigned char *user_key,
                                 unsigned char keysize,
@@ -226,3 +228,4 @@ void sapphire::hash_final(unsigned char *hash,      // Destination
         hash[i] = encrypt(0);
     }
 
+SWORD_NAMESPACE_END

@@ -13,7 +13,11 @@
 #include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
-
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWCipher;
+using sword::VerseKey;
+using sword::RawVerse;
+#endif
 
 int main(int argc, char **argv) {
 	SWCipher *zobj;

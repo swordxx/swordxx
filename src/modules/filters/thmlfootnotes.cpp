@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char ThMLFootnotes::on[] = "On";
 const char ThMLFootnotes::off[] = "Off";
@@ -101,3 +102,5 @@ char ThMLFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const 
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.10 2002/09/30 10:34:43 dglassey Exp $
+ * $Id: swbasicfilter.h,v 1.11 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,8 @@
 
 #include <defs.h>
 #include <map>
+
+SWORD_NAMESPACE_START
 
 /** A filter providing commonly used functionality.
 * This filter has facilities for handling SGML/HTML/XML like tokens and
@@ -113,4 +115,5 @@ protected:
 	virtual bool handleEscapeString(char **buf, const char *escString, DualStringMap &userData);
 };
 
+SWORD_NAMESPACE_END
 #endif

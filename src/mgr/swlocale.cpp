@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.4 2002/07/28 01:48:38 scribe Exp $
+ * $Id: swlocale.cpp,v 1.5 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,6 +23,7 @@
 #include <swlocale.h>
 #include <utilfuns.h>
 
+SWORD_NAMESPACE_START
 
 SWLocale::SWLocale(const char * ifilename) {
 	ConfigEntMap::iterator confEntry;
@@ -138,3 +139,5 @@ void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	*iBMAX  = BMAX;
 	*ibooks = books;
 }
+
+SWORD_NAMESPACE_END

@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.5 2001/12/11 22:35:10 scribe Exp $ */
-/* $Revision: 1.5 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/rtfhtml.h,v 1.6 2002/10/01 19:52:40 dglassey Exp $ */
+/* $Revision: 1.6 $ */
 
 #ifndef RTFHTML_H
 #define RTFHTML_H
@@ -24,6 +24,8 @@
 #include <swfilter.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
   /** this filter converts RTF text into HTML text
   */
@@ -34,4 +36,5 @@ public:
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

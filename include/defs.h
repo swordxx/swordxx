@@ -1,6 +1,19 @@
 // ----------------------------------------------------------------------------
 // Making or using sword as a Windows DLL
 // ----------------------------------------------------------------------------
+#ifndef SWORDDEFS_H
+#define SWORDDEFS_H
+
+#ifdef NO_SWORD_NAMESPACE
+#define SWORD_NAMESPACE_START
+#define SWORD_NAMESPACE_END
+#else
+#define SWORD_NAMESPACE_START namespace sword {
+#define SWORD_NAMESPACE_END }
+#endif
+
+
+SWORD_NAMESPACE_START
 
 #define FILTERPAD 80
 
@@ -74,3 +87,6 @@
 #else
 #  define SWDLLIMPORT
 #endif
+
+SWORD_NAMESPACE_END
+#endif //SWORDDEFS_H

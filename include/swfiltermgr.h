@@ -2,7 +2,7 @@
  *  swfiltermgr.h   - definition of class SWFilterMgr used as an interface to
  *				manage filters on a module
  *
- * $Id: swfiltermgr.h,v 1.1 2001/11/30 21:05:41 scribe Exp $
+ * $Id: swfiltermgr.h,v 1.2 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,8 @@
 #include <swlog.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWMgr;
 
@@ -78,5 +80,5 @@ public:
   virtual void AddRawFilters (SWModule * module, ConfigEntMap & section);
 
 };
-
+SWORD_NAMESPACE_END
 #endif

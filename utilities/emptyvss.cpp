@@ -2,6 +2,15 @@
 #include <versekey.h>
 #include <iostream>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::VerseKey;
+using sword::ModMap;
+using sword::SWKey;
+using sword::SWModule;
+using sword::SW_POSITION;
+#endif
+
 int main(int argc, char **argv) {
 	if (argc < 2) {
 		fprintf(stderr, "usage: %s <Mod Name>\n", argv[0]);

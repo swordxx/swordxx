@@ -20,6 +20,7 @@
 #include <rawverse.h>
 #include <hrefcom.h>
 
+SWORD_NAMESPACE_START
 
  /******************************************************************************
  * HREFCom Constructor - Initializes data for instance of HREFCom
@@ -95,3 +96,5 @@ char *HREFCom::getRawEntry() {
 
 	return entrybuf;
 }
+
+SWORD_NAMESPACE_END

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swversion.h   - definition of class SWVersion used to compare version info
  *
- * $Id: swversion.h,v 1.5 2002/09/28 12:14:50 joachim Exp $
+ * $Id: swversion.h,v 1.6 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,9 @@
 #ifndef SWVERSION_H
 #define SWVERSION_H
 
+#include <defs.h>
+SWORD_NAMESPACE_START
+
 class SWVersion {
 	public:
 	int major, minor, minor2, minor3;
@@ -42,5 +45,6 @@ class SWVersion {
 	static SWVersion currentVersion;
 };
 
+SWORD_NAMESPACE_END
 #endif
 

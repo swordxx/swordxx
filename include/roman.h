@@ -18,8 +18,13 @@
  */
 #ifndef ROMAN_H
 #define ROMAN_H
+
+#include <defs.h>
+SWORD_NAMESPACE_START
+
 char isroman(const char *);
 /* char* to_rom(int num, char *p); */
 int from_rom(const char *s);
 
+SWORD_NAMESPACE_END
 #endif

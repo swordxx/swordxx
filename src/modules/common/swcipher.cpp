@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <swcipher.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * SWCipher Constructor - Initializes data for instance of SWCipher
@@ -121,3 +122,5 @@ void SWCipher::setCipherKey(const char *ikey) {
 	unsigned char *key = (unsigned char *)ikey;
 	master.initialize(key, strlen((char *)key));
 }
+
+SWORD_NAMESPACE_END

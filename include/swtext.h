@@ -2,7 +2,7 @@
  *  swtext.h   - code for base class 'SWText'.  SWText is the basis for all
  *		 types of text modules
  *
- * $Id: swtext.h,v 1.12 2002/09/29 03:21:08 scribe Exp $
+ * $Id: swtext.h,v 1.13 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,8 @@
 #include <listkey.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 /** The basis for all text modules
  */
@@ -59,5 +61,6 @@ public:
 
 };
 
+SWORD_NAMESPACE_END
 
 #endif

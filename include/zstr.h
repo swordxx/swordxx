@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: zstr.h,v 1.5 2002/09/25 21:22:03 scribe Exp $
+ * $Id: zstr.h,v 1.6 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,8 @@
 #include <filemgr.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWCompress;
 class EntriesBlock;
@@ -70,4 +72,5 @@ public:
 	static signed char createModule (const char *path);
 };
 
+SWORD_NAMESPACE_END
 #endif

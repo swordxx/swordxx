@@ -167,7 +167,7 @@ tcl_multi_cpp: $(SRCS)
 # files "perl.h", "EXTERN.h" and "XSUB.h".   With Perl5.003, it's
 # usually something like /usr/local/lib/perl5/arch-osname/5.003/CORE.
 
-PERL5_INCLUDE= /usr/lib/perl5/5.6.1/i586-linux/CORE
+PERL5_INCLUDE= /usr/lib/perl5/5.6.1/i386-linux/CORE
 
 # Extra Perl specific dynamic linking options
 PERL5_DLNK   = 

@@ -3,6 +3,7 @@
 
 #include <map>
 
+SWORD_NAMESPACE_START
 
 // multmap that still lets you use [] to reference FIRST
 // entry of a key if multiples exist
@@ -34,4 +35,5 @@ public:
 	}
 };
 
+SWORD_NAMESPACE_END
 #endif

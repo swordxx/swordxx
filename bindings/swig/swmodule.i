@@ -84,7 +84,7 @@ public:
 //write interface
   virtual bool isWritable ();
   static signed char createModule (const char *);
-  virtual SWModule& setentry (const char *inbuf, long len);
+  virtual void setEntry (const char *inbuf, long len);
   virtual void deleteEntry ();
   
 %extend {

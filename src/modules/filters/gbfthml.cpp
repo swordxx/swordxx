@@ -18,6 +18,7 @@
 #include <string.h>
 #include <gbfthml.h>
 
+SWORD_NAMESPACE_START
 
 GBFThML::GBFThML()
 {
@@ -461,3 +462,4 @@ char GBFThML::ProcessText(char *text, int maxlen)
 
 
 
+SWORD_NAMESPACE_END

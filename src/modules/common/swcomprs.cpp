@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <swcomprs.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * SWCompress Constructor - Initializes data for instance of SWCompress
@@ -188,3 +189,5 @@ void SWCompress::cycleStream() {
 
 	zlen = slen = totlen;
 }
+
+SWORD_NAMESPACE_END

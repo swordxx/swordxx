@@ -15,16 +15,18 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.4 2001/12/11 22:35:10 scribe Exp $ */
-/* $Revision: 1.4 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $ */
+/* $Revision: 1.5 $ */
 
 #ifndef PLAINFOOTNOTES_H
 #define PLAINFOOTNOTES_H
 
 #include <defs.h>
 
-class QObject;
 #include <swfilter.h>
+
+SWORD_NAMESPACE_START
+
 class SWKey;
 
 /**Shows or hides footnotes in plain text.
@@ -59,4 +61,5 @@ public:
   }
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -2,7 +2,7 @@
  *  echomod.h  - code for class 'EchoMod' - a test module that just echo back
  *		 text of key.
  *
- * $Id: echomod.h,v 1.2 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: echomod.h,v 1.3 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,8 @@
 #include <swtext.h>
 #include <versekey.h>
 
+SWORD_NAMESPACE_START
+
 class EchoMod:public SWText
 {
 public:
@@ -34,5 +36,5 @@ public:
   virtual operator const char *();
 };
 
-
+SWORD_NAMESPACE_END
 #endif

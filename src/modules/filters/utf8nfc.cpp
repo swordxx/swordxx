@@ -15,6 +15,8 @@
 
 #include <utf8nfc.h>
 
+SWORD_NAMESPACE_START
+
 UTF8NFC::UTF8NFC() {
         conv = ucnv_open("UTF-8", &err);
 }
@@ -45,4 +47,5 @@ char UTF8NFC::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	return 0;
 }
 
+SWORD_NAMESPACE_END
 #endif

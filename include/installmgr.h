@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <vector>
 
-using std::vector;
 
 // move this include to cpp once struct ftpparse isn't exposed anymore
 extern "C" {
@@ -41,6 +40,6 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 // own FTPFile class or something that contains things like file name,
 // size, type (dir, file, special).  Then change to vector of this class
 // instead of ftpparse
-vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
+std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
 
 #endif

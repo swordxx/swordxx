@@ -18,6 +18,7 @@
 #include <string.h>
 #include <thmlolb.h>
 
+SWORD_NAMESPACE_START
 
 ThMLOLB::ThMLOLB()
 {
@@ -241,3 +242,4 @@ char ThMLOLB::ProcessText(char *text, int maxlen)
 
 
 
+SWORD_NAMESPACE_END

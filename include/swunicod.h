@@ -20,6 +20,9 @@
 #ifndef SWUNICOD_H
 #define SWUNICOD_H
 
+#include <defs.h>
+SWORD_NAMESPACE_START
+
 /** Converts a 32-bit unsigned integer UTF-32 value into a UTF-8 encoded 1-6 byte array
  * @param utf32 the UTF-32 Unicode code point value
  * @param utf8 pointer to an array of 6 unsigned chars to contain the UTF-8 value
@@ -34,5 +37,7 @@ unsigned char* UTF32to8 (unsigned long utf32, unsigned char * utf8);
  * @return utf32
  */
 unsigned long UTF8to32 (unsigned char * utf8, unsigned long utf32);
+
+SWORD_NAMESPACE_END
 
 #endif

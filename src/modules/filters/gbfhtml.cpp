@@ -19,6 +19,8 @@
 #include <string.h>
 #include <gbfhtml.h>
 
+SWORD_NAMESPACE_START
+
 
 GBFHTML::GBFHTML()
 {
@@ -534,3 +536,5 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -3,6 +3,16 @@
 #include <stdlib.h>
 #include <swmgr.h>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::SWModule;
+using sword::ModMap;
+using sword::SWKey;
+using sword::AttributeTypeList;
+using sword::AttributeValue;
+using sword::AttributeList;
+#endif
+
 int main(int argc, char **argv)
 {
 	SWMgr manager;

@@ -18,6 +18,13 @@
 #define O_BINARY 0
 #endif
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::RawText;
+using sword::VerseKey;
+using sword::SWText;
+using sword::ListKey;
+#endif
+
 int readline(FILE* infile, char* linebuffer) {
   signed char c;
   char* lbPtr = linebuffer;

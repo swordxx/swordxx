@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This Filter shows/hides morph tags in a GBF text
   */
 class SWDLLEXPORT GBFMorph:public SWFilter
@@ -54,4 +56,5 @@ public:
   }
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.46 2002/09/30 10:34:43 dglassey Exp $
+* $Id: swmgr.h,v 1.47 2002/10/01 19:52:40 dglassey Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -50,9 +50,11 @@
 
 #include <defs.h>
 
-typedef map < string, SWModule *, less < string > >ModMap;
-typedef list < string > OptionsList;
-typedef map < string, SWFilter * >FilterMap;
+SWORD_NAMESPACE_START
+
+typedef std::map < std::string, SWModule *, less < std::string > >ModMap;
+typedef std::list < std::string > OptionsList;
+typedef std::map < std::string, SWFilter * >FilterMap;
 
 /** SWMgr is the main class of the Sword library.
 *
@@ -62,7 +64,7 @@ typedef map < string, SWFilter * >FilterMap;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.46 2002/09/30 10:34:43 dglassey Exp $
+* @version $Id: swmgr.h,v 1.47 2002/10/01 19:52:40 dglassey Exp $
 */
 class SWDLLEXPORT SWMgr {
 
@@ -75,7 +77,7 @@ protected:
 	SWConfig *mysysconfig;
 	SWConfig *homeConfig;
 	void CreateMods();
-	SWModule *CreateMod(string name, string driver, ConfigEntMap & section);
+	SWModule *CreateMod(std::string name, std::string driver, ConfigEntMap & section);
 	void DeleteMods();
 	char configType;		// 0 = file; 1 = directory
 	FilterMap optionFilters;
@@ -94,7 +96,7 @@ protected:
 	virtual void AddLocalOptions(SWModule * module, ConfigEntMap & section,
 	ConfigEntMap::iterator start,
 	ConfigEntMap::iterator end);
-	list<string> augPaths;
+	std::list<std::string> augPaths;
 
 	/**
 	* Adds the encoding filters which are defined in "section" to the SWModule object "module".
@@ -135,7 +137,7 @@ public:
 	/**
 	*
 	*/
-	static void findConfig(char *configType, char **prefixPath, char **configPath, list<string> *augPaths = 0);
+	static void findConfig(char *configType, char **prefixPath, char **configPath, std::list<std::string> *augPaths = 0);
 	/** The global config object.
 	* This is the global config object. It contains all items of all modules,
 	* so lookups of entries should use this config object.
@@ -289,4 +291,6 @@ public:
 	*/
 	virtual signed char setCipherKey(const char *modName, const char *key);
 };
+
+SWORD_NAMESPACE_END
 #endif

@@ -16,6 +16,14 @@
 #include <zld.h>
 #include <zipcomprs.h>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::ZipCompress;
+using sword::RawLD4;
+using sword::SWKey;
+using sword::zLD;
+using sword::RawLD;
+#endif
 
 #ifndef O_BINARY
 #define O_BINARY 0

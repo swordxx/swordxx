@@ -19,6 +19,7 @@
 #include <string.h>
 #include <rtfhtml.h>
 
+SWORD_NAMESPACE_START
 
 RTFHTML::RTFHTML() {
 
@@ -97,3 +98,5 @@ char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

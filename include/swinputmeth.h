@@ -10,6 +10,9 @@
 #ifndef SWINPUTMETHOD_H
 #define SWINPUTMETHOD_H
 
+#include <defs.h>
+SWORD_NAMESPACE_START
+
 class SWInputMethod {
 
 private:
@@ -27,4 +30,5 @@ public:
     virtual void clearState();
 };
 
+SWORD_NAMESPACE_END
 #endif

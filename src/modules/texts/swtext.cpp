@@ -5,6 +5,7 @@
 #include <swtext.h>
 #include <listkey.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * SWText Constructor - Initializes data for instance of SWText
@@ -76,3 +77,5 @@ long SWText::Index(long iindex) {
 
 	return Index();
 }
+
+SWORD_NAMESPACE_END

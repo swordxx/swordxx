@@ -9,8 +9,8 @@ typedef map < string, SWFilter * > FilterMap;
 class SWMgr {
 public:
 //member data
-  static bool debug;
-  static const char *globalConfPath;
+//  static bool debug;
+//  static const char *globalConfPath;
   static void findConfig (char *configType, char **prefixPath, char **configPath);
 
   SWConfig *config;

@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: rawstr.h,v 1.14 2002/07/30 10:17:30 scribe Exp $
+ * $Id: rawstr.h,v 1.15 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT RawStr {
 	static int instance;		// number of instantiated RawStr objects or derivitives
 	char *path;
@@ -51,4 +53,5 @@ public:
 	static signed char createModule(const char *path);
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char ThMLVariants::primary[] = "Primary Reading";
 const char ThMLVariants::secondary[] = "Secondary Reading";
@@ -183,3 +184,4 @@ char ThMLVariants::ProcessText(char *text, int maxlen, const SWKey *key, const S
 
 
 
+SWORD_NAMESPACE_END

@@ -21,6 +21,9 @@
 #include <utilfuns.h>
 #include <rawstr.h>
 #include <sysdata.h>
+
+SWORD_NAMESPACE_START
+
 /******************************************************************************
  * RawStr Statics
  */
@@ -549,3 +552,5 @@ signed char RawStr::createModule(const char *ipath)
 	
 	return 0;
 }
+
+SWORD_NAMESPACE_END

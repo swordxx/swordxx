@@ -4,6 +4,9 @@
 #include <stdio.h>
 
 using namespace std;
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 void addEntry(EntriesBlock *eb) {
 	string input;

@@ -21,11 +21,14 @@ print " finished \n";
 $config->Save();
 
 #testing SWMgr
-$localemgr = sword::LocaleMgr::systemLocaleMgr();
-$localemgr->setDefaultLocaleName("de");
+print "testing SWMgr\n";
+#$localemgr = sword::LocaleMgr::systemLocaleMgr();
+#$localemgr->setDefaultLocaleName("de");
 
 $mgr = new sword::SWMgr();
-$module = $mgr->module("GerLut1545-temp");
+print "init ... ";
+#$module = $mgr->module("GerLut1545-temp");
+$module = $mgr->module("WEB");
 print "Printing WEB Module information: \n";
 print "Name:\t", $module->Name(),"\nDescription:\t", $module->Description(), "\nLang:\t", $module->Lang(), "\n";
 

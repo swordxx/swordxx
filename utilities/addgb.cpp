@@ -21,6 +21,13 @@
 #define O_BINARY 0
 #endif
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::TreeKeyIdx;
+using sword::RawGenBook;
+using sword::SWKey;
+#endif
+
+
 void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 	if (!target)
 		target = &treeKey;

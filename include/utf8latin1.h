@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This filter converts UTF-8 encoded text to Latin-1
   */
 class SWDLLEXPORT UTF8Latin1:public SWFilter {
@@ -33,4 +35,5 @@ public:
   virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

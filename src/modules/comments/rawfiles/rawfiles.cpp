@@ -25,6 +25,7 @@
 #define O_BINARY 0              // If it hasn't been defined than we probably
 #endif                          // don't need it.
 
+SWORD_NAMESPACE_START
 
  /******************************************************************************
  * RawFiles Constructor - Initializes data for instance of RawFiles
@@ -272,3 +273,4 @@ char RawFiles::createModule (const char *path) {
 
 
 
+SWORD_NAMESPACE_END

@@ -20,6 +20,7 @@
 #include <ztext.h>
 //#include <zlib.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * zText Constructor - Initializes data for instance of zText
@@ -259,3 +260,5 @@ void zText::increment(int steps) {
 	if (tmpkey != key)
 		delete tmpkey;
 }
+
+SWORD_NAMESPACE_END

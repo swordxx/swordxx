@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.54 2002/09/30 10:34:43 dglassey Exp $
+* $Id: swmodule.h,v 1.55 2002/10/01 19:52:40 dglassey Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -35,7 +35,7 @@
 #include <defs.h>
 #include <multimapwdef.h>
 
-
+SWORD_NAMESPACE_START
 
 #define SWMODULE_OPERATORS \
 	operator const char *() { return RenderText(); } \
@@ -574,4 +574,6 @@ protected:
 	SWMODULE_OPERATORS
 
 };
+
+SWORD_NAMESPACE_END
 #endif

@@ -8,6 +8,7 @@
 #include "config.h"
 #endif
 
+
 typedef signed char __s8;
 typedef unsigned char __u8;
 

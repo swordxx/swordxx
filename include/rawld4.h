@@ -2,7 +2,7 @@
  *  rawld.cpp - code for class 'RawLD'- a module that reads raw lexicon and
  *				dictionary files: *.dat *.idx
  *
- * $Id: rawld4.h,v 1.10 2002/07/28 01:48:38 scribe Exp $
+ * $Id: rawld4.h,v 1.11 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <swld.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawLD4 : public RawStr4, public SWLD {
 	void strongsPad(char *buf);
@@ -63,5 +65,5 @@ public:
 
 };
 
-
+SWORD_NAMESPACE_END
 #endif

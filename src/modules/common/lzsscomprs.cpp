@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <lzsscomprs.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * LZSSCompress Statics
@@ -663,3 +664,5 @@ void LZSSCompress::Decode(void)
 	}
 	slen = totalLen;
 }
+
+SWORD_NAMESPACE_END

@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.13 2002/06/25 04:17:29 chrislit Exp $
+ * $Id: canon.h,v 1.14 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,6 +23,9 @@
  * [on]tbooks - initialize static instance for all canonical text names
  *		and chapmax
  */
+
+#include <defs.h>
+SWORD_NAMESPACE_START
 
 struct sbook
   VerseKey::otbooks[] = {
@@ -693,3 +696,5 @@ int
   { {sizeof (VerseKey::otbks) / 4, sizeof (VerseKey::otcps) / 4}
 , {sizeof (VerseKey::ntbks) / 4, sizeof (VerseKey::ntcps) / 4}
 };
+
+SWORD_NAMESPACE_END

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swlog.h	- definition of class SWLog used for logging messages
  *
- * $Id: swlog.h,v 1.4 2002/07/19 23:00:43 scribe Exp $
+ * $Id: swlog.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT SWLog {
 protected:
 	char logLevel;
@@ -42,5 +44,5 @@ public:
 	virtual void LogInformation (char *fmt, ...);
 };
 
-
+SWORD_NAMESPACE_END
 #endif

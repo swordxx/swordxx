@@ -2,7 +2,7 @@
 *  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
 *				types of Lexicon and Dictionary modules (hence the 'LD').
 *
-* $Id: swgenbook.h,v 1.2 2002/07/28 01:48:38 scribe Exp $
+* $Id: swgenbook.h,v 1.3 2002/10/01 19:52:40 dglassey Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <treekeyidx.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 /** the basis for all types of Lexicon and
 * Dictionary modules (hence the 'LD').
@@ -58,4 +60,5 @@ public:
 
 };
 
+SWORD_NAMESPACE_END
 #endif

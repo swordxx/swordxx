@@ -13,6 +13,7 @@
 #include "swlog.h"
 //---------------------------------------------------------------------------
 
+SWORD_NAMESPACE_START
 
 SWLog *SWLog::systemlog = 0;
 
@@ -129,4 +130,6 @@ void SWLog::LogInformation(char *fmt, ...)
 		std::cout << std::endl;
 #endif
 	}
-} 
+}
+
+SWORD_NAMESPACE_END

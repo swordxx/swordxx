@@ -5,6 +5,7 @@
 
 #include <swgenbook.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * SWLD Constructor - Initializes data for instance of SWLD
@@ -25,3 +26,4 @@ SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWDisplay *idis
 SWGenBook::~SWGenBook() {
 }
 
+SWORD_NAMESPACE_END

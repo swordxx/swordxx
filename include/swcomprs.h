@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcomprs.h   - definition of Class SWCompress used for data compression
  *
- * $Id: swcomprs.h,v 1.7 2001/12/20 10:01:00 scribe Exp $
+ * $Id: swcomprs.h,v 1.8 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT SWCompress
 {
   void Init ();
@@ -42,4 +44,5 @@ public:
   virtual void Decode (void);	// override to provide compression algorythm
 };
 
+SWORD_NAMESPACE_END
 #endif

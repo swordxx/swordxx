@@ -9,6 +9,8 @@
 
 #include <utf16utf8.h>
 
+SWORD_NAMESPACE_START
+
 UTF16UTF8::UTF16UTF8() {
 }
 
@@ -95,3 +97,4 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 
 
 
+SWORD_NAMESPACE_END

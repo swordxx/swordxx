@@ -18,6 +18,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 ThMLOSIS::ThMLOSIS() {
 }
@@ -330,3 +331,5 @@ const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 	}
 	return outRef.c_str();
 }
+
+SWORD_NAMESPACE_END

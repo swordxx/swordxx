@@ -10,6 +10,8 @@
 #include <swkey.h>
 #include <listkey.h>
 
+SWORD_NAMESPACE_START
+
 static const char *classes[] = {"ListKey", "SWKey", "SWObject", 0};
 SWClass ListKey::classdef(classes);
 
@@ -288,5 +290,5 @@ const char *ListKey::getText() const {
 	return (key) ? key->getText() : keytext;
 }
 
-
+SWORD_NAMESPACE_END
 

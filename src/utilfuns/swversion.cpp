@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+SWORD_NAMESPACE_START
 
 SWVersion SWVersion::currentVersion(SWORDVER);
 
@@ -76,3 +77,5 @@ const char *SWVersion::getText() const {
 
 	return buf;
 }
+
+SWORD_NAMESPACE_END

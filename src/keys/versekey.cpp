@@ -20,10 +20,9 @@
 #include <swlog.h>
 #include <versekey.h>
 #include <localemgr.h>
-extern "C" {
 #include <roman.h>
-}
 
+SWORD_NAMESPACE_START
 
 static const char *classes[] = {"VerseKey", "SWKey", "SWObject", 0};
 SWClass VerseKey::classdef(classes);
@@ -1479,3 +1478,4 @@ const char *VerseKey::getRangeText() const {
 	return rangeText;
 }
 
+SWORD_NAMESPACE_END

@@ -2,7 +2,7 @@
  *  rawgbf.h   - code for class 'RawGBF'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawgbf.h,v 1.4 2002/02/19 01:20:35 scribe Exp $
+ * $Id: rawgbf.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT RawGBF:public SWText, public RawVerse
 {
 
@@ -41,5 +43,5 @@ public:
   virtual operator char *();
 };
 
-
+SWORD_NAMESPACE_END
 #endif

@@ -19,6 +19,8 @@
 #include <string.h>
 #include <gbfhtmlhref.h>
 
+SWORD_NAMESPACE_START
+
 GBFHTMLHREF::GBFHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -146,3 +148,5 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 	}
 	return true;
 }
+
+SWORD_NAMESPACE_END

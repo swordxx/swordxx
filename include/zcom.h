@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.16 2002/09/25 21:22:03 scribe Exp $
+ * $Id: zcom.h,v 1.17 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,8 @@
 #include <swcomprs.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWDLLEXPORT zCom:public zVerse, public SWCom {
 	VerseKey *lastWriteKey;
@@ -71,5 +73,5 @@ public:
 
 };
 
-
+SWORD_NAMESPACE_END
 #endif

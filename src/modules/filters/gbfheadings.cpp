@@ -13,6 +13,8 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
+
 
 const char GBFHeadings::on[] = "On";
 const char GBFHeadings::off[] = "Off";
@@ -105,3 +107,5 @@ char GBFHeadings::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

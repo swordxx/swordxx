@@ -22,6 +22,8 @@
 #define O_BINARY 0
 #endif
 
+SWORD_NAMESPACE_START
+
 /******************************************************************************
  * RawGenBook Constructor - Initializes data for instance of RawGenBook
  *
@@ -216,3 +218,5 @@ SWKey *RawGenBook::CreateKey() {
 	TreeKeyIdx *newKey = new TreeKeyIdx(path);
 	return newKey;
 }
+
+SWORD_NAMESPACE_END

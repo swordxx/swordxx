@@ -1,6 +1,7 @@
 TOP        = $(PWD)
 SWIG       = swig
-SWIGOPT    = -Wall -proxy
+#SWIGOPT    = -Wall -proxy
+SWIGOPT    = -shadow
 CXXSRCS    = 
 TARGET     = sword
 INTERFACE  = sword.i

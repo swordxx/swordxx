@@ -19,6 +19,7 @@
 #include <rawverse.h>
 #include <rawgbf.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * RawGBF Constructor - Initializes data for instance of RawGBF
@@ -82,3 +83,5 @@ RawGBF::operator char*()
 
 	return entrybuf;
 }
+
+SWORD_NAMESPACE_END

@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.9 2002/07/28 01:48:38 scribe Exp $
+ * $Id: swconfig.cpp,v 1.10 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,6 +23,7 @@
 #include <swconfig.h>
 #include <utilfuns.h>
 
+SWORD_NAMESPACE_START
 
 SWConfig::SWConfig(const char * ifilename) {
 	filename = ifilename;
@@ -161,3 +162,5 @@ void SWConfig::augment(SWConfig &addFrom) {
 ConfigEntMap & SWConfig::operator [] (const char *section) {
     return Sections[section];
 }
+
+SWORD_NAMESPACE_END

@@ -7,6 +7,8 @@
 #include <swmodule.h>
 #include <swdisp.h>
 
+SWORD_NAMESPACE_START
+
 static const char *classes[] = {"SWDisplay", "SWObject", 0};
 SWClass SWDisplay::classdef(classes);
 
@@ -25,3 +27,5 @@ char SWDisplay::Display(SWModule &imodule)
 	std::cout << (const char *)imodule;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

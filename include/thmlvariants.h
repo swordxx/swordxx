@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This Filter shows/hides textual variants
   */
 class SWDLLEXPORT ThMLVariants : public SWFilter
@@ -58,4 +60,5 @@ class SWDLLEXPORT ThMLVariants : public SWFilter
     }
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -31,20 +31,23 @@ enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATI
 //#include <unicode/ustring.h>
 //#include <unicode/uchar.h>
 
-//#include <unicode/unistr.h>
-//#include <unicode/translit.h>
+#include <unicode/unistr.h>
+#include <unicode/translit.h>
 
 #include <defs.h>
 #include <map>
 
-class UnicodeString;
+
+//class UnicodeString;
+
+SWORD_NAMESPACE_START
 
 struct SWTransData {
 	UnicodeString resource;
 	UTransDirection dir;
 };
-typedef map <const UnicodeString, SWTransData> SWTransMap;
-typedef pair<UnicodeString, SWTransData> SWTransPair;
+typedef std::map <const UnicodeString, SWTransData> SWTransMap;
+typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
   /** This Filter uses ICU for transliteration
   */
@@ -91,4 +94,5 @@ private:
     }
 };
 
+SWORD_NAMESPACE_END
 #endif

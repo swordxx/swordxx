@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.9 2002/07/28 06:44:01 scribe Exp $
+ * $Id: utilstr.h,v 1.10 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,6 +21,10 @@
 
 #ifndef UTILSTR_H
 #define UTILSTR_H
+
+#include <defs.h>
+
+SWORD_NAMESPACE_START
 
 /** Use stdstr to copy a const char* to a char*
 */
@@ -81,4 +85,5 @@ static const unsigned char SW_toupper_array[256] =
 
 #define SW_toupper(c) SW_toupper_array[(unsigned char)c]
 
+SWORD_NAMESPACE_END
 #endif

@@ -2,7 +2,7 @@
  *  ztext.h   - code for class 'zText'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: ztext.h,v 1.25 2002/09/25 21:22:03 scribe Exp $
+ * $Id: ztext.h,v 1.26 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,8 @@
 //#include <swcomprs.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 /*** SWModule implementation for compressed modules
 * This class handles compressed modules.
@@ -76,4 +78,5 @@ public:
 
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char ThMLLemma::on[] = "On";
 const char ThMLLemma::off[] = "Off";
@@ -95,3 +96,5 @@ char ThMLLemma::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -20,6 +20,8 @@
 #include <defs.h>
 #include <swfilter.h>
 
+SWORD_NAMESPACE_START
+
 /** this filter converts GBF text to HTML text with hrefs
  */
 class SWDLLEXPORT GBFOSIS : public SWFilter {
@@ -32,4 +34,5 @@ public:
 	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif /* THMLOSIS_H */

@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** this filter converts ThML text to RTF text
   */
 class SWDLLEXPORT ThMLRTF:public SWBasicFilter
@@ -35,4 +37,5 @@ public:
   ThMLRTF ();
 };
 
+SWORD_NAMESPACE_END
 #endif

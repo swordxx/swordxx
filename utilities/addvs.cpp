@@ -14,6 +14,14 @@
 #include <rawtext.h>
 #include <iostream>
 
+#ifndef NO_SWORD_NAMESPACE
+using sword::SWMgr;
+using sword::RawText;
+using sword::SWKey;
+using sword::VerseKey;
+using sword::ListKey;
+using sword::SWModule;
+#endif
 
 #ifndef O_BINARY
 #define O_BINARY 0

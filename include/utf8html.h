@@ -24,6 +24,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** This filter converts UTF-8 text into HTML escape sequences
   */
 class SWDLLEXPORT UTF8HTML:public SWFilter {
@@ -32,4 +34,5 @@ public:
   virtual char ProcessText (char *text, int maxlen, const SWKey *key, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

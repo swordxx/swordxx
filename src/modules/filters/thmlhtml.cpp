@@ -19,6 +19,7 @@
 #include <thmlhtml.h>
 #include <swmodule.h>
 
+SWORD_NAMESPACE_START
 
 ThMLHTML::ThMLHTML() {
 	setTokenStart("<");
@@ -209,3 +210,5 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 	return true;
 }
 
+
+SWORD_NAMESPACE_END

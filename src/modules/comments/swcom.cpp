@@ -5,6 +5,7 @@
 
 #include <swcom.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * SWCom Constructor - Initializes data for instance of SWCom
@@ -66,3 +67,5 @@ long SWCom::Index(long iindex) {
 
 	return Index();
 }
+
+SWORD_NAMESPACE_END

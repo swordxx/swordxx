@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <utf8html.h>
 
+SWORD_NAMESPACE_START
+
 UTF8HTML::UTF8HTML() {
 }
 
@@ -66,3 +68,5 @@ char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

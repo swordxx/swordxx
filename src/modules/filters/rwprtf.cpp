@@ -8,6 +8,7 @@
 #include <string.h>
 #include <rwprtf.h>
 
+SWORD_NAMESPACE_START
 
 RWPRTF::RWPRTF() {
 
@@ -105,3 +106,5 @@ char RWPRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

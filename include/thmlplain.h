@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** this filter converts ThML text to plain text
   */
 class SWDLLEXPORT ThMLPlain:public SWFilter
@@ -34,4 +36,5 @@ public:
   virtual char ProcessText (char *text, int maxlen = -1);
 };
 
+SWORD_NAMESPACE_END
 #endif

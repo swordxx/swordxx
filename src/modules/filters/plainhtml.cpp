@@ -19,6 +19,7 @@
 #include <string.h>
 #include <plainhtml.h>
 
+SWORD_NAMESPACE_START
 
 PLAINHTML::PLAINHTML()
 {
@@ -132,3 +133,5 @@ char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

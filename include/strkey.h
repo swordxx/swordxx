@@ -1,7 +1,7 @@
 /******************************************************************************
  *  strkey.h - code for class 'strkey'- a standard Biblical verse key
  *
- * $Id: strkey.h,v 1.6 2001/08/08 09:17:00 scribe Exp $
+ * $Id: strkey.h,v 1.7 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** a standard string key class (used
   * for modules that index on single strings (eg. cities,
   * names, words, etc.)
@@ -49,6 +51,6 @@ public:
   SWKEY_OPERATORS
 
 };
-
+SWORD_NAMESPACE_END
 
 #endif

@@ -22,6 +22,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** this filter converts GBF text into ThML text
   */
 class SWDLLEXPORT GBFThML:public SWFilter
@@ -31,4 +33,5 @@ public:
   virtual char ProcessText (char *text, int maxlen = -1);
 };
 
+SWORD_NAMESPACE_END
 #endif

@@ -20,6 +20,8 @@
 #include <ctype.h>
 #include <rwphtml.h>
 
+SWORD_NAMESPACE_START
+
 RWPHTML::RWPHTML()
 {
 }
@@ -185,3 +187,5 @@ char RWPHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 	*to = 0;        
 	return 0;
 }
+
+SWORD_NAMESPACE_END

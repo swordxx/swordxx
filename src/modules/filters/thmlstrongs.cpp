@@ -16,6 +16,8 @@
 #endif
 #include <ctype.h>
 
+SWORD_NAMESPACE_START
+
 const char ThMLStrongs::on[] = "On";
 const char ThMLStrongs::off[] = "Off";
 const char ThMLStrongs::optName[] = "Strong's Numbers";
@@ -154,3 +156,5 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

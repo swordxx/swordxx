@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <treekeyidx.h>
 #include <rawgenbook.h>
-
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 	if (!target)

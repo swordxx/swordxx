@@ -25,6 +25,8 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
+
 const char PLAINFootnotes::on[] = "On";
 const char PLAINFootnotes::off[] = "Off";
 const char PLAINFootnotes::optName[] = "Footnotes";
@@ -100,3 +102,4 @@ char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const
 	return 0;
 }
 
+SWORD_NAMESPACE_END

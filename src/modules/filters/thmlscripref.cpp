@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char ThMLScripref::on[] = "On";
 const char ThMLScripref::off[] = "Off";
@@ -101,3 +102,5 @@ char ThMLScripref::ProcessText(char *text, int maxlen, const SWKey *key, const S
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

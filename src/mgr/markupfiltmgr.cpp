@@ -37,6 +37,7 @@
 
 #include <swmgr.h>
 
+SWORD_NAMESPACE_START
 
 /******************************************************************************
  * MarkupFilterMgr Constructor - initializes instance of MarkupFilterMgr
@@ -234,3 +235,5 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                 }
 
 }
+
+SWORD_NAMESPACE_END

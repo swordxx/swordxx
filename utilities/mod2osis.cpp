@@ -22,6 +22,11 @@
 #include <markupfiltmgr.h>
 #include <algorithm>
 
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
+
+
 void errorOutHelp(char *appName) {
 	cerr << appName << " - a tool to output a Sword module in OSIS format\n";
 	cerr << "usage: "<< appName << " <modname> \n";

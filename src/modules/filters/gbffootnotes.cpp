@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char GBFFootnotes::on[] = "On";
 const char GBFFootnotes::off[] = "Off";
@@ -116,3 +117,5 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const S
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END

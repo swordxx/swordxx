@@ -23,6 +23,8 @@
 #include <sysdata.h>
 #include <entriesblk.h>
 
+SWORD_NAMESPACE_START
+
 /******************************************************************************
  * zStr Statics
  */
@@ -709,3 +711,5 @@ signed char zStr::createModule(const char *ipath) {
 	
 	return 0;
 }
+
+SWORD_NAMESPACE_END

@@ -14,6 +14,9 @@
 #endif
 
 #include <swcomprs.h>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
+#endif
 
 class FileCompress: public SWCompress {
 	int ifd;

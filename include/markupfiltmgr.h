@@ -24,6 +24,8 @@
 
 #include <encfiltmgr.h>
 
+SWORD_NAMESPACE_START
+
 /** This class is like a normal @ref SWEncodingMgr,
   * but you can additonally specify which markup
   * you want to use.
@@ -72,4 +74,5 @@ public:
         virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
 };
 
+SWORD_NAMESPACE_END
 #endif

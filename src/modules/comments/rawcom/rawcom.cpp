@@ -19,6 +19,7 @@
 #include <rawverse.h>
 #include <rawcom.h>
 
+SWORD_NAMESPACE_START
 
  /******************************************************************************
  * RawCom Constructor - Initializes data for instance of RawCom
@@ -223,3 +224,4 @@ void RawCom::deleteEntry() {
 }
 
 
+SWORD_NAMESPACE_END

@@ -1,7 +1,7 @@
 /******************************************************************************
  *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.27 2002/08/27 22:52:36 scribe Exp $
+ * $Id: versekey.h,v 1.28 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,8 @@
 #include <ctype.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 #define POS_MAXVERSE ((char)3)
 #define POS_MAXCHAPTER ((char)4)
@@ -404,5 +406,5 @@ public:
 	virtual SWKey & operator = (const VerseKey & ikey) { copyFrom(ikey); return *this; }
 };
 
-
+SWORD_NAMESPACE_END
 #endif

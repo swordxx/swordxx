@@ -9,6 +9,8 @@
 #include <gbfrtf.h>
 #include <ctype.h>
 
+SWORD_NAMESPACE_START
+
 GBFRTF::GBFRTF() {
 }
 
@@ -296,3 +298,5 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	*to = 0;
 	return 0;
 }
+
+SWORD_NAMESPACE_END

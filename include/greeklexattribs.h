@@ -25,6 +25,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
   /** this filter converts ThML text to plain text
   */
 class SWDLLEXPORT GreekLexAttribs:public SWFilter {
@@ -33,4 +35,5 @@ public:
 	virtual char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
 };
 
+SWORD_NAMESPACE_END
 #endif

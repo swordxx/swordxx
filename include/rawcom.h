@@ -2,7 +2,7 @@
  *  rawcom.h   - code for class 'RawCom'- a module that reads raw commentary
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawcom.h,v 1.15 2002/07/28 01:48:38 scribe Exp $
+ * $Id: rawcom.h,v 1.16 2002/10/01 19:52:40 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,8 @@
 #include <swcom.h>
 
 #include <defs.h>
+
+SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawCom:public RawVerse, public SWCom {
 
@@ -58,4 +60,5 @@ public:
 	SWMODULE_OPERATORS
 
 };
+SWORD_NAMESPACE_END
 #endif

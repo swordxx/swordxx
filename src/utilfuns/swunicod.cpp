@@ -17,6 +17,7 @@
  */
 
 #include "swunicod.h"
+SWORD_NAMESPACE_START
 unsigned char* UTF32to8 (unsigned long utf32, unsigned char * utf8) {
   unsigned int i;
   for (i = 0; i < 6; i++) utf8[i] = 0;
@@ -137,3 +138,5 @@ unsigned long UTF8to32 (unsigned char * utf8) {
   }
   return utf32;
 }
+
+SWORD_NAMESPACE_END

@@ -13,6 +13,8 @@
 
 #include <defs.h>
 
+SWORD_NAMESPACE_START
+
 class SWDLLEXPORT RawVerse {
 	static int instance;		// number of instantiated RawVerse objects or derivitives
 protected:
@@ -34,5 +36,5 @@ public:
 	static char createModule(const char *path);
 };
 
-
+SWORD_NAMESPACE_END
 #endif

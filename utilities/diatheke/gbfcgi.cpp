@@ -18,6 +18,8 @@
 #include <string.h>
 #include "gbfcgi.h"
 
+SWORD_NAMESPACE_START
+
 GBFCGI::GBFCGI() {
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -136,3 +138,5 @@ bool GBFCGI::handleToken(char **buf, const char *token, DualStringMap &userData)
 	}
 	return true;
 }
+
+SWORD_NAMESPACE_END

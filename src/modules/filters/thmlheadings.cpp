@@ -13,6 +13,7 @@
 #include <unixstr.h>
 #endif
 
+SWORD_NAMESPACE_START
 
 const char ThMLHeadings::on[] = "On";
 const char ThMLHeadings::off[] = "Off";
@@ -105,3 +106,5 @@ char ThMLHeadings::ProcessText(char *text, int maxlen, const SWKey *key, const S
 	}
 	return 0;
 }
+
+SWORD_NAMESPACE_END
