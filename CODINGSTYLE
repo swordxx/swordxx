@@ -29,7 +29,7 @@ required:
 		statement;
 		statement;
 	}
-	else	{
+	else {
 		statement;
 		statement;
 	}

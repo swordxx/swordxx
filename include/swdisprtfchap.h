@@ -2,7 +2,7 @@
  *  swdisprtfchap.h	- definition of class SWDispRTFChap, an SWDisplay used to
  *				display an entire chapter in Rich Text Format
  *
- * $Id: swdisprtfchap.h,v 1.4 2002/06/26 12:53:05 scribe Exp $
+ * $Id: swdisprtfchap.h,v 1.5 2002/07/30 11:33:17 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -34,34 +34,17 @@
 #include <swdisprtf.h>
 //---------------------------------------------------------------------------
 class SWDispRTFChap_init;
-class SWDispRTFChap:public SWDispRTF
-{
+class SWDispRTFChap:public SWDispRTF {
 protected:
-
-  bool FCurVerseMrk;
-  bool FCurVersePos;
-  bool FMarkCurrentVerse;
-  bool FAutoPosition;
-  
-
-  virtual void __fastcall Loaded (void);
+	virtual void __fastcall Loaded (void);
 public:
 	static char platformID;
 	static SWDispRTFChap_init _init;
 	
-    __fastcall SWDispRTFChap (TComponent * Owner);
-    __fastcall ~ SWDispRTFChap ();
+    __fastcall SWDispRTFChap(TWinControl *Owner);
+    __fastcall ~ SWDispRTFChap();
 
-  virtual char Display (SWModule & imodule);
-    __published:__property bool CurVersePos =
-  {
-  read = FCurVersePos, write = FCurVersePos, default = true};
-    __property bool CurVerseMrk = { read = FCurVerseMrk, write =
-	 FCurVerseMrk, default = true };
-  __property bool MarkCurrentVerse = { read = FMarkCurrentVerse, write =
-	 FMarkCurrentVerse, default = true };
-  __property bool AutoPosition = { read = FAutoPosition, write =
-	 FAutoPosition, default = true };
+	virtual char Display(SWModule & imodule);
 };
 
 //---------------------------------------------------------------------------
