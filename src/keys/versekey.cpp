@@ -137,8 +137,10 @@ void VerseKey::setLocale(const char *name) {
 	if (localeCache.name)
 		useCache = (!strcmp(localeCache.name, name));
 
-	if (!useCache)		// if we're setting params for a new locale
+	if (!useCache)	{	// if we're setting params for a new locale
 		stdstr(&(localeCache.name), name);
+		localeCache.abbrevsCnt = 0;
+	}
 
 	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::systemLocaleMgr.getLocale(name);
 	localeCache.locale = locale;
