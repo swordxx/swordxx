@@ -119,6 +119,7 @@ USEUNIT("..\..\src\modules\filters\gbfredletterwords.cpp");
 USEUNIT("..\..\src\modules\filters\osisrtf.cpp");
 USEUNIT("..\..\src\modules\filters\osisplain.cpp");
 USEUNIT("..\..\src\utilfuns\swbuf.cpp");
+USEUNIT("..\..\src\modules\filters\osisheadings.cpp");
 //---------------------------------------------------------------------------
 USE("\\			preptext(entrybuf);
 ", File);
