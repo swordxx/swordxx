@@ -1,5 +1,10 @@
 #ifndef MULTIMAPWDEF
 #define MULTIMAPWDEF
+
+#include <multimap>
+
+using namespace std;
+
 // multmap that still lets you use [] to reference FIRST
 // entry of a key if multiples exist
 template <class Key, class T, class Compare>

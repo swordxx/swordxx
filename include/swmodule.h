@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.42 2002/03/19 23:59:41 scribe Exp $
+ * $Id: swmodule.h,v 1.43 2002/03/20 01:07:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -67,7 +67,7 @@ protected:
 
   ConfigEntMap ownConfig;
   ConfigEntMap *config;
-  AttributeTypeList entryAttributes;
+  mutable AttributeTypeList entryAttributes;
 
   char error;
   bool skipConsecutiveLinks;
@@ -582,7 +582,7 @@ public:
   */
   virtual void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
   virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
-  virtual AttributeTypeList getEntryAttributes() { return entryAttributes; }
+  virtual AttributeTypeList getEntryAttributes() const { return entryAttributes; }
 };
 
 
