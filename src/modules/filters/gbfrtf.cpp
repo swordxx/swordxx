@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gbfrtf.h>
+#include <ctype.h>
 
 GBFRTF::GBFRTF() {
 }
