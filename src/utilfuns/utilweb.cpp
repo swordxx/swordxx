@@ -25,8 +25,9 @@ const std::string encodeURL( const std::string& url ) {
 	m[' '] = '+';
 
 	string buf;
-	for (int i = 0; i <= url.length(); i++) { //fill "buf"
-		const char c = url[i];
+	const int length = url.length();
+	for (int i = 0; i <= length; i++) { //fill "buf"
+		const char& c = url[i];
 		buf += m[c].empty() ? string(1,c) : m[c];
 	}
 

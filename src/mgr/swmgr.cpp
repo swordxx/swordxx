@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.88 2003/04/30 08:18:45 scribe Exp $
+ * $Id: swmgr.cpp,v 1.89 2003/06/09 07:13:46 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -689,6 +689,9 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 	strcpy(buf, misc1.c_str());
 //	for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
 	for (; ((*buf2) && ((*buf2 == '/') || (*buf2 == '\\'))); buf2++);
+	if (!strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
+		buf2 += 2;
+	}
 	if (*buf2)
 		datapath += buf2;
 	delete [] buf;
