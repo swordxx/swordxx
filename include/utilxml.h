@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.5 2003/06/26 04:33:31 scribe Exp $
+ * $Id: utilxml.h,v 1.6 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,8 +29,8 @@
 
 SWORD_NAMESPACE_START
 
-typedef std::map<SWBuf, SWBuf> MapStringPair;
-typedef std::list<SWBuf> ListString;
+typedef std::map<SWBuf, SWBuf> StringPairMap;
+typedef std::list<SWBuf> StringList;
 
 /** Simple XML helper class.
 */
@@ -41,7 +41,7 @@ private:
 	mutable bool parsed;
 	mutable bool empty;
 	mutable bool endTag;
-	mutable MapStringPair attributes;
+	mutable StringPairMap attributes;
 	mutable SWBuf junkBuf;
 	
 	void parse() const;
@@ -63,7 +63,7 @@ public:
 
 	inline bool isEndTag() const { return endTag; }
 
-	const ListString getAttributeNames() const;
+	const StringList getAttributeNames() const;
 	int getAttributePartCount(const char *attribName, char partSplit = '|') const;
 	const char *getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
 	const char *setAttribute(const char *attribName, const char *attribValue);

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlvariants.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
+ * $Id: thmlvariants.h,v 1.5 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,7 +37,7 @@ class SWDLLEXPORT ThMLVariants : public SWFilter {
 
 	static const char optName[];
 	static const char optTip[];
-	OptionsList options;
+	StringList options;
 
 public:
 	ThMLVariants();
@@ -47,7 +47,7 @@ public:
 	virtual const char *getOptionTip() { return optTip; }
 	virtual void setOptionValue(const char *ival);
 	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
+	virtual StringList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

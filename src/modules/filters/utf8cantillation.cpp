@@ -11,31 +11,21 @@
 
 SWORD_NAMESPACE_START
 
-const char UTF8Cantillation::on[] = "On";
-const char UTF8Cantillation::off[] = "Off";
-const char UTF8Cantillation::optName[] = "Hebrew Cantillation";
-const char UTF8Cantillation::optTip[] = "Toggles Hebrew Cantillation Marks";
+const char oName[] = "Hebrew Cantillation";
+const char oTip[] = "Toggles Hebrew Cantillation Marks";
 
-UTF8Cantillation::UTF8Cantillation() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
+
+UTF8Cantillation::UTF8Cantillation() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
+
 
 UTF8Cantillation::~UTF8Cantillation(){};
 
-void UTF8Cantillation::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *UTF8Cantillation::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char UTF8Cantillation::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char UTF8Cantillation::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {
 		//The UTF-8 range 0xD6 0x90 to 0xD6 0xAF and 0xD7 0x84 consist of Hebrew cantillation marks so block those out.
 		SWBuf orig = text;

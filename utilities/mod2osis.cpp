@@ -51,9 +51,9 @@ int main(int argc, char **argv)
 	}
 
 	SWMgr mgr(new MarkupFilterMgr(FMT_OSIS));
-	OptionsList options = mgr.getGlobalOptions();
-	for (OptionsList::iterator it = options.begin(); it != options.end(); it++) {
-		OptionsList values = mgr.getGlobalOptionValues(it->c_str());
+	StringList options = mgr.getGlobalOptions();
+	for (StringList::iterator it = options.begin(); it != options.end(); it++) {
+		StringList values = mgr.getGlobalOptionValues(it->c_str());
 		if (find(values.begin(), values.end(), "On") != values.end()) {
 			mgr.setGlobalOption(it->c_str(), "On");
 		}

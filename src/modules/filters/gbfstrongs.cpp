@@ -16,34 +16,22 @@
 
 SWORD_NAMESPACE_START
 
-const char GBFStrongs::on[] = "On";
-const char GBFStrongs::off[] = "Off";
-const char GBFStrongs::optName[] = "Strong's Numbers";
-const char GBFStrongs::optTip[] = "Toggles Strong's Numbers On and Off if they exist";
+const char oName[] = "Strong's Numbers";
+const char oTip[] = "Toggles Strong's Numbers On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-GBFStrongs::GBFStrongs() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+GBFStrongs::GBFStrongs() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 GBFStrongs::~GBFStrongs() {
 }
 
-void GBFStrongs::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *GBFStrongs::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;

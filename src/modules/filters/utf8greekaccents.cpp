@@ -11,28 +11,18 @@
 
 SWORD_NAMESPACE_START
 
-const char UTF8GreekAccents::on[] = "On";
-const char UTF8GreekAccents::off[] = "Off";
-const char UTF8GreekAccents::optName[] = "Greek Accents";
-const char UTF8GreekAccents::optTip[] = "Toggles Greek Accents";
+const char oName[] = "Greek Accents";
+const char oTip[] = "Toggles Greek Accents";
 
-UTF8GreekAccents::UTF8GreekAccents() {
-	option = true;
-	options.push_back(on);
-	options.push_back(off);
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
+
+UTF8GreekAccents::UTF8GreekAccents() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("On");
 }
 
 UTF8GreekAccents::~UTF8GreekAccents(){};
 
-void UTF8GreekAccents::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *UTF8GreekAccents::getOptionValue()
-{
-	return (option) ? on:off;
-}
 
 char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 

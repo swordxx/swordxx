@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlmorph.h,v 1.4 2003/02/20 07:25:20 scribe Exp $
+ * $Id: thmlmorph.h,v 1.5 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,28 +21,17 @@
 #ifndef THMLMORPH_H
 #define THMLMORPH_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
 /** This Filter shows/hides morph tags in a ThML text
  */
-class SWDLLEXPORT ThMLMorph : public SWFilter {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT ThMLMorph : public SWOptionFilter {
 public:
 	ThMLMorph();
 	virtual ~ThMLMorph();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

@@ -103,13 +103,13 @@ XMLTag::~XMLTag() {
 		delete [] name;
 }
 
-const ListString XMLTag::getAttributeNames() const {
-	ListString retVal;
+const StringList XMLTag::getAttributeNames() const {
+	StringList retVal;
 
 	if (!parsed)
 		parse();
 
-	for (MapStringPair::iterator it = attributes.begin(); it != attributes.end(); it++)
+	for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++)
 		retVal.push_back(it->first.c_str());
 
 	return retVal;
@@ -149,7 +149,7 @@ const char *XMLTag::getAttribute(const char *attribName, int partNum, char partS
 	if (!parsed)
 		parse();
 
-	MapStringPair::iterator it = attributes.find(attribName);
+	StringPairMap::iterator it = attributes.find(attribName);
 	const char *retVal = (it == attributes.end()) ? 0 : it->second.c_str();
 	if ((retVal) && (partNum > -1))
 		retVal = getPart(retVal, partNum, partSplit);
@@ -176,7 +176,7 @@ const char *XMLTag::toString() const {
 		tag += "/";
 
 	tag += getName();
-	for (MapStringPair::iterator it = attributes.begin(); it != attributes.end(); it++) {
+	for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++) {
 		tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
 	}
 

@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.54 2003/06/27 01:41:06 scribe Exp $
+* $Id: swmgr.h,v 1.55 2003/07/05 04:58:42 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -53,6 +53,7 @@ SWORD_NAMESPACE_START
 
 typedef std::map < SWBuf, SWModule *, std::less < SWBuf > >ModMap;
 typedef std::map < SWBuf, SWFilter * >FilterMap;
+typedef std::list < SWBuf >StringList;
 
 /** SWMgr is the main class of the Sword library.
 *
@@ -62,7 +63,7 @@ typedef std::map < SWBuf, SWFilter * >FilterMap;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.54 2003/06/27 01:41:06 scribe Exp $
+* @version $Id: swmgr.h,v 1.55 2003/07/05 04:58:42 scribe Exp $
 */
 class SWDLLEXPORT SWMgr {
 
@@ -85,7 +86,7 @@ protected:
 	SWFilter *osisplain;
 	SWFilter *transliterator;
 	FilterList cleanupFilters;
-	OptionsList options;
+	StringList options;
 	virtual void init(); // use to initialize before loading modules
 	virtual char AddModToConfig(int conffd, const char *fname);
 	virtual void loadConfigDir(const char *ipath);
@@ -95,7 +96,7 @@ protected:
 	virtual void AddLocalOptions(SWModule * module, ConfigEntMap & section,
 	ConfigEntMap::iterator start,
 	ConfigEntMap::iterator end);
-	std::list<SWBuf> augPaths;
+	StringList augPaths;
 
 	/**
 	* Adds the encoding filters which are defined in "section" to the SWModule object "module".
@@ -136,7 +137,7 @@ public:
 	/**
 	*
 	*/
-	static void findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths = 0);
+	static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0);
 	/** The global config object.
 	* This is the global config object. It contains all items of all modules,
 	* so lookups of entries should use this config object.
@@ -244,11 +245,11 @@ public:
 	/** A list of all availble options with the currently set  values
 	* @return This function returns a list of global options.
 	*/
-	virtual OptionsList getGlobalOptions();
+	virtual StringList getGlobalOptions();
 	/**
 	*
 	*/
-	virtual OptionsList getGlobalOptionValues(const char *option);
+	virtual StringList getGlobalOptionValues(const char *option);
 	/**
 	* Sets the cipher key for the given module. This function updates the key
 	* at runtime, but it does not write to the config file.

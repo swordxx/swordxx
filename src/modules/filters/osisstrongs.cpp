@@ -16,34 +16,23 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISStrongs::on[] = "On";
-const char OSISStrongs::off[] = "Off";
-const char OSISStrongs::optName[] = "Strong's Numbers";
-const char OSISStrongs::optTip[] = "Toggles Strong's Numbers On and Off if they exist";
+const char oName[] = "Strong's Numbers";
+const char oTip[] = "Toggles Strong's Numbers On and Off if they exist";
+
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
 
-OSISStrongs::OSISStrongs() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+OSISStrongs::OSISStrongs() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 OSISStrongs::~OSISStrongs() {
 }
 
-void OSISStrongs::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *OSISStrongs::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	const char *from;
 	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;

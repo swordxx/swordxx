@@ -112,7 +112,7 @@ const char *SWMgr_getGlobalOptionTip(SWHANDLE hmgr, const char *option) {
 // ret: forward_iterator
 SWHANDLE SWMgr_getGlobalOptionsIterator(SWHANDLE hmgr) {
 	SWMgr *mgr = (SWMgr *)hmgr;
-	static OptionsList::iterator it;
+	static StringList::iterator it;
 	
 	if (mgr) 
 		it = mgr->getGlobalOptions().begin();
@@ -123,7 +123,7 @@ SWHANDLE SWMgr_getGlobalOptionsIterator(SWHANDLE hmgr) {
 // ret: forward_iterator
 SWHANDLE SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, const char *option) {
 	SWMgr *mgr = (SWMgr *)hmgr;
-	static OptionsList::iterator it;
+	static StringList::iterator it;
 	
 	if (mgr) 
 		it = mgr->getGlobalOptionValues(option).begin();
@@ -241,13 +241,13 @@ const char *SWModule_getRenderText(SWHANDLE hmodule) {
 // stringlist_iterator methods
 
 void stringlist_iterator_next(SWHANDLE hsli) {
-	OptionsList::iterator *sli = (OptionsList::iterator *)hsli;
+	StringList::iterator *sli = (StringList::iterator *)hsli;
 	(*sli)++;
 }
 
 
 const char *stringlist_iterator_val(SWHANDLE hsli) {
-	OptionsList::iterator *sli = (OptionsList::iterator *)hsli;
+	StringList::iterator *sli = (StringList::iterator *)hsli;
 	return (const char *)(*sli)->c_str();
 }
 

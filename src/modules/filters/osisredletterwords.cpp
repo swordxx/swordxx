@@ -16,34 +16,22 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISRedLetterWords::on[] = "On";
-const char OSISRedLetterWords::off[] = "Off";
-const char OSISRedLetterWords::optName[] = "Words of Christ in Red";
-const char OSISRedLetterWords::optTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
+const char oName[] = "Words of Christ in Red";
+const char oTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-OSISRedLetterWords::OSISRedLetterWords() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+OSISRedLetterWords::OSISRedLetterWords() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("On");
 }
 
 
 OSISRedLetterWords::~OSISRedLetterWords() {
 }
 
-void OSISRedLetterWords::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *OSISRedLetterWords::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
 	bool intoken    = false;
 	char buf[254];

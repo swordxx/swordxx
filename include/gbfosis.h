@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfosis.h,v 1.9 2003/06/27 01:41:06 scribe Exp $
+ * $Id: gbfosis.h,v 1.10 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,6 +26,7 @@
 
 SWORD_NAMESPACE_START
 
+
 class QuoteStack {
 private:
 	class QuoteInstance {
@@ -43,7 +44,8 @@ private:
 		void pushStartStream(SWBuf &text);
 	};
 
-	std::stack<QuoteInstance> quotes;
+	typedef std::stack<QuoteInstance> QuoteInstanceStack;
+	QuoteInstanceStack quotes;
 public:
 	QuoteStack();
 	virtual ~QuoteStack();

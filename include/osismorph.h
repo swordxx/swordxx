@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: osismorph.h,v 1.2 2003/02/20 07:25:19 scribe Exp $
+ * $Id: osismorph.h,v 1.3 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,28 +21,17 @@
 #ifndef OSISMORPH_H
 #define OSISMORPH_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
 /** This Filter shows/hides morph tags in a OSIS text
  */
-class SWDLLEXPORT OSISMorph : public SWFilter {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT OSISMorph : public SWOptionFilter {
 public:
 	OSISMorph();
 	virtual ~OSISMorph();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip () { return optTip; }
-	virtual void setOptionValue (const char *ival);
-	virtual const char *getOptionValue ();
-	virtual OptionsList getOptionValues () { return options; }
 };
 
 SWORD_NAMESPACE_END

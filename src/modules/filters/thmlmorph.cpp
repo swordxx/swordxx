@@ -14,34 +14,22 @@
 
 SWORD_NAMESPACE_START
 
-const char ThMLMorph::on[] = "On";
-const char ThMLMorph::off[] = "Off";
-const char ThMLMorph::optName[] = "Morphological Tags";
-const char ThMLMorph::optTip[] = "Toggles Morphological Tags On and Off if they exist";
+const char oName[] = "Morphological Tags";
+const char oTip[] = "Toggles Morphological Tags On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-ThMLMorph::ThMLMorph() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+ThMLMorph::ThMLMorph() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 ThMLMorph::~ThMLMorph() {
 }
 
-void ThMLMorph::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *ThMLMorph::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want morph tags
 		bool intoken = false;
 

@@ -14,31 +14,20 @@
 
 SWORD_NAMESPACE_START
 
-const char GBFMorph::on[] = "On";
-const char GBFMorph::off[] = "Off";
-const char GBFMorph::optName[] = "Morphological Tags";
-const char GBFMorph::optTip[] = "Toggles Morphological Tags On and Off if they exist";
+const char oName[] = "Morphological Tags";
+const char oTip[] = "Toggles Morphological Tags On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-GBFMorph::GBFMorph() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+GBFMorph::GBFMorph() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 GBFMorph::~GBFMorph() {
 }
 
-void GBFMorph::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *GBFMorph::getOptionValue()
-{
-	return (option) ? on:off;
-}
 
 char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want morph tags

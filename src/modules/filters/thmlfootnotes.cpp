@@ -14,34 +14,22 @@
 
 SWORD_NAMESPACE_START
 
-const char ThMLFootnotes::on[] = "On";
-const char ThMLFootnotes::off[] = "Off";
-const char ThMLFootnotes::optName[] = "Footnotes";
-const char ThMLFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
+const char oName[] = "Footnotes";
+const char oTip[] = "Toggles Footnotes On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-ThMLFootnotes::ThMLFootnotes() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+ThMLFootnotes::ThMLFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 ThMLFootnotes::~ThMLFootnotes() {
 }
 
-void ThMLFootnotes::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *ThMLFootnotes::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want footnotes
 		bool intoken = false;
 		bool hide = false;

@@ -16,30 +16,20 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISScripref::on[] = "On";
-const char OSISScripref::off[] = "Off";
-const char OSISScripref::optName[] = "Scripture Cross-references";
-const char OSISScripref::optTip[] = "Toggles Scripture Cross-references On and Off if they exist";
+const char oName[] = "Scripture Cross-references";
+const char oTip[] = "Toggles Scripture Cross-references On and Off if they exist";
 
-OSISScripref::OSISScripref() {
-	option = true;
-	options.push_back(on);
-	options.push_back(off);
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
+
+OSISScripref::OSISScripref() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("On");
 }
 
 
 OSISScripref::~OSISScripref() {
 }
 
-void OSISScripref::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *OSISScripref::getOptionValue()
-{
-	return (option) ? on:off;
-}
 
 char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;

@@ -11,31 +11,20 @@
 
 SWORD_NAMESPACE_START
 
-const char UTF8HebrewPoints::on[] = "On";
-const char UTF8HebrewPoints::off[] = "Off";
-const char UTF8HebrewPoints::optName[] = "Hebrew Vowel Points";
-const char UTF8HebrewPoints::optTip[] = "Toggles Hebrew Vowel Points";
+const char oName[] = "Hebrew Vowel Points";
+const char oTip[] = "Toggles Hebrew Vowel Points";
 
-UTF8HebrewPoints::UTF8HebrewPoints() {
-	option = true;
-	options.push_back(on);
-	options.push_back(off);
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
+
+UTF8HebrewPoints::UTF8HebrewPoints() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("On");
 }
 
 UTF8HebrewPoints::~UTF8HebrewPoints(){};
 
-void UTF8HebrewPoints::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *UTF8HebrewPoints::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char UTF8HebrewPoints::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char UTF8HebrewPoints::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {
 		//The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0x consist of Hebrew cantillation marks so block those out.
 		SWBuf orig = text;

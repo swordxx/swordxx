@@ -15,34 +15,22 @@
 SWORD_NAMESPACE_START
 
 
-const char GBFHeadings::on[] = "On";
-const char GBFHeadings::off[] = "Off";
-const char GBFHeadings::optName[] = "Headings";
-const char GBFHeadings::optTip[] = "Toggles Headings On and Off if they exist";
+const char oName[] = "Headings";
+const char oTip[] = "Toggles Headings On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-GBFHeadings::GBFHeadings() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+GBFHeadings::GBFHeadings() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 GBFHeadings::~GBFHeadings() {
 }
 
-void GBFHeadings::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *GBFHeadings::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char GBFHeadings::processText (SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char GBFHeadings::processText (SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want headings
 		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;

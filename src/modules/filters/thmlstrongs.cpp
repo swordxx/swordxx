@@ -17,31 +17,20 @@
 
 SWORD_NAMESPACE_START
 
-const char ThMLStrongs::on[] = "On";
-const char ThMLStrongs::off[] = "Off";
-const char ThMLStrongs::optName[] = "Strong's Numbers";
-const char ThMLStrongs::optTip[] = "Toggles Strong's Numbers On and Off if they exist";
+const char oName[] = "Strong's Numbers";
+const char oTip[] = "Toggles Strong's Numbers On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-ThMLStrongs::ThMLStrongs() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+ThMLStrongs::ThMLStrongs() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 ThMLStrongs::~ThMLStrongs() {
 }
 
-void ThMLStrongs::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *ThMLStrongs::getOptionValue()
-{
-	return (option) ? on:off;
-}
 
 char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	char token[2048]; // cheese.  Fix.

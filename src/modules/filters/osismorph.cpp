@@ -15,34 +15,22 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISMorph::on[] = "On";
-const char OSISMorph::off[] = "Off";
-const char OSISMorph::optName[] = "Morphological Tags";
-const char OSISMorph::optTip[] = "Toggles Morphological Tags On and Off if they exist";
+const char oName[] = "Morphological Tags";
+const char oTip[] = "Toggles Morphological Tags On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-OSISMorph::OSISMorph() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+OSISMorph::OSISMorph() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 OSISMorph::~OSISMorph() {
 }
 
-void OSISMorph::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *OSISMorph::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want morph tags
 		const char *from;
 		char token[2048]; // cheese.  Fix.

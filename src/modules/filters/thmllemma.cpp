@@ -14,33 +14,22 @@
 
 SWORD_NAMESPACE_START
 
-const char ThMLLemma::on[] = "On";
-const char ThMLLemma::off[] = "Off";
-const char ThMLLemma::optName[] = "Lemmas";
-const char ThMLLemma::optTip[] = "Toggles Lemmas On and Off if they exist";
+const char oName[] = "Lemmas";
+const char oTip[] = "Toggles Lemmas On and Off if they exist";
 
-ThMLLemma::ThMLLemma() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
+
+ThMLLemma::ThMLLemma() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 ThMLLemma::~ThMLLemma() {
 }
 
-void ThMLLemma::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *ThMLLemma::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char ThMLLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char ThMLLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want lemmas
 		bool intoken = false;
 

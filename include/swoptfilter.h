@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: osisstrongs.h,v 1.3 2003/07/05 04:58:42 scribe Exp $
+ * $Id: swoptfilter.h,v 1.1 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -18,20 +18,30 @@
  *
  */
 
-#ifndef OSISSTRONGS_H
-#define OSISSTRONGS_H
+#ifndef SWOPTFILTER_H
+#define SWOPTFILTER_H
 
-#include <swoptfilter.h>
+#include <swfilter.h>
 
 SWORD_NAMESPACE_START
 
   /** This Filter shows/hides strong's numbers in a OSIS text
   */
-class SWDLLEXPORT OSISStrongs : public SWOptionFilter {
+class SWDLLEXPORT SWOptionFilter : public SWFilter {
+protected:
+	SWBuf optionValue;
+	const char *optName;
+	const char *optTip;
+	const StringList *optValues;
+	bool option;
 public:
-	OSISStrongs();
-	virtual ~OSISStrongs();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	SWOptionFilter(const char *oName, const char *oTip, const StringList *oValues);
+	virtual ~SWOptionFilter();
+	virtual const char *getOptionName() { return optName; }
+	virtual const char *getOptionTip() { return optTip; }
+	virtual void setOptionValue(const char *ival);
+	virtual const char *getOptionValue();
+	virtual StringList getOptionValues() { return *optValues; }
 };
 
 SWORD_NAMESPACE_END

@@ -18,34 +18,22 @@
 
 SWORD_NAMESPACE_START
 
-const char ThMLHeadings::on[] = "On";
-const char ThMLHeadings::off[] = "Off";
-const char ThMLHeadings::optName[] = "Headings";
-const char ThMLHeadings::optTip[] = "Toggles Headings On and Off if they exist";
+const char oName[] = "Headings";
+const char oTip[] = "Toggles Headings On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-ThMLHeadings::ThMLHeadings() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+ThMLHeadings::ThMLHeadings() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 ThMLHeadings::~ThMLHeadings() {
 }
 
-void ThMLHeadings::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *ThMLHeadings::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want headings
 		SWBuf token;
 		bool intoken = false;

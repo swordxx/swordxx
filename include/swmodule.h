@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.66 2003/06/27 01:41:07 scribe Exp $
+* $Id: swmodule.h,v 1.67 2003/07/05 04:58:42 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -52,7 +52,6 @@ SWORD_NAMESPACE_START
 
 
 typedef std::list < SWFilter * >FilterList;
-
 typedef std::map < SWBuf, SWBuf, std::less < SWBuf > > AttributeValue;
 typedef std::map < SWBuf, AttributeValue, std::less < SWBuf > > AttributeList;
 typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList;

@@ -14,34 +14,22 @@
 
 SWORD_NAMESPACE_START
 
-const char ThMLScripref::on[] = "On";
-const char ThMLScripref::off[] = "Off";
-const char ThMLScripref::optName[] = "Scripture Cross-references";
-const char ThMLScripref::optTip[] = "Toggles Scripture Cross-references On and Off if they exist";
+const char oName[] = "Scripture Cross-references";
+const char oTip[] = "Toggles Scripture Cross-references On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-ThMLScripref::ThMLScripref() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+ThMLScripref::ThMLScripref() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 ThMLScripref::~ThMLScripref() {
 }
 
-void ThMLScripref::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *ThMLScripref::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want scriprefs
 		bool intoken = false;
 		bool hide = false;

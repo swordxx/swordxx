@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.15 2003/06/27 01:41:06 scribe Exp $
+ * $Id: localemgr.h,v 1.16 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,8 +32,9 @@
 
 SWORD_NAMESPACE_START
 
-typedef std::map < SWBuf, SWLocale *, std::less < SWBuf > >LocaleMap;
-
+ 
+typedef std::list<SWBuf> StringList;
+typedef std::map < SWBuf, SWLocale *, std::less < SWBuf > > LocaleMap;
 /**
 * The LocaleMgr class handles all the different locales of Sword.
 * It provides functions to get a list of all available locales,
@@ -45,71 +46,70 @@ typedef std::map < SWBuf, SWLocale *, std::less < SWBuf > >LocaleMap;
 * To get the locale for a language name use @see getLocale
 * To get a list of availble locales use @see getAvailableLocales
 */
-class SWDLLEXPORT LocaleMgr
-{
+class SWDLLEXPORT LocaleMgr {
 private:
-  void deleteLocales ();
-  char *defaultLocaleName;
-  LocaleMgr(const LocaleMgr &);
+	void deleteLocales();
+	char *defaultLocaleName;
+	LocaleMgr(const LocaleMgr &);
 
 protected:
-  LocaleMap locales;
+	LocaleMap *locales;
 
 public:
-  /** Default constructor of  LocaleMgr
-  * You do normally not need this constructor, use LocaleMgr::systemLocaleMgr instead.
-  */
-  LocaleMgr (const char *iConfigPath = 0);
+	/** Default constructor of  LocaleMgr
+	* You do normally not need this constructor, use LocaleMgr::systemLocaleMgr instead.
+	*/
+	LocaleMgr(const char *iConfigPath = 0);
 
-  /**
-  * Default destructor of LocaleMgr
-  */
-  virtual ~ LocaleMgr ();
+	/**
+	* Default destructor of LocaleMgr
+	*/
+	virtual ~LocaleMgr();
 
-  /** Get the locale connected with the name "name".
-  *
-  * @param name The name of the locale you want to have. For example use getLocale("de") to get the locale for the German language.
-  * @return Returns the locale object if the locale with the name given as parameter was found. If it wasn't found return NULL.
-  */
-  virtual SWLocale *getLocale (const char *name);
+	/** Get the locale connected with the name "name".
+	*
+	* @param name The name of the locale you want to have. For example use getLocale("de") to get the locale for the German language.
+	* @return Returns the locale object if the locale with the name given as parameter was found. If it wasn't found return NULL.
+	*/
+	virtual SWLocale *getLocale(const char *name);
 
-  /** Get the list of available locales.
-  *
-  * @return Returns a list of strings, which contains the names of the available locales.
-  */
-  virtual std::list < SWBuf > getAvailableLocales ();
-  
-  /** Returns translated text.
-  * This function uses both parameters to return the translated version of the given text.
-  *
-  * @param text The text to translate into the language given by the first parameter.
-  * @param localeName The name of the locale Sword should use
-  * @return Returns the translated text.
-  */
-  virtual const char *translate (const char *text, const char *localeName = 0);
+	/** Get the list of available locales.
+	*
+	* @return Returns a list of strings, which contains the names of the available locales.
+	*/
+	virtual StringList getAvailableLocales();
 
-  /** Get the default locale name. To set it use @see setDefaultLocaleName
-  *
-  * @return Returns the default locale name
-  */
-  virtual const char *getDefaultLocaleName ();
+	/** Returns translated text.
+	* This function uses both parameters to return the translated version of the given text.
+	*
+	* @param text The text to translate into the language given by the first parameter.
+	* @param localeName The name of the locale Sword should use
+	* @return Returns the translated text.
+	*/
+	virtual const char *translate(const char *text, const char *localeName = 0);
 
-  /** Set the new standard locale of Sword.
-  *
-  * @param name The name of the new default locale  
-  */
-  virtual void setDefaultLocaleName (const char *name);
+	/** Get the default locale name. To set it use @see setDefaultLocaleName
+	*
+	* @return Returns the default locale name
+	*/
+	virtual const char *getDefaultLocaleName();
 
-  /** The LocaleMgr object used globally in the Sword world.
-  * Do not create your own LocaleMgr, use this static object instead.
-  */
-  static LocaleMgr systemLocaleMgr;
+	/** Set the new standard locale of Sword.
+	*
+	* @param name The name of the new default locale  
+	*/
+	virtual void setDefaultLocaleName(const char *name);
 
-  
-  /** Augment this localmgr with all locale.conf files in a directory
-  */
-  virtual void loadConfigDir(const char *ipath);
-  
+	/** The LocaleMgr object used globally in the Sword world.
+	* Do not create your own LocaleMgr, use this static object instead.
+	*/
+	static LocaleMgr systemLocaleMgr;
+
+
+	/** Augment this localmgr with all locale.conf files in a directory
+	*/
+	virtual void loadConfigDir(const char *ipath);
+
 };
 
 SWORD_NAMESPACE_END

@@ -15,34 +15,22 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISLemma::on[] = "On";
-const char OSISLemma::off[] = "Off";
-const char OSISLemma::optName[] = "Lemmas";
-const char OSISLemma::optTip[] = "Toggles Lemmas On and Off if they exist";
+const char oName[] = "Lemmas";
+const char oTip[] = "Toggles Lemmas On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-OSISLemma::OSISLemma() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+OSISLemma::OSISLemma() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 OSISLemma::~OSISLemma() {
 }
 
-void OSISLemma::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *OSISLemma::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want lemmas
 		const char *from;
 		char token[2048]; // cheese.  Fix.

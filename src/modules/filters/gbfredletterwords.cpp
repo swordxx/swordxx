@@ -16,34 +16,22 @@
 
 SWORD_NAMESPACE_START
 
-const char GBFRedLetterWords::on[] = "On";
-const char GBFRedLetterWords::off[] = "Off";
-const char GBFRedLetterWords::optName[] = "Words of Christ in Red";
-const char GBFRedLetterWords::optTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
+const char oName[] = "Words of Christ in Red";
+const char oTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-GBFRedLetterWords::GBFRedLetterWords() {
-	option = true;
-	options.push_back(on);
-	options.push_back(off);
+GBFRedLetterWords::GBFRedLetterWords() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 GBFRedLetterWords::~GBFRedLetterWords() {
 }
 
-void GBFRedLetterWords::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *GBFRedLetterWords::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 /** This function removes the red letter words in Bible like the WEB
 * The words are marked by <FR> as start and <Fr> as end tag.
 */

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.92 2003/06/27 06:25:37 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.93 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -859,7 +859,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
 			module->AddOptionFilter((*it).second);	// add filter to module and option as a valid option
-			OptionsList::iterator loop;
+			StringList::iterator loop;
 			for (loop = options.begin(); loop != options.end(); loop++) {
 				if (!strcmp((*loop).c_str(), (*it).second->getOptionName()))
 					break;
@@ -1114,15 +1114,15 @@ const char *SWMgr::getGlobalOptionTip(const char *option)
 }
 
 
-OptionsList SWMgr::getGlobalOptions()
+StringList SWMgr::getGlobalOptions()
 {
 	return options;
 }
 
 
-OptionsList SWMgr::getGlobalOptionValues(const char *option)
+StringList SWMgr::getGlobalOptionValues(const char *option)
 {
-	OptionsList options;
+	StringList options;
 	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
 			if (!stricmp(option, (*it).second->getOptionName())) {

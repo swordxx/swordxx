@@ -14,31 +14,21 @@
 
 SWORD_NAMESPACE_START
 
-const char GBFFootnotes::on[] = "On";
-const char GBFFootnotes::off[] = "Off";
-const char GBFFootnotes::optName[] = "Footnotes";
-const char GBFFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
+const char oName[] = "Footnotes";
+const char oTip[] = "Toggles Footnotes On and Off if they exist";
+
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
 
-GBFFootnotes::GBFFootnotes() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+GBFFootnotes::GBFFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 GBFFootnotes::~GBFFootnotes() {
 }
 
-void GBFFootnotes::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *GBFFootnotes::getOptionValue()
-{
-	return (option) ? on:off;
-}
 
 char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *module)
 {

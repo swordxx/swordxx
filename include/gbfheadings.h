@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfheadings.h,v 1.5 2003/02/28 13:31:37 mgruner Exp $
+ * $Id: gbfheadings.h,v 1.6 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,28 +21,17 @@
 #ifndef GBFHEADINGS_H
 #define GBFHEADINGS_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
   /** This Filter shows/hides headings in a GBF text
   */
-class SWDLLEXPORT GBFHeadings : public SWFilter {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT GBFHeadings : public SWOptionFilter {
 public:
 	GBFHeadings();
 	virtual ~GBFHeadings();
 	virtual char processText (SWBuf &text, const SWKey * key = 0, const SWModule *module = 0);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

@@ -1,6 +1,7 @@
 filtersdir = $(top_srcdir)/src/modules/filters
 
 libsword_la_SOURCES += $(filtersdir)/swbasicfilter.cpp
+libsword_la_SOURCES += $(filtersdir)/swoptfilter.cpp
 
 libsword_la_SOURCES += $(filtersdir)/gbfhtml.cpp
 libsword_la_SOURCES += $(filtersdir)/gbfhtmlhref.cpp

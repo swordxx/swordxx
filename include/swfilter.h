@@ -2,7 +2,7 @@
  *  swfilter.h	- definition of class SWFilter used to filter text between
  *				different formats
  *
- * $Id: swfilter.h,v 1.16 2003/02/28 13:31:37 mgruner Exp $
+ * $Id: swfilter.h,v 1.17 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,7 +33,7 @@ SWORD_NAMESPACE_START
 /**
 * The type definitoin for option types
 */
-typedef std::list < SWBuf > OptionsList;
+typedef std::list < SWBuf > StringList;
 
 class SWModule;
 
@@ -60,8 +60,8 @@ public:
 	 * 
 	 * @return list of option values
 	 */
-	virtual OptionsList getOptionValues () {
-		OptionsList options;
+	virtual StringList getOptionValues () {
+		StringList options;
 		return options;
 	}
 

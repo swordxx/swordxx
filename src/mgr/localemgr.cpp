@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.15 2003/06/27 01:41:07 scribe Exp $
+ * $Id: localemgr.cpp,v 1.16 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,10 +41,12 @@
 
 SWORD_NAMESPACE_START
 
+
 LocaleMgr LocaleMgr::systemLocaleMgr;
 
 
 LocaleMgr::LocaleMgr(const char *iConfigPath) {
+	locales = new LocaleMap();
 	char *prefixPath = 0;
 	char *configPath = 0;
 	char configType = 0;
@@ -98,6 +100,7 @@ LocaleMgr::~LocaleMgr() {
 	if (defaultLocaleName)
 		delete [] defaultLocaleName;
      deleteLocales();
+	delete locales;
 }
 
 
@@ -117,12 +120,12 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 				newmodfile += ent->d_name;
 				SWLocale *locale = new SWLocale(newmodfile.c_str());
 				if (locale->getName()) {
-					it = locales.find(locale->getName());
-					if (it != locales.end()) {
+					it = locales->find(locale->getName());
+					if (it != locales->end()) {
 						*((*it).second) += *locale;
 						delete locale;
 					}
-					else locales.insert(LocaleMap::value_type(locale->getName(), locale));
+					else locales->insert(LocaleMap::value_type(locale->getName(), locale));
 				}
                     else	delete locale;
 			}
@@ -136,18 +139,18 @@ void LocaleMgr::deleteLocales() {
 
 	LocaleMap::iterator it;
 
-	for (it = locales.begin(); it != locales.end(); it++)
+	for (it = locales->begin(); it != locales->end(); it++)
 		delete (*it).second;
 
-	locales.erase(locales.begin(), locales.end());
+	locales->erase(locales->begin(), locales->end());
 }
 
 
 SWLocale *LocaleMgr::getLocale(const char *name) {
 	LocaleMap::iterator it;
 
-	it = locales.find(name);
-	if (it != locales.end())
+	it = locales->find(name);
+	if (it != locales->end())
 		return (*it).second;
 
 	return 0;
@@ -156,7 +159,7 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 
 std::list <SWBuf> LocaleMgr::getAvailableLocales() {
 	std::list <SWBuf> retVal;
-	for (LocaleMap::iterator it = locales.begin(); it != locales.end(); it++) 
+	for (LocaleMap::iterator it = locales->begin(); it != locales->end(); it++) 
 		retVal.push_back((*it).second->getName());
 
 	return retVal;

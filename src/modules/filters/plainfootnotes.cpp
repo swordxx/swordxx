@@ -26,34 +26,21 @@
 
 SWORD_NAMESPACE_START
 
-const char PLAINFootnotes::on[] = "On";
-const char PLAINFootnotes::off[] = "Off";
-const char PLAINFootnotes::optName[] = "Footnotes";
-const char PLAINFootnotes::optTip[] = "Toggles Footnotes On and Off In Bible Texts If They Exist";
+const char oName[] = "Footnotes";
+const char oTip[] = "Toggles Footnotes On and Off In Bible Texts If They Exist";
 
-PLAINFootnotes::PLAINFootnotes(){
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
+
+PLAINFootnotes::PLAINFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 PLAINFootnotes::~PLAINFootnotes(){
 }
 
 
-void PLAINFootnotes::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *PLAINFootnotes::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-
-char PLAINFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char PLAINFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (!option) {	// if we don't want footnotes
 		//char token[2048];
 		//SWBuf token;

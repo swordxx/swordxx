@@ -16,34 +16,22 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISHeadings::on[] = "On";
-const char OSISHeadings::off[] = "Off";
-const char OSISHeadings::optName[] = "Headings";
-const char OSISHeadings::optTip[] = "Toggles Headings On and Off if they exist";
+const char oName[] = "Headings";
+const char oTip[] = "Toggles Headings On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-OSISHeadings::OSISHeadings() {
-	option = false;
-	options.push_back(on);
-	options.push_back(off);
+OSISHeadings::OSISHeadings() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 OSISHeadings::~OSISHeadings() {
 }
 
-void OSISHeadings::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
 
-const char *OSISHeadings::getOptionValue()
-{
-	return (option) ? on:off;
-}
-
-char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
+char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
 	bool intoken    = false;
 	bool hide       = false;

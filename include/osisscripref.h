@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisscripref.h,v 1.1 2003/06/27 06:18:44 chrislit Exp $
+ * $Id: osisscripref.h,v 1.2 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,28 +21,17 @@
 #ifndef OSISSCRIPREF_H
 #define OSISSCRIPREF_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISScripref : public SWFilter {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT OSISScripref : public SWOptionFilter {
 public:
 	OSISScripref();
 	virtual ~OSISScripref();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END

@@ -18,31 +18,20 @@
 
 SWORD_NAMESPACE_START
 
-const char OSISFootnotes::on[] = "On";
-const char OSISFootnotes::off[] = "Off";
-const char OSISFootnotes::optName[] = "Footnotes";
-const char OSISFootnotes::optTip[] = "Toggles Footnotes On and Off if they exist";
+const char oName[] = "Footnotes";
+const char oTip[] = "Toggles Footnotes On and Off if they exist";
 
+const SWBuf choices[2] = {"On", "Off"};
+const StringList oValues(&choices[0], &choices[1]);
 
-OSISFootnotes::OSISFootnotes() {
-	option = true;
-	options.push_back(on);
-	options.push_back(off);
+OSISFootnotes::OSISFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
+	setOptionValue("Off");
 }
 
 
 OSISFootnotes::~OSISFootnotes() {
 }
 
-void OSISFootnotes::setOptionValue(const char *ival)
-{
-	option = (!stricmp(ival, on));
-}
-
-const char *OSISFootnotes::getOptionValue()
-{
-	return (option) ? on:off;
-}
 
 char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
@@ -88,8 +77,8 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				if (hide && tag.isEndTag()) {
 					if (module->isProcessEntryAttributes()) {
 						sprintf(buf, "%i", footnoteNum++);
-						ListString attributes = startTag.getAttributeNames();
-						for (ListString::iterator it = attributes.begin(); it != attributes.end(); it++) {
+						StringList attributes = startTag.getAttributeNames();
+						for (StringList::iterator it = attributes.begin(); it != attributes.end(); it++) {
 							module->getEntryAttributes()["Footnote"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
 						}
 						module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;

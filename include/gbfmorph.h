@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfmorph.h,v 1.5 2003/02/28 13:31:37 mgruner Exp $
+ * $Id: gbfmorph.h,v 1.6 2003/07/05 04:58:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,28 +21,17 @@
 #ifndef GBFMORPH_H
 #define GBFMORPH_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
   /** This Filter shows/hides morph tags in a GBF text
   */
-class SWDLLEXPORT GBFMorph : public SWFilter {
-	bool option;
-	static const char on[];
-	static const char off[];
-	static const char optName[];
-	static const char optTip[];
-	OptionsList options;
+class SWDLLEXPORT GBFMorph : public SWOptionFilter {
 public:
 	GBFMorph();
 	virtual ~GBFMorph();
 	virtual char processText(SWBuf &text, const SWKey * key = 0, const SWModule *module = 0);
-	virtual const char *getOptionName() { return optName; }
-	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
-	virtual OptionsList getOptionValues() { return options; }
 };
 
 SWORD_NAMESPACE_END
