@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.5, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.16 $)
+AC_REVISION($Revision: 1.17 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.5)
@@ -46,7 +46,7 @@ AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,
 AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
 AC_ARG_ENABLE(tests,[  --enable-tests          build test programs [default=no]],,enable_tests=no)
 AC_ARG_ENABLE(utilities,[  --enable-utilities      build utilities [default=yes]],,enable_utilities=yes)
-
+AC_ARG_ENABLE(examples,[  --enable-examples       build examples [default=no]],,enable_examples=no)
 AM_MAINTAINER_MODE
 
 
@@ -87,12 +87,12 @@ CXXFLAGS="$CXXFLAGS -ftemplate-depth-25"
 
 if test x$enable_debug = xyes; then
   if test x$ac_cv_prog_cc_g = xyes; then
-    CFLAGS="-g -O0"
+    CFLAGS="-g3 -O0"
   else
     CFLAGS="-O0"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
-    CXXFLAGS="-g -O0"
+    CXXFLAGS="-g3 -O0"
   else
     CXXFLAGS="-O0"
   fi
@@ -199,7 +199,9 @@ AM_CONDITIONAL(INSTALLMGR, test x$enable_installmgr = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
 #AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)
-
+AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
+AM_CONDITIONAL(BUILDUTILS, test x$enable_utilities = xyes)
+AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 
 # ---------------------------------------------------------------------
 # Final output
