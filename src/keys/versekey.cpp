@@ -1403,3 +1403,23 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	keyval1 = (keyval1) ? ((keyval1 > 0) ? 1 : -1) /*keyval1/labs(keyval1)*/:0; // -1 | 0 | 1
 	return keyval1;
 }
+
+
+const char *VerseKey::getOSISRef() const {
+	static char buf[254];
+	static char *osisotbooks[] = {
+			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","Sam1","Sam2",
+			"Kgs1","Kgs2","Chr1","Chr2","Ezra","Neh","Esth","Job","Ps","Eccl",
+			"Song","Isa","Jer","Lam","Ezek","Dan","Hos","Joel","Amos","Obad",
+			"Jonah","Mic","Nah","Hab","Zeph","Hag","Zech","Mal","Bar","PrAzar",
+			"Bel","Sus","Esd1","Esd2","AddEsth","EpJer","Jdt","Macc1","Macc2","Macc3",
+			"Macc4","PrMan","Ps151","Sir","Tob","Wis"};
+	static char *osisntbooks[] = {
+			"Matt","Mark","Luke","John","Acts","Rom","Cor1","Cor2","Gal","Eph",
+			"Phil","Col","Thess1","Thess2","Tim1","Tim2","Titus","Phlm","Heb","Jas",
+			"Pet1","Pet2","John1","John2","John3","Jude","Rev"};
+	static char **osisbooks[] = { osisotbooks, osisntbooks };
+
+	sprintf(buf, "%s.%d.%d", books[Testament()-1][Book()-1]);
+	return buf;
+}
