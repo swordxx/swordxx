@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.23 2003/06/27 01:41:07 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.24 2003/07/12 22:58:48 joachim Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -95,6 +95,14 @@ void SWBasicFilter::addTokenSubstitute(const char *findString, const char *repla
 }
 
 
+void SWBasicFilter::replaceTokenSubstitute(const char *findString, const char *replaceString) {
+	if (tokenSubMap.find(findString) != tokenSubMap.end()) {
+		tokenSubMap.erase( tokenSubMap.find(findString) ); //erase entry
+	}
+	addTokenSubstitute(findString, replaceString);
+}
+
+
 void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char *replaceString) {
 	char *buf = 0;
 
@@ -105,6 +113,13 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 		delete [] buf;
 	}
 	else escSubMap.insert(DualStringMap::value_type(findString, replaceString));
+}
+
+void SWBasicFilter::replaceEscapeStringSubstitute(const char *findString, const char *replaceString) {
+        if (escSubMap.find(findString) != escSubMap.end()) {
+                escSubMap.erase( escSubMap.find(findString) ); //erase entry
+        }
+        addEscapeStringSubstitute(findString, replaceString);
 }
 
 
