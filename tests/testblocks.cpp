@@ -3,7 +3,7 @@
 #include <string>
 #include <stdio.h>
 
-using namespace std:
+using namespace std;
 
 void addEntry(EntriesBlock *eb) {
 	string input;
