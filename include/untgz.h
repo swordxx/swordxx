@@ -7,3 +7,4 @@ int untargz(int fd, const char *dest);
 int untar(gzFile in, const char *dest);
 
 #endif
+

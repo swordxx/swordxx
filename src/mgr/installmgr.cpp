@@ -5,9 +5,6 @@
  */
  
 
-// stupid hack to make untgz stuff compile
-#define VCL
-
 extern "C" {
 #include <untgz.h>
 }
@@ -103,7 +100,7 @@ InstallMgr::InstallMgr(const char *privatePath) {
 		sourceEnd = sourcesSection->second.upper_bound("FTPSource");
 
 		while (sourceBegin != sourceEnd) {
-			InstallSource *is = new InstallSource(sourceBegin->second.c_str(), "FTP");
+			InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
 			sources[is->caption] = is;
 			SWBuf parent = (SWBuf)privatePath + "/" + is->source + "/file";
 			FileMgr::createParent(parent.c_str());
@@ -296,17 +293,19 @@ int InstallMgr::removeModule(SWMgr *manager, const char *modName) {
 
 
 
-InstallSource::InstallSource(const char *confEnt, const char *type) {
-	char *buf = 0;
-	stdstr(&buf, confEnt);
-
-	caption = strtok(buf, "|");
-	source = strtok(0, "|");
-	directory = strtok(0, "|");
-	delete [] buf;
+InstallSource::InstallSource(const char *type, const char *confEnt) {
 	this->type = type;
 	mgr = 0;
 	userData = 0;
+	if (confEnt) {
+		char *buf = 0;
+		stdstr(&buf, confEnt);
+
+		caption = strtok(buf, "|");
+		source = strtok(0, "|");
+		directory = strtok(0, "|");
+		delete [] buf;
+	}
 }
 
 
@@ -315,11 +314,22 @@ InstallSource::~InstallSource() {
 		delete mgr;
 }
 
+
+void InstallSource::flush() {
+	if (mgr) {
+		delete mgr;
+		mgr = 0;
+	}
+}
+
+
 SWMgr *InstallSource::getMgr() {
 	if (!mgr)
 		mgr = new SWMgr(localShadow.c_str());
 	return mgr;
 }
+
+
 int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	terminate = false;
 	void *session = FTPOpenSession();
@@ -381,6 +391,7 @@ int InstallMgr::FTPCopy(InstallSource *is, const char *src, const char *dest, bo
 		FTPCloseSession(session);
 	}
 	catch(...){}
+	return 0;
 }
 
 
@@ -398,6 +409,9 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	if (is)
 		sourceDir = (SWBuf)privatePath + "/" + is->source;
 	else	sourceDir = fromLocation;
+
+	if (sourceDir[sourceDir.length()-1] != '/')
+		sourceDir += '/';
 
 	SWMgr mgr(sourceDir.c_str());
 	

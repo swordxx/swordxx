@@ -23,6 +23,7 @@ ciphertest_SOURCES = ciphertest.cpp
 ciphertest2_SOURCES = ciphertest2.cpp
 lexdump_SOURCES = lexdump.c
 lexdump_LDADD = -lstdc++
+installmgr_LDADD = $(CURL_LIBS) $(LDADD)
 mkfastmod_SOURCES = mkfastmod.cpp
 mod2vpl_SOURCES = mod2vpl.cpp
 vpl2mod_SOURCES = vpl2mod.cpp

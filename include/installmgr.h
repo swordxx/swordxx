@@ -35,7 +35,7 @@ struct FtpFile {
 class InstallSource {
 	SWMgr *mgr;
 public:
-	InstallSource(const char *confEnt, const char *type);
+	InstallSource(const char *type, const char *confEnt = 0);
 	virtual ~InstallSource();
 	SWBuf getConfEnt() {
 		return caption +"|" + source + "|" + directory;
@@ -47,7 +47,7 @@ public:
 	SWBuf localShadow;
 	void *userData;
 	SWMgr *getMgr();
-	void flush() { if (mgr) delete mgr; mgr = 0; }
+	void flush();
 };
 
 typedef std::map < SWBuf, InstallSource * >InstallSourceMap;

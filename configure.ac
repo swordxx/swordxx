@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.19 $)
+AC_REVISION($Revision: 1.20 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -62,25 +62,6 @@ if test x$with_icu = xyes; then
 fi
 
 # ---------------------------------------------------------------------
-# Check for curl for installmgr suport
-# ---------------------------------------------------------------------
-
-CURL_CFLAGS=
-CURL_LIBS=
-if test x$enable_installmgr = xyes; then
-	AC_PATH_PROG(CURL_CONFIG, curl-config, no)
-	if test "$CURL_CONFIG" = "no" ; then
-		echo "*** The curl-config script installed by curl could not be found"
-		echo "*** compiling without install manager support"
-		enable_installmgr=no
-	else
-		echo "curl found - install manager support ok"
-		CURL_CFLAGS=`$CURL_CONFIG --cflags`
-		CURL_LIBS=`$CURL_CONFIG --libs`
-	fi
-fi
-
-# ---------------------------------------------------------------------
 # Debug and profile
 # ---------------------------------------------------------------------
 
@@ -113,6 +94,25 @@ if test x$enable_profilefn = xyes; then
   CFLAGS="$CFLAGS -g -finstrument-functions"
   CXXFLAGS="$CXXFLAGS -g -finstrument-functions"
   LIBS="$LIBS -g -finstrument-functions -lfnccheck"
+fi
+
+# ---------------------------------------------------------------------
+# Check for curl for installmgr suport
+# ---------------------------------------------------------------------
+
+CURL_CFLAGS=
+CURL_LIBS=
+AC_PATH_PROG(CURL_CONFIG, curl-config, no)
+if test "$CURL_CONFIG" = "no" ; then
+	echo "*** The curl-config script installed by curl could not be found"
+	echo "*** compiling without install manager support"
+	enable_installmgr=no
+else
+	echo "curl found - remote install options available"
+	CURL_CFLAGS=`$CURL_CONFIG --cflags`
+	CURL_LIBS=`$CURL_CONFIG --libs`
+	CXXFLAGS="$CXXFLAGS -DCURLAVAILABLE"
+	CFLAGS="$CFLAGS -DCURLAVAILABLE"
 fi
 
 # ---------------------------------------------------------------------

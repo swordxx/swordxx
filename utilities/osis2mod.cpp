@@ -91,8 +91,8 @@ bool isKJVRef(const char *buf) {
 
 
 void writeEntry(VerseKey &key, SWBuf &text) {
-	cout << "Verse: " << key << "\n";
-	cout << "TEXT: " << text << "\n\n";
+//	cout << "Verse: " << key << "\n";
+//	cout << "TEXT: " << text << "\n\n";
 	SWBuf currentText = module->getRawEntry();
 	if (currentText.length())
 		text = currentText + " " + text;
@@ -119,7 +119,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	if ((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) {
 		if (!strcmp(token.getAttribute("type"), "book")) {
 			if (inHeader) {	// this one should never happen, but just in case
-				cout << "HEADING ";
+//				cout << "HEADING ";
 				writeEntry(currentVerse, text);
 				inHeader = false;
 			}
@@ -133,7 +133,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		}
 		if (!strcmp(token.getAttribute("type"), "chapter")) {
 			if (inHeader) {
-				cout << "HEADING ";
+//				cout << "HEADING ";
 				writeEntry(currentVerse, text);
 				inHeader = false;
 			}
@@ -148,7 +148,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	}
 	if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
 		if (inHeader) {
-			cout << "HEADING ";
+//			cout << "HEADING ";
 			writeEntry(currentVerse, text);
 			inHeader = false;
 		}
