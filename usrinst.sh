@@ -2,7 +2,7 @@
 
 ./configure --prefix=/usr \
 	--disable-shared \
-	--without-conf --sysconfdir=/etc
+	--enable-debug --without-conf --sysconfdir=/etc
 
 echo ""
 echo ""

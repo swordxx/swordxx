@@ -81,8 +81,16 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 					for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
 						*valto++ = token[i];
 					*valto = 0;
-					sprintf(wordstr, "%03d", word++);
-					module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+						// normal strongs number
+						sprintf(wordstr, "%03d", word++);
+						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+					}
+					else {
+						// verse morph
+						sprintf(wordstr, "%03d", word-1);
+						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
+					}
 				}
 
 				if (!option) {	// if we don't want strongs

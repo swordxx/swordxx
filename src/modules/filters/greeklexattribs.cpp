@@ -36,7 +36,7 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 						currentPhrase = from;
 				}
 				else {
-					if ((!isalpha(*from)) && (*from != ' ') && (*from != '+') && (*from !='(') && (*from != ')')) {
+					if ((!isalpha(*from)) && (*from != ' ') && (*from != '+') && (*from !='(') && (*from != ')') && (*from != '\'')) {
 						if (*from == '<') {
 							if (!currentPhraseEnd)
 								currentPhraseEnd = from - 1;
@@ -49,7 +49,7 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 									*valto = 0;
 									sprintf(wordstr, "%03d", number+1);
 									module->getEntryAttributes()["AVPhrase"][wordstr]["CompoundedWith"] = val;
-									*from += strlen(val);
+									from += strlen(val);
 								}
 							}
 							continue;
@@ -61,10 +61,18 @@ char GreekLexAttribs::ProcessText(char *text, int maxlen, const SWKey *key, cons
 						while (*from && isdigit(*from)) from++;
 						freq = "";
 						freq.append(currentPhrase, (int)(from - currentPhrase));
-//						freq = freq.substr(freq.find_first_not_of(' '), freq.find_last_not_of(' '));
-//						phrase = phrase.substr(phrase.find_first_not_of(' '), phrase.find_last_not_of(' '));
 						if ((freq.length() > 0) && (phrase.length() > 0)) {
 							sprintf(wordstr, "%03d", ++number);
+							if ((strchr(phrase.c_str(), '(') > phrase.c_str()) && (strchr(phrase.c_str(), ')') > phrase.c_str() + 1)) {
+								string tmp = phrase.substr(0, phrase.find_first_of("("));
+								phrase.erase(phrase.find_first_of("("), 1);
+								phrase.erase(phrase.find_first_of(")"), 1);
+								phrase.erase(0,phrase.find_first_not_of("\r\n\v\t ")); phrase.erase(phrase.find_last_not_of("\r\n\v\t ")+1);
+								module->getEntryAttributes()["AVPhrase"][wordstr]["Alt"] = phrase;
+								phrase = tmp;
+							}
+							phrase.erase(0,phrase.find_first_not_of("\r\n\v\t ")); phrase.erase(phrase.find_last_not_of("\r\n\v\t ")+1);
+							freq.erase(0,freq.find_first_not_of("\r\n\v\t ")); freq.erase(freq.find_last_not_of("\r\n\v\t ")+1);
 							module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase;
 							module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq;
 							currentPhrase = 0;
