@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.14 2003/08/13 03:56:14 scribe Exp $
+* $Id: swbuf.cpp,v 1.15 2004/02/29 23:26:17 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -158,6 +158,27 @@ void SWBuf::appendFormatted(const char *format, ...) {
 	va_start(argptr, format);
 	end += vsprintf(end, format, argptr);
 	va_end(argptr);
+}
+
+void SWBuf::insert(const unsigned long pos, const char* str, const signed long max) {
+	const int len = (max > -1) ? max : strlen(str);
+
+	if (!len || (pos > length())) //nothing to do, return
+		return;
+	
+	// pos==length(), so we can call append in this case
+	if (pos == length()) { //append is more efficient
+		append(str, max);
+		return;
+	}
+	
+	assureMore( len );
+	
+	memmove(buf + pos + len, buf + pos, (end - buf) - pos); //make a gap of "len" bytes
+	memcpy(buf+pos, str, len);
+	
+	end += len;
+	*end = 0;
 }
 
 SWORD_NAMESPACE_END

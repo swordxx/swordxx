@@ -78,6 +78,23 @@ void compareTest() {
 }
 
 
+void insertStringTest() {
+	// insert test
+	cerr << "\ninsert string test -------\n";
+	cerr.flush();
+	
+	speed = "Start\nend";
+	for (int i = 0; i < 1000; ++i) {
+		speed.insert(6, "text ->this part should not appear :)", 5);
+		speed.insert(6, SWBuf("text ->this part should not appear :)"), 5);
+		//if (!(i%3))speed.append("test");
+	}
+	cout << "\ninsert string test -------\n";
+	
+	//speed = SWBuf(speed.c_str() + iterations);
+	//speed.resize(BASEI/100L);
+	cout << speed << "\n";
+}
 
 int main(int argc, char **argv) {
 	SWBuf x;
@@ -101,11 +118,11 @@ int main(int argc, char **argv) {
 	y.append(y.c_str(),5);
 	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles!hello): (" << y << ")\n";
 
+	insertStringTest();
 	appendChTest();
 	appendStringTest();
 	subscriptTest();
 	ctorAssignTest();
 	compareTest();
-		
 }
 

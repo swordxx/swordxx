@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.28 2004/02/05 10:24:36 dglassey Exp $
+* $Id: swbuf.h,v 1.29 2004/02/29 23:26:17 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -178,6 +178,18 @@ public:
 	* @param ... Add all arguments here.
  	*/
 	void appendFormatted(const char *format, ...);
+	
+	/** 
+	* SWBuf::insert - inserts the given string at position into this string
+	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
+	*/
+	void insert(const unsigned long pos, const char* str, const signed long max = -1 );
+	void insert(const unsigned long pos, const SWBuf &str, const signed long max = -1 ) {
+		insert(pos, str.c_str(), max);
+	};
+	void insert(const unsigned long pos, const char c) {
+		insert(pos, SWBuf(c));
+	}
 	
 	inline char *getRawData() { return buf; }	// be careful!  Probably setSize needs to be called in conjunction before and maybe after
 
