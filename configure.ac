@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.8 $)
+AC_REVISION($Revision: 1.9 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.3)
@@ -51,6 +51,9 @@ AM_MAINTAINER_MODE
 # ---------------------------------------------------------------------
 # Debug and profile
 # ---------------------------------------------------------------------
+
+CXXFLAGS="$CXXFLAGS -ftemplate-depth-25"
+
 if test x$enable_debug = xyes; then
   if test x$ac_cv_prog_cc_g = xyes; then
     CFLAGS="-g -O0"
@@ -167,5 +170,7 @@ AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile utilities/Makefile examples/Makefile)
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile utilities/Makefile examples/Makefile \
+	examples/cmdline/Makefile apps/Makefile apps/console/Makefile \
+	apps/console/diatheke/Makefile)
 AC_OUTPUT

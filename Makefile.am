@@ -63,7 +63,7 @@ icu := @with_icu@
 # Global config directory
 globalconfdir := @sysconfdir@
 
-SUBDIRS = lib . tests utilities examples
+SUBDIRS = lib . tests utilities examples apps
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 

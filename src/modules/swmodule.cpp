@@ -85,6 +85,7 @@ SWModule::~SWModule()
      renderFilters->clear();
      optionFilters->clear();
      encodingFilters->clear();
+	entryAttributes.clear();
 
      delete stripFilters;
      delete rawFilters;
@@ -562,6 +563,7 @@ const char *SWModule::StripText(char *buf, int len)
  */
 
  const char *SWModule::RenderText(char *buf, int len, bool render) {
+	entryAttributes.clear();
 	char *tmpbuf = (buf) ? buf : getRawEntry();
 	SWKey *key = 0;
 	static char *null = "";

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.66 2002/03/18 19:29:50 scribe Exp $
+ * $Id: swmgr.cpp,v 1.67 2002/03/19 23:59:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -65,6 +65,7 @@
 #include <utf8greekaccents.h>
 #include <utf8cantillation.h>
 #include <utf8hebrewpoints.h>
+#include <greeklexattribs.h>
 #include <swfiltermgr.h>
 
 
@@ -149,6 +150,10 @@ void SWMgr::init() {
 
 	tmpFilter = new UTF8Cantillation();
 	optionFilters.insert(FilterMap::value_type("UTF8Cantillation", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new GreekLexAttribs();
+	optionFilters.insert(FilterMap::value_type("GreekLexAttribs", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 /* UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
@@ -763,7 +768,11 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
 {
 	for (;start != end; start++) {
-		printf("%s:%s\n", module->Name(), (*start).second.c_str());
+		FilterMap::iterator it;
+		it = optionFilters.find((*start).second);
+		if (it != optionFilters.end()) {
+			module->AddOptionFilter((*it).second);	// add filter to module
+		}
 	}
 
 	if (filterMgr)

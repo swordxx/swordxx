@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.39 2002/03/18 19:29:50 scribe Exp $
+ * $Id: swmgr.h,v 1.40 2002/03/19 23:59:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,7 +64,7 @@ typedef map < string, SWFilter * >FilterMap;
   *
   * To get the SWModule objects of the instalelled modules use @ref Modules for this.
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.39 2002/03/18 19:29:50 scribe Exp $
+  * @version $Id: swmgr.h,v 1.40 2002/03/19 23:59:41 scribe Exp $
   */
 class SWDLLEXPORT SWMgr {
 
@@ -122,11 +122,6 @@ protected:
   virtual void AddRawFilters (SWModule * module, ConfigEntMap & section);
 
 public:
-  enum LoadError { // the possible errors which might occur in Load are covered here
-  	NoError, // no error occured,
-  	NoModuleConfig, // either mods.d or mods.conf is missing
-  	NoModules, //config exists, but no modules are installed
-  };
 
   /** Enable / Disable debug output on runtime
   * Set this to true to get more verbose output of SWMgr at runtime. Set it to false to get no debug output.

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.41 2002/03/16 01:11:59 scribe Exp $
+ * $Id: swmodule.h,v 1.42 2002/03/19 23:59:41 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -33,12 +33,17 @@
 #include <list>
 
 #include <defs.h>
+#include <multimapwdef.h>
 
 #define FILTERPAD 80
 
 using namespace std;
 
 typedef list < SWFilter * >FilterList;
+
+typedef map < string, string, less < string > > AttributeValue;
+typedef map < string, AttributeValue, less < string > > AttributeList;
+typedef map < string, AttributeList, less < string > > AttributeTypeList;
 
 #define SWTextDirection char
 #define SWTextEncoding char
@@ -62,6 +67,7 @@ protected:
 
   ConfigEntMap ownConfig;
   ConfigEntMap *config;
+  AttributeTypeList entryAttributes;
 
   char error;
   bool skipConsecutiveLinks;
@@ -576,6 +582,7 @@ public:
   */
   virtual void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
   virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+  virtual AttributeTypeList getEntryAttributes() { return entryAttributes; }
 };
 
 

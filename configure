@@ -8204,6 +8204,9 @@ fi
 # ---------------------------------------------------------------------
 # Debug and profile
 # ---------------------------------------------------------------------
+
+CXXFLAGS="$CXXFLAGS -ftemplate-depth-25"
+
 if test x$enable_debug = xyes; then
   if test x$ac_cv_prog_cc_g = xyes; then
     CFLAGS="-g -O0"

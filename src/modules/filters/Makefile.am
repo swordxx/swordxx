@@ -43,6 +43,8 @@ libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
 
 libsword_la_SOURCES += $(filtersdir)/thmlolb.cpp
 
+libsword_la_SOURCES += $(filtersdir)/greeklexattribs.cpp
+
 if ICU
 ICUDEFS = -D_ICU_
 SWICUSRC = $(filtersdir)/utf8transliterator.cpp
