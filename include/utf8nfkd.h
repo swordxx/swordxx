@@ -15,7 +15,6 @@
  * General Public License for more details.
  *
  */
-#ifdef _ICU_
 
 #ifndef UTF8NFKD_H
 #define UTF8NFKD_H
@@ -40,7 +39,5 @@ class SWDLLEXPORT UTF8NFKD : public SWFilter
   ~UTF8NFKD();  
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
-
-#endif
 
 #endif

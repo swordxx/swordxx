@@ -15,7 +15,6 @@
  * General Public License for more details.
  *
  */
-#ifdef _ICU_
 
 #ifndef UTF8TRANSLITERATOR_H
 #define UTF8TRANSLITERATOR_H
@@ -67,7 +66,5 @@ class SWDLLEXPORT UTF8Transliterator : public SWFilter
       return options;
     }
 };
-
-#endif
 
 #endif

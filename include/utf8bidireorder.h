@@ -15,7 +15,6 @@
  * General Public License for more details.
  *
  */
-#ifdef _ICU_
 
 #ifndef UTF8BIDIREORDER_H
 #define UTF8BIDIREORDER_H
@@ -41,8 +40,6 @@ class SWDLLEXPORT UTF8BiDiReorder : public SWFilter
   ~UTF8BiDiReorder();  
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
-
-#endif
 
 #endif
 

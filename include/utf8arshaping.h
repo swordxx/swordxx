@@ -15,7 +15,6 @@
  * General Public License for more details.
  *
  */
-#ifdef _ICU_
 
 #ifndef UTF8ARSHAPING_H
 #define UTF8ARSHAPING_H
@@ -44,5 +43,4 @@ class SWDLLEXPORT UTF8arShaping : public SWFilter
 
 #endif
 
-#endif
 

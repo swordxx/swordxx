@@ -15,7 +15,6 @@
  * General Public License for more details.
  *
  */
-#ifdef _ICU_
 
 #ifndef UTF8NFC_H
 #define UTF8NFC_H
@@ -40,7 +39,5 @@ class SWDLLEXPORT UTF8NFC : public SWFilter
   ~UTF8NFC();  
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
 };
-
-#endif
 
 #endif

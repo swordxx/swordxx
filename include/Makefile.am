@@ -97,16 +97,11 @@ pkginclude_HEADERS += $(swincludedir)/unicodertf.h
 pkginclude_HEADERS += $(swincludedir)/unixstr.h
 pkginclude_HEADERS += $(swincludedir)/untgz.h
 pkginclude_HEADERS += $(swincludedir)/utf16utf8.h
-pkginclude_HEADERS += $(swincludedir)/utf8arshaping.h
-pkginclude_HEADERS += $(swincludedir)/utf8bidireorder.h
 pkginclude_HEADERS += $(swincludedir)/utf8cantillation.h
 pkginclude_HEADERS += $(swincludedir)/utf8greekaccents.h
 pkginclude_HEADERS += $(swincludedir)/utf8hebrewpoints.h
 pkginclude_HEADERS += $(swincludedir)/utf8html.h
 pkginclude_HEADERS += $(swincludedir)/utf8latin1.h
-pkginclude_HEADERS += $(swincludedir)/utf8nfc.h
-pkginclude_HEADERS += $(swincludedir)/utf8nfkd.h
-pkginclude_HEADERS += $(swincludedir)/utf8transliterator.h
 pkginclude_HEADERS += $(swincludedir)/utf8utf16.h
 pkginclude_HEADERS += $(swincludedir)/utilconf.h
 pkginclude_HEADERS += $(swincludedir)/utilfuns.h
@@ -119,3 +114,15 @@ pkginclude_HEADERS += $(swincludedir)/zld.h
 pkginclude_HEADERS += $(swincludedir)/zlib.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
+
+if ICU
+ICU_HEAD  = $(swincludedir)/utf8arshaping.h
+ICU_HEAD += $(swincludedir)/utf8bidireorder.h
+ICU_HEAD += $(swincludedir)/utf8nfc.h
+ICU_HEAD += $(swincludedir)/utf8nfkd.h
+ICU_HEAD += $(swincludedir)/utf8transliterator.h
+else
+ICU_HEAD =
+endif
+
+pkginclude_HEADERS += ICU_HEAD
