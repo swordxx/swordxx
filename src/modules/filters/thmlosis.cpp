@@ -63,7 +63,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	const char* from = orig.c_str();
 
 	text = "";
-	for (const char* from = orig.c_str(); *from; ++from) {
+	for (from = orig.c_str(); *from; ++from) {
 		if (*from == '<') { //start of new token detected
 			intoken = true;
 			tokpos = 0;

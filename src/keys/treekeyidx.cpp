@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.17 2004/04/02 23:54:45 willthimbleby Exp $
+ * $Id: treekeyidx.cpp,v 1.18 2004/05/16 20:59:04 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,6 +30,7 @@
 #else
 #include <unistd.h>
 #endif
+#include <swlog.h>
 
 SWORD_NAMESPACE_START
 
@@ -67,8 +68,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd <= 0) {
-		buf.setFormatted("Error: %d", errno);
-		perror(buf);
+		SWLog::getSystemLog()->logError("%d", errno);
 		error = errno;
 	}
 	else {

@@ -19,6 +19,7 @@
 #include <utilfuns.h>
 #include <rawstr4.h>
 #include <sysdata.h>
+#include <swlog.h>
 
 SWORD_NAMESPACE_START
 
@@ -61,8 +62,7 @@ RawStr4::RawStr4(const char *ipath, int fileMode)
 	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd < 0) {
-		buf.setFormatted("Error: %d", errno);
-		perror(buf);
+		SWLog::getSystemLog()->logError("%d", errno);
 	}
 
 	instance++;

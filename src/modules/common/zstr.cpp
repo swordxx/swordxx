@@ -21,6 +21,7 @@
 
 #include <sysdata.h>
 #include <entriesblk.h>
+#include <swlog.h>
 
 SWORD_NAMESPACE_START
 
@@ -71,8 +72,7 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp)
 	zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd <= 0) {
-		buf.setFormatted("Error: %d", errno);
-		perror(buf);
+		SWLog::getSystemLog()->logError("%d", errno);
 	}
 
 	cacheBlock = 0;
