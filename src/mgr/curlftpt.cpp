@@ -96,8 +96,12 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 		curl_easy_setopt(session, CURLOPT_VERBOSE, true);
 		
 		/* FTP connection settings */
-#ifdef LIBCURL_VERSION_MAJOR>=7 && LIBCURL_VERSION_MINOR>=10 && LIBCURL_VERSION_PATCH>=6
-		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0);
+#if LIBCURL_VERSION_MAJOR >= 7
+#if LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR>=10 && LIBCURL_VERSION_PATCH>=6
+		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0); //curl >= 7.10.6
+#else
+		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0); //curl 8.0 or later
+#endif
 #endif
 
 		res = curl_easy_perform(session);
