@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.42 2002/03/22 05:26:34 scribe Exp $
+ * $Id: swmgr.h,v 1.43 2002/07/11 21:07:35 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,7 +64,7 @@ typedef map < string, SWFilter * >FilterMap;
   *
   * To get the SWModule objects of the instalelled modules use @ref Modules for this.
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.42 2002/03/22 05:26:34 scribe Exp $
+  * @version $Id: swmgr.h,v 1.43 2002/07/11 21:07:35 dglassey Exp $
   */
 class SWDLLEXPORT SWMgr {
 
@@ -128,6 +128,7 @@ public:
   * The default is "false".
   */
   static bool debug;
+  static bool isICU;
   static const char *globalConfPath;
   /**
   *
