@@ -1,4 +1,5 @@
 AUTOMAKE_OPTIONS = 1.6
+SUBDIRS = diatheke
 INCLUDES = -I $(top_srcdir)/include
 LDADD = $(top_builddir)/lib/libsword.la 
 
