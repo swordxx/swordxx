@@ -87,8 +87,8 @@ endif
 if INSTCONF
 sysconf_DATA = sword.conf
 sword.conf:
-	@echo "[Install]" > sword.conf
-	@echo "DataPath=$(pkgdatadir)/" >> sword.conf
+	@echo "[Install]" > $(DESTDIR)$(sysconfdir)/sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> $(DESTDIR)$(sysconfdir)/sword.conf
 
 clean-generic:
 	-rm -f sword.conf
