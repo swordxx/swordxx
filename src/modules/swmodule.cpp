@@ -265,11 +265,14 @@ char SWModule::Display()
 char SWModule::SetKey(const SWKey &ikey) {
 	return SetKey(&ikey);
 }
+
 char SWModule::SetKey(const SWKey *ikey)
 {
+	SWKey *oldKey = 0;
+
 	if (key) {
 		if (!key->Persist())	// if we have our own copy
-			delete key;
+			oldKey = key;
 	}
 
 	if (!ikey->Persist()) {		// if we are to keep our own copy
@@ -277,6 +280,9 @@ char SWModule::SetKey(const SWKey *ikey)
 		*key = *ikey;
 	}
 	else	 key = (SWKey *)ikey;		// if we are to just point to an external key
+
+	if (oldKey)
+		delete oldKey;
 
 	return 0;
 }
