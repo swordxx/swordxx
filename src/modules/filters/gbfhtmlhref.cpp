@@ -28,8 +28,8 @@ GBFHTMLHREF::GBFHTMLHREF() {
 
 	addTokenSubstitute("Rf", ")</small></font>");
 	addTokenSubstitute("Rx", "</a>");
-	addTokenSubstitute("FI", "<i>"); // italics begin
-	addTokenSubstitute("Fi", "</i>");
+	addTokenSubstitute("FI", "<i> "); // italics begin
+	addTokenSubstitute("Fi", " </i>");
 	addTokenSubstitute("FB", "<n>"); // bold begin
 	addTokenSubstitute("Fb", "</n>");
 	addTokenSubstitute("FR", "<font color=\"#FF0000\">"); // words of Jesus begin
@@ -133,7 +133,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &user
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
-			buf += " <small><em>&lt;<a href=\"type=Strongs value=";
+			buf += " <small><em>(<a href=\"type=Strongs value=";
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
@@ -170,7 +170,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &user
 		}
 
 		else if (!strncmp(token, "RB", 2)) {
-			buf += "<i>";
+			buf += "<i> ";
 			userData["hasFootnotePreTag"] = "true";
 		}
 
