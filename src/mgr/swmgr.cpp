@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.43 2001/09/23 06:53:00 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.44 2001/09/23 11:00:37 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -57,6 +57,13 @@
 #include <ztext.h>
 #include <zcom.h>
 #include <lzsscomprs.h>
+#include <utf8greekaccents.h>
+#include <utf8cantillation.h>
+#include <utf8hebrewpoints.h>
+
+#ifdef ICU
+#include <utf8transliterator.h>
+#endif
 
 #ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
@@ -91,6 +98,24 @@ void SWMgr::init() {
 	tmpFilter = new GBFHeadings();
 	optionFilters.insert(FilterMap::value_type("GBFHeadings", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new UTF8GreekAccents();
+	optionFilters.insert(FilterMap::value_type("UTF8GreekAccents", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new UTF8HebrewPoints();
+	optionFilters.insert(FilterMap::value_type("UTF8HebrewPoints", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new UTF8Cantillation();
+	optionFilters.insert(FilterMap::value_type("UTF8Cantillation", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+#ifdef ICU
+	tmpFilter = new UTF8Transliterator();
+	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+#endif
 
 	gbfplain = new GBFPlain();
 	cleanupFilters.push_back(gbfplain);
