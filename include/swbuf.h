@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.31 2004/03/27 09:24:35 mgruner Exp $
+* $Id: swbuf.h,v 1.32 2004/04/02 23:54:45 willthimbleby Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -135,6 +135,16 @@ public:
 	* @param newVal the value to set this buffer to. 
  	*/
 	void set(const SWBuf &newVal);
+
+	/**
+ 	* SWBuf::setFormatted - sets this buf to a formatted strings
+	* If the allocated memory is bigger than the new string, it will NOT be resized.
+	* WARNING: This function can only write at most
+	* JUNKBUFSIZE to the string per call.
+	* @param format The format string. Same syntax as printf, for example.
+	* @param ... Add all arguments here.
+ 	*/
+	void setFormatted(const char *format, ...);
 
 	/**
  	* SWBuf::setSize - Size this buffer to a specific length.

@@ -39,7 +39,7 @@ int RawStr4::instance = 0;
 
 RawStr4::RawStr4(const char *ipath, int fileMode)
 {
-	char buf[127];
+	SWBuf buf;
 
 	nl = '\n';
 	lastoff = -1;
@@ -54,14 +54,14 @@ RawStr4::RawStr4(const char *ipath, int fileMode)
 		fileMode = O_RDWR;
 	}
 		
-	sprintf(buf, "%s.idx", path);
+	buf.setFormatted("%s.idx", path);
 	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s.dat", path);
+	buf.setFormatted("%s.dat", path);
 	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd < 0) {
-		sprintf(buf, "Error: %d", errno);
+		buf.setFormatted("Error: %d", errno);
 		perror(buf);
 	}
 

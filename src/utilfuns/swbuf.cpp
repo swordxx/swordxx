@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.15 2004/02/29 23:26:17 joachim Exp $
+* $Id: swbuf.cpp,v 1.16 2004/04/02 23:54:44 willthimbleby Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -119,6 +119,22 @@ void SWBuf::set(const SWBuf &newVal) {
 	end = buf + (len-1);
 }
 
+/******************************************************************************
+* SWBuf::setFormatted - sets this buf to a formatted string
+* WARNING: This function can only write at most
+* JUNKBUFSIZE to the string per call.
+*/
+void SWBuf::setFormatted(const char *format, ...) {
+	va_list argptr;
+
+	va_start(argptr, format);
+	int len = vsprintf(junkBuf, format, argptr)+1;
+	va_end(argptr);
+	assureSize(len);
+	va_start(argptr, format);
+	end = vsprintf(buf, format, argptr) + buf;
+	va_end(argptr);
+}
 
 /******************************************************************************
 * SWBuf::append - appends a value to the current value of this SWBuf
@@ -130,7 +146,6 @@ void SWBuf::append(const char *str, long max) {
 	end += (len-1);
 	*end = 0;
 }
-
 
 /******************************************************************************
 * SWBuf::setSize - Size this buffer to a specific length

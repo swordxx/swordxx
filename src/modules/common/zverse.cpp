@@ -51,7 +51,7 @@ const char zVerse::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
 
 zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp)
 {
-	char buf[127];
+	SWBuf buf;
 
 	nl = '\n';
 	path = 0;
@@ -70,22 +70,22 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 		fileMode = O_RDWR;
 	}
 		
-	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/ot.%czs", path, uniqueIndexID[blockType]);
 	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/nt.%czs", path, uniqueIndexID[blockType]);
 	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/ot.%czz", path, uniqueIndexID[blockType]);
 	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/nt.%czz", path, uniqueIndexID[blockType]);
 	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/ot.%czv", path, uniqueIndexID[blockType]);
 	compfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockType]);
+	buf.setFormatted("%s/nt.%czv", path, uniqueIndexID[blockType]);
 	compfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 	
 	instance++;

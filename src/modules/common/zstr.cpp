@@ -39,8 +39,9 @@ const int zStr::ZDXENTRYSIZE = 8;
  * ENT:	ipath - path of the directory where data and index files are located.
  */
 
-zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp) {
-	char buf[127];
+zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp)
+{
+	SWBuf buf;
 
 	nl = '\n';
 	lastoff = -1;
@@ -57,20 +58,20 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp) 
 		fileMode = O_RDWR;
 	}
 		
-	sprintf(buf, "%s.idx", path);
+	buf.setFormatted("%s.idx", path);
 	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s.dat", path);
+	buf.setFormatted("%s.dat", path);
 	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s.zdx", path);
+	buf.setFormatted("%s.zdx", path);
 	zdxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s.zdt", path);
+	buf.setFormatted("%s.zdt", path);
 	zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd <= 0) {
-		sprintf(buf, "Error: %d", errno);
+		buf.setFormatted("Error: %d", errno);
 		perror(buf);
 	}
 

@@ -47,11 +47,11 @@ const char *RawVerse::nl = "\r\n";
 
 RawVerse::RawVerse(const char *ipath, int fileMode)
 {
-	char *buf;
+	SWBuf buf;
 
 	path = 0;
 	stdstr(&path, ipath);
-     buf = new char [ strlen(path) + 80 ];
+	
 	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
 		path[strlen(path)-1] = 0;
 
@@ -59,19 +59,18 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 		fileMode = O_RDWR;
 	}
 		
-	sprintf(buf, "%s/ot.vss", path);
+	buf.setFormatted("%s/ot.vss", path);
 	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/nt.vss", path);
+	buf.setFormatted("%s/nt.vss", path);
 	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/ot", path);
+	buf.setFormatted("%s/ot", path);
 	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	sprintf(buf, "%s/nt", path);
+	buf.setFormatted("%s/nt", path);
 	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
-	delete [] buf;
 	instance++;
 }
 

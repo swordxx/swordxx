@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+03-Apr-2004	Will Thimbleby <will@thimbleby.net>
+	Added SWBuf method setFormatted()
+	Altered all remaining uses of char[127]
+		for file names to use SWBufs.
 
 06-Jan-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Changed system[Log|File|Locale]Mgr to
