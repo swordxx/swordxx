@@ -128,7 +128,6 @@ ThMLRTF::ThMLRTF()
 
 	setTokenCaseSensitive(true);
 
-	addTokenSubstitute("/scripRef", "|}");
 	addTokenSubstitute("/note", ") }");
 
         addTokenSubstitute("br", "\\line ");
@@ -156,14 +155,14 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
         			pushString(buf, " {\\fs15 <");
                                 for (unsigned int i = 28; token[i] != '\"'; i++)
                 		        *(*buf)++ = token[i];
-        			pushString(buf, ">}");
-                        }
-                        else if (token[27] == 'T') {
-                                pushString(buf, " {\\fs15 (");
-        			for (unsigned int i = 28; token[i] != '\"'; i++)
-        				*(*buf)++ = token[i];
-        			pushString(buf, ")}");
-                        }
+				pushString(buf, ">}");
+				    }
+				    else if (token[27] == 'T') {
+						  pushString(buf, " {\\fs15 (");
+				for (unsigned int i = 28; token[i] != '\"'; i++)
+					*(*buf)++ = token[i];
+				pushString(buf, ")}");
+				    }
 		}
 		else if (!strncmp(token, "sync type=\"morph\" ", 18)) {
 			pushString(buf, " {\\fs15 (");
@@ -185,29 +184,34 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 			pushString(buf, ")}");
 		}
 		else if (!strncmp(token, "scripRef", 8)) {
-			pushString(buf, "{\\cf2 #");
+//			pushString(buf, "{\\cf2 #");
+			userData["suspendTextPassThru"] = true;
 		}
-                else if (!strncmp(token, "div", 3)) {
-                        *(*buf)++ = '{';
-                        if (!strncmp(token, "div class=\"title\"", 17)) {
-                                pushString(buf, "\\par\\i1\\b1 ");
-                                userData["sechead"] = "true";
-                        }
-                        else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-                                pushString(buf, "\\par\\i1\\b1 ");
-                                userData["sechead"] = "true";
-                        }
-                }
-                else if (!strncmp(token, "/div", 4)) {
-                        *(*buf)++ = '}';
-                        if (userData["sechead"] == "true") {
-                                pushString(buf, "\\par ");
-                                userData["sechead"] == "false";
-                        }
-                }
-                else if (!strncmp(token, "note", 4)) {
-                        pushString(buf, " {\\i1\\fs15 (");
-                }
+		else if (!strncmp(token, "/scripRef", 9)) {
+			pushString(buf, "<a href=\"%s\">%s</a>", userData["lastTextNode"].c_str(), userData["lastTextNode"].c_str());
+			userData["suspendTextPassThru"] = false;
+		}
+		else if (!strncmp(token, "div", 3)) {
+			*(*buf)++ = '{';
+			if (!strncmp(token, "div class=\"title\"", 17)) {
+				pushString(buf, "\\par\\i1\\b1 ");
+				userData["sechead"] = "true";
+			}
+			else if (!strncmp(token, "div class=\"sechead\"", 19)) {
+				pushString(buf, "\\par\\i1\\b1 ");
+				userData["sechead"] = "true";
+			}
+		}
+		else if (!strncmp(token, "/div", 4)) {
+			*(*buf)++ = '}';
+			if (userData["sechead"] == "true") {
+				pushString(buf, "\\par ");
+				userData["sechead"] == "false";
+			}
+		}
+		else if (!strncmp(token, "note", 4)) {
+			pushString(buf, " {\\i1\\fs15 (");
+		}
 
 		else {
 			return false;  // we still didn't handle token
