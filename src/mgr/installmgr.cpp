@@ -68,7 +68,7 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
 
 	sources.clear();
 	
-	setFTPPassive(!stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "true"));
+	setFTPPassive(stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "false")!=0);
 
 	sourcesSection = installConf->Sections.find("Sources");
 	if (sourcesSection != installConf->Sections.end()) {
