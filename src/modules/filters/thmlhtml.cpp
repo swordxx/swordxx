@@ -189,7 +189,7 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 					if (*(c+1) == '/') {
 						pushString(buf, "file:");
 						pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
-						if (*(buf-1) == '/')
+						if (*((*buf)-1) == '/')
 							c++;		// skip '/'
 					}
 					continue;

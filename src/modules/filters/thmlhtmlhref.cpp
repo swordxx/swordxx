@@ -243,7 +243,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 					if (*(c+1) == '/') {
 						pushString(buf, "file:");
 						pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
-						if (*(buf-1) == '/')
+						if (*((*buf)-1) == '/')
 							c++;		// skip '/'
 					}
 					continue;
