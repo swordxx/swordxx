@@ -47,7 +47,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 	addTokenSubstitute("Pp", "</CITE>");
 	addTokenSubstitute("Fn", "</FONT>"); //  font  end
 	addTokenSubstitute("CL", "<BR>"); //  new line
-	addTokenSubstitute("CM", "<BR>"); //  paragraph
+	addTokenSubstitute("CM", "<P>"); //  paragraph
 	addTokenSubstitute("CG", ""); //  ???
 	addTokenSubstitute("CT", ""); // ???
 	addTokenSubstitute("JR", "<DIV ALIGN=\"RIGHT\">"); // right align begin

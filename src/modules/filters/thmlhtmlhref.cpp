@@ -135,6 +135,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 
 bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+	static bool inscriptRef;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
@@ -163,7 +164,8 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			pushString(buf, "</A>");
 		}
 
-		else if (!strncmp(token, "scripRef ", 9)) {
+		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
+			inscriptRef = true;
 			pushString(buf, "<A HREF=\"");
 			for (unsigned int i = 9; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
@@ -174,18 +176,29 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 
 		// we're starting a scripRef like "<scripRef>John 3:16</scripRef>"
 		else if (!strcmp(token, "scripRef")) {
+			inscriptRef = false;
 			// let's stop text from going to output
 			userData["suspendTextPassThru"] = "true";
 		}
 
-		// we've ended a scripRef like "<scripRef>John 3:16</scripRef>"
+		// we've ended a scripRef 
 		else if (!strcmp(token, "/scripRef")) {
-			pushString(buf, "<A HREF=\"");
-			pushString(buf, userData["lastTextNode"].c_str());
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
-			// let's let text resume to output again
-			userData["suspendTextPassThru"] = "false";
+			if(inscriptRef){ // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+				inscriptRef = false;
+				pushString(buf, "</A>");
+			}
+			
+			else { // like "<scripRef>John 3:16</scripRef>"
+				pushString(buf, "<A HREF=\"passage=");
+				char *strbuf = (char *)userData["lastTextNode"].c_str();
+				pushString(buf, strbuf);
+				*(*buf)++ = '\"';
+				*(*buf)++ = '>';
+				pushString(buf, strbuf);
+				// let's let text resume to output again
+				userData["suspendTextPassThru"] = "false";	
+				pushString(buf, "</A>");
+			}
 		}
 			
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
