@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.8 2001/04/22 00:55:04 chrislit Exp $
+ * $Id: filemgr.h,v 1.9 2001/05/11 05:49:24 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -74,7 +74,6 @@ public:
   char trunc (FileDesc *);
 
   int maxFiles;
-  static char cheezyAccess(const char *path, int access);  // used if no 'access' method exists (for weezy microsoft).
   static FileMgr systemFileMgr;
 };
 

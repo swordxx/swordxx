@@ -26,4 +26,6 @@ cpp += thmlrtf.cpp
 cpp += thmlhtml.cpp
 cpp += thmlplain.cpp
 
+cpp += thmlolb.cpp
+
 include ${root}/Makefile.post
