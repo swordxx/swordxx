@@ -2,6 +2,8 @@
 // Making or using sword as a Windows DLL
 // ----------------------------------------------------------------------------
 
+#define FILTERPAD 80
+
 #if defined(__SWMSW__)
 
 // _declspec works in BC++ 5 and later, as well as VC++

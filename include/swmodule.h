@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.48 2002/07/28 01:48:38 scribe Exp $
+* $Id: swmodule.h,v 1.49 2002/07/30 10:17:30 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -37,7 +37,6 @@
 
 using namespace std;
 
-#define FILTERPAD 80
 
 #define SWMODULE_OPERATORS \
 	operator const char *() { return RenderText(); } \

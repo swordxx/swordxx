@@ -90,13 +90,8 @@ char RawLD4::getEntry(long away)
 
 	*entrybuf = 0;
 	if (!(retval = findoffset(buf, &start, &size, away))) {
+		readtext(start, &size, &idxbuf, &entrybuf);
 		entrySize = size;        // support getEntrySize call
-		if (entrybuf)
-			delete [] entrybuf;
-		entrybuf = new char [ ++size * FILTERPAD ];
-		idxbuf   = new char [ size * FILTERPAD ];
-
-		readtext(start, size, idxbuf, entrybuf);
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
 

@@ -332,36 +332,42 @@ void RawStr4::preptext(char *buf)
  *
  */
 
-void RawStr4::readtext(long istart, unsigned long isize, char *idxbuf, char *buf)
+void RawStr4::readtext(long istart, unsigned long *isize, char **idxbuf, char **buf)
 {
 	char *ch;
 	char *idxbuflocal = 0;
 	getidxbufdat(istart, &idxbuflocal);
 	long start = istart;
-	unsigned long size = isize;
 
 	do {
-		memset(buf, 0, size);
-		lseek(datfd->getFd(), start, SEEK_SET);
-		read(datfd->getFd(), buf, (int)(size - 1));
+		if (*idxbuf)
+			delete [] *idxbuf;
+		if (*buf)
+			delete [] *buf;
+		*buf    = new char [ ++(*isize) * FILTERPAD ];
+		*idxbuf = new char [ (*isize) * FILTERPAD ];
 
-		for (ch = buf; *ch; ch++) {		// skip over index string
+		memset(*buf, 0, *isize);
+		lseek(datfd->getFd(), start, SEEK_SET);
+		read(datfd->getFd(), *buf, (int)((*isize) - 1));
+
+		for (ch = *buf; *ch; ch++) {		// skip over index string
 			if (*ch == 10) {
 				ch++;
 				break;
 			}
 		}
-		memmove(buf, ch, size - (unsigned long)(ch-buf));
+		memmove(*buf, ch, *isize - (unsigned long)(ch-*buf));
 
 		// resolve link
-		if (!strncmp(buf, "@LINK", 5)) {
-			for (ch = buf; *ch; ch++) {		// null before nl
+		if (!strncmp(*buf, "@LINK", 5)) {
+			for (ch = *buf; *ch; ch++) {		// null before nl
 				if (*ch == 10) {
 					*ch = 0;
 					break;
 				}
 			}
-			findoffset(buf + 8, &start, &size);
+			findoffset(*buf + 6, &start, isize);
 		}
 		else break;
 	}
@@ -369,9 +375,9 @@ void RawStr4::readtext(long istart, unsigned long isize, char *idxbuf, char *buf
 
 	if (idxbuflocal) {
 		int localsize = strlen(idxbuflocal);
-		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
-		strncpy(idxbuf, idxbuflocal, localsize);
-		idxbuf[localsize] = 0;
+		localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
+		strncpy(*idxbuf, idxbuflocal, localsize);
+		(*idxbuf)[localsize] = 0;
 		free(idxbuflocal);
 	}
 }
@@ -439,6 +445,7 @@ void RawStr4::setText(const char *ikey, const char *buf, long len) {
 					}
 				}
 				findoffset(tmpbuf + 8, &start, &size, 0, &idxoff);
+				++size;
 			}
 			else break;
 		}

@@ -364,9 +364,9 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 
 							// get data for this word from database
 							free(idxbuf);
-							idxbuf = (char *)calloc(size+2, 1);
-							datbuf = (char *)calloc(size+2, 1);
-							fastSearch[j]->readtext(start, size + 2, idxbuf, datbuf);
+							idxbuf = 0;
+							datbuf = 0;
+							fastSearch[j]->readtext(start, &size, &idxbuf, &datbuf);
 
 							// we know that the data consists of sizof(long)
 							// records each a valid module position that constains

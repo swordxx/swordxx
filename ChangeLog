@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+30-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed RawLD link errors.
+	Allocate buffer for RawStr* drivers in readtext
+		to allow realloc if link
+
 29-Jul-2002     Victor Porton <porton@narod.ru>
 	Fixed RawLD and RawLD4 drivers not reporting errors in
 	getRawEntry()

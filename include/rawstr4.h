@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: rawstr4.h,v 1.6 2002/07/28 01:48:38 scribe Exp $
+ * $Id: rawstr4.h,v 1.7 2002/07/30 10:17:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -48,7 +48,7 @@ public:
 	void getidxbufdat(long ioffset, char **buf);
 	signed char findoffset(const char *key, long *start, unsigned long *size,
 	long away = 0, long *idxoff = 0);
-	void readtext(long start, unsigned long size, char *idxbuf, char *buf);
+	void readtext(long start, unsigned long *size, char **idxbuf, char **buf);
 	static signed char createModule(const char *path);
 };
 

@@ -327,40 +327,42 @@ void RawStr::preptext(char *buf) {
  *
  */
 
-void RawStr::readtext(long istart, unsigned short isize, char *idxbuf, char *buf)
+void RawStr::readtext(long istart, unsigned short *isize, char **idxbuf, char **buf)
 {
 	char *ch;
 	char *idxbuflocal = 0;
 	getidxbufdat(istart, &idxbuflocal);
 	long start = istart;
-	unsigned short size = isize;
 
 	do {
-		memset(buf, 0, size);
-		lseek(datfd->getFd(), start, SEEK_SET);
-		read(datfd->getFd(), buf, (int)(size - 2));
+		if (*idxbuf)
+			delete [] *idxbuf;
+		if (*buf)
+			delete [] *buf;
+		*buf    = new char [ ++(*isize) * FILTERPAD ];
+		*idxbuf = new char [ (*isize) * FILTERPAD ];
 
-		for (ch = buf; *ch; ch++) {		// skip over index string
+		memset(*buf, 0, *isize);
+		lseek(datfd->getFd(), start, SEEK_SET);
+		read(datfd->getFd(), *buf, (int)((*isize) - 1));
+
+		for (ch = *buf; *ch; ch++) {		// skip over index string
 			if (*ch == 10) {
 				ch++;
 				break;
 			}
 		}
-		size -= (unsigned short)(ch-buf);
-		memmove(buf, ch, size);
-		buf[size] = 0;
-		buf[size+1] = 0;
+		memmove(*buf, ch, *isize - (unsigned long)(ch-*buf));
 
 		// resolve link
-		if (!strncmp(buf, "@LINK", 5)) {
-			for (ch = buf; *ch; ch++) {		// null before nl
+		if (!strncmp(*buf, "@LINK", 5)) {
+			for (ch = *buf; *ch; ch++) {		// null before nl
 				if (*ch == 10) {
 					*ch = 0;
 					break;
 				}
 			}
-			findoffset(buf + 6, &start, &size);
-			// TODO: FIX!  THIS IS WRONG!!!  buf is not reallocated for the appropriate size!
+			findoffset(*buf + 6, &start, isize);
 		}
 		else break;
 	}
@@ -368,9 +370,9 @@ void RawStr::readtext(long istart, unsigned short isize, char *idxbuf, char *buf
 
 	if (idxbuflocal) {
 		int localsize = strlen(idxbuflocal);
-		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
-		strncpy(idxbuf, idxbuflocal, localsize);
-		idxbuf[localsize] = 0;
+		localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
+		strncpy(*idxbuf, idxbuflocal, localsize);
+		(*idxbuf)[localsize] = 0;
 		free(idxbuflocal);
 	}
 }
