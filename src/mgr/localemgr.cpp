@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.20 2004/04/20 12:03:10 joachim Exp $
+ * $Id: localemgr.cpp,v 1.21 2004/05/07 18:00:10 dglassey Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -80,14 +80,14 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	if (lang) {
 		if (strlen(lang) > 0)
 			setDefaultLocaleName(lang);
-		else setDefaultLocaleName("en_us");
+		else setDefaultLocaleName("en_US");
 	}
-	else setDefaultLocaleName("en_us");
+	else setDefaultLocaleName("en_US");
 
 	if (!iConfigPath)
 		SWMgr::findConfig(&configType, &prefixPath, &configPath);
 	else configPath = (char *)iConfigPath;
-
+	
 	if (prefixPath) {
 		switch (configType) {
 		case 2:
@@ -115,6 +115,8 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 
 	if (configPath)
 		delete [] configPath;
+	
+
 }
 
 
@@ -131,6 +133,7 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 	struct dirent *ent;
 	SWBuf newmodfile;
 	LocaleMap::iterator it;
+	printf("LocaleMgr::loadConfigDir loading %s", ipath);
  
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);
@@ -189,6 +192,7 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 	if (it != locales->end())
 		return (*it).second;
 
+	printf("LocaleMgr::getLocale failed to find %s\n", name);
 	return 0;
 }
 
@@ -220,7 +224,11 @@ const char *LocaleMgr::getDefaultLocaleName() {
 
 
 void LocaleMgr::setDefaultLocaleName(const char *name) {
-	stdstr(&defaultLocaleName, name);
+	char *tmplang=0;
+	stdstr(&tmplang, name);
+	strtok(tmplang, ".");
+	stdstr(&defaultLocaleName, tmplang);
+	delete [] tmplang;
 }
 
 SWORD_NAMESPACE_END
