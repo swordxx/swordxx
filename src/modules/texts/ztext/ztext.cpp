@@ -27,13 +27,14 @@
  * ENT:	ipath - path to data files
  *		iname - Internal name for module
  *		idesc - Name to display to user for module
- *		blockType - verse, chapter, book, etc. of index chunks
+ *		iblockType - verse, chapter, book, etc. of index chunks
  *		icomp - Compressor object
  *		idisp - Display object to use for displaying
  */
 
-zText::zText(const char *ipath, const char *iname, const char *idesc, int blockType, SWCompress *icomp, SWDisplay *idisp) : zVerse(ipath, -1, blockType, icomp), SWText(iname, idesc, idisp)/*, SWCompress()*/
+zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp) : zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp)/*, SWCompress()*/
 {
+	blockType = iblockType;
 	versebuf = 0;
 	lastWriteKey = 0;
 	printf("init ztext\n");
