@@ -354,6 +354,8 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 			cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
 			cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";
 			cerr << "highIndex: " << highIndex << "\n";
+			cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
+			cerr << "perc == "  << (int )perc << "% \n";
 		}
 		if (searchType >= 0) {
 			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
