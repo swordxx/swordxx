@@ -15,10 +15,9 @@ UTF16UTF8::UTF16UTF8() {
 }
 
 
-char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
   unsigned short *from;
-  unsigned char *to;
 
   int len;
   unsigned long uchar;
@@ -27,24 +26,19 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 		return -1;
 
   len = 0;
-  from = (unsigned short*) text;
+  from = (unsigned short*) text.c_str();
   while (*from) {
         len += 2;
         from++;
   }
 
-  // shift string to right of buffer
-  if (len < maxlen) {
-    memmove(&text[maxlen - len], text, len);
-    from = (unsigned short*)&text[maxlen - len];
-  }
-  else
-    from = (unsigned short*)text;
-  
+	SWBuf orig = text;
+	from = (unsigned short*)orig.c_str();
+
 
   // -------------------------------
 
-  for (to = (unsigned char*)text; *from; from++) {
+  for (text = ""; *from; from++) {
     uchar = 0;
 
     if (*from < 0xD800 || *from > 0xDFFF) {
@@ -70,26 +64,24 @@ char UTF16UTF8::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
     }
     
     if (uchar < 0x80) { 
-      *to++ = uchar; 
+      text += uchar;
     }
     else if (uchar < 0x800) { 
-      *to++ = 0xc0 | (uchar >> 6); 
-      *to++ = 0x80 | (uchar & 0x3f);
+      text += 0xc0 | (uchar >> 6); 
+      text += 0x80 | (uchar & 0x3f);
     }
     else if (uchar < 0x10000) {
-      *to++ = 0xe0 | (uchar >> 12); 
-      *to++ = 0x80 | (uchar >> 6) & 0x3f; 
-      *to++ = 0x80 | uchar & 0x3f;
+      text += 0xe0 | (uchar >> 12); 
+      text += 0x80 | (uchar >> 6) & 0x3f; 
+      text += 0x80 | uchar & 0x3f;
     }
     else if (uchar < 0x200000) {
-      *to++ = 0xF0 | (uchar >> 18);
-      *to++ = 0x80 | (uchar >> 12) & 0x3F; 
-      *to++ = 0x80 | (uchar >> 6) & 0x3F; 
-      *to++ = 0x80 | uchar & 0x3F;
+      text += 0xF0 | (uchar >> 18);
+      text += 0x80 | (uchar >> 12) & 0x3F; 
+      text += 0x80 | (uchar >> 6) & 0x3F; 
+      text += 0x80 | uchar & 0x3F;
     }
   }
-  *to++ = 0;
-  *to = 0;
   
   return 0;
 }
