@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 30-May-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added utilities/installmgr to call some of the
+		basic functionality from engine install
+		routines.
 	Added removeModule to installmgr.cpp, copied from
 		Windows InstallMgr.
 
