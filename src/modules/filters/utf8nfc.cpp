@@ -16,15 +16,17 @@
 #include <utf8nfc.h>
 
 UTF8NFC::UTF8NFC() {
-
         conv = ucnv_open("UTF-8", &err);
+}
 
+UTF8NFC::~UTF8NFC() {
+         ucnv_close(conv);
 }
 
 char UTF8NFC::ProcessText(char *text, int maxlen, const SWKey *key)
 {
         int32_t len = strlen(text) * 2;
-        source = new UChar[len]; //each char could become a surrogate pair
+        source = new UChar[len + 1]; //each char could become a surrogate pair
 
 	// Convert UTF-8 string to UTF-16 (UChars)
         len = ucnv_toUChars(conv, source, len, text, -1, &err);
