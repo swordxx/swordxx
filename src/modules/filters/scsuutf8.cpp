@@ -29,7 +29,7 @@ SCSUUTF8::SCSUUTF8() {
 unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
 {
   /* join UTF-16 surrogates without any pairing sanity checks */
-  
+
   static int d;
   
   if (uchar >= 0xd800 && uchar <= 0xdbff) { d = uchar & 0x3f; return text;  }
@@ -37,8 +37,8 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
   
   /* output one character as UTF-8 multibyte sequence */
   
-  if (uchar < 0x80) { 
-    *text++ = c; 
+  if (uchar < 0x80) {
+    *text++ = c;
   }
   else if (uchar < 0x800) { 
     *text++ = 0xc0 | uchar >> 6; 
@@ -46,7 +46,7 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
   }
   else if (uchar < 0x10000) {
     *text++ = 0xe0 | uchar >> 12; 
-    *text++ = 0x80 | uchar >> 6 & 0x3f; 
+    *text++ = 0x80 | uchar >> 6 & 0x3f;
     *text++ = 0x80 | uchar & 0x3f;
   }
   else if (uchar < 0x200000) {
@@ -64,7 +64,7 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key)
   unsigned char *to, *from;
   unsigned long buflen = len * FILTERPAD;
   char active = 0, mode = 0;
-  
+
   static unsigned short start[8] = {0x0000,0x0080,0x0100,0x0300,0x2000,0x2080,0x2100,0x3000};
   static unsigned short slide[8] = {0x0080,0x00C0,0x0400,0x0600,0x0900,0x3040,0x30A0,0xFF00};
   static unsigned short win[256]   = {
@@ -102,147 +102,117 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key)
     0x0000, 0x00C0, 0x0250, 0x0370, 0x0530, 0x3040, 0x30A0, 0xFF60
   };
 
+  if (!len)
+        return 0;
+
   memmove(&text[buflen - len], text, len);
   from = (unsigned char*)&text[buflen - len];
-  
+  to = text;
+
   // -------------------------------
-  
-  for (int i = 0; i < len; i++, c = *from++) {
-    
-    if (c >= 0x80)
-      {
-	UTF8Output (c - 0x80 + slide[active], to);
-      }
-    else if (c >= 0x20 && c <= 0x7F)
-      {
-	UTF8Output (c, to);
-      }
-    else if (c == 0x0 || c == 0x9 || c == 0xA || c == 0xC || c == 0xD) 
-      {
-	UTF8Output (c, to);
-      }
-    else if (c >= 0x1 && c <= 0x8) /* SQn */
-      {
-	/* single quote */
-	i++;
-	if (i < len)
-	  d = *from++;
-	else
-	  break;
-	
-	UTF8Output (d < 0x80 ? d + start [c - 0x1] : 
-		d - 0x80 + slide [c - 0x1], to);
-      }
-    else if (c >= 0x10 && c <= 0x17) /* SCn */
-      {
-	/* change window */ active = c - 0x10;
-      }
-    else if (c >= 0x18 && c <= 0x1F) /* SDn */
-      {
-	/* define window */ active = c - 0x18;
-	i++;
-	if (i < len)
-	  slide[active] = win[*from++];
-	else
-	  break;
-      }
-    else if (c == 0xB) /* SDX */
-      {
-	i++;
-	if (i < len)
-	  c = *from++;
-	else
-	  break;
-	i++;
-	if (i < len)
-	  d = *from++;
-	else
-	  break;
 
-	slide [active = c>>5] = 0x10000 + (((c & 0x1F) << 8 | d) << 7);
-      }
-    else if (c == 0xE) /* SQU */
-      {
-	/* SQU */
-	i++;
-	if (i < len)
-	  c = *from++;
-	else
-	  break; 
+  for (int i = 0; i < len;) {
 
-	i++;
-	if (i < len)
-	  UTF8Output (c << 8 | *from++, to);
-	else
-	  break;
-      }
-    else if (c == 0xF) /* SCU */
-      {
-	/* change to Unicode mode */ mode = 1;
-	
-	while (mode)
-	  {
-	    i++;
-	    if (i < len)
-	      c = *from++;
-	    else
-	      break;
-	    
-	    if (c <= 0xDF || c >= 0xF3)
-	      {
-		i++;
-		if (i < len)
-		  UTF8Output (c << 8 | *from++, to);
-		else
-		  break;
-	      }
-	    else if (c == 0xF0) /* UQU */
-	      {
-		i++;
-		if (i < len)
-		  c = *from++;
-		else
-		  break;
-		i++;
-		if (i < len)
-		  UTF8Output (c << 8 | *from++, to);
-		else
-		  break;
-	      }
-	    else if (c >= 0xE0 && c <= 0xE7) /* UCn */
-	      {
-		active = c - 0xE0; mode = 0;
-	      }
-	    else if (c >= 0xE8 && c <= 0xEF) /* UDn */
-	      {
-		i++;
-		if (i < len) {
-		  slide [active=c-0xE8] = win [*from++];
-		  mode = 0;
+
+      if (i >= len) break;
+      c = from[i++];
+
+      if (c >= 0x80)
+	{
+	  to = UTF8Output (c - 0x80 + slide[active], to);
+	}
+      else if (c >= 0x20 && c <= 0x7F)
+	{
+	  to = UTF8Output (c, to);
+	}
+      else if (c == 0x0 || c == 0x9 || c == 0xA || c == 0xC || c == 0xD)
+	{
+	  to = UTF8Output (c, to);
+	}
+      else if (c >= 0x1 && c <= 0x8) /* SQn */
+	{
+          if (i >= len) break;
+	  /* single quote */ d = from[i++];
+
+	  to = UTF8Output (d < 0x80 ? d + start [c - 0x1] :
+		  d - 0x80 + slide [c - 0x1], to);
+	}
+      else if (c >= 0x10 && c <= 0x17) /* SCn */
+	{
+	  /* change window */ active = c - 0x10;
+	}
+      else if (c >= 0x18 && c <= 0x1F) /* SDn */
+	{
+	  /* define window */ active = c - 0x18;
+          if (i >= len) break;
+	  slide [active] = win [from[i++]];
+	}
+      else if (c == 0xB) /* SDX */
+	{
+          if (i >= len) break;
+          c = from[i++];
+
+          if (i >= len) break;
+          d = from[i++];
+
+	  slide [active = c>>5] = 0x10000 + (((c & 0x1F) << 8 | d) << 7);
+	}
+      else if (c == 0xE) /* SQU */
+	{
+          if (i >= len) break;
+	  /* SQU */ c = from[i++];
+
+          if (i >= len) break;
+          to = UTF8Output (c << 8 | from[i++], to);
+      	}
+      else if (c == 0xF) /* SCU */
+	{
+	  /* change to Unicode mode */ mode = 1;
+
+	  while (mode)
+	    {
+              if (i >= len) break;
+	      c = from[i++];
+
+	      if (c <= 0xDF || c >= 0xF3)
+		{
+                  if (i >= len) break;
+		  to = UTF8Output (c << 8 | from[i++], to);
 		}
-		else
-		  break;
-	      }
-	    else if (c == 0xF1) /* UDX */
-	      {
-		i++;
-		if (i < len)
-		  c = *from++;
-		else
-		  break;
-		i++;
-		if (i < len)
-		  d = *from++;
-		else
-		  break;
-		slide [active = c>>5] = 
-		  0x10000 + (((c & 0x1F) << 8 | d) << 7); mode = 0;
-	      }
-	  }
-      }
-    
-  } 
-  
+	      else if (c == 0xF0) /* UQU */
+		{
+                  if (i >= len) break;
+		  c = from[i++];
+
+                  if (i >= len) break;
+                  to = UTF8Output (c << 8 | from[i++], to);
+		}
+	      else if (c >= 0xE0 && c <= 0xE7) /* UCn */
+		{
+		  active = c - 0xE0; mode = 0;
+		}
+	      else if (c >= 0xE8 && c <= 0xEF) /* UDn */
+		{
+                  if (i >= len) break;
+		  slide [active=c-0xE8] = win [from[i++]]; mode = 0;
+		}
+	      else if (c == 0xF1) /* UDX */
+		{
+                  if (i >= len) break;
+		  c = from[i++];
+
+                  if (i >= len) break;
+                  d = from[i++];
+
+		  slide [active = c>>5] =
+		    0x10000 + (((c & 0x1F) << 8 | d) << 7); mode = 0;
+		}
+	    }
+	}
+
+
+  }
+
   *to++ = 0;
   *to = 0;
   return 0;
