@@ -1,6 +1,8 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+10-Jan-2003	Terry Biggs <tbiggs@infinet.com>
+	Added new osisstrongs and osismorph support to gbfhtml*.
 
 08-Jan-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added new osisstrongs and osismorph option filters.
@@ -262,7 +264,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 11-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added David White's recommendation to cache strlen
 		in stdstr to improve performance.
-	Added Helmer Kr‰mer's fix for case insensitive code
+	Added Helmer Kr√§mer's fix for case insensitive code
 		in SWBasicFilter
 
 04-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
@@ -283,7 +285,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		methods that tbiggs pointed out with .sword
 
 01-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
-	Added Helmer Kr‰mer's speed improvements to SWModule for
+	Added Helmer Kr√§mer's speed improvements to SWModule for
 	multiword searches
 	Fixed RawGenBook memory bugs
 	Isolated all byte swapping logic to sysdata.h
@@ -580,7 +582,7 @@ Kolatzek.
 		the VCL libraries from the build.
 	Changed the install for the include directory to OBTAIN the
 		file list instead of specifying each include file
-	Included cs Czech locale submitted by Kriπtof Petr
+	Included cs Czech locale submitted by Kri¬πtof Petr
 	Included da Dutch locale submitted by Birger Langkjer
 
 13-Mar-2000
