@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.19 2003/08/05 09:06:30 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.20 2003/08/05 09:16:10 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -67,7 +67,7 @@ protected:
 
 	class UserData {
 	public:
-		UserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; supressNextWhitespace = false; }
+		UserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; supressAdjacentWhitespace = false; }
 		virtual ~UserData() {}
 		const SWModule *module;
 		const SWKey *key;
