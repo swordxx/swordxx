@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.27 2001/10/22 22:10:16 chrislit Exp $
+ * $Id: swmodule.h,v 1.28 2001/10/24 19:43:57 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,7 +37,10 @@
 using namespace std;
 
 typedef list < SWFilter * >FilterList;
+
 enum DIRECTION {DIRECTION_LTR, DIRECTION_RTL, DIRECTION_BIDI};
+enum FORMATS {FMT_UNKNOWN, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS};
+enum ENCODINGS {ENC_UNKNOWN, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
 
 /**
   * The class SWModule is the base class for all modules used in Sword.
@@ -57,7 +60,10 @@ protected:
   char *modname;
   char *moddesc;
   char *modtype;
+
   char direction;
+  char markup;
+  char encoding;
 
   /** this module's display object */
   SWDisplay *disp;
@@ -77,8 +83,10 @@ protected:
   /** executed to change markup to user prefs */
   FilterList *optionFilters;
 
+  /** executed to decode text for display */
+  FilterList *encodingFilters;
+
   bool render;
-  bool unicode;
   int entrySize;
 
 public:
@@ -109,7 +117,7 @@ public:
   *  others of same type under their modtype heading)
   *  see also @ref Type
   */
-  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, bool unicode = false, char dir = DIRECTION_LTR);
+  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, char encoding = ENC_UNKNOWN, char dir = DIRECTION_LTR, char markup = FMT_UNKNOWN);
 
   /** Cleans up instance of SWModule
   */
@@ -124,7 +132,7 @@ public:
   /**
   * @return  True if this module is encoded in Unicode, otherwise return false.
   */
-  virtual const bool isUnicode() const {return unicode;}
+  virtual const bool isUnicode() const {return (encoding == ENC_UTF8 || encoding == ENC_SCSU);}
   /**
   * @return The size of the current entry.
   */
@@ -216,6 +224,22 @@ public:
   * @return char direction
   */
   virtual char Direction(char newdir = -1);
+
+  /** Sets/gets module encoding
+  *
+  * @param newdir value which to set encoding;
+  *  [-1] - only get
+  * @return char encoding
+  */
+  virtual char Encoding(char enc = -1);
+
+  /** Sets/gets module markup
+  *
+  * @param newdir value which to set markup;
+  *  [-1] - only get
+  * @return char markup
+  */
+  virtual char Markup(char enc = -1);
 
   // search methods
 
@@ -364,7 +388,7 @@ public:
   * @return *this
   */
   virtual SWModule & operator = (SW_POSITION p);
-  
+
   /** Adds a RenderFilter to this module's @see renderfilters queue
   * @param newfilter the filter to add
   * @return *this
@@ -374,12 +398,25 @@ public:
     return *this;
   }
 
-  /** Removes a RenderFilter to this module's @see renderfilters queue
+  /** Removes a RenderFilter from this module's @see renderfilters queue
   * @param oldfilter the filter to remove
   * @return *this
   */
   virtual SWModule & RemoveRenderFilter (SWFilter * oldfilter) {
     renderFilters->remove (oldfilter);
+    return *this;
+  }
+
+  /** Replaces a RenderFilter in this module's @see renderfilters queue
+  * @param oldfilter the filter to remove
+  * @param newfilter the filter to add in its place
+  * @return *this
+  */
+  virtual SWModule & ReplaceRenderFilter (SWFilter * oldfilter, SWFilter * newfilter) {
+    FilterList::iterator iter;
+    for (iter = renderFilters->begin(); iter != renderFilters->end(); iter++)
+        if (*iter == oldfilter)
+                *iter = newfilter;
     return *this;
   }
 
@@ -392,6 +429,48 @@ public:
   virtual void renderFilter (char *buf, long size, SWKey *key) {
   	filterBuffer(renderFilters, buf, size, key);
   }
+
+  /** Adds an EncodingFilter to this module's @see encodingfilters queue
+  * @param newfilter the filter to add
+  * @return *this
+  */
+  virtual SWModule & AddEncodingFilter (SWFilter * newfilter) {
+    encodingFilters->push_back (newfilter);
+    return *this;
+  }
+
+  /** Removes an EncodingFilter from this module's @see encodingfilters queue
+  * @param oldfilter the filter to remove
+  * @return *this
+  */
+  virtual SWModule & RemoveEncodingFilter (SWFilter * oldfilter) {
+    encodingFilters->remove (oldfilter);
+    return *this;
+  }
+
+  /** Replaces an EncodingFilter in this module's @see encodingfilters queue
+  * @param oldfilter the filter to remove
+  * @param newfilter the filter to add in its place
+  * @return *this
+  */
+  virtual SWModule & ReplaceEncodingFilter (SWFilter * oldfilter, SWFilter * newfilter) {
+    FilterList::iterator iter;
+    for (iter = encodingFilters->begin(); iter != encodingFilters->end(); iter++)
+        if (*iter == oldfilter)
+                *iter = newfilter;
+    return *this;
+  }
+
+  /** encodingFilter a text buffer
+  * @param buf the buffer to filter
+  * @param size the allocated size of the buffer
+  * @param key key location from where this buffer was extracted
+  * @return *this
+  */
+  virtual void encodingFilter (char *buf, long size, SWKey *key) {
+  	filterBuffer(encodingFilters, buf, size, key);
+  }
+
 
   /** Adds a StripFilter to this module's @ref stripfilters queue
   * @param newfilter the filter to add
@@ -442,6 +521,7 @@ public:
   * @return *this
   */
   virtual void rawFilter (char *buf, long size, SWKey *key) {
+        buf[size] = 0;
   	filterBuffer(rawFilters, buf, size, key);
   }
   
