@@ -31,7 +31,7 @@ SWCipher::~SWCipher()
 }
 
 
-char *SWCipher::Buf(const char *ibuf, unsigned int ilen)
+char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
 {
 	if (ibuf) {
 	
@@ -55,7 +55,7 @@ char *SWCipher::Buf(const char *ibuf, unsigned int ilen)
 }
 
 
-char *SWCipher::cipherBuf(unsigned int *ilen, const char *ibuf)
+char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
 {
 	if (ibuf) {
 	
@@ -87,7 +87,7 @@ void SWCipher::Encode(void)
 {
 	if (!cipher) {
 		work = master;
-		for (int i = 0; i < len; i++)
+		for (unsigned long i = 0; i < len; i++)
 			buf[i] = work.encrypt(buf[i]);
 		cipher = true;
 	}
@@ -106,7 +106,7 @@ void SWCipher::Decode(void)
 {
 	if (cipher) {
 		work = master;
-		int i;
+		unsigned long i;
 		for (i = 0; i < len; i++)
 			buf[i] = work.decrypt(buf[i]);
 		buf[i] = 0;

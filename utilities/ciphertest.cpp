@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	RawVerse *rawdrv;
 	long offset;
 	unsigned short size;
-	unsigned int len;
+	unsigned long len;
 	char *tmpbuf;
 	
 	if (argc != 3) {

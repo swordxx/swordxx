@@ -80,14 +80,18 @@ int main(int argc, char **argv) {
 				SWBuf tmpbuf;
 				rawdrv->readText(key.Testament(), offset, size, tmpbuf);
 				zobj->Buf(tmpbuf.c_str(), size);
-				zobj->cipherBuf((unsigned int *)&size);
+				unsigned long ulSize = size;
+				zobj->cipherBuf(&ulSize);
+				size = (unsigned int)ulSize;
 			}
 			offset = lseek(ofd[key.Testament() - 1], 0, SEEK_CUR);
 			tmpoff = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);
 			printf("%s: (%ld) NEW offset: %ld; size: %d\n", (const char *)key, tmpoff, offset, size);
 			write(oxfd[key.Testament() - 1], &offset, 4);
+			unsigned long ulSize = size;
 			if (size) 
-				write(ofd[key.Testament() - 1], zobj->cipherBuf((unsigned int *)&size), size);
+				write(ofd[key.Testament() - 1], zobj->cipherBuf(&ulSize), size);
+			size = (unsigned int)ulSize;
 			lzoffset = offset;
 			write(oxfd[key.Testament() - 1], &size, 2);
 			lzsize = size;
