@@ -23,7 +23,7 @@ protected:
 	
 public:
 	char nl;
-	RawVerse(const char *ipath, int fileMode = O_RDONLY);
+	RawVerse(const char *ipath, int fileMode = -1);
 	virtual ~RawVerse();
 	void findoffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void gettext(char testmt, long start, unsigned short size, char *buf);

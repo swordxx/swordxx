@@ -53,22 +53,32 @@
 RawVerse::RawVerse(const char *ipath, int fileMode)
 {
 	char buf[127];
+	int tries = 1;
 
 	nl = '\n';
 	path = 0;
 	stdstr(&path, ipath);
 
-	sprintf(buf, "%sot.vss", path);
-	idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
+	if (fileMode == -1) { // try read/write if possible
+		fileMode = O_RDWR;
+		tries = 2;
+	}
+		
+	for (int i = 0; i < tries; i++) {
+		sprintf(buf, "%sot.vss", path);
+		idxfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-	sprintf(buf, "%snt.vss", path);
-	idxfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
+		sprintf(buf, "%snt.vss", path);
+		idxfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-	sprintf(buf, "%sot", path);
-	textfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
+		sprintf(buf, "%sot", path);
+		textfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-	sprintf(buf, "%snt", path);
-	textfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY);
+		sprintf(buf, "%snt", path);
+		textfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+		if ((idxfp[0]->getFd() >= 0) || (idxfp[1]->getFd() >= 0))
+			break;
+	}
 	
 	instance++;
 }
@@ -218,7 +228,7 @@ void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf) 
 
 void RawVerse::settext(char testmt, long idxoff, const char *buf)
 {
-	long start;
+	long start, outstart;
 	unsigned short size;
 	unsigned short outsize;
 
@@ -228,21 +238,25 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 
 	size = outsize = strlen(buf);
 
+	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-	read(idxfp[testmt-1]->getFd(), &start, 4);
 #ifdef BIGENDIAN
 	#ifndef MACOSX
-		start = lelong(start);
+		outstart = lelong(start);
 		outsize  = leshort(size);
 	#else
-		start = NXSwapLittleLongToHost(start);
+		outstart = NXSwapLittleLongToHost(start);
 		outsize  = NXSwapLittleShortToHost(size);
 	#endif
 #endif
+	write(idxfp[testmt-1]->getFd(), &outstart, 4);
 	write(idxfp[testmt-1]->getFd(), &outsize, 2);
 
 	lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
 	write(textfp[testmt-1]->getFd(), buf, (int)size);
+
+	// add a new line to make data file easier to read in an editor
+	write(textfp[testmt-1]->getFd(), &nl, 1);
 }
 
 
@@ -256,30 +270,46 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 char RawVerse::CreateModule(char *path)
 {
 	char buf[127];
-	FileDesc *fd;
-
-	sprintf(buf, "%sot.vss", path);
-	unlink(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
-	FileMgr::systemFileMgr.close(fd);
-
-	sprintf(buf, "%snt.vss", path);
-	unlink(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
-	FileMgr::systemFileMgr.close(fd);
+	FileDesc *fd, *fd2;
 
 	sprintf(buf, "%sot", path);
 	unlink(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
 	sprintf(buf, "%snt", path);
 	unlink(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
+	sprintf(buf, "%sot.vss", path);
+	unlink(buf);
+	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd->getFd();
+
+	sprintf(buf, "%snt.vss", path);
+	unlink(buf);
+	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2->getFd();
+
+	VerseKey vk;
+	vk.Headings(1);
+	long offset = 0;
+	short size = 0;
+	for (vk = TOP; !vk.Error(); vk++) {
+		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &offset, 4);
+		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &size, 2);
+	}
+
+	FileMgr::systemFileMgr.close(fd);
+	FileMgr::systemFileMgr.close(fd2);
+
+/*
 	RawVerse rv(path);
 	VerseKey mykey("Rev 22:21");
+*/
 	
 	return 0;
 }

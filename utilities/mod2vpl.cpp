@@ -2,8 +2,23 @@
 #include <versekey.h>
 #include <iostream.h>
 
+void cleanbuf(char *buf) {
+	char *from = buf;
+	char *to = buf;
+
+	while (*from) {
+		if ((*from != 10) && (*from != 13)) {
+			*to++ = *from++;
+		}
+		else {
+			from++;
+		}
+	}
+	*to = 0;
+}
 
 int main(int argc, char **argv) {
+	char *buffer = 0;
 
 	if (argc < 2) {
 		fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference]\n", argv[0]);
@@ -44,7 +59,12 @@ int main(int argc, char **argv) {
 	while (!mod->Error()) {
 		if (vref)
 			cout << (const char *)(*vkey) << " ";
-		cout << (const char *) (*mod) << "\n";
+		
+		buffer = new char [ strlen ((const char *)(*mod)) + 1 ];
+		strcpy(buffer, (const char *)(*mod));
+		cleanbuf(buffer);
+		cout << buffer << "\n";
+		delete [] buffer;
 		(*mod)++;
 	}
 }

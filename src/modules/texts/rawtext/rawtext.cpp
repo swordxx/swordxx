@@ -460,3 +460,19 @@ RawText &RawText::operator =(POSITION p) {
 	SWModule::operator =(p);
 	return *this;
 }
+
+SWModule &RawText::operator <<(const char *inbuf) {
+	VerseKey *key = 0;
+	// see if we have a VerseKey * or decendant
+	try {
+		key = dynamic_cast<VerseKey *>(this->key);
+	}
+	catch ( ... ) {
+	}
+	// if we don't have a VerseKey * decendant, create our own
+	if (!key)
+		key = new VerseKey(this->key);
+
+	settext(key->Testament(), key->Index(), inbuf);
+	return *this;
+}

@@ -1,6 +1,17 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+30-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Fixed mod2vpl to strip any existing \n's from data before
+		writing the data.
+	Added new utility which reads a verse per line (vpl) file
+		and creates a new module.
+	Fixed RawVerse::CreateModule.
+	Implimented write functionality in RawText with a call to
+		RawVerse::settext.
+	Changed write functionality in RawVerse driver which appends
+		the new entry to the end of the data file and resets
+		the index to this new location.
 
 28-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added new utility to output a verse module one line per
