@@ -170,10 +170,14 @@ AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I$(top_srcdir)/include
 
 bin_PROGRAMS = diatheke
+
 diatheke_SOURCES = diatheke.cpp corediatheke.cpp diathekemgr.cpp \
 	diafiltmgr.cpp thmlcgi.cpp gbfcgi.cpp
 
+
 diatheke_LDADD = -L$(top_builddir)/lib -lsword
+
+noinst_HEADERS = corediatheke.h diafiltmgr.h diathekemgr.h gbfcgi.h thmlcgi.h
 subdir = apps/console/diatheke
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -204,7 +208,9 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(diatheke_SOURCES)
-DIST_COMMON = README Makefile.am Makefile.in
+HEADERS = $(noinst_HEADERS)
+
+DIST_COMMON = README $(noinst_HEADERS) Makefile.am Makefile.in
 SOURCES = $(diatheke_SOURCES)
 
 all: all-am
@@ -395,7 +401,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(HEADERS)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(bindir)

@@ -12,7 +12,6 @@ else
 icudatadir =
 endif
 
-
 DEFS += $(globdef) $(icudatadir)
 
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
@@ -24,4 +23,3 @@ libsword_la_SOURCES += $(mgrdir)/filemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swlocale.cpp
 libsword_la_SOURCES += $(mgrdir)/localemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swcacher.cpp
-libsword_la_SOURCES += $(mgrdir)/swsourcemgr.cpp

@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = 1.6
 # General defines
 
-version := 1.5.6
+version := 1.5.5.99
 
 
 # this WILL NOT WORK for you. only inhouse patched version of
@@ -71,7 +71,7 @@ SUBDIRS += examples
 endif
 
 INCLUDES = -I $(top_srcdir)/include
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp 
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh
 
 if INSTCONF
 sysconf_DATA = sword.conf

@@ -46,35 +46,29 @@ libsword_la_SOURCES += $(filtersdir)/scsuutf8.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8html.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
 
+libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
+libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
+libsword_la_SOURCES += $(filtersdir)/utf8greekaccents.cpp
+
 libsword_la_SOURCES += $(filtersdir)/thmlolb.cpp
 
 libsword_la_SOURCES += $(filtersdir)/greeklexattribs.cpp
 
+SWICUSRC = $(filtersdir)/utf8transliterator.cpp
+SWICUSRC += $(filtersdir)/utf8nfc.cpp
+SWICUSRC += $(filtersdir)/utf8nfkd.cpp
+SWICUSRC += $(filtersdir)/utf8arshaping.cpp
+SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
+
 if ICU
-ICUDEFS = -D_ICU_
-SWICUSRC = $(filtersdir)/utf8transliterator.cpp
-SWICUSRC += $(filtersdir)/utf8nfc.cpp
-SWICUSRC += $(filtersdir)/utf8nfkd.cpp
-SWICUSRC += $(filtersdir)/utf8arshaping.cpp
-SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
-else
-SWICUSRC =
-ICUDEFS = 
-endif
-
-if ICUSWORD
-ICUDEFS = -D_ICU_ -D_ICUSWORD_
-SWICUSRC = $(filtersdir)/utf8transliterator.cpp
-SWICUSRC += $(filtersdir)/utf8nfc.cpp
-SWICUSRC += $(filtersdir)/utf8nfkd.cpp
-SWICUSRC += $(filtersdir)/utf8arshaping.cpp
-SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
-endif
-
+DEFS += -D_ICU_
 libsword_la_SOURCES += $(SWICUSRC)
-DEFS += $(ICUDEFS)
-
-libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
-libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
-libsword_la_SOURCES += $(filtersdir)/utf8greekaccents.cpp
+else
+if ICUSWORD
+DEFS += -D_ICU_ -D_ICUSWORD_
+libsword_la_SOURCES += $(SWICUSRC)
+else
+EXTRA_DIST = $(SWICUSRC)
+endif
+endif
 

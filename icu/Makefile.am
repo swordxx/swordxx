@@ -1,10 +1,5 @@
 AUTOMAKE_OPTIONS = 1.6
 
-if ICU
-#pkglib_DATA = swicu.dat
-#else
-#endif
-
 swicuSOURCES = translit_BETA_Greek.txt
 swicuSOURCES += translit_BGreek_Greek.txt
 swicuSOURCES += translit_CCAT_Hebrew.txt
@@ -25,25 +20,18 @@ swicuSOURCES += translit_Any_Latex.txt
 #swicuSOURCES += translit_Kanji_OnRomaji.txt
 swicuSOURCES += translit_Latin_Arabic.txt
 swicuSOURCES += translit_Latin_Hebrew.txt
-swicuSOURCES += translit_swordindex.txt 
+swicuSOURCES += translit_swordindex.txt
+
+
+if ICU
+pkglib_DATA = $(swicuSOURCES:.txt=.res)
+else
+EXTRA_DIST = $(swicuSOURCES)
 endif
 
 CLEANFILES = *.res *.lst *.mk *.mak swicu.dat
 
-pkglib_DATA = $(swicuSOURCES:.txt=.res)
-
 SUFFIXES = .txt .res .dat
-
-#swicu.dat: $(swicuDATA) trans.lst icupkg.mk
-#	$(PKGDATA) -O icupkg.mk -p swicu -m common -T . -s . \
-#		-d . -r $(VERSION) trans.lst
-
-#trans.lst:
-#	ls -1 *.res > trans.lst
-
-#icupkg.mk:
-#	@echo "GENCCODE=@GENCCODE@" > icupkg.mk
-#	@echo "GENCMN=@GENCMN@" >> icupkg.mk
 
 .txt.res:
 	$(GENRB) -s . -d . $<

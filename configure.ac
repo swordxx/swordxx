@@ -1,13 +1,14 @@
 # ---------------------------------------------------------------------
 # Initialisation
 # ---------------------------------------------------------------------
-AC_INIT(sword, 1.5.5, sword-bugs@crosswire.org)
+
+AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.17 $)
+AC_REVISION($Revision: 1.18 $)
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(sword,1.5.5)
+AM_INIT_AUTOMAKE(sword, 1.5.5.99)
 
 AM_CONFIG_HEADER(config.h)
 

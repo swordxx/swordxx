@@ -18,6 +18,7 @@ pkginclude_HEADERS += $(swincludedir)/gbfhtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/gbfmorph.h
 pkginclude_HEADERS += $(swincludedir)/gbfosis.h
 pkginclude_HEADERS += $(swincludedir)/gbfplain.h
+pkginclude_HEADERS += $(swincludedir)/gbfredletterwords.h
 pkginclude_HEADERS += $(swincludedir)/gbfrtf.h
 pkginclude_HEADERS += $(swincludedir)/gbfstrongs.h
 pkginclude_HEADERS += $(swincludedir)/gbfthml.h
@@ -32,6 +33,11 @@ pkginclude_HEADERS += $(swincludedir)/lzsscomprs.h
 pkginclude_HEADERS += $(swincludedir)/markupfiltmgr.h
 pkginclude_HEADERS += $(swincludedir)/multimapwdef.h
 pkginclude_HEADERS += $(swincludedir)/nullim.h
+pkginclude_HEADERS += $(swincludedir)/osismorph.h
+pkginclude_HEADERS += $(swincludedir)/osisplain.h
+pkginclude_HEADERS += $(swincludedir)/osisrtf.h
+pkginclude_HEADERS += $(swincludedir)/osisstrongs.h
+pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/plainhtml.h
 pkginclude_HEADERS += $(swincludedir)/rawcom.h
@@ -86,6 +92,7 @@ pkginclude_HEADERS += $(swincludedir)/thmlhtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/thmllemma.h
 pkginclude_HEADERS += $(swincludedir)/thmlmorph.h
 pkginclude_HEADERS += $(swincludedir)/thmlolb.h
+pkginclude_HEADERS += $(swincludedir)/thmlosis.h
 pkginclude_HEADERS += $(swincludedir)/thmlplain.h
 pkginclude_HEADERS += $(swincludedir)/thmlrtf.h
 pkginclude_HEADERS += $(swincludedir)/thmlscripref.h
@@ -97,11 +104,16 @@ pkginclude_HEADERS += $(swincludedir)/unicodertf.h
 pkginclude_HEADERS += $(swincludedir)/unixstr.h
 pkginclude_HEADERS += $(swincludedir)/untgz.h
 pkginclude_HEADERS += $(swincludedir)/utf16utf8.h
+pkginclude_HEADERS += $(swincludedir)/utf8arshaping.h
+pkginclude_HEADERS += $(swincludedir)/utf8bidireorder.h
 pkginclude_HEADERS += $(swincludedir)/utf8cantillation.h
 pkginclude_HEADERS += $(swincludedir)/utf8greekaccents.h
 pkginclude_HEADERS += $(swincludedir)/utf8hebrewpoints.h
 pkginclude_HEADERS += $(swincludedir)/utf8html.h
 pkginclude_HEADERS += $(swincludedir)/utf8latin1.h
+pkginclude_HEADERS += $(swincludedir)/utf8nfc.h
+pkginclude_HEADERS += $(swincludedir)/utf8nfkd.h
+pkginclude_HEADERS += $(swincludedir)/utf8transliterator.h
 pkginclude_HEADERS += $(swincludedir)/utf8utf16.h
 pkginclude_HEADERS += $(swincludedir)/utilconf.h
 pkginclude_HEADERS += $(swincludedir)/utilfuns.h
@@ -116,16 +128,6 @@ pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
 
-if ICU
-ICU_HEAD  = $(swincludedir)/utf8arshaping.h
-ICU_HEAD += $(swincludedir)/utf8bidireorder.h
-ICU_HEAD += $(swincludedir)/utf8nfc.h
-ICU_HEAD += $(swincludedir)/utf8nfkd.h
-ICU_HEAD += $(swincludedir)/utf8transliterator.h
-else
-ICU_HEAD =
-endif
-
 if INSTALLMGR
 REMOTE_HEAD  = $(swincludedir)/swremotemgr.h
 REMOTE_HEAD += $(swincludedir)/swinstallmgr.h
@@ -133,6 +135,4 @@ else
 REMOTE_HEAD =
 endif
 
-
-pkginclude_HEADERS += $(ICU_HEAD)
 pkginclude_HEADERS += $(REMOTE_HEAD)

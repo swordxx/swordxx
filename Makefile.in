@@ -171,7 +171,7 @@ with_zlib = @with_zlib@
 AUTOMAKE_OPTIONS = 1.6
 
 # General defines
-version := 1.5.6
+version := 1.5.5.99
 
 
 # this WILL NOT WORK for you. only inhouse patched version of
@@ -225,7 +225,7 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . icu apps $(am__append_1) $(am__append_2) $(am__append_3)
 
 INCLUDES = -I $(top_srcdir)/include
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp 
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh
 
 @INSTCONF_TRUE@sysconf_DATA = sword.conf
 
