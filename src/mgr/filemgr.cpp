@@ -380,10 +380,9 @@ int FileMgr::removeFile(const char *fName) {
 }
 
 char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
-	char ch=0;
 	int len;
-	char *buf;
 	bool more = true;
+	char chunk[255];
 
 	line = "";
 
@@ -394,45 +393,44 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 	while (more) {
 		more = false;
 		long index = lseek(fDesc->getFd(), 0, SEEK_CUR);
+		len = read(fDesc->getFd(), chunk, 254);
+		if (len < 1)
+			break;
 		// clean up any preceding white space
-		while ((len = read(fDesc->getFd(), &ch, 1)) == 1) {
-			if ((ch != 13) && (ch != ' ') && (ch != '\t'))
+		int start;
+		for (start = 0; start < len; start++) {
+			if ((chunk[start] != 13) && (chunk[start] != ' ') && (chunk[start] != '\t'))
 				break;
-			else index++;
 		}
 
 		// assert we have a readable file (not a directory)
 		if (len < 0)
 			break;
 
-		while (ch != 10) {
-		   if ((len = read(fDesc->getFd(), &ch, 1)) != 1)
-				break;
-		}
-		
-		int size = (lseek(fDesc->getFd(), 0, SEEK_CUR) - index) - len;
+		// find the end
+		int end;
+		for (end = start; ((end < 254) && (chunk[end] != 10)); end++);
+		if (end > 253)
+			more = true;
+		index += (end + 1);
 
-		buf = new char [ size + 1 ];
+		// reposition to next valid place to read
+		lseek(fDesc->getFd(), index, SEEK_SET);
 
-		if (size > 0) {
-			lseek(fDesc->getFd(), index, SEEK_SET);
-			read(fDesc->getFd(), buf, size);
-			read(fDesc->getFd(), &ch, 1);   //pop terminating char
-			buf[size] = 0;
-
-			// clean up any trailing junk on buf
-			for (char *it = buf+(strlen(buf)-1); it > buf; it--) {
-				if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t')) {
-					if (*it == '\\')
-						more = true;
-					else break;
-				}
-				*it = 0;
+		// clean up any trailing junk on line
+		for (; end > start; end--) {
+			if ((chunk[end] != 10) && (chunk[end] != 13) && (chunk[end] != ' ') && (chunk[end] != '\t')) {
+				if (chunk[end] == '\\')
+					more = true;
+				else break;
 			}
 		}
-		else *buf = 0;
-		line += buf;
-		delete [] buf;
+		
+		int size = (end - start) + 1;
+
+		if (size > 0) {
+			line.appendFormatted("%.*s", size, chunk+start);
+		}
 	}
 	return ((len>0) || line.length());
 }
