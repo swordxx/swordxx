@@ -5,9 +5,11 @@
  */
  
 
+#ifndef EXCLUDEZLIB
 extern "C" {
 #include <untgz.h>
 }
+#endif
 
 
 #include <installmgr.h>
@@ -601,13 +603,17 @@ void InstallMgr::refreshRemoteSource(InstallSource *is) {
 	}
 
 
+
+#ifndef EXCLUDEZLIB
 	SWBuf archive = root + "/mods.d.tar.gz";
 	if (!FTPCopy(is, "mods.d.tar.gz", archive.c_str(), false)) {
 		int fd = open(archive.c_str(), O_RDONLY|O_BINARY);
 		untargz(fd, root.c_str());
 		close(fd);
 	}
-	else	FTPCopy(is, "mods.d", target.c_str(), true, ".conf");
+	else
+#endif
+	FTPCopy(is, "mods.d", target.c_str(), true, ".conf");
 	is->flush();
 }
 
