@@ -50,6 +50,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
 	bool handled = false;
+	string divEnd = "";
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
@@ -93,6 +94,19 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				else break;
 			}
 
+			// hebrew titles
+			if (!strcmp(token, "div class=\"sechead\"")) {
+				pushString(&to, "<title type=\"psalm\">");
+				divEnd = "</title>";
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
+			else	if (!strcmp(token, "/div")) {
+				pushString(&to, divEnd.c_str());
+				lastspace = false;
+				handled = true;
+			}
 			// Scripture Reference
 			if (!strncmp(token, "scripRef", 8)) {
 	//			pushString(buf, "<reference osisRef=\"");

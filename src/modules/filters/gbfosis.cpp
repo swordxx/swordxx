@@ -126,6 +126,18 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				lastspace = false;
 				handled = true;
 			}
+			// hebrew titles
+			if (!strcmp(token, "TH")) {
+				pushString(&to, "<title type=\"psalm\">");
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
+			else	if (!strcmp(token, "Th")) {
+				pushString(&to, "</title>");
+				lastspace = false;
+				handled = true;
+			}
 			// Italics assume transchange
 			if (!strcmp(token, "FI")) {
 				pushString(&to, "<transChange changeType=\"added\">");
@@ -140,7 +152,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			}
 			// Paragraph break.  For now use empty paragraph element
 			if (!strcmp(token, "CM")) {
-				pushString(&to, "<p />");
+				pushString(&to, "<milestone type=\"p\" />");
 				newText = true;
 				lastspace = false;
 				handled = true;
@@ -176,6 +188,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 
 			// Strongs numbers
 			else if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
+				bool divineName = false;
 				if (module->isProcessEntryAttributes()) {
 					valto = val;
 					for (unsigned int i = 1; ((token[i]) && (i < 150)); i++)
@@ -200,11 +213,22 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 						to+=strlen(buf);
 					}
 					else {
-						sprintf(buf, "<w lemma=\"x-Strongs:%s\">", val);
+						if (!strcmp(val, "H03068")) {	//divineName
+							sprintf(buf, "<divineName><w lemma=\"x-Strongs:%s\">", val);
+							divineName = true;
+						}
+						else sprintf(buf, "<w lemma=\"x-Strongs:%s\">", val);
+
 						memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
 						memcpy(wordStart, buf, strlen(buf));
 						to+=strlen(buf);
-						pushString(&to, "</w>");
+
+						if (divineName) {
+							wordStart += 12;
+							pushString(&to, "</w></divineName>");
+						}
+						else	pushString(&to, "</w>");
+
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
 						lastspace = false;
 					}
@@ -298,8 +322,9 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 		char ref[254];
 		if (vkey->Verse())
 			sprintf(ref, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
-		else if (vkey->Chapter())
+		else if (vkey->Chapter()) {
 			sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+		}
 		else if (vkey->Book())
 			sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		else *ref = 0;
@@ -334,9 +359,12 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				}
 			}
 
-			else if (vkey->Chapter())
+			/*
+			else if (vkey->Chapter()) {
 				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+			}
 			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
+			*/
 		}
 	}
 	*to++ = 0;
