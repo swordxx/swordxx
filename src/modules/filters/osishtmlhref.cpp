@@ -18,6 +18,7 @@
 #include <osishtmlhref.h>
 #include <utilxml.h>
 #include <versekey.h>
+#include <swmodule.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,6 +34,8 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		XMLTag tag(token);
+		bool osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+
 		//printf("token = %s\n",token);
 		// <w> tag
 		if (!strcmp(tag.getName(), "w")) {
@@ -223,8 +226,8 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 				/*buf += "{";*/
 
 				//alternate " and '
-				if(lev)
-					buf += (level % 2) ? '\'' : '\"';
+				if(osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 				
 				if (who == "Jesus") {
 					buf += "<font color=\"red\"> ";
@@ -232,14 +235,14 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 			}
 			else if (tag.isEndTag()) {
 				//alternate " and '
-				if(lev)
-					buf += (level % 2) ? '\'' : '\"';
+				if(osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 				//buf += "</font>";
 			}
 			else {	// empty quote marker
 				//alternate " and '
-				if(lev)
-					buf += (level % 2) ? '\'' : '\"';
+				if(osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 			}
 		}
 
