@@ -1,5 +1,5 @@
 #include <swmgr.h>
-#include <iostream.h>
+#include <iostream>
 #include <versekey.h>
 #include <rawtext.h>
 
@@ -56,35 +56,35 @@ int main(int argc, char **argv) {
 	vk.Chapter(0);
 	vk.Verse(0);
 
-	cout << "Module heading text ?= " << (const char*)mod << endl;
+	std::cout << "Module heading text ?= " << (const char*)mod << std::endl;
 
 	vk.Testament(1);
 	vk.Book(0);
 	vk.Chapter(0);
 	vk.Verse(0);
 
-	cout << "OT heading text ?= " << (const char*)mod << endl;
+	std::cout << "OT heading text ?= " << (const char*)mod << std::endl;
 
 	vk.Testament(1);
 	vk.Book(1);
 	vk.Chapter(0);
 	vk.Verse(0);
 
-	cout << "Gen heading text ?= " << (const char*)mod << endl;
+	std::cout << "Gen heading text ?= " << (const char*)mod << std::endl;
 
 	vk.Testament(1);
 	vk.Book(1);
 	vk.Chapter(1);
 	vk.Verse(0);
 
-	cout << "Gen 1 heading text ?= " << (const char*)mod << endl;
+	std::cout << "Gen 1 heading text ?= " << (const char*)mod << std::endl;
 
 	vk.Testament(1);
 	vk.Book(1);
 	vk.Chapter(1);
 	vk.Verse(1);
 
-	cout << "Gen 1:1 text ?= " << (const char*)mod << endl;
+	std::cout << "Gen 1:1 text ?= " << (const char*)mod << std::endl;
 
 	  /* old introtest
 	SWModule *mhc = mymgr.Modules["MHC"];
@@ -95,10 +95,10 @@ int main(int argc, char **argv) {
 		vk.AutoNormalize(0);
 		vk.Persist(1);
 		vk = "jas 0:0";
-		cout << vk << ":\n";
+		std::cout << vk << ":\n";
 		mhc->SetKey(vk);
-		cout << (const char *) mhc->Key() << ":\n";
-		cout << (const char *) *mhc << "\n";
+		std::cout << (const char *) mhc->Key() << ":\n";
+		std::cout << (const char *) *mhc << "\n";
 	}
 	  */
 	return 0;

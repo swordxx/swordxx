@@ -1,4 +1,5 @@
 #include <swmgr.h>
+#include <iostream>
 
 int main (int argc, char* argv[]) {
         SWMgr mgr;
@@ -7,11 +8,11 @@ int main (int argc, char* argv[]) {
 /* 
         OptionsList globalOptions = mgr.getGlobalOptions();
         for (OptionsList::iterator it = globalOptions.begin(); it != globalOptions.end(); it++) {
-                cout << *it << endl;
+                std::cout << *it << std::endl;
 
                 OptionsList values = mgr.getGlobalOptionValues((*it).c_str());
                 for (OptionsList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
-                        cout << "\t"<< *it2 << endl;
+                        std::cout << "\t"<< *it2 << std::endl;
                 }
         }
 */
@@ -19,7 +20,7 @@ int main (int argc, char* argv[]) {
 //crashes
 	OptionsList values = mgr.getGlobalOptionValues("Footnotes");
         for (OptionsList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
-              cout << "\t"<< *it2 << endl;
+              std::cout << "\t"<< *it2 << std::endl;
         }    
 };
 

@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <versekey.h>
 #include <treekeyidx.h>
 #include <listkey.h>
@@ -14,13 +14,13 @@ int main(int argc, char **argv) {
 //	v = SWDYNAMIC_CAST(VerseKey, y);
 	v = SWDYNAMIC_CAST(TreeKeyIdx, y);
 //	v = SWDYNAMIC_CAST(ListKey, y);
-	cout << endl;
+	std::cout << std::endl;
 	if (v)
-		cout << (const char *)(*v);
+		std::cout << (const char *)(*v);
 	else
-		cout << "cast failed\n";
+		std::cout << "cast failed\n";
 
-	cout << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
 	return 0;
 }

@@ -11,7 +11,7 @@
 #endif
 
 #include <entriesblk.h>
-#include <iostream.h>
+#include <iostream>
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
@@ -24,9 +24,9 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
     target = &treeKey;
   
   unsigned long currentOffset = target->getOffset();
-  cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
-  for (int i = 0; i < level; i++) cout << "\t";
-  cout << treeKey.getLocalName() << "/\n";
+  std::cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
+  for (int i = 0; i < level; i++) std::cout << "\t";
+  std::cout << treeKey.getLocalName() << "/\n";
   if (treeKey.firstChild()) {
     printTree(treeKey, target, level+1);
     treeKey.parent();
@@ -64,7 +64,7 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
       treeKey->save();
     }
     
-    //DEBUG      cout << treeKey->getLocalName() << " : " << tok << endl;
+    //DEBUG      std::cout << treeKey->getLocalName() << " : " << tok << endl;
     
     tok = strtok(NULL, "/");
     
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
   while (readline(infile, linebuffer)) {
     if (!strncmp(linebuffer, "$$$", 3)) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
-	cout << keybuffer << endl;
+	std::cout << keybuffer << endl;
 	treeKey->root();
 	setkey(treeKey, keybuffer);
 	book->setentry(entbuffer, strlen(entbuffer));
@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
 
   //handle final entry
   if (strlen(keybuffer) && strlen(entbuffer)) {
-    cout << keybuffer << endl;
+    std::cout << keybuffer << endl;
     treeKey->root();
     setkey(treeKey, keybuffer);
     book->setentry(entbuffer, strlen(entbuffer));

@@ -10,7 +10,7 @@
 #include <unistd.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 #include <string>
 #include <rawtext.h>
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
   while (readline(infile, linebuffer)) {
     if (!strncmp(linebuffer, "$$$", 3)) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
-	cout << keybuffer << endl;
+	std::cout << keybuffer << std::endl;
 	*vkey = keybuffer;
 	mod->SetKey(*vkey);
 	if (!vkey->Chapter()) {
@@ -89,17 +89,17 @@ int main(int argc, char **argv) {
 	    if (element) {
 	      mod->Key(element->LowerBound());
 	      VerseKey finalkey = element->UpperBound();
-	      cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
+	      std::cout << (const char*)mod->Key() << "-" << (const char*)finalkey << std::endl;
 	      if (!havefirst) {
 		havefirst = true;
 		firstverse = mod->Key();
 		
 		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
-		cout << "f" << (const char*)firstverse << endl;
+		std::cout << "f" << (const char*)firstverse << std::endl;
 		(mod->Key())++;
 	      }
 	      while (mod->Key() <= finalkey) {
-		cout << (const char*)mod->Key() << endl;
+		std::cout << (const char*)mod->Key() << std::endl;
 		*(SWModule*)mod << &firstverse;
 		(mod->Key())++;
 	      }
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 	      if (havefirst) {
 		mod->Key(*listkey.GetElement(i));
 		*(SWModule*)mod << &firstverse;
-		cout << (const char*)mod->Key() << endl;
+		std::cout << (const char*)mod->Key() << std::endl;
 	      }
 	      else {
 		mod->Key(*listkey.GetElement(i));
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
 		firstverse = mod->Key();
 		
 		((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
-		cout << "f" << (const char*)firstverse << endl;
+		std::cout << "f" << (const char*)firstverse << std::endl;
 	      }
 	    }
 	  }
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 
   //handle final entry
   if (strlen(keybuffer) && strlen(entbuffer)) {
-    cout << keybuffer << endl;
+    std::cout << keybuffer << std::endl;
     *vkey = keybuffer;
     mod->SetKey(*vkey);
     if (!vkey->Chapter()) {
@@ -154,17 +154,17 @@ int main(int argc, char **argv) {
 	if (element) {
 	  mod->Key(element->LowerBound());
 	  VerseKey finalkey = element->UpperBound();
-	  cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
+	  std::cout << (const char*)mod->Key() << "-" << (const char*)finalkey << std::endl;
 	  if (!havefirst) {
 	    havefirst = true;
 	    firstverse = mod->Key();
 	    
 	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
-	    cout << "f" << (const char*)firstverse << endl;
+	    std::cout << "f" << (const char*)firstverse << std::endl;
 	    (mod->Key())++;
 	  }
 	  while (mod->Key() <= finalkey) {
-	    cout << (const char*)mod->Key() << endl;
+	    std::cout << (const char*)mod->Key() << std::endl;
 	    *(SWModule*)mod << &firstverse;
 	    (mod->Key())++;
 	  }
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 	  if (havefirst) {
 	    mod->Key(*listkey.GetElement(i));
 	    *(SWModule*)mod << &firstverse;
-	    cout << (const char*)mod->Key() << endl;
+	    std::cout << (const char*)mod->Key() << std::endl;
 	  }
 	  else {
 	    mod->Key(*listkey.GetElement(i));
@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
 	    firstverse = mod->Key();
 	    
 	    ((SWModule*)mod)->setentry(entbuffer, strlen(entbuffer));
-	    cout << "f" << (const char*)firstverse << endl;
+	    std::cout << "f" << (const char*)firstverse << std::endl;
 	  }
 	}
       }

@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -23,11 +23,11 @@ int main(int argc, char **argv) {
 	for (int i = 0; i < verses.Count(); i++) {
 		VerseKey *element = dynamic_cast<VerseKey *>(verses.GetElement(i));
 		if (element) {
-			cout << (string(element->LowerBound()) + " - " + string(element->UpperBound())).c_str() << "\n";
+			std::cout << (string(element->LowerBound()) + " - " + string(element->UpperBound())).c_str() << "\n";
 		}
-		else	cout << (const char *)*verses.GetElement(i) << "\n";
+		else	std::cout << (const char *)*verses.GetElement(i) << "\n";
 //		else	{
-//			cout << VerseKey(verses.GetElement(i)).getOSISRef() << "\n";
+//			std::cout << VerseKey(verses.GetElement(i)).getOSISRef() << "\n";
 //		}
 	}
 	return 0;

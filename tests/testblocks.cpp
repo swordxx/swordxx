@@ -1,5 +1,5 @@
 #include <entriesblk.h>
-#include <iostream.h>
+#include <iostream>
 #include <string>
 #include <stdio.h>
 
@@ -9,41 +9,41 @@ void addEntry(EntriesBlock *eb) {
 	string input;
 	string body;
 	char line[1024];
-	cout << "\nEnter new Entry's text. '.' on an empty line to finish:\n";
+	std::cout << "\nEnter new Entry's text. '.' on an empty line to finish:\n";
 	do {
-		cout << "> ";
+		std::cout << "> ";
 		gets(line);
 		input = line;
 		if (input.compare("."))
 			body.append(input);
 	}
 	while (input.compare("."));
-	cout << "Adding new entry.  Index is: " << eb->addEntry(body.c_str()) << "\n\n";
+	std::cout << "Adding new entry.  Index is: " << eb->addEntry(body.c_str()) << "\n\n";
 }
 
 
 void printEntry(EntriesBlock *eb, int index) {
 	if (index < eb->getCount()) {
-		cout << "Contents of entry [" << index << "]:\n";
-		cout << eb->getEntry(index) << "\n";
+		std::cout << "Contents of entry [" << index << "]:\n";
+		std::cout << eb->getEntry(index) << "\n";
 	}
-	else cout << "Invalid entry number\n\n";
+	else std::cout << "Invalid entry number\n\n";
 }
 
 
 void printSize(EntriesBlock *eb) {
 	unsigned long size;
 	eb->getRawData(&size);
-	cout << "Size of raw data: " << size << "\n\n";
+	std::cout << "Size of raw data: " << size << "\n\n";
 }
 
 
 void removeEntry(EntriesBlock *eb, int index) {
 	if (index < eb->getCount()) {
-		cout << "Removing entry [" << index << "]\n";
+		std::cout << "Removing entry [" << index << "]\n";
 		eb->removeEntry(index);
 	}
-	else cout << "Invalid entry number\n\n";
+	else std::cout << "Invalid entry number\n\n";
 }
 
 
@@ -53,10 +53,10 @@ int main(int argc, char **argv) {
 	string input;
 	char line[1024];
 
-	cout << "Initial entry count should be 0: " << eb->getCount() << "\n";
+	std::cout << "Initial entry count should be 0: " << eb->getCount() << "\n";
 
 	do {
-		cout << "[" << eb->getCount() << "] > ";
+		std::cout << "[" << eb->getCount() << "] > ";
 		gets(line);
 		input = line;
 		if (input.length() > 0) {
@@ -68,11 +68,11 @@ int main(int argc, char **argv) {
 				case 'q': break;
 				case '?':
 				default:
-					cout << "\n a - add a new entry\n";
-					cout << " p <entry_index> - print entry\n";
-					cout << " r <entry_index> - remove entry\n";
-					cout << " s - print size of raw data\n";
-					cout << " q - quit\n\n";
+					std::cout << "\n a - add a new entry\n";
+					std::cout << " p <entry_index> - print entry\n";
+					std::cout << " r <entry_index> - remove entry\n";
+					std::cout << " s - print size of raw data\n";
+					std::cout << " q - quit\n\n";
 					break;
 			}
 		}

@@ -11,7 +11,7 @@
 #endif
 
 #include <entriesblk.h>
-#include <iostream.h>
+#include <iostream>
 #include <string>
 #include <stdio.h>
 #include <treekeyidx.h>
@@ -26,9 +26,9 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 		target = &treeKey;
 	
 	unsigned long currentOffset = target->getOffset();
-       	cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
-	for (int i = 0; i < level; i++) cout << "\t";
-	cout << treeKey.getLocalName() << "/\n";
+       	std::cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
+	for (int i = 0; i < level; i++) std::cout << "\t";
+	std::cout << treeKey.getLocalName() << "/\n";
 	if (treeKey.firstChild()) {
 		printTree(treeKey, target, level+1);
 		treeKey.parent();
@@ -69,7 +69,7 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
 	treeKey->save();
       }
       
-      //DEBUG      cout << treeKey->getLocalName() << " : " << tok << endl;
+      //DEBUG      std::cout << treeKey->getLocalName() << " : " << tok << std::endl;
       
       tok = strtok(NULL, "/");
       
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
 	    }
 
 	    if (level) {
-	      cout << keybuffer << endl;
+	      std::cout << keybuffer << std::endl;
 	      if (exportfile) {
 		fprintf (outfile, "$$$%s\n%s\n", keybuffer, entbuffer);
 	      }
@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
 	    }
 	    
 	    if (level) {
-	      cout << keybuffer << endl;
+	      std::cout << keybuffer << std::endl;
 	      if (exportfile) {
 		fprintf (outfile, "$$$%s\n%s\n", keybuffer, entbuffer);
 	      }

@@ -12,7 +12,7 @@
 
 #include <swmgr.h>
 #include <rawtext.h>
-#include <iostream.h>
+#include <iostream>
 
 
 #ifndef O_BINARY
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 	if (element) {
 	  mod->Key(element->LowerBound());
 	  VerseKey finalkey = element->UpperBound();
-	  cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
+	  std::cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
 	  if (!havefirst) {
 	    havefirst = true;
 	    firstverse = mod->Key();
@@ -87,11 +87,11 @@ int main(int argc, char **argv) {
 	    entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 	    
 	    ((SWModule*)mod)->setentry(buffer, entrysize);	// save text to module at current position
-	    cout << "f" << (const char*)firstverse << endl;
+	    std::cout << "f" << (const char*)firstverse << endl;
 	    (*mod)++;
 	  }
 	  while (mod->Key() <= finalkey) {
-	    cout << (const char*)mod->Key() << endl;
+	    std::cout << (const char*)mod->Key() << endl;
 	    *(SWModule*)mod << &firstverse;
 	    (*mod)++;
 	  }
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
 	  if (havefirst) {
 	    mod->Key(*listkey.GetElement(i));
 	    *(SWModule*)mod << &firstverse;
-	    cout << (const char*)mod->Key() << endl;
+	    std::cout << (const char*)mod->Key() << endl;
 	  }
 	  else {
 	    mod->Key(*listkey.GetElement(i));
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
 	    entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 	    
 	    ((SWModule*)mod)->setentry(buffer, entrysize);	// save text to module at current position
-	    cout << "f" << (const char*)firstverse << endl;
+	    std::cout << "f" << (const char*)firstverse << endl;
 	  }
 	}
       }

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <iostream.h>
+#include <iostream>
 #include <versekey.h>
 #include <rawtext.h>
 #include <zcom.h>
@@ -35,6 +35,6 @@ int main(int argc, char **argv)
 		personal << argv[1];
 		mykey++;
 	}
-	cout << "Added Comment\n";
+	std::cout << "Added Comment" << std::endl;
 	return 0;
 }

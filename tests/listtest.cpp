@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 #include <listkey.h>
 #include <versekey.h>
@@ -25,14 +25,14 @@ int main(int argc, char **argv)
 	lk2 << vk2;
 	lk2 << "test2";
 	for (lk2 = TOP; !lk2.Error(); lk2++)
-		cout << (const char *) lk2 << "\n";
+		std::cout << (const char *) lk2 << "\n";
 
 
 	lk2 = VerseKey().ParseVerseList("mat-john", 0, true);
 
 	VerseKey yoyo("john");
 	yoyo = MAXCHAPTER;
-	cout << yoyo;
+	std::cout << yoyo;
 /*
 
 	for (int i = 0; i < 2; i++) {
@@ -50,10 +50,10 @@ int main(int argc, char **argv)
 	}
 
 */
-	cout << "---------\n";
+	std::cout << "---------\n";
 
 	for (lk2 = TOP; !lk2.Error(); lk2++)
-		cout << (const char *) lk2 << "\n";
+		std::cout << (const char *) lk2 << "\n";
 
 	return 0;
 }

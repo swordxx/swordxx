@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <versekey.h>
 #include <sys/stat.h>
-#include <iostream.h>
+#include <iostream>
 const long MAXVLEN = 8192;
 
 int fp, vfp, cfp, bfp, dfp;
@@ -146,7 +146,7 @@ char getVerse(int fp, int *verseNum, char *verseBuf, char testament)
     else
       break;
   }
-  cout << tvn << " "; 
+  std::cout << tvn << " "; 
   *verseNum = tvn;
 
   while (1) {
@@ -158,7 +158,7 @@ char getVerse(int fp, int *verseNum, char *verseBuf, char testament)
   }
   strcat (verseBuf, "\n");
 
-  cout << verseBuf; 
+  std::cout << verseBuf; 
 
   if (retVal) 
     retVal = 0;

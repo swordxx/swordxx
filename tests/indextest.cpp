@@ -1,5 +1,5 @@
 #include <swmgr.h>
-#include <iostream.h>
+#include <iostream>
 #include <versekey.h>
 
 int main(int argc, char **argv) {
@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 		vk.Persist(1);
 		bbe->SetKey(vk);
 		for (; !bbe->Error(); (*bbe)++ ) {
-			cout << vk.NewIndex() << endl; 
+			std::cout << vk.NewIndex() << std::endl; 
 		}
 	}
 	return 0;

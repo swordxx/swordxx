@@ -10,7 +10,7 @@
 #include <unistd.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 #include <string>
 #include <rawld.h>
 #include <rawld4.h>
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
   while (readline(infile, linebuffer)) {
     if (!strncmp(linebuffer, "$$$", 3)) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
-	cout << keybuffer << endl;
+	std::cout << keybuffer << std::endl;
 	*key = keybuffer;
 
 	if (mode == 3) {
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 
   //handle final entry
   if (strlen(keybuffer) && strlen(entbuffer)) {
-    cout << keybuffer << endl;
+    std::cout << keybuffer << std::endl;
     *key = keybuffer;
 
     if (mode == 3) {

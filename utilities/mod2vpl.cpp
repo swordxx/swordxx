@@ -1,6 +1,6 @@
 #include <swmgr.h>
 #include <versekey.h>
-#include <iostream.h>
+#include <iostream>
 
 void cleanbuf(char *buf) {
 	char *from = buf;
@@ -62,11 +62,11 @@ int main(int argc, char **argv) {
 		cleanbuf(buffer);
 		if (vref) {
 			if ((strlen(buffer) > 0) && (vref)) {
-				cout << (const char *)(*vkey) << " ";
-				cout << buffer << "\n";
+				std::cout << (const char *)(*vkey) << " ";
+				std::cout << buffer << std::endl;
 			}
 		}
-		else cout << buffer << "\n";
+		else std::cout << buffer << std::endl;
 
 		delete [] buffer;
 		(*mod)++;

@@ -259,6 +259,11 @@ static const char RB_RULE[] = "Rule";
 
 static const char SW_RESDATA[] = "/usr/local/lib/sword/";
 
+void  instantiateTransFactory(const UnicodeString& ID, const UnicodeString& resource,
+		UTransDirection dir, UParseError &parseError, UErrorCode &status )
+{
+}
+
 void  instantiateTrans(const UnicodeString& ID, const UnicodeString& resource,
 		UTransDirection dir, UParseError &parseError, UErrorCode &status )
 {
@@ -366,6 +371,85 @@ void initiateSwordTransliterators(UErrorCode &status)
     ures_close(transIDs);
     ures_close(bundle);
 }
+
+
+Transliterator *SWTransFactory(const UnicodeString &ID, 
+	Transliterator::Token context)
+{
+	return NULL;
+}
+
+
+void initiateSwordTransliteratorsByFactory(UErrorCode &status)
+{
+    static const char translit_swordindex[] = "translit_swordindex";
+
+    UResourceBundle *bundle, *transIDs, *colBund;
+    bundle = ures_openDirect(SW_RESDATA, translit_swordindex, &status);
+    if (U_FAILURE(status)) {
+		std::cout << "no resource index to load" << std::endl;
+		return;
+	}
+
+    transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
+	UParseError parseError;
+
+    int32_t row, maxRows;
+    if (U_SUCCESS(status)) {
+        maxRows = ures_getSize(transIDs);
+        for (row = 0; row < maxRows; row++) {
+            colBund = ures_getByIndex(transIDs, row, 0, &status);
+
+            if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
+                UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
+                UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
+                UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
+
+                if (U_SUCCESS(status)) {
+                    switch (type) {
+                    case 0x66: // 'f'
+                    case 0x69: // 'i'
+                        // 'file' or 'internal';
+                        // row[2]=resource, row[3]=direction
+                        {
+                            UBool visible = (type == 0x0066 /*f*/);
+                            UTransDirection dir =
+                                (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
+                                 0x0046 /*F*/) ?
+                                UTRANS_FORWARD : UTRANS_REVERSE;
+                            //registry->put(id, resString, dir, visible);
+			    std::cout << "instantiating " << resString << std::endl;
+			    instantiateTransFactory(id, resString, dir, parseError, status);
+                        }
+                        break;
+                    case 0x61: // 'a'
+                        // 'alias'; row[2]=createInstance argument
+                        //registry->put(id, resString, TRUE);
+                        break;
+                    }
+                }
+		else std::cout << "Failed to get resString" << std:: endl;
+            }
+	    else std::cout << "Failed to get row" << std:: endl;
+
+            ures_close(colBund);
+        }
+    }
+	else
+	{
+		std::cout << "no resource index to load" << std::endl;
+	}
+
+    ures_close(transIDs);
+    ures_close(bundle);
+}
+
+
+
+
+
+
+
 
 int main()
 {

@@ -15,7 +15,6 @@
 #include <rawld4.h>
 #include <zld.h>
 #include <zipcomprs.h>
-#include <iostream.h>
 
 
 #ifndef O_BINARY

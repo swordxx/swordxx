@@ -1,5 +1,5 @@
 #include <entriesblk.h>
-#include <iostream.h>
+#include <iostream>
 #include <string>
 #include <stdio.h>
 #include <treekeyidx.h>
@@ -10,9 +10,9 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 		target = &treeKey;
 	
 	unsigned long currentOffset = target->getOffset();
-	cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
-	for (int i = 0; i < level; i++) cout << "\t";
-	cout << treeKey.getLocalName() << "\n";
+	std::cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
+	for (int i = 0; i < level; i++) std::cout << "\t";
+	std::cout << treeKey.getLocalName() << std::endl;
 	if (treeKey.firstChild()) {
 		printTree(treeKey, target, level+1);
 		treeKey.parent();
@@ -24,13 +24,13 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 
 
 void printLocalName(TreeKeyIdx *treeKey) {
-	cout << "locaName: " << treeKey->getLocalName() << "\n";
+	std::cout << "locaName: " << treeKey->getLocalName() << std::endl;
 }
 
 
 void setLocalName(TreeKeyIdx *treeKey) {
 	char buf[1023];
-	cout << "Enter New Node Name: ";
+	std::cout << "Enter New Node Name: ";
 	gets(buf);
 	treeKey->setLocalName(buf);
 	treeKey->save();
@@ -40,19 +40,19 @@ void setLocalName(TreeKeyIdx *treeKey) {
 void appendSibbling(TreeKeyIdx *treeKey) {
 	if (treeKey->getOffset()) {
 		char buf[1023];
-		cout << "Enter New Sibbling Name: ";
+		std::cout << "Enter New Sibbling Name: ";
 		gets(buf);
 		treeKey->append();
 		treeKey->setLocalName(buf);
 		treeKey->save();
 	}
-	else	cout << "Can't add sibling to root node\n";
+	else	std::cout << "Can't add sibling to root node\n";
 }
 
 
 void appendChild(TreeKeyIdx *treeKey) {
 	char buf[1023];
-	cout << "Enter New Child Name: ";
+	std::cout << "Enter New Child Name: ";
 	gets(buf);
 	treeKey->appendChild();
 	treeKey->setLocalName(buf);
@@ -62,10 +62,10 @@ void appendChild(TreeKeyIdx *treeKey) {
 
 void removeEntry(EntriesBlock *eb, int index) {
 	if (index < eb->getCount()) {
-		cout << "Removing entry [" << index << "]\n";
+		std::cout << "Removing entry [" << index << "]\n";
 		eb->removeEntry(index);
 	}
-	else cout << "Invalid entry number\n\n";
+	else std::cout << "Invalid entry number\n\n";
 }
 
 
@@ -85,11 +85,11 @@ int main(int argc, char **argv) {
 	}
 	TreeKeyIdx root = *treeKey;
 
-	string input;
+	std::string input;
 	char line[1024];
 
 	do {
-		cout << "[" << treeKey->getFullName() << "] > ";
+		std::cout << "[" << treeKey->getFullName() << "] > ";
 		gets(line);
 		input = line;
 		if (input.length() > 0) {
@@ -107,19 +107,19 @@ int main(int argc, char **argv) {
 				case 'q': break;
 				case '?':
 				default:
-					cout << "\n p - print tree\n";
-					cout << " n - get local name\n";
-					cout << " s - set local name\n";
-					cout << " j - next sibbling\n";
-					cout << " k - previous sibbling\n";
-					cout << " h - parent\n";
-					cout << " l - first child\n";
-					cout << " r - root\n";
-					cout << " a - append sibbling\n";
-					cout << " c - append child\n";
-					cout << " u - get user data\n";
-					cout << " d - set user data\n";
-					cout << " q - quit\n\n";
+					std::cout << "\n p - print tree\n";
+					std::cout << " n - get local name\n";
+					std::cout << " s - set local name\n";
+					std::cout << " j - next sibbling\n";
+					std::cout << " k - previous sibbling\n";
+					std::cout << " h - parent\n";
+					std::cout << " l - first child\n";
+					std::cout << " r - root\n";
+					std::cout << " a - append sibbling\n";
+					std::cout << " c - append child\n";
+					std::cout << " u - get user data\n";
+					std::cout << " d - set user data\n";
+					std::cout << " q - quit\n\n";
 					break;
 			}
 		}

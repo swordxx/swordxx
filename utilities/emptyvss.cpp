@@ -1,6 +1,6 @@
 #include <swmgr.h>
 #include <versekey.h>
-#include <iostream.h>
+#include <iostream>
 
 int main(int argc, char **argv) {
 	if (argc < 2) {
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 	  
 	  if (vkey->Verse())
 	    if (!strlen ((const char *)(*mod)))
-	      cout << *vkey << "\n";
+	      std::cout << *vkey << std::endl;
 	  (*mod)++;
 	}
 }

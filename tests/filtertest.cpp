@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <thmlhtmlhref.h>
 #include <thmlosis.h>
 #include <gbfosis.h>
@@ -22,10 +22,10 @@ int main(int argc, char **argv) {
 //    strcpy(buf, "This is a verse reference: <scripRef>jas1:22,23-25;3;5:1;rom1-9</scripRef> with an <img src=\"/images/yoyo.jpg\">");
     module->getRawEntry();
     memcpy(buf, module->getRawEntry(), module->getEntrySize());
-    cout << "Original:\n\n" << buf << "\n\n-------\n\n";
+    std::cout << "Original:\n\n" << buf << "\n\n-------\n\n";
     filter.ProcessText(buf, MAXBUF - 3, *module, module);
 
-    cout << buf << "\n\n+++++++\n";
+    std::cout << buf << "\n\n+++++++\n";
     delete [] buf;
     return 0;
 }

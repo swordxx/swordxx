@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <swconfig.h>
 
 int main(int argc, char **argv) {
@@ -8,6 +8,6 @@ int main(int argc, char **argv) {
     config["Section1"]["Entry2"] = "Value2";
     config.Save();
     SWConfig config2("./test1.conf");
-    cout << "Should be Value2: " << config2["Section1"]["Entry2"] << "\n";
+    std::cout << "Should be Value2: " << config2["Section1"]["Entry2"] << std::endl;
     return 0;
 }

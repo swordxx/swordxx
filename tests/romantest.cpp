@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -15,10 +15,10 @@ int main(int argc, char **argv) {
 	char buf[127];
 	if (isdigit(argv[1][0])) {
 		to_rom(atoi(argv[1]), buf);
-		cout << buf << "\n";
+		std::cout << buf << std::endl;
 	}
 	*/
-	else cout << from_rom(argv[1]) << "\n";
+	else std::cout << from_rom(argv[1]) << std::endl;
 	return 0;
 }
 

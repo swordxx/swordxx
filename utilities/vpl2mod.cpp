@@ -12,7 +12,7 @@
 
 #include <swmgr.h>
 #include <rawtext.h>
-#include <iostream.h>
+#include <iostream>
 #include <string>
 
 #ifndef O_BINARY
@@ -107,7 +107,7 @@ bool isKJVRef(const char *buf) {
 	test = buf;
 
 	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
-//		cerr << (const char*)vk << " == "  << (const char*)test << endl;
+//		std::cerr << (const char*)vk << " == "  << (const char*)test << std::endl;
 		return (vk == test);
 	}
 	else return true;	// no check if we're a heading... Probably bad.
@@ -122,7 +122,7 @@ void fixText(char *text) {
 		if (!*text)
 			break;
 		if (*text != ' ')
-			cerr << "problem\n";
+			std::cerr << "problem\n";
 		else	text++;
 	}
 	*to = 0;
@@ -199,13 +199,13 @@ int main(int argc, char **argv) {
 		if (vref) {
 			const char *verseText = parseVReg(buffer);
 			if (!verseText) {	// if we didn't find a valid verse ref
-				cerr << "No valid verse ref found on line: " << buffer << "\n";
+				std::cerr << "No valid verse ref found on line: " << buffer << "\n";
 				exit(-4);
 			}
 
 			vk = buffer;
 			if (vk.Error()) {
-				cerr << "Error parsing key: " << buffer << "\n";
+				std::cerr << "Error parsing key: " << buffer << "\n";
 				exit(-5);
 			}
 			string orig = mod.getRawEntry();
@@ -222,8 +222,8 @@ int main(int argc, char **argv) {
 				vk -= successive;
 				orig = mod.getRawEntry();
 
-				cerr << "Not a valid KJV ref: " << origVK << "\n";
-				cerr << "appending to ref: " << vk << "\n";
+				std::cerr << "Not a valid KJV ref: " << origVK << "\n";
+				std::cerr << "appending to ref: " << vk << "\n";
 				orig += " [ (";
 				orig += origVK;
 				orig += ") ";
@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
 			}
 
 			if (orig.length() > 1)
-				   cerr << "Warning, overwriting verse: " << vk << endl;
+				   std::cerr << "Warning, overwriting verse: " << vk << std::endl;
 			  
 			// ------------- End verse tests -----------------
 			mod << verseText;	// save text to module at current position

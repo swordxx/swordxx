@@ -1,6 +1,6 @@
 #include <swmgr.h>
 #include <swtext.h>
-#include <iostream.h>
+#include <iostream>
 
 int main(int argc, char **argv) {
 	SWMgr mymgr;
@@ -10,16 +10,16 @@ int main(int argc, char **argv) {
 	for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
 		module = it->second;
 		if (!strcmp(module->Type(), "Biblical Texts")) {
-			cout << module->Name() << "\n";
+			std::cout << module->Name() << "\n";
 			for (*module = TOP; (!module->Key().Error()); ((VerseKey *)&module->Key())->Book(((VerseKey *)&module->Key())->Book()+1)) {
-				cout << module->KeyText() << "\n";
+				std::cout << module->KeyText() << "\n";
 			}
 		}
 			
 		if (!strcmp(module->Type(), "Commentaries")) {
-			cout << module->Name() << "\n";
+			std::cout << module->Name() << "\n";
 			for (*module = TOP; (!module->Error()); (*module)--) {
-				cout << module->KeyText() << "\n";
+				std::cout << module->KeyText() << "\n";
 			}
 				
 		}
