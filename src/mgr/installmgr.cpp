@@ -102,6 +102,10 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
 InstallMgr::~InstallMgr() {
 	delete [] privatePath;
 	delete installConf;
+
+	for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
+		delete it->second;
+	}
 }
 
 
