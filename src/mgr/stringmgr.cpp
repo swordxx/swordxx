@@ -1,7 +1,7 @@
 /******************************************************************************
  *  stringmgr.cpp - implementation of class StringMgr
  *
- * $Id: stringmgr.cpp,v 1.5 2004/07/15 10:36:15 joachim Exp $
+ * $Id: stringmgr.cpp,v 1.6 2004/07/20 11:21:00 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -54,7 +54,7 @@ public:
 	//here comes our IcuStringMgr reimplementation
 	class ICUStringMgr : public StringMgr {
 	public:
-		virtual char* upperUTF8(char*, const unsigned int maxlen = 0);
+		virtual char* upperUTF8(char*, const unsigned int /*maxlen*/ = 0);
 		virtual char* upperLatin1(char*);
 	
 	protected:
@@ -99,10 +99,10 @@ StringMgr* StringMgr::getSystemStringMgr() {
 	if (!m_systemStringMgr) {
 #ifndef _ICU_
 		m_systemStringMgr = new StringMgr();
-		SWLog::getSystemLog()->logInformation("created default StringMgr");
+ 		SWLog::getSystemLog()->logInformation("created default StringMgr");
 #else
 		m_systemStringMgr = new ICUStringMgr();
-		SWLog::getSystemLog()->logInformation("created default IcuStringMgr");
+ 		SWLog::getSystemLog()->logInformation("created default IcuStringMgr");
 #endif	
 	}
 	
@@ -131,17 +131,16 @@ char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
 * @param The text encoded in latin1 which should be turned into an upper case string
 */	
 char* StringMgr::upperLatin1(char* t) {
-// 	SWLog::getSystemLog()->logError("StringMgr::upperLatin1 with %s", t);
 	char* ret = t;
  	while (*t) {
- 		*t++ = SW_toupper(*t);
+ 		*t = SW_toupper(*t);
+		t++;
  	}
 	
 	return ret;
 }
 
 const bool StringMgr::supportsUnicode() const {
-// 	SWLog::getSystemLog()->logError("StringMgr::supportsUtf8");
 	return false; //default impl has no UTF8 support
 }
 
@@ -149,23 +148,41 @@ const bool StringMgr::supportsUnicode() const {
 #ifdef _ICU_
 
 	char* ICUStringMgr::upperUTF8(char* buf, const unsigned int maxlen) {
-		char *ret = buf;
-		
-		int max = maxlen;
-		if (!max)
-			max = strlen(ret);
+		char *ret = buf;		
+		const int max = (maxlen > 0) ? maxlen : strlen(ret);
 
 		UErrorCode err = U_ZERO_ERROR;
-		UConverter *conv = ucnv_open("UTF-8", &err);
-		UnicodeString str(buf, -1, conv, err);
-		UnicodeString ustr = str.toUpper();
-		ustr.extract(ret, max+1, conv, err);
+		UConverter *conv = ucnv_open("utf-8", &err);
+
+		//UnicodeString from(buf, -1, conv, err);
+		UnicodeString from(buf);
+		SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
 		
-		SWLog::getSystemLog()->logError("%s", u_errorName(err));
+		UChar upperStr[max+10];
+		u_strToUpper(
+			upperStr,
+			max+10, 
+			from.getBuffer(), 
+			from.length(),
+			"utf-8", 
+			&err
+		);
+		SWLog::getSystemLog()->logError("upper: %s", u_errorName(err));
+		
+		u_strToUTF8 ( 
+			ret, 
+			max, 
+			0, 
+			upperStr, 
+			u_strlen( upperStr ),
+			&err
+		);
+		SWLog::getSystemLog()->logError("as utf8: %s", u_errorName(err));
 		
 		ucnv_close(conv);
 		
-		SWLog::getSystemLog()->logError("%s", ret);
+		
+		SWLog::getSystemLog()->logError("uppercase name: %s", ret);
 		return ret;
 	}
 	
