@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.2 1999/07/08 07:06:33 scribe Exp $
+ * $Id: canon.h,v 1.3 1999/07/08 17:20:40 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -209,13 +209,13 @@ struct abbrev VerseKey::abbrevs[] = {
 	{"II SAMUEL", 10   }, //    2 Samuel
 	{"II THESSALONIANS", 53   }, //   2 Thessalonians
 	{"II TIMOTHY", 55   }, //   2 Timothy
-	{"IIIJN", 64   }, //    3 John
-	{"IIIJOHN", 64   }, //    3 John
 	{"IIC", 47   }, //   2 Corinthians
 	{"IICHRONICLES", 14   }, //   2 Chronicles
 	{"IICORINTHIANS", 47   }, //   2 Corinthians
 	{"III JN", 64   }, //    3 John	
 	{"III JOHN", 64   }, //    3 John
+	{"IIIJN", 64   }, //    3 John
+	{"IIIJOHN", 64   }, //    3 John
 	{"IIJN", 63   }, //    2 John
 	{"IIJOHN", 63   }, //    2 John
 	{"IIKGS", 12 }, // 2 Kings

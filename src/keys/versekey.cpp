@@ -146,7 +146,13 @@ void VerseKey::initstatics()
 			chaptmp += books[l1][l2].chapmax;
 		}
 	}
-	for (abbrevsCnt = 0; *abbrevs[abbrevsCnt].ab; abbrevsCnt++);
+
+        for (abbrevsCnt = 1; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
+                if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
+			fprintf(stderr, "ERROR: canon.h abbrev misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
+			exit(-1);
+		}
+	}
 }
 
 
@@ -240,7 +246,8 @@ int VerseKey::getBookAbbrev(char *abbr)
 
 	if (abLen) {
 		min = 0;
-		max = abbrevsCnt - 1;
+//		max = abbrevsCnt - 1;
+		max = abbrevsCnt;
 		while(1) {
 			target = min + ((max - min) / 2);
 			diff = strncmp(abbr, abbrevs[target].ab, abLen);
