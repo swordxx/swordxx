@@ -1,6 +1,12 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+16-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
+	utf8transliterator now loads translators from local
+		sword ICU data on demand
+	SWMgr loads a UTF8Transliterator filter along with
+		other filters on Load
+
 11-Jul-2002	Daniel Glassey <dglassey@crosswire.org>
 	simple fixes to allow compiling with gcc 3.1
 	rename gettext to readtext as unobtrusively as
