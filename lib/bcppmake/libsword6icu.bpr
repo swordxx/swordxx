@@ -26,22 +26,22 @@
       ..\..\obj\latin1utf16.obj ..\..\obj\latin1utf8.obj ..\..\obj\scsuutf8.obj 
       ..\..\obj\swbasicfilter.obj ..\..\obj\thmlfootnotes.obj 
       ..\..\obj\thmlheadings.obj ..\..\obj\thmlhtmlhref.obj 
-      ..\..\obj\thmllemma.obj ..\..\obj\thmlmorph.obj 
-      ..\..\obj\thmlscripref.obj ..\..\obj\thmlstrongs.obj 
-      ..\..\obj\thmlvariants.obj ..\..\obj\unicodertf.obj 
-      ..\..\obj\utf16utf8.obj ..\..\obj\utf8arshaping.obj 
-      ..\..\obj\utf8bidireorder.obj ..\..\obj\utf8cantillation.obj 
-      ..\..\obj\utf8greekaccents.obj ..\..\obj\utf8hebrewpoints.obj 
-      ..\..\obj\utf8html.obj ..\..\obj\utf8latin1.obj ..\..\obj\utf8nfc.obj 
-      ..\..\obj\utf8nfkd.obj ..\..\obj\utf8transliterator.obj ..\..\obj\zcom.obj 
-      ..\..\obj\rawld4.obj ..\..\obj\zipcomprs.obj ..\..\obj\zld.obj 
-      ..\..\obj\entriesblk.obj ..\..\obj\zutil.obj ..\..\obj\compress.obj 
-      ..\..\obj\crc32.obj ..\..\obj\deflate.obj ..\..\obj\gzio.obj 
-      ..\..\obj\infblock.obj ..\..\obj\infcodes.obj ..\..\obj\inffast.obj 
-      ..\..\obj\inflate.obj ..\..\obj\inftrees.obj ..\..\obj\infutil.obj 
-      ..\..\obj\trees.obj ..\..\obj\uncompr.obj ..\..\obj\untgz.obj 
-      ..\..\obj\adler32.obj ..\..\obj\greeklexattribs.obj ..\..\obj\swcacher.obj 
-      ..\..\obj\gbfosis.obj ..\..\obj\thmlosis.obj ..\..\obj\encfiltmgr.obj 
+      ..\..\obj\thmllemma.obj ..\..\obj\thmlmorph.obj ..\..\obj\thmlscripref.obj 
+      ..\..\obj\thmlstrongs.obj ..\..\obj\thmlvariants.obj 
+      ..\..\obj\unicodertf.obj ..\..\obj\utf16utf8.obj 
+      ..\..\obj\utf8arshaping.obj ..\..\obj\utf8bidireorder.obj 
+      ..\..\obj\utf8cantillation.obj ..\..\obj\utf8greekaccents.obj 
+      ..\..\obj\utf8hebrewpoints.obj ..\..\obj\utf8html.obj 
+      ..\..\obj\utf8latin1.obj ..\..\obj\utf8nfc.obj ..\..\obj\utf8nfkd.obj 
+      ..\..\obj\utf8transliterator.obj ..\..\obj\zcom.obj ..\..\obj\rawld4.obj 
+      ..\..\obj\zipcomprs.obj ..\..\obj\zld.obj ..\..\obj\entriesblk.obj 
+      ..\..\obj\zutil.obj ..\..\obj\compress.obj ..\..\obj\crc32.obj 
+      ..\..\obj\deflate.obj ..\..\obj\gzio.obj ..\..\obj\infblock.obj 
+      ..\..\obj\infcodes.obj ..\..\obj\inffast.obj ..\..\obj\inflate.obj 
+      ..\..\obj\inftrees.obj ..\..\obj\infutil.obj ..\..\obj\trees.obj 
+      ..\..\obj\uncompr.obj ..\..\obj\untgz.obj ..\..\obj\adler32.obj 
+      ..\..\obj\greeklexattribs.obj ..\..\obj\swcacher.obj ..\..\obj\gbfosis.obj 
+      ..\..\obj\thmlosis.obj ..\..\obj\encfiltmgr.obj 
       ..\..\obj\markupfiltmgr.obj ..\..\obj\roman.obj ..\..\obj\swsourcemgr.obj 
       ..\..\obj\installmgr.obj ..\..\obj\ftpparse.obj ..\..\obj\osisstrongs.obj 
       ..\..\obj\osismorph.obj ..\..\obj\gbfredletterwords.obj 
@@ -50,7 +50,8 @@
       ..\..\obj\gbfwebif.obj ..\..\obj\utilweb.obj ..\..\obj\osisfootnotes.obj 
       ..\..\obj\osisscripref.obj ..\..\obj\swoptfilter.obj 
       ..\..\obj\osislemma.obj ..\..\obj\osisredletterwords.obj 
-      ..\..\obj\osishtmlhref.obj"/>
+      ..\..\obj\osishtmlhref.obj ..\..\obj\swsearchable.obj 
+      ..\..\obj\osiswebif.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -65,7 +66,7 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
     <INCLUDEPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n"/>
@@ -229,6 +230,8 @@
       <FILE FILENAME="..\..\src\modules\filters\osislemma.cpp" FORMNAME="" UNITNAME="osislemma.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osisredletterwords.cpp" FORMNAME="" UNITNAME="osisredletterwords.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osishtmlhref.cpp" FORMNAME="" UNITNAME="osishtmlhref" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\mgr\swsearchable.cpp" FORMNAME="" UNITNAME="swsearchable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\osiswebif.cpp" FORMNAME="" UNITNAME="osiswebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -293,14 +296,15 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=7
-Item0=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL
-Item1=_ICU_;_ICUSWORD_;USBINARY
-Item2=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
-Item3=;USBINARY;_DEBUG
-Item4=_ICU_;_ICUSWORD_
-Item5=_ICU_;_ICUSWORD_;_DEBUG
-Item6=_DEBUG
+Count=8
+Item0=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0
+Item1=_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL
+Item2=_ICU_;_ICUSWORD_;USBINARY
+Item3=_ICU_;_ICUSWORD_;USBINARY;_DEBUG
+Item4=;USBINARY;_DEBUG
+Item5=_ICU_;_ICUSWORD_
+Item6=_ICU_;_ICUSWORD_;_DEBUG
+Item7=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
 Count=2
