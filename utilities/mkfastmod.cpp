@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv)
 {
-	SWMgr manager;
+	SWMgr manager(0,0,true);
 	SWModule *target;
 	ListKey listkey;
 	VerseKey vk;
