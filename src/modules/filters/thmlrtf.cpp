@@ -43,6 +43,10 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 	{
 	  if (*from == 10 || *from == 13)
 	    from++;
+	  if (*from == '{' || *from == '}') {
+	    *to++ = '\\';
+	    *to++ = *from;
+	  }
 	  if (*from == '<') {
 	    intoken = true;
 	    tokpos = 0;
