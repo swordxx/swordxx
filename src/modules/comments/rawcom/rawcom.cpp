@@ -133,7 +133,10 @@ void RawCom::increment(int steps) {
 		}
 		long index = tmpkey->Index();
 		findoffset(tmpkey->Testament(), index, &start, &size);
-		if ((((laststart != start) || (lastsize != size))||(!skipConsecutiveLinks)) && (start >= 0) && (size)) {
+		if (
+			(((laststart != start) || (lastsize != size))	// we're a different entry
+				&& (start > 0) && (size))	// and we actually have a size
+				||(!skipConsecutiveLinks)) {	// or we don't want to skip consecutive links
 			steps += (steps < 0) ? 1 : -1;
 			lastgood = *tmpkey;
 		}

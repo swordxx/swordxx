@@ -18,6 +18,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWT
 {
 	delete key;
 	key = CreateKey();
+	skipConsecutiveLinks = false;
 }
 
 
