@@ -37,7 +37,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 	  printf("token = %s\ntag->name = %s\n",token,tag.getName());
     //w
     if (!strncmp(token, "w", 1)) {
-      userData["w"] == token;
+      userData["w"] = token;
     }
     else if (!strncmp(token, "/w", 2)) {
 

@@ -48,7 +48,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
     //w
     if (!strncmp(token, "w", 1)) {
       buf += "{";
-      userData["w"] == token;
+      userData["w"] = token;
     }
     else if (!strncmp(token, "/w", 2)) {
 
