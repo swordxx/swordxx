@@ -48,3 +48,5 @@
 %include "swcompress.i"
 %include "lzsscompress.i"
 %include "zipcompress.i"
+
+%include "swbuf.i"

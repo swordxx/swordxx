@@ -40,6 +40,7 @@ package Sword::SWConfig;
 @ISA = qw( Sword );
 %OWNER = ();
 %BLESSEDMEMBERS = (
+    filename => 'Sword::SWBuf',
 );
 
 %ITERATORS = ();
@@ -1352,6 +1353,59 @@ sub DESTROY {
 
 *Encode = *Swordc::ZipCompress_Encode;
 *Decode = *Swordc::ZipCompress_Decode;
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+    };
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+    };
+
+
+############# Class : Sword::SWBuf ##############
+
+package Sword::SWBuf;
+@ISA = qw( Sword );
+%OWNER = ();
+%ITERATORS = ();
+sub new {
+    my $pkg = shift;
+    my @args = @_;
+    my $self = Swordc::new_SWBuf(@args);
+    return undef if (!defined($self));
+    $OWNER{$self} = 1;
+    my %retval;
+    tie %retval, "Sword::SWBuf", $self;
+    return bless \%retval, $pkg;
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Swordc::delete_SWBuf($self);
+        delete $OWNER{$self};
+    }
+}
+
+*setFillByte = *Swordc::SWBuf_setFillByte;
+*getFillByte = *Swordc::SWBuf_getFillByte;
+*c_str = *Swordc::SWBuf_c_str;
+*charAt = *Swordc::SWBuf_charAt;
+*size = *Swordc::SWBuf_size;
+*length = *Swordc::SWBuf_length;
+*set = *Swordc::SWBuf_set;
+*setSize = *Swordc::SWBuf_setSize;
+*append = *Swordc::SWBuf_append;
+*appendFormatted = *Swordc::SWBuf_appendFormatted;
+*getRawData = *Swordc::SWBuf_getRawData;
+*compare = *Swordc::SWBuf_compare;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

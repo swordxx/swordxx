@@ -3,9 +3,9 @@
 using namespace sword;
 %}
 
-typedef map < string, SWModule *, less < string > > ModMap;
-typedef list < string > OptionsList;
-typedef map < string, SWFilter * > FilterMap;
+typedef map < SWBuf, SWModule *, less < SWBuf > > ModMap;
+typedef list < SWBuf > OptionsList;
+typedef map < SWBuf, SWFilter * > FilterMap;
 
 class SWMgr {
 public:

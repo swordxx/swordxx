@@ -16,13 +16,13 @@ using namespace std;
 %include "typemaps.i"
 
 
-typedef multimapwithdefault < std::string, string, less < std::string > > ConfigEntMap;
-typedef std::map < std::string, ConfigEntMap, less < std::string > > SectionMap;
+typedef multimapwithdefault < SWBuf, SWBuf, std::less < SWBuf > > ConfigEntMap;
+typedef std::map < SWBuf, ConfigEntMap, std::less < SWBuf > > SectionMap;
 
 class SWConfig {
 public:
   //member data
-  std::string filename;
+  SWBuf filename;
   SectionMap Sections;
 
   //member functions

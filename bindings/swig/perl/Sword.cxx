@@ -225,7 +225,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.11 2003/05/16 19:49:52 joachim Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.12 2003/06/28 21:08:56 joachim Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
@@ -520,41 +520,42 @@ static void _swig_create_magic(CPerlObj *pPerl, SV *sv, const char *name, int (C
 #define  SWIGTYPE_p_ConfigEntMap swig_types[6] 
 #define  SWIGTYPE_p_p_char swig_types[7] 
 #define  SWIGTYPE_p_RawLD swig_types[8] 
-#define  SWIGTYPE_p_TreeKey swig_types[9] 
-#define  SWIGTYPE_p_bool swig_types[10] 
-#define  SWIGTYPE_p_SWFilterMgr swig_types[11] 
-#define  SWIGTYPE_p_SWLD swig_types[12] 
-#define  SWIGTYPE_p_SWTextDirection swig_types[13] 
-#define  SWIGTYPE_p_RawText swig_types[14] 
-#define  SWIGTYPE_p_f_char_p_void__void swig_types[15] 
-#define  SWIGTYPE_p_VerseKey swig_types[16] 
-#define  SWIGTYPE_p_ModMap swig_types[17] 
-#define  SWIGTYPE_p_zCom swig_types[18] 
-#define  SWIGTYPE_p_std__string swig_types[19] 
-#define  SWIGTYPE_p_SectionMap swig_types[20] 
-#define  SWIGTYPE_p_SWDisplay swig_types[21] 
-#define  SWIGTYPE_p_AttributeTypeList swig_types[22] 
-#define  SWIGTYPE_p_SWText swig_types[23] 
-#define  SWIGTYPE_p_TreeKeyIdx swig_types[24] 
-#define  SWIGTYPE_p_SWCompress swig_types[25] 
-#define  SWIGTYPE_p_LZSSCompress swig_types[26] 
-#define  SWIGTYPE_p_ZipCompress swig_types[27] 
-#define  SWIGTYPE_p_SW_POSITION swig_types[28] 
-#define  SWIGTYPE_p_SWModule swig_types[29] 
-#define  SWIGTYPE_p_zLD swig_types[30] 
-#define  SWIGTYPE_p_SWGenBook swig_types[31] 
-#define  SWIGTYPE_p_RawCom swig_types[32] 
-#define  SWIGTYPE_p_RawGenBook swig_types[33] 
-#define  SWIGTYPE_p_SWConfig swig_types[34] 
-#define  SWIGTYPE_p_LocaleMgr swig_types[35] 
-#define  SWIGTYPE_p_int swig_types[36] 
-#define  SWIGTYPE_p_SWTextMarkup swig_types[37] 
-#define  SWIGTYPE_p_OptionsList swig_types[38] 
-#define  SWIGTYPE_p_std__listTstd__string_t swig_types[39] 
-#define  SWIGTYPE_p_zText swig_types[40] 
-#define  SWIGTYPE_p_SWTextEncoding swig_types[41] 
-#define  SWIGTYPE_p_unsigned_long swig_types[42] 
-static swig_type_info *swig_types[44];
+#define  SWIGTYPE_p_char swig_types[9] 
+#define  SWIGTYPE_p_TreeKey swig_types[10] 
+#define  SWIGTYPE_p_bool swig_types[11] 
+#define  SWIGTYPE_p_SWFilterMgr swig_types[12] 
+#define  SWIGTYPE_p_SWLD swig_types[13] 
+#define  SWIGTYPE_p_SWTextDirection swig_types[14] 
+#define  SWIGTYPE_p_RawText swig_types[15] 
+#define  SWIGTYPE_p_f_char_p_void__void swig_types[16] 
+#define  SWIGTYPE_p_VerseKey swig_types[17] 
+#define  SWIGTYPE_p_SWBuf swig_types[18] 
+#define  SWIGTYPE_p_ModMap swig_types[19] 
+#define  SWIGTYPE_p_zCom swig_types[20] 
+#define  SWIGTYPE_p_SectionMap swig_types[21] 
+#define  SWIGTYPE_p_SWDisplay swig_types[22] 
+#define  SWIGTYPE_p_AttributeTypeList swig_types[23] 
+#define  SWIGTYPE_p_SWText swig_types[24] 
+#define  SWIGTYPE_p_std__listTSWBuf_t swig_types[25] 
+#define  SWIGTYPE_p_TreeKeyIdx swig_types[26] 
+#define  SWIGTYPE_p_SWCompress swig_types[27] 
+#define  SWIGTYPE_p_LZSSCompress swig_types[28] 
+#define  SWIGTYPE_p_ZipCompress swig_types[29] 
+#define  SWIGTYPE_p_SW_POSITION swig_types[30] 
+#define  SWIGTYPE_p_SWModule swig_types[31] 
+#define  SWIGTYPE_p_zLD swig_types[32] 
+#define  SWIGTYPE_p_SWGenBook swig_types[33] 
+#define  SWIGTYPE_p_RawCom swig_types[34] 
+#define  SWIGTYPE_p_RawGenBook swig_types[35] 
+#define  SWIGTYPE_p_SWConfig swig_types[36] 
+#define  SWIGTYPE_p_LocaleMgr swig_types[37] 
+#define  SWIGTYPE_p_int swig_types[38] 
+#define  SWIGTYPE_p_SWTextMarkup swig_types[39] 
+#define  SWIGTYPE_p_OptionsList swig_types[40] 
+#define  SWIGTYPE_p_zText swig_types[41] 
+#define  SWIGTYPE_p_SWTextEncoding swig_types[42] 
+#define  SWIGTYPE_p_unsigned_long swig_types[43] 
+static swig_type_info *swig_types[45];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -769,7 +770,6 @@ using namespace sword;
 
 
 #include <localemgr.h>
-#include <string>
 
 using namespace std;
 using namespace sword;
@@ -846,6 +846,10 @@ using namespace sword;
 #include <zipcomprs.h>
 using namespace sword;
 
+
+#include "swbuf.h"
+using namespace sword;
+
 #ifdef PERL_OBJECT
 #define MAGIC_CLASS _wrap_Sword_var::
 class _wrap_Sword_var : public CPerlObj {
@@ -873,7 +877,7 @@ XS(_wrap_SWConfig_filename_set) {
     const char *_swigerr = _swigmsg;
     {
         SWConfig *arg1 = (SWConfig *) 0 ;
-        std::string *arg2 = (std::string *) 0 ;
+        SWBuf *arg2 = (SWBuf *) 0 ;
         int argvi = 0;
         dXSARGS;
         
@@ -886,8 +890,8 @@ XS(_wrap_SWConfig_filename_set) {
             }
         }
         {
-            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_std__string,0) < 0) {
-                SWIG_croak("Type error in argument 2 of SWConfig_filename_set. Expected _p_std__string");
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 2 of SWConfig_filename_set. Expected _p_SWBuf");
             }
         }
         if (arg1) (arg1)->filename = *arg2;
@@ -906,7 +910,7 @@ XS(_wrap_SWConfig_filename_get) {
     const char *_swigerr = _swigmsg;
     {
         SWConfig *arg1 = (SWConfig *) 0 ;
-        std::string *result;
+        SWBuf *result;
         int argvi = 0;
         dXSARGS;
         
@@ -918,10 +922,10 @@ XS(_wrap_SWConfig_filename_get) {
                 SWIG_croak("Type error in argument 1 of SWConfig_filename_get. Expected _p_SWConfig");
             }
         }
-        result = (std::string *)& ((arg1)->filename);
+        result = (SWBuf *)& ((arg1)->filename);
         
         ST(argvi) = sv_newmortal();
-        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_std__string,0);
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWBuf,0);
         XSRETURN(argvi);
         fail:
         (void) _swigerr;
@@ -6933,7 +6937,7 @@ XS(_wrap_LocaleMgr_getAvailableLocales) {
     const char *_swigerr = _swigmsg;
     {
         LocaleMgr *arg1 = (LocaleMgr *) 0 ;
-        std::list<std::string > result;
+        std::list<SWBuf > result;
         int argvi = 0;
         dXSARGS;
         
@@ -6948,9 +6952,9 @@ XS(_wrap_LocaleMgr_getAvailableLocales) {
         result = (arg1)->getAvailableLocales();
         
         {
-            std::list<std::string > * resultobj = new std::list<std::string >((std::list<std::string > &)result);
+            std::list<SWBuf > * resultobj = new std::list<SWBuf >((std::list<SWBuf > &)result);
             ST(argvi) = sv_newmortal();
-            SWIG_MakePtr(ST(argvi++), (void *) resultobj, SWIGTYPE_p_std__listTstd__string_t,0);
+            SWIG_MakePtr(ST(argvi++), (void *) resultobj, SWIGTYPE_p_std__listTSWBuf_t,0);
         }
         XSRETURN(argvi);
         fail:
@@ -8847,6 +8851,774 @@ XS(_wrap_ZipCompress_Decode) {
 }
 
 
+XS(_wrap_new_SWBuf__SWIG_0) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        char *arg1 = (char *) 0 ;
+        SWBuf *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 0) || (items > 1)) {
+            SWIG_croak("Usage: new_SWBuf(initVal);");
+        }
+        if (items > 0) {
+            if (!SvOK((SV*) ST(0))) arg1 = 0;
+            else arg1 = (char *) SvPV(ST(0), PL_na);
+        }
+        result = (SWBuf *)new SWBuf((char const *)arg1);
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWBuf,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_new_SWBuf__SWIG_1) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        char arg1 ;
+        SWBuf *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: new_SWBuf(initVal);");
+        }
+        arg1 = (char) *SvPV(ST(0),PL_na);
+        result = (SWBuf *)new SWBuf(arg1);
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWBuf,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_new_SWBuf__SWIG_2) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = 0 ;
+        SWBuf *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: new_SWBuf(other);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of new_SWBuf. Expected _p_SWBuf");
+            }
+        }
+        result = (SWBuf *)new SWBuf((SWBuf const &)*arg1);
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_SWBuf,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_new_SWBuf) {
+    dXSARGS;
+    
+    if ((items >= 0) && (items <= 1)) {
+        int _v;
+        if (items <= 0) {
+            (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWBuf__SWIG_0); return;
+        }
+        {
+            _v = SvPOK(ST(0)) ? 1 : 0;
+        }
+        if (_v) {
+            (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWBuf__SWIG_0); return;
+        }
+    }
+    if (items == 1) {
+        int _v;
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWBuf__SWIG_2); return;
+        }
+    }
+    if (items == 1) {
+        int _v;
+        {
+            _v = SvPOK(ST(0)) ? 1 : 0;
+        }
+        if (_v) {
+            (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_new_SWBuf__SWIG_1); return;
+        }
+    }
+    
+    croak("No matching function for overloaded 'new_SWBuf'");
+    XSRETURN(0);
+}
+
+
+XS(_wrap_delete_SWBuf) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: delete_SWBuf(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of delete_SWBuf. Expected _p_SWBuf");
+            }
+        }
+        delete arg1;
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_setFillByte) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_setFillByte(self,ch);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_setFillByte. Expected _p_SWBuf");
+            }
+        }
+        arg2 = (char) *SvPV(ST(1),PL_na);
+        (arg1)->setFillByte(arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_getFillByte) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: SWBuf_getFillByte(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_getFillByte. Expected _p_SWBuf");
+            }
+        }
+        result = (char)(arg1)->getFillByte();
+        
+        ST(argvi) = sv_newmortal();
+        sv_setpvn((SV*)ST(argvi++), &result, 1);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_c_str) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: SWBuf_c_str(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_c_str. Expected _p_SWBuf");
+            }
+        }
+        result = (char *)((SWBuf const *)arg1)->c_str();
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        }else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_charAt) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        unsigned int arg2 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_charAt(self,pos);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_charAt. Expected _p_SWBuf");
+            }
+        }
+        arg2 = (unsigned int) SvUV(ST(1));
+        {
+            char &_result_ref = (arg1)->charAt(arg2);
+            result = (char *) &_result_ref;
+        }
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_char,0);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_size) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        unsigned int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: SWBuf_size(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_size. Expected _p_SWBuf");
+            }
+        }
+        result = (unsigned int)((SWBuf const *)arg1)->size();
+        
+        ST(argvi) = sv_newmortal();
+        sv_setuv(ST(argvi++), (UV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_length) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        unsigned int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: SWBuf_length(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_length. Expected _p_SWBuf");
+            }
+        }
+        result = (unsigned int)((SWBuf const *)arg1)->length();
+        
+        ST(argvi) = sv_newmortal();
+        sv_setuv(ST(argvi++), (UV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_set__SWIG_0) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char *arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_set(self,newVal);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_set. Expected _p_SWBuf");
+            }
+        }
+        if (!SvOK((SV*) ST(1))) arg2 = 0;
+        else arg2 = (char *) SvPV(ST(1), PL_na);
+        (arg1)->set((char const *)arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_set__SWIG_1) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        SWBuf *arg2 = 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_set(self,newVal);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_set. Expected _p_SWBuf");
+            }
+        }
+        {
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 2 of SWBuf_set. Expected _p_SWBuf");
+            }
+        }
+        (arg1)->set((SWBuf const &)*arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_set) {
+    dXSARGS;
+    
+    if (items == 2) {
+        int _v;
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *tmp;
+                if (SWIG_ConvertPtr(ST(1), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                    _v = 0;
+                }else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_set__SWIG_1); return;
+            }
+        }
+    }
+    if (items == 2) {
+        int _v;
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                _v = SvPOK(ST(1)) ? 1 : 0;
+            }
+            if (_v) {
+                (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_set__SWIG_0); return;
+            }
+        }
+    }
+    
+    croak("No matching function for overloaded 'SWBuf_set'");
+    XSRETURN(0);
+}
+
+
+XS(_wrap_SWBuf_setSize) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        unsigned int arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_setSize(self,len);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_setSize. Expected _p_SWBuf");
+            }
+        }
+        arg2 = (unsigned int) SvUV(ST(1));
+        (arg1)->setSize(arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_append__SWIG_0) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char *arg2 ;
+        int arg3 = (int) -1 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 3)) {
+            SWIG_croak("Usage: SWBuf_append(self,str,max);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_append. Expected _p_SWBuf");
+            }
+        }
+        if (!SvOK((SV*) ST(1))) arg2 = 0;
+        else arg2 = (char *) SvPV(ST(1), PL_na);
+        if (items > 2) {
+            arg3 = (int) SvIV(ST(2));
+        }
+        (arg1)->append((char const *)arg2,arg3);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_append__SWIG_1) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        SWBuf *arg2 = 0 ;
+        int arg3 = (int) -1 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 3)) {
+            SWIG_croak("Usage: SWBuf_append(self,str,max);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_append. Expected _p_SWBuf");
+            }
+        }
+        {
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 2 of SWBuf_append. Expected _p_SWBuf");
+            }
+        }
+        if (items > 2) {
+            arg3 = (int) SvIV(ST(2));
+        }
+        (arg1)->append((SWBuf const &)*arg2,arg3);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_append__SWIG_2) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_append(self,ch);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_append. Expected _p_SWBuf");
+            }
+        }
+        arg2 = (char) *SvPV(ST(1),PL_na);
+        (arg1)->append(arg2);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_append) {
+    dXSARGS;
+    
+    if ((items >= 2) && (items <= 3)) {
+        int _v;
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *tmp;
+                if (SWIG_ConvertPtr(ST(1), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                    _v = 0;
+                }else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                if (items <= 2) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_append__SWIG_1); return;
+                }
+                {
+                    _v = SvIOK(ST(2)) ? 1 : 0;
+                }
+                if (_v) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_append__SWIG_1); return;
+                }
+            }
+        }
+    }
+    if (items == 2) {
+        int _v;
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                _v = SvPOK(ST(1)) ? 1 : 0;
+            }
+            if (_v) {
+                (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_append__SWIG_2); return;
+            }
+        }
+    }
+    if ((items >= 2) && (items <= 3)) {
+        int _v;
+        {
+            void *tmp;
+            if (SWIG_ConvertPtr(ST(0), (void **) &tmp, SWIGTYPE_p_SWBuf, 0) == -1) {
+                _v = 0;
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                _v = SvPOK(ST(1)) ? 1 : 0;
+            }
+            if (_v) {
+                if (items <= 2) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_append__SWIG_0); return;
+                }
+                {
+                    _v = SvIOK(ST(2)) ? 1 : 0;
+                }
+                if (_v) {
+                    (*PL_markstack_ptr++);SWIG_CALLXS(_wrap_SWBuf_append__SWIG_0); return;
+                }
+            }
+        }
+    }
+    
+    croak("No matching function for overloaded 'SWBuf_append'");
+    XSRETURN(0);
+}
+
+
+XS(_wrap_SWBuf_appendFormatted) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char *arg2 ;
+        void *arg3 = 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if (items < 1) {
+            SWIG_croak("Usage: SWBuf_appendFormatted(self,format,...);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_appendFormatted. Expected _p_SWBuf");
+            }
+        }
+        if (items >= 1) {
+            if (!SvOK((SV*) ST(1))) arg2 = 0;
+            else arg2 = (char *) SvPV(ST(1), PL_na);
+        }
+        (arg1)->appendFormatted((char const *)arg2,arg3);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_getRawData) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: SWBuf_getRawData(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_getRawData. Expected _p_SWBuf");
+            }
+        }
+        result = (char *)(arg1)->getRawData();
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        }else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
+XS(_wrap_SWBuf_compare) {
+    char _swigmsg[SWIG_MAX_ERRMSG] = "";
+    const char *_swigerr = _swigmsg;
+    {
+        SWBuf *arg1 = (SWBuf *) 0 ;
+        SWBuf *arg2 = 0 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: SWBuf_compare(self,other);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 1 of SWBuf_compare. Expected _p_SWBuf");
+            }
+        }
+        {
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_SWBuf,0) < 0) {
+                SWIG_croak("Type error in argument 2 of SWBuf_compare. Expected _p_SWBuf");
+            }
+        }
+        result = (int)((SWBuf const *)arg1)->compare((SWBuf const &)*arg2);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        (void) _swigerr;
+    }
+    croak(_swigerr);
+}
+
+
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
@@ -8940,6 +9712,7 @@ static swig_type_info _swigt__p_SWKey[] = {{"Sword::SWKey", 0, "SWKey *", 0},{"S
 static swig_type_info _swigt__p_ConfigEntMap[] = {{"_p_ConfigEntMap", 0, "ConfigEntMap const &", 0},{"_p_ConfigEntMap"},{0}};
 static swig_type_info _swigt__p_p_char[] = {{"_p_p_char", 0, "char **", 0},{"_p_p_char"},{0}};
 static swig_type_info _swigt__p_RawLD[] = {{"Sword::RawLD", 0, "RawLD *", 0},{"Sword::RawLD"},{0}};
+static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
 static swig_type_info _swigt__p_TreeKey[] = {{"Sword::TreeKey", 0, "TreeKey *", 0},{"Sword::TreeKeyIdx", _p_TreeKeyIdxTo_p_TreeKey},{"Sword::TreeKey"},{0}};
 static swig_type_info _swigt__p_bool[] = {{"_p_bool", 0, "bool *", 0},{"_p_bool"},{0}};
 static swig_type_info _swigt__p_SWFilterMgr[] = {{"Sword::SWFilterMgr", 0, "SWFilterMgr *", 0},{"Sword::SWFilterMgr"},{0}};
@@ -8948,13 +9721,14 @@ static swig_type_info _swigt__p_SWTextDirection[] = {{"_p_SWTextDirection", 0, "
 static swig_type_info _swigt__p_RawText[] = {{"Sword::RawText", 0, "RawText *", 0},{"Sword::RawText"},{0}};
 static swig_type_info _swigt__p_f_char_p_void__void[] = {{"_p_f_char_p_void__void", 0, "void (*)(char,void *)", 0},{"_p_f_char_p_void__void"},{0}};
 static swig_type_info _swigt__p_VerseKey[] = {{"Sword::VerseKey", 0, "VerseKey *", 0},{"Sword::VerseKey"},{0}};
+static swig_type_info _swigt__p_SWBuf[] = {{"Sword::SWBuf", 0, "SWBuf *", 0},{"Sword::SWBuf"},{0}};
 static swig_type_info _swigt__p_ModMap[] = {{"_p_ModMap", 0, "ModMap *", 0},{"_p_ModMap"},{0}};
 static swig_type_info _swigt__p_zCom[] = {{"Sword::zCom", 0, "zCom *", 0},{"Sword::zCom"},{0}};
-static swig_type_info _swigt__p_std__string[] = {{"_p_std__string", 0, "std::string *", 0},{"_p_std__string"},{0}};
 static swig_type_info _swigt__p_SectionMap[] = {{"_p_SectionMap", 0, "SectionMap *", 0},{"_p_SectionMap"},{0}};
 static swig_type_info _swigt__p_SWDisplay[] = {{"_p_SWDisplay", 0, "SWDisplay *", 0},{"_p_SWDisplay"},{0}};
 static swig_type_info _swigt__p_AttributeTypeList[] = {{"_p_AttributeTypeList", 0, "AttributeTypeList *", 0},{"_p_AttributeTypeList"},{0}};
 static swig_type_info _swigt__p_SWText[] = {{"Sword::SWText", 0, "SWText *", 0},{"Sword::SWText"},{"Sword::RawText", _p_RawTextTo_p_SWText},{"Sword::zText", _p_zTextTo_p_SWText},{0}};
+static swig_type_info _swigt__p_std__listTSWBuf_t[] = {{"_p_std__listTSWBuf_t", 0, "std::list<SWBuf > *", 0},{"_p_std__listTSWBuf_t"},{0}};
 static swig_type_info _swigt__p_TreeKeyIdx[] = {{"Sword::TreeKeyIdx", 0, "TreeKeyIdx *", 0},{"Sword::TreeKeyIdx"},{0}};
 static swig_type_info _swigt__p_SWCompress[] = {{"Sword::SWCompress", 0, "SWCompress *", 0},{"Sword::SWCompress"},{"Sword::LZSSCompress", _p_LZSSCompressTo_p_SWCompress},{"Sword::ZipCompress", _p_ZipCompressTo_p_SWCompress},{0}};
 static swig_type_info _swigt__p_LZSSCompress[] = {{"Sword::LZSSCompress", 0, "LZSSCompress *", 0},{"Sword::LZSSCompress"},{0}};
@@ -8970,7 +9744,6 @@ static swig_type_info _swigt__p_LocaleMgr[] = {{"Sword::LocaleMgr", 0, "LocaleMg
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0},{"_p_int"},{0}};
 static swig_type_info _swigt__p_SWTextMarkup[] = {{"_p_SWTextMarkup", 0, "SWTextMarkup *", 0},{"_p_SWTextMarkup"},{0}};
 static swig_type_info _swigt__p_OptionsList[] = {{"_p_OptionsList", 0, "OptionsList *", 0},{"_p_OptionsList"},{0}};
-static swig_type_info _swigt__p_std__listTstd__string_t[] = {{"_p_std__listTstd__string_t", 0, "std::list<std::string > *", 0},{"_p_std__listTstd__string_t"},{0}};
 static swig_type_info _swigt__p_zText[] = {{"Sword::zText", 0, "zText *", 0},{"Sword::zText"},{0}};
 static swig_type_info _swigt__p_SWTextEncoding[] = {{"_p_SWTextEncoding", 0, "SWTextEncoding *", 0},{"_p_SWTextEncoding"},{0}};
 static swig_type_info _swigt__p_unsigned_long[] = {{"_p_unsigned_long", 0, "unsigned long *", 0},{"_p_unsigned_long"},{0}};
@@ -8985,6 +9758,7 @@ _swigt__p_SWKey,
 _swigt__p_ConfigEntMap, 
 _swigt__p_p_char, 
 _swigt__p_RawLD, 
+_swigt__p_char, 
 _swigt__p_TreeKey, 
 _swigt__p_bool, 
 _swigt__p_SWFilterMgr, 
@@ -8993,13 +9767,14 @@ _swigt__p_SWTextDirection,
 _swigt__p_RawText, 
 _swigt__p_f_char_p_void__void, 
 _swigt__p_VerseKey, 
+_swigt__p_SWBuf, 
 _swigt__p_ModMap, 
 _swigt__p_zCom, 
-_swigt__p_std__string, 
 _swigt__p_SectionMap, 
 _swigt__p_SWDisplay, 
 _swigt__p_AttributeTypeList, 
 _swigt__p_SWText, 
+_swigt__p_std__listTSWBuf_t, 
 _swigt__p_TreeKeyIdx, 
 _swigt__p_SWCompress, 
 _swigt__p_LZSSCompress, 
@@ -9015,7 +9790,6 @@ _swigt__p_LocaleMgr,
 _swigt__p_int, 
 _swigt__p_SWTextMarkup, 
 _swigt__p_OptionsList, 
-_swigt__p_std__listTstd__string_t, 
 _swigt__p_zText, 
 _swigt__p_SWTextEncoding, 
 _swigt__p_unsigned_long, 
@@ -9260,6 +10034,20 @@ static swig_command_info swig_commands[] = {
 {"Swordc::delete_ZipCompress", _wrap_delete_ZipCompress},
 {"Swordc::ZipCompress_Encode", _wrap_ZipCompress_Encode},
 {"Swordc::ZipCompress_Decode", _wrap_ZipCompress_Decode},
+{"Swordc::new_SWBuf", _wrap_new_SWBuf},
+{"Swordc::delete_SWBuf", _wrap_delete_SWBuf},
+{"Swordc::SWBuf_setFillByte", _wrap_SWBuf_setFillByte},
+{"Swordc::SWBuf_getFillByte", _wrap_SWBuf_getFillByte},
+{"Swordc::SWBuf_c_str", _wrap_SWBuf_c_str},
+{"Swordc::SWBuf_charAt", _wrap_SWBuf_charAt},
+{"Swordc::SWBuf_size", _wrap_SWBuf_size},
+{"Swordc::SWBuf_length", _wrap_SWBuf_length},
+{"Swordc::SWBuf_set", _wrap_SWBuf_set},
+{"Swordc::SWBuf_setSize", _wrap_SWBuf_setSize},
+{"Swordc::SWBuf_append", _wrap_SWBuf_append},
+{"Swordc::SWBuf_appendFormatted", _wrap_SWBuf_appendFormatted},
+{"Swordc::SWBuf_getRawData", _wrap_SWBuf_getRawData},
+{"Swordc::SWBuf_compare", _wrap_SWBuf_compare},
 {0,0}
 };
 
@@ -9347,6 +10135,7 @@ XS(SWIG_init) {
     SWIG_TypeClientData(SWIGTYPE_p_SWCompress, (void*) "Sword::SWCompress");
     SWIG_TypeClientData(SWIGTYPE_p_LZSSCompress, (void*) "Sword::LZSSCompress");
     SWIG_TypeClientData(SWIGTYPE_p_ZipCompress, (void*) "Sword::ZipCompress");
+    SWIG_TypeClientData(SWIGTYPE_p_SWBuf, (void*) "Sword::SWBuf");
     ST(0) = &PL_sv_yes;
     XSRETURN(1);
 }
