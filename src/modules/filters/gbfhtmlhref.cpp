@@ -24,12 +24,6 @@
 
 SWORD_NAMESPACE_START
 
-GBFHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	if (module) {
-		version = module->Name();
-	}	
-}
-
 GBFHTMLHREF::GBFHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -149,21 +143,9 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			}
 		}
 		
-		else if (!strncmp(token, "WG", 2)) { // strong's numbers
-			buf += " <small><em>&lt;<a href=\"strongs://Greek/";
-			for (tok = token+2; *tok; tok++)
-				//if(token[i] != '\"')
-					buf += *tok;
-			buf += "\">";
-			for (tok = token + 2; *tok; tok++)
-				//if(token[i] != '\"')
-					buf += *tok;
-			buf += "</a>&gt;</em></small>";
-		}
-		
-		else if (!strncmp(token, "WH", 2)) { // strong's numbers
-			buf += " <small><em>&lt;<a href=\"strongs://Hebrew/";
-			for (tok = token+2; *tok; tok++)
+		else if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
+			buf += " <small><em>&lt;<a href=\"type=Strongs value=";
+			for (tok = token+1; *tok; tok++)
 				//if(token[i] != '\"')
 					buf += *tok;
 			buf += "\">";
@@ -173,23 +155,9 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			buf += "</a>&gt;</em></small>";
 		}
 
-		else if (!strncmp(token, "WTG", 3)) { // strong's numbers tense
-			
-			buf += " <small><em>(<a href=\"strongs://Greek/";
-			for (tok = token + 3; *tok; tok++)
-				if(*tok != '\"')
-					buf += *tok;
-			buf += "\">";
-			for (tok = token + 3; *tok; tok++)
-				if(*tok != '\"')
-					buf += *tok;
-			buf += "</a>)</em></small>";
-		}
-
-		else if (!strncmp(token, "WTH", 3)) { // strong's numbers tense
-			
-			buf += " <small><em>(<a href=\"strongs://Hebrew/";
-			for (tok = token + 3; *tok; tok++)
+		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
+			buf += " <small><em>(<a href=\"type=Strongs value=";
+			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
 			buf += "\">";
@@ -200,7 +168,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 		}
 
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
-			buf += " <small><em>(<a href=\"morph:///";
+			buf += " <small><em>(<a href=\"type=morph class=none value=";
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
@@ -235,7 +203,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			if (vkey) {
 				// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 				//char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-				buf.appendFormatted("<a href=\"noteID://%s/%s/%c/%s\"><small><sup>*%c</sup></small></a> ", u->version.c_str(), vkey->getText(), 'n', footnoteNumber.c_str(), 'n');
+				buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), 'n', footnoteNumber.c_str(), 'n');
 			}
 			u->suspendTextPassThru = true;
 		}
