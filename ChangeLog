@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 26-May-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added first cut of osis2mod using the ESV as a
+		basic template.  Works with VerseKey mods
+		only and doesn't capture all data.
 	Improved verse reference parsing to include proper
 		parsing of osisRef attributes and other
 		misc. anomalies.
