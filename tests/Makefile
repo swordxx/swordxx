@@ -1,23 +1,12 @@
 root := ..
 subdirs := 
 pre-targets := 
+bin := yes
 targets := keytest mgrtest parsekey listtest casttest modtest compnone complzss
 include ${root}/Makefile.cfg
 
-cpp += keytest.cpp
-cpp += mgrtest.cpp
-cpp += parsekey.cpp
-cpp += listtest.cpp
-cpp += casttest.cpp
-cpp += modtest.cpp
-cpp += compnone.cpp
-cpp += complzss.cpp
 
-s = $(c) $(cpp)
-d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
-o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
 l =  -lsword -lstdc++
-
 
 keytest: keytest.o
 	$(CC) $(LFLAGS) -o $@ keytest.o $(l) $(l)
