@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.23 2001/06/12 06:27:24 scribe Exp $
+ * $Id: swmodule.h,v 1.24 2001/06/13 21:53:22 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -118,18 +118,31 @@ public:
   *
   * @return error status
   */
-	virtual char Error ();
+  virtual char Error ();
 
-	virtual isUnicode() {return unicode;}
-	virtual getEntrySize() {return entrySize;}
+  /**
+  * @return  True if this module is encoded in Unicode, otherwise return false.
+  */
+  virtual const bool isUnicode() const {return unicode;}
+  /**
+  * @return The size of the current entry.
+  */
+  virtual const int getEntrySize() const {return entrySize;}
 
-  /** Sets a key to this module for position to a particular
-  * record or set of records
+  /** 
+  * Sets a key to this module for position to a 
+  * particular record or set of records
   *
   * @param ikey key with which to set this module
   * @return error status
   */
   virtual char SetKey (const SWKey *ikey);
+
+  /**
+  * Sets the key of this module. Similair to @see SetKey(const SWKey*) .
+  * @param ikey The SWKey which should be used as new key.
+  * @return Error status
+  */
   virtual char SetKey (const SWKey &ikey);
 
   /** Gets the current module key
