@@ -96,3 +96,6 @@ include src/mgr/Makefile.am
 include src/frontend/Makefile.am
 include src/modules/Makefile.am
 include include/Makefile.am
+
+restore:
+	cd $(top_srcdir) && ./scripts/restoremake.sh
