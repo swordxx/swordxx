@@ -10,7 +10,6 @@
 #include "diafiltmgr.h"
 #include <iostream>
 
-using std::string;
 using std::cout;
 
 #define RQ_REF 1
@@ -185,7 +184,7 @@ int main(int argc, char **argv)
 		else if (!stricmp("-k", argv[i])) {
 			i++;	
 			if (i < argc) {
-				string key = argv[i];
+				SWBuf key = argv[i];
 				i++;
 				for (; i < argc; i++)
 					key = key + " " + argv[i];
