@@ -59,22 +59,25 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 	path = 0;
 	stdstr(&path, ipath);
 
+	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
+		path[strlen(path)-1] = 0;
+
 	if (fileMode == -1) { // try read/write if possible
 		fileMode = O_RDWR;
 		tries = 2;
 	}
 		
 	for (int i = 0; i < tries; i++) {
-		sprintf(buf, "%sot.vss", path);
+		sprintf(buf, "%s/ot.vss", path);
 		idxfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-		sprintf(buf, "%snt.vss", path);
+		sprintf(buf, "%s/nt.vss", path);
 		idxfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-		sprintf(buf, "%sot", path);
+		sprintf(buf, "%s/ot", path);
 		textfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 
-		sprintf(buf, "%snt", path);
+		sprintf(buf, "%s/nt", path);
 		textfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
 		if ((idxfp[0]->getFd() >= 0) || (idxfp[1]->getFd() >= 0))
 			break;
@@ -304,29 +307,35 @@ void RawVerse::linkentry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 
-char RawVerse::createModule(const char *path)
+char RawVerse::createModule(const char *ipath)
 {
-	char buf[127];
+	char *path = 0;
+	char *buf = new char [ strlen (ipath) + 20 ];
 	FileDesc *fd, *fd2;
 
-	sprintf(buf, "%sot", path);
+	stdstr(&path, ipath);
+
+	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
+		path[strlen(path)-1] = 0;
+
+	sprintf(buf, "%s/ot", path);
 	unlink(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
-	sprintf(buf, "%snt", path);
+	sprintf(buf, "%s/nt", path);
 	unlink(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 	FileMgr::systemFileMgr.close(fd);
 
-	sprintf(buf, "%sot.vss", path);
+	sprintf(buf, "%s/ot.vss", path);
 	unlink(buf);
 	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 
-	sprintf(buf, "%snt.vss", path);
+	sprintf(buf, "%s/nt.vss", path);
 	unlink(buf);
 	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
@@ -343,6 +352,7 @@ char RawVerse::createModule(const char *path)
 	FileMgr::systemFileMgr.close(fd);
 	FileMgr::systemFileMgr.close(fd2);
 
+	delete [] path;
 /*
 	RawVerse rv(path);
 	VerseKey mykey("Rev 22:21");

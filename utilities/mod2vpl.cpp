@@ -57,13 +57,17 @@ int main(int argc, char **argv) {
 	(*mod) = TOP;
 
 	while (!mod->Error()) {
-		if (vref)
-			cout << (const char *)(*vkey) << " ";
-		
 		buffer = new char [ strlen ((const char *)(*mod)) + 1 ];
 		strcpy(buffer, (const char *)(*mod));
 		cleanbuf(buffer);
-		cout << buffer << "\n";
+		if (vref) {
+			if ((strlen(buffer) > 0) && (vref)) {
+				cout << (const char *)(*vkey) << " ";
+				cout << buffer << "\n";
+			}
+		}
+		else cout << buffer << "\n";
+
 		delete [] buffer;
 		(*mod)++;
 	}

@@ -1,6 +1,17 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+30-Oct-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Hacked SWModule::Search to hardcode high index always to
+		32300 for now until we get NewIndex working properly.
+		This will be inaccurate for range searches but will
+		always return a value between 0-100
+	Made rawverse.cpp utility functions to not be so picky
+		about trailing '/' or '\' on path names.
+	Made vpl2mod work better when 'prepend verse ref' option
+		is turned on.  There seems to be no sense in outputting
+		blank entries in this scenerio.
+
 29-Oct-2000	Joachim Ansorg <jansorg@crosswire.org>
 	Reverted the patch from 23-Oct-2000
 	gbfhtml.cpp: Changed the HTML tag for new paragraph from <P> to <BR>
