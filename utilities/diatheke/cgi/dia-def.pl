@@ -10,6 +10,9 @@ foreach $i (@values) {
     if ($varname eq "defversion") {
 	$COOKIE = "DEFTRANS=$mydata ; expires=$EXPIRES";
     }
+    elsif ($varname eq "locale") {
+	$COOKIE = "LOCALE=$mydata ; expires=$EXPIRES";
+    }
     elsif ($varname eq "settrans") {
 	$COOKIE = "SETTRANS=$mydata ; expires=$EXPIRES";
     }

@@ -1,7 +1,7 @@
 # Diatheke/Tcl 3.0 by Chris Little <chrislit@gotjesus.org>
 # Based on code schema of <cking@acy.digex.net>
 
-# Copyright 1999 by Chris Little
+# Copyright 1999, 2000, 2001 by Chris Little
 # Licensed under GNU General Public License (GPL)
 # see accompanying LICENSE file for license details
 

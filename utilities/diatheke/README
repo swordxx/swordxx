@@ -7,13 +7,12 @@ the SWORD Project, available at http://www.crosswire.org/
 The latest versions of this suite and its components are available
 at http://www.gotjesus.org/diatheke/
 
-Version 3.0 of this suite, the second public release, consists of
-the following components:
+Version 3.0 of this suite consists of the following components:
 
-Diatheke 3.0 - a command line utility, good for lots of stuff
-Diatheke/CGI 3.0 - a PERL CGI module interface to Diatheke 3.0
+Diatheke 3.1 - a command line utility, good for lots of stuff
+Diatheke/CGI 3.1 - a PERL CGI module interface to Diatheke 3.0
 Diatheke/Tcl 3.0 - an eggdrop Tcl script interface to Diatheke 3.0
-HANDiatheke - a Palm Query App (PQA) for Palm VII or PalmOS devices
+HANDiatheke 3.0 - a Palm Query App (PQA) for Palm VII or PalmOS devices
               with either Omnisky or Palm Mobile Internet Kit.  
 
 ----------------------------------------------------------------------
@@ -69,6 +68,10 @@ on the internet or your intranet.  The bottom section of each file
 includes an example call to the dia-def.pl script to set a default
 Bible version.
 
+You may also direct users directly to your perl script since it will
+present a page with all of your modules.  Or you may wish to use this
+default page to create a custom index.html for your users.
+
 --------------------------------------------------------------------
 INSTALLING Diatheke/Tcl
 
@@ -110,6 +113,10 @@ Install on your PalmOS PDA like any other PQA.
 ----------------------------------------------------------------------
 VERSION HISTORY
 
+3.0	March 31, 2001.
+	Self-generating HTML page for the lazy (Diatheke/CGI).
+	Localization support. (Diatheke and Diatheke/CGI).
+
 2.5	Now supports ThML.  Numerous bugfixes.  December 10, 2000.
 	Includes Diatheke 3.0, Diatheke/CGI 3.0, Diatheke/Tcl 3.0,
 	and HANDiatheke 3.0 (initial version, but version-synced)
@@ -117,14 +124,12 @@ VERSION HISTORY
 2.0	First public release, including Diatheke 2.0, Diatheke/CGI
 	2.0, and Diatheke/Tcl 2.5.  October 23, 1999.
 
-
-
 -----------------------------------------------------------------------
 COPYRIGHT
 
 The Diatheke Suite and its components, Diatheke, Diatheke/CGI, and
-Diatheke/Tcl are Copyright 1999, 2000 by Chris Little.
-HANDiatheke is Copyright 2000 by Chris Little.
+Diatheke/Tcl are Copyright 1999, 2000, 2001 by Chris Little.
+HANDiatheke is Copyright 2000, 2001 by Chris Little.
 The Diatheke Suite and all of its components are licensed through
 the GNU General Public License and are intended for free distribution.
 See http://www.gnu.org/copyleft/gpl.html for details.

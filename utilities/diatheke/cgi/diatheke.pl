@@ -1,10 +1,14 @@
 #!/usr/bin/perl
 
-#version 3.0
+#version 3.1
 
 $diatheke = "nice /usr/bin/diatheke";  # location of diatheke command line program -- if you are using a MS Windows server, you might need to remove the "nice"
 $defaultfontface = "Arial, Helvetica, sans-serif"; # default font name
 $sword_path = "/home/sword";  # SWORD_PATH environment variable you want to use
+$maxverses = 50; # maximum number of verses diatheke will return per query (prevents people from asking for Gen1:1-Rev22:21)
+$defaultbook = "KJV"; # book to query when none is selected, but a verse/search is entered
+$deflocale = en;  # this is just the default for cases where user has not selected a locale and his browser does not reveal one -- you can also set locale using locael=<locale> in the GET URL
+
 
 ###############################################################################
 ## You should not need to edit anything below this line.
@@ -15,13 +19,29 @@ $ENV{'SWORD_PATH'} = $sword_path;
 
 print "Content-type: text/html\n\n";
 
-if ($ENV{HTTP_COOKIE}) {
-    split(/=/,$ENV{HTTP_COOKIE});  #  @_ contains results
-    $defversion = $_[1];
+
+if ($ENV{'HTTP_COOKIE'}) {
+
+    $cookie = $ENV{'HTTP_COOKIE'};
+    $cookie =~ s/\; /=/g;
+    %cookiedata = split(/=/, $cookie);
+    
+    $defversion = $cookiedata{DEFTRANS};
+    $locale = $cookiedata{LOCALE};
 }
-else {
+
+if ($defversion eq "") {
     $defversion = 'KJV';
 }
+if ($locale eq "") {
+    $locale = $ENV{'HTTP_ACCEPT_LANGUAGE'};
+    if ($locale eq "") {
+	$locale = $deflocale;
+    }
+}
+
+$locale =~ s/(..).*/$1/;
+
 
 $hostname = $ENV{'REMOTE_ADDR'};
 @values = split(/\&/,$ENV{'QUERY_STRING'});
@@ -52,12 +72,115 @@ foreach $i (@values) {
 	elsif ($varname eq "palm") {
 	    $palm = 1;
 	}
+	elsif ($varname eq "locale") {
+	    $locale = $mydata;
+	}
 	elsif ($mydata eq "on" || $mydata eq "ON") {
 	    $versions[$n] = $varname;
 	    $n++;
 	}
     }
 }
+
+if ($n == 0) {
+    $versions[0] = $defaultbook;
+    $n++;
+}
+
+if ($verse eq "") {
+
+    @versionlist = `$diatheke -m 2> /dev/null`;    
+    @versionlist2 = @versionlist;
+    @localelist = `$diatheke -l 2> /dev/null`;
+
+    print <<DEF1;
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Diatheke Insta-Interlinear Bible</title>
+</head>
+
+<body>
+
+<form method="get" action="diatheke.pl">
+  <p /><input type="radio" name="search" checked value="off"><font face="Arial, Helvetica, sans-serif">Verse/Commentary
+  Lookup</font><br />
+  <input type="radio" name="search" value="on"><font face="Arial, Helvetica, sans-serif">Word
+  Search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Verse or Word:</font><input type="text" name="verse" size="20"><input type="submit" name="Submit" value="Submit"><input type="reset" name="Reset" value="Reset">
+  <p /><input type="checkbox" name="strongs" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
+  Stong's Numbers when available (Strong's numbered modules are marked by *)</font>
+  <p /><input type="checkbox" name="footnotes" value="on"><font size="-1" face="Arial, Helvetica, sans-serif">Show
+  Footnotes when available</font><br />
+  &nbsp;
+  <table BORDER="0" WIDTH="100%">
+DEF1
+    
+    foreach $line (@versionlist) {
+	chomp($line);
+
+	if ($line eq "Biblical Texts:") {
+	    print "<tr><td><font face=$defaultfontface><b>Biblical Texts:</b></font><br /></td></tr>";
+	}
+	elsif ($line eq "Commentaries:") {
+	    print "<tr><td><font face=$defaultfontface><b>Commentaries:</b></font></td></tr>";
+	}
+	elsif ($line eq "Dictionaries:") {
+	    print "<tr><td><font face=$defaultfontface><b>Dictionaries & Lexica:</b></font></td></tr>";
+	}
+	else {
+	    $line =~ s/([^:]+) : (.+)/<tr><td><input type=\"checkbox\" name=\"$1\" value=\"on\"><font size=\"-1\" face=$defaultfontface>$2 ($1)<\/font><\/td><\/tr>/;
+	    print "$line\n";
+	}
+
+    }
+
+    print <<DEF2;
+        </table>
+</form>
+
+<form method="get" action="dia-def.pl">
+  Select default Bible version for cross-references:&nbsp;<select name="defversion" size="1">
+  
+DEF2
+    
+    $biblesflag = 1;
+    foreach $line (@versionlist2) {
+	if ($biblesflag == 1) {
+	    chomp ($line);
+	    if ($line eq "Biblical Texts:") {
+	    }
+	    elsif ($line eq "Commentaries:") {
+		$biblesflag = 0;
+	    }
+	    else {
+		$line =~ s/([^:]+) : (.+)/<option value=\"$1\">$2 ($1)<\/option>/;
+		print "$line\n";
+	    }
+	}
+    }
+
+    print <<DEF3;
+</select><input type="submit" name="Submit" value="Submit"></form><br/><form method="get" action="dia-def.pl">Select locale:&nbsp;
+<select name="locale" size="1"><option value="">browser default</option>
+<option value="en">en</option>
+DEF3
+    foreach $line (@localelist) {
+	chomp($line);
+	print "<option value=\"$line\">$line<\/option>";
+    }
+print <<DEF4
+</select>
+<input type="submit" name="Submit" value="Submit">
+</form>
+</body>
+</html>
+DEF4
+
+}
+else {
+
+
 
 if ($palm == 0) {
 print <<END;
@@ -150,7 +273,7 @@ function resized(){
 if(bw.bw && !bw.ns5) onload=geoInit;
 
 //Here we will write the div out so that lower browser won't see it.'
-if(bw.bw && !bw.ns5) document.write('<div id="divBottom"><center>Powered by<br><img src="http://www.crosswire.org/sword/pbsword.gif"><br><a href="http://www.crosswire.org/">www.crosswire.org</a></center></div>')
+if(bw.bw && !bw.ns5) document.write('<div id="divBottom"><center>Powered by<br /><img src="http://www.crosswire.org/sword/pbsword.gif"><br /><a href="http://www.crosswire.org/">www.crosswire.org</a></center></div>')
 </script>
 
 </head>
@@ -175,28 +298,28 @@ for ($i = 0; $i < $n; $i++) {
     
     if ($search eq "on") {
 	
-	$line = `$diatheke -s $versions[$i] \"$verse\" 2> /dev/null`;
+	$line = `$diatheke -s $versions[$i] \"$verse\" $locale 2> /dev/null`;
 
     }
     else {
 	if ($versions[$i] eq "MHC" || $versions[$i] eq "RWP" || $versions[$i] eq "DTN" || $versions[$i] eq "Family" || $versions[$i] eq "Geneva" || $versions[$i] eq "JFB" || $versions[$i] eq "PNT" || $versions[$i] eq "TSK") {
 	    $arg .= "c";
-	    $line = `$diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
+	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
 	}
 	elsif ($versions[$i] eq "Vines" || $versions[$i] eq "Naves" || $versions[$i] eq "Eastons" || $versions[$i] eq "StrongsGreek" || $versions[$i] eq "StrongsHebrew" || $versions[$i] eq "Thayer" || $versions[$i] eq "BDB" || $versions[$i] eq "Hitchcocks" || $versions[$i] eq "ISBE" || $versions[$i] eq "Smiths") {
 	    $arg .= "d";
-	    $line = `$diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
+	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
 	}
 	else {
 	    $arg .= "b";
-	    $line = `$diatheke $arg $versions[$i] \"$verse\" thml 50 2> /dev/null`;
+	    $line = `$diatheke $arg $versions[$i] \"$verse\" $locale thml $maxverses 2> /dev/null`;
 	}
     }
     chomp($line);
 
 # Parse and link to Strong's references if present
     
-#    $line =~ s/\n/<br>/g;
+#    $line =~ s/\n/<br />/g;
     
 #    $line =~ s/<FI>/<i>/g;
 #    $line =~ s/<Fi>/<\/i>/g;
@@ -451,7 +574,7 @@ for ($i = 0; $i < $n; $i++) {
 	$line =~ s/<a href=[^>]+Strongs(Greek|Hebrew)[^<]+<\/a>//g;
     }
     
-    print "$line <br><br>\n";
+    print "$line <br /><br />\n";
 }
 
 if ($palm == 1) {
@@ -459,3 +582,5 @@ if ($palm == 1) {
 }
 
 print "</font></body></html>";
+
+}
