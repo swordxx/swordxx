@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.33 2003/10/24 02:43:46 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.34 2004/06/02 14:44:03 joachim Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -204,8 +204,8 @@ void SWBasicFilter::setTokenEnd(const char *tokenEnd) {
 
 
 char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-        char *from;
-        char token[4096];
+	char *from;
+	char token[4096];
 	int tokpos = 0;
 	bool intoken = false;
 	bool inEsc = false;
@@ -263,10 +263,13 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				if (escEndPos == (escEndLen - 1)) {
 					intoken = false;
 					userData->lastTextNode = lastTextNode;
-					if ((!handleEscapeString(text, token, userData)) && (passThruUnknownEsc)) {
-						text += escStart;
-						text += token;
-						text += escEnd;
+					
+					if (!userData->suspendTextPassThru)  { //if text through is disabled no tokens should pass, too
+						if ((!handleEscapeString(text, token, userData)) && (passThruUnknownEsc)) {
+							text += escStart;
+							text += token;
+							text += escEnd;
+						}
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
 					lastTextNode = "";
@@ -293,16 +296,18 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 		}
 
 		if (intoken) {
-			if (tokpos < 4090)
+			if (tokpos < 4090) {
 				token[tokpos++] = *from;
 				token[tokpos+2] = 0;
+			}
 		}
 		else {
-			if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
-				if (!userData->suspendTextPassThru)
-					text += *from;
-				lastTextNode += *from;
-			}
+ 			if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
+				if (!userData->suspendTextPassThru) {
+					text.append( *from );
+				}
+				lastTextNode.append( *from );
+ 			}
 			userData->supressAdjacentWhitespace = false;
 		}
 
