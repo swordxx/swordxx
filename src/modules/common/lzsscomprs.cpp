@@ -3,8 +3,8 @@
  *			provides LZSS compression
  */
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <lzsscomprs.h>
 
 SWORD_NAMESPACE_START

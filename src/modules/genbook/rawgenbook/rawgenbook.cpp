@@ -13,7 +13,6 @@
 #include <unistd.h>
 #endif
 
-#include <string.h>
 #include <utilfuns.h>
 #include <rawgenbook.h>
 #include <rawstr.h>

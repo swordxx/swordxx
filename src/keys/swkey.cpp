@@ -6,7 +6,6 @@
 
 #include <swkey.h>
 #include <utilfuns.h>
-#include <string.h>
 
 SWORD_NAMESPACE_START
 

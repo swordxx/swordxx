@@ -82,8 +82,8 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
 	ConfigEntMap::iterator entry;
 
-	std::string encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (std::string)"";
-	if (encoding.empty() || !stricmp(encoding.c_str(), "Latin-1")) {
+	SWBuf encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (SWBuf)"";
+	if (!encoding.length() || !stricmp(encoding.c_str(), "Latin-1")) {
                 module->AddRawFilter(latin1utf8);
 	}
         else if (!stricmp(encoding.c_str(), "SCSU")) {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfosis.h,v 1.8 2003/02/28 13:31:37 mgruner Exp $
+ * $Id: gbfosis.h,v 1.9 2003/06/27 01:41:06 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,11 +22,7 @@
 #define GBFOSIS_H
 
 #include <swfilter.h>
-#include <string>
 #include <stack>
-
-using std::string;
-using std::stack;
 
 SWORD_NAMESPACE_START
 
@@ -36,9 +32,9 @@ private:
 	public:
 		char startChar;
 		char level;
-		string uniqueID;
+		SWBuf uniqueID;
 		char continueCount;
-		QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
+		QuoteInstance(char startChar = '\"', char level = 1, SWBuf uniqueID = "", char continueCount = 0) {
 			this->startChar     = startChar;
 			this->level         = level;
 			this->uniqueID      = uniqueID;
@@ -47,7 +43,7 @@ private:
 		void pushStartStream(SWBuf &text);
 	};
 
-	stack<QuoteInstance> quotes;
+	std::stack<QuoteInstance> quotes;
 public:
 	QuoteStack();
 	virtual ~QuoteStack();

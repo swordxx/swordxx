@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlplain.h>
 
 SWORD_NAMESPACE_START

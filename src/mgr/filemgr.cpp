@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.24 2003/02/25 04:12:47 scribe Exp $
+ * $Id: filemgr.cpp,v 1.25 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,11 +24,11 @@
 #include <utilstr.h>
 
 #include <dirent.h>
+#include <dir.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdio.h>
-#include <string.h>
 #ifndef __GNUC__
 #include <io.h>
 #else
@@ -263,8 +263,69 @@ signed char FileMgr::existsDir(const char *ipath, const char *idirName)
 		sprintf(ch, "/%s", idirName);
 	}
 	signed char retVal = !access(path, 04);
-     delete [] path;
-     return retVal;
+	delete [] path;
+	return retVal;
 }
+
+
+int FileMgr::createParent(const char *pName) {
+	char *buf = new char [ strlen(pName) + 1 ];
+	int retCode = 0;
+	
+	strcpy(buf, pName);
+	int end = strlen(buf) - 1;
+	while (end) {
+		if (buf[end] == '/')
+			break;
+		end--;
+	}
+	buf[end] = 0;
+	if (strlen(buf)>0) {
+		if (access(buf, 02)) {  // not exists with write access?
+			if ((retCode = mkdir(buf))) {
+				createParent(buf);
+				retCode = mkdir(buf);
+			}
+		}
+	}
+	else retCode = -1;
+	delete [] buf;
+	return retCode;
+}
+	
+
+int FileMgr::createPathAndFile(const char *fName) {
+	int fd;
+	
+	fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	if (fd < 1) {
+		createParent(fName);
+		fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	}
+	return fd;
+}
+
+
+int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
+	int sfd, dfd, len;
+	char buf[4096];
+
+	if ((sfd = ::open(sourceFile, O_RDONLY|O_BINARY)) < 1)
+		return -1;
+	if ((dfd = createPathAndFile(targetFile)) < 1)
+		return -1;
+
+	do {
+		len = read(sfd, buf, 4096);
+		write(dfd, buf, len);
+	}
+	while(len == 4096);	
+	::close(dfd);
+	::close(sfd);
+	
+	return 0;
+}
+
+
 
 SWORD_NAMESPACE_END

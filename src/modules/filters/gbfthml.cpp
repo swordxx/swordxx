@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <gbfthml.h>
 
 SWORD_NAMESPACE_START

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.90 2003/06/17 22:14:18 joachim Exp $
+ * $Id: swmgr.cpp,v 1.91 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -248,7 +248,7 @@ void SWMgr::commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload,
 
 SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr) {
 
-	std::string path;
+	SWBuf path;
 	
 	this->filterMgr = filterMgr;
 	if (filterMgr)
@@ -305,8 +305,8 @@ SWMgr::~SWMgr() {
 }
 
 
-void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<std::string> *augPaths) {
-	std::string path;
+void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths) {
+	SWBuf path;
 	ConfigEntMap::iterator entry;
 	ConfigEntMap::iterator lastEntry;
 
@@ -550,7 +550,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 {
    DIR *dir;
    struct dirent *ent;
-   std::string newmodfile;
+   SWBuf newmodfile;
  
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);
@@ -580,7 +580,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 
 
 void SWMgr::augmentModules(const char *ipath) {
-	std::string path = ipath;
+	SWBuf path = ipath;
 	if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
 		path += "/";
 	if (FileMgr::existsDir(path.c_str(), "mods.d")) {
@@ -648,13 +648,13 @@ signed char SWMgr::Load() {
 
 		CreateMods();
 
-		for (std::list<std::string>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
+		for (std::list<SWBuf>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
 			augmentModules(pathIt->c_str());
 		}
 //	augment config with ~/.sword/mods.d if it exists ---------------------
 		char *envhomedir  = getenv ("HOME");
 		if (envhomedir != NULL && configType != 2) { // 2 = user only
-			std::string path = envhomedir;
+			SWBuf path = envhomedir;
 			if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
 				path += "/";
 			path += ".sword/";
@@ -673,22 +673,22 @@ signed char SWMgr::Load() {
 	return ret;
 }
 
-SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &section)
+SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &section)
 {
-	std::string description, datapath, misc1;
+	SWBuf description, datapath, misc1;
 	ConfigEntMap::iterator entry;
 	SWModule *newmod = 0;
-	std::string lang, sourceformat, encoding;
-        signed char direction, enc, markup;
+	SWBuf lang, sourceformat, encoding;
+	signed char direction, enc, markup;
 
-	description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (std::string)"";
-	lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (std::string)"en";
- 	sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (std::string)"";
- 	encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (std::string)"";
+	description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (SWBuf)"";
+	lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (SWBuf)"en";
+ 	sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (SWBuf)"";
+ 	encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (SWBuf)"";
 	datapath = prefixPath;
 	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
 		datapath += "/";
-	misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (std::string)"";
+	misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (SWBuf)"";
 	char *buf = new char [ strlen(misc1.c_str()) + 1 ];
 	char *buf2 = buf;
 	strcpy(buf, misc1.c_str());
@@ -703,14 +703,14 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 
 	section["AbsoluteDataPath"] = datapath;
 
-        if (!stricmp(sourceformat.c_str(), "GBF"))
-                markup = FMT_GBF;
-        else if (!stricmp(sourceformat.c_str(), "ThML"))
-                markup = FMT_THML;
-        else if (!stricmp(sourceformat.c_str(), "OSIS"))
-                markup = FMT_OSIS;
-        else
-                markup = FMT_GBF;
+	if (!stricmp(sourceformat.c_str(), "GBF"))
+		markup = FMT_GBF;
+	else if (!stricmp(sourceformat.c_str(), "ThML"))
+		markup = FMT_THML;
+	else if (!stricmp(sourceformat.c_str(), "OSIS"))
+		markup = FMT_OSIS;
+	else
+		markup = FMT_GBF;
 
 	if (!stricmp(encoding.c_str(), "SCSU"))
 		enc = ENC_SCSU;
@@ -720,22 +720,22 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 	else enc = ENC_LATIN1;
 
 	if ((entry = section.find("Direction")) == section.end()) {
-                direction = DIRECTION_LTR;
-        }
-        else if (!stricmp((*entry).second.c_str(), "rtol")) {
-                direction = DIRECTION_RTL;
-        }
-        else if (!stricmp((*entry).second.c_str(), "bidi")) {
-                direction = DIRECTION_BIDI;
-        }
-        else {
-                direction = DIRECTION_LTR;
-        }
+		direction = DIRECTION_LTR;
+	}
+	else if (!stricmp((*entry).second.c_str(), "rtol")) {
+		direction = DIRECTION_RTL;
+	}
+	else if (!stricmp((*entry).second.c_str(), "bidi")) {
+		direction = DIRECTION_BIDI;
+	}
+	else {
+		direction = DIRECTION_LTR;
+	}
 
-	if ((!stricmp(driver.c_str(), "zText")) || (!stricmp(driver.c_str(), "zCom"))) {
+	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
-		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (std::string)"CHAPTER";
+		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (SWBuf)"CHAPTER";
 		if (!stricmp(misc1.c_str(), "VERSE"))
 			blockType = VERSEBLOCKS;
 		else if (!stricmp(misc1.c_str(), "CHAPTER"))
@@ -743,7 +743,7 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 		else if (!stricmp(misc1.c_str(), "BOOK"))
 			blockType = BOOKBLOCKS;
 
-		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (std::string)"LZSS";
+		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
 #ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
@@ -753,53 +753,53 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 			compress = new LZSSCompress();
 
 		if (compress) {
-			if (!stricmp(driver.c_str(), "zText"))
-				newmod = new zText(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
-			else	newmod = new zCom(datapath.c_str(), name.c_str(), description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
+			if (!stricmp(driver, "zText"))
+				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
+			else	newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
 		}
 	}
 
-	if (!stricmp(driver.c_str(), "RawText")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+	if (!stricmp(driver, "RawText")) {
+		newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
 	// backward support old drivers
-	if (!stricmp(driver.c_str(), "RawGBF")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+	if (!stricmp(driver, "RawGBF")) {
+		newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
-	if (!stricmp(driver.c_str(), "RawCom")) {
-		newmod = new RawCom(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+	if (!stricmp(driver, "RawCom")) {
+		newmod = new RawCom(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
-	if (!stricmp(driver.c_str(), "RawFiles")) {
-		newmod = new RawFiles(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+	if (!stricmp(driver, "RawFiles")) {
+		newmod = new RawFiles(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
-	if (!stricmp(driver.c_str(), "HREFCom")) {
-		misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : (std::string)"";
-		newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
+	if (!stricmp(driver, "HREFCom")) {
+		misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : (SWBuf)"";
+		newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name, description.c_str());
 	}
 
-        string::size_type pos;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
-	if (!stricmp(driver.c_str(), "RawLD")) {
-		newmod = new RawLD(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+        int pos;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
+	if (!stricmp(driver, "RawLD")) {
+		newmod = new RawLD(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
                 pos = 1;
         }
 
-	if (!stricmp(driver.c_str(), "RawLD4")) {
-		newmod = new RawLD4(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
+	if (!stricmp(driver, "RawLD4")) {
+		newmod = new RawLD4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
                 pos = 1;
         }
 
-	if (!stricmp(driver.c_str(), "zLD")) {
+	if (!stricmp(driver, "zLD")) {
 		SWCompress *compress = 0;
 		int blockCount;
-		misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : (std::string)"200";
+		misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : (SWBuf)"200";
 		blockCount = atoi(misc1.c_str());
 		blockCount = (blockCount) ? blockCount : 200;
 
-		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (std::string)"LZSS";
+		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
 #ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
@@ -809,27 +809,32 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
 			compress = new LZSSCompress();
 
 		if (compress) {
-			newmod = new zLD(datapath.c_str(), name.c_str(), description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str());
+			newmod = new zLD(datapath.c_str(), name, description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str());
 		}
-                pos = 1;
+		pos = 1;
 	}
 
-	if (!stricmp(driver.c_str(), "RawGenBook")) {
-		newmod = new RawGenBook(datapath.c_str(), name.c_str(), description.c_str(), 0, enc, direction, markup, lang.c_str());
-                pos = 1;
+	if (!stricmp(driver, "RawGenBook")) {
+		newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+		pos = 1;
 	}
 
-        if (pos == 1) {
-                pos = section["AbsoluteDataPath"].rfind("/");
-                section["AbsoluteDataPath"].erase(pos, section["AbsoluteDataPath"].length() - pos);
-        }
+	if (pos == 1) {
+		SWBuf &dp = section["AbsoluteDataPath"];
+		for (int i = dp.length() - 1; i; i--) {
+			if (dp[i] == '/') {
+				dp.setSize(i);
+				break;
+			}
+		}
+	}
 
-        // if a specific module type is set in the config, use this
-        if ((entry = section.find("Type")) != section.end())
-                newmod->Type(entry->second.c_str());
+	// if a specific module type is set in the config, use this
+	if ((entry = section.find("Type")) != section.end())
+		newmod->Type(entry->second.c_str());
 
-        newmod->setConfig(&section);
-                return newmod;
+	newmod->setConfig(&section);
+	return newmod;
 }
 
 
@@ -872,11 +877,11 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 
 
 void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
-	std::string sourceformat, cipherKey;
+	SWBuf sourceformat, cipherKey;
 	ConfigEntMap::iterator entry;
 
-	cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (std::string)"";
-	if (!cipherKey.empty()) {
+	cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (SWBuf)"";
+	if (cipherKey.length()) {
 		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
 		cipherFilters.insert(FilterMap::value_type(module->Name(), cipherFilter));
 		cleanupFilters.push_back(cipherFilter);
@@ -889,22 +894,21 @@ void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
 
 void SWMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
-
 	if (filterMgr)
 		filterMgr->AddEncodingFilters(module, section);
 }
 
 
 void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
-	std::string sourceformat;
+	SWBuf sourceformat;
 	ConfigEntMap::iterator entry;
 
-	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (std::string)"";
+	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (SWBuf)"";
 
 	// Temporary: To support old module types
-        // TODO: Remove at 1.6.0 release?
-	if (sourceformat.empty()) {
-		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
+	// TODO: Remove at 1.6.0 release?
+	if (!sourceformat.length()) {
+		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
 		if (!stricmp(sourceformat.c_str(), "RawGBF"))
 			sourceformat = "GBF";
 		else sourceformat = "";
@@ -923,13 +927,13 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 
 void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 {
-	std::string sourceformat;
+	SWBuf sourceformat;
 	ConfigEntMap::iterator entry;
 
-	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (std::string)"";
+	sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (SWBuf)"";
 	// Temporary: To support old module types
-	if (sourceformat.empty()) {
-		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
+	if (!sourceformat.length()) {
+		sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
 		if (!stricmp(sourceformat.c_str(), "RawGBF"))
 			sourceformat = "GBF";
 		else sourceformat = "";
@@ -957,13 +961,13 @@ void SWMgr::CreateMods() {
 	ConfigEntMap::iterator end;
 	ConfigEntMap::iterator entry;
 	SWModule *newmod;
-	std::string driver, misc1;
+	SWBuf driver, misc1;
 	for (it = config->Sections.begin(); it != config->Sections.end(); it++) {
 		ConfigEntMap &section = (*it).second;
 		newmod = 0;
 		
-		driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
-		if (!driver.empty()) {
+		driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
+		if (driver.length()) {
 			newmod = CreateMod((*it).first, driver, section);
 			if (newmod) {
 				start = (*it).second.lower_bound("GlobalOptionFilter");
@@ -1002,8 +1006,8 @@ void SWMgr::InstallScan(const char *dirname)
    DIR *dir;
    struct dirent *ent;
    int conffd = 0;
-   std::string newmodfile;
-   std::string targetName;
+   SWBuf newmodfile;
+   SWBuf targetName;
  
 	if (!access(dirname, 04)) {
           if ((dir = opendir(dirname))) {

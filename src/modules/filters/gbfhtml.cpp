@@ -15,12 +15,8 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <gbfhtml.h>
 #include <ctype.h>
-#include <string>
-
-using std::string;
 
 SWORD_NAMESPACE_START
 

@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.22 2003/02/20 07:53:15 scribe Exp $
+ * $Id: swbasicfilter.cpp,v 1.23 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,7 +23,6 @@
  */
 
 #include <stdlib.h>
-#include <string.h>
 #include <swbasicfilter.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -194,7 +193,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	char tokenEndLen   = strlen(tokenEnd);
 	char tokenStartPos = 0, tokenEndPos = 0;
 	DualStringMap userData;
-	std::string lastTextNode;
+	SWBuf lastTextNode;
 
 	bool suspendTextPassThru = false;
 	userData["suspendTextPassThru"] = "false";

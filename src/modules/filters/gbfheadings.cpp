@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <gbfheadings.h>
 #ifndef __GNUC__
 #else

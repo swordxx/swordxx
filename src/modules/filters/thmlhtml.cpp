@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlhtml.h>
 #include <swmodule.h>
 #include <utilxml.h>

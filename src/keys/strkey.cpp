@@ -7,7 +7,6 @@
 #include <swmacs.h>
 #include <utilfuns.h>
 #include <strkey.h>
-#include <string.h>
 #include <stdio.h>
 
 SWORD_NAMESPACE_START

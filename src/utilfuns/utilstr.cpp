@@ -1,4 +1,3 @@
-#include <string.h>
 #include <utilstr.h>
 #include <ctype.h>
 
@@ -10,6 +9,7 @@
 
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
+#include <string.h>
 
 #endif
 

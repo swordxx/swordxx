@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <osisstrongs.h>
 #include <swmodule.h>
 #ifndef __GNUC__
@@ -58,7 +57,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	char *ch;
 	unsigned int textStart = 0, textEnd = 0;
 	bool newText = false;
-	std::string tmp;
+	SWBuf tmp;
 
 	SWBuf orig = text;
 	from = orig.c_str();

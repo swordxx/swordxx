@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string>
 #include <stdarg.h>
 #include <thmlosis.h>
 #include <swmodule.h>
@@ -48,11 +47,11 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	char *wordStart, *wordEnd;
 	bool newText = false;
 	bool newWord = false;
-	std::string tmp;
+	SWBuf tmp;
 	bool suspendTextPassThru = false;
 	bool keepToken = false;
 	bool handled = false;
-	std::string divEnd = "";
+	SWBuf divEnd = "";
 
 
 	wordStart = text;
@@ -355,7 +354,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 
 const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
-	static std::string outRef;
+	static SWBuf outRef;
 
 	outRef = "";
 

@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlheadings.h>
 #include <utilxml.h>
 

@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlwebif.h>
 #include <swmodule.h>
 #include <utilweb.h>
@@ -32,7 +31,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userDa
 
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		XMLTag tag(token);
-		std::string url;
+		SWBuf url;
 		if (!strcmp(tag.getName(), "sync")) {
 			const char* value = tag.getAttribute("value");
 			url = value;

@@ -239,5 +239,205 @@ int removeModule(SWMgr *manager, const char *modName) {
 	}
 	return 1;
 }
+
+
+
+InstallSource::InstallSource(const char *confEnt, const char *type) {
+	char *buf = 0;
+	stdstr(&buf, confEnt);
+
+	caption = strtok(buf, "|");
+	source = strtok(0, "|");
+	directory = strtok(0, "|");
+	delete [] buf;
+	this->type = type;
+	mgr = 0;
+}
+
+
+InstallSource::~InstallSource() {
+	if (mgr)
+		delete mgr;
+}
+
+
+int installModule(const char *fromLocation, const char *modName, InstallSource *is) {
+	SectionMap::iterator module, section;
+	ConfigEntMap::iterator fileBegin;
+	ConfigEntMap::iterator fileEnd;
+	ConfigEntMap::iterator entry;
+	SWBuf sourceDir;
+	SWBuf buffer;
+	bool aborted = false;
+	bool cipher = false;
+
+	sourceDir = fromLocation;
+/*	
+	if (ist)
+		sourceDir = (SWBuf)"./sources/" + ist->is.source;
+	else	sourceDir = getLocalDir();
+*/	
+	SWMgr mgr(sourceDir.c_str());
+	
+	module = mgr.config->Sections.find(modName);
+
+	if (module != mgr.config->Sections.end()) {
+	
+		entry = module->second.find("CipherKey");
+		if (entry != module->second.end())
+			cipher = true;
+		
+		fileEnd = module->second.upper_bound("File");
+		fileBegin = module->second.lower_bound("File");
+
+		if (fileBegin != fileEnd) {	// copy each file
+			if (is) {
+				while (fileBegin != fileEnd) {	// ftp each file first
+					buffer = sourceDir + "/" + fileBegin->second.c_str();
+					if (FTPCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
+						aborted = true;
+						break;	// user aborted
+					}
+					fileBegin++;
+				}
+				fileBegin = module->second.lower_bound("File");
+			}
+
+			if (!aborted) {
+				// DO THE INSTALL
+				while (fileBegin != fileEnd) {
+					copyFileToCWD(sourceDir.c_str(), fileBegin->second.c_str());
+					fileBegin++;
+				}
+			}
+			//---------------
+
+			if (is) {
+				fileBegin = module->second.lower_bound("File");
+				while (fileBegin != fileEnd) {	// delete each tmp ftp file
+					buffer = sourceDir + "/" + fileBegin->second.c_str();
+					remove(buffer.c_str());
+					fileBegin++;
+				}
+			}
+		}
+		else {	//copy all files in DataPath directory
+			DIR *dir;
+			struct dirent *ent;
+			ConfigEntMap::iterator entry;
+			SWBuf modDir;
+			SWBuf modFile;
+			SWBuf sourceOrig = sourceDir;
+
+			entry = module->second.find("DataPath");
+			if (entry != module->second.end()) {
+				modDir = entry->second.c_str();
+				entry = module->second.find("ModDrv");
+				if (entry != module->second.end()) {
+					if (!strcmp(entry->second.c_str(), "RawLD") || !strcmp(entry->second.c_str(), "RawLD4") || !strcmp(entry->second.c_str(), "zLD") || !strcmp(entry->second.c_str(), "RawGenBook") || !strcmp(entry->second.c_str(), "zGenBook")) {
+						char *buf = new char [ strlen(modDir.c_str()) + 1 ];
+	
+						strcpy(buf, modDir.c_str());
+						int end = strlen(buf) - 1;
+						while (end) {
+							if (buf[end] == '/')
+								break;
+							end--;
+						}
+						buf[end] = 0;
+						modDir = buf;
+						delete [] buf;
+					}
+				}
+
+				if (is) {
+					buffer = sourceDir + "/" + modDir;
+					if (FTPCopy(is, modDir.c_str(), buffer.c_str(), true)) {
+						aborted = true;	// user aborted
+					}
+				}
+				sourceDir += "/";
+				sourceDir += modDir;
+				if (!aborted) {
+					if (dir = opendir(sourceDir.c_str())) {
+						rewinddir(dir);
+						while ((ent = readdir(dir))) {
+							if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+								modFile = modDir;
+								modFile += "/";
+								modFile += ent->d_name;
+								copyFileToSWORDInstall(sourceOrig.c_str(), modFile.c_str());
+							}
+						}
+						closedir(dir);
+					}
+				}
+				if (is) {		// delete tmp ftp files
+					if (dir = opendir(sourceDir.c_str())) {
+						rewinddir(dir);
+						while ((ent = readdir(dir))) {
+							if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+								modFile = sourceOrig + "/" + modDir;
+								modFile += "/";
+								modFile += ent->d_name;
+								remove(modFile.c_str());
+							}
+						}
+						closedir(dir);
+					}
+				}
+				sourceDir = sourceOrig;
+				sourceDir += "/mods.d/";
+				if (!aborted) {
+					if (dir = opendir(sourceDir.c_str())) {	// find and copy .conf file
+						rewinddir(dir);
+						while ((ent = readdir(dir))) {
+							if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+								modFile = sourceDir;
+								modFile += ent->d_name;
+								SWConfig *config = new SWConfig(modFile.c_str());
+								if (config->Sections.find(modName) != config->Sections.end()) {
+									delete config;
+									SWBuf targetFile = manager->configPath; //"./mods.d/";
+									targetFile += "/";
+									targetFile += ent->d_name;
+									FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
+									if (cipher) {
+										CipherForm->modName = modName;
+										CipherForm->confFile = targetFile;
+										if (CipherForm->ShowModal() == mrCancel) {
+											removeModule(modName);
+											aborted = true;
+										}
+									}
+								}
+								else	delete config;
+							}
+						}
+						closedir(dir);
+					}
+				}
+			}
+		}
+		return (aborted) ? -1 : 0;
+	}
+	return 1;
+}
+
+
+int copyFileToSWORDInstall(const char *sourceDir, const char *fName) {
+	SWBuf sourcePath = sourceDir;
+	sourcePath += fName;
+
+	SWBuf dest;
+	dest = manager->prefixPath;
+	if ((manager->prefixPath[strlen(manager->prefixPath)-1] != '\\') && ( manager->prefixPath[strlen(manager->prefixPath)-1] != '/'))
+	   dest += "/";
+	  dest += fName;
+
+	return FileMgr::copyFile(sourcePath.c_str(), dest.c_str());
+}
+
+
 SWORD_NAMESPACE_END
 

@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlolb.h>
 
 SWORD_NAMESPACE_START

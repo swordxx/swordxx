@@ -13,7 +13,6 @@
 #include <unistd.h>
 #endif
 
-#include <string>
 #include <utilfuns.h>
 #include <rawverse.h>
 #include <rawtext.h>
@@ -27,14 +26,13 @@
 #define O_BINARY 0
 #endif
 
-using std::string;
 using std::map;
 using std::list;
 using std::find;
 
 SWORD_NAMESPACE_START
 
-typedef  map < string, list<long> > strlist;
+typedef  map < SWBuf, list<long> > strlist;
 typedef list<long> longlist;
 
 /******************************************************************************
@@ -49,7 +47,7 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
           RawVerse(ipath) {
           
-	string fname;
+	SWBuf fname;
 	fname = path;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
@@ -57,7 +55,7 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 	
 	for (int loop = 0; loop < 2; loop++) {
      	fastSearch[loop] = 0;
-		string fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat"));
+		SWBuf fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat"));
 		if (!access(fastidxname.c_str(), 04)) {
 			fastidxname = (fname + ((loop)?"ntwords.idx":"otwords.idx"));
 			if (!access(fastidxname.c_str(), 04))
@@ -148,7 +146,7 @@ signed char RawText::createSearchFramework() {
 	// dictionary holds words associated with a list
 	// containing every module position that contains
 	// the word.  [0] Old Testament; [1] NT
-	map < string, list<long> > dictionary[2];
+	map < SWBuf, list<long> > dictionary[2];
 
 
 	// save key information so as not to disrupt original
@@ -211,7 +209,7 @@ signed char RawText::createSearchFramework() {
 	unsigned long offset, entryoff;
 	unsigned short size;
 
-	string fname;
+	SWBuf fname;
 	fname = path;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))

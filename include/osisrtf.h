@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osisrtf.h,v 1.2 2003/02/20 07:25:19 scribe Exp $
+ * $Id: osisrtf.h,v 1.3 2003/06/27 01:41:06 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,19 +23,12 @@
 
 #include <swbasicfilter.h>
 
-#include <string>
-
-using std::string;
-
 SWORD_NAMESPACE_START
 
 /** this filter converts OSIS text to RTF text
  */
 class SWDLLEXPORT OSISRTF : public SWBasicFilter {
 private:
-	string tagData;
-	string::size_type pos1;
-	string::size_type pos2;
 
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);

@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <osismorph.h>
 #include <utilxml.h>
 #ifndef __GNUC__

@@ -3,8 +3,8 @@
  *				compression utilities.
  */
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <swcomprs.h>
 
 SWORD_NAMESPACE_START

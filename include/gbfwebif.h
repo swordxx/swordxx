@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: gbfwebif.h,v 1.1 2003/06/01 14:32:09 joachim Exp $
+ * $Id: gbfwebif.h,v 1.2 2003/06/27 01:41:06 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,15 +22,14 @@
 #define GBFWEBIF_H
 
 #include <gbfhtmlhref.h>
-#include <string>
 
 SWORD_NAMESPACE_START
 
 /** this filter converts GBF  text to HTML text with hrefs
  */
 class SWDLLEXPORT GBFWEBIF : public GBFHTMLHREF {
-	const std::string baseURL;
-	const std::string passageStudyURL;
+	const SWBuf baseURL;
+	const SWBuf passageStudyURL;
 
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);

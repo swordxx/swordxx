@@ -2,7 +2,7 @@
 *  swmgr.h   - definition of class SWMgr used to interact with an install
 *				base of sword modules.
 *
-* $Id: swmgr.h,v 1.53 2003/02/28 13:12:43 mgruner Exp $
+* $Id: swmgr.h,v 1.54 2003/06/27 01:41:06 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -40,7 +40,6 @@
 #define SWMGR_H
 
 #include <sys/types.h>
-#include <string>
 #include <map>
 #include <list>
 #include <swmodule.h>
@@ -52,8 +51,8 @@
 
 SWORD_NAMESPACE_START
 
-typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
-typedef std::map < std::string, SWFilter * >FilterMap;
+typedef std::map < SWBuf, SWModule *, std::less < SWBuf > >ModMap;
+typedef std::map < SWBuf, SWFilter * >FilterMap;
 
 /** SWMgr is the main class of the Sword library.
 *
@@ -63,7 +62,7 @@ typedef std::map < std::string, SWFilter * >FilterMap;
 *
 * To get the SWModule objects of the instalelled modules use @ref Modules for this.
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id: swmgr.h,v 1.53 2003/02/28 13:12:43 mgruner Exp $
+* @version $Id: swmgr.h,v 1.54 2003/06/27 01:41:06 scribe Exp $
 */
 class SWDLLEXPORT SWMgr {
 
@@ -76,7 +75,7 @@ protected:
 	SWConfig *mysysconfig;
 	SWConfig *homeConfig;
 	void CreateMods();
-	SWModule *CreateMod(std::string name, std::string driver, ConfigEntMap & section);
+	SWModule *CreateMod(const char *name, const char *driver, ConfigEntMap & section);
 	void DeleteMods();
 	char configType;		// 0 = file; 1 = directory
 	FilterMap optionFilters;
@@ -96,7 +95,7 @@ protected:
 	virtual void AddLocalOptions(SWModule * module, ConfigEntMap & section,
 	ConfigEntMap::iterator start,
 	ConfigEntMap::iterator end);
-	std::list<std::string> augPaths;
+	std::list<SWBuf> augPaths;
 
 	/**
 	* Adds the encoding filters which are defined in "section" to the SWModule object "module".
@@ -137,7 +136,7 @@ public:
 	/**
 	*
 	*/
-	static void findConfig(char *configType, char **prefixPath, char **configPath, std::list<std::string> *augPaths = 0);
+	static void findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths = 0);
 	/** The global config object.
 	* This is the global config object. It contains all items of all modules,
 	* so lookups of entries should use this config object.

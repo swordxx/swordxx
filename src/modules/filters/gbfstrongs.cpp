@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <gbfstrongs.h>
 #include <swmodule.h>
 #ifndef __GNUC__
@@ -57,7 +56,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	char *ch;
 	unsigned int textStart = 0, textEnd = 0;
 	bool newText = false;
-	std::string tmp;
+	SWBuf tmp;
 	const char *from;
 
 	SWBuf orig = text;

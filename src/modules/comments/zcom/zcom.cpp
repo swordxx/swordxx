@@ -14,7 +14,6 @@
 #include <unistd.h>
 #endif
 
-#include <string.h>
 #include <utilfuns.h>
 #include <zverse.h>
 #include <zcom.h>

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: thmlwebif.h,v 1.1 2003/06/01 14:32:09 joachim Exp $
+ * $Id: thmlwebif.h,v 1.2 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,15 +22,14 @@
 #define _ThMLWEBIF_H
 
 #include <thmlhtmlhref.h>
-#include <string>
 
 SWORD_NAMESPACE_START
 
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLWEBIF : public ThMLHTMLHREF {
-	const std::string baseURL;
-	const std::string passageStudyURL;
+	const SWBuf baseURL;
+	const SWBuf passageStudyURL;
 
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);

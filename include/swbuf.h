@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.14 2003/06/26 04:33:31 scribe Exp $
+* $Id: swbuf.h,v 1.15 2003/06/27 01:41:06 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -130,20 +130,20 @@ public:
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param str Append this.
  	*/
-	void append(const char *str);
+	void append(const char *str, int max = -1);
 
 	/**
- 	* SWBuf::append - appends a value to the current value of this SWBuf
+	* SWBuf::append - appends a value to the current value of this SWBuf
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param str Append this.
- 	*/
-	void append(const SWBuf &str);
+	*/
+	inline void append(const SWBuf &str, int max = -1) { append(str.c_str(), max); }
 
 	/**
- 	* SWBuf::append - appends a value to the current value of this SWBuf
+	* SWBuf::append - appends a value to the current value of this SWBuf
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param ch Append this.
- 	*/
+	*/
 	inline void append(char ch) {
 		assureSize((end-buf) + 2);
 		*end = ch;
@@ -152,7 +152,7 @@ public:
 	}
 
 	/**
- 	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf
+	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf
 	* WARNING: This function can only write at most
 	* JUNKBUFSIZE to the string per call.
 	* @param format The format string. Same syntax as printf, for example.

@@ -4,7 +4,6 @@
  *		  etc.)
  */
 
-#include <string.h>
 #include <swmodule.h>
 #include <utilfuns.h>
 #include <regex.h>	// GNU

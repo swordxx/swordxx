@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilweb.h,v 1.1 2003/06/01 14:32:09 joachim Exp $
+ * $Id: utilweb.h,v 1.2 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,7 +23,7 @@
 #define UTILWEB_H
 
 #include <defs.h>
-#include <string>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -32,7 +32,7 @@ SWORD_NAMESPACE_START
 * http://www.crosswire.org/test.jsp?force=1&amp;help=1
 * This function works on the data of the buf parameter.
 */
-const std::string encodeURL( const std::string& buf );
+const SWBuf encodeURL( const SWBuf& buf );
 
 SWORD_NAMESPACE_END
 

@@ -5,7 +5,6 @@
  */
 
 #include <utilfuns.h>
-#include <string.h>
 #include <stdlib.h>
 #include <swkey.h>
 #include <listkey.h>

@@ -14,7 +14,6 @@
 #include <unistd.h>
 #endif
 
-#include <string.h>
 #include <stdlib.h>
 #include <utilfuns.h>
 #include <zstr.h>

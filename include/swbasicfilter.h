@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.13 2003/02/20 07:25:20 scribe Exp $
+ * $Id: swbasicfilter.h,v 1.14 2003/06/27 01:41:06 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,6 @@
 
 #include <swfilter.h>
 #include <map>
-#include <string>
 
 SWORD_NAMESPACE_START
 
@@ -61,7 +60,7 @@ public:
 protected:
 	const SWModule *module;
 	const SWKey *key;
-	typedef std::map<std::string, std::string> DualStringMap;
+	typedef std::map<SWBuf, SWBuf> DualStringMap;
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;
 

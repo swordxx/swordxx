@@ -22,8 +22,8 @@
 //*****************************************************************************
 
 #include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "Greek2Greek.h"
 #include "GreekChars.h"

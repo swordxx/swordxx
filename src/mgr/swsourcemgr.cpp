@@ -2,7 +2,7 @@
  *  swsourcemgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swsourcemgr.cpp,v 1.1 2002/10/23 23:14:39 dglassey Exp $
+ * $Id: swsourcemgr.cpp,v 1.2 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 2002 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,13 +24,12 @@
  #include "filemgr.h"
  #include "utilstr.h"
  #include "swconfig.h"
- #include <string>
  #include <dirent.h>
  
  SWORD_NAMESPACE_START
  
  SWSourceMgr::SWSourceMgr(const char *iConfigPath) {
-	std::string path;
+	SWBuf path;
 	
 	//init();
 	
@@ -59,7 +58,7 @@ void SWSourceMgr::loadConfigDir(const char *ipath)
 {
    DIR *dir;
    struct dirent *ent;
-   std::string newmodfile;
+   SWBuf newmodfile;
  
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);

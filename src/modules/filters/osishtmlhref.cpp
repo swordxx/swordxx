@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <osishtmlhref.h>
 #include <utilxml.h>
 #include <versekey.h>
@@ -111,7 +110,7 @@ bool OSISHTMLHref::handleToken(SWBuf &buf, const char *token, DualStringMap &use
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {	
 			if (!tag.isEmpty() && !tag.isEndTag()) {		
-				string footnoteNum = userData["fn"];
+				SWBuf footnoteNum = userData["fn"];
 				SWBuf type = tag.getAttribute("type");
 				
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off

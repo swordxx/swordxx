@@ -3,9 +3,8 @@
  *				compression utilities. - using zlib
  */
 
-#include <string.h>
-#include <string>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <zipcomprs.h>
 #include <zlib.h>

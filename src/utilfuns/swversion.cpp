@@ -1,7 +1,7 @@
 #include <swversion.h>
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 SWORD_NAMESPACE_START
 

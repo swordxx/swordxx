@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <gbfredletterwords.h>
 #include <swmodule.h>
 #ifndef __GNUC__

@@ -30,7 +30,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, DualStringMap &userDat
 	char val[128];
 	char *valto;
 	const char *num;
-	std::string url;
+	SWBuf url;
 
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "w", 1)) {

@@ -6,7 +6,6 @@
 
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlfootnotes.h>
 #ifndef __GNUC__
 #else

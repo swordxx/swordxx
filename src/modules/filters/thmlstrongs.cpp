@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <thmlstrongs.h>
 #include <swmodule.h>
 #ifndef __GNUC__
@@ -57,7 +56,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	char *valto;
 	char *ch;
 	unsigned int textStart = 0, textEnd = 0;
-	std::string tmp;
+	SWBuf tmp;
 	bool newText = false;
 
 		SWBuf orig = text;

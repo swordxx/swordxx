@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <thmlrtf.h>
 #include <swmodule.h>
 

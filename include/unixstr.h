@@ -1,7 +1,7 @@
 // Include only if your UNIX compiler does not include stricmp but does include strcasecmp
 /*
  *
- * $Id: unixstr.h,v 1.3 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: unixstr.h,v 1.4 2003/06/27 01:41:07 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,7 +21,6 @@
 
 #ifndef UNIXSTR_H
 #define UNIXSTR_H
-#include <string.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START

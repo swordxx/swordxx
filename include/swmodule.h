@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.65 2003/06/18 23:37:21 scribe Exp $
+* $Id: swmodule.h,v 1.66 2003/06/27 01:41:07 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -53,9 +53,9 @@ SWORD_NAMESPACE_START
 
 typedef std::list < SWFilter * >FilterList;
 
-typedef std::map < std::string, std::string, std::less < std::string > > AttributeValue;
-typedef std::map < std::string, AttributeValue, std::less < std::string > > AttributeList;
-typedef std::map < std::string, AttributeList, std::less < std::string > > AttributeTypeList;
+typedef std::map < SWBuf, SWBuf, std::less < SWBuf > > AttributeValue;
+typedef std::map < SWBuf, AttributeValue, std::less < SWBuf > > AttributeList;
+typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList;
 
 #define SWTextDirection char
 #define SWTextEncoding char

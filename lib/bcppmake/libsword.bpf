@@ -125,6 +125,7 @@ USEUNIT("..\..\src\modules\filters\gbfwebif.cpp");
 USEUNIT("..\..\src\utilfuns\utilweb.cpp");
 USEUNIT("..\..\src\modules\filters\osisfootnotes.cpp");
 USEUNIT("..\..\src\modules\filters\osishtmlhref.cpp");
+USEUNIT("..\..\src\utilfuns\swversion.cpp");
 //---------------------------------------------------------------------------
 USE("\\			preptext(entrybuf);
 ", File);

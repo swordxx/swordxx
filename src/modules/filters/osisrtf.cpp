@@ -15,30 +15,28 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <string.h>
 #include <osisrtf.h>
 #include <utilxml.h>
 #include <versekey.h>
 
 SWORD_NAMESPACE_START
 
-OSISRTF::OSISRTF()
-{
-  setTokenStart("<");
-  setTokenEnd(">");
+OSISRTF::OSISRTF() {
+	setTokenStart("<");
+	setTokenEnd(">");
   
-  setEscapeStart("&");
-  setEscapeEnd(";");
+	setEscapeStart("&");
+	setEscapeEnd(";");
   
-  setEscapeStringCaseSensitive(true);
+	setEscapeStringCaseSensitive(true);
   
-  addEscapeStringSubstitute("amp", "&");
-  addEscapeStringSubstitute("apos", "'");
-  addEscapeStringSubstitute("lt", "<");
-  addEscapeStringSubstitute("gt", ">");
-  addEscapeStringSubstitute("quot", "\"");
+	addEscapeStringSubstitute("amp", "&");
+	addEscapeStringSubstitute("apos", "'");
+	addEscapeStringSubstitute("lt", "<");
+	addEscapeStringSubstitute("gt", ">");
+	addEscapeStringSubstitute("quot", "\"");
   
-  setTokenCaseSensitive(true);  
+	setTokenCaseSensitive(true);  
 }
 
 bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
@@ -121,7 +119,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEmpty() && !tag.isEndTag()) {
-				string footnoteNum = userData["fn"];
+				SWBuf footnoteNum = userData["fn"];
 				SWBuf type = tag.getAttribute("type");
 
 				if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off

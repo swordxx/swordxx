@@ -18,7 +18,6 @@
 #include <unistd.h>
 #endif
 
-#include <string.h>
 #include <utilfuns.h>
 #include <versekey.h>
 #include <zverse.h>

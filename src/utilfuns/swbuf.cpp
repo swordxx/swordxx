@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.9 2003/06/26 04:33:31 scribe Exp $
+* $Id: swbuf.cpp,v 1.10 2003/06/27 01:41:08 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -21,7 +21,6 @@
 
 #include <swbuf.h>
 
-#include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -108,25 +107,20 @@ void SWBuf::set(const SWBuf &newVal) {
 	end = buf + (len-1);
 }
 
-/******************************************************************************
-* SWBuf::append - appends a value to the current value of this SWBuf
-*/
-void SWBuf::append(const char *str) {
-	unsigned int len = strlen(str) + 1;
-	assureSize((end-buf)+len);
-	memcpy(end, str, len);
-	end += (len-1);
-}
 
 /******************************************************************************
 * SWBuf::append - appends a value to the current value of this SWBuf
 */
-void SWBuf::append(const SWBuf &str) {
-	unsigned int len = str.length() + 1;
+void SWBuf::append(const char *str, int max) {
+	unsigned int len = strlen(str) + 1;
+	if ((max > -1) && (len > max + 1))
+		len = max + 1;
 	assureSize((end-buf)+len);
-	memcpy(end, str.c_str(), len);
+	memcpy(end, str, len-1);
 	end += (len-1);
+	*end = 0;
 }
+
 
 /******************************************************************************
 * SWBuf::setSize - Size this buffer to a specific length

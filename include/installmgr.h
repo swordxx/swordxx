@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <vector>
 #include <defs.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -28,6 +29,24 @@ struct FtpFile {
   FILE *stream;
 };
 
+
+class InstallSource {
+public:
+	InstallSource(const char *confEnt, const char *type);
+	virtual ~InstallSource();
+	SWBuf getConfEnt() {
+		return caption +"|" + source + "|" + directory;
+	}
+	SWBuf type;
+	SWBuf source;
+	SWBuf directory;
+	SWBuf caption;
+	SWMgr *mgr;
+};
+
+
+
+
 int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
 int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 
@@ -47,6 +66,9 @@ char FTPURLGetFile(void *session, const char *dest, const char *sourceurl, bool 
 // instead of ftpparse
 std::vector<struct ftpparse> FTPURLGetDir(void *session, const char *dirurl, bool passive = true);
 int removeModule(SWMgr *manager, const char *modName);
+int installModule(const char *fromLocation, const char *modName, InstallSource *is);
+int copyFileToSWORDInstall(const char *sourceDir, const char *fName);
+
 
 SWORD_NAMESPACE_END
 

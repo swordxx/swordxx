@@ -7,7 +7,6 @@
 #ifdef _ICU_
 
 #include <stdlib.h>
-#include <string.h>
 
 #ifdef __GNUC__
 #include <unixstr.h>

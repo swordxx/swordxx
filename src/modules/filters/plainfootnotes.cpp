@@ -19,7 +19,6 @@
 #include <swkey.h>
 
 #include <stdlib.h>
-#include <string.h>
 #ifndef __GNUC__
 #else
 #include <unixstr.h>
