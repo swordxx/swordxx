@@ -115,14 +115,14 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		}
 	}
 
-	char *lang = getenv ("LANG");
+/*	char *lang = getenv ("LANG");
 	if (lang) {
 		if (strlen(lang) > 0)
 			setDefaultLocaleName(lang);
 		else stdstr(&defaultLocaleName, "en_US");
 
 	}
-	else stdstr(&defaultLocaleName, "en_US");
+	else*/ stdstr(&defaultLocaleName, "en_US");
 
 	if (prefixPath)
 		delete [] prefixPath;
