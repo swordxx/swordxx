@@ -53,41 +53,53 @@ char readline(int fd, char **buf) {
 
 int main(int argc, char **argv) {
 
+	// Let's test our command line arguments
 	if (argc < 2) {
 //		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod> [0|1 - file includes prepended verse references]\n", argv[0]);
-		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod>\n", argv[0]);
+		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod/>\n", argv[0]);
 		exit(-1);
 	}
 
+	// Let's see if we can open our input file
 	int fd = open(argv[1], O_RDONLY|O_BINARY);
 	if (fd < 0) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[1]);
-		exit(-1);
-	}
-
-	if (RawVerse::CreateModule(argv[2])) {
-		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
 		exit(-2);
 	}
 
+	// Try to initialize a default set of datafiles and indicies at our
+	// datapath location passed to us from the user.
+	// This call- CreateModule should probably become part of the standard
+	// module driver interface.
+	if (RawVerse::CreateModule(argv[2])) {
+		fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+		exit(-3);
+	}
+
+	// not used yet, but for future support of a vpl file with each line
+	// prepended with verse reference, eg. "Gen 1:1 In the beginning..."
 	bool vref = false;
 	if (argc > 2)
 		vref = (argv[2][0] == '0') ? false : true;
 
+	// Do some initialization stuff
 	char *buffer = 0;
-	RawText mod(argv[2]);
+	RawText mod(argv[2]);	// open our datapath with our RawText driver.
 
 	VerseKey *vkey = (VerseKey *)(SWKey *)mod;
-
 	vkey->Headings(1);	// turn on mod/testmnt/book/chap headings
 
+
+	// Loop through module from TOP to BOTTOM and set next line from
+	// input file as text for this entry in the module
 	mod = TOP;
 
 	while ((!mod.Error()) && (!readline(fd, &buffer))) {
-		mod << buffer;
-		mod++;
+		mod << buffer;	// save text to module at current position
+		mod++;	// increment module position
 	}
 
+	// clear up our buffer that readline might have allocated
 	if (buffer)
 		delete [] buffer;
 }
