@@ -14,11 +14,17 @@
 #include <unistd.h>
 #endif
 
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
 #include <defs.h>
 #include <vector>
+#include <swmgr.h>
+#include <dirent.h>
 
 using namespace std;
 
@@ -141,5 +147,89 @@ void FTPCloseSession(void *session) {
 	curl_easy_cleanup(curl);
 }
 
+
+int removeModule(SWMgr *manager, const char *modName) {
+	SectionMap::iterator module;
+	ConfigEntMap::iterator fileBegin;
+	ConfigEntMap::iterator fileEnd, entry;
+
+	module = manager->config->Sections.find(modName);
+
+	if (module != manager->config->Sections.end()) {
+			
+		fileBegin = module->second.lower_bound("File");
+		fileEnd = module->second.upper_bound("File");
+
+		if (fileBegin != fileEnd) {	// remove each file
+			while (fileBegin != fileEnd) {
+				//remove file
+				remove(fileBegin->second.c_str());
+				fileBegin++;
+			}
+		}
+		else {	//remove all files in DataPath directory
+
+			DIR *dir;
+			struct dirent *ent;
+			ConfigEntMap::iterator entry;
+			string modDir;
+			string modFile;
+
+			entry = module->second.find("DataPath");
+			if (entry != module->second.end()) {
+				modDir = entry->second.c_str();
+				entry = module->second.find("ModDrv");
+				if (entry != module->second.end()) {
+					if (!strcmp(entry->second.c_str(), "RawLD") || !strcmp(entry->second.c_str(), "RawLD4") || !strcmp(entry->second.c_str(), "zLD") || !strcmp(entry->second.c_str(), "RawGenBook") || !strcmp(entry->second.c_str(), "zGenBook")) {
+						char *buf = new char [ strlen(modDir.c_str()) + 1 ];
+	
+						strcpy(buf, modDir.c_str());
+						int end = strlen(buf) - 1;
+						while (end) {
+							if (buf[end] == '/')
+								break;
+							end--;
+						}
+						buf[end] = 0;
+						modDir = buf;
+						delete [] buf;
+					}
+				}
+
+				if (dir = opendir(modDir.c_str())) {
+					rewinddir(dir);
+					while ((ent = readdir(dir))) {
+						if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+							modFile = modDir;
+							modFile += "/";
+							modFile += ent->d_name;
+							remove(modFile.c_str());
+						}
+					}
+					closedir(dir);
+				}
+				if (dir = opendir(manager->configPath)) {	// find and remove .conf file
+					rewinddir(dir);
+					while ((ent = readdir(dir))) {
+						if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+							modFile = manager->configPath;
+							modFile += "/";
+							modFile += ent->d_name;
+							SWConfig *config = new SWConfig(modFile.c_str());
+							if (config->Sections.find(modName) != config->Sections.end()) {
+								delete config;
+								remove(modFile.c_str());
+							}
+							else	delete config;
+						}
+					}
+					closedir(dir);
+				}
+			}
+		}
+		return 0;
+	}
+	return 1;
+}
 SWORD_NAMESPACE_END
 

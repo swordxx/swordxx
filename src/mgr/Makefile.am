@@ -23,3 +23,4 @@ libsword_la_SOURCES += $(mgrdir)/filemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swlocale.cpp
 libsword_la_SOURCES += $(mgrdir)/localemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swcacher.cpp
+libsword_la_SOURCES += $(mgrdir)/installmgr.cpp

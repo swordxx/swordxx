@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+30-May-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added removeModule to installmgr.cpp, copied from
+		Windows InstallMgr.
+
 26-May-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added first cut of osis2mod using the ESV as a
 		basic template.  Works with VerseKey mods
