@@ -420,7 +420,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				inTerm = false;
 				break;
 			}
-			if (inTerm) break;
+			if (inTerm) {
+				book[tobook++] = ' ';
+				break;
+			}
 		case '-': 
 		case ',': // on number new verse
 		case ';': // on number new chapter
