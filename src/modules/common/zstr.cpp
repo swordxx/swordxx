@@ -357,7 +357,9 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 		size = swordtoarch32(size);
 
 		*buf = (*buf) ? (char *)realloc(*buf, size + 1) : (char *)malloc(size + 1);
+		*idxbuf = (*idxbuf) ? (char *)realloc(*idxbuf, size + 1) : (char *)malloc(size + 1);
 		memset(*buf, 0, size + 1);
+		memset(*idxbuf, 0, size + 1);
 		lseek(datfd->getFd(), start, SEEK_SET);
 		read(datfd->getFd(), *buf, (int)(size));
 

@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+20-Dec-2001     Troy A. Griffitts <scribe@crosswire.org>
+	Added first cut of zLD
+
 13-Dec-2001     Troy A. Griffitts <scribe@crosswire.org>
 	Added __u16, __u32, and __u64 raw data types
 	Added byte swapping macros
