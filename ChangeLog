@@ -3,6 +3,8 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 11-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added David White's recommendation to cache strlen
+		in stdstr to improve performance.
 	Added Helmer Krämer's fix for case insensitive code
 		in SWBasicFilter
 

@@ -16,8 +16,9 @@ char *stdstr(char **ipstr, const char *istr) {
 	if (istr) {
 		if (*ipstr)
 			delete [] *ipstr;
-		*ipstr = new char [ strlen(istr) + 1 ];
-		strcpy(*ipstr, istr);
+		int len = strlen(istr) + 1;
+		*ipstr = new char [ len ];
+		memcpy(*ipstr, istr, len);
 	}
 	return *ipstr;
 }
@@ -35,9 +36,10 @@ char *strstrip(char *istr) {
 	char *tmp = istr;
 	char *rtmp;
 
-	if (strlen(istr) < 1)
+	int len = strlen(istr);
+	if (len < 1)
 		return istr;
-	rtmp = istr + (strlen(istr) - 1);
+	rtmp = istr + len - 1);
 	
 	while (*rtmp == ' ') *(rtmp--) = 0;
 	while (*tmp == ' ') tmp++;
