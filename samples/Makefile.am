@@ -1,3 +1,5 @@
+EXTRA_DIST += samples/mods.d/globals.conf
+
 if INSTCONF
 modsDATA = samples/mods.d/globals.conf
 
