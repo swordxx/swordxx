@@ -9,7 +9,7 @@ EntriesBlock::EntriesBlock(const char *iBlock, long size) {
 
 
 EntriesBlock::EntriesBlock() {
-	block = (char *)calloc(1, 4);
+	block = (char *)calloc(1, sizeof(__u32));
 }
 
 
