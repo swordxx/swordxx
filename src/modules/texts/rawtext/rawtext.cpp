@@ -30,8 +30,12 @@
 using std::string;
 using std::map;
 using std::list;
+using std::find;
 
 SWORD_NAMESPACE_START
+
+typedef  map < string, list<long> > strlist;
+typedef list<long> longlist;
 
 /******************************************************************************
  * RawText Constructor - Initializes data for instance of RawText
@@ -211,8 +215,8 @@ signed char RawText::createSearchFramework() {
 	// --------- Let's output an index from our dictionary -----------
 	int datfd;
 	int idxfd;
-	map < string, list<long> >::iterator it;
-	list<long>::iterator it2;
+	strlist::iterator it;
+	longlist::iterator it2;
 	unsigned long offset, entryoff;
 	unsigned short size;
 
@@ -427,7 +431,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 				indexes.sort();
 
 				// iterate thru each good module position that meets the search
-				for (list <long>::iterator it = indexes.begin(); it != indexes.end(); it++) {
+				for (longlist::iterator it = indexes.begin(); it != indexes.end(); it++) {
 
 					// set a temporary verse key to this module position
 					vk.Testament(j+1);
