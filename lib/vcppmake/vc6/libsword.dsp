@@ -267,6 +267,10 @@ SOURCE=..\..\..\src\utilfuns\zlib\infutil.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\mgr\installmgr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\latin1utf16.cpp
 # End Source File
 # Begin Source File
@@ -299,6 +303,14 @@ SOURCE=..\..\..\src\modules\filters\osisheadings.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\osishtmlhref.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\osislemma.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\osismorph.cpp
 # End Source File
 # Begin Source File
@@ -307,7 +319,15 @@ SOURCE=..\..\..\src\modules\filters\osisplain.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\osisredletterwords.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\osisrtf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\osisscripref.cpp
 # End Source File
 # Begin Source File
 
@@ -444,6 +464,10 @@ SOURCE=..\..\..\src\mgr\swmgr.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\modules\swmodule.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\swoptfilter.cpp
 # End Source File
 # Begin Source File
 
