@@ -105,53 +105,69 @@ protected:
 	/** Sets the end of token start sequence (by default ">").*/
 	void setTokenEnd(const char *tokenEnd);
 
-	/** Sets whether pass thru unknown tokens unchanged or just ignore (remove) them.
+	/** Sets whether to pass thru an unknown token unchanged
+	 *	or just remove it.
 	 * Default is false.*/
 	void setPassThruUnknownToken(bool val);
 
-	/** Sets whether pass thru unknown escape sequences unchanged or just ignore (remove) them.
-	 * Default is false.*/
+	/** Sets whether to pass thru an unknown escape sequence unchanged
+	 *	or just remove it.
+	 *	Default is false.
+	 */
 	void setPassThruUnknownEscapeString(bool val);
 
 	/** Are escapeStrings case sensitive or not? Call this
-	function before addEscapeStingSubstitute()*/
+	 *	function before addEscapeStingSubstitute()
+	 */
 	void setEscapeStringCaseSensitive(bool val);
-	/** Use this to add your own escapeString substitutes. It will replace them
-	if they already exist.*/
+
+	/** Registers an esc control sequence
+	 */
 	void addEscapeStringSubstitute(const char *findString, const char *replaceString);
-	/** Remove excapeStringSubstitutes from the list */
-	void deleteEscapeStringSubstitute(const char *findString);
+	/** Unregisters an esc control sequence
+	 */
+	void removeEscapeStringSubstitute(const char *findString);
+
 	/** This function performs the substitution of escapeStrings */
 	bool substituteEscapeString(SWBuf &buf, const char *escString);
 
-	/** Are tokens case sensitive (like in OSIS) or not? Call this
-	function before addTokenSubstitute()*/
+	/** Are tokens case sensitive (like in GBF) or not? Call this
+	 *	function before addTokenSubstitute()
+	 */
 	void setTokenCaseSensitive(bool val);
-	/** Use this to add your own token substitutes. It will replace them
-	if they already exist.*/
+
+	/** Registers a simple token substitutions.  Usually called from the
+	 *	c-tor of a subclass
+	 */
 	void addTokenSubstitute(const char *findString, const char *replaceString);
-	/** Remove tokenSubstitutes from the list */
-	void deleteTokenSubstitute(const char *findString);
+
+	/** Unregisters a simple token substitute
+	 */
+	void removeTokenSubstitute(const char *findString);
+
 	/** This function performs the substitution of tokens */
 	bool substituteToken(SWBuf &buf, const char *token);
 
 	/** This function is called for every token encountered in the input text.
-	* @param buf the output buffer (FIXME: what is its size?)
-	* @param token the token (e.g. <code>"p align='left'"</code>
-	* @param userData FIXME: document this
-	* @return <code>false</code> if was not handled and should be handled in
-	* the default way (by just substituting).*/
+	 * @param buf the output buffer
+	 * @param token the token (e.g. <code>"p align='left'"</code>
+	 * @param userData user storage space for data transient to 1 full buffer parse
+	 * @return subclasses should return true if they handled the token, or false if they did not.
+	 */
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+
 	virtual bool processStage(char stage, SWBuf &text, char *&from, BasicFilterUserData *userData) { return false; }
 	virtual void setStageProcessing(char stages) { processStages = stages; }	// see STATICs up above
 
 	/** This function is called for every escape sequence encountered in the input text.
-	* @param buf the output buffer (FIXME: what is its size?)
-	* @param escString the escape sequence (e.g. <code>"amp"</code> for &amp;amp;)
-	* @param userData FIXME: document this
-	* @return <code>false</code> if was not handled and should be handled in
-	* the default way (by just substituting).*/
+	 * @param buf the output buffer 
+	 * @param escString the escape sequence (e.g. <code>"amp"</code> for &amp;amp;)
+	 * @param userData user storage space for data transient to 1 full buffer parse
+	 * @return <code>false</code> if was not handled and should be handled in
+	 * @return subclasses should return true if they handled the esc seq, or false if they did not.
+	 */
 	virtual bool handleEscapeString(SWBuf &buf, const char *escString, BasicFilterUserData *userData);
+
 };
 
 SWORD_NAMESPACE_END

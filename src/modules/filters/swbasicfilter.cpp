@@ -101,7 +101,7 @@ void SWBasicFilter::addTokenSubstitute(const char *findString, const char *repla
 }
 
 
-void SWBasicFilter::deleteTokenSubstitute(const char *findString) {
+void SWBasicFilter::removeTokenSubstitute(const char *findString) {
 	if (tokenSubMap.find(findString) != tokenSubMap.end()) {
 		tokenSubMap.erase( tokenSubMap.find(findString) );
 	}
@@ -119,7 +119,7 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 	else escSubMap.insert(DualStringMap::value_type(findString, replaceString));
 }
 
-void SWBasicFilter::deleteEscapeStringSubstitute(const char *findString) {
+void SWBasicFilter::removeEscapeStringSubstitute(const char *findString) {
 	if (escSubMap.find(findString) != escSubMap.end()) {
 		escSubMap.erase( escSubMap.find(findString) );
 	}

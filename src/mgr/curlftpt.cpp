@@ -96,11 +96,11 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 		curl_easy_setopt(session, CURLOPT_VERBOSE, true);
 		
 		/* FTP connection settings */
-#if LIBCURL_VERSION_MAJOR >= 7
-#define EPRT_AVAILABLE 1
-#if (LIBCURL_VERSION_MINOR<=10) || (LIBCURL_VERSION_MINOR==10 && LIBCURL_VERSION_PATCH<=6)
-#undef EPRT_AVAILABLE
-#endif
+
+#if (LIBCURL_VERSION_MAJOR > 7) || \
+   ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR > 10)) || \
+   ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR == 10) && (LIBCURL_VERSION_PATCH >= 6))
+#      define EPRT_AVAILABLE 1
 #endif
 
 #ifdef EPRT_AVAILABLE
