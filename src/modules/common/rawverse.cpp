@@ -261,6 +261,36 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf)
 
 
 /******************************************************************************
+ * RawVerse::linkentry	- links one entry to another
+ *
+ * ENT: testmt	- testament to find (0 - Bible/module introduction)
+ *	destidxoff	- dest offset into .vss
+ *	srcidxoff		- source offset into .vss
+ */
+
+void RawVerse::linkentry(char testmt, long destidxoff, long srcidxoff) {
+	long start;
+	unsigned short size;
+
+	destidxoff *= 6;
+	srcidxoff  *= 6;
+
+	if (!testmt)
+		testmt = ((idxfp[1]) ? 1:2);
+
+	// get source
+	lseek(idxfp[testmt-1]->getFd(), srcidxoff, SEEK_SET);
+	read(idxfp[testmt-1]->getFd(), &start, 4);
+	read(idxfp[testmt-1]->getFd(), &size, 2);
+
+	// write dest
+	lseek(idxfp[testmt-1]->getFd(), destidxoff, SEEK_SET);
+	write(idxfp[testmt-1]->getFd(), &start, 4);
+	write(idxfp[testmt-1]->getFd(), &size, 2);
+}
+
+
+/******************************************************************************
  * RawVerse::CreateModule	- Creates new module files
  *
  * ENT: path	- directory to store module files

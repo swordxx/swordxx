@@ -20,6 +20,7 @@ protected:
 	char *path;
 	void preptext(char *buf);
 	void settext(char testmt, long idxoff, const char *buf);
+	void linkentry(char testmt, long destidxoff, long srcidxoff);
 	
 public:
 	char nl;

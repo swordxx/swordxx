@@ -461,6 +461,7 @@ RawText &RawText::operator =(POSITION p) {
 	return *this;
 }
 
+
 SWModule &RawText::operator <<(const char *inbuf) {
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
@@ -474,5 +475,37 @@ SWModule &RawText::operator <<(const char *inbuf) {
 		key = new VerseKey(this->key);
 
 	settext(key->Testament(), key->Index(), inbuf);
+
 	return *this;
 }
+
+
+SWModule &RawText::operator <<(const SWKey *inkey) {
+	VerseKey *destkey = 0;
+	const VerseKey *srckey = 0;
+	// see if we have a VerseKey * or decendant
+	try {
+		destkey = dynamic_cast<VerseKey *>(this->key);
+	}
+	catch ( ... ) {
+	}
+	// if we don't have a VerseKey * decendant, create our own
+	if (!destkey)
+		destkey = new VerseKey(this->key);
+
+	// see if we have a VerseKey * or decendant
+	try {
+		srckey = dynamic_cast<const VerseKey *>(inkey);
+	}
+	catch ( ... ) {
+	}
+	// if we don't have a VerseKey * decendant, create our own
+	if (!srckey)
+		srckey = new VerseKey(inkey);
+
+	linkentry(destkey->Testament(), destkey->Index(), srckey->Index());
+
+	return *this;
+}
+
+
