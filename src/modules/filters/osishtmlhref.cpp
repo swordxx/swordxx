@@ -19,12 +19,15 @@
 #include <utilxml.h>
 #include <versekey.h>
 #include <swmodule.h>
+#include <url.h>
 
 SWORD_NAMESPACE_START
 
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+	if (module) 
+		version = module->Name();
 }
 
 
@@ -54,10 +57,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
-
+		
 		// <w> tag
 		if (!strcmp(tag.getName(), "w")) {
-
+ 
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
 				u->w = token;
@@ -95,12 +98,21 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						if (i < 0) i = 0;	// to handle our -1 condition
 						val = strchr(attrib, ':');
 						val = (val) ? (val + 1) : attrib;
+						SWBuf gh;
+						if(*val == 'G')
+							gh = "Greek";
+						if(*val == 'H')
+							gh = "Hebrew";
 						const char *val2 = val;
 						if ((strchr("GH", *val)) && (isdigit(val[1])))
 							val2++;
 						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 							show = false;
-						else	buf.appendFormatted(" <small><em>&lt;<a href=\"type=Strongs value=%s\">%s</a>&gt;</em></small> ", val, val2);
+						else buf.appendFormatted(" <small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small> ", 
+							(gh.length()) ? gh.c_str() : "", 
+							URL::encode(val2).c_str(), 
+							val2);
+						
 					} while (++i < count);
 				}
 				if ((attrib = tag.getAttribute("morph")) && (show)) {
@@ -118,7 +130,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 							const char *val2 = val;
 							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 								val2+=2;
-							buf.appendFormatted(" <small><em>(<a href=\"type=morph class=%s value=%s\">%s</a>)</em></small> ", tag.getAttribute("morph"), val, val2);
+							buf.appendFormatted(" <small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\">%s</a>)</em></small> ", 
+								URL::encode(tag.getAttribute("morph")).c_str(),
+								URL::encode(val).c_str(), 
+								val2);
 						} while (++i < count);
 					}
 				}
@@ -148,8 +163,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						}
 						SWCATCH ( ... ) {	}
 						if (vkey) {
+							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
 							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-							buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
+							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup>*%c</sup></small></a> ", 
+								ch, 
+								URL::encode(footnoteNumber.c_str()).c_str(), 
+								URL::encode(u->version.c_str()).c_str(), 
+								URL::encode(vkey->getText()).c_str(), 
+								ch);
 						}
 					}
 					u->suspendTextPassThru = true;

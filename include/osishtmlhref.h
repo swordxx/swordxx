@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: osishtmlhref.h,v 1.10 2004/03/27 19:35:30 mgruner Exp $
+ * $Id: osishtmlhref.h,v 1.11 2004/07/21 16:47:26 tbiggs Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,6 +37,7 @@ protected:
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
+		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
