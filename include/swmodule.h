@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.17 2001/02/21 21:26:16 scribe Exp $
+ * $Id: swmodule.h,v 1.18 2001/03/03 21:24:19 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,7 @@
 
 #include <defs.h>
 
-#define FILTERPAD 3
+#define FILTERPAD 5
 
 using namespace std;
 
