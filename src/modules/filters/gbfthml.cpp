@@ -25,23 +25,18 @@ GBFThML::GBFThML()
 }
 
 
-char GBFThML::ProcessText(char *text, int maxlen)
-{
-	char *to, *from, token[2048];
+char GBFThML::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+	const char *from;
+	char token[2048];
 	int tokpos = 0;
 	bool intoken 	= false;
 	int len;
 	const char *tok;
 
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;							// -------------------------------
+	SWBuf orig = text;
+	from = orig.c_str();
 
-	for (to = text; *from; from++)
-	{
+	for (text = ""; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
@@ -59,75 +54,17 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			  switch(token[1]) {
 			  case 'G':
 			  case 'H':			    
-			    *to++ = '<';
-			    *to++ = 's';
-			    *to++ = 'y';
-			    *to++ = 'n';
-			    *to++ = 'c';
-			    *to++ = ' ';
-			    *to++ = 't';
-			    *to++ = 'y';
-			    *to++ = 'p';
-			    *to++ = 'e';
-			    *to++ = '=';
-			    *to++ = '"';
-			    *to++ = 'S';
-			    *to++ = 't';
-			    *to++ = 'r';
-			    *to++ = 'o';
-			    *to++ = 'n';
-			    *to++ = 'g';
-			    *to++ = 's';
-			    *to++ = '"';
-			    *to++ = ' ';
-			    *to++ = 'v';
-			    *to++ = 'a';
-			    *to++ = 'l';
-			    *to++ = 'u';
-			    *to++ = 'e';
-			    *to++ = '=';
-			    *to++ = '"';
+			    text += "<sync type=\"Strongs\" value=\"";
 			    for (tok = token + 1; *tok; tok++)
-			      *to++ = *tok;
-			    *to++ = '"';
-			    *to++ = ' ';
-			    *to++ = '/';
-			    *to++ = '>';
+				 text += *tok;
+			    text += "\" />";
 			    continue;
 			    
 			  case 'T':               // Tense
-			    *to++ = '<';
-			    *to++ = 's';
-			    *to++ = 'y';
-			    *to++ = 'n';
-			    *to++ = 'c';
-			    *to++ = ' ';
-			    *to++ = 't';
-			    *to++ = 'y';
-			    *to++ = 'p';
-			    *to++ = 'e';
-			    *to++ = '=';
-			    *to++ = '"';
-			    *to++ = 'M';
-			    *to++ = 'o';
-			    *to++ = 'r';
-			    *to++ = 'p';
-			    *to++ = 'h';
-			    *to++ = '"';
-			    *to++ = ' ';
-			    *to++ = 'v';
-			    *to++ = 'a';
-			    *to++ = 'l';
-			    *to++ = 'u';
-			    *to++ = 'e';
-			    *to++ = '=';
-			    *to++ = '"';
+			    text += "<sync type=\"Morph\" value=\"";
 			    for (tok = token + 2; *tok; tok++)
-			      *to++ = *tok;
-			    *to++ = '"';
-			    *to++ = ' ';
-			    *to++ = '/';
-			    *to++ = '>';
+				 text += *tok;
+			    text += "\" />";
 			    continue;
 				}
 			  break;
@@ -135,221 +72,99 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			  switch(token[1])
 			    {
 			    case 'X':
-			      *to++ = '<';
-			      *to++ = 'a';
-			      *to++ = ' ';
-			      *to++ = 'h';
-			      *to++ = 'r';
-			      *to++ = 'e';
-			      *to++ = 'f';
-			      *to++ = '=';
-			      *to++ = '\"';
-			      for (tok = token + 3; *tok; tok++) {
+				 text += "<a href=\"";
+				 for (tok = token + 3; *tok; tok++) {
 				if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
-				  *to++ = *tok;
+				  text += *tok;
 				}
 				else {
 				  break;
 				}
-			      }
-			      *to++ = '\"';
-			      *to++ = '>';
-			      continue;
+				 }
+				 text += "\">";
+				 continue;
 			    case 'x':
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'a';
-			      *to++ = '>';
-			      continue;
+				 text += "</a>";
+				 continue;
 			    case 'F':               // footnote begin
-			      *to++ = '<';
-			      *to++ = 'n';
-			      *to++ = 'o';
-			      *to++ = 't';
-			      *to++ = 'e';
-			      *to++ = '>';
-			      continue;
+				 text += "<note>";
+				 continue;
 			    case 'f':               // footnote end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'n';
-			      *to++ = 'o';
-			      *to++ = 't';
-			      *to++ = 'e';
-			      *to++ = '>';
-			      continue;
+				 text += "</note>";
+				 continue;
 			    }
 			  break;
 			case 'F':			// font tags
 			  switch(token[1])
 			    {
 			    case 'N':
-			      *to++ = '<';
-			      *to++ = 'f';
-			      *to++ = 'o';
-			      *to++ = 'n';
-			      *to++ = 't';
-			      *to++ = ' ';
-			      *to++ = 'f';
-			      *to++ = 'a';
-			      *to++ = 'c';
-			      *to++ = 'e';
-			      *to++ = '=';
-			      *to++ = '"';		
-			      for (tok = token + 2; *tok; tok++)
-				*to++ = *tok;
-			      *to++ = '"';
-			      *to++ = '>';
-			      continue;
+				 text += "<font face=\"";
+				 for (tok = token + 2; *tok; tok++)
+					text += *tok;
+				text += "\">";
+				 continue;
 			    case 'n':
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'f';
-			      *to++ = 'o';
-			      *to++ = 'n';
-			      *to++ = 't';
-			      *to++ = '>';
-			      continue;
+				 text += "</font>";
+				 continue;
 			    case 'I':		// italic start
-			      *to++ = '<';
-			      *to++ = 'i';
-			      *to++ = '>';
-			      continue;
+				 text += "<i>";
+				 continue;
 			    case 'i':		// italic end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'i';
-			      *to++ = '>';
-			      continue;
+				 text += "</i>";
+				 continue;
 			    case 'B':		// bold start
-			      *to++ = '<';
-			      *to++ = 'b';
-			      *to++ = '>';
-			      continue;
+				 text += "<b>";
+				 continue;
 			    case 'b':		// bold end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'b';
-			      *to++ = '>';
-			      continue;
+				 text += "</b>";
+				 continue;
 
 			    case 'R':		// words of Jesus begin
-			      *to++ = '<';
-			      *to++ = 'f';
-			      *to++ = 'o';
-			      *to++ = 'n';
-			      *to++ = 't';
-			      *to++ = ' ';
-			      *to++ = 'c';
-			      *to++ = 'o';
-			      *to++ = 'l';
-			      *to++ = 'o';
-			      *to++ = 'r';
-			      *to++ = '=';
-			      *to++ = '\"';
-			      *to++ = '#';
-			      *to++ = 'f';
-			      *to++ = 'f';
-			      *to++ = '0';
-			      *to++ = '0';
-			      *to++ = '0';
-			      *to++ = '0';
-			      *to++ = '\"';
-			      *to++ = '>';
-			      continue;
+				 text += "<font color=\"#ff0000\">";
+				 continue;
 			    case 'r':		// words of Jesus end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'f';
-			      *to++ = 'o';
-			      *to++ = 'n';
-			      *to++ = 't';
-			      *to++ = '>';
-			      continue;
+				 text += "</font>";
+				 continue;
 			    case 'U':		// Underline start
-			      *to++ = '<';
-			      *to++ = 'u';
-			      *to++ = '>';
-			      continue;
+				 text += "<u>";
+				 continue;
 			    case 'u':		// Underline end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'u';
-			      *to++ = '>';
-			      continue;
+				 text += "</u>";
+				 continue;
 			    case 'O':		// Old Testament quote begin
-			      *to++ = '<';
-			      *to++ = 'c';
-			      *to++ = 'i';
-			      *to++ = 't';
-			      *to++ = 'e';
-			      *to++ = '>';
-			      continue;
+				 text += "<cite>";
+				 continue;
 			    case 'o':		// Old Testament quote end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'c';
-			      *to++ = 'i';
-			      *to++ = 't';
-			      *to++ = 'e';
-			      *to++ = '>';
-			      continue;
+				 text += "</cite>";
+				 continue;
 			    case 'S':		// Superscript begin
-			      *to++ = '<';
-			      *to++ = 's';
-			      *to++ = 'u';
-			      *to++ = 'p';
-			      *to++ = '>';
-			      continue;
+				 text += "<sup>";
+				 continue;
 			    case 's':		// Superscript end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 's';
-			      *to++ = 'u';
-			      *to++ = 'p';
-			      *to++ = '>';
-			      continue;
+				 text += "</sup>";
+				 continue;
 			    case 'V':		// Subscript begin
-			      *to++ = '<';
-			      *to++ = 's';
-			      *to++ = 'u';
-			      *to++ = 'b';
-			      *to++ = '>';
-			      continue;
+				 text += "<sub>";
+				 continue;
 			    case 'v':		// Subscript end
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 's';
-			      *to++ = 'u';
-			      *to++ = 'b';
-			      *to++ = '>';
-			      continue;
+				 text += "</sub>";
+				 continue;
 			    }
 			  break;
 			case 'C':			// special character tags
 			  switch(token[1])
 				{
 				case 'A':               // ASCII value
-				  *to++ = (char)atoi(&token[2]);
+				  text += (char)atoi(&token[2]);
 				  continue;
 				case 'G':
 				  //*to++ = ' ';
 				  continue;
 				case 'L':               // line break
-				  *to++ = '<';
-				  *to++ = 'b';
-				  *to++ = 'r';
-				  *to++ = ' ';
-				  *to++ = '/';
-				  *to++ = '>';
-				  *to++ = ' ';
+				 text += "<br /> ";
 				  continue;
 				case 'M':               // new paragraph
-				  *to++ = '<';
-				  *to++ = 'p';
-				  *to++ = ' ';
-				  *to++ = '/';
-				  *to++ = '>';
+				 text += "<p />";
 				  continue;
 				case 'T':
 				  //*to++ = ' ';
@@ -360,76 +175,28 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			  switch(token[1])
 			    {
 			    case 'T':               // Book title begin
-			      *to++ = '<';
-			      *to++ = 'b';
-			      *to++ = 'i';
-			      *to++ = 'g';
-			      *to++ = '>';
-			      continue;
+				 text += "<big>";
+				 continue;
 			    case 't':
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'b';
-			      *to++ = 'i';
-			      *to++ = 'g';
-			      *to++ = '>';
-			      continue;
+				 text += "</big>";
+				 continue;
 			    case 'S':
-			      *to++ = '<';
-			      *to++ = 'd';
-			      *to++ = 'i';
-			      *to++ = 'v';
-			      *to++ = ' ';
-			      *to++ = 'c';
-			      *to++ = 'l';
-			      *to++ = 'a';
-			      *to++ = 's';
-			      *to++ = 's';
-			      *to++ = '=';
-			      *to++ = '\"';
-			      *to++ = 's';
-			      *to++ = 'e';
-			      *to++ = 'c';
-			      *to++ = 'h';
-			      *to++ = 'e';
-			      *to++ = 'a';
-			      *to++ = 'd';
-			      *to++ = '\"';
-			      *to++ = '>';
-			      continue;
+				 text += "<div class=\"sechead\">";
+				 continue;
 			    case 's':
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'd';
-			      *to++ = 'i';
-			      *to++ = 'v';
-			      *to++ = '>';
-			      continue;
+				 text += "</div>";
+				 continue;
 			    }
 			  break;
 
 			case 'P':			// special formatting
-			  switch(token[1])
-			    {
+			  switch(token[1]) {
 			    case 'P':               // Poetry begin
-			      *to++ = '<';
-			      *to++ = 'v';
-			      *to++ = 'e';
-			      *to++ = 'r';
-			      *to++ = 's';
-			      *to++ = 'e';
-			      *to++ = '>';
-			      continue;
+				 text += "<verse>";
+				 continue;
 			    case 'p':
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'v';
-			      *to++ = 'e';
-			      *to++ = 'r';
-			      *to++ = 's';
-			      *to++ = 'e';
-			      *to++ = '>';
-			      continue;
+				 text += "</verse>";
+				 continue;
 			    }
 			  break;
 			}
@@ -440,10 +207,8 @@ char GBFThML::ProcessText(char *text, int maxlen)
 				token[tokpos++] = *from;
 				token[tokpos+2] = 0;
 		}
-		else	*to++ = *from;
+		else	text += *from;
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 

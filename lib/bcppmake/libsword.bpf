@@ -37,8 +37,6 @@ USEUNIT("..\..\src\modules\filters\gbfthml.cpp");
 USEUNIT("..\..\src\modules\filters\plainfootnotes.cpp");
 USEUNIT("..\..\src\modules\filters\plainhtml.cpp");
 USEUNIT("..\..\src\modules\filters\rtfhtml.cpp");
-USEUNIT("..\..\src\modules\filters\rwphtml.cpp");
-USEUNIT("..\..\src\modules\filters\rwprtf.cpp");
 USEUNIT("..\..\src\modules\filters\thmlgbf.cpp");
 USEUNIT("..\..\src\modules\filters\thmlhtml.cpp");
 USEUNIT("..\..\src\modules\filters\thmlplain.cpp");
