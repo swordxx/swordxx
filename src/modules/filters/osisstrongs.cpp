@@ -63,6 +63,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 		if (*from == '>') {	// process tokens
 			intoken = false;
 			if ((*token == 'w') && (token[1] == ' ')) {	// Word
+				*wordstr = 0;
 				if (module->isProcessEntryAttributes()) {
 					valto = val;
 					char *num = strstr(token, "lemma=\"x-Strongs:");					
@@ -103,6 +104,11 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 							module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 						}
 					}
+				}
+				if (wordstr) {
+					strcat(token, " wn=\"");
+					strcat(token, wordstr);
+					strcat(token, "\"");
 				}
 				if (!option) {
 					char *num = strstr(token, "lemma=\"x-Strongs:");
