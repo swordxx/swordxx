@@ -541,19 +541,19 @@ const char *SWModule::StripText(char *buf, int len)
 	SWKey *key = 0;
 
 	if (versebuf) {
-		int size = getEntrySize();
-          if (size == -1)
+		unsigned long size = (len < 0) ? getEntrySize() * FILTERPAD : len;
+          if (size < 0)
           	size = strlen(versebuf);
-		if (size) {
+		if (size > 0) {
 			key = (SWKey *)*this;
 
-			optionFilter(versebuf, len, key);
+			optionFilter(versebuf, size, key);
 	
 			if (render) {
-				renderFilter(versebuf, len, key);
-				encodingFilter(versebuf, len, key);
+				renderFilter(versebuf, size, key);
+				encodingFilter(versebuf, size, key);
 			}
-			else	stripFilter(versebuf, len, key);
+			else	stripFilter(versebuf, size, key);
 		}
 	}
 	else {
