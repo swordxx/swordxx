@@ -257,7 +257,7 @@ int VerseKey::getBookAbbrev(char *abbr)
 
 /******************************************************************************
  * VerseKey::ParseVerseList - Attempts to parse a buffer into separate
- *				verse entries returned in an ListKey
+ *				verse entries returned in a ListKey
  *
  * ENT:	buf		- buffer to parse;
  *	defaultKey	- if verse, chap, book, or testament is left off,
@@ -265,9 +265,11 @@ int VerseKey::getBookAbbrev(char *abbr)
  *				Gen would be used when parsing the 4:5 section)
  *
  * RET:	ListKey reference filled with verse entries contained in buf
+ *
+ * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
  */
 
-ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey)
+ListKey &VerseKey::ParseVerseList(char *buf, const char *defaultKey, char max)
 {
 	SWKey textkey;
 
@@ -466,6 +468,7 @@ VerseKey &VerseKey::LowerBound(const char *lb)
 		initBounds();
 
 	(*lowerBound) = lb;
+	lowerBound->Normalize();
 
 	return (*lowerBound);
 }
@@ -480,7 +483,30 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 	if (!upperBound) 
 		initBounds();
 
+// need to set upperbound parsing to resolve to max verse/chap if not specified
 	(*upperBound) = ub;
+	upperBound->Normalize();
+
+// until we have a proper method to resolve max verse/chap use this kludge
+	int len = strlen(ub);
+	bool alpha = false;
+	bool versespec = false;
+	bool chapspec = false;
+	for (int i = 0; i < len; i++) {
+		if (isalpha(ub[i]))
+			alpha = true;
+		if (ub[i] == ':')	// if we have a : we assume verse spec
+			versespec = true;
+		if ((isdigit(ub[i])) && (alpha))	// if digit after alpha assume chap spec
+			chapspec = true;
+	}
+	if (!chapspec)
+		*upperBound = MAXCHAPTER;
+	if (!versespec)
+		*upperBound = MAXVERSE;
+	
+
+// -- end kludge
 
 	return (*upperBound);
 }
@@ -610,6 +636,13 @@ SWKey &VerseKey::operator =(POSITION p)
 		chapter   = UpperBound().Chapter();
 		verse     = UpperBound().Verse();
 		break;
+	case POS_MAXVERSE:
+		verse     = books[testament-1][book-1].versemax[chapter-1];
+		break;
+	case POS_MAXCHAPTER:
+		verse     = 1;
+		chapter   = books[testament-1][book-1].chapmax;
+		break;
 	} 
 	Normalize(1);
 	Error();	// clear error from normalize
@@ -627,10 +660,14 @@ SWKey &VerseKey::operator =(POSITION p)
 
 SWKey &VerseKey::operator += (int increment)
 {
+	char ierror = 0;
 	Index(Index() + increment);
-	while ((!verse) && (!headings) && (!Error())) 
+	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() + 1);
+		ierror = Error();
+	}
 
+	error = (ierror) ? ierror : error;
 	return *this;
 }
 
@@ -648,11 +685,14 @@ SWKey &VerseKey::operator -= (int decrement)
 	char ierror = 0;
 
 	Index(Index() - decrement);
-	while ((!verse) && (!headings) && (!(ierror = Error()))) 
+	while ((!verse) && (!headings) && (!ierror)) {
 		Index(Index() - 1);
+		ierror = Error();
+	}
 	if ((ierror) && (!headings))
 		(*this)++;
 
+	error = (ierror) ? ierror : error;
 	return *this;
 }
 

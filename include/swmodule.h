@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swmodule.h,v 1.2 1999/07/06 04:45:49 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -55,6 +55,8 @@ public:
 	virtual ~SWModule();
 	virtual char Error();
 	virtual char SetKey(const SWKey &ikey);
+	virtual SWKey &Key() const { return *key; }
+	virtual char Key(const SWKey &ikey) { return SetKey(ikey); }
 	virtual const char *KeyText(char *imodtype = 0);
 	virtual char Display();
 	virtual SWDisplay *Disp(SWDisplay *idisp = 0);

@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swkey.h,v 1.2 1999/07/06 04:45:49 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,8 +38,8 @@ public:
 #define POS_TOP ((char)1)
 #define POS_BOTTOM ((char)2)
 
-#define TOP POSITION(1)
-#define BOTTOM POSITION(2)
+#define TOP POSITION(POS_TOP)
+#define BOTTOM POSITION(POS_BOTTOM)
 
 class SWKey {
 protected:
