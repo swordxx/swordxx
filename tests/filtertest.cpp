@@ -13,7 +13,7 @@ using namespace std;
 
 #define MAXBUF 30000
 int main(int argc, char **argv) {
-	SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
+	SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_RTF));
 	mgr.setGlobalOption("Strong's Numbers", "on");
 	mgr.setGlobalOption("Morphological Tags", "on");
 	SWModule *module = mgr.Modules["KJV2003"];
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 		module = mgr.Modules.begin()->second;
 
     //ThMLOSIS filter;
-    module->Key() = ((argc > 1) ? argv[1] : "acts 2:1");
+    module->Key() = ((argc > 1) ? argv[1] : "john 1:1");
     /*
     char *buf = new char [ MAXBUF ];
     memset(buf, 0, MAXBUF);
@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
     std::cout << buf << "\n\n+++++++\n";
     delete [] buf;
     */
-    cout << *module << "\n";
+    cout << module->Name() << " : " << module->KeyText() << "\n";
+    cout << module->RenderText() << "\n";
     return 0;
 }

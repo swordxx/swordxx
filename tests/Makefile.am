@@ -5,7 +5,8 @@ LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_PROGRAMS = keytest mgrtest parsekey listtest casttest modtest \
 compnone complzss localetest keycast introtest indextest configtest \
-romantest testblocks filtertest rawldidxtest lextest swaptest genbooktest treeidxtest
+romantest testblocks filtertest rawldidxtest lextest swaptest genbooktest treeidxtest \
+swbuftest
 
 if ICU
 ICUPROG = icutest translittest tlitmgrtest
@@ -56,3 +57,5 @@ rawldidxtest_SOURCES = rawldidxtest.cpp
 swaptest_SOURCES = swaptest.cpp
 treeidxtest_SOURCES = treeidxtest.cpp
 genbooktest_SOURCES = genbooktest.cpp
+swbuftest_SOURCES = swbuftest.cpp
+

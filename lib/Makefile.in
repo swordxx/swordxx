@@ -167,7 +167,7 @@ globalconfdir := @sysconfdir@
 
 lib_LTLIBRARIES = libsword.la
 
-libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(SWREGEX) $(utilfunsdir)/roman.cpp $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp $(mgrdir)/swsourcemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfredletterwords.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp $(filtersdir)/gbfosis.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/osismorph.cpp $(filtersdir)/osisstrongs.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(filtersdir)/greeklexattribs.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp $(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
+libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(utilfunsdir)/swbuf.cpp $(SWREGEX) $(utilfunsdir)/roman.cpp $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp $(mgrdir)/swsourcemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfredletterwords.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp $(filtersdir)/gbfosis.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/osismorph.cpp $(filtersdir)/osisstrongs.cpp $(filtersdir)/osisplain.cpp $(filtersdir)/osisrtf.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(filtersdir)/greeklexattribs.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp $(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
 @ICU_TRUE@libsword_la_LIBADD = -licui18n -licuuc -lustdio
 @ICU_FALSE@libsword_la_LIBADD = 
 libsword_la_LDFLAGS = -version-info 1
@@ -239,26 +239,26 @@ am__libsword_la_SOURCES_DIST = $(keysdir)/swkey.cpp \
 	$(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp \
 	$(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp \
 	$(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp \
-	$(utilfunsdir)/regex.c $(utilfunsdir)/roman.cpp \
-	$(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp \
-	$(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp \
-	$(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp \
-	$(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp \
-	$(mgrdir)/swcacher.cpp $(mgrdir)/swsourcemgr.cpp \
-	$(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp \
-	$(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp \
-	$(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp \
-	$(commondir)/lzsscomprs.cpp $(commondir)/zipcomprs.cpp \
-	$(commondir)/rawverse.cpp $(commondir)/swcipher.cpp \
-	$(commondir)/zverse.cpp $(commondir)/zstr.cpp \
-	$(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp \
-	$(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp \
-	$(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp \
-	$(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp \
-	$(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp \
-	$(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp \
-	$(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp \
-	$(filtersdir)/gbfheadings.cpp \
+	$(utilfunsdir)/swbuf.cpp $(utilfunsdir)/regex.c \
+	$(utilfunsdir)/roman.cpp $(mgrdir)/swconfig.cpp \
+	$(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp \
+	$(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp \
+	$(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp \
+	$(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp \
+	$(mgrdir)/swsourcemgr.cpp $(frontenddir)/swdisp.cpp \
+	$(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp \
+	$(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp \
+	$(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp \
+	$(commondir)/zipcomprs.cpp $(commondir)/rawverse.cpp \
+	$(commondir)/swcipher.cpp $(commondir)/zverse.cpp \
+	$(commondir)/zstr.cpp $(commondir)/entriesblk.cpp \
+	$(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp \
+	$(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp \
+	$(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp \
+	$(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp \
+	$(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp \
+	$(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp \
+	$(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp \
 	$(filtersdir)/gbfredletterwords.cpp $(filtersdir)/gbfmorph.cpp \
 	$(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp \
 	$(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp \
@@ -269,6 +269,7 @@ am__libsword_la_SOURCES_DIST = $(keysdir)/swkey.cpp \
 	$(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp \
 	$(filtersdir)/gbfosis.cpp $(filtersdir)/thmlplain.cpp \
 	$(filtersdir)/osismorph.cpp $(filtersdir)/osisstrongs.cpp \
+	$(filtersdir)/osisplain.cpp $(filtersdir)/osisrtf.cpp \
 	$(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp \
 	$(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp \
 	$(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp \
@@ -299,26 +300,28 @@ am__libsword_la_SOURCES_DIST = $(keysdir)/swkey.cpp \
 @ICUSWORD_TRUE@	utf8nfkd.lo utf8arshaping.lo utf8bidireorder.lo
 am_libsword_la_OBJECTS = swkey.lo listkey.lo versekey.lo strkey.lo \
 	treekey.lo treekeyidx.lo Greek2Greek.lo utilstr.lo unixstr.lo \
-	swunicod.lo swversion.lo $(am__objects_1) roman.lo swconfig.lo \
-	swmgr.lo swfiltermgr.lo encfiltmgr.lo markupfiltmgr.lo \
-	filemgr.lo swlocale.lo localemgr.lo swcacher.lo swsourcemgr.lo \
-	swdisp.lo swlog.lo swmodule.lo rawstr.lo rawstr4.lo swcomprs.lo \
-	lzsscomprs.lo $(am__objects_2) rawverse.lo swcipher.lo \
-	zverse.lo zstr.lo entriesblk.lo sapphire.lo swbasicfilter.lo \
-	gbfhtml.lo gbfhtmlhref.lo gbfplain.lo gbfrtf.lo plainhtml.lo \
-	rwphtml.lo rwprtf.lo cipherfil.lo rtfhtml.lo gbfstrongs.lo \
-	gbffootnotes.lo gbfheadings.lo gbfredletterwords.lo gbfmorph.lo \
+	swunicod.lo swversion.lo swbuf.lo $(am__objects_1) roman.lo \
+	swconfig.lo swmgr.lo swfiltermgr.lo encfiltmgr.lo \
+	markupfiltmgr.lo filemgr.lo swlocale.lo localemgr.lo \
+	swcacher.lo swsourcemgr.lo swdisp.lo swlog.lo swmodule.lo \
+	rawstr.lo rawstr4.lo swcomprs.lo lzsscomprs.lo $(am__objects_2) \
+	rawverse.lo swcipher.lo zverse.lo zstr.lo entriesblk.lo \
+	sapphire.lo swbasicfilter.lo gbfhtml.lo gbfhtmlhref.lo \
+	gbfplain.lo gbfrtf.lo plainhtml.lo rwphtml.lo rwprtf.lo \
+	cipherfil.lo rtfhtml.lo gbfstrongs.lo gbffootnotes.lo \
+	gbfheadings.lo gbfredletterwords.lo gbfmorph.lo \
 	plainfootnotes.lo thmlstrongs.lo thmlfootnotes.lo \
 	thmlheadings.lo thmlmorph.lo thmllemma.lo thmlscripref.lo \
 	thmlvariants.lo gbfthml.lo thmlgbf.lo thmlrtf.lo thmlhtml.lo \
 	thmlhtmlhref.lo thmlosis.lo gbfosis.lo thmlplain.lo \
-	osismorph.lo osisstrongs.lo unicodertf.lo latin1utf8.lo \
-	latin1utf16.lo utf8utf16.lo utf16utf8.lo scsuutf8.lo \
-	utf8html.lo utf8latin1.lo thmlolb.lo greeklexattribs.lo \
-	$(am__objects_3) utf8cantillation.lo utf8hebrewpoints.lo \
-	utf8greekaccents.lo swgenbook.lo rawgenbook.lo swtext.lo \
-	rawtext.lo ztext.lo rawgbf.lo swcom.lo rawcom.lo rawfiles.lo \
-	zcom.lo hrefcom.lo swld.lo rawld.lo rawld4.lo zld.lo flatapi.lo
+	osismorph.lo osisstrongs.lo osisplain.lo osisrtf.lo \
+	unicodertf.lo latin1utf8.lo latin1utf16.lo utf8utf16.lo \
+	utf16utf8.lo scsuutf8.lo utf8html.lo utf8latin1.lo thmlolb.lo \
+	greeklexattribs.lo $(am__objects_3) utf8cantillation.lo \
+	utf8hebrewpoints.lo utf8greekaccents.lo swgenbook.lo \
+	rawgenbook.lo swtext.lo rawtext.lo ztext.lo rawgbf.lo swcom.lo \
+	rawcom.lo rawfiles.lo zcom.lo hrefcom.lo swld.lo rawld.lo \
+	rawld4.lo zld.lo flatapi.lo
 libsword_la_OBJECTS = $(am_libsword_la_OBJECTS)
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -343,8 +346,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/localemgr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/lzsscomprs.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/markupfiltmgr.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/osismorph.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/osisstrongs.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/osismorph.Plo ./$(DEPDIR)/osisplain.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/osisrtf.Plo ./$(DEPDIR)/osisstrongs.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/plainfootnotes.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/plainhtml.Plo ./$(DEPDIR)/rawcom.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/rawfiles.Plo ./$(DEPDIR)/rawgbf.Plo \
@@ -356,7 +359,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/rwphtml.Plo ./$(DEPDIR)/rwprtf.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/sapphire.Plo ./$(DEPDIR)/scsuutf8.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/strkey.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/swbasicfilter.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/swbasicfilter.Plo ./$(DEPDIR)/swbuf.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/swcacher.Plo ./$(DEPDIR)/swcipher.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/swcom.Plo ./$(DEPDIR)/swcomprs.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/swconfig.Plo ./$(DEPDIR)/swdisp.Plo \
@@ -511,6 +514,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lzsscomprs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/markupfiltmgr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/osismorph.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/osisplain.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/osisrtf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/osisstrongs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plainfootnotes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plainhtml.Plo@am__quote@
@@ -533,6 +538,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scsuutf8.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strkey.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swbasicfilter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swbuf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcacher.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcipher.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcom.Plo@am__quote@
@@ -1054,6 +1060,39 @@ swversion.lo: $(utilfunsdir)/swversion.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/swversion.Plo' tmpdepfile='$(DEPDIR)/swversion.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o swversion.lo `test -f '$(utilfunsdir)/swversion.cpp' || echo '$(srcdir)/'`$(utilfunsdir)/swversion.cpp
+
+swbuf.o: $(utilfunsdir)/swbuf.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT swbuf.o -MD -MP -MF "$(DEPDIR)/swbuf.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o swbuf.o `test -f '$(utilfunsdir)/swbuf.cpp' || echo '$(srcdir)/'`$(utilfunsdir)/swbuf.cpp; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/swbuf.Tpo" "$(DEPDIR)/swbuf.Po"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/swbuf.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(utilfunsdir)/swbuf.cpp' object='swbuf.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/swbuf.Po' tmpdepfile='$(DEPDIR)/swbuf.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o swbuf.o `test -f '$(utilfunsdir)/swbuf.cpp' || echo '$(srcdir)/'`$(utilfunsdir)/swbuf.cpp
+
+swbuf.obj: $(utilfunsdir)/swbuf.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT swbuf.obj -MD -MP -MF "$(DEPDIR)/swbuf.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o swbuf.obj `if test -f '$(utilfunsdir)/swbuf.cpp'; then $(CYGPATH_W) '$(utilfunsdir)/swbuf.cpp'; else $(CYGPATH_W) '$(srcdir)/$(utilfunsdir)/swbuf.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/swbuf.Tpo" "$(DEPDIR)/swbuf.Po"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/swbuf.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(utilfunsdir)/swbuf.cpp' object='swbuf.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/swbuf.Po' tmpdepfile='$(DEPDIR)/swbuf.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o swbuf.obj `if test -f '$(utilfunsdir)/swbuf.cpp'; then $(CYGPATH_W) '$(utilfunsdir)/swbuf.cpp'; else $(CYGPATH_W) '$(srcdir)/$(utilfunsdir)/swbuf.cpp'; fi`
+
+swbuf.lo: $(utilfunsdir)/swbuf.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT swbuf.lo -MD -MP -MF "$(DEPDIR)/swbuf.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o swbuf.lo `test -f '$(utilfunsdir)/swbuf.cpp' || echo '$(srcdir)/'`$(utilfunsdir)/swbuf.cpp; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/swbuf.Tpo" "$(DEPDIR)/swbuf.Plo"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/swbuf.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(utilfunsdir)/swbuf.cpp' object='swbuf.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/swbuf.Plo' tmpdepfile='$(DEPDIR)/swbuf.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o swbuf.lo `test -f '$(utilfunsdir)/swbuf.cpp' || echo '$(srcdir)/'`$(utilfunsdir)/swbuf.cpp
 
 roman.o: $(utilfunsdir)/roman.cpp
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT roman.o -MD -MP -MF "$(DEPDIR)/roman.Tpo" \
@@ -2968,6 +3007,72 @@ osisstrongs.lo: $(filtersdir)/osisstrongs.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisstrongs.Plo' tmpdepfile='$(DEPDIR)/osisstrongs.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisstrongs.lo `test -f '$(filtersdir)/osisstrongs.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisstrongs.cpp
+
+osisplain.o: $(filtersdir)/osisplain.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT osisplain.o -MD -MP -MF "$(DEPDIR)/osisplain.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o osisplain.o `test -f '$(filtersdir)/osisplain.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisplain.cpp; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/osisplain.Tpo" "$(DEPDIR)/osisplain.Po"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/osisplain.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(filtersdir)/osisplain.cpp' object='osisplain.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisplain.Po' tmpdepfile='$(DEPDIR)/osisplain.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisplain.o `test -f '$(filtersdir)/osisplain.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisplain.cpp
+
+osisplain.obj: $(filtersdir)/osisplain.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT osisplain.obj -MD -MP -MF "$(DEPDIR)/osisplain.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o osisplain.obj `if test -f '$(filtersdir)/osisplain.cpp'; then $(CYGPATH_W) '$(filtersdir)/osisplain.cpp'; else $(CYGPATH_W) '$(srcdir)/$(filtersdir)/osisplain.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/osisplain.Tpo" "$(DEPDIR)/osisplain.Po"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/osisplain.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(filtersdir)/osisplain.cpp' object='osisplain.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisplain.Po' tmpdepfile='$(DEPDIR)/osisplain.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisplain.obj `if test -f '$(filtersdir)/osisplain.cpp'; then $(CYGPATH_W) '$(filtersdir)/osisplain.cpp'; else $(CYGPATH_W) '$(srcdir)/$(filtersdir)/osisplain.cpp'; fi`
+
+osisplain.lo: $(filtersdir)/osisplain.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT osisplain.lo -MD -MP -MF "$(DEPDIR)/osisplain.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o osisplain.lo `test -f '$(filtersdir)/osisplain.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisplain.cpp; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/osisplain.Tpo" "$(DEPDIR)/osisplain.Plo"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/osisplain.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(filtersdir)/osisplain.cpp' object='osisplain.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisplain.Plo' tmpdepfile='$(DEPDIR)/osisplain.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisplain.lo `test -f '$(filtersdir)/osisplain.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisplain.cpp
+
+osisrtf.o: $(filtersdir)/osisrtf.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT osisrtf.o -MD -MP -MF "$(DEPDIR)/osisrtf.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o osisrtf.o `test -f '$(filtersdir)/osisrtf.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisrtf.cpp; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/osisrtf.Tpo" "$(DEPDIR)/osisrtf.Po"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/osisrtf.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(filtersdir)/osisrtf.cpp' object='osisrtf.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisrtf.Po' tmpdepfile='$(DEPDIR)/osisrtf.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisrtf.o `test -f '$(filtersdir)/osisrtf.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisrtf.cpp
+
+osisrtf.obj: $(filtersdir)/osisrtf.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT osisrtf.obj -MD -MP -MF "$(DEPDIR)/osisrtf.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o osisrtf.obj `if test -f '$(filtersdir)/osisrtf.cpp'; then $(CYGPATH_W) '$(filtersdir)/osisrtf.cpp'; else $(CYGPATH_W) '$(srcdir)/$(filtersdir)/osisrtf.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/osisrtf.Tpo" "$(DEPDIR)/osisrtf.Po"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/osisrtf.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(filtersdir)/osisrtf.cpp' object='osisrtf.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisrtf.Po' tmpdepfile='$(DEPDIR)/osisrtf.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisrtf.obj `if test -f '$(filtersdir)/osisrtf.cpp'; then $(CYGPATH_W) '$(filtersdir)/osisrtf.cpp'; else $(CYGPATH_W) '$(srcdir)/$(filtersdir)/osisrtf.cpp'; fi`
+
+osisrtf.lo: $(filtersdir)/osisrtf.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT osisrtf.lo -MD -MP -MF "$(DEPDIR)/osisrtf.Tpo" \
+@am__fastdepCXX_TRUE@	  -c -o osisrtf.lo `test -f '$(filtersdir)/osisrtf.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisrtf.cpp; \
+@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/osisrtf.Tpo" "$(DEPDIR)/osisrtf.Plo"; \
+@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/osisrtf.Tpo"; exit 1; \
+@am__fastdepCXX_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(filtersdir)/osisrtf.cpp' object='osisrtf.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/osisrtf.Plo' tmpdepfile='$(DEPDIR)/osisrtf.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o osisrtf.lo `test -f '$(filtersdir)/osisrtf.cpp' || echo '$(srcdir)/'`$(filtersdir)/osisrtf.cpp
 
 unicodertf.o: $(filtersdir)/unicodertf.cpp
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unicodertf.o -MD -MP -MF "$(DEPDIR)/unicodertf.Tpo" \

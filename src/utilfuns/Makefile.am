@@ -5,6 +5,7 @@ libsword_la_SOURCES += $(utilfunsdir)/utilstr.cpp
 libsword_la_SOURCES += $(utilfunsdir)/unixstr.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swunicod.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swversion.cpp
+libsword_la_SOURCES += $(utilfunsdir)/swbuf.cpp
 
 if MINGW
 SWREGEX = $(utilfunsdir)/regex.c

@@ -36,6 +36,8 @@ libsword_la_SOURCES += $(filtersdir)/gbfosis.cpp
 libsword_la_SOURCES += $(filtersdir)/thmlplain.cpp
 libsword_la_SOURCES += $(filtersdir)/osismorph.cpp
 libsword_la_SOURCES += $(filtersdir)/osisstrongs.cpp
+libsword_la_SOURCES += $(filtersdir)/osisplain.cpp
+libsword_la_SOURCES += $(filtersdir)/osisrtf.cpp
 
 libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp

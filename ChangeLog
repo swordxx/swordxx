@@ -1,11 +1,16 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-06-feb-2003	Joachim Ansorg <joachim@ansorgs.de>
+19-Feb-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added utilfuns/swbuf.cpp and tests/swbuftest
+	Fixed make system to include osisrtf and osisplain
+
+06-Feb-2003	Joachim Ansorg <joachim@ansorgs.de>
 	Added ro.conf (Romanian) in locales.d
 
 14-Jan-2003	Joachim Ansorg <joachim@ansorgs.de>
-	Added strip filter for the red letter words so users can turn it off
+	Added strip filter for the red letter words so users can
+		turn it off
 	Worked a bit on locales.d/de.conf to include some abbrevs
 
 10-Jan-2003	Terry Biggs <tbiggs@infinet.com>
