@@ -106,6 +106,8 @@ register:
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
 
-install_config: sword.conf
+install_config: 
+	@echo "[Install]" > /etc/sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> /etc/sword.conf
 	@echo "sword.conf generated"
 

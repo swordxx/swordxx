@@ -661,6 +661,11 @@ register:
 	@echo ""
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
+
+install_config: 
+	@echo "[Install]" > /etc/sword.conf
+	@echo "DataPath=$(pkgdatadir)/" >> /etc/sword.conf
+	@echo "sword.conf generated"
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
