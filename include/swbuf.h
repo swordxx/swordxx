@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.38 2004/06/16 09:04:20 mgruner Exp $
+* $Id: swbuf.h,v 1.39 2004/07/15 13:11:52 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -286,6 +286,7 @@ public:
 	inline bool operator <=(const SWBuf &other) const { return compare(other) <= 0; }
 	inline bool operator >=(const SWBuf &other) const { return compare(other) >= 0; }
 
+	inline int compare(const char* other) const { return strcmp(c_str(), other); }
 	inline bool operator ==(const char *other) const { return !compare(other); }
 	inline bool operator !=(const char *other) const { return compare(other); }
 	inline bool operator > (const char *other) const { return compare(other) > 0; }

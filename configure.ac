@@ -8,7 +8,7 @@
 AC_INIT(sword, 1.5.8, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.43 $)
+AC_REVISION($Revision: 1.44 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
@@ -288,7 +288,7 @@ AM_CONDITIONAL(BUILDREFSYS, test x$enable_refsys = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/refsys/Makefile \
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile tests/refsys/Makefile \
 	utilities/Makefile examples/Makefile \
 	examples/cmdline/Makefile \
 	utilities/diatheke/Makefile icu/Makefile sword.pc sword.spec)
