@@ -39,10 +39,5 @@ int main(int argc, char **argv) {
 		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
 	}
 	
-	
-	VerseKey testkey = argv[1];
-	std::cout << (const char *)testkey << "\n";
-	
-
 	return 0;
 }
