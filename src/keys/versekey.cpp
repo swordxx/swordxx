@@ -30,7 +30,7 @@ struct sbook *VerseKey::builtin_books[2]       = {0,0};
 const char    VerseKey::builtin_BMAX[2]        = {39, 27};
 long         *VerseKey::offsets[2][2]  = {{VerseKey::otbks, VerseKey::otcps}, {VerseKey::ntbks, VerseKey::ntcps}};
 int           VerseKey::instance       = 0;
-//ListKey     VerseKey::internalListKey;
+VerseKey::LocaleCache   VerseKey::localeCache;
 
 
 /******************************************************************************
@@ -132,15 +132,27 @@ VerseKey::~VerseKey()
 void VerseKey::setLocale(const char *name) {
 	char *BMAX;
 	struct sbook **books;
-	SWLocale *locale = LocaleMgr::systemLocaleMgr.getLocale(name);
+	bool useCache = false;
+
+	if (localeCache.name)
+		useCache = (!strcmp(localeCache.name, name));
+
+	if (!useCache)		// if we're setting params for a new locale
+		stdstr(&(localeCache.name), name);
+
+	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::systemLocaleMgr.getLocale(name);
+	localeCache.locale = locale;
+
 	if (locale) {
 		locale->getBooks(&BMAX, &books);
 		setBooks(BMAX, books);
-		setBookAbbrevs(locale->getBookAbbrevs());
+		setBookAbbrevs(locale->getBookAbbrevs(), localeCache.abbrevsCnt);
+		localeCache.abbrevsCnt = abbrevsCnt;
 	}
 	else {
 		setBooks(builtin_BMAX, builtin_books);
-		setBookAbbrevs(builtin_abbrevs);
+		setBookAbbrevs(builtin_abbrevs, localeCache.abbrevsCnt);
+		localeCache.abbrevsCnt = abbrevsCnt;
 	}
 }
 
@@ -151,14 +163,19 @@ void VerseKey::setBooks(const char *iBMAX, struct sbook **ibooks) {
 }
 
 
-void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs) {
+void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int size) {
 	abbrevs = bookAbbrevs;
-	for (abbrevsCnt = 1; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
-		if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
-			fprintf(stderr, "ERROR: book abbreviation (canon.h or locale) misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
-			exit(-1);
+	if (!size) {
+		for (abbrevsCnt = 1; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
+			/*
+			if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
+				fprintf(stderr, "ERROR: book abbreviation (canon.h or locale) misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
+				exit(-1);
+			}
+			*/
 		}
 	}
+	else abbrevsCnt = size;
 }
 
 
@@ -1279,6 +1296,6 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	keyval1 += Verse();
 	keyval2 += ivkey.Verse();
 	keyval1 -= keyval2;
-	keyval1 = (keyval1) ? keyval1/labs(keyval1):0; // -1 | 0 | 1
+	keyval1 = (keyval1) ? ((keyval1 > 0) ? 1 : -1) /*keyval1/labs(keyval1)*/:0; // -1 | 0 | 1
 	return keyval1;
 }

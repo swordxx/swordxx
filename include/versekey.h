@@ -1,7 +1,7 @@
 /****************************************************************************** 
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.4 2000/05/21 20:35:56 scribe Exp $
+ * $Id: versekey.h,v 1.5 2000/08/18 03:23:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -45,7 +45,26 @@ struct abbrev {
 	int book;
 };
 
+
+class SWLocale;
+
 class VerseKey : public SWKey {
+
+	class LocaleCache {
+	public:
+		char *name;
+		unsigned int abbrevsCnt;
+		SWLocale *locale;
+		LocaleCache() {
+			name = 0;
+			abbrevsCnt = 0;
+			locale = 0;
+		}
+		~LocaleCache() {
+			if (name)
+				delete [] name;
+		}
+	};
 
 	static long *offsets[2][2];
 	static int offsize[2][2];
@@ -57,6 +76,7 @@ class VerseKey : public SWKey {
 	static long ntbks[];
 	static long ntcps[];
 	static int vm[];
+	static LocaleCache localeCache;
 	ListKey internalListKey;
 
 	const struct abbrev *abbrevs;
@@ -126,7 +146,7 @@ public:
 	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = "Genesis 1:1", bool expandRange = false);
 	virtual int compare(const SWKey &ikey);
 	virtual int _compare(const VerseKey &ikey);
-	virtual void setBookAbbrevs(const struct abbrev *bookAbbrevs);
+	virtual void setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int size = 0 /* default determine size */);
 	virtual void setBooks(const char *iBMAX, struct sbook **ibooks);
 	virtual void setLocale(const char *name);
 };
