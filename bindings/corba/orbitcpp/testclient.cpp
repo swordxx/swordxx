@@ -25,7 +25,9 @@ int main (int argc, char *argv[])
 		swordorb::SWMgr_var ptr = swordorb::SWMgr::_narrow(obj);
 
 		swordorb::ModInfoList *modInfoList;
-		// Do the actual CORBA call here
+
+		std::cout << "PrefixPath: " << ptr->getPrefixPath() << "\n";
+		std::cout << "ConfigPath: " << ptr->getConfigPath() << "\n";
 		modInfoList = ptr->getModInfoList();
 		std::cout << "sequence length: " << modInfoList->length() << "\n";
 		for (int i = 0; i < modInfoList->length(); i++) {
