@@ -70,7 +70,7 @@ const char *stristr(const char *s1, const char *s2) {
 		target[i] = (target[i] > 0) ? toupper(target[i]):target[i];
 
 	for (i = 0; i < (cLen - tLen)+1; i++) {
-		if (toupper(s1[i]) == *target) {
+		if ((s1[i] > 0) ? toupper(s1[i]):s1[i] == *target) {
 			for (j = 1; j < tLen; j++) {
 				if (toupper(s1[i+j]) != target[j])
 					break;
