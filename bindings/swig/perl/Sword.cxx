@@ -225,7 +225,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.12 2003/06/28 21:08:56 joachim Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.13 2003/06/29 10:49:39 joachim Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
