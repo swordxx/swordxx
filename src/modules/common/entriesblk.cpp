@@ -84,7 +84,7 @@ const char *EntriesBlock::getRawData(unsigned long *retSize) {
 int EntriesBlock::addEntry(const char *entry) {
 	unsigned long dataSize;
 	getRawData(&dataSize);
-	int len = strlen(entry);
+	unsigned long  len = strlen(entry);
 	unsigned long offset;
 	unsigned long size;
 	int count = getCount();
@@ -140,7 +140,7 @@ void EntriesBlock::removeEntry(int entryIndex) {
 	unsigned long dataSize;
 	getRawData(&dataSize);
 	getMetaEntry(entryIndex, &offset, &size);
-	int len = size - 1;
+	unsigned long len = size - 1;
 	int count = getCount();
 	unsigned long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
 

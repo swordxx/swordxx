@@ -81,7 +81,7 @@ VERSION = 1.5.3
 am__include = include
 am__quote = 
 dir_confdef = no
-enable_debug = no
+enable_debug = yes
 enable_profile = no
 enable_vcl = no
 install_sh = /space/home/scribe/src/sword/install-sh
@@ -90,7 +90,7 @@ target_mingw32 = no
 target_os = linux-gnu
 target_system = intel
 target_vendor = pc
-with_conf = yes
+with_conf = no
 with_icu = no
 with_zlib = yes
 
@@ -122,7 +122,7 @@ need_local_regex := no
 buildvcl := no
 
 # Debugging options etc...
-debug := no
+debug := yes
 profile := no
 
 
@@ -155,7 +155,7 @@ SUBDIRS = lib . tests utilities
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
 
-sysconf_DATA = sword.conf
+#sysconf_DATA = sword.conf
 
 noinst_PROGRAMS = testlib
 testlib_SOURCES = testlib.cpp
@@ -165,9 +165,9 @@ localeDATA = locales.d/abbr.conf locales.d/da.conf locales.d/de.conf locales.d/e
 
 localedatadir = $(pkgdatadir)/locales.d
 
-modsDATA = samples/mods.d/globals.conf
+#modsDATA = samples/mods.d/globals.conf
 
-modsdatadir = $(pkgdatadir)/mods.d
+#modsdatadir = $(pkgdatadir)/mods.d
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -196,7 +196,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O2
+CXXFLAGS = -g -O0 -Werror
 DIST_SOURCES = $(testlib_SOURCES)
 DATA = $(sysconf_DATA)
 
@@ -586,9 +586,9 @@ uninstall-info: uninstall-info-recursive
 	uninstall-info-recursive uninstall-recursive \
 	uninstall-sysconfDATA
 
-sword.conf:
-	@echo "[Install]" > sword.conf
-	@echo "DataPath=$(pkgdatadir)/" >> sword.conf
+#sword.conf:
+#	@echo "[Install]" > sword.conf
+#	@echo "DataPath=$(pkgdatadir)/" >> sword.conf
 
 installlocaleDATA: $(localeDATA)
 	@$(NORMAL_INSTALL)
@@ -608,23 +608,23 @@ uninstalllocaleDATA:
 	  rm -f $(DESTDIR)$(localedatadir)/$$f; \
 	done
 
-installmodsDATA: $(modsDATA)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(modsdatadir)
-	@list='$(modsDATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(modsdatadir)/$$f"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(modsdatadir)/$$f; \
-	done
+#installmodsDATA: $(modsDATA)
+#	@$(NORMAL_INSTALL)
+#	$(mkinstalldirs) $(DESTDIR)$(modsdatadir)
+#	@list='$(modsDATA)'; for p in $$list; do \
+#	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+#	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+#	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(modsdatadir)/$$f"; \
+#	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(modsdatadir)/$$f; \
+#	done
 
-uninstallmodsDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(modsDATA)'; for p in $$list; do \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " rm -f $(DESTDIR)$(modsdatadir)/$$f"; \
-	  rm -f $(DESTDIR)$(modsdatadir)/$$f; \
-	done
+#uninstallmodsDATA:
+#	@$(NORMAL_UNINSTALL)
+#	@list='$(modsDATA)'; for p in $$list; do \
+#	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+#	  echo " rm -f $(DESTDIR)$(modsdatadir)/$$f"; \
+#	  rm -f $(DESTDIR)$(modsdatadir)/$$f; \
+#	done
 
 restore:
 	cd $(top_srcdir) && ./scripts/restoremake.sh

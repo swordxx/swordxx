@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if ((iType < 2) || (iType > 4) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
+	if ((iType < 2) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
 		errorOutHelp(argv[0]);
 	}
 
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 		bufferKey = *(SWKey *)(*inModule);
 		cout << "Adding [" << bufferKey << "]\n";
 		// pseudo-check for link.  Will get most common links.
-		if (lastBuffer == (const char *)(*inModule)) {
+		if (lastBuffer == inModule->getRawEntry()) {
 			(*outModule) << &bufferKey;	// link to last key
 		}
 		else {

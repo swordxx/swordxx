@@ -79,7 +79,7 @@ VERSION = 1.5.3
 am__include = include
 am__quote = 
 dir_confdef = no
-enable_debug = no
+enable_debug = yes
 enable_profile = no
 enable_vcl = no
 install_sh = /space/home/scribe/src/sword/install-sh
@@ -88,7 +88,7 @@ target_mingw32 = no
 target_os = linux-gnu
 target_system = intel
 target_vendor = pc
-with_conf = yes
+with_conf = no
 with_icu = no
 with_zlib = yes
 
@@ -313,7 +313,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O2
+CXXFLAGS = -g -O0 -Werror
 DIST_SOURCES = $(casttest_SOURCES) $(complzss_SOURCES) \
 	$(compnone_SOURCES) $(compzip_SOURCES) $(configtest_SOURCES) \
 	$(filtertest_SOURCES) $(genbooktest_SOURCES) $(icutest_SOURCES) \

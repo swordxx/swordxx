@@ -33,6 +33,8 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	key       = CreateKey();
 	entrybuf  = new char [1];
 	*entrybuf = 0;
+	config    = new ConfigEntMap();
+	ownConfig = true;
 	entrybufallocsize = 0;
 	modname   = 0;
 	error     = 0;
@@ -70,17 +72,22 @@ SWModule::~SWModule()
 		delete [] moddesc;
 	if (modtype)
 		delete [] modtype;
-        if (modlang)
-                delete [] modlang;
+	if (modlang)
+		delete [] modlang;
+
 	if (key) {
 		if (!key->Persist())
 			delete key;
 	}
+
 	stripFilters->clear();
      rawFilters->clear();
      renderFilters->clear();
      optionFilters->clear();
      encodingFilters->clear();
+
+	if (ownConfig)
+		delete config;
 
      delete stripFilters;
      delete rawFilters;
@@ -606,7 +613,7 @@ const char *SWModule::StripText(char *buf, int len)
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
- const char *SWModule::StripText(SWKey *tmpKey)
+const char *SWModule::StripText(SWKey *tmpKey)
 {
 	SWKey *savekey;
 	const char *retVal;
@@ -632,4 +639,19 @@ const char *SWModule::StripText(char *buf, int len)
 
 SWModule::operator const char*() {
 	return RenderText();
+}
+
+
+const char *SWModule::getConfigEntry(const char *key) {
+	ConfigEntMap::iterator it = config->find(key);
+	return (it != config->end()) ? it->second.c_str() : 0;
+}
+
+
+void SWModule::setConfig(ConfigEntMap *config) {
+	if (ownConfig) {
+		delete config;
+		ownConfig = false;
+	}
+	this->config = config;
 }

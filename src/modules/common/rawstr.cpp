@@ -207,7 +207,7 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
 				lastoff = -1;
 				getidxbuf(tryoff, &trybuf);
 
-				if (!*trybuf) {		// In case of extra entry at end of idx
+				if (!*trybuf && tryoff) {		// In case of extra entry at end of idx (not first entry)
 					tryoff += (tryoff > (maxoff / 2))?-6:6;
 					retval = -1;
 					break;

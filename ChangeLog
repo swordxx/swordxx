@@ -2,6 +2,14 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+26-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Make mod2zmod work with modules other than verse
+		keyed modules
+	Fixed zLD
+	Added SWModule::getConfig and
+		SWModule::getConfigEntry and made SWMgr
+		call new SWModlue::setConfig
+
 25-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added chrislit's new gbs tools:
 		utilities/thml2gbs

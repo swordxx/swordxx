@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.36 2002/02/19 01:20:35 scribe Exp $
+ * $Id: swmodule.h,v 1.37 2002/02/27 01:30:02 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,7 @@
 #include <swkey.h>
 #include <listkey.h>
 #include <swfilter.h>
+#include <swconfig.h>
 #include <list>
 
 #include <defs.h>
@@ -57,6 +58,9 @@ enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_H
 class SWDLLEXPORT SWModule {
 
 protected:
+
+  bool ownConfig;
+  ConfigEntMap *config;
 
   char error;
 
@@ -135,6 +139,14 @@ public:
   * @return  True if this module is encoded in Unicode, otherwise return false.
   */
   virtual const bool isUnicode() const {return (encoding == ENC_UTF8 || encoding == ENC_SCSU);}
+
+  // These methods are useful for modules that come from a standard SWORD install (most do).
+  // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
+  // are not comfortable with, or don't wish to use  stl maps).
+  virtual const ConfigEntMap &getConfig() { return *config; }
+  virtual void setConfig(ConfigEntMap *config);
+  virtual const char *getConfigEntry(const char *key);
+
   /**
   * @return The size of the current entry.
   */
