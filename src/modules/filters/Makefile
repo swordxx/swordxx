@@ -13,6 +13,7 @@ cpp += plainhtml.cpp
 cpp += rwphtml.cpp
 cpp += rwprtf.cpp
 cpp += cipherfil.cpp
+cpp += rtfhtml.cpp
 
 cpp += gbfstrongs.cpp
 cpp += gbffootnotes.cpp
