@@ -1,7 +1,7 @@
 /******************************************************************************
  *  filemgr.h   - definition of class FileMgr used for pooling file handles
  *
- * $Id: filemgr.h,v 1.16 2003/02/25 04:12:47 scribe Exp $
+ * $Id: filemgr.h,v 1.17 2003/03/03 17:02:46 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,6 +31,9 @@ SWORD_NAMESPACE_START
 
 class SWDLLEXPORT FileMgr;
 
+/**
+* This class represents one file. It works with the FileMgr object.
+*/
 class SWDLLEXPORT FileDesc
 {
 
@@ -41,17 +44,32 @@ class SWDLLEXPORT FileDesc
   FileMgr *parent;
   FileDesc *next;
 
-public:
    FileDesc (FileMgr * parent, const char *path, int mode, int perms, bool tryDowngrade);
    virtual ~FileDesc ();
+
+public:
+	/** @return File handle.
+	*/
   int getFd ();
+	/** Path to file.
+	*/
   char *path;
+	/** File access mode.
+	*/
   int mode;
+	/** File permissions.
+	*/
   int perms;
+	/**
+	*/
   bool tryDowngrade;
 };
 
-
+/**
+*	This class ist used make file access operations easier.
+* It keeps a list of all open files internally and closes them
+* when the destructor is called.
+*/
 class FileMgr
 {
 
@@ -61,20 +79,62 @@ class FileMgr
   int sysOpen (FileDesc * file);
 public:
 
+	/** Constructor.
+	* @param maxFiles The number of files that this FileMgr may open in parallel, if necessary.
+	*/
     FileMgr (int maxFiles = 35);
-   ~FileMgr ();
+  /**
+	* Destructor. Clean things up. Will close all files opened by this FileMgr object.
+	*/
+	 ~FileMgr ();
+
+	/** Open a file and return a FileDesc for it.
+	* The file itself will only be opened when FileDesc::getFd() is called.
+	* @param path Filename.
+	* @param mode File access mode.
+	* @param tryDowngrade
+	* @return FileDesc object for the requested file.
+	*/
   FileDesc *open (const char *path, int mode, bool tryDowngrade);
+	/** Open a file and return a FileDesc for it.
+	* The file itself will only be opened when FileDesc::getFd() is called.
+	* @param path Filename.
+	* @param mode File access mode.
+	* @param perms Permissions.
+	* @param tryDowngrade
+	* @return FileDesc object for the requested file.
+	*/
   FileDesc *open (const char *path, int mode, int perms = S_IREAD | S_IWRITE, bool tryDowngrade = false);
-  void close (FileDesc *);
 
+  /** Close a given file and delete its FileDesc object.
+	* Will only close the file if it was created by this FileMgr object.
+	* @param file The file to close.
+	*/
+  void close (FileDesc * file);
+
+	/** Checks for the existence of a file.
+	* @param ipath Path to file.
+	* @param ifileName Name of file to check for.
+	*/
   static signed char existsFile (const char *ipath, const char *ifileName = 0);
-  static signed char existsDir (const char *ipath, const char *idirName = 0);
-  // to truncate a file at its current position
-  // leaving byte at current possition intact
-  // deleting everything afterward.
-  signed char trunc (FileDesc *);
 
+	/** Checks for the existence of a directory.
+	* @param ipath Path to directory.
+	* @param idirName Name of directory to check for.
+	*/
+  static signed char existsDir (const char *ipath, const char *idirName = 0);
+
+  /** Truncate a file at its current position
+  * leaving byte at current possition intact deleting everything afterward.
+	* @param file The file to operate on.
+	*/
+  signed char trunc (FileDesc * file);
+
+	/** Maximum number of open files set in the constructor.
+	* Change this if you need to open more files.
+	*/
   int maxFiles;
+	
   static FileMgr systemFileMgr;
 };
 
