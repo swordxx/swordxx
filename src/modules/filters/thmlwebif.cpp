@@ -49,7 +49,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf += "<small><em> &lt;";
 			}
 
-			buf.appendFormatted("<a href=\"%s?key=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
+			buf.appendFormatted("<a href=\"%s?showStrong=%s\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
 			buf += value;
 			buf += "</a>";
 
