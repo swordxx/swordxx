@@ -3414,6 +3414,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\mgr\swsearchable.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\src\mgr\swsourcemgr.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -5242,6 +5245,9 @@
 			Name="Sword Header Files"
 			Filter="">
 			<File
+				RelativePath="..\..\..\include\apocrypha.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\canon.h">
 			</File>
 			<File
@@ -5308,6 +5314,9 @@
 				RelativePath="..\..\..\include\gbfthml.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\gbfwebif.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\Greek2Greek.h">
 			</File>
 			<File
@@ -5350,7 +5359,31 @@
 				RelativePath="..\..\..\include\nullim.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\osisfootnotes.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisheadings.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osishtmlhref.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osislemma.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\osismorph.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisplain.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisredletterwords.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisrtf.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisscripref.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\osisstrongs.h">
@@ -5482,7 +5515,13 @@
 				RelativePath="..\..\..\include\swobject.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\swoptfilter.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\swremotemgr.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\swsearchable.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\swsourcemgr.h">
@@ -5545,6 +5584,9 @@
 				RelativePath="..\..\..\include\thmlvariants.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\thmlwebif.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\treekey.h">
 			</File>
 			<File
@@ -5603,6 +5645,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\utilstr.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\utilweb.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\utilxml.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\versekey.h">
