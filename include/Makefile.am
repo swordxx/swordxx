@@ -133,5 +133,5 @@ REMOTE_HEAD =
 endif
 
 
-pkginclude_HEADERS += ICU_HEAD
-pkginclude_HEADERS += REMOTE_HEAD
+pkginclude_HEADERS += $(ICU_HEAD)
+pkginclude_HEADERS += $(REMOTE_HEAD)

@@ -35,19 +35,41 @@ enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/ SE_BASICLATI
 #include <unicode/translit.h>
 
 #include <defs.h>
+#include <map>
 
-  /** This Filter shows/hides strong's numbers in a GBF text
+struct SWTransData {
+	UnicodeString resource;
+	UTransDirection dir;
+};
+typedef map <const UnicodeString, SWTransData> SWTransMap;
+typedef pair<UnicodeString, SWTransData> SWTransPair;
+
+  /** This Filter uses ICU for transliteration
   */
 class SWDLLEXPORT UTF8Transliterator : public SWFilter
 {
+private:
+
   char option;
 
   static const char optionstring[NUMTARGETSCRIPTS][16];
 
   static const char optName[];
   static const char optTip[];
+  static const char SW_RB_RULE_BASED_IDS[];
+  static const char SW_RB_RULE[];
+  static const char SW_RESDATA[];
   OptionsList options;
-
+  SWTransMap transMap;
+  UErrorCode utf8status;
+  
+  void Load(UErrorCode &status);
+  void  registerTrans(const UnicodeString& ID, const UnicodeString& resource,
+		UTransDirection dir, UErrorCode &status );
+  bool checkTrans(const UnicodeString& ID, UErrorCode &status );
+  Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID, 
+  	const UnicodeString& postID, UTransDirection dir, UErrorCode &status );
+  
  public:
   UTF8Transliterator ();
   virtual char ProcessText (char *text, int maxlen, const SWKey * key, const SWModule * = 0);
