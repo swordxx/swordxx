@@ -29,8 +29,8 @@
     <USERDEFINES value="_ICU_;_ICUSWORD_"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mod2vpl.bpf"/>
-    <INCLUDEPATH value="..\;..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\;..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
@@ -83,11 +83,12 @@ Item2=..;..\..\include;$(BCB)\include;$(BCB)\include\vcl
 Item3=..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=4
-Item0=..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\;..;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
-Item3=..;$(BCB)\lib\obj;$(BCB)\lib
+Count=5
+Item0=..\;..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\;..;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\;..\..\utilities;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -112,11 +113,6 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
 
 [Language]
 ActiveLang=
