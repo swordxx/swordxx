@@ -20,7 +20,7 @@ SWORD_NAMESPACE_START
 const char oName[] = "Strong's Numbers";
 const char oTip[] = "Toggles Strong's Numbers On and Off if they exist";
 
-const SWBuf choices[3] = {"On", "Off", ""};
+const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
 ThMLStrongs::ThMLStrongs() : SWOptionFilter(oName, oTip, &oValues) {

@@ -861,6 +861,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	char *word = 0;
 	char *wordBuf = 0;
 
+
+	// turn all filters to default values
+	StringList filterSettings;
+	for (FilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
+		filterSettings.push_back((*filter)->getOptionValue());
+		(*filter)->setOptionValue(*((*filter)->getOptionValues().begin()));
+	}
+
+	
 	// be sure we give CLucene enough file handles	
 	FileMgr::getSystemFileMgr()->flush();
 
@@ -886,7 +895,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	IndexWriter *writer = NULL;
 	Directory *d = NULL;
  
-	lucene::analysis::SimpleAnalyzer *an = new lucene::analysis::SimpleAnalyzer();
+	standard::StandardAnalyzer *an = new standard::StandardAnalyzer();
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
@@ -918,25 +927,59 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 
+	bool savePEA = isProcessEntryAttributes();
+	processEntryAttributes(true);
+
 	while (!Error()) {
 		long mindex = 0;
 		if (vkcheck)
 			mindex = vkcheck->NewIndex();
 		else mindex = key->Index();
+
+		// computer percent complete so we can report to our progress callback
 		float per = (float)mindex / highIndex;
-		per *= 93;
-		per += 5;
+		// between 5%-98%
+		per *= 93; per += 5;
 		char newperc = (char)per;
-//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
 		if (newperc > perc) {
 			perc = newperc;
 			(*percent)(perc, percentUserData);
 		}
-		const char *stripText = StripText();
-		if (stripText && *stripText) {
+
+		// get "content" field
+		const char *content = StripText();
+
+		if (content && *content) {
+
+			// build "strong" field
+			SWBuf strong;
+		
+			AttributeTypeList::iterator words;
+			AttributeList::iterator word;
+			AttributeValue::iterator strongVal;
+
+			words = getEntryAttributes().find("Word");
+			if (words != getEntryAttributes().end()) {
+				for (word = words->second.begin();word != words->second.end(); word++) {
+					strongVal = word->second.find("Strongs");
+					if (strongVal != word->second.end()) {
+						// cheeze.  skip empty article tags that weren't assigned to any text
+						if (strongVal->second == "G3588") {
+							if (word->second.find("Text") == word->second.end())
+								continue;	// no text? let's skip
+						}
+						strong.append(strongVal->second);
+						strong.append(' ');
+					}
+				}
+			}
+
+			// add our entry to the clucene index		
 			Document *doc = new Document();
-			doc->add( Field::Text(_T("key"), getKeyText() ) );
-			doc->add( Field::Text(_T("content"), stripText) );
+			doc->add( Field::UnIndexed(_T("key"), getKeyText() ) );
+			doc->add( Field::UnStored(_T("content"), content) );
+			if (strong.length() > 0)
+				doc->add( Field::UnStored(_T("strong"), strong) );
 			writer->addDocument(*doc);
 			delete doc;
 		}
@@ -957,6 +1000,14 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	if (searchkey)
 		delete searchkey;
+
+	processEntryAttributes(savePEA);
+
+	// reset option filters back to original values
+	StringList::iterator origVal = filterSettings.begin();
+	for (FilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
+		(*filter)->setOptionValue(*origVal++);
+	}
 
 	return 0;
 }

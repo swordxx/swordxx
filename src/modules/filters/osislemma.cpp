@@ -18,7 +18,7 @@ SWORD_NAMESPACE_START
 const char oName[] = "Lemmas";
 const char oTip[] = "Toggles Lemmas On and Off if they exist";
 
-const SWBuf choices[3] = {"On", "Off", ""};
+const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
 OSISLemma::OSISLemma() : SWOptionFilter(oName, oTip, &oValues) {

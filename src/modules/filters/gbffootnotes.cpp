@@ -21,7 +21,7 @@ SWORD_NAMESPACE_START
 const char oName[] = "Footnotes";
 const char oTip[] = "Toggles Footnotes On and Off if they exist";
 
-const SWBuf choices[3] = {"On", "Off", ""};
+const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
 
@@ -77,9 +77,9 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 				
 					if((tagText.length() == 1) || !strcmp(module->Name(), "IGNT")) {
 						if (option) { // for ASV marks text in verse then put explanation at end of verse
-							text.append(" <FA>(");
+							text.append(" <FS>(");
 							text.append(tagText);
-							text.append(")<Fr>");
+							text.append(")<Fs>");
 							hide = false;
 							continue;
 						}

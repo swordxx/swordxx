@@ -29,7 +29,7 @@ SWORD_NAMESPACE_START
 const char oName[] = "Footnotes";
 const char oTip[] = "Toggles Footnotes On and Off In Bible Texts If They Exist";
 
-const SWBuf choices[3] = {"On", "Off", ""};
+const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
 PLAINFootnotes::PLAINFootnotes() : SWOptionFilter(oName, oTip, &oValues) {

@@ -19,7 +19,7 @@ SWORD_NAMESPACE_START
 const char oName[] = "Cross-references";
 const char oTip[] = "Toggles Scripture Cross-references On and Off if they exist";
 
-const SWBuf choices[3] = {"On", "Off", ""};
+const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
 OSISScripref::OSISScripref() : SWOptionFilter(oName, oTip, &oValues) {
