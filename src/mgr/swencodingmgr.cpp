@@ -99,13 +99,31 @@ char SWEncodingMgr::Encoding(char enc) {
                         break;
                 case ENC_HTML:
                         targetenc = new UTF8HTML();
+                        break;
+                default: // i.e. case ENC_UTF8
+                        targetenc = NULL;
                 }
 
                 ModMap::const_iterator module;
-                for (module = Modules.begin(); module != Modules.end(); module++) {
-                        module->second->ReplaceRenderFilter(oldfilter, targetenc);
+
+                if (oldfilter != targetenc) {
+                        if (oldfilter) {
+                                if (!targetenc) {
+                                        for (module = Modules.begin(); module != Modules.end(); module++)
+                                                module->second->RemoveRenderFilter(targetenc);
+                                }
+                                else {
+                                        for (module = Modules.begin(); module != Modules.end(); module++)
+                                                module->second->ReplaceRenderFilter(oldfilter, targetenc);
+                                }
+                                delete oldfilter;
+                        }
+                        else if (targetenc) {
+                                for (module = Modules.begin(); module != Modules.end(); module++)
+                                        module->second->AddRenderFilter(targetenc);
+                        }
                 }
-                delete oldfilter;
+
         }
         return encoding;
 }
