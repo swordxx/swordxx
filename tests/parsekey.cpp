@@ -9,12 +9,12 @@ using namespace sword;
 #endif
 
 int main(int argc, char **argv) {
-	if ((argc != 2) && (argc != 3)) {
-		fprintf(stderr, "usage: %s <\"string to parse\"> [locale name]\n", *argv);
+	if ((argc < 2) || (argc > 4)) {
+		fprintf(stderr, "usage: %s <\"string to parse\"> [locale name] [test-in-set-verse]\n", *argv);
 		exit(-1);
 	}
 
-	if (argc == 3)
+	if (argc > 2)
 		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(argv[2]);
 
 	VerseKey DefaultVSKey;
@@ -33,5 +33,11 @@ int main(int argc, char **argv) {
 //			std::cout << VerseKey(verses.GetElement(i)).getOSISRef() << "\n";
 //		}
 	}
+
+	if (argc > 3) {
+		verses.setText(argv[3]);
+		cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
+	}
+
 	return 0;
 }
