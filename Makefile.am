@@ -112,7 +112,6 @@ testlib_LDADD = $(top_builddir)/lib/libsword.la
 
 include locales.d/Makefile.am
 include samples/Makefile.am
-include debian/Makefile.am
 include doc/Makefile.am
 
 restore:
