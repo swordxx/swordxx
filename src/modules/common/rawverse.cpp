@@ -230,7 +230,7 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
 
-	size = outsize = (len < 0) ? strlen(buf) : 0;
+	size = outsize = (len < 0) ? strlen(buf) : len;
 
 	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
 	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
