@@ -1,9 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+14-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Added beginnings of search framework support.
+	Added some optimized searches for RawText driver
+
 07-Apr-2000 	Joachim Ansorg <jansorg@crosswire.org>
 	Added the THML filters (thmlrtf,thmlplain,thmlhtml and thmlgbf)
-	to the Makefile
+		to the Makefile.
 
 15-Mar-2000
 	Added buildvcl option to Makefile.cfg to allow exclusion of

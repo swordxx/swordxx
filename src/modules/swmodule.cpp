@@ -268,11 +268,13 @@ SWModule &SWModule::operator -=(int increment)
  *				-1  - phrase
  *				-2  - multiword
  * 	flags		- options flags for search
+ *	justCheckIfSupported	- if set, don't search, only tell if this
+ *							function supports requested search.
  *
  * RET: listkey set to verses that contain istr
  */
 
-ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *scope)
+ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported)
 {
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;

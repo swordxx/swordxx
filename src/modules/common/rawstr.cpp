@@ -91,7 +91,7 @@ RawStr::~RawStr()
  *						NOTE: buf is allocated and must be freed by
  *							calling function
  *
- * ENT:	ioffset	- offset to lookup
+ * ENT:	ioffset	- offset in dat file to lookup
  *		buf		- address of pointer to allocate for storage of string
  */
 
@@ -126,7 +126,7 @@ void RawStr::getidxbufdat(long ioffset, char **buf)
  *						NOTE: buf is allocated and must be freed by
  *							calling function
  *
- * ENT:	ioffset	- offset to lookup
+ * ENT:	ioffset	- offset in idx file to lookup
  *		buf		- address of pointer to allocate for storage of string
  */
 
@@ -344,10 +344,10 @@ void RawStr::preptext(char *buf)
 /******************************************************************************
  * RawStr::gettext	- gets text at a given offset
  *
- * ENT:	testmt	- testament file to search in (0 - Old; 1 - New)
+ * ENT:
  *	start	- starting offset where the text is located in the file
- *	size	- size of text entry
- *	buf	- buffer to store text
+ *	size		- size of text entry
+ *	buf		- buffer to store text
  *
  */
 
@@ -367,7 +367,7 @@ void RawStr::gettext(long start, unsigned short size, char *idxbuf, char *buf)
 			break;
 		}
 	}
-	memmove(buf, ch, strlen(ch) + 1);
+	memmove(buf, ch, size - (unsigned short)(ch-buf));
 	if (idxbuflocal) {
 		int localsize = strlen(idxbuflocal);
 		localsize = (localsize < (size - 1)) ? localsize : (size - 1);

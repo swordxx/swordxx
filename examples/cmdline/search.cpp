@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>
+#include <regex.h> // GNU
 
 int main(int argc, char **argv)
 {
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
 	}
 
 //	for (listkey = target->Search(argv[2]);!listkey.Error();listkey++)
-	listkey = target->Search(argv[2]);
+	listkey = target->Search(argv[2], -2, REG_ICASE);
 	while (!listkey.Error()) {
 		cout << (const char *)listkey << "\n";
 		listkey++;
