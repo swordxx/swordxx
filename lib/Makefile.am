@@ -21,10 +21,13 @@ if ICU
 #ICULIBADD = -licui18n -licuuc -lustdio
 #ICU 2.6
 ICULIBADD = -licui18n -licuuc -licuio
-INCLUDES += -DSWICU_DATA=\"${pkglibdir}/icu${ICU_VER}\" 
+ICUDEF = -DSWICU_DATA=\"${pkglibdir}/icu${ICU_VER}\" 
 else
 ICULIBADD =
+ICUDEF =
 endif
+
+INCLUDES += $(ICUDEF)
 
 if INSTALLMGR
 IMGRLIBADD = $(CURL_LIBS)
