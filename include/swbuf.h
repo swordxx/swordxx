@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.7 2003/02/27 19:14:32 mgruner Exp $
+* $Id: swbuf.h,v 1.8 2003/02/27 23:34:22 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -30,6 +30,9 @@ SWORD_NAMESPACE_START
 
 #define JUNKBUFSIZE 8191
 
+/**
+* This class is used as a transport and utility for data buffers.
+*/
 class SWDLLEXPORT SWBuf {
 	char *buf;
 	char *end;
@@ -48,55 +51,98 @@ class SWDLLEXPORT SWBuf {
 	}
 	void init();
 
-	inline const char *raw_buf() const{		return buf;	}
-
-
 public:
-	SWBuf(const char *initVal = 0);
+	/******************************************************************************
+	* SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
+ 	* 		to a value from a const char *
+ 	*
+ 	*/
+  SWBuf(const char *initVal = 0);
+
 	SWBuf(char initVal);
 	SWBuf(const SWBuf &other);
 
 	inline void setFillByte(char ch) { fillByte = ch; }
 	inline char getFillByte() { return fillByte; }
 
+  /******************************************************************************
+	* SWBuf Destructor - Cleans up instance of SWBuf
+ 	*/
 	virtual ~SWBuf();
 
-	//return null-terminated strings only!
-	inline const char *c_str(){
-		unsigned int size_cache = size();		
-		if (buf[size_cache - 1] != 0){
-			assureSize(size_cache + 2);
-			buf[size_cache] = 0;
-		}
-		return buf;
-	}
+	/**
+	* @return a pointer to the buffer content (null-terminated string)
+	*/
+	inline const char *c_str() const{	return buf;	}
+
+	/**
+	*
+	*/
 	inline char &charAt(unsigned int pos) { return ((pos <= (unsigned int)(end - buf)) ? buf[pos] : nullStr[0]); }
 
+	/** 
+	* size() and length() return only the number of characters of the string.
+	* Add one for the following null and one for each char to be appended!
+	*/
 	inline unsigned int size() const { return length(); }
+
+	/**
+	* size() and length() return only the number of characters of the string.
+	* Add one for the following null and one for each char to be appended!
+	*/
 	inline unsigned int length() const { return end - buf; }
+
+	/******************************************************************************
+ 	* SWBuf::set - sets this buf to a new value
+ 	*/
 	void set(const char *newVal);
+
+	/******************************************************************************
+ 	* SWBuf::set - sets this buf to a new value
+ 	*/
 	void set(const SWBuf &newVal);
+
+	/******************************************************************************
+ 	* SWBuf::setSize - Size this buffer to a specific length
+ 	*/
 	void setSize(unsigned int len);
+
+	/******************************************************************************
+ 	* SWBuf::append - appends a value to the current value of this SWBuf
+ 	*/
 	void append(const char *str);
+
+	/******************************************************************************
+ 	* SWBuf::append - appends a value to the current value of this SWBuf
+ 	*/
 	void append(const SWBuf &str);
+
+	/******************************************************************************
+ 	* SWBuf::append - appends a value to the current value of this SWBuf
+ 	*/
 	inline void append(char ch) {
-		assureSize((end-buf)+2);
+		assureSize((end-buf) + 2);
 		*end = ch;
 		end++;
 		*end = 0;
 	}
+
+	/******************************************************************************
+ 	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf
+	* WARNING: This function can only write at most
+	* JUNKBUFSIZE to the string per call.
+ 	*/
 	void appendFormatted(const char *format, ...);
 	
 	inline char *getRawData() { return buf; }	// be careful!  Probably setSize needs to be called in conjunction before and maybe after
 
-	inline operator const char *() { return c_str(); }
+	inline operator const char *() const { return c_str(); }
 	inline char &operator[](unsigned int pos) { return charAt(pos); }
 	inline char &operator[](int pos) { return charAt((unsigned int)pos); }
 	inline SWBuf &operator =(const char *newVal) { set(newVal); return *this; }
 	inline SWBuf &operator =(const SWBuf &other) { set(other); return *this; }
 	inline SWBuf &operator +=(const char *str) { append(str); return *this; }
 	inline SWBuf &operator +=(char ch) { append(ch); return *this; }
-	inline SWBuf &operator +=(const SWBuf &str) { append(str); return *this; }
 	inline SWBuf &operator -=(unsigned int len) { setSize(length()-len); return *this; }
 	inline SWBuf &operator --(int) { operator -=(1); return *this; }
 	inline SWBuf operator +(const SWBuf &other) const {

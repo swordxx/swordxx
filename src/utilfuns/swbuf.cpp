@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.6 2003/02/27 19:14:32 mgruner Exp $
+* $Id: swbuf.cpp,v 1.7 2003/02/27 23:34:22 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -30,12 +30,6 @@ SWORD_NAMESPACE_START
 
 char *SWBuf::nullStr = "";
 char SWBuf::junkBuf[JUNKBUFSIZE];
-
-/******************************************************************************
- * SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
- * 		to a value from a const char *
- *
- */
 
 SWBuf::SWBuf(const char *initVal) {
 	if (initVal) {
@@ -76,18 +70,9 @@ void SWBuf::init() {
 	fillByte = ' ';
 }
 
-/******************************************************************************
- * SWBuf Destructor - Cleans up instance of SWBuf
- */
-
 SWBuf::~SWBuf() {
 	free(buf);
 }
-
-
-/******************************************************************************
- * SWBuf::set - sets this buf to a new value
- */
 
 void SWBuf::set(const char *newVal) {
 	unsigned int len = strlen(newVal) + 1;
@@ -97,21 +82,13 @@ void SWBuf::set(const char *newVal) {
 }
 
 
-/******************************************************************************
- * SWBuf::set - sets this buf to a new value
- */
-
 void SWBuf::set(const SWBuf &newVal) {
 	unsigned int len = newVal.length() + 1;
 	assureSize(len);
-	memcpy(buf, newVal.raw_buf(), len);
+	memcpy(buf, newVal.c_str(), len);
 	end = buf + (len-1);
 }
 
-
-/******************************************************************************
- * SWBuf::append - appends a value to the current value of this SWBuf
- */
 
 void SWBuf::append(const char *str) {
 	unsigned int len = strlen(str) + 1;
@@ -120,37 +97,20 @@ void SWBuf::append(const char *str) {
 	end += (len-1);
 }
 
-
-/******************************************************************************
- * SWBuf::append - appends a value to the current value of this SWBuf
- */
-
 void SWBuf::append(const SWBuf &str) {
 	unsigned int len = str.length() + 1;
 	assureSize((end-buf)+len);
-	memcpy(end, str.raw_buf(), len);
+	memcpy(end, str.c_str(), len);
 	end += (len-1);
 }
-
-
-
-
-/******************************************************************************
- * SWBuf::setSize - Size this buffer to a specific length
- */
 
 void SWBuf::setSize(unsigned int len) {
 	assureSize(len+1);
 	if ((end - buf) < len)
 		memset(end, fillByte, len - (end-buf));
 	end = buf + len;
-	end[1] = 0;
+	*end = 0;
 }
-
-
-
-
-
 
 // WARNING: This function can only write at most
 // JUNKBUFSIZE to the string per call.

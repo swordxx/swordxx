@@ -44,6 +44,12 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILDEXAMPLES_FALSE = @BUILDEXAMPLES_FALSE@
+BUILDEXAMPLES_TRUE = @BUILDEXAMPLES_TRUE@
+BUILDTESTS_FALSE = @BUILDTESTS_FALSE@
+BUILDTESTS_TRUE = @BUILDTESTS_TRUE@
+BUILDUTILS_FALSE = @BUILDUTILS_FALSE@
+BUILDUTILS_TRUE = @BUILDUTILS_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -207,7 +213,7 @@ all: all-am
 .SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  apps/console/diatheke/Makefile
+	  $(AUTOMAKE) --foreign  apps/console/diatheke/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)

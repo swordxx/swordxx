@@ -44,6 +44,12 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILDEXAMPLES_FALSE = @BUILDEXAMPLES_FALSE@
+BUILDEXAMPLES_TRUE = @BUILDEXAMPLES_TRUE@
+BUILDTESTS_FALSE = @BUILDTESTS_FALSE@
+BUILDTESTS_TRUE = @BUILDTESTS_TRUE@
+BUILDUTILS_FALSE = @BUILDUTILS_FALSE@
+BUILDUTILS_TRUE = @BUILDUTILS_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -442,7 +448,7 @@ all: all-am
 .SUFFIXES: .c .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/genbook/Makefile.am $(srcdir)/../src/modules/genbook/rawgenbook/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  lib/Makefile
+	  $(AUTOMAKE) --foreign  lib/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 libLTLIBRARIES_INSTALL = $(INSTALL)
