@@ -1,0 +1,6 @@
+usr/lib
+etc/
+usr/share/sword
+usr/share/sword/mods.d
+usr/share/sword/modules
+usr/share/sword/locales.d

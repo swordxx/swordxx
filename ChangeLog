@@ -1,6 +1,8 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+09-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
+	Add debian directory so you can build debs from cvs
 
 * Release 1.5.4a *
 

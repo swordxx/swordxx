@@ -1,0 +1,27 @@
+An apt-getable archive is now available at crosswire with additional
+modules that you can install. Add this line to your sources.list 
+
+deb ftp://ftp.crosswire.org/pub/sword/packages/debian woody main
+
+Please report any bugs with these packages to the sword package,
+priority wishlist.
+
+You can also download modules from:
+
+  http://www.crosswire.org/sword/modules/
+
+then install modules in /usr/share/sword
+
+# cd /usr/share/sword
+# unzip ~/SwordMod.zip
+
+That method of install is not supported.
+
+Alternatively, for use on a user by user basis install them to 
+~/.sword
+
+Also, feel free to join us on irc.openprojects.net #sword
+
+:)
+Daniel
+

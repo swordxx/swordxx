@@ -1,0 +1,9 @@
+Document: sword
+Title: SWORD API Documentation
+Author: The SWORD Project
+Abstract: SWORD API Documentation
+Section: programming
+
+Format: HTML
+Index: /usr/share/doc/libsword-dev/html/index.html
+Files: /usr/share/doc/libsword-dev/html/*.html
