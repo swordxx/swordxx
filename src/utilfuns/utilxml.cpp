@@ -114,12 +114,45 @@ const ListString XMLTag::getAttributeNames() const {
 }
 
 
-const char *XMLTag::getAttribute(const char *attribName) const {
+const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const {
+	for (; (buf && partNum); partNum--) {
+		buf = strchr(buf, partSplit);
+		if (buf)
+			buf++;
+	}
+	if (buf) {
+		const char *end = strchr(buf, partSplit);
+		junkBuf = buf;
+		if (end)
+			junkBuf.setSize(end - buf);
+		return junkBuf.c_str();
+	}
+	return 0;
+}
+
+
+int XMLTag::getAttributePartCount(const char *attribName, char partSplit) const {
+	int count;
+	const char *buf = getAttribute(attribName);
+	for (count = 0; buf; count++) {
+		buf = strchr(buf, partSplit);
+		if (buf)
+			buf++;
+	}
+	return count;
+}
+
+
+const char *XMLTag::getAttribute(const char *attribName, int partNum, char partSplit) const {
 	if (!parsed)
 		parse();
 
 	MapStringPair::iterator it = attributes.find(attribName);
-	return (it == attributes.end()) ? 0 : it->second.c_str();
+	const char *retVal = (it == attributes.end()) ? 0 : it->second.c_str();
+	if ((retVal) && (partNum > -1))
+		retVal = getPart(retVal, partNum, partSplit);
+
+	return retVal;
 }
 
 

@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.8 2003/02/27 23:57:55 mgruner Exp $
+* $Id: swbuf.cpp,v 1.9 2003/06/26 04:33:31 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -37,19 +37,8 @@ char SWBuf::junkBuf[JUNKBUFSIZE];
 *
 */
 SWBuf::SWBuf(const char *initVal) {
-	if (initVal) {
-		allocSize = strlen(initVal)+1;
-		buf = (char *)calloc(allocSize + 5, 1);
-		memcpy(buf, initVal, allocSize);
-		end = buf + allocSize - 1;
-		allocSize += 5;
-	}
-	else {
-		allocSize = 15;
-		buf = (char *)calloc(allocSize, 1);
-		end = buf;
-	}
 	init();
+	set(initVal);
 }
 
 /******************************************************************************
@@ -58,12 +47,8 @@ SWBuf::SWBuf(const char *initVal) {
 *
 */
 SWBuf::SWBuf(const SWBuf &other) {
-	allocSize = other.length()+1;
-	buf = (char *)calloc(allocSize + 5, 1);
-	memcpy(buf, other.buf, allocSize);
-	end = buf + allocSize - 1;
-	allocSize += 5;
 	init();
+	set(other);
 }
 
 /******************************************************************************
@@ -72,32 +57,44 @@ SWBuf::SWBuf(const SWBuf &other) {
 *
 */
 SWBuf::SWBuf(char initVal) {
+	init();
+
 	allocSize = 15;
 	buf = (char *)calloc(allocSize, 1);
 	*buf = initVal;
 	end = buf+1;
-	init();
 }
 
 void SWBuf::init() {
 	fillByte = ' ';
+	allocSize = 0;
+	buf = 0;
+	end = 0;
 }
 
 /******************************************************************************
 * SWBuf Destructor - Cleans up instance of SWBuf
 */
 SWBuf::~SWBuf() {
-	free(buf);
+	if (buf)
+		free(buf);
 }
 
 /******************************************************************************
 * SWBuf::set - sets this buf to a new value
 */
 void SWBuf::set(const char *newVal) {
-	unsigned int len = strlen(newVal) + 1;
-	assureSize(len);
-	memcpy(buf, newVal, len);
-	end = buf + (len-1);
+	if (newVal) {
+		unsigned int len = strlen(newVal) + 1;
+		assureSize(len);
+		memcpy(buf, newVal, len);
+		end = buf + (len - 1);
+	}
+	else {
+		assureSize(1);
+		end = buf;
+		*end = 0;
+	}
 }
 
 

@@ -93,7 +93,8 @@
       ..\..\src\modules\filters\osisheadings.obj ..\..\src\utilfuns\utilxml.obj 
       ..\..\src\modules\filters\thmlwebif.obj 
       ..\..\src\modules\filters\gbfwebif.obj ..\..\src\utilfuns\utilweb.obj 
-      ..\..\src\modules\filters\osisfootnotes.obj"/>
+      ..\..\src\modules\filters\osisfootnotes.obj 
+      ..\..\src\modules\filters\osishtmlhref.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.4 2003/06/18 20:14:59 scribe Exp $
+ * $Id: utilxml.h,v 1.5 2003/06/26 04:33:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,9 +42,10 @@ private:
 	mutable bool empty;
 	mutable bool endTag;
 	mutable MapStringPair attributes;
-
+	mutable SWBuf junkBuf;
+	
 	void parse() const;
-
+	const char *getPart(const char *buf, int partNum = 0, char partSplit = '|') const;
 	
 public:
 	XMLTag(const char *tagString = 0);
@@ -63,7 +64,8 @@ public:
 	inline bool isEndTag() const { return endTag; }
 
 	const ListString getAttributeNames() const;
-	const char *getAttribute(const char *attribName) const;
+	int getAttributePartCount(const char *attribName, char partSplit = '|') const;
+	const char *getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
 	const char *setAttribute(const char *attribName, const char *attribValue);
 	const char *toString() const;
 	inline operator const char *() const { return toString(); }

@@ -68,12 +68,6 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
 			XMLTag tag(token);
 			if (!stricmp(tag.getName(), "note")) {
-				if ((tag.getAttribute("type")) && (!stricmp(tag.getAttribute("type"), "strongsMarkup")) && (!tag.isEmpty())) {
-					startTag = tag;
-					hide = true;
-					tagText = "";
-					continue;
-				}
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
 					startTag = tag;
 					hide = true;
@@ -86,7 +80,6 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					continue;
 				}
 				if (hide && tag.isEndTag()) {
-
 					if (module->isProcessEntryAttributes() && option) {
 						sprintf(buf, "%i", footnoteNum++);
 						ListString attributes = startTag.getAttributeNames();
