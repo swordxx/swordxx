@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.8 2004/07/20 19:06:41 scribe Exp $
+* $Id: url.cpp,v 1.9 2004/07/20 20:42:07 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -101,74 +101,100 @@ void URL::parse () {
 	 parameterMap.clear();
 	 
 	 // 2. Get the protocol, which is from the begining to the first ://
-	 char* end = strchr( urlPtr, ':' );
-	 if (end) { //protocol was found
+	 const char* end = strchr( urlPtr, ':' );
+	if (end) { //protocol was found
 	 	protocol.append(urlPtr, end-urlPtr);
-	 	pos = end-urlPtr;
-		
-		for (char* c = end; (*c == ':') || (*c == '/') ; ++c, ++pos) {} //find the end of the protocol separator (e.g. "://")
-	 }
+	 	urlPtr = end + 1;
 	
-	 //3.Get the hostname part. This is the part from pos up to the first slash
-	 end = strchr(urlPtr+pos, '/');
-	 if (end) {
-		hostname.append(urlPtr+pos, (end-urlPtr)-pos);
-	 	
-		pos = end - urlPtr;
-	 }
-	 else { //no slash found means there's only the host in the url
-	 	return; //WARNING: return already here!
-	 }
+		//find the end of the protocol separator (e.g. "://")
+		for (; (*urlPtr == ':') || (*urlPtr == '/'); urlPtr++);
+	}
+
+ //3.Get the hostname part. This is the part from pos up to the first slash
+	bool checkPath   = true;
+	bool checkParams = true;
+	bool checkAnchor = true;
+
+	end = strchr(urlPtr, '/');
+	if (!end) {
+		checkPath = false;
+		end = strchr(urlPtr, '?');
+	}
+	if (!end) {
+		checkParams = false;
+		end = strchr(urlPtr, '#');
+	}
+	if (!end) {
+		checkAnchor = false;
+		end = urlPtr+strlen(urlPtr);
+	}
 	 
-	 //4. Get the path, e.g. /dir/script.jsp, this is the part up to the first question mark, if it exists. Otherwise up to the end.
-	 char* start = end;
-	 end = start ? strchr(start, '?') : 0;
-	 if (end) {
-	 	path.append(start, end-start);
+	hostname.append(urlPtr, end-urlPtr);
+	 	
+	urlPtr = end + ((*end)? 1 : 0);
+
+	if (checkPath) { 
+		end = strchr(urlPtr, '?');
+		if (!end) {
+			checkParams = false;
+			end = strchr(urlPtr, '#');
+		}
+		if (!end) {
+			checkAnchor = false;
+			end = urlPtr+strlen(urlPtr);
+		}
+
+	 	path.append(urlPtr, end-urlPtr);
 		
-		pos = end-urlPtr;
-	 }
-	 else {
-	 	path.append(start);
-		return; //WARNING: return already here
+		urlPtr = end + ((*end)? 1 : 0);
 	 }
 
-	//5. Fill the map with the parameters and their values
-	SWBuf paramName;
-	SWBuf paramValue;
-			
-	end = (start && strchr(start, '?')) ? strchr(start, '?')+1 :0;
-	while (end) {
-		paramName = "";
-		paramValue = "";
-		
-		//search for the equal sign to find the value part
-		const char* valueStart = strchr(end, '=');		
-		if (valueStart) {
-			const char* valueEnd = strstr(valueStart, "&amp;") ? strstr(valueStart, "&amp;") : strstr(valueStart, "&"); //try to find a new paramter part
-			
-			if (valueEnd) {
-				paramName.append(end, valueStart-end);
-				paramValue.append(valueStart+1, valueEnd-(valueStart+1));
-			}
-			else { //this is the last paramter of the URL
-				paramName.append(end, valueStart-end);
-				paramValue.append(valueStart+1);
-			}
-			
-			if (paramName.length() && paramValue.length()) {//insert the param into the map if it's valid
-				paramName = decode(paramName.c_str());
-				paramValue = decode(paramValue.c_str());
+	if (checkParams) {
+		//5. Fill the map with the parameters and their values
+		SWBuf paramName;
+		SWBuf paramValue;
 				
-				parameterMap[ paramName ] = paramValue;
+/*
+		end = strchr(urlPtr, '#');
+		if (!end) {
+			checkAnchor = false;
+			end = urlPtr+strlen(urlPtr);
+		}
+*/
+		//end = (start && strchr(start, '?')) ? strchr(start, '?')+1 :0;
+		end = urlPtr;
+		while (end) {
+			paramName = "";
+			paramValue = "";
+			
+			//search for the equal sign to find the value part
+			const char* valueStart = strchr(end, '=');		
+			if (valueStart) {
+				const char* valueEnd = strstr(valueStart, "&amp;") ? strstr(valueStart, "&amp;") : strstr(valueStart, "&"); //try to find a new paramter part
+				
+				if (valueEnd) {
+					paramName.append(end, valueStart-end);
+					paramValue.append(valueStart+1, valueEnd-(valueStart+1));
+				}
+				else { //this is the last paramter of the URL
+					paramName.append(end, valueStart-end);
+					paramValue.append(valueStart+1);
+				}
+				
+				if (paramName.length() && paramValue.length()) {//insert the param into the map if it's valid
+					paramName = decode(paramName.c_str());
+					paramValue = decode(paramValue.c_str());
+					
+					parameterMap[ paramName ] = paramValue;
+				}
 			}
+			else {
+				break; //no valid parameter in the url
+			}
+			
+			const char *start = end+1;
+			end = strstr(start, "&amp;") ? strstr(start, "&amp;")+5 : (strstr(start, "&") ? strstr(start, "&")+1 : 0); //try to find a new paramter part
 		}
-		else {
-			break; //no valid parameter in the url
-		}
-		
-		start = end+1;
-		end = strstr(start, "&amp;") ? strstr(start, "&amp;")+5 : (strstr(start, "&") ? strstr(start, "&")+1 : 0); //try to find a new paramter part
 	}
 }
 
