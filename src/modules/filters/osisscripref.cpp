@@ -16,7 +16,7 @@
 
 SWORD_NAMESPACE_START
 
-const char oName[] = "Scripture Cross-references";
+const char oName[] = "Cross-references";
 const char oTip[] = "Toggles Scripture Cross-references On and Off if they exist";
 
 const SWBuf choices[3] = {"On", "Off", ""};
