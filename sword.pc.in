@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+
+Name: Sword
+Description: Biblical Text Engine
+Version: 1.5.99
+Libs: -L${libdir} -lsword
+Cflags: -I${includedir}/sword
+
