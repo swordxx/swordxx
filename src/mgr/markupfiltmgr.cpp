@@ -30,6 +30,8 @@
 #include <gbfhtmlhref.h>
 #include <thmlrtf.h>
 #include <gbfrtf.h>
+#include <gbfosis.h>
+#include <thmlosis.h>
 
 #include <markupfiltmgr.h>
 
@@ -225,8 +227,8 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         break;
                 case FMT_OSIS:
                         fromplain = NULL;
-                        fromthml = NULL;
-                        fromgbf = NULL;
+                        fromthml = new ThMLOSIS();
+                        fromgbf = new GBFOSIS();
                         fromosis = NULL;
                         break;
                 }

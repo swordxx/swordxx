@@ -1,8 +1,8 @@
 #!/bin/sh
 
 ./configure --prefix=/usr \
-	--disable-shared \
-	--enable-debug --without-conf --sysconfdir=/etc --with-vcl
+	--enable-debug --without-conf --sysconfdir=/etc --with-vcl \
+	--disable-shared
 
 echo ""
 echo ""

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          thmlosis.h  -  description
+                          gbfosis.h  -  description
                              -------------------
     begin                : 2001-09-03
     copyright            : 2001 by CrossWire Bible Society
@@ -14,21 +14,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef THMLOSIS_H
-#define THMLOSIS_H
+#ifndef GBFOSIS_H
+#define GBFOSIS_H
 
 #include <defs.h>
 #include <swfilter.h>
 
-/** this filter converts ThML text to HTML text with hrefs
+/** this filter converts GBF text to HTML text with hrefs
  */
-class SWDLLEXPORT ThMLOSIS : public SWFilter {
+class SWDLLEXPORT GBFOSIS : public SWFilter {
 protected:
 	virtual const char *convertToOSIS(const char *, const SWKey *key);
 	void pushString(char **buf, const char *format, ...);
 public:
-	ThMLOSIS();
-	virtual ~ThMLOSIS();
+	GBFOSIS();
+	virtual ~GBFOSIS();
 	char ProcessText(char *text, int maxlen, const SWKey *, const SWModule * = 0);
 };
 

@@ -54,6 +54,9 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 	char wordstr[5];
 	char *valto;
 	char *ch;
+	char *textStart = text, *textEnd = 0;
+	string tmp;
+	bool newText = false;
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
@@ -71,6 +74,7 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
+			textEnd = to;
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -85,6 +89,10 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 						// normal strongs number
 						sprintf(wordstr, "%03d", word++);
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+						tmp = "";
+						tmp.append(textStart, (int)(textEnd - textStart));
+						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
+						newText = true;
 					}
 					else {
 						// verb morph
@@ -98,6 +106,7 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 						if (lastspace)
 							to--;
 					}
+					if (newText) {textStart = to; newText = false; }
 					continue;
 				}
 			}
@@ -128,6 +137,7 @@ char ThMLStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SW
 			for (char *tok = token; *tok; tok++)
 				*to++ = *tok;
 			*to++ = '>';
+			if (newText) {textStart = to; newText = false; }
 			continue;
 		}
 		if (intoken) {

@@ -17,8 +17,8 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 {
 	unsigned char *to, *from, *maxto;
 	int len;
-        char digit[10];
-        short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
+	char digit[10];
+	short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
 
 	len = strlenw(text) + 2;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -30,7 +30,7 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 
 	// -------------------------------
 	for (to = (unsigned char*)text; *from && (to <= maxto); from++) {
-	  ch = 0;
+		ch = 0;
           if ((*from & 128) != 128) {
 	       *to++ = *from;
                continue;

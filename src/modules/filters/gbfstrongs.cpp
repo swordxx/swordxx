@@ -53,6 +53,9 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 	char wordstr[5];
 	char *valto;
 	char *ch;
+	char *textStart = text, *textEnd = 0;
+	bool newText = false;
+	string tmp;
 
 	len = strlen(text) + 1;	// shift string to right of buffer
 	if (len < maxlen) {
@@ -68,6 +71,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
+			textEnd = to;
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -82,6 +86,10 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 						// normal strongs number
 						sprintf(wordstr, "%03d", word++);
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+						tmp = "";
+						tmp.append(textStart, (int)(textEnd - textStart));
+						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
+						newText = true;
 					}
 					else {
 						// verb morph
@@ -94,6 +102,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 						if (lastspace)
 							to--;
 					}
+					if (newText) {textStart = to; newText = false; }
 					continue;
 				}
 			}
@@ -102,6 +111,7 @@ char GBFStrongs::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
 			for (char *tok = token; *tok; tok++)
 				*to++ = *tok;
 			*to++ = '>';
+			if (newText) {textStart = to; newText = false; }
 			continue;
 		}
 		if (intoken) {

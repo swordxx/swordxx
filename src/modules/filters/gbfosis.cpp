@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- * thmlstrongs -	SWFilter decendant to hide or show strongs number
- *			in a ThML module.
+ * gbfstrongs -	SWFilter decendant to hide or show strongs number
+ *			in a GBF module.
  */
 
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <thmlosis.h>
+#include <gbfosis.h>
 #include <swmodule.h>
 #include <versekey.h>
 #ifndef __GNUC__
@@ -17,15 +17,15 @@
 #endif
 
 
-ThMLOSIS::ThMLOSIS() {
+GBFOSIS::GBFOSIS() {
 }
 
 
-ThMLOSIS::~ThMLOSIS() {
+GBFOSIS::~GBFOSIS() {
 }
 
 
-char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
+char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
 
 	char *to, *from, token[2048]; // cheese.  Fix.
 	int tokpos = 0;
@@ -78,12 +78,12 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 
 			while (wordStart < (text+maxlen)) {
 //				if (strchr(" ,;.?!()'\"", *wordStart))
-				if (strchr(";,: .?!()'\"", *wordStart))
+				if (strchr(";, .:?!()'\"", *wordStart))
 					wordStart++;
 				else break;
 			}
 			while (wordEnd > wordStart) {
-				if (strchr(" ,;:.?!()'\"", *wordEnd))
+				if (strchr(" ,;.:?!()'\"", *wordEnd))
 					wordEnd--;
 				else break;
 			}
@@ -102,12 +102,12 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 			}
 
 			// Footnote
-			if (!strcmp(token, "note")) {
+			if (!strcmp(token, "RF")) {
 	//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
 				suspendTextPassThru = true;
 				newText = true;
 			}
-			else	if (!strcmp(token, "/note")) {
+			else	if (!strcmp(token, "Rf")) {
 				tmp = "<note type=\"x-StudyNote\"><notePart type=\"x-MainText\">";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
 				tmp += "</notePart></note>";
@@ -142,74 +142,55 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 			}
 
 			// Strongs numbers
-			else	if (!strnicmp(token, "sync type=\"Strongs\" ", 20)) {	// Strongs
+			else if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
 				if (module->isProcessEntryAttributes()) {
 					valto = val;
-					for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
+					for (unsigned int i = 1; ((token[i]) && (i < 150)); i++)
 						*valto++ = token[i];
 					*valto = 0;
-					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
-						// normal strongs number
-						strstrip(val);
+					// normal strongs number
+					strstrip(val);
+					if (!strncmp(wordStart, "<w ", 3)) {
+						sprintf(buf, "lemma=\"x-Strong:%s\" ", val);
+						memmove(wordStart+3+strlen(buf), wordStart+3, (to-wordStart)+1);
+						memcpy(wordStart+3, buf, strlen(buf));
+						to+=strlen(buf);
+					}
+					else {
 						sprintf(buf, "<w lemma=\"x-Strong:%s\">", val);
 						memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
 						memcpy(wordStart, buf, strlen(buf));
 						to+=strlen(buf);
 						pushString(&to, "</w>");
 						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
-//						tmp = "";
-//						tmp.append(textStart, (int)(wordEnd - wordStart));
-//						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
-					}
-					else {
-						// verb morph
-						sprintf(wordstr, "%03d", word-1);
-						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 					}
 				}
 			}
 
 			// Morphology
-			else	if (!strncmp(token, "sync type=\"morph\"", 17)) {
-				for (ch = token+17; *ch; ch++) {
-					if (!strncmp(ch, "class=\"", 7)) {
-						valto = val;
-						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
-							*valto++ = ch[i];
-						*valto = 0;
-						sprintf(wordstr, "%03d", word-1);
-						strstrip(val);
-						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
-					}
-					if (!strncmp(ch, "value=\"", 7)) {
-						valto = val;
-						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
-							*valto++ = ch[i];
-						*valto = 0;
-						sprintf(wordstr, "%03d", word-1);
-						strstrip(val);
-						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
-					}
-				}
+			else if (*token == 'W' && token[1] == 'T' && (token[2] == 'G' || token[2] == 'H')) {	// Strongs
+				valto = val;
+				for (unsigned int i = 1; ((token[i]) && (i < 150)); i++)
+					*valto++ = token[i];
+				*valto = 0;
+				strstrip(val);
 				if (!strncmp(wordStart, "<w ", 3)) {
-
-					const char *cls = "Unknown", *morph;
-
-					if (module->getEntryAttributes()["Word"][wordstr]["Morph"].size() > 0) {
-						if (module->getEntryAttributes()["Word"][wordstr]["MorphClass"].size() > 0)
-							cls = module->getEntryAttributes()["Word"][wordstr]["MorphClass"].c_str();
-						morph = module->getEntryAttributes()["Word"][wordstr]["Morph"].c_str();
-					
-						sprintf(buf, "morph=\"x-%s:%s\" ", cls, morph);
-						memmove(wordStart+3+strlen(buf), wordStart+3, (to-wordStart)+1);
-						memcpy(wordStart+3, buf, strlen(buf));
-						to+=strlen(buf);
-					}
+					sprintf(buf, "morph=\"x-%s:%s\" ", "StrongsMorph", val);
+					memmove(wordStart+3+strlen(buf), wordStart+3, (to-wordStart)+1);
+					memcpy(wordStart+3, buf, strlen(buf));
+					to+=strlen(buf);
+				}
+				else {
+					sprintf(buf, "<w morph=\"x-%s:%s\">", "StrongsMorph", val);
+					memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
+					memcpy(wordStart, buf, strlen(buf));
+					to+=strlen(buf);
+					pushString(&to, "</w>");
 				}
 			}
 
 			if (!keepToken) {	// if we don't want strongs
-				if (strchr(" ,:;.?!()'\"", from[1])) {
+				if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
 					if (lastspace)
 						to--;
 				}
@@ -289,7 +270,7 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 }
 
 
-void ThMLOSIS::pushString(char **buf, const char *format, ...) {
+void GBFOSIS::pushString(char **buf, const char *format, ...) {
   va_list argptr;
 
   va_start(argptr, format);
@@ -300,7 +281,7 @@ void ThMLOSIS::pushString(char **buf, const char *format, ...) {
 }
 
 
-const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
+const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 	static string outRef;
 
 	outRef = "";

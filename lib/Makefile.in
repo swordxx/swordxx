@@ -106,7 +106,7 @@ globalconfdir := @sysconfdir@
 
 lib_LTLIBRARIES = libsword.la
 
-libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(SWREGEX) $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(filtersdir)/greeklexattribs.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp $(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
+libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(SWREGEX) $(utilfunsdir)/roman.c $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/rwphtml.cpp $(filtersdir)/rwprtf.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp $(filtersdir)/gbfosis.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(filtersdir)/greeklexattribs.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp $(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
 libsword_la_LIBADD = 
 libsword_la_LDFLAGS = -version-info 1
 keysdir = $(top_srcdir)/src/keys
@@ -179,13 +179,13 @@ am_libsword_la_OBJECTS = swkey.lo listkey.lo versekey.lo strkey.lo \
 	thmlstrongs.lo thmlfootnotes.lo thmlheadings.lo thmlmorph.lo \
 	thmllemma.lo thmlscripref.lo thmlvariants.lo gbfthml.lo \
 	thmlgbf.lo thmlrtf.lo thmlhtml.lo thmlhtmlhref.lo thmlosis.lo \
-	thmlplain.lo unicodertf.lo latin1utf8.lo latin1utf16.lo \
-	utf8utf16.lo utf16utf8.lo scsuutf8.lo utf8html.lo utf8latin1.lo \
-	thmlolb.lo greeklexattribs.lo $(am__objects_3) \
-	utf8cantillation.lo utf8hebrewpoints.lo utf8greekaccents.lo \
-	swgenbook.lo rawgenbook.lo swtext.lo rawtext.lo ztext.lo \
-	rawgbf.lo swcom.lo rawcom.lo rawfiles.lo zcom.lo hrefcom.lo \
-	swld.lo rawld.lo rawld4.lo zld.lo flatapi.lo
+	gbfosis.lo thmlplain.lo unicodertf.lo latin1utf8.lo \
+	latin1utf16.lo utf8utf16.lo utf16utf8.lo scsuutf8.lo \
+	utf8html.lo utf8latin1.lo thmlolb.lo greeklexattribs.lo \
+	$(am__objects_3) utf8cantillation.lo utf8hebrewpoints.lo \
+	utf8greekaccents.lo swgenbook.lo rawgenbook.lo swtext.lo \
+	rawtext.lo ztext.lo rawgbf.lo swcom.lo rawcom.lo rawfiles.lo \
+	zcom.lo hrefcom.lo swld.lo rawld.lo rawld4.lo zld.lo flatapi.lo
 libsword_la_OBJECTS = $(am_libsword_la_OBJECTS)
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
@@ -201,9 +201,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gbffootnotes.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/gbfheadings.Plo ./$(DEPDIR)/gbfhtml.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/gbfhtmlhref.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/gbfmorph.Plo ./$(DEPDIR)/gbfplain.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/gbfrtf.Plo ./$(DEPDIR)/gbfstrongs.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/gbfthml.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/gbfmorph.Plo ./$(DEPDIR)/gbfosis.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/gbfplain.Plo ./$(DEPDIR)/gbfrtf.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/gbfstrongs.Plo ./$(DEPDIR)/gbfthml.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/greeklexattribs.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/hrefcom.Plo ./$(DEPDIR)/latin1utf16.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/latin1utf8.Plo ./$(DEPDIR)/listkey.Plo \
@@ -376,6 +376,7 @@ thmlrtf.lo: $(filtersdir)/thmlrtf.cpp
 thmlhtml.lo: $(filtersdir)/thmlhtml.cpp
 thmlhtmlhref.lo: $(filtersdir)/thmlhtmlhref.cpp
 thmlosis.lo: $(filtersdir)/thmlosis.cpp
+gbfosis.lo: $(filtersdir)/gbfosis.cpp
 thmlplain.lo: $(filtersdir)/thmlplain.cpp
 unicodertf.lo: $(filtersdir)/unicodertf.cpp
 latin1utf8.lo: $(filtersdir)/latin1utf8.cpp
@@ -431,6 +432,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfhtml.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfhtmlhref.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfmorph.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfosis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfplain.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfrtf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gbfstrongs.Plo@am__quote@
@@ -1711,6 +1713,24 @@ thmlosis.lo: $(filtersdir)/thmlosis.cpp
 @AMDEP_TRUE@	depfile='$(DEPDIR)/thmlosis.Plo' tmpdepfile='$(DEPDIR)/thmlosis.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o thmlosis.lo `test -f '$(filtersdir)/thmlosis.cpp' || echo '$(srcdir)/'`$(filtersdir)/thmlosis.cpp
+
+gbfosis.o: $(filtersdir)/gbfosis.cpp
+@AMDEP_TRUE@	source='$(filtersdir)/gbfosis.cpp' object='gbfosis.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/gbfosis.Po' tmpdepfile='$(DEPDIR)/gbfosis.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o gbfosis.o `test -f '$(filtersdir)/gbfosis.cpp' || echo '$(srcdir)/'`$(filtersdir)/gbfosis.cpp
+
+gbfosis.obj: $(filtersdir)/gbfosis.cpp
+@AMDEP_TRUE@	source='$(filtersdir)/gbfosis.cpp' object='gbfosis.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/gbfosis.Po' tmpdepfile='$(DEPDIR)/gbfosis.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o gbfosis.obj `cygpath -w $(filtersdir)/gbfosis.cpp`
+
+gbfosis.lo: $(filtersdir)/gbfosis.cpp
+@AMDEP_TRUE@	source='$(filtersdir)/gbfosis.cpp' object='gbfosis.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/gbfosis.Plo' tmpdepfile='$(DEPDIR)/gbfosis.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o gbfosis.lo `test -f '$(filtersdir)/gbfosis.cpp' || echo '$(srcdir)/'`$(filtersdir)/gbfosis.cpp
 
 thmlplain.o: $(filtersdir)/thmlplain.cpp
 @AMDEP_TRUE@	source='$(filtersdir)/thmlplain.cpp' object='thmlplain.o' libtool=no @AMDEPBACKSLASH@
