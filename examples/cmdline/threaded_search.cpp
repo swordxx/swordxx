@@ -3,6 +3,7 @@
 #include <swmgr.h>
 #include <regex.h> // GNU
 #include <listkey.h>
+#include <iostream>
 
 #include <pthread.h>
 
@@ -31,7 +32,7 @@ void* dummy(void* p) {
 
 void percentUpdate(char percent, void* userData)  {
 	cms_currentProgress = (int)percent;
-	cout << cms_currentProgress << "% ";
+	std::cout << cms_currentProgress << "% ";
 }
 
 CSwordModuleSearch::CSwordModuleSearch() {
@@ -45,8 +46,8 @@ CSwordModuleSearch::~CSwordModuleSearch() {
 }
 
 void CSwordModuleSearch::startThread()  {
-	cout << "startThread" << endl;
-	cout.flush();
+	std::cout << "startThread" << std::endl;
+	std::cout.flush();
 
 	pthread_attr_t* attr = new pthread_attr_t;
 	pthread_attr_init(attr);
@@ -56,27 +57,27 @@ void CSwordModuleSearch::startThread()  {
 	m_isSearching = true;
 	int i = pthread_create(thread, attr, &dummy, this); 
 
-	cout << "Created the thread: " << i << endl;
-	cout.flush();
+	std::cout << "Created the thread: " << i << std::endl;
+	std::cout.flush();
 }	
 
 void CSwordModuleSearch::search()  {
 	
 	if (!m_module) {
-		cout << "Return." << endl;
+		std::cout << "Return." << std::endl;
 		return;
 	}
 
 	ListKey scopeList = VerseKey().ParseVerseList("Luke;John;Revelation","", true);
 	for (int i=0; i < scopeList.Count(); ++i) {
-		cout << (const char*)*scopeList.GetElement(i) << endl;
+		std::cout << (const char*)*scopeList.GetElement(i) << std::endl;
 	}
 	SWKey* scope = &scopeList;
 
 	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
 
 	if (!scope)
-		cout << "bad scope!" << endl;
+		std::cout << "bad scope!" << std::endl;
 	m_isSearching = false;
 }
 
@@ -105,18 +106,18 @@ int main(int argc, char **argv) {
 	moduleSearch->m_module = (*it).second;
 	moduleSearch->startThread();
 	
-	cout << "Start loop" << endl;
-	cout.flush();
+	std::cout << "Start loop" << std::endl;
+	std::cout.flush();
 	while (true) {
 		if (!moduleSearch->m_isSearching)
 			break;
 		else 
-			cout.flush();
+			std::cout.flush();
 	};
 
-	cout << endl << "Number of found items: " << moduleSearch->m_searchResult.Count() << endl;
-	cout << "Finished program" << endl;
-	cout.flush();
+	std::cout << std::endl << "Number of found items: " << moduleSearch->m_searchResult.Count() << std::endl;
+	std::cout << "Finished program" << std::endl;
+	std::cout.flush();
 
 	delete moduleSearch;
 	exit(0);

@@ -2,20 +2,21 @@
 #include <rawtext.h>
 #include <swmgr.h>
 #include <regex.h> // GNU
+#include <iostream>
 
 void percentUpdate(char percent, void *userData) {
 	static char printed = 0;
 	char maxHashes = *((char *)userData);
 	
 	while ((((float)percent)/100) * maxHashes > printed) {
-		cout << "=";
+		std::cout << "=";
 		printed++;
-		cout.flush();
+		std::cout.flush();
 	}
 /*
-	cout << (int)percent << "% ";
+	std::cout << (int)percent << "% ";
 */
-	cout.flush();
+	std::cout.flush();
 }
 
 
@@ -50,12 +51,12 @@ int main(int argc, char **argv)
 		target->SetKey(vk);
 	}
 
-	cout << "[0=================================50===============================100]\n ";
+	std::cout << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
 	listkey = target->Search(argv[2], -2, 0/*REG_ICASE*/, 0, 0, &percentUpdate, &lineLen);
-	cout << "\n";
+	std::cout << "\n";
 	while (!listkey.Error()) {
-		cout << (const char *)listkey << "\n";
+		std::cout << (const char *)listkey << std::endl;
 		listkey++;
 	}
 
