@@ -36,6 +36,7 @@
 #include <osishtmlhref.h>
 #include <gbfwebif.h>
 #include <thmlwebif.h>
+#include <osiswebif.h>
 
 #include <markupfiltmgr.h>
 
@@ -240,7 +241,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromplain = NULL;
                         fromthml = new ThMLWEBIF();
                         fromgbf = new GBFWEBIF();
-                        fromosis = NULL;
+                        fromosis = new OSISWEBIF();
                         break;
                 }
 

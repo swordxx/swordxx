@@ -26,6 +26,8 @@
 SWORD_NAMESPACE_START
 
 
+OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
+}
 
 bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
