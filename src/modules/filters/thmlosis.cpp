@@ -177,8 +177,9 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 			memcpy(text, ref, strlen(ref));
 			if (vkey->Verse()) {
 				VerseKey tmp;
-				tmp.Normalize(0);
 				tmp = *vkey;
+				tmp.AutoNormalize(0);
+				tmp.Headings(1);
 				sprintf(ref, "<verseEnd refVerseStart=\"%s\" />", vkey->getOSISRef());
 				strcat(text, ref);
 				tmp = MAXVERSE;
@@ -189,8 +190,8 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 					tmp = MAXCHAPTER;
 					tmp = MAXVERSE;
 					if (*vkey == tmp) {
-						tmp.Verse(0);
 						tmp.Chapter(0);
+						tmp.Verse(0);
 						sprintf(ref, "<bookEnd refBookStart=\"%s\" />", tmp.getOSISRef());
 						strcat(text, ref);
 					}

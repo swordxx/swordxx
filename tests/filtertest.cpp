@@ -11,11 +11,11 @@ int main(int argc, char **argv) {
 	if (!module)
 		module = mgr.Modules.begin()->second;
 
-	((VerseKey &)module->Key()).Normalize(0);
-	((VerseKey &)module->Key()).Headings(1);
+	((VerseKey *)(SWKey *)*module)->AutoNormalize(0);
+	((VerseKey *)(SWKey *)*module)->Headings(1);
 //    ThMLHTMLHREF filter;
     ThMLOSIS filter;
-    module->SetKey((argc > 1) ? argv[1] : "jas1:1");
+    module->Key() = ((argc > 1) ? argv[1] : "jas1:1");
     char *buf = new char [ MAXBUF ];
     memset(buf, 0, MAXBUF);
 //    strcpy(buf, "This is a verse reference: <scripRef>James 1:19</scripRef> with an <img src=\"/images/yoyo.jpg\">");
