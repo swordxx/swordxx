@@ -1,0 +1,54 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+USEUNIT("..\..\src\keys\versekey.cpp");
+USEUNIT("..\..\src\keys\strkey.cpp");
+USEUNIT("..\..\src\keys\swkey.cpp");
+USEUNIT("..\..\src\keys\listkey.cpp");
+USEUNIT("..\..\src\mgr\swmgr.cpp");
+USEUNIT("..\..\src\mgr\localemgr.cpp");
+USEUNIT("..\..\src\mgr\swconfig.cpp");
+USEUNIT("..\..\src\mgr\swlocale.cpp");
+USEUNIT("..\..\src\mgr\filemgr.cpp");
+USEUNIT("..\..\src\utilfuns\utilstr.cpp");
+USEUNIT("..\..\src\utilfuns\utilconf.cpp");
+USEUNIT("..\..\src\utilfuns\Greek2Greek.cpp");
+USEUNIT("..\..\src\frontend\swlog.cpp");
+USEUNIT("..\..\src\frontend\swdisp.cpp");
+USEUNIT("..\..\src\modules\swmodule.cpp");
+USEUNIT("..\..\src\modules\comments\swcom.cpp");
+USEUNIT("..\..\src\modules\comments\hrefcom\hrefcom.cpp");
+USEUNIT("..\..\src\modules\comments\rawcom\rawcom.cpp");
+USEUNIT("..\..\src\modules\comments\rawfiles\rawfiles.cpp");
+USEUNIT("..\..\src\modules\common\lzsscomprs.cpp");
+USEUNIT("..\..\src\modules\common\rawstr.cpp");
+USEUNIT("..\..\src\modules\common\rawverse.cpp");
+USEUNIT("..\..\src\modules\common\sapphire.cpp");
+USEUNIT("..\..\src\modules\common\swcipher.cpp");
+USEUNIT("..\..\src\modules\common\swcomprs.cpp");
+USEUNIT("..\..\src\modules\filters\thmlrtf.cpp");
+USEUNIT("..\..\src\modules\filters\gbffootnotes.cpp");
+USEUNIT("..\..\src\modules\filters\gbfhtml.cpp");
+USEUNIT("..\..\src\modules\filters\gbfplain.cpp");
+USEUNIT("..\..\src\modules\filters\gbfrtf.cpp");
+USEUNIT("..\..\src\modules\filters\gbfstrongs.cpp");
+USEUNIT("..\..\src\modules\filters\gbfthml.cpp");
+USEUNIT("..\..\src\modules\filters\plainfootnotes.cpp");
+USEUNIT("..\..\src\modules\filters\plainhtml.cpp");
+USEUNIT("..\..\src\modules\filters\rtfhtml.cpp");
+USEUNIT("..\..\src\modules\filters\rwphtml.cpp");
+USEUNIT("..\..\src\modules\filters\rwprtf.cpp");
+USEUNIT("..\..\src\modules\filters\thmlgbf.cpp");
+USEUNIT("..\..\src\modules\filters\thmlhtml.cpp");
+USEUNIT("..\..\src\modules\filters\thmlplain.cpp");
+USEUNIT("..\..\src\modules\filters\cipherfil.cpp");
+USEUNIT("..\..\src\modules\lexdict\swld.cpp");
+USEUNIT("..\..\src\modules\lexdict\rawld\rawld.cpp");
+USEUNIT("..\..\src\modules\texts\swtext.cpp");
+USEUNIT("..\..\src\modules\texts\rawtext\rawtext.cpp");
+//---------------------------------------------------------------------------
+#define Library
+
+// To add a file to the library use the Project menu 'Add to Project'.
+

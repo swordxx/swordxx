@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="libsword.lib"/>
+    <OBJFILES value="..\..\src\keys\versekey.obj ..\..\src\keys\strkey.obj 
+      ..\..\src\keys\swkey.obj ..\..\src\keys\listkey.obj 
+      ..\..\src\mgr\swmgr.obj ..\..\src\mgr\localemgr.obj 
+      ..\..\src\mgr\swconfig.obj ..\..\src\mgr\swlocale.obj 
+      ..\..\src\mgr\filemgr.obj ..\..\src\utilfuns\utilstr.obj 
+      ..\..\src\utilfuns\utilconf.obj ..\..\src\utilfuns\Greek2Greek.obj 
+      ..\..\src\frontend\swlog.obj ..\..\src\frontend\swdisp.obj 
+      ..\..\src\modules\swmodule.obj ..\..\src\modules\comments\swcom.obj 
+      ..\..\src\modules\comments\hrefcom\hrefcom.obj 
+      ..\..\src\modules\comments\rawcom\rawcom.obj 
+      ..\..\src\modules\comments\rawfiles\rawfiles.obj 
+      ..\..\src\modules\common\lzsscomprs.obj 
+      ..\..\src\modules\common\rawstr.obj ..\..\src\modules\common\rawverse.obj 
+      ..\..\src\modules\common\sapphire.obj 
+      ..\..\src\modules\common\swcipher.obj ..\..\src\modules\common\swcomprs.obj 
+      ..\..\src\modules\filters\thmlrtf.obj 
+      ..\..\src\modules\filters\gbffootnotes.obj 
+      ..\..\src\modules\filters\gbfhtml.obj 
+      ..\..\src\modules\filters\gbfplain.obj 
+      ..\..\src\modules\filters\gbfrtf.obj ..\..\src\modules\filters\gbfstrongs.obj 
+      ..\..\src\modules\filters\gbfthml.obj 
+      ..\..\src\modules\filters\plainfootnotes.obj 
+      ..\..\src\modules\filters\plainhtml.obj 
+      ..\..\src\modules\filters\rtfhtml.obj 
+      ..\..\src\modules\filters\rwphtml.obj ..\..\src\modules\filters\rwprtf.obj 
+      ..\..\src\modules\filters\thmlgbf.obj 
+      ..\..\src\modules\filters\thmlhtml.obj 
+      ..\..\src\modules\filters\thmlplain.obj 
+      ..\..\src\modules\filters\cipherfil.obj ..\..\src\modules\lexdict\swld.obj 
+      ..\..\src\modules\lexdict\rawld\rawld.obj 
+      ..\..\src\modules\texts\swtext.obj 
+      ..\..\src\modules\texts\rawtext\rawtext.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;..\..\src\keys;..\..\src\mgr;..\..\src\utilfuns;..\..\src\frontend;..\..\src\modules;..\..\src\modules\comments;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\rawfiles;..\..\src\modules\common;..\..\src\modules\filters;..\..\src\modules\lexdict;..\..\src\modules\lexdict\rawld;..\..\src\modules\texts;..\..\src\modules\texts\rawtext"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <LINKER value="TLib"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="libsword.bpf"/>
+    <INCLUDEPATH value="..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+    <LISTFILE value=""/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+      -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="/P128"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="$(OBJFILES)"/>
+    <ALLLIB value=""/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=3
+Item0=..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\include;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\src\modules\texts\rawtext;..\src\modules\texts;..\src\modules\lexdict\rawld;..\src\modules\lexdict;..\src\modules\filters;..\src\modules\common;..\src\modules\comments\rawfiles;..\src\modules\comments\rawcom;..\src\modules\comments\hrefcom;..\src\modules\comments;..\src\modules;..\src\frontend;..\src\utilfuns;..\src\mgr;..\src\keys;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=2
+Item0=..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\src\modules\texts\rawtext;..\src\modules\texts;..\src\modules\lexdict\rawld;..\src\modules\lexdict;..\src\modules\filters;..\src\modules\common;..\src\modules\comments\rawfiles;..\src\modules\comments\rawcom;..\src\modules\comments\hrefcom;..\src\modules\comments;..\src\modules;..\src\frontend;..\src\utilfuns;..\src\mgr;..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[HistoryLists\hlTlibPageSize]
+Count=4
+Item0=0x0080
+Item1=0x0040
+Item2=0x0020
+Item3=0x0010
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>
