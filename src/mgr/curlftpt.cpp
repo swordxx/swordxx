@@ -104,7 +104,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 #endif
 
 #ifdef EPRT_AVAILABLE
-		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0); //curl 8.0 or later
+		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0);
 #endif
 		
 		res = curl_easy_perform(session);
