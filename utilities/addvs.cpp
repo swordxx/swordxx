@@ -31,53 +31,107 @@ int main(int argc, char **argv) {
     
     // Do some initialization stuff
     char buffer[65536];  //this is the max size of any entry
-    RawText mod(argv[2]);	// open our datapath with our RawText driver.
+    RawText * mod = new RawText(argv[2]);	// open our datapath with our RawText driver.
     VerseKey *vkey = new VerseKey;
     vkey->Headings(1);
     vkey->AutoNormalize(0);
     vkey->Persist(1);      // the magical setting
-    
+    *vkey = argv[3];   
     // Set our VerseKey
-    mod.SetKey(*vkey);
-    *vkey = argv[3];
+    mod->SetKey(*vkey);
+    if (!vkey->Chapter()) {
+      // bad hack >>
+      // 0:0 is Book intro
+      // (chapter):0 is Chapter intro
+      //
+      // 0:2 is Module intro
+      // 0:1 is Testament intro
+      int backstep = vkey->Verse();
+      vkey->Verse(0);
+      *mod -= backstep;       
+      // << bad hack
 
-   if (!vkey->Chapter())
-     {
-       // bad hack >>
-       // 0:0 is Book intro
-       // (chapter):0 is Chapter intro
-       //
-       // 0:2 is Module intro
-       // 0:1 is Testament intro
-       int backstep = vkey->Verse();
-       vkey->Verse(0);
-       mod -= backstep;       
-       // << bad hack
-     }
-    
-    FILE *infile;
-    // case: add from text file
-    //Open our data file and read its contents into the buffer
-    if (argc == 5) infile = fopen(argv[4], "r");
-    // case: add from stdin
-    else infile = stdin;
-
-    fread(buffer, sizeof(buffer), sizeof(char), infile);
-    
-    mod << buffer;	// save text to module at current position
-
+      FILE *infile;
+      // case: add from text file
+      //Open our data file and read its contents into the buffer
+      if (argc == 5) infile = fopen(argv[4], "r");
+      // case: add from stdin
+      else infile = stdin;
+      
+      fread(buffer, sizeof(buffer), sizeof(char), infile);
+      
+      *mod << buffer;	// save text to module at current position
+    }
+    else {
+      ListKey listkey = vkey->ParseVerseList(argv[3], "Gen1:1", true);
+      int i;
+      bool havefirst = false;
+      VerseKey firstverse;
+      for (i = 0; i < listkey.Count(); i++) {
+	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+	if (element) {
+	  mod->Key(element->LowerBound());
+	  VerseKey finalkey = element->UpperBound();
+	  cout << (const char*)mod->Key() << "-" << (const char*)finalkey << endl;
+	  if (!havefirst) {
+	    havefirst = true;
+	    firstverse = mod->Key();
+	    FILE *infile;
+	    // case: add from text file
+	    //Open our data file and read its contents into the buffer
+	    if (argc == 5) infile = fopen(argv[4], "r");
+	    // case: add from stdin
+	    else infile = stdin;
+	    
+	    fread(buffer, sizeof(buffer), sizeof(char), infile);
+	    
+	    *(SWModule*)mod << buffer;	// save text to module at current position
+	    cout << "f" << (const char*)firstverse << endl;
+	    (*mod)++;
+	  }
+	  while (mod->Key() <= finalkey) {
+	    cout << (const char*)mod->Key() << endl;
+	    *(SWModule*)mod << &firstverse;
+	    (*mod)++;
+	  }
+	}
+	else {
+	  if (havefirst) {
+	    mod->Key(*listkey.GetElement(i));
+	    *(SWModule*)mod << &firstverse;
+	    cout << (const char*)mod->Key() << endl;
+	  }
+	  else {
+	    mod->Key(*listkey.GetElement(i));
+	    havefirst = true;
+	    firstverse = mod->Key();
+	    FILE *infile;
+	    // case: add from text file
+	    //Open our data file and read its contents into the buffer
+	    if (argc == 5) infile = fopen(argv[4], "r");
+	    // case: add from stdin
+	    else infile = stdin;
+	    
+	    fread(buffer, sizeof(buffer), sizeof(char), infile);
+	    
+	    *(SWModule*)mod << buffer;	// save text to module at current position
+	    cout << "f" << (const char*)firstverse << endl;
+	  }
+	}
+      }
+    }
     delete vkey;
-  }
-  // Link 2 verses
-  else if (!strcmp(argv[1], "-l") && argc == 5) {
-    // Do some initialization stuff
-    RawText *mod = new RawText(argv[2]);	// open our datapath with our RawText driver.
-    
-    mod->SetKey(argv[4]);    // set key from argument
-    *(SWModule*)mod << &((SWKey) argv[3]);
-    delete mod;
-  }
-
+ }
+ // Link 2 verses
+ else if (!strcmp(argv[1], "-l") && argc == 5) {
+   // Do some initialization stuff
+   RawText *mod = new RawText(argv[2]);	// open our datapath with our RawText driver.
+   
+   mod->SetKey(argv[4]);    // set key from argument
+   *(SWModule*)mod << &((SWKey) argv[3]);
+   delete mod;
+ }
+ 
  else if (!strcmp(argv[1], "-d") && argc == 4) {
    RawText mod(argv[2]);	// open our datapath with our RawText driver.
    VerseKey *vkey = new VerseKey;
