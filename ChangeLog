@@ -3,6 +3,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 15-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added SWCacher to lib and made SWModule impl it
 	Added SWModule::setSkipConsecutiveLinks
 	Fixed mod2zmod to catch links
 	Fixed TOP to position to first entry, not say Gen1:1
