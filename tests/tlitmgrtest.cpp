@@ -382,10 +382,21 @@ int main()
 	Transliterator *trans = Transliterator::createInstance("NFD;Latin-Gothic;NFC", UTRANS_FORWARD, status);
     if (U_FAILURE(status)) {
 	std::cout << "Failed to get Latin-Gothic" << std::endl;
+	status = U_ZERO_ERROR;
 	}
 	else
 	{
 	std::cout << "Got Latin-Gothic :)" << std::endl;
+	delete trans;
+	}
+	trans = Transliterator::createInstance("NFD;BGreek-Greek;NFC", UTRANS_FORWARD, status);
+    if (U_FAILURE(status)) {
+	std::cout << "Failed to get BGreek-Greek" << std::endl;
+	status = U_ZERO_ERROR;
+	}
+	else
+	{
+	std::cout << "Got BGreek-Greek :)" << std::endl;
 	delete trans;
 	}
 
