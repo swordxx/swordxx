@@ -1,8 +1,4 @@
 AUTOMAKE_OPTIONS = 1.6
-# General defines
-
-version := 1.5.7
-
 
 # this WILL NOT WORK for you. only inhouse patched version of
 # sapphire will omit enciphering code when set to yes, so leave
@@ -141,7 +137,7 @@ uninstall-am: uninstall-info-am uninstalllocaleDATA \
 	
 register:
 	@echo ""
-	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}, ${pkgdatadir}" | mail sword.users@crosswire.org
+	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD @VERSION@, ${pkgdatadir}" | mail sword.users@crosswire.org
 	@echo ""
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
