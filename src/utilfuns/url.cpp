@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.cpp  - code for an URL parser utility class
 *
-* $Id: url.cpp,v 1.1 2004/07/06 20:07:13 joachim Exp $
+* $Id: url.cpp,v 1.2 2004/07/08 19:30:42 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -39,16 +39,16 @@ URL::URL(const char* url)
 	}
 }
 
-const SWBuf& URL::getProtocol() const {
-	return m_protocol;
+const char* const URL::getProtocol() const {
+	return m_protocol.c_str();
 }
 
-const SWBuf& URL::getHostName () const {
-	return m_hostname;
+const char* const URL::getHostName () const {
+	return m_hostname.c_str();
 }
 
-const SWBuf& URL::getPath() const {
-	return m_path;
+const char* const URL::getPath() const {
+	return m_path.c_str();
 }
 
 const std::map< SWBuf, SWBuf >& URL::getParameters()  const {
@@ -59,8 +59,8 @@ const std::map< SWBuf, SWBuf >& URL::getParameters()  const {
  * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".
  * If the parameter is not set an empty string is returned.
  */
-const SWBuf URL::getParamterValue(const SWBuf& name) {
-	return m_parameterMap[ name ];
+const char* const URL::getParamterValue(const char* const name) {
+	return m_parameterMap[ SWBuf(name) ].c_str();
 }
 
 

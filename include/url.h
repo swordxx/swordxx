@@ -1,7 +1,7 @@
 /******************************************************************************
 *  url.h  - code for an URL parser utility class
 *
-* $Id: url.h,v 1.1 2004/07/06 20:07:13 joachim Exp $
+* $Id: url.h,v 1.2 2004/07/08 19:30:42 joachim Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -40,15 +40,15 @@ public:
 	/** Get the protocol.
 	* @return The protocol, e.g. "http" for an url like "http://www.crosswire.org/index.jsp?page=help"
 	*/
-	const SWBuf&  getProtocol() const;
+	const char* const  getProtocol() const;
 	/** Get the hostname
 	* @return The hostname, e.g. "www.crosswire.org" for an url like "http://www.crosswire.org/index.jsp?page=help"
 	*/
-	const SWBuf&  getHostName() const;
+	const char* const  getHostName() const;
 	/** Get the path
 	* @return The path, e.g. "/index.jsp" for an url like "http://www.crosswire.org/index.jsp?page=help"
 	*/
-	const SWBuf&  getPath() const;
+	const char* const  getPath() const;
 	
 	/** All available paramters
 	* @return The map which contains the parameters and their values
@@ -61,7 +61,7 @@ public:
 	 * @param name The name of the paramter.
 	 * @return The value of the given paramter of an empty string if the name could not be found in the list of available paramters
 	 */
-	const SWBuf getParamterValue (const SWBuf& name);
+	const char* const getParamterValue (const char* const name);
 		
 private:
 	/** Parse
