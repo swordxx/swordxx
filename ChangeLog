@@ -2,6 +2,12 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+25-Nov-1999
+	Fixed double // bug in swmgr
+	Fixed /./ bug in swmgr
+	Applied Joachim's patch to fix UpperBound bug
+	Fixed Makefile bugs
+
 17-Oct-1999
 	Fixed bug in rawstr.cpp that would overwrite buffer size if
 		idxkey info was larger than buffer size
