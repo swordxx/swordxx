@@ -6,6 +6,7 @@ include ${root}/Makefile.cfg
 
 cpp += swconfig.cpp
 cpp += swmgr.cpp
+cpp += swfiltermgr.cpp
 cpp += encfiltmgr.cpp
 cpp += markupfiltmgr.cpp
 cpp += filemgr.cpp

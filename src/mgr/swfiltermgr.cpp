@@ -1,7 +1,8 @@
 /******************************************************************************
- *  swversion.h   - definition of class SWVersion used to compare version info
+ *  swfiltermgr.cpp   - definition of class SWFilterMgr used as an interface to
+ *				manage filters on a module
  *
- * $Id: swversion.h,v 1.2 2001/11/30 11:16:15 scribe Exp $
+ * $Id: swfiltermgr.cpp,v 1.1 2001/11/30 11:16:15 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -19,23 +20,14 @@
  *
  */
 
-#ifndef SWVERSION_H
-#define SWVERSION_H
+#include <swfiltermgr.h>
 
-class SWVersion {
-	public:
-	int major, minor, minor2, minor3;
-	
-	SWVersion(const char *version = "0.0");
-	int compare(const SWVersion &vi) const;
-	operator const char *() const;
-	bool operator>(const SWVersion &vi) const {return (compare(vi) > 0);}
-	bool operator<(const SWVersion &vi) const {return (compare(vi) < 0);}
-	bool operator==(const SWVersion &vi) const {return (compare(vi) == 0);}
 
-	// current sword library version
-	static SWVersion currentVersion;
-};
+void SWFilterMgr::setParentMgr(SWMgr *parentMgr) {
+  this->parentMgr = parentMgr;
+}
 
-#endif
+SWMgr *SWFilterMgr::getParentMgr() {
+  return parentMgr;
+}
 

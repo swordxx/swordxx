@@ -50,7 +50,7 @@ public:
 	 * @param encoding The desired encoding.
 	 * @param markup The desired markup format.
 	 */
-        MarkupFilterMgr(char encoding = ENC_UTF8, char markup = FMT_THML);
+        MarkupFilterMgr(char markup = FMT_THML, char encoding = ENC_UTF8);
 
 	/**
 	 * The destructor of SWMarkupMgr.

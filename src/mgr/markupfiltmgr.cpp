@@ -44,7 +44,7 @@
  *      mark - Markup format to emit
  */
 
-MarkupFilterMgr::MarkupFilterMgr (char enc, char mark)
+MarkupFilterMgr::MarkupFilterMgr (char mark, char enc)
 		   : EncodingFilterMgr(enc) {
 
         markup = mark;
