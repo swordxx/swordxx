@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.40 2002/03/16 01:00:37 scribe Exp $
+ * $Id: swmodule.h,v 1.41 2002/03/16 01:11:59 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,7 @@
 #include <listkey.h>
 #include <swfilter.h>
 #include <swconfig.h>
+#include <swcacher.h>
 #include <list>
 
 #include <defs.h>
@@ -55,7 +56,7 @@ enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_H
   * user-created modules.
   */
   
-class SWDLLEXPORT SWModule {
+class SWDLLEXPORT SWModule : public SWCacher {
 
 protected:
 
