@@ -22,9 +22,12 @@ modsconf += samples/mods.d/globals.conf
 localesconf += locales.d/cs.conf
 localesconf += locales.d/da.conf
 localesconf += locales.d/de.conf
+localesconf += locales.d/fr.conf
 localesconf += locales.d/no.conf
+localesconf += locales.d/pl.conf
 localesconf += locales.d/pt.conf
 localesconf += locales.d/sk.conf
+
 
 include ${root}/Makefile.cfg
 

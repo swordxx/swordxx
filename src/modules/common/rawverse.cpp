@@ -207,17 +207,17 @@ void RawVerse::preptext(char *buf)
  *
  * ENT:	testmt	- testament file to search in (0 - Old; 1 - New)
  *	start	- starting offset where the text is located in the file
- *	size	- size of text entry + 1 (null)
+ *	size	- size of text entry + 2 (null)(null)
  *	buf	- buffer to store text
  *
  */
 
 void RawVerse::gettext(char testmt, long start, unsigned short size, char *buf) {
-	memset(buf, 0, size+1);
+	memset(buf, 0, size);
 	if (size) {
 		if (textfp[testmt-1]->getFd() >= 0) {
 			lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
-			read(textfp[testmt-1]->getFd(), buf, (int)size - 1);
+			read(textfp[testmt-1]->getFd(), buf, (int)size - 2); 
 		}
 	}
 }

@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
 	key.Headings(1);
 	for (key.Index(0); (!key.Error()); key++) {
 		rawdrv->findoffset(key.Testament(), key.Index(), &offset, &size);
-		tmpbuf = (char *) calloc(size + 1, 1);
-		rawdrv->gettext(key.Testament(), offset, size, tmpbuf);
+		tmpbuf = (char *) calloc(size + 2, 1);
+		rawdrv->gettext(key.Testament(), offset, size + 2, tmpbuf);
 		len = size;
 		zobj->cipherBuf(&len, tmpbuf);
 		printf("%s\n", zobj->Buf());
