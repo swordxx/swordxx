@@ -237,7 +237,7 @@ char VerseKey::parse()
 	chapter   = 1;
 	verse     = 1;
 
-	error     = 0;
+	int error = 0;
 
 	if (keytext) {
 		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
@@ -256,12 +256,12 @@ char VerseKey::parse()
 				sscanf(&keytext[strlen(books[testament-1][book-1].name)], "%d:%d", &chapter, &verse);
 			}
 			else	error = 1;
-		}
+		} else error = 1;
 	}
 	Normalize(1);
 	freshtext();
 
-	return error;
+	return (this->error) ? this->error : (this->error = error);
 }
 
 
