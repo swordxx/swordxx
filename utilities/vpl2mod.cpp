@@ -84,7 +84,7 @@ char *parseVReg(char *buf) {
 			if (isdigit(*buf))
 				stage++;
 			break;
-        case 4:
+	   case 4:
 			if (*buf == ' ') {
 				*buf = 0;
 				return ++buf;
@@ -93,7 +93,7 @@ char *parseVReg(char *buf) {
 		}
 		buf++;
 	}
-	return (stage == 4) ? buf : 0;  // if we got to stage 4 return empty buf, else return error
+	return (stage == 4) ? buf : 0;  // if we got to stage 4 return after key buf, else return 0;
 }
 
 
@@ -204,6 +204,10 @@ int main(int argc, char **argv) {
 			}
 
 			vk = buffer;
+			if (vk.Error()) {
+				cerr << "Error parsing key: " << buffer << "\n";
+				exit(-5);
+			}
 			string orig = mod.getRawEntry();
 
 			if (!isKJVRef(buffer)) {
@@ -232,8 +236,8 @@ int main(int argc, char **argv) {
 			}
 
 			if (orig.length() > 1)
-			        cerr << "Warning, overwriting verse: " << vk << endl;
-		       
+				   cerr << "Warning, overwriting verse: " << vk << endl;
+			  
 			// ------------- End verse tests -----------------
 			mod << verseText;	// save text to module at current position
 		}
