@@ -2,7 +2,7 @@
  *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
  *				of locale lookups
  *
- * $Id: swlocale.cpp,v 1.6 2004/01/18 20:24:04 mgruner Exp $
+ * $Id: swlocale.cpp,v 1.7 2004/01/18 20:27:08 mgruner Exp $
  *
  * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,9 +44,9 @@ SWLocale::SWLocale(const char * ifilename) {
 	if (confEntry != localeSource->Sections["Meta"].end())
 		stdstr(&description, (*confEntry).second.c_str());
 
-	confEntry = localeSource->Sections["Meta"].find("Description");
+	confEntry = localeSource->Sections["Meta"].find("Encoding");
 	if (confEntry != localeSource->Sections["Meta"].end())
-		stdstr(&description, (*confEntry).second.c_str());
+		stdstr(&encoding, (*confEntry).second.c_str());
 }
 
 
