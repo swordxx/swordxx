@@ -471,6 +471,10 @@ SOURCE=..\..\..\src\modules\filters\swoptfilter.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\mgr\swsearchable.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\mgr\swsourcemgr.cpp
 # End Source File
 # Begin Source File
@@ -667,6 +671,10 @@ SOURCE=..\..\..\src\modules\common\zverse.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\include\apocrypha.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\canon.h
 # End Source File
 # Begin Source File
@@ -755,6 +763,10 @@ SOURCE=..\..\..\include\gbfthml.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\gbfwebif.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\Greek2Greek.h
 # End Source File
 # Begin Source File
@@ -811,7 +823,39 @@ SOURCE=..\..\..\include\nullim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\osisfootnotes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osisheadings.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osishtmlhref.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osislemma.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\osismorph.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osisplain.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osisredletterwords.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osisrtf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osisscripref.h
 # End Source File
 # Begin Source File
 
@@ -987,7 +1031,15 @@ SOURCE=..\..\..\include\swobject.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\swoptfilter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\swremotemgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\swsearchable.h
 # End Source File
 # Begin Source File
 
@@ -1071,6 +1123,10 @@ SOURCE=..\..\..\include\thmlvariants.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\thmlwebif.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\treekey.h
 # End Source File
 # Begin Source File
@@ -1148,6 +1204,14 @@ SOURCE=..\..\..\include\utilfuns.h
 # Begin Source File
 
 SOURCE=..\..\..\include\utilstr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\utilweb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\utilxml.h
 # End Source File
 # Begin Source File
 
