@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.12 2001/02/14 21:55:13 jansorg Exp $
+ * $Id: versekey.h,v 1.13 2001/02/19 16:59:51 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -64,9 +64,9 @@ class SWLocale;
   */
 class SWDLLEXPORT VerseKey:public SWKey
 {
-/**
-  * LocaleCache
-  */
+
+
+
   class LocaleCache
   {
   public:

@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/plainhtml.h,v 1.5 2001/02/09 15:38:51 jansorg Exp $ */
-/* $Revision: 1.5 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/plainhtml.h,v 1.6 2001/02/19 16:59:51 mgruner Exp $ */
+/* $Revision: 1.6 $ */
 
 #ifndef PLAINHTML_H
 #define PLAINHTML_H
@@ -26,6 +26,8 @@
 
 #include <defs.h>
 
+  /** this filter converts plain text to HTML text
+  */
 class SWDLLEXPORT PLAINHTML:public SWFilter
 {
 public:
