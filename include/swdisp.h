@@ -2,7 +2,7 @@
  *  swdisp.h  - code for base class 'swdisp'.  swdisp is the basis for all
  *		types of displays (e.g. raw textout, curses, xwindow, etc.)
  *
- * $Id: swdisp.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swdisp.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,9 +23,12 @@
 #ifndef SWDISP_H
 #define SWDISP_H
 
+#include <defs.h>
+
+
 class SWModule;
 
-class SWDisplay {
+class SWDLLEXPORT SWDisplay {
 public:
 	SWDisplay() {};
 	virtual char Display(SWModule &imodule);

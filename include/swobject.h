@@ -6,10 +6,15 @@
 #else
 #include <unixstr.h>
 #endif
+#ifdef WIN32
+#include <string.h>
+#endif
+
+#include <defs.h>
 
 #define SWDYNAMIC_CAST(className, object) (className *)((object->getClass()->isAssignableFrom(#className))?object:0)
 
-class SWClass {
+class SWDLLEXPORT SWClass {
 private:
         const char **descends;
 

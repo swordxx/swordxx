@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.2 1999/06/02 06:58:04 scribe Exp $
+ * $Id: swconfig.h,v 1.3 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,6 +28,7 @@
 #include <string>
 #include <map>
 
+#include <defs.h>
 
 using namespace std;
 
@@ -36,7 +37,7 @@ typedef multimap <string, string, less <string> > ConfigEntMap;
 typedef map <string, ConfigEntMap, less <string> > SectionMap;
 
 
-class SWConfig {
+class SWDLLEXPORT SWConfig {
 private:
 	char getline(FILE *fp, string &line);
 public:

@@ -9,12 +9,15 @@
    made the output function more resistant to cryptanalysis,
    and renamed to Sapphire II 2 January 1995
 */
-
+#ifdef WIN32
+#include <memory.h>
+#else
 #ifdef UNIX
 #include <memory.h>
 #include <unistd.h>
 #else
 #include <mem.h>
+#endif
 #endif
 #include "sapphire.h"
 

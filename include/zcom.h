@@ -2,7 +2,7 @@
  *  zcom.h   - code for class 'zCom'- a module that reads compressed text
  *				files: ot and nt using indexs ??.vss
  *
- * $Id: zcom.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: zcom.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,9 @@
 #include <swcom.h>
 #include <swcomprs.h>
 
-class zCom : public RawVerse, public SWCom, public SWCompress {
+#include <defs.h>
+
+class SWDLLEXPORT zCom : public RawVerse, public SWCom, public SWCompress {
 public:
 	zCom(char *ipath, char *iname = 0, char *idesc = 0, SWDisplay *idisp = 0);
 	virtual ~zCom();

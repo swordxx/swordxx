@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawtext.h,v 1.7 2000/10/15 13:36:13 scribe Exp $
+ * $Id: rawtext.h,v 1.8 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,9 @@
 #include <rawstr.h>
 #include <swtext.h>
 
-class RawText : public SWText, public RawVerse {
+#include <defs.h>
+
+class SWDLLEXPORT RawText : public SWText, public RawVerse {
 	char *versebuf;
 	RawStr *fastSearch[2];
 
@@ -37,7 +39,11 @@ public:
 	virtual char *getRawEntry();
 	virtual char createSearchFramework();
 	virtual bool hasSearchFramework() { return true; }
+#ifdef WIN32
+	virtual SWModule &operator =(POSITION);
+#else
 	virtual RawText &operator =(POSITION);
+#endif
 	virtual ListKey &Search(const char *istr, int searchType = 0, int flags = 0, SWKey *scope = 0, bool *justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
 
 	// write interface ----------------------------

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcomprs.h   - definition of Class SWCompress used for data compression
  *
- * $Id: swcomprs.h,v 1.4 2000/12/15 09:59:16 scribe Exp $
+ * $Id: swcomprs.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,8 +22,9 @@
 #ifndef SWCOMPRS_H
 #define SWCOMPRS_H
 
+#include <defs.h>
 
-class SWCompress {
+class SWDLLEXPORT SWCompress {
 	void Init();
 	void cycleStream();
 protected:

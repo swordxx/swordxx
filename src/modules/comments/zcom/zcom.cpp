@@ -58,7 +58,7 @@ zCom::operator char*()
 	VerseKey *key = 0;
 
 	try {
-		key = (VerseKey *)SWDYNAMIC_CAST("VerseKey", this->key);
+		key = (VerseKey *)SWDYNAMIC_CAST(VerseKey, this->key);
 	}
 	catch ( ... ) {}
 	if (!key)
@@ -70,7 +70,7 @@ zCom::operator char*()
 	tmpbuf = new char [ size ];
 
 	gettext(key->Testament(), start, size, tmpbuf);
-	zBuf(&size, tmpbuf);
+	zBuf((unsigned long*)&size, tmpbuf);
 	preptext(Buf());
 
 	delete [] tmpbuf;

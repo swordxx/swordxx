@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swcipher.h   - definition of Class SWCipher used for data cipher/decipher
  *
- * $Id: swcipher.h,v 1.3 2000/05/21 22:36:02 scribe Exp $
+ * $Id: swcipher.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1999 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,7 +24,9 @@
 
 #include "sapphire.h"
 
-class SWCipher {
+#include <defs.h>
+
+class SWDLLEXPORT SWCipher {
 
 	sapphire master;
 	sapphire work;

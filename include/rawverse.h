@@ -11,7 +11,9 @@
 #include <filemgr.h>
 #include <fcntl.h>
 
-class RawVerse {
+#include <defs.h>
+
+class SWDLLEXPORT RawVerse {
 	static int instance;	// number of instantiated RawVerse objects or derivitives
 	FileDesc *idxfp[2];
 	FileDesc *textfp[2];

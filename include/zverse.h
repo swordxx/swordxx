@@ -13,7 +13,9 @@
 #include <rawverse.h>
 #include <swcomprs.h>
 
-class zVerse /*: public RawVerse*/ {
+#include <defs.h>
+
+class SWDLLEXPORT zVerse /*: public RawVerse*/ {
 SWCompress *compressor;
 
 protected:

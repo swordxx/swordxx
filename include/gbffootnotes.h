@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbffootnotes.h,v 1.4 1999/10/25 04:31:24 scribe Exp $
+ * $Id: gbffootnotes.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,7 +23,9 @@
 
 #include <swfilter.h>
 
-class GBFFootnotes : public SWFilter {
+#include <defs.h>
+
+class SWDLLEXPORT GBFFootnotes : public SWFilter {
 	bool option;
 	static const char on[];
 	static const char off[];

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbfrtf.h,v 1.3 1999/10/25 04:31:24 scribe Exp $
+ * $Id: gbfrtf.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -23,7 +23,9 @@
 
 #include <swfilter.h>
 
-class GBFRTF : public SWFilter {
+#include <defs.h>
+
+class SWDLLEXPORT GBFRTF : public SWFilter {
 public:
 	GBFRTF();
 	virtual char ProcessText(char *text, int maxlen, const SWKey *key);

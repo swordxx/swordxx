@@ -30,6 +30,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 	char *to, *from, token[20], tokpos = 0;
 	bool intoken 	= false;
 	int len;
+	unsigned int i;
 	
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -83,7 +84,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			    *to++ = 'e';
 			    *to++ = '=';
 			    *to++ = '"';
-			    for (unsigned int i = 1; i < strlen(token); i++)
+			    for (i = 1; i < strlen(token); i++)
 			      *to++ = token[i];
 			    *to++ = '"';
 			    *to++ = ' ';
@@ -103,7 +104,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			    *to++ = '<';
 			    *to++ = 'i';
 			    *to++ = '>';
-			    for (unsigned int i = 3; i < strlen(token); i++)
+			    for (i = 3; i < strlen(token); i++)
 			      *to++ = token[i];
 			    *to++ = '<';
 			    *to++ = '/';
@@ -172,7 +173,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = 'e';
 			      *to++ = '=';
 			      *to++ = '\"';		
-			      for (unsigned int i = 2; i < strlen(token); i++)
+			      for (i = 2; i < strlen(token); i++)
 				*to++ = token[i];
 			      *to++ = '\"';
 			      *to++ = '>';

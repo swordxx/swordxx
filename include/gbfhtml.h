@@ -16,15 +16,17 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.3 1999/10/25 04:31:24 scribe Exp $ */
-/* $Revision: 1.3 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.4 2001/02/08 09:20:48 chrislit Exp $ */
+/* $Revision: 1.4 $ */
 
 #ifndef GBFHTML_H
 #define GBFHTML_H
 
 #include <swfilter.h>
 
-class GBFHTML : public SWFilter {
+#include <defs.h>
+
+class SWDLLEXPORT GBFHTML : public SWFilter {
 public:
 	GBFHTML();
 	virtual char ProcessText(char *text, int maxlen, const SWKey *key);

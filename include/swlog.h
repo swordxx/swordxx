@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swlog.h	- definition of class SWLog used for logging messages
  *
- * $Id: swlog.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swlog.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,7 +24,9 @@
 #define swlogH
 //---------------------------------------------------------------------------
 
-class SWLog {
+#include <defs.h>
+
+class SWDLLEXPORT SWLog {
 public:
 	static SWLog *systemlog;
 	

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.10 2000/10/15 13:36:13 scribe Exp $
+ * $Id: swmodule.h,v 1.11 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,13 +30,15 @@
 #include <swfilter.h>
 #include <list>
 
+#include <defs.h>
+
 #define FILTERPAD 3
 
 using namespace std;
 
 typedef list<SWFilter *> FilterList;
 
-class SWModule {
+class SWDLLEXPORT SWModule {
 protected:
 	char error;
 	SWKey *key;

@@ -1,7 +1,7 @@
 /****************************************************************************** 
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.9 2001/02/07 05:03:56 scribe Exp $
+ * $Id: versekey.h,v 1.10 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,6 +27,7 @@
 #include <swmacs.h>
 #include <listkey.h>
 
+#include <defs.h>
 
 #define POS_MAXVERSE ((char)3)
 #define POS_MAXCHAPTER ((char)4)
@@ -50,7 +51,7 @@ struct abbrev {
 
 class SWLocale;
 
-class VerseKey : public SWKey {
+class SWDLLEXPORT VerseKey : public SWKey {
 	class LocaleCache {
 	public:
 		char *name;

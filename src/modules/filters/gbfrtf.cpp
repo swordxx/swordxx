@@ -19,6 +19,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
+	unsigned int i;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -49,7 +50,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = '7';
 					*to++ = ' ';
 					*to++ = '<';
-					for (unsigned int i = 2; i < strlen(token); i++)
+					for (i = 2; i < strlen(token); i++)
 						*to++ = token[i];
 					*to++ = '>';
 					*to++ = '}';
@@ -65,7 +66,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 					*to++ = ' ';
 					*to++ = '(';
 					bool separate = false;
-					for (unsigned int i = 2; i < strlen(token); i++) {
+					for (i = 2; i < strlen(token); i++) {
 						if (separate) {
 							*to++ = ';';
 							*to++ = ' ';

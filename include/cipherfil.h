@@ -1,6 +1,6 @@
 /*
  *
- * $Id: cipherfil.h,v 1.4 2000/05/21 22:30:05 scribe Exp $
+ * $Id: cipherfil.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -24,7 +24,9 @@
 #include <swfilter.h>
 #include <swcipher.h>
 
-class CipherFilter : public SWFilter {
+#include <defs.h>
+
+class SWDLLEXPORT CipherFilter : public SWFilter {
 	SWCipher *cipher;
 public:
 	CipherFilter(const char *key);

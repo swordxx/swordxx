@@ -15,11 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.1 2000/02/17 09:54:40 tuhlmann Exp $ */
-/* $Revision: 1.1 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/plainfootnotes.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $ */
+/* $Revision: 1.2 $ */
 
 #ifndef PLAINFOOTNOTES_H
 #define PLAINFOOTNOTES_H
+
+#include <defs.h>
 
 class QObject;
 #include <swfilter.h>
@@ -28,7 +30,7 @@ class SWKey;
 /**Shows or hides footnotes in plain text.
   *@author The team of BibleTime
   */
-class PLAINFootnotes : public SWFilter  {
+class SWDLLEXPORT PLAINFootnotes : public SWFilter  {
 	bool option;
 	static const char on[];
 	static const char off[];

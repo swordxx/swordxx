@@ -20,7 +20,9 @@
 
 #include <swfilter.h>
 
-class GBFThML : public SWFilter {
+#include <defs.h>
+
+class SWDLLEXPORT GBFThML : public SWFilter {
 public:
 	GBFThML();
 	virtual char ProcessText(char *text, int maxlen = -1);

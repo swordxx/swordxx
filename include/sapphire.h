@@ -15,6 +15,10 @@
    & 0xFF or % 0x100, whichever is faster.
 */
 
+#ifdef WIN32
+#define NULL 0
+#endif
+
 class sapphire
     {
     // These variables comprise the state of the state machine.

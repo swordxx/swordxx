@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.4 2001/02/07 05:03:56 scribe Exp $
+ * $Id: listkey.h,v 1.5 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -27,7 +27,9 @@
 
 #include <swkey.h>
 
-class ListKey: public SWKey {
+#include <defs.h>
+
+class SWDLLEXPORT ListKey: public SWKey {
 
 	static SWClass classdef;
 	void init();

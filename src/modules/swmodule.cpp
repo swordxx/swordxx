@@ -10,8 +10,9 @@
 #include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
+#ifndef WIN32
 #include <iostream.h>
-
+#endif
 
 SWDisplay SWModule::rawdisp;
 void SWModule::nullPercent(char percent, void *percentUserData) {}
@@ -363,12 +364,14 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 			(*percent)(perc, percentUserData);
 		}
 		else if (newperc < perc) {
+#ifndef WIN32
 			cerr << "Serious error: new percentage complete is less than previous value\n";
 			cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
 			cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";
 			cerr << "highIndex: " << highIndex << "\n";
 			cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
 			cerr << "perc == "  << (int )perc << "% \n";
+#endif
 		}
 		if (searchType >= 0) {
 			if (!regexec(&preg,  StripText(), 0, 0, 0)) {

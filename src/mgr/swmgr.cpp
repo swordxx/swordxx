@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.26 2000/12/15 09:59:16 scribe Exp $
+ * $Id: swmgr.cpp,v 1.27 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,8 +32,9 @@
 #include <unixstr.h>
 #endif
 #include <sys/stat.h>
+#ifndef WIN32
 #include <iostream.h>
-
+#endif
 #include <swmgr.h>
 #include <rawtext.h>
 #include <rawgbf.h>
@@ -159,27 +160,35 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath) {
 
 	*configType = 0;
 
+#ifndef WIN32
 	// check working directory
 if (debug)
 	cerr << "Checking working directory for mods.conf...";
+#endif
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 		stdstr(prefixPath, "./");
 		stdstr(configPath, "./mods.conf");
 		return;
 	}
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking working directory for mods.d...";
+#endif
 
 	if (FileMgr::existsDir(".", "mods.d")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 		stdstr(prefixPath, "./");
 		stdstr(configPath, "./mods.d");
@@ -189,27 +198,33 @@ if (debug)
 
 
 	// check environment variable SWORD_PATH
-
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking SWORD_PATH...";
+#endif
 
 	if (envsworddir != NULL) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found (" << envsworddir << ")\n";
+#endif
 
 		path = envsworddir;
 		if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 			path += "/";
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.conf...";
-
+#endif
 
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
@@ -217,13 +232,17 @@ if (debug)
 			return;
 		}
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking $SWORD_PATH for mods.d...";
+#endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
@@ -236,14 +255,18 @@ if (debug)
 
 	// check for systemwide /etc/sword.conf
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking for /etc/sword.conf...";
+#endif
 
 	if ((fd = ::open("/etc/sword.conf", O_RDONLY)) > 0) {
 		::close(fd);
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 		SWConfig etcconf("/etc/sword.conf");
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
@@ -251,16 +274,21 @@ if (debug)
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
 				path += "/";
 
+#ifndef WIN32
 if (debug)
 	cerr << "DataPath in /etc/sword.conf is set to: " << path;
+#endif
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking for mods.conf in DataPath ";
-
+#endif
 			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
@@ -268,13 +296,17 @@ if (debug)
 				return;
 			}
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking for mods.d in DataPath ";
+#endif
 
 			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 				stdstr(prefixPath, path.c_str());
 				path += "mods.d";
@@ -288,8 +320,10 @@ if (debug)
 
 	// check ~/.sword/
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.conf" << path;
+#endif
 
 	if (envhomedir != NULL) {
 		path = envhomedir;
@@ -298,8 +332,10 @@ if (debug)
 		path += ".sword/";
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 			stdstr(prefixPath, "");
 			path += "mods.conf";
@@ -307,13 +343,17 @@ if (debug)
 			return;
 		}
 
+#ifndef WIN32
 if (debug)
 	cerr << "\nChecking home directory for ~/.sword/mods.d" << path;
+#endif
 
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 
+#ifndef WIN32
 if (debug)
 	cerr << "found\n";
+#endif
 
 			stdstr(prefixPath, "");
 			path += "mods.d";

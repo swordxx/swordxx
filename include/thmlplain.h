@@ -23,7 +23,9 @@
 
 #include <swfilter.h>
 
-class ThMLPlain : public SWFilter {
+#include <defs.h>
+
+class SWDLLEXPORT ThMLPlain : public SWFilter {
 public:
 	ThMLPlain();
 	virtual char ProcessText(char *text, int maxlen = -1);

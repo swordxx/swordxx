@@ -2,7 +2,7 @@
  *  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
  *				types of Lexicon and Dictionary modules (hence the 'LD').
  *
- * $Id: swld.h,v 1.1 1999/05/04 22:03:36 scribe Exp $
+ * $Id: swld.h,v 1.2 2001/02/08 09:20:48 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,7 +26,9 @@
 #include <swmodule.h>
 #include <strkey.h>
 
-class SWLD : public SWModule {
+#include <defs.h>
+
+class SWDLLEXPORT SWLD : public SWModule {
 protected:
 	char *entkeytxt;
 public:
