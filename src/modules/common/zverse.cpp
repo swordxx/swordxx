@@ -206,6 +206,25 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 	}
 	*start = ulVerseStart;
 	*size = usVerseSize;
+
+#ifdef BIGENDIAN
+	#ifdef MACOSX
+		ulBuffNum  = NXSwapLittleLongToHost(ulBuffNum);
+		*start  = NXSwapLittleLongToHost(*start);
+		*size   = NXSwapLittleShortToHost(*size);
+	#else
+        #ifdef PPC
+		ulBuffNum  = bswap_32(ulBuffNum);
+		*start  = bswap_32(*start);
+		*size   = bswap_16(*size);
+	#else
+		ulBuffNum  = lelong(ulBuffNum);
+		*start  = lelong(*start);
+		*size   = leshort(*size);
+	#endif
+	#endif
+#endif
+
 	if (*size) {
 		if (((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf)) {
 			// have the text buffered
@@ -235,13 +254,32 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 			return;
 		}
 
+#ifdef BIGENDIAN
+	#ifdef MACOSX
+		ulCompOffset  = NXSwapLittleLongToHost(ulCompOffSet);
+		ulCompSize  = NXSwapLittleLongToHost(ulCompSize);
+		ulUnCompSize  = NXSwapLittleLongToHost(ulUnCompSize);
+	#else
+        #ifdef PPC
+		ulCompOffset = bswap_32(ulCompOffset);
+		ulCompSize = bswap_32(ulCompSize);
+		ulUnCompSize = bswap_32(ulUnCompSize);
+	#else
+		ulCompOffset  = lelong(ulCompOffset);
+		ulCompSize  = lelong(ulCompSize);
+		ulUnCompSize  = lelong(ulUnCompSize);
+	#endif
+	#endif
+#endif
+
 		if (lseek(textfp[testmt-1]->getFd(), ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
 		{
 			printf ("Error: could not seek to right place in compressed text\n");
 			return;
 		}
 		pcCompText = new char[ulCompSize];
-		if (read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
+
+		if (long X = read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
 		{
 			printf ("Error reading compressed text\n");
 			return;
