@@ -7,6 +7,7 @@ include ${root}/Makefile.cfg
 cpp += Greek2Greek.cpp
 cpp += utilstr.cpp
 cpp += unixstr.cpp
+cpp += swunicod.cpp
 
 ifeq (${need_local_regex}, yes)
 c += regex.c

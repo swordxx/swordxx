@@ -1,8 +1,6 @@
 /*
  *
- * $Id: unicodertf.h,v 1.2 2001/06/15 01:07:46 chrislit Exp $
- *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,19 +16,20 @@
  *
  */
 
-#ifndef UNICODERTF_H
-#define UNICODERTF_H
+#ifndef SJISUTF8_H
+#define SJISUTF8_H
 
 #include <swfilter.h>
 
 #include <defs.h>
 
-  /** This filter converts UTF-8 text into RTF Unicode tags
+  /** This filter converts Shift-JIS encoded text to UTF-8
   */
-class SWDLLEXPORT UnicodeRTF:public SWFilter {
+class SWDLLEXPORT SJISUTF8:public SWFilter {
 public:
-  UnicodeRTF();
+  SJISUTF8();
   virtual char ProcessText (char *text, int maxlen, const SWKey *key);
+  unsigned long SJIStoUTF32(unsigned long);
 };
 
 #endif
