@@ -34,6 +34,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	bool hideText = false;
 	int wordLen = 0;
 	int wordCount = 0;
+	int i;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -129,9 +130,9 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 			case '/':
 				if (token[1] == 'w') {
 					if ((wordCount > 0) || (strongnum != "{\\cf3 \\sub <3588>}")) {
-						for (int i = 0; i < strongnum.length(); i++)
+						for (i = 0; i < strongnum.length(); i++)
 							*to++ = strongnum[i];
-					for (int i = 0; i < strongtense.length(); i++)
+					for (i = 0; i < strongtense.length(); i++)
 						*to++ = strongtense[i];
 					}
 				}
