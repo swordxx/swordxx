@@ -156,7 +156,7 @@ pkginclude_HEADERS += $(swincludedir)/zverse.h
 
 #if INSTALLMGR
 REMOTE_HEAD  = $(swincludedir)/swremotemgr.h
-REMOTE_HEAD += $(swincludedir)/swinstallmgr.h
+REMOTE_HEAD += $(swincludedir)/installmgr.h
 #else
 #REMOTE_HEAD =
 #endif
