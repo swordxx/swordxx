@@ -13,7 +13,8 @@ int main(int argc, char **argv)
 	int loop;
 	int max;
 
-	LocaleMgr::systemLocaleMgr.setDefaultLocaleName("de");
+	if (argc > 1)
+		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(argv[1]);
 
 	VerseKey	bla;
 	long index;
