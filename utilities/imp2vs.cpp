@@ -64,18 +64,27 @@ int main(int argc, char **argv) {
   vkey->Headings(1);
   vkey->AutoNormalize(0);
   vkey->Persist(1);
+  mod->setKey(*vkey);
   
   while (readline(infile, linebuffer)) {
     if (!strncmp(linebuffer, "$$$", 3)) {
       if (strlen(keybuffer) && strlen(entbuffer)) {
 	std::cout << keybuffer << std::endl;
 	*vkey = keybuffer;
-	mod->setKey(*vkey);
 	if (!vkey->Chapter()) {
 	  // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
 	  int backstep = vkey->Verse();
-	  vkey->Verse(0);
-	  *mod -= backstep;       
+	  vkey->Verse(1);
+	  vkey->Chapter(1);
+	  switch (backstep) {
+	  case 2:
+		  vkey->Book(1);
+		  vkey->Testament(0);
+       case 1:
+            vkey->Book(0);
+		  vkey->Chapter(0);
+	  }
+       vkey->Verse(0);
 	  
 	  mod->setEntry(entbuffer, strlen(entbuffer));
 	}
@@ -84,36 +93,40 @@ int main(int argc, char **argv) {
 	  int i;
 	  bool havefirst = false;
 	  VerseKey firstverse;
+	  firstverse.Headings(1);
+	  firstverse.AutoNormalize(0);
 	  for (i = 0; i < listkey.Count(); i++) {
 	    VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 	    if (element) {
-	      mod->Key(element->LowerBound());
+	      *vkey = element->LowerBound();
 	      VerseKey finalkey = element->UpperBound();
-	      std::cout << (const char*)mod->Key() << "-" << (const char*)finalkey << std::endl;
+		  finalkey.Headings(1);
+		  finalkey.AutoNormalize(0);
+	      std::cout << (const char*)*vkey << "-" << (const char*)finalkey << std::endl;
 	      if (!havefirst) {
 		havefirst = true;
-		firstverse = mod->Key();
+		firstverse = *vkey;
 		
 		mod->setEntry(entbuffer, strlen(entbuffer));
 		std::cout << "f" << (const char*)firstverse << std::endl;
-		(mod->Key())++;
+		(*vkey)++;
 	      }
-	      while (mod->Key() <= finalkey) {
-		std::cout << (const char*)mod->Key() << std::endl;
-		*(SWModule*)mod << &firstverse;
-		(mod->Key())++;
+	      while (*vkey <= finalkey) {
+		std::cout << (const char*)(*vkey) << std::endl;
+		*mod << &firstverse;
+		(*vkey)++;
 	      }
 	    }
 	    else {
 	      if (havefirst) {
-		mod->Key(*listkey.GetElement(i));
-		*(SWModule*)mod << &firstverse;
-		std::cout << (const char*)mod->Key() << std::endl;
+		*vkey = (*listkey.GetElement(i));
+		*mod << &firstverse;
+		std::cout << (const char*)*vkey << std::endl;
 	      }
 	      else {
-		mod->Key(*listkey.GetElement(i));
+		*vkey = (*listkey.GetElement(i));
 		havefirst = true;
-		firstverse = mod->Key();
+		firstverse = *vkey;
 		
 		mod->setEntry(entbuffer, strlen(entbuffer));
 		std::cout << "f" << (const char*)firstverse << std::endl;
@@ -135,12 +148,20 @@ int main(int argc, char **argv) {
   if (strlen(keybuffer) && strlen(entbuffer)) {
     std::cout << keybuffer << std::endl;
     *vkey = keybuffer;
-    mod->setKey(*vkey);
     if (!vkey->Chapter()) {
       // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
       int backstep = vkey->Verse();
+	  vkey->Verse(1);
+	  vkey->Chapter(1);
+	  switch (backstep) {
+	  case 2:
+		  vkey->Book(1);
+		  vkey->Testament(0);
+       case 1:
+            vkey->Book(0);
+		  vkey->Chapter(0);
+	  }
       vkey->Verse(0);
-      *mod -= backstep;       
       
       mod->setEntry(entbuffer, strlen(entbuffer));
     }
@@ -149,36 +170,40 @@ int main(int argc, char **argv) {
       int i;
       bool havefirst = false;
       VerseKey firstverse;
+	  firstverse.Headings(1);
+	  firstverse.AutoNormalize(0);
       for (i = 0; i < listkey.Count(); i++) {
 	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 	if (element) {
-	  mod->Key(element->LowerBound());
+	  *vkey = element->LowerBound();
 	  VerseKey finalkey = element->UpperBound();
-	  std::cout << (const char*)mod->Key() << "-" << (const char*)finalkey << std::endl;
+	  finalkey.Headings(1);
+	  finalkey.AutoNormalize(0);
+	  std::cout << (const char*)*vkey << "-" << (const char*)finalkey << std::endl;
 	  if (!havefirst) {
 	    havefirst = true;
-	    firstverse = mod->Key();
+	    firstverse = *vkey;
 	    
 	    ((SWModule*)mod)->setEntry(entbuffer, strlen(entbuffer));
 	    std::cout << "f" << (const char*)firstverse << std::endl;
-	    (mod->Key())++;
+	    (*vkey)++;
 	  }
-	  while (mod->Key() <= finalkey) {
-	    std::cout << (const char*)mod->Key() << std::endl;
+	  while (*vkey <= finalkey) {
+	    std::cout << (const char*)*vkey << std::endl;
 	    *(SWModule*)mod << &firstverse;
-	    (mod->Key())++;
+	    (*vkey)++;
 	  }
 	}
 	else {
 	  if (havefirst) {
-	    mod->Key(*listkey.GetElement(i));
+	    *vkey = (*listkey.GetElement(i));
 	    *mod << &firstverse;
-	    std::cout << (const char*)mod->Key() << std::endl;
+	    std::cout << (const char*)*vkey << std::endl;
 	  }
 	  else {
-	    mod->Key(*listkey.GetElement(i));
+	    *vkey = (*listkey.GetElement(i));
 	    havefirst = true;
-	    firstverse = mod->Key();
+	    firstverse = *vkey;
 	    
 	    mod->setEntry(entbuffer, strlen(entbuffer));
 	    std::cout << "f" << (const char*)firstverse << std::endl;
