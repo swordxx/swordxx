@@ -328,13 +328,14 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		text = "";
 		return true;
 	}
-/*        else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {*/
+        else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
      
-//we really should decide how to handle end tags /e.g. of a chapter). There's no way for frontends to
-//see to what OSIS tag the end tag (which is added to the verse text!) belongs. It mixes up the rendering as a result 
-//excluded /div for now (jansorg)
-	else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
-        	//text.append( token );
+// we really should decide how to handle end tags /e.g. of a chapter). There's no way for frontends to
+// see to what OSIS tag the end tag (which is added to the verse text!) belongs. It mixes up the rendering as a result 
+// included /div for now (jansorg)
+//	else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
+
+        	text.append( token );
 		writeEntry(*currentVerse, text, true);
 		text = "";
                 return true;
