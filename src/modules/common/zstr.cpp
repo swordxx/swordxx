@@ -130,7 +130,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
 			read(datfd->getFd(), *buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr(*buf);
+		toupperstr_utf8(*buf);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -183,7 +183,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 		if (*ikey) {
 			headoff = 0;
 			stdstr(&key, ikey);
-			toupperstr(key);
+			toupperstr_utf8(key);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
@@ -462,7 +462,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 	len = (len < 0) ? strlen(buf) : len;
 	stdstr(&key, ikey);
-	toupperstr(key);
+	toupperstr_utf8(key);
 
 	char notFound = findKeyIndex(ikey, &idxoff, 0);
 	if (!notFound) {

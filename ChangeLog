@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 27-Jul-2002     Troy A. Griffitts <scribe@crosswire.org>
+	lex/dict drivers use new toupperstr_utf8 to allow
+		keys to be encoded in utf8 (hopefully will
+		allow cedict to be built/work correctly.
+	Added toupperstr_utf8 to utilstr.cpp
 	Make all operators have real name methods
 	Isolated SWModule operators in define
 	Fixed RawLD and RawLD4 drivers where there was

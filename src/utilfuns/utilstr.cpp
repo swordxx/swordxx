@@ -169,6 +169,37 @@ char *toupperstr(char *buf) {
 		*buf = SW_toupper(*buf++);
 /*
 #else
+	ret = toupperstr_utf8(buf);
+#endif
+*/
+
+	return ret;
+}
+
+
+/******************************************************************************
+ * toupperstr - converts a string to uppercase string
+ *
+ * ENT:	target - string to convert
+ *
+ * RET:	target
+ */
+
+char *toupperstr_utf8(char *buf) {
+	char *ret = buf;
+
+#ifndef _ICU_
+	// try to decide if it's worth trying to toupper.  Do we have more
+	// characters that are probably lower latin than not?
+	long performOp = 0;
+	for (const char *ch = buf; *ch; ch++)
+		performOp += (*ch > 0) ? 1 : -1;
+
+	if (performOp) {
+		while (*buf)
+			*buf = SW_toupper(*buf++);
+	}
+#else
 		UErrorCode err = U_ZERO_ERROR;
 		UConverter *conv = ucnv_open("UTF-8", &err);
 		UnicodeString str(buf, -1, conv, err);
@@ -176,7 +207,6 @@ char *toupperstr(char *buf) {
 		ustr.extract(ret, strlen(ret)*2, conv, err);
 		ucnv_close(conv);
 #endif
-*/
 
 	return ret;
 }

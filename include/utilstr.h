@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilstr.h	- prototypes for string utility functions
  *
- * $Id: utilstr.h,v 1.8 2001/11/02 18:35:42 chrislit Exp $
+ * $Id: utilstr.h,v 1.9 2002/07/28 06:44:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -30,6 +30,7 @@ const char *stristr (const char *s1, const char *s2);
 const char strnicmp(const char *s1, const char *s2, int len);
 unsigned int strlenw(const char *s1);
 char *toupperstr(char *buf);
+char *toupperstr_utf8(char *buf);
 
 /*
 extern "C" {

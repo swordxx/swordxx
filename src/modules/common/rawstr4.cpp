@@ -108,7 +108,7 @@ void RawStr4::getidxbufdat(long ioffset, char **buf) {
 			read(datfd->getFd(), *buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr(*buf);
+		toupperstr_utf8(*buf);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -143,7 +143,7 @@ void RawStr4::getidxbuf(long ioffset, char **buf)
 		}
 		*targetbuf = 0;
 		trybuf = 0;
-		toupperstr(targetbuf);
+		toupperstr_utf8(targetbuf);
 	}
 }
 
@@ -180,7 +180,7 @@ signed char RawStr4::findoffset(const char *ikey, long *start, unsigned long *si
 			}
 			*targetbuf = 0;
 			trybuf = 0;
-			toupperstr(targetbuf);
+			toupperstr_utf8(targetbuf);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 8) - (headoff / 8))) / 2) * 8 : lastoff; 
@@ -407,7 +407,7 @@ void RawStr4::setText(const char *ikey, const char *buf, long len) {
 
 	char errorStatus = findoffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
-	toupperstr(key);
+	toupperstr_utf8(key);
 
 	len = (len < 0) ? strlen(buf) : len;
 	getidxbufdat(start, &dbKey);
