@@ -3,7 +3,7 @@
 *		  types of modules (e.g. texts, commentaries, maps, lexicons,
 *		  etc.)
 *
-* $Id: swmodule.h,v 1.72 2004/03/27 09:24:35 mgruner Exp $
+* $Id$
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -40,6 +40,8 @@
 #include <multimapwdef.h>
 
 SWORD_NAMESPACE_START
+
+#define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
 #define SWMODULE_OPERATORS \
 	operator const char *() { return RenderText(); } \
@@ -317,11 +319,14 @@ public:
 
 
 	// search interface
-	/** Searches a module for a string
+    /** Searches a module for a string
 	*
 	* @param istr string for which to search
 	* @param searchType type of search to perform
-	*   >=0 ->regex;  -1 ->phrase; -2 ->multiword;
+	*			>=0 - regex
+	*			-1  - phrase
+	*			-2  - multiword
+	*			-3  - entryAttrib (eg. Word//Strongs/G1234/)
 	* @param flags options flags for search
 	* @param scope Key containing the scope. VerseKey or ListKey are useful here.
 	* @param justCheckIfSupported if set, don't search,
@@ -330,7 +335,7 @@ public:
 	* @param percentUserData User data that is given to the callback function as parameter.
 	*
 	* @return listkey set to verses that contain istr
-	*/
+     */
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
 			SWKey * scope = 0,
 			bool * justCheckIfSupported = 0,

@@ -365,7 +365,7 @@ void SWModule::decrement(int steps) {
  *				>=0 - regex
  *				-1  - phrase
  *				-2  - multiword
- *				-3  - entryAttrib
+ *				-3  - entryAttrib (eg. Word//Strongs/G1234/)
  * 	flags		- options flags for search
  *	justCheckIfSupported	- if set, don't search, only tell if this
  *							function supports requested search.
@@ -572,7 +572,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						i3End   = i2Start->second.end();
 					}
 					for (;i3Start != i3End; i3Start++) {
-						sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
+						if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
+							bool found = !(((flags & REG_ICASE) == REG_ICASE) ? stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
+							sres = (found) ? i3Start->second.c_str() : 0;
+						}
+						else {
+							sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
+						}
 						if (sres) {
 							textkey = KeyText();
 							listkey << textkey;
