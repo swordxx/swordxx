@@ -30,16 +30,47 @@ protected:
         SWFilter *latin1utf8;
         SWFilter *scsuutf8;
         SWFilter *targetenc;
-        
+
+
+	/*
+	 * current encoding value
+	 */        
         char encoding;
 
 public:
+	/** Constructor of SWEncodingMgr.
+	 *
+	 * @param iconfig
+	 * @param isysconfig
+	 * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
+	 * @param encoding The desired encoding.
+	 */
         SWEncodingMgr (SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, char encoding = ENC_UTF8);
+
+	/**
+	 * The destructor of SWEncodingMgr.
+	 */
         ~SWEncodingMgr();
 
+	/** Markup sets/gets the encoding after initialization
+	 * 
+	 * @param m The new encoding or ENC_UNKNOWN if you just want to get the current markup.
+	 * @return The current (possibly changed) encoding format.
+	 */
         char Encoding(char enc);
 
+	/**
+	 * Adds the raw filters which are defined in "section" to the SWModule object "module".
+	 * @param module To this module the raw filter(s) are added
+	 * @param section We use this section to get a list of filters we should apply to the module
+	 */
         virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
+
+	/**
+	 * Adds the encoding filters which are defined in "section" to the SWModule object "module".
+	 * @param module To this module the encoding filter(s) are added
+	 * @param section We use this section to get a list of filters we should apply to the module
+	 */
         virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
 };
 #endif

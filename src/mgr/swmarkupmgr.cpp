@@ -32,6 +32,16 @@
 #include <gbfrtf.h>
 
 #include <swmarkupmgr.h>
+
+/******************************************************************************
+ * SWMarkupMgr Constructor - initializes instance of SWMarkupMgr
+ *
+ * ENT:	iconfig - SWConfig
+ *      isysconfig - SWConfig
+ *      autoload -
+ *      enc - Encoding format to emit
+ *      mark - Markup format to emit
+ */
 SWMarkupMgr::SWMarkupMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc, char mark)
         : SWEncodingMgr(iconfig, isysconfig, autoload, enc)
 {
@@ -40,6 +50,9 @@ SWMarkupMgr::SWMarkupMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autolo
         CreateFilters(markup);
 }
 
+/******************************************************************************
+ * SWMarkupMgr Destructor - Cleans up instance of SWMarkupMgr
+ */
 SWMarkupMgr::~SWMarkupMgr() {
         if (fromthml)
                 delete (fromthml);
@@ -51,6 +64,13 @@ SWMarkupMgr::~SWMarkupMgr() {
                 delete (fromosis);
 }
 
+/******************************************************************************
+ * SWMarkupMgr::Markup	- sets/gets markup
+ *
+ * ENT:	mark	- new encoding or 0 to simply get the current markup
+ *
+ * RET: markup
+ */
 char SWMarkupMgr::Markup(char mark) {
         if (mark && mark != markup) {
                 markup = mark;

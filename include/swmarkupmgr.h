@@ -32,15 +32,40 @@ protected:
         SWFilter* fromplain;
         SWFilter* fromosis;
 
+	/*
+	 * current markup value
+	 */
         char markup;
 
         void CreateFilters(char markup);
 public:
+	/** Constructor of SWMarkupMgr.
+	 *
+	 * @param iconfig
+	 * @param isysconfig
+	 * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
+	 * @param encoding The desired encoding.
+	 * @param markup The desired markup format.
+	 */
         SWMarkupMgr (SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, char encoding = ENC_UTF8, char markup = FMT_THML);
+
+	/**
+	 * The destructor of SWMarkupMgr.
+	 */
         ~SWMarkupMgr();
 
+	/** Markup sets/gets the markup after initialization
+	 * 
+	 * @param m The new markup or FMT_UNKNOWN if you just want to get the current markup.
+	 * @return The current (possibly changed) markup format.
+	 */
         char Markup(char m = FMT_UNKNOWN);
 
+	/**
+	 * Adds the render filters which are defined in "section" to the SWModule object "module".
+	 * @param module To this module the render filter(s) are added
+	 * @param section We use this section to get a list of filters we should apply to the module
+	 */	
         virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
 };
 

@@ -29,6 +29,14 @@
 #include <utf8utf16.h>
 #include <utf8html.h>
 
+/******************************************************************************
+ * SWEncodingMgr Constructor - initializes instance of SWEncodingMgr
+ *
+ * ENT:	iconfig - SWConfig
+ *      isysconfig - SWConfig
+ *      autoload -
+ *      enc - Encoding format to emit
+ */
 SWEncodingMgr::SWEncodingMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc)
         : SWMgr(iconfig, isysconfig, autoload)
 {
@@ -55,6 +63,9 @@ SWEncodingMgr::SWEncodingMgr (SWConfig * iconfig, SWConfig * isysconfig, bool au
         }
 }
 
+/******************************************************************************
+ * SWEncodingMgr Destructor - Cleans up instance of SWEncodingMgr
+ */
 SWEncodingMgr::~SWEncodingMgr() {
         if (scsuutf8)
                 delete scsuutf8;
@@ -84,6 +95,13 @@ void SWEncodingMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) 
                 module->AddEncodingFilter(targetenc);
 }
 
+/******************************************************************************
+ * SWEncodingMgr::Encoding	- sets/gets encoding
+ *
+ * ENT:	enc	- new encoding or 0 to simply get the current encoding
+ *
+ * RET: encoding
+ */
 char SWEncodingMgr::Encoding(char enc) {
         if (enc && enc != encoding) {
                 encoding = enc;
