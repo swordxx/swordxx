@@ -2,6 +2,15 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+06-Jan-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Changed system[Log|File|Locale]Mgr to
+		*Mgr *[get|set]System*Mgr() per Daniel Glassey's
+		discovery of potential problems from order of
+		initializing statics.
+
+	Added new prefix recognition for OSIS lemma prefix
+		"strong:"
+
 * Release 1.5.7 *
 
 28-Dec-2003	Troy A. Griffitts <scribe@crosswire.org>

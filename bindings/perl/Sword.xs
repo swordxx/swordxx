@@ -58,7 +58,7 @@ public:
 VerseIterator::VerseIterator(char * module_name) {
 	module = manager.Modules[module_name];
 	key = module->Key();
-	key.setLocale(LocaleMgr::systemLocaleMgr.getDefaultLocaleName());
+	key.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 
 	key = key.LowerBound();
 }
@@ -121,9 +121,9 @@ PPCODE:
 void
 get_locales()
 PPCODE:
-	LocaleMgr lm = LocaleMgr::systemLocaleMgr;
-	list<string> loclist = lm.getAvailableLocales();
-	list<string>::iterator li = loclist.begin();
+	LocaleMgr *lm = LocaleMgr::getSystemLocaleMgr();
+	list<SWBuf> loclist = lm->getAvailableLocales();
+	list<SWBuf>::iterator li = loclist.begin();
 	for (;li != loclist.end(); li++) {
 		XPUSHs(sv_2mortal(newSVpv(li->c_str(), li->length())));
 	}
@@ -131,7 +131,7 @@ PPCODE:
 void
 set_locale(char * locale)
 CODE:
-	LocaleMgr::systemLocaleMgr.setDefaultLocaleName(locale);
+	LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
 
 
 MODULE = Sword		PACKAGE = Sword::VerseIterator

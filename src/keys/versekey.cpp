@@ -60,7 +60,7 @@ void VerseKey::init() {
 	verse = 0;
 	locale = 0;
 
-	setLocale(LocaleMgr::systemLocaleMgr().getDefaultLocaleName());
+	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 
 /******************************************************************************
@@ -155,7 +155,7 @@ void VerseKey::setLocale(const char *name) {
 		localeCache.abbrevsCnt = 0;
 	}
 
-	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::systemLocaleMgr().getLocale(name);
+	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::getSystemLocaleMgr()->getLocale(name);
 	localeCache.locale = locale;
 
 	if (locale) {
@@ -198,7 +198,7 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
             for (int i = 0; i < BMAX[t]; i++) {
                 int bn = getBookAbbrev(books[t][i].name);
                 if ((bn-1)%39 != i) {
-				SWLog::systemlog->LogError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", books[t][i].name, bn);
+				SWLog::getSystemLog()->logError("Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d", books[t][i].name, bn);
                 }
             }
         }

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.99 2004/01/31 00:09:31 scribe Exp $
+ * $Id: swmgr.cpp,v 1.100 2004/02/06 21:01:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -333,7 +333,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	// check working directory
 if (debug)
-//	SWLog::systemlog->LogInformation("Checking working directory for mods.conf...");
+//	SWLog::getSystemLog()->logInformation("Checking working directory for mods.conf...");
 //	std::cerr << "Checking working directory for mods.conf...";
 
 	if (FileMgr::existsFile(".", "mods.conf")) {
@@ -699,7 +699,7 @@ signed char SWMgr::Load() {
 
 	}
 	else {
-		SWLog::systemlog->LogError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", (configPath) ? configPath : "<configPath is null>");
+		SWLog::getSystemLog()->logError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", (configPath) ? configPath : "<configPath is null>");
 		ret = -1;
 	}
 
@@ -1084,7 +1084,7 @@ char SWMgr::AddModToConfig(int conffd, const char *fname)
 	int modfd;
 	char ch;
 
-	SWLog::systemlog->LogTimedInformation("Found new module [%s]. Installing...", fname);
+	SWLog::getSystemLog()->logTimedInformation("Found new module [%s]. Installing...", fname);
 	modfd = open(fname, O_RDONLY);
 	ch = '\n';
 	write(conffd, &ch, 1);

@@ -22,7 +22,7 @@ $config->Save();
 
 #testing SWMgr
 print "testing SWMgr\n";
-#$localemgr = sword::LocaleMgr::systemLocaleMgr();
+#$localemgr = sword::LocaleMgr::getSystemLocaleMgr();
 #$localemgr->setDefaultLocaleName("de");
 
 $mgr = new sword::SWMgr();

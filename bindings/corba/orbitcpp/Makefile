@@ -1,8 +1,8 @@
 all: server testclient
 
 #comment these out if you didn't compile sword with lucene support
-luceneflags=-DUSELUCENE
-lucenelibs=-lclucene
+#luceneflags=-DUSELUCENE
+#lucenelibs=-lclucene
 #----------------------------------
 
 LIBS += ${lucenelibs}

@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 	}
 
 	if (argc > 2)
-		LocaleMgr::systemLocaleMgr().setDefaultLocaleName(argv[2]);
+		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[2]);
 
 	VerseKey DefaultVSKey;
 

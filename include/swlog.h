@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swlog.h	- definition of class SWLog used for logging messages
  *
- * $Id: swlog.h,v 1.5 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: swlog.h,v 1.6 2004/02/06 21:01:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,19 +29,23 @@
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT SWLog {
+	friend class __staticsystemLog;
 protected:
 	char logLevel;
+	static SWLog *systemLog;
 
 public:
-	static SWLog *systemlog;
+
+	static SWLog *getSystemLog();
+	static void setSystemLog(SWLog *newLogger);
 
 	SWLog () { logLevel = 1;	/*default to show only errors*/}
 	virtual void setLogLevel(char level) { logLevel = level; }
 	virtual char getLogLevel() { return logLevel; }
-	virtual void LogWarning (char *fmt, ...);
-	virtual void LogError (char *fmt, ...);
-	virtual void LogTimedInformation (char *fmt, ...);
-	virtual void LogInformation (char *fmt, ...);
+	virtual void logWarning (char *fmt, ...);
+	virtual void logError (char *fmt, ...);
+	virtual void logTimedInformation (char *fmt, ...);
+	virtual void logInformation (char *fmt, ...);
 };
 
 SWORD_NAMESPACE_END

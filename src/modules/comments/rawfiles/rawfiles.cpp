@@ -78,7 +78,7 @@ SWBuf &RawFiles::getRawEntryBuf() {
 		readText(key->Testament(), start, size, entryBuf);
 		tmpbuf += entryBuf;
 		entryBuf = "";
-		datafile = FileMgr::systemFileMgr.open(tmpbuf.c_str(), O_RDONLY|O_BINARY);
+		datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), O_RDONLY|O_BINARY);
 		if (datafile->getFd() > 0) {
 			size = lseek(datafile->getFd(), 0, SEEK_END);
 			char *tmpBuf = new char [ size + 1 ];
@@ -89,7 +89,7 @@ SWBuf &RawFiles::getRawEntryBuf() {
 			delete [] tmpBuf;
 //			preptext(entrybuf);
 		}
-		FileMgr::systemFileMgr.close(datafile);
+		FileMgr::getSystemFileMgr()->close(datafile);
 	}
 
 	if (key != this->key)
@@ -135,11 +135,11 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 		doSetText(key->Testament(), key->Index(), tmpbuf);
 		entryBuf += tmpbuf;
 	}
-	datafile = FileMgr::systemFileMgr.open(entryBuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	if (datafile->getFd() > 0) {
 		write(datafile->getFd(), inbuf, len);
 	}
-	FileMgr::systemFileMgr.close(datafile);
+	FileMgr::getSystemFileMgr()->close(datafile);
 	
 	if (key != this->key)
 		delete key;
@@ -228,15 +228,15 @@ char *RawFiles::getNextFilename() {
 	FileDesc *datafile;
 
 	sprintf(incfile, "%s/incfile", path);
-	datafile = FileMgr::systemFileMgr.open(incfile, O_RDONLY|O_BINARY);
+	datafile = FileMgr::getSystemFileMgr()->open(incfile, O_RDONLY|O_BINARY);
 	if (read(datafile->getFd(), &number, 4) != 4)
 		number = 0;
 	number++;
-	FileMgr::systemFileMgr.close(datafile);
+	FileMgr::getSystemFileMgr()->close(datafile);
 	
-	datafile = FileMgr::systemFileMgr.open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+	datafile = FileMgr::getSystemFileMgr()->open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	write(datafile->getFd(), &number, 4);
-	FileMgr::systemFileMgr.close(datafile);
+	FileMgr::getSystemFileMgr()->close(datafile);
 	sprintf(incfile, "%.7ld", number-1);
 	return incfile;
 }
@@ -248,10 +248,10 @@ char RawFiles::createModule (const char *path) {
 	FileDesc *datafile;
 
 	sprintf(incfile, "%s/incfile", path);
-	datafile = FileMgr::systemFileMgr.open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+	datafile = FileMgr::getSystemFileMgr()->open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
     delete [] incfile;
 	write(datafile->getFd(), &zero, 4);
-	FileMgr::systemFileMgr.close(datafile);
+	FileMgr::getSystemFileMgr()->close(datafile);
 
     return RawVerse::createModule (path);
 }

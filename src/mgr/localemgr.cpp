@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.17 2004/02/05 10:24:36 dglassey Exp $
+ * $Id: localemgr.cpp,v 1.18 2004/02/06 21:01:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -42,11 +42,29 @@
 SWORD_NAMESPACE_START
 
 
-//LocaleMgr LocaleMgr::systemLocaleMgr;
-LocaleMgr& LocaleMgr::systemLocaleMgr() {
-	static LocaleMgr slm;
-	return slm;
+LocaleMgr *LocaleMgr::systemLocaleMgr = 0;
+
+class __staticsystemLocaleMgr {
+public:
+	__staticsystemLocaleMgr() { }
+	~__staticsystemLocaleMgr() { delete LocaleMgr::systemLocaleMgr; }
+} _staticsystemLocaleMgr;
+
+
+LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
+	if (!systemLocaleMgr)
+		systemLocaleMgr = new LocaleMgr();
+
+	return systemLocaleMgr;
 }
+
+
+void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
+	if (systemLocaleMgr)
+		delete systemLocaleMgr;
+	systemLocaleMgr = newLocaleMgr;
+}
+
 
 LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	locales = new LocaleMap();

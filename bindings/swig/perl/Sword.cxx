@@ -234,7 +234,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
  * perl5.swg
  *
  * Perl5 runtime library
- * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.14 2003/07/17 21:38:30 dglassey Exp $
+ * $Header: /space/oldserver/cvsroot/core/sword/bindings/swig/perl/Attic/Sword.cxx,v 1.15 2004/02/06 21:01:00 scribe Exp $
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPERL
@@ -836,7 +836,7 @@ using namespace std;
 using namespace sword;
 
 LocaleMgr *const LocaleMgr_getSystemLocaleMgr(){
-  	return &(LocaleMgr::systemLocaleMgr);
+  	return LocaleMgr::getSystemLocaleMgr();
   }
 
 #include <swfiltermgr.h>

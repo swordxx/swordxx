@@ -19,7 +19,7 @@ public:
 
 %extend {
   static LocaleMgr* const getSystemLocaleMgr() {
-  	return &(LocaleMgr::systemLocaleMgr);
+  	return LocaleMgr::getSystemLocaleMgr();
   };
 }
 };

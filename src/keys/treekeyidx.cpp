@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: treekeyidx.cpp,v 1.15 2004/01/16 03:42:41 scribe Exp $
+ * $Id: treekeyidx.cpp,v 1.16 2004/02/06 21:01:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -62,9 +62,9 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	}
 		
 	sprintf(buf, "%s.idx", path);
-	idxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 	sprintf(buf, "%s.dat", path);
-	datfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd <= 0) {
 		sprintf(buf, "Error: %d", errno);
@@ -86,8 +86,8 @@ TreeKeyIdx::~TreeKeyIdx () {
 	if (path)
 		delete [] path;
 
-	FileMgr::systemFileMgr.close(idxfd);
-	FileMgr::systemFileMgr.close(datfd);
+	FileMgr::getSystemFileMgr()->close(idxfd);
+	FileMgr::getSystemFileMgr()->close(datfd);
 }
 
 
@@ -256,15 +256,15 @@ signed char TreeKeyIdx::create(const char *ipath) {
 
 	sprintf(buf, "%s.dat", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s.idx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	TreeKeyIdx newTree(path);
 	TreeKeyIdx::TreeNode root;
@@ -430,11 +430,11 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 		stdstr(&path, ikey.path);
 
 		if (idxfd) {
-			FileMgr::systemFileMgr.close(idxfd);
-			FileMgr::systemFileMgr.close(datfd);
+			FileMgr::getSystemFileMgr()->close(idxfd);
+			FileMgr::getSystemFileMgr()->close(datfd);
 		}
-		idxfd = FileMgr::systemFileMgr.open(ikey.idxfd->path, ikey.idxfd->mode, ikey.idxfd->perms);
-		datfd = FileMgr::systemFileMgr.open(ikey.datfd->path, ikey.datfd->mode, ikey.datfd->perms);
+		idxfd = FileMgr::getSystemFileMgr()->open(ikey.idxfd->path, ikey.idxfd->mode, ikey.idxfd->perms);
+		datfd = FileMgr::getSystemFileMgr()->open(ikey.datfd->path, ikey.datfd->mode, ikey.datfd->perms);
 	}
 }
 

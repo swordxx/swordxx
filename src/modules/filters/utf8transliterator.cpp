@@ -137,8 +137,8 @@ void UTF8Transliterator::Load(UErrorCode &status)
 	UResourceBundle *bundle, *transIDs, *colBund;
 	bundle = ures_openDirect(SW_RESDATA, translit_swordindex, &status);
 	if (U_FAILURE(status)) {
-		SWLog::systemlog->LogError("no resource index to load");
-		SWLog::systemlog->LogError("status %s", u_errorName(status));
+		SWLog::getSystemLog()->logError("no resource index to load");
+		SWLog::getSystemLog()->logError("status %s", u_errorName(status));
 		return;
 	}
 
@@ -155,7 +155,7 @@ void UTF8Transliterator::Load(UErrorCode &status)
 				UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
                         	UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
 				UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
-                        	SWLog::systemlog->LogInformation("ok so far");
+                        	SWLog::getSystemLog()->logInformation("ok so far");
 
 				 if (U_SUCCESS(status)) {
 					switch (type) {
@@ -170,9 +170,9 @@ void UTF8Transliterator::Load(UErrorCode &status)
 								0x0046 /*F*/) ?
 								UTRANS_FORWARD : UTRANS_REVERSE;
 		                                        //registry->put(id, resString, dir, visible);
-							SWLog::systemlog->LogInformation("instantiating %s ...", resString.getBuffer());
+							SWLog::getSystemLog()->logInformation("instantiating %s ...", resString.getBuffer());
 					    		registerTrans(id, resString, dir, status);
-							SWLog::systemlog->LogInformation("done.");
+							SWLog::getSystemLog()->logInformation("done.");
 	                                	}
 						break;
 					case 0x61: // 'a'
@@ -181,16 +181,16 @@ void UTF8Transliterator::Load(UErrorCode &status)
                                 		break;
 					}
         	                 }
-                	         else SWLog::systemlog->LogError("Failed to get resString");
+                	         else SWLog::getSystemLog()->logError("Failed to get resString");
 	                }
-			else SWLog::systemlog->LogError("Failed to get row");
+			else SWLog::getSystemLog()->logError("Failed to get row");
 			ures_close(colBund);
 		}
 	}
 	else
 	{
-		SWLog::systemlog->LogError("no resource index to load");
-		SWLog::systemlog->LogError("status %s", u_errorName(status));
+		SWLog::getSystemLog()->logError("no resource index to load");
+		SWLog::getSystemLog()->logError("status %s", u_errorName(status));
 	}
 
 	ures_close(transIDs);
@@ -203,7 +203,7 @@ void  UTF8Transliterator::registerTrans(const UnicodeString& ID, const UnicodeSt
 		UTransDirection dir, UErrorCode &status )
 {
 #ifndef _ICUSWORD_
-		SWLog::systemlog->LogInformation("registering ID locally %s", ID.getBuffer());
+		SWLog::getSystemLog()->logInformation("registering ID locally %s", ID.getBuffer());
 		SWTransData swstuff;
 		swstuff.resource = resource;
 		swstuff.dir = dir;
@@ -221,7 +221,7 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		if (!U_FAILURE(status))
 		{
 			// already have it, clean up and return true
-			SWLog::systemlog->LogInformation("already have it %s", ID.getBuffer());
+			SWLog::getSystemLog()->logInformation("already have it %s", ID.getBuffer());
 			delete trans;
 			return true;
 		}
@@ -230,13 +230,13 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 	SWTransMap::iterator swelement;
 	if ((swelement = transMap.find(ID)) != transMap.end())
 	{
-		SWLog::systemlog->LogInformation("found element in map");
+		SWLog::getSystemLog()->logInformation("found element in map");
 		SWTransData swstuff = (*swelement).second;
 		UParseError parseError;
 		//UErrorCode status;
 		//std::cout << "unregistering " << ID << std::endl;
 		//Transliterator::unregister(ID);
-		SWLog::systemlog->LogInformation("resource is %s", swstuff.resource.getBuffer());
+		SWLog::getSystemLog()->logInformation("resource is %s", swstuff.resource.getBuffer());
 
 		// Get the rules
 		//std::cout << "importing: " << ID << ", " << resource << std::endl;
@@ -247,8 +247,8 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		//parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
 		//        parseError, status);
 		if (U_FAILURE(status)) {
-			SWLog::systemlog->LogError("Failed to get rules");
-			SWLog::systemlog->LogError("status %s", u_errorName(status));
+			SWLog::getSystemLog()->logError("Failed to get rules");
+			SWLog::getSystemLog()->logError("status %s", u_errorName(status));
 			return false;
 		}
 
@@ -256,14 +256,14 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 		Transliterator *trans = Transliterator::createFromRules(ID, rules, swstuff.dir,
 			parseError,status);
 		if (U_FAILURE(status)) {
-			SWLog::systemlog->LogError("Failed to create transliterator");
-			SWLog::systemlog->LogError("status %s", u_errorName(status));
-			SWLog::systemlog->LogError("Parse error: line %s", parseError.line);
-			SWLog::systemlog->LogError("Parse error: offset %d", parseError.offset);
-			SWLog::systemlog->LogError("Parse error: preContext %s", *parseError.preContext);
-			SWLog::systemlog->LogError("Parse error: postContext %s", *parseError.postContext);
-			SWLog::systemlog->LogError("rules were");
-//			SWLog::systemlog->LogError((const char *)rules);
+			SWLog::getSystemLog()->logError("Failed to create transliterator");
+			SWLog::getSystemLog()->logError("status %s", u_errorName(status));
+			SWLog::getSystemLog()->logError("Parse error: line %s", parseError.line);
+			SWLog::getSystemLog()->logError("Parse error: offset %d", parseError.offset);
+			SWLog::getSystemLog()->logError("Parse error: preContext %s", *parseError.preContext);
+			SWLog::getSystemLog()->logError("Parse error: postContext %s", *parseError.postContext);
+			SWLog::getSystemLog()->logError("rules were");
+//			SWLog::getSystemLog()->logError((const char *)rules);
 			return false;
 		}
 

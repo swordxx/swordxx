@@ -709,8 +709,8 @@ static int _propget_TreeKeyIdx(zend_property_reference *property_reference, pval
 
 #include <localemgr.h>
 
-LocaleMgr *const LocaleMgr_systemLocaleMgr(LocaleMgr *self){
-  	return &(LocaleMgr::systemLocaleMgr);
+LocaleMgr *const LocaleMgr_getSystemLocaleMgr(LocaleMgr *self){
+  	return LocaleMgr::getSystemLocaleMgr();
   }
 static int _wrap_propset_LocaleMgr(zend_property_reference *property_reference, pval *value);
 static int _propset_LocaleMgr(zend_property_reference *property_reference, pval *value);

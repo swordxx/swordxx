@@ -1,7 +1,7 @@
 /******************************************************************************
 *  filemgr.h   - definition of class FileMgr used for pooling file handles
 *
-* $Id: filemgr.h,v 1.20 2004/01/17 04:33:25 scribe Exp $
+* $Id: filemgr.h,v 1.21 2004/02/06 21:01:00 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -77,9 +77,12 @@ public:
 class FileMgr {
 
 	friend class FileDesc;
+	friend class __staticsystemFileMgr;
 
 	FileDesc *files;
 	int sysOpen(FileDesc * file);
+protected:
+	static FileMgr *systemFileMgr;
 public:
 
 	/** Maximum number of open files set in the constructor.
@@ -88,7 +91,8 @@ public:
 	*/
 	int maxFiles;
 	
-	static FileMgr systemFileMgr;
+	static FileMgr *getSystemFileMgr();
+	static void setSystemFileMgr(FileMgr *newFileMgr);
 
 	/** Constructor.
 	* @param maxFiles The number of files that this FileMgr may open in parallel, if necessary.

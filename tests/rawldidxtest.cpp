@@ -27,9 +27,9 @@ int main(int argc, char **argv)
      char buf[127];
 
 	sprintf(buf, "%s.idx", argv[1]);
-	FileDesc *idxfd = FileMgr::systemFileMgr.open(buf, O_RDONLY|O_BINARY, true);
+	FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, O_RDONLY|O_BINARY, true);
 	long maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
-	FileMgr::systemFileMgr.close(idxfd);
+	FileMgr::getSystemFileMgr()->close(idxfd);
 
 	SWBuf last = "";
 	bool first = true;

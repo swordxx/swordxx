@@ -48,7 +48,7 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 
 
 	sprintf(buf, "%s.bdt", path);
-	bdtfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	bdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	delete [] buf;
 
@@ -61,7 +61,7 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 
 RawGenBook::~RawGenBook() {
 
-	FileMgr::systemFileMgr.close(bdtfd);
+	FileMgr::getSystemFileMgr()->close(bdtfd);
 
 	if (path)
 		delete [] path;
@@ -191,9 +191,9 @@ char RawGenBook::createModule(const char *ipath) {
 
 	sprintf(buf, "%s.bdt", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	retval = TreeKeyIdx::create(path);
 	delete [] path;

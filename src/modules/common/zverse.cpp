@@ -71,22 +71,22 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 	}
 		
 	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockType]);
-	idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockType]);
-	idxfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockType]);
-	textfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockType]);
-	textfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockType]);
-	compfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	compfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockType]);
-	compfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	compfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 	
 	instance++;
 }
@@ -114,9 +114,9 @@ zVerse::~zVerse()
 	--instance;
 
 	for (loop1 = 0; loop1 < 2; loop1++) {
-		FileMgr::systemFileMgr.close(idxfp[loop1]);
-		FileMgr::systemFileMgr.close(textfp[loop1]);
-		FileMgr::systemFileMgr.close(compfp[loop1]);
+		FileMgr::getSystemFileMgr()->close(idxfp[loop1]);
+		FileMgr::getSystemFileMgr()->close(textfp[loop1]);
+		FileMgr::getSystemFileMgr()->close(compfp[loop1]);
 	}
 }
 
@@ -420,36 +420,36 @@ char zVerse::createModule(const char *ipath, int blockBound)
 
 	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 
 	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 
 	VerseKey vk;
@@ -462,8 +462,8 @@ char zVerse::createModule(const char *ipath, int blockBound)
 		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &size, 2);
 	}
 
-	FileMgr::systemFileMgr.close(fd);
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	delete [] path;
 	delete [] buf;

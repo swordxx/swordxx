@@ -15,36 +15,37 @@
 
 SWORD_NAMESPACE_START
 
-SWLog *SWLog::systemlog = 0;
+SWLog *SWLog::systemLog = 0;
 
-
-class __staticsystemlog {
+class __staticsystemLog {
 public:
-	__staticsystemlog() {
-		SWLog::systemlog = new SWLog();
-	}
-	~__staticsystemlog() {
-		delete SWLog::systemlog;
-	}
-} _staticsystemlog;
+	__staticsystemLog() { }
+	~__staticsystemLog() { delete SWLog::systemLog; }
+} _staticsystemLog;
 
 
-void SWLog::LogWarning(char *fmt, ...)
-{
-	//#ifdef _USTDIO_
-	//UChar msg[2048];
-	//#else
+SWLog *SWLog::getSystemLog() {
+	if (!systemLog)
+		systemLog = new SWLog();
+
+	return systemLog;
+}
+
+
+void SWLog::setSystemLog(SWLog *newLog) {
+	if (systemLog)
+		delete systemLog;
+	systemLog = newLog;
+}
+
+
+void SWLog::logWarning(char *fmt, ...) {
 	char msg[2048];
-	//#endif
 	va_list argptr;
 
 	if (logLevel >= 2) {
 		va_start(argptr, fmt);
-		//#ifdef _USTDIO_
-		//u_vsprintf(msg, NULL, fmt, argptr);
-		//#else
 		vsprintf(msg, fmt, argptr);
-		//#endif
 		va_end(argptr);
 
 #ifndef _WIN32_WCE
@@ -55,22 +56,13 @@ void SWLog::LogWarning(char *fmt, ...)
 }
 
 
-void SWLog::LogError(char *fmt, ...)
-{
-	//#ifdef _USTDIO_
-	//UChar msg[2048];
-	//#else
+void SWLog::logError(char *fmt, ...) {
 	char msg[2048];
-	//#endif
 	va_list argptr;
 
 	if (logLevel) {
 		va_start(argptr, fmt);
-		//#ifdef _USTDIO_
-		//u_vsprintf(msg, NULL, fmt, argptr);
-		//#else
 		vsprintf(msg, fmt, argptr);
-		//#endif
 		va_end(argptr);
 
 #ifndef _WIN32_WCE
@@ -81,22 +73,13 @@ void SWLog::LogError(char *fmt, ...)
 }
 
 
-void SWLog::LogTimedInformation(char *fmt, ...)
-{
-	//#ifdef _USTDIO_
-	//UChar msg[2048];
-	//#else
+void SWLog::logTimedInformation(char *fmt, ...) {
 	char msg[2048];
-	//#endif
 	va_list argptr;
 
 	if (logLevel >= 4) {
 		va_start(argptr, fmt);
-		//#ifdef _USTDIO_
-		//u_vsprintf(msg, NULL, fmt, argptr);
-		//#else
 		vsprintf(msg, fmt, argptr);
-		//#endif
 		va_end(argptr);
 
 #ifndef _WIN32_WCE
@@ -107,22 +90,13 @@ void SWLog::LogTimedInformation(char *fmt, ...)
 }
 
 
-void SWLog::LogInformation(char *fmt, ...)
-{
-	//#ifdef _USTDIO_
-	//UChar msg[2048];
-	//#else
+void SWLog::logInformation(char *fmt, ...) {
 	char msg[2048];
-	//#endif
 	va_list argptr;
 
 	if (logLevel >= 3) {
 		va_start(argptr, fmt);
-		//#ifdef _USTDIO_
-		//u_vsprintf(msg, NULL, fmt, argptr);
-		//#else
 		vsprintf(msg, fmt, argptr);
-		//#endif
 		va_end(argptr);
 
 #ifndef _WIN32_WCE

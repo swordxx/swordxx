@@ -58,16 +58,16 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp) 
 	}
 		
 	sprintf(buf, "%s.idx", path);
-	idxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.dat", path);
-	datfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.zdx", path);
-	zdxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	zdxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.zdt", path);
-	zdtfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd <= 0) {
 		sprintf(buf, "Error: %d", errno);
@@ -95,10 +95,10 @@ zStr::~zStr() {
 
 	--instance;
 
-	FileMgr::systemFileMgr.close(idxfd);
-	FileMgr::systemFileMgr.close(datfd);
-	FileMgr::systemFileMgr.close(zdxfd);
-	FileMgr::systemFileMgr.close(zdtfd);
+	FileMgr::getSystemFileMgr()->close(idxfd);
+	FileMgr::getSystemFileMgr()->close(datfd);
+	FileMgr::getSystemFileMgr()->close(zdxfd);
+	FileMgr::getSystemFileMgr()->close(zdtfd);
 
 
 	if (compressor)
@@ -578,7 +578,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		if (idxBytes) {
 			write(idxfd->getFd(), idxBytes+IDXENTRYSIZE, shiftSize-IDXENTRYSIZE);
 			lseek(idxfd->getFd(), -1, SEEK_CUR);	// last valid byte
-			FileMgr::systemFileMgr.trunc(idxfd);	// truncate index
+			FileMgr::getSystemFileMgr()->trunc(idxfd);	// truncate index
 		}
 	}
 
@@ -688,27 +688,27 @@ signed char zStr::createModule(const char *ipath) {
 
 	sprintf(buf, "%s.dat", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s.idx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	sprintf(buf, "%s.zdt", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	sprintf(buf, "%s.zdx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	delete [] path;
 	

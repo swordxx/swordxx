@@ -878,8 +878,8 @@ char ListKey_SetToElement(ListKey *self,int element){
 
 #include <localemgr.h>
 
-LocaleMgr *const LocaleMgr_systemLocaleMgr(){
-  	return &(LocaleMgr::systemLocaleMgr);
+LocaleMgr *const LocaleMgr_getSystemLocaleMgr(){
+  	return LocaleMgr::getSystemLocaleMgr();
   }
 
 #include <swfiltermgr.h>

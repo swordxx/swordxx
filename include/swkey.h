@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.25 2004/02/05 10:24:36 dglassey Exp $
+ * $Id: swkey.h,v 1.26 2004/02/06 21:01:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -191,7 +191,7 @@ public:
 	* const char* randomVerse() {
 	*   VerseKey vk;
 	*   SWMgr mgr;
-	*   LocaleMgr::systemLocaleMgr().setDefaultLocaleName("de");
+	*   LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName("de");
 	*
 	*   SWModule* module = mgr->Modules("GerLut");
 	*   srand( time(0) );

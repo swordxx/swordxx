@@ -55,10 +55,10 @@ RawStr4::RawStr4(const char *ipath, int fileMode)
 	}
 		
 	sprintf(buf, "%s.idx", path);
-	idxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.dat", path);
-	datfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	if (datfd < 0) {
 		sprintf(buf, "Error: %d", errno);
@@ -80,8 +80,8 @@ RawStr4::~RawStr4()
 
 	--instance;
 
-	FileMgr::systemFileMgr.close(idxfd);
-	FileMgr::systemFileMgr.close(datfd);
+	FileMgr::getSystemFileMgr()->close(idxfd);
+	FileMgr::getSystemFileMgr()->close(datfd);
 }
 
 
@@ -496,7 +496,7 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 		if (idxBytes) {
 			write(idxfd->getFd(), idxBytes+8, shiftSize-8);
 			lseek(idxfd->getFd(), -1, SEEK_CUR);	// last valid byte
-			FileMgr::systemFileMgr.trunc(idxfd);	// truncate index
+			FileMgr::getSystemFileMgr()->trunc(idxfd);	// truncate index
 			delete [] idxBytes;
 		}
 	}
@@ -543,15 +543,15 @@ signed char RawStr4::createModule(const char *ipath)
 
 	sprintf(buf, "%s.dat", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s.idx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	delete [] path;
 	

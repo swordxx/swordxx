@@ -60,16 +60,16 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 	}
 		
 	sprintf(buf, "%s/ot.vss", path);
-	idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/nt.vss", path);
-	idxfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/ot", path);
-	textfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s/nt", path);
-	textfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
+	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
 
 	delete [] buf;
 	instance++;
@@ -90,8 +90,8 @@ RawVerse::~RawVerse()
 	--instance;
 
 	for (loop1 = 0; loop1 < 2; loop1++) {
-		FileMgr::systemFileMgr.close(idxfp[loop1]);
-		FileMgr::systemFileMgr.close(textfp[loop1]);
+		FileMgr::getSystemFileMgr()->close(idxfp[loop1]);
+		FileMgr::getSystemFileMgr()->close(textfp[loop1]);
 	}
 }
 
@@ -308,24 +308,24 @@ char RawVerse::createModule(const char *ipath)
 
 	sprintf(buf, "%s/ot", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
-	FileMgr::systemFileMgr.close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.vss", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd->getFd();
 
 	sprintf(buf, "%s/nt.vss", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::systemFileMgr.open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
 	fd2->getFd();
 
 	VerseKey vk;
@@ -337,8 +337,8 @@ char RawVerse::createModule(const char *ipath)
 		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &size, 2);
 	}
 
-	FileMgr::systemFileMgr.close(fd);
-	FileMgr::systemFileMgr.close(fd2);
+	FileMgr::getSystemFileMgr()->close(fd);
+	FileMgr::getSystemFileMgr()->close(fd2);
 
 	delete [] path;
 	delete [] buf;

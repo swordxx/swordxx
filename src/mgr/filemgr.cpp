@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.37 2004/01/17 23:12:46 scribe Exp $
+ * $Id: filemgr.cpp,v 1.38 2004/02/06 21:01:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -51,7 +51,28 @@
 SWORD_NAMESPACE_START
 
 // ---------------- statics -----------------
-FileMgr FileMgr::systemFileMgr;
+FileMgr *FileMgr::systemFileMgr = 0;
+
+class __staticsystemFileMgr {
+public:
+	__staticsystemFileMgr() { }
+	~__staticsystemFileMgr() { delete FileMgr::systemFileMgr; }
+} _staticsystemFileMgr;
+
+
+FileMgr *FileMgr::getSystemFileMgr() {
+	if (!systemFileMgr)
+		systemFileMgr = new FileMgr();
+
+	return systemFileMgr;
+}
+
+
+void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
+	if (systemFileMgr)
+		delete systemFileMgr;
+	systemFileMgr = newFileMgr;
+}
 
 // --------------- end statics --------------
 

@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.14 2004/01/17 04:33:25 scribe Exp $
+ * $Id: swconfig.cpp,v 1.15 2004/02/06 21:01:01 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -87,7 +87,7 @@ void SWConfig::Load() {
 	
 	Sections.erase(Sections.begin(), Sections.end());
 	
-	cfile = FileMgr::systemFileMgr.open(filename.c_str(), O_RDONLY|O_BINARY);
+	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), O_RDONLY|O_BINARY);
 	if (cfile->getFd() > 0) {
 		while (FileMgr::getLine(cfile, line)) {
 			buf = new char [ line.length() + 1 ];
@@ -115,7 +115,7 @@ void SWConfig::Load() {
 		if (!first)
 			Sections.insert(SectionMap::value_type(sectname, cursect));
 
-		FileMgr::systemFileMgr.close(cfile);
+		FileMgr::getSystemFileMgr()->close(cfile);
 	}
 }
 
@@ -127,7 +127,7 @@ void SWConfig::Save() {
 	ConfigEntMap::iterator entry;
 	SWBuf sectname;
 	
-	cfile = FileMgr::systemFileMgr.open(filename.c_str(), O_BINARY|O_RDWR|O_CREAT|O_TRUNC);
+	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), O_BINARY|O_RDWR|O_CREAT|O_TRUNC);
 	if (cfile->getFd() > 0) {
 		
 		for (sit = Sections.begin(); sit != Sections.end(); sit++) {
@@ -145,7 +145,7 @@ void SWConfig::Save() {
 		}
 		buf = "\n";
 		write(cfile->getFd(), buf.c_str(), buf.length());
-		FileMgr::systemFileMgr.close(cfile);
+		FileMgr::getSystemFileMgr()->close(cfile);
 	}
 }
 

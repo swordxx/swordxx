@@ -273,7 +273,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 			if (!keepToken) {	// if we don't want strongs
 				if (!handled) {
-					SWLog::systemlog->LogError("Unprocessed Token: <%s>", token);
+					SWLog::getSystemLog()->logError("Unprocessed Token: <%s>", token);
 //					exit(-1);
 				}
 				if (strchr(" ,:;.?!()'\"", from[1])) {

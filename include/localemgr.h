@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.17 2004/02/05 10:24:36 dglassey Exp $
+ * $Id: localemgr.h,v 1.18 2004/02/06 21:01:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -51,14 +51,15 @@ private:
 	void deleteLocales();
 	char *defaultLocaleName;
 	LocaleMgr(const LocaleMgr &);
-
+	friend class __staticsystemLocaleMgr;
 protected:
 	LocaleMap *locales;
+	static LocaleMgr *systemLocaleMgr;
 
 public:
 
 	/** Default constructor of  LocaleMgr
-	* You do normally not need this constructor, use LocaleMgr::systemLocaleMgr() instead.
+	* You do normally not need this constructor, use LocaleMgr::getSystemLocaleMgr() instead.
 	*/
 	LocaleMgr(const char *iConfigPath = 0);
 
@@ -104,7 +105,8 @@ public:
 	/** The LocaleMgr object used globally in the Sword world.
 	* Do not create your own LocaleMgr, use this static object instead.
 	*/
-	static LocaleMgr& systemLocaleMgr();
+	static LocaleMgr *getSystemLocaleMgr();
+	static void setSystemLocaleMgr(LocaleMgr *newLocaleMgr);
 
 	/** Augment this localmgr with all locale.conf files in a directory
 	*/

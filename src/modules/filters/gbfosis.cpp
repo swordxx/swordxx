@@ -271,7 +271,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
 			if (!keepToken) {	
 				if (!handled) {
-					SWLog::systemlog->LogError("Unprocessed Token: <%s>", token);
+					SWLog::getSystemLog()->LogError("Unprocessed Token: <%s>", token);
 //					exit(-1);
 				}
 				if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
@@ -346,7 +346,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 //						sprintf(ref, "\t</div>");
 //						pushString(&to, ref);
 						if (!quoteStack.empty()) {
-							SWLog::systemlog->LogError("popping unclosed quote at end of book");
+							SWLog::getSystemlog()->LogError("popping unclosed quote at end of book");
 							quoteStack.clear();
 						}
 					}
