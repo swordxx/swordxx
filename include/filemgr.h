@@ -1,7 +1,7 @@
 /******************************************************************************
 *  filemgr.h   - definition of class FileMgr used for pooling file handles
 *
-* $Id: filemgr.h,v 1.19 2003/08/15 08:52:15 scribe Exp $
+* $Id: filemgr.h,v 1.20 2004/01/17 04:33:25 scribe Exp $
 *
 * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -26,8 +26,13 @@
 #include <fcntl.h>
 
 #include <defs.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
+
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 
 class SWDLLEXPORT FileMgr;
 
@@ -142,6 +147,7 @@ public:
 	static int createPathAndFile(const char *fName);
 	static int copyFile(const char *sourceFile, const char *targetFile);
 	static int removeFile(const char *fName);
+	static char getLine(FileDesc *fDesc, SWBuf &line);
 
 };
 

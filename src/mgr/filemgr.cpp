@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.33 2003/12/23 01:36:12 chrislit Exp $
+ * $Id: filemgr.cpp,v 1.34 2004/01/17 04:33:25 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -352,6 +352,56 @@ int FileMgr::removeFile(const char *fName) {
 	return ::remove(fName);
 }
 
+char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
+	char ch;
+	int len;
+	char *buf;
+	bool more = true;
+
+	line = "";
+	while (more) {
+		more = false;
+		long index = lseek(fDesc->getFd(), 0, SEEK_CUR);
+		// clean up any preceding white space
+		while ((len = read(fDesc->getFd(), &ch, 1)) == 1) {
+			if ((ch != 13) && (ch != ' ') && (ch != '\t'))
+				break;
+			else index++;
+		}
+
+
+		while (ch != 10) {
+		   if ((len = read(fDesc->getFd(), &ch, 1)) != 1)
+				break;
+		}
+		
+		int size = (lseek(fDesc->getFd(), 0, SEEK_CUR) - index) - 1;
+
+		buf = new char [ size + 1 ];
+
+		if (size > 0) {
+			lseek(fDesc->getFd(), index, SEEK_SET);
+			read(fDesc->getFd(), buf, size);
+			read(fDesc->getFd(), &ch, 1);   //pop terminating char
+			buf[size] = 0;
+
+			more = (line[line.length()-1] == '\\');
+			// clean up any trailing junk on buf
+			for (char *it = buf+(strlen(buf)-1); it > buf; it--) {
+				if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t')) {
+					if (*it == '\\')
+						more = true;
+					else break;
+				}
+				*it = 0;
+			}
+		}
+		else *buf = 0;
+		line += buf;
+		delete [] buf;
+	}
+	return (len || line.length());
+}
 
 
 SWORD_NAMESPACE_END

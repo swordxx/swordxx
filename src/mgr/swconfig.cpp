@@ -2,7 +2,7 @@
  *  swconfig.cpp   - implementation of Class SWConfig used for saving and
  *			retrieval of configuration information
  *
- * $Id: swconfig.cpp,v 1.13 2003/06/27 01:41:07 scribe Exp $
+ * $Id: swconfig.cpp,v 1.14 2004/01/17 04:33:25 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -22,6 +22,13 @@
 
 #include <swconfig.h>
 #include <utilfuns.h>
+#include <filemgr.h>
+#include <fcntl.h>
+#ifndef __GNUC__
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
 
 SWORD_NAMESPACE_START
 
@@ -35,6 +42,7 @@ SWConfig::~SWConfig() {
 }
 
 
+/*
 char SWConfig::getline(FILE *fp, SWBuf &line)
 {
 	char retval = 0;
@@ -64,10 +72,13 @@ char SWConfig::getline(FILE *fp, SWBuf &line)
 	}
 	return retval;
 }
+*/
+
+
 
 
 void SWConfig::Load() {
-	FILE *cfile;
+	FileDesc *cfile;
 	char *buf, *data;
 	SWBuf line;
 	ConfigEntMap cursect;
@@ -76,8 +87,9 @@ void SWConfig::Load() {
 	
 	Sections.erase(Sections.begin(), Sections.end());
 	
-	if ((cfile = fopen(filename.c_str(), "r"))) {
-		while (getline(cfile, line)) {
+	cfile = FileMgr::systemFileMgr.open(filename.c_str(), O_RDONLY|O_BINARY);
+	if (cfile->getFd() > 0) {
+		while (FileMgr::getLine(cfile, line)) {
 			buf = new char [ line.length() + 1 ];
 			strcpy(buf, line.c_str());
 			if (*strstrip(buf) == '[') {
@@ -103,35 +115,37 @@ void SWConfig::Load() {
 		if (!first)
 			Sections.insert(SectionMap::value_type(sectname, cursect));
 
-		fclose(cfile);
+		FileMgr::systemFileMgr.close(cfile);
 	}
 }
 
 
 void SWConfig::Save() {
-	FILE *cfile;
+	FileDesc *cfile;
 	SWBuf buf;
 	SectionMap::iterator sit;
 	ConfigEntMap::iterator entry;
 	SWBuf sectname;
 	
-	if ((cfile = fopen(filename.c_str(), "w"))) {
+	cfile = FileMgr::systemFileMgr.open(filename.c_str(), O_BINARY|O_RDWR|O_CREAT|O_TRUNC);
+	if (cfile->getFd() > 0) {
 		
 		for (sit = Sections.begin(); sit != Sections.end(); sit++) {
 			buf =  "\n[";
 			buf += (*sit).first.c_str();
 			buf += "]\n";
-			fputs(buf.c_str(), cfile);
+			write(cfile->getFd(), buf.c_str(), buf.length());
 			for (entry = (*sit).second.begin(); entry != (*sit).second.end(); entry++) {
 				buf = (*entry).first.c_str();
 				buf += "=";
 				buf += (*entry).second.c_str();
 				buf += "\n";
-				fputs(buf.c_str(), cfile);
+				write(cfile->getFd(), buf.c_str(), buf.length());
 			}
 		}
-		fputs("\n", cfile);	// so getline will find last line
-		fclose(cfile);
+		buf = "\n";
+		write(cfile->getFd(), buf.c_str(), buf.length());
+		FileMgr::systemFileMgr.close(cfile);
 	}
 }
 

@@ -33,9 +33,6 @@ using std::find;
 
 #endif
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 SWORD_NAMESPACE_START
 
