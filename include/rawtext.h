@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawtext.h,v 1.28 2003/08/29 06:00:16 scribe Exp $
+ * $Id: rawtext.h,v 1.29 2003/08/29 19:02:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,12 +29,27 @@
 
 #include <defs.h>
 
+#ifdef USELUCENE
+namespace lucene { namespace index {
+class IndexReader;
+}}
+
+namespace lucene { namespace search {
+class IndexSearcher;
+}}
+#endif
+
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawText : public SWText, public RawVerse {
 
-	RawStr *fastSearch[2];
 	VerseKey &getVerseKey();
+#ifdef USELUCENE
+	lucene::index::IndexReader *ir;
+	lucene::search::IndexSearcher *is;
+#else
+	RawStr *fastSearch[2];
+#endif
 
 
 public:

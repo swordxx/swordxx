@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.94 2003/08/14 00:57:38 scribe Exp $
+ * $Id: swmgr.cpp,v 1.95 2003/08/29 19:02:45 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -436,7 +436,7 @@ if (debug)
 	stdstr(&globPaths, globalConfPath);
 	for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(0, ":")) {
 
-	#ifndef _MSC_VER
+#ifndef _MSC_VER
 if (debug)
 	std::cerr << "\nChecking for " << gfp << "...";
 #endif
@@ -444,15 +444,33 @@ if (debug)
 		if (FileMgr::existsFile(gfp))
 			break;
 	}
+	SWBuf sysConfPath;
+	if (gfp)
+		sysConfPath = gfp;
 
-	if (gfp) {
+	SWBuf homeDir  = getenv ("HOME");
+	if (homeDir.size() > 0) {
+		if ((homeDir[homeDir.size()-1] != '\\') && (homeDir[homeDir.size()-1] != '/'))
+			homeDir += "/";
+		homeDir += ".sword/sword.conf";
+		if (FileMgr::existsFile(homeDir)) {
+#ifndef _MSC_VER
+if (debug)
+	std::cerr << "\nOverriding any systemwide sword.conf with one found in users home directory." << gfp << "...";
+#endif
+			sysConfPath = homeDir;
+		}
+	}
+
+
+	if (sysConfPath.size()) {
 
 #ifndef _MSC_VER
 if (debug)
 	std::cerr << "found\n";
 #endif
 
-		SWConfig etcconf(gfp);
+		SWConfig etcconf(sysConfPath);
 		if ((entry = etcconf.Sections["Install"].find("DataPath")) != etcconf.Sections["Install"].end()) {
 			path = (*entry).second;
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
@@ -460,7 +478,7 @@ if (debug)
 
 #ifndef _MSC_VER
 if (debug)
-	std::cerr << "DataPath in " << gfp << " is set to: " << path;
+	std::cerr << "DataPath in " << sysConfPath << " is set to: " << path;
 #endif
 
 #ifndef _MSC_VER

@@ -15,20 +15,10 @@
 #endif
 
 #include <utilfuns.h>
-//#include <rawverse.h>
 #include <ztext.h>
-//#include <zlib.h>
 
-#include <map>
-#include <list>
-#include <algorithm>
 #include <regex.h>	// GNU
 
-
-
-using std::map;
-using std::list;
-using std::find;
 
 #ifdef USELUCENE
 #include <CLucene/CLucene.h>

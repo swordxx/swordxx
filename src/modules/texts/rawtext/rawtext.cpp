@@ -17,18 +17,25 @@
 #include <rawverse.h>
 #include <rawtext.h>
 
+#include <regex.h>	// GNU
+#ifdef USELUCENE
+#include <CLucene/CLucene.h>
+using namespace lucene::search;
+using namespace lucene::queryParser;
+#else
 #include <map>
 #include <list>
 #include <algorithm>
-#include <regex.h>	// GNU
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 using std::map;
 using std::list;
 using std::find;
+
+#endif
+
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 
 SWORD_NAMESPACE_START
 
@@ -47,6 +54,19 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
           RawVerse(ipath) {
           
+#ifdef USELUCENE
+	SWBuf fname;
+	fname = path;
+	ir = 0;
+	is = 0;
+	char ch = fname.c_str()[strlen(fname.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		fname += "/lucene";
+	if (IndexReader::indexExists(fname.c_str())) {
+		ir = &IndexReader::open(fname);
+		is = new IndexSearcher(*ir);
+	}
+#else
 	SWBuf fname;
 	fname = path;
 	char ch = fname.c_str()[strlen(fname.c_str())-1];
@@ -62,6 +82,7 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 				fastSearch[loop] = new RawStr((fname + ((loop)?"ntwords":"otwords")).c_str());
         	}
 	}
+#endif
 }
 
 
@@ -69,13 +90,20 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
  * RawText Destructor - Cleans up instance of RawText
  */
 
-RawText::~RawText()
-{
+RawText::~RawText() {
+#ifdef USELUCENE
+	if (is)
+		is->close();
+
+	if (ir)
+		delete ir;
+#else
 	if (fastSearch[0])
 		delete fastSearch[0];
 
 	if (fastSearch[1])
 		delete fastSearch[1];
+#endif
 }
 
 
@@ -137,6 +165,84 @@ SWBuf &RawText::getRawEntryBuf() {
 
 
 signed char RawText::createSearchFramework() {
+#ifdef USELUCENE
+	SWKey *savekey = 0;
+	SWKey *searchkey = 0;
+	SWKey textkey;
+	char *word = 0;
+	char *wordBuf = 0;
+
+
+	// save key information so as not to disrupt original
+	// module position
+	if (!key->Persist()) {
+		savekey = CreateKey();
+		*savekey = *key;
+	}
+	else	savekey = key;
+
+	searchkey = (key->Persist())?key->clone():0;
+	if (searchkey) {
+		searchkey->Persist(1);
+		setKey(*searchkey);
+	}
+
+	// position module at the beginning
+	*this = TOP;
+
+	VerseKey *lkey = (VerseKey *)key;
+
+	// iterate thru each entry in module
+
+	IndexWriter* writer = NULL;
+	Directory* d = NULL;
+ 
+	lucene::analysis::SimpleAnalyzer& an = *new lucene::analysis::SimpleAnalyzer();
+	SWBuf target = path;
+	char ch = target.c_str()[strlen(target.c_str())-1];
+	if ((ch != '/') && (ch != '\\'))
+		target += "/lucene";
+
+	if (IndexReader::indexExists(target.c_str())) {
+		d = &FSDirectory::getDirectory(target.c_str(), false);
+		if (IndexReader::isLocked(*d)) {
+			IndexReader::unlock(*d);
+		}
+																		   
+		writer = new IndexWriter(*d, an, false);
+	} else {
+		d = &FSDirectory::getDirectory(target.c_str(), true);
+		writer = new IndexWriter( *d ,an, true);
+	}
+
+
+ 
+	while (!Error()) {
+		Document &doc = *new Document();
+		doc.add( Field::Text(_T("key"), (const char *)*lkey ) );
+		doc.add( Field::Text(_T("content"), StripText()) );
+		writer->addDocument(doc);
+		delete &doc;
+
+		(*this)++;
+	}
+
+	writer->optimize();
+	writer->close();
+	delete writer;
+	delete &an;
+
+	// reposition module back to where it was before we were called
+	setKey(*savekey);
+
+	if (!savekey->Persist())
+		delete savekey;
+
+	if (searchkey)
+		delete searchkey;
+
+	
+#else
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	SWKey textkey;
@@ -262,6 +368,7 @@ signed char RawText::createSearchFramework() {
 		close(datfd);
 		close(idxfd);
 	}
+#endif
 	return 0;
 }
 
@@ -281,8 +388,85 @@ signed char RawText::createSearchFramework() {
  * RET: listkey set to verses that contain istr
  */
 
-ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData)
-{
+ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
+#ifdef USELUCENE
+	listkey.ClearList();
+
+	if ((is) && (ir)) {
+
+		switch (searchType) {
+		case -3: {
+
+
+			// test to see if our scope for this search is bounded by a
+			// VerseKey
+			VerseKey *testKeyType = 0, vk;
+			try {
+				testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
+			}
+			catch ( ... ) {}
+			// if we don't have a VerseKey * decendant we can't handle
+			// because of scope.
+			// In the future, add bool SWKey::isValid(const char *tryString);
+			if (!testKeyType)
+				break;
+
+
+			// check if we just want to see if search is supported.
+			// If we've gotten this far, then it is supported.
+			if (justCheckIfSupported) {
+				*justCheckIfSupported = true;
+				return listkey;
+			}
+
+			(*percent)(10, percentUserData);
+
+			standard::StandardAnalyzer analyzer;
+			Query &q =  QueryParser::Parse(istr, _T("content"), analyzer);
+			(*percent)(20, percentUserData);
+			Hits &h = is->search(q);
+			(*percent)(80, percentUserData);
+
+
+			// iterate thru each good module position that meets the search
+			for (long i = 0; i < h.Length(); i++) {
+				Document &doc = h.doc(i);
+
+				// set a temporary verse key to this module position
+				vk = doc.get(_T("key"));
+
+				// check scope
+				// Try to set our scope key to this verse key
+				if (scope) {
+					*testKeyType = vk;
+
+					// check to see if it set ok and if so, add to our return list
+					if (*testKeyType == vk)
+						listkey << (const char *) vk;
+				}
+				else listkey << (const char*) vk;
+			}
+			(*percent)(98, percentUserData);
+
+			delete &h;
+			delete &q;
+
+			listkey = TOP;
+			(*percent)(100, percentUserData);
+			return listkey;
+		}
+
+		default:
+			break;
+		}
+	}
+
+	// check if we just want to see if search is supported
+	if (justCheckIfSupported) {
+		*justCheckIfSupported = false;
+		return listkey;
+	}
+#else
 	listkey.ClearList();
 
 	if ((fastSearch[0]) && (fastSearch[1])) {
@@ -461,6 +645,7 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 		return listkey;
 	}
 
+#endif
 	// if we don't support this search, fall back to base class
 	return SWModule::Search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
