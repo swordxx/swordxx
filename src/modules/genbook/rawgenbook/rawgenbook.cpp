@@ -117,7 +117,7 @@ char *RawGenBook::getRawEntry() {
           entryBuf[size] = 0;
 
 		rawFilter(entryBuf, size, 0);	// hack, decipher
-		rawFilter(entryBuf, size, key);
+		rawFilter(entryBuf, size*FILTERPAD, key);
 
 		   if (!isUnicode())
 			RawStr::preptext(entryBuf);

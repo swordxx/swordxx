@@ -93,7 +93,7 @@ char RawLD4::getEntry(long away)
 	if (!(retval = findoffset(buf, &start, &size, away))) {
 		readtext(start, &size, &idxbuf, &entrybuf);
 		rawFilter(entrybuf, size, 0);	// hack, decipher
-		rawFilter(entrybuf, size, key);
+		rawFilter(entrybuf, size*FILTERPAD, key);
 		entrySize = size;        // support getEntrySize call
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer

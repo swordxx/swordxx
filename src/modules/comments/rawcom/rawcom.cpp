@@ -80,7 +80,7 @@ char *RawCom::getRawEntry() {
      entrybuf[size] = 0;
 
 	rawFilter(entrybuf, size, 0);	// hack, decipher
-	rawFilter(entrybuf, size, key);
+	rawFilter(entrybuf, size*FILTERPAD, key);
 
         if (!isUnicode())
 		preptext(entrybuf);
