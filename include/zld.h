@@ -2,7 +2,7 @@
  *  zld.cpp - code for class 'zLD'- a module that reads compressed lexicon and
  *				dictionary files.
  *
- * $Id: zld.h,v 1.1 2001/12/20 10:01:00 scribe Exp $
+ * $Id: zld.h,v 1.2 2002/03/13 06:55:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,7 +47,7 @@ public:
 		return this->operator +=(-decrement);
 	}
 	// write interface ----------------------------
-	virtual bool isWritable() { return true; }
+	virtual bool isWritable () { return ((idxfd->getFd() > 0) && (idxfd->mode & O_RDWR == O_RDWR)); }
 	static char createModule (const char *path) {
 		return zStr::createModule (path);
 	}

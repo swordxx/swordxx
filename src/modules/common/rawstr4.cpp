@@ -39,7 +39,6 @@ int RawStr4::instance = 0;
 RawStr4::RawStr4(const char *ipath, int fileMode)
 {
 	char buf[127];
-	char tries = 1;
 
 	nl = '\n';
 	lastoff = -1;
@@ -52,19 +51,13 @@ RawStr4::RawStr4(const char *ipath, int fileMode)
 
 	if (fileMode == -1) { // try read/write if possible
 		fileMode = O_RDWR;
-		tries = 2;
 	}
 		
-	for (int i = 0; i < tries; i++) {
-		sprintf(buf, "%s.idx", path);
-		idxfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s.idx", path);
+	idxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s.dat", path);
-		datfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
-
-		if (idxfd->getFd() >= 0)
-			break;
-	}
+	sprintf(buf, "%s.dat", path);
+	datfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
 	if (datfd < 0) {
 		sprintf(buf, "Error: %d", errno);

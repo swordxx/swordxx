@@ -13,13 +13,12 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawVerse
-{
+class SWDLLEXPORT RawVerse {
   static int instance;		// number of instantiated RawVerse objects or derivitives
+protected:
   FileDesc *idxfp[2];
   FileDesc *textfp[2];
 
-protected:
   char *path;
   void preptext (char *buf);
   void settext (char testmt, long idxoff, const char *buf, long len = 0);

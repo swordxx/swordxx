@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: rawstr.h,v 1.10 2002/01/24 08:55:27 scribe Exp $
+ * $Id: rawstr.h,v 1.11 2002/03/13 06:55:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,12 +31,12 @@
 
 class SWDLLEXPORT RawStr {
 	static int instance;		// number of instantiated RawStr objects or derivitives
-	FileDesc *idxfd;
-	FileDesc *datfd;
 	char *path;
 	long lastoff;
 
 protected:
+	FileDesc *idxfd;
+	FileDesc *datfd;
 	void settext(const char *key, const char *buf, long len = 0);
 	void linkentry(const char *destkey, const char *srckey);
 public:

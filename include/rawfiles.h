@@ -3,7 +3,7 @@
  *			pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawfiles.h,v 1.12 2002/02/19 01:20:35 scribe Exp $
+ * $Id: rawfiles.h,v 1.13 2002/03/13 06:55:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -47,9 +47,7 @@ public:
   /** Is the module writable? :)
   * @return yes or no
   */
-  virtual bool isWritable () {
-    return true;
-  }
+	virtual bool isWritable () { return ((idxfp[0]->getFd() > 0) && (idxfp[0]->mode & O_RDWR == O_RDWR)); }
   
   /** Creates a new module
   * @param path The first parameter is path of the new module

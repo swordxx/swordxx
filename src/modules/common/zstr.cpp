@@ -40,7 +40,6 @@ const int zStr::ZDXENTRYSIZE = 8;
 
 zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp) {
 	char buf[127];
-	char tries = 1;
 
 	nl = '\n';
 	lastoff = -1;
@@ -55,28 +54,21 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp) 
 
 	if (fileMode == -1) { // try read/write if possible
 		fileMode = O_RDWR;
-		tries = 2;
 	}
 		
-	int i;
-	for (i = 0; i < tries; i++) {
-		sprintf(buf, "%s.idx", path);
-		idxfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
-
-		if (idxfd->getFd() >= 0)
-			break;
-	}
+	sprintf(buf, "%s.idx", path);
+	idxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.dat", path);
-	datfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	datfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.zdx", path);
-	zdxfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	zdxfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
 	sprintf(buf, "%s.zdt", path);
-	zdtfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	zdtfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-	if (datfd->getFd() < 0) {
+	if (datfd <= 0) {
 		sprintf(buf, "Error: %d", errno);
 		perror(buf);
 	}

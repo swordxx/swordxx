@@ -51,7 +51,6 @@ const char zVerse::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
 zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp)
 {
 	char buf[127];
-	int tries = 1;
 
 	nl = '\n';
 	path = 0;
@@ -68,30 +67,25 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 
 	if (fileMode == -1) { // try read/write if possible
 		fileMode = O_RDWR;
-		tries = 2;
 	}
 		
-	for (int i = 0; i < tries; i++) {
-		sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockType]);
-		idxfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockType]);
+	idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockType]);
-		idxfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockType]);
+	idxfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockType]);
-		textfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockType]);
+	textfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockType]);
-		textfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockType]);
+	textfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockType]);
-		compfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockType]);
+	compfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockType]);
-		compfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
-		if ((idxfp[0]->getFd() >= 0) || (idxfp[1]->getFd() >= 0))
-			break;
-	}
+	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockType]);
+	compfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 	
 	instance++;
 }

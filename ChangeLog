@@ -2,6 +2,14 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+12-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added new option to filemgr open to allow downgrade
+		of access from rdwr to rdonly.
+	Removed code that actually opens files from most
+		driver's constructors.
+	Changed isWritable to actually return true only if the user
+		has write permission to the files.
+
 11-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added David White's recommendation to cache strlen
 		in stdstr to improve performance.

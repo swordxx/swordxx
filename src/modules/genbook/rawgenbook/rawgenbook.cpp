@@ -32,7 +32,6 @@
 
 RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
 		: SWGenBook(iname, idesc, idisp, enc, dir, mark, ilang) {
-	char tries = 2;
 	int fileMode = O_RDWR;
 	char *buf = new char [ strlen (ipath) + 20 ];
 
@@ -48,14 +47,8 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 	key = CreateKey();
 
 
-	int i;
-	for (i = 0; i < tries; i++) {
-		sprintf(buf, "%s.bdt", path);
-		bdtfd = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
-
-		if (bdtfd->getFd() >= 0)
-			break;
-	}
+	sprintf(buf, "%s.bdt", path);
+	bdtfd = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
 	delete [] buf;
 

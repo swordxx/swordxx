@@ -47,7 +47,6 @@
 RawVerse::RawVerse(const char *ipath, int fileMode)
 {
 	char *buf;
-	int tries = 1;
 
 	nl = '\n';
 	path = 0;
@@ -58,24 +57,19 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 
 	if (fileMode == -1) { // try read/write if possible
 		fileMode = O_RDWR;
-		tries = 2;
 	}
 		
-	for (int i = 0; i < tries; i++) {
-		sprintf(buf, "%s/ot.vss", path);
-		idxfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/ot.vss", path);
+	idxfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/nt.vss", path);
-		idxfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/nt.vss", path);
+	idxfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/ot", path);
-		textfp[0] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
+	sprintf(buf, "%s/ot", path);
+	textfp[0] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
-		sprintf(buf, "%s/nt", path);
-		textfp[1] = FileMgr::systemFileMgr.open(buf, ((!i)?fileMode:O_RDONLY)|O_BINARY);
-		if ((idxfp[0]->getFd() >= 0) || (idxfp[1]->getFd() >= 0))
-			break;
-	}
+	sprintf(buf, "%s/nt", path);
+	textfp[1] = FileMgr::systemFileMgr.open(buf, fileMode|O_BINARY, true);
 
 	delete [] buf;
 	instance++;

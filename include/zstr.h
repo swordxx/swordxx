@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: zstr.h,v 1.2 2002/01/06 22:27:03 chrislit Exp $
+ * $Id: zstr.h,v 1.3 2002/03/13 06:55:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -36,10 +36,6 @@ class SWDLLEXPORT zStr {
 
 private:
 	static int instance;		// number of instantiated zStr objects or derivitives
-	FileDesc *idxfd;
-	FileDesc *datfd;
-	FileDesc *zdxfd;
-	FileDesc *zdtfd;
 	EntriesBlock *cacheBlock;
 	long cacheBlockIndex;
 	bool cacheDirty;
@@ -49,6 +45,10 @@ private:
 	SWCompress *compressor;
 
 protected:
+	FileDesc *idxfd;
+	FileDesc *datfd;
+	FileDesc *zdxfd;
+	FileDesc *zdtfd;
 	static const int IDXENTRYSIZE;
 	static const int ZDXENTRYSIZE;
 

@@ -39,7 +39,7 @@ char *strstrip(char *istr) {
 	int len = strlen(istr);
 	if (len < 1)
 		return istr;
-	rtmp = istr + len - 1);
+	rtmp = istr + (len - 1);
 	
 	while (*rtmp == ' ') *(rtmp--) = 0;
 	while (*tmp == ' ') tmp++;

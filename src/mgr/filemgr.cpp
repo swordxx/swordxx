@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.17 2001/10/30 00:01:50 chrislit Exp $
+ * $Id: filemgr.cpp,v 1.18 2002/03/13 06:55:39 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -41,12 +41,13 @@ FileMgr FileMgr::systemFileMgr;
 // --------------- end statics --------------
 
 
-FileDesc::FileDesc(FileMgr *parent, char *path, int mode, int perms) {
+FileDesc::FileDesc(FileMgr *parent, char *path, int mode, int perms, bool tryDowngrade) {
 	this->parent = parent;
 	this->path = 0;
 	stdstr(&this->path, path);
 	this->mode = mode;
 	this->perms = perms;
+	this->tryDowngrade = tryDowngrade;
 	offset = 0;
 	fd = -77;
 }
@@ -85,7 +86,11 @@ FileMgr::~FileMgr() {
 }
 
 
-FileDesc *FileMgr::open(char *path, int mode, int perms) {
+FileDesc *FileMgr::open(char *path, int mode, bool tryDowngrade) {
+	return open(path, mode, S_IREAD | S_IWRITE, tryDowngrade);
+}
+
+FileDesc *FileMgr::open(char *path, int mode, int perms, bool tryDowngrade) {
 	FileDesc **tmp, *tmp2;
 	
 	for (tmp = &files; *tmp; tmp = &((*tmp)->next)) {
@@ -93,7 +98,7 @@ FileDesc *FileMgr::open(char *path, int mode, int perms) {
 			break;
 	}
 
-	tmp2 = new FileDesc(this, path, mode, perms);
+	tmp2 = new FileDesc(this, path, mode, perms, tryDowngrade);
 	tmp2->next = *tmp;
 	*tmp = tmp2;
 	
@@ -193,13 +198,24 @@ int FileMgr::sysOpen(FileDesc *file) {
 				files = file;
 			}
                if ((!access(file->path, 04)) || (file->mode & O_CREAT == O_CREAT)) {	// check for at least file exists / read access before we try to open
-				file->fd = ::open(file->path, file->mode, file->perms);
-			        if (file->fd >= 0)
+				char tries = ((file->mode & O_RDWR == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
+				for (int i = 0; i < tries; i++) {
+					if (i > 0) {
+						file->mode = file->mode & ~O_RDWR;	// remove write access
+						file->mode = file->mode | O_RDONLY;// add read access
+					}
+					file->fd = ::open(file->path, file->mode, file->perms);
+
+					if (file->fd >= 0)
+						break;
+				}
+
+				if (file->fd >= 0)
 					lseek(file->fd, file->offset, SEEK_SET);
-               }
-               else file->fd = -1;
-               if (!*loop)
-                  break;
+			}
+			else file->fd = -1;
+			if (!*loop)
+				break;
 		}
 	}
 	return file->fd;
