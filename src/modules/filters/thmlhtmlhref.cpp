@@ -20,7 +20,7 @@
 #include <swmodule.h>
 
 SWORD_NAMESPACE_START
-
+ 
 ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
