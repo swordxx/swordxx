@@ -24,10 +24,10 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
 		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
+		from = (unsigned char *)&text[maxlen - len];
 	}
-	else	from = text;							// -------------------------------
-	for (to = text; *from; from++) {
+	else	from = (unsigned char *)text;							// -------------------------------
+	for (to = (unsigned char *)text; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;

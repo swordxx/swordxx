@@ -43,13 +43,13 @@ char readline(int fd, char **buf) {
 	
 	int size = (lseek(fd, 0, SEEK_CUR) - index) - 1;
 
-    *buf = new char [ size + 1 ];
+	*buf = new char [ size + 1 ];
 
-    if (size > 0) {
-        lseek(fd, index, SEEK_SET);
-        read(fd, *buf, size);
-        read(fd, &ch, 1);   //pop terminating char
-        (*buf)[size] = 0;
+	if (size > 0) {
+		lseek(fd, index, SEEK_SET);
+		read(fd, *buf, size);
+		read(fd, &ch, 1);   //pop terminating char
+		(*buf)[size] = 0;
 
 		// clean up any trailing junk on buf
 		for (char *it = *buf+(strlen(*buf)-1); it > *buf; it--) {
@@ -58,6 +58,7 @@ char readline(int fd, char **buf) {
 			else *it = 0;
 		}
 	}
+	else **buf = 0;
 	return !len;
 }
 
@@ -113,6 +114,19 @@ bool isKJVRef(const char *buf) {
 }
 
 
+void fixText(char *text) {
+	char *to = text;
+	while(*text) {
+		*to++ = *text++;
+		*to++ = *text++;
+		if (!*text)
+			break;
+		if (*text != ' ')
+			cerr << "problem\n";
+		else	text++;
+	}
+	*to = 0;
+}
 
 int main(int argc, char **argv) {
 
@@ -223,6 +237,7 @@ int main(int argc, char **argv) {
 			mod << verseText;	// save text to module at current position
 		}
 		else {
+			fixText(buffer);
 			mod << buffer;	// save text to module at current position
 			mod++;	// increment module position
 		}
