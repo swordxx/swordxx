@@ -117,6 +117,14 @@ int main(int argc, char **argv)
 
 	string lastBuffer = "Something that would never be first module entry";
 	SWKey bufferKey;
+	SWKey *outModuleKey = outModule->CreateKey();
+	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, outModuleKey);
+	outModuleKey->Persist(1);
+	if (vkey) {
+		vkey->Headings(1);
+		vkey->AutoNormalize(0);
+	}
+	outModule->setKey(*outModuleKey);
 
 	inModule->setSkipConsecutiveLinks(false);
 	(*inModule) = TOP;
@@ -131,7 +139,9 @@ int main(int argc, char **argv)
 			lastBuffer = inModule->getRawEntry();
 			if (lastBuffer.length() > 0) {
 				cout << "Adding [" << bufferKey << "] new text. \n";
-				outModule->setKey(bufferKey);
+				*outModuleKey = bufferKey;
+//				outModule->getRawEntry();	// snap
+//				outModule->setKey(bufferKey);
 				(*outModule) << lastBuffer.c_str();	// save new text;
 			}
 			else {
@@ -140,6 +150,7 @@ int main(int argc, char **argv)
 		}
 		(*inModule)++;
 	}
+	delete outModuleKey;
 	delete outModule;
 }
 

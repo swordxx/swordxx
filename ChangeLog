@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+27-Aug-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Fixed mod2zmod to work properly with headings
+	Fixed cheatah to allow heading texts like 'Mat 0:0'
+
 08-Aug-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added support for new entry in /etc/sword.conf
 		[Install]
