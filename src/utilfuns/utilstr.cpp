@@ -52,7 +52,7 @@ char *strstrip(char *istr) {
 		return istr;
 	rtmp = istr + (len - 1);
 	
-	while ((*rtmp == ' ')||(*rtmp == '\t')||(*rtmp == 10)||(*rtmp == 13)) *(rtmp--) = 0;
+	while ((rtmp > istr)&&((*rtmp == ' ')||(*rtmp == '\t')||(*rtmp == 10)||(*rtmp == 13))) *(rtmp--) = 0;
 	while ((*tmp == ' ')||(*tmp == '\t')||(*tmp == 10)||(*tmp == 13)) tmp++;
 	memmove(istr, tmp, (rtmp - tmp) + 1);
 	istr[(rtmp - tmp) + 1] = 0;

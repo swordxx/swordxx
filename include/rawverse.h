@@ -25,7 +25,7 @@ protected:
 	void linkentry(char testmt, long destidxoff, long srcidxoff);
 
 public:
-	char nl;
+	static const char *nl;
 	RawVerse(const char *ipath, int fileMode = -1);
 	virtual ~ RawVerse();
 	void findoffset(char testmt, long idxoff, long *start,

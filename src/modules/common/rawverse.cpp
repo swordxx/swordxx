@@ -33,7 +33,8 @@
  * RawVerse Statics
  */
 
- int RawVerse::instance = 0;
+int RawVerse::instance = 0;
+const char *RawVerse::nl = "\r\n";
 
 
 /******************************************************************************
@@ -48,7 +49,6 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 {
 	char *buf;
 
-	nl = '\n';
 	path = 0;
 	stdstr(&path, ipath);
      buf = new char [ strlen(path) + 80 ];
@@ -151,14 +151,16 @@ void RawVerse::preptext(char *buf)
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				*to++ = nl;
+				*to++ = nl[0];
+				*to++ = nl[1];
 //				nlcnt = 0;
 			}
 			continue;
 		case 13:
 			if (!realdata)
 				continue;
-			*to++ = nl;
+			*to++ = nl[0];
+			*to++ = nl[1];
 			space = 0;
 			cr = 1;
 			continue;
@@ -223,7 +225,6 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
 	long start, outstart;
 	unsigned short size;
 	unsigned short outsize;
-	static const char nl[] = {13, 10};
 
 	idxoff *= 6;
 	if (!testmt)
@@ -239,7 +240,7 @@ void RawVerse::settext(char testmt, long idxoff, const char *buf, long len)
 		write(textfp[testmt-1]->getFd(), buf, (int)size);
 
 		// add a new line to make data file easier to read in an editor
-		write(textfp[testmt-1]->getFd(), &nl, 2);
+		write(textfp[testmt-1]->getFd(), nl, 2);
 	}
 	else {
 		start = 0;
