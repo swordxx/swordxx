@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.2 2003/05/28 01:53:00 scribe Exp $
+ * $Id: utilxml.h,v 1.3 2003/05/31 17:34:43 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,6 +32,8 @@ SWORD_NAMESPACE_START
 typedef std::map<SWBuf, SWBuf> MapStringPair;
 typedef std::list<SWBuf> ListString;
 
+/** Simple XML helper class.
+*/
 class SWDLLEXPORT XMLTag {
 private:
 	mutable char *buf;
