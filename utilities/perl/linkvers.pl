@@ -31,7 +31,7 @@ while (<INF>) {
 	$last = $ch . $sv;
 
 	if ($check ne "") {
-	    print "$first\t\t$last";
+	    print "$first\t\t$last\n";
 	} else {
 	    `addvs -l ./ \"$first\" \"$last\"`;
 	}
