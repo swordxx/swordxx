@@ -134,7 +134,7 @@ translit_Latin_Thai {
     "rue<>\u0E24\u0E32;"
     "ri<>\u0E24;"
     "r<>\u0E23;"
-    "lue<\u0E26\uE32;"
+    "lue<\u0E26\u0E32;"
     "lue<>\u0E26;"
     "l<>\u0E25;"
     "w<>\u0E27;"

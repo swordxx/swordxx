@@ -8,7 +8,7 @@
 
 
 #include "unicode/utypes.h"
-#include "unicode/convert.h"
+#include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 #include "unicode/normlzr.h"
 

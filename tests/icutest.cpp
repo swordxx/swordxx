@@ -3,7 +3,6 @@
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/ucnv.h"     /* C   Converter API    */
-#include "unicode/convert.h"  /* C++ Converter API    */
 #include "unicode/ustring.h"  /* some more string fcns*/
 
 #include "unicode/translit.h"

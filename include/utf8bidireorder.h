@@ -24,7 +24,7 @@
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
-#include <unicode/bidi.h>
+#include <unicode/ubidi.h>
 
 #include <defs.h>
 SWORD_NAMESPACE_START

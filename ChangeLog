@@ -2,6 +2,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+09-Nov-2002	Troy A. Griffitts <scribe@crosswire.org>
+	Updated ICU headers and Thai transliterator per
+		Steven Loomis' recommendations.
+
 29-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Added SWModule *SWMgr::getModule(const char *modName);
 	Added Terry Biggs' patch to htmlref filters to
