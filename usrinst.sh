@@ -1,10 +1,14 @@
 #!/bin/sh
 
-CPPFLAGS=-DUSBINARY ./configure --prefix=/usr \
-	--disable-shared --without-conf --sysconfdir=/etc \
-     --with-vcl \
-#     --enable-debug --enable-profile \
-	$*
+OPTIONS="--prefix=/usr"
+OPTIONS="--disable-share $OPTIONS"
+OPTIONS="--without-conf $OPTIONS"
+OPTIONS="--sysconfdir=/etc $OPTIONS"
+OPTIONS="--with-vcl $OPTIONS"
+OPTIONS="--enable-debug $OPTIONS"
+#OPTIONS="--enable-profile $OPTIONS"
+
+CPPFLAGS=-DUSBINARY ./configure $OPTIONS $*
 
 echo ""
 echo ""
