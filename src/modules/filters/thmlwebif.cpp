@@ -23,7 +23,7 @@
 
 SWORD_NAMESPACE_START
 
-ThMLWEBIF::ThMLWEBIF() : baseURL("/"), passageStudyURL(baseURL + "passagestudy.jsp") {
+ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
   //all's done in ThMLHTMLHREF
 }
 

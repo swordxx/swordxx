@@ -21,7 +21,7 @@
 
 SWORD_NAMESPACE_START
 
-GBFWEBIF::GBFWEBIF() : baseURL("/"), passageStudyURL(baseURL + "passagestudy.jsp") {
+GBFWEBIF::GBFWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
 //all is done in GBFHTMLHREF since it inherits form this class
 }
 

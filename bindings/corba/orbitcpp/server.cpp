@@ -5,7 +5,7 @@
 #include <swmgr.h>
 #include <markupfiltmgr.h>
 
-sword::SWMgr swordmgr(new sword::MarkupFilterMgr(sword::FMT_HTMLHREF));
+sword::SWMgr swordmgr(new sword::MarkupFilterMgr(sword::FMT_WEBIF));
 
 int main (int argc, char* argv[]) {
   try {
