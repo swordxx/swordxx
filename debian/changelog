@@ -1,3 +1,52 @@
+sword (1.5.5.99-1) unstable; urgency=low
+
+  * Build a pre-release from a make dist from cvs
+  * change lib version for imminent 1.5.6
+  * depend on icu 2.6 to test that
+  * api docs have been moved out into separate source
+
+ -- Daniel Glassey <wdg@debian.org>  Thu, 10 Jul 2003 12:45:18 +0100
+
+sword (1.5.5-4) unstable; urgency=low
+
+  * debian/control remove extra blank line that stops building on woody
+
+ -- Daniel Glassey <wdg@debian.org>  Thu,  1 May 2003 09:59:14 +0100
+
+sword (1.5.5-3) unstable; urgency=low
+
+  * libsword-dev now depends on icu stuff so apps that build with it don't
+      have to
+  * conflict with libsword1 since both include config files (may split these
+      out into separate package for 1.5.6), Closes #189647
+
+ -- Daniel Glassey <wdg@debian.org>  Sat, 19 Apr 2003 16:01:05 +0100
+
+sword (1.5.5-2) unstable; urgency=low
+
+  * Close the new upstream bug, Closes: #175322
+  * uses autotools-dev to get the uptodate config.guess and
+    config.sub, hopefully will sort out mips problem, Closes: #187703
+  * Utilities are now really included - bug 157115 tagged for woody
+  * debian/control - change section of libsword-dev to libdevel
+  * debian/rules - 
+      remove alpha compiler flags since it is ok with gcc3.2, Closes: #142703
+      use confflags like autotools-dev says
+      copy the config.guess and .sub from autotools-dev
+
+ -- Daniel Glassey <wdg@debian.org>  Sat,  5 Apr 2003 12:53:06 +0100
+
+sword (1.5.5-1) unstable; urgency=low
+
+  * New upstream release
+  * Rename library package to libsword2c102 since it is a new
+     libver from 1.5.3 and it is part of the gcc3.2 transition
+  * build with icu support now that icu has made the transition
+     so build-depend on libicu21-dev and icu
+  * build depend on debhelper >= 4.0.0
+
+ -- Daniel Glassey <wdg@debian.org>  Tue, 26 Mar 2003 18:42:28 +0000
+
 sword (1.5.4+cvs20021008-1) unstable; urgency=low
 
   * try and build a package from cvs

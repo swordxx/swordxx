@@ -1,0 +1,21 @@
+swdebdir = $(top_srcdir)/debian
+
+EXTRA_DIST += $(swdebdir)/README.Debian
+EXTRA_DIST += $(swdebdir)/changelog
+EXTRA_DIST += $(swdebdir)/conffiles
+EXTRA_DIST += $(swdebdir)/control
+EXTRA_DIST += $(swdebdir)/copyright
+EXTRA_DIST += $(swdebdir)/diatheke.dirs
+EXTRA_DIST += $(swdebdir)/diatheke.undocumented
+EXTRA_DIST += $(swdebdir)/dirs
+EXTRA_DIST += $(swdebdir)/docs
+EXTRA_DIST += $(swdebdir)/libsword-dev.dirs
+EXTRA_DIST += $(swdebdir)/libsword-dev.doc-base
+EXTRA_DIST += $(swdebdir)/libsword-runtime.dirs
+EXTRA_DIST += $(swdebdir)/libsword-runtime.undocumented
+EXTRA_DIST += $(swdebdir)/libsword3c102.conffiles
+EXTRA_DIST += $(swdebdir)/libsword3c102.dirs
+EXTRA_DIST += $(swdebdir)/libsword3c102.docs
+EXTRA_DIST += $(swdebdir)/libsword3c102.shlibs
+EXTRA_DIST += $(swdebdir)/rules
+EXTRA_DIST += $(swdebdir)/sword.conf

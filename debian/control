@@ -1,20 +1,21 @@
 Source: sword
-Build-Depends: debhelper, libz-dev, php4-dev, perl (>= 5.6.0-16)
+Build-Depends: debhelper (>=4.0.0), libz-dev, libicu26-dev, icu, autotools-dev
 Section: libs
 Priority: optional
 Maintainer: Daniel Glassey <wdg@debian.org>
 Standards-Version: 3.5.6.0
 
-Package: libsword2
+Package: libsword3c102
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}
 Recommends: sword-frontend
+Conflicts: libsword1
 Description: API/library for bible software
  The SWORD Project is an open source, cross-platform (Linux, Windows, Solaris,
- etc.) API/library for Bible software with a constantly growing list of
- front-ends (GUI, textmode, web-based, etc.) and a library of over 100 text
- modules.
+ MacOSX etc.) API/library for Bible software with a constantly growing list 
+ of front-ends (GUI, textmode, web-based, etc.) and a library of over 200 
+ text modules.
  .
  This package contains the core libraries for the project.
  .
@@ -23,21 +24,13 @@ Description: API/library for bible software
 
 Package: libsword-dev
 Architecture: any
-Section: devel
-Depends: libsword1 (= ${Source-Version}), libc6-dev, libz-dev
+Section: libdevel
+Depends: libsword3c102 (= ${Source-Version}), libc6-dev, libz-dev, icu, libicu26-dev
 Provides: sword-dev
 Recommends: libsword-runtime
 Description: Development files for libsword
  This package contains the static libraries and headers for developing 
  applications that use the sword library.
-
-Package: libsword-runtime
-Architecture: any
-Section: text
-Depends: ${shlibs:Depends}
-Conflicts: libsword-dev (<< 1.5.3-1)
-Description: Utilities for sword
- This package contains utilities for generating data modules.
 
 Package: diatheke
 Architecture: any
@@ -48,16 +41,11 @@ Description: CGI script for making bible website
  A command line utility for sword, and a cgi perl script that
  uses the utility to produce a bible browsing/searching website.
 
-Package: libsword-perl
+Package: libsword-runtime
 Architecture: any
-Section: web
-Depends: ${shlibs:Depends}, ${perl:Depends}
-Description: Perl bindings for sword
- incorporate bible related texts into your perl scripts
+Section: text
+Depends: ${shlibs:Depends}
+Conflicts: libsword-dev (<< 1.5.3-1)
+Description: Utilities for sword
+ This package contains utilities for generating data modules.
 
-Package: php4-sword
-Architecture: any
-Section: web
-Depends: ${shlibs:Depends}, php4 | php4-cgi
-Description: PHP bindings for sword
- incorporate bible related texts into your php4 scripts

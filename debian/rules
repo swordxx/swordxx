@@ -17,31 +17,24 @@ version_major=$(shell expr `pwd` : '.*-\([0-9]*\).[0-9.]*')
 # This is the debhelper compatability version to use.
 #export DH_COMPAT=2
 
-ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
-ifeq ($(ARCH),alpha)
-        COMPILER_FLAGS=CFLAGS="-O0 -mieee" CXXFLAGS="-O0 -mieee"
+export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+confflags =
+# FOR AUTOCONF 2.52 AND NEWER ONLY
+ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
+  confflags += --build $(DEB_HOST_GNU_TYPE)
+else
+  confflags += "--build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)"
 endif
-PHPENV=EXTRA_INCLUDES="-I../../../include -DSWIG"
-PHPEXTDIR=`php-config --extension-dir`
 
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	#autoheader
-	#autoconf
 	chmod 755 configure
-	#chmod 755 apps/console/diatheke/configure
-	chmod 755 bindings/swig/configure
-	$(COMPILER_FLAGS) ./configure --prefix=/usr --mandir=\$${prefix}/share/man \
+	./configure $(confflags) --prefix=/usr --mandir=\$${prefix}/share/man \
 		--infodir=\$${prefix}/share/info --with-zlib \
 		--sysconfdir=/etc --enable-shared --with-icu
-	#cd apps/console/diatheke && ./configure --prefix=/usr
-	cd bindings/swig && $(COMPILER_FLAGS) ./configure --prefix=/usr \
-		--with-sword-dir=`pwd`/../.. --without-swigbin
-	cd bindings/swig && $(MAKE) perl_makebuild \
-		&& $(MAKE) php_makebuild
-	cd bindings/swig/php && phpize && \
-		$(COMPILER_FLAGS) ./configure --prefix=/usr --enable-Sword
 	touch configure.stamp
 
 build: configure-stamp build-stamp
@@ -49,19 +42,16 @@ build-stamp:
 	dh_testdir
 
 	$(MAKE)
-	cd bindings/swig && $(MAKE) perl_makebuild
-	cd bindings/swig/perl && perl Makefile.PL INSTALLDIRS=vendor && \
-		$(MAKE) OPTIMIZE="-O2 -g -Wall"
-	cd bindings/swig/php && $(PHPENV) $(MAKE)
 	touch build-stamp
 
 clean:
 	dh_testdir
 	dh_testroot
+	-test -r /usr/share/misc/config.sub && \
+	   cp -f /usr/share/misc/config.sub config.sub
+	-test -r /usr/share/misc/config.guess && \
+	   cp -f /usr/share/misc/config.guess config.guess
 	-$(MAKE) distclean
-	-cd bindings/swig/perl && $(MAKE) clean
-	-cd bindings/swig/php && $(MAKE) distclean && rm -rf modules
-	-cd bindings/swig && $(MAKE) distclean
 	rm -f build-stamp configure-stamp install-stamp lib/lib* \
 		config.h config.status config.log config.cache
 	dh_clean
@@ -75,19 +65,13 @@ install-stamp: build-stamp
 
 	# Add here commands to install the package into debian/tmp.
 	\$(MAKE) install DESTDIR=`pwd`/debian/tmp
-	cd bindings/swig/perl && \
-		$(MAKE) install PREFIX=`pwd`/../../../debian/libsword-perl/usr
-	#cd bindings/swig/php && \
-		$(MAKE) install DESTDIR=`pwd`/../../../debian/php-sword
-	dh_install bindings/swig/php/modules/*.so $(PHPEXTDIR) 
 
-	dh_movefiles -pphp4-sword usr/lib/php4/*
 	dh_movefiles -plibsword-dev usr/lib/lib*so usr/lib/lib*.a \
-		usr/include/*
+		usr/lib/lib*.la usr/include/*
 	dh_movefiles -pdiatheke usr/bin/diatheke
 	dh_movefiles -plibsword-runtime usr/bin/*
-	mkdir -p debian/libsword-dev/usr/share/doc/libsword-dev/html
-	cp -R doc/api-documentation/html debian/libsword-dev/usr/share/doc/libsword-dev
+	#mkdir -p debian/libsword-dev/usr/share/doc/libsword-dev/html
+	#cp -R doc/api-documentation/html debian/libsword-dev/usr/share/doc/libsword-dev
 	mkdir -p debian/diatheke/usr/share/doc/diatheke/examples
 	cp -a apps/console/diatheke/cgi/index-public.html debian/diatheke/usr/share/doc/diatheke/examples
 	cp -a apps/console/diatheke/cgi/*.pl debian/diatheke/usr/lib/cgi-bin
@@ -115,7 +99,7 @@ binary-arch: build install
 	dh_compress 
 	dh_fixperms 
 	dh_installdeb
-	dh_makeshlibs -V 'libsword1 (>=1.5.3-1)'
+	dh_makeshlibs -V 'libsword3c102 (>=1.5.5.99-1)'
 	dh_perl 
 	dh_shlibdeps -ldebian/tmp/usr/lib
 	dh_gencontrol 
