@@ -31,7 +31,7 @@
  *		idisp - Display object to use for displaying
  */
 
-zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, char enc, char dir, char mark, const char* ilang) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)/*, SWCompress()*/
+zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)/*, SWCompress()*/
 {
 	blockType = iblockType;
 	versebuf = 0;

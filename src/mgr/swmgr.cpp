@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.52 2001/11/30 11:26:53 scribe Exp $
+ * $Id: swmgr.cpp,v 1.53 2001/12/18 04:47:05 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -567,17 +567,89 @@ void SWMgr::Load() {
 	}
 }
 
+SWTextEncoding SWMgr::getTextEncoding (ConfigEntMap &section)
+{
+	ConfigEntMap::iterator entry;
+
+	string 	encoding;
+	SWTextEncoding	source_encoding;
+
+	if ((entry = section.find("Encoding"))  == section.end())	// No encoding is specified - assume Latin-1
+		return(ENC_LATIN1);			
+	
+	encoding =  (*entry).second;			// A text encoding was specified in the configuration
+	source_encoding=ENC_UNKNOWN;                    // Default - if we don't recognize it, return ENC_UNKNOWN
+
+	if (!strcasecmp(encoding.c_str(), "SCSU")) {
+		source_encoding=ENC_SCSU;
+	}
+	else if (!stricmp(encoding.c_str(), "UTF-8")){
+		source_encoding=ENC_UTF8;
+	}
+	else if (!strcasecmp(encoding.c_str(), "Latin-1")) {
+		source_encoding=ENC_LATIN1;
+	}
+        else if (!stricmp(encoding.c_str(), "UTF-16")) {
+	        source_encoding = ENC_UTF16;
+	}
+
+	return (source_encoding);
+}
+
+SWTextEncoding SWMgr::getTextEncoding (string name)
+{
+	SectionMap::iterator sit;
+
+	if ((sit = config->Sections.find(name.c_str())) != config->Sections.end()) 
+		return ( getTextEncoding( (*sit).second ) );
+	else
+		return(ENC_UNKNOWN);
+}
+
+SWTextMarkup SWMgr::getTextMarkup (ConfigEntMap &section)
+{
+	ConfigEntMap::iterator entry;
+
+	string	source_type;
+	SWTextMarkup	source_format;
+
+	if ((entry =  section.find("SourceType"))  == section.end()) 	// If no SourceType is specified,
+		return( FMT_PLAIN );			                // then assume FMT_PLAIN
+
+ 	source_type= (*entry).second ;	// We found a source type in the configuration
+	source_format=FMT_UNKNOWN;	// Default to use if we don't recognize the SourceType specified
+
+	if (!strcasecmp(source_type.c_str(), "GBF")) {
+		source_format=FMT_GBF;
+	}
+	else if (!strcasecmp(source_type.c_str(), "ThML")) {
+		source_format=FMT_THML;
+	}
+	else if (!stricmp(source_type.c_str(), "OSIS")) {
+	        source_format = FMT_OSIS;
+	}
+
+	return (source_format);
+}
+
+SWTextMarkup SWMgr::getTextMarkup (string name)
+{
+	SectionMap::iterator sit;
+
+	if ((sit = config->Sections.find(name.c_str())) != config->Sections.end()) 
+		return ( getTextMarkup( (*sit).second ) );
+	else
+		return(FMT_UNKNOWN);
+}
 
 SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 {
 	string description, datapath, misc1;
 	ConfigEntMap::iterator entry;
 	SWModule *newmod = 0;
- 	string sourceformat, encoding, lang;
+ 	string lang;
         signed char direction, enc, markup;
 
-	sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (string)"";
-	encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (string)"";
 	description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (string)"";
 	lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (string)"en";
 	datapath = prefixPath;
@@ -593,21 +665,8 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		datapath += buf2;
 	delete [] buf;
 
-        if (!stricmp(sourceformat.c_str(), "GBF"))
-                markup = FMT_GBF;
-        else if (!stricmp(sourceformat.c_str(), "ThML"))
-                markup = FMT_THML;
-        else if (!stricmp(sourceformat.c_str(), "OSIS"))
-                markup = FMT_OSIS;
-        else
-                markup = FMT_PLAIN;
-
-    	if (!stricmp(encoding.c_str(), "SCSU"))
-                enc = ENC_SCSU;
-        else if (!stricmp(encoding.c_str(), "UTF-8"))
-                enc = ENC_UTF8;
-        else enc = ENC_LATIN1;
-
+	markup = getTextMarkup(section);
+	enc = getTextEncoding(section);
 
 	if ((entry = section.find("Direction")) == section.end()) {
                 direction = DIRECTION_LTR;

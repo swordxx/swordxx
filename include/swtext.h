@@ -2,7 +2,7 @@
  *  swtext.h   - code for base class 'SWText'.  SWText is the basis for all
  *		 types of text modules
  *
- * $Id: swtext.h,v 1.9 2001/11/08 13:19:11 chrislit Exp $
+ * $Id: swtext.h,v 1.10 2001/12/18 04:47:40 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -40,7 +40,7 @@ public:
   * @param imoddesc Name to display to user for module
   * @param idisp Display object to use for displaying
   */
-  SWText (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char encoding = ENC_UNKNOWN, char dir = DIRECTION_LTR, char markup = FMT_UNKNOWN, const char* ilang = 0);
+  SWText (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
   virtual ~ SWText ();
   /** Create the correct key (VerseKey) for use with SWText
   */

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.32 2001/12/11 22:35:10 scribe Exp $
+ * $Id: swmodule.h,v 1.33 2001/12/18 04:47:40 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,9 +38,13 @@ using namespace std;
 
 typedef list < SWFilter * >FilterList;
 
-enum DIRECTION {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};
-enum FORMATS {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS};
-enum ENCODINGS {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
+#define SWTextDirection char
+#define SWTextEncoding char
+#define SWTextMarkup char
+
+enum {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};
+enum {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS};
+enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_HTML};
 
 /**
   * The class SWModule is the base class for all modules used in Sword.
@@ -118,7 +122,7 @@ public:
   *  others of same type under their modtype heading)
   *  see also @ref Type
   */
-  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, char encoding = ENC_UNKNOWN, char dir = DIRECTION_LTR, char markup = FMT_UNKNOWN, const char* modlang = 0);
+  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
 
   /** Cleans up instance of SWModule
   */

@@ -2,7 +2,7 @@
  *  swcom.h   - code for base class 'SWCom'.  SWCom is the basis for all
  *		 types of commentary modules
  *
- * $Id: swcom.h,v 1.8 2001/11/08 13:19:11 chrislit Exp $
+ * $Id: swcom.h,v 1.9 2001/12/18 04:47:40 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -39,7 +39,7 @@ public:
   * @param imoddesc Name to display to user for module
   * @param idisp Display object to use for displaying
   */
-  SWCom(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char enc = ENC_UNKNOWN, char dir = DIRECTION_LTR, char mark = FMT_UNKNOWN, const char* ilang = 0);
+  SWCom(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, SWTextEncoding enc = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup mark = FMT_UNKNOWN, const char* ilang = 0);
   virtual ~SWCom();
   virtual SWKey *CreateKey()
   {
