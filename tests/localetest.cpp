@@ -1,8 +1,8 @@
 #include <localemgr.h>
 
 main(int argc, char **argv) {
-	if (argc != 2) {
-		fprintf(stderr, "usage: %s localetest <locale_name> <text>", *argv);
+	if (argc != 3) {
+		fprintf(stderr, "usage: %s localetest <locale_name> <text>\n", *argv);
 		exit(-1);
 	}
 
