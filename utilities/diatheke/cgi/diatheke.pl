@@ -215,7 +215,7 @@ print <<END;
 
 <html><head>
 <title>Diatheke Interlinear Bible</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="palmcomputingplatform" content="true">
 <meta name="historylisttext" content="Diatheke">
 <style type="text/css">
@@ -315,7 +315,7 @@ print <<END
 
 <html><head>
 <title>HANDiatheke</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="palmcomputingplatform" content="true">
 <meta name="historylisttext" content="HANDiatheke">
 </head>
