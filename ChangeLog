@@ -1,24 +1,28 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-02-Jun-2001 Chris Little <chrislit@crosswire.org>
-	Added GBFMorph OptionFilter to handle <WT...> tags and adjusted
-	GBFStrongs & other filters to not handle <WTG/H...> as a Strong's
-	number
+11-Mar-2001     Troy A. Griffitts <scribe@crosswire.org>
+	Added limited unicode support
+	Added French locale from Dominique Corbex
 	
-20-May-2001 Joachim Ansorg <jansorg@gmx.de>
+02-Jun-2001	Chris Little <chrislit@crosswire.org>
+	Added GBFMorph OptionFilter to handle <WT...> tags and adjusted
+		GBFStrongs & other filters to not handle <WTG/H...> as a
+		Strong's number
+	
+20-May-2001	Joachim Ansorg <jansorg@gmx.de>
 	Updated the Czech translation of booknames (cs.conf)
 
-18-May-2001 Joachim Ansorg <jansorg@gmx.de>
+18-May-2001	Joachim Ansorg <jansorg@gmx.de>
 	Added polish translation of the booknames. It was created by Robert
 Kolatzek.
 
 06-May-2001	Chris Little <chrislit@crosswire.org>
 	Added GBFHeadings OptionFilter & support for <TS><Ts> tags to
-	all GBF filters
+		all GBF filters
 	Added emptyvss utility to list empty verses in a module
 	Added warning to vpl2mod for cases where a verse is being
-	overwritten
+		overwritten
 	
 23-Mar-2001	Joachim Ansorg <jansorg@gmx.de>
 	Made some changes to the API documentation in the headers
@@ -31,7 +35,7 @@ Kolatzek.
 
 25-Feb-2001     Chris Little <chirslit@crosswire.org>
 	Added roman.c for Roman Numeral conversion and made GBF to ThML
-        filter produce XML compliant text
+		filter produce XML compliant text
 
 09-Feb-2001	Joachim Ansorg <jansorg@gmx.de>
 	Added beginnings of API documentation in doc/api-documemtation.
@@ -39,9 +43,9 @@ Kolatzek.
 
 08-Feb-2001     Chris Little <chrislit@crosswire.org>
 	Added embedded Visual C++ project to build DLL in
-        apps/windoze/wince/sword but it requires undistributable
-        libraries to build it currently.  MIPS, SH3, and ARM processors
-        are supported.
+		apps/windoze/wince/sword but it requires undistributable
+		libraries to build it currently.  MIPS, SH3, and ARM processors
+		are supported.
 
 08-Feb-2001     Chris Little <chrislit@crosswire.org>
 	Added Visual C++ 6.0 project to build DLL in apps/windoze/vc/Sword
