@@ -165,11 +165,42 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
 		char ref[254];
-		sprintf(ref, "<verseStart VerseStart=\"%s\" />", vkey->getOSISRef());
-		memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
-		memcpy(text, ref, strlen(ref));
-		sprintf(ref, "<verseEnd refVerseStart=\"%s\" />", vkey->getOSISRef());
-		strcat(text, ref);
+		if (vkey->Verse())
+			sprintf(ref, "<verseStart VerseStart=\"%s\" />", vkey->getOSISRef());
+		else if (vkey->Chapter())
+			sprintf(ref, "<chapterStart ChapterStart=\"%s\" />", vkey->getOSISRef());
+		else if (vkey->Book())
+			sprintf(ref, "<bookStart BookStart=\"%s\" />", vkey->getOSISRef());
+		else *ref = 0;
+		if (*ref) {
+			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
+			memcpy(text, ref, strlen(ref));
+			if (vkey->Verse()) {
+				VerseKey tmp;
+				tmp.Normalize(0);
+				tmp = *vkey;
+				sprintf(ref, "<verseEnd refVerseStart=\"%s\" />", vkey->getOSISRef());
+				strcat(text, ref);
+				tmp = MAXVERSE;
+				if (*vkey == tmp) {
+					tmp.Verse(0);
+					sprintf(ref, "<chapterEnd refChapterStart=\"%s\" />", tmp.getOSISRef());
+					strcat(text, ref);
+					tmp = MAXCHAPTER;
+					tmp = MAXVERSE;
+					if (*vkey == tmp) {
+						tmp.Verse(0);
+						tmp.Chapter(0);
+						sprintf(ref, "<bookEnd refBookStart=\"%s\" />", tmp.getOSISRef());
+						strcat(text, ref);
+					}
+				}
+			}
+
+			else if (vkey->Chapter())
+				sprintf(ref, "<chapterStart ChapterStart=\"%s\" />", vkey->getOSISRef());
+			else sprintf(ref, "<bookStart BookStart=\"%s\" />", vkey->getOSISRef());
+		}
 	}
 	return retVal;
 }
