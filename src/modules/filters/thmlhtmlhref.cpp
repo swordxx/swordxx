@@ -140,10 +140,10 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s\"><small><sup>*x</sup></small></a> ",  
-							URL::encode(vkey->getText()).c_str(), 
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup>*x</sup></small></a> ",  
 							URL::encode(footnoteNumber.c_str()).c_str(), 
-							URL::encode(u->version.c_str()).c_str());
+							URL::encode(u->version.c_str()).c_str(),
+							URL::encode(vkey->getText()).c_str());
 					
 					}
 				}
