@@ -29,27 +29,6 @@ You may want to have a look in the configuration file Makefile.cfg to be
 sure everything is being built the way that you would like.
 
 
-DECIPHER MECHANISM
-
-Cipher tools are not included by default, so if you are planning on using
-any copyrighted texts or any other ciphered modules, you will need to
-add the necessary files before building.  SWORD uses the SAPPHIRE II cipher
-which is not exportable in source form outside of the US and CANADA.  To
-include encipher / decipher functionality, the necessary cipher package
-MUST BE DOWNLOADED AND ADDED TO THE SOURCE TREE BEFORE COMPILING.
-SAPPHIRE may be obtained from:
-
-    http://cryptography.org/cgi-bin/crypto.cgi/libraries/sapphire.zip
-
-These files must be replaced with files from this package:
-
-    .../sword/include/sapphire.h
-    .../sword/src/modules/common/sapphire.cpp
-
-If you are outside of the US or Canada, you will have to obtain this package
-elsewhere.
-
-
 BUILDING
 
 A 'make' at the top level directory of the SWORD package should build the
