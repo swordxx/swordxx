@@ -10,14 +10,13 @@ using namespace sword;
 using namespace std;
 %}
 
-%include "stl.i"
 %include "std_vector.i"
 %include "std_string.i"
 %include "typemaps.i"
 
 
-typedef multimapwithdefault < SWBuf, SWBuf, std::less < SWBuf > > ConfigEntMap;
-typedef std::map < SWBuf, ConfigEntMap, std::less < SWBuf > > SectionMap;
+typedef multimapwithdefault < SWBuf, SWBuf, less < SWBuf > > ConfigEntMap;
+typedef map < SWBuf, ConfigEntMap, less < SWBuf > > SectionMap;
 
 class SWConfig {
 public:
