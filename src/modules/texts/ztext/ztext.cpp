@@ -58,10 +58,9 @@ zText::~zText()
 
 
 /******************************************************************************
- * zText::operator char *	- Returns the correct verse when char * cast
- *					is requested
+ * zText::getRawEntry	- Returns the current verse buffer
  *
- * RET: string buffer with verse
+ * RET: buffer with verse
  */
 
 char *zText::getRawEntry()

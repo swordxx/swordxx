@@ -403,15 +403,15 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
                               if (isroman(&book[loop+1])) {
                                    if (verse == -1) {
                                         verse = chap;
-                                        chap = from_rom(&book[loop+1]);
-                                        book[loop] = 0;
-                                   }
-                              }
-                              break;
-                         }
-                    }
+								chap = from_rom(&book[loop+1]);
+								book[loop] = 0;
+							}
+						}
+						break;
+					}
+				}
 
-                    if (!stricmp(book, "V")) {
+				if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
                          if (verse == -1) {
                               verse = chap;
 						chap = VerseKey(tmpListKey).Chapter();
@@ -571,14 +571,14 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
                }
           }
                
-		if (!stricmp(book, "V")) {
-          	if (verse == -1) {
-               	verse = chap;
+		if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev.
+			if (verse == -1) {
+				verse = chap;
 				chap = VerseKey(tmpListKey).Chapter();
-                    *book = 0;
-               }
-          }
-               
+				*book = 0;
+			}
+		}
+			
 		bookno = getBookAbbrev(book);
 	}
 	if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {

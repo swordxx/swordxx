@@ -98,6 +98,7 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key)
 		}
 		else	*to++ = *from;
 	}
-	*to = 0;
+	*to++ = 0;
+ 	*to = 0;
 	return 0;
 }

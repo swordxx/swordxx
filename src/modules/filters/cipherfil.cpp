@@ -33,5 +33,6 @@ char CipherFilter::ProcessText(char *text, int maxlen, const SWKey *key) {
 		strncpy(text, cipher->Buf(), (len < (unsigned int)maxlen) ? len : maxlen);
      }
 	text[maxlen] = 0;
+	text[maxlen+1] = 0;
 	return 0;
 }

@@ -96,6 +96,7 @@ char GBFHeadings::ProcessText(char *text, int maxlen, const SWKey *key)
 				}
 			}
 		}
+		*to++ = 0;
 		*to = 0;
 	}
 	return 0;

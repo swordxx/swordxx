@@ -53,7 +53,8 @@ const char *PLAINFootnotes::getOptionValue()
 
 char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	char token[20], tokpos = 0;
+	char token[2048];
+	int tokpos = 0;
 	bool intoken 	= false;
 	bool lastspace = false;
 
@@ -81,8 +82,10 @@ char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 				hide=false;
 				continue;
 			}
-			if (intoken)
-				token[tokpos++] = *from;
+			if (intoken) {
+				if (tokpos < 2047)
+					token[tokpos++] = *from;
+			}
 			else	{
 				if (!hide) {
 					*to++ = *from;
@@ -90,6 +93,7 @@ char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key)
 				}
 			}
 		}
+		*to++ = 0;
 		*to = 0;
 	}
 	return 0;

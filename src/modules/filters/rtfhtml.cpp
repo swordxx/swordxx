@@ -93,6 +93,7 @@ char RTFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 
 		*to++ = *from;
 	}
+	*to++ = 0;
 	*to = 0;
 	return 0;
 }

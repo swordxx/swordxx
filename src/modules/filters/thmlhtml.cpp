@@ -26,7 +26,8 @@ ThMLHTML::ThMLHTML()
 
 char ThMLHTML::ProcessText(char *text, int maxlen)
 {
-  char *to, *from, token[2048], tokpos = 0;
+  char *to, *from, token[2048];
+  int tokpos = 0;
   bool intoken 	= false;
   int len;
   bool ampersand = false;
@@ -352,11 +353,13 @@ char ThMLHTML::ProcessText(char *text, int maxlen)
 	}
         continue;
       }
-      if (intoken)
-	token[tokpos++] = *from;
-      else
-	*to++ = *from;
-    }
+	if (intoken) {
+		if (tokpos < 2047)
+			token[tokpos++] = *from;
+     }
+	else	*to++ = *from;
+  }
+  *to++ = 0;
   *to = 0;
   return 0;
 }
