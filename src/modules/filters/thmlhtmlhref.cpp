@@ -53,27 +53,19 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
 			SWBuf value = tag.getAttribute("value");
 			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
-				buf += "<small><em>(<a href=\"";
-				buf += "type=";
-				buf += tag.getAttribute("type");
-	
-				//const char* value = tag.getAttribute("value");
-				buf += " value=";
-				buf += (value.length()) ? value.c_str() : "";
-				buf += "\">";
+				buf.appendFormatted("<small><em>(<a href=\"morph://Greek/%s\">",(value.length()) ? value.c_str() : "");
 				buf += (value.length()) ? value.c_str() : "";
 				buf += "</a>) </em></small>";
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
-				buf += "<small><em>&lt;<a href=\"";
-				buf += "type=";
-				buf += tag.getAttribute("type");
-	
-				//const char* value = tag.getAttribute("value");
-				buf += " value=";
-				buf += (value.length()) ? value.c_str() : "";
-				buf += "\">";
-				value<<1;
+				if(*value == 'H') {
+					value<<1;
+					buf.appendFormatted("<small><em>&lt;<a href=\"strongs://Hebrew/%s\">",(value.length()) ? value.c_str() : "");
+				}
+				else if(*value == 'G') {
+					value<<1;
+					buf.appendFormatted("<small><em>&lt;<a href=\"strongs://Greek/%s\">",(value.length()) ? value.c_str() : "");
+				}
 				buf += (value.length()) ? value.c_str() : "";
 				buf += "</a>&gt; </em></small>";
 			}
@@ -99,7 +91,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
+						buf.appendFormatted("<a href=\"noteID://%s/%s/%c/%s\"><small><sup>*%c</sup></small></a> ", u->version.c_str(), vkey->getText(), ch, footnoteNumber.c_str(), ch);
 					}
 					u->suspendTextPassThru = true;
 				}
@@ -110,7 +102,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 		// <scripRef> tag
 		else if (!strcmp(tag.getName(), "scripRef")) {
-			if (!tag.isEndTag()) {
+			if (!tag.isEndTag()) {					
 				if (!tag.isEmpty()) {
 					u->suspendTextPassThru = true;
 				}
@@ -120,16 +112,8 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					SWBuf refList = u->startTag.getAttribute("passage");
 					if (!refList.length())
 						refList = u->lastTextNode;
-					SWBuf version = tag.getAttribute("version");
-					buf += "&nbsp<a href=\"";
-					if (version.length()) {
-						buf += "version=";
-						buf += version;
-						buf += " ";
-					}
-					buf += "passage=";
-					buf += refList.c_str();
-					buf += "\">";
+					SWBuf version = u->startTag.getAttribute("version");
+					buf.appendFormatted("&nbsp<a href=\"reference://%s/%s\">",(version.length()) ? version.c_str() : "",(refList.length()) ? refList.c_str() : "");
 					buf += u->lastTextNode.c_str();
 					buf += "</a>&nbsp";
 				}
@@ -143,7 +127,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					SWCATCH ( ... ) {}
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-						buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
+						buf.appendFormatted("<a href=\"noteID://%s/%s/x/%s\"><small><sup>*x</sup></small></a> ",u->version.c_str(), vkey->getText(), footnoteNumber.c_str());
 					}
 				}
 
