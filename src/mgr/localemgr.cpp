@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.23 2004/05/29 01:12:42 joachim Exp $
+ * $Id: localemgr.cpp,v 1.24 2004/07/22 18:47:44 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -146,10 +146,10 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 				if (locale->getName()) {					
 					bool supported = false;
 					if (StringMgr::hasUTF8Support()) {
-						supported = (locale->getEncoding() && (!strcmp(locale->getEncoding(), "UTF-8") /*|| !strcmp(locale->getEncoding(), "ISO8859-1")*/) );
+						supported = (locale->getEncoding() && (!strcmp(locale->getEncoding(), "UTF-8") || !strcmp(locale->getEncoding(), "ASCII")) );
 					}
 					else {
-						supported = !locale->getEncoding() || (locale->getEncoding() && strcmp(locale->getEncoding(), "UTF-8"));
+						supported = !locale->getEncoding() || (locale->getEncoding() && (strcmp(locale->getEncoding(), "UTF-8") != 0)); //exclude UTF-8 locales
 					}
 					
 					if (!supported) { //not supported
