@@ -57,13 +57,13 @@ char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strnicmp(token.c_str(), "sync", 4) && strstr(token.c_str(), "type=\"morph\"")) {	// Morph
+				if (!strncmp(token.c_str(), "sync ", 5) && strstr(token.c_str(), "type=\"morph\"")) {	// Morph
 				  continue;
 				}
 
 				// if not a morph tag token, keep token in text
-				text += '<'; 
-				token += token; 
+				text += '<';
+				text += token;
 				text += '>';
 				continue;
 			}
