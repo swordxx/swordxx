@@ -138,10 +138,7 @@ char *zText::getRawEntry()
 	swgettext(key->Testament(), start, size, versebuf);
 	//printf ("got text\n");
 
-	//printf ("processing text\n");
-	for (it = rawfilters.begin(); it != rawfilters.end(); it++) {
-		(*it)->ProcessText(versebuf, size, key);
-	}
+	rawFilter(versebuf, size, key);
 
 	//printf ("preparing text\n");
 	preptext(versebuf);

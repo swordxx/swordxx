@@ -109,9 +109,7 @@ char *RawText::getRawEntry() {
 
 	gettext(key->Testament(), start, size, versebuf);
 
-	for (it = rawfilters.begin(); it != rawfilters.end(); it++) {
-		(*it)->ProcessText(versebuf, size, key);
-	}
+	rawFilter(versebuf, size, key);
 
 	preptext(versebuf);
 

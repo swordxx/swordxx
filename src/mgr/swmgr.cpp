@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.29 2001/02/20 02:08:53 scribe Exp $
+ * $Id: swmgr.cpp,v 1.30 2001/02/21 21:26:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -681,38 +681,40 @@ void SWMgr::InstallScan(const char *dirname)
    string newmodfile;
    string targetName;
  
-	if ((dir = opendir(dirname))) {
-		rewinddir(dir);
-		while ((ent = readdir(dir))) {
-			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-				newmodfile = dirname;
-				if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
-					newmodfile += "/";
-				newmodfile += ent->d_name;
-				if (configType) {
-					if (config > 0)
-						close(conffd);
-					targetName = configPath;
-					if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
-						targetName += "/";
-					targetName += ent->d_name;
-					conffd = open(targetName.c_str(), O_WRONLY|O_CREAT, S_IREAD|S_IWRITE);
-				}
-				else {
-					if (conffd < 1) {
-						conffd = open(config->filename.c_str(), O_WRONLY|O_APPEND);
-						if (conffd > 0)
-							lseek(conffd, 0L, SEEK_END);
-					}
-				}
-				AddModToConfig(conffd, newmodfile.c_str());
-				unlink(newmodfile.c_str());
-			}
-		}
-		if (conffd > 0)
-			close(conffd);
-		closedir(dir);
-	}
+	if (!access(dirname, 04)) {
+          if ((dir = opendir(dirname))) {
+               rewinddir(dir);
+               while ((ent = readdir(dir))) {
+                    if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+                         newmodfile = dirname;
+                         if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
+                              newmodfile += "/";
+                         newmodfile += ent->d_name;
+                         if (configType) {
+                              if (config > 0)
+                                   close(conffd);
+                              targetName = configPath;
+                              if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
+                                   targetName += "/";
+                              targetName += ent->d_name;
+                              conffd = open(targetName.c_str(), O_WRONLY|O_CREAT, S_IREAD|S_IWRITE);
+                         }
+                         else {
+                              if (conffd < 1) {
+                                   conffd = open(config->filename.c_str(), O_WRONLY|O_APPEND);
+                                   if (conffd > 0)
+                                        lseek(conffd, 0L, SEEK_END);
+                              }
+                         }
+                         AddModToConfig(conffd, newmodfile.c_str());
+                         unlink(newmodfile.c_str());
+                    }
+               }
+               if (conffd > 0)
+                    close(conffd);
+               closedir(dir);
+          }
+     }
 }
 
 

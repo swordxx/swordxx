@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.16 2001/02/20 06:12:14 scribe Exp $
+ * $Id: swmodule.h,v 1.17 2001/02/21 21:26:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -38,35 +38,48 @@ using namespace std;
 
 typedef list < SWFilter * >FilterList;
 
+
 /**
   * The class SWModule is the base class for all modules used in Sword.
   *
   */
-class SWDLLEXPORT SWModule
-{
+  
+class SWDLLEXPORT SWModule {
+
 protected:
+
   char error;
+
   /** the current key */
   SWKey *key;
+
   ListKey listkey;
   char *modname;
   char *moddesc;
   char *modtype;
+
   /** this module's display object */
   SWDisplay *disp;
+
   static SWDisplay rawdisp;
   char *entrybuf;
+
   /** executed to remove all markup (for searches) */
-  FilterList stripfilters;
+  FilterList *stripFilters;
+
   /** executed immediately upon fileread */
-  FilterList rawfilters;
+  FilterList *rawFilters;
+
   /** executed to format for display */
-  FilterList renderfilters;
+  FilterList *renderFilters;
+
   /** executed to change markup to user prefs */
-  FilterList optionfilters;
+  FilterList *optionFilters;
+
   bool render;
 
 public:
+
   /**
   * This is the default callback function for searching.
   * This function is a placeholder and does nothing.
@@ -74,6 +87,7 @@ public:
   * evaluation, and pass it over to @ref Search.
   */
   static void nullPercent (char percent, void *userData);
+
   /**
   * Set this bool to false to terminate the search which is executed by this module (@ref #Search).
   * This is useful for threaded applications to terminate the search in another thread.
@@ -92,16 +106,18 @@ public:
   *  others of same type under their modtype heading)
   *  see also @ref Type
   */
-  SWModule (const char *imodname = 0, const char *imoddesc =
-	      0, SWDisplay * idisp = 0, char *imodtype = 0);
+  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0);
+
   /** Cleans up instance of SWModule
   */
   virtual ~ SWModule ();
+
   /** Gets and clears error status
   *
   * @return error status
   */
   virtual char Error ();
+
   /** Sets a key to this module for position to a particular
   * record or set of records
   *
@@ -109,23 +125,24 @@ public:
   * @return error status
   */
   virtual char SetKey (const SWKey & ikey);
+
   /** Gets the current module key
   * @return the current key of this module
   */
-  virtual SWKey & Key () const
-  {
+  virtual SWKey & Key () const {
     return *key;
   }
+  
   /** Sets the current key of the module to ikey, and returns
   * the keytext
   *
   * @param ikey new current key for the module
   * @return the keytext of the current module key
   */
-  virtual char Key (const SWKey & ikey)
-  {
+  virtual char Key (const SWKey & ikey) {
     return SetKey (ikey);
   }
+  
   /** Sets/gets module KeyText
   *
   * @param ikeytext value which to set keytext;
@@ -133,11 +150,13 @@ public:
   * @return pointer to keytext
   */
   virtual const char *KeyText (const char *imodtype = 0);
+  
   /** Calls this modules display object and passes itself
   *
   * @return error status
   */
   virtual char Display ();
+  
   /** Sets/gets display driver
   *
   * @param idisp value which to set disp;
@@ -145,6 +164,7 @@ public:
   * @return pointer to disp
   */
   virtual SWDisplay *Disp (SWDisplay * idisp = 0);
+  
   /** Sets/gets module name
   *
   * @param imodname value which to set modname;
@@ -152,6 +172,7 @@ public:
   * @return pointer to modname
   */
   virtual char *Name (const char *imodname = 0);
+  
   /** Sets/gets module description
   *
   * @param imoddesc value which to set moddesc;
@@ -159,6 +180,7 @@ public:
   * @return pointer to moddesc
   */
   virtual char *Description (const char *imoddesc = 0);
+  
   /** Sets/gets module type
   *
   * @param imodtype value which to set modtype;
@@ -180,32 +202,31 @@ public:
   *
   * @return listkey set to verses that contain istr
   */
-  virtual ListKey & Search (const char *istr, int searchType = 0, int flags =
-			    0, SWKey * scope =
-			    0, bool * justCheckIfSupported =
-			    0, void (*percent) (char, void *) =
-			    &nullPercent, void *percentUserData = 0);
+  virtual ListKey & Search (const char *istr, int searchType = 0, int flags = 0,
+                  SWKey * scope = 0,
+                  bool * justCheckIfSupported = 0,
+                  void (*percent) (char, void *) = &nullPercent,
+                  void *percentUserData = 0);
   /**
   *
   */
-  virtual char createSearchFramework ()
-  {
+  virtual char createSearchFramework () {
     return 0;
   }				// special search framework
+  
   /**
   *
   */
-  virtual bool hasSearchFramework ()
-  {
+  virtual bool hasSearchFramework () {
     return false;
   }				// special search framework
+  
   /**
   *
   */
   virtual bool isSearchOptimallySupported (const char *istr, int searchType,
-					   int flags, SWKey * scope)
-  {
-    bool retVal = false;
+					   int flags, SWKey * scope) {
+      bool retVal = false;
       Search (istr, searchType, flags, scope, &retVal);
       return retVal;
   }
@@ -220,23 +241,24 @@ public:
   * @return the rendered current module text
   */
   virtual operator char *();
+  
   /** This function is reimplemented by the different kinds
   * of module objects
   * @return the raw module text of the current entry
   */
   virtual char *getRawEntry () = 0;
+  
   /**
   *
   */
-  virtual operator SWKey & ()
-  {
+  virtual operator SWKey & () {
     return *key;
   }
+  
   /**
   *
   */
-  virtual operator SWKey *()
-  {
+  virtual operator SWKey *() {
     return key;
   }
 
@@ -244,39 +266,39 @@ public:
   /** Is the module writable? :)
   * @return yes or no
   */
-  virtual bool isWritable ()
-  {
+  virtual bool isWritable () {
     return false;
   }
+  
   /** Creates a new module
   * @return error
   */
-  static char createModule (const char *path)
-  {
+  static char createModule (const char *path) {
     return -1;
   }
+  
   /** Modify the current module entry text
   * - only if module @ref isWritable
   * @return *this
   */
-  virtual SWModule & operator << (const char *)
-  {
+  virtual SWModule & operator << (const char *) {
     return *this;
   }
+  
   /** Link the current module entry to another module entry
   * - only if module @ref isWritable
   * @return *this
   */
-  virtual SWModule & operator << (const SWKey *)
-  {
+  virtual SWModule & operator << (const SWKey *) {
     return *this;
   }
+  
   /** Delete current module entry - only if module @ref isWritable
   *
   */
-  virtual void deleteEntry ()
-  {
+  virtual void deleteEntry () {
   }
+  
   // end write interface ------------------------
 
   /** Decrements module key a number of entries
@@ -285,68 +307,125 @@ public:
   * @return *this
   */
   virtual SWModule & operator -= (int decrement);
+  
   /** Increments module key a number of entries
   *
   * @param increment Number of entries to jump forward
   * @return *this
   */
   virtual SWModule & operator += (int increment);
+  
   /** Increments module key by 1 entry
   *
   */
-  virtual SWModule & operator++ (int)
-  {
+  virtual SWModule & operator++ (int) {
     return *this += 1;
   }
+  
   /** Decrements module key by 1 entry
   *
   */
-  virtual SWModule & operator-- (int)
-  {
+  virtual SWModule & operator-- (int) {
     return *this -= 1;
   }
+  
   /** Positions this modules to an entry
   *
   * @param p position (e.g. TOP, BOTTOM)
   * @return *this
   */
   virtual SWModule & operator = (POSITION p);
+  
   /** Adds a RenderFilter to this module's @ref renderfilters queue
   * @param newfilter the filter to add
   * @return *this
   */
-  virtual SWModule & AddRenderFilter (SWFilter * newfilter)
-  {
-    renderfilters.push_back (newfilter);
+  virtual SWModule & AddRenderFilter (SWFilter * newfilter) {
+    renderFilters->push_back (newfilter);
     return *this;
   }
+
+  /** RenderFilter a text buffer
+  * @param buf the buffer to filter
+  * @param size the allocated size of the buffer
+  * @param key key location from where this buffer was extracted
+  * @return *this
+  */
+  virtual void renderFilter (char *buf, long size, SWKey *key) {
+  	filterBuffer(renderFilters, buf, size, key);
+  }
+  
   /** Adds a StripFilter to this module's @ref stripfilters queue
   * @param newfilter the filter to add
   * @return *this
   */
-  virtual SWModule & AddStripFilter (SWFilter * newfilter)
-  {
-    stripfilters.push_back (newfilter);
+  virtual SWModule & AddStripFilter (SWFilter * newfilter) {
+    stripFilters->push_back (newfilter);
     return *this;
   }
+
+  /** StripFilter a text buffer
+  * @param buf the buffer to filter
+  * @param size the allocated size of the buffer
+  * @param key key location from where this buffer was extracted
+  * @return *this
+  */
+  virtual void stripFilter (char *buf, long size, SWKey *key) {
+  	filterBuffer(stripFilters, buf, size, key);
+  }
+  
   /** Adds a RawFilter to this module's @ref rawfilters queue
   * @param newfilter the filter to add
   * @return *this
   */
-  virtual SWModule & AddRawFilter (SWFilter * newfilter)
-  {
-    rawfilters.push_back (newfilter);
+  virtual SWModule & AddRawFilter (SWFilter * newfilter) {
+    rawFilters->push_back (newfilter);
     return *this;
   }
+  
+  /** FilterBuffer a text buffer
+  * @param filters the FilterList of filters to iterate
+  * @param buf the buffer to filter
+  * @param size the allocated size of the buffer
+  * @param key key location from where this buffer was extracted
+  * @return *this
+  */
+  virtual void filterBuffer (FilterList *filters, char *buf, long size, SWKey *key) {
+	FilterList::iterator it;
+	for (it = filters->begin(); it != filters->end(); it++) {
+		(*it)->ProcessText(buf, size, key);
+	}
+  }
+
+  /** RawFilter a text buffer
+  * @param buf the buffer to filter
+  * @param size the allocated size of the buffer
+  * @param key key location from where this buffer was extracted
+  * @return *this
+  */
+  virtual void rawFilter (char *buf, long size, SWKey *key) {
+  	filterBuffer(rawFilters, buf, size, key);
+  }
+  
   /** Adds an OptionFilter to this module's @ref optionfilters queue
   * @param newfilter the filter to add
   * @return *this
   */
-  virtual SWModule & AddOptionFilter (SWFilter * newfilter)
-  {
-    optionfilters.push_back (newfilter);
+  virtual SWModule & AddOptionFilter (SWFilter * newfilter) {
+    optionFilters->push_back (newfilter);
     return *this;
   }
+
+  /** OptionFilter a text buffer
+  * @param buf the buffer to filter
+  * @param size the allocated size of the buffer
+  * @param key key location from where this buffer was extracted
+  * @return *this
+  */
+  virtual void optionFilter (char *buf, long size, SWKey *key) {
+  	filterBuffer(optionFilters, buf, size, key);
+  }
+  
   /** calls all StripFilters on buffer or current text
   *
   * @param buf buf to massage instead of current module position;
@@ -355,6 +434,7 @@ public:
   * @return this module's text at specified key location massaged by Strip filters
   */
   virtual const char *StripText (char *buf = 0, int len = -1);
+  
   /** calls all RenderFilters on buffer or current text
   *
   * @param buf buffer to Render instead of current module position;
@@ -363,18 +443,21 @@ public:
   * @return this module's text at specified key location massaged by Render filters
   */
   virtual const char *RenderText (char *buf = 0, int len = -1);
+  
   /** calls all StripFilters on current text
   *
   * @param tmpKey key to use to grab text
   * @return this module's text at specified key location massaged by Strip filters
   */
   virtual const char *StripText (SWKey * tmpKey);
+  
   /** calls all RenderFilters on current text
   *
   * @param tmpKey key to use to grab text
   * @return this module's text at specified key location massaged by Render filters
   */
   virtual const char *RenderText (SWKey * tmpKey);
+  
 };
 
 

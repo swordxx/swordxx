@@ -41,6 +41,10 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	stdstr(&moddesc, imoddesc);
 	stdstr(&modtype, imodtype);
 	render = true;	// for protected method when sometimes need RenderText not to _Render Text_ :)  kludge / rewrite
+     stripFilters = new FilterList();
+     rawFilters = new FilterList();
+     renderFilters = new FilterList();
+     optionFilters = new FilterList();
 }
 
 
@@ -62,10 +66,15 @@ SWModule::~SWModule()
 		if (!key->Persist())
 			delete key;
 	}
-	stripfilters.clear();
-     rawfilters.clear();
-     renderfilters.clear();
-     optionfilters.clear();
+	stripFilters->clear();
+     rawFilters->clear();
+     renderFilters->clear();
+     optionFilters->clear();
+     
+     delete stripFilters;
+     delete rawFilters;
+     delete renderFilters;
+     delete optionFilters;
 }
 
 
@@ -454,12 +463,8 @@ const char *SWModule::StripText(char *buf, int len)
 		render = true;
 	}
 
-	for (it = optionfilters.begin(); it != optionfilters.end(); it++) {
-		(*it)->ProcessText(buf, len, key);
-	}
-	for (it = stripfilters.begin(); it != stripfilters.end(); it++) {
-		(*it)->ProcessText(buf, len, key);
-	}
+	optionFilter(buf, len, key);
+	stripFilter(buf, len, key);
 
 	return buf;
 }
@@ -483,14 +488,10 @@ const char *SWModule::StripText(char *buf, int len)
 		buf = (char *)*this;
 	}
 
-	for (it = optionfilters.begin(); it != optionfilters.end(); it++) {
-		(*it)->ProcessText(buf, len, key);
-	}
+	optionFilter(buf, len, key);
 	
 	if (render) {
-		for (it = renderfilters.begin(); it != renderfilters.end(); it++) {
-			(*it)->ProcessText(buf, len, key);
-		}
+		renderFilter(buf, len, key);
 	}
 
 	return buf;
