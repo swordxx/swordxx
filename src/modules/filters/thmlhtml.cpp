@@ -139,9 +139,9 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
                         if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
         			pushString(buf, "<small><em>");
-	        		for (unsigned int i = 5; i < strlen(token); i++)
-		        		if(token[i] != '\"')
-			        		*(*buf)++ = token[i];
+	        		for (const char *tok = token + 5; *tok; tok++)
+		        		if(*tok != '\"')
+			        		*(*buf)++ = *tok;
         			pushString(buf, "</em></small>");
                         }
                         else if (token[27] == 'T') {
@@ -165,9 +165,9 @@ bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userDat
 		}
 		else if (!strncmp(token, "scripRef", 8)) {
 			pushString(buf, "<a href=\"");
-			for (unsigned int i = 9; i < strlen(token); i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
+			for (const char *tok = token + 9; *tok; tok++)
+				if(*tok != '\"')
+					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 		}

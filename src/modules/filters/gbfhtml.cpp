@@ -51,11 +51,12 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
-			memset(token, 0, 2048);
+			token[0] = 0;
+			token[1] = 0;
+			token[2] = 0;
 			continue;
 		}
 		if (*from == '>') {
-			unsigned int i;
 			intoken = false;
 			// process desired tokens
 			switch (*token) {
@@ -77,8 +78,8 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 							*to++ = 'e';
 							*to++ = 'm';
 							*to++ = '>';
-							for (i = 2; i < strlen(token); i++)
-								*to++ = token[i];
+							for (char *tok = token+2; *tok; tok++)
+								*to++ = *tok;
 							*to++ = '<';
 							*to++ = '/';
 							*to++ = 'e';
@@ -297,8 +298,8 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 							*to++ = 'e';
 							*to++ = '=';
 							*to++ = '"';
-						        for (i = 2; i < strlen(token); i++)
-								*to++ = token[i];
+						        for (char *tok = token + 2; *tok; tok++)
+								*to++ = *tok;
 							*to++ = '"';
 							*to++ = '>';
 							continue;
@@ -493,9 +494,9 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			continue;
 		}
 		if (intoken) {
-		 	if (tokpos < 2047) {
-		 		token[tokpos] = *from;
-		 		tokpos++;
+		 	if (tokpos < 2045) {
+		 		token[tokpos++] = *from;
+		 		token[tokpos+2] = 0;
 		 	}
 		 }
 		else

@@ -30,29 +30,28 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
 
 SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char* imodlang)
 {
-	key      = CreateKey();
-	entrybuf = new char [1];
+	key       = CreateKey();
+	entrybuf  = new char [1];
 	*entrybuf = 0;
-	modname  = 0;
-	error    = 0;
-	moddesc  = 0;
-	modtype  = 0;
-        modlang = 0;
-        this->encoding = encoding;
-        this->direction = direction;
-        this->markup  = markup;
-        entrySize= -1;
+	modname   = 0;
+	error     = 0;
+	moddesc   = 0;
+	modtype   = 0;
+	modlang   = 0;
+	this->encoding = encoding;
+	this->direction = direction;
+	this->markup  = markup;
+	entrySize= -1;
 	disp     = (idisp) ? idisp : &rawdisp;
 	stdstr(&modname, imodname);
 	stdstr(&moddesc, imoddesc);
 	stdstr(&modtype, imodtype);
-        stdstr(&modlang, imodlang);
-	render = true;	// for protected method when sometimes need RenderText not to _Render Text_ :)  kludge / rewrite
-        stripFilters = new FilterList();
-        rawFilters = new FilterList();
-        renderFilters = new FilterList();
-        optionFilters = new FilterList();
-        encodingFilters = new FilterList();
+	stdstr(&modlang, imodlang);
+	stripFilters = new FilterList();
+	rawFilters = new FilterList();
+	renderFilters = new FilterList();
+	optionFilters = new FilterList();
+	encodingFilters = new FilterList();
 }
 
 
@@ -525,19 +524,7 @@ ListKey &SWModule::Search(const char *istr, int searchType, int flags, SWKey *sc
 
 const char *SWModule::StripText(char *buf, int len)
 {
-	SWKey *key = 0;
-
-	if (!buf) {
-		key = (SWKey *)*this;
-		render = false;
-		buf = (char *)*this;
-		render = true;
-	}
-
-	optionFilter(buf, len, key);
-	stripFilter(buf, len, key);
-
-	return buf;
+	return RenderText(buf, len, false);
 }
 
 
@@ -549,23 +536,32 @@ const char *SWModule::StripText(char *buf, int len)
  * RET: listkey set to verses that contain istr
  */
 
- const char *SWModule::RenderText(char *buf, int len)
-{
+ const char *SWModule::RenderText(char *buf, int len, bool render) {
+	char *versebuf = (buf) ? buf : getRawEntry();
 	SWKey *key = 0;
 
-	if (!buf) {
-		key = (SWKey *)*this;
-		buf = (char *)*this;
-	}
+	if (versebuf) {
+		int size = getEntrySize();
+          if (size == -1)
+          	size = strlen(versebuf);
+		if (size) {
+			key = (SWKey *)*this;
 
-	optionFilter(buf, len, key);
+			optionFilter(versebuf, len, key);
 	
-	if (render) {
-		renderFilter(buf, len, key);
-                encodingFilter(buf, len, key);
+			if (render) {
+				renderFilter(versebuf, len, key);
+				encodingFilter(versebuf, len, key);
+			}
+			else	stripFilter(versebuf, len, key);
+		}
+	}
+	else {
+		versebuf = new char [1];
+		*versebuf = 0;
 	}
 
-	return buf;
+	return versebuf;
 }
 
 
@@ -633,14 +629,6 @@ const char *SWModule::StripText(char *buf, int len)
 }
 
 
-SWModule::operator char*() {
-	char *versebuf = getRawEntry();
-	if (versebuf) {
-		int size = getEntrySize();
-          if (size == -1)
-          	size = strlen(versebuf);
-		if (size)
-			RenderText(versebuf, size * FILTERPAD);
-	}
-	return versebuf;
+SWModule::operator const char*() {
+	return RenderText();
 }

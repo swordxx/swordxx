@@ -169,17 +169,17 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
                         }
 		}
 		else if (!strncmp(token, "sync type=\"morph\" ", 18)) {
-                        pushString(buf, " {\\fs15 (");
-			for (unsigned int i = 5; i < strlen(token); i++) {
-                                if (!strncmp(token+i, "value=\"", 7)) {
-                                        i += 7;
-                                        for (;token[i] != '\"'; i++)
-                				*(*buf)++ = token[i];
-                                        break;
-                                }
-                        }
+			pushString(buf, " {\\fs15 (");
+			for (const char *tok = token + 5; *tok; tok++) {
+				if (!strncmp(tok, "value=\"", 7)) {
+					tok += 7;
+					for (;*tok != '\"'; tok++)
+						*(*buf)++ = *tok;
+					break;
+				}
+			}
 
-      			pushString(buf, ")}");
+			pushString(buf, ")}");
 		}
 		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
 			pushString(buf, "{\\fs15 (");

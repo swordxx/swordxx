@@ -57,9 +57,9 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWM
           *to++ = '\\';
           *to++ = 'u';
 	  sprintf(digit, "%d", ch);
-	  for (int i = 0; i < strlen(digit); i++)
-	    *to++ = digit[i];
-          *to++ = '?';
+		for (char *dig = digit; *dig; dig++)
+			*to++ = *dig;
+		*to++ = '?';
 	}
         
         if (to != maxto) {

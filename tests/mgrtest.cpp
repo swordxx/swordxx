@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 		if ((!strcmp((*it).second->Type(), "Biblical Texts")) || (!strcmp((*it).second->Type(), "Commentaries"))) {
 			(*it).second->SetKey("James 1:19");
 			cout << "[" << (*it).second->Name() << "] (Writable: " << (it->second->isWritable()?"Yes":"No") << ") [" << (*it).second->Description() << "]\n";
-			cout << (char *) *(*it).second << "\n\n";
+			cout << (const char *) *(*it).second << "\n\n";
 		}
 	}
 	SWModule *mhc = mymgr.Modules["MHC"];

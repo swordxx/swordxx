@@ -133,35 +133,34 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 
 bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
-	unsigned long i;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync ", 5)) {
 			pushString(buf, "<a href=\"");
-			for (i = 5; i < strlen(token)-1; i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
+			for (const char *tok = token + 5; *(tok+1); tok++)
+				if(*tok != '\"')
+					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 
                         //scan for value and add it to the buffer
-			for (unsigned int j = 5; j < strlen(token); j++) {
-                                if (!strncmp(token+j, "value=\"", 7)) {
-                                        j += 7;
-                                        for (;token[j] != '\"'; j++)
-                				*(*buf)++ = token[j];
-                                        break;
-                                }
-                        }
+			for (const char *tok = token + 5; *tok; tok++) {
+				if (!strncmp(tok, "value=\"", 7)) {
+					tok += 7;
+					for (;*tok != '\"'; tok++)
+						*(*buf)++ = *tok;
+					break;
+				}
+			}
 			pushString(buf, "</a>");
 		}
 
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
 			userData["inscriptRef"] = "true";
 			pushString(buf, "<a href=\"");
-			for (i = 9; i < strlen(token)-1; i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];
+			for (const char *tok = token + 9; *(tok+1); tok++)				
+				if(*tok != '\"') 			
+					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
 		} 
@@ -210,14 +209,14 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			pushString(buf, "<a href=\"");
-			for (i = 5; i < strlen(token)-1; i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];
+			for (const char *tok = token + 5; *(tok+1); tok++)				
+				if(*tok != '\"') 			
+					*(*buf)++ = *tok;
 			*(*buf)++ = '\"';
 			*(*buf)++ = '>';
-			for (i = 29; i < strlen(token)-2; i++)				
-				if(token[i] != '\"') 			
-					*(*buf)++ = token[i];		
+			for (const char *tok = token + 29; *(tok+2); tok++)				
+				if(*tok != '\"') 			
+					*(*buf)++ = *tok;		
 			pushString(buf, "</a>");
 		}
                 else if(!strncmp(token, "note", 4)) {
@@ -226,9 +225,9 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 
 		else {
 			*(*buf)++ = '<';
-			for (i = 0; i < strlen(token); i++)
-				*(*buf)++ = token[i];
-				*(*buf)++ = '>';
+			for (const char *tok = token; *tok; tok++)
+				*(*buf)++ = *tok;
+			*(*buf)++ = '>';
 			//return false;  // we still didn't handle token
 		}
 	}

@@ -20,7 +20,6 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
-	unsigned int i;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -32,7 +31,9 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
-			memset(token, 0, 2048);
+			token[0] = 0;
+			token[1] = 0;
+			token[2] = 0;
 			continue;
 		}
 		if (*from == '>') {
@@ -51,8 +52,8 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = '7';
 					*to++ = ' ';
 					*to++ = '<';
-					for (i = 2; i < strlen(token); i++)
-						*to++ = token[i];
+					for (char *tok = token + 2; *tok; tok++)
+						*to++ = *tok;
 					*to++ = '>';
 					*to++ = '}';
 					continue;
@@ -67,29 +68,29 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*to++ = ' ';
 					*to++ = '(';
 					bool separate = false;
-					for (i = 2; i < strlen(token); i++) {
+					for (char *tok = token + 2; *tok; tok++) {
 						if (separate) {
 							*to++ = ';';
 							*to++ = ' ';
 							separate = false;
 						}
-						switch (token[i]) {
+						switch (*tok) {
 						case 'G':
 						case 'H':
-							for (i++; i < strlen(token); i++) {
-								if (isdigit(token[i])) {
-									*to++ = token[i];
+							for (tok++; *tok; tok++) {
+								if (isdigit(*tok)) {
+									*to++ = *tok;
 									separate = true;
 								}
 								else {
-									i--;
+									tok--;
 									break;
 								}
 							}
 							break;
 						default:
-							for (; i < strlen(token); i++) {
-							       *to++ = token[i];
+							for (; *tok; tok++) {
+							       *to++ = *tok;
 							}
 						}
 					}
@@ -257,8 +258,9 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 			continue;
 		}
 		if (intoken) {
-			if (tokpos < 2047)
+			if (tokpos < 2045)
 				token[tokpos++] = *from;
+				token[tokpos+2] = 0;
 		}
 		else	*to++ = *from;
 	}

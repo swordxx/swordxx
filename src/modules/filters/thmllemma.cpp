@@ -59,7 +59,9 @@ char ThMLLemma::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
-				memset(token, 0, 2048);
+				token[0] = 0;
+				token[1] = 0;
+				token[2] = 0;
 				continue;
 			}
 			if (*from == '>') {	// process tokens
@@ -73,14 +75,15 @@ char ThMLLemma::ProcessText(char *text, int maxlen, const SWKey *key, const SWMo
 				}
 				// if not a lemma token, keep token in text
 				*to++ = '<';
-				for (unsigned int i = 0; i < strlen(token); i++)
-					*to++ = token[i];
+				for (char *tok = token; *tok; tok++)
+					*to++ = *tok;
 				*to++ = '>';
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2047)
+				if (tokpos < 2045)
 					token[tokpos++] = *from;
+					token[tokpos+2] = 0;
 			}
 			else	{
 				*to++ = *from;

@@ -56,9 +56,9 @@ char UTF8HTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
           *to++ = '&';
           *to++ = '#';
 	  sprintf(digit, "%d", ch);
-	  for (int i = 0; i < strlen(digit); i++)
-	    *to++ = digit[i];
-          *to++ = ';';
+		for (char *dig = digit; *dig; dig++)
+			*to++ = *dig;
+		*to++ = ';';
 	}
 	*to++ = 0;
 	*to = 0;

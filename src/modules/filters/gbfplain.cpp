@@ -20,7 +20,6 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
-	unsigned int i;
 
 	len = strlen(text) + 1;						// shift string to right of buffer
 	if (len < maxlen) {
@@ -33,7 +32,9 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
-			memset(token, 0, 2048);
+			token[0] = 0;
+			token[1] = 0;
+			token[2] = 0;
 			continue;
 		}
 		if (*from == '>') {
@@ -47,8 +48,8 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 					case 'T':               // Tense
 						*to++ = ' ';
 						*to++ = '<';
-						for (i = 2; i < strlen(token); i++)
-							*to++ = token[i];
+						for (char *tok = token + 2; *tok; tok++)
+							*to++ = *tok;
 						*to++ = '>';
 						*to++ = ' ';
 						continue;
@@ -93,8 +94,9 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 			continue;
 		}
 		if (intoken) {
-			if (tokpos < 2047)
+			if (tokpos < 2045)
 				token[tokpos++] = *from;
+				token[tokpos+2] = 0;
 		}
 		else	*to++ = *from;
 	}

@@ -20,6 +20,6 @@
 
 char SWDisplay::Display(SWModule &imodule)
 {
-	cout << (char *)imodule;
+	cout << (const char *)imodule;
 	return 0;
 }

@@ -83,8 +83,9 @@ char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2047)
+				if (tokpos < 2045)
 					token[tokpos++] = *from;
+					token[tokpos+2] = 0;
 			}
 			else	{
 				if (!hide) {

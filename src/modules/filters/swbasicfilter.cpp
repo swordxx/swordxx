@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.14 2001/11/05 11:14:57 chrislit Exp $
+ * $Id: swbasicfilter.cpp,v 1.15 2002/02/18 02:53:24 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -171,7 +171,7 @@ void SWBasicFilter::setTokenEnd(const char *tokenEnd) {
 
 
 char SWBasicFilter::ProcessText(char *text, int maxlen) {
-	char *to, *from, token[2048];
+	char *to, *from, token[4096];
 	int tokpos = 0;
 	bool intoken 	= false;
 	int len;
@@ -201,7 +201,9 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 			if (tokenStartPos == (tokenStartLen - 1)) {
 				intoken = true;
 				tokpos = 0;
-				memset(token, 0, 2048);
+				token[0] = 0;
+				token[1] = 0;
+				token[2] = 0;
 				inEsc = false;
 			}
 			else tokenStartPos++;
@@ -212,7 +214,9 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 			if (escStartPos == (escStartLen - 1)) {
 				intoken = true;
 				tokpos = 0;
-				memset(token, 0, 2048);
+				token[0] = 0;
+				token[1] = 0;
+				token[2] = 0;
 				inEsc = true;
 			}
 			else escStartPos++;
@@ -256,8 +260,9 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 		}
 
 		if (intoken) {
-			if (tokpos < 2047)
+			if (tokpos < 4090)
 				token[tokpos++] = *from;
+				token[tokpos+2] = 0;
 		}
 		else {
 			if (!suspendTextPassThru)

@@ -43,7 +43,7 @@ const char *GBFFootnotes::getOptionValue()
 char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
 {
 	if (!option) {	// if we don't want footnotes
-		char *to, *from, token[2048]; // cheese.  Fix.
+		char *to, *from, token[4096]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
 		int len;
@@ -60,7 +60,10 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const S
 			if (*from == '<') {
 				intoken = true;
 				tokpos = 0;
-				memset(token, 0, 2048);
+//				memset(token, 0, 4096);
+				token[0] = 0;
+				token[1] = 0;
+				token[2] = 0;
 				continue;
 			}
 			if (*from == '>') {	// process tokens
@@ -91,15 +94,16 @@ char GBFFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const S
 				// if not a footnote token, keep token in text
 				if (!hide) {
 					*to++ = '<';
-					for (unsigned int i = 0; i < strlen(token); i++)
-						*to++ = token[i];
+					for (char *tok = token; *tok; tok++)
+						*to++ = *tok;
 					*to++ = '>';
 				}
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2047)
+				if (tokpos < 4090)
 					token[tokpos++] = *from;
+					token[tokpos+2] = 0;	// +2 cuz we init token with 2 extra '0' because of switch statement
 			}
 			else	{
 				if (!hide) {
