@@ -1,17 +1,24 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+10-Jun-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added tests/testsuite for building a good set
+		of regression tests
+	Fixed VerseKey parsing of "1. book" and osisRefs
+
 06-Jun-2003     Joachim Ansorg <junkmail@joachim.ansorgs.de>
 	Implemented encodeURL() function in utilweb.cpp
-	Converted ThMLHTML filter to XMLTag, removed handling of scripRefs
-		because this shouldn't be done in FMT_HTML
+	Converted ThMLHTML filter to XMLTag, removed handling
+		of scripRefs because this shouldn't be done
+		in FMT_HTML
 	Converted ThMLHTMLHREF to XMLTag. Fixed some things.
 	Simplified some small things in filters, nothing big.
 
 01-Jun-2003     Joachim Ansorg <junkmail@joachim.ansorgs.de>
 	Added WEBIF filters, based on HTMLHREF filters.
 	Added new utilweb stuff for working with urls etc.
-	Fixed SWORD_NAMESPACE_START and SWORD_NAMESPACE_END in defs.h if NO_SWORD_NAMESPACE was defined
+	Fixed SWORD_NAMESPACE_START and SWORD_NAMESPACE_END
+		in defs.h if NO_SWORD_NAMESPACE was defined
 
 30-May-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added utilities/installmgr to call some of the

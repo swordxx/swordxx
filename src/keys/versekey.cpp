@@ -393,6 +393,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	SWKey tmpDefaultKey = defaultKey;
 	char lastPartial = 0;
 	bool inTerm = true;
+	int notAllDigits;
 
 	curkey.AutoNormalize(0);
 	tmpListKey << tmpDefaultKey;
@@ -573,7 +574,11 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			break;
 		case '.':
 			if (buf > orig)			// ignore (break) if preceeding char is not a digit
-				if ((chap < 0) || (!isdigit(*(buf-1))))
+				for (notAllDigits = tobook; notAllDigits; notAllDigits--) {
+					if ((!isdigit(book[notAllDigits-1])) && (!strchr(" .", book[notAllDigits-1])))
+						break;
+				}
+				if (!notAllDigits)
 					break;
 
 			number[tonumber] = 0;
