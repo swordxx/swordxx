@@ -169,7 +169,7 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	      *to++ = '>';
 	      continue;
 	  }
-	  if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+	  if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
 	    *to++ = '<';
 	    *to++ = 'W';
 	    *to++ = 'T';
@@ -210,24 +210,6 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = 's';
 	    *to++ = '>';
 	  }
-	  else if (!strncmp(token, "foreign lang=\"el\"", 17)) {
-	    *to++ = '<';
-	    *to++ = 'F';
-	    *to++ = 'N';
-	    *to++ = 'S';
-	    *to++ = 'I';
-	    *to++ = 'L';
-	    *to++ = ' ';
-	    *to++ = 'G';
-	    *to++ = 'a';
-	    *to++ = 'l';
-	    *to++ = 'a';
-	    *to++ = 't';
-	    *to++ = 'i';
-	    *to++ = 'a';
-	    *to++ = '>';
-	    continue;
-	  }
 	  else if (!strnicmp(token, "font color=#ff0000", 18)) {
 	    *to++ = '<';
 	    *to++ = 'F';
@@ -240,7 +222,7 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = 'F';
 	    *to++ = 'r';
 	    *to++ = '>';
-	    continue;	    
+	    continue;
 	  }
 	  else if (!strncmp(token, "div class=\"sechead\"", 19)) {
 	    *to++ = '<';
@@ -257,28 +239,6 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = '>';
 	    sechead = false;
 	    continue;
-	  }
-	  else if (!strncmp(token, "foreign lang=\"he\"", 17)) {
-	    *to++ = '<';
-	    *to++ = 'F';
-	    *to++ = 'N';
-	    *to++ = 'S';
-	    *to++ = 'I';
-	    *to++ = 'L';
-	    *to++ = ' ';
-	    *to++ = 'E';
-	    *to++ = 'z';
-	    *to++ = 'r';
-	    *to++ = 'a';
-	    *to++ = '>';
-	    continue;
-	  }
-	  else if (!strncmp(token, "/foreign", 8)) {
-	    *to++ = '<';
-	    *to++ = 'F';
-	    *to++ = 'n';
-	    *to++ = '>';
-	    continue;				
 	  }
 	  else if (!strnicmp(token, "br", 2)) {
 		    *to++ = '<';

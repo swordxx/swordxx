@@ -129,9 +129,6 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 	addTokenSubstitute("note place=\"foot\"", " <small>(");
 	addTokenSubstitute("/note", ")</small> ");
-	addTokenSubstitute("foreign lang=\"el\"", "<font face=\"SIL Galatia\">");
-	addTokenSubstitute("foreign lang=\"he\"", "<font face=\"SIL Ezra\">");
-	addTokenSubstitute("/foreign", "</font>");
 }
 
 
@@ -152,7 +149,7 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			pushString(buf, "</a>");
 		}
 
-		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
+		else if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
 			pushString(buf, "<a href=\"");
 			for (i = 5; i < strlen(token)-1; i++)				
 				if(token[i] != '\"') 			
