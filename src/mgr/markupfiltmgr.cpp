@@ -32,6 +32,7 @@
 #include <gbfrtf.h>
 #include <gbfosis.h>
 #include <thmlosis.h>
+#include <osisrtf.h>
 
 #include <markupfiltmgr.h>
 
@@ -224,7 +225,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromplain = NULL;
                         fromthml = new ThMLRTF();
                         fromgbf = new GBFRTF();
-                        fromosis = NULL;
+                        fromosis = new OSISRTF();
                         break;
                 case FMT_OSIS:
                         fromplain = NULL;
