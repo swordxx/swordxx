@@ -117,33 +117,24 @@ VerseKey &RawText::getVerseKey() {
  * RET: string buffer with verse
  */
 
-char *RawText::getRawEntry() {
+SWBuf &RawText::getRawEntryBuf() {
 	long  start = 0;
 	unsigned short size = 0;
 	VerseKey &key = getVerseKey();
 
-	findoffset(key.Testament(), key.Index(), &start, &size);
+	findOffset(key.Testament(), key.Index(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
-	unsigned long newsize = (size + 2) * FILTERPAD;
-	if (newsize > entrybufallocsize) {
-		if (entrybuf)
-			delete [] entrybuf;
-		entrybuf = new char [ newsize ];
-		entrybufallocsize = newsize;
-	}
-	*entrybuf = 0;
+	entryBuf = "";
+	readText(key.Testament(), start, size, entryBuf);
 
-	readtext(key.Testament(), start, (size + 2), entrybuf);
-     entrybuf[size] = 0;
-
-	rawFilter(entrybuf, size, 0);	// hack, decipher
-	rawFilter(entrybuf, size*FILTERPAD, &key);
+	rawFilter(entryBuf, 0);	// hack, decipher
+	rawFilter(entryBuf, &key);
 
 	if (!isUnicode())
-		preptext(entrybuf);
+		prepText(entryBuf);
 
-	return entrybuf;
+	return entryBuf;
 }
 
 
@@ -335,7 +326,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 			long start;
 			unsigned short size;
 			char *idxbuf = 0;
-			char *datbuf = 0;
+			SWBuf datBuf;
 			list <long> indexes;
 			list <long> indexes2;
 			VerseKey vk;
@@ -380,10 +371,10 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 						idxbuf = 0;
 						
 						// find our word in the database and jump ahead _away_
-						error = fastSearch[j]->findoffset(words[i], &start, &size, away);
+						error = fastSearch[j]->findOffset(words[i], &start, &size, away);
 
 						// get the word from the database
-						fastSearch[j]->getidxbufdat(start, &idxbuf);
+						fastSearch[j]->getIDXBufDat(start, &idxbuf);
 
 						// check to see if it starts with our target word
 						if (strlen(idxbuf) > strlen(words[i]))
@@ -394,16 +385,16 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 							// get data for this word from database
 							free(idxbuf);
 							idxbuf = 0;
-							datbuf = 0;
-							fastSearch[j]->readtext(start, &size, &idxbuf, &datbuf);
+							datBuf = "";
+							fastSearch[j]->readText(start, &size, &idxbuf, datBuf);
 
 							// we know that the data consists of sizof(long)
 							// records each a valid module position that constains
 							// this word
 							//
 							// iterate thru each of these module positions
-							long *keyindex = (long *)datbuf;
-							while (keyindex < (long *)(datbuf + size - (strlen(idxbuf) + 1))) {
+							long *keyindex = (long *)datBuf.getRawData();
+							while (keyindex < (long *)(datBuf.getRawData() + size - (strlen(idxbuf) + 1))) {
 								if (i) {	// if we're not on our first word
 
 									// check to see if this word is already in the result set.
@@ -415,7 +406,6 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 								else	indexes2.push_back(*keyindex);
 								keyindex++;
 							}
-							free(datbuf);
 						}
 						else error = 1;	// no more matches
 						free(idxbuf);
@@ -480,7 +470,7 @@ ListKey &RawText::Search(const char *istr, int searchType, int flags, SWKey *sco
 
 void RawText::setEntry(const char *inbuf, long len) {
 	VerseKey &key = getVerseKey();
-	settext(key.Testament(), key.Index(), inbuf, len);
+	doSetText(key.Testament(), key.Index(), inbuf, len);
 }
 
 
@@ -497,7 +487,7 @@ void RawText::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	linkentry(destkey.Testament(), destkey.Index(), srckey->Index());
+	doLinkEntry(destkey.Testament(), destkey.Index(), srckey->Index());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -512,7 +502,7 @@ void RawText::linkEntry(const SWKey *inkey) {
 
 void RawText::deleteEntry() {
 	VerseKey &key = getVerseKey();
-	settext(key.Testament(), key.Index(), "");
+	doSetText(key.Testament(), key.Index(), "");
 }
 
 /******************************************************************************
@@ -528,7 +518,7 @@ void RawText::increment(int steps) {
 	unsigned short size;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+	findOffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -543,7 +533,7 @@ void RawText::increment(int steps) {
 			break;
 		}
 		long index = tmpkey->Index();
-		findoffset(tmpkey->Testament(), index, &start, &size);
+		findOffset(tmpkey->Testament(), index, &start, &size);
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
 //				&& (start > 0)

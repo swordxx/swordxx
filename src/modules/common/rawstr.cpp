@@ -96,7 +96,7 @@ RawStr::~RawStr()
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr::getidxbufdat(long ioffset, char **buf)
+void RawStr::getIDXBufDat(long ioffset, char **buf)
 {
 	int size;
 	char ch;
@@ -130,7 +130,7 @@ void RawStr::getidxbufdat(long ioffset, char **buf)
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr::getidxbuf(long ioffset, char **buf)
+void RawStr::getIDXBuf(long ioffset, char **buf)
 {
 	char *trybuf, *targetbuf;
 	long offset;
@@ -141,7 +141,7 @@ void RawStr::getidxbuf(long ioffset, char **buf)
 
 		offset = swordtoarch32(offset);
 
-		getidxbufdat(offset, buf);
+		getIDXBufDat(offset, buf);
 		toupperstr_utf8(*buf);
 	}
 }
@@ -159,7 +159,7 @@ void RawStr::getidxbuf(long ioffset, char **buf)
  * RET: error status -1 general error; -2 new file
  */
 
-signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
+signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
 {
 	char *trybuf, *targetbuf, *key, quitflag = 0;
 	signed char retval = -1;
@@ -180,7 +180,7 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 6) - (headoff / 6))) / 2) * 6 : lastoff; 
 				lastoff = -1;
-				getidxbuf(tryoff, &trybuf);
+				getIDXBuf(tryoff, &trybuf);
 
 				if (!*trybuf && tryoff) {		// In case of extra entry at end of idx (not first entry)
 					tryoff += (tryoff > (maxoff / 2))?-6:6;
@@ -272,11 +272,11 @@ signed char RawStr::findoffset(const char *ikey, long *start, unsigned short *si
  *				text.
  */
 
-void RawStr::preptext(char *buf) {
-	char *to, *from, space = 0, cr = 0, realdata = 0, nlcnt = 0;
-
-	for (to = from = buf; *from; from++) {
-		switch (*from) {
+void RawStr::prepText(SWBuf &buf) {
+	unsigned int to, from; 
+	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
+	for (to = from = 0; buf[from]; from++) {
+		switch (buf[from]) {
 		case 10:
 			if (!realdata)
 				continue;
@@ -285,14 +285,16 @@ void RawStr::preptext(char *buf) {
 			nlcnt++;
 			if (nlcnt > 1) {
 //				*to++ = nl;
-				*to++ = nl;
+				buf[to++] = 10;
+//				*to++ = nl[1];
 //				nlcnt = 0;
 			}
 			continue;
 		case 13:
 			if (!realdata)
 				continue;
-			*to++ = nl;
+//			*to++ = nl[0];
+			buf[to++] = 10;
 			space = 0;
 			cr = 1;
 			continue;
@@ -301,20 +303,20 @@ void RawStr::preptext(char *buf) {
 		nlcnt = 0;
 		if (space) {
 			space = 0;
-			if (*from != ' ') {
-				*to++ = ' ';
+			if (buf[from] != ' ') {
+				buf[to++] = ' ';
 				from--;
 				continue;
 			}
 		}
-		*to++ = *from;
+		buf[to++] = buf[from];
 	}
-	*to = 0;
+	buf.setSize(to);
 
-	while (to > (buf+1)) {			// remove trailing excess
+	while (to > 1) {			// remove trailing excess
 		to--;
-		if ((*to == 10) || (*to == ' '))
-			*to = 0;
+		if ((buf[to] == 10) || (buf[to] == ' '))
+			buf.setSize(to);
 		else break;
 	}
 }
@@ -330,42 +332,41 @@ void RawStr::preptext(char *buf) {
  *
  */
 
-void RawStr::readtext(long istart, unsigned short *isize, char **idxbuf, char **buf)
+void RawStr::readText(long istart, unsigned short *isize, char **idxbuf, SWBuf &buf)
 {
-	char *ch;
+	unsigned int ch;
 	char *idxbuflocal = 0;
-	getidxbufdat(istart, &idxbuflocal);
+	getIDXBufDat(istart, &idxbuflocal);
 	long start = istart;
 
 	do {
 		if (*idxbuf)
 			delete [] *idxbuf;
-		if (*buf)
-			delete [] *buf;
-		*buf    = new char [ ++(*isize) ];
+		buf = "";
+		buf.setFillByte(0);
+		buf.setSize(++(*isize));
+
 		*idxbuf = new char [ (*isize) ];
 
-		memset(*buf, 0, *isize);
 		lseek(datfd->getFd(), start, SEEK_SET);
-		read(datfd->getFd(), *buf, (int)((*isize) - 1));
+		read(datfd->getFd(), buf.getRawData(), (int)((*isize) - 1));
 
-		for (ch = *buf; *ch; ch++) {		// skip over index string
-			if (*ch == 10) {
+		for (ch = 0; buf[ch]; ch++) {		// skip over index string
+			if (buf[ch] == 10) {
 				ch++;
 				break;
 			}
 		}
-		memmove(*buf, ch, *isize - (unsigned long)(ch-*buf));
-
+		buf = SWBuf(buf.c_str()+ch);
 		// resolve link
-		if (!strncmp(*buf, "@LINK", 5)) {
-			for (ch = *buf; *ch; ch++) {		// null before nl
-				if (*ch == 10) {
-					*ch = 0;
+		if (!strncmp(buf.c_str(), "@LINK", 5)) {
+			for (ch = 0; buf[ch]; ch++) {		// null before nl
+				if (buf[ch] == 10) {
+					buf[ch] = 0;
 					break;
 				}
 			}
-			findoffset(*buf + 6, &start, isize);
+			findOffset(buf.c_str() + 6, &start, isize);
 		}
 		else break;
 	}
@@ -389,7 +390,7 @@ void RawStr::readtext(long istart, unsigned short *isize, char **idxbuf, char **
  *      len     - length of buffer (0 - null terminated)
  */
 
-void RawStr::settext(const char *ikey, const char *buf, long len)
+void RawStr::doSetText(const char *ikey, const char *buf, long len)
 {
 
 	long start, outstart;
@@ -406,13 +407,13 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
 	char *outbuf = 0;
 	char *ch = 0;
 
-	char errorStatus = findoffset(ikey, &start, &size, 0, &idxoff);
+	char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey);
 	toupperstr_utf8(key);
 
 	len = (len < 0) ? strlen(buf) : len;
 
-	getidxbufdat(start, &dbKey);
+	getIDXBufDat(start, &dbKey);
 
 	if (strcmp(key, dbKey) < 0) {
 	}
@@ -444,7 +445,7 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
 						break;
 					}
 				}
-				findoffset(tmpbuf + 6, &start, &size, 0, &idxoff);
+				findOffset(tmpbuf + 6, &start, &size, 0, &idxoff);
 			}
 			else break;
 		}
@@ -510,10 +511,10 @@ void RawStr::settext(const char *ikey, const char *buf, long len)
  *	srcidxoff		- source offset into .vss
  */
 
-void RawStr::linkentry(const char *destkey, const char *srckey) {
+void RawStr::doLinkEntry(const char *destkey, const char *srckey) {
 	char *text = new char [ strlen(destkey) + 7 ];
 	sprintf(text, "@LINK %s", destkey);
-	settext(srckey, text);
+	doSetText(srckey, text);
 	delete [] text;
 }
 

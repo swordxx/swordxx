@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: rawstr.h,v 1.15 2002/10/01 19:52:40 dglassey Exp $
+ * $Id: rawstr.h,v 1.16 2003/02/26 03:23:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,9 +25,9 @@
 #ifndef RAWSTR_H
 #define RAWSTR_H
 
-#include <filemgr.h>
-
 #include <defs.h>
+#include <filemgr.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -39,17 +39,17 @@ class SWDLLEXPORT RawStr {
 protected:
 	FileDesc *idxfd;
 	FileDesc *datfd;
-	void settext(const char *key, const char *buf, long len = -1);
-	void linkentry(const char *destkey, const char *srckey);
+	void doSetText(const char *key, const char *buf, long len = -1);
+	void doLinkEntry(const char *destkey, const char *srckey);
 public:
-	static void preptext(char *buf);
+	static void prepText(SWBuf &buf);
 	static char nl;
 	RawStr(const char *ipath, int fileMode = -1);
 	virtual ~RawStr();
-	void getidxbuf(long ioffset, char **buf);
-	void getidxbufdat(long ioffset, char **buf);
-	signed char findoffset(const char *key, long *start, unsigned short *size, long away = 0, long *idxoff = 0);
-	void readtext(long start, unsigned short *size, char **idxbuf, char **buf);
+	void getIDXBuf(long ioffset, char **buf);
+	void getIDXBufDat(long ioffset, char **buf);
+	signed char findOffset(const char *key, long *start, unsigned short *size, long away = 0, long *idxoff = 0);
+	void readText(long start, unsigned short *size, char **idxbuf, SWBuf &buf);
 	static signed char createModule(const char *path);
 };
 

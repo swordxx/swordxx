@@ -65,7 +65,7 @@ SWBuf &RawCom::getRawEntryBuf() {
 	rawFilter(entryBuf, 0);	// hack, decipher
 	rawFilter(entryBuf, key);
 
-	   if (!isUnicode())
+	if (!isUnicode())
 		prepText(entryBuf);
 
 	return entryBuf;

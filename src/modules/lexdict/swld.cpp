@@ -48,7 +48,7 @@ SWLD::~SWLD()
 const char *SWLD::KeyText(const char *ikeytext)
 {
 	if (key->Persist() && !ikeytext) {
-		getRawEntry();	// force module key to snap to entry
+		getRawEntryBuf();	// force module key to snap to entry
 		return entkeytxt;
 	}
 	else return SWModule::KeyText(ikeytext);
@@ -71,7 +71,7 @@ void SWLD::setPosition(SW_POSITION p) {
 		} 
 	}
 	else	*key = p;
-	getRawEntry();
+	getRawEntryBuf();
 }
 
 

@@ -89,10 +89,10 @@ char RawLD::getEntry(long away)
 
 	strongsPad(buf);
 
-	if (!(retval = findoffset(buf, &start, &size, away))) {
-		readtext(start, &size, &idxbuf, &entrybuf);
-		rawFilter(entrybuf, size, 0);	// hack, decipher
-		rawFilter(entrybuf, size*FILTERPAD, key);
+	if (!(retval = findOffset(buf, &start, &size, away))) {
+		readText(start, &size, &idxbuf, entryBuf);
+		rawFilter(entryBuf, 0);	// hack, decipher
+		rawFilter(entryBuf, key);
 		entrySize = size;        // support getEntrySize call
 		if (!key->Persist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
@@ -101,10 +101,7 @@ char RawLD::getEntry(long away)
 		delete [] idxbuf;
 	}
 	else {
-		if (entrybuf)
-			delete [] entrybuf;
-		entrybuf = new char [ 5 ];
-		*entrybuf = 0;
+		entryBuf = "";
 	}
 		
 	delete [] buf;
@@ -119,16 +116,16 @@ char RawLD::getEntry(long away)
  * RET: string buffer with entry
  */
 
-char *RawLD::getRawEntry() {
+SWBuf &RawLD::getRawEntryBuf() {
 
 	char ret = getEntry();
 	if (!ret) {
 		if (!isUnicode())
-			preptext(entrybuf);
+			prepText(entryBuf);
 	}
 	else error = ret;
 
-	return entrybuf;
+	return entryBuf;
 }
 
 
@@ -156,12 +153,12 @@ void RawLD::increment(int steps) {
 
 
 void RawLD::setEntry(const char *inbuf, long len) {
-	settext(*key, inbuf, len);
+	doSetText(*key, inbuf, len);
 }
 
 
 void RawLD::linkEntry(const SWKey *inkey) {
-	linkentry(*key, *inkey);
+	doLinkEntry(*key, *inkey);
 }
 
 
@@ -172,7 +169,7 @@ void RawLD::linkEntry(const SWKey *inkey) {
  */
 
 void RawLD::deleteEntry() {
-	settext(*key, "");
+	doSetText(*key, "");
 }
 
 SWORD_NAMESPACE_END
