@@ -1,6 +1,15 @@
 AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I$(top_srcdir)/include
 INCLUDES += -DUSE_AUTOTOOLS -DUNIX
+
+if ZLIB
+ZLIBDEF = 
+else
+ZLIBDEF = -DEXCLUDEZLIB
+endif
+
+INCLUDES += $(ZLIBDEF)
+
 # Global config directory
 globalconfdir := @sysconfdir@
 

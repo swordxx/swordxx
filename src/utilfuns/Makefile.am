@@ -9,7 +9,14 @@ libsword_la_SOURCES += $(utilfunsdir)/swunicod.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swversion.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swbuf.cpp
 libsword_la_SOURCES += $(utilfunsdir)/ftpparse.c
-libsword_la_SOURCES += $(utilfunsdir)/zlib/untgz.c
+
+if ZLIB
+UNTGZ = $(utilfunsdir)/zlib/untgz.c
+else
+UNTGZ =
+endif
+libsword_la_SOURCES += $(UNTGZ)
+
 
 if MINGW
 SWREGEX = $(utilfunsdir)/regex.c

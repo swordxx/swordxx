@@ -5,7 +5,7 @@
 AC_INIT(sword, 1.5.5.99, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.21 $)
+AC_REVISION($Revision: 1.22 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.5.99)
@@ -24,11 +24,6 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 AC_C_BIGENDIAN
-# ---------------------------------------------------------------------
-# Check libraries
-# ---------------------------------------------------------------------
-AC_CHECK_LIB(z, compress)
-#AC_CHECK_LIB(stdc++, cerr)
 
 # ---------------------------------------------------------------------
 # With options
@@ -49,6 +44,13 @@ AC_ARG_ENABLE(tests,[  --enable-tests          build test programs [default=no]]
 AC_ARG_ENABLE(utilities,[  --enable-utilities      build utilities [default=yes]],,enable_utilities=yes)
 AC_ARG_ENABLE(examples,[  --enable-examples       build examples [default=no]],,enable_examples=no)
 AM_MAINTAINER_MODE
+
+# ---------------------------------------------------------------------
+# Check libraries
+# ---------------------------------------------------------------------
+if test x$with_zlib  = xyes; then
+	AC_CHECK_LIB(z, compress)
+fi
 
 
 # ---------------------------------------------------------------------
@@ -103,17 +105,24 @@ fi
 CURL_CFLAGS=
 CURL_LIBS=
 if test x$enable_installmgr = xyes; then
-  AC_PATH_PROG(CURL_CONFIG, curl-config, no)
-  if test "$CURL_CONFIG" = "no" ; then
-	echo "*** The curl-config script installed by curl could not be found"
+  if test x$with_zlib  = xno; then
+	echo "*** Install manager support requires zlib"
+	echo "*** However you have specified no zlib"
 	echo "*** compiling without install manager support"
 	enable_installmgr=no
   else
+    AC_PATH_PROG(CURL_CONFIG, curl-config, no)
+    if test "$CURL_CONFIG" = "no" ; then
+	echo "*** The curl-config script installed by curl could not be found"
+	echo "*** compiling without install manager support"
+	enable_installmgr=no
+    else
 	echo "curl found - remote install options available"
 	CURL_CFLAGS=`$CURL_CONFIG --cflags`
 	CURL_LIBS=`$CURL_CONFIG --libs`
 	CXXFLAGS="$CXXFLAGS -DCURLAVAILABLE"
 	CFLAGS="$CFLAGS -DCURLAVAILABLE"
+    fi
   fi
 fi
 
