@@ -55,6 +55,7 @@ void VerseKey::init() {
 	headings = 0;		// default display headings option is false
 	upperBound = 0;
 	lowerBound = 0;
+	boundSet = false;
 	testament = 0;
 	book = 0;
 	chapter = 0;
@@ -103,8 +104,10 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 	book = k.Book();
 	chapter = k.Chapter();
 	verse = k.Verse();
-	LowerBound(k.LowerBound());
-	UpperBound(k.UpperBound());
+	if (k.isBoundSet()) {
+		LowerBound(k.LowerBound());
+		UpperBound(k.UpperBound());
+	}
 }
 
 
@@ -719,7 +722,7 @@ VerseKey &VerseKey::LowerBound(const char *lb)
 	(*lowerBound) = lb;
 	lowerBound->Normalize();
 	lowerBound->setLocale( this->getLocale() );
-
+	boundSet = true;
 	return (*lowerBound);
 }
 
@@ -760,7 +763,7 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 	
 
 // -- end kludge
-
+	boundSet = true;
 	return (*upperBound);
 }
 
@@ -823,6 +826,7 @@ void VerseKey::initBounds() const
 	upperBound->Book(BMAX[1]);
 	upperBound->Chapter(books[1][BMAX[1]-1].chapmax);
 	upperBound->Verse(books[1][BMAX[1]-1].versemax[upperBound->Chapter()-1]);
+	boundSet = false;
 }
 
 
@@ -1466,9 +1470,9 @@ const char *VerseKey::getOSISRef() const {
  */
 
 const char *VerseKey::getRangeText() const {
-	if ((upperBound) && (lowerBound)) {
+	if (isBoundSet()) {
 		char buf[1023];
-		sprintf(buf, "%s-%s", (const char *)lowerBound, (const char *)upperBound);
+		sprintf(buf, "%s-%s", (const char *)LowerBound(), (const char *)UpperBound());
 		stdstr(&rangeText, buf);
 	}
 	else stdstr(&rangeText, getText());

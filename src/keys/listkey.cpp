@@ -213,7 +213,8 @@ char ListKey::SetToElement(int ielement, SW_POSITION pos) {
 	}
 	
 	if (arraycnt) {
-		(*array[arraypos]) = pos;
+		if (array[arraypos]->isBoundSet())
+			(*array[arraypos]) = pos;
 		*this = (const char *)(*array[arraypos]);
 	}
 	else *this = "";
