@@ -21,7 +21,6 @@ char UTF8Latin1::ProcessText(char *text, int maxlen, const SWKey *key)
   int len;
   unsigned long uchar;
   unsigned char significantFirstBits, subsequent;
-  unsigned short schar;
   
   len = strlen(text) + 1;						// shift string to right of buffer
   if (len < maxlen) {

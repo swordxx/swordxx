@@ -7,12 +7,12 @@ extern "C" {
 }
 
 int main(int argc, char **argv) {
-	char buf[127];
 	if (argc != 2) {
 		fprintf(stderr, "usage: %s <roman_numeral>\n", *argv);
 		exit(-1);
 	}
 	/* I don't think we need to_rom, do we? anyway, it isn't written
+	char buf[127];
 	if (isdigit(argv[1][0])) {
 		to_rom(atoi(argv[1]), buf);
 		cout << buf << "\n";

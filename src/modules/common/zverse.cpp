@@ -237,7 +237,7 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 		}
 		pcCompText = new char[ulCompSize];
 
-		if (long X = read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
+		if (read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
 		{
 			printf ("Error reading compressed text\n");
 			return;
