@@ -1,10 +1,28 @@
+/******************************************************************************
+ *	swordapi.h	- This file contains an api usable by non-C++
+ *					environments
+ *
+ * $Id$
+ *
+ * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
+
 #ifndef SWORDAPI_H
 #define SWORDAPI_H
 
-//#include <swmodule.h>
-//#include <swkey.h>
-//#include <versekey.h>
-//#include <swmgr.h>
 #include <defs.h>
 #ifdef __cplusplus
 #endif
@@ -13,7 +31,6 @@ extern "C" {
 
 #define SWHANDLE long
 
-//using namespace sword;
 
 //-----------------------------------------------------------------
 // stringlist_iterator methods
