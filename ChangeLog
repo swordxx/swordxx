@@ -1,6 +1,14 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+05-Jul-1999
+	Added MAXCHAPTER and MAXVERSE as POSITIONs in VerseKey
+	Added Key() method for setting / getting key on SWModule
+	Added kludge to UpperBound for setting verse and chapter to max
+		values if not specified
+	Fixed bugs were error was not being set correctly for some
+		traversals of SWModule
+
 05-Jun-1999
 	Sorry for not keeping the ChangeLog current
 	Lots of other stuff I'm sure I forgot
