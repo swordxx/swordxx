@@ -41,6 +41,7 @@ interface SWModule {
 	void   begin();
 	string getStripText();
 	string getRenderText();
+	string getConfigEntry(in string key);
 };
 
 //-----------------------------------------------------------------

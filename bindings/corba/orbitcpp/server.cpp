@@ -3,8 +3,9 @@
 #include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
+#include <markupfiltmgr.h>
 
-sword::SWMgr swordmgr;
+sword::SWMgr swordmgr(new sword::MarkupFilterMgr(sword::FMT_HTMLHREF));
 
 int main (int argc, char* argv[]) {
   try {

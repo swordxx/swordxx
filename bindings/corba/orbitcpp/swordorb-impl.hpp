@@ -29,6 +29,8 @@ public:
 	void   begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
+	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):""); }
+
 };
 
 typedef std::map<std::string, SWModule_impl *> SWModuleMap;
