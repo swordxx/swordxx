@@ -70,6 +70,8 @@ install-stamp: build-stamp
 		usr/lib/lib*.la usr/include/*
 	dh_movefiles -pdiatheke usr/bin/diatheke
 	dh_movefiles -plibsword-runtime usr/bin/*
+	dh_movefiles -plibsword-config etc/* usr/share/sword/mods.d/global.conf \
+		usr/share/sword/locales.d/*
 	#mkdir -p debian/libsword-dev/usr/share/doc/libsword-dev/html
 	#cp -R doc/api-documentation/html debian/libsword-dev/usr/share/doc/libsword-dev
 	mkdir -p debian/diatheke/usr/share/doc/diatheke/examples

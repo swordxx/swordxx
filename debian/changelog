@@ -1,8 +1,10 @@
-sword (1.5.6-1) unstable; urgency=low
+sword (1.5.5.99-2) unstable; urgency=low
 
-  * Bump version to 1.5.6 ready for release
+  * Another prerelease build
+  * split config files out into separate package so we can have different
+    sword libs installed at the same time later on
 
- -- Daniel Glassey <wdg@debian.org>  Sat, 12 Jul 2003 22:17:28 +0100
+ -- Daniel Glassey <wdg@debian.org>  Wed, 16 Jul 2003 14:48:22 +0100
 
 sword (1.5.5.99-1) unstable; urgency=low
 
