@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 
-static const char *classes[] = {"StrKey", "SWKey", "SWObjects"};
+static const char *classes[] = {"StrKey", "SWKey", "SWObject", 0};
 SWClass StrKey::classdef(classes);
 
 /******************************************************************************

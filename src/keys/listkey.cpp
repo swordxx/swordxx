@@ -10,7 +10,7 @@
 #include <swkey.h>
 #include <listkey.h>
 
-static const char *classes[] = {"ListKey", "SWKey", "SWObjects"};
+static const char *classes[] = {"ListKey", "SWKey", "SWObject", 0};
 SWClass ListKey::classdef(classes);
 
 /******************************************************************************

@@ -52,13 +52,13 @@
 
 RawVerse::RawVerse(const char *ipath, int fileMode)
 {
-	char buf[127];
+	char *buf;
 	int tries = 1;
 
 	nl = '\n';
 	path = 0;
 	stdstr(&path, ipath);
-
+     buf = new char [ strlen(path) + 80 ];
 	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
 		path[strlen(path)-1] = 0;
 
@@ -82,7 +82,7 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 		if ((idxfp[0]->getFd() >= 0) || (idxfp[1]->getFd() >= 0))
 			break;
 	}
-	
+	delete [] buf;
 	instance++;
 }
 

@@ -8,7 +8,7 @@
 #include <utilfuns.h>
 #include <string.h>
 
-static const char *classes[] = {"SWKey", "SWObjects"};
+static const char *classes[] = {"SWKey", "SWObject", 0};
 SWClass SWKey::classdef(classes);
 
 /******************************************************************************

@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.30 2001/02/21 21:26:16 scribe Exp $
+ * $Id: swmgr.cpp,v 1.31 2001/03/04 11:32:23 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -463,7 +463,7 @@ void SWMgr::Load() {
 	}
 	else {
 		SWLog::systemlog->LogError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", (configPath) ? configPath : "<configPath is null>");
-		exit(-1);
+          throw "SWMgr: Can't find 'mods.conf' or 'mods.d' .  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options";
 	}
 }
 

@@ -21,7 +21,7 @@
 #include <localemgr.h>
 
 
-static const char *classes[] = {"VerseKey", "SWKey", "SWObjects"};
+static const char *classes[] = {"VerseKey", "SWKey", "SWObject", 0};
 SWClass VerseKey::classdef(classes);
 
 /******************************************************************************
