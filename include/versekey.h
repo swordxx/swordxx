@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.17 2001/08/08 09:17:00 scribe Exp $
+ * $Id: versekey.h,v 1.18 2001/11/01 21:05:00 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -116,7 +116,7 @@ class SWDLLEXPORT VerseKey:public SWKey
   */
   char headings;
 
-  int getBookAbbrev (char *abbr);
+  int getBookAbbrev (const char *abbr);
   void initBounds () const;
   /** initialize and allocate books array
   */

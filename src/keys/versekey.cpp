@@ -183,7 +183,17 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
 			}
 			*/
 		}
-	}
+        for (int t = 0; t < 2; t++) {
+            for (int i = 0; i < BMAX[t]; i++) {
+                int bn = getBookAbbrev(books[t][i].name);
+                if (getBookAbbrev(books[t][i].name) != i+1) {
+                    char numBuf[24];
+                    sprintf(numBuf, "%d", bn);
+                    throw (((string)"Book: " + (string)books[t][i].name + (string)" does not have a matching toupper abbrevs entry! book number returned was: " + (string)numBuf).c_str());
+                }
+            }
+        }
+    }
 	else abbrevsCnt = size;
 }
 
@@ -290,10 +300,13 @@ void VerseKey::freshtext() const
  * RET:	book number or < 0 = not valid
  */
 
-int VerseKey::getBookAbbrev(char *abbr)
+int VerseKey::getBookAbbrev(const char *iabbr)
 {
-	int loop, diff, abLen, min, max, target;
+	int loop, diff, abLen, min, max, target, retVal = -1;
 
+    char *abbr;
+
+    stdstr(&abbr, iabbr);
 	strstrip(abbr);
 	abLen = strlen(abbr);
 	for (loop = 0; loop < abLen; loop++)
@@ -318,8 +331,9 @@ int VerseKey::getBookAbbrev(char *abbr)
           }
                
 		return (!diff) ? abbrevs[target].book : -1;
+ 		retVal = (!diff) ? abbrevs[target].book : -1;
 	}
-	else	return -1;
+    return retVal;
 }
 
 /******************************************************************************
