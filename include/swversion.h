@@ -1,7 +1,7 @@
 /******************************************************************************
  *  swversion.h   - definition of class SWVersion used to compare version info
  *
- * $Id: swversion.h,v 1.12 2003/07/12 21:22:41 dglassey Exp $
+ * $Id: swversion.h,v 1.13 2003/11/24 19:55:29 joachim Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -53,6 +53,8 @@ class SWVersion {
 	operator const char *() const { return getText(); }
 	bool operator>(const SWVersion &vi) const {return (compare(vi) > 0);}
 	bool operator<(const SWVersion &vi) const {return (compare(vi) < 0);}
+	bool operator>=(const SWVersion &vi) const {return (compare(vi) >= 0);}
+	bool operator<=(const SWVersion &vi) const {return (compare(vi) <= 0);}
 	bool operator==(const SWVersion &vi) const {return (compare(vi) == 0);}
 
 	/** Current sword library version.
