@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <osisrtf.h>
+#include <utilxml.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -42,6 +44,7 @@ OSISRTF::OSISRTF()
 bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
   // manually process if it wasn't a simple substitution
   if (!substituteToken(buf, token)) {
+	XMLTag tag(token);
     //w
     if (!strncmp(token, "w", 1)) {
       buf += "{";
@@ -87,6 +90,28 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 
       buf += "}";
     }
+	else if (!strcmp(tag.getName(), "note")) {
+		if (!tag.isEmpty() && !tag.isEndTag()) {
+			string footnoteNum = userData["fn"];
+			int footnoteNumber = (footnoteNum.length()) ? atoi(footnoteNum.c_str()) : 1;
+			VerseKey *vkey;
+			// see if we have a VerseKey * or decendant
+			try {
+				vkey = SWDYNAMIC_CAST(VerseKey, this->key);
+			}
+			catch ( ... ) {	}
+			if (vkey) {
+				buf.appendFormatted("{<a href=\"\">*n%i.%i</a>}", vkey->Verse(), footnoteNumber);
+				SWBuf tmp;
+				tmp.appendFormatted("%i", ++footnoteNumber);
+				userData["fn"] = tmp.c_str();
+				userData["suspendTextPassThru"] = "true";
+			}
+		}
+		if (tag.isEndTag()) {
+			userData["suspendTextPassThru"] = "false";
+		}
+	}
 
     //p
     else if (!strncmp(token, "p", 1)) {
@@ -112,13 +137,6 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
       buf += "\\par}";
     }
 
-    //note
-    else if (!strncmp(token, "note", 4)) {
-      buf += " {\\i1\\fs15 (";
-    }
-    else if (!strncmp(token, "/note", 5)) {
-      buf += ")} ";
-    }
 
     //title
     else if (!strncmp(token, "title", 5)) {
