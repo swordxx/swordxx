@@ -137,7 +137,7 @@ install: install-recursive
 install-data-am: installlocaleDATA installmodsDATA install-pkgconfigDATA
 
 uninstall-am: uninstall-info-am uninstalllocaleDATA \
-	uninstallmodsDATA uninstall-sysconfDATA
+	uninstallmodsDATA uninstall-sysconfDATA uninstall-pkgconfigDATA
 
 	
 register:
