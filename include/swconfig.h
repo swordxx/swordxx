@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.13 2001/05/25 10:39:07 jansorg Exp $
+ * $Id: swconfig.h,v 1.14 2001/06/14 08:39:19 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -77,19 +77,25 @@ public:
   * Load the contzent from disk.
   */
   virtual void Load ();
+
   /** Save to disk
   * Save the content of this config object to disk.
   */
   virtual void Save ();
+
   /** Merges the values of addFrom
   * @param The config which values should be merged to this config object. Already existing values will be overwritten.
   */
   virtual SWConfig & operator += (SWConfig & addFrom);
+
   /** Get a section
   * This is an easy way to get and store config values.
-  * The following will work:
+  * The following will work:\n
+  *
+  * @code
   * SWConfig config("/home/user/.setttings");
-  * config["Colors"]["Background"] = "red"
+  * config["Colors"]["Background"] = "red";
+  * @endcode
   */
   virtual ConfigEntMap & operator [] (const char *section);
 };

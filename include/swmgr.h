@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.23 2001/05/25 10:39:07 jansorg Exp $
+ * $Id: swmgr.h,v 1.24 2001/06/14 08:39:19 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -21,16 +21,16 @@
  */
 
 /** @mainpage The Sword library 1.52 - API documentation
-* This page decsribes the structure of the Sword library.
+* This page describes the structure of the Sword library.
 * Sword provides an interface to different modules (Bibles/Commentaries/Lexicons)
 * on disk. The object to work directly with the modules is SWModule.
 * Use the class SWMgr to manage the modules.
 *
 * If you want to write your own frontend for Sword please have a look at the already existing ones.
-* Well knwon frontends are:
-* 	-BibleCS for Windows (the sourcecode is availble in the CVS of crosswire.org)
-*	-GnomeSword (http://gnomesword.sourceforge.net/)
-*	-BibleTime (www.bibletime.de)
+* Well knwon frontends are:\n
+* 	-BibleCS for Windows (the sourcecode is availble in the CVS of crosswire.org)\n
+*	-GnomeSword (http://gnomesword.sourceforge.net/)\n
+*	-BibleTime (www.bibletime.de)\n
 */
 
 #ifndef SWMGR_H
@@ -58,7 +58,7 @@ typedef map < string, SWFilter * >FilterMap;
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.23 2001/05/25 10:39:07 jansorg Exp $
+  * @version $Id: swmgr.h,v 1.24 2001/06/14 08:39:19 jansorg Exp $
   */
 class SWDLLEXPORT SWMgr
 {
