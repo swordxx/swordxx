@@ -15,7 +15,7 @@
 
 SWORD_NAMESPACE_START
 
-#define FILTERPAD 16
+#define FILTERPAD 32
 
 // _declspec works in BC++ 5 and later, as well as VC++
 #if defined(_MSC_VER)

@@ -31,104 +31,96 @@ public:
 
 void SWLog::LogWarning(char *fmt, ...)
 {
-	#ifdef _USTDIO_
-	UChar msg[2048];
-	#else
+	//#ifdef _USTDIO_
+	//UChar msg[2048];
+	//#else
 	char msg[2048];
-	#endif
+	//#endif
 	va_list argptr;
 
 	if (logLevel >= 2) {
 		va_start(argptr, fmt);
-		#ifdef _USTDIO_
-		u_vsprintf(msg, NULL, fmt, argptr);
-		#else
+		//#ifdef _USTDIO_
+		//u_vsprintf(msg, NULL, fmt, argptr);
+		//#else
 		vsprintf(msg, fmt, argptr);
-		#endif
+		//#endif
 		va_end(argptr);
 
-#ifndef _MSC_VER
 		std::cerr << msg;
 		std::cerr << std::endl;
-#endif
 	}
 }
 
 
 void SWLog::LogError(char *fmt, ...)
 {
-	#ifdef _USTDIO_
-	UChar msg[2048];
-	#else
+	//#ifdef _USTDIO_
+	//UChar msg[2048];
+	//#else
 	char msg[2048];
-	#endif
+	//#endif
 	va_list argptr;
 
 	if (logLevel) {
 		va_start(argptr, fmt);
-		#ifdef _USTDIO_
-		u_vsprintf(msg, NULL, fmt, argptr);
-		#else
+		//#ifdef _USTDIO_
+		//u_vsprintf(msg, NULL, fmt, argptr);
+		//#else
 		vsprintf(msg, fmt, argptr);
-		#endif
+		//#endif
 		va_end(argptr);
 
-#ifndef _MSC_VER
 		std::cerr << msg;
 		std::cerr << std::endl;
-#endif
 	}
 }
 
 
 void SWLog::LogTimedInformation(char *fmt, ...)
 {
-	#ifdef _USTDIO_
-	UChar msg[2048];
-	#else
+	//#ifdef _USTDIO_
+	//UChar msg[2048];
+	//#else
 	char msg[2048];
-	#endif
+	//#endif
 	va_list argptr;
 
 	if (logLevel >= 4) {
 		va_start(argptr, fmt);
-		#ifdef _USTDIO_
-		u_vsprintf(msg, NULL, fmt, argptr);
-		#else
+		//#ifdef _USTDIO_
+		//u_vsprintf(msg, NULL, fmt, argptr);
+		//#else
 		vsprintf(msg, fmt, argptr);
-		#endif
+		//#endif
 		va_end(argptr);
 
-#ifndef _MSC_VER
 		std::cout << msg;
 		std::cout << std::endl;
-#endif
 	}
 }
 
 
 void SWLog::LogInformation(char *fmt, ...)
 {
-	#ifdef _USTDIO_
-	UChar msg[2048];
-	#else
+	//#ifdef _USTDIO_
+	//UChar msg[2048];
+	//#else
 	char msg[2048];
-	#endif
+	//#endif
 	va_list argptr;
 
 	if (logLevel >= 3) {
 		va_start(argptr, fmt);
-		#ifdef _USTDIO_
-		u_vsprintf(msg, NULL, fmt, argptr);
-		#else
+		//#ifdef _USTDIO_
+		//u_vsprintf(msg, NULL, fmt, argptr);
+		//#else
 		vsprintf(msg, fmt, argptr);
-		#endif
+		//#endif
 		va_end(argptr);
 
-#ifndef _MSC_VER
 		std::cout << msg;
 		std::cout << std::endl;
-#endif
 	}
 }
 

@@ -140,7 +140,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			}
 			// Italics assume transchange
 			if (!strcmp(token, "FI")) {
-				pushString(&to, "<transChange changeType=\"added\">");
+				pushString(&to, "<transChange type=\"added\">");
 				newText = true;
 				lastspace = false;
 				handled = true;
@@ -152,7 +152,7 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 			}
 			// Paragraph break.  For now use empty paragraph element
 			if (!strcmp(token, "CM")) {
-				pushString(&to, "<milestone type=\"p\" />");
+				pushString(&to, "<milestone type=\"x-p\" />");
 				newText = true;
 				lastspace = false;
 				handled = true;
@@ -322,11 +322,6 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 		char ref[254];
 		if (vkey->Verse())
 			sprintf(ref, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
-		else if (vkey->Chapter()) {
-			sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
-		}
-		else if (vkey->Book())
-			sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		else *ref = 0;
 		if (*ref) {
 			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
@@ -342,15 +337,15 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				tmp = MAXVERSE;
 				if (*vkey == tmp) {
 					tmp.Verse(0);
-					sprintf(ref, "\t</div>");
-					pushString(&to, ref);
+//					sprintf(ref, "\t</div>");
+//					pushString(&to, ref);
 					tmp = MAXCHAPTER;
 					tmp = MAXVERSE;
 					if (*vkey == tmp) {
 						tmp.Chapter(0);
 						tmp.Verse(0);
-						sprintf(ref, "\t</div>");
-						pushString(&to, ref);
+//						sprintf(ref, "\t</div>");
+//						pushString(&to, ref);
 						if (!quoteStack.empty()) {
 							SWLog::systemlog->LogError("popping unclosed quote at end of book");
 							quoteStack.clear();

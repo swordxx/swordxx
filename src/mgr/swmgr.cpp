@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.81 2002/10/01 22:04:59 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.82 2002/11/22 04:46:03 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -673,7 +673,7 @@ SWModule *SWMgr::CreateMod(std::string name, std::string driver, ConfigEntMap &s
         else if (!stricmp(sourceformat.c_str(), "OSIS"))
                 markup = FMT_OSIS;
         else
-                markup = FMT_PLAIN;
+                markup = FMT_GBF;
 
 	if (!stricmp(encoding.c_str(), "SCSU"))
 		enc = ENC_SCSU;

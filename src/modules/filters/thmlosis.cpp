@@ -121,6 +121,18 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				suspendTextPassThru = false;
 				handled = true;
 			}
+			// Italics assume transchange
+			if (!stricmp(token, "i")) {
+				pushString(&to, "<transChange type=\"added\">");
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
+			else	if (!stricmp(token, "/i")) {
+				pushString(&to, "</transChange>");
+				lastspace = false;
+				handled = true;
+			}
 
 			// Footnote
 			if (!strcmp(token, "note")) {
@@ -130,9 +142,9 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				handled = true;
 			}
 			else	if (!strcmp(token, "/note")) {
-				tmp = "<note type=\"x-StudyNote\"><notePart type=\"x-MainText\">";
+				tmp = "<note type=\"x-StudyNote\">";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
-				tmp += "</notePart></note>";
+				tmp += "</note>";
 				pushString(&to, tmp.c_str());
 				suspendTextPassThru = false;
 				handled = true;
@@ -276,10 +288,6 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 		char ref[254];
 		if (vkey->Verse())
 			sprintf(ref, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
-		else if (vkey->Chapter())
-			sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
-		else if (vkey->Book())
-			sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		else *ref = 0;
 		if (*ref) {
 			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
@@ -295,22 +303,22 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				tmp = MAXVERSE;
 				if (*vkey == tmp) {
 					tmp.Verse(0);
-					sprintf(ref, "\t</div>");
-					pushString(&to, ref);
+//					sprintf(ref, "\t</div>");
+//					pushString(&to, ref);
 					tmp = MAXCHAPTER;
 					tmp = MAXVERSE;
 					if (*vkey == tmp) {
 						tmp.Chapter(0);
 						tmp.Verse(0);
-						sprintf(ref, "\t</div>");
-						pushString(&to, ref);
+//						sprintf(ref, "\t</div>");
+//						pushString(&to, ref);
 					}
 				}
 			}
 
-			else if (vkey->Chapter())
-				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
-			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
+//			else if (vkey->Chapter())
+//				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+//			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		}
 	}
 	*to++ = 0;

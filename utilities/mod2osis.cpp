@@ -76,18 +76,15 @@ int main(int argc, char **argv)
 	bool opentest = false;
 	bool openbook = false;
 	bool openchap = false;
-	VerseKey lastHeading;
-	lastHeading.Headings(1);
-	lastHeading.AutoNormalize(0);
-	lastHeading.Testament(5);
-	lastHeading = BOTTOM;
-
+	int lastTest = 5;
+	int lastBook = 9999;
+	int lastChap = 9999;
 	if (!vkey) {
 		cerr << "Currently mod2zmod only works with verse keyed modules\n\n";
 		exit(-1);
 	}
 
-	vkey->Headings(1);
+	vkey->Headings(0);
 
 	cout << "<?xml version=\"1.0\" ";
 		if (inModule->getConfigEntry("Encoding")) {
@@ -101,7 +98,7 @@ int main(int argc, char **argv)
 
 	cout << "<osis";
 		cout << " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
-		cout << " xsi:noNamespaceSchemaLocation=\"osisCore.1.1.xsd\">\n\n";
+		cout << " xsi:noNamespaceSchemaLocation=\"http://www.bibletechnologies.net/osisCore.1.1.1.xsd\">\n\n";
 	cout << "<osisText";
 		cout << " osisIDWork=\"";
 		cout << inModule->Name() << "\"";
@@ -112,7 +109,7 @@ int main(int argc, char **argv)
 	cout << "\t\t<work osisWork=\"";
 	cout << inModule->Name() << "\">\n";
 	cout << "\t\t\t<title>" << inModule->Description() << "</title>\n";
-	cout << "\t\t\t<identifier type=\"OSIS\">" << inModule->Name() << "</identifier>\n";
+	cout << "\t\t\t<identifier type=\"OSIS\">Bible." << inModule->Name() << "</identifier>\n";
 	if (inModule->Lang()) {
 		if (strlen(inModule->Lang()))
 			cout << "\t\t\t<language>" << inModule->Lang() << "</language>\n";
@@ -126,42 +123,65 @@ int main(int argc, char **argv)
 
 
 	(*inModule) = TOP; 
-	int testament = vkey->Testament();		
 //	for ((*inModule) = TOP; (inModule->Key() < (VerseKey)"Mat 2:1"); (*inModule)++) {
-	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
 //	for ((*vkey) = "Mark6:29"; !inModule->Error(); (*inModule)++) {
-		if (vkey->Testament() != lastHeading.Testament()) {
+
+	VerseKey tmpKey;
+	tmpKey.Headings(1);
+	tmpKey.AutoNormalize(0);
+
+	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
+		bool newTest = false;
+		bool newBook = false;
+
+		if (!strlen(inModule->RenderText())) {
+			continue;
+		}
+
+		if ((vkey->Testament() != lastTest)) {
+			if (openchap)
+				cout << "\t</div>\n";
+			if (openbook)
+				cout << "\t</div>\n";
 			if (opentest)
 				cout << "\t</div>\n";
-			cout << "\t<div type=\"testament\">";
-			lastHeading = *vkey;
-			lastHeading.Book(0);
-			lastHeading.Chapter(0);
-			lastHeading.Verse(0);
+			cout << "\t<div type=\"testament\">\n";
 			opentest = true;
+			newTest = true;
 		}
-		if (vkey->Book() != lastHeading.Book()) {
+		if ((vkey->Book() != lastBook) || newTest) {
+			if (!newTest) {
+				if (openchap)
+					cout << "\t</div>\n";
+				if (openbook)
+					cout << "\t</div>\n";
+			}
 			buf = new char [205];
-			lastHeading = *vkey;
-			lastHeading.Chapter(0);
-			lastHeading.Verse(0);
 			*buf = 0;
-			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
+			tmpKey = *vkey;
+			tmpKey.Chapter(0);
+			tmpKey.Verse(0);
+			sprintf(buf, "\t<div type=\"book\" osisID=\"%s\">\n", tmpKey.getOSISRef());
+//			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf << endl;
 			delete [] buf;
 			openbook = true;
+			newBook = true;
 		}
-		if (vkey->Chapter() != lastHeading.Chapter()) {
-			if (openchap)
-				cout << "\t</div>\n";
+		if ((vkey->Chapter() != lastChap) || newBook) {
+			if (!newBook) {
+				if (openchap)
+					cout << "\t</div>\n";
+			}
 			buf = new char [205];
-			lastHeading = *vkey;
-			lastHeading.Verse(0);
 			*buf = 0;
-			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
+			tmpKey = *vkey;
+			tmpKey.Verse(0);
+			sprintf(buf, "\t<div type=\"chapter\" osisID=\"%s\">\n", tmpKey.getOSISRef());
+//			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf;
 			delete [] buf;
-			openbook = true;
+			openchap = true;
 		}
 		/*
 		char *text = inModule->getRawEntry();
@@ -173,7 +193,14 @@ int main(int argc, char **argv)
 		cout << buf << endl;
 		*/
 		cout << inModule->RenderText() << endl;
+		lastChap = vkey->Chapter();
+		lastBook = vkey->Book();
+		lastTest = vkey->Testament();
 	}
+	if (openchap)
+		cout << "\t</div>\n";
+	if (openbook)
+		cout << "\t</div>\n";
 	if (opentest)
 		cout << "\t</div>\n";
 	cout << "\t</osisText>\n";
