@@ -91,6 +91,7 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 	char *font = 0;
 	char inputformat = 0;
 	string value = "";
+	string encoding;
 	char querytype = 0;	
 	
 	char * ref2 = new char[strlen(ref)];
@@ -120,7 +121,9 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			else if (!stricmp((char *)(*eit).second.c_str(), "ThML"))
 				inputformat = FMT_THML;
 		}
+		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (string)"";
 	}
+
 
 	if (querytype == QT_INFO) {
 	  switch (inputformat) {
@@ -215,8 +218,11 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 		target->SetKey(ref2);
 		
 		char * text = (char *) *target;
+		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
+		        target->AddRenderFilter(new UnicodeRTF()); //memory leak
+		}
 		if (inputformat == FMT_GBF) {
-			target->AddRenderFilter(new GBFThML());
+		        target->AddRenderFilter(new GBFThML()); //memory leak
 		}
 		if (filter) target->AddRenderFilter(filter);
 		if (strlen(text)) {
@@ -239,8 +245,11 @@ char* doquery(int maxverses = -1, char outputformat = FMT_PLAIN, char optionfilt
 			}
 		}
 		
+		if (outputformat == FMT_RTF && !strcmp(encoding.c_str(), "UTF-8")) {
+		        target->AddRenderFilter(new UnicodeRTF()); //memory leak
+		}
 		if (inputformat == FMT_GBF) {
-			target->AddRenderFilter(new GBFThML());
+			target->AddRenderFilter(new GBFThML()); //memory leak
 		}
 		if (filter) target->AddRenderFilter(filter);
 		

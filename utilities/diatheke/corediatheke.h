@@ -12,6 +12,7 @@
 #include <thmlplain.h>
 #include <thmlhtml.h>
 #include <thmlrtf.h>
+#include <unicodertf.h>
 #include <localemgr.h>
 
 #define FMT_PLAIN 0
