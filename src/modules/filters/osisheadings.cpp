@@ -14,9 +14,6 @@
 #include <unixstr.h>
 #endif
 
-#include <iostream>
-using namespace std;
-
 SWORD_NAMESPACE_START
 
 const char oName[] = "Headings";
@@ -35,7 +32,6 @@ OSISHeadings::~OSISHeadings() {
 
 
 char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-
 	SWBuf token;
 	bool intoken    = false;
 	bool hide       = false;
@@ -49,7 +45,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	SWBuf orig = text;
 	const char *from = orig.c_str();
 	
- 	XMLTag tag;
+	XMLTag tag;
 
 	for (text = ""; *from; ++from) {
 		if (*from == '<') {
