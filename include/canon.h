@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.12 2002/06/25 04:15:50 scribe Exp $
+ * $Id: canon.h,v 1.13 2002/06/25 04:17:29 chrislit Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -175,6 +175,7 @@ const struct abbrev
   {"ESTHER", 17},		//    Esther
   {"EXODUS", 2},		//    Exodus
   {"EZEKIEL", 26},		//   Ezekiel
+  {"EZK", 26},		//   Ezekiel
   {"EZRA", 15},			//   Ezra
   {"G", 1},			//     Genesis
   {"GALATIANS", 48},		//    Galatians
@@ -243,11 +244,13 @@ const struct abbrev
   {"JAS", 59},			//    James
   {"JDGS", 7},		//  Judges
   {"JEREMIAH", 24},		//    Jeremiah
+  {"JHN", 43},			//    John
   {"JN", 43},			//    John
   {"JO", 43},			//    John
   {"JOB", 18},			//   Job
   {"JOEL", 29},			//   Joel
   {"JOHN", 43},			//   John
+  {"JOL", 29},			//   Joel
   {"JONAH", 32},		//   Jonah
   {"JOSHUA", 6},		//   Joshua
   {"JUDE", 65},			//  Jude
@@ -263,10 +266,11 @@ const struct abbrev
   {"MATTHEW", 40},		//   Matthew
   {"MICAH", 33},		//    Micah
   {"MK", 41},			//    Mark
-  {"MR", 41},			//    Mark
+  {"MRK", 41},			//    Mark
   {"MT", 40},			//    Matthew
   {"N", 4},			//     Numbers
   {"NAHUM", 34},		//    Nahum
+  {"NAM", 34},		//    Nahum
   {"NEHEMIAH", 16},		//    Nehemiah
   {"NUMBERS", 4},		//    Numbers
   {"OBADIAH", 31},		//     Obadiah
@@ -284,6 +288,7 @@ const struct abbrev
   {"REVELATION OF JOHN", 66},	//     Revelation
   {"ROMANS", 45},		//    Romans
   {"RUTH", 8},			//    Ruth
+  {"SNG", 22},	//     Song of Solomon
   {"SOLOMON", 22},	//     Song of Solomon
   {"SONG OF SOLOMON", 22},	//     Song of Solomon
   {"SONG OF SONGS", 22},	//     Song of Solomon
