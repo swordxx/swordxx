@@ -128,14 +128,17 @@ System.out.println("ORB found in session");
 		ModInfo[] modInfoList = mgr.getModInfoList();
 		System.out.println("sequence size: " + modInfoList.length);
 		SWModule module;
+/*
 		for (int i = 0; i < modInfoList.length; i++) {
 			System.out.println(modInfoList[i].name + ": " + modInfoList[i].category + ": " + modInfoList[i].language);
 			module = mgr.getModuleByName(modInfoList[i].name);
 			module.setKeyText("jas1:19");
 			System.out.println(module.getRenderText());
 		}
-		module = mgr.getModuleByName("WEB");
-		SearchHit[] searchResults = module.search("God love world", SearchType.MULTIWORD, 0, "");
+*/
+		module = mgr.getModuleByName("KJV");
+		boolean lucene = module.hasSearchFramework();
+		SearchHit[] searchResults = module.search("God love world", (lucene)?SearchType.LUCENE:SearchType.MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults.length; i++)
 			System.out.println(searchResults[i].key);
 

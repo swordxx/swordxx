@@ -12,6 +12,22 @@ using sword::ModMap;
 using sword::SWBuf;
 #endif
 
+void percentUpdate(char percent, void *userData) {
+	static char printed = 0;
+	char maxHashes = *((char *)userData);
+	
+	while ((((float)percent)/100) * maxHashes > printed) {
+		printf("=");
+		printed++;
+		fflush(stdout);
+	}
+/*
+	std::cout << (int)percent << "% ";
+*/
+	fflush(stdout);
+}
+
+
 int main(int argc, char **argv)
 {
 	SWMgr manager(new sword::MarkupFilterMgr(sword::FMT_HTMLHREF, sword::ENC_UTF16));
@@ -45,8 +61,11 @@ int main(int argc, char **argv)
 		exit(-2);
 	}
 
+	printf("Deleting any existing framework...\n");
+	target->deleteSearchFramework();
 	printf("Building framework, please wait...\n");
-	char error = target->createSearchFramework();
+	char lineLen = 70;
+	char error = target->createSearchFramework(&percentUpdate, &lineLen);
 	if (error) {
 		fprintf(stderr, "%s: couldn't create search framework (permissions?)\n", *argv);
 	}

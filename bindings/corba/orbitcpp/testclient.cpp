@@ -32,6 +32,7 @@ int main (int argc, char *argv[])
 		std::cout << "ConfigPath: " << mgr->getConfigPath() << "\n";
 		modInfoList = mgr->getModInfoList();
 		std::cout << "sequence length: " << modInfoList->length() << "\n";
+/*
 		for (int i = 0; i < modInfoList->length(); i++) {
 			std::cout << (*modInfoList)[i].name << ": " << (*modInfoList)[i].category << ": " << (*modInfoList)[i].language << "\n";
 			if (!strncmp((*modInfoList)[i].category, "Bibl", 4)) {
@@ -41,13 +42,14 @@ int main (int argc, char *argv[])
 			}
 			std::cout << "\n";
 		}
-		/*
+*/
 		swordorb::SearchHitList *searchResults;
-		searchResults = module->search("God love world", swordorb::MULTIWORD, 0, "");
+		module = mgr->getModuleByName("KJV");
+		bool lucene = module->hasSearchFramework();
+		searchResults = module->search("God love world", (lucene)?swordorb::LUCENE:swordorb::MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults->length(); i++) {
 			std::cout << (*searchResults)[i].key << "\n";
 		}
-		*/
 
 
 		

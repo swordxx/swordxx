@@ -122,6 +122,8 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 	if (searchType == REGEX) stype = 0;
 	if (searchType == PHRASE) stype = -1;
 	if (searchType == MULTIWORD) stype = -2;
+	if (searchType == ENTRYATTR) stype = -3;
+	if (searchType == LUCENE) stype = -4;
 	sword::ListKey result;
 
 	if ((scope) && (strlen(scope)) > 0) {
@@ -143,7 +145,6 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 
 	return retVal;
 }
-
 
 
 StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *level2, const char *level3) throw(CORBA::SystemException) {
