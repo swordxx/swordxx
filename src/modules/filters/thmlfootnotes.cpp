@@ -69,7 +69,9 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
 				// if not a footnote token, keep token in text
 				if (!hide) {
-					text += '<' + token + '>';
+					text += '<';
+					text += token;
+					text += '>';
 				}
 				continue;
 			}

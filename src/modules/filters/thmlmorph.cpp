@@ -62,7 +62,9 @@ char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				}
 
 				// if not a morph tag token, keep token in text
-				text += '<' + token + '>';
+				text += '<'; 
+				token += token; 
+				text += '>';
 				continue;
 			}
 

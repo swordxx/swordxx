@@ -69,7 +69,9 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 				// if not a scripref token, keep token in text
 				if (!hide) {
-					text += '<' + token + '>';
+					text += '<';
+					text += token;
+					text += '>';
 				}
 				continue;
 			}
