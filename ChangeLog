@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+05-Sep-2000	Joachim Ansorg <jansorg@gmx.de>
+	Fixed a problem in Makefile.cfg with profiler support and
+non-debugging lib (-s removes the profiler support, changed it)
+
 30-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed mod2vpl to strip any existing \n's from data before
 		writing the data.
