@@ -7,7 +7,7 @@
 AC_INIT(sword, 1.5.7, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.35 $)
+AC_REVISION($Revision: 1.36 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.7)
@@ -46,6 +46,7 @@ AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling
 AC_ARG_ENABLE(tests,[  --enable-tests          build test programs [default=no]],,enable_tests=no)
 AC_ARG_ENABLE(utilities,[  --enable-utilities      build utilities [default=yes]],,enable_utilities=yes)
 AC_ARG_ENABLE(examples,[  --enable-examples       build examples [default=no]],,enable_examples=no)
+AC_ARG_ENABLE(versekey2,[  --enable-versekey2      build with experimental versekey [default=no]],,enable_versekey2=no)
 AM_MAINTAINER_MODE
 
 # ---------------------------------------------------------------------
@@ -267,6 +268,7 @@ AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
 AM_CONDITIONAL(BUILDUTILS, test x$enable_utilities = xyes)
 AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
+AM_CONDITIONAL(BUILDNEWVKEY, test x$enable_versekey2 = xyes)
 
 # ---------------------------------------------------------------------
 # Final output
