@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.13 2001/02/15 08:51:22 scribe Exp $
+ * $Id: swmodule.h,v 1.14 2001/02/19 16:21:11 mgruner Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -67,7 +67,7 @@ public:
   */
   static void nullPercent (char percent, void *userData);
 /**
-  * Set this bool to false to terminate the search which is executed by this module (@ref #Search)
+  * Set this bool to false to terminate the search which is executed by this module (@ref Search)
   * This is useful for threaded applications to terminate the search in another thread.
   */
   bool terminateSearch;
