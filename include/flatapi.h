@@ -4,6 +4,7 @@
 #include <swmodule.h>
 #include <swkey.h>
 #include <versekey.h>
+#include <swmgr.h>
 
 #ifdef __cplusplus
 #endif
