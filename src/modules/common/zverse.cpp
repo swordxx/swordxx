@@ -242,6 +242,8 @@ void zVerse::findoffset(char testmt, long idxoff, long *start, unsigned short *s
 
 		cacheTestament = testmt;
 		cacheBufIdx = ulBuffNum;
+		if (pcCompText)
+			delete [] pcCompText;
 	}
 }
 

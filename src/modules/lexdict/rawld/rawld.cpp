@@ -88,7 +88,6 @@ char RawLD::getEntry(long away)
 
 	strongsPad(buf);
 
-	*entrybuf = 0;
 	if (!(retval = findoffset(buf, &start, &size, away))) {
 		readtext(start, &size, &idxbuf, &entrybuf);
 		entrySize = size;        // support getEntrySize call
@@ -99,6 +98,8 @@ char RawLD::getEntry(long away)
 		delete [] idxbuf;
 	}
 	else {
+		if (entrybuf)
+			delete [] entrybuf;
 		entrybuf = new char [ 5 ];
 		*entrybuf = 0;
 	}
