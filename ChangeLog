@@ -3,9 +3,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 05-Sep-1999
 	Why is it always the 5th?
-	Added RawFilters to facilitate cryptography
-	Added SWCrypt which uses Michael Paul Johnson's SapphireII crypt
-	Added CryptFilter which uses SWCrypt and .conf CryptKey= entry
+	Added RawFilters to facilitate on-the-fly deciphering of entries
+	Added SWCipher which uses Michael Paul Johnson's SapphireII cipher
+	Added CipherFilter which uses SWCipher and .conf CipherKey= entry
 
 05-Jul-1999
 	Added MAXCHAPTER and MAXVERSE as POSITIONs in VerseKey
