@@ -27,17 +27,17 @@ UTF8BiDiReorder::~UTF8BiDiReorder() {
         ucnv_close(conv);
 }
 
-char UTF8BiDiReorder::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
         UChar *ustr, *ustr2;
-	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
 		return -1;
         
-        int32_t len = strlen(text);
+        int32_t len = text.length();
         ustr = new UChar[len]; //each char could become a surrogate pair
 
 	// Convert UTF-8 string to UTF-16 (UChars)
-        len = ucnv_toUChars(conv, ustr, len, text, -1, &err);
+        len = ucnv_toUChars(conv, ustr, len, text.c_str(), -1, &err);
         ustr2 = new UChar[len];
 
         UBiDi* bidi = ubidi_openSized(len + 1, 0, &err);
@@ -49,7 +49,7 @@ char UTF8BiDiReorder::ProcessText(char *text, int maxlen, const SWKey *key, cons
 //        len = ubidi_writeReverse(ustr, len, ustr2, len,
 //                UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &err);
 
-        ucnv_fromUChars(conv, text, maxlen, ustr2, len, &err);
+        ucnv_fromUChars(conv, text.c_str(), maxlen, ustr2, len, &err);
 
         delete [] ustr2;
         delete [] ustr;
