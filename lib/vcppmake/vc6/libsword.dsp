@@ -291,6 +291,10 @@ SOURCE=..\..\..\src\mgr\markupfiltmgr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\osisfootnotes.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\osisheadings.cpp
 # End Source File
 # Begin Source File
