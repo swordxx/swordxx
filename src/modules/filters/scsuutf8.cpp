@@ -107,7 +107,7 @@ char SCSUUTF8::ProcessText(char *text, int len, const SWKey *key)
 
   memmove(&text[buflen - len], text, len);
   from = (unsigned char*)&text[buflen - len];
-  to = text;
+  to = (unsigned char *)text;
 
   // -------------------------------
 
