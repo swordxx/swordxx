@@ -3,15 +3,20 @@ d = $(c:%.c=%.d) $(cpp:%.cpp=%.d)
 o = $(c:%.c=%.o) $(cpp:%.cpp=%.o)
 so = $(o:%.o=%.so)
 
+ifeq ($(system),macosx)
+arflags = cr
+else
+arflags = crs
+endif
 
 ifeq (${buildshare},yes)
 ${root}/lib/libsword.a: $(o)
-	$(AR) cr $@ $(o)
+	$(AR) $(arflags) $@ $(o)
 	$(CC) -fpic -shared -o ${root}/lib/libsword.so ${objdir}/*.so
 
 else
 ${root}/lib/libsword.a: $(o)
-	$(AR) cr $@ $(o)
+	$(AR) $(arflags) $@ $(o)
 endif
 
 
