@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+09-Feb-2001	Joachim Ansorg <jansorg@gmx.de>
+	Added beginnings of API documentation in doc/api-documemtation.
+	Formats are HTML and man
+
 08-Feb-2001     Chris Little <chrislit@crosswire.org>
 	Added embedded Visual C++ project to build DLL in apps/windoze/wince/sword but it requires undistributable libraries to build it currently.  MIPS, SH3, and ARM processors are supported.
 
