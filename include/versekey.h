@@ -1,7 +1,7 @@
 /****************************************************************************** 
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.2 1999/07/06 04:45:49 scribe Exp $
+ * $Id: versekey.h,v 1.3 2000/03/13 09:36:02 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,30 +35,33 @@
 #define MAXCHAPTER POSITION(POS_MAXCHAPTER)
 
 struct sbook {
-	char *name;		// Name of book
+	const char *name;		// Name of book
 	unsigned char chapmax;	// Maximum chapters in book
 	int *versemax;		// Array[chapmax] of maximum verses in chapters
 };
 
 struct abbrev {
-	char *ab;
+	const char *ab;
 	int book;
 };
 
 class VerseKey : public SWKey {
+
 	static long *offsets[2][2];
 	static int offsize[2][2];
 	static int instance;	// number of instantiated VerseKey objects or derivitives
 	static struct sbook otbooks[];
 	static struct sbook ntbooks[];
-	static struct abbrev abbrevs[];
 	static long otbks[];
 	static long otcps[];
 	static long ntbks[];
 	static long ntcps[];
 	static int vm[];
 	static ListKey internalListKey;
-	static int getBookAbbrev(char *abbr);
+
+	const struct abbrev *abbrevs;
+	int abbrevsCnt;
+
 	char testament;		// 0 - Old; 1 - New
 	mutable char book;
 	mutable int chapter;
@@ -66,6 +69,7 @@ class VerseKey : public SWKey {
 	char autonorm;		// flag for auto normalization
 	char headings;		// flag for headings on/off
 
+	int getBookAbbrev(char *abbr);
 	void initBounds() const;
 	void initstatics();	// initialize and allocate books array
 	void init();		// initializes this VerseKey()
@@ -74,8 +78,11 @@ class VerseKey : public SWKey {
 	int findindex(long *array, int size, long value);	// finds the index of a given value
 	mutable VerseKey *lowerBound, *upperBound;
 public:
-	static const char BMAX[2];
-	static struct sbook *books[2];
+	static const char builtin_BMAX[2];
+	static struct sbook *builtin_books[2];
+	static const struct abbrev builtin_abbrevs[];
+	const char *BMAX;
+	struct sbook **books;
 
 	VerseKey(const char *ikey = 0);
 	VerseKey(const SWKey *ikey);
@@ -116,9 +123,12 @@ public:
 	virtual long Index() const;
 	virtual long Index(long iindex);
 
-	static ListKey &ParseVerseList(char *buf, const char *defaultKey = "Genesis 1:1", char max = 0);
+	virtual ListKey &ParseVerseList(char *buf, const char *defaultKey = "Genesis 1:1", char max = 0);
 	virtual int compare(const SWKey &ikey);
 	virtual int _compare(const VerseKey &ikey);
+	virtual void setBookAbbrevs(const struct abbrev *bookAbbrevs);
+	virtual void setBooks(const char *iBMAX, struct sbook **ibooks);
+	virtual void setLocale(const char *name);
 };
 
 

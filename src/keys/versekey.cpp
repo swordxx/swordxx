@@ -18,6 +18,7 @@
 
 #include <swkey.h>
 #include <versekey.h>
+#include <localemgr.h>
 
 /******************************************************************************
  *  Initialize static members of VerseKey
@@ -25,8 +26,8 @@
 
 #include <canon.h>	// Initialize static members of canonical books structure
 
-struct sbook *VerseKey::books[2]       = {0,0};
-const char    VerseKey::BMAX[2]        = {39, 27};
+struct sbook *VerseKey::builtin_books[2]       = {0,0};
+const char    VerseKey::builtin_BMAX[2]        = {39, 27};
 long         *VerseKey::offsets[2][2]  = {{VerseKey::otbks, VerseKey::otcps}, {VerseKey::ntbks, VerseKey::ntcps}};
 int           VerseKey::instance       = 0;
 ListKey     VerseKey::internalListKey;
@@ -36,8 +37,7 @@ ListKey     VerseKey::internalListKey;
  * VerseKey::init - initializes instance of VerseKey
  */
 
-void VerseKey::init()
-{
+void VerseKey::init() {
 	if (!instance)
 		initstatics();
 
@@ -51,6 +51,7 @@ void VerseKey::init()
 	chapter = 0;
 	verse = 0;
 
+	setLocale(LocaleMgr::systemLocaleMgr.getDefaultLocaleName());
 }
 
 /******************************************************************************
@@ -128,29 +129,54 @@ VerseKey::~VerseKey()
 }
 
 
+void VerseKey::setLocale(const char *name) {
+	char *BMAX;
+	struct sbook **books;
+	SWLocale *locale = LocaleMgr::systemLocaleMgr.getLocale(name);
+	if (locale) {
+		locale->getBooks(&BMAX, &books);
+		setBooks(BMAX, books);
+		setBookAbbrevs(locale->getBookAbbrevs());
+	}
+	else {
+		setBooks(builtin_BMAX, builtin_books);
+		setBookAbbrevs(builtin_abbrevs);
+	}
+}
+
+
+void VerseKey::setBooks(const char *iBMAX, struct sbook **ibooks) {
+	BMAX = iBMAX;
+	books = ibooks;
+}
+
+
+void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs) {
+	abbrevs = bookAbbrevs;
+	for (abbrevsCnt = 1; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
+		if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
+			fprintf(stderr, "ERROR: book abbreviation (canon.h or locale) misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
+			exit(-1);
+		}
+	}
+}
+
+
 /******************************************************************************
  * VerseKey::initstatics - initializes statics.  Performed only when first
  *						instance on VerseKey (or descendent) is created.
  */
 
-void VerseKey::initstatics()
-{
+void VerseKey::initstatics() {
 	int l1, l2, chaptmp = 0;
 
-	books[0] = otbooks;
-	books[1] = ntbooks;
+	builtin_books[0] = otbooks;
+	builtin_books[1] = ntbooks;
 
 	for (l1 = 0; l1 < 2; l1++) {
-		for (l2 = 0; l2 < BMAX[l1]; l2++) {
-			books[l1][l2].versemax = &vm[chaptmp];
-			chaptmp += books[l1][l2].chapmax;
-		}
-	}
-
-        for (abbrevsCnt = 1; *abbrevs[abbrevsCnt].ab; abbrevsCnt++) {
-                if (strcmp(abbrevs[abbrevsCnt-1].ab, abbrevs[abbrevsCnt].ab) > 0) {
-			fprintf(stderr, "ERROR: canon.h abbrev misordered at entry: %s\n", abbrevs[abbrevsCnt].ab);
-			exit(-1);
+		for (l2 = 0; l2 < builtin_BMAX[l1]; l2++) {
+			builtin_books[l1][l2].versemax = &vm[chaptmp];
+			chaptmp += builtin_books[l1][l2].chapmax;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.3 1999/07/08 17:20:40 scribe Exp $
+ * $Id: canon.h,v 1.4 2000/03/13 09:36:02 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -103,7 +103,7 @@ struct sbook VerseKey::ntbooks[] = {
  *			(e.g. key: "1CH"; match: "1CHRONICLES")
  */
 
-struct abbrev VerseKey::abbrevs[] = {
+const struct abbrev VerseKey::builtin_abbrevs[] = {
 	{"1 C", 46}, //   1 Corinthians
 	{"1 CHRONICLES", 13}, //   1 Chronicles
 	{"1 CORINTHIANS", 46}, //   1 Corinthians
@@ -289,8 +289,6 @@ struct abbrev VerseKey::abbrevs[] = {
 	{"ZEPHANIAH", 36}, //   Zephaniah
 	{"", -1} //   Zephaniah
 };
-int abbrevsCnt;
-
 
 
 /******************************************************************************

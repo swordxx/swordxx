@@ -6,12 +6,18 @@
 #include <echomod.h>
 #include <stdlib.h>
 
+#include <localemgr.h>
+
 int main(int argc, char **argv)
 {
 	int loop;
 	int max;
+
+	LocaleMgr::systemLocaleMgr.setDefaultLocaleName("de");
+
 	VerseKey	bla;
 	long index;
+
 
 	if (argc < 2) 
 		bla = "James    1:19";
