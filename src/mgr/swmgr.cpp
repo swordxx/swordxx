@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.65 2002/03/16 17:50:10 scribe Exp $
+ * $Id: swmgr.cpp,v 1.66 2002/03/18 19:29:50 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -521,7 +521,9 @@ void SWMgr::loadConfigDir(const char *ipath)
 }
 
 
-void SWMgr::Load() {
+const SWMgr::LoadError SWMgr::Load() {
+	SWMgr::LoadError ret = SWMgr::NoError;
+
 	if (!config) {	// If we weren't passed a config object at construction, find a config file
 		if (!configPath)	// If we weren't passed a config path at construction...
 			findConfig(&configType, &prefixPath, &configPath);
@@ -583,16 +585,16 @@ void SWMgr::Load() {
 				}
 			}
 // -------------------------------------------------------------------------
+		if ( !Modules.size() ) // config exists, but no modules
+			ret = NoModules;
 
 	}
 	else {
 		SWLog::systemlog->LogError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", (configPath) ? configPath : "<configPath is null>");
-#ifndef WIN32
-		throw "SWMgr: Can't find 'mods.conf' or 'mods.d' .  Try setting:\n\tSWORD_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options";
-#else
-		exit(-1);
-#endif
+		ret = SWMgr::NoModuleConfig;
 	}
+
+	return ret;
 }
 
 SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
@@ -888,7 +890,7 @@ void SWMgr::DeleteMods() {
 	for (it = Modules.begin(); it != Modules.end(); it++)
 		delete (*it).second;
 
-	Modules.erase(Modules.begin(), Modules.end());
+	Modules.clear();
 }
 
 

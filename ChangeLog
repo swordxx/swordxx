@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+18-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Joachim's patch to remove throw in SWMgr::Load
+
 16-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Added Martin Gruner's suggestion to swmgr to look
 		for global configuration in multiple location.
