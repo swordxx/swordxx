@@ -3,7 +3,7 @@ INCLUDES = -I $(top_srcdir)/include
 LDADD = -L$(top_builddir)/lib -lsword 
 
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
-mod2vpl vpl2mod stepdump step2vpl mod2zmod modwrite addvs addld emptyvss \
+mod2vpl vpl2mod stepdump step2vpl mod2zmod gbfidx modwrite addvs addld emptyvss \
 txt2sword addgb imp2gbs imp2ld imp2vs mod2imp thml2gbs mod2osis
 
 if ICU
@@ -30,6 +30,7 @@ vpl2mod_SOURCES = vpl2mod.cpp
 stepdump_SOURCES = stepdump.cpp
 step2vpl_SOURCES = step2vpl.cpp
 mod2zmod_SOURCES = mod2zmod.cpp
+gbfidx_SOURCES = gbfidx.cpp
 modwrite_SOURCES = modwrite.cpp
 addvs_SOURCES = addvs.cpp
 addld_SOURCES = addld.cpp
