@@ -3,13 +3,13 @@
 #include <string.h>
 
 EntriesBlock::EntriesBlock(const char *iBlock, long size) {
-	block = (char *)calloc(sizeof(char), size);
+	block = (char *)calloc(1, size);
 	memcpy(block, iBlock, size);
 }
 
 
 EntriesBlock::EntriesBlock() {
-	block = (char *)calloc(sizeof(char), 4);
+	block = (char *)calloc(1, 4);
 }
 
 
@@ -19,37 +19,45 @@ EntriesBlock::~EntriesBlock() {
 
 
 void EntriesBlock::setCount(int count) {
-	short rawCount=count;
-	memcpy(block, &rawCount, sizeof(short));
+	__u32 rawCount = count;
+	memcpy(block, &rawCount, sizeof(__u32));
 }
 
 
 int EntriesBlock::getCount() {
-	short count=0;
-	memcpy(&count, block, sizeof(short));
+	__u32 count = 0;
+	memcpy(&count, block, sizeof(__u32));
 	return count;
 }
 
 
 void EntriesBlock::getMetaEntry(int index, long *offset, short *size) {
+	__u32 rawOffset = 0;
+	__u32 rawSize = 0;
 	*offset = 0;
 	*size = 0;
 	if (index >= getCount())	// assert index < count
 		return;
 
 	// first 4 bytes is count, each 6 bytes after is each meta entry
-	memcpy(offset, block+4+(index*6), 4);
-	memcpy(size, block+4+(index*6)+4, 2);
+	memcpy(&rawOffset, block + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
+	memcpy(&rawSize, block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
+
+	*offset = (long)rawOffset;
+	*size   = (short)rawSize;
 }
 
 
 void EntriesBlock::setMetaEntry(int index, long offset, short size) {
+	__u32 rawOffset = (__u32)offset;
+	__u32 rawSize = (__u32)size;
+
 	if (index >= getCount())	// assert index < count
 		return;
 
 	// first 4 bytes is count, each 6 bytes after is each meta entry
-	memcpy(block+4+(index*6), &offset, 4);
-	memcpy(block+4+(index*6)+4, &size, 2);
+	memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE), &rawOffset, sizeof(rawOffset));
+	memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), &rawSize, sizeof(rawSize));
 }
 
 
@@ -74,15 +82,16 @@ int EntriesBlock::addEntry(const char *entry) {
 	long offset;
 	short size;
 	int count = getCount();
-	long dataStart = 4 + (count*6);
-	// +7 because null + new 6 byte meta entry
-	block = (char *)realloc(block, dataSize + len + 7);
+	long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
+	// new meta entry + new data size + 1 because null 
+	block = (char *)realloc(block, dataSize + METAENTRYSIZE + len + 1);
 	// shift right to make room for new meta entry
-	memmove(block+dataStart+6, block+dataStart, dataSize-dataStart);
+	memmove(block + dataStart + METAENTRYSIZE, block + dataStart, dataSize - dataStart);
+
 	for (int loop = 0; loop < count; loop++) {
 		getMetaEntry(loop, &offset, &size);
 		if (offset) {	// if not a deleted entry
-			offset+=6;
+			offset += METAENTRYSIZE;
 			setMetaEntry(loop, offset, size);
 		}
 	}
@@ -90,11 +99,11 @@ int EntriesBlock::addEntry(const char *entry) {
 	offset = dataSize;	// original dataSize before realloc
 	size = len + 1;
 	// add our text to the end
-	memcpy(block+offset+6, entry, size);
+	memcpy(block + offset + METAENTRYSIZE, entry, size);
 	// increment count
-	setCount(count+1);
+	setCount(count + 1);
 	// add our meta entry
-	setMetaEntry(count, offset+6, size);
+	setMetaEntry(count, offset + METAENTRYSIZE, size);
 	// return index of our new entry
 	return count;
 }
@@ -111,42 +120,27 @@ const char *EntriesBlock::getEntry(int entryIndex) {
 
 void EntriesBlock::removeEntry(int entryIndex) {
 	long offset;
-	short size;
-	getMetaEntry(entryIndex, &offset, &size);
-
-// addEntry recipricate this
-/*
+	short size, size2;
 	long dataSize;
 	getRawData(&dataSize);
-	int len = strlen(entry);
-	long offset;
-	short size;
+	getMetaEntry(entryIndex, &offset, &size);
+	int len = size - 1;
 	int count = getCount();
-	long dataStart = 4 + (count*6);
-	// +7 because null + new 6 byte meta entry
-	block = (char *)realloc(block, sizeof(char), dataSize + len + 7);
-	// shift right to make room for new meta entry
-	memmove(block+dataStart+6, block+dataStart, dataSize-dataStart);
-	for (int loop = 0; loop < count; loop++) {
-		getMetaEntry(loop, &offset, &size);
+	long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
+	// shift left to retrieve space used for old entry
+	memmove(block + offset, block + offset + size, dataSize - (offset + size));
+
+	// fix offset for all entries after our entry that were shifted left
+	for (int loop = entryIndex + 1; loop < count; loop++) {
+		getMetaEntry(loop, &offset, &size2);
 		if (offset) {	// if not a deleted entry
-			offset+=6;
-			setMetaEntry(loop, offset, size);
+			offset -= size;
+			setMetaEntry(loop, offset, size2);
 		}
 	}
 
-	offset = dataSize;	// original dataSize before realloc
-	size = len + 1;
-	// add our text to the end
-	memcpy(block+offset, entry, size);
-	// increment count
-	setCount(count+1);
-	// add our meta entry
-	setMetaEntry(count, offset, size);
-	// return index of our new entry
-	return count;
-*/
-	
+	// zero out our meta entry
+	setMetaEntry(entryIndex, 0L, 0);
 }
 
 

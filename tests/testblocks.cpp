@@ -30,9 +30,17 @@ void printEntry(EntriesBlock *eb, int index) {
 }
 
 
+void printSize(EntriesBlock *eb) {
+	long size;
+	eb->getRawData(&size);
+	cout << "Size of raw data: " << size << "\n\n";
+}
+
+
 void removeEntry(EntriesBlock *eb, int index) {
 	if (index < eb->getCount()) {
 		cout << "Removing entry [" << index << "]\n";
+		eb->removeEntry(index);
 	}
 	else cout << "Invalid entry number\n\n";
 }
@@ -55,6 +63,7 @@ int main(int argc, char **argv) {
 				case 'a': addEntry(eb); break;
 				case 'p':	printEntry(eb, atoi(input.c_str()+1)); break;
 				case 'r':	removeEntry(eb, atoi(input.c_str()+1)); break;
+				case 's': printSize(eb); break;
 				case 'q': break;
 				case '?':
 				default:

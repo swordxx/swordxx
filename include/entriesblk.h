@@ -1,8 +1,15 @@
 #ifndef ENTRIESBLK_H
 #define ENTRIESBLK_H
 
+#include <sysdata.h>
+
 class EntriesBlock {
-static const int 
+	static const int METAHEADERSIZE = 4;
+		// count(4);
+
+	static const int METAENTRYSIZE = 8;
+		// offset(4); size(4);
+
 private:
 	char *block;
 	void setCount(int count);
