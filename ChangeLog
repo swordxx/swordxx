@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+23-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
+	some base work for installmgr on classes to 
+		manage mods.d
 
 * Release 1.5.5 *
 
