@@ -124,7 +124,7 @@ void SWKey::setText(const char *ikey) {
 
 void SWKey::copyFrom(const SWKey &ikey) {
 // not desirable	Persist(ikey.Persist());
-	stdstr(&keytext, (const char *)ikey);
+	setText((const char *)ikey);
 }
 
 

@@ -90,27 +90,53 @@ char *RawGenBook::getRawEntry() {
 	__u32 offset = 0;
 	__u32 size = 0;
 
-	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
+	TreeKeyIdx *key = 0;
+#ifndef _WIN32_WCE
+	try {
+#endif
+		key = SWDYNAMIC_CAST(TreeKeyIdx, (this->key));
+#ifndef _WIN32_WCE
+	}
+	catch ( ... ) {}
+#endif
 
-	memcpy(&offset, key->getUserData(), 4);
-	offset = swordtoarch32(offset);
+	if (!key) {
+		key = (TreeKeyIdx *)CreateKey();
+		(*key) = *(this->key);
+	}
 
-	memcpy(&size, key->getUserData() + 4, 4);
-	size = swordtoarch32(size);
-
-	entrySize = size;        // support getEntrySize call
 	if (entryBuf)
 		delete [] entryBuf;
 
-	entryBuf = new char [ (size + 2) * FILTERPAD ];
-	*entryBuf = 0;
-	lseek(bdtfd->getFd(), offset, SEEK_SET);
-	read(bdtfd->getFd(), entryBuf, size);
+	int dsize;
+	key->getUserData(&dsize);
+	if (dsize > 7) {
+		memcpy(&offset, key->getUserData(), 4);
+		offset = swordtoarch32(offset);
 
-	rawFilter(entryBuf, size, key);
+		memcpy(&size, key->getUserData() + 4, 4);
+		size = swordtoarch32(size);
 
-        if (!isUnicode())
-		RawStr::preptext(entryBuf);
+		entrySize = size;        // support getEntrySize call
+
+		entryBuf = new char [ (size + 2) * FILTERPAD ];
+		*entryBuf = 0;
+		lseek(bdtfd->getFd(), offset, SEEK_SET);
+		read(bdtfd->getFd(), entryBuf, size);
+
+		rawFilter(entryBuf, size, key);
+
+		   if (!isUnicode())
+			RawStr::preptext(entryBuf);
+	}
+	else {
+		entryBuf = new char [2];
+		entryBuf[0] = 0;
+		entryBuf[1] = 0;
+	}
+
+	if (key != this->key) // free our key if we created a VerseKey
+		delete key;
 
 	return entryBuf;
 }
