@@ -39,7 +39,7 @@ void printsyntax() {
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
 	fprintf (stderr, "  arguments are added to the key.\n");
 }
-
+/*
 int main(int argc, char **argv)
 {
 	int maxverses = -1;
@@ -200,5 +200,10 @@ int main(int argc, char **argv)
 	else
 		printsyntax();
 }
+<<<<<<< diatheke.cpp
+
+*/
+=======
 
 
+>>>>>>> 1.19

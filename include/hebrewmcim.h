@@ -12,11 +12,12 @@
 
 #include <swinputmeth.h>
 #include <map>
+using namespace std;
 
 class HebrewMCIM : public SWInputMethod {
 
     void init();
-    char subst[255];
+    int subst[255];
     map<int, int> subst2[12];
     map<int, int*> multiChars;
 
