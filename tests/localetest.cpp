@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 	bla = "Johannes 1:1";
 	std::cout << bla << std::endl;
 
-	LocaleMgr::systemLocaleMgr.setDefaultLocaleName("de");
+	LocaleMgr::systemLocaleMgr().setDefaultLocaleName("de");
 	VerseKey key2;
 	key2.setLocale("en");
 	ListKey list = key2.ParseVerseList("Luke 3:23-28",key2, true);

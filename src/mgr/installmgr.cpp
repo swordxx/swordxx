@@ -48,7 +48,7 @@ static InstallMgr_init _InstallMgr_init;
 
 InstallMgr_init::InstallMgr_init() {
 #ifdef CURLAVAILABLE
-	curl_global_init(CURL_GLOBAL_DEFAULT);
+	//curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
 #else
 //	fprintf(stderr, "libCURL is needed for remote installation functions\n");
 #endif

@@ -23,7 +23,7 @@ void systemquery(const char * key, ostream* output){
 	bool types = false, descriptions = false, names = false;
 
 	if (!stricmp(key, "localelist")) {		
-		LocaleMgr *lm = &LocaleMgr::systemLocaleMgr;
+		LocaleMgr *lm = &LocaleMgr::systemLocaleMgr();
 		list<SWBuf> loclist =	lm->getAvailableLocales();
 		list<SWBuf>::iterator li = loclist.begin();
 		for (;li != loclist.end(); li++) {
@@ -92,7 +92,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	char querytype = 0;	
 
 	if (locale) {
-		LocaleMgr::systemLocaleMgr.setDefaultLocaleName(locale);
+		LocaleMgr::systemLocaleMgr().setDefaultLocaleName(locale);
 	}
 	VerseKey vk;
 

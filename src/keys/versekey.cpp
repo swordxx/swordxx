@@ -60,7 +60,7 @@ void VerseKey::init() {
 	verse = 0;
 	locale = 0;
 
-	setLocale(LocaleMgr::systemLocaleMgr.getDefaultLocaleName());
+	setLocale(LocaleMgr::systemLocaleMgr().getDefaultLocaleName());
 }
 
 /******************************************************************************
@@ -155,7 +155,7 @@ void VerseKey::setLocale(const char *name) {
 		localeCache.abbrevsCnt = 0;
 	}
 
-	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::systemLocaleMgr.getLocale(name);
+	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::systemLocaleMgr().getLocale(name);
 	localeCache.locale = locale;
 
 	if (locale) {
