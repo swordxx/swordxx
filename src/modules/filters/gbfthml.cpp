@@ -229,6 +229,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = 'o';
 			      *to++ = 'r';
 			      *to++ = '=';
+			      *to++ = '\"';
 			      *to++ = '#';
 			      *to++ = 'f';
 			      *to++ = 'f';
@@ -236,6 +237,7 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      *to++ = '0';
 			      *to++ = '0';
 			      *to++ = '0';
+			      *to++ = '\"';
 			      *to++ = '>';
 			      continue;
 			    case 'r':		// words of Jesus end
