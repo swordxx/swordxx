@@ -71,6 +71,9 @@ other-install:
 
 remake: clean all
 
+backup:
+	./scripts/backupmake.sh
+
 uninstall:
 	@if [ -f ${bindir}/testlib ]; then rm -i ${bindir}/testlib; fi
 	@if [ -f ${libdir} ]; then rm -rfi ${libdir}; fi
