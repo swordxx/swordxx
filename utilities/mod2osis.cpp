@@ -1,5 +1,5 @@
 // Compression on variable granularity
-#include <fcntl.h>
+#include <fcntl.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 
 		if ((vkey->Testament() != lastTest)) {
 			if (openchap)
-				cout << "\t</div>\n";
+				cout << "\t</chapter>\n";
 			if (openbook)
 				cout << "\t</div>\n";
 			if (opentest)
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 		if ((vkey->Book() != lastBook) || newTest) {
 			if (!newTest) {
 				if (openchap)
-					cout << "\t</div>\n";
+					cout << "\t</chapter>\n";
 				if (openbook)
 					cout << "\t</div>\n";
 			}
@@ -171,13 +171,13 @@ int main(int argc, char **argv)
 		if ((vkey->Chapter() != lastChap) || newBook) {
 			if (!newBook) {
 				if (openchap)
-					cout << "\t</div>\n";
+					cout << "\t</chapter>\n";
 			}
 			buf = new char [205];
 			*buf = 0;
 			tmpKey = *vkey;
 			tmpKey.Verse(0);
-			sprintf(buf, "\t<div type=\"chapter\" osisID=\"%s\">\n", tmpKey.getOSISRef());
+			sprintf(buf, "\t<chapter osisID=\"%s\">\n", tmpKey.getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf;
 			delete [] buf;
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 		lastTest = vkey->Testament();
 	}
 	if (openchap)
-		cout << "\t</div>\n";
+		cout << "\t</chapter>\n";
 	if (openbook)
 		cout << "\t</div>\n";
 	if (opentest)

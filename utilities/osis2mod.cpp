@@ -116,35 +116,33 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		lastTitle += token;
 		return false;
 	}
-	if ((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) {
-		if (!strcmp(token.getAttribute("type"), "book")) {
-			if (inHeader) {	// this one should never happen, but just in case
-//				cout << "HEADING ";
-				writeEntry(currentVerse, text);
-				inHeader = false;
-			}
-			currentVerse = token.getAttribute("osisID");
-			currentVerse.Chapter(0);
-			currentVerse.Verse(0);
-			inHeader = true;
-			headerType = "book";
-			lastTitle = "";
-			text = "";
+	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
+		if (inHeader) {	// this one should never happen, but just in case
+//			cout << "HEADING ";
+			writeEntry(currentVerse, text);
+			inHeader = false;
 		}
-		if (!strcmp(token.getAttribute("type"), "chapter")) {
-			if (inHeader) {
-//				cout << "HEADING ";
-				writeEntry(currentVerse, text);
-				inHeader = false;
-			}
+		currentVerse = token.getAttribute("osisID");
+		currentVerse.Chapter(0);
+		currentVerse.Verse(0);
+		inHeader = true;
+		headerType = "book";
+		lastTitle = "";
+		text = "";
+	}
+	else if ((((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag()) && (token.getAttribute("osisID")))) {
+		if (inHeader) {
+//			cout << "HEADING ";
+			writeEntry(currentVerse, text);
+			inHeader = false;
+		}
 
-			currentVerse = token.getAttribute("osisID");
-			currentVerse.Verse(0);
-			inHeader = true;
-			headerType = "chap";
-			lastTitle = "";
-			text = "";
-		}
+		currentVerse = token.getAttribute("osisID");
+		currentVerse.Verse(0);
+		inHeader = true;
+		headerType = "chap";
+		lastTitle = "";
+		text = "";
 	}
 	if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag())) {
 		if (inHeader) {
