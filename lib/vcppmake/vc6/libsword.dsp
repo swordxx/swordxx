@@ -39,7 +39,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\.."
+# PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
@@ -62,7 +62,7 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\.."
+# PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\libswordd.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "libsword - Win32 Debug with ICU"
 
@@ -85,7 +85,7 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\.."
+# PROP Output_Dir "libsword___Win32_Debug_with_ICU"
 # PROP Intermediate_Dir "libsword___Win32_Debug_with_ICU"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../src/utilfuns/win32" /I "../../../include" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /D "__VISUALC__" /YX /FD /GZ /c
@@ -97,7 +97,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\libswordicud.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "libsword - Win32 Release with ICU"
 
@@ -108,7 +108,7 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\.."
+# PROP Output_Dir "libsword___Win32_Release_with_ICU"
 # PROP Intermediate_Dir "libsword___Win32_Release_with_ICU"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "REGEX_MALLOC" /D "__VISUALC__" /YX /FD /c
@@ -120,7 +120,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\libswordicu.lib"
+# ADD LIB32 /nologo
 
 !ENDIF 
 
