@@ -53,7 +53,7 @@ void setEntryText(RawGenBook *book) {
 		cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
 		do {
 			gets(buf);
-			if ((buf[0] != '.') || (buf[1] != 0))
+			if ((buf[0] == '.') || (buf[1] == 0))
 				break;
 			body += buf;
 			body += "\n";
