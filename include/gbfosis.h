@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: gbfosis.h,v 1.6 2003/02/20 07:25:19 scribe Exp $
+ * $Id: gbfosis.h,v 1.7 2003/02/27 00:56:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -44,14 +44,14 @@ private:
 			this->uniqueID      = uniqueID;
 			this->continueCount = continueCount;
 		}
-		void pushStartStream(char **to);
+		void pushStartStream(SWBuf &text);
 	};
 
 	stack<QuoteInstance> quotes;
 public:
 	QuoteStack();
 	virtual ~QuoteStack();
-	void handleQuote(char *buf, char *quotePos, char **to);
+	void handleQuote(char *buf, char *quotePos, SWBuf &text);
 	void clear();
 	bool empty() { return quotes.empty(); }
 };

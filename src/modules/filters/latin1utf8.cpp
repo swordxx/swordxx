@@ -24,7 +24,7 @@ char Latin1UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		return -1;
 
 	SWBuf orig = text;
-	from = orig.c_str();
+	from = (const unsigned char *)orig.c_str();
 
 	for (text = ""; *from; from++) {
 	  if (*from < 0x80) {

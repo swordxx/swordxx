@@ -34,8 +34,8 @@ const char *UTF8GreekAccents::getOptionValue()
 	return (option) ? on:off;
 }
 
-char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
-{
+char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+/*
 	if (!option) {
     unsigned char *to, *from;
 
@@ -243,6 +243,7 @@ char UTF8GreekAccents::ProcessText(char *text, int maxlen, const SWKey *key, con
 	*to++ = 0;
 	*to = 0;
      }
+*/
 	return 0;
 }
 

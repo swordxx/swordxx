@@ -23,7 +23,7 @@ char Latin1UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *mod
    
     
 	SWBuf orig = text;
-	from = orig.c_str();
+	from = (const unsigned char *)orig.c_str();
 
 	for (text = ""; *from; from++) {
 		text.setSize(text.size()+2);

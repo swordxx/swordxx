@@ -17,16 +17,14 @@ UnicodeRTF::UnicodeRTF() {
 
 char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	unsigned char *from;
-	int len;
+	const unsigned char *from;
 	char digit[10];
 	short ch;	// must be signed per unicode spec (negative is ok for big numbers > 32768)
+	unsigned char from2[7];
 
 	SWBuf orig = text;
 
-	len = strlenw(text.c_str()) + 2;						// shift string to right of buffer
-#warning is this right? I needed to cast "const" away.
-	from = (unsigned char*)orig.c_str();
+	from = (const unsigned char *)orig.c_str();
 
 	// -------------------------------
 	bool lastUni = false;
@@ -40,23 +38,25 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			continue;
 		}
 		if ((*from & 128) && ((*from & 64) != 64)) {
-	    // error
-			*from = 'x';
+// error, should never get here
+//			*from = 'x';
 			continue;
 		}
-		*from <<= 1;
+		from2[0] = *from;
+		from2[0] <<= 1;
 		int subsequent;
-		for (subsequent = 1; (*from & 128); subsequent++) {
-			*from <<= 1;
-			from[subsequent] &= 63;
+		for (subsequent = 1; (*from & 128) && (subsequent < 7); subsequent++) {
+			from2[0] <<= 1;
+			from2[subsequent] = from[subsequent];
+			from2[subsequent] &= 63;
 			ch <<= 6;
-			ch |= from[subsequent];
+			ch |= from2[subsequent];
 		}
 		subsequent--;
-		*from <<=1;
+		from2[0] <<= 1;
 		char significantFirstBits = 8 - (2+subsequent);
 		
-		ch |= (((short)*from) << (((6*subsequent)+significantFirstBits)-8));
+		ch |= (((short)from2[0]) << (((6*subsequent)+significantFirstBits)-8));
 		from += subsequent;
 		text += '\\';
 		text += 'u';

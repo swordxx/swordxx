@@ -167,7 +167,7 @@ globalconfdir := @sysconfdir@
 
 lib_LTLIBRARIES = libsword.la
 
-libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(utilfunsdir)/swbuf.cpp $(SWREGEX) $(utilfunsdir)/roman.cpp $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp $(mgrdir)/swsourcemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfredletterwords.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp $(filtersdir)/gbfosis.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/osismorph.cpp $(filtersdir)/osisstrongs.cpp $(filtersdir)/osisplain.cpp $(filtersdir)/osisrtf.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(filtersdir)/greeklexattribs.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp $(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
+libsword_la_SOURCES = $(keysdir)/swkey.cpp $(keysdir)/listkey.cpp $(keysdir)/versekey.cpp $(keysdir)/strkey.cpp $(keysdir)/treekey.cpp $(keysdir)/treekeyidx.cpp $(utilfunsdir)/Greek2Greek.cpp $(utilfunsdir)/utilstr.cpp $(utilfunsdir)/unixstr.cpp $(utilfunsdir)/swunicod.cpp $(utilfunsdir)/swversion.cpp $(utilfunsdir)/swbuf.cpp $(SWREGEX) $(utilfunsdir)/roman.cpp $(mgrdir)/swconfig.cpp $(mgrdir)/swmgr.cpp $(mgrdir)/swfiltermgr.cpp $(mgrdir)/encfiltmgr.cpp $(mgrdir)/markupfiltmgr.cpp $(mgrdir)/filemgr.cpp $(mgrdir)/swlocale.cpp $(mgrdir)/localemgr.cpp $(mgrdir)/swcacher.cpp $(mgrdir)/swsourcemgr.cpp $(frontenddir)/swdisp.cpp $(frontenddir)/swlog.cpp $(modulesdir)/swmodule.cpp $(commondir)/rawstr.cpp $(commondir)/rawstr4.cpp $(commondir)/swcomprs.cpp $(commondir)/lzsscomprs.cpp $(SWZLIB) $(commondir)/rawverse.cpp $(commondir)/swcipher.cpp $(commondir)/zverse.cpp $(commondir)/zstr.cpp $(commondir)/entriesblk.cpp $(commondir)/sapphire.cpp $(filtersdir)/swbasicfilter.cpp $(filtersdir)/gbfhtml.cpp $(filtersdir)/gbfhtmlhref.cpp $(filtersdir)/gbfplain.cpp $(filtersdir)/gbfrtf.cpp $(filtersdir)/plainhtml.cpp $(filtersdir)/cipherfil.cpp $(filtersdir)/rtfhtml.cpp $(filtersdir)/gbfstrongs.cpp $(filtersdir)/gbffootnotes.cpp $(filtersdir)/gbfheadings.cpp $(filtersdir)/gbfredletterwords.cpp $(filtersdir)/gbfmorph.cpp $(filtersdir)/plainfootnotes.cpp $(filtersdir)/thmlstrongs.cpp $(filtersdir)/thmlfootnotes.cpp $(filtersdir)/thmlheadings.cpp $(filtersdir)/thmlmorph.cpp $(filtersdir)/thmllemma.cpp $(filtersdir)/thmlscripref.cpp $(filtersdir)/thmlvariants.cpp $(filtersdir)/gbfthml.cpp $(filtersdir)/thmlgbf.cpp $(filtersdir)/thmlrtf.cpp $(filtersdir)/thmlhtml.cpp $(filtersdir)/thmlhtmlhref.cpp $(filtersdir)/thmlosis.cpp $(filtersdir)/gbfosis.cpp $(filtersdir)/thmlplain.cpp $(filtersdir)/osismorph.cpp $(filtersdir)/osisstrongs.cpp $(filtersdir)/osisplain.cpp $(filtersdir)/osisrtf.cpp $(filtersdir)/unicodertf.cpp $(filtersdir)/latin1utf8.cpp $(filtersdir)/latin1utf16.cpp $(filtersdir)/utf8utf16.cpp $(filtersdir)/utf16utf8.cpp $(filtersdir)/scsuutf8.cpp $(filtersdir)/utf8html.cpp $(filtersdir)/utf8latin1.cpp $(filtersdir)/thmlolb.cpp $(filtersdir)/greeklexattribs.cpp $(SWICUSRC) $(filtersdir)/utf8cantillation.cpp $(filtersdir)/utf8hebrewpoints.cpp $(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp $(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp $(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp $(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp $(bindingsdir)/flatapi.cpp
 @ICU_TRUE@libsword_la_LIBADD = -licui18n -licuuc -lustdio
 @ICU_FALSE@libsword_la_LIBADD = 
 libsword_la_LDFLAGS = -version-info 1
@@ -204,7 +204,6 @@ rawgenbookdir = $(top_srcdir)/src/modules/genbook/rawgenbook
 textsdir = $(top_srcdir)/src/modules/texts
 rawtextdir = $(top_srcdir)/src/modules/texts/rawtext
 ztextdir = $(top_srcdir)/src/modules/texts/ztext
-rawgbfdir = $(top_srcdir)/src/modules/texts/rawgbf
 commentsdir = $(top_srcdir)/src/modules/comments
 rawcomdir = $(top_srcdir)/src/modules/comments/rawcom
 rawfilesdir = $(top_srcdir)/src/modules/comments/rawfiles
@@ -282,11 +281,10 @@ am__libsword_la_SOURCES_DIST = $(keysdir)/swkey.cpp \
 	$(filtersdir)/utf8greekaccents.cpp $(genbookdir)/swgenbook.cpp \
 	$(rawgenbookdir)/rawgenbook.cpp $(textsdir)/swtext.cpp \
 	$(rawtextdir)/rawtext.cpp $(ztextdir)/ztext.cpp \
-	$(rawgbfdir)/rawgbf.cpp $(commentsdir)/swcom.cpp \
-	$(rawcomdir)/rawcom.cpp $(rawfilesdir)/rawfiles.cpp \
-	$(zcomdir)/zcom.cpp $(hrefcomdir)/hrefcom.cpp \
-	$(lexdictdir)/swld.cpp $(rawlddir)/rawld.cpp \
-	$(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp \
+	$(commentsdir)/swcom.cpp $(rawcomdir)/rawcom.cpp \
+	$(rawfilesdir)/rawfiles.cpp $(zcomdir)/zcom.cpp \
+	$(hrefcomdir)/hrefcom.cpp $(lexdictdir)/swld.cpp \
+	$(rawlddir)/rawld.cpp $(rawld4dir)/rawld4.cpp $(zlddir)/zld.cpp \
 	$(bindingsdir)/flatapi.cpp
 @MINGW_TRUE@am__objects_1 = regex.lo
 @MINGW_FALSE@am__objects_1 =
@@ -318,8 +316,8 @@ am_libsword_la_OBJECTS = swkey.lo listkey.lo versekey.lo strkey.lo \
 	utf8html.lo utf8latin1.lo thmlolb.lo greeklexattribs.lo \
 	$(am__objects_3) utf8cantillation.lo utf8hebrewpoints.lo \
 	utf8greekaccents.lo swgenbook.lo rawgenbook.lo swtext.lo \
-	rawtext.lo ztext.lo rawgbf.lo swcom.lo rawcom.lo rawfiles.lo \
-	zcom.lo hrefcom.lo swld.lo rawld.lo rawld4.lo zld.lo flatapi.lo
+	rawtext.lo ztext.lo swcom.lo rawcom.lo rawfiles.lo zcom.lo \
+	hrefcom.lo swld.lo rawld.lo rawld4.lo zld.lo flatapi.lo
 libsword_la_OBJECTS = $(am_libsword_la_OBJECTS)
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
@@ -348,14 +346,13 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/osisrtf.Plo ./$(DEPDIR)/osisstrongs.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/plainfootnotes.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/plainhtml.Plo ./$(DEPDIR)/rawcom.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/rawfiles.Plo ./$(DEPDIR)/rawgbf.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/rawgenbook.Plo ./$(DEPDIR)/rawld.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/rawld4.Plo ./$(DEPDIR)/rawstr.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/rawstr4.Plo ./$(DEPDIR)/rawtext.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/rawverse.Plo ./$(DEPDIR)/regex.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/roman.Plo ./$(DEPDIR)/rtfhtml.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/sapphire.Plo ./$(DEPDIR)/scsuutf8.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/strkey.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/rawfiles.Plo ./$(DEPDIR)/rawgenbook.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/rawld.Plo ./$(DEPDIR)/rawld4.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/rawstr.Plo ./$(DEPDIR)/rawstr4.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/rawtext.Plo ./$(DEPDIR)/rawverse.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/regex.Plo ./$(DEPDIR)/roman.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/rtfhtml.Plo ./$(DEPDIR)/sapphire.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/scsuutf8.Plo ./$(DEPDIR)/strkey.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/swbasicfilter.Plo ./$(DEPDIR)/swbuf.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/swcacher.Plo ./$(DEPDIR)/swcipher.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/swcom.Plo ./$(DEPDIR)/swcomprs.Plo \
@@ -433,7 +430,6 @@ DIST_COMMON = README $(pkginclude_HEADERS) \
 	$(srcdir)/../src/modules/lexdict/rawld4/Makefile.am \
 	$(srcdir)/../src/modules/lexdict/zld/Makefile.am \
 	$(srcdir)/../src/modules/texts/Makefile.am \
-	$(srcdir)/../src/modules/texts/rawgbf/Makefile.am \
 	$(srcdir)/../src/modules/texts/rawtext/Makefile.am \
 	$(srcdir)/../src/modules/texts/ztext/Makefile.am \
 	$(srcdir)/../src/utilfuns/Makefile.am Makefile.am Makefile.in
@@ -443,7 +439,7 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .cpp .lo .o .obj
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/genbook/Makefile.am $(srcdir)/../src/modules/genbook/rawgenbook/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/texts/rawgbf/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/../src/keys/Makefile.am $(srcdir)/../src/utilfuns/Makefile.am $(srcdir)/../src/mgr/Makefile.am $(srcdir)/../src/frontend/Makefile.am $(srcdir)/../src/modules/Makefile.am $(srcdir)/../src/modules/common/Makefile.am $(srcdir)/../src/modules/filters/Makefile.am $(srcdir)/../src/modules/genbook/Makefile.am $(srcdir)/../src/modules/genbook/rawgenbook/Makefile.am $(srcdir)/../src/modules/texts/Makefile.am $(srcdir)/../src/modules/texts/rawtext/Makefile.am $(srcdir)/../src/modules/texts/ztext/Makefile.am $(srcdir)/../src/modules/comments/Makefile.am $(srcdir)/../src/modules/comments/rawcom/Makefile.am $(srcdir)/../src/modules/comments/rawfiles/Makefile.am $(srcdir)/../src/modules/comments/zcom/Makefile.am $(srcdir)/../src/modules/comments/hrefcom/Makefile.am $(srcdir)/../src/modules/lexdict/Makefile.am $(srcdir)/../src/modules/lexdict/rawld/Makefile.am $(srcdir)/../src/modules/lexdict/rawld4/Makefile.am $(srcdir)/../src/modules/lexdict/zld/Makefile.am $(srcdir)/../bindings/Makefile.am $(srcdir)/../include/Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -518,7 +514,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/plainhtml.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawcom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawfiles.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawgbf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawgenbook.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawld.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rawld4.Plo@am__quote@
@@ -3762,39 +3757,6 @@ ztext.lo: $(ztextdir)/ztext.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ztext.lo `test -f '$(ztextdir)/ztext.cpp' || echo '$(srcdir)/'`$(ztextdir)/ztext.cpp
 
-rawgbf.o: $(rawgbfdir)/rawgbf.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT rawgbf.o -MD -MP -MF "$(DEPDIR)/rawgbf.Tpo" \
-@am__fastdepCXX_TRUE@	  -c -o rawgbf.o `test -f '$(rawgbfdir)/rawgbf.cpp' || echo '$(srcdir)/'`$(rawgbfdir)/rawgbf.cpp; \
-@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/rawgbf.Tpo" "$(DEPDIR)/rawgbf.Po"; \
-@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/rawgbf.Tpo"; exit 1; \
-@am__fastdepCXX_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(rawgbfdir)/rawgbf.cpp' object='rawgbf.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/rawgbf.Po' tmpdepfile='$(DEPDIR)/rawgbf.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rawgbf.o `test -f '$(rawgbfdir)/rawgbf.cpp' || echo '$(srcdir)/'`$(rawgbfdir)/rawgbf.cpp
-
-rawgbf.obj: $(rawgbfdir)/rawgbf.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT rawgbf.obj -MD -MP -MF "$(DEPDIR)/rawgbf.Tpo" \
-@am__fastdepCXX_TRUE@	  -c -o rawgbf.obj `if test -f '$(rawgbfdir)/rawgbf.cpp'; then $(CYGPATH_W) '$(rawgbfdir)/rawgbf.cpp'; else $(CYGPATH_W) '$(srcdir)/$(rawgbfdir)/rawgbf.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/rawgbf.Tpo" "$(DEPDIR)/rawgbf.Po"; \
-@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/rawgbf.Tpo"; exit 1; \
-@am__fastdepCXX_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(rawgbfdir)/rawgbf.cpp' object='rawgbf.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/rawgbf.Po' tmpdepfile='$(DEPDIR)/rawgbf.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rawgbf.obj `if test -f '$(rawgbfdir)/rawgbf.cpp'; then $(CYGPATH_W) '$(rawgbfdir)/rawgbf.cpp'; else $(CYGPATH_W) '$(srcdir)/$(rawgbfdir)/rawgbf.cpp'; fi`
-
-rawgbf.lo: $(rawgbfdir)/rawgbf.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT rawgbf.lo -MD -MP -MF "$(DEPDIR)/rawgbf.Tpo" \
-@am__fastdepCXX_TRUE@	  -c -o rawgbf.lo `test -f '$(rawgbfdir)/rawgbf.cpp' || echo '$(srcdir)/'`$(rawgbfdir)/rawgbf.cpp; \
-@am__fastdepCXX_TRUE@	then mv "$(DEPDIR)/rawgbf.Tpo" "$(DEPDIR)/rawgbf.Plo"; \
-@am__fastdepCXX_TRUE@	else rm -f "$(DEPDIR)/rawgbf.Tpo"; exit 1; \
-@am__fastdepCXX_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(rawgbfdir)/rawgbf.cpp' object='rawgbf.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/rawgbf.Plo' tmpdepfile='$(DEPDIR)/rawgbf.TPlo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rawgbf.lo `test -f '$(rawgbfdir)/rawgbf.cpp' || echo '$(srcdir)/'`$(rawgbfdir)/rawgbf.cpp
-
 swcom.o: $(commentsdir)/swcom.cpp
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT swcom.o -MD -MP -MF "$(DEPDIR)/swcom.Tpo" \
 @am__fastdepCXX_TRUE@	  -c -o swcom.o `test -f '$(commentsdir)/swcom.cpp' || echo '$(srcdir)/'`$(commentsdir)/swcom.cpp; \
@@ -4212,7 +4174,7 @@ top_distdir = ..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	$(mkinstalldirs) $(distdir)/$(swincludedir) $(distdir)/./../bindings $(distdir)/./../include $(distdir)/./../src/frontend $(distdir)/./../src/keys $(distdir)/./../src/mgr $(distdir)/./../src/modules $(distdir)/./../src/modules/comments $(distdir)/./../src/modules/comments/hrefcom $(distdir)/./../src/modules/comments/rawcom $(distdir)/./../src/modules/comments/rawfiles $(distdir)/./../src/modules/comments/zcom $(distdir)/./../src/modules/common $(distdir)/./../src/modules/filters $(distdir)/./../src/modules/genbook $(distdir)/./../src/modules/genbook/rawgenbook $(distdir)/./../src/modules/lexdict $(distdir)/./../src/modules/lexdict/rawld $(distdir)/./../src/modules/lexdict/rawld4 $(distdir)/./../src/modules/lexdict/zld $(distdir)/./../src/modules/texts $(distdir)/./../src/modules/texts/rawgbf $(distdir)/./../src/modules/texts/rawtext $(distdir)/./../src/modules/texts/ztext $(distdir)/./../src/utilfuns
+	$(mkinstalldirs) $(distdir)/$(swincludedir) $(distdir)/./../bindings $(distdir)/./../include $(distdir)/./../src/frontend $(distdir)/./../src/keys $(distdir)/./../src/mgr $(distdir)/./../src/modules $(distdir)/./../src/modules/comments $(distdir)/./../src/modules/comments/hrefcom $(distdir)/./../src/modules/comments/rawcom $(distdir)/./../src/modules/comments/rawfiles $(distdir)/./../src/modules/comments/zcom $(distdir)/./../src/modules/common $(distdir)/./../src/modules/filters $(distdir)/./../src/modules/genbook $(distdir)/./../src/modules/genbook/rawgenbook $(distdir)/./../src/modules/lexdict $(distdir)/./../src/modules/lexdict/rawld $(distdir)/./../src/modules/lexdict/rawld4 $(distdir)/./../src/modules/lexdict/zld $(distdir)/./../src/modules/texts $(distdir)/./../src/modules/texts/rawtext $(distdir)/./../src/modules/texts/ztext $(distdir)/./../src/utilfuns
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

@@ -29,9 +29,11 @@ ThMLOSIS::~ThMLOSIS() {
 }
 
 
-char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
+char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+	/*
 
-	char *to, *from, token[2048]; // cheese.  Fix.
+	const char *from;
+	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
 	int len;
@@ -52,19 +54,14 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	bool handled = false;
 	std::string divEnd = "";
 
-	len = strlen(text) + 1;	// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;
-	
-	textStart = from;
+
 	wordStart = text;
 
-	// -------------------------------
+	SWBuf orig = text;
+	from = orig.c_str();
 
-	for (to = text; *from; from++) {
+	for (text = ""; *from; from++) {
+
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
@@ -121,26 +118,26 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				suspendTextPassThru = false;
 				handled = true;
 			}
-/*      Usage of italics to represent transChange isn't domaninant;
-        solution: mark in OSIS instead, assume no semantics other than emphasis
-                of italicized text
-                        if (!strcmp(module->Type(), "Biblical Texts")) {
-        			// Italics assume transchange for Biblical texts
-	        		if (!stricmp(token, "i")) {
-		        		pushString(&to, "<transChange type=\"added\">");
-			        	newText = true;
-				        lastspace = false;
-        				handled = true;
-	        		}
-		        	else	if (!stricmp(token, "/i")) {
-			        	pushString(&to, "</transChange>");
-        				lastspace = false;
-	        			handled = true;
-		        	}
-                        }
-                        else {
-                        	// otherwise, italics are just italics
-*/
+//      Usage of italics to represent transChange isn't domaninant;
+//        solution: mark in OSIS instead, assume no semantics other than emphasis
+//                of italicized text
+//                        if (!strcmp(module->Type(), "Biblical Texts")) {
+//        			// Italics assume transchange for Biblical texts
+//	        		if (!stricmp(token, "i")) {
+//		        		pushString(&to, "<transChange type=\"added\">");
+//			        	newText = true;
+//				        lastspace = false;
+//        				handled = true;
+//	        		}
+//		        	else	if (!stricmp(token, "/i")) {
+//			        	pushString(&to, "</transChange>");
+//        				lastspace = false;
+//	        			handled = true;
+//		        	}
+//                        }
+//                        else {
+//                        	// otherwise, italics are just italics
+//-- end italics for transchange
 	        		if (!stricmp(token, "i")) {
 		        		pushString(&to, "<hi type=\"i\">");
 			        	newText = true;
@@ -190,14 +187,14 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				const char *c;
 				for (c = src;((*c) && (*c != '"')); c++);
 
-				/* uncomment for SWORD absolute path logic
-				if (*(c+1) == '/') {
-					pushString(buf, "file:");
-					pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
-					if (*((*buf)-1) == '/')
-						c++;		// skip '/'
-				}
-				end of uncomment for asolute path logic */
+// uncomment for SWORD absolute path logic
+//				if (*(c+1) == '/') {
+//					pushString(buf, "file:");
+//					pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
+//					if (*((*buf)-1) == '/')
+//						c++;		// skip '/'
+//				}
+//				end of uncomment for asolute path logic 
 
 				for (c++;((*c) && (*c != '"')); c++)
 					*to++ = *c;
@@ -352,18 +349,8 @@ char ThMLOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 	}
 	*to++ = 0;
 	*to = 0;
+*/
 	return 0;
-}
-
-
-void ThMLOSIS::pushString(char **buf, const char *format, ...) {
-  va_list argptr;
-
-  va_start(argptr, format);
-  *buf += vsprintf(*buf, format, argptr);
-  va_end(argptr);
-
-//  *buf += strlen(*buf);
 }
 
 

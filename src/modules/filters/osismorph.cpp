@@ -48,12 +48,9 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
     char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		int len;
 		bool lastspace = false;
 		SWBuf orig = text;
 		from = orig.c_str();
-
-		len = strlen(text) + 1;	// shift string to right of buffer
 
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
@@ -79,8 +76,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				}
 				// if not a morph tag token, keep token in text
 				text += '<';
-				for (char *tok = token; *tok; tok++)
-					text += *tok;
+				text += token;
 				text += '>';
 				continue;
 			}

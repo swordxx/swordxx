@@ -29,8 +29,8 @@ GBFOSIS::~GBFOSIS() {
 }
 
 
-char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module) {
-
+char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) { 
+/*
 	char *to, *from, token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
@@ -169,14 +169,14 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				const char *c;
 				for (c = src;((*c) && (*c != '"')); c++);
 
-				/* uncomment for SWORD absolute path logic
-				if (*(c+1) == '/') {
-					pushString(buf, "file:");
-					pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
-					if (*((*buf)-1) == '/')
-						c++;		// skip '/'
-				}
-				end of uncomment for asolute path logic */
+// uncomment for SWORD absolute path logic
+//				if (*(c+1) == '/') {
+//					pushString(buf, "file:");
+//					pushString(buf, module->getConfigEntry("AbsoluteDataPath"));
+//					if (*((*buf)-1) == '/')
+//						c++;		// skip '/'
+//				}
+// end of uncomment for asolute path logic 
 
 				for (c++;((*c) && (*c != '"')); c++)
 					*to++ = *c;
@@ -354,28 +354,18 @@ char GBFOSIS::ProcessText(char *text, int maxlen, const SWKey *key, const SWModu
 				}
 			}
 
-			/*
-			else if (vkey->Chapter()) {
-				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
-			}
-			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
-			*/
+//
+//			else if (vkey->Chapter()) {
+//				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+//			}
+//			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
+//
 		}
 	}
 	*to++ = 0;
 	*to = 0;
+*/
 	return 0;
-}
-
-
-void GBFOSIS::pushString(char **buf, const char *format, ...) {
-  va_list argptr;
-
-  va_start(argptr, format);
-  *buf += vsprintf(*buf, format, argptr);
-  va_end(argptr);
-
-//  *buf += strlen(*buf);
 }
 
 
@@ -424,27 +414,27 @@ QuoteStack::~QuoteStack() {
 }
 
 
-void QuoteStack::handleQuote(char *buf, char *quotePos, char **to) {
+void QuoteStack::handleQuote(char *buf, char *quotePos, SWBuf &text) {
 //QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
 	if (!quotes.empty()) {
 		QuoteInstance last = quotes.top();
 		if (last.startChar == *quotePos) {
-			GBFOSIS::pushString(to, "</quote>");
+			text += "</quote>";
 			quotes.pop();
 		}
 		else {
 			quotes.push(QuoteInstance(*quotePos, last.level+1));
-			quotes.top().pushStartStream(to);
+			quotes.top().pushStartStream(text);
 		}
 	}
 	else {
 		quotes.push(QuoteInstance(*quotePos));
-		quotes.top().pushStartStream(to);
+		quotes.top().pushStartStream(text);
 	}
 }
 
-void QuoteStack::QuoteInstance::pushStartStream(char **to) {
-	GBFOSIS::pushString(to, "<quote level=\"%d\">", level);
+void QuoteStack::QuoteInstance::pushStartStream(SWBuf &text) {
+	text.appendFormatted("<quote level=\"%d\">", level);
 }
 
 SWORD_NAMESPACE_END

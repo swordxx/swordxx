@@ -28,7 +28,7 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 
   
 	SWBuf orig = text;
-	from = orig.c_str();
+	from = (const unsigned char *)orig.c_str();
 
 	for (text = ""; *from; from++) {
 		uchar = 0;

@@ -127,14 +127,19 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	findOffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
-		tmpbuf   = new char [ (size + 3) + strlen(path) + 1 ];
-		sprintf(tmpbuf, "%s/", path);
-		readText(key->Testament(), start, (size + 2), tmpbuf+strlen(tmpbuf));
+		SWBuf tmpbuf;
+		entryBuf = path;
+		entryBuf += '/';
+		readText(key->Testament(), start, (size + 2), tmpbuf);
+		entryBuf += tmpbuf;
 	}
 	else {
-		tmpbuf   = new char [ 16 + strlen(path) + 1 ];
-		sprintf(tmpbuf, "%s/%s", path, getNextFilename());
-		doSetText(key->Testament(), key->Index(), tmpbuf+strlen(path)+1);
+		SWBuf tmpbuf;
+		entryBuf = path;
+		entryBuf += '/';
+		entryBuf += getNextFilename();
+		doSetText(key->Testament(), key->Index(), tmpbuf);
+		entryBuf += tmpbuf;
 	}
 	datafile = FileMgr::systemFileMgr.open(tmpbuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
 	delete [] tmpbuf;
@@ -172,7 +177,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 	findOffset(key->Testament(), key->Index(), &start, &size);
 
 	if (size) {
-		tmpbuf   = new char [ size + 2];
+		SWBuf tmpbuf;
 		readText(key->Testament(), start, size + 2, tmpbuf);
 
 		if (key != inkey)
@@ -185,7 +190,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 		catch ( ... ) {}
 		if (!key)
 			key = new VerseKey(this->key);
-		doSetText(key->Testament(), key->Index(), tmpbuf);
+		doSetText(key->Testament(), key->Index(), tmpbuf.c_str());
 	}
 	
 	if (key != inkey)
