@@ -22,7 +22,6 @@ SWClass SWDisplay::classdef(classes);
 
 char SWDisplay::Display(SWModule &imodule)
 {
-	myclass = &classdef;
 	cout << (const char *)imodule;
 	return 0;
 }
