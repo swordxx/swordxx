@@ -18,14 +18,14 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ../..
 
-prefix = /usr
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
 sbindir = ${exec_prefix}/sbin
 libexecdir = ${exec_prefix}/libexec
 datadir = ${prefix}/share
-sysconfdir = /etc
+sysconfdir = ${prefix}/etc
 sharedstatedir = ${prefix}/com
 localstatedir = ${prefix}/var
 libdir = ${exec_prefix}/lib
@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/sword
 pkgincludedir = $(includedir)/sword
 top_builddir = ../..
 
-ACLOCAL = ${SHELL} /home/scribe/src/sword/missing --run aclocal
-AUTOCONF = ${SHELL} /home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/scribe/src/sword/missing --run automake
-AUTOHEADER = ${SHELL} /home/scribe/src/sword/missing --run autoheader
+ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal
+AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
+AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake
+AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -64,7 +64,7 @@ host_triplet = i686-pc-linux-gnu
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /home/scribe/src/sword/missing --run tar
+AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -83,17 +83,17 @@ STRIP = strip
 VERSION = 1.5.3
 am__include = include
 am__quote = 
-dir_confdef = no
-enable_debug = yes
+dir_confdef = yes
+enable_debug = no
 enable_profile = no
 enable_vcl = no
-install_sh = /home/scribe/src/sword/install-sh
+install_sh = /space/home/scribe/src/sword/install-sh
 target_cpu = i686
 target_mingw32 = no
 target_os = linux-gnu
 target_system = intel
 target_vendor = pc
-with_conf = no
+with_conf = yes
 with_icu = no
 with_zlib = yes
 AUTOMAKE_OPTIONS = 1.5
@@ -146,7 +146,7 @@ LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = -g -O0 -Werror
+CXXFLAGS = -g -O2 -ftemplate-depth-25
 DIST_SOURCES = $(lookup_SOURCES) $(search_SOURCES) \
 	$(threaded_search_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
