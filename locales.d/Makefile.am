@@ -24,7 +24,7 @@ localeDATA += locales.d/uk_UA-koi8-u.conf
 localeDATA += locales.d/uk_UA-cp1251.conf
 localeDATA += locales.d/ro.conf
 
-EXTRA_DIST = $(localeDATA)
+EXTRA_DIST += $(localeDATA)
 
 localedatadir = $(pkgdatadir)/locales.d
 
