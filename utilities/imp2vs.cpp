@@ -74,17 +74,19 @@ int main(int argc, char **argv) {
 	if (!vkey->Chapter()) {
 	  // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
 	  int backstep = vkey->Verse();
-	  vkey->Verse(1);
-	  vkey->Chapter(1);
-	  switch (backstep) {
-	  case 2:
-		  vkey->Book(1);
-		  vkey->Testament(0);
-       case 1:
-            vkey->Book(0);
-		  vkey->Chapter(0);
-	  }
-       vkey->Verse(0);
+	  if (backstep) {
+		  vkey->Verse(1);
+		  vkey->Chapter(1);
+		  switch (backstep) {
+		  case 2:
+			  vkey->Book(1);
+			  vkey->Testament(0);
+		  case 1:
+			  vkey->Book(0);
+			  vkey->Chapter(0);
+		  }
+		  vkey->Verse(0);
+       }
 	  
 	  std::cout << "adding entry: " << *vkey << std::endl;
 	  mod->setEntry(entbuffer, strlen(entbuffer));
@@ -146,21 +148,24 @@ int main(int argc, char **argv) {
 
   //handle final entry
   if (strlen(keybuffer) && strlen(entbuffer)) {
+    std::cout << "from file: " << keybuffer << std::endl;
     *vkey = keybuffer;
     if (!vkey->Chapter()) {
       // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
-      int backstep = vkey->Verse();
-	  vkey->Verse(1);
-	  vkey->Chapter(1);
-	  switch (backstep) {
-	  case 2:
-		  vkey->Book(1);
-		  vkey->Testament(0);
-       case 1:
-            vkey->Book(0);
-		  vkey->Chapter(0);
-	  }
-      vkey->Verse(0);
+	  int backstep = vkey->Verse();
+	  if (backstep) {
+		  vkey->Verse(1);
+		  vkey->Chapter(1);
+		  switch (backstep) {
+		  case 2:
+			  vkey->Book(1);
+			  vkey->Testament(0);
+		  case 1:
+			  vkey->Book(0);
+			  vkey->Chapter(0);
+		  }
+		  vkey->Verse(0);
+       }
       
 	 std::cout << "adding entry: " << *vkey << std::endl;
       mod->setEntry(entbuffer, strlen(entbuffer));
