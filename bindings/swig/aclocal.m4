@@ -415,3 +415,338 @@ do
 done
 ])
 
+#----------------------------------------------------------------
+# Look for Perl5
+#----------------------------------------------------------------
+
+AC_DEFUN(SW_FIND_PERL,
+[
+
+
+PERLBIN=
+PERLSWIG=
+
+AC_ARG_WITH(perl5,[  --with-perl5=path       Set location of Perl5 executable],[ PERLBIN="$withval"], [PERLBIN=])
+
+# First figure out what the name of Perl5 is
+
+if test -z "$PERLBIN"; then
+AC_CHECK_PROGS(PERL, perl perl5.6.1 perl5.6.0 perl5.004 perl5.003 perl5.002 perl5.001 perl5 perl)
+else
+PERL="$PERLBIN"
+fi
+
+
+AC_MSG_CHECKING(for Perl5 header files)
+if test -n "$PERL"; then
+	PERL5DIR=`($PERL -e 'use Config; print $Config{archlib};') 2>/dev/null`
+	if test "$PERL5DIR" != ""; then
+		dirs="$PERL5DIR $PERL5DIR/CORE"
+		PERL5EXT=none
+		PERLSWIG=perlswig
+		for i in $dirs; do
+			if test -r $i/perl.h; then
+				AC_MSG_RESULT($i)
+				PERL5EXT="$i"
+				break;
+			fi
+		done
+		if test "$PERL5EXT" = none; then
+			PERL5EXT="$PERL5DIR/CORE"
+			AC_MSG_RESULT(could not locate perl.h...using $PERL5EXT)
+		fi
+
+		AC_MSG_CHECKING(for Perl5 library)
+		PERL5LIB=`($PERL -e 'use Config; $_=$Config{libperl}; s/^lib//; s/$Config{_a}$//; print $_') 2>/dev/null`
+		if test "$PERL5LIB" = "" ; then
+			AC_MSG_RESULT(not found)
+		else
+			AC_MSG_RESULT($PERL5LIB)
+		fi
+	else
+		AC_MSG_RESULT(unable to determine perl5 configuration)
+		PERL5EXT=$PERL5DIR
+	fi
+else
+       	AC_MSG_RESULT(could not figure out how to run perl5)
+#	PERL5EXT="/usr/local/lib/perl/archname/5.003/CORE"
+fi
+
+# Only cygwin (Windows) needs the library for dynamic linking
+case $ac_sys_system/$ac_sys_release in
+CYGWIN*) PERL5DYNAMICLINKING="-L$PERL5EXT -l$PERL5LIB";;
+*)PERL5DYNAMICLINKING="";;
+esac
+
+
+AC_SUBST(PERL5EXT)
+AC_SUBST(PERL5DYNAMICLINKING)
+AC_SUBST(PERL5LIB)
+AC_SUBST(PERLSWIG)
+
+])
+
+#----------------------------------------------------------------
+# Look for Python
+#----------------------------------------------------------------
+
+AC_DEFUN(SW_FIND_PYTHON,
+[
+
+PYINCLUDE=
+PYLIB=
+PYPACKAGE=
+
+# I don't think any of this commented stuff works anymore
+
+#PYLINK="-lModules -lPython -lObjects -lParser"
+
+#AC_ARG_WITH(py,[  --with-py=path          Set location of Python],[
+#	PYPACKAGE="$withval"], [PYPACKAGE=])
+#AC_ARG_WITH(pyincl,[  --with-pyincl=path      Set location of Python include directory],[
+#	PYINCLUDE="$withval"], [PYINCLUDE=])
+#AC_ARG_WITH(pylib,[  --with-pylib=path       Set location of Python library directory],[
+#	PYLIB="$withval"], [PYLIB=])
+
+#if test -z "$PYINCLUDE"; then
+#   if test -n "$PYPACKAGE"; then
+#	PYINCLUDE="$PYPACKAGE/include"
+#   fi
+#fi
+
+#if test -z "$PYLIB"; then
+#   if test -n "$PYPACKAGE"; then
+#	PYLIB="$PYPACKAGE/lib"
+#   fi
+#fi
+
+AC_ARG_WITH(python,[  --with-python=path       Set location of Python executable],[ PYBIN="$withval"], [PYBIN=])
+
+# First figure out the name of the Python executable
+
+if test -z "$PYBIN"; then
+AC_CHECK_PROGS(PYTHON, $prefix/bin/python python python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 python1.4 python)
+else
+PYTHON="$PYBIN"
+fi
+
+if test -n "$PYTHON"; then
+    AC_MSG_CHECKING(for Python prefix)
+    PYPREFIX=`($PYTHON -c "import sys; print sys.prefix") 2>/dev/null`
+    AC_MSG_RESULT($PYPREFIX)
+    AC_MSG_CHECKING(for Python exec-prefix)
+    PYEPREFIX=`($PYTHON -c "import sys; print sys.exec_prefix") 2>/dev/null`
+    AC_MSG_RESULT($PYEPREFIX)
+
+
+    # Note: I could not think of a standard way to get the version string from different versions.
+    # This trick pulls it out of the file location for a standard library file.
+
+    AC_MSG_CHECKING(for Python version)
+
+    # Need to do this hack since autoconf replaces __file__ with the name of the configure file
+    filehack="file__"
+    PYVERSION=`($PYTHON -c "import string,operator; print operator.getitem(string.split(string.__$filehack,'/'),-2)")`
+    AC_MSG_RESULT($PYVERSION)
+
+    # Set the include directory
+
+    AC_MSG_CHECKING(for Python header files)		
+    if test -r $PYPREFIX/include/$PYVERSION/Python.h; then
+        PYINCLUDE="-I$PYPREFIX/include/$PYVERSION -I$PYEPREFIX/lib/$PYVERSION/config"
+    fi
+    if test -z "$PYINCLUDE"; then
+        if test -r $PYPREFIX/include/Py/Python.h; then
+            PYINCLUDE="-I$PYPREFIX/include/Py -I$PYEPREFIX/lib/python/lib"
+        fi
+    fi
+    AC_MSG_RESULT($PYINCLUDE)
+
+    # Set the library directory blindly.   This probably won't work with older versions
+    AC_MSG_CHECKING(for Python library)
+    dirs="$PYVERSION/config $PYVERSION/lib python/lib"
+    for i in $dirs; do
+        if test -d $PYEPREFIX/lib/$i; then
+           PYLIB="$PYEPREFIX/lib/$i"
+           break
+        fi
+    done
+    if test -z "$PYLIB"; then
+        AC_MSG_RESULT(Not found)
+    else
+        AC_MSG_RESULT($PYLIB)
+    fi
+
+    # Check for really old versions
+    if test -r $PYLIB/libPython.a; then
+         PYLINK="-lModules -lPython -lObjects -lParser"
+    else
+         PYLINK="-l$PYVERSION"
+    fi
+fi
+
+# Only cygwin (Windows) needs the library for dynamic linking
+case $ac_sys_system/$ac_sys_release in
+CYGWIN*) PYTHONDYNAMICLINKING="-L$PYLIB $PYLINK"
+         PYINCLUDE="-DUSE_DL_IMPORT $PYINCLUDE"
+         ;;
+*)PYTHONDYNAMICLINKING="";;
+esac
+
+
+AC_SUBST(PYINCLUDE)
+AC_SUBST(PYLIB)
+AC_SUBST(PYLINK)
+AC_SUBST(PYTHONDYNAMICLINKING)
+
+])
+
+#-------------------------------------------------------------------------
+# Look for Php4
+#-------------------------------------------------------------------------
+
+AC_DEFUN(SW_FIND_PHP4,
+[
+
+PHP4BIN=
+
+AC_ARG_WITH(php4,[  --with-php4=path	  Set location of PHP4 executable],[ PHP4BIN="$withval"], [PHP4BIN=])
+
+if test -z "$PHP4BIN"; then
+AC_CHECK_PROGS(PHP4, php, php4)
+else
+PHP4="$PHP4BIN"
+fi
+AC_MSG_CHECKING(for PHP4 header files)
+dirs="/usr/include/php /usr/local/include/php /usr/local/apache/php"
+for i in $dirs; do
+	if test -r $i/php_config.h -o -r $i/php_version.h; then
+		AC_MSG_RESULT($i)
+		PHP4EXT="$i"
+		PHP4INC="-I$PHP4EXT -I$PHP4EXT/Zend -I$PHP4EXT/main -I$PHP4EXT/TSRM"
+		break;
+	fi
+done
+if test -z "$PHP4INC"; then
+	AC_MSG_RESULT(not found)
+fi
+
+AC_SUBST(PHP4INC)
+	
+])
+
+#--------------------------------------------------------------------
+#	Try to locate the Tcl package
+#--------------------------------------------------------------------
+
+AC_DEFUN(SW_FIND_TCL,
+[
+
+
+TCLINCLUDE=
+TCLLIB=
+TCLPACKAGE=
+TCLSWIG=
+
+AC_ARG_WITH(tclconfig,[  --with-tclconfig=path  Set location of tclConfig.sh],
+        with_tclconfig="$withval")
+AC_ARG_WITH(tcl,[  --with-tcl=path         Set location of Tcl package],[
+	TCLPACKAGE="$withval"], [TCLPACKAGE=])
+AC_ARG_WITH(tclincl,[  --with-tclincl=path     Set location of Tcl include directory],[
+	TCLINCLUDE="-I$withval"], [TCLINCLUDE=])
+AC_ARG_WITH(tcllib,[  --with-tcllib=path      Set location of Tcl library directory],[
+	TCLLIB="-L$withval"], [TCLLIB=])
+
+AC_MSG_CHECKING([for Tcl configuration])
+# First check to see if --with-tclconfig was specified.
+if test x"${with_tclconfig}" != x ; then
+   if test -f "${with_tclconfig}/tclConfig.sh" ; then
+      TCLCONFIG=`(cd ${with_tclconfig}; pwd)`
+   else
+      AC_MSG_ERROR([${with_tcl} directory doesn't contain tclConfig.sh])
+   fi
+fi
+# check in a few common install locations
+if test x"${TCLCONFIG}" = x ; then
+    for i in `ls -d /usr/lib 2>/dev/null` \
+	     `ls -d ${prefix}/lib 2>/dev/null` \
+	    `ls -d /usr/local/lib 2>/dev/null` ; do
+	if test -f "$i/tclConfig.sh" ; then
+	    TCLCONFIG=`(cd $i; pwd)`
+	    break
+	fi
+    done
+fi
+if test x"${TCLCONFIG}" = x ; then
+    AC_MSG_RESULT(no)
+else
+    AC_MSG_RESULT(found $TCLCONFIG/tclConfig.sh)
+    . $TCLCONFIG/tclConfig.sh
+    TCLINCLUDE=-I$TCL_PREFIX/include
+    TCLLIB=$TCL_LIB_SPEC
+fi
+
+if test -z "$TCLINCLUDE"; then
+   if test -n "$TCLPACKAGE"; then
+	TCLINCLUDE="-I$TCLPACKAGE/include"
+   fi
+fi
+
+if test -z "$TCLLIB"; then
+   if test -n "$TCLPACKAGE"; then
+	TCLLIB="-L$TCLPACKAGE/lib -ltcl"
+   fi
+fi
+
+AC_MSG_CHECKING(for Tcl header files)
+if test -z "$TCLINCLUDE"; then
+AC_TRY_CPP([#include <tcl.h>], , TCLINCLUDE="")
+if test -z "$TCLINCLUDE"; then
+	dirs="$prefix/include /usr/local/include /usr/include /opt/local/include"
+	for i in $dirs ; do
+		if test -r $i/tcl.h; then
+			AC_MSG_RESULT($i)
+			TCLINCLUDE="-I$i"
+			break
+		fi
+	done
+fi
+if test -z "$TCLINCLUDE"; then
+#	TCLINCLUDE="-I/usr/local/include"
+    	AC_MSG_RESULT(not found)
+fi
+else
+        AC_MSG_RESULT($TCLINCLUDE)
+fi
+
+AC_MSG_CHECKING(for Tcl library)
+if test -z "$TCLLIB"; then
+dirs="$prefix/lib /usr/local/lib /usr/lib /opt/local/lib"
+for i in $dirs ; do
+	if test -r $i/libtcl.a; then
+	    AC_MSG_RESULT($i)
+	    TCLLIB="-L$i -ltcl"
+	    break
+	fi
+done
+if test -z "$TCLLIB"; then
+	AC_MSG_RESULT(not found)
+#	TCLLIB="-L/usr/local/lib"
+fi
+else
+AC_MSG_RESULT($TCLLIB)
+fi
+
+# Only cygwin (Windows) needs the library for dynamic linking
+case $ac_sys_system/$ac_sys_release in
+CYGWIN*) TCLDYNAMICLINKING="$TCLLIB";;
+*)TCLDYNAMICLINKING="";;
+esac
+
+AC_SUBST(TCLINCLUDE)
+AC_SUBST(TCLLIB)
+AC_SUBST(TCLDYNAMICLINKING)
+AC_SUBST(TCLSWIG)
+
+])
+

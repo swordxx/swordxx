@@ -722,6 +722,10 @@ ac_env_CXXFLAGS_set=${CXXFLAGS+set}
 ac_env_CXXFLAGS_value=$CXXFLAGS
 ac_cv_env_CXXFLAGS_set=${CXXFLAGS+set}
 ac_cv_env_CXXFLAGS_value=$CXXFLAGS
+ac_env_CPP_set=${CPP+set}
+ac_env_CPP_value=$CPP
+ac_cv_env_CPP_set=${CPP+set}
+ac_cv_env_CPP_value=$CPP
 
 #
 # Report the --help message.
@@ -808,6 +812,13 @@ Optional Packages:
   --with-extra-includes=DIR
                           adds non standard include paths
   --with-extra-libs=DIR   adds non standard library paths
+  --with-perl5=path       Set location of Perl5 executable
+  --with-python=path       Set location of Python executable
+  --with-php4=path	  Set location of PHP4 executable
+  --with-tclconfig=path  Set location of tclConfig.sh
+  --with-tcl=path         Set location of Tcl package
+  --with-tclincl=path     Set location of Tcl include directory
+  --with-tcllib=path      Set location of Tcl library directory
 
 Some influential environment variables:
   CC          C compiler command
@@ -818,6 +829,7 @@ Some influential environment variables:
               headers in a nonstandard directory <include dir>
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
+  CPP         C preprocessor
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -2833,7 +2845,7 @@ for i in $ac_sword_library_dirs;
 do
   for j in $SEARCH_LIBS;
   do
-    echo "configure: 2836: $i/$j" >&5
+    echo "configure: 2848: $i/$j" >&5
     if test -r "$i/$j"; then
       echo "taking that" >&5
       ac_cv_sword_libdir=$i
@@ -2884,7 +2896,7 @@ for i in $ac_sword_include_dirs;
 do
   for j in swmgr.h;
   do
-    echo "configure: 2887: $i/$j" >&5
+    echo "configure: 2899: $i/$j" >&5
     if test -r "$i/$j"; then
       echo "taking that" >&5
       ac_cv_sword_incdir=$i
@@ -3024,6 +3036,748 @@ echo "$as_me: error: Your Sword installation is not recent enough! $sword_test_r
 upgrade to version 1.5.5!" >&2;}
    { (exit 1); exit 1; }; };
 fi;
+
+
+
+# ---------------------------------------------------------------------
+# Check Scripting languages
+# ---------------------------------------------------------------------
+
+
+
+PERLBIN=
+PERLSWIG=
+
+
+# Check whether --with-perl5 or --without-perl5 was given.
+if test "${with_perl5+set}" = set; then
+  withval="$with_perl5"
+   PERLBIN="$withval"
+else
+  PERLBIN=
+fi;
+
+# First figure out what the name of Perl5 is
+
+if test -z "$PERLBIN"; then
+for ac_prog in perl perl5.6.1 perl5.6.0 perl5.004 perl5.003 perl5.002 perl5.001 perl5 perl
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_PERL+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$PERL"; then
+  ac_cv_prog_PERL="$PERL" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_PERL="$ac_prog"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+fi
+fi
+PERL=$ac_cv_prog_PERL
+if test -n "$PERL"; then
+  echo "$as_me:$LINENO: result: $PERL" >&5
+echo "${ECHO_T}$PERL" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  test -n "$PERL" && break
+done
+
+else
+PERL="$PERLBIN"
+fi
+
+
+echo "$as_me:$LINENO: checking for Perl5 header files" >&5
+echo $ECHO_N "checking for Perl5 header files... $ECHO_C" >&6
+if test -n "$PERL"; then
+	PERL5DIR=`($PERL -e 'use Config; print $Config{archlib};') 2>/dev/null`
+	if test "$PERL5DIR" != ""; then
+		dirs="$PERL5DIR $PERL5DIR/CORE"
+		PERL5EXT=none
+		PERLSWIG=perlswig
+		for i in $dirs; do
+			if test -r $i/perl.h; then
+				echo "$as_me:$LINENO: result: $i" >&5
+echo "${ECHO_T}$i" >&6
+				PERL5EXT="$i"
+				break;
+			fi
+		done
+		if test "$PERL5EXT" = none; then
+			PERL5EXT="$PERL5DIR/CORE"
+			echo "$as_me:$LINENO: result: could not locate perl.h...using $PERL5EXT" >&5
+echo "${ECHO_T}could not locate perl.h...using $PERL5EXT" >&6
+		fi
+
+		echo "$as_me:$LINENO: checking for Perl5 library" >&5
+echo $ECHO_N "checking for Perl5 library... $ECHO_C" >&6
+		PERL5LIB=`($PERL -e 'use Config; $_=$Config{libperl}; s/^lib//; s/$Config{_a}$//; print $_') 2>/dev/null`
+		if test "$PERL5LIB" = "" ; then
+			echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
+		else
+			echo "$as_me:$LINENO: result: $PERL5LIB" >&5
+echo "${ECHO_T}$PERL5LIB" >&6
+		fi
+	else
+		echo "$as_me:$LINENO: result: unable to determine perl5 configuration" >&5
+echo "${ECHO_T}unable to determine perl5 configuration" >&6
+		PERL5EXT=$PERL5DIR
+	fi
+else
+       	echo "$as_me:$LINENO: result: could not figure out how to run perl5" >&5
+echo "${ECHO_T}could not figure out how to run perl5" >&6
+#	PERL5EXT="/usr/local/lib/perl/archname/5.003/CORE"
+fi
+
+# Only cygwin (Windows) needs the library for dynamic linking
+case $ac_sys_system/$ac_sys_release in
+CYGWIN*) PERL5DYNAMICLINKING="-L$PERL5EXT -l$PERL5LIB";;
+*)PERL5DYNAMICLINKING="";;
+esac
+
+
+
+
+
+
+
+
+
+
+PYINCLUDE=
+PYLIB=
+PYPACKAGE=
+
+# I don't think any of this commented stuff works anymore
+
+#PYLINK="-lModules -lPython -lObjects -lParser"
+
+#AC_ARG_WITH(py,[  --with-py=path          Set location of Python],[
+#	PYPACKAGE="$withval"], [PYPACKAGE=])
+#AC_ARG_WITH(pyincl,[  --with-pyincl=path      Set location of Python include directory],[
+#	PYINCLUDE="$withval"], [PYINCLUDE=])
+#AC_ARG_WITH(pylib,[  --with-pylib=path       Set location of Python library directory],[
+#	PYLIB="$withval"], [PYLIB=])
+
+#if test -z "$PYINCLUDE"; then
+#   if test -n "$PYPACKAGE"; then
+#	PYINCLUDE="$PYPACKAGE/include"
+#   fi
+#fi
+
+#if test -z "$PYLIB"; then
+#   if test -n "$PYPACKAGE"; then
+#	PYLIB="$PYPACKAGE/lib"
+#   fi
+#fi
+
+
+# Check whether --with-python or --without-python was given.
+if test "${with_python+set}" = set; then
+  withval="$with_python"
+   PYBIN="$withval"
+else
+  PYBIN=
+fi;
+
+# First figure out the name of the Python executable
+
+if test -z "$PYBIN"; then
+for ac_prog in $prefix/bin/python python python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 python1.4 python
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_PYTHON+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$PYTHON"; then
+  ac_cv_prog_PYTHON="$PYTHON" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_PYTHON="$ac_prog"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+fi
+fi
+PYTHON=$ac_cv_prog_PYTHON
+if test -n "$PYTHON"; then
+  echo "$as_me:$LINENO: result: $PYTHON" >&5
+echo "${ECHO_T}$PYTHON" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  test -n "$PYTHON" && break
+done
+
+else
+PYTHON="$PYBIN"
+fi
+
+if test -n "$PYTHON"; then
+    echo "$as_me:$LINENO: checking for Python prefix" >&5
+echo $ECHO_N "checking for Python prefix... $ECHO_C" >&6
+    PYPREFIX=`($PYTHON -c "import sys; print sys.prefix") 2>/dev/null`
+    echo "$as_me:$LINENO: result: $PYPREFIX" >&5
+echo "${ECHO_T}$PYPREFIX" >&6
+    echo "$as_me:$LINENO: checking for Python exec-prefix" >&5
+echo $ECHO_N "checking for Python exec-prefix... $ECHO_C" >&6
+    PYEPREFIX=`($PYTHON -c "import sys; print sys.exec_prefix") 2>/dev/null`
+    echo "$as_me:$LINENO: result: $PYEPREFIX" >&5
+echo "${ECHO_T}$PYEPREFIX" >&6
+
+
+    # Note: I could not think of a standard way to get the version string from different versions.
+    # This trick pulls it out of the file location for a standard library file.
+
+    echo "$as_me:$LINENO: checking for Python version" >&5
+echo $ECHO_N "checking for Python version... $ECHO_C" >&6
+
+    # Need to do this hack since autoconf replaces __file__ with the name of the configure file
+    filehack="file__"
+    PYVERSION=`($PYTHON -c "import string,operator; print operator.getitem(string.split(string.__$filehack,'/'),-2)")`
+    echo "$as_me:$LINENO: result: $PYVERSION" >&5
+echo "${ECHO_T}$PYVERSION" >&6
+
+    # Set the include directory
+
+    echo "$as_me:$LINENO: checking for Python header files" >&5
+echo $ECHO_N "checking for Python header files... $ECHO_C" >&6
+    if test -r $PYPREFIX/include/$PYVERSION/Python.h; then
+        PYINCLUDE="-I$PYPREFIX/include/$PYVERSION -I$PYEPREFIX/lib/$PYVERSION/config"
+    fi
+    if test -z "$PYINCLUDE"; then
+        if test -r $PYPREFIX/include/Py/Python.h; then
+            PYINCLUDE="-I$PYPREFIX/include/Py -I$PYEPREFIX/lib/python/lib"
+        fi
+    fi
+    echo "$as_me:$LINENO: result: $PYINCLUDE" >&5
+echo "${ECHO_T}$PYINCLUDE" >&6
+
+    # Set the library directory blindly.   This probably won't work with older versions
+    echo "$as_me:$LINENO: checking for Python library" >&5
+echo $ECHO_N "checking for Python library... $ECHO_C" >&6
+    dirs="$PYVERSION/config $PYVERSION/lib python/lib"
+    for i in $dirs; do
+        if test -d $PYEPREFIX/lib/$i; then
+           PYLIB="$PYEPREFIX/lib/$i"
+           break
+        fi
+    done
+    if test -z "$PYLIB"; then
+        echo "$as_me:$LINENO: result: Not found" >&5
+echo "${ECHO_T}Not found" >&6
+    else
+        echo "$as_me:$LINENO: result: $PYLIB" >&5
+echo "${ECHO_T}$PYLIB" >&6
+    fi
+
+    # Check for really old versions
+    if test -r $PYLIB/libPython.a; then
+         PYLINK="-lModules -lPython -lObjects -lParser"
+    else
+         PYLINK="-l$PYVERSION"
+    fi
+fi
+
+# Only cygwin (Windows) needs the library for dynamic linking
+case $ac_sys_system/$ac_sys_release in
+CYGWIN*) PYTHONDYNAMICLINKING="-L$PYLIB $PYLINK"
+         PYINCLUDE="-DUSE_DL_IMPORT $PYINCLUDE"
+         ;;
+*)PYTHONDYNAMICLINKING="";;
+esac
+
+
+
+
+
+
+
+
+
+
+PHP4BIN=
+
+
+# Check whether --with-php4 or --without-php4 was given.
+if test "${with_php4+set}" = set; then
+  withval="$with_php4"
+   PHP4BIN="$withval"
+else
+  PHP4BIN=
+fi;
+
+if test -z "$PHP4BIN"; then
+for ac_prog in php
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_PHP4+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$PHP4"; then
+  ac_cv_prog_PHP4="$PHP4" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_PHP4="$ac_prog"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+fi
+fi
+PHP4=$ac_cv_prog_PHP4
+if test -n "$PHP4"; then
+  echo "$as_me:$LINENO: result: $PHP4" >&5
+echo "${ECHO_T}$PHP4" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  test -n "$PHP4" && break
+done
+test -n "$PHP4" || PHP4="php4"
+
+else
+PHP4="$PHP4BIN"
+fi
+echo "$as_me:$LINENO: checking for PHP4 header files" >&5
+echo $ECHO_N "checking for PHP4 header files... $ECHO_C" >&6
+dirs="/usr/include/php /usr/local/include/php /usr/local/apache/php"
+for i in $dirs; do
+	if test -r $i/php_config.h -o -r $i/php_version.h; then
+		echo "$as_me:$LINENO: result: $i" >&5
+echo "${ECHO_T}$i" >&6
+		PHP4EXT="$i"
+		PHP4INC="-I$PHP4EXT -I$PHP4EXT/Zend -I$PHP4EXT/main -I$PHP4EXT/TSRM"
+		break;
+	fi
+done
+if test -z "$PHP4INC"; then
+	echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
+fi
+
+
+
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+echo "$as_me:$LINENO: checking how to run the C preprocessor" >&5
+echo $ECHO_N "checking how to run the C preprocessor... $ECHO_C" >&6
+# On Suns, sometimes $CPP names a directory.
+if test -n "$CPP" && test -d "$CPP"; then
+  CPP=
+fi
+if test -z "$CPP"; then
+  if test "${ac_cv_prog_CPP+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+      # Double quotes because CPP needs to be expanded
+    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
+    do
+      ac_preproc_ok=false
+for ac_c_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+#include <assert.h>
+                     Syntax error
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  egrep -v '^ *\+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  # Broken: fails on valid input.
+continue
+fi
+rm -f conftest.err conftest.$ac_ext
+
+  # OK, works on sane cases.  Now check whether non-existent headers
+  # can be detected and how.
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+#include <ac_nonexistent.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  egrep -v '^ *\+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  # Broken: success on invalid input.
+continue
+else
+  echo "$as_me: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  # Passes both tests.
+ac_preproc_ok=:
+break
+fi
+rm -f conftest.err conftest.$ac_ext
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_ext
+if $ac_preproc_ok; then
+  break
+fi
+
+    done
+    ac_cv_prog_CPP=$CPP
+
+fi
+  CPP=$ac_cv_prog_CPP
+else
+  ac_cv_prog_CPP=$CPP
+fi
+echo "$as_me:$LINENO: result: $CPP" >&5
+echo "${ECHO_T}$CPP" >&6
+ac_preproc_ok=false
+for ac_c_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+#include <assert.h>
+                     Syntax error
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  egrep -v '^ *\+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  # Broken: fails on valid input.
+continue
+fi
+rm -f conftest.err conftest.$ac_ext
+
+  # OK, works on sane cases.  Now check whether non-existent headers
+  # can be detected and how.
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+#include <ac_nonexistent.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  egrep -v '^ *\+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  # Broken: success on invalid input.
+continue
+else
+  echo "$as_me: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  # Passes both tests.
+ac_preproc_ok=:
+break
+fi
+rm -f conftest.err conftest.$ac_ext
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_ext
+if $ac_preproc_ok; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: C preprocessor \"$CPP\" fails sanity check" >&5
+echo "$as_me: error: C preprocessor \"$CPP\" fails sanity check" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+
+
+TCLINCLUDE=
+TCLLIB=
+TCLPACKAGE=
+TCLSWIG=
+
+
+# Check whether --with-tclconfig or --without-tclconfig was given.
+if test "${with_tclconfig+set}" = set; then
+  withval="$with_tclconfig"
+  with_tclconfig="$withval"
+fi;
+
+# Check whether --with-tcl or --without-tcl was given.
+if test "${with_tcl+set}" = set; then
+  withval="$with_tcl"
+
+	TCLPACKAGE="$withval"
+else
+  TCLPACKAGE=
+fi;
+
+# Check whether --with-tclincl or --without-tclincl was given.
+if test "${with_tclincl+set}" = set; then
+  withval="$with_tclincl"
+
+	TCLINCLUDE="-I$withval"
+else
+  TCLINCLUDE=
+fi;
+
+# Check whether --with-tcllib or --without-tcllib was given.
+if test "${with_tcllib+set}" = set; then
+  withval="$with_tcllib"
+
+	TCLLIB="-L$withval"
+else
+  TCLLIB=
+fi;
+
+echo "$as_me:$LINENO: checking for Tcl configuration" >&5
+echo $ECHO_N "checking for Tcl configuration... $ECHO_C" >&6
+# First check to see if --with-tclconfig was specified.
+if test x"${with_tclconfig}" != x ; then
+   if test -f "${with_tclconfig}/tclConfig.sh" ; then
+      TCLCONFIG=`(cd ${with_tclconfig}; pwd)`
+   else
+      { { echo "$as_me:$LINENO: error: ${with_tcl} directory doesn't contain tclConfig.sh" >&5
+echo "$as_me: error: ${with_tcl} directory doesn't contain tclConfig.sh" >&2;}
+   { (exit 1); exit 1; }; }
+   fi
+fi
+# check in a few common install locations
+if test x"${TCLCONFIG}" = x ; then
+    for i in `ls -d /usr/lib 2>/dev/null` \
+	     `ls -d ${prefix}/lib 2>/dev/null` \
+	    `ls -d /usr/local/lib 2>/dev/null` ; do
+	if test -f "$i/tclConfig.sh" ; then
+	    TCLCONFIG=`(cd $i; pwd)`
+	    break
+	fi
+    done
+fi
+if test x"${TCLCONFIG}" = x ; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+else
+    echo "$as_me:$LINENO: result: found $TCLCONFIG/tclConfig.sh" >&5
+echo "${ECHO_T}found $TCLCONFIG/tclConfig.sh" >&6
+    . $TCLCONFIG/tclConfig.sh
+    TCLINCLUDE=-I$TCL_PREFIX/include
+    TCLLIB=$TCL_LIB_SPEC
+fi
+
+if test -z "$TCLINCLUDE"; then
+   if test -n "$TCLPACKAGE"; then
+	TCLINCLUDE="-I$TCLPACKAGE/include"
+   fi
+fi
+
+if test -z "$TCLLIB"; then
+   if test -n "$TCLPACKAGE"; then
+	TCLLIB="-L$TCLPACKAGE/lib -ltcl"
+   fi
+fi
+
+echo "$as_me:$LINENO: checking for Tcl header files" >&5
+echo $ECHO_N "checking for Tcl header files... $ECHO_C" >&6
+if test -z "$TCLINCLUDE"; then
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+#include <tcl.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  egrep -v '^ *\+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  TCLINCLUDE=""
+fi
+rm -f conftest.err conftest.$ac_ext
+if test -z "$TCLINCLUDE"; then
+	dirs="$prefix/include /usr/local/include /usr/include /opt/local/include"
+	for i in $dirs ; do
+		if test -r $i/tcl.h; then
+			echo "$as_me:$LINENO: result: $i" >&5
+echo "${ECHO_T}$i" >&6
+			TCLINCLUDE="-I$i"
+			break
+		fi
+	done
+fi
+if test -z "$TCLINCLUDE"; then
+#	TCLINCLUDE="-I/usr/local/include"
+    	echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
+fi
+else
+        echo "$as_me:$LINENO: result: $TCLINCLUDE" >&5
+echo "${ECHO_T}$TCLINCLUDE" >&6
+fi
+
+echo "$as_me:$LINENO: checking for Tcl library" >&5
+echo $ECHO_N "checking for Tcl library... $ECHO_C" >&6
+if test -z "$TCLLIB"; then
+dirs="$prefix/lib /usr/local/lib /usr/lib /opt/local/lib"
+for i in $dirs ; do
+	if test -r $i/libtcl.a; then
+	    echo "$as_me:$LINENO: result: $i" >&5
+echo "${ECHO_T}$i" >&6
+	    TCLLIB="-L$i -ltcl"
+	    break
+	fi
+done
+if test -z "$TCLLIB"; then
+	echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
+#	TCLLIB="-L/usr/local/lib"
+fi
+else
+echo "$as_me:$LINENO: result: $TCLLIB" >&5
+echo "${ECHO_T}$TCLLIB" >&6
+fi
+
+# Only cygwin (Windows) needs the library for dynamic linking
+case $ac_sys_system/$ac_sys_release in
+CYGWIN*) TCLDYNAMICLINKING="$TCLLIB";;
+*)TCLDYNAMICLINKING="";;
+esac
+
+
+
+
 
 
 
@@ -3637,6 +4391,23 @@ s,@USER_LDFLAGS@,$USER_LDFLAGS,;t t
 s,@LIBZ@,$LIBZ,;t t
 s,@LIB_SWORD@,$LIB_SWORD,;t t
 s,@SWORD_INCLUDES@,$SWORD_INCLUDES,;t t
+s,@PERL@,$PERL,;t t
+s,@PERL5EXT@,$PERL5EXT,;t t
+s,@PERL5DYNAMICLINKING@,$PERL5DYNAMICLINKING,;t t
+s,@PERL5LIB@,$PERL5LIB,;t t
+s,@PERLSWIG@,$PERLSWIG,;t t
+s,@PYTHON@,$PYTHON,;t t
+s,@PYINCLUDE@,$PYINCLUDE,;t t
+s,@PYLIB@,$PYLIB,;t t
+s,@PYLINK@,$PYLINK,;t t
+s,@PYTHONDYNAMICLINKING@,$PYTHONDYNAMICLINKING,;t t
+s,@PHP4@,$PHP4,;t t
+s,@PHP4INC@,$PHP4INC,;t t
+s,@CPP@,$CPP,;t t
+s,@TCLINCLUDE@,$TCLINCLUDE,;t t
+s,@TCLLIB@,$TCLLIB,;t t
+s,@TCLDYNAMICLINKING@,$TCLDYNAMICLINKING,;t t
+s,@TCLSWIG@,$TCLSWIG,;t t
 CEOF
 
 _ACEOF

@@ -1,5 +1,5 @@
 
-all: perlswig
+all: $(PERLSWIG) $(TCLSWIG) $(PYTHONSWIG) $(PHPSWIG)
 	echo "built"
 
 perlswig: sword.i
@@ -26,4 +26,15 @@ perlswig: sword.i
 	cd perl && perl Makefile.PL && make clean && rm -f MANIFEST* && rm -f *.old && perl Makefile.PL && make manifest
 	cd perl && sed -e 's/-lsword/-lsword -lstdc++/' Makefile > Makefile.tmp && mv Makefile.tmp Makefile
 
+tclswig: sword.i
+	mkdir -p tcl
+	swig -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx sword.i
+	
+pythonswig: sword.i
+	mkdir -p python
+	swig -python -c++ -shadow -o python/Sword.cxx sword.i
+
+phpswig: sword.i
+	mkdir -p php
+	swig -php -c++ -o php/Sword.cxx sword.i
 

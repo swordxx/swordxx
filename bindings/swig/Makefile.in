@@ -63,7 +63,23 @@ LIBZ = @LIBZ@
 LIB_SWORD = @LIB_SWORD@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
+PERL = @PERL@
+PERL5DYNAMICLINKING = @PERL5DYNAMICLINKING@
+PERL5EXT = @PERL5EXT@
+PERL5LIB = @PERL5LIB@
+PERLSWIG = @PERLSWIG@
+PHP4 = @PHP4@
+PHP4INC = @PHP4INC@
+PYINCLUDE = @PYINCLUDE@
+PYLIB = @PYLIB@
+PYLINK = @PYLINK@
+PYTHON = @PYTHON@
+PYTHONDYNAMICLINKING = @PYTHONDYNAMICLINKING@
 SWORD_INCLUDES = @SWORD_INCLUDES@
+TCLDYNAMICLINKING = @TCLDYNAMICLINKING@
+TCLINCLUDE = @TCLINCLUDE@
+TCLLIB = @TCLLIB@
+TCLSWIG = @TCLSWIG@
 USER_INCLUDES = @USER_INCLUDES@
 USER_LDFLAGS = @USER_LDFLAGS@
 VERSION = @VERSION@
@@ -213,7 +229,7 @@ distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
 
-all: perlswig
+all: $(PERLSWIG) $(TCLSWIG) $(PYTHONSWIG) $(PHPSWIG)
 	echo "built"
 
 perlswig: sword.i
@@ -239,6 +255,18 @@ perlswig: sword.i
 	@echo ");" >> perl/Makefile.PL
 	cd perl && perl Makefile.PL && make clean && rm -f MANIFEST* && rm -f *.old && perl Makefile.PL && make manifest
 	cd perl && sed -e 's/-lsword/-lsword -lstdc++/' Makefile > Makefile.tmp && mv Makefile.tmp Makefile
+
+tclswig: sword.i
+	mkdir -p tcl
+	swig -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx sword.i
+
+pythonswig: sword.i
+	mkdir -p python
+	swig -python -c++ -shadow -o python/Sword.cxx sword.i
+
+phpswig: sword.i
+	mkdir -p php
+	swig -php -c++ -o php/Sword.cxx sword.i
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
