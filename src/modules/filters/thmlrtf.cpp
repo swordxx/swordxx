@@ -208,7 +208,7 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 			buf += '}';
 			if (userData["sechead"] == "true") {
 				buf += "\\par ";
-				userData["sechead"] == "false";
+				userData["sechead"] = "false";
 			}
 		}
 		else if (!strncmp(token, "note", 4)) {
