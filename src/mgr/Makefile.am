@@ -12,7 +12,7 @@ else
 icudatadir =
 endif
 
-DEFS += $(globdef) $(icudatadir)
+INCLUDES += $(globdef) $(icudatadir)
 
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
 libsword_la_SOURCES += $(mgrdir)/swmgr.cpp

@@ -17,6 +17,5 @@ libsword_la_SOURCES += $(commondir)/zverse.cpp
 libsword_la_SOURCES += $(commondir)/zstr.cpp
 libsword_la_SOURCES += $(commondir)/entriesblk.cpp
 
-DEFS  += -DUNIX
 libsword_la_SOURCES += $(commondir)/sapphire.cpp
 

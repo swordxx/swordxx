@@ -62,14 +62,21 @@ SWICUSRC += $(filtersdir)/utf8arshaping.cpp
 SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
 
 if ICU
-DEFS += -D_ICU_
-libsword_la_SOURCES += $(SWICUSRC)
+ICUDEFS = -D_ICU_
+DISTSWICUSRC =
+SWREALICUSRC = $(SWICUSRC)
 else
 if ICUSWORD
-DEFS += -D_ICU_ -D_ICUSWORD_
-libsword_la_SOURCES += $(SWICUSRC)
+ICUDEFS = -D_ICU_ -D_ICUSWORD_
+DISTSWICUSRC =
+SWREALICUSRC = $(SWICUSRC)
 else
-EXTRA_DIST = $(SWICUSRC)
+DISTSWICUSRC = $(SWICUSRC)
+SWREALICUSRC =
 endif
 endif
+
+INCLUDES += $(ICUDEFS)
+libsword_la_SOURCES += $(SWREALICUSRC)
+EXTRA_DIST = $(DISTSWICUSRC)
 

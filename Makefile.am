@@ -61,14 +61,22 @@ globalconfdir := @sysconfdir@
 
 SUBDIRS = lib . icu apps
 if BUILDTESTS
-SUBDIRS += tests
+TESTSDIR = tests
+else
+TESTSDIR =
 endif
 if BUILDUTILS
-SUBDIRS += utilities
+UTILSDIR = utilities
+else
+UTILSDIR =
 endif
 if BUILDEXAMPLES
-SUBDIRS += examples
+EXAMPLESDIR = examples
+else
+EXAMPLESDIR =
 endif
+
+SUBDIRS += $(TESTSDIR) $(UTILSDIR) $(EXAMPLESDIR)
 
 INCLUDES = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh
