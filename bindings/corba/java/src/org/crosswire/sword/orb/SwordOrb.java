@@ -54,10 +54,11 @@ System.out.println("failed in attach");
 
 	public void valueUnbound(HttpSessionBindingEvent httpSessionBindingEvent) {
 		try {
-			throw new Exception("value unbound; showing stacktrace");
-//			getSWMgrInstance().terminate();
+//			throw new Exception("value unbound; showing stacktrace");
+			getSWMgrInstance().terminate();
 		}
-		catch (Exception e) {e.printStackTrace();}	// we know this doesn't return property cuz we killed the orb! :)
+		catch (Exception e) {}	// we know this doesn't return properly cuz we killed the orb! :)
+//		catch (Exception e) {e.printStackTrace();}	// we know this doesn't return properly cuz we killed the orb! :)
 	}
 
 
