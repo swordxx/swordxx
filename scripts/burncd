@@ -1,0 +1,1 @@
+cdrecord -v speed=2 dev=0,0 /mnt/server/space/im.iso
