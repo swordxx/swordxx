@@ -1,13 +1,18 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+
+28-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
+	Added new utility to output a verse module one line per
+		verse (utilities/mod2vpl)
+
 22-Aug-2000	Joachim Ansorg <jansorg@gmx.de>
 	Added Slovak translation of booknames made by Zdeno <zdpo@post.sk>
 
 16-Aug-2000	Joachim Ansorg <jansorg@gmx.de>
 	Fixed utilities/mkfastmod.cpp
 	Added a template for translations of international booknames 
-	(doc/translation-template.conf).
+		(doc/translation-template.conf).
 
 14-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
 	Added beginnings of search framework support.
