@@ -31,6 +31,7 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
   bool intoken 	= false;
   int len;
   bool ampersand = false;
+  bool sechead = false;
   
   len = strlen(text) + 1;						// shift string to right of buffer
   if (len < maxlen) {
@@ -234,12 +235,28 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = '>';
 	    continue;
 	  }
-	  else if (!strnicmp(token, "\\font", 5)) {
+	  else if (!strnicmp(token, "/font", 5)) {
 	    *to++ = '<';
 	    *to++ = 'F';
 	    *to++ = 'r';
 	    *to++ = '>';
 	    continue;	    
+	  }
+	  else if (!strncmp(token, "div class=\"sechead\"", 19)) {
+	    *to++ = '<';
+	    *to++ = 'T';
+	    *to++ = 'S';
+	    *to++ = '>';
+	    sechead = true;
+	    continue;
+	  }
+	  else if (sechead && !strncmp(token, "/div", 19)) {
+	    *to++ = '<';
+	    *to++ = 'T';
+	    *to++ = 's';
+	    *to++ = '>';
+	    sechead = false;
+	    continue;
 	  }
 	  else if (!strncmp(token, "foreign lang=\"he\"", 17)) {
 	    *to++ = '<';
@@ -263,7 +280,7 @@ char ThMLGBF::ProcessText(char *text, int maxlen)
 	    *to++ = '>';
 	    continue;				
 	  }
-	  else if (!strncmp(token, "br", 2) || !strncmp(token, "BR", 2)) {
+	  else if (!strnicmp(token, "br", 2)) {
 		    *to++ = '<';
 		    *to++ = 'C';
 		    *to++ = 'L';

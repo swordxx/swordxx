@@ -357,34 +357,34 @@ char GBFThML::ProcessText(char *text, int maxlen)
 			      continue;
 			    case 'S':
 			      *to++ = '<';
-			      *to++ = 'b';
-			      *to++ = 'r';
-			      *to++ = ' ';
-			      *to++ = '/';
-			      *to++ = '>';
-			      *to++ = '<';
-			      *to++ = 'b';
-			      *to++ = '>';
-			      *to++ = '<';
+			      *to++ = 'd';
 			      *to++ = 'i';
+			      *to++ = 'v';
+			      *to++ = ' ';
+			      *to++ = 'c';
+			      *to++ = 'l';
+			      *to++ = 'a';
+			      *to++ = 's';
+			      *to++ = 's';
+			      *to++ = '=';
+			      *to++ = '\"';
+			      *to++ = 's';
+			      *to++ = 'e';
+			      *to++ = 'c';
+			      *to++ = 'h';
+			      *to++ = 'e';
+			      *to++ = 'a';
+			      *to++ = 'd';
+			      *to++ = '\"';
 			      *to++ = '>';
 			      continue;
 			    case 's':
 			      *to++ = '<';
 			      *to++ = '/';
+			      *to++ = 'd';
 			      *to++ = 'i';
+			      *to++ = 'v';
 			      *to++ = '>';
-			      *to++ = '<';
-			      *to++ = '/';
-			      *to++ = 'b';
-			      *to++ = '>';
-			      *to++ = '<';
-			      *to++ = 'b';
-			      *to++ = 'r';
-			      *to++ = ' ';
-			      *to++ = '/';
-			      *to++ = '>';
-			      
 			      continue;
 			    }
 			  break;

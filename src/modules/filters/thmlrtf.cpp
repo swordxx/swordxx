@@ -234,6 +234,29 @@ char ThMLRTF::ProcessText(char *text, int maxlen)
 			inScriptRef = false;
 		    continue;
 		  }
+		  else if (!strncmp(token, "div class=\"sechead\"", 19)) {
+		    *to++ = '{';
+		    *to++ = '\\';
+		    *to++ = 'p';
+		    *to++ = 'a';
+		    *to++ = 'r';
+		    *to++ = '\\';
+		    *to++ = 'i';
+		    *to++ = '1';
+		    *to++ = '\\';
+		    *to++ = 'b';
+		    *to++ = '1';
+		    *to++ = ' ';
+		    continue;
+		  }
+		  else if (!strncmp(token, "div", 3)) {
+		    *to++ = '{';
+		    continue;
+                  }
+		  else if (!strncmp(token, "/div", 4)) {
+		    *to++ = '}';
+		    continue;
+		  }
 		  else if (!strncmp(token, "note place=\"foot\"", 17)) {
 		    *to++ = '{';
 		    *to++ = '\\';

@@ -201,6 +201,17 @@ bool ThMLHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &use
 			}
 		}
 			
+		else if (!strncmp(token, "div class=\"sechead\"", 19)) {
+		        userData["SecHead"] = "true";
+			pushString(buf, "<br /><b><i>");
+		}
+		else if (!strncmp(token, "/div", 4)) {
+		        if (userData["SecHead"] == "true") {
+			        pushString(buf, "</i></b><br />");
+				userData["SecHead"] = "false";
+			}
+		}
+
 		else if (!strncmp(token, "sync type=\"Strongs\" value=\"T", 28)) {
 			pushString(buf, "<A HREF=\"");
 			for (i = 5; i < strlen(token)-1; i++)				
