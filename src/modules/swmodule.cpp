@@ -28,7 +28,7 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
  *	unicode  - if this module is unicode (widechar)
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, bool unicode, char dir)
+SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, char encoding, char direction, char markup)
 {
 	key      = CreateKey();
 	entrybuf = new char [1];
@@ -37,18 +37,20 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	error    = 0;
 	moddesc  = 0;
 	modtype  = 0;
-        this->unicode  = unicode;
-        this->direction = dir;
+        this->encoding = encoding;
+        this->direction = direction;
+        this->markup  = markup;
         entrySize= -1;
 	disp     = (idisp) ? idisp : &rawdisp;
 	stdstr(&modname, imodname);
 	stdstr(&moddesc, imoddesc);
 	stdstr(&modtype, imodtype);
 	render = true;	// for protected method when sometimes need RenderText not to _Render Text_ :)  kludge / rewrite
-     stripFilters = new FilterList();
-     rawFilters = new FilterList();
-     renderFilters = new FilterList();
-     optionFilters = new FilterList();
+        stripFilters = new FilterList();
+        rawFilters = new FilterList();
+        renderFilters = new FilterList();
+        optionFilters = new FilterList();
+        encodingFilters = new FilterList();
 }
 
 
@@ -74,11 +76,13 @@ SWModule::~SWModule()
      rawFilters->clear();
      renderFilters->clear();
      optionFilters->clear();
-     
+     encodingFilters->clear();
+
      delete stripFilters;
      delete rawFilters;
      delete renderFilters;
      delete optionFilters;
+     delete encodingFilters;
 }
 
 
@@ -167,6 +171,33 @@ char SWModule::Direction(char newdir) {
         return direction;
 }
 
+/******************************************************************************
+ * SWModule::Encoding - Sets/gets module encoding
+ *
+ * ENT:	newdir - value which to set direction
+ *		[-1] - only get
+ *
+ * RET:	char encoding
+ */
+char SWModule::Encoding(char newenc) {
+        if (newenc != -1)
+                encoding = newenc;
+        return encoding;
+}
+
+/******************************************************************************
+ * SWModule::Markup - Sets/gets module markup
+ *
+ * ENT:	newdir - value which to set direction
+ *		[-1] - only get
+ *
+ * RET:	char markup
+ */
+char SWModule::Markup(char newmark) {
+        if (newmark != -1)
+                markup = newmark;
+        return markup;
+}
 /******************************************************************************
  * SWModule::Disp - Sets/gets display driver
  *
@@ -510,6 +541,7 @@ const char *SWModule::StripText(char *buf, int len)
 	
 	if (render) {
 		renderFilter(buf, len, key);
+                encodingFilter(buf, len, key);
 	}
 
 	return buf;
