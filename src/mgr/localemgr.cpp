@@ -2,7 +2,7 @@
  *  localemgr.cpp - implementation of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.cpp,v 1.5 2000/03/15 07:25:09 scribe Exp $
+ * $Id: localemgr.cpp,v 1.6 2000/08/12 23:58:51 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,19 +59,36 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	else setDefaultLocaleName("en");
 
 	if (!iConfigPath)
-		SWMgr::findConfig(&configType, &configPath, &prefixPath);
+		SWMgr::findConfig(&configType, &prefixPath, &configPath);
 	else configPath = (char *)iConfigPath;
 
-	if (configPath) {
-		path = configPath;
-		if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
+	if (prefixPath) {
+		switch (configType) {
+		case 2:
+			int i;
+			for (i = strlen(configPath)-1; ((i) && (configPath[i] != '/') && (configPath[i] != '\\')); i--);
+			configPath[i] = 0;
+			path = configPath;
 			path += "/";
+			break;
+		default:
+			path = prefixPath;
+			if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
+				path += "/";
 
+			break;
+		}
 		if (SWMgr::existsDir(path.c_str(), "locales.d")) {
 			path += "locales.d";
 			loadConfigDir(path.c_str());
 		}
 	}
+
+	if (prefixPath)
+		delete [] prefixPath;
+
+	if (configPath)
+		delete [] configPath;
 }
 
 
