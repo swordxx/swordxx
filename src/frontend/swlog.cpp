@@ -2,9 +2,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#ifndef _MSC_VER
 #include <iostream>
-#endif
 #if defined(_ICU_) && !defined(_ICUSWORD_)
 #define _USTDIO_
 #include <unicode/ustdio.h>
