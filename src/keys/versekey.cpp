@@ -400,14 +400,6 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	
 	while (*buf) {
 		switch (*buf) {
-		case ':':
-			number[tonumber] = 0;
-			tonumber = 0;
-			if (*number)
-				chap = atoi(number);
-			*number = 0;
-			break;
-
 		case ' ':
 			inTerm = true;
 			while (true) {
@@ -423,6 +415,17 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				book[tobook++] = ' ';
 				break;
 			}
+		case ':':
+			if (buf[1] != ' ') {		// for silly Mat 1:1: this verse....
+				number[tonumber] = 0;
+				tonumber = 0;
+				if (*number)
+					chap = atoi(number);
+				*number = 0;
+				break;
+			}
+			// otherwise drop down to next case
+
 		case '-': 
 		case ',': // on number new verse
 		case ';': // on number new chapter
@@ -454,29 +457,29 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					break;
 				}
 
-                                for (loop = strlen(book) - 1; loop+1; loop--) {
+				for (loop = strlen(book) - 1; loop+1; loop--) {
 					if (book[loop] == ' ') {
 						if (isroman(&book[loop+1])) {
 							if (verse == -1) {
 								verse = chap;
 								chap = from_rom(&book[loop+1]);
 								book[loop] = 0;
-					       	        }
-                                                }
+							}
+						}
 	        				break;
-                                        }
-                                }
+					}
+				}
 
-                                if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
-                                        if (verse == -1) {
-                                                verse = chap;
-		                		chap = VerseKey(tmpListKey).Chapter();
-                                                *book = 0;
-                                        }
-                                }
-                                if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
+				if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
+					if (verse == -1) {
+						verse = chap;
+						chap = VerseKey(tmpListKey).Chapter();
+						*book = 0;
+					}
+				}
+				if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
 					strcpy(book, VerseKey(tmpListKey).getBookName());
-                                }
+				}
 				bookno = getBookAbbrev(book);
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
@@ -573,6 +576,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		case ']': 
 		case '(': 
 		case ')': 
+		case '{': 
+		case '}': 
 			break;
 		case '.':
 			if (buf > orig)			// ignore (break) if preceeding char is not a digit

@@ -88,19 +88,39 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 							module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 						}
 					}
+					else {
+						num = strstr(token, "lemma=\"strong:");
+						if (num) {
+							for (num+=14; ((*num) && (*num != '\"')); num++)
+								*valto++ = *num;
+							*valto = 0;
+							if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+								// normal strongs number
+								sprintf(wordstr, "%03d", word++);
+								module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+								tmp = "";
+								tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
+								module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
+								newText = true;
+							}
+							else {
+								// verb morph
+								sprintf(wordstr, "%03d", word-1);
+								module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+							}
+						}
+					}
 				}
 				if (!option) {
 					char *num = strstr(token, "lemma=\"x-Strongs:");
 					if (num) {
 						memcpy(num, "savlm", 5);
-/*						
-						for (int i = 0; i < 17; i++)
-							*num++ = ' ';
-						for (; ((*num) && (*num!='\"')); num++)
-							*num = ' ';
-						if (*num)
-							*num = ' ';
-*/
+					}
+					else {
+						char *num = strstr(token, "lemma=\"strong:");
+						if (num) {
+							memcpy(num, "savlm", 5);
+						}
 					}
 				}
 			}

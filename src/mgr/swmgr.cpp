@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.98 2004/01/21 06:14:41 scribe Exp $
+ * $Id: swmgr.cpp,v 1.99 2004/01/31 00:09:31 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -95,7 +95,7 @@ bool SWMgr::isICU = false;
 #endif
 
 
-bool SWMgr::debug = true;
+bool SWMgr::debug = false;
 
 #ifdef GLOBCONFPATH
 const char *SWMgr::globalConfPath = GLOBCONFPATH;

@@ -39,7 +39,6 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			// OSIS Word (temporary until OSISRTF is done)
 			valto = val;
 			num = strstr(token, "lemma=\"x-Strongs:");
-
 			if (num) {
 				for (num+=17; ((*num) && (*num != '\"')); num++)
 					*valto++ = *num;
@@ -61,6 +60,32 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 						buf += *tok;
 					}
 					buf += "</a>&gt;</em></small> ";
+				}
+			}
+			else {
+				num = strstr(token, "lemma=\"strong:");
+				if (num) {
+					for (num+=14; ((*num) && (*num != '\"')); num++)
+						*valto++ = *num;
+					*valto = 0;
+
+					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+						buf += " <small><em>&lt;";
+						url = "";
+						for (tok = val; *tok; tok++) {
+							url += *tok;
+						}
+						if ((url.length() > 1) && strchr("GH", url[0])) {
+							if (isdigit(url[1]))
+								url = url.c_str()+1;
+						}
+						buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str());
+
+						for (tok = (!isdigit(*val))?val+1:val; *tok; tok++) {
+							buf += *tok;
+						}
+						buf += "</a>&gt;</em></small> ";
+					}
 				}
 			}
 			valto = val;

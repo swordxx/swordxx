@@ -80,6 +80,28 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 					}
 					*/
 				}
+				else {
+					num = strstr(token, "lemma=\"strong:");
+					if (num) {
+						for (num+=14; ((*num) && (*num != '\"')); num++)
+							*valto++ = *num;
+						*valto = 0;
+						if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+							// normal strongs number
+							strongnum += "{\\cf3 \\sub <";
+							for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+								strongnum += *tok;
+							strongnum += ">}";
+						}
+						/*	forget these for now
+						else {
+							// verb morph
+							sprintf(wordstr, "%03d", word-1);
+							module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+						}
+						*/
+					}
+				}
 				valto = val;
 				num = strstr(token, "morph=\"x-Robinson:");
 				if (num) {

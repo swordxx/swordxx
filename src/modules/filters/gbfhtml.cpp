@@ -90,6 +90,19 @@ bool GBFHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 							buf += *tok;
 					buf += "&gt;</em></small> ";					
 				}
+			} else {
+				num = strstr(token, "lemma=\"strong:");
+				if (num) {
+					for (num+=14; ((*num) && (*num != '\"')); num++)
+						*valto++ = *num;
+					*valto = 0;
+					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+						buf += " <small><em>&lt;";
+						for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+								buf += *tok;
+						buf += "&gt;</em></small> ";					
+					}
+				}
 			}
 			valto = val;
 			num = strstr(token, "morph=\"x-Robinson:");

@@ -47,7 +47,7 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 		memset(frag, 0, 800);
 		memset(preJunk, 0, 800);
 		memset(postJunk, 0, 800);
-		while ((*startFrag) && (strchr(" ;,()[].", *startFrag))) {
+		while ((*startFrag) && (strchr(" {};,()[].", *startFrag))) {
 			outRef += *startFrag;
 			startFrag++;
 		}
@@ -55,7 +55,7 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 			frag[((const char *)element->userData - startFrag) + 1] = 0;
 			int j;
-			for (j = strlen(frag)-1; j && (strchr(" ;,()[].", frag[j])); j--);
+			for (j = strlen(frag)-1; j && (strchr(" {};,()[].", frag[j])); j--);
 			if (frag[j+1])
 				strcpy(postJunk, frag+j+1);
 			frag[j+1]=0;
@@ -66,7 +66,7 @@ const char *convertToOSIS(const char *inRef, const SWKey *key) {
 			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
 			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
 			int j;
-			for (j = strlen(frag)-1; j && (strchr(" ;,()[].", frag[j])); j--);
+			for (j = strlen(frag)-1; j && (strchr(" {};,()[].", frag[j])); j--);
 			if (frag[j+1])
 				strcpy(postJunk, frag+j+1);
 			frag[j+1]=0;

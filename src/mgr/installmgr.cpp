@@ -609,6 +609,8 @@ void InstallMgr::refreshRemoteSource(InstallSource *is) {
 		}
 		closedir(dir);
 	}
+	if (!FileMgr::existsDir(target))
+		FileMgr::createPathAndFile(target+"/globals.conf");
 
 
 
