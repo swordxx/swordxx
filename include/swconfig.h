@@ -2,7 +2,7 @@
  *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
  *				of configuration information
  *
- * $Id: swconfig.h,v 1.12 2001/04/19 15:40:06 jansorg Exp $
+ * $Id: swconfig.h,v 1.13 2001/05/25 10:39:07 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -58,15 +58,39 @@ class SWDLLEXPORT SWConfig
 private:
   char getline (FILE * fp, string & line);
 public:
-    string filename;
+  /** The filename used by this SWConfig object
+  *
+  */
+  string filename;
+  /** Map of available sections
+  * The map of available sections.
+  */
   SectionMap Sections;
 
-    SWConfig (const char *ifilename);
-    virtual ~ SWConfig ();
+  /** Constructor of SWConfig
+  * @param ifilename The file, which should be used for this config.
+  */
+  SWConfig (const char *ifilename);
+  virtual ~ SWConfig ();
 
+  /** Load from disk
+  * Load the contzent from disk.
+  */
   virtual void Load ();
+  /** Save to disk
+  * Save the content of this config object to disk.
+  */
   virtual void Save ();
+  /** Merges the values of addFrom
+  * @param The config which values should be merged to this config object. Already existing values will be overwritten.
+  */
   virtual SWConfig & operator += (SWConfig & addFrom);
+  /** Get a section
+  * This is an easy way to get and store config values.
+  * The following will work:
+  * SWConfig config("/home/user/.setttings");
+  * config["Colors"]["Background"] = "red"
+  */
   virtual ConfigEntMap & operator [] (const char *section);
 };
 

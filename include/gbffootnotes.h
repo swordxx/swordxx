@@ -1,6 +1,6 @@
 /*
  *
- * $Id: gbffootnotes.h,v 1.7 2001/02/15 21:20:14 jansorg Exp $
+ * $Id: gbffootnotes.h,v 1.8 2001/05/25 10:39:07 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -25,7 +25,7 @@
 
 #include <defs.h>
 
-  /** This Filter shows/hides footnotes in a GBF text
+/** This Filter shows/hides footnotes in a GBF text
   */
 class SWDLLEXPORT GBFFootnotes:public SWFilter
 {

@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.6 2001/02/19 16:59:51 mgruner Exp $ */
-/* $Revision: 1.6 $ */
+/* $Header: /space/oldserver/cvsroot/core/sword/include/gbfhtml.h,v 1.7 2001/05/25 10:39:07 jansorg Exp $ */
+/* $Revision: 1.7 $ */
 
 #ifndef GBFHTML_H
 #define GBFHTML_H
@@ -26,8 +26,8 @@
 
 #include <defs.h>
 
-  /** This filter converts GBF Text into HTML
-  */
+/** This filter converts GBF Text into HTML
+ */
 class SWDLLEXPORT GBFHTML:public SWFilter
 {
 public:

@@ -2,7 +2,7 @@
  *  swmgr.h   - definition of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.h,v 1.22 2001/04/19 15:40:06 jansorg Exp $
+ * $Id: swmgr.h,v 1.23 2001/05/25 10:39:07 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,24 +20,17 @@
  *
  */
 
-/** @page frontend How to write a frontend for the Sword library
-* This page describes howto create a new frontend using the Sword library.<BR>
-* We do only show how to write a very simple frontend, the GUI and more features have to be 
-* implemented with your own ideas.<BR>
-* The programming language is C++, the toolkit is Qt 2.2 because I do only know Qt and it's 
-* available on Linux and Windows. The IDE I used is KDevelop 1.41.<BR>
-* The app is called SimpleSword and does almoust nothing :) The sourcecode of SimpleSword
-* is available in Swords CVS in the directory examples/X11/SimpleSword/<BR>
-*
-*/
-
 /** @mainpage The Sword library 1.52 - API documentation
 * This page decsribes the structure of the Sword library.
 * Sword provides an interface to different modules (Bibles/Commentaries/Lexicons)
 * on disk. The object to work directly with the modules is SWModule.
 * Use the class SWMgr to manage the modules.
 *
-* Learn how to write a frontend: @ref frontend
+* If you want to write your own frontend for Sword please have a look at the already existing ones.
+* Well knwon frontends are:
+* 	-BibleCS for Windows (the sourcecode is availble in the CVS of crosswire.org)
+*	-GnomeSword (http://gnomesword.sourceforge.net/)
+*	-BibleTime (www.bibletime.de)
 */
 
 #ifndef SWMGR_H
@@ -59,13 +52,13 @@ typedef map < string, SWModule *, less < string > >ModMap;
 typedef list < string > OptionsList;
 typedef map < string, SWFilter * >FilterMap;
 
-/**
+/** The main class of Sword to handle all other things.
   * SWmgr manages the installed modules, the filters and global options like footnotes or strong numbers.
   * The class SWMgr is the most important class of Sword. It is used to manage the installed modules.
   * It also manages the filters (Render-, Strip- and Rawfilters).
   *
   * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-  * @version $Id: swmgr.h,v 1.22 2001/04/19 15:40:06 jansorg Exp $
+  * @version $Id: swmgr.h,v 1.23 2001/05/25 10:39:07 jansorg Exp $
   */
 class SWDLLEXPORT SWMgr
 {
@@ -82,27 +75,12 @@ protected:
   SWFilter *thmlplain;
   FilterList cleanupFilters;
   OptionsList options;
-  /**
-    *
-    */
   virtual void init (); // use to initialize before loading modules
-	/**
-    *
-    */
   virtual char AddModToConfig (int conffd, const char *fname);
-  /**
-    *
-    */
   virtual void loadConfigDir (const char *ipath);
-  /**
-    *
-    */
   virtual void AddGlobalOptions (SWModule * module, ConfigEntMap & section,
 				 ConfigEntMap::iterator start,
 				 ConfigEntMap::iterator end);
-  /**
-    *
-    */
   virtual void AddLocalOptions (SWModule * module, ConfigEntMap & section,
 				ConfigEntMap::iterator start,
 				ConfigEntMap::iterator end);
@@ -126,29 +104,31 @@ protected:
   virtual void AddRawFilters (SWModule * module, ConfigEntMap & section);
 
 public:
-  /**
+  /** Enable / Disable debug output
     * Set this static bool to true to get more verbose debug messages from SWMgr
     */
   static bool debug;
-  /**
+  /** 
     *
     */
   static void findConfig (char *configType, char **prefixPath,
 			  char **configPath);
-
-  /**
-    *
+  /** The global config object.
+    * This is the global config object. It contains all items of all modules,
+    * so lookups should use this config object.
+    * If you want to save a cipher key or other things to the module config file,
+    * do NOT use this object, because it would corrupt your configs after config->Save().
     */
   SWConfig *config;
   /**
     *
     */
   SWConfig *sysconfig;
-  /**
+  /** A map of all modules
     * This map contains the list of installed modules we use.
     */
   ModMap Modules;
-  /**
+  /** The path to your Sword directory
     *
     */
   char *prefixPath;
@@ -156,8 +136,8 @@ public:
     *
     */
   char *configPath;
-  /**
-    * Constructor of SWMgr.
+  /** Constructor of SWMgr.
+    * 
     * @param iconfig
     * @param isysconfig
     * @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
@@ -173,30 +153,35 @@ public:
     * Destroy the SWMgr at last in your application.
     */
   virtual ~SWMgr ();
-  /**
-    *
+  /**Installs a scan for modules in the directory givan as parameter.
+    * @param dir The directory where new modules should be searched.
     */
   virtual void InstallScan (const char *dir);
-  /**
-    * Load the modules.
-    * Reimplement this function to use your own Load function, for example to use your own filters.
+  /**  Load the modules.
+    * Reimplement this function to use your own Load function, 
+    * for example to use your own filters.
     */
   virtual void Load ();
-  /**
-    *
+  /** Set a global option
+    * Set a global option using the parameters. A global option could be for example
+    * footnotes.
+    * @param option The name of the option, for which you want to change the value. Well known and often used values are "Footnotes" or "Strongs"
+    * @param value The value. Common values are "On" and "Off"
     */
   virtual void setGlobalOption (const char *option, const char *value);
-  /**
-    *
+  /** Gives the value of the given option
+    * @param The option, which should be used to return the value of it
+    * @return The value of the given option
     */
   virtual const char *getGlobalOption (const char *option);
-  /**
-    *
+  /** Gives a description for the given option
+    * @param option The option, which should be used
+    * @return A description of the given option
+    * @see setGlobalOption, getGlobalOption, getGlobalOptions
     */
   virtual const char *getGlobalOptionTip (const char *option);
-  /**
-    * This function returns a list of global options.
-    * The list of global options contains the names and the status of the global options.
+  /** A list of all availble options with the currently set  values
+    * @return This function returns a list of global options.
     */
   virtual OptionsList getGlobalOptions ();
   /**

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h,v 1.15 2001/04/08 09:03:37 chrislit Exp $
+ * $Id: versekey.h,v 1.16 2001/05/25 10:39:07 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,14 +59,12 @@ struct abbrev
 
 class SWLocale;
 
-  /**
-  * Class VerseKey
-  */
+/**
+ * Class VerseKey
+ * The SWKey implementation used for verse based modules like Bibles or commentaries.
+ */
 class SWDLLEXPORT VerseKey:public SWKey
 {
-
-
-
   class LocaleCache
   {
   public:
