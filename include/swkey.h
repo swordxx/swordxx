@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.14 2002/03/22 05:26:34 scribe Exp $
+ * $Id: swkey.h,v 1.15 2002/04/07 23:12:38 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -85,6 +85,10 @@ protected:
   char error;
 
 public:
+
+  // misc pointer for whatever
+  void *userData;
+
   /** initializes instance of SWKey
   *
   * @param ikey text key

@@ -213,16 +213,24 @@ const char *ThMLOSIS::convertToOSIS(const char *inRef) {
 
 	VerseKey defLanguage;
 	ListKey verses = defLanguage.ParseVerseList(inRef, (*key), true);
+	const char *startFrag = inRef;
 	for (int i = 0; i < verses.Count(); i++) {
 		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		char buf[512];
+		char frag[80];
 		if (element) {
-			sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" referenceEnd=\"%s\">%s-%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), (const char *)element->LowerBound(), (const char *)element->UpperBound());
+			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
+			frag[((const char *)element->userData - startFrag) + 1] = 0;
+			startFrag = (const char *)element->userData + 1;
+			sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\" referenceEnd=\"%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
 		}
-		else sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), (const char *)*verses.GetElement(i));
+		else {
+			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
+			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
+			startFrag = (const char *)verses.GetElement(i)->userData + 1;
+			sprintf(buf, "<reference work=\"Bible.KJV\" reference=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), frag);
+		}
 		outRef+=buf;
-		if (i<(verses.Count()-1))
-			outRef+="; ";
 	}
 	return outRef.c_str();
 }

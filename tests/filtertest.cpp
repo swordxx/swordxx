@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
     module->Key() = ((argc > 1) ? argv[1] : "jas1:1");
     char *buf = new char [ MAXBUF ];
     memset(buf, 0, MAXBUF);
-//    strcpy(buf, "This is a verse reference: <scripRef>James 1:19</scripRef> with an <img src=\"/images/yoyo.jpg\">");
-    strcpy(buf, module->getRawEntry());
+    strcpy(buf, "This is a verse reference: <scripRef>jas1:22,23-25; 3;5:1</scripRef> with an <img src=\"/images/yoyo.jpg\">");
+//    strcpy(buf, module->getRawEntry());
     filter.ProcessText(buf, MAXBUF - 3, *module, module);
 
     cout << buf << "\n";

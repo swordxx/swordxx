@@ -29,10 +29,11 @@ SWKey::SWKey(const char *ikey)
 
 SWKey::SWKey(SWKey const &k)
 {
-	index   = k.index;
-	persist = k.persist;
-	keytext = 0;
-	error = k.error;
+	index    = k.index;
+	persist  = k.persist;
+	userData = k.userData;
+	keytext  = 0;
+	error    = k.error;
 	stdstr(&keytext, k.keytext);
 	init();
 }

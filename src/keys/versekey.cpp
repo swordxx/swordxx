@@ -94,7 +94,7 @@ VerseKey::VerseKey(const char *ikey) : SWKey(ikey)
 }
 
 
-VerseKey::VerseKey(VerseKey const &k) : SWKey(k.keytext)
+VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 {
 	init();
 	autonorm = k.autonorm;
@@ -379,6 +379,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 	curkey.AutoNormalize(0);
 	tmpListKey << tmpDefaultKey;
+	tmpListKey.GetElement()->userData = (void *)buf;
 	
 	while (*buf) {
 		switch (*buf) {
@@ -485,6 +486,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					newElement.LowerBound(curkey);
 					newElement.setPosition(TOP);
 					tmpListKey << newElement;
+					tmpListKey.GetElement()->userData = (void *)buf;
 				}
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
@@ -498,8 +500,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							newElement.UpperBound(curkey);
 							newElement = TOP;
 							tmpListKey << newElement;
+							tmpListKey.GetElement()->userData = (void *)buf;
 						}
-						else tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+						else {
+							tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+							tmpListKey.GetElement()->userData = (void *)buf;
+						}
 					}
 					else	if (expandRange) {
 						VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
@@ -510,6 +516,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 								curkey = MAXVERSE;
 							newElement->UpperBound(curkey);
 							*newElement = TOP;
+							tmpListKey.GetElement()->userData = (void *)buf;
 						}
 					}
 				}
@@ -646,6 +653,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			newElement.LowerBound(curkey);
 			newElement = TOP;
 			tmpListKey << newElement;
+			tmpListKey.GetElement()->userData = (void *)buf;
 		}
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
@@ -659,8 +667,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					newElement.UpperBound(curkey);
 					newElement = TOP;
 					tmpListKey << newElement;
+					tmpListKey.GetElement()->userData = (void *)buf;
 				}
-				else tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+				else {
+					tmpListKey << (const SWKey &)(const SWKey)(const char *)curkey;
+					tmpListKey.GetElement()->userData = (void *)buf;
+				}
 			}
 			else if (expandRange) {
 				VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
@@ -671,6 +683,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						curkey = MAXVERSE;
 					newElement->UpperBound(curkey);
 					*newElement = TOP;
+					tmpListKey.GetElement()->userData = (void *)buf;
 				}
 			}
 		}
