@@ -3,7 +3,7 @@
  *				types of keys for indexing into modules (e.g. verse, word,
  *				place, etc.)
  *
- * $Id: swkey.h,v 1.7 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swkey.h,v 1.8 2001/02/15 17:38:35 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -52,6 +52,10 @@ public:
 #define TOP POSITION(POS_TOP)
 #define BOTTOM POSITION(POS_BOTTOM)
 
+  /** SWKey is the basis for all
+  * types of keys for indexing into modules (e.g. verse, word,
+  * place, etc.)
+  */
 class SWDLLEXPORT SWKey:public SWObject
 {
   long index;
@@ -63,50 +67,133 @@ protected:
   char error;
 
 public:
-    SWKey (const char *ikey = 0);
-    SWKey (SWKey const &k);
-    virtual ~ SWKey ();
+  /** initializes instance of SWKey
+  *
+  * @param ikey text key
+  */
+  SWKey (const char *ikey = 0);
+  /** Copy Constructor
+  */
+  SWKey (SWKey const &k);
+  /** cleans up instance of SWKey
+  */
+  virtual ~ SWKey ();
 
 
   virtual SWKey *clone () const;
+  /** Gets whether this object itself persists within a
+  * module that it was used to SetKey or just a copy.
+  * (1 - persists in module; 0 - a copy is attempted
+  *
+  * @return value of persist
+  */
   char Persist () const;
+  /** Set/gets whether this object itself persists within a
+  * module that it was used to SetKey or just a copy.
+  * (1 - persists in module; 0 - a copy is attempted
+  *
+  * @param ipersist value which to set persist;
+  * [-1] - only get
+  * @return value of persist
+  */
   char Persist (char ikey);
-
+  /** Gets and clears error status
+  *
+  * @return error status
+  */
   virtual char Error ();
+  /** Equates this SWKey to a character string
+  *
+  * @param ikey string to set this key to
+  */
   virtual SWKey & operator = (const char *ikey);
+  /** Equates this SWKey to another SWKey object
+  *
+  * @param ikey other swkey object
+  */
   virtual SWKey & operator = (const SWKey & ikey);
+  /** returns text key if (char *) cast is requested
+  */
   virtual operator const char *() const;
-
+  /** Compares another VerseKey object
+  *
+  * @param ikey key to compare with this one
+  * @return >0 if this key is greater than compare key;
+  * <0 if this key is smaller than compare key;
+  * 0 if the keys are the same
+  */
   virtual int compare (const SWKey & ikey);
+  /** Compares another VerseKey object
+  *
+  * @param ikey key to compare with this one
+  * @return <> 0 if the keys are the same
+  */
   virtual bool operator == (const SWKey & ikey) { return !compare (ikey);
   }
+  /** Compares another VerseKey object
+  *
+  * @param ikey key to compare with this one
+  * @return 0 if the keys are the same
+  */
   virtual bool operator != (const SWKey & ikey)
   {
     return compare (ikey);
   }
+  /**
+  * see @ref compare
+  */
   virtual bool operator > (const SWKey & ikey)
   {
     return (compare (ikey) > 0);
   }
+  /**
+  * see @ref compare
+  */
   virtual bool operator < (const SWKey & ikey)
   {
     return (compare (ikey) < 0);
   }
+  /**
+  * see @ref compare
+  */
   virtual bool operator >= (const SWKey & ikey)
   {
     return (compare (ikey) > -1);
   }
+  /**
+  * see @ref compare
+  */
   virtual bool operator <= (const SWKey & ikey)
   {
     return (compare (ikey) < 1);
   }
+  /** Positions this key if applicable
+  */
   virtual SWKey & operator = (POSITION);
-  virtual SWKey & operator -= (int);
-  virtual SWKey & operator += (int);
+  /** Decrements key a number of entries
+  *
+  * @param decrement Number of entries to jump backward
+  * @return *this
+  */
+  virtual SWKey & operator -= (int decrement);
+  /** Increments key a number of entries
+  *
+  * @param increment Number of entries to jump forward
+  * @return *this
+  */
+  virtual SWKey & operator += (int increment);
+  /** Increments key by 1 entry
+  *
+  * @return *this
+  */
   virtual SWKey & operator++ (int)
   {
     return *this += 1;
   }
+  /** Decrements key by 1 entry
+  *
+  * @return *this
+  */
   virtual SWKey & operator-- (int)
   {
     return *this -= 1;

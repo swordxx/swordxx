@@ -4,7 +4,7 @@
  *				(e.g. verse, word,
  *				place, etc.)
  *
- * $Id: listkey.h,v 1.6 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: listkey.h,v 1.7 2001/02/15 17:38:35 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,6 +29,10 @@
 
 #include <defs.h>
 
+  /** ListKey is the basis for all
+  * types of keys that have lists of specified indexes
+  * (e.g. a list of verses, place, etc.)
+  */
 class SWDLLEXPORT ListKey:public SWKey
 {
 
@@ -40,24 +44,63 @@ protected:
   int arraycnt;
   SWKey **array;
 public:
+  /** initializes instance of ListKey
+  *
+  * @param ikey text key
+  */
     ListKey (const char *ikey = 0);
     ListKey (ListKey const &k);
+  /** cleans up instance of ListKey
+  */
     virtual ~ ListKey ();
 
   virtual SWKey *clone () const;
-  virtual void ClearList ();	// delete all elements
+  /** Clears out elements of list
+  */
+  virtual void ClearList ();
+  /** Returns number of elements in list
+  * @return number of elements in list
+  */
   virtual int Count ();
-  virtual void Remove ();	// remove current element
-  virtual char SetToElement (int, POSITION = TOP);
-  virtual SWKey *GetElement (int pos = -1);
-  virtual ListKey & operator << (const SWKey &);	// add to list
+  /** Removes current element from list
+  */
+  virtual void Remove ();
+  /** Sets key to element number
+  *
+  * @param ielement element number to set to
+  * @return error status
+  */
+  virtual char SetToElement (int ielement, POSITION = TOP);
+  /** Gets a key element number
+  *
+  * @param pos element number to get (or default current)
+  * @return Key or null on error
+  */
+ virtual SWKey *GetElement (int pos = -1);
+  /** Adds an element to the list
+  * @param ikey the element to add
+  */
+  virtual ListKey & operator << (const SWKey &ikey);
+  /** Equates this ListKey to another ListKey object
+  *
+  * @param ikey other ListKey object
+  */
   virtual ListKey & operator = (const ListKey & ikey);
   virtual SWKey & operator = (const char *ikey) { return SWKey::operator =
       (ikey);}
   virtual SWKey & operator = (const SWKey & ikey) { return SWKey::operator =
       (ikey);}
+  /** Positions this key
+  *
+  * @param p position
+  * @return *this
+  */
   virtual SWKey & operator = (POSITION);
+  /** Decrements a number of elements
+  */
   virtual SWKey & operator -= (int decrement);
+  /** Increments a number of elements
+  */
   virtual SWKey & operator += (int increment);
   virtual char Traversable ()
   {

@@ -1,7 +1,7 @@
-/****************************************************************************** 
+/******************************************************************************
  *  strkey.h - code for class 'strkey'- a standard Biblical verse key
  *
- * $Id: strkey.h,v 1.4 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: strkey.h,v 1.5 2001/02/15 17:38:35 jansorg Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,13 +28,23 @@
 
 #include <defs.h>
 
+  /** a standard string key class (used
+  * for modules that index on single strings (eg. cities,
+  * names, words, etc.)
+  */
 class SWDLLEXPORT StrKey:public SWKey
 {
   static SWClass classdef;
   void init ();
 public:
-    StrKey (const char *ikey = 0);
-    virtual ~ StrKey ();
+  /** initializes instance of StrKey
+  *
+  * @param ikey text key (word, city, name, etc.)
+  */
+  StrKey (const char *ikey = 0);
+  /** cleans up instance of StrKey
+  */
+  virtual ~ StrKey ();
 };
 
 
