@@ -225,7 +225,7 @@ globalconfdir := @sysconfdir@
 SUBDIRS = lib . icu apps $(am__append_1) $(am__append_2) $(am__append_3)
 
 INCLUDES = -I $(top_srcdir)/include
-EXTRA_DIST = sword.spec sword.kdevprj sword.bmp options.conf
+EXTRA_DIST = sword.spec sword.kdevprj sword.bmp 
 
 @INSTCONF_TRUE@sysconf_DATA = sword.conf
 
