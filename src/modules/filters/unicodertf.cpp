@@ -32,7 +32,7 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 	for (to = text; *from; from++) {
      	ch = 0;
           if ((*from & 128) != 128) {
-          	if (*from != ' ')
+//          	if (*from != ' ')
 	               *to++ = *from;
                continue;
           }
@@ -49,9 +49,12 @@ char UnicodeRTF::ProcessText(char *text, int maxlen, const SWKey *key)
                ch <<= 6;
                ch |= from[subsequent];
           }
+          subsequent--;
           *from <<=1;
-          ch |= (((short)*from) << 8);
-          from += (subsequent - 1);
+          char significantFirstBits = 8 - (2+subsequent);
+          
+          ch |= (((short)*from) << (((6*subsequent)+significantFirstBits)-8));
+          from += subsequent;
           *to++ = '\\';
           *to++ = 'u';
           sprintf(digit, "%d", ch);

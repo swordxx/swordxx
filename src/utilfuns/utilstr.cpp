@@ -106,3 +106,24 @@ const char strnicmp(const char *s1, const char *s2, int len) {
      }
      return (i < len) ? cLen - tLen : 0;
 }
+
+/******************************************************************************
+ * strlenw - Scans a string for trailing 0x0000 and return size in BYTES
+ *
+ * ENT:	target - string for which to determine size
+ *
+ * RET:	length in BYTES 
+ *			If s2 does not occur in s1, returns null.
+ */
+
+unsigned int strlenw(const char *s1) {
+	const char *ch = s1;
+     if (!*ch)
+     	ch++;
+     while (*ch) {
+     	ch++;
+          if (!*ch)
+          	ch++;
+     }
+     return (unsigned int)(ch - s1) - 1;
+}

@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.22 2001/04/19 10:17:36 jansorg Exp $
+ * $Id: swmodule.h,v 1.23 2001/06/12 06:27:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -77,6 +77,8 @@ protected:
   FilterList *optionFilters;
 
   bool render;
+  bool unicode;
+  int entrySize;
 
 public:
 
@@ -106,7 +108,7 @@ public:
   *  others of same type under their modtype heading)
   *  see also @ref Type
   */
-  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0);
+  SWModule (const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, bool unicode = false);
 
   /** Cleans up instance of SWModule
   */
@@ -116,7 +118,10 @@ public:
   *
   * @return error status
   */
-  virtual char Error ();
+	virtual char Error ();
+
+	virtual isUnicode() {return unicode;}
+	virtual getEntrySize() {return entrySize;}
 
   /** Sets a key to this module for position to a particular
   * record or set of records

@@ -14,7 +14,8 @@ GBFRTF::GBFRTF() {
 
 char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key)
 {
-	char *to, *from, token[2048];
+	unsigned char *to, *from;
+     char token[2048];
 	int tokpos = 0;
 	bool intoken = false;
 	int len;

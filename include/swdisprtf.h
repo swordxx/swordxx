@@ -2,7 +2,7 @@
  *  swdisprtf.h   - definition of Class SWDispRTF-- an SWDisplay used to display
  *				a verse in Rich Text Format.
  *
- * $Id: swdisprtf.h,v 1.3 2001/02/09 15:38:51 jansorg Exp $
+ * $Id: swdisprtf.h,v 1.4 2001/06/12 06:27:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,6 +31,7 @@
 #include <vcl\ComCtrls.hpp>
 #include <vcl\StdCtrls.hpp>
 #include <swtext.h>
+#include "RX/Units/RxRichEd.hpp"
 //---------------------------------------------------------------------------
 
 #define	defRTFHeader          "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f2\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f3\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f4\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}{\\f8\\froman\\fcharset2\\fprq2 Symbol;}}{\\colortbl;\\red0\\green0\\blue255;\\red0\\green200\\blue50;\\red0\\green0\\blue255;\\red0\\green200\\blue50;\\red0\\green0\\blue255;\\red255\\green0\\blue0;} "
@@ -47,7 +48,7 @@
 #define	defRTFVersePost       " }"
 
 
-class SWDispRTF:public TRichEdit
+class SWDispRTF:public TRxRichEdit
 {
 protected:
 

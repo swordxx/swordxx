@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.39 2001/06/03 05:06:09 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.40 2001/06/12 06:27:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -492,8 +492,13 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	string description, datapath, misc1;
 	ConfigEntMap::iterator entry;
 	SWModule *newmod = 0;
+ 	string sourceformat;
+ 	string encoding;
+     bool unicode = false;
 
-	description = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (string)"";
+	sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (string)"";
+	encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (string)"";
+	description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (string)"";
 	datapath = prefixPath;
 	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
 		datapath += "/";
@@ -507,6 +512,9 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 		datapath += buf2;
 	delete [] buf;
 	
+    	if ((!stricmp(sourceformat.c_str(), "PlainUnicode")) || (!stricmp(encoding.c_str(), "UTF-8")))
+     	unicode = true;
+
 	if ((!stricmp(driver.c_str(), "zText")) || (!stricmp(driver.c_str(), "zCom"))) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
@@ -535,7 +543,7 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 	}
 	
 	if (!stricmp(driver.c_str(), "RawText")) {
-		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str());
+		newmod = new RawText(datapath.c_str(), name.c_str(), description.c_str(), 0, unicode);
 	}
 	
 	// backward support old drivers

@@ -25,9 +25,10 @@ void SWModule::nullPercent(char percent, void *percentUserData) {}
  *	idisp	 - Display object to use for displaying
  *	imodtype - Type of Module (All modules will be displayed with
  *			others of same type under their modtype heading
+ *	unicode  - if this module is unicode (widechar)
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype)
+SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, bool unicode)
 {
 	key      = CreateKey();
 	entrybuf = new char [1];
@@ -36,6 +37,8 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	error    = 0;
 	moddesc  = 0;
 	modtype  = 0;
+     this->unicode  = unicode;
+     entrySize= -1;
 	disp     = (idisp) ? idisp : &rawdisp;
 	stdstr(&modname, imodname);
 	stdstr(&moddesc, imoddesc);
@@ -566,9 +569,11 @@ const char *SWModule::StripText(char *buf, int len)
 SWModule::operator char*() {
 	char *versebuf = getRawEntry();
 	if (versebuf) {
-		int size = strlen(versebuf);
+		int size = getEntrySize();
+          if (size == -1)
+          	size = strlen(versebuf);
 		if (size)
-			RenderText(versebuf, size * FILTERPAD);
+			RenderText(versebuf, size * FILTERPAD * ((unicode) ? 9 : 1));
 	}
 	return versebuf;
 }

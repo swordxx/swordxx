@@ -2,7 +2,7 @@
  *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
  *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id: rawtext.h,v 1.11 2001/04/08 09:18:37 chrislit Exp $
+ * $Id: rawtext.h,v 1.12 2001/06/12 06:27:24 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -37,8 +37,7 @@ class SWDLLEXPORT RawText:public SWText, public RawVerse
 public:
   
     
-    RawText (const char *ipath, const char *iname = 0, const char *idesc =
-	     0, SWDisplay * idisp = 0);
+    RawText (const char *ipath, const char *iname = 0, const char *idesc =	0, SWDisplay * idisp = 0, bool unicode = false);
     virtual ~ RawText ();
   virtual char *getRawEntry ();
   virtual char createSearchFramework ();
