@@ -1,8 +1,12 @@
 AUTOMAKE_OPTIONS = 1.6
 SUBDIRS = diatheke
 INCLUDES = -I $(top_srcdir)/include
-LDADD = $(top_builddir)/lib/libsword.la 
-
+if BUILDSPLITLIB
+LDADD = $(top_builddir)/lib/libsword_imp.la \
+        $(top_builddir)/lib/libsword.la
+else
+LDADD = $(top_builddir)/lib/libsword.la
+endif
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
 txt2sword addgb imp2gbs mod2imp thml2gbs xml2gbs

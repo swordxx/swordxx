@@ -74,7 +74,7 @@ endif
 
 SUBDIRS += $(TESTSDIR) $(UTILSDIR) $(EXAMPLESDIR)
 
-INCLUDES = -I $(top_srcdir)/include
+AM_CPPFLAGS = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh sword.pc.in
 
 if USE_PKGCONF
@@ -102,7 +102,13 @@ if ICU
 iculibs = -licui18n -licuuc
 endif
 
-testlib_LDADD = -L./lib -lsword $(iculibs)
+#testlib_LDADD = -L./lib -lsword -lsword_imp $(iculibs)
+if BUILDSPLITLIB
+testlib_LDADD = $(top_builddir)/lib/libsword_imp.la \
+	$(top_builddir)/lib/libsword.la
+else
+testlib_LDADD = $(top_builddir)/lib/libsword.la
+endif
 
 include locales.d/Makefile.am
 include samples/Makefile.am

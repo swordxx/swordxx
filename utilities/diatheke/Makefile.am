@@ -15,7 +15,15 @@ if USELUCENE
 lucenelibs = -lclucene
 endif
 
-diatheke_LDADD = -L$(top_builddir)/lib -lsword $(iculibs) $(lucenelibs)
+if BUILDSPLITLIB
+diatheke_LDADD = $(top_builddir)/lib/libsword_imp.la \
+        $(top_builddir)/lib/libsword.la \
+	$(iculibs) $(lucenelibs)
+else
+diatheke_LDADD = $(top_builddir)/lib/libsword.la \
+	$(iculibs) $(lucenelibs)
+endif
+
 
 noinst_HEADERS = corediatheke.h diafiltmgr.h diathekemgr.h gbfcgi.h thmlcgi.h \
 	osiscgi.h

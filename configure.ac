@@ -7,7 +7,7 @@
 AC_INIT(sword, 1.5.7, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.37 $)
+AC_REVISION($Revision: 1.38 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword, 1.5.7)
@@ -59,6 +59,8 @@ AC_ARG_ENABLE(examples,
 	AC_HELP_STRING([--enable-examples],[build examples (default=no)]),,enable_examples=no)
 AC_ARG_ENABLE(versekey2,
 	AC_HELP_STRING([--enable-versekey2],[build with experimental versekey (default=no)]),,enable_versekey2=no)
+AC_ARG_ENABLE(splitlib,
+	AC_HELP_STRING([--enable-splitlib],[split lib into core and import/export legacy part and flatapi (default=no)]),,enable_splitlib=no)
 AC_ARG_ENABLE(refsys,
 	AC_HELP_STRING([--enable-refsys],[build alternative versification data files - requires expat (default=no)]),,enable_refsys=no)
 AM_MAINTAINER_MODE
@@ -121,21 +123,21 @@ fi
 # Debug and profile
 # ---------------------------------------------------------------------
 
-CXXFLAGS="$CXXFLAGS -ftemplate-depth-25"
+AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
 
 if test x$enable_debug = xyes; then
   if test x$ac_cv_prog_cc_g = xyes; then
-    CFLAGS="-g3 -O0"
+    AM_CFLAGS="-g3 -O0"
   else
-    CFLAGS="-O0"
+    AM_CFLAGS="-O0"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
-    CXXFLAGS="-g3 -O0"
+    AM_CXXFLAGS="-g3 -O0"
   else
-    CXXFLAGS="-O0"
+    AM_CXXFLAGS="-O0"
   fi
-  CFLAGS="$CFLAGS -Werror"
-  CXXFLAGS="$CXXFLAGS -Werror"
+  AM_CFLAGS="$AM_CFLAGS -Werror"
+  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
 fi
 #  AC_DEFINE(DEBUG)
 #else
@@ -143,12 +145,12 @@ fi
 #fi
 
 if test x$enable_profile = xyes; then
-  CFLAGS="$CFLAGS -pg"
-  CXXFLAGS="$CXXFLAGS -pg"
+  AM_CFLAGS="$AM_CFLAGS -pg"
+  AM_CXXFLAGS="$AM_CXXFLAGS -pg"
 fi
 if test x$enable_profilefn = xyes; then
-  CFLAGS="$CFLAGS -g -finstrument-functions"
-  CXXFLAGS="$CXXFLAGS -g -finstrument-functions"
+  AM_CFLAGS="$AM_CFLAGS -g -finstrument-functions"
+  AM_CXXFLAGS="$AM_CXXFLAGS -g -finstrument-functions"
   LIBS="$LIBS -g -finstrument-functions -lfnccheck"
 fi
 
@@ -156,7 +158,7 @@ fi
 # Check for curl for installmgr suport
 # ---------------------------------------------------------------------
 
-CURL_CFLAGS=
+CURL_AM_CFLAGS=
 CURL_LIBS=
 if test x$with_curl = xyes; then
     AC_PATH_PROG(CURL_CONFIG, curl-config, no)
@@ -166,10 +168,10 @@ if test x$with_curl = xyes; then
 	with_curl=no
     else
 	echo "curl found - remote install options available"
-	CURL_CFLAGS=`$CURL_CONFIG --cflags`
+	CURL_AM_CFLAGS=`$CURL_CONFIG --cflags`
 	CURL_LIBS=`$CURL_CONFIG --libs`
-	CXXFLAGS="$CXXFLAGS -DCURLAVAILABLE"
-	CFLAGS="$CFLAGS -DCURLAVAILABLE"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DCURLAVAILABLE"
+	AM_CFLAGS="$AM_CFLAGS -DCURLAVAILABLE"
     fi
 fi
 
@@ -180,10 +182,10 @@ fi
 #FIXME: always make lucene available without checking for lib and headers
 if test x$with_lucene = xyes; then
    echo "lucene found - lucene searching options available"
-   LUCENE_CFLAGS=""
+   LUCENE_AM_CFLAGS=""
    LUCENE_LIBS="-lclucene"
-   CXXFLAGS="$CXXFLAGS -DUSELUCENE"
-   CFLAGS="$CFLAGS -DUSELUCENE"
+   AM_CXXFLAGS="$AM_CXXFLAGS -DUSELUCENE"
+   AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
    LIBS="$LIBS $LUCENE_LIBS"
 fi
 
@@ -200,6 +202,16 @@ if test x$enable_refsys = xyes; then
 	],[	AC_MSG_ERROR([* * * require expat-devel * * *])
 	])
 fi
+
+if test x$enable_splitlib = xyes; then
+  enable_versekey2=no
+fi
+
+if test x$enable_versekey2 = xyes; then
+  AM_CFLAGS="$AM_CFLAGS -DVK2"
+  AM_CXXFLAGS="$AM_CXXFLAGS -DVK2"
+fi
+
 
 # ---------------------------------------------------------------------
 # Alter global conf directory only if not /etc
@@ -260,7 +272,7 @@ AC_SUBST(with_icu)
 AC_SUBST(with_conf)
 AC_SUBST(dir_confdef)
 AC_SUBST(CC)
-AC_SUBST(CURL_CFLAGS)
+AC_SUBST(CURL_AM_CFLAGS)
 AC_SUBST(CURL_LIBS)
 AC_SUBST(LUCENE_LIBS)
 AC_SUBST(ICU_LIBS)
@@ -269,6 +281,7 @@ AC_SUBST(ICU_VER)
 AC_SUBST(XML_LIBS)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
+AC_SUBST(AM_CXXFLAGS)
 
 AC_SUBST(target_cpu)
 AC_SUBST(target_vendor)
@@ -289,7 +302,6 @@ AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
-AM_CONDITIONAL(USELUCENE, test x$with_lucene = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 #AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
@@ -298,6 +310,7 @@ AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
 AM_CONDITIONAL(BUILDUTILS, test x$enable_utilities = xyes)
 AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 AM_CONDITIONAL(BUILDNEWVKEY, test x$enable_versekey2 = xyes)
+AM_CONDITIONAL(BUILDSPLITLIB, test x$enable_splitlib = xyes)
 AM_CONDITIONAL(BUILDREFSYS, test x$enable_refsys = xyes)
 
 # ---------------------------------------------------------------------

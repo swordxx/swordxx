@@ -14,6 +14,12 @@ versekey = $(keysdir)/versekey.cpp
 vkdef =
 endif
 
+if BUILDSPLITLIB
+libsword_imp_la_SOURCES += $(keysdir)/versekey.cpp
+versekey = $(keysdir)/versekey2.cpp
+vkdef =
+endif
+
 libsword_la_SOURCES += $(versekey)
-INCLUDES += $(vkdef)
+AM_CPPFLAGS += $(vkdef)
 
