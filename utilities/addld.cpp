@@ -124,16 +124,18 @@ int main(int argc, char **argv) {
   else if ((mode == 'c') && argc == 3) {
     // Try to initialize a default set of datafiles and indicies at our
     // datapath location passed to us from the user.
-    if (fourbyte)
+    if (fourbyte) {
       if (RawLD4::createModule(argv[2])) {
 	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
 	exit(-2);
       }
-      else
-	if (RawLD::createModule(argv[2])) {
-	  fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-	  exit(-2);
-	}
+    }
+    else {
+      if (RawLD::createModule(argv[2])) {
+	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+	exit(-2);
+      }
+    }
   }   
   
   // Bad arguments, print usage
