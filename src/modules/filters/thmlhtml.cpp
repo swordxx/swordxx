@@ -139,12 +139,14 @@ ThMLHTML::ThMLHTML() {
 bool ThMLHTML::handleToken(char **buf, const char *token, DualStringMap &userData) {
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
-		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27) && (token[27] == 'H' || token[27] == 'G' || token[27] == 'A')) {
-			pushString(buf, "<small><em>");
-			for (unsigned int i = 5; i < strlen(token); i++)
-				if(token[i] != '\"')
-					*(*buf)++ = token[i];
-			pushString(buf, "</em></small>");
+		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
+                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
+        			pushString(buf, "<small><em>");
+	        		for (unsigned int i = 5; i < strlen(token); i++)
+		        		if(token[i] != '\"')
+			        		*(*buf)++ = token[i];
+        			pushString(buf, "</em></small>");
+                        }
 		}
 
 		else if (!strncmp(token, "sync type=\"Morph\" value=\"", 25)) {
