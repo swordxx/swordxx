@@ -2,6 +2,13 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 
+01-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added Helmer Krämer's speed improvements to SWModule for multiword
+		searches
+	Fixed RawGenBook memory bugs
+	Isolated all byte swapping logic to sysdata.h
+	Changed BIGENDIAN to SWBIGENDIAN
+	
 27-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Commited tbiggs' update to thmlhtmlhref.cpp
 	Commited dglassey's update to make system
