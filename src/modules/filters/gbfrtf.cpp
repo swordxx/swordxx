@@ -4,13 +4,8 @@
  */
 
 
-#include <stdlib.h>
-#include <string.h>
 #include <gbfrtf.h>
 #include <ctype.h>
-#include <string>
-
-using std::string;
 
 SWORD_NAMESPACE_START
 
@@ -18,9 +13,8 @@ GBFRTF::GBFRTF() {
 }
 
 
-char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	unsigned char *to, *from;
 	char token[2048];
 	char val[128];
 	char *valto;
@@ -29,20 +23,17 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 	bool intoken = false;
 	int len;
 	const char *tok;
-	string strongnum;
-	string strongtense;
+	SWBuf strongnum;
+	SWBuf strongtense;
 	bool hideText = false;
 	int wordLen = 0;
 	int wordCount = 0;
 	int i;
 
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = (unsigned char *)&text[maxlen - len];
-	}
-	else	from = (unsigned char *)text;							// -------------------------------
-	for (to = (unsigned char *)text; *from; from++) {
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {
 		if (*from == '<') {
 			wordLen = wordCount;
 			wordCount = 0;
@@ -76,22 +67,10 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 					*valto = 0;
 					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
 						// normal strongs number
-						strongnum += '{';
-						strongnum += '\\';
-						strongnum += 'c';
-						strongnum += 'f';
-						strongnum += '3';
-						strongnum += ' ';
-						strongnum += '\\';
-						strongnum += 's';
-						strongnum += 'u';
-						strongnum += 'b';
-						strongnum += ' ';
-						strongnum += '<';
+						strongnum += "{\\cf3 \\sub <";
 						for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
 							strongnum += *tok;
-						strongnum += '>';
-						strongnum += '}';
+						strongnum += ">}";
 					}
 					/*	forget these for now
 					else {
@@ -108,32 +87,20 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 						*valto++ = *num;
 					*valto = 0;
 					// normal robinsons tense
-					strongtense += '{';
-					strongtense += '\\';
-					strongtense += 'c';
-					strongtense += 'f';
-					strongtense += '4';
-					strongtense += ' ';
-					strongtense += '\\';
-					strongtense += 's';
-					strongtense += 'u';
-					strongtense += 'b';
-					strongtense += ' ';
-					strongtense += '(';
+					strongtense += "{\\cf4 \\sub (";
 					for (tok = val; *tok; tok++)
 						strongtense += *tok;
-					strongtense += ')';
-					strongtense += '}';
+					strongtense += ")}";
 				}
 				continue;
 
 			case '/':
 				if (token[1] == 'w') {
 					if ((wordCount > 0) || (strongnum != "{\\cf3 \\sub <3588>}")) {
-						for (i = 0; i < strongnum.length(); i++)
-							*to++ = strongnum[i];
-					for (i = 0; i < strongtense.length(); i++)
-						*to++ = strongtense[i];
+						//for (i = 0; i < strongnum.length(); i++)
+							text += strongnum;
+					//for (i = 0; i < strongtense.length(); i++)
+						text += strongtense;
 					}
 				}
 				continue;
@@ -142,42 +109,18 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 				switch(token[1]) {
 				case 'G':               // Greek
 				case 'H':               // Hebrew
-					*to++ = '{';
-					*to++ = '\\';
-					*to++ = 'c';
-					*to++ = 'f';
-					*to++ = '3';
-					*to++ = ' ';
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'u';
-					*to++ = 'b';
-					*to++ = ' ';
-					*to++ = '<';
+					text += "{\\cf3 \\sub <";
 					for (tok = token + 2; *tok; tok++)
-						*to++ = *tok;
-					*to++ = '>';
-					*to++ = '}';
+						text += *tok;
+					text += ">}";
 					continue;
 
 				case 'T':               // Tense
-					*to++ = '{';
-					*to++ = '\\';
-					*to++ = 'c';
-					*to++ = 'f';
-					*to++ = '4';
-					*to++ = ' ';
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'u';
-					*to++ = 'b';
-					*to++ = ' ';
-					*to++ = '(';
+					text += "{\\cf4 \\sub (";
 					bool separate = false;
 					for (tok = token + 2; *tok; tok++) {
 						if (separate) {
-							*to++ = ';';
-							*to++ = ' ';
+							text += "; ";
 							separate = false;
 						}
 						switch (*tok) {
@@ -185,7 +128,7 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 						case 'H':
 							for (tok++; *tok; tok++) {
 								if (isdigit(*tok)) {
-									*to++ = *tok;
+									text += *tok;
 									separate = true;
 								}
 								else {
@@ -196,232 +139,119 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 							break;
 						default:
 							for (; *tok; tok++) {
-							       *to++ = *tok;
+							       text += *tok;
 							}
 						}
 					}
-					*to++ = ')';
-					*to++ = '}';
+					text += ")}";
 					continue;
 				}
 				break;
 			case 'R':
 				switch(token[1]) {
 				case 'X':
-				  *to++ = '<';
-				  *to++ = 'a';
-				  *to++ = ' ';
-				  *to++ = 'h';
-				  *to++ = 'r';
-				  *to++ = 'e';
-				  *to++ = 'f';
-				  *to++ = '=';
-				  *to++ = '"';
-				  *to++ = '"';
-				  *to++ = '>';
+					text += "<a href=\"\">";
 				  continue;
 				case 'x':
-				  *to++ = '<';
-				  *to++ = '/';
-				  *to++ = 'a';
-				  *to++ = '>';
+					text += "</a>";
 				  continue;
 				case 'F':               // footnote begin
-					*to++ = '{';
-					*to++ = '\\';
-					*to++ = 'i';
-					*to++ = '1';
-					*to++ = ' ';
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'u';
-					*to++ = 'b';
-					*to++ = ' ';
-					*to++ = '(';
+					text += "{\\i1 \\sub (";
 					continue;
 				case 'f':               // footnote end
-					*to++ = ')';
-					*to++ = ' ';
-					*to++ = '}';
+					text += ") }";
 					continue;
 				}
 				break;
 			case 'F':			// font tags
 				switch(token[1]) {
 				case 'I':		// italic start
-					*to++ = '\\';
-					*to++ = 'i';
-					*to++ = '1';
-					*to++ = ' ';
+					text += "\\i1 ";
 					continue;
 				case 'i':		// italic end
-					*to++ = '\\';
-					*to++ = 'i';
-					*to++ = '0';
-					*to++ = ' ';
+					text += "\\i0 ";
 					continue;
 				case 'B':		// bold start
-					*to++ = '\\';
-					*to++ = 'b';
-					*to++ = '1';
-					*to++ = ' ';
+					text += "\\b1 ";
 					continue;
 				case 'b':		// bold end
-					*to++ = '\\';
-					*to++ = 'b';
-					*to++ = '0';
-					*to++ = ' ';
+					text += "\\b0 ";
 					continue;
 				case 'N':
-					   *to++ = '{';
+					text += '{';
 					   if (!strnicmp(token+2, "Symbol", 6)) {
-					  *to++ = '\\';
-					  *to++ = 'f';
-					  *to++ = '7';
-					  *to++ = ' ';
+						   text += "\\f7 ";
 					}
 					continue;
 				case 'n':
-					*to++ = '}';
+					text += '}';
 					continue;
 				case 'S':
-					*to++ = '{';
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'u';
-					*to++ = 'p';
-					*to++ = 'e';
-					*to++ = 'r';
-					*to++ = ' ';
+					text += "{\\super ";
 					continue;
 				case 's':
-					*to++ = '}';
+					text += '}';
 					continue;
 				case 'R':
-					*to++ = '{';
-					*to++ = '\\';
-					*to++ = 'c';
-					*to++ = 'f';
-					*to++ = '6';
-					*to++ = ' ';
+					text += "{\\cf6 ";
 					continue;
 				case 'r':
-					*to++ = '}';
+					text += '}';
 					continue;
 				case 'O':
 				case 'C':
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'c';
-					*to++ = 'a';
-					*to++ = 'p';
-					*to++ = 's';
-					*to++ = '1';
-					*to++ = ' ';
+					text += "\\scaps1 ";
 					continue;
 				case 'o':
 				case 'c':
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'c';
-					*to++ = 'a';
-					*to++ = 'p';
-					*to++ = 's';
-					*to++ = '0';
-					*to++ = ' ';
+					text += "\\scaps0 ";
 					continue;
 				case 'V':
-					*to++ = '{';
-					*to++ = '\\';
-					*to++ = 's';
-					*to++ = 'u';
-					*to++ = 'b';
-					*to++ = ' ';
+					text += "{\\sub ";
 					continue;
 				case 'v':
-					*to++ = '}';
+					text += '}';
 					continue;
 				case 'U':
-					*to++ = '\\';
-					*to++ = 'u';
-					*to++ = 'l';
-					*to++ = '1';
-					*to++ = ' ';
+					text += "\\ul1 ";
 					continue;
 				case 'u':
-					*to++ = '\\';
-					*to++ = 'u';
-					*to++ = 'l';
-					*to++ = '0';
-					*to++ = ' ';
+					text += "\\ul0 ";
 					continue;
 				}
 				break;
 			case 'C':			// special character tags
 				switch(token[1]) {
 				case 'A':               // ASCII value
-					*to++ = (char)atoi(&token[2]);
+					text += (char)atoi(&token[2]);
 					continue;
 				case 'G':
-					*to++ = '>';
+					text += '>';
 					continue;
 				case 'L':               // line break
-					*to++ = '\\';
-					*to++ = 'l';
-					*to++ = 'i';
-					*to++ = 'n';
-					*to++ = 'e';
-					*to++ = ' ';
+					text += "\\line ";
 					continue;
 				case 'M':               // new paragraph
-					*to++ = '\\';
-					*to++ = 'p';
-					*to++ = 'a';
-					*to++ = 'r';
-					*to++ = ' ';
+					text += "\\par ";
 					continue;
 				case 'T':
-					*to++ = '<';
+					text += '<';
 				}
 				break;
 			case 'T':			// title formatting
 			  switch(token[1])
 			    {
 			    case 'T':               // Book title begin
-			      *to++ = '{';
-			      *to++ = '\\';
-				 *to++ = 'l';
-				 *to++ = 'a';
-				 *to++ = 'r';
-				 *to++ = 'g';
-				 *to++ = 'e';
-				 *to++ = ' ';
+					text += "{\\large ";
 				 continue;
 			    case 't':
-				 *to++ = '}';
+				 text += '}';
 				 continue;
 			    case 'S':
-				 *to++ = '\\';
-				 *to++ = 'p';
-				 *to++ = 'a';
-				 *to++ = 'r';
-				 *to++ = ' ';
-				 *to++ = '{';
-			      *to++ = '\\';
-			      *to++ = 'i';
-			      *to++ = '1';
-			      *to++ = '\\';
-			      *to++ = 'b';
-			      *to++ = '1';
-			      *to++ = ' ';
+					text += "\\par {\\i1\\b1 ";
 			      continue;
 			    case 's':
-			      *to++ = '}';
-			      *to++ = '\\';
-			      *to++ = 'p';
-			      *to++ = 'a';
-			      *to++ = 'r';
-			      *to++ = ' ';
+					text += "}\\par ";
 			      continue;
 			    }
 			  break;
@@ -437,12 +267,10 @@ char GBFRTF::ProcessText(char *text, int maxlen, const SWKey *key, const SWModul
 		else {
 			if (!hideText) {
 				wordCount++;
-				*to++ = *from;
+				text += *from;
 			}
 		}
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 

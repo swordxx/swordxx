@@ -15,13 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
 #include <gbfhtmlhref.h>
-#include <ctype.h>
-#include <string>
-
-using std::string;
 
 SWORD_NAMESPACE_START
 
@@ -63,7 +57,7 @@ GBFHTMLHREF::GBFHTMLHREF() {
 }
 
 
-bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &userData) {
+bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
 	const char *tok;
 	char val[128];
 	char *valto;
@@ -89,14 +83,13 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 					*valto++ = *num;
 				*valto = 0;
 				if (atoi((!isdigit(*val))?val+1:val) < 5627) {
-					pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
+					buf += " <small><em>&lt;<a href=\"type=Strongs value=";
 					for (tok = val; *tok; tok++)
-							*(*buf)++ = *tok;
-					*(*buf)++ = '\"';
-					*(*buf)++ = '>';
+							buf += *tok;
+					buf += "\">";
 					for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
-							*(*buf)++ = *tok;
-					pushString(buf, "</a>&gt;</em></small> ");
+							buf += *tok;
+					buf += "</a>&gt;</em></small> ";
 					//cout << buf;
 					
 				}
@@ -114,96 +107,90 @@ bool GBFHTMLHREF::handleToken(char **buf, const char *token, DualStringMap &user
 				for (num+=18; ((*num) && (*num != '\"')); num++)
 					*valto++ = *num;
 				*valto = 0;
-				pushString(buf, " <small><em>(<a href=\"type=morph class=Robinson value=");
+				buf += " <small><em>(<a href=\"type=morph class=Robinson value=";
 				for (tok = val; *tok; tok++)
 				// normal robinsons tense
-						*(*buf)++ = *tok;
-				*(*buf)++ = '\"';
-				*(*buf)++ = '>';
+						buf += *tok;
+				buf += "\">";
 				for (tok = val; *tok; tok++)				
 					//if(*tok != '\"') 			
-						*(*buf)++ = *tok;		
-				pushString(buf, "</a>)</em></small> ");					
+						buf += *tok;		
+				buf += "</a>)</em></small> ";					
 			}
 		}
 		
 		else if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
-			pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
+			buf += " <small><em>&lt;<a href=\"type=Strongs value=";
 			for (tok = token+1; *tok; tok++)
 				//if(token[i] != '\"')
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+					buf += *tok;
+			buf += "\">";
 			for (tok = token + 2; *tok; tok++)
 				//if(token[i] != '\"')
-					*(*buf)++ = *tok;
-			pushString(buf, "</a>&gt;</em></small>");
+					buf += *tok;
+			buf += "</a>&gt;</em></small>";
 		}
 
 		else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
-			pushString(buf, " <small><em>&lt;<a href=\"type=Strongs value=");
+			buf += " <small><em>&lt;<a href=\"type=Strongs value=";
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+					buf += *tok;
+			buf += "\">";
 			for (tok = token + 3; *tok; tok++)
 				if(*tok != '\"')
-					*(*buf)++ = *tok;
-			pushString(buf, "</a>)</em></small>");
+					buf += *tok;
+			buf += "</a>)</em></small>";
 		}
 
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
-			pushString(buf, " <small><em>(<a href=\"type=morph class=none value=");
+			buf += " <small><em>(<a href=\"type=morph class=none value=";
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+					buf += *tok;
+			buf += "\">";
 			for (tok = token + 2; *tok; tok++)				
 				if(*tok != '\"') 			
-					*(*buf)++ = *tok;		
-			pushString(buf, "</a>)</em></small>");
+					buf += *tok;		
+			buf += "</a>)</em></small>";
 		}
 
 		else if (!strncmp(token, "RX", 2)) {
-			pushString(buf, "<a href=\"");
+			buf += "<a href=\"";
 			for (tok = token + 3; *tok; tok++) {
 			  if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
-			    *(*buf)++ = *tok;
+			    buf += *tok;
 			  }
 			  else {
 			    break;
 			  }
 			}
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+			buf += "\">";
 		}
 
 		else if (!strncmp(token, "RB", 2)) {
-			pushString(buf, "<i>");
+			buf += "<i>";
 			userData["hasFootnotePreTag"] = "true";
 		}
 
 		else if (!strncmp(token, "RF", 2)) {
 			if(userData["hasFootnotePreTag"] == "true") {
 				userData["hasFootnotePreTag"] = "false";
-				pushString(buf, "</i> ");
+				buf += "</i> ";
 			}
-			pushString(buf, "<font color=\"#800000\"><small> (");
+			buf += "<font color=\"#800000\"><small> (";
 		}
 
 		else if (!strncmp(token, "FN", 2)) {
-			pushString(buf, "<font face=\"");
+			buf += "<font face=\"";
 			for (tok = token + 2; *tok; tok++)				
 				if(*tok != '\"') 			
-					*(*buf)++ = *tok;
-			*(*buf)++ = '\"';
-			*(*buf)++ = '>';
+					buf += *tok;
+			buf += "\">";
 		}
 
 		else if (!strncmp(token, "CA", 2)) {	// ASCII value
-			*(*buf)++ = (char)atoi(&token[2]);
+			buf += (char)atoi(&token[2]);
 		}
 		
 		else {

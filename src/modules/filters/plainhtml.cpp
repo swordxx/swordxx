@@ -15,8 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
 #include <plainhtml.h>
 
 SWORD_NAMESPACE_START
@@ -26,111 +24,49 @@ PLAINHTML::PLAINHTML()
 }
 
 
-char PLAINHTML::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char PLAINHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	char *to, *from;
-	int len;
 	int count = 0;
 
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;							// -------------------------------
-	for (to = text; *from; from++)
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++)
 	{
 		if ((*from == '\n') && (from[1] == '\n')) // paragraph
 		{
-			*to++ = '<';
-			*to++ = 'P';
-			*to++ = '>';
+			text += "<P>";
 			from++;
 			continue;
 		} else {
 			if ((*from == '\n')) // && (from[1] != '\n')) // new line
 			{
-				*to++ = '<';
-				*to++ = 'B';
-				*to++ = 'R';
-				*to++ = '>';
+				text += "<BR>";
 				continue;
 			}
 		}
 		
 		if (*from == '{') {
-		  *to++ = '<';
-	  	*to++ = 'F';
-  		*to++ = 'O';
-			*to++ = 'N';
-			*to++ = 'T';
-			*to++ = ' ';
-			*to++ = 'C';
-			*to++ = 'O';
-			*to++ = 'L';
-			*to++ = 'O';
-			*to++ = 'R';
-			*to++ = '=';
-			*to++ = '#';
-			*to++ = '8';
-			*to++ = '0';
-			*to++ = '0';
-			*to++ = '0';
-			*to++ = '0';
-			*to++ = '0';
-			*to++ = '>';
-
-			*to++ = '<';
-			*to++ = 'S';
-			*to++ = 'M';
-			*to++ = 'A';
-			*to++ = 'L';
-			*to++ = 'L';
-			*to++ = '>';
-			*to++ = ' ';
-			*to++ = '(';
+			text += "<FONT COLOR=#80000><SMALL> (";
 			continue;
 		}
 
 		if (*from == '}')
 		{
-			*to++ = ')';
-			*to++ = ' ';
-			*to++ = '<';
-			*to++ = '/';
-			*to++ = 'S';
-			*to++ = 'M';
-			*to++ = 'A';
-			*to++ = 'L';
-			*to++ = 'L';
-			*to++ = '>';
-			
-			*to++ = '<';
-			*to++ = '/';
-  		*to++ = 'F';
-			*to++ = 'O';
-			*to++ = 'N';
-			*to++ = 'T';
-			*to++ = '>';
+			text += ") </SMALL></FONT>";
 			continue;
 		}
 
 		if ((*from == ' ') && (count > 5000))
 		{
-			*to++ = '<';
-			*to++ = 'W';
-			*to++ = 'B';
-			*to++ = 'R';
-			*to++ = '>';
+			text += "<WBR>";
 			count = 0;
 			continue;
 		}
 
-		*to++ = *from;
+		text += *from;
 		count++;
 	}
-	*to++ = 0;
-	*to = 0;
 	return 0;
 }
 

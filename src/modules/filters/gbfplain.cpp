@@ -15,21 +15,15 @@ GBFPlain::GBFPlain() {
 }
 
 
-char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	char *to, *from, token[2048];
+	char token[2048];
 	int tokpos = 0;
 	bool intoken = false;
-	int len;
-
-	len = strlen(text) + 1;						// shift string to right of buffer
-	if (len < maxlen) {
-		memmove(&text[maxlen - len], text, len);
-		from = &text[maxlen - len];
-	}
-	else	from = text;							// -------------------------------
-	
-	for (to = text; *from; from++) {
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {
 		if (*from == '<') {
 			intoken = true;
 			tokpos = 0;
@@ -47,34 +41,30 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 					case 'G':               // Greek
 					case 'H':               // Hebrew
 					case 'T':               // Tense
-						*to++ = ' ';
-						*to++ = '<';
+						text += " <";
 						for (char *tok = token + 2; *tok; tok++)
-							*to++ = *tok;
-						*to++ = '>';
-						*to++ = ' ';
+							text += *tok;
+						text += "> ";
 						continue;
 				}
 				break;
 			case 'R':
 				switch(token[1]) {
 				case 'F':               // footnote begin
-					*to++ = ' ';
-					*to++ = '[';
+					text += " [";
 					continue;
 				case 'f':               // footnote end
-					*to++ = ']';
-					*to++ = ' ';
+					text += "] ";
 					continue;
 				}
 				break;
 			case 'C':
 				switch(token[1]) {
 				case 'A':               // ASCII value
-					*to++ = (char)atoi(&token[2]);
+					text += (char)atoi(&token[2]);
 					continue;
 				case 'G':
-					*to++ = '>';
+					text += ">";
 					continue;
 /*								Bug in WEB
 				case 'L':
@@ -83,11 +73,10 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 */
 				case 'L':	//        Bug in WEB.  Use above entry when fixed
 				case 'N':               // new line
-					*to++ = '\n';
+					text += '\n';
 					continue;
 				case 'M':               // new paragraph
-					*to++ = '\n';
-					*to++ = '\n';
+					text += "\n\n";
 					continue;
 				}
 				break;
@@ -99,10 +88,8 @@ char GBFPlain::ProcessText(char *text, int maxlen, const SWKey *key, const SWMod
 				token[tokpos++] = *from;
 				token[tokpos+2] = 0;
 		}
-		else	*to++ = *from;
+		else	text += *from;
 	}
-	*to++ = 0;
- 	*to = 0;
 	return 0;
 }
 

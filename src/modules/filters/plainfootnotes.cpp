@@ -53,7 +53,7 @@ const char *PLAINFootnotes::getOptionValue()
 }
 
 
-char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const SWModule *module)
+char PLAINFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
 	char token[2048];
 	int tokpos = 0;
@@ -61,20 +61,13 @@ char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const
 	bool lastspace = false;
 
 	if (!option) {	// if we don't want footnotes
-		char *to, *from;
-		int len;
 		bool hide = false;
 
-		len = strlen(text) + 1;	// shift string to right of buffer
-		if (len < maxlen)
-		{
-			memmove(&text[maxlen - len], text, len);
-			from = &text[maxlen - len];
-		}
-		else	from = text;	// -------------------------------
-
-		for (to = text; *from; from++) {
-			if (*from == '{') // Footnote start
+		const char *from;
+		SWBuf orig = text;
+		from = orig.c_str();
+		for (text = ""; *from; from++) {
+		 if (*from == '{') // Footnote start
 			{
 				hide = true;
 				continue;
@@ -91,13 +84,11 @@ char PLAINFootnotes::ProcessText(char *text, int maxlen, const SWKey *key, const
 			}
 			else	{
 				if (!hide) {
-					*to++ = *from;
+					text = *from;
 					lastspace = (*from == ' ');
 				}
 			}
 		}
-		*to++ = 0;
-		*to = 0;
 	}
 	return 0;
 }
