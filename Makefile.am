@@ -59,7 +59,7 @@ icu := @with_icu@
 # Global config directory
 globalconfdir := @sysconfdir@
 
-SUBDIRS = lib . icu apps
+SUBDIRS = lib . icu
 if BUILDTESTS
 TESTSDIR = tests
 else
