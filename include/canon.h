@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.11 2002/06/25 03:18:12 scribe Exp $
+ * $Id: canon.h,v 1.12 2002/06/25 04:15:50 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -250,7 +250,6 @@ const struct abbrev
   {"JOHN", 43},			//   John
   {"JONAH", 32},		//   Jonah
   {"JOSHUA", 6},		//   Joshua
-  {"JUD", 7},			//   Judges
   {"JUDE", 65},			//  Jude
   {"JUDGES", 7},		//  Judges
   {"L", 42},			//     Luke
