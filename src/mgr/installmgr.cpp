@@ -197,14 +197,16 @@ SWMgr *InstallSource::getMgr() {
 
 int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	int retVal = 0;
-	term = false;
 	long i;
-	FTPTransport *transport = createFTPTransport(is->source, statusReporter);
+	FTPTransport *trans = createFTPTransport(is->source, statusReporter);
+	transport = trans; // set classwide current transport for other thread terminate() call
+	trans->setPassive(passive);
+	
 	SWBuf urlPrefix = (SWBuf)"ftp://" + is->source;
 
 	// let's be sure we can connect.  This seems to be necessary but sucks
 //	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
-//	if (transport->getURL("dirlist", url.c_str())) {
+//	if (trans->getURL("dirlist", url.c_str())) {
 //		 fprintf(stderr, "FTPCopy: failed to get dir %s\n", url.c_str());
 //		 return -1;
 //	}
@@ -213,27 +215,27 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 	if (dirTransfer) {
 		SWBuf dir = (SWBuf)is->directory.c_str() + "/" + src; //dont forget the final slash
 
-		retVal = transport->copyDirectory(urlPrefix, dir, dest, suffix);
+		retVal = trans->copyDirectory(urlPrefix, dir, dest, suffix);
 
 
 	}
 	else {
 		SWTRY {
 			SWBuf url = urlPrefix + is->directory.c_str() + "/" + src; //dont forget the final slash
-			if (transport->getURL(dest, url.c_str())) {
+			if (trans->getURL(dest, url.c_str())) {
 				fprintf(stderr, "FTPCopy: failed to get file %s", url.c_str());
-				return -1;
+				retVal = -1;
 			}
 		}
 		SWCATCH (...) {
-			term = true;
+			retVal = -1;
 		}
 	}
 	SWTRY {
-		FTPTransport *deleteMe = transport;
+		FTPTransport *deleteMe = trans;
 		// do this order for threadsafeness
 		// (see terminate())
-		transport = 0;
+		trans = transport = 0;
 		delete deleteMe;
 	}
 	SWCATCH (...) {}

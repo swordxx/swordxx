@@ -95,8 +95,8 @@ vector<struct ftpparse> FTPTransport::getDirList(const char *dirURL) {
 
 int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
 	int i;
-
-	term = false;
+	int retVal = 0;
+	
 	SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/"; //dont forget the final slash
 	fprintf(stderr, "FTPCopy: getting dir %s\n", url.c_str());
 	vector<struct ftpparse> dirList = getDirList(url.c_str());
@@ -112,40 +112,42 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 	long completedBytes = 0;
 	for (i = 0; i < dirList.size(); i++) {
 		struct ftpparse &dirEntry = dirList[i];
-			SWBuf buffer = (SWBuf)dest + "/" + (dirEntry.name);
-			if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
-				SWBuf buffer2 = "Downloading (";
-				buffer2.appendFormatted("%d", i+1);
-				buffer2 += " of ";
-				buffer2.appendFormatted("%d", dirList.size());
-				buffer2 += "): ";
-				buffer2 += (dirEntry.name);
-				if (statusReporter)
-					statusReporter->preStatus(totalBytes, completedBytes, buffer2.c_str());
-				FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
-				SWTRY {
-					SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/" + dirEntry.name; //dont forget the final slash
-					if (dirEntry.flagtrycwd != 1) {
-						if (getURL(buffer.c_str(), url.c_str())) {
-							fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
-							return -2;
-						}
-						completedBytes += dirEntry.size;
+		SWBuf buffer = (SWBuf)dest + "/" + (dirEntry.name);
+		if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
+			SWBuf buffer2 = "Downloading (";
+			buffer2.appendFormatted("%d", i+1);
+			buffer2 += " of ";
+			buffer2.appendFormatted("%d", dirList.size());
+			buffer2 += "): ";
+			buffer2 += (dirEntry.name);
+			if (statusReporter)
+				statusReporter->preStatus(totalBytes, completedBytes, buffer2.c_str());
+			FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
+			SWTRY {
+				SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/" + dirEntry.name; //dont forget the final slash
+				if (dirEntry.flagtrycwd != 1) {
+					if (getURL(buffer.c_str(), url.c_str())) {
+						fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
+						return -2;
 					}
-					else {
-						SWBuf subdir = (SWBuf)dir + "/" + dirEntry.name;
-						if (copyDirectory(urlPrefix, subdir, buffer.c_str(), suffix)) {
-							fprintf(stderr, "FTPCopy: failed to get file %s\n", subdir.c_str());
-							return -2;
-						}
+					completedBytes += dirEntry.size;
+				}
+				else {
+					SWBuf subdir = (SWBuf)dir + "/" + dirEntry.name;
+					if (copyDirectory(urlPrefix, subdir, buffer.c_str(), suffix)) {
+						fprintf(stderr, "FTPCopy: failed to get file %s\n", subdir.c_str());
+						return -2;
 					}
 				}
-				SWCATCH (...) {}
-				if (term)
-					break;
 			}
+			SWCATCH (...) {}
+			if (term) {
+				retVal = -3;
+				break;
+			}
+		}
 	}
-	return 0;
+	return retVal;
 }
 
 
