@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.75 2002/07/16 23:00:03 dglassey Exp $
+ * $Id: swmgr.cpp,v 1.76 2002/07/23 19:47:42 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -161,9 +161,10 @@ void SWMgr::init() {
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
 #ifdef _ICU_
-	tmpFilter = new UTF8Transliterator();
-	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", tmpFilter));
-	cleanupFilters.push_back(tmpFilter);
+	transliterator = new UTF8Transliterator();
+	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", transliterator));
+	options.push_back(transliterator->getOptionName());
+	cleanupFilters.push_back(transliterator);
 #endif
 
 	gbfplain = new GBFPlain();
@@ -773,6 +774,9 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 	}
 	if (filterMgr)
 		filterMgr->AddGlobalOptions(module, section, start, end);
+#ifdef _ICU_
+	   module->AddOptionFilter(transliterator);
+#endif
 }
 
 
