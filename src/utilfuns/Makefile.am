@@ -9,6 +9,7 @@ libsword_la_SOURCES += $(utilfunsdir)/swunicod.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swversion.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swbuf.cpp
 libsword_la_SOURCES += $(utilfunsdir)/ftpparse.c
+libsword_la_SOURCES += $(utilfunsdir)/url.cpp
 
 if INTERNALFTPLIB
 ftpsrc = $(utilfunsdir)/ftplib.c
@@ -34,5 +35,3 @@ libsword_la_SOURCES += $(SWREGEX)
 
 
 libsword_la_SOURCES += $(utilfunsdir)/roman.cpp
-
-
