@@ -2,7 +2,7 @@
  *  swdisprtf.h   - definition of Class SWDispRTF-- an SWDisplay used to display
  *				a verse in Rich Text Format.
  *
- * $Id: swdisprtf.h,v 1.8 2001/08/15 02:40:12 dtrotzjr Exp $
+ * $Id: swdisprtf.h,v 1.9 2002/06/19 09:24:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -84,27 +84,17 @@ public:
     __fastcall ~ SWDispRTF ();
 
   virtual char Display (SWModule & imodule);
-    __published:__property System::AnsiString RTFHeader =
-  {
-  read = FRTFHeader, write = FRTFHeader};
-  __property System::AnsiString RTFHeadMargin = { read =
-      FRTFHeadMargin, write = FRTFHeadMargin };
-  __property System::AnsiString RTFChapterMarkPre = { read =
-      FRTFChapterMarkPre, write = FRTFChapterMarkPre };
-  __property System::AnsiString RTFChapterMarkPost = { read =
-      FRTFChapterMarkPost, write = FRTFChapterMarkPost };
-  __property System::AnsiString RTFVerseMarkPre = { read =
-      FRTFVerseMarkPre, write = FRTFVerseMarkPre };
-  __property System::AnsiString RTFVerseMarkPost = { read =
-      FRTFVerseMarkPost, write = FRTFVerseMarkPost };
-  __property System::AnsiString RTFVersePre = { read = FRTFVersePre, write =
-      FRTFVersePre };
-  __property System::AnsiString RTFVersePost = { read = FRTFVersePost, write =
-      FRTFVersePost };
-  __property System::AnsiString RTFTrailer = { read = FRTFTrailer, write =
-      FRTFTrailer };
-  __property bool ExpandNewLine = { read = FExpandNewLine, write =
-      FExpandNewLine };
+__published:
+  __property System::AnsiString RTFHeader = { read = FRTFHeader, write = FRTFHeader};
+  __property System::AnsiString RTFHeadMargin = { read = FRTFHeadMargin, write = FRTFHeadMargin };
+  __property System::AnsiString RTFChapterMarkPre = { read = FRTFChapterMarkPre, write = FRTFChapterMarkPre };
+  __property System::AnsiString RTFChapterMarkPost = { read = FRTFChapterMarkPost, write = FRTFChapterMarkPost };
+  __property System::AnsiString RTFVerseMarkPre = { read = FRTFVerseMarkPre, write = FRTFVerseMarkPre };
+  __property System::AnsiString RTFVerseMarkPost = { read = FRTFVerseMarkPost, write = FRTFVerseMarkPost };
+  __property System::AnsiString RTFVersePre = { read = FRTFVersePre, write = FRTFVersePre };
+  __property System::AnsiString RTFVersePost = { read = FRTFVersePost, write = FRTFVersePost };
+  __property System::AnsiString RTFTrailer = { read = FRTFTrailer, write = FRTFTrailer };
+  __property bool ExpandNewLine = { read = FExpandNewLine, write = FExpandNewLine };
   __property int FontSize = { read = getFontSize, write = setFontSize };
 };
 

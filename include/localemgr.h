@@ -2,7 +2,7 @@
  *  localemgr.h   - definition of class LocaleMgr used to interact with
  *				registered locales for a sword installation
  *
- * $Id: localemgr.h,v 1.8 2001/06/24 01:30:33 scribe Exp $
+ * $Id: localemgr.h,v 1.9 2002/06/19 09:24:44 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -54,7 +54,6 @@ private:
 
 protected:
   LocaleMap locales;
-  virtual void loadConfigDir (const char *ipath);
 
 public:
   /** Default constructor of  LocaleMgr
@@ -83,11 +82,11 @@ public:
   /** Returns translated text.
   * This function uses both parameters to return the translated version of the given text.
   *
-  * @param name The name of the locale Sword should use
-  * @paran The text to translate into the language given by the first parameter.
+  * @param The text to translate into the language given by the first parameter.
+  * @param localeName The name of the locale Sword should use
   * @return Returns the translated text.
   */
-  virtual const char *translate (const char *name, const char *text);
+  virtual const char *translate (const char *text, const char *localeName = 0);
 
   /** Get the default locale name. To set it use @see setDefaultLocaleName
   *
@@ -105,5 +104,11 @@ public:
   * Do not create your own LocaleMgr, use this static object instead.
   */
   static LocaleMgr systemLocaleMgr;
+
+  
+  /** Augment this localmgr with all locale.conf files in a directory
+  */
+  virtual void loadConfigDir(const char *ipath);
+  
 };
 #endif
