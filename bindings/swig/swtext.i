@@ -1,5 +1,6 @@
 %{
- #include "swtext.h"
+#include "swtext.h"
+using namespace sword;
 %}
 
 class SWText : public SWModule {

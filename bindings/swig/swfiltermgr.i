@@ -1,5 +1,6 @@
 %{
 #include <swfiltermgr.h>
+using namespace sword;
 %}
 
 class SWFilterMgr {

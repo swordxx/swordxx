@@ -1,13 +1,15 @@
 %{
- #include "versekey.h"
+#include "versekey.h"
+#include "listkey.h"
+using namespace sword;
 %}
 
 class VerseKey : public SWKey {
 public:
   VerseKey(const char *ikey = 0);
-  //VerseKey(const SWKey * ikey);
-  //VerseKey(const char *min, const char *max);
-  //VerseKey(const VerseKey &k);
+  VerseKey(const SWKey * ikey);
+  VerseKey(const char *min, const char *max);
+  VerseKey(const VerseKey &k);
   virtual ~VerseKey();
 
   virtual SWKey *clone() const;
@@ -20,9 +22,17 @@ public:
   void ClearBounds();
 
 //data functions
+  virtual ListKey ParseVerseList (const char *buf, const char *defaultKey="Genesis 1:1", bool expandRange=false);
+  
+  virtual void setText(const char *ikey);
+  virtual const char* getText () const;
+  virtual const char *getRangeText() const;
+
+
+  virtual char Traversable();
+
   virtual void decrement(int step);
   virtual void increment(int step);
-  virtual char Traversable() { return 1; }
 
   virtual const char *getBookName() const;
   virtual const char *getBookAbbrev() const;

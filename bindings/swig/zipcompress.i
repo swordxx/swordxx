@@ -1,5 +1,6 @@
 %{
- #include <zipcomprs.h>
+#include <zipcomprs.h>
+using namespace sword;
 %}
 
 class ZipCompress : public SWCompress {

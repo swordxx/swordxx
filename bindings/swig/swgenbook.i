@@ -1,5 +1,6 @@
 %{
- #include "swgenbook.h"
+#include "swgenbook.h"
+using namespace sword;
 %}
 
 class SWGenBook : public SWModule {

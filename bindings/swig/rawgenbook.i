@@ -1,5 +1,6 @@
 %{
- #include "rawgenbook.h"
+#include "rawgenbook.h"
+using namespace sword;
 %}
 
 class RawGenBook : public SWGenBook {

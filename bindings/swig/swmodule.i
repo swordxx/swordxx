@@ -1,5 +1,6 @@
 %{
- #include "swmodule.h"
+#include "swmodule.h"
+using namespace sword;
 %}
 
 class SWModule {
@@ -89,11 +90,11 @@ public:
   
 %extend {
   void write(const char* text) {
-    (*self)<<text;
+    (*self) << text;
   };
   
   void writeLink(const SWKey* key) {
-    (*self)<<key;
+    (*self) << key;
   };
 }
 };

@@ -1,5 +1,6 @@
 %{
- #include "rawtext.h"
+#include "rawtext.h"
+using namespace sword;
 %}
 
 class RawText : public SWText {

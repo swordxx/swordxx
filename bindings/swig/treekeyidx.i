@@ -1,5 +1,6 @@
 %{
 #include "treekeyidx.h"
+using namespace sword;
 %}
 
 class TreeKeyIdx : public TreeKey {

@@ -1,12 +1,13 @@
 %{
- #include <stdio.h>
- #include <string>
- #include <map>
- #include <defs.h>
- #include <multimapwdef.h>
+#include <stdio.h>
+#include <string>
+#include <map>
+#include <defs.h>
+#include <multimapwdef.h>
+#include "swconfig.h"
 
- #include "swconfig.h"
 using namespace sword;
+using namespace std;
 %}
 
 %include "stl.i"
@@ -15,13 +16,13 @@ using namespace sword;
 %include "typemaps.i"
 
 
-typedef multimapwithdefault < string, string, less < string > > ConfigEntMap;
-typedef map < string, ConfigEntMap, less < string > > SectionMap;
+typedef multimapwithdefault < std::string, string, less < std::string > > ConfigEntMap;
+typedef std::map < std::string, ConfigEntMap, less < std::string > > SectionMap;
 
 class SWConfig {
 public:
   //member data
-  string filename;
+  std::string filename;
   SectionMap Sections;
 
   //member functions

@@ -1,5 +1,6 @@
 %{
- #include "rawld4.h"
+#include "rawld4.h"
+using namespace sword;
 %}
 
 class RawLD4 : public SWLD {

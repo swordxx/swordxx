@@ -1,5 +1,6 @@
 %{
- #include <swcomprs.h>
+#include <swcomprs.h>
+using namespace sword;
 %}
 
 class SWCompress {

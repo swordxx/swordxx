@@ -1,5 +1,7 @@
 %{
- #include "swkey.h"
+#include "swkey.h"
+#include "versekey.h"
+using namespace sword;
 %}
 
 class SW_POSITION {
@@ -13,25 +15,24 @@ public:
 #define TOP SW_POSITION(POS_TOP)
 #define BOTTOM SW_POSITION(POS_BOTTOM)
 
-
 /**
 * The SWKey class for the SWIG-Perl interface.
 */
 class SWKey {
 public:
   SWKey(const char *ikey = 0);
-  //SWKey(SWKey const &k);
+  SWKey(SWKey const &k);
   virtual SWKey *clone () const;
+  virtual ~SWKey();
 
   char Persist() const;
 
 %extend {
-  
   void setPersist(signed char persists) {
   	self->Persist(persists);
   };
-
 }
+
   virtual char Error ();
 
   virtual void setText(const char *ikey);
@@ -50,7 +51,6 @@ public:
   //virtual long Index(long iindex);
   
 %extend {
-
   /**
   * Goes to the next key. Only useful for VerseKeys at the moment.
   */
@@ -63,7 +63,13 @@ public:
   void setKey(const SWKey* key) {
   	self->copyFrom(*key);
   };
-
+  
+  /**
+  * We define here some casting functions since Perl etc. don't support casts of pointers.
+  */
+  VerseKey* toVerseKey() {
+	return dynamic_cast<VerseKey*>(self);
+  };
 }
 
 };

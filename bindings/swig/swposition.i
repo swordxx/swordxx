@@ -1,5 +1,6 @@
 %{
- #include "swkey.h"
+#include "swkey.h"
+using namespace sword;
 %}
 
 class SW_POSITION {

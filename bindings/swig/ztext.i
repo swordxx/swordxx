@@ -1,5 +1,6 @@
 %{
- #include "ztext.h"
+#include "ztext.h"
+using namespace sword;
 %}
 
 class zText : public SWText {

@@ -1,5 +1,6 @@
 %{
- #include "zld.h"
+#include "zld.h"
+using namespace sword;
 %}
 
 class zLD : public SWLD {

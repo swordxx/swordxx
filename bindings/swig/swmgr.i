@@ -1,5 +1,6 @@
 %{
 #include <swmgr.h>
+using namespace sword;
 %}
 
 typedef map < string, SWModule *, less < string > > ModMap;
