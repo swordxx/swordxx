@@ -186,7 +186,7 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
  	*/
-	void append(const char *str, const long max = -1);
+	void append(const char *str, long max = -1);
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
@@ -194,14 +194,14 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
 	*/
-	inline void append(const SWBuf &str, const long max = -1) { append(str.c_str(), max); }
+	inline void append(const SWBuf &str, long max = -1) { append(str.c_str(), max); }
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param ch Append this.
 	*/
-	inline void append(const char ch) {
+	inline void append(char ch) {
 		assureMore(1);
 		*end++ = ch;
 		*end = 0;
@@ -222,7 +222,7 @@ public:
 	*
 	* @param format The format string. Same syntax as printf, for example.
 	* @param ... Add all arguments here.
- 	*/
+	*/
 	void appendFormatted(const char *format, ...);
 	
 	/** 
@@ -231,14 +231,14 @@ public:
 	* @param str Insert this.
 	* @param max Insert only max chars.
 	*/
-	void insert(const unsigned long pos, const char* str, const signed long max = -1 );
+	void insert(unsigned long pos, const char* str, signed long max = -1 );
 	/** 
 	* SWBuf::insert - inserts the given string at position into this string
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
 	* @param str Insert this.
 	* @param max Insert only max chars.
 	*/
-	void insert(const unsigned long pos, const SWBuf &str, const signed long max = -1 ) {
+	void insert(unsigned long pos, const SWBuf &str, signed long max = -1 ) {
 		insert(pos, str.c_str(), max);
 	};
 	/** 
@@ -246,7 +246,7 @@ public:
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
 	* @param c Insert this.
 	*/
-	void insert(const unsigned long pos, const char c) {
+	void insert(unsigned long pos, char c) {
 		insert(pos, SWBuf(c));
 	}
 	/** SWBuf::getRawData

@@ -409,8 +409,8 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 
 		// find the end
 		int end;
-		for (end = start; ((end < 254) && (chunk[end] != 10)); end++);
-		if (end > 253)
+		for (end = start; ((end < (len-1)) && (chunk[end] != 10)); end++);
+		if (end >= 253)
 			more = true;
 		index += (end + 1);
 

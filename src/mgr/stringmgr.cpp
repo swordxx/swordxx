@@ -174,8 +174,8 @@ const bool StringMgr::supportsUnicode() const {
 		);
 		if (err != U_ZERO_ERROR) {
 			SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
-			delete lowerStr;
-			delete upperStr;
+			delete [] lowerStr;
+			delete [] upperStr;
 			return ret;
 		}
 		
@@ -189,8 +189,8 @@ const bool StringMgr::supportsUnicode() const {
 		);
 		if (err != U_ZERO_ERROR) {
 			SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
-			delete lowerStr;
-			delete upperStr;
+			delete [] lowerStr;
+			delete [] upperStr;
 			return ret;
 		}
 
@@ -203,8 +203,8 @@ const bool StringMgr::supportsUnicode() const {
 			&err
 		);
 		
-		delete lowerStr;
-		delete upperStr;
+		delete [] lowerStr;
+		delete [] upperStr;
 		return ret;
 	}
 	

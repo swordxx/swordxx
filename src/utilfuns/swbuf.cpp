@@ -140,15 +140,14 @@ void SWBuf::setFormatted(const char *format, ...) {
 * SWBuf::append - appends a value to the current value of this SWBuf
 * 
 */
-void SWBuf::append(const char *str, const long max) {
+void SWBuf::append(const char *str, long max) {
 //	if (!str) //A null string was passed
 //		return;
-	//make sure we only copy strlen(str) bytes if max is larger than strlen(str) is
-	unsigned long str_len = strlen( str );
-	unsigned long len = (max > -1) ? ((max <= str_len) ? max : str_len) : str_len;
-	assureMore(++len);
-	memcpy(end, str, len-1);
-	end += (len-1);
+	if (max < 0)
+		max = strlen(str);
+	assureMore(max+1);
+	for (;((*str)&&(max));max--)
+		*end++ = *str++;
 	*end = 0;
 }
 
@@ -180,11 +179,11 @@ void SWBuf::appendFormatted(const char *format, ...) {
 	va_end(argptr);
 }
 
-void SWBuf::insert(const unsigned long pos, const char* str, const signed long max) {
+void SWBuf::insert(unsigned long pos, const char* str, signed long max) {
 // 	if (!str) //A null string was passed
 // 		return;
 
-	const int len = (max > -1) ? max : strlen(str);
+	int len = (max > -1) ? max : strlen(str);
 
 	if (!len || (pos > length())) //nothing to do, return
 		return;
