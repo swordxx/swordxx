@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: gbfwebif.h,v 1.4 2003/08/07 23:23:24 chrislit Exp $
+ * $Id: gbfwebif.h,v 1.5 2003/08/12 05:36:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -32,7 +32,7 @@ class SWDLLEXPORT GBFWEBIF : public GBFHTMLHREF {
 	const SWBuf passageStudyURL;
 
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	GBFWEBIF();
 };

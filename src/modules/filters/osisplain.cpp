@@ -47,7 +47,7 @@ OSISPlain::OSISPlain() {
 }
 
 
-bool OSISPlain::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
+bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
         // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;

@@ -112,7 +112,7 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 		rawFilter(entryBuf, 0);	// hack, decipher
 		rawFilter(entryBuf, key);
 
-		   if (!isUnicode())
+//		   if (!isUnicode())
 			RawStr::prepText(entryBuf);
 	}
 

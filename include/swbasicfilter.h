@@ -4,7 +4,7 @@
  *  				many filter will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.h,v 1.21 2003/08/07 23:23:24 chrislit Exp $
+ * $Id: swbasicfilter.h,v 1.22 2003/08/12 05:36:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -31,10 +31,11 @@
 SWORD_NAMESPACE_START
 
 
-class SWFilterUserData {
+// not a protected inner class because MSVC++ sucks and can't handle it
+class BasicFilterUserData {
 public:
-	SWFilterUserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; supressAdjacentWhitespace = false; }
-	virtual ~SWFilterUserData() {}
+	BasicFilterUserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; supressAdjacentWhitespace = false; }
+	virtual ~BasicFilterUserData() {}
 	const SWModule *module;
 	const SWKey *key;
 	SWBuf lastTextNode;
@@ -77,8 +78,8 @@ public:
 
 protected:
 
-	virtual SWFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new SWFilterUserData(module, key);
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new BasicFilterUserData(module, key);
 	}
 
 	// STAGEs
@@ -130,8 +131,8 @@ protected:
 	* @param userData FIXME: document this
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
-	virtual bool handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData);
-	virtual bool processStage(char stage, SWBuf &text, char *&from, SWFilterUserData *userData) { return false; }
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+	virtual bool processStage(char stage, SWBuf &text, char *&from, BasicFilterUserData *userData) { return false; }
 	virtual void setStageProcessing(char stages) { processStages = stages; }	// see STATICs up above
 
 	/** This function is called for every escape sequence encountered in the input text.
@@ -140,7 +141,7 @@ protected:
 	* @param userData FIXME: document this
 	* @return <code>false</code> if was not handled and should be handled in
 	* the default way (by just substituting).*/
-	virtual bool handleEscapeString(SWBuf &buf, const char *escString, SWFilterUserData *userData);
+	virtual bool handleEscapeString(SWBuf &buf, const char *escString, BasicFilterUserData *userData);
 };
 
 SWORD_NAMESPACE_END

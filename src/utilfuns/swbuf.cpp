@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.cpp,v 1.12 2003/07/17 23:20:41 scribe Exp $
+* $Id: swbuf.cpp,v 1.13 2003/08/12 05:36:31 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -64,6 +64,14 @@ SWBuf::SWBuf(char initVal, unsigned long initSize) {
 	end = buf+1;
 	endAlloc = buf + allocSize-1;
 }
+
+/*
+SWBuf::SWBuf(unsigned long initSize) {
+	init(initSize);
+	set((const char *)0);
+}
+*/
+
 
 void SWBuf::init(unsigned long initSize) {
 	fillByte = ' ';

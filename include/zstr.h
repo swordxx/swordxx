@@ -4,7 +4,7 @@
  *			and provides lookup and parsing functions based on
  *			class StrKey
  *
- * $Id: zstr.h,v 1.7 2003/02/27 07:39:37 scribe Exp $
+ * $Id: zstr.h,v 1.8 2003/08/12 05:36:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -68,7 +68,7 @@ public:
 	void getText(long index, char **idxbuf, char **buf);
 	void setText(const char *ikey, const char *buf, long len = -1);
 	void linkEntry(const char *destkey, const char *srckey);
-	virtual void rawZFilter(char *buf, long size, char direction = 0) {}
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) {}
 	static signed char createModule (const char *path);
 };
 

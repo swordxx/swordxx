@@ -22,6 +22,7 @@
 #include <versekey.h>
 #include <zverse.h>
 #include <sysdata.h>
+#include <swbuf.h>
 
 
 #ifndef O_BINARY
@@ -221,17 +222,17 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 			printf ("Error: could not seek to right place in compressed text\n");
 			return;
 		}
-		pcCompText = new char[ulCompSize];
+		SWBuf pcCompText;
+		pcCompText.setSize(ulCompSize+5);
 
-		if (read(textfp[testmt-1]->getFd(), pcCompText, ulCompSize)<(long)ulCompSize)
-		{
+		if (read(textfp[testmt-1]->getFd(), pcCompText.getRawData(), ulCompSize)<(long)ulCompSize) {
 			printf ("Error reading compressed text\n");
 			return;
 		}
-
-		rawZFilter(pcCompText, ulCompSize, 0); // 0 = decipher
+		pcCompText.setSize(ulCompSize);
+		rawZFilter(pcCompText, 0); // 0 = decipher
 		
-		compressor->zBuf(&ulCompSize, pcCompText);
+		compressor->zBuf(&ulCompSize, pcCompText.getRawData());
 
 		if (cacheBuf) {
 			flushCache();
@@ -245,8 +246,6 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 
 		cacheTestament = testmt;
 		cacheBufIdx = ulBuffNum;
-		if (pcCompText)
-			delete [] pcCompText;
 	}
 }
 
@@ -342,9 +341,10 @@ void zVerse::flushCache() {
 				compressor->zBuf(&zsize);
 				outzsize = zsize;
 
-				char *buf = new char [ zsize * 2 ];
-				memcpy(buf, compressor->zBuf(&zsize), zsize);
-				rawZFilter(buf, zsize, 1); // 1 = encipher
+				SWBuf buf(zsize + 5);
+				memcpy(buf.getRawData(), compressor->zBuf(&zsize), zsize);
+				buf.setSize(zsize);
+				rawZFilter(buf, 1); // 1 = encipher
 
 				start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
 
@@ -353,8 +353,6 @@ void zVerse::flushCache() {
 				outzsize  = archtosword32(zsize);
 
 				write(textfp[cacheTestament-1]->getFd(), buf, zsize);
-
-				delete [] buf;
 
 				lseek(idxfp[cacheTestament-1]->getFd(), idxoff, SEEK_SET);
 				write(idxfp[cacheTestament-1]->getFd(), &outstart, 4);

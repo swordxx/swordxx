@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * $Id: gbfhtmlhref.h,v 1.6 2003/08/07 23:23:24 chrislit Exp $
+ * $Id: gbfhtmlhref.h,v 1.7 2003/08/12 05:36:30 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -29,15 +29,15 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT GBFHTMLHREF : public SWBasicFilter {
 protected:
-	class MyUserData : public SWFilterUserData {
+	class MyUserData : public BasicFilterUserData {
 	public:
-		MyUserData(const SWModule *module, const SWKey *key) : SWFilterUserData(module, key) {}
+		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
 		bool hasFootnotePreTag;
 	};
-	virtual SWFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
 	}
-	virtual bool handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData);
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	GBFHTMLHREF();
 };

@@ -422,19 +422,19 @@ void zStr::getCompressedText(long block, long entry, char **buf) {
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
-		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
-
+		SWBuf buf;
+		buf.setSize(size + 5);
 		lseek(zdtfd->getFd(), start, SEEK_SET);
-		read(zdtfd->getFd(), *buf, size);
+		read(zdtfd->getFd(), buf.getRawData(), size);
 
 		flushCache();
 
 		unsigned long len = size;
+		buf.setSize(size);
+		rawZFilter(buf, 0); // 0 = decipher
 
-		rawZFilter(*buf, len, 0); // 0 = decipher
-
-		compressor->zBuf(&len, *buf);
-		char * rawBuf = compressor->Buf(0, &len);
+		compressor->zBuf(&len, buf.getRawData());
+		char *rawBuf = compressor->Buf(0, &len);
 		cacheBlock = new EntriesBlock(rawBuf, len);
 		cacheBlockIndex = block;
 	}
@@ -617,9 +617,10 @@ void zStr::flushCache() {
 			compressor->Buf(rawBuf, &size);
 			compressor->zBuf(&size);
 
-			char *buf = new char [ size * 2 ];
-			memcpy(buf, compressor->zBuf(&size), size); // 1 = encipher
-			rawZFilter(buf, size, 1); // 1 = encipher
+			SWBuf buf(size + 5);
+			memcpy(buf.getRawData(), compressor->zBuf(&size), size); // 1 = encipher
+			buf.setSize(size);
+			rawZFilter(buf, 1); // 1 = encipher
 
 			long zdxSize = lseek(zdxfd->getFd(), 0, SEEK_END);
 			long zdtSize = lseek(zdtfd->getFd(), 0, SEEK_END);

@@ -25,7 +25,7 @@ GBFWEBIF::GBFWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp"
 //all is done in GBFHTMLHREF since it inherits form this class
 }
 
-bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
+bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	const char *tok;
 	char val[128];
 	char *valto;

@@ -50,7 +50,7 @@ public:
 	virtual ~zVerse();
 	void findOffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void zReadText(char testmt, long start, unsigned short size, SWBuf &buf);
-	virtual void rawZFilter(char *buf, long size, char direction = 0) {}
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) {}
 	static char createModule(const char *path, int blockBound);
 };
 

@@ -116,7 +116,7 @@ char zLD::getEntry(long away) {
  */
 
 SWBuf &zLD::getRawEntryBuf() {
-	if (!getEntry() && !isUnicode()) {
+	if (!getEntry() /*&& !isUnicode()*/) {
 		prepText(entryBuf);
 	}
 

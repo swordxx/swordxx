@@ -23,7 +23,7 @@
 SWORD_NAMESPACE_START
 
 
-OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : SWFilterUserData(module, key) {
+OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 }
 
@@ -48,7 +48,7 @@ OSISRTF::OSISRTF() {
 }
 
 
-bool OSISRTF::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
+bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;

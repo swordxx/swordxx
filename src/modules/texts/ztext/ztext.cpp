@@ -71,7 +71,7 @@ SWBuf &zText::getRawEntryBuf() {
 
 	rawFilter(entryBuf, &key);
 
-	if (!isUnicode())
+//	if (!isUnicode())
 		prepText(entryBuf);
 
 	return entryBuf;

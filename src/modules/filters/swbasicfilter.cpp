@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.31 2003/08/07 23:23:32 chrislit Exp $
+ * $Id: swbasicfilter.cpp,v 1.32 2003/08/12 05:36:30 scribe Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -169,12 +169,12 @@ bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 }
 
 
-bool SWBasicFilter::handleToken(SWBuf &buf, const char *token, SWFilterUserData *userData) {
+bool SWBasicFilter::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	return substituteToken(buf, token);
 }
 
 
-bool SWBasicFilter::handleEscapeString(SWBuf &buf, const char *escString, SWFilterUserData *userData) {
+bool SWBasicFilter::handleEscapeString(SWBuf &buf, const char *escString, BasicFilterUserData *userData) {
 	return substituteEscapeString(buf, escString);
 }
 
@@ -212,7 +212,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	char escStartPos = 0, escEndPos = 0;
 	char tokenStartPos = 0, tokenEndPos = 0;
 	SWBuf lastTextNode;
-	SWFilterUserData *userData = createUserData(module, key);
+	BasicFilterUserData *userData = createUserData(module, key);
 
 	SWBuf orig = text;
 	from = orig.getRawData();

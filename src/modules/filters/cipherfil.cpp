@@ -26,7 +26,7 @@ SWCipher *CipherFilter::getCipher() {
 
 char CipherFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	if (text.length() > 2) { //check if it's large enough to substract 2 in the next step.
-		unsigned int len = text.length() - 2;
+		unsigned int len = text.length();
 		if (!key) {	// hack, using key to determine encipher, or decipher
 			cipher->cipherBuf(&len, text); //set buffer to enciphered text
 			//memcpy(text, cipher->Buf(), (len < (unsigned int)(maxlen)) ? len : maxlen);

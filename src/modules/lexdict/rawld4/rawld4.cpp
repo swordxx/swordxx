@@ -117,7 +117,7 @@ SWBuf &RawLD4::getRawEntryBuf() {
 
 	char ret = getEntry();
 	if (!ret) {
-		if (!isUnicode())
+//		if (!isUnicode())
 			prepText(entryBuf);
 	}
 	else error = ret;
