@@ -644,8 +644,14 @@ restore:
 install: install-recursive
 	@echo ""
 	@echo "sword is installed."
+	@echo ""
+	@echo "if this is your first time, you may need a basic global"
+	@echo "configuration file.  One can be generated to /etc/sword.conf"
+	@echo "by typing: \"make install_config\""
+	@echo "Then you may unzip modules (Bible, etc.) to $(pkgdatadir)/"
+	@echo ""
 	@echo "Type \"make register\" to help us keep track of how many"
-	@echo "people have seen it."
+	@echo "people are using sword."
 	@echo "(You may consider exiting from 'root', first, to make this"
 	@echo "a little more personal)"
 	@echo ""
@@ -657,7 +663,7 @@ uninstall-am: uninstall-info-am uninstalllocaleDATA \
 
 register:
 	@echo ""
-	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}" | mail sword.users@crosswire.org
+	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD ${version}, ${pkgdatadir}" | mail sword.users@crosswire.org
 	@echo ""
 	@echo "The output of this command has been sent to CrossWire-- thank you.  Enjoy!"
 	@echo ""
