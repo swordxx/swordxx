@@ -972,7 +972,7 @@ install_location=
 type=SOURCE
 
 [src/mgr/Makefile.am]
-files=src/mgr/filemgr.cpp,src/mgr/localemgr.cpp,src/mgr/swconfig.cpp,src/mgr/swencodingmgr.cpp,src/mgr/swlocale.cpp,src/mgr/swmarkupmgr.cpp,src/mgr/swmgr.cpp,src/mgr/markupfiltmgr.cpp,src/mgr/encfiltmgr.cpp,src/mgr/swfiltermgr.cpp,src/mgr/swcacher.cpp,src/mgr/installmgr.cpp,src/mgr/swsourcemgr.cpp
+files=src/mgr/filemgr.cpp,src/mgr/localemgr.cpp,src/mgr/swconfig.cpp,src/mgr/swencodingmgr.cpp,src/mgr/swlocale.cpp,src/mgr/swmarkupmgr.cpp,src/mgr/swmgr.cpp,src/mgr/markupfiltmgr.cpp,src/mgr/encfiltmgr.cpp,src/mgr/swfiltermgr.cpp,src/mgr/swcacher.cpp,src/mgr/installmgr.cpp,src/mgr/swsourcemgr.cpp,src/mgr/swsearchable.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=mgr
 sub_dirs=
@@ -1045,6 +1045,12 @@ install_location=
 type=SOURCE
 
 [src/mgr/swmgr.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/mgr/swsearchable.cpp]
 dist=true
 install=false
 install_location=
@@ -1208,7 +1214,7 @@ install_location=
 type=SOURCE
 
 [src/modules/filters/Makefile.am]
-files=src/modules/filters/cipherfil.cpp,src/modules/filters/gbffootnotes.cpp,src/modules/filters/gbfheadings.cpp,src/modules/filters/gbfhtml.cpp,src/modules/filters/gbfhtmlhref.cpp,src/modules/filters/gbfmorph.cpp,src/modules/filters/gbfplain.cpp,src/modules/filters/gbfrtf.cpp,src/modules/filters/gbfstrongs.cpp,src/modules/filters/gbfthml.cpp,src/modules/filters/latin1utf16.cpp,src/modules/filters/latin1utf8.cpp,src/modules/filters/plainfootnotes.cpp,src/modules/filters/plainhtml.cpp,src/modules/filters/rtfhtml.cpp,src/modules/filters/rwphtml.cpp,src/modules/filters/rwprtf.cpp,src/modules/filters/scsuutf8.cpp,src/modules/filters/swbasicfilter.cpp,src/modules/filters/thmlgbf.cpp,src/modules/filters/thmlhtml.cpp,src/modules/filters/thmlhtmlhref.cpp,src/modules/filters/thmlplain.cpp,src/modules/filters/thmlrtf.cpp,src/modules/filters/unicodertf.cpp,src/modules/filters/utf16utf8.cpp,src/modules/filters/utf8cantillation.cpp,src/modules/filters/utf8greekaccents.cpp,src/modules/filters/utf8hebrewpoints.cpp,src/modules/filters/utf8html.cpp,src/modules/filters/utf8latin1.cpp,src/modules/filters/utf8transliterator.cpp,src/modules/filters/utf8utf16.cpp,src/modules/filters/thmlfootnotes.cpp,src/modules/filters/thmlheadings.cpp,src/modules/filters/thmllemma.cpp,src/modules/filters/thmlmorph.cpp,src/modules/filters/thmlscripref.cpp,src/modules/filters/thmlstrongs.cpp,src/modules/filters/utf8nfc.cpp,src/modules/filters/utf8nfkd.cpp,src/modules/filters/utf8arshaping.cpp,src/modules/filters/utf8bidireorder.cpp,src/modules/filters/thmlvariants.cpp,src/modules/filters/gbfosis.cpp,src/modules/filters/gbfredletterwords.cpp,src/modules/filters/greeklexattribs.cpp,src/modules/filters/osismorph.cpp,src/modules/filters/osisstrongs.cpp,src/modules/filters/thmlosis.cpp,src/modules/filters/osisplain.cpp,src/modules/filters/osisrtf.cpp
+files=src/modules/filters/cipherfil.cpp,src/modules/filters/gbffootnotes.cpp,src/modules/filters/gbfheadings.cpp,src/modules/filters/gbfhtml.cpp,src/modules/filters/gbfhtmlhref.cpp,src/modules/filters/gbfmorph.cpp,src/modules/filters/gbfplain.cpp,src/modules/filters/gbfrtf.cpp,src/modules/filters/gbfstrongs.cpp,src/modules/filters/gbfthml.cpp,src/modules/filters/latin1utf16.cpp,src/modules/filters/latin1utf8.cpp,src/modules/filters/plainfootnotes.cpp,src/modules/filters/plainhtml.cpp,src/modules/filters/rtfhtml.cpp,src/modules/filters/rwphtml.cpp,src/modules/filters/rwprtf.cpp,src/modules/filters/scsuutf8.cpp,src/modules/filters/swbasicfilter.cpp,src/modules/filters/thmlgbf.cpp,src/modules/filters/thmlhtml.cpp,src/modules/filters/thmlhtmlhref.cpp,src/modules/filters/thmlplain.cpp,src/modules/filters/thmlrtf.cpp,src/modules/filters/unicodertf.cpp,src/modules/filters/utf16utf8.cpp,src/modules/filters/utf8cantillation.cpp,src/modules/filters/utf8greekaccents.cpp,src/modules/filters/utf8hebrewpoints.cpp,src/modules/filters/utf8html.cpp,src/modules/filters/utf8latin1.cpp,src/modules/filters/utf8transliterator.cpp,src/modules/filters/utf8utf16.cpp,src/modules/filters/thmlfootnotes.cpp,src/modules/filters/thmlheadings.cpp,src/modules/filters/thmllemma.cpp,src/modules/filters/thmlmorph.cpp,src/modules/filters/thmlscripref.cpp,src/modules/filters/thmlstrongs.cpp,src/modules/filters/utf8nfc.cpp,src/modules/filters/utf8nfkd.cpp,src/modules/filters/utf8arshaping.cpp,src/modules/filters/utf8bidireorder.cpp,src/modules/filters/thmlvariants.cpp,src/modules/filters/gbfosis.cpp,src/modules/filters/gbfredletterwords.cpp,src/modules/filters/greeklexattribs.cpp,src/modules/filters/osismorph.cpp,src/modules/filters/osisstrongs.cpp,src/modules/filters/thmlosis.cpp,src/modules/filters/osisplain.cpp,src/modules/filters/osisrtf.cpp,src/modules/filters/gbfwebif.cpp,src/modules/filters/osisfootnotes.cpp,src/modules/filters/osisheadings.cpp,src/modules/filters/osishtmlhref.cpp,src/modules/filters/osislemma.cpp,src/modules/filters/osisredletterwords.cpp,src/modules/filters/osisscripref.cpp,src/modules/filters/osiswebif.cpp,src/modules/filters/swoptfilter.cpp,src/modules/filters/thmlwebif.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=filters
 sub_dirs=
@@ -1286,6 +1292,12 @@ install=false
 install_location=
 type=SOURCE
 
+[src/modules/filters/gbfwebif.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
 [src/modules/filters/greeklexattribs.cpp]
 dist=true
 install=false
@@ -1304,6 +1316,30 @@ install=false
 install_location=
 type=SOURCE
 
+[src/modules/filters/osisfootnotes.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/modules/filters/osisheadings.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/modules/filters/osishtmlhref.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/modules/filters/osislemma.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
 [src/modules/filters/osismorph.cpp]
 dist=true
 install=false
@@ -1316,13 +1352,31 @@ install=false
 install_location=
 type=SOURCE
 
+[src/modules/filters/osisredletterwords.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
 [src/modules/filters/osisrtf.cpp]
 dist=true
 install=false
 install_location=
 type=SOURCE
 
+[src/modules/filters/osisscripref.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
 [src/modules/filters/osisstrongs.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/modules/filters/osiswebif.cpp]
 dist=true
 install=false
 install_location=
@@ -1365,6 +1419,12 @@ install_location=
 type=SOURCE
 
 [src/modules/filters/swbasicfilter.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/modules/filters/swoptfilter.cpp]
 dist=true
 install=false
 install_location=
@@ -1443,6 +1503,12 @@ install_location=
 type=SOURCE
 
 [src/modules/filters/thmlvariants.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/modules/filters/thmlwebif.cpp]
 dist=true
 install=false
 install_location=
@@ -1669,7 +1735,7 @@ install_location=
 type=SOURCE
 
 [src/utilfuns/Makefile.am]
-files=src/utilfuns/Greek2Greek.cpp,src/utilfuns/regex.c,src/utilfuns/roman.c,src/utilfuns/sub.c,src/utilfuns/swunicod.cpp,src/utilfuns/unixstr.cpp,src/utilfuns/utilconf.cpp,src/utilfuns/utilstr.cpp,src/utilfuns/swversion.cpp,src/utilfuns/roman.cpp,src/utilfuns/ftpparse.c,src/utilfuns/swbuf.cpp
+files=src/utilfuns/Greek2Greek.cpp,src/utilfuns/regex.c,src/utilfuns/roman.c,src/utilfuns/sub.c,src/utilfuns/swunicod.cpp,src/utilfuns/unixstr.cpp,src/utilfuns/utilconf.cpp,src/utilfuns/utilstr.cpp,src/utilfuns/swversion.cpp,src/utilfuns/roman.cpp,src/utilfuns/ftpparse.c,src/utilfuns/swbuf.cpp,src/utilfuns/utilweb.cpp,src/utilfuns/utilxml.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=utilfuns
 sub_dirs=zlib
@@ -1736,6 +1802,18 @@ install_location=
 type=SOURCE
 
 [src/utilfuns/utilstr.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/utilfuns/utilweb.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/utilfuns/utilxml.cpp]
 dist=true
 install=false
 install_location=
