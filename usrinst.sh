@@ -4,4 +4,5 @@ echo "*** Running configure with your settings"
 TEMPDIR=`pwd`
 
 cd $BUILDDIR && $TEMPDIR/configure --prefix=/usr \
-	--enable-debug --disable-shared
+	--enable-debug --disable-shared \
+	--without-conf --sysconfdir=/etc
