@@ -54,3 +54,4 @@ filtertest_SOURCES = filtertest.cpp
 swaptest_SOURCES = swaptest.cpp
 treeidxtest_SOURCES = treeidxtest.cpp
 genbooktest_SOURCES = genbooktest.cpp
+lextest_SOURCES = lextest.cpp

@@ -164,9 +164,10 @@ unsigned int strlenw(const char *s1) {
 char *toupperstr(char *buf) {
 	char *ret = buf;
 
-#ifndef _ICU_
+//#ifndef _ICU_
 	while (*buf)
 		*buf = SW_toupper(*buf++);
+/*
 #else
 		UErrorCode err = U_ZERO_ERROR;
 		UConverter *conv = ucnv_open("UTF-8", &err);
@@ -175,6 +176,7 @@ char *toupperstr(char *buf) {
 		ustr.extract(ret, strlen(ret)*2, conv, err);
 		ucnv_close(conv);
 #endif
+*/
 
 	return ret;
 }

@@ -2,7 +2,7 @@
  *  rawld.cpp - code for class 'RawLD'- a module that reads raw lexicon and
  *				dictionary files: *.dat *.idx
  *
- * $Id: rawld.h,v 1.14 2002/03/14 16:56:49 scribe Exp $
+ * $Id: rawld.h,v 1.15 2002/07/27 05:33:29 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -28,38 +28,29 @@
 
 #include <defs.h>
 
-class SWDLLEXPORT RawLD:public RawStr, public SWLD
-{
-  void strongsPad (char *buf);
-  char getEntry (long away = 0);
+class SWDLLEXPORT RawLD:public RawStr, public SWLD {
+	void strongsPad(char *buf);
+	char getEntry(long away = 0);
 
 public:
-  
-    
-    RawLD (const char *ipath, const char *iname = 0, const char *idesc =
-	   0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
-           const char* ilang = 0);
-    virtual ~ RawLD ();
-  virtual char *getRawEntry ();
 
-  virtual SWModule & operator = (SW_POSITION pos);
-  virtual SWModule & operator += (int increment);
-  virtual SWModule & operator -= (int decrement)
-  {
-    return this->operator += (-decrement);
-  }
-  // write interface ----------------------------
-	virtual bool isWritable () { return ((idxfd->getFd() > 0) && ((idxfd->mode & O_RDWR) == O_RDWR)); }
-  static char createModule (const char *path)
-  {
-    return RawStr::createModule (path);
-  }
-  
-  virtual SWModule & setentry (const char *inbuf, long len);	// Modify current module entry
-  virtual SWModule & operator << (const char *inbuf);	// Modify current module entry
-  virtual SWModule & operator << (const SWKey * linkKey);	// Link current module entry to other module entry
-  virtual void deleteEntry ();	// Delete current module entry
-  // end write interface ------------------------
+
+	RawLD(const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+	virtual ~RawLD();
+	virtual char *getRawEntry();
+
+	virtual SWModule & operator =(SW_POSITION pos);
+	virtual SWModule & operator +=(int increment);
+	virtual SWModule & operator -=(int decrement) { return this->operator += (-decrement); }
+	// write interface ----------------------------
+	virtual bool isWritable() { return ((idxfd->getFd() > 0) && ((idxfd->mode & O_RDWR) == O_RDWR)); }
+	static char createModule(const char *path) { return RawStr::createModule (path); }
+
+	virtual SWModule & setentry(const char *inbuf, long len);	// Modify current module entry
+	virtual SWModule & operator <<(const char *inbuf);	// Modify current module entry
+	virtual SWModule & operator <<(const SWKey * linkKey);	// Link current module entry to other module entry
+	virtual void deleteEntry();	// Delete current module entry
+	// end write interface ------------------------
 };
 
 
