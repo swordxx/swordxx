@@ -1,3 +1,9 @@
+sword (1.5.6-1) unstable; urgency=low
+
+  * Bump version to 1.5.6 ready for release
+
+ -- Daniel Glassey <wdg@debian.org>  Sat, 12 Jul 2003 22:17:28 +0100
+
 sword (1.5.5.99-1) unstable; urgency=low
 
   * Build a pre-release from a make dist from cvs
