@@ -66,7 +66,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			intoken = false;
 
 			XMLTag tag(token);
-			if (!strcmp(tag.getName(), "note") && strcmp(tag.getAttribute("type"), "crossReference")) {
+			if (!strcmp(tag.getName(), "note") && ((!tag.getAttribute("type")) || (strcmp(tag.getAttribute("type"), "crossReference")))) {
 				if (!tag.isEndTag() && (!tag.isEmpty())) {
 					startTag = tag;
 					hide = true;

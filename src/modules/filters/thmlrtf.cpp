@@ -252,7 +252,7 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
                                 buf += "}}";
                         }
 */
-                        delete filepath;
+                        delete [] filepath;
 		}
 		else {
 			return false;  // we still didn't handle token
