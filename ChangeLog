@@ -1,6 +1,12 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+25-May-2003	Troy A. Griffitts <scribe@crosswire.org>
+	Added utilfuns/utilxml.cpp and test/xmltest which
+		include basic xml utility classes
+	Added comparison operators to SWBuf so it plays
+		nicely with stl containers
+
 19-Feb-2003	Troy A. Griffitts <scribe@crosswire.org>
 	Added utilfuns/swbuf.cpp and tests/swbuftest
 	Fixed make system to include osisrtf and osisplain

@@ -387,10 +387,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	char comma = 0;
 	char dash = 0;
 	const char *orig = buf;
+	int q;
 	ListKey tmpListKey;
 	ListKey internalListKey;
 	SWKey tmpDefaultKey = defaultKey;
 	char lastPartial = 0;
+	bool inTerm = true;
 
 	curkey.AutoNormalize(0);
 	tmpListKey << tmpDefaultKey;
@@ -406,6 +408,18 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			*number = 0;
 			break;
 
+		case ' ':
+			inTerm = true;
+			while (true) {
+				if (!*number)
+					break;
+				for (q = 1; ((buf[q]) && (buf[q] != ' ')); q++);
+				if (buf[q] == ':')
+					break;
+				inTerm = false;
+				break;
+			}
+			if (inTerm) break;
 		case '-': 
 		case ',': // on number new verse
 		case ';': // on number new chapter

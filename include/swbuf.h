@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.12 2003/03/31 00:14:14 scribe Exp $
+* $Id: swbuf.h,v 1.13 2003/05/26 04:32:45 scribe Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -24,6 +24,7 @@
 
 #include <defs.h>
 #include <stdlib.h>
+#include <string.h>
 
 SWORD_NAMESPACE_START
 
@@ -176,6 +177,21 @@ public:
 		return retVal;
 	}
 	inline SWBuf operator +(char ch) const { return (*this) + SWBuf(ch); }
+
+	int compare(const SWBuf &other) const { return strncmp(c_str(), other.c_str(), (length() < other.length()) ? length() : other.length()); }
+	inline bool operator ==(const SWBuf &other) const { return !compare(other); }
+	inline bool operator !=(const SWBuf &other) const { return compare(other); }
+	inline bool operator > (const SWBuf &other) const { return compare(other) > 0; }
+	inline bool operator < (const SWBuf &other) const { return compare(other) < 0; }
+	inline bool operator <=(const SWBuf &other) const { return compare(other) <= 0; }
+	inline bool operator >=(const SWBuf &other) const { return compare(other) >= 0; }
+
+	inline bool operator ==(const char *other) const { return !compare(other); }
+	inline bool operator !=(const char *other) const { return compare(other); }
+	inline bool operator > (const char *other) const { return compare(other) > 0; }
+	inline bool operator < (const char *other) const { return compare(other) < 0; }
+	inline bool operator <=(const char *other) const { return compare(other) <= 0; }
+	inline bool operator >=(const char *other) const { return compare(other) >= 0; }
 };
 
 
