@@ -310,34 +310,39 @@ void VerseKey::freshtext() const
 
 int VerseKey::getBookAbbrev(const char *iabbr)
 {
-    int loop, diff, abLen, min, max, target, retVal = -1;
+	int loop, diff, abLen, min, max, target, retVal = -1;
 
-    char *abbr = 0;
+	char *abbr = 0;
 
-	stdstr(&abbr, iabbr);
-	strstrip(abbr);
-	toupperstr(abbr);
-	abLen = strlen(abbr);
+	for (int i = 0; i < 2; i++) {
+		stdstr(&abbr, iabbr);
+		strstrip(abbr);
+		if (!i)
+			toupperstr(abbr);
+		abLen = strlen(abbr);
 
-	if (abLen) {
-		min = 0;
-//		max = abbrevsCnt - 1;
-		max = abbrevsCnt;
-		while(1) {
-			target = min + ((max - min) / 2);
-			diff = strncmp(abbr, abbrevs[target].ab, abLen);
-			if ((!diff)||(target >= max)||(target <= min))
-				break;
-			if (diff > 0)
-				min = target;
-			else	max = target;
+		if (abLen) {
+			min = 0;
+//			max = abbrevsCnt - 1;
+			max 	= abbrevsCnt;
+			while(1) {
+				target = min + ((max - min) / 2);
+				diff = strncmp(abbr, abbrevs[target].ab, abLen);
+				if ((!diff)||(target >= max)||(target <= min))
+					break;
+				if (diff > 0)
+					min = target;
+				else	max = target;
+			}
+			for (; target > 0; target--) {
+				if (strncmp(abbr, abbrevs[target-1].ab, abLen))
+					break;
+			}
+				
+			retVal = (!diff) ? abbrevs[target].book : -1;
 		}
-		for (; target > 0; target--) {
-			if (strncmp(abbr, abbrevs[target-1].ab, abLen))
-				break;
-		}
-			
-		retVal = (!diff) ? abbrevs[target].book : -1;
+		if (retVal > 0)
+			break;
 	}
 	delete [] abbr;
 	return retVal;
