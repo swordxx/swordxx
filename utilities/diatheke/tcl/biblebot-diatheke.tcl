@@ -1,7 +1,7 @@
 # Diatheke/Tcl 3.0 by Chris Little <chrislit@gotjesus.org>
 # Based on code schema of <cking@acy.digex.net>
 
-# Copyright 1999, 2000, 2001 by Chris Little
+# Copyright 1999 by Chris Little
 # Licensed under GNU General Public License (GPL)
 # see accompanying LICENSE file for license details
 
@@ -29,7 +29,7 @@
 # More commands will appear to you depending upon which mode the bot is
 # in and whether you are an op on the bot or voiced in the channel.
 
-set diaver 3.0
+set diaver 4.0
 
 #modify this to reflect actual location of diatheke and dict binaries
 set diatheke "/usr/bin/diatheke"
@@ -52,7 +52,7 @@ proc publookupverse {vlookup} {
     set vlookup [string trimleft $vlookup "@"]
     set vlookup [string trimleft $vlookup "#"]
 
-    catch {exec $diatheke $arg $bibver "$vlookup" 5 >& /tmp/fooout.$botnick}
+    catch {exec $diatheke -f plaintext -o $arg -b $bibver -k "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     while {[gets $foofile fooverse] >= 0} {
 	set len [string length $fooverse]
@@ -154,6 +154,14 @@ bind pub - !web setver_web
 proc setver_web {nick uhost hand channel arg} {
     global botnick chan bibver
     set bibver WEB
+    pub_lookup $nick $uhost $hand $channel $arg
+}
+
+bind pub - !akjv setver_akjv
+
+proc setver_akjv {nick uhost hand channel arg} {
+    global botnick chan bibver
+    set bibver AKJV
     pub_lookup $nick $uhost $hand $channel $arg
 }
 
@@ -1625,7 +1633,7 @@ proc setver_viets {nick uhost hand channel arg} {
 
 proc publookupdict {vlookup} {
     global botnick chan bibver diatheke
-    catch {exec $diatheke -d $bibver "$vlookup" >& /tmp/fooout.$botnick}
+    catch {exec $diatheke -f plaintext -b $bibver -k "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
 
     while {[gets $foofile fooverse] >= 0} {
@@ -2105,5 +2113,19 @@ proc dcc_verseon {hand idx arg} {
 bind dcc - verseon dcc_verseon
 
 #sets default von mode
-set von 3
+set von 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
