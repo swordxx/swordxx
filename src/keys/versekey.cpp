@@ -1413,16 +1413,16 @@ const char *VerseKey::getOSISRef() const {
 		loop = 0;
 
 	static char *osisotbooks[] = {
-			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","Sam1","Sam2",
-			"Kgs1","Kgs2","Chr1","Chr2","Ezra","Neh","Esth","Job","Ps","Eccl",
+			"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","_1Sam","_2Sam",
+			"_1Kgs","_2Kgs","_1Chr","_2Chr","Ezra","Neh","Esth","Job","Ps","Eccl",
 			"Song","Isa","Jer","Lam","Ezek","Dan","Hos","Joel","Amos","Obad",
 			"Jonah","Mic","Nah","Hab","Zeph","Hag","Zech","Mal","Bar","PrAzar",
-			"Bel","Sus","Esd1","Esd2","AddEsth","EpJer","Jdt","Macc1","Macc2","Macc3",
-			"Macc4","PrMan","Ps151","Sir","Tob","Wis"};
+			"Bel","Sus","_1Esd","_2Esd","AddEsth","EpJer","Jdt","_1Macc","_2Macc","_3Macc",
+			"_4Macc","PrMan","Ps151","Sir","Tob","Wis"};
 	static char *osisntbooks[] = {
-			"Matt","Mark","Luke","John","Acts","Rom","Cor1","Cor2","Gal","Eph",
-			"Phil","Col","Thess1","Thess2","Tim1","Tim2","Titus","Phlm","Heb","Jas",
-			"Pet1","Pet2","John1","John2","John3","Jude","Rev"};
+			"Matt","Mark","Luke","John","Acts","Rom","_1Cor","_2Cor","Gal","Eph",
+			"Phil","Col","_1Thess","_2Thess","_1Tim","_2Tim","Titus","Phlm","Heb","Jas",
+			"_1Pet","_2Pet","_1John","_2John","_3John","Jude","Rev"};
 	static char **osisbooks[] = { osisotbooks, osisntbooks };
 	if (Verse())
 		sprintf(buf[loop], "%s.%d.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter(), (int)Verse());
