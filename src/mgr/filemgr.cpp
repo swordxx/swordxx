@@ -2,7 +2,7 @@
  *  filemgr.cpp	- implementation of class FileMgr used for pooling file
  *  					handles
  *
- * $Id: filemgr.cpp,v 1.34 2004/01/17 04:33:25 scribe Exp $
+ * $Id: filemgr.cpp,v 1.35 2004/01/17 07:00:08 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -80,10 +80,16 @@ FileDesc::~FileDesc() {
 int FileDesc::getFd() {
 	if (fd == -77)
 		fd = parent->sysOpen(this);
+//	if ((fd < -1) && (fd != -77))  // kludge to hand ce
+//		return 777;
 	return fd;
 }
-
-
+/*
+unsigned int FileDesc::getFdu() {
+	getFd();
+	return (unsigned int)fd;
+}
+*/
 FileMgr::FileMgr(int maxFiles) {
 	this->maxFiles = maxFiles;		// must be at least 2
 	files = 0;
