@@ -62,10 +62,10 @@ pkglibdir = $(libdir)/sword
 pkgincludedir = $(includedir)/sword
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/scribe/src/sword/missing --run aclocal
-AUTOCONF = ${SHELL} /home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/scribe/src/sword/missing --run automake
-AUTOHEADER = ${SHELL} /home/scribe/src/sword/missing --run autoheader
+ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal
+AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
+AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake
+AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -81,7 +81,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /home/scribe/src/sword/missing --run tar
+AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
 AS = as
 AWK = gawk
 CC = gcc
@@ -106,7 +106,7 @@ dir_confdef = no
 enable_debug = yes
 enable_profile = no
 enable_vcl = no
-install_sh = /home/scribe/src/sword/install-sh
+install_sh = /space/home/scribe/src/sword/install-sh
 target_cpu = i686
 target_mingw32 = no
 target_os = linux-gnu
@@ -192,7 +192,7 @@ bindingsdir = $(top_srcdir)/bindings
 
 swincludedir = $(top_srcdir)/include
 
-pkginclude_HEADERS = $(swincludedir)/Greek2Greek.h $(swincludedir)/GreekChars.h $(swincludedir)/canon.h $(swincludedir)/cipherfil.h $(swincludedir)/defs.h $(swincludedir)/echomod.h $(swincludedir)/encfiltmgr.h $(swincludedir)/entriesblk.h $(swincludedir)/femain.h $(swincludedir)/filemgr.h $(swincludedir)/flatapi.h $(swincludedir)/gbffootnotes.h $(swincludedir)/gbfheadings.h $(swincludedir)/gbfhtml.h $(swincludedir)/gbfhtmlhref.h $(swincludedir)/gbfmorph.h $(swincludedir)/gbfplain.h $(swincludedir)/gbfrtf.h $(swincludedir)/gbfstrongs.h $(swincludedir)/gbfthml.h $(swincludedir)/hebrewmcim.h $(swincludedir)/hrefcom.h $(swincludedir)/latin1utf16.h $(swincludedir)/latin1utf8.h $(swincludedir)/listkey.h $(swincludedir)/localemgr.h $(swincludedir)/lzsscomprs.h $(swincludedir)/markupfiltmgr.h $(swincludedir)/nullim.h $(swincludedir)/plainfootnotes.h $(swincludedir)/plainhtml.h $(swincludedir)/rawcom.h $(swincludedir)/rawfiles.h $(swincludedir)/rawgbf.h $(swincludedir)/rawgenbook.h $(swincludedir)/rawld.h $(swincludedir)/rawld4.h $(swincludedir)/rawstr.h $(swincludedir)/rawstr4.h $(swincludedir)/rawtext.h $(swincludedir)/rawverse.h $(swincludedir)/regex.h $(swincludedir)/roman.h $(swincludedir)/rtfhtml.h $(swincludedir)/rwphtml.h $(swincludedir)/rwprtf.h $(swincludedir)/sapphire.h $(swincludedir)/scsuutf8.h $(swincludedir)/strkey.h $(swincludedir)/swbasicfilter.h $(swincludedir)/swbyteswap.h $(swincludedir)/swcipher.h $(swincludedir)/swcom.h $(swincludedir)/swcomprs.h $(swincludedir)/swconfig.h $(swincludedir)/swdisp.h $(swincludedir)/swdisprtf.h $(swincludedir)/swdisprtfchap.h $(swincludedir)/swfilter.h $(swincludedir)/swfiltermgr.h $(swincludedir)/swgenbook.h $(swincludedir)/swinputmeth.h $(swincludedir)/swkey.h $(swincludedir)/swld.h $(swincludedir)/swlocale.h $(swincludedir)/swlog.h $(swincludedir)/swmacs.h $(swincludedir)/swmgr.h $(swincludedir)/swmodule.h $(swincludedir)/swobject.h $(swincludedir)/swtext.h $(swincludedir)/swunicod.h $(swincludedir)/swversion.h $(swincludedir)/swwinlog.h $(swincludedir)/sysdata.h $(swincludedir)/tbdisp.h $(swincludedir)/thmlfootnotes.h $(swincludedir)/thmlgbf.h $(swincludedir)/thmlheadings.h $(swincludedir)/thmlhtml.h $(swincludedir)/thmlhtmlhref.h $(swincludedir)/thmllemma.h $(swincludedir)/thmlmorph.h $(swincludedir)/thmlolb.h $(swincludedir)/thmlplain.h $(swincludedir)/thmlrtf.h $(swincludedir)/thmlscripref.h $(swincludedir)/thmlstrongs.h $(swincludedir)/thmlvariants.h $(swincludedir)/treekey.h $(swincludedir)/treekeyidx.h $(swincludedir)/unicodertf.h $(swincludedir)/unixstr.h $(swincludedir)/untgz.h $(swincludedir)/utf16utf8.h $(swincludedir)/utf8arshaping.h $(swincludedir)/utf8bidireorder.h $(swincludedir)/utf8cantillation.h $(swincludedir)/utf8greekaccents.h $(swincludedir)/utf8hebrewpoints.h $(swincludedir)/utf8html.h $(swincludedir)/utf8latin1.h $(swincludedir)/utf8nfc.h $(swincludedir)/utf8nfkd.h $(swincludedir)/utf8transliterator.h $(swincludedir)/utf8utf16.h $(swincludedir)/utilconf.h $(swincludedir)/utilfuns.h $(swincludedir)/utilstr.h $(swincludedir)/versekey.h $(swincludedir)/zcom.h $(swincludedir)/zconf.h $(swincludedir)/zipcomprs.h $(swincludedir)/zld.h $(swincludedir)/zlib.h $(swincludedir)/ztext.h $(swincludedir)/zverse.h
+pkginclude_HEADERS = $(swincludedir)/Greek2Greek.h $(swincludedir)/GreekChars.h $(swincludedir)/canon.h $(swincludedir)/cipherfil.h $(swincludedir)/defs.h $(swincludedir)/echomod.h $(swincludedir)/encfiltmgr.h $(swincludedir)/entriesblk.h $(swincludedir)/femain.h $(swincludedir)/filemgr.h $(swincludedir)/flatapi.h $(swincludedir)/gbffootnotes.h $(swincludedir)/gbfheadings.h $(swincludedir)/gbfhtml.h $(swincludedir)/gbfhtmlhref.h $(swincludedir)/gbfmorph.h $(swincludedir)/gbfplain.h $(swincludedir)/gbfrtf.h $(swincludedir)/gbfstrongs.h $(swincludedir)/gbfthml.h $(swincludedir)/hebrewmcim.h $(swincludedir)/hrefcom.h $(swincludedir)/latin1utf16.h $(swincludedir)/latin1utf8.h $(swincludedir)/listkey.h $(swincludedir)/localemgr.h $(swincludedir)/lzsscomprs.h $(swincludedir)/markupfiltmgr.h $(swincludedir)/nullim.h $(swincludedir)/plainfootnotes.h $(swincludedir)/plainhtml.h $(swincludedir)/rawcom.h $(swincludedir)/rawfiles.h $(swincludedir)/rawgbf.h $(swincludedir)/rawgenbook.h $(swincludedir)/rawld.h $(swincludedir)/rawld4.h $(swincludedir)/rawstr.h $(swincludedir)/rawstr4.h $(swincludedir)/rawtext.h $(swincludedir)/rawverse.h $(swincludedir)/regex.h $(swincludedir)/roman.h $(swincludedir)/rtfhtml.h $(swincludedir)/rwphtml.h $(swincludedir)/rwprtf.h $(swincludedir)/sapphire.h $(swincludedir)/scsuutf8.h $(swincludedir)/strkey.h $(swincludedir)/swbasicfilter.h $(swincludedir)/swcipher.h $(swincludedir)/swcom.h $(swincludedir)/swcomprs.h $(swincludedir)/swconfig.h $(swincludedir)/swdisp.h $(swincludedir)/swdisprtf.h $(swincludedir)/swdisprtfchap.h $(swincludedir)/swfilter.h $(swincludedir)/swfiltermgr.h $(swincludedir)/swgenbook.h $(swincludedir)/swinputmeth.h $(swincludedir)/swkey.h $(swincludedir)/swld.h $(swincludedir)/swlocale.h $(swincludedir)/swlog.h $(swincludedir)/swmacs.h $(swincludedir)/swmgr.h $(swincludedir)/swmodule.h $(swincludedir)/swobject.h $(swincludedir)/swtext.h $(swincludedir)/swunicod.h $(swincludedir)/swversion.h $(swincludedir)/swwinlog.h $(swincludedir)/sysdata.h $(swincludedir)/tbdisp.h $(swincludedir)/thmlfootnotes.h $(swincludedir)/thmlgbf.h $(swincludedir)/thmlheadings.h $(swincludedir)/thmlhtml.h $(swincludedir)/thmlhtmlhref.h $(swincludedir)/thmllemma.h $(swincludedir)/thmlmorph.h $(swincludedir)/thmlolb.h $(swincludedir)/thmlplain.h $(swincludedir)/thmlrtf.h $(swincludedir)/thmlscripref.h $(swincludedir)/thmlstrongs.h $(swincludedir)/thmlvariants.h $(swincludedir)/treekey.h $(swincludedir)/treekeyidx.h $(swincludedir)/unicodertf.h $(swincludedir)/unixstr.h $(swincludedir)/untgz.h $(swincludedir)/utf16utf8.h $(swincludedir)/utf8arshaping.h $(swincludedir)/utf8bidireorder.h $(swincludedir)/utf8cantillation.h $(swincludedir)/utf8greekaccents.h $(swincludedir)/utf8hebrewpoints.h $(swincludedir)/utf8html.h $(swincludedir)/utf8latin1.h $(swincludedir)/utf8nfc.h $(swincludedir)/utf8nfkd.h $(swincludedir)/utf8transliterator.h $(swincludedir)/utf8utf16.h $(swincludedir)/utilconf.h $(swincludedir)/utilfuns.h $(swincludedir)/utilstr.h $(swincludedir)/versekey.h $(swincludedir)/zcom.h $(swincludedir)/zconf.h $(swincludedir)/zipcomprs.h $(swincludedir)/zld.h $(swincludedir)/zlib.h $(swincludedir)/ztext.h $(swincludedir)/zverse.h
 subdir = lib
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h

@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/sword
 pkgincludedir = $(includedir)/sword
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/scribe/src/sword/missing --run aclocal
-AUTOCONF = ${SHELL} /home/scribe/src/sword/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/scribe/src/sword/missing --run automake
-AUTOHEADER = ${SHELL} /home/scribe/src/sword/missing --run autoheader
+ACLOCAL = ${SHELL} /space/home/scribe/src/sword/missing --run aclocal
+AUTOCONF = ${SHELL} /space/home/scribe/src/sword/missing --run autoconf
+AUTOMAKE = ${SHELL} /space/home/scribe/src/sword/missing --run automake
+AUTOHEADER = ${SHELL} /space/home/scribe/src/sword/missing --run autoheader
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -57,7 +57,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /home/scribe/src/sword/missing --run tar
+AMTAR = ${SHELL} /space/home/scribe/src/sword/missing --run tar
 AS = as
 AWK = gawk
 CC = gcc
@@ -82,7 +82,7 @@ dir_confdef = no
 enable_debug = yes
 enable_profile = no
 enable_vcl = no
-install_sh = /home/scribe/src/sword/install-sh
+install_sh = /space/home/scribe/src/sword/install-sh
 target_cpu = i686
 target_mingw32 = no
 target_os = linux-gnu
@@ -98,7 +98,7 @@ LDADD = -L$(top_builddir)/lib -lsword
 
 noinst_PROGRAMS = cipherraw ciphertest ciphertest2 lexdump mkfastmod \
 mod2vpl vpl2mod stepdump step2vpl mod2zmod modwrite addvs addld emptyvss \
-txt2sword\
+txt2sword addgb imp2gbs imp2ld imp2vs thml2gbs\
 $(ICUPROG)
 
 #ICUPROG = normcode
@@ -122,6 +122,11 @@ addvs_SOURCES = addvs.cpp
 addld_SOURCES = addld.cpp
 emptyvss_SOURCES = emptyvss.cpp
 txt2sword_SOURCES = txt2sword.cpp
+addgb_SOURCES = addgb.cpp
+imp2gbs_SOURCES = imp2gbs.cpp
+imp2ld_SOURCES = imp2ld.cpp
+imp2vs_SOURCES = imp2vs.cpp
+thml2gbs_SOURCES = thml2gbs.cpp
 subdir = utilities
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -131,16 +136,24 @@ CONFIG_CLEAN_FILES =
 #	mkfastmod$(EXEEXT) mod2vpl$(EXEEXT) vpl2mod$(EXEEXT) \
 #	stepdump$(EXEEXT) step2vpl$(EXEEXT) mod2zmod$(EXEEXT) \
 #	modwrite$(EXEEXT) addvs$(EXEEXT) addld$(EXEEXT) \
-#	emptyvss$(EXEEXT) txt2sword$(EXEEXT) \
-#	normcode$(EXEEXT)
+#	emptyvss$(EXEEXT) txt2sword$(EXEEXT) addgb$(EXEEXT) \
+#	imp2gbs$(EXEEXT) imp2ld$(EXEEXT) imp2vs$(EXEEXT) \
+#	thml2gbs$(EXEEXT) normcode$(EXEEXT)
 noinst_PROGRAMS = cipherraw$(EXEEXT) ciphertest$(EXEEXT) \
 	ciphertest2$(EXEEXT) lexdump$(EXEEXT) \
 	mkfastmod$(EXEEXT) mod2vpl$(EXEEXT) vpl2mod$(EXEEXT) \
 	stepdump$(EXEEXT) step2vpl$(EXEEXT) \
 	mod2zmod$(EXEEXT) modwrite$(EXEEXT) addvs$(EXEEXT) \
-	addld$(EXEEXT) emptyvss$(EXEEXT) txt2sword$(EXEEXT)
+	addld$(EXEEXT) emptyvss$(EXEEXT) txt2sword$(EXEEXT) \
+	addgb$(EXEEXT) imp2gbs$(EXEEXT) imp2ld$(EXEEXT) \
+	imp2vs$(EXEEXT) thml2gbs$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
+am_addgb_OBJECTS = addgb.$(OBJEXT)
+addgb_OBJECTS = $(am_addgb_OBJECTS)
+addgb_LDADD = $(LDADD)
+addgb_DEPENDENCIES =
+addgb_LDFLAGS =
 am_addld_OBJECTS = addld.$(OBJEXT)
 addld_OBJECTS = $(am_addld_OBJECTS)
 addld_LDADD = $(LDADD)
@@ -171,6 +184,21 @@ emptyvss_OBJECTS = $(am_emptyvss_OBJECTS)
 emptyvss_LDADD = $(LDADD)
 emptyvss_DEPENDENCIES =
 emptyvss_LDFLAGS =
+am_imp2gbs_OBJECTS = imp2gbs.$(OBJEXT)
+imp2gbs_OBJECTS = $(am_imp2gbs_OBJECTS)
+imp2gbs_LDADD = $(LDADD)
+imp2gbs_DEPENDENCIES =
+imp2gbs_LDFLAGS =
+am_imp2ld_OBJECTS = imp2ld.$(OBJEXT)
+imp2ld_OBJECTS = $(am_imp2ld_OBJECTS)
+imp2ld_LDADD = $(LDADD)
+imp2ld_DEPENDENCIES =
+imp2ld_LDFLAGS =
+am_imp2vs_OBJECTS = imp2vs.$(OBJEXT)
+imp2vs_OBJECTS = $(am_imp2vs_OBJECTS)
+imp2vs_LDADD = $(LDADD)
+imp2vs_DEPENDENCIES =
+imp2vs_LDFLAGS =
 am_lexdump_OBJECTS = lexdump.$(OBJEXT)
 lexdump_OBJECTS = $(am_lexdump_OBJECTS)
 lexdump_DEPENDENCIES =
@@ -211,6 +239,11 @@ stepdump_OBJECTS = $(am_stepdump_OBJECTS)
 stepdump_LDADD = $(LDADD)
 stepdump_DEPENDENCIES =
 stepdump_LDFLAGS =
+am_thml2gbs_OBJECTS = thml2gbs.$(OBJEXT)
+thml2gbs_OBJECTS = $(am_thml2gbs_OBJECTS)
+thml2gbs_LDADD = $(LDADD)
+thml2gbs_DEPENDENCIES =
+thml2gbs_LDFLAGS =
 am_txt2sword_OBJECTS = txt2sword.$(OBJEXT)
 txt2sword_OBJECTS = $(am_txt2sword_OBJECTS)
 txt2sword_LDADD = $(LDADD)
@@ -228,14 +261,17 @@ CPPFLAGS =
 LDFLAGS = 
 LIBS = -lstdc++ -lz 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
-DEP_FILES = $(DEPDIR)/addld.Po $(DEPDIR)/addvs.Po \
-	$(DEPDIR)/cipherraw.Po $(DEPDIR)/ciphertest.Po \
-	$(DEPDIR)/ciphertest2.Po $(DEPDIR)/emptyvss.Po \
+DEP_FILES = $(DEPDIR)/addgb.Po $(DEPDIR)/addld.Po \
+	$(DEPDIR)/addvs.Po $(DEPDIR)/cipherraw.Po \
+	$(DEPDIR)/ciphertest.Po $(DEPDIR)/ciphertest2.Po \
+	$(DEPDIR)/emptyvss.Po $(DEPDIR)/imp2gbs.Po \
+	$(DEPDIR)/imp2ld.Po $(DEPDIR)/imp2vs.Po \
 	$(DEPDIR)/lexdump.Po $(DEPDIR)/mkfastmod.Po \
 	$(DEPDIR)/mod2vpl.Po $(DEPDIR)/mod2zmod.Po \
 	$(DEPDIR)/modwrite.Po $(DEPDIR)/normcode.Po \
 	$(DEPDIR)/step2vpl.Po $(DEPDIR)/stepdump.Po \
-	$(DEPDIR)/txt2sword.Po $(DEPDIR)/vpl2mod.Po
+	$(DEPDIR)/thml2gbs.Po $(DEPDIR)/txt2sword.Po \
+	$(DEPDIR)/vpl2mod.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -253,14 +289,16 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = -g -O0 -Werror
-DIST_SOURCES = $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) \
-	$(ciphertest_SOURCES) $(ciphertest2_SOURCES) \
-	$(emptyvss_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) \
-	$(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) \
-	$(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) \
-	$(txt2sword_SOURCES) $(vpl2mod_SOURCES)
+DIST_SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) \
+	$(cipherraw_SOURCES) $(ciphertest_SOURCES) \
+	$(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) \
+	$(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) \
+	$(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) \
+	$(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) \
+	$(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) \
+	$(vpl2mod_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
+SOURCES = $(addgb_SOURCES) $(addld_SOURCES) $(addvs_SOURCES) $(cipherraw_SOURCES) $(ciphertest_SOURCES) $(ciphertest2_SOURCES) $(emptyvss_SOURCES) $(imp2gbs_SOURCES) $(imp2ld_SOURCES) $(imp2vs_SOURCES) $(lexdump_SOURCES) $(mkfastmod_SOURCES) $(mod2vpl_SOURCES) $(mod2zmod_SOURCES) $(modwrite_SOURCES) $(normcode_SOURCES) $(step2vpl_SOURCES) $(stepdump_SOURCES) $(thml2gbs_SOURCES) $(txt2sword_SOURCES) $(vpl2mod_SOURCES)
 
 all: all-am
 
@@ -285,6 +323,9 @@ Makefile: # $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 clean-noinstPROGRAMS:
 	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+addgb$(EXEEXT): $(addgb_OBJECTS) $(addgb_DEPENDENCIES) 
+	@rm -f addgb$(EXEEXT)
+	$(CXXLINK) $(addgb_LDFLAGS) $(addgb_OBJECTS) $(addgb_LDADD) $(LIBS)
 addld$(EXEEXT): $(addld_OBJECTS) $(addld_DEPENDENCIES) 
 	@rm -f addld$(EXEEXT)
 	$(CXXLINK) $(addld_LDFLAGS) $(addld_OBJECTS) $(addld_LDADD) $(LIBS)
@@ -303,6 +344,15 @@ ciphertest2$(EXEEXT): $(ciphertest2_OBJECTS) $(ciphertest2_DEPENDENCIES)
 emptyvss$(EXEEXT): $(emptyvss_OBJECTS) $(emptyvss_DEPENDENCIES) 
 	@rm -f emptyvss$(EXEEXT)
 	$(CXXLINK) $(emptyvss_LDFLAGS) $(emptyvss_OBJECTS) $(emptyvss_LDADD) $(LIBS)
+imp2gbs$(EXEEXT): $(imp2gbs_OBJECTS) $(imp2gbs_DEPENDENCIES) 
+	@rm -f imp2gbs$(EXEEXT)
+	$(CXXLINK) $(imp2gbs_LDFLAGS) $(imp2gbs_OBJECTS) $(imp2gbs_LDADD) $(LIBS)
+imp2ld$(EXEEXT): $(imp2ld_OBJECTS) $(imp2ld_DEPENDENCIES) 
+	@rm -f imp2ld$(EXEEXT)
+	$(CXXLINK) $(imp2ld_LDFLAGS) $(imp2ld_OBJECTS) $(imp2ld_LDADD) $(LIBS)
+imp2vs$(EXEEXT): $(imp2vs_OBJECTS) $(imp2vs_DEPENDENCIES) 
+	@rm -f imp2vs$(EXEEXT)
+	$(CXXLINK) $(imp2vs_LDFLAGS) $(imp2vs_OBJECTS) $(imp2vs_LDADD) $(LIBS)
 lexdump$(EXEEXT): $(lexdump_OBJECTS) $(lexdump_DEPENDENCIES) 
 	@rm -f lexdump$(EXEEXT)
 	$(LINK) $(lexdump_LDFLAGS) $(lexdump_OBJECTS) $(lexdump_LDADD) $(LIBS)
@@ -327,6 +377,9 @@ step2vpl$(EXEEXT): $(step2vpl_OBJECTS) $(step2vpl_DEPENDENCIES)
 stepdump$(EXEEXT): $(stepdump_OBJECTS) $(stepdump_DEPENDENCIES) 
 	@rm -f stepdump$(EXEEXT)
 	$(CXXLINK) $(stepdump_LDFLAGS) $(stepdump_OBJECTS) $(stepdump_LDADD) $(LIBS)
+thml2gbs$(EXEEXT): $(thml2gbs_OBJECTS) $(thml2gbs_DEPENDENCIES) 
+	@rm -f thml2gbs$(EXEEXT)
+	$(CXXLINK) $(thml2gbs_LDFLAGS) $(thml2gbs_OBJECTS) $(thml2gbs_LDADD) $(LIBS)
 txt2sword$(EXEEXT): $(txt2sword_OBJECTS) $(txt2sword_DEPENDENCIES) 
 	@rm -f txt2sword$(EXEEXT)
 	$(CXXLINK) $(txt2sword_LDFLAGS) $(txt2sword_OBJECTS) $(txt2sword_LDADD) $(LIBS)
@@ -340,12 +393,16 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include $(DEPDIR)/addgb.Po
 include $(DEPDIR)/addld.Po
 include $(DEPDIR)/addvs.Po
 include $(DEPDIR)/cipherraw.Po
 include $(DEPDIR)/ciphertest.Po
 include $(DEPDIR)/ciphertest2.Po
 include $(DEPDIR)/emptyvss.Po
+include $(DEPDIR)/imp2gbs.Po
+include $(DEPDIR)/imp2ld.Po
+include $(DEPDIR)/imp2vs.Po
 include $(DEPDIR)/lexdump.Po
 include $(DEPDIR)/mkfastmod.Po
 include $(DEPDIR)/mod2vpl.Po
@@ -354,6 +411,7 @@ include $(DEPDIR)/modwrite.Po
 include $(DEPDIR)/normcode.Po
 include $(DEPDIR)/step2vpl.Po
 include $(DEPDIR)/stepdump.Po
+include $(DEPDIR)/thml2gbs.Po
 include $(DEPDIR)/txt2sword.Po
 include $(DEPDIR)/vpl2mod.Po
 

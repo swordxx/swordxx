@@ -50,7 +50,6 @@ pkginclude_HEADERS += $(swincludedir)/sapphire.h
 pkginclude_HEADERS += $(swincludedir)/scsuutf8.h
 pkginclude_HEADERS += $(swincludedir)/strkey.h
 pkginclude_HEADERS += $(swincludedir)/swbasicfilter.h
-pkginclude_HEADERS += $(swincludedir)/swbyteswap.h
 pkginclude_HEADERS += $(swincludedir)/swcipher.h
 pkginclude_HEADERS += $(swincludedir)/swcom.h
 pkginclude_HEADERS += $(swincludedir)/swcomprs.h
