@@ -117,6 +117,7 @@ USEUNIT("..\..\src\mgr\installmgr.cpp");
 USEUNIT("..\..\src\utilfuns\ftpparse.c");
 USEUNIT("..\..\src\modules\filters\osisstrongs.cpp");
 USEUNIT("..\..\src\modules\filters\osismorph.cpp");
+USEUNIT("..\..\src\modules\filters\gbfredletterwords.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
