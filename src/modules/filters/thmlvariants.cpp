@@ -35,7 +35,9 @@ ThMLVariants::~ThMLVariants() {
 
 void ThMLVariants::setOptionValue(const char *ival)
 {
-	option = (!stricmp(ival, primary));
+	if (!stricmp(ival, primary)) option = 0;
+        else if (!stricmp(ival, secondary)) option = 1;
+        else option = 2;
 }
 
 const char *ThMLVariants::getOptionValue()
@@ -80,7 +82,7 @@ char ThMLVariants::ProcessText(char *text, int maxlen, const SWKey *key, const S
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strncmp(token, "div type=\"variant\"", 19)) {
+				if (!strncmp(token, "div type=\"variant\" class=\"2\"", 28)) {
 				  hide = true;
                                   continue;
 				}
@@ -126,7 +128,7 @@ char ThMLVariants::ProcessText(char *text, int maxlen, const SWKey *key, const S
 			from = &text[maxlen - len];
 		}
 		else	from = text;
-		
+
 		// -------------------------------
 
 		for (to = text; *from; from++) {
@@ -140,7 +142,7 @@ char ThMLVariants::ProcessText(char *text, int maxlen, const SWKey *key, const S
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strncmp(token, "div type=\"primary\"", 19)) {
+				if (!strncmp(token, "div type=\"variant\" class=\"1\"", 28)) {
 				  hide = true;
                                   continue;
 				}

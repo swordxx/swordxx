@@ -81,8 +81,11 @@
       ..\..\src\utilfuns\zlib\inffast.obj ..\..\src\utilfuns\zlib\inflate.obj 
       ..\..\src\utilfuns\zlib\inftrees.obj ..\..\src\utilfuns\zlib\infutil.obj 
       ..\..\src\utilfuns\zlib\trees.obj ..\..\src\utilfuns\zlib\uncompr.obj 
-      ..\..\src\utilfuns\zlib\untgz.obj ..\..\src\utilfuns\zlib\adler32.obj"/>
+      ..\..\src\utilfuns\zlib\untgz.obj ..\..\src\utilfuns\zlib\adler32.obj 
+      ..\..\src\modules\filters\greeklexattribs.obj ..\..\src\mgr\swcacher.obj"/>
     <RESFILES value=""/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>

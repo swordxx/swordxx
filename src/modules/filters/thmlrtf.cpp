@@ -152,7 +152,7 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
 		if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
-/*                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
+                        if (token[27] == 'H' || token[27] == 'G' || token[27] == 'A') {
         			pushString(buf, " {\\fs15 <");
                                 for (unsigned int i = 28; token[i] != '\"'; i++)
                 		        *(*buf)++ = token[i];
@@ -177,7 +177,7 @@ bool ThMLRTF::handleToken(char **buf, const char *token, DualStringMap &userData
 			}
 
 			pushString(buf, ")}");
-*/		}
+		}
 		else if (!strncmp(token, "sync type=\"lemma\" value=\"", 25)) {
 			pushString(buf, "{\\fs15 (");
 			for (unsigned int i = 25; token[i] != '\"'; i++)
