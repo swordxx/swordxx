@@ -370,8 +370,8 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange) {
 	SWKey textkey;
 
-	char book[255];
-	char number[255];
+	char book[2048];
+	char number[2048];
 	int tobook = 0;
 	int tonumber = 0;
 	int chap = -1, verse = -1;

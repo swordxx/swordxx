@@ -313,7 +313,7 @@ const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 	for (int i = 0; i < verses.Count(); i++) {
 		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		char buf[5120];
-		char frag[800];
+		char frag[5120];
 		if (element) {
 			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 			frag[((const char *)element->userData - startFrag) + 1] = 0;

@@ -11,7 +11,7 @@ BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = libsword.lib mod2vpl.exe vpl2mod.exe mkfastmod.exe imp2gbs.exe \
   imp2ld.exe imp2vs.exe thml2gbs.exe mod2zmod.exe mod2imp.exe cipherraw.exe \
-  stepdump.exe step2vpl.exe
+  stepdump.exe step2vpl.exe mod2osis.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -65,6 +65,10 @@ stepdump.exe: stepdump.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 step2vpl.exe: step2vpl.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+mod2osis.exe: mod2osis.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

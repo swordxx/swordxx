@@ -1,6 +1,5 @@
 // Compression on variable granularity
-
-#include <fcntl.h>
+#include <fcntl.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -179,4 +178,5 @@ int main(int argc, char **argv)
 	cout << "</osis>\n";
 	return 0;
 }
+
 
