@@ -4,7 +4,7 @@
  *  				many filters will need and can use as a starting
  *  				point. 
  *
- * $Id: swbasicfilter.cpp,v 1.11 2001/11/03 22:04:55 mgruner Exp $
+ * $Id: swbasicfilter.cpp,v 1.12 2001/11/04 15:11:13 mgruner Exp $
  *
  * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -112,6 +112,8 @@ void SWBasicFilter::pushString(char **buf, const char *format, ...) {
   va_start(argptr, format);
   vsprintf(*buf, format, argptr);
   va_end(argptr);
+
+  *buf += strlen(*buf);
 }
 
 
@@ -266,5 +268,6 @@ char SWBasicFilter::ProcessText(char *text, int maxlen) {
 	*to = 0;
 	return 0;
 }
+
 
 
