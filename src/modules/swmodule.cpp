@@ -54,6 +54,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	renderFilters = new FilterList();
 	optionFilters = new FilterList();
 	encodingFilters = new FilterList();
+	skipConsecutiveLinks = true;
 }
 
 
@@ -317,8 +318,21 @@ const char *SWModule::KeyText(const char *ikeytext)
 SWModule &SWModule::operator =(SW_POSITION p)
 {
 	*key = p;
-	error = key->Error();
+	char saveError = key->Error();
 
+	switch (p) {
+	case POS_TOP:
+		(*this)++;
+		(*this)--;
+		break;
+
+	case POS_BOTTOM:
+		(*this)--;
+		(*this)++;
+		break;
+	}
+
+	error = saveError;
 	return *this;
 }
 

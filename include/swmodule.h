@@ -3,7 +3,7 @@
  *		  types of modules (e.g. texts, commentaries, maps, lexicons,
  *		  etc.)
  *
- * $Id: swmodule.h,v 1.39 2002/03/04 01:56:44 scribe Exp $
+ * $Id: swmodule.h,v 1.40 2002/03/16 01:00:37 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -63,6 +63,7 @@ protected:
   ConfigEntMap *config;
 
   char error;
+  bool skipConsecutiveLinks;
 
   /** the current key */
   SWKey *key;
@@ -565,6 +566,15 @@ public:
   * @return this module's text at specified key location massaged by Render filters
   */
   virtual const char *RenderText (SWKey * tmpKey);
+
+  /** 
+  *
+  *  option to specify behaviour when iterating over consecutive entried linked
+  *  to same text
+  * @param val = true means only include entry once in iteration
+  */
+  virtual void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
+  virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
 };
 
 

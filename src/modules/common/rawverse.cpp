@@ -119,7 +119,7 @@ void RawVerse::findoffset(char testmt, long idxoff, long *start, unsigned short 
 		*size  = swordtoarch16(*size);
 
 		if (len < 2) {
-			*size = (unsigned short)(lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)start);	// if for some reason we get an error reading size, make size to end of file
+			*size = (unsigned short)((*start) ? (lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)*start) : 0);	// if for some reason we get an error reading size, make size to end of file
 		}
 	}
 	else {

@@ -118,18 +118,25 @@ int main(int argc, char **argv)
 	string lastBuffer = "Something that would never be first module entry";
 	SWKey bufferKey;
 
+	inModule->setSkipConsecutiveLinks(false);
 	(*inModule) = TOP;
 	while (!inModule->Error()) {
 		bufferKey = *(SWKey *)(*inModule);
-		cout << "Adding [" << bufferKey << "]\n";
 		// pseudo-check for link.  Will get most common links.
 		if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
 			(*outModule) << &bufferKey;	// link to last key
+		cout << "Adding [" << bufferKey << "] link to: \n";
 		}
 		else {
 			lastBuffer = inModule->getRawEntry();
-			outModule->SetKey(bufferKey);
-			(*outModule) << lastBuffer.c_str();	// save new text;
+			if (lastBuffer.length() > 0) {
+				cout << "Adding [" << bufferKey << "] new text. \n";
+				outModule->SetKey(bufferKey);
+				(*outModule) << lastBuffer.c_str();	// save new text;
+			}
+			else {
+				cout << "Skipping [" << bufferKey << "] no entry in inModule. \n";
+			}
 		}
 		(*inModule)++;
 	}

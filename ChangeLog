@@ -3,6 +3,10 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 
 15-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
+	Added SWModule::setSkipConsecutiveLinks
+	Fixed mod2zmod to catch links
+	Fixed TOP to position to first entry, not say Gen1:1
+	Fixed bug in rawverse in logic when index is out of bnds.
 	Added DTrotz' fix for CBuilder6
 
 14-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>

@@ -590,6 +590,7 @@ SWModule &RawText::operator +=(int increment)
 
 	findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
 
+	SWKey lastgood = *tmpkey;
 	while (increment) {
 		long laststart = start;
 		unsigned short lastsize = size;
@@ -610,12 +611,15 @@ SWModule &RawText::operator +=(int increment)
 			tmpkey = new VerseKey(key);
 
 		if ((error = key->Error())) {
-			*key = lasttry;
+			*key = lastgood;
 			break;
 		}
-		findoffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
-		if (((laststart != start) || (lastsize != size)) && (start >= 0) && (size)) 
+		long index = tmpkey->Index();
+		findoffset(tmpkey->Testament(), index, &start, &size);
+		if ((((laststart != start) || (lastsize != size))||(!skipConsecutiveLinks)) && (start >= 0) && (size)) {
 			increment += (increment < 0) ? 1 : -1;
+			lastgood = *tmpkey;
+		}
 	}
 	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
 
