@@ -129,6 +129,7 @@ char GBFHTML::ProcessText(char *text, int maxlen, const SWKey *key)
 						*to++ = '/';
 						*to++ = 'I';
 						*to++ = '>';						
+						*to++ = ' ';
  						*to++ = '<';
 						*to++ = 'F';
 						*to++ = 'O';
