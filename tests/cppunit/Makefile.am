@@ -9,4 +9,4 @@ LibSword_LDFLAGS = -lcppunit -ldl
 
 swcppunitpdir = $(top_srcdir)/tests/cppunit
 
-all: check
+#all: check
