@@ -319,7 +319,7 @@ const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
 			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 			frag[((const char *)element->userData - startFrag) + 1] = 0;
 			startFrag = (const char *)element->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s-\"%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
+			sprintf(buf, "<reference osisRef=\"%s-%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
 		}
 		else {
 			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
