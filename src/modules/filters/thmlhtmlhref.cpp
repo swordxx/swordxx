@@ -124,11 +124,11 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						refList = u->lastTextNode;
 					SWBuf version = tag.getAttribute("version");
 					
-					buf.appendFormatted("&nbsp<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
+					buf.appendFormatted("&nbsp;<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
 						(refList.length()) ? URL::encode(refList.c_str()).c_str() : "", 
 						(version.length()) ? URL::encode(version.c_str()).c_str() : "");
 					buf += u->lastTextNode.c_str();
-					buf += "</a>&nbsp";
+					buf += "</a>&nbsp;";
 				}
 				else {
 					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
