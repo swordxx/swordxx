@@ -27,29 +27,29 @@ if (scalar(@ARGV) < 2 || scalar(@ARGV) > 4) {
 $datapath = $ARGV[1];
 $blockType = defined $ARGV[2] ? $ARGV[2] : 4;
 $compressType = defined $ARGV[3] ? $ARGV[3] : 1;
-$mgr = new sword::SWMgr();
+$mgr = new Sword::SWMgr();
 $module = $mgr->module($ARGV[0]);
-$compressor = ($compressType == 1) ? new sword::LZSSCompress() : new sword::ZipCompress();
+$compressor = ($compressType == 1) ? new Sword::LZSSCompress() : new Sword::ZipCompress();
 
 if ($module->Type() eq "Biblical Texts") {
-	if (!sword::zText::createModule( $datapath, $blockType )) {
+	if (!Sword::zText::createModule( $datapath, $blockType )) {
 		print "$appname: Couldn't create module in $datapath";
 		exit(-1);
 	}
-        $newmod = new sword::zText( $datapath, 0, 0, $blockType, $compressor );
+        $newmod = new Sword::zText( $datapath, 0, 0, $blockType, $compressor );
 
 } elsif ($module->Type() eq "Lexicons / Dictionaries") {
-	if (!sword::zLD::createModule( $datapath )){
+	if (!Sword::zLD::createModule( $datapath )){
 		print "$appname: Couldn't create module in $datapath";
 		exit(-1);
 	}
-	$newmod = new sword::zLD( $datapath, 0, 0, $blockType, $compressor)
+	$newmod = new Sword::zLD( $datapath, 0, 0, $blockType, $compressor)
 } elsif ($module->Type() eq "Commentaries") {
-	if (!sword::zCom::createModule( $datapath, $blockType )){
+	if (!Sword::zCom::createModule( $datapath, $blockType )){
 		print "$appname: Couldn't create module in $datapath";
 		exit(-1);
 	}
-	$newmod = new sword::zCom( $datapath, 0, 0, $blockType, $compressor)
+	$newmod = new Sword::zCom( $datapath, 0, 0, $blockType, $compressor)
 }
 
 #now copy the content!

@@ -402,6 +402,17 @@ sub clone {
     tie %resulthash, ref($result), $result;
     return bless \%resulthash, ref($result);
 }
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Swordc::delete_SWKey($self);
+        delete $OWNER{$self};
+    }
+}
+
 *Persist = *Swordc::SWKey_Persist;
 *setPersist = *Swordc::SWKey_setPersist;
 *Error = *Swordc::SWKey_Error;
@@ -417,17 +428,14 @@ sub clone {
 *next = *Swordc::SWKey_next;
 *prev = *Swordc::SWKey_prev;
 *setKey = *Swordc::SWKey_setKey;
-sub DESTROY {
-    return unless $_[0]->isa('HASH');
-    my $self = tied(%{$_[0]});
-    return unless defined $self;
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        Swordc::delete_SWKey($self);
-        delete $OWNER{$self};
-    }
+sub toVerseKey {
+    my @args = @_;
+    my $result = Swordc::SWKey_toVerseKey(@args);
+    return undef if (!defined($result));
+    my %resulthash;
+    tie %resulthash, ref($result), $result;
+    return bless \%resulthash, ref($result);
 }
-
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
@@ -494,9 +502,21 @@ sub UpperBound {
     return bless \%resulthash, ref($result);
 }
 *ClearBounds = *Swordc::VerseKey_ClearBounds;
+sub ParseVerseList {
+    my @args = @_;
+    my $result = Swordc::VerseKey_ParseVerseList(@args);
+    return undef if (!defined($result));
+    $Sword::ListKey::OWNER{$result} = 1; 
+    my %resulthash;
+    tie %resulthash, ref($result), $result;
+    return bless \%resulthash, ref($result);
+}
+*setText = *Swordc::VerseKey_setText;
+*getText = *Swordc::VerseKey_getText;
+*getRangeText = *Swordc::VerseKey_getRangeText;
+*Traversable = *Swordc::VerseKey_Traversable;
 *decrement = *Swordc::VerseKey_decrement;
 *increment = *Swordc::VerseKey_increment;
-*Traversable = *Swordc::VerseKey_Traversable;
 *getBookName = *Swordc::VerseKey_getBookName;
 *getBookAbbrev = *Swordc::VerseKey_getBookAbbrev;
 *Testament = *Swordc::VerseKey_Testament;
@@ -680,9 +700,9 @@ sub DESTROY {
 *getAvailableLocales = *Swordc::LocaleMgr_getAvailableLocales;
 *getDefaultLocaleName = *Swordc::LocaleMgr_getDefaultLocaleName;
 *setDefaultLocaleName = *Swordc::LocaleMgr_setDefaultLocaleName;
-sub systemLocaleMgr {
+sub getSystemLocaleMgr {
     my @args = @_;
-    my $result = Swordc::LocaleMgr_systemLocaleMgr(@args);
+    my $result = Swordc::LocaleMgr_getSystemLocaleMgr(@args);
     return undef if (!defined($result));
     my %resulthash;
     tie %resulthash, ref($result), $result;
@@ -867,6 +887,30 @@ sub ACQUIRE {
 package Sword::RawCom;
 @ISA = qw( Sword Sword::SWCom );
 %OWNER = ();
+%ITERATORS = ();
+sub new {
+    my $pkg = shift;
+    my @args = @_;
+    my $self = Swordc::new_RawCom(@args);
+    return undef if (!defined($self));
+    $OWNER{$self} = 1;
+    my %retval;
+    tie %retval, "Sword::RawCom", $self;
+    return bless \%retval, $pkg;
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Swordc::delete_RawCom($self);
+        delete $OWNER{$self};
+    }
+}
+
+*createModule = *Swordc::RawCom_createModule;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
@@ -885,6 +929,30 @@ sub ACQUIRE {
 package Sword::zCom;
 @ISA = qw( Sword Sword::SWCom );
 %OWNER = ();
+%ITERATORS = ();
+sub new {
+    my $pkg = shift;
+    my @args = @_;
+    my $self = Swordc::new_zCom(@args);
+    return undef if (!defined($self));
+    $OWNER{$self} = 1;
+    my %retval;
+    tie %retval, "Sword::zCom", $self;
+    return bless \%retval, $pkg;
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        Swordc::delete_zCom($self);
+        delete $OWNER{$self};
+    }
+}
+
+*createModule = *Swordc::zCom_createModule;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
