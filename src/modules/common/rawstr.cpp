@@ -103,7 +103,7 @@ void RawStr::getidxbufdat(long ioffset, char **buf)
 			if ((ch == '\\') || (ch == 10) || (ch == 13))
 				break;
 		}
-		*buf = (*buf) ? (char *)realloc(*buf, size + 1) : (char *)malloc(size + 1);
+		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 		if (size) {
 			lseek(datfd->getFd(), ioffset, SEEK_SET);
 			read(datfd->getFd(), *buf, size);

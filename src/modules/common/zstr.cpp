@@ -124,7 +124,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
 			if ((ch == '\\') || (ch == 10) || (ch == 13))
 				break;
 		}
-		*buf = (*buf) ? (char *)realloc(*buf, size + 1) : (char *)malloc(size + 1);
+		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 		if (size) {
 			lseek(datfd->getFd(), ioffset, SEEK_SET);
 			read(datfd->getFd(), *buf, size);
@@ -354,8 +354,8 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
-		*buf = (*buf) ? (char *)realloc(*buf, size + 1) : (char *)malloc(size + 1);
-		*idxbuf = (*idxbuf) ? (char *)realloc(*idxbuf, size + 1) : (char *)malloc(size + 1);
+		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
+		*idxbuf = (*idxbuf) ? (char *)realloc(*idxbuf, size*2 + 1) : (char *)malloc(size*2 + 1);
 		memset(*buf, 0, size + 1);
 		memset(*idxbuf, 0, size + 1);
 		lseek(datfd->getFd(), start, SEEK_SET);
@@ -418,7 +418,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) {
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
-		*buf = (*buf) ? (char *)realloc(*buf, size + 1) : (char *)malloc(size + 1);
+		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 
 		lseek(zdtfd->getFd(), start, SEEK_SET);
 		read(zdtfd->getFd(), *buf, size);
@@ -432,7 +432,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) {
 		cacheBlockIndex = block;
 	}
 	size = cacheBlock->getEntrySize(entry);
-	*buf = (*buf) ? (char *)realloc(*buf, size + 1) : (char *)malloc(size + 1);
+	*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 	strcpy(*buf, cacheBlock->getEntry(entry));
 }
 
