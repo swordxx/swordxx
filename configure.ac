@@ -4,7 +4,7 @@
 AC_INIT(sword, 1.5.3, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.9 $)
+AC_REVISION($Revision: 1.10 $)
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(sword,1.5.3)
@@ -41,7 +41,6 @@ AC_ARG_WITH(conf,[  --with-conf             install a new sword.conf [default=ye
 # ---------------------------------------------------------------------
 # Enable options
 # ---------------------------------------------------------------------
-AC_ARG_ENABLE(vcl,[  --enable-vcl            build VCL library [default=no]],,enable_vcl=no)
 AC_ARG_ENABLE(debug,[  --enable-debug          build debug library [default=no]],,enable_debug=no)
 AC_ARG_ENABLE(profile,[  --enable-profile        allow profiling [default=no]],,enable_profile=no)
 AC_ARG_ENABLE(profilefn,[  --enable-profilefn      allow functioncheck profiling [default=no]],,enable_profilefn=no)
@@ -142,7 +141,6 @@ AC_SUBST(with_icu)
 AC_SUBST(with_conf)
 AC_SUBST(dir_confdef)
 AC_SUBST(CC)
-AC_SUBST(enable_vcl)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 

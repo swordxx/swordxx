@@ -27,10 +27,6 @@ need_local_regex := no
 
 endif
 
-# VCL library- set to yes if you would like to build
-buildvcl := @enable_vcl@
-
-
 # Debugging options etc...
 debug   := @enable_debug@
 profile := @enable_profile@

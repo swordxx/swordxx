@@ -3,6 +3,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 22-Jun-2002	Daniel Glassey <dglassey@crosswire.org>
 	Fixes to allow compiling with gcc3
+	add configure support to libVCL and change X!/installmgr
+	  to build it automatically
+	remove --enable-vcl from core sword
 
 13-Jun-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Fixed Module heading bug
