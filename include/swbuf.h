@@ -1,7 +1,7 @@
 /******************************************************************************
 *  swbuf.h  - code for SWBuf used as a transport and utility for data buffers
 *
-* $Id: swbuf.h,v 1.37 2004/05/05 21:33:27 scribe Exp $
+* $Id: swbuf.h,v 1.38 2004/06/16 09:04:20 mgruner Exp $
 *
 * Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
 *	CrossWire Bible Society
@@ -33,6 +33,10 @@ SWORD_NAMESPACE_START
 
 /**
 * This class is used as a transport and utility for data buffers.
+*
+* @warning This class does not perform pointer validity checks (for speed reasons). 
+*	Therefore, never try to pass an invalid string (const char* 0) as an argument-
+*	it will crash your program. You need to perform the checks yourself!
 */
 class SWDLLEXPORT SWBuf {
 	char *buf;
