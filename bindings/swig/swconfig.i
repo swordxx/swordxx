@@ -6,6 +6,7 @@
  #include <multimapwdef.h>
 
  #include "swconfig.h"
+using namespace sword;
 %}
 
 %include "stl.i"

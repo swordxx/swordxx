@@ -8,7 +8,7 @@
 * @ref SWMgr, SWModule, SWKey, VerseKey and SWConfig.
 */
 
-%module sword
+%module Sword
 %{
 #undef bool
 #undef assert
