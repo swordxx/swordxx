@@ -357,6 +357,7 @@ void SWModule::decrement(int steps) {
  *				>=0 - regex
  *				-1  - phrase
  *				-2  - multiword
+ *				-3  - entryAttrib
  * 	flags		- options flags for search
  *	justCheckIfSupported	- if set, don't search, only tell if this
  *							function supports requested search.
@@ -377,7 +378,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	char perc = 1;
 	bool savePEA = isProcessEntryAttributes();
 
-	processEntryAttributes(false);
+	processEntryAttributes(searchType == -3);
+	
 	listkey.ClearList();
 
 	if (!key->Persist()) {
@@ -435,6 +437,32 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 	}
 
+	if (searchType == -3) {
+		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
+		char *checkSlash = wordBuf;
+		strcpy(wordBuf, istr);
+		words = (char **)calloc(sizeof(char *), 10);
+		int allocWords = 10;
+		while (*checkSlash == '/')
+			words[wordCount++] = checkSlash++;
+		words[wordCount] = strtok(wordBuf, "/");
+		while (words[wordCount]) {
+			wordCount++;
+			if (wordCount == allocWords) {
+				allocWords+=10;
+				words = (char **)realloc(words, sizeof(char *)*allocWords);
+			}
+			checkSlash = words[wordCount-1] + (strlen(words[wordCount-1]))+1;
+			while (*checkSlash == '/')
+				words[wordCount++] = checkSlash++;
+			words[wordCount] = strtok(NULL, "/");
+		}
+		for (int i = 0; i < wordCount; i++) {
+			if (words[i][0] == '/')
+				words[i][0] = 0;
+		}
+	}
+
 	perc = 5;
 	(*percent)(perc, percentUserData);
 
@@ -470,27 +498,79 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				listkey << textkey;
 			}
 		}
-		else {
-			if (searchType == -1) {
-				sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
-				if (sres) {
-						textkey = KeyText();
-						listkey << textkey;
-				}
-			}
-			if (searchType == -2) {
-				int i;
-				const char *stripBuf = StripText();
-				for (i = 0; i < wordCount; i++) {
-					sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(stripBuf, words[i]) : strstr(stripBuf, words[i]);
-					if (!sres)
-						break;
-				}
-				if (i == wordCount) {
+		else if (searchType == -1) {
+			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
+			if (sres) {
 					textkey = KeyText();
 					listkey << textkey;
-				}
+			}
+		}
+		else if (searchType == -2) {
+			int i;
+			const char *stripBuf = StripText();
+			for (i = 0; i < wordCount; i++) {
+				sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(stripBuf, words[i]) : strstr(stripBuf, words[i]);
+				if (!sres)
+					break;
+			}
+			if (i == wordCount) {
+				textkey = KeyText();
+				listkey << textkey;
+			}
+		}
+		else if (searchType == -3) {
+			int i;
+			RenderText();	// force parse
+			AttributeTypeList &entryAttribs = getEntryAttributes();
+			AttributeTypeList::iterator i1Start, i1End;
+			AttributeList::iterator i2Start, i2End;
+			AttributeValue::iterator i3Start, i3End;
 
+			if ((words[0]) && (words[0][0])) {
+				i1Start = entryAttribs.find(words[0]);
+				i1End = i1Start;
+				if (i1End != entryAttribs.end())
+				i1End++;
+			}
+			else {
+				i1Start = entryAttribs.begin();
+				i1End   = entryAttribs.end();
+			}
+			for (;i1Start != i1End; i1Start++) {
+				if ((words[1]) && (words[1][0])) {
+					i2Start = i1Start->second.find(words[1]);
+					i2End = i2Start;
+					if (i2End != i1Start->second.end())
+						i2End++;
+				}
+				else {
+					i2Start = i1Start->second.begin();
+					i2End   = i1Start->second.end();
+				}
+				for (;i2Start != i2End; i2Start++) {
+					if ((words[2]) && (words[2][0])) {
+						i3Start = i2Start->second.find(words[2]);
+						i3End = i3Start;
+						if (i3End != i2Start->second.end())
+							i3End++;
+					}
+					else {
+						i3Start = i2Start->second.begin();
+						i3End   = i2Start->second.end();
+					}
+					for (;i3Start != i3End; i3Start++) {
+						sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
+						if (sres) {
+							textkey = KeyText();
+							listkey << textkey;
+							break;
+						}
+					}
+					if (i3Start != i3End)
+						break;
+				}
+				if (i2Start != i2End)
+					break;
 			}
 		}
 		(*this)++;
