@@ -64,10 +64,12 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 			XMLTag tag(token);
 			if (!stricmp(tag.getName(), "q")) {
 				if ((tag.getAttribute("who")) && (!stricmp(tag.getAttribute("who"), "Jesus"))) {
-				        tag.setAttribute("who", 0);
-					token = tag;
+					tag.setAttribute("who", 0);
+					text += token;	// token toString already has < and >
+					continue;
 				}
 			}
+			// if we haven't modified, still use original token instead of tag, so we don't reorder attribs and stuff.  It doesn't really matter, but this is less intrusive to the original markup.
 			text += '<';
 			text.append(token);
 			text += '>';
