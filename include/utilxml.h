@@ -1,7 +1,7 @@
 /******************************************************************************
  *  utilxml.h   - definition of class that deal with xml constructs 
  *
- * $Id: utilxml.h,v 1.6 2003/07/05 04:58:42 scribe Exp $
+ * $Id: utilxml.h,v 1.7 2003/07/16 04:55:43 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -59,6 +59,11 @@ public:
 			parse();
 
 		return empty;
+	}
+	inline void setEmpty(bool value) {
+		if (!parsed)
+			parse();
+		empty = value;
 	}
 
 	inline bool isEndTag() const { return endTag; }

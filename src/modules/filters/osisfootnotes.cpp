@@ -68,7 +68,11 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			XMLTag tag(token);
 			if (!strcmp(tag.getName(), "note")) {
 				if (!tag.isEndTag()) {
-					if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {
+					if (SWBuf("strongsMarkup") == tag.getAttribute("type")) {  // handle bug in KJV2003 module where some note open tags were <note ... />
+						tag.setEmpty(false);
+					}
+					if (!tag.isEmpty()) {
+//					if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {
 						refs = "";
 						startTag = tag;
 						hide = true;
