@@ -2,7 +2,7 @@
  *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
  *				base of sword modules.
  *
- * $Id: swmgr.cpp,v 1.37 2001/05/06 21:36:48 chrislit Exp $
+ * $Id: swmgr.cpp,v 1.38 2001/05/15 09:25:16 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -54,7 +54,7 @@
 #include <zcom.h>
 #include <lzsscomprs.h>
 
-#ifdef ZLIBSUPPORTED
+#ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
 #endif
 
@@ -514,7 +514,7 @@ SWModule *SWMgr::CreateMod(string name, string driver, ConfigEntMap &section)
 			blockType = BOOKBLOCKS;
 
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (string)"LZSS";
-#ifdef ZLIBSUPPORTED
+#ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
 		else
