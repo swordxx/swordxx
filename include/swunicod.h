@@ -25,7 +25,7 @@
  * @param utf8 pointer to an array of 6 unsigned chars to contain the UTF-8 value
  * @return utf8
  */
-char* UTF32to8 (unsigned long utf32, unsigned char * utf8);
+unsigned char* UTF32to8 (unsigned long utf32, unsigned char * utf8);
 
 
 /** Converts a UTF-8 encoded 1-6 byte array into a 32-bit unsigned integer UTF-32 value

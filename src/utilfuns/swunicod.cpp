@@ -17,7 +17,7 @@
  */
 
 #include "swunicod.h"
-char* UTF32to8 (unsigned long utf32, unsigned char * utf8) {
+unsigned char* UTF32to8 (unsigned long utf32, unsigned char * utf8) {
   unsigned int i;
   for (i = 0; i < 6; i++) utf8[i] = 0;
 
