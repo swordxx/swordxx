@@ -1,7 +1,7 @@
 /******************************************************************************
  * canon.h - Canonical text information to be included by VerseKey.cpp
  *
- * $Id: canon.h,v 1.9 2002/06/25 01:53:00 scribe Exp $
+ * $Id: canon.h,v 1.10 2002/06/25 02:34:46 scribe Exp $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -284,8 +284,8 @@ const struct abbrev
   {"REVELATION OF JOHN", 66},	//     Revelation
   {"ROMANS", 45},		//    Romans
   {"RUTH", 8},			//    Ruth
-  {"SONG OF SOLOMON", 22},	//     Song of Solomon
   {"SOLOMON", 22},	//     Song of Solomon
+  {"SONG OF SOLOMON", 22},	//     Song of Solomon
   {"SONG OF SONGS", 22},	//     Song of Solomon
   {"SOS", 22},			//     Song of Solomon
   {"TITUS", 56},		//     Titus
