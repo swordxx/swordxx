@@ -571,6 +571,10 @@ SOURCE=..\..\..\src\utilfuns\zlib\untgz.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\utilfuns\url.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\utf16utf8.cpp
 # End Source File
 # Begin Source File
@@ -1144,6 +1148,10 @@ SOURCE=..\..\..\include\unixstr.h
 # Begin Source File
 
 SOURCE=..\..\..\include\untgz.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\url.h
 # End Source File
 # Begin Source File
 

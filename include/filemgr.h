@@ -35,6 +35,15 @@ SWORD_NAMESPACE_START
 #define O_BINARY 0
 #endif
 
+#ifndef S_IREAD
+// Fix for VC6
+#ifdef _S_IREAD
+#define S_IREAD _S_IREAD
+#define S_IWRITE _S_IWRITE
+#endif
+//
+#endif
+
 class SWDLLEXPORT FileMgr;
 
 /**
