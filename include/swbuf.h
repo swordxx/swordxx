@@ -25,7 +25,6 @@
 #include <defs.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mem.h>
 
 SWORD_NAMESPACE_START
 
