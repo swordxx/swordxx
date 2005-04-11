@@ -23,10 +23,6 @@
 #ifndef VERSEKEY_H
 #define VERSEKEY_H
 
-#ifdef VK2
-#include <versekey2.h>
-#else
-
 #include <swkey.h>
 #include <swmacs.h>
 #include <listkey.h>
@@ -421,5 +417,4 @@ public:
 
 SWORD_NAMESPACE_END
 
-#endif //VK2
 #endif //VERSEKEY_H

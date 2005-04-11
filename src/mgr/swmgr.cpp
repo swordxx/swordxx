@@ -69,11 +69,6 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
-
-#ifdef SPLITLIB
-#include <ztext2.h>
-#endif
-
 #include <zld.h>
 #include <zcom.h>
 #include <lzsscomprs.h>
@@ -130,7 +125,6 @@ void SWMgr::init() {
 	cipherFilters.clear();
 	optionFilters.clear();
 	cleanupFilters.clear();
-//#ifndef SPLITLIB
 	tmpFilter = new ThMLVariants();
 	optionFilters.insert(FilterMap::value_type("ThMLVariants", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
@@ -697,11 +691,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 		direction = DIRECTION_LTR;
 	}
 
-	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))
-#ifdef SPLITLIB
-	|| (!stricmp(driver, "zText2"))
-#endif
-	) {
+	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
 		int blockNum = 1;
@@ -726,11 +716,6 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 			compress = new LZSSCompress();
 
 		if (compress) {
-#ifdef SPLITLIB
-			if (!stricmp(driver, "zText2"))
-				newmod = new zText2(datapath.c_str(), name, description.c_str(), blockType, blockNum, compress, 0, enc, direction, markup, lang.c_str());
-			else
-#endif
 			if (!stricmp(driver, "zText"))
 				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
 			else	newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());

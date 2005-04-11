@@ -1,25 +1,11 @@
 AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
-#if BUILDSPLITLIB
-#LDADD = $(top_builddir)/lib/libsword_imp.la \
-#        $(top_builddir)/lib/libsword.la
-#else
 LDADD = $(top_builddir)/lib/libsword.la
-#endif
-if BUILDREFSYS
-refsysdir = refsys
-else
-refsysdir =
-endif
-
-SUBDIRS = $(refsysdir)
 
 noinst_PROGRAMS = ciphertest keytest mgrtest parsekey listtest casttest \
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
 genbooktest treeidxtest swbuftest xmltest webiftest
-
-#outputcps
 
 if ICU
 ICUPROG = icutest translittest tlitmgrtest
@@ -42,24 +28,10 @@ else
 ZLIBPROG =
 endif
 
-if BUILDNEWVKEY
-VKPROG = keytest2 refsystest
-else
-VKPROG =
-endif
-
-noinst_PROGRAMS += $(ZLIBPROG) $(VKPROG)
+noinst_PROGRAMS += $(ZLIBPROG)
 
 if ZLIB
 compzip_SOURCES = compzip.cpp
-endif
-
-if BUILDNEWVKEY
-keytest2_SOURCES = keytest2.cpp
-refsystest_SOURCES = refsystest.cpp
-#You have to make some parts of versekey.h public to 
-#get outputcps to work
-#outputcps_SOURCES = outputcps.cpp
 endif
 
 keytest_SOURCES = keytest.cpp

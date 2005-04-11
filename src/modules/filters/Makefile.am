@@ -93,10 +93,5 @@ AM_CPPFLAGS += $(ICUDEFS)
 libsword_la_SOURCES += $(SWREALICUSRC)
 EXTRA_DIST = $(DISTSWICUSRC)
 
-#if BUILDSPLITLIB
-#libsword_imp_la_SOURCES += $(OSISFIL) $(GBFFIL) \
-#	$(THMLFIL) $(CONVFIL) $(PLFIL)
-#else
 libsword_la_SOURCES += $(OSISFIL) $(GBFFIL) \
 	$(THMLFIL) $(CONVFIL) $(PLFIL)
-#endif

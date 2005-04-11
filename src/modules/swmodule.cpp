@@ -842,8 +842,16 @@ void SWModule::setConfig(ConfigEntMap *config) {
 }
 
 
+bool SWModule::hasSearchFramework() {
 #ifdef USELUCENE
+	return true;
+#else
+	return SWSearchable::hasSearchFramework();
+#endif
+}
+
 void SWModule::deleteSearchFramework() {
+#ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
@@ -851,10 +859,14 @@ void SWModule::deleteSearchFramework() {
 	target.append("lucene");
 
 	FileMgr::removeDir(target.c_str());
+#else
+	SWSearchable::deleteSearchFrameword();
+#endif
 }
 
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
+#ifdef USELUCENE
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	SWKey textkey;
@@ -1013,8 +1025,10 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	}
 
 	return 0;
-}
+#else
+	return SWSearchable::createSearchFramework(percent, percentUserData);
 #endif
+}
 
 
 

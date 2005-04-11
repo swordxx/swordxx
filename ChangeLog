@@ -1,6 +1,10 @@
 ﻿API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+11-Apr-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Cleaned up unused files in preparation for release
+	Updated pkg-config to report proper required libs
+
 1-Jan-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Extended InstallMgr routines to recurse directories
 	Cleaned up InstallMgr code

@@ -1,12 +1,7 @@
 AUTOMAKE_OPTIONS = 1.6
 SUBDIRS = diatheke
 INCLUDES = -I $(top_srcdir)/include
-#if BUILDSPLITLIB
-#LDADD = $(top_builddir)/lib/libsword_imp.la \
-#        $(top_builddir)/lib/libsword.la
-#else
 LDADD = $(top_builddir)/lib/libsword.la
-#endif
 noinst_PROGRAMS = cipherraw lexdump \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
 addgb imp2gbs mod2imp xml2gbs
@@ -28,11 +23,7 @@ bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2vpl \
 #endif
 
 if ZLIB
-if BUILDNEWVKEY
-ZLIBPROG = mod2zmod addld imp2ld mod2zmod2 vpl2zmod2
-else
 ZLIBPROG = mod2zmod addld imp2ld
-endif
 else
 ZLIBPROG =
 endif
@@ -71,10 +62,6 @@ installmgr_SOURCES = installmgr.cpp
 #installmgr_LDADD = -lcurl $(CURL_LIBS) $(LDADD)
 
 if ZLIB
-if BUILDNEWVKEY
-mod2zmod2_SOURCES = mod2zmod2.cpp
-vpl2zmod2_SOURCES = vpl2zmod2.cpp
-endif
 mod2zmod_SOURCES = mod2zmod.cpp
 addld_SOURCES = addld.cpp
 imp2ld_SOURCES = imp2ld.cpp

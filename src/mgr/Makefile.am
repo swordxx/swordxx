@@ -6,15 +6,7 @@ else
 globdef =
 endif
 
-if BUILDNEWVKEY
-spdefs = -DSPLITLIB
-refsrc = $(mgrdir)/refsysmgr.cpp
-else
-spdefs =
-refsrc =
-endif
-
-AM_CPPFLAGS += $(globdef) $(spdefs)
+AM_CPPFLAGS += $(globdef)
 
 if WITHCURL
 libsword_la_SOURCES += $(mgrdir)/curlftpt.cpp
@@ -26,7 +18,7 @@ libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
 libsword_la_SOURCES += $(mgrdir)/swmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swfiltermgr.cpp
 libsword_la_SOURCES += $(mgrdir)/encfiltmgr.cpp
-mgrsplits = $(mgrdir)/markupfiltmgr.cpp
+libsword_la_SOURCES += $(mgrdir)/markupfiltmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/filemgr.cpp
 libsword_la_SOURCES += $(mgrdir)/ftptrans.cpp
 libsword_la_SOURCES += $(mgrdir)/swlocale.cpp
@@ -36,6 +28,4 @@ libsword_la_SOURCES += $(mgrdir)/swsearchable.cpp
 libsword_la_SOURCES += $(mgrdir)/installmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/stringmgr.cpp
 
-libsword_la_SOURCES += $(mgrsplits)
-libsword_la_SOURCES += $(refsrc) 
 

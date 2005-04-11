@@ -141,8 +141,8 @@ SWBuf &RawText::getRawEntryBuf() {
 }
 
 
-#ifndef USELUCENE
 signed char RawText::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
+#ifndef USELUCENE
 	SWKey *savekey = 0;
 	SWKey *searchkey = 0;
 	SWKey textkey;
@@ -269,10 +269,14 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 		close(idxfd);
 	}
 	return 0;
+#else
+	return SWModule::createSearchFramework(percent, percentUserData);
+#endif
 }
 
 
 void RawText::deleteSearchFramework() {
+#ifndef USELUCENE
 	SWBuf target = path;
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
@@ -281,6 +285,9 @@ void RawText::deleteSearchFramework() {
 	FileMgr::removeFile(target + "otwords.dat");
 	FileMgr::removeFile(target + "ntwords.idx");
 	FileMgr::removeFile(target + "otwords.idx");
+#else
+	SWModule::deleteSearchFramework();
+#endif
 }
 
 
@@ -300,6 +307,7 @@ void RawText::deleteSearchFramework() {
  */
 
 ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
+#ifndef USELUCENE
 	listkey.ClearList();
 
 	if ((fastSearch[0]) && (fastSearch[1])) {
@@ -478,10 +486,10 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 		return listkey;
 	}
 
+#endif
 	// if we don't support this search, fall back to base class
 	return SWModule::search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
 }
-#endif
 
 
 void RawText::setEntry(const char *inbuf, long len) {

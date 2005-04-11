@@ -24,24 +24,18 @@
 #define SWLOCALE_H
 
 #include <map>
-
 #include <swconfig.h>
-
 #include <versekey.h>
-#ifdef SPLITLIB
-#include <versekey2.h>
-#endif
-
 #include <defs.h>
 
 SWORD_NAMESPACE_START
-#define ENDOFABBREVS -2
 
+static const int ENDOFABBREVS = -2;
 typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
 
 /** SWLocale is used for the localisation of the booknames
 * The SWLocale is a class which holds the information of one language.
-* Every language supported by Sword has one SWLocale object, 
+* Every language supported by SWORD has one SWLocale object, 
 * get the name of the Language using @see getname of this class.
 * Another functions useful for frontend developers is @see getDescription.
 */
@@ -54,10 +48,6 @@ class SWDLLEXPORT SWLocale {
 	struct abbrev *bookAbbrevs;
 	char *BMAX;
 	struct sbook **books;
-	#ifdef SPLITLIB
-	struct sbook2 **books2;
-	struct abbrev2 *bookAbbrevs2;
-	#endif
 
 public:
 	SWLocale(const char *ifilename);
@@ -78,10 +68,6 @@ public:
 	virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
 	virtual const struct abbrev *getBookAbbrevs();
 	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
-	#ifdef SPLITLIB
-	virtual void getBooks2(struct sbook2 ***ibooks, VerseKey2 *vk);
-	virtual const struct abbrev2 *getBookAbbrevs2();
-	#endif
 };
 
 SWORD_NAMESPACE_END

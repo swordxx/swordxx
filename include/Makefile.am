@@ -156,21 +156,3 @@ pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
 
-#if INSTALLMGR
-REMOTE_HEAD  = $(swincludedir)/swremotemgr.h
-REMOTE_HEAD += $(swincludedir)/installmgr.h
-#else
-#REMOTE_HEAD =
-#endif
-
-NEWVKEY_HEAD  = $(swincludedir)/versekey2.h
-NEWVKEY_HEAD += $(swincludedir)/ztext2.h
-NEWVKEY_HEAD += $(swincludedir)/zverse2.h
-
-if BUILDNEWVKEY
-SPLIT_HEAD = $(NEWVKEY_HEAD)
-else
-SPLIT_HEAD =
-endif
-
-pkginclude_HEADERS += $(REMOTE_HEAD) $(SPLIT_HEAD)

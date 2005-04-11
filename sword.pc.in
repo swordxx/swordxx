@@ -4,9 +4,9 @@ libdir=@libdir@
 includedir=@includedir@
 
 
-Name: Sword
+Name: SWORD
 Description: Biblical Text Engine
 Version: @VERSION@
-Libs: -L${libdir} -lsword
+Libs: -L${libdir} -lsword @CURL_LIBS@ @LUCENE_LIBS@ @ICU_LIBS@ @ICU_IOLIBS@
 Cflags: -I${includedir}/sword
 

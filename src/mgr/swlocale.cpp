@@ -34,10 +34,6 @@ SWLocale::SWLocale(const char * ifilename) {
 	bookAbbrevs  = 0;
 	BMAX         = 0;
 	books        = 0;
-	#ifdef SPLITLIB
-	books2        = 0;
-	bookAbbrevs2  = 0;
-	#endif
 	localeSource = new SWConfig(ifilename);
 
 	confEntry = localeSource->Sections["Meta"].find("Name");
@@ -70,21 +66,11 @@ SWLocale::~SWLocale() {
 	if (bookAbbrevs)
 		delete [] bookAbbrevs;
 
-	#ifdef SPLITLIB
-	if (bookAbbrevs2)
-		delete [] bookAbbrevs2;
-	#endif
-	
 	if (BMAX) {
-		#ifndef VK2
 		for (int i = 0; i < 2; i++)
 			delete [] books[i];
-		#endif
 		delete [] BMAX;
 		delete [] books;
-		#ifdef SPLITLIB
-		delete [] books2;
-		#endif
 	}
 }
 
@@ -178,40 +164,6 @@ const struct abbrev *SWLocale::getBookAbbrevs() {
 }
 
 
-#ifdef SPLITLIB
-const struct abbrev2 *SWLocale::getBookAbbrevs2() {
-	static const char *nullstr = "";
-	if (!bookAbbrevs2) {
-		ConfigEntMap::iterator it;
-		int i;
-		int size = localeSource->Sections["Book Abbrevs"].size();
-		bookAbbrevs2 = new struct abbrev2[size + 1];
-		for (i = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
-			bookAbbrevs2[i].ab = (*it).first.c_str();
-			bookAbbrevs2[i].book = VerseKey2::getOSISBookNum((*it).second.c_str());
-			//printf("SWLocale::getBookAbbrevs2 %d:%s:%s %d\n",i,bookAbbrevs2[i].ab,
-			//	(*it).second.c_str(), bookAbbrevs2[i].book); 
-		}
-		bookAbbrevs2[i].ab = nullstr;
-		bookAbbrevs2[i].book = ENDOFABBREVS;
-	}
-		
-	return bookAbbrevs2;
-}
-void SWLocale::getBooks2(struct sbook2 ***ibooks, VerseKey2 *vk) {
-	if (!books2) {
-
-		books2 = new struct sbook2*[1];
-		books2[0] = new struct sbook2[MAXOSISBOOKS+1];
-		for (int j = 0; j <= MAXOSISBOOKS; j++) {
-				books2[0][j].name = translate(vk->getNameOfBook(j));
-				books2[0][j].prefAbbrev = translate(vk->getPrefAbbrev(j));
-		}
-	}
-
-	*ibooks = books2;
-}
-#endif
 void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
 	if (!BMAX) {
 		BMAX = new char [2];
