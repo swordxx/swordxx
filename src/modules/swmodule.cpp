@@ -860,7 +860,7 @@ void SWModule::deleteSearchFramework() {
 
 	FileMgr::removeDir(target.c_str());
 #else
-	SWSearchable::deleteSearchFrameword();
+	SWSearchable::deleteSearchFramework();
 #endif
 }
 
