@@ -2,6 +2,8 @@ AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
 LDADD = $(top_builddir)/lib/libsword.la
 
+SUBDIRS = cppunit
+
 noinst_PROGRAMS = ciphertest keytest mgrtest parsekey listtest casttest \
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
