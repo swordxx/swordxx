@@ -42,8 +42,8 @@
       ..\..\obj\uncompr.obj ..\..\obj\untgz.obj ..\..\obj\adler32.obj 
       ..\..\obj\greeklexattribs.obj ..\..\obj\swcacher.obj ..\..\obj\gbfosis.obj 
       ..\..\obj\thmlosis.obj ..\..\obj\encfiltmgr.obj 
-      ..\..\obj\markupfiltmgr.obj ..\..\obj\roman.obj ..\..\obj\swsourcemgr.obj 
-      ..\..\obj\ftpparse.obj ..\..\obj\osisstrongs.obj ..\..\obj\osismorph.obj 
+      ..\..\obj\markupfiltmgr.obj ..\..\obj\roman.obj ..\..\obj\ftpparse.obj 
+      ..\..\obj\osisstrongs.obj ..\..\obj\osismorph.obj 
       ..\..\obj\gbfredletterwords.obj ..\..\obj\osisheadings.obj 
       ..\..\obj\swbuf.obj ..\..\obj\utilxml.obj ..\..\obj\osisplain.obj 
       ..\..\obj\osisrtf.obj ..\..\obj\thmlwebif.obj ..\..\obj\gbfwebif.obj 
@@ -211,7 +211,6 @@
       <FILE FILENAME="..\..\src\mgr\encfiltmgr.cpp" FORMNAME="" UNITNAME="encfiltmgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\mgr\markupfiltmgr.cpp" FORMNAME="" UNITNAME="markupfiltmgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\roman.cpp" FORMNAME="" UNITNAME="roman" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\mgr\swsourcemgr.cpp" FORMNAME="" UNITNAME="swsourcemgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\ftpparse.c" FORMNAME="" UNITNAME="ftpparse" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osisstrongs.cpp" FORMNAME="" UNITNAME="osisstrongs" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osismorph.cpp" FORMNAME="" UNITNAME="osismorph" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
