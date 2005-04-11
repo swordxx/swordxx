@@ -81,11 +81,11 @@ fi
 # Find CppUnit
 # ---------------------------------------------------------------------
 # Locate CppUnit (minimum version 1.8.0) for testing.  
-#AM_PATH_CPPUNIT(1.8.0)
+AM_PATH_CPPUNIT(1.8.0)
 
 # You can set up an automake conditional and use it to conditionally
 # build cppunit-using test programs.
-#AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
+AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
 
 
 # ---------------------------------------------------------------------

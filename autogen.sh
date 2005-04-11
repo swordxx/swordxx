@@ -10,7 +10,7 @@ echo "$LTIZE"
 ACLOCAL="$AUTODIR""aclocal"
 echo "*** Recreating aclocal.m4"
 echo "$ACLOCAL"
-	$ACLOCAL;
+	$ACLOCAL -I m4;
 
 echo "*** Recreating configure"
 AUTOCONF="$AUTODIR""autoconf"
