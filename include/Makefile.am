@@ -15,6 +15,7 @@ pkginclude_HEADERS += $(swincludedir)/flatapi.h
 pkginclude_HEADERS += $(swincludedir)/ftpparse.h
 pkginclude_HEADERS += $(swincludedir)/ftptrans.h
 pkginclude_HEADERS += $(swincludedir)/ftplibftpt.h
+pkginclude_HEADERS += $(swincludedir)/ftplib.h
 
 pkginclude_HEADERS += $(swincludedir)/gbffootnotes.h
 pkginclude_HEADERS += $(swincludedir)/gbfheadings.h
