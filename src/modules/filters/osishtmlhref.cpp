@@ -259,18 +259,30 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 		}
 
-		// <hi> hi?  hi contrast?
+		// <catchWord> & <rdg> tags (italicize)
+		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				if (!u->suspendTextPassThru)
+					buf += "<i>";
+			}
+			else if (tag.isEndTag()) {
+				if (!u->suspendTextPassThru)
+					buf += "</i>";
+			}
+		}
+
+		// <hi> text highlighting
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b") {
 					if (!u->suspendTextPassThru)
-						buf += "<b> ";
+						buf += "<b>";
 					u->inBold = true;
 				}
 				else {	// all other types
 					if (!u->suspendTextPassThru)
-						buf += "<i> ";
+						buf += "<i>";
 					u->inBold = false;
 				}
 			}
@@ -284,9 +296,6 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					if (!u->suspendTextPassThru)
 						 buf += "</i>";
 			}
-			else {	// empty hi marker
-				// what to do?  is this even valid?
-			}
 		}
 
 		// <q> quote
@@ -295,7 +304,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
 			int level = (lev) ? atoi(lev) : 1;
-			
+
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				/*buf += "{";*/
 
@@ -306,7 +315,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				
 				if (who == "Jesus") {
 					if (!u->suspendTextPassThru)
-						buf += "<font color=\"red\"> ";
+						buf += "<font color=\"red\">";
 				}
 			}
 			else if (tag.isEndTag()) {
@@ -327,7 +336,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <transChange>
 		else if (!strcmp(tag.getName(), "transChange")) {
 			SWBuf type = tag.getAttribute("type");
-			
+
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 
 // just do all transChange tags this way for now
@@ -364,7 +373,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					buf+="\" />";
 				}
 		}
-		
+
 		else {
 		      return false;  // we still didn't handle token
 		}
