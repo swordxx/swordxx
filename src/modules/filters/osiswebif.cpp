@@ -139,6 +139,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				u->suspendTextPassThru = false;
 			}
 		}
+
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -146,6 +147,44 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 			else if (tag.isEndTag()) {
 				buf += "</h3>";
+			}
+		}
+
+		// <catchWord> & <rdg> tags (italicize)
+		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				if (!u->suspendTextPassThru)
+					buf += "<i>";
+			}
+			else if (tag.isEndTag()) {
+				if (!u->suspendTextPassThru)
+					buf += "</i>";
+			}
+		}
+
+                // <hi> text highlighting
+		else if (!strcmp(tag.getName(), "hi")) {
+			SWBuf type = tag.getAttribute("type");
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				if (type == "b" || type == "x-b") {
+					if (!u->suspendTextPassThru)
+						buf += "<b>";
+					u->inBold = true;
+				}
+				else {	// all other types
+					if (!u->suspendTextPassThru)
+						buf += "<i>";
+				}
+			}
+			else if (tag.isEndTag()) {
+				if(u->inBold) {
+					if (!u->suspendTextPassThru)
+						buf += "</b>";
+					u->inBold = false;
+				}
+				else
+					if (!u->suspendTextPassThru)
+						 buf += "</i>";
 			}
 		}
 
@@ -186,7 +225,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				SWBuf type = tag.getAttribute("type");
 				u->lastTransChange = type;
 
-// just do all transChange tags this way for now
+				// just do all transChange tags this way for now
 				if ((type == "added") || (type == "supplied"))
 					buf += "<i>";
 				else if (type == "tenseChange")
