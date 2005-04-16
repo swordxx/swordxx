@@ -223,6 +223,16 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 		}
 
+		// <catchWord> & <rdg> tags (italicize)
+		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "{\i1 ";
+			}
+			else if (tag.isEndTag()) {
+				buf += "}";
+			}
+		}
+
 		// <hi>
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
