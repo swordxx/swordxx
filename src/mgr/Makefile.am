@@ -9,11 +9,12 @@ endif
 AM_CPPFLAGS += $(globdef)
 
 if WITHCURL
-libsword_la_SOURCES += $(mgrdir)/curlftpt.cpp
+FTP_SOURCES = $(mgrdir)/curlftpt.cpp
 else
-libsword_la_SOURCES += $(mgrdir)/ftplibftpt.cpp
+FTP_SOURCES = $(mgrdir)/ftplibftpt.cpp
 endif
 
+libsword_la_SOURCES += $(FTP_SOURCES)
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp
 libsword_la_SOURCES += $(mgrdir)/swmgr.cpp
 libsword_la_SOURCES += $(mgrdir)/swfiltermgr.cpp
