@@ -7,6 +7,7 @@ globdef =
 endif
 
 AM_CPPFLAGS += $(globdef)
+AM_CPPFLAGS += -D_FTPLIB_NO_COMPAT
 
 if WITHCURL
 FTP_SOURCES = $(mgrdir)/curlftpt.cpp
