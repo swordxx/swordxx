@@ -1,16 +1,24 @@
+#include <time.h>
 #include <iostream>
 
-#define BASEI 320000000L
+#define BASEI 256000000L
 
-//#include <swbuf.h>
-//typedef sword::SWBuf StringType;
+#include <swbuf.h>
+typedef sword::SWBuf StringType;
 
-#include <string>
-typedef std::string StringType;
+//#include <string>
+//typedef std::string StringType;
 
 using std::cout;
 using std::cerr;
 
+void markTime() {
+	static clock_t start = clock();
+	static clock_t last = start;
+	clock_t current = clock();
+	cerr << ((float)(current - last)/CLOCKS_PER_SEC) << " / " << ((float)(current - start)/CLOCKS_PER_SEC) << " (Seconds Delta / Seconds Total)\n";
+	last = current;
+}
 
 void appendChTest() {
 	cerr << "\nSTART: append ch test -------\n";
@@ -45,7 +53,7 @@ void subscriptTest() {
 	for (int j = 0; j < 100; j++) {
 		s += "0123456789";
 	}
-	for (int j = 0; j < BASEI/500; j++) {
+	for (int j = 0; j < BASEI/100; j++) {
 		for (unsigned long i = s.length()-1; i; i--) {
 			s[i] = (char) (i%40)+65;
 		}
@@ -61,7 +69,7 @@ void ctorAssignTest() {
 	for (int j = 0; j < 100; j++) {
 		s += "0123456789";
 	}
-	for (unsigned long i = (BASEI/4); i; i--) {
+	for (unsigned long i = (BASEI); i; i--) {
 		StringType s2;
 		s2 = s;
 		s2.c_str();	// keep us from being optimized out
@@ -75,7 +83,7 @@ void compareTest() {
 	cerr.flush();
 	StringType first =  "firsttestAfirst";
 	StringType second = "firsttestBsecond";
-	for (unsigned long i = BASEI/2; i; i--) {
+	for (unsigned long i = BASEI/1.5; i; i--) {
 		if (first != second)
 			if (first <= second)
 				if (first > second);
@@ -91,7 +99,7 @@ void insertStringTest() {
 	cerr.flush();
 	StringType s;
 	StringType sub = "text ->this part should not appear :)";
-	for (int j = 0; j < BASEI/10000; j++) {
+	for (int j = 0; j < BASEI/7000; j++) {
 		s = "Start    end";
 		for (int i = 0; i < 1000; i++) {
 			s.insert(s.length()/2, sub, 0, 5);
@@ -123,11 +131,18 @@ int main(int argc, char **argv) {
 //	y.append(y.c_str(),5);
 //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles!hello): (" << y << ")\n";
 
+	markTime();
 	appendChTest();
+	markTime();
 	appendStringTest();
+	markTime();
 	subscriptTest();
+	markTime();
 	ctorAssignTest();
+	markTime();
  	compareTest();
+	markTime();
 	insertStringTest();
+	markTime();
 }
 
