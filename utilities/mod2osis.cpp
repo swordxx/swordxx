@@ -59,8 +59,8 @@ int main(int argc, char **argv)
 		}
 	}
 
-	mgr.setGlobalOption("Strong's Numbers", "Off");
-	mgr.setGlobalOption("Morphological Tags", "Off");
+//	mgr.setGlobalOption("Strong's Numbers", "Off");
+//	mgr.setGlobalOption("Morphological Tags", "Off");
 
 	ModMap::iterator it = mgr.Modules.find(argv[1]);
 	if (it == mgr.Modules.end()) {

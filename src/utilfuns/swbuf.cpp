@@ -179,10 +179,11 @@ void SWBuf::appendFormatted(const char *format, ...) {
 	va_end(argptr);
 }
 
-void SWBuf::insert(unsigned long pos, const char* str, signed long max) {
+void SWBuf::insert(unsigned long pos, const char* str, unsigned long start, signed long max) {
 // 	if (!str) //A null string was passed
 // 		return;
 
+	str += start;
 	int len = (max > -1) ? max : strlen(str);
 
 	if (!len || (pos > length())) //nothing to do, return

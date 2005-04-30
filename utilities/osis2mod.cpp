@@ -11,6 +11,7 @@
 #include <unistd.h>
 #endif
 
+#include <utilstr.h>
 #include <swmgr.h>
 #include <rawtext.h>
 #include <iostream>
@@ -74,20 +75,22 @@ char readline(int fd, char **buf) {
 	return !len;
 }
 
+
 char* deleteSubverses(char *buf) {
-        // remove subverse elements from osisIDs
-        // (this is a hack and should be handled better with VerseKey2)
-        for (int i = 0; buf[i]; i++) {
+	// remove subverse elements from osisIDs
+	// (this is a hack and should be handled better with VerseKey2)
+	for (int i = 0; buf[i]; i++) {
 		if (buf[i] == '!') {
 			while (buf[i] && buf[i] != ' ') {
-                        	buf[i] = ' ';
-                               	i++;
-                        }
-                        i--;
-                }
-        }
-        return buf;
+				buf[i] = ' ';
+				i++;
+			}
+			i--;
+		}
+	}
+	return buf;
 }
+
 
 bool isKJVRef(const char *buf) {
 	VerseKey vk, test;
@@ -124,22 +127,22 @@ void writeEntry(VerseKey &key, SWBuf &text, bool suppressOutput = false) {
 	VerseKey saveKey;
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
-        saveKey = key;
+	saveKey = key;
 
-        if (!isKJVRef(key)) {
+	if (!isKJVRef(key)) {
 		makeKJVRef(key);
-        }
+	}
 
 	SWBuf currentText = module->getRawEntry();
 	if (currentText.length()) {
-               	if (!suppressOutput) {
-                	cout << "Overwriting entry: " << key << endl;
-                }
+		if (!suppressOutput) {
+			cout << "Overwriting entry: " << key << endl;
+		}
 		text = currentText + " " + text;
-        }
+	}
 	module->setEntry(text);
 
-        key = saveKey;
+	key = saveKey;
 }
 
 void linkToEntry(VerseKey& dest) {
@@ -186,6 +189,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 // 		printf("text-lastTitle:	%s\n", text.c_str()+titleOffset);
 		return false; //don't add </title> to the text itself
 	}
+
+	// BOOK START
 	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag() && !(token.getAttribute("eID"))) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
         	inVerse = false;
 		if (inHeader) {	// this one should never happen, but just in case
@@ -204,74 +209,87 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		headerType = "book";
 		lastTitle = "";
 		text = "";
+
+		return true;
 	}
-	else if ((((!strcmp(token.getName(), "div")) && (!token.isEndTag()) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "chapter"))) || ((!strcmp(token.getName(), "chapter")) && (!token.isEndTag() || (token.getAttribute("eID"))) && (token.getAttribute("osisID")))) {
-        	inVerse = false;
-		if (inHeader) {
-//			cout << "HEADING ";
-			writeEntry(*currentVerse, text);
-			inHeader = false;
-		}
 
-		*currentVerse = token.getAttribute("osisID");
-		currentVerse->Verse(0);
-		inHeader = true;
-		headerType = "chap";
-		lastTitle = "";
-		text = "";
-	}
-	else if ((!strcmp(token.getName(), "verse")) && (!token.isEndTag() && !(token.getAttribute("eID")))) {
-		inVerse = true;
-		if (inHeader) {
-			//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
-			const char* chapterTagEnd = strchr(text.c_str(), '>');
-			const char* titleTagStart = strstr(text.c_str(), "<title");
 
-			if (chapterTagEnd+1 == titleTagStart) {
-				const char* titleTagEnd = strstr(text.c_str(), "</title>");
-				while (strstr(titleTagEnd+8, "</title>")) {
-					titleTagEnd = strstr(titleTagEnd+8, "</title>");
-				}
+	// START TAG WITH OSIS ID
+	else if ((!token.isEndTag()) && (!token.getAttribute("eID")) && (token.getAttribute("osisID")))
 
-				
-				const char* textEnd = text.c_str() + text.length();
-				if (titleTagEnd+8 == textEnd) {
-					text.setSize(chapterTagEnd+1-text.c_str()); //only insert the <chapter...> part
-				}
+		// CHAPTER START
+		if (((!strcmp(token.getName(), "div")) && (!strcmp(token.getAttribute("type"), "chapter")))
+				|| (!strcmp(token.getName(), "chapter"))
+				) {
+			inVerse = false;
+			if (inHeader) {
+	//			cout << "HEADING ";
+				writeEntry(*currentVerse, text);
+				inHeader = false;
 			}
-			
-// 			cout << "HEADING "<< text.c_str() << endl;
-			writeEntry(*currentVerse, text);
-			
+
+			*currentVerse = token.getAttribute("osisID");
+			currentVerse->Verse(0);
+			inHeader = true;
+			headerType = "chap";
+			lastTitle = "";
 			text = "";
-			inHeader = false;
+
+			return true;
 		}
 
-		string str = token.getAttribute("osisID");
-                char *subverseBuf = new char[str.length()+1];
-                strcpy(subverseBuf, str.c_str());
-		str = deleteSubverses(subverseBuf);
-                delete []subverseBuf;
+		// VERSE START
+		else if (!strcmp(token.getName(), "verse")) {
+			inVerse = true;
+			if (inHeader) {
+				//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
+				const char* chapterTagEnd = strchr(text.c_str(), '>');
+				const char* titleTagStart = strstr(text.c_str(), "<title");
 
-		*currentVerse = str.c_str();
+				if (chapterTagEnd+1 == titleTagStart) {
+					const char* titleTagEnd = strstr(text.c_str(), "</title>");
+					while (strstr(titleTagEnd+8, "</title>")) {
+						titleTagEnd = strstr(titleTagEnd+8, "</title>");
+					}
 
-		int pos = 0;
-		while ((pos = str.find(' ', pos)) != string::npos) {
-			str.replace(pos, 1, ";");
+					
+					const char* textEnd = text.c_str() + text.length();
+					if (titleTagEnd+8 == textEnd) {
+						text.setSize(chapterTagEnd+1-text.c_str()); //only insert the <chapter...> part
+					}
+				}
+				
+	// 			cout << "HEADING "<< text.c_str() << endl;
+				writeEntry(*currentVerse, text);
+			
+				text = "";
+				inHeader = false;
+			}
+
+			char *subverseBuf = 0;
+			stdstr(&subverseBuf, token.getAttribute("osisID"));
+			deleteSubverses(subverseBuf);
+			*currentVerse = subverseBuf;
+
+		char *pos = 0;
+		while ((pos = strchr(pos, ' '))) {
+			*pos = ';';
 		}
 
 		//cout << "set the list\n" << token.getAttribute("osisID");
-		lastVerseIDs = currentVerse->ParseVerseList(str.c_str());
+		lastVerseIDs = currentVerse->ParseVerseList(subverseBuf);
 //		if (lastVerseIDs.Count() > 1)
 //			cout << "count is" << lastVerseIDs.Count();
 
 		if (lastVerseIDs.Count())
 			*currentVerse = lastVerseIDs.getElement(0)->getText();
 
-		text.append( token );
+//		text.append(token);
 
 		return true;
 	}
+
+	// VERSE END
 	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag() || (token.getAttribute("eID")))) {
         	inVerse = false;
 		if (lastTitle.length()) {
@@ -328,7 +346,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		text = "";
 		return true;
 	}
-        else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
+	else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
      
 // we really should decide how to handle end tags /e.g. of a chapter). There's no way for frontends to
 // see to what OSIS tag the end tag (which is added to the verse text!) belongs. It mixes up the rendering as a result 
@@ -402,7 +420,7 @@ int main(int argc, char **argv) {
 				// take this isalpha if out to check for bugs in text
 				if ((isalpha(token[1])) || (isalpha(token[2]))) {
 					if (!handleToken(text, token.c_str())) {
-						text.append( token );
+						text.append(token);
 					}
 				}
 				continue;

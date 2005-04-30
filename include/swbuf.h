@@ -228,27 +228,32 @@ public:
 	/** 
 	* SWBuf::insert - inserts the given string at position into this string
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
-	* @param str Insert this.
+	* @param str string to be inserted
+	* @param start start from this position in the string to be inserted
 	* @param max Insert only max chars.
 	*/
-	void insert(unsigned long pos, const char* str, signed long max = -1 );
+	void insert(unsigned long pos, const char* str, unsigned long start = 0, signed long max = -1);
+
 	/** 
 	* SWBuf::insert - inserts the given string at position into this string
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
-	* @param str Insert this.
+	* @param str string to be inserted
+	* @param start start from this position in the string to be inserted
 	* @param max Insert only max chars.
 	*/
-	void insert(unsigned long pos, const SWBuf &str, signed long max = -1 ) {
-		insert(pos, str.c_str(), max);
+	inline void insert(unsigned long pos, const SWBuf &str, unsigned long start = 0, signed long max = -1) {
+		insert(pos, str.c_str(), start, max);
 	};
+
 	/** 
 	* SWBuf::insert - inserts the given character at position into this string
 	* @param pos The position where to insert. pos=0 inserts at the beginning, pos=1 after the first char, etc. Using pos=length() is the same as calling append(s)
 	* @param c Insert this.
 	*/
-	void insert(unsigned long pos, char c) {
+	inline void insert(unsigned long pos, char c) {
 		insert(pos, SWBuf(c));
 	}
+
 	/** SWBuf::getRawData
 	*
 	* @warning be careful! Probably setSize needs to be called in conjunction before and maybe after

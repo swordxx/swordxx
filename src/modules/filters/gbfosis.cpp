@@ -253,27 +253,30 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			}
 
 			// Morphology
-			else if (*token == 'W' && token[1] == 'T' && (token[2] == 'G' || token[2] == 'H')) {	// Strongs
-				value = token+2;
+			else if (*token == 'W' && token[1] == 'T') {
+				if (token[2] == 'G' || token[2] == 'H') {	// Strongs
+					value = token+2;
+				}
+				else value = token+1;
 				
 				if (!strncmp(wordStart, "<w ", 3)) {
 					const char *attStart = strstr(wordStart, "morph");
 					if (attStart) { //existing morph attribute, append this one to it
 						attStart += 7;
 						buf = "";
-						buf.appendFormatted("%s:%s ", "strongsMorph", value.c_str());
+						buf.appendFormatted("%s:%s ", "robinson", value.c_str());
 					}
 					else {
 						attStart = wordStart + 3;
 						buf = "";
-						buf.appendFormatted("morph=\"%s:%s\" ", "strongsMorph", value.c_str());
+						buf.appendFormatted("morph=\"%s:%s\" ", "robinson", value.c_str());
 					}
 					
 					text.insert(attStart - text.c_str(), buf); //hack, we have to
 				}
 				else { //no existing <w> attribute fond
 					buf = "";
-					buf.appendFormatted("<w morph=\"%s:%s\">", "strongsMorph", value.c_str());
+					buf.appendFormatted("<w morph=\"%s:%s\">", "robinson", value.c_str());
 					
 					text.insert(wordStart - text.c_str(), buf);
 					

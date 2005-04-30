@@ -1,6 +1,6 @@
 #!/bin/sh
 REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
-SWORDVER=`grep "define SWORDVER" ../include/swversion.h |cut -f2 -d"\""`
+SWORDVER=`grep "define VERSI" ../include/config.h |cut -f2 -d"\""`
 
 if test `echo $REV` == `echo $SWORDVER`; then 
 	chmod +x *
@@ -10,7 +10,7 @@ if test `echo $REV` == `echo $SWORDVER`; then
 	cd ..; ./autogen.sh
 	cd ..; tar -v -c -p -s -z --exclude sword-$REV/bin -X sword-$REV/modlist -f sword-$REV.tar.gz sword-$REV/*
 else
-	echo $"Directory version is $REV, but swversion.h has $SWORDVER"
+	echo $"Directory version is $REV, but config.h has $SWORDVER"
 	exit 1
 
 fi

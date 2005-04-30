@@ -70,7 +70,7 @@ public:
 		for (int i = 0; i < 5000; ++i) {
 			t.insert(0, "a");
 			t.insert(1, "b");
-			t.insert(2, "ccccccc", 1); //only one c
+			t.insert(2, "ccccccc", 0, 1); //only one c
 		}		
 		CPPUNIT_ASSERT( t.length() == 3*5000+3 );
 		
