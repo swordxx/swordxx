@@ -47,37 +47,51 @@ class SWDLLEXPORT SWBuf {
 	static char *nullStr;
 	static char junkBuf[JUNKBUFSIZE];
 
-	inline void assureMore(signed long pastEnd) {
+	inline void assureMore(size_t pastEnd) {
 		if (endAlloc-end < pastEnd) {
-			long newsize = (end-buf)+pastEnd;
-			allocSize = newsize + 128;
-			long size = (end - buf);
-			buf = (char *)((buf) ? realloc(buf, allocSize) : malloc(allocSize));
-			end = (buf + size);
-			*end = 0;
-			endAlloc = buf + allocSize-1;
-		}
-	}
-	inline void assureSize(unsigned long newsize) {
-		if (newsize > allocSize) {
-			allocSize = newsize + 128;
-			long size = (end - buf);
-			buf = (char *)((buf) ? realloc(buf, allocSize) : malloc(allocSize));
-			end = (buf + size);
-			*end = 0;
-			endAlloc = buf + allocSize-1;
+			assureSize(allocSize + pastEnd);
 		}
 	}
 
-	void init(unsigned long initSize);
+	inline void assureSize(size_t checkSize) {
+		if (checkSize > allocSize) {
+			long size = (end - buf);
+			checkSize += 128;
+			buf = (char *)((allocSize) ? realloc(buf, checkSize) : malloc(checkSize));
+			allocSize = checkSize;
+			end = (buf + size);
+			*end = 0;
+			endAlloc = buf + allocSize - 1;
+		}
+	}
+
+	inline void init(size_t initSize) {
+		fillByte = ' ';
+		allocSize = 0;
+		buf = nullStr;
+		end = buf;
+		endAlloc = buf;
+		if (initSize)
+			assureSize(initSize);
+	}
+
 
 public:
+
+	/******************************************************************************
+	* SWBuf Constructor - Creates an empty SWBuf object
+	*
+	*/
+	inline SWBuf() {
+		init(0);
+	}
+
 	/**
-	* SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
+	* SWBuf Constructor - Creates an SWBuf initialized
  	* 		to a value from a const char *
  	*
  	*/
-	SWBuf(const char *initVal = 0, unsigned long initSize = 0);
+	SWBuf(const char *initVal, unsigned long initSize = 0);
 //	SWBuf(unsigned long initSize);
 
 	/**
@@ -93,6 +107,15 @@ public:
 	*
 	*/
 	SWBuf(const SWBuf &other, unsigned long initSize = 0);
+
+	/******************************************************************************
+	* SWBuf Destructor - Cleans up instance of SWBuf
+	*/
+	inline ~SWBuf() {
+		if ((buf) && (buf != nullStr))
+			free(buf);
+	}
+
 	/**
 	* SWBuf::setFillByte - Set the fillByte character
 	*
@@ -100,17 +123,13 @@ public:
 	*   The memory will be filled with this character. \see setSize() \see resize()
  	*/
 	inline void setFillByte(char ch) { fillByte = ch; }
+
 	/**
 	* SWBuf::getFillByte - Get the fillByte character
 	*
 	* @return The character used for filling memory. \see setFillByte.
  	*/
 	inline char getFillByte() { return fillByte; }
-
-	/**
-	* SWBuf Destructor - Cleans up instance of SWBuf
- 	*/
-	virtual ~SWBuf();
 
 	/**
 	* @return a pointer to the buffer content (null-terminated string)
@@ -121,8 +140,7 @@ public:
 	*	@param pos The position of the requested character.
 	* @return The character at the specified position
 	*/
-	inline char &charAt(unsigned long pos) { return ((pos <= (unsigned long)(end - buf)) ? buf[pos] : nullStr[0]); }
-//	inline char &charAt(unsigned int pos) { return ((buf+pos)<=end) ? buf[pos] : nullStr[0]; }
+	inline char &charAt(unsigned long pos) { return ((pos <= (unsigned long)(end - buf)) ? buf[pos] : ((*junkBuf=0),*junkBuf)); }
 
 	/** 
 	* @return size() and length() return only the number of characters of the string.
@@ -137,18 +155,37 @@ public:
 	inline unsigned long length() const { return end - buf; }
 
 	/**
- 	* SWBuf::set - sets this buf to a new value.
-	* If the allocated memory is bigger than the new string, it will NOT be resized.
-	* @param newVal the value to set this buffer to. 
- 	*/
-	void set(const char *newVal);
-
-	/**
  	* SWBuf::set - sets this buf to a new value
 	* If the allocated memory is bigger than the new string, it will NOT be resized.
 	* @param newVal the value to set this buffer to. 
  	*/
-	void set(const SWBuf &newVal);
+	inline void set(const SWBuf &newVal) {
+		unsigned long len = newVal.length() + 1;
+		assureSize(len);
+//		const char *n = newVal.c_str();
+//		for (end = buf;len;len--) *end++ = *n++;
+		memcpy(buf, newVal.c_str(), len);
+		end = buf + (len - 1);
+	}
+
+	/**
+ 	* SWBuf::set - sets this buf to a new value.
+	* If the allocated memory is bigger than the new string, it will NOT be resized.
+	* @param newVal the value to set this buffer to. 
+ 	*/
+	inline void set(const char *newVal) {
+		if (newVal) {
+			unsigned long len = strlen(newVal) + 1;
+			assureSize(len);
+			memcpy(buf, newVal, len);
+			end = buf + (len - 1);
+		}
+		else {
+			assureSize(1);
+			end = buf;
+			*end = 0;
+		}
+	}
 
 	/**
  	* SWBuf::setFormatted - sets this buf to a formatted string.

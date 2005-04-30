@@ -1,13 +1,13 @@
 #include <time.h>
 #include <iostream>
 
-#define BASEI 256000000L
+#define BASEI 25600000L
 
-#include <swbuf.h>
-typedef sword::SWBuf StringType;
+//#include <swbuf.h>
+//typedef sword::SWBuf StringType;
 
-//#include <string>
-//typedef std::string StringType;
+#include <string>
+typedef std::string StringType;
 
 using std::cout;
 using std::cerr;
@@ -17,6 +17,7 @@ void markTime() {
 	static clock_t last = start;
 	clock_t current = clock();
 	cerr << ((float)(current - last)/CLOCKS_PER_SEC) << " / " << ((float)(current - start)/CLOCKS_PER_SEC) << " (Seconds Delta / Seconds Total)\n";
+	cerr.flush();
 	last = current;
 }
 
@@ -71,7 +72,7 @@ void ctorAssignTest() {
 	}
 	for (unsigned long i = (BASEI); i; i--) {
 		StringType s2;
-		s2 = s;
+		s2 = s.c_str();
 		s2.c_str();	// keep us from being optimized out
 	}
 	cerr << "\nEND: constructor and assign test -------\n";
@@ -131,18 +132,18 @@ int main(int argc, char **argv) {
 //	y.append(y.c_str(),5);
 //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles!hello): (" << y << ")\n";
 
-	markTime();
-	appendChTest();
-	markTime();
-	appendStringTest();
-	markTime();
-	subscriptTest();
+//	markTime();
+//	appendChTest();
+//	markTime();
+//	appendStringTest();
+//	markTime();
+//	subscriptTest();
 	markTime();
 	ctorAssignTest();
 	markTime();
- 	compareTest();
-	markTime();
-	insertStringTest();
-	markTime();
+ //	compareTest();
+//	markTime();
+//	insertStringTest();
+//	markTime();
 }
 

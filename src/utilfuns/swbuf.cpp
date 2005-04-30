@@ -37,7 +37,8 @@ char SWBuf::junkBuf[JUNKBUFSIZE];
 */
 SWBuf::SWBuf(const char *initVal, unsigned long initSize) {
 	init(initSize);
-	set(initVal);
+	if (initVal)
+		set(initVal);
 }
 
 /******************************************************************************
@@ -56,13 +57,10 @@ SWBuf::SWBuf(const SWBuf &other, unsigned long initSize) {
 *
 */
 SWBuf::SWBuf(char initVal, unsigned long initSize) {
-	init(initSize);
-
-	allocSize = 15;
-	buf = (char *)calloc(allocSize, 1);
+	init(initSize+1);
 	*buf = initVal;
 	end = buf+1;
-	endAlloc = buf + allocSize-1;
+	*end = 0;
 }
 
 /*
@@ -72,52 +70,6 @@ SWBuf::SWBuf(unsigned long initSize) {
 }
 */
 
-
-void SWBuf::init(unsigned long initSize) {
-	fillByte = ' ';
-	allocSize = 0;
-	endAlloc = 0;
-	buf = 0;
-	end = 0;
-	if (initSize)
-		assureSize(initSize);
-}
-
-/******************************************************************************
-* SWBuf Destructor - Cleans up instance of SWBuf
-*/
-SWBuf::~SWBuf() {
-	if (buf)
-		free(buf);
-}
-
-/******************************************************************************
-* SWBuf::set - sets this buf to a new value
-*/
-void SWBuf::set(const char *newVal) {
-	if (newVal) {
-		unsigned long len = strlen(newVal) + 1;
-		assureSize(len);
-		memcpy(buf, newVal, len);
-		end = buf + (len - 1);
-	}
-	else {
-		assureSize(1);
-		end = buf;
-		*end = 0;
-	}
-}
-
-
-/******************************************************************************
-* SWBuf::set - sets this buf to a new value
-*/
-void SWBuf::set(const SWBuf &newVal) {
-	unsigned long len = newVal.length() + 1;
-	assureSize(len);
-	memcpy(buf, newVal.c_str(), len);
-	end = buf + (len-1);
-}
 
 /******************************************************************************
 * SWBuf::setFormatted - sets this buf to a formatted string
