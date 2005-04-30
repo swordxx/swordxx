@@ -1,7 +1,7 @@
 #include <time.h>
 #include <iostream>
 
-#define BASEI 25600000L
+#define BASEI 102400000L
 
 //#include <swbuf.h>
 //typedef sword::SWBuf StringType;
@@ -70,11 +70,10 @@ void ctorAssignTest() {
 	for (int j = 0; j < 100; j++) {
 		s += "0123456789";
 	}
-	for (unsigned long i = (BASEI); i; i--) {
+	for (unsigned long i = (BASEI/8); i; i--) {
 		StringType s2;
 		s2 = s;
-		s2.c_str();	// keep us from being optimized out
-//		s2[0] = '0';	// keep us from being optimized out
+		s2[0] = '0';	// keep defeat copy on write optimizations
 	}
 	cerr << "\nEND: constructor and assign test -------\n";
 	cerr.flush();
@@ -85,7 +84,7 @@ void compareTest() {
 	cerr.flush();
 	StringType first =  "firsttestAfirst";
 	StringType second = "firsttestBsecond";
-	for (unsigned long i = BASEI/1.5; i; i--) {
+	for (unsigned long i = (unsigned long)(BASEI/1.5); i; i--) {
 		if (first != second)
 			if (first <= second)
 				if (first > second);
@@ -133,18 +132,18 @@ int main(int argc, char **argv) {
 //	y.append(y.c_str(),5);
 //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles!hello): (" << y << ")\n";
 
-//	markTime();
-//	appendChTest();
-//	markTime();
-//	appendStringTest();
-//	markTime();
-//	subscriptTest();
+	markTime();
+	appendChTest();
+	markTime();
+	appendStringTest();
+	markTime();
+	subscriptTest();
 	markTime();
 	ctorAssignTest();
 	markTime();
- //	compareTest();
-//	markTime();
-//	insertStringTest();
-//	markTime();
+	compareTest();
+	markTime();
+	insertStringTest();
+	markTime();
 }
 
