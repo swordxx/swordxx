@@ -72,8 +72,9 @@ void ctorAssignTest() {
 	}
 	for (unsigned long i = (BASEI); i; i--) {
 		StringType s2;
-		s2 = s.c_str();
+		s2 = s;
 		s2.c_str();	// keep us from being optimized out
+//		s2[0] = '0';	// keep us from being optimized out
 	}
 	cerr << "\nEND: constructor and assign test -------\n";
 	cerr.flush();
