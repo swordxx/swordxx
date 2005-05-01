@@ -5,7 +5,7 @@
 # Version change: Change line 8 only !
 # Change it immediately after a release
 
-AC_INIT(sword, 1.5.8, sword-bugs@crosswire.org)
+AC_INIT(sword, 1.5.7.102, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
 AC_REVISION($Revision: 1.45 $)
@@ -272,9 +272,6 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile \
-	utilities/Makefile examples/Makefile \
-	examples/cmdline/Makefile \
-	utilities/diatheke/Makefile icu/Makefile sword.pc sword.spec)
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile icu/Makefile sword.pc sword.spec)
 AC_OUTPUT
 

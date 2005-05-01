@@ -94,14 +94,14 @@ clean-generic:
 	-rm -f sword.conf
 endif
 
-noinst_PROGRAMS = testlib
-testlib_SOURCES = testlib.cpp
+noinst_PROGRAMS = buildtest
+buildtest_SOURCES = buildtest.cpp
 
 if ICU
 iculibs = -licui18n -licuuc
 endif
 
-testlib_LDADD = $(top_builddir)/lib/libsword.la
+buildtest_LDADD = $(top_builddir)/lib/libsword.la
 
 include locales.d/Makefile.am
 include samples/Makefile.am

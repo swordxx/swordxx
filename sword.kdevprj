@@ -33,7 +33,7 @@ Quellen=*.cpp,*.c,*.cc,*.C,*.cxx,*.ec,*.ecpp,*.lxx,*.l++,*.ll,*.l
 groups=Header,Quellen,Benutzerschnittstelle,Andere
 
 [Makefile.am]
-files=sword.kdevprj,testlib.cpp
+files=sword.kdevprj,buildtest.cpp
 sub_dirs=sword,include,src,tests
 type=static_library
 
@@ -1844,7 +1844,7 @@ type=normal
 sub_dirs=
 type=normal
 
-[testlib.cpp]
+[buildtest.cpp]
 dist=true
 install=false
 install_location=

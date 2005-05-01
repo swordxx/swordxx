@@ -15,7 +15,7 @@ UNIX developers	You can try a './configure' (or optionally './usrinst.sh'
 		(sword/apps), in the tree.  The apps each have their own make system,
 		so look for a ./configure or a README.
 
-		./testlib.cpp compiles to the executable 'testlib' as a test to
+		./buildtest.cpp compiles to the executable 'buildtest' as a test to
 		see if the libs have compiled and can be linked against successfully.
 		This is NOT the final target of the build, nor does anything useful.
 			:)
