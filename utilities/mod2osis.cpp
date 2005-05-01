@@ -186,17 +186,8 @@ int main(int argc, char **argv)
 			delete [] buf;
 			openchap = true;
 		}
-		/*
-		char *text = inModule->getRawEntry();
-		int len = (inModule->getEntrySize() + 1) * 15;
-		buf = new char [ len ];
-		memset(buf, 0, len);
-		memcpy(buf, inModule->getRawEntry(), inModule->getEntrySize());
-		filter.ProcessText(buf,  len - 3, vkey, inModule);
-		cout << buf << endl;
-		*/
-//		cout << "<verse osisID=\"" << vkey->getOSISRef() << "\">" << inModule->RenderText() << "</verse>" << endl;
-		cout << inModule->RenderText() << endl;
+		SWBuf verseText = inModule->RenderText();
+		cout << verseText.c_str() << endl;
 		lastChap = vkey->Chapter();
 		lastBook = vkey->Book();
 		lastTest = vkey->Testament();

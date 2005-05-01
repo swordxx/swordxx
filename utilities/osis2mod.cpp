@@ -12,6 +12,7 @@
 #endif
 
 #include <utilstr.h>
+#include <filemgr.h>
 #include <swmgr.h>
 #include <rawtext.h>
 #include <iostream>
@@ -32,53 +33,9 @@ using namespace std;
 RawText *module;
 VerseKey *currentVerse = 0;
 
-char readline(int fd, char **buf) {
-	char ch;
-	if (*buf)
-		delete [] *buf;
-	*buf = 0;
-	int len;
 
-
-	long index = lseek(fd, 0, SEEK_CUR);
-	// clean up any preceding white space
-	while ((len = read(fd, &ch, 1)) == 1) {
-		if ((ch != 13) && (ch != ' ') && (ch != '\t'))
-			break;
-		else index++;
-	}
-
-
-	while (ch != 10) {
-        if ((len = read(fd, &ch, 1)) != 1)
-			break;
-	}
-	
-	int size = (lseek(fd, 0, SEEK_CUR) - index) - 1;
-
-	*buf = new char [ size + 1 ];
-
-	if (size > 0) {
-		lseek(fd, index, SEEK_SET);
-		read(fd, *buf, size);
-		read(fd, &ch, 1);   //pop terminating char
-		(*buf)[size] = 0;
-
-		// clean up any trailing junk on buf
-		for (char *it = *buf+(strlen(*buf)-1); it > *buf; it--) {
-			if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t'))
-				break;
-			else *it = 0;
-		}
-	}
-	else **buf = 0;
-	return !len;
-}
-
-
-char* deleteSubverses(char *buf) {
-	// remove subverse elements from osisIDs
-	// (this is a hack and should be handled better with VerseKey2)
+// remove subverse elements from osisIDs
+void deleteSubverses(SWBuf &buf) {
 	for (int i = 0; buf[i]; i++) {
 		if (buf[i] == '!') {
 			while (buf[i] && buf[i] != ' ') {
@@ -88,7 +45,6 @@ char* deleteSubverses(char *buf) {
 			i--;
 		}
 	}
-	return buf;
 }
 
 
@@ -108,6 +64,7 @@ bool isKJVRef(const char *buf) {
 	else return true;	// no check if we're a heading... Probably bad.
 }
 
+
 void makeKJVRef(VerseKey &key) {
 	cout << "re-versified " << key;
 //        cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
@@ -120,6 +77,7 @@ void makeKJVRef(VerseKey &key) {
         }
        	cout << "\tas " << key << endl;
 }
+
 
 void writeEntry(VerseKey &key, SWBuf &text, bool suppressOutput = false) {
 //	cout << "Verse: " << key << "\n";
@@ -144,6 +102,7 @@ void writeEntry(VerseKey &key, SWBuf &text, bool suppressOutput = false) {
 
 	key = saveKey;
 }
+
 
 void linkToEntry(VerseKey& dest) {
 //	cout << "Verse: " << key << "\n";
@@ -190,35 +149,38 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		return false; //don't add </title> to the text itself
 	}
 
-	// BOOK START
-	if (((!strcmp(token.getName(), "div")) && (!token.isEndTag() && !(token.getAttribute("eID"))) && (token.getAttribute("osisID"))) && (!strcmp(token.getAttribute("type"), "book"))) {
-        	inVerse = false;
-		if (inHeader) {	// this one should never happen, but just in case
-//			cout << "HEADING ";
-			currentVerse->Testament(0);
-			currentVerse->Book(0);
+
+
+//-- START TAG WITH OSIS ID -------------------------------------------------------------------------
+
+	if ((!token.isEndTag()) && (!token.getAttribute("eID")) && (token.getAttribute("osisID"))) {
+
+
+		// BOOK START
+		if ((!strcmp(token.getName(), "div")) && (!strcmp(token.getAttribute("type"), "book"))) {
+			inVerse = false;
+			if (inHeader) {	// this one should never happen, but just in case
+	//			cout << "HEADING ";
+				currentVerse->Testament(0);
+				currentVerse->Book(0);
+				currentVerse->Chapter(0);
+				currentVerse->Verse(0);
+				writeEntry(*currentVerse, text);
+				inHeader = false;
+			}
+			*currentVerse = token.getAttribute("osisID");
 			currentVerse->Chapter(0);
 			currentVerse->Verse(0);
-			writeEntry(*currentVerse, text);
-			inHeader = false;
+			inHeader = true;
+			headerType = "book";
+			lastTitle = "";
+			text = "";
+
+			return true;
 		}
-		*currentVerse = token.getAttribute("osisID");
-		currentVerse->Chapter(0);
-		currentVerse->Verse(0);
-		inHeader = true;
-		headerType = "book";
-		lastTitle = "";
-		text = "";
-
-		return true;
-	}
-
-
-	// START TAG WITH OSIS ID
-	else if ((!token.isEndTag()) && (!token.getAttribute("eID")) && (token.getAttribute("osisID")))
 
 		// CHAPTER START
-		if (((!strcmp(token.getName(), "div")) && (!strcmp(token.getAttribute("type"), "chapter")))
+		else if (((!strcmp(token.getName(), "div")) && (!strcmp(token.getAttribute("type"), "chapter")))
 				|| (!strcmp(token.getName(), "chapter"))
 				) {
 			inVerse = false;
@@ -266,98 +228,112 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				inHeader = false;
 			}
 
-			char *subverseBuf = 0;
-			stdstr(&subverseBuf, token.getAttribute("osisID"));
-			deleteSubverses(subverseBuf);
-			*currentVerse = subverseBuf;
+			SWBuf keyVal = token.getAttribute("osisID");
+			deleteSubverses(keyVal);
 
-		char *pos = 0;
-		while ((pos = strchr(pos, ' '))) {
-			*pos = ';';
+			// turn "Mat.1.1  Mat.1.2" into "Mat.1.1; Mat.1.2"
+			bool skipSpace = false;
+			for (int i = 0; keyVal[i]; i++) {
+				if (keyVal[i] == ' ') {
+					if (!skipSpace) {
+						keyVal[i] = ';';
+						skipSpace = true;
+					}
+				}
+				else skipSpace = false;
+			}
+
+			lastVerseIDs = currentVerse->ParseVerseList(keyVal);
+			if (lastVerseIDs.Count())
+				*currentVerse = lastVerseIDs.getElement(0)->getText();
+
+			return true;
 		}
-
-		//cout << "set the list\n" << token.getAttribute("osisID");
-		lastVerseIDs = currentVerse->ParseVerseList(subverseBuf);
-//		if (lastVerseIDs.Count() > 1)
-//			cout << "count is" << lastVerseIDs.Count();
-
-		if (lastVerseIDs.Count())
-			*currentVerse = lastVerseIDs.getElement(0)->getText();
-
-//		text.append(token);
-
-		return true;
 	}
 
-	// VERSE END
-	else if ((!strcmp(token.getName(), "verse")) && (token.isEndTag() || (token.getAttribute("eID")))) {
-        	inVerse = false;
-		if (lastTitle.length()) {
-			const char* end = strchr(lastTitle, '>');
-// 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
 
-			SWBuf titleTagText;
-			titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
-// 			printf("tagText: %s\n", titleTagText.c_str());
+//-- END TAG ---------------------------------------------------------------------------------------------
 
-			XMLTag titleTag(titleTagText);
-			titleTag.setAttribute("type", "section");
-			titleTag.setAttribute("subtype", "x-preverse");
+	else if ((token.isEndTag()) || (token.getAttribute("eID"))) {
 
-			//we insert the title into the text again - make sure to remove the old title text
-			const char* pos = strstr(text, lastTitle);
-			if (pos) {
-				SWBuf temp;
-				temp.append(text, pos-text.c_str());
-				temp.append(pos+lastTitle.length());
-				text = temp;
-			}
+		// VERSE END
+		if (!strcmp(token.getName(), "verse")) {
+			inVerse = false;
+			if (lastTitle.length()) {
+				const char* end = strchr(lastTitle, '>');
+	// 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
+
+				SWBuf titleTagText;
+				titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
+	// 			printf("tagText: %s\n", titleTagText.c_str());
+
+				XMLTag titleTag(titleTagText);
+				titleTag.setAttribute("type", "section");
+				titleTag.setAttribute("subtype", "x-preverse");
+
+				//we insert the title into the text again - make sure to remove the old title text
+				const char* pos = strstr(text, lastTitle);
+				if (pos) {
+					SWBuf temp;
+					temp.append(text, pos-text.c_str());
+					temp.append(pos+lastTitle.length());
+					text = temp;
+				}
 			
-			//if a title was already inserted at the beginning insert this one after that first title
-			int titlePos = 0;
-			if (!strncmp(text.c_str(),"<title ",7)) {
-				const char* tmp = strstr(text.c_str(), "</title>");
-				if (tmp) {
-					titlePos = (tmp-text.c_str()) + 8;
+				//if a title was already inserted at the beginning insert this one after that first title
+				int titlePos = 0;
+				if (!strncmp(text.c_str(),"<title ",7)) {
+					const char* tmp = strstr(text.c_str(), "</title>");
+					if (tmp) {
+						titlePos = (tmp-text.c_str()) + 8;
+					}
+				}
+				text.insert(titlePos, end+1);
+				text.insert(titlePos, titleTag);
+			}
+	//		text += token;
+			writeEntry(*currentVerse, text);
+
+			// If we found an osisID like osisID="Gen.1.1 Gen.1.2 Gen.1.3" we have to link Gen.1.2 and Gen.1.3 to Gen.1.1
+			VerseKey dest = *currentVerse;
+			for (int i = 0; i < lastVerseIDs.Count(); ++i) {
+				VerseKey linkKey;
+				linkKey.AutoNormalize(0);
+				linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
+				linkKey.Persist(1);
+				linkKey = lastVerseIDs.getElement(i)->getText();
+
+				if (linkKey.Verse() != currentVerse->Verse() || linkKey.Chapter() != currentVerse->Chapter() || linkKey.Book() != currentVerse->Book() || linkKey.Testament() != currentVerse->Testament()) {
+					*currentVerse = linkKey;
+					linkToEntry(dest);
 				}
 			}
- 			text.insert(titlePos, end+1);
- 			text.insert(titlePos, titleTag);
+
+			lastTitle = "";
+			text = "";
+			return true;
 		}
-//		text += token;
-		writeEntry(*currentVerse, text);
-
-		// If we found an osisID like osisID="Gen.1.1 Gen.1.2 Gen.1.3" we have to link Gen.1.2 and Gen.1.3 to Gen.1.1
-		VerseKey dest = *currentVerse;
-		for (int i = 0; i < lastVerseIDs.Count(); ++i) {
-			VerseKey linkKey;
-			linkKey.AutoNormalize(0);
-			linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
-			linkKey.Persist(1);
-			linkKey = lastVerseIDs.getElement(i)->getText();
-
-			if (linkKey.Verse() != currentVerse->Verse() || linkKey.Chapter() != currentVerse->Chapter() || linkKey.Book() != currentVerse->Book() || linkKey.Testament() != currentVerse->Testament()) {
-				*currentVerse = linkKey;
-				linkToEntry(dest);
-			}
-		}
-
-		lastTitle = "";
-		text = "";
-		return true;
-	}
-	else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "div") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
+	
+		// OTHER MISC END TAGS WHEN !INVERSE
+		// we really should decide how to handle end tags /e.g. of a chapter). There's no way for frontends to
+		// see to what OSIS tag the end tag (which is added to the verse text!) belongs. It mixes up the rendering as a result 
+		// included /div for now (jansorg)
+		else if (!inVerse &&
+				(!strcmp(token.getName(), "p") ||
+				 !strcmp(token.getName(), "div") ||
+				 !strcmp(token.getName(), "q")  ||
+				 !strcmp(token.getName(), "l") ||
+				 !strcmp(token.getName(), "lg"))) {
      
-// we really should decide how to handle end tags /e.g. of a chapter). There's no way for frontends to
-// see to what OSIS tag the end tag (which is added to the verse text!) belongs. It mixes up the rendering as a result 
-// included /div for now (jansorg)
-//	else if (!inVerse && (token.isEndTag() || (token.getAttribute("eID"))) && (!strcmp(token.getName(), "p") || !strcmp(token.getName(), "q")  || !strcmp(token.getName(), "l") || !strcmp(token.getName(), "lg"))) {
 
-        	text.append( token );
-		writeEntry(*currentVerse, text, true);
-		text = "";
-                return true;
-        }
+			text.append(token);
+			writeEntry(*currentVerse, text, true);
+			text = "";
+
+			return true;
+
+		}
+	}
 	return false;
 }
 
@@ -368,7 +344,7 @@ int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
 	if (argc < 3) {
-		fprintf(stderr, "usage: %s <path/to/mod/files> <osisDoc> [0|1 - create module|augment]\n\n", argv[0]);
+		fprintf(stderr, "\nusage: %s <output/path> <osisDoc> [0 - create module (default)|1 - augment]\n\n", argv[0]);
 		exit(-1);
 	}
 
@@ -383,14 +359,14 @@ int main(int argc, char **argv) {
 	}
 
 	// Let's see if we can open our input file
-	int fd = open(argv[2], O_RDONLY|O_BINARY);
-	if (fd < 0) {
+	FileDesc *fd = FileMgr::getSystemFileMgr()->open(argv[2], O_RDONLY|O_BINARY);
+	if (fd->getFd() < 0) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[2]);
 		exit(-2);
 	}
 
 	// Do some initialization stuff
-	char *buffer = 0;
+	SWBuf buffer;
 	module = new RawText(argv[1]);	// open our datapath with our RawText driver.
 	currentVerse = new VerseKey();
 	currentVerse->AutoNormalize(0);
@@ -401,13 +377,13 @@ int main(int argc, char **argv) {
 
 	(*module) = TOP;
 
-	char *from;
+	const char *from;
 	SWBuf token;
 	SWBuf text;
 	bool intoken = false;
 
-	while (!readline(fd, &buffer)) {
-		for (from = buffer; *from; from++) {
+	while (FileMgr::getLine(fd, buffer)) {
+		for (from = buffer.c_str(); *from; from++) {
 			if (*from == '<') {
 				intoken = true;
 				token = "<";
@@ -427,16 +403,13 @@ int main(int argc, char **argv) {
 			}
 
 			if (intoken)
-				token.append( *from );
+				token.append(*from);
 			else	
-				text.append( *from );
+				text.append(*from);
 		}
 	}
-	// clear up our buffer that readline might have allocated
-	if (buffer)
-		delete [] buffer;
 	delete module;
 	delete currentVerse;
-	close(fd);
+	FileMgr::getSystemFileMgr()->close(fd);
 }
 
