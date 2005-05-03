@@ -48,7 +48,7 @@ class SWDLLEXPORT SWBuf {
 	static char junkBuf[JUNKBUFSIZE];
 
 	inline void assureMore(size_t pastEnd) {
-		if (endAlloc-end < pastEnd) {
+		if (size_t(endAlloc-end) < pastEnd) {
 			assureSize(allocSize + pastEnd);
 		}
 	}
