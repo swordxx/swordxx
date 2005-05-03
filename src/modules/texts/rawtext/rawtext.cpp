@@ -53,9 +53,9 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
 	for (int loop = 0; loop < 2; loop++) {
 		fastSearch[loop] = 0;
 		SWBuf fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat"));
-		if (!access(fastidxname.c_str(), 04)) {
+		if (FileMgr::existsFile(fastidxname.c_str())) {
 			fastidxname = (fname + ((loop)?"ntwords.idx":"otwords.idx"));
-			if (!access(fastidxname.c_str(), 04))
+			if (FileMgr::existsFile(fastidxname.c_str()))
 				fastSearch[loop] = new RawStr((fname + ((loop)?"ntwords":"otwords")).c_str());
 		}
 	}

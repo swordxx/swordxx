@@ -7,23 +7,23 @@
     <OBJFILES value="..\..\obj\versekey.obj ..\..\obj\strkey.obj ..\..\obj\swkey.obj 
       ..\..\obj\listkey.obj ..\..\obj\swmgr.obj ..\..\obj\localemgr.obj 
       ..\..\obj\swconfig.obj ..\..\obj\swlocale.obj ..\..\obj\filemgr.obj 
-      ..\..\obj\utilstr.obj ..\..\obj\utilconf.obj ..\..\obj\Greek2Greek.obj 
-      ..\..\obj\swlog.obj ..\..\obj\swdisp.obj ..\..\obj\swmodule.obj 
-      ..\..\obj\swcom.obj ..\..\obj\hrefcom.obj ..\..\obj\rawcom.obj 
-      ..\..\obj\rawfiles.obj ..\..\obj\lzsscomprs.obj ..\..\obj\rawstr.obj 
-      ..\..\obj\rawverse.obj ..\..\obj\sapphire.obj ..\..\obj\swcipher.obj 
-      ..\..\obj\swcomprs.obj ..\..\obj\thmlrtf.obj ..\..\obj\gbffootnotes.obj 
-      ..\..\obj\gbfhtml.obj ..\..\obj\gbfplain.obj ..\..\obj\gbfrtf.obj 
-      ..\..\obj\gbfstrongs.obj ..\..\obj\gbfthml.obj 
-      ..\..\obj\plainfootnotes.obj ..\..\obj\plainhtml.obj ..\..\obj\rtfhtml.obj 
-      ..\..\obj\thmlgbf.obj ..\..\obj\thmlhtml.obj ..\..\obj\thmlplain.obj 
-      ..\..\obj\cipherfil.obj ..\..\obj\swld.obj ..\..\obj\rawld.obj 
-      ..\..\obj\swtext.obj ..\..\obj\rawtext.obj ..\..\obj\ztext.obj 
-      ..\..\obj\zverse.obj ..\..\obj\treekey.obj ..\..\obj\treekeyidx.obj 
-      ..\..\obj\rawstr4.obj ..\..\obj\zstr.obj ..\..\obj\swgenbook.obj 
-      ..\..\obj\rawgenbook.obj ..\..\obj\swfiltermgr.obj ..\..\obj\utf8utf16.obj 
-      ..\..\obj\gbfheadings.obj ..\..\obj\gbfhtmlhref.obj ..\..\obj\gbfmorph.obj 
-      ..\..\obj\latin1utf16.obj ..\..\obj\latin1utf8.obj ..\..\obj\scsuutf8.obj 
+      ..\..\obj\utilstr.obj ..\..\obj\Greek2Greek.obj ..\..\obj\swlog.obj 
+      ..\..\obj\swdisp.obj ..\..\obj\swmodule.obj ..\..\obj\swcom.obj 
+      ..\..\obj\hrefcom.obj ..\..\obj\rawcom.obj ..\..\obj\rawfiles.obj 
+      ..\..\obj\lzsscomprs.obj ..\..\obj\rawstr.obj ..\..\obj\rawverse.obj 
+      ..\..\obj\sapphire.obj ..\..\obj\swcipher.obj ..\..\obj\swcomprs.obj 
+      ..\..\obj\thmlrtf.obj ..\..\obj\gbffootnotes.obj ..\..\obj\gbfhtml.obj 
+      ..\..\obj\gbfplain.obj ..\..\obj\gbfrtf.obj ..\..\obj\gbfstrongs.obj 
+      ..\..\obj\gbfthml.obj ..\..\obj\plainfootnotes.obj ..\..\obj\plainhtml.obj 
+      ..\..\obj\rtfhtml.obj ..\..\obj\thmlgbf.obj ..\..\obj\thmlhtml.obj 
+      ..\..\obj\thmlplain.obj ..\..\obj\cipherfil.obj ..\..\obj\swld.obj 
+      ..\..\obj\rawld.obj ..\..\obj\swtext.obj ..\..\obj\rawtext.obj 
+      ..\..\obj\ztext.obj ..\..\obj\zverse.obj ..\..\obj\treekey.obj 
+      ..\..\obj\treekeyidx.obj ..\..\obj\rawstr4.obj ..\..\obj\zstr.obj 
+      ..\..\obj\swgenbook.obj ..\..\obj\rawgenbook.obj ..\..\obj\swfiltermgr.obj 
+      ..\..\obj\utf8utf16.obj ..\..\obj\gbfheadings.obj 
+      ..\..\obj\gbfhtmlhref.obj ..\..\obj\gbfmorph.obj ..\..\obj\latin1utf16.obj 
+      ..\..\obj\latin1utf8.obj ..\..\obj\scsuutf8.obj 
       ..\..\obj\swbasicfilter.obj ..\..\obj\thmlfootnotes.obj 
       ..\..\obj\thmlheadings.obj ..\..\obj\thmlhtmlhref.obj 
       ..\..\obj\thmllemma.obj ..\..\obj\thmlmorph.obj ..\..\obj\thmlscripref.obj 
@@ -52,7 +52,7 @@
       ..\..\obj\osislemma.obj ..\..\obj\osisredletterwords.obj 
       ..\..\obj\osishtmlhref.obj ..\..\obj\swsearchable.obj 
       ..\..\obj\osiswebif.obj ..\..\obj\osisosis.obj ..\..\obj\stringmgr.obj 
-      ..\..\obj\swversion.obj ..\..\obj\url.obj"/>
+      ..\..\obj\swversion.obj ..\..\obj\url.obj ..\..\obj\swobject.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -114,7 +114,6 @@
       <FILE FILENAME="..\..\src\mgr\swlocale.cpp" FORMNAME="" UNITNAME="swlocale" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\mgr\filemgr.cpp" FORMNAME="" UNITNAME="filemgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\utilstr.cpp" FORMNAME="" UNITNAME="utilstr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\utilfuns\utilconf.cpp" FORMNAME="" UNITNAME="utilconf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\Greek2Greek.cpp" FORMNAME="" UNITNAME="Greek2Greek" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\frontend\swlog.cpp" FORMNAME="" UNITNAME="swlog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\frontend\swdisp.cpp" FORMNAME="" UNITNAME="swdisp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -235,6 +234,7 @@
       <FILE FILENAME="..\..\src\mgr\stringmgr.cpp" FORMNAME="" UNITNAME="stringmgr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\swversion.cpp" FORMNAME="" UNITNAME="swversion" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\utilfuns\url.cpp" FORMNAME="" UNITNAME="url" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\utilfuns\swobject.cpp" FORMNAME="" UNITNAME="swobject" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
