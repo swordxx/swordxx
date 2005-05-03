@@ -96,8 +96,8 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 
 		entryBuf.setFillByte(0);
 		entryBuf.setSize(size);
-		lseek(bdtfd->getFd(), offset, SEEK_SET);
-		read(bdtfd->getFd(), entryBuf.getRawData(), size);
+		bdtfd->seek(offset, SEEK_SET);
+		bdtfd->read(entryBuf.getRawData(), size);
 
 		rawFilter(entryBuf, 0);	// hack, decipher
 		rawFilter(entryBuf, key);
@@ -115,7 +115,7 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 
 void RawGenBook::setEntry(const char *inbuf, long len) {
 
-	__u32 offset = archtosword32(lseek(bdtfd->getFd(), 0, SEEK_END));
+	__u32 offset = archtosword32(bdtfd->seek(0, SEEK_END));
 	__u32 size = 0;
 	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
 
@@ -124,7 +124,7 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 	if (!len)
 		len = strlen(inbuf);
 
-	write(bdtfd->getFd(), inbuf, len);
+	bdtfd->write(inbuf, len);
 
 	size = archtosword32(len);
 	memcpy(userData, &offset, 4);

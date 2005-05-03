@@ -74,7 +74,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					}
 					SWBuf lexName = "";
 					if ((!strncmp(lemma.c_str(), "x-Strongs:", 10)) || (!strncmp(lemma.c_str(), "strong:", 7))) {
-						char *num = strstr(lemma.c_str(), ":");
+						const char *num = strstr(lemma.c_str(), ":");
 						num++;
 						gh = isdigit(*num) ? 0:*num;
 						if (!gh) {

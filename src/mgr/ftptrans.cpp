@@ -9,6 +9,7 @@
 
 #include <fcntl.h>
 #include <dirent.h>
+#include <swlog.h>
 
 
 using std::vector;
@@ -46,14 +47,12 @@ vector<struct ftpparse> FTPTransport::getDirList(const char *dirURL) {
 
 	vector<struct ftpparse> dirList;
 	
-	fprintf(stderr, "FTPURLGetDir: getting dir %s\n", dirURL);
-
 	if (!getURL("dirlist", dirURL)) {
 		FileDesc *fd = FileMgr::getSystemFileMgr()->open("dirlist", FileMgr::RDONLY);
-		long size = lseek(fd->getFd(), 0, SEEK_END);
-		lseek(fd->getFd(), 0, SEEK_SET);
+		long size = fd->seek(0, SEEK_END);
+		fd->seek(0, SEEK_SET);
 		char *buf = new char [ size + 1 ];
-		read(fd->getFd(), buf, size);
+		fd->read(buf, size);
 		FileMgr::getSystemFileMgr()->close(fd);
 		char *start = buf;
 		char *end = start;
@@ -70,9 +69,9 @@ vector<struct ftpparse> FTPTransport::getDirList(const char *dirURL) {
 				else if ((*end != 10) && (*end != 13))
 					break;
 			}
-			fprintf(stderr, "FTPURLGetDir: parsing item %s(%d)\n", start, end-start);
+			SWLog::getSystemLog()->logWarning("FTPURLGetDir: parsing item %s(%d)\n", start, end-start);
 			int status = ftpparse(&item, start, end - start);
-			fprintf(stderr, "FTPURLGetDir: got item %s\n", item.name);
+			SWLog::getSystemLog()->logWarning("FTPURLGetDir: got item %s\n", item.name);
 			if (status)
 				dirList.push_back(item);
 			start = end;
@@ -80,7 +79,7 @@ vector<struct ftpparse> FTPTransport::getDirList(const char *dirURL) {
 	}
 	else
 	{
-		fprintf(stderr, "FTPURLGetDir: failed to get dir %s\n", dirURL);
+		SWLog::getSystemLog()->logWarning("FTPURLGetDir: failed to get dir %s\n", dirURL);
 	}
 	return dirList;
 }
@@ -91,11 +90,11 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 	int retVal = 0;
 	
 	SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/"; //dont forget the final slash
-	fprintf(stderr, "FTPCopy: getting dir %s\n", url.c_str());
+	SWLog::getSystemLog()->logWarning("FTPCopy: getting dir %s\n", url.c_str());
 	vector<struct ftpparse> dirList = getDirList(url.c_str());
 
 	if (!dirList.size()) {
-		fprintf(stderr, "FTPCopy: failed to read dir %s\n", url.c_str());
+		SWLog::getSystemLog()->logWarning("FTPCopy: failed to read dir %s\n", url.c_str());
 		return -1;
 	}
 				
@@ -120,7 +119,7 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 				SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/" + dirEntry.name; //dont forget the final slash
 				if (dirEntry.flagtrycwd != 1) {
 					if (getURL(buffer.c_str(), url.c_str())) {
-						fprintf(stderr, "FTPCopy: failed to get file %s\n", url.c_str());
+						SWLog::getSystemLog()->logWarning("FTPCopy: failed to get file %s\n", url.c_str());
 						return -2;
 					}
 					completedBytes += dirEntry.size;
@@ -128,7 +127,7 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 				else {
 					SWBuf subdir = (SWBuf)dir + "/" + dirEntry.name;
 					if (copyDirectory(urlPrefix, subdir, buffer.c_str(), suffix)) {
-						fprintf(stderr, "FTPCopy: failed to get file %s\n", subdir.c_str());
+						SWLog::getSystemLog()->logWarning("FTPCopy: failed to get file %s\n", subdir.c_str());
 						return -2;
 					}
 				}

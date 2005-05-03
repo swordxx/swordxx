@@ -69,11 +69,11 @@ SWBuf &RawFiles::getRawEntryBuf() {
 		entryBuf = "";
 		datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
 		if (datafile->getFd() > 0) {
-			size = lseek(datafile->getFd(), 0, SEEK_END);
+			size = datafile->seek(0, SEEK_END);
 			char *tmpBuf = new char [ size + 1 ];
 			memset(tmpBuf, 0, size + 1);
-			lseek(datafile->getFd(), 0, SEEK_SET);
-			read(datafile->getFd(), tmpBuf, size);
+			datafile->seek(0, SEEK_SET);
+			datafile->read(tmpBuf, size);
 			entryBuf = tmpBuf;
 			delete [] tmpBuf;
 //			preptext(entrybuf);
@@ -126,7 +126,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	}
 	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
 	if (datafile->getFd() > 0) {
-		write(datafile->getFd(), inbuf, len);
+		datafile->write(inbuf, len);
 	}
 	FileMgr::getSystemFileMgr()->close(datafile);
 	
@@ -218,13 +218,13 @@ char *RawFiles::getNextFilename() {
 
 	sprintf(incfile, "%s/incfile", path);
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
-	if (read(datafile->getFd(), &number, 4) != 4)
+	if (datafile->read(&number, 4) != 4)
 		number = 0;
 	number++;
 	FileMgr::getSystemFileMgr()->close(datafile);
 	
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-	write(datafile->getFd(), &number, 4);
+	datafile->write(&number, 4);
 	FileMgr::getSystemFileMgr()->close(datafile);
 	sprintf(incfile, "%.7ld", number-1);
 	return incfile;
@@ -239,7 +239,7 @@ char RawFiles::createModule (const char *path) {
 	sprintf(incfile, "%s/incfile", path);
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
     delete [] incfile;
-	write(datafile->getFd(), &zero, 4);
+	datafile->write(&zero, 4);
 	FileMgr::getSystemFileMgr()->close(datafile);
 
     return RawVerse::createModule (path);

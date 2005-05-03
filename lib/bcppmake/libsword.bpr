@@ -4,57 +4,84 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="..\libsword.lib"/>
-    <OBJFILES value="..\..\src\keys\versekey.obj ..\..\src\keys\strkey.obj 
-      ..\..\src\keys\swkey.obj ..\..\src\keys\listkey.obj 
-      ..\..\src\mgr\swmgr.obj ..\..\src\mgr\localemgr.obj 
-      ..\..\src\mgr\swconfig.obj ..\..\src\mgr\swlocale.obj 
-      ..\..\src\mgr\filemgr.obj ..\..\src\utilfuns\utilstr.obj 
-      ..\..\src\utilfuns\utilconf.obj ..\..\src\utilfuns\Greek2Greek.obj 
-      ..\..\src\frontend\swlog.obj ..\..\src\frontend\swdisp.obj 
-      ..\..\src\modules\swmodule.obj ..\..\src\modules\comments\swcom.obj 
+    <OBJFILES value="..\..\src\frontend\swdisp.obj ..\..\src\frontend\swlog.obj 
+      ..\..\src\keys\versekey.obj ..\..\src\keys\strkey.obj 
+      ..\..\src\keys\swkey.obj ..\..\src\keys\treekey.obj 
+      ..\..\src\keys\treekeyidx.obj ..\..\src\keys\listkey.obj 
+      ..\..\src\mgr\swsearchable.obj ..\..\src\mgr\encfiltmgr.obj 
+      ..\..\src\mgr\filemgr.obj ..\..\src\mgr\ftplibftpt.obj 
+      ..\..\src\mgr\ftptrans.obj ..\..\src\mgr\installmgr.obj 
+      ..\..\src\mgr\localemgr.obj ..\..\src\mgr\markupfiltmgr.obj 
+      ..\..\src\mgr\stringmgr.obj ..\..\src\mgr\swcacher.obj 
+      ..\..\src\mgr\swconfig.obj ..\..\src\mgr\swfiltermgr.obj 
+      ..\..\src\mgr\swlocale.obj ..\..\src\mgr\swmgr.obj 
+      ..\..\src\mgr\curlftpt.obj ..\..\src\utilfuns\utilxml.obj 
+      ..\..\src\utilfuns\roman.obj ..\..\src\utilfuns\swbuf.obj 
+      ..\..\src\utilfuns\swobject.obj ..\..\src\utilfuns\swunicod.obj 
+      ..\..\src\utilfuns\swversion.obj ..\..\src\utilfuns\url.obj 
+      ..\..\src\utilfuns\utilstr.obj ..\..\src\utilfuns\Greek2Greek.obj 
       ..\..\src\modules\comments\hrefcom\hrefcom.obj 
       ..\..\src\modules\comments\rawcom\rawcom.obj 
       ..\..\src\modules\comments\rawfiles\rawfiles.obj 
+      ..\..\src\modules\comments\zcom\zcom.obj 
+      ..\..\src\modules\comments\swcom.obj ..\..\src\modules\common\zverse.obj 
+      ..\..\src\modules\common\entriesblk.obj 
       ..\..\src\modules\common\lzsscomprs.obj 
-      ..\..\src\modules\common\rawstr.obj ..\..\src\modules\common\rawverse.obj 
-      ..\..\src\modules\common\sapphire.obj 
-      ..\..\src\modules\common\swcipher.obj ..\..\src\modules\common\swcomprs.obj 
-      ..\..\src\modules\filters\thmlrtf.obj 
+      ..\..\src\modules\common\rawstr.obj ..\..\src\modules\common\rawstr4.obj 
+      ..\..\src\modules\common\rawverse.obj 
+      ..\..\src\modules\common\sapphire.obj ..\..\src\modules\common\swcipher.obj 
+      ..\..\src\modules\common\swcomprs.obj 
+      ..\..\src\modules\common\zipcomprs.obj ..\..\src\modules\common\zstr.obj 
+      ..\..\src\modules\filters\utf8utf16.obj 
       ..\..\src\modules\filters\gbffootnotes.obj 
+      ..\..\src\modules\filters\gbfheadings.obj 
       ..\..\src\modules\filters\gbfhtml.obj 
+      ..\..\src\modules\filters\gbfhtmlhref.obj 
+      ..\..\src\modules\filters\gbfmorph.obj 
+      ..\..\src\modules\filters\gbfosis.obj 
       ..\..\src\modules\filters\gbfplain.obj 
-      ..\..\src\modules\filters\gbfrtf.obj ..\..\src\modules\filters\gbfstrongs.obj 
+      ..\..\src\modules\filters\gbfredletterwords.obj 
+      ..\..\src\modules\filters\gbfrtf.obj 
+      ..\..\src\modules\filters\gbfstrongs.obj 
       ..\..\src\modules\filters\gbfthml.obj 
+      ..\..\src\modules\filters\gbfwebif.obj 
+      ..\..\src\modules\filters\greeklexattribs.obj 
+      ..\..\src\modules\filters\latin1utf16.obj 
+      ..\..\src\modules\filters\latin1utf8.obj 
+      ..\..\src\modules\filters\osisfootnotes.obj 
+      ..\..\src\modules\filters\osisheadings.obj 
+      ..\..\src\modules\filters\osishtmlhref.obj 
+      ..\..\src\modules\filters\osislemma.obj 
+      ..\..\src\modules\filters\osismorph.obj 
+      ..\..\src\modules\filters\osisosis.obj 
+      ..\..\src\modules\filters\osisplain.obj 
+      ..\..\src\modules\filters\osisredletterwords.obj 
+      ..\..\src\modules\filters\osisrtf.obj 
+      ..\..\src\modules\filters\osisscripref.obj 
+      ..\..\src\modules\filters\osisstrongs.obj 
+      ..\..\src\modules\filters\osiswebif.obj 
+      ..\..\src\modules\filters\osiswordjs.obj 
       ..\..\src\modules\filters\plainfootnotes.obj 
       ..\..\src\modules\filters\plainhtml.obj 
       ..\..\src\modules\filters\rtfhtml.obj 
-      ..\..\src\modules\filters\thmlgbf.obj ..\..\src\modules\filters\thmlhtml.obj 
-      ..\..\src\modules\filters\thmlplain.obj 
-      ..\..\src\modules\filters\cipherfil.obj ..\..\src\modules\lexdict\swld.obj 
-      ..\..\src\modules\lexdict\rawld\rawld.obj 
-      ..\..\src\modules\texts\swtext.obj 
-      ..\..\src\modules\texts\rawtext\rawtext.obj 
-      ..\..\src\modules\texts\ztext\ztext.obj 
-      ..\..\src\modules\common\zverse.obj ..\..\src\keys\treekey.obj 
-      ..\..\src\keys\treekeyidx.obj ..\..\src\modules\common\rawstr4.obj 
-      ..\..\src\modules\common\zstr.obj ..\..\src\modules\genbook\swgenbook.obj 
-      ..\..\src\modules\genbook\rawgenbook\rawgenbook.obj 
-      ..\..\src\mgr\swfiltermgr.obj ..\..\src\modules\filters\utf8utf16.obj 
-      ..\..\src\modules\filters\gbfheadings.obj 
-      ..\..\src\modules\filters\gbfhtmlhref.obj 
-      ..\..\src\modules\filters\gbfmorph.obj 
-      ..\..\src\modules\filters\latin1utf16.obj 
-      ..\..\src\modules\filters\latin1utf8.obj 
       ..\..\src\modules\filters\scsuutf8.obj 
       ..\..\src\modules\filters\swbasicfilter.obj 
+      ..\..\src\modules\filters\swoptfilter.obj 
       ..\..\src\modules\filters\thmlfootnotes.obj 
+      ..\..\src\modules\filters\thmlgbf.obj 
       ..\..\src\modules\filters\thmlheadings.obj 
+      ..\..\src\modules\filters\thmlhtml.obj 
       ..\..\src\modules\filters\thmlhtmlhref.obj 
       ..\..\src\modules\filters\thmllemma.obj 
       ..\..\src\modules\filters\thmlmorph.obj 
+      ..\..\src\modules\filters\thmlosis.obj 
+      ..\..\src\modules\filters\thmlplain.obj 
+      ..\..\src\modules\filters\thmlrtf.obj 
       ..\..\src\modules\filters\thmlscripref.obj 
       ..\..\src\modules\filters\thmlstrongs.obj 
       ..\..\src\modules\filters\thmlvariants.obj 
+      ..\..\src\modules\filters\thmlwebif.obj 
+      ..\..\src\modules\filters\thmlwordjs.obj 
       ..\..\src\modules\filters\unicodertf.obj 
       ..\..\src\modules\filters\utf16utf8.obj 
       ..\..\src\modules\filters\utf8arshaping.obj 
@@ -67,44 +94,24 @@
       ..\..\src\modules\filters\utf8nfc.obj 
       ..\..\src\modules\filters\utf8nfkd.obj 
       ..\..\src\modules\filters\utf8transliterator.obj 
-      ..\..\src\modules\comments\zcom\zcom.obj 
+      ..\..\src\modules\filters\cipherfil.obj 
+      ..\..\src\modules\genbook\rawgenbook\rawgenbook.obj 
+      ..\..\src\modules\genbook\swgenbook.obj 
+      ..\..\src\modules\lexdict\rawld\rawld.obj 
       ..\..\src\modules\lexdict\rawld4\rawld4.obj 
-      ..\..\src\modules\common\zipcomprs.obj 
-      ..\..\src\modules\lexdict\zld\zld.obj 
-      ..\..\src\modules\common\entriesblk.obj ..\..\src\utilfuns\zlib\zutil.obj 
+      ..\..\src\modules\lexdict\zld\zld.obj ..\..\src\modules\lexdict\swld.obj 
+      ..\..\src\modules\tests\echomod.obj 
+      ..\..\src\modules\texts\rawtext\rawtext.obj 
+      ..\..\src\modules\texts\ztext\ztext.obj ..\..\src\modules\texts\swtext.obj 
+      ..\..\src\modules\swmodule.obj ..\..\src\utilfuns\zlib\zutil.obj 
       ..\..\src\utilfuns\zlib\compress.obj ..\..\src\utilfuns\zlib\crc32.obj 
       ..\..\src\utilfuns\zlib\deflate.obj ..\..\src\utilfuns\zlib\gzio.obj 
       ..\..\src\utilfuns\zlib\infblock.obj ..\..\src\utilfuns\zlib\infcodes.obj 
       ..\..\src\utilfuns\zlib\inffast.obj ..\..\src\utilfuns\zlib\inflate.obj 
       ..\..\src\utilfuns\zlib\inftrees.obj ..\..\src\utilfuns\zlib\infutil.obj 
-      ..\..\src\utilfuns\zlib\trees.obj ..\..\src\utilfuns\zlib\uncompr.obj 
-      ..\..\src\utilfuns\zlib\untgz.obj ..\..\src\utilfuns\zlib\adler32.obj 
-      ..\..\src\modules\filters\greeklexattribs.obj ..\..\src\mgr\swcacher.obj 
-      ..\..\src\modules\filters\gbfosis.obj 
-      ..\..\src\modules\filters\thmlosis.obj ..\..\src\mgr\encfiltmgr.obj 
-      ..\..\src\mgr\markupfiltmgr.obj ..\..\src\utilfuns\roman.obj 
-      ..\..\src\mgr\swsourcemgr.obj ..\..\src\utilfuns\ftpparse.obj 
-      ..\..\src\modules\filters\osisstrongs.obj 
-      ..\..\src\modules\filters\osismorph.obj 
-      ..\..\src\modules\filters\gbfredletterwords.obj 
-      ..\..\src\utilfuns\swbuf.obj ..\..\src\mgr\stringmgr.obj 
-      ..\..\src\modules\filters\swoptfilter.obj ..\..\src\utilfuns\utilxml.obj 
-      ..\..\src\modules\filters\osiswebif.obj 
-      ..\..\src\modules\filters\osisheadings.obj 
-      ..\..\src\modules\filters\osishtmlhref.obj 
-      ..\..\src\modules\filters\osislemma.obj 
-      ..\..\src\modules\filters\osisosis.obj 
-      ..\..\src\modules\filters\osisplain.obj 
-      ..\..\src\modules\filters\osisredletterwords.obj 
-      ..\..\src\modules\filters\osisrtf.obj 
-      ..\..\src\modules\filters\osisscripref.obj 
-      ..\..\src\modules\filters\osisfootnotes.obj ..\..\src\mgr\swsearchable.obj 
-      ..\..\src\modules\filters\gbfwebif.obj 
-      ..\..\src\modules\filters\thmlwebif.obj ..\..\src\utilfuns\utilweb.obj 
-      ..\..\src\utilfuns\swversion.obj ..\..\src\utilfuns\url.obj 
-      ..\..\src\mgr\curlftpt.obj ..\..\src\mgr\ftptrans.obj 
-      ..\..\src\mgr\installmgr.obj ..\..\src\mgr\ftplibftpt.obj 
-      ..\..\src\mgr\refsysmgr.obj ..\..\src\utilfuns\swunicod.obj"/>
+      ..\..\src\utilfuns\zlib\maketree.obj ..\..\src\utilfuns\zlib\trees.obj 
+      ..\..\src\utilfuns\zlib\uncompr.obj ..\..\src\utilfuns\zlib\untgz.obj 
+      ..\..\src\utilfuns\zlib\adler32.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -113,16 +120,16 @@
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\src\keys;..\..\src\mgr;..\..\src\utilfuns;..\..\src\frontend;..\..\src\modules;..\..\src\modules\comments;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\rawfiles;..\..\src\modules\common;..\..\src\modules\filters;..\..\src\modules\lexdict;..\..\src\modules\lexdict\rawld;..\..\src\modules\texts;..\..\src\modules\texts\rawtext;..\..\src\modules\texts\ztext;..\..\src\modules\genbook;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\comments\zcom;..\..\src\modules\lexdict\rawld4;..\..\src\modules\lexdict\zld;..\..\src\utilfuns\zlib"/>
+    <PATHCPP value=".;..\..\src\frontend;..\..\src\keys;..\..\src\mgr;..\..\src\utilfuns;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\zcom;..\..\src\modules\comments;..\..\src\modules\common;..\..\src\modules\filters;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict;..\..\src\modules\tests;..\..\src\modules\texts\rawtext;..\..\src\modules\texts\ztext;..\..\src\modules\texts;..\..\src\modules;..\..\src\utilfuns\zlib"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG"/>
+    <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
-    <INCLUDEPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include"/>
-    <LIBPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include"/>
+    <LIBPATH value="..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <LISTFILE value=""/>
   </MACROS>
@@ -144,9 +151,9 @@
       -I..\..\..\biblecs\apps\InstallMgr\curl\include -src_suffix cpp -D_ICU_ 
       -D_ICUSWORD_ -DUSBINARY -DU_HAVE_PLACEMENT_NEW=0 -DUSELUCENE 
       -DLUCENE_DISABLE_MULTITHREADING -D_WIN32 -DHAVE_DIRENT -boa"/>
-    <CFLAG1 value="-vGc -vGt -vGd -Od -Vx -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
-    <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
-    <AFLAGS value="/mx /w2 /zi"/>
+    <CFLAG1 value="-O2 -Vx -X- -a8 -b- -k- -vi -c -tW -tWM"/>
+    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zn"/>
     <LFLAGS value="/P512"/>
   </OPTIONS>
   <LINKER>
@@ -182,35 +189,37 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=19
-Item0=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include
-Item1=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src
-Item2=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;D:\src\biblecs\clucene\src
-Item3=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n
-Item4=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item5=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item6=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item7=..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item8=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item9=..\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item10=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n
-Item11=..\..\apps\windoze;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n
-Item12=..\..\apps\windoze;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n
-Item13=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common
-Item14=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item15=..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item16=..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
-Item17=..\include;$(BCB)\include;$(BCB)\include\vcl
-Item18=..\src\modules\texts\rawtext;..\src\modules\texts;..\src\modules\lexdict\rawld;..\src\modules\lexdict;..\src\modules\filters;..\src\modules\common;..\src\modules\comments\rawfiles;..\src\modules\comments\rawcom;..\src\modules\comments\hrefcom;..\src\modules\comments;..\src\modules;..\src\frontend;..\src\utilfuns;..\src\mgr;..\src\keys;$(BCB)\include;$(BCB)\include\vcl
+Count=20
+Item0=..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include
+Item1=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include
+Item2=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src
+Item3=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;D:\src\biblecs\clucene\src
+Item4=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n
+Item5=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item6=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item7=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item8=..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item9=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item10=..\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item11=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n
+Item12=..\..\apps\windoze;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n
+Item13=..\..\apps\windoze;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n
+Item14=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common
+Item15=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item16=..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item17=..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\include;$(BCB)\include;$(BCB)\include\vcl
+Item18=..\include;$(BCB)\include;$(BCB)\include\vcl
+Item19=..\src\modules\texts\rawtext;..\src\modules\texts;..\src\modules\lexdict\rawld;..\src\modules\lexdict;..\src\modules\filters;..\src\modules\common;..\src\modules\comments\rawfiles;..\src\modules\comments\rawcom;..\src\modules\comments\hrefcom;..\src\modules\comments;..\src\modules;..\src\frontend;..\src\utilfuns;..\src\mgr;..\src\keys;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=6
-Item0=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
-Item1=$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..\apps\windoze;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
-Item3=..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
-Item4=..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
-Item5=..\src\modules\texts\rawtext;..\src\modules\texts;..\src\modules\lexdict\rawld;..\src\modules\lexdict;..\src\modules\filters;..\src\modules\common;..\src\modules\comments\rawfiles;..\src\modules\comments\rawcom;..\src\modules\comments\hrefcom;..\src\modules\comments;..\src\modules;..\src\frontend;..\src\utilfuns;..\src\mgr;..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Count=7
+Item0=..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Item2=$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..\apps\windoze;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Item5=..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
+Item6=..\src\modules\texts\rawtext;..\src\modules\texts;..\src\modules\lexdict\rawld;..\src\modules\lexdict;..\src\modules\filters;..\src\modules\common;..\src\modules\comments\rawfiles;..\src\modules\comments\rawcom;..\src\modules\comments\hrefcom;..\src\modules\comments;..\src\modules;..\src\frontend;..\src\utilfuns;..\src\mgr;..\src\keys;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -218,8 +227,8 @@ Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
 Count=15
-Item0=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG
-Item1=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT
+Item0=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT
+Item1=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG
 Item2=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT
 Item3=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE
 Item4=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG
@@ -261,7 +270,7 @@ RemoteDebug=0
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
-LinkCGLIB=1
+LinkCGLIB=0
 
 [Language]
 ActiveLang=

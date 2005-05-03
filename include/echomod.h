@@ -25,15 +25,17 @@
 
 #include <swtext.h>
 #include <versekey.h>
+#include <defs.h>
+
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT EchoMod:public SWText
+class SWDLLEXPORT EchoMod : public SWText
 {
 public:
-  EchoMod ();
-  virtual ~ EchoMod ();
-  virtual operator const char *();
+	EchoMod();
+	virtual ~EchoMod();
+	virtual SWBuf &getRawEntryBuf();
 };
 
 SWORD_NAMESPACE_END

@@ -992,61 +992,69 @@ void SWMgr::InstallScan(const char *dirname)
 {
    DIR *dir;
    struct dirent *ent;
-   int conffd = 0;
+   FileDesc *conffd = 0;
    SWBuf newmodfile;
    SWBuf targetName;
  
-	if (!access(dirname, 04)) {
-          if ((dir = opendir(dirname))) {
-               rewinddir(dir);
-               while ((ent = readdir(dir))) {
-                    if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-                         newmodfile = dirname;
-                         if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
-                              newmodfile += "/";
-                         newmodfile += ent->d_name;
-                         if (configType) {
-                              if (config > 0)
-                                   close(conffd);
-                              targetName = configPath;
-                              if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
-                                   targetName += "/";
-                              targetName += ent->d_name;
-                              conffd = open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
-                         }
-                         else {
-                              if (conffd < 1) {
-                                   conffd = open(config->filename.c_str(), FileMgr::WRONLY|FileMgr::APPEND);
-                                   if (conffd > 0)
-                                        lseek(conffd, 0L, SEEK_END);
-                              }
+	if (FileMgr::existsDir(dirname)) {
+		if ((dir = opendir(dirname))) {
+			rewinddir(dir);
+			while ((ent = readdir(dir))) {
+				if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+					newmodfile = dirname;
+					if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
+						newmodfile += "/";
+					newmodfile += ent->d_name;
+
+					// mods.d
+					if (configType) {
+						if (conffd)
+							FileMgr::getSystemFileMgr()->close(conffd);
+						targetName = configPath;
+						if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
+							targetName += "/";
+						targetName += ent->d_name;
+						conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
 					}
-                         AddModToConfig(conffd, newmodfile.c_str());
-                         FileMgr::removeFile(newmodfile.c_str());
-                    }
-               }
-               if (conffd > 0)
-                    close(conffd);
-               closedir(dir);
-          }
-     }
+
+					// mods.conf
+					else {
+						if (!conffd) {
+							conffd = FileMgr::getSystemFileMgr()->open(config->filename.c_str(), FileMgr::WRONLY|FileMgr::APPEND);
+							if (conffd > 0)
+								conffd->seek(0L, SEEK_END);
+							else {
+								FileMgr::getSystemFileMgr()->close(conffd);
+								conffd = 0;
+							}
+						}
+					}
+					AddModToConfig(conffd, newmodfile.c_str());
+					FileMgr::removeFile(newmodfile.c_str());
+				}
+			}
+			if (conffd)
+				FileMgr::getSystemFileMgr()->close(conffd);
+			closedir(dir);
+		}
+	}
 }
 
 
-char SWMgr::AddModToConfig(int conffd, const char *fname)
+char SWMgr::AddModToConfig(FileDesc *conffd, const char *fname)
 {
-	int modfd;
+	FileDesc *modfd;
 	char ch;
 
 	SWLog::getSystemLog()->logTimedInformation("Found new module [%s]. Installing...", fname);
-	modfd = open(fname, FileMgr::RDONLY);
+	modfd = FileMgr::getSystemFileMgr()->open(fname, FileMgr::RDONLY);
 	ch = '\n';
-	write(conffd, &ch, 1);
-	while (read(modfd, &ch, 1) == 1)
-		write(conffd, &ch, 1);
+	conffd->write(&ch, 1);
+	while (modfd->read(&ch, 1) == 1)
+		conffd->write(&ch, 1);
 	ch = '\n';
-	write(conffd, &ch, 1);
-	close(modfd);
+	conffd->write(&ch, 1);
+	FileMgr::getSystemFileMgr()->close(modfd);
 	return 0;
 }
 

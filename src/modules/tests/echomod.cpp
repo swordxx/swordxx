@@ -6,6 +6,8 @@
 #include <echomod.h>
 
 
+SWORD_NAMESPACE_START
+
 EchoMod::EchoMod() : SWText("echomod", "Echos back key")
 {
 }
@@ -15,7 +17,11 @@ EchoMod::~EchoMod() {
 }
 
 
-EchoMod::operator const char*()
+SWBuf &EchoMod::getRawEntryBuf()
 {
-	return *key;
+	static SWBuf retVal;
+	retVal = *key;
+	return retVal;
 }
+
+SWORD_NAMESPACE_END

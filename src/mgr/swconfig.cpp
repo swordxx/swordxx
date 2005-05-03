@@ -130,17 +130,17 @@ void SWConfig::Save() {
 			buf =  "\n[";
 			buf += (*sit).first.c_str();
 			buf += "]\n";
-			write(cfile->getFd(), buf.c_str(), buf.length());
+			cfile->write(buf.c_str(), buf.length());
 			for (entry = (*sit).second.begin(); entry != (*sit).second.end(); entry++) {
 				buf = (*entry).first.c_str();
 				buf += "=";
 				buf += (*entry).second.c_str();
 				buf += "\n";
-				write(cfile->getFd(), buf.c_str(), buf.length());
+				cfile->write(buf.c_str(), buf.length());
 			}
 		}
 		buf = "\n";
-		write(cfile->getFd(), buf.c_str(), buf.length());
+		cfile->write(buf.c_str(), buf.length());
 		FileMgr::getSystemFileMgr()->close(cfile);
 	}
 }

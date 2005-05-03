@@ -65,6 +65,9 @@ typedef std::list < SWBuf >StringList;
 * @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
 * @version $Id$
 */
+
+class FileDesc;
+
 class SWDLLEXPORT SWMgr {
 
 private:
@@ -89,7 +92,7 @@ protected:
 	FilterList cleanupFilters;
 	StringList options;
 	virtual void init(); // use to initialize before loading modules
-	virtual char AddModToConfig(int conffd, const char *fname);
+	virtual char AddModToConfig(FileDesc *conffd, const char *fname);
 	virtual void loadConfigDir(const char *ipath);
 	virtual void AddGlobalOptions(SWModule * module, ConfigEntMap & section,
 	ConfigEntMap::iterator start,

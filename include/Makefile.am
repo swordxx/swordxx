@@ -83,8 +83,6 @@ pkginclude_HEADERS += $(swincludedir)/swcom.h
 pkginclude_HEADERS += $(swincludedir)/swcomprs.h
 pkginclude_HEADERS += $(swincludedir)/swconfig.h
 pkginclude_HEADERS += $(swincludedir)/swdisp.h
-pkginclude_HEADERS += $(swincludedir)/swdisprtf.h
-pkginclude_HEADERS += $(swincludedir)/swdisprtfchap.h
 pkginclude_HEADERS += $(swincludedir)/swfilter.h
 pkginclude_HEADERS += $(swincludedir)/swfiltermgr.h
 pkginclude_HEADERS += $(swincludedir)/swgenbook.h
@@ -104,7 +102,6 @@ pkginclude_HEADERS += $(swincludedir)/swtext.h
 pkginclude_HEADERS += $(swincludedir)/swunicod.h
 pkginclude_HEADERS += $(swincludedir)/swversion.h
 pkginclude_HEADERS += $(swincludedir)/sysdata.h
-pkginclude_HEADERS += $(swincludedir)/tbdisp.h
 
 pkginclude_HEADERS += $(swincludedir)/thmlfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/thmlgbf.h
