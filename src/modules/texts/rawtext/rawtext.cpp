@@ -232,12 +232,12 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 
 			// get our current offset in our word.dat file and write this as the start
 			// of the next entry in our database
-			offset = lseek(datfd->getFd(), 0, SEEK_CUR);
-			write(idxfd->getFd(), &offset, 4);
+			offset = datfd->seek(0, SEEK_CUR);
+			idxfd->write(&offset, 4);
 
 			// write our word out to the word.dat file, delineating with a \n
-			write(datfd->getFd(), it->first.c_str(), strlen(it->first.c_str()));
-			write(datfd->getFd(), "\n", 1);
+			datfd->write(it->first.c_str(), strlen(it->first.c_str()));
+			datfd->write("\n", 1);
 
 			// force our mod position list for this word to be unique (remove
 			// duplicates that may exist if the word was found more than once
@@ -249,16 +249,16 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 			unsigned short count = 0;
 			for (it2 = it->second.begin(); it2 != it->second.end(); it2++) {
 				entryoff= *it2;
-				write(datfd->getFd(), &entryoff, 4);
+				datfd->write(&entryoff, 4);
 				count++;
 			}
 			
 			// now see what our new position is in our word.dat file and
 			// determine the size of this database entry
-			size = lseek(datfd->getFd(), 0, SEEK_CUR) - offset;
+			size = datfd->seek(0, SEEK_CUR) - offset;
 
 			// store the size of this database entry
-			write(idxfd->getFd(), &size, 2);
+			idxfd->write(&size, 2);
 			printf("%d entries (size: %d)\n", count, size);
 		}
 		FileMgr::getSystemFileMgr()->close(datfd);

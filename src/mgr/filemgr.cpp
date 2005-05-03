@@ -246,11 +246,11 @@ int FileMgr::sysOpen(FileDesc *file) {
 signed char FileMgr::trunc(FileDesc *file) {
 
 	static const char *writeTest = "x";
-	long size = lseek(file->getFd(), 1, SEEK_CUR);
+	long size = file->seek(1, SEEK_CUR);
 	if (size == 1) // was empty
 		size = 0;
 	char nibble [ 32767 ];
-	bool writable = write(file->getFd(), writeTest, 1);
+	bool writable = file->write(writeTest, 1);
 	int bytes = 0;
 
 	if (writable) {
@@ -269,9 +269,9 @@ signed char FileMgr::trunc(FileDesc *file) {
 		if (fd < 0)
 			return -3;
 	
-		lseek(file->getFd(), 0, SEEK_SET);
+		file->seek(0, SEEK_SET);
 		while (size > 0) {	 
-			bytes = read(file->getFd(), nibble, 32767);
+			bytes = file->read(nibble, 32767);
 			write(fd, nibble, (bytes < size)?bytes:size);
 			size -= bytes;
 		}
@@ -284,7 +284,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		lseek(fd, 0, SEEK_SET);
 		do {
 			bytes = read(fd, nibble, 32767);
-			write(file->getFd(), nibble, bytes);
+			file->write(nibble, bytes);
 		} while (bytes == 32767);
 		
 		::close(fd);
@@ -293,7 +293,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		file->fd = -77;	// causes file to be swapped out forcing open on next call to getFd()
 	}
 	else { // put offset back and return failure
-		lseek(file->getFd(), -1, SEEK_CUR);
+		file->seek(-1, SEEK_CUR);
 		return -1;
 	}
 	return 0;
@@ -426,8 +426,8 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 
 	while (more) {
 		more = false;
-		long index = lseek(fDesc->getFd(), 0, SEEK_CUR);
-		len = read(fDesc->getFd(), chunk, 254);
+		long index = fDesc->seek(0, SEEK_CUR);
+		len = fDesc->read(chunk, 254);
 		if (len < 1)
 			break;
 		// clean up any preceding white space
@@ -449,7 +449,7 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		index += (end + 1);
 
 		// reposition to next valid place to read
-		lseek(fDesc->getFd(), index, SEEK_SET);
+		fDesc->seek(index, SEEK_SET);
 
 		// clean up any trailing junk on line
 		for (; end > start; end--) {

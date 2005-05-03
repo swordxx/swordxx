@@ -9,6 +9,7 @@
 #include "diathekemgr.h"
 #include "diafiltmgr.h"
 #include <iostream>
+#include <utilstr.h>
 
 using std::cout;
 

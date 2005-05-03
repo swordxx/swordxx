@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "thmlcgi.h"
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 

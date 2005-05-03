@@ -8,6 +8,7 @@
 #include <regex.h>
 #include <iostream>
 #include <list>
+#include <utilstr.h>
 
 using std::list;
 using std::cout;

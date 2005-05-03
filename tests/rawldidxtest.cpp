@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 
 	sprintf(buf, "%s.idx", argv[1]);
 	FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDONLY, true);
-	long maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
+	long maxoff = idxfd->seek(0, SEEK_END) - 6;
 	FileMgr::getSystemFileMgr()->close(idxfd);
 
 	SWBuf last = "";
