@@ -8,15 +8,10 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
 #include <stdlib.h>
-#include <utilfuns.h>
+#include <sys/types.h>
+
+#include <utilstr.h>
 #include <rawstr4.h>
 #include <sysdata.h>
 #include <swlog.h>
@@ -47,19 +42,15 @@ RawStr4::RawStr4(const char *ipath, int fileMode)
 	path = 0;
 	stdstr(&path, ipath);
 
-#ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
-#define O_BINARY 0		// If it hasn't been defined than we probably
-#endif				// don't need it.
-
 	if (fileMode == -1) { // try read/write if possible
-		fileMode = O_RDWR;
+		fileMode = FileMgr::RDWR;
 	}
 		
 	buf.setFormatted("%s.idx", path);
-	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s.dat", path);
-	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	if (datfd < 0) {
 		SWLog::getSystemLog()->logError("%d", errno);
@@ -98,15 +89,15 @@ void RawStr4::getIDXBufDat(long ioffset, char **buf) {
 	int size;
 	char ch;
 	if (datfd > 0) {
-		lseek(datfd->getFd(), ioffset, SEEK_SET);
-		for (size = 0; read(datfd->getFd(), &ch, 1) == 1; size++) {
+		datfd->seek(ioffset, SEEK_SET);
+		for (size = 0; datfd->read(&ch, 1) == 1; size++) {
 			if ((ch == '\\') || (ch == 10) || (ch == 13))
 				break;
 		}
 		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 		if (size) {
-			lseek(datfd->getFd(), ioffset, SEEK_SET);
-			read(datfd->getFd(), *buf, size);
+			datfd->seek(ioffset, SEEK_SET);
+			datfd->read(*buf, size);
 		}
 		(*buf)[size] = 0;
 		toupperstr_utf8(*buf, size*2);
@@ -133,8 +124,8 @@ void RawStr4::getIDXBuf(long ioffset, char **buf)
 	long offset;
 	
 	if (idxfd > 0) {
-		lseek(idxfd->getFd(), ioffset, SEEK_SET);
-		read(idxfd->getFd(), &offset, 4);
+		idxfd->seek(ioffset, SEEK_SET);
+		idxfd->read(&offset, 4);
 
 		offset = swordtoarch32(offset);
 
@@ -171,7 +162,7 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
 	if (idxfd->getFd() >=0) {
-		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 8;
+		tailoff = maxoff = idxfd->seek(0, SEEK_END) - 8;
 		retval = (tailoff >= 0) ? 0 : -2;	// if NOT new file
 		if (*ikey) {
 			headoff = 0;
@@ -212,11 +203,11 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 		}
 		else	tryoff = 0;
 
-		lseek(idxfd->getFd(), tryoff, SEEK_SET);
+		idxfd->seek(tryoff, SEEK_SET);
 
 		*start = *size = 0;
-		read(idxfd->getFd(), start, 4);
-		read(idxfd->getFd(), size, 4);
+		idxfd->read(start, 4);
+		idxfd->read(size, 4);
 		if (idxoff)
 			*idxoff = tryoff;
 
@@ -232,7 +223,7 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			bool bad = false;
 			if (((tryoff + (away*8)) < -8) || (tryoff + (away*8) > (maxoff+8)))
 				bad = true;
-			else if (lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0)
+			else if (idxfd->seek(tryoff, SEEK_SET) < 0)
 				bad = true;
 			if (bad) {
 				retval = -1;
@@ -243,8 +234,8 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 					*idxoff = tryoff;
 				break;
 			}
-			read(idxfd->getFd(), start, 4);
-			read(idxfd->getFd(), size, 4);
+			idxfd->read(start, 4);
+			idxfd->read(size, 4);
 			if (idxoff)
 				*idxoff = tryoff;
 
@@ -352,8 +343,8 @@ void RawStr4::readText(long istart, unsigned long *isize, char **idxbuf, SWBuf &
 		buf = "";
 		buf.setFillByte(0);
 		buf.setSize(*isize);
-		lseek(datfd->getFd(), start, SEEK_SET);
-		read(datfd->getFd(), buf.getRawData(), (int)((*isize) - 1));
+		datfd->seek(start, SEEK_SET);
+		datfd->read(buf.getRawData(), (int)((*isize) - 1));
 
 		for (ch = 0; buf[ch]; ch++) {		// skip over index string
 			if (buf[ch] == 10) {
@@ -429,8 +420,8 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 		do {
 			tmpbuf = new char [ size + 2 ];
 			memset(tmpbuf, 0, size + 2);
-			lseek(datfd->getFd(), start, SEEK_SET);
-			read(datfd->getFd(), tmpbuf, (int)(size - 1));
+			datfd->seek(start, SEEK_SET);
+			datfd->read(tmpbuf, (int)(size - 1));
 
 			for (ch = tmpbuf; *ch; ch++) {		// skip over index string
 				if (*ch == 10) {
@@ -456,14 +447,14 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 		while (true);	// while we're resolving links
 	}
 
-	endoff = lseek(idxfd->getFd(), 0, SEEK_END);
+	endoff = idxfd->seek(0, SEEK_END);
 
 	shiftSize = endoff - idxoff;
 
 	if (shiftSize > 0) {
 		idxBytes = new char [ shiftSize ];
-		lseek(idxfd->getFd(), idxoff, SEEK_SET);
-		read(idxfd->getFd(), idxBytes, shiftSize);
+		idxfd->seek(idxoff, SEEK_SET);
+		idxfd->read(idxBytes, shiftSize);
 	}
 
 	outbuf = new char [ len + strlen(key) + 5 ];
@@ -472,30 +463,30 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 	memcpy(outbuf + size, buf, len);
 	size = outsize = size + len;
 
-	start = outstart = lseek(datfd->getFd(), 0, SEEK_END);
+	start = outstart = datfd->seek(0, SEEK_END);
 
 	outstart = archtosword32(start);
 	outsize  = archtosword32(size);
 
-	lseek(idxfd->getFd(), idxoff, SEEK_SET);
+	idxfd->seek(idxoff, SEEK_SET);
 	if (len>0) {
-		lseek(datfd->getFd(), start, SEEK_SET);
-		write(datfd->getFd(), outbuf, (long)size);
+		datfd->seek(start, SEEK_SET);
+		datfd->write(outbuf, (long)size);
 
 		// add a new line to make data file easier to read in an editor
-		write(datfd->getFd(), &nl, 2);
+		datfd->write(&nl, 2);
 		
-		write(idxfd->getFd(), &outstart, 4);
-		write(idxfd->getFd(), &outsize, 4);
+		idxfd->write(&outstart, 4);
+		idxfd->write(&outsize, 4);
 		if (idxBytes) {
-			write(idxfd->getFd(), idxBytes, shiftSize);
+			idxfd->write(idxBytes, shiftSize);
 			delete [] idxBytes;
 		}
 	}
 	else {	// delete entry
 		if (idxBytes) {
-			write(idxfd->getFd(), idxBytes+8, shiftSize-8);
-			lseek(idxfd->getFd(), -1, SEEK_CUR);	// last valid byte
+			idxfd->write(idxBytes+8, shiftSize-8);
+			idxfd->seek(-1, SEEK_CUR);	// last valid byte
 			FileMgr::getSystemFileMgr()->trunc(idxfd);	// truncate index
 			delete [] idxBytes;
 		}
@@ -543,13 +534,13 @@ signed char RawStr4::createModule(const char *ipath)
 
 	sprintf(buf, "%s.dat", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s.idx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd2);
 

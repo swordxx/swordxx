@@ -5,6 +5,7 @@
 
 
 #include <swoptfilter.h>
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 

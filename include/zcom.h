@@ -53,7 +53,7 @@ public:
 
 	// write interface ----------------------------
 	virtual bool isWritable() {
-		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & O_RDWR) == O_RDWR));
+		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 	}
 	static char createModule(const char *path, int blockBound) {
 		return zVerse::createModule(path, blockBound);

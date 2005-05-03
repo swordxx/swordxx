@@ -1,10 +1,10 @@
 /******************************************************************************
- *	stringmgr.h - A class which provides string andling functions which can 
- *			reimplemented by frontends
+ *	stringmgr.h - A class which provides string handling functions which can 
+ *			be reimplemented by frontends
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2005 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ	85280-2528
@@ -41,6 +41,7 @@ public:
 	* @return The global string handle
 	*/
 	static StringMgr* getSystemStringMgr();
+
 	/** Checks whether Utf8 support is available.
 	* Override the function supportsUnicode() to tell whether your implementation has utf8 support.
 	* @return True if this implementation provides support for Utf8 handling or false if just latin1 handling is available

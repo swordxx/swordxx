@@ -33,8 +33,8 @@ SWORD_NAMESPACE_START
 char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
 char *strstrip (char *istr);
 const char *stristr (const char *s1, const char *s2);
-const char strnicmp(const char *s1, const char *s2, int len);
-unsigned int strlenw(const char *s1);
+int strnicmp(const char *s1, const char *s2, int len);
+int stricmp(const char *s1, const char *s2);
 // char *toupperstr(char *buf);
 // char *toupperstr_utf8(char *buf, unsigned int max = 0);
 

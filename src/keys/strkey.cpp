@@ -5,7 +5,6 @@
  */
 
 #include <swmacs.h>
-#include <utilfuns.h>
 #include <strkey.h>
 #include <stdio.h>
 

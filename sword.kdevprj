@@ -15,7 +15,7 @@ email=scribe@crosswire.org
 kdevprj_version=1.3
 lfv_open_groups=
 make_options=\s-j1
-makefiles=Makefile.am,sword/Makefile.am,sword/docs/Makefile.am,sword/docs/en/Makefile.am,po/Makefile.am,include/Makefile.am,src/mgr/Makefile.am,src/Makefile.am,src/keys/Makefile.am,src/frontend/Makefile.am,src/utilfuns/Makefile.am,src/utilfuns/zlib/Makefile.am,src/modules/Makefile.am,src/modules/comments/Makefile.am,src/modules/comments/hrefcom/Makefile.am,src/modules/comments/rawcom/Makefile.am,src/modules/comments/rawfiles/Makefile.am,src/modules/comments/zcom/Makefile.am,src/modules/common/Makefile.am,src/modules/lexdict/Makefile.am,src/modules/lexdict/rawld/Makefile.am,src/modules/lexdict/rawld4/Makefile.am,src/modules/texts/Makefile.am,src/modules/texts/rawgbf/Makefile.am,src/modules/texts/rawtext/Makefile.am,src/modules/texts/ztext/Makefile.am,src/modules/filters/Makefile.am,src/frontend/im/Makefile.am,src/modules/genbook/Makefile.am,src/modules/genbook/rawgenbook/Makefile.am,src/modules/lexdict/zld/Makefile.am,tests/Makefile.am
+makefiles=Makefile.am,sword/Makefile.am,sword/docs/Makefile.am,sword/docs/en/Makefile.am,po/Makefile.am,include/Makefile.am,src/mgr/Makefile.am,src/Makefile.am,src/keys/Makefile.am,src/frontend/Makefile.am,src/utilfuns/Makefile.am,src/utilfuns/zlib/Makefile.am,src/modules/Makefile.am,src/modules/comments/Makefile.am,src/modules/comments/hrefcom/Makefile.am,src/modules/comments/rawcom/Makefile.am,src/modules/comments/rawfiles/Makefile.am,src/modules/comments/zcom/Makefile.am,src/modules/common/Makefile.am,src/modules/lexdict/Makefile.am,src/modules/lexdict/rawld/Makefile.am,src/modules/lexdict/rawld4/Makefile.am,src/modules/texts/Makefile.am,src/modules/texts/rawtext/Makefile.am,src/modules/texts/ztext/Makefile.am,src/modules/filters/Makefile.am,src/frontend/im/Makefile.am,src/modules/genbook/Makefile.am,src/modules/genbook/rawgenbook/Makefile.am,src/modules/lexdict/zld/Makefile.am,tests/Makefile.am
 modifyMakefiles=false
 project_name=Sword
 project_type=normal_empty
@@ -50,7 +50,7 @@ install_location=
 type=HEADER
 
 [include/Makefile.am]
-files=include/canon.h,include/cipherfil.h,include/defs.h,include/echomod.h,include/entriesblk.h,include/femain.h,include/filemgr.h,include/gbffootnotes.h,include/gbfheadings.h,include/gbfhtml.h,include/swfilter.h,include/gbfhtmlhref.h,include/gbfmorph.h,include/gbfplain.h,include/gbfrtf.h,include/gbfstrongs.h,include/gbfthml.h,include/Greek2Greek.h,include/GreekChars.h,include/hrefcom.h,include/latin1utf16.h,include/latin1utf8.h,include/listkey.h,include/localemgr.h,include/lzsscomprs.h,include/plainfootnotes.h,include/plainhtml.h,include/rawcom.h,include/rawfiles.h,include/rawgbf.h,include/rawld.h,include/rawld4.h,include/rawstr.h,include/rawstr4.h,include/rawtext.h,include/rawverse.h,include/regex.h,include/roman.h,include/rtfhtml.h,include/rwphtml.h,include/rwprtf.h,include/sapphire.h,include/scsuutf8.h,include/strkey.h,include/swbasicfilter.h,include/swbyteswap.h,include/swcipher.h,include/swcom.h,include/swcomprs.h,include/swconfig.h,include/swdisp.h,include/swdisprtf.h,include/swdisprtfchap.h,include/swencodingmgr.h,include/swkey.h,include/swld.h,include/swlocale.h,include/swlog.h,include/swmacs.h,include/swmarkupmgr.h,include/swmgr.h,include/swmodule.h,include/swobject.h,include/swtext.h,include/swunicod.h,include/swwinlog.h,include/tbdisp.h,include/thmlgbf.h,include/thmlhtml.h,include/thmlhtmlhref.h,include/thmlplain.h,include/thmlrtf.h,include/unicodertf.h,include/unixstr.h,include/untgz.h,include/utf16utf8.h,include/utf8cantillation.h,include/utf8greekaccents.h,include/utf8hebrewpoints.h,include/utf8html.h,include/utf8latin1.h,include/utf8transliterator.h,include/utf8utf16.h,include/utilconf.h,include/utilfuns.h,include/utilstr.h,include/versekey.h,include/zcom.h,include/zconf.h,include/zipcomprs.h,include/zlib.h,include/ztext.h,include/zverse.h,include/thmlfootnotes.h,include/thmlheadings.h,include/thmllemma.h,include/thmlmorph.h,include/thmlscripref.h,include/thmlstrongs.h,include/utf8cnormalizer.h,include/utf8arshaping.h,include/utf8bidireorder.h,include/utf8nfc.h,include/utf8nfkd.h,include/encfiltmgr.h,include/swversion.h,include/swfiltermgr.h,include/markupfiltmgr.h,include/rawgenbook.h,include/swgenbook.h,include/treekey.h,include/thmlvariants.h,include/treekeyidx.h,include/zld.h,include/zstr.h,include/swinputmeth.h,include/nullim.h,include/hebrewmcim.h,include/flatapi.h,include/cdsourcemgr.h,include/ftpparse.h,include/gbfosis.h,include/gbfredletterwords.h,include/greeklexattribs.h,include/installmgr.h,include/osismorph.h,include/osisstrongs.h,include/remotesourcemgr.h,include/multimapwdef.h,include/swcacher.h,include/swinstallmgr.h,include/swremotemgr.h,include/swsourcemgr.h,include/sysdata.h,include/thmlosis.h,include/swbuf.h,include/osisplain.h,include/osisrtf.h
+files=include/canon.h,include/cipherfil.h,include/defs.h,include/echomod.h,include/entriesblk.h,include/femain.h,include/filemgr.h,include/gbffootnotes.h,include/gbfheadings.h,include/gbfhtml.h,include/swfilter.h,include/gbfhtmlhref.h,include/gbfmorph.h,include/gbfplain.h,include/gbfrtf.h,include/gbfstrongs.h,include/gbfthml.h,include/Greek2Greek.h,include/GreekChars.h,include/hrefcom.h,include/latin1utf16.h,include/latin1utf8.h,include/listkey.h,include/localemgr.h,include/lzsscomprs.h,include/plainfootnotes.h,include/plainhtml.h,include/rawcom.h,include/rawfiles.h,include/rawld.h,include/rawld4.h,include/rawstr.h,include/rawstr4.h,include/rawtext.h,include/rawverse.h,include/regex.h,include/roman.h,include/rtfhtml.h,include/rwphtml.h,include/rwprtf.h,include/sapphire.h,include/scsuutf8.h,include/strkey.h,include/swbasicfilter.h,include/swbyteswap.h,include/swcipher.h,include/swcom.h,include/swcomprs.h,include/swconfig.h,include/swdisp.h,include/swdisprtf.h,include/swdisprtfchap.h,include/swencodingmgr.h,include/swkey.h,include/swld.h,include/swlocale.h,include/swlog.h,include/swmacs.h,include/swmarkupmgr.h,include/swmgr.h,include/swmodule.h,include/swobject.h,include/swtext.h,include/swunicod.h,include/swwinlog.h,include/tbdisp.h,include/thmlgbf.h,include/thmlhtml.h,include/thmlhtmlhref.h,include/thmlplain.h,include/thmlrtf.h,include/unicodertf.h,include/unixstr.h,include/untgz.h,include/utf16utf8.h,include/utf8cantillation.h,include/utf8greekaccents.h,include/utf8hebrewpoints.h,include/utf8html.h,include/utf8latin1.h,include/utf8transliterator.h,include/utf8utf16.h,include/utilconf.h,include/utilfuns.h,include/utilstr.h,include/versekey.h,include/zcom.h,include/zconf.h,include/zipcomprs.h,include/zlib.h,include/ztext.h,include/zverse.h,include/thmlfootnotes.h,include/thmlheadings.h,include/thmllemma.h,include/thmlmorph.h,include/thmlscripref.h,include/thmlstrongs.h,include/utf8cnormalizer.h,include/utf8arshaping.h,include/utf8bidireorder.h,include/utf8nfc.h,include/utf8nfkd.h,include/encfiltmgr.h,include/swversion.h,include/swfiltermgr.h,include/markupfiltmgr.h,include/rawgenbook.h,include/swgenbook.h,include/treekey.h,include/thmlvariants.h,include/treekeyidx.h,include/zld.h,include/zstr.h,include/swinputmeth.h,include/nullim.h,include/hebrewmcim.h,include/flatapi.h,include/cdsourcemgr.h,include/ftpparse.h,include/gbfosis.h,include/gbfredletterwords.h,include/greeklexattribs.h,include/installmgr.h,include/osismorph.h,include/osisstrongs.h,include/remotesourcemgr.h,include/multimapwdef.h,include/swcacher.h,include/swinstallmgr.h,include/swremotemgr.h,include/swsourcemgr.h,include/sysdata.h,include/thmlosis.h,include/swbuf.h,include/osisplain.h,include/osisrtf.h
 sub_dirs=
 type=normal
 
@@ -301,12 +301,6 @@ install_location=
 type=HEADER
 
 [include/rawfiles.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[include/rawgbf.h]
 dist=true
 install=false
 install_location=
@@ -1680,21 +1674,8 @@ type=SOURCE
 files=src/modules/texts/swtext.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=texts
-sub_dirs=rawgbf,rawtext,ztext
+sub_dirs=rawtext,ztext
 type=static_library
-
-[src/modules/texts/rawgbf/Makefile.am]
-files=src/modules/texts/rawgbf/rawgbf.cpp
-sharedlib_LDFLAGS=-version-info 0:0:1
-sharedlib_rootname=rawgbf
-sub_dirs=
-type=static_library
-
-[src/modules/texts/rawgbf/rawgbf.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
 
 [src/modules/texts/rawtext/Makefile.am]
 files=src/modules/texts/rawtext/rawtext.cpp

@@ -3,6 +3,8 @@
 #include <swmgr.h>
 #include <markupfiltmgr.h>
 #include <swbuf.h>
+
+
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::SWModule;

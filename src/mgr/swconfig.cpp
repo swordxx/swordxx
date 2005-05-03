@@ -21,14 +21,10 @@
  */
 
 #include <swconfig.h>
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <filemgr.h>
 #include <fcntl.h>
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
+
 
 SWORD_NAMESPACE_START
 
@@ -87,7 +83,7 @@ void SWConfig::Load() {
 	
 	Sections.erase(Sections.begin(), Sections.end());
 	
-	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), O_RDONLY|O_BINARY);
+	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDONLY);
 	if (cfile->getFd() > 0) {
 		while (FileMgr::getLine(cfile, line)) {
 			buf = new char [ line.length() + 1 ];
@@ -127,7 +123,7 @@ void SWConfig::Save() {
 	ConfigEntMap::iterator entry;
 	SWBuf sectname;
 	
-	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), O_BINARY|O_RDWR|O_CREAT|O_TRUNC);
+	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDWR|FileMgr::CREAT|FileMgr::TRUNC);
 	if (cfile->getFd() > 0) {
 		
 		for (sit = Sections.begin(); sit != Sections.end(); sit++) {

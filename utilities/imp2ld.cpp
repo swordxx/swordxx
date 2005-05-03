@@ -17,10 +17,6 @@
 #include <zld.h>
 #include <zipcomprs.h>
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 #ifndef NO_SWORD_NAMESPACE
 using sword::zLD;
 using sword::ZipCompress;

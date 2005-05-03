@@ -4,7 +4,6 @@
 #include <rawtext.h>
 #include <zcom.h>
 #include <rawcom.h>
-#include <rawgbf.h>
 #include <rawfiles.h>
 #include <stdlib.h>
 

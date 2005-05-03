@@ -20,6 +20,8 @@
 #include <versekey.h>
 #include <stdio.h>
 #include <cipherfil.h>
+
+
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWCompress;
 using sword::CipherFilter;

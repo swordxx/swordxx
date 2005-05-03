@@ -50,7 +50,7 @@ public:
 
 	// write interface ----------------------------
 	virtual bool isWritable() {
-		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & O_RDWR) == O_RDWR));
+		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 	}
 	static char createModule(const char *path) { return RawVerse::createModule(path); }
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry

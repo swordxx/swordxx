@@ -9,10 +9,7 @@
 #include <stdio.h>
 #include <thmlstrongs.h>
 #include <swmodule.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
+#include <utilstr.h>
 #include <ctype.h>
 
 SWORD_NAMESPACE_START

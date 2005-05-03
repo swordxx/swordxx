@@ -11,21 +11,11 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#include <sys/stat.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <rawverse.h>
 #include <versekey.h>
 #include <sysdata.h>
 
-#ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
-#define O_BINARY 0		// If it hasn't been defined than we probably
-#endif				// don't need it.
 
 SWORD_NAMESPACE_START
 
@@ -56,20 +46,20 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
 		path[strlen(path)-1] = 0;
 
 	if (fileMode == -1) { // try read/write if possible
-		fileMode = O_RDWR;
+		fileMode = FileMgr::RDWR;
 	}
 		
 	buf.setFormatted("%s/ot.vss", path);
-	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/nt.vss", path);
-	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/ot", path);
-	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/nt", path);
-	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	instance++;
 }
@@ -110,15 +100,15 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
 		testmt = ((idxfp[1]) ? 1:2);
 		
 	if (idxfp[testmt-1]->getFd() >= 0) {
-		lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-		read(idxfp[testmt-1]->getFd(), start, 4);
-		long len = read(idxfp[testmt-1]->getFd(), size, 2); 		// read size
+		idxfp[testmt-1]->seek(idxoff, SEEK_SET);
+		idxfp[testmt-1]->read(start, 4);
+		long len = idxfp[testmt-1]->read(size, 2); 		// read size
 
 		*start = swordtoarch32(*start);
 		*size  = swordtoarch16(*size);
 
 		if (len < 2) {
-			*size = (unsigned short)((*start) ? (lseek(textfp[testmt-1]->getFd(), 0, SEEK_END) - (long)*start) : 0);	// if for some reason we get an error reading size, make size to end of file
+			*size = (unsigned short)((*start) ? (textfp[testmt-1]->seek(0, SEEK_END) - (long)*start) : 0);	// if for some reason we get an error reading size, make size to end of file
 		}
 	}
 	else {
@@ -205,8 +195,8 @@ void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf
 		testmt = ((idxfp[1]) ? 1:2);
 	if (size) {
 		if (textfp[testmt-1]->getFd() >= 0) {
-			lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
-			read(textfp[testmt-1]->getFd(), buf.getRawData(), (int)size); 
+			textfp[testmt-1]->seek(start, SEEK_SET);
+			textfp[testmt-1]->read(buf.getRawData(), (int)size); 
 		}
 	}
 }
@@ -233,15 +223,15 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 
 	size = outsize = (len < 0) ? strlen(buf) : len;
 
-	start = outstart = lseek(textfp[testmt-1]->getFd(), 0, SEEK_END);
-	lseek(idxfp[testmt-1]->getFd(), idxoff, SEEK_SET);
+	start = outstart = textfp[testmt-1]->seek(0, SEEK_END);
+	idxfp[testmt-1]->seek(idxoff, SEEK_SET);
 
 	if (size) {
-		lseek(textfp[testmt-1]->getFd(), start, SEEK_SET);
-		write(textfp[testmt-1]->getFd(), buf, (int)size);
+		textfp[testmt-1]->seek(start, SEEK_SET);
+		textfp[testmt-1]->write(buf, (int)size);
 
 		// add a new line to make data file easier to read in an editor
-		write(textfp[testmt-1]->getFd(), nl, 2);
+		textfp[testmt-1]->write(nl, 2);
 	}
 	else {
 		start = 0;
@@ -250,8 +240,8 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 	outstart = archtosword32(start);
 	outsize  = archtosword16(size);
 
-	write(idxfp[testmt-1]->getFd(), &outstart, 4);
-	write(idxfp[testmt-1]->getFd(), &outsize, 2);
+	idxfp[testmt-1]->write(&outstart, 4);
+	idxfp[testmt-1]->write(&outsize, 2);
 
 
 }
@@ -276,14 +266,14 @@ void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 		testmt = ((idxfp[1]) ? 1:2);
 
 	// get source
-	lseek(idxfp[testmt-1]->getFd(), srcidxoff, SEEK_SET);
-	read(idxfp[testmt-1]->getFd(), &start, 4);
-	read(idxfp[testmt-1]->getFd(), &size, 2);
+	idxfp[testmt-1]->seek(srcidxoff, SEEK_SET);
+	idxfp[testmt-1]->read(&start, 4);
+	idxfp[testmt-1]->read(&size, 2);
 
 	// write dest
-	lseek(idxfp[testmt-1]->getFd(), destidxoff, SEEK_SET);
-	write(idxfp[testmt-1]->getFd(), &start, 4);
-	write(idxfp[testmt-1]->getFd(), &size, 2);
+	idxfp[testmt-1]->seek(destidxoff, SEEK_SET);
+	idxfp[testmt-1]->write(&start, 4);
+	idxfp[testmt-1]->write(&size, 2);
 }
 
 
@@ -307,24 +297,24 @@ char RawVerse::createModule(const char *ipath)
 
 	sprintf(buf, "%s/ot", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.vss", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 
 	sprintf(buf, "%s/nt.vss", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 
 	VerseKey vk;
@@ -332,8 +322,14 @@ char RawVerse::createModule(const char *ipath)
 	long offset = 0;
 	short size = 0;
 	for (vk = TOP; !vk.Error(); vk++) {
-		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &offset, 4);
-		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &size, 2);
+		if (vk.Testament() == 1) {
+			fd->write(&offset, 4);
+			fd->write(&size, 2);
+		}
+		else	{
+			fd2->write(&offset, 4);
+			fd2->write(&size, 2);
+		}
 	}
 
 	FileMgr::getSystemFileMgr()->close(fd);

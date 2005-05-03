@@ -141,14 +141,14 @@ const char *stristr(const char *s1, const char *s2) {
 }
 
 /******************************************************************************
- * strnicmp - compares the first n bytes of 2 string ignoring case
+ * strnicmp - compares the first n bytes of 2 strings ignoring case
  *
  * ENT:	compares s1 to s2 comparing the first n byte ingnoring case
  *
  * RET:	same as strcmp
  */
 
-const char strnicmp(const char *s1, const char *s2, int len) {
+int strnicmp(const char *s1, const char *s2, int len) {
 	int tLen = strlen(s2);
 	int cLen = strlen(s1);
 	char diff;
@@ -162,31 +162,13 @@ const char strnicmp(const char *s1, const char *s2, int len) {
 	return (i < len) ? cLen - tLen : 0;
 }
 
-/******************************************************************************
- * strlenw - Scans a string for trailing 0x0000 and return size in BYTES
- *
- * ENT:	target - string for which to determine size
- *
- * RET:	length in BYTES 
- *			If s2 does not occur in s1, returns null.
- */
-
-unsigned int strlenw(const char *s1) {
-	return strlen(s1);
-// utf8 says no null in string except terminator, so below code is overkill
-/*
-	const char *ch = s1;
-	if (!*ch)
-		ch++;
-	while (*ch) {
-		ch++;
-		if (!*ch)
-			ch++;
-	}
-	return (unsigned int)(ch - s1) - 1;
-*/
+int stricmp(const char *s1, const char *s2) {
+#if defined(__GNUC__) || defined(_WIN32_WCE)
+	return ::strcasecmp(s1, s2);
+#else
+	return ::stricmp(s1, s2);
+#endif
 }
-
 
 /******************************************************************************
  * toupperstr - converts a string to uppercase string

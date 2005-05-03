@@ -15,10 +15,6 @@
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 #ifndef NO_SWORD_NAMESPACE
 using sword::TreeKeyIdx;
 using sword::RawGenBook;

@@ -9,10 +9,7 @@
 #include <osisheadings.h>
 #include <swmodule.h>
 #include <utilxml.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 

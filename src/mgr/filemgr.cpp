@@ -36,6 +36,7 @@
 #include <unistd.h>
 #endif
 
+
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
@@ -48,7 +49,28 @@
 #define S_IROTH 0
 #endif
 
+// Fix for VC6
+#ifndef S_IREAD
+#ifdef _S_IREAD
+#define S_IREAD _S_IREAD
+#define S_IWRITE _S_IWRITE
+#endif
+#endif
+// -----------
+
+
 SWORD_NAMESPACE_START
+
+
+int FileMgr::CREAT = O_CREAT;
+int FileMgr::APPEND = O_APPEND;
+int FileMgr::TRUNC = O_TRUNC;
+int FileMgr::RDONLY = O_RDONLY;
+int FileMgr::RDWR = O_RDWR;
+int FileMgr::WRONLY = O_WRONLY;
+int FileMgr::IREAD = S_IREAD;
+int FileMgr::IWRITE = S_IWRITE;
+
 
 // ---------------- statics -----------------
 FileMgr *FileMgr::systemFileMgr = 0;
@@ -105,12 +127,23 @@ int FileDesc::getFd() {
 //		return 777;
 	return fd;
 }
-/*
-unsigned int FileDesc::getFdu() {
-	getFd();
-	return (unsigned int)fd;
+
+
+long FileDesc::seek(long offset, int whence) {
+	return lseek(getFd(), offset, whence);
 }
-*/
+
+
+long FileDesc::read(void *buf, long count) {
+	return ::read(getFd(), buf, count);
+}
+
+
+long FileDesc::write(const void *buf, long count) {
+	return ::write(getFd(), buf, count);
+}
+
+
 FileMgr::FileMgr(int maxFiles) {
 	this->maxFiles = maxFiles;		// must be at least 2
 	files = 0;
@@ -129,8 +162,9 @@ FileMgr::~FileMgr() {
 
 
 FileDesc *FileMgr::open(const char *path, int mode, bool tryDowngrade) {
-	return open(path, mode, S_IREAD | S_IWRITE|S_IRGRP|S_IROTH, tryDowngrade);
+	return open(path, mode, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH, tryDowngrade);
 }
+
 
 FileDesc *FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade) {
 	FileDesc **tmp, *tmp2;
@@ -188,7 +222,7 @@ int FileMgr::sysOpen(FileDesc *file) {
 						file->mode = (file->mode & ~O_RDWR);	// remove write access
 						file->mode = (file->mode | O_RDONLY);// add read access
 					}
-					file->fd = ::open(file->path, file->mode, file->perms);
+					file->fd = ::open(file->path, file->mode|O_BINARY, file->perms);
 
 					if (file->fd >= 0)
 						break;

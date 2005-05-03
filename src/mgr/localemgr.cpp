@@ -24,17 +24,11 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#include <unixstr.h>
-#endif
 #include <sys/stat.h>
 #include <dirent.h>
 
 #include <swmgr.h>
-#include <utilfuns.h>
+#include <utilstr.h>
 
 #include <stringmgr.h>
 #include <filemgr.h>

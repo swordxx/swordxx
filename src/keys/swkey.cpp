@@ -5,7 +5,7 @@
  */
 
 #include <swkey.h>
-#include <utilfuns.h>
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 

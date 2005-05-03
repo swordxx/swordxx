@@ -1,6 +1,12 @@
 ﻿API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+2-May-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Removed many tools files and added them to
+		the sword-tools repository
+	Removed the need for many #if's throughout the code
+	Added seek, read, write, O_*, S_* to filemgr.cpp
+
 11-Apr-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Cleaned up unused files in preparation for release
 	Updated pkg-config to report proper required libs

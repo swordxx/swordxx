@@ -8,19 +8,11 @@
 #include <filemgr.h>
 
 #include <fcntl.h>
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 #include <dirent.h>
 
-using namespace std;
+
+using std::vector;
+
 
 SWORD_NAMESPACE_START
 
@@ -57,12 +49,12 @@ vector<struct ftpparse> FTPTransport::getDirList(const char *dirURL) {
 	fprintf(stderr, "FTPURLGetDir: getting dir %s\n", dirURL);
 
 	if (!getURL("dirlist", dirURL)) {
-		int fd = open("dirlist", O_RDONLY|O_BINARY);
-		long size = lseek(fd, 0, SEEK_END);
-		lseek(fd, 0, SEEK_SET);
+		FileDesc *fd = FileMgr::getSystemFileMgr()->open("dirlist", FileMgr::RDONLY);
+		long size = lseek(fd->getFd(), 0, SEEK_END);
+		lseek(fd->getFd(), 0, SEEK_SET);
 		char *buf = new char [ size + 1 ];
-		read(fd, buf, size);
-		close(fd);
+		read(fd->getFd(), buf, size);
+		FileMgr::getSystemFileMgr()->close(fd);
 		char *start = buf;
 		char *end = start;
 		while (start < (buf+size)) {

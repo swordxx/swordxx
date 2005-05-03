@@ -8,10 +8,6 @@
 #include <stdlib.h>
 #include <osislemma.h>
 #include <utilxml.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
 
 SWORD_NAMESPACE_START
 

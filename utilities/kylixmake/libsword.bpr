@@ -70,7 +70,6 @@
       ../../src/modules/lexdict/swld.o ../../src/modules/lexdict/rawld/rawld.o 
       ../../src/modules/lexdict/rawld4/rawld4.o 
       ../../src/modules/lexdict/zld/zld.o ../../src/modules/texts/swtext.o 
-      ../../src/modules/texts/rawgbf/rawgbf.o 
       ../../src/modules/texts/rawtext/rawtext.o 
       ../../src/modules/texts/ztext/ztext.o ../../src/utilfuns/roman.o"/>
     <RESFILES value=""/>
@@ -81,7 +80,7 @@
     <PACKAGES value="rtl.bpi visualclx.bpi dataclx.bpi visualdbclx.bpi netclx.bpi 
       netdataclx.bpi xmlrtl.bpi indy.bpi webdsnapclx.bpi websnapclx.bpi 
       soaprtl.bpi"/>
-    <PATHCPP value=".;../../src/utilfuns:../../src/keys:../../src/mgr:../../src/frontend:../../src/modules:../../src/modules/comments:../../src/modules/comments/hrefcom:../../src/modules/comments/rawcom:../../src/modules/comments/rawfiles:../../src/modules/comments/zcom:../../src/modules/common:../../src/modules/filters:../../src/modules/genbook:../../src/modules/genbook/rawgenbook:../../src/modules/lexdict:../../src/modules/lexdict/rawld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/zld:../../src/modules/texts:../../src/modules/texts/rawgbf:../../src/modules/texts/rawtext:../../src/modules/texts/ztext"/>
+    <PATHCPP value=".;../../src/utilfuns:../../src/keys:../../src/mgr:../../src/frontend:../../src/modules:../../src/modules/comments:../../src/modules/comments/hrefcom:../../src/modules/comments/rawcom:../../src/modules/comments/rawfiles:../../src/modules/comments/zcom:../../src/modules/common:../../src/modules/filters:../../src/modules/genbook:../../src/modules/genbook/rawgenbook:../../src/modules/lexdict:../../src/modules/lexdict/rawld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/zld:../../src/modules/texts:../../src/modules/texts/rawtext:../../src/modules/texts/ztext"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -89,8 +88,8 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value=""/>
     <MAINSOURCE value="libsword.bpf"/>
-    <INCLUDEPATH value="../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts/rawgbf:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:../../include:$(BCB)/include/stlport:$(BCB)/include:$(BCB)/include/vcl:/usr/include"/>
-    <LIBPATH value="../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts/rawgbf:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:$(BCB)/lib/obj:$(BCB)/lib:/usr/lib:/lib:/usr/X11R6/lib:$(BCB)/bin"/>
+    <INCLUDEPATH value="../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:../../include:$(BCB)/include/stlport:$(BCB)/include:$(BCB)/include/vcl:/usr/include"/>
+    <LIBPATH value="../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:$(BCB)/lib/obj:$(BCB)/lib:/usr/lib:/lib:/usr/X11R6/lib:$(BCB)/bin"/>
     <WARNINGS value="-w-par"/>
     <LISTFILE value=""/>
     <OTHERFILES value=""/>
@@ -201,7 +200,6 @@
       <FILE FILENAME="../../src/modules/lexdict/rawld4/rawld4.cpp" FORMNAME="" UNITNAME="rawld4" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/lexdict/zld/zld.cpp" FORMNAME="" UNITNAME="zld" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/texts/swtext.cpp" FORMNAME="" UNITNAME="swtext" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="../../src/modules/texts/rawgbf/rawgbf.cpp" FORMNAME="" UNITNAME="rawgbf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/texts/rawtext/rawtext.cpp" FORMNAME="" UNITNAME="rawtext" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/modules/texts/ztext/ztext.cpp" FORMNAME="" UNITNAME="ztext" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/utilfuns/roman.c" FORMNAME="" UNITNAME="roman" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -213,11 +211,11 @@
 [HistoryLists\hlIncludePath]
 Count=2
 Item0=../../include:$(BCB)/include/stlport:$(BCB)/include:$(BCB)/include/vcl:/usr/include
-Item1=../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts/rawgbf:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:$(BCB)/include/stlport:$(BCB)/include:$(BCB)/include/vcl:/usr/include
+Item1=../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:$(BCB)/include/stlport:$(BCB)/include:$(BCB)/include/vcl:/usr/include
 
 [HistoryLists\hlLibraryPath]
 Count=1
-Item0=../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts/rawgbf:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:$(BCB)/lib/obj:$(BCB)/lib:/usr/lib:/lib:/usr/X11R6/lib:$(BCB)/bin
+Item0=../../src/modules/texts/ztext:../../src/modules/texts/rawtext:../../src/modules/texts:../../src/modules/lexdict/zld:../../src/modules/lexdict/rawld4:../../src/modules/lexdict/rawld:../../src/modules/lexdict:../../src/modules/genbook/rawgenbook:../../src/modules/genbook:../../src/modules/filters:../../src/modules/common:../../src/modules/comments/zcom:../../src/modules/comments/rawfiles:../../src/modules/comments/rawcom:../../src/modules/comments/hrefcom:../../src/modules/comments:../../src/modules:../../src/frontend:../../src/mgr:../../src/keys:../../src/utilfuns:$(BCB)/lib/obj:$(BCB)/lib:/usr/lib:/lib:/usr/X11R6/lib:$(BCB)/bin
 
 [HistoryLists\hlConditionals]
 Count=1

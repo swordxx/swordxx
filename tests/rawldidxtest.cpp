@@ -2,10 +2,6 @@
 #include <rawstr.h>
 #include <swmgr.h>
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 #ifndef __GNUC__
 #include <io.h>
 #else
@@ -27,7 +23,7 @@ int main(int argc, char **argv)
      char buf[127];
 
 	sprintf(buf, "%s.idx", argv[1]);
-	FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, O_RDONLY|O_BINARY, true);
+	FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDONLY, true);
 	long maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - 6;
 	FileMgr::getSystemFileMgr()->close(idxfd);
 

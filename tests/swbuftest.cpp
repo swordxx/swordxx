@@ -3,11 +3,11 @@
 
 #define BASEI 102400000L
 
-//#include <swbuf.h>
-//typedef sword::SWBuf StringType;
+#include <swbuf.h>
+typedef sword::SWBuf StringType;
 
-#include <string>
-typedef std::string StringType;
+//#include <string>
+//typedef std::string StringType;
 
 using std::cout;
 using std::cerr;
@@ -54,7 +54,7 @@ void subscriptTest() {
 	for (int j = 0; j < 100; j++) {
 		s += "0123456789";
 	}
-	for (int j = 0; j < BASEI/100; j++) {
+	for (int j = 0; j < BASEI/200; j++) {
 		for (unsigned long i = s.length()-1; i; i--) {
 			s[i] = (char) (i%40)+65;
 		}

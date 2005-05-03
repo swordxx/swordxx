@@ -4,12 +4,6 @@
 #include <fstream>
 #include <string>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
 #include <ztext.h>
 #include <zld.h>
 #include <zcom.h>

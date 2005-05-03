@@ -5,6 +5,7 @@
 
 
 #include <gbfrtf.h>
+#include <utilstr.h>
 #include <ctype.h>
 
 SWORD_NAMESPACE_START

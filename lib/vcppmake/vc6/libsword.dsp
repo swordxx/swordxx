@@ -883,10 +883,6 @@ SOURCE=..\..\..\include\rawfiles.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\include\rawgbf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\include\rawgenbook.h
 # End Source File
 # Begin Source File

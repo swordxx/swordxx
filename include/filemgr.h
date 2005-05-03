@@ -31,18 +31,6 @@
 
 SWORD_NAMESPACE_START
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-#ifndef S_IREAD
-// Fix for VC6
-#ifdef _S_IREAD
-#define S_IREAD _S_IREAD
-#define S_IWRITE _S_IWRITE
-#endif
-//
-#endif
 
 class SWDLLEXPORT FileMgr;
 
@@ -65,6 +53,11 @@ public:
 	/** @return File handle.
 	*/
 	int getFd();
+
+	long seek(long offset, int whence);
+	long read(void *buf, long count);
+	long write(const void *buf, long count);
+
 	/** Path to file.
 	*/
 	char *path;
@@ -94,6 +87,14 @@ class SWDLLEXPORT FileMgr : public SWCacher {
 protected:
 	static FileMgr *systemFileMgr;
 public:
+	static int CREAT;
+	static int APPEND;
+	static int TRUNC;
+	static int RDONLY;
+	static int RDWR;
+	static int WRONLY;
+	static int IREAD;
+	static int IWRITE;
 
 	/** Maximum number of open files set in the constructor.
 	* determines the max number of real system files that

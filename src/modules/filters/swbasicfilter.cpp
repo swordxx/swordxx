@@ -26,6 +26,7 @@
 #include <swbasicfilter.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 

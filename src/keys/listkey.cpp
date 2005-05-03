@@ -4,7 +4,7 @@
  *				(e.g. a list of verses, place, etc.)
  */
 
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <stdlib.h>
 #include <swkey.h>
 #include <listkey.h>

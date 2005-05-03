@@ -3,16 +3,9 @@
  */
 
 #include <swmacs.h>
-#include <utilfuns.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
-
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
 
 #include <utilstr.h>
 #include <stringmgr.h>

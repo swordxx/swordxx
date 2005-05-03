@@ -13,10 +13,8 @@
 #include <swlog.h>
 #include <versekey.h>
 #include <stdarg.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
+#include <utilstr.h>
+
 
 SWORD_NAMESPACE_START
 

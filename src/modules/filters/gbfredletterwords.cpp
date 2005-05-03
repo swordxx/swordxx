@@ -8,10 +8,6 @@
 #include <stdlib.h>
 #include <gbfredletterwords.h>
 #include <swmodule.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
 #include <ctype.h>
 
 SWORD_NAMESPACE_START

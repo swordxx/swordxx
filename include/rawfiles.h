@@ -50,7 +50,7 @@ public:
 	* @return yes or no
 	*/
 	virtual bool isWritable() {
-		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & O_RDWR) == O_RDWR));
+		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 	}
 
 	/** Creates a new module

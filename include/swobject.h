@@ -1,11 +1,27 @@
+/******************************************************************************
+*  swobject.h  - definition for SWObject used as lowest base class for many
+*	SWORD objects
+*
+* $Id$
+*
+* Copyright 2005 CrossWire Bible Society (http://www.crosswire.org)
+*	CrossWire Bible Society
+*	P. O. Box 2528
+*	Tempe, AZ  85280-2528
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation version 2.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+*/
+
 #ifndef SWOBJECT_H
 #define SWOBJECT_H
-
-#include <utilfuns.h>
-#if !defined(__GNUC__) && !defined(_WIN32_WCE)
-#else
-#include <unixstr.h>
-#endif
 
 #include <defs.h>
 
@@ -24,13 +40,7 @@ public:
 		this->descends = descends;
 	}
 
-	bool isAssignableFrom(const char *className) const {
-		for (int i = 0; descends[i]; i++) {
-			if (!stricmp(descends[i], className))
-				return true;
-		}
-		return false;
-	}
+	bool isAssignableFrom(const char *className) const;
 };
 
 /** Base class for major Sword classes.

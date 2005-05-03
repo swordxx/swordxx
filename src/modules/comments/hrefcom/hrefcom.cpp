@@ -9,13 +9,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <rawverse.h>
 #include <hrefcom.h>
 #include <swbuf.h>

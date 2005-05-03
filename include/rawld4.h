@@ -49,7 +49,7 @@ public:
 	virtual void decrement(int steps = 1) { increment(-steps); }
 	// write interface ----------------------------
 	virtual bool isWritable() {
-		return ((idxfd->getFd() > 0) && ((idxfd->mode & O_RDWR) == O_RDWR));
+		return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 	}
 	static char createModule(const char *path) { return RawStr4::createModule(path); }
 

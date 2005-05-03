@@ -13,17 +13,9 @@ extern "C" {
 
 #include <installmgr.h>
 #include <filemgr.h>
+#include <utilstr.h>
 
 #include <fcntl.h>
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 #include <swmgr.h>
 #include <dirent.h>
@@ -458,9 +450,9 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	
 	errorCode = ftpCopy(is, "mods.d.tar.gz", archive.c_str(), false);
 	if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
-		int fd = open(archive.c_str(), O_RDONLY|O_BINARY);
-		untargz(fd, root.c_str());
-		close(fd);
+		FileDesc *fd = FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY);
+		untargz(fd->getFd(), root.c_str());
+		FileMgr::getSystemFileMgr()->close(fd);
 	}
 	else if (!term) //if the tar.gz download was canceled don't continue with another download
 #endif

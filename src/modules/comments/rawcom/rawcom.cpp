@@ -8,13 +8,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
 #include <rawverse.h>
 #include <rawcom.h>
 

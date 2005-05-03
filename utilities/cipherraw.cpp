@@ -15,6 +15,8 @@
 #include <versekey.h>
 #include <rawverse.h>
 #include <swbuf.h>
+
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif

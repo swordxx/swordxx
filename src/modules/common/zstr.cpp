@@ -8,14 +8,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
 #include <stdlib.h>
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <zstr.h>
 #include <swcomprs.h>
 
@@ -51,25 +45,22 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp)
 
 	compressor = (icomp) ? icomp : new SWCompress();
 	this->blockCount = blockCount;
-#ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
-#define O_BINARY 0		// If it hasn't been defined than we probably
-#endif				// don't need it.
 
 	if (fileMode == -1) { // try read/write if possible
-		fileMode = O_RDWR;
+		fileMode = FileMgr::RDWR;
 	}
 		
 	buf.setFormatted("%s.idx", path);
-	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s.dat", path);
-	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s.zdx", path);
-	zdxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	zdxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s.zdt", path);
-	zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	if (datfd <= 0) {
 		SWLog::getSystemLog()->logError("%d", errno);
@@ -121,15 +112,15 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
 	int size;
 	char ch;
 	if (datfd > 0) {
-		lseek(datfd->getFd(), ioffset, SEEK_SET);
-		for (size = 0; read(datfd->getFd(), &ch, 1) == 1; size++) {
+		datfd->seek(ioffset, SEEK_SET);
+		for (size = 0; datfd->read(&ch, 1) == 1; size++) {
 			if ((ch == '\\') || (ch == 10) || (ch == 13))
 				break;
 		}
 		*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 		if (size) {
-			lseek(datfd->getFd(), ioffset, SEEK_SET);
-			read(datfd->getFd(), *buf, size);
+			datfd->seek(ioffset, SEEK_SET);
+			datfd->read(*buf, size);
 		}
 		(*buf)[size] = 0;
 		toupperstr_utf8(*buf, size*2);
@@ -154,8 +145,8 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) {
 	__u32 offset;
 	
 	if (idxfd > 0) {
-		lseek(idxfd->getFd(), ioffset, SEEK_SET);
-		read(idxfd->getFd(), &offset, sizeof(__u32));
+		idxfd->seek(ioffset, SEEK_SET);
+		idxfd->read(&offset, sizeof(__u32));
 		offset = swordtoarch32(offset);
 		getKeyFromDatOffset(offset, buf);
 	}
@@ -181,7 +172,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 	__u32 start, size;
 
 	if (idxfd->getFd() >= 0) {
-		tailoff = maxoff = lseek(idxfd->getFd(), 0, SEEK_END) - IDXENTRYSIZE;
+		tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
 		if (*ikey) {
 			headoff = 0;
 			stdstr(&key, ikey, 3);
@@ -219,11 +210,11 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 		}
 		else	{ tryoff = 0; }
 
-		lseek(idxfd->getFd(), tryoff, SEEK_SET);
+		idxfd->seek(tryoff, SEEK_SET);
 
 		start = size = 0;
-		retval = (read(idxfd->getFd(), &start, sizeof(__u32))==sizeof(__u32)) ? retval : -1;
-		retval = (read(idxfd->getFd(), &size, sizeof(__u32))==sizeof(__u32)) ? retval : -1;
+		retval = (idxfd->read(&start, sizeof(__u32))==sizeof(__u32)) ? retval : -1;
+		retval = (idxfd->read(&size, sizeof(__u32))==sizeof(__u32)) ? retval : -1;
 		start = swordtoarch32(start);
 		size  = swordtoarch32(size);
 
@@ -239,7 +230,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 			bool bad = false;
 			if (((long)(tryoff + (away*IDXENTRYSIZE)) < -IDXENTRYSIZE) || (tryoff + (away*IDXENTRYSIZE) > (maxoff+IDXENTRYSIZE)))
 				bad = true;
-			else	if (lseek(idxfd->getFd(), tryoff, SEEK_SET) < 0)
+			else	if (idxfd->seek(tryoff, SEEK_SET) < 0)
 				bad = true;
 			if (bad) {
 				retval = -1;
@@ -250,8 +241,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 					*idxoff = tryoff;
 				break;
 			}
-			read(idxfd->getFd(), &start, sizeof(__u32));
-			read(idxfd->getFd(), &size, sizeof(__u32));
+			idxfd->read(&start, sizeof(__u32));
+			idxfd->read(&size, sizeof(__u32));
 			start = swordtoarch32(start);
 			size  = swordtoarch32(size);
 
@@ -353,9 +344,9 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 	__u32 size;
 
 	do {
-		lseek(idxfd->getFd(), offset, SEEK_SET);
-		read(idxfd->getFd(), &start, sizeof(__u32));
-		read(idxfd->getFd(), &size, sizeof(__u32));
+		idxfd->seek(offset, SEEK_SET);
+		idxfd->read(&start, sizeof(__u32));
+		idxfd->read(&size, sizeof(__u32));
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
@@ -363,8 +354,8 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 		*idxbuf = (*idxbuf) ? (char *)realloc(*idxbuf, size*2 + 1) : (char *)malloc(size*2 + 1);
 		memset(*buf, 0, size + 1);
 		memset(*idxbuf, 0, size + 1);
-		lseek(datfd->getFd(), start, SEEK_SET);
-		read(datfd->getFd(), *buf, (int)(size));
+		datfd->seek(start, SEEK_SET);
+		datfd->read(*buf, (int)(size));
 
 		for (ch = *buf; *ch; ch++) {		// skip over index string
 			if (*ch == 10) {
@@ -417,16 +408,16 @@ void zStr::getCompressedText(long block, long entry, char **buf) {
 	if (cacheBlockIndex != block) {
 		__u32 start = 0;
 
-		lseek(zdxfd->getFd(), block * ZDXENTRYSIZE, SEEK_SET);
-		read(zdxfd->getFd(), &start, sizeof(__u32));
-		read(zdxfd->getFd(), &size, sizeof(__u32));
+		zdxfd->seek(block * ZDXENTRYSIZE, SEEK_SET);
+		zdxfd->read(&start, sizeof(__u32));
+		zdxfd->read(&size, sizeof(__u32));
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
 		SWBuf buf;
 		buf.setSize(size + 5);
-		lseek(zdtfd->getFd(), start, SEEK_SET);
-		read(zdtfd->getFd(), buf.getRawData(), size);
+		zdtfd->seek(start, SEEK_SET);
+		zdtfd->read(buf.getRawData(), size);
 
 		flushCache();
 
@@ -483,16 +474,16 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		}
 		else if ((!diff) && (len > 0 /*we're not deleting*/)) { // got absolute entry
 			do {
-				lseek(idxfd->getFd(), idxoff, SEEK_SET);
-				read(idxfd->getFd(), &start, sizeof(__u32));
-				read(idxfd->getFd(), &size, sizeof(__u32));
+				idxfd->seek(idxoff, SEEK_SET);
+				idxfd->read(&start, sizeof(__u32));
+				idxfd->read(&size, sizeof(__u32));
 				start = swordtoarch32(start);
 				size = swordtoarch32(size);
 
 				tmpbuf = new char [ size + 2 ];
 				memset(tmpbuf, 0, size + 2);
-				lseek(datfd->getFd(), start, SEEK_SET);
-				read(datfd->getFd(), tmpbuf, size);
+				datfd->seek(start, SEEK_SET);
+				datfd->read(tmpbuf, size);
 
 				for (ch = tmpbuf; *ch; ch++) {		// skip over index string
 					if (*ch == 10) {
@@ -519,14 +510,14 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		}
 	}
 
-	endoff = lseek(idxfd->getFd(), 0, SEEK_END);
+	endoff = idxfd->seek(0, SEEK_END);
 
 	shiftSize = endoff - idxoff;
 
 	if (shiftSize > 0) {
 	        idxBytes = new char [ shiftSize ];
-		lseek(idxfd->getFd(), idxoff, SEEK_SET);
-		read(idxfd->getFd(), idxBytes, shiftSize);
+		idxfd->seek(idxoff, SEEK_SET);
+		idxfd->read(idxBytes, shiftSize);
 	}
 
 	outbuf = new char [ len + strlen(key) + 5 ];
@@ -536,12 +527,12 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		if (!cacheBlock) {
 			flushCache();
 			cacheBlock = new EntriesBlock();
-			cacheBlockIndex = (lseek(zdxfd->getFd(), 0, SEEK_END) / ZDXENTRYSIZE);
+			cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
 		}
 		else if (cacheBlock->getCount() >= blockCount) {
 			flushCache();
 			cacheBlock = new EntriesBlock();
-			cacheBlockIndex = (lseek(zdxfd->getFd(), 0, SEEK_END) / ZDXENTRYSIZE);
+			cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
 		}
 		__u32 entry = cacheBlock->addEntry(buf);
 		cacheDirty = true;
@@ -556,29 +547,29 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		size += len;
 	}
 
-	start = lseek(datfd->getFd(), 0, SEEK_END);
+	start = datfd->seek(0, SEEK_END);
 
 	outstart = archtosword32(start);
 	outsize  = archtosword32(size);
 
-	lseek(idxfd->getFd(), idxoff, SEEK_SET);
+	idxfd->seek(idxoff, SEEK_SET);
 	if (len > 0) {
-		lseek(datfd->getFd(), start, SEEK_SET);
-		write(datfd->getFd(), outbuf, size);
+		datfd->seek(start, SEEK_SET);
+		datfd->write(outbuf, size);
 
 		// add a new line to make data file easier to read in an editor
-		write(datfd->getFd(), &nl, 2);
+		datfd->write(&nl, 2);
 		
-		write(idxfd->getFd(), &outstart, sizeof(__u32));
-		write(idxfd->getFd(), &outsize, sizeof(__u32));
+		idxfd->write(&outstart, sizeof(__u32));
+		idxfd->write(&outsize, sizeof(__u32));
 		if (idxBytes) {
-			write(idxfd->getFd(), idxBytes, shiftSize);
+			idxfd->write(idxBytes, shiftSize);
 		}
 	}
 	else {	// delete entry
 		if (idxBytes) {
-			write(idxfd->getFd(), idxBytes+IDXENTRYSIZE, shiftSize-IDXENTRYSIZE);
-			lseek(idxfd->getFd(), -1, SEEK_CUR);	// last valid byte
+			idxfd->write(idxBytes+IDXENTRYSIZE, shiftSize-IDXENTRYSIZE);
+			idxfd->seek(-1, SEEK_CUR);	// last valid byte
 			FileMgr::getSystemFileMgr()->trunc(idxfd);	// truncate index
 		}
 	}
@@ -624,16 +615,16 @@ void zStr::flushCache() {
 			buf.setSize(size);
 			rawZFilter(buf, 1); // 1 = encipher
 
-			long zdxSize = lseek(zdxfd->getFd(), 0, SEEK_END);
-			long zdtSize = lseek(zdtfd->getFd(), 0, SEEK_END);
+			long zdxSize = zdxfd->seek(0, SEEK_END);
+			long zdtSize = zdtfd->seek(0, SEEK_END);
 
 			if ((cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {	// New Block
 				start = zdtSize;
 			}
 			else {
-				lseek(zdxfd->getFd(), cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
-				read(zdxfd->getFd(), &start, sizeof(__u32));
-				read(zdxfd->getFd(), &outsize, sizeof(__u32));
+				zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
+				zdxfd->read(&start, sizeof(__u32));
+				zdxfd->read(&outsize, sizeof(__u32));
 				start = swordtoarch32(start);
 				outsize = swordtoarch32(outsize);
 				if (start + outsize >= zdtSize) {	// last entry, just overwrite
@@ -652,15 +643,15 @@ void zStr::flushCache() {
 			outstart = archtosword32(start);
 			outsize  = archtosword32((__u32)size);
 
-			lseek(zdxfd->getFd(), cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
-			lseek(zdtfd->getFd(), start, SEEK_SET);
-			write(zdtfd->getFd(), buf, size);
+			zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
+			zdtfd->seek(start, SEEK_SET);
+			zdtfd->write(buf, size);
 
 			// add a new line to make data file easier to read in an editor
-			write(zdtfd->getFd(), &nl, 2);
+			zdtfd->write(&nl, 2);
 			
-			write(zdxfd->getFd(), &outstart, sizeof(__u32));
-			write(zdxfd->getFd(), &outsize, sizeof(__u32));
+			zdxfd->write(&outstart, sizeof(__u32));
+			zdxfd->write(&outsize, sizeof(__u32));
 		}
 		delete cacheBlock;
 		cacheBlock = 0;
@@ -689,25 +680,25 @@ signed char zStr::createModule(const char *ipath) {
 
 	sprintf(buf, "%s.dat", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s.idx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd2);
 
 	sprintf(buf, "%s.zdt", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd2);
 
 	sprintf(buf, "%s.zdx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd2);
 

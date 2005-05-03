@@ -19,10 +19,6 @@
 #include <swkey.h>
 
 #include <stdlib.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
 
 SWORD_NAMESPACE_START
 

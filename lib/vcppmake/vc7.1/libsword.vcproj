@@ -5401,9 +5401,6 @@
 				RelativePath="..\..\..\include\rawfiles.h">
 			</File>
 			<File
-				RelativePath="..\..\..\include\rawgbf.h">
-			</File>
-			<File
 				RelativePath="..\..\..\include\rawgenbook.h">
 			</File>
 			<File

@@ -5,12 +5,6 @@
 #include <stdlib.h>
 #include <string>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
 #include <utilstr.h>
 #include <filemgr.h>
 #include <swmgr.h>
@@ -19,10 +13,6 @@
 #include <swbuf.h>
 #include <utilxml.h>
 #include <listkey.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -359,7 +349,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Let's see if we can open our input file
-	FileDesc *fd = FileMgr::getSystemFileMgr()->open(argv[2], O_RDONLY|O_BINARY);
+	FileDesc *fd = FileMgr::getSystemFileMgr()->open(argv[2], FileMgr::RDONLY);
 	if (fd->getFd() < 0) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[2]);
 		exit(-2);

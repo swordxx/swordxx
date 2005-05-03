@@ -8,14 +8,7 @@
 #include <stdlib.h>
 #include <thmlheadings.h>
 #include <utilxml.h>
-
-#ifndef	_WIN32_WCE
-#include <iostream>
-#endif
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 

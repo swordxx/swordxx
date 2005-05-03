@@ -7,10 +7,6 @@
 
 #include <stdlib.h>
 #include <gbfmorph.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
 
 SWORD_NAMESPACE_START
 

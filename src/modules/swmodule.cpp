@@ -5,7 +5,7 @@
  */
 
 #include <swmodule.h>
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search

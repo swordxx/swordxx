@@ -45,7 +45,7 @@ public:
 	virtual SWBuf &getRawEntryBuf();
 	// write interface ----------------------------
 	virtual bool isWritable() {
-		return ((bdtfd->getFd() > 0) && ((bdtfd->mode & O_RDWR) == O_RDWR));
+		return ((bdtfd->getFd() > 0) && ((bdtfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 	}
 	static char createModule(const char *ipath);
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry

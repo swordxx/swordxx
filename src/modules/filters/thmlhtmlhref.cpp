@@ -18,6 +18,7 @@
 #include <thmlhtmlhref.h>
 #include <swmodule.h>
 #include <utilxml.h>
+#include <utilstr.h>
 #include <versekey.h>
 #include <url.h>
 

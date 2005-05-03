@@ -9,20 +9,9 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
 #include <rawverse.h>
 #include <rawfiles.h>
 #include <filemgr.h>
-
-#ifndef O_BINARY                // O_BINARY is needed in Borland C++ 4.53
-#define O_BINARY 0              // If it hasn't been defined than we probably
-#endif                          // don't need it.
 
 SWORD_NAMESPACE_START
 
@@ -34,7 +23,7 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, O_RDWR), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)
+RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, FileMgr::RDWR), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)
 {
 }
 
@@ -78,7 +67,7 @@ SWBuf &RawFiles::getRawEntryBuf() {
 		readText(key->Testament(), start, size, entryBuf);
 		tmpbuf += entryBuf;
 		entryBuf = "";
-		datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), O_RDONLY|O_BINARY);
+		datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
 		if (datafile->getFd() > 0) {
 			size = lseek(datafile->getFd(), 0, SEEK_END);
 			char *tmpBuf = new char [ size + 1 ];
@@ -135,7 +124,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 		doSetText(key->Testament(), key->Index(), tmpbuf);
 		entryBuf += tmpbuf;
 	}
-	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
 	if (datafile->getFd() > 0) {
 		write(datafile->getFd(), inbuf, len);
 	}
@@ -228,13 +217,13 @@ char *RawFiles::getNextFilename() {
 	FileDesc *datafile;
 
 	sprintf(incfile, "%s/incfile", path);
-	datafile = FileMgr::getSystemFileMgr()->open(incfile, O_RDONLY|O_BINARY);
+	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
 	if (read(datafile->getFd(), &number, 4) != 4)
 		number = 0;
 	number++;
 	FileMgr::getSystemFileMgr()->close(datafile);
 	
-	datafile = FileMgr::getSystemFileMgr()->open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
 	write(datafile->getFd(), &number, 4);
 	FileMgr::getSystemFileMgr()->close(datafile);
 	sprintf(incfile, "%.7ld", number-1);
@@ -248,7 +237,7 @@ char RawFiles::createModule (const char *path) {
 	FileDesc *datafile;
 
 	sprintf(incfile, "%s/incfile", path);
-	datafile = FileMgr::getSystemFileMgr()->open(incfile, O_CREAT|O_WRONLY|O_BINARY|O_TRUNC);
+	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
     delete [] incfile;
 	write(datafile->getFd(), &zero, 4);
 	FileMgr::getSystemFileMgr()->close(datafile);

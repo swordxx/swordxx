@@ -12,22 +12,12 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <versekey.h>
 #include <zverse.h>
 #include <sysdata.h>
 #include <swbuf.h>
 
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 SWORD_NAMESPACE_START
 
@@ -45,7 +35,7 @@ const char zVerse::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
  * ENT:	ipath - path of the directory where data and index files are located.
  *		be sure to include the trailing separator (e.g. '/' or '\')
  *		(e.g. 'modules/texts/rawtext/webster/')
- *		fileMode - open mode for the files (O_RDONLY, etc.)
+ *		fileMode - open mode for the files (FileMgr::RDONLY, etc.)
  *		blockType - verse, chapter, book, etc.
  */
 
@@ -67,26 +57,26 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
 	compressor = (icomp) ? icomp : new SWCompress();
 
 	if (fileMode == -1) { // try read/write if possible
-		fileMode = O_RDWR;
+		fileMode = FileMgr::RDWR;
 	}
 		
 	buf.setFormatted("%s/ot.%czs", path, uniqueIndexID[blockType]);
-	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/nt.%czs", path, uniqueIndexID[blockType]);
-	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/ot.%czz", path, uniqueIndexID[blockType]);
-	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/nt.%czz", path, uniqueIndexID[blockType]);
-	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/ot.%czv", path, uniqueIndexID[blockType]);
-	compfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	compfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	buf.setFormatted("%s/nt.%czv", path, uniqueIndexID[blockType]);
-	compfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	compfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 	
 	instance++;
 }
@@ -158,9 +148,9 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 	if (compfp[testmt-1]->getFd() < 1)
 		return;
 		
-	long newOffset = lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
+	long newOffset = compfp[testmt-1]->seek(idxoff, SEEK_SET);
 	if (newOffset == idxoff) {
-		if (read(compfp[testmt-1]->getFd(), &ulBuffNum, 4) != 4) {
+		if (compfp[testmt-1]->read(&ulBuffNum, 4) != 4) {
 			printf ("Error reading ulBuffNum\n");
 			return;
 		}
@@ -169,12 +159,12 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 
 	ulBuffNum = swordtoarch32(ulBuffNum);
 
-	if (read(compfp[testmt-1]->getFd(), &ulVerseStart, 4) < 2)
+	if (compfp[testmt-1]->read(&ulVerseStart, 4) < 2)
 	{
 		printf ("Error reading ulVerseStart\n");
 		return;
 	}
-	if (read(compfp[testmt-1]->getFd(), &usVerseSize, 2) < 2)
+	if (compfp[testmt-1]->read(&usVerseSize, 2) < 2)
 	{
 		printf ("Error reading usVerseSize\n");
 		return;
@@ -192,22 +182,22 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
 
 
-		if (lseek(idxfp[testmt-1]->getFd(), ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
+		if (idxfp[testmt-1]->seek(ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
 		{
 			printf ("Error seeking compressed file index\n");
 			return;
 		}
-		if (read(idxfp[testmt-1]->getFd(), &ulCompOffset, 4)<4)
+		if (idxfp[testmt-1]->read(&ulCompOffset, 4)<4)
 		{
 			printf ("Error reading ulCompOffset\n");
 			return;
 		}
-		if (read(idxfp[testmt-1]->getFd(), &ulCompSize, 4)<4)
+		if (idxfp[testmt-1]->read(&ulCompSize, 4)<4)
 		{
 			printf ("Error reading ulCompSize\n");
 			return;
 		}
-		if (read(idxfp[testmt-1]->getFd(), &ulUnCompSize, 4)<4)
+		if (idxfp[testmt-1]->read(&ulUnCompSize, 4)<4)
 		{
 			printf ("Error reading ulUnCompSize\n");
 			return;
@@ -217,7 +207,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		ulCompSize  = swordtoarch32(ulCompSize);
 		ulUnCompSize  = swordtoarch32(ulUnCompSize);
 
-		if (lseek(textfp[testmt-1]->getFd(), ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
+		if (textfp[testmt-1]->seek(ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
 		{
 			printf ("Error: could not seek to right place in compressed text\n");
 			return;
@@ -225,7 +215,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		SWBuf pcCompText;
 		pcCompText.setSize(ulCompSize+5);
 
-		if (read(textfp[testmt-1]->getFd(), pcCompText.getRawData(), ulCompSize)<(long)ulCompSize) {
+		if (textfp[testmt-1]->read(pcCompText.getRawData(), ulCompSize)<(long)ulCompSize) {
 			printf ("Error reading compressed text\n");
 			return;
 		}
@@ -287,7 +277,7 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 	if (!testmt) 
 		testmt = ((idxfp[0]) ? 1:2);
 	if ((!dirtyCache) || (cacheBufIdx < 0)) {
-		cacheBufIdx = lseek(idxfp[testmt-1]->getFd(), 0, SEEK_END) / 12;
+		cacheBufIdx = idxfp[testmt-1]->seek(0, SEEK_END) / 12;
 		cacheTestament = testmt;
 		if (cacheBuf)
 			free(cacheBuf);
@@ -314,10 +304,10 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 	outstart  = archtosword32(start);
 	outsize   = archtosword16(size);
 
-	lseek(compfp[testmt-1]->getFd(), idxoff, SEEK_SET);
-	write(compfp[testmt-1]->getFd(), &outBufIdx, 4);
-	write(compfp[testmt-1]->getFd(), &outstart, 4);
-	write(compfp[testmt-1]->getFd(), &outsize, 2);
+	compfp[testmt-1]->seek(idxoff, SEEK_SET);
+	compfp[testmt-1]->write(&outBufIdx, 4);
+	compfp[testmt-1]->write(&outstart, 4);
+	compfp[testmt-1]->write(&outsize, 2);
 	strcat(cacheBuf, buf);
 }
 
@@ -347,18 +337,18 @@ void zVerse::flushCache() {
 				buf.setSize(zsize);
 				rawZFilter(buf, 1); // 1 = encipher
 
-				start = outstart = lseek(textfp[cacheTestament-1]->getFd(), 0, SEEK_END);
+				start = outstart = textfp[cacheTestament-1]->seek(0, SEEK_END);
 
 				outstart  = archtosword32(start);
 				outsize   = archtosword32(size);
 				outzsize  = archtosword32(zsize);
 
-				write(textfp[cacheTestament-1]->getFd(), buf, zsize);
+				textfp[cacheTestament-1]->write(buf, zsize);
 
-				lseek(idxfp[cacheTestament-1]->getFd(), idxoff, SEEK_SET);
-				write(idxfp[cacheTestament-1]->getFd(), &outstart, 4);
-				write(idxfp[cacheTestament-1]->getFd(), &outzsize, 4);
-				write(idxfp[cacheTestament-1]->getFd(), &outsize, 4);
+				idxfp[cacheTestament-1]->seek(idxoff, SEEK_SET);
+				idxfp[cacheTestament-1]->write(&outstart, 4);
+				idxfp[cacheTestament-1]->write(&outzsize, 4);
+				idxfp[cacheTestament-1]->write(&outsize, 4);
 			}
 			free(cacheBuf);
 			cacheBuf = 0;
@@ -387,16 +377,16 @@ void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 		testmt = ((idxfp[1]) ? 1:2);
 
 	// get source
-	lseek(compfp[testmt-1]->getFd(), srcidxoff, SEEK_SET);
-	read(compfp[testmt-1]->getFd(), &bufidx, 4);
-	read(compfp[testmt-1]->getFd(), &start, 4);
-	read(compfp[testmt-1]->getFd(), &size, 2);
+	compfp[testmt-1]->seek(srcidxoff, SEEK_SET);
+	compfp[testmt-1]->read(&bufidx, 4);
+	compfp[testmt-1]->read(&start, 4);
+	compfp[testmt-1]->read(&size, 2);
 
 	// write dest
-	lseek(compfp[testmt-1]->getFd(), destidxoff, SEEK_SET);
-	write(compfp[testmt-1]->getFd(), &bufidx, 4);
-	write(compfp[testmt-1]->getFd(), &start, 4);
-	write(compfp[testmt-1]->getFd(), &size, 2);
+	compfp[testmt-1]->seek(destidxoff, SEEK_SET);
+	compfp[testmt-1]->write(&bufidx, 4);
+	compfp[testmt-1]->write(&start, 4);
+	compfp[testmt-1]->write(&size, 2);
 }
 
 
@@ -420,36 +410,36 @@ char zVerse::createModule(const char *ipath, int blockBound)
 
 	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 
 	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 
 	VerseKey vk;
@@ -457,9 +447,16 @@ char zVerse::createModule(const char *ipath, int blockBound)
 	long offset = 0;
 	short size = 0;
 	for (vk = TOP; !vk.Error(); vk++) {
-		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &offset, 4);	//compBufIdxOffset
-		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &offset, 4);
-		write((vk.Testament() == 1) ? fd->getFd() : fd2->getFd(), &size, 2);
+		if (vk.Testament() == 1) {
+			fd->write(&offset, 4);	//compBufIdxOffset
+			fd->write(&offset, 4);
+			fd->write(&size, 2);
+		}
+		else {
+			fd2->write(&offset, 4);	//compBufIdxOffset
+			fd2->write(&offset, 4);
+			fd2->write(&size, 2);
+		}
 	}
 
 	FileMgr::getSystemFileMgr()->close(fd);

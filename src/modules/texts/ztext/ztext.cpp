@@ -7,16 +7,8 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
-
 #include <sysdata.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
 #include <ztext.h>
 
 #include <regex.h>	// GNU
@@ -221,13 +213,5 @@ VerseKey &zText::getVerseKey() {
 	}
 	else	return *key;
 }
-
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-
-
 
 SWORD_NAMESPACE_END

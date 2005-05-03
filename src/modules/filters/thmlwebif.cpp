@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <thmlwebif.h>
 #include <swmodule.h>
-#include <utilweb.h>
+#include <url.h>
 #include <utilxml.h>
 #include <ctype.h>
 
@@ -44,7 +44,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 			if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")){
 				buf += "<small><em> (";
-				buf.appendFormatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
+				buf.appendFormatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
 			}
 			else {
 				if (value) {
@@ -53,7 +53,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 
 				buf += "<small><em> &lt;";
-				buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str() );
+				buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
 			}
 
 			buf += value;
@@ -74,7 +74,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 				else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
 					url = u->lastTextNode;
-					buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), encodeURL(url).c_str());
+					buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
 					buf += u->lastTextNode.c_str();
 					buf += "</a>";
 
@@ -85,7 +85,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			else if (tag.getAttribute("passage")) { //passage given
 				u->inscriptRef = true;
 
-				buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), encodeURL(tag.getAttribute("passage")).c_str());
+				buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.getAttribute("passage")).c_str());
 			}
 			else { //no passage given
 				u->inscriptRef = false;

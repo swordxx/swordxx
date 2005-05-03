@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <osiswebif.h>
 #include <utilxml.h>
+#include <url.h>
 #include <versekey.h>
 #include <swmodule.h>
 #include <ctype.h>
@@ -80,7 +81,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							val2++;
 						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 							show = false;
-						else	buf.appendFormatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL.c_str(), encodeURL(val2).c_str(), val2);
+						else	buf.appendFormatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
 					} while (++i < count);
 				}
 				if ((attrib = tag.getAttribute("morph")) && (show)) {
@@ -98,7 +99,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							const char *val2 = val;
 							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 								val2+=2;
-							buf.appendFormatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL.c_str(), encodeURL(val2).c_str(), val2);
+							buf.appendFormatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
 						} while (++i < count);
 					}
 				}

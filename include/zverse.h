@@ -46,7 +46,7 @@ public:
 	char nl;
 
 
-	zVerse(const char *ipath, int fileMode = O_RDONLY, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
+	zVerse(const char *ipath, int fileMode = FileMgr::RDONLY, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
 	virtual ~zVerse();
 	void findOffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void zReadText(char testmt, long start, unsigned short size, SWBuf &buf);

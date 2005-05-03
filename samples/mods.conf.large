@@ -8,8 +8,9 @@ Description=Personal Commentary
 About=This module allows you to store your own commentary.
 
 [SpanishRVA]
-DataPath=/usr/local/sword/modules/texts/rawgbf/spanishrva/
-ModDrv=RawGBF
+DataPath=/usr/local/sword/modules/texts/rawtext/spanishrva/
+ModDrv=RawText
+SourceType=GBF
 Description=The New International Version
 About=\qc El texto b¡blico designado RVA es de LA SANTA BIBLIA, \par \
 VERSION REINA-VALERA ACTUALIZADA. Copyright 1982, 1986, \par \
@@ -21,8 +22,8 @@ miso por escrito por la Casa Bautista de Publicaciones. \par\pard \
 
 
 [NASB]
-DataPath=/usr/local/sword/modules/texts/rawgbf/nasb/
-ModDrv=RawGBF
+DataPath=/usr/local/sword/modules/texts/rawtext/nasb/
+ModDrv=RawText
 Description=The New American Standard Bible
 About=\qc -=+* see the file errata.doc for important verse descrepencies *+=- \par\par \
 The New American Standard Bible \par \
@@ -38,8 +39,8 @@ a review in a magazine or newspaper. \par\pard
 
 
 [NIV]
-DataPath=/usr/local/sword/modules/texts/rawgbf/niv/
-ModDrv=RawGBF
+DataPath=/usr/local/sword/modules/texts/rawtext/niv/
+ModDrv=RawText
 Description=The New International Version
 About=\qc -=+* see the file errata.doc for important verse descrepencies *+=- \par\par\pard \
 Quotations designated (NIV) are from \par\par \
@@ -362,8 +363,8 @@ This is a lexicon of Greek words keyed off of Strong's numbers.
 
 
 [WEB]
-DataPath=/usr/local/sword/modules/texts/rawgbf/web/
-ModDrv=RawGBF
+DataPath=/usr/local/sword/modules/texts/rawtext/web/
+ModDrv=RawText
 Description=The World English Bible
 About= -=+* see the file 'info.txt' for more details *+=-\par\par \
 \qc The World English Bible (WEB) \par\par Public Domain \par\par \pard \
@@ -450,8 +451,8 @@ Inquiries and comments may be directed to: \par\par \
         http://www.online-bible.com
 
 [FrenchLSG]
-DataPath=/usr/local/sword/modules/texts/rawgbf/frenchlsg/
-ModDrv=RawGBF
+DataPath=/usr/local/sword/modules/texts/rawtext/frenchlsg/
+ModDrv=RawText
 Description=French 1910 Louis Segond Version 
 About=The 1910 edition of the Louis Segond Bible is keyed to Strong's numbers.  \
 All this material may be freely copied and shared with your friends.  \

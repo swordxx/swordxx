@@ -10,10 +10,6 @@
 #include <utilxml.h>
 #include <versekey.h>
 #include <swmodule.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
 
 SWORD_NAMESPACE_START
 

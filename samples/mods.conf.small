@@ -126,8 +126,9 @@ This is a lexicon of Greek words keyed off of Strong's numbers.
 
 
 [WEB]
-DataPath=/usr/local/lib/sword/modules/texts/rawgbf/web/
-ModDrv=RawGBF
+DataPath=/usr/local/lib/sword/modules/texts/rawtext/web/
+ModDrv=RawText
+SourceType=GBF
 Description=The World English Bible
 About= -=+* see the file 'info.txt' for more details *+=-\par\par \
 \qc The World English Bible (WEB) \par\par Public Domain \par\par \pard \

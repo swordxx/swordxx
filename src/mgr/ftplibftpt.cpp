@@ -7,15 +7,6 @@
 #include <ftplibftpt.h>
 
 #include <fcntl.h>
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 #include <ftplib.h>
 

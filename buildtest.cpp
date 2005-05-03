@@ -3,7 +3,6 @@
 #include <rawtext.h>
 //#include <zcom.h>
 #include <rawcom.h>
-//#include <rawgbf.h>
 //#include <rawfiles.h>
 #ifndef NO_SWORD_NAMESPACE
 using sword::VerseKey;
@@ -21,7 +20,6 @@ int main(int argc, char **argv)
 //	RawText text("src/modules/texts/rawtext/sve/", "Sven Text", "Sven Text");
 	RawText text("src/modules/texts/rawtext/webster/", "Webster", "Webster Text");
 //	RawText text("src/modules/texts/rawtext/orthjbc/", "Webster", "Webster Text");
-//	RawGBF text("src/modules/texts/rawgbf/newtext/", "WEB", "World English Bible");
 //	RawText text("src/modules/texts/rawtext/kjv/", "KJV", "KJV Text");
 //	RawText text("src/modules/texts/rawtext/vnt/", "VNT", "Valera Spanish NT");
 //	RawCom  commentary("src/modules/comments/rawcom/rwp/", "RWP", "Robertson's Word Pictures");

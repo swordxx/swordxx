@@ -18,6 +18,7 @@
 #include <thmlrtf.h>
 #include <swmodule.h>
 #include <utilxml.h>
+#include <utilstr.h>
 #include <versekey.h>
 
 SWORD_NAMESPACE_START

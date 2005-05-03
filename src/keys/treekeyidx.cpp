@@ -25,12 +25,8 @@
 #include <stdio.h>
 #include <errno.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
 #include <swlog.h>
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 
@@ -54,18 +50,14 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	path = 0;
 	stdstr(&path, idxPath);
 
-#ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
-#define O_BINARY 0		// If it hasn't been defined than we probably
-#endif				// don't need it.
-
 	if (fileMode == -1) { // try read/write if possible
-		fileMode = O_RDWR;
+		fileMode = FileMgr::RDWR;
 	}
 		
 	buf.setFormatted("%s.idx", path);
-	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 	buf.setFormatted("%s.dat", path);
-	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
 	if (datfd <= 0) {
 		SWLog::getSystemLog()->logError("%d", errno);
@@ -202,7 +194,7 @@ void TreeKeyIdx::append() {
 		while (lastSib.next > -1) {
 			getTreeNodeFromIdxOffset(lastSib.next, &lastSib);
 		}
-		__u32 idxOffset = lseek(idxfd->getFd(), 0, SEEK_END);
+		__u32 idxOffset = idxfd->seek(0, SEEK_END);
 		lastSib.next = idxOffset;
 		saveTreeNodeOffsets(&lastSib);
 		__u32 parent = currentNode.parent;
@@ -218,7 +210,7 @@ void TreeKeyIdx::appendChild() {
 		append();
 	}
 	else {
-		__u32 idxOffset = lseek(idxfd->getFd(), 0, SEEK_END);
+		__u32 idxOffset = idxfd->seek(0, SEEK_END);
 		currentNode.firstChild = idxOffset;
 		saveTreeNodeOffsets(&currentNode);
 		__u32 parent = currentNode.offset;
@@ -256,13 +248,13 @@ signed char TreeKeyIdx::create(const char *ipath) {
 
 	sprintf(buf, "%s.dat", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s.idx", path);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd2);
 
@@ -293,33 +285,33 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 
 	if (datfd > 0) {
 
-		lseek(datfd->getFd(), ioffset, SEEK_SET);
+		datfd->seek(ioffset, SEEK_SET);
 
-		read(datfd->getFd(), &tmp, 4);
+		datfd->read(&tmp, 4);
 		node->parent = swordtoarch32(tmp);
 
-		read(datfd->getFd(), &tmp, 4);
+		datfd->read(&tmp, 4);
 		node->next = swordtoarch32(tmp);
 
-		read(datfd->getFd(), &tmp, 4);
+		datfd->read(&tmp, 4);
 		node->firstChild = swordtoarch32(tmp);
 
 		SWBuf name;
 		do {
-			read(datfd->getFd(), &ch, 1);
+			datfd->read(&ch, 1);
 			name += ch;
 		} while (ch);
 
 		stdstr(&(node->name), name.c_str());
 
-		read(datfd->getFd(), &tmp2, 2);
+		datfd->read(&tmp2, 2);
 		node->dsize = swordtoarch16(tmp2);
 
 		if (node->dsize) {
 			if (node->userData)
 				delete [] node->userData;
 			node->userData = new char [node->dsize];
-			read(datfd->getFd(), node->userData, node->dsize);
+			datfd->read(node->userData, node->dsize);
 		}
 	}
 }
@@ -346,15 +338,15 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 	node->offset = ioffset;
 	if (idxfd > 0) {
 		if (idxfd->getFd() > 0) {
-			lseek(idxfd->getFd(), ioffset, SEEK_SET);
-			if (read(idxfd->getFd(), &offset, 4) == 4) {
+			idxfd->seek(ioffset, SEEK_SET);
+			if (idxfd->read(&offset, 4) == 4) {
 				offset = swordtoarch32(offset);
 				error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
 				getTreeNodeFromDatOffset(offset, node);
 			}
 			else {
-				lseek(idxfd->getFd(), -4, SEEK_END);
-				if (read(idxfd->getFd(), &offset, 4) == 4) {
+				idxfd->seek(-4, SEEK_END);
+				if (idxfd->read(&offset, 4) == 4) {
 					offset = swordtoarch32(offset);
 					getTreeNodeFromDatOffset(offset, node);
 				}
@@ -379,25 +371,25 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 	__s32 tmp;
 
 	if (idxfd > 0) {
-		lseek(idxfd->getFd(), node->offset, SEEK_SET);
-		if (read(idxfd->getFd(), &tmp, 4) != 4) {
-			datOffset = lseek(datfd->getFd(), 0, SEEK_END);
+		idxfd->seek(node->offset, SEEK_SET);
+		if (idxfd->read(&tmp, 4) != 4) {
+			datOffset = datfd->seek(0, SEEK_END);
 			tmp = archtosword32(datOffset);
-			write(idxfd->getFd(), &tmp, 4);
+			idxfd->write(&tmp, 4);
 		}
 		else {
 			datOffset = swordtoarch32(tmp);
-			lseek(datfd->getFd(), datOffset, SEEK_SET);
+			datfd->seek(datOffset, SEEK_SET);
 		}
 
 		tmp = archtosword32(node->parent);
-		write(datfd->getFd(), &tmp, 4);
+		datfd->write(&tmp, 4);
 
 		tmp = archtosword32(node->next);
-		write(datfd->getFd(), &tmp, 4);
+		datfd->write(&tmp, 4);
 
 		tmp = archtosword32(node->firstChild);
-		write(datfd->getFd(), &tmp, 4);
+		datfd->write(&tmp, 4);
 	}
 }
 
@@ -444,22 +436,22 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 	__s32 tmp;
 	if (idxfd > 0) {
 
-		lseek(idxfd->getFd(), node->offset, SEEK_SET);
-		datOffset = lseek(datfd->getFd(), 0, SEEK_END);
+		idxfd->seek(node->offset, SEEK_SET);
+		datOffset = datfd->seek(0, SEEK_END);
 		tmp = archtosword32(datOffset);
-		write(idxfd->getFd(), &tmp, 4);
+		idxfd->write(&tmp, 4);
 
 		saveTreeNodeOffsets(node);
 
-		write(datfd->getFd(), node->name, strlen(node->name));
+		datfd->write(node->name, strlen(node->name));
 		char null = 0;
-		write(datfd->getFd(), &null, 1);
+		datfd->write(&null, 1);
 
 		__u16 tmp2 = archtosword16(node->dsize);
-		write(datfd->getFd(), &tmp2, 2);
+		datfd->write(&tmp2, 2);
 
 		if (node->dsize) {
-			write(datfd->getFd(), node->userData, node->dsize);
+			datfd->write(node->userData, node->dsize);
 		}
 	}
 }
@@ -503,7 +495,7 @@ void TreeKeyIdx::setPosition(SW_POSITION p) {
 		root();
 		break;
 	case POS_BOTTOM:
-		error = getTreeNodeFromIdxOffset(lseek(idxfd->getFd(), -4, SEEK_END), &currentNode);
+		error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
 		break;
 	} 
 	Error();	// clear error from normalize

@@ -7,19 +7,9 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
 #include <rawgenbook.h>
 #include <rawstr.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,7 +23,7 @@ SWORD_NAMESPACE_START
 
 RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
 		: SWGenBook(iname, idesc, idisp, enc, dir, mark, ilang) {
-	int fileMode = O_RDWR;
+
 	char *buf = new char [ strlen (ipath) + 20 ];
 
 	path = 0;
@@ -48,7 +38,7 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 
 
 	sprintf(buf, "%s.bdt", path);
-	bdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode|O_BINARY, true);
+	bdtfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDWR, true);
 
 	delete [] buf;
 
@@ -191,7 +181,7 @@ char RawGenBook::createModule(const char *ipath) {
 
 	sprintf(buf, "%s.bdt", path);
 	FileMgr::removeFile(buf);
-	fd = FileMgr::getSystemFileMgr()->open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE);
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd->getFd();
 	FileMgr::getSystemFileMgr()->close(fd);
 

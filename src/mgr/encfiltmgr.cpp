@@ -20,6 +20,7 @@
  */
 
 #include <encfiltmgr.h>
+#include <utilstr.h>
 
 #include <scsuutf8.h>
 #include <latin1utf8.h>

@@ -8,13 +8,7 @@
 #include <fcntl.h>
 #include <sysdata.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <rawverse.h>
 #include <rawtext.h>
 
@@ -208,8 +202,8 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 
 	
 	// --------- Let's output an index from our dictionary -----------
-	int datfd;
-	int idxfd;
+	FileDesc *datfd;
+	FileDesc *idxfd;
 	strlist::iterator it;
 	longlist::iterator it2;
 	unsigned long offset, entryoff;
@@ -223,10 +217,12 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 
 	// for old and new testament do...
 	for (int loop = 0; loop < 2; loop++) {
-		if ((datfd = open((fname + ((loop)?"ntwords.dat":"otwords.dat")).c_str(), O_CREAT|O_WRONLY|O_BINARY, 00644 )) == -1)
+		datfd = FileMgr::getSystemFileMgr()->open((fname + ((loop)?"ntwords.dat":"otwords.dat")).c_str(), FileMgr::CREAT|FileMgr::WRONLY, 00644);
+		if (datfd->getFd() == -1)
 			return -1;
-		if ((idxfd = open((fname + ((loop)?"ntwords.idx":"otwords.idx")).c_str(), O_CREAT|O_WRONLY|O_BINARY, 00644 )) == -1) {
-			close(datfd);
+		idxfd = FileMgr::getSystemFileMgr()->open((fname + ((loop)?"ntwords.idx":"otwords.idx")).c_str(), FileMgr::CREAT|FileMgr::WRONLY, 00644);
+		if (idxfd->getFd() == -1) {
+			FileMgr::getSystemFileMgr()->close(datfd);
 			return -1;
 		}
 
@@ -236,12 +232,12 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 
 			// get our current offset in our word.dat file and write this as the start
 			// of the next entry in our database
-			offset = lseek(datfd, 0, SEEK_CUR);
-			write(idxfd, &offset, 4);
+			offset = lseek(datfd->getFd(), 0, SEEK_CUR);
+			write(idxfd->getFd(), &offset, 4);
 
 			// write our word out to the word.dat file, delineating with a \n
-			write(datfd, it->first.c_str(), strlen(it->first.c_str()));
-			write(datfd, "\n", 1);
+			write(datfd->getFd(), it->first.c_str(), strlen(it->first.c_str()));
+			write(datfd->getFd(), "\n", 1);
 
 			// force our mod position list for this word to be unique (remove
 			// duplicates that may exist if the word was found more than once
@@ -253,20 +249,20 @@ signed char RawText::createSearchFramework(void (*percent)(char, void *), void *
 			unsigned short count = 0;
 			for (it2 = it->second.begin(); it2 != it->second.end(); it2++) {
 				entryoff= *it2;
-				write(datfd, &entryoff, 4);
+				write(datfd->getFd(), &entryoff, 4);
 				count++;
 			}
 			
 			// now see what our new position is in our word.dat file and
 			// determine the size of this database entry
-			size = lseek(datfd, 0, SEEK_CUR) - offset;
+			size = lseek(datfd->getFd(), 0, SEEK_CUR) - offset;
 
 			// store the size of this database entry
-			write(idxfd, &size, 2);
+			write(idxfd->getFd(), &size, 2);
 			printf("%d entries (size: %d)\n", count, size);
 		}
-		close(datfd);
-		close(idxfd);
+		FileMgr::getSystemFileMgr()->close(datfd);
+		FileMgr::getSystemFileMgr()->close(idxfd);
 	}
 	return 0;
 #else

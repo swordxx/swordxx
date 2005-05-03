@@ -8,12 +8,9 @@
 #include <stdlib.h>
 #include <thmlwordjs.h>
 #include <swmodule.h>
-#ifndef __GNUC__
-#else
-#include <unixstr.h>
-#endif
 #include <ctype.h>
 #include <utilxml.h>
+#include <utilstr.h>
 #include <versekey.h>
 
 SWORD_NAMESPACE_START

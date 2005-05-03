@@ -11,22 +11,7 @@
 */
 
 
-#ifdef WIN32
-#include <memory.h>
-#endif
-
-#ifdef UNIX
-#include <memory.h>
-#include <unistd.h>
-#else
-#ifndef _MSC_VER
-#include <mem.h>
-#endif
-#endif
-
-#ifdef _WIN32_WCE
 #include <string.h>
-#endif
 
 #include "sapphire.h"
 

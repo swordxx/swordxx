@@ -19,14 +19,6 @@
  */
 
 
-#ifdef UNIX
-#include <memory.h>
-#include <unistd.h>
-#else
-#include <mem.h>
-#endif
-#include "sapphire.h"
-
 unsigned char sapphire::keyrand(int limit,
                                 unsigned char *user_key,
                                 unsigned char keysize,

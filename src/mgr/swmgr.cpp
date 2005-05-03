@@ -24,12 +24,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#include <unixstr.h>
-#endif
 #include <sys/stat.h>
 #ifndef _MSC_VER
 #include <iostream>
@@ -43,7 +37,7 @@
 #include <hrefcom.h>
 #include <rawld.h>
 #include <rawld4.h>
-#include <utilfuns.h>
+#include <utilstr.h>
 #include <gbfplain.h>
 #include <thmlplain.h>
 #include <osisplain.h>
@@ -1018,11 +1012,11 @@ void SWMgr::InstallScan(const char *dirname)
                               if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
                                    targetName += "/";
                               targetName += ent->d_name;
-                              conffd = open(targetName.c_str(), O_WRONLY|O_CREAT, S_IREAD|S_IWRITE);
+                              conffd = open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
                          }
                          else {
                               if (conffd < 1) {
-                                   conffd = open(config->filename.c_str(), O_WRONLY|O_APPEND);
+                                   conffd = open(config->filename.c_str(), FileMgr::WRONLY|FileMgr::APPEND);
                                    if (conffd > 0)
                                         lseek(conffd, 0L, SEEK_END);
                               }
@@ -1045,7 +1039,7 @@ char SWMgr::AddModToConfig(int conffd, const char *fname)
 	char ch;
 
 	SWLog::getSystemLog()->logTimedInformation("Found new module [%s]. Installing...", fname);
-	modfd = open(fname, O_RDONLY);
+	modfd = open(fname, FileMgr::RDONLY);
 	ch = '\n';
 	write(conffd, &ch, 1);
 	while (read(modfd, &ch, 1) == 1)

@@ -45,7 +45,7 @@ StringMgr* StringMgr::m_systemStringMgr = 0;
 class __staticsystemStringMgr {
 public:
  	__staticsystemStringMgr() { }
- 	~__staticsystemStringMgr() { delete StringMgr::m_systemStringMgr; StringMgr::m_systemStringMgr = 0; }
+ 	~__staticsystemStringMgr() { if (StringMgr::m_systemStringMgr) delete StringMgr::m_systemStringMgr; StringMgr::m_systemStringMgr = 0; }
 } _staticsystemStringMgr;
 
 
@@ -114,15 +114,15 @@ StringMgr* StringMgr::getSystemStringMgr() {
 * @param The text encoded in utf8 which should be turned into an upper case string
 */	
 char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
-        // try to decide if it's worth trying to toupper.  Do we have more
-        // characters that are probably lower latin than not?
-        long performOp = 0;
-        for (const char *ch = t; *ch; ch++)
-                performOp += (*ch > 0) ? 1 : -1;
+	// try to decide if it's worth trying to toupper.  Do we have more
+	// characters which are probably lower latin than not?
+	long performOp = 0;
+	for (const char *ch = t; *ch; ch++)
+		performOp += (*ch > 0) ? 1 : -1;
 
-        if (performOp) {
+	if (performOp > 0) {
 		return upperLatin1(t);
-        }
+	}
 
 	return t;
 }
