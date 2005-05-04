@@ -126,9 +126,7 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				tag.setAttribute("savlm", 0);
 				tag.setAttribute("splitID", 0);
 			}
-
-// just leave w out for now
-//			buf += tag;
+			buf += tag;
 		}
 
 		// <note> tag
@@ -152,7 +150,7 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		}
 
 		else {
-		      return false;  // we still didn't handle token
+			 return false;  // we still didn't handle token
 		}
 	}
 	return true;

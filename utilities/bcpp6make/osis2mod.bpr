@@ -128,7 +128,7 @@ Item0=stage\
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=test test.osis.xml 0
+RunParams=WHAC
 Launcher=
 UseLauncher=0
 DebugCWD=

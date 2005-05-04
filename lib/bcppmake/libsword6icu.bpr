@@ -47,12 +47,12 @@
       ..\..\obj\gbfredletterwords.obj ..\..\obj\osisheadings.obj 
       ..\..\obj\swbuf.obj ..\..\obj\utilxml.obj ..\..\obj\osisplain.obj 
       ..\..\obj\osisrtf.obj ..\..\obj\thmlwebif.obj ..\..\obj\gbfwebif.obj 
-      ..\..\obj\utilweb.obj ..\..\obj\osisfootnotes.obj 
-      ..\..\obj\osisscripref.obj ..\..\obj\swoptfilter.obj 
-      ..\..\obj\osislemma.obj ..\..\obj\osisredletterwords.obj 
-      ..\..\obj\osishtmlhref.obj ..\..\obj\swsearchable.obj 
-      ..\..\obj\osiswebif.obj ..\..\obj\osisosis.obj ..\..\obj\stringmgr.obj 
-      ..\..\obj\swversion.obj ..\..\obj\url.obj ..\..\obj\swobject.obj"/>
+      ..\..\obj\osisfootnotes.obj ..\..\obj\osisscripref.obj 
+      ..\..\obj\swoptfilter.obj ..\..\obj\osislemma.obj 
+      ..\..\obj\osisredletterwords.obj ..\..\obj\osishtmlhref.obj 
+      ..\..\obj\swsearchable.obj ..\..\obj\osiswebif.obj ..\..\obj\osisosis.obj 
+      ..\..\obj\stringmgr.obj ..\..\obj\swversion.obj ..\..\obj\url.obj 
+      ..\..\obj\swobject.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -69,7 +69,7 @@
     <LINKER value="TLib"/>
     <USERDEFINES value="_ICU_;_ICUSWORD_;USBINARY;_USE_OLD_RW_STL;U_HAVE_PLACEMENT_NEW=0;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
-    <MAINSOURCE value="libsword.bpf"/>
+    <MAINSOURCE value="libsword6icu.bpf"/>
     <INCLUDEPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\common;..\..\..\icu-sword\source\i18n"/>
     <LIBPATH value="..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
@@ -103,7 +103,7 @@
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>
-      <FILE FILENAME="libsword.bpf" FORMNAME="" UNITNAME="libsword" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="libsword6icu.bpf" FORMNAME="" UNITNAME="libsword" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\keys\versekey.cpp" FORMNAME="" UNITNAME="versekey" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\keys\strkey.cpp" FORMNAME="" UNITNAME="strkey" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\keys\swkey.cpp" FORMNAME="" UNITNAME="swkey" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -221,7 +221,6 @@
       <FILE FILENAME="..\..\src\modules\filters\osisrtf.cpp" FORMNAME="" UNITNAME="osisrtf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlwebif.cpp" FORMNAME="" UNITNAME="thmlwebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\gbfwebif.cpp" FORMNAME="" UNITNAME="gbfwebif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\utilfuns\utilweb.cpp" FORMNAME="" UNITNAME="utilweb" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osisfootnotes.cpp" FORMNAME="" UNITNAME="osisfootnotes.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\osisscripref.cpp" FORMNAME="" UNITNAME="osisscripref.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\swoptfilter.cpp" FORMNAME="" UNITNAME="swoptfilter.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
