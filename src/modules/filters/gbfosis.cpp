@@ -109,7 +109,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			}
 
 			// Footnote
-			if (!strcmp(token, "RF")) {
+			if (!strcmp(token, "RF") || !strncmp(token, "RF ", 3)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
 	//			pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
 				text += "<note type=\"x-StudyNote\">";
 				newText = true;
