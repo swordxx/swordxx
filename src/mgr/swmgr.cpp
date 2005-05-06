@@ -74,6 +74,8 @@
 
 #include <swlog.h>
 
+#include <iterator>
+
 #ifndef EXCLUDEZLIB
 #include "zipcomprs.h"
 #endif
@@ -552,13 +554,36 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 		config = myconfig = 0;
 		loadConfigDir(configPath);
 
+		if (multiMod) {
+			// fix config's Section names to rename modules which are available more than once
+			// find out which sections are in both config objects
+			// inserting all configs first is not good because that overwrites old keys and new modules would share the same config
+			for (SectionMap::iterator it = config->Sections.begin(); it != config->Sections.end(); ++it) {
+				if (saveConfig->Sections.find( (*it).first ) != saveConfig->Sections.end()) { //if the new section is already present rename it
+					ConfigEntMap entMap( (*it).second );
+					
+					SWBuf name;
+					int i = 1;
+					do { //module name already used?
+						name.setFormatted("%s_%d", (*it).first.c_str(), i);
+						i++;
+					} while (config->Sections.find(name) != config->Sections.end());
+					
+					config->Sections.insert( make_pair(name, entMap) );
+					config->Sections.erase( it );
+				}
+			}
+		}
+		
 		CreateMods(multiMod);
 
 		stdstr(&prefixPath, savePrefixPath);
 		delete []savePrefixPath;
 		stdstr(&configPath, saveConfigPath);
 		delete []saveConfigPath;
+
 		(*saveConfig) += *config;
+		
 		homeConfig = myconfig;
 		config = myconfig = saveConfig;
 	}
@@ -949,23 +974,10 @@ void SWMgr::CreateMods(bool multiMod) {
 				AddEncodingFilters(newmod, section);
 				
 				SWModule *oldmod = Modules[newmod->Name()];
-
 				if (oldmod) {
-					if (!multiMod)
-						delete oldmod;
-					else {
-						SWBuf name;
-						int i = 1; 
-						SWModule *mod;
-						do {
-							name = newmod->Name();
-							name.appendFormatted("_%d", i);
-							mod = Modules[name];
-							i++;
-						} while (mod);
-						newmod->Name(name);
-					}
+					delete oldmod;
 				}
+				
 				Modules[newmod->Name()] = newmod;
 			}
 		}
