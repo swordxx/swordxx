@@ -8,7 +8,7 @@ if test `echo $REV` == `echo $SWORDVER`; then
 	chmod +x ../apps/X11/cheatah/missing
 	#cp sapphire.cpp ../src/modules/common
 	cd ..; ./autogen.sh
-	cd ..; tar -v -c -p -s -z --exclude sword-$REV/bin -X sword-$REV/modlist -f sword-$REV.tar.gz sword-$REV/*
+	cd ..; tar -v -c -p -s -z --exclude sword-$REV/bin -X sword-$REV/distignore -f sword-$REV.tar.gz sword-$REV/*
 else
 	echo $"Directory version is $REV, but config.h has $SWORDVER"
 	exit 1
