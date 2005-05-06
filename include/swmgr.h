@@ -72,6 +72,7 @@ class SWDLLEXPORT SWMgr {
 
 private:
 	bool mgrModeMultiMod;
+	bool augmentHome;
 	void commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod = false);
 
 protected:
@@ -194,22 +195,28 @@ public:
 	* @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE DELETED BY SWMgr
 	*/
 	SWMgr(SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
+
 	/**
 	*
 	* @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE DELETED BY SWMgr
 	*/
 	SWMgr(SWFilterMgr *filterMgr, bool multiMod = false);
+
 	/**
 	*
 	* @param iConfigPath Path to config files.
 	* @param autoload If this bool is true the constructor starts loading the
 	* installed modules. If you reimplemented SWMgr you can set autoload=false
 	* to load the modules with your own reimplemented function.
+	* @param iConfigPath explicit path to use where modules exist
 	* @param filterMgr an SWFilterMgr subclass to use to manager filters on
-	* modules THIS WILL BE DELETED BY SWMgr
+	* 		modules THIS WILL BE DELETED BY SWMgr
+	* @param augmentHome whether or not to augment ~/.sword personal modules
+	*		default is to augment modules,
 	*
 	*/
-	SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
+	SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false, bool augmentHome = true);
+
 	/** The destructor of SWMgr.
 	* This function cleans up the modules and deletes the created object.
 	* Destroy the SWMgr at last object in your application, because otherwise you may experience crashes

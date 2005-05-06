@@ -198,7 +198,8 @@ void InstallSource::flush() {
 
 SWMgr *InstallSource::getMgr() {
 	if (!mgr)
-		mgr = new SWMgr(localShadow.c_str());
+		// ..., false = don't augment ~home directory.
+		mgr = new SWMgr(localShadow.c_str(), true, 0, false, false);
 	return mgr;
 }
 

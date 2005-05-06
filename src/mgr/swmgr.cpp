@@ -113,8 +113,8 @@ void SWMgr::init() {
 	configType  = 0;
 	myconfig    = 0;
 	mysysconfig = 0;
-	homeConfig = 0;
-
+	homeConfig  = 0;
+	augmentHome = true;
 
 	cipherFilters.clear();
 	optionFilters.clear();
@@ -232,12 +232,13 @@ void SWMgr::init() {
 
 
 void SWMgr::commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
+
+	init();
+
 	mgrModeMultiMod = multiMod;
 	this->filterMgr = filterMgr;
 	if (filterMgr)
 		filterMgr->setParentMgr(this);
-
-	init();
 	
 	if (iconfig) {
 		config   = iconfig;
@@ -265,7 +266,9 @@ SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr
 }
 
 
-SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
+SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, bool multiMod, bool augmentHome) {
+
+	init();
 
 	mgrModeMultiMod = multiMod;
 	SWBuf path;
@@ -273,9 +276,9 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 	this->filterMgr = filterMgr;
 	if (filterMgr)
 		filterMgr->setParentMgr(this);
-
-	init();
 	
+	this->augmentHome = augmentHome;
+
 	path = iConfigPath;
 	int len = path.length();
 	if ((len < 1) || (iConfigPath[len-1] != '\\') && (iConfigPath[len-1] != '/'))
@@ -495,9 +498,9 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 void SWMgr::loadConfigDir(const char *ipath)
 {
-   DIR *dir;
-   struct dirent *ent;
-   SWBuf newmodfile;
+	DIR *dir;
+	struct dirent *ent;
+	SWBuf newmodfile;
  
 	if ((dir = opendir(ipath))) {
 		rewinddir(dir);
@@ -604,14 +607,16 @@ signed char SWMgr::Load() {
 		for (std::list<SWBuf>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
 			augmentModules(pathIt->c_str(), mgrModeMultiMod);
 		}
-//	augment config with ~/.sword/mods.d if it exists ---------------------
-		char *envhomedir  = getenv ("HOME");
-		if (envhomedir != NULL && configType != 2) { // 2 = user only
-			SWBuf path = envhomedir;
-			if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
-				path += "/";
-			path += ".sword/";
-			augmentModules(path.c_str(), mgrModeMultiMod);
+		if (augmentHome) {
+			// augment config with ~/.sword/mods.d if it exists ---------------------
+			char *envhomedir  = getenv ("HOME");
+			if (envhomedir != NULL && configType != 2) { // 2 = user only
+				SWBuf path = envhomedir;
+				if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
+					path += "/";
+				path += ".sword/";
+				augmentModules(path.c_str(), mgrModeMultiMod);
+			}
 		}
 // -------------------------------------------------------------------------
 		if ( !Modules.size() ) // config exists, but no modules

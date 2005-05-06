@@ -430,11 +430,14 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		len = fDesc->read(chunk, 254);
 		if (len < 1)
 			break;
-		// clean up any preceding white space
-		int start;
-		for (start = 0; start < len; start++) {
-			if ((chunk[start] != 13) && (chunk[start] != ' ') && (chunk[start] != '\t'))
-				break;
+
+		int start = 0;
+		// clean up any preceding white space if we're at the beginning of line
+		if (!line.length()) {
+			for (;start < len; start++) {
+				if ((chunk[start] != 13) && (chunk[start] != ' ') && (chunk[start] != '\t'))
+					break;
+			}
 		}
 
 		// assert we have a readable file (not a directory)
@@ -451,12 +454,14 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		// reposition to next valid place to read
 		fDesc->seek(index, SEEK_SET);
 
-		// clean up any trailing junk on line
-		for (; end > start; end--) {
-			if ((chunk[end] != 10) && (chunk[end] != 13) && (chunk[end] != ' ') && (chunk[end] != '\t')) {
-				if (chunk[end] == '\\')
-					more = true;
-				else break;
+		// clean up any trailing junk on line if we're at the end
+		if (!more) {
+			for (; end > start; end--) {
+				if ((chunk[end] != 10) && (chunk[end] != 13) && (chunk[end] != ' ') && (chunk[end] != '\t')) {
+					if (chunk[end] == '\\')
+						more = true;
+					else break;
+				}
 			}
 		}
 		
