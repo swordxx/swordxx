@@ -23,7 +23,7 @@ void systemquery(const char * key, ostream* output){
 	
 	bool types = false, descriptions = false, names = false;
 
-	if (!stricmp(key, "localelist")) {		
+	if (!::stricmp(key, "localelist")) {		
 		LocaleMgr *lm = LocaleMgr::getSystemLocaleMgr();
 		list<SWBuf> loclist =	lm->getAvailableLocales();
 		list<SWBuf>::iterator li = loclist.begin();
@@ -31,15 +31,15 @@ void systemquery(const char * key, ostream* output){
 		  *output << li->c_str() << endl;
 		}
 	}
-	else if (!stricmp(key, "modulelist")) {
+	else if (!::stricmp(key, "modulelist")) {
 		types = true;
 		descriptions = true;
 		names = true;
 	}
-	else if (!stricmp(key, "modulelistnames")) {
+	else if (!::stricmp(key, "modulelistnames")) {
 		names = true;
 	}
-	else if (!stricmp(key, "modulelistdescriptions")) {
+	else if (!::stricmp(key, "modulelistdescriptions")) {
 		descriptions = true;
 	}
 	
@@ -98,7 +98,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	VerseKey vk;
 
 	//deal with queries to "system"
-	if (!stricmp(text, "system")) {
+	if (!::stricmp(text, "system")) {
 		querytype = QT_SYSTEM;
 		systemquery(ref, output);
 	}
@@ -120,11 +120,11 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	
 	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
-			if (!stricmp((char *)(*eit).second.c_str(), "GBF"))
+			if (!::stricmp((char *)(*eit).second.c_str(), "GBF"))
 				inputformat = FMT_GBF;
-			else if (!stricmp((char *)(*eit).second.c_str(), "ThML"))
+			else if (!::stricmp((char *)(*eit).second.c_str(), "ThML"))
 				inputformat = FMT_THML;
-			else if (!stricmp((char *)(*eit).second.c_str(), "OSIS"))
+			else if (!::stricmp((char *)(*eit).second.c_str(), "OSIS"))
 				inputformat = FMT_OSIS;
 		}
 		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (SWBuf)"";

@@ -57,49 +57,49 @@ int main(int argc, char **argv)
 	// (a querytype & text = 1 and a ref = 2)
 	
 	for (int i = 1; i < argc; i++) {
-		if (!stricmp("-b", argv[i])) {
+		if (!::stricmp("-b", argv[i])) {
 			if (i+1 <= argc) {
 				text = argv[i+1];
 				i++;
 				runquery |= RQ_BOOK;
 			}
 		}
-		else if (!stricmp("-s", argv[i])) {
+		else if (!::stricmp("-s", argv[i])) {
 			if (i+1 <= argc) {
-				if (!stricmp("phrase", argv[i+1])) {
+				if (!::stricmp("phrase", argv[i+1])) {
 					searchtype = ST_PHRASE;
 					i++;
 				}
-				else if (!stricmp("regex", argv[i+1])) {
+				else if (!::stricmp("regex", argv[i+1])) {
 					searchtype = ST_REGEX;
 					i++;
 				}
-				else if (!stricmp("multiword", argv[i+1])) {
+				else if (!::stricmp("multiword", argv[i+1])) {
 					searchtype = ST_MULTIWORD;
 					i++;
 				}
 				else i++;
 			}
 		}
- 		else if (!stricmp("-r", argv[i])) {
+ 		else if (!::stricmp("-r", argv[i])) {
  			if (i+1 <= argc) {
  				range = argv[i+1];
  				i++;
  			}	
  		}
-		else if (!stricmp("-l", argv[i])) {
+		else if (!::stricmp("-l", argv[i])) {
 			if (i+1 <= argc) {
 				locale = argv[i+1];
 				i++;
 			}
 		}
-		else if (!stricmp("-m", argv[i])) {
+		else if (!::stricmp("-m", argv[i])) {
 			if (i+1 <= argc) {
 				maxverses = atoi(argv[i+1]);
 				i++;
 			}
 		}
-		else if (!stricmp("-o", argv[i])) {
+		else if (!::stricmp("-o", argv[i])) {
 			if (i+1 <= argc) {
 				if (strchr(argv[i+1], 'f'))
 					optionfilters |= OP_FOOTNOTES;
@@ -128,61 +128,61 @@ int main(int argc, char **argv)
 				i++;
 			}
 		}
-		else if (!stricmp("-f", argv[i])) {
+		else if (!::stricmp("-f", argv[i])) {
 			if (i+1 <= argc) {
-				if (!stricmp("thml", argv[i+1])) {
+				if (!::stricmp("thml", argv[i+1])) {
 					outputformat = FMT_THML;
 					i++;
 				}
-				else if (!stricmp("cgi", argv[i+1])) {
+				else if (!::stricmp("cgi", argv[i+1])) {
 					outputformat = FMT_CGI;
 					i++;
 				}
-				else if (!stricmp("gbf", argv[i+1])) {
+				else if (!::stricmp("gbf", argv[i+1])) {
 					outputformat = FMT_GBF;
 					i++;
 				}
-				else if (!stricmp("html", argv[i+1])) {
+				else if (!::stricmp("html", argv[i+1])) {
 					outputformat = FMT_HTML;
 					i++;
 				}
-				else if (!stricmp("rtf", argv[i+1])) {
+				else if (!::stricmp("rtf", argv[i+1])) {
 					outputformat = FMT_RTF;
 					i++;
 				}
-				else if (!stricmp("osis", argv[i+1])) {
+				else if (!::stricmp("osis", argv[i+1])) {
 					outputformat = FMT_OSIS;
 					i++;
 				}
 				else i++;
 			}
 		}
-		else if (!stricmp("-e", argv[i])) {
+		else if (!::stricmp("-e", argv[i])) {
 			if (i+1 <= argc) {
-				if (!stricmp("utf8", argv[i+1])) {
+				if (!::stricmp("utf8", argv[i+1])) {
 					outputencoding = ENC_UTF8;
 					i++;
 				}
-				else if (!stricmp("rtf", argv[i+1])) {
+				else if (!::stricmp("rtf", argv[i+1])) {
 					outputencoding = ENC_RTF;
 					i++;
 				}
-				else if (!stricmp("html", argv[i+1])) {
+				else if (!::stricmp("html", argv[i+1])) {
 					outputencoding = ENC_HTML;
 					i++;
 				}
-				else if (!stricmp("latin1", argv[i+1])) {
+				else if (!::stricmp("latin1", argv[i+1])) {
 					outputencoding = ENC_LATIN1;
 					i++;
 				}
-				else if (!stricmp("utf16", argv[i+1])) {
+				else if (!::stricmp("utf16", argv[i+1])) {
 					outputencoding = ENC_UTF16;
 					i++;
 				}
 				else i++;
 			}
 		}
-		else if (!stricmp("-k", argv[i])) {
+		else if (!::stricmp("-k", argv[i])) {
 			i++;	
 			if (i < argc) {
 				SWBuf key = argv[i];
@@ -195,14 +195,14 @@ int main(int argc, char **argv)
 					runquery |= RQ_REF;
 			}
 		}
-		else if (!stricmp("-v", argv[i])) {
+		else if (!::stricmp("-v", argv[i])) {
 			if (i+1 <= argc) {
 				variants = atoi(argv[i+1]);
 				optionfilters |= OP_VARIANTS;
 				i++;
 			}
 		}
-		else if (!stricmp("-t", argv[i])) {
+		else if (!::stricmp("-t", argv[i])) {
 			if (i+1 <= argc) {
 				script = argv[i+1];
 				optionfilters |= OP_TRANSLITERATOR;
