@@ -28,8 +28,6 @@ SWORD_NAMESPACE_START
 /** this filter converts ThML text to OSIS text
  */
 class SWDLLEXPORT ThMLOSIS : public SWFilter {
-protected:
-	virtual const char *convertToOSIS(const char *, const SWKey *key);
 public:
 	ThMLOSIS();
 	virtual ~ThMLOSIS();

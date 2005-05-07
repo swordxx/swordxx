@@ -380,6 +380,12 @@ public:
 	virtual const char *getOSISRef() const;
 	static const int getOSISBookNum(const char *bookab);
 
+	/** Tries to parse a string and convert it into an OSIS reference
+	 * @param inRef reference string to try to parse
+	 * @param defaultKey @see ParseVerseList(..., defaultKey, ...)
+	 */
+	static const char *convertToOSIS(const char *inRef, const SWKey *defaultKey);
+
 	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = "Genesis 1:1", bool expandRange = false);
 	virtual const char *getRangeText() const;
 	/** Compares another	SWKey object

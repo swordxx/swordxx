@@ -14,6 +14,7 @@
 #include <versekey.h>
 #include <stdarg.h>
 #include <utilstr.h>
+#include <utilxml.h>
 
 
 SWORD_NAMESPACE_START
@@ -27,29 +28,27 @@ ThMLOSIS::~ThMLOSIS() {
 
 
 char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-// 	const char *from;
-	
 	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
+	bool keepToken = false;
+
+//	static QuoteStack quoteStack;
 	
-	int len;
 	bool lastspace = false;
 	int word = 1;
 	char val[128];
-	char buf[128];
-	char wordstr[5];
+	SWBuf buf;
 	char *valto;
 	char *ch;
 	
-	const char*wordStart = text.c_str();
-	const char* wordEnd;
+	const char *wordStart = text.c_str();
+	const char *wordEnd;
 	
 	const char *textStart;
 	const char *textEnd;
 		
 	bool suspendTextPassThru = false;
-	bool keepToken = false;
 	bool handled = false;
 	bool newText = false;
 	bool newWord = false;
@@ -62,6 +61,13 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 	text = "";
 	for (from = orig.c_str(); *from; ++from) {
+
+		// handle silly <variant word> items in greek whnu, remove when module is fixed
+		if ((*from == '<') && (*(from+1) < 0)) {
+			text += "&lt;";
+			continue;
+		}
+
 		if (*from == '<') { //start of new token detected
 			intoken = true;
 			tokpos = 0;
@@ -75,6 +81,12 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			continue;
 		}
 		
+		// handle silly <variant word> items in greek whnu, remove when module is fixed
+		if ((*from == '>') && (*(from-1) < 0)) {
+			text += "&gt;";
+			continue;
+		}
+
 		if (*from == '>') {	// process tokens
 			intoken = false;
 			keepToken = false;
@@ -82,10 +94,8 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			newWord = true;
 			handled = false;
 
-// 			while (wordStart < (text+maxlen)) {
 			while (wordStart < (text.c_str() + text.length())) { //hack
-//				if (strchr(" ,;.?!()'\"", *wordStart))
-				if (strchr(";,: .?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
+				if (strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
 					wordStart++;
 				else break;
 			}
@@ -95,6 +105,21 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 				else break;
 			}
 
+			// variants
+			if (!strncmp(token, "div type=\"variant\"", 18)) {
+				XMLTag tag = token;
+				text.append("<seg type=\"x-variant\"");
+				SWBuf cls = "x-class:";
+				cls += tag.getAttribute("class");
+				if (cls.length()>8)
+					text.appendFormatted(" subType=\"%s\"", cls.c_str());
+
+				text += ">";
+				divEnd = "</seg>";
+				newText = true;
+				lastspace = false;
+				handled = true;
+			}
 			// section titles
 			if (!strcmp(token, "div class=\"sechead\"")) {
 // 				pushString(&to, "<title>");
@@ -122,7 +147,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 				tmp = "";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
 				//pushString(&to, convertToOSIS(tmp.c_str(), key));
-				text.append(convertToOSIS(tmp.c_str(), key));
+				text.append(VerseKey::convertToOSIS(tmp.c_str(), key));
 				suspendTextPassThru = false;
 				handled = true;
 			}
@@ -228,101 +253,115 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 			// Strongs numbers
 			else	if (!strnicmp(token, "sync type=\"Strongs\" ", 20)) {	// Strongs
-/*				if (module->isProcessEntryAttributes()) {
-					valto = val;
-					for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
-						*valto++ = token[i];
-					*valto = 0;
-					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
-						// normal strongs number
-						strstrip(val);
-						sprintf(buf, "<w lemma=\"x-Strong:%s\">", val);
-						memmove(wordStart+strlen(buf), wordStart, (to-wordStart)+1);
-						memcpy(wordStart, buf, strlen(buf));
-						to+=strlen(buf);
-						pushString(&to, "</w>");
-						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
-//						tmp = "";
-//						tmp.append(textStart, (int)(wordEnd - wordStart));
-//						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
+				valto = val;
+				for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
+					*valto++ = token[i];
+				*valto = 0;
+				if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+					// normal strongs number
+					strstrip(val);
+
+					if (!strncmp(wordStart, "<w ", 3)) {
+						const char *attStart = strstr(wordStart, "lemma");
+						if (attStart) { //existing morph attribute, append this one to it
+							attStart += 7;
+							buf = "";
+							buf.appendFormatted("strong:%s ", val);
+						}
+						else { // no lemma attribute
+							attStart = wordStart + 3;
+							buf = "";
+							buf.appendFormatted(buf, "lemma=\"strong:%s\" ", val);
+						}
+
+						text.insert(attStart - text.c_str(), buf);
 					}
-					else {
-						// verb morph
-						sprintf(wordstr, "%03d", word-1);
-						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+					else { //wordStart doesn't point to an existing <w> attribute!
+						buf = "";
+						buf.appendFormatted("<w lemma=\"strong:%s\">", val);
+						text.insert(wordStart - text.c_str(), buf);
+						text += "</w>";
+						lastspace = false;
 					}
-				}*/
+				}
+				// OLB verb morph, leave it out of OSIS tag
+				else {
+				}
 				handled = true;
 			}
 
 			// Morphology
 			else	if (!strncmp(token, "sync type=\"morph\"", 17)) {
-/*				for (ch = token+17; *ch; ch++) {
+				SWBuf cls = "";
+				SWBuf morph = "";
+				for (ch = token+17; *ch; ch++) {
 					if (!strncmp(ch, "class=\"", 7)) {
 						valto = val;
 						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
 							*valto++ = ch[i];
 						*valto = 0;
-						sprintf(wordstr, "%03d", word-1);
 						strstrip(val);
-						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
+						cls = val;
 					}
 					if (!strncmp(ch, "value=\"", 7)) {
 						valto = val;
 						for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
 							*valto++ = ch[i];
 						*valto = 0;
-						sprintf(wordstr, "%03d", word-1);
 						strstrip(val);
-						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+						morph = val;
 					}
 				}
 				if (!strncmp(wordStart, "<w ", 3)) {
-
-					const char *cls = "Unknown", *morph;
-
-					if (module->getEntryAttributes()["Word"][wordstr]["Morph"].size() > 0) {
-						if (module->getEntryAttributes()["Word"][wordstr]["MorphClass"].size() > 0)
-							cls = module->getEntryAttributes()["Word"][wordstr]["MorphClass"].c_str();
-						morph = module->getEntryAttributes()["Word"][wordstr]["Morph"].c_str();
-					
-						sprintf(buf, "morph=\"x-%s:%s\" ", cls, morph);
-						memmove(wordStart+3+strlen(buf), wordStart+3, (to-wordStart)+1);
-						memcpy(wordStart+3, buf, strlen(buf));
-						to+=strlen(buf);
+					const char *attStart = strstr(wordStart, "morph");
+					if (attStart) { //existing morph attribute, append this one to it
+						attStart += 7;
+						buf = "";
+						buf.appendFormatted("%s:%s ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
 					}
-				}*/
+					else { // no lemma attribute
+						attStart = wordStart + 3;
+						buf = "";
+						buf.appendFormatted("morph=\"%s:%s\" ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+					}
+					
+					text.insert(attStart - text.c_str(), buf); //hack, we have to
+				}
+				else { //no existing <w> attribute fond
+					buf = "";
+					buf.appendFormatted("<w morph=\"%s:%s\">", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+					text.insert(wordStart - text.c_str(), buf);
+					text += "</w>";
+					lastspace = false;
+
+				}
 				handled = true;
 			}
 
-			if (!keepToken) {	// if we don't want strongs
+			if (!keepToken) {
 				if (!handled) {
-					SWLog::getSystemLog()->logError("Unprocessed Token: <%s>", token);
+					SWLog::getSystemLog()->logError("Unprocessed Token: <%s> in key %s", token, key ? (const char*)*key : "<unknown>");
 //					exit(-1);
 				}
-				if (strchr(" ,:;.?!()'\"", from[1])) {
+				if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
 					if (lastspace) {
-						text--;//to--;
+						text--;
 					}
 				}
 				if (newText) {
 					textStart = from+1; 
 					newText = false; 
 				}
-//				if (newWord) {wordStart = to; newWord = false; }
-					continue;
+				continue;
 			}
 			
 			// if not a strongs token, keep token in text
-			text.append('<');
-			text.append(token);
-			text.append('>');
+			text.appendFormatted("<%s>", token);
 			
 			if (newText) {
-				textStart = text.c_str()+text.length(); 
+				textStart = text.c_str() + text.length(); 
 				newWord = false; 
 			}
-//			if (newWord) {wordStart = to; newWord = false; }
 			continue;
 		}
 		if (intoken) {
@@ -332,36 +371,40 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			}
 		}
 		else	{
-			if (newWord && (*from != ' ')) {
-				// wordStart = to; 
-				wordStart = text.c_str()+text.length();
-				newWord = false; 
-// 				memset(to, 0, 10); 
-			}
-			if (!suspendTextPassThru) {
-// 				*to++ = *from;
-				text.append(*from);
-				lastspace = (*from == ' ');
+			switch (*from) {
+			case '\'':
+			case '\"':
+			case '`':
+//				quoteStack.handleQuote(fromStart, from, &to);
+				text += *from;
+				//from++; //this line removes chars after an apostrophe! Needs fixing.
+				break;
+			default:
+				if (newWord && (*from != ' ')) {
+					wordStart = text.c_str() + text.length();
+					newWord = false;
+					
+					//fix this if required?
+					//memset(to, 0, 10); 
+					
+				}
+				
+				if (!suspendTextPassThru) {
+					text += (*from);
+					lastspace = (*from == ' ');
+				}
 			}
 		}
 	}
 
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-// 		char ref[254];
-		SWBuf ref;
+		SWBuf ref = "";
 		if (vkey->Verse()) {
-			ref.setFormatted("<verse osisID=\"%s\">", vkey->getOSISRef());
-		}
-		else {
-// 			*ref = 0;
-			ref = "";
+			ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
 		}
 			
-		if (*ref) {
-/*			memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
-			memcpy(text, ref, strlen(ref));
-			to+=strlen(ref);*/
+		if (ref.length() > 0) {
 			
 			text = ref + text;
 			
@@ -371,9 +414,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 				tmp.AutoNormalize(0);
 				tmp.Headings(1);
 				
-// 				sprintf(ref, "</verse>");
-// 				pushString(&to, ref);
-				text.append("</verse>");
+				text += "</verse>";
 				
 				tmp = MAXVERSE;
 				if (*vkey == tmp) {
@@ -387,50 +428,23 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 						tmp.Verse(0);
 //						sprintf(ref, "\t</div>");
 //						pushString(&to, ref);
+/*
+						if (!quoteStack.empty()) {
+							SWLog::getSystemLog()->logError("popping unclosed quote at end of book");
+							quoteStack.clear();
+						}
+*/
 					}
 				}
 			}
-
-//			else if (vkey->Chapter())
+//			else if (vkey->Chapter()) {
 //				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
+//			}
 //			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 		}
 	}
-	
-// 	*to++ = 0;
-// 	*to = 0;
-
 	return 0;
 }
 
-
-const char *ThMLOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
-	static SWBuf outRef;
-
-	outRef = "";
-
-	VerseKey defLanguage;
-	ListKey verses = defLanguage.ParseVerseList(inRef, (*key), true);
-	const char *startFrag = inRef;
-	for (int i = 0; i < verses.Count(); i++) {
-		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
-		char buf[5120];
-		char frag[5120];
-		if (element) {
-			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
-			frag[((const char *)element->userData - startFrag) + 1] = 0;
-			startFrag = (const char *)element->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s-%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
-		}
-		else {
-			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
-			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
-			startFrag = (const char *)verses.GetElement(i)->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), frag);
-		}
-		outRef+=buf;
-	}
-	return outRef.c_str();
-}
 
 SWORD_NAMESPACE_END

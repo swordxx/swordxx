@@ -29,9 +29,9 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	char token[2048]; //cheesy, we seem to like cheese :)
 	int tokpos = 0;
 	bool intoken = false;
-	bool keeptoken = false;
+	bool keepToken = false;
 	
-	static QuoteStack quoteStack;
+//	static QuoteStack quoteStack;
 
 	SWBuf orig = text;
 	SWBuf tmp;
@@ -40,17 +40,16 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	bool newtext = false;
 	
 	bool suspendTextPassThru = false;
-	bool keepToken = false;
 	bool handled = false;
 	bool newWord = false;
 	bool newText = false;
 	bool lastspace = false;
 	
-	const char* wordStart = text.c_str();
-	const char* wordEnd;
+	const char *wordStart = text.c_str();
+	const char *wordEnd;
 	
-	const char* textStart;
-	const char* textEnd;
+	const char *textStart;
+	const char *textEnd;
 	
 	SWBuf textNode = "";
 
@@ -80,14 +79,12 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			handled = false;
 
 			while (wordStart < (text.c_str() + text.length())) { //hack
-				if (strchr(";, .:?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
+				if (strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
 					wordStart++;
 				else break;
 			}			
-			
-			
 			while (wordEnd > wordStart) {
-				if (strchr(" ,;.:?!()'\"", *wordEnd))
+				if (strchr(" ,;:.?!()'\"", *wordEnd))
 					wordEnd--;
 				else break;
 			}
@@ -101,7 +98,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			else if (!strncmp(token, "/scripRef", 9)) {
 				tmp = "";
 				tmp.append(textStart, (int)(textEnd - textStart)+1);
-				text += convertToOSIS(tmp.c_str(), key);
+				text += VerseKey::convertToOSIS(tmp.c_str(), key);
 				
 				lastspace = false;
 				suspendTextPassThru = false;
@@ -199,51 +196,48 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			// Strongs numbers
 			else if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
 				bool divineName = false;
-				if (module->isProcessEntryAttributes()) {
-					value = token+1;
-				
-					// normal strongs number
-					//strstrip(val);
-					if (!strncmp(wordStart, "<w ", 3)) {
-						const char *attStart = strstr(wordStart, "lemma");
-						if (attStart) {
-							attStart += 7;
-							
-							buf = "";
-							buf.appendFormatted("strong:%s ", value.c_str());
-						}
-						else { // no lemma attribute
-							attStart = wordStart + 3;
-							
-							buf = "";
-							buf.appendFormatted(buf, "lemma=\"strong:%s\" ", value.c_str());
-						}
-
-						text.insert(attStart - text.c_str(), buf);
+				value = token+1;
+			
+				// normal strongs number
+				//strstrip(val);
+				if (!strncmp(wordStart, "<w ", 3)) {
+					const char *attStart = strstr(wordStart, "lemma");
+					if (attStart) {
+						attStart += 7;
+						
+						buf = "";
+						buf.appendFormatted("strong:%s ", value.c_str());
 					}
-					else { //wordStart doesn't point to an existing <w> attribute!
-						if (!strcmp(value.c_str(), "H03068")) {	//divineName
-							buf = "";
-							buf.appendFormatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
-							
-							divineName = true;
-						}
-						else {
-							buf = "";
-							buf.appendFormatted("<w lemma=\"strong:%s\">", value.c_str());
-						}
-
-						text.insert(wordStart - text.c_str(), buf);
-
-						if (divineName) {
-							wordStart += 12;
-							text += "</w></divineName>";
-						}
-						else	text += "</w>";
-
-						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = value.c_str();
-						lastspace = false;
+					else { // no lemma attribute
+						attStart = wordStart + 3;
+						
+						buf = "";
+						buf.appendFormatted(buf, "lemma=\"strong:%s\" ", value.c_str());
 					}
+
+					text.insert(attStart - text.c_str(), buf);
+				}
+				else { //wordStart doesn't point to an existing <w> attribute!
+					if (!strcmp(value.c_str(), "H03068")) {	//divineName
+						buf = "";
+						buf.appendFormatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
+						
+						divineName = true;
+					}
+					else {
+						buf = "";
+						buf.appendFormatted("<w lemma=\"strong:%s\">", value.c_str());
+					}
+
+					text.insert(wordStart - text.c_str(), buf);
+
+					if (divineName) {
+						wordStart += 12;
+						text += "</w></divineName>";
+					}
+					else	text += "</w>";
+
+					lastspace = false;
 				}
 				handled = true;
 			}
@@ -262,7 +256,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 						buf = "";
 						buf.appendFormatted("%s:%s ", "robinson", value.c_str());
 					}
-					else {
+					else { // no lemma attribute
 						attStart = wordStart + 3;
 						buf = "";
 						buf.appendFormatted("morph=\"%s:%s\" ", "robinson", value.c_str());
@@ -273,9 +267,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				else { //no existing <w> attribute fond
 					buf = "";
 					buf.appendFormatted("<w morph=\"%s:%s\">", "robinson", value.c_str());
-					
 					text.insert(wordStart - text.c_str(), buf);
-					
 					text += "</w>";
 					lastspace = false;
 
@@ -289,21 +281,22 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 //					exit(-1);
 				}
 				if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
-					if (lastspace)
+					if (lastspace) {
 						text--;
+					}
 				}
 				if (newText) {
 					textStart = from+1;
 					newText = false; 
 				}
-//				if (newWord) {wordStart = to; newWord = false; }
 				continue;
 			}
+
 			// if not a strongs token, keep token in text
 			text.appendFormatted("<%s>", token);
 			
 			if (newText) {
-				textStart = text.c_str() + text.length();  //hack, instad of textStart = to;
+				textStart = text.c_str() + text.length();
 				newWord = false; 
 			}
 			continue;
@@ -342,17 +335,13 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	}
 
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
-	if ( vkey ) {
+	if (vkey) {
 		SWBuf ref = "";
-		//char ref[254];
 		if (vkey->Verse()) {
 			ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
 		}
 		
 		if (ref.length() > 0) {
-			//memmove(text+strlen(ref), text, maxlen-strlen(ref)-1);
-			//memcpy(text, ref, strlen(ref));
-			//to+=strlen(ref);
 			
 			text = ref + text;
 			
@@ -376,56 +365,22 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 						tmp.Verse(0);
 //						sprintf(ref, "\t</div>");
 //						pushString(&to, ref);
+/*
 						if (!quoteStack.empty()) {
 							SWLog::getSystemLog()->logError("popping unclosed quote at end of book");
 							quoteStack.clear();
 						}
+*/
 					}
 				}
 			}
-
-//
 //			else if (vkey->Chapter()) {
 //				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());
 //			}
 //			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
-//
 		}
 	}
-//	*to++ = 0;
-//	*to = 0;
-
 	return 0;
-}
-
-
-const char *GBFOSIS::convertToOSIS(const char *inRef, const SWKey *key) {
-	static SWBuf outRef;
-
-	outRef = "";
-
-	VerseKey defLanguage;
-	ListKey verses = defLanguage.ParseVerseList(inRef, (*key), true);
-	const char *startFrag = inRef;
-	for (int i = 0; i < verses.Count(); i++) {
-		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
-		char buf[5120];
-		char frag[800];
-		if (element) {
-			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
-			frag[((const char *)element->userData - startFrag) + 1] = 0;
-			startFrag = (const char *)element->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s-%s\">%s</reference>", element->LowerBound().getOSISRef(), element->UpperBound().getOSISRef(), frag);
-		}
-		else {
-			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
-			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
-			startFrag = (const char *)verses.GetElement(i)->userData + 1;
-			sprintf(buf, "<reference osisRef=\"%s\">%s</reference>", VerseKey(*verses.GetElement(i)).getOSISRef(), frag);
-		}
-		outRef+=buf;
-	}
-	return outRef.c_str();
 }
 
 

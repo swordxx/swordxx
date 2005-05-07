@@ -57,8 +57,6 @@ public:
 /** this filter converts GBF text to OSIS text
  */
 class SWDLLEXPORT GBFOSIS : public SWFilter {
-protected:
-	virtual const char *convertToOSIS(const char *, const SWKey *key);
 public:
 	GBFOSIS();
 	virtual ~GBFOSIS();

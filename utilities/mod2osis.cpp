@@ -51,6 +51,9 @@ int main(int argc, char **argv)
 		if (find(values.begin(), values.end(), "On") != values.end()) {
 			mgr.setGlobalOption(it->c_str(), "On");
 		}
+		if (find(values.begin(), values.end(), "All Readings") != values.end()) {
+			mgr.setGlobalOption(it->c_str(), "All Readings");
+		}
 	}
 
 //	mgr.setGlobalOption("Strong's Numbers", "Off");
