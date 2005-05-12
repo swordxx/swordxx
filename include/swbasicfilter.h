@@ -156,7 +156,7 @@ protected:
 	 */
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 
-	virtual bool processStage(char /*stage*/, SWBuf &/*text*/, char *&/*from*/, BasicFilterUserData */*userData*/) { return false; }
+	virtual bool processStage(char /*stage*/, SWBuf &/*text*/, char *&/*from*/, BasicFilterUserData * /*userData*/) { return false; }
 	virtual void setStageProcessing(char stages) { processStages = stages; }	// see STATICs up above
 
 	/** This function is called for every escape sequence encountered in the input text.
