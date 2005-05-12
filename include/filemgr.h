@@ -25,6 +25,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#ifndef S_IREAD
+#define S_IREAD        0000400         // Read permission, owner
+#define S_IWRITE       0000200         // Write permission, owner
+#endif
+
 #include <defs.h>
 #include <swbuf.h>
 #include <swcacher.h>
