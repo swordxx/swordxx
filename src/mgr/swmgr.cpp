@@ -560,7 +560,7 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 			// inserting all configs first is not good because that overwrites old keys and new modules would share the same config
 			for (SectionMap::iterator it = config->Sections.begin(); it != config->Sections.end(); ++it) {
 				if (saveConfig->Sections.find( (*it).first ) != saveConfig->Sections.end()) { //if the new section is already present rename it
-					ConfigEntMap entMap( (*it).second );
+					ConfigEntMap entMap((*it).second);
 					
 					SWBuf name;
 					int i = 1;
@@ -569,8 +569,8 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 						i++;
 					} while (config->Sections.find(name) != config->Sections.end());
 					
-					config->Sections.insert( make_pair(name, entMap) );
-					config->Sections.erase( it );
+					config->Sections.insert(SectionMap::value_type(name, entMap) );
+					config->Sections.erase(it);
 				}
 			}
 		}
@@ -768,7 +768,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 		newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name, description.c_str());
 	}
 
-        int pos;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
+        int pos = 0;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
 	if (!stricmp(driver, "RawLD")) {
 		newmod = new RawLD(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
                 pos = 1;
