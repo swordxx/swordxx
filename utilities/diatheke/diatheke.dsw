@@ -18,7 +18,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libsword"=..\..\..\lib\vcppmake\vc6\libsword.dsp - Package Owner=<4>
+Project: "libsword"=..\..\lib\vcppmake\vc6\libsword.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

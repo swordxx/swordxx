@@ -44,7 +44,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
+# ADD CPP /nologo /MD /w /W0 /GX /O2 /I "../../include" /I "../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -52,7 +52,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6.lib /nologo /subsystem:console /machine:I386 /libpath:"../../lib"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Debug"
 
@@ -68,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /w /W0 /Gm /GX /ZI /Od /I "../../include" /I "../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6d.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6d.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../lib"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Debug with ICU"
 
@@ -92,16 +92,16 @@ LINK32=link.exe
 # PROP Intermediate_Dir "ICUDebug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "__VISUALC__" /FR /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /w /W0 /Gm /GX /ZI /Od /I "../../../include" /I "../../../src/utilfuns/win32" /I "../../../../icu-sword/include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "_ICU_" /D "_ICUSWORD_" /FR /YX /FD /GZ /c
+# ADD BASE CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "../../include" /I "../../src/utilfuns/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "__VISUALC__" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /w /W0 /Gm /GX /ZI /Od /I "../../include" /I "../../src/utilfuns/win32" /I "../../../icu-sword/include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "_ICU_" /D "_ICUSWORD_" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/vcppmake/vc6/Debug"
-# ADD LINK32 icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6icud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../../icu-sword/lib" /libpath:"../../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../lib/vcppmake/vc6/Debug"
+# ADD LINK32 icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6icud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../icu-sword/lib" /libpath:"../../lib"
 
 !ELSEIF  "$(CFG)" == "diatheke - Win32 Release with ICU"
 
@@ -117,16 +117,16 @@ LINK32=link.exe
 # PROP Intermediate_Dir "ICURelease"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "__VISUALC__" /FR /YX /FD /c
-# ADD CPP /nologo /MD /w /W0 /GX /O2 /I "../../../include" /I "../../../src/utilfuns/win32" /I "../../../../icu-sword/include" /D "NDEBUG" /D "_ICU_" /D "_ICUSWORD_" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
+# ADD BASE CPP /nologo /w /W0 /GX /O2 /I "../../include" /I "../../src/utilfuns/win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "__VISUALC__" /FR /YX /FD /c
+# ADD CPP /nologo /MD /w /W0 /GX /O2 /I "../../include" /I "../../src/utilfuns/win32" /I "../../../icu-sword/include" /D "NDEBUG" /D "_ICU_" /D "_ICUSWORD_" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../lib/vcppmake/vc6/Release"
-# ADD LINK32 icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6icu.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../../icu-sword/lib" /libpath:"../../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libsword.lib /nologo /subsystem:console /machine:I386 /libpath:"../../lib/vcppmake/vc6/Release"
+# ADD LINK32 icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libswordvc6icu.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../icu-sword/lib" /libpath:"../../lib"
 
 !ENDIF 
 

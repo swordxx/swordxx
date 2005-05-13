@@ -1932,6 +1932,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\modules\filters\osisosis.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\src\modules\filters\osisplain.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2120,6 +2123,12 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\filters\osiswebif.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\filters\osiswordjs.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\filters\plainfootnotes.cpp">
@@ -2728,6 +2737,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\mgr\stringmgr.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\src\keys\strkey.cpp">
@@ -3376,6 +3388,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\utilfuns\swobject.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\src\modules\filters\swoptfilter.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -3415,44 +3430,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\mgr\swsearchable.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\src\mgr\swsourcemgr.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\texts\swtext.cpp">
@@ -4099,6 +4076,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\filters\thmlwordjs.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\src\keys\treekey.cpp">
@@ -4785,83 +4765,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\src\utilfuns\utilconf.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\src\utilfuns\utilstr.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\src\utilfuns\utilweb.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -5257,6 +5161,12 @@
 				RelativePath="..\..\..\include\cipherfil.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\config.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\curlftpt.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\defs.h">
 			</File>
 			<File
@@ -5278,7 +5188,16 @@
 				RelativePath="..\..\..\include\flatapi.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\ftplib.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\ftplibftpt.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\ftpparse.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\ftptrans.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\gbffootnotes.h">
@@ -5359,6 +5278,9 @@
 				RelativePath="..\..\..\include\nullim.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\osisbook.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\osisfootnotes.h">
 			</File>
 			<File
@@ -5374,6 +5296,9 @@
 				RelativePath="..\..\..\include\osismorph.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\osisosis.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\osisplain.h">
 			</File>
 			<File
@@ -5387,6 +5312,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\osisstrongs.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osiswebif.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\osiswordjs.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\plainfootnotes.h">
@@ -5438,6 +5369,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\scsuutf8.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\stringmgr.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\strkey.h">
@@ -5521,9 +5455,6 @@
 				RelativePath="..\..\..\include\swsearchable.h">
 			</File>
 			<File
-				RelativePath="..\..\..\include\swsourcemgr.h">
-			</File>
-			<File
 				RelativePath="..\..\..\include\swtext.h">
 			</File>
 			<File
@@ -5584,6 +5515,9 @@
 				RelativePath="..\..\..\include\thmlwebif.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\thmlwordjs.h">
+			</File>
+			<File
 				RelativePath="..\..\..\include\treekey.h">
 			</File>
 			<File
@@ -5597,6 +5531,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\untgz.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\url.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\utf16utf8.h">
@@ -5635,16 +5572,10 @@
 				RelativePath="..\..\..\include\utf8utf16.h">
 			</File>
 			<File
-				RelativePath="..\..\..\include\utilconf.h">
-			</File>
-			<File
 				RelativePath="..\..\..\include\utilfuns.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\utilstr.h">
-			</File>
-			<File
-				RelativePath="..\..\..\include\utilweb.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\utilxml.h">

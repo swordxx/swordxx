@@ -315,6 +315,10 @@ SOURCE=..\..\..\src\modules\filters\osismorph.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\modules\filters\osisosis.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\osisplain.cpp
 # End Source File
 # Begin Source File
@@ -332,6 +336,14 @@ SOURCE=..\..\..\src\modules\filters\osisscripref.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\modules\filters\osisstrongs.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\osiswebif.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\osiswordjs.cpp
 # End Source File
 # Begin Source File
 
@@ -396,6 +408,10 @@ SOURCE=..\..\..\src\modules\common\sapphire.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\modules\filters\scsuutf8.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\mgr\stringmgr.cpp
 # End Source File
 # Begin Source File
 
@@ -467,15 +483,15 @@ SOURCE=..\..\..\src\modules\swmodule.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\utilfuns\swobject.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\modules\filters\swoptfilter.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\mgr\swsearchable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\mgr\swsourcemgr.cpp
 # End Source File
 # Begin Source File
 
@@ -544,6 +560,10 @@ SOURCE=..\..\..\src\modules\filters\thmlvariants.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\modules\filters\thmlwebif.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\modules\filters\thmlwordjs.cpp
 # End Source File
 # Begin Source File
 
@@ -623,15 +643,7 @@ SOURCE=..\..\..\src\modules\filters\utf8utf16.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\utilfuns\utilconf.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\utilfuns\utilstr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\utilfuns\utilweb.cpp
 # End Source File
 # Begin Source File
 
@@ -691,6 +703,14 @@ SOURCE=..\..\..\include\cipherfil.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\config.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\curlftpt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\defs.h
 # End Source File
 # Begin Source File
@@ -719,7 +739,19 @@ SOURCE=..\..\..\include\flatapi.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\ftplib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\ftplibftpt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\ftpparse.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\ftptrans.h
 # End Source File
 # Begin Source File
 
@@ -827,6 +859,10 @@ SOURCE=..\..\..\include\nullim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\osisbook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\osisfootnotes.h
 # End Source File
 # Begin Source File
@@ -847,6 +883,10 @@ SOURCE=..\..\..\include\osismorph.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\osisosis.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\osisplain.h
 # End Source File
 # Begin Source File
@@ -864,6 +904,14 @@ SOURCE=..\..\..\include\osisscripref.h
 # Begin Source File
 
 SOURCE=..\..\..\include\osisstrongs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osiswebif.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\osiswordjs.h
 # End Source File
 # Begin Source File
 
@@ -932,6 +980,10 @@ SOURCE=..\..\..\include\sapphire.h
 # Begin Source File
 
 SOURCE=..\..\..\include\scsuutf8.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\stringmgr.h
 # End Source File
 # Begin Source File
 
@@ -1124,6 +1176,10 @@ SOURCE=..\..\..\include\thmlvariants.h
 # Begin Source File
 
 SOURCE=..\..\..\include\thmlwebif.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\thmlwordjs.h
 # End Source File
 # Begin Source File
 
