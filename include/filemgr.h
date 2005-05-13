@@ -25,11 +25,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifndef S_IREAD
-#define S_IREAD        0000400         // Read permission, owner
-#define S_IWRITE       0000200         // Write permission, owner
-#endif
-
 #include <defs.h>
 #include <swbuf.h>
 #include <swcacher.h>
@@ -137,7 +132,7 @@ public:
 	* @param tryDowngrade
 	* @return FileDesc object for the requested file.
 	*/
-	FileDesc *open(const char *path, int mode, int perms = S_IREAD | S_IWRITE, bool tryDowngrade = false);
+	FileDesc *open(const char *path, int mode, int perms = IREAD | IWRITE, bool tryDowngrade = false);
 
 	/** Close a given file and delete its FileDesc object.
 	* Will only close the file if it was created by this FileMgr object.
