@@ -10,6 +10,7 @@
 #include <swmodule.h>
 #include <ctype.h>
 #include <utilxml.h>
+#include <utilstr.h>
 #include <versekey.h>
 
 SWORD_NAMESPACE_START
@@ -46,8 +47,10 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		char val[128];
 		char *valto;
 		char *ch;
+		SWBuf modName = (module)?module->Name():"";
+		// add TR to w src in KJV then remove this next line
+		SWBuf wordSrcPrefix = (modName == "KJV")?"TR":modName;
 		
-
 		const SWBuf orig = text;
 		const char * from = orig.c_str();
 
@@ -67,6 +70,9 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					SWBuf lemma = wtag.getAttribute("lemma");
 					SWBuf strong = "";
 					SWBuf morph = wtag.getAttribute("morph");
+					SWBuf src = wtag.getAttribute("src");
+					if (!src.length()) src.appendFormatted("%d", wordNum);
+					src.insert(0, wordSrcPrefix);
 					char gh = 0;
 					VerseKey *vkey = 0;
 					if (key) {
@@ -101,21 +107,25 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 								lexName = "H";
 						}
 					}
-					SWBuf layer;
+					SWBuf wordID;
 					if (vkey) {
 						// optimize for bandwidth and use only the verse as the unique entry id
-						layer.appendFormatted("%d", vkey->Verse());
+						wordID.appendFormatted("%d", vkey->Verse());
 					}
 					else {
-						layer = key->getText();
+						wordID = key->getText();
 					}
-					for (int i = 0; i < layer.size(); i++) {
-						if ((!isdigit(layer[i])) && (!isalpha(layer[i]))) {
-							layer[i] = '_';
+					for (int i = 0; i < wordID.size(); i++) {
+						if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+							wordID[i] = '_';
 						}
 					}
+					wordID.appendFormatted("_%s", src.c_str());
 					// 'p' = 'fillpop' to save bandwidth
-					text.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s_%d', '%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(),wordNum,morph.c_str());
+					const char *m = strchr(morph.c_str(), ':');
+					if (m) m++;
+					else m = morph.c_str();
+					text.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s', '%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
 					wordNum++;
 
 

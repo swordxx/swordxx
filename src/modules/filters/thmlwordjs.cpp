@@ -54,8 +54,9 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		bool newText = false;
 		bool needWordOut = false;
 		AttributeValue *wordAttrs = 0;
+		SWBuf modName = (module)?module->Name():"";
+		SWBuf wordSrcPrefix = modName;
 		
-
 		const SWBuf orig = text;
 		const char * from = orig.c_str();
 		VerseKey *vkey = 0;
@@ -169,19 +170,20 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 							if (lexName == "StrongsHebrew")
 								lexName = "H";
 						}
-						SWBuf layer;
+						SWBuf wordID;
 						if (vkey) {
 							// optimize for bandwidth and use only the verse as the unique entry id
-							layer.appendFormatted("%d", vkey->Verse());
+							wordID.appendFormatted("%d", vkey->Verse());
 						}
 						else {
-							layer = key->getText();
+							wordID = key->getText();
 						}
-						for (int i = 0; i < layer.size(); i++) {
-							if ((!isdigit(layer[i])) && (!isalpha(layer[i]))) {
-								layer[i] = '_';
+						for (int i = 0; i < wordID.size(); i++) {
+							if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+								wordID[i] = '_';
 							}
 						}
+						wordID.appendFormatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
 						if (textSt.size()) {
 							int textStr = atoi(textSt.c_str());
 							textStr += lastAppendLen;
@@ -192,15 +194,16 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 /*
 							if (sMorph) {
 								SWBuf popMorph = "<a onclick=\"";
-								popMorph.appendFormatted("p(\'%s\',\'%s\','%s_%s','');\" >%s</a>", sMorph->Name(), morph.c_str(), layer.c_str(), wstr, morph.c_str());
+								popMorph.appendFormatted("p(\'%s\',\'%s\','%s','');\" >%s</a>", sMorph->Name(), morph.c_str(), wordID.c_str(), morph.c_str());
 								morph = popMorph;
 							}
 */
 
-
-
 							// 'p' = 'fillpop' to save bandwidth
-							spanStart.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s_%s','%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(), wstr, morph.c_str());
+							const char *m = strchr(morph.c_str(), ':');
+							if (m) m++;
+							else m = morph.c_str();
+							spanStart.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
 							text.insert(textStr, spanStart);
 							lastAppendLen = spanStart.length();
 						}
@@ -259,25 +262,29 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 				if (lexName == "StrongsHebrew")
 					lexName = "H";
 			}
-			SWBuf layer;
+			SWBuf wordID;
 			if (vkey) {
 				// optimize for bandwidth and use only the verse as the unique entry id
-				layer.appendFormatted("%d", vkey->Verse());
+				wordID.appendFormatted("%d", vkey->Verse());
 			}
 			else {
-				layer = key->getText();
+				wordID = key->getText();
 			}
-			for (int i = 0; i < layer.size(); i++) {
-				if ((!isdigit(layer[i])) && (!isalpha(layer[i]))) {
-					layer[i] = '_';
+			for (int i = 0; i < wordID.size(); i++) {
+				if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+					wordID[i] = '_';
 				}
 			}
+			wordID.appendFormatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
 			if (textSt.size()) {
 				int textStr = atoi(textSt.c_str());
 				textStr += lastAppendLen;
 				SWBuf spanStart = "";
 				// 'p' = 'fillpop' to save bandwidth
-				spanStart.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s_%s', '%s');\" >", lexName.c_str(), strong.c_str(), layer.c_str(), wstr, morph.c_str());
+				const char *m = strchr(morph.c_str(), ':');
+				if (m) m++;
+				else m = morph.c_str();
+				spanStart.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
 				text.insert(textStr, spanStart);
 			}
 		}

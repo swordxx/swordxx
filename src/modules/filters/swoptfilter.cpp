@@ -25,7 +25,7 @@ void SWOptionFilter::setOptionValue(const char *ival) {
 	for (StringList::const_iterator loop = optValues->begin(); loop != optValues->end(); loop++) {
 		if (!stricmp(loop->c_str(), ival)) {
 			optionValue = *loop;
-			option = (!stricmp(ival, "On"));	// convenience for boolean filters
+			option = (!strnicmp(ival, "On", 2));	// convenience for boolean filters
 			break;
 		}
 	}
