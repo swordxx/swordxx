@@ -8,9 +8,7 @@
 
 #include <stdlib.h>
 
-#ifdef __GNUC__
-#include <unixstr.h>
-#endif
+#include <utilstr.h>
 
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
