@@ -1,5 +1,5 @@
-// Diatheke 4.2 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999-2002 by CrossWire Bible Society
+// Diatheke 4.2.1 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999-2005 by CrossWire Bible Society
 // http://www.crosswire.org/sword/diatheke
 // Licensed under GNU General Public License (GPL)
 // see accompanying LICENSE file for license details
@@ -18,14 +18,14 @@ using std::cout;
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.2\n");
-	fprintf (stderr, "Copyright 1999-2002 by the CrossWire Bible Society\n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.2.1\n");
+	fprintf (stderr, "Copyright 1999-2005 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "usage: \n  ");
- 	fprintf (stderr, "diatheke <-b book> [-s search_type] [-r search_range] [-o option_filters]\n");
-	fprintf (stderr, "[-m maximum_verses] [-f output_format] [-l locale]\n");
+ 	fprintf (stderr, "diatheke <-b module_name> [-s search_type] [-r search_range]\n");
+	fprintf (stderr, "[-o option_filters] [-m maximum_verses] [-f output_format]\n");
 	fprintf (stderr, "[-e output_encoding] [-t script] [-v variant#(-1=all|0|1)]\n");
-	fprintf (stderr, "<-k query_key>\n");
+	fprintf (stderr, "[-l locale] <-k query_key>\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", and \"localelist\".");
@@ -42,7 +42,12 @@ void printsyntax() {
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
-	fprintf (stderr, "  arguments are added to the key.\n");
+	fprintf (stderr, "  arguments are added to the key.\n\n");
+
+	fprintf (stderr, "Example usage:\n");
+	fprintf (stderr, "  diatheke -b KJV -o fmnx -k Jn 3:16\n");
+	fprintf (stderr, "  diatheke -b WHNU -t Latin -o mn -k Mt 24\n");
+	fprintf (stderr, "  diatheke -b KJV -s phrase -r Mt -k love\n");
 }
 
 int main(int argc, char **argv)
