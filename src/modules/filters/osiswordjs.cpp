@@ -125,11 +125,8 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					const char *m = strchr(morph.c_str(), ':');
 					if (m) m++;
 					else m = morph.c_str();
-					text.appendFormatted("<span onclick=\"p(\'%s\', \'%s\', '%s', '%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
+					text.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
 					wordNum++;
-
-
-
 				}
 				if ((*token == '/') && (token[1] == 'w') && option) {	// Word
 					text += "</w></span>";

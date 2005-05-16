@@ -68,8 +68,9 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					*valto = 0;
 					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
 						// normal strongs number
-						sprintf(wordstr, "%03d", word++);
-						module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
+						sprintf(wordstr, "%03d", word);
+						module->getEntryAttributes()["Word"][wordstr]["Lemma"] = val;
+						module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = "strong";
 						tmp = "";
 						tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
 						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
@@ -77,9 +78,11 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					}
 					else {
 						// verb morph
-						sprintf(wordstr, "%03d", word-1);
+						sprintf(wordstr, "%03d", word);
 						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
+						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = "OLBMorph";
 					}
+					word++;
 				}
 
 				if (!option) {	// if we don't want strongs
@@ -100,6 +103,9 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 								*valto++ = ch[i];
 							*valto = 0;
 							sprintf(wordstr, "%03d", word-1);
+							if ((!stricmp(val, "Robinsons")) || (!stricmp(val, "Robinson"))) {
+								strcpy(val, "robinson");
+							}
 							module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
 						}
 						if (!strncmp(ch, "value=\"", 7)) {
@@ -111,6 +117,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 							module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 						}
 					}
+					newText = true;
 				}
 			}
 			// if not a strongs token, keep token in text

@@ -8,7 +8,8 @@
 #include <stdlib.h>
 #include <osisstrongs.h>
 #include <swmodule.h>
-#include <ctype.h>
+#include <versekey.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,11 +34,12 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	int tokpos = 0;
 	bool intoken = false;
 	bool lastspace = false;
-	int word = 1;
+	int wordNum = 1;
 	char val[128];
 	char wordstr[5];
 	char *valto;
 	char *ch;
+	const char *wordStart = 0;
 
 	const SWBuf orig = text;
 	const char * from = orig.c_str();
@@ -54,53 +56,67 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 		if (*from == '>') {	// process tokens
 			intoken = false;
 			if ((*token == 'w') && (token[1] == ' ')) {	// Word
-				*wordstr = 0;
 				if (module->isProcessEntryAttributes()) {
-					valto = val;
-					char *num = strstr(token, "lemma=\"x-Strongs:");					
-					int strongMarkerLength = 17;
-					if (!num) { //try alternative strong marker value
-						num = strstr(token, "lemma=\"strong:");
-						strongMarkerLength = 14;
+					wordStart = from+1;
+					char gh = 0;
+					VerseKey *vkey = 0;
+					if (key) {
+						vkey = SWDYNAMIC_CAST(VerseKey, key);
+					}
+					XMLTag wtag(token);
+					SWBuf lemma      = wtag.getAttribute("lemma");
+					SWBuf morph      = wtag.getAttribute("morph");
+					SWBuf src        = wtag.getAttribute("src");
+					SWBuf morphClass = "";
+					SWBuf lemmaClass = "";
+
+
+					const char *m = strchr(morph.c_str(), ':');
+					if (m) {
+						int len = m-morph.c_str();
+						morphClass.append(morph.c_str(), len);
+						morph << len+1;
+					}
+					m = strchr(lemma.c_str(), ':');
+					if (m) {
+						int len = m-lemma.c_str();
+						lemmaClass.append(lemma.c_str(), len);
+						lemma << len+1;
 					}
 
-					if (num) {
-						for (num+=strongMarkerLength; ((*num) && (*num != '\"')); num++) {
-							*valto++ = *num;
-						}
-						*valto = 0;
-						
-						if (atoi((!isdigit(*val))?val+1:val) < 5627) {
-							// normal strongs number
-							sprintf(wordstr, "%03d", word++);
-							module->getEntryAttributes()["Word"][wordstr]["Strongs"] = val;
-							
-							//now try to find the end tag to get the text between <w> and </w> to set the entry attribute
-							
-							const char* startTagEnd = strstr(from, ">"); //end of the opening tag
-							if (startTagEnd) {
-								startTagEnd++;
-								
-								const char* endTagStart = strstr(startTagEnd, "</w>"); //end of the opening tag
-								if (endTagStart && endTagStart > startTagEnd) { //content in between
-									SWBuf tmp;
-									tmp.append(startTagEnd, endTagStart - startTagEnd);
-									module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
-								}
+					if ((lemmaClass == "x-Strongs") || (lemmaClass == "strong")) {
+						gh = isdigit(lemma[0]) ? 0:lemma[0];
+						if (!gh) {
+							if (vkey) {
+								gh = vkey->Testament() ? 'H' : 'G';
 							}
 						}
-						else {
-							// verb morph
-							sprintf(wordstr, "%03d", word-1);
-							module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
-						}
+						else lemma << 1;
+						lemmaClass = "strong";
 					}
-				}
-				if (wordstr) {
+					if ((morphClass == "x-Robinsons") || (morphClass == "x-Robinson") || (morphClass == "Robinson")) {
+						morphClass = "robinson";
+					}
+
+					sprintf(wordstr, "%03d", wordNum);
+					if (gh) lemma.insert(0,gh);
+					if (lemma.length())
+					module->getEntryAttributes()["Word"][wordstr]["Lemma"] = lemma;
+					if (lemmaClass.length())
+					module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = lemmaClass;
+					if (morph.length())
+					module->getEntryAttributes()["Word"][wordstr]["Morph"] = morph;
+					if (morphClass.length())
+					module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = morphClass;
+					if (src.length())
+						module->getEntryAttributes()["Word"][wordstr]["Src"] = src;
 					strcat(token, " wn=\"");
 					strcat(token, wordstr);
 					strcat(token, "\"");
+
+					wordNum++;
 				}
+
 				if (!option) {
 					char *num = strstr(token, "lemma=\"x-Strongs:");
 					if (num) {
@@ -113,6 +129,17 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						}
 					}
 				}
+			}
+			if ((*token == '/') && (token[1] == 'w')) {	// Word End
+				if (module->isProcessEntryAttributes()) {
+					if (wordStart) {
+						SWBuf tmp;
+						tmp.append(wordStart, (from-wordStart)-3);
+						sprintf(wordstr, "%03d", wordNum-1);
+						module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
+					}
+				}
+				wordStart = 0;
 			}
 			
 			// if not a strongs token, keep token in text

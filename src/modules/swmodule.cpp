@@ -373,7 +373,7 @@ void SWModule::decrement(int steps) {
  *				>=0 - regex
  *				-1  - phrase
  *				-2  - multiword
- *				-3  - entryAttrib (eg. Word//Strongs/G1234/)
+ *				-3  - entryAttrib (eg. Word//Lemma/G1234/)
  *				-4  - clucene
  * 	flags		- options flags for search
  *	justCheckIfSupported	- if set, don't search, only tell if this
@@ -976,7 +976,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			words = getEntryAttributes().find("Word");
 			if (words != getEntryAttributes().end()) {
 				for (word = words->second.begin();word != words->second.end(); word++) {
-					strongVal = word->second.find("Strongs");
+					strongVal = word->second.find("Lemma");
 					if (strongVal != word->second.end()) {
 						// cheeze.  skip empty article tags that weren't assigned to any text
 						if (strongVal->second == "G3588") {
@@ -994,7 +994,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			doc->add( Field::UnIndexed(_T("key"), keyText ) );
 			doc->add( Field::UnStored(_T("content"), content) );
 			if (strong.length() > 0)
-				doc->add( Field::UnStored(_T("strong"), strong) );
+				doc->add( Field::UnStored(_T("lemma"), strong) );
 			writer->addDocument(*doc);
 			delete doc;
 		}
