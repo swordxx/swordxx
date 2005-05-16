@@ -1,4 +1,5 @@
 #!/bin/sh
+(cd ..;./autogen.sh)
 REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
 SWORDVER=`grep "define VERSI" ../include/config.h |cut -f2 -d"\""`
 

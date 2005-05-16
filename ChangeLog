@@ -1,6 +1,12 @@
 ﻿API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+16-May-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Changed Strongs to Lemma and added LemmaClass for
+		EntryAttributes
+	Made OSIS, GBF, and ThML filters parse lemma and
+		morph
+
 2-May-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Removed many tools files and added them to
 		the sword-tools repository
