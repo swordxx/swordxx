@@ -89,7 +89,11 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 	int i;
 	int retVal = 0;
 	
-	SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/"; //dont forget the final slash
+	SWBuf url = SWBuf(urlPrefix) + SWBuf(dir);
+	if (url[url.length()-1] != '/') {
+		url.append('/'); //don't forget the final slash if it's not yet at the end
+	}
+	
 	SWLog::getSystemLog()->logWarning("FTPCopy: getting dir %s\n", url.c_str());
 	vector<struct ftpparse> dirList = getDirList(url.c_str());
 
