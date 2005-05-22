@@ -189,7 +189,7 @@ int processXML(char* filename, char* modname, bool longnames, bool exportfile, u
   while ((c = fgetc(infile)) != EOF) {
     if (c == '<') {
       if (getTag(infile, keybuffer)) {
-	if ((format == F_OSIS) && ((!strcmp(keybuffer, "/div>")) || (!strcmp(keybuffer, "/verse>"))) ||
+	if ((format == F_OSIS) && ((!strcmp(keybuffer, "/div>")) || (!strcmp(keybuffer, "/verse>")) || (!strcmp(keybuffer, "/chapter>"))) ||
            ((format == F_THML) && ((!strncmp(keybuffer, "/div", 4)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
 	  if (!closer) {
        	    keysize = 0;
@@ -220,7 +220,7 @@ int processXML(char* filename, char* modname, bool longnames, bool exportfile, u
 
 	  closer = true;
 	}
-	else if ((format == F_OSIS) && !((!strcmp(keybuffer, "div>") || !strncmp(keybuffer, "div ", 4)) || (!strcmp(keybuffer, "verse>") || !strncmp(keybuffer, "verse ", 6))) ||
+	else if ((format == F_OSIS) && !((!strcmp(keybuffer, "div>") || !strncmp(keybuffer, "div ", 4)) || (!strcmp(keybuffer, "verse>") || !strncmp(keybuffer, "verse ", 6)) || (!strcmp(keybuffer, "chapter>") || !strncmp(keybuffer, "chapter ", 8))) ||
                 ((format == F_THML) && !((!strncmp(keybuffer, "div", 3)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
 	  entbuffer[entrysize++] = '<';
 	  for (i = 0; i <= strlen(keybuffer); i++) {
