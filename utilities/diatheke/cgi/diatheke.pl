@@ -25,6 +25,21 @@ $deflocale = "abbr";  # this is just the default for cases where user has not se
 
 $version = "4.2";
 
+sub shell_escape {
+    my $input = shift;
+    my $result = '';
+
+    foreach my $i (split //, $input) {
+    if ($i eq "'") {
+        $result .= "'\\''";
+    } else {
+        $result .= $i;
+    }
+    }
+    return $result;
+}
+
+
 sub plussifyaddress  {
     ($p_ver = @_[0]) =~ tr/ /+/; 
     $p_newline = "<a href=\"$scriptname?verse=$p_ver&@_[1]=on\">";
@@ -69,6 +84,7 @@ if ($locale eq "") {
     }
 }
 
+$locale = shell_escape($locale);
 $hostname = $ENV{'REMOTE_ADDR'};
 @values = split(/\&/,$ENV{'QUERY_STRING'});
 $n = 0;
@@ -85,15 +101,17 @@ foreach $i (@values) {
 	    $verse = $mydata;
 	    $verse =~ tr/+/ /;
 	    $verse =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+            $verse = shell_escape($verse);
 	}
 	elsif ($varname eq "search" && $mydata ne "" && $mydata ne "off") {
-	    $search = "-s $mydata";
+            $search = "-s '" . shell_escape($mydata) . "'";
 	}
 	elsif ($varname eq "range" && $mydata ne "" && $mydata ne "off") {
 	    $range = $mydata;
 	    $range =~ tr/+/ /;
 	    $range =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
 	    $range = "-r \"$range\"";
+            $range = shell_escape($range);
 	}
 
 	elsif ($varname eq "strongs") {
@@ -141,13 +159,13 @@ foreach $i (@values) {
 	    $debug = 1;
 	}
 	elsif ($varname eq "locale") {
-	    $locale = $mydata;
+	    $locale = shell_escape($mydata);
 	}
 	elsif ($varname eq "maxverses") {
-	    $maxverses = $mydata;
+	    $maxverses = shell_escape($mydata);
 	}
 	elsif ($mydata eq "on" || $mydata eq "ON") {
-	    $versions[$n] = $varname;
+	    $versions[$n] = shell_escape($varname);
 	    $n++;
 	}
     }
@@ -431,7 +449,7 @@ END
 }
 for ($i = 0; $i < $n; $i++) {
     
-    $line = "$diatheke $search $range $optionfilters $latinxlit -l $locale -m $maxverses -f cgi -b $versions[$i] -k \"$verse\" $err";
+    $line = "$diatheke $search $range $optionfilters $latinxlit -l '$locale' -m '$maxverses' -f cgi -b '$versions[$i]' -k '$verse' $err";
 
     if ($debug) {
 	print "<br /><i>command line: $line\n</i><br /><br />";
@@ -444,7 +462,7 @@ for ($i = 0; $i < $n; $i++) {
 
 #    Parse and link to Strong's references if present
     
-    $info = `$diatheke -b info -k $versions[$i] $err`;
+    $info = `$diatheke -b info -k '$versions[$i]' $err`;
     $info =~ /([^\;]+)\;([^\;]+)/;
     $format = $1;
     $type = $2;
