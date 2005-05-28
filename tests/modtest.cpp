@@ -8,7 +8,7 @@ using namespace sword;
 int main(int argc, char **argv) {
 	SWMgr mymgr;
 	ModMap::iterator it;
-	SWModule *module = mymgr.Modules["RWP"];
+	SWModule *module = mymgr.Modules["KJV"];
 	VerseKey parser;
 	ListKey lk = parser.ParseVerseList("mal4:6-rev", parser, true);
 	lk.Persist(1);

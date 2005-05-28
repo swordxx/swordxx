@@ -40,15 +40,42 @@ required:
 	class ClassDef {
 	private:
 	protected:
-		void method(int param1, char param2);
+
+		/** This method does something
+		 * @param paramName1 the first parameter name
+		 * @param param2 the second parameter name
+		 * @return error status
+		 */
+		char methodName(int paramName1, char param2 = -1);
+
+		/** This method does something too
+		 */
+		void anotherMethodName() { someShortExpression; }
+
 	public:
 		ClassDef();
 	};
 
-	ClassDef classDef;
-	classDef.method(1, '2');
+	char ClassDef::methodName(int paramName1, char param2) {
+		char retVal = 0;
+		// do something;
+		return retVal;
+	}
 
-	var1      = 1;
-	variable2 = 2;
-	var3      = 3;
+	ClassDef classDef;
+	classDef.methodName(1, '2');
+
+	if (((reallyLongCondition) && (moreLogic)) ||
+			(otherCondition)) {
+		expression;
+	}
+
+	int   varName1  = 1;
+	char *variable2 = "2";
+	int  &var3      = varName1;
+	int   variable4, variable5, var6, var7;
+
 	variable4 = 4;
+	variable5 = 5;
+	var6      = 6;
+	var7      = 7;

@@ -1,40 +1,52 @@
 /******************************************************************************
-*  swmgr.h   - definition of class SWMgr used to interact with an install
-*				base of sword modules.
-*
-* $Id$
-*
-* Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
-*	CrossWire Bible Society
-*	P. O. Box 2528
-*	Tempe, AZ  85280-2528
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the
-* Free Software Foundation version 2.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-*/
+ *  swmgr.h   - definition of class SWMgr used to interact with an install
+ *				base of sword modules.
+ *
+ * $Id$
+ *
+ * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
-/** @mainpage The Sword Project - API documentation
-* This is the API documentation of the Sword project.
-* it describes the structure of the Sword library and documents the functions of the classes.
-* From time to time this documentation gives programming examples, too.
-*
-* Sword provides an interface to different modules (Bibles/Commentaries/Lexicons)
-* on disk. The object to work directly with the modules is SWModule.
-* Use the class SWMgr to manage the modules.
-*
-* If you want to write your own frontend for Sword please have a look at the already existing ones.
-* Well known frontends are:\n
-*	-BibleCS for Windows (the sourcecode is availble in the CVS of crosswire.org)\n
-*	-GnomeSword (http://gnomesword.sourceforge.net/)\n
-*	-BibleTime (http://www.bibletime.info/)\n
-*/
+/** @mainpage The SWORD Project - API documentation
+ * This is the API documentation for the SWORD Project.
+ * It describes the structure of the SWORD library and documents the functions of the classes.
+ * From time to time this documentation gives programming examples, too.
+ *
+ * SWORD provides a simple to use engine for working with many types of texts including Bibles,
+ *	commentaries, lexicons, glossaries, daily devotionals, and others.
+ *
+ * Some main classes:
+ *
+ * SWMgr makes an installed library of modules (works) available.
+ * SWModule represents an individual work
+ * SWKey represents a location into a work (e.g. "John 3:16")
+ *
+ * An API Primer can be found at:
+ *
+ * http://crosswire.org/sword/develop/swordapi/apiprimer.jsp
+ *
+ * If you're interested in working on a client which uses SWORD, please first have a look at
+ *	some of the existing ones.  They can always use help, and will also prove to be good examples
+ *	if you decide to start a new project.
+ *
+ * Well known frontends are:\n
+ *	-SWORD for Windows (http://crosswire.org/sword/software/biblecs/)\n
+ *	-GnomeSword (http://gnomesword.sourceforge.net/)\n
+ *	-BibleTime (http://www.bibletime.info/)\n
+ */
 
 #ifndef SWMGR_H
 #define SWMGR_H
@@ -55,16 +67,13 @@ typedef std::map < SWBuf, SWModule *, std::less < SWBuf > >ModMap;
 typedef std::map < SWBuf, SWFilter * >FilterMap;
 typedef std::list < SWBuf >StringList;
 
-/** SWMgr is the main class of the Sword library.
-*
-* SWmgr manages the installed modules, the filters and global options like footnotes or strong numbers.
-* The class SWMgr is the most important class of Sword. It is used to manage the installed modules.
-* It also manages the filters (Render-, Strip- and Rawfilters).
-*
-* To get the SWModule objects of the instalelled modules use @ref Modules for this.
-* @see AddRawFilters(), AddRenderFilters(), AddStripFilters()
-* @version $Id$
-*/
+/** SWMgr exposes an installed module set
+ *
+ * SWMgr exposes an installed module set and can be asked to configure the desired
+ *	markup and options which modules will produce.
+ *
+ * @version $Id$
+ */
 
 class FileDesc;
 
@@ -73,11 +82,11 @@ class SWDLLEXPORT SWMgr {
 private:
 	bool mgrModeMultiMod;
 	bool augmentHome;
-	void commonInit(SWConfig * iconfig, SWConfig * isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod = false);
+	void commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod = false);
 
 protected:
 	SWFilterMgr *filterMgr;		//made protected because because BibleTime needs it
-	SWConfig * myconfig;		//made protected because because BibleTime needs it
+	SWConfig *myconfig;		//made protected because because BibleTime needs it
 	SWConfig *mysysconfig;
 	SWConfig *homeConfig;
 	void CreateMods(bool multiMod = false);
@@ -95,221 +104,232 @@ protected:
 	virtual void init(); // use to initialize before loading modules
 	virtual char AddModToConfig(FileDesc *conffd, const char *fname);
 	virtual void loadConfigDir(const char *ipath);
-	virtual void AddGlobalOptions(SWModule * module, ConfigEntMap & section,
-	ConfigEntMap::iterator start,
-	ConfigEntMap::iterator end);
-	virtual void AddLocalOptions(SWModule * module, ConfigEntMap & section,
-	ConfigEntMap::iterator start,
-	ConfigEntMap::iterator end);
+	virtual void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
+	virtual void AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
 	StringList augPaths;
 
 	/**
-	* Adds the encoding filters which are defined in "section" to the SWModule object "module".
-	* @param module To this module the encoding filter(s) are added
-	* @param section We use this section to get a list of filters we should apply to the module
-	*/
-	virtual void AddEncodingFilters(SWModule * module, ConfigEntMap & section);
+	 * Called to add appropriate Encoding Filters to a module.  Override to do special actions,
+	 *	if desired.	See the module.conf Encoding= entry.
+	 * @param module module to which to add Encoding Filters
+	 * @param section configuration information from module.conf
+	 */
+	virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
+
 	/**
-	* Adds the render filters which are defined in "section" to the SWModule object "module".
-	* @param module To this module the render filter(s) are added
-	* @param section We use this section to get a list of filters we should apply to the module
-	*/
-	virtual void AddRenderFilters(SWModule * module, ConfigEntMap & section);
+	 * Called to add appropriate Render Filters to a module.  Override to do special actions,
+	 *	if desired.	See the module.conf SourceType= entry.
+	 * @param module module to which to add Render Filters
+	 * @param section configuration information from module.conf
+	 */
+	virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
+
 	/**
-	* Adds the strip filters which are defined in "section" to the SWModule object "module".
-	* @param module To this module the strip filter(s) are added
-	* @param section We use this section to get a list of filters we should apply to the module
-	*/
-	virtual void AddStripFilters(SWModule * module, ConfigEntMap & section);
+	 * Called to add appropriate Strip Filters to a module.  Override to do special actions,
+	 *	if desired.	See the module.conf SourceType= entry.
+	 * @param module module to which to add Strip Filters
+	 * @param section configuration information from module.conf
+	 */
+	virtual void AddStripFilters(SWModule *module, ConfigEntMap &section);
+
 	/**
-	* Adds the raw filters which are defined in "section" to the SWModule object "module".
-	* @param module To this module the raw filter(s) are added
-	* @param section We use this section to get a list of filters we should apply to the module
-	*/
-	virtual void AddRawFilters(SWModule * module, ConfigEntMap & section);
+	 * Called to add appropriate Raw Filters to a module.  Override to do special actions,
+	 *	if desired.	See the module.conf CipherKey= entry.
+	 * @param module module to which to add Raw Filters
+	 * @param section configuration information from module.conf
+	 */
+	virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
 
 
 public:
-	/** Enable / Disable debug output on runtime
-	* Set this to true to get more verbose output of SWMgr at runtime. Set it to false to get no debug output.
-	* The default is "false".
-	*/
+	/** Enable / Disable debug output at runtime
+	 * Set this to true to get more verbose output from SWMgr at runtime. Set it to false to get no debug
+	 * output.
+	 * The default is "false".
+	 */
 	static bool debug;
+
 	static bool isICU;
 	static const char *globalConfPath;
+
 	/**
-	*
-	*/
+	 *
+	 */
 	static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0);
-	/** The global config object.
-	* This is the global config object. It contains all items of all modules,
-	* so lookups of entries should use this config object.
-	* If you want to save a cipher key or other things to the module config file,
-	* DO NOT USE this object, because it would corrupt your config files after config->Save().
-	*
-	* If you want to write to the modules config file read the informtaion of @ref setCipherKey() for an example of this.
-	*/
+
 	SWConfig *config;
-	/**
-	*
-	*/
 	SWConfig *sysconfig;
-	/** The map of available modules.
-	* This map contains the list of available modules in Sword.
-	* Here's an example how to got through the map and how toc ehck for the module type.
-	*
-	*@code
-	* ModMap::iterator it;
-	* SWModule*	curMod = 0;
-	*
-	* for (it = Modules.begin(); it != Modules.end(); it++) {
-	*     curMod = (*it).second;
-	*     if (!strcmp(curMod->Type(), "Biblical Texts")) {
-	*       //do something with curMod
-	*     }
-	*     else if (!strcmp(curMod->Type(), "Commentaries")) {
-	*       //do something with curMod
-	*     }
-	*     else if (!strcmp(curMod->Type(), "Lexicons / Dictionaries")) {
-	*       //do something with curMod
-	*     }
-	* }
-	* @endcode
-	*/
-	ModMap Modules;
-	SWModule *getModule(const char *modName) { ModMap::iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
-	/** The path to your Sword directory
-	*
-	*/
+
+	/** The path to main module set and locales
+	 */
 	char *prefixPath;
-	/**
-	*
-	*/
+
+	/** path to main module set configuration 
+	 */
 	char *configPath;
 
-	/** Constructor of SWMgr.
-	*
-	* @param iconfig
-	* @param isysconfig
-	* @param autoload If this bool is true the constructor starts loading the installed modules. If you reimplemented SWMgr you can set autoload=false to load the modules with your own reimplemented function.
-	* @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE DELETED BY SWMgr
-	*/
-	SWMgr(SWConfig * iconfig = 0, SWConfig * isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
+	/** The map of available modules.
+	 *	This map exposes the installed modules.
+	 *	Here's an example how to iterate over the map and check the module type of each module.
+	 *
+	 *@code
+	 * ModMap::iterator it;
+	 * SWModule *curMod = 0;
+	 *
+	 * for (it = Modules.begin(); it != Modules.end(); it++) {
+	 *      curMod = (*it).second;
+	 *      if (!strcmp(curMod->Type(), "Biblical Texts")) {
+	 *           // do something with curMod
+	 *      }
+	 *      else if (!strcmp(curMod->Type(), "Commentaries")) {
+	 *           // do something with curMod
+	 *      }
+	 *      else if (!strcmp(curMod->Type(), "Lexicons / Dictionaries")) {
+	 *           // do something with curMod
+	 *      }
+	 * }
+	 * @endcode
+	 */
+	ModMap Modules;
+
+	/** Gets a specific module by name.  e.g. SWModule *kjv = myManager.getModule("KJV");
+	 * @param modName the name of the module to retrieve
+	 * @return the module, if found, otherwise 0
+	 */
+	SWModule *getModule(const char *modName) { ModMap::iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
+
+
+	/** Constructs an instance of SWMgr
+	 *
+	 * @param iconfig manually supply a configuration.  If not supplied, SWMgr will look on the system
+	 *	using a complex hierarchical search.  See README for detailed specifics.
+	 * @param isysconfig
+	 * @param autoload whether or not to immediately load modules on construction of this SWMgr.
+	 *	If you reimplemented SWMgr you can set this to false and call SWMgr::Load() after you have
+	 *	completed the contruction and setup of your SWMgr subclass.
+	 * @param filterMgr an SWFilterMgr subclass to use to manager filters on modules
+	 *	SWMgr TAKES OWNERSHIP FOR DELETING THIS OBJECT
+	 *	For example, this will create an SWMgr and cause its modules to produce HTMLHREF formatted output
+	 *	when asked for renderable text:
+	 *
+	 *	SWMgr *myMgr = new SWMgr(0, 0, false, new MarkupFilterMgr(FMT_HTMLHREF));
+	 */
+	SWMgr(SWConfig *iconfig = 0, SWConfig *isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
 
 	/**
-	*
-	* @param filterMgr an SWFilterMgr subclass to use to manager filters on modules THIS WILL BE DELETED BY SWMgr
-	*/
+	 */
 	SWMgr(SWFilterMgr *filterMgr, bool multiMod = false);
 
 	/**
-	*
-	* @param iConfigPath Path to config files.
-	* @param autoload If this bool is true the constructor starts loading the
-	* installed modules. If you reimplemented SWMgr you can set autoload=false
-	* to load the modules with your own reimplemented function.
-	* @param iConfigPath explicit path to use where modules exist
-	* @param filterMgr an SWFilterMgr subclass to use to manager filters on
-	* 		modules THIS WILL BE DELETED BY SWMgr
-	* @param augmentHome whether or not to augment ~/.sword personal modules
-	*		default is to augment modules,
-	*
-	*/
+	 * @param iConfigPath provide a custom path to use for module set location, instead of
+	 *	searching the system for it.
+	 */
 	SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false, bool augmentHome = true);
 
 	/** The destructor of SWMgr.
-	* This function cleans up the modules and deletes the created object.
-	* Destroy the SWMgr at last object in your application, because otherwise you may experience crashes
-	* because the SWModule objects become invalid.
-	*/
+	 * This function cleans up the modules and deletes the created object.
+	 * Destroying the SWMgr causes all retrieved SWModule object to be invalid, so
+	 *	be sure to destroy only when retrieved objects are no longer needed.
+	 */
 	virtual ~SWMgr();
 
 	/**
-	* Adds books from a new path to the library
-	* @param path the path in which to search for books
-	* @param multiMod whether or not to keep multiple copies of the same book if found in different paths
-	*		default - false, uses last found version of the book
-	*/
+	 * Adds books from a new path to the library
+	 * @param path the path in which to search for books
+	 * @param multiMod whether or not to keep multiple copies of the same book if found in different paths
+	 *		default - false, uses last found version of the book
+	 */
 	virtual void augmentModules(const char *path, bool multiMod = false);
+
 	void deleteModule(const char *);
 
-	/**Installs a scan for modules in the directory givan as parameter.
-	* @param dir The directory where new modules should be searched.
-	*/
+	/** Looks for any newly installed module.conf file in the path provided,
+	 *	displays the copyright information to the user, and then copies the
+	 *	module.conf to the main module set's mods.d directory
+	 * @param dir where to search for new modules
+	 */
 	virtual void InstallScan(const char *dir);
-	/**  Load the modules.
-	* Reimplement this function to use your own Load function,
-	* for example to use your own filters.
-	*/
+
+	/** Load all modules.  Should only be manually called if SWMgr was constructed
+	 *	without autoload; otherwise, this will be called on SWMgr construction
+	 * Reimplement this function to supply special functionality when modules are
+	 * initially loaded.
+	 */
 	virtual signed char Load();
-	/** Set a global option
-	* Set a global option using the parameters. A global option could be for
-	* example footnotes.
-	* @param option The name of the option, for which you want to change the
-	* value. Well known and often used values are "Footnotes" or "Strongs"
-	* @param value The value. Common values are "On" and "Off"
-	*/
+
+	/** Change the values of global options (e.g. Footnotes, Strong's Number, etc.)
+	 * @param option The name of the option, for which you want to change the
+	 * value. Well known and often used values are "Footnotes" or "Strong's Numbers"
+	 * @param value new value. Common values are "On" and "Off"
+	 */
 	virtual void setGlobalOption(const char *option, const char *value);
-	/** Gives the value of the given option
-	* @param option The option, which should be used to return the value of it
-	* @return The value of the given option
-	*/
+
+	/** Get the current value of the given option
+	 * @param option the name of the option, who's value is desired
+	 * @return the value of the given option
+	 */
 	virtual const char *getGlobalOption(const char *option);
-	/** Gives a description for the given option
-	* @param option The option, which should be used
-	* @return A description of the given option
-	* @see setGlobalOption, getGlobalOption, getGlobalOptions
-	*/
+
+	/** Gets a brief description for the given option
+	 * @param option the name of the option, who's tip is desired
+	 * @return description text
+	 * @see setGlobalOption, getGlobalOption, getGlobalOptions
+	 */
 	virtual const char *getGlobalOptionTip(const char *option);
-	/** A list of all availble options with the currently set  values
-	* @return This function returns a list of global options.
-	*/
+
+	/** Gets a list of all available option names
+	 * @return list of option names
+	 */
 	virtual StringList getGlobalOptions();
-	/**
-	*
-	*/
+
+	/** Gets a list of legal values to which a specific option 
+	 *	may be set
+	 * @param option the name of the option, who's legal values are desired
+	 * @return a list of legal values for the given option
+	 */
 	virtual StringList getGlobalOptionValues(const char *option);
+
 	/**
-	* Sets the cipher key for the given module. This function updates the key
-	* at runtime, but it does not write to the config file.
-	* To write the new unlock key to the config file use code like this:
-	*
-	* @code
-	* SectionMap::iterator section;
-	* ConfigEntMap::iterator entry;
-	* DIR *dir = opendir(configPath);
-	* struct dirent *ent;
-	* char* modFile;
-	* if (dir) {    // find and update .conf file
-	*   rewinddir(dir);
-	*   while ((ent = readdir(dir)))
-	*   {
-	*     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, "..")))
-	*     {
-	*       modFile = m_backend->configPath;
-	*       modFile += "/";
-	*       modFile += ent->d_name;
-	*       SWConfig *myConfig = new SWConfig( modFile );
-	*       section = myConfig->Sections.find( m_module->Name() );
-	*       if ( section != myConfig->Sections.end() )
-	*       {
-	*         entry = section->second.find("CipherKey");
-	*         if (entry != section->second.end())
-	*         {
-	*           entry->second = unlockKey;//set cipher key
-	*           myConfig->Save();//save config file
-	*         }
-	*       }
-	*       delete myConfig;
-	*     }
-	*   }
-	* }
-	* closedir(dir);
-	* @endcode
-	*
-	* @param modName For this module we change the unlockKey
-	* @param key This is the new unlck key we use for te module.
-	*/
+	 * Sets the cipher key for the given module. This function updates the key
+	 * at runtime, but it does not write to the config file.
+	 * To write the new unlock key to the config file use code like this:
+	 *
+	 * @code
+	 * SectionMap::iterator section;
+	 * ConfigEntMap::iterator entry;
+	 * DIR *dir = opendir(configPath);
+	 * struct dirent *ent;
+	 * char* modFile;
+	 * if (dir) {    // find and update .conf file
+	 *   rewinddir(dir);
+	 *   while ((ent = readdir(dir)))
+	 *   {
+	 *     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, "..")))
+	 *     {
+	 *       modFile = m_backend->configPath;
+	 *       modFile += "/";
+	 *       modFile += ent->d_name;
+	 *       SWConfig *myConfig = new SWConfig( modFile );
+	 *       section = myConfig->Sections.find( m_module->Name() );
+	 *       if ( section != myConfig->Sections.end() )
+	 *       {
+	 *         entry = section->second.find("CipherKey");
+	 *         if (entry != section->second.end())
+	 *         {
+	 *           entry->second = unlockKey;//set cipher key
+	 *           myConfig->Save();//save config file
+	 *         }
+	 *       }
+	 *       delete myConfig;
+	 *     }
+	 *   }
+	 * }
+	 * closedir(dir);
+	 * @endcode
+	 *
+	 * @param modName For this module we change the unlockKey
+	 * @param key This is the new unlck key we use for te module.
+	 */
 	virtual signed char setCipherKey(const char *modName, const char *key);
 };
 

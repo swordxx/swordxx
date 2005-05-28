@@ -36,7 +36,9 @@ int main(int argc, char **argv)
 	ModMap::iterator it;
 
 	if ((argc != 3) && (argc != 4)) {
-		fprintf(stderr, "usage: %s <modname> <\"search string\"> [\"search_scope\"]\n", argv[0]);
+		fprintf(stderr, "\nusage: %s <modname> <\"search string\"> [\"search_scope\"]\n"
+							 "\tExample: search KJV \"swift hear slow speak\"\n\n", argv[0]);
+
 		exit(-1);
 	}
 
@@ -59,7 +61,7 @@ int main(int argc, char **argv)
 
 	std::cout << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
-	listkey = target->Search(argv[2], -2, SEARCHFLAG_MATCHWHOLEENTRY/*REG_ICASE*/, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(argv[2], -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;

@@ -1,25 +1,25 @@
 /******************************************************************************
-*  swmodule.h  - code for base class 'module'.  Module is the basis for all
-*		  types of modules (e.g. texts, commentaries, maps, lexicons,
-*		  etc.)
-*
-* $Id$
-*
-* Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
-*	CrossWire Bible Society
-*	P. O. Box 2528
-*	Tempe, AZ  85280-2528
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the
-* Free Software Foundation version 2.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-*/
+ *  swmodule.h  - code for base class 'module'.  Module is the basis for all
+ *		  types of modules (e.g. texts, commentaries, maps, lexicons,
+ *		  etc.)
+ *
+ * $Id$
+ *
+ * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #ifndef SWMODULE_H
 #define SWMODULE_H
@@ -68,7 +68,8 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 /**
  * The class SWModule is the base class for all modules used in Sword.
  * It provides functions to look up a text passage, to search in the module,
- * to switch on/off the state of optional things like Strong's numbers or footnotes.
+ * to switch on/off the state of optional things like Strong's numbers or
+ * footnotes.
  *
  * SWModule has also functions to write to the data files.
  */
@@ -268,84 +269,93 @@ public:
 		return getDisplay();
 	}
 
-
 	/** Gets module name
-	*
-	* @return pointer to modname
-	*/
+	 *
+	 * @return pointer to modname
+	 */
 	virtual char *Name() const;
+
 	/** Sets module name
-	*
-	* @param imodname Value which to set modname; [0]-only get
-	* @return pointer to modname
-	*/
+	 *
+	 * @param imodname Value which to set modname; [0]-only get
+	 * @return pointer to modname
+	 */
 	virtual char *Name(const char *imodname);
+
 	/** Gets module description
-	*
-	* @return pointer to moddesc
-	*/
+	 *
+	 * @return pointer to moddesc
+	 */
 	virtual char *Description() const;
+
 	/** Sets module description
-	*
-	* @param imoddesc Value which to set moddesc; [0]-only get
-	* @return pointer to moddesc
-	*/
+	 *
+	 * @param imoddesc Value which to set moddesc; [0]-only get
+	 * @return pointer to moddesc
+	 */
 	virtual char *Description(const char *imoddesc);
+
 	/** Gets module type
-	*
-	* @return pointer to modtype
-	*/
+	 *
+	 * @return pointer to modtype
+	 */
 	virtual char *Type() const;
+
 	/** Sets module type
-	*
-	* @param imodtype Value which to set modtype; [0]-only get
-	* @return pointer to modtype
-	*/
+	 *
+	 * @param imodtype Value which to set modtype; [0]-only get
+	 * @return pointer to modtype
+	 */
 	virtual char *Type(const char *imodtype);
+
 	/** Sets/gets module direction
-	*
-	* @param newdir Value which to set direction; [-1]-only get
-	* @return new direction
-	*/
+	 *
+	 * @param newdir Value which to set direction; [-1]-only get
+	 * @return new direction
+	 */
 	virtual char Direction(signed char newdir = -1);
+
 	/** Sets/gets module encoding
-	*
-	* @param enc Value which to set encoding; [-1]-only get
-	* @return Encoding
-	*/
+	 *
+	 * @param enc Value which to set encoding; [-1]-only get
+	 * @return Encoding
+	 */
 	virtual char Encoding(signed char enc = -1);
+
 	/** Sets/gets module markup
-	*
-	* @param markup Vvalue which to set markup; [-1]-only get
-	* @return Markup
-	*/
+	 *
+	 * @param markup Vvalue which to set markup; [-1]-only get
+	 * @return Markup
+	 */
 	virtual char Markup(signed char markup = -1);
+
 	/** Sets/gets module language
-	*
-	* @param imodlang Value which to set modlang; [0]-only get
-	* @return pointer to modlang
-	*/
+	 *
+	 * @param imodlang Value which to set modlang; [0]-only get
+	 * @return pointer to modlang
+	 */
 	virtual char *Lang(const char *imodlang = 0);
 
 
-	// search interface
-    /** Searches a module for a string
-	*
-	* @param istr string for which to search
-	* @param searchType type of search to perform
-	*			>=0 - regex
-	*			-1  - phrase
-	*			-2  - multiword
-	*			-3  - entryAttrib (eg. Word//Strongs/G1234/)
-	* @param flags options flags for search
-	* @param scope Key containing the scope. VerseKey or ListKey are useful here.
-	* @param justCheckIfSupported if set, don't search,
-	* only tell if this function supports requested search.
-	* @param percent Callback function to get the current search status in %.
-	* @param percentUserData User data that is given to the callback function as parameter.
-	*
-	* @return listkey set to verses that contain istr
-     */
+	// search interface -------------------------------------------------
+
+	/** Searches a module for a string
+	 *
+	 * @param istr string for which to search
+	 * @param searchType type of search to perform
+	 *			>=0 - regex
+	 *			-1  - phrase
+	 *			-2  - multiword
+	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
+	 * @param flags options flags for search
+	 * @param scope Key containing the scope. VerseKey or ListKey are useful here.
+	 * @param justCheckIfSupported if set, don't search,
+	 * only tell if this function supports requested search.
+	 * @param percent Callback function to get the current search status in %.
+	 * @param percentUserData User data that is given to the callback function as parameter.
+	 *
+	 * @return listkey set to verses that contain istr
+	 */
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
 			SWKey * scope = 0,
 			bool * justCheckIfSupported = 0,
@@ -363,16 +373,17 @@ public:
 
 
 	/** Allocates a key of specific type for module
-	* The different reimplementatiosn of SWModule (e.g. SWText) support SWKey implementations, which support special.
-	* This functions returns a SWKey object which works with the current implementation of SWModule. For example for the SWText class it returns a VerseKey object.
-	* @see VerseKey, ListKey, SWText, SWLD, SWCom
-	* @return pointer to allocated key
-	*/
+	 * The different reimplementatiosn of SWModule (e.g. SWText) support SWKey implementations, which support special.
+	 * This functions returns a SWKey object which works with the current implementation of SWModule. For example for the SWText class it returns a VerseKey object.
+	 * @see VerseKey, ListKey, SWText, SWLD, SWCom
+	 * @return pointer to allocated key
+	 */
 	virtual SWKey *CreateKey();
+
 	/** This function is reimplemented by the different kinds
-	* of module objects
-	* @return the raw module text of the current entry
-	*/
+	 * of module objects
+	 * @return the raw module text of the current entry
+	 */
 #ifndef SWIG 
 	virtual SWBuf &getRawEntryBuf() = 0;
 #else
@@ -383,67 +394,84 @@ public:
 
 	// write interface ----------------------------
 	/** Is the module writable? :)
-	* @return yes or no
-	*/
+	 * @return yes or no
+	 */
 	virtual bool isWritable() { return false; }
-	/** Creates a new module
-	* @param path The first parameter is path of the new module
-	* @return error
-	*/
+
+	/** Creates a new, empty module
+	 * @param path path where to create the new module
+	 * @return error
+	 */
 	static signed char createModule(const char *path) { return -1; }
+
 	/** Modify the current module entry text - only if module isWritable()
-	* @return *this
-	*/
+	 */
 	virtual void setEntry(const char *inbuf, long len = -1) { }
-	/** Link the current module entry to another module entry - only if module isWritable()
-	*/
+
+	/** Link the current module entry to another module entry - only if
+	 *	module isWritable()
+	 */
 	virtual void linkEntry(const SWKey *sourceKey) { }
+
 	/** Delete current module entry - only if module isWritable()
-	*/
+	 */
 	virtual void deleteEntry() {}
 
 	// end write interface ------------------------
 
 	/** Decrements module key a number of entries
-	*
-	* @param steps Number of entries to jump backward
-	* @return *this
-	*/
+	 * @param steps Number of entries to jump backward
+	 */
 	virtual void decrement(int steps = 1);
+
 	/** Increments module key a number of entries
-	*
-	* @param steps Number of entries to jump forward
-	* @return *this
-	*/
+	 * @param steps Number of entries to jump forward
+	 */
 	virtual void increment(int steps = 1);
-	/** Positions this modules to an entry
-	*
-	* @param pos position (e.g. TOP, BOTTOM)
-	* @return *this
-	*/
+
+	/** Positions this modules to a logical position entry
+	 * @param pos position (e.g. TOP, BOTTOM)
+	 */
 	virtual void setPosition(SW_POSITION pos);
-	/** Adds a RenderFilter to this module's renderfilters queue
-	* @param newfilter the filter to add
-	* @return *this
-	*/
-	virtual SWModule & AddRenderFilter(SWFilter * newfilter) {
-		renderFilters->push_back (newfilter);
+
+	/** FilterBuffer a text buffer
+	 * @param filters the FilterList of filters to iterate
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
+	virtual void filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
+		FilterList::iterator it;
+		for (it = filters->begin(); it != filters->end(); it++) {
+			(*it)->processText(buf, key, this);
+		}
+	}
+
+	/** Adds a RenderFilter to this module's renderFilters queue.
+	 *	Render Filters are called when the module is asked to produce
+	 *	renderable text.
+	 * @param newFilter the filter to add
+	 * @return *this
+	 */
+	virtual SWModule &AddRenderFilter(SWFilter *newfilter) {
+		renderFilters->push_back(newfilter);
 		return *this;
 	}
-	/** Removes a RenderFilter from this module's renderfilters queue
-	* @param oldfilter the filter to remove
-	* @return *this
-	*/
-	virtual SWModule & RemoveRenderFilter(SWFilter * oldfilter) {
-		renderFilters->remove (oldfilter);
+
+	/** Removes a RenderFilter from this module's renderFilters queue
+	 * @param oldfilter the filter to remove
+	 * @return *this
+	 */
+	virtual SWModule &RemoveRenderFilter(SWFilter *oldfilter) {
+		renderFilters->remove(oldfilter);
 		return *this;
 	}
+
 	/** Replaces a RenderFilter in this module's renderfilters queue
-	* @param oldfilter the filter to remove
-	* @param newfilter the filter to add in its place
-	* @return *this
-	*/
-	virtual SWModule & ReplaceRenderFilter(SWFilter * oldfilter, SWFilter * newfilter) {
+	 * @param oldfilter the filter to remove
+	 * @param newfilter the filter to add in its place
+	 * @return *this
+	 */
+	virtual SWModule &ReplaceRenderFilter(SWFilter *oldfilter, SWFilter *newfilter) {
 		FilterList::iterator iter;
 		for (iter = renderFilters->begin(); iter != renderFilters->end(); iter++) {
 			if (*iter == oldfilter)
@@ -451,36 +479,42 @@ public:
 		}
 		return *this;
 	}
-	/** RenderFilter a text buffer
-	* @param buf the buffer to filter
-	* @param key key location from where this buffer was extracted
-	* @return *this
-	*/
+
+	/** RenderFilter run a buf through this module's Render Filters
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
 	virtual void renderFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(renderFilters, buf, key);
 	}
-	/** Adds an EncodingFilter to this module's @see encodingfilters queue
-	* @param newfilter the filter to add
-	* @return *this
-	*/
-	virtual SWModule & AddEncodingFilter(SWFilter * newfilter) {
-		encodingFilters->push_back (newfilter);
+
+	/** Adds an EncodingFilter to this module's @see encodingFilters queue.
+	 *	Encoding Filters are called immediately when the module is read
+	 *	from data source, to assure we have desired internal data stream
+	 *	(e.g. UTF-8 for text modules)
+	 * @param newfilter the filter to add
+	 * @return *this
+	 */
+	virtual SWModule &AddEncodingFilter(SWFilter *newfilter) {
+		encodingFilters->push_back(newfilter);
 		return *this;
 	}
-	/** Removes an EncodingFilter from this module's encodingfilters queue
-	* @param oldfilter the filter to remove
-	* @return *this
-	*/
-	virtual SWModule & RemoveEncodingFilter(SWFilter * oldfilter) {
-		encodingFilters->remove (oldfilter);
+
+	/** Removes an EncodingFilter from this module's encodingFilters queue
+	 * @param oldfilter the filter to remove
+	 * @return *this
+	 */
+	virtual SWModule &RemoveEncodingFilter(SWFilter *oldfilter) {
+		encodingFilters->remove(oldfilter);
 		return *this;
 	}
+
 	/** Replaces an EncodingFilter in this module's encodingfilters queue
-	* @param oldfilter the filter to remove
-	* @param newfilter the filter to add in its place
-	* @return *this
-	*/
-	virtual SWModule & ReplaceEncodingFilter(SWFilter * oldfilter, SWFilter * newfilter) {
+	 * @param oldfilter the filter to remove
+	 * @param newfilter the filter to add in its place
+	 * @return *this
+	 */
+	virtual SWModule &ReplaceEncodingFilter(SWFilter *oldfilter, SWFilter *newfilter) {
 		FilterList::iterator iter;
 		for (iter = encodingFilters->begin(); iter != encodingFilters->end(); iter++) {
 			if (*iter == oldfilter)
@@ -488,121 +522,132 @@ public:
 		}
 		return *this;
 	}
-	/** encodingFilter a text buffer
-	* @param buf the buffer to filter
-	* @param key key location from where this buffer was extracted
-	* @return *this
-	*/
+
+	/** encodingFilter run a buf through this module's Encoding Filters
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
 	virtual void encodingFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(encodingFilters, buf, key);
 	}
-	/** Adds a StripFilter to this module's stripfilters queue
-	* @param newfilter the filter to add
-	* @return *this
-	*/
-	virtual SWModule & AddStripFilter(SWFilter * newfilter) {
-		stripFilters->push_back (newfilter);
+
+	/** Adds a StripFilter to this module's stripFilters queue.
+	 *	Strip filters are called when a module is asked to render
+	 *	an entry without any markup (like when searching).
+	 * @param newfilter the filter to add
+	 * @return *this
+	 */
+	virtual SWModule &AddStripFilter(SWFilter *newfilter) {
+		stripFilters->push_back(newfilter);
 		return *this;
 	}
-	/** StripFilter a text buffer
-	* @param buf the buffer to filter
-	* @param key key location from where this buffer was extracted
-	* @return *this
-	*/
+
+	/** Adds a RawFilter to this module's rawFilters queue
+	 * @param newfilter the filter to add
+	 * @return *this
+	 */
+	virtual SWModule &AddRawFilter(SWFilter *newfilter) {
+		rawFilters->push_back(newfilter);
+		return *this;
+	}
+
+	/** StripFilter run a buf through this module's Strip Filters
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
 	virtual void stripFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(stripFilters, buf, key);
 	}
-	/** Adds a RawFilter to this module's rawfilters queue
-	* @param newfilter the filter to add
-	* @return *this
-	*/
-	virtual SWModule & AddRawFilter(SWFilter * newfilter) {
-		rawFilters->push_back (newfilter);
-		return *this;
-	}
-	/** FilterBuffer a text buffer
-	* @param filters the FilterList of filters to iterate
-	* @param buf the buffer to filter
-	* @param key key location from where this buffer was extracted
-	* @return *this
-	*/
-	virtual void filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
-		FilterList::iterator it;
-		for (it = filters->begin(); it != filters->end(); it++) {
-			(*it)->processText(buf, key, this);
-		}
-	}
+
+
 	/** RawFilter a text buffer
-	* @param buf the buffer to filter
-	* @param key key location from where this buffer was extracted
-	* @return *this
-	*/
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
 	virtual void rawFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(rawFilters, buf, key);
 	}
-	/** Adds an OptionFilter to this module's optionfilters queue
-	* @param newfilter the filter to add
-	* @return *this
-	*/
-	virtual SWModule & AddOptionFilter(SWFilter * newfilter) {
+
+	/** Adds an OptionFilter to this module's optionFilters queue.
+	 *	Option Filters are used to turn options in the text on
+	 *	or off, or so some other state (e.g. Strong's Number,
+	 *	Footnotes, Cross References, etc.)
+	 * @param newfilter the filter to add
+	 * @return *this
+	 */
+	virtual SWModule &AddOptionFilter(SWFilter *newfilter) {
 		optionFilters->push_back(newfilter);
 		return *this;
 	}
+
 	/** OptionFilter a text buffer
-	* @param buf the buffer to filter
-	* @param key key location from where this buffer was extracted
-	* @return *this
-	*/
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
 	virtual void optionFilter(SWBuf &buf, SWKey *key) {
 		filterBuffer(optionFilters, buf, key);
 	}
-	/** calls all StripFilters on buffer or current text
-	*
-	* @param buf buf to massage instead of current module position;
-	*   if buf is NULL, the current text will be used
-	* @param len max len of buf OR current text -- will be applied anyway
-	* @return this module's text at specified key location massaged by Strip filters
-	*/
+
+	/** Produces plain text, without markup, of the current module entry,
+	 *	or supplied text
+	 *
+	 * @param buf buf to massage instead of current module entry;
+	 *	if buf is 0, the current text will be used
+	 * @param len max len to process
+	 * @return result buffer
+	 */
 	virtual const char *StripText(const char *buf = 0, int len = -1);
-	/** calls all RenderFilters on buffer or current text
-	*
-	* @param buf buffer to Render instead of current module position;
-	*   if buf is 0, the current module position text will be used
-	* @param len max len of buf OR current text -- will be applied anyway
-	* @param render Perform the rendering.
-	* @return this module's text at specified key location massaged by Render filters
-	*/
+
+	/** Produces renderable text of the current module entry or supplied text
+	 *
+	 * @param buf buffer to massage instead of current module entry;
+	 *	if buf is 0, the current module position text will be used
+	 * @param len max len to process
+	 * @param render for internal use
+	 * @return result buffer
+	 */
 	virtual const char *RenderText(const char *buf = 0, int len = -1, bool render = true);
-	/** calls all StripFilters on current text
-	*
-	* @param tmpKey key to use to grab text
-	* @return this module's text at specified key location massaged by Strip filters
-	*/
-	virtual const char *StripText(SWKey * tmpKey);
-	/** calls all RenderFilters on current text
-	*
-	* @param tmpKey key to use to grab text
-	* @return this module's text at specified key location massaged by Render filters
-	*/
-	virtual const char *RenderText(SWKey * tmpKey);
-	/**
-	*
-	*  option to specify behaviour when iterating over consecutive entried linked
-	*  to same text
-	* @param val = true means only include entry once in iteration
-	*/
+
+	/** Produces plain text, without markup, of the module entry at the supplied key
+	 * @param tmpKey desired module entry
+	 * @return result buffer
+	 */
+	virtual const char *StripText(SWKey *tmpKey);
+
+	/** Produces renderable text of the module entry at the supplied key
+	 * @param tmpKey key to use to grab text
+	 * @return this module's text at specified key location massaged by Render filters
+	 */
+	virtual const char *RenderText(SWKey *tmpKey);
+
+	/** Whether or not to only hit one entry when iterating encounters
+	 *	consecutive links when iterating
+	 * @param val = true means only include entry once in iteration
+	 */
 	virtual void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
-	/** DOCS NEEDED.
-	*/
+
+	/** Whether or not to only hit one entry when iterating encounters
+	 *	consecutive links when iterating
+	 */
 	virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
-	/** DOCS NEEDED.
-	*/
+
+	/** Entry Attributes are special data pertaining to the current entry.
+	 *	To see what Entry Attributes exists for a specific entry of a module,
+	 *	the example examples/cmdline/lookup.cpp is a good utility which
+	 *	displays this information.  It is also useful as an example of how
+	 *	to access such.
+	 */
 	virtual AttributeTypeList &getEntryAttributes() const { return entryAttributes; }
-	/** DOCS NEEDED.
-	*/
+
+	/** Processing Entry Attributes can be expensive.  This method allows
+	 * turning the processing off if they are not desired.  Some internal
+	 * engine processing turns them off (like searching) temporarily for
+	 * optimization.
+	 */
 	virtual void processEntryAttributes(bool val) const { procEntAttr = val; }
-	/** DOCS NEEDED.
-	*/
+
+	/** Whether or not we're processing Entry Attributes
+	 */
 	virtual bool isProcessEntryAttributes() const { return procEntAttr; }
 
 	// OPERATORS -----------------------------------------------------------------

@@ -20,7 +20,9 @@ int main(int argc, char **argv)
 	ModMap::iterator it;
 
 	if (argc != 3) {
-		fprintf(stderr, "usage: %s <modname> <\"lookup key\">\n", argv[0]);
+		fprintf(stderr, "\nusage: %s <modname> <\"lookup key\">\n"
+							 "\tExample: lookup KJV \"James 1:19\"\n\n", argv[0]);
+ 
 		exit(-1);
 	}
 

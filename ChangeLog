@@ -1,5 +1,10 @@
-﻿API ChangeLog	(see the ChangeLog in each 'apps' directory for
+API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
+
+* Release 1.5.8 *
+
+27-May-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Clean up and package for 1.5.8
 
 16-May-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Changed Strongs to Lemma and added LemmaClass for

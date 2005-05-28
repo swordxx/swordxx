@@ -18,23 +18,23 @@ using sword::ModMap;
 
 int cms_currentProgress;
 
-class CSwordModuleSearch {
+class SearchThread {
 public:
-	CSwordModuleSearch();	
-	~CSwordModuleSearch();
+	SearchThread();	
+	~SearchThread();
 
-	char* m_searchedText;
-	SWModule* m_module;
-	ListKey m_searchResult;
-	bool m_isSearching;
+	char* searchedText;
+	SWModule* module;
+	ListKey searchResult;
+	bool isSearching;
 
 	void startThread();
 	void search();
 };
 
 void* dummy(void* p) {
-	CSwordModuleSearch* moduleSearch = (CSwordModuleSearch*)p;		
-	moduleSearch->search();	
+	SearchThread* searchThread = (SearchThread*)p;		
+	searchThread->search();	
 
 	return NULL;
 }
@@ -44,17 +44,17 @@ void percentUpdate(char percent, void* userData)  {
 	std::cout << cms_currentProgress << "% ";
 }
 
-CSwordModuleSearch::CSwordModuleSearch() {
-	m_isSearching = false;
-	m_module = 0;
-	m_searchedText = 0;
+SearchThread::SearchThread() {
+	isSearching = false;
+	module = 0;
+	searchedText = 0;
 	cms_currentProgress = -1;
 }
 
-CSwordModuleSearch::~CSwordModuleSearch() {
+SearchThread::~SearchThread() {
 }
 
-void CSwordModuleSearch::startThread()  {
+void SearchThread::startThread()  {
 	std::cout << "startThread" << std::endl;
 	std::cout.flush();
 
@@ -63,16 +63,16 @@ void CSwordModuleSearch::startThread()  {
 	pthread_attr_setdetachstate(attr, PTHREAD_CREATE_DETACHED);
 
 	pthread_t *thread= new pthread_t;
-	m_isSearching = true;
+	isSearching = true;
 	int i = pthread_create(thread, attr, &dummy, this); 
 
 	std::cout << "Created the thread: " << i << std::endl;
 	std::cout.flush();
 }	
 
-void CSwordModuleSearch::search()  {
+void SearchThread::search()  {
 	
-	if (!m_module) {
+	if (!module) {
 		std::cout << "Return." << std::endl;
 		return;
 	}
@@ -83,11 +83,11 @@ void CSwordModuleSearch::search()  {
 	}
 	SWKey* scope = &scopeList;
 
-	m_searchResult = m_module->Search(m_searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
+	searchResult = module->Search(searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
 
 	if (!scope)
 		std::cout << "bad scope!" << std::endl;
-	m_isSearching = false;
+	isSearching = false;
 }
 
 int main(int argc, char **argv) {
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
 	ModMap::iterator it;
 	int oldProgress = 0; 
 
-	CSwordModuleSearch* moduleSearch = new CSwordModuleSearch();
+	SearchThread* searchThread = new SearchThread();
 
 	if (argc != 3) {
 		fprintf(stderr, "usage: %s <modname> <searched text>\n", argv[0]);
@@ -111,24 +111,24 @@ int main(int argc, char **argv) {
 		exit(-1);
 	}
 	
-	moduleSearch->m_searchedText = argv[2];
-	moduleSearch->m_module = (*it).second;
-	moduleSearch->startThread();
+	searchThread->searchedText = argv[2];
+	searchThread->module = (*it).second;
+	searchThread->startThread();
 	
 	std::cout << "Start loop" << std::endl;
 	std::cout.flush();
 	while (true) {
-		if (!moduleSearch->m_isSearching)
+		if (!searchThread->isSearching)
 			break;
 		else 
 			std::cout.flush();
 	};
 
-	std::cout << std::endl << "Number of found items: " << moduleSearch->m_searchResult.Count() << std::endl;
+	std::cout << std::endl << "Number of found items: " << searchThread->searchResult.Count() << std::endl;
 	std::cout << "Finished program" << std::endl;
 	std::cout.flush();
 
-	delete moduleSearch;
+	delete searchThread;
 	exit(0);
 }
 
