@@ -4,10 +4,10 @@ INCLUDES = -I $(top_srcdir)/include
 LDADD = $(top_builddir)/lib/libsword.la
 noinst_PROGRAMS = cipherraw lexdump \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
-addgb imp2gbs mod2imp xml2gbs
+addgb
 
 bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2vpl \
-	mkfastmod vpl2mod imp2vs installmgr
+	mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs
 
 #if INSTALLMGR
 #IMGRPROG =
