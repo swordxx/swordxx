@@ -65,7 +65,7 @@ CURLFTPTransport::~CURLFTPTransport() {
 
 
 char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
-	char retVal = 0;
+	signed char retVal = 0;
 	struct FtpFile ftpfile = {destPath, NULL};
 
 	CURLcode res;
