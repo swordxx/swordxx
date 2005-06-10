@@ -7,16 +7,7 @@
 #include <fstream>
 using namespace std;
 
-#if 0
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-#endif
-
 #include <iostream>
-#include <string>
 #include <rawtext.h>
 
 
@@ -25,27 +16,6 @@ using sword::RawText;
 using sword::VerseKey;
 using sword::SWText;
 using sword::ListKey;
-#endif
-#if 0
-int readline(FILE* infile, string &linebuffer) {
-  signed char c;
-  int lbPtr = 0;
-  linebuffer = string(1048576,' ');
-  while ((c = fgetc(infile)) != EOF) {
-    if(lbPtr < linebuffer.size())
-      linebuffer[lbPtr++] = c;
-    else {
-      linebuffer.resize(linebuffer.size()+1048576);
-      linebuffer[lbPtr++] = c;
-    }
-    //lbPtr++;
-    if (c == 10) {
-      linebuffer.resize(lbPtr);
-      return (linebuffer.size());
-    }
-  }
-  return 0;
-}
 #endif
 
 int main(int argc, char **argv) {
@@ -70,7 +40,6 @@ int main(int argc, char **argv) {
   }
   
   ifstream infile(argv[1]);
-  //infile = argv[1], "r");
 
   SWText* mod;
   RawText::createModule(modname.c_str());
@@ -86,7 +55,6 @@ int main(int argc, char **argv) {
 
   getline(infile,linebuffer);
   final = (!infile.eof()) + 1;
-  //final = ((bool)(readline(infile, linebuffer)) + 1);
 
   while (final) {
     if (linebuffer.substr(0,3) == "$$$" || final == 1) {
@@ -159,7 +127,6 @@ int main(int argc, char **argv) {
 	  }
 	}
       }
-      //linebuffer.resize(linebuffer.size()-1);
       keybuffer = linebuffer.substr(3,linebuffer.size()) ;
       entbuffer.resize(0);
     }
@@ -170,13 +137,8 @@ int main(int argc, char **argv) {
     if (final) {
       getline(infile,linebuffer);
       final = (!infile.eof()) + 1;
-      //final = ((bool)(readline(infile, linebuffer)) + 1);
     }
   }
-
-  //delete entbuffer;
-  //delete linebuffer;
-  //delete keybuffer;
 
   return 0;
 }
