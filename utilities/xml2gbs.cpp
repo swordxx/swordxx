@@ -4,16 +4,10 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
 #include <entriesblk.h>
-//#include <iostream>
+#include <iostream>
 #include <string>
-#include <stdio.h>
+#include <fstream>
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
@@ -24,29 +18,11 @@ using sword::RawGenBook;
 using sword::SWKey;
 #endif
 
-#define DEBUG
+//#define DEBUG
 
-/*
-void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
-	if (!target)
-		target = &treeKey;
-
-	unsigned long currentOffset = target->getOffset();
-       	std::cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
-	for (int i = 0; i < level; i++) std::cout << "\t";
-	std::cout << treeKey.getLocalName() << "/\n";
-	if (treeKey.firstChild()) {
-		printTree(treeKey, target, level+1);
-		treeKey.parent();
-	}
-	if (treeKey.nextSibling())
-		printTree(treeKey, target, level);
-}
-*/
-
-
-void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
-    char* tok = strtok(keybuffer, "/");
+void setkey (TreeKeyIdx * treeKey, const char* keybuffer) {
+    char *keybuf = strdup(keybuffer);
+    char* tok = strtok(keybuf, "/");
     while (tok) {
       bool foundkey = false;
       if (treeKey->hasChildren()) {
@@ -81,79 +57,58 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
       tok = strtok(NULL, "/");
       
     }
-}
-
-int readline(FILE* infile, char* linebuffer) {
-  signed char c;
-  char* lbPtr = linebuffer;
-  while ((c = fgetc(infile)) != EOF) {
-    *lbPtr++ = c;
-    if (c == 10) {
-      *lbPtr = 0;
-      return (lbPtr-linebuffer);
-    }
-  }
-  return 0;
+    free(keybuf);
 }
 
 enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML };
 
 #define HELPTEXT "xml2gbs 1.0 OSIS/ThML General Book module creation tool for the SWORD Project\n  usage:\n   xml2gbs [-l] [-i] [-fT|-fO] <filename> [modname]\n  -l uses long div names in ThML files\n  -i exports to IMP format instead of creating a module\n  -fO and -fT will set the importer to expect OSIS or ThML format respectively\n    (otherwise it attempts to autodetect)\n"
 
-unsigned char detectFormat(char* filename, char* entbuffer) {
+unsigned char detectFormat(char* filename) {
 
   unsigned char format = F_AUTODETECT;
 
-  FILE *infile;
-  infile = fopen(filename, "r");
-  if (!infile) {
-        fprintf(stderr, HELPTEXT);
-        fprintf(stderr, "\n\nCould not open file \"%s\"\n", filename);
+  std::ifstream infile(filename);
+  std::string entbuffer;
+  
+  if (!infile.is_open()) {
+        std::cerr << HELPTEXT;
+        std::cerr << std::endl << std::endl << "Could not open file \"" << filename << "\"" << std::endl;
   }
   else {
-        while (readline(infile, entbuffer) && format == F_AUTODETECT) {
-                if (strstr(entbuffer, "<osis")) {
+	while (std::getline(infile, entbuffer) && format == F_AUTODETECT) {
+                if (strstr(entbuffer.c_str(), "<osis")) {
                         format = F_OSIS;
                 }
-                else if (strstr(entbuffer, "<ThML")) {
+                else if (strstr(entbuffer.c_str(), "<ThML")) {
                         format = F_THML;
                 }
         }
-        fclose(infile);
+        infile.close();
   }
 
   return format;
 }
 
-int getTag(FILE* file, char* keybuffer) {
-        char c;
-        char* kbPtr = keybuffer;
-        while ((c = fgetc(file)) != '>')
-                *kbPtr++ = c;
-        *kbPtr++ = c;
-        *kbPtr = 0;
-        return (kbPtr-keybuffer);
-}
-
-int processXML(char* filename, char* modname, bool longnames, bool exportfile, unsigned char format, char* entbuffer) {
+int processXML(const char* filename, char* modname, bool longnames, bool exportfile, unsigned char format) {
   signed long i = 0;
   char* strtmp;
+  std::string entbuffer;
 
 #ifdef DEBUG
   printf ("%s :%s :%d :%d :%d\n\n", filename, modname, longnames, exportfile, format);
 #endif
 
-  FILE *infile;
-  infile = fopen(filename, "r");
-  if (!infile) {
-        fprintf(stderr, HELPTEXT);
-        fprintf(stderr, "\n\nCould not open file \"%s\"\n", filename);
+  std::ifstream infile(filename);
+  if (!infile.is_open()) {
+        std::cerr << HELPTEXT;
+        std::cerr << std::endl << std::endl << "Could not open file \"" << filename << "\"" << std::endl;
         return -1;
   }
-  FILE *outfile;
+  std::ofstream outfile;
   if (exportfile) {
     strcat (modname, ".imp");
-    outfile = fopen(modname, "w");
+    outfile.open(modname);
   }
 
   TreeKeyIdx * treeKey;
@@ -162,11 +117,11 @@ int processXML(char* filename, char* modname, bool longnames, bool exportfile, u
   std::string divs[32];
 
   int level = 0;
-  char* keybuffer = new char[2048];
-  char* keybuffer2 = new char[2048];
-  char* n = new char[256];
-  char* type = new char[256];
-  char* title= new char[512];
+  std::string keybuffer = "";
+  std::string keybuffer2;
+  std::string n;
+  std::string type;
+  std::string title;
   unsigned long entrysize = 0;
   unsigned long keysize = 0;
   bool closer = false;
@@ -186,198 +141,173 @@ int processXML(char* filename, char* modname, bool longnames, bool exportfile, u
 #endif
 
   int c;
-  while ((c = fgetc(infile)) != EOF) {
+  while ((c = infile.get()) != EOF) {
     if (c == '<') {
-      if (getTag(infile, keybuffer)) {
-	if ((format == F_OSIS) && ((!strcmp(keybuffer, "/div>")) || (!strcmp(keybuffer, "/verse>")) || (!strcmp(keybuffer, "/chapter>"))) ||
-           ((format == F_THML) && ((!strncmp(keybuffer, "/div", 4)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
+	    {
+		    keybuffer = "";
+		    while ((c = infile.get()) != '>')
+			    keybuffer += c;
+		    keybuffer += c;
+	    }
+
+      if (keybuffer.length()) {
+	if ((format == F_OSIS) && ((!strncmp(keybuffer.c_str(), "/div>", 5)) || (!strncmp(keybuffer.c_str(), "/verse>", 7)) || (!strncmp(keybuffer.c_str(), "/chapter>", 9))) ||
+           ((format == F_THML) && ((!strncmp(keybuffer.c_str(), "/div", 4)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
 	  if (!closer) {
        	    keysize = 0;
-            keybuffer2[0] = 0;
+            keybuffer2 = "";
        	    for (i = 0; i < level; i++) {
-              keybuffer2[keysize] = '/';
+              keybuffer2 += '/';
        	      keysize++;
-              keybuffer2[keysize] = 0;
-       	      strcat (keybuffer2, divs[i].c_str());
+       	      keybuffer2 += divs[i];
               keysize += divs[i].length();
+	      std::cout << keybuffer2 << std::endl;
        	    }
 
 	    if (level) {
-	      printf ("%s\n", keybuffer2);
+	      std::cout << keybuffer2 << std::endl;
 	      if (exportfile) {
-		fprintf (outfile, "$$$%s\n%s\n", keybuffer2, entbuffer);
+		outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
 	      }
 	      else {
 		treeKey->root();
-		setkey(treeKey, keybuffer2);
-		book->setEntry(entbuffer, entrysize); // save text to module at current position
+		setkey(treeKey, keybuffer2.c_str());
+		book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
 	      }
 	    }
 	  }
 	  level--;
-	  entbuffer[0] = 0;
+	  entbuffer = "";
 	  entrysize = 0;
 
 	  closer = true;
 	}
-	else if ((format == F_OSIS) && !((!strcmp(keybuffer, "div>") || !strncmp(keybuffer, "div ", 4)) || (!strcmp(keybuffer, "verse>") || !strncmp(keybuffer, "verse ", 6)) || (!strcmp(keybuffer, "chapter>") || !strncmp(keybuffer, "chapter ", 8))) ||
-                ((format == F_THML) && !((!strncmp(keybuffer, "div", 3)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
-	  entbuffer[entrysize++] = '<';
-	  for (i = 0; i <= strlen(keybuffer); i++) {
-              entbuffer[entrysize++] = keybuffer[i];
-	  }
-          entrysize--;
+	else if ((format == F_OSIS) && !((!strncmp(keybuffer.c_str(), "div>", 4) || !strncmp(keybuffer.c_str(), "div ", 4)) || (!strncmp(keybuffer.c_str(), "verse>", 6) || !strncmp(keybuffer.c_str(), "verse ", 6)) || (!strncmp(keybuffer.c_str(), "chapter>", 8) || !strncmp(keybuffer.c_str(), "chapter ", 8))) ||
+                ((format == F_THML) && !((!strncmp(keybuffer.c_str(), "div", 3)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
+	  entbuffer += '<';
+	  entrysize++;
+	  entrysize += keybuffer.length();
+	  entbuffer += keybuffer;
 	}
 	else {
 	  //we have a divN...
        	  if (!closer) {
             keysize = 0;
-       	    keybuffer2[0] = 0;
+       	    keybuffer2= "";
        	    for (i = 0; i < level; i++) {
-              keybuffer2[keysize] = '/';
+              keybuffer2 += '/';
        	      keysize++;
-              keybuffer2[keysize] = 0;
-       	      strcat (keybuffer2, divs[i].c_str());
+       	      keybuffer2 += divs[i];
               keysize += divs[i].length();
+	      std::cout << keybuffer2 << std::endl;
        	    }
 
 	    if (level) {
-	      printf ("%s\n", keybuffer2);
+	      std::cout << keybuffer2 << std::endl;
 	      if (exportfile) {
-		fprintf (outfile, "$$$%s\n%s\n", keybuffer2, entbuffer);
+		outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
 	      }
 	      else {
 		treeKey->root();
-		setkey(treeKey, keybuffer2);
-		book->setEntry(entbuffer, entrysize); // save text to module at current position
+		setkey(treeKey, keybuffer2.c_str());
+		book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
 	      }
 	    }
 	  }
 
-	  entbuffer[0] = 0;
+	  entbuffer= "";
 	  entrysize = 0;
 
 	  level++;
-          keysize = strlen(keybuffer)-1;
-/*	  keysize = 0;
-	  while ((c = fgetc(infile)) != EOF) {
-	    if (c != '>') {
-	      keybuffer[keysize] = c;
-	      keysize++;
-	    }
-	    else {
-	      break;
-	    }
-	  }
-	  keybuffer[keysize] = 0;*/
+          keysize = keybuffer.length()-1;
 
-          type[0] = 0;
-      	  n[0] = 0;
-       	  title[0] = 0;
+          type = "";
+      	  n = "";
+       	  title = "";
 
           if (format == F_OSIS && longnames == false) {
-               	  strtmp = strstr(keybuffer, "osisID=\"");
+               	  strtmp = strstr(keybuffer.c_str(), "osisID=\"");
                	  if (strtmp) {
                	    strtmp += 8;
-               	    i = 0;
                	    for (;*strtmp != '\"'; strtmp++) {
                	      if (*strtmp == 10) {
-               		title[i] = ' ';
-               		i++;
+               		title += ' ';
                	      }
                	      else if (*strtmp == '.') {
-                        i = 0;
+                        title = "";
                	      }
                	      else if (*strtmp != 13) {
-               		title[i] = *strtmp;
-               		i++;
+               		title += *strtmp;
                	      }
                	    }
-               	    title[i] = 0;
                	  }
-                  strcpy (keybuffer, title);
+                  keybuffer = title;
           }
           else {
-               	  strtmp = strstr(keybuffer, "type=\"");
+               	  strtmp = strstr(keybuffer.c_str(), "type=\"");
                	  if (strtmp) {
                	    strtmp += 6;
-               	    i = 0;
                	    for (;*strtmp != '\"'; strtmp++) {
                	      if (*strtmp == 10) {
-               		type[i] = ' ';
-               		i++;
+               		type+= ' ';
                	      }
                	      else if (*strtmp != 13) {
-               		type[i] = *strtmp;
-               		i++;
+               		type+= *strtmp;
                	      }
                	    }
-               	    type[i] = 0;
                	  }
 
-               	  strtmp = strstr(keybuffer, "n=\"");
+               	  strtmp = strstr(keybuffer.c_str(), "n=\"");
                	  if (strtmp) {
                	    strtmp += 3;
-               	    i = 0;
                	    for (;*strtmp != '\"'; strtmp++) {
                	      if (*strtmp == 10) {
-               		n[i] = ' ';
-               		i++;
+               		n += ' ';
                	      }
                	      else if (*strtmp != 13) {
-               		n[i] = *strtmp;
-               		i++;
+               		n += *strtmp;
                	      }
                	    }
-               	    n[i] = 0;
                	  }
 
                   if (format == F_OSIS) {
-                       	  strtmp = strstr(keybuffer, "title=\"");
+                       	  strtmp = strstr(keybuffer.c_str(), "title=\"");
                 	  if (strtmp) {
                 	    strtmp += 7;
-                	    i = 0;
                 	    for (;*strtmp != '\"'; strtmp++) {
                 	      if (*strtmp == 10) {
-                		title[i] = ' ';
-                		i++;
+                		title += ' ';
                 	      }
                 	      else if (*strtmp != 13) {
-                		title[i] = *strtmp;
-                		i++;
+                		title += *strtmp;
                 	      }
                 	    }
-                	    title[i] = 0;
                 	  }
                   }
                   else if (format == F_THML) {
-                	  strtmp = strstr(keybuffer, "title=\"");
+                	  strtmp = strstr(keybuffer.c_str(), "title=\"");
                 	  if (strtmp) {
                 	    strtmp += 7;
-                	    i = 0;
                 	    for (;*strtmp != '\"'; strtmp++) {
                 	      if (*strtmp == 10) {
-                		title[i] = ' ';
-                		i++;
+                		title += ' ';
                 	      }
                 	      else if (*strtmp != 13) {
-                		title[i] = *strtmp;
-                		i++;
+                		title += *strtmp;
                 	      }
                 	    }
-                	    title[i] = 0;
                 	  }
                   }
 
-        	  strcpy (keybuffer, type);
-        	  if (strlen(keybuffer) && strlen(n))
-        	    strcat (keybuffer, " ");
-        	  strcat (keybuffer, n);
+        	  keybuffer = type;
+        	  if (keybuffer.length() && n.length())
+        	    keybuffer += " ";
+        	  keybuffer += n;
 
-        	  if (longnames && strlen(keybuffer))
-        	    strcat (keybuffer, ": ");
-        	  if (longnames || !strlen(keybuffer))
-        	    strcat (keybuffer, title);
+        	  if (longnames && keybuffer.length())
+        	    keybuffer += ": ";
+        	  if (longnames || !keybuffer.length())
+        	    keybuffer += title;
           }
           divs[level-1] = keybuffer;
 
@@ -386,9 +316,8 @@ int processXML(char* filename, char* modname, bool longnames, bool exportfile, u
       }
     }
     else if (c != 13) {
-      entbuffer[entrysize] = c;
+      entbuffer += c;
       entrysize++;
-      entbuffer[entrysize] = 0;
     }
   }
 
@@ -397,10 +326,6 @@ int processXML(char* filename, char* modname, bool longnames, bool exportfile, u
 #endif
 
 //  delete book;  //causes nasty-bad errors upon execution
-  delete n;
-  delete type;
-  delete title;
-  delete keybuffer;
 }
 
 int main(int argc, char **argv) {
@@ -439,19 +364,19 @@ int main(int argc, char **argv) {
                         }
                 }
                 else if (*filename == 0) {
-                        strcpy (filename, argv[i]);
+                        strncpy (filename, argv[i], 200);
                 }
                 else if (*modname == 0) {
-                        strcpy (modname, argv[i]);
+                        strncpy (modname, argv[i], 200);
                 }
         }
   }
   else if (argc > 1) {
-    strcpy (filename, argv[1]);
+    strncpy (filename, argv[1], 200);
   }
 
   if (!*filename) {
-    fprintf(stderr, HELPTEXT);
+    std::cerr << HELPTEXT << std::endl;
     return -1;
   }
   else {
@@ -462,16 +387,14 @@ int main(int argc, char **argv) {
                 modname[i] = 0;
         }
 
-        char* entbuffer = new char[1048576];
-        format = (format == F_AUTODETECT) ? detectFormat(filename, entbuffer) : format;
+        format = (format == F_AUTODETECT) ? detectFormat(filename) : format;
         if (format == F_AUTODETECT) {
                 fprintf(stderr, HELPTEXT);
                 fprintf(stderr, "\n\nCould not detect file format for file \"%s\", please specify.\n", filename);
                 return -1;
         }
 
-        int retCode =  processXML (filename, modname, longnames, exportfile, format, entbuffer);
-        delete entbuffer;
+        int retCode =  processXML (filename, modname, longnames, exportfile, format);
 
         return retCode;
   }
