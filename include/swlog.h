@@ -40,6 +40,8 @@ public:
 	static void setSystemLog(SWLog *newLogger);
 
 	SWLog () { logLevel = 1;	/*default to show only errors*/}
+	virtual ~SWLog() {};
+
 	virtual void setLogLevel(char level) { logLevel = level; }
 	virtual char getLogLevel() { return logLevel; }
 	virtual void logWarning (char *fmt, ...);
