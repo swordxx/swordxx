@@ -1,19 +1,10 @@
-#include <ctype.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <entriesblk.h>
 #include <iostream>
+#include <string>
+#include <fstream>
 #include <treekeyidx.h>
 #include <rawgenbook.h>
+
+using std::string;
 
 #ifndef NO_SWORD_NAMESPACE
 using sword::TreeKeyIdx;
@@ -28,7 +19,7 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
   unsigned long currentOffset = target->getOffset();
   std::cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
   for (int i = 0; i < level; i++) std::cout << "\t";
-  std::cout << treeKey.getLocalName() << "/\n";
+  std::cout << treeKey.getLocalName() << std::endl;
   if (treeKey.firstChild()) {
     printTree(treeKey, target, level+1);
     treeKey.parent();
@@ -37,8 +28,9 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
     printTree(treeKey, target, level);
 }
 
-void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
-  char* tok = strtok(keybuffer, "/");
+void setkey (TreeKeyIdx * treeKey, const char* keybuffer) {
+  char *keybuf = strdup(keybuffer);
+  char* tok = strtok(keybuf, "/");
   while (tok) {
     bool foundkey = false;
     if (treeKey->hasChildren()) {
@@ -71,29 +63,18 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
     tok = strtok(NULL, "/");
     
   }
+  free(keybuf);
 }
 
-int readline(FILE* infile, char* linebuffer) {
-  signed char c;
-  char* lbPtr = linebuffer;
-  while ((c = fgetc(infile)) != EOF) {
-    *lbPtr++ = c;
-    if (c == 10) {
-      *lbPtr = 0;
-      return (strlen(linebuffer));
-    }
-  }
-  return 0;
-}
 
 int main(int argc, char **argv) {
   
   const char * helptext ="imp2gbs 1.0 General Book module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname]\n";
   
   signed long i = 0;
-  char* keybuffer = new char[2048];
-  char* entbuffer = new char[1048576];
-  char* linebuffer = new char[1048576];
+  string keybuffer;
+  string entbuffer;
+  string linebuffer;
   char modname[16];
   
   if (argc > 2) {
@@ -110,8 +91,7 @@ int main(int argc, char **argv) {
     exit(-1);
   }
   
-  FILE *infile;
-  infile = fopen(argv[1], "r");
+  std::ifstream infile(argv[1]);
   
   TreeKeyIdx * treeKey;
   RawGenBook *book;
@@ -125,37 +105,35 @@ int main(int argc, char **argv) {
   //DEBUG  TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
   treeKey = ((TreeKeyIdx *)((SWKey *)(*book)));
   
-  while (readline(infile, linebuffer)) {
-    if (!strncmp(linebuffer, "$$$", 3)) {
-      if (strlen(keybuffer) && strlen(entbuffer)) {
+  while (!infile.eof()) {
+    std::getline(infile, linebuffer);
+    if (linebuffer.substr(0,3) == "$$$") {
+      if (keybuffer.size() && entbuffer.size()) {
 	std::cout << keybuffer << std::endl;
 	treeKey->root();
-	setkey(treeKey, keybuffer);
-	book->setEntry(entbuffer, strlen(entbuffer));
+	setkey(treeKey, keybuffer.c_str());
+	book->setEntry(entbuffer.c_str(), entbuffer.size());
       }
-      linebuffer[strlen(linebuffer) - 1] = 0;
-      strcpy (keybuffer, linebuffer + 3);
-      *entbuffer = 0;
+      keybuffer = linebuffer.substr(3,linebuffer.size()) ;
+      entbuffer.resize(0);
     }
     else {
-      strcat (entbuffer, linebuffer);
+      entbuffer += linebuffer;
     }
   }
 
   //handle final entry
-  if (strlen(keybuffer) && strlen(entbuffer)) {
+  if (keybuffer.size() && entbuffer.size()) {
     std::cout << keybuffer << std::endl;
     treeKey->root();
-    setkey(treeKey, keybuffer);
-    book->setEntry(entbuffer, strlen(entbuffer));
+    setkey(treeKey, keybuffer.c_str());
+    book->setEntry(entbuffer.c_str(), entbuffer.size());
   }
   
   //DEBUG  printTree(root, treeKey);
   
   delete book;
-  delete [] keybuffer;
-  delete [] linebuffer;
-  delete [] entbuffer;
+  infile.close();
 
   return 0;
 }
