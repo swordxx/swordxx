@@ -37,6 +37,8 @@ class SWDLLEXPORT SWDisplay : public SWObject {
   static SWClass classdef;
 public:
   SWDisplay () { myclass = &classdef; };
+  virtual ~SWDisplay() {};
+  
   /** casts a module to a character pointer and displays it to
   * raw output (overriden for different display types and
   * module types if necessary)
