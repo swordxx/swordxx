@@ -32,8 +32,6 @@ SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawCom:public RawVerse, public SWCom {
 
-	VerseKey &getVerseKey();
-
 
 public:
     

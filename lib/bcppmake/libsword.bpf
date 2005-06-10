@@ -14,7 +14,6 @@ USEUNIT("..\..\src\keys\listkey.cpp");
 USEUNIT("..\..\src\mgr\swsearchable.cpp");
 USEUNIT("..\..\src\mgr\encfiltmgr.cpp");
 USEUNIT("..\..\src\mgr\filemgr.cpp");
-USEUNIT("..\..\src\mgr\ftplibftpt.cpp");
 USEUNIT("..\..\src\mgr\ftptrans.cpp");
 USEUNIT("..\..\src\mgr\installmgr.cpp");
 USEUNIT("..\..\src\mgr\localemgr.cpp");

@@ -33,6 +33,14 @@ SWORD_NAMESPACE_START
   /** The basis for all commentary modules
   */
 class SWDLLEXPORT SWCom : public SWModule {
+
+	// for conversion if we have been set with a different internal key type
+	mutable VerseKey tmpVK;
+
+protected:
+	VerseKey &getVerseKey() const;
+
+
 public:
 
 	/** Initializes data for instance of SWCom

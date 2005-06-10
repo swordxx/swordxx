@@ -37,42 +37,6 @@ SWConfig::SWConfig(const char * ifilename) {
 SWConfig::~SWConfig() {
 }
 
-
-/*
-char SWConfig::getline(FILE *fp, SWBuf &line)
-{
-	char retval = 0;
-	char buf[255];
-        int len;
-
-	line = "";
-	
-	while (fgets(buf, 254, fp)) {
-		while (buf[strlen(buf)-1] == '\n' || buf[strlen(buf)-1] == '\r')
-			buf[strlen(buf)-1] = 0;
-                len = strlen(buf);
-                while (len>0 && buf[len-1] == '\n' || buf[len-1] == '\r')
-                        buf[(len--)-1] = 0;
-
-                if (len>0 && buf[len-1] == '\\') {
-                        buf[(len--)-1] = 0;
-			line += buf;
-			continue;
-		}
-		line += buf;
-
-		if (len < 253) {
-			retval = 1;
-			break;
-		}
-	}
-	return retval;
-}
-*/
-
-
-
-
 void SWConfig::Load() {
 	FileDesc *cfile;
 	char *buf, *data;
@@ -85,7 +49,17 @@ void SWConfig::Load() {
 	
 	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDONLY);
 	if (cfile->getFd() > 0) {
-		while (FileMgr::getLine(cfile, line)) {
+		bool goodLine = FileMgr::getLine(cfile, line);
+
+		// clean UTF encoding tags at start of file
+		while (goodLine && line.length() && 
+				((((unsigned char)line[0]) == 0xEF) ||
+				 (((unsigned char)line[0]) == 0xBB) ||
+				 (((unsigned char)line[0]) == 0xBF))) {
+			line << 1;
+		}
+		
+		while (goodLine) {
 			buf = new char [ line.length() + 1 ];
 			strcpy(buf, line.c_str());
 			if (*strstrip(buf) == '[') {
@@ -107,6 +81,7 @@ void SWConfig::Load() {
 				}
 			}
 			delete [] buf;
+			goodLine = FileMgr::getLine(cfile, line);
 		}
 		if (!first)
 			Sections.insert(SectionMap::value_type(sectname, cursect));

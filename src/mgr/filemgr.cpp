@@ -458,9 +458,11 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		if (!more) {
 			for (; end > start; end--) {
 				if ((chunk[end] != 10) && (chunk[end] != 13) && (chunk[end] != ' ') && (chunk[end] != '\t')) {
-					if (chunk[end] == '\\')
+					if (chunk[end] == '\\') {
 						more = true;
-					else break;
+						end--;
+					}
+					break;
 				}
 			}
 		}

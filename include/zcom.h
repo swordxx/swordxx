@@ -36,7 +36,6 @@ class SWDLLEXPORT zCom:public zVerse, public SWCom {
 	VerseKey *lastWriteKey;
 	bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
 	int blockType;
-	VerseKey &getVerseKey();
 
 
 public:

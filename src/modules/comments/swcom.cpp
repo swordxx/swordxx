@@ -4,6 +4,7 @@
  */
 
 #include <swcom.h>
+#include <localemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -15,8 +16,7 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Commentaries", enc, dir, mark, ilang)
-{
+SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Commentaries", enc, dir, mark, ilang), tmpVK() {
 	delete key;
 	key = CreateKey();
 }
@@ -26,8 +26,7 @@ SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTex
  * SWCom Destructor - Cleans up instance of SWCom
  */
 
-SWCom::~SWCom()
-{
+SWCom::~SWCom() {
 }
 
 
@@ -66,6 +65,35 @@ long SWCom::Index(long iindex) {
 	}
 
 	return Index();
+}
+
+
+VerseKey &SWCom::getVerseKey() const {
+	VerseKey *key;
+	// see if we have a VerseKey * or decendant
+	SWTRY {
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+	}
+	SWCATCH ( ... ) {	}
+	if (!key) {
+		ListKey *lkTest = 0;
+		SWTRY {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		SWCATCH ( ... ) {	}
+		if (lkTest) {
+			SWTRY {
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+			}
+			SWCATCH ( ... ) {	}
+		}
+	}
+	if (!key) {
+		tmpVK.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+		tmpVK = *(this->key);
+		return tmpVK;
+	}
+	else	return *key;
 }
 
 SWORD_NAMESPACE_END

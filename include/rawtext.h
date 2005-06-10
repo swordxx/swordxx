@@ -33,7 +33,6 @@ SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawText : public SWText, public RawVerse {
 
-	VerseKey &getVerseKey();
 	RawStr *fastSearch[2];
 
 public:

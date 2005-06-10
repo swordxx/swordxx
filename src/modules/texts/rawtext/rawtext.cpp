@@ -78,35 +78,6 @@ RawText::~RawText() {
 }
 
 
-VerseKey &RawText::getVerseKey() {
-	static VerseKey tmpVK;
-	VerseKey *key;
-	// see if we have a VerseKey * or decendant
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {	}
-	if (!key) {
-		ListKey *lkTest = 0;
-		SWTRY {
-			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
-		}
-		SWCATCH ( ... ) {	}
-		if (lkTest) {
-			SWTRY {
-				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
-			}
-			SWCATCH ( ... ) {	}
-		}
-	}
-	if (!key) {
-		tmpVK = *(this->key);
-		return tmpVK;
-	}
-	else	return *key;
-}
-
-
 /******************************************************************************
  * RawText::getRawEntry	- Returns the correct verse when char * cast
  *					is requested

@@ -49,7 +49,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		char *ch;
 		SWBuf modName = (module)?module->Name():"";
 		// add TR to w src in KJV then remove this next line
-		SWBuf wordSrcPrefix = (modName == "KJV")?"TR":modName;
+		SWBuf wordSrcPrefix = (modName == "KJV")?SWBuf("TR"):modName;
 		
 		const SWBuf orig = text;
 		const char * from = orig.c_str();

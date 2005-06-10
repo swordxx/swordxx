@@ -4,6 +4,7 @@
 
 #include <swtext.h>
 #include <listkey.h>
+#include <localemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -15,8 +16,7 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang)
-{
+SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang), tmpVK() {
 	delete key;
 	key = CreateKey();
 	skipConsecutiveLinks = false;
@@ -35,8 +35,7 @@ SWText::~SWText() {
  * SWText CreateKey - Create the correct key (VerseKey) for use with SWText
  */
 
-SWKey *SWText::CreateKey()
-{
+SWKey *SWText::CreateKey() {
 	return new VerseKey();
 }
 
@@ -77,5 +76,35 @@ long SWText::Index(long iindex) {
 
 	return Index();
 }
+
+
+VerseKey &SWText::getVerseKey() const {
+	VerseKey *key;
+	// see if we have a VerseKey * or decendant
+	SWTRY {
+		key = SWDYNAMIC_CAST(VerseKey, this->key);
+	}
+	SWCATCH ( ... ) {	}
+	if (!key) {
+		ListKey *lkTest = 0;
+		SWTRY {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		SWCATCH ( ... ) {	}
+		if (lkTest) {
+			SWTRY {
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+			}
+			SWCATCH ( ... ) {	}
+		}
+	}
+	if (!key) {
+		tmpVK.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+		tmpVK = *(this->key);
+		return tmpVK;
+	}
+	else	return *key;
+}
+
 
 SWORD_NAMESPACE_END

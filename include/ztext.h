@@ -49,7 +49,6 @@ class SWDLLEXPORT zText:public zVerse, public SWText {
 	VerseKey *lastWriteKey;
 	bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
 	int blockType;
-	VerseKey &getVerseKey();
 
 
 public:

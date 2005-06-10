@@ -9,17 +9,17 @@
       ..\..\src\keys\swkey.obj ..\..\src\keys\treekey.obj 
       ..\..\src\keys\treekeyidx.obj ..\..\src\keys\listkey.obj 
       ..\..\src\mgr\swsearchable.obj ..\..\src\mgr\encfiltmgr.obj 
-      ..\..\src\mgr\filemgr.obj ..\..\src\mgr\ftplibftpt.obj 
-      ..\..\src\mgr\ftptrans.obj ..\..\src\mgr\installmgr.obj 
-      ..\..\src\mgr\localemgr.obj ..\..\src\mgr\markupfiltmgr.obj 
-      ..\..\src\mgr\stringmgr.obj ..\..\src\mgr\swcacher.obj 
-      ..\..\src\mgr\swconfig.obj ..\..\src\mgr\swfiltermgr.obj 
-      ..\..\src\mgr\swlocale.obj ..\..\src\mgr\swmgr.obj 
-      ..\..\src\mgr\curlftpt.obj ..\..\src\utilfuns\utilxml.obj 
-      ..\..\src\utilfuns\roman.obj ..\..\src\utilfuns\swbuf.obj 
-      ..\..\src\utilfuns\swobject.obj ..\..\src\utilfuns\swunicod.obj 
-      ..\..\src\utilfuns\swversion.obj ..\..\src\utilfuns\url.obj 
-      ..\..\src\utilfuns\utilstr.obj ..\..\src\utilfuns\Greek2Greek.obj 
+      ..\..\src\mgr\filemgr.obj ..\..\src\mgr\ftptrans.obj 
+      ..\..\src\mgr\installmgr.obj ..\..\src\mgr\localemgr.obj 
+      ..\..\src\mgr\markupfiltmgr.obj ..\..\src\mgr\stringmgr.obj 
+      ..\..\src\mgr\swcacher.obj ..\..\src\mgr\swconfig.obj 
+      ..\..\src\mgr\swfiltermgr.obj ..\..\src\mgr\swlocale.obj 
+      ..\..\src\mgr\swmgr.obj ..\..\src\mgr\curlftpt.obj 
+      ..\..\src\utilfuns\utilxml.obj ..\..\src\utilfuns\roman.obj 
+      ..\..\src\utilfuns\swbuf.obj ..\..\src\utilfuns\swobject.obj 
+      ..\..\src\utilfuns\swunicod.obj ..\..\src\utilfuns\swversion.obj 
+      ..\..\src\utilfuns\url.obj ..\..\src\utilfuns\utilstr.obj 
+      ..\..\src\utilfuns\Greek2Greek.obj 
       ..\..\src\modules\comments\hrefcom\hrefcom.obj 
       ..\..\src\modules\comments\rawcom\rawcom.obj 
       ..\..\src\modules\comments\rawfiles\rawfiles.obj 
