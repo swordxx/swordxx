@@ -3,11 +3,16 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string>
+#include <fstream>
+using namespace std;
 
+#if 0
 #ifndef __GNUC__
 #include <io.h>
 #else
 #include <unistd.h>
+#endif
 #endif
 
 #include <iostream>
@@ -21,47 +26,55 @@ using sword::VerseKey;
 using sword::SWText;
 using sword::ListKey;
 #endif
-
-int readline(FILE* infile, char* linebuffer) {
+#if 0
+int readline(FILE* infile, string &linebuffer) {
   signed char c;
-  char* lbPtr = linebuffer;
+  int lbPtr = 0;
+  linebuffer = string(1048576,' ');
   while ((c = fgetc(infile)) != EOF) {
-    *lbPtr++ = c;
+    if(lbPtr < linebuffer.size())
+      linebuffer[lbPtr++] = c;
+    else {
+      linebuffer.resize(linebuffer.size()+1048576);
+      linebuffer[lbPtr++] = c;
+    }
+    //lbPtr++;
     if (c == 10) {
-      *lbPtr = 0;
-      return (strlen(linebuffer));
+      linebuffer.resize(lbPtr);
+      return (linebuffer.size());
     }
   }
   return 0;
 }
+#endif
 
 int main(int argc, char **argv) {
   
-  const char * helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [output dir] \n";
+  const string helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [output dir] \n";
   
   signed long i = 0;
-  char* keybuffer = new char[2048];
-  char* entbuffer = new char[1048576];
-  char* linebuffer = new char[1048576];
-  char modname[16];
+  string keybuffer;
+  string entbuffer;
+  string linebuffer;
+  string modname;
   
   if (argc > 2) {
-    strcpy (modname, argv[2]);
+    modname = argv[2];
   }
   else if (argc > 1) {
-    strcpy (modname, "./");
+    modname = "./";
   }
   else {
-    fprintf(stderr, helptext, argv[0]);
+    fprintf(stderr, helptext.c_str(), argv[0]);
     exit(-1);
   }
   
-  FILE *infile;
-  infile = fopen(argv[1], "r");
+  ifstream infile(argv[1]);
+  //infile = argv[1], "r");
 
   SWText* mod;
-  RawText::createModule(modname);
-  RawText modRaw(modname);
+  RawText::createModule(modname.c_str());
+  RawText modRaw(modname.c_str());
   mod = &modRaw;
 
   VerseKey* vkey = new VerseKey;
@@ -71,13 +84,15 @@ int main(int argc, char **argv) {
   mod->setKey(*vkey);
   char final; // 2 == pre-final line; 1 == final line; 0 == EOF
 
-  final = ((bool)(readline(infile, linebuffer)) + 1);
+  getline(infile,linebuffer);
+  final = (!infile.eof()) + 1;
+  //final = ((bool)(readline(infile, linebuffer)) + 1);
 
   while (final) {
-    if (!strncmp(linebuffer, "$$$", 3) || final == 1) {
-      if (strlen(keybuffer) && strlen(entbuffer)) {
+    if (linebuffer.substr(0,3) == "$$$" || final == 1) {
+      if (keybuffer.size() && entbuffer.size()) {
 	std::cout << "from file: " << keybuffer << std::endl;
-	*vkey = keybuffer;
+	*vkey = keybuffer.c_str();
 	if (!vkey->Chapter()) {
 	  // bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
 	  int backstep = vkey->Verse();
@@ -96,10 +111,10 @@ int main(int argc, char **argv) {
        }
 
 	  std::cout << "adding entry: " << *vkey << std::endl;
-	  mod->setEntry(entbuffer, strlen(entbuffer));
+	  mod->setEntry(entbuffer.c_str(), entbuffer.size());
 	}
 	else {
-	  ListKey listkey = vkey->ParseVerseList(keybuffer, "Gen1:1", true);
+	  ListKey listkey = vkey->ParseVerseList(keybuffer.c_str(), "Gen1:1", true);
 	  int i;
 	  bool havefirst = false;
 	  VerseKey firstverse;
@@ -117,7 +132,7 @@ int main(int argc, char **argv) {
 		firstverse = *vkey;
 
 	     std::cout << "adding entry: " << *vkey << std::endl;
-		mod->setEntry(entbuffer, strlen(entbuffer));
+		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 		(*vkey)++;
 	      }
 	      while (! (finalkey < (*vkey))) {
@@ -138,28 +153,30 @@ int main(int argc, char **argv) {
 		firstverse = *vkey;
 
 	     std::cout << "adding entry: " << *vkey << std::endl;
-		mod->setEntry(entbuffer, strlen(entbuffer));
+		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 	      }
 	    }
 	  }
 	}
       }
-      linebuffer[strlen(linebuffer) - 1] = 0;
-      strcpy (keybuffer, linebuffer + 3);
-      *entbuffer = 0;
+      //linebuffer.resize(linebuffer.size()-1);
+      keybuffer = linebuffer.substr(3,linebuffer.size()) ;
+      entbuffer.resize(0);
     }
     else {
-      strcat (entbuffer, linebuffer);
+      entbuffer.append(linebuffer);
     }
     final--;
     if (final) {
-        final = ((bool)(readline(infile, linebuffer)) + 1);
+      getline(infile,linebuffer);
+      final = (!infile.eof()) + 1;
+      //final = ((bool)(readline(infile, linebuffer)) + 1);
     }
   }
 
-  delete entbuffer;
-  delete linebuffer;
-  delete keybuffer;
+  //delete entbuffer;
+  //delete linebuffer;
+  //delete keybuffer;
 
   return 0;
 }
