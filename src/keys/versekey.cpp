@@ -1039,7 +1039,7 @@ void VerseKey::Normalize(char autocheck)
 	if ((autocheck) && (!autonorm))	// only normalize if we were explicitely called or if autonorm is turned on
 		return;
 
-	if ((headings) && (!verse))		// this is cheeze and temporary until deciding what actions should be taken.
+	if ((headings) && ((!verse) || (!chapter)))		// this is cheeze and temporary until deciding what actions should be taken.
 		return;					// so headings should only be turned on when positioning with Index() or incrementors
 
 	while ((testament < 3) && (testament > 0)) {
