@@ -54,13 +54,30 @@ public:
 
 	virtual const char *getFullName() const = 0;
 
+	/** Go to the root node
+	*/
 	virtual void root() = 0;
+	/** Go to the parent of the current node
+	* @return success or failure
+	*/
 	virtual bool parent() = 0;
 
+	/** Go to the first child of the current node
+	* @return success or failure
+	*/
 	virtual bool firstChild() = 0;
+	/** Go to the next sibling of the current node
+	* @return success or failure
+	*/
 	virtual bool nextSibling() = 0;
+	/** Go to the previous sibling of the current node
+	* @return success or failure
+	*/
 	virtual bool previousSibling() = 0;
 
+	/** Does the current node have children?
+	* @return whether or not it does
+	*/
 	virtual bool hasChildren() = 0;
 
 	virtual void append() = 0;
