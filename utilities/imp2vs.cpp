@@ -23,10 +23,10 @@ int main(int argc, char **argv) {
   const string helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [output dir] \n";
   
   signed long i = 0;
-  string keybuffer;
-  string entbuffer;
-  string linebuffer;
-  string modname;
+  string keybuffer = "";
+  string entbuffer = "";
+  string linebuffer = "";
+  string modname = "";
   
   if (argc > 2) {
     modname = argv[2];
@@ -38,6 +38,8 @@ int main(int argc, char **argv) {
     fprintf(stderr, helptext.c_str(), argv[0]);
     exit(-1);
   }
+  
+  try {
   
   ifstream infile(argv[1]);
 
@@ -57,7 +59,7 @@ int main(int argc, char **argv) {
   final = (!infile.eof()) + 1;
 
   while (final) {
-    if (linebuffer.substr(0,3) == "$$$" || final == 1) {
+    if (final == 1 || (linebuffer.size() > 3 && linebuffer.substr(0,3) == "$$$")) {
       if (keybuffer.size() && entbuffer.size()) {
 	std::cout << "from file: " << keybuffer << std::endl;
 	*vkey = keybuffer.c_str();
@@ -78,7 +80,7 @@ int main(int argc, char **argv) {
 		  vkey->Verse(0);
        }
 
-	  std::cout << "adding entry: " << *vkey << std::endl;
+	  std::cout << "adding entry: " << *vkey << " length " << entbuffer.size() << "/" << (unsigned short)entbuffer.size() << std::endl;
 	  mod->setEntry(entbuffer.c_str(), entbuffer.size());
 	}
 	else {
@@ -99,7 +101,7 @@ int main(int argc, char **argv) {
 		havefirst = true;
 		firstverse = *vkey;
 
-	     std::cout << "adding entry: " << *vkey << std::endl;
+		std::cout << "adding entry: " << *vkey << " length " << entbuffer.size() << "/" << (unsigned short)entbuffer.size() << std::endl;
 		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 		(*vkey)++;
 	      }
@@ -120,14 +122,15 @@ int main(int argc, char **argv) {
 		havefirst = true;
 		firstverse = *vkey;
 
-	     std::cout << "adding entry: " << *vkey << std::endl;
+		std::cout << "adding entry: " << *vkey << " length " << entbuffer.size() << "/" << (unsigned short)entbuffer.size() << std::endl;
 		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 	      }
 	    }
 	  }
 	}
       }
-      keybuffer = linebuffer.substr(3,linebuffer.size()) ;
+      if (linebuffer.size() > 3)
+	      keybuffer = linebuffer.substr(3,linebuffer.size()) ;
       entbuffer.resize(0);
     }
     else {
@@ -138,6 +141,18 @@ int main(int argc, char **argv) {
       getline(infile,linebuffer);
       final = (!infile.eof()) + 1;
     }
+  }
+  }
+  catch (const std::exception& e) {
+         std::cerr << "Exception: imp2vs failed: " << e.what() << std::endl;
+	 std::cerr << "Line: " << linebuffer.size() << " " << linebuffer << std::endl;
+	 std::cerr << "Key: "  << keybuffer.size() << " " << keybuffer << std::endl;
+	 std::cerr << "Ent: "  << entbuffer.size() << " " << entbuffer << std::endl;
+         return -2;
+  }
+  catch (...) {
+         std::cerr << "Exception: imp2vs failed" << std::endl;
+         return -3;
   }
 
   return 0;
