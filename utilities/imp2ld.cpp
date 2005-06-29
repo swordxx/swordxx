@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 
   while (!infile.eof()) {
     std::getline(infile, linebuffer);
-    if (linebuffer.substr(0,3) == "$$$") {
+    if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "$$$") {
       if (keybuffer.size() && entbuffer.size()) {
 	std::cout << keybuffer << std::endl;
 	*key = keybuffer.c_str();
@@ -118,12 +118,13 @@ int main(int argc, char **argv) {
           }
 	}
       }
-      keybuffer = linebuffer.substr(3,linebuffer.size()) ;
+      if (linebuffer.size() > 3)
+      	keybuffer = linebuffer.substr(3,linebuffer.size()) ;
       entbuffer.resize(0);
       linkbuffer.clear();
       links = 0;
     }
-    else if (linebuffer.substr(0,3) == "%%%") {
+    else if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "%%%") {
       linkbuffer.push_back(linebuffer.substr(3,linebuffer.size()));
       links++;
     }

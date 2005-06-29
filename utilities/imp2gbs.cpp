@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
   
   while (!infile.eof()) {
     std::getline(infile, linebuffer);
-    if (linebuffer.substr(0,3) == "$$$") {
+    if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "$$$") {
       if (keybuffer.size() && entbuffer.size()) {
 	std::cout << keybuffer << std::endl;
 	treeKey->root();
