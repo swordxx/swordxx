@@ -326,6 +326,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 #endif
 
 //  delete book;  //causes nasty-bad errors upon execution
+	return 0;
 }
 
 int main(int argc, char **argv) {
