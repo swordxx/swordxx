@@ -457,64 +457,63 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 #ifdef USELUCENE
 	if (searchType == -4) {	// lucene
-		// test to see if our scope for this search is bounded by a
-		// VerseKey
-		VerseKey *testKeyType = 0, vk;
+		// Make sure our scope for this search is bounded by
+		// something we can test
+		// In the future, add bool SWKey::isValid(const char *tryString);
+		VerseKey vk;
+		bool freeTestKey = false;
+		SWKey *testKey = 0;
 		SWTRY {
-			testKeyType = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
+			testKey = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
+			if (!testKey) {
+				testKey = SWDYNAMIC_CAST(ListKey, ((scope)?scope:key));
+			}
 		}
 		SWCATCH ( ... ) {}
-		// if we don't have a VerseKey * decendant we can't handle
-		// because of scope.
-		// In the future, add bool SWKey::isValid(const char *tryString);
-		// For now just drop back to multiword unindexed
-		if (!testKeyType) {
-			searchType = -3;
+		if (!testKey) {
+			testKey = new ListKey();
+			*testKey = vk.ParseVerseList((const char *)((scope)?scope:key), vk, true);
+			freeTestKey = true;
 		}
-		else {
-			lucene::index::IndexReader *ir;
-			lucene::search::IndexSearcher *is;
-			ir = &IndexReader::open(target);
-			is = new IndexSearcher(*ir);
-			(*percent)(10, percentUserData);
+		lucene::index::IndexReader *ir;
+		lucene::search::IndexSearcher *is;
+		ir = &IndexReader::open(target);
+		is = new IndexSearcher(*ir);
+		(*percent)(10, percentUserData);
 
-			standard::StandardAnalyzer analyzer;
-			Query &q =  QueryParser::Parse(istr, _T("content"), analyzer);
-			(*percent)(20, percentUserData);
-			Hits &h = is->search(q);
-			(*percent)(80, percentUserData);
+		standard::StandardAnalyzer analyzer;
+		Query &q =  QueryParser::Parse(istr, _T("content"), analyzer);
+		(*percent)(20, percentUserData);
+		Hits &h = is->search(q);
+		(*percent)(80, percentUserData);
 
 
-			// iterate thru each good module position that meets the search
-			for (long i = 0; i < h.Length(); i++) {
-				Document &doc = h.doc(i);
+		// iterate thru each good module position that meets the search
+		for (long i = 0; i < h.Length(); i++) {
+			Document &doc = h.doc(i);
 
-				// set a temporary verse key to this module position
-				vk = doc.get(_T("key"));
+			// set a temporary verse key to this module position
+			vk = doc.get(_T("key"));
 
-				// check scope
-				// Try to set our scope key to this verse key
-				if (scope) {
-					*testKeyType = vk;
+			// check scope
+			// Try to set our scope key to this verse key
+			*testKey = vk;
 
-					// check to see if it set ok and if so, add to our return list
-					if (*testKeyType == vk) {
-						listkey << (const char *) vk;
-						listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
-					}
-				}
-				else {
-					listkey << (const char*) vk;
-					listkey.GetElement()->userData = reinterpret_cast<void *>((int)(h.score(i)*100));
-				}
+			// check to see if it set ok and if so, add to our return list
+			if (*testKey == vk) {
+				listkey << (const char *) vk;
+				listkey.GetElement()->userData = (void *)((int)(h.score(i)*100));
 			}
-			(*percent)(98, percentUserData);
+		}
+		(*percent)(98, percentUserData);
 
-			delete &h;
-			delete &q;
+		delete &h;
+		delete &q;
 
-			delete is;
-			ir->close();
+		delete is;
+		ir->close();
+		if (freeTestKey) {
+			delete testKey;
 		}
 	}
 #endif

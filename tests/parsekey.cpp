@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
 
 	for (int i = 0; i < verses.Count(); i++) {
-		VerseKey *element = dynamic_cast<VerseKey *>(verses.GetElement(i));
+		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		if (element) {
 			std::cout << (SWBuf(element->LowerBound()) + " - " + SWBuf(element->UpperBound())).c_str() << "\n";
 		}

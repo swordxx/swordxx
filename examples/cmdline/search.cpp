@@ -14,9 +14,9 @@ void percentUpdate(char percent, void *userData) {
 	char maxHashes = *((char *)userData);
 	
 	while ((((float)percent)/100) * maxHashes > printed) {
-		std::cout << "=";
+		std::cerr << "=";
 		printed++;
-		std::cout.flush();
+		std::cerr.flush();
 	}
 /*
 	std::cout << (int)percent << "% ";
@@ -27,8 +27,8 @@ void percentUpdate(char percent, void *userData) {
 
 int main(int argc, char **argv)
 {
-	SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
-//	SWMgr manager;
+//	SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
+	SWMgr manager;
 	SWModule *target;
 	ListKey listkey;
 	ListKey scope;
@@ -59,9 +59,9 @@ int main(int argc, char **argv)
 		target->setKey(scope);
 	}
 
-	std::cout << "[0=================================50===============================100]\n ";
+	std::cerr << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
-	listkey = target->Search(argv[2], -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(argv[2], -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;
