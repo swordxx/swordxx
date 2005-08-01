@@ -61,7 +61,14 @@ int main(int argc, char **argv)
 
 	std::cerr << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
-	listkey = target->Search(argv[2], -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+  /*
+	 *			>=0 - regex
+	 *			-1  - phrase
+	 *			-2  - multiword
+	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
+	 *			-4  - Lucene
+   */
+	listkey = target->Search(argv[2], -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;

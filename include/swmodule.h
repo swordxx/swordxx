@@ -347,6 +347,7 @@ public:
 	 *			-1  - phrase
 	 *			-2  - multiword
 	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
+	 *			-4  - Lucene
 	 * @param flags options flags for search
 	 * @param scope Key containing the scope. VerseKey or ListKey are useful here.
 	 * @param justCheckIfSupported if set, don't search,
