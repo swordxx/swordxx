@@ -233,6 +233,31 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 	return retVal;
 }
 
+CORBA::Boolean SWModule_impl::hasKeyChildren() throw(CORBA::SystemException) {
+	sword::SWKey *key = delegate->getKey();
+	bool retVal = "";
+
+	TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
+	if (tkey) {
+		retVal = tkey->hasChildren();
+	}
+	return retVal;
+}
+
+
+char *SWModule_impl::getKeyParent() throw(CORBA::SystemException) {
+	sword::SWKey *key = delegate->getKey();
+	SWBuf retVal = "";
+
+	TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
+	if (tkey) {
+		if (tkey->parent()) {
+			retVal = tkey->getFullName();
+		}
+	}
+	return CORBA::string_dup((const char *)retVal);
+}
+
 
 StringList *SWMgr_impl::getAvailableLocales() throw(CORBA::SystemException) {
 	sword::StringList localeNames = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();

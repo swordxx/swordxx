@@ -27,6 +27,8 @@ public:
 	void   setKeyText(const char *key) throw(CORBA::SystemException) { delegate->KeyText(key); }
 	char *getKeyText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->KeyText()); }
 	StringList *getKeyChildren() throw(CORBA::SystemException);
+	char *getKeyParent() throw(CORBA::SystemException);
+	CORBA::Boolean hasKeyChildren() throw(CORBA::SystemException);
 	char *getName() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Name()); }
 	char *getDescription() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Description()); }
 	char *getCategory() throw(CORBA::SystemException);

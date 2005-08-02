@@ -45,7 +45,9 @@ interface SWModule {
 	StringList getEntryAttribute(in string level1, in string level2, in string level3);
 	void   setKeyText(in string key);
 	string getKeyText();
+	boolean hasKeyChildren();
 	StringList getKeyChildren();
+	string getKeyParent();
 	string getName();
 	string getDescription();
 	string getCategory();
