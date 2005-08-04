@@ -4,6 +4,7 @@
  *		  etc.)
  */
 
+#include <sysdata.h>
 #include <swmodule.h>
 #include <utilstr.h>
 #include <regex.h>	// GNU
@@ -502,7 +503,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			// check to see if it set ok and if so, add to our return list
 			if (*testKey == vk) {
 				listkey << (const char *) vk;
-				listkey.GetElement()->userData = (void *)((int)(h.score(i)*100));
+				listkey.GetElement()->userData = (void *)((__u32)(h.score(i)*100));
 			}
 		}
 		(*percent)(98, percentUserData);
@@ -878,6 +879,10 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	for (FilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
 		filterSettings.push_back((*filter)->getOptionValue());
 		(*filter)->setOptionValue(*((*filter)->getOptionValues().begin()));
+
+		if (!strcmp("Greek Accents", (*filter)->getOptionName())) {
+			(*filter)->setOptionValue("Off");
+		}
 	}
 
 	

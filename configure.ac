@@ -152,8 +152,8 @@ if test x$enable_debug = xyes; then
   else
     AM_CXXFLAGS="-O0"
   fi
-  AM_CFLAGS="$AM_CFLAGS -Werror"
-  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
+#  AM_CFLAGS="$AM_CFLAGS -Werror"
+#  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
 fi
 #  AC_DEFINE(DEBUG)
 #else
