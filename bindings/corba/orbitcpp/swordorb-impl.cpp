@@ -112,8 +112,9 @@ void SWMgr_impl::setJavascript(CORBA::Boolean val) throw(CORBA::SystemException)
 
 char *SWMgr_impl::filterText(const char *filterName, const char *text) throw(CORBA::SystemException) {
 	SWBuf buf = text;
-	SWBuf retVal = delegate->filterText(filterName, buf);
-	return CORBA::string_dup((char *)retVal.c_str());
+	delegate->setGlobalOption("Greek Accents", "Off");
+	char errStatus = delegate->filterText(filterName, buf);
+	return CORBA::string_dup((char *)buf.c_str());
 }
 
 char *SWModule_impl::getCategory() throw(CORBA::SystemException) {

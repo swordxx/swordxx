@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
 	 *			-4  - Lucene
    */
-	listkey = target->Search(searchTerm.c_str(), -1, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(searchTerm.c_str(), -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;

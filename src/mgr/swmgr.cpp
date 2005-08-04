@@ -859,9 +859,11 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
  {
 	char retVal = -1;
-	FilterMap::iterator it = optionFilters.find(filterName);
-	if (it != optionFilters.end()) {
-		retVal = it->second->processText(text, key, module);	// add filter to module
+	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+		if ((*it).second->getOptionName()) {
+			if (!stricmp(filterName, (*it).second->getOptionName()))
+				retVal = it->second->processText(text, key, module);	// add filter to module
+		}
 	}
 	return retVal;
 }

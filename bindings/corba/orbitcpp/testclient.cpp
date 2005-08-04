@@ -66,6 +66,8 @@ int main (int argc, char *argv[])
 		}
 */
 
+		mgr->setGlobalOption("Greek Accents", "Off");
+		std::cout << "\nFiltered text: " << mgr->filterText("Greek Accents", "ὁ θεὸς") << "\n";
 
 		
 	} catch(const CORBA::Exception& ex) {
