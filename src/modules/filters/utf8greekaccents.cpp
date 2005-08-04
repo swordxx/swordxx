@@ -9,6 +9,12 @@
 #include <stdio.h>
 #include <utf8greekaccents.h>
 
+
+#ifdef _ICU_
+#include <utf8nfkd.h>
+sword::UTF8NFKD decompose;
+#endif
+
 SWORD_NAMESPACE_START
 
 const char oName[] = "Greek Accents";
@@ -30,6 +36,9 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
     		//unsigned char *to, *from;
 		//to = (unsigned char*)text;
 		//for (from = (unsigned char*)text; *from; from++) {
+#ifdef _ICU_
+		decompose.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+#endif
 		
 		SWBuf orig = text;
 		const unsigned char* from = (unsigned char*)orig.c_str();

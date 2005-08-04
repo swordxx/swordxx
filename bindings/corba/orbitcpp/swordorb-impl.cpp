@@ -110,6 +110,12 @@ void SWMgr_impl::setJavascript(CORBA::Boolean val) throw(CORBA::SystemException)
 	delegate->setJavascript(val);
 }
 
+char *SWMgr_impl::filterText(const char *filterName, const char *text) throw(CORBA::SystemException) {
+	SWBuf buf = text;
+	SWBuf retVal = delegate->filterText(filterName, buf);
+	return CORBA::string_dup((char *)retVal.c_str());
+}
+
 char *SWModule_impl::getCategory() throw(CORBA::SystemException) {
 	SWBuf type = delegate->Type();
 	SWBuf cat = delegate->getConfigEntry("Category");

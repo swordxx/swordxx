@@ -41,6 +41,7 @@
 #include <gbfplain.h>
 #include <thmlplain.h>
 #include <osisplain.h>
+#include <papyriplain.h>
 #include <gbfstrongs.h>
 #include <gbffootnotes.h>
 #include <gbfheadings.h>
@@ -211,6 +212,10 @@ void SWMgr::init() {
 
 	tmpFilter = new GreekLexAttribs();
 	optionFilters.insert(FilterMap::value_type("GreekLexAttribs", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new PapyriPlain();
+	optionFilters.insert(FilterMap::value_type("PapyriPlain", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
@@ -851,6 +856,17 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 }
 
 
+char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
+ {
+	char retVal = -1;
+	FilterMap::iterator it = optionFilters.find(filterName);
+	if (it != optionFilters.end()) {
+		retVal = it->second->processText(text, key, module);	// add filter to module
+	}
+	return retVal;
+}
+
+
 void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
 {
 	for (;start != end; start++) {
@@ -863,6 +879,19 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 
 	if (filterMgr)
 		filterMgr->AddLocalOptions(module, section, start, end);
+}
+
+
+// manually specified StripFilters for special cases, like Papyri marks and such
+void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
+{
+	for (;start != end; start++) {
+		FilterMap::iterator it;
+		it = optionFilters.find((*start).second);
+		if (it != optionFilters.end()) {
+			module->AddStripFilter((*it).second);	// add filter to module
+		}
+	}
 }
 
 
@@ -960,16 +989,31 @@ void SWMgr::CreateMods(bool multiMod) {
 		if (driver.length()) {
 			newmod = CreateMod((*it).first, driver, section);
 			if (newmod) {
+				// Filters to add for this module and globally announce as an option to the user
+				// e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally
 				start = (*it).second.lower_bound("GlobalOptionFilter");
 				end   = (*it).second.upper_bound("GlobalOptionFilter");
 				AddGlobalOptions(newmod, section, start, end);
 
+				// Only add the option to the module, don't announce it's availability
+				// These are useful for like: filters that parse special entryAttribs in a text
+				// or whatever you might want to happen on entry lookup
 				start = (*it).second.lower_bound("LocalOptionFilter");
 				end   = (*it).second.upper_bound("LocalOptionFilter");
 				AddLocalOptions(newmod, section, start, end);
 
-				AddRawFilters(newmod, section);
+				//STRIP FILTERS
+
+				// add all basic ones for for the modtype
 				AddStripFilters(newmod, section);
+
+				// Any special processing for this module when searching:
+				// e.g. for papyri, removed all [](). notation
+				start = (*it).second.lower_bound("LocalStripFilter");
+				end   = (*it).second.upper_bound("LocalStripFilter");
+				AddStripFilters(newmod, section, start, end);
+
+				AddRawFilters(newmod, section);
 				AddRenderFilters(newmod, section);
 				AddEncodingFilters(newmod, section);
 				

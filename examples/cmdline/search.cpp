@@ -42,6 +42,11 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
+
+	SWBuf searchTerm = argv[2];
+	manager.setGlobalOption("Greek Accents", "Off");
+	manager.filterText("Greek Accents", searchTerm);
+
 	it = manager.Modules.find(argv[1]);
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
@@ -68,7 +73,7 @@ int main(int argc, char **argv)
 	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
 	 *			-4  - Lucene
    */
-	listkey = target->Search(argv[2], -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(searchTerm.c_str(), -1, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;

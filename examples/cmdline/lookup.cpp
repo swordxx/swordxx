@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 	}
 
 	manager.setGlobalOption("Headings", "On");
+	manager.setGlobalOption("Greek Accents", "Off");
 
 	target = (*it).second;
 

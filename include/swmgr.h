@@ -132,6 +132,9 @@ protected:
 	 */
 	virtual void AddStripFilters(SWModule *module, ConfigEntMap &section);
 
+	// ones manually specified in .conf file
+	virtual void AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
+
 	/**
 	 * Called to add appropriate Raw Filters to a module.  Override to do special actions,
 	 *	if desired.	See the module.conf CipherKey= entry.
@@ -288,6 +291,15 @@ public:
 	 * @return a list of legal values for the given option
 	 */
 	virtual StringList getGlobalOptionValues(const char *option);
+
+	/** Filters a buffer thru a named filter
+	 * @param filterName
+	 * @param text buffer to filter
+	 * @param key context key if filter needs this for processing
+	 * @param module context module if filter needs this for processing
+	 * @return error status
+	 */
+	virtual char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 
 	/**
 	 * Sets the cipher key for the given module. This function updates the key

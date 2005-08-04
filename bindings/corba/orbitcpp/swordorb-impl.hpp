@@ -55,6 +55,7 @@ public:
 
 	ModInfoList *getModInfoList() throw(CORBA::SystemException);
 	SWModule_ptr getModuleByName(const char *name) throw(CORBA::SystemException);
+	char *filterText(const char *filterName, const char *text) throw(CORBA::SystemException);
 	char *getPrefixPath() throw(CORBA::SystemException) { return CORBA::string_dup(delegate->prefixPath); }
 	char *getConfigPath() throw(CORBA::SystemException) { return CORBA::string_dup(delegate->configPath); }
 	void  setGlobalOption(const char *option, const char *value) throw(CORBA::SystemException) { delegate->setGlobalOption(option, value); }

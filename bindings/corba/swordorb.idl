@@ -74,6 +74,7 @@ interface SWMgr {
 	void   setGlobalOption(in string option, in string value);
 	string getGlobalOption(in string option);
 	string getGlobalOptionTip(in string option);
+	string filterText(in string filterName, in string text);
 	StringList getGlobalOptions();
 	StringList getGlobalOptionValues(in string option);
 	void     setCipherKey(in string modName, in string key);

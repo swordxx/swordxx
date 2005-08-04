@@ -1,6 +1,6 @@
 #include <iostream>
 #include <swbuf.h>
-#include <osishtmlhref.h>
+#include <papyriplain.h>
 //#include <swmgr.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -11,9 +11,9 @@ using namespace std;
 int main(int argc, char **argv) {
 //	SWMgr mgr;
 //	SWModule *module = mgr.getModule("KJV");
-	OSISHTMLHREF filter;
+	PapyriPlain filter;
 	SWBuf buf;
-	buf = "This is OSIS text with a <figure src=\"images/scroll.png\"/>";
+	buf = "This is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 	std::cout << "Original:\n\n" << buf << "\n\n-------\n\n";
 	filter.processText(buf);
 //	filter.processText(buf, module->getKey(), module);

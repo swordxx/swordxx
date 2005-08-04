@@ -66,6 +66,7 @@ PLFIL += $(filtersdir)/plainfootnotes.cpp
 PLFIL += $(filtersdir)/plainhtml.cpp
 PLFIL += $(filtersdir)/greeklexattribs.cpp
 PLFIL += $(filtersdir)/unicodertf.cpp
+PLFIL += $(filtersdir)/papyriplain.cpp
 
 
 SWICUSRC = $(filtersdir)/utf8transliterator.cpp
