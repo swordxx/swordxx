@@ -10,6 +10,7 @@
 #include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
+#include <treekeyidx.h>	// KLUDGE for Search
 #include <filemgr.h>
 #ifndef _MSC_VER
 #include <iostream>
@@ -520,6 +521,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 
 
+	// multi-word
 	if (searchType == -2) {
 		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
 		strcpy(wordBuf, istr);
@@ -536,6 +538,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 	}
 
+	// entry attributes
 	if (searchType == -3) {
 		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
 		char *checkSlash = wordBuf;
@@ -596,6 +599,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				listkey << textkey;
 			}
 		}
+
+		// phrase
 		else if (searchType == -1) {
 			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
 			if (sres) { //it's also in the StripText(), so we have a valid search result item now
@@ -603,11 +608,14 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				listkey << textkey;
 			}
 		}
+
+		// multiword
 		else if (searchType == -2) {
 			int loopCount = 0;
 			int foundWords = 0;
+			bool specialStrips = getConfigEntry("LocalStripFilter");
 			do {
-				const char* textBuf = (loopCount == 0) ? getRawEntry() : StripText();
+				const char* textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : StripText();
 				foundWords = 0;
 				
 				for (int i = 0; i < wordCount; ++i) {
@@ -626,6 +634,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				listkey << textkey;
 			}
 		}
+
+		// entry attributes
 		else if (searchType == -3) {
 			int i;
 			RenderText();	// force parse
@@ -903,11 +913,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		setKey(*searchkey);
 	}
 
-	// position module at the beginning
-	*this = TOP;
-
-	// iterate thru each entry in module
-
 	IndexWriter *writer = NULL;
 	Directory *d = NULL;
  
@@ -935,10 +940,13 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  
 	char perc = 1;
 	VerseKey *vkcheck = 0;
-	SWTRY {
-		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	SWCATCH (...) {}
+	vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+
+	TreeKeyIdx *tkcheck = 0;
+	tkcheck = SWDYNAMIC_CAST(TreeKeyIdx, key);
+
+
+	*this = BOTTOM;
 	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
@@ -946,11 +954,24 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	bool savePEA = isProcessEntryAttributes();
 	processEntryAttributes(true);
 
-	while (!Error()) {
+	// prox chapter blocks
+	// position module at the beginning
+	*this = TOP;
+
+	VerseKey chapMax;
+	SWBuf proxBuf;
+	SWBuf proxLem;
+	SWBuf strong;
+
+	char err = Error();
+	while (!err) {
 		long mindex = 0;
 		if (vkcheck)
 			mindex = vkcheck->NewIndex();
 		else mindex = key->Index();
+
+		proxBuf = "";
+		proxLem = "";
 
 		// computer percent complete so we can report to our progress callback
 		float per = (float)mindex / highIndex;
@@ -965,14 +986,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		// get "content" field
 		const char *content = StripText();
 
-		if (content && *content) {
+		bool good = false;
 
-			// get "key" field
-			SWBuf keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
-			
+		// start out entry
+		Document *doc = new Document();
+		// get "key" field
+		SWBuf keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
+		if (content && *content) {
+			good = true;
 			// build "strong" field
-			SWBuf strong;
-		
 			AttributeTypeList::iterator words;
 			AttributeList::iterator word;
 			AttributeValue::iterator strongVal;
@@ -992,18 +1014,129 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 					}
 				}
 			}
-
-			// add our entry to the clucene index		
-			Document *doc = new Document();
 			doc->add( Field::UnIndexed(_T("key"), keyText ) );
 			doc->add( Field::UnStored(_T("content"), content) );
 			if (strong.length() > 0)
 				doc->add( Field::UnStored(_T("lemma"), strong) );
-			writer->addDocument(*doc);
-			delete doc;
+//printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
+printf("setting fields (%s).\n", (const char *)*key);
+fflush(stdout);
 		}
+		// don't write yet, cuz we have to see if we're the first of a prox block (5:1 or chapter5/verse1
+
+		// for VerseKeys use chapter
+		if (vkcheck) {
+			chapMax = *vkcheck;
+			// we're the first verse in a chapter
+			if (vkcheck->Verse() == 1) {
+				chapMax = MAXVERSE;
+				VerseKey saveKey = *vkcheck;
+				while ((!err) && (*vkcheck <= chapMax)) {
+//printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
+printf("building proxBuf from (%s).\n", (const char *)*key);
+
+					// build "strong" field
+					strong = "";
+					AttributeTypeList::iterator words;
+					AttributeList::iterator word;
+					AttributeValue::iterator strongVal;
+
+					words = getEntryAttributes().find("Word");
+					if (words != getEntryAttributes().end()) {
+						for (word = words->second.begin();word != words->second.end(); word++) {
+							strongVal = word->second.find("Lemma");
+							if (strongVal != word->second.end()) {
+								// cheeze.  skip empty article tags that weren't assigned to any text
+								if (strongVal->second == "G3588") {
+									if (word->second.find("Text") == word->second.end())
+										continue;	// no text? let's skip
+								}
+								strong.append(strongVal->second);
+								strong.append(' ');
+							}
+						}
+					}
+					content = getRawEntry();
+					if (content && *content) {
+						proxBuf += content;
+						proxBuf.append(' ');
+					}
+					proxLem += strong;
+					if (proxLem.length()) 
+						proxLem.append("\n");
+					(*this)++;
+					err = Error();
+				}
+				err = 0;
+				*vkcheck = saveKey;
+			}
+		}
+		
+		// for TreeKeys use siblings if we have no children
+		else if (tkcheck) {
+			if (!tkcheck->hasChildren()) {
+				if (!tkcheck->previousSibling()) {
+					do {
+printf("building proxBuf from (%s).\n", (const char *)*key);
+fflush(stdout);
+
+						// build "strong" field
+						strong = "";
+						AttributeTypeList::iterator words;
+						AttributeList::iterator word;
+						AttributeValue::iterator strongVal;
+
+						words = getEntryAttributes().find("Word");
+						if (words != getEntryAttributes().end()) {
+							for (word = words->second.begin();word != words->second.end(); word++) {
+								strongVal = word->second.find("Lemma");
+								if (strongVal != word->second.end()) {
+									// cheeze.  skip empty article tags that weren't assigned to any text
+									if (strongVal->second == "G3588") {
+										if (word->second.find("Text") == word->second.end())
+											continue;	// no text? let's skip
+									}
+									strong.append(strongVal->second);
+									strong.append(' ');
+								}
+							}
+						}
+
+						content = getRawEntry();
+						if (content && *content) {
+							proxBuf += content;
+							proxBuf.append("\n");
+						}
+						proxLem += strong;
+						if (proxLem.length()) 
+							proxLem.append(' ');
+					} while (tkcheck->nextSibling());
+					tkcheck->parent();
+					tkcheck->firstChild();
+				}
+				else tkcheck->nextSibling();	// reposition from our previousSibling test
+			}
+		}
+		if (proxBuf.length() > 0) {
+printf("proxBuf before (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
+			proxBuf = StripText(proxBuf);
+printf("proxBuf after (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
+			doc->add( Field::UnStored(_T("prox"), proxBuf) );
+			good = true;
+		}
+		if (proxLem.length() > 0) {
+			doc->add( Field::UnStored(_T("proxlem"), proxLem) );
+			good = true;
+		}
+		if (good) {
+printf("writing (%s).\n", (const char *)*key);
+fflush(stdout);
+			writer->addDocument(*doc);
+		}
+		delete doc;
 
 		(*this)++;
+		err = Error();
 	}
 
 	writer->optimize();
