@@ -140,6 +140,8 @@ USEUNIT("..\..\src\utilfuns\zlib\trees.c");
 USEUNIT("..\..\src\utilfuns\zlib\uncompr.c");
 USEUNIT("..\..\src\utilfuns\zlib\untgz.c");
 USEUNIT("..\..\src\utilfuns\zlib\adler32.c");
+USEUNIT("..\..\src\modules\filters\papyriplain.cpp");
+USEUNIT("..\..\src\utilfuns\ftpparse.c");
 //---------------------------------------------------------------------------
 #define Library
 
