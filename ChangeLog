@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+21-Sep-2005	Martin Gruner <mgruner@crosswire.org>
+	Added Hebrew locale for both Tanach (OT) and 
+	Berit Hadaschah (NT).
+
 * Release 1.5.8 *
 
 27-May-2005	Troy A. Griffitts <scribe@crosswire.org>
