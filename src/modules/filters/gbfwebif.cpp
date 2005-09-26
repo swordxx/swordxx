@@ -176,7 +176,8 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			buf.appendFormatted("a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
 		}
 		// ok to leave these in
-		else if (!strncmp(token, "span", 4)) {
+		else if ((!strncmp(token, "span", 4))
+				|| (!strncmp(token, "/span", 5))) {
 			buf.appendFormatted("<%s>", token);
 		}
 
