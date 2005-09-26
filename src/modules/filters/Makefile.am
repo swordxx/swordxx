@@ -13,6 +13,7 @@ GBFFIL += $(filtersdir)/gbffootnotes.cpp
 GBFFIL += $(filtersdir)/gbfheadings.cpp
 GBFFIL += $(filtersdir)/gbfredletterwords.cpp
 GBFFIL += $(filtersdir)/gbfmorph.cpp
+GBFFIL += $(filtersdir)/gbfwordjs.cpp
 
 THMLFIL = $(filtersdir)/thmlstrongs.cpp
 THMLFIL += $(filtersdir)/thmlfootnotes.cpp

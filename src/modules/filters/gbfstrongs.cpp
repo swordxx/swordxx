@@ -92,7 +92,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 				}
 			}
 			if (module->isProcessEntryAttributes()) {
-				if ((*token == 'W') && (token[1] == 'T')) {	// Strongs
+				if ((*token == 'W') && (token[1] == 'T')) {	// Morph
 					valto = val;
 					for (unsigned int i = 2; ((token[i]) && (i < 150)); i++)
 						*valto++ = token[i];

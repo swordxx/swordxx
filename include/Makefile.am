@@ -28,6 +28,7 @@ pkginclude_HEADERS += $(swincludedir)/gbfplain.h
 pkginclude_HEADERS += $(swincludedir)/gbfredletterwords.h
 pkginclude_HEADERS += $(swincludedir)/gbfrtf.h
 pkginclude_HEADERS += $(swincludedir)/gbfstrongs.h
+pkginclude_HEADERS += $(swincludedir)/gbfwordjs.h
 pkginclude_HEADERS += $(swincludedir)/gbfthml.h
 pkginclude_HEADERS += $(swincludedir)/greeklexattribs.h
 

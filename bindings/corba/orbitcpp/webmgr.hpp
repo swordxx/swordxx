@@ -5,12 +5,14 @@
 #include <markupfiltmgr.h>
 #include <osiswordjs.h>
 #include <thmlwordjs.h>
+#include <gbfwordjs.h>
 
 using namespace sword;
 
 class WebMgr : public SWMgr {
 	OSISWordJS *osisWordJS;
 	ThMLWordJS *thmlWordJS;
+	GBFWordJS *gbfWordJS;
 	SWModule *defaultGreekLex;
 	SWModule *defaultHebLex;
 	SWModule *defaultGreekParse;
@@ -25,17 +27,21 @@ public:
 
 		osisWordJS = new OSISWordJS();
 		thmlWordJS = new ThMLWordJS();
+		gbfWordJS = new GBFWordJS();
 		Load();
 		osisWordJS->setDefaultModules(defaultGreekLex, defaultHebLex, defaultGreekParse, defaultHebParse);
 		thmlWordJS->setDefaultModules(defaultGreekLex, defaultHebLex, defaultGreekParse, defaultHebParse);
+		gbfWordJS->setDefaultModules(defaultGreekLex, defaultHebLex, defaultGreekParse, defaultHebParse);
 		osisWordJS->setMgr(this);
 		thmlWordJS->setMgr(this);
+		gbfWordJS->setMgr(this);
 		setGlobalOption("Textual Variants", "Primary Reading");
 	}
 
 	~WebMgr() {
 		delete osisWordJS;
 		delete thmlWordJS;
+		delete gbfWordJS;
 	}
 
 
@@ -65,6 +71,9 @@ public:
 		if (module->Markup() == FMT_THML) {
 			module->AddOptionFilter(thmlWordJS);
 		}
+		if (module->Markup() == FMT_GBF) {
+			module->AddOptionFilter(gbfWordJS);
+		}
 		SWMgr::AddGlobalOptions(module, section, start, end);
 	}
 
@@ -72,6 +81,7 @@ public:
 	void setJavascript(bool val) {
 		osisWordJS->setOptionValue((val)?"On":"Off");
 		thmlWordJS->setOptionValue((val)?"On":"Off");
+		gbfWordJS->setOptionValue((val)?"On":"Off");
 	}
 };
 
