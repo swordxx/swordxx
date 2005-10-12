@@ -70,6 +70,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					SWBuf lemma = wtag.getAttribute("lemma");
 					SWBuf strong = "";
 					SWBuf morph = wtag.getAttribute("morph");
+					SWBuf xlit = wtag.getAttribute("xlit");
 					SWBuf src = wtag.getAttribute("src");
 					if (!src.length()) src.appendFormatted("%d", wordNum);
 					src.insert(0, wordSrcPrefix);
@@ -106,6 +107,12 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 							if (lexName == "StrongsHebrew")
 								lexName = "H";
 						}
+					}
+					else if (!strncmp(xlit.c_str(), "betacode:", 9)) {
+						lexName = "betacode";
+//						const char *m = strchr(xlit.c_str(), ':');
+//						strong = ++m;
+						strong = lemma;
 					}
 					SWBuf wordID;
 					if (vkey) {

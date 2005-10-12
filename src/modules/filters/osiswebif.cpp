@@ -61,7 +61,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if (attrib = tag.getAttribute("xlit")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" %s", val);
+//					buf.appendFormatted(" %s", val);
 				}
 				if (attrib = tag.getAttribute("gloss")) {
 					val = strchr(attrib, ':');

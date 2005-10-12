@@ -1,12 +1,15 @@
 TOMCAT_HOME=/usr/local/tomcat
+JAVA_HOME=/usr/java/j2sdk1.4.2_09
 instdir=/home/scribe/src/swordweb
+JAVA=${JAVA_HOME}/bin/java
+JAVACC=${JAVA_HOME}/bin/javac
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 
 src/org/crosswire/sword/orb/SWMgr.java: ../swordorb.idl
 	idlj -pkgTranslate swordorb org.crosswire.sword.orb -td src ../swordorb.idl
 
 classes/org/crosswire/sword/orb/SwordOrb.class: src/org/crosswire/sword/orb/SwordOrb.java
-	javac -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
+	${JAVACC} -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
 
 
 clean:

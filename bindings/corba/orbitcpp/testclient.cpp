@@ -7,16 +7,12 @@
 	
 int main (int argc, char *argv[])
 {
-	if (argc != 2)
-	{
-		std::cerr << "Usage:" << std::endl
-				  << "  " << argv[0] << " IOR" << std::endl
-				  << std::endl;
+	if (argc != 2) {
+		std::cerr << "Usage:" << std::endl << "  " << argv[0] << " <IOR>" << std::endl << std::endl;
 		return -1;
 	}
 	
-	try
-	{
+	try {
 		// Initialize ORBit
 		CORBA::ORB_ptr orb = CORBA::ORB_init(argc, argv, "orbit-local-orb");
 
@@ -44,19 +40,28 @@ int main (int argc, char *argv[])
 			std::cout << "\n";
 		}
 */
-		swordorb::StringList *localeNames = mgr->getAvailableLocales();
-		for (int i = 0; i < localeNames->length(); i++) {
-			std::cout << (*localeNames)[i] << "\n";
-		}
-		mgr->setDefaultLocale("de");
+//		swordorb::StringList *localeNames = mgr->getAvailableLocales();
+//		for (int i = 0; i < localeNames->length(); i++) {
+//			std::cout << (*localeNames)[i] << "\n";
+//		}
+//		mgr->setDefaultLocale("de");
 		mgr->setJavascript(true);
-		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
-		module = mgr->getModuleByName("WHNU");
-		for (module->setKeyText("jas.1.1"); !module->error(); module->next()) {
-			std::cout << "KeyText: " << module->getKeyText() << "\n";
-			std::cout << "Text: " << module->getRenderText() << "\n";
-			break;
-		}
+//		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
+		mgr->setGlobalOption("Strong's Numbers", "Off");
+		module = mgr->getModuleByName("LXXM");
+		std::cout << "Mod Desc: " << module->getDescription() << "\n";
+
+//int i = 0;
+//for (module->begin(); i < 5; i++, module->next()) {
+//		std::cout << "KeyText: " << module->getKeyText() << "\n";
+		module->setKeyText("PsSol/18/2");
+//		module->getRenderText();
+		std::cout << "KeyText: " << module->getKeyText() << "\n";
+		std::cout << "--------------\n";
+		std::cout << "Raw: " << module->getRawEntry() << "\n";
+		std::cout << "--------------\n";
+		std::cout << "Render: " << module->getRenderText() << "\n";
+//}
 /*
 		swordorb::SearchHitList *searchResults;
 		bool lucene = module->hasSearchFramework();
@@ -66,8 +71,8 @@ int main (int argc, char *argv[])
 		}
 */
 
-		mgr->setGlobalOption("Greek Accents", "Off");
-		std::cout << "\nFiltered text: " << mgr->filterText("Greek Accents", "ὁ θεὸς") << "\n";
+//		mgr->setGlobalOption("Greek Accents", "Off");
+//		std::cout << "\nFiltered text: " << mgr->filterText("Greek Accents", "ὁ θεὸς") << "\n";
 
 		
 	} catch(const CORBA::Exception& ex) {

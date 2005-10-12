@@ -118,15 +118,10 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				}
 
 				if (!option) {
-					char *num = strstr(token, "lemma=\"x-Strongs:");
+					// remove all lemmas.  This class should be renamed to OSISLemma
+					char *num = strstr(token, "lemma=\"");
 					if (num) {
 						memcpy(num, "savlm", 5);
-					}
-					else {
-						num = strstr(token, "lemma=\"strong:");
-						if (num) {
-							memcpy(num, "savlm", 5);
-						}
 					}
 				}
 			}

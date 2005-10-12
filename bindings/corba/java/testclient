@@ -1,3 +1,3 @@
 #!/bin/sh
-TOMCAT_HOME=/home/tomcat/jakarta-tomcat
-java -cp $TOMCAT_HOME/common/lib/servlet-api.jar:classes org.crosswire.sword.orb.SwordOrb $*
+TOMCAT_HOME=/usr/local/tomcat
+/usr/java/j2sdk1.4.2_09/bin/java -cp $TOMCAT_HOME/common/lib/servlet-api.jar:classes org.crosswire.sword.orb.SwordOrb $*
