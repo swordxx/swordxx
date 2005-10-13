@@ -188,7 +188,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 							const char *m = strchr(morph.c_str(), ':');
 							if (m) m++;
 							else m = morph.c_str();
-							spanStart.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
+							spanStart.appendFormatted("<span class=\"clk\" onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
 							text.insert(textStr, spanStart);
 							lastAppendLen = spanStart.length();
 						}
@@ -269,7 +269,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				const char *m = strchr(morph.c_str(), ':');
 				if (m) m++;
 				else m = morph.c_str();
-				spanStart.appendFormatted("<span onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
+				spanStart.appendFormatted("<span class=\"clk\" onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
 				text.insert(textStr, spanStart);
 			}
 		}
