@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+17-Oct-2005	Joachim Ansorg <jansorg@crosswire.org>
+	Fixed the dutch locale file
+
 21-Sep-2005	Martin Gruner <mgruner@crosswire.org>
 	Added Hebrew locale for both Tanach (OT) and 
 	Berit Chadashah (NT).
