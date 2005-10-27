@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+26-Oct-2005	Martin Gruner <mgruner@crosswire.org>
+	Added Arabic locale from Mina Magdy.
+
 17-Oct-2005	Joachim Ansorg <jansorg@crosswire.org>
 	Fixed the dutch locale file
 
