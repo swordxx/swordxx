@@ -28,14 +28,15 @@
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT ZipCompress:public SWCompress
-{
+class SWDLLEXPORT ZipCompress : public SWCompress {
+
 protected:
 public:
-  ZipCompress ();
-  virtual ~ ZipCompress ();
-  virtual void Encode (void);
-  virtual void Decode (void);
+	ZipCompress();
+	virtual ~ZipCompress();
+
+	virtual void Encode(void);
+	virtual void Decode(void);
 };
 
 SWORD_NAMESPACE_END

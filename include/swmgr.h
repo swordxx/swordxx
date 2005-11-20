@@ -51,21 +51,28 @@
 #ifndef SWMGR_H
 #define SWMGR_H
 
-#include <sys/types.h>
 #include <map>
 #include <list>
-#include <swmodule.h>
+#include <swbuf.h>
 #include <swconfig.h>
-#include <swlog.h>
-#include <swfiltermgr.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
+class SWModule;
+class SWFilter;
+class SWOptionFilter;
+class SWFilterMgr;
+class SWBuf;
+class SWKey;
+
 typedef std::map < SWBuf, SWModule *, std::less < SWBuf > >ModMap;
 typedef std::map < SWBuf, SWFilter * >FilterMap;
+typedef std::map < SWBuf, SWOptionFilter * >OptionFilterMap;
 typedef std::list < SWBuf >StringList;
+typedef std::list < SWFilter* >FilterList;
+typedef std::list < SWOptionFilter* >OptionFilterList;
 
 /** SWMgr exposes an installed module set
  *
@@ -76,8 +83,10 @@ typedef std::list < SWBuf >StringList;
  */
 
 class FileDesc;
+class SWOptionFilter;
 
 class SWDLLEXPORT SWMgr {
+
 
 private:
 	bool mgrModeMultiMod;
@@ -90,15 +99,15 @@ protected:
 	SWConfig *mysysconfig;
 	SWConfig *homeConfig;
 	void CreateMods(bool multiMod = false);
-	SWModule *CreateMod(const char *name, const char *driver, ConfigEntMap & section);
+	SWModule *CreateMod(const char *name, const char *driver, ConfigEntMap &section);
 	void DeleteMods();
 	char configType;		// 0 = file; 1 = directory
-	FilterMap optionFilters;
+	OptionFilterMap optionFilters;
 	FilterMap cipherFilters;
 	SWFilter *gbfplain;
 	SWFilter *thmlplain;
 	SWFilter *osisplain;
-	SWFilter *transliterator;
+	SWOptionFilter *transliterator;
 	FilterList cleanupFilters;
 	StringList options;
 	virtual void init(); // use to initialize before loading modules

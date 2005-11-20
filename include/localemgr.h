@@ -25,13 +25,13 @@
 
 #include <map>
 #include <list>
-#include <swconfig.h>
-#include <swlocale.h>
 
 #include <defs.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
+class SWLocale;
  
 typedef std::list<SWBuf> StringList;
 typedef std::map < SWBuf, SWLocale *, std::less < SWBuf > > LocaleMap;

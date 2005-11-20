@@ -15,6 +15,8 @@
 #include <rawverse.h>
 #include <versekey.h>
 #include <sysdata.h>
+#include <filemgr.h>
+#include <swbuf.h>
 
 
 SWORD_NAMESPACE_START

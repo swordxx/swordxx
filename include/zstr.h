@@ -25,14 +25,14 @@
 #ifndef ZSTR_H
 #define ZSTR_H
 
-#include <filemgr.h>
-#include <swbuf.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
 class SWCompress;
 class EntriesBlock;
+class FileDesc;
+class SWBuf;
 
 class SWDLLEXPORT zStr {
 

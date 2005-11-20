@@ -9,7 +9,9 @@
 #include <fcntl.h>
 
 #include <zverse.h>
+#include <versekey.h>
 #include <zcom.h>
+#include <filemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -40,6 +42,12 @@ zCom::~zCom() {
 	if (lastWriteKey)
 		delete lastWriteKey;
 }
+
+
+bool zCom::isWritable() {
+	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
+}
+
 
 /******************************************************************************
  * zCom::getRawEntry	- Returns the correct verse when char * cast

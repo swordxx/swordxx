@@ -24,11 +24,12 @@
 #define RAWGENBOOK_H
 
 #include <swgenbook.h>
-#include <filemgr.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+
+class FileDesc;
 
 class SWDLLEXPORT RawGenBook : public SWGenBook {
 	char *path;
@@ -44,9 +45,7 @@ public:
 	virtual ~RawGenBook();
 	virtual SWBuf &getRawEntryBuf();
 	// write interface ----------------------------
-	virtual bool isWritable() {
-		return ((bdtfd->getFd() > 0) && ((bdtfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
-	}
+	virtual bool isWritable();
 	static char createModule(const char *ipath);
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey * linkKey);	// Link current module entry to other module entry

@@ -21,13 +21,13 @@
 #ifndef PapyriPLAIN_H
 #define PapyriPLAIN_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
   /** This filter converts Papyri text to plain text
   */
-class SWDLLEXPORT PapyriPlain : public SWFilter {
+class SWDLLEXPORT PapyriPlain : public SWOptionFilter {
 public:
 	PapyriPlain();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);

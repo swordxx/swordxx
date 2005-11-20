@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
+#include <swbuf.h>
 #if !defined(__GNUC__) && !defined(_WIN32_WCE)
 #include <io.h>
 #include <direct.h>

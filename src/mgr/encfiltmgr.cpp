@@ -29,6 +29,7 @@
 #include <utf8latin1.h>
 #include <utf8utf16.h>
 #include <utf8html.h>
+#include <swmodule.h>
 
 #include <swmgr.h>
 

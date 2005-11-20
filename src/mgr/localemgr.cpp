@@ -33,6 +33,8 @@
 #include <stringmgr.h>
 #include <filemgr.h>
 #include <localemgr.h>
+#include <swlocale.h>
+#include <swlog.h>
 
 SWORD_NAMESPACE_START
 

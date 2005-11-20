@@ -38,6 +38,7 @@
 #include <gbfwebif.h>
 #include <thmlwebif.h>
 #include <osiswebif.h>
+#include <swmodule.h>
 
 #include <markupfiltmgr.h>
 

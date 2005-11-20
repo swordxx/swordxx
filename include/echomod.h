@@ -24,7 +24,6 @@
 #define ECHOMOD_H
 
 #include <swtext.h>
-#include <versekey.h>
 #include <defs.h>
 
 

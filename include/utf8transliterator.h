@@ -25,8 +25,7 @@ enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/  SE_IPA, SE_
 #define NUMSCRIPTS 50
 #define NUMTARGETSCRIPTS NUMSCRIPTS-3//6
 
-#include <swfilter.h>
-#include <swmodule.h>
+#include <swoptfilter.h>
 
 #include <unicode/unistr.h>
 
@@ -37,11 +36,13 @@ enum scriptEnum {SE_OFF, SE_LATIN, /*one-way (to) transliterators*/  SE_IPA, SE_
 
 SWORD_NAMESPACE_START
 
+class SWModule;
+
 struct SWTransData {
 	UnicodeString resource;
 	UTransDirection dir;
 };
-typedef std::map <const UnicodeString, SWTransData> SWTransMap;
+typedef std::map<const UnicodeString, SWTransData> SWTransMap;
 typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
 // Chris, please add more javadoc-style documentation in this header file
@@ -50,7 +51,7 @@ typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
 /** This Filter uses ICU for transliteration
 */
-class SWDLLEXPORT UTF8Transliterator : public SWFilter {
+class SWDLLEXPORT UTF8Transliterator : public SWOptionFilter {
 private:
 
 	char option;

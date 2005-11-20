@@ -17,6 +17,8 @@
 #include <zverse.h>
 #include <sysdata.h>
 #include <swbuf.h>
+#include <filemgr.h>
+#include <swcomprs.h>
 
 
 SWORD_NAMESPACE_START
@@ -41,6 +43,9 @@ const char zVerse::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
 
 zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp)
 {
+	// this line, instead of just defaulting, to keep FileMgr out of header
+	if (fileMode == -1) fileMode = FileMgr::RDONLY;
+
 	SWBuf buf;
 
 	nl = '\n';

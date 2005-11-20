@@ -21,13 +21,13 @@
 #ifndef GREEKLEXATTRIBS_H
 #define GREEKLEXATTRIBS_H
 
-#include <swfilter.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
 /** this filter converts ThML text to plain text
  */
-class SWDLLEXPORT GreekLexAttribs : public SWFilter {
+class SWDLLEXPORT GreekLexAttribs : public SWOptionFilter {
 public:
 	GreekLexAttribs();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);

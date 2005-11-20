@@ -22,8 +22,6 @@
 #ifndef UTILSTR_H
 #define UTILSTR_H
 
-#include <swbuf.h>
-#include <stringmgr.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START

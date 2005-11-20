@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <sysdata.h>
+#include <versekey.h>
+#include <filemgr.h>
 
 #include <ztext.h>
 
@@ -46,6 +48,9 @@ zText::~zText()
 		delete lastWriteKey;
 
 }
+
+
+bool zText::isWritable() { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR)); }
 
 
 /******************************************************************************

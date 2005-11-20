@@ -8,14 +8,13 @@
 #ifndef ZVERSE_H
 #define ZVERSE_H
 
-#include <filemgr.h>
-#include <fcntl.h>
-#include <rawverse.h>
-#include <swcomprs.h>
-
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+
+class FileDesc;
+class SWCompress;
+class SWBuf;
 
 class SWDLLEXPORT zVerse {
 	SWCompress *compressor;
@@ -46,8 +45,10 @@ public:
 	char nl;
 
 
-	zVerse(const char *ipath, int fileMode = FileMgr::RDONLY, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
+	// fileMode default = RDONLY
+	zVerse(const char *ipath, int fileMode = -1, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
 	virtual ~zVerse();
+
 	void findOffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void zReadText(char testmt, long start, unsigned short size, SWBuf &buf);
 	virtual void rawZFilter(SWBuf &buf, char direction = 0) {}

@@ -13,6 +13,7 @@
 #include <rawverse.h>
 #include <hrefcom.h>
 #include <swbuf.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 

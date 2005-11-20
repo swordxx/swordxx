@@ -21,14 +21,13 @@
 #ifndef THMLVARIANTS_H
 #define THMLVARIANTS_H
 
-#include <swfilter.h>
-#include <swmodule.h>
+#include <swoptfilter.h>
 
 SWORD_NAMESPACE_START
 
 /** This Filter shows/hides textual variants
  */
-class SWDLLEXPORT ThMLVariants : public SWFilter {
+class SWDLLEXPORT ThMLVariants : public SWOptionFilter {
 	char option;
 
 	static const char primary[];

@@ -5,6 +5,7 @@
 
 #include <swcom.h>
 #include <localemgr.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -16,9 +17,10 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Commentaries", enc, dir, mark, ilang), tmpVK() {
+SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Commentaries", enc, dir, mark, ilang) {
 	delete key;
 	key = CreateKey();
+	tmpVK = new VerseKey();
 }
 
 
@@ -27,7 +29,11 @@ SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTex
  */
 
 SWCom::~SWCom() {
+	delete tmpVK;
 }
+
+
+SWKey *SWCom::CreateKey() { return new VerseKey(); }
 
 
 long SWCom::Index() const {
@@ -89,9 +95,9 @@ VerseKey &SWCom::getVerseKey() const {
 		}
 	}
 	if (!key) {
-		tmpVK.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-		tmpVK = *(this->key);
-		return tmpVK;
+		tmpVK->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+		(*tmpVK) = *(this->key);
+		return (*tmpVK);
 	}
 	else	return *key;
 }

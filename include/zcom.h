@@ -23,15 +23,13 @@
 #ifndef ZCOM_H
 #define ZCOM_H
 
-#include <rawverse.h>
 #include <swcom.h>
-#include <swcomprs.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT zCom:public zVerse, public SWCom {
+class SWDLLEXPORT zCom : public zVerse, public SWCom {
 
 	VerseKey *lastWriteKey;
 	bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
@@ -51,9 +49,7 @@ public:
 	virtual void decrement(int steps = 1) { increment(-steps); }
 
 	// write interface ----------------------------
-	virtual bool isWritable() {
-		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
-	}
+	virtual bool isWritable();
 	static char createModule(const char *path, int blockBound) {
 		return zVerse::createModule(path, blockBound);
 	}

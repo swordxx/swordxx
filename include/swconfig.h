@@ -23,8 +23,6 @@
 #ifndef SWCONFIG_H
 #define SWCONFIG_H
 
-#include <stdio.h>
-
 #include <map>
 
 #include <defs.h>

@@ -25,9 +25,10 @@
 
 #include <treekey.h>
 #include <sysdata.h>
-#include <filemgr.h>
 
 SWORD_NAMESPACE_START
+
+class FileDesc;
 
 /**
  * Class TreeKeyIdx

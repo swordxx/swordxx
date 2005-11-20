@@ -23,7 +23,6 @@
 #define SWGENBOOK_H
 
 #include <swmodule.h>
-#include <treekeyidx.h>
 
 #include <defs.h>
 

@@ -26,11 +26,11 @@
 #include <fcntl.h>
 
 #include <defs.h>
-#include <swbuf.h>
 #include <swcacher.h>
 
 SWORD_NAMESPACE_START
 
+class SWBuf;
 
 class SWDLLEXPORT FileMgr;
 

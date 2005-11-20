@@ -27,6 +27,8 @@
 
 #include <swlog.h>
 #include <utilstr.h>
+#include <filemgr.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

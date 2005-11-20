@@ -22,8 +22,16 @@
 #define SWOPTFILTER_H
 
 #include <swfilter.h>
+#include <swbuf.h>
+#include <list>
 
 SWORD_NAMESPACE_START
+
+/**
+* The type definitoin for option types
+*/
+typedef std::list < SWBuf > StringList;
+
 
   /** Base class for all option filters.
   */
@@ -35,13 +43,41 @@ protected:
 	const StringList *optValues;
 	bool option;
 public:
+
+	SWOptionFilter();
 	SWOptionFilter(const char *oName, const char *oTip, const StringList *oValues);
 	virtual ~SWOptionFilter();
+
+
+	/** gets the name of the option of this filter
+	 * @return option name
+	 */
 	virtual const char *getOptionName() { return optName; }
+
+	/** gets a short explanation of the option of this filter;
+	 * it could be presented to the user in frontend programs
+	 * @return option tip/explanation
+	 */
 	virtual const char *getOptionTip() { return optTip; }
-	virtual void setOptionValue(const char *ival);
-	virtual const char *getOptionValue();
+
+	/** returns a list of the possible option values
+	 * 
+	 * @return list of option values
+	 */
 	virtual StringList getOptionValues() { return *optValues; }
+
+	/** @return The value of the current option.
+	*/
+	virtual const char *getOptionValue();
+
+	/** sets the value of the option of this filter,
+	 * e.g maybe a strong's filter mioght be set to "on" / "off" -
+	 * that would mean to show or not to show the strongs in the text,
+	 * see also getOptionValues()
+	 * @param ival the new option value
+	 */
+	virtual void setOptionValue(const char *ival);
+
 };
 
 SWORD_NAMESPACE_END

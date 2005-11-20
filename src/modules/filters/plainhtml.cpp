@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <plainhtml.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

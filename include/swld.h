@@ -24,7 +24,6 @@
 #define SWLD_H
 
 #include <swmodule.h>
-#include <strkey.h>
 
 #include <defs.h>
 
@@ -45,7 +44,7 @@ public:
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 	
 	virtual ~SWLD();
-	virtual SWKey *CreateKey() { return new StrKey(); }
+	virtual SWKey *CreateKey();
 
 	/** Sets/gets module KeyText, getting from saved text if key is persistent
 	*

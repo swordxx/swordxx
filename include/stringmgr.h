@@ -24,7 +24,7 @@
 #ifndef STRINGMGR_H
 #define STRINGMGR_H
 
-#include <swbuf.h>
+#include <defs.h>
 
 SWORD_NAMESPACE_START
 

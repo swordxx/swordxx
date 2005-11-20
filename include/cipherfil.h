@@ -22,9 +22,10 @@
 #define CIPHERFIL_H
 
 #include <swfilter.h>
-#include <swcipher.h>
 
 SWORD_NAMESPACE_START
+
+class SWCipher;
 
 class SWDLLEXPORT CipherFilter:public SWFilter {
 	SWCipher *cipher;

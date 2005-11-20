@@ -1,15 +1,16 @@
 #!/bin/sh
 
 OPTIONS="--prefix=/usr $OPTIONS"
+OPTIONS="--disable-shared $OPTIONS"
 OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--sysconfdir=/etc $OPTIONS"
-OPTIONS="--with-lucene $OPTIONS"
 OPTIONS="--with-icu $OPTIONS"
+#OPTIONS="--with-vcl $OPTIONS"
+OPTIONS="--enable-debug $OPTIONS"
+#OPTIONS="--enable-profile $OPTIONS"
+OPTIONS="--with-lucene $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
 #OPTIONS="--enable-tests $OPTIONS"
-#OPTIONS="--enable-profile $OPTIONS"
-OPTIONS="--enable-debug $OPTIONS"
-OPTIONS="--disable-shared $OPTIONS"
 OPTIONS="--disable-utilities $OPTIONS"
 
 

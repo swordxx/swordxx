@@ -8,15 +8,17 @@
 #ifndef RAWVERSE_H
 #define RAWVERSE_H
 
-#include <filemgr.h>
-#include <fcntl.h>
 
 #include <defs.h>
-#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
+class FileDesc;
+class SWBuf;
+
 class SWDLLEXPORT RawVerse {
+
+
 	static int instance;		// number of instantiated RawVerse objects or derivitives
 protected:
 	FileDesc *idxfp[2];

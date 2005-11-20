@@ -23,6 +23,7 @@
 
 #include <swfilter.h>
 #include <stack>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

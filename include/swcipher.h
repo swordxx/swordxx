@@ -22,7 +22,7 @@
 #ifndef SWCIPHER_H
 #define SWCIPHER_H
 
-#include "sapphire.h"
+#include <sapphire.h>
 
 #include <defs.h>
 

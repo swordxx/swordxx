@@ -13,6 +13,7 @@
 #include <swlog.h>
 #include <versekey.h>
 #include <localemgr.h>
+#include <swlocale.h>
 #include <roman.h>
 
 SWORD_NAMESPACE_START

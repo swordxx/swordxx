@@ -10,6 +10,9 @@
 #include <rawgenbook.h>
 #include <rawstr.h>
 #include <utilstr.h>
+#include <filemgr.h>
+#include <sysdata.h>
+#include <treekeyidx.h>
 
 SWORD_NAMESPACE_START
 
@@ -56,6 +59,11 @@ RawGenBook::~RawGenBook() {
 	if (path)
 		delete [] path;
 
+}
+
+
+bool RawGenBook::isWritable() {
+	return ((bdtfd->getFd() > 0) && ((bdtfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

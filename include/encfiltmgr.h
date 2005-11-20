@@ -26,6 +26,8 @@
 
 SWORD_NAMESPACE_START
 
+class SWFilter;
+
 /** This class is like a normal SWMgr,
   * but you can additonally specify which encoding
   * you want to use.

@@ -4,6 +4,7 @@
  */
 
 #include <swld.h>
+#include <strkey.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,6 +34,9 @@ SWLD::~SWLD()
 	if (entkeytxt)
 		delete [] entkeytxt;
 }
+
+
+SWKey *SWLD::CreateKey() { return new StrKey(); }
 
 
 /******************************************************************************

@@ -24,12 +24,13 @@
 #define RAWTEXT_H
 
 #include <rawverse.h>
-#include <rawstr.h>
 #include <swtext.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+
+class RawStr;
 
 class SWDLLEXPORT RawText : public SWText, public RawVerse {
 
@@ -50,7 +51,7 @@ public:
 	virtual bool hasSearchFramework() { return true; }
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
 	// write interface ----------------------------
-	virtual bool isWritable() { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR)); }
+	virtual bool isWritable();
 	static char createModule(const char *path) { return RawVerse::createModule(path); }
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry

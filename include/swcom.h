@@ -24,18 +24,19 @@
 #define SWCOM_H
 
 #include <swmodule.h>
-#include <versekey.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
+class VerseKey;
+class SWKey;
+
   /** The basis for all commentary modules
   */
 class SWDLLEXPORT SWCom : public SWModule {
 
-	// for conversion if we have been set with a different internal key type
-	mutable VerseKey tmpVK;
+	mutable VerseKey *tmpVK;
 
 protected:
 	VerseKey &getVerseKey() const;
@@ -51,7 +52,7 @@ public:
 			SWTextMarkup mark = FMT_UNKNOWN, const char* ilang = 0);
 
 	virtual ~SWCom();
-	virtual SWKey *CreateKey() { return new VerseKey(); }
+	virtual SWKey *CreateKey();
 
 	virtual long Index() const;
 	virtual long Index(long iindex);

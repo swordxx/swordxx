@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <thmlplain.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

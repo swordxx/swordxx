@@ -6,6 +6,8 @@
 
 #include <stdlib.h>
 #include <cipherfil.h>
+#include <swcipher.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

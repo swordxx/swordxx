@@ -32,6 +32,7 @@
 
 #include <swmgr.h>
 #include <rawtext.h>
+#include <filemgr.h>
 #include <rawgenbook.h>
 #include <rawcom.h>
 #include <hrefcom.h>
@@ -72,6 +73,8 @@
 #include <utf8hebrewpoints.h>
 #include <greeklexattribs.h>
 #include <swfiltermgr.h>
+#include <swcipher.h>
+#include <swoptfilter.h>
 
 #include <swlog.h>
 
@@ -110,7 +113,7 @@ const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif  
 
 void SWMgr::init() {
-	SWFilter *tmpFilter = 0;
+	SWOptionFilter *tmpFilter = 0;
 	configPath  = 0;
 	prefixPath  = 0;
 	configType  = 0;
@@ -123,105 +126,105 @@ void SWMgr::init() {
 	optionFilters.clear();
 	cleanupFilters.clear();
 	tmpFilter = new ThMLVariants();
-	optionFilters.insert(FilterMap::value_type("ThMLVariants", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLVariants", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GBFStrongs();
-	optionFilters.insert(FilterMap::value_type("GBFStrongs", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("GBFStrongs", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GBFFootnotes();
-	optionFilters.insert(FilterMap::value_type("GBFFootnotes", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("GBFFootnotes", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GBFRedLetterWords();
-	optionFilters.insert(FilterMap::value_type("GBFRedLetterWords", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("GBFRedLetterWords", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GBFMorph();
-	optionFilters.insert(FilterMap::value_type("GBFMorph", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("GBFMorph", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GBFHeadings();
-	optionFilters.insert(FilterMap::value_type("GBFHeadings", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("GBFHeadings", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISHeadings();
-	optionFilters.insert(FilterMap::value_type("OSISHeadings", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISHeadings", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISStrongs();
-	optionFilters.insert(FilterMap::value_type("OSISStrongs", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISStrongs", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISMorph();
-	optionFilters.insert(FilterMap::value_type("OSISMorph", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISMorph", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISLemma();
-	optionFilters.insert(FilterMap::value_type("OSISLemma", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISLemma", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISFootnotes();
-	optionFilters.insert(FilterMap::value_type("OSISFootnotes", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISFootnotes", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISScripref();
-	optionFilters.insert(FilterMap::value_type("OSISScripref", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISScripref", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new OSISRedLetterWords();
-	optionFilters.insert(FilterMap::value_type("OSISRedLetterWords", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("OSISRedLetterWords", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLStrongs();
-	optionFilters.insert(FilterMap::value_type("ThMLStrongs", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLStrongs", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLFootnotes();
-	optionFilters.insert(FilterMap::value_type("ThMLFootnotes", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLFootnotes", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLMorph();
-	optionFilters.insert(FilterMap::value_type("ThMLMorph", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLMorph", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLHeadings();
-	optionFilters.insert(FilterMap::value_type("ThMLHeadings", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLHeadings", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLLemma();
-	optionFilters.insert(FilterMap::value_type("ThMLLemma", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLLemma", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLScripref();
-	optionFilters.insert(FilterMap::value_type("ThMLScripref", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("ThMLScripref", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new UTF8GreekAccents();
-	optionFilters.insert(FilterMap::value_type("UTF8GreekAccents", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("UTF8GreekAccents", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new UTF8HebrewPoints();
-	optionFilters.insert(FilterMap::value_type("UTF8HebrewPoints", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("UTF8HebrewPoints", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new UTF8Cantillation();
-	optionFilters.insert(FilterMap::value_type("UTF8Cantillation", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("UTF8Cantillation", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new GreekLexAttribs();
-	optionFilters.insert(FilterMap::value_type("GreekLexAttribs", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("GreekLexAttribs", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new PapyriPlain();
-	optionFilters.insert(FilterMap::value_type("PapyriPlain", tmpFilter));
+	optionFilters.insert(OptionFilterMap::value_type("PapyriPlain", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
 #ifdef _ICU_
 	transliterator = new UTF8Transliterator();
-	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", transliterator));
+	optionFilters.insert(OptionFilterMap::value_type("UTF8Transliterator", transliterator));
 	options.push_back(transliterator->getOptionName());
 	cleanupFilters.push_back(transliterator);
 #endif
@@ -835,7 +838,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 
 void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
 	for (;start != end; start++) {
-		FilterMap::iterator it;
+		OptionFilterMap::iterator it;
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
 			module->AddOptionFilter((*it).second);	// add filter to module and option as a valid option
@@ -859,7 +862,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
  {
 	char retVal = -1;
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
 			if (!stricmp(filterName, (*it).second->getOptionName()))
 				retVal = it->second->processText(text, key, module);	// add filter to module
@@ -872,7 +875,7 @@ char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, co
 void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
 {
 	for (;start != end; start++) {
-		FilterMap::iterator it;
+		OptionFilterMap::iterator it;
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
 			module->AddOptionFilter((*it).second);	// add filter to module
@@ -888,7 +891,7 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
 {
 	for (;start != end; start++) {
-		FilterMap::iterator it;
+		OptionFilterMap::iterator it;
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
 			module->AddStripFilter((*it).second);	// add filter to module
@@ -1124,7 +1127,7 @@ char SWMgr::AddModToConfig(FileDesc *conffd, const char *fname)
 
 void SWMgr::setGlobalOption(const char *option, const char *value)
 {
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
 			if (!stricmp(option, (*it).second->getOptionName()))
 				(*it).second->setOptionValue(value);
@@ -1135,7 +1138,7 @@ void SWMgr::setGlobalOption(const char *option, const char *value)
 
 const char *SWMgr::getGlobalOption(const char *option)
 {
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
 			if (!stricmp(option, (*it).second->getOptionName()))
 				return (*it).second->getOptionValue();
@@ -1147,7 +1150,7 @@ const char *SWMgr::getGlobalOption(const char *option)
 
 const char *SWMgr::getGlobalOptionTip(const char *option)
 {
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
 			if (!stricmp(option, (*it).second->getOptionName()))
 				return (*it).second->getOptionTip();
@@ -1166,7 +1169,7 @@ StringList SWMgr::getGlobalOptions()
 StringList SWMgr::getGlobalOptionValues(const char *option)
 {
 	StringList options;
-	for (FilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
+	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
 			if (!stricmp(option, (*it).second->getOptionName())) {
 				options = (*it).second->getOptionValues();

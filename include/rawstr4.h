@@ -25,11 +25,12 @@
 #ifndef RAWSTR4_H
 #define RAWSTR4_H
 
-#include <filemgr.h>
-#include <swbuf.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+
+class FileDesc;
+class SWBuf;
 
 class SWDLLEXPORT RawStr4 {
 	static int instance;		// number of instantiated RawStr4 objects or derivitives

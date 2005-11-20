@@ -24,9 +24,7 @@
 #define ZTEXT_H
 
 #include <zverse.h>
-#include <rawstr.h>
 #include <swtext.h>
-//#include <swcomprs.h>
 
 #include <defs.h>
 
@@ -66,7 +64,7 @@ public:
 	virtual void decrement(int steps = 1) { increment(-steps); }
 
   // write interface ----------------------------
-	virtual bool isWritable() { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR)); }
+	virtual bool isWritable();
 	static char createModule(const char *path, int blockBound) {
 		return zVerse::createModule(path, blockBound);
 	}

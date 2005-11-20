@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <latin1utf16.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

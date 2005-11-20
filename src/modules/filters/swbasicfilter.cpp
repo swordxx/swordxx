@@ -27,8 +27,19 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <utilstr.h>
+#include <stringmgr.h>
+#include <map>
 
 SWORD_NAMESPACE_START
+
+typedef std::map<SWBuf, SWBuf> DualStringMap;
+
+// I hate bridge patterns but this isolates std::map from a ton of filters
+class SWBasicFilter::Private {
+public:
+	DualStringMap tokenSubMap;
+	DualStringMap escSubMap;
+};
 
 const char SWBasicFilter::INITIALIZE = 1;
 const char SWBasicFilter::PRECHAR    = 2;
@@ -36,6 +47,9 @@ const char SWBasicFilter::POSTCHAR   = 4;
 const char SWBasicFilter::FINALIZE   = 8;
 
 SWBasicFilter::SWBasicFilter() {
+
+	p = new Private;
+
 	processStages = 0;
 	tokenStart    = 0;
 	tokenEnd      = 0;
@@ -51,6 +65,23 @@ SWBasicFilter::SWBasicFilter() {
 	tokenCaseSensitive     = false;
 	passThruUnknownToken   = false;
 	passThruUnknownEsc     = false;
+}
+
+
+SWBasicFilter::~SWBasicFilter() {
+	if (tokenStart)
+		delete [] tokenStart;
+
+	if (tokenEnd)
+		delete [] tokenEnd;
+
+	if (escStart)
+		delete [] escStart;
+
+	if (escEnd)
+		delete [] escEnd;
+
+	delete p;
 }
 
 
@@ -74,37 +105,22 @@ void SWBasicFilter::setEscapeStringCaseSensitive(bool val) {
 }
 
 
-SWBasicFilter::~SWBasicFilter() {
-	if (tokenStart)
-		delete [] tokenStart;
-
-	if (tokenEnd)
-		delete [] tokenEnd;
-
-	if (escStart)
-		delete [] escStart;
-
-	if (escEnd)
-		delete [] escEnd;
-}
-
-
 void SWBasicFilter::addTokenSubstitute(const char *findString, const char *replaceString) {
 	char *buf = 0;
 
 	if (!tokenCaseSensitive) {
 		stdstr(&buf, findString);
 		toupperstr(buf);
-		tokenSubMap[buf] = replaceString;
+		p->tokenSubMap[buf] = replaceString;
 		delete [] buf;
 	}
-	else tokenSubMap[findString] = replaceString;
+	else p->tokenSubMap[findString] = replaceString;
 }
 
 
 void SWBasicFilter::removeTokenSubstitute(const char *findString) {
-	if (tokenSubMap.find(findString) != tokenSubMap.end()) {
-		tokenSubMap.erase( tokenSubMap.find(findString) );
+	if (p->tokenSubMap.find(findString) != p->tokenSubMap.end()) {
+		p->tokenSubMap.erase( p->tokenSubMap.find(findString) );
 	}
 }
 
@@ -114,15 +130,15 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 	if (!escStringCaseSensitive) {
 		stdstr(&buf, findString);
 		toupperstr(buf);
-		escSubMap.insert(DualStringMap::value_type(buf, replaceString));
+		p->escSubMap.insert(DualStringMap::value_type(buf, replaceString));
 		delete [] buf;
 	}
-	else escSubMap.insert(DualStringMap::value_type(findString, replaceString));
+	else p->escSubMap.insert(DualStringMap::value_type(findString, replaceString));
 }
 
 void SWBasicFilter::removeEscapeStringSubstitute(const char *findString) {
-	if (escSubMap.find(findString) != escSubMap.end()) {
-		escSubMap.erase( escSubMap.find(findString) );
+	if (p->escSubMap.find(findString) != p->escSubMap.end()) {
+		p->escSubMap.erase( p->escSubMap.find(findString) );
 	}
 }
 
@@ -133,12 +149,12 @@ bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 	        char *tmp = 0;
 		stdstr(&tmp, token);
 		toupperstr(tmp);
-		it = tokenSubMap.find(tmp);
+		it = p->tokenSubMap.find(tmp);
 		delete [] tmp;
 	} else
-	it = tokenSubMap.find(token);
+	it = p->tokenSubMap.find(token);
 
-	if (it != tokenSubMap.end()) {
+	if (it != p->tokenSubMap.end()) {
 		buf += it->second.c_str();
 		return true;
 	}
@@ -152,12 +168,12 @@ bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 	        char *tmp = 0;
 		stdstr(&tmp, escString);
 		toupperstr(tmp);
-		it = escSubMap.find(tmp);
+		it = p->escSubMap.find(tmp);
 		delete [] tmp;
 	} else 
-	it = escSubMap.find(escString);
+	it = p->escSubMap.find(escString);
 
-	if (it != escSubMap.end()) {
+	if (it != p->escSubMap.end()) {
 		buf += it->second.c_str();
 		return true;
 	}

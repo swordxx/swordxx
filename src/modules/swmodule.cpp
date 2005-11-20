@@ -11,6 +11,7 @@
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
 #include <treekeyidx.h>	// KLUDGE for Search
+#include <swoptfilter.h>
 #include <filemgr.h>
 #ifndef _MSC_VER
 #include <iostream>
@@ -26,6 +27,8 @@ using namespace lucene::queryParser;
 SWORD_NAMESPACE_START
 
 SWDisplay SWModule::rawdisp;
+
+typedef std::list<SWBuf> StringList;
 
 /******************************************************************************
  * SWModule Constructor - Initializes data for instance of SWModule
@@ -59,7 +62,7 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
 	stripFilters = new FilterList();
 	rawFilters = new FilterList();
 	renderFilters = new FilterList();
-	optionFilters = new FilterList();
+	optionFilters = new OptionFilterList();
 	encodingFilters = new FilterList();
 	skipConsecutiveLinks = true;
 	procEntAttr = true;
@@ -886,7 +889,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	// turn all filters to default values
 	StringList filterSettings;
-	for (FilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
+	for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
 		filterSettings.push_back((*filter)->getOptionValue());
 		(*filter)->setOptionValue(*((*filter)->getOptionValues().begin()));
 
@@ -1157,7 +1160,7 @@ fflush(stdout);
 
 	// reset option filters back to original values
 	StringList::iterator origVal = filterSettings.begin();
-	for (FilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
+	for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
 		(*filter)->setOptionValue(*origVal++);
 	}
 
@@ -1167,6 +1170,29 @@ fflush(stdout);
 #endif
 }
 
+/** OptionFilterBuffer a text buffer
+ * @param filters the FilterList of filters to iterate
+ * @param buf the buffer to filter
+ * @param key key location from where this buffer was extracted
+ */
+void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, SWKey *key) {
+	OptionFilterList::iterator it;
+	for (it = filters->begin(); it != filters->end(); it++) {
+		(*it)->processText(buf, key, this);
+	}
+}
+
+/** FilterBuffer a text buffer
+ * @param filters the FilterList of filters to iterate
+ * @param buf the buffer to filter
+ * @param key key location from where this buffer was extracted
+ */
+void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
+	FilterList::iterator it;
+	for (it = filters->begin(); it != filters->end(); it++) {
+		(*it)->processText(buf, key, this);
+	}
+}
 
 
 SWORD_NAMESPACE_END

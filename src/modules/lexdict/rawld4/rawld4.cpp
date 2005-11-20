@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+#include <filemgr.h>
 #include <utilstr.h>
 #include <rawstr4.h>
 #include <rawld4.h>
@@ -34,6 +35,11 @@ RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, SWDispla
 
 RawLD4::~RawLD4()
 {
+}
+
+
+bool RawLD4::isWritable() {
+	return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

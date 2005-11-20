@@ -24,9 +24,11 @@
 #define SWSEARCHABLE_H
 
 #include <defs.h>
-#include <listkey.h>
 
 SWORD_NAMESPACE_START
+
+class ListKey;
+class SWKey;
 
 /** used to provide an interface for objects that be searched.
  */

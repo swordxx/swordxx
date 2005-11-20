@@ -10,6 +10,14 @@
 SWORD_NAMESPACE_START
 
 
+SWOptionFilter::SWOptionFilter() {
+	static StringList empty;
+	static char *empty2 = "";
+	optName   = empty2;
+	optTip    = empty2;
+	optValues = &empty;
+}
+
 SWOptionFilter::SWOptionFilter(const char *oName, const char *oTip, const StringList *oValues) {
 	optName   = oName;
 	optTip    = oTip;

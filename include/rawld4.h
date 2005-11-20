@@ -48,9 +48,7 @@ public:
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
 	// write interface ----------------------------
-	virtual bool isWritable() {
-		return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
-	}
+	virtual bool isWritable();
 	static char createModule(const char *path) { return RawStr4::createModule(path); }
 
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry

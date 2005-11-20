@@ -26,7 +26,7 @@
 #define SWBASICFILTER_H
 
 #include <swfilter.h>
-#include <map>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -56,6 +56,8 @@ public:
  */
 class SWDLLEXPORT SWBasicFilter : public SWFilter {
 
+class Private;
+
 	char *tokenStart;
 	char *tokenEnd;
 	char *escStart;
@@ -70,6 +72,8 @@ class SWDLLEXPORT SWBasicFilter : public SWFilter {
 	bool passThruUnknownEsc;
 	char processStages;
 
+
+	Private *p;
 public:
 
 	SWBasicFilter();
@@ -88,10 +92,6 @@ protected:
 	static const char POSTCHAR;	// flag for indicating processing at bottom in char loop
 	static const char FINALIZE;	// flag for indicating processing after char loop
 
-
-	typedef std::map<SWBuf, SWBuf> DualStringMap;
-	DualStringMap tokenSubMap;
-	DualStringMap escSubMap;
 
 	/** Sets the beginning of escape sequence (by default "&").*/
 	void setEscapeStart(const char *escStart);

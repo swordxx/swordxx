@@ -11,6 +11,8 @@
 #include <utilstr.h>
 #include <rawverse.h>
 #include <rawtext.h>
+#include <filemgr.h>
+#include <versekey.h>
 
 #include <regex.h>	// GNU
 #include <map>
@@ -75,6 +77,11 @@ RawText::~RawText() {
 	if (fastSearch[1])
 		delete fastSearch[1];
 #endif
+}
+
+
+bool RawText::isWritable() {
+	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

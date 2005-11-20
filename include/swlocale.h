@@ -23,15 +23,12 @@
 #ifndef SWLOCALE_H
 #define SWLOCALE_H
 
-#include <map>
-#include <swconfig.h>
-#include <versekey.h>
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
+class SWConfig;
 static const int ENDOFABBREVS = -2;
-typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
 
 /** SWLocale is used for the localisation of the booknames
 * The SWLocale is a class which holds the information of one language.
@@ -40,8 +37,13 @@ typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
 * Another functions useful for frontend developers is @see getDescription.
 */
 class SWDLLEXPORT SWLocale {
-	LookupMap lookupTable;
+
+class Private;
+
+	Private *p;
+
 	SWConfig *localeSource;
+
 	char *name;
 	char *description;
 	char *encoding;

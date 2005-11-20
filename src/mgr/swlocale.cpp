@@ -22,10 +22,23 @@
 
 #include <swlocale.h>
 #include <utilstr.h>
+#include <map>
+#include <swconfig.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
+typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
+
+// I have bridge patterns, but this hides swconfig and map from lots o stuff
+class SWLocale::Private {
+public:
+	LookupMap lookupTable;
+};
+
+
 SWLocale::SWLocale(const char * ifilename) {
+	p = new Private;
 	ConfigEntMap::iterator confEntry;
 
 	name         = 0;
@@ -72,19 +85,20 @@ SWLocale::~SWLocale() {
 		delete [] BMAX;
 		delete [] books;
 	}
+	delete p;
 }
 
 
 const char *SWLocale::translate(const char *text) {
 	LookupMap::iterator entry;
 
-	entry = lookupTable.find(text);
+	entry = p->lookupTable.find(text);
 
-	if (entry == lookupTable.end()) {
+	if (entry == p->lookupTable.end()) {
 		ConfigEntMap::iterator confEntry;
 		confEntry = localeSource->Sections["Text"].find(text);
 		if (confEntry == localeSource->Sections["Text"].end())
-			lookupTable.insert(LookupMap::value_type(text, text));
+			p->lookupTable.insert(LookupMap::value_type(text, text));
 		else {//valid value found
 			/*
 			- If Encoding==Latin1 and we have a StringHelper, convert to UTF-8
@@ -94,21 +108,21 @@ const char *SWLocale::translate(const char *text) {
 			*/
 /*			if (StringHelper::getSystemStringHelper()) {
 				if (!strcmp(encoding, "UTF-8")) {
-					lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
+					p->lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
 				}
 				else { //latin1 expected, convert to UTF-8
 					SWBuf t((*confEntry).second.c_str());
 					t = StringHelper::getSystemStringHelper()->latin2unicode( t );
 					
-					lookupTable.insert(LookupMap::value_type(text, t.c_str()));
+					p->lookupTable.insert(LookupMap::value_type(text, t.c_str()));
 				}
 			}
 			else { //no stringhelper, just insert. Nothing we can do*/
-				lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
+				p->lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
 // 			}
 			
 		}
-		entry = lookupTable.find(text);
+		entry = p->lookupTable.find(text);
 	}
 	return (*entry).second.c_str();
 }

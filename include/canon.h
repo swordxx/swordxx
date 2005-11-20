@@ -24,9 +24,6 @@
  *		and chapmax
  */
 
-#include <defs.h>
-//SWORD_NAMESPACE_START
-
 struct sbook
   VerseKey::otbooks[] = {
   {"Genesis", "Gen", 50},
@@ -698,4 +695,3 @@ int
 , {sizeof (VerseKey::ntbks) / sizeof(long), sizeof (VerseKey::ntcps) / sizeof(long)}
 };
 
-//SWORD_NAMESPACE_END

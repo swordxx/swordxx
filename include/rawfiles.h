@@ -49,9 +49,7 @@ public:
 	/** Is the module writable? :)
 	* @return yes or no
 	*/
-	virtual bool isWritable() {
-		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
-	}
+	virtual bool isWritable();
 
 	/** Creates a new module
 	* @param path The first parameter is path of the new module

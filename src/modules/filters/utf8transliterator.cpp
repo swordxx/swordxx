@@ -13,6 +13,7 @@
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
 #include <utf8transliterator.h>
+#include <swmodule.h>
 
 #ifndef _ICUSWORD_
 #include "unicode/resbund.h"

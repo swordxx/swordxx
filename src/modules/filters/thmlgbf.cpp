@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <thmlgbf.h>
 #include <utilstr.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

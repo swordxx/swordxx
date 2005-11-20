@@ -16,6 +16,9 @@
 #include <sysdata.h>
 #include <entriesblk.h>
 #include <swlog.h>
+#include <stringmgr.h>
+#include <filemgr.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

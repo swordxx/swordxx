@@ -5,12 +5,13 @@
 #include <swbuf.h>
 #include <map>
 #include <set>
-#include <ftptrans.h>
 
 SWORD_NAMESPACE_START
 
 class SWMgr;
 class SWConfig;
+class FTPTransport;
+class StatusReporter;
 
 /** TODO: document
 */
@@ -66,7 +67,7 @@ public:
 	virtual int refreshRemoteSource(InstallSource *is);
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
 	void setFTPPassive(bool passive) { this->passive = passive; }
-	void terminate() { if (transport) transport->terminate(); }
+	void terminate();
 
 	/************************************************************************
 	 * isDefaultModule - allows an installation to provide a set of modules

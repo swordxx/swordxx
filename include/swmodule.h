@@ -25,11 +25,8 @@
 #define SWMODULE_H
 
 #include <swdisp.h>
-#include <swkey.h>
 #include <listkey.h>
-#include <swfilter.h>
 #include <swconfig.h>
-#include <swbuf.h>
 
 #include <swcacher.h>
 #include <swsearchable.h>
@@ -37,9 +34,11 @@
 #include <list>
 
 #include <defs.h>
-#include <multimapwdef.h>
 
 SWORD_NAMESPACE_START
+
+class SWOptionFilter;
+class SWFilter;
 
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
@@ -57,6 +56,7 @@ SWORD_NAMESPACE_START
 
 
 typedef std::list < SWFilter * >FilterList;
+typedef std::list < SWOptionFilter * >OptionFilterList;
 typedef std::map < SWBuf, SWBuf, std::less < SWBuf > > AttributeValue;
 typedef std::map < SWBuf, AttributeValue, std::less < SWBuf > > AttributeList;
 typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList;
@@ -125,7 +125,7 @@ protected:
 	FilterList *renderFilters;
 
 	/** filters to be executed to change markup to user prefs */
-	FilterList *optionFilters;
+	OptionFilterList *optionFilters;
 
 	/** filters to be executed to decode text for display */
 	FilterList *encodingFilters;
@@ -435,17 +435,19 @@ public:
 	 */
 	virtual void setPosition(SW_POSITION pos);
 
+	/** OptionFilterBuffer a text buffer
+	 * @param filters the FilterList of filters to iterate
+	 * @param buf the buffer to filter
+	 * @param key key location from where this buffer was extracted
+	 */
+	virtual void filterBuffer(OptionFilterList *filters, SWBuf &buf, SWKey *key);
+
 	/** FilterBuffer a text buffer
 	 * @param filters the FilterList of filters to iterate
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
-		FilterList::iterator it;
-		for (it = filters->begin(); it != filters->end(); it++) {
-			(*it)->processText(buf, key, this);
-		}
-	}
+	virtual void filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key);
 
 	/** Adds a RenderFilter to this module's renderFilters queue.
 	 *	Render Filters are called when the module is asked to produce
@@ -576,7 +578,7 @@ public:
 	 * @param newfilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &AddOptionFilter(SWFilter *newfilter) {
+	virtual SWModule &AddOptionFilter(SWOptionFilter *newfilter) {
 		optionFilters->push_back(newfilter);
 		return *this;
 	}

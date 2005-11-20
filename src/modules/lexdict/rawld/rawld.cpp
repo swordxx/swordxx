@@ -11,6 +11,7 @@
 #include <utilstr.h>
 #include <rawstr.h>
 #include <rawld.h>
+#include <filemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -34,6 +35,11 @@ RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay 
 
 RawLD::~RawLD()
 {
+}
+
+
+bool RawLD::isWritable() {
+	 return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

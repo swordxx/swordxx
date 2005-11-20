@@ -24,19 +24,19 @@
 #define SWTEXT_H
 
 #include <swmodule.h>
-#include <versekey.h>
-#include <listkey.h>
 
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+
+class VerseKey;
 
 /** The basis for all text modules
  */
 class SWDLLEXPORT SWText : public SWModule {
 
 	// for conversion if we have been set with a different internal key type
-	mutable VerseKey tmpVK;
+	mutable VerseKey *tmpVK;
 
 protected:
 	VerseKey &getVerseKey() const;

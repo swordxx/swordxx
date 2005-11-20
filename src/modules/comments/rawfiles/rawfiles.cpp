@@ -12,6 +12,7 @@
 #include <rawverse.h>
 #include <rawfiles.h>
 #include <filemgr.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -34,6 +35,14 @@ RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDi
 
 RawFiles::~RawFiles()
 {
+}
+
+
+/** Is the module writable? :)
+* @return yes or no
+*/
+bool RawFiles::isWritable() {
+	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

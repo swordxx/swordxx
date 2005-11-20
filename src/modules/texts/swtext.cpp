@@ -5,6 +5,7 @@
 #include <swtext.h>
 #include <listkey.h>
 #include <localemgr.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -16,7 +17,8 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang), tmpVK() {
+SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang) {
+	tmpVK = new VerseKey();
 	delete key;
 	key = CreateKey();
 	skipConsecutiveLinks = false;
@@ -28,6 +30,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWT
  */
 
 SWText::~SWText() {
+	delete tmpVK;
 }
 
 
@@ -99,9 +102,9 @@ VerseKey &SWText::getVerseKey() const {
 		}
 	}
 	if (!key) {
-		tmpVK.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-		tmpVK = *(this->key);
-		return tmpVK;
+		tmpVK->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+		(*tmpVK) = *(this->key);
+		return (*tmpVK);
 	}
 	else	return *key;
 }

@@ -101,6 +101,8 @@ InstallMgr::~InstallMgr() {
 }
 
 
+void InstallMgr::terminate() { if (transport) transport->terminate(); }
+
 int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 	SectionMap::iterator module;
 	ConfigEntMap::iterator fileBegin;

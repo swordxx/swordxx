@@ -26,7 +26,6 @@
 #include <swkey.h>
 #include <swmacs.h>
 #include <listkey.h>
-#include <ctype.h>
 
 #include <defs.h>
 
@@ -72,7 +71,8 @@ class SWLocale;
  * Class VerseKey
  * The SWKey implementation used for verse based modules like Bibles or commentaries.
  */
-class SWDLLEXPORT VerseKey:public SWKey {
+class SWDLLEXPORT VerseKey : public SWKey {
+
 	class LocaleCache {
 	public:
 		char *name;
@@ -350,7 +350,7 @@ public:
 	* @return if unchanged -> value of autonorm,
 	* if changed -> previous value of autonorm
 	*/
-	virtual char AutoNormalize(char iautonorm = MAXPOS (char));
+	virtual char AutoNormalize(char iautonorm = MAXPOS(char));
 	
 	/** Sets/gets flag that tells VerseKey to include
 	* chapter/book/testament/module headings
@@ -360,7 +360,7 @@ public:
 	* @return if unchanged -> value of headings,
 	* if changed -> previous value of headings
 	*/
-	virtual char Headings(char iheadings = MAXPOS (char));
+	virtual char Headings(char iheadings = MAXPOS(char));
 	
 	virtual long NewIndex() const;
 	

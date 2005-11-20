@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <swkey.h>
 #include <listkey.h>
+#include <string.h>
 
 SWORD_NAMESPACE_START
 

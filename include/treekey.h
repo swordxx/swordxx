@@ -24,7 +24,6 @@
 #define TREEKEY_H
 
 #include <swkey.h>
-#include <swmacs.h>
 
 #include <defs.h>
 

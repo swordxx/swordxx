@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <rtfhtml.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

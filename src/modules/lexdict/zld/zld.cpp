@@ -11,6 +11,7 @@
 #include <utilstr.h>
 #include <zstr.h>
 #include <zld.h>
+#include <filemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -34,6 +35,11 @@ zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCoun
 
 zLD::~zLD() {
 
+}
+
+
+bool zLD::isWritable() {
+	return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

@@ -11,6 +11,7 @@
 #include <utilstr.h>
 
 #include <utf8nfkd.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 

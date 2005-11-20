@@ -30,7 +30,7 @@
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT RawCom:public RawVerse, public SWCom {
+class SWDLLEXPORT RawCom : public RawVerse, public SWCom {
 
 
 public:
@@ -47,9 +47,7 @@ public:
 	virtual void decrement(int steps) { increment(-steps); }
 
 	// write interface ----------------------------
-	virtual bool isWritable() {
-		return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
-	}
+	virtual bool isWritable();
 	static char createModule(const char *path) { return RawVerse::createModule(path); }
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry

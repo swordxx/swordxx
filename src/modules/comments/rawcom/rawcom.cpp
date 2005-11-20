@@ -8,8 +8,10 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+#include <filemgr.h>
 #include <rawverse.h>
 #include <rawcom.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -36,6 +38,9 @@ RawCom::~RawCom()
 }
 
 
+bool RawCom::isWritable() {
+	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
+}
 /******************************************************************************
  * RawCom::getRawEntry()	- Returns the correct verse when char * cast
  *					is requested
