@@ -1,4 +1,6 @@
 #include <swmgr.h>
+#include <swmodule.h>
+#include <swkey.h>
 #include <versekey.h>
 #include <iostream>
 #ifndef NO_SWORD_NAMESPACE

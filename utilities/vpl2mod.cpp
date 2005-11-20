@@ -14,6 +14,7 @@
 #include <rawtext.h>
 #include <iostream>
 #include <string>
+#include <versekey.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0

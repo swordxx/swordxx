@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <swmgr.h>
+#include <swmodule.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;

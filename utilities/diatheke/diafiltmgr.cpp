@@ -30,6 +30,7 @@
 #include <gbfrtf.h>
 #include <osisrtf.h>
 #include <osishtmlhref.h>
+#include <swmodule.h>
 #include <osisplain.h>
 #include <thmlosis.h>
 #include <gbfosis.h>

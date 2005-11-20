@@ -13,6 +13,7 @@
 #include <swbuf.h>
 #include <utilxml.h>
 #include <listkey.h>
+#include <versekey.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;

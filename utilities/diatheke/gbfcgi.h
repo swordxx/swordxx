@@ -20,9 +20,11 @@
 #include <swbasicfilter.h>
 #include <swbuf.h>
 #include <defs.h>
+#include <map>
 
 SWORD_NAMESPACE_START
 
+typedef std::map<SWBuf, SWBuf> DualStringMap;
 /** this filter converts GBF text to Diatheke/CGI format
  */
 class SWDLLEXPORT GBFCGI : public SWBasicFilter {

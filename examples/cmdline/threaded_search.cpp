@@ -3,6 +3,7 @@
 #include <swmgr.h>
 #include <regex.h> // GNU
 #include <listkey.h>
+#include <versekey.h>
 #include <iostream>
 
 #include <pthread.h>

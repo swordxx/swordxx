@@ -1,6 +1,7 @@
 #include <iostream>
 #include <rawstr.h>
 #include <swmgr.h>
+#include <filemgr.h>
 
 #ifndef __GNUC__
 #include <io.h>

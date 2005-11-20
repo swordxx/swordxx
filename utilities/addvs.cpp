@@ -11,6 +11,7 @@
 #endif
 
 #include <swmgr.h>
+#include <versekey.h>
 #include <rawtext.h>
 #include <iostream>
 

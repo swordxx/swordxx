@@ -9,6 +9,7 @@ using namespace std;
 
 #include <iostream>
 #include <rawtext.h>
+#include <versekey.h>
 
 
 #ifndef NO_SWORD_NAMESPACE

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>
+#include <versekey.h>
 #include <markupfiltmgr.h>
 #include <regex.h> // GNU
 #include <iostream>

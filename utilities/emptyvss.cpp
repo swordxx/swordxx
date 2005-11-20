@@ -1,4 +1,5 @@
 #include <swmgr.h>
+#include <swmodule.h>
 #include <versekey.h>
 #include <iostream>
 

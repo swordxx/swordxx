@@ -9,6 +9,8 @@
 #include <iostream>
 #include <list>
 #include <utilstr.h>
+#include <versekey.h>
+#include <swmodule.h>
 
 using std::list;
 using std::cout;

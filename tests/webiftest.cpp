@@ -13,6 +13,7 @@
 #include <thmlosis.h>
 #include <versekey.h>
 #include <swmgr.h>
+#include <swmodule.h>
 #include <markupfiltmgr.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;

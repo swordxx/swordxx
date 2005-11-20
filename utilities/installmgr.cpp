@@ -3,6 +3,7 @@
 #include <filemgr.h>
 #include <iostream>
 #include <string>
+#include <swmodule.h>
 
 using namespace sword;
 using std::cout;

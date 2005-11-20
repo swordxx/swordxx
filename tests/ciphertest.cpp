@@ -1,5 +1,6 @@
 #include <cipherfil.h>
 #include <filemgr.h>
+#include <swbuf.h>
 #include <iostream>
 
 using namespace sword;
