@@ -2,6 +2,8 @@
 #define WEBMGR_HPP
 
 #include <swmgr.h>
+#include <swmodule.h>
+#include <swfilter.h>
 #include <markupfiltmgr.h>
 #include <osiswordjs.h>
 #include <thmlwordjs.h>
@@ -59,7 +61,7 @@ public:
 			defaultHebParse = module;
 		}
 		if (module->getConfig().has("GlobalOptionFilter", "ThMLVariants")) {
-			FilterMap::iterator it = optionFilters.find("ThMLVariants");
+			OptionFilterMap::iterator it = optionFilters.find("ThMLVariants");
 			if (it != optionFilters.end()) {
 				module->AddOptionFilter((*it).second);	// add filter to module and option as a valid option
 			}
