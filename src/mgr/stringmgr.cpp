@@ -164,14 +164,7 @@ const bool StringMgr::supportsUnicode() const {
 		UChar *lowerStr = new UChar[max+10];
 		UChar *upperStr = new UChar[max+10];
 		
-		u_strFromUTF8  ( 
-			lowerStr, 
-			max+1,  //including the \0 end
-			0, 
-			buf,
-			max, 
-			&err
-		);
+		u_strFromUTF8(lowerStr, max+9, 0, buf, -1, &err);
 		if (err != U_ZERO_ERROR) {
 //			SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
 			delete [] lowerStr;
@@ -179,14 +172,7 @@ const bool StringMgr::supportsUnicode() const {
 			return ret;
 		}
 		
-		u_strToUpper(
-			upperStr, 
-			max+1, //for the \0 end
-			lowerStr, 
-			u_strlen(lowerStr),
-			0,
-			&err
-		);
+		u_strToUpper(upperStr, max+9, lowerStr, -1, 0, &err);
 		if (err != U_ZERO_ERROR) {
 //			SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
 			delete [] lowerStr;
@@ -194,14 +180,7 @@ const bool StringMgr::supportsUnicode() const {
 			return ret;
 		}
 
-		ret = u_strToUTF8  ( 
-			ret, 
-			max+1, //for the \0 end
-			0, 
-			upperStr, 
-			max, 
-			&err
-		);
+		ret = u_strToUTF8(ret, max+9, 0, upperStr, -1, &err);
 		
 		delete [] lowerStr;
 		delete [] upperStr;

@@ -2,6 +2,9 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
 19-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Fixed ICUStringMgr toUpper method
+
+19-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Cleaned up headers to remove unnecessary includes
 
 26-Oct-2005	Martin Gruner <mgruner@crosswire.org>
