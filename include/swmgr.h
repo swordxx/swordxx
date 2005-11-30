@@ -74,6 +74,9 @@ typedef std::list < SWBuf >StringList;
 typedef std::list < SWFilter* >FilterList;
 typedef std::list < SWOptionFilter* >OptionFilterList;
 
+class FileDesc;
+class SWOptionFilter;
+
 /** SWMgr exposes an installed module set
  *
  * SWMgr exposes an installed module set and can be asked to configure the desired
@@ -81,10 +84,6 @@ typedef std::list < SWOptionFilter* >OptionFilterList;
  *
  * @version $Id$
  */
-
-class FileDesc;
-class SWOptionFilter;
-
 class SWDLLEXPORT SWMgr {
 
 
