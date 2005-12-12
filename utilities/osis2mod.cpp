@@ -15,13 +15,22 @@
 #include <listkey.h>
 #include <versekey.h>
 
+#include <ztext.h>
+// #include <zld.h>
+// #include <zcom.h>
+#include <lzsscomprs.h>
+#include <zipcomprs.h>
+// #include <stdio.h>
+#include <cipherfil.h>
+
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
 
 using namespace std;
 
-RawText *module;
+SWText *module;
 VerseKey *currentVerse = 0;
 
 
@@ -328,22 +337,55 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	return false;
 }
 
-
-
-
 int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
 	if (argc < 3) {
-		fprintf(stderr, "\nusage: %s <output/path> <osisDoc> [0 - create module (default)|1 - augment]\n\n", argv[0]);
-		exit(-1);
+		fprintf(stderr, 
+"usage: osis2mod <output/path> <osisDoc> [createMod] [compressType [blockType [cipherKey]]]\n");
+		fprintf(stderr, "  createMod   : (default 0): 0 - create  1 - augment\n");
+		fprintf(stderr, "  compressType: (default 0): 0 - no compression  1 - LZSS    2 - Zip\n");
+		fprintf(stderr, "  blockType   : (default 4): 2 - verses  3 - chapters  4 - books\n");
 	}
+
+	int iType = 4;
+	int compType = 0;
+	string cipherKey = "";
+	SWCompress *compressor = 0;
+// 	SWModule *outModule    = 0;
+	
+
+	if (argc > 4) {
+		compType = atoi(argv[4]);
+		if (argc > 5) {
+			iType = atoi(argv[5]);
+			if (argc > 6) {
+				cipherKey = argv[6];
+			}
+		}
+	}
+
+	switch (compType) {	// these are deleted by zText
+		case 0: break;
+		case 1: compressor = new LZSSCompress(); break;
+		case 2: compressor = new ZipCompress(); break;
+	}
+
+// 	cerr << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
+// 	cerr << "";
+// 	exit(-3);
 
 
 	if ((argc<4)||(!strcmp(argv[3], "0"))) {	// == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
-		if (RawText::createModule(argv[1])) {
+		if ( compressor ){
+			if ( zText::createModule(argv[1], iType) ){
+				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[1]);
+				exit(-3);
+			}
+		}
+		else if (RawText::createModule(argv[1])) {
 			fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[1]);
 			exit(-3);
 		}
@@ -358,7 +400,19 @@ int main(int argc, char **argv) {
 
 	// Do some initialization stuff
 	SWBuf buffer;
-	module = new RawText(argv[1]);	// open our datapath with our RawText driver.
+
+	if (compressor){
+		module = new zText(argv[1], 0, 0, iType, compressor);
+	}
+	else{
+		module = new RawText(argv[1]);	// open our datapath with our RawText driver.
+	}
+
+	if (!cipherKey.empty()){
+		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
+		module->AddRawFilter(cipherFilter);
+	}
+
 	currentVerse = new VerseKey();
 	currentVerse->AutoNormalize(0);
 	currentVerse->Headings(1);	// turn on mod/testmnt/book/chap headings
