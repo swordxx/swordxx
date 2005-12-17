@@ -1,7 +1,7 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-19-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>
+28-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed ICUStringMgr toUpper method
 
 19-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>

@@ -342,10 +342,11 @@ int main(int argc, char **argv) {
 	// Let's test our command line arguments
 	if (argc < 3) {
 		fprintf(stderr, 
-"usage: osis2mod <output/path> <osisDoc> [createMod] [compressType [blockType [cipherKey]]]\n");
+"\nusage: osis2mod <output/path> <osisDoc> [createMod] [compressType [blockType [cipherKey]]]\n");
 		fprintf(stderr, "  createMod   : (default 0): 0 - create  1 - augment\n");
 		fprintf(stderr, "  compressType: (default 0): 0 - no compression  1 - LZSS    2 - Zip\n");
 		fprintf(stderr, "  blockType   : (default 4): 2 - verses  3 - chapters  4 - books\n");
+		exit(-1);
 	}
 
 	int iType = 4;

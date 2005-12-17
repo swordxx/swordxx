@@ -9,10 +9,8 @@
 #include <sysdata.h>
 
 #include <utilstr.h>
-#include <stringmgr.h>
 #include <rawverse.h>
 #include <rawtext.h>
-#include <rawstr.h>
 #include <filemgr.h>
 #include <versekey.h>
 

@@ -8,11 +8,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <ctype.h>
 #include <thmlosis.h>
 #include <swmodule.h>
 #include <swlog.h>
 #include <versekey.h>
-#include <stdarg.h>
 #include <utilstr.h>
 #include <utilxml.h>
 

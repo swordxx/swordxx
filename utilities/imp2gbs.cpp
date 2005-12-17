@@ -37,8 +37,8 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
     printTree(treeKey, target, level);
 }
 
-void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
-  char* tok = strtok(keybuffer, "/");
+void setKey(TreeKeyIdx * treeKey, char* keyBuffer) {
+  char* tok = strtok(keyBuffer, "/");
   while (tok) {
     bool foundkey = false;
     if (treeKey->hasChildren()) {
@@ -73,14 +73,14 @@ void setkey (TreeKeyIdx * treeKey, char* keybuffer) {
   }
 }
 
-int readline(FILE* infile, char* linebuffer) {
+int readline(FILE* infile, char* lineBuffer) {
   signed char c;
-  char* lbPtr = linebuffer;
+  char* lbPtr = lineBuffer;
   while ((c = fgetc(infile)) != EOF) {
     *lbPtr++ = c;
     if (c == 10) {
       *lbPtr = 0;
-      return (strlen(linebuffer));
+      return (strlen(lineBuffer));
     }
   }
   return 0;
@@ -91,9 +91,9 @@ int main(int argc, char **argv) {
   const char * helptext ="imp2gbs 1.0 General Book module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname]\n";
   
   signed long i = 0;
-  char* keybuffer = new char[2048];
-  char* entbuffer = new char[1048576];
-  char* linebuffer = new char[1048576];
+  char* keyBuffer = new char[2048];
+  char* entBuffer = new char[1048576];
+  char* lineBuffer = new char[1048576];
   char modname[16];
   
   if (argc > 2) {
@@ -125,37 +125,37 @@ int main(int argc, char **argv) {
   //DEBUG  TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
   treeKey = ((TreeKeyIdx *)((SWKey *)(*book)));
   
-  while (readline(infile, linebuffer)) {
-    if (!strncmp(linebuffer, "$$$", 3)) {
-      if (strlen(keybuffer) && strlen(entbuffer)) {
-	std::cout << keybuffer << std::endl;
+  while (readline(infile, lineBuffer)) {
+    if (!strncmp(lineBuffer, "$$$", 3)) {
+      if (strlen(keyBuffer) && strlen(entBuffer)) {
+	std::cout << keyBuffer << std::endl;
 	treeKey->root();
-	setkey(treeKey, keybuffer);
-	book->setEntry(entbuffer, strlen(entbuffer));
+	setKey(treeKey, keyBuffer);
+	book->setEntry(entBuffer, strlen(entBuffer));
       }
-      linebuffer[strlen(linebuffer) - 1] = 0;
-      strcpy (keybuffer, linebuffer + 3);
-      *entbuffer = 0;
+      lineBuffer[strlen(lineBuffer) - 1] = 0;
+      strcpy (keyBuffer, lineBuffer + 3);
+      *entBuffer = 0;
     }
     else {
-      strcat (entbuffer, linebuffer);
+      strcat (entBuffer, lineBuffer);
     }
   }
 
   //handle final entry
-  if (strlen(keybuffer) && strlen(entbuffer)) {
-    std::cout << keybuffer << std::endl;
+  if (strlen(keyBuffer) && strlen(entBuffer)) {
+    std::cout << keyBuffer << std::endl;
     treeKey->root();
-    setkey(treeKey, keybuffer);
-    book->setEntry(entbuffer, strlen(entbuffer));
+    setKey(treeKey, keyBuffer);
+    book->setEntry(entBuffer, strlen(entBuffer));
   }
   
   //DEBUG  printTree(root, treeKey);
   
   delete book;
-  delete [] keybuffer;
-  delete [] linebuffer;
-  delete [] entbuffer;
+  delete [] keyBuffer;
+  delete [] lineBuffer;
+  delete [] entBuffer;
 
   return 0;
 }

@@ -15,6 +15,7 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+#include <ctype.h>
 #include <osisrtf.h>
 #include <utilxml.h>
 #include <versekey.h>

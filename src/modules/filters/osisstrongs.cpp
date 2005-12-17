@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <ctype.h>
 #include <osisstrongs.h>
 #include <swmodule.h>
 #include <versekey.h>

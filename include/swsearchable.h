@@ -85,11 +85,7 @@ public:
 	* This function checks whether the search framework may work in the best way.
 	* @return True if the the search is optimally supported, false if it's not working in the best way.
 	*/
-	virtual bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey * scope) {
-		bool retVal = false;
-		search(istr, searchType, flags, scope, &retVal);
-		return retVal;
-	}
+	virtual bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
 };
 
 SWORD_NAMESPACE_END

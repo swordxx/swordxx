@@ -38,7 +38,15 @@ signed char SWSearchable::createSearchFramework(void (*percent)(char, void *), v
 	return 0;
 }
 
+
 void SWSearchable::deleteSearchFramework() {
+}
+
+
+bool SWSearchable::isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope) {
+	bool retVal = false;
+	search(istr, searchType, flags, scope, &retVal);
+	return retVal;
 }
 
 SWORD_NAMESPACE_END
