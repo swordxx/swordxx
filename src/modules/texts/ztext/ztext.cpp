@@ -30,7 +30,7 @@ SWORD_NAMESPACE_START
  */
 
 zText::zText(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
-		: zVerse(ipath, -1, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang) {
+		: zVerse(ipath, FileMgr::RDWR, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang) {
 	blockType = iblockType;
 	lastWriteKey = 0;
 }
