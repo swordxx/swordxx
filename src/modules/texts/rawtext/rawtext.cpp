@@ -11,8 +11,10 @@
 #include <utilstr.h>
 #include <rawverse.h>
 #include <rawtext.h>
+#include <rawstr.h>
 #include <filemgr.h>
 #include <versekey.h>
+#include <stringmgr.h>
 
 #include <regex.h>	// GNU
 #include <map>
@@ -24,7 +26,6 @@ using std::map;
 using std::list;
 using std::find;
 #endif
-
 
 SWORD_NAMESPACE_START
 
