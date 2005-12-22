@@ -30,7 +30,7 @@ using namespace sword;
 
 using namespace std;
 
-SWText *module;
+SWText *module = 0;
 VerseKey *currentVerse = 0;
 
 
@@ -346,6 +346,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "  createMod   : (default 0): 0 - create  1 - augment\n");
 		fprintf(stderr, "  compressType: (default 0): 0 - no compression  1 - LZSS    2 - Zip\n");
 		fprintf(stderr, "  blockType   : (default 4): 2 - verses  3 - chapters  4 - books\n");
+		fprintf(stderr, "  cipherkey   : ascii string for module encryption\n");
 		exit(-1);
 	}
 
@@ -398,7 +399,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[2]);
 		exit(-2);
 	}
-
+	
 	// Do some initialization stuff
 	SWBuf buffer;
 
@@ -409,13 +410,20 @@ int main(int argc, char **argv) {
 		module = new RawText(argv[1]);	// open our datapath with our RawText driver.
 	}
 
-	SWFilter *cipherFilter;
+	SWFilter *cipherFilter = 0;
 
 	if (!cipherKey.empty()){
 		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
 		cipherFilter = new CipherFilter(cipherKey.c_str());
 		module->AddRawFilter(cipherFilter);
 	}
+
+	if (!module->isWritable()) {
+		fprintf(stderr, "The module is not writable. Writing text to it will not work.\nExiting.\n" );
+		exit(-1);
+	}
+	
+
 
 	currentVerse = new VerseKey();
 	currentVerse->AutoNormalize(0);
