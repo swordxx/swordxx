@@ -409,8 +409,11 @@ int main(int argc, char **argv) {
 		module = new RawText(argv[1]);	// open our datapath with our RawText driver.
 	}
 
+	SWFilter *cipherFilter;
+
 	if (!cipherKey.empty()){
-		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
+		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
+		cipherFilter = new CipherFilter(cipherKey.c_str());
 		module->AddRawFilter(cipherFilter);
 	}
 
@@ -456,6 +459,8 @@ int main(int argc, char **argv) {
 	}
 	delete module;
 	delete currentVerse;
+	if (cipherFilter)
+		delete cipherFilter;
 	FileMgr::getSystemFileMgr()->close(fd);
 }
 
