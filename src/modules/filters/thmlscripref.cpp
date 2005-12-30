@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <thmlscripref.h>
 #include <utilxml.h>
 #include <versekey.h>

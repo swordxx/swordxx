@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <gbffootnotes.h>
 #include <swmodule.h>
 #include <swbuf.h>

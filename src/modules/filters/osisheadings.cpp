@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <osisheadings.h>
 #include <swmodule.h>
 #include <utilxml.h>

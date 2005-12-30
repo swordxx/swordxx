@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <thmlwordjs.h>
 #include <swmodule.h>
 #include <ctype.h>

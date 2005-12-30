@@ -3,7 +3,7 @@
  * master Glassey
  *
  */
- 
+
 
 #ifndef EXCLUDEZLIB
 extern "C" {
@@ -19,6 +19,8 @@ extern "C" {
 
 #include <swmgr.h>
 #include <dirent.h>
+
+#include <stdio.h>
 
 #ifdef CURLAVAILABLE
 #include <curlftpt.h>
