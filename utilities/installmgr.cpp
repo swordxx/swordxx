@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <swmodule.h>
+#include <stdio.h>
 
 using namespace sword;
 using std::cout;

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -6,6 +5,7 @@
 #include <rawld4.h>
 #include <zld.h>
 #include <zipcomprs.h>
+#include <stdio.h>
 
 using std::string;
 
