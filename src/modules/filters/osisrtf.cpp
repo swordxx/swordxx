@@ -27,6 +27,7 @@ SWORD_NAMESPACE_START
 OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	inXRefNote = false;
 	BiblicalText = false;
+	inQuote = false;
 	if (module) {
 		version = module->Name();
 		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
@@ -275,6 +276,16 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				//alternate " and '
 				if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
+				if (!u->inQuote) {
+					if (who == "Jesus")
+						buf += "\\cf6 ";
+					u->inQuote = 1;
+				}
+				else {
+					if (who == "Jesus")
+						buf += "\\cf0 ";
+					u->inQuote = 0;
+				}
 			}
 		}
 

@@ -36,6 +36,7 @@ protected:
 		bool osisQToTick;
 		bool BiblicalText;
 		bool inXRefNote;
+		bool inQuote;
 		SWBuf w;
 		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);
