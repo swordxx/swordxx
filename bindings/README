@@ -1,0 +1,9 @@
+Building java
+-------------
+
+The source can be built with sun java (javac) or with GNU Classpath (jikes-classpath)
+GJC does not yet work, corba is expected to work with gcj 4.1
+
+set the JAVAC environment variable to whichever you wish to build with
+
+e.g. JAVAC=javac ./configure

@@ -17,7 +17,7 @@ src/org/crosswire/sword/orb/SWMgr.java: $(top_builddir)/corba/java/src/org/cross
 
 classes/org/crosswire/sword/orb/SwordOrb.class: src/org/crosswire/sword/orb/SWMgr.java
 	mkdir -p $(top_builddir)/corba/java/classes
-	$(JAVAC) -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d $(top_builddir)/corba/java/classes src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
+	$(JAVAC) -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d $(top_builddir)/corba/java/classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
 
 $(top_builddir)/corba/java/src/org/crosswire/util/Base64.java:
 	cp -a $(top_srcdir)/corba/java/src .
