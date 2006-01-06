@@ -5,6 +5,7 @@ JAVAC = @JAVAC@
 top_srcdir = @top_srcdir@
 top_builddir = @top_builddir@
 INSTALL = @INSTALL@
+JAR = @JAR@
 
 #SWORDORBJAR=sword-orb-$(VERSION).jar
 SWORDORBJAR=sword-orb.jar
@@ -15,7 +16,8 @@ src/org/crosswire/sword/orb/SWMgr.java: $(top_builddir)/corba/java/src/org/cross
 	idlj -pkgTranslate swordorb org.crosswire.sword.orb -td src $(top_srcdir)/corba/swordorb.idl
 
 classes/org/crosswire/sword/orb/SwordOrb.class: src/org/crosswire/sword/orb/SWMgr.java
-	$(JAVAC) -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d classes src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
+	mkdir -p $(top_builddir)/corba/java/classes
+	$(JAVAC) -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d $(top_builddir)/corba/java/classes src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
 
 $(top_builddir)/corba/java/src/org/crosswire/util/Base64.java:
 	cp -a $(top_srcdir)/corba/java/src .
@@ -32,7 +34,7 @@ clean:
 	-rm $(SWORDORBJAR)
 
 $(SWORDORBJAR): classes/org/crosswire/sword/orb/SwordOrb.class
-	$(JAR) cf $(SWORDORBJAR) -C $(top_srcdir)/classes org
+	$(JAR) cf $(SWORDORBJAR) -C $(top_builddir)/corba/java/classes org
 
 install:
 	@INSTALL@ $(SWORDORBJAR) $(TOMCAT_HOME)/common/lib

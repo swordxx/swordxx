@@ -3,5 +3,5 @@
 OPTIONS="--prefix=/usr $OPTIONS"
 OPTIONS="--enable-corba $OPTIONS"
 
-CPPFLAGS="$CFLAGS $CPPFLAGS" ./configure $OPTIONS $*
+CPPFLAGS="$CFLAGS $CPPFLAGS" JAVAC=javac ./configure $OPTIONS $*
 
