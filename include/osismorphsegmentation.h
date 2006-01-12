@@ -23,23 +23,20 @@
 
 #include <swoptfilter.h>
 
-using namespace sword;
+SWORD_NAMESPACE_START
 
-namespace Filters {
-
-	/*  This filters toggles splitting of morphemes
-	 *  (for morpheme segmented Hebrew in the WLC)
-	 */
+/*  This filters toggles splitting of morphemes
+ *  (for morpheme segmented Hebrew in the WLC)
+ */
 
 class OSISMorphSegmentation : public SWOptionFilter {
 
 public:
-		OSISMorphSegmentation();
-		virtual ~OSISMorphSegmentation();
+	OSISMorphSegmentation();
+	virtual ~OSISMorphSegmentation();
 
-		virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
-	};
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+};
 
-}
-
+SWORD_NAMESPACE_END
 #endif
