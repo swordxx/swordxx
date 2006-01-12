@@ -135,23 +135,23 @@
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\..\src\utilfuns\zlib -I..\..\src\modules\lexdict\zld 
-      -I..\..\src\modules\lexdict\rawld4 -I..\..\src\modules\comments\zcom 
-      -I..\..\src\modules\genbook\rawgenbook -I..\..\src\modules\genbook 
-      -I..\..\src\modules\texts\ztext -I..\..\src\modules\texts\rawtext 
-      -I..\..\src\modules\texts -I..\..\src\modules\lexdict\rawld 
-      -I..\..\src\modules\lexdict -I..\..\src\modules\filters 
-      -I..\..\src\modules\common -I..\..\src\modules\comments\rawfiles 
-      -I..\..\src\modules\comments\rawcom -I..\..\src\modules\comments\hrefcom 
-      -I..\..\src\modules\comments -I..\..\src\modules -I..\..\src\frontend 
-      -I..\..\src\utilfuns -I..\..\src\mgr -I..\..\src\keys 
-      -I..\..\..\icu-sword\source\common 
+    <IDLCFLAGS value="-I..\..\src\modules\tests -I..\..\src\utilfuns\zlib 
+      -I..\..\src\modules\lexdict\zld -I..\..\src\modules\lexdict\rawld4 
+      -I..\..\src\modules\comments\zcom -I..\..\src\modules\genbook\rawgenbook 
+      -I..\..\src\modules\genbook -I..\..\src\modules\texts\ztext 
+      -I..\..\src\modules\texts\rawtext -I..\..\src\modules\texts 
+      -I..\..\src\modules\lexdict\rawld -I..\..\src\modules\lexdict 
+      -I..\..\src\modules\filters -I..\..\src\modules\common 
+      -I..\..\src\modules\comments\rawfiles -I..\..\src\modules\comments\rawcom 
+      -I..\..\src\modules\comments\hrefcom -I..\..\src\modules\comments 
+      -I..\..\src\modules -I..\..\src\frontend -I..\..\src\utilfuns 
+      -I..\..\src\mgr -I..\..\src\keys -I..\..\..\icu-sword\source\common 
       -I..\..\apps\windoze\CBuilder5\InstallMgr\curl\include -I..\..\include 
       -I$(BCB)\include -I$(BCB)\include\vcl -I..\..\..\icu-sword\source\i18n 
       -I..\..\..\biblecs\clucene\src 
       -I..\..\..\biblecs\apps\InstallMgr\curl\include -src_suffix cpp -D_ICU_ 
       -D_ICUSWORD_ -DUSBINARY -DU_HAVE_PLACEMENT_NEW=0 -DUSELUCENE 
-      -DLUCENE_DISABLE_MULTITHREADING -D_WIN32 -DHAVE_DIRENT -boa"/>
+      -DLUCENE_DISABLE_MULTITHREADING -D_WIN32 -DHAVE_DIRENT -no_tie -boa"/>
     <CFLAG1 value="-O2 -Vx -X- -a8 -b- -k- -vi -c -tW -tWM"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zn"/>
@@ -272,6 +272,11 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=0
+AddClientUnit=0
+PrecompiledHeaders=0
 
 [Language]
 ActiveLang=
