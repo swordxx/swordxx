@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include <rawld.h>
 #include <rawld4.h>
 #include <zld.h>
