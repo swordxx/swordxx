@@ -21,7 +21,7 @@ typedef sequence<ModInfo> ModInfoList;
 struct SearchHit {
 	string modName;
 	string key;
-	long score;
+	long   score;
 };
 
 typedef sequence<SearchHit> SearchHitList;
@@ -38,28 +38,29 @@ typedef sequence<SearchHit> SearchHitList;
 
 
 interface SWModule {
-	void   terminateSearch();
+	void          terminateSearch();
 	SearchHitList search(in string istr, in SearchType searchType, in long flags, in string scope);
-	char   error();
-	long  getEntrySize();
-	StringList getEntryAttribute(in string level1, in string level2, in string level3);
-	void   setKeyText(in string key);
-	string getKeyText();
-	boolean hasKeyChildren();
-	StringList getKeyChildren();
-	string getKeyParent();
-	string getName();
-	string getDescription();
-	string getCategory();
-	void   previous();
-	void   next();
-	void   begin();
-	string getStripText();
-	string getRenderText();
-	string getRawEntry();
-	string getConfigEntry(in string key);
-	void deleteSearchFramework();
-	boolean hasSearchFramework();
+	char          error();
+	long          getEntrySize();
+	StringList    getEntryAttribute(in string level1, in string level2, in string level3, in boolean filtered);
+	StringList    parseKeyList(in string keyText);
+	void          setKeyText(in string key);
+	string        getKeyText();
+	boolean       hasKeyChildren();
+	StringList    getKeyChildren();
+	string        getKeyParent();
+	string        getName();
+	string        getDescription();
+	string        getCategory();
+	void          previous();
+	void          next();
+	void          begin();
+	string        getStripText();
+	string        getRenderText();
+	string        getRawEntry();
+	string        getConfigEntry(in string key);
+	void          deleteSearchFramework();
+	boolean       hasSearchFramework();
 };
 
 
@@ -68,21 +69,21 @@ interface SWModule {
 //
 interface SWMgr {
 	ModInfoList getModInfoList();
-	SWModule getModuleByName(in string name);
-	string getPrefixPath();
-	string getConfigPath();
-	void   setGlobalOption(in string option, in string value);
-	string getGlobalOption(in string option);
-	string getGlobalOptionTip(in string option);
-	string filterText(in string filterName, in string text);
-	StringList getGlobalOptions();
-	StringList getGlobalOptionValues(in string option);
-	void     setCipherKey(in string modName, in string key);
-	void     terminate();
-	boolean testConnection();
-	void setJavascript(in boolean val);
-	StringList getAvailableLocales();
-	void setDefaultLocale(in string name);
+	SWModule    getModuleByName(in string name);
+	string      getPrefixPath();
+	string      getConfigPath();
+	void        setGlobalOption(in string option, in string value);
+	string      getGlobalOption(in string option);
+	string      getGlobalOptionTip(in string option);
+	string      filterText(in string filterName, in string text);
+	StringList  getGlobalOptions();
+	StringList  getGlobalOptionValues(in string option);
+	void        setCipherKey(in string modName, in string key);
+	void        terminate();
+	boolean     testConnection();
+	void        setJavascript(in boolean val);
+	StringList  getAvailableLocales();
+	void        setDefaultLocale(in string name);
 };
 
 };

@@ -1,5 +1,5 @@
 TOMCAT_HOME=/usr/local/tomcat
-instdir=/home/swordweb/livehtml
+instdir=/home/scribe/src/swordweb/webapp
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 
 src/org/crosswire/sword/orb/SWMgr.java: ../swordorb.idl

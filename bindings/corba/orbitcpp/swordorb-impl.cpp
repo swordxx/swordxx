@@ -5,6 +5,7 @@
 #include <treekeyidx.h>
 #include <swbuf.h>
 #include <localemgr.h>
+#include <vector>
 
 /*
 char* swordorb::SWModule_impl::helloWorld(const char* greeting) throw(CORBA::SystemException) {
@@ -126,6 +127,31 @@ char *SWModule_impl::getCategory() throw(CORBA::SystemException) {
 }
 
 
+StringList *SWModule_impl::parseKeyList(const char *keyText) throw(CORBA::SystemException) {
+	sword::VerseKey *parser = dynamic_cast<VerseKey *>(delegate->getKey());
+	StringList *retVal = new StringList;
+	if (parser) {
+		sword::ListKey result;
+		result = parser->ParseVerseList(keyText, *parser, true);
+		int count = 0;
+		for (result = sword::TOP; !result.Error(); result++) {
+			count++;
+		}
+		retVal->length(count);
+		count = 0;
+		for (result = sword::TOP; !result.Error(); result++) {
+			(*retVal)[count++] = CORBA::string_dup((const char *)result);
+		}
+	}
+	else	{
+		retVal->length(1);
+		(*retVal)[0] = CORBA::string_dup(keyText);
+	}
+
+	return retVal;
+}
+
+
 SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException) {
 	int stype = 2;
 	sword::ListKey lscope;
@@ -158,32 +184,68 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 }
 
 
-StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *level2, const char *level3) throw(CORBA::SystemException) {
+StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *level2, const char *level3, CORBA::Boolean filtered) throw(CORBA::SystemException) {
 	delegate->RenderText();	// force parse
-	sword::AttributeTypeList &entryAttribs = delegate->getEntryAttributes();
-	sword::AttributeTypeList::iterator i1 = entryAttribs.find(level1);
-	sword::AttributeList::iterator i2;
-	sword::AttributeValue::iterator i3, j3;
+	std::vector<SWBuf> results;
 	StringList *retVal = new StringList;
 	int count = 0;
 
-	if (i1 != entryAttribs.end()) {
-		i2 = i1->second.find(level2);
-		if (i2 != i1->second.end()) {
-			i3 = i2->second.find(level3);
-			if (i3 != i2->second.end()) {
-				for (j3 = i3; j3 != i2->second.end(); j3++)
-					count++;
-				retVal->length(count);
-				count = 0;
-				for (j3 = i3; j3 != i2->second.end(); j3++) {
-					(*retVal)[count++] = CORBA::string_dup(i3->second.c_str());
-				}
+	sword::AttributeTypeList &entryAttribs = delegate->getEntryAttributes();
+	sword::AttributeTypeList::iterator i1Start, i1End;
+	sword::AttributeList::iterator i2Start, i2End;
+	sword::AttributeValue::iterator i3Start, i3End;
+
+	if ((level1) && (*level1)) {
+		i1Start = entryAttribs.find(level1);
+		i1End = i1Start;
+		if (i1End != entryAttribs.end())
+			i1End++;
+	}
+	else {
+		i1Start = entryAttribs.begin();
+		i1End   = entryAttribs.end();
+	}
+	for (;i1Start != i1End; i1Start++) {
+		if ((level2) && (*level2)) {
+			i2Start = i1Start->second.find(level2);
+			i2End = i2Start;
+			if (i2End != i1Start->second.end())
+				i2End++;
+		}
+		else {
+			i2Start = i1Start->second.begin();
+			i2End   = i1Start->second.end();
+		}
+		for (;i2Start != i2End; i2Start++) {
+			if ((level3) && (*level3)) {
+				i3Start = i2Start->second.find(level3);
+				i3End = i3Start;
+				if (i3End != i2Start->second.end())
+					i3End++;
 			}
+			else {
+				i3Start = i2Start->second.begin();
+				i3End   = i2Start->second.end();
+			}
+			for (;i3Start != i3End; i3Start++) {
+				results.push_back(i3Start->second);
+			}
+			if (i3Start != i3End)
+				break;
+		}
+		if (i2Start != i2End)
+			break;
+	}
+
+	retVal->length(results.size());
+	for (int i = 0; i < results.size(); i++) {
+		if (filtered) {
+			(*retVal)[i] = CORBA::string_dup(delegate->RenderText(results[i].c_str()));
+		}
+		else {
+			(*retVal)[count++] = CORBA::string_dup(results[i].c_str());
 		}
 	}
-	if (!count)
-		retVal->length(count);
 
 	return retVal;
 }

@@ -43,20 +43,29 @@ int main (int argc, char *argv[])
 			}
 			std::cout << "\n";
 		}
-*/
 		swordorb::StringList *localeNames = mgr->getAvailableLocales();
 		for (int i = 0; i < localeNames->length(); i++) {
 			std::cout << (*localeNames)[i] << "\n";
 		}
 		mgr->setDefaultLocale("de");
+*/
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
-		module = mgr->getModuleByName("LXX");
+		mgr->setGlobalOption("Footnotes", "On");
+		module = mgr->getModuleByName("NASB");
+		module->setKeyText("jas.1.19");
+		swordorb::StringList *attr = module->getEntryAttribute("Footnote", "", "body", true);
+		std::cout << "length: " << attr->length() << "\n";
+		for (int i = 0; i < attr->length(); i++) {
+			std::cout << (*attr)[i] << "\n";
+		}
+/*
 		for (module->setKeyText("is.53.4"); !module->error(); module->next()) {
 			std::cout << "KeyText: " << module->getKeyText() << "\n";
 			std::cout << "Text: " << module->getRenderText() << "\n";
 			break;
 		}
+*/
 /*
 		swordorb::SearchHitList *searchResults;
 		bool lucene = module->hasSearchFramework();

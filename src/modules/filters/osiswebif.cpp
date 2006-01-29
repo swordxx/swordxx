@@ -122,6 +122,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 					if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						SWBuf modName = (u->module) ? u->module->Name() : "";
 						VerseKey *vkey;
 						// see if we have a VerseKey * or descendant
 						SWTRY {
@@ -131,6 +132,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						if (vkey) {
 							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 //							buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
+							buf.appendFormatted("<span class=\"fn\" onclick=\"f(\'%s\',\'%s\',\'%s\');\" >%c</span>", modName.c_str(), u->key->getText(), footnoteNumber.c_str(), ch);
 						}
 					}
 					u->suspendTextPassThru = true;
@@ -138,6 +140,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = false;
+
 			}
 		}
 
@@ -175,17 +178,18 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				else {	// all other types
 					if (!u->suspendTextPassThru)
 						buf += "<i>";
+					u->inBold = false;
 				}
 			}
 			else if (tag.isEndTag()) {
 				if(u->inBold) {
 					if (!u->suspendTextPassThru)
 						buf += "</b>";
-					u->inBold = false;
 				}
-				else
+				else {
 					if (!u->suspendTextPassThru)
 						 buf += "</i>";
+				}
 			}
 		}
 

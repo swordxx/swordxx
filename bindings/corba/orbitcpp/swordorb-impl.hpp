@@ -21,6 +21,7 @@ public:
 	SWModule_impl(sword::SWModule *delegate)  { this->delegate = delegate; }
 
 	SearchHitList *search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException);
+	StringList *parseKeyList(const char *keyText) throw(CORBA::SystemException);
 	void   terminateSearch() throw(CORBA::SystemException) { delegate->terminateSearch = true; }
 	char   error() throw(CORBA::SystemException) { return delegate->Error(); }
 	CORBA::Long getEntrySize() throw(CORBA::SystemException) { return delegate->getEntrySize(); }
@@ -36,7 +37,7 @@ public:
 	void   next() throw(CORBA::SystemException) { delegate->increment(); }
 	void   begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
-	StringList *getEntryAttribute(const char *level1, const char *level2, const char *level3) throw(CORBA::SystemException);
+	StringList *getEntryAttribute(const char *level1, const char *level2, const char *level3, CORBA::Boolean filtered) throw(CORBA::SystemException);
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
 	char *getRawEntry() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->getRawEntry()); }
 	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }
