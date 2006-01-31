@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include <utilstr.h>
 #include <stringmgr.h>

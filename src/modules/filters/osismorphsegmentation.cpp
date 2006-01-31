@@ -25,7 +25,7 @@ OSISMorphSegmentation::OSISMorphSegmentation() : sword::SWOptionFilter(oName, oT
 OSISMorphSegmentation::~OSISMorphSegmentation() {}
 
 
-char OSISMorphSegmentation::processText(SWBuf &text, const SWKey */*key*/, const SWModule */*module*/) {
+char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, const SWModule * /*module*/) {
 	SWBuf token;
 	bool intoken    = false;
 	bool hide       = false;

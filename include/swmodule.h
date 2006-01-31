@@ -388,7 +388,7 @@ public:
 #ifndef SWIG 
 	virtual SWBuf &getRawEntryBuf() = 0;
 #else
-	virtual SWBuf &getRawEntryBuf() {};
+	virtual SWBuf &getRawEntryBuf() { return entryBuf; }
 #endif  
 
 	virtual const char *getRawEntry() { return getRawEntryBuf().c_str(); }

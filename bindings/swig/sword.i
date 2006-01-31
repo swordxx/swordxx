@@ -16,6 +16,8 @@
 #undef list
 %}
 
+%include "../../include/defs.h"
+
 %include "swconfig.i"
 %include "swmgr.i"
 %include "swmodule.i"
@@ -28,6 +30,8 @@
 
 %include "localemgr.i"
 %include "swfiltermgr.i"
+%include "encfiltmgr.i"
+%include "markupfiltmgr.i"
 
 %include "swtext.i"
 %include "rawtext.i"

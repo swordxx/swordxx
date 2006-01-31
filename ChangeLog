@@ -3,6 +3,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 
 31-Jan-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Added support for OSIS variants
+	Added .NET support and update to swig bindings (from lefticus)
 
 28-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed ICUStringMgr toUpper method
@@ -11,7 +12,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	Cleaned up headers to remove unnecessary includes
 
 26-Oct-2005	Martin Gruner <mgruner@crosswire.org>
-	Added Arabic locale from Mina Magdy.
+	Added Arabic locale (from Mina Magdy).
 
 17-Oct-2005	Joachim Ansorg <jansorg@crosswire.org>
 	Fixed the dutch locale file
