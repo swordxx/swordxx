@@ -46,6 +46,7 @@ OSISFIL += $(filtersdir)/osisrtf.cpp
 OSISFIL += $(filtersdir)/osislemma.cpp
 OSISFIL += $(filtersdir)/osisredletterwords.cpp
 OSISFIL += $(filtersdir)/osisscripref.cpp
+OSISFIL += $(filtersdir)/osisvariants.cpp
 OSISFIL += $(filtersdir)/osiswordjs.cpp
 OSISFIL += $(filtersdir)/osismorphsegmentation.cpp
 

@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+31-Jan-2005	Troy A. Griffitts <scribe@crosswire.org>
+	Added support for OSIS variants
+
 28-Nov-2005	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed ICUStringMgr toUpper method
 
