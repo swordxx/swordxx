@@ -40,6 +40,14 @@ void setLocalName(TreeKeyIdx *treeKey) {
 }
 
 
+void assurePath(TreeKeyIdx *treeKey) {
+	char buf[1023];
+	std::cout << "Enter path: ";
+	gets(buf);
+	treeKey->assureKeyPath(buf);
+}
+
+
 void appendSibbling(TreeKeyIdx *treeKey) {
 	if (treeKey->getOffset()) {
 		char buf[1023];
@@ -92,7 +100,7 @@ int main(int argc, char **argv) {
 	char line[1024];
 
 	do {
-		std::cout << "[" << treeKey->getFullName() << "] > ";
+		std::cout << "[" << treeKey->getText() << "] > ";
 		gets(line);
 		input = line;
 		if (input.length() > 0) {
@@ -103,6 +111,7 @@ int main(int argc, char **argv) {
 				case 'a':	appendSibbling(treeKey); break;
 				case 'c':	appendChild(treeKey); break;
 				case 'j':	treeKey->nextSibling(); break;
+				case 'g': assurePath(treeKey); break;
 				case 'k':	treeKey->previousSibling(); break;
 				case 'h':	treeKey->parent(); break;
 				case 'l':	treeKey->firstChild(); break;
@@ -122,6 +131,7 @@ int main(int argc, char **argv) {
 					std::cout << " c - append child\n";
 					std::cout << " u - get user data\n";
 					std::cout << " d - set user data\n";
+					std::cout << " g - goto path; create if it doesn't exist\n";
 					std::cout << " q - quit\n\n";
 					break;
 			}

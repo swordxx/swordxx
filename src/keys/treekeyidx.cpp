@@ -86,11 +86,13 @@ TreeKeyIdx::~TreeKeyIdx () {
 
 
 const char *TreeKeyIdx::getLocalName() {
+	unsnappedKeyText = "";
 	return currentNode.name;
 }
 
 
 const char *TreeKeyIdx::getUserData(int *size) {
+	unsnappedKeyText = "";
 	if (size)
 		*size = (int)currentNode.dsize;
 	return currentNode.userData;
@@ -98,6 +100,8 @@ const char *TreeKeyIdx::getUserData(int *size) {
 
 
 void TreeKeyIdx::setUserData(const char *userData, int size) {
+	// this makes sure any unsnapped path exists
+	assureKeyPath();
 	if (currentNode.userData)
 		delete currentNode.userData;
 
@@ -110,6 +114,7 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
 }
 
 const char *TreeKeyIdx::setLocalName(const char *newName) {
+	unsnappedKeyText = "";
 	stdstr(&(currentNode.name), newName);
 	return currentNode.name;
 }
@@ -117,19 +122,6 @@ const char *TreeKeyIdx::setLocalName(const char *newName) {
 
 void TreeKeyIdx::save() {
 	saveTreeNode(&currentNode);
-}
-
-
-const char *TreeKeyIdx::getFullName() const {
-	TreeNode parent;
-	static SWBuf fullPath;
-	fullPath = currentNode.name;
-	parent.parent = currentNode.parent;
-	while (parent.parent > -1) {
-		getTreeNodeFromIdxOffset(parent.parent, &parent);
-		fullPath = ((SWBuf)parent.name) + (SWBuf) "/" + fullPath;
-	}
-	return fullPath.c_str();
 }
 
 
@@ -281,6 +273,7 @@ signed char TreeKeyIdx::create(const char *ipath) {
  */
 
 void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
+	unsnappedKeyText = "";
 	char ch;
 	__s32  tmp;
 	__u16  tmp2;
@@ -329,6 +322,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
  */
 
 char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
+	unsnappedKeyText = "";
 	__u32 offset;
 	char error = KEYERR_OUTOFBOUNDS;
 	
@@ -360,6 +354,7 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 
 
 unsigned long TreeKeyIdx::getOffset() const {
+	unsnappedKeyText = "";
 	return currentNode.offset;
 }
 
@@ -369,6 +364,7 @@ void TreeKeyIdx::setOffset(unsigned long offset) {
 
 
 void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
+	unsnappedKeyText = "";
 	long datOffset = 0;
 	__s32 tmp;
 
@@ -397,6 +393,7 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 
 
 void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
+	unsnappedKeyText = "";
 
 	SWKey::copyFrom(ikey);
 
@@ -483,11 +480,13 @@ void TreeKeyIdx::setText(const char *ikey) {
 		}
 	}
 	delete [] buf;
+	unsnappedKeyText = ikey;
 }
 
 
 
 void TreeKeyIdx::copyFrom(const SWKey &ikey) {
+	unsnappedKeyText = ikey;
 	SWKey::copyFrom(ikey);
 }
 
@@ -501,10 +500,6 @@ void TreeKeyIdx::setPosition(SW_POSITION p) {
 		break;
 	} 
 	Error();	// clear error from normalize
-}
-
-const char *TreeKeyIdx::getText() const {
-	return getFullName();
 }
 
 
@@ -547,6 +542,21 @@ void TreeKeyIdx::increment(int steps) {
 */
 }
 
+
+
+const char *TreeKeyIdx::getText() const {
+	TreeNode parent;
+	static SWBuf fullPath;
+	fullPath = currentNode.name;
+	parent.parent = currentNode.parent;
+	while (parent.parent > -1) {
+		getTreeNodeFromIdxOffset(parent.parent, &parent);
+		fullPath = ((SWBuf)parent.name) + (SWBuf) "/" + fullPath;
+	}
+	// we've snapped; clear our unsnapped text holder
+	unsnappedKeyText = "";
+	return fullPath.c_str();
+}
 
 
 TreeKeyIdx::TreeNode::TreeNode() {

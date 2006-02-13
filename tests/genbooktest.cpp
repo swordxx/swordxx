@@ -48,6 +48,14 @@ void gotoPath(TreeKeyIdx *treeKey) {
 }
 
 
+void assurePath(TreeKeyIdx *treeKey) {
+	char buf[1023];
+	std::cout << "Enter Path: ";
+	gets(buf);
+	treeKey->assureKeyPath(buf);
+}
+
+
 void viewEntryText(RawGenBook *book) {
 	std::cout << "\n";
 	std::cout << book->RenderText();
@@ -129,7 +137,7 @@ int main(int argc, char **argv) {
 	char line[1024];
 
 	do {
-		std::cout << "[" << treeKey->getFullName() << "] > ";
+		std::cout << "[" << treeKey->getText() << "] > ";
 		gets(line);
 		input = line;
 		if (input.length() > 0) {
@@ -137,6 +145,7 @@ int main(int argc, char **argv) {
 				case 'n': printLocalName(treeKey); break;
 				case 's': setLocalName(treeKey); break;
 				case 'g': gotoPath(treeKey); break;
+				case 'G': assurePath(treeKey); break;
 				case 'p':	root.root(); printTree(root, treeKey); break;
 				case 'a':	appendSibbling(treeKey); break;
 				case 'c':	appendChild(treeKey); break;
@@ -159,6 +168,7 @@ int main(int argc, char **argv) {
 					std::cout << " l - first child\n";
 					std::cout << " r - root\n";
 					std::cout << " g - goto path\n";
+					std::cout << " G   goto path; create if it doesn't exist\n";
 					std::cout << " a - append sibbling\n";
 					std::cout << " c - append child\n";
 					std::cout << " v - view entry text\n";

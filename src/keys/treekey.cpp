@@ -21,6 +21,8 @@
 
 
 #include <treekey.h>
+#include <utilstr.h>
+#include <string.h>
 
 SWORD_NAMESPACE_START
 
@@ -29,6 +31,67 @@ SWClass TreeKey::classdef(classes);
 
 void TreeKey::init() {
 	myclass = &classdef;
+	unsnappedKeyText = "";
 }
+
+
+void TreeKey::assureKeyPath(const char *keyBuffer) {
+
+	if (!keyBuffer) {
+		keyBuffer = unsnappedKeyText;
+		//assert we have something to do before setting root
+		if (!*keyBuffer)
+			return;
+	}
+
+	char *keybuf = 0;
+	stdstr(&keybuf, keyBuffer);
+
+	root();
+
+	//assert we have more to do
+	if (!*keybuf)
+		return;
+
+	// TODO: change to NOT use strtok. strtok is dangerous.
+	char *tok = strtok(keybuf, "/");
+	while (tok) {
+		bool foundkey = false;
+		if (hasChildren()) {
+			firstChild();
+			if (!strcmp(getLocalName(), tok)) {
+				foundkey = true;
+			}
+			else {
+				while (nextSibling()) {
+					if (getLocalName()) {
+						if (!strcmp(getLocalName(), tok)) {
+							foundkey = true;
+						}
+					}
+				}
+			}
+			if (!foundkey) {
+				append();
+				setLocalName(tok);
+				save();	    
+			}
+		}
+		else {
+			appendChild();
+			setLocalName(tok);
+			save();
+		}
+
+#ifdef DEBUG
+//      std::cout << getLocalName() << " : " << tok << std::endl;
+#endif
+
+		tok = strtok(NULL, "/");
+
+	}
+	delete [] keybuf;
+}
+
 
 SWORD_NAMESPACE_END

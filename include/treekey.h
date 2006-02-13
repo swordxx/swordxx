@@ -24,6 +24,7 @@
 #define TREEKEY_H
 
 #include <swkey.h>
+#include <swbuf.h>
 
 #include <defs.h>
 
@@ -36,6 +37,12 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT TreeKey : public SWKey {
 	static SWClass classdef;
 	void init();
+
+protected:
+	// hold on to setText until we've done a snap action: getText or navigation
+	// if we set, and then write out userData, we want to assure the path exists.
+	// This better conforms to the SWORD write methodology: mod.setKey, mod.setEntry
+	mutable SWBuf unsnappedKeyText;
 
 public:
 //	TreeKey (const char *ikey = 0);
@@ -51,11 +58,10 @@ public:
 	virtual const char *getUserData(int *size = 0) = 0;
 	virtual void setUserData(const char *userData, int size = 0) = 0;
 
-	virtual const char *getFullName() const = 0;
-
 	/** Go to the root node
 	*/
 	virtual void root() = 0;
+
 	/** Go to the parent of the current node
 	* @return success or failure
 	*/
@@ -65,10 +71,12 @@ public:
 	* @return success or failure
 	*/
 	virtual bool firstChild() = 0;
+
 	/** Go to the next sibling of the current node
 	* @return success or failure
 	*/
 	virtual bool nextSibling() = 0;
+
 	/** Go to the previous sibling of the current node
 	* @return success or failure
 	*/
@@ -85,6 +93,7 @@ public:
 
 	virtual void remove() = 0;
 
+
 	virtual void setOffset(unsigned long offset) = 0;
 	virtual unsigned long getOffset() const = 0;
 
@@ -95,8 +104,15 @@ public:
 	virtual void decrement(int steps = 1) = 0;
 	virtual void increment(int steps = 1) = 0;
 	virtual bool isTraversable() { return true; }
-	virtual long Index () const { return getOffset(); }
-	virtual long Index (long iindex) { setOffset(iindex); return getOffset(); }
+	virtual long Index() const { return getOffset(); }
+	virtual long Index(long iindex) { setOffset(iindex); return getOffset(); }
+
+	/** Set the key to this path.  If the path doesn't exist, then
+	 *	nodes are created as necessary
+	 * @keyPath = path to set/create; if unsupplied, then use any unsnapped setText value.
+	 */
+	virtual void assureKeyPath(const char *keyPath = 0);
+	virtual void save() {}
 
 	SWKEY_OPERATORS
 

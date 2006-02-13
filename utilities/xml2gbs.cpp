@@ -20,45 +20,6 @@ using sword::SWKey;
 
 //#define DEBUG
 
-void setkey (TreeKeyIdx * treeKey, const char* keybuffer) {
-    char *keybuf = strdup(keybuffer);
-    char* tok = strtok(keybuf, "/");
-    while (tok) {
-      bool foundkey = false;
-      if (treeKey->hasChildren()) {
-	treeKey->firstChild();
-	if (!strcmp(treeKey->getLocalName(), tok)) {
-	  foundkey = true;
-	} else {
-	  while (treeKey->nextSibling()) {
-	    if (treeKey->getLocalName()) {
-	      if (!strcmp(treeKey->getLocalName(), tok)) {
-		foundkey = true;
-	      }
-	    }
-	  }
-	}
-	if (!foundkey) {
-	  treeKey->append();
-	  treeKey->setLocalName(tok);
-	  treeKey->save();	    
-	}
-      }
-      else {
-	treeKey->appendChild();
-	treeKey->setLocalName(tok);
-	treeKey->save();
-      }
-
-#ifdef DEBUG
-//      std::cout << treeKey->getLocalName() << " : " << tok << std::endl;
-#endif
-      
-      tok = strtok(NULL, "/");
-      
-    }
-    free(keybuf);
-}
 
 enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML };
 
@@ -133,7 +94,6 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
     RawGenBook::createModule(modname);
     delete treeKey;
     book = new RawGenBook(modname);
-    treeKey = ((TreeKeyIdx *)((SWKey *)(*book)));
   }
 
 #ifdef DEBUG
@@ -170,8 +130,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 		outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
 	      }
 	      else {
-		treeKey->root();
-		setkey(treeKey, keybuffer2.c_str());
+		book->setKey(keybuffer2.c_str());
 		book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
 	      }
 	    }
@@ -208,8 +167,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 		outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
 	      }
 	      else {
-		treeKey->root();
-		setkey(treeKey, keybuffer2.c_str());
+		book->setKey(keybuffer2.c_str());
 		book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
 	      }
 	    }

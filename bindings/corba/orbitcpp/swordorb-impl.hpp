@@ -22,10 +22,10 @@ public:
 
 	SearchHitList *search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException);
 	StringList *parseKeyList(const char *keyText) throw(CORBA::SystemException);
-	void   terminateSearch() throw(CORBA::SystemException) { delegate->terminateSearch = true; }
-	char   error() throw(CORBA::SystemException) { return delegate->Error(); }
+	void  terminateSearch() throw(CORBA::SystemException) { delegate->terminateSearch = true; }
+	char  error() throw(CORBA::SystemException) { return delegate->Error(); }
 	CORBA::Long getEntrySize() throw(CORBA::SystemException) { return delegate->getEntrySize(); }
-	void   setKeyText(const char *key) throw(CORBA::SystemException) { delegate->KeyText(key); }
+	void  setKeyText(const char *key) throw(CORBA::SystemException) { delegate->KeyText(key); }
 	char *getKeyText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->KeyText()); }
 	StringList *getKeyChildren() throw(CORBA::SystemException);
 	char *getKeyParent() throw(CORBA::SystemException);
@@ -33,13 +33,14 @@ public:
 	char *getName() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Name()); }
 	char *getDescription() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->Description()); }
 	char *getCategory() throw(CORBA::SystemException);
-	void   previous() throw(CORBA::SystemException) { delegate->decrement(); }
-	void   next() throw(CORBA::SystemException) { delegate->increment(); }
-	void   begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }
+	void  previous() throw(CORBA::SystemException) { delegate->decrement(); }
+	void  next() throw(CORBA::SystemException) { delegate->increment(); }
+	void  begin() throw(CORBA::SystemException) { delegate->setPosition(sword::TOP); }
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
 	StringList *getEntryAttribute(const char *level1, const char *level2, const char *level3, CORBA::Boolean filtered) throw(CORBA::SystemException);
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
 	char *getRawEntry() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->getRawEntry()); }
+	void  setRawEntry(const char *entryBuffer) throw(CORBA::SystemException) { delegate->setEntry(entryBuffer); }
 	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }
 	void deleteSearchFramework() throw(CORBA::SystemException) { return delegate->deleteSearchFramework(); }
 	CORBA::Boolean hasSearchFramework() throw(CORBA::SystemException) { return (delegate->hasSearchFramework() && delegate->isSearchOptimallySupported("God", -4, 0, 0)); }

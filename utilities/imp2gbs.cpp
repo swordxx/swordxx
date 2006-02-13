@@ -37,42 +37,6 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
     printTree(treeKey, target, level);
 }
 
-void setKey(TreeKeyIdx * treeKey, char* keyBuffer) {
-  char* tok = strtok(keyBuffer, "/");
-  while (tok) {
-    bool foundkey = false;
-    if (treeKey->hasChildren()) {
-      treeKey->firstChild();
-      if (!strcmp(treeKey->getLocalName(), tok)) {
-	foundkey = true;
-      } else {
-	while (treeKey->nextSibling()) {
-	  if (treeKey->getLocalName()) {
-	    if (!strcmp(treeKey->getLocalName(), tok)) {
-	      foundkey = true;
-	    }
-	  }
-	}
-      }
-      if (!foundkey) {
-	treeKey->append();
-	treeKey->setLocalName(tok);
-	treeKey->save();	    
-      }
-    }
-    else {
-      treeKey->appendChild();
-      treeKey->setLocalName(tok);
-      treeKey->save();
-    }
-    
-    //DEBUG      std::cout << treeKey->getLocalName() << " : " << tok << std::endl;
-    
-    tok = strtok(NULL, "/");
-    
-  }
-}
-
 int readline(FILE* infile, char* lineBuffer) {
   signed char c;
   char* lbPtr = lineBuffer;
@@ -123,14 +87,12 @@ int main(int argc, char **argv) {
   delete treeKey;
   book = new RawGenBook(modname);
   //DEBUG  TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
-  treeKey = ((TreeKeyIdx *)((SWKey *)(*book)));
   
   while (readline(infile, lineBuffer)) {
     if (!strncmp(lineBuffer, "$$$", 3)) {
       if (strlen(keyBuffer) && strlen(entBuffer)) {
 	std::cout << keyBuffer << std::endl;
-	treeKey->root();
-	setKey(treeKey, keyBuffer);
+	book->setKey(keyBuffer);
 	book->setEntry(entBuffer, strlen(entBuffer));
       }
       lineBuffer[strlen(lineBuffer) - 1] = 0;
@@ -145,8 +107,7 @@ int main(int argc, char **argv) {
   //handle final entry
   if (strlen(keyBuffer) && strlen(entBuffer)) {
     std::cout << keyBuffer << std::endl;
-    treeKey->root();
-    setKey(treeKey, keyBuffer);
+    book->setKey(keyBuffer);
     book->setEntry(entBuffer, strlen(entBuffer));
   }
   

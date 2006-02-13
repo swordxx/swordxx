@@ -58,6 +58,7 @@ interface SWModule {
 	string        getStripText();
 	string        getRenderText();
 	string        getRawEntry();
+	void          setRawEntry(in string entryBuffer);
 	string        getConfigEntry(in string key);
 	void          deleteSearchFramework();
 	boolean       hasSearchFramework();

@@ -68,45 +68,10 @@ int main(int argc, char **argv) {
   }
   delete treeKey;
   RawGenBook *book = new RawGenBook(argv[2]);
-  TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
-  treeKey = (TreeKeyIdx *)(SWKey *)(*book);  
 
   if ((mode == 'a') && (argc == 4 || argc == 5)) {	
     char buffer[1048576];  //this is the max size of any entry
 
-    char* tok = strtok(argv[3], "/");
-    while (tok) {
-      bool foundkey = false;
-      if (treeKey->hasChildren()) {
-	treeKey->firstChild();
-	if (!strcmp(treeKey->getLocalName(), tok)) {
-	  foundkey = true;
-	} else {
-	  while (treeKey->nextSibling()) {
-	    if (treeKey->getLocalName()) {
-	      if (!strcmp(treeKey->getLocalName(), tok)) {
-		foundkey = true;
-	      }
-	    }
-	  }
-	}
-	if (!foundkey) {
-	  treeKey->append();
-	  treeKey->setLocalName(tok);
-	  treeKey->save();	    
-	}
-      }
-      else {
-	treeKey->appendChild();
-	treeKey->setLocalName(tok);
-	treeKey->save();
-      }
-      
-      //DEBUG      std::cout << treeKey->getLocalName() << " : " << tok << endl;
-      
-      tok = strtok(NULL, "/");
-      
-    }
     
     FILE *infile;
     // case: add from text file
@@ -116,6 +81,7 @@ int main(int argc, char **argv) {
     else infile = stdin;
     
     entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
+    book->setKey(argv[3]);
     book->setEntry(buffer, entrysize); // save text to module at current position
   }
   

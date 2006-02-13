@@ -76,8 +76,6 @@ public:
 	virtual const char *getUserData(int *size = 0);
 	virtual void setUserData(const char *userData, int size = 0);
 
-	virtual const char *getFullName() const;
-
 	virtual void root();
 	virtual bool parent();
 
@@ -95,11 +93,10 @@ public:
 	virtual void save();
 
 	virtual void copyFrom(const TreeKeyIdx &ikey);
-	virtual void copyFrom(const SWKey & ikey);
+	virtual void copyFrom(const SWKey &ikey);
 
 	void setOffset(unsigned long offset);
 	unsigned long getOffset() const;
-
 
 
 	// OPERATORS ------------------------------------------------------------
