@@ -49,10 +49,6 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
 
 	root();
 
-	//assert we have more to do
-	if (!*keybuf)
-		return;
-
 	// TODO: change to NOT use strtok. strtok is dangerous.
 	char *tok = strtok(keybuf, "/");
 	while (tok) {
