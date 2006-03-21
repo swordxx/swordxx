@@ -77,7 +77,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			else {
 				bool endTag = tag.isEndTag();
 				SWBuf lastText;
-				bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
+				//bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
 				if (endTag) {
 					tag = u->w.c_str();
@@ -100,10 +100,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						buf.appendFormatted(" %s", val);
 				}
 				if (attrib = tag.getAttribute("lemma")) {
-					int count = tag.getAttributePartCount("lemma");
+					int count = tag.getAttributePartCount("lemma", ' ');
 					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 					do {
-						attrib = tag.getAttribute("lemma", i);
+						attrib = tag.getAttribute("lemma", i, ' ');
 						if (i < 0) i = 0;	// to handle our -1 condition
 						val = strchr(attrib, ':');
 						val = (val) ? (val + 1) : attrib;
@@ -115,27 +115,27 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						const char *val2 = val;
 						if ((strchr("GH", *val)) && (isdigit(val[1])))
 							val2++;
-						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
-							show = false;
-						else {
+						//if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
+						//	show = false;
+						//else {
 							if (!u->suspendTextPassThru)
 								buf.appendFormatted(" <small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small> ", 
 										(gh.length()) ? gh.c_str() : "", 
 										URL::encode(val2).c_str(), 
 										val2);
-						}
+						//}
 						
 					} while (++i < count);
 				}
-				if ((attrib = tag.getAttribute("morph")) && (show)) {
+				if (attrib = tag.getAttribute("morph")) { // && (show)) {
 					SWBuf savelemma = tag.getAttribute("savlm");
-					if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
-						show = false;
-					if (show) {
-						int count = tag.getAttributePartCount("morph");
+					//if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
+					//	show = false;
+					//if (show) {
+						int count = tag.getAttributePartCount("morph", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
-							attrib = tag.getAttribute("morph", i);
+							attrib = tag.getAttribute("morph", i, ' ');
 							if (i < 0) i = 0;	// to handle our -1 condition
 							val = strchr(attrib, ':');
 							val = (val) ? (val + 1) : attrib;
@@ -148,7 +148,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 										URL::encode(val).c_str(), 
 										val2);
 						} while (++i < count);
-					}
+					//}
 				}
 				if (attrib = tag.getAttribute("POS")) {
 					val = strchr(attrib, ':');
@@ -242,10 +242,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <milestone type="line"/>
-		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
-			if (!u->suspendTextPassThru)
-				buf += "<br />";
-			userData->supressAdjacentWhitespace = true;
+		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type"))) {
+			if(!strcmp(tag.getAttribute("type"), "line")) {
+				if (!u->suspendTextPassThru)
+					buf += "<br />";
+					userData->supressAdjacentWhitespace = true;
+			}
+			else if(!strcmp(tag.getAttribute("type"),"x-p")) 
+				buf += tag.getAttribute("marker");
 		}
 
 		// <title>
