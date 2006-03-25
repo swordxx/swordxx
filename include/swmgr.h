@@ -307,7 +307,7 @@ public:
 	 * @param module context module if filter needs this for processing
 	 * @return error status
 	 */
-	virtual char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual char filterText(const char *filterName, SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 
 	/**
 	 * Sets the cipher key for the given module. This function updates the key

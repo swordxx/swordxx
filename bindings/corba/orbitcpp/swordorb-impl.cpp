@@ -321,7 +321,7 @@ char *SWModule_impl::getKeyParent() throw(CORBA::SystemException) {
 	TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
 	if (tkey) {
 		if (tkey->parent()) {
-			retVal = tkey->getFullName();
+			retVal = tkey->getText();
 		}
 	}
 	return CORBA::string_dup((const char *)retVal);

@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	SWKey *key = (SWKey *)*inModule;
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 
-	char *buf;
+	char buf[1024];
 	bool opentest = false;
 	bool openbook = false;
 	bool openchap = false;
@@ -156,7 +156,6 @@ int main(int argc, char **argv)
 				if (openbook)
 					cout << "\t</div>\n";
 			}
-			buf = new char [205];
 			*buf = 0;
 			tmpKey = *vkey;
 			tmpKey.Chapter(0);
@@ -164,7 +163,6 @@ int main(int argc, char **argv)
 			sprintf(buf, "\t<div type=\"book\" osisID=\"%s\">\n", tmpKey.getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf << endl;
-			delete [] buf;
 			openbook = true;
 			newBook = true;
 		}
@@ -173,18 +171,17 @@ int main(int argc, char **argv)
 				if (openchap)
 					cout << "\t</chapter>\n";
 			}
-			buf = new char [205];
 			*buf = 0;
 			tmpKey = *vkey;
 			tmpKey.Verse(0);
 			sprintf(buf, "\t<chapter osisID=\"%s\">\n", tmpKey.getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf;
-			delete [] buf;
 			openchap = true;
 		}
-		SWBuf verseText = inModule->RenderText();
-		cout << verseText.c_str() << endl;
+		SWBuf verseText = inModule->getRawEntry();
+		sprintf(buf, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
+		cout << buf << verseText.c_str() << "</verse>\n" << endl;
 		lastChap = vkey->Chapter();
 		lastBook = vkey->Book();
 		lastTest = vkey->Testament();
