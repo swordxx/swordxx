@@ -1,7 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
-31-Jan-2005	Troy A. Griffitts <scribe@crosswire.org>
+29-Mar-2006	Joachim Ansorg <jansorg@crosswire.org>
+	Fixed lucene code to work with 0.9.x (tested with 0.9.10)
+
+31-Jan-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added support for OSIS variants
 	Added .NET support and update to swig bindings (from lefticus)
 

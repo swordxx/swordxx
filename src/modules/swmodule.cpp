@@ -19,8 +19,19 @@
 
 #ifdef USELUCENE
 #include <CLucene.h>
-using namespace lucene::search;
+//Lucence includes
+#include "CLucene.h"
+#include "CLucene/util/Reader.h"
+#include "CLucene/util/Misc.h"
+#include "CLucene/util/dirent.h"
+
+using namespace lucene::index;
+using namespace lucene::analysis;
+using namespace lucene::util;
+using namespace lucene::store;
+using namespace lucene::document;
 using namespace lucene::queryParser;
+using namespace lucene::search;
 #endif
 
 
@@ -462,6 +473,14 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 #ifdef USELUCENE
 	if (searchType == -4) {	// lucene
+		//Buffers for the wchar<->utf8 char* conversion
+		enum {
+			MAX_CONV_SIZE = 2047
+		};
+		wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
+		char utfBuffer[MAX_CONV_SIZE + 1];
+		
+		
 		// Make sure our scope for this search is bounded by
 		// something we can test
 		// In the future, add bool SWKey::isValid(const char *tryString);
@@ -482,23 +501,25 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 		lucene::index::IndexReader *ir;
 		lucene::search::IndexSearcher *is;
-		ir = &IndexReader::open(target);
-		is = new IndexSearcher(*ir);
+		ir = IndexReader::open(target);
+		is = new IndexSearcher(ir);
 		(*percent)(10, percentUserData);
 
 		standard::StandardAnalyzer analyzer;
-		Query &q =  QueryParser::Parse(istr, _T("content"), analyzer);
+		lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
+		Query *q =  QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
 		(*percent)(20, percentUserData);
-		Hits &h = is->search(q);
+		Hits *h = is->search(q);
 		(*percent)(80, percentUserData);
 
 
 		// iterate thru each good module position that meets the search
-		for (long i = 0; i < h.Length(); i++) {
-			Document &doc = h.doc(i);
+		for (long i = 0; i < h->length(); i++) {
+			Document &doc = h->doc(i);
 
 			// set a temporary verse key to this module position
-			vk = doc.get(_T("key"));
+			lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
+		       	vk = utfBuffer; //TODO Does vk always accept utf8?
 
 			// check scope
 			// Try to set our scope key to this verse key
@@ -507,13 +528,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			// check to see if it set ok and if so, add to our return list
 			if (*testKey == vk) {
 				listkey << (const char *) vk;
-				listkey.GetElement()->userData = (void *)((__u32)(h.score(i)*100));
+				listkey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
 			}
 		}
 		(*percent)(98, percentUserData);
 
-		delete &h;
-		delete &q;
+		delete h;
+		delete q;
 
 		delete is;
 		ir->close();
@@ -928,15 +949,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	FileMgr::createParent(target+"/dummy");
 
 	if (IndexReader::indexExists(target.c_str())) {
-		d = &FSDirectory::getDirectory(target.c_str(), false);
-		if (IndexReader::isLocked(*d)) {
-			IndexReader::unlock(*d);
+		d = FSDirectory::getDirectory(target.c_str(), false);
+		if (IndexReader::isLocked(d)) {
+			IndexReader::unlock(d);
 		}
 																		   
-		writer = new IndexWriter(*d, *an, false);
+		writer = new IndexWriter( d, an, false);
 	} else {
-		d = &FSDirectory::getDirectory(target.c_str(), true);
-		writer = new IndexWriter( *d ,*an, true);
+		d = FSDirectory::getDirectory(target.c_str(), true);
+		writer = new IndexWriter( d ,an, true);
 	}
 
 
@@ -966,6 +987,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWBuf proxLem;
 	SWBuf strong;
 
+	const short int MAX_CONV_SIZE = 2047;
+	wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
+	
 	char err = Error();
 	while (!err) {
 		long mindex = 0;
@@ -997,6 +1021,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		SWBuf keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
 		if (content && *content) {
 			good = true;
+
+			
 			// build "strong" field
 			AttributeTypeList::iterator words;
 			AttributeList::iterator word;
@@ -1017,13 +1043,21 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 					}
 				}
 			}
-			doc->add( Field::UnIndexed(_T("key"), keyText ) );
-			doc->add( Field::UnStored(_T("content"), content) );
-			if (strong.length() > 0)
-				doc->add( Field::UnStored(_T("lemma"), strong) );
+
+			lucene_utf8towcs(wcharBuffer, keyText, MAX_CONV_SIZE); //keyText must be utf8
+			doc->add( *Field::UnIndexed(_T("key"), wcharBuffer ) );
+
+			lucene_utf8towcs(wcharBuffer, content, MAX_CONV_SIZE); //content must be utf8
+			doc->add( *Field::UnStored(_T("content"), wcharBuffer) );
+
+			if (strong.length() > 0) {
+				lucene_utf8towcs(wcharBuffer, strong, MAX_CONV_SIZE);
+				doc->add( *Field::UnStored(_T("lemma"), wcharBuffer) );
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
-printf("setting fields (%s).\n", (const char *)*key);
-fflush(stdout);
+			}
+
+			printf("setting fields (%s).\n", (const char *)*key);
+			fflush(stdout);
 		}
 		// don't write yet, cuz we have to see if we're the first of a prox block (5:1 or chapter5/verse1
 
@@ -1120,21 +1154,28 @@ fflush(stdout);
 				else tkcheck->nextSibling();	// reposition from our previousSibling test
 			}
 		}
+		
 		if (proxBuf.length() > 0) {
-printf("proxBuf before (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
+			printf("proxBuf before (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
 			proxBuf = StripText(proxBuf);
-printf("proxBuf after (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
-			doc->add( Field::UnStored(_T("prox"), proxBuf) );
+	
+			lucene_utf8towcs(wcharBuffer, proxBuf, MAX_CONV_SIZE); //keyText must be utf8
+		
+			printf("proxBuf after (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
+			
+
+			doc->add( *Field::UnStored(_T("prox"), wcharBuffer) );
 			good = true;
 		}
 		if (proxLem.length() > 0) {
-			doc->add( Field::UnStored(_T("proxlem"), proxLem) );
+			lucene_utf8towcs(wcharBuffer, proxLem, MAX_CONV_SIZE); //keyText must be utf8
+			doc->add( *Field::UnStored(_T("proxlem"), wcharBuffer) );
 			good = true;
 		}
 		if (good) {
 printf("writing (%s).\n", (const char *)*key);
 fflush(stdout);
-			writer->addDocument(*doc);
+			writer->addDocument(doc);
 		}
 		delete doc;
 
