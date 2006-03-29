@@ -474,9 +474,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #ifdef USELUCENE
 	if (searchType == -4) {	// lucene
 		//Buffers for the wchar<->utf8 char* conversion
-		enum {
-			MAX_CONV_SIZE = 2047
-		};
+		const unsigned short int MAX_CONV_SIZE = 2047;
 		wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
 		char utfBuffer[MAX_CONV_SIZE + 1];
 		
