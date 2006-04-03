@@ -276,6 +276,32 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 		}
 
+		// divineName  
+		else if (!strcmp(tag.getName(), "divineName")) {
+			SWBuf type = tag.getAttribute("type");
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				if (type == "x-yhwh") {
+					u->inName = true;
+					u->suspendTextPassThru = true;
+				} else {
+					u->inName = false;
+				}
+			} else if (tag.isEndTag()) {
+				if(u->inName ) {
+					char firstChar = *u->lastTextNode.c_str();
+					const char *name = u->lastTextNode.c_str();
+					++name;
+					buf += firstChar;
+					buf += "<font size=\"-1\">";
+					for(int i=0;i<strlen(name);i++)
+						buf += toupper(name[i]);
+					buf += "</font>";
+					u->inName = false;
+					u->suspendTextPassThru = false;
+				}
+			} 
+		}
+
 		// <hi> text highlighting
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
