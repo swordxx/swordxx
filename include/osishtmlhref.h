@@ -34,6 +34,7 @@ protected:
 	public:
 		bool osisQToTick;
 		bool inBold;
+		bool inName;
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
