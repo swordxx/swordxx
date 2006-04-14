@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes
 
+14-Apr-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Added EntryAttribute support to SWIG bindings (from mreimer)
+
 29-Mar-2006	Joachim Ansorg <jansorg@crosswire.org>
 	Fixed lucene code to work with 0.9.x (tested with 0.9.10)
 
