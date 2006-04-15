@@ -3,14 +3,15 @@
 using namespace sword;
 %}
 
-typedef std::map < SWBuf, SWBuf, std::less < SWBuf > > AttributeValue;
-typedef std::map < SWBuf, AttributeValue, std::less < SWBuf > > AttributeList;
-typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList;
+%include "std_map.i"
 
-%template(attrval) std::map < SWBuf, SWBuf, std::less < SWBuf > > AttributeValue;
-%template(attrlist) std::map < SWBuf, AttributeValue, std::less < SWBuf > > AttributeList;
-%template(attrtypelist) std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList;
+typedef std::map < SWBuf, SWBuf > AttributeValue;
+typedef std::map < SWBuf, AttributeValue > AttributeList;
+typedef std::map < SWBuf, AttributeList > AttributeTypeList;
 
+%template(AttributeValue) std::map<SWBuf, SWBuf>;
+%template(AttributeList) std::map<SWBuf, AttributeValue>;
+%template(AttributeTypeList) std::map<SWBuf, AttributeList>;
 
 class SWModule {
 public:
