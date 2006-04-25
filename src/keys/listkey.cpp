@@ -316,5 +316,18 @@ void ListKey::setText(const char *ikey) {
 	SWKey::setText(ikey);
 }
 
+// This sort impl sucks.  Let's change it to a quicksort or some other efficient algol
+void ListKey::sort() {
+	for (int i = 0; i < arraycnt; i++) {
+		for (int j = i; j < arraycnt; j++) {
+			if (*array[j] < *array[i]) {
+				SWKey *tmp = array[i];
+				array[i] = array[j];
+				array[j] = tmp;
+			}
+		}
+	}
+}
+
 SWORD_NAMESPACE_END
 

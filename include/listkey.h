@@ -118,6 +118,7 @@ public:
 	virtual long Index(long index) { SetToElement (index); return Index (); }
 	virtual const char *getText() const;
 	virtual void setText(const char *ikey);
+	virtual void sort();
 
 	SWKEY_OPERATORS
 	ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
