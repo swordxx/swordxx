@@ -176,6 +176,7 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 	int i = 0;
 
 	// if we're sorted by score, let's re-sort by verse, because Java can always re-sort by score
+	result = sword::TOP;
 	if ((long)result.getElement()->userData)
 		result.sort();
 
