@@ -174,6 +174,11 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 	for (result = sword::TOP; !result.Error(); result++) count++;
 	retVal->length(count);
 	int i = 0;
+
+	// if we're sorted by score, let's re-sort by verse, because Java can always re-sort by score
+	if ((long)result.getElement()->userData)
+		result.sort();
+
 	for (result = sword::TOP; !result.Error(); result++) {
 		(*retVal)[i].modName = CORBA::string_dup(delegate->Name());
 		(*retVal)[i].key = CORBA::string_dup((const char *)result);
