@@ -76,6 +76,7 @@ int main(int argc, char **argv)
    */
 	listkey = target->Search(searchTerm.c_str(), -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
+	listkey.sort();
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;
 		listkey++;

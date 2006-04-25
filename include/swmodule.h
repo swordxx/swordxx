@@ -99,7 +99,7 @@ protected:
 	/** the current key */
 	SWKey *key;
 
-	ListKey listkey;
+	ListKey listKey;
 	char *modname;
 	char *moddesc;
 	char *modtype;
@@ -355,7 +355,7 @@ public:
 	 * @param percent Callback function to get the current search status in %.
 	 * @param percentUserData User data that is given to the callback function as parameter.
 	 *
-	 * @return listkey set to verses that contain istr
+	 * @return ListKey set to verses that contain istr
 	 */
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
 			SWKey * scope = 0,

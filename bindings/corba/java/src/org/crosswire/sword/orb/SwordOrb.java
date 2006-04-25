@@ -28,8 +28,8 @@ System.out.println("calling testConnection");
 			retVal.testConnection();
 System.out.println("testConnection successful");
 		}
-		catch(org.omg.CORBA.SystemException e) {
-			e.printStackTrace();
+		catch(Exception e) {
+//			e.printStackTrace();
 			retVal = null;
 System.out.println("failed in attach");
 		}
@@ -88,7 +88,7 @@ System.out.println("trying to attach to running ORB");
 			retVal = attach();
 		}
 		catch(org.omg.CORBA.SystemException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			retVal = null;
 		}
 		if (retVal == null) {

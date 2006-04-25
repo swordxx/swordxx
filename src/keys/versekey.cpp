@@ -1458,7 +1458,12 @@ long VerseKey::Index(long iindex)
 
 int VerseKey::compare(const SWKey &ikey)
 {
-	VerseKey ivkey = (const char *)ikey;
+	const SWKey *testKey = &ikey;
+	const VerseKey *vkey = (const VerseKey *)SWDYNAMIC_CAST(VerseKey, testKey);
+	if (vkey) {
+		return _compare(*vkey);
+	}
+	const VerseKey ivkey = (const char *)ikey;
 	return _compare(ivkey);
 }
 

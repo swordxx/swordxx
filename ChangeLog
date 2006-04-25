@@ -1,5 +1,13 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
-		app specific changes
+		app specific changes)
+
+25-Apr-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Changed SWModule::search to fill result set up with more
+		specialized SWKey objects, instead of always SWKey
+	Changed SWModule::search to use CLucene better for
+		non-VerseKey modules
+	Added basic proximity searching with CLucene searches
+	Added ListKey::sort()
 
 14-Apr-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added EntryAttribute support to SWIG bindings (from mreimer)

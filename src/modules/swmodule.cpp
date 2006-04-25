@@ -395,12 +395,12 @@ void SWModule::decrement(int steps) {
  *	justCheckIfSupported	- if set, don't search, only tell if this
  *							function supports requested search.
  *
- * RET: listkey set to verses that contain istr
+ * RET: ListKey set to verses that contain istr
  */
 
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 
-	listkey.ClearList();
+	listKey.ClearList();
 
 #ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
@@ -416,13 +416,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			*justCheckIfSupported = true;
 		}
 #endif
-		return listkey;
+		return listKey;
 	}
 	
-	SWKey *savekey = 0;
-	SWKey *searchkey = 0;
+	SWKey *saveKey = 0;
+	SWKey *searchKey = 0;
+	SWKey *resultKey = CreateKey();
 	regex_t preg;
-	SWKey textkey;
 	char **words = 0;
 	char *wordBuf = 0;
 	int wordCount = 0;
@@ -435,15 +435,15 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	
 
 	if (!key->Persist()) {
-		savekey = CreateKey();
-		*savekey = *key;
+		saveKey = CreateKey();
+		*saveKey = *key;
 	}
-	else	savekey = key;
+	else	saveKey = key;
 
-	searchkey = (scope)?scope->clone():(key->Persist())?key->clone():0;
-	if (searchkey) {
-		searchkey->Persist(1);
-		setKey(*searchkey);
+	searchKey = (scope)?scope->clone():(key->Persist())?key->clone():0;
+	if (searchKey) {
+		searchKey->Persist(1);
+		setKey(*searchKey);
 	}
 
 	(*percent)(perc, percentUserData);
@@ -482,20 +482,25 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		// Make sure our scope for this search is bounded by
 		// something we can test
 		// In the future, add bool SWKey::isValid(const char *tryString);
-		VerseKey vk;
 		bool freeTestKey = false;
+
+		// only enforce range if we're VerseKey decendant
+		bool enforceRange = SWDYNAMIC_CAST(VerseKey, resultKey);
+
 		SWKey *testKey = 0;
-		SWTRY {
-			testKey = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
-			if (!testKey) {
-				testKey = SWDYNAMIC_CAST(ListKey, ((scope)?scope:key));
+		if (enforceRange) {
+			SWTRY {
+				testKey = SWDYNAMIC_CAST(VerseKey, ((scope)?scope:key));
+				if (!testKey) {
+					testKey = SWDYNAMIC_CAST(ListKey, ((scope)?scope:key));
+				}
 			}
-		}
-		SWCATCH ( ... ) {}
-		if (!testKey) {
-			testKey = new ListKey();
-			*testKey = vk.ParseVerseList((const char *)((scope)?scope:key), vk, true);
-			freeTestKey = true;
+			SWCATCH ( ... ) {}
+			if (!testKey) {
+				testKey = new ListKey();
+				*testKey = ((VerseKey *)resultKey)->ParseVerseList((const char *)((scope)?scope:key), *resultKey, true);
+				freeTestKey = true;
+			}
 		}
 		lucene::index::IndexReader *ir;
 		lucene::search::IndexSearcher *is;
@@ -517,16 +522,21 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// set a temporary verse key to this module position
 			lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
-		       	vk = utfBuffer; //TODO Does vk always accept utf8?
+			*resultKey = utfBuffer; //TODO Does a key always accept utf8?
+			if (enforceRange) {
+				// check scope
+				// Try to set our scope key to this verse key
+				*testKey = *resultKey;
 
-			// check scope
-			// Try to set our scope key to this verse key
-			*testKey = vk;
-
-			// check to see if it set ok and if so, add to our return list
-			if (*testKey == vk) {
-				listkey << (const char *) vk;
-				listkey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
+				// check to see if it set ok and if so, add to our return list
+				if (*testKey == *resultKey) {
+					listKey << *resultKey;
+					listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
+				}
+			}
+			else {
+				listKey << *resultKey;
+				listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
 			}
 		}
 		(*percent)(98, percentUserData);
@@ -617,8 +627,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 		if (searchType >= 0) {
 			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
-				textkey = KeyText();
-				listkey << textkey;
+				*resultKey = *getKey();
+				listKey << *resultKey;
 			}
 		}
 
@@ -626,8 +636,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		else if (searchType == -1) {
 			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
 			if (sres) { //it's also in the StripText(), so we have a valid search result item now
-				textkey = KeyText();
-				listkey << textkey;
+				*resultKey = *getKey();
+				listKey << *resultKey;
 			}
 		}
 
@@ -652,8 +662,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			} while ( (loopCount < 2) && (foundWords == wordCount));
 			
 			if ((loopCount == 2) && (foundWords == wordCount)) { //we found the right words in both raw and stripped text, which means it's a valid result item
-				textkey = KeyText();
-				listkey << textkey;
+				*resultKey = *getKey();
+				listKey << *resultKey;
 			}
 		}
 
@@ -707,8 +717,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 							sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
 						}
 						if (sres) {
-							textkey = KeyText();
-							listkey << textkey;
+							*resultKey = *getKey();
+							listKey << *resultKey;
 							break;
 						}
 					}
@@ -730,19 +740,23 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		free(wordBuf);
 	}
 
-	setKey(*savekey);
+	setKey(*saveKey);
 
-	if (!savekey->Persist())
-		delete savekey;
+	if (!saveKey->Persist())
+		delete saveKey;
 
-	if (searchkey)
-		delete searchkey;
+	if (searchKey)
+		delete searchKey;
+	delete resultKey;
 
-	listkey = TOP;
+	listKey = TOP;
 	processEntryAttributes(savePEA);
+
+
 	(*percent)(100, percentUserData);
 
-	return listkey;
+
+	return listKey;
 }
 
 
@@ -765,7 +779,7 @@ const char *SWModule::StripText(const char *buf, int len) {
  *
  * ENT:	buf	- buffer to Render instead of current module position
  *
- * RET: listkey set to verses that contain istr
+ * RET: this module's text at specified key location massaged by RenderText filters
  */
 
  const char *SWModule::RenderText(const char *buf, int len, bool render) {
@@ -810,23 +824,23 @@ const char *SWModule::StripText(const char *buf, int len) {
  */
 
  const char *SWModule::RenderText(SWKey *tmpKey) {
-	SWKey *savekey;
+	SWKey *saveKey;
 	const char *retVal;
 
 	if (!key->Persist()) {
-		savekey = CreateKey();
-		*savekey = *key;
+		saveKey = CreateKey();
+		*saveKey = *key;
 	}
-	else	savekey = key;
+	else	saveKey = key;
 
 	setKey(*tmpKey);
 
 	retVal = RenderText();
 
-	setKey(*savekey);
+	setKey(*saveKey);
 
-	if (!savekey->Persist())
-		delete savekey;
+	if (!saveKey->Persist())
+		delete saveKey;
 
 	return retVal;
 }
@@ -841,23 +855,23 @@ const char *SWModule::StripText(const char *buf, int len) {
  */
 
 const char *SWModule::StripText(SWKey *tmpKey) {
-	SWKey *savekey;
+	SWKey *saveKey;
 	const char *retVal;
 
 	if (!key->Persist()) {
-		savekey = CreateKey();
-		*savekey = *key;
+		saveKey = CreateKey();
+		*saveKey = *key;
 	}
-	else	savekey = key;
+	else	saveKey = key;
 
 	setKey(*tmpKey);
 
 	retVal = StripText();
 
-	setKey(*savekey);
+	setKey(*saveKey);
 
-	if (!savekey->Persist())
-		delete savekey;
+	if (!saveKey->Persist())
+		delete saveKey;
 
 	return retVal;
 }
@@ -899,8 +913,8 @@ void SWModule::deleteSearchFramework() {
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 #ifdef USELUCENE
-	SWKey *savekey = 0;
-	SWKey *searchkey = 0;
+	SWKey *saveKey = 0;
+	SWKey *searchKey = 0;
 	SWKey textkey;
 	char *word = 0;
 	char *wordBuf = 0;
@@ -924,15 +938,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	// save key information so as not to disrupt original
 	// module position
 	if (!key->Persist()) {
-		savekey = CreateKey();
-		*savekey = *key;
+		saveKey = CreateKey();
+		*saveKey = *key;
 	}
-	else	savekey = key;
+	else	saveKey = key;
 
-	searchkey = (key->Persist())?key->clone():0;
-	if (searchkey) {
-		searchkey->Persist(1);
-		setKey(*searchkey);
+	searchKey = (key->Persist())?key->clone():0;
+	if (searchKey) {
+		searchKey->Persist(1);
+		setKey(*searchKey);
 	}
 
 	IndexWriter *writer = NULL;
@@ -1054,8 +1068,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
 			}
 
-			printf("setting fields (%s).\n", (const char *)*key);
-			fflush(stdout);
+//printf("setting fields (%s).\n", (const char *)*key);
+//fflush(stdout);
 		}
 		// don't write yet, cuz we have to see if we're the first of a prox block (5:1 or chapter5/verse1
 
@@ -1068,7 +1082,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				VerseKey saveKey = *vkcheck;
 				while ((!err) && (*vkcheck <= chapMax)) {
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
-printf("building proxBuf from (%s).\n", (const char *)*key);
+//printf("building proxBuf from (%s).\n", (const char *)*key);
 
 					// build "strong" field
 					strong = "";
@@ -1112,8 +1126,8 @@ printf("building proxBuf from (%s).\n", (const char *)*key);
 			if (!tkcheck->hasChildren()) {
 				if (!tkcheck->previousSibling()) {
 					do {
-printf("building proxBuf from (%s).\n", (const char *)*key);
-fflush(stdout);
+//printf("building proxBuf from (%s).\n", (const char *)*key);
+//fflush(stdout);
 
 						// build "strong" field
 						strong = "";
@@ -1154,12 +1168,12 @@ fflush(stdout);
 		}
 		
 		if (proxBuf.length() > 0) {
-			printf("proxBuf before (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
+//printf("proxBuf before (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
 			proxBuf = StripText(proxBuf);
 	
 			lucene_utf8towcs(wcharBuffer, proxBuf, MAX_CONV_SIZE); //keyText must be utf8
 		
-			printf("proxBuf after (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
+//printf("proxBuf after (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
 			
 
 			doc->add( *Field::UnStored(_T("prox"), wcharBuffer) );
@@ -1171,8 +1185,8 @@ fflush(stdout);
 			good = true;
 		}
 		if (good) {
-printf("writing (%s).\n", (const char *)*key);
-fflush(stdout);
+//printf("writing (%s).\n", (const char *)*key);
+//fflush(stdout);
 			writer->addDocument(doc);
 		}
 		delete doc;
@@ -1187,13 +1201,13 @@ fflush(stdout);
 	delete an;
 
 	// reposition module back to where it was before we were called
-	setKey(*savekey);
+	setKey(*saveKey);
 
-	if (!savekey->Persist())
-		delete savekey;
+	if (!saveKey->Persist())
+		delete saveKey;
 
-	if (searchkey)
-		delete searchkey;
+	if (searchKey)
+		delete searchKey;
 
 	processEntryAttributes(savePEA);
 
