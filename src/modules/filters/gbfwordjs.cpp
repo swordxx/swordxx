@@ -97,7 +97,9 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 					}
 					else {
 						// verb morph
-						(*wordAttrs)["Morph"] = val;
+						if (wordAttrs) {
+							(*wordAttrs)["Morph"] = val;
+						}
 	//printf("Adding: [\"Word\"][%s][\"Morph\"] = %s\n", wordstr, val);
 					}
 
@@ -107,8 +109,10 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 						strcpy(val, token+2);
 					}
 					else strcpy(val, token+1);
-					(*wordAttrs)["Morph"] = val;
-					(*wordAttrs)["MorphClass"] = "StrongsMorph";
+					if (wordAttrs) {
+						(*wordAttrs)["Morph"] = val;
+						(*wordAttrs)["MorphClass"] = "StrongsMorph";
+					}
 					newText = true;
 				}
 				// if not a strongs token, keep token in text
