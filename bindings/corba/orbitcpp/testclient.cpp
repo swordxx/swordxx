@@ -52,31 +52,31 @@ int main (int argc, char *argv[])
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
 		mgr->setGlobalOption("Footnotes", "On");
-		module = mgr->getModuleByName("NASB");
+		module = mgr->getModuleByName("WEB");
+/*
 		module->setKeyText("jas.1.19");
 		swordorb::StringList *attr = module->getEntryAttribute("Footnote", "", "body", true);
 		std::cout << "length: " << attr->length() << "\n";
 		for (int i = 0; i < attr->length(); i++) {
 			std::cout << (*attr)[i] << "\n";
 		}
-/*
-		for (module->setKeyText("is.53.4"); !module->error(); module->next()) {
+*/
+		int i = 0;
+		for (module->setKeyText("jas.1.1"); !module->error() && i < 30; module->next(), i++) {
 			std::cout << "KeyText: " << module->getKeyText() << "\n";
 			std::cout << "Text: " << module->getRenderText() << "\n";
-			break;
 		}
-*/
 /*
 		swordorb::SearchHitList *searchResults;
 		bool lucene = module->hasSearchFramework();
-		searchResults = module->search("God love world", (lucene)?swordorb::LUCENE:swordorb::MULTIWORD, 0, "");
+		searchResults = module->search("David", (lucene)?swordorb::LUCENE:swordorb::MULTIWORD, 0, "");
 		for (int i = 0; i < searchResults->length(); i++) {
 			std::cout << (*searchResults)[i].key << "\n";
 		}
-*/
 
 		mgr->setGlobalOption("Greek Accents", "Off");
 		std::cout << "\nFiltered text: " << mgr->filterText("Greek Accents", "ὁ θεὸς") << "\n";
+*/
 
 		
 	} catch(const CORBA::Exception& ex) {

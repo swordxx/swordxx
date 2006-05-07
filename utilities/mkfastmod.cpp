@@ -33,10 +33,10 @@ void percentUpdate(char percent, void *userData) {
 
 int main(int argc, char **argv)
 {
-	SWMgr manager(new sword::MarkupFilterMgr(sword::FMT_HTMLHREF, sword::ENC_UTF16));
-	SWModule &kjv = *(manager.Modules["KJV"]);
-	for (kjv.setKey("Gen 1:1"); ((VerseKey *)kjv.getKey())->Chapter() == 1; kjv++) {
-		SWBuf x = kjv.RenderText();
+
+	if (argc != 2) {
+		fprintf(stderr, "usage: %s <modname>\n", argv[0]);
+		exit(-1);
 	}
 	
 	SWModule *target;
@@ -44,11 +44,7 @@ int main(int argc, char **argv)
 	VerseKey vk;
 	ModMap::iterator it;
 
-	if (argc != 2) {
-		fprintf(stderr, "usage: %s <modname>\n", argv[0]);
-		exit(-1);
-	}
-
+	SWMgr manager;
 	it = manager.Modules.find(argv[1]);
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);

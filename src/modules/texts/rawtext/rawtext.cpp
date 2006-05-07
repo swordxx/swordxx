@@ -278,12 +278,12 @@ void RawText::deleteSearchFramework() {
  *	justCheckIfSupported	- if set, don't search, only tell if this
  *							function supports requested search.
  *
- * RET: listkey set to verses that contain istr
+ * RET: ListKey set to verses that contain istr
  */
 
 ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 #ifndef USELUCENE
-	listkey.ClearList();
+	listKey.ClearList();
 
 	if ((fastSearch[0]) && (fastSearch[1])) {
 
@@ -312,7 +312,7 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 			// If we've gotten this far, then it is supported.
 			if (justCheckIfSupported) {
 				*justCheckIfSupported = true;
-				return listkey;
+				return listKey;
 			}
 
 			SWKey saveKey = *testKeyType; // save current place
@@ -415,7 +415,7 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 					percent((char)(20 + (float)((j*wordCount)+i)/(wordCount * 2) * 78), percentUserData);
 				}
 
-				// indexes contains our good verses, lets return them in a listkey
+				// indexes contains our good verses, lets return them in a listKey
 				indexes.sort();
 
 				// iterate thru each good module position that meets the search
@@ -433,9 +433,9 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 
 						// check to see if it set ok and if so, add to our return list
 						if (*testKeyType == vk)
-							listkey << (const char *) vk;
+							listKey << (const char *) vk;
 					}
-					else listkey << (const char*) vk;
+					else listKey << (const char*) vk;
 				}
 			}
 			(*percent)(98, percentUserData);
@@ -445,9 +445,9 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 
 			*testKeyType = saveKey;	// set current place back to original
 
-			listkey = TOP;
+			listKey = TOP;
 			(*percent)(100, percentUserData);
-			return listkey;
+			return listKey;
 		}
 
 		default:
@@ -458,7 +458,7 @@ ListKey &RawText::search(const char *istr, int searchType, int flags, SWKey *sco
 	// check if we just want to see if search is supported
 	if (justCheckIfSupported) {
 		*justCheckIfSupported = false;
-		return listkey;
+		return listKey;
 	}
 
 #endif
