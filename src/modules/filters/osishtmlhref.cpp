@@ -248,8 +248,13 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					buf += "<br />";
 					userData->supressAdjacentWhitespace = true;
 			}
-			else if(!strcmp(tag.getAttribute("type"),"x-p")) 
-				buf += tag.getAttribute("marker");
+			else if(!strcmp(tag.getAttribute("type"),"x-p"))  {
+			//	buf += tag.getAttribute("marker");
+				if( tag.getAttribute("marker"))
+					buf += tag.getAttribute("marker");
+				else
+					buf +=  "<!p>";
+			}
 		}
 
 		// <title>
