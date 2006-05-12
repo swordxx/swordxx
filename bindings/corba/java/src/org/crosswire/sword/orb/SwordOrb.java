@@ -159,10 +159,6 @@ System.out.println("trying to attach to newly launched ORB");
 		if (orb == null) {
 System.out.println("No ORB found in session; constructing a new instance");
 
-			String locName = (String)session.getAttribute("SwordOrbLocale");
-			if (locName != null)
-				orb.localeName = locName;
-
 			Vector orbs = (Vector)clients.get(remoteAddr);
 			if (orbs == null) {
 				orbs = new Vector();
@@ -171,6 +167,11 @@ System.out.println("No ORB found in session; constructing a new instance");
 			if (orbs.size() < MAX_REMOTE_ADDR_CONNECTIONS) {
 				orb = new SwordOrb(remoteAddr);
 				orbs.add(orb);
+
+				String locName = (String)session.getAttribute("SwordOrbLocale");
+				if (locName != null)
+					orb.localeName = locName;
+
 				session.setAttribute("SwordOrb", orb);
 			}
 			else throw new Exception("Max Remote Addr Connections from: ["+remoteAddr+"]");
