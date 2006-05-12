@@ -5,18 +5,32 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.StringWriter;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionBindingEvent;
+import java.util.Vector;
+import java.util.Hashtable;
+import java.util.Date;
 
 public class SwordOrb extends Object implements HttpSessionBindingListener {
+	public static final int MAX_REMOTE_ADDR_CONNECTIONS = 10;
+	public static final int MAX_ACCESS_COUNT_PER_INTERVAL = 10;
+	public static final long MAX_ACCESS_COUNT_INTERVAL = 10 * 1000;	// milliseconds
+	public static final long BLACKLIST_DURATION = 10 * 60 * 1000;	// milliseconds
 	public static final String BIBLES = "Biblical Texts";
 	public static final String COMMENTARIES = "Commentaries";
 	public static final String LEXDICTS = "Lexicons / Dictionaries";
 	public static final String GENBOOKS = "Generic Books";
 	public static final String DAILYDEVOS = "Daily Devotional";
 	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, null);
+	static Hashtable clients = new Hashtable();
 	String ior = null;
+	String remoteAddr = null;
 	String localeName = null;
+	long   lastAccessed = 0;
+	int    intervalCount = 0;
+	long   intervalStamp = 0;
+	long   blacklistTill = 0;
 
 	private SWMgr attach() {
 		SWMgr retVal = null;
@@ -36,7 +50,8 @@ System.out.println("failed in attach");
 		return retVal;
 	}
 
-	public SwordOrb() {
+	public SwordOrb(String remoteAddr) {
+		this.remoteAddr = remoteAddr;
 	}
 
 
@@ -57,6 +72,10 @@ System.out.println("failed in attach");
 		try {
 //			throw new Exception("value unbound; showing stacktrace");
 			getSWMgrInstance().terminate();
+			Vector orbs = (Vector)clients.get(remoteAddr);
+			if (orbs != null) {
+				orbs.remove(orb);
+			}
 		}
 		catch (Exception e) {}	// we know this doesn't return properly cuz we killed the orb! :)
 //		catch (Exception e) {e.printStackTrace();}	// we know this doesn't return properly cuz we killed the orb! :)
@@ -80,8 +99,23 @@ System.out.println("Launched ORB, IOR: " + ior);
 		catch (Exception e) {e.printStackTrace();}
 	}
 
+	void checkAccessAbuse() throws Exception {
+		if ((blacklistTill > 0) && (System.currentTimeMillis() < blacklistTill)) {
+			throw new Exception("You're an abuser and have been blacklisted till " + new Date(blacklistTill));
+		}
+		if (++intervalCount > MAX_ACCESS_COUNT_PER_INTERVAL) {
+			if (System.currentTimeMillis() < intervalStamp + MAX_ACCESS_COUNT_INTERVAL) {
+				// abuser
+				blacklistTill = System.currentTimeMillis() + BLACKLIST_DURATION;
+			}
+			intervalStamp = System.currentTimeMillis();
+			intervalCount = 0;
+		}
+	}
 
-	public SWMgr getSWMgrInstance() {
+	public SWMgr getSWMgrInstance() throws Exception {
+		lastAccessed = System.currentTimeMillis();
+		checkAccessAbuse();
 		SWMgr retVal = null;
 		try {
 System.out.println("trying to attach to running ORB");
@@ -110,25 +144,36 @@ System.out.println("trying to attach to newly launched ORB");
 		return retVal;
 	}
 
-	public static void setSessionLocale(String localeName, HttpSession session) {
-		session.setAttribute("SwordOrbLocale", localeName);
-		SWMgr mgr = getSWMgrInstance(session);
+	public static void setSessionLocale(String localeName, HttpServletRequest request) throws Exception {
+		request.getSession().setAttribute("SwordOrbLocale", localeName);
+		SWMgr mgr = getSWMgrInstance(request);
 		if (mgr != null) {
 			mgr.setDefaultLocale(localeName);
 		}
 	}
 
-	public static SwordOrb getSessionOrb(HttpSession session) {
+	public static SwordOrb getSessionOrb(HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
 		SwordOrb orb = (SwordOrb)session.getAttribute("SwordOrb");
+		String remoteAddr = request.getRemoteAddr();
 		if (orb == null) {
 System.out.println("No ORB found in session; constructing a new instance");
-			orb = new SwordOrb();
 
 			String locName = (String)session.getAttribute("SwordOrbLocale");
 			if (locName != null)
 				orb.localeName = locName;
 
-			session.setAttribute("SwordOrb", orb);
+			Vector orbs = (Vector)clients.get(remoteAddr);
+			if (orbs == null) {
+				orbs = new Vector();
+				clients.put(remoteAddr, orbs);
+			}
+			if (orbs.size() < MAX_REMOTE_ADDR_CONNECTIONS) {
+				orb = new SwordOrb(remoteAddr);
+				orbs.add(orb);
+				session.setAttribute("SwordOrb", orb);
+			}
+			else throw new Exception("Max Remote Addr Connections from: ["+remoteAddr+"]");
 		}
 		else {
 System.out.println("ORB found in session");
@@ -136,15 +181,15 @@ System.out.println("ORB found in session");
 		return orb;
 	}
 
-	public static SWMgr getSWMgrInstance(HttpSession session) {
-		SwordOrb orb = getSessionOrb(session);
+	public static SWMgr getSWMgrInstance(HttpServletRequest request) throws Exception {
+		SwordOrb orb = getSessionOrb(request);
 		SWMgr mgr = orb.getSWMgrInstance();
 		return mgr;
 	}
 
 
 	public static void main(String args[]) throws Exception {
-		SWMgr mgr = new SwordOrb().getSWMgrInstance();
+		SWMgr mgr = new SwordOrb("127.0.0.1").getSWMgrInstance();
 
 		System.out.println("PrefixPath: " + mgr.getPrefixPath());
 		System.out.println("ConfigPath: " + mgr.getConfigPath());
