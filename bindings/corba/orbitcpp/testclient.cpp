@@ -52,7 +52,7 @@ int main (int argc, char *argv[])
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
 		mgr->setGlobalOption("Footnotes", "On");
-		module = mgr->getModuleByName("KJV2006");
+		module = mgr->getModuleByName("TR");
 /*
 		module->setKeyText("jas.1.19");
 		swordorb::StringList *attr = module->getEntryAttribute("Footnote", "", "body", true);

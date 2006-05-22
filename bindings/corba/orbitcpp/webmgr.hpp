@@ -48,8 +48,16 @@ public:
 
 
 	void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
+
+		// ThML word stuff needs to process before strongs strip
+		if (module->Markup() == FMT_THML) {
+			module->AddOptionFilter(thmlWordJS);
+		}
+
+		// add other module filters
 		SWMgr::AddGlobalOptions(module, section, start, end);
 
+		// add our special filters
 		if (module->getConfig().has("Feature", "GreekDef")) {
 			defaultGreekLex = module;
 		}
@@ -71,9 +79,6 @@ public:
 
 		if (module->Markup() == FMT_OSIS) {
 			module->AddOptionFilter(osisWordJS);
-		}
-		if (module->Markup() == FMT_THML) {
-			module->AddOptionFilter(thmlWordJS);
 		}
 		if (module->Markup() == FMT_GBF) {
 			module->AddOptionFilter(gbfWordJS);

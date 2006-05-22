@@ -1040,18 +1040,25 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			AttributeList::iterator word;
 			AttributeValue::iterator strongVal;
 
+			strong="";
 			words = getEntryAttributes().find("Word");
 			if (words != getEntryAttributes().end()) {
 				for (word = words->second.begin();word != words->second.end(); word++) {
-					strongVal = word->second.find("Lemma");
-					if (strongVal != word->second.end()) {
-						// cheeze.  skip empty article tags that weren't assigned to any text
-						if (strongVal->second == "G3588") {
-							if (word->second.find("Text") == word->second.end())
-								continue;	// no text? let's skip
+					int partCount = atoi(word->second["PartCount"]);
+					if (!partCount) partCount = 1;
+					for (int i = 0; i < partCount; i++) {
+						SWBuf tmp = "Lemma";
+						if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+						strongVal = word->second.find(tmp);
+						if (strongVal != word->second.end()) {
+							// cheeze.  skip empty article tags that weren't assigned to any text
+							if (strongVal->second == "G3588") {
+								if (word->second.find("Text") == word->second.end())
+									continue;	// no text? let's skip
+							}
+							strong.append(strongVal->second);
+							strong.append(' ');
 						}
-						strong.append(strongVal->second);
-						strong.append(' ');
 					}
 				}
 			}
@@ -1084,35 +1091,41 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 
-					// build "strong" field
-					strong = "";
-					AttributeTypeList::iterator words;
-					AttributeList::iterator word;
-					AttributeValue::iterator strongVal;
+					content = StripText();
+					if (content && *content) {
+						// build "strong" field
+						strong = "";
+						AttributeTypeList::iterator words;
+						AttributeList::iterator word;
+						AttributeValue::iterator strongVal;
 
-					words = getEntryAttributes().find("Word");
-					if (words != getEntryAttributes().end()) {
-						for (word = words->second.begin();word != words->second.end(); word++) {
-							strongVal = word->second.find("Lemma");
-							if (strongVal != word->second.end()) {
-								// cheeze.  skip empty article tags that weren't assigned to any text
-								if (strongVal->second == "G3588") {
-									if (word->second.find("Text") == word->second.end())
-										continue;	// no text? let's skip
+						words = getEntryAttributes().find("Word");
+						if (words != getEntryAttributes().end()) {
+							for (word = words->second.begin();word != words->second.end(); word++) {
+								int partCount = atoi(word->second["PartCount"]);
+								if (!partCount) partCount = 1;
+								for (int i = 0; i < partCount; i++) {
+									SWBuf tmp = "Lemma";
+									if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+									strongVal = word->second.find(tmp);
+									if (strongVal != word->second.end()) {
+										// cheeze.  skip empty article tags that weren't assigned to any text
+										if (strongVal->second == "G3588") {
+											if (word->second.find("Text") == word->second.end())
+												continue;	// no text? let's skip
+										}
+										strong.append(strongVal->second);
+										strong.append(' ');
+									}
 								}
-								strong.append(strongVal->second);
-								strong.append(' ');
 							}
 						}
-					}
-					content = getRawEntry();
-					if (content && *content) {
 						proxBuf += content;
 						proxBuf.append(' ');
+						proxLem += strong;
+						if (proxLem.length()) 
+							proxLem.append("\n");
 					}
-					proxLem += strong;
-					if (proxLem.length()) 
-						proxLem.append("\n");
 					(*this)++;
 					err = Error();
 				}
@@ -1129,36 +1142,42 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 //fflush(stdout);
 
-						// build "strong" field
-						strong = "";
-						AttributeTypeList::iterator words;
-						AttributeList::iterator word;
-						AttributeValue::iterator strongVal;
+						content = StripText();
+						if (content && *content) {
+							// build "strong" field
+							strong = "";
+							AttributeTypeList::iterator words;
+							AttributeList::iterator word;
+							AttributeValue::iterator strongVal;
 
-						words = getEntryAttributes().find("Word");
-						if (words != getEntryAttributes().end()) {
-							for (word = words->second.begin();word != words->second.end(); word++) {
-								strongVal = word->second.find("Lemma");
-								if (strongVal != word->second.end()) {
-									// cheeze.  skip empty article tags that weren't assigned to any text
-									if (strongVal->second == "G3588") {
-										if (word->second.find("Text") == word->second.end())
-											continue;	// no text? let's skip
+							words = getEntryAttributes().find("Word");
+							if (words != getEntryAttributes().end()) {
+								for (word = words->second.begin();word != words->second.end(); word++) {
+									int partCount = atoi(word->second["PartCount"]);
+									if (!partCount) partCount = 1;
+									for (int i = 0; i < partCount; i++) {
+										SWBuf tmp = "Lemma";
+										if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+										strongVal = word->second.find(tmp);
+										if (strongVal != word->second.end()) {
+											// cheeze.  skip empty article tags that weren't assigned to any text
+											if (strongVal->second == "G3588") {
+												if (word->second.find("Text") == word->second.end())
+													continue;	// no text? let's skip
+											}
+											strong.append(strongVal->second);
+											strong.append(' ');
+										}
 									}
-									strong.append(strongVal->second);
-									strong.append(' ');
 								}
 							}
-						}
 
-						content = getRawEntry();
-						if (content && *content) {
 							proxBuf += content;
-							proxBuf.append("\n");
+							proxBuf.append(' ');
+							proxLem += strong;
+							if (proxLem.length()) 
+								proxLem.append("\n");
 						}
-						proxLem += strong;
-						if (proxLem.length()) 
-							proxLem.append(' ');
 					} while (tkcheck->nextSibling());
 					tkcheck->parent();
 					tkcheck->firstChild();
@@ -1168,13 +1187,10 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		}
 		
 		if (proxBuf.length() > 0) {
-//printf("proxBuf before (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
-			proxBuf = StripText(proxBuf);
 	
 			lucene_utf8towcs(wcharBuffer, proxBuf, MAX_CONV_SIZE); //keyText must be utf8
 		
-//printf("proxBuf after (%s).\n%s\n", (const char *)*key, proxBuf.c_str());
-			
+//printf("proxBuf after (%s).\nprox: %s\nproxLem: %s\n", (const char *)*key, proxBuf.c_str(), proxLem.c_str());
 
 			doc->add( *Field::UnStored(_T("prox"), wcharBuffer) );
 			good = true;

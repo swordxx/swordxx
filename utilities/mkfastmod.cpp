@@ -64,6 +64,7 @@ int main(int argc, char **argv)
 	target->deleteSearchFramework();
 	printf("Building framework, please wait...\n");
 	char lineLen = 70;
+	printf("[0=================================50===============================100]\n ");
 	char error = target->createSearchFramework(&percentUpdate, &lineLen);
 	if (error) {
 		fprintf(stderr, "%s: couldn't create search framework (permissions?)\n", *argv);
