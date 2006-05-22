@@ -78,10 +78,13 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						newText = true;
 					}
 					else {
+/*
 						// verb morph
 						sprintf(wordstr, "%03d", word);
 						module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
 						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = "OLBMorph";
+*/
+						word--;	// for now, completely ignore this word attribute.
 					}
 					word++;
 				}
