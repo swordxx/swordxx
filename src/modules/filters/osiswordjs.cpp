@@ -147,7 +147,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						}
 					}
 					// 'p' = 'fillpop' to save bandwidth
-					text.appendFormatted("<span class=\"clk\" onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str());
+					text.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str(), modName.c_str());
 					wordNum++;
 				}
 				if ((*token == '/') && (token[1] == 'w') && option) {	// Word

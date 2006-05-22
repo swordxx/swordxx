@@ -204,7 +204,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 							const char *m = strchr(morph.c_str(), ':');
 							if (m) m++;
 							else m = morph.c_str();
-							spanStart.appendFormatted("<span class=\"clk\" onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
+							spanStart.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
 							text.insert(textStr, spanStart);
 							lastAppendLen = spanStart.length();
 						}
@@ -285,7 +285,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 				const char *m = strchr(morph.c_str(), ':');
 				if (m) m++;
 				else m = morph.c_str();
-				spanStart.appendFormatted("<span class=\"clk\" onclick=\"p(\'%s\',\'%s\','%s','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m);
+				spanStart.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
 				text.insert(textStr, spanStart);
 			}
 		}
