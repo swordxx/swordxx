@@ -37,7 +37,6 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	bool intoken = false;
 	bool lastspace = false;
 	int wordNum = 1;
-	char val[128];
 	char wordstr[5];
 	char *valto;
 	char *ch;
@@ -66,42 +65,108 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						vkey = SWDYNAMIC_CAST(VerseKey, key);
 					}
 					XMLTag wtag(token);
-					SWBuf lemma      = wtag.getAttribute("lemma");
-					SWBuf morph      = wtag.getAttribute("morph");
-					SWBuf src        = wtag.getAttribute("src");
+					SWBuf lemma      = "";
+					SWBuf morph      = "";
+					SWBuf src        = "";
 					SWBuf morphClass = "";
 					SWBuf lemmaClass = "";
 
-
-					const char *m = strchr(morph.c_str(), ':');
-					if (m) {
-						int len = m-morph.c_str();
-						morphClass.append(morph.c_str(), len);
-						morph << len+1;
-					}
-					m = strchr(lemma.c_str(), ':');
-					if (m) {
-						int len = m-lemma.c_str();
-						lemmaClass.append(lemma.c_str(), len);
-						lemma << len+1;
-					}
-
-					if ((lemmaClass == "x-Strongs") || (lemmaClass == "strong")) {
-						gh = isdigit(lemma[0]) ? 0:lemma[0];
-						if (!gh) {
-							if (vkey) {
-								gh = vkey->Testament() ? 'H' : 'G';
-							}
-						}
-						else lemma << 1;
-						lemmaClass = "strong";
-					}
-					if ((morphClass == "x-Robinsons") || (morphClass == "x-Robinson") || (morphClass == "Robinson")) {
-						morphClass = "robinson";
-					}
-
+					const char *attrib;
+					const char *val;
 					sprintf(wordstr, "%03d", wordNum);
-					if (gh) lemma.insert(0,gh);
+					if (attrib = wtag.getAttribute("morph")) {
+						int count = wtag.getAttributePartCount("morph", ' ');
+						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+						do {
+							SWBuf mClass = "";
+							SWBuf mp = "";
+							attrib = wtag.getAttribute("morph", i, ' ');
+							if (i < 0) i = 0;	// to handle our -1 condition
+
+							const char *m = strchr(attrib, ':');
+							if (m) {
+								int len = m-attrib;
+								mClass.append(attrib, len);
+								attrib += (len+1);
+							}
+							if ((mClass == "x-Robinsons") || (mClass == "x-Robinson") || (mClass == "Robinson")) {
+								mClass = "robinson";
+							}
+							if (i) { morphClass += " "; morph += " "; }
+							mp += attrib;
+							morphClass += mClass;
+							morph += mp;
+							if (count > 1) {
+								SWBuf tmp;
+								tmp.setFormatted("Morph.%d", i+1);
+								module->getEntryAttributes()["Word"][wordstr][tmp] = mp;
+								tmp.setFormatted("MorphClass.%d", i+1);
+								module->getEntryAttributes()["Word"][wordstr][tmp] = mClass;
+							}
+						} while (++i < count);
+					}
+
+					if (attrib = wtag.getAttribute("lemma")) {
+						int count = wtag.getAttributePartCount("lemma", ' ');
+						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+						do {
+							SWBuf lClass = "";
+							SWBuf l = "";
+							attrib = wtag.getAttribute("lemma", i, ' ');
+							if (i < 0) i = 0;	// to handle our -1 condition
+
+							const char *m = strchr(attrib, ':');
+							if (m) {
+								int len = m-attrib;
+								lClass.append(attrib, len);
+								attrib += (len+1);
+							}
+							if ((lClass == "x-Strongs") || (lClass == "strong")) {
+								gh = isdigit(attrib[0]) ? 0:attrib[0];
+								if (!gh) {
+									if (vkey) {
+										gh = vkey->Testament() ? 'H' : 'G';
+									}
+								}
+								else attrib++;
+								lClass = "strong";
+							}
+							if (gh) l += gh;
+							l += attrib;
+							if (i) { lemmaClass += " "; lemma += " "; }
+							lemma += l;
+							lemmaClass += lClass;
+							if (count > 1) {
+								SWBuf tmp;
+								tmp.setFormatted("Lemma.%d", i+1);
+								module->getEntryAttributes()["Word"][wordstr][tmp] = l;
+								tmp.setFormatted("LemmaClass.%d", i+1);
+								module->getEntryAttributes()["Word"][wordstr][tmp] = lClass;
+							}
+						} while (++i < count);
+						module->getEntryAttributes()["Word"][wordstr]["PartCount"].setFormatted("%d", count);
+					}
+
+					if (attrib = wtag.getAttribute("src")) {
+						int count = wtag.getAttributePartCount("src", ' ');
+						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+						do {
+							SWBuf mp = "";
+							attrib = wtag.getAttribute("src", i, ' ');
+							if (i < 0) i = 0;	// to handle our -1 condition
+
+							if (i) src += " ";
+							mp += attrib;
+							src += mp;
+							if (count > 1) {
+								SWBuf tmp;
+								tmp.setFormatted("Src.%d", i+1);
+								module->getEntryAttributes()["Word"][wordstr][tmp] = mp;
+							}
+						} while (++i < count);
+					}
+
+
 					if (lemma.length())
 					module->getEntryAttributes()["Word"][wordstr]["Lemma"] = lemma;
 					if (lemmaClass.length())

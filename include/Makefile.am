@@ -143,6 +143,7 @@ pkginclude_HEADERS += $(swincludedir)/utilstr.h
 pkginclude_HEADERS += $(swincludedir)/utilxml.h
 
 pkginclude_HEADERS += $(swincludedir)/versekey.h
+pkginclude_HEADERS += $(swincludedir)/versetreekey.h
 pkginclude_HEADERS += $(swincludedir)/zcom.h
 pkginclude_HEADERS += $(swincludedir)/zconf.h
 pkginclude_HEADERS += $(swincludedir)/zipcomprs.h

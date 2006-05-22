@@ -68,6 +68,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
 						// normal strongs number
 						sprintf(wordstr, "%03d", word++);
+						module->getEntryAttributes()["Word"][wordstr]["PartsCount"] = "1";
 						module->getEntryAttributes()["Word"][wordstr]["Lemma"] = val;
 						module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = "strong";
 						tmp = "";

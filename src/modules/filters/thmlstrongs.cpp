@@ -69,6 +69,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					if (atoi((!isdigit(*val))?val+1:val) < 5627) {
 						// normal strongs number
 						sprintf(wordstr, "%03d", word);
+						module->getEntryAttributes()["Word"][wordstr]["PartCount"] = "1";
 						module->getEntryAttributes()["Word"][wordstr]["Lemma"] = val;
 						module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = "strong";
 						tmp = "";

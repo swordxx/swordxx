@@ -13,6 +13,7 @@
 #include <filemgr.h>
 #include <sysdata.h>
 #include <treekeyidx.h>
+#include <versetreekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -24,14 +25,16 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
+RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
 		: SWGenBook(iname, idesc, idisp, enc, dir, mark, ilang) {
 
 	char *buf = new char [ strlen (ipath) + 20 ];
 
 	path = 0;
 	stdstr(&path, ipath);
+	verseKey = !strcmp("VerseKey", keyType);
 
+	if (verseKey) Type("Biblical Texts");
 
 	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
 		path[strlen(path)-1] = 0;
@@ -79,11 +82,20 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 	__u32 offset = 0;
 	__u32 size = 0;
 
-	TreeKeyIdx *key = 0;
+	TreeKey *key = 0;
 	SWTRY {
-		key = SWDYNAMIC_CAST(TreeKeyIdx, (this->key));
+		key = SWDYNAMIC_CAST(TreeKey, (this->key));
 	}
 	SWCATCH ( ... ) {}
+
+	if (!key) {
+		VerseTreeKey *tkey = 0;
+		SWTRY {
+			tkey = SWDYNAMIC_CAST(VerseTreeKey, (this->key));
+		}
+		SWCATCH ( ... ) {}
+		if (tkey) key = tkey->getTreeKey();
+	}
 
 	if (!key) {
 		key = (TreeKeyIdx *)CreateKey();
@@ -201,7 +213,7 @@ char RawGenBook::createModule(const char *ipath) {
 
 SWKey *RawGenBook::CreateKey() {
 	TreeKeyIdx *newKey = new TreeKeyIdx(path);
-	return newKey;
+	return (verseKey) ? (SWKey *)new VerseTreeKey(newKey) : newKey;
 }
 
 SWORD_NAMESPACE_END

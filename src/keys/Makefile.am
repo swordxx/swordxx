@@ -6,4 +6,5 @@ libsword_la_SOURCES += $(keysdir)/strkey.cpp
 libsword_la_SOURCES += $(keysdir)/treekey.cpp
 libsword_la_SOURCES += $(keysdir)/treekeyidx.cpp
 libsword_la_SOURCES += $(keysdir)/versekey.cpp
+libsword_la_SOURCES += $(keysdir)/versetreekey.cpp
 

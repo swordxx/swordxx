@@ -1,6 +1,11 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+21-May-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Added SWBuf::startsWith, endsWith
+	Added entry attribute exposure of multipart words
+	Added beginnings of VerseKey subclass which uses TreeKey
+	
 25-Apr-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Changed SWModule::search to fill result set up with more
 		specialized SWKey objects, instead of always SWKey

@@ -69,10 +69,10 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					buf.appendFormatted(" %s", val);
 				}
 				if (attrib = tag.getAttribute("lemma")) {
-					int count = tag.getAttributePartCount("lemma");
+					int count = tag.getAttributePartCount("lemma", ' ');
 					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 					do {
-						attrib = tag.getAttribute("lemma", i);
+						attrib = tag.getAttribute("lemma", i, ' ');
 						if (i < 0) i = 0;	// to handle our -1 condition
 						val = strchr(attrib, ':');
 						val = (val) ? (val + 1) : attrib;
@@ -89,10 +89,10 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
 						show = false;
 					if (show) {
-						int count = tag.getAttributePartCount("morph");
+						int count = tag.getAttributePartCount("morph", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
-							attrib = tag.getAttribute("morph", i);
+							attrib = tag.getAttribute("morph", i, ' ');
 							if (i < 0) i = 0;	// to handle our -1 condition
 							val = strchr(attrib, ':');
 							val = (val) ? (val + 1) : attrib;

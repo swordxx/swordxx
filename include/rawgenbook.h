@@ -34,6 +34,7 @@ class FileDesc;
 class SWDLLEXPORT RawGenBook : public SWGenBook {
 	char *path;
 	FileDesc *bdtfd;
+	bool verseKey;
 
 public:
   
@@ -41,7 +42,7 @@ public:
 	RawGenBook(const char *ipath, const char *iname = 0, const char *idesc = 0,
 			SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
 			SWTextDirection dir = DIRECTION_LTR,
-			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, const char *keyType = "TreeKey");
 	virtual ~RawGenBook();
 	virtual SWBuf &getRawEntryBuf();
 	// write interface ----------------------------

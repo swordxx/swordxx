@@ -114,36 +114,33 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	const struct abbrev *abbrevs;
 	char *locale;
 	int abbrevsCnt;
+
 	/** The Testament: 0 - Old; 1 - New
 	*/
 	signed char testament;
 	mutable signed char book;
 	mutable signed int chapter;
 	mutable signed int verse;
+
 	/** flag for auto normalization 
 	*/
 	char autonorm;
+
 	/** flag for headings on/off
 	*/
 	char headings;
 
 	int getBookAbbrev(const char *abbr);
 	void initBounds() const;
+
 	/** initialize and allocate books array
 	*/
 	void initstatics();
+
 	/** initializes this VerseKey()
 	*/
 	void init();
-	/** Refresh keytext based on testament|book|chapter|verse
-	* default auto normalization to true
-	* default display headings option is false
-	*/
-	void freshtext() const;
-	/**	Parse a character array into testament|book|chapter|verse 
-	*
-	*/
-	virtual char parse();
+
 	/** Binary search to find the index closest, but less
 	* than the given value.
 	*
@@ -153,8 +150,21 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	* @return the index into the array that is less than but closest to value
 	*/
 	int findindex(long *array, int size, long value);
+
 	mutable VerseKey *lowerBound, *upperBound;
 
+
+protected:
+
+	/** Refresh keytext based on testament|book|chapter|verse
+	* default auto normalization to true
+	* default display headings option is false
+	*/
+	void freshtext() const;
+	/**	Parse a character array into testament|book|chapter|verse 
+	*
+	*/
+	virtual char parse();
 public:
 #if 0
 	static long otbks[];
@@ -244,11 +254,11 @@ public:
 	virtual const char *getText() const;
 	virtual const char *getShortText() const;
 	virtual void setText(const char *ikey) { SWKey::setText(ikey); parse (); }
-	virtual void copyFrom(const SWKey & ikey);
+	virtual void copyFrom(const SWKey &ikey);
 	
 	/** Equates this VerseKey to another VerseKey
 	*/
-	virtual void copyFrom(const VerseKey & ikey);
+	virtual void copyFrom(const VerseKey &ikey);
 	
 	/** Positions this key
 	*

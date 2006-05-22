@@ -48,6 +48,8 @@ public:
 
 
 	void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
+		SWMgr::AddGlobalOptions(module, section, start, end);
+
 		if (module->getConfig().has("Feature", "GreekDef")) {
 			defaultGreekLex = module;
 		}
@@ -76,7 +78,6 @@ public:
 		if (module->Markup() == FMT_GBF) {
 			module->AddOptionFilter(gbfWordJS);
 		}
-		SWMgr::AddGlobalOptions(module, section, start, end);
 	}
 
 

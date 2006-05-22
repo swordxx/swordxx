@@ -52,7 +52,7 @@ int main (int argc, char *argv[])
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
 		mgr->setGlobalOption("Footnotes", "On");
-		module = mgr->getModuleByName("WEB");
+		module = mgr->getModuleByName("KJV2006");
 /*
 		module->setKeyText("jas.1.19");
 		swordorb::StringList *attr = module->getEntryAttribute("Footnote", "", "body", true);
@@ -62,9 +62,10 @@ int main (int argc, char *argv[])
 		}
 */
 		int i = 0;
-		for (module->setKeyText("jas.1.1"); !module->error() && i < 30; module->next(), i++) {
+		for (module->setKeyText("jas.2.14"); !module->error() && i < 30; module->next(), i++) {
 			std::cout << "KeyText: " << module->getKeyText() << "\n";
 			std::cout << "Text: " << module->getRenderText() << "\n";
+			break;
 		}
 /*
 		swordorb::SearchHitList *searchResults;
