@@ -816,7 +816,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 
 	if (!stricmp(driver, "RawGenBook")) {
 		misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : (SWBuf)"TreeKey";
-		newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), "VerseKey");
+		newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), misc1.c_str());
 		pos = 1;
 	}
 
