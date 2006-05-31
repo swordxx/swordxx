@@ -5,8 +5,12 @@ using namespace sword;
 using namespace std;
 
 int main(int argc, char **argv) {
-	XMLTag x((argc > 1) ? argv[1] : "<verse osisID=\"John.1.1\" type=\"test type\" yeah = \"stuff\" />");
+	const char *xml = "<verse osisID=\"John.1.1\" type=\'test type\' yeah = \"stuff\" />";
+	cout << ((argc > 1) ? argv[1]: xml) << "\n";
+	XMLTag x((argc > 1) ? argv[1] : xml);
 //	x.setAttribute("newOne", "oneValue");
+	cout << x.toString() << "\n";
+	x.setAttribute("addedAttribute", "with a \" quote");
 	cout << x.toString() << "\n";
 	cout << "Tag name: [" << x.getName() << "]\n";
 	StringList attributes = x.getAttributeNames();

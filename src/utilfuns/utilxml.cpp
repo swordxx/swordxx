@@ -49,10 +49,10 @@ void XMLTag::parse() const {
 					strncpy(name, buf+start, i-start);
 					name[i-start] = 0;
 				}
-				for (; ((buf[i]) && (strchr(" =\"", buf[i]))); i++);
+				for (; ((buf[i]) && (strchr(" =\"\'", buf[i]))); i++);
 				if (buf[i]) {	// we have attribute value
 					start = i;
-					for (; ((buf[i]) && (buf[i] != '\"')); i++);
+					for (; ((buf[i]) && (buf[i] != '\"') && (buf[i] != '\'')); i++);
 					if (i-start) {
 						if (value)
 							delete [] value;
@@ -212,9 +212,9 @@ const char *XMLTag::toString() const {
 		//tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
 		tag.append(' ');
 		tag.append(it->first.c_str());
-		tag.append("=\"");
+		tag.append((strchr(it->second.c_str(), '\"')) ? "=\'" : "=\"");
 		tag.append(it->second.c_str());
-		tag.append('"');
+		tag.append((strchr(it->second.c_str(), '\"'))? '\'' : '\"');
 	}
 
 	if (isEmpty())
