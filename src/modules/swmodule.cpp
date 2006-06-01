@@ -19,11 +19,13 @@
 
 #ifdef USELUCENE
 #include <CLucene.h>
+#include <CLucene/CLBackwards.h>
+
 //Lucence includes
-#include "CLucene.h"
-#include "CLucene/util/Reader.h"
-#include "CLucene/util/Misc.h"
-#include "CLucene/util/dirent.h"
+//#include "CLucene.h"
+//#include "CLucene/util/Reader.h"
+//#include "CLucene/util/Misc.h"
+//#include "CLucene/util/dirent.h"
 
 using namespace lucene::index;
 using namespace lucene::analysis;
