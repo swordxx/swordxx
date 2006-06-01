@@ -10,6 +10,7 @@
 #include <utilxml.h>
 #include <utilstr.h>
 #include <swmodule.h>
+#include <stdio.h>
 
 SWORD_NAMESPACE_START
 
