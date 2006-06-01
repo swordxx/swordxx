@@ -143,6 +143,7 @@ USEUNIT("..\..\src\utilfuns\zlib\adler32.c");
 USEUNIT("..\..\src\modules\filters\papyriplain.cpp");
 USEUNIT("..\..\src\utilfuns\ftpparse.c");
 USEUNIT("..\..\src\modules\filters\osismorphsegmentation.cpp");
+USEUNIT("..\..\src\keys\versetreekey.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

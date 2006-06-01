@@ -113,7 +113,8 @@
       ..\..\src\utilfuns\zlib\uncompr.obj ..\..\src\utilfuns\zlib\untgz.obj 
       ..\..\src\utilfuns\zlib\adler32.obj 
       ..\..\src\modules\filters\papyriplain.obj ..\..\src\utilfuns\ftpparse.obj 
-      ..\..\src\modules\filters\osismorphsegmentation.obj"/>
+      ..\..\src\modules\filters\osismorphsegmentation.obj 
+      ..\..\src\keys\versetreekey.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
