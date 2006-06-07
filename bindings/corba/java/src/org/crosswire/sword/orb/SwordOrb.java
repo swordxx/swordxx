@@ -13,7 +13,7 @@ import java.util.Hashtable;
 import java.util.Date;
 
 public class SwordOrb extends Object implements HttpSessionBindingListener {
-	public static final int MAX_REMOTE_ADDR_CONNECTIONS = 10;
+	public static final int MAX_REMOTE_ADDR_CONNECTIONS = 20;
 	public static final int MAX_ACCESS_COUNT_PER_INTERVAL = 10;
 	public static final long MAX_ACCESS_COUNT_INTERVAL = 10 * 1000;	// milliseconds
 	public static final long BLACKLIST_DURATION = 10 * 60 * 1000;	// milliseconds
