@@ -15,16 +15,18 @@
 
 SWORD_NAMESPACE_START
 
-SWLog *SWLog::systemLog = 0;
 
-class __staticsystemLog {
-public:
-	__staticsystemLog() { }
-	~__staticsystemLog() { delete SWLog::systemLog; }
-} _staticsystemLog;
+SWLog *SWLog::systemLog = 0;
 
 
 SWLog *SWLog::getSystemLog() {
+	static class __staticSystemLog {
+	SWLog **clear;
+	public:
+		__staticSystemLog(SWLog **clear) { this->clear = clear; }
+		~__staticSystemLog() { delete *clear; *clear = 0; }
+	} _staticSystemLog(&SWLog::systemLog);
+
 	if (!systemLog)
 		systemLog = new SWLog();
 
@@ -33,13 +35,12 @@ SWLog *SWLog::getSystemLog() {
 
 
 void SWLog::setSystemLog(SWLog *newLog) {
-	if (systemLog)
-		delete systemLog;
+	delete getSystemLog();
 	systemLog = newLog;
 }
 
 
-void SWLog::logWarning(char *fmt, ...) {
+void SWLog::logWarning(const char *fmt, ...) const {
 	char msg[2048];
 	va_list argptr;
 
@@ -47,16 +48,12 @@ void SWLog::logWarning(char *fmt, ...) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-
-#ifndef _WIN32_WCE
-		std::cerr << msg;
-		std::cerr << std::endl;
-#endif
+		logMessage(msg, 2);
 	}
 }
 
 
-void SWLog::logError(char *fmt, ...) {
+void SWLog::logError(const char *fmt, ...) const {
 	char msg[2048];
 	va_list argptr;
 
@@ -64,16 +61,12 @@ void SWLog::logError(char *fmt, ...) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-
-#ifndef _WIN32_WCE
-		std::cerr << msg;
-		std::cerr << std::endl;
-#endif
+		logMessage(msg, 1);
 	}
 }
 
 
-void SWLog::logTimedInformation(char *fmt, ...) {
+void SWLog::logTimedInformation(const char *fmt, ...) const {
 	char msg[2048];
 	va_list argptr;
 
@@ -81,16 +74,12 @@ void SWLog::logTimedInformation(char *fmt, ...) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-
-#ifndef _WIN32_WCE
-		std::cout << msg;
-		std::cout << std::endl;
-#endif
+		logMessage(msg, 4);
 	}
 }
 
 
-void SWLog::logInformation(char *fmt, ...) {
+void SWLog::logInformation(const char *fmt, ...) const {
 	char msg[2048];
 	va_list argptr;
 
@@ -98,12 +87,12 @@ void SWLog::logInformation(char *fmt, ...) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-
-#ifndef _WIN32_WCE
-		std::cout << msg;
-		std::cout << std::endl;
-#endif
+		logMessage(msg, 3);
 	}
 }
 
+void SWLog::logMessage(const char *message, int level) const {
+	std::cerr << message;
+	std::cerr << std::endl;
+}
 SWORD_NAMESPACE_END

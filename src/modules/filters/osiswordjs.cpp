@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <osiswordjs.h>
 #include <swmodule.h>
 #include <ctype.h>
