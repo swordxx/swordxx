@@ -25,7 +25,9 @@
 #include <defs.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef WIN32
 #include <mem.h>
+#endif
 
 SWORD_NAMESPACE_START
 
