@@ -19,6 +19,9 @@
 #include <utilxml.h>
 #include <versekey.h>
 #include <swmodule.h>
+#ifdef WIN32
+#include <ctype.h>
+#endif
 
 SWORD_NAMESPACE_START
 
