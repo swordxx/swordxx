@@ -171,7 +171,7 @@ const bool StringMgr::supportsUnicode() const {
 			delete [] upperStr;
 			return ret;
 		}
-		
+
 		u_strToUpper(upperStr, max+9, lowerStr, -1, 0, &err);
 		if (err != U_ZERO_ERROR) {
 //			SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
@@ -180,7 +180,7 @@ const bool StringMgr::supportsUnicode() const {
 			return ret;
 		}
 
-		ret = u_strToUTF8(ret, max+9, 0, upperStr, -1, &err);
+		ret = u_strToUTF8(ret, max, 0, upperStr, -1, &err);
 		
 		delete [] lowerStr;
 		delete [] upperStr;

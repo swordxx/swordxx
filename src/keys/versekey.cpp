@@ -322,23 +322,25 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 
 	StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 	const bool hasUTF8Support = StringMgr::hasUTF8Support();
-	
+
+        // TODO: Why do we loop twice?  once upper and once not?
+        // If you wrote this, please comment.
 	for (int i = 0; i < 2; i++) {
-		stdstr(&abbr, iabbr);
+		stdstr(&abbr, iabbr, 2);
 		strstrip(abbr);
 		if (!i && hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-			abbr = stringMgr->upperUTF8(abbr);
+			abbr = stringMgr->upperUTF8(abbr, strlen(abbr)*2);
 		}
 		else if (!i) {
 			abbr = stringMgr->upperLatin1(abbr);
 		}
-			
+
 		abLen = strlen(abbr);
 
 		if (abLen) {
 			min = 0;
-			max 	= abbrevsCnt;
-			
+			max = abbrevsCnt;
+
 			while(1) {
 				target = min + ((max - min) / 2);
 				diff = strncmp(abbr, abbrevs[target].ab, abLen);
@@ -348,12 +350,12 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 					min = target;
 				else	max = target;
 			}
-			
+
 			for (; target > 0; target--) {
 				if (strncmp(abbr, abbrevs[target-1].ab, abLen))
 					break;
 			}
-				
+
 			retVal = (!diff) ? abbrevs[target].book : -1;
 		}
 		if (retVal > 0)
@@ -362,6 +364,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	delete [] abbr;
 	return retVal;
 }
+
 
 /******************************************************************************
  * VerseKey::ParseVerseList - Attempts to parse a buffer into separate
