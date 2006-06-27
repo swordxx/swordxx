@@ -432,6 +432,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	terminateSearch = false;
 	char perc = 1;
 	bool savePEA = isProcessEntryAttributes();
+   // determine if we might be doing special strip searches.  useful for knowing if we can use shortcuts
+	bool specialStrips = (getConfigEntry("LocalStripFilter") || strchr(istr, '<'));
 
 	processEntryAttributes(searchType == -3);
 	
@@ -647,7 +649,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		else if (searchType == -2) {
 			int loopCount = 0;
 			int foundWords = 0;
-			bool specialStrips = getConfigEntry("LocalStripFilter");
 			do {
 				const char* textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : StripText();
 				foundWords = 0;

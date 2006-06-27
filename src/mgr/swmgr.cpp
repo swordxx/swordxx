@@ -357,7 +357,6 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	// check working directory
 	DEBUGSTR("Checking working directory for mods.conf...");
-
 	if (FileMgr::existsFile(".", "mods.conf")) {
 		DEBUGSTR("found\n");
 		stdstr(prefixPath, "./");
@@ -374,6 +373,15 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 		return;
 	}
 
+   // check working directory ../library/
+	DEBUGSTR("\nChecking working directory ../library/ for mods.d...");
+	if (FileMgr::existsDir("../library", "mods.d")) {
+		DEBUGSTR("found\n");
+		stdstr(prefixPath, "../library/");
+		stdstr(configPath, "../library/mods.d");
+		*configType = 1;
+		return;
+	}
 
 	// check environment variable SWORD_PATH
 	DEBUGSTR("\nChecking SWORD_PATH...");
