@@ -25,6 +25,8 @@
 #define STRINGMGR_H
 
 #include <defs.h>
+#include <swbuf.h>
+#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,20 +35,22 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT StringMgr {
 public:
+
 	/** Sets the global StringMgr handle
 	* @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr
 	*/	
-	static void setSystemStringMgr( StringMgr* newStringMgr );
+	static void setSystemStringMgr(StringMgr *newStringMgr);
+   
 	/** Returns the global StringMgr handle
 	* @return The global string handle
 	*/
-	static StringMgr* getSystemStringMgr();
+	static StringMgr *getSystemStringMgr();
 
 	/** Checks whether Utf8 support is available.
 	* Override the function supportsUnicode() to tell whether your implementation has utf8 support.
 	* @return True if this implementation provides support for Utf8 handling or false if just latin1 handling is available
 	*/
-	static const bool hasUTF8Support() {
+	static inline bool hasUTF8Support() {
 		return getSystemStringMgr()->supportsUnicode();
 	};
 	
@@ -54,11 +58,12 @@ public:
 	* @param text The text encoded in utf8 which should be turned into an upper case string
 	* @param max Only change max chars
 	*/	
-	virtual char* upperUTF8(char* text, const unsigned int max = 0);
+	virtual char *upperUTF8(char *text, unsigned int max = 0) const;
+   
 	/** Converts the param to an uppercase latin1 string
 	* @param text The text encoded in latin1 which should be turned into an upper case string
 	*/	
-	virtual char* upperLatin1(char* text);
+	virtual char *upperLatin1(char *text, unsigned int max = 0) const;
 	
 
 protected:
@@ -67,29 +72,38 @@ protected:
 	/** Default constructor. Protected to make instances on user side impossible, because this is a Singleton
 	*/		
 	StringMgr();
+   
 	/** Copy constructor
 	*/	
-	StringMgr( const StringMgr& );
+	StringMgr(const StringMgr &);
+   
 	/** Destructor
 	*/	
 	virtual ~StringMgr();
 	
-	virtual const bool supportsUnicode() const;
+	virtual bool supportsUnicode() const;
 
 private:
-	static StringMgr* m_systemStringMgr;
+	static StringMgr *systemStringMgr;
 };
 
-namespace utilstr {
-	inline char* toupperstr( char* t ) {
-		return StringMgr::getSystemStringMgr()->upperLatin1( t );
-	};
+inline char *toupperstr(char *t, unsigned int max = 0) {
+	return (StringMgr::hasUTF8Support())
+		? StringMgr::getSystemStringMgr()->upperLatin1(t, max)
+		: StringMgr::getSystemStringMgr()->upperUTF8(t, max);
+}
 	
-	inline char* toupperstr_utf8( char* t, const unsigned int max = 0 ) {
-		return StringMgr::getSystemStringMgr()->upperUTF8( t, max );
-	};
-};
-using namespace utilstr;
+inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
+	return StringMgr::getSystemStringMgr()->upperUTF8(t, max);
+}
+	
+inline SWBuf &toupperstr(SWBuf &b) {
+	char *utf8 = 0;
+	stdstr(&utf8, b.c_str(), 2);
+	toupperstr(utf8, strlen(utf8)*2);
+	b = utf8;
+	return b;
+}
 
 SWORD_NAMESPACE_END
 

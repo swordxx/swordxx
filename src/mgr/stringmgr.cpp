@@ -40,28 +40,25 @@
 
 SWORD_NAMESPACE_START
 
-StringMgr* StringMgr::m_systemStringMgr = 0;
+StringMgr *StringMgr::systemStringMgr = 0;
 
 class __staticsystemStringMgr {
 public:
- 	__staticsystemStringMgr() { }
- 	~__staticsystemStringMgr() { if (StringMgr::m_systemStringMgr) delete StringMgr::m_systemStringMgr; StringMgr::m_systemStringMgr = 0; }
+	__staticsystemStringMgr() { }
+	~__staticsystemStringMgr() { if (StringMgr::systemStringMgr) delete StringMgr::systemStringMgr; StringMgr::systemStringMgr = 0; }
 } _staticsystemStringMgr;
 
 
 #ifdef _ICU_
 
-	//here comes our IcuStringMgr reimplementation
-	class ICUStringMgr : public StringMgr {
-	public:
-		virtual char* upperUTF8(char*, const unsigned int maxlen = 0);
-		//virtual char* upperLatin1(char*);
+//here comes our ICUStringMgr reimplementation
+class ICUStringMgr : public StringMgr {
+public:
+	virtual char *upperUTF8(char *, unsigned int maxlen = 0) const;
 	
-	protected:
-		virtual const bool supportsUnicode() const {
-			return true;
-		};
-	};
+protected:
+	virtual bool supportsUnicode() const { return true; };
+};
 
 #endif
 
@@ -73,7 +70,7 @@ StringMgr::StringMgr() {
 
 /** Copy constructor
 */	
-StringMgr::StringMgr( const StringMgr& m ) {
+StringMgr::StringMgr(const StringMgr &m) {
 }
 
 /** Destructor
@@ -84,36 +81,40 @@ StringMgr::~StringMgr() {
 /** Sets the global StringMgr handle
 * @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr
 */	
-void StringMgr::setSystemStringMgr( StringMgr* newStringMgr ) {
-	if (m_systemStringMgr) 
-		delete m_systemStringMgr;
+void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
+	if (systemStringMgr) 
+		delete systemStringMgr;
 	
-	m_systemStringMgr = newStringMgr;
-	LocaleMgr::getSystemLocaleMgr()->setSystemLocaleMgr( new LocaleMgr() );
+	systemStringMgr = newStringMgr;
+
+   // TODO: this is magic. apparently we have to reset the system localemgr upon changing stringmgr.
+   // setting system stringmgr should be set before localemgr and not possible to change.
+   // rework this design.
+	LocaleMgr::getSystemLocaleMgr()->setSystemLocaleMgr(new LocaleMgr());
 }
 
 /** Returns the global StringMgr handle
 * @return The global string handle
 */
 StringMgr* StringMgr::getSystemStringMgr() {
-	if (!m_systemStringMgr) {
+	if (!systemStringMgr) {
 #ifdef _ICU_
-		m_systemStringMgr = new ICUStringMgr();
+		systemStringMgr = new ICUStringMgr();
 // 		SWLog::getSystemLog()->logInformation("created default ICUStringMgr");
 #else
-		m_systemStringMgr = new StringMgr();
+		systemStringMgr = new StringMgr();
 //  		SWLog::getSystemLog()->logInformation("created default StringMgr");
 #endif
 	}
 	
-	return m_systemStringMgr;
+	return systemStringMgr;
 }
 
 
 /** Converts the param to an upper case Utf8 string
 * @param The text encoded in utf8 which should be turned into an upper case string
 */	
-char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
+char *StringMgr::upperUTF8(char *t, unsigned int maxlen) const {
 	// try to decide if it's worth trying to toupper.  Do we have more
 	// characters which are probably lower latin than not?
 	long performOp = 0;
@@ -130,13 +131,13 @@ char* StringMgr::upperUTF8(char* t, const unsigned int maxlen) {
 /** Converts the param to an uppercase latin1 string
 * @param The text encoded in latin1 which should be turned into an upper case string
 */	
-char* StringMgr::upperLatin1(char* buf) {
+char* StringMgr::upperLatin1(char* buf, unsigned int maxlen) const {
 	if (!buf)
 		return 0;
 		
 	char *ret = buf;
 
-	while (*buf) {
+	while (*buf && maxlen--) {
 		*buf = SW_toupper(*buf);
 		buf++;
 	}
@@ -144,48 +145,48 @@ char* StringMgr::upperLatin1(char* buf) {
 	return ret;
 }
 
-const bool StringMgr::supportsUnicode() const {
+bool StringMgr::supportsUnicode() const {
 	return false; //default impl has no UTF8 support
 }
 
 
 #ifdef _ICU_
 
-	char* ICUStringMgr::upperUTF8(char* buf, const unsigned int maxlen) {
-		char* ret = buf;
-		const int max = maxlen ? maxlen : strlen(buf);
+char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
+	char *ret = buf;
+	int max = (maxlen) ? maxlen : strlen(buf);
 		
-		UErrorCode err = U_ZERO_ERROR;
+	UErrorCode err = U_ZERO_ERROR;
 		
-		if (!buf || !max) {
-			return ret;
-		}
+	if (!buf || !max) {
+		return ret;
+	}
 		
-		UChar *lowerStr = new UChar[max+10];
-		UChar *upperStr = new UChar[max+10];
+	UChar *lowerStr = new UChar[max+10];
+	UChar *upperStr = new UChar[max+10];
 		
-		u_strFromUTF8(lowerStr, max+9, 0, buf, -1, &err);
-		if (err != U_ZERO_ERROR) {
-//			SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
-			delete [] lowerStr;
-			delete [] upperStr;
-			return ret;
-		}
-
-		u_strToUpper(upperStr, max+9, lowerStr, -1, 0, &err);
-		if (err != U_ZERO_ERROR) {
-//			SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
-			delete [] lowerStr;
-			delete [] upperStr;
-			return ret;
-		}
-
-		ret = u_strToUTF8(ret, max, 0, upperStr, -1, &err);
-		
+	u_strFromUTF8(lowerStr, max+9, 0, buf, -1, &err);
+	if (err != U_ZERO_ERROR) {
+//		SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
 		delete [] lowerStr;
 		delete [] upperStr;
 		return ret;
 	}
+
+	u_strToUpper(upperStr, max+9, lowerStr, -1, 0, &err);
+	if (err != U_ZERO_ERROR) {
+//		SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
+		delete [] lowerStr;
+		delete [] upperStr;
+		return ret;
+	}
+
+	ret = u_strToUTF8(ret, max, 0, upperStr, -1, &err);
+		
+	delete [] lowerStr;
+	delete [] upperStr;
+	return ret;
+}
 	
 #endif
 

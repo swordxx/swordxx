@@ -506,53 +506,61 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				freeTestKey = true;
 			}
 		}
-		lucene::index::IndexReader *ir;
-		lucene::search::IndexSearcher *is;
-		ir = IndexReader::open(target);
-		is = new IndexSearcher(ir);
-		(*percent)(10, percentUserData);
+		lucene::index::IndexReader    *ir = 0;
+		lucene::search::IndexSearcher *is = 0;
+      Query                          *q = 0;
+      Hits                           *h = 0;
+      try {
+        ir = IndexReader::open(target);
+        is = new IndexSearcher(ir);
+        (*percent)(10, percentUserData);
 
-		standard::StandardAnalyzer analyzer;
-		lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
-		Query *q =  QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
-		(*percent)(20, percentUserData);
-		Hits *h = is->search(q);
-		(*percent)(80, percentUserData);
+        standard::StandardAnalyzer analyzer;
+        lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
+  		  q = QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
+   	  (*percent)(20, percentUserData);
+	     h = is->search(q);
+	     (*percent)(80, percentUserData);
 
+        // iterate thru each good module position that meets the search
+        for (long i = 0; i < h->length(); i++) {
+           Document &doc = h->doc(i);
 
-		// iterate thru each good module position that meets the search
-		for (long i = 0; i < h->length(); i++) {
-			Document &doc = h->doc(i);
+           // set a temporary verse key to this module position
+           lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
+           *resultKey = utfBuffer; //TODO Does a key always accept utf8?
+           if (enforceRange) {
+              // check scope
+              // Try to set our scope key to this verse key
+              *testKey = *resultKey;
 
-			// set a temporary verse key to this module position
-			lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
-			*resultKey = utfBuffer; //TODO Does a key always accept utf8?
-			if (enforceRange) {
-				// check scope
-				// Try to set our scope key to this verse key
-				*testKey = *resultKey;
+              // check to see if it set ok and if so, add to our return list
+              if (*testKey == *resultKey) {
+                 listKey << *resultKey;
+                 listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
+              }
+           }
+           else {
+              listKey << *resultKey;
+              listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
+           }
+        }
+        (*percent)(98, percentUserData);
+      }
+      catch (...) {
+         q = 0;
+         // invalid clucene query
+      }
+      delete h;
+      delete q;
 
-				// check to see if it set ok and if so, add to our return list
-				if (*testKey == *resultKey) {
-					listKey << *resultKey;
-					listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
-				}
-			}
-			else {
-				listKey << *resultKey;
-				listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
-			}
-		}
-		(*percent)(98, percentUserData);
-
-		delete h;
-		delete q;
-
-		delete is;
-		ir->close();
-		if (freeTestKey) {
-			delete testKey;
-		}
+      delete is;
+      if (ir) {
+         ir->close();
+      }
+      if (freeTestKey) {
+         delete testKey;
+      }
 	}
 #endif
 

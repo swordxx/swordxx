@@ -20,6 +20,7 @@
 #include <utilxml.h>
 #include <versekey.h>
 #include <swmodule.h>
+#include <stringmgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -97,18 +98,19 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					buf.appendFormatted(" {\\fs15 <%s>}", val);
 				}
 				if (attrib = tag.getAttribute("lemma")) {
-					int count = tag.getAttributePartCount("lemma");
+					int count = tag.getAttributePartCount("lemma", ' ');
 					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 					do {
-						attrib = tag.getAttribute("lemma", i);
+						attrib = tag.getAttribute("lemma", i, ' ');
 						if (i < 0) i = 0;	// to handle our -1 condition
 						val = strchr(attrib, ':');
 						val = (val) ? (val + 1) : attrib;
+						const char *val2 = val;
 						if ((strchr("GH", *val)) && (isdigit(val[1])))
-							val++;
-						if ((!strcmp(val, "3588")) && (lastText.length() < 1))
+							val2++;
+						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 							show = false;
-						else	buf.appendFormatted(" {\\cf3 \\sub <%s>}", val);
+						else	buf.appendFormatted(" {\\cf3 \\sub <%s>}", val2);
 					} while (++i < count);
 				}
 				if ((attrib = tag.getAttribute("morph")) && (show)) {
@@ -116,16 +118,17 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
 						show = false;
 					if (show) {
-						int count = tag.getAttributePartCount("morph");
+						int count = tag.getAttributePartCount("morph", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
-							attrib = tag.getAttribute("morph", i);
+							attrib = tag.getAttribute("morph", i, ' ');
 							if (i < 0) i = 0;	// to handle our -1 condition
 							val = strchr(attrib, ':');
 							val = (val) ? (val + 1) : attrib;
+							const char *val2 = val;
 							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
-								val+=2;
-							buf.appendFormatted(" {\\cf4 \\sub (%s)}", val);
+								val2+=2;
+							buf.appendFormatted(" {\\cf4 \\sub (%s)}", val2);
 						} while (++i < count);
 					}
 				}
@@ -301,6 +304,25 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 			else if (tag.isEndTag()) {
 				buf += "}";
+			}
+		}
+
+		// <divineName>
+		else if (!strcmp(tag.getName(), "divineName")) {
+
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+
+// just do all transChange tags this way for now
+//				if (type == "supplied")
+				u->suspendTextPassThru = true;
+			}
+			else if (tag.isEndTag()) {
+				u->suspendTextPassThru = false;
+				SWBuf lastText = u->lastTextNode.c_str();
+				if (lastText.size()) {
+					toupperstr(lastText);
+					buf.appendFormatted("{\\fs19%c\\fs16%s}", lastText[0], lastText.c_str()+1);
+				}
 			}
 		}
 
