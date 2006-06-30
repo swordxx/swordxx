@@ -18,6 +18,7 @@
 #include <osisplain.h>
 #include <utilxml.h>
 #include <ctype.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -36,22 +37,24 @@ OSISPlain::OSISPlain() {
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
 
-        setTokenCaseSensitive(true);
-        addTokenSubstitute("title", "\n");
-        addTokenSubstitute("/title", "\n");
-        addTokenSubstitute("/l", "\n");
-        addTokenSubstitute("lg", "\n");
-        addTokenSubstitute("/lg", "\n");
+	   setTokenCaseSensitive(true);
+	   addTokenSubstitute("title", "\n");
+	   addTokenSubstitute("/title", "\n");
+	   addTokenSubstitute("/l", "\n");
+	   addTokenSubstitute("lg", "\n");
+	   addTokenSubstitute("/lg", "\n");
 }
 
 
 bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
-        // manually process if it wasn't a simple substitution
+	   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;
+		VerseKey *vk = SWDYNAMIC_CAST(VerseKey, u->key);
+		char testament = (vk) ? vk ->Testament() : 2;	// default to NT
 		if (((*token == 'w') && (token[1] == ' ')) ||
 		    ((*token == '/') && (token[1] == 'w') && (!token[2]))) {
-	                u->tag = token;
+				 u->tag = token;
 			
 			bool start = false;
 			if (*token == 'w') {
@@ -83,29 +86,36 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf.append('>');
 			}
 			if ((attrib = u->tag.getAttribute("lemma"))) {
-				int count = u->tag.getAttributePartCount("lemma");
+				int count = u->tag.getAttributePartCount("lemma", ' ');
 				int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 				do {
-					attrib = u->tag.getAttribute("lemma", i);
+					char gh;
+					attrib = u->tag.getAttribute("lemma", i, ' ');
 					if (i < 0) i = 0;	// to handle our -1 condition
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					if ((strchr("GH", *val)) && (isdigit(val[1])))
+					if ((strchr("GH", *val)) && (isdigit(val[1]))) {
+						gh = *val;
 						val++;
+					}
+					else {
+						gh = (testament>1) ? 'G' : 'H';
+					}
 					if ((!strcmp(val, "3588")) && (lastText.length() < 1))
 						show = false;
 					else	{
-						buf.append(" {<");
+						buf.append(" <");
+						buf.append(gh);
 						buf.append(val);
-						buf.append(">}");
+						buf.append(">");
 					}
 				} while (++i < count);
 			}
 			if ((attrib = u->tag.getAttribute("morph")) && (show)) {
-				int count = u->tag.getAttributePartCount("morph");
+				int count = u->tag.getAttributePartCount("morph", ' ');
 				int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 				do {
-					attrib = u->tag.getAttribute("morph", i);
+					attrib = u->tag.getAttribute("morph", i, ' ');
 					if (i < 0) i = 0;	// to handle our -1 condition
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
