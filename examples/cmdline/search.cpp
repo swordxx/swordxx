@@ -46,6 +46,7 @@ int main(int argc, char **argv)
 
 	SWBuf searchTerm = argv[2];
 	manager.setGlobalOption("Greek Accents", "Off");
+	manager.setGlobalOption("Strong's Numbers", "On");
 	manager.filterText("Greek Accents", searchTerm);
 
 	it = manager.Modules.find(argv[1]);
@@ -74,7 +75,7 @@ int main(int argc, char **argv)
 	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
 	 *			-4  - Lucene
    */
-	listkey = target->Search(searchTerm.c_str(), -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(searchTerm.c_str(), -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	listkey.sort();
 	while (!listkey.Error()) {
