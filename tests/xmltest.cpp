@@ -5,10 +5,12 @@ using namespace sword;
 using namespace std;
 
 int main(int argc, char **argv) {
+
 	const char *xml = "<verse osisID=\"John.1.1\" type=\'test type\' yeah = \"stuff\" />";
 	cout << ((argc > 1) ? argv[1]: xml) << "\n";
+
 	XMLTag x((argc > 1) ? argv[1] : xml);
-//	x.setAttribute("newOne", "oneValue");
+
 	cout << x.toString() << "\n";
 	x.setAttribute("addedAttribute", "with a \" quote");
 	cout << x.toString() << "\n";
@@ -18,6 +20,13 @@ int main(int argc, char **argv) {
 		const char *name = it->c_str();
 		cout << " - attribute: [" << name << "] = [";
 		cout << x.getAttribute(name) << "]\n";
+		int count = x.getAttributePartCount(name, ' ');
+		cout << "\t" << count << " parts:\n";
+		int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+		do {
+			cout << "\t" << x.getAttribute(name, i, ' ') << "\n";
+			if (i < 0) i = 0;	// to handle our -1 condition
+		} while (++i < count);
 	}
 	cout << " isEmpty: " << x.isEmpty() << "\n";
 	cout << " isEndTag: " << x.isEndTag() << "\n";
