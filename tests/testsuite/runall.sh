@@ -1,19 +1,19 @@
 #!/bin/sh
 
-TESTSUITE="verseparsing-utf8 $TESTSUITE"
-TESTSUITE="verseparsing $TESTSUITE"
+TESTSUITE=`for i in *.good; do basename $i .good; done`
 
 for i in $TESTSUITE; do
+	echo -n "$i: "
 	./runtest.sh $i -q
 	if [ $? -ne 0 ]; then
-		echo $i: FAILED
+		echo FAILED
 		echo ""
 		echo To see problems, try running:
 		echo ./runtest.sh $i
 		echo ""
 		exit 1
 	else
-		echo $i: PASSED.
+		echo PASSED.
 	fi
 done
 echo "ALL PASSED!"

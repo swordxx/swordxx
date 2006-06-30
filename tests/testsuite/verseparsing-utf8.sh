@@ -1,6 +1,5 @@
 #!/bin/sh
 # This only works if --with-icu was passed to configure 
-# and if src/mgr/stringmgr.cpp has the ICUStringMgr instance enabled (commented out by default)
 
 ### German test keys
 ../parsekey "Matthäus 2:3-12" "de"
