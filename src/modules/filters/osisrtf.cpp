@@ -149,7 +149,9 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
 
-					if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+					if (		   (type != "x-strongsMarkup")	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+							&& (type != "strongsMarkup")		// deprecated
+							) {
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey;
 						// see if we have a VerseKey * or descendant
@@ -311,9 +313,6 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "divineName")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-
-// just do all transChange tags this way for now
-//				if (type == "supplied")
 				u->suspendTextPassThru = true;
 			}
 			else if (tag.isEndTag()) {
@@ -323,6 +322,16 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					toupperstr(lastText);
 					buf.appendFormatted("{\\fs19%c\\fs16%s}", lastText[0], lastText.c_str()+1);
 				}
+			}
+		}
+
+		// <div>
+		else if (!strcmp(tag.getName(), "div")) {
+
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf.append("\\par\\par\\pard ");
+			}
+			else if (tag.isEndTag()) {
 			}
 		}
 

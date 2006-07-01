@@ -34,6 +34,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	bool intoken    = false;
 	bool hide       = false;
 	bool preverse   = false;
+	bool canonical  = false;
 	SWBuf header;
 	int headerNum   = 0;
 	int pvHeaderNum = 0;
@@ -64,16 +65,19 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					}
 				}
 				
-				if (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse")) {
+				if (         (tag.getAttribute("subType") && !stricmp(tag.getAttribute("subType"), "x-preverse"))
+						|| (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse"))	// deprecated
+						) {
 					hide = true;
 					preverse = true;
 					header = "";
+					canonical = (tag.getAttribute("canonical") && (!stricmp(tag.getAttribute("canonical"), "true")));
 					continue;
 				}
 				if (!tag.isEndTag()) { //start tag
 					hide = true;
 					header = "";
-					if (option) {	// we want the tag in the text
+					if (option || canonical) {	// we want the tag in the text
 						text.append('<');
 						text.append(token);
 						text.append('>');
@@ -81,7 +85,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					continue;
 				}
 				if (hide && tag.isEndTag()) {
-					if (module->isProcessEntryAttributes() && (option || (!preverse))) {
+					if (module->isProcessEntryAttributes() && ((option || canonical) || (!preverse))) {
 						if (preverse) {
 							sprintf(buf, "%i", pvHeaderNum++);
 							module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;
@@ -89,7 +93,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 						else {
 							sprintf(buf, "%i", headerNum++);
 							module->getEntryAttributes()["Heading"]["Interverse"][buf] = header;
-							if (option) {	// we want the tag in the text
+							if (option || canonical) {	// we want the tag in the text
 								text.append(header);
 							}
 						}
@@ -101,7 +105,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					}
 					
 					hide = false;
-					if (!option || preverse) {	// we don't want the tag in the text anymore
+					if (!(option || canonical) || preverse) {	// we don't want the tag in the text anymore
 						preverse = false;
 						continue;
 					}
