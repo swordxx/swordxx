@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <osisredletterwords.h>
 #include <swmodule.h>
-#include <utilxml.h>
 
 
 SWORD_NAMESPACE_START

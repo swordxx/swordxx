@@ -9,7 +9,6 @@
 #include <gbfwordjs.h>
 #include <swmodule.h>
 #include <ctype.h>
-#include <utilxml.h>
 #include <utilstr.h>
 #include <versekey.h>
 

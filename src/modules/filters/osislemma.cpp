@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <osislemma.h>
-#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 

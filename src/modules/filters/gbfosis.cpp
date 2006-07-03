@@ -11,7 +11,6 @@
 #include <gbfosis.h>
 #include <swmodule.h>
 #include <versekey.h>
-#include <utilxml.h>
 #include <swlog.h>
 #include <stdarg.h>
 

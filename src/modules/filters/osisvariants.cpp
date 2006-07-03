@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <osisvariants.h>
 #include <utilstr.h>
-#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 

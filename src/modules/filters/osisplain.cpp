@@ -16,7 +16,6 @@
 
 #include <stdlib.h>
 #include <osisplain.h>
-#include <utilxml.h>
 #include <ctype.h>
 #include <versekey.h>
 
