@@ -4,12 +4,13 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string>
+#include <stack>
+#include <iostream>
 
 #include <utilstr.h>
 #include <filemgr.h>
 #include <swmgr.h>
 #include <rawtext.h>
-#include <iostream>
 #include <swbuf.h>
 #include <utilxml.h>
 #include <listkey.h>
@@ -20,7 +21,6 @@
 // #include <zcom.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
-// #include <stdio.h>
 #include <cipherfil.h>
 
 
@@ -67,15 +67,15 @@ bool isKJVRef(const char *buf) {
 
 void makeKJVRef(VerseKey &key) {
 	cout << "re-versified " << key;
-//        cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
-       	if (key.Chapter() > key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) {
+//	cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+	if (key.Chapter() > key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) {
 		key.Chapter(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax);
 		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
-        }
+	}
 	else if (key.Verse() > key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]) {
 		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
-        }
-       	cout << "\tas " << key << endl;
+	}
+	cout << "\tas " << key << endl;
 }
 
 
@@ -94,7 +94,7 @@ void writeEntry(VerseKey &key, SWBuf &text, bool suppressOutput = false) {
 	SWBuf currentText = module->getRawEntry();
 	if (currentText.length()) {
 		if (!suppressOutput) {
-			cout << "Overwriting entry: " << key << endl;
+			cout << "Appending entry: " << key << endl;
 		}
 		text = currentText + " " + text;
 	}
@@ -113,11 +113,11 @@ void linkToEntry(VerseKey& dest) {
 	VerseKey saveKey;
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
-        saveKey = *currentVerse;
+	saveKey = *currentVerse;
 
-        if (!isKJVRef(*currentVerse)) {
+	if (!isKJVRef(*currentVerse)) {
 		makeKJVRef(*currentVerse);
-        }
+	}
 
 	cout << "Linking " << module->KeyText() << " to " << dest.getText() << "\n";
 	module->linkEntry(&dest);
@@ -125,151 +125,239 @@ void linkToEntry(VerseKey& dest) {
 	*currentVerse = saveKey;
 }
 
+// Return true if the content was handled or is to be ignored.
+//		false if the what has been seen is to be accumulated and considered later.
+bool handleToken(SWBuf &text, XMLTag *token) {
 
-bool handleToken(SWBuf &text, XMLTag token) {
-	static bool inHeader = false;
+	// Everything between the begin book tag and the first begin chapter tag is inBookHeader
+	static bool inBookHeader = false;
+	// Everything between the begin chapter tag and the first begin verse tag is inChapterHeader
+	static bool inChapterHeader = false;
+
+	// Flags to indicate whether we are in a book, chapter and/or verse
+	static bool inBook = false;
+	static bool inChapter = false;
 	static bool inVerse = true;
-	static SWBuf headerType = "";
+	
 	static SWBuf header = "";
+
+	// Used to remember titles that need to be handle specially
 	static SWBuf lastTitle = "";
 	static int titleOffset = -1;
+	static bool inTitle = false;
+	static int titleDepth = 0;
+
 	static ListKey lastVerseIDs = ListKey();
 
-	if ((!strcmp(token.getName(), "title")) && !token.isEndTag() && !token.getAttribute("eID")) {
+	// Stack of elements used to validate that books, chapters and verses are well-formed
+	// This goes beyond simple xml well-formed and also considers milestoned div, chapter and verse
+	// to be begin and end tags, too.
+	// It is an error if books and chapters are not well formed (though not required by OSIS)
+	// It is a warning that verses are not well formed (because some clients are not ready)
+	static std::stack<XMLTag*> tagStack;
+	// The following are used to validate well-formedness
+	static int chapterDepth = 0;
+	static int bookDepth = 0;
+	static int verseDepth = 0;
+
+	int tagDepth = tagStack.size();
+	const char *tokenName = token->getName();
+	bool isEndTag = token->isEndTag() || token->getAttribute("eID");
+	const char *typeAttr = token->getAttribute("type");
+
+	//Titles are treated specially.
+	// If the title has an attribute type of "main" or "chapter"
+	// it belongs to its <div> or <chapter> and is treated as part of its heading
+	// Otherwise if it a title in a chapter before the first the first verse it
+	// is put into the verse as a preverse title.
+	if (!isEndTag && titleDepth == 0 && (!strcmp(tokenName, "title")) && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
 		titleOffset = text.length(); //start of the title tag
 		lastTitle = "";
+		inTitle = true;
+		tagStack.push(token);
+		titleDepth = tagStack.size();
 		return false; 
 	}
-	else if ((!strcmp(token.getName(), "title")) && (token.isEndTag() || (token.getAttribute("eID")))) {
+	// Check titleDepth since titles can be nested. Don't want to quit too early.
+	else if (isEndTag && tagDepth == titleDepth && (!strcmp(tokenName, "title"))) {
 		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
- 		lastTitle.append(token); //</title>
-		
-// 		printf("lastTitle:	%s\n", lastTitle.c_str());b
+		lastTitle.append(*token); //</title>
+
+// 		printf("lastTitle:	%s\n", lastTitle.c_str());
 // 		printf("text-lastTitle:	%s\n", text.c_str()+titleOffset);
-		return false; //don't add </title> to the text itself
+		inTitle = false;
+		titleDepth = 0;
+		tagStack.pop();
+		return false; // don't add </title> to the text itself
 	}
 
 
 
-//-- START TAG WITH OSIS ID -------------------------------------------------------------------------
+//-- START TAG -------------------------------------------------------------------------
 
-	if ((!token.isEndTag()) && (!token.getAttribute("eID")) && (token.getAttribute("osisID"))) {
+	if (!isEndTag) {
 
+		// Remember non-empty start tags
+		if (!token->isEmpty()) {
+			tagStack.push(token);
+		}
 
-		// BOOK START
-		if ((!strcmp(token.getName(), "div")) && (!strcmp(token.getAttribute("type"), "book"))) {
-			inVerse = false;
-			if (inHeader) {	// this one should never happen, but just in case
-	//			cout << "HEADING ";
-				currentVerse->Testament(0);
-				currentVerse->Book(0);
+		//-- WITH OSIS ID -------------------------------------------------------------------------
+		if (token->getAttribute("osisID")) {
+	
+			// BOOK START
+			if ((!strcmp(tokenName, "div")) && (!strcmp(typeAttr, "book"))) {
+				inVerse = false;
+				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
+//					cout << "HEADING ";
+					currentVerse->Testament(0);
+					currentVerse->Book(0);
+					currentVerse->Chapter(0);
+					currentVerse->Verse(0);
+					writeEntry(*currentVerse, text);
+				}
+				*currentVerse = token->getAttribute("osisID");
 				currentVerse->Chapter(0);
 				currentVerse->Verse(0);
-				writeEntry(*currentVerse, text);
-				inHeader = false;
-			}
-			*currentVerse = token.getAttribute("osisID");
-			currentVerse->Chapter(0);
-			currentVerse->Verse(0);
-			inHeader = true;
-			headerType = "book";
-			lastTitle = "";
-			text = "";
-
-			return true;
-		}
-
-		// CHAPTER START
-		else if (((!strcmp(token.getName(), "div")) && (!strcmp(token.getAttribute("type"), "chapter")))
-				|| (!strcmp(token.getName(), "chapter"))
-				) {
-			inVerse = false;
-			if (inHeader) {
-	//			cout << "HEADING ";
-				writeEntry(*currentVerse, text);
-				inHeader = false;
-			}
-
-			*currentVerse = token.getAttribute("osisID");
-			currentVerse->Verse(0);
-			inHeader = true;
-			headerType = "chap";
-			lastTitle = "";
-			text = "";
-
-			return true;
-		}
-
-		// VERSE START
-		else if (!strcmp(token.getName(), "verse")) {
-			inVerse = true;
-			if (inHeader) {
-				//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
-				const char* chapterTagEnd = strchr(text.c_str(), '>');
-				const char* titleTagStart = strstr(text.c_str(), "<title");
-
-				if (chapterTagEnd+1 == titleTagStart) {
-					const char* titleTagEnd = strstr(text.c_str(), "</title>");
-					while (strstr(titleTagEnd+8, "</title>")) {
-						titleTagEnd = strstr(titleTagEnd+8, "</title>");
-					}
-
-					
-					const char* textEnd = text.c_str() + text.length();
-					if (titleTagEnd+8 == textEnd) {
-						text.setSize(chapterTagEnd+1-text.c_str()); //only insert the <chapter...> part
-					}
-				}
-				
-	// 			cout << "HEADING "<< text.c_str() << endl;
-				writeEntry(*currentVerse, text);
-			
+				inBookHeader = true;
+				inChapterHeader = false;
+				lastTitle = "";
 				text = "";
-				inHeader = false;
+				bookDepth = tagStack.size();
+				chapterDepth = 0;
+				verseDepth = 0;
+
+				return true;
 			}
 
-			SWBuf keyVal = token.getAttribute("osisID");
-			deleteSubverses(keyVal);
-
-			// turn "Mat.1.1  Mat.1.2" into "Mat.1.1; Mat.1.2"
-			bool skipSpace = false;
-			for (int i = 0; keyVal[i]; i++) {
-				if (keyVal[i] == ' ') {
-					if (!skipSpace) {
-						keyVal[i] = ';';
-						skipSpace = true;
-					}
+			// CHAPTER START
+			else if (((!strcmp(tokenName, "div")) && (!strcmp(typeAttr, "chapter")))
+					 || (!strcmp(tokenName, "chapter"))
+					 ) {
+				inVerse = false;
+				if (inBookHeader) {
+//					cout << "BOOK HEADING "<< text.c_str() << endl;
+					writeEntry(*currentVerse, text);
 				}
-				else skipSpace = false;
+
+				*currentVerse = token->getAttribute("osisID");
+				currentVerse->Verse(0);
+				inBookHeader = false;
+				inChapterHeader = true;
+				lastTitle = "";
+				text = "";
+				chapterDepth = tagStack.size();
+				verseDepth = 0;
+				
+				return true;
 			}
 
-			lastVerseIDs = currentVerse->ParseVerseList(keyVal);
-			if (lastVerseIDs.Count())
-				*currentVerse = lastVerseIDs.getElement(0)->getText();
+			// VERSE START
+			else if (!strcmp(tokenName, "verse")) {
+				inVerse = true;
+				if (inChapterHeader) {
+					//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
+					// Did we have a preverse title?
+					if (lastTitle.length())
+					{
+						//Was the preVerse title in the header (error if not)?
+						const char* header = text.c_str();
+						const char* preVerse = strstr(header, lastTitle);
+						if (preVerse) {
+							if (preVerse == header) {
+								; // do nothing
+							}
+							else {
+								int preVerseLen = strlen(preVerse);
+								int headerLen = strlen(header);
+								// Was it the last thing?
+								if (header == preVerseLen + preVerse - headerLen) {
+									// Remove it from the end of the header.
+									text.setSize(headerLen - preVerseLen);
+								}
+								// It was not the last thing so it cannot be preVerse
+								else {
+									lastTitle = "";
+								}
+							}
+						}
+						else {
+							cout << "Warning: Bug in code. Could not find title." << endl;
+						}
+					}
 
-			return true;
+//					cout << "CHAPTER HEADING "<< text.c_str() << endl;
+					writeEntry(*currentVerse, text);
+			
+					text = "";
+					inChapterHeader = false;
+				}
+
+				SWBuf keyVal = token->getAttribute("osisID");
+				deleteSubverses(keyVal);
+
+				// turn "Mat.1.1  Mat.1.2" into "Mat.1.1; Mat.1.2"
+				bool skipSpace = false;
+				for (int i = 0; keyVal[i]; i++) {
+					if (keyVal[i] == ' ') {
+						if (!skipSpace) {
+							keyVal[i] = ';';
+							skipSpace = true;
+						}
+					}
+					else skipSpace = false;
+				}
+
+				lastVerseIDs = currentVerse->ParseVerseList(keyVal);
+				if (lastVerseIDs.Count()) {
+					*currentVerse = lastVerseIDs.getElement(0)->getText();
+				}
+
+				verseDepth = tagStack.size();
+
+				return true;
+			}
 		}
 	}
-
 
 //-- END TAG ---------------------------------------------------------------------------------------------
 
-	else if ((token.isEndTag()) || (token.getAttribute("eID"))) {
+	else {
 
+		if (tagStack.empty()) {
+			cout << "tag expected" << endl;
+			exit(1);
+		}
+
+		XMLTag *topToken = tagStack.top();
+		tagDepth = tagStack.size();
+		tagStack.pop();
+
+		if (strcmp(topToken->getName(), tokenName)) {
+			cout << "Expected " << topToken->getName() << " found " << tokenName << endl;
+			exit(1);
+		}
+		
 		// VERSE END
-		if (!strcmp(token.getName(), "verse")) {
+		if (!strcmp(tokenName, "verse")) {
 			inVerse = false;
+
+			if (tagDepth != verseDepth) {
+				cout << "Warning verse " << *currentVerse << " is not well formed:(" << verseDepth << "," << tagDepth << ")" << endl;
+			}
+
 			if (lastTitle.length()) {
 				const char* end = strchr(lastTitle, '>');
-	// 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
+//				cout << lastTitle << endl;
+//	 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
 
 				SWBuf titleTagText;
 				titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
-	// 			printf("tagText: %s\n", titleTagText.c_str());
+//				printf("tagText: %s\n", titleTagText.c_str());
 
 				XMLTag titleTag(titleTagText);
 				titleTag.setAttribute("type", "section");
-				titleTag.setAttribute("subtype", "x-preverse");
+				titleTag.setAttribute("subType", "x-preverse");
 
 				//we insert the title into the text again - make sure to remove the old title text
 				const char* pos = strstr(text, lastTitle);
@@ -311,27 +399,38 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			lastTitle = "";
 			text = "";
+			verseDepth = 0;
 			return true;
 		}
-	
-		// OTHER MISC END TAGS WHEN !INVERSE
-		// we really should decide how to handle end tags /e.g. of a chapter). There's no way for frontends to
-		// see to what OSIS tag the end tag (which is added to the verse text!) belongs. It mixes up the rendering as a result 
-		// included /div for now (jansorg)
-		else if (!inVerse &&
-				(!strcmp(token.getName(), "p") ||
-				 !strcmp(token.getName(), "div") ||
-				 !strcmp(token.getName(), "q")  ||
-				 !strcmp(token.getName(), "l") ||
-				 !strcmp(token.getName(), "lg"))) {
-     
-
-			text.append(token);
-			writeEntry(*currentVerse, text, true);
-			text = "";
-
-			return true;
-
+		else if (!inVerse) {
+			// Is this the end of a chapter.
+			if (tagDepth == chapterDepth && (!strcmp(tokenName, "div") || !strcmp(tokenName, "chapter"))) {
+				chapterDepth = 0;
+				verseDepth = 0;
+				text = "";
+				return true;
+			}
+			// Or is it the end of a book
+			else if (tagDepth == bookDepth && (!strcmp(tokenName, "div"))) {
+				bookDepth = 0;
+				chapterDepth = 0;
+				verseDepth = 0;
+				text = "";
+				return true;
+			}
+			// OTHER MISC END TAGS WHEN !INVERSE
+			// Test that is between verses, or after the last is appended to the preceeding verse.
+			else if (!strcmp(tokenName, "p") ||
+					 !strcmp(tokenName, "div") ||
+					 !strcmp(tokenName, "q")  ||
+					 !strcmp(tokenName, "l") ||
+					 !strcmp(tokenName, "lg")
+					  ) {
+				text.append(*token);
+				writeEntry(*currentVerse, text, true);
+				text = "";
+				return true;
+			}
 		}
 	}
 	return false;
@@ -373,9 +472,9 @@ int main(int argc, char **argv) {
 		case 2: compressor = new ZipCompress(); break;
 	}
 
-// 	cerr << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
-// 	cerr << "";
-// 	exit(-3);
+//	cerr << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
+//	cerr << "";
+//	exit(-3);
 
 
 	if ((argc<4)||(!strcmp(argv[3], "0"))) {	// == 0 then create module
@@ -440,6 +539,7 @@ int main(int argc, char **argv) {
 	bool intoken = false;
 
 	while (FileMgr::getLine(fd, buffer)) {
+		//cout << "Line: " << buffer.c_str() << endl;
 		for (from = buffer.c_str(); *from; from++) {
 			if (*from == '<') {
 				intoken = true;
@@ -452,7 +552,9 @@ int main(int argc, char **argv) {
 				token.append('>');
 				// take this isalpha if out to check for bugs in text
 				if ((isalpha(token[1])) || (isalpha(token[2]))) {
-					if (!handleToken(text, token.c_str())) {
+					//cout << "Handle:" << token.c_str() << endl;
+					XMLTag *t = new XMLTag(token.c_str());
+					if (!handleToken(text, t)) {
 						text.append(token);
 					}
 				}
@@ -464,6 +566,9 @@ int main(int argc, char **argv) {
 			else	
 				text.append(*from);
 		}
+		
+		if (intoken)
+			token.append("\n");
 	}
 	delete module;
 	delete currentVerse;

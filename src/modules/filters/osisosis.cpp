@@ -132,11 +132,16 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
+				SWBuf type = tag.getAttribute("type");
+				bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");	// the latter is deprecated
+				if (strongsMarkup) {
+					tag.setEmpty(false);	// handle bug in KJV2003 module where some note open tags were <note ... />
+				}
+
 				if (!tag.isEmpty()) {
-					SWBuf type = tag.getAttribute("type");
 					tag.setAttribute("swordFootnote", 0);
 
-					if (type != "strongsMarkup") {
+					if (!strongsMarkup) {
 						buf += tag;
 					}
 					else u->suspendTextPassThru = true;

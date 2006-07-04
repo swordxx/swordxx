@@ -117,10 +117,14 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <note> tag
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
+                                SWBuf type = tag.getAttribute("type");
+                                bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");    // the latter is deprecated
+                                if (strongsMarkup) {
+                                        tag.setEmpty(false);    // handle bug in KJV2003 module where some note open tags were <note ... />
+                                }                       
+                                                        
 				if (!tag.isEmpty()) {
-					SWBuf type = tag.getAttribute("type");
-
-					if (type != "strongsMarkup") {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						SWBuf modName = (u->module) ? u->module->Name() : "";
 						VerseKey *vkey;

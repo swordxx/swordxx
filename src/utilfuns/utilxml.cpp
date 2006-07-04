@@ -37,7 +37,7 @@ void XMLTag::parse() const {
 		return;
 	for (i = 0; ((buf[i]) && (!isalpha(buf[i]))); i++);
 	for (; buf[i]; i++) {
-		if (buf[i] == ' ') {
+		if (strchr("\t\r\n ", buf[i])) {
 			for (; ((buf[i]) && (!isalpha(buf[i]))); i++);
 			if (buf[i]) {		// we have an attribute name
 				start = i;
@@ -70,7 +70,7 @@ void XMLTag::parse() const {
 	for (;i;i--) {
 		if (buf[i] == '/')
 			empty = true;
-		if (!strchr(" \n>\t", buf[i]))
+		if (!strchr(" \t\r\n>\t", buf[i]))
 			break;
 	}
 		
@@ -111,7 +111,7 @@ void XMLTag::setText(const char *tagString) {
 			endTag = true;
 	}
 	start = i;
-	for (; ((tagString[i]) && (!strchr(" />", tagString[i]))); i++);
+	for (; ((tagString[i]) && (!strchr("\t\r\n />", tagString[i]))); i++);
 	if (i-start) {
 		if (name)
 			delete [] name;
