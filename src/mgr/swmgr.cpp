@@ -42,6 +42,7 @@
 #include <gbfplain.h>
 #include <thmlplain.h>
 #include <osisplain.h>
+#include <teiplain.h>
 #include <papyriplain.h>
 #include <gbfstrongs.h>
 #include <gbffootnotes.h>
@@ -242,6 +243,9 @@ void SWMgr::init() {
 
 	osisplain = new OSISPlain();
 	cleanupFilters.push_back(osisplain);
+
+	teiplain = new TEIPlain();
+	cleanupFilters.push_back(teiplain);
 //#endif
 }
 
@@ -713,6 +717,8 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 		markup = FMT_THML;
 	else if (!stricmp(sourceformat.c_str(), "OSIS"))
 		markup = FMT_OSIS;
+	else if (!stricmp(sourceformat.c_str(), "TEI"))
+		markup = FMT_TEI;
 	else
 		markup = FMT_GBF;
 
@@ -985,6 +991,9 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 	}
 	else if (!stricmp(sourceformat.c_str(), "OSIS")) {
 		module->AddStripFilter(osisplain);
+	}
+	else if (!stricmp(sourceformat.c_str(), "TEI")) {
+		module->AddStripFilter(teiplain);
 	}
 
 	if (filterMgr)

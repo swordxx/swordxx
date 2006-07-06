@@ -114,7 +114,8 @@
       ..\..\src\utilfuns\zlib\adler32.obj 
       ..\..\src\modules\filters\papyriplain.obj ..\..\src\utilfuns\ftpparse.obj 
       ..\..\src\modules\filters\osismorphsegmentation.obj 
-      ..\..\src\keys\versetreekey.obj"/>
+      ..\..\src\keys\versetreekey.obj ..\..\src\modules\filters\teiplain.obj 
+      ..\..\src\modules\filters\teirtf.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

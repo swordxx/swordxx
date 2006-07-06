@@ -144,6 +144,8 @@ USEUNIT("..\..\src\modules\filters\papyriplain.cpp");
 USEUNIT("..\..\src\utilfuns\ftpparse.c");
 USEUNIT("..\..\src\modules\filters\osismorphsegmentation.cpp");
 USEUNIT("..\..\src\keys\versetreekey.cpp");
+USEUNIT("..\..\src\modules\filters\teiplain.cpp");
+USEUNIT("..\..\src\modules\filters\teirtf.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

@@ -36,6 +36,7 @@ protected:
         SWFilter* fromgbf;
         SWFilter* fromplain;
         SWFilter* fromosis;
+        SWFilter* fromtei;
 
 				/**
 	 			* current markup value

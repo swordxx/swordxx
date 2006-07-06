@@ -106,6 +106,7 @@ protected:
 	SWFilter *gbfplain;
 	SWFilter *thmlplain;
 	SWFilter *osisplain;
+	SWFilter *teiplain;
 	SWOptionFilter *transliterator;
 	FilterList cleanupFilters;
 	StringList options;

@@ -21,6 +21,8 @@
 
 #include <thmlplain.h>
 #include <gbfplain.h>
+#include <osisplain.h>
+#include <teiplain.h>
 #include <thmlgbf.h>
 #include <gbfthml.h>
 #include <thmlhtml.h>
@@ -33,6 +35,7 @@
 #include <gbfosis.h>
 #include <thmlosis.h>
 #include <osisrtf.h>
+#include <teirtf.h>
 #include <osisosis.h>
 #include <osishtmlhref.h>
 #include <gbfwebif.h>
@@ -76,6 +79,8 @@ MarkupFilterMgr::~MarkupFilterMgr() {
                 delete (fromplain);
         if (fromosis)
                 delete (fromosis);
+        if (fromtei)
+                delete (fromtei);
 }
 
 /******************************************************************************
@@ -94,6 +99,7 @@ char MarkupFilterMgr::Markup(char mark) {
                 SWFilter * oldthml = fromthml;
                 SWFilter * oldgbf = fromgbf;
                 SWFilter * oldosis = fromosis;
+                SWFilter * oldtei = fromtei;
 
                 CreateFilters(markup);
 
@@ -159,6 +165,21 @@ char MarkupFilterMgr::Markup(char mark) {
                                         }
                                         break;
                                 }
+                        case FMT_TEI:
+                                if (oldtei != fromtei) {
+                                        if (oldtei) {
+                                                if (!fromtei) {
+                                                        module->second->RemoveRenderFilter(oldtei);
+                                                }
+                                                else {
+                                                        module->second->ReplaceRenderFilter(oldtei, fromtei);
+                                                }
+                                        }
+                                        else if (fromtei) {
+                                                module->second->AddRenderFilter(fromtei);
+                                        }
+                                        break;
+                                }
                         }
 
                 if (oldthml)
@@ -169,6 +190,8 @@ char MarkupFilterMgr::Markup(char mark) {
                         delete oldplain;
                 if (oldosis)
                         delete oldosis;
+                if (oldtei)
+                        delete oldtei;
         }
         return markup;
 }
@@ -191,6 +214,10 @@ void MarkupFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) 
                 if (fromosis)
                         module->AddRenderFilter(fromosis);
                 break;
+        case FMT_TEI:
+                if (fromtei)
+                        module->AddRenderFilter(fromtei);
+                break;
         }
 }
 
@@ -201,49 +228,64 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromplain = NULL;
                         fromthml = new ThMLPlain();
                         fromgbf = new GBFPlain();
-                        fromosis = NULL;
+                        fromosis = new OSISPlain();
+                        fromtei = TEIPlain();
                         break;
                 case FMT_THML:
                         fromplain = NULL;
                         fromthml = NULL;
                         fromgbf = new GBFThML();
                         fromosis = NULL;
+                        fromtei = NULL;
                         break;
                 case FMT_GBF:
                         fromplain = NULL;
                         fromthml = new ThMLGBF();
                         fromgbf = NULL;
                         fromosis = NULL;
+                        fromtei = NULL;
                         break;
                 case FMT_HTML:
                         fromplain = new PLAINHTML();
                         fromthml = new ThMLHTML();
                         fromgbf = new GBFHTML();
                         fromosis = NULL;
+                        fromtei = NULL;
                         break;
                 case FMT_HTMLHREF:
                         fromplain = new PLAINHTML();
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
                         fromosis = new OSISHTMLHREF();
+                        fromtei = NULL;
                         break;
                 case FMT_RTF:
                         fromplain = NULL;
                         fromthml = new ThMLRTF();
                         fromgbf = new GBFRTF();
                         fromosis = new OSISRTF();
+                        fromtei = new TEIRTF();
                         break;
                 case FMT_OSIS:
                         fromplain = NULL;
                         fromthml = new ThMLOSIS();
                         fromgbf = new GBFOSIS();
                         fromosis = new OSISOSIS();
+                        fromtei = NULL;
                         break;
                 case FMT_WEBIF:
                         fromplain = NULL;
                         fromthml = new ThMLWEBIF();
                         fromgbf = new GBFWEBIF();
                         fromosis = new OSISWEBIF();
+                        fromtei = NULL;
+                        break;
+                case FMT_TEI:
+                        fromplain = NULL;
+                        fromthml = NULL;
+                        fromgbf = NULL;
+                        fromosis = NULL;
+                        fromtei = NULL;
                         break;
                 }
 
