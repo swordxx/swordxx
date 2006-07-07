@@ -122,6 +122,9 @@ pkginclude_HEADERS += $(swincludedir)/thmlstrongs.h
 pkginclude_HEADERS += $(swincludedir)/thmlvariants.h
 pkginclude_HEADERS += $(swincludedir)/thmlwordjs.h
 
+pkginclude_HEADERS += $(swincludedir)/teiplain.h
+pkginclude_HEADERS += $(swincludedir)/teirtf.h
+
 pkginclude_HEADERS += $(swincludedir)/treekey.h
 pkginclude_HEADERS += $(swincludedir)/treekeyidx.h
 pkginclude_HEADERS += $(swincludedir)/unicodertf.h

@@ -229,7 +229,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromthml = new ThMLPlain();
                         fromgbf = new GBFPlain();
                         fromosis = new OSISPlain();
-                        fromtei = TEIPlain();
+                        fromtei = new TEIPlain();
                         break;
                 case FMT_THML:
                         fromplain = NULL;

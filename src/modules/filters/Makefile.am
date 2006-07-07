@@ -29,6 +29,9 @@ THMLFIL += $(filtersdir)/thmlhtmlhref.cpp
 THMLFIL += $(filtersdir)/thmlwebif.cpp
 THMLFIL += $(filtersdir)/thmlwordjs.cpp
 
+TEIFIL = $(filtersdir)/teiplain.cpp
+TEIFIL += $(filtersdir)/teirtf.cpp
+
 CONVFIL = $(filtersdir)/gbfthml.cpp
 CONVFIL += $(filtersdir)/gbfosis.cpp
 CONVFIL += $(filtersdir)/thmlosis.cpp
@@ -98,4 +101,4 @@ libsword_la_SOURCES += $(SWREALICUSRC)
 EXTRA_DIST = $(DISTSWICUSRC)
 
 libsword_la_SOURCES += $(OSISFIL) $(GBFFIL) \
-	$(THMLFIL) $(CONVFIL) $(PLFIL)
+	$(THMLFIL) $(CONVFIL) $(PLFIL) $(TEIFIL)
