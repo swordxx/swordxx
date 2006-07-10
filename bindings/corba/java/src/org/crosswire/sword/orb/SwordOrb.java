@@ -1,5 +1,7 @@
 package org.crosswire.sword.orb;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -11,9 +13,11 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import java.util.Vector;
 import java.util.Hashtable;
 import java.util.Date;
+import java.util.Properties;
 
 public class SwordOrb extends Object implements HttpSessionBindingListener {
-	public static final String ORBEXE = "swordorbserver";
+	public static Properties config = null;
+	public static String ORBEXE = null;
 	public static final int MAX_REMOTE_ADDR_CONNECTIONS = 20;
 	public static final int MAX_ACCESS_COUNT_PER_INTERVAL = 10;
 	public static final long MAX_ACCESS_COUNT_INTERVAL = 10 * 1000;	// milliseconds
@@ -82,6 +86,19 @@ System.out.println("failed in attach");
 //		catch (Exception e) {e.printStackTrace();}	// we know this doesn't return properly cuz we killed the orb! :)
 	}
 
+	private static void loadConfig(HttpServletRequest request) {
+		try {
+			config = new Properties();
+			File propName = new File(request.getSession().getServletContext().getRealPath("/WEB-INF/swordweb.properties"));
+			if (propName.exists()) {
+				FileInputStream propFile = new FileInputStream(propName);
+				config.load(propFile);
+				propFile.close();
+			}
+		}
+		catch (Exception e) { e.printStackTrace(); }
+		ORBEXE = config.getProperty("orbexe", "swordorbserver");
+	}
 
 	private void startOrb() {
 		try {
@@ -122,7 +139,7 @@ System.out.println("Launched ORB, IOR: " + ior);
 System.out.println("trying to attach to running ORB");
 			retVal = attach();
 		}
-		catch(org.omg.CORBA.SystemException e) {
+		catch(Exception e) {
 //			e.printStackTrace();
 			retVal = null;
 		}
@@ -154,6 +171,7 @@ System.out.println("trying to attach to newly launched ORB");
 	}
 
 	public static SwordOrb getSessionOrb(HttpServletRequest request) throws Exception {
+		if (config == null) loadConfig(request);
 		HttpSession session = request.getSession();
 		SwordOrb orb = (SwordOrb)session.getAttribute("SwordOrb");
 		String remoteAddr = request.getRemoteAddr();
