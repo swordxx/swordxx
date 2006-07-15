@@ -30,6 +30,15 @@ SWORD_NAMESPACE_START
 OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp"), javascript(false) {
 }
 
+
+BasicFilterUserData *OSISWEBIF::createUserData(const SWModule *module, const SWKey *key) {
+	MyUserData *u = new MyUserData(module, key);
+	u->wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
+	u->wordsOfChristEnd   = "</span> ";
+	return u;
+}
+
+
 bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
@@ -158,96 +167,6 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 
-		// <catchWord> & <rdg> tags (italicize)
-		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (!u->suspendTextPassThru)
-					buf += "<i>";
-			}
-			else if (tag.isEndTag()) {
-				if (!u->suspendTextPassThru)
-					buf += "</i>";
-			}
-		}
-
-                // <hi> text highlighting
-		else if (!strcmp(tag.getName(), "hi")) {
-			SWBuf type = tag.getAttribute("type");
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (type == "b" || type == "x-b") {
-					if (!u->suspendTextPassThru)
-						buf += "<b>";
-					u->inBold = true;
-				}
-				else {	// all other types
-					if (!u->suspendTextPassThru)
-						buf += "<i>";
-					u->inBold = false;
-				}
-			}
-			else if (tag.isEndTag()) {
-				if(u->inBold) {
-					if (!u->suspendTextPassThru)
-						buf += "</b>";
-				}
-				else {
-					if (!u->suspendTextPassThru)
-						 buf += "</i>";
-				}
-			}
-		}
-
-		// <q> quote
-		else if (!strcmp(tag.getName(), "q")) {
-			SWBuf type = tag.getAttribute("type");
-			SWBuf who = tag.getAttribute("who");
-			const char *lev = tag.getAttribute("level");
-			int level = (lev) ? atoi(lev) : 1;
-			
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				/*buf += "{";*/
-
-				//alternate " and '
-				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
-				
-				if (who == "Jesus") {
-					buf += "<span class=\"wordsOfJesus\"> ";
-				}
-			}
-			else if (tag.isEndTag()) {
-				//alternate " and '
-				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
-				buf += "</span>";
-			}
-			else {	// empty quote marker
-				//alternate " and '
-				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
-			}
-		}
-
-		// <transChange>
-		else if (!strcmp(tag.getName(), "transChange")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				SWBuf type = tag.getAttribute("type");
-				u->lastTransChange = type;
-
-				// just do all transChange tags this way for now
-				if ((type == "added") || (type == "supplied"))
-					buf += "<i>";
-				else if (type == "tenseChange")
-					buf += "*";
-			}
-			else if (tag.isEndTag()) {
-				SWBuf type = u->lastTransChange;
-				if ((type == "added") || (type == "supplied"))
-					buf += "</i>";
-			}
-			else {	// empty transChange marker?
-			}
-		}
 		// ok to leave these in
 		else if (!strcmp(tag.getName(), "div")) {
 			buf += tag;
@@ -258,6 +177,13 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "br")) {
 			buf += tag;
 		}
+
+		// handled appropriately in base class
+		// <catchWord> & <rdg> tags (italicize)
+		// <hi> text highlighting
+		// <q> quote
+		// <milestone type="cQuote" marker="x"/>
+		// <transChange>
 		else {
 			return OSISHTMLHREF::handleToken(buf, token, userData);
 		}

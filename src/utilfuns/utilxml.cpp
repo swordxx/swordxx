@@ -41,7 +41,10 @@ void XMLTag::parse() const {
 			for (; ((buf[i]) && (!isalpha(buf[i]))); i++);
 			if (buf[i]) {		// we have an attribute name
 				start = i;
+				// Deprecated: check for following whitespacee
+				// Should be: for (; (buf[i] && buf[i] != '='; i++);
 				for (; ((buf[i]) && (!strchr(" =", buf[i]))); i++);
+
 				if (i-start) {
 					if (name)
 						delete [] name;
@@ -49,23 +52,47 @@ void XMLTag::parse() const {
 					strncpy(name, buf+start, i-start);
 					name[i-start] = 0;
 				}
-				for (; ((buf[i]) && (strchr(" =\"\'", buf[i]))); i++);
+
+				// The following does not allow for empty attributes
+				//for (; ((buf[i]) && (strchr(" =\"\'", buf[i]))); i++);
+
+				// skip space preceding the = sign
+				// Deprecated: this is not part of the xml spec
+				for (; buf[i] == ' '; i++) ;
+
+				// skip the = sign
+				i++;
+
+				// skip space following the = sign
+				// Deprecated: this is not part of the xml spec
+				for (; buf[i] == ' '; i++) ;
+
+				// remember and skip the quote sign
+				char quoteChar = buf[i];
+				i++;
+
 				if (buf[i]) {	// we have attribute value
 					start = i;
-					for (; ((buf[i]) && (buf[i] != '\"') && (buf[i] != '\'')); i++);
-					if (i-start) {
+					// Skip until matching quote character
+					for (; ((buf[i]) && (buf[i] != quoteChar)); i++);
+
+					// Allow for empty quotes
+					//if (i-start) {
 						if (value)
 							delete [] value;
 						value = new char [ (i-start) + 1 ];
-						strncpy(value, buf+start, i-start);
+						if (i-start) {
+							strncpy(value, buf+start, i-start);
+						}
 						value[i-start] = 0;
 						attributes[name] = value;
-					}
+					//}
 				}
 			}
 		}
-		if (!buf[i])
-			break;
+		if (buf[i])
+			buf[i] = ' ';
+		else break;
 	}
 	for (;i;i--) {
 		if (buf[i] == '/')

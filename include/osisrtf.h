@@ -37,6 +37,8 @@ protected:
 		bool BiblicalText;
 		bool inXRefNote;
 		bool inQuote;
+		bool providesQuote;
+		SWBuf quoteMark;
 		SWBuf w;
 		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);

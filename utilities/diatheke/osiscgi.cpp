@@ -226,8 +226,8 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 		}
 
-		// <milestone type="line"/>
-		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+		// <milestone type="line"/> or <lb.../>
+		else if ((!strcmp(tag.getName(), "lb")) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
 			buf += "<br />";
 			userData->supressAdjacentWhitespace = true;
 		}

@@ -32,6 +32,7 @@ using namespace std;
 
 SWText *module = 0;
 VerseKey *currentVerse = 0;
+char activeOsisID[255];
 
 
 // remove subverse elements from osisIDs
@@ -58,7 +59,7 @@ bool isKJVRef(const char *buf) {
 	test = buf;
 
 	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
-//		std::cerr << (const char*)vk << " == "  << (const char*)test << std::endl;
+//		cout << (const char*)vk << " == "  << (const char*)test << endl;
 		return (vk == test);
 	}
 	else return true;	// no check if we're a heading... Probably bad.
@@ -79,28 +80,57 @@ void makeKJVRef(VerseKey &key) {
 }
 
 
-void writeEntry(VerseKey &key, SWBuf &text, bool suppressOutput = false) {
-//	cout << "Verse: " << key << "\n";
-//	cout << "TEXT: " << text << "\n\n";
+void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
+	static SWBuf activeVerseText;
+        char keyOsisID[255];
+	strcpy(keyOsisID, key.getOSISRef());
+
+	// set keyOsisID to anything that an osisID cannot be.
+	if (force) {
+		strcpy(keyOsisID, "-force");
+	}
+
+	static VerseKey lastKey;
+	lastKey.AutoNormalize(0);
+	lastKey.Headings(1);
+
 	VerseKey saveKey;
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = key;
 
-	if (!isKJVRef(key)) {
-		makeKJVRef(key);
+	// If we have seen a verse and the supplied one is different then we output the collected one.
+	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
+
+		key = lastKey;
+
+		if (!isKJVRef(key)) {
+			makeKJVRef(key);
+		}
+
+		SWBuf currentText = module->getRawEntry();
+		if (currentText.length()) {
+			cout << "Appending entry: " << key.getOSISRef() << ": " << activeVerseText << endl;
+			activeVerseText = currentText + " " + activeVerseText;
+		}
+
+//		cout << "Write: " << activeOsisID << ":" << key.getOSISRef() << ": " << activeVerseText << endl;
+
+		module->setEntry(activeVerseText);
+		activeVerseText = "";
 	}
 
-	SWBuf currentText = module->getRawEntry();
-	if (currentText.length()) {
-		if (!suppressOutput) {
-			cout << "Appending entry: " << key << endl;
-		}
-		text = currentText + " " + text;
+	if (activeVerseText.length()) {
+		activeVerseText += " ";
+		activeVerseText += text;
 	}
-	module->setEntry(text);
+	else {
+		activeVerseText = text;
+	}
 
 	key = saveKey;
+	lastKey = key;
+	strcpy(activeOsisID, keyOsisID);
 }
 
 
@@ -138,7 +168,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	static bool inBook = false;
 	static bool inChapter = false;
 	static bool inVerse = true;
-	
+
 	static SWBuf header = "";
 
 	// Used to remember titles that need to be handle specially
@@ -175,6 +205,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		lastTitle = "";
 		inTitle = true;
 		tagStack.push(token);
+//		cout << "push " << token->getName() << endl;
 		titleDepth = tagStack.size();
 		return false; 
 	}
@@ -183,10 +214,12 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
 		lastTitle.append(*token); //</title>
 
-// 		printf("lastTitle:	%s\n", lastTitle.c_str());
-// 		printf("text-lastTitle:	%s\n", text.c_str()+titleOffset);
+// 		cout << "lastTitle:      " << lastTitle.c_str() << endl;
+// 		cout << "text-lastTitle: " << text.c_str()+titleOffset << endl;
+//		cout << "text:           " << text.c_str() << endl;
 		inTitle = false;
 		titleDepth = 0;
+//		cout << "pop " << tagStack.top()->getName() << endl;
 		tagStack.pop();
 		return false; // don't add </title> to the text itself
 	}
@@ -200,11 +233,12 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		// Remember non-empty start tags
 		if (!token->isEmpty()) {
 			tagStack.push(token);
+//			cout << "push " << token->getName() << endl;
 		}
 
 		//-- WITH OSIS ID -------------------------------------------------------------------------
 		if (token->getAttribute("osisID")) {
-	
+
 			// BOOK START
 			if ((!strcmp(tokenName, "div")) && (!strcmp(typeAttr, "book"))) {
 				inVerse = false;
@@ -248,7 +282,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				text = "";
 				chapterDepth = tagStack.size();
 				verseDepth = 0;
-				
+
 				return true;
 			}
 
@@ -256,29 +290,24 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			else if (!strcmp(tokenName, "verse")) {
 				inVerse = true;
 				if (inChapterHeader) {
+					SWBuf heading = text;
+
 					//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
 					// Did we have a preverse title?
 					if (lastTitle.length())
 					{
 						//Was the preVerse title in the header (error if not)?
-						const char* header = text.c_str();
+						const char* header = heading.c_str();
 						const char* preVerse = strstr(header, lastTitle);
 						if (preVerse) {
 							if (preVerse == header) {
-								; // do nothing
+								heading = ""; // do nothing
 							}
 							else {
-								int preVerseLen = strlen(preVerse);
-								int headerLen = strlen(header);
-								// Was it the last thing?
-								if (header == preVerseLen + preVerse - headerLen) {
-									// Remove it from the end of the header.
-									text.setSize(headerLen - preVerseLen);
-								}
-								// It was not the last thing so it cannot be preVerse
-								else {
-									lastTitle = "";
-								}
+								// remove everything before the title from the beginning.
+								text = preVerse;
+								// Remove text from the end of the header.
+								heading.setSize(preVerse - header);
 							}
 						}
 						else {
@@ -286,10 +315,11 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 						}
 					}
 
-//					cout << "CHAPTER HEADING "<< text.c_str() << endl;
-					writeEntry(*currentVerse, text);
-			
-					text = "";
+					if (heading.length()) {
+//						cout << "CHAPTER HEADING "<< heading.c_str() << endl;
+						writeEntry(*currentVerse, heading);
+					}
+
 					inChapterHeader = false;
 				}
 
@@ -318,6 +348,26 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				return true;
 			}
 		}
+		// Handle stuff between the verses
+		// Whitespace producing empty tokens are appended to prior entry
+		// Also the quote
+		// This is a hack to get ESV to work
+		else if (!inTitle && !inVerse && token->isEmpty()) { // && !inBookHeader && !inChapterHeader) {
+			if (!strcmp(tokenName, "p") ||
+					!strcmp(tokenName, "div") ||
+					!strcmp(tokenName, "q")  ||
+					!strcmp(tokenName, "l") ||
+					!strcmp(tokenName, "lb") ||
+					!strcmp(tokenName, "lg")
+					) {
+//					if (token) {
+//						cout << "start token " << *token << ":" << text.c_str() << endl;
+//					}
+				SWBuf tmp = token->toString();
+				writeEntry(*currentVerse, tmp);
+				return true;
+			}
+		}
 	}
 
 //-- END TAG ---------------------------------------------------------------------------------------------
@@ -329,15 +379,19 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			exit(1);
 		}
 
-		XMLTag *topToken = tagStack.top();
-		tagDepth = tagStack.size();
-		tagStack.pop();
+		XMLTag *topToken = 0;
+		if (!token->isEmpty()) {
+			topToken = tagStack.top();
+			tagDepth = tagStack.size();
+//			cout << "pop " << topToken->getName() << endl;
+			tagStack.pop();
 
-		if (strcmp(topToken->getName(), tokenName)) {
-			cout << "Expected " << topToken->getName() << " found " << tokenName << endl;
-			exit(1);
+			if (strcmp(topToken->getName(), tokenName)) {
+				cout << "Error: " << *currentVerse << ": Expected " << topToken->getName() << " found " << tokenName << endl;
+				exit(1);
+			}
 		}
-		
+
 		// VERSE END
 		if (!strcmp(tokenName, "verse")) {
 			inVerse = false;
@@ -349,11 +403,11 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			if (lastTitle.length()) {
 				const char* end = strchr(lastTitle, '>');
 //				cout << lastTitle << endl;
-//	 			printf("length=%d, tag; %s\n", end+1 - lastTitle.c_str(), lastTitle.c_str());
+//	 			cout << "length=" << int(end+1 - lastTitle.c_str()) << ", tag:" << lastTitle.c_str() << endl;
 
 				SWBuf titleTagText;
 				titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
-//				printf("tagText: %s\n", titleTagText.c_str());
+//				cout << "tagText: " << titleTagText.c_str() << endl;;
 
 				XMLTag titleTag(titleTagText);
 				titleTag.setAttribute("type", "section");
@@ -367,7 +421,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					temp.append(pos+lastTitle.length());
 					text = temp;
 				}
-			
+
 				//if a title was already inserted at the beginning insert this one after that first title
 				int titlePos = 0;
 				if (!strncmp(text.c_str(),"<title ",7)) {
@@ -402,7 +456,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			verseDepth = 0;
 			return true;
 		}
-		else if (!inVerse) {
+		else if (!inTitle && !inVerse && !inBookHeader && !inChapterHeader) {
+//			cout << "End tag not in verse: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
 			// Is this the end of a chapter.
 			if (tagDepth == chapterDepth && (!strcmp(tokenName, "div") || !strcmp(tokenName, "chapter"))) {
 				chapterDepth = 0;
@@ -412,6 +467,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			}
 			// Or is it the end of a book
 			else if (tagDepth == bookDepth && (!strcmp(tokenName, "div"))) {
+//				cout << "Saw an end div: " << *topToken << endl;
 				bookDepth = 0;
 				chapterDepth = 0;
 				verseDepth = 0;
@@ -421,19 +477,67 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			// OTHER MISC END TAGS WHEN !INVERSE
 			// Test that is between verses, or after the last is appended to the preceeding verse.
 			else if (!strcmp(tokenName, "p") ||
-					 !strcmp(tokenName, "div") ||
-					 !strcmp(tokenName, "q")  ||
-					 !strcmp(tokenName, "l") ||
-					 !strcmp(tokenName, "lg")
-					  ) {
+					!strcmp(tokenName, "div") ||
+					!strcmp(tokenName, "q")  ||
+					!strcmp(tokenName, "l") ||
+					!strcmp(tokenName, "lb") ||
+					!strcmp(tokenName, "lg")
+					) {
+//				if (topToken) {
+//					cout << "start token " << *topToken << endl;
+//				}
 				text.append(*token);
-				writeEntry(*currentVerse, text, true);
+				writeEntry(*currentVerse, text);
 				text = "";
 				return true;
 			}
 		}
 	}
 	return false;
+}
+
+XMLTag* transform(XMLTag* t) {
+	static std::stack<XMLTag*> tagStack;
+	static int sID = 1;
+	char buf[11];
+
+	// Support simplification transformations
+	if (!t->isEmpty()) {
+		if (!t->isEndTag()) {
+			tagStack.push(t);
+			// Transform <q> into <q sID=""/> except for <q who="Jesus">
+			if ((!strcmp(t->getName(), "q")) && (!t->getAttribute("who") || strcmp(t->getAttribute("who"), "Jesus"))) {
+				t->setEmpty(true);
+				sprintf(buf, "q%d", sID++);
+				t->setAttribute("sID", buf);
+			}
+
+			// Transform <p> into <lb type="x-begin-paragraph"/>
+			else if (!strcmp(t->getName(), "p")) {
+				// note there is no process that should care about type, it is there for reversability
+				t->setText("<lb type=\"x-begin-paragraph\" />");
+			}
+		}
+		else {
+			XMLTag *topToken = tagStack.top();
+			tagStack.pop();
+
+			// If we have found an end tag for a <q> that was transformed then transform this one as well.
+			if ((!strcmp(t->getName(), "q")) && (!strcmp(topToken->getName(), "q")) && (!topToken->getAttribute("who") || strcmp(topToken->getAttribute("who"), "Jesus"))) {
+				// make this a clone of the start tag with sID changed to eID
+				*t = *topToken;
+				t->setAttribute("eID", t->getAttribute("sID"));
+				t->setAttribute("sID", 0);
+			}
+
+			// Look for paragraph tags.
+			// If we have found an end tag for a <p> that was transformed then transform this as well.
+			else if ((!strcmp(t->getName(), "p")) && (!strcmp(topToken->getName(), "lb"))) {
+				t->setText("<lb type=\"x-end-paragraph\" />");
+			}
+		}
+	}
+	return t;
 }
 
 int main(int argc, char **argv) {
@@ -454,7 +558,7 @@ int main(int argc, char **argv) {
 	string cipherKey = "";
 	SWCompress *compressor = 0;
 // 	SWModule *outModule    = 0;
-	
+
 
 	if (argc > 4) {
 		compType = atoi(argv[4]);
@@ -472,8 +576,8 @@ int main(int argc, char **argv) {
 		case 2: compressor = new ZipCompress(); break;
 	}
 
-//	cerr << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
-//	cerr << "";
+//	cout << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
+//	cout << "";
 //	exit(-3);
 
 
@@ -498,7 +602,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[2]);
 		exit(-2);
 	}
-	
+
 	// Do some initialization stuff
 	SWBuf buffer;
 
@@ -521,8 +625,8 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "The module is not writable. Writing text to it will not work.\nExiting.\n" );
 		exit(-1);
 	}
-	
 
+	activeOsisID[0] = '\0';
 
 	currentVerse = new VerseKey();
 	currentVerse->AutoNormalize(0);
@@ -554,8 +658,9 @@ int main(int argc, char **argv) {
 				if ((isalpha(token[1])) || (isalpha(token[2]))) {
 					//cout << "Handle:" << token.c_str() << endl;
 					XMLTag *t = new XMLTag(token.c_str());
-					if (!handleToken(text, t)) {
-						text.append(token);
+
+					if (!handleToken(text, transform(t))) {
+						text.append(*t);
 					}
 				}
 				continue;
@@ -566,10 +671,14 @@ int main(int argc, char **argv) {
 			else	
 				text.append(*from);
 		}
-		
+
 		if (intoken)
 			token.append("\n");
 	}
+
+	// Force the last entry from the buffer.
+	text = "";
+	writeEntry(*currentVerse, text, true);
 	delete module;
 	delete currentVerse;
 	if (cipherFilter)

@@ -9,8 +9,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation version 2 of the License.                *
  *                                                                         *
  ***************************************************************************/
 
@@ -26,9 +25,10 @@ SWORD_NAMESPACE_START
 
 
 OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	inXRefNote = false;
-	BiblicalText = false;
-	inQuote = false;
+	inXRefNote    = false;
+	BiblicalText  = false;
+	inQuote       = false;
+	providesQuote = false;
 	if (module) {
 		version = module->Name();
 		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
@@ -203,19 +203,23 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 		// <l> poetry
 		else if (!strcmp(tag.getName(), "l")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "";
-			}
-			else if (tag.isEndTag()) {
+			// end line marker
+			if (tag.getAttribute("eID")) {
 				buf += "{\\par}";
 			}
-			else if (tag.getAttribute("sID")) {	// empty line marker
+			// <l/> without eID or sID
+			// Note: this is improper osis. This should be <lb/>
+			else if (tag.isEmpty() && !tag.getAttribute("sID")) {
+				buf += "{\\par}";
+			}
+			// end of the line
+			else if (tag.isEndTag()) {
 				buf += "{\\par}";
 			}
 		}
 
-		// <milestone type="line"/>
-		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line"))) {
+		// <milestone type="line"/> or <lb.../>
+		else if ((!strcmp(tag.getName(), "lb")) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
 			buf += "{\\par}";
 			userData->supressAdjacentWhitespace = true;
 		}
@@ -259,39 +263,70 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			SWBuf type = tag.getAttribute("type");
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
+			const char *mark = tag.getAttribute("marker");
 			int level = (lev) ? atoi(lev) : 1;
 
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{";
+			// open <q> or <q sID... />
+			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
 
+				// Honor the marker attribute, ignoring the osisQToTick
+				u->providesQuote = false;
+				if (mark) {
+					if (*mark) {
+						buf += mark;
+					}
+					u->quoteMark = mark;
+					u->providesQuote = true;
+				}
 				//alternate " and '
-				if (u->osisQToTick)
+				else if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 
-				if (who == "Jesus")
+				if (who == "Jesus") {
 					buf += "\\cf6 ";
-			}
-			else if (tag.isEndTag()) {
-				//alternate " and '
-				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
-				buf += "}";
-			}
-			else {	// empty quote marker
-				//alternate " and '
-				if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
-				if (!u->inQuote) {
-					if (who == "Jesus")
-						buf += "\\cf6 ";
-					u->inQuote = 1;
-				}
-				else {
-					if (who == "Jesus")
-						buf += "\\cf0 ";
-					u->inQuote = 0;
+					u->inQuote = true;
 				}
 			}
+			// close </q> or <q eID... />
+			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
+				// if we've changed color, we should put it back
+				if (u->inQuote) {
+					buf += "\\cf0 ";
+					u->inQuote = false;
+				}
+				// first check to see if we've been given an explicit mark
+				if (mark) {
+					if (*mark) {
+						buf += mark;
+					}
+				}
+				// next check to see if our opening q provided an explicit mark
+				else if (u->providesQuote) {
+					if (u->quoteMark.length()) {
+						buf += u->quoteMark;
+					}
+				}
+				// finally, alternate " and ', if config says we should supply a mark
+				else if (u->osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
+			}
+		}
+
+		// <milestone type="cQuote" marker="x"/>
+		else if (!strcmp(tag.getName(), "milestone") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "cQuote")) {
+			const char *mark = tag.getAttribute("marker");
+			const char *lev = tag.getAttribute("level");
+			int level = (lev) ? atoi(lev) : 1;
+
+			// first check to see if we've been given an explicit mark
+			if (mark) {
+				if (*mark) {
+					buf += mark;
+				}
+			}
+			// finally, alternate " and ', if config says we should supply a mark
+			else if (u->osisQToTick)
+				buf += (level % 2) ? '\"' : '\'';
 		}
 
 		// <transChange>

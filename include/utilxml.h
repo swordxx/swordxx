@@ -65,6 +65,8 @@ public:
 		if (!parsed)
 			parse();
 		empty = value;
+		if (value)
+			endTag = false;
 	}
 
 	inline bool isEndTag() const { return endTag; }

@@ -9,8 +9,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   the Free Software Foundation version 2 of the License.                *
  *                                                                         *
  ***************************************************************************/
 
@@ -26,6 +25,9 @@ SWORD_NAMESPACE_START
 
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	providesQuote = false;
+	wordsOfChristStart = "<font color=\"red\"> ";
+	wordsOfChristEnd   = "</font> ";
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 		version = module->Name();
@@ -46,18 +48,25 @@ OSISHTMLHREF::OSISHTMLHREF() {
 
 	setEscapeStringCaseSensitive(true);
 
-	addEscapeStringSubstitute("amp",  "&");
-	addEscapeStringSubstitute("apos", "'");
-	addEscapeStringSubstitute("lt",   "<");
-	addEscapeStringSubstitute("gt",   ">");
-	addEscapeStringSubstitute("quot", "\"");
-	
+//   commenting these out.  If someone is sure we shouldn't
+//   convert these since we are outputing to a markup that
+//   recognizes them, then please delete these lines
+//   addEscapeStringSubstitute("amp",  "&");
+//   addEscapeStringSubstitute("apos", "'");
+//   addEscapeStringSubstitute("lt",   "<");
+//   addEscapeStringSubstitute("gt",   ">");
+//   addEscapeStringSubstitute("quot", "\"");
+
 	setTokenCaseSensitive(true);
 	
 	addTokenSubstitute("lg",  "<br />");
 	addTokenSubstitute("/lg", "<br />");
 }
 
+// though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
+// so speed isn't the absolute highest priority, and this is a very minor possible hit
+static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
+static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
 
 bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
@@ -90,14 +99,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if (attrib = tag.getAttribute("xlit")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					if (!u->suspendTextPassThru)
-						buf.appendFormatted(" %s", val);
+					outText(" ", buf, u);
+					outText(val, buf, u);
 				}
 				if (attrib = tag.getAttribute("gloss")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					if (!u->suspendTextPassThru)
-						buf.appendFormatted(" %s", val);
+					outText(" ", buf, u);
+					outText(val, buf, u);
 				}
 				if (attrib = tag.getAttribute("lemma")) {
 					int count = tag.getAttributePartCount("lemma", ' ');
@@ -118,11 +127,12 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						//if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 						//	show = false;
 						//else {
-							if (!u->suspendTextPassThru)
+							if (!u->suspendTextPassThru) {
 								buf.appendFormatted(" <small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small> ", 
 										(gh.length()) ? gh.c_str() : "", 
 										URL::encode(val2).c_str(), 
 										val2);
+							}
 						//}
 						
 					} while (++i < count);
@@ -142,19 +152,20 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 							const char *val2 = val;
 							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 								val2+=2;
-							if (!u->suspendTextPassThru)
+							if (!u->suspendTextPassThru) {
 								buf.appendFormatted(" <small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\">%s</a>)</em></small> ", 
 										URL::encode(tag.getAttribute("morph")).c_str(),
 										URL::encode(val).c_str(), 
 										val2);
+							}
 						} while (++i < count);
 					//}
 				}
 				if (attrib = tag.getAttribute("POS")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					if (!u->suspendTextPassThru)
-						buf.appendFormatted(" %s", val);
+					outText(" ", buf, u);
+					outText(val, buf, u);
 				}
 
 				/*if (endTag)
@@ -203,17 +214,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				if (!u->suspendTextPassThru)
-					buf += "<!P><br />";
+				outText("<!P><br />", buf, u);
 			}
 			else if (tag.isEndTag()) {	// end tag
-				if (!u->suspendTextPassThru)
-					buf += "<!/P><br />";
+				outText("<!/P><br />", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				if (!u->suspendTextPassThru)
-					buf += "<!P><br />";
+				outText("<!P><br />", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -221,68 +229,65 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {			
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (!u->suspendTextPassThru)
-					buf += "<a href=\"\">";
+				outText("<a href=\"\">", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				if (!u->suspendTextPassThru)
-					buf += "</a>";
+				outText("</a>", buf, u);
 			}
 		}
 
 		// <l> poetry, etc
 		else if (!strcmp(tag.getName(), "l")) {
-			if (tag.isEmpty()) {
-				if (!u->suspendTextPassThru)
-					buf += "<br />";
+			// end line marker
+			if (tag.getAttribute("eID")) {
+				outText("<br />", buf, u);
 			}
+			// <l/> without eID or sID
+			// Note: this is improper osis. This should be <lb/>
+			else if (tag.isEmpty() && !tag.getAttribute("sID")) {
+				outText("<br />", buf, u);
+			}
+			// end of the line
 			else if (tag.isEndTag()) {
-				if (!u->suspendTextPassThru)
-					buf += "<br />";
-			}
-			else if (tag.getAttribute("sID")) {	// empty line marker
-				if (!u->suspendTextPassThru)
-					buf += "<br />";
+				outText("<br />", buf, u);
 			}
 		}
 
+		// <lb.../>
+		else if (!strcmp(tag.getName(), "lb")) {
+			outText("<br />", buf, u);
+			userData->supressAdjacentWhitespace = true;
+		}
 		// <milestone type="line"/>
 		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type"))) {
 			if(!strcmp(tag.getAttribute("type"), "line")) {
-				if (!u->suspendTextPassThru)
-					buf += "<br />";
-					userData->supressAdjacentWhitespace = true;
+				outText("<br />", buf, u);
+				userData->supressAdjacentWhitespace = true;
 			}
 			else if(!strcmp(tag.getAttribute("type"),"x-p"))  {
-			//	buf += tag.getAttribute("marker");
 				if( tag.getAttribute("marker"))
-					buf += tag.getAttribute("marker");
-				else
-					buf +=  "<!p>";
+					outText(tag.getAttribute("marker"), buf, u);
+				else outText("<!p>", buf, u);
 			}
 		}
 
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (!u->suspendTextPassThru)
-					buf += "<b>";
+				outText("<b>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				if (!u->suspendTextPassThru)
-					buf += "</b><br />";
+				outText("</b><br />", buf, u);
 			}
 		}
 
 		// <catchWord> & <rdg> tags (italicize)
 		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (!u->suspendTextPassThru)
-					buf += "<i>";
+				outText("<i>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				if (!u->suspendTextPassThru)
-					buf += "</i>";
+				outText("</i>", buf, u);
 			}
 		}
 
@@ -301,11 +306,12 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					char firstChar = *u->lastTextNode.c_str();
 					const char *name = u->lastTextNode.c_str();
 					++name;
-					buf += firstChar;
-					buf += "<font size=\"-1\">";
+					outText(firstChar, buf, u);
+					outText("<font size=\"-1\">", buf, u);
+					
 					for(int i=0;i<strlen(name);i++)
-						buf += toupper(name[i]);
-					buf += "</font>";
+						outText(toupper(name[i]), buf, u);
+					outText("</font>", buf, u);
 					u->inName = false;
 					u->suspendTextPassThru = false;
 				}
@@ -317,25 +323,20 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b") {
-					if (!u->suspendTextPassThru)
-						buf += "<b>";
+					outText("<b>", buf, u);
 					u->inBold = true;
 				}
 				else {	// all other types
-					if (!u->suspendTextPassThru)
-						buf += "<i>";
+					outText("<i>", buf, u);
 					u->inBold = false;
 				}
 			}
 			else if (tag.isEndTag()) {
 				if(u->inBold) {
-					if (!u->suspendTextPassThru)
-						buf += "</b>";
+					outText("</b>", buf, u);
 					u->inBold = false;
 				}
-				else
-					if (!u->suspendTextPassThru)
-						 buf += "</i>";
+				else outText("</i>", buf, u);
 			}
 		}
 
@@ -344,50 +345,88 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			SWBuf type = tag.getAttribute("type");
 			SWBuf who = tag.getAttribute("who");
 			const char *lev = tag.getAttribute("level");
+			const char *mark = tag.getAttribute("marker");
 			int level = (lev) ? atoi(lev) : 1;
 
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				/*buf += "{";*/
+			// open <q> or <q sID... />
+			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
 
+				// Honor the marker attribute, ignoring the osisQToTick
+				u->providesQuote = false;
+				if (mark) {
+					if (*mark) {
+						outText(mark, buf, u);
+					}
+					u->quoteMark = mark;
+					u->providesQuote = true;
+				}
 				//alternate " and '
-				if (u->osisQToTick)
-					if (!u->suspendTextPassThru)
-						buf += (level % 2) ? '\"' : '\'';
+				else if (u->osisQToTick)
+					outText((level % 2) ? '\"' : '\'', buf, u);
 				
-				if (who == "Jesus") {
-					if (!u->suspendTextPassThru)
-						buf += "<font color=\"red\">";
+				if (who == "Jesus" && !u->suspendTextPassThru) {
+					outText(u->wordsOfChristStart, buf, u);
+					u->inQuote = true;
 				}
 			}
-			else if (tag.isEndTag()) {
-				//alternate " and '
-				if (u->osisQToTick)
-					if (!u->suspendTextPassThru)
-						buf += (level % 2) ? '\"' : '\'';
-				//buf += "</font>";
+			// close </q> or <q eID... />
+			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
+				// if we've changed font color, we should put it back
+				if (u->inQuote) {
+					outText(u->wordsOfChristEnd, buf, u);
+					u->inQuote = false;
+				}
+				// first check to see if we've been given an explicit mark
+				if (mark) {
+					if (*mark) {
+						outText(mark, buf, u);
+					}
+				}
+				// next check to see if our opening q provided an explicit mark
+				else if (u->providesQuote) {
+					if (u->quoteMark.length()) {
+						outText(u->quoteMark, buf, u);
+					}
+				}
+				// finally, alternate " and ', if config says we should supply a mark
+				else if (u->osisQToTick)
+					outText((level % 2) ? '\"' : '\'', buf, u);
 			}
-			else {	// empty quote marker
-				//alternate " and '
-				if (u->osisQToTick)
-					if (!u->suspendTextPassThru)
-						buf += (level % 2) ? '\"' : '\'';
+		}
+
+		// <milestone type="cQuote" marker="x"/>
+		else if (!strcmp(tag.getName(), "milestone") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "cQuote")) {
+			const char *mark = tag.getAttribute("marker");
+			const char *lev = tag.getAttribute("level");
+			int level = (lev) ? atoi(lev) : 1;
+
+			// first check to see if we've been given an explicit mark
+			if (mark) {
+				if (*mark) {
+					outText(mark, buf, u);
+				}
 			}
+			// finally, alternate " and ', if config says we should supply a mark
+			else if (u->osisQToTick)
+				outText((level % 2) ? '\"' : '\'', buf, u);
 		}
 
 		// <transChange>
 		else if (!strcmp(tag.getName(), "transChange")) {
-			SWBuf type = tag.getAttribute("type");
-
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				SWBuf type = tag.getAttribute("type");
+				u->lastTransChange = type;
 
-// just do all transChange tags this way for now
-//				if (type == "supplied")
-					if (!u->suspendTextPassThru)
-						buf += "<i>";
+				// just do all transChange tags this way for now
+				if ((type == "added") || (type == "supplied"))
+					outText("<i>", buf, u);
+				else if (type == "tenseChange")
+					buf += "*";
 			}
 			else if (tag.isEndTag()) {
-				if (!u->suspendTextPassThru)
-					buf += "</i>";
+				SWBuf type = u->lastTransChange;
+				if ((type == "added") || (type == "supplied"))
+					outText("</i>", buf, u);
 			}
 			else {	// empty transChange marker?
 			}
@@ -408,11 +447,9 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			filepath += src;
 
 // we do this because BibleCS looks for this EXACT format for an image tag
-				if (!u->suspendTextPassThru) {
-					buf+="<image src=\"";
-					buf+=filepath;
-					buf+="\" />";
-				}
+			outText("<image src=\"", buf, u);
+			outText(filepath, buf, u);
+			outText("\" />", buf, u);
 		}
 
 		else {

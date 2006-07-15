@@ -155,6 +155,12 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf.append('\n');
 		}
 
+                // <lb .../>
+                else if (!strncmp(token, "lb", 2)) {
+			userData->supressAdjacentWhitespace = true;
+			buf.append('\n');
+		}
+
                 // <milestone type="line"/>
                 else if (!strncmp(token, "milestone", 9)) {
 			const char* type = strstr(token+10, "type=\"");

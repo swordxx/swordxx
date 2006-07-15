@@ -34,7 +34,12 @@ protected:
 	public:
 		bool osisQToTick;
 		bool inBold;
+		bool inQuote;
 		bool inName;
+		bool providesQuote;
+		SWBuf quoteMark;
+		SWBuf wordsOfChristStart;
+		SWBuf wordsOfChristEnd;
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
