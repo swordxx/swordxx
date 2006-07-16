@@ -38,6 +38,9 @@ void XMLTag::parse() const {
 	for (i = 0; ((buf[i]) && (!isalpha(buf[i]))); i++);
 	for (; buf[i]; i++) {
 		if (strchr("\t\r\n ", buf[i])) {
+                        // Convert newlines, carriage returns and tabs to spaces
+			buf[i] = ' ';
+
 			for (; ((buf[i]) && (!isalpha(buf[i]))); i++);
 			if (buf[i]) {		// we have an attribute name
 				start = i;
@@ -61,7 +64,8 @@ void XMLTag::parse() const {
 				for (; buf[i] == ' '; i++) ;
 
 				// skip the = sign
-				i++;
+				if (buf[i])
+					i++;
 
 				// skip space following the = sign
 				// Deprecated: this is not part of the xml spec
@@ -69,7 +73,8 @@ void XMLTag::parse() const {
 
 				// remember and skip the quote sign
 				char quoteChar = buf[i];
-				i++;
+				if (quoteChar)
+					i++;
 
 				if (buf[i]) {	// we have attribute value
 					start = i;
@@ -90,9 +95,11 @@ void XMLTag::parse() const {
 				}
 			}
 		}
-		if (buf[i])
-			buf[i] = ' ';
-		else break;
+
+		// if there are no more characters left then quit
+		if (!buf[i])
+			break;
+
 	}
 	for (;i;i--) {
 		if (buf[i] == '/')
