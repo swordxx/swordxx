@@ -82,7 +82,7 @@ void makeKJVRef(VerseKey &key) {
 
 void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 	static SWBuf activeVerseText;
-        char keyOsisID[255];
+	char keyOsisID[255];
 	strcpy(keyOsisID, key.getOSISRef());
 
 	// set keyOsisID to anything that an osisID cannot be.
@@ -219,7 +219,6 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 //		cout << "text:           " << text.c_str() << endl;
 		inTitle = false;
 		titleDepth = 0;
-//		cout << "pop " << tagStack.top()->getName() << endl;
 		tagStack.pop();
 		return false; // don't add </title> to the text itself
 	}
@@ -314,6 +313,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 							cout << "Warning: Bug in code. Could not find title." << endl;
 						}
 					}
+					else {
+						text = "";
+					}
 
 					if (heading.length()) {
 //						cout << "CHAPTER HEADING "<< heading.c_str() << endl;
@@ -379,7 +381,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			exit(1);
 		}
 
-		XMLTag *topToken = 0;
+		XMLTag* topToken = 0;
 		if (!token->isEmpty()) {
 			topToken = tagStack.top();
 			tagDepth = tagStack.size();
@@ -467,7 +469,6 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			}
 			// Or is it the end of a book
 			else if (tagDepth == bookDepth && (!strcmp(tokenName, "div"))) {
-//				cout << "Saw an end div: " << *topToken << endl;
 				bookDepth = 0;
 				chapterDepth = 0;
 				verseDepth = 0;
@@ -483,9 +484,6 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					!strcmp(tokenName, "lb") ||
 					!strcmp(tokenName, "lg")
 					) {
-//				if (topToken) {
-//					cout << "start token " << *topToken << endl;
-//				}
 				text.append(*token);
 				writeEntry(*currentVerse, text);
 				text = "";
