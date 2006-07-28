@@ -269,31 +269,30 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			// open <q> or <q sID... />
 			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
 
-				// Honor the marker attribute, ignoring the osisQToTick
-				u->providesQuote = false;
-				if (mark) {
-					if (*mark) {
-						buf += mark;
-					}
-					u->quoteMark = mark;
-					u->providesQuote = true;
-				}
-				//alternate " and '
-				else if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
-
 				if (who == "Jesus") {
 					buf += "\\cf6 ";
 					u->inQuote = true;
 				}
+
+				// Honor the marker attribute, ignoring the osisQToTick
+				if (!tag.isEmpty()) {
+					u->providesQuote = false;
+				}
+				if (mark) {
+					if (*mark) {
+						buf += mark;
+					}
+					if (!tag.isEmpty()) {
+						u->quoteMark = mark;
+						u->providesQuote = true;
+					}
+				}
+				//alternate " and '
+				else if (u->osisQToTick)
+					buf += (level % 2) ? '\"' : '\'';
 			}
 			// close </q> or <q eID... />
 			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
-				// if we've changed color, we should put it back
-				if (u->inQuote) {
-					buf += "\\cf0 ";
-					u->inQuote = false;
-				}
 				// first check to see if we've been given an explicit mark
 				if (mark) {
 					if (*mark) {
@@ -301,14 +300,22 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					}
 				}
 				// next check to see if our opening q provided an explicit mark
-				else if (u->providesQuote) {
+				else if (u->providesQuote && !tag.getAttribute("eID")) {
 					if (u->quoteMark.length()) {
 						buf += u->quoteMark;
 					}
+					u->providesQuote = false;
 				}
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
+
+				// if we've changed color, we should put it back
+				// Do this last so quote mark is colored
+				if (u->inQuote && (who == "Jesus" || tag.isEndTag())) {
+					buf += "\\cf0 ";
+					u->inQuote = false;
+				}
 			}
 		}
 

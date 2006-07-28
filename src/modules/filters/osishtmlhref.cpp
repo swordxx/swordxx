@@ -350,32 +350,31 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 			// open <q> or <q sID... />
 			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
-
-				// Honor the marker attribute, ignoring the osisQToTick
-				u->providesQuote = false;
-				if (mark) {
-					if (*mark) {
-						outText(mark, buf, u);
-					}
-					u->quoteMark = mark;
-					u->providesQuote = true;
-				}
-				//alternate " and '
-				else if (u->osisQToTick)
-					outText((level % 2) ? '\"' : '\'', buf, u);
-				
+				// Do this first so quote marks are red
 				if (who == "Jesus" && !u->suspendTextPassThru) {
 					outText(u->wordsOfChristStart, buf, u);
 					u->inQuote = true;
 				}
+
+				// Honor the marker attribute, ignoring the osisQToTick
+				if (!tag.isEmpty()) {
+					u->providesQuote = false;
+				}
+				if (mark) {
+					if (*mark) {
+						outText(mark, buf, u);
+					}
+					if (!tag.isEmpty()) {
+						u->quoteMark = mark;
+						u->providesQuote = true;
+					}
+				}
+				//alternate " and '
+				else if (u->osisQToTick)
+					outText((level % 2) ? '\"' : '\'', buf, u);
 			}
 			// close </q> or <q eID... />
 			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
-				// if we've changed font color, we should put it back
-				if (u->inQuote) {
-					outText(u->wordsOfChristEnd, buf, u);
-					u->inQuote = false;
-				}
 				// first check to see if we've been given an explicit mark
 				if (mark) {
 					if (*mark) {
@@ -383,14 +382,22 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					}
 				}
 				// next check to see if our opening q provided an explicit mark
-				else if (u->providesQuote) {
+				else if (u->providesQuote && !tag.getAttribute("eID")) {
 					if (u->quoteMark.length()) {
 						outText(u->quoteMark, buf, u);
 					}
+					u->providesQuote = false;
 				}
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
 					outText((level % 2) ? '\"' : '\'', buf, u);
+
+				// if we've changed font color, we should put it back
+				// Do this last so quote mark is colored
+				if (u->inQuote && (who == "Jesus" || tag.isEndTag())) {
+					outText(u->wordsOfChristEnd, buf, u);
+					u->inQuote = false;
+				}
 			}
 		}
 
