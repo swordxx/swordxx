@@ -73,6 +73,8 @@ public:
 
 	const StringList getAttributeNames() const;
 	int getAttributePartCount(const char *attribName, char partSplit = '|') const;
+
+	// return values should not be considered to persist beyond the return of the function.
 	const char *getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
 	const char *setAttribute(const char *attribName, const char *attribValue);
 	const char *toString() const;

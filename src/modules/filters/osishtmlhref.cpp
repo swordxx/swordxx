@@ -285,12 +285,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				else outText("<!p>", buf, u);
 			}
 			else if (!strcmp(tag.getAttribute("type"), "cQuote")) {
-				const char *mark = tag.getAttribute("marker");
-				const char *lev = tag.getAttribute("level");
-				int level = (lev) ? atoi(lev) : 1;
+				const char *tmp = tag.getAttribute("marker");
+				bool hasMark    = tmp;
+				SWBuf mark      = tmp;
+				tmp             = tag.getAttribute("level");
+				int level       = (tmp) ? atoi(tmp) : 1;
 
 				// first check to see if we've been given an explicit mark
-				if (mark)
+				if (hasMark)
 					outText(mark, buf, u);
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
@@ -376,11 +378,13 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// If there is a marker attribute, possibly empty, this overrides osisQToTick.
 		// If osisQToTick, then output the marker, using level to determine the type of mark.
 		else if (!strcmp(tag.getName(), "q")) {
-			SWBuf type = tag.getAttribute("type");
-			SWBuf who = tag.getAttribute("who");
-			const char *lev = tag.getAttribute("level");
-			const char *mark = tag.getAttribute("marker");
-			int level = (lev) ? atoi(lev) : 1;
+			SWBuf type      = tag.getAttribute("type");
+			SWBuf who       = tag.getAttribute("who");
+			const char *tmp = tag.getAttribute("level");
+			int level       = (tmp) ? atoi(tmp) : 1;
+			tmp             = tag.getAttribute("marker");
+			bool hasMark    = tmp;
+			SWBuf mark      = tmp;
 
 			// open <q> or <q sID... />
 			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
@@ -396,7 +400,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					outText(u->wordsOfChristStart, buf, u);
 
 				// first check to see if we've been given an explicit mark
-				if (mark)
+				if (hasMark)
 					outText(mark, buf, u);
 				//alternate " and '
 				else if (u->osisQToTick)
@@ -411,15 +415,17 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					XMLTag qTag(tagData);
 					delete tagData;
 
-					type  = qTag.getAttribute("type");
-					who   = qTag.getAttribute("who");
-					lev   = qTag.getAttribute("level");
-					mark  = qTag.getAttribute("marker");
-					level = (lev) ? atoi(lev) : 1;
+					type    = qTag.getAttribute("type");
+					who     = qTag.getAttribute("who");
+					tmp     = qTag.getAttribute("level");
+					level   = (tmp) ? atoi(tmp) : 1;
+					tmp     = qTag.getAttribute("marker");
+					hasMark = tmp;
+					mark    = tmp;
 				}
 
 				// first check to see if we've been given an explicit mark
-				if (mark)
+				if (hasMark)
 					outText(mark, buf, u);
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
