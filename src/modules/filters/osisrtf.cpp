@@ -37,29 +37,29 @@ namespace {
 		MyUserData(const SWModule *module, const SWKey *key);
 		~MyUserData();
 	};
-};
 
 
-MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	inXRefNote    = false;
-	BiblicalText  = false;
-	if (module) {
-		version = module->Name();
-		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
-	}	
-	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-}
-
-
-MyUserData::~MyUserData() {
-	// Just in case the quotes are not well formed
-	while (!quoteStack.empty()) {
-		const char *tagData = quoteStack.top();
-		quoteStack.pop();
-		delete tagData;
+	MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+		inXRefNote    = false;
+		BiblicalText  = false;
+		if (module) {
+			version = module->Name();
+			BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		}	
+		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 	}
-}
 
+
+	MyUserData::~MyUserData() {
+		// Just in case the quotes are not well formed
+		while (!quoteStack.empty()) {
+			const char *tagData = quoteStack.top();
+			quoteStack.pop();
+			delete tagData;
+		}
+	}
+
+};
 
 OSISRTF::OSISRTF() {
 	setTokenStart("<");
