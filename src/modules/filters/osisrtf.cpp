@@ -17,23 +17,47 @@
 #include <ctype.h>
 #include <osisrtf.h>
 #include <utilxml.h>
+#include <utilstr.h>
 #include <versekey.h>
 #include <swmodule.h>
 #include <stringmgr.h>
+#include <stack>
 
 SWORD_NAMESPACE_START
 
+namespace {
+	class MyUserData : public BasicFilterUserData {
+	public:
+		bool osisQToTick;
+		bool BiblicalText;
+		bool inXRefNote;
+		std::stack<const char*> quoteStack;
+		SWBuf w;
+		SWBuf version;
+		MyUserData(const SWModule *module, const SWKey *key);
+		~MyUserData();
+	};
+};
 
-OSISRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+
+MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	inXRefNote    = false;
 	BiblicalText  = false;
-	inQuote       = false;
-	providesQuote = false;
 	if (module) {
 		version = module->Name();
 		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
 	}	
 	osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+}
+
+
+MyUserData::~MyUserData() {
+	// Just in case the quotes are not well formed
+	while (!quoteStack.empty()) {
+		const char *tagData = quoteStack.top();
+		quoteStack.pop();
+		delete tagData;
+	}
 }
 
 
@@ -55,6 +79,11 @@ OSISRTF::OSISRTF() {
 	addTokenSubstitute("/lg", "{\\par}");
 
 	setTokenCaseSensitive(true);
+}
+
+
+BasicFilterUserData *OSISRTF::createUserData(const SWModule *module, const SWKey *key) {
+	return new MyUserData(module, key);
 }
 
 
@@ -259,6 +288,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <q> quote
+		// Rules for a quote element:
+		// If the tag is empty with an sID or an eID then use whatever it specifies for quoting.
+		//    Note: empty elements without sID or eID are ignored.
+		// If the tag is <q> then use it's specifications and push it onto a stack for </q>
+		// If the tag is </q> then use the pushed <q> for specification
+		// If there is a marker attribute, possibly empty, this overrides osisQToTick.
+		// If osisQToTick, then output the marker, using level to determine the type of mark.
 		else if (!strcmp(tag.getName(), "q")) {
 			SWBuf type = tag.getAttribute("type");
 			SWBuf who = tag.getAttribute("who");
@@ -268,56 +304,53 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 			// open <q> or <q sID... />
 			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
-
-				if (who == "Jesus") {
-					buf += "\\cf6 ";
-					u->inQuote = true;
-				}
-
-				// Honor the marker attribute, ignoring the osisQToTick
+				// if <q> then remember it for the </q>
 				if (!tag.isEmpty()) {
-					u->providesQuote = false;
+					char *tagData = 0;
+					stdstr(&tagData, tag.toString());
+					u->quoteStack.push(tagData);
 				}
-				if (mark) {
-					if (*mark) {
-						buf += mark;
-					}
-					if (!tag.isEmpty()) {
-						u->quoteMark = mark;
-						u->providesQuote = true;
-					}
-				}
+
+				// Do this first so quote marks are included as WoC
+				if (who == "Jesus")
+					buf += "\\cf6 ";
+
+				// first check to see if we've been given an explicit mark
+				if (mark)
+					buf += mark;
 				//alternate " and '
 				else if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 			}
 			// close </q> or <q eID... />
 			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
+				// if it is </q> then pop the stack for the attributes
+				if (tag.isEndTag() && !u->quoteStack.empty()) {
+					const char *tagData  = u->quoteStack.top();
+					u->quoteStack.pop();
+					XMLTag qTag(tagData);
+					delete tagData;
+
+					type  = qTag.getAttribute("type");
+					who   = qTag.getAttribute("who");
+					lev   = qTag.getAttribute("level");
+					mark  = qTag.getAttribute("marker");
+					level = (lev) ? atoi(lev) : 1;
+				}
+
 				// first check to see if we've been given an explicit mark
-				if (mark) {
-					if (*mark) {
-						buf += mark;
-					}
-				}
-				// next check to see if our opening q provided an explicit mark
-				else if (u->providesQuote && !tag.getAttribute("eID")) {
-					if (u->quoteMark.length()) {
-						buf += u->quoteMark;
-					}
-					u->providesQuote = false;
-				}
+				if (mark)
+					buf += mark;
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
 					buf += (level % 2) ? '\"' : '\'';
 
-				// if we've changed color, we should put it back
-				// Do this last so quote mark is colored
-				if (u->inQuote && (who == "Jesus" || tag.isEndTag())) {
+				// Do this last so quote marks are included as WoC
+				if (who == "Jesus")
 					buf += "\\cf0 ";
-					u->inQuote = false;
-				}
 			}
 		}
+
 
 		// <milestone type="cQuote" marker="x"/>
 		else if (!strcmp(tag.getName(), "milestone") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "cQuote")) {
@@ -326,11 +359,8 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			int level = (lev) ? atoi(lev) : 1;
 
 			// first check to see if we've been given an explicit mark
-			if (mark) {
-				if (*mark) {
-					buf += mark;
-				}
-			}
+			if (mark)
+				buf += mark;
 			// finally, alternate " and ', if config says we should supply a mark
 			else if (u->osisQToTick)
 				buf += (level % 2) ? '\"' : '\'';

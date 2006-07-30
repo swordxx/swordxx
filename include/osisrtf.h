@@ -31,21 +31,7 @@ class SWDLLEXPORT OSISRTF : public SWBasicFilter {
 private:
 
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		bool osisQToTick;
-		bool BiblicalText;
-		bool inXRefNote;
-		bool inQuote;
-		bool providesQuote;
-		SWBuf quoteMark;
-		SWBuf w;
-		SWBuf version;
-		MyUserData(const SWModule *module, const SWKey *key);
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	OSISRTF();

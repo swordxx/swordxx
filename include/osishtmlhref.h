@@ -30,21 +30,22 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT OSISHTMLHREF : public SWBasicFilter {
 private:
 protected:
+	// used by derived classes so we have it in the header
+	class QuoteStack;
 	class MyUserData : public BasicFilterUserData {
 	public:
 		bool osisQToTick;
 		bool inBold;
-		bool inQuote;
 		bool inName;
-		bool providesQuote;
-		SWBuf quoteMark;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
+                QuoteStack *quoteStack;
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
 		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);
+		~MyUserData();
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);
