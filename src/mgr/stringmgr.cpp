@@ -136,8 +136,9 @@ char* StringMgr::upperLatin1(char* buf, unsigned int maxlen) const {
 		return 0;
 		
 	char *ret = buf;
+	bool checkMax = maxlen;
 
-	while (*buf && maxlen--) {
+	while (*buf && (!checkMax || maxlen--)) {
 		*buf = SW_toupper(*buf);
 		buf++;
 	}
