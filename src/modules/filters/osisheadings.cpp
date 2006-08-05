@@ -34,6 +34,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	bool intoken    = false;
 	bool hide       = false;
 	bool preverse   = false;
+	bool withinTitle = false;
 	bool canonical  = false;
 	SWBuf header;
 	int headerNum   = 0;
@@ -57,6 +58,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			intoken = false;
 
 			if (!strncmp(token.c_str(), "title", 5) || !strncmp(token.c_str(), "/title", 6)) {
+				withinTitle =  (!strnicmp(token.c_str(), "title", 5));
 				tag = token;
 				
 				if (!tag.isEndTag()) { //start tag
@@ -113,11 +115,17 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				}
 			}
 
-			// if not a heading token, keep token in text
-			if (!hide) {
-				text.append('<');
-				text.append(token);
-				text.append('>');
+			if (withinTitle) {
+				header.append('<');
+				header.append(token);
+				header.append('>');
+			} else {
+				// if not a heading token, keep token in text
+				if (!hide) {
+					text.append('<');
+					text.append(token);
+					text.append('>');
+				}
 			}
 			continue;
 		}

@@ -35,6 +35,7 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	bool intoken    = false;
 	bool hide       = false;
 	bool preverse   = false;
+	bool withinDiv  = false;
 	SWBuf header;
 	int headerNum   = 0;
 	int pvHeaderNum = 0;
@@ -57,6 +58,7 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			intoken = false;
 
 			if (!strnicmp(token.c_str(), "div", 3) || !strnicmp(token.c_str(), "/div", 4)) {
+				withinDiv =  (!strnicmp(token.c_str(), "div", 3));
 				tag = token;
 				if (hide && tag.isEndTag()) {
 					if (module->isProcessEntryAttributes() && (option || (!preverse))) {
@@ -117,11 +119,17 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				}
 			}
 
-			// if not a heading token, keep token in text
-			if (!hide) {
-				text.append('<');
-				text.append(token);
-				text.append('>');
+			if (withinDiv) {
+				header.append('<');
+				header.append(token);
+				header.append('>');
+			} else {
+				// if not a heading token, keep token in text
+				if (!hide) {
+					text.append('<');
+					text.append(token);
+					text.append('>');
+				}
 			}
 			continue;
 		}
