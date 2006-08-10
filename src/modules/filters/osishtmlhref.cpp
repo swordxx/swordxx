@@ -322,16 +322,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 		// divineName  
 		else if (!strcmp(tag.getName(), "divineName")) {
-			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (type == "x-yhwh") {
-					u->inName = true;
-					u->suspendTextPassThru = true;
-				} else {
-					u->inName = false;
-				}
-			} else if (tag.isEndTag()) {
+				u->inName = true;
+				u->suspendTextPassThru = true;
+			}
+			else if (tag.isEndTag()) {
 				if(u->inName ) {
+					u->inName = false;
+					u->suspendTextPassThru = false;
 					char firstChar = *u->lastTextNode.c_str();
 					const char *name = u->lastTextNode.c_str();
 					++name;
@@ -341,8 +339,6 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					for(int i=0;i<strlen(name);i++)
 						outText(toupper(name[i]), buf, u);
 					outText("</font>", buf, u);
-					u->inName = false;
-					u->suspendTextPassThru = false;
 				}
 			} 
 		}
