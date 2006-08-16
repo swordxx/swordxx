@@ -7,6 +7,7 @@ using namespace sword;
 #endif
 
 int main(int argc, char **argv) {
+	std::cerr << "\n";
 	SWMgr::debug = true;
 	SWMgr mymgr;
 	char keypress[2];

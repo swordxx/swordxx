@@ -1,6 +1,21 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+16-Aug-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Added new module lookup options:
+		./sword.conf
+		../library/mods.d
+	Added fix to preserve markup in headings (charcoal)
+	Fixed non-UTF8 builds (thanks berkana)
+
+1-Aug-2006	DM Smith <dmsmith@crosswire.org>
+	Fixed divineName bug
+	Updated q handling to use quote stack
+	Update to fix RLT
+	Fixed a bug in osis2mod that duplicated a chapter title in the verse
+	Normalize whitespace in xml tags
+	Updated support for more OSIS markup, including q marker
+
 21-May-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added SWBuf::startsWith, endsWith
 	Added entry attribute exposure of multipart words
