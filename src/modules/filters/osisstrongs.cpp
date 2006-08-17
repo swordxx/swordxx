@@ -177,9 +177,20 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = morphClass;
 					if (src.length())
 						module->getEntryAttributes()["Word"][wordstr]["Src"] = src;
+
+					if (wtag.isEmpty()) {
+						int j;
+						for (j = strlen(token)-1; ((j>0) && (strchr(" /", token[j]))); j--);
+						token[j+1] = 0;
+					}
+					
 					strcat(token, " wn=\"");
 					strcat(token, wordstr);
 					strcat(token, "\"");
+
+					if (wtag.isEmpty()) {
+						strcat(token, "/");
+					}
 
 					wordNum++;
 				}
@@ -204,7 +215,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				wordStart = 0;
 			}
 			
-			// if not a strongs token, keep token in text
+			// keep token in text
 			text.append('<');
 			text.append(token);
 			text.append('>');
