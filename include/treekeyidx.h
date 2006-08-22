@@ -112,7 +112,7 @@ public:
 	virtual int compare(const SWKey &ikey);
 	virtual void decrement(int steps = 1);
 	virtual void increment(int steps = 1);
-	virtual bool isTraversable() { return true; }
+	virtual bool isTraversable() const { return true; }
 
 	static signed char create(const char *path);
 };

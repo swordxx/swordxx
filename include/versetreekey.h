@@ -84,7 +84,7 @@ public:
 	*/
 	virtual SWKey *clone() const;
 	
-	virtual bool isTraversable() { return true; }
+	virtual bool isTraversable() const { return true; }
 
 	virtual TreeKey *getTreeKey() { return treeKey; }
 	

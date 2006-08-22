@@ -63,7 +63,7 @@ ListKey::~ListKey()
  * ListKey::ClearList	- Clears out elements of list
  */
 
-void ListKey::ClearList()
+void ListKey::clear()
 {
 	int loop;
 

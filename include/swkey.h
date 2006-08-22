@@ -170,14 +170,13 @@ public:
 	 */
 	virtual void increment(int steps = 1);
 
-	/** Increments key a number of entries
-	 * deprecated, use isTraversible
+	/** deprecated, use isTraversible
 	 */
 	char Traversable() { return (isTraversable()) ? 1:0; }
 
 	/** Whether or not this key can be ++ -- incremented
 	 */
-	virtual bool isTraversable() { return false; }
+	virtual bool isTraversable() const { return false; }
 
 	/** Use this function to get an index position within a module.
 	 * Here's a small example how to use this function and @ref Index(long).

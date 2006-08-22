@@ -103,7 +103,7 @@ public:
 	virtual int compare(const SWKey &ikey) = 0;
 	virtual void decrement(int steps = 1) = 0;
 	virtual void increment(int steps = 1) = 0;
-	virtual bool isTraversable() { return true; }
+	virtual bool isTraversable() const { return true; }
 	virtual long Index() const { return getOffset(); }
 	virtual long Index(long iindex) { setOffset(iindex); return getOffset(); }
 

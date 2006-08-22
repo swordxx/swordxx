@@ -280,7 +280,7 @@ public:
 	* @return *this
 	*/
 	virtual void increment(int steps);
-	virtual bool isTraversable() { return true; }
+	virtual bool isTraversable() const { return true; }
 
 	virtual const char *getBookName() const;
 	virtual const char *getBookAbbrev() const;

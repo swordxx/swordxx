@@ -129,7 +129,7 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING"/>
+    <USERDEFINES value="UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
     <INCLUDEPATH value="..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include"/>
@@ -155,9 +155,9 @@
       -I..\..\..\biblecs\apps\InstallMgr\curl\include -src_suffix cpp -DUNICODE 
       -D_ICU_ -D_ICUSWORD_ -DUSBINARY -DU_HAVE_PLACEMENT_NEW=0 -DUSELUCENE 
       -D_WIN32 -D_CL_DISABLE_MULTITHREADING -no_tie -boa"/>
-    <CFLAG1 value="-O2 -Vx -X- -a8 -b- -k- -vi -c -tW -tWM"/>
-    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
-    <AFLAGS value="/mx /w2 /zn"/>
+    <CFLAG1 value="-Od -Vx -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zi"/>
     <LFLAGS value="/P512"/>
   </OPTIONS>
   <LINKER>
@@ -231,8 +231,8 @@ Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
 Count=22
-Item0=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING
-Item1=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;_DEBUG
+Item0=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;_DEBUG
+Item1=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING
 Item2=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING
 Item3=_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;UNICODE
 Item4=_UCS2;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING

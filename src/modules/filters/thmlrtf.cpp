@@ -140,6 +140,7 @@ ThMLRTF::ThMLRTF() {
 	addTokenSubstitute("b", "{\\b1 ");
 	addTokenSubstitute("/b", "}");
 	addTokenSubstitute("p", "\\par ");
+	addTokenSubstitute("p /", "\\par\\pard ");
 
 	//we need uppercase forms for the moment to support a few early ThML modules that aren't XHTML compliant
 	addTokenSubstitute("BR", "\\line ");
