@@ -91,7 +91,7 @@ public:
 
 	/**
 	* SWBuf Constructor - Creates an SWBuf initialized
- 	* 		to a value from a const char *
+	* 		to a value from a const char *
  	*
  	*/
 	SWBuf(const char *initVal, unsigned long initSize = 0);
@@ -124,14 +124,14 @@ public:
 	*
 	* @param ch This character is used when the SWBuf is (re)sized.
 	*   The memory will be filled with this character. \see setSize() \see resize()
- 	*/
+	*/
 	inline void setFillByte(char ch) { fillByte = ch; }
 
 	/**
 	* SWBuf::getFillByte - Get the fillByte character
 	*
 	* @return The character used for filling memory. \see setFillByte.
- 	*/
+	*/
 	inline char getFillByte() { return fillByte; }
 
 	/**
@@ -158,10 +158,10 @@ public:
 	inline unsigned long length() const { return end - buf; }
 
 	/**
- 	* SWBuf::set - sets this buf to a new value
+	* SWBuf::set - sets this buf to a new value
 	* If the allocated memory is bigger than the new string, it will NOT be resized.
 	* @param newVal the value to set this buffer to. 
- 	*/
+	*/
 	inline void set(const SWBuf &newVal) {
 		unsigned long len = newVal.length() + 1;
 		assureSize(len);
@@ -172,10 +172,10 @@ public:
 	}
 
 	/**
- 	* SWBuf::set - sets this buf to a new value.
+	* SWBuf::set - sets this buf to a new value.
 	* If the allocated memory is bigger than the new string, it will NOT be resized.
 	* @param newVal the value to set this buffer to. 
- 	*/
+	*/
 	inline void set(const char *newVal) {
 		if (newVal) {
 			unsigned long len = strlen(newVal) + 1;
@@ -191,7 +191,7 @@ public:
 	}
 
 	/**
- 	* SWBuf::setFormatted - sets this buf to a formatted string.
+	* SWBuf::setFormatted - sets this buf to a formatted string.
 	* If the allocated memory is bigger than the new string, it will NOT be resized.
 	*
 	* @warning This function can only write at most JUNKBUFSIZE to the string per call.
@@ -206,26 +206,26 @@ public:
 	*
 	* @param format The format string. Same syntax as printf, for example.
 	* @param ... Add all arguments here.
- 	*/
+	*/
 	void setFormatted(const char *format, ...);
 
 	/**
- 	* SWBuf::setSize - Size this buffer to a specific length.
+	* SWBuf::setSize - Size this buffer to a specific length.
 	* @param len The new size of the buffer. One byte for the null will be added.
- 	*/
+	*/
 	void setSize(unsigned long len);
 	/**
- 	* SWBuf::resize - Resize this buffer to a specific length.
+	* SWBuf::resize - Resize this buffer to a specific length.
 	* @param len The new size of the buffer. One byte for the null will be added.
- 	*/
+	*/
 	inline void resize(unsigned long len) { setSize(len); }
 
 	/**
- 	* SWBuf::append - appends a value to the current value of this SWBuf.
+	* SWBuf::append - appends a value to the current value of this SWBuf.
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param str Append this.
 	* @param max Append only max chars.
- 	*/
+	*/
 	void append(const char *str, long max = -1);
 
 	/**
@@ -322,6 +322,10 @@ public:
 		return retVal;
 	}
 	inline SWBuf operator +(char ch) const { return (*this) + SWBuf(ch); }
+
+	inline SWBuf &trimStart() { while (size() && (strchr("\t\r\n ", *(buf)))) *this << 1; return *this; }
+	inline SWBuf &trimEnd() { while (size() && (strchr("\t\r\n ", *(end-1)))) setSize(size()-1); return *this; }
+	inline SWBuf &trim() { trimStart(); return trimEnd(); }
 
 	inline bool startsWith(const SWBuf &prefix) const { return !strncmp(c_str(), prefix.c_str(), prefix.size()); }
 	inline bool endsWith(const SWBuf &postfix) const { return (size() >= postfix.size())?!strncmp(end-postfix.size(), postfix.c_str(), postfix.size()):false; }
