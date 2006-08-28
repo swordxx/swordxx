@@ -21,6 +21,7 @@
  */
 
 #include <swsearchable.h>
+#include <listkey.h>
 
 SWORD_NAMESPACE_START
 

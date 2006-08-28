@@ -25,7 +25,7 @@
 #include <defs.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef WIN32
+#ifdef __BORLANDC__
 #include <mem.h>
 #endif
 

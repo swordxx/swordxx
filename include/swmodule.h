@@ -385,11 +385,7 @@ public:
 	 * of module objects
 	 * @return the raw module text of the current entry
 	 */
-#ifndef SWIG 
 	virtual SWBuf &getRawEntryBuf() = 0;
-#else
-	virtual SWBuf &getRawEntryBuf() { return entryBuf; }
-#endif  
 
 	virtual const char *getRawEntry() { return getRawEntryBuf().c_str(); }
 
