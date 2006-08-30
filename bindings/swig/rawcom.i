@@ -1,15 +1,14 @@
 %{
 #include "rawcom.h"
-using namespace sword;
 %}
 
-class RawCom : public SWCom {
-public:
-     RawCom (const char *ipath, const char *iname = 0, const char *idesc = 0,
-		SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
-                const char* ilang = 0);
-     virtual ~ RawCom ();
-     
-     static char createModule (const char *path);
-};
 
+%include "rawcom.h"
+
+
+
+%extend sword::RawCom {
+	static sword::RawCom *castTo(sword::SWCom *o) {
+		return dynamic_cast<sword::RawCom*>(o);
+	}
+}

@@ -1,22 +1,12 @@
 %{
 #include <swfiltermgr.h>
-using namespace sword;
 %}
 
-class SWFilterMgr {
-  SWFilterMgr ();
-  virtual ~SWFilterMgr ();
+%ignore sword::SWFilterMgr::AddGlobalOptions;
+%ignore sword::SWFilterMgr::AddLocalOptions;
+%ignore sword::SWFilterMgr::AddEncodingFilters;
+%ignore sword::SWFilterMgr::AddRenderFilters;
+%ignore sword::SWFilterMgr::AddStripFilters;
+%ignore sword::SWFilterMgr::AddRawFilters;
 
-  virtual void setParentMgr(SWMgr *parentMgr);
-  virtual SWMgr *getParentMgr();
-  virtual void AddGlobalOptions (SWModule * module, ConfigEntMap & section,
-				 ConfigEntMap::iterator start,
-				 ConfigEntMap::iterator end);
-  virtual void AddLocalOptions (SWModule * module, ConfigEntMap & section,
-				ConfigEntMap::iterator start,
-				ConfigEntMap::iterator end);
-  virtual void AddEncodingFilters (SWModule * module, ConfigEntMap & section);
-  virtual void AddRenderFilters (SWModule * module, ConfigEntMap & section);
-  virtual void AddStripFilters (SWModule * module, ConfigEntMap & section);
-  virtual void AddRawFilters (SWModule * module, ConfigEntMap & section);
-};
+%include "swfiltermgr.h"

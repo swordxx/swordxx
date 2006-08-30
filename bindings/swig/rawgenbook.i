@@ -1,22 +1,12 @@
 %{
 #include "rawgenbook.h"
-#include "treekeyidx.h"
-#include "swkey.h"
-using namespace sword;
 %}
 
-class RawGenBook : public SWGenBook {
-public:
-	RawGenBook (const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
-	virtual ~ RawGenBook ();
+%include "rawgenbook.h"
+
+%extend sword::RawGenBook {
+	static sword::RawGenBook *castTo(sword::SWGenBook *o) {
+		return dynamic_cast<sword::RawGenBook*>(o);
+	}
 	
-	static char createModule (const char *ipath);
-
-%extend {
-	TreeKeyIdx* getTreeKey() {
-		return ( (TreeKeyIdx *) ( (SWKey *) (*self) ) );
-	};
 }
-};
-
-

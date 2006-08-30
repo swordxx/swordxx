@@ -1,37 +1,16 @@
 %{
-#include <stdio.h>
-#include <string>
-#include <map>
-#include <defs.h>
-#include <multimapwdef.h>
 #include "swconfig.h"
-
-using namespace sword;
-using namespace std;
 %}
 
-%include "std_vector.i"
-%include "std_string.i"
-%include "typemaps.i"
+%ignore sword::SWConfig::operator[];
+%ignore sword::SWConfig::operator+=;
+%ignore sword::SWConfig::sections;
+%ignore sword::SWConfig::Sections;
+
+%include "swconfig.h"
 
 
-typedef multimapwithdefault < SWBuf, SWBuf, less < SWBuf > > ConfigEntMap;
-typedef map < SWBuf, ConfigEntMap, less < SWBuf > > SectionMap;
-
-class SWConfig {
-public:
-  //member data
-  SWBuf filename;
-  SectionMap Sections;
-
-  //member functions
-  SWConfig(const char *ifilename);
-  virtual ~ SWConfig();
-
-  virtual void Load();
-  virtual void Save();
-
-%extend {
+%extend sword::SWConfig {
   void set(const char* group, const char* entry, const char* value) {
 	self->Sections[group][entry] = value;
   };
@@ -40,4 +19,3 @@ public:
   };
 }
 
-};

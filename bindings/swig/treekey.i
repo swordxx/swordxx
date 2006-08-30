@@ -1,48 +1,38 @@
 %{
 #include "treekey.h"
-using namespace sword;
 %}
 
-class TreeKey : public SWKey {
-protected:
-	TreeKey();
-	~TreeKey();
+%ignore sword::TreeKey::getUserData(int *);
+%ignore sword::TreeKey::setUserData(const char *, int);
 
-public:
+%include <carrays.i>
 
-	virtual const char *getLocalName() = 0;
-	virtual const char *setLocalName(const char *) = 0;
+//%pointer_class(unsigned char, BytePointer);
+//%array_class(unsigned char, ByteArray);
 
-	virtual const char *getUserData(int *size = 0) = 0;
-	virtual void setUserData(const char *userData, int size = 0) = 0;
+%include "treekey.h"
 
-	virtual const char *getFullName() const = 0;
+%extend sword::TreeKey {
+	static sword::TreeKey *castTo(sword::SWKey *o) {
+		return dynamic_cast<sword::TreeKey*>(o);
+	}
+}
 
-	virtual void root() = 0;
-	virtual bool parent() = 0;
+/*
+%extend sword::TreeKey {
 
-	virtual bool firstChild() = 0;
-	virtual bool nextSibling() = 0;
-	virtual bool previousSibling() = 0;
+        const unsigned char *getUserData2() {
+                return (const unsigned char*)(self->getUserData(0));
+        }
 
-	virtual bool hasChildren() = 0;
+        int getUserDataSize() {
+                int s;
+                self->getUserData(&s);
+                return s;
+        }
 
-	virtual void append() = 0;
-	virtual void appendChild() = 0;
-	virtual void insertBefore() = 0;
-
-	virtual void remove() = 0;
-
-	virtual void setOffset(unsigned long offset) = 0;
-	virtual unsigned long getOffset() const = 0;
-
-	//virtual void setText(const char *ikey) = 0;
-	virtual void setPosition(SW_POSITION p) = 0;
-	//virtual const char *getText() const = 0;
-	//virtual int compare(const SWKey &ikey) = 0;
-	//virtual void decrement(int steps = 1) = 0;
-	//virtual void increment(int steps = 1) = 0;
-	virtual char Traversable ();
-	virtual long Index () const;
-	//virtual long Index (long iindex);
+        void setUserData(unsigned char data[], int size) {
+                self->setUserData(((const char*)(data)), size);
+        }
 };
+*/
