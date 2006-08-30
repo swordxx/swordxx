@@ -1,4 +1,10 @@
+INCLUDES = $(SWORD_INCLUDES)
+lib_LTLIBRARIES = libsword_csharpsword.la
+libsword_csharpsword_la_LIBADD = $(SWORD_LIBS)
+libsword_csharpsword_la_SOURCES = csharp/Sword.cxx
+
 EXTRA_DIST = *.i
+
 
 if RUNSWIG
 PERLSWIG=perlswig
@@ -63,14 +69,14 @@ perl_makebuild: $(PERLSWIG)
 
 tclswig: sword.i
 	mkdir -p tcl
-	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) $(top_srcdir)/sword.i
+	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
 python_make: python_makebuild
 	cd python && $(PYTHON) setup.py build_ext $(SWORD_INCLUDES) $(LIB_SWORD)
 
 pythonswig: sword.i
 	mkdir -p python
-	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(top_srcdir)/sword.i
+	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
 python_makebuild: $(PYTHONSWIG)
 	mkdir -p python
@@ -84,6 +90,7 @@ python_makebuild: $(PYTHONSWIG)
 	@echo "	maintainer_email = \"sword-devel@crosswire.org\"," >> python/setup.py
 	@echo "	url = \"http://www.crosswire.org/sword\"," >> python/setup.py
 	@echo "	py_modules = [\"Sword\"]," >> python/setup.py
+	@echo " include_dirs=['$(SWORD_INCLUDES)']," >> python/setup.py
 	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
 	@echo " libraries=[('sword')], " >> python/setup.py
 	@echo "	define_macros=[('SWIG',1)])], " >> python/setup.py
@@ -93,5 +100,14 @@ python_makebuild: $(PYTHONSWIG)
 
 phpswig: sword.i
 	mkdir -p php
-	$(SWIG) -php4 -c++ -fullmake -o php/Sword.cxx -I$(top_srcdir) $(top_srcdir)/sword.i
+	$(SWIG) -php4 -c++ -phpfull -o php/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
+
+csharp/Sword.cxx: csharpswig
+
+csharpswig: sword.i
+	        mkdir -p csharp
+		        $(SWIG) -csharp -c++ -nodefaultctor -dllimport libsword_csharpwrap.dll -o csharp/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES)  $(top_srcdir)/sword.i
+
+csharpmake:
+	        mcs -out:csharp/Sword.dll -target:library csharp/*.cs

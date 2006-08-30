@@ -14,6 +14,7 @@ AC_LANG(C++)
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_LIBTOOL
 SW_PROG_SWIG
 
 # ---------------------------------------------------------------------
@@ -25,6 +26,8 @@ SW_CHECK_SWORD(1.5.7)
 # Misc
 # ---------------------------------------------------------------------
 AM_MAINTAINER_MODE
+AC_ARG_ENABLE(swig, [--disable-swig do not run swig to generate input files], enable_swig=$enableval, enable_swig=no)
+AM_CONDITIONAL([RUNSWIG], [test x$enable_swig = xyes])
 
 # ---------------------------------------------------------------------
 # Check Scripting languages

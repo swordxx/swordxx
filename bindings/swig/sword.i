@@ -3,6 +3,8 @@
 
 #define SWDLLEXPORT  
 
+%module "Sword"
+
 %include "defs.i"
 
 %include "swbuf.i"
