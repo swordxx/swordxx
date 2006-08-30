@@ -167,7 +167,7 @@ public:
 	/**
 	 *
 	 */
-	static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0);
+	static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0, SWConfig *providedSysConf = 0);
 
 	SWConfig *config;
 	SWConfig *sysconfig;

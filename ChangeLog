@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+29-Aug-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Added recognition for the sysConfig parameter in SWMgr c-tor
+	Updated CORBA server to allow option -sysConf /path/sword.conf
+
 16-Aug-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added new module lookup options:
 		./sword.conf

@@ -5,12 +5,36 @@
 #include <swmgr.h>
 #include "webmgr.hpp"
 
-WebMgr swordmgr;
+SWConfig *sysConf = 0;
+WebMgr *swordMgr = 0;
+
+class CleanStatics {
+public:
+	CleanStatics() {}
+	~CleanStatics() {
+		if (swordMgr)
+			delete swordMgr;
+
+		if (sysConf)
+			delete sysConf;
+	}
+} cleanStatics;
+
 
 
 
 int main (int argc, char* argv[]) {
   try {
+
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-sysConf")) {
+			if ((i+1) < argc)
+				sysConf = new SWConfig(argv[i+1]);
+		}
+	}
+
+	swordMgr = new WebMgr(sysConf);
+
  	  // Initialize the CORBA orb
  	  CORBA::ORB_ptr orb = CORBA::ORB_init (argc, argv);
 	
@@ -26,7 +50,7 @@ int main (int argc, char* argv[]) {
  	  mgr->activate();
 
  	  // Create a Servant and explicitly create a CORBA object
- 	  swordorb::SWMgr_impl servant(&swordmgr);
+ 	  swordorb::SWMgr_impl servant(swordMgr);
  	  CORBA::Object_var object = servant._this();
 
  	  // Here we get the IOR for the Hello server object.

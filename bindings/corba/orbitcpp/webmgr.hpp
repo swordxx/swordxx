@@ -21,7 +21,7 @@ class WebMgr : public SWMgr {
 	SWModule *defaultHebParse;
 
 public:
-	WebMgr() : SWMgr(0, 0, false, new MarkupFilterMgr(FMT_WEBIF)) {
+	WebMgr(SWConfig *sysConf) : SWMgr(0, sysConf, false, new MarkupFilterMgr(FMT_WEBIF)) {
 		defaultGreekLex   = 0;
 		defaultHebLex     = 0;
 		defaultGreekParse = 0;
