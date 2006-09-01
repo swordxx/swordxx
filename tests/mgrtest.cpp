@@ -2,6 +2,7 @@
 #include <iostream>
 #include <versekey.h>
 #include <swmodule.h>
+#include <swconfig.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -9,8 +10,11 @@ using namespace sword;
 int main(int argc, char **argv) {
 	std::cerr << "\n";
 	SWMgr::debug = true;
-	SWMgr mymgr;
-	char keypress[2];
+	SWConfig *sysConf = 0;
+	if (argc > 1) {
+		sysConf = new SWConfig(argv[1]);
+	}
+	SWMgr mymgr(0, sysConf);
 	std::cerr << "\n\nprefixPath: " << mymgr.prefixPath;
 	std::cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
 
@@ -31,5 +35,9 @@ int main(int argc, char **argv) {
 		for (mhc->Key("Gen 1:1"); mhc->Key() < (VerseKey) "Gen 1:10"; (*mhc)++)
 			std::cout << (const char *) *mhc << "\n";
 	}
+
+	if (sysConf)
+		delete sysConf;
+
 	return 0;
 }
