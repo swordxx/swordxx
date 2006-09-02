@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 	}
 
 	manager.setGlobalOption("Headings", "On");
-	manager.setGlobalOption("Greek Accents", "Off");
+//	manager.setGlobalOption("Greek Accents", "Off");
 
 	target->setKey(argv[2]);
 

@@ -41,10 +41,7 @@ be built in the ./lib directory.
 
 After the libraries are built, one will probably wish to 'su' to root and
 'make install' to install the libraries systemwide.  One then may proceed to
-the ./apps directory.  The most basic application that is stable and easy to
-build is the cheatah frontend (./apps/X11/cheatah).  These frontends
-each have their own make system, so read the help in their respective
-directories if a problem is encountered while building.
+write and compile SWORD applications.
 
 
 MODULES
@@ -55,40 +52,47 @@ dictionaries, and the like.  New plugins are constantly being added.  They
 may be obtained from:
 http://www.crosswire.org or various mirrors.
 
-In a default SWORD configuration, a module install may look like this:
+In a default SWORD configuration, the module install process may look like this:
 
 [download a module with your favourite client]
 su
 cd /usr/share/sword
 unzip ~/KJV.zip
 
+There is also an over-the-net install utility located at utilities/installmgr
 
-If you want the details, read on...
+After modules are installed, you can create fast search indecies (if you have
+compiled with clucene support), with utilities/mkfastmod
+
+If you want module configuration/installation details, read on...
 
 
-A file named 'mods.conf' or directory named 'mods.d' contains all configuration
-information regarding the installed modules available to the API.  The format
-of a config file is fairly straight-forward, and most modules come with their
-own .conf file, of which the contents may be appended to the mods.conf file
-or placed in the mods.d directory.
+A directory named 'mods.d' contains all configuration information regarding
+the installed modules available to the API.  The format of a config file is
+fairly straight-forward, and most modules come with their own .conf file,
+of which the contents may be placed in the mods.d directory.
 
 FOR A RECOMMENDED MODULE INSTALLATION SCHEME, SEE
 .../sword/samples/recommended, otherwise, the specific details follow:
 
 The API looks for its module configuration in the following sequence:
-	./mods.[conf|d]
-	$SWORD_PATH/mods.[conf|d]
-	$HOME/.sword/mods.[conf|d]
+	./sword.conf in the format:
+			[Install]
+			DataPath=/where/your/datafiles/are/installed
+		then the API will look for DataPath/mods.d
+	./mods.d
+	$SWORD_PATH/mods.d
+	$HOME/.sword/mods.d
 	or finally from information found in a system-wide configuration file
 		/etc/sword.conf in the format:
 			[Install]
 			DataPath=/where/your/datafiles/are/installed
-		then the API will look for DataPath/mods.[conf|d]
+		then the API will look for DataPath/mods.d
 
 * NOTE:
 Using the above scheme, SWORD will also determine the path to prefix to the
 specified datafile location found in the config files.  The prefix path will
-be the directory where SWORD finds mods.[conf|d].
+be the directory where SWORD finds mods.d.
 
 Sample config files can be found in: .../sword/samples
 
@@ -97,8 +101,9 @@ LOCALE
 
 If you would like to include support for localization, you may copy the
 locales.d directory and any of the locale files contained therein into
-the directory where your mods.d or mods.conf file exists
-(eg. to /usr/share/sword/locales.d/).
+the directory where your mods.d exists
+(eg. to /usr/share/sword/locales.d/)
+but this is done with a 'normal' sword install.
 
 
 ENJOY!!!
