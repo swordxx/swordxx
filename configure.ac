@@ -19,6 +19,8 @@ AM_CONFIG_HEADER(include/config.h)
 # ---------------------------------------------------------------------
 # Check Programs
 # ---------------------------------------------------------------------
+CFLAGS=" $CFLAGS"
+CXXFLAGS=" $CXXFLAGS"
 AC_LANG(C++)
 AC_PROG_CC
 AC_PROG_CXX
@@ -154,8 +156,8 @@ if test x$enable_debug = xyes; then
     AM_CXXFLAGS="-O0"
   fi
 else
-  AM_CFLAGS="-O3"
-  AM_CXXFLAGS="-O3"
+  AM_CFLAGS="-O2"
+  AM_CXXFLAGS="-O2"
 #  AM_CFLAGS="$AM_CFLAGS -Werror"
 #  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
 fi
