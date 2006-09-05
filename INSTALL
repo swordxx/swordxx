@@ -64,6 +64,10 @@ There is also an over-the-net install utility located at utilities/installmgr
 After modules are installed, you can create fast search indecies (if you have
 compiled with clucene support), with utilities/mkfastmod
 
+NOTE: sometimes clucene forgets to install some header files.  You might need to
+manually copy clucene-core-X/src/CLucene/clucene-config.h to your install prefix
+(e.g. /usr/local/include/CLucene/)
+
 If you want module configuration/installation details, read on...
 
 

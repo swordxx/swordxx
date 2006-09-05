@@ -224,7 +224,7 @@ public:
 	 *	For example, this will create an SWMgr and cause its modules to produce HTMLHREF formatted output
 	 *	when asked for renderable text:
 	 *
-	 *	SWMgr *myMgr = new SWMgr(0, 0, false, new MarkupFilterMgr(FMT_HTMLHREF));
+	 *	SWMgr *myMgr = new SWMgr(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF));
 	 */
 	SWMgr(SWConfig *iconfig = 0, SWConfig *isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
 

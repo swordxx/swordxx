@@ -11,8 +11,8 @@
 
 SWORD_NAMESPACE_START
 
-const char oName[] = "Morpheme segmentation";
-const char oTip[] = "Toggles morpheme segmentation, when present";
+const char oName[] = "Morpheme Segmentation";
+const char oTip[] = "Toggles Morpheme Segmentation On and Off, when present";
 
 const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
