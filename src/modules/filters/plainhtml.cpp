@@ -1,5 +1,5 @@
 /***************************************************************************
-                          rwphtml.cpp  -  description
+                          plainhtml.cpp  -  description
                              -------------------
     begin                : Thu Jun 24 1999
     copyright            : (C) 1999 by Torsten Uhlmann
@@ -53,6 +53,18 @@ char PLAINHTML::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		else if (*from == '}') //footnote end
 		{
 			text += ") </SMALL></FONT>";
+			continue;
+		}
+		else if (*from == '<') {
+			text += "&lt;";
+			continue;
+		}
+		else if (*from == '>') {
+			text += "&gt;";
+			continue;
+		}
+		else if (*from == '&') {
+			text += "&amp;";
 			continue;
 		}
 		else if ((*from == ' ') && (count > 5000))

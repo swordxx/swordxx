@@ -61,6 +61,7 @@ namespace {
 
 };
 
+
 OSISRTF::OSISRTF() {
 	setTokenStart("<");
 	setTokenEnd(">");
@@ -84,6 +85,46 @@ OSISRTF::OSISRTF() {
 
 BasicFilterUserData *OSISRTF::createUserData(const SWModule *module, const SWKey *key) {
 	return new MyUserData(module, key);
+}
+
+
+char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+
+	// preprocess text buffer to escape RTF control codes
+	const char *from;
+	SWBuf orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {  //loop to remove extra spaces
+		switch (*from) {
+		case '{':
+		case '}':
+		case '\\':
+			text += "\\";
+			text += *from;
+			break;
+		default:
+			text += *from;
+		}
+	}
+	text += (char)0;
+
+	SWBasicFilter::processText(text, key, module);  //handle tokens as usual
+
+	orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {  //loop to remove extra spaces
+		if ((strchr(" \t\n\r", *from))) {
+			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+				from++;
+			}
+			text += " ";
+		}
+		else {
+			text += *from;
+		}
+	}
+	text += (char)0;	// probably not needed, but don't want to remove without investigating (same as above)
+	return 0;
 }
 
 

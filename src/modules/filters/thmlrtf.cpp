@@ -155,23 +155,42 @@ ThMLRTF::ThMLRTF() {
 
 
 char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	SWBasicFilter::processText(text, key, module);  //handle tokens as usual
+
+	// preprocess text buffer to escape RTF control codes
 	const char *from;
 	SWBuf orig = text;
 	from = orig.c_str();
 	for (text = ""; *from; from++) {  //loop to remove extra spaces
-                if ((strchr(" \t\n\r", *from))) {
-                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
-                                from++;
-                        }
-                        text += " ";
-                }
-			 else {
-                        text += *from;
-                }
-        }
-        text += (char)0;
-        return 0;
+		switch (*from) {
+		case '{':
+		case '}':
+		case '\\':
+			text += "\\";
+			text += *from;
+			break;
+		default:
+			text += *from;
+		}
+	}
+	text += (char)0;
+
+	SWBasicFilter::processText(text, key, module);  //handle tokens as usual
+
+	orig = text;
+	from = orig.c_str();
+	for (text = ""; *from; from++) {  //loop to remove extra spaces
+		if ((strchr(" \t\n\r", *from))) {
+			while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+				from++;
+			}
+			text += " ";
+		}
+		else {
+			text += *from;
+		}
+	}
+	text += (char)0;	// probably not needed, but don't want to remove without investigating (same as above)
+	return 0;
 }
 
 

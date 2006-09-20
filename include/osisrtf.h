@@ -33,6 +33,7 @@ private:
 protected:
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
 	OSISRTF();
 };
