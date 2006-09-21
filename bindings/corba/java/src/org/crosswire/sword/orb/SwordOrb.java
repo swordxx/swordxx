@@ -17,7 +17,7 @@ import java.util.Properties;
 
 public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static Properties config = null;
-	public static String ORBEXE = null;
+	public static String ORBEXE = "swordorbserver";
 	public static final int MAX_REMOTE_ADDR_CONNECTIONS = 20;
 	public static final int MAX_ACCESS_COUNT_PER_INTERVAL = 10;
 	public static final long MAX_ACCESS_COUNT_INTERVAL = 10 * 1000;	// milliseconds
