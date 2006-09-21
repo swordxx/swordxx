@@ -31,6 +31,7 @@ namespace {
 		bool osisQToTick;
 		bool BiblicalText;
 		bool inXRefNote;
+		int suspendLevel;
 		std::stack<const char*> quoteStack;
 		SWBuf w;
 		SWBuf version;
@@ -42,6 +43,7 @@ namespace {
 	MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 		inXRefNote    = false;
 		BiblicalText  = false;
+		suspendLevel  = 0;
 		if (module) {
 			version = module->Name();
 			BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
@@ -58,7 +60,8 @@ namespace {
 			delete tagData;
 		}
 	}
-
+static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
+static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
 };
 
 
@@ -130,8 +133,10 @@ char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
 bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
-	if (!substituteToken(buf, token)) {
-		MyUserData *u = (MyUserData *)userData;
+	MyUserData *u = (MyUserData *)userData;
+	SWBuf scratch;
+	bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
+	if (!sub) {
 		XMLTag tag(token);
 
 		// <w> tag
@@ -139,7 +144,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 			// start <w> tag
 			if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-				buf += "{";
+				outText('{', buf, u);
 				u->w = token;
 			}
 
@@ -160,12 +165,14 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				if (attrib = tag.getAttribute("xlit")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" {\\fs15 <%s>}", val);
+					scratch.setFormatted(" {\\fs15 <%s>}", val);
+					outText(scratch.c_str(), buf, u);
 				}
 				if (attrib = tag.getAttribute("gloss")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" {\\fs15 <%s>}", val);
+					scratch.setFormatted(" {\\fs15 <%s>}", val);
+					outText(scratch.c_str(), buf, u);
 				}
 				if (attrib = tag.getAttribute("lemma")) {
 					int count = tag.getAttributePartCount("lemma", ' ');
@@ -180,7 +187,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 							val2++;
 						if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
 							show = false;
-						else	buf.appendFormatted(" {\\cf3 \\sub <%s>}", val2);
+						else	{
+							scratch.setFormatted(" {\\cf3 \\sub <%s>}", val2);
+							outText(scratch.c_str(), buf, u);
+						}
 					} while (++i < count);
 				}
 				if ((attrib = tag.getAttribute("morph")) && (show)) {
@@ -198,18 +208,20 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 							const char *val2 = val;
 							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 								val2+=2;
-							buf.appendFormatted(" {\\cf4 \\sub (%s)}", val2);
+							scratch.setFormatted(" {\\cf4 \\sub (%s)}", val2);
+							outText(scratch.c_str(), buf, u);
 						} while (++i < count);
 					}
 				}
 				if (attrib = tag.getAttribute("POS")) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					buf.appendFormatted(" {\\fs15 <%s>}", val);
-				}
+					scratch.setFormatted(" {\\fs15 <%s>}", val);
+					outText(scratch.c_str(), buf, u);
+				}               
 
 				if (endTag)
-					buf += "}";
+					outText('}', buf, u);
 			}
 		}
 
@@ -231,15 +243,16 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
-							buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());
+							scratch.setFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());
+							outText(scratch.c_str(), buf, u);
 							u->inXRefNote = (ch == 'x');
 						}
 					}
-					u->suspendTextPassThru = true;
+					u->suspendTextPassThru = (++u->suspendLevel);
 				}
 			}
 			if (tag.isEndTag()) {
-				u->suspendTextPassThru = false;
+				u->suspendTextPassThru = (--u->suspendLevel);
 				u->inXRefNote = false;
 			}
 		}
@@ -247,14 +260,14 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "{\\par}";
+				outText("{\\par}", buf, u);
 			}
 			else if (tag.isEndTag()) {	// end tag
-				buf += "{\\par}";
+				outText("{\\par}", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				buf += "{\\par\\par}";
+				outText("{\\par\\par}", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -263,10 +276,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "reference")) {
 			if (!u->inXRefNote) {	// only show these if we're not in an xref note
 				if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-					buf += "{<a href=\"\">";
+					outText("{<a href=\"\">", buf, u);
 				}
 				else if (tag.isEndTag()) {
-					buf += "</a>}";
+					outText("</a>}", buf, u);
 				}
 			}
 		}
@@ -275,42 +288,42 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "l")) {
 			// end line marker
 			if (tag.getAttribute("eID")) {
-				buf += "{\\par}";
+				outText("{\\par}", buf, u);
 			}
 			// <l/> without eID or sID
 			// Note: this is improper osis. This should be <lb/>
 			else if (tag.isEmpty() && !tag.getAttribute("sID")) {
-				buf += "{\\par}";
+				outText("{\\par}", buf, u);
 			}
 			// end of the line
 			else if (tag.isEndTag()) {
-				buf += "{\\par}";
+				outText("{\\par}", buf, u);
 			}
 		}
 
 		// <milestone type="line"/> or <lb.../>
 		else if ((!strcmp(tag.getName(), "lb")) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
-			buf += "{\\par}";
+			outText("{\\par}", buf, u);
 			userData->supressAdjacentWhitespace = true;
 		}
 
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\par\\i1\\b1 ";
+				outText("{\\par\\i1\\b1 ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "\\par}";
+				outText("\\par}", buf, u);
 			}
 		}
 
 		// <catchWord> & <rdg> tags (italicize)
 		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\i1 ";
+				outText("{\\i1 ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "}";
+				outText('}', buf, u);
 			}
 		}
 
@@ -319,12 +332,12 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "b" || type == "x-b")
-					buf += "{\\b1 ";
+					outText("{\\b1 ", buf, u);
 				else	// all other types
-					buf += "{\\i1 ";
+					outText("{\\i1 ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "}";
+				outText('}', buf, u);
 			}
 		}
 
@@ -356,14 +369,14 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 				// Do this first so quote marks are included as WoC
 				if (who == "Jesus")
-					buf += "\\cf6 ";
+					outText("\\cf6 ", buf, u);
 
 				// first check to see if we've been given an explicit mark
 				if (hasMark)
-					buf += mark;
+					outText(mark, buf, u);
 				//alternate " and '
 				else if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
+					outText((level % 2) ? '\"' : '\'', buf, u);
 			}
 			// close </q> or <q eID... />
 			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
@@ -385,14 +398,14 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 				// first check to see if we've been given an explicit mark
 				if (hasMark)
-					buf += mark;
+					outText(mark, buf, u);
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
-					buf += (level % 2) ? '\"' : '\'';
+					outText((level % 2) ? '\"' : '\'', buf, u);
 
 				// Do this last so quote marks are included as WoC
 				if (who == "Jesus")
-					buf += "\\cf0 ";
+					outText("\\cf0 ", buf, u);
 			}
 		}
 
@@ -407,10 +420,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 			// first check to see if we've been given an explicit mark
 			if (hasMark)
-				buf += mark;
+				outText(mark, buf, u);
 			// finally, alternate " and ', if config says we should supply a mark
 			else if (u->osisQToTick)
-				buf += (level % 2) ? '\"' : '\'';
+				outText((level % 2) ? '\"' : '\'', buf, u);
 		}
 
 		// <transChange>
@@ -421,10 +434,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 // just do all transChange tags this way for now
 //				if (type == "supplied")
-					buf += "{\\i1 ";
+					outText("{\\i1 ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "}";
+				outText('}', buf, u);
 			}
 		}
 
@@ -432,15 +445,16 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "divineName")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				u->suspendTextPassThru = true;
+				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			else if (tag.isEndTag()) {
-				u->suspendTextPassThru = false;
 				SWBuf lastText = u->lastTextNode.c_str();
+				u->suspendTextPassThru = (--u->suspendLevel);
 				if (lastText.size()) {
 					toupperstr(lastText);
-					buf.appendFormatted("{\\fs19%c\\fs16%s}", lastText[0], lastText.c_str()+1);
-				}
+					scratch.setFormatted("{\\fs19%c\\fs16%s}", lastText[0], lastText.c_str()+1);
+					outText(scratch.c_str(), buf, u);
+				}               
 			}
 		}
 
@@ -448,7 +462,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "div")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf.append("\\par\\par\\pard ");
+				outText("\\par\\par\\pard ", buf, u);
 			}
 			else if (tag.isEndTag()) {
 			}
@@ -466,9 +480,9 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			strcat(filepath, src);
 
 // we do this because BibleCS looks for this EXACT format for an image tag
-			buf+="<img src=\"";
-			buf+=filepath;
-			buf+="\" />";
+			outText("<img src=\"", buf, u);
+			outText(filepath, buf, u);
+			outText("\" />", buf, u);
 /*
 			char imgc;
 			for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
@@ -477,18 +491,20 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				    if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
 						  imgfile = fopen(filepath, "r");
 						  if (imgfile != NULL) {
-								buf += "{\\nonshppict {\\pict\\jpegblip ";
+								outText("{\\nonshppict {\\pict\\jpegblip ", buf, u);
 								while (feof(imgfile) != EOF) {
-									   buf.appendFormatted("%2x", fgetc(imgfile));
+									   scratch.setFormatted("%2x", fgetc(imgfile));
+							   		   outText(scratch.c_str(), buf, u);
+									   
 								}
 								fclose(imgfile);
-								buf += "}}";
+								outText("}}", buf, u);
 						  }
 				    }
 				    else if (stricmp(c, "png")) {
-						  buf += "{\\*\\shppict {\\pict\\pngblip ";
+						  outText("{\\*\\shppict {\\pict\\pngblip ", buf, u);
 
-						  buf += "}}";
+						  outText("}}", buf, u);
 				    }
 */
 			delete [] filepath;

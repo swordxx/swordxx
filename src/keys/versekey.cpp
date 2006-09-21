@@ -190,19 +190,32 @@ void VerseKey::setBookAbbrevs(const struct abbrev *bookAbbrevs, unsigned int siz
 			}
 			*/
 		}
-        
+
 		if (SWLog::getSystemLog()->getLogLevel() > 0) { //make sure log is wanted, this loop stuff costs a lot of time
 			for (int t = 0; t < 2; t++) {
 				for (int i = 0; i < BMAX[t]; i++) {
 					const int bn = getBookAbbrev(books[t][i].name);
 					if ((bn-1)%39 != i) {
-						SWLog::getSystemLog()->logError("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d)", 
+						SWLog::getSystemLog()->logError("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d). Required entry should be:",
 							books[t][i].name, bn, i);
+						char *abbr = 0;
+						stdstr(&abbr, books[t][i].name, 2);
+						strstrip(abbr);
+
+						StringMgr* stringMgr = StringMgr::getSystemStringMgr();
+						const bool hasUTF8Support = StringMgr::hasUTF8Support();
+						if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+							stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+						}
+						else {
+							stringMgr->upperLatin1(abbr);
+						}
+						SWLog::getSystemLog()->logError("%s=%d", abbr, (t*39)+i+1);
 					}
 				}
 			}
 		}
-    	}
+		}
 	else abbrevsCnt = size;
 }
 
@@ -323,8 +336,8 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 	const bool hasUTF8Support = StringMgr::hasUTF8Support();
 
-        // TODO: Why do we loop twice?  once upper and once not?
-        // If you wrote this, please comment.
+		// TODO: Why do we loop twice?  once upper and once not?
+		// If you wrote this, please comment.
 	for (int i = 0; i < 2; i++) {
 		stdstr(&abbr, iabbr, 2);
 		strstrip(abbr);
