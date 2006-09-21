@@ -40,9 +40,11 @@ BasicFilterUserData *OSISWEBIF::createUserData(const SWModule *module, const SWK
 
 
 bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+	MyUserData *u = (MyUserData *)userData;
+	SWBuf scratch;
+	bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
+	if (!sub) {
   // manually process if it wasn't a simple substitution
-	if (!substituteToken(buf, token)) {
-		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 
 		// <w> tag
@@ -148,11 +150,11 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							buf.appendFormatted("<span class=\"fn\" onclick=\"f(\'%s\',\'%s\',\'%s\');\" >%c</span>", modName.c_str(), u->key->getText(), footnoteNumber.c_str(), ch);
 						}
 					}
-					u->suspendTextPassThru = true;
+					u->suspendTextPassThru = (++u->suspendLevel);
 				}
 			}
 			if (tag.isEndTag()) {
-				u->suspendTextPassThru = false;
+				u->suspendTextPassThru = (--u->suspendLevel);
 
 			}
 		}

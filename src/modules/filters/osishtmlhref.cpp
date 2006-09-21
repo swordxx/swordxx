@@ -1,6 +1,6 @@
 /***************************************************************************
-                     osishtmlhref.cpp  -  OSIS to HTML with hrefs filter
-                             -------------------
+				 osishtmlhref.cpp  -  OSIS to HTML with hrefs filter
+					    -------------------
     begin                : 2003-06-24
     copyright            : 2003 by CrossWire Bible Society
  ***************************************************************************/
@@ -29,6 +29,9 @@ class OSISHTMLHREF::QuoteStack : public std::stack<const char*> {
 };
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	inBold = false;
+	inName = false;
+	suspendLevel = 0;
 	quoteStack = new QuoteStack();
 	wordsOfChristStart = "<font color=\"red\"> ";
 	wordsOfChristEnd   = "</font> ";
@@ -82,9 +85,11 @@ static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if
 static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
 
 bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+	MyUserData *u = (MyUserData *)userData;
+	SWBuf scratch;
+	bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
+	if (!sub) {
   // manually process if it wasn't a simple substitution
-	if (!substituteToken(buf, token)) {
-		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 		
 		// <w> tag
@@ -217,10 +222,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						}
 					}
 				}
-				u->suspendTextPassThru = true;
+				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			if (tag.isEndTag()) {
-				u->suspendTextPassThru = false;
+				u->suspendTextPassThru = (--u->suspendLevel);
 			}
 		}
 
@@ -324,12 +329,12 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		else if (!strcmp(tag.getName(), "divineName")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				u->inName = true;
-				u->suspendTextPassThru = true;
+				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			else if (tag.isEndTag()) {
 				if(u->inName ) {
 					u->inName = false;
-					u->suspendTextPassThru = false;
+					u->suspendTextPassThru = (--u->suspendLevel);
 					char firstChar = *u->lastTextNode.c_str();
 					const char *name = u->lastTextNode.c_str();
 					++name;
