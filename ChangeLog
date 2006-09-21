@@ -1,6 +1,14 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+
+* Release 1.5.9 *
+
+21-Sep-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Clean up and package for 1.5.9
+	Added Thai Unicode locale coutesy of
+		Adrian Korten <adrian_korten@sil.org>
+
 29-Aug-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added recognition for the sysConfig parameter in SWMgr c-tor
 		(allow passing path to sword.conf to use for config)
