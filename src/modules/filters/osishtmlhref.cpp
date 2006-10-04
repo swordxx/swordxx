@@ -63,15 +63,13 @@ OSISHTMLHREF::OSISHTMLHREF() {
 	setEscapeEnd(";");
 
 	setEscapeStringCaseSensitive(true);
+	setPassThruNumericEscapeString(true);
 
-//   commenting these out.  If someone is sure we shouldn't
-//   convert these since we are outputing to a markup that
-//   recognizes them, then please delete these lines
-//   addEscapeStringSubstitute("amp",  "&");
-//   addEscapeStringSubstitute("apos", "'");
-//   addEscapeStringSubstitute("lt",   "<");
-//   addEscapeStringSubstitute("gt",   ">");
-//   addEscapeStringSubstitute("quot", "\"");
+	addAllowedEscapeString("quot");
+	addAllowedEscapeString("apos");
+	addAllowedEscapeString("amp");
+	addAllowedEscapeString("lt");
+	addAllowedEscapeString("gt");
 
 	setTokenCaseSensitive(true);
 	

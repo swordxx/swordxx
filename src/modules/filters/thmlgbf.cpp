@@ -64,7 +64,7 @@ char ThMLGBF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			else if (!strncmp("amp", token, 3)) text += '&';
 			else if (!strncmp("lt", token, 2)) text += '<';
 			else if (!strncmp("gt", token, 2)) text += '>';
-			else if (!strncmp("brvbar", token, 6)) text += '|';
+			else if (!strncmp("brvbar", token, 6)) text += '¦';
 			else if (!strncmp("sect", token, 4)) text += '§';
 			else if (!strncmp("copy", token, 4)) text += '©';
 			else if (!strncmp("laquo", token, 5)) text += '«';
@@ -155,6 +155,13 @@ char ThMLGBF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			else if (!strncmp("uml", token, 3)) text += '¨';
 			else if (!strncmp("shy", token, 3)) text += '­';
 			else if (!strncmp("macr", token, 4)) text += '¯';
+			else if (!strncmp("micro", token, 5)) text += "µ";
+			else if (!strncmp("middot", token, 6)) text +="·";
+			else if (!strncmp("cedil", token, 5)) text += "¸";
+			else if (!strncmp("ordm", token, 4)) text +=  "º";
+			else if (!strncmp("times", token, 5)) text += "×";
+			else if (!strncmp("divide", token, 6)) text +="÷";
+			else if (!strncmp("oslash", token, 6)) text +="ø";
 			continue;
 		
 		}

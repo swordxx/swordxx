@@ -38,7 +38,7 @@ ThMLRTF::ThMLRTF() {
 	addEscapeStringSubstitute("amp", "&");
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
-	addEscapeStringSubstitute("brvbar", "|");
+	addEscapeStringSubstitute("brvbar", "¦");
 	addEscapeStringSubstitute("sect", "§");
 	addEscapeStringSubstitute("copy", "©");
 	addEscapeStringSubstitute("laquo", "«");
@@ -129,6 +129,14 @@ ThMLRTF::ThMLRTF() {
 	addEscapeStringSubstitute("uml", "¨");
 	addEscapeStringSubstitute("shy", "­");
 	addEscapeStringSubstitute("macr", "¯");
+
+	addEscapeStringSubstitute("micro",  "µ");
+	addEscapeStringSubstitute("middot", "·");
+	addEscapeStringSubstitute("cedil",  "¸");
+	addEscapeStringSubstitute("ordm",   "º");
+	addEscapeStringSubstitute("times",  "×");
+	addEscapeStringSubstitute("divide", "÷");
+	addEscapeStringSubstitute("oslash", "ø");
 
 	setTokenCaseSensitive(true);
 

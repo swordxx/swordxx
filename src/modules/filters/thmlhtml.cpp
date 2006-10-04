@@ -24,109 +24,119 @@ SWORD_NAMESPACE_START
 ThMLHTML::ThMLHTML() {
 	setTokenStart("<");
 	setTokenEnd(">");
-/*
+
 	setEscapeStart("&");
 	setEscapeEnd(";");
 
 	setEscapeStringCaseSensitive(true);
+	setPassThruNumericEscapeString(true);
 
-	addEscapeStringSubstitute("nbsp", " ");
-	addEscapeStringSubstitute("quot", "\"");
-	addEscapeStringSubstitute("amp", "&");
-	addEscapeStringSubstitute("lt", "<");
-	addEscapeStringSubstitute("gt", ">");
-	addEscapeStringSubstitute("brvbar", "|");
-	addEscapeStringSubstitute("sect", "§");
-	addEscapeStringSubstitute("copy", "©");
-	addEscapeStringSubstitute("laquo", "«");
-	addEscapeStringSubstitute("reg", "®");
-	addEscapeStringSubstitute("acute", "´");
-	addEscapeStringSubstitute("para", "¶");
-	addEscapeStringSubstitute("raquo", "»");
+	addAllowedEscapeString("quot");
+	addAllowedEscapeString("amp");
+	addAllowedEscapeString("lt");
+	addAllowedEscapeString("gt");
 
-	addEscapeStringSubstitute("Aacute", "Á");
-	addEscapeStringSubstitute("Agrave", "À");
-	addEscapeStringSubstitute("Acirc", "Â");
-	addEscapeStringSubstitute("Auml", "Ä");
-	addEscapeStringSubstitute("Atilde", "Ã");
-	addEscapeStringSubstitute("Aring", "Å");
-	addEscapeStringSubstitute("aacute", "á");
-	addEscapeStringSubstitute("agrave", "à");
-	addEscapeStringSubstitute("acirc", "â");
-	addEscapeStringSubstitute("auml", "ä");
-	addEscapeStringSubstitute("atilde", "ã");
-	addEscapeStringSubstitute("aring", "å");
-	addEscapeStringSubstitute("Eacute", "É");
-	addEscapeStringSubstitute("Egrave", "È");
-	addEscapeStringSubstitute("Ecirc", "Ê");
-	addEscapeStringSubstitute("Euml", "Ë");
-	addEscapeStringSubstitute("eacute", "é");
-	addEscapeStringSubstitute("egrave", "è");
-	addEscapeStringSubstitute("ecirc", "ê");
-	addEscapeStringSubstitute("euml", "ë");
-	addEscapeStringSubstitute("Iacute", "Í");
-	addEscapeStringSubstitute("Igrave", "Ì");
-	addEscapeStringSubstitute("Icirc", "Î");
-	addEscapeStringSubstitute("Iuml", "Ï");
-	addEscapeStringSubstitute("iacute", "í");
-	addEscapeStringSubstitute("igrave", "ì");
-	addEscapeStringSubstitute("icirc", "î");
-	addEscapeStringSubstitute("iuml", "ï");
-	addEscapeStringSubstitute("Oacute", "Ó");
-	addEscapeStringSubstitute("Ograve", "Ò");
-	addEscapeStringSubstitute("Ocirc", "Ô");
-	addEscapeStringSubstitute("Ouml", "Ö");
-	addEscapeStringSubstitute("Otilde", "Õ");
-	addEscapeStringSubstitute("oacute", "ó");
-	addEscapeStringSubstitute("ograve", "ò");
-	addEscapeStringSubstitute("ocirc", "ô");
-	addEscapeStringSubstitute("ouml", "ö");
-	addEscapeStringSubstitute("otilde", "õ");
-	addEscapeStringSubstitute("Uacute", "Ú");
-	addEscapeStringSubstitute("Ugrave", "Ù");
-	addEscapeStringSubstitute("Ucirc", "Û");
-	addEscapeStringSubstitute("Uuml", "Ü");
-	addEscapeStringSubstitute("uacute", "ú");
-	addEscapeStringSubstitute("ugrave", "ù");
-	addEscapeStringSubstitute("ucirc", "û");
-	addEscapeStringSubstitute("uuml", "ü");
-	addEscapeStringSubstitute("Yacute", "Ý");
-	addEscapeStringSubstitute("yacute", "ý");
-	addEscapeStringSubstitute("yuml", "ÿ");
+	addAllowedEscapeString("nbsp");
+	addAllowedEscapeString("brvbar"); // "¦"
+	addAllowedEscapeString("sect");   // "§"
+	addAllowedEscapeString("copy");   // "©"
+	addAllowedEscapeString("laquo");  // "«"
+	addAllowedEscapeString("reg");    // "®"
+	addAllowedEscapeString("acute");  // "´"
+	addAllowedEscapeString("para");   // "¶"
+	addAllowedEscapeString("raquo");  // "»"
 
-	addEscapeStringSubstitute("deg", "°");
-	addEscapeStringSubstitute("plusmn", "±");
-	addEscapeStringSubstitute("sup2", "²");
-	addEscapeStringSubstitute("sup3", "³");
-	addEscapeStringSubstitute("sup1", "¹");
-	addEscapeStringSubstitute("nbsp", "º");
-	addEscapeStringSubstitute("pound", "£");
-	addEscapeStringSubstitute("cent", "¢");
-	addEscapeStringSubstitute("frac14", "¼");
-	addEscapeStringSubstitute("frac12", "½");
-	addEscapeStringSubstitute("frac34", "¾");
-	addEscapeStringSubstitute("iquest", "¿");
-	addEscapeStringSubstitute("iexcl", "¡");
-	addEscapeStringSubstitute("ETH", "Ð");
-	addEscapeStringSubstitute("eth", "ð");
-	addEscapeStringSubstitute("THORN", "Þ");
-	addEscapeStringSubstitute("thorn", "þ");
-	addEscapeStringSubstitute("AElig", "Æ");
-	addEscapeStringSubstitute("aelig", "æ");
-	addEscapeStringSubstitute("Oslash", "Ø");
-	addEscapeStringSubstitute("curren", "¤");
-	addEscapeStringSubstitute("Ccedil", "Ç");
-	addEscapeStringSubstitute("ccedil", "ç");
-	addEscapeStringSubstitute("szlig", "ß");
-	addEscapeStringSubstitute("Ntilde", "Ñ");
-	addEscapeStringSubstitute("ntilde", "ñ");
-	addEscapeStringSubstitute("yen", "¥");
-	addEscapeStringSubstitute("not", "¬");
-	addEscapeStringSubstitute("ordf", "ª");
-	addEscapeStringSubstitute("uml", "¨");
-	addEscapeStringSubstitute("shy", "­");
-	addEscapeStringSubstitute("macr", "¯");
-*/
+	addAllowedEscapeString("Aacute"); // "Á"
+	addAllowedEscapeString("Agrave"); // "À"
+	addAllowedEscapeString("Acirc");  // "Â"
+	addAllowedEscapeString("Auml");   // "Ä"
+	addAllowedEscapeString("Atilde"); // "Ã"
+	addAllowedEscapeString("Aring");  // "Å"
+	addAllowedEscapeString("aacute"); // "á"
+	addAllowedEscapeString("agrave"); // "à"
+	addAllowedEscapeString("acirc");  // "â"
+	addAllowedEscapeString("auml");   // "ä"
+	addAllowedEscapeString("atilde"); // "ã"
+	addAllowedEscapeString("aring");  // "å"
+	addAllowedEscapeString("Eacute"); // "É"
+	addAllowedEscapeString("Egrave"); // "È"
+	addAllowedEscapeString("Ecirc");  // "Ê"
+	addAllowedEscapeString("Euml");   // "Ë"
+	addAllowedEscapeString("eacute"); // "é"
+	addAllowedEscapeString("egrave"); // "è"
+	addAllowedEscapeString("ecirc");  // "ê"
+	addAllowedEscapeString("euml");   // "ë"
+	addAllowedEscapeString("Iacute"); // "Í"
+	addAllowedEscapeString("Igrave"); // "Ì"
+	addAllowedEscapeString("Icirc");  // "Î"
+	addAllowedEscapeString("Iuml");   // "Ï"
+	addAllowedEscapeString("iacute"); // "í"
+	addAllowedEscapeString("igrave"); // "ì"
+	addAllowedEscapeString("icirc");  // "î"
+	addAllowedEscapeString("iuml");   // "ï"
+	addAllowedEscapeString("Oacute"); // "Ó"
+	addAllowedEscapeString("Ograve"); // "Ò"
+	addAllowedEscapeString("Ocirc");  // "Ô"
+	addAllowedEscapeString("Ouml");   // "Ö"
+	addAllowedEscapeString("Otilde"); // "Õ"
+	addAllowedEscapeString("oacute"); // "ó"
+	addAllowedEscapeString("ograve"); // "ò"
+	addAllowedEscapeString("ocirc");  // "ô"
+	addAllowedEscapeString("ouml");   // "ö"
+	addAllowedEscapeString("otilde"); // "õ"
+	addAllowedEscapeString("Uacute"); // "Ú"
+	addAllowedEscapeString("Ugrave"); // "Ù"
+	addAllowedEscapeString("Ucirc");  // "Û"
+	addAllowedEscapeString("Uuml");   // "Ü"
+	addAllowedEscapeString("uacute"); // "ú"
+	addAllowedEscapeString("ugrave"); // "ù"
+	addAllowedEscapeString("ucirc");  // "û"
+	addAllowedEscapeString("uuml");   // "ü"
+	addAllowedEscapeString("Yacute"); // "Ý"
+	addAllowedEscapeString("yacute"); // "ý"
+	addAllowedEscapeString("yuml");   // "ÿ"
+
+	addAllowedEscapeString("deg");    // "°"
+	addAllowedEscapeString("plusmn"); // "±"
+	addAllowedEscapeString("sup2");   // "²"
+	addAllowedEscapeString("sup3");   // "³"
+	addAllowedEscapeString("sup1");   // "¹"
+	addAllowedEscapeString("nbsp");   // "º"
+	addAllowedEscapeString("pound");  // "£"
+	addAllowedEscapeString("cent");   // "¢"
+	addAllowedEscapeString("frac14"); // "¼"
+	addAllowedEscapeString("frac12"); // "½"
+	addAllowedEscapeString("frac34"); // "¾"
+	addAllowedEscapeString("iquest"); // "¿"
+	addAllowedEscapeString("iexcl");  // "¡"
+	addAllowedEscapeString("ETH");    // "Ð"
+	addAllowedEscapeString("eth");    // "ð"
+	addAllowedEscapeString("THORN");  // "Þ"
+	addAllowedEscapeString("thorn");  // "þ"
+	addAllowedEscapeString("AElig");  // "Æ"
+	addAllowedEscapeString("aelig");  // "æ"
+	addAllowedEscapeString("Oslash"); // "Ø"
+	addAllowedEscapeString("curren"); // "¤"
+	addAllowedEscapeString("Ccedil"); // "Ç"
+	addAllowedEscapeString("ccedil"); // "ç"
+	addAllowedEscapeString("szlig");  // "ß"
+	addAllowedEscapeString("Ntilde"); // "Ñ"
+	addAllowedEscapeString("ntilde"); // "ñ"
+	addAllowedEscapeString("yen");    // "¥"
+	addAllowedEscapeString("not");    // "¬"
+	addAllowedEscapeString("ordf");   // "ª"
+	addAllowedEscapeString("uml");    // "¨"
+	addAllowedEscapeString("shy");    // "­"
+	addAllowedEscapeString("macr");   // "¯"
+
+	addAllowedEscapeString("micro");  // "µ"
+	addAllowedEscapeString("middot"); // "·"
+	addAllowedEscapeString("cedil");  // "¸"
+	addAllowedEscapeString("ordm");   // "º"
+	addAllowedEscapeString("times");  // "×"
+	addAllowedEscapeString("divide"); // "÷"
+	addAllowedEscapeString("oslash"); // "ø"
+
 	setTokenCaseSensitive(true);
 
 	addTokenSubstitute("note", " <font color=\"#800000\"><small>(");

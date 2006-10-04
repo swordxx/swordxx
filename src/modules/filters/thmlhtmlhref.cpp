@@ -38,6 +38,118 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 	setTokenStart("<");
 	setTokenEnd(">");
 
+	setEscapeStart("&");
+	setEscapeEnd(";");
+
+	setEscapeStringCaseSensitive(true);
+	setPassThruNumericEscapeString(true);
+
+	addAllowedEscapeString("quot");
+	addAllowedEscapeString("amp");
+	addAllowedEscapeString("lt");
+	addAllowedEscapeString("gt");
+
+	addAllowedEscapeString("nbsp");
+	addAllowedEscapeString("brvbar"); // "¦"
+	addAllowedEscapeString("sect");   // "§"
+	addAllowedEscapeString("copy");   // "©"
+	addAllowedEscapeString("laquo");  // "«"
+	addAllowedEscapeString("reg");    // "®"
+	addAllowedEscapeString("acute");  // "´"
+	addAllowedEscapeString("para");   // "¶"
+	addAllowedEscapeString("raquo");  // "»"
+
+	addAllowedEscapeString("Aacute"); // "Á"
+	addAllowedEscapeString("Agrave"); // "À"
+	addAllowedEscapeString("Acirc");  // "Â"
+	addAllowedEscapeString("Auml");   // "Ä"
+	addAllowedEscapeString("Atilde"); // "Ã"
+	addAllowedEscapeString("Aring");  // "Å"
+	addAllowedEscapeString("aacute"); // "á"
+	addAllowedEscapeString("agrave"); // "à"
+	addAllowedEscapeString("acirc");  // "â"
+	addAllowedEscapeString("auml");   // "ä"
+	addAllowedEscapeString("atilde"); // "ã"
+	addAllowedEscapeString("aring");  // "å"
+	addAllowedEscapeString("Eacute"); // "É"
+	addAllowedEscapeString("Egrave"); // "È"
+	addAllowedEscapeString("Ecirc");  // "Ê"
+	addAllowedEscapeString("Euml");   // "Ë"
+	addAllowedEscapeString("eacute"); // "é"
+	addAllowedEscapeString("egrave"); // "è"
+	addAllowedEscapeString("ecirc");  // "ê"
+	addAllowedEscapeString("euml");   // "ë"
+	addAllowedEscapeString("Iacute"); // "Í"
+	addAllowedEscapeString("Igrave"); // "Ì"
+	addAllowedEscapeString("Icirc");  // "Î"
+	addAllowedEscapeString("Iuml");   // "Ï"
+	addAllowedEscapeString("iacute"); // "í"
+	addAllowedEscapeString("igrave"); // "ì"
+	addAllowedEscapeString("icirc");  // "î"
+	addAllowedEscapeString("iuml");   // "ï"
+	addAllowedEscapeString("Oacute"); // "Ó"
+	addAllowedEscapeString("Ograve"); // "Ò"
+	addAllowedEscapeString("Ocirc");  // "Ô"
+	addAllowedEscapeString("Ouml");   // "Ö"
+	addAllowedEscapeString("Otilde"); // "Õ"
+	addAllowedEscapeString("oacute"); // "ó"
+	addAllowedEscapeString("ograve"); // "ò"
+	addAllowedEscapeString("ocirc");  // "ô"
+	addAllowedEscapeString("ouml");   // "ö"
+	addAllowedEscapeString("otilde"); // "õ"
+	addAllowedEscapeString("Uacute"); // "Ú"
+	addAllowedEscapeString("Ugrave"); // "Ù"
+	addAllowedEscapeString("Ucirc");  // "Û"
+	addAllowedEscapeString("Uuml");   // "Ü"
+	addAllowedEscapeString("uacute"); // "ú"
+	addAllowedEscapeString("ugrave"); // "ù"
+	addAllowedEscapeString("ucirc");  // "û"
+	addAllowedEscapeString("uuml");   // "ü"
+	addAllowedEscapeString("Yacute"); // "Ý"
+	addAllowedEscapeString("yacute"); // "ý"
+	addAllowedEscapeString("yuml");   // "ÿ"
+
+	addAllowedEscapeString("deg");    // "°"
+	addAllowedEscapeString("plusmn"); // "±"
+	addAllowedEscapeString("sup2");   // "²"
+	addAllowedEscapeString("sup3");   // "³"
+	addAllowedEscapeString("sup1");   // "¹"
+	addAllowedEscapeString("nbsp");   // "º"
+	addAllowedEscapeString("pound");  // "£"
+	addAllowedEscapeString("cent");   // "¢"
+	addAllowedEscapeString("frac14"); // "¼"
+	addAllowedEscapeString("frac12"); // "½"
+	addAllowedEscapeString("frac34"); // "¾"
+	addAllowedEscapeString("iquest"); // "¿"
+	addAllowedEscapeString("iexcl");  // "¡"
+	addAllowedEscapeString("ETH");    // "Ð"
+	addAllowedEscapeString("eth");    // "ð"
+	addAllowedEscapeString("THORN");  // "Þ"
+	addAllowedEscapeString("thorn");  // "þ"
+	addAllowedEscapeString("AElig");  // "Æ"
+	addAllowedEscapeString("aelig");  // "æ"
+	addAllowedEscapeString("Oslash"); // "Ø"
+	addAllowedEscapeString("curren"); // "¤"
+	addAllowedEscapeString("Ccedil"); // "Ç"
+	addAllowedEscapeString("ccedil"); // "ç"
+	addAllowedEscapeString("szlig");  // "ß"
+	addAllowedEscapeString("Ntilde"); // "Ñ"
+	addAllowedEscapeString("ntilde"); // "ñ"
+	addAllowedEscapeString("yen");    // "¥"
+	addAllowedEscapeString("not");    // "¬"
+	addAllowedEscapeString("ordf");   // "ª"
+	addAllowedEscapeString("uml");    // "¨"
+	addAllowedEscapeString("shy");    // "­"
+	addAllowedEscapeString("macr");   // "¯"
+
+	addAllowedEscapeString("micro");  // "µ"
+	addAllowedEscapeString("middot"); // "·"
+	addAllowedEscapeString("cedil");  // "¸"
+	addAllowedEscapeString("ordm");   // "º"
+	addAllowedEscapeString("times");  // "×"
+	addAllowedEscapeString("divide"); // "÷"
+	addAllowedEscapeString("oslash"); // "ø"
+
 	setTokenCaseSensitive(true);
 	addTokenSubstitute("scripture", "<i> ");
 	addTokenSubstitute("/scripture", "</i> ");

@@ -29,16 +29,19 @@
 #include <utilstr.h>
 #include <stringmgr.h>
 #include <map>
+#include <set>
 
 SWORD_NAMESPACE_START
 
 typedef std::map<SWBuf, SWBuf> DualStringMap;
+typedef std::set<SWBuf> StringSet;
 
 // I hate bridge patterns but this isolates std::map from a ton of filters
 class SWBasicFilter::Private {
 public:
 	DualStringMap tokenSubMap;
 	DualStringMap escSubMap;
+	StringSet escPassSet;
 };
 
 const char SWBasicFilter::INITIALIZE = 1;
@@ -65,6 +68,7 @@ SWBasicFilter::SWBasicFilter() {
 	tokenCaseSensitive     = false;
 	passThruUnknownToken   = false;
 	passThruUnknownEsc     = false;
+	passThruNumericEsc     = false;
 }
 
 
@@ -91,6 +95,10 @@ void SWBasicFilter::setPassThruUnknownToken(bool val) {
 
 
 void SWBasicFilter::setPassThruUnknownEscapeString(bool val) {
+	passThruUnknownEsc = val;
+}
+
+void SWBasicFilter::setPassThruNumericEscapeString(bool val) {
 	passThruUnknownEsc = val;
 }
 
@@ -121,6 +129,24 @@ void SWBasicFilter::addTokenSubstitute(const char *findString, const char *repla
 void SWBasicFilter::removeTokenSubstitute(const char *findString) {
 	if (p->tokenSubMap.find(findString) != p->tokenSubMap.end()) {
 		p->tokenSubMap.erase( p->tokenSubMap.find(findString) );
+	}
+}
+
+void SWBasicFilter::addAllowedEscapeString(const char *findString) {
+	char *buf = 0;
+
+	if (!escStringCaseSensitive) {
+		stdstr(&buf, findString);
+		toupperstr(buf);
+		p->escPassSet.insert(StringSet::value_type(buf));
+		delete [] buf;
+	}
+	else p->escPassSet.insert(StringSet::value_type(findString));
+}
+
+void SWBasicFilter::removeAllowedEscapeString(const char *findString) {
+	if (p->escPassSet.find(findString) != p->escPassSet.end()) {
+		p->escPassSet.erase( p->escPassSet.find(findString) );
 	}
 }
 
@@ -161,8 +187,50 @@ bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 	return false;
 }
 
+void SWBasicFilter::appendEscapeString(SWBuf &buf, const char *escString) {
+	buf += escStart;
+	buf += escString;
+	buf += escEnd;
+}
+
+bool SWBasicFilter::passAllowedEscapeString(SWBuf &buf, const char *escString) {
+	StringSet::iterator it;
+
+	if (!escStringCaseSensitive) {
+	        char *tmp = 0;
+		stdstr(&tmp, escString);
+		toupperstr(tmp);
+		it = p->escPassSet.find(tmp);
+		delete [] tmp;
+	} else 
+		it = p->escPassSet.find(escString);
+
+	if (it != p->escPassSet.end()) {
+		appendEscapeString(buf, escString);
+		return true;
+	}
+
+	return false;
+}
+
+bool SWBasicFilter::handleNumericEscapeString(SWBuf &buf, const char *escString) {
+	if (passThruNumericEsc) {
+		appendEscapeString(buf, escString);
+		return true;
+	}
+	return false;
+}
+
 bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 	DualStringMap::iterator it;
+
+	if (*escString == '#') {
+		return handleNumericEscapeString(buf, escString);
+	}
+
+	if (passAllowedEscapeString(buf, escString)) {
+		return true;
+	}
 
 	if (!escStringCaseSensitive) {
 	        char *tmp = 0;
@@ -278,9 +346,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					
 					if (!userData->suspendTextPassThru)  { //if text through is disabled no tokens should pass, too
 						if ((!handleEscapeString(text, token, userData)) && (passThruUnknownEsc)) {
-							text += escStart;
-							text += token;
-							text += escEnd;
+							appendEscapeString(text, token);
 						}
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;

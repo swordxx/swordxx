@@ -70,6 +70,7 @@ class Private;
 	bool tokenCaseSensitive;
 	bool passThruUnknownToken;
 	bool passThruUnknownEsc;
+	bool passThruNumericEsc;
 	char processStages;
 
 
@@ -116,20 +117,40 @@ protected:
 	 */
 	void setPassThruUnknownEscapeString(bool val);
 
+	/** Sets whether to pass thru a numeric escape sequence unchanged
+	 *	or allow it to be handled otherwise.
+	 * Default is false.*/
+	void setPassThruNumericEscapeString(bool val);
+
 	/** Are escapeStrings case sensitive or not? Call this
 	 *	function before addEscapeStingSubstitute()
 	 */
 	void setEscapeStringCaseSensitive(bool val);
 
+	/** Registers an esc control sequence that can pass unchanged
+	 */
+	void addAllowedEscapeString(const char *findString);
+
+	/** Unregisters an esc control sequence that can pass unchanged
+	 */
+	void removeAllowedEscapeString(const char *findString);
+
 	/** Registers an esc control sequence
 	 */
 	void addEscapeStringSubstitute(const char *findString, const char *replaceString);
+
 	/** Unregisters an esc control sequence
 	 */
 	void removeEscapeStringSubstitute(const char *findString);
 
 	/** This function performs the substitution of escapeStrings */
 	bool substituteEscapeString(SWBuf &buf, const char *escString);
+
+	/** This passes allowed escapeStrings */
+	bool passAllowedEscapeString(SWBuf &buf, const char *escString);
+
+	/** This appends escString to buf as an entity */
+	void appendEscapeString(SWBuf &buf, const char *escString);
 
 	/** Are tokens case sensitive (like in GBF) or not? Call this
 	 *	function before addTokenSubstitute()
@@ -167,6 +188,14 @@ protected:
 	 * @return subclasses should return true if they handled the esc seq, or false if they did not.
 	 */
 	virtual bool handleEscapeString(SWBuf &buf, const char *escString, BasicFilterUserData *userData);
+
+	/** This function is called for all numeric escape sequences. If passThrough
+	 * @param buf the output buffer 
+	 * @param escString the escape sequence (e.g. <code>"#235"</code> for &amp;235;)
+	 * @return subclasses should return true if they handled the esc seq, or false if they did not.
+         */
+	virtual bool handleNumericEscapeString(SWBuf &buf, const char *escString);
+
 
 };
 

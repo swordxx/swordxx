@@ -35,6 +35,14 @@ OSISOSIS::OSISOSIS() {
 	setEscapeEnd(";");
 
 	setEscapeStringCaseSensitive(true);
+	setPassThruNumericEscapeString(true);
+
+	addAllowedEscapeString("quot");
+	addAllowedEscapeString("apos");
+	addAllowedEscapeString("amp");
+	addAllowedEscapeString("lt");
+	addAllowedEscapeString("gt");
+
 	setTokenCaseSensitive(true);
 }
 
