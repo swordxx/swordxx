@@ -341,7 +341,7 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 		if (inEsc) {
 			if (*from == escEnd[escEndPos]) {
 				if (escEndPos == (escEndLen - 1)) {
-					intoken = false;
+					intoken = inEsc = false;
 					userData->lastTextNode = lastTextNode;
 					
 					if (!userData->suspendTextPassThru)  { //if text through is disabled no tokens should pass, too
