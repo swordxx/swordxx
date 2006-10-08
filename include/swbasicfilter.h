@@ -39,6 +39,7 @@ public:
 	const SWModule *module;
 	const SWKey *key;
 	SWBuf lastTextNode;
+	SWBuf lastSuspendSegment;
 	bool suspendTextPassThru;
 	bool supressAdjacentWhitespace;
 };

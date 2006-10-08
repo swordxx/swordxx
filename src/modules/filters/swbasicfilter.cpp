@@ -382,9 +382,11 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 		else {
  			if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
 				if (!userData->suspendTextPassThru) {
-					text.append( *from );
+					text.append(*from);
+					userData->lastSuspendSegment.size(0);
 				}
-				lastTextNode.append( *from );
+				else	userData->lastSuspendSegment.append(*from);
+				lastTextNode.append(*from);
  			}
 			userData->supressAdjacentWhitespace = false;
 		}

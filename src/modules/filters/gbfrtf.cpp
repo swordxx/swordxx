@@ -180,10 +180,10 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 					text += "</a>";
 				  continue;
 				case 'F':               // footnote begin
-					text += "{\\i1 \\sub (";
+					text += "{\\i1 \\sub [ ";
 					continue;
 				case 'f':               // footnote end
-					text += ") }";
+					text += " ] }";
 					continue;
 				}
 				break;

@@ -60,8 +60,8 @@ namespace {
 			delete tagData;
 		}
 	}
-static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
-static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
+static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
 };
 
 
@@ -448,7 +448,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			else if (tag.isEndTag()) {
-				SWBuf lastText = u->lastTextNode.c_str();
+				SWBuf lastText = u->lastSuspendSegment.c_str();
 				u->suspendTextPassThru = (--u->suspendLevel);
 				if (lastText.size()) {
 					toupperstr(lastText);

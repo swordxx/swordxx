@@ -151,9 +151,15 @@ public:
 	*/
 	inline unsigned long size() const { return length(); }
 
+	/** 
+	 * set's the size of the buffer.  This is a quick inline method which checks
+	 * for changes before actually calling setSize().
+	 * @param newSize new size of the buffer
+	 */
+	inline void size(unsigned long newSize) { if (end - buf - newSize) setSize(newSize); }
+
 	/**
 	* @return size() and length() return only the number of characters of the string.
-	* Add one for the following null and one for each char to be appended!
 	*/
 	inline unsigned long length() const { return end - buf; }
 

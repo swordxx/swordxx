@@ -74,9 +74,9 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 				
 					if((tagText.length() == 1) || !strcmp(module->Name(), "IGNT")) {
 						if (option) { // for ASV marks text in verse then put explanation at end of verse
-							text.append(" <FS>(");
+							text.append(" <FS>[");
 							text.append(tagText);
-							text.append(")<Fs>");
+							text.append("]<Fs>");
 							hide = false;
 							continue;
 						}
