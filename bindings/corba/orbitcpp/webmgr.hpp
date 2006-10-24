@@ -54,6 +54,10 @@ public:
 			module->AddOptionFilter(thmlWordJS);
 		}
 
+		if (module->Markup() == FMT_GBF) {
+			module->AddOptionFilter(gbfWordJS);
+		}
+
 		// add other module filters
 		SWMgr::AddGlobalOptions(module, section, start, end);
 
@@ -79,9 +83,6 @@ public:
 
 		if (module->Markup() == FMT_OSIS) {
 			module->AddOptionFilter(osisWordJS);
-		}
-		if (module->Markup() == FMT_GBF) {
-			module->AddOptionFilter(gbfWordJS);
 		}
 	}
 
