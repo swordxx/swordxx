@@ -260,7 +260,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		// <p> paragraph tag
 		else if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				outText("{\\par}", buf, u);
+				outText("{\\fi200\\par}", buf, u);
 			}
 			else if (tag.isEndTag()) {	// end tag
 				outText("{\\par}", buf, u);
