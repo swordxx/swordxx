@@ -29,6 +29,7 @@ SWORD_NAMESPACE_START
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
+	SWBuf imgPrefix;
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
@@ -45,6 +46,8 @@ protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	ThMLHTMLHREF();
+	virtual const char *getImagePrefix() { return imgPrefix.c_str(); }
+	virtual void setImagePrefix(const char *newImgPrefix) { imgPrefix = newImgPrefix; }
 };
 SWORD_NAMESPACE_END
 #endif /* _THMLHTMLHREF_H */

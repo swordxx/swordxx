@@ -36,7 +36,6 @@ protected:
 	public:
 		bool osisQToTick;
 		bool inBold;
-		bool inName;
 		int suspendLevel;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
