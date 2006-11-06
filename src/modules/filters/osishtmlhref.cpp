@@ -21,6 +21,7 @@
 #include <versekey.h>
 #include <swmodule.h>
 #include <url.h>
+#include <stringmgr.h>
 #include <stack>
 
 SWORD_NAMESPACE_START
@@ -30,7 +31,6 @@ class OSISHTMLHREF::QuoteStack : public std::stack<const char*> {
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	inBold = false;
-	inName = false;
 	suspendLevel = 0;
 	quoteStack = new QuoteStack();
 	wordsOfChristStart = "<font color=\"red\"> ";
@@ -79,8 +79,8 @@ OSISHTMLHREF::OSISHTMLHREF() {
 
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
-static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
-static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; }
+static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
 
 bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
@@ -326,23 +326,16 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// divineName  
 		else if (!strcmp(tag.getName(), "divineName")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				u->inName = true;
 				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			else if (tag.isEndTag()) {
-				if(u->inName ) {
-					u->inName = false;
-					u->suspendTextPassThru = (--u->suspendLevel);
-					char firstChar = *u->lastTextNode.c_str();
-					const char *name = u->lastTextNode.c_str();
-					++name;
-					outText(firstChar, buf, u);
-					outText("<font size=\"-1\">", buf, u);
-					
-					for(int i=0;i<strlen(name);i++)
-						outText(toupper(name[i]), buf, u);
-					outText("</font>", buf, u);
-				}
+				SWBuf lastText = u->lastSuspendSegment.c_str();
+				u->suspendTextPassThru = (--u->suspendLevel);
+				if (lastText.size()) {
+					toupperstr(lastText);
+					scratch.setFormatted("%c<font size=\"-1\">%s</font>", lastText[0], lastText.c_str()+1);
+					outText(scratch.c_str(), buf, u);
+				}               
 			} 
 		}
 
