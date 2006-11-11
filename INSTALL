@@ -87,6 +87,10 @@ The API looks for its module configuration in the following sequence:
 	./mods.d
 	../library/mods.d (don't ask)
 	$SWORD_PATH/mods.d
+	$HOME/.sword/sword.conf in the format:
+			[Install]
+			DataPath=/where/your/datafiles/are/installed
+		then the API will look for DataPath/mods.d
 	/etc/sword.conf in the format:
 			[Install]
 			DataPath=/where/your/datafiles/are/installed
