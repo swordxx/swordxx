@@ -85,13 +85,21 @@ The API looks for its module configuration in the following sequence:
 			DataPath=/where/your/datafiles/are/installed
 		then the API will look for DataPath/mods.d
 	./mods.d
+	../library/mods.d (don't ask)
 	$SWORD_PATH/mods.d
-	$HOME/.sword/mods.d
-	or finally from information found in a system-wide configuration file
-		/etc/sword.conf in the format:
+	/etc/sword.conf in the format:
 			[Install]
 			DataPath=/where/your/datafiles/are/installed
 		then the API will look for DataPath/mods.d
+	$HOME/.sword/mods.d
+		*NOTE: this last one is special.  SWORD will always
+			augment the discovered library from any previous
+			check with modules found here.
+			If this is the ONLY location, then it will be
+			considered the PRIMARY datapath, like any of the
+			earlier checks.
+		
+                       
 
 * NOTE:
 Using the above scheme, SWORD will also determine the path to prefix to the
