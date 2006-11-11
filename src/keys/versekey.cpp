@@ -336,16 +336,23 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 	const bool hasUTF8Support = StringMgr::hasUTF8Support();
 
-		// TODO: Why do we loop twice?  once upper and once not?
-		// If you wrote this, please comment.
+	// The first iteration of this loop tries to uppercase
+	// the string. If we still fail to match, we try
+	// matching the string without any toupper logic.
+	// This is useful for, say, Chinese user input
+	// on a system that doesn't properly support
+	// a true Unicode-toupper function (!hasUTF8Support)
 	for (int i = 0; i < 2; i++) {
 		stdstr(&abbr, iabbr, 2);
 		strstrip(abbr);
-		if (!i && hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-			abbr = stringMgr->upperUTF8(abbr, strlen(abbr)*2);
-		}
-		else if (!i) {
-			abbr = stringMgr->upperLatin1(abbr);
+
+		if (!i) {
+			if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+				abbr = stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+			}
+			else {
+				abbr = stringMgr->upperLatin1(abbr);
+			}
 		}
 
 		abLen = strlen(abbr);
@@ -354,6 +361,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 			min = 0;
 			max = abbrevsCnt;
 
+			// binary search for a match
 			while(1) {
 				target = min + ((max - min) / 2);
 				diff = strncmp(abbr, abbrevs[target].ab, abLen);
@@ -364,6 +372,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 				else	max = target;
 			}
 
+			// lets keep backing up till we find the 'first' valid match
 			for (; target > 0; target--) {
 				if (strncmp(abbr, abbrevs[target-1].ab, abLen))
 					break;
