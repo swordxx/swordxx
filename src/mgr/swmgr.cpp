@@ -876,6 +876,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 				break;
 			}
 		}
+/*
 		SWBuf &rdp = section["RelativeDataPath"];
 		for (int i = rdp.length() - 1; i; i--) {
 			if (rdp[i] == '/') {
@@ -883,6 +884,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 				break;
 			}
 		}
+*/
 	}
 
 	// if a specific module type is set in the config, use this
