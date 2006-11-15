@@ -724,6 +724,10 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 	datapath = prefixPath;
 	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
 		datapath += "/";
+
+	// DataPath - relative path to data used by module driver.  May be a directory, may be a File.
+	//   Typically not useful by outside world.  See AbsoluteDataPath, PrefixPath, and RelativePrefixPath
+	//   below.
 	misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (SWBuf)"";
 	char *buf = new char [ strlen(misc1.c_str()) + 1 ];
 	char *buf2 = buf;
@@ -733,6 +737,8 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 	if (!strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
 		buf2 += 2;
 	}
+	// PrefixPath - absolute directory path to the repository in which this module was found
+	section["PrefixPath"] = datapath;
 	if (*buf2)
 		datapath += buf2;
 	delete [] buf;
@@ -867,6 +873,13 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 		for (int i = dp.length() - 1; i; i--) {
 			if (dp[i] == '/') {
 				dp.setSize(i);
+				break;
+			}
+		}
+		SWBuf &rdp = section["RelativeDataPath"];
+		for (int i = rdp.length() - 1; i; i--) {
+			if (rdp[i] == '/') {
+				rdp.setSize(i);
 				break;
 			}
 		}

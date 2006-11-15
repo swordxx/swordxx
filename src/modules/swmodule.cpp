@@ -929,6 +929,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWKey textkey;
 	char *word = 0;
 	char *wordBuf = 0;
+	SWBuf c;
 
 
 	// turn all filters to default values
@@ -965,6 +966,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  
 	standard::StandardAnalyzer *an = new standard::StandardAnalyzer();
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
+	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 	char ch = target.c_str()[strlen(target.c_str())-1];
 	if ((ch != '/') && (ch != '\\'))
 		target.append('/');
@@ -1076,6 +1078,13 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 			lucene_utf8towcs(wcharBuffer, keyText, MAX_CONV_SIZE); //keyText must be utf8
 			doc->add( *Field::UnIndexed(_T("key"), wcharBuffer ) );
+
+			if (includeKeyInSearch) {
+				c = keyText;
+				c += " ";
+				c += content;
+				content = c.c_str();
+			}
 
 			lucene_utf8towcs(wcharBuffer, content, MAX_CONV_SIZE); //content must be utf8
 			doc->add( *Field::UnStored(_T("content"), wcharBuffer) );
