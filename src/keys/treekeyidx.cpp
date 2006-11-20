@@ -459,26 +459,31 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 void TreeKeyIdx::setText(const char *ikey) {
 	char *buf = 0;
 	stdstr(&buf, ikey);
-	char *leaf = strtok(buf, "/");
+	SWBuf leaf = strtok(buf, "/");
+	leaf.trim();
 	root();
-	while ((leaf) && (!Error())) {
+	while ((leaf.size()) && (!Error())) {
 		bool ok, inChild = false;
+		error = KEYERR_OUTOFBOUNDS;
 		for (ok = firstChild(); ok; ok = nextSibling()) {
 			inChild = true;
-			if (!stricmp(leaf, getLocalName()))
+			if (leaf == getLocalName()) {
+				error = 0;
 				break;
+			}
 		}
 		leaf = strtok(0, "/");
+		leaf.trim();
 		if (!ok) {
 		    	if (inChild) {	// if we didn't find a matching child node, default to first child
 				parent();
 				firstChild();
 			}
-			if (leaf)
-				error = KEYERR_OUTOFBOUNDS;
-			break;
+			error = KEYERR_OUTOFBOUNDS;
 		}
 	}
+	if (leaf.size())
+		error = KEYERR_OUTOFBOUNDS;
 	delete [] buf;
 	unsnappedKeyText = ikey;
 }

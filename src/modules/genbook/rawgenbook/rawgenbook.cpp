@@ -141,7 +141,7 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
 	char userData[8];
 
-	if (!len)
+	if (len < 0)
 		len = strlen(inbuf);
 
 	bdtfd->write(inbuf, len);

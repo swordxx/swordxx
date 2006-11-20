@@ -1,6 +1,20 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+20-Nov-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Moved treekey and genbook tests to utilities
+	Finished first stable version of rewrite of imp2gbs
+	Fixed bug in treekey where didn't break on found sibling
+	Added .trim to localName segments of genbook path,
+		e.g. /this / is/a/test/  - all spaces will be removed.
+	Added recognition of additional greek accent ~
+		in UTF8GreekAccents filter
+	Fixed bug in RawGenBook::setText where default size
+		is < 0, not false.
+	Changed lucene indexing to actually index the key field.  This
+		allows searching within key field (e.g. key:word)
+	Fixed divineName logic
+	Fixed & handling
 
 * Release 1.5.9 *
 

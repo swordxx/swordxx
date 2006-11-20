@@ -52,7 +52,7 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
 					from++;
 				}
 			}
-			else if (*from == 0xCD && *(from + 1) == 0xBA) {
+			else if (*from == 0xCD && (*(from + 1) == 0xBA || *(from + 1) == 0x82)) {
 				from++;
 			}
 			//now converted pre-composed characters to their alphabetic bases, discarding the accents

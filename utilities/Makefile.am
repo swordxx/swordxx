@@ -4,7 +4,7 @@ INCLUDES = -I $(top_srcdir)/include
 LDADD = $(top_builddir)/lib/libsword.la
 noinst_PROGRAMS = cipherraw lexdump \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
-addgb
+addgb genbookutil treeidxutil
 
 bin_PROGRAMS = mod2imp mod2osis osis2mod vs2osisref mod2vpl \
 	mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs
@@ -57,6 +57,8 @@ mod2osis_SOURCES = mod2osis.cpp
 xml2gbs_SOURCES = xml2gbs.cpp
 osis2mod_SOURCES = osis2mod.cpp
 vs2osisref_SOURCES = vs2osisref.cpp
+genbookutil_SOURCES = genbookutil.cpp
+treeidxutil_SOURCES = treeidxutil.cpp
 
 installmgr_SOURCES = installmgr.cpp
 #installmgr_LDADD = -lcurl $(CURL_LIBS) $(LDADD)

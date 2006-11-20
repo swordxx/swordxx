@@ -34,6 +34,8 @@ SWBuf outPath;
 SWBuf inFile;
 bool  toUpper     = false;
 bool  greekFilter = false;
+bool  augMod      = false;
+bool  augEnt      = true;
 int   lexLevels   = 0;
 UTF8GreekAccents greekAccentsFilter;
 
@@ -42,6 +44,8 @@ void usage(const char *app) {
 	fprintf(stderr, "imp2gbs 1.0 General Book module creation tool for the SWORD Project\n\n");
 	fprintf(stderr, "usage: %s <inFile> [OPTIONS]\n", app);
 	fprintf(stderr, "\t-o <outPath>\n\t\tSpecify an output Path other than inFile location.\n");
+	fprintf(stderr, "\t-a\n\t\tAugment Module [default: create new]\n");
+	fprintf(stderr, "\t-O\n\t\tOverwrite entries of same key [default: append to]\n");
 	fprintf(stderr, "\t-U\n\t\tKey filter: Convert toUpper\n");
 	fprintf(stderr, "\t-g\n\t\tKey filter: Strip Greek diacritics\n");
 	fprintf(stderr, "\t-l <levels>\n\t\tKey filter: Pseudo-Lexicon n-level generation using first character\n");
@@ -79,6 +83,12 @@ void parseParams(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-g")) {
 			greekFilter = true;
 		}
+		else if (!strcmp(argv[i], "-O")) {
+			augEnt = false;
+		}
+		else if (!strcmp(argv[i], "-a")) {
+			augMod = true;
+		}
 		else if (!strcmp(argv[i], "-l")) {
 			if (i+1 < argc) {
 				lexLevels = atoi(argv[i+1]);
@@ -111,7 +121,8 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 	}
 
 //#ifdef _ICU_
-	if (lexLevels) {
+//	if (lexLevels) {
+	if (lexLevels && !keyBuffer.startsWith("/Intro")) {
 		unsigned size = (keyBuffer.size()+(lexLevels*2));
 		keyBuffer.setFillByte(0);
 		keyBuffer.resize(size);
@@ -122,6 +133,28 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 		UChar *ubuffer = new UChar[max+10];
 		int32_t len;
 		
+		u_strFromUTF8(ubuffer, max+9, &len, keyBuffer.c_str(), -1, &err);
+		if (err == U_ZERO_ERROR) {
+			UChar *upper = new UChar[(lexLevels+1)*3];
+			memcpy(upper, ubuffer, lexLevels*sizeof(UChar));
+			upper[lexLevels] = 0;
+			len = u_strToUpper(upper, (lexLevels+1)*3, upper, -1, 0, &err);
+			memmove(ubuffer+len+1, ubuffer, (max-len)*sizeof(UChar));
+			memcpy(ubuffer, upper, len*sizeof(UChar));
+			ubuffer[len] = '/';
+			delete [] upper;
+
+			int totalShift = 0;
+			for (int i = lexLevels-1; i; i--) {
+				int shift = (i < len)? i : len;
+				memmove(ubuffer+(shift+1), ubuffer, (max-shift)*sizeof(UChar));
+				ubuffer[shift] = '/';
+				totalShift += (shift+1);
+			}
+			u_strToUTF8(keyBuffer.getRawData(), max, 0, ubuffer, -1, &err);
+		}
+		
+/*
 		u_strFromUTF8(ubuffer, max+9, &len, keyBuffer.c_str(), -1, &err);
 		if (err == U_ZERO_ERROR) {
 			int totalShift = 0;
@@ -140,14 +173,25 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 			delete [] upper;
 			u_strToUTF8(keyBuffer.getRawData(), max, 0, ubuffer, -1, &err);
 		}
+*/
 		
 		delete [] ubuffer;
 	}
 //#endif
 
 	std::cout << keyBuffer << std::endl;
+
 	book->setKey(keyBuffer.c_str());
-	book->setEntry(entBuffer, strlen(entBuffer));
+
+	// check to see if we already have an entry
+	for (int i = 2; book->getKey()->Error() != KEYERR_OUTOFBOUNDS; i++) {
+		SWBuf key;
+		key.setFormatted("%s {%d}", keyBuffer.c_str(), i);
+		std::cout << "dup key, trying: " << key << std::endl;
+		book->setKey(key.c_str());
+	}
+
+	book->setEntry(entBuffer);
 }
 
 
@@ -165,7 +209,9 @@ int main(int argc, char **argv) {
 	RawGenBook *book;
   
 	// Do some initialization stuff
-	RawGenBook::createModule(outPath);
+	if (!augMod) {
+		RawGenBook::createModule(outPath);
+	}
 	book = new RawGenBook(outPath);
   
 	SWBuf lineBuffer;
@@ -191,6 +237,9 @@ int main(int argc, char **argv) {
 			}
 		}
 	} while (more);
+	if ((keyBuffer.size()) && (entBuffer.size())) {
+		writeEntry(book, keyBuffer, entBuffer);
+	}
 
 	delete book;
 

@@ -7,7 +7,7 @@ SUBDIRS = cppunit
 noinst_PROGRAMS = ciphertest keytest mgrtest parsekey listtest casttest \
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
-genbooktest treeidxtest swbuftest xmltest webiftest
+ swbuftest xmltest webiftest
 
 if ICU
 ICUPROG = icutest translittest tlitmgrtest
@@ -56,8 +56,6 @@ filtertest_SOURCES = filtertest.cpp
 lextest_SOURCES = lextest.cpp
 rawldidxtest_SOURCES = rawldidxtest.cpp
 swaptest_SOURCES = swaptest.cpp
-treeidxtest_SOURCES = treeidxtest.cpp
-genbooktest_SOURCES = genbooktest.cpp
 swbuftest_SOURCES = swbuftest.cpp
 webiftest_SOURCES = webiftest.cpp
 xmltest_SOURCES = xmltest.cpp
