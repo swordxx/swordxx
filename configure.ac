@@ -30,6 +30,8 @@ AC_PROG_LIBTOOL
 
 AC_C_BIGENDIAN
 
+ACX_CLUCENE
+
 # ---------------------------------------------------------------------
 # With options
 # ---------------------------------------------------------------------
@@ -47,8 +49,8 @@ AC_ARG_WITH(conf,
 #	(default=internal)]),,with_installmgr=internal)
 AC_ARG_WITH(curl,
 	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
-AC_ARG_WITH(lucene,
-	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
+#AC_ARG_WITH(lucene,
+#	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 
 
 # ---------------------------------------------------------------------
@@ -203,13 +205,13 @@ fi
 # ---------------------------------------------------------------------
 
 #FIXME: always make lucene available without checking for lib and headers
-if test x$with_lucene = xyes; then
+if test x$with_clucene = xyes; then
    echo "lucene found - lucene searching options available"
-   LUCENE_AM_CFLAGS=""
-   LUCENE_LIBS="-lclucene"
-   AM_CXXFLAGS="$AM_CXXFLAGS -DUSELUCENE"
+#   LUCENE_AM_CFLAGS=""
+#   LUCENE_LIBS="-lclucene"
+   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
    AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
-   LIBS="$LIBS $LUCENE_LIBS"
+   LIBS="$LIBS $CLUCENE_LIBS"
 fi
 
 
@@ -234,7 +236,7 @@ AC_SUBST(dir_confdef)
 AC_SUBST(CC)
 AC_SUBST(CURL_AM_CFLAGS)
 AC_SUBST(CURL_LIBS)
-AC_SUBST(LUCENE_LIBS)
+#AC_SUBST(LUCENE_LIBS)
 AC_SUBST(ICU_LIBS)
 AC_SUBST(ICU_IOLIBS)
 AC_SUBST(ICU_VER)
@@ -257,7 +259,7 @@ AC_SUBST(target_mingw32)
 # ---------------------------------------------------------------------
 AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
-AM_CONDITIONAL(USELUCENE, test x$with_lucene = xyes)
+AM_CONDITIONAL(USELUCENE, test x$with_clucene = xyes)
 AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)

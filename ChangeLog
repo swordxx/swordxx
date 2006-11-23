@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+23-Nov-2006	Daniel Glassey <dglassey@crosswire.org>
+	Use acx_clucene.m4 from CLucene contribs to detect CLucene
+
 20-Nov-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Moved treekey and genbook tests to utilities
 	Finished first stable version of rewrite of imp2gbs
