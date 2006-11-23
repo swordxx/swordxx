@@ -29,7 +29,7 @@
 
 extern "C" {
 
-#define SWHANDLE long
+#define SWHANDLE intptr_t
 
 
 //-----------------------------------------------------------------
