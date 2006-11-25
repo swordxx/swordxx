@@ -145,7 +145,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
 			FileMgr::removeDir(modDir.c_str());
 
-			if (dir = opendir(manager->configPath)) {	// find and remove .conf file
+			if ((dir = opendir(manager->configPath))) {	// find and remove .conf file
 				rewinddir(dir);
 				while ((ent = readdir(dir))) {
 					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
@@ -210,7 +210,6 @@ SWMgr *InstallSource::getMgr() {
 
 int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 	int retVal = 0;
-	long i;
 	FTPTransport *trans = createFTPTransport(is->source, statusReporter);
 	transport = trans; // set classwide current transport for other thread terminate() call
 	trans->setPassive(passive);
@@ -364,7 +363,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 		}
 		if (!aborted) {
 			SWBuf confDir = sourceDir + "/mods.d/";
-			if (dir = opendir(confDir.c_str())) {	// find and copy .conf file
+			if ((dir = opendir(confDir.c_str()))) {	// find and copy .conf file
 				rewinddir(dir);
 				while ((ent = readdir(dir))) {
 					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {

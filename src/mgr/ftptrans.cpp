@@ -86,7 +86,7 @@ vector<struct ftpparse> FTPTransport::getDirList(const char *dirURL) {
 
 
 int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
-	int i;
+	unsigned int i;
 	int retVal = 0;
 	
 	SWBuf url = SWBuf(urlPrefix) + SWBuf(dir);

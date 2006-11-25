@@ -490,7 +490,7 @@ char FileMgr::isDirectory(const char *path) {
 int FileMgr::copyDir(const char *srcDir, const char *destDir) {
 	DIR *dir;
 	struct dirent *ent;
-	if (dir = opendir(srcDir)) {
+	if ((dir = opendir(srcDir))) {
 		rewinddir(dir);
 		while ((ent = readdir(dir))) {
 			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {

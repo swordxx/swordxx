@@ -293,7 +293,6 @@ const char *ListKey::getText() const {
 
 void ListKey::setText(const char *ikey) {
 	// at least try to set the current element to this text
-	int pos = arraypos;
 	for (arraypos = 0; arraypos < arraycnt; arraypos++) {
 		SWKey *key = array[arraypos];
 		if (key) {

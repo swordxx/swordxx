@@ -329,7 +329,7 @@ void VerseKey::freshtext() const
 
 int VerseKey::getBookAbbrev(const char *iabbr)
 {
-	int loop, diff, abLen, min, max, target, retVal = -1;
+	int diff, abLen, min, max, target, retVal = -1;
 
 	char *abbr = 0;
 
@@ -426,7 +426,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	SWKey tmpDefaultKey = defaultKey;
 	char lastPartial = 0;
 	bool inTerm = true;
-	int notAllDigits;
+	int notAllDigits = 0;
 
 	curkey.AutoNormalize(0);
 	tmpListKey << tmpDefaultKey;
@@ -1539,7 +1539,7 @@ char **VerseKey::osisbooks[] = { osisotbooks, osisntbooks };
 
 const char *VerseKey::getOSISRef() const {
 	static char buf[5][254];
-	static char loop = 0;
+	static int loop = 0;
 
 	if (loop > 4)
 		loop = 0;
@@ -1550,7 +1550,7 @@ const char *VerseKey::getOSISRef() const {
 		sprintf(buf[loop], "%s.%d", osisbooks[Testament()-1][Book()-1], (int)Chapter());
 	else if (Book())
 		sprintf(buf[loop], "%s", osisbooks[Testament()-1][Book()-1]);
-	else	sprintf(buf[loop], "");
+	else	buf[loop][0] = 0;
 	return buf[loop++];
 }
 
