@@ -58,6 +58,8 @@ AC_ARG_WITH(curl,
 # ---------------------------------------------------------------------
 AC_ARG_ENABLE(debug,
 	AC_HELP_STRING([--enable-debug],[build debug library (default=no)]),,enable_debug=no)
+AC_ARG_ENABLE(warnings,
+	AC_HELP_STRING([--enable-warnings],[build with compiler warnings as errors (default=no)]),,enable_warnings=no)
 AC_ARG_ENABLE(profile,
 	AC_HELP_STRING([--enable-profile],[allow profiling (default=no)]),,enable_profile=no)
 AC_ARG_ENABLE(profilefn,
@@ -160,13 +162,16 @@ if test x$enable_debug = xyes; then
 else
   AM_CFLAGS="-O2"
   AM_CXXFLAGS="-O2"
-#  AM_CFLAGS="$AM_CFLAGS -Werror"
-#  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
 fi
 #  AC_DEFINE(DEBUG)
 #else
 #  AC_DEFINE(NDEBUG)
 #fi
+
+if test x$enable_warnings = xyes; then
+  AM_CFLAGS="$AM_CFLAGS -Werror"
+  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
+fi
 
 if test x$enable_profile = xyes; then
   AM_CFLAGS="$AM_CFLAGS -pg"
@@ -204,14 +209,15 @@ fi
 # Check for clucene for lucene searching support
 # ---------------------------------------------------------------------
 
-#FIXME: always make lucene available without checking for lib and headers
-if test x$with_clucene = xyes; then
+use_clucene=
+if test -z "$with_clucene"; then
    echo "lucene found - lucene searching options available"
-#   LUCENE_AM_CFLAGS=""
-#   LUCENE_LIBS="-lclucene"
    AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
    AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
    LIBS="$LIBS $CLUCENE_LIBS"
+   use_clucene="yes"
+else
+   echo "lucene searching options not available"
 fi
 
 
@@ -259,7 +265,7 @@ AC_SUBST(target_mingw32)
 # ---------------------------------------------------------------------
 AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
-AM_CONDITIONAL(USELUCENE, test x$with_clucene = xyes)
+AM_CONDITIONAL(USELUCENE, test x$use_clucene = xyes)
 AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
 AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
