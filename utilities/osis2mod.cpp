@@ -165,8 +165,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	static bool inChapterHeader = false;
 
 	// Flags to indicate whether we are in a book, chapter and/or verse
-	static bool inBook = false;
-	static bool inChapter = false;
+	//static bool inBook = false;
+	//static bool inChapter = false;
 	static bool inVerse = true;
 
 	static SWBuf header = "";

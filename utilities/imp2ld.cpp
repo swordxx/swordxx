@@ -61,9 +61,9 @@ int main(int argc, char **argv) {
     }
   }
 
-  zLD* modZ;
-  RawLD* mod2;
-  RawLD4* mod4;
+  zLD* modZ = NULL;
+  RawLD* mod2 = NULL;
+  RawLD4* mod4 = NULL;
   SWKey* key;
 
   if (mode == 3) {

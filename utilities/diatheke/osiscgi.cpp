@@ -80,17 +80,17 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 				const char *attrib;
 				const char *val;
-				if (attrib = tag.getAttribute("xlit")) {
+				if ((attrib = tag.getAttribute("xlit"))) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
 					buf.appendFormatted(" %s", val);
 				}
-				if (attrib = tag.getAttribute("gloss")) {
+				if ((attrib = tag.getAttribute("gloss"))) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
 					buf.appendFormatted(" %s", val);
 				}
-				if (attrib = tag.getAttribute("lemma")) {
+				if ((attrib = tag.getAttribute("lemma"))) {
 					int count = tag.getAttributePartCount("lemma");
 					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 					do {
@@ -140,7 +140,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						} while (++i < count);
 					}
 				}
-				if (attrib = tag.getAttribute("POS")) {
+				if ((attrib = tag.getAttribute("POS"))) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
 					buf.appendFormatted(" %s", val);
@@ -160,7 +160,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					if (type != "x-strongsMarkup" &&	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 					    type != "strongsMarkup") {	// deprecated
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-						VerseKey *vkey;
+						VerseKey *vkey = NULL;
 						// see if we have a VerseKey * or descendant
 						SWTRY {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
@@ -201,7 +201,7 @@ bool OSISCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 			        buf += "<a href=\"!DIATHEKE_URL!verse=";
-				if (attrib = tag.getAttribute("osisRef")) {
+				if ((attrib = tag.getAttribute("osisRef"))) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
 					buf.appendFormatted("%s", val);

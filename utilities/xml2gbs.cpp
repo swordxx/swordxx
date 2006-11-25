@@ -73,7 +73,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
   }
 
   TreeKeyIdx * treeKey;
-  RawGenBook * book;
+  RawGenBook * book = NULL;
 
   std::string divs[32];
 
@@ -288,7 +288,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 }
 
 int main(int argc, char **argv) {
-  unsigned long i = 0;
+  int i = 0;
 
   char modname[256];
   *modname = 0;

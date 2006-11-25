@@ -65,10 +65,10 @@ int main(int argc, char **argv) {
 	key.Headings(1);
 	for (key.Index(0); (!key.Error()); key++) {
 		rawdrv->findOffset(key.Testament(), key.Index(), &offset, &size);
-		printf("%s: OLD offset: %d; size: %d\n", (const char *)key, offset, size);
+		printf("%s: OLD offset: %ld; size: %d\n", (const char *)key, offset, size);
 
 		if ((offset == loffset) && (size == lsize)) {
-			printf("using previous offset,size\n", size);
+			printf("using previous offset,size %d\n", size);
 			offset = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);
 			printf("%ld %ld %d \n", offset, lzoffset, lzsize);
 			write(oxfd[key.Testament() - 1], &lzoffset, 4);

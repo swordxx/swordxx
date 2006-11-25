@@ -32,12 +32,12 @@ short chapsize;
 char testmnt;
 
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	long pos, offset;
-	int num1, num2, rangemax, curbook = 0, curchap = 0, curverse = 0;
-	char buf[127], startflag = 0;
-	short size, tmp;
+	int num1, num2, rangemax;
+	char startflag = 0;
+	short size;
 
 	checkparams(argc, argv);
 
@@ -90,6 +90,7 @@ main(int argc, char **argv)
 	close(cfp);
 	close(bfp);
 	close(fp);
+	return 0;
 }
 
 
@@ -135,8 +136,6 @@ void writeidx(VerseKey &key1, VerseKey &key2, VerseKey &key3, long offset, short
 
 char startchap(char *buf)
 {
-	char loop;
-
 	if (buf[0] != '<')
 		return 0;
 	if (buf[1] != 'S')
@@ -159,8 +158,6 @@ char startchap(char *buf)
 
 char startentry(char *buf)
 {
-	char loop;
-
 	if (buf[0] != '<')
 		return 0;
 	if (buf[1] != 'S')
@@ -184,9 +181,7 @@ char startentry(char *buf)
 char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short *size)
 {
 	char buf[7];
-	char buf2[20];
-	char ch;
-	char loop;
+	int loop;
 	long offset2;
 	int ch2, vs2, rm2;
 	bool flag;

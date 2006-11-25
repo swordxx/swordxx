@@ -23,7 +23,6 @@ int main(int argc, char **argv) {
   
   const string helptext ="imp2vs 1.0 Bible/Commentary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [output dir] \n";
   
-  signed long i = 0;
   string keybuffer = "";
   string entbuffer = "";
   string linebuffer = "";
