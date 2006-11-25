@@ -31,7 +31,6 @@ char GBFHeadings::processText (SWBuf &text, const SWKey *key, const SWModule *mo
 		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		int len;
 		bool hide = false;
 
 	const char *from;

@@ -33,7 +33,6 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
 	
 	SWBuf token;
 	bool intoken    = false;
-	char buf[254];
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();

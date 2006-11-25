@@ -35,7 +35,6 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
 		char token[4096]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		int len;
 		bool hide = false;
 
 	const char *from;

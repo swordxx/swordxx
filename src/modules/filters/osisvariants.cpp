@@ -62,7 +62,7 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		const char *from = orig.c_str();
 
 		//we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code
-		const char* variantCompareString = (option == 0) ? "div type=\"variant\" class=\"1\"" : "div type=\"variant\" class=\"2\"";
+		//const char* variantCompareString = (option == 0) ? "div type=\"variant\" class=\"1\"" : "div type=\"variant\" class=\"2\"";
 		
 		for (text = ""; *from; from++) {
 			if (*from == '<') {

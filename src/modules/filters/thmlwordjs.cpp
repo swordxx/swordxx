@@ -50,7 +50,6 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		char *ch;
 		char wordstr[5];
 		unsigned int textStart = 0, lastAppendLen = 0, textEnd = 0;
-		char gh = 0;
 		SWBuf tmp;
 		bool newText = false;
 		bool needWordOut = false;
@@ -179,7 +178,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						else {
 							wordID = key->getText();
 						}
-						for (int i = 0; i < wordID.size(); i++) {
+						for (unsigned int i = 0; i < wordID.size(); i++) {
 							if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
 								wordID[i] = '_';
 							}
@@ -271,7 +270,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			else {
 				wordID = key->getText();
 			}
-			for (int i = 0; i < wordID.size(); i++) {
+			for (unsigned int i = 0; i < wordID.size(); i++) {
 				if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
 					wordID[i] = '_';
 				}

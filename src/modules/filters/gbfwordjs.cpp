@@ -44,11 +44,8 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		bool lastspace = false;
 		int word = 1;
 		char val[128];
-		char *valto;
-		char *ch;
 		char wordstr[5];
 		unsigned int textStart = 0, lastAppendLen = 0, textEnd = 0;
-		char gh = 0;
 		SWBuf tmp;
 		bool newText = false;
 		bool needWordOut = false;
@@ -166,7 +163,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 						else {
 							wordID = key->getText();
 						}
-						for (int i = 0; i < wordID.size(); i++) {
+						for (unsigned int i = 0; i < wordID.size(); i++) {
 							if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
 								wordID[i] = '_';
 							}
@@ -258,7 +255,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			else {
 				wordID = key->getText();
 			}
-			for (int i = 0; i < wordID.size(); i++) {
+			for (unsigned int i = 0; i < wordID.size(); i++) {
 				if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
 					wordID[i] = '_';
 				}

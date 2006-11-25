@@ -47,9 +47,6 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		bool lastspace = false;
 		int wordNum = 1;
 		char wordstr[5];
-		char val[128];
-		char *valto;
-		char *ch;
 		SWBuf modName = (module)?module->Name():"";
 		// add TR to w src in KJV then remove this next line
 		SWBuf wordSrcPrefix = (modName == "KJV")?SWBuf("TR"):modName;
@@ -143,7 +140,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					}
 					wordID.appendFormatted("_%s", src.c_str());
 					// clean up our word ID for XHTML
-					for (int i = 0; i < wordID.size(); i++) {
+					for (unsigned int i = 0; i < wordID.size(); i++) {
 						if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
 							wordID[i] = '_';
 						}

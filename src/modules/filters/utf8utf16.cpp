@@ -17,7 +17,6 @@ UTF8UTF16::UTF8UTF16() {
 
 char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	const unsigned char *from;
-	char digit[10];
 	unsigned long ch;
         signed short utf16;
 	unsigned char from2[7];

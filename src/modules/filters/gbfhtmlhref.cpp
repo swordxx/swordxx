@@ -72,9 +72,6 @@ GBFHTMLHREF::GBFHTMLHREF() {
 
 bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	const char *tok;
-	char val[128];
-	char *valto;
-	const char *num;
 	MyUserData *u = (MyUserData *)userData;
 
 	if (!substituteToken(buf, token)) {
@@ -227,7 +224,7 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 		else if (!strcmp(tag.getName(), "RF")) {
 			SWBuf type = tag.getAttribute("type");
 			SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-			VerseKey *vkey;
+			VerseKey *vkey = NULL;
 			// see if we have a VerseKey * or descendant
 			SWTRY {
 				vkey = SWDYNAMIC_CAST(VerseKey, u->key);

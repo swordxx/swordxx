@@ -32,13 +32,11 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	char token[2048]; // cheese.  Fix.
 	int tokpos = 0;
 	bool intoken = false;
-	int len;
 	bool lastspace = false;
 	int word = 1;
 	char val[128];
 	char wordstr[5];
 	char *valto;
-	char *ch;
 	unsigned int textStart = 0, textEnd = 0;
 	bool newText = false;
 	SWBuf tmp;

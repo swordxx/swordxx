@@ -37,17 +37,16 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 //	static QuoteStack quoteStack;
 	
 	bool lastspace = false;
-	int word = 1;
 	char val[128];
 	SWBuf buf;
 	char *valto;
 	char *ch;
 	
 	const char *wordStart = text.c_str();
-	const char *wordEnd;
+	const char *wordEnd = NULL;
 	
-	const char *textStart;
-	const char *textEnd;
+	const char *textStart = NULL;
+	const char *textEnd = NULL;
 		
 	bool suspendTextPassThru = false;
 	bool handled = false;

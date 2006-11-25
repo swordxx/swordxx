@@ -31,7 +31,6 @@ char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module
 		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		int len;
 		bool lastspace = false;
 
 		SWBuf orig = text;

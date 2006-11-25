@@ -34,7 +34,6 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	const char *from;
 	int tokpos = 0;
 	bool intoken = false;
-	int len;
 	bool lastspace = false;
 	int word = 1;
 	char val[128];

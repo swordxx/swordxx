@@ -33,9 +33,6 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	bool hide       = false;
 	SWBuf tagText;
 	XMLTag startTag;
-	int tagTextNum  = 1;
-	int footnoteNum = 1;
-	char buf[254];
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();

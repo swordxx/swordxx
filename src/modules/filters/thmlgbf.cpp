@@ -31,7 +31,6 @@ char ThMLGBF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	char token[2048];
 	int tokpos = 0;
 	bool intoken 	= false;
-	int len;
 	bool ampersand = false;
 	bool sechead = false;
 	bool title = false;  

@@ -36,8 +36,6 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	SWBuf tmp;
 	SWBuf value;
 	
-	bool newtext = false;
-	
 	bool suspendTextPassThru = false;
 	bool handled = false;
 	bool newWord = false;
@@ -45,15 +43,13 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	bool lastspace = false;
 	
 	const char *wordStart = text.c_str();
-	const char *wordEnd;
+	const char *wordEnd = NULL;
 	
-	const char *textStart;
-	const char *textEnd;
+	const char *textStart = NULL;
+	const char *textEnd = NULL;
 	
 	SWBuf textNode = "";
 
-	char wordstr[5];
-	
 	SWBuf buf;
 		
 	text = "";

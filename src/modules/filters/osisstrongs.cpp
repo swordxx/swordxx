@@ -38,8 +38,6 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	bool lastspace = false;
 	int wordNum = 1;
 	char wordstr[5];
-	char *valto;
-	char *ch;
 	const char *wordStart = 0;
 
 	const SWBuf orig = text;
@@ -72,9 +70,8 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					SWBuf lemmaClass = "";
 
 					const char *attrib;
-					const char *val;
 					sprintf(wordstr, "%03d", wordNum);
-					if (attrib = wtag.getAttribute("morph")) {
+					if ((attrib = wtag.getAttribute("morph"))) {
 						int count = wtag.getAttributePartCount("morph", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
@@ -106,7 +103,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						} while (++i < count);
 					}
 
-					if (attrib = wtag.getAttribute("lemma")) {
+					if ((attrib = wtag.getAttribute("lemma"))) {
 						int count = wtag.getAttributePartCount("lemma", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
@@ -147,7 +144,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						module->getEntryAttributes()["Word"][wordstr]["PartCount"].setFormatted("%d", count);
 					}
 
-					if (attrib = wtag.getAttribute("src")) {
+					if ((attrib = wtag.getAttribute("src"))) {
 						int count = wtag.getAttributePartCount("src", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {

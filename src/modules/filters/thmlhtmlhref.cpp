@@ -157,7 +157,6 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 
 
 bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
-	const char *tok;
 	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
 		MyUserData *u = (MyUserData *)userData;		
 
@@ -200,7 +199,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					VerseKey *vkey;
+					VerseKey *vkey = NULL;
 					// see if we have a VerseKey * or descendant
 					SWTRY {
 						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
@@ -245,7 +244,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				}
 				else {
 					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
-					VerseKey *vkey;
+					VerseKey *vkey = NULL;
 					// see if we have a VerseKey * or descendant
 					SWTRY {
 						vkey = SWDYNAMIC_CAST(VerseKey, u->key);

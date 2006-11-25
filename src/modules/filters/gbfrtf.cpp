@@ -23,14 +23,12 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	char *num;
 	int tokpos = 0;
 	bool intoken = false;
-	int len;
 	const char *tok;
 	SWBuf strongnum;
 	SWBuf strongtense;
 	bool hideText = false;
 	int wordLen = 0;
 	int wordCount = 0;
-	int i;
 
 	const char *from;
 	SWBuf orig = text;

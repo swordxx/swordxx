@@ -54,7 +54,7 @@ TEIRTF::TEIRTF() {
 bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
-		MyUserData *u = (MyUserData *)userData;
+		//MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 
 		// <p> paragraph tag

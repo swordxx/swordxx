@@ -29,7 +29,7 @@ char GreekLexAttribs::processText(SWBuf &text, const SWKey *key, const SWModule 
 		string freq;
 		char val[128], *valto;
 		char wordstr[7];
-		const char *currentPhrase = 0, *ch = 0;
+		const char *currentPhrase = 0;
 		const char *currentPhraseEnd = 0;
 		int number = 0;
 
