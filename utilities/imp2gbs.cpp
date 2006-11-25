@@ -99,7 +99,7 @@ void parseParams(int argc, char **argv) {
 	}
 	if (!outPath.size()) {
 		outPath = inFile;
-		int i;
+		unsigned int i;
 		for (i = 0; (i < outPath.size() && outPath[i] != '.'); i++);
 		outPath.size(i);
 	}
