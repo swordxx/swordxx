@@ -140,7 +140,6 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 	unsigned long ulCompOffset=0;	       // compressed buffer start
 	unsigned long ulCompSize=0;	             // buffer size compressed
 	unsigned long ulUnCompSize=0;	          // buffer size uncompressed
-	char *pcCompText=NULL;					 // compressed text
 
 	*start = *size = 0;
 	//printf ("Finding offset %ld\n", idxoff);

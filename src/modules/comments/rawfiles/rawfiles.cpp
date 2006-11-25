@@ -57,7 +57,6 @@ SWBuf &RawFiles::getRawEntryBuf() {
 	FileDesc *datafile;
 	long  start = 0;
 	unsigned short size = 0;
-	char *tmpbuf;
 	VerseKey *key = 0;
 
 	SWTRY {
@@ -155,7 +154,6 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 
 	long  start;
 	unsigned short size;
-	char *tmpbuf;
 	const VerseKey *key = 0;
 
 	SWTRY {

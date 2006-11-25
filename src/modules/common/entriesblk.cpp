@@ -142,9 +142,7 @@ void EntriesBlock::removeEntry(int entryIndex) {
 	unsigned long dataSize;
 	getRawData(&dataSize);
 	getMetaEntry(entryIndex, &offset, &size);
-	unsigned long len = size - 1;
 	int count = getCount();
-	unsigned long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
 
 	if (!offset)	// already deleted
 		return;

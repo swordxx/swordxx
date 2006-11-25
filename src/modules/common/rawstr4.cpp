@@ -123,7 +123,6 @@ void RawStr4::getIDXBufDat(long ioffset, char **buf) {
 
 void RawStr4::getIDXBuf(long ioffset, char **buf)
 {
-	char *trybuf, *targetbuf;
 	long offset;
 	
 	if (idxfd > 0) {
@@ -160,7 +159,7 @@ void RawStr4::getIDXBuf(long ioffset, char **buf)
 
 signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
 {
-	char *trybuf, *targetbuf, *key = 0, quitflag = 0;
+	char *trybuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 
@@ -372,7 +371,7 @@ void RawStr4::readText(long istart, unsigned long *isize, char **idxbuf, SWBuf &
 	while (true);	// while we're resolving links
 
 	if (idxbuflocal) {
-		int localsize = strlen(idxbuflocal);
+		unsigned int localsize = strlen(idxbuflocal);
 		localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
 		strncpy(*idxbuf, idxbuflocal, localsize);
 		(*idxbuf)[localsize] = 0;

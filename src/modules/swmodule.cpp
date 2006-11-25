@@ -680,7 +680,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 		// entry attributes
 		else if (searchType == -3) {
-			int i;
 			RenderText();	// force parse
 			AttributeTypeList &entryAttribs = getEntryAttributes();
 			AttributeTypeList::iterator i1Start, i1End;

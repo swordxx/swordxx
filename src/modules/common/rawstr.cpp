@@ -124,7 +124,6 @@ void RawStr::getIDXBufDat(long ioffset, char **buf)
 
 void RawStr::getIDXBuf(long ioffset, char **buf)
 {
-	char *trybuf, *targetbuf;
 	long offset;
 	
 	if (idxfd > 0) {
@@ -152,7 +151,7 @@ void RawStr::getIDXBuf(long ioffset, char **buf)
 
 signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
 {
-	char *trybuf, *targetbuf, *key = 0, quitflag = 0;
+	char *trybuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 

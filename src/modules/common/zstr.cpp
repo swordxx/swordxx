@@ -619,7 +619,7 @@ void zStr::flushCache() {
 			rawZFilter(buf, 1); // 1 = encipher
 
 			long zdxSize = zdxfd->seek(0, SEEK_END);
-			long zdtSize = zdtfd->seek(0, SEEK_END);
+			unsigned long zdtSize = zdtfd->seek(0, SEEK_END);
 
 			if ((cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {	// New Block
 				start = zdtSize;

@@ -82,7 +82,7 @@ long SWText::Index(long iindex) {
 
 
 VerseKey &SWText::getVerseKey() const {
-	VerseKey *key;
+	VerseKey *key = NULL;
 	// see if we have a VerseKey * or decendant
 	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);
