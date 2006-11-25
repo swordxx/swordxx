@@ -12,7 +12,7 @@
 #include <utf8greekaccents.h>
 #include <stringmgr.h>
 
-//#ifdef _ICU_
+#ifdef _ICU_
 
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
@@ -24,7 +24,7 @@
 
 #include <unicode/locid.h>
 
-//#endif
+#endif
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -120,7 +120,7 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 		StringMgr::getSystemStringMgr()->upperUTF8(keyBuffer.getRawData(), size-2);
 	}
 
-//#ifdef _ICU_
+#ifdef _ICU_
 //	if (lexLevels) {
 	if (lexLevels && !keyBuffer.startsWith("/Intro")) {
 		unsigned size = (keyBuffer.size()+(lexLevels*2));
@@ -177,7 +177,7 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 		
 		delete [] ubuffer;
 	}
-//#endif
+#endif
 
 	std::cout << keyBuffer << std::endl;
 
