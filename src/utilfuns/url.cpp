@@ -93,7 +93,6 @@ void URL::parse () {
 	 
 	 //1. Init
 	 const char* urlPtr = url.c_str();
-	 int pos = 0;
 	 	 
 	 protocol = "";
 	 hostname = "";
