@@ -41,7 +41,7 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 		TreeNode();
 		~TreeNode();
 		void clear();
-		__u32 offset;
+		__s32 offset;
 		__s32 parent;
 		__s32 next;
 		__s32 firstChild;

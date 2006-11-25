@@ -159,7 +159,7 @@ bool TreeKeyIdx::nextSibling() {
 
 bool TreeKeyIdx::previousSibling() {
 	TreeNode iterator;
-	__u32 target = currentNode.offset;
+	__s32 target = currentNode.offset;
 	if (currentNode.parent > -1) {
 		getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
 		getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
