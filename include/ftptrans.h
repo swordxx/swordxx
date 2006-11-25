@@ -19,6 +19,7 @@ SWORD_NAMESPACE_START
 */
 class SWDLLEXPORT StatusReporter {
 public:
+	virtual ~StatusReporter() {};
 	/** Messages before stages of a batch download */
 	virtual void preStatus(long totalBytes, long completedBytes, const char *message);
 	
