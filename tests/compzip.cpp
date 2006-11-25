@@ -83,7 +83,7 @@ void FileCompress::Decode()
 }
 
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	int decomp = 0;
 	SWCompress *fobj;
@@ -107,4 +107,5 @@ main(int argc, char **argv)
 	else fobj->Encode();
 
 	delete fobj;
+	return 0;
 }
