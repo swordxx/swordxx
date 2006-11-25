@@ -108,7 +108,7 @@ void SWBuf::append(const char *str, long max) {
 */
 void SWBuf::setSize(unsigned long len) {
 	assureSize(len+1);
-	if ((end - buf) < len)
+	if ((unsigned)(end - buf) < len)
 		memset(end, fillByte, len - (end-buf));
 	end = buf + len;
 	*end = 0;
