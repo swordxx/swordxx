@@ -94,7 +94,6 @@ void SearchThread::search()  {
 int main(int argc, char **argv) {
 	SWMgr manager;
 	ModMap::iterator it;
-	int oldProgress = 0; 
 
 	SearchThread* searchThread = new SearchThread();
 
