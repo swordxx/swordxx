@@ -148,14 +148,14 @@ AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
 if test x$enable_debug = xyes; then
   GCJFLAGS="-g -O0"
   if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0"
+    AM_CFLAGS="-g3 -O0 -Wall"
   else
-    AM_CFLAGS="-O0"
+    AM_CFLAGS="-O0 -Wall"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
-    AM_CXXFLAGS="-g3 -O0"
+    AM_CXXFLAGS="-g3 -O0 -Wall"
   else
-    AM_CXXFLAGS="-O0"
+    AM_CXXFLAGS="-O0 -Wall"
   fi
 else
   AM_CFLAGS="-O2"
