@@ -1,7 +1,9 @@
 %include "std_map.i"
+%include "std_vector.i"
 
 %template() std::pair<sword::SWBuf, sword::SWModule*>;
 %template(ModuleMap) std::map<sword::SWBuf, sword::SWModule*>;
+%template(StringVector) std::vector < sword::SWBuf >;
 
 %{
 #include <swmgr.h>
@@ -14,6 +16,16 @@
 %include "swmgr.h"
 
 %extend sword::SWMgr {
+    std::vector < sword::SWBuf > getGlobalOptionsVector() {
+        std::list<sword::SWBuf> l(self->getGlobalOptions());
+        return std::vector< sword::SWBuf >(l.begin(), l.end());
+    }
+    
+    std::vector < sword::SWBuf > getGlobalOptionValuesVector(const char *option) {
+        std::list<sword::SWBuf> l(self->getGlobalOptionValues(option));
+        return std::vector< sword::SWBuf >(l.begin(), l.end());
+    }
+    
         std::map<sword::SWBuf, sword::SWModule*> &getModules() {
           return self->Modules;
         }

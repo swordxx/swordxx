@@ -49,6 +49,7 @@
     <Compile Include="RawLD4.cs" />
     <Compile Include="RawText.cs" />
     <Compile Include="sbook.cs" />
+    <Compile Include="StringVector.cs" />
     <Compile Include="SWBuf.cs" />
     <Compile Include="SWClass.cs" />
     <Compile Include="SWCom.cs" />
