@@ -399,16 +399,16 @@ public:
 	 * @param path path where to create the new module
 	 * @return error
 	 */
-	static signed char createModule(const char *) { return -1; }
+	static signed char createModule(const char *path);
 
 	/** Modify the current module entry text - only if module isWritable()
 	 */
-	virtual void setEntry(const char *, long = -1) { }
+	virtual void setEntry(const char *inbuf, long len= -1);
 
 	/** Link the current module entry to another module entry - only if
 	 *	module isWritable()
 	 */
-	virtual void linkEntry(const SWKey *) { }
+	virtual void linkEntry(const SWKey *sourceKey);
 
 	/** Delete current module entry - only if module isWritable()
 	 */

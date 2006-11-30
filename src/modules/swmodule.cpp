@@ -1282,5 +1282,14 @@ void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
 	}
 }
 
+signed char SWModule::createModule(const char*) {
+	return -1;
+}
+
+void SWModule::setEntry(const char*, long) {
+}
+
+void SWModule::linkEntry(const SWKey*) {
+}
 
 SWORD_NAMESPACE_END
