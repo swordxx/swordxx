@@ -72,10 +72,10 @@ int main(int argc, char **argv)
 	 *			>=0 - regex
 	 *			-1  - phrase
 	 *			-2  - multiword
-	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
+	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
 	 *			-4  - Lucene
    */
-	listkey = target->Search(searchTerm.c_str(), -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(searchTerm.c_str(), -3, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	listkey.sort();
 	while (!listkey.Error()) {

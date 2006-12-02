@@ -2,9 +2,10 @@ AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
 LDADD = $(top_builddir)/lib/libsword.la
 
-noinst_PROGRAMS = lookup search threaded_search
+noinst_PROGRAMS = lookup search threaded_search listoptions
 
 lookup_SOURCES = lookup.cpp
 search_SOURCES = search.cpp
+listoptions_SOURCES = listoptions.cpp
 threaded_search_SOURCES = threaded_search.cpp
 threaded_search_LDADD = $(LDADD) -lpthread

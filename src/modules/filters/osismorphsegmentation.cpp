@@ -8,6 +8,8 @@
 #include <osismorphsegmentation.h>
 #include <stdlib.h>
 #include <utilxml.h>
+#include <swmodule.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -17,7 +19,7 @@ const char oTip[] = "Toggles Morpheme Segmentation On and Off, when present";
 const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
-OSISMorphSegmentation::OSISMorphSegmentation() : sword::SWOptionFilter(oName, oTip, &oValues) {
+OSISMorphSegmentation::OSISMorphSegmentation() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");
 }
 
@@ -25,7 +27,7 @@ OSISMorphSegmentation::OSISMorphSegmentation() : sword::SWOptionFilter(oName, oT
 OSISMorphSegmentation::~OSISMorphSegmentation() {}
 
 
-char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, const SWModule * /*module*/) {
+char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, const SWModule *module) {
 	SWBuf token;
 	bool intoken    = false;
 	bool hide       = false;
@@ -34,6 +36,10 @@ char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, cons
 	const char *from = orig.c_str();
 
 	XMLTag tag;
+	SWBuf tagText = "";
+	unsigned int morphemeNum = 0;
+	bool inMorpheme = false;
+	SWBuf buf;
 
 	for (text = ""; *from; ++from) {
 		if (*from == '<') {
@@ -50,8 +56,15 @@ char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, cons
 
 				if (!tag.isEndTag() && tag.getAttribute("type") && !strcmp("morph", tag.getAttribute("type"))) {  //<seg type="morph"> start tag
 					hide = !option; //only hide if option is Off
+					tagText = "";
+					inMorpheme = true;
 				}
 
+				if (tag.isEndTag()) {
+						buf.setFormatted("%.3d", morphemeNum++);
+						module->getEntryAttributes()["Morpheme"][buf]["body"] = tagText;
+						inMorpheme = false;
+				}
 				if (hide) { //hides start and end tags as long as hide is set
 
 					if (tag.isEndTag()) { //</seg>
@@ -63,10 +76,14 @@ char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, cons
 			} //end of seg tag handling
 
 			text.append('<');
-
 			text.append(token);
-
 			text.append('>');
+
+			if (inMorpheme) {
+				tagText.append('<');
+				tagText.append(token);
+				tagText.append('>');
+			}
 
 			hide = false;
 
@@ -78,9 +95,11 @@ char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, cons
 		}
 		else { //copy text which is not inside of a tag
 			text.append(*from);
+			if (inMorpheme) {
+				tagText.append(*from);
+			}
 		}
 	}
-
 	return 0;
 }
 

@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+2-Dec-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Added example: examples/cmdline/listoptions.cpp
+	Added entryAttributes processing for morph segs
+
 23-Nov-2006	Daniel Glassey <dglassey@crosswire.org>
 	Use acx_clucene.m4 from CLucene contribs to detect CLucene
 	apply Debian patch for flatapi for 64-bit portability
