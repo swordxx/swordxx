@@ -10,8 +10,13 @@ const int EntriesBlock::METAENTRYSIZE = 8;
 	// offset(4); size(4);
 
 EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
-	block = (char *)calloc(1, size);
-	memcpy(block, iBlock, size);
+	if (size) {
+		block = (char *)calloc(1, size);
+		memcpy(block, iBlock, size);
+	}
+	else {
+		block = (char *)calloc(1, sizeof(__u32));
+	}
 }
 
 
