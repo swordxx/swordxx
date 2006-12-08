@@ -79,7 +79,7 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 	if (len)
 	{
 		//printf("Doing compress\n");
-		if (compress((Bytef*)zbuf, &zlen, (const Bytef*)buf, len)!=Z_OK)
+		if (compress((Bytef*)zbuf, &zlen, (const Bytef*)buf, len) != Z_OK)
 		{
 			printf("ERROR in compression\n");
 		}
@@ -89,7 +89,7 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 	}
 	else
 	{
-		fprintf(stderr, "No buffer to compress\n");
+		fprintf(stderr, "ERROR: no buffer to compress\n");
 	}
 	delete [] zbuf;
 	free (buf);
@@ -144,15 +144,18 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 		unsigned long blen = zlen*20;	// trust compression is less than 1000%
 		char *buf = new char[blen]; 
 		//printf("Doing decompress {%s}\n", zbuf);
-		if (uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen) != Z_OK) {
-			fprintf(stderr, "no room in outbuffer to during decompression. see zipcomp.cpp\n");
+		slen = 0;
+		switch (uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen)){
+			case Z_OK: SendChars(buf, blen); slen = blen; break;
+			case Z_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
+			case Z_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
+			case Z_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
+			default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
 		}
-		SendChars(buf, blen);
 		delete [] buf;
-		slen = blen;
 	}
 	else {
-		fprintf(stderr, "No buffer to decompress!\n");
+		fprintf(stderr, "ERROR: no buffer to decompress!\n");
 	}
 	//printf("Finished decoding\n");
 	free (zbuf);
