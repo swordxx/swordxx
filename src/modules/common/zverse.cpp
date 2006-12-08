@@ -256,7 +256,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 
 void zVerse::zReadText(char testmt, long start, unsigned short size, SWBuf &inBuf) {
 	inBuf = "";
-	if ( (size > 0) && cacheBuf && ((start+size) <= strlen(cacheBuf)) ){ //TODO: optimize this, remove strlen
+	if ( (size > 0) && cacheBuf && ((unsigned)(start+size) <= strlen(cacheBuf)) ){ //TODO: optimize this, remove strlen
 		inBuf.setFillByte(0);
 		inBuf.setSize(size+1);
 		strncpy(inBuf.getRawData(), &(cacheBuf[start]), size);
