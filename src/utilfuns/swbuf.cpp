@@ -98,7 +98,7 @@ void SWBuf::append(const char *str, long max) {
 	if (max < 0)
 		max = strlen(str);
 	assureMore(max+1);
-	for (;((*str)&&(max));max--)
+	for (;((max)&&(*str));max--)
 		*end++ = *str++;
 	*end = 0;
 }
