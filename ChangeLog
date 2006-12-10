@@ -1,6 +1,9 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+10-Dec-2006	Troy A. Griffitts <scribe@crosswire.org>
+	Added example: examples/cmdline/verserangeparse.cpp
+
 2-Dec-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added example: examples/cmdline/listoptions.cpp
 	Added entryAttributes processing for morph segs
