@@ -31,6 +31,7 @@ class OSISHTMLHREF::QuoteStack : public std::stack<const char*> {
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	inBold = false;
+	inXRefNote    = false;
 	suspendLevel = 0;
 	quoteStack = new QuoteStack();
 	wordsOfChristStart = "<font color=\"red\"> ";
@@ -38,6 +39,7 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 		version = module->Name();
+		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
 	}
 	else {
 		osisQToTick = true;	// default
@@ -203,6 +205,8 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey = NULL;
+						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						u->inXRefNote = (ch == 'x');
 						// see if we have a VerseKey * or descendant
 						SWTRY {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
@@ -210,7 +214,6 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup>*%c</sup></small></a> ", 
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
@@ -219,7 +222,6 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 								ch);
 						}
 						else {
-							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup>*%c</sup></small></a> ", 
 							ch, 
 							URL::encode(footnoteNumber.c_str()).c_str(), 
@@ -233,6 +235,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = (--u->suspendLevel);
+				u->inXRefNote = false;
 			}
 		}
 
@@ -252,12 +255,46 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <reference> tag
-		else if (!strcmp(tag.getName(), "reference")) {			
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<a href=\"\">", buf, u);
+		else if (!strcmp(tag.getName(), "reference")) {	
+			if (!u->inXRefNote) {	// only show these if we're not in an xref note				
+				if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+					u->suspendTextPassThru = true;
+				}
+				if (tag.isEndTag()) {
+					if (!u->BiblicalText) {
+						SWBuf refList = tag.getAttribute("passage");
+						if (!refList.length())
+							refList = u->lastTextNode;
+						SWBuf version = tag.getAttribute("version");
+						
+						buf.appendFormatted("&nbsp;<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
+							(refList.length()) ? URL::encode(refList.c_str()).c_str() : "", 
+							(version.length()) ? URL::encode(version.c_str()).c_str() : "");
+						buf += u->lastTextNode.c_str();
+						buf += "</a>&nbsp;";
+					}
+					else {
+						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						VerseKey *vkey = NULL;
+						// see if we have a VerseKey * or descendant
+						SWTRY {
+							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+						}
+						SWCATCH ( ... ) {}
+						if (vkey) {
+							// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+							//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
+							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup>*x</sup></small></a> ",  
+								URL::encode(footnoteNumber.c_str()).c_str(), 
+								URL::encode(u->version.c_str()).c_str(),
+								URL::encode(vkey->getText()).c_str());
+						
+						}
+					}
+				}
 			}
-			else if (tag.isEndTag()) {
-				outText("</a>", buf, u);
+			if (tag.isEndTag()) {
+				u->suspendTextPassThru = false;
 			}
 		}
 
