@@ -36,6 +36,8 @@ protected:
 	public:
 		bool osisQToTick;
 		bool inBold;
+		bool inXRefNote;
+		bool BiblicalText;
 		int suspendLevel;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
