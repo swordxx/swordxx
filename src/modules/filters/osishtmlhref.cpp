@@ -223,11 +223,11 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						}
 						else {
 							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup>*%c</sup></small></a> ", 
-							ch, 
-							URL::encode(footnoteNumber.c_str()).c_str(), 
-							URL::encode(u->version.c_str()).c_str(), 
-							URL::encode(u->key->getText()).c_str(),  
-							ch);
+								ch, 
+								URL::encode(footnoteNumber.c_str()).c_str(), 
+								URL::encode(u->version.c_str()).c_str(), 
+								URL::encode(u->key->getText()).c_str(),  
+								ch);
 						}
 					}
 				}
@@ -291,11 +291,12 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						
 						}
 					}
+					u->suspendTextPassThru = false;
 				}
-			}
+			}/*
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = false;
-			}
+			}*/
 		}
 
 		// <l> poetry, etc
