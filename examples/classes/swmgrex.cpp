@@ -8,12 +8,18 @@
  *
  * SWMgr makes its modules available as an STL Map.
  * The Map definition is typedef'ed as ModMap
- * ModMap consists of: FIRST : string moduleName
+ * ModMap consists of: FIRST : SWBuf moduleName
  *                     SECOND: SWModule *module
  *
  */
 
+#include <iostream>
+
 #include <swmgr.h>
+#include <swmodule.h>
+
+using namespace sword;
+using namespace std;
 
 main() {
 	SWMgr manager;		// create a default manager that looks in the current directory for mods.conf
@@ -25,7 +31,7 @@ main() {
 // Loop thru all installed modules and print out information
 
 	for (modIterator = manager.Modules.begin(); modIterator != manager.Modules.end(); modIterator++) {
-		string   modName  = (*modIterator).first;  // mod.conf section name (stored in module->Name())
+		SWBuf   modName  = (*modIterator).first;  // mod.conf section name (stored in module->Name())
 		SWModule *module  = (*modIterator).second;
 
 		cout << modName << "(" << module->Name() << ") | " << module->Type() << "\n";

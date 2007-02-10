@@ -6,7 +6,14 @@
  *
  */
 
+#include <iostream>
+
 #include <swmgr.h>
+#include <swmodule.h>
+
+
+using namespace sword;
+using namespace std;
 
 int main(int argc, char **argv) {
 
@@ -36,7 +43,7 @@ int main(int argc, char **argv) {
 		cout << "\n\nEnter new cipher key: ";
 		cin >> key;
 		cout << "\nSetting key to: " << key;
-		manager.setCipherKey(argv[1], (unsigned char *)key.c_str());
+		manager.setCipherKey(argv[1], key.c_str());
 	}
 
 

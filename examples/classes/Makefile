@@ -1,7 +1,10 @@
-root := ../..
-subdirs := 
-pre-targets := 
-bin := yes
-targets := swmgrex ciphercng
-include ${root}/Makefile.cfg
+TARGETS= ciphercng swmgrex
+all: $(TARGETS)
+
+clean:
+	rm $(TARGETS)
+
+.cpp:
+	g++ `pkg-config --cflags sword` $< -o $@ `pkg-config --libs sword`
+
 
