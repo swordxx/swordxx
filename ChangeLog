@@ -1,6 +1,10 @@
 API ChangeLog	(see the ChangeLog in each 'apps' directory for
 		app specific changes)
 
+03-Mar-2007 	Joachim Ansorg <jansorg@crosswire.org>
+	Added osis morph segments filter include file to the dist
+	Fixed wrong stricmp in SWObject
+
 10-Dec-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Added example: examples/cmdline/verserangeparse.cpp
 

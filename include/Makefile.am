@@ -58,6 +58,7 @@ pkginclude_HEADERS += $(swincludedir)/osislemma.h
 pkginclude_HEADERS += $(swincludedir)/osisredletterwords.h   
 pkginclude_HEADERS += $(swincludedir)/osisscripref.h   
 pkginclude_HEADERS += $(swincludedir)/osiswordjs.h   
+pkginclude_HEADERS += $(swincludedir)/osisvariants.h   
 
 pkginclude_HEADERS += $(swincludedir)/papyriplain.h
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h

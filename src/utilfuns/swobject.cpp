@@ -28,7 +28,7 @@ SWORD_NAMESPACE_START
 
 bool SWClass::isAssignableFrom(const char *className) const {
 	for (int i = 0; descends[i]; i++) {
-		if (!stricmp(descends[i], className))
+		if (!sword::stricmp(descends[i], className))
 			return true;
 	}
 	return false;
