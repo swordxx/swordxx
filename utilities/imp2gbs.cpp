@@ -120,6 +120,8 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 		StringMgr::getSystemStringMgr()->upperUTF8(keyBuffer.getRawData(), size-2);
 	}
 
+// Added for Hesychius, but this stuff should be pushed back into new StringMgr
+// functionality
 #ifdef _ICU_
 //	if (lexLevels) {
 	if (lexLevels && !keyBuffer.startsWith("/Intro")) {

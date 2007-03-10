@@ -5,7 +5,7 @@
 			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
 			<Option Name="ProjectType">CppStaticLibrary</Option>
 			<Option Name="Version">1.0</Option>
-			<Option Name="GUID">{CF5FA57E-C83A-4D4A-A54B-04C6218E8312}</Option>
+			<Option Name="GUID">{42E205EF-ACE1-43B1-B144-7CC5BFF5A26A}</Option>
 		</Option>
 	</PersonalityInfo>
 	<CPlusPlusBuilder.Personality>
@@ -80,15 +80,15 @@
         <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
         <optionset name="all_configurations">
           <property category="node" name="displayname" value="All Configurations"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="CURLAVAILABLE"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.2" value="UNICODE"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.3" value="_ICU_"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.4" value="_ICUSWORD_"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.5" value="USBINARY"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.6" value="U_HAVE_PLACEMENT_NEW=0"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.7" value="USELUCENE"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.8" value="_WIN32"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.9" value="_CL_DISABLE_MULTITHREADING"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="UNICODE"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.2" value="_ICU_"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.3" value="_ICUSWORD_"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.4" value="USBINARY"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.5" value="U_HAVE_PLACEMENT_NEW=0"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.6" value="USELUCENE"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.7" value="_WIN32"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.8" value="_CL_DISABLE_MULTITHREADING"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.9" value="CURLAVAILABLE"/>
           <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\src\modules\tests"/>
@@ -544,6 +544,8 @@
         <FILE FILENAME="..\..\src\utilfuns\ftpparse.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ftpparse" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\osismorphsegmentation.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="osismorphsegmentation" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\keys\versetreekey.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="versetreekey" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\modules\filters\teiplain.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="teiplain" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\modules\filters\teirtf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="teirtf" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -578,7 +580,7 @@
           <HistoryLists_hlIncludePath Name="Item0">..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include</HistoryLists_hlIncludePath>
           <HistoryLists_hlIncludePath Name="Item1">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include</HistoryLists_hlIncludePath>
           <HistoryLists_hlIncludePath Name="Item2">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src</HistoryLists_hlIncludePath>
-          <HistoryLists_hlIncludePath Name="Item3">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;D:\src\biblecs\clucene\src</HistoryLists_hlIncludePath>
+          <HistoryLists_hlIncludePath Name="Item3">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src</HistoryLists_hlIncludePath>
           <HistoryLists_hlIncludePath Name="Item4">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n</HistoryLists_hlIncludePath>
           <HistoryLists_hlIncludePath Name="Item5">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl</HistoryLists_hlIncludePath>
           <HistoryLists_hlIncludePath Name="Item6">..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\include;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;$(BCB)\include;$(BCB)\include\vcl</HistoryLists_hlIncludePath>
@@ -611,28 +613,29 @@
           <HistoryLists_hlDebugSourcePath Name="Item0">$(BCB)\source\vcl</HistoryLists_hlDebugSourcePath>
         </HistoryLists_hlDebugSourcePath>
         <HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Count">21</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Count">22</HistoryLists_hlConditionals>
           <HistoryLists_hlConditionals Name="Item0">UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item1">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item2">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;UNICODE</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item3">_UCS2;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item4">_ASCII;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item5">__ASCII;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item6">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item7">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item8">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item9">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item10">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item11">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item12">_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item13">_ICU_;_ICUSWORD_;USBINARY;_DEBUG</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item14">_ICU_;_ICUSWORD_;USBINARY</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item15">_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE;_DEBUG</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item16">_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item17">;USBINARY;_DEBUG</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item18">_ICU_;_ICUSWORD_</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item19">_ICU_;_ICUSWORD_;_DEBUG</HistoryLists_hlConditionals>
-          <HistoryLists_hlConditionals Name="Item20">_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item1">UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item2">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item3">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;UNICODE</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item4">_UCS2;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item5">_ASCII;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item6">__ASCII;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item7">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item8">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item9">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE;LUCENE_DISABLE_MULTITHREADING;_WIN32;HAVE_DIRENT</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item10">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG;USELUCENE</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item11">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item12">_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item13">_ICU_;_ICUSWORD_;USBINARY;_DEBUG;U_HAVE_PLACEMENT_NEW=0</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item14">_ICU_;_ICUSWORD_;USBINARY;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item15">_ICU_;_ICUSWORD_;USBINARY</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item16">_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item17">_ICU_;_ICUSWORD_;USBINARY;CURLAVAILABLE</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item18">;USBINARY;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item19">_ICU_;_ICUSWORD_</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item20">_ICU_;_ICUSWORD_;_DEBUG</HistoryLists_hlConditionals>
+          <HistoryLists_hlConditionals Name="Item21">_DEBUG</HistoryLists_hlConditionals>
         </HistoryLists_hlConditionals>
         <HistoryLists_hlFinalOutputDir>
           <HistoryLists_hlFinalOutputDir Name="Count">3</HistoryLists_hlFinalOutputDir>
