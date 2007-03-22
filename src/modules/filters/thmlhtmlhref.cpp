@@ -209,7 +209,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					}
 					else {
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup>*%c</sup></small></a> ", 
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup>*%c</sup></small></a>", 
 							ch, 
 							URL::encode(footnoteNumber.c_str()).c_str(), 
 							URL::encode(u->version.c_str()).c_str(), 
@@ -296,8 +296,23 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			if (!src)		// assert we have a src attribute
 				return false;
 
-			buf += '<';
-			for (const char *c = token; *c; c++) {
+			const char *c, *d;
+			if (((c = strchr(src+3, '"')) == NULL) ||
+			    ((d = strchr( ++c , '"')) == NULL))	// identify endpoints.
+				return false;			// abandon hope.
+
+			SWBuf imagename = "file:";
+			if (*c == '/')				// as below, inside for loop.
+				imagename += userData->module->getConfigEntry("AbsoluteDataPath");
+			while (c != d)				// move bits into the name.
+			    imagename += *(c++);
+
+			// images become clickable, if the UI supports showImage.
+			buf.appendFormatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><",
+					    URL::encode(imagename.c_str()).c_str(),
+					    URL::encode(u->version.c_str()).c_str());
+
+			for (c = token; *c; c++) {
 				if (c == src) {
 					for (;((*c) && (*c != '"')); c++)
 						buf += *c;
@@ -315,7 +330,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				}
 				buf += *c;
 			}
-			buf += '>';
+			buf += "></a>";
 		}
 		else {
 			buf += '<';

@@ -511,10 +511,19 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 			filepath += src;
 
+			// images become clickable, if the UI supports showImage.
+			outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
+			outText(URL::encode(filepath.c_str()).c_str(), buf, u);
+			outText("&module=", buf, u);
+			outText(URL::encode(u->version.c_str()).c_str(), buf, u);
+			outText("\">", buf, u);
+
 // we do this because BibleCS looks for this EXACT format for an image tag
 			outText("<image src=\"", buf, u);
 			outText(filepath, buf, u);
 			outText("\" />", buf, u);
+
+			outText("</a>", buf, u);
 		}
 
 		else {
