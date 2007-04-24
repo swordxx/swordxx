@@ -3,12 +3,22 @@
 #include <stdlib.h>
 #include <swmgr.h>
 #include <swmodule.h>
+#include <markupfiltmgr.h>
 
+using sword::SWMgr;
+using sword::MarkupFilterMgr;
+using sword::SWModule;
+using sword::FMT_WEBIF;
+using sword::ModMap;
+using sword::AttributeTypeList;
+using sword::AttributeList;
+using sword::AttributeValue;
 
 int main(int argc, char **argv)
 {
-	sword::SWMgr manager(0, 0, true, 0, true);
-	sword::SWModule *target;
+	
+	SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
+	SWModule *target;
 
 	if (argc != 3) {
 		fprintf(stderr, "\nusage: %s <modname> <\"lookup key\">\n"
@@ -20,7 +30,7 @@ int main(int argc, char **argv)
 	target = manager.getModule(argv[1]);
 	if (!target) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
-		sword::ModMap::iterator it;
+		ModMap::iterator it;
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
 		}
@@ -34,14 +44,18 @@ int main(int argc, char **argv)
 
 	target->RenderText();		// force an entry lookup to resolve key to something in the index
 
+	std::cout << "==Raw=Entry===============\n";
 	std::cout << target->getKeyText() << ":\n";
 	std::cout << target->getRawEntry();
 	std::cout << "\n";
+	std::cout << "==Render=Entry============\n";
+	std::cout << target->RenderText();
+	std::cout << "\n";
 	std::cout << "==========================\n";
 	std::cout << "Entry Attributes:\n\n";
-	sword::AttributeTypeList::iterator i1;
-	sword::AttributeList::iterator i2;
-	sword::AttributeValue::iterator i3;
+	AttributeTypeList::iterator i1;
+	AttributeList::iterator i2;
+	AttributeValue::iterator i3;
 	for (i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); i1++) {
 		std::cout << "[ " << i1->first << " ]\n";
 		for (i2 = i1->second.begin(); i2 != i1->second.end(); i2++) {
