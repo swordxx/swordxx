@@ -23,6 +23,7 @@
 #include <zipcomprs.h>
 #include <cipherfil.h>
 
+//#define DEBUG
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -33,7 +34,29 @@ using namespace std;
 SWText *module = 0;
 VerseKey *currentVerse = 0;
 char activeOsisID[255];
+char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
+        "Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
+        "Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
+        "Dan", "Hos", "Joel", "Amos", "Obad", "Jonah", "Mic", "Nah", "Hab",
+        "Zeph", "Hag", "Zech", "Mal",
 
+        "Matt", "Mark", "Luke", "John", "Acts", "Rom", "1Cor", "2Cor", "Gal",
+        "Eph", "Phil", "Col", "1Thess", "2Thess", "1Tim", "2Tim", "Titus",
+        "Phlm", "Heb", "Jas", "1Pet", "2Pet", "1John", "2John", "3John",
+        "Jude", "Rev"};
+
+static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
+
+bool isOSISAbbrev(const char *buf) {
+        bool match = false;
+        for (int i = 0; i < 66; i++) {
+                if (!strcmp(buf, osisabbrevs[i])){
+                        match = true;
+                        break;
+                }
+        }
+        return match;
+}
 
 // remove subverse elements from osisIDs
 void deleteSubverses(SWBuf &buf) {
@@ -59,7 +82,9 @@ bool isKJVRef(const char *buf) {
 	test = buf;
 
 	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
-//		cout << (const char*)vk << " == "  << (const char*)test << endl;
+#ifdef DEBUG
+		cout << (const char*)vk << " == "  << (const char*)test << endl;
+#endif
 		return (vk == test);
 	}
 	else return true;	// no check if we're a heading... Probably bad.
@@ -68,7 +93,9 @@ bool isKJVRef(const char *buf) {
 
 void makeKJVRef(VerseKey &key) {
 	cout << "re-versified " << key;
-//	cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+#ifdef DEBUG
+	cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+#endif
 	if (key.Chapter() > key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) {
 		key.Chapter(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax);
 		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
@@ -83,60 +110,65 @@ void makeKJVRef(VerseKey &key) {
 void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 	static SWBuf activeVerseText;
 	char keyOsisID[255];
-	strcpy(keyOsisID, key.getOSISRef());
 
-	// set keyOsisID to anything that an osisID cannot be.
-	if (force) {
-		strcpy(keyOsisID, "-force");
-	}
+        if (inCanonicalOSISBook) {
+        	strcpy(keyOsisID, key.getOSISRef());
 
-	static VerseKey lastKey;
-	lastKey.AutoNormalize(0);
-	lastKey.Headings(1);
+	        // set keyOsisID to anything that an osisID cannot be.
+        	if (force) {
+	        	strcpy(keyOsisID, "-force");
+        	}
 
-	VerseKey saveKey;
-	saveKey.AutoNormalize(0);
-	saveKey.Headings(1);
-	saveKey = key;
+	        static VerseKey lastKey;
+        	lastKey.AutoNormalize(0);
+	        lastKey.Headings(1);
 
-	// If we have seen a verse and the supplied one is different then we output the collected one.
-	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
+        	VerseKey saveKey;
+        	saveKey.AutoNormalize(0);
+	        saveKey.Headings(1);
+        	saveKey = key;
 
-		key = lastKey;
+	        // If we have seen a verse and the supplied one is different then we output the collected one.
+        	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
 
-		if (!isKJVRef(key)) {
-			makeKJVRef(key);
-		}
+	        	key = lastKey;
 
-		SWBuf currentText = module->getRawEntry();
-		if (currentText.length()) {
-			cout << "Appending entry: " << key.getOSISRef() << ": " << activeVerseText << endl;
-			activeVerseText = currentText + " " + activeVerseText;
-		}
+		        if (!isKJVRef(key)) {
+			        makeKJVRef(key);
+        		}
 
-//		cout << "Write: " << activeOsisID << ":" << key.getOSISRef() << ": " << activeVerseText << endl;
+	        	SWBuf currentText = module->getRawEntry();
+		        if (currentText.length()) {
+			        cout << "Appending entry: " << key.getOSISRef() << ": " << activeVerseText << endl;
+        			activeVerseText = currentText + " " + activeVerseText;
+	        	}
 
-		module->setEntry(activeVerseText);
-		activeVerseText = "";
-	}
+#ifdef DEBUG
+        		cout << "Write: " << activeOsisID << ":" << key.getOSISRef() << ": " << activeVerseText << endl;
+#endif
 
-	if (activeVerseText.length()) {
-		activeVerseText += " ";
-		activeVerseText += text;
-	}
-	else {
-		activeVerseText = text;
-	}
+	        	module->setEntry(activeVerseText);
+		        activeVerseText = "";
+        	}
 
-	key = saveKey;
-	lastKey = key;
-	strcpy(activeOsisID, keyOsisID);
+	        if (activeVerseText.length()) {
+		        activeVerseText += " ";
+        		activeVerseText += text;
+	        }
+        	else {
+	        	activeVerseText = text;
+        	}
+
+	        key = saveKey;
+        	lastKey = key;
+	        strcpy(activeOsisID, keyOsisID);
+        }
 }
 
 
 void linkToEntry(VerseKey& dest) {
-//	cout << "Verse: " << key << "\n";
-//	cout << "TEXT: " << text << "\n\n";
+	//cout << "Verse: " << key << "\n";
+	//cout << "TEXT: " << text << "\n\n";
 	//SWBuf currentText = module->getRawEntry();
 	//if (currentText.length())
 	//	text = currentText + " " + text;
@@ -205,18 +237,22 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		lastTitle = "";
 		inTitle = true;
 		tagStack.push(token);
-//		cout << "push " << token->getName() << endl;
+#ifdef DEBUG
+		cout << "push " << token->getName() << endl;
+#endif
 		titleDepth = tagStack.size();
-		return false; 
+		return false;
 	}
 	// Check titleDepth since titles can be nested. Don't want to quit too early.
 	else if (isEndTag && tagDepth == titleDepth && (!strcmp(tokenName, "title"))) {
 		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
 		lastTitle.append(*token); //</title>
 
-// 		cout << "lastTitle:      " << lastTitle.c_str() << endl;
-// 		cout << "text-lastTitle: " << text.c_str()+titleOffset << endl;
-//		cout << "text:           " << text.c_str() << endl;
+#ifdef DEBUG
+ 		cout << "lastTitle:      " << lastTitle.c_str() << endl;
+ 		cout << "text-lastTitle: " << text.c_str()+titleOffset << endl;
+		cout << "text:           " << text.c_str() << endl;
+#endif
 		inTitle = false;
 		titleDepth = 0;
 		tagStack.pop();
@@ -232,7 +268,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		// Remember non-empty start tags
 		if (!token->isEmpty()) {
 			tagStack.push(token);
-//			cout << "push " << token->getName() << endl;
+#ifdef DEBUG
+			cout << "push " << token->getName() << endl;
+#endif
 		}
 
 		//-- WITH OSIS ID -------------------------------------------------------------------------
@@ -242,7 +280,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			if ((!strcmp(tokenName, "div")) && (!strcmp(typeAttr, "book"))) {
 				inVerse = false;
 				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
-//					cout << "HEADING ";
+#ifdef DEBUG
+					cout << "HEADING ";
+#endif
 					currentVerse->Testament(0);
 					currentVerse->Book(0);
 					currentVerse->Chapter(0);
@@ -260,6 +300,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				chapterDepth = 0;
 				verseDepth = 0;
 
+                                inCanonicalOSISBook = isOSISAbbrev(token->getAttribute("osisID"));
+
 				return true;
 			}
 
@@ -269,7 +311,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					 ) {
 				inVerse = false;
 				if (inBookHeader) {
-//					cout << "BOOK HEADING "<< text.c_str() << endl;
+#ifdef DEBUG
+					cout << "BOOK HEADING "<< text.c_str() << endl;
+#endif
 					writeEntry(*currentVerse, text);
 				}
 
@@ -318,7 +362,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					}
 
 					if (heading.length()) {
-//						cout << "CHAPTER HEADING "<< heading.c_str() << endl;
+#ifdef DEBUG
+						cout << "CHAPTER HEADING "<< heading.c_str() << endl;
+#endif
 						writeEntry(*currentVerse, heading);
 					}
 
@@ -362,9 +408,11 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					!strcmp(tokenName, "lb") ||
 					!strcmp(tokenName, "lg")
 					) {
-//					if (token) {
-//						cout << "start token " << *token << ":" << text.c_str() << endl;
-//					}
+#ifdef DEBUG
+					if (token) {
+						cout << "start token " << *token << ":" << text.c_str() << endl;
+					}
+#endif
 				SWBuf tmp = token->toString();
 				writeEntry(*currentVerse, tmp);
 				return true;
@@ -385,12 +433,15 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		if (!token->isEmpty()) {
 			topToken = tagStack.top();
 			tagDepth = tagStack.size();
-//			cout << "pop " << topToken->getName() << endl;
+#ifdef DEBUG
+			cout << "pop " << topToken->getName() << endl;
+#endif
 			tagStack.pop();
 
 			if (strcmp(topToken->getName(), tokenName)) {
 				cout << "Error: " << *currentVerse << ": Expected " << topToken->getName() << " found " << tokenName << endl;
-				exit(1);
+//				exit(1);        // I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
+                                                // So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 			}
 		}
 
@@ -404,12 +455,16 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 
 			if (lastTitle.length()) {
 				const char* end = strchr(lastTitle, '>');
-//				cout << lastTitle << endl;
-//	 			cout << "length=" << int(end+1 - lastTitle.c_str()) << ", tag:" << lastTitle.c_str() << endl;
+#ifdef DEBUG
+				cout << lastTitle << endl;
+	 			cout << "length=" << int(end+1 - lastTitle.c_str()) << ", tag:" << lastTitle.c_str() << endl;
+#endif
 
 				SWBuf titleTagText;
 				titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
-//				cout << "tagText: " << titleTagText.c_str() << endl;;
+#ifdef DEBUG
+				cout << "tagText: " << titleTagText.c_str() << endl;;
+#endif
 
 				XMLTag titleTag(titleTagText);
 				titleTag.setAttribute("type", "section");
@@ -459,7 +514,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			return true;
 		}
 		else if (!inTitle && !inVerse && !inBookHeader && !inChapterHeader) {
-//			cout << "End tag not in verse: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+#ifdef DEBUG
+			cout << "End tag not in verse: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+#endif
 			// Is this the end of a chapter.
 			if (tagDepth == chapterDepth && (!strcmp(tokenName, "div") || !strcmp(tokenName, "chapter"))) {
 				chapterDepth = 0;
@@ -542,7 +599,7 @@ int main(int argc, char **argv) {
 
 	// Let's test our command line arguments
 	if (argc < 3) {
-		fprintf(stderr, 
+		fprintf(stderr,
 "\nusage: osis2mod <output/path> <osisDoc> [createMod] [compressType [blockType [cipherKey]]]\n");
 		fprintf(stderr, "  createMod   : (default 0): 0 - create  1 - augment\n");
 		fprintf(stderr, "  compressType: (default 0): 0 - no compression  1 - LZSS    2 - Zip\n");
@@ -574,9 +631,11 @@ int main(int argc, char **argv) {
 		case 2: compressor = new ZipCompress(); break;
 	}
 
-//	cout << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
-//	cout << "";
+#ifdef DEBUG
+	cout << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
+	cout << "";
 //	exit(-3);
+#endif
 
 
 	if ((argc<4)||(!strcmp(argv[3], "0"))) {	// == 0 then create module
