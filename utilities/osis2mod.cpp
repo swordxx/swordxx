@@ -232,7 +232,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	// it belongs to its <div> or <chapter> and is treated as part of its heading
 	// Otherwise if it a title in a chapter before the first the first verse it
 	// is put into the verse as a preverse title.
-	if (!isEndTag && titleDepth == 0 && (!strcmp(tokenName, "title")) && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
+	if (!token->isEmpty() && !isEndTag && titleDepth == 0 && (!strcmp(tokenName, "title")) && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
 		titleOffset = text.length(); //start of the title tag
 		lastTitle = "";
 		inTitle = true;
