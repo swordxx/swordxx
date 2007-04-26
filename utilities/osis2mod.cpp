@@ -35,27 +35,27 @@ SWText *module = 0;
 VerseKey *currentVerse = 0;
 char activeOsisID[255];
 char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
-        "Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
-        "Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
-        "Dan", "Hos", "Joel", "Amos", "Obad", "Jonah", "Mic", "Nah", "Hab",
-        "Zeph", "Hag", "Zech", "Mal",
+	"Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
+	"Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
+	"Dan", "Hos", "Joel", "Amos", "Obad", "Jonah", "Mic", "Nah", "Hab",
+	"Zeph", "Hag", "Zech", "Mal",
 
-        "Matt", "Mark", "Luke", "John", "Acts", "Rom", "1Cor", "2Cor", "Gal",
-        "Eph", "Phil", "Col", "1Thess", "2Thess", "1Tim", "2Tim", "Titus",
-        "Phlm", "Heb", "Jas", "1Pet", "2Pet", "1John", "2John", "3John",
-        "Jude", "Rev"};
+	"Matt", "Mark", "Luke", "John", "Acts", "Rom", "1Cor", "2Cor", "Gal",
+	"Eph", "Phil", "Col", "1Thess", "2Thess", "1Tim", "2Tim", "Titus",
+	"Phlm", "Heb", "Jas", "1Pet", "2Pet", "1John", "2John", "3John",
+	"Jude", "Rev"};
 
 static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
 
 bool isOSISAbbrev(const char *buf) {
-        bool match = false;
-        for (int i = 0; i < 66; i++) {
-                if (!strcmp(buf, osisabbrevs[i])){
-                        match = true;
-                        break;
-                }
-        }
-        return match;
+	bool match = false;
+	for (int i = 0; i < 66; i++) {
+		if (!strcmp(buf, osisabbrevs[i])){
+			match = true;
+			break;
+		}
+	}
+	return match;
 }
 
 // remove subverse elements from osisIDs
@@ -111,58 +111,58 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 	static SWBuf activeVerseText;
 	char keyOsisID[255];
 
-        if (inCanonicalOSISBook) {
-        	strcpy(keyOsisID, key.getOSISRef());
+	if (inCanonicalOSISBook) {
+		strcpy(keyOsisID, key.getOSISRef());
 
-	        // set keyOsisID to anything that an osisID cannot be.
-        	if (force) {
-	        	strcpy(keyOsisID, "-force");
-        	}
+		// set keyOsisID to anything that an osisID cannot be.
+		if (force) {
+			strcpy(keyOsisID, "-force");
+		}
 
-	        static VerseKey lastKey;
-        	lastKey.AutoNormalize(0);
-	        lastKey.Headings(1);
+		static VerseKey lastKey;
+		lastKey.AutoNormalize(0);
+		lastKey.Headings(1);
 
-        	VerseKey saveKey;
-        	saveKey.AutoNormalize(0);
-	        saveKey.Headings(1);
-        	saveKey = key;
+		VerseKey saveKey;
+		saveKey.AutoNormalize(0);
+		saveKey.Headings(1);
+		saveKey = key;
 
-	        // If we have seen a verse and the supplied one is different then we output the collected one.
-        	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
+		// If we have seen a verse and the supplied one is different then we output the collected one.
+		if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
 
-	        	key = lastKey;
+			key = lastKey;
 
-		        if (!isKJVRef(key)) {
-			        makeKJVRef(key);
-        		}
+			if (!isKJVRef(key)) {
+				makeKJVRef(key);
+			}
 
-	        	SWBuf currentText = module->getRawEntry();
-		        if (currentText.length()) {
-			        cout << "Appending entry: " << key.getOSISRef() << ": " << activeVerseText << endl;
-        			activeVerseText = currentText + " " + activeVerseText;
-	        	}
+			SWBuf currentText = module->getRawEntry();
+			if (currentText.length()) {
+				cout << "Appending entry: " << key.getOSISRef() << ": " << activeVerseText << endl;
+				activeVerseText = currentText + " " + activeVerseText;
+			}
 
 #ifdef DEBUG
-        		cout << "Write: " << activeOsisID << ":" << key.getOSISRef() << ": " << activeVerseText << endl;
+			cout << "Write: " << activeOsisID << ":" << key.getOSISRef() << ": " << activeVerseText << endl;
 #endif
 
-	        	module->setEntry(activeVerseText);
-		        activeVerseText = "";
-        	}
+			module->setEntry(activeVerseText);
+			activeVerseText = "";
+		}
 
-	        if (activeVerseText.length()) {
-		        activeVerseText += " ";
-        		activeVerseText += text;
-	        }
-        	else {
-	        	activeVerseText = text;
-        	}
+		if (activeVerseText.length()) {
+			activeVerseText += " ";
+			activeVerseText += text;
+		}
+		else {
+			activeVerseText = text;
+		}
 
-	        key = saveKey;
-        	lastKey = key;
-	        strcpy(activeOsisID, keyOsisID);
-        }
+		key = saveKey;
+		lastKey = key;
+		strcpy(activeOsisID, keyOsisID);
+	}
 }
 
 
@@ -251,7 +251,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 #ifdef DEBUG
  		cout << "lastTitle:      " << lastTitle.c_str() << endl;
  		cout << "text-lastTitle: " << text.c_str()+titleOffset << endl;
-		cout << "text:           " << text.c_str() << endl;
+		cout << "text:	   " << text.c_str() << endl;
 #endif
 		inTitle = false;
 		titleDepth = 0;
@@ -300,7 +300,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				chapterDepth = 0;
 				verseDepth = 0;
 
-                                inCanonicalOSISBook = isOSISAbbrev(token->getAttribute("osisID"));
+				inCanonicalOSISBook = isOSISAbbrev(token->getAttribute("osisID"));
 
 				return true;
 			}
@@ -440,8 +440,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 
 			if (strcmp(topToken->getName(), tokenName)) {
 				cout << "Error: " << *currentVerse << ": Expected " << topToken->getName() << " found " << tokenName << endl;
-//				exit(1);        // I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
-                                                // So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
+//				exit(1);	// I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
+						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 			}
 		}
 
