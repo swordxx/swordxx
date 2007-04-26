@@ -25,6 +25,9 @@
 
 //#define DEBUG
 
+// Debug for simple transformation stack
+//#define DEBUG2
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -34,6 +37,7 @@ using namespace std;
 SWText *module = 0;
 VerseKey *currentVerse = 0;
 char activeOsisID[255];
+char currentOsisID[255];
 char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
 	"Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
 	"Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
@@ -200,7 +204,6 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	//static bool inBook = false;
 	//static bool inChapter = false;
 	static bool inVerse = true;
-	static SWBuf currentOsisID = "";
 
 	static SWBuf header = "";
 
@@ -239,7 +242,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		inTitle = true;
 		tagStack.push(token);
 #ifdef DEBUG
-		cout << currentOsisID << ": push " << token->getName() << endl;
+		cout << currentOsisID << ": push (" << tagStack.size() << ") " << token->getName() << endl;
 #endif
 		titleDepth = tagStack.size();
 		return false;
@@ -257,6 +260,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 #endif
 		inTitle = false;
 		titleDepth = 0;
+#ifdef DEBUG
+		cout << currentOsisID << ": pop(" << tagStack.size() << ") " << tagStack.top()->getName() << endl;
+#endif
 		tagStack.pop();
 		return false; // don't add </title> to the text itself
 	}
@@ -271,7 +277,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		if (!token->isEmpty()) {
 			tagStack.push(token);
 #ifdef DEBUG
-			cout << currentOsisID << ": push " << token->getName() << endl;
+			cout << currentOsisID << ": push (" << tagStack.size() << ") " << token->getName() << endl;
 #endif
 		}
 
@@ -291,7 +297,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					currentVerse->Verse(0);
 					writeEntry(*currentVerse, text);
 				}
-				currentOsisID = token->getAttribute("osisID");
+				strcpy(currentOsisID, token->getAttribute("osisID"));
 				*currentVerse = currentOsisID;
 				currentVerse->Chapter(0);
 				currentVerse->Verse(0);
@@ -320,7 +326,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					writeEntry(*currentVerse, text);
 				}
 
-				currentOsisID = token->getAttribute("osisID");
+				strcpy(currentOsisID, token->getAttribute("osisID"));
 				*currentVerse = currentOsisID;
 				currentVerse->Verse(0);
 				inBookHeader = false;
@@ -391,8 +397,12 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				}
 
 				lastVerseIDs = currentVerse->ParseVerseList(keyVal);
-				if (lastVerseIDs.Count()) {
-					currentOsisID = lastVerseIDs.getElement(0)->getText();
+				if (lastVerseIDs.Count() > 1) {
+					*currentVerse = lastVerseIDs.getElement(0)->getText();
+					strcpy(currentOsisID, currentVerse->getOSISRef());
+				}
+				else {
+					strcpy(currentOsisID, keyVal.c_str());
 					*currentVerse = currentOsisID;
 				}
 
@@ -439,7 +449,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			topToken = tagStack.top();
 			tagDepth = tagStack.size();
 #ifdef DEBUG
-			cout << currentOsisID << ": pop " << topToken->getName() << endl;
+			cout << currentOsisID << ": pop(" << tagDepth << ") " << topToken->getName() << endl;
 #endif
 			tagStack.pop();
 
@@ -535,6 +545,14 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				text = "";
 				return true;
 			}
+			// Or is it the end of an osis document
+			else if (!strcmp(tokenName, "osisText") || !strcmp(tokenName, "osis")) {
+				bookDepth = 0;
+				chapterDepth = 0;
+				verseDepth = 0;
+				text = "";
+				return true;
+			}
 			// OTHER MISC END TAGS WHEN !INVERSE
 			// Test that is between verses, or after the last is appended to the preceeding verse.
 			else if (!strcmp(tokenName, "p") ||
@@ -566,6 +584,9 @@ XMLTag* transform(XMLTag* t) {
 	if (!t->isEmpty()) {
 		if (!t->isEndTag()) {
 			tagStack.push(t);
+#ifdef DEBUG2
+			cout << currentOsisID << ": xform push (" << tagStack.size() << ") " << t->getName() << endl;
+#endif
 			// Transform <q> into <q sID=""/> except for <q who="Jesus">
 			if ((!strcmp(t->getName(), "q")) && (!t->getAttribute("who") || strcmp(t->getAttribute("who"), "Jesus"))) {
 				t->setEmpty(true);
@@ -581,6 +602,9 @@ XMLTag* transform(XMLTag* t) {
 		}
 		else {
 			XMLTag *topToken = tagStack.top();
+#ifdef DEBUG2
+			cout << currentOsisID << ": xform pop(" << tagStack.size() << ") " << topToken->getName() << endl;
+#endif
 			tagStack.pop();
 
 			// If we have found an end tag for a <q> that was transformed then transform this one as well.
@@ -699,6 +723,7 @@ int main(int argc, char **argv) {
 	}
 
 	activeOsisID[0] = '\0';
+	strcpy(currentOsisID,"N/A");
 
 	currentVerse = new VerseKey();
 	currentVerse->AutoNormalize(0);
@@ -717,13 +742,13 @@ int main(int argc, char **argv) {
 	while (FileMgr::getLine(fd, buffer)) {
 		//cout << "Line: " << buffer.c_str() << endl;
 		for (from = buffer.c_str(); *from; from++) {
-			if (*from == '<') {
+			if (!intoken && *from == '<') {
 				intoken = true;
 				token = "<";
 				continue;
 			}
 
-			if (*from == '>') {
+			if (intoken && *from == '>') {
 				intoken = false;
 				token.append('>');
 				// take this isalpha if out to check for bugs in text
@@ -740,8 +765,13 @@ int main(int argc, char **argv) {
 
 			if (intoken)
 				token.append(*from);
-			else	
-				text.append(*from);
+			else
+				switch (*from) {
+					case '>' : text.append("&gt;"); break;
+					case '<' : text.append("&lt;"); break;
+					default  : text.append(*from); break;
+				}
+				
 		}
 
 		if (intoken)
