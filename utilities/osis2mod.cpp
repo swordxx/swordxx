@@ -200,6 +200,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	//static bool inBook = false;
 	//static bool inChapter = false;
 	static bool inVerse = true;
+	static SWBuf currentOsisID = "";
 
 	static SWBuf header = "";
 
@@ -238,7 +239,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		inTitle = true;
 		tagStack.push(token);
 #ifdef DEBUG
-		cout << "push " << token->getName() << endl;
+		cout << currentOsisID << ": push " << token->getName() << endl;
 #endif
 		titleDepth = tagStack.size();
 		return false;
@@ -249,9 +250,10 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		lastTitle.append(*token); //</title>
 
 #ifdef DEBUG
- 		cout << "lastTitle:      " << lastTitle.c_str() << endl;
- 		cout << "text-lastTitle: " << text.c_str()+titleOffset << endl;
-		cout << "text:	   " << text.c_str() << endl;
+		cout << currentOsisID << ":" << endl;
+ 		cout << "\tlastTitle:      " << lastTitle.c_str() << endl;
+ 		cout << "\ttext-lastTitle: " << text.c_str()+titleOffset << endl;
+		cout << "\ttext:	   " << text.c_str() << endl;
 #endif
 		inTitle = false;
 		titleDepth = 0;
@@ -269,7 +271,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		if (!token->isEmpty()) {
 			tagStack.push(token);
 #ifdef DEBUG
-			cout << "push " << token->getName() << endl;
+			cout << currentOsisID << ": push " << token->getName() << endl;
 #endif
 		}
 
@@ -281,7 +283,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				inVerse = false;
 				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
 #ifdef DEBUG
-					cout << "HEADING ";
+					cout << currentOsisID << ": HEADING ";
 #endif
 					currentVerse->Testament(0);
 					currentVerse->Book(0);
@@ -289,7 +291,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					currentVerse->Verse(0);
 					writeEntry(*currentVerse, text);
 				}
-				*currentVerse = token->getAttribute("osisID");
+				currentOsisID = token->getAttribute("osisID");
+				*currentVerse = currentOsisID;
 				currentVerse->Chapter(0);
 				currentVerse->Verse(0);
 				inBookHeader = true;
@@ -312,12 +315,13 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				inVerse = false;
 				if (inBookHeader) {
 #ifdef DEBUG
-					cout << "BOOK HEADING "<< text.c_str() << endl;
+					cout << currentOsisID << ": BOOK HEADING "<< text.c_str() << endl;
 #endif
 					writeEntry(*currentVerse, text);
 				}
 
-				*currentVerse = token->getAttribute("osisID");
+				currentOsisID = token->getAttribute("osisID");
+				*currentVerse = currentOsisID;
 				currentVerse->Verse(0);
 				inBookHeader = false;
 				inChapterHeader = true;
@@ -354,7 +358,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 							}
 						}
 						else {
-							cout << "Warning: Bug in code. Could not find title." << endl;
+							cout << currentOsisID << ": Warning: Bug in code. Could not find title." << endl;
 						}
 					}
 					else {
@@ -363,7 +367,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 
 					if (heading.length()) {
 #ifdef DEBUG
-						cout << "CHAPTER HEADING "<< heading.c_str() << endl;
+						cout << currentOsisID << ": CHAPTER HEADING "<< heading.c_str() << endl;
 #endif
 						writeEntry(*currentVerse, heading);
 					}
@@ -388,7 +392,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 
 				lastVerseIDs = currentVerse->ParseVerseList(keyVal);
 				if (lastVerseIDs.Count()) {
-					*currentVerse = lastVerseIDs.getElement(0)->getText();
+					currentOsisID = lastVerseIDs.getElement(0)->getText();
+					*currentVerse = currentOsisID;
 				}
 
 				verseDepth = tagStack.size();
@@ -410,7 +415,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					) {
 #ifdef DEBUG
 					if (token) {
-						cout << "start token " << *token << ":" << text.c_str() << endl;
+						cout << currentOsisID << ": start token " << *token << ":" << text.c_str() << endl;
 					}
 #endif
 				SWBuf tmp = token->toString();
@@ -425,7 +430,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	else {
 
 		if (tagStack.empty()) {
-			cout << "tag expected" << endl;
+			cout << currentOsisID << ": tag expected" << endl;
 			exit(1);
 		}
 
@@ -434,12 +439,12 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			topToken = tagStack.top();
 			tagDepth = tagStack.size();
 #ifdef DEBUG
-			cout << "pop " << topToken->getName() << endl;
+			cout << currentOsisID << ": pop " << topToken->getName() << endl;
 #endif
 			tagStack.pop();
 
 			if (strcmp(topToken->getName(), tokenName)) {
-				cout << "Error: " << *currentVerse << ": Expected " << topToken->getName() << " found " << tokenName << endl;
+				cout << "Error: " << currentOsisID << ": Expected " << topToken->getName() << " found " << tokenName << endl;
 //				exit(1);	// I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
 						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 			}
@@ -450,20 +455,21 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			inVerse = false;
 
 			if (tagDepth != verseDepth) {
-				cout << "Warning verse " << *currentVerse << " is not well formed:(" << verseDepth << "," << tagDepth << ")" << endl;
+				cout << "Warning verse " << currentOsisID << " is not well formed:(" << verseDepth << "," << tagDepth << ")" << endl;
 			}
 
 			if (lastTitle.length()) {
 				const char* end = strchr(lastTitle, '>');
 #ifdef DEBUG
-				cout << lastTitle << endl;
-	 			cout << "length=" << int(end+1 - lastTitle.c_str()) << ", tag:" << lastTitle.c_str() << endl;
+				cout << currentOsisID << ":" << endl;
+				cout << "\t" << lastTitle << endl;
+	 			cout << "\tlength=" << int(end+1 - lastTitle.c_str()) << ", tag:" << lastTitle.c_str() << endl;
 #endif
 
 				SWBuf titleTagText;
 				titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
 #ifdef DEBUG
-				cout << "tagText: " << titleTagText.c_str() << endl;;
+				cout << currentOsisID << ": tagText: " << titleTagText.c_str() << endl;;
 #endif
 
 				XMLTag titleTag(titleTagText);
@@ -514,9 +520,6 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			return true;
 		}
 		else if (!inTitle && !inVerse && !inBookHeader && !inChapterHeader) {
-#ifdef DEBUG
-			cout << "End tag not in verse: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
-#endif
 			// Is this the end of a chapter.
 			if (tagDepth == chapterDepth && (!strcmp(tokenName, "div") || !strcmp(tokenName, "chapter"))) {
 				chapterDepth = 0;
@@ -546,6 +549,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				text = "";
 				return true;
 			}
+#ifdef DEBUG
+			cout << currentOsisID << ": End tag not in verse: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+#endif
 		}
 	}
 	return false;
@@ -608,19 +614,28 @@ int main(int argc, char **argv) {
 		exit(-1);
 	}
 
-	int iType = 4;
-	int compType = 0;
-	string cipherKey = "";
+	// variables for arguments, holding defaults
+	const char* program = argv[0];
+	const char* path    = argv[1];
+	const char* osisDoc = argv[2];
+	int append          = 0;
+	int compType        = 0;
+	int iType           = 4;
+	string cipherKey    = "";
+
 	SWCompress *compressor = 0;
 // 	SWModule *outModule    = 0;
 
 
-	if (argc > 4) {
-		compType = atoi(argv[4]);
-		if (argc > 5) {
-			iType = atoi(argv[5]);
-			if (argc > 6) {
-				cipherKey = argv[6];
+	if (argc > 3) {
+		append = atoi(argv[3]);
+		if (argc > 4) {
+			compType = atoi(argv[4]);
+			if (argc > 5) {
+				iType = atoi(argv[5]);
+				if (argc > 6) {
+					cipherKey = argv[6];
+				}
 			}
 		}
 	}
@@ -632,31 +647,31 @@ int main(int argc, char **argv) {
 	}
 
 #ifdef DEBUG
-	cout << "path: " << argv[1] << " osisDoc: " << argv[2] << " create: " << argv[3] << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
+	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
 	cout << "";
 //	exit(-3);
 #endif
 
 
-	if ((argc<4)||(!strcmp(argv[3], "0"))) {	// == 0 then create module
+	if (!append) {	// == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if ( compressor ){
-			if ( zText::createModule(argv[1], iType) ){
-				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[1]);
+			if ( zText::createModule(path, iType) ){
+				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
 				exit(-3);
 			}
 		}
-		else if (RawText::createModule(argv[1])) {
-			fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[1]);
+		else if (RawText::createModule(path)) {
+			fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
 			exit(-3);
 		}
 	}
 
 	// Let's see if we can open our input file
-	FileDesc *fd = FileMgr::getSystemFileMgr()->open(argv[2], FileMgr::RDONLY);
+	FileDesc *fd = FileMgr::getSystemFileMgr()->open(osisDoc, FileMgr::RDONLY);
 	if (fd->getFd() < 0) {
-		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[2]);
+		fprintf(stderr, "error: %s: couldn't open input file: %s \n", program, osisDoc);
 		exit(-2);
 	}
 
@@ -664,10 +679,10 @@ int main(int argc, char **argv) {
 	SWBuf buffer;
 
 	if (compressor){
-		module = new zText(argv[1], 0, 0, iType, compressor);
+		module = new zText(path, 0, 0, iType, compressor);
 	}
 	else{
-		module = new RawText(argv[1]);	// open our datapath with our RawText driver.
+		module = new RawText(path);	// open our datapath with our RawText driver.
 	}
 
 	SWFilter *cipherFilter = 0;
