@@ -359,7 +359,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			SWBuf mark      = tmp;
 
 			// open <q> or <q sID... />
-			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
+			if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("sID"))) {
 				// if <q> then remember it for the </q>
 				if (!tag.isEmpty()) {
 					char *tagData = 0;

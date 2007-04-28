@@ -426,7 +426,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			SWBuf mark      = tmp;
 
 			// open <q> or <q sID... />
-			if ((!tag.isEmpty()) || (tag.getAttribute("sID"))) {
+			if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("sID"))) {
 				// if <q> then remember it for the </q>
 				if (!tag.isEmpty()) {
 					char *tagData = 0;
@@ -446,7 +446,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					outText((level % 2) ? '\"' : '\'', buf, u);
 			}
 			// close </q> or <q eID... />
-			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
+			else if ((tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("eID"))) {
 				// if it is </q> then pop the stack for the attributes
 				if (tag.isEndTag() && !u->quoteStack->empty()) {
 					const char *tagData  = u->quoteStack->top();
