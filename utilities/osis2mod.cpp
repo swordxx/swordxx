@@ -28,8 +28,6 @@
 // Debug for simple transformation stack
 //#define DEBUG2
 
-const char* VERSION_STRING = "$Id$";
-
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
