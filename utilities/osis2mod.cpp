@@ -28,6 +28,8 @@
 // Debug for simple transformation stack
 //#define DEBUG2
 
+const char* VERSION_STRING = "$Id$";
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -626,6 +628,8 @@ XMLTag* transform(XMLTag* t) {
 }
 
 int main(int argc, char **argv) {
+
+	fprintf(stderr, "You are running osis2mod: $Rev$\n");
 
 	// Let's test our command line arguments
 	if (argc < 3) {
