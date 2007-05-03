@@ -515,7 +515,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			is = new IndexSearcher(ir);
 			(*percent)(10, percentUserData);
 
-			standard::StandardAnalyzer analyzer;
+			SimpleAnalyzer analyzer;
 			lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
 			q = QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
 			(*percent)(20, percentUserData);
@@ -960,10 +960,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		setKey(*searchKey);
 	}
 
-	IndexWriter *writer = NULL;
+	RAMDirectory *ramDir = NULL;
+	IndexWriter *coreWriter = NULL;
+	IndexWriter *fsWriter = NULL;
 	Directory *d = NULL;
  
-	standard::StandardAnalyzer *an = new standard::StandardAnalyzer();
+	SimpleAnalyzer *an = new SimpleAnalyzer();
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 	char ch = target.c_str()[strlen(target.c_str())-1];
@@ -972,18 +974,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	target.append("lucene");
 	FileMgr::createParent(target+"/dummy");
 
-	if (IndexReader::indexExists(target.c_str())) {
-		d = FSDirectory::getDirectory(target.c_str(), false);
-		if (IndexReader::isLocked(d)) {
-			IndexReader::unlock(d);
-		}
-																		   
-		writer = new IndexWriter( d, an, false);
-	} else {
-		d = FSDirectory::getDirectory(target.c_str(), true);
-		writer = new IndexWriter( d ,an, true);
-	}
-
+	ramDir = new RAMDirectory();
+	coreWriter = new IndexWriter(ramDir, an, true);
+	
 
  
 	char perc = 1;
@@ -1222,7 +1215,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		if (good) {
 //printf("writing (%s).\n", (const char *)*key);
 //fflush(stdout);
-			writer->addDocument(doc);
+			coreWriter->addDocument(doc);
 		}
 		delete doc;
 
@@ -1230,9 +1223,29 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		err = Error();
 	}
 
-	writer->optimize();
-	writer->close();
-	delete writer;
+	// Optimizing automatically happens with the call to addIndexes
+	//coreWriter->optimize();
+	coreWriter->close();
+
+	if (IndexReader::indexExists(target.c_str())) {
+		d = FSDirectory::getDirectory(target.c_str(), false);
+		if (IndexReader::isLocked(d)) {
+			IndexReader::unlock(d);
+		}
+ 
+		fsWriter = new IndexWriter( d, an, false);
+	} else {
+		d = FSDirectory::getDirectory(target.c_str(), true);
+		fsWriter = new IndexWriter( d ,an, true);
+	}
+
+	Directory *dirs[] = { ramDir, 0 };
+	fsWriter->addIndexes(dirs);
+	fsWriter->close();
+
+	delete ramDir;
+	delete coreWriter;
+	delete fsWriter;
 	delete an;
 
 	// reposition module back to where it was before we were called
