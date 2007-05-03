@@ -515,7 +515,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			is = new IndexSearcher(ir);
 			(*percent)(10, percentUserData);
 
-			SimpleAnalyzer analyzer;
+			standard::StandardAnalyzer analyzer;
 			lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
 			q = QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
 			(*percent)(20, percentUserData);
@@ -965,7 +965,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	IndexWriter *fsWriter = NULL;
 	Directory *d = NULL;
  
-	SimpleAnalyzer *an = new SimpleAnalyzer();
+	standard::StandardAnalyzer *an = new standard::StandardAnalyzer();
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 	char ch = target.c_str()[strlen(target.c_str())-1];
