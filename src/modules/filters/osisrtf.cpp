@@ -518,4 +518,3 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 
 SWORD_NAMESPACE_END
-

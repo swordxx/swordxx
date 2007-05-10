@@ -236,6 +236,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = (--u->suspendLevel);
 				u->inXRefNote = false;
+				u->lastSuspendSegment = ""; // fix/work-around for nasb devineName in note bug
 			}
 		}
 
