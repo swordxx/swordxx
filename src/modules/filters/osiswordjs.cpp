@@ -116,10 +116,10 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					SWBuf lexName = "";
 					// we can pass the real lex name in, but we have some
 					// aliases in the javascript to optimize bandwidth
-					if (gh == 'G') {
+					if ((gh == 'G') && (defaultGreekLex)) {
 						lexName = (!strcmp(defaultGreekLex->Name(), "StrongsGreek"))?"G":defaultGreekLex->Name();
 					}
-					else if (gh == 'H') {
+					else if ((gh == 'H') && (defaultHebLex)) {
 						lexName = (!strcmp(defaultHebLex->Name(), "StrongsHebrew"))?"H":defaultHebLex->Name();
 					}
 
