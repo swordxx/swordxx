@@ -6,9 +6,9 @@
 #include <string>
 #include <stack>
 #include <iostream>
+#include <fstream>
 
 #include <utilstr.h>
-#include <filemgr.h>
 #include <swmgr.h>
 #include <rawtext.h>
 #include <swbuf.h>
@@ -155,6 +155,9 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 			activeVerseText = "";
 		}
 
+		// eliminate leading whitespace on the beginning of each verse and
+		// before we append to current content, since we just added one
+		text.trimStart();
 		if (activeVerseText.length()) {
 			activeVerseText += " ";
 			activeVerseText += text;
@@ -695,15 +698,13 @@ int main(int argc, char **argv) {
 	}
 
 	// Let's see if we can open our input file
-	FileDesc *fd = FileMgr::getSystemFileMgr()->open(osisDoc, FileMgr::RDONLY);
-	if (fd->getFd() < 0) {
+	ifstream infile(osisDoc);
+	if (infile.fail()) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", program, osisDoc);
 		exit(-2);
 	}
 
 	// Do some initialization stuff
-	SWBuf buffer;
-
 	if (compressor){
 		module = new zText(path, 0, 0, iType, compressor);
 	}
@@ -736,22 +737,44 @@ int main(int argc, char **argv) {
 
 	(*module) = TOP;
 
-	const char *from;
 	SWBuf token;
 	SWBuf text;
 	bool intoken = false;
+	bool inWhitespace = false;
+	bool seeingSpace = false;
+	char curChar = '\0';
 
-	while (FileMgr::getLine(fd, buffer)) {
-		//cout << "Line: " << buffer.c_str() << endl;
-		for (from = buffer.c_str(); *from; from++) {
-			if (!intoken && *from == '<') {
+	while (infile.good()) {
+		
+		curChar = infile.get();
+
+		// skip the character if it is bad. infile.good() will catch the problem
+		if (curChar == -1) {
+			continue;
+		}
+
+			if (!intoken && curChar == '<') {
 				intoken = true;
 				token = "<";
 				continue;
 			}
 
-			if (intoken && *from == '>') {
+			// Outside of tokens merge adjacent whitespace
+			if (!intoken) {
+				seeingSpace = isspace(curChar);
+				if (seeingSpace) {
+					if (inWhitespace) {
+						continue;
+					}
+					// convert all whitespace to blanks
+					curChar = ' ';
+				}
+				inWhitespace = seeingSpace;
+			}
+
+			if (intoken && curChar == '>') {
 				intoken = false;
+				inWhitespace = false;
 				token.append('>');
 				// take this isalpha if out to check for bugs in text
 				if ((isalpha(token[1])) || (isalpha(token[2]))) {
@@ -766,27 +789,22 @@ int main(int argc, char **argv) {
 			}
 
 			if (intoken)
-				token.append(*from);
+				token.append(curChar);
 			else
-				switch (*from) {
+				switch (curChar) {
 					case '>' : text.append("&gt;"); break;
 					case '<' : text.append("&lt;"); break;
-					default  : text.append(*from); break;
+					default  : text.append(curChar); break;
 				}
-				
-		}
-
-		if (intoken)
-			token.append("\n");
 	}
 
-	// Force the last entry from the buffer.
+	// Force the last entry from the text buffer.
 	text = "";
 	writeEntry(*currentVerse, text, true);
 	delete module;
 	delete currentVerse;
 	if (cipherFilter)
 		delete cipherFilter;
-	FileMgr::getSystemFileMgr()->close(fd);
+	infile.close();
 }
 
