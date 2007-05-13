@@ -753,49 +753,49 @@ int main(int argc, char **argv) {
 			continue;
 		}
 
-			if (!intoken && curChar == '<') {
-				intoken = true;
-				token = "<";
-				continue;
-			}
+		if (!intoken && curChar == '<') {
+			intoken = true;
+			token = "<";
+			continue;
+		}
 
-			// Outside of tokens merge adjacent whitespace
-			if (!intoken) {
-				seeingSpace = isspace(curChar);
-				if (seeingSpace) {
-					if (inWhitespace) {
-						continue;
-					}
-					// convert all whitespace to blanks
-					curChar = ' ';
+		// Outside of tokens merge adjacent whitespace
+		if (!intoken) {
+			seeingSpace = isspace(curChar);
+			if (seeingSpace) {
+				if (inWhitespace) {
+					continue;
 				}
-				inWhitespace = seeingSpace;
+				// convert all whitespace to blanks
+				curChar = ' ';
 			}
+			inWhitespace = seeingSpace;
+		}
 
-			if (intoken && curChar == '>') {
-				intoken = false;
-				inWhitespace = false;
-				token.append('>');
-				// take this isalpha if out to check for bugs in text
-				if ((isalpha(token[1])) || (isalpha(token[2]))) {
-					//cout << "Handle:" << token.c_str() << endl;
-					XMLTag *t = new XMLTag(token.c_str());
+		if (intoken && curChar == '>') {
+			intoken = false;
+			inWhitespace = false;
+			token.append('>');
+			// take this isalpha if out to check for bugs in text
+			if ((isalpha(token[1])) || (isalpha(token[2]))) {
+				//cout << "Handle:" << token.c_str() << endl;
+				XMLTag *t = new XMLTag(token.c_str());
 
-					if (!handleToken(text, transform(t))) {
-						text.append(*t);
-					}
+				if (!handleToken(text, transform(t))) {
+					text.append(*t);
 				}
-				continue;
 			}
+			continue;
+		}
 
-			if (intoken)
-				token.append(curChar);
-			else
-				switch (curChar) {
-					case '>' : text.append("&gt;"); break;
-					case '<' : text.append("&lt;"); break;
-					default  : text.append(curChar); break;
-				}
+		if (intoken)
+			token.append(curChar);
+		else
+			switch (curChar) {
+				case '>' : text.append("&gt;"); break;
+				case '<' : text.append("&lt;"); break;
+				default  : text.append(curChar); break;
+			}
 	}
 
 	// Force the last entry from the text buffer.
