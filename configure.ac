@@ -210,14 +210,14 @@ fi
 # ---------------------------------------------------------------------
 
 use_clucene=
-if test -z "$with_clucene"; then
+if test -z "$CLUCENE_LIBS"; then
+   echo "lucene searching options not available"
+else
    echo "lucene found - lucene searching options available"
    AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
    AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
    LIBS="$LIBS $CLUCENE_LIBS"
    use_clucene="yes"
-else
-   echo "lucene searching options not available"
 fi
 
 
