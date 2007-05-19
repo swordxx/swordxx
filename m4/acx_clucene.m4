@@ -14,7 +14,7 @@ if test "x$with_clucene" = "xno"; then
 	AC_MSG_RESULT(excluding support)
 else
 #try some default locations
-if test -z "$with_clucene"; then
+if test -z "$with_clucene" || test "x$with_clucene" = "xyes"; then
 	#use parent of this directory, and some common library paths
 	with_clucene=$(cd "../" && pwd)
 	with_clucene="$with_clucene /usr /usr/local"
@@ -28,24 +28,24 @@ CLUCENE_LIBS=
 for flag in $with_clucene; do
 	if test -z "$clucene_set_failed"; then
 		if test -e "$flag/include/CLucene.h"; then
+# 64-bit checks first
 			if test -e "$flag/lib64/libclucene.la" || test -e "$flag/lib64/libclucene.so"; then
 				clucene_set_failed=$flag
 				CLUCENE_LIBS="-L$flag/lib64 -lclucene"
 				if test -e "$flag/include/CLucene/clucene-config.h"; then
 					CLUCENE_CXXFLAGS="-I$flag/include"
-# what is this?!!!  Keeping, but don't understand.  Can clucene-config.h actually get installed to lib?
 				else
 					CLUCENE_CXXFLAGS="-I$flag/include -I$flag/lib64"
 				fi
 			else
+# 32-bit checks
 				if test -e "$flag/lib/libclucene.la" || test -e "$flag/lib/libclucene.so"; then
 					clucene_set_failed=$flag
 					CLUCENE_LIBS="-L$flag/lib -lclucene"
 					if test -e "$flag/include/CLucene/clucene-config.h"; then
 						CLUCENE_CXXFLAGS="-I$flag/include"
-	# what is this?!!!  Keeping, but don't understand.  Can clucene-config.h actually get installed to lib?
 					else
-						CLUCENE_CXXFLAGS="-I$flag/include -I$flag/lib64"
+						CLUCENE_CXXFLAGS="-I$flag/include -I$flag/lib"
 					fi
 				fi
 			fi
