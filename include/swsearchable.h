@@ -45,46 +45,55 @@ public:
 	*/
 	static void nullPercent(char percent, void *userData);
 
-	// search methods
+	// search interface -------------------------------------------------
 
-	/** Searches a module for a string
-	*
-	* @param istr string for which to search
-	* @param searchType type of search to perform
-	*   >=0 ->regex;  -1 ->phrase; -2 ->multiword;
-	* @param flags options flags for search
-	* @param scope Key containing the scope. VerseKey or ListKey are useful here.
-	* @param justCheckIfSupported if set, don't search,
-	* only tell if this function supports requested search.
-	* @param percent Callback function to get the current search status in %.
-	* @param percentUserData User data that is given to the callback function as parameter.
-	*
-	* @return listkey set to verses that contain istr
-	*/
+	/**
+	 * Searches a module for a string
+	 * @param istr string for which to search
+	 * @param searchType type of search to perform
+	 *			>=0 - regex
+	 *			-1  - phrase
+	 *			-2  - multiword
+	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
+	 *			-4  - Lucene
+	 * @param flags options flags for search
+	 * @param scope Key containing the scope. VerseKey or ListKey are useful here.
+	 * @param justCheckIfSupported if set, don't search,
+	 * only tell if this function supports requested search.
+	 * @param percent Callback function to get the current search status in %.
+	 * @param percentUserData User data that is given to the callback function as parameter.
+	 *
+	 * @return ListKey set to verses that contain istr
+	 */
+
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
 			SWKey * scope = 0,
 			bool * justCheckIfSupported = 0,
 			void (*percent) (char, void *) = &nullPercent,
 			void *percentUserData = 0) = 0;
 
-	/** ask the object to build any framework it need to do it searching.
-	*
-	*/
+	/**
+	 * ask the object to build any indecies it wants for optimal searching
+	 */
 	virtual signed char createSearchFramework(
 			void (*percent) (char, void *) = &nullPercent,
 			void *percentUserData = 0);	// special search framework
 
 	virtual void deleteSearchFramework();
 	
-	/** does this class have a search framework built?
-	*
-	*/
-	virtual bool hasSearchFramework() { return false; }				// special search framework
+	/**
+	 * was SWORD compiled with code to optimize searching for this driver?
+	 */
+	virtual bool hasSearchFramework() { return false; }
 
-	/** Check if the search is optimally supported (e.g. if index files are presnt and working)
-	* This function checks whether the search framework may work in the best way.
-	* @return True if the the search is optimally supported, false if it's not working in the best way.
-	*/
+	/**
+	 * Check if the search is optimally supported (e.g. if index files are
+	 * presnt and working)
+	 * This function checks whether the search framework may work in the
+	 * best way.
+	 * @return true if the the search is optimally supported, false if
+	 * it's not working in the best way.
+	 */
 	virtual bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
 };
 
