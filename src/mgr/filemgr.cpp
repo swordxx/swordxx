@@ -429,6 +429,8 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 		more = false;
 		long index = fDesc->seek(0, SEEK_CUR);
 		len = fDesc->read(chunk, 254);
+
+		// assert we have a readable file (not a directory)
 		if (len < 1)
 			break;
 
@@ -441,15 +443,13 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 			}
 		}
 
-		// assert we have a readable file (not a directory)
-		if (len < 0)
-			break;
-
 		// find the end
 		int end;
 		for (end = start; ((end < (len-1)) && (chunk[end] != 10)); end++);
-		if (end >= 253)
+	
+		if ((chunk[end] != 10) && (len == 254)) {
 			more = true;
+		}
 		index += (end + 1);
 
 		// reposition to next valid place to read
