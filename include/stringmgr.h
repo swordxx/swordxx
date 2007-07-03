@@ -89,8 +89,8 @@ private:
 
 inline char *toupperstr(char *t, unsigned int max = 0) {
 	return (StringMgr::hasUTF8Support())
-		? StringMgr::getSystemStringMgr()->upperLatin1(t, max)
-		: StringMgr::getSystemStringMgr()->upperUTF8(t, max);
+		? StringMgr::getSystemStringMgr()->upperUTF8(t, max)
+		: StringMgr::getSystemStringMgr()->upperLatin1(t, max);
 }
 	
 inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
@@ -102,6 +102,7 @@ inline SWBuf &toupperstr(SWBuf &b) {
 	stdstr(&utf8, b.c_str(), 2);
 	toupperstr(utf8, strlen(utf8)*2);
 	b = utf8;
+	delete [] utf8;
 	return b;
 }
 
