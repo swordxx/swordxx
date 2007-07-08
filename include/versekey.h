@@ -192,7 +192,7 @@ public:
 	* @param ikey base key (will take various forms of 'BOOK CH:VS'.
 	*	See parse() for more detailed information)
 	*/	
-	VerseKey(const SWKey * ikey);
+	VerseKey(const SWKey *ikey);
 	
 	/** VerseKey Constructor - initializes instance of VerseKey
 	* with boundariess - see also LowerBound()
@@ -202,7 +202,14 @@ public:
 	*/	
 	VerseKey(const char *min, const char *max);
 	
-	/**	VerseKey Copy Constructor - will create a new	VerseKey
+	/**	VerseKey Copy Constructor - will create a new VerseKey
+	* based on an existing SWKey
+	*
+	* @param k the	VerseKey to copy from
+	*/
+	VerseKey(const SWKey &k);
+
+	/**	VerseKey Copy Constructor - will create a new VerseKey
 	* based on an existing one
 	*
 	* @param k the	VerseKey to copy from
@@ -212,7 +219,7 @@ public:
 	/**	VerseKey Destructor
 	* Cleans up an instance of VerseKey
 	*/
-	virtual ~ VerseKey();
+	virtual ~VerseKey();
 
 	/** sets the lower boundary for this	VerseKey
 	* and returns the new boundary
@@ -220,24 +227,24 @@ public:
 	* @param lb the new lower boundary for this	VerseKey
 	* @return the lower boundary the key was set to
 	*/
-	VerseKey & LowerBound(const char *lb);
+	VerseKey &LowerBound(const char *lb);
 	
 	/** sets the upper boundary for this	VerseKey
 	* and returns the new boundary
 	* @param ub the new upper boundary for this	VerseKey
 	* @return the upper boundary the key was set to
 	*/
-	VerseKey & UpperBound(const char *ub);
+	VerseKey &UpperBound(const char *ub);
 	
 	/** gets the lower boundary of this	VerseKey
 	* @return the lower boundary of this	VerseKey
 	*/
-	VerseKey & LowerBound() const;
+	VerseKey &LowerBound() const;
 	
 	/** gets the upper boundary of this	VerseKey
 	* @return the upper boundary of this	VerseKey
 	*/
-	VerseKey & UpperBound() const;
+	VerseKey &UpperBound() const;
 	
 	/** clears the boundaries of this	VerseKey
 	*/
@@ -253,7 +260,7 @@ public:
 	*/
 	virtual const char *getText() const;
 	virtual const char *getShortText() const;
-	virtual void setText(const char *ikey) { SWKey::setText(ikey); parse (); }
+	virtual void setText(const char *ikey) { SWKey::setText(ikey); parse(); }
 	virtual void copyFrom(const SWKey &ikey);
 	
 	/** Equates this VerseKey to another VerseKey
@@ -396,7 +403,7 @@ public:
 	 */
 	static const char *convertToOSIS(const char *inRef, const SWKey *defaultKey);
 
-	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = "Genesis 1:1", bool expandRange = false);
+	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false);
 	virtual const char *getRangeText() const;
 	/** Compares another	SWKey object
 	*
@@ -428,7 +435,7 @@ public:
 
 	SWKEY_OPERATORS
 
-	virtual SWKey & operator = (const VerseKey & ikey) { copyFrom(ikey); return *this; }
+	virtual SWKey & operator =(const VerseKey & ikey) { copyFrom(ikey); return *this; }
 };
 
 SWORD_NAMESPACE_END
