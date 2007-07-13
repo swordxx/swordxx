@@ -520,7 +520,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			outText("\">", buf, u);
 
 // we do this because BibleCS looks for this EXACT format for an image tag
-			outText("<image src=\"", buf, u);
+			outText("<image border=0 src=\"", buf, u);
 			outText(filepath, buf, u);
 			outText("\" />", buf, u);
 

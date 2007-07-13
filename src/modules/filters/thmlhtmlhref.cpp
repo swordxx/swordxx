@@ -330,7 +330,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				}
 				buf += *c;
 			}
-			buf += "></a>";
+			buf += " border=0></a>";
 		}
 		else {
 			buf += '<';
