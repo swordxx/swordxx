@@ -26,21 +26,13 @@
 
 SWORD_NAMESPACE_START
 
-/** Use stdstr to copy a const char* to a char*
+/** stdstr - clone a string
 */
 char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
 char *strstrip (char *istr);
 const char *stristr (const char *s1, const char *s2);
 int strnicmp(const char *s1, const char *s2, int len);
 int stricmp(const char *s1, const char *s2);
-// char *toupperstr(char *buf);
-// char *toupperstr_utf8(char *buf, unsigned int max = 0);
-
-/*
-extern "C" {
-int stricmp(const char *s1, const char *s2);
-}
-*/
 
 /******************************************************************************
  * SW_toupper - array of uppercase values for any given Latin-1 value

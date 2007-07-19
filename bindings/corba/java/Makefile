@@ -1,4 +1,6 @@
-TOMCAT_HOME=/usr/local/tomcat
+TOMCAT_HOME=/opt/tomcat
+#SERVLET_LIB=${TOMCAT_HOME}/common/lib/servlet-api.jar
+SERVLET_LIB=${TOMCAT_HOME}/lib/servlet-api.jar
 instdir=/home/swordweb/livehtml/webapp
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 
@@ -6,7 +8,7 @@ src/org/crosswire/sword/orb/SWMgr.java: ../swordorb.idl
 	idlj -pkgTranslate swordorb org.crosswire.sword.orb -td src ../swordorb.idl
 
 classes/org/crosswire/sword/orb/SwordOrb.class: src/org/crosswire/sword/orb/SwordOrb.java
-	javac -classpath ${TOMCAT_HOME}/common/lib/servlet-api.jar -d classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
+	javac -classpath ${SERVLET_LIB} -d classes -sourcepath src src/org/crosswire/sword/orb/*.java src/org/crosswire/util/*.java
 
 
 clean:

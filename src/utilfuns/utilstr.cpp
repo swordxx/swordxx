@@ -57,7 +57,7 @@ const unsigned char SW_toupper_array[256] =
 
 
 /******************************************************************************
- * stdstr - Sets/gets a string
+ * stdstr - clones a string
  *
  * ENT:	ipstr	- pointer to a string pointer to set if necessary
  *	istr	- string to set to *ipstr
