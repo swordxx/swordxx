@@ -9,6 +9,7 @@ using sword::SWMgr;
 using sword::MarkupFilterMgr;
 using sword::SWModule;
 using sword::FMT_WEBIF;
+using sword::FMT_HTMLHREF;
 using sword::ModMap;
 using sword::AttributeTypeList;
 using sword::AttributeList;
@@ -17,7 +18,8 @@ using sword::AttributeValue;
 int main(int argc, char **argv)
 {
 	
-	SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
+//	SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
+	SWMgr manager(new MarkupFilterMgr(FMT_HTMLHREF));
 	SWModule *target;
 
 	if (argc != 3) {
@@ -37,7 +39,9 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
+	// turn all filters to default values
 	manager.setGlobalOption("Headings", "On");
+	manager.setGlobalOption("Strong's Numbers", "On");
 //	manager.setGlobalOption("Greek Accents", "Off");
 
 	target->setKey(argv[2]);
