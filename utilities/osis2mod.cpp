@@ -428,17 +428,24 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					) {
 #ifdef DEBUG
 					if (token) {
-						cout << currentOsisID << ": start token " << *token << ":" << text.c_str() << endl;
+						cout << currentOsisID << ": appending interverse start token " << *token << ":" << text.c_str() << endl;
 					}
 #endif
 				SWBuf tmp = token->toString();
 				writeEntry(*currentVerse, tmp);
 				return true;
 			}
+#ifdef DEBUG
+			else {
+				if (token) {
+					cout << currentOsisID << ": interverse start token " << *token << ":" << text.c_str() << endl;
+				}
+			}
+#endif
 		}
 	}
 
-//-- END TAG ---------------------------------------------------------------------------------------------
+//-- EMPTY and END TAG ---------------------------------------------------------------------------------------------
 
 	else {
 
@@ -568,10 +575,13 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				text.append(*token);
 				writeEntry(*currentVerse, text);
 				text = "";
+#ifdef DEBUG
+				cout << currentOsisID << ": appending interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+#endif
 				return true;
 			}
 #ifdef DEBUG
-			cout << currentOsisID << ": End tag not in verse: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+			cout << currentOsisID << ": interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
 #endif
 		}
 	}
