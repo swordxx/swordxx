@@ -76,11 +76,11 @@ System.out.println("failed in attach");
 	public void valueUnbound(HttpSessionBindingEvent httpSessionBindingEvent) {
 		try {
 //			throw new Exception("value unbound; showing stacktrace");
-			getSWMgrInstance().terminate();
 			Vector orbs = (Vector)clients.get(remoteAddr);
 			if (orbs != null) {
 				orbs.remove(orb);
 			}
+			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return properly cuz we killed the orb! :)
 //		catch (Exception e) {e.printStackTrace();}	// we know this doesn't return properly cuz we killed the orb! :)
