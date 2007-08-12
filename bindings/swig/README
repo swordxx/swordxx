@@ -1,0 +1,28 @@
+Building the SWIG Bindings
+==========================
+
+You may need to do the following to get this to work. From this directory:
+
+cd package
+
+# Special step for BSD-liks (e.g. Mac OS X):
+# edit autogen.sh to remove the "-a" option from cp
+
+libtoolize --force
+
+./autogen.sh
+./configure
+make
+
+# Rather than make, you probably only care about one of the languages bindings.
+# So you might try one of these instead:
+# 
+#   make perl_make
+#   make python_make
+#
+
+# Install the perl bindings
+cd perl
+sudo make install
+
+# TODO Install the python bindings
