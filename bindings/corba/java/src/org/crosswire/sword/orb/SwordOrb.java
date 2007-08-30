@@ -27,6 +27,7 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static final String LEXDICTS = "Lexicons / Dictionaries";
 	public static final String GENBOOKS = "Generic Books";
 	public static final String DAILYDEVOS = "Daily Devotional";
+
 	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, null);
 	static Hashtable clients = new Hashtable();
 	String ior = null;
@@ -38,6 +39,11 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	long   blacklistTill = 0;
 
 	private SWMgr attach() {
+
+		// assert IOR has been set
+		if (ior == null)
+			return null;
+
 		SWMgr retVal = null;
 		try {
 System.out.println("attaching...");
@@ -47,7 +53,7 @@ System.out.println("calling testConnection");
 			retVal.testConnection();
 System.out.println("testConnection successful");
 		}
-		catch(Exception e) {
+		catch(Throwable e) {
 //			e.printStackTrace();
 			retVal = null;
 System.out.println("failed in attach");
@@ -64,6 +70,7 @@ System.out.println("failed in attach");
 	public void finalize () throws Throwable {
 		// shut down external process
 		try {
+System.out.println("calling finalize.");
 			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return property cuz we killed the orb! :)
@@ -77,9 +84,12 @@ System.out.println("failed in attach");
 		try {
 //			throw new Exception("value unbound; showing stacktrace");
 			Vector orbs = (Vector)clients.get(remoteAddr);
+int size = -1;
 			if (orbs != null) {
-				orbs.remove(orb);
+size = orbs.size();
+				orbs.remove(this);
 			}
+System.out.println("calling valueUnbound. size before: " + size + "; size after: "+orbs.size());
 			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return properly cuz we killed the orb! :)
