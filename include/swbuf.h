@@ -332,6 +332,8 @@ public:
 	inline SWBuf &trimStart() { while (size() && (strchr("\t\r\n ", *(buf)))) *this << 1; return *this; }
 	inline SWBuf &trimEnd() { while (size() && (strchr("\t\r\n ", *(end-1)))) setSize(size()-1); return *this; }
 	inline SWBuf &trim() { trimStart(); return trimEnd(); }
+	// this could be nicer, like replacing a contiguous series of target bytes with single replacement; offering replacement const char *
+	inline SWBuf &replaceBytes(const char *targets, char newByte) { for (unsigned int i = 0; (i < size()); i++) { if (strchr(targets, buf[i])) buf[i] = newByte; } return *this; }
 
 	inline bool startsWith(const SWBuf &prefix) const { return !strncmp(c_str(), prefix.c_str(), prefix.size()); }
 	inline bool endsWith(const SWBuf &postfix) const { return (size() >= postfix.size())?!strncmp(end-postfix.size(), postfix.c_str(), postfix.size()):false; }

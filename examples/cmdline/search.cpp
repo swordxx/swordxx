@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
 	 *			-4  - Lucene
    */
-	listkey = target->Search(searchTerm.c_str(), -1, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(searchTerm.c_str(), -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
 	listkey.sort();
 	while (!listkey.Error()) {
