@@ -28,10 +28,9 @@ SWORD_NAMESPACE_START
 /** this filter converts ThML text to plain text
  */
 class SWDLLEXPORT ThMLPlain : public SWFilter {
-protected:
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
 	ThMLPlain();
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

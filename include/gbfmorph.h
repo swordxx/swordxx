@@ -31,7 +31,7 @@ class SWDLLEXPORT GBFMorph : public SWOptionFilter {
 public:
 	GBFMorph();
 	virtual ~GBFMorph();
-	virtual char processText(SWBuf &text, const SWKey * key = 0, const SWModule *module = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END

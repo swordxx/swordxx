@@ -30,7 +30,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT GBFPlain : public SWFilter {
 public:
 	GBFPlain();
-	virtual char processText (SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 SWORD_NAMESPACE_END
