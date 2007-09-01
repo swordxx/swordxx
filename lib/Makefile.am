@@ -34,7 +34,7 @@ IMGRLIBADD =
 endif
 
 
-libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) 
+libsword_la_LIBADD = $(ICULIBADD) $(IMGRLIBADD) $(CLUCENE_LIBS)
 
 libsword_la_LDFLAGS = -release $(VERSION)
 
