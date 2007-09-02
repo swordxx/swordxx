@@ -320,7 +320,7 @@ public:
 	inline SWBuf &operator -=(unsigned long len) { setSize(length()-len); return *this; }
 	inline SWBuf &operator --(int) { operator -=(1); return *this; }
 
-	inline SWBuf &operator <<(unsigned long n) { n = (n<=length())?n:(length()-1); memmove(buf, buf+n, length()-n); (*this)-=n; return *this; }
+	inline SWBuf &operator <<(unsigned long n) { if (n && length()) { n = (n<=length())?n:(length()-1); memmove(buf, buf+n, length()-n); (*this)-=n; } return *this; }
 	inline SWBuf &operator >>(unsigned long n) { setSize(length()+n); memmove(buf+n, buf, length()-n); return *this; }
 	inline SWBuf operator +(const SWBuf &other) const {
 		SWBuf retVal = buf;
