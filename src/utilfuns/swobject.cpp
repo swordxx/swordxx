@@ -21,14 +21,23 @@
 */
 
 #include <swobject.h>
-#include <utilstr.h>
 
+// hack.  remove this when we figure out our link error
+#ifndef __CYGWIN__
+#include <utilstr.h>
+#else
+#include <string.h>
+#endif
 
 SWORD_NAMESPACE_START
 
 bool SWClass::isAssignableFrom(const char *className) const {
 	for (int i = 0; descends[i]; i++) {
+#ifndef __CYGWIN__
 		if (!sword::stricmp(descends[i], className))
+#else
+		if (!stricmp(descends[i], className))
+#endif
 			return true;
 	}
 	return false;
