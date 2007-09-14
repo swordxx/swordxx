@@ -18,9 +18,12 @@ extern "C" {
 #include <fcntl.h>
 
 #include <swmgr.h>
+#include <swmodule.h>
+#include <swversion.h>
 #include <dirent.h>
 
 #include <stdio.h>
+#include <map>
 
 #ifdef CURLAVAILABLE
 #include <curlftpt.h>
@@ -28,9 +31,28 @@ extern "C" {
 #include <ftplibftpt.h>
 #endif
 
-
 SWORD_NAMESPACE_START
 
+namespace {
+
+void removeTrailingSlash(SWBuf &buf) {
+	int len = buf.size();
+	if ((buf[len-1] == '/')
+	 || (buf[len-1] == '\\'))
+		buf.size(len-1);
+}
+
+};
+
+
+using std::map;
+
+const int InstallMgr::MODSTAT_OLDER            = 0x001;
+const int InstallMgr::MODSTAT_SAMEVERSION      = 0x002;
+const int InstallMgr::MODSTAT_UPDATED          = 0x004;
+const int InstallMgr::MODSTAT_NEW              = 0x008;
+const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
+const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 // override this method and provide your own custom FTPTransport subclass
 // here we try a couple defaults if sword was compiled with support for them.
@@ -51,6 +73,12 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
 	this->privatePath = 0;
 	this->transport = 0;
 	stdstr(&(this->privatePath), privatePath);
+	if (this->privatePath) {
+		int len = strlen(this->privatePath);
+		if ((this->privatePath[len-1] == '/')
+		 || (this->privatePath[len-1] == '\\'))
+			this->privatePath[len-1] = 0;
+	}
 	SWBuf confPath = (SWBuf)privatePath + "/InstallMgr.conf";
 	FileMgr::createParent(confPath.c_str());
 	
@@ -127,6 +155,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 		SWBuf modDir;
 		entry = module->second.find("AbsoluteDataPath");
 		modDir = entry->second.c_str();
+		removeTrailingSlash(modDir);
 		if (fileBegin != fileEnd) {	// remove each file
 			while (fileBegin != fileEnd) {
 				modFile = modDir;
@@ -150,6 +179,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 				while ((ent = readdir(dir))) {
 					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
 						modFile = manager->configPath;
+						removeTrailingSlash(modFile);
 						modFile += "/";
 						modFile += ent->d_name;
 						SWConfig *config = new SWConfig(modFile.c_str());
@@ -166,45 +196,6 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 		return 0;
 	}
 	return 1;
-}
-
-
-
-InstallSource::InstallSource(const char *type, const char *confEnt) {
-	this->type = type;
-	mgr = 0;
-	userData = 0;
-	if (confEnt) {
-		char *buf = 0;
-		stdstr(&buf, confEnt);
-
-		caption = strtok(buf, "|");
-		source = strtok(0, "|");
-		directory = strtok(0, "|");
-		delete [] buf;
-	}
-}
-
-
-InstallSource::~InstallSource() {
-	if (mgr)
-		delete mgr;
-}
-
-
-void InstallSource::flush() {
-	if (mgr) {
-		delete mgr;
-		mgr = 0;
-	}
-}
-
-
-SWMgr *InstallSource::getMgr() {
-	if (!mgr)
-		// ..., false = don't augment ~home directory.
-		mgr = new SWMgr(localShadow.c_str(), true, 0, false, false);
-	return mgr;
 }
 
 
@@ -225,7 +216,9 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 
 	   
 	if (dirTransfer) {
-		SWBuf dir = (SWBuf)is->directory.c_str() + "/" + src; //dont forget the final slash
+		SWBuf dir = (SWBuf)is->directory.c_str();
+		removeTrailingSlash(dir);
+		dir += (SWBuf)"/" + src; //dont forget the final slash
 
 		retVal = trans->copyDirectory(urlPrefix, dir, dest, suffix);
 
@@ -233,7 +226,9 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 	}
 	else {
 		SWTRY {
-			SWBuf url = urlPrefix + is->directory.c_str() + "/" + src; //dont forget the final slash
+			SWBuf url = urlPrefix + is->directory.c_str();
+			removeTrailingSlash(url);
+			url += (SWBuf)"/" + src; //dont forget the final slash
 			if (trans->getURL(dest, url.c_str())) {
 				fprintf(stderr, "FTPCopy: failed to get file %s", url.c_str());
 				retVal = -1;
@@ -273,8 +268,8 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 		sourceDir = (SWBuf)privatePath + "/" + is->source;
 	else	sourceDir = fromLocation;
 
-	if (sourceDir[sourceDir.length()-1] != '/')
-		sourceDir += '/';
+	removeTrailingSlash(sourceDir);
+	sourceDir += '/';
 
 	SWMgr mgr(sourceDir.c_str());
 	
@@ -296,7 +291,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 		if (fileBegin != fileEnd) {	// copy each file
 			if (is) {
 				while (fileBegin != fileEnd) {	// ftp each file first
-					buffer = sourceDir + "/" + fileBegin->second.c_str();
+					buffer = sourceDir + fileBegin->second.c_str();
 					if (ftpCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
 						aborted = true;
 						break;	// user aborted
@@ -312,8 +307,8 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 					SWBuf sourcePath = sourceDir;
 					sourcePath += fileBegin->second.c_str();
 					SWBuf dest = destMgr->prefixPath;
-					if ((destMgr->prefixPath[strlen(destMgr->prefixPath)-1] != '\\') && (destMgr->prefixPath[strlen(destMgr->prefixPath)-1] != '/'))
-						dest += "/";
+					removeTrailingSlash(dest);
+					dest += '/';
 					dest += fileBegin->second.c_str();
 					FileMgr::copyFile(sourcePath.c_str(), dest.c_str());
 
@@ -325,7 +320,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			if (is) {
 				fileBegin = module->second.lower_bound("File");
 				while (fileBegin != fileEnd) {	// delete each tmp ftp file
-					buffer = sourceDir + "/" + fileBegin->second.c_str();
+					buffer = sourceDir + fileBegin->second.c_str();
 					FileMgr::removeFile(buffer.c_str());
 					fileBegin++;
 				}
@@ -362,7 +357,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			}
 		}
 		if (!aborted) {
-			SWBuf confDir = sourceDir + "/mods.d/";
+			SWBuf confDir = sourceDir + "mods.d/";
 			if ((dir = opendir(confDir.c_str()))) {	// find and copy .conf file
 				rewinddir(dir);
 				while ((ent = readdir(dir))) {
@@ -372,6 +367,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 						SWConfig *config = new SWConfig(modFile.c_str());
 						if (config->Sections.find(modName) != config->Sections.end()) {
 							SWBuf targetFile = destMgr->configPath; //"./mods.d/";
+							removeTrailingSlash(targetFile);
 							targetFile += "/";
 							targetFile += ent->d_name;
 							FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
@@ -441,6 +437,7 @@ bool InstallMgr::getCipherCode(const char *modName, SWConfig *config) {
 
 int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->source.c_str();
+	removeTrailingSlash(root);
 	SWBuf target = root + "/mods.d";
 	int errorCode = -1; //0 means successful
 	
@@ -469,6 +466,97 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 
 bool InstallMgr::isDefaultModule(const char *modName) {
 	return defaultMods.count(modName);
+}
+
+/************************************************************************
+ * getModuleStatus - compare the modules of two SWMgrs and return a 
+ * 	vector describing the status of each.  See MODSTAT_*
+ */
+map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr &other) {
+	map<SWModule *, int> retVal;
+	SWBuf targetVersion;
+	SWBuf sourceVersion;
+	SWBuf softwareVersion;
+	bool cipher;
+	bool keyPresent;
+	int modStat;
+	
+	for (ModMap::const_iterator mod = other.Modules.begin(); mod != other.Modules.end(); mod++) {
+	
+		modStat = 0;
+
+		cipher = false;
+		keyPresent = false;
+		
+		const char *v = mod->second->getConfigEntry("CipherKey");
+		if (v) {
+			cipher = true;
+			keyPresent = *v;
+		}
+		
+		targetVersion = "0.0";
+		sourceVersion = "1.0";
+		softwareVersion = (const char *)SWVersion::currentVersion;
+		
+		v = mod->second->getConfigEntry("Version");
+		if (v) sourceVersion = v;
+
+		v = mod->second->getConfigEntry("MinimumVersion");
+		if (v) softwareVersion = v;
+
+		const SWModule *baseMod = base.getModule(mod->first);
+		if (baseMod) {
+			targetVersion = "1.0";
+			v = baseMod->getConfigEntry("Version");
+			if (v) targetVersion = v;
+			modStat |= (SWVersion(sourceVersion.c_str()) > SWVersion(targetVersion.c_str())) ? MODSTAT_UPDATED : (SWVersion(sourceVersion.c_str()) < SWVersion(targetVersion.c_str())) ? MODSTAT_OLDER : MODSTAT_SAMEVERSION;
+		}
+		else modStat |= MODSTAT_NEW;
+
+		if (cipher) modStat |= MODSTAT_CIPHERED;
+		if (keyPresent) modStat |= MODSTAT_CIPHERKEYPRESENT;
+		retVal[mod->second] = modStat;
+	}
+	return retVal;
+}
+
+
+InstallSource::InstallSource(const char *type, const char *confEnt) {
+	this->type = type;
+	mgr = 0;
+	userData = 0;
+	if (confEnt) {
+		char *buf = 0;
+		stdstr(&buf, confEnt);
+
+		caption = strtok(buf, "|");
+		source = strtok(0, "|");
+		directory = strtok(0, "|");
+		removeTrailingSlash(directory);
+		delete [] buf;
+	}
+}
+
+
+InstallSource::~InstallSource() {
+	if (mgr)
+		delete mgr;
+}
+
+
+void InstallSource::flush() {
+	if (mgr) {
+		delete mgr;
+		mgr = 0;
+	}
+}
+
+
+SWMgr *InstallSource::getMgr() {
+	if (!mgr)
+		// ..., false = don't augment ~home directory.
+		mgr = new SWMgr(localShadow.c_str(), true, 0, false, false);
+	return mgr;
 }
 
 

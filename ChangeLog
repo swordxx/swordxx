@@ -1,5 +1,9 @@
-API ChangeLog	(see the ChangeLog in each 'apps' directory for
-		app specific changes)
+API ChangeLog 
+
+13-Sep-2007	Troy A. Griffitts <scribe@crosswire.org>
+	Added InstallMgr::getModuleStatus to return a list
+		of differences between the modules of two SWMgr
+		objects
 
 03-Mar-2007 	Joachim Ansorg <jansorg@crosswire.org>
 	Added osis morph segments filter include file to the dist
@@ -25,7 +29,7 @@ API ChangeLog	(see the ChangeLog in each 'apps' directory for
 	Added recognition of additional greek accent ~
 		in UTF8GreekAccents filter
 	Fixed bug in RawGenBook::setText where default size
-		is < 0, not false.
+		is < 0, not false
 	Changed lucene indexing to actually index the key field.  This
 		allows searching within key field (e.g. key:word)
 	Fixed divineName logic

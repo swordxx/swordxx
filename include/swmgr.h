@@ -209,6 +209,7 @@ public:
 	 * @return the module, if found, otherwise 0
 	 */
 	SWModule *getModule(const char *modName) { ModMap::iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
+	const SWModule *getModule(const char *modName) const { ModMap::const_iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
 
 
 	/** Constructs an instance of SWMgr

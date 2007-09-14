@@ -9,6 +9,7 @@
 SWORD_NAMESPACE_START
 
 class SWMgr;
+class SWModule;
 class SWConfig;
 class FTPTransport;
 class StatusReporter;
@@ -53,6 +54,14 @@ protected:
 	FTPTransport *transport;	
 	
 public:
+
+	const static int MODSTAT_OLDER;
+	const static int MODSTAT_SAMEVERSION;
+	const static int MODSTAT_UPDATED;
+	const static int MODSTAT_NEW;
+	const static int MODSTAT_CIPHERED;
+	const static int MODSTAT_CIPHERKEYPRESENT;
+
 	SWConfig *installConf;
 	InstallSourceMap sources;
 	bool term;
@@ -68,6 +77,12 @@ public:
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
 	void setFTPPassive(bool passive) { this->passive = passive; }
 	void terminate();
+
+	/************************************************************************
+	 * getModuleStatus - compare the modules of two SWMgrs and return a 
+	 * 	vector describing the status of each.  See MODSTAT_*
+	 */
+	static std::map<SWModule *, int> getModuleStatus(const SWMgr &base, const SWMgr &other);
 
 	/************************************************************************
 	 * isDefaultModule - allows an installation to provide a set of modules

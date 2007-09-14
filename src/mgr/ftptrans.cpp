@@ -18,6 +18,18 @@ using std::vector;
 SWORD_NAMESPACE_START
 
 
+namespace {
+
+void removeTrailingSlash(SWBuf &buf) {
+	int len = buf.size();
+	if ((buf[len-1] == '/')
+	 || (buf[len-1] == '\\'))
+		buf.size(len-1);
+}
+
+};
+
+
 void StatusReporter::preStatus(long totalBytes, long completedBytes, const char *message) {
 }
 
@@ -90,9 +102,8 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 	int retVal = 0;
 	
 	SWBuf url = SWBuf(urlPrefix) + SWBuf(dir);
-	if (url[url.length()-1] != '/') {
-		url.append('/'); //don't forget the final slash if it's not yet at the end
-	}
+	removeTrailingSlash(url);
+	url += '/';
 	
 	SWLog::getSystemLog()->logWarning("FTPCopy: getting dir %s\n", url.c_str());
 	vector<struct ftpparse> dirList = getDirList(url.c_str());
@@ -108,7 +119,9 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 	long completedBytes = 0;
 	for (i = 0; i < dirList.size(); i++) {
 		struct ftpparse &dirEntry = dirList[i];
-		SWBuf buffer = (SWBuf)dest + "/" + (dirEntry.name);
+		SWBuf buffer = (SWBuf)dest;
+		removeTrailingSlash(buffer);
+		buffer += (SWBuf)"/" + (dirEntry.name);
 		if (!strcmp(&buffer.c_str()[buffer.length()-strlen(suffix)], suffix)) {
 			SWBuf buffer2 = "Downloading (";
 			buffer2.appendFormatted("%d", i+1);
@@ -120,7 +133,9 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 				statusReporter->preStatus(totalBytes, completedBytes, buffer2.c_str());
 			FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
 			SWTRY {
-				SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir + "/" + dirEntry.name; //dont forget the final slash
+				SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir;
+				removeTrailingSlash(url);
+				url += (SWBuf)"/" + dirEntry.name; //dont forget the final slash
 				if (dirEntry.flagtrycwd != 1) {
 					if (getURL(buffer.c_str(), url.c_str())) {
 						SWLog::getSystemLog()->logWarning("FTPCopy: failed to get file %s\n", url.c_str());
@@ -129,7 +144,9 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 					completedBytes += dirEntry.size;
 				}
 				else {
-					SWBuf subdir = (SWBuf)dir + "/" + dirEntry.name;
+					SWBuf subdir = (SWBuf)dir;
+					removeTrailingSlash(subdir);
+					subdir += (SWBuf)"/" + dirEntry.name;
 					if (copyDirectory(urlPrefix, subdir, buffer.c_str(), suffix)) {
 						SWLog::getSystemLog()->logWarning("FTPCopy: failed to get file %s\n", subdir.c_str());
 						return -2;

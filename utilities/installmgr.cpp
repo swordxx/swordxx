@@ -2,14 +2,14 @@
 #include <installmgr.h>
 #include <filemgr.h>
 #include <iostream>
-#include <string>
+#include <map>
 #include <swmodule.h>
 #include <stdio.h>
 
 using namespace sword;
 using std::cout;
 using std::cin;
-using std::string;
+using std::map;
 
 
 SWMgr *mgr;
@@ -33,6 +33,7 @@ void usage(const char *progName) {
 		"\t-s\t\t\t\tlist remote sources\n"
 		"\t-r  <remoteSrcName>\t\trefresh remote source\n"
 		"\t-rl <remoteSrcName>\t\tlist available modules from remote source\n"
+		"\t-rd <remoteSrcName>\t\tlist new/updated modules from remote source\n"
 		"\t-ri <remoteSrcName> <modName>\tinstall module from remote source\n"
 		"\t-ll <path>\t\t\tlist available modules at local path\n"
 		"\t-li <path> <modName>\t\tinstall module from local path\n"
@@ -123,6 +124,28 @@ void refreshRemoteSource(const char *sourceName) {
 }
 
 
+void remoteNewModules(const SWMgr *base, const char *sourceName) {
+	cout << "Updated and New Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
+	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
+	if (source == installMgr->sources.end()) {
+		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
+		finish(-3);
+	}
+	map<SWModule *, int> modStats = installMgr->getModuleStatus(*base, *source->second->getMgr());
+	SWModule *module;
+	int status;
+	bool updated;
+	for (map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); it++) {
+		module = it->first;
+		status = it->second;
+		updated = (status & InstallMgr::MODSTAT_UPDATED);
+		if ((status & InstallMgr::MODSTAT_NEW) || (updated)) {
+			cout << ((updated)?"U":"N") << " [" << module->Name() << "]  \t- " << module->Description() << "\n";
+		}
+	}
+}
+
+
 void remoteListModules(const char *sourceName) {
 	cout << "Available Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
 	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
@@ -156,8 +179,10 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
 		finish(-4);
 	}
 	module = it->second;
-	installMgr->installModule(mgr, 0, module->Name(), is);
-	cout << "Installed module: [" << module->Name() << "]\n";
+	int error = installMgr->installModule(mgr, 0, module->Name(), is);
+	if (error) {
+		cout << "Error installing module: [" << module->Name() << "] (write permissions?)\n";
+	} else cout << "Installed module: [" << module->Name() << "]\n";
 }
 
 
@@ -170,8 +195,10 @@ void localDirInstallModule(const char *dir, const char *modName) {
 		finish(-4);
 	}
 	module = it->second;
-	installMgr->installModule(mgr, dir, module->Name());
-	cout << "Installed module: [" << module->Name() << "]\n";
+	int error = installMgr->installModule(mgr, dir, module->Name());
+	if (error) {
+		cout << "Error installing module: [" << module->Name() << "] (write permissions?)\n";
+	} else cout << "Installed module: [" << module->Name() << "]\n";
 }
 
 
@@ -232,6 +259,11 @@ int main(int argc, char **argv) {
 			if (argc < 3)
 				usage(*argv);
 			remoteListModules(argv[2]);
+			break;
+		case 'd':		// -rl remote list
+			if (argc < 3)
+				usage(*argv);
+			remoteNewModules(mgr, argv[2]);
 			break;
 		case 'i':		// -ri remote install
 			if (argc < 4)
