@@ -96,9 +96,15 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 
 #ifdef EPRT_AVAILABLE
 		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0);
+fprintf(stderr, "***** using CURLOPT_FTP_USE_EPRT\n");
 #endif
+
 		
+fprintf(stderr, "***** About to perform curl easy action. \n");
+fprintf(stderr, "***** destPath: %s \n", destPath);
+fprintf(stderr, "***** sourceURL: %s \n", sourceURL);
 		res = curl_easy_perform(session);
+fprintf(stderr, "***** Finished performing curl easy action. \n");
 
 		if(CURLE_OK != res) {
 			retVal = -1;
