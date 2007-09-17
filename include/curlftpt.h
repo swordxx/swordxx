@@ -23,7 +23,7 @@ public:
 	CURLFTPTransport(const char *host, StatusReporter *statusReporter = 0);
 	~CURLFTPTransport();
 	
-	virtual char getURL(const char *destPath, const char *sourceURL);
+	virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
 };
 
 

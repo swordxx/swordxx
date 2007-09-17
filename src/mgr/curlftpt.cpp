@@ -12,12 +12,15 @@
 #include <curl/types.h>
 #include <curl/easy.h>
 
+#include <swlog.h>
+
 SWORD_NAMESPACE_START
 
 
 struct FtpFile {
   const char *filename;
   FILE *stream;
+  SWBuf *destBuf;
 };
 
 
@@ -36,11 +39,17 @@ CURLFTPTransport_init::~CURLFTPTransport_init() {
 
 int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 	struct FtpFile *out=(struct FtpFile *)stream;
-	if (out && !out->stream) {
+	if (out && !out->stream && !out->destBuf) {
 		/* open file for writing */
 		out->stream=fopen(out->filename, "wb");
 		if (!out->stream)
 			return -1; /* failure, can't open file to write */
+	}
+	if (out->destBuf) {
+		int s = out->destBuf->size();
+		out->destBuf->size(s+(size*nmemb));
+		memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
+		return nmemb;
 	}
 	return fwrite(buffer, size, nmemb, out->stream);
 }
@@ -54,6 +63,33 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 }
 
 
+static int my_trace(CURL *handle, curl_infotype type, unsigned char *data, size_t size, void *userp) {
+	SWBuf header;
+	(void)userp; /* prevent compiler warning */
+	(void)handle; /* prevent compiler warning */
+
+	switch (type) {
+	case CURLINFO_TEXT: header = "TEXT"; break;
+	case CURLINFO_HEADER_OUT: header = "=> Send header"; break;
+	case CURLINFO_HEADER_IN: header = "<= Recv header"; break;
+	
+	// these we don't want to log (HUGE)
+	case CURLINFO_DATA_OUT: header = "=> Send data";
+	case CURLINFO_SSL_DATA_OUT: header = "=> Send SSL data";
+	case CURLINFO_DATA_IN: header = "<= Recv data"; 
+	case CURLINFO_SSL_DATA_IN: header = "<= Recv SSL data";
+	default: /* in case a new one is introduced to shock us */
+		return 0;
+	}
+	
+	if (size > 120) size = 120;
+	SWBuf text;
+	text.size(size);
+	memcpy(text.getRawData(), data, size);
+	SWLog::getSystemLog()->logDebug("CURLFTPTransport: %s: %s", header.c_str(), text.c_str());
+	return 0;
+}
+
 CURLFTPTransport::CURLFTPTransport(const char *host, StatusReporter *sr) : FTPTransport(host, sr) {
 	session = (CURL *)curl_easy_init();
 }
@@ -64,9 +100,9 @@ CURLFTPTransport::~CURLFTPTransport() {
 }
 
 
-char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
+char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
 	signed char retVal = 0;
-	struct FtpFile ftpfile = {destPath, NULL};
+	struct FtpFile ftpfile = {destPath, 0, destBuf};
 
 	CURLcode res;
 	
@@ -80,6 +116,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 		curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
 		curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
 		curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_fprogress);
+		curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, my_trace);
 		/* Set a pointer to our struct to pass to the callback */
 		curl_easy_setopt(session, CURLOPT_FILE, &ftpfile);
 
@@ -96,15 +133,15 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL) {
 
 #ifdef EPRT_AVAILABLE
 		curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0);
-fprintf(stderr, "***** using CURLOPT_FTP_USE_EPRT\n");
+		SWLog::getSystemLog()->logDebug("***** using CURLOPT_FTP_USE_EPRT\n");
 #endif
 
 		
-fprintf(stderr, "***** About to perform curl easy action. \n");
-fprintf(stderr, "***** destPath: %s \n", destPath);
-fprintf(stderr, "***** sourceURL: %s \n", sourceURL);
+		SWLog::getSystemLog()->logDebug("***** About to perform curl easy action. \n");
+		SWLog::getSystemLog()->logDebug("***** destPath: %s \n", destPath);
+		SWLog::getSystemLog()->logDebug("***** sourceURL: %s \n", sourceURL);
 		res = curl_easy_perform(session);
-fprintf(stderr, "***** Finished performing curl easy action. \n");
+		SWLog::getSystemLog()->logDebug("***** Finished performing curl easy action. \n");
 
 		if(CURLE_OK != res) {
 			retVal = -1;

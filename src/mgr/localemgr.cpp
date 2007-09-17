@@ -37,13 +37,6 @@
 #include <swlog.h>
 
 
-#ifdef _MSC_VER
-#define DEBUGSTR(x)
-#else
-#include<iostream>
-#define DEBUGSTR(x) if (SWMgr::debug) std::cerr << x;
-#endif  
-
 SWORD_NAMESPACE_START
 
 LocaleMgr *LocaleMgr::systemLocaleMgr = 0;
@@ -81,9 +74,9 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	defaultLocaleName = 0;
 	
 	if (!iConfigPath) {
-		DEBUGSTR("LOOKING UP LOCALE DIRECTORY...\n");
+		SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
 		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths);
-		DEBUGSTR("LOOKING UP LOCALE DIRECTORY COMPLETE.\n\n");
+		SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY COMPLETE.");
 	}
 	else configPath = (char *)iConfigPath;
 	

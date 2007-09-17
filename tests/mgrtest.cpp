@@ -1,4 +1,5 @@
 #include <swmgr.h>
+#include <swlog.h>
 #include <iostream>
 #include <versekey.h>
 #include <swmodule.h>
@@ -9,7 +10,7 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 	std::cerr << "\n";
-	SWMgr::debug = true;
+	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 	SWConfig *sysConf = 0;
 	if (argc > 1) {
 		sysConf = new SWConfig(argv[1]);

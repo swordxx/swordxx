@@ -27,13 +27,18 @@
 
 #include <defs.h>
 #include <swcacher.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
-class SWBuf;
-
 class SWDLLEXPORT FileMgr;
 
+struct SWDLLEXPORT DirEntry {
+public:
+	SWBuf name;
+	unsigned long size;
+	bool isDirectory;
+};
 /**
 * This class represents one file. It works with the FileMgr object.
 */

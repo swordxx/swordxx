@@ -20,6 +20,7 @@ extern "C" {
 #include <swmgr.h>
 #include <swmodule.h>
 #include <swversion.h>
+#include <swlog.h>
 #include <dirent.h>
 
 #include <stdio.h>
@@ -209,8 +210,8 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 
 	// let's be sure we can connect.  This seems to be necessary but sucks
 //	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
-//	if (trans->getURL("dirlist", url.c_str())) {
-//		 fprintf(stderr, "FTPCopy: failed to get dir %s\n", url.c_str());
+//	if (trans->getURL("swdirlist.tmp", url.c_str())) {
+//		 SWLog::getSystemLog()->logDebug("FTPCopy: failed to get dir %s\n", url.c_str());
 //		 return -1;
 //	}
 
@@ -230,7 +231,7 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 			removeTrailingSlash(url);
 			url += (SWBuf)"/" + src; //dont forget the final slash
 			if (trans->getURL(dest, url.c_str())) {
-				fprintf(stderr, "FTPCopy: failed to get file %s", url.c_str());
+				SWLog::getSystemLog()->logDebug("FTPCopy: failed to get file %s", url.c_str());
 				retVal = -1;
 			}
 		}
@@ -263,6 +264,10 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	struct dirent *ent;
 	SWBuf modFile;
 
+	SWLog::getSystemLog()->logDebug("***** InstallMgr::installModule\n");
+	if (fromLocation)
+		SWLog::getSystemLog()->logDebug("***** fromLocation: %s \n", fromLocation);
+	SWLog::getSystemLog()->logDebug("***** modName: %s \n", modName);
 
 	if (is)
 		sourceDir = (SWBuf)privatePath + "/" + is->source;
@@ -340,6 +345,10 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 				SWBuf absolutePath = entry->second.c_str();
 				SWBuf relativePath = absolutePath;
 				relativePath << strlen(mgr.prefixPath);
+				SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.prefixPath);
+				SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->prefixPath);
+				SWLog::getSystemLog()->logDebug("***** absolutePath: %s \n", absolutePath.c_str());
+				SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
 				if (is) {
 					if (ftpCopy(is, relativePath.c_str(), absolutePath.c_str(), true)) {

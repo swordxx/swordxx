@@ -5,6 +5,7 @@
 #include <map>
 #include <swmodule.h>
 #include <stdio.h>
+#include <swlog.h>
 
 using namespace sword;
 using std::cout;
@@ -209,6 +210,8 @@ int main(int argc, char **argv) {
 	SWBuf baseDir = (envhomedir) ? envhomedir : ".";
 	baseDir += "/.sword/InstallMgr";
 	installMgr = new InstallMgr(baseDir);
+
+	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 
 	cout << "\n";
 

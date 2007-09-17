@@ -20,7 +20,7 @@ class SWDLLEXPORT FTPLibFTPTransport : public FTPTransport {
 public:
 	FTPLibFTPTransport(const char *host, StatusReporter *statusReporter = 0);
 	~FTPLibFTPTransport();
-	char getURL(const char *destPath, const char *sourceURL);
+	char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
 };
 
 

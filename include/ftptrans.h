@@ -42,15 +42,18 @@ protected:
 public:
 	FTPTransport(const char *host, StatusReporter *statusReporter = 0);
 	virtual ~FTPTransport();
-	virtual char getURL(const char *destPath, const char *sourceURL);
+
+	/***********
+	 * override this method in your real impl
+	 * 
+	 * if destBuf then write to buffer instead of file
+	 */
+	virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
+
 
 	int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 
-	// probably change to not expose struct ftpparse.  We probably need our
-	// own FTPFile class or something that contains things like file name,
-	// size, type (dir, file, special).  Then change to vector of this class
-	// instead of ftpparse
-	virtual std::vector<struct ftpparse> getDirList(const char *dirURL);
+	virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
 	void setPassive(bool passive) { this->passive = passive; }
 	void terminate() { term = true; }
 };

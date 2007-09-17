@@ -100,19 +100,11 @@ bool SWMgr::isICU = false;
 #endif
 
 
-bool SWMgr::debug = false;
-
 #ifdef GLOBCONFPATH
 const char *SWMgr::globalConfPath = GLOBCONFPATH;
 #else
 const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif
-
-#ifdef _MSC_VER
-#define DEBUGSTR(x)
-#else
-#define DEBUGSTR(x) if (SWMgr::debug) std::cerr << x;
-#endif  
 
 void SWMgr::init() {
 	SWOptionFilter *tmpFilter = 0;
@@ -365,30 +357,30 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	//debug=1;
 
 	// check for a sysConf passed in to us
-	DEBUGSTR("Checking for provided SWConfig(\"sword.conf\")...");
+	SWLog::getSystemLog()->logDebug("Checking for provided SWConfig(\"sword.conf\")...");
 	if (providedSysConf) {
 		sysConf = providedSysConf;
-		DEBUGSTR("found.\n");
+		SWLog::getSystemLog()->logDebug("found.");
 	}
 	else {
 		// check working directory
-		DEBUGSTR("\nChecking working directory for sword.conf...");
+		SWLog::getSystemLog()->logDebug("Checking working directory for sword.conf...");
 		if (FileMgr::existsFile(".", "sword.conf")) {
-			DEBUGSTR("\nOverriding any systemwide or ~/.sword/ sword.conf with one found in current directory.\n");
+			SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.sword/ sword.conf with one found in current directory.");
 			sysConfPath = "./sword.conf";
 		}
 		else {
-			DEBUGSTR("\nChecking working directory for mods.conf...");
+			SWLog::getSystemLog()->logDebug("Checking working directory for mods.conf...");
 			if (FileMgr::existsFile(".", "mods.conf")) {
-				DEBUGSTR("found\n");
+				SWLog::getSystemLog()->logDebug("found.");
 				stdstr(prefixPath, "./");
 				stdstr(configPath, "./mods.conf");
 				return;
 			}
 
-			DEBUGSTR("\nChecking working directory for mods.d...");
+			SWLog::getSystemLog()->logDebug("Checking working directory for mods.d...");
 			if (FileMgr::existsDir(".", "mods.d")) {
-				DEBUGSTR("found\n");
+				SWLog::getSystemLog()->logDebug("found.");
 				stdstr(prefixPath, "./");
 				stdstr(configPath, "./mods.d");
 				*configType = 1;
@@ -396,9 +388,9 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			}
 
 		   // check working directory ../library/
-			DEBUGSTR("\nChecking working directory ../library/ for mods.d...");
+			SWLog::getSystemLog()->logDebug("Checking working directory ../library/ for mods.d...");
 			if (FileMgr::existsDir("../library", "mods.d")) {
-				DEBUGSTR("found\n");
+				SWLog::getSystemLog()->logDebug("found.");
 				stdstr(prefixPath, "../library/");
 				stdstr(configPath, "../library/mods.d");
 				*configType = 1;
@@ -406,27 +398,27 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			}
 
 			// check environment variable SWORD_PATH
-			DEBUGSTR("\nChecking SWORD_PATH...");
+			SWLog::getSystemLog()->logDebug("Checking SWORD_PATH...");
 
 			if (envsworddir != NULL) {
 				
-				DEBUGSTR("found (" << envsworddir << ")\n");
+				SWLog::getSystemLog()->logDebug("found (%s).", envsworddir);
 				path = envsworddir;
 				if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
 					path += "/";
 
-				DEBUGSTR("\nChecking $SWORD_PATH for mods.conf...");
+				SWLog::getSystemLog()->logDebug("Checking $SWORD_PATH for mods.conf...");
 				if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-					DEBUGSTR("found\n");
+					SWLog::getSystemLog()->logDebug("found.");
 					stdstr(prefixPath, path.c_str());
 					path += "mods.conf";
 					stdstr(configPath, path.c_str());
 					return;
 				}
 
-				DEBUGSTR("\nChecking $SWORD_PATH for mods.d...");
+				SWLog::getSystemLog()->logDebug("Checking $SWORD_PATH for mods.d...");
 				if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-					DEBUGSTR("found\n");
+					SWLog::getSystemLog()->logDebug("found.");
 					stdstr(prefixPath, path.c_str());
 					path += "mods.d";
 					stdstr(configPath, path.c_str());
@@ -438,14 +430,14 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 			// check for systemwide globalConfPath
 
-			DEBUGSTR("\nParsing " << globalConfPath << "...");
+			SWLog::getSystemLog()->logDebug("Parsing %s...", globalConfPath);
 			char *globPaths = 0;
 			char *gfp;
 			stdstr(&globPaths, globalConfPath);
 			for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(0, ":")) {
-				DEBUGSTR("\nChecking for " << gfp << "...");
+				SWLog::getSystemLog()->logDebug("Checking for %s...", gfp);
 				if (FileMgr::existsFile(gfp)) {
-					DEBUGSTR("found\n");
+					SWLog::getSystemLog()->logDebug("found.");
 					break;
 				}
 			}
@@ -459,7 +451,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 					homeDir += "/";
 				homeDir += ".sword/sword.conf";
 				if (FileMgr::existsFile(homeDir)) {
-					DEBUGSTR("\nOverriding any systemwide sword.conf with one found in users home directory.\n");
+					SWLog::getSystemLog()->logDebug("Overriding any systemwide sword.conf with one found in users home directory.");
 					sysConfPath = homeDir;
 				}
 			}
@@ -476,21 +468,21 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
 				path += "/";
 
-			DEBUGSTR("DataPath in " << sysConfPath << " is set to: " << path);
-			DEBUGSTR("\nChecking for mods.conf in DataPath...");
+			SWLog::getSystemLog()->logDebug("DataPath in %s is set to %s.", sysConfPath.c_str(), path.c_str());
+			SWLog::getSystemLog()->logDebug("Checking for mods.conf in DataPath...");
 			
 			if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-				DEBUGSTR("found\n");
+				SWLog::getSystemLog()->logDebug("found.");
 				stdstr(prefixPath, path.c_str());
 				path += "mods.conf";
 				stdstr(configPath, path.c_str());
 				*configType = 1;
 			}
 
-			DEBUGSTR("\nChecking for mods.d in DataPath...");
+			SWLog::getSystemLog()->logDebug("Checking for mods.d in DataPath...");
 
 			if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-				DEBUGSTR("found\n");
+				SWLog::getSystemLog()->logDebug("found.");
 				stdstr(prefixPath, path.c_str());
 				path += "mods.d";
 				stdstr(configPath, path.c_str());
@@ -519,25 +511,25 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	// check ~/.sword/
 
-	DEBUGSTR("\nChecking home directory for ~/.sword...");
+	SWLog::getSystemLog()->logDebug("Checking home directory for ~/.sword...");
 
 	if (envhomedir != NULL) {
 		path = envhomedir;
 		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
 			path += "/";
 		path += ".sword/";
-		DEBUGSTR("\n  Checking for " << path << "mods.conf...");
+		SWLog::getSystemLog()->logDebug("  Checking for %smods.conf...", path.c_str());
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-			DEBUGSTR("found\n");
+			SWLog::getSystemLog()->logDebug("found.");
 			stdstr(prefixPath, path.c_str());
 			path += "mods.conf";
 			stdstr(configPath, path.c_str());
 			return;
 		}
 
-		DEBUGSTR("\n  Checking for " << path << "mods.d...");
+		SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-			DEBUGSTR("found\n");
+			SWLog::getSystemLog()->logDebug("found.");
 			stdstr(prefixPath, path.c_str());
 			path += "mods.d";
 			stdstr(configPath, path.c_str());
@@ -652,9 +644,9 @@ signed char SWMgr::Load() {
 
 	if (!config) {	// If we weren't passed a config object at construction, find a config file
 		if (!configPath) {	// If we weren't passed a config path at construction...
-			DEBUGSTR("LOOKING UP MODULE CONFIGURATION...\n");
+			SWLog::getSystemLog()->logDebug("LOOKING UP MODULE CONFIGURATION...");
 			findConfig(&configType, &prefixPath, &configPath, &augPaths, sysconfig);
-			DEBUGSTR("LOOKING UP MODULE CONFIGURATION COMPLETE.\n\n");
+			SWLog::getSystemLog()->logDebug("LOOKING UP MODULE CONFIGURATION COMPLETE.");
 		}
 		if (configPath) {
 			if (configType)

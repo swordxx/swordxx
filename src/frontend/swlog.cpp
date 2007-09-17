@@ -18,6 +18,11 @@ SWORD_NAMESPACE_START
 
 SWLog *SWLog::systemLog = 0;
 
+const int SWLog::LOG_ERROR     = 1;
+const int SWLog::LOG_WARN      = 2;
+const int SWLog::LOG_INFO      = 3;
+const int SWLog::LOG_TIMEDINFO = 4;
+const int SWLog::LOG_DEBUG     = 5;
 
 SWLog *SWLog::getSystemLog() {
 	static class __staticSystemLog {
@@ -44,11 +49,11 @@ void SWLog::logWarning(const char *fmt, ...) const {
 	char msg[2048];
 	va_list argptr;
 
-	if (logLevel >= 2) {
+	if (logLevel >= LOG_WARN) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-		logMessage(msg, 2);
+		logMessage(msg, LOG_WARN);
 	}
 }
 
@@ -61,20 +66,7 @@ void SWLog::logError(const char *fmt, ...) const {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-		logMessage(msg, 1);
-	}
-}
-
-
-void SWLog::logTimedInformation(const char *fmt, ...) const {
-	char msg[2048];
-	va_list argptr;
-
-	if (logLevel >= 4) {
-		va_start(argptr, fmt);
-		vsprintf(msg, fmt, argptr);
-		va_end(argptr);
-		logMessage(msg, 4);
+		logMessage(msg, LOG_ERROR);
 	}
 }
 
@@ -83,11 +75,37 @@ void SWLog::logInformation(const char *fmt, ...) const {
 	char msg[2048];
 	va_list argptr;
 
-	if (logLevel >= 3) {
+	if (logLevel >= LOG_INFO) {
 		va_start(argptr, fmt);
 		vsprintf(msg, fmt, argptr);
 		va_end(argptr);
-		logMessage(msg, 3);
+		logMessage(msg, LOG_INFO);
+	}
+}
+
+
+void SWLog::logTimedInformation(const char *fmt, ...) const {
+	char msg[2048];
+	va_list argptr;
+
+	if (logLevel >= LOG_TIMEDINFO) {
+		va_start(argptr, fmt);
+		vsprintf(msg, fmt, argptr);
+		va_end(argptr);
+		logMessage(msg, LOG_TIMEDINFO);
+	}
+}
+
+
+void SWLog::logDebug(const char *fmt, ...) const {
+	char msg[2048];
+	va_list argptr;
+
+	if (logLevel >= LOG_DEBUG) {
+		va_start(argptr, fmt);
+		vsprintf(msg, fmt, argptr);
+		va_end(argptr);
+		logMessage(msg, LOG_DEBUG);
 	}
 }
 
