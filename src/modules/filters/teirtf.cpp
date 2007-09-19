@@ -19,6 +19,7 @@
 #include <teirtf.h>
 #include <utilxml.h>
 #include <swmodule.h>
+#include <versekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -54,21 +55,13 @@ TEIRTF::TEIRTF() {
 bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
-		//MyUserData *u = (MyUserData *)userData;
+		MyUserData *u = (MyUserData *)userData;
 		XMLTag tag(token);
 
 		// <p> paragraph tag
 		if (!strcmp(tag.getName(), "p")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "{\\par}";
-			}
-			else if (tag.isEndTag()) {	// end tag
-				buf += "{\\par}";
-				userData->supressAdjacentWhitespace = true;
-			}
-			else {					// empty paragraph break marker
-				buf += "{\\par\\par}";
-				userData->supressAdjacentWhitespace = true;
+			if (!tag.isEndTag()) {	// non-empty start tag
+				buf += "{\\sb100\\fi200\\par}";
 			}
 		}
 
@@ -105,13 +98,10 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			SWBuf n = tag.getAttribute("n");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 			        if (n != "") {
-                                	buf += "{\\par\\b1 ";
+                                	buf += "{\\sb100\\par\\b1 ";
 					buf += n;
 					buf += ". }";
 				}
-			}
-			else if (tag.isEndTag()) {
-			                buf += "\\par ";
 			}
 		}
 
@@ -119,34 +109,14 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 		else if (!strcmp(tag.getName(), "div")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf.append("\\par\\par\\pard ");
+				buf.append("{\\pard\\sa300}");
 			}
 			else if (tag.isEndTag()) {
 			}
 		}
 
-		// <pos>
-		else if (!strcmp(tag.getName(), "pos")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\i1 ";
-			}
-			else if (tag.isEndTag()) {
-			        buf += "}";
-			}
-		}
-
-		// <gen>
-		else if (!strcmp(tag.getName(), "gen")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\i1 ";
-			}
-			else if (tag.isEndTag()) {
-			        buf += "}";
-			}
-		}
-
-		// <case>
-		else if (!strcmp(tag.getName(), "case")) {
+		// <pos>, <gen>, <case>, <gram>, <number>, <mood>
+		else if (!strcmp(tag.getName(), "pos") || !strcmp(tag.getName(), "gen") || !strcmp(tag.getName(), "case") || !strcmp(tag.getName(), "gram") || !strcmp(tag.getName(), "number") || !strcmp(tag.getName(), "mood")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "{\\i1 ";
 			}
@@ -165,26 +135,6 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			}
 		}
 
-		// <number>
-		else if (!strcmp(tag.getName(), "number")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\i1 ";
-			}
-			else if (tag.isEndTag()) {
-			        buf += "}";
-			}
-		}
-
-		// <mood>
-		else if (!strcmp(tag.getName(), "mood")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "{\\i1 ";
-			}
-			else if (tag.isEndTag()) {
-			        buf += "}";
-			}
-		}
-
 		// <etym>
 		else if (!strcmp(tag.getName(), "etym")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
@@ -195,9 +145,34 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			}
 		}
 
+       		// <note> tag
+		else if (!strcmp(tag.getName(), "note")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf type = tag.getAttribute("type");
+
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+					VerseKey *vkey;
+					// see if we have a VerseKey * or descendant
+					SWTRY {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					SWCATCH ( ... ) {	}
+					if (vkey) {
+						buf.appendFormatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
+					}
+					u->suspendTextPassThru = true;
+				}
+			}
+			if (tag.isEndTag()) {
+				u->suspendTextPassThru = false;
+			}
+		}
+
 		else {
 			return false;  // we still didn't handle token
 		}
+
 	}
 	return true;
 }

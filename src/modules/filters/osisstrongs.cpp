@@ -118,7 +118,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 								lClass.append(attrib, len);
 								attrib += (len+1);
 							}
-							if ((lClass == "x-Strongs") || (lClass == "strong")) {
+							if ((lClass == "x-Strongs") || (lClass == "strong") || (lClass == "Strong")) {
 								gh = isdigit(attrib[0]) ? 0:attrib[0];
 								if (!gh) {
 									if (vkey) {
