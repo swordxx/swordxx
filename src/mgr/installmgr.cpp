@@ -344,7 +344,13 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			if (entry != module->second.end()) {
 				SWBuf absolutePath = entry->second.c_str();
 				SWBuf relativePath = absolutePath;
-				relativePath << strlen(mgr.prefixPath);
+				entry = module->second.find("PrefixPath");
+				if (entry != module->second.end()) {
+					relativePath << strlen(entry->second.c_str());
+				}
+				else {
+					relativePath << strlen(mgr.prefixPath);
+				}
 				SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.prefixPath);
 				SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->prefixPath);
 				SWLog::getSystemLog()->logDebug("***** absolutePath: %s \n", absolutePath.c_str());
