@@ -76,41 +76,65 @@ the installed modules available to the API.  The format of a config file is
 fairly straight-forward, and most modules come with their own .conf file,
 of which the contents may be placed in the mods.d directory.
 
-FOR A RECOMMENDED MODULE INSTALLATION SCHEME, SEE
-.../sword/samples/recommended, otherwise, the specific details follow:
 
-The API looks for its module configuration in the following sequence:
-	./sword.conf in the format:
-			[Install]
-			DataPath=/where/your/datafiles/are/installed
-		then the API will look for DataPath/mods.d
-	./mods.d
-	../library/mods.d (don't ask)
-	$SWORD_PATH/mods.d
-	$HOME/.sword/sword.conf in the format:
-			[Install]
-			DataPath=/where/your/datafiles/are/installed
-		then the API will look for DataPath/mods.d
-	/etc/sword.conf in the format:
-			[Install]
-			DataPath=/where/your/datafiles/are/installed
-		then the API will look for DataPath/mods.d
-	$HOME/.sword/mods.d
-		*NOTE: this last one is special.  SWORD will always
-			augment the discovered library from any previous
-			check with modules found here.
-			If this is the ONLY location, then it will be
-			considered the PRIMARY datapath, like any of the
-			earlier checks.
-		
-                       
+MODULE INSTALLATION SCHEME
 
-* NOTE:
-Using the above scheme, SWORD will also determine the path to prefix to the
-specified datafile location found in the config files.  The prefix path will
-be the directory where SWORD finds mods.d.
+For a recommended module configuration scheme
+On UN*X: create /etc/sword.conf with contents:
+[Install]
+DataPath=/usr/share/sword
 
-Sample config files can be found in: .../sword/samples
+and unzip your modules to /usr/share/sword
+(or type: make install_config which should do the same)
+
+Windows users can simply unzip their modules where they installed their frontend.
+
+Otherwise, read on:
+
+
+DETAILS
+
+
+The API attempts to hunts down its primary module configuration in the
+following sequence, stopping at the first successful step:
+
+	o) ./sword.conf in the format:
+
+			[Install]
+			DataPath=/where/your/modules/are/installed
+
+		then the API will look for <DataPath>/mods.d/
+
+	o) ./mods.d
+	o) ../library/mods.d (don't ask)
+	o) $SWORD_PATH/mods.d
+	o) $HOME/.sword/sword.conf in the format:
+
+			[Install]
+			DataPath=/where/your/modules/are/installed
+
+		then the API will look for DataPath/mods.d/
+
+	o) /etc/sword.conf in the format:
+
+			[Install]
+			DataPath=/where/your/modules/are/installed
+
+		then the API will look for DataPath/mods.d/
+
+	o) $HOME/.sword/mods.d/
+
+
+In addition to the 'primary module configuration', SWORD will also
+include modules found in $HOME/.sword/mods.d/
+
+Also, when a sword.conf file is used, any number of:
+
+AugmentDataPath=/where/more/modules/are/installed
+
+entries may be included.  These are useful to tell sword to scan,
+for example, CDROM, MMC, or other removable media locations.
+
 
 
 LOCALE
