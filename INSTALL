@@ -113,14 +113,14 @@ following sequence, stopping at the first successful step:
 			[Install]
 			DataPath=/where/your/modules/are/installed
 
-		then the API will look for DataPath/mods.d/
+		then the API will look for <DataPath>/mods.d/
 
 	o) /etc/sword.conf in the format:
 
 			[Install]
 			DataPath=/where/your/modules/are/installed
 
-		then the API will look for DataPath/mods.d/
+		then the API will look for <DataPath>/mods.d/
 
 	o) $HOME/.sword/mods.d/
 
