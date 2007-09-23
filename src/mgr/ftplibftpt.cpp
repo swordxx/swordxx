@@ -27,43 +27,64 @@ FTPLibFTPTransport_init::~FTPLibFTPTransport_init() {
 
 
 FTPLibFTPTransport::FTPLibFTPTransport(const char *host, StatusReporter *sr) : FTPTransport(host, sr) {
-	void *retVal = 0;
 
-	SWLog::getSystemLog()->logDebug("connecting to host %s\n", host);
-	if (FtpConnect(host, (netbuf **)&nControl))
-		retVal = nControl;
-	else
-		SWLog::getSystemLog()->logDebug("Failed to connect to %s\n", host);
-	if (!FtpLogin("anonymous", "installmgr@user.com", (netbuf *)nControl))
-		SWLog::getSystemLog()->logDebug("Failed to login to %s\n", host);
+	ftpConnection = 0;
 }
 
 
 FTPLibFTPTransport::~FTPLibFTPTransport() {
-	FtpQuit((netbuf *) nControl);
+	if (ftpConnection)
+		FtpQuit(ftpConnection);
+}
+
+
+char FTPLibFTPTransport::assureLoggedIn() {
+	char retVal = 0;
+	if (ftpConnection == 0) {
+		SWLog::getSystemLog()->logDebug("connecting to host %s\n", host.c_str());
+		if (FtpConnect(host, &ftpConnection))
+			if (FtpLogin("anonymous", "installmgr@user.com", ftpConnection)) {
+				retVal = 0;
+			}
+			else {
+				SWLog::getSystemLog()->logError("Failed to login to %s\n", host.c_str());
+				retVal = -2;
+			}
+		else {
+			SWLog::getSystemLog()->logError("Failed to connect to %s\n", host.c_str());
+			retVal = -1;
+		}
+	}
+	return retVal;
 }
 
 
 char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
+
 	char retVal = 0;
+
+	// assert we can login
+	retVal = assureLoggedIn();
+	if (retVal) return retVal;
+
 	SWBuf sourcePath = sourceURL;
 	SWBuf outFile = (!destBuf) ? destPath : "swftplib.tmp";
 	sourcePath << (6 + host.length()); // shift << "ftp://hostname";
 	SWLog::getSystemLog()->logDebug("getting file %s to %s\n", sourcePath.c_str(), outFile.c_str());
 	if (passive)
-		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PASSIVE, (netbuf *)nControl);
+		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PASSIVE, ftpConnection);
 	else
-		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PORT, (netbuf *)nControl);
+		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PORT, ftpConnection);
 	// !!!WDG also want to set callback options
 	if (sourcePath.endsWith("/") || sourcePath.endsWith("\\")) {
 		SWLog::getSystemLog()->logDebug("getting test directory %s\n", sourcePath.c_str());
-		FtpDir(NULL, sourcePath, (netbuf *)nControl);
+		FtpDir(NULL, sourcePath, ftpConnection);
 		SWLog::getSystemLog()->logDebug("getting real directory %s\n", sourcePath.c_str());
-		retVal = FtpDir(outFile.c_str(), sourcePath, (netbuf *)nControl) - 1;
+		retVal = FtpDir(outFile.c_str(), sourcePath, ftpConnection) - 1;
 	}
 	else {
 		SWLog::getSystemLog()->logDebug("getting file %s\n", sourcePath.c_str());
-		retVal = FtpGet(outFile.c_str(), sourcePath, FTPLIB_IMAGE, (netbuf *)nControl) - 1;
+		retVal = FtpGet(outFile.c_str(), sourcePath, FTPLIB_IMAGE, ftpConnection) - 1;
 	}
 
 	// Is there a way to FTPGet directly to a buffer?

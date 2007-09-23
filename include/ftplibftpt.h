@@ -4,7 +4,10 @@
 #include <defs.h>
 #include <ftptrans.h>
 
+typedef struct NetBuf netbuf;
+
 SWORD_NAMESPACE_START
+
 
 // initialize/cleanup SYSTEMWIDE library with life of this static.
 class FTPLibFTPTransport_init {
@@ -15,7 +18,9 @@ public:
 
 
 class SWDLLEXPORT FTPLibFTPTransport : public FTPTransport {
-	void *nControl;
+	netbuf *ftpConnection;
+
+	char assureLoggedIn();
 
 public:
 	FTPLibFTPTransport(const char *host, StatusReporter *statusReporter = 0);

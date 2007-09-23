@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	char *tmpbuf;
 	
 	if (argc != 3) {
-		printf("%d %d\n", sizeof(long), sizeof(unsigned short));
+		printf("%ld %ld\n", sizeof(long), sizeof(unsigned short));
 		fprintf(stderr, "usage: %s <datapath> \"<key>\"\n", argv[0]);
 		exit(1);
 	}

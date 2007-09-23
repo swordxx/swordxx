@@ -926,8 +926,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWKey *saveKey = 0;
 	SWKey *searchKey = 0;
 	SWKey textkey;
-	char *word = 0;
-	char *wordBuf = 0;
 	SWBuf c;
 
 

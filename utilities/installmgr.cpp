@@ -120,8 +120,9 @@ void refreshRemoteSource(const char *sourceName) {
 		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
 		finish(-3);
 	}
-	installMgr->refreshRemoteSource(source->second);
-	cout << "Remote Source Refreshed\n";
+	if (!installMgr->refreshRemoteSource(source->second))
+		cout << "Remote Source Refreshed\n";
+	else	cerr << "Error Refreshing Remote Source\n";
 }
 
 

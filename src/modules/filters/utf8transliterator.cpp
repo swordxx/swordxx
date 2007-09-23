@@ -133,7 +133,7 @@ void UTF8Transliterator::Load(UErrorCode &status)
 #ifndef _ICUSWORD_
 	static const char translit_swordindex[] = "translit_swordindex";
 	
-	UResourceBundle *bundle, *transIDs, *colBund;
+	UResourceBundle *bundle = 0, *transIDs = 0, *colBund = 0;
 	bundle = ures_openDirect(SW_RESDATA, translit_swordindex, &status);
 	if (U_FAILURE(status)) {
 		SWLog::getSystemLog()->logError("UTF8Transliterator: ICU: no resource index to load");
@@ -142,7 +142,7 @@ void UTF8Transliterator::Load(UErrorCode &status)
 	}
 
 	transIDs = ures_getByKey(bundle, SW_RB_RULE_BASED_IDS, 0, &status);
-	UParseError parseError;
+	//UParseError parseError;
 
 	int32_t row, maxRows;
 	if (U_SUCCESS(status)) {
@@ -163,7 +163,7 @@ void UTF8Transliterator::Load(UErrorCode &status)
 						// 'file' or 'internal';
 						// row[2]=resource, row[3]=direction
 						{
-							UBool visible = (type == 0x0066 /*f*/);
+							//UBool visible = (type == 0x0066 /*f*/);
 							UTransDirection dir =
 								(ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
 								0x0046 /*F*/) ?

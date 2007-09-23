@@ -488,7 +488,7 @@ void initiateSwordTransliterators(UErrorCode &status)
                         // 'file' or 'internal';
                         // row[2]=resource, row[3]=direction
                         {
-                            UBool visible = (type == 0x0066 /*f*/);
+                            //UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir =
                                 (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
@@ -556,7 +556,7 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
                         // 'file' or 'internal';
                         // row[2]=resource, row[3]=direction
                         {
-                            UBool visible = (type == 0x0066 /*f*/);
+                            //UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir =
                                 (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
@@ -604,7 +604,7 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
 	}
 
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
-	UParseError parseError;
+	//UParseError parseError;
 
     int32_t row, maxRows;
     if (U_SUCCESS(status)) {
@@ -625,7 +625,7 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
                         // 'file' or 'internal';
                         // row[2]=resource, row[3]=direction
                         {
-                            UBool visible = (type == 0x0066 /*f*/);
+                            //UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir =
                                 (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
