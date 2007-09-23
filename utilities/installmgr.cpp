@@ -9,6 +9,7 @@
 
 using namespace sword;
 using std::cout;
+using std::cerr;
 using std::cin;
 using std::map;
 
