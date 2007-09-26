@@ -68,8 +68,8 @@ const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Ogham",
         "Thaana",
 	"Glagolitic",
-        "Tengwar",
-        "Cirth"
+//        "Tengwar",
+//        "Cirth"
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -771,14 +771,14 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 			}
 		}
 
-		if (scripts[SE_TENGWAR]) {
-			addTrans("Tengwar-Latin", &ID);
-			scripts[SE_LATIN] = true;
-		}
-		if (scripts[SE_CIRTH]) {
-			addTrans("Cirth-Latin", &ID);
-			scripts[SE_LATIN] = true;
-		}
+//		if (scripts[SE_TENGWAR]) {
+//			addTrans("Tengwar-Latin", &ID);
+//			scripts[SE_LATIN] = true;
+//		}
+//		if (scripts[SE_CIRTH]) {
+//			addTrans("Cirth-Latin", &ID);
+//			scripts[SE_LATIN] = true;
+//		}
 
 		if (scripts[SE_LATIN]) {
                 switch (option) {
@@ -851,12 +851,12 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                         case SE_GLAGOLITIC:
 				addTrans("Latin-Glagolitic", &ID);
                                 break;
-                        case SE_TENGWAR:
-				addTrans("Latin-Tengwar", &ID);
-                                break;
-                        case SE_CIRTH:
-				addTrans("Latin-Cirth", &ID);
-                                break;
+//                        case SE_TENGWAR:
+//				addTrans("Latin-Tengwar", &ID);
+//                                break;
+//                        case SE_CIRTH:
+//				addTrans("Latin-Cirth", &ID);
+//                                break;
                         }
                 }
 
