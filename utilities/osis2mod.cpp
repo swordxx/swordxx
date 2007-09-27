@@ -639,11 +639,10 @@ XMLTag* transform(XMLTag* t) {
 }
 
 void usage(const char *app, const char *error = 0) {
-	if (error) {
-		fprintf(stderr, "\n%s: %s\n", app, error);
-	}
-	fprintf(stderr,
-"\nusage: %s <output/path> <osisDoc> [OPTIONS]\n", app);
+
+	if (error) fprintf(stderr, "\n%s: %s\n", app, error);
+
+	fprintf(stderr, "\nusage: %s <output/path> <osisDoc> [OPTIONS]\n", app);
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
 	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
 	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
@@ -694,9 +693,10 @@ int main(int argc, char **argv) {
 			usage(*argv, "-b requires one of <2|3|4>");
 		}
 		else if (!strcmp(argv[i], "-c")) {
-			if (i+1 < argc) cipherKey = argv[i];
+			if (i+1 < argc) cipherKey = argv[++i];
 			else usage(*argv, "-c requires <cipher_key>");
 		}
+		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
 	switch (compType) {	// these are deleted by zText
