@@ -638,19 +638,29 @@ XMLTag* transform(XMLTag* t) {
 	return t;
 }
 
+void usage(const char *app, const char *error = 0) {
+	if (error) {
+		fprintf(stderr, "\n%s: %s\n", app, error);
+	}
+	fprintf(stderr,
+"\nusage: %s <output/path> <osisDoc> [OPTIONS]\n", app);
+	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
+	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
+	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
+	fprintf(stderr, "  -b <2|3|4>\t\t compression block size (default 4):\n");
+	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
+	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
+	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
+	exit(-1);
+}
+
 int main(int argc, char **argv) {
 
 	fprintf(stderr, "You are running osis2mod: $Rev$\n");
 
 	// Let's test our command line arguments
 	if (argc < 3) {
-		fprintf(stderr,
-"\nusage: osis2mod <output/path> <osisDoc> [createMod] [compressType [blockType [cipherKey]]]\n");
-		fprintf(stderr, "  createMod   : (default 0): 0 - create  1 - augment\n");
-		fprintf(stderr, "  compressType: (default 0): 0 - no compression  1 - LZSS    2 - Zip\n");
-		fprintf(stderr, "  blockType   : (default 4): 2 - verses  3 - chapters  4 - books\n");
-		fprintf(stderr, "  cipherkey   : ascii string for module encryption\n");
-		exit(-1);
+		usage(*argv);
 	}
 
 	// variables for arguments, holding defaults
@@ -663,19 +673,29 @@ int main(int argc, char **argv) {
 	string cipherKey    = "";
 
 	SWCompress *compressor = 0;
-// 	SWModule *outModule    = 0;
 
-
-	if (argc > 3) {
-		append = atoi(argv[3]);
-		if (argc > 4) {
-			compType = atoi(argv[4]);
-			if (argc > 5) {
-				iType = atoi(argv[5]);
-				if (argc > 6) {
-					cipherKey = argv[6];
-				}
+	for (int i = 3; i < argc; i++) {
+		if (!strcmp(argv[i], "-a")) {
+			append = 1;
+		}
+		else if (!strcmp(argv[i], "-z")) {
+			if (compType) usage(*argv, "Cannot specify both -z and -Z");
+			compType = 2;
+		}
+		else if (!strcmp(argv[i], "-Z")) {
+			if (compType) usage(*argv, "Cannot specify both -z and -Z");
+			compType = 1;
+		}
+		else if (!strcmp(argv[i], "-b")) {
+			if (i+1 < argc) {
+				iType = atoi(argv[++i]);
+				if ((iType >= 2) && (iType <= 4)) continue;
 			}
+			usage(*argv, "-b requires one of <2|3|4>");
+		}
+		else if (!strcmp(argv[i], "-c")) {
+			if (i+1 < argc) cipherKey = argv[i];
+			else usage(*argv, "-c requires <cipher_key>");
 		}
 	}
 
