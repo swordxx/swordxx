@@ -456,6 +456,16 @@ public:
 		return *this;
 	}
 
+	/** Adds a RenderFilter to this module's renderFilters queue.
+	 *	Render Filters are called when the module is asked to produce
+	 *	renderable text.
+	 * @param newFilter the filter to add
+	 * @return *this
+	 */
+	virtual const FilterList &getRenderFilters() const {
+		return *renderFilters;
+	}
+
 	/** Removes a RenderFilter from this module's renderFilters queue
 	 * @param oldfilter the filter to remove
 	 * @return *this
