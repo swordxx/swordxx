@@ -29,6 +29,7 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT OSISHTMLHREF : public SWBasicFilter {
 private:
+	bool morphFirst;
 protected:
 	// used by derived classes so we have it in the header
 	class QuoteStack;
@@ -55,6 +56,7 @@ protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	OSISHTMLHREF();
+	void setMorphFirst(bool val = true) { morphFirst = val; }
 };
 
 SWORD_NAMESPACE_END

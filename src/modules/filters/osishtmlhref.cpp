@@ -77,12 +77,77 @@ OSISHTMLHREF::OSISHTMLHREF() {
 	
 	addTokenSubstitute("lg",  "<br />");
 	addTokenSubstitute("/lg", "<br />");
+
+	morphFirst = false;
 }
 
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
 static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
 static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+
+void processLemma(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
+	const char *attrib;
+	const char *val;
+	if ((attrib = tag.getAttribute("lemma"))) {
+		int count = tag.getAttributePartCount("lemma", ' ');
+		int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+		do {
+			attrib = tag.getAttribute("lemma", i, ' ');
+			if (i < 0) i = 0;	// to handle our -1 condition
+			val = strchr(attrib, ':');
+			val = (val) ? (val + 1) : attrib;
+			SWBuf gh;
+			if(*val == 'G')
+				gh = "Greek";
+			if(*val == 'H')
+				gh = "Hebrew";
+			const char *val2 = val;
+			if ((strchr("GH", *val)) && (isdigit(val[1])))
+				val2++;
+			//if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
+			//	show = false;
+			//else {
+				if (!suspendTextPassThru) {
+					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small>",
+							(gh.length()) ? gh.c_str() : "", 
+							URL::encode(val2).c_str(), 
+							val2);
+				}
+			//}
+			
+		} while (++i < count);
+	}
+}
+
+void processMorph(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
+	const char * attrib;
+	const char *val;
+	if ((attrib = tag.getAttribute("morph"))) { // && (show)) {
+		SWBuf savelemma = tag.getAttribute("savlm");
+		//if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
+		//	show = false;
+		//if (show) {
+			int count = tag.getAttributePartCount("morph", ' ');
+			int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
+			do {
+				attrib = tag.getAttribute("morph", i, ' ');
+				if (i < 0) i = 0;	// to handle our -1 condition
+				val = strchr(attrib, ':');
+				val = (val) ? (val + 1) : attrib;
+				const char *val2 = val;
+				if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
+					val2+=2;
+				if (!suspendTextPassThru) {
+					buf.appendFormatted("<small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\">%s</a>)</em></small>",
+							URL::encode(tag.getAttribute("morph")).c_str(),
+							URL::encode(val).c_str(), 
+							val2);
+				}
+			} while (++i < count);
+		//}
+	}
+}
 
 bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
@@ -126,58 +191,13 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					outText(" ", buf, u);
 					outText(val, buf, u);
 				}
-				if ((attrib = tag.getAttribute("lemma"))) {
-					int count = tag.getAttributePartCount("lemma", ' ');
-					int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
-					do {
-						attrib = tag.getAttribute("lemma", i, ' ');
-						if (i < 0) i = 0;	// to handle our -1 condition
-						val = strchr(attrib, ':');
-						val = (val) ? (val + 1) : attrib;
-						SWBuf gh;
-						if(*val == 'G')
-							gh = "Greek";
-						if(*val == 'H')
-							gh = "Hebrew";
-						const char *val2 = val;
-						if ((strchr("GH", *val)) && (isdigit(val[1])))
-							val2++;
-						//if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
-						//	show = false;
-						//else {
-							if (!u->suspendTextPassThru) {
-								buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small>",
-										(gh.length()) ? gh.c_str() : "", 
-										URL::encode(val2).c_str(), 
-										val2);
-							}
-						//}
-						
-					} while (++i < count);
+				if (!morphFirst) {
+					processLemma(u->suspendTextPassThru, tag, buf);
+					processMorph(u->suspendTextPassThru, tag, buf);
 				}
-				if ((attrib = tag.getAttribute("morph"))) { // && (show)) {
-					SWBuf savelemma = tag.getAttribute("savlm");
-					//if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
-					//	show = false;
-					//if (show) {
-						int count = tag.getAttributePartCount("morph", ' ');
-						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
-						do {
-							attrib = tag.getAttribute("morph", i, ' ');
-							if (i < 0) i = 0;	// to handle our -1 condition
-							val = strchr(attrib, ':');
-							val = (val) ? (val + 1) : attrib;
-							const char *val2 = val;
-							if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
-								val2+=2;
-							if (!u->suspendTextPassThru) {
-								buf.appendFormatted("<small><em>(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\">%s</a>)</em></small>",
-										URL::encode(tag.getAttribute("morph")).c_str(),
-										URL::encode(val).c_str(), 
-										val2);
-							}
-						} while (++i < count);
-					//}
+				else {
+					processMorph(u->suspendTextPassThru, tag, buf);
+					processLemma(u->suspendTextPassThru, tag, buf);
 				}
 				if ((attrib = tag.getAttribute("POS"))) {
 					val = strchr(attrib, ':');
