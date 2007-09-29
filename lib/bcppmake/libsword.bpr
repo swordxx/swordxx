@@ -19,7 +19,6 @@
       ..\..\src\utilfuns\swbuf.obj ..\..\src\utilfuns\swobject.obj 
       ..\..\src\utilfuns\swunicod.obj ..\..\src\utilfuns\swversion.obj 
       ..\..\src\utilfuns\url.obj ..\..\src\utilfuns\utilstr.obj 
-      ..\..\src\utilfuns\Greek2Greek.obj 
       ..\..\src\modules\comments\hrefcom\hrefcom.obj 
       ..\..\src\modules\comments\rawcom\rawcom.obj 
       ..\..\src\modules\comments\rawfiles\rawfiles.obj 
