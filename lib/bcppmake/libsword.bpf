@@ -33,7 +33,6 @@ USEUNIT("..\..\src\utilfuns\swunicod.cpp");
 USEUNIT("..\..\src\utilfuns\swversion.cpp");
 USEUNIT("..\..\src\utilfuns\url.cpp");
 USEUNIT("..\..\src\utilfuns\utilstr.cpp");
-USEUNIT("..\..\src\utilfuns\Greek2Greek.cpp");
 USEUNIT("..\..\src\modules\comments\hrefcom\hrefcom.cpp");
 USEUNIT("..\..\src\modules\comments\rawcom\rawcom.cpp");
 USEUNIT("..\..\src\modules\comments\rawfiles\rawfiles.cpp");

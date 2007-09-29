@@ -57,7 +57,7 @@ public:
 	virtual ~SWConfig();
 
 	/** Load from disk
-	* Load the contzent from disk.
+	* Load the content from disk.
 	*/
 	virtual void Load();
 
