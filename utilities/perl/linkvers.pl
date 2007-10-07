@@ -3,7 +3,7 @@
 $vplfile = $ARGV[0];
 
 if ($vplfile eq "") {
-    die("linkvers.pl Syntax:\n./linkvers.pl <vpl file> [1 - checking mode on].\nMust be run AFTER vpl2mod is completed.\ndied");
+    die("linkvers.pl Syntax:\n./linkvers.pl <vpl file> [1 - checking mode on].\nMust be run AFTER vpl2mod is completed.\n");
 }
 
 $check = $ARGV[1];
