@@ -113,13 +113,11 @@ int main(int argc, char **argv)
 	int result = 0;
 	switch (modType) {
 	case BIBLE:
+	case COM:
 		result = zText::createModule(argv[2], iType);
 		break;
 	case LEX:
 		result = zLD::createModule(argv[2]);
-		break;
-	case COM:
-		result = zCom::createModule(argv[2], iType);
 		break;
 	}
 
@@ -130,15 +128,12 @@ int main(int argc, char **argv)
 
 	switch (modType) {
 	case BIBLE:
+	case COM:
 		outModule = new zText(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
 		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
 		break;
 	case LEX:
 		outModule = new zLD(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
-		break;
-	case COM:
-		outModule = new zCom(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
-		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
 		break;
 	}
 
