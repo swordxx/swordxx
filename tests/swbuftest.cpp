@@ -125,6 +125,12 @@ int main(int argc, char **argv) {
 	cout << "x should be (hello wurld): (" << x << ")\n";
 	StringType y = x + " " + x;
 	cout << "should be (hello wurld hello wurld): (" << y << ")\n";
+
+	sword::SWBuf prefixTest = "prefix:value";
+	cout << "Prefix test: " << prefixTest << "\n";
+	cout << "Prefix should be (prefix): " << prefixTest.stripPrefix(':') << "\n";
+	cout << "Value should be (value): " << prefixTest << "\n";
+
 //	y.appendFormatted(" from %d %s running %02.05f miles", 4, "dogs", 1.9f);
 //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles): (" << y << ")\n";
 //	y += '!';

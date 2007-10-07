@@ -388,10 +388,10 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 
 		if (!i) {
 			if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-				abbr = stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+				stringMgr->upperUTF8(abbr, strlen(abbr)*2);
 			}
 			else {
-				abbr = stringMgr->upperLatin1(abbr);
+				stringMgr->upperLatin1(abbr);
 			}
 		}
 

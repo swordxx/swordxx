@@ -44,7 +44,7 @@ void TForm2::ProcessFile(char *fileName)
 	char end = 0;
 	
 
-	if ((fp = open(fileName, O_RDONLY|O_BINARY)) == -1) {
+	if ((fp = open(fileName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE)) == -1) {
 		sprintf(buf, "Couldn't open file: %s\n", fileName);
 		MessageBox(this->Handle, buf, "ProcessFile", MB_OK);
 		return;

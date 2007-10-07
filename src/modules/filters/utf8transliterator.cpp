@@ -349,7 +349,7 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                         scripts[i] = false;
                 }
 
-                for (i = 0; i < len; i++) {
+                for (i = 0; i < (unsigned long)len; i++) {
                         j = ublock_getCode(source[i]);
 			scripts[SE_LATIN] = true;
 			switch (j) {

@@ -1,6 +1,8 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,9 +31,9 @@ int main(int argc, char **argv) {
 
 	tmpbuf = calloc(strlen(argv[1]) + 11,1);
 	sprintf(tmpbuf, "%s.idx", argv[1]);
-	idxfd = open(tmpbuf, O_RDONLY|O_BINARY);
+	idxfd = open(tmpbuf, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	sprintf(tmpbuf, "%s.dat", argv[1]);
-	datfd = open(tmpbuf, O_RDONLY|O_BINARY);
+	datfd = open(tmpbuf, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	free(tmpbuf);
 
 	offset = atoi(argv[2]) * 6;

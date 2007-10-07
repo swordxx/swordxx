@@ -32,8 +32,7 @@ OSISStrongs::~OSISStrongs() {
 
 
 char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	char token[2112]; // cheese.  Fix.
-	int tokpos = 0;
+	SWBuf token;
 	bool intoken = false;
 	bool lastspace = false;
 	int wordNum = 1;
@@ -46,15 +45,13 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	for (text = ""; *from; ++from) {
 		if (*from == '<') {
 			intoken = true;
-			tokpos = 0;
-			token[0] = 0;
-			token[1] = 0;
-			token[2] = 0;
+			token = "";
 			continue;
 		}
 		if (*from == '>') {	// process tokens
 			intoken = false;
-			if ((*token == 'w') && (token[1] == ' ')) {	// Word
+			if (token.startsWith("w ")) {	// Word
+				XMLTag wtag(token);
 				if (module->isProcessEntryAttributes()) {
 					wordStart = from+1;
 					char gh = 0;
@@ -62,7 +59,6 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					if (key) {
 						vkey = SWDYNAMIC_CAST(VerseKey, key);
 					}
-					XMLTag wtag(token);
 					SWBuf lemma      = "";
 					SWBuf morph      = "";
 					SWBuf src        = "";
@@ -71,6 +67,9 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 					const char *attrib;
 					sprintf(wordstr, "%03d", wordNum);
+
+					// why is morph entry attribute processing done in here?  Well, it's faster.  It makes more local sense to place this code in osismorph.
+					// easier to keep lemma and morph in same wordstr number too maybe.
 					if ((attrib = wtag.getAttribute("morph"))) {
 						int count = wtag.getAttributePartCount("morph", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
@@ -107,6 +106,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						int count = wtag.getAttributePartCount("lemma", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
+							gh = 0;
 							SWBuf lClass = "";
 							SWBuf l = "";
 							attrib = wtag.getAttribute("lemma", i, ' ');
@@ -119,13 +119,15 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 								attrib += (len+1);
 							}
 							if ((lClass == "x-Strongs") || (lClass == "strong") || (lClass == "Strong")) {
-								gh = isdigit(attrib[0]) ? 0:attrib[0];
-								if (!gh) {
+								if (isdigit(attrib[0])) {
 									if (vkey) {
 										gh = vkey->Testament() ? 'H' : 'G';
 									}
 								}
-								else attrib++;
+								else {
+									gh = *attrib;
+									attrib++;
+								}
 								lClass = "strong";
 							}
 							if (gh) l += gh;
@@ -177,30 +179,41 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 					if (wtag.isEmpty()) {
 						int j;
-						for (j = strlen(token)-1; ((j>0) && (strchr(" /", token[j]))); j--);
-						token[j+1] = 0;
+						for (j = token.length()-1; ((j>0) && (strchr(" /", token[j]))); j--);
+						token.size(j+1);
 					}
 					
-					strcat(token, " wn=\"");
-					strcat(token, wordstr);
-					strcat(token, "\"");
+					token += " wn=\"";
+					token += wordstr;
+					token += "\"";
 
 					if (wtag.isEmpty()) {
-						strcat(token, "/");
+						token += "/";
 					}
 
 					wordNum++;
 				}
 
 				if (!option) {
-					// remove all lemmas.  This class should be renamed to OSISLemma
-					char *num = strstr(token, "lemma=\"");
-					if (num) {
-						memcpy(num, "savlm", 5);
+					int count = wtag.getAttributePartCount("lemma", ' ');
+					for (int i = 0; i < count; i++) {
+						SWBuf a = wtag.getAttribute("lemma", i, ' ');
+						const char *prefix = a.stripPrefix(':');
+						if ((prefix) && (!strcmp(prefix, "x-Strongs") || !strcmp(prefix, "strong") || !strcmp(prefix, "Strong"))) {
+							// remove attribute part
+							wtag.setAttribute("lemma", 0, i, ' ');
+							i--;
+							count--;
+						}
 					}
+					token = wtag;
+					token.trim();
+					// drop <>
+					token << 1;
+					token--;
 				}
 			}
-			if ((*token == '/') && (token[1] == 'w')) {	// Word End
+			if (token.startsWith("/w")) {	// Word End
 				if (module->isProcessEntryAttributes()) {
 					if (wordStart) {
 						SWBuf tmp;
@@ -220,9 +233,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 			continue;
 		}
 		if (intoken) {
-			if (tokpos < 2045)
-				token[tokpos++] = *from;
-				token[tokpos+2] = 0;
+			token += *from;
 		}
 		else	{
 			text.append(*from);

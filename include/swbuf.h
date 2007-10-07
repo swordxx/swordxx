@@ -317,26 +317,86 @@ public:
 	inline SWBuf &operator =(const SWBuf &other) { set(other); return *this; }
 	inline SWBuf &operator +=(const char *str) { append(str); return *this; }
 	inline SWBuf &operator +=(char ch) { append(ch); return *this; }
+
+	/**
+	 * Decrease the buffer size, discarding the last characters
+	 * @param len how many bytes to decrease the buffer size
+	 */
 	inline SWBuf &operator -=(unsigned long len) { setSize(length()-len); return *this; }
+
+	/**
+	 * Decrease the buffer size, discarding the last character
+	 */
 	inline SWBuf &operator --(int) { operator -=(1); return *this; }
 
+	/**
+	 * Shift the buffer to the left, discarding the first bytes, decreasing the buffer size
+	 */
 	inline SWBuf &operator <<(unsigned long n) { if (n && length()) { n = (n<=length())?n:(length()-1); memmove(buf, buf+n, length()-n); (*this)-=n; } return *this; }
+
+	/**
+	 * Shift the buffer to the right, increasing the buffer size
+	 */
 	inline SWBuf &operator >>(unsigned long n) { setSize(length()+n); memmove(buf+n, buf, length()-n); return *this; }
+
+	/**
+	 * Concatenate another buffer to the end of this buffer
+	 */
 	inline SWBuf operator +(const SWBuf &other) const {
 		SWBuf retVal = buf;
 		retVal += other;
 		return retVal;
 	}
+
+	/**
+	 * Concatenate a byte to the end of this buffer
+	 */
 	inline SWBuf operator +(char ch) const { return (*this) + SWBuf(ch); }
 
+	/**
+	 * Trim whitespace from the start of this buffer, shifting the buffer left as necessary
+	 */
 	inline SWBuf &trimStart() { while (size() && (strchr("\t\r\n ", *(buf)))) *this << 1; return *this; }
+
+	/**
+	 * Trim whitespace from the end of this buffer, decreasing the size as necessary
+	 */
 	inline SWBuf &trimEnd() { while (size() && (strchr("\t\r\n ", *(end-1)))) setSize(size()-1); return *this; }
+
+	/**
+	 * Trim whitespace from the start and end of this buffer, shifting left and decreasing size as necessary
+	 */
 	inline SWBuf &trim() { trimStart(); return trimEnd(); }
+
+
+	/**
+	 * Strip a prefix from this buffer up to a separator byte.
+	 * Returns the prefix and modifies this buffer, shifting left to remove prefix
+	 * @param separator to use (e.g. ':')
+	 * @return prefix if separator character found; otherwise, null and leaves buffer unmodified
+	 */
+	inline const char *stripPrefix(char separator) { const char *m = strchr(buf, ':'); if (m) { int len = m-buf; char *hold = new char[len]; memcpy(hold, buf, len); *this << (len+1); memcpy(end+1, hold, len); delete [] hold; end[len+1] = 0; } return (m) ? end+1 : 0; }  // safe.  we know we don't actually realloc and shrink buffer when shifting, so we can place our return val at end.
+
 	// this could be nicer, like replacing a contiguous series of target bytes with single replacement; offering replacement const char *
+	/**
+	 * Replace with a new byte value all occurances in this buffer of any byte value specified in a set
+	 * @param targets a set of bytes, any of which will be replaced
+	 * @param newByte value to use as replacement.
+	 *
+	 * Example: replaceBytes("abc", 'z');  // replaces all occurances of 'a', 'b', and 'c' with 'z'
+	 */
 	inline SWBuf &replaceBytes(const char *targets, char newByte) { for (unsigned int i = 0; (i < size()); i++) { if (strchr(targets, buf[i])) buf[i] = newByte; } return *this; }
 
+	/**
+	 * @return returns true if this buffer starts with the specified prefix
+	 */
 	inline bool startsWith(const SWBuf &prefix) const { return !strncmp(c_str(), prefix.c_str(), prefix.size()); }
+
+	/**
+	 * @return returns true if this buffer ends with the specified postfix
+	 */
 	inline bool endsWith(const SWBuf &postfix) const { return (size() >= postfix.size())?!strncmp(end-postfix.size(), postfix.c_str(), postfix.size()):false; }
+
 	inline int compare(const SWBuf &other) const { return strcmp(c_str(), other.c_str()); }
 	inline bool operator ==(const SWBuf &other) const { return !compare(other); }
 	inline bool operator !=(const SWBuf &other) const { return compare(other); }
@@ -345,8 +405,16 @@ public:
 	inline bool operator <=(const SWBuf &other) const { return compare(other) <= 0; }
 	inline bool operator >=(const SWBuf &other) const { return compare(other) >= 0; }
 
+	/**
+	 * @return returns true if this buffer starts with the specified prefix
+	 */
 	inline bool startsWith(const char *prefix) const { return !strncmp(c_str(), prefix, strlen(prefix)); }
+
+	/**
+	 * @return returns true if this buffer ends with the specified postfix
+	 */
 	inline bool endsWith(const char *postfix) const { unsigned int psize = strlen(postfix); return (size() >= psize)?!strncmp(end-psize, postfix, psize):false; }
+
 	inline int compare(const char *other) const { return strcmp(c_str(), other); }
 	inline bool operator ==(const char *other) const { return !compare(other); }
 	inline bool operator !=(const char *other) const { return compare(other); }

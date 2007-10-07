@@ -25,7 +25,7 @@ short verse_list[MAX_LIST];
     call DOINIT(argv[1]);   /* initialise system */
  else
     call DOINIT("g:\\bible\\av");   /* initialise system */
-	fd = open("../modules/texts/rawtext/kjv/ot", O_RDONLY);
+	fd = open("../modules/texts/rawtext/kjv/ot", O_RDONLY, S_IREAD|S_IWRITE);
 
 					   /* get text for Ge 1:1 & Rev 22:21 */
 

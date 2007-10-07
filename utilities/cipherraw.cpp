@@ -45,13 +45,13 @@ int main(int argc, char **argv) {
 
 	tmpbuf = new char [ strlen(argv[1]) + 11 ];
 	sprintf(tmpbuf, "%sot.zzz", argv[1]);
-	ofd[0] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT);
+	ofd[0] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	sprintf(tmpbuf, "%sot.zzz.vss", argv[1]);
-	oxfd[0] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT);
+	oxfd[0] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	sprintf(tmpbuf, "%snt.zzz", argv[1]);
-	ofd[1] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT);
+	ofd[1] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	sprintf(tmpbuf, "%snt.zzz.vss", argv[1]);
-	oxfd[1] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT);
+	oxfd[1] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	delete [] tmpbuf;
 

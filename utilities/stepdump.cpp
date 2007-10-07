@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 		bookpath += "/";
 
 	fileName = bookpath + "Book.dat";
-	int fd = open(fileName.c_str(), O_RDONLY|O_BINARY);
+	int fd = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	if (fd < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
 
 
 	fileName = bookpath + "Viewable.idx";
-	int fdv = open(fileName.c_str(), O_RDONLY|O_BINARY);
+	int fdv = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	if (fdv < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";

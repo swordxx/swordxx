@@ -393,7 +393,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 	int sfd, dfd, len;
 	char buf[4096];
 
-	if ((sfd = ::open(sourceFile, O_RDONLY|O_BINARY)) < 1)
+	if ((sfd = ::open(sourceFile, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) < 1)
 		return -1;
 	if ((dfd = createPathAndFile(targetFile)) < 1)
 		return -1;

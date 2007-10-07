@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
 		bookpath += "/";
 
 	fileName = bookpath + "Book.dat";
-	int fdbook = open(fileName.c_str(), O_RDONLY|O_BINARY);
+	int fdbook = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	if (fdbook < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 
 
 	fileName = bookpath + "Viewable.idx";
-	int fdviewable = open(fileName.c_str(), O_RDONLY|O_BINARY);
+	int fdviewable = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	if (fdviewable < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -166,7 +166,7 @@ int main(int argc, char **argv) {
 
 
 	fileName = bookpath + "Vsync.idx";
-	int fdvsync = open(fileName.c_str(), O_RDONLY|O_BINARY);
+	int fdvsync = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	if (fdvsync < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
 	}
 
 	fileName = bookpath + "Sections.idx";
-	int fdsections = open(fileName.c_str(), O_RDONLY|O_BINARY);
+	int fdsections = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	if (fdsections < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";

@@ -35,8 +35,7 @@ int main() {
 
 
   UErrorCode status = U_ZERO_ERROR;
-  UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu", 
-	"res", "root", &status);
+//  UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu", "res", "root", &status);
   if (U_FAILURE(status)) 
   {
   	std::cout << "error: " << status << ":" << 
@@ -48,7 +47,7 @@ int main() {
   UConverter *conv;
   //UParseError perr = U_ZERO_ERROR;
   int32_t uBufSize = 0, uLength = 0;
-  void * pAppData=NULL;
+//  void * pAppData=NULL;
   char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
   //ures_open("/usr/local/lib/sword/swicu.dat", 
  // 	NULL, &status);

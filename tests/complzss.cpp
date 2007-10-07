@@ -41,10 +41,10 @@ FileCompress::FileCompress(char *fname)
 #define O_BINARY 0
 #endif
 
-	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY, 00644);
+	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 
 	sprintf(buf, "%s.lzs", fname);
-	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY, 00644);
+	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 }
 
 	

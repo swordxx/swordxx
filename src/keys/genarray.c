@@ -19,7 +19,7 @@ main()
 			l3 = 1;
 			sprintf(buf, "%s", fnames[(l1*2)+l2]);
 			printf("		// %s\n", fnames[(l1*2)+l2]);
-			fd = open(buf, O_RDONLY|O_BINARY);
+			fd = open(buf, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 			while (read(fd, &val, 4) == 4) {
 				l3++;
 				printf("%ld, ", val/(4 + (l2*2)));

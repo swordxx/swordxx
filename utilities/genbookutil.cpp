@@ -34,7 +34,7 @@ void printLocalName(TreeKeyIdx *treeKey) {
 void setLocalName(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter New Node Name: ";
-	gets(buf);
+	fgets(buf, 1000, stdin);
 	treeKey->setLocalName(buf);
 	treeKey->save();
 }
@@ -43,7 +43,7 @@ void setLocalName(TreeKeyIdx *treeKey) {
 void gotoPath(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter Path: ";
-	gets(buf);
+	fgets(buf, 1000, stdin);
 	(*treeKey) = buf;
 }
 
@@ -51,7 +51,7 @@ void gotoPath(TreeKeyIdx *treeKey) {
 void assurePath(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter Path: ";
-	gets(buf);
+	fgets(buf, 1000, stdin);
 	treeKey->assureKeyPath(buf);
 }
 
@@ -70,7 +70,7 @@ void setEntryText(RawGenBook *book) {
 		char buf[1023];
 		std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
 		do {
-			gets(buf);
+			fgets(buf, 1000, stdin);
 			if ((buf[0] == '.') && (buf[1] == 0))
 				break;
 			body += buf;
@@ -87,7 +87,7 @@ void appendSibbling(TreeKeyIdx *treeKey) {
 	if (treeKey->getOffset()) {
 		char buf[1023];
 		std::cout << "Enter New Sibbling Name: ";
-		gets(buf);
+		fgets(buf, 1000, stdin);
 		treeKey->append();
 		treeKey->setLocalName(buf);
 		treeKey->save();
@@ -99,7 +99,7 @@ void appendSibbling(TreeKeyIdx *treeKey) {
 void appendChild(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter New Child Name: ";
-	gets(buf);
+	fgets(buf, 1000, stdin);
 	treeKey->appendChild();
 	treeKey->setLocalName(buf);
 	treeKey->save();
@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
 
 	do {
 		std::cout << "[" << treeKey->getText() << "] > ";
-		gets(line);
+		fgets(line, 1000, stdin);
 		input = line;
 		if (input.length() > 0) {
 			switch (input[0]) {

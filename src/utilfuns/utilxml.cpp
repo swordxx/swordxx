@@ -224,12 +224,39 @@ const char *XMLTag::getAttribute(const char *attribName, int partNum, char partS
 }
 
 
-const char *XMLTag::setAttribute(const char *attribName, const char *attribValue) {
+const char *XMLTag::setAttribute(const char *attribName, const char *attribValue, int partNum, char partSplit) {
 	if (!parsed)
 		parse();
+
+	SWBuf newVal = "";
+	// set part of an attribute
+	if (partNum > -1) {
+		const char *wholeAttr = getAttribute(attribName);
+		int attrCount = getAttributePartCount(attribName, partSplit);
+		for (int i = 0; i < attrCount; i++) {
+			if (i == partNum) {
+				if (attribValue) {
+					newVal += attribValue;
+					newVal += partSplit;
+				}
+				else {
+					// discard this part per null attribValue
+				}
+			}
+			else {
+				newVal += getPart(wholeAttr, i, partSplit);
+				newVal += partSplit;
+			}
+		}
+		if (newVal.length()) newVal--;	// discard the last partSplit
+		attribValue = (!attribValue && !newVal.length()) ? 0 : newVal.c_str();
+	}
+
+	// perform the actual set
 	if (attribValue)
 		attributes[attribName] = attribValue;
 	else	attributes.erase(attribName);
+
 	return attribValue;
 }
 

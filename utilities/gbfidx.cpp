@@ -253,25 +253,25 @@ void openfiles(char *fname)
 #endif				// don't need it.
 	char buf[255];
 
-	if ((fp = open(fname, O_RDONLY|O_BINARY)) == -1) {
+	if ((fp = open(fname, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", fname);
 		exit(1);
 	}
 
 	sprintf(buf, "%s.vss", fname);
-	if ((vfp = open(buf, O_CREAT|O_WRONLY|O_BINARY)) == -1) {
+	if ((vfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}
 
 	sprintf(buf, "%s.cps", fname);
-	if ((cfp = open(buf, O_CREAT|O_WRONLY|O_BINARY)) == -1) {
+	if ((cfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}
 
 	sprintf(buf, "%s.bks", fname);
-	if ((bfp = open(buf, O_CREAT|O_WRONLY|O_BINARY)) == -1) {
+	if ((bfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}

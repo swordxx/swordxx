@@ -76,7 +76,7 @@ public:
 
 	// return values should not be considered to persist beyond the return of the function.
 	const char *getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
-	const char *setAttribute(const char *attribName, const char *attribValue);
+	const char *setAttribute(const char *attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
 	const char *toString() const;
 	inline operator const char *() const { return toString(); }
 	inline XMLTag & operator =(const char *tagString) { setText(tagString); return *this; }

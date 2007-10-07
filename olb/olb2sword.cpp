@@ -243,28 +243,28 @@ void openfiles()
 
 	strcpy(fname, (testmnt==2) ? "nt" : "ot");
 	unlink(fname);
-	if ((fp = open(fname, O_CREAT|O_RDWR|O_BINARY)) == -1) {
+	if ((fp = open(fname, O_CREAT|O_RDWR|O_BINARY, S_IREAD|S_IWRITE)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", fname);
 		exit(1);
 	}
 
 	sprintf(buf, "%s.vss", fname);
 	unlink(buf);
-	if ((vfp = open(buf, O_CREAT|O_WRONLY|O_BINARY)) == -1) {
+	if ((vfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}
 
 	sprintf(buf, "%s.cps", fname);
 	unlink(buf);
-	if ((cfp = open(buf, O_CREAT|O_WRONLY|O_BINARY)) == -1) {
+	if ((cfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}
 
 	sprintf(buf, "%s.bks", fname);
 	unlink(buf);
-	if ((bfp = open(buf, O_CREAT|O_WRONLY|O_BINARY)) == -1) {
+	if ((bfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE)) == -1) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}

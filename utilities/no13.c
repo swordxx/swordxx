@@ -11,7 +11,7 @@ main(int argc, char **argv)
 		fprintf(stderr, "This program writes to stdout, so to be useful,\n\tit should be redirected (e.g no13 bla > bla.dat)\nusage: %s <filename>\n", argv[0]);
 		exit(1);
 	}
-	fd = open(argv[1], O_RDONLY);
+	fd = open(argv[1], O_RDONLY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	while (read(fd, &ch, 1) == 1) {
 		if (ch == 0x0d) {	// CR
 			breakcnt++;

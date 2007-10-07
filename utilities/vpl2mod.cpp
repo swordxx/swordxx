@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Let's see if we can open our input file
-	int fd = open(argv[1], O_RDONLY|O_BINARY);
+	int fd = open(argv[1], O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	if (fd < 0) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[1]);
 		exit(-2);

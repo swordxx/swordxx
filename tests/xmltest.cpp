@@ -31,4 +31,22 @@ int main(int argc, char **argv) {
 	cout << " isEmpty: " << x.isEmpty() << "\n";
 	cout << " isEndTag: " << x.isEndTag() << "\n";
 	cout << "\n";
+
+	
+	if (argc < 2) {  // only run if we're defaulted
+		const char *testParts="ABC D EF GHIJ";
+		cout << "Setting attribute 'multiPart' to: '" << testParts << "'\n";
+		x.setAttribute("multiPart", testParts);
+		cout << x << "\n";
+		cout << "Setting part 2 to 'MMM'\n";
+		x.setAttribute("multiPart", "MMM", 2, ' ');
+		cout << x << "\n";
+		cout << "Removing part 1\n";
+		x.setAttribute("multiPart", 0, 1, ' ');
+		cout << x << "\n";
+		cout << "Removing part 2\n";
+		x.setAttribute("multiPart", 0, 2, ' ');
+		cout << x << "\n";
+	}
+	
 }

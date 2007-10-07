@@ -21,6 +21,14 @@ Tag name: [verse]
  isEmpty: 1
  isEndTag: 0
 
+Setting attribute 'multiPart' to: 'ABC D EF GHIJ'
+<verse addedAttribute='with a " quote' multiPart="ABC D EF GHIJ" osisID="John.1.1" type="test type" yeah="stuff"/>
+Setting part 2 to 'MMM'
+<verse addedAttribute='with a " quote' multiPart="ABC D MMM GHIJ" osisID="John.1.1" type="test type" yeah="stuff"/>
+Removing part 1
+<verse addedAttribute='with a " quote' multiPart="ABC MMM GHIJ" osisID="John.1.1" type="test type" yeah="stuff"/>
+Removing part 2
+<verse addedAttribute='with a " quote' multiPart="ABC MMM" osisID="John.1.1" type="test type" yeah="stuff"/>
 <yo mama='stuff' />
 <yo mama="stuff"/>
 <yo addedAttribute='with a " quote' mama="stuff"/>

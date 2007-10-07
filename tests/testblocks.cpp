@@ -15,7 +15,7 @@ void addEntry(EntriesBlock *eb) {
 	std::cout << "\nEnter new Entry's text. '.' on an empty line to finish:\n";
 	do {
 		std::cout << "> ";
-		gets(line);
+		fgets(line, 1000, stdin);
 		input = line;
 		if (input.compare("."))
 			body.append(input);
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
 	do {
 		std::cout << "[" << eb->getCount() << "] > ";
-		gets(line);
+		fgets(line, 1000, stdin);
 		input = line;
 		if (input.length() > 0) {
 			switch (input[0]) {

@@ -1,5 +1,16 @@
 API ChangeLog 
 
+6-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
+	Added SWBuf::stripPrefix method which works nice
+		for returning and stripping stuff like
+		'lemma' from "lemma:G1234"
+	Added part params to XMLTag::setAttribute
+	Changed OSISStrongs to only strip lemma parts with
+		strong prefix
+	Applied fix for newer version of gcc which errors if
+		create perms are not passed to ::open
+		(Deji Akingunola <dakingun at gmail dot com>)
+
 13-Sep-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added InstallMgr::getModuleStatus to return a list
 		of differences between the modules of two SWMgr
@@ -25,7 +36,7 @@ API ChangeLog
 	Finished first stable version of rewrite of imp2gbs
 	Fixed bug in treekey where didn't break on found sibling
 	Added .trim to localName segments of genbook path,
-		e.g. /this / is/a/test/  - all spaces will be removed.
+		e.g. /this / is/a/test/  - all spaces will be removed
 	Added recognition of additional greek accent ~
 		in UTF8GreekAccents filter
 	Fixed bug in RawGenBook::setText where default size
