@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <osislemma.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
@@ -26,42 +27,43 @@ OSISLemma::~OSISLemma() {
 
 
 char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	if (!option) {	// if we don't want lemmas
-		char token[2048]; // cheese.  Fix.
-		int tokpos = 0;
-		bool intoken = false;
-		bool lastspace = false;
-		SWBuf orig = text;
-		const char *from = orig.c_str();
+	SWBuf token;
+	bool intoken = false;
+	bool lastspace = false;
 
-		//taken out of the loop for speed
-		const char* start = 0;
-		const char* end = 0;
-		
+	const SWBuf orig = text;
+	const char * from = orig.c_str();
+
+	if (!option) {
 		for (text = ""; *from; ++from) {
 			if (*from == '<') {
 				intoken = true;
-				tokpos = 0;
-				token[0] = 0;
+				token = "";
 				continue;
 			}
 			if (*from == '>') {	// process tokens
 				intoken = false;
-				
-				if ((*token == 'w') && (token[1] == ' ')) {
-					start = strstr(token, "lemma=\""); //we leave out the "w " at the start
-					end = start ? strchr(start+7, '"') : 0;
-					
-					if (start && end) { //we want to leave out the morph attribute
-						text.append('<');
-						text.append(token, start-token); //the text before the morph attr
-						text.append(end+1);
-						text.append('>');
-						
-						continue;
+				if (token.startsWith("w ")) {	// Word
+					XMLTag wtag(token);
+					int count = wtag.getAttributePartCount("lemma", ' ');
+					for (int i = 0; i < count; i++) {
+						SWBuf a = wtag.getAttribute("lemma", i, ' ');
+						const char *prefix = a.stripPrefix(':');
+						if ((!prefix) || ((SWBuf)prefix).startsWith("lemma.")) {
+							// remove attribute part
+							wtag.setAttribute("lemma", 0, i, ' ');
+							i--;
+							count--;
+						}
 					}
+					token = wtag;
+					token.trim();
+					// drop <>
+					token << 1;
+					token--;
 				}
 				
+				// keep token in text
 				text.append('<');
 				text.append(token);
 				text.append('>');
@@ -69,9 +71,7 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
-					token[tokpos++] = *from;
-					token[tokpos] = 0;
+				token += *from;
 			}
 			else	{
 				text.append(*from);

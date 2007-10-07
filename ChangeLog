@@ -10,6 +10,8 @@ API ChangeLog
 	Applied fix for newer version of gcc which errors if
 		create perms are not passed to ::open
 		(Deji Akingunola <dakingun at gmail dot com>)
+	Modified OSISLemma to only strip lemma parts with
+		lemma.* prefix or no prefix
 
 13-Sep-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added InstallMgr::getModuleStatus to return a list

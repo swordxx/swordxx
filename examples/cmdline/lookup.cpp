@@ -42,6 +42,7 @@ int main(int argc, char **argv)
 	// turn all filters to default values
 	manager.setGlobalOption("Headings", "On");
 	manager.setGlobalOption("Strong's Numbers", "On");
+	manager.setGlobalOption("Lemmas", "Off");
 //	manager.setGlobalOption("Greek Accents", "Off");
 
 	target->setKey(argv[2]);
