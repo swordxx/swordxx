@@ -98,6 +98,13 @@ inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
 	return StringMgr::getSystemStringMgr()->upperUTF8(t, max);
 }
 	
+/**
+ * Converts an SWBuf filled with UTF-8 to upper case
+ *
+ * @param b SWBuf to change to upper case
+ * 
+ * @return b for convenience
+ */
 inline SWBuf &toupperstr(SWBuf &b) {
 	char *utf8 = 0;
 	stdstr(&utf8, b.c_str(), 2);

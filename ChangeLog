@@ -12,6 +12,8 @@ API ChangeLog
 		(Deji Akingunola <dakingun at gmail dot com>)
 	Modified OSISLemma to only strip lemma parts with
 		lemma.* prefix or no prefix
+	Added UTF-8 processing for case insensitive unindexed
+		searching
 
 13-Sep-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added InstallMgr::getModuleStatus to return a list

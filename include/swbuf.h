@@ -375,7 +375,7 @@ public:
 	 * @param separator to use (e.g. ':')
 	 * @return prefix if separator character found; otherwise, null and leaves buffer unmodified
 	 */
-	inline const char *stripPrefix(char separator) { const char *m = strchr(buf, ':'); if (m) { int len = m-buf; char *hold = new char[len]; memcpy(hold, buf, len); *this << (len+1); memcpy(end+1, hold, len); delete [] hold; end[len+1] = 0; } return (m) ? end+1 : 0; }  // safe.  we know we don't actually realloc and shrink buffer when shifting, so we can place our return val at end.
+	inline const char *stripPrefix(char separator) { const char *m = strchr(buf, separator); if (m) { int len = m-buf; char *hold = new char[len]; memcpy(hold, buf, len); *this << (len+1); memcpy(end+1, hold, len); delete [] hold; end[len+1] = 0; } return (m) ? end+1 : 0; }  // safe.  we know we don't actually realloc and shrink buffer when shifting, so we can place our return val at end.
 
 	// this could be nicer, like replacing a contiguous series of target bytes with single replacement; offering replacement const char *
 	/**

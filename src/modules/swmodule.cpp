@@ -13,6 +13,7 @@
 #include <treekeyidx.h>	// KLUDGE for Search
 #include <swoptfilter.h>
 #include <filemgr.h>
+#include <stringmgr.h>
 #ifndef _MSC_VER
 #include <iostream>
 #endif
@@ -403,6 +404,7 @@ void SWModule::decrement(int steps) {
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 
 	listKey.ClearList();
+	SWBuf term = istr;
 
 #ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
@@ -425,9 +427,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	SWKey *searchKey = 0;
 	SWKey *resultKey = CreateKey();
 	regex_t preg;
-	char **words = 0;
-	char *wordBuf = 0;
-	int wordCount = 0;
+	vector<SWBuf> words;
 	const char *sres;
 	terminateSearch = false;
 	char perc = 1;
@@ -564,51 +564,49 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	}
 #endif
 
+	// some pre-loop processing
+	switch (searchType) {
+
+	// phrase
+	case -1:
+		// let's see if we're told to ignore case.  If so, then we'll touppstr our term
+		if ((flags & REG_ICASE) == REG_ICASE) toupperstr(term);
+		break;
 
 	// multi-word
-	if (searchType == -2) {
-		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
-		strcpy(wordBuf, istr);
-		words = (char **)calloc(sizeof(char *), 10);
-		int allocWords = 10;
-		words[wordCount] = strtok(wordBuf, " ");
-		while (words[wordCount]) {
-			wordCount++;
-			if (wordCount == allocWords) {
-				allocWords+=10;
-				words = (char **)realloc(words, sizeof(char *)*allocWords);
+	case -2:
+		// let's break the term down into our words vector
+		while (1) {
+			const char *word = term.stripPrefix(' ');
+			if (!word) {
+				words.push_back(term);
+				break;
 			}
-			words[wordCount] = strtok(NULL, " ");
+			words.push_back(word);
 		}
-	}
+		if ((flags & REG_ICASE) == REG_ICASE) {
+			for (unsigned int i = 0; i < words.size(); i++) {
+				toupperstr(words[i]);
+			}
+		}
+		break;
 
 	// entry attributes
-	if (searchType == -3) {
-		wordBuf = (char *)calloc(sizeof(char), strlen(istr) + 1);
-		char *checkSlash = wordBuf;
-		strcpy(wordBuf, istr);
-		words = (char **)calloc(sizeof(char *), 10);
-		int allocWords = 10;
-		while (*checkSlash == '/')
-			words[wordCount++] = checkSlash++;
-		words[wordCount] = strtok(wordBuf, "/");
-		while (words[wordCount]) {
-			wordCount++;
-			if (wordCount == allocWords) {
-				allocWords+=10;
-				words = (char **)realloc(words, sizeof(char *)*allocWords);
+	case -3:
+		// let's break the attribute segs down.  We'll reuse our words vector for each segment
+		while (1) {
+			const char *word = term.stripPrefix('/');
+			if (!word) {
+				words.push_back(term);
+				break;
 			}
-			checkSlash = words[wordCount-1] + (strlen(words[wordCount-1]))+1;
-			while (*checkSlash == '/')
-				words[wordCount++] = checkSlash++;
-			words[wordCount] = strtok(NULL, "/");
+			words.push_back(word);
 		}
-		for (int i = 0; i < wordCount; i++) {
-			if (words[i][0] == '/')
-				words[i][0] = 0;
-		}
+		break;
 	}
 
+
+	// our main loop to iterate the module and find the stuff
 	perc = 5;
 	(*percent)(perc, percentUserData);
 
@@ -645,110 +643,119 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 
 		// phrase
-		else if (searchType == -1) {
-			sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(StripText(), istr) : strstr(StripText(), istr);
-			if (sres) { //it's also in the StripText(), so we have a valid search result item now
-				*resultKey = *getKey();
-				listKey << *resultKey;
-			}
-		}
+		else {
+			SWBuf textBuf;
+			switch (searchType) {
 
-		// multiword
-		else if (searchType == -2) {
-			int loopCount = 0;
-			int foundWords = 0;
-			do {
-				const char* textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : StripText();
-				foundWords = 0;
-				
-				for (int i = 0; i < wordCount; ++i) {
-					sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(textBuf, words[i]) : strstr(textBuf, words[i]);
-					if (!sres) {
-						break; //for loop
-					}
-					++foundWords;
+			// phrase
+			case -1:
+				textBuf = StripText();
+				if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
+				sres = strstr(textBuf.c_str(), term.c_str());
+				if (sres) { //it's also in the StripText(), so we have a valid search result item now
+					*resultKey = *getKey();
+					listKey << *resultKey;
 				}
+				break;
+
+			// multiword
+			case -2: { // enclose our allocations
+				int loopCount = 0;
+				unsigned int foundWords = 0;
+				do {
+					textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : StripText();
+					foundWords = 0;
+					
+					for (unsigned int i = 0; i < words.size(); i++) {
+						if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
+						sres = strstr(textBuf.c_str(), words[i].c_str());
+						if (!sres) {
+							break; //for loop
+						}
+						foundWords++;
+					}
+					
+					loopCount++;
+				} while ( (loopCount < 2) && (foundWords == words.size()));
 				
-				++loopCount;
-			} while ( (loopCount < 2) && (foundWords == wordCount));
-			
-			if ((loopCount == 2) && (foundWords == wordCount)) { //we found the right words in both raw and stripped text, which means it's a valid result item
-				*resultKey = *getKey();
-				listKey << *resultKey;
-			}
-		}
+				if ((loopCount == 2) && (foundWords == words.size())) { //we found the right words in both raw and stripped text, which means it's a valid result item
+					*resultKey = *getKey();
+					listKey << *resultKey;
+				}
+				} break;
 
-		// entry attributes
-		else if (searchType == -3) {
-			RenderText();	// force parse
-			AttributeTypeList &entryAttribs = getEntryAttributes();
-			AttributeTypeList::iterator i1Start, i1End;
-			AttributeList::iterator i2Start, i2End;
-			AttributeValue::iterator i3Start, i3End;
+			// entry attributes
+			case -3:
+				RenderText();	// force parse
+				AttributeTypeList &entryAttribs = getEntryAttributes();
+				AttributeTypeList::iterator i1Start, i1End;
+				AttributeList::iterator i2Start, i2End;
+				AttributeValue::iterator i3Start, i3End;
 
-			if ((words[0]) && (words[0][0])) {
-				i1Start = entryAttribs.find(words[0]);
-				i1End = i1Start;
-				if (i1End != entryAttribs.end())
-				i1End++;
-			}
-			else {
-				i1Start = entryAttribs.begin();
-				i1End   = entryAttribs.end();
-			}
-			for (;i1Start != i1End; i1Start++) {
-				if ((words[1]) && (words[1][0])) {
-					i2Start = i1Start->second.find(words[1]);
-					i2End = i2Start;
-					if (i2End != i1Start->second.end())
-						i2End++;
+				if ((words.size()) && (words[0].length())) {
+					i1Start = entryAttribs.find(words[0]);
+					i1End = i1Start;
+					if (i1End != entryAttribs.end())
+					i1End++;
 				}
 				else {
-					i2Start = i1Start->second.begin();
-					i2End   = i1Start->second.end();
+					i1Start = entryAttribs.begin();
+					i1End   = entryAttribs.end();
 				}
-				for (;i2Start != i2End; i2Start++) {
-					if ((words[2]) && (words[2][0])) {
-						i3Start = i2Start->second.find(words[2]);
-						i3End = i3Start;
-						if (i3End != i2Start->second.end())
-							i3End++;
+				for (;i1Start != i1End; i1Start++) {
+					if ((words.size()>1) && (words[1].length())) {
+						i2Start = i1Start->second.find(words[1]);
+						i2End = i2Start;
+						if (i2End != i1Start->second.end())
+							i2End++;
 					}
 					else {
-						i3Start = i2Start->second.begin();
-						i3End   = i2Start->second.end();
+						i2Start = i1Start->second.begin();
+						i2End   = i1Start->second.end();
 					}
-					for (;i3Start != i3End; i3Start++) {
-						if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
-							bool found = !(((flags & REG_ICASE) == REG_ICASE) ? stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
-							sres = (found) ? i3Start->second.c_str() : 0;
+					for (;i2Start != i2End; i2Start++) {
+						if ((words.size()>2) && (words[2].length())) {
+							i3Start = i2Start->second.find(words[2]);
+							i3End = i3Start;
+							if (i3End != i2Start->second.end())
+								i3End++;
 						}
 						else {
-							sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
+							i3Start = i2Start->second.begin();
+							i3End   = i2Start->second.end();
 						}
-						if (sres) {
-							*resultKey = *getKey();
-							listKey << *resultKey;
+						for (;i3Start != i3End; i3Start++) {
+							if ((words.size()>3) && (words[3].length())) {
+								if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
+									bool found = !(((flags & REG_ICASE) == REG_ICASE) ? stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
+									sres = (found) ? i3Start->second.c_str() : 0;
+								}
+								else {
+									sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
+								}
+								if (sres) {
+									*resultKey = *getKey();
+									listKey << *resultKey;
+									break;
+								}
+							}
+						}
+						if (i3Start != i3End)
 							break;
-						}
 					}
-					if (i3Start != i3End)
+					if (i2Start != i2End)
 						break;
 				}
-				if (i2Start != i2End)
-					break;
-			}
+				break;
+			} // end switch
 		}
 		(*this)++;
 	}
 	
+
+	// cleaup work
 	if (searchType >= 0)
 		regfree(&preg);
-
-	if (searchType == -2) {
-		free(words);
-		free(wordBuf);
-	}
 
 	setKey(*saveKey);
 
@@ -776,7 +783,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
  * ENT:	buf	- buf to massage instead of this modules current text
  * 	len	- max len of buf
  *
- * RET: this module's text at specified key location massaged by Strip filters
+ * RET: this module's text at current key location massaged by Strip filters
  */
 
 const char *SWModule::StripText(const char *buf, int len) {
@@ -789,7 +796,7 @@ const char *SWModule::StripText(const char *buf, int len) {
  *
  * ENT:	buf	- buffer to Render instead of current module position
  *
- * RET: this module's text at specified key location massaged by RenderText filters
+ * RET: this module's text at current key location massaged by RenderText filters
  */
 
  const char *SWModule::RenderText(const char *buf, int len, bool render) {
@@ -830,7 +837,7 @@ const char *SWModule::StripText(const char *buf, int len) {
  *
  * ENT:	tmpKey	- key to use to grab text
  *
- * RET: this module's text at specified key location massaged by RenderFilers
+ * RET: this module's text at current key location massaged by RenderFilers
  */
 
  const char *SWModule::RenderText(SWKey *tmpKey) {
