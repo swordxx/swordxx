@@ -32,7 +32,7 @@
 SWORD_NAMESPACE_START
 
 
-#define JUNKBUFSIZE 8191
+#define JUNKBUFSIZE 16383
 
 /**
 * This class is used as a transport and utility for data buffers.

@@ -1,4 +1,9 @@
 
+if HAVE_VSNPRINTF 
+else
+CXXFLAGS += -DNO_VSNPRINTF
+endif
+
 utilfunsdir = $(top_srcdir)/src/utilfuns
 libsword_la_SOURCES += $(utilfunsdir)/swobject.cpp
 libsword_la_SOURCES += $(utilfunsdir)/Greek2Greek.cpp

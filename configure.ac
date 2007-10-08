@@ -220,6 +220,7 @@ else
    use_clucene="yes"
 fi
 
+AC_CHECK_FUNCS(vsnprintf, [have_vsnprintf="yes"])
 
 # ---------------------------------------------------------------------
 # Alter global conf directory only if not /etc
@@ -263,6 +264,7 @@ AC_SUBST(target_mingw32)
 # ---------------------------------------------------------------------
 # Conditional variables
 # ---------------------------------------------------------------------
+AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
 AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(USELUCENE, test x$use_clucene = xyes)
