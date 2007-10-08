@@ -39,7 +39,7 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 #endif
 
-using std:vector;
+using std::vector;
 
 SWORD_NAMESPACE_START
 
