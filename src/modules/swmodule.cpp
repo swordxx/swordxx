@@ -4,6 +4,8 @@
  *		  etc.)
  */
 
+#include <vector>
+
 #include <sysdata.h>
 #include <swmodule.h>
 #include <utilstr.h>
@@ -37,6 +39,7 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 #endif
 
+using std:vector;
 
 SWORD_NAMESPACE_START
 
