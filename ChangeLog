@@ -1,5 +1,10 @@
 API ChangeLog 
 
+11-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
+	Added new RawText4 and RawCom4 drivers which allow
+		for a 4 byte record size.  Patch submitted by
+		Doug Rintoul <doug_rintoul at sil dot org>
+
 6-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added SWBuf::stripPrefix method which works nice
 		for returning and stripping stuff like

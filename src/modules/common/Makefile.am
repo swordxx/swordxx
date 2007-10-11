@@ -12,6 +12,7 @@ SWZLIB =
 endif
 libsword_la_SOURCES += $(SWZLIB)
 libsword_la_SOURCES += $(commondir)/rawverse.cpp
+libsword_la_SOURCES += $(commondir)/rawverse4.cpp
 libsword_la_SOURCES += $(commondir)/swcipher.cpp
 libsword_la_SOURCES += $(commondir)/zverse.cpp
 libsword_la_SOURCES += $(commondir)/zstr.cpp

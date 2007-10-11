@@ -32,9 +32,11 @@
 
 #include <swmgr.h>
 #include <rawtext.h>
+#include <rawtext4.h>
 #include <filemgr.h>
 #include <rawgenbook.h>
 #include <rawcom.h>
+#include <rawcom4.h>
 #include <hrefcom.h>
 #include <rawld.h>
 #include <rawld4.h>
@@ -803,6 +805,10 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 		newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
+	if (!stricmp(driver, "RawText4")) {
+		newmod = new RawText4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+	}
+
 	// backward support old drivers
 	if (!stricmp(driver, "RawGBF")) {
 		newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
@@ -810,6 +816,10 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 
 	if (!stricmp(driver, "RawCom")) {
 		newmod = new RawCom(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+	}
+
+	if (!stricmp(driver, "RawCom4")) {
+		newmod = new RawCom4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
 	}
 
 	if (!stricmp(driver, "RawFiles")) {

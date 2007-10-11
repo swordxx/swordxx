@@ -9,11 +9,13 @@ using namespace std;
 
 #include <iostream>
 #include <rawtext.h>
+ #include <rawtext4.h>
 #include <versekey.h>
 
 
 #ifndef NO_SWORD_NAMESPACE
 using sword::RawText;
+using sword::RawText4;
 using sword::VerseKey;
 using sword::SWText;
 using sword::ListKey;
@@ -38,15 +40,37 @@ int main(int argc, char **argv) {
     fprintf(stderr, helptext.c_str(), argv[0]);
     exit(-1);
   }
+  int mode = 1;
+  if (argc > 3) {
+    switch (*argv[3]) {
+    case '4':
+      mode = 2;
+      break;
+    default:
+      mode = 1;
+    }
+  }
   
+
+
   try {
   
   ifstream infile(argv[1]);
 
   SWText* mod;
-  RawText::createModule(modname.c_str());
-  RawText modRaw(modname.c_str());
-  mod = &modRaw;
+  RawText * modRaw;
+  RawText4 * modRaw4;
+  
+  if (mode == 1) {
+	std::cout << "Mode 1\n";
+          RawText::createModule(modname.c_str());
+          modRaw= new RawText(modname.c_str());
+          mod = modRaw;
+  } else {
+          RawText4::createModule(modname.c_str());
+          modRaw4= new RawText4(modname.c_str());
+          mod = modRaw4;
+  }
 
   VerseKey* vkey = new VerseKey;
   vkey->Headings(1);
