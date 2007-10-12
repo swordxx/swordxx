@@ -730,7 +730,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						for (;i3Start != i3End; i3Start++) {
 							if ((words.size()>3) && (words[3].length())) {
 								if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
-									bool found = !(((flags & REG_ICASE) == REG_ICASE) ? stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
+									bool found = !(((flags & REG_ICASE) == REG_ICASE) ? sword::stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
 									sres = (found) ? i3Start->second.c_str() : 0;
 								}
 								else {
