@@ -145,6 +145,9 @@ USEUNIT("..\..\src\modules\filters\osismorphsegmentation.cpp");
 USEUNIT("..\..\src\keys\versetreekey.cpp");
 USEUNIT("..\..\src\modules\filters\teiplain.cpp");
 USEUNIT("..\..\src\modules\filters\teirtf.cpp");
+USEUNIT("..\..\src\modules\texts\rawtext4\rawtext4.cpp");
+USEUNIT("..\..\src\modules\comments\rawcom4\rawcom4.cpp");
+USEUNIT("..\..\src\modules\common\rawverse4.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

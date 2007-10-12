@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -15,7 +16,6 @@
 #include <versekey.h>
 #include <rawverse.h>
 #include <swbuf.h>
-
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;

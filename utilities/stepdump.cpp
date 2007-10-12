@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-
+#include <sys/stat.h>
 #include <fcntl.h>
 
 #ifndef __GNUC__
@@ -10,11 +10,6 @@
 #endif
 
 #include <lzsscomprs.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 
 using namespace std;
 #ifndef NO_SWORD_NAMESPACE

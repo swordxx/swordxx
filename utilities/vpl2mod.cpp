@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -15,10 +16,6 @@
 #include <iostream>
 #include <string>
 #include <versekey.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;

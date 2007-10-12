@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
 		break;
 	case LEX:
-		outModule = new zLD(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
+		outModule = new zLD(argv[2], 0, 0, iType, compressor);		// open our datapath with our RawText driver.
 		break;
 	}
 

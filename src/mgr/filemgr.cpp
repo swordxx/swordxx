@@ -37,19 +37,6 @@
 #include <unistd.h>
 #endif
 
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-#ifndef S_IRGRP
-#define S_IRGRP 0
-#endif
-
-#ifndef S_IROTH
-#define S_IROTH 0
-#endif
-
 // Fix for VC6
 #ifndef S_IREAD
 #ifdef _S_IREAD

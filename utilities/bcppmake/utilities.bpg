@@ -12,7 +12,7 @@ BRCC = $(ROOT)\bin\brcc32.exe $**
 PROJECTS = icuuc.lib icuin.lib libcurl.lib clucene.lib libsword.lib \
   osis2mod.exe mod2zmod.exe mod2vpl.exe mkfastmod.exe imp2gbs.exe vpl2mod.exe \
   imp2ld.exe imp2vs.exe mod2imp.exe cipherraw.exe step2vpl.exe stepdump.exe \
-  mod2osis.exe vs2osisref.exe diatheke.exe xml2gbs.exe installmgr.exe
+  mod2osis.exe vs2osisref.exe xml2gbs.exe diatheke.exe installmgr.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include <fcntl.h>
 
@@ -11,10 +12,6 @@
 #endif
 
 #include <lzsscomprs.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 using namespace std;
 #ifndef NO_SWORD_NAMESPACE
