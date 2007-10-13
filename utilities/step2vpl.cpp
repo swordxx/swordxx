@@ -11,6 +11,7 @@
 #include <unistd.h>
 #endif
 
+#include <filemgr.h>
 #include <lzsscomprs.h>
 
 using namespace std;
@@ -135,7 +136,7 @@ int main(int argc, char **argv) {
 		bookpath += "/";
 
 	fileName = bookpath + "Book.dat";
-	int fdbook = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	int fdbook = FileMgr::openFileReadOnly(fileName.c_str());
 
 	if (fdbook < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -148,7 +149,7 @@ int main(int argc, char **argv) {
 
 
 	fileName = bookpath + "Viewable.idx";
-	int fdviewable = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	int fdviewable = FileMgr::openFileReadOnly(fileName.c_str());
 
 	if (fdviewable < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -163,7 +164,7 @@ int main(int argc, char **argv) {
 
 
 	fileName = bookpath + "Vsync.idx";
-	int fdvsync = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	int fdvsync = FileMgr::openFileReadOnly(fileName.c_str());
 
 	if (fdvsync < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";
@@ -171,7 +172,7 @@ int main(int argc, char **argv) {
 	}
 
 	fileName = bookpath + "Sections.idx";
-	int fdsections = open(fileName.c_str(), O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	int fdsections = FileMgr::openFileReadOnly(fileName.c_str());
 
 	if (fdsections < 1) {
 		cerr << "error, couldn't open file: " << fileName << "\n";

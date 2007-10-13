@@ -16,6 +16,7 @@
 
 #include <fcntl.h>
 #include <versekey.h>
+#include <filemgr.h>
 
 using namespace sword;
 
@@ -248,30 +249,27 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short 
 
 void openfiles(char *fname)
 {
-#ifndef O_BINARY		// O_BINARY is needed in Borland C++ 4.53
-#define O_BINARY 0		// If it hasn't been defined than we probably
-#endif				// don't need it.
-	char buf[255];
+	SWBuf buf;
 
-	if ((fp = open(fname, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
+	if ((fp = FileMgr::openFileReadOnly(fname)) < 0) {
 		fprintf(stderr, "Couldn't open file: %s\n", fname);
 		exit(1);
 	}
 
-	sprintf(buf, "%s.vss", fname);
-	if ((vfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
+	buf.setFormatted("%s.vss", fname);
+	if ((vfp = FileMgr::createPathAndFile(buf)) < 0) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}
 
-	sprintf(buf, "%s.cps", fname);
-	if ((cfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
+	buf.setFormatted("%s.cps", fname);
+	if ((cfp = FileMgr::createPathAndFile(buf)) < 0) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}
 
-	sprintf(buf, "%s.bks", fname);
-	if ((bfp = open(buf, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) == -1) {
+	buf.setFormatted("%s.bks", fname);
+	if ((bfp = FileMgr::createPathAndFile(buf)) < 0) {
 		fprintf(stderr, "Couldn't open file: %s\n", buf);
 		exit(1);
 	}

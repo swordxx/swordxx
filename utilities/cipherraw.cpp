@@ -12,6 +12,7 @@
 #include <unistd.h>
 #endif
 
+#include <filemgr.h>
 #include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
@@ -39,19 +40,15 @@ int main(int argc, char **argv) {
 	rawdrv = new RawVerse(argv[1]);
 	zobj = new SWCipher((unsigned char *)argv[2]);
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
 	tmpbuf = new char [ strlen(argv[1]) + 11 ];
 	sprintf(tmpbuf, "%sot.zzz", argv[1]);
-	ofd[0] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	ofd[0] = FileMgr::createPathAndFile(tmpbuf);
 	sprintf(tmpbuf, "%sot.zzz.vss", argv[1]);
-	oxfd[0] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	oxfd[0] = FileMgr::createPathAndFile(tmpbuf);
 	sprintf(tmpbuf, "%snt.zzz", argv[1]);
-	ofd[1] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	ofd[1] = FileMgr::createPathAndFile(tmpbuf);
 	sprintf(tmpbuf, "%snt.zzz.vss", argv[1]);
-	oxfd[1] = open(tmpbuf, O_WRONLY|O_BINARY|O_CREAT, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	oxfd[1] = FileMgr::createPathAndFile(tmpbuf);
 
 	delete [] tmpbuf;
 

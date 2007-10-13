@@ -171,6 +171,12 @@ public:
 	static char isDirectory(const char *path);
 	static int createParent(const char *pName);
 	static int createPathAndFile(const char *fName);
+
+	/** attempts to open a file readonly
+	 * @param fName filename to open
+	 * @return fd; < 0 = error
+	 */
+	static int openFileReadOnly(const char *fName);
 	static int copyFile(const char *srcFile, const char *destFile);
 	static int copyDir(const char *srcDir, const char *destDir);
 	static int removeDir(const char *targetDir);

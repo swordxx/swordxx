@@ -11,6 +11,7 @@
 #include <unistd.h>
 #endif
 
+#include <filemgr.h>
 #include <swmgr.h>
 #include <rawtext.h>
 #include <iostream>
@@ -18,6 +19,7 @@
 #include <versekey.h>
 
 #ifndef NO_SWORD_NAMESPACE
+using sword::FileMgr;
 using sword::SWMgr;
 using sword::RawText;
 using sword::VerseKey;
@@ -150,7 +152,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "\t\tCHAPTER 1 HEADER\n");
 		fprintf(stderr, "\t\tIn the beginning...\n\n");
 		fprintf(stderr, "\t... implying there must also be a CHAPTER2 HEADER,\n");
-        fprintf(stderr, "\tEXODUS HEADER, NEW TESTAMENT HEADER, etc.  If there is no text for\n");
+		fprintf(stderr, "\tEXODUS HEADER, NEW TESTAMENT HEADER, etc.  If there is no text for\n");
 		fprintf(stderr, "\tthe header, a blank line must, at least, hold place.\n\n");
 		fprintf(stderr, "\tWith verse refs, source file must simply contain any number of lines,\n");
 		fprintf(stderr, "\tthat begin with the verse reference for which it is an entry.  e.g.:\n\n");
@@ -160,7 +162,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Let's see if we can open our input file
-	int fd = open(argv[1], O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	int fd = FileMgr::openFileReadOnly(argv[1]);
 	if (fd < 0) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[1]);
 		exit(-2);

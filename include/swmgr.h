@@ -21,7 +21,7 @@
  */
 
 /** @mainpage The SWORD Project - API documentation
- * This is the API documentation for the SWORD Project.
+ * This is the API documentation for The SWORD Project.
  * It describes the structure of the SWORD library and documents the functions of the classes.
  * From time to time this documentation gives programming examples, too.
  *
@@ -30,9 +30,9 @@
  *
  * Some main classes:
  *
- * SWMgr makes an installed library of modules (works) available.
- * SWModule represents an individual work
- * SWKey represents a location into a work (e.g. "John 3:16")
+ * SWMgr gives access to an installed library of modules (books).
+ * SWModule represents an individual module
+ * SWKey represents a location into a module (e.g. "John 3:16")
  *
  * An API Primer can be found at:
  *

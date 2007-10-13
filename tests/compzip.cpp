@@ -11,7 +11,9 @@
 #include <unistd.h>
 #endif
 
+#include <filemgr.h>
 #include <zipcomprs.h>
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -35,14 +37,10 @@ FileCompress::FileCompress(char *fname)
 {
 	char buf[256];
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-	ufd  = open(fname, O_RDWR|O_CREAT|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	ufd  = FileMgr::createPathAndFile(fname);
 
 	sprintf(buf, "%s.zip", fname);
-	zfd = open(buf, O_RDWR|O_CREAT|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	zfd = FileMgr::createPathAndFile(buf);
 }
 
 	
