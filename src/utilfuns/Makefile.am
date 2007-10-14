@@ -6,7 +6,6 @@ endif
 
 utilfunsdir = $(top_srcdir)/src/utilfuns
 libsword_la_SOURCES += $(utilfunsdir)/swobject.cpp
-libsword_la_SOURCES += $(utilfunsdir)/Greek2Greek.cpp
 libsword_la_SOURCES += $(utilfunsdir)/utilstr.cpp
 libsword_la_SOURCES += $(utilfunsdir)/utilxml.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swunicod.cpp
