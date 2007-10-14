@@ -13,7 +13,8 @@
     <LIBFILES value="..\..\..\icu-sword\as_is\borland\icuin.lib 
       ..\..\..\icu-sword\as_is\borland\icudatab.lib 
       ..\..\..\icu-sword\as_is\borland\icuuc.lib ..\..\lib\libsword.lib 
-      ..\..\..\biblecs\clucene\clucene.lib"/>
+      ..\..\..\biblecs\clucene\clucene.lib 
+      ..\..\..\biblecs\apps\InstallMgr\libcurl.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi QRPT50.bpi VCLDB50.bpi VCLBDE50.bpi 

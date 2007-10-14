@@ -630,6 +630,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\modules\tests\echomod.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\mgr\encfiltmgr.cpp"
 				>
 				<FileConfiguration
@@ -773,49 +777,10 @@
 			<File
 				RelativePath="..\..\..\src\utilfuns\ftpparse.c"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\mgr\ftptrans.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\filters\gbffootnotes.cpp"
@@ -1382,98 +1347,8 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\src\keys\genarray.c"
+				RelativePath="..\..\..\src\modules\filters\gbfwordjs.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\src\utilfuns\Greek2Greek.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\filters\greeklexattribs.cpp"
@@ -2659,7 +2534,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\modules\filters\osisvariants.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\modules\filters\osiswebif.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\filters\osiswordjs.cpp"
 				>
 			</File>
 			<File
@@ -2806,6 +2689,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\comments\rawcom4\rawcom4.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\comments\rawfiles\rawfiles.cpp"
@@ -3137,6 +3024,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\modules\texts\rawtext4\rawtext4.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\modules\common\rawverse.cpp"
 				>
 				<FileConfiguration
@@ -3182,6 +3073,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\common\rawverse4.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\utilfuns\regex.c"
@@ -3468,6 +3363,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\utilfuns\sub.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\filters\swbasicfilter.cpp"
@@ -5084,6 +4983,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\modules\filters\thmlwordjs.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\keys\treekey.cpp"
 				>
 				<FileConfiguration
@@ -5317,6 +5220,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\utilfuns\zlib\untgz.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\utilfuns\url.cpp"
@@ -6381,6 +6288,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\config.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\curlftpt.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\defs.h"
 				>
 			</File>
@@ -6409,7 +6324,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\ftplib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ftplibftpt.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\ftpparse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ftptrans.h"
 				>
 			</File>
 			<File
@@ -6461,6 +6388,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\gbfwordjs.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Greek2Greek.h"
 				>
 			</File>
@@ -6478,6 +6409,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\hrefcom.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\installmgr.h"
 				>
 			</File>
 			<File
@@ -6510,6 +6445,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\nullim.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisbook.h"
 				>
 			</File>
 			<File
@@ -6561,7 +6500,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\osisvariants.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\osiswebif.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\osiswordjs.h"
 				>
 			</File>
 			<File
@@ -6578,6 +6525,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\rawcom.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\rawcom4.h"
 				>
 			</File>
 			<File
@@ -6613,7 +6564,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\rawtext4.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\rawverse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\rawverse4.h"
 				>
 			</File>
 			<File
@@ -6838,6 +6797,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\thmlwebif.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\thmlwordjs.h"
 				>
 			</File>
 			<File

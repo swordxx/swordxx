@@ -461,6 +461,14 @@ GLOBALDEF int FtpConnect(const char *host, netbuf **nControl)
           return 0;
       }
 
+#if defined(_WIN32)
+	if (connect(sControl, (struct sockaddr *)&sin, sizeof(sin)) == -1)
+	{
+		perror("connect");
+		net_close(sControl);
+		return 0;
+	}
+#else
      //set nonblocking for connection timeout
     flags = fcntl( sControl, F_GETFL,0);
     oldflags=flags;
@@ -498,6 +506,7 @@ GLOBALDEF int FtpConnect(const char *host, netbuf **nControl)
 
       //set original flags
     fcntl( sControl, F_SETFL, oldflags);
+#endif
 
     ctrl = calloc(1,sizeof(netbuf));
     if (ctrl == NULL)
