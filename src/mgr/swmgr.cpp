@@ -356,7 +356,6 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	SWConfig *sysConf = 0;
 
 	*configType = 0;
-	//debug=1;
 
 	// check for a sysConf passed in to us
 	SWLog::getSystemLog()->logDebug("Checking for provided SWConfig(\"sword.conf\")...");

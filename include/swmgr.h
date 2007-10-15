@@ -154,12 +154,6 @@ protected:
 
 
 public:
-	/** Enable / Disable debug output at runtime
-	 * Set this to true to get more verbose output from SWMgr at runtime. Set it to false to get no debug
-	 * output.
-	 * The default is "false".
-	 */
-	static bool debug;
 
 	static bool isICU;
 	static const char *globalConfPath;

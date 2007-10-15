@@ -257,20 +257,20 @@ void openfiles(char *fname)
 	}
 
 	buf.setFormatted("%s.vss", fname);
-	if ((vfp = FileMgr::createPathAndFile(buf)) < 0) {
-		fprintf(stderr, "Couldn't open file: %s\n", buf);
+	if ((vfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
+		fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
 		exit(1);
 	}
 
 	buf.setFormatted("%s.cps", fname);
-	if ((cfp = FileMgr::createPathAndFile(buf)) < 0) {
-		fprintf(stderr, "Couldn't open file: %s\n", buf);
+	if ((cfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
+		fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
 		exit(1);
 	}
 
 	buf.setFormatted("%s.bks", fname);
-	if ((bfp = FileMgr::createPathAndFile(buf)) < 0) {
-		fprintf(stderr, "Couldn't open file: %s\n", buf);
+	if ((bfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
+		fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
 		exit(1);
 	}
 }
