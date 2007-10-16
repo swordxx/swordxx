@@ -32,7 +32,7 @@ namespace {
 		bool BiblicalText;
 		bool inXRefNote;
 		int suspendLevel;
-		std::stack<const char*> quoteStack;
+		std::stack<char *> quoteStack;
 		SWBuf w;
 		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);
@@ -55,9 +55,9 @@ namespace {
 	MyUserData::~MyUserData() {
 		// Just in case the quotes are not well formed
 		while (!quoteStack.empty()) {
-			const char *tagData = quoteStack.top();
+			char *tagData = quoteStack.top();
 			quoteStack.pop();
-			delete tagData;
+			delete [] tagData;
 		}
 	}
 static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
@@ -382,10 +382,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
 				// if it is </q> then pop the stack for the attributes
 				if (tag.isEndTag() && !u->quoteStack.empty()) {
-					const char *tagData  = u->quoteStack.top();
+					char *tagData  = u->quoteStack.top();
 					u->quoteStack.pop();
 					XMLTag qTag(tagData);
-					delete tagData;
+					delete [] tagData;
 
 					type    = qTag.getAttribute("type");
 					who     = qTag.getAttribute("who");

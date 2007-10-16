@@ -163,10 +163,14 @@ int strnicmp(const char *s1, const char *s2, int len) {
 }
 
 int stricmp(const char *s1, const char *s2) {
-#if defined(__GNUC__) || defined(_WIN32_WCE)
+#if defined(__GNUC__)
 	return ::strcasecmp(s1, s2);
 #else
+ #if defined(_WIN32_WCE)
+	return ::_stricmp(s1, s2);
+ #else
 	return ::stricmp(s1, s2);
+ #endif
 #endif
 }
 

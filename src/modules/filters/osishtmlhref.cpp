@@ -26,7 +26,7 @@
 
 SWORD_NAMESPACE_START
 
-class OSISHTMLHREF::QuoteStack : public std::stack<const char*> {
+class OSISHTMLHREF::QuoteStack : public std::stack<char *> {
 };
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -50,9 +50,9 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 OSISHTMLHREF::MyUserData::~MyUserData() {
 	// Just in case the quotes are not well formed
 	while (!quoteStack->empty()) {
-		const char *tagData = quoteStack->top();
+		char *tagData = quoteStack->top();
 		quoteStack->pop();
-		delete tagData;
+		delete [] tagData;
 	}
 	delete quoteStack;
 }
@@ -470,10 +470,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			else if ((tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("eID"))) {
 				// if it is </q> then pop the stack for the attributes
 				if (tag.isEndTag() && !u->quoteStack->empty()) {
-					const char *tagData  = u->quoteStack->top();
+					char *tagData  = u->quoteStack->top();
 					u->quoteStack->pop();
 					XMLTag qTag(tagData);
-					delete tagData;
+					delete [] tagData;
 
 					type    = qTag.getAttribute("type");
 					who     = qTag.getAttribute("who");

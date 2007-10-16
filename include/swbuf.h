@@ -398,8 +398,8 @@ public:
 	inline bool endsWith(const SWBuf &postfix) const { return (size() >= postfix.size())?!strncmp(end-postfix.size(), postfix.c_str(), postfix.size()):false; }
 
 	inline int compare(const SWBuf &other) const { return strcmp(c_str(), other.c_str()); }
-	inline bool operator ==(const SWBuf &other) const { return !compare(other); }
-	inline bool operator !=(const SWBuf &other) const { return compare(other); }
+	inline bool operator ==(const SWBuf &other) const { return compare(other) == 0; }
+	inline bool operator !=(const SWBuf &other) const { return compare(other) != 0; }
 	inline bool operator > (const SWBuf &other) const { return compare(other) > 0; }
 	inline bool operator < (const SWBuf &other) const { return compare(other) < 0; }
 	inline bool operator <=(const SWBuf &other) const { return compare(other) <= 0; }
@@ -416,8 +416,8 @@ public:
 	inline bool endsWith(const char *postfix) const { unsigned int psize = strlen(postfix); return (size() >= psize)?!strncmp(end-psize, postfix, psize):false; }
 
 	inline int compare(const char *other) const { return strcmp(c_str(), other); }
-	inline bool operator ==(const char *other) const { return !compare(other); }
-	inline bool operator !=(const char *other) const { return compare(other); }
+	inline bool operator ==(const char *other) const { return compare(other) == 0; }
+	inline bool operator !=(const char *other) const { return compare(other) != 0; }
 	inline bool operator > (const char *other) const { return compare(other) > 0; }
 	inline bool operator < (const char *other) const { return compare(other) < 0; }
 	inline bool operator <=(const char *other) const { return compare(other) <= 0; }
