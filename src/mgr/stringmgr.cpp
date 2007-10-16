@@ -72,6 +72,7 @@ public:
  */
 int isValidUTF8(unsigned char *txt) {
 	unsigned int  countUTF8 = 0;
+#if 0
 	unsigned char parts     = 0;
 
 
@@ -109,6 +110,7 @@ int isValidUTF8(unsigned char *txt) {
 	}
 
 	// At this point it is either UTF-8 or ascii
+#endif
 	return countUTF8 ? 1 : -1;
 }
 
