@@ -2,6 +2,10 @@ API ChangeLog
 
 * Release 1.5.10 *
 
+16-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
+	Added new vi-utf8.conf Vietnamese locale submitted
+		by Daniel Owens <dhowens at pmbx dot net>
+
 11-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added new FileMgr::openFileReadOnly to help centralize
 		all file io details.
