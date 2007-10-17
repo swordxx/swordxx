@@ -1,5 +1,7 @@
 API ChangeLog 
 
+* Release 1.5.10 *
+
 11-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added new FileMgr::openFileReadOnly to help centralize
 		all file io details.
