@@ -641,6 +641,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		if (searchType >= 0) {
 			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
 				*resultKey = *getKey();
+				resultKey->clearBound();
 				listKey << *resultKey;
 			}
 		}
@@ -657,6 +658,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				sres = strstr(textBuf.c_str(), term.c_str());
 				if (sres) { //it's also in the StripText(), so we have a valid search result item now
 					*resultKey = *getKey();
+					resultKey->clearBound();
 					listKey << *resultKey;
 				}
 				break;
@@ -683,6 +685,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				
 				if ((loopCount == 2) && (foundWords == words.size())) { //we found the right words in both raw and stripped text, which means it's a valid result item
 					*resultKey = *getKey();
+					resultKey->clearBound();
 					listKey << *resultKey;
 				}
 				} break;
@@ -738,6 +741,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 								}
 								if (sres) {
 									*resultKey = *getKey();
+									resultKey->clearBound();
 									listKey << *resultKey;
 									break;
 								}

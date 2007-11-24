@@ -13,9 +13,9 @@ CXXFLAGS += $(shell orbit2-config --cflags)
 LIBS += $(shell orbit2-config --libs)
 
 #orbitcpp stuff-- this is silly.  Is there really NOT a way to derive this?
-CFLAGS += -I/usr/local/include/orbitcpp-2.0
-CXXFLAGS += -I/usr/local/include/orbitcpp-2.0
-LIBS += -L/usr/local/lib -lORBit-2-cpp
+CFLAGS += -I/usr/include/orbitcpp-2.0
+CXXFLAGS += -I/usr/include/orbitcpp-2.0
+LIBS += -L/usr/lib64 -lORBit-2-cpp
 
 #comment out for release
 CXXFLAGS += -g -O0

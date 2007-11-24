@@ -141,6 +141,7 @@ public:
 	virtual const char *getShortText() const { return getText(); }
 	virtual const char *getRangeText() const;
 	virtual bool isBoundSet() const { return boundSet; }
+	virtual void clearBound() const { boundSet = false; }
 
 	/** Compares this key object to another SWKey object
 	 * @param ikey key to compare with this one

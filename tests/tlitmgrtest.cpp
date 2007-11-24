@@ -223,6 +223,7 @@
 #include "unicode/resbund.h"
 #include "unicode/translit.h"
 #include "unicode/ustream.h"
+#include <iostream>
 
 class SWCharString {
  public:
