@@ -485,38 +485,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
 		char utfBuffer[MAX_CONV_SIZE + 1];
 		
-		
-/*
-		// Make sure our scope for this search is bounded by
-		// something we can test
-		// In the future, add bool SWKey::isValid(const char *tryString);
-		bool freeTestKey = false;
-
-		// only enforce range if we're VerseKey decendant
-		bool enforceRange = SWDYNAMIC_CAST(VerseKey, resultKey);
-
-		SWKey *testKey = 0;
-		if (enforceRange) {
-			SWTRY {
-				testKey = SWDYNAMIC_CAST(VerseKey, getKey());
-				if (!testKey) {
-					testKey = SWDYNAMIC_CAST(ListKey, getKey());
-				}
-			}
-			SWCATCH ( ... ) {}
-			if (!testKey) {
-				testKey = new ListKey();
-				*testKey = ((VerseKey *)resultKey)->ParseVerseList((const char *)((scope)?scope:key), *resultKey, true);
-				freeTestKey = true;
-			}
-		}
-*/
-
 		lucene::index::IndexReader    *ir = 0;
 		lucene::search::IndexSearcher *is = 0;
-		Query                          *q = 0;
-		Hits                           *h = 0;
-		try {
+		Query                         *q  = 0;
+		Hits                          *h  = 0;
+		SWTRY {
 			ir = IndexReader::open(target);
 			is = new IndexSearcher(ir);
 			(*percent)(10, percentUserData);
@@ -535,31 +508,17 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				// set a temporary verse key to this module position
 				lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
 				*resultKey = utfBuffer; //TODO Does a key always accept utf8?
-/*
-				if (enforceRange) {
-					// check scope
-					// Try to set our scope key to this verse key
-					*testKey = *resultKey;
-*/
-					*getKey() = *resultKey;
 
-					// check to see if it set ok and if so, add to our return list
-//					if (*testKey == *resultKey) {
-					if (*getKey() == *resultKey) {
-						listKey << *resultKey;
-						listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
-					}
-/*
-				}
-				else {
+				// check to see if it sets ok (in our range?) and if so, add to our return list
+				*getKey() = *resultKey;
+				if (*getKey() == *resultKey) {
 					listKey << *resultKey;
 					listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
 				}
-*/
 			}
 			(*percent)(98, percentUserData);
 		}
-		catch (...) {
+		SWCATCH (...) {
 			q = 0;
 			// invalid clucene query
 		}
@@ -570,11 +529,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		if (ir) {
 			ir->close();
 		}
-/*
-		if (freeTestKey) {
-			delete testKey;
-		}
-*/
 	}
 #endif
 
