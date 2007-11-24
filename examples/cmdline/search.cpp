@@ -10,6 +10,15 @@
 using namespace sword;
 #endif
 
+  /*
+	 *			>=0 - regex
+	 *			-1  - phrase
+	 *			-2  - multiword
+	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
+	 *			-4  - Lucene
+   */
+char SEARCH_TYPE=-2;
+
 char printed = 0;
 void percentUpdate(char percent, void *userData) {
 	char maxHashes = *((char *)userData);
@@ -68,23 +77,16 @@ int main(int argc, char **argv)
 
 	std::cerr << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
-  /*
-	 *			>=0 - regex
-	 *			-1  - phrase
-	 *			-2  - multiword
-	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
-	 *			-4  - Lucene
-   */
-	listkey = target->Search(searchTerm.c_str(), -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
-	std::cout << "\n";
+	listkey = target->Search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	std::cerr << std::endl;
 	if (argc > 4) {			// if min / max specified
 		scope = listkey;
 		scope.Persist(1);
 		target->setKey(scope);
 		printed = 0;
-		std::cout << " ";
-		listkey = target->Search(argv[4], -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
-		std::cout << "\n";
+		std::cerr << " ";
+		listkey = target->Search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+		std::cerr << std::endl;
 	}
 	listkey.sort();
 	while (!listkey.Error()) {
