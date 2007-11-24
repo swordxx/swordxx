@@ -10,8 +10,8 @@
 using namespace sword;
 #endif
 
+char printed = 0;
 void percentUpdate(char percent, void *userData) {
-	static char printed = 0;
 	char maxHashes = *((char *)userData);
 	
 	while ((((float)percent)/100) * maxHashes > printed) {
@@ -36,8 +36,8 @@ int main(int argc, char **argv)
 	VerseKey parser;
 	ModMap::iterator it;
 
-	if ((argc != 3) && (argc != 4)) {
-		fprintf(stderr, "\nusage: %s <modname> <\"search string\"> [\"search_scope\"]\n"
+	if ((argc < 3) || (argc > 5)) {
+		fprintf(stderr, "\nusage: %s <modname> <\"search string\"> [\"search_scope\"] [\"search again for string in previous result set\"]\n"
 							 "\tExample: search KJV \"swift hear slow speak\"\n\n", argv[0]);
 
 		exit(-1);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
 	target = (*it).second;
 
-	if (argc == 4) {			// if min / max specified
+	if (argc > 3) {			// if min / max specified
 		scope = parser.ParseVerseList(argv[3], parser, true);
 		scope.Persist(1);
 		target->setKey(scope);
@@ -75,8 +75,17 @@ int main(int argc, char **argv)
 	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
 	 *			-4  - Lucene
    */
-	listkey = target->Search(searchTerm.c_str(), -2, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->Search(searchTerm.c_str(), -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cout << "\n";
+	if (argc > 4) {			// if min / max specified
+		scope = listkey;
+		scope.Persist(1);
+		target->setKey(scope);
+		printed = 0;
+		std::cout << " ";
+		listkey = target->Search(argv[4], -4, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+		std::cout << "\n";
+	}
 	listkey.sort();
 	while (!listkey.Error()) {
 		std::cout << (const char *)listkey << std::endl;

@@ -296,7 +296,7 @@ void ListKey::setText(const char *ikey) {
 	for (arraypos = 0; arraypos < arraycnt; arraypos++) {
 		SWKey *key = array[arraypos];
 		if (key) {
-			if (key->isTraversable()) {
+			if (key->isTraversable() && key->isBoundSet()) {
 				key->setText(ikey);
 				if (!key->Error())
 					break;
