@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <thmllemma.h>
-#include <utilstr.h>
 
 SWORD_NAMESPACE_START
 
@@ -36,28 +35,28 @@ char ThMLLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
 				intoken = true;
-                                token = "";
+				token = "";
 				continue;
 			}
-			else if (*from == '>') {	// process tokens
+			if (*from == '>') {	// process tokens
 				intoken = false;
-				if (!strnicmp(token.c_str(), "sync", 4) && strstr(token.c_str(), " type=\"lemma\"")) {	// Lemma
-					continue;
+				if (!strncmp(token.c_str(), "sync ", 5) && strstr(token.c_str(), "type=\"lemma\"")) {	// Lemma
+				  continue;
 				}
-				
+
 				// if not a lemma token, keep token in text
 				text += '<';
-                                text.append(token);
-      				text += '>';
+				text += token;
+				text += '>';
 				continue;
 			}
-			
+
 			if (intoken) {
 				token += *from;
 			}
-			else {
-                                text += *from;
-       			}
+			else	{
+				text += *from;
+			}
 		}
 	}
 	return 0;

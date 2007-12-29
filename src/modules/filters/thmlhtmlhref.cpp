@@ -171,6 +171,13 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						URL::encode(value.c_str()).c_str(),
 						value.c_str());
 			}
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "lemma")) { //&gt;
+				if(value.length())
+					// empty "type=" is deliberate.
+					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\">%s</a>&gt;</em></small>", 
+						URL::encode(value.c_str()).c_str(),
+						value.c_str());
+			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
 				char ch = *value;
 				value<<1;
