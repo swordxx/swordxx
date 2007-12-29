@@ -34,5 +34,17 @@ int main(int argc, char **argv) {
 
 	std::cout << result.getText() << "\n";
 
+     const char *bounds = "lk,acts";
+     scope = parser.ParseVerseList(bounds, parser, true);
+
+     x = "1Sam.21.1";
+     scope = x;
+//     if (scope == x) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+     if (!scope.Error()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+
+     x = "Is.1.13";
+     scope = x;
+     if (!scope.Error()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+
 	return 0;
 }
