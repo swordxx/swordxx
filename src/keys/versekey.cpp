@@ -1079,93 +1079,94 @@ void VerseKey::Normalize(char autocheck)
 {
 	error = 0;
 
-	if ((autocheck) && (!autonorm))	// only normalize if we were explicitely called or if autonorm is turned on
-		return;
+	if (((!autocheck) || (autonorm))	// only normalize if we were explicitely called or if autonorm is turned on
+               &&
+	          ((!headings) || ((verse) && (chapter)))) {		// this is cheeze and temporary until deciding what actions should be taken; so headings should only be turned on when positioning with Index() or incrementors
 
-	if ((headings) && ((!verse) || (!chapter)))		// this is cheeze and temporary until deciding what actions should be taken.
-		return;					// so headings should only be turned on when positioning with Index() or incrementors
+          while ((testament < 3) && (testament > 0)) {
 
-	while ((testament < 3) && (testament > 0)) {
+               if (book > BMAX[testament-1]) {
+                    book -= BMAX[testament-1];
+                    testament++;
+                    continue;
+               }
 
-		if (book > BMAX[testament-1]) {
-			book -= BMAX[testament-1];
-			testament++;
-			continue;
-		}
+               if (book < 1) {
+                    if (--testament > 0) {
+                         book += BMAX[testament-1];
+                    }
+                    continue;
+               }
 
-		if (book < 1) {
-			if (--testament > 0) {
-				book += BMAX[testament-1];
-			}
-			continue;
-		}
+               if (chapter > books[testament-1][book-1].chapmax) {
+                    chapter -= books[testament-1][book-1].chapmax;
+                    book++;
+                    continue;
+               }
 
-		if (chapter > books[testament-1][book-1].chapmax) {
-			chapter -= books[testament-1][book-1].chapmax;
-			book++;
-			continue;
-		}
+               if (chapter < 1) {
+                    if (--book > 0) {
+                         chapter += books[testament-1][book-1].chapmax;
+                    }
+                    else	{
+                         if (testament > 1) {
+                              chapter += books[0][BMAX[0]-1].chapmax;
+                         }
+                    }
+                    continue;
+               }
 
-		if (chapter < 1) {
-			if (--book > 0) {
-				chapter += books[testament-1][book-1].chapmax;
-			}
-			else	{
-				if (testament > 1) {
-					chapter += books[0][BMAX[0]-1].chapmax;
-				}
-			}
-			continue;
-		}
+               if (verse > books[testament-1][book-1].versemax[chapter-1]) { // -1 because e.g chapter 1 of Matthew is books[1][0].versemax[0]
+                    verse -= books[testament-1][book-1].versemax[chapter++ - 1];
+                    continue;
+               }
 
-		if (verse > books[testament-1][book-1].versemax[chapter-1]) { // -1 because e.g chapter 1 of Matthew is books[1][0].versemax[0]
-			verse -= books[testament-1][book-1].versemax[chapter++ - 1];
-			continue;
-		}
+               if (verse < 1) {
+                    if (--chapter > 0) {
+                         verse += books[testament-1][book-1].versemax[chapter-1];
+                    }
+                    else	{
+                         if (book > 1) {
+                              verse += books[testament-1][book-2].versemax[books[testament-1][book-2].chapmax-1];
+                         }
+                         else	{
+                              if (testament > 1) {
+                                   verse += books[0][BMAX[0]-1].versemax[books[0][BMAX[0]-1].chapmax-1];
+                              }
+                         }
+                    }
+                    continue;
+               }
 
-		if (verse < 1) {
-			if (--chapter > 0) {
-				verse += books[testament-1][book-1].versemax[chapter-1];
-			}
-			else	{
-				if (book > 1) {
-					verse += books[testament-1][book-2].versemax[books[testament-1][book-2].chapmax-1];
-				}
-				else	{
-					if (testament > 1) {
-						verse += books[0][BMAX[0]-1].versemax[books[0][BMAX[0]-1].chapmax-1];
-					}
-				}
-			}
-			continue;
-		}
+               break;  // If we've made it this far (all failure checks continue) we're ok
+          }
 
-		break;  // If we've made it this far (all failure checks continue) we're ok
-	}
+          if (testament > 2) {
+               testament = 2;
+               book      = BMAX[testament-1];
+               chapter   = books[testament-1][book-1].chapmax;
+               verse     = books[testament-1][book-1].versemax[chapter-1];
+               error     = KEYERR_OUTOFBOUNDS;
+          }
 
-	if (testament > 2) {
-		testament = 2;
-		book      = BMAX[testament-1];
-		chapter   = books[testament-1][book-1].chapmax;
-		verse     = books[testament-1][book-1].versemax[chapter-1];
-		error     = KEYERR_OUTOFBOUNDS;
-	}
+          if (testament < 1) {
+               error     = ((!headings) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
+               testament = ((headings) ? 0 : 1);
+               book      = ((headings) ? 0 : 1);
+               chapter   = ((headings) ? 0 : 1);
+               verse     = ((headings) ? 0 : 1);
+          }
 
-	if (testament < 1) {
-		error     = ((!headings) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
-		testament = ((headings) ? 0 : 1);
-		book      = ((headings) ? 0 : 1);
-		chapter   = ((headings) ? 0 : 1);
-		verse     = ((headings) ? 0 : 1);
-	}
-	if (_compare(UpperBound()) > 0) {
-		*this = UpperBound();
-		error = KEYERR_OUTOFBOUNDS;
-	}
-	if (_compare(LowerBound()) < 0) {
-		*this = LowerBound();
-		error = KEYERR_OUTOFBOUNDS;
-	}
+          // should we always perform bounds checks?  Tried but seems to cause infinite recursion
+          if (_compare(UpperBound()) > 0) {
+               setText(UpperBound());
+               error = KEYERR_OUTOFBOUNDS;
+          }
+          if (_compare(LowerBound()) < 0) {
+               setText(LowerBound());
+               error = KEYERR_OUTOFBOUNDS;
+          }
+     }
 }
 
 
