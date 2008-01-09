@@ -62,7 +62,6 @@ int main(int argc, char **argv) {
   RawText4 * modRaw4;
   
   if (mode == 1) {
-	std::cout << "Mode 1\n";
           RawText::createModule(modname.c_str());
           modRaw= new RawText(modname.c_str());
           mod = modRaw;

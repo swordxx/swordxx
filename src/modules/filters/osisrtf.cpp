@@ -267,7 +267,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				outText("{\\par\\par}", buf, u);
+				outText("{\\pard\\par\\par}", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
