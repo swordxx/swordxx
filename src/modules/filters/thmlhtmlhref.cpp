@@ -320,6 +320,8 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					    URL::encode(u->version.c_str()).c_str());
 
 			for (c = token; *c; c++) {
+                    if ((*c == '/') && (*(c+1) == '\0'))
+                         continue;
 				if (c == src) {
 					for (;((*c) && (*c != '"')); c++)
 						buf += *c;
@@ -337,7 +339,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				}
 				buf += *c;
 			}
-			buf += " border=0></a>";
+               buf += " border=0 /></a>";
 		}
 		else {
 			buf += '<';

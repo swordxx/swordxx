@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 				(*outModule) << lastBuffer.c_str();	// save new text;
 			}
 			else {
-				cout << "Skipping [" << bufferKey << "] no entry in in Module.\n";
+                    cout << "Skipping [" << bufferKey << "] no entry in Module.\n";
 			}
 		}
 		(*inModule)++;

@@ -32,7 +32,7 @@ ThMLRTF::ThMLRTF() {
 
 	setEscapeStringCaseSensitive(true);
 
-	addEscapeStringSubstitute("nbsp", " ");
+     addEscapeStringSubstitute("nbsp", "\302\240");
 	addEscapeStringSubstitute("apos", "'");
 	addEscapeStringSubstitute("quot", "\"");
 	addEscapeStringSubstitute("amp", "&");
@@ -159,6 +159,8 @@ ThMLRTF::ThMLRTF() {
 	addTokenSubstitute("P", "\\par ");
 	addTokenSubstitute("scripture", "{\\i1 ");
 	addTokenSubstitute("/scripture", "}");
+     addTokenSubstitute("center", "\\qc ");
+     addTokenSubstitute("/center", "\\pard ");
 }
 
 
