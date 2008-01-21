@@ -73,6 +73,28 @@ AC_ARG_ENABLE(examples,
 AM_MAINTAINER_MODE
 
 # ---------------------------------------------------------------------
+# Debug and profile
+# ---------------------------------------------------------------------
+
+# these are first because the SET AM_C.*FLAGS, not just append
+if test x$enable_debug = xyes; then
+  GCJFLAGS="-g -O0"
+  if test x$ac_cv_prog_cc_g = xyes; then
+    AM_CFLAGS="-g3 -O0 -Wall"
+  else
+    AM_CFLAGS="-O0 -Wall"
+  fi
+  if test x$ac_cv_prog_cxx_g = xyes; then
+    AM_CXXFLAGS="-g3 -O0 -Wall"
+  else
+    AM_CXXFLAGS="-O0 -Wall"
+  fi
+else
+  AM_CFLAGS="-O2"
+  AM_CXXFLAGS="-O2"
+fi
+
+# ---------------------------------------------------------------------
 # Check libraries
 # ---------------------------------------------------------------------
 if test x$with_zlib  = xyes; then
@@ -139,30 +161,12 @@ if test x$with_icu = xyes; then
 	   ICU_LIBS=`$ICU_CONFIG --ldflags`
 	   ICU_IOLIBS=`if test $(echo "$ICU_VER >= 3.0"|bc) -eq 1; then $ICU_CONFIG --ldflags-icuio; else $ICU_CONFIG --ldflags-ustdio; fi;`
 	fi
+     AM_CXXFLAGS="$AM_CXXFLAGS -D_ICU_"
+     AM_CFLAGS="$AM_CFLAGS -D_ICU_"
 fi
 
-# ---------------------------------------------------------------------
-# Debug and profile
-# ---------------------------------------------------------------------
 
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
-
-if test x$enable_debug = xyes; then
-  GCJFLAGS="-g -O0"
-  if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0 -Wall"
-  else
-    AM_CFLAGS="-O0 -Wall"
-  fi
-  if test x$ac_cv_prog_cxx_g = xyes; then
-    AM_CXXFLAGS="-g3 -O0 -Wall"
-  else
-    AM_CXXFLAGS="-O0 -Wall"
-  fi
-else
-  AM_CFLAGS="-O2"
-  AM_CXXFLAGS="-O2"
-fi
 #  AC_DEFINE(DEBUG)
 #else
 #  AC_DEFINE(NDEBUG)

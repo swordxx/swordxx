@@ -10,6 +10,8 @@
 #include <gbfhtmlhref.h>
 #include <thmlrtf.h>
 #include <gbfrtf.h>
+#include <utilstr.h>
+#include <swmodule.h>
 
 #include <swconfig.h>
 #include "diafiltmgr.h"
@@ -89,8 +91,8 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 signed char DiathekeMgr::Load () {
 	signed char retval =  SWMgr::Load();
 #ifdef _ICU_
-	optionFilters.insert(FilterMap::value_type("UTF8Transliterator", transliterator));
-        options.push_back(transliterator->getOptionName());
+	optionFilters["UTF8Transliterator"] = transliterator;
+	options.push_back(transliterator->getOptionName());
 #endif
 	return retval;
 };

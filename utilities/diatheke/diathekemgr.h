@@ -9,7 +9,7 @@ enum PlatformIDs { WIN32S = 0, WIN9X, WINNT, WINCE };
 class DiathekeMgr : public SWMgr {
 	SWFilter *arshaping;
 	SWFilter *bidireorder;
-    SWFilter *transliterator;
+    SWOptionFilter *transliterator;
 
 #ifdef WIN32
         char platformID;
