@@ -55,12 +55,12 @@ protected:
 	
 public:
 
-	const static int MODSTAT_OLDER;
-	const static int MODSTAT_SAMEVERSION;
-	const static int MODSTAT_UPDATED;
-	const static int MODSTAT_NEW;
-	const static int MODSTAT_CIPHERED;
-	const static int MODSTAT_CIPHERKEYPRESENT;
+	static const int MODSTAT_OLDER;
+	static const int MODSTAT_SAMEVERSION;
+	static const int MODSTAT_UPDATED;
+	static const int MODSTAT_NEW;
+	static const int MODSTAT_CIPHERED;
+	static const int MODSTAT_CIPHERKEYPRESENT;
 
 	SWConfig *installConf;
 	InstallSourceMap sources;
