@@ -23,6 +23,10 @@
 #include <zipcomprs.h>
 #include <cipherfil.h>
 
+#ifdef _ICU_
+#include <utf8nfc.h>
+#endif
+
 //#define DEBUG
 
 // Debug for simple transformation stack
@@ -33,6 +37,10 @@ using namespace sword;
 #endif
 
 using namespace std;
+
+#ifdef _ICU_
+UTF8NFC normalizer;
+#endif
 
 SWText *module = 0;
 VerseKey *currentVerse = 0;
@@ -50,11 +58,12 @@ char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
 	"Jude", "Rev"};
 
 static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
+static bool normalize = false; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
 	bool match = false;
 	for (int i = 0; i < 66; i++) {
-		if (!strcmp(buf, osisabbrevs[i])){
+		if (!strcmp(buf, osisabbrevs[i])) {
 			match = true;
 			break;
 		}
@@ -140,6 +149,12 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 			if (!isKJVRef(key)) {
 				makeKJVRef(key);
 			}
+
+#ifdef _ICU_
+			if (normalize) {
+				normalizer.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+			}
+#endif
 
 			SWBuf currentText = module->getRawEntry();
 			if (currentText.length()) {
@@ -650,6 +665,8 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
+	fprintf(stderr, "  -n\t\t\t normalize UTF-8 to NFC (default is to leave text unmodified)\n");
+	fprintf(stderr, "\t\t\t\t Note: all UTF-8 texts should be normalized to NFC\n");
 	exit(-1);
 }
 
@@ -692,6 +709,13 @@ int main(int argc, char **argv) {
 			}
 			usage(*argv, "-b requires one of <2|3|4>");
 		}
+		else if (!strcmp(argv[i], "-n")) {
+			normalize = true;
+#ifndef _ICU_
+			normalize = false;
+			cout << program << " is not compiled with support for ICU. Ignoring -n flag." << endl;
+#endif
+		}
 		else if (!strcmp(argv[i], "-c")) {
 			if (i+1 < argc) cipherKey = argv[++i];
 			else usage(*argv, "-c requires <cipher_key>");
@@ -706,7 +730,7 @@ int main(int argc, char **argv) {
 	}
 
 #ifdef DEBUG
-	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << "\n";
+	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << "\n";
 	cout << "";
 //	exit(-3);
 #endif
@@ -715,8 +739,8 @@ int main(int argc, char **argv) {
 	if (!append) {	// == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
-		if ( compressor ){
-			if ( zText::createModule(path, iType) ){
+		if ( compressor ) {
+			if ( zText::createModule(path, iType) ) {
 				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
 				exit(-3);
 			}
@@ -735,7 +759,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Do some initialization stuff
-	if (compressor){
+	if (compressor) {
 		module = new zText(path, 0, 0, iType, compressor);
 	}
 	else{
@@ -744,7 +768,7 @@ int main(int argc, char **argv) {
 
 	SWFilter *cipherFilter = 0;
 
-	if (!cipherKey.empty()){
+	if (!cipherKey.empty()) {
 		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
 		cipherFilter = new CipherFilter(cipherKey.c_str());
 		module->AddRawFilter(cipherFilter);

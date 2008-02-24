@@ -9,6 +9,9 @@
 #include <stdlib.h>
 
 #include <utilstr.h>
+#include <unicode/unistr.h>
+#include <unicode/normlzr.h>
+#include <unicode/unorm.h>
 
 #include <utf8nfc.h>
 #include <swbuf.h>
@@ -25,25 +28,20 @@ UTF8NFC::~UTF8NFC() {
 
 char UTF8NFC::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
 		return -1;
         
-	int32_t len = text.length() * 2;
-        source = new UChar[len + 1]; //each char could become a surrogate pair
+	UErrorCode status = U_ZERO_ERROR;
+	UnicodeString source(text.getRawData(), text.length(), conv, status);
+	UnicodeString target;
 
-	// Convert UTF-8 string to UTF-16 (UChars)
-        len = ucnv_toUChars(conv, source, len, text.c_str(), -1, &err);
-        target = new UChar[len + 1];
+	status = U_ZERO_ERROR;
+	Normalizer::normalize(source, UNORM_NFC, 0, target, status);
 
-        //canonical composition
-        unorm_normalize(source, len, UNORM_NFC, 0, target, len, &err);
-
-	   text.setSize(text.size()*2);
-	   len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target, -1, &err);
-	   text.setSize(len);
-
-        delete [] source;
-        delete [] target;
+	status = U_ZERO_ERROR;
+	text.setSize(text.size()*2); // potentially, it can grow to 2x the original size
+	int32_t len = target.extract(text.getRawData(), text.size(), conv, status);
+	text.setSize(len);
 
 	return 0;
 }
