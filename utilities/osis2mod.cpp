@@ -32,6 +32,9 @@
 // Debug for simple transformation stack
 //#define DEBUG2
 
+// Debug for parsing osisRefs
+//#define DEBUG3
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -71,19 +74,122 @@ bool isOSISAbbrev(const char *buf) {
 	return match;
 }
 
-// remove subverse elements from osisIDs
-void deleteSubverses(SWBuf &buf) {
-	for (int i = 0; buf[i]; i++) {
-		if (buf[i] == '!') {
-			while (buf[i] && buf[i] != ' ') {
-				buf[i] = ' ';
-				i++;
+// This routine converts an osisID or osisRef into one that SWORD can parse into a verse list
+// An osisRef is made up of:
+// a single osisID
+// an osisID-osisID
+// or
+// an osisRef osisRef
+//
+// An osisID can have a work prefix which is terminated by a : and may have a grain
+// which is started by a !
+//
+// However, SWORD cannot handle work prefixes or grains and expects ranges to be
+// separated with a single;
+void prepareSWVerseKey(SWBuf &buf) {
+	// This routine modifies the buf in place
+	char* s = buf.getRawData();
+	char* p = s;
+	bool inRange = false;
+	while (*p) {
+		if (inRange) {
+#ifdef DEBUG3
+		cout << "Copy range marker:" << *p << endl;;
+#endif
+			// Range markers are copied as is
+			*s++ = *p++;
+		}
+
+		// Look ahead to see if we are in a work prefix
+		// but don't look past an osisID
+		char *n = p;
+		while (*n && *n != ':' && *n != ' ' && *n != '-') {
+			n++;
+		}
+
+		// We have found a work prefix
+		if (*n == ':') {
+			// set p to skip the work prefix
+			p = n + 1;
+#ifdef DEBUG3
+			cout << "Found a work prefix ";
+			for (char *x = s; x <= n; x++) {
+				cout << *x;
 			}
-			i--;
+			cout << endl;
+#endif
+		}
+
+		// Now we are in the meat of an osisID.
+		// Copy it to its end but stop on a grain marker of '!'
+#ifdef DEBUG3
+		cout << "Copy osisID:";
+#endif
+		while (*p && *p != '!' && *p != ' ' && *p != '-') {
+#ifdef DEBUG3
+			cout << *p;
+#endif
+			*s++ = *p++;
+		}
+#ifdef DEBUG3
+		cout << endl;
+#endif
+
+		// The ! and everything following until we hit
+		// the end of the osisID is part of the grain reference
+		if (*p == '!') {
+			n = p;
+			while (*n && *n != ' ' && *n != '-') {
+				n++;
+			}
+#ifdef DEBUG3
+			cout << "Found a grain suffix ";
+			for (char *x = p; x < n; x++) {
+				cout << *x;
+			}
+			cout << endl;
+#endif
+			p = n;
+		}
+
+		// At this point we have processed an osisID
+
+		// if we are not in a range and the next characer is a -
+		// then we are entering a range
+		inRange = !inRange && *p == '-';
+
+#ifdef DEBUG3
+		if (inRange) {
+			cout << "Found a range" << endl;
+		}
+#endif
+
+		// between ranges and stand alone osisIDs we might have whitespace
+		if (!inRange && *p == ' ') {
+			// skip this and subsequent spaces
+			while (*p == ' ') {
+				p++;
+			}
+			// replacing them all with a ';'
+			*s++ = ';';
+#ifdef DEBUG3
+			cout << "replacing space with ;. Remaining: " << p << endl;
+#endif
 		}
 	}
-}
 
+	// Determine whether we have modified the buffer
+	// We have modified the buffer if s is not sitting on the null byte of the original
+	if (*s) {
+		// null terminate the reference
+		*s = '\0';
+		// Since we modified the swbuf, we need to tell it what we have done
+		buf.setSize(s - buf.c_str());
+#ifdef DEBUG3
+		cout << "shortended keyVal to`" << buf.c_str() << "`"<< endl;
+#endif
+	}
+}
 
 bool isKJVRef(const char *buf) {
 	VerseKey vk, test;
@@ -299,8 +405,9 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 #endif
 		}
 
-		//-- WITH OSIS ID -------------------------------------------------------------------------
-		if (token->getAttribute("osisID")) {
+		//-- WITH OSIS ID      -------------------------------------------------------------------------
+		//--   OR ANNOTATE REF -------------------------------------------------------------------------
+		if (token->getAttribute("osisID") || token->getAttribute("annotateRef")) {
 
 			// BOOK START
 			if ((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "book"))) {
@@ -357,8 +464,13 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				return true;
 			}
 
-			// VERSE START
-			else if (!strcmp(tokenName, "verse")) {
+			// VERSE OR COMMENTARY START
+			else if (!strcmp(tokenName, "verse") ||
+				 (!strcmp(tokenName, "div") &&
+				   token->getAttribute("annotateType"))) {
+#ifdef DEBUG
+				cout << "Entering verse" << endl;
+#endif
 				inVerse = true;
 				if (inChapterHeader) {
 					SWBuf heading = text;
@@ -399,30 +511,24 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 					inChapterHeader = false;
 				}
 
-				SWBuf keyVal = token->getAttribute("osisID");
-				deleteSubverses(keyVal);
+				SWBuf keyVal = token->getAttribute(strcmp(tokenName, "verse") ? "annotateRef" : "osisID");
+				prepareSWVerseKey(keyVal);
+				lastVerseIDs = currentVerse->ParseVerseList(keyVal, *currentVerse, true);
 
-				// turn "Mat.1.1  Mat.1.2" into "Mat.1.1; Mat.1.2"
-				bool skipSpace = false;
-				for (int i = 0; keyVal[i]; i++) {
-					if (keyVal[i] == ' ') {
-						if (!skipSpace) {
-							keyVal[i] = ';';
-							skipSpace = true;
-						}
-					}
-					else skipSpace = false;
-				}
-
-				lastVerseIDs = currentVerse->ParseVerseList(keyVal);
-				if (lastVerseIDs.Count() > 1) {
-					*currentVerse = lastVerseIDs.getElement(0)->getText();
-					strcpy(currentOsisID, currentVerse->getOSISRef());
+				// set currentVerse to the first value in the keyVal
+				VerseKey *element = SWDYNAMIC_CAST(VerseKey, lastVerseIDs.GetElement(0));
+				if (element) {
+					*currentVerse = element->LowerBound();
 				}
 				else {
-					strcpy(currentOsisID, keyVal.c_str());
-					*currentVerse = currentOsisID;
+					*currentVerse = lastVerseIDs.GetElement(0);
 				}
+
+				strcpy(currentOsisID, currentVerse->getOSISRef());
+#ifdef DEBUG
+				cout << "Current verse is " << *currentVerse << endl;
+				cout << "osisID/annotateRef is adjusted to" << keyVal << endl;
+#endif
 
 				verseDepth = tagStack.size();
 
@@ -485,8 +591,8 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			}
 		}
 
-		// VERSE END
-		if (!strcmp(tokenName, "verse")) {
+		// VERSE and COMMENTARY END
+		if (!strcmp(tokenName, "verse") || (inVerse && !strcmp(tokenName, "div"))) {
 			inVerse = false;
 
 			if (tagDepth != verseDepth) {
@@ -536,14 +642,18 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 
 			// If we found an osisID like osisID="Gen.1.1 Gen.1.2 Gen.1.3" we have to link Gen.1.2 and Gen.1.3 to Gen.1.1
 			VerseKey dest = *currentVerse;
-			for (int i = 0; i < lastVerseIDs.Count(); ++i) {
-				VerseKey linkKey;
-				linkKey.AutoNormalize(0);
-				linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
-				linkKey.Persist(1);
-				linkKey = lastVerseIDs.getElement(i)->getText();
+			VerseKey linkKey;
+			linkKey.AutoNormalize(0);
+			linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
+			linkKey.Persist(1);
+			for (lastVerseIDs = TOP; !lastVerseIDs.Error(); lastVerseIDs++) {
+				linkKey = lastVerseIDs;
 
-				if (linkKey.Verse() != currentVerse->Verse() || linkKey.Chapter() != currentVerse->Chapter() || linkKey.Book() != currentVerse->Book() || linkKey.Testament() != currentVerse->Testament()) {
+				if (linkKey.Verse()     != dest.Verse()   ||
+				    linkKey.Chapter()   != dest.Chapter() ||
+				    linkKey.Book()      != dest.Book()    ||
+				    linkKey.Testament() != dest.Testament())
+				{
 					*currentVerse = linkKey;
 					linkToEntry(dest);
 				}
