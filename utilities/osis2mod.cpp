@@ -303,7 +303,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		if (token->getAttribute("osisID")) {
 
 			// BOOK START
-			if ((!strcmp(tokenName, "div")) && (!strcmp(typeAttr, "book"))) {
+			if ((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "book"))) {
 				inVerse = false;
 				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
 #ifdef DEBUG
@@ -333,7 +333,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			}
 
 			// CHAPTER START
-			else if (((!strcmp(tokenName, "div")) && (!strcmp(typeAttr, "chapter")))
+			else if (((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "chapter")))
 					 || (!strcmp(tokenName, "chapter"))
 					 ) {
 				inVerse = false;
