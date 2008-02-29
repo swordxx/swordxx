@@ -30,10 +30,13 @@
 //#define DEBUG
 
 // Debug for simple transformation stack
-//#define DEBUG2
+//#define DEBUG_XFORM
 
 // Debug for parsing osisRefs
-//#define DEBUG3
+//#define DEBUG_REF
+
+// Debug for tag stack
+//#define DEBUG_STACK
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -93,7 +96,7 @@ void prepareSWVerseKey(SWBuf &buf) {
 	bool inRange = false;
 	while (*p) {
 		if (inRange) {
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 		cout << "Copy range marker:" << *p << endl;;
 #endif
 			// Range markers are copied as is
@@ -111,7 +114,7 @@ void prepareSWVerseKey(SWBuf &buf) {
 		if (*n == ':') {
 			// set p to skip the work prefix
 			p = n + 1;
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 			cout << "Found a work prefix ";
 			for (char *x = s; x <= n; x++) {
 				cout << *x;
@@ -122,16 +125,16 @@ void prepareSWVerseKey(SWBuf &buf) {
 
 		// Now we are in the meat of an osisID.
 		// Copy it to its end but stop on a grain marker of '!'
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 		cout << "Copy osisID:";
 #endif
 		while (*p && *p != '!' && *p != ' ' && *p != '-') {
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 			cout << *p;
 #endif
 			*s++ = *p++;
 		}
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 		cout << endl;
 #endif
 
@@ -142,7 +145,7 @@ void prepareSWVerseKey(SWBuf &buf) {
 			while (*n && *n != ' ' && *n != '-') {
 				n++;
 			}
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 			cout << "Found a grain suffix ";
 			for (char *x = p; x < n; x++) {
 				cout << *x;
@@ -158,7 +161,7 @@ void prepareSWVerseKey(SWBuf &buf) {
 		// then we are entering a range
 		inRange = !inRange && *p == '-';
 
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 		if (inRange) {
 			cout << "Found a range" << endl;
 		}
@@ -172,7 +175,7 @@ void prepareSWVerseKey(SWBuf &buf) {
 			}
 			// replacing them all with a ';'
 			*s++ = ';';
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 			cout << "replacing space with ;. Remaining: " << p << endl;
 #endif
 		}
@@ -185,7 +188,7 @@ void prepareSWVerseKey(SWBuf &buf) {
 		*s = '\0';
 		// Since we modified the swbuf, we need to tell it what we have done
 		buf.setSize(s - buf.c_str());
-#ifdef DEBUG3
+#ifdef DEBUG_REF
 		cout << "shortended keyVal to`" << buf.c_str() << "`"<< endl;
 #endif
 	}
@@ -365,7 +368,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		lastTitle = "";
 		inTitle = true;
 		tagStack.push(token);
-#ifdef DEBUG
+#ifdef DEBUG_STACK
 		cout << currentOsisID << ": push (" << tagStack.size() << ") " << token->getName() << endl;
 #endif
 		titleDepth = tagStack.size();
@@ -384,7 +387,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 #endif
 		inTitle = false;
 		titleDepth = 0;
-#ifdef DEBUG
+#ifdef DEBUG_STACK
 		cout << currentOsisID << ": pop(" << tagStack.size() << ") " << tagStack.top()->getName() << endl;
 #endif
 		tagStack.pop();
@@ -400,7 +403,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		// Remember non-empty start tags
 		if (!token->isEmpty()) {
 			tagStack.push(token);
-#ifdef DEBUG
+#ifdef DEBUG_STACK
 			cout << currentOsisID << ": push (" << tagStack.size() << ") " << token->getName() << endl;
 #endif
 		}
@@ -518,10 +521,10 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				// set currentVerse to the first value in the keyVal
 				VerseKey *element = SWDYNAMIC_CAST(VerseKey, lastVerseIDs.GetElement(0));
 				if (element) {
-					*currentVerse = element->LowerBound();
+					*currentVerse = element->LowerBound().getText();
 				}
 				else {
-					*currentVerse = lastVerseIDs.GetElement(0);
+					*currentVerse = lastVerseIDs.GetElement(0)->getText();
 				}
 
 				strcpy(currentOsisID, currentVerse->getOSISRef());
@@ -579,7 +582,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		if (!token->isEmpty()) {
 			topToken = tagStack.top();
 			tagDepth = tagStack.size();
-#ifdef DEBUG
+#ifdef DEBUG_STACK
 			cout << currentOsisID << ": pop(" << tagDepth << ") " << topToken->getName() << endl;
 #endif
 			tagStack.pop();
@@ -722,7 +725,7 @@ XMLTag* transform(XMLTag* t) {
 	if (!t->isEmpty()) {
 		if (!t->isEndTag()) {
 			tagStack.push(t);
-#ifdef DEBUG2
+#ifdef DEBUG_XFORM
 			cout << currentOsisID << ": xform push (" << tagStack.size() << ") " << t->getName() << endl;
 #endif
 			// Transform <q> into <q sID=""/> except for <q who="Jesus">
@@ -740,7 +743,7 @@ XMLTag* transform(XMLTag* t) {
 		}
 		else {
 			XMLTag *topToken = tagStack.top();
-#ifdef DEBUG2
+#ifdef DEBUG_XFORM
 			cout << currentOsisID << ": xform pop(" << tagStack.size() << ") " << topToken->getName() << endl;
 #endif
 			tagStack.pop();
