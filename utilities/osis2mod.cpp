@@ -25,6 +25,7 @@
 
 #ifdef _ICU_
 #include <utf8nfc.h>
+#include <latin1utf8.h>
 #endif
 
 //#define DEBUG
@@ -46,6 +47,10 @@ using namespace std;
 
 #ifdef _ICU_
 UTF8NFC normalizer;
+int normalized = 0;
+
+Latin1UTF8 converter;
+int converted = 0;
 #endif
 
 SWText *module = 0;
@@ -75,6 +80,80 @@ bool isOSISAbbrev(const char *buf) {
 		}
 	}
 	return match;
+}
+
+
+/**
+ * Determine whether the string contains a valid unicode sequence.
+ * The following table give the pattern of a valid UTF-8 character.
+ * Unicode Range               1st       2nd       3rd       4th
+ * U-00000000 - U-0000007F  0nnnnnnn
+ * U-00000080 - U-000007FF  110nnnnn  10nnnnnn
+ * U-00000800 - U-0000FFFF  1110nnnn  10nnnnnn  10nnnnnn
+ * U-00010000 - U-001FFFFF  11110nnn  10nnnnnn  10nnnnnn  10nnnnnn
+ * Note:
+ *   1.  The latest UTF-8 RFC allows for a max of 4 bytes.
+ *       Earlier allowed 6.
+ *   2.  The number of bits of the leading byte before the first 0
+ *       is the total number of bytes.
+ *   3.  The "n" are the bits of the unicode codepoint.
+ * This routine does not check to see if the code point is in the range.
+ * It could.
+ *
+ * param  txt the text to check
+ * return   1 if all high order characters form a valid unicode sequence
+ *         -1 if there are no high order characters.
+ *            Note: this is also a valid unicode sequence
+ *          0 if there are high order characters that do not form
+ *            a valid unicode sequence
+ * author DM Smith
+ */
+int detectUTF8(const char *txt) {
+    unsigned int  countUTF8 = 0;
+    int count = 0;
+    
+    // Cast it to make masking and shifting easier
+    const unsigned char *p = (const unsigned char*) txt;
+    while (*p) {
+        // Is the high order bit set?
+        if (*p & 0x80) {
+            // Then count the number of high order bits that are set.
+            // This determines the number of following bytes
+            // that are a part of the unicode character
+            unsigned char i = *p;
+            for (count = 0; i & 0x80; count++) {
+                i <<= 1;
+            }
+
+            // Validate count:
+            // Count 0: bug in code that would cause core walking
+            // Count 1: is a pattern of 10nnnnnn,
+            //          which does not signal the start of a unicode character
+            // Count 5 to 8: 111110nn, 1111110n and 11111110 and 11111111
+            //          are not legal starts, either
+            if (count < 2 || count > 4) return 0;
+
+            // At this point we expect (count - 1) following characters
+            // of the pattern 10nnnnnn
+            while (--count && *++p) {
+                // The pattern of each following character must be: 10nnnnnn
+                // So, compare the top 2 bits.
+                if ((0xc0 & *p) != 0x80) return  0;
+            }
+
+            // Oops, we've run out of bytes too soon: Cannot be UTF-8
+            if (count) return 0;
+
+            // We have a valid UTF-8 character, so count it
+            countUTF8++;
+        }
+
+        // Advance to the next character to examine.
+        p++;
+    }
+    
+    // At this point it is either UTF-8 or 7-bit ascii
+    return countUTF8 ? 1 : -1;
 }
 
 // This routine converts an osisID or osisRef into one that SWORD can parse into a verse list
@@ -260,8 +339,33 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 			}
 
 #ifdef _ICU_
+			int utf8State = detectUTF8(activeVerseText.c_str());
 			if (normalize) {
-				normalizer.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+				// Don't need to normalize text that is ASCII
+				// But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
+				if (!utf8State) {
+					cout << "Warning: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
+					converter.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+					converted++;
+
+					// Prepare for double check. This probably can be removed.
+					// But for now we are running the check again.
+					// This is to determine whether we need to normalize output of the conversion.
+					utf8State = detectUTF8(activeVerseText.c_str());
+				}
+
+				// Double check. This probably can be removed.
+				if (!utf8State) {
+					cout << "Error: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
+				}
+
+				if (utf8State > 0) {
+					SWBuf before = activeVerseText;
+					normalizer.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+					if (before != activeVerseText) {
+						normalized++;
+					}
+				}
 			}
 #endif
 
@@ -778,8 +882,8 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
-	fprintf(stderr, "  -N\t\t\t Do not normalize UTF-8 to NFC\n");
-	fprintf(stderr, "\t\t\t\t Note: assumes text is UTF-8\n");
+	fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
+	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed, and then normalize to NFC");
 	fprintf(stderr, "\t\t\t\t Note: all UTF-8 texts should be normalized to NFC\n");
 	exit(-1);
 }
@@ -977,5 +1081,8 @@ int main(int argc, char **argv) {
 	if (cipherFilter)
 		delete cipherFilter;
 	infile.close();
+
+	if (converted)  fprintf(stderr, "osis2mod converted %d verses to UTF-8\n", converted);
+	if (normalized) fprintf(stderr, "osis2mod normalized %d verses to NFC\n", normalized);
 }
 
