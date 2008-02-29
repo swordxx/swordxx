@@ -61,7 +61,7 @@ char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
 	"Jude", "Rev"};
 
 static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
-static bool normalize = false; // Whether to normalize UTF-8 to NFC
+static bool normalize = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
 	bool match = false;
@@ -775,7 +775,8 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
-	fprintf(stderr, "  -n\t\t\t normalize UTF-8 to NFC (default is to leave text unmodified)\n");
+	fprintf(stderr, "  -N\t\t\t Do not normalize UTF-8 to NFC\n");
+	fprintf(stderr, "\t\t\t\t Note: assumes text is UTF-8\n");
 	fprintf(stderr, "\t\t\t\t Note: all UTF-8 texts should be normalized to NFC\n");
 	exit(-1);
 }
@@ -819,12 +820,8 @@ int main(int argc, char **argv) {
 			}
 			usage(*argv, "-b requires one of <2|3|4>");
 		}
-		else if (!strcmp(argv[i], "-n")) {
-			normalize = true;
-#ifndef _ICU_
+		else if (!strcmp(argv[i], "-N")) {
 			normalize = false;
-			cout << program << " is not compiled with support for ICU. Ignoring -n flag." << endl;
-#endif
 		}
 		else if (!strcmp(argv[i], "-c")) {
 			if (i+1 < argc) cipherKey = argv[++i];
@@ -838,6 +835,13 @@ int main(int argc, char **argv) {
 		case 1: compressor = new LZSSCompress(); break;
 		case 2: compressor = new ZipCompress(); break;
 	}
+
+#ifndef _ICU_
+	if (normalize) {
+		normalize = false;
+		cout << program << " is not compiled with support for ICU. Ignoring -n flag." << endl;
+	}
+#endif
 
 #ifdef DEBUG
 	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << "\n";
