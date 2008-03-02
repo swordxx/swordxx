@@ -520,7 +520,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "DataPath=%s\n", recommendedPath.c_str());
 	fprintf(stderr, "Description=???\n");
 	fprintf(stderr, "SourceType=TEI\n");
-	fprintf(stderr, "Encoding=%s\n", (normalized ? "UTF-8" : "???"));
+	fprintf(stderr, "Encoding=%s\n", (normalize ? "UTF-8" : "???"));
 	fprintf(stderr, "ModDrv=%s\n", modDrv.c_str());
 	if (compressor) {
 		fprintf(stderr, "CompressType=%s\n", compType.c_str());
