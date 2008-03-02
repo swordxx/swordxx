@@ -1082,7 +1082,9 @@ int main(int argc, char **argv) {
 		delete cipherFilter;
 	infile.close();
 
+#ifdef _ICU_
 	if (converted)  fprintf(stderr, "osis2mod converted %d verses to UTF-8\n", converted);
 	if (normalized) fprintf(stderr, "osis2mod normalized %d verses to NFC\n", normalized);
+#endif
 }
 
