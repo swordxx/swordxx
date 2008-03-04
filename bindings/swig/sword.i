@@ -4,6 +4,39 @@
 #define SWDLLEXPORT  
 
 %module "Sword"
+%module(directors="1") Sword;
+
+%feature("director") sword::SWLog::logMessage;
+
+%feature("director") RenderCallback;
+%feature("director") MarkupCallback;
+
+%feature("director") SWSearcher;
+
+%feature("director") sword::StatusReporter;
+
+
+%feature("director:except") {
+    if ($error != NULL) {
+        throw Swig::DirectorMethodException();
+    }
+}
+
+%exception {
+    try { $action }
+    catch (Swig::DirectorException &e) { SWIG_fail; }
+}
+
+
+
+
+%ignore *::operator=;
+%ignore *::operator++;
+%ignore *::operator--;
+%ignore *::operator const char *;
+%ignore *::operator sword::SWKey &;
+%ignore *::operator sword::SWKey *;
+
 
 %include "defs.i"
 
@@ -63,3 +96,10 @@
 %include "localemgr.i"
 
 %include "url.i"
+
+%include "bases.i"
+%include "osishtmlhref.i"
+%include "extras.i"
+%include "swlog.i"
+%include "installmgr.i"
+

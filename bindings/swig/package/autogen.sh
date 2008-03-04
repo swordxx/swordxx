@@ -1,6 +1,8 @@
 #!/bin/sh
 echo "*** copying swig files"
 cp -a ../*.i .
+cp -a ../*.h .
+
 
 ACLOCAL="$AUTODIR""aclocal"
 echo "*** Recreating aclocal.m4"

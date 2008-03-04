@@ -40,7 +40,7 @@ perl_makebuild: $(PERLSWIG)
 	@echo "WriteMakefile(" >> perl/Makefile.PL
 	@echo "		'NAME'		=> 'Sword'," >> perl/Makefile.PL
 	@echo "		'VERSION'	=> '$(VERSION)'," >> perl/Makefile.PL
-	@echo "		'INC'		=> '$(SWORD_INCLUDES)'," >> perl/Makefile.PL
+	@echo "		'INC'		=> '$(SWORD_INCLUDES) -I..'," >> perl/Makefile.PL
 	@echo "		'DEFINE'	=> '-DSWIG'," >> perl/Makefile.PL
 	@echo "		'LIBS'		=> '$(LIB_SWORD) -lz'," >> perl/Makefile.PL
 	@echo "		'PREREQ_PM'	=> {}, # e.g., Module::Name => 1.1" >> perl/Makefile.PL
@@ -72,7 +72,7 @@ tclswig: sword.i
 	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
 python_make: python_makebuild
-	cd python && $(PYTHON) setup.py build_ext $(SWORD_INCLUDES) $(LIB_SWORD)
+	cd python && $(PYTHON) setup.py build_ext $(SWORD_INCLUDES):.. $(LIB_SWORD)
 
 pythonswig: sword.i
 	mkdir -p python
@@ -90,9 +90,9 @@ python_makebuild: $(PYTHONSWIG)
 	@echo "	maintainer_email = \"sword-devel@crosswire.org\"," >> python/setup.py
 	@echo "	url = \"http://www.crosswire.org/sword\"," >> python/setup.py
 	@echo "	py_modules = [\"Sword\"]," >> python/setup.py
-	@echo " include_dirs=['$(SWORD_INCLUDES)']," >> python/setup.py
+	@echo "	include_dirs=['$(SWORD_INCLUDES)']," >> python/setup.py
 	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
-	@echo " libraries=[('sword')], " >> python/setup.py
+	@echo "	libraries=[('sword')], " >> python/setup.py
 	@echo "	define_macros=[('SWIG',1)])], " >> python/setup.py
 	@echo ")" >> python/setup.py
 
