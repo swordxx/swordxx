@@ -15,9 +15,12 @@ libtoolize --force
 make
 
 # Rather than make, you probably only care about one of the languages bindings.
-# So you might try one of these instead:
+# So you might try one of these pairs of commands instead:
 # 
+#   make perl_swig
 #   make perl_make
+#
+#   make python_swig
 #   make python_make
 #
 
@@ -25,4 +28,6 @@ make
 cd perl
 sudo make install
 
-# TODO Install the python bindings
+# Install the python bindings - you may need to run this with sudo
+cd python
+python setup.py install
