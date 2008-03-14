@@ -220,6 +220,40 @@ void TreeKeyIdx::insertBefore() {
 
 
 void TreeKeyIdx::remove() {
+	TreeNode node;
+	bool done = false;
+	if (currentNode.offset) {
+		getTreeNodeFromIdxOffset(currentNode.offset, &node);
+		if (node.parent > -1) {
+			TreeNode parent;
+			getTreeNodeFromIdxOffset(node.parent, &parent);
+			if (parent.firstChild == node.offset) {
+				parent.firstChild = node.next;
+				saveTreeNodeOffsets(&parent);
+				getTreeNodeFromIdxOffset(parent.offset, &currentNode);
+				done = true;
+			}
+		}
+		if (!done) {
+			TreeNode iterator;
+			__s32 target = currentNode.offset;
+			if (currentNode.parent > -1) {
+				getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
+				getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
+				if (iterator.offset != target) {
+					while ((iterator.next != target) && (iterator.next > -1))
+						getTreeNodeFromIdxOffset(iterator.next, &iterator);
+						if (iterator.next > -1) {
+							TreeNode prev;
+							getTreeNodeFromIdxOffset(iterator.offset, &prev);
+							prev.next = node.next;
+							saveTreeNodeOffsets(&prev);
+							getTreeNodeFromIdxOffset(prev.offset, &currentNode);
+					}
+				}
+			}
+		}
+	}
 }
 
 

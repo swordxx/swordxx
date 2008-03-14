@@ -1,5 +1,8 @@
 API ChangeLog 
 
+16-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
+	Implemented a basic TreeKeyIdx::remove() method
+
 * Release 1.5.10 *
 
 16-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
@@ -8,7 +11,7 @@ API ChangeLog
 
 11-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added new FileMgr::openFileReadOnly to help centralize
-		all file io details.
+		all file io details
 
 11-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Added new RawText4 and RawCom4 drivers which allow

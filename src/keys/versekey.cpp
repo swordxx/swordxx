@@ -631,13 +631,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 								curKey = MAXCHAPTER;
 							if (partial > 0)
 								curKey = MAXVERSE;
-							if (newElement->LowerBound() > curKey) {
-								newElement->UpperBound(newElement->LowerBound());
-								newElement->LowerBound(curKey);
-							}
-							else {
-								newElement->UpperBound(curKey);
-							}
+							newElement->UpperBound(curKey);
 							*newElement = TOP;
 							tmpListKey.GetElement()->userData = (void *)buf;
 						}
@@ -822,13 +816,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						curKey = MAXCHAPTER;
 					if (partial > 0)
 						curKey = MAXVERSE;
-					if (newElement->LowerBound() > curKey) {
-						newElement->UpperBound(newElement->LowerBound());
-						newElement->LowerBound(curKey);
-					}
-					else {
 						newElement->UpperBound(curKey);
-					}
 					*newElement = TOP;
 					tmpListKey.GetElement()->userData = (void *)buf;
 				}

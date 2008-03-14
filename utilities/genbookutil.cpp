@@ -1,6 +1,5 @@
 #include <entriesblk.h>
 #include <iostream>
-#include <string>
 #include <stdio.h>
 #include <treekeyidx.h>
 #include <rawgenbook.h>
@@ -35,7 +34,8 @@ void setLocalName(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter New Node Name: ";
 	fgets(buf, 1000, stdin);
-	treeKey->setLocalName(buf);
+	SWBuf name = buf;
+	treeKey->setLocalName(name.trim());
 	treeKey->save();
 }
 
@@ -44,7 +44,8 @@ void gotoPath(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter Path: ";
 	fgets(buf, 1000, stdin);
-	(*treeKey) = buf;
+	SWBuf path = buf;
+	(*treeKey) = path.trim();
 }
 
 
@@ -52,7 +53,8 @@ void assurePath(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter Path: ";
 	fgets(buf, 1000, stdin);
-	treeKey->assureKeyPath(buf);
+	SWBuf path = buf;
+	treeKey->assureKeyPath(path.trim());
 }
 
 
@@ -64,16 +66,18 @@ void viewEntryText(RawGenBook *book) {
 
 
 void setEntryText(RawGenBook *book) {
-	std::string body;
+	SWBuf body;
 	TreeKeyIdx *treeKey = (TreeKeyIdx *)(SWKey *)(*book);
 	if (treeKey->getOffset()) {
 		char buf[1023];
 		std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
 		do {
 			fgets(buf, 1000, stdin);
-			if ((buf[0] == '.') && (buf[1] == 0))
+			SWBuf text = buf;
+			text.trim();
+			if ((text[0] == '.') && (text[1] == 0))
 				break;
-			body += buf;
+			body += text;
 			body += "\n";
 		} while (true);
 
@@ -88,8 +92,9 @@ void appendSibbling(TreeKeyIdx *treeKey) {
 		char buf[1023];
 		std::cout << "Enter New Sibbling Name: ";
 		fgets(buf, 1000, stdin);
+		SWBuf name = buf;
 		treeKey->append();
-		treeKey->setLocalName(buf);
+		treeKey->setLocalName(name.trim());
 		treeKey->save();
 	}
 	else	std::cout << "Can't add sibling to root node\n";
@@ -100,9 +105,16 @@ void appendChild(TreeKeyIdx *treeKey) {
 	char buf[1023];
 	std::cout << "Enter New Child Name: ";
 	fgets(buf, 1000, stdin);
+	SWBuf name = buf;
 	treeKey->appendChild();
-	treeKey->setLocalName(buf);
+	treeKey->setLocalName(name.trim());
 	treeKey->save();
+}
+
+
+void deleteNode(TreeKeyIdx *treeKey) {
+	std::cout << "Removing entry [" << treeKey->getText() << "]\n";
+	treeKey->remove();
 }
 
 
@@ -133,13 +145,14 @@ int main(int argc, char **argv) {
 	TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
 	treeKey = (TreeKeyIdx *)(SWKey *)(*book);
 
-	std::string input;
+	SWBuf input;
 	char line[1024];
 
 	do {
 		std::cout << "[" << treeKey->getText() << "] > ";
 		fgets(line, 1000, stdin);
 		input = line;
+		input.trim();
 		if (input.length() > 0) {
 			switch (input[0]) {
 				case 'n': printLocalName(treeKey); break;
@@ -149,6 +162,7 @@ int main(int argc, char **argv) {
 				case 'p':	root.root(); printTree(root, treeKey); break;
 				case 'a':	appendSibbling(treeKey); break;
 				case 'c':	appendChild(treeKey); break;
+				case 'd':	deleteNode(treeKey); break;
 				case 'j':	treeKey->nextSibling(); break;
 				case 'k':	treeKey->previousSibling(); break;
 				case 'h':	treeKey->parent(); break;
@@ -171,6 +185,7 @@ int main(int argc, char **argv) {
 					std::cout << " G   goto path; create if it doesn't exist\n";
 					std::cout << " a - append sibbling\n";
 					std::cout << " c - append child\n";
+					std::cout << " d - delete node\n";
 					std::cout << " v - view entry text\n";
 					std::cout << " t - set entry text\n";
 					std::cout << " q - quit\n\n";
