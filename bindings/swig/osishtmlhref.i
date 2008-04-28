@@ -1,6 +1,3 @@
-
-%feature("director") OSISHTMLHREF;
-
 %{
 #include <swbasicfilter.h>
 #include <osishtmlhref.h>

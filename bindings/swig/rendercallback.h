@@ -49,8 +49,10 @@ private:
 
 public:
 	// Create a class which can be inherited externally
+#ifndef SWIG
 	using sword::OSISHTMLHREF::MyUserData;
-	class MyOsisUserData : public MyUserData {};
+    class MyOsisUserData : public MyUserData {};
+#endif
     
 	PyOSISHTMLHREF(RenderCallback* callback)
     {
@@ -114,8 +116,10 @@ private:
     RenderCallback* _callback;
 public:
 	// Create a class which can be inherited externally
+#ifndef SWIG
 	using sword::ThMLHTMLHREF::MyUserData;
 	class MyThmlUserData : public MyUserData {};
+#endif
 
 	PyThMLHTMLHREF(RenderCallback* callback)
 	{

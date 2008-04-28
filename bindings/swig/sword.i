@@ -1,35 +1,15 @@
-%include <stl.i>
-%include <std_map.i>
-
 #define SWDLLEXPORT  
+#define EXCLUDE_INSTALLMGR
 
 %module "Sword"
 %module(directors="1") Sword;
 
-%feature("director") sword::SWLog::logMessage;
+/* Ignore warnings about Unknown base class */
+%warnfilter(401);
 
-%feature("director") RenderCallback;
-%feature("director") MarkupCallback;
+%include "directors.i"
 
-%feature("director") SWSearcher;
-
-%feature("director") sword::StatusReporter;
-
-
-%feature("director:except") {
-    if ($error != NULL) {
-        throw Swig::DirectorMethodException();
-    }
-}
-
-%exception {
-    try { $action }
-    catch (Swig::DirectorException &e) { SWIG_fail; }
-}
-
-
-
-
+/* Some generic ignores. These don't map into any Python operators */
 %ignore *::operator=;
 %ignore *::operator++;
 %ignore *::operator--;
@@ -37,14 +17,15 @@
 %ignore *::operator sword::SWKey &;
 %ignore *::operator sword::SWKey *;
 
-
 %include "defs.i"
-
 %include "swbuf.i"
 
-%include "swconfig.i"
-%include "swobject.i"
+/* Now include all the STL templates we are going to use */
+%include "templates.i"
 
+%include "swobject.i"
+%include "swconfig.i"
+%include "swversion.i"
 
 %include "swkey.i"
 %include "listkey.i"
@@ -65,7 +46,9 @@
 %include "swmodule.i"
 
 
+
 %include "swmgr.i"
+%include "filemgr.h"
 
 %include "encfiltmgr.i"
 %include "markupfiltmgr.i"
@@ -101,5 +84,10 @@
 %include "osishtmlhref.i"
 %include "extras.i"
 %include "swlog.i"
+
+%include "ftptrans.i"
+
+#ifndef EXCLUDE_INSTALLMGR
 %include "installmgr.i"
+#endif
 

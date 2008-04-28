@@ -1,10 +1,3 @@
-%include "std_map.i"
-%include "std_vector.i"
-
-%template() std::pair<sword::SWBuf, sword::SWModule*>;
-%template(ModuleMap) std::map<sword::SWBuf, sword::SWModule*>;
-%template(StringVector) std::vector < sword::SWBuf >;
-
 %{
 #include <swmgr.h>
 %}
@@ -26,24 +19,24 @@
         return std::vector< sword::SWBuf >(l.begin(), l.end());
     }
     
-        std::map<sword::SWBuf, sword::SWModule*> &getModules() {
-          return self->Modules;
+    std::map<sword::SWBuf, sword::SWModule*> &getModules() {
+        return self->Modules;
+    }
+    
+    SWModule* getModuleAt( const int pos ) {
+        if (pos < 0 || pos > self->Modules.size() )
+            return 0;
+    
+        sword::ModMap::iterator it = self->Modules.begin(); 
+        
+        for (int i = 0; i < pos; ++i) {
+            it++;
         }
-	
-	SWModule* getModuleAt( const int pos ) {
-		if (pos < 0 || pos > self->Modules.size() )
-			return 0;
-	
-		sword::ModMap::iterator it = self->Modules.begin(); 
-		
-		for (int i = 0; i < pos; ++i) {
-			it++;
-		}
 
-		if ( it != self->Modules.end() ) {
-			return (*it).second;
-		}
-		
-		return 0;
-	}
+        if ( it != self->Modules.end() ) {
+            return (*it).second;
+        }
+        
+        return 0;
+    }
 } 

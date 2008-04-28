@@ -17,5 +17,9 @@
   const char* get(const char* group, const char* entry) {
 	return self->Sections[group][entry].c_str();
   };
+  std::multimap < sword::SWBuf, std::map <sword::SWBuf, sword::SWBuf> >
+  *getSections() {
+    return (std::multimap < sword::SWBuf, std::map < sword::SWBuf, sword::SWBuf > > *) &self->Sections;
+  }
 }
 

@@ -1,36 +1,9 @@
-%include "stl.i"
-%include "std_pair.i"
-%include "std_map.i"
-
-
-%inline %{
-typedef std::map< sword::SWBuf, sword::SWBuf > AttributeValueMap;
-typedef std::map< sword::SWBuf, AttributeValueMap> AttributeListMap;
-typedef std::map< sword::SWBuf, AttributeListMap> AttributetypeListMap; 
-%}
-
-%template() std::pair <sword::SWBuf, sword::SWBuf>;
-%template(AttributeValueMap) std::map < sword::SWBuf, sword::SWBuf >;
-%template() std::pair <sword::SWBuf, AttributeValueMap>;
-%template(AttributeListMap) std::map < sword::SWBuf, AttributeValueMap>;
-%template() std::pair < sword::SWBuf, AttributeListMap>;
-%template(AttributeTypeListMap) std::map < sword::SWBuf, AttributeListMap>;
-
 %{
 #include "swmodule.h"
 %}
 
-%warnfilter(401) sword::SWModule;
-
-%ignore sword::SWModule::operator const char *;
 %ignore sword::SWModule::operator sword::SWKey &;
 %ignore sword::SWModule::operator sword::SWKey *;
-%ignore sword::SWModule::operator +=;
-%ignore sword::SWModule::operator -=;
-%ignore sword::SWModule::operator <<;
-%ignore sword::SWModule::operator ++;
-%ignore sword::SWModule::operator --;
-%ignore sword::SWModule::operator =;
 
 %ignore sword::SWModule::Search;
 
@@ -54,5 +27,9 @@ typedef std::map< sword::SWBuf, AttributeListMap> AttributetypeListMap;
       &getEntryAttributesMap() {
             return self->getEntryAttributes();
     }
+
+  std::map <sword::SWBuf, sword::SWBuf> *getConfigMap() {
+    return ( std::map < sword::SWBuf, sword::SWBuf > * ) &self->getConfig();
+  }
 }
 
