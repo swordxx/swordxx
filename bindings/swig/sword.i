@@ -1,5 +1,4 @@
 #define SWDLLEXPORT  
-#define EXCLUDE_INSTALLMGR
 
 %module "Sword"
 %module(directors="1") Sword;
