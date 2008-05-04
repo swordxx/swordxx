@@ -33,6 +33,7 @@ ThMLHeadings::~ThMLHeadings() {
 char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
 	bool intoken    = false;
+	bool isheader   = false;
 	bool hide       = false;
 	bool preverse   = false;
 	bool withinDiv  = false;
@@ -89,6 +90,8 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 				}
 				if (tag.getAttribute("class") && ((!stricmp(tag.getAttribute("class"), "sechead"))
 										 ||  (!stricmp(tag.getAttribute("class"), "title")))) {
+
+					isheader = true;
 					
 					if (!tag.isEndTag()) { //start tag
 						if (!tag.isEmpty()) {
@@ -117,9 +120,11 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					}
 */
 				}
+				else
+					isheader = false;
 			}
 
-			if (withinDiv) {
+			if (withinDiv && isheader) {
 				header.append('<');
 				header.append(token);
 				header.append('>');

@@ -4,6 +4,7 @@
 // see accompanying LICENSE file for license details
 
 #include <stdio.h>
+#include <iostream>
 
 #include "diathekemgr.h"
 #include <localemgr.h>

@@ -6,7 +6,6 @@
 
 #include "corediatheke.h"
 #include <regex.h>
-#include <iostream>
 #include <list>
 #include <utilstr.h>
 #include <versekey.h>

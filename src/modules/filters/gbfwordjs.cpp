@@ -6,6 +6,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <gbfwordjs.h>
 #include <swmodule.h>
 #include <ctype.h>

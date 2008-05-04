@@ -24,6 +24,7 @@
 #define SWORDAPI_H
 
 #include <defs.h>
+#include <inttypes.h>
 #ifdef __cplusplus
 #endif
 
