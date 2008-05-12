@@ -332,6 +332,7 @@ void RawStr::readText(long istart, unsigned short *isize, char **idxbuf, SWBuf &
 	do {
 		if (*idxbuf)
 			delete [] *idxbuf;
+
 		buf = "";
 		buf.setFillByte(0);
 		buf.setSize(++(*isize));

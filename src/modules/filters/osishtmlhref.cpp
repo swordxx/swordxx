@@ -226,7 +226,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey = NULL;
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						u->inXRefNote = (ch == 'x');
+						u->inXRefNote = true; // Any note can have references in, so we need to set this to true for all notes
 						// see if we have a VerseKey * or descendant
 						SWTRY {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
@@ -279,7 +279,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		else if (!strcmp(tag.getName(), "reference")) {	
 			if (!u->inXRefNote) {	// only show these if we're not in an xref note				
 				if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-					u->suspendTextPassThru = true;
+					u->suspendTextPassThru = (++u->suspendLevel);
 				}
 				if (tag.isEndTag()) {
 					if (!u->BiblicalText) {
@@ -312,7 +312,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						
 						}
 					}
-					u->suspendTextPassThru = false;
+					u->suspendTextPassThru = (--u->suspendLevel);
 				}
 			}/*
 			if (tag.isEndTag()) {

@@ -340,11 +340,13 @@ void RawStr4::readText(long istart, unsigned long *isize, char **idxbuf, SWBuf &
 	do {
 		if (*idxbuf)
 			delete [] *idxbuf;
-		*idxbuf = new char [ (*isize) ];
 
 		buf = "";
 		buf.setFillByte(0);
-		buf.setSize(*isize);
+		buf.setSize(++(*isize));
+
+		*idxbuf = new char [ (*isize) ];
+
 		datfd->seek(start, SEEK_SET);
 		datfd->read(buf.getRawData(), (int)((*isize) - 1));
 
@@ -364,7 +366,6 @@ void RawStr4::readText(long istart, unsigned long *isize, char **idxbuf, SWBuf &
 				}
 			}
 			findOffset(buf.c_str() + 6, &start, isize);
-
 		}
 		else break;
 	}

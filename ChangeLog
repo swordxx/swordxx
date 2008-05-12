@@ -1,5 +1,18 @@
 API ChangeLog 
 
+11-May-2008	Troy A. Griffitts <scribe@crosswire.org>
+	Applied patch to better handle x-refs in notes
+		-Ben Morgan <benpmorgan at gmail dot com>
+	Applied patch to better output OSIS in plaintext
+		-Ben Morgan <benpmorgan at gmail dot com>
+	Updated rawstr and rawstr4 to work consistently
+		with buffer sizes
+	Updated French locales and added french abbrev
+		locales from Dominique Corbex
+		<dominique dot corbex at gmail dot com>
+	Updated Farsi locales from Peter von Kaehne
+		<refdoc at gmx dot net>
+
 16-Oct-2007	Troy A. Griffitts <scribe@crosswire.org>
 	Implemented a basic TreeKeyIdx::remove() method
 

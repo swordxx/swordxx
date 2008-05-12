@@ -18,6 +18,7 @@
 #include <osisplain.h>
 #include <ctype.h>
 #include <versekey.h>
+#include <stringmgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -159,6 +160,16 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                 else if (!strncmp(token, "lb", 2)) {
 			userData->supressAdjacentWhitespace = true;
 			buf.append('\n');
+		}
+		else if (!strncmp(token, "l", 1) && strstr(token, "eID")) {
+			userData->supressAdjacentWhitespace = true;
+			buf.append('\n');
+		}
+		else if (!strncmp(token, "/divineName", 11)) {
+			// Get the end portion of the string, and upper case it
+			char* end = buf.getRawData();
+			end += buf.size() - u->lastTextNode.size();
+			toupperstr(end);
 		}
 
                 // <milestone type="line"/>
