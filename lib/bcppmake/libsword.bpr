@@ -117,7 +117,8 @@
       ..\..\src\modules\filters\teirtf.obj 
       ..\..\src\modules\texts\rawtext4\rawtext4.obj 
       ..\..\src\modules\comments\rawcom4\rawcom4.obj 
-      ..\..\src\modules\common\rawverse4.obj"/>
+      ..\..\src\modules\common\rawverse4.obj 
+      ..\..\src\modules\filters\teihtmlhref.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

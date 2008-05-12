@@ -31,6 +31,7 @@ THMLFIL += $(filtersdir)/thmlwordjs.cpp
 
 TEIFIL = $(filtersdir)/teiplain.cpp
 TEIFIL += $(filtersdir)/teirtf.cpp
+TEIFIL += $(filtersdir)/teihtmlhref.cpp
 
 CONVFIL = $(filtersdir)/gbfthml.cpp
 CONVFIL += $(filtersdir)/gbfosis.cpp
