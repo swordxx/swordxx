@@ -195,6 +195,9 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				}
 
 				if (!option) {
+/*
+ * Code which handles multiple lemma types.  Kindof works but breaks at least WEBIF filters for strongs.
+ *
 					int count = wtag.getAttributePartCount("lemma", ' ');
 					for (int i = 0; i < count; i++) {
 						SWBuf a = wtag.getAttribute("lemma", i, ' ');
@@ -206,11 +209,19 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 							count--;
 						}
 					}
-					token = wtag;
-					token.trim();
-					// drop <>
-					token << 1;
-					token--;
+* Instead the codee below just removes the lemma attribute
+*****/
+					const char *l = wtag.getAttribute("lemma");
+					if (l) {
+						SWBuf savlm = l;
+						wtag.setAttribute("lemma", 0);
+						wtag.setAttribute("savlm", savlm);
+						token = wtag;
+						token.trim();
+						// drop <>
+						token << 1;
+						token--;
+					}
 				}
 			}
 			if (token.startsWith("/w")) {	// Word End

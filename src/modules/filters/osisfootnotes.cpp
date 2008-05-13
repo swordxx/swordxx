@@ -108,7 +108,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					hide = false;
 					if (option || (startTag.getAttribute("type") && !strcmp(startTag.getAttribute("type"), "crossReference"))) {	// we want the tag in the text; crossReferences are handled by another filter
 						text.append(startTag);
-						text.append(tagText);
+//						text.append(tagText);	// we don't put the body back in because it is retrievable from EntryAttributes["Footnotes"][]["body"].
 					}
 					else	continue;
 				}

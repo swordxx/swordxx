@@ -226,7 +226,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey = NULL;
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						u->inXRefNote = true; // Any note can have references in, so we need to set this to true for all notes
+
+						u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
+//						u->inXRefNote = (ch == 'x');
+
 						// see if we have a VerseKey * or descendant
 						SWTRY {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);

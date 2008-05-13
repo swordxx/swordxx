@@ -34,7 +34,7 @@ protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
 		MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
-		SWBuf inscriptRef;
+		bool inscriptRef;
 		bool SecHead;
 		bool BiblicalText;
 		SWBuf version;

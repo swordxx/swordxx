@@ -18,9 +18,9 @@ CXXFLAGS += -I/usr/include/orbitcpp-2.0
 LIBS += -L/usr/lib64 -lORBit-2-cpp
 
 #comment out for release
-CXXFLAGS += -g -O0
-CFLAGS += -g -O0
-LDFLAGS += -g -O0
+#CXXFLAGS += -g -O0
+#CFLAGS += -g -O0
+#LDFLAGS += -g -O0
 #-----------------------------------------------------------------------------
 
 

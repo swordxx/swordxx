@@ -12,6 +12,7 @@ OPTIONS="--with-icu $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
 OPTIONS="--enable-tests $OPTIONS"
 #OPTIONS="--disable-utilities $OPTIONS"
+#OPTIONS="--libdir=/usr/lib64 $OPTIONS"
 
 
 CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*
