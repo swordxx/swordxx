@@ -286,7 +286,7 @@ void VerseKey::initstatics() {
  * RET:	error status
  */
 
-char VerseKey::parse()
+char VerseKey::parse(bool checkAutoNormalize)
 {
 
 	
@@ -321,7 +321,9 @@ char VerseKey::parse()
 			else	error = 1;
 		} else error = 1;
 	}
-	Normalize(1);
+	if (checkAutoNormalize) {
+		Normalize(1);
+	}
 	freshtext();
 
 	return (this->error) ? this->error : (this->error = error);
@@ -1159,11 +1161,11 @@ void VerseKey::Normalize(char autocheck)
 
           // should we always perform bounds checks?  Tried but seems to cause infinite recursion
           if (_compare(UpperBound()) > 0) {
-               setText(UpperBound());
+               setText(UpperBound(), false);
                error = KEYERR_OUTOFBOUNDS;
           }
           if (_compare(LowerBound()) < 0) {
-               setText(LowerBound());
+               setText(LowerBound(), false);
                error = KEYERR_OUTOFBOUNDS;
           }
      }

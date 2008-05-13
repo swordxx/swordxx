@@ -164,7 +164,7 @@ protected:
 	/**	Parse a character array into testament|book|chapter|verse 
 	*
 	*/
-	virtual char parse();
+	virtual char parse(bool checkNormalize = true);
 public:
 #if 0
 	static long otbks[];
@@ -260,6 +260,7 @@ public:
 	*/
 	virtual const char *getText() const;
 	virtual const char *getShortText() const;
+	virtual void setText(const char *ikey, bool checkNormalize) { SWKey::setText(ikey); parse(checkNormalize); }
 	virtual void setText(const char *ikey) { SWKey::setText(ikey); parse(); }
 	virtual void copyFrom(const SWKey &ikey);
 	
