@@ -19,6 +19,13 @@
 %ignore sword::SWBuf::operator--;
 %ignore sword::SWBuf::charAt(unsigned long);
 
+/* Ignore this horrible constructor.
+*  This would be the default for single character strings passed in. This can
+*  lead to changing of immutable strings!!!!
+*/
+%ignore sword::SWBuf::SWBuf(char, unsigned long);
+
+
 %include "swbuf.h"
 
 

@@ -25,6 +25,7 @@
 %include "swobject.i"
 %include "swconfig.i"
 %include "swversion.i"
+%include "bases.i"
 
 %include "swkey.i"
 %include "listkey.i"
@@ -40,6 +41,7 @@
 %include "swfiltermgr.i"
 
 
+%include "stringmgr.i"
 %include "swsearchable.i"
 //%include "swcacher.i"
 %include "swmodule.i"
@@ -78,8 +80,8 @@
 %include "localemgr.i"
 
 %include "url.i"
+%include "utilxml.i"
 
-%include "bases.i"
 %include "osishtmlhref.i"
 %include "extras.i"
 %include "swlog.i"

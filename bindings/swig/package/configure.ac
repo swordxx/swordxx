@@ -1,11 +1,11 @@
 # ---------------------------------------------------------------------
 # Initialisation
 # ---------------------------------------------------------------------
-AC_INIT(swordbindings, 1.5.8, sword-bugs@crosswire.org)
+AC_INIT([swordbindings],[1.5.11],[sword-bugs@crosswire.org])
 AC_CONFIG_SRCDIR(sword.i)
-AC_PREREQ(2.52)
+AC_PREREQ(2.59)
 AC_REVISION($Revision: 1.2 $)
-AM_INIT_AUTOMAKE(swordbindings,1.5.8)
+AM_INIT_AUTOMAKE(swordbindings,1.5.11)
 
 # ---------------------------------------------------------------------
 # Check Programs

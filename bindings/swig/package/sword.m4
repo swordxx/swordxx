@@ -13,7 +13,7 @@ dnl AC_MSG_CHECKING([for a Sword installation])
 
 dnl The option for the configure script
 AC_ARG_WITH(sword-dir,
-[  --with-sword-dir=DIR     Patch where Sword is being installed (default=/usr) ],
+[  --with-sword-dir=DIR     Path where Sword is being installed (default=/usr) ],
 [
   ac_sword_dir=$withval
 ],ac_sword_dir=/usr
@@ -75,7 +75,9 @@ Please try to use configure with --with-sword-dir=/your/SWORD/path !
 fi
 
 SWORD_INCLUDES="-I$ac_cv_sword_incdir"
+SWORD_INCLUDE_DIR="$ac_cv_sword_incdir"
 AC_SUBST(SWORD_INCLUDES)
+AC_SUBST(SWORD_INCLUDE_DIR)
 all_includes="$all_includes -I$ac_cv_sword_incdir"
 
 AC_MSG_RESULT([$ac_cv_sword_incdir])

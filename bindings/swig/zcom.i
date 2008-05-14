@@ -6,7 +6,7 @@
 %include "zcom.h"
 
 %extend sword::zCom {
-	static sword::zCom *castTo(sword::SWCom *o) {
+	static sword::zCom *castTo(sword::SWModule *o) {
 		return dynamic_cast<sword::zCom*>(o);
 	}
 }

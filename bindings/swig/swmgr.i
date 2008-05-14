@@ -4,8 +4,6 @@
 
 %ignore sword::SWMgr::Modules;
 %ignore sword::SWMgr::findConfig;
-%ignore sword::SWMgr::getGlobalOptions;
-%ignore sword::SWMgr::getGlobalOptionValues;
 %include "swmgr.h"
 
 %extend sword::SWMgr {

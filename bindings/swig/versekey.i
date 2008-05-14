@@ -3,22 +3,33 @@
 %}
 
 
-
 %ignore sword::sbook::versemax;
 %ignore sword::VerseKey::setBookAbbrevs;
 %ignore sword::VerseKey::setBooks;
-%ignore sword::VerseKey::setLocale;
-		
 
 %ignore sword::VerseKey::builtin_BMAX;
 %ignore sword::VerseKey::builtin_books;
-%ignore sword::VerseKey::builtin_abbrevs;
 %ignore sword::VerseKey::BMAX;
 %ignore sword::VerseKey::books;
-					
 
+%immutable sword::VerseKey::builtin_abbrevs;
+%immutable sword::sbook::name;
+%immutable sword::sbook::prefAbbrev;
+%immutable sword::abbrev::ab;
 
 %include "versekey.h"
+
+%extend sword::abbrev {
+	int getAbbrevCount() {
+		int abbrevsCnt;
+		for (abbrevsCnt = 0; *self[abbrevsCnt].ab; abbrevsCnt++) {}
+		return abbrevsCnt-1;
+	}
+
+	const struct sword::abbrev* getAbbrevData(int i) {
+		return &(self[i]);
+	}
+}
 
 %extend sword::sbook {
 	const int verseMax( int chapter ) {

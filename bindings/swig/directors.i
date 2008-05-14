@@ -6,6 +6,9 @@ the target language. This may have performance implications, and is not
 available for all target languages, though it should be for the main ones
 */
 %feature("director") sword::SWLog::logMessage;
+%feature("director") PyStringMgr;
+%feature("nodirector") PyStringMgr::upperUTF8;
+%feature("nodirector") PyStringMgr::upperLatin1;
 
 %feature("director") RenderCallback;
 %feature("director") MarkupCallback;

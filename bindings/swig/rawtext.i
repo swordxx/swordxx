@@ -6,7 +6,7 @@
 
 
 %extend sword::RawText {
-	static sword::RawText *castTo(sword::SWText *o) {
+	static sword::RawText *castTo(sword::SWModule *o) {
 		return dynamic_cast<sword::RawText*>(o);
 	}	
 }

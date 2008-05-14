@@ -1,5 +1,7 @@
 %include <stl.i>
 %include <std_map.i>
+%include <std_list.i>
+
 %include <std_pair.i>
 %include <std_multimap.i>
 
@@ -43,9 +45,15 @@ typedef std::map< sword::SWBuf, AttributeListMap> AttributetypeListMap;
 /* Used by SWMgr and LocaleMgr */
 %template(StringVector) std::vector < sword::SWBuf >;
 
+/* Used by xmltag */
+%template(StringList) std::list < sword::SWBuf >;
+
+
 /* Used by InstallMgr */
 #ifndef EXCLUDE_INSTALLMGR
-
+%{
+#include "installmgr.h"
+%}
 %template() std::pair<sword::SWBuf, sword::InstallSource*>;
 %template(InstallSourceMap) std::map<sword::SWBuf, sword::InstallSource*>;
 %template() std::pair<sword::SWModule *, int>;
