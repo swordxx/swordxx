@@ -154,6 +154,7 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 	char *trybuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
+	int diff = 0;
 
 	if (idxfd->getFd() >=0) {
 		tailoff = maxoff = idxfd->seek(0, SEEK_END) - 6;
@@ -177,20 +178,26 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 					break;
 				}
 					
-				if (!strcmp(key, trybuf))
+				diff = strcmp(key, trybuf);
+
+				if (!diff)
 					break;
 
-				int diff = strcmp(key, trybuf);
 				if (diff < 0)
 					tailoff = (tryoff == headoff) ? headoff : tryoff;
 				else headoff = tryoff;
+
 				if (tailoff == headoff + 6) {
 					if (quitflag++)
 						headoff = tailoff;
 				}
 			}
-			if (headoff >= tailoff)
+
+			// didn't find exact match
+			if (headoff >= tailoff) {
 				tryoff = headoff;
+				away--;	// prefer the previous entry over the next
+			}
 			if (trybuf)
 				free(trybuf);
 			delete [] key;

@@ -173,6 +173,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 	signed char retval = 0;
 	__s32 headoff, tailoff, tryoff = 0, maxoff = 0;
 	__u32 start, size;
+	int diff = 0;
 
 	if (idxfd->getFd() >= 0) {
 		tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
@@ -193,20 +194,26 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 					break;
 				}
 
-				int diff = strcmp(key, trybuf);
+				diff = strcmp(key, trybuf);
+
 				if (!diff)
 					break;
 
 				if (diff < 0)
 					tailoff = (tryoff == headoff) ? headoff : tryoff;
 				else headoff = tryoff;
+
 				if (tailoff == headoff + IDXENTRYSIZE) {
 					if (quitflag++)
 						headoff = tailoff;
 				}
 			}
-			if (headoff >= tailoff)
+
+			// didn't find exact match
+			if (headoff >= tailoff) {
 				tryoff = headoff;
+				away--;	// prefer the previous entry over the next
+			}
 			if (trybuf)
 				free(trybuf);
 			delete [] key;
