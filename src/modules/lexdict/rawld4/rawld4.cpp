@@ -56,23 +56,31 @@ void RawLD4::strongsPad(char *buf)
 	int size = 0;
 	int len = strlen(buf);
 	char subLet = 0;
-	if ((len < 6) && (len > 0)) {
+	bool bang = false;
+	if ((len < 8) && (len > 0)) {
 		for (check = buf; *(check+1); check++) {
 			if (!isdigit(*check))
 				break;
 			else size++;
 		}
 
-		if ((size == (len-1)) && size) {
+		if (size && ((size == (len-1)) || (size == (len-2)))) {
+			if (*check == '!') {
+				bang = true;
+				check++;
+			}
 			if (isalpha(*check)) {
 				subLet = toupper(*check);
-				*check = 0;
+				*(check-(bang?1:0)) = 0;
 			}
 			sprintf(buf, "%.5d", atoi(buf));
 			if (subLet) {
 				check = buf+(strlen(buf));
-				*check = subLet;
-				*(check+1) = 0;
+				if (bang) {
+					*check++ = '!';
+				}
+				*check++ = subLet;
+				*check = 0;
 			}
 		}
 	}

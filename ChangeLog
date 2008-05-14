@@ -1,5 +1,9 @@
 API ChangeLog 
 
+14-May-2008	Troy A. Griffitts <scribe@crosswire.org>
+	Added ability for lexicon drivers to accept
+		####![a-z] as strong number.
+
 11-May-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Applied patch to better handle x-refs in notes
 		-Ben Morgan <benpmorgan at gmail dot com>
