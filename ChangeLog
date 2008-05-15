@@ -4,6 +4,13 @@ API ChangeLog
 	Added ability for lexicon drivers to accept
 		####![a-z] as strong number.
 
+13-May-2008	Chris Little <chrislit@crosswire.org>
+	Added basic TEIRTF filters
+	Added tei2mod utility
+	Added Japanese locale from http://bible.50webs.org/en/
+	Applied Ben Morgan's TEIHTMLHREF filter
+	Added TEIHTMLHREF filter to BCB5 project
+		
 11-May-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Applied patch to better handle x-refs in notes
 		-Ben Morgan <benpmorgan at gmail dot com>
