@@ -3,6 +3,12 @@ echo "*** copying swig files"
 cp -a ../*.i .
 cp -a ../*.h .
 
+echo "*** Recreating libtool"
+if test -z "$LTIZE"; then
+LTIZE="$AUTODIR""libtoolize"
+fi
+echo "$LTIZE"
+       $LTIZE --force --copy;
 
 ACLOCAL="$AUTODIR""aclocal"
 echo "*** Recreating aclocal.m4"
