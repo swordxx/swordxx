@@ -159,7 +159,8 @@ if test x$with_icu = xyes; then
 	else
 	   ICU_VER=`$ICU_CONFIG --version`
 	   ICU_LIBS=`$ICU_CONFIG --ldflags`
-	   ICU_IOLIBS=`if test $(echo "$ICU_VER >= 3.0"|bc) -eq 1; then $ICU_CONFIG --ldflags-icuio; else $ICU_CONFIG --ldflags-ustdio; fi;`
+	   #ICU_IOLIBS=`if test $(echo "$ICU_VER >= 3.0"|bc) -eq 1; then $ICU_CONFIG --ldflags-icuio; else $ICU_CONFIG --ldflags-ustdio; fi;`
+	   ICU_IOLIBS=`$ICU_CONFIG --ldflags-icuio`
 	fi
      AM_CXXFLAGS="$AM_CXXFLAGS -D_ICU_"
      AM_CFLAGS="$AM_CFLAGS -D_ICU_"

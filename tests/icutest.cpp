@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <malloc.h>
+#include <string.h>
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/ucnv.h"     /* C   Converter API    */
@@ -17,7 +19,7 @@ int main() {
   UErrorCode status = U_ZERO_ERROR;
   int32_t uBufSize = 0, uLength = 0;
   
-  char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
+  const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
 
   uLength = strlen(samplestring);
   conv = ucnv_open("utf-8", &status);		

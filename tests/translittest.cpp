@@ -48,7 +48,7 @@ int main() {
   //UParseError perr = U_ZERO_ERROR;
   int32_t uBufSize = 0, uLength = 0;
 //  void * pAppData=NULL;
-  char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
+  const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
   //ures_open("/usr/local/lib/sword/swicu.dat", 
  // 	NULL, &status);
   //UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu", 

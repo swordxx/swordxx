@@ -780,7 +780,7 @@ const char *SWModule::StripText(const char *buf, int len) {
 
 	SWBuf &tmpbuf = (buf) ? local : getRawEntryBuf();
 	SWKey *key = 0;
-	static char *null = "";
+	static const char *null = "";
 
 	if (tmpbuf) {
 		unsigned long size = (len < 0) ? ((getEntrySize()<0) ? strlen(tmpbuf) : getEntrySize()) : len;

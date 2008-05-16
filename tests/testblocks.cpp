@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 #ifndef NO_SWORD_NAMESPACE

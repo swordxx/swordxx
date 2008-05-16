@@ -125,7 +125,7 @@ int EntriesBlock::addEntry(const char *entry) {
 const char *EntriesBlock::getEntry(int entryIndex) {
 	unsigned long offset;
 	unsigned long size;
-	static char *empty = "";
+	static const char *empty = "";
 
 	getMetaEntry(entryIndex, &offset, &size);
 	return (offset) ? block+offset : empty;

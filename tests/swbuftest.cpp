@@ -85,10 +85,14 @@ void compareTest() {
 	StringType first =  "firsttestAfirst";
 	StringType second = "firsttestBsecond";
 	for (unsigned long i = (unsigned long)(BASEI/1.5); i; i--) {
-		if (first != second)
-			if (first <= second)
-				if (first > second);
-				else if (!(BASEI%10000)) first[0] = 'f';	// keep us from being optimized out
+		if (first != second) {
+			if (first <= second) {
+				if (first > second) {;}
+				else if (!(BASEI%10000)) {
+					first[0] = 'f';	// keep us from being optimized out
+				}
+			}
+		}
 	}
 	cerr << "\nEND: compare test -------\n";
 	cerr.flush();

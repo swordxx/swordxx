@@ -289,8 +289,8 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	int tokpos = 0;
 	bool intoken = false;
 	bool inEsc = false;
-	char escStartPos = 0, escEndPos = 0;
-	char tokenStartPos = 0, tokenEndPos = 0;
+	int escStartPos = 0, escEndPos = 0;
+	int tokenStartPos = 0, tokenEndPos = 0;
 	SWBuf lastTextNode;
 	BasicFilterUserData *userData = createUserData(module, key);
 
