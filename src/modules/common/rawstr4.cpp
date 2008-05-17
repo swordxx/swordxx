@@ -173,6 +173,9 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			stdstr(&key, ikey, 3);
 			toupperstr_utf8(key, strlen(key)*3);
 
+			int keylen = strlen(key);
+			bool substr = false;
+
 			trybuf = 0;
 
 			while (headoff < tailoff) {
@@ -180,7 +183,7 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 				lastoff = -1;
 				getIDXBuf(tryoff, &trybuf);
 
-				if (!*trybuf) {		// In case of extra entry at end of idx
+				if (!*trybuf && tryoff) {		// In case of extra entry at end of idx (not first entry)
 					tryoff += (tryoff > (maxoff / 2))?-8:8;
 					retval = -1;
 					break;
@@ -190,6 +193,8 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 
 				if (!diff)
 					break;
+
+				if (!strncmp(trybuf, key, keylen)) substr = true;
 
 				if (diff < 0)
 					tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -204,7 +209,9 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			// didn't find exact match
 			if (headoff >= tailoff) {
 				tryoff = headoff;
-				away--;	// prefer the previous entry over the next
+				if (!substr) {
+					away--;	// if our entry doesn't startwith out key, prefer the previous entry over the next
+				}
 			}
 			if (trybuf)
 				free(trybuf);

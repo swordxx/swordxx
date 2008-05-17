@@ -165,6 +165,9 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 			stdstr(&key, ikey, 3);
 			toupperstr_utf8(key, strlen(key)*3);
 
+			int keylen = strlen(key);
+			bool substr = false;
+
 			trybuf = 0;
 
 			while (headoff < tailoff) {
@@ -183,6 +186,8 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 				if (!diff)
 					break;
 
+				if (!strncmp(trybuf, key, keylen)) substr = true;
+
 				if (diff < 0)
 					tailoff = (tryoff == headoff) ? headoff : tryoff;
 				else headoff = tryoff;
@@ -196,7 +201,9 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 			// didn't find exact match
 			if (headoff >= tailoff) {
 				tryoff = headoff;
-				away--;	// prefer the previous entry over the next
+				if (!substr) {
+					away--;	// if our entry doesn't startwith out key, prefer the previous entry over the next
+				}
 			}
 			if (trybuf)
 				free(trybuf);

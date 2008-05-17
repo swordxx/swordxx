@@ -182,6 +182,9 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 			stdstr(&key, ikey, 3);
 			toupperstr_utf8(key, strlen(key)*3);
 
+			int keylen = strlen(key);
+			bool substr = false;
+
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
 				lastoff = -1;
@@ -199,6 +202,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 				if (!diff)
 					break;
 
+				if (!strncmp(trybuf, key, keylen)) substr = true;
+
 				if (diff < 0)
 					tailoff = (tryoff == headoff) ? headoff : tryoff;
 				else headoff = tryoff;
@@ -212,7 +217,9 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 			// didn't find exact match
 			if (headoff >= tailoff) {
 				tryoff = headoff;
-				away--;	// prefer the previous entry over the next
+				if (!substr) {
+					away--;	// if our entry doesn't startwith out key, prefer the previous entry over the next
+				}
 			}
 			if (trybuf)
 				free(trybuf);
