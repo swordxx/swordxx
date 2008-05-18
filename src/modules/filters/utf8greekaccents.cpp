@@ -170,7 +170,7 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
 				from+=2;
 			}
 			//capital omicron
-			else if (*from == 0xE1 && (((*(from + 1) == 0xBD && *(from + 2) >= 0x88 && *(from + 2) <= 0x8D)) || ((*(from + 1) == 0xBF && *(from + 2) == 0xB8 || *(from + 2) == 0xB9)))) {
+			else if (*from == 0xE1 && (((*(from + 1) == 0xBD && *(from + 2) >= 0x88 && *(from + 2) <= 0x8D)) || ((*(from + 1) == 0xBF && (*(from + 2) == 0xB8 || *(from + 2) == 0xB9))))) {
 				text += 0xCE;
 				text += 0x9F;
 				from+=2;
