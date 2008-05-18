@@ -57,7 +57,7 @@ SWText *module = 0;
 VerseKey *currentVerse = 0;
 char activeOsisID[255];
 char currentOsisID[255];
-char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
+const char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
 	"Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
 	"Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
 	"Dan", "Hos", "Joel", "Amos", "Obad", "Jonah", "Mic", "Nah", "Hab",

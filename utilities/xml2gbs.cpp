@@ -111,7 +111,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 	    }
 
       if (keybuffer.length()) {
-	if ((format == F_OSIS) && ((!strncmp(keybuffer.c_str(), "/div>", 5)) || (!strncmp(keybuffer.c_str(), "/verse>", 7)) || (!strncmp(keybuffer.c_str(), "/chapter>", 9))) ||
+	if (((format == F_OSIS) && ((!strncmp(keybuffer.c_str(), "/div>", 5)) || (!strncmp(keybuffer.c_str(), "/verse>", 7)) || (!strncmp(keybuffer.c_str(), "/chapter>", 9)))) ||
            ((format == F_THML) && ((!strncmp(keybuffer.c_str(), "/div", 4)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
 	  if (!closer) {
        	    keysize = 0;
@@ -141,7 +141,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 
 	  closer = true;
 	}
-	else if ((format == F_OSIS) && !((!strncmp(keybuffer.c_str(), "div>", 4) || !strncmp(keybuffer.c_str(), "div ", 4)) || (!strncmp(keybuffer.c_str(), "verse>", 6) || !strncmp(keybuffer.c_str(), "verse ", 6)) || (!strncmp(keybuffer.c_str(), "chapter>", 8) || !strncmp(keybuffer.c_str(), "chapter ", 8))) ||
+	else if (((format == F_OSIS) && !((!strncmp(keybuffer.c_str(), "div>", 4) || !strncmp(keybuffer.c_str(), "div ", 4)) || (!strncmp(keybuffer.c_str(), "verse>", 6) || !strncmp(keybuffer.c_str(), "verse ", 6)) || (!strncmp(keybuffer.c_str(), "chapter>", 8) || !strncmp(keybuffer.c_str(), "chapter ", 8)))) ||
                 ((format == F_THML) && !((!strncmp(keybuffer.c_str(), "div", 3)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
 	  entbuffer += '<';
 	  entrysize++;

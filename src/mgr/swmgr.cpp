@@ -294,7 +294,7 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 
 	path = iConfigPath;
 	int len = path.length();
-	if ((len < 1) || (iConfigPath[len-1] != '\\') && (iConfigPath[len-1] != '/'))
+	if ((len < 1) || ((iConfigPath[len-1] != '\\') && (iConfigPath[len-1] != '/')))
 		path += "/";
 	if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 		stdstr(&prefixPath, path.c_str());

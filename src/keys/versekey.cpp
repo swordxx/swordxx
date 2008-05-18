@@ -1540,7 +1540,7 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	return keyval1;
 }
 
-char *VerseKey::osisotbooks[] = {
+const char *VerseKey::osisotbooks[] = {
 		"Gen","Exod","Lev","Num","Deut","Josh","Judg","Ruth","1Sam","2Sam",
 		"1Kgs","2Kgs","1Chr","2Chr","Ezra","Neh","Esth","Job","Ps",
 		"Prov",		// added this.  Was not in OSIS spec
@@ -1549,11 +1549,11 @@ char *VerseKey::osisotbooks[] = {
 		"Jonah","Mic","Nah","Hab","Zeph","Hag","Zech","Mal","Bar","PrAzar",
 		"Bel","Sus","1Esd","2Esd","AddEsth","EpJer","Jdt","1Macc","2Macc","3Macc",
 		"4Macc","PrMan","Ps151","Sir","Tob","Wis"};
-char *VerseKey::osisntbooks[] = {
+const char *VerseKey::osisntbooks[] = {
 		"Matt","Mark","Luke","John","Acts","Rom","1Cor","2Cor","Gal","Eph",
 		"Phil","Col","1Thess","2Thess","1Tim","2Tim","Titus","Phlm","Heb","Jas",
 		"1Pet","2Pet","1John","2John","3John","Jude","Rev"};
-char **VerseKey::osisbooks[] = { osisotbooks, osisntbooks };
+const char **VerseKey::osisbooks[] = { osisotbooks, osisntbooks };
 
 
 const char *VerseKey::getOSISRef() const {

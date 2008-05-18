@@ -17,7 +17,7 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang) {
+SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, (char *)"Biblical Texts", enc, dir, mark, ilang) {
 	tmpVK = new VerseKey();
 	delete key;
 	key = CreateKey();

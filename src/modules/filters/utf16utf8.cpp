@@ -69,15 +69,15 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
       text += 0x80 | (uchar & 0x3f);
     }
     else if (uchar < 0x10000) {
-      text += 0xe0 | (uchar >> 12); 
-      text += 0x80 | (uchar >> 6) & 0x3f; 
-      text += 0x80 | uchar & 0x3f;
+      text += 0xe0 | (uchar >> 12);
+      text += 0x80 | ((uchar >> 6) & 0x3f);
+      text += 0x80 | (uchar & 0x3f);
     }
     else if (uchar < 0x200000) {
       text += 0xF0 | (uchar >> 18);
-      text += 0x80 | (uchar >> 12) & 0x3F; 
-      text += 0x80 | (uchar >> 6) & 0x3F; 
-      text += 0x80 | uchar & 0x3F;
+      text += 0x80 | ((uchar >> 12) & 0x3F);
+      text += 0x80 | ((uchar >> 6) & 0x3F);
+      text += 0x80 | (uchar & 0x3F);
     }
   }
   

@@ -27,7 +27,7 @@
 
 SWORD_NAMESPACE_START
 
-char *SWBuf::nullStr = "";
+char *SWBuf::nullStr = (char *)"";
 char SWBuf::junkBuf[JUNKBUFSIZE];
 
 /******************************************************************************

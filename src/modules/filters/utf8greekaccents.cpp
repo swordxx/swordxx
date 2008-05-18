@@ -146,7 +146,7 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
 
 			//Extended Greek
 			//capital alpha
-			else if (*from == 0xE1 && ((*(from + 1) == 0xBC || *(from + 1) == 0xBE) && *(from + 2) >= 0x88 && *(from + 2) <= 0x8F) || (*(from + 1) == 0xBE && *(from + 2) >= 0xB8 && *(from + 2) <= 0xBC)) {
+			else if (*from == 0xE1 && (((*(from + 1) == 0xBC || *(from + 1) == 0xBE) && *(from + 2) >= 0x88 && *(from + 2) <= 0x8F) || (*(from + 1) == 0xBE && *(from + 2) >= 0xB8 && *(from + 2) <= 0xBC))) {
 				text += 0xCE;
 				text += 0x91;
 				from+=2;
@@ -170,7 +170,7 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
 				from+=2;
 			}
 			//capital omicron
-			else if (*from == 0xE1 && ((*(from + 1) == 0xBD && *(from + 2) >= 0x88 && *(from + 2) <= 0x8D) || (*(from + 1) == 0xBF && *(from + 2) == 0xB8 || *(from + 2) == 0xB9))) {
+			else if (*from == 0xE1 && (((*(from + 1) == 0xBD && *(from + 2) >= 0x88 && *(from + 2) <= 0x8D)) || ((*(from + 1) == 0xBF && *(from + 2) == 0xB8 || *(from + 2) == 0xB9)))) {
 				text += 0xCE;
 				text += 0x9F;
 				from+=2;
@@ -195,7 +195,10 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
 			}
 
 			//alpha
-			else if (*from == 0xE1 && ((*(from + 1) == 0xBC || *(from + 1) == 0xBE) && *(from + 2) >= 0x80 && *(from + 2) <= 0x87) || (*(from + 1) == 0xBD && (*(from + 2) == 0xB0 || *(from + 2) == 0xB1)) || (*(from + 1) == 0xBE && *(from + 2) >= 0xB0 && *(from + 2) <= 0xB7)) {
+			else if (*from == 0xE1 && (
+                            ((*(from + 1) == 0xBC || *(from + 1) == 0xBE) && *(from + 2) >= 0x80 && *(from + 2) <= 0x87)
+                         || (*(from + 1) == 0xBD && (*(from + 2) == 0xB0 || *(from + 2) == 0xB1))
+                         || (*(from + 1) == 0xBE && *(from + 2) >= 0xB0 && *(from + 2) <= 0xB7))) {
 				text += 0xCE;
 				text += 0xB1;
 				from+=2;

@@ -16,7 +16,7 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, "Lexicons / Dictionaries", enc, dir, mark, ilang)
+SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang)
 {
 	delete key;
 	key = CreateKey();

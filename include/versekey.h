@@ -98,9 +98,9 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	static int instance;
 	static struct sbook otbooks[];
 	static struct sbook ntbooks[];
-	static char *osisotbooks[];
-	static char *osisntbooks[];
-	static char **osisbooks[];
+	static const char *osisotbooks[];
+	static const char *osisntbooks[];
+	static const char **osisbooks[];
 #if 1
 	static long otbks[];
 	static long otcps[];

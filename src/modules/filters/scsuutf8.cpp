@@ -44,18 +44,18 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
   }
   else if (uchar < 0x800) { 
     *text++ = 0xc0 | uchar >> 6; 
-    *text++ = 0x80 | uchar & 0x3f;
+    *text++ = 0x80 | (uchar & 0x3f);
   }
   else if (uchar < 0x10000) {
     *text++ = 0xe0 | uchar >> 12; 
-    *text++ = 0x80 | uchar >> 6 & 0x3f;
-    *text++ = 0x80 | uchar & 0x3f;
+    *text++ = 0x80 | (uchar >> 6 & 0x3f);
+    *text++ = 0x80 | (uchar & 0x3f);
   }
   else if (uchar < 0x200000) {
     *text++ = 0xf0 | uchar >> 18;
-    *text++ = 0x80 | uchar >> 12 & 0x3f; 
-    *text++ = 0x80 | uchar >> 6 & 0x3f; 
-    *text++ = 0x80 | uchar & 0x3f;
+    *text++ = 0x80 | (uchar >> 12 & 0x3f);
+    *text++ = 0x80 | (uchar >> 6 & 0x3f);
+    *text++ = 0x80 | (uchar & 0x3f);
   }  
   
   return text;

@@ -125,7 +125,7 @@ unsigned long UTF8to32 (unsigned char * utf8) {
     count--;
     utf32 = i >> count;
     for (i = 1; i <= count; i++) {
-      if (0xc0 & utf8[i] != 0x80) {
+      if ((0xc0 & utf8[i]) != 0x80) {
 	return  0xffff;
       }
       utf32 <<= 6;
