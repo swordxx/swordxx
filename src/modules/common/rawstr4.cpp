@@ -159,7 +159,7 @@ void RawStr4::getIDXBuf(long ioffset, char **buf)
 
 signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *size, long away, long *idxoff)
 {
-	char *trybuf, *key = 0, quitflag = 0;
+	char *trybuf, *maxbuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 	int diff = 0;
@@ -176,10 +176,11 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			int keylen = strlen(key);
 			bool substr = false;
 
-			trybuf = 0;
+			trybuf = maxbuf = 0;
+			getIDXBuf(maxoff, &maxbuf);
 
 			while (headoff < tailoff) {
-				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 8) - (headoff / 8))) / 2) * 8 : lastoff; 
+				tryoff = (lastoff == -1) ? headoff + ((((tailoff / 8) - (headoff / 8))) / 2) * 8 : lastoff;
 				lastoff = -1;
 				getIDXBuf(tryoff, &trybuf);
 
@@ -188,7 +189,7 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 					retval = -1;
 					break;
 				}
-					
+
 				diff = strcmp(key, trybuf);
 
 				if (!diff)
@@ -209,7 +210,7 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			// didn't find exact match
 			if (headoff >= tailoff) {
 				tryoff = headoff;
-				if (!substr && ((tryoff != maxoff)||((keylen>1)&&!strncmp(key, trybuf, keylen-1)))) {
+				if (!substr && ((tryoff != maxoff)||(strncmp(key, maxbuf, keylen)<0))) {
 					away--;	// if our entry doesn't startwith our key, prefer the previous entry over the next
 				}
 			}

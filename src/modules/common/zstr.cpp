@@ -169,7 +169,7 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) {
  */
 
 signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
-	char *trybuf = 0, *key = 0, quitflag = 0;
+	char *maxbuf = 0, *trybuf = 0, *key = 0, quitflag = 0;
 	signed char retval = 0;
 	__s32 headoff, tailoff, tryoff = 0, maxoff = 0;
 	__u32 start, size;
@@ -184,6 +184,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 
 			int keylen = strlen(key);
 			bool substr = false;
+
+			getKeyFromIdxOffset(maxoff, &maxbuf);
 
 			while (headoff < tailoff) {
 				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
@@ -217,7 +219,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 			// didn't find exact match
 			if (headoff >= tailoff) {
 				tryoff = headoff;
-				if (!substr && ((tryoff != maxoff)||((keylen>1)&&!strncmp(key, trybuf, keylen-1)))) {
+				if (!substr && ((tryoff != maxoff)||(strncmp(key, maxbuf, keylen)<0))) {
 					away--;	// if our entry doesn't startwith our key, prefer the previous entry over the next
 				}
 			}
