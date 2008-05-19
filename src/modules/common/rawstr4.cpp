@@ -217,6 +217,8 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			if (trybuf)
 				free(trybuf);
 			delete [] key;
+                        if (maxbuf)
+                        	free(maxbuf);
 		}
 		else	tryoff = 0;
 

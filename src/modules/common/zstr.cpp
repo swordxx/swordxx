@@ -226,6 +226,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 			if (trybuf)
 				free(trybuf);
 			delete [] key;
+                        if (maxbuf)
+                        	free(maxbuf);
 		}
 		else	{ tryoff = 0; }
 
