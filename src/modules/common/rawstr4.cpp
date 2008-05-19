@@ -209,8 +209,8 @@ signed char RawStr4::findOffset(const char *ikey, long *start, unsigned long *si
 			// didn't find exact match
 			if (headoff >= tailoff) {
 				tryoff = headoff;
-				if (!substr) {
-					away--;	// if our entry doesn't startwith out key, prefer the previous entry over the next
+				if (!substr && ((tryoff != maxoff)||((keylen>1)&&!strncmp(key, trybuf, keylen-1)))) {
+					away--;	// if our entry doesn't startwith our key, prefer the previous entry over the next
 				}
 			}
 			if (trybuf)
