@@ -1,5 +1,7 @@
 API ChangeLog 
 
+* Release 1.5.11 *
+
 14-May-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Added ability for lexicon drivers to accept
 		####![a-z] as strong number.
