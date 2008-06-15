@@ -1556,6 +1556,11 @@ const char *VerseKey::osisntbooks[] = {
 const char **VerseKey::osisbooks[] = { osisotbooks, osisntbooks };
 
 
+const char *VerseKey::getOSISBookName() const {
+		return osisbooks[Testament()-1][Book()-1];
+}
+
+
 const char *VerseKey::getOSISRef() const {
 	static char buf[5][254];
 	static int loop = 0;

@@ -41,6 +41,9 @@ class SWDLLEXPORT VerseTreeKey : public VerseKey {
 	static SWClass classdef;
 	TreeKey *treeKey;
 
+	void init(TreeKey *treeKey);
+	void syncVerseToTree();
+
 public:
 
 	/**
@@ -74,6 +77,7 @@ public:
 	*/
 	VerseTreeKey(const VerseTreeKey &k);
 	
+
 	/**	VerseKey Destructor
 	* Cleans up an instance of VerseKey
 	*/
@@ -86,9 +90,8 @@ public:
 	
 	virtual bool isTraversable() const { return true; }
 
-	virtual TreeKey *getTreeKey() { return treeKey; }
+	virtual TreeKey *getTreeKey();
 	
-
 	// OPERATORS --------------------------------------------------------------------
 
 

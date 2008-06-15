@@ -81,6 +81,7 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 
 	__u32 offset = 0;
 	__u32 size = 0;
+	bool freeKey = false;
 
 	TreeKey *key = 0;
 	SWTRY {
@@ -98,6 +99,7 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 	}
 
 	if (!key) {
+		freeKey = true;
 		key = (TreeKeyIdx *)CreateKey();
 		(*key) = *(this->key);
 	}
@@ -126,7 +128,7 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 			RawStr::prepText(entryBuf);
 	}
 
-	if (key != this->key) // free our key if we created a VerseKey
+	if (freeKey) // free our key if we created a VerseKey
 		delete key;
 
 	return entryBuf;
@@ -212,8 +214,9 @@ char RawGenBook::createModule(const char *ipath) {
 
 
 SWKey *RawGenBook::CreateKey() {
-	TreeKeyIdx *newKey = new TreeKeyIdx(path);
-	return (verseKey) ? (SWKey *)new VerseTreeKey(newKey) : newKey;
+	SWKey *newKey = new TreeKeyIdx(path);
+	if (verseKey) newKey = new VerseTreeKey((TreeKeyIdx *)newKey);
+	return newKey;
 }
 
 SWORD_NAMESPACE_END

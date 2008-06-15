@@ -396,6 +396,7 @@ public:
 	virtual long Index(long iindex);
 
 	virtual const char *getOSISRef() const;
+	virtual const char *getOSISBookName() const;
 	static const int getOSISBookNum(const char *bookab);
 
 	/** Tries to parse a string and convert it into an OSIS reference

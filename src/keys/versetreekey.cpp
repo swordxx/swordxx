@@ -20,7 +20,7 @@ SWClass VerseTreeKey::classdef(classes);
 
 VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(ikey)
 {
-	this->treeKey = treeKey;
+	init(treeKey);
 	if (ikey)
 		parse();
 }
@@ -35,7 +35,7 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(ikey)
 
 VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *ikey) : VerseKey(ikey)
 {
-	this->treeKey = treeKey;
+	init(treeKey);
 	if (ikey)
 		parse();
 }
@@ -43,13 +43,20 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *ikey) : VerseKey(ikey)
 
 VerseTreeKey::VerseTreeKey(VerseTreeKey const &k) : VerseKey(k)
 {
-	treeKey = k.treeKey;
+	init(k.treeKey);
 }
 
 
 VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) : VerseKey(min, max)
 {
+	init(treeKey);
+}
+
+
+void VerseTreeKey::init(TreeKey *treeKey)
+{
 	this->treeKey = treeKey;
+	myclass = &classdef;
 }
 
 
@@ -66,6 +73,18 @@ SWKey *VerseTreeKey::clone() const
  */
 
 VerseTreeKey::~VerseTreeKey() {
+}
+
+void VerseTreeKey::syncVerseToTree() {
+	SWBuf path;
+	path.setFormatted("/%s/%d/%d", getOSISBookName(), Chapter(), Verse());
+	treeKey->setText(path);
+}
+
+
+TreeKey *VerseTreeKey::getTreeKey() {
+	syncVerseToTree();
+	return treeKey;
 }
 
 
