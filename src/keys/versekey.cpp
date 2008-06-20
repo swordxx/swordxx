@@ -105,6 +105,29 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 
 
 /******************************************************************************
+ * VerseKey::positionFrom - Positions this VerseKey to another VerseKey
+ */
+
+void VerseKey::positionFrom(const VerseKey &ikey) {
+	error = 0;
+	testament = ikey.Testament();
+	book = ikey.Book();
+	chapter = ikey.Chapter();
+	verse = ikey.Verse();
+	suffix = ikey.getSuffix();
+	// should we always perform bounds checks?  Tried but seems to cause infinite recursion
+	if (_compare(UpperBound()) > 0) {
+		positionFrom(UpperBound());
+		error = KEYERR_OUTOFBOUNDS;
+	}
+	if (_compare(LowerBound()) < 0) {
+		positionFrom(LowerBound());
+		error = KEYERR_OUTOFBOUNDS;
+	}
+}
+
+
+/******************************************************************************
  * VerseKey::copyFrom - Equates this VerseKey to another VerseKey
  */
 
@@ -303,7 +326,9 @@ char VerseKey::parse(bool checkAutoNormalize)
 	if (keytext) {
 		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
-			(*this) = tmpListKey.getElement(0);
+			
+			this->positionFrom(tmpListKey.getElement(0));
+			error = this->error;
 /*
 			SWKey::setText((const char *)tmpListKey);
 			for (int i = 1; i < 3; i++) {
@@ -581,7 +606,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					curKey.Book(lastKey.Book());
 				}
 				else {
-					curKey.Testament(1);
+					int t = 1;
+					if (bookno > BMAX[0]) {
+						t++;
+						bookno -= BMAX[0];
+					}
+					curKey.Testament(t);
 					curKey.Book(bookno);
 				}
 
@@ -784,7 +814,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			curKey.Book(lastKey.Book());
 		}
 		else {
-			curKey.Testament(1);
+			int t = 1;
+			if (bookno > BMAX[0]) {
+				t++;
+				bookno -= BMAX[0];
+			}
+			curKey.Testament(t);
 			curKey.Book(bookno);
 		}
 
@@ -1115,11 +1150,11 @@ void VerseKey::decrement(int step) {
 
 void VerseKey::Normalize(char autocheck)
 {
-	error = 0;
 
 	if (((!autocheck) || (autonorm))	// only normalize if we were explicitely called or if autonorm is turned on
                &&
 	          ((!headings) || ((verse) && (chapter)))) {		// this is cheeze and temporary until deciding what actions should be taken; so headings should only be turned on when positioning with Index() or incrementors
+		error = 0;
 
           while ((testament < 3) && (testament > 0)) {
 
@@ -1197,11 +1232,11 @@ void VerseKey::Normalize(char autocheck)
 
           // should we always perform bounds checks?  Tried but seems to cause infinite recursion
           if (_compare(UpperBound()) > 0) {
-               copyFrom(UpperBound());
+               positionFrom(UpperBound());
                error = KEYERR_OUTOFBOUNDS;
           }
           if (_compare(LowerBound()) < 0) {
-               copyFrom(LowerBound());
+               positionFrom(LowerBound());
                error = KEYERR_OUTOFBOUNDS;
           }
      }

@@ -269,6 +269,10 @@ public:
 	*/
 	virtual void copyFrom(const VerseKey &ikey);
 	
+	/** Only repositions this VerseKey to another VerseKey
+	*/
+	virtual void positionFrom(const VerseKey &ikey);
+	
 	/** Positions this key
 	*
 	* @param newpos Position to set to.

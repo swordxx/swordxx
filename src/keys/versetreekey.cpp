@@ -183,15 +183,18 @@ void VerseTreeKey::setPosition(SW_POSITION p) {
 
 	switch (p) {
 	case POS_TOP:
+		Error();
 		treeKey->setPosition(p);
-		treeKey->increment();
-		treeKey->decrement();
-		treeKey->Error();
+		increment();
+		decrement();
+		Error();
+		break;
 	case POS_BOTTOM:
+		Error();
 		treeKey->setPosition(p);
-		treeKey->decrement();
-		treeKey->increment();
-		treeKey->Error();
+		decrement();
+		increment();
+		Error();
 		break;
 	case POS_MAXVERSE:
 	case POS_MAXCHAPTER:
