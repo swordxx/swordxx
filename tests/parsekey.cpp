@@ -23,16 +23,12 @@ int main(int argc, char **argv) {
 	
 	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
 
+	std::cout << verses.getRangeText() << "\n";
+/*
 	for (int i = 0; i < verses.Count(); i++) {
-		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
-		if (element) {
-			std::cout << (SWBuf(element->LowerBound()) + " - " + SWBuf(element->UpperBound())).c_str() << "\n";
-		}
-		else	std::cout << (const char *)*verses.GetElement(i) << "\n";
-//		else	{
-//			std::cout << VerseKey(verses.GetElement(i)).getOSISRef() << "\n";
-//		}
+		std::cout << verses.GetElement(i)->getRangeText() << "\n";
 	}
+*/
 
 	if (argc > 3) {
 		verses.setText(argv[3]);

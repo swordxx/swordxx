@@ -124,6 +124,7 @@ public:
 	 * @return error status
 	 */
 	virtual char Error();
+	virtual void setError(char err) { error = err; }
 
 	/** Sets this SWKey with a character string
 	 * @param ikey string used to set this key

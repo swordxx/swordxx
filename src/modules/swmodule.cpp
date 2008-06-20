@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include <swlog.h>
 #include <sysdata.h>
 #include <swmodule.h>
 #include <utilstr.h>
@@ -435,8 +436,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	terminateSearch = false;
 	char perc = 1;
 	bool savePEA = isProcessEntryAttributes();
-   // determine if we might be doing special strip searches.  useful for knowing if we can use shortcuts
-	bool specialStrips = (getConfigEntry("LocalStripFilter") || strchr(istr, '<'));
+
+	// determine if we might be doing special strip searches.  useful for knowing if we can use shortcuts
+	bool specialStrips = (getConfigEntry("LocalStripFilter")
+                       || (getConfig().has("GlobalOptionFilter", "UTF8GreekAccents"))
+                       || (strchr(istr, '<')));
 
 	processEntryAttributes(searchType == -3);
 	
@@ -466,7 +470,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	*this = BOTTOM;
 	// fix below when we find out the bug
-	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
+	long highIndex = (vkcheck)?/*32300*/vkcheck->NewIndex():key->Index();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 	*this = TOP;
@@ -965,7 +969,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 
 	*this = BOTTOM;
-	long highIndex = (vkcheck)?32300/*vkcheck->NewIndex()*/:key->Index();
+	long highIndex = (vkcheck)?/*32300*/vkcheck->NewIndex():key->Index();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 

@@ -36,13 +36,14 @@ SWORD_NAMESPACE_START
  * Class VerseKey
  * The SWKey implementation used for verse based modules like Bibles or commentaries.
  */
-class SWDLLEXPORT VerseTreeKey : public VerseKey {
+class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChangeListener {
 
 	static SWClass classdef;
 	TreeKey *treeKey;
 
 	void init(TreeKey *treeKey);
 	void syncVerseToTree();
+	long lastGoodOffset;
 
 public:
 
@@ -91,7 +92,18 @@ public:
 	virtual bool isTraversable() const { return true; }
 
 	virtual TreeKey *getTreeKey();
+
+	// TreeKey::PositionChangeListener interface
+	virtual void positionChanged();
+	bool internalPosChange;
+
+	virtual void decrement(int steps = 1);
+	virtual void increment(int steps = 1);
 	
+	virtual void Normalize(char autocheck = 0);
+
+	virtual void setPosition(SW_POSITION newpos);
+	virtual long NewIndex() const;
 	// OPERATORS --------------------------------------------------------------------
 
 

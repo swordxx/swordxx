@@ -35,7 +35,7 @@ class FileDesc;
  * The TreeKey implementation used for all tree-based modules in Sword, such as GenBooks.
  */
 class SWDLLEXPORT TreeKeyIdx : public TreeKey {
-
+		
 	class TreeNode {
 	public:
 		TreeNode();
@@ -57,16 +57,18 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 	FileDesc *idxfd;
 	FileDesc *datfd;
 
+	void init();
+
 	void getTreeNodeFromDatOffset(long ioffset, TreeNode *buf) const;
 	char getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const;
 	void saveTreeNode(TreeNode *node);
 	void saveTreeNodeOffsets(TreeNode *node);
-	void init();
+
 
 public:
 	TreeKeyIdx(const TreeKeyIdx &ikey);
-	TreeKeyIdx (const char *idxPath, int fileMode = -1);
-	~TreeKeyIdx ();
+	TreeKeyIdx(const char *idxPath, int fileMode = -1);
+	virtual ~TreeKeyIdx();
 
 	virtual SWKey *clone() const;
 
@@ -97,6 +99,8 @@ public:
 
 	void setOffset(unsigned long offset);
 	unsigned long getOffset() const;
+
+	virtual int getLevel();
 
 
 	// OPERATORS ------------------------------------------------------------

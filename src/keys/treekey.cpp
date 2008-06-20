@@ -32,6 +32,7 @@ SWClass TreeKey::classdef(classes);
 void TreeKey::init() {
 	myclass = &classdef;
 	unsnappedKeyText = "";
+	posChangeListener = 0;
 }
 
 

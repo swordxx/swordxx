@@ -54,6 +54,7 @@ void VerseKey::init() {
 	book = 0;
 	chapter = 0;
 	verse = 0;
+	suffix = 0;
 	locale = 0;
 
 	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
@@ -114,6 +115,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
 	book = ikey.Book();
 	chapter = ikey.Chapter();
 	verse = ikey.Verse();
+	suffix = ikey.getSuffix();
 	if (ikey.isBoundSet()) {
 		LowerBound(ikey.LowerBound());
 		UpperBound(ikey.UpperBound());
@@ -294,13 +296,15 @@ char VerseKey::parse(bool checkAutoNormalize)
 	book      = BMAX[1];
 	chapter   = 1;
 	verse     = 1;
-	int booklen   = 0;
+	//int booklen   = 0;
 
 	int error = 0;
 
 	if (keytext) {
 		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
+			(*this) = tmpListKey.getElement(0);
+/*
 			SWKey::setText((const char *)tmpListKey);
 			for (int i = 1; i < 3; i++) {
 				for (int j = 1; j <= BMAX[i-1]; j++) {
@@ -319,6 +323,7 @@ char VerseKey::parse(bool checkAutoNormalize)
 				sscanf(&keytext[booklen], "%d:%d", &chapter, &verse);
 			}
 			else	error = 1;
+*/
 		} else error = 1;
 	}
 	if (checkAutoNormalize) {
@@ -355,6 +360,10 @@ void VerseKey::freshtext() const
 				realbook = BMAX[realtest-1];
 		}
 		sprintf(buf, "%s %d:%d", books[realtest-1][realbook-1].name, chapter, verse);
+		if (suffix) {
+			buf[strlen(buf)+1] = 0;
+			buf[strlen(buf)] = suffix;
+		}
 	}
 
 	stdstr((char **)&keytext, buf);
@@ -453,6 +462,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	*number = 0;
 	int tobook = 0;
 	int tonumber = 0;
+	char suffix = 0;
 	int chap = -1, verse = -1;
 	int bookno = 0;
 	VerseKey curKey, lBound, lastKey;
@@ -471,6 +481,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	int notAllDigits = 0;
 
 	curKey.AutoNormalize(0);
+	lastKey.AutoNormalize(0);
+	lBound.AutoNormalize(0);
 	if (defaultKey) lastKey = defaultKey;
 	
 	while (*buf) {
@@ -588,6 +600,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					}
 					if (verse >= 0) {
 						curKey.Verse(verse);
+						if (suffix) {
+							curKey.setSuffix(suffix);
+						}
 					}
 					else {
 						partial++;
@@ -621,9 +636,11 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							// we store non-range entries as strings so we don't traverse
 							// maybe we should consider just setting
 							// lowerBound and upperBound to the same value
-							tmpListKey << curKey.getText();
+							lastKey.LowerBound(curKey);
+							lastKey.UpperBound(curKey);
+							lastKey = TOP;
+							tmpListKey << lastKey;
 							tmpListKey.GetElement()->userData = (void *)buf;
-							lastKey = curKey;
 						}
 					}
 					else	if (expandRange) {
@@ -644,6 +661,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			*book = 0;
 			chap = -1;
 			verse = -1;
+			suffix = 0;
 			if (*buf == ',')
 				comma = 1;
 			else	comma = 0;
@@ -683,12 +701,17 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			else {
 				switch (*buf) {
 				case ' ':    // ignore these and don't reset number
-				case 'f':
 				case 'F':
 					break;
 				default:
-					number[tonumber] = 0;
-					tonumber = 0;
+					// suffixes (and oddly 'f'-- ff.)
+					if (*buf >= 'a' && *buf <= 'z') {
+						if (chap >=0) suffix = *buf;
+					}
+					else {
+						number[tonumber] = 0;
+						tonumber = 0;
+					}
 					break;
 				}
 			}
@@ -779,6 +802,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			}
 			if (verse >= 0) {
 				curKey.Verse(verse);
+				if (suffix) {
+					curKey.setSuffix(suffix);
+				}
 			}
 			else {
 				partial++;
@@ -806,9 +832,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					tmpListKey.GetElement()->userData = (void *)buf;
 				}
 				else {
-					tmpListKey << curKey.getText();
+					lastKey.LowerBound(curKey);
+					lastKey.UpperBound(curKey);
+					lastKey = TOP;
+					tmpListKey << lastKey;
+//					tmpListKey << curKey.getText();
 					tmpListKey.GetElement()->userData = (void *)buf;
-					lastKey = curKey;
 				}
 			}
 			else if (expandRange) {
@@ -838,13 +867,14 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
  * VerseKey::LowerBound	- sets / gets the lower boundary for this key
  */
 
-VerseKey &VerseKey::LowerBound(const char *lb)
+VerseKey &VerseKey::LowerBound(const VerseKey &lb)
 {
 	if (!lowerBound) 
 		initBounds();
 
 	(*lowerBound) = lb;
-	lowerBound->Normalize();
+// why are we normalizing?
+//	lowerBound->Normalize();
 	lowerBound->setLocale( this->getLocale() );
 	boundSet = true;
 	return (*lowerBound);
@@ -855,7 +885,7 @@ VerseKey &VerseKey::LowerBound(const char *lb)
  * VerseKey::UpperBound	- sets / gets the upper boundary for this key
  */
 
-VerseKey &VerseKey::UpperBound(const char *ub)
+VerseKey &VerseKey::UpperBound(const VerseKey &ub)
 {
 	if (!upperBound) 
 		initBounds();
@@ -864,10 +894,12 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 	   (*upperBound) = ub;
 	if (*upperBound < *lowerBound)
 		*upperBound = *lowerBound;
-	upperBound->Normalize();
+// why are we normalizing?
+//	upperBound->Normalize();
 	upperBound->setLocale( this->getLocale() );
 
 // until we have a proper method to resolve max verse/chap use this kludge
+/*
 	int len = strlen(ub);
 	bool alpha = false;
 	bool versespec = false;
@@ -884,9 +916,9 @@ VerseKey &VerseKey::UpperBound(const char *ub)
 		*upperBound = MAXCHAPTER;
 	if (!versespec)
 		*upperBound = MAXVERSE;
-	
-
+*/
 // -- end kludge
+
 	boundSet = true;
 	return (*upperBound);
 }
@@ -1005,19 +1037,23 @@ void VerseKey::setPosition(SW_POSITION p) {
 		book      = LowerBound().Book();
 		chapter   = LowerBound().Chapter();
 		verse     = LowerBound().Verse();
+		suffix    = LowerBound().getSuffix();
 		break;
 	case POS_BOTTOM:
 		testament = UpperBound().Testament();
 		book      = UpperBound().Book();
 		chapter   = UpperBound().Chapter();
 		verse     = UpperBound().Verse();
+		suffix    = UpperBound().getSuffix();
 		break;
 	case POS_MAXVERSE:
 		Normalize();
 		verse     = books[testament-1][book-1].versemax[chapter-1];
+		suffix    = 0;
 		break;
 	case POS_MAXCHAPTER:
 		verse     = 1;
+		suffix    = 0;
 		Normalize();
 		chapter   = books[testament-1][book-1].chapmax;
 		break;
@@ -1161,11 +1197,11 @@ void VerseKey::Normalize(char autocheck)
 
           // should we always perform bounds checks?  Tried but seems to cause infinite recursion
           if (_compare(UpperBound()) > 0) {
-               setText(UpperBound(), false);
+               copyFrom(UpperBound());
                error = KEYERR_OUTOFBOUNDS;
           }
           if (_compare(LowerBound()) < 0) {
-               setText(LowerBound(), false);
+               copyFrom(LowerBound());
                error = KEYERR_OUTOFBOUNDS;
           }
      }
@@ -1300,12 +1336,21 @@ int VerseKey::Verse(int iverse)
 {
 	int retval = verse;
 
+	setSuffix(0);
 	verse = iverse;
 	Normalize(1);
 
 	return retval;
 }
 
+
+char VerseKey::getSuffix() const {
+	return suffix;
+}
+
+void VerseKey::setSuffix(char suf) {
+	suffix = suf;
+}
 
 /******************************************************************************
  * VerseKey::AutoNormalize - Sets/gets flag that tells VerseKey to auto-
@@ -1435,6 +1480,7 @@ long VerseKey::Index(long iindex)
 {
 	long  offset;
 
+	suffix = 0;
 // This is the dirty stuff --------------------------------------------
 
 	if (!testament)
@@ -1533,8 +1579,10 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	keyval2 += ivkey.Book() * 1000000;
 	keyval1 += Chapter() * 1000;
 	keyval2 += ivkey.Chapter() * 1000;
-	keyval1 += Verse();
-	keyval2 += ivkey.Verse();
+	keyval1 += Verse() * 50;
+	keyval2 += ivkey.Verse() * 50;
+	keyval1 += (int)getSuffix();
+	keyval2 += (int)ivkey.getSuffix();
 	keyval1 -= keyval2;
 	keyval1 = (keyval1) ? ((keyval1 > 0) ? 1 : -1) /*keyval1/labs(keyval1)*/:0; // -1 | 0 | 1
 	return keyval1;
@@ -1606,7 +1654,7 @@ const int VerseKey::getOSISBookNum(const char *bookab) {
  */
 
 const char *VerseKey::getRangeText() const {
-	if (isBoundSet()) {
+	if (isBoundSet() && (LowerBound() != UpperBound())) {
 		char buf[1023];
 		sprintf(buf, "%s-%s", (const char *)LowerBound(), (const char *)UpperBound());
 		stdstr(&rangeText, buf);

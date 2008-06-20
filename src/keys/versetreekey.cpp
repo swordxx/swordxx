@@ -55,8 +55,10 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) :
 
 void VerseTreeKey::init(TreeKey *treeKey)
 {
-	this->treeKey = treeKey;
 	myclass = &classdef;
+	this->treeKey = treeKey;
+	this->treeKey->setPositionChangeListener(this);
+	internalPosChange = false;
 }
 
 
@@ -75,10 +77,84 @@ SWKey *VerseTreeKey::clone() const
 VerseTreeKey::~VerseTreeKey() {
 }
 
+
+void VerseTreeKey::decrement(int steps) {
+	int treeError = 0;
+	if (!error) lastGoodOffset = treeKey->getOffset();
+	do {
+		treeKey->decrement();
+		treeError = treeKey->Error();
+	// iterate until 3 levels and no versekey parse errors
+	} while (!treeError && ((treeKey->getLevel() < 3) || error));
+	if (error && !treeError) {
+		int saveError = error;
+		increment();
+		error = saveError;
+	}
+	if (treeError) {
+		treeKey->setOffset(lastGoodOffset);
+		error = treeError;
+	}
+}
+void VerseTreeKey::increment(int steps) {
+	int treeError = 0;
+	if (!error) lastGoodOffset = treeKey->getOffset();
+	do {
+		treeKey->increment();
+		treeError = treeKey->Error();
+	// iterate until 3 levels and no versekey parse errors
+	} while (!treeError && ((treeKey->getLevel() < 3) || error));
+	if (error && !treeError) {
+		int saveError = error;
+		decrement();
+		error = saveError;
+	}
+	if (treeError) {
+		treeKey->setOffset(lastGoodOffset);
+		error = treeError;
+	}
+}
+
+
+void VerseTreeKey::positionChanged() {
+	if (!internalPosChange) {
+		TreeKey *tkey = TreeKey::PositionChangeListener::getTreeKey();
+		int saveError = tkey->Error();
+		long bookmark = tkey->getOffset();
+		SWBuf path;
+		internalPosChange = true;
+		int legs = 0;
+		do {
+			path = (SWBuf)tkey->getLocalName() + "." + path;
+			legs++;
+		} while (tkey->parent());
+		path--;
+		path << 1;
+		setText(path);
+		if (saveError) {
+			error = saveError;
+		}
+		tkey->setOffset(bookmark);
+		tkey->setError(saveError);
+		internalPosChange = false;
+	}
+}
+
+
 void VerseTreeKey::syncVerseToTree() {
+	internalPosChange = true;
 	SWBuf path;
 	path.setFormatted("/%s/%d/%d", getOSISBookName(), Chapter(), Verse());
+	if (getSuffix()) path += getSuffix();
+	long bookmark = treeKey->getOffset();
 	treeKey->setText(path);
+
+	// if our module has jacked inconsistencies, then let's put our tree back to where it was
+	if (treeKey->Error()) {
+		treeKey->setOffset(bookmark);
+	}
+
+	internalPosChange = false;
 }
 
 
@@ -87,5 +163,41 @@ TreeKey *VerseTreeKey::getTreeKey() {
 	return treeKey;
 }
 
+// can autonormalize yet (ever?)
+void VerseTreeKey::Normalize(char autocheck) {
+	error = 0;
+}
+
+long VerseTreeKey::NewIndex() const {
+	return treeKey->getOffset();
+}
+
+
+void VerseTreeKey::setPosition(SW_POSITION p) {
+
+/*
+	if (boundSet) {
+		return VerseKey::setPosition(p);
+	}
+*/
+
+	switch (p) {
+	case POS_TOP:
+		treeKey->setPosition(p);
+		treeKey->increment();
+		treeKey->decrement();
+		treeKey->Error();
+	case POS_BOTTOM:
+		treeKey->setPosition(p);
+		treeKey->decrement();
+		treeKey->increment();
+		treeKey->Error();
+		break;
+	case POS_MAXVERSE:
+	case POS_MAXCHAPTER:
+		VerseKey::setPosition(p);
+		break;
+	}
+}
 
 SWORD_NAMESPACE_END

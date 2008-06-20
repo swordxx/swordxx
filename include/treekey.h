@@ -44,7 +44,23 @@ protected:
 	// This better conforms to the SWORD write methodology: mod.setKey, mod.setEntry
 	mutable SWBuf unsnappedKeyText;
 
+	// called whenever position of this key is changed.  Should we move this
+	// to a more base class?
+	void positionChanged() { if (posChangeListener) posChangeListener->positionChanged(); }
+
 public:
+
+	class PositionChangeListener {
+		TreeKey *treeKey;
+	public:
+		PositionChangeListener() {}
+		virtual void positionChanged() = 0;
+		TreeKey *getTreeKey() { return treeKey; }
+		void setTreeKey(TreeKey *tk) { treeKey = tk; }
+	} *posChangeListener;
+
+	void setPositionChangeListener(PositionChangeListener *pcl) { posChangeListener = pcl; posChangeListener->setTreeKey(this); }
+
 //	TreeKey (const char *ikey = 0);
 //	TreeKey (const SWKey * ikey);
 //	TreeKey (TreeKey const &k);
@@ -54,6 +70,8 @@ public:
 
 	virtual const char *getLocalName() = 0;
 	virtual const char *setLocalName(const char *) = 0;
+
+	virtual int getLevel() { long bm = getOffset(); int level = 0; do { level++; } while (parent()); setOffset(bm); return level; }
 
 	virtual const char *getUserData(int *size = 0) = 0;
 	virtual void setUserData(const char *userData, int size = 0) = 0;

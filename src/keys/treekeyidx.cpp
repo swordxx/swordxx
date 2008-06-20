@@ -127,12 +127,25 @@ void TreeKeyIdx::save() {
 
 void TreeKeyIdx::root() {
 	error = getTreeNodeFromIdxOffset(0, &currentNode);
+	positionChanged();
+}
+
+int TreeKeyIdx::getLevel() {
+	TreeNode iterator;
+	iterator.parent = currentNode.parent;
+	int level = 0;
+	while (iterator.parent > -1) {
+		level++;
+		getTreeNodeFromIdxOffset(iterator.parent, &iterator);
+	}
+	return level;
 }
 
 
 bool TreeKeyIdx::parent() {
 	if (currentNode.parent > -1) {
 		error = getTreeNodeFromIdxOffset(currentNode.parent, &currentNode);
+		positionChanged();
 		return true;
 	}
 	return false;
@@ -142,6 +155,7 @@ bool TreeKeyIdx::parent() {
 bool TreeKeyIdx::firstChild() {
 	if (currentNode.firstChild > -1) {
 		error = getTreeNodeFromIdxOffset(currentNode.firstChild, &currentNode);
+		positionChanged();
 		return true;
 	}
 	return false;
@@ -151,6 +165,7 @@ bool TreeKeyIdx::firstChild() {
 bool TreeKeyIdx::nextSibling() {
 	if (currentNode.next > -1) {
 		error = getTreeNodeFromIdxOffset(currentNode.next, &currentNode);
+		positionChanged();
 		return true;
 	}
 	return false;
@@ -168,6 +183,7 @@ bool TreeKeyIdx::previousSibling() {
 				getTreeNodeFromIdxOffset(iterator.next, &iterator);
 			if (iterator.next > -1) {
 				error = getTreeNodeFromIdxOffset(iterator.offset, &currentNode);
+				positionChanged();
 				return true;
 			}
 		}
@@ -195,6 +211,7 @@ void TreeKeyIdx::append() {
 		currentNode.clear();
 		currentNode.offset = idxOffset;
 		currentNode.parent = parent;
+		positionChanged();
 	}
 }
 
@@ -212,6 +229,7 @@ void TreeKeyIdx::appendChild() {
 		currentNode.offset = idxOffset;
 		currentNode.parent = parent;
 	}
+	positionChanged();
 }
 
 
@@ -253,6 +271,7 @@ void TreeKeyIdx::remove() {
 				}
 			}
 		}
+		positionChanged();
 	}
 }
 
@@ -292,7 +311,7 @@ signed char TreeKeyIdx::create(const char *ipath) {
 	newTree.saveTreeNode(&root);
 
 	delete [] path;
-	
+
 	return 0;
 }
 
@@ -394,6 +413,7 @@ unsigned long TreeKeyIdx::getOffset() const {
 
 void TreeKeyIdx::setOffset(unsigned long offset) {
 	error = getTreeNodeFromIdxOffset(offset, &currentNode);
+	positionChanged();
 }
 
 
@@ -461,6 +481,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 		idxfd = FileMgr::getSystemFileMgr()->open(ikey.idxfd->path, ikey.idxfd->mode, ikey.idxfd->perms);
 		datfd = FileMgr::getSystemFileMgr()->open(ikey.datfd->path, ikey.datfd->mode, ikey.datfd->perms);
 	}
+	positionChanged();
 }
 
 
@@ -520,6 +541,7 @@ void TreeKeyIdx::setText(const char *ikey) {
 		error = KEYERR_OUTOFBOUNDS;
 	delete [] buf;
 	unsnappedKeyText = ikey;
+	positionChanged();
 }
 
 
@@ -527,6 +549,7 @@ void TreeKeyIdx::setText(const char *ikey) {
 void TreeKeyIdx::copyFrom(const SWKey &ikey) {
 	unsnappedKeyText = ikey;
 	SWKey::copyFrom(ikey);
+	positionChanged();
 }
 
 void TreeKeyIdx::setPosition(SW_POSITION p) {
@@ -538,6 +561,7 @@ void TreeKeyIdx::setPosition(SW_POSITION p) {
 		error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
 		break;
 	} 
+	positionChanged();
 	Error();	// clear error from normalize
 }
 
@@ -557,10 +581,15 @@ int TreeKeyIdx::compare(const SWKey &ikey) {
 
 void TreeKeyIdx::decrement(int steps) {
 	error = getTreeNodeFromIdxOffset(currentNode.offset - (4*steps), &currentNode);
+	positionChanged();
 }
 
 void TreeKeyIdx::increment(int steps) {
 	error = getTreeNodeFromIdxOffset(currentNode.offset + (4*steps), &currentNode);
+	if (error) {
+//		SWLog::getSystemLog()->logError("error: %d", error);
+	}
+	positionChanged();
 
 /*
 	// assert positive

@@ -121,6 +121,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	mutable signed char book;
 	mutable signed int chapter;
 	mutable signed int verse;
+	mutable char suffix;
 
 	/** flag for auto normalization 
 	*/
@@ -227,14 +228,14 @@ public:
 	* @param lb the new lower boundary for this	VerseKey
 	* @return the lower boundary the key was set to
 	*/
-	VerseKey &LowerBound(const char *lb);
+	VerseKey &LowerBound(const VerseKey &ub);
 	
 	/** sets the upper boundary for this	VerseKey
 	* and returns the new boundary
 	* @param ub the new upper boundary for this	VerseKey
 	* @return the upper boundary the key was set to
 	*/
-	VerseKey &UpperBound(const char *ub);
+	VerseKey &UpperBound(const VerseKey &ub);
 	
 	/** gets the lower boundary of this	VerseKey
 	* @return the lower boundary of this	VerseKey
@@ -316,6 +317,12 @@ public:
 	*/
 	virtual int Verse() const;
 	
+	/** Gets verse suffix
+	*
+	* @return value of verse suffix
+	*/
+	virtual char getSuffix() const;
+	
 	/** Sets/gets testament
 	*
 	* @param itestament value which to set testament
@@ -351,6 +358,12 @@ public:
 	* if changed -> previous value of verse
 	*/
 	virtual int Verse(int iverse);
+	
+	/** Sets/gets verse suffix
+	*
+	* @param isuffix value which to set verse suffix
+	*/
+	virtual void setSuffix(char isuffix);
 	
 	/** checks limits and normalizes if necessary (e.g.
 	* Matthew 29:47 = Mark 2:2).	If last verse is
