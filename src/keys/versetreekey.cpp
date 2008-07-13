@@ -68,6 +68,33 @@ SWKey *VerseTreeKey::clone() const
 }
 
 
+int VerseTreeKey::getBookAbbrev(const char *iabbr)
+{
+	int bookno = VerseKey::getBookAbbrev(iabbr);
+	if (bookno < 0) {
+/*
+		vector<struct sbook>::iterator it = find(books, iabbr);
+		if (it == books.end()) {
+			TreeKey *tkey = this->treeKey;
+			int saveError = tkey->Error();
+			long bookmark = tkey->getOffset();
+			SWBuf segment;
+			internalPosChange = true;
+			do {
+				segment = (SWBuf)tkey->getLocalName();
+			} while (tkey->parent());
+			segment << 1;
+			if (saveError) {
+				error = saveError;
+			}
+			tkey->setOffset(bookmark);
+		}
+		books.push_back(sbook(iabbr));
+*/
+	}
+	return 0;
+}
+
 /******************************************************************************
  * VerseTreeKey Destructor - cleans up instance of VerseTreeKey
  *

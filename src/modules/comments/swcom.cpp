@@ -45,7 +45,7 @@ long SWCom::Index() const {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	entryIndex = key->NewIndex();
+	entryIndex = key->Index();
 
 	if (key != this->key)
 		delete key;

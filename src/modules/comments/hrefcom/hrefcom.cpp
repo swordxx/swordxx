@@ -63,7 +63,7 @@ SWBuf &HREFCom::getRawEntryBuf() {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findOffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
 	SWBuf tmpbuf;

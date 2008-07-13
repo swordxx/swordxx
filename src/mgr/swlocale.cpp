@@ -25,6 +25,7 @@
 #include <map>
 #include <swconfig.h>
 #include <versekey.h>
+#include <versemgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -37,17 +38,26 @@ public:
 };
 
 
-SWLocale::SWLocale(const char * ifilename) {
+SWLocale::SWLocale(const char *ifilename) {
 	p = new Private;
 	ConfigEntMap::iterator confEntry;
 
-	name         = 0;
-	description  = 0;
-	encoding     = 0;
-	bookAbbrevs  = 0;
-	BMAX         = 0;
-	books        = 0;
-	localeSource = new SWConfig(ifilename);
+	name           = 0;
+	description    = 0;
+	encoding       = 0;
+	bookAbbrevs    = 0;
+	bookLongNames  = 0;
+	bookPrefAbbrev = 0;
+	if (ifilename) {
+		localeSource   = new SWConfig(ifilename);
+	}
+	else {
+		localeSource   = new SWConfig(0);
+		(*localeSource)["Meta"]["Name"] = "en_US";
+		(*localeSource)["Meta"]["Description"] = "English (US)";
+		bookAbbrevs = (struct abbrev *)builtin_abbrevs;
+		for (abbrevsCnt = 0; builtin_abbrevs[abbrevsCnt].book != -1; abbrevsCnt++);
+	}
 
 	confEntry = localeSource->Sections["Meta"].find("Name");
 	if (confEntry != localeSource->Sections["Meta"].end())
@@ -76,15 +86,9 @@ SWLocale::~SWLocale() {
 	if (name)
 		delete [] name;
 
-	if (bookAbbrevs)
+	if (bookAbbrevs != builtin_abbrevs)
 		delete [] bookAbbrevs;
 
-	if (BMAX) {
-		for (int i = 0; i < 2; i++)
-			delete [] books[i];
-		delete [] BMAX;
-		delete [] books;
-	}
 	delete p;
 }
 
@@ -147,7 +151,7 @@ void SWLocale::augment(SWLocale &addFrom) {
 
 //#define NONNUMERICLOCALETHING 1
 
-const struct abbrev *SWLocale::getBookAbbrevs() {
+const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 	static const char *nullstr = "";
 	if (!bookAbbrevs) {
 		ConfigEntMap::iterator it;
@@ -172,32 +176,11 @@ const struct abbrev *SWLocale::getBookAbbrevs() {
 		}
 		bookAbbrevs[j].ab = nullstr;
 		bookAbbrevs[j].book = -1;
+		abbrevsCnt = size;
 	}
 		
+	*retSize = abbrevsCnt;
 	return bookAbbrevs;
-}
-
-
-void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
-	if (!BMAX) {
-		BMAX = new char [2];
-		BMAX[0] = VerseKey::builtin_BMAX[0];
-		BMAX[1] = VerseKey::builtin_BMAX[1];
-
-		books = new struct sbook *[2];
-		books[0] = new struct sbook[BMAX[0]];
-		books[1] = new struct sbook[BMAX[1]];
-
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < BMAX[i]; j++) {
-				books[i][j] = VerseKey::builtin_books[i][j];
-				books[i][j].name = translate(VerseKey::builtin_books[i][j].name);
-			}
-		}
-	}
-
-	*iBMAX  = BMAX;
-	*ibooks = books;
 }
 
 

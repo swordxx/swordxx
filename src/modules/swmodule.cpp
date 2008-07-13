@@ -469,8 +469,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	// end MAJOR KLUDGE
 
 	*this = BOTTOM;
-	// fix below when we find out the bug
-	long highIndex = (vkcheck)?/*32300*/vkcheck->NewIndex():key->Index();
+	long highIndex = key->Index();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 	*this = TOP;
@@ -584,10 +583,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	
 	while ((searchType > -4) && !Error() && !terminateSearch) {
-		long mindex = 0;
-		if (vkcheck)
-			mindex = vkcheck->NewIndex();
-		else mindex = key->Index();
+		long mindex = key->Index();
 		float per = (float)mindex / highIndex;
 		per *= 93;
 		per += 5;
@@ -601,7 +597,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #ifndef _MSC_VER
 			std::cerr << "Serious error: new percentage complete is less than previous value\n";
 			std::cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
-			std::cerr << "index: " << ((vkcheck)?vkcheck->NewIndex():key->Index()) << "\n";
+			std::cerr << "index: " << (key->Index()) << "\n";
 			std::cerr << "highIndex: " << highIndex << "\n";
 			std::cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
 			std::cerr << "perc == "  << (int )perc << "% \n";
@@ -969,7 +965,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 
 	*this = BOTTOM;
-	long highIndex = (vkcheck)?/*32300*/vkcheck->NewIndex():key->Index();
+	long highIndex = key->Index();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 
@@ -990,10 +986,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	
 	char err = Error();
 	while (!err) {
-		long mindex = 0;
-		if (vkcheck)
-			mindex = vkcheck->NewIndex();
-		else mindex = key->Index();
+		long mindex = key->Index();
 
 		proxBuf = "";
 		proxLem = "";

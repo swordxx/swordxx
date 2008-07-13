@@ -40,10 +40,14 @@ class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChange
 
 	static SWClass classdef;
 	TreeKey *treeKey;
+//	vector<struct sbook> books;
 
 	void init(TreeKey *treeKey);
 	void syncVerseToTree();
 	long lastGoodOffset;
+
+protected:
+	virtual int getBookAbbrev(const char *abbr);
 
 public:
 

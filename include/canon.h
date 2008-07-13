@@ -19,85 +19,94 @@
  *
  */
 
+#ifndef CANON_H
+#define CANON_H
+
+SWORD_NAMESPACE_START
+
+
 /******************************************************************************
  * [on]tbooks - initialize static instance for all canonical text names
  *		and chapmax
  */
-
-struct sbook
-  VerseKey::otbooks[] = {
-  {"Genesis", "Gen", 50},
-  {"Exodus", "Exod", 40},
-  {"Leviticus", "Lev", 27},
-  {"Numbers", "Num", 36},
-  {"Deuteronomy", "Deut", 34},
-  {"Joshua", "Josh", 24},
-  {"Judges", "Judg", 21},
-  {"Ruth", "Ruth", 4},
-  {"I Samuel", "1Sam", 31},
-  {"II Samuel", "2Sam", 24},
-  {"I Kings", "1Kgs", 22},
-  {"II Kings", "2Kgs", 25},
-  {"I Chronicles", "1Chr", 29},
-  {"II Chronicles", "2Chr", 36},
-  {"Ezra", "Ezra", 10},
-  {"Nehemiah", "Neh", 13},
-  {"Esther", "Esth", 10},
-  {"Job", "Job", 42},
-  {"Psalms", "Ps", 150},
-  {"Proverbs", "Prov", 31},
-  {"Ecclesiastes", "Eccl", 12},
-  {"Song of Solomon", "Song", 8},
-  {"Isaiah", "Isa", 66},
-  {"Jeremiah", "Jer", 52},
-  {"Lamentations", "Lam", 5},
-  {"Ezekiel", "Ezek", 48},
-  {"Daniel", "Dan", 12},
-  {"Hosea", "Hos", 14},
-  {"Joel", "Joel", 3},
-  {"Amos", "Amos", 9},
-  {"Obadiah", "Obad", 1},
-  {"Jonah", "Jonah", 4},
-  {"Micah", "Mic", 7},
-  {"Nahum", "Nah", 3},
-  {"Habakkuk", "Hab", 3},
-  {"Zephaniah", "Zeph", 3},
-  {"Haggai", "Hag", 2},
-  {"Zechariah", "Zech", 14},
-  {"Malachi", "Mal", 4}
+struct sbook otbooks[] = {
+  {"Genesis", "Gen", "Gen", 50},
+  {"Exodus", "Exod", "Exod", 40},
+  {"Leviticus", "Lev", "Lev", 27},
+  {"Numbers", "Num", "Num", 36},
+  {"Deuteronomy", "Deut", "Deut", 34},
+  {"Joshua", "Josh", "Josh", 24},
+  {"Judges", "Judg", "Judg", 21},
+  {"Ruth", "Ruth", "Ruth", 4},
+  {"I Samuel", "1Sam", "1Sam", 31},
+  {"II Samuel", "2Sam", "2Sam", 24},
+  {"I Kings", "1Kgs", "1Kgs", 22},
+  {"II Kings", "2Kgs", "2Kgs", 25},
+  {"I Chronicles", "1Chr", "1Chr", 29},
+  {"II Chronicles", "2Chr", "2Chr", 36},
+  {"Ezra", "Ezra", "Ezra", 10},
+  {"Nehemiah", "Neh", "Neh", 13},
+  {"Esther", "Esth", "Esth", 10},
+  {"Job", "Job", "Job", 42},
+  {"Psalms", "Ps", "Ps", 150},
+  {"Proverbs", "Prov", "Prov", 31},
+  {"Ecclesiastes", "Eccl", "Eccl", 12},
+  {"Song of Solomon", "Song", "Song", 8},
+  {"Isaiah", "Isa", "Isa", 66},
+  {"Jeremiah", "Jer", "Jer", 52},
+  {"Lamentations", "Lam", "Lam", 5},
+  {"Ezekiel", "Ezek", "Ezek", 48},
+  {"Daniel", "Dan", "Dan", 12},
+  {"Hosea", "Hos", "Hos", 14},
+  {"Joel", "Joel", "Joel", 3},
+  {"Amos", "Amos", "Amos", 9},
+  {"Obadiah", "Obad", "Obad", 1},
+  {"Jonah", "Jonah", "Jonah", 4},
+  {"Micah", "Mic", "Mic", 7},
+  {"Nahum", "Nah", "Nah", 3},
+  {"Habakkuk", "Hab", "Hab", 3},
+  {"Zephaniah", "Zeph", "Zeph", 3},
+  {"Haggai", "Hag", "Hag", 2},
+  {"Zechariah", "Zech", "Zech", 14},
+  {"Malachi", "Mal", "Mal", 4},
+  {"", "", "", 0}
+};
+struct sbook ntbooks[] = {
+  {"Matthew", "Matt", "Matt", 28},
+  {"Mark", "Mark", "Mark", 16},
+  {"Luke", "Luke", "Luke", 24},
+  {"John", "John", "John", 21},
+  {"Acts", "Acts", "Acts", 28},
+  {"Romans", "Rom", "Rom", 16},
+  {"I Corinthians", "1Cor", "1Cor", 16},
+  {"II Corinthians", "2Cor", "2Cor", 13},
+  {"Galatians", "Gal", "Gal", 6},
+  {"Ephesians", "Eph", "Eph", 6},
+  {"Philippians", "Phil", "Phil", 4},
+  {"Colossians", "Col", "Col", 4},
+  {"I Thessalonians", "1Thess", "1Thess", 5},
+  {"II Thessalonians", "2Thess", "2Thess", 3},
+  {"I Timothy", "1Tim", "1Tim", 6},
+  {"II Timothy", "2Tim", "2Tim", 4},
+  {"Titus", "Titus", "Titus", 3},
+  {"Philemon", "Phlm", "Phlm", 1},
+  {"Hebrews", "Heb", "Heb", 13},
+  {"James", "Jas", "Jas", 5},
+  {"I Peter", "1Pet", "1Pet", 5},
+  {"II Peter", "2Pet", "2Pet", 3},
+  {"I John", "1John", "1John", 5},
+  {"II John", "2John", "2John", 1},
+  {"III John", "3John", "3John", 1},
+  {"Jude", "Jude", "Jude", 1},
+  {"Revelation of John", "Rev", "Rev", 22},
+  {"", "", "", 0}
 };
 
-struct sbook
-  VerseKey::ntbooks[] = {
-  {"Matthew", "Matt", 28},
-  {"Mark", "Mark", 16},
-  {"Luke", "Luke", 24},
-  {"John", "John", 21},
-  {"Acts", "Acts", 28},
-  {"Romans", "Rom", 16},
-  {"I Corinthians", "1Cor", 16},
-  {"II Corinthians", "2Cor", 13},
-  {"Galatians", "Gal", 6},
-  {"Ephesians", "Eph", 6},
-  {"Philippians", "Phil", 4},
-  {"Colossians", "Col", 4},
-  {"I Thessalonians", "1Thess", 5},
-  {"II Thessalonians", "2Thess", 3},
-  {"I Timothy", "1Tim", 6},
-  {"II Timothy", "2Tim", 4},
-  {"Titus", "Titus", 3},
-  {"Philemon", "Phlm", 1},
-  {"Hebrews", "Heb", 13},
-  {"James", "Jas", 5},
-  {"I Peter", "1Pet", 5},
-  {"II Peter", "2Pet", 3},
-  {"I John", "1John", 5},
-  {"II John", "2John", 1},
-  {"III John", "3John", 1},
-  {"Jude", "Jude", 1},
-  {"Revelation of John", "Rev", 22}
-};
-
+/* other OSIS abbrevs
+		"Bar","PrAzar",
+		"Bel","Sus","1Esd","2Esd","AddEsth","EpJer","Jdt","1Macc","2Macc","3Macc",
+		"4Macc","PrMan","Ps151","Sir","Tob","Wis"};
+*/
 
 /******************************************************************************
  *	Abbreviations - MUST be in alphabetical order & by PRIORITY
@@ -105,8 +114,7 @@ struct sbook
  *			(e.g. key: "1CH"; match: "1CHRONICLES")
  */
 
-const struct abbrev
-  VerseKey::builtin_abbrevs[] = {
+const struct abbrev builtin_abbrevs[] = {
   {"1 C", 46},			//   1 Corinthians
   {"1 CHRONICLES", 13},		//   1 Chronicles
   {"1 CORINTHIANS", 46},	//   1 Corinthians
@@ -122,7 +130,7 @@ const struct abbrev
   {"1C", 46},			//   1 Corinthians
   {"1CHRONICLES", 13},		//   1 Chronicles
   {"1CORINTHIANS", 46},		//   1 Corinthians
-  {"1JN", 62},			//    1 John       
+  {"1JN", 62},			//    1 John
   {"1JOHN", 62},		//    1 John
   {"1KGS", 11},			// 1 Kings
   {"1KINGS", 11},		//    1 Kings
@@ -146,7 +154,7 @@ const struct abbrev
   {"2C", 47},			//   2 Corinthians
   {"2CHRONICLES", 14},		//   2 Chronicles
   {"2CORINTHIANS", 47},		//   2 Corinthians
-  {"2JN", 63},			//    2 John    
+  {"2JN", 63},			//    2 John
   {"2JOHN", 63},		//    2 John
   {"2KGS", 12},			// 2 Kings
   {"2KINGS", 12},		//    2 Kings
@@ -203,7 +211,7 @@ const struct abbrev
   {"II C", 47},			//   2 Corinthians
   {"II CHRONICLES", 14},	//   2 Chronicles
   {"II CORINTHIANS", 47},	//   2 Corinthians
-  {"II JN", 63},		//    2 John  
+  {"II JN", 63},		//    2 John
   {"II JOHN", 63},		//    2 John
   {"II KGS", 12},		// 2 Kings
   {"II KINGS", 12},		//    2 Kings
@@ -215,7 +223,7 @@ const struct abbrev
   {"IIC", 47},			//   2 Corinthians
   {"IICHRONICLES", 14},		//   2 Chronicles
   {"IICORINTHIANS", 47},	//   2 Corinthians
-  {"III JN", 64},		//    3 John 
+  {"III JN", 64},		//    3 John
   {"III JOHN", 64},		//    3 John
   {"IIIJN", 64},		//    3 John
   {"IIIJOHN", 64},		//    3 John
@@ -305,8 +313,7 @@ const struct abbrev
  *	Maximum verses per chapter
  */
 
-int
-  VerseKey::vm[] = {
+int vm[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32, 32, 20, 18, 24, 21, 16, 27, 33, 38,
     18, 34, 24, 20, 67, 34, 35, 46, 22, 35, 43, 55, 32, 20, 31, 29, 43, 36,
@@ -480,8 +487,7 @@ int
 };
 
 
-long
-  VerseKey::otbks[] = {
+long otbks[] = {
   0, 1, 52, 93, 121, 158,
   193, 218, 240, 245, 277, 302, 325,
   351, 381, 418, 429, 443, 454, 497,
@@ -490,8 +496,7 @@ long
   934, 938, 942, 946, 949, 964
 };
 
-long
-  VerseKey::otcps[] = {
+long otcps[] = {
   0, 2, 3, 35, 61, 86,
   113, 146, 169, 194, 217, 247, 280,
   313, 334, 353, 378, 400, 417, 445,
@@ -633,8 +638,7 @@ long
   24056, 24071, 24089, 24108
 };
 
-long
-  VerseKey::ntbks[] = {
+long ntbks[] = {
   0, 1, 30, 47, 72, 94,
   123, 140, 157, 171, 178, 185, 190,
   195, 201, 205, 212, 217, 221, 223,
@@ -642,8 +646,7 @@ long
   265
 };
 
-long
-  VerseKey::ntcps[] = {
+long ntcps[] = {
   0, 2, 3, 29, 53, 71,
   97, 146, 181, 211, 246, 285, 328,
   359, 410, 469, 506, 546, 575, 603,
@@ -689,9 +692,12 @@ long
 };
 
 
-int
-  VerseKey::offsize[2][2] =
-  { {sizeof (VerseKey::otbks) / sizeof(long), sizeof (VerseKey::otcps) / sizeof(long)}
-, {sizeof (VerseKey::ntbks) / sizeof(long), sizeof (VerseKey::ntcps) / sizeof(long)}
+int offsize[2][2] =
+  { {sizeof (otbks) / sizeof(long), sizeof (otcps) / sizeof(long)}
+, {sizeof (ntbks) / sizeof(long), sizeof (ntcps) / sizeof(long)}
 };
 
+SWORD_NAMESPACE_END
+
+
+#endif

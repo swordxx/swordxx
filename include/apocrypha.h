@@ -29,7 +29,7 @@
 
 //Data based on NRSVA unless otherwise noted; this book ordering is not necessarily optimal.
 
-struct sbook
+struct VersificationBook
 VerseKey::otbooks[] = {
   //Catholic Deuterocanon
   {"Tobit", "Tob", 14},                        //67

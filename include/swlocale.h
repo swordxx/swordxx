@@ -48,8 +48,9 @@ class Private;
 	char *description;
 	char *encoding;
 	struct abbrev *bookAbbrevs;
-	char *BMAX;
-	struct sbook **books;
+	int abbrevsCnt;
+	const char **bookLongNames;
+	const char **bookPrefAbbrev;
 
 public:
 	SWLocale(const char *ifilename);
@@ -68,8 +69,7 @@ public:
 	virtual const char *translate(const char *text);
 	virtual void augment(SWLocale &addFrom);
 	virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
-	virtual const struct abbrev *getBookAbbrevs();
-	virtual void getBooks(char **iBMAX, struct sbook ***ibooks);
+	virtual const struct abbrev *getBookAbbrevs(int *retSize);
 };
 
 SWORD_NAMESPACE_END

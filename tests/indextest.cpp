@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 		vk.Persist(1);
 		bbe->setKey(vk);
 		for (; !bbe->Error(); (*bbe)++ ) {
-			std::cout << vk.NewIndex() << std::endl; 
+			std::cout << vk.Index() << std::endl; 
 		}
 	}
 	return 0;

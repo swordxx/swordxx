@@ -54,6 +54,7 @@ public:
 	* @param ifilename The file, which should be used for this config.
 	*/
 	SWConfig(const char *ifilename);
+	SWConfig();
 	virtual ~SWConfig();
 
 	/** Load from disk

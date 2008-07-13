@@ -28,6 +28,9 @@
 
 SWORD_NAMESPACE_START
 
+SWConfig::SWConfig() {
+}
+
 SWConfig::SWConfig(const char * ifilename) {
 	filename = ifilename;
 	Load();
@@ -38,6 +41,9 @@ SWConfig::~SWConfig() {
 }
 
 void SWConfig::Load() {
+
+	if (!filename.size()) return;	// assert we have a filename
+
 	FileDesc *cfile;
 	char *buf, *data;
 	SWBuf line;
@@ -92,6 +98,9 @@ void SWConfig::Load() {
 
 
 void SWConfig::Save() {
+
+	if (!filename.size()) return;	// assert we have a filename
+
 	FileDesc *cfile;
 	SWBuf buf;
 	SectionMap::iterator sit;

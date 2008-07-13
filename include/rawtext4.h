@@ -35,8 +35,6 @@ class RawStr;
 
 class SWDLLEXPORT RawText4 : public SWText, public RawVerse4 {
 
-	RawStr4 *fastSearch[2];
-
 public:
   
 	RawText4(const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
@@ -45,12 +43,6 @@ public:
 	virtual SWBuf &getRawEntryBuf();
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
-	virtual signed char createSearchFramework(
-			void (*percent) (char, void *) = &nullPercent,
-			void *percentUserData = 0);
-	virtual void deleteSearchFramework();
-	virtual bool hasSearchFramework() { return true; }
-	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent)(char, void *) = &SWModule::nullPercent, void *percentUserData = 0);
 	// write interface ----------------------------
 	virtual bool isWritable();
 	static char createModule(const char *path) { return RawVerse4::createModule(path); }

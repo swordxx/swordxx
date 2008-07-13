@@ -64,7 +64,7 @@ SWBuf &zText::getRawEntryBuf() {
 	unsigned short size = 0;
 	VerseKey &key = getVerseKey();
 
-	findOffset(key.Testament(), key.Index(), &start, &size);
+	findOffset(key.Testament(), key.TestamentIndex(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 			  
 	entryBuf = "";
@@ -109,7 +109,7 @@ void zText::setEntry(const char *inbuf, long len) {
 		delete lastWriteKey;
 	}
 
-	doSetText(key.Testament(), key.Index(), inbuf, len);
+	doSetText(key.Testament(), key.TestamentIndex(), inbuf, len);
 
 	lastWriteKey = (VerseKey *)key.clone();	// must delete
 }
@@ -129,7 +129,7 @@ void zText::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	doLinkEntry(destkey.Testament(), destkey.Index(), srckey->Index());
+	doLinkEntry(destkey.Testament(), destkey.TestamentIndex(), srckey->TestamentIndex());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -145,7 +145,7 @@ void zText::deleteEntry() {
 
 	VerseKey &key = getVerseKey();
 
-	doSetText(key.Testament(), key.Index(), "");
+	doSetText(key.Testament(), key.TestamentIndex(), "");
 }
 
 
@@ -161,7 +161,7 @@ void zText::increment(int steps) {
 	unsigned short size;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findOffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+	findOffset(tmpkey->Testament(), tmpkey->TestamentIndex(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -175,7 +175,7 @@ void zText::increment(int steps) {
 			*key = lastgood;
 			break;
 		}
-		long index = tmpkey->Index();
+		long index = tmpkey->TestamentIndex();
 		findOffset(tmpkey->Testament(), index, &start, &size);
 
 		if (

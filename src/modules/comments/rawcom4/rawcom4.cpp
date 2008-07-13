@@ -53,7 +53,7 @@ SWBuf &RawCom4::getRawEntryBuf() {
 	unsigned long size = 0;
 	VerseKey *key = &getVerseKey();
 
-	findOffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
 	entryBuf = "";
@@ -82,7 +82,7 @@ void RawCom4::increment(int steps) {
 	unsigned long size;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findOffset(tmpkey->Testament(), tmpkey->Index(), &start, &size);
+	findOffset(tmpkey->Testament(), tmpkey->TestamentIndex(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -96,7 +96,7 @@ void RawCom4::increment(int steps) {
 			*key = lastgood;
 			break;
 		}
-		long index = tmpkey->Index();
+		long index = tmpkey->TestamentIndex();
 		findOffset(tmpkey->Testament(), index, &start, &size);
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
@@ -113,7 +113,7 @@ void RawCom4::increment(int steps) {
 
 void RawCom4::setEntry(const char *inbuf, long len) {
 	VerseKey *key = &getVerseKey();
-	doSetText(key->Testament(), key->Index(), inbuf, len);
+	doSetText(key->Testament(), key->TestamentIndex(), inbuf, len);
 }
 
 
@@ -130,7 +130,7 @@ void RawCom4::linkEntry(const SWKey *inkey) {
 	if (!srckey)
 		srckey = new VerseKey(inkey);
 
-	doLinkEntry(destkey->Testament(), destkey->Index(), srckey->Index());
+	doLinkEntry(destkey->Testament(), destkey->TestamentIndex(), srckey->TestamentIndex());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -146,7 +146,7 @@ void RawCom4::linkEntry(const SWKey *inkey) {
 void RawCom4::deleteEntry() {
 
 	VerseKey *key = &getVerseKey();
-	doSetText(key->Testament(), key->Index(), "");
+	doSetText(key->Testament(), key->TestamentIndex(), "");
 }
 
 

@@ -11,6 +11,7 @@ pkginclude_HEADERS += $(swincludedir)/encfiltmgr.h
 pkginclude_HEADERS += $(swincludedir)/entriesblk.h
 pkginclude_HEADERS += $(swincludedir)/femain.h
 pkginclude_HEADERS += $(swincludedir)/filemgr.h
+pkginclude_HEADERS += $(swincludedir)/versemgr.h
 pkginclude_HEADERS += $(swincludedir)/flatapi.h
 pkginclude_HEADERS += $(swincludedir)/ftpparse.h
 pkginclude_HEADERS += $(swincludedir)/ftptrans.h
@@ -125,6 +126,7 @@ pkginclude_HEADERS += $(swincludedir)/thmlwordjs.h
 
 pkginclude_HEADERS += $(swincludedir)/teiplain.h
 pkginclude_HEADERS += $(swincludedir)/teirtf.h
+pkginclude_HEADERS += $(swincludedir)/teihtmlhref.h
 
 pkginclude_HEADERS += $(swincludedir)/treekey.h
 pkginclude_HEADERS += $(swincludedir)/treekeyidx.h

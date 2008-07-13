@@ -161,13 +161,13 @@ int main(int argc, char **argv)
 		std::cout << (const char *)bla << "\n";
 	bla.Testament(1);
 	bla = BOTTOM;
+	std::cout << bla.TestamentIndex() << "\n";
 	std::cout << bla.Index() << "\n";
-	std::cout << bla.NewIndex() << "\n";
 	std::cout << bla << "\n";
 	bla.Testament(2);
 	bla = BOTTOM;
+	std::cout << bla.TestamentIndex() << "\n";
 	std::cout << bla.Index() << "\n";
-	std::cout << bla.NewIndex() << "\n";
 	std::cout << bla << "\n";
 	return 0;
 }

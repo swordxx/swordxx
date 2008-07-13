@@ -66,7 +66,7 @@ SWBuf &RawFiles::getRawEntryBuf() {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findOffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 
 	entryBuf = "";
 	if (size) {
@@ -115,7 +115,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findOffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 
 	if (size) {
 		SWBuf tmpbuf;
@@ -129,7 +129,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 		entryBuf = path;
 		entryBuf += '/';
 		tmpbuf = getNextFilename();
-		doSetText(key->Testament(), key->Index(), tmpbuf);
+		doSetText(key->Testament(), key->TestamentIndex(), tmpbuf);
 		entryBuf += tmpbuf;
 	}
 	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
@@ -163,7 +163,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	findOffset(key->Testament(), key->Index(), &start, &size);
+	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 
 	if (size) {
 		SWBuf tmpbuf;
@@ -179,7 +179,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 		SWCATCH ( ... ) {}
 		if (!key)
 			key = new VerseKey(this->key);
-		doSetText(key->Testament(), key->Index(), tmpbuf.c_str());
+		doSetText(key->Testament(), key->TestamentIndex(), tmpbuf.c_str());
 	}
 	
 	if (key != inkey)
@@ -204,7 +204,7 @@ void RawFiles::deleteEntry() {
 	if (!key)
 		key = new VerseKey(this->key);
 
-	doSetText(key->Testament(), key->Index(), "");
+	doSetText(key->Testament(), key->TestamentIndex(), "");
 
 	if (key != this->key)
 		delete key;
