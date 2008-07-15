@@ -145,7 +145,7 @@ void VerseTreeKey::increment(int steps) {
 
 void VerseTreeKey::positionChanged() {
 	if (!internalPosChange) {
-		TreeKey *tkey = TreeKey::PositionChangeListener::getTreeKey();
+		TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
 		int saveError = tkey->Error();
 		long bookmark = tkey->getOffset();
 		SWBuf path;
