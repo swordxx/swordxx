@@ -45,24 +45,6 @@ typedef list<long> longlist;
 RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
 		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
 		RawVerse(ipath) {
-		
-#ifndef USELUCENE
-	SWBuf fname;
-	fname = path;
-	char ch = fname.c_str()[strlen(fname.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
-		fname += "/";
-	
-	for (int loop = 0; loop < 2; loop++) {
-		fastSearch[loop] = 0;
-		SWBuf fastidxname =(fname + ((loop)?"ntwords.dat":"otwords.dat"));
-		if (FileMgr::existsFile(fastidxname.c_str())) {
-			fastidxname = (fname + ((loop)?"ntwords.idx":"otwords.idx"));
-			if (FileMgr::existsFile(fastidxname.c_str()))
-				fastSearch[loop] = new RawStr((fname + ((loop)?"ntwords":"otwords")).c_str());
-		}
-	}
-#endif
 }
 
 
@@ -71,13 +53,6 @@ RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisp
  */
 
 RawText::~RawText() {
-#ifndef USELUCENE
-	if (fastSearch[0])
-		delete fastSearch[0];
-
-	if (fastSearch[1])
-		delete fastSearch[1];
-#endif
 }
 
 
