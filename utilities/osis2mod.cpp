@@ -297,12 +297,12 @@ void makeKJVRef(VerseKey &key) {
 #ifdef DEBUG
 	cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
 #endif
-	if (key.Chapter() > key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) {
-		key.Chapter(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax);
-		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+	if (key.Chapter() > key.getChapterMax()) {
+		key.Chapter(key.getChapterMax());
+		key.Verse(key.getVerseMax());
 	}
-	else if (key.Verse() > key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]) {
-		key.Verse(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+	else if (key.Verse() > key.getVerseMax()) {
+		key.Verse(key.getVerseMax());
 	}
 	cout << "\tas " << key << endl;
 }
