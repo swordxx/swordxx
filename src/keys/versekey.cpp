@@ -230,8 +230,6 @@ void VerseKey::setLocale(const char *name) {
 }
 
 
-
-
 /******************************************************************************
  * VerseKey::parse - parses keytext into testament|book|chapter|verse
  *
@@ -311,7 +309,7 @@ void VerseKey::freshtext() const
 			if (realbook > BMAX[realTest-1])
 				realbook = BMAX[realTest-1];
 		}
-		sprintf(buf, "%s %d:%d", refSys->getBook(((realTest>1)?BMAX[0]:0)+realbook-1)->getLongName(), chapter, verse);
+		sprintf(buf, "%s %d:%d", getBookName(), chapter, verse);
 		if (suffix) {
 			buf[strlen(buf)+1] = 0;
 			buf[strlen(buf)] = suffix;
@@ -849,7 +847,7 @@ VerseKey &VerseKey::LowerBound(const VerseKey &lb)
 	(*lowerBound) = lb;
 // why are we normalizing?
 //	lowerBound->Normalize();
-	lowerBound->setLocale( this->getLocale() );
+	lowerBound->setLocale(this->getLocale());
 	boundSet = true;
 	return (*lowerBound);
 }
@@ -870,7 +868,7 @@ VerseKey &VerseKey::UpperBound(const VerseKey &ub)
 		*upperBound = *lowerBound;
 // why are we normalizing?
 //	upperBound->Normalize();
-	upperBound->setLocale( this->getLocale() );
+	upperBound->setLocale(this->getLocale());
 
 // until we have a proper method to resolve max verse/chap use this kludge
 /*
@@ -990,7 +988,15 @@ const char *VerseKey::getShortText() const {
 
 
 const char *VerseKey::getBookName() const {
-	return refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getLongName();
+	bool useCache = false;
+
+	useCache = (localeCache.name && localeCache.locale);
+
+	if (!useCache)	{	// if we're setting params for a new locale
+		stdstr(&(localeCache.name), locale);
+		localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(locale);
+	}
+	return localeCache.locale->translate(refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getLongName());
 }
 
 
