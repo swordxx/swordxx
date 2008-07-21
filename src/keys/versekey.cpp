@@ -391,7 +391,7 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 					break;
 			}
 
-			retVal = (!diff) ? abbrevs[target].book : -1;
+			retVal = (!diff) ? refSys->getBookNumberByOSISName(abbrevs[target].osis) : -1;
 		}
 		if (retVal > 0)
 			break;

@@ -39,7 +39,7 @@ class TreeKey;
 struct abbrev
 {
 	const char *ab;
-	int book;
+	const char *osis;
 };
 
 struct sbook {
@@ -135,8 +135,8 @@ public:
 		System(const char *name) { this->name = name; init(); }
 		~System();
 		const char *getName() const { return name.c_str(); }
-		const Book *getBookByName (const char *bookName) const;
-		const Book *getBookByOSISName (const char *bookName) const;
+		const Book *getBookByName(const char *bookName) const;
+		int getBookNumberByOSISName(const char *bookName) const;
 		const Book *getBook(int number) const;
 		int getBookCount() const;
 		void loadFromSBook(const sbook *ot, const sbook *nt, int *chMax);

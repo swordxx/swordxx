@@ -39,17 +39,17 @@ class VerseMgr::System::Private {
 public:
 	/** Array[chapmax] of maximum verses in chapters */
 	vector<Book> books;
+	map<SWBuf, int> osisLookup;
 
 	Private() {
-		books.clear();
 	}
 	Private(const VerseMgr::System::Private &other) {
-		books.clear();
 		books = other.books;
+		osisLookup = other.osisLookup;
 	}
 	VerseMgr::System::Private &operator =(const VerseMgr::System::Private &other) {
-		books.clear();
 		books = other.books;
+		osisLookup = other.osisLookup;
 		return *this;
 	}
 };
@@ -122,6 +122,11 @@ const VerseMgr::Book *VerseMgr::System::getBook(int number) const {
 }
 
 
+int VerseMgr::System::getBookNumberByOSISName(const char *bookName) const {
+	return p->osisLookup[bookName];
+}
+
+
 void VerseMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax) {
 	int chap = 0;
 	int book = 0;
@@ -131,6 +136,7 @@ void VerseMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMa
 		p->books.push_back(Book(ot->name, ot->osis, ot->prefAbbrev, ot->chapmax));
 		offset++;		// book heading
 		Book &b = p->books[p->books.size()-1];
+		p->osisLookup[b.getOSISName()] = p->books.size();
 		for (int i = 0; i < ot->chapmax; i++) {
 			b.p->verseMax.push_back(chMax[chap]);
 			offset++;		// chapter heading
@@ -148,6 +154,7 @@ void VerseMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMa
 		p->books.push_back(Book(nt->name, nt->osis, nt->prefAbbrev, nt->chapmax));
 		offset++;		// book heading
 		Book &b = p->books[p->books.size()-1];
+		p->osisLookup[b.getOSISName()] = p->books.size();
 		for (int i = 0; i < nt->chapmax; i++) {
 			b.p->verseMax.push_back(chMax[chap]);
 			offset++;		// chapter heading

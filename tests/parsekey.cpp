@@ -23,6 +23,11 @@ int main(int argc, char **argv) {
 	
 	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
 
+	for (int i = 1; i < argc; i++) {
+		if (i > 1) std::cout << " ";
+		std::cout << argv[i];
+	}
+	std::cout << ": ";
 	std::cout << verses.getRangeText() << "\n";
 /*
 	for (int i = 0; i < verses.Count(); i++) {

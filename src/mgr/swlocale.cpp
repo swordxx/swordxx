@@ -56,7 +56,7 @@ SWLocale::SWLocale(const char *ifilename) {
 		(*localeSource)["Meta"]["Name"] = "en_US";
 		(*localeSource)["Meta"]["Description"] = "English (US)";
 		bookAbbrevs = (struct abbrev *)builtin_abbrevs;
-		for (abbrevsCnt = 0; builtin_abbrevs[abbrevsCnt].book != -1; abbrevsCnt++);
+		for (abbrevsCnt = 0; builtin_abbrevs[abbrevsCnt].osis[0]; abbrevsCnt++);
 	}
 
 	confEntry = localeSource->Sections["Meta"].find("Name");
@@ -168,14 +168,14 @@ const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 			}
 			#else
 			bookAbbrevs[i].ab = (*it).first.c_str();
-			bookAbbrevs[i].book = atoi((*it).second.c_str());
+			bookAbbrevs[i].osis = (*it).second.c_str();
 			j++;
 			#endif
 			//printf("SWLocale::getBookAbbrevs %s:%s %d\n",bookAbbrevs[i].ab,
 			//	(*it).second.c_str(), bookAbbrevs[i].book); 
 		}
 		bookAbbrevs[j].ab = nullstr;
-		bookAbbrevs[j].book = -1;
+		bookAbbrevs[j].osis = nullstr;
 		abbrevsCnt = size;
 	}
 		
