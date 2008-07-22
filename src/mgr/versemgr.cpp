@@ -100,6 +100,7 @@ VerseMgr::System::System(const System &other) {
 	BMAX[1] = other.BMAX[1];
 	init();
 	(*p) = *(other.p);
+	ntStartOffset = other.ntStartOffset;
 }
 
 VerseMgr::System::System &VerseMgr::System::operator =(const System &other) {
@@ -108,22 +109,23 @@ VerseMgr::System::System &VerseMgr::System::operator =(const System &other) {
 	BMAX[1] = other.BMAX[1];
 	init();
 	(*p) = *(other.p);
+	ntStartOffset = other.ntStartOffset;
 	return *this;
 }
 
 
 VerseMgr::System::~System() {
 	delete p;
-	p = 0;
 }
 
 const VerseMgr::Book *VerseMgr::System::getBook(int number) const {
-	return &(p->books[number]);
+	return (number < p->books.size()) ? &(p->books[number]) : 0;
 }
 
 
 int VerseMgr::System::getBookNumberByOSISName(const char *bookName) const {
-	return p->osisLookup[bookName];
+	map<SWBuf, int>::const_iterator it = p->osisLookup.find(bookName);
+	return (it != p->osisLookup.end()) ? it->second : -1;
 }
 
 
@@ -192,20 +194,25 @@ VerseMgr::Book::Book& VerseMgr::Book::operator =(const Book &other) {
 
 VerseMgr::Book::~Book() {
 	delete p;
-	p = 0;
 }
 
 
 int VerseMgr::Book::getVerseMax(int chapter) const {
-	return p->verseMax[chapter-1];
+	chapter--;
+	return (chapter < p->verseMax.size()) ? p->verseMax[chapter] : -1;
 }
 
 
 long VerseMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const {
 	long  offset = -1;
+	chapter--;
 
 	const Book *b = getBook(book);
-	offset = b->p->offsetPrecomputed[chapter-1];
+
+	if (!b)                                        return -1;	// assert we have a valid book
+	if (chapter >= b->p->offsetPrecomputed.size()) return -1;	// assert we have a valid chapter
+
+	offset = b->p->offsetPrecomputed[chapter];
 
 /* old code
  *
@@ -269,7 +276,6 @@ void VerseMgr::init() {
 
 VerseMgr::~VerseMgr() {
 	delete p;
-	p = 0;
 }
 
 
@@ -278,7 +284,6 @@ VerseMgr *VerseMgr::getSystemVerseMgr() {
 		systemVerseMgr = new VerseMgr();
 		systemVerseMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
 	}
-
 	return systemVerseMgr;
 }
 
@@ -291,7 +296,8 @@ void VerseMgr::setSystemVerseMgr(VerseMgr *newVerseMgr) {
 
 
 const VerseMgr::System *VerseMgr::getVersificationSystem(const char *name) const {
-	return &(p->systems[name]);
+	map<SWBuf, System>::const_iterator it = p->systems.find(name);
+	return (it != p->systems.end()) ? &(it->second) : 0;
 }
 
 void VerseMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax) {

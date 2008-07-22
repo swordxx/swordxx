@@ -672,8 +672,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					break;
 				default:
 					// suffixes (and oddly 'f'-- ff.)
-					if (*buf >= 'a' && *buf <= 'z') {
-						if (chap >=0) suffix = *buf;
+					if ((*buf >= 'a' && *buf <= 'z') && (chap >=0)) {
+						suffix = *buf;
 					}
 					else {
 						number[tonumber] = 0;
