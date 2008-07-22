@@ -90,8 +90,8 @@ if test x$enable_debug = xyes; then
     AM_CXXFLAGS="-O0 -Wall"
   fi
 else
-  AM_CFLAGS="-O2"
-  AM_CXXFLAGS="-O2"
+  AM_CFLAGS="-O3"
+  AM_CXXFLAGS="-O3"
 fi
 
 # ---------------------------------------------------------------------

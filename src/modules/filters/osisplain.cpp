@@ -1,18 +1,24 @@
-/***************************************************************************
-                     osisplain.cpp  -  OSIS to Plaintext filter
-                             -------------------
-    begin                : 2003-02-15
-    copyright            : 2003 by CrossWire Bible Society
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/******************************************************************************
+ *  osisplain.cpp	- An SWFilter
+ *  				impl that provides stripping of OSIS tags
+ *
+ * $Id$
+ *
+ * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #include <stdlib.h>
 #include <osisplain.h>
@@ -21,6 +27,17 @@
 #include <stringmgr.h>
 
 SWORD_NAMESPACE_START
+
+namespace {
+class MyUserData : public BasicFilterUserData {
+public:
+	SWBuf w;
+	XMLTag tag;
+	VerseKey *vk;
+	char testament;
+	MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+};
+}
 
 OSISPlain::OSISPlain() {
 	setTokenStart("<");
@@ -45,13 +62,18 @@ OSISPlain::OSISPlain() {
 	   addTokenSubstitute("/lg", "\n");
 }
 
+BasicFilterUserData *OSISPlain::createUserData(const SWModule *module, const SWKey *key) {
+	MyUserData *u = new MyUserData(module, key);
+	u->vk = SWDYNAMIC_CAST(VerseKey, u->key);
+	u->testament = (u->vk) ? u->vk->Testament() : 2;	// default to NT
+	return u;
+}
+
 
 bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	   // manually process if it wasn't a simple substitution
 	if (!substituteToken(buf, token)) {
 		MyUserData *u = (MyUserData *)userData;
-		VerseKey *vk = SWDYNAMIC_CAST(VerseKey, u->key);
-		char testament = (vk) ? vk ->Testament() : 2;	// default to NT
 		if (((*token == 'w') && (token[1] == ' ')) ||
 		    ((*token == '/') && (token[1] == 'w') && (!token[2]))) {
 				 u->tag = token;
@@ -99,7 +121,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						val++;
 					}
 					else {
-						gh = (testament>1) ? 'G' : 'H';
+						gh = (u->testament>1) ? 'G' : 'H';
 					}
 					if ((!strcmp(val, "3588")) && (lastText.length() < 1))
 						show = false;

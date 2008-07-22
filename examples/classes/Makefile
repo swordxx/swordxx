@@ -5,6 +5,6 @@ clean:
 	rm $(TARGETS)
 
 .cpp:
-	g++ -g `pkg-config --cflags sword` $< -o $@ `pkg-config --libs sword`
+	g++ -O3 `pkg-config --cflags sword` $< -o $@ `pkg-config --libs sword`
 
 

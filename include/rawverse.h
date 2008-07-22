@@ -25,7 +25,6 @@ protected:
 	FileDesc *textfp[2];
 
 	char *path;
-	void prepText(SWBuf &buf);
 	void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
 	void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 

@@ -237,7 +237,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		compressor->Buf(0, &len);
 		cacheBuf = (char *)calloc(len + 1, 1);
 		memcpy(cacheBuf, compressor->Buf(), len);
-
+		cacheBufSize = strlen(cacheBuf);  // TODO: can we just use len?
 		cacheTestament = testmt;
 		cacheBufIdx = ulBuffNum;
 	}
@@ -256,7 +256,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 
 void zVerse::zReadText(char testmt, long start, unsigned short size, SWBuf &inBuf) {
 	inBuf = "";
-	if ( (size > 0) && cacheBuf && ((unsigned)start < strlen(cacheBuf)) ){ //TODO: optimize this, remove strlen
+	if ((size > 0) && cacheBuf && ((unsigned)start < cacheBufSize)) {
 		inBuf.setFillByte(0);
 		inBuf.setSize(size+1);
 		strncpy(inBuf.getRawData(), &(cacheBuf[start]), size);
@@ -473,65 +473,6 @@ char zVerse::createModule(const char *ipath, int blockBound)
 */
 	
 	return 0;
-}
-
-
-/******************************************************************************
- * zVerse::preptext	- Prepares the text before returning it to external
- *				objects
- *
- * ENT:	buf	- buffer where text is stored and where to store the prep'd
- *			text.
- */
-
-void zVerse::prepText(SWBuf &buf) {
-	unsigned int to, from; 
-	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
-	char *rawBuf = buf.getRawData();
-	for (to = from = 0; rawBuf[from]; from++) {
-		switch (rawBuf[from]) {
-		case 10:
-			if (!realdata)
-				continue;
-			space = (cr) ? 0 : 1;
-			cr = 0;
-			nlcnt++;
-			if (nlcnt > 1) {
-//				*to++ = nl;
-				rawBuf[to++] = 10;
-//				*to++ = nl[1];
-//				nlcnt = 0;
-			}
-			continue;
-		case 13:
-			if (!realdata)
-				continue;
-//			*to++ = nl[0];
-			rawBuf[to++] = 10;
-			space = 0;
-			cr = 1;
-			continue;
-		}
-		realdata = 1;
-		nlcnt = 0;
-		if (space) {
-			space = 0;
-			if (rawBuf[from] != ' ') {
-				rawBuf[to++] = ' ';
-				from--;
-				continue;
-			}
-		}
-		rawBuf[to++] = rawBuf[from];
-	}
-	buf.setSize(to);
-
-	while (to > 1) {			// remove trailing excess
-		to--;
-		if ((rawBuf[to] == 10) || (rawBuf[to] == ' '))
-			buf.setSize(to);
-		else break;
-	}
 }
 
 

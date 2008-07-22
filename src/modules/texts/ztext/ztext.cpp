@@ -68,8 +68,8 @@ SWBuf &zText::getRawEntryBuf() {
 	entrySize = size;        // support getEntrySize call
 			  
 	entryBuf = "";
+	
 	zReadText(key.Testament(), start, size, entryBuf);
-
 	rawFilter(entryBuf, &key);
 
 //	if (!isUnicode())

@@ -43,7 +43,6 @@ protected:
 	void doSetText(const char *key, const char *buf, long len = -1);
 	void doLinkEntry(const char *destkey, const char *srckey);
 public:
-	static void prepText(SWBuf &buf);
 	static char nl;
 	RawStr(const char *ipath, int fileMode = -1);
 	virtual ~RawStr();

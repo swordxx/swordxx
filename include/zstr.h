@@ -56,7 +56,6 @@ protected:
 
 	void getCompressedText(long block, long entry, char **buf);
 	void flushCache();
-	void prepText(SWBuf &buf);
 	void getKeyFromDatOffset(long ioffset, char **buf);
 	void getKeyFromIdxOffset(long ioffset, char **buf);
 

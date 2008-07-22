@@ -133,6 +133,8 @@ protected:
 	int entrySize;
 	mutable long entryIndex;	 // internal common storage for index
 
+	static void prepText(SWBuf &buf);
+
 
 public:
 

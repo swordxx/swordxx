@@ -26,7 +26,8 @@ int main(int argc, char **argv) {
 
 	const char *bookName = (argc > 1) ? argv[1] : "WLC";
 	SWModule &book = *manager.getModule(bookName);
+	book.processEntryAttributes(false);
 	for (book = TOP; !book.Error(); book++) {
-		cout << book.StripText() << "\n";
+		cout << book.getKeyText() << " " << book.StripText() << "\n";
 	}
 }

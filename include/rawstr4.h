@@ -40,7 +40,6 @@ class SWDLLEXPORT RawStr4 {
 protected:
 	FileDesc *idxfd;
 	FileDesc *datfd;
-	void prepText(SWBuf &buf);
 	void doSetText(const char *key, const char *buf, long len = -1);
 	void doLinkEntry(const char *destkey, const char *srckey);
 public:

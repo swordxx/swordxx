@@ -26,11 +26,11 @@ protected:
 	FileDesc *textfp[2];
 	FileDesc *compfp[2];
 	char *path;
-	void prepText(SWBuf &buf);
 	void doSetText(char testmt, long idxoff, const char *buf, long len = 0);
 	void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 	void flushCache();
 	char *cacheBuf;
+	unsigned int cacheBufSize;
 	char cacheTestament;
 	long cacheBufIdx;
 	bool dirtyCache;

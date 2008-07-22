@@ -49,10 +49,11 @@ public:
 
 
 LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
-	if (!systemLocaleMgr)
+	if (!systemLocaleMgr) {
 		systemLocaleMgr = new LocaleMgr();
 		SWLocale *locale = new SWLocale(0);
 		systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
+	}
 
 	return systemLocaleMgr;
 }

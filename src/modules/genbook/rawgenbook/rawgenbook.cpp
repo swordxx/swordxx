@@ -125,7 +125,7 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 		rawFilter(entryBuf, key);
 
 //		   if (!isUnicode())
-			RawStr::prepText(entryBuf);
+			SWModule::prepText(entryBuf);
 	}
 
 	if (freeKey) // free our key if we created a VerseKey

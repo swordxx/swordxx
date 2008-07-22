@@ -271,65 +271,6 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 
 
 /******************************************************************************
- * RawStr::preptext	- Prepares the text before returning it to external
- *					objects
- *
- * ENT:	buf	- buffer where text is stored and where to store the prep'd
- *				text.
- */
-
-void RawStr::prepText(SWBuf &buf) {
-	unsigned int to, from; 
-	char space = 0, cr = 0, realdata = 0, nlcnt = 0;
-	char *rawBuf = buf.getRawData();
-	for (to = from = 0; rawBuf[from]; from++) {
-		switch (rawBuf[from]) {
-		case 10:
-			if (!realdata)
-				continue;
-			space = (cr) ? 0 : 1;
-			cr = 0;
-			nlcnt++;
-			if (nlcnt > 1) {
-//				*to++ = nl;
-				rawBuf[to++] = 10;
-//				*to++ = nl[1];
-//				nlcnt = 0;
-			}
-			continue;
-		case 13:
-			if (!realdata)
-				continue;
-//			*to++ = nl[0];
-			rawBuf[to++] = 10;
-			space = 0;
-			cr = 1;
-			continue;
-		}
-		realdata = 1;
-		nlcnt = 0;
-		if (space) {
-			space = 0;
-			if (rawBuf[from] != ' ') {
-				rawBuf[to++] = ' ';
-				from--;
-				continue;
-			}
-		}
-		rawBuf[to++] = rawBuf[from];
-	}
-	buf.setSize(to);
-
-	while (to > 1) {			// remove trailing excess
-		to--;
-		if ((rawBuf[to] == 10) || (rawBuf[to] == ' '))
-			buf.setSize(to);
-		else break;
-	}
-}
-
-
-/******************************************************************************
  * RawStr::readtext	- gets text at a given offset
  *
  * ENT:

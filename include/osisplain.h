@@ -31,15 +31,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT OSISPlain : public SWBasicFilter {
 public:
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		SWBuf w;
-		XMLTag tag;
-		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	OSISPlain();
