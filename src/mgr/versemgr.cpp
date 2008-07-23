@@ -79,7 +79,10 @@ public:
 };
 
 struct BookOffsetLess {
+	bool operator() (const VerseMgr::Book &o1, const VerseMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
+	bool operator() (const long &o1, const VerseMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
 	bool operator() (const VerseMgr::Book &o1, const long &o2) const { return o1.p->offsetPrecomputed[0] < o2; }
+	bool operator() (const long &o1, const long &o2) const { return o1 < o2; }
 };
 
 void VerseMgr::Book::init() {
@@ -103,7 +106,7 @@ VerseMgr::System::System(const System &other) {
 	ntStartOffset = other.ntStartOffset;
 }
 
-VerseMgr::System::System &VerseMgr::System::operator =(const System &other) {
+VerseMgr::System &VerseMgr::System::operator =(const System &other) {
 	name = other.name;
 	BMAX[0] = other.BMAX[0];
 	BMAX[1] = other.BMAX[1];
@@ -181,7 +184,7 @@ VerseMgr::Book::Book(const Book &other) {
 	(*p) = *(other.p);
 }
 
-VerseMgr::Book::Book& VerseMgr::Book::operator =(const Book &other) {
+VerseMgr::Book& VerseMgr::Book::operator =(const Book &other) {
 	longName = other.longName;
 	osisName = other.osisName;
 	prefAbbrev = other.prefAbbrev;
