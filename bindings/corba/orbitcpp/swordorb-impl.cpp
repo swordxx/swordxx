@@ -278,10 +278,10 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 		num.appendFormatted("%d", vkey->Verse());
 		(*retVal)[3] = CORBA::string_dup(num.c_str());
 		num = "";
-		num.appendFormatted("%d", vkey->books[vkey->Testament()-1][vkey->Book()-1].chapmax);
+		num.appendFormatted("%d", vkey->getChapterMax());
 		(*retVal)[4] = CORBA::string_dup(num.c_str());
 		num = "";
-		num.appendFormatted("%d", vkey->books[vkey->Testament()-1][vkey->Book()-1].versemax[vkey->Chapter()-1]);
+		num.appendFormatted("%d", vkey->getVerseMax());
 		(*retVal)[5] = CORBA::string_dup(num.c_str());
 	}
 	else {
