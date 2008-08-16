@@ -25,6 +25,7 @@
 #include <map>
 #include <treekey.h>
 #include <canon.h>	// KJV internal versification system
+#include <swlog.h>	// KJV internal versification system
 #include <algorithm>
 
 using std::vector;
@@ -242,6 +243,7 @@ char VerseMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, 
 
 	// binary search for book
 	vector<Book>::iterator b = lower_bound(p->books.begin(), p->books.end(), offset, BookOffsetLess());
+	if (b == p->books.end()) b--;
 	(*book)    = distance(p->books.begin(), b)+1;
 	if (offset < (*(b->p->offsetPrecomputed.begin()))-((((!(*book)) || (*book)==BMAX[0]+1))?2:1)) { // -1 for chapter headings
 		(*book)--;
@@ -264,7 +266,6 @@ char VerseMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, 
 		(*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
 		(*verse)   = (offset - *c);
 	}
-
 	return 0;
 }
 
