@@ -70,6 +70,7 @@ public:
 	virtual void augment(SWLocale &addFrom);
 	virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
 	virtual const struct abbrev *getBookAbbrevs(int *retSize);
+	static const char *DEFAULT_LOCALE_NAME;
 };
 
 SWORD_NAMESPACE_END

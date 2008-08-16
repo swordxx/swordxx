@@ -122,7 +122,7 @@ VerseMgr::System::~System() {
 }
 
 const VerseMgr::Book *VerseMgr::System::getBook(int number) const {
-	return (number < p->books.size()) ? &(p->books[number]) : 0;
+	return (number < (signed int)p->books.size()) ? &(p->books[number]) : 0;
 }
 
 
@@ -202,7 +202,7 @@ VerseMgr::Book::~Book() {
 
 int VerseMgr::Book::getVerseMax(int chapter) const {
 	chapter--;
-	return (chapter < p->verseMax.size()) ? p->verseMax[chapter] : -1;
+	return (chapter < (signed int)p->verseMax.size()) ? p->verseMax[chapter] : -1;
 }
 
 
@@ -213,9 +213,10 @@ long VerseMgr::System::getOffsetFromVerse(int book, int chapter, int verse) cons
 	const Book *b = getBook(book);
 
 	if (!b)                                        return -1;	// assert we have a valid book
-	if (chapter >= b->p->offsetPrecomputed.size()) return -1;	// assert we have a valid chapter
+	if ((chapter > -1) && (chapter >= (signed int)b->p->offsetPrecomputed.size())) return -1;	// assert we have a valid chapter
 
-	offset = b->p->offsetPrecomputed[chapter];
+	offset = b->p->offsetPrecomputed[(chapter > -1)?chapter:0];
+	if (chapter < 0) offset--;
 
 /* old code
  *
@@ -231,15 +232,38 @@ long VerseMgr::System::getOffsetFromVerse(int book, int chapter, int verse) cons
 
 
 char VerseMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const {
+
+	if (offset < 1) {	// just handle the module heading corner case up front (and error case)
+		(*book) = -1;
+		(*chapter) = 0;
+		(*verse) = 0;
+		return offset;	// < 0 = error
+	}
+
 	// binary search for book
 	vector<Book>::iterator b = lower_bound(p->books.begin(), p->books.end(), offset, BookOffsetLess());
-	b--;
-	vector<long>::iterator c = lower_bound(b->p->offsetPrecomputed.begin(), b->p->offsetPrecomputed.end(), offset);
-	c--;
-
 	(*book)    = distance(p->books.begin(), b)+1;
-	(*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
-	(*verse)   = (offset - *c);
+	if (offset < (*(b->p->offsetPrecomputed.begin()))-((((!(*book)) || (*book)==BMAX[0]+1))?2:1)) { // -1 for chapter headings
+		(*book)--;
+		if (b != p->books.begin()) {
+			b--;	
+		}
+	}
+	vector<long>::iterator c = lower_bound(b->p->offsetPrecomputed.begin(), b->p->offsetPrecomputed.end(), offset);
+
+	// if we're a book heading, we are lessthan chapter precomputes, but greater book.  This catches corner case.
+	if (c == b->p->offsetPrecomputed.end()) {
+		c--;
+	}
+	if ((offset < *c) && (c == b->p->offsetPrecomputed.begin())) {
+		(*chapter) = (offset - *c)+1;	// should be 0 or -1 (for testament heading)
+		(*verse) = 0;
+	}
+	else {
+		if (offset < *c) c--;
+		(*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
+		(*verse)   = (offset - *c);
+	}
 
 	return 0;
 }

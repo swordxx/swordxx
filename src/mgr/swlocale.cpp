@@ -31,6 +31,8 @@ SWORD_NAMESPACE_START
 
 typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
 
+const char *SWLocale::DEFAULT_LOCALE_NAME="en_US";
+
 // I have bridge patterns, but this hides swconfig and map from lots o stuff
 class SWLocale::Private {
 public:
@@ -53,7 +55,7 @@ SWLocale::SWLocale(const char *ifilename) {
 	}
 	else {
 		localeSource   = new SWConfig(0);
-		(*localeSource)["Meta"]["Name"] = "en_US";
+		(*localeSource)["Meta"]["Name"] = DEFAULT_LOCALE_NAME;
 		(*localeSource)["Meta"]["Description"] = "English (US)";
 		bookAbbrevs = (struct abbrev *)builtin_abbrevs;
 		for (abbrevsCnt = 0; builtin_abbrevs[abbrevsCnt].osis[0]; abbrevsCnt++);

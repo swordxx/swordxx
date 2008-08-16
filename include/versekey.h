@@ -72,13 +72,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	/** number of instantiated VerseKey objects or derivitives
 	*/
 	static int instance;
-#if 1
-	static long otbks[];
-	static long otcps[];
-	static long ntbks[];
-	static long ntcps[];
-#endif
-	static int vm[];
 	static LocaleCache localeCache;
 	ListKey internalListKey;
 

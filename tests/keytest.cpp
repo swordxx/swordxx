@@ -26,13 +26,14 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "James    1:19";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
-	std::cout << "\n loop++; (.Index(Index()+1))\n";
+	std::cout << "\n Headings: " << (bool)bla.Headings() << "\n";
+	std::cout << " (.Index(Index()+1))\n";
 
-	max = (argc < 3) ? 10 : atoi(argv[2]);
+	max = (argc < 4) ? 10 : atoi(argv[3]);
 
-	for (loop = 0; loop < max; loop++, bla++) {
+	for (loop = 0; loop < max; loop++) {
 		index = bla.Index();
 		std::cout << (const char *)bla << "(" << index << ")";
 		bla.Index(index+1);
@@ -40,12 +41,12 @@ int main(int argc, char **argv)
 	}
 
 	std::cout << "-----------------\n";
-	std::cout << "\n loop--; (.Index(Index()-1))\n";
+	std::cout << "\n (.Index(Index()-1))\n";
 	if (argc < 2) 
 		bla = "James    1:19";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
-	for (loop = max; loop; loop--, bla--) {
+	for (loop = max; loop; loop--) {
 		index = bla.Index();
 		std::cout << (const char *)bla << "(" << index << ")";
 		bla.Index(index-1);
@@ -53,13 +54,29 @@ int main(int argc, char **argv)
 	}
 
 	std::cout << "-----------------\n";
-	std::cout << "--------- No Headings --------\n";
+	bla.Headings(true);
+	std::cout << "\n Headings: " << (bool)bla.Headings() << "\n";
+	std::cout << " key++\n";
 
 	if (argc < 2) 
 		bla = "Matthew  1:5";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
-	for (loop = max; loop; loop--, bla--) {
+	for (loop = 0; loop < max && !bla.Error(); loop++,bla++) {
+		index = bla.Index();
+		std::cout << (const char *)bla << "(" << index << ")\n";
+	}
+
+	std::cout << "-----------------\n";
+	bla.Headings(true);
+	std::cout << "\n Headings: " << (bool)bla.Headings() << "\n";
+	std::cout << " key--\n";
+
+	if (argc < 2) 
+		bla = "Matthew  1:5";
+	else	bla = argv[2];
+
+	for (loop = max; loop && !bla.Error(); loop--, bla--) {
 		index = bla.Index();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
@@ -68,7 +85,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Genesis  1:5";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla--) {
 		index = bla.Index();
@@ -79,7 +96,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Malachi  4:2";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
 		index = bla.Index();
@@ -90,7 +107,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Revelation of John  22:17";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
 		index = bla.Index();
@@ -105,7 +122,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Matthew  1:5";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla--) {
 		index = bla.Index();
@@ -116,7 +133,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Genesis  1:5";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla--) {
 		index = bla.Index();
@@ -127,7 +144,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Malachi  4:2";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
 		index = bla.Index();
@@ -138,7 +155,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2) 
 		bla = "Revelation of John  22:17";
-	else	bla = argv[1];
+	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
 		index = bla.Index();

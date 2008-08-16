@@ -120,7 +120,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	// Locales will be invalidated if you change the StringMgr
 	// So only use the default hardcoded locale and let the
 	// frontends change the locale if they want
-	stdstr(&defaultLocaleName, "en_US");
+	stdstr(&defaultLocaleName, SWLocale::DEFAULT_LOCALE_NAME);
 
 	if (prefixPath)
 		delete [] prefixPath;
@@ -203,7 +203,7 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 		return (*it).second;
 
 	SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
-	return 0;
+	return (*locales)[SWLocale::DEFAULT_LOCALE_NAME];
 }
 
 

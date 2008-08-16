@@ -1422,13 +1422,18 @@ long VerseKey::Index() const
 	if (!testament) { // if we want module heading
 		offset = 0;
 		verse  = 0;
+		chapter = 0;
+		book = 0;
+	}
+	else if (!book) {	// we want testament heading
+			offset = ((testament == 2) ? refSys->getNTStartOffset():0) + 1;
+			chapter = 0;
+			verse = 0;
 	}
 	else {
-		if (!book)
-			chapter = 0;
-		if (!chapter)
+		if (!chapter) {
 			verse   = 0;
-
+		}
 		offset = refSys->getOffsetFromVerse((((testament>1)?BMAX[0]:0)+book-1), chapter, verse);
 	}
 	return offset;
@@ -1466,6 +1471,9 @@ long VerseKey::Index(long iindex)
 		book -= BMAX[0];
 		testament = 2;
 	}
+	// special case for Module and Testament heading
+	if (book < 0) { testament = 0; book = 0; }
+	if (chapter < 0) { book = 0; chapter = 0; }
 
 /*
 	suffix = 0;
