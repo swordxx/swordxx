@@ -458,15 +458,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	}
 
 	(*percent)(perc, percentUserData);
-	// MAJOR KLUDGE: VerseKey::Index still return index within testament.
-	// 	VerseKey::NewIndex should be moved to Index and Index should be some
-	// 	VerseKey specific name
-	VerseKey *vkcheck = 0;
-	SWTRY {
-		vkcheck = SWDYNAMIC_CAST(VerseKey, key);
-	}
-	SWCATCH (...) {}
-	// end MAJOR KLUDGE
 
 	*this = BOTTOM;
 	long highIndex = key->Index();
@@ -505,6 +496,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			(*percent)(80, percentUserData);
 
 			// iterate thru each good module position that meets the search
+			bool checkBounds = getKey()->isBoundSet();
 			for (long i = 0; i < h->length(); i++) {
 				Document &doc = h->doc(i);
 
@@ -512,12 +504,15 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
 				*resultKey = utfBuffer; //TODO Does a key always accept utf8?
 
-				// check to see if it sets ok (in our range?) and if so, add to our return list
-				*getKey() = *resultKey;
-				if (*getKey() == *resultKey) {
-					listKey << *resultKey;
-					listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
+				// check to see if it sets ok (within our bounds) and if not, skip
+				if (checkBounds) {
+					*getKey() = *resultKey;
+					if (*getKey() != *resultKey) {
+						continue;
+					}
 				}
+				listKey << *resultKey;
+				listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
 			}
 			(*percent)(98, percentUserData);
 		}
@@ -588,7 +583,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		per *= 93;
 		per += 5;
 		char newperc = (char)per;
-//		char newperc = (char)(5+(93*(((float)((vkcheck)?vkcheck->NewIndex():key->Index()))/highIndex)));
 		if (newperc > perc) {
 			perc = newperc;
 			(*percent)(perc, percentUserData);
@@ -596,7 +590,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		else if (newperc < perc) {
 #ifndef _MSC_VER
 			std::cerr << "Serious error: new percentage complete is less than previous value\n";
-			std::cerr << "using vk? " << ((vkcheck)?"yes":"no") << "\n";
 			std::cerr << "index: " << (key->Index()) << "\n";
 			std::cerr << "highIndex: " << highIndex << "\n";
 			std::cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
@@ -1043,7 +1036,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			}
 
 			lucene_utf8towcs(wcharBuffer, keyText, MAX_CONV_SIZE); //keyText must be utf8
-			doc->add( *Field::Text(_T("key"), wcharBuffer ) );
+			doc->add( *(new Field("key", wcharBuffer, Field::STORE_YES | Field::INDEX_TOKENIZED)));
 
 			if (includeKeyInSearch) {
 				c = keyText;

@@ -54,6 +54,7 @@ public:
 		TreeKey *treeKey;
 	public:
 		PositionChangeListener() {}
+		virtual ~PositionChangeListener() {}
 		virtual void positionChanged() = 0;
 		TreeKey *getTreeKey() { return treeKey; }
 		void setTreeKey(TreeKey *tk) { treeKey = tk; }

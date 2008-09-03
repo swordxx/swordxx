@@ -17,7 +17,7 @@ using namespace sword;
 	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
 	 *			-4  - Lucene
    */
-char SEARCH_TYPE=-2;
+char SEARCH_TYPE=-4;
 
 char printed = 0;
 void percentUpdate(char percent, void *userData) {
