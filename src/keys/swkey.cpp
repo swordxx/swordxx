@@ -157,6 +157,15 @@ const char *SWKey::getRangeText() const {
 
 
 /******************************************************************************
+ * SWKey::getOSISRefRangeText - returns parsable range text for this key
+ */
+
+const char *SWKey::getOSISRefRangeText() const {
+	return getRangeText();
+}
+
+
+/******************************************************************************
  * SWKey::compare	- Compares another VerseKey object
  *
  * ENT:	ikey - key to compare with this one

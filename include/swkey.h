@@ -141,6 +141,7 @@ public:
 	virtual const char *getText() const;
 	virtual const char *getShortText() const { return getText(); }
 	virtual const char *getRangeText() const;
+	virtual const char *getOSISRefRangeText() const;
 	virtual bool isBoundSet() const { return boundSet; }
 	virtual void clearBound() const { boundSet = false; }
 

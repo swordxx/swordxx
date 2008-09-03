@@ -1623,6 +1623,21 @@ const char *VerseKey::getRangeText() const {
 }
 
 
+/******************************************************************************
+ * VerseKey::getOSISRefRangeText - returns parsable range text for this key
+ */
+
+const char *VerseKey::getOSISRefRangeText() const {
+	if (isBoundSet() && (LowerBound() != UpperBound())) {
+		char buf[1023];
+		sprintf(buf, "%s-%s", LowerBound().getOSISRef(), UpperBound().getOSISRef());
+		stdstr(&rangeText, buf);
+	}
+	else stdstr(&rangeText, getOSISRef());
+	return rangeText;
+}
+
+
 const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey) {
 	static SWBuf outRef;
 

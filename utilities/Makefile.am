@@ -6,7 +6,7 @@ noinst_PROGRAMS = cipherraw lexdump \
 stepdump step2vpl gbfidx modwrite addvs emptyvss \
 addgb genbookutil treeidxutil
 
-bin_PROGRAMS = mod2imp mod2osis osis2mod tei2mod vs2osisref mod2vpl \
+bin_PROGRAMS = mod2imp mod2osis osis2mod tei2mod vs2osisref vs2osisreftxt mod2vpl \
 	mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs
 
 #if INSTALLMGR
@@ -58,6 +58,7 @@ xml2gbs_SOURCES = xml2gbs.cpp
 osis2mod_SOURCES = osis2mod.cpp
 tei2mod_SOURCES = tei2mod.cpp
 vs2osisref_SOURCES = vs2osisref.cpp
+vs2osisreftxt_SOURCES = vs2osisreftxt.cpp
 genbookutil_SOURCES = genbookutil.cpp
 treeidxutil_SOURCES = treeidxutil.cpp
 

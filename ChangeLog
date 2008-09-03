@@ -1,5 +1,9 @@
 API ChangeLog 
 
+03-Sep-2008	Troy A. Griffitts <scribe@crosswire.org>
+	Added getOSISRefRangeText to SWKey. Not yetimplemented
+		ideally or even correctly for all SWKey types.
+
 * Release 1.5.11 *
 
 14-May-2008	Troy A. Griffitts <scribe@crosswire.org>

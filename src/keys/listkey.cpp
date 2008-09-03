@@ -281,6 +281,24 @@ const char *ListKey::getRangeText() const {
 
 
 /******************************************************************************
+ * ListKey::getOSISRefRangeText - returns parsable range text for this key
+ */
+
+const char *ListKey::getOSISRefRangeText() const {
+	char *buf = new char[(arraycnt + 1) * 255];
+	buf[0] = 0;
+	for (int i = 0; i < arraycnt; i++) {
+		strcat(buf, array[i]->getOSISRefRangeText());
+		if (i < arraycnt-1)
+			strcat(buf, ";");
+	}
+	stdstr(&rangeText, buf);
+	delete [] buf;
+	return rangeText;
+}
+
+
+/******************************************************************************
  * ListKey::getText - returns text key if (const char *) cast is requested
  */
 

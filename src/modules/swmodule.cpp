@@ -1036,7 +1036,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			}
 
 			lucene_utf8towcs(wcharBuffer, keyText, MAX_CONV_SIZE); //keyText must be utf8
-			doc->add( *(new Field("key", wcharBuffer, Field::STORE_YES | Field::INDEX_TOKENIZED)));
+//			doc->add( *(new Field("key", wcharBuffer, Field::STORE_YES | Field::INDEX_TOKENIZED)));
+			doc->add( *Field::Text(_T("key"), wcharBuffer ) );
+
 
 			if (includeKeyInSearch) {
 				c = keyText;

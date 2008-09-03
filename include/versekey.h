@@ -398,6 +398,7 @@ public:
 
 	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false);
 	virtual const char *getRangeText() const;
+	virtual const char *getOSISRefRangeText() const;
 	/** Compares another	SWKey object
 	*
 	* @param ikey key to compare with this one

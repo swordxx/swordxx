@@ -126,6 +126,7 @@ public:
 	virtual bool isTraversable() const { return true; }
 	virtual long Index() const { return arraypos; }
 	virtual const char *getRangeText() const;
+	virtual const char *getOSISRefRangeText() const;
 
 	/**
 	 * Returns the index for the new one given as as parameter.

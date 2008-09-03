@@ -1,6 +1,4 @@
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 
 #include <versekey.h>
 #include <localemgr.h>
@@ -10,7 +8,7 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 	if ((argc < 2) || (argc > 4)) {
-		fprintf(stderr, "usage: %s <\"string to parse\"> [locale name] [test-in-set-verse]\n", *argv);
+		fprintf(stderr, "usage: %s <\"string to parse\"> [locale_name] [test-in-set-verse]\n", *argv);
 		exit(-1);
 	}
 
