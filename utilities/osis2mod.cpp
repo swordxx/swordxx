@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <stack>
+#include <vector>
 #include <iostream>
 #include <fstream>
 
@@ -17,8 +18,6 @@
 #include <versekey.h>
 
 #include <ztext.h>
-// #include <zld.h>
-// #include <zcom.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
 #include <cipherfil.h>
@@ -33,11 +32,16 @@
 // Debug for simple transformation stack
 //#define DEBUG_XFORM
 
+// Debug for Words of Christ (aka WOC)
+#define DEBUG_QUOTE
+
 // Debug for parsing osisRefs
 //#define DEBUG_REF
 
 // Debug for tag stack
 //#define DEBUG_STACK
+
+//#define INCLUDE_TAGS
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -54,9 +58,16 @@ int converted = 0;
 #endif
 
 SWText *module = 0;
-VerseKey *currentVerse = 0;
+VerseKey currentVerse;
 char activeOsisID[255];
 char currentOsisID[255];
+
+SWBuf activeVerseText;
+
+ListKey currentKeyIDs = ListKey();
+
+std::vector<ListKey> linkedVerses;
+
 const char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
 	"Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
 	"Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
@@ -81,7 +92,6 @@ bool isOSISAbbrev(const char *buf) {
 	}
 	return match;
 }
-
 
 /**
  * Determine whether the string contains a valid unicode sequence.
@@ -292,10 +302,40 @@ bool isKJVRef(const char *buf) {
 }
 
 
+/**
+ * This routine is used to ensure that all the text in the input is saved to the module.
+ * Assumption: The input orders all the verses for a chapter in numerical order. Thus, any
+ * verses that are not in the KJV versification (v11n) follow those that are.
+ *
+ * The prior implementation of this adjusted the verse to the last one that is in the KJV v11n.
+ * If it the chapter were extra, then it is appended to the last verse of the last
+ * chapter in the KJV v11n for that book. If it is just extra verses for a chapter, then it is
+ * appended to the last verse of the chapter.
+ *
+ * The problem with this is when a OSIS verse refers to more than one KJV v11n verse, e.g.
+ * osisID="Gen.1.29 Gen.1.30 Gen.1.31" (Gen.1.31 is the KJV v11n last verse) and then it is
+ * followed by Gen.1.31. In this case, we need to append Gen.1.29 and make sure that Gen.1.30
+ * and Gen.1.31 link to the new Gen.1.29.
+ *
+ * This routine assumes that linking is postponed to the end so that in the example Gen.1.30-31
+ * are not linked but rather empty. This routine will then find the last verse in the computed
+ * chapter that has content.
+ *
+ * Alternative, we could have done linking as we went, but this routine would have needed
+ * to find the first entry in the link set and elsewhere in the code when appending to a
+ * verse, it would need to be checked for adjacent links and those would have needed to be adjusted.
+ *
+ * param key the key that may need to be adjusted
+ */
 void makeKJVRef(VerseKey &key) {
+	VerseKey saveKey;
+	saveKey.AutoNormalize(0);
+	saveKey.Headings(1);
+	saveKey = currentVerse;
+
 	cout << "re-versified " << key;
 #ifdef DEBUG
-	cout << "\tC" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].chapmax) << ":V" << (int)(key.builtin_books[key.Testament()-1][key.Book()-1].versemax[key.Chapter()-1]);
+	cout << "\tC" << (int)(key.getChapterMax()) << ":V" << (int)(key.getVerseMax());
 #endif
 	if (key.Chapter() > key.getChapterMax()) {
 		key.Chapter(key.getChapterMax());
@@ -304,16 +344,32 @@ void makeKJVRef(VerseKey &key) {
 	else if (key.Verse() > key.getVerseMax()) {
 		key.Verse(key.getVerseMax());
 	}
+
+	currentVerse = key;
+	currentVerse.ClearBounds();
+	currentVerse--;
+	while (!currentVerse.Error() && currentVerse.getVerse() > 0) {
+		SWBuf currentText = module->getRawEntry();
+		if (currentText.length()) {
+			break;
+		}
+		currentVerse--;
+	}
+
+	key = currentVerse;
 	cout << "\tas " << key << endl;
+
+	currentVerse = saveKey;
 }
 
-
-void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
-	static SWBuf activeVerseText;
+void writeEntry(SWBuf &text, bool force = false) {
 	char keyOsisID[255];
 
-	if (inCanonicalOSISBook) {
-		strcpy(keyOsisID, key.getOSISRef());
+	if (!inCanonicalOSISBook) {
+		return;
+	}
+
+		strcpy(keyOsisID, currentVerse.getOSISRef());
 
 		// set keyOsisID to anything that an osisID cannot be.
 		if (force) {
@@ -327,15 +383,15 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 		VerseKey saveKey;
 		saveKey.AutoNormalize(0);
 		saveKey.Headings(1);
-		saveKey = key;
+		saveKey = currentVerse;
 
 		// If we have seen a verse and the supplied one is different then we output the collected one.
 		if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
 
-			key = lastKey;
+			currentVerse = lastKey;
 
-			if (!isKJVRef(key)) {
-				makeKJVRef(key);
+			if (!isKJVRef(currentVerse)) {
+				makeKJVRef(currentVerse);
 			}
 
 #ifdef _ICU_
@@ -369,21 +425,25 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 			}
 #endif
 
+			// If the entry already exists, then append this entry to the text.
+			// This is for verses that are outside the KJV versification. They are appended to the prior verse.
+			// The space should not be needed if we retained verse tags.
 			SWBuf currentText = module->getRawEntry();
 			if (currentText.length()) {
-				cout << "Appending entry: " << key.getOSISRef() << ": " << activeVerseText << endl;
+				cout << "Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
 				activeVerseText = currentText + " " + activeVerseText;
 			}
 
 #ifdef DEBUG
-			cout << "Write: " << activeOsisID << ":" << key.getOSISRef() << ": " << activeVerseText << endl;
+			cout << "Write: " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
 #endif
 
 			module->setEntry(activeVerseText);
 			activeVerseText = "";
 		}
 
-		// eliminate leading whitespace on the beginning of each verse and
+		// The following is for initial verse content and for appending interverse content.
+		// Eliminate leading whitespace on the beginning of each verse and
 		// before we append to current content, since we just added one
 		text.trimStart();
 		if (activeVerseText.length()) {
@@ -393,100 +453,109 @@ void writeEntry(VerseKey &key, SWBuf &text, bool force = false) {
 		else {
 			activeVerseText = text;
 		}
+		// text has been consumed so clear it out.
+		text = "";
 
-		key = saveKey;
-		lastKey = key;
+		currentVerse = saveKey;
+		lastKey = currentVerse;
 		strcpy(activeOsisID, keyOsisID);
-	}
 }
 
 
-void linkToEntry(VerseKey& dest) {
-	//cout << "Verse: " << key << "\n";
-	//cout << "TEXT: " << text << "\n\n";
-	//SWBuf currentText = module->getRawEntry();
-	//if (currentText.length())
-	//	text = currentText + " " + text;
+void linkToEntry(VerseKey& linkKey, VerseKey& dest) {
+
+	// Only link verses that are in the KJV versification.
+	if (!isKJVRef(linkKey)) {
+		return;
+	}
+
 	VerseKey saveKey;
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
-	saveKey = *currentVerse;
-
-	if (!isKJVRef(*currentVerse)) {
-		makeKJVRef(*currentVerse);
-	}
+	saveKey = currentVerse;
+	currentVerse = linkKey;
 
 	cout << "Linking " << module->KeyText() << " to " << dest.getText() << "\n";
 	module->linkEntry(&dest);
 
-	*currentVerse = saveKey;
+	currentVerse = saveKey;
 }
 
 // Return true if the content was handled or is to be ignored.
 //		false if the what has been seen is to be accumulated and considered later.
-bool handleToken(SWBuf &text, XMLTag *token) {
+bool handleToken(SWBuf &text, XMLTag token) {
 
 	// Everything between the begin book tag and the first begin chapter tag is inBookHeader
-	static bool inBookHeader = false;
+	static bool inBookHeader    = false;
+
 	// Everything between the begin chapter tag and the first begin verse tag is inChapterHeader
 	static bool inChapterHeader = false;
 
-	// Flags to indicate whether we are in a book, chapter and/or verse
-	//static bool inBook = false;
-	//static bool inChapter = false;
-	static bool inVerse = true;
-
-	static SWBuf header = "";
+	// Flags indicating whether we are processing the content of a verse
+	static bool inVerse = false;
 
 	// Used to remember titles that need to be handle specially
+	static SWBuf header = "";
 	static SWBuf lastTitle = "";
 	static int titleOffset = -1;
 	static bool inTitle = false;
 	static int titleDepth = 0;
 
-	static ListKey lastVerseIDs = ListKey();
+	// Flag indicating whether we are in "Words of Christ"
+	static bool inWOC = false;
+	// Tag for WOC quotes within a verse
+	static XMLTag wocTag = "<q who=\"Jesus\" marker=\"\">";
+
+	// Flag used to indicate where useful text begins
+	static bool firstDiv = false;
+
+	// Stack of quote elements used to handle Words of Christ
+	static std::stack<XMLTag> quoteStack;
 
 	// Stack of elements used to validate that books, chapters and verses are well-formed
 	// This goes beyond simple xml well-formed and also considers milestoned div, chapter and verse
 	// to be begin and end tags, too.
 	// It is an error if books and chapters are not well formed (though not required by OSIS)
 	// It is a warning that verses are not well formed (because some clients are not ready)
-	static std::stack<XMLTag*> tagStack;
+	static std::stack<XMLTag> tagStack;
+
 	// The following are used to validate well-formedness
 	static int chapterDepth = 0;
 	static int bookDepth = 0;
 	static int verseDepth = 0;
 
 	int tagDepth = tagStack.size();
-	const char *tokenName = token->getName();
-	bool isEndTag = token->isEndTag() || token->getAttribute("eID");
-	const char *typeAttr = token->getAttribute("type");
+	const char *tokenName = token.getName();
+	bool isEndTag = token.isEndTag() || token.getAttribute("eID");
+	const char *typeAttr = token.getAttribute("type");
 
 	//Titles are treated specially.
 	// If the title has an attribute type of "main" or "chapter"
 	// it belongs to its <div> or <chapter> and is treated as part of its heading
 	// Otherwise if it a title in a chapter before the first the first verse it
 	// is put into the verse as a preverse title.
-	if (!token->isEmpty() && !isEndTag && titleDepth == 0 && (!strcmp(tokenName, "title")) && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
+	if (!inVerse) {
+	if (!token.isEmpty() && !isEndTag && titleDepth == 0 && (!strcmp(tokenName, "title")) && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
 		titleOffset = text.length(); //start of the title tag
 		lastTitle = "";
 		inTitle = true;
 		tagStack.push(token);
 #ifdef DEBUG_STACK
-		cout << currentOsisID << ": push (" << tagStack.size() << ") " << token->getName() << endl;
+		cout << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
 #endif
 		titleDepth = tagStack.size();
 		return false;
 	}
+
 	// Check titleDepth since titles can be nested. Don't want to quit too early.
-	else if (isEndTag && tagDepth == titleDepth && (!strcmp(tokenName, "title"))) {
+	else if (inTitle && isEndTag && tagDepth == titleDepth && (!strcmp(tokenName, "title"))) {
 		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
-		lastTitle.append(*token); //</title>
+		lastTitle.append(token); //</title>
 
 #ifdef DEBUG
 		cout << currentOsisID << ":" << endl;
- 		cout << "\tlastTitle:      " << lastTitle.c_str() << endl;
- 		cout << "\ttext-lastTitle: " << text.c_str()+titleOffset << endl;
+		cout << "\tlastTitle:      " << lastTitle.c_str() << endl;
+		cout << "\ttext-lastTitle: " << text.c_str()+titleOffset << endl;
 		cout << "\ttext:	   " << text.c_str() << endl;
 #endif
 		inTitle = false;
@@ -497,7 +566,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 		tagStack.pop();
 		return false; // don't add </title> to the text itself
 	}
-
+	}
 
 
 //-- START TAG -------------------------------------------------------------------------
@@ -505,76 +574,87 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	if (!isEndTag) {
 
 		// Remember non-empty start tags
-		if (!token->isEmpty()) {
+		if (!token.isEmpty()) {
 			tagStack.push(token);
 #ifdef DEBUG_STACK
-			cout << currentOsisID << ": push (" << tagStack.size() << ") " << token->getName() << endl;
+			cout << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
 #endif
+		}
+
+		// throw away everything up to the first div
+		if (!firstDiv && !strcmp(tokenName, "div")) {
+			firstDiv = true;
+			text     = "";
 		}
 
 		//-- WITH OSIS ID      -------------------------------------------------------------------------
 		//--   OR ANNOTATE REF -------------------------------------------------------------------------
-		if (token->getAttribute("osisID") || token->getAttribute("annotateRef")) {
+		if (token.getAttribute("osisID") || token.getAttribute("annotateRef")) {
 
-			// BOOK START
+			// BOOK START, <div type="book" ...>
 			if ((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "book"))) {
 				inVerse = false;
 				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
 #ifdef DEBUG
 					cout << currentOsisID << ": HEADING ";
 #endif
-					currentVerse->Testament(0);
-					currentVerse->Book(0);
-					currentVerse->Chapter(0);
-					currentVerse->Verse(0);
-					writeEntry(*currentVerse, text);
+					currentVerse.Testament(0);
+					currentVerse.Book(0);
+					currentVerse.Chapter(0);
+					currentVerse.Verse(0);
+					writeEntry(text);
 				}
-				strcpy(currentOsisID, token->getAttribute("osisID"));
-				*currentVerse = currentOsisID;
-				currentVerse->Chapter(0);
-				currentVerse->Verse(0);
+				strcpy(currentOsisID, token.getAttribute("osisID"));
+				currentVerse = currentOsisID;
+				currentVerse.Chapter(0);
+				currentVerse.Verse(0);
 				inBookHeader = true;
 				inChapterHeader = false;
 				lastTitle = "";
-				text = "";
 				bookDepth = tagStack.size();
 				chapterDepth = 0;
 				verseDepth = 0;
 
-				inCanonicalOSISBook = isOSISAbbrev(token->getAttribute("osisID"));
+				inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID"));
 
+#ifndef INCLUDE_TAGS
 				return true;
+#else
+				return false;
+#endif
 			}
 
-			// CHAPTER START
-			else if (((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "chapter")))
-					 || (!strcmp(tokenName, "chapter"))
-					 ) {
+			// CHAPTER START, <div type="chapter" ...> or <chapter ...>
+			if (((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "chapter"))) ||
+			     (!strcmp(tokenName, "chapter"))
+			   ) {
 				inVerse = false;
 				if (inBookHeader) {
 #ifdef DEBUG
 					cout << currentOsisID << ": BOOK HEADING "<< text.c_str() << endl;
 #endif
-					writeEntry(*currentVerse, text);
+					writeEntry(text);
 				}
 
-				strcpy(currentOsisID, token->getAttribute("osisID"));
-				*currentVerse = currentOsisID;
-				currentVerse->Verse(0);
+				strcpy(currentOsisID, token.getAttribute("osisID"));
+				currentVerse = currentOsisID;
+				currentVerse.Verse(0);
 				inBookHeader = false;
 				inChapterHeader = true;
 				lastTitle = "";
-				text = "";
 				chapterDepth = tagStack.size();
 				verseDepth = 0;
 
+#ifndef INCLUDE_TAGS
 				return true;
+#else
+				return false;
+#endif
 			}
 
-			// VERSE OR COMMENTARY START
-			else if (!strcmp(tokenName, "verse") ||
-				 (!strcmp(tokenName, "div") &&
-				   token->getAttribute("annotateType"))) {
+			// VERSE, <verse ...> OR COMMENTARY START, <div annotateType="xxx" ...>
+			if (!strcmp(tokenName, "verse") ||
+			   (!strcmp(tokenName, "div") && token.getAttribute("annotateType"))) {
 #ifdef DEBUG
 				cout << "Entering verse" << endl;
 #endif
@@ -584,8 +664,7 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 
 					//make sure we don't insert the preverse title which belongs to the first verse of this chapter!
 					// Did we have a preverse title?
-					if (lastTitle.length())
-					{
+					if (lastTitle.length()) {
 						//Was the preVerse title in the header (error if not)?
 						const char* header = heading.c_str();
 						const char* preVerse = strstr(header, lastTitle);
@@ -608,67 +687,94 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 						text = "";
 					}
 
+
 					if (heading.length()) {
 #ifdef DEBUG
 						cout << currentOsisID << ": CHAPTER HEADING "<< heading.c_str() << endl;
 #endif
-						writeEntry(*currentVerse, heading);
+						writeEntry(heading);
 					}
 
 					inChapterHeader = false;
 				}
 
-				SWBuf keyVal = token->getAttribute(strcmp(tokenName, "verse") ? "annotateRef" : "osisID");
+				SWBuf keyVal = token.getAttribute(strcmp(tokenName, "verse") ? "annotateRef" : "osisID");
+				// The osisID or annotateRef can be more than a single verse
+				// The first or only one is the currentVerse
 				prepareSWVerseKey(keyVal);
-				lastVerseIDs = currentVerse->ParseVerseList(keyVal, *currentVerse, true);
-
-				// set currentVerse to the first value in the keyVal
-				VerseKey *element = SWDYNAMIC_CAST(VerseKey, lastVerseIDs.GetElement(0));
-				if (element) {
-					*currentVerse = element->LowerBound().getText();
+				ListKey verseKeys = currentVerse.ParseVerseList(keyVal, currentVerse, true);
+				int memberKeyCount = verseKeys.Count();
+				if (memberKeyCount) {
+					currentVerse = verseKeys.getElement(0);
+					// See if this osisID or annotateRef refers to more than one verse.
+					// If it does, save it until all verses have been seen.
+					// At that point we will output links.
+					if (memberKeyCount > 1) {
+						linkedVerses.push_back(verseKeys);
+					}
 				}
 				else {
-					*currentVerse = lastVerseIDs.GetElement(0)->getText();
+					cout << "Error: Invalid osisID/annotateRef: " << token.getAttribute(strcmp(tokenName, "verse") ? "annotateRef" : "osisID") << endl;
 				}
 
-				strcpy(currentOsisID, currentVerse->getOSISRef());
+				strcpy(currentOsisID, currentVerse.getOSISRef());
 #ifdef DEBUG
-				cout << "Current verse is " << *currentVerse << endl;
-				cout << "osisID/annotateRef is adjusted to" << keyVal << endl;
+				cout << "Current verse is " << currentVerse << endl;
+				cout << "osisID/annotateRef is adjusted to: " << keyVal << endl;
 #endif
 
 				verseDepth = tagStack.size();
 
+#ifdef INCLUDE_TAGS
+				text.append(token);
+#endif
+				if (inWOC) {
+					text.append(wocTag);
+				}
 				return true;
 			}
 		}
+
+		// Handle WOC quotes.
+		// Note this requires transformBSP to make them into milestones
+		// Otherwise have to do it here
+		if (!strcmp(tokenName, "q")) {
+			
+			quoteStack.push(token); 
+#ifdef DEBUG_QUOTE
+			cout << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
+#endif
+			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
+				inWOC = true;
+				text.append(wocTag);
+				// This puts the quote marks in the WOC
+				token.setAttribute("who", 0); // remove the who="Jesus"
+				text.append(token);
+				return true;
+			}
+			return false;
+		}
+
 		// Handle stuff between the verses
 		// Whitespace producing empty tokens are appended to prior entry
 		// Also the quote
 		// This is a hack to get ESV to work
-		else if (!inTitle && !inVerse && token->isEmpty()) { // && !inBookHeader && !inChapterHeader) {
-			if (!strcmp(tokenName, "p") ||
-					!strcmp(tokenName, "div") ||
-					!strcmp(tokenName, "q")  ||
-					!strcmp(tokenName, "l") ||
-					!strcmp(tokenName, "lb") ||
-					!strcmp(tokenName, "lg")
-					) {
+		if (!inTitle && !inVerse && token.isEmpty()) {
+			if (!strcmp(tokenName, "div") ||
+			    !strcmp(tokenName, "q")   ||
+			    !strcmp(tokenName, "l")   ||
+			    !strcmp(tokenName, "lb")  ||
+			    !strcmp(tokenName, "lg")
+			   ) {
 #ifdef DEBUG
-					if (token) {
-						cout << currentOsisID << ": appending interverse start token " << *token << ":" << text.c_str() << endl;
-					}
+				cout << currentOsisID << ": appending interverse start token " << token << ":" << text.c_str() << endl;
 #endif
-				SWBuf tmp = token->toString();
-				writeEntry(*currentVerse, tmp);
+				SWBuf tmp = token.toString();
+				writeEntry(tmp);
 				return true;
 			}
 #ifdef DEBUG
-			else {
-				if (token) {
-					cout << currentOsisID << ": interverse start token " << *token << ":" << text.c_str() << endl;
-				}
-			}
+			cout << currentOsisID << ": interverse start token " << token << ":" << text.c_str() << endl;
 #endif
 		}
 	}
@@ -682,17 +788,16 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			exit(1);
 		}
 
-		XMLTag* topToken = 0;
-		if (!token->isEmpty()) {
-			topToken = tagStack.top();
+		if (!token.isEmpty()) {
+			XMLTag topToken = tagStack.top();
 			tagDepth = tagStack.size();
 #ifdef DEBUG_STACK
-			cout << currentOsisID << ": pop(" << tagDepth << ") " << topToken->getName() << endl;
+			cout << currentOsisID << ": pop(" << tagDepth << ") " << topToken.getName() << endl;
 #endif
 			tagStack.pop();
 
-			if (strcmp(topToken->getName(), tokenName)) {
-				cout << "Error: " << currentOsisID << ": Expected " << topToken->getName() << " found " << tokenName << endl;
+			if (strcmp(topToken.getName(), tokenName)) {
+				cout << "Error: " << currentOsisID << ": Expected " << topToken.getName() << " found " << tokenName << endl;
 //				exit(1);	// I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
 						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 			}
@@ -744,72 +849,104 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 				text.insert(titlePos, end+1);
 				text.insert(titlePos, titleTag);
 			}
-	//		text += token;
-			writeEntry(*currentVerse, text);
 
-			// If we found an osisID like osisID="Gen.1.1 Gen.1.2 Gen.1.3" we have to link Gen.1.2 and Gen.1.3 to Gen.1.1
-			VerseKey dest = *currentVerse;
-			VerseKey linkKey;
-			linkKey.AutoNormalize(0);
-			linkKey.Headings(1);	// turn on mod/testmnt/book/chap headings
-			linkKey.Persist(1);
-			for (lastVerseIDs = TOP; !lastVerseIDs.Error(); lastVerseIDs++) {
-				linkKey = lastVerseIDs;
-
-				if (linkKey.Verse()     != dest.Verse()   ||
-				    linkKey.Chapter()   != dest.Chapter() ||
-				    linkKey.Book()      != dest.Book()    ||
-				    linkKey.Testament() != dest.Testament())
-				{
-					*currentVerse = linkKey;
-					linkToEntry(dest);
-				}
+			// If we are in WOC then we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
+			if (inWOC) {
+				text.append("</q>");
 			}
+#ifdef INCLUDE_TAGS
+			text.append(token);
+#endif
+			writeEntry(text);
 
 			lastTitle = "";
-			text = "";
 			verseDepth = 0;
 			return true;
 		}
-		else if (!inTitle && !inVerse && !inBookHeader && !inChapterHeader) {
+		
+		// Handle WOC quotes.
+		// Note this requires transformBSP to make them into milestones
+		// Otherwise have to manage it here
+		if (!strcmp(tokenName, "q")) {
+			XMLTag topToken = quoteStack.top();
+#ifdef DEBUG_QUOTE
+			cout << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+#endif
+			quoteStack.pop();
+
+			// If we have found an end tag for a <q who="Jesus"> then we are done with the WOC
+			// and we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
+			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
+#ifdef DEBUG_QUOTE
+			cout << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+#endif
+				inWOC = false;
+				const char *sID = topToken.getAttribute("sID");
+				const char *eID = token.getAttribute("eID");
+				if (!sID) {
+					sID = "";
+				}
+				if (!eID) {
+					eID = "";
+				}
+				if (strcmp(sID, eID)) {
+					cout << "Error: improper nesting " << currentVerse << ": matching (sID,eID) not found (" << sID << "," << eID << ")" << endl;
+				}
+
+				// This puts the quote marks in the WOC
+				text.append(token);
+				text.append("</q>");
+				return true;
+			}
+			return false;
+		}
+
+		if (!inTitle && !inVerse && !inBookHeader && !inChapterHeader) {
 			// Is this the end of a chapter.
 			if (tagDepth == chapterDepth && (!strcmp(tokenName, "div") || !strcmp(tokenName, "chapter"))) {
+#ifdef INCLUDE_TAGS
+				text.append(token);
+				writeEntry(text);
+#endif
 				chapterDepth = 0;
 				verseDepth = 0;
-				text = "";
 				return true;
 			}
-			// Or is it the end of a book
-			else if (tagDepth == bookDepth && (!strcmp(tokenName, "div"))) {
+
+			// Is it the end of a book
+			if (tagDepth == bookDepth && (!strcmp(tokenName, "div"))) {
+#ifdef INCLUDE_TAGS
+				text.append(token);
+				writeEntry(text);
+#endif
 				bookDepth = 0;
 				chapterDepth = 0;
 				verseDepth = 0;
-				text = "";
 				return true;
 			}
-			// Or is it the end of an osis document
-			else if (!strcmp(tokenName, "osisText") || !strcmp(tokenName, "osis")) {
-				bookDepth = 0;
-				chapterDepth = 0;
-				verseDepth = 0;
-				text = "";
-				return true;
-			}
+
 			// OTHER MISC END TAGS WHEN !INVERSE
 			// Test that is between verses, or after the last is appended to the preceeding verse.
-			else if (!strcmp(tokenName, "p") ||
-					!strcmp(tokenName, "div") ||
-					!strcmp(tokenName, "q")  ||
-					!strcmp(tokenName, "l") ||
-					!strcmp(tokenName, "lb") ||
-					!strcmp(tokenName, "lg")
-					) {
-				text.append(*token);
-				writeEntry(*currentVerse, text);
-				text = "";
+			if (!strcmp(tokenName, "div") ||
+			    !strcmp(tokenName, "q")   ||
+			    !strcmp(tokenName, "l")   ||
+			    !strcmp(tokenName, "lb")  ||
+			    !strcmp(tokenName, "lg")
+			   ) {
+				text.append(token);
+				writeEntry(text);
 #ifdef DEBUG
 				cout << currentOsisID << ": appending interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
 #endif
+				return true;
+			}
+
+			// Is it the end of an osis document
+			if (!strcmp(tokenName, "osisText") || !strcmp(tokenName, "osis")) {
+				bookDepth = 0;
+				chapterDepth = 0;
+				verseDepth = 0;
+				text = "";
 				return true;
 			}
 #ifdef DEBUG
@@ -820,54 +957,158 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 	return false;
 }
 
-XMLTag* transform(XMLTag* t) {
-	static std::stack<XMLTag*> tagStack;
+/**
+ * Support normalizations necessary for a SWORD module.
+ * OSIS allows for document structure (Book, Section, Paragraph or BSP)
+ * to overlap Bible versification (Book, Chapter, Verse).
+ * Most SWORD applications need to display verses in isolation or in HTML table cells,
+ * requiring each stored entry (i.e. verses) to be well-formed xml.
+ * This routine normalizes container elements which could cross verse boundaries into milestones.
+ * For most of these OSIS elements, there is a milestone form. However, p is not milestoneable.
+ * For this reason, p is transformed into lb elements.
+ * param t the tag to transform
+ * return the transformed tag or the original one
+ */
+XMLTag transformBSP(XMLTag t) {
+	static std::stack<XMLTag> bspTagStack;
 	static int sID = 1;
 	char buf[11];
 
 	// Support simplification transformations
-	if (!t->isEmpty()) {
-		if (!t->isEndTag()) {
-			tagStack.push(t);
+	if (t.isEmpty()) {
 #ifdef DEBUG_XFORM
-			cout << currentOsisID << ": xform push (" << tagStack.size() << ") " << t->getName() << endl;
+		cout << currentOsisID << ": xform empty " << t << endl;
 #endif
-			// Transform <q> into <q sID=""/> except for <q who="Jesus">
-			if ((!strcmp(t->getName(), "q")) && (!t->getAttribute("who") || strcmp(t->getAttribute("who"), "Jesus"))) {
-				t->setEmpty(true);
-				sprintf(buf, "q%d", sID++);
-				t->setAttribute("sID", buf);
-			}
+		return t;
+	}
 
-			// Transform <p> into <lb type="x-begin-paragraph"/>
-			else if (!strcmp(t->getName(), "p")) {
-				// note there is no process that should care about type, it is there for reversability
-				t->setText("<lb type=\"x-begin-paragraph\" />");
-			}
+	const char* tagName = t.getName();
+	if (!t.isEndTag()) {
+		// Transform <q> into <q sID=""/> except for <q who="Jesus">
+		if ((!strcmp(tagName, "q")) && (!t.getAttribute("who") || strcmp(t.getAttribute("who"), "Jesus"))) {
+			t.setEmpty(true);
+			sprintf(buf, "gen%d", sID++);
+			t.setAttribute("sID", buf);
 		}
-		else {
-			XMLTag *topToken = tagStack.top();
+
+		// Transform <p> into <lb type="x-begin-paragraph"/>
+		else if (!strcmp(tagName, "p")) {
+			// note there is no process that should care about type, it is there for reversability
+			t.setText("<lb type=\"x-begin-paragraph\" />");
+		}
+
+		// Transform <tag> into <tag  sID="">, where tag is a milestoneable element.
+		// The following containers are milestoneable.
+		// abbr, closer, div, foreign, l, lg, salute, signed, speech
+		// Leaving out:
+		//   abbr	When would this ever cross a boundary?
+		//   seg	as it is used for a divineName hack
+		//   foreign	so that it can be easily italicized
+		else if (
+			 !strcmp(tagName, "chapter") ||
+			 !strcmp(tagName, "closer")  ||
+			 !strcmp(tagName, "div")     ||
+			 !strcmp(tagName, "l")       ||
+			 !strcmp(tagName, "lg")      ||
+			 !strcmp(tagName, "salute")  ||
+			 !strcmp(tagName, "signed")  ||
+			 !strcmp(tagName, "speech")
+			) {
+			t.setEmpty(true);
+			sprintf(buf, "gen%d", sID++);
+			t.setAttribute("sID", buf);
+		}
+		bspTagStack.push(t); 
 #ifdef DEBUG_XFORM
-			cout << currentOsisID << ": xform pop(" << tagStack.size() << ") " << topToken->getName() << endl;
+		cout << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t << " (tagname=" << tagName << ")" << endl;
+		XMLTag topToken = bspTagStack.top();
+		cout << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken << endl;
 #endif
-			tagStack.pop();
+	}
+	else {
+		XMLTag topToken = bspTagStack.top();
+#ifdef DEBUG_XFORM
+		cout << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken << endl;
+#endif
+		bspTagStack.pop();
 
-			// If we have found an end tag for a <q> that was transformed then transform this one as well.
-			if ((!strcmp(t->getName(), "q")) && (!strcmp(topToken->getName(), "q")) && (!topToken->getAttribute("who") || strcmp(topToken->getAttribute("who"), "Jesus"))) {
-				// make this a clone of the start tag with sID changed to eID
-				*t = *topToken;
-				t->setAttribute("eID", t->getAttribute("sID"));
-				t->setAttribute("sID", 0);
-			}
+		// If we have found an end tag for a <q> that was transformed then transform this one as well.
+		if ((!strcmp(tagName, "q")) && (!strcmp(topToken.getName(), "q")) && (!topToken.getAttribute("who") || strcmp(topToken.getAttribute("who"), "Jesus"))) {
+			// make this a clone of the start tag with sID changed to eID
+			t = topToken;
+			t.setAttribute("eID", t.getAttribute("sID"));
+			t.setAttribute("sID", 0);
+		}
 
-			// Look for paragraph tags.
-			// If we have found an end tag for a <p> that was transformed then transform this as well.
-			else if ((!strcmp(t->getName(), "p")) && (!strcmp(topToken->getName(), "lb"))) {
-				t->setText("<lb type=\"x-end-paragraph\" />");
-			}
+		// Look for paragraph tags.
+		// If we have found an end tag for a <p> that was transformed then transform this as well.
+		else if ((!strcmp(tagName, "p")) && (!strcmp(topToken.getName(), "lb"))) {
+			t.setText("<lb type=\"x-end-paragraph\" />");
+		}
+
+		// Look for the milestoneable container tags handled above.
+		else if (
+			 !strcmp(tagName, "chapter") ||
+			 !strcmp(tagName, "closer")  ||
+			 !strcmp(tagName, "div")     ||
+			 !strcmp(tagName, "l")       ||
+			 !strcmp(tagName, "lg")      ||
+			 !strcmp(tagName, "salute")  ||
+			 !strcmp(tagName, "signed")  ||
+			 !strcmp(tagName, "speech")
+			) {
+			// make this a clone of the start tag with sID changed to eID
+			t = topToken;
+			t.setAttribute("eID", t.getAttribute("sID"));
+			t.setAttribute("sID", 0);
 		}
 	}
+
 	return t;
+}
+
+/**
+ * Write out all links in the module.
+ * Waiting is necessary because writeEntry might ultimately append
+ * text to a verse moving it's offset in the data file.
+ * While we are minimizing it by postponing the write until we have
+ * gathered the next verse, the following scenario is happening:
+ * A module is using linked verses and has some verses that are not
+ * in the KJV versification. If the out-of-canon verse happens following
+ * a linked verse, the out-of-canon verse is appended to the prior
+ * verse. Care has to be taken that the linked verses all point to
+ * the first of the set.
+ */
+void writeLinks()
+{
+	// Link all the verses
+	VerseKey destKey;
+	destKey.AutoNormalize(0);
+	destKey.Headings(1);
+
+	VerseKey linkKey;
+	linkKey.AutoNormalize(0);
+	linkKey.Headings(1);
+	for (unsigned int i = 0; i < linkedVerses.size(); i++) {
+		// The verseKeys is an list of verses
+		// where the first is the real verse
+		// and the others link to it.
+		ListKey verseKeys = linkedVerses[i];
+		for (verseKeys = TOP; !verseKeys.Error(); verseKeys++) {
+			destKey = verseKeys;
+		}
+		verseKeys.setPosition(TOP);
+		destKey = verseKeys.getElement();
+		destKey.ClearBounds();
+		verseKeys.increment(1);
+
+		while (!verseKeys.Error()) {
+			linkKey = verseKeys.getElement();
+			linkKey.ClearBounds();
+			verseKeys.increment(1);
+			linkToEntry(linkKey, destKey);
+		}
+	}
 }
 
 void usage(const char *app, const char *error = 0) {
@@ -951,8 +1192,7 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef DEBUG
-	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << "\n";
-	cout << "";
+	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << endl;
 //	exit(-3);
 #endif
 
@@ -1001,16 +1241,16 @@ int main(int argc, char **argv) {
 	}
 
 	activeOsisID[0] = '\0';
+
 	strcpy(currentOsisID,"N/A");
 
-	currentVerse = new VerseKey();
-	currentVerse->AutoNormalize(0);
-	currentVerse->Headings(1);	// turn on mod/testmnt/book/chap headings
-	currentVerse->Persist(1);
+	currentVerse.AutoNormalize(0);
+	currentVerse.Headings(1);	// turn on mod/testmnt/book/chap headings
+	currentVerse.Persist(1);
 
-	module->setKey(*currentVerse);
 
-	(*module) = TOP;
+	module->setKey(currentVerse);
+	module->setPosition(TOP);
 
 	SWBuf token;
 	SWBuf text;
@@ -1054,30 +1294,33 @@ int main(int argc, char **argv) {
 			// take this isalpha if out to check for bugs in text
 			if ((isalpha(token[1])) || (isalpha(token[2]))) {
 				//cout << "Handle:" << token.c_str() << endl;
-				XMLTag *t = new XMLTag(token.c_str());
+				XMLTag t = transformBSP(token.c_str());
 
-				if (!handleToken(text, transform(t))) {
-					text.append(*t);
+				if (!handleToken(text, t)) {
+					text.append(t);
 				}
 			}
 			continue;
 		}
 
-		if (intoken)
+		if (intoken) {
 			token.append(curChar);
-		else
+		}
+		else {
 			switch (curChar) {
 				case '>' : text.append("&gt;"); break;
 				case '<' : text.append("&lt;"); break;
 				default  : text.append(curChar); break;
 			}
+		}
 	}
 
 	// Force the last entry from the text buffer.
 	text = "";
-	writeEntry(*currentVerse, text, true);
+	writeEntry(text, true);
+	writeLinks();
+
 	delete module;
-	delete currentVerse;
 	if (cipherFilter)
 		delete cipherFilter;
 	infile.close();
