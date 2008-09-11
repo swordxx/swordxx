@@ -117,11 +117,11 @@ public:
 	
 	/** Decrements a number of elements
 	 */
-	virtual void decrement(int step);
+	virtual void decrement(int step = 1);
 	
 	/** Increments a number of elements
 	 */
-	virtual void increment(int step);
+	virtual void increment(int step = 1);
 
 	virtual bool isTraversable() const { return true; }
 	virtual long Index() const { return arraypos; }

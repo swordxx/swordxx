@@ -45,8 +45,10 @@ SWORD_NAMESPACE_START
   virtual bool operator <=(const SWKey &ikey) { return (compare(ikey) < 1); } \
   SWKey &operator -=(int steps) { decrement(steps); return *this; } \
   SWKey &operator +=(int steps) { increment(steps); return *this; } \
-  SWKey &operator++(int) { return *this += 1; } \
-  SWKey &operator--(int) { return *this -= 1; }
+  SWKey &operator ++()    { increment(1); return *this; } \
+  SWKey  operator ++(int) { SWKey temp = *this; increment(1); return temp; } \
+  SWKey &operator --()    { decrement(1); return *this; } \
+  SWKey  operator --(int) { SWKey temp = *this; decrement(1); return temp; }
 
 
 /** For use with = operator to position key.

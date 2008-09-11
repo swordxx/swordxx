@@ -246,14 +246,14 @@ public:
 	* @param steps Number of verses to jump backward
 	* @return *this
 	*/
-	virtual void decrement(int steps);
+	virtual void decrement(int steps = 1);
 
 	/** Increments key a number of verses
 	*
 	* @param steps Number of verses to jump forward
 	* @return *this
 	*/
-	virtual void increment(int steps);
+	virtual void increment(int steps = 1);
 	virtual bool isTraversable() const { return true; }
 
 	virtual const char *getBookName() const;

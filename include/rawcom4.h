@@ -43,8 +43,8 @@ public:
 
 	virtual SWBuf &getRawEntryBuf();
 
-	virtual void increment(int steps);
-	virtual void decrement(int steps) { increment(-steps); }
+	virtual void increment(int steps = 1);
+	virtual void decrement(int steps = 1) { increment(-steps); }
 
 	// write interface ----------------------------
 	virtual bool isWritable();

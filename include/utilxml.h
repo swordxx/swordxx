@@ -50,6 +50,7 @@ private:
 	
 public:
 	XMLTag(const char *tagString = 0);
+	XMLTag(const XMLTag& tag);
 	~XMLTag();
 
 	void setText(const char *tagString);
