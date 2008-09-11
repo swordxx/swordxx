@@ -213,7 +213,7 @@ public:
 	* @param format The format string. Same syntax as printf, for example.
 	* @param ... Add all arguments here.
 	*/
-	void setFormatted(const char *format, ...);
+	SWBuf &setFormatted(const char *format, ...);
 
 	/**
 	* SWBuf::setSize - Size this buffer to a specific length.

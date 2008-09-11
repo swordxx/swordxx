@@ -76,7 +76,7 @@ SWBuf::SWBuf(unsigned long initSize) {
 * WARNING: This function can only write at most
 * JUNKBUFSIZE to the string per call.
 */
-void SWBuf::setFormatted(const char *format, ...) {
+SWBuf &SWBuf::setFormatted(const char *format, ...) {
 	va_list argptr;
 
 	va_start(argptr, format);
@@ -90,6 +90,7 @@ void SWBuf::setFormatted(const char *format, ...) {
 	va_start(argptr, format);
 	end = vsprintf(buf, format, argptr) + buf;
 	va_end(argptr);
+	return *this;
 }
 
 /******************************************************************************
