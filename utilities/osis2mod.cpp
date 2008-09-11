@@ -68,19 +68,21 @@ ListKey currentKeyIDs = ListKey();
 
 std::vector<ListKey> linkedVerses;
 
-const char *osisabbrevs[] = {"Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg",
-	"Ruth", "1Sam", "2Sam", "1Kgs", "2Kgs", "1Chr", "2Chr", "Ezra", "Neh",
-	"Esth", "Job", "Ps", "Prov", "Eccl", "Song", "Isa", "Jer", "Lam", "Ezek",
-	"Dan", "Hos", "Joel", "Amos", "Obad", "Jonah", "Mic", "Nah", "Hab",
-	"Zeph", "Hag", "Zech", "Mal",
+const char *osisabbrevs[] = {
+	"Gen",    "Exod",   "Lev",    "Num",    "Deut",   "Josh",   "Judg",   "Ruth",
+	"1Sam",   "2Sam",   "1Kgs",   "2Kgs",   "1Chr",   "2Chr",   "Ezra",   "Neh",
+	"Esth",   "Job",    "Ps",     "Prov",   "Eccl",   "Song",   "Isa",    "Jer",
+	"Lam",    "Ezek",   "Dan",    "Hos",    "Joel",   "Amos",   "Obad",   "Jonah",
+	"Mic",    "Nah",    "Hab",    "Zeph",   "Hag",    "Zech",   "Mal",
 
-	"Matt", "Mark", "Luke", "John", "Acts", "Rom", "1Cor", "2Cor", "Gal",
-	"Eph", "Phil", "Col", "1Thess", "2Thess", "1Tim", "2Tim", "Titus",
-	"Phlm", "Heb", "Jas", "1Pet", "2Pet", "1John", "2John", "3John",
-	"Jude", "Rev"};
+	"Matt",   "Mark",   "Luke",   "John",   "Acts",   "Rom",    "1Cor",   "2Cor",
+	"Gal",    "Eph",    "Phil",   "Col",    "1Thess", "2Thess", "1Tim",   "2Tim",
+	"Titus",  "Phlm",   "Heb",    "Jas",    "1Pet",   "2Pet",   "1John",  "2John",
+	"3John",  "Jude",   "Rev"
+};
 
 static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
-static bool normalize = true; // Whether to normalize UTF-8 to NFC
+static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
 	bool match = false;
@@ -119,51 +121,51 @@ bool isOSISAbbrev(const char *buf) {
  * author DM Smith
  */
 int detectUTF8(const char *txt) {
-    unsigned int  countUTF8 = 0;
-    int count = 0;
-    
-    // Cast it to make masking and shifting easier
-    const unsigned char *p = (const unsigned char*) txt;
-    while (*p) {
-        // Is the high order bit set?
-        if (*p & 0x80) {
-            // Then count the number of high order bits that are set.
-            // This determines the number of following bytes
-            // that are a part of the unicode character
-            unsigned char i = *p;
-            for (count = 0; i & 0x80; count++) {
-                i <<= 1;
-            }
+	unsigned int  countUTF8 = 0;
+	int           count     = 0;
+	
+	// Cast it to make masking and shifting easier
+	const unsigned char *p = (const unsigned char*) txt;
+	while (*p) {
+		// Is the high order bit set?
+		if (*p & 0x80) {
+			// Then count the number of high order bits that are set.
+			// This determines the number of following bytes
+			// that are a part of the unicode character
+			unsigned char i = *p;
+			for (count = 0; i & 0x80; count++) {
+				i <<= 1;
+			}
 
-            // Validate count:
-            // Count 0: bug in code that would cause core walking
-            // Count 1: is a pattern of 10nnnnnn,
-            //          which does not signal the start of a unicode character
-            // Count 5 to 8: 111110nn, 1111110n and 11111110 and 11111111
-            //          are not legal starts, either
-            if (count < 2 || count > 4) return 0;
+			// Validate count:
+			// Count 0: bug in code that would cause core walking
+			// Count 1: is a pattern of 10nnnnnn,
+			//          which does not signal the start of a unicode character
+			// Count 5 to 8: 111110nn, 1111110n and 11111110 and 11111111
+			//          are not legal starts, either
+			if (count < 2 || count > 4) return 0;
 
-            // At this point we expect (count - 1) following characters
-            // of the pattern 10nnnnnn
-            while (--count && *++p) {
-                // The pattern of each following character must be: 10nnnnnn
-                // So, compare the top 2 bits.
-                if ((0xc0 & *p) != 0x80) return  0;
-            }
+			// At this point we expect (count - 1) following characters
+			// of the pattern 10nnnnnn
+			while (--count && *++p) {
+				// The pattern of each following character must be: 10nnnnnn
+				// So, compare the top 2 bits.
+				if ((0xc0 & *p) != 0x80) return  0;
+			}
 
-            // Oops, we've run out of bytes too soon: Cannot be UTF-8
-            if (count) return 0;
+			// Oops, we've run out of bytes too soon: Cannot be UTF-8
+			if (count) return 0;
 
-            // We have a valid UTF-8 character, so count it
-            countUTF8++;
-        }
+			// We have a valid UTF-8 character, so count it
+			countUTF8++;
+		}
 
-        // Advance to the next character to examine.
-        p++;
-    }
-    
-    // At this point it is either UTF-8 or 7-bit ascii
-    return countUTF8 ? 1 : -1;
+		// Advance to the next character to examine.
+		p++;
+	}
+	
+	// At this point it is either UTF-8 or 7-bit ascii
+	return countUTF8 ? 1 : -1;
 }
 
 // This routine converts an osisID or osisRef into one that SWORD can parse into a verse list
@@ -369,96 +371,96 @@ void writeEntry(SWBuf &text, bool force = false) {
 		return;
 	}
 
-		strcpy(keyOsisID, currentVerse.getOSISRef());
+	strcpy(keyOsisID, currentVerse.getOSISRef());
 
-		// set keyOsisID to anything that an osisID cannot be.
-		if (force) {
-			strcpy(keyOsisID, "-force");
+	// set keyOsisID to anything that an osisID cannot be.
+	if (force) {
+		strcpy(keyOsisID, "-force");
+	}
+
+	static VerseKey lastKey;
+	lastKey.AutoNormalize(0);
+	lastKey.Headings(1);
+
+	VerseKey saveKey;
+	saveKey.AutoNormalize(0);
+	saveKey.Headings(1);
+	saveKey = currentVerse;
+
+	// If we have seen a verse and the supplied one is different then we output the collected one.
+	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
+
+		currentVerse = lastKey;
+
+		if (!isKJVRef(currentVerse)) {
+			makeKJVRef(currentVerse);
 		}
-
-		static VerseKey lastKey;
-		lastKey.AutoNormalize(0);
-		lastKey.Headings(1);
-
-		VerseKey saveKey;
-		saveKey.AutoNormalize(0);
-		saveKey.Headings(1);
-		saveKey = currentVerse;
-
-		// If we have seen a verse and the supplied one is different then we output the collected one.
-		if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
-
-			currentVerse = lastKey;
-
-			if (!isKJVRef(currentVerse)) {
-				makeKJVRef(currentVerse);
-			}
 
 #ifdef _ICU_
-			int utf8State = detectUTF8(activeVerseText.c_str());
-			if (normalize) {
-				// Don't need to normalize text that is ASCII
-				// But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
-				if (!utf8State) {
-					cout << "Warning: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
-					converter.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
-					converted++;
+		int utf8State = detectUTF8(activeVerseText.c_str());
+		if (normalize) {
+			// Don't need to normalize text that is ASCII
+			// But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
+			if (!utf8State) {
+				cout << "Warning: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
+				converter.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+				converted++;
 
-					// Prepare for double check. This probably can be removed.
-					// But for now we are running the check again.
-					// This is to determine whether we need to normalize output of the conversion.
-					utf8State = detectUTF8(activeVerseText.c_str());
-				}
+				// Prepare for double check. This probably can be removed.
+				// But for now we are running the check again.
+				// This is to determine whether we need to normalize output of the conversion.
+				utf8State = detectUTF8(activeVerseText.c_str());
+			}
 
-				// Double check. This probably can be removed.
-				if (!utf8State) {
-					cout << "Error: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
-				}
+			// Double check. This probably can be removed.
+			if (!utf8State) {
+				cout << "Error: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
+			}
 
-				if (utf8State > 0) {
-					SWBuf before = activeVerseText;
-					normalizer.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
-					if (before != activeVerseText) {
-						normalized++;
-					}
+			if (utf8State > 0) {
+				SWBuf before = activeVerseText;
+				normalizer.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+				if (before != activeVerseText) {
+					normalized++;
 				}
 			}
+		}
 #endif
 
-			// If the entry already exists, then append this entry to the text.
-			// This is for verses that are outside the KJV versification. They are appended to the prior verse.
-			// The space should not be needed if we retained verse tags.
-			SWBuf currentText = module->getRawEntry();
-			if (currentText.length()) {
-				cout << "Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
-				activeVerseText = currentText + " " + activeVerseText;
-			}
+		// If the entry already exists, then append this entry to the text.
+		// This is for verses that are outside the KJV versification. They are appended to the prior verse.
+		// The space should not be needed if we retained verse tags.
+		SWBuf currentText = module->getRawEntry();
+		if (currentText.length()) {
+			cout << "Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+			activeVerseText = currentText + " " + activeVerseText;
+		}
 
 #ifdef DEBUG
-			cout << "Write: " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+		cout << "Write: " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
 #endif
 
-			module->setEntry(activeVerseText);
-			activeVerseText = "";
-		}
+		module->setEntry(activeVerseText);
+		activeVerseText = "";
+	}
 
-		// The following is for initial verse content and for appending interverse content.
-		// Eliminate leading whitespace on the beginning of each verse and
-		// before we append to current content, since we just added one
-		text.trimStart();
-		if (activeVerseText.length()) {
-			activeVerseText += " ";
-			activeVerseText += text;
-		}
-		else {
-			activeVerseText = text;
-		}
-		// text has been consumed so clear it out.
-		text = "";
+	// The following is for initial verse content and for appending interverse content.
+	// Eliminate leading whitespace on the beginning of each verse and
+	// before we append to current content, since we just added one
+	text.trimStart();
+	if (activeVerseText.length()) {
+		activeVerseText += " ";
+		activeVerseText += text;
+	}
+	else {
+		activeVerseText = text;
+	}
+	// text has been consumed so clear it out.
+	text = "";
 
-		currentVerse = saveKey;
-		lastKey = currentVerse;
-		strcpy(activeOsisID, keyOsisID);
+	currentVerse = saveKey;
+	lastKey = currentVerse;
+	strcpy(activeOsisID, keyOsisID);
 }
 
 
@@ -486,28 +488,28 @@ void linkToEntry(VerseKey& linkKey, VerseKey& dest) {
 bool handleToken(SWBuf &text, XMLTag token) {
 
 	// Everything between the begin book tag and the first begin chapter tag is inBookHeader
-	static bool inBookHeader    = false;
+	static bool               inBookHeader    = false;
 
 	// Everything between the begin chapter tag and the first begin verse tag is inChapterHeader
-	static bool inChapterHeader = false;
+	static bool               inChapterHeader = false;
 
 	// Flags indicating whether we are processing the content of a verse
-	static bool inVerse = false;
+	static bool               inVerse         = false;
 
 	// Used to remember titles that need to be handle specially
-	static SWBuf header = "";
-	static SWBuf lastTitle = "";
-	static int titleOffset = -1;
-	static bool inTitle = false;
-	static int titleDepth = 0;
+	static SWBuf              header          = "";
+	static SWBuf              lastTitle       = "";
+	static int                titleOffset     = -1;
+	static bool               inTitle         = false;
+	static int                titleDepth      = 0;
 
 	// Flag indicating whether we are in "Words of Christ"
-	static bool inWOC = false;
+	static bool               inWOC           = false;
 	// Tag for WOC quotes within a verse
-	static XMLTag wocTag = "<q who=\"Jesus\" marker=\"\">";
+	static XMLTag             wocTag          = "<q who=\"Jesus\" marker=\"\">";
 
 	// Flag used to indicate where useful text begins
-	static bool firstDiv = false;
+	static bool               firstDiv        = false;
 
 	// Stack of quote elements used to handle Words of Christ
 	static std::stack<XMLTag> quoteStack;
@@ -520,14 +522,14 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	static std::stack<XMLTag> tagStack;
 
 	// The following are used to validate well-formedness
-	static int chapterDepth = 0;
-	static int bookDepth = 0;
-	static int verseDepth = 0;
+	static int                chapterDepth    = 0;
+	static int                bookDepth       = 0;
+	static int                verseDepth      = 0;
 
-	int tagDepth = tagStack.size();
-	const char *tokenName = token.getName();
-	bool isEndTag = token.isEndTag() || token.getAttribute("eID");
-	const char *typeAttr = token.getAttribute("type");
+	int                       tagDepth        = tagStack.size();
+	const char               *tokenName       = token.getName();
+	bool                      isEndTag        = token.isEndTag() || token.getAttribute("eID");
+	const char               *typeAttr        = token.getAttribute("type");
 
 	//Titles are treated specially.
 	// If the title has an attribute type of "main" or "chapter"
@@ -740,7 +742,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Otherwise have to do it here
 		if (!strcmp(tokenName, "q")) {
 			
-			quoteStack.push(token); 
+			quoteStack.push(token);
 #ifdef DEBUG_QUOTE
 			cout << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
 #endif
@@ -878,7 +880,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			// and we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
 			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
 #ifdef DEBUG_QUOTE
-			cout << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+				cout << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
 #endif
 				inWOC = false;
 				const char *sID = topToken.getAttribute("sID");
@@ -1004,8 +1006,7 @@ XMLTag transformBSP(XMLTag t) {
 		//   abbr	When would this ever cross a boundary?
 		//   seg	as it is used for a divineName hack
 		//   foreign	so that it can be easily italicized
-		else if (
-			 !strcmp(tagName, "chapter") ||
+		else if (!strcmp(tagName, "chapter") ||
 			 !strcmp(tagName, "closer")  ||
 			 !strcmp(tagName, "div")     ||
 			 !strcmp(tagName, "l")       ||
@@ -1018,7 +1019,7 @@ XMLTag transformBSP(XMLTag t) {
 			sprintf(buf, "gen%d", sID++);
 			t.setAttribute("sID", buf);
 		}
-		bspTagStack.push(t); 
+		bspTagStack.push(t);
 #ifdef DEBUG_XFORM
 		cout << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t << " (tagname=" << tagName << ")" << endl;
 		XMLTag topToken = bspTagStack.top();
@@ -1047,8 +1048,7 @@ XMLTag transformBSP(XMLTag t) {
 		}
 
 		// Look for the milestoneable container tags handled above.
-		else if (
-			 !strcmp(tagName, "chapter") ||
+		else if (!strcmp(tagName, "chapter") ||
 			 !strcmp(tagName, "closer")  ||
 			 !strcmp(tagName, "div")     ||
 			 !strcmp(tagName, "l")       ||
