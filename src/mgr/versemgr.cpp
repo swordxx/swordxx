@@ -30,7 +30,7 @@
 
 using std::vector;
 using std::map;
-
+using std::distance;
 using std::lower_bound;
 
 SWORD_NAMESPACE_START
