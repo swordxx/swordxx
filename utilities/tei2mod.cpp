@@ -63,6 +63,9 @@ int converted = 0;
 SWLD  *module       = NULL;
 SWKey *currentKey   = NULL;
 bool   normalize    = true;
+SWBuf keyStr;
+
+unsigned long entryCount = 0;
 
 /**
  * Determine whether the string contains a valid unicode sequence.
@@ -172,7 +175,7 @@ void normalizeInput(SWKey &key, SWBuf &text) {
 
 void writeEntry(SWKey &key, SWBuf &text) {
 #ifdef DEBUG
-	cout << key << endl;
+	cout << "(" << entryCount << ") " << key << endl;
 #endif
 
 	module->setKey(key);
@@ -182,16 +185,12 @@ void writeEntry(SWKey &key, SWBuf &text) {
 	module->setEntry(text);
 }
 
-void linkToEntry(SWBuf &keyBuf, vector<string> &linkBuf) {
-
-/*
-	char links = linkBuf.size();
-	for (int i = 0; i < links; i++) {
-		SWKey tmpkey = linkBuf[i].c_str();
-		module->linkEntry(&tmpkey);
-		cout << "Linking: " << linkBuf[i] << endl;
-	}
-*/
+void linkToEntry(SWBuf &keyBuf, SWBuf &linkBuf) {
+       	SWKey tmpkey = linkBuf.c_str();
+	module->linkEntry(&tmpkey);
+#ifdef DEBUG
+	cout << "(" << entryCount << ") " << "Linking: " << linkBuf << endl;
+#endif
 }
 
 // Return true if the content was handled or is to be ignored.
@@ -199,7 +198,6 @@ void linkToEntry(SWBuf &keyBuf, vector<string> &linkBuf) {
 bool handleToken(SWBuf &text, XMLTag *token) {
         // The start token for the current entry;
 	static XMLTag startTag;
-	static SWBuf  keyBuf;
 
         // Flags to indicate whether we are in a entry, entryFree or superentry
         static bool inEntry      = false;
@@ -207,6 +205,10 @@ bool handleToken(SWBuf &text, XMLTag *token) {
         static bool inSuperEntry = false;
 
 	const char *tokenName = token->getName();
+
+        static const char *splitPtr, *splitPtr2 = NULL;
+        static char *splitBuffer	= new char[4096];
+	static SWKey tmpKey;
 //-- START TAG -------------------------------------------------------------------------
 	if (!token->isEndTag()) {
 
@@ -221,7 +223,14 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 #endif
 				startTag    = *token;
 				text        = "";
-				*currentKey = token->getAttribute("key");
+
+                                keyStr = token->getAttribute("n"); // P5 with linking and/or non-URI chars
+                                if (!strlen(keyStr)) {
+	                                keyStr = token->getAttribute("sortKey"); // P5 otherwise
+	                                if (!strlen(keyStr)) {
+        					keyStr = token->getAttribute("key"); // P4
+                                        }
+                                }
 
 				return false; // make tag be part of the output
 			}
@@ -245,7 +254,52 @@ bool handleToken(SWBuf &text, XMLTag *token) {
 			inEntryFree   = false;
 			inSuperEntry  = false;
 			text         += token->toString();
-			writeEntry(*currentKey, text);
+
+                        entryCount++;
+#ifdef DEBUG
+			cout << "keyStr: " << keyStr << endl;
+#endif
+                        splitPtr = strstr(keyStr, "|");
+                        if (splitPtr) {
+                                strncpy (splitBuffer, keyStr.c_str(), splitPtr - keyStr.c_str());
+                                splitBuffer[splitPtr - keyStr.c_str()] = 0;
+				*currentKey = splitBuffer;
+#ifdef DEBUG
+				cout << "splitBuffer: " << splitBuffer << endl;
+				cout << "currentKey: " << *currentKey << endl;
+#endif
+				writeEntry(*currentKey, text);
+#if 0
+                                while (splitPtr) {
+                                	splitPtr += 1;
+                                	splitPtr2 = strstr(splitPtr, "|");
+                                        entryCount++;
+                                        if (splitPtr2) {
+						strncpy (splitBuffer, splitPtr, splitPtr2 - splitPtr);
+                                                splitBuffer[splitPtr2 - splitPtr] = 0;
+#ifdef DEBUG
+						cout << "splitBuffer: " << splitBuffer << endl;
+						cout << "currentKey: " << *currentKey << endl;
+#endif
+						linkToEntry(currentKey->getText(), splitBuffer);
+                        	                splitPtr = splitPtr2;
+                                        }
+                                        else {
+						strcpy (splitBuffer, splitPtr);
+#ifdef DEBUG
+       	       					cout << "splitBuffer: " << splitBuffer << endl;
+						cout << "currentKey: " << *currentKey << endl;
+#endif
+						linkToEntry(currentKey->getText(), splitBuffer);
+                                                splitPtr = 0;
+                                        }
+                                }
+#endif
+                        }
+                        else {
+				*currentKey = keyStr;
+				writeEntry(*currentKey, text);
+                        }
 
 			// Since we consumed the text, clear it
 			// and tell the caller that the tag was consumed.
@@ -448,6 +502,7 @@ int main(int argc, char **argv) {
 			if (!handleToken(text, t)) {
 				text.append(*t);
 			}
+                        delete t;
 			continue;
 		}
 
