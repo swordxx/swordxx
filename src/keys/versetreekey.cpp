@@ -92,7 +92,7 @@ int VerseTreeKey::getBookAbbrev(const char *iabbr)
 		books.push_back(sbook(iabbr));
 */
 	}
-	return 0;
+	return bookno;
 }
 
 /******************************************************************************
