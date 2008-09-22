@@ -28,7 +28,13 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static final String GENBOOKS = "Generic Books";
 	public static final String DAILYDEVOS = "Daily Devotional";
 
-	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, null);
+	static java.util.Properties p = new java.util.Properties();
+	static {
+		p.setProperty("com.sun.CORBA.codeset.charsets", "0x05010001, 0x00010109");    // UTF-8, UTF-16
+		p.setProperty("com.sun.CORBA.codeset.wcharsets", "0x00010109, 0x05010001");    // UTF-16, UTF-8
+	}
+
+	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, p);
 	static Hashtable clients = new Hashtable();
 	String ior = null;
 	String remoteAddr = null;
