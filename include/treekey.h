@@ -128,7 +128,7 @@ public:
 
 	/** Set the key to this path.  If the path doesn't exist, then
 	 *	nodes are created as necessary
-	 * @keyPath = path to set/create; if unsupplied, then use any unsnapped setText value.
+	 * @param keyPath path to set/create; if unsupplied, then use any unsnapped setText value.
 	 */
 	virtual void assureKeyPath(const char *keyPath = 0);
 	virtual void save() {}

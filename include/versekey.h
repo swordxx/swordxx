@@ -186,7 +186,7 @@ public:
 	/** sets the lower boundary for this	VerseKey
 	* and returns the new boundary
 	*
-	* @param lb the new lower boundary for this	VerseKey
+	* @param ub the new upper boundary for this	VerseKey
 	* @return the lower boundary the key was set to
 	*/
 	VerseKey &LowerBound(const VerseKey &ub);

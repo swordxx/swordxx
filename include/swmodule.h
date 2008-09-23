@@ -450,7 +450,7 @@ public:
 	/** Adds a RenderFilter to this module's renderFilters queue.
 	 *	Render Filters are called when the module is asked to produce
 	 *	renderable text.
-	 * @param newFilter the filter to add
+	 * @param newfilter the filter to add
 	 * @return *this
 	 */
 	virtual SWModule &AddRenderFilter(SWFilter *newfilter) {

@@ -54,6 +54,7 @@ public:
 	/**
 	* VerseKey Constructor - initializes Instance of VerseKey
 	*
+	* @param treeKey a TreeKey which will form the basis of this VerseTreeKey
 	* @param ikey text key (will take various forms of 'BOOK CH:VS'.
 	* See parse() for more detailed information)
 	*/
@@ -62,6 +63,7 @@ public:
 	/**
 	* VerseKey Constructor - initializes instance of VerseKey
 	*
+	* @param treeKey a TreeKey which will form the basis of this VerseTreeKey
 	* @param ikey base key (will take various forms of 'BOOK CH:VS'.
 	*	See parse() for more detailed information)
 	*/	
@@ -70,6 +72,7 @@ public:
 	/** VerseKey Constructor - initializes instance of VerseKey
 	* with boundariess - see also LowerBound()
 	* and UpperBound()
+	* @param treeKey a TreeKey which will form the basis of this VerseTreeKey
 	* @param min the lower boundary of the new	VerseKey
 	* @param max the upper boundary of the new	VerseKey
 	*/	
