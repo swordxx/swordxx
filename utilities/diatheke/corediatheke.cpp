@@ -208,7 +208,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				manager.setGlobalOption("Variants", "Secondary Readings");
 	}
 	else
-		manager.setGlobalOption("Transliteration", "Primary Readings");
+		manager.setGlobalOption("Variants", "Primary Readings");
 
 	if (optionfilters & OP_TRANSLITERATOR && script)
                 manager.setGlobalOption("Transliteration", script);
