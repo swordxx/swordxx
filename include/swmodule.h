@@ -103,7 +103,7 @@ protected:
 	char *modname;
 	char *moddesc;
 	char *modtype;
-	char *modlang;  
+	char *modlang;
 
 	char direction;
 	char markup;
@@ -170,7 +170,7 @@ public:
 	/**
 	 * @return  True if this module is encoded in Unicode, otherwise returns false.
 	 */
-	virtual const bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
+	virtual bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
 
 	// These methods are useful for modules that come from a standard SWORD install (most do).
 	// SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
@@ -182,7 +182,7 @@ public:
 	/**
 	 * @return The size of the text entry for the module's current key position.
 	 */
-	virtual const int getEntrySize() const { return entrySize; }
+	virtual int getEntrySize() const { return entrySize; }
 
 	/**
 	 * Sets a key to this module for position to a particular record
@@ -206,7 +206,7 @@ public:
 	 * @deprecated Use setKey() instead.
 	 */
 	char SetKey(const SWKey &ikey) { return setKey(ikey); }
-	/** 
+	/**
 	 * @deprecated Use setKey() instead.
 	 */
 	char Key(const SWKey & ikey) { return setKey(ikey); }
@@ -235,12 +235,12 @@ public:
 	 * gets the key text for the module.
 	 * do we really need this?
 	 */
-	 
+
 	virtual const char *getKeyText() const {
 		return *getKey();
 	}
 
-	
+
 	virtual long Index() const { return entryIndex; }
 	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
 
@@ -262,7 +262,7 @@ public:
 	 */
 	virtual void setDisplay(SWDisplay * idisp);
 
-	/** 
+	/**
 	 * @deprecated Use get/setDisplay() instead.
 	 */
 	SWDisplay *Disp(SWDisplay * idisp = 0) {
@@ -659,7 +659,7 @@ public:
 	 */
 	virtual bool isProcessEntryAttributes() const { return procEntAttr; }
 
-	
+
 	// SWSearchable Interface Impl -----------------------------------------------
 	virtual signed char createSearchFramework(
 			void (*percent) (char, void *) = &nullPercent,
