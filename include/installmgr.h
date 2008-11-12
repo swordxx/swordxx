@@ -41,6 +41,7 @@ typedef std::map<SWBuf, InstallSource *> InstallSourceMap;
 class SWDLLEXPORT InstallMgr {
 
 protected:
+	bool userDisclaimerConfirmed;
 	std::set<SWBuf> defaultMods;
 	char *privatePath;
 	StatusReporter *statusReporter;
@@ -74,6 +75,32 @@ public:
 	virtual int installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is = 0);
 	
 	virtual int refreshRemoteSource(InstallSource *is);
+	virtual int refreshRemoteSourceConfiguration();
+	/* user disclaimer should ask user for confirmation of 2 critical items:
+	 * and the default answer should be NO
+	 * (possible wrong language of disclaimer)
+	 *
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
+		cout << "Although Install Manager provides a convenient way for installing\n";
+		cout << "and upgrading SWORD components, it also uses a systematic method\n";
+		cout << "for accessing sites which gives packet sniffers a target to lock\n";
+		cout << "into for singling out users. \n\n\n";
+		cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
+		cout << "YOU SHOULD *NOT* USE INSTALL MANAGER'S REMOTE SOURCE FEATURES.\n\n\n";
+		cout << "Also, Remote Sources other than CrossWire may contain less than\n";
+		cout << "quality modules, module with unorthodox content, or even modules\n";
+		cout << "which are not legitimately distributable.  Many repositories\n";
+		cout << "contain wonderfully useful content.  These repositories simpley\n";
+		cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
+		cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
+		cout << "If you understand this and are willing to enable remote source features\n";
+		cout << "then type yes at the prompt\n\n";
+		cout << "enable? [no] ";
+	*/
+
+	bool isUserDisclaimerConfirmed() const { return userDisclaimerConfirmed; }
+	void setUserDisclaimerConfirmed(bool val) { userDisclaimerConfirmed = val; }
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
 	void setFTPPassive(bool passive) { this->passive = passive; }
 	void terminate();
