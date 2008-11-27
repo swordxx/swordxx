@@ -149,6 +149,8 @@ USEUNIT("..\..\src\modules\texts\rawtext4\rawtext4.cpp");
 USEUNIT("..\..\src\modules\comments\rawcom4\rawcom4.cpp");
 USEUNIT("..\..\src\modules\common\rawverse4.cpp");
 USEUNIT("..\..\src\modules\filters\teihtmlhref.cpp");
+USEUNIT("..\..\src\mgr\versemgr.cpp");
+USEUNIT("..\..\src\modules\filters\osisruby.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

@@ -58,6 +58,7 @@
 #include <osislemma.h>
 #include <osisredletterwords.h>
 #include <osismorphsegmentation.h>
+#include <osisruby.h>
 #include <osisscripref.h>
 #include <thmlstrongs.h>
 #include <thmlfootnotes.h>
@@ -175,6 +176,10 @@ void SWMgr::init() {
 
 	tmpFilter = new OSISMorphSegmentation();
 	optionFilters.insert(OptionFilterMap::value_type("OSISMorphSegmentation", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISRuby();
+	optionFilters.insert(OptionFilterMap::value_type("OSISRuby", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLStrongs();

@@ -53,6 +53,7 @@ OSISFIL += $(filtersdir)/osisscripref.cpp
 OSISFIL += $(filtersdir)/osisvariants.cpp
 OSISFIL += $(filtersdir)/osiswordjs.cpp
 OSISFIL += $(filtersdir)/osismorphsegmentation.cpp
+OSISFIL += $(filtersdir)/osisruby.cpp 
 
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp
