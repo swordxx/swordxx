@@ -371,6 +371,10 @@ void makeKJVRef(VerseKey &key) {
 void writeEntry(SWBuf &text, bool force = false) {
 	char keyOsisID[255];
 
+	static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev:$\"/>";
+	static bool firstOT = true;
+	static bool firstNT = true;
+
 	if (!inCanonicalOSISBook) {
 		return;
 	}
@@ -430,6 +434,28 @@ void writeEntry(SWBuf &text, bool force = false) {
 			}
 		}
 #endif
+
+		// Put the revision into the module
+		int testmt = currentVerse.Testament();
+		if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
+			VerseKey t;
+			t.AutoNormalize(0);
+			t.Headings(1);
+			t = currentVerse;
+			currentVerse.Book(0);
+			currentVerse.Chapter(0);
+			currentVerse.Verse(0);
+			module->setEntry(revision);
+			currentVerse = t;
+			switch (testmt) {
+			case 1:
+				firstOT = false;
+				break;
+			case 2:
+				firstNT = false;
+				break;
+			}
+                }
 
 		// If the entry already exists, then append this entry to the text.
 		// This is for verses that are outside the KJV versification. They are appended to the prior verse.
