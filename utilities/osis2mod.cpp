@@ -33,7 +33,7 @@
 //#define DEBUG_XFORM
 
 // Debug for Words of Christ (aka WOC)
-#define DEBUG_QUOTE
+//#define DEBUG_QUOTE
 
 // Debug for parsing osisRefs
 //#define DEBUG_REF
@@ -41,6 +41,10 @@
 // Debug for tag stack
 //#define DEBUG_STACK
 
+// Debug for titles
+//#define DEBUG_TITLE
+
+//Include all tags starting with the first div in the module
 //#define INCLUDE_TAGS
 
 #ifndef NO_SWORD_NAMESPACE
@@ -554,7 +558,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
 		lastTitle.append(token); //</title>
 
-#ifdef DEBUG
+#ifdef DEBUG_TITLE
 		cout << currentOsisID << ":" << endl;
 		cout << "\tlastTitle:      " << lastTitle.c_str() << endl;
 		cout << "\ttext-lastTitle: " << text.c_str()+titleOffset << endl;
@@ -586,6 +590,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// throw away everything up to the first div
 		if (!firstDiv && !strcmp(tokenName, "div")) {
 			firstDiv = true;
+#ifdef DEBUG
+			cout << "Found first div and pitching prior material: " << text << endl;
+#endif
 			text     = "";
 		}
 
@@ -597,7 +604,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if ((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "book"))) {
 				inVerse = false;
 				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
-#ifdef DEBUG
+#ifdef DEBUG_TITLE
 					cout << currentOsisID << ": HEADING ";
 #endif
 					currentVerse.Testament(0);
@@ -606,10 +613,15 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					currentVerse.Verse(0);
 					writeEntry(text);
 				}
-				strcpy(currentOsisID, token.getAttribute("osisID"));
-				currentVerse = currentOsisID;
+				// Initializing a temporary and copying that because there were problems with setting the text directly
+				VerseKey t;
+				t.AutoNormalize(0);
+				t.Headings(1);
+				t = token.getAttribute("osisID");
+				currentVerse = t;
 				currentVerse.Chapter(0);
 				currentVerse.Verse(0);
+				strcpy(currentOsisID, currentVerse.getOSISRef());
 				inBookHeader = true;
 				inChapterHeader = false;
 				lastTitle = "";
@@ -618,6 +630,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				verseDepth = 0;
 
 				inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID"));
+#ifdef DEBUG
+				cout << "Current book is " << currentVerse << (!inCanonicalOSISBook ? "not in KJV, ignoring" : "") << endl;
+#endif
 
 #ifndef INCLUDE_TAGS
 				return true;
@@ -632,15 +647,25 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			   ) {
 				inVerse = false;
 				if (inBookHeader) {
-#ifdef DEBUG
+#ifdef DEBUG_TITLE
 					cout << currentOsisID << ": BOOK HEADING "<< text.c_str() << endl;
 #endif
 					writeEntry(text);
 				}
 
-				strcpy(currentOsisID, token.getAttribute("osisID"));
-				currentVerse = currentOsisID;
+				// I don't know why, but I cannot do the following,
+				// as it does not change the content of VerseKey!
+				// currentVerse = token.getAttribute("osisID");
+				VerseKey t;
+				t.AutoNormalize(0);
+				t.Headings(1);
+				t = token.getAttribute("osisID");
+				currentVerse = t;
 				currentVerse.Verse(0);
+#ifdef DEBUG
+				cout << "Current chapter is " << currentVerse << " (" << token.getAttribute("osisID") << ")" << endl;
+#endif
+				strcpy(currentOsisID, currentVerse.getOSISRef());
 				inBookHeader = false;
 				inChapterHeader = true;
 				lastTitle = "";
@@ -691,7 +716,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 
 					if (heading.length()) {
-#ifdef DEBUG
+#ifdef DEBUG_TITLE
 						cout << currentOsisID << ": CHAPTER HEADING "<< heading.c_str() << endl;
 #endif
 						writeEntry(heading);
@@ -761,7 +786,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Whitespace producing empty tokens are appended to prior entry
 		// Also the quote
 		// This is a hack to get ESV to work
-		if (!inTitle && !inVerse && token.isEmpty()) {
+		// Don't write if there is not a valid osisID yet.
+		if (!inTitle && !inVerse && token.isEmpty() && strcmp(currentOsisID, "N/A")) {
 			if (!strcmp(tokenName, "div") ||
 			    !strcmp(tokenName, "q")   ||
 			    !strcmp(tokenName, "l")   ||
@@ -815,7 +841,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			if (lastTitle.length()) {
 				const char* end = strchr(lastTitle, '>');
-#ifdef DEBUG
+#ifdef DEBUG_TITLE
 				cout << currentOsisID << ":" << endl;
 				cout << "\t" << lastTitle << endl;
 	 			cout << "\tlength=" << int(end+1 - lastTitle.c_str()) << ", tag:" << lastTitle.c_str() << endl;
@@ -823,7 +849,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 				SWBuf titleTagText;
 				titleTagText.append(lastTitle.c_str(), end+1 - lastTitle.c_str());
-#ifdef DEBUG
+#ifdef DEBUG_TITLE
 				cout << currentOsisID << ": tagText: " << titleTagText.c_str() << endl;;
 #endif
 
@@ -930,6 +956,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			// OTHER MISC END TAGS WHEN !INVERSE
 			// Test that is between verses, or after the last is appended to the preceeding verse.
 			if (!strcmp(tokenName, "div") ||
+			    !strcmp(tokenName, "chapter") ||
 			    !strcmp(tokenName, "q")   ||
 			    !strcmp(tokenName, "l")   ||
 			    !strcmp(tokenName, "lb")  ||
