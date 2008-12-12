@@ -40,6 +40,8 @@ void StatusReporter::statusUpdate(double dtTotal, double dlNow) {
 FTPTransport::FTPTransport(const char *host, StatusReporter *statusReporter) {
 	this->statusReporter = statusReporter;
 	this->host = host;
+	u = "ftp";
+	p = "installmgr@user.com";
 	term = false;
 }
 

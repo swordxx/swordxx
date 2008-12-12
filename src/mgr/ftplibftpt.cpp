@@ -43,7 +43,7 @@ char FTPLibFTPTransport::assureLoggedIn() {
 	if (ftpConnection == 0) {
 		SWLog::getSystemLog()->logDebug("connecting to host %s\n", host.c_str());
 		if (FtpConnect(host, &ftpConnection))
-			if (FtpLogin("anonymous", "installmgr@user.com", ftpConnection)) {
+			if (FtpLogin(u.c_str(), p.c_str(), ftpConnection)) {
 				retVal = 0;
 			}
 			else {

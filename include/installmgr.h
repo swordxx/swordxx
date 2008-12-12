@@ -22,12 +22,15 @@ public:
 	InstallSource(const char *type, const char *confEnt = 0);
 	virtual ~InstallSource();
 	SWBuf getConfEnt() {
-		return caption +"|" + source + "|" + directory;
+		return caption +"|" + source + "|" + directory + "|" + u + "|" + p;
 	}
-	SWBuf type;
+	SWBuf caption;
 	SWBuf source;
 	SWBuf directory;
-	SWBuf caption;
+	SWBuf u;
+	SWBuf p;
+
+	SWBuf type;
 	SWBuf localShadow;
 	void *userData;
 	SWMgr *getMgr();
@@ -46,6 +49,7 @@ protected:
 	char *privatePath;
 	StatusReporter *statusReporter;
 	bool passive;
+	SWBuf u, p;
 	
 	// override this method and provide your own custom FTPTransport subclass
 	virtual FTPTransport *createFTPTransport(const char *host, StatusReporter *statusReporter);
@@ -67,7 +71,7 @@ public:
 	InstallSourceMap sources;
 	bool term;
 
-	InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0);
+	InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0, SWBuf u="ftp", SWBuf p="installmgr@user.com");
 	virtual ~InstallMgr();
 
 	virtual int removeModule(SWMgr *manager, const char *modName);

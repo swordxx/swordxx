@@ -109,7 +109,8 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 	if (session) {
 		curl_easy_setopt(session, CURLOPT_URL, sourceURL);
 	
-		curl_easy_setopt(session, CURLOPT_USERPWD, "ftp:installmgr@user.com");
+		SWBuf credentials = u + ":" + p;
+		curl_easy_setopt(session, CURLOPT_USERPWD, credentials.c_str());
 		curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, my_fwrite);
 		if (!passive)
 			curl_easy_setopt(session, CURLOPT_FTPPORT, "-");

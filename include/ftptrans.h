@@ -38,6 +38,8 @@ protected:
 	bool passive;
 	bool term;
 	SWBuf host;
+	SWBuf u;
+	SWBuf p;
 	
 public:
 	FTPTransport(const char *host, StatusReporter *statusReporter = 0);
@@ -55,6 +57,8 @@ public:
 
 	virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
 	void setPassive(bool passive) { this->passive = passive; }
+	void setUser(const char *user) { u = user; }
+	void setPasswd(const char *passwd) { p = passwd; }
 	void terminate() { term = true; }
 };
 

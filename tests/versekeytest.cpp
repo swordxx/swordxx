@@ -9,7 +9,17 @@
 using namespace sword;
 #endif
 
+using std::cout;
+using std::endl;
+
 int main(int argc, char **argv) {
+VerseKey currentVerse;
+currentVerse.AutoNormalize(0);
+currentVerse.Headings(1);
+currentVerse.Persist(1);
+currentVerse = "jn2";
+cout << currentVerse << endl;
+/*
 	VerseKey parser;
 
      ListKey scope = parser.ParseVerseList("amos", parser, true);
@@ -53,6 +63,7 @@ int main(int argc, char **argv) {
      x = "1Sam.21.1";
      scope = x;
      if (!scope.Error()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+*/
 
 	return 0;
 }

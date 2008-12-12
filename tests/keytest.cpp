@@ -17,6 +17,8 @@ int main(int argc, char **argv)
 	int loop;
 	int max;
 
+	VerseKey yo("Gen.1.1", "Gen.1.2");
+	std::cout << yo.getRangeText();
 	if (argc > 1)
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[1]);
 

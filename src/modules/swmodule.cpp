@@ -398,6 +398,7 @@ void SWModule::decrement(int steps) {
  *				-2  - multiword
  *				-3  - entryAttrib (eg. Word//Lemma/G1234/)
  *				-4  - clucene
+ *				-5  - multilemma window; flags = window size
  * 	flags		- options flags for search
  *	justCheckIfSupported	- if set, don't search, only tell if this
  *							function supports requested search.
@@ -432,6 +433,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	SWKey *resultKey = CreateKey();
 	regex_t preg;
 	vector<SWBuf> words;
+	vector<SWBuf> window;
 	const char *sres;
 	terminateSearch = false;
 	char perc = 1;
@@ -541,6 +543,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	// multi-word
 	case -2:
+	case -5:
 		// let's break the term down into our words vector
 		while (1) {
 			const char *word = term.stripPrefix(' ');
@@ -577,7 +580,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	(*percent)(perc, percentUserData);
 
 	
-	while ((searchType > -4) && !Error() && !terminateSearch) {
+	while ((searchType != -4) && !Error() && !terminateSearch) {
 		long mindex = key->Index();
 		float per = (float)mindex / highIndex;
 		per *= 93;
@@ -649,7 +652,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				} break;
 
 			// entry attributes
-			case -3:
+			case -3: {
 				RenderText();	// force parse
 				AttributeTypeList &entryAttribs = getEntryAttributes();
 				AttributeTypeList::iterator i1Start, i1End;
@@ -710,6 +713,54 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 					}
 					if (i2Start != i2End)
 						break;
+				}
+				break;
+			}
+			case -5:
+				AttributeList &words = getEntryAttributes()["Word"];
+				SWBuf kjvWord = "";
+				SWBuf bibWord = "";
+				for (AttributeList::iterator it = words.begin(); it != words.end(); it++) {
+					int parts = atoi(it->second["PartCount"]);
+					SWBuf lemma = "";
+					SWBuf morph = "";
+					for (int i = 1; i <= parts; i++) {
+						SWBuf key = "";
+						key = (parts == 1) ? "Lemma" : SWBuf().setFormatted("Lemma.%d", i);
+						AttributeValue::iterator li = it->second.find(key);
+						if (li != it->second.end()) {
+							if (i > 1) lemma += " ";
+							key = (parts == 1) ? "LemmaClass" : SWBuf().setFormatted("LemmaClass.%d", i);
+							AttributeValue::iterator lci = it->second.find(key);
+							if (lci != it->second.end()) {
+								lemma += lci->second + ":";
+							}
+							lemma += li->second;
+						}
+						key = (parts == 1) ? "Morph" : SWBuf().setFormatted("Morph.%d", i);
+						li = it->second.find(key);
+						// silly.  sometimes morph counts don't equal lemma counts
+						if (i == 1 && parts != 1 && li == it->second.end()) {
+							li = it->second.find("Morph");
+						}
+						if (li != it->second.end()) {
+							if (i > 1) morph += " ";
+							key = (parts == 1) ? "MorphClass" : SWBuf().setFormatted("MorphClass.%d", i);
+							AttributeValue::iterator lci = it->second.find(key);
+							// silly.  sometimes morph counts don't equal lemma counts
+							if (i == 1 && parts != 1 && lci == it->second.end()) {
+								lci = it->second.find("MorphClass");
+							}
+							if (lci != it->second.end()) {
+								morph += lci->second + ":";
+							}
+							morph += li->second;
+						}
+						// TODO: add src tags and maybe other attributes
+					}
+					while (window.size() < (unsigned)flags) {
+						
+					}
 				}
 				break;
 			} // end switch

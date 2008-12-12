@@ -39,7 +39,15 @@ SWText::~SWText() {
  */
 
 SWKey *SWText::CreateKey() {
-	return new VerseKey();
+	VerseKey *vk = new VerseKey();
+
+// TODO: put this config check somewhere once
+//	SWBuf versif = getConfigEntry("Versification");
+//
+//	if (versif.length() > 0)
+//	vk->setVersificationSystem(versif);
+//
+	return vk;
 }
 
 

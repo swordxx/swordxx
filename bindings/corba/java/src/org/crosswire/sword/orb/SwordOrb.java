@@ -34,7 +34,7 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 		p.setProperty("com.sun.CORBA.codeset.wcharsets", "0x00010109, 0x05010001");    // UTF-16, UTF-8
 	}
 
-	static org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(new String[]{}, p);
+	static org.omg.CORBA.ORB orb = org.omg.CORBA_2_3.ORB.init(new String[]{}, p);
 	static Hashtable clients = new Hashtable();
 	String ior = null;
 	String remoteAddr = null;

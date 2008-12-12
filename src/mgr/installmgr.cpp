@@ -43,6 +43,8 @@ void removeTrailingSlash(SWBuf &buf) {
 		buf.size(len-1);
 }
 
+const char *crosswireMasterRepoList = "http://crosswire.org/repos.conf";
+
 };
 
 
@@ -69,8 +71,11 @@ FTPTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *s
 
 
 
-InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr) {
+InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWBuf p) {
+	userDisclaimerConfirmed = false;
 	statusReporter = sr;
+	this->u = u;
+	this->p = p;
 	this->privatePath = 0;
 	this->transport = 0;
 	stdstr(&(this->privatePath), privatePath);
@@ -204,6 +209,14 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 	int retVal = 0;
 	FTPTransport *trans = createFTPTransport(is->source, statusReporter);
 	transport = trans; // set classwide current transport for other thread terminate() call
+	if (is->u.length()) {
+		trans->setUser(is->u);
+		trans->setPasswd(is->p);
+	}
+	else {
+		trans->setUser(u);
+		trans->setPasswd(p);
+	}
 	trans->setPassive(passive);
 	
 	SWBuf urlPrefix = (SWBuf)"ftp://" + is->source;
@@ -536,6 +549,23 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
 }
 
 
+/************************************************************************
+ * refreshRemoteSourceConfiguration - grab master list of know remote
+ * 	sources and integrate it with our configurations.
+ */
+int InstallMgr::refreshRemoteSourceConfiguration() {
+	// TODO: something
+	// 	well a litte more specific:
+	// 	add hash YYYYMMDDHHMMSSUU to each entry and use this
+	// 	for dir name
+	// 	master list should be commands like:
+	// 	YYYYMMDDHHMMSSUU=delete
+	// 	YYYYMMDDHHMMSSUU=FTPSource=...
+	// 	YYYYMMDDHHMMSSUU=delete
+	//
+}
+
+
 InstallSource::InstallSource(const char *type, const char *confEnt) {
 	this->type = type;
 	mgr = 0;
@@ -548,6 +578,8 @@ InstallSource::InstallSource(const char *type, const char *confEnt) {
 		source = strtok(0, "|");
 		directory = strtok(0, "|");
 		removeTrailingSlash(directory);
+		u = strtok(0, "|");
+		p = strtok(0, "|");
 		delete [] buf;
 	}
 }
