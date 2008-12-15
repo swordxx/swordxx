@@ -563,6 +563,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 	// 	YYYYMMDDHHMMSSUU=FTPSource=...
 	// 	YYYYMMDDHHMMSSUU=delete
 	//
+	return 0;
 }
 
 

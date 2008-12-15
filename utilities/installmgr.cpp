@@ -16,19 +16,35 @@ using std::map;
 
 SWMgr *mgr;
 InstallMgr *installMgr;
+SWBuf baseDir;
+SWBuf confPath;
 
 
+void init() {
+	mgr = new SWMgr();
+	char *envhomedir  = getenv ("HOME");
+	SWBuf baseDir = (envhomedir) ? envhomedir : ".";
+	baseDir += "/.sword/InstallMgr";
+	confPath = baseDir + "/InstallMgr.conf";
+	installMgr = new InstallMgr(baseDir);
+}
+
+
+// clean up and exit is status is 0 or negative error code
 void finish(int status) {
 	delete installMgr;
 	delete mgr;
-	cout << "\n";
-	exit(status);
+	if (status < 1) {
+		cout << "\n";
+		exit(status);
+	}
 }
 
 
 void usage(const char *progName) {
 	fprintf(stderr, "usage: %s <option>\nOptions:\n"
 		"\t-init\t\t\t\tcreate a basic user config file.\n"
+		"\t-sc\t\t\t\tsync config with known remote repo list\n"
 		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
 		"\t-l\t\t\t\tlist installed modules\n"
 		"\t-u <modName>\t\t\tuninstall module\n"
@@ -44,7 +60,7 @@ void usage(const char *progName) {
 }
 
 
-void initConfig() {
+bool showDisclaimer() {
 	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
 	cout << "Although Install Manager provides a convenient way for installing\n";
@@ -53,15 +69,23 @@ void initConfig() {
 	cout << "into for singling out users. \n\n\n";
 	cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
 	cout << "YOU SHOULD *NOT* USE INSTALL MANAGER'S REMOTE SOURCE FEATURES.\n\n\n";
-	cout << "if you understand this and are willing to enable remote source features\n";
+	cout << "Also, Remote Sources other than CrossWire may contain less than\n";
+	cout << "quality modules, module with unorthodox content, or even modules\n";
+	cout << "which are not legitimately distributable.  Many repositories\n";
+	cout << "contain wonderfully useful content.  These repositories simply\n";
+	cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
+	cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
+	cout << "If you understand this and are willing to enable remote source features\n";
 	cout << "then type yes at the prompt\n\n";
 	cout << "enable? [no] ";
 	char prompt[10];
 	fgets(prompt, 9, stdin);
-	bool enable = (!strcmp(prompt, "yes\n"));
-	char *envhomedir  = getenv ("HOME");
-	SWBuf confPath = (envhomedir) ? envhomedir : ".";
-	confPath += "/.sword/InstallMgr/InstallMgr.conf";
+	return (!strcmp(prompt, "yes\n"));
+}
+
+
+void createBasicConfig(bool enableRemote) {
+
 	FileMgr::createParent(confPath.c_str());
 	remove(confPath.c_str());
 
@@ -72,12 +96,41 @@ void initConfig() {
 
 	SWConfig config(confPath.c_str());
 	config["General"]["PassiveFTP"] = "true";
-	if (enable) {
+	if (enableRemote) {
 		config["Sources"]["FTPSource"] = is.getConfEnt();
 	}
 	config.Save();
+}
+
+void initConfig() {
+
+	bool enable = showDisclaimer();
+
+	createBasicConfig(enable);
+
 	cout << "\n\nInitialized basic config file at [" << confPath << "]\n";
 	cout << "with remote source features " << ((enable) ? "ENABLED" : "DISABLED") << "\n";
+}
+
+
+void syncConfig() {
+
+	if (!showDisclaimer()) {  // assert disclaimer is accepted
+		cout << "\n\nDisclaimer not accepted.  Aborting.";
+		return;
+	}
+
+	if (!FileMgr::existsFile(confPath.c_str())) {
+		createBasicConfig(true);
+		finish(1); // cleanup and don't exit
+		init();    // re-init with InstallMgr which uses our new config
+	}
+
+	installMgr->setUserDisclaimerConfirmed(true);
+
+	if (!installMgr->refreshRemoteSourceConfiguration()) 
+		cout << "\nSync'd config file with master remote source list.\n";
+	else cout << "\nFailed to sync config file with master remote source list.\n";
 }
 
 
@@ -207,11 +260,7 @@ void localDirInstallModule(const char *dir, const char *modName) {
 
 int main(int argc, char **argv) {
 
-	mgr = new SWMgr();
-	char *envhomedir  = getenv ("HOME");
-	SWBuf baseDir = (envhomedir) ? envhomedir : ".";
-	baseDir += "/.sword/InstallMgr";
-	installMgr = new InstallMgr(baseDir);
+	init();
 
 	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 
@@ -251,7 +300,14 @@ int main(int argc, char **argv) {
 		uninstallModule(argv[2]);
 		break;
 	case 's':
-		listRemoteSources();
+		switch (argv[1][2]) {
+		case 0:			// -s list sources
+			listRemoteSources();
+			break;
+		case 'c':		// -rl remote list
+			syncConfig();
+			break;
+		}
 		break;
 	case 'r':	// remote option
 		switch (argv[1][2]) {

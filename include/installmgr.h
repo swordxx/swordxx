@@ -95,7 +95,7 @@ public:
 		cout << "Also, Remote Sources other than CrossWire may contain less than\n";
 		cout << "quality modules, module with unorthodox content, or even modules\n";
 		cout << "which are not legitimately distributable.  Many repositories\n";
-		cout << "contain wonderfully useful content.  These repositories simpley\n";
+		cout << "contain wonderfully useful content.  These repositories simply\n";
 		cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
 		cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
 		cout << "If you understand this and are willing to enable remote source features\n";
