@@ -1,5 +1,8 @@
 API ChangeLog 
 
+16-Dec-2008	Joachim A. <jansorg@crosswire.org>
+	Added two Chinese bookname translations provided by F. Lee
+
 03-Sep-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Added getOSISRefRangeText to SWKey. Not yetimplemented
 		ideally or even correctly for all SWKey types.
