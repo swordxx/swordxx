@@ -32,6 +32,7 @@ extern "C" {
 #include <ftplibftpt.h>
 #endif
 
+#include <iostream>
 SWORD_NAMESPACE_START
 
 namespace {
@@ -43,7 +44,7 @@ void removeTrailingSlash(SWBuf &buf) {
 		buf.size(len-1);
 }
 
-const char *crosswireMasterRepoList = "http://crosswire.org/repos.conf";
+const char *masterRepoList = "masterRepoList.conf";
 
 };
 
@@ -563,7 +564,24 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 	// 	YYYYMMDDHHMMSSUU=FTPSource=...
 	// 	YYYYMMDDHHMMSSUU=delete
 	//
-	return 0;
+	SWBuf root = (SWBuf)privatePath+"/"+masterRepoList;
+	removeTrailingSlash(root);
+	InstallSource is("FTP");
+	is.source = "ftp.crosswire.org";
+	is.directory = "/pub/sword";
+	int errorCode = ftpCopy(&is, masterRepoList, root.c_str(), false);
+	if (!errorCode) { //sucessfully downloaded the repo list
+		SWConfig masterList(masterRepoList);
+		SectionMap::iterator sections = masterList.Sections.find("Repos");
+		if (sections != masterList.Sections.end()) {
+			for (ConfigEntMap::iterator actions = sections->second.begin(); actions != sections->second.end(); actions++) {
+				std::cout << "UID: " << actions->first << " ; data: " << actions->second << std::endl;
+			}
+			return 0;
+		}
+	}
+
+	return -1;
 }
 
 
