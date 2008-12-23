@@ -71,7 +71,6 @@ FTPTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *s
 
 
 
-
 InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWBuf p) {
 	userDisclaimerConfirmed = false;
 	statusReporter = sr;
@@ -79,6 +78,7 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 	this->p = p;
 	this->privatePath = 0;
 	this->transport = 0;
+	installConf = 0;
 	stdstr(&(this->privatePath), privatePath);
 	if (this->privatePath) {
 		int len = strlen(this->privatePath);
@@ -86,23 +86,43 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 		 || (this->privatePath[len-1] == '\\'))
 			this->privatePath[len-1] = 0;
 	}
-	SWBuf confPath = (SWBuf)privatePath + "/InstallMgr.conf";
+	confPath = (SWBuf)privatePath + "/InstallMgr.conf";
 	FileMgr::createParent(confPath.c_str());
 	
+	readInstallConf();
+}
+
+
+InstallMgr::~InstallMgr() {
+	delete [] privatePath;
+	delete installConf;
+
+}
+
+void InstallMgr::clearSources() {
+	for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
+		delete it->second;
+	}
+	sources.clear();
+}
+
+void InstallMgr::readInstallConf() {
+
+	if (installConf) delete installConf;
+
 	installConf = new SWConfig(confPath.c_str());
 
-	SectionMap::iterator sourcesSection;
+	clearSources();
+	
+	setFTPPassive(stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "false") != 0);
+
+	SectionMap::iterator confSection = installConf->Sections.find("Sources");
 	ConfigEntMap::iterator sourceBegin;
 	ConfigEntMap::iterator sourceEnd;
 
-	sources.clear();
-	
-	setFTPPassive(stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "false")!=0);
-
-	sourcesSection = installConf->Sections.find("Sources");
-	if (sourcesSection != installConf->Sections.end()) {
-		sourceBegin = sourcesSection->second.lower_bound("FTPSource");
-		sourceEnd = sourcesSection->second.upper_bound("FTPSource");
+	if (confSection != installConf->Sections.end()) {
+		sourceBegin = confSection->second.lower_bound("FTPSource");
+		sourceEnd = confSection->second.upper_bound("FTPSource");
 
 		while (sourceBegin != sourceEnd) {
 			InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
@@ -115,10 +135,10 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 	}
 
 	defaultMods.clear();
-	sourcesSection = installConf->Sections.find("General");
-	if (sourcesSection != installConf->Sections.end()) {
-		sourceBegin = sourcesSection->second.lower_bound("DefaultMod");
-		sourceEnd = sourcesSection->second.upper_bound("DefaultMod");
+	confSection = installConf->Sections.find("General");
+	if (confSection != installConf->Sections.end()) {
+		sourceBegin = confSection->second.lower_bound("DefaultMod");
+		sourceEnd = confSection->second.upper_bound("DefaultMod");
 
 		while (sourceBegin != sourceEnd) {
 			defaultMods.insert(sourceBegin->second.c_str());
@@ -128,17 +148,23 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 }
 
 
-InstallMgr::~InstallMgr() {
-	delete [] privatePath;
-	delete installConf;
+void InstallMgr::saveInstallConf() {
+
+	installConf->Sections["Sources"].erase("FTPSource");
 
 	for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
-		delete it->second;
+		if (it->second) {
+			installConf->Sections["Sources"].insert(ConfigEntMap::value_type("FTPSource", it->second->getConfEnt().c_str()));
+		}
 	}
+	(*installConf)["General"]["PassiveFTP"] = (isFTPPassive()) ? "true" : "false";
+
+	installConf->Save();
 }
 
 
 void InstallMgr::terminate() { if (transport) transport->terminate(); }
+
 
 int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 	SectionMap::iterator module;
@@ -207,6 +233,10 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
 
 int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
+
+	// assert user disclaimer has been confirmed
+	if (!isUserDisclaimerConfirmed()) return -1;
+
 	int retVal = 0;
 	FTPTransport *trans = createFTPTransport(is->source, statusReporter);
 	transport = trans; // set classwide current transport for other thread terminate() call
@@ -465,6 +495,10 @@ bool InstallMgr::getCipherCode(const char *modName, SWConfig *config) {
 
 
 int InstallMgr::refreshRemoteSource(InstallSource *is) {
+
+	// assert user disclaimer has been confirmed
+	if (!isUserDisclaimerConfirmed()) return -1;
+
 	SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->source.c_str();
 	removeTrailingSlash(root);
 	SWBuf target = root + "/mods.d";
@@ -555,32 +589,71 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
  * 	sources and integrate it with our configurations.
  */
 int InstallMgr::refreshRemoteSourceConfiguration() {
-	// TODO: something
-	// 	well a litte more specific:
-	// 	add hash YYYYMMDDHHMMSSUU to each entry and use this
-	// 	for dir name
-	// 	master list should be commands like:
-	// 	YYYYMMDDHHMMSSUU=delete
-	// 	YYYYMMDDHHMMSSUU=FTPSource=...
-	// 	YYYYMMDDHHMMSSUU=delete
-	//
-	SWBuf root = (SWBuf)privatePath+"/"+masterRepoList;
+
+	// assert user disclaimer has been confirmed
+	if (!isUserDisclaimerConfirmed()) return -1;
+
+	SWBuf root = (SWBuf)privatePath;
 	removeTrailingSlash(root);
+	SWBuf masterRepoListPath = root + "/" + masterRepoList;
 	InstallSource is("FTP");
 	is.source = "ftp.crosswire.org";
 	is.directory = "/pub/sword";
-	int errorCode = ftpCopy(&is, masterRepoList, root.c_str(), false);
+	int errorCode = ftpCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
 	if (!errorCode) { //sucessfully downloaded the repo list
-		SWConfig masterList(masterRepoList);
+		SWConfig masterList(masterRepoListPath);
 		SectionMap::iterator sections = masterList.Sections.find("Repos");
 		if (sections != masterList.Sections.end()) {
 			for (ConfigEntMap::iterator actions = sections->second.begin(); actions != sections->second.end(); actions++) {
-				std::cout << "UID: " << actions->first << " ; data: " << actions->second << std::endl;
+				// Search through our current sources and see if we have a matching UID
+				InstallSourceMap::iterator it;
+				for (it = sources.begin(); it != sources.end(); ++it) {
+					// is this our UID?
+					if ((it->second) && (it->second->uid == actions->first)) {
+						if (actions->second == "REMOVE") {
+							// be sure to call save/reload after this
+							// or this could be dangerous
+							delete it->second;
+							it->second = 0;
+						}
+						else {
+							SWBuf key = actions->second.stripPrefix('=');
+							if (key == "FTPSource") {
+								// we might consider instantiating a temp IS
+								// from our config string and then copy only
+								// some entries.  This would allow the use to
+								// change some fields and not have them overwritten
+								// but it seems like we might want to change any
+								// of the current fields so we don't do this now
+								// InstallSource i("FTP", actions->second);
+								delete it->second;
+								it->second = new InstallSource("FTP", actions->second.c_str());
+								it->second->uid = actions->first;
+							}
+						}
+						break;
+					}
+				}
+				// didn't find our UID, let's add it
+				if (it == sources.end()) {
+					SWBuf key = actions->second.stripPrefix('=');
+					if (key == "FTPSource") {
+						if (actions->second != "REMOVE") {
+							InstallSource *is = new InstallSource("FTP", actions->second.c_str());
+							is->uid = actions->first;
+							sources[is->caption] = is;
+						}
+					}
+				}
 			}
+
+			// persist and re-read
+			saveInstallConf();
+			readInstallConf();
+
 			return 0;
 		}
 	}
-
 	return -1;
 }
 
@@ -590,16 +663,15 @@ InstallSource::InstallSource(const char *type, const char *confEnt) {
 	mgr = 0;
 	userData = 0;
 	if (confEnt) {
-		char *buf = 0;
-		stdstr(&buf, confEnt);
+		SWBuf buf = confEnt;
+		caption   = buf.stripPrefix('|', true);
+		source    = buf.stripPrefix('|', true);
+		directory = buf.stripPrefix('|', true);
+		u         = buf.stripPrefix('|', true);
+		p         = buf.stripPrefix('|', true);
+		uid       = buf.stripPrefix('|', true);
 
-		caption = strtok(buf, "|");
-		source = strtok(0, "|");
-		directory = strtok(0, "|");
 		removeTrailingSlash(directory);
-		u = strtok(0, "|");
-		p = strtok(0, "|");
-		delete [] buf;
 	}
 }
 

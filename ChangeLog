@@ -1,11 +1,28 @@
 API ChangeLog 
 
+23-Dec-2008	Troy A. Griffitts <scribe@crosswire.org>
+	Added ignore of comment lines starting with '#'
+		in SWConfig processing
+	Added requirement to call setUserDisclaimerConfirmed
+		in InstallMgr before remote functions operate
+	Added refreshRemoteSourceConfiguration to sync a
+		local InstallMgr.conf with a master remote list
+	Added ability for InstallMgr to use username/passwd
+		supplied by either .conf or globally in c-tor
+	Added VerseMgr to abstract versification scheme
+		functionality
+	Included 1 versification scheme: KJV
+	Added param on SWBuf::stripPrefix to allow use more
+		like a safe string tokenizer to replace strtok
+
+		
 16-Dec-2008	Joachim A. <jansorg@crosswire.org>
-	Added two Chinese bookname translations provided by F. Lee
+	Added two Chinese bookname translations provided by
+		F. Lee
 
 03-Sep-2008	Troy A. Griffitts <scribe@crosswire.org>
-	Added getOSISRefRangeText to SWKey. Not yetimplemented
-		ideally or even correctly for all SWKey types.
+	Added getOSISRefRangeText to SWKey- not yetimplemented
+		ideally or even correctly for all SWKey types
 
 * Release 1.5.11 *
 

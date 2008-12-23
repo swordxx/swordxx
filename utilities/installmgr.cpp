@@ -30,7 +30,7 @@ void init() {
 }
 
 
-// clean up and exit is status is 0 or negative error code
+// clean up and exit if status is 0 or negative error code
 void finish(int status) {
 	delete installMgr;
 	delete mgr;
@@ -84,7 +84,7 @@ bool showDisclaimer() {
 }
 
 
-void createBasicConfig(bool enableRemote) {
+void createBasicConfig(bool enableRemote, bool addCrossWire) {
 
 	FileMgr::createParent(confPath.c_str());
 	remove(confPath.c_str());
@@ -106,7 +106,7 @@ void initConfig() {
 
 	bool enable = showDisclaimer();
 
-	createBasicConfig(enable);
+	createBasicConfig(enable, true);
 
 	cout << "\n\nInitialized basic config file at [" << confPath << "]\n";
 	cout << "with remote source features " << ((enable) ? "ENABLED" : "DISABLED") << "\n";
@@ -121,7 +121,7 @@ void syncConfig() {
 	}
 
 	if (!FileMgr::existsFile(confPath.c_str())) {
-		createBasicConfig(true);
+		createBasicConfig(true, false);
 		finish(1); // cleanup and don't exit
 		init();    // re-init with InstallMgr which uses our new config
 	}
@@ -161,9 +161,9 @@ void listRemoteSources() {
 	cout << "Remote Sources:\n\n";
 	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
 		cout << "[" << it->second->caption << "]\n";
-		cout << "\tType     ; " << it->second->type << "\n";
-		cout << "\tSource   ; " << it->second->source << "\n";
-		cout << "\tDirectory; " << it->second->directory << "\n";
+		cout << "\tType     : " << it->second->type << "\n";
+		cout << "\tSource   : " << it->second->source << "\n";
+		cout << "\tDirectory: " << it->second->directory << "\n";
 	}
 }
 
@@ -304,7 +304,7 @@ int main(int argc, char **argv) {
 		case 0:			// -s list sources
 			listRemoteSources();
 			break;
-		case 'c':		// -rl remote list
+		case 'c':		// -sc sync config with master
 			syncConfig();
 			break;
 		}

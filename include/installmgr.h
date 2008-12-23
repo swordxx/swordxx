@@ -22,13 +22,14 @@ public:
 	InstallSource(const char *type, const char *confEnt = 0);
 	virtual ~InstallSource();
 	SWBuf getConfEnt() {
-		return caption +"|" + source + "|" + directory + "|" + u + "|" + p;
+		return caption +"|" + source + "|" + directory + "|" + u + "|" + p + "|" + uid;
 	}
 	SWBuf caption;
 	SWBuf source;
 	SWBuf directory;
 	SWBuf u;
 	SWBuf p;
+	SWBuf uid;
 
 	SWBuf type;
 	SWBuf localShadow;
@@ -47,6 +48,7 @@ protected:
 	bool userDisclaimerConfirmed;
 	std::set<SWBuf> defaultMods;
 	char *privatePath;
+	SWBuf confPath;
 	StatusReporter *statusReporter;
 	bool passive;
 	SWBuf u, p;
@@ -71,8 +73,21 @@ public:
 	InstallSourceMap sources;
 	bool term;
 
+	// Username and Password supplied here can be used to identify your frontend
+	// by supplying a valid anon password like installmgr@macsword.com
+	// This will get overridden if a password is required and provided in an indivual
+	// source configuration
 	InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0, SWBuf u="ftp", SWBuf p="installmgr@user.com");
 	virtual ~InstallMgr();
+
+	// Call to re-read InstallMgr.conf
+	void readInstallConf();
+
+	// Call to dump sources and other settings to InstallMgr.conf
+	void saveInstallConf();
+
+	// Removes all configured sources from memory.  Call saveInstallConf() to persist
+	void clearSources();
 
 	virtual int removeModule(SWMgr *manager, const char *modName);
 	virtual int ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
@@ -107,6 +122,7 @@ public:
 	void setUserDisclaimerConfirmed(bool val) { userDisclaimerConfirmed = val; }
 	virtual bool getCipherCode(const char *modName, SWConfig *config);
 	void setFTPPassive(bool passive) { this->passive = passive; }
+	bool isFTPPassive() { return passive; }
 	void terminate();
 
 	/************************************************************************

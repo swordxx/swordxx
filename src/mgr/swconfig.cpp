@@ -66,27 +66,30 @@ void SWConfig::Load() {
 		}
 		
 		while (goodLine) {
-			buf = new char [ line.length() + 1 ];
-			strcpy(buf, line.c_str());
-			if (*strstrip(buf) == '[') {
-				if (!first)
-					Sections.insert(SectionMap::value_type(sectname, cursect));
-				else first = false;
-				
-				cursect.erase(cursect.begin(), cursect.end());
+			// ignore commented lines
+			if (!line.startsWith("#")) {
+				buf = new char [ line.length() + 1 ];
+				strcpy(buf, line.c_str());
+				if (*strstrip(buf) == '[') {
+					if (!first)
+						Sections.insert(SectionMap::value_type(sectname, cursect));
+					else first = false;
+					
+					cursect.erase(cursect.begin(), cursect.end());
 
-				strtok(buf, "]");
-				sectname = buf+1;
-			}
-			else {
-				strtok(buf, "=");
-				if ((*buf) && (*buf != '=')) {
-					if ((data = strtok(NULL, "")))
-						cursect.insert(ConfigEntMap::value_type(buf, strstrip(data)));
-					else cursect.insert(ConfigEntMap::value_type(buf, ""));
+					strtok(buf, "]");
+					sectname = buf+1;
 				}
+				else {
+					strtok(buf, "=");
+					if ((*buf) && (*buf != '=')) {
+						if ((data = strtok(NULL, "")))
+							cursect.insert(ConfigEntMap::value_type(buf, strstrip(data)));
+						else cursect.insert(ConfigEntMap::value_type(buf, ""));
+					}
+				}
+				delete [] buf;
 			}
-			delete [] buf;
 			goodLine = FileMgr::getLine(cfile, line);
 		}
 		if (!first)
