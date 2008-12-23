@@ -96,7 +96,7 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 InstallMgr::~InstallMgr() {
 	delete [] privatePath;
 	delete installConf;
-
+	clearSources();
 }
 
 void InstallMgr::clearSources() {
