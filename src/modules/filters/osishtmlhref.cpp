@@ -383,7 +383,26 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				outText("</b><br />", buf, u);
 			}
 		}
+		
+		// <list>
+		else if (!strcmp(tag.getName(), "list")) {
+			if((!tag.isEndTag()) && (!tag.isEmpty())) {
+				outText("<ul>", buf, u);
+			}
+			else if (tag.isEndTag()) {
+				outText("</ul>", buf, u);
+			}
+		}
 
+		// <item>
+		else if (!strcmp(tag.getName(), "item")) {
+			if((!tag.isEndTag()) && (!tag.isEmpty())) {
+				outText("<li>", buf, u);
+			}
+			else if (tag.isEndTag()) {
+				outText("</li>", buf, u);
+			}
+		}
 		// <catchWord> & <rdg> tags (italicize)
 		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {

@@ -1,5 +1,8 @@
 API ChangeLog 
 
+26-Dec-2008	Troy A. Griffitts <scribe@crosswire.org>
+	Added list support in OSIS HTML conversion (ghellings)
+
 23-Dec-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Added ignore of comment lines starting with '#'
 		in SWConfig processing

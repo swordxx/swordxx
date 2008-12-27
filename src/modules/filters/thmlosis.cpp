@@ -326,7 +326,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			}
 
 			// Footnote
-			if (!strcmp(token, "note")) {
+			if (!strncmp(token, "note", 4)) {
 		        	//pushString(&to, "<note>");
 				text.append("<note>");
 				newText = true;

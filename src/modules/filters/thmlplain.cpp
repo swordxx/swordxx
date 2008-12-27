@@ -177,14 +177,14 @@ char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			if (!strncmp("note", token, 4)) {
 				text += ' ';
-				text += '(';
+				text += '[';
 			}
 			else if (!strncmp("br", token, 2))
 				text += '\n';
 			else if (!strncmp("/p", token, 2))
 				text += '\n';
 			else if (!strncmp("/note", token, 5)) {
-				text += ')';
+				text += ']';
 				text += ' ';
 			}
 			continue;

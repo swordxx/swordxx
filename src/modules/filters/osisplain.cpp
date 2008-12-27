@@ -161,13 +161,13 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <note> tag
 		else if (!strncmp(token, "note", 4)) {
 				if (!strstr(token, "strongsMarkup")) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-					buf.append(" (");
+					buf.append(" [");
 				}
 				else	u->suspendTextPassThru = true;
 			}
 		else if (!strncmp(token, "/note", 5)) {
 			if (!u->suspendTextPassThru)
-				buf.append(')');
+				buf.append("] ");
 			else	u->suspendTextPassThru = false;
 		}
 

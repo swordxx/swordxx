@@ -316,6 +316,25 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				outText("\\par}", buf, u);
 			}
 		}
+		// <list>	 - how do we support these better in RTF?
+		else if (!strcmp(tag.getName(), "list")) {
+			if((!tag.isEndTag()) && (!tag.isEmpty())) {
+				outText("\\par\\pard", buf, u);
+			}
+			else if (tag.isEndTag()) {
+				outText("\\par\\pard", buf, u);
+			}
+		}
+
+		// <item> - support better
+		else if (!strcmp(tag.getName(), "item")) {
+			if((!tag.isEndTag()) && (!tag.isEmpty())) {
+				outText("* ", buf, u);
+			}
+			else if (tag.isEndTag()) {
+				outText("\\par", buf, u);
+			}
+		}
 
 		// <catchWord> & <rdg> tags (italicize)
 		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
