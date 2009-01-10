@@ -144,7 +144,7 @@ void listModules(SWMgr *otherMgr) {
 		SWBuf status = " ";
 		if (it->second & InstallMgr::MODSTAT_NEW) status = "*";
 		if (it->second & InstallMgr::MODSTAT_OLDER) status = "-";
-		if (it->second & InstallMgr::MODSTAT_UPDATED) status = ">";
+		if (it->second & InstallMgr::MODSTAT_UPDATED) status = "+";
 
 		cout << status << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
 	}
