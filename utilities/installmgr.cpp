@@ -139,7 +139,8 @@ void listModules(SWMgr *mgr) {
 	SWModule *module;
 	for (ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); it++) {
 		module = it->second;
-		cout << "[" << module->Name() << "]  \t- " << module->Description() << "\n";
+		SWBuf version = module->getConfigEntry("Version");
+		cout << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
 	}
 }
 
@@ -174,6 +175,10 @@ void refreshRemoteSource(const char *sourceName) {
 		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
 		finish(-3);
 	}
+
+	// since a remote source is in the config files, we've already confirmed
+	installMgr->setUserDisclaimerConfirmed(true);
+
 	if (!installMgr->refreshRemoteSource(source->second))
 		cout << "Remote Source Refreshed\n";
 	else	cerr << "Error Refreshing Remote Source\n";
