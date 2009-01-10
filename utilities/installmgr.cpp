@@ -134,13 +134,19 @@ void syncConfig() {
 }
 
 
-void listModules(SWMgr *mgr) {
+void listModules(SWMgr *otherMgr) {
 	cout << "Installed Modules:\n\n";
 	SWModule *module;
-	for (ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); it++) {
-		module = it->second;
+	std::map<SWModule *, int> mods = InstallMgr::getModuleStatus(*mgr, *otherMgr);
+	for (std::map<SWModule *, int>::iterator it = mods.begin(); it != mods.end(); it++) {
+		module = it->first;
 		SWBuf version = module->getConfigEntry("Version");
-		cout << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
+		SWBuf status = " ";
+		if (it->second & InstallMgr::MODSTAT_NEW) status = "*";
+		if (it->second & InstallMgr::MODSTAT_OLDER) status = "-";
+		if (it->second & InstallMgr::MODSTAT_UPDATED) status = ">";
+
+		cout << status << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
 	}
 }
 
