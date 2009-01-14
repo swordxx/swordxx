@@ -726,18 +726,18 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 					SWBuf morph = "";
 					for (int i = 1; i <= parts; i++) {
 						SWBuf key = "";
-						key = (parts == 1) ? "Lemma" : SWBuf().setFormatted("Lemma.%d", i);
+						key = (parts == 1) ? "Lemma" : SWBuf().setFormatted("Lemma.%d", i).c_str();
 						AttributeValue::iterator li = it->second.find(key);
 						if (li != it->second.end()) {
 							if (i > 1) lemma += " ";
-							key = (parts == 1) ? "LemmaClass" : SWBuf().setFormatted("LemmaClass.%d", i);
+							key = (parts == 1) ? "LemmaClass" : SWBuf().setFormatted("LemmaClass.%d", i).c_str();
 							AttributeValue::iterator lci = it->second.find(key);
 							if (lci != it->second.end()) {
 								lemma += lci->second + ":";
 							}
 							lemma += li->second;
 						}
-						key = (parts == 1) ? "Morph" : SWBuf().setFormatted("Morph.%d", i);
+						key = (parts == 1) ? "Morph" : SWBuf().setFormatted("Morph.%d", i).c_str();
 						li = it->second.find(key);
 						// silly.  sometimes morph counts don't equal lemma counts
 						if (i == 1 && parts != 1 && li == it->second.end()) {
@@ -745,7 +745,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						}
 						if (li != it->second.end()) {
 							if (i > 1) morph += " ";
-							key = (parts == 1) ? "MorphClass" : SWBuf().setFormatted("MorphClass.%d", i);
+							key = (parts == 1) ? "MorphClass" : SWBuf().setFormatted("MorphClass.%d", i).c_str();
 							AttributeValue::iterator lci = it->second.find(key);
 							// silly.  sometimes morph counts don't equal lemma counts
 							if (i == 1 && parts != 1 && lci == it->second.end()) {
