@@ -50,9 +50,7 @@ public:
 
 LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
 	if (!systemLocaleMgr) {
-		systemLocaleMgr = new LocaleMgr();
-		SWLocale *locale = new SWLocale(0);
-		systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
+		setSystemLocaleMgr(new LocaleMgr());
 	}
 
 	return systemLocaleMgr;
@@ -63,6 +61,8 @@ void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
 	if (systemLocaleMgr)
 		delete systemLocaleMgr;
 	systemLocaleMgr = newLocaleMgr;
+	SWLocale *locale = new SWLocale(0);
+	systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
 }
 
 
