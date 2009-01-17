@@ -120,6 +120,13 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
 protected:
 
+	/************************************************************************
+	 * VerseKey::getBookAbbrev - Attempts to find a book no from a name or
+	 *                           abbreviation
+	 *
+	 * ENT:	@param abbr - key for which to search;
+	 * RET:	@return book number or < 0 = not valid
+	 */
 	virtual int getBookAbbrev(const char *abbr);
 
 	/** Refresh keytext based on testament|book|chapter|verse
@@ -256,7 +263,11 @@ public:
 	virtual void increment(int steps = 1);
 	virtual bool isTraversable() const { return true; }
 
+	/** Get/Set position of this key by Book Name
+	 */
 	virtual const char *getBookName() const;
+	virtual void setBookName(const char *bname);
+
 	virtual const char *getBookAbbrev() const;
 	/** Gets testament
 	*

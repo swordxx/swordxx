@@ -44,10 +44,10 @@ void VerseKey::init() {
 	upperBound = 0;
 	lowerBound = 0;
 	boundSet = false;
-	testament = 0;
-	book = 0;
-	chapter = 0;
-	verse = 0;
+	testament = 1;
+	book = 1;
+	chapter = 1;
+	verse = 1;
 	suffix = 0;
 	locale = 0;
 
@@ -321,8 +321,9 @@ void VerseKey::freshtext() const
 
 
 
-/******************************************************************************
- * VerseKey::getBookAbbrev - Attempts to find a book abbreviation for a buffer
+/************************************************************************
+ * VerseKey::getBookAbbrev - Attempts to find a book no from a name or
+ *                           abbreviation
  *
  * ENT:	abbr - key for which to search;
  * RET:	book number or < 0 = not valid
@@ -1278,10 +1279,6 @@ void VerseKey::setTestament(char itestament)
  * VerseKey::Book - Sets/gets book
  *
  * ENT:	ibook - value which to set book
- *		[MAXPOS(char)] - only get
- *
- * RET:	if unchanged ->          value of book
- *	if   changed -> previous value of book
  */
 
 void VerseKey::setBook(char ibook)
@@ -1292,14 +1289,28 @@ void VerseKey::setBook(char ibook)
 }
 
 
+
+/******************************************************************************
+ * VerseKey::Book - Sets/gets book by name
+ *
+ * ENT:	bname - book name/abbrev
+ */
+
+void VerseKey::setBookName(const char *bname)
+{
+	int bnum = getBookAbbrev(bname);
+	if (bnum > -1) {
+		setTestament(1);
+		setBook(bnum);
+	}
+	else error = KEYERR_OUTOFBOUNDS;
+}
+	
+
 /******************************************************************************
  * VerseKey::Chapter - Sets/gets chapter
  *
  * ENT:	ichapter - value which to set chapter
- *		[MAXPOS(int)] - only get
- *
- * RET:	if unchanged ->          value of chapter
- *	if   changed -> previous value of chapter
  */
 
 void VerseKey::setChapter(int ichapter)
