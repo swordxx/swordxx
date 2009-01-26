@@ -5,6 +5,8 @@
 #include <versekey.h>
 #include <listkey.h>
 #include <localemgr.h>
+#include <swmgr.h>
+#include <swmodule.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -13,16 +15,20 @@ using std::cout;
 using std::endl;
 
 int main(int argc, char **argv) {
+/*
 VerseKey currentVerse;
 currentVerse.AutoNormalize(0);
 currentVerse.Headings(1);
 currentVerse.Persist(1);
 currentVerse = "jn2";
 cout << currentVerse << endl;
-/*
-	VerseKey parser;
 
-     ListKey scope = parser.ParseVerseList("amos", parser, true);
+	SWMgr mgr;
+	SWModule *mod = mgr.getModule("KJVgb");
+*/
+	VerseKey *parser = new VerseKey(); //(VerseKey *)mod->CreateKey();
+
+     ListKey scope = parser->ParseVerseList("amos", *parser, true);
 
 	ListKey result;
 
@@ -31,12 +37,13 @@ cout << currentVerse << endl;
 	scope++;
 	scope++;
 
-	VerseKey x = scope;
-	x.clearBound();
+	VerseKey *x = new VerseKey(); //(VerseKey *)mod->CreateKey();
+	*x = scope;
+	x->clearBound();
 
-	std::cout << "x: " << x.getText() << "\n";
+	std::cout << "x: " << x->getText() << "\n";
 
-	result << x;
+	result << *x;
 
 	std::cout << result.getText() << "\n";
 
@@ -45,7 +52,7 @@ cout << currentVerse << endl;
 	std::cout << result.getText() << "\n";
 
      const char *bounds = "lk,acts";
-     scope = parser.ParseVerseList(bounds, parser, true);
+     scope = parser->ParseVerseList(bounds, *parser, true);
 
      VerseKey boundTest("lk", "acts");
 
@@ -55,14 +62,32 @@ cout << currentVerse << endl;
      std::cout << "Error: " << (int)boundTest.Error() << "\n";
 
 
-     x = "Is.1.13";
-     scope = x;
+     *x = "Is.1.13";
+     scope = *x;
 //     if (scope == x) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
-     if (!scope.Error()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+     if (!scope.Error()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
-     x = "1Sam.21.1";
-     scope = x;
-     if (!scope.Error()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+     *x = "1Sam.21.1";
+     scope = *x;
+     if (!scope.Error()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+
+/*
+	VerseKey *y = (VerseKey *)mod->CreateKey();
+	(*y) = "lev 1.1";
+	cout << (*y) << "\n";
+	(*y)++;
+	cout << (*y) << "\n";
+	(*y)--;
+	cout << (*y) << "\n";
+	(*y)--;
+	cout << (*y) << "\n";
+
+	mod->setKey("Ruth 1.1");
+	cout << mod->getKeyText() << "\n";
+	(*mod)++;
+	cout << mod->getKeyText() << "\n";
+	(*mod)--;
+	cout << mod->getKeyText() << "\n";
 */
 
 	return 0;

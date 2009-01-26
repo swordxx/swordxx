@@ -107,7 +107,7 @@ VerseTreeKey::~VerseTreeKey() {
 
 void VerseTreeKey::decrement(int steps) {
 	int treeError = 0;
-	if (!error) lastGoodOffset = treeKey->getOffset();
+	if (!error) lastGoodOffset = getTreeKey()->getOffset();
 	do {
 		treeKey->decrement();
 		treeError = treeKey->Error();
@@ -125,7 +125,7 @@ void VerseTreeKey::decrement(int steps) {
 }
 void VerseTreeKey::increment(int steps) {
 	int treeError = 0;
-	if (!error) lastGoodOffset = treeKey->getOffset();
+	if (!error) lastGoodOffset = getTreeKey()->getOffset();
 	do {
 		treeKey->increment();
 		treeError = treeKey->Error();
