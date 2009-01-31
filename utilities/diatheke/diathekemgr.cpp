@@ -1,20 +1,5 @@
 //---------------------------------------------------------------------------
-#include <thmlplain.h>
-#include <gbfplain.h>
-#include <thmlgbf.h>
-#include <gbfthml.h>
-#include <thmlhtml.h>
-#include <gbfhtml.h>
-#include <plainhtml.h>
-#include <thmlhtmlhref.h>
-#include <gbfhtmlhref.h>
-#include <thmlrtf.h>
-#include <gbfrtf.h>
-#include <utilstr.h>
 #include <swmodule.h>
-
-#include <swconfig.h>
-#include "diafiltmgr.h"
 
 #ifdef _ICU_
 #include <utf8arshaping.h>
@@ -27,8 +12,6 @@
 #endif
 
 #include "diathekemgr.h"
-#include "gbfcgi.h"
-#include "thmlcgi.h"
 
 //---------------------------------------------------------------------------
 DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autoload, char enc, char mark, bool ibidi, bool ishape)
@@ -38,9 +21,9 @@ DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autolo
 	shape = ishape;
 
 #ifdef _ICU_
-    arshaping = new UTF8arShaping();
+	arshaping = new UTF8arShaping();
 	bidireorder = new UTF8BiDiReorder();
-    transliterator = new UTF8Transliterator();
+	transliterator = new UTF8Transliterator();
 #endif
 	Load();
 
@@ -78,10 +61,8 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 	rtl = ((entry = section.find("Direction")) != section.end()) ? ((*entry).second == "RtoL") : false;
 
 #ifdef _ICU_
-    if (shape && !strnicmp(lang.c_str(), "ar", 2)) {
-		module->AddRenderFilter(arshaping);
-	}
-    if (bidi && rtl) {
+        module->AddRenderFilter(arshaping);
+	if (bidi && rtl) {
 		module->AddRenderFilter(bidireorder);
 	}
 #endif
