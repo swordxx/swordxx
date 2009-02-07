@@ -1,3 +1,20 @@
+/*
+ * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
+
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -371,7 +388,7 @@ void makeKJVRef(VerseKey &key) {
 void writeEntry(SWBuf &text, bool force = false) {
 	char keyOsisID[255];
 
-	static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev:$\"/>";
+	static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev$\"/>";
 	static bool firstOT = true;
 	static bool firstNT = true;
 
