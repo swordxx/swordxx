@@ -1,20 +1,27 @@
 /***************************************************************************
-                          gbfhtmlhref.cpp  -   GBF to HTML filter with hrefs 
-			        for strongs and morph tags
-                             -------------------
-    begin                    : 2001-09-03
-    copyright            : 2001 by CrossWire Bible Society
- ***************************************************************************/
+ *                         gbfhtmlhref.cpp  -   GBF to HTML filter with hrefs 
+ *			        for strongs and morph tags
+ *                            -------------------
+ *   begin                    : 2001-09-03
+ *   copyright            : 2001 by CrossWire Bible Society
+ *
+ * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
+ 
 #include <stdlib.h>
 #include <gbfhtmlhref.h>
 #include <swmodule.h>
