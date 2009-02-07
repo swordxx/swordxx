@@ -1,5 +1,33 @@
 #!/usr/bin/perl
 
+#########################################################################
+### WARNING: This is for demonstration purposes only. Do not deploy
+###          this CGI on a live website. There are security issues.
+###          You will likely be hacked if you try to deploy this on a
+###          live site.
+###
+###          For a web Bible interface, please consider using
+###          SwordWeb, which can be also be installed on your
+###          server: http://www.crosswire.org/swordweb/
+########################################################################
+
+# *
+# * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+# *	CrossWire Bible Society
+# *	P. O. Box 2528
+# *	Tempe, AZ  85280-2528
+# *
+# * This program is free software; you can redistribute it and/or modify it
+# * under the terms of the GNU General Public License as published by the
+# * Free Software Foundation version 2.
+# *
+# * This program is distributed in the hope that it will be useful, but
+# * WITHOUT ANY WARRANTY; without even the implied warranty of
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# * General Public License for more details.
+# *
+
+
 # Typical Linux/Unix settings
 $err = "2> /dev/null";
 $sword_path = "/home/sword";  # SWORD_PATH environment variable you want to use
