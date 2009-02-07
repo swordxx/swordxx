@@ -127,6 +127,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				inputformat = FMT_THML;
 			else if (!::stricmp((char *)(*eit).second.c_str(), "OSIS"))
 				inputformat = FMT_OSIS;
+			else if (!::stricmp((char *)(*eit).second.c_str(), "TEI"))
+				inputformat = FMT_TEI;
 		}
 		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (SWBuf)"";
 	}
@@ -142,6 +144,9 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	    break;
 	  case FMT_OSIS :
 	    *output << "OSIS";
+	    break;
+	  case FMT_TEI :
+	    *output << "TEI";
 	    break;
 	  default:
 	    *output << "Other";
