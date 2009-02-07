@@ -464,16 +464,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "divineName")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				u->suspendTextPassThru = (++u->suspendLevel);
+ 				outText("{\\scaps ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				SWBuf lastText = u->lastSuspendSegment.c_str();
-				u->suspendTextPassThru = (--u->suspendLevel);
-				if (lastText.size()) {
-					toupperstr(lastText);
-					scratch.setFormatted("{\\fs19%c\\fs16%s}", lastText[0], lastText.c_str()+1);
-					outText(scratch.c_str(), buf, u);
-				}               
+				outText("}", buf, u);
 			}
 		}
 
@@ -481,10 +475,11 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "div")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("\\par\\par\\pard ", buf, u);
+				outText("\\pard ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-			}
+	                        outText("\\par ", buf, u);
+                        }
 		}
 
 		// image
