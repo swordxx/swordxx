@@ -1,18 +1,19 @@
 #!/bin/sh
 
 OPTIONS="--prefix=/usr $OPTIONS"
-OPTIONS="--disable-shared $OPTIONS"
-OPTIONS="--without-conf $OPTIONS"
+OPTIONS="--libdir=/usr/lib64 $OPTIONS"
 OPTIONS="--sysconfdir=/etc $OPTIONS"
-#OPTIONS="--with-vcl $OPTIONS"
+OPTIONS="--without-conf $OPTIONS"
+OPTIONS="--disable-shared $OPTIONS"
 OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
+
 OPTIONS="--with-icu $OPTIONS"
 #OPTIONS="--without-clucene $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
-#OPTIONS="--enable-tests $OPTIONS"
-OPTIONS="--disable-utilities $OPTIONS"
-OPTIONS="--libdir=/usr/lib64 $OPTIONS"
+
+OPTIONS="--enable-tests $OPTIONS"
+#OPTIONS="--disable-utilities $OPTIONS"
 
 
 CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*

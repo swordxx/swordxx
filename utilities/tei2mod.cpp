@@ -203,7 +203,7 @@ void writeEntry(SWKey &key, SWBuf &text) {
 	module->setEntry(text);
 }
 
-void linkToEntry(SWBuf &keyBuf, SWBuf &linkBuf) {
+void linkToEntry(const SWBuf &keyBuf, const SWBuf &linkBuf) {
        	SWKey tmpkey = linkBuf.c_str();
 	module->linkEntry(&tmpkey);
 #ifdef DEBUG
