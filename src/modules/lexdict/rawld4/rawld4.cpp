@@ -113,10 +113,10 @@ void RawLD4::strongsPad(char *buf)
 
 char RawLD4::getEntry(long away)
 {
-	long  start = 0;
-	unsigned long size = 0;
+	__u32 start  = 0;
+	__u32 size   = 0;
 	char *idxbuf = 0;
-	char retval = 0;
+	char retval  = 0;
 
 	char *buf = new char [ strlen(*key) + 6 ];
 	strcpy(buf, *key);

@@ -120,11 +120,13 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
 		
 	if (idxfp[testmt-1]->getFd() >= 0) {
 		idxfp[testmt-1]->seek(idxoff, SEEK_SET);
-		idxfp[testmt-1]->read(start, 4);
-		long len = idxfp[testmt-1]->read(size, 2); 		// read size
+		__s32 tmpStart;
+		__u16 tmpSize;
+		idxfp[testmt-1]->read(&tmpStart, 4);
+		long len = idxfp[testmt-1]->read(&tmpSize, 2); 		// read size
 
-		*start = swordtoarch32(*start);
-		*size  = swordtoarch16(*size);
+		*start = swordtoarch32(tmpStart);
+		*size  = swordtoarch16(tmpSize);
 
 		if (len < 2) {
 			*size = (unsigned short)((*start) ? (textfp[testmt-1]->seek(0, SEEK_END) - (long)*start) : 0);	// if for some reason we get an error reading size, make size to end of file
@@ -173,17 +175,16 @@ void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf
 
 void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
-	long start, outstart;
-	unsigned short size;
-	unsigned short outsize;
+	__s32 start;
+	__u16 size;
 
 	idxoff *= 6;
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
 
-	size = outsize = (len < 0) ? strlen(buf) : len;
+	size = (len < 0) ? strlen(buf) : len;
 
-	start = outstart = textfp[testmt-1]->seek(0, SEEK_END);
+	start = textfp[testmt-1]->seek(0, SEEK_END);
 	idxfp[testmt-1]->seek(idxoff, SEEK_SET);
 
 	if (size) {
@@ -197,13 +198,11 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 		start = 0;
 	}
 
-	outstart = archtosword32(start);
-	outsize  = archtosword16(size);
+	start = archtosword32(start);
+	size  = archtosword16(size);
 
-	idxfp[testmt-1]->write(&outstart, 4);
-	idxfp[testmt-1]->write(&outsize, 2);
-
-
+	idxfp[testmt-1]->write(&start, 4);
+	idxfp[testmt-1]->write(&size, 2);
 }
 
 
@@ -216,8 +215,8 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
  */
 
 void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-	long start;
-	unsigned short size;
+	__s32 start;
+	__u16 size;
 
 	destidxoff *= 6;
 	srcidxoff  *= 6;
@@ -279,8 +278,12 @@ char RawVerse::createModule(const char *ipath)
 
 	VerseKey vk;
 	vk.Headings(1);
-	long offset = 0;
-	short size = 0;
+
+	__s32 offset = 0;
+	__u16 size = 0;
+	offset = archtosword32(offset);
+	size = archtosword16(size);
+
 	for (vk = TOP; !vk.Error(); vk++) {
 		if (vk.Testament() == 1) {
 			fd->write(&offset, 4);

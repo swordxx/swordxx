@@ -139,7 +139,7 @@ void RawStr::getIDXBufDat(long ioffset, char **buf)
 
 void RawStr::getIDXBuf(long ioffset, char **buf)
 {
-	long offset;
+	__u32 offset;
 	
 	if (idxfd > 0) {
 		idxfd->seek(ioffset, SEEK_SET);
@@ -164,7 +164,7 @@ void RawStr::getIDXBuf(long ioffset, char **buf)
  * RET: error status -1 general error; -2 new file
  */
 
-signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *size, long away, long *idxoff)
+signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long away, __u32 *idxoff)
 {
 	char *trybuf, *maxbuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
@@ -231,14 +231,16 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 
 		idxfd->seek(tryoff, SEEK_SET);
 
-		*start = *size = 0;
-		idxfd->read(start, 4);
-		idxfd->read(size, 2);
+		__u32 tmpStart;
+		__u16 tmpSize;
+		*start = *size = tmpStart = tmpSize = 0;
+		idxfd->read(&tmpStart, 4);
+		idxfd->read(&tmpSize, 2);
 		if (idxoff)
 			*idxoff = tryoff;
 
-		*start = swordtoarch32(*start);
-		*size  = swordtoarch16(*size);
+		*start = swordtoarch32(tmpStart);
+		*size  = swordtoarch16(tmpSize);
 
 		while (away) {
 			long laststart = *start;
@@ -260,13 +262,13 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
 					*idxoff = tryoff;
 				break;
 			}
-			idxfd->read(start, 4);
-			idxfd->read(size, 2);
+			idxfd->read(&tmpStart, 4);
+			idxfd->read(&tmpSize, 2);
 			if (idxoff)
 				*idxoff = tryoff;
 
-			*start = swordtoarch32(*start);
-			*size  = swordtoarch16(*size);
+			*start = swordtoarch32(tmpStart);
+			*size  = swordtoarch16(tmpSize);
 
 			if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
 				away += (away < 0) ? 1 : -1;
@@ -295,12 +297,12 @@ signed char RawStr::findOffset(const char *ikey, long *start, unsigned short *si
  *
  */
 
-void RawStr::readText(long istart, unsigned short *isize, char **idxbuf, SWBuf &buf)
+void RawStr::readText(__u32 istart, __u16 *isize, char **idxbuf, SWBuf &buf)
 {
 	unsigned int ch;
 	char *idxbuflocal = 0;
 	getIDXBufDat(istart, &idxbuflocal);
-	long start = istart;
+	__u32 start = istart;
 
 	do {
 		if (*idxbuf)
@@ -357,12 +359,12 @@ void RawStr::readText(long istart, unsigned short *isize, char **idxbuf, SWBuf &
 void RawStr::doSetText(const char *ikey, const char *buf, long len)
 {
 
-	long start, outstart;
-	long idxoff;
-	long endoff;
-	long shiftSize;
-	unsigned short size;
-	unsigned short outsize;
+	__u32 start, outstart;
+	__u32 idxoff;
+	__u32 endoff;
+	__u32 shiftSize;
+	__u16 size;
+	__u16 outsize;
 	static const char nl[] = {13, 10};
 	char *tmpbuf = 0;
 	char *key = 0;

@@ -245,7 +245,28 @@ void SWMgr::init() {
 
 	teiplain = new TEIPlain();
 	cleanupFilters.push_back(teiplain);
-//#endif
+}
+
+
+SWBuf SWMgr::getHomeDir() {
+
+	// figure out 'home' directory for app data
+	SWBuf homeDir = getenv("HOME");
+	if (!homeDir.length()) {
+		// silly windows
+		homeDir = getenv("HOMEDRIVE");
+		if (homeDir.length()) {
+			homeDir += getenv("HOMEPATH");
+			homeDir += "/Application Data";
+		}
+	}
+	if (homeDir.length()) {
+		if ((homeDir[homeDir.length()-1] != '\\') && (homeDir[homeDir.length()-1] != '/')) {
+			homeDir += "/";
+		}
+	}
+
+	return homeDir;
 }
 
 
@@ -356,11 +377,11 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	ConfigEntMap::iterator entry;
 	ConfigEntMap::iterator lastEntry;
 
-	char *envsworddir = getenv("SWORD_PATH");
-	char *envhomedir  = getenv("HOME");
 	SWConfig *sysConf = 0;
 
 	*configType = 0;
+
+	SWBuf homeDir = getHomeDir();
 
 	// check for a sysConf passed in to us
 	SWLog::getSystemLog()->logDebug("Checking for provided SWConfig(\"sword.conf\")...");
@@ -404,13 +425,14 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			}
 
 			// check environment variable SWORD_PATH
-			SWLog::getSystemLog()->logDebug("Checking SWORD_PATH...");
+			SWLog::getSystemLog()->logDebug("Checking $SWORD_PATH...");
 
-			if (envsworddir != NULL) {
+			SWBuf envsworddir = getenv("SWORD_PATH");
+			if (envsworddir.length()) {
 				
-				SWLog::getSystemLog()->logDebug("found (%s).", envsworddir);
+				SWLog::getSystemLog()->logDebug("found (%s).", envsworddir.c_str());
 				path = envsworddir;
-				if ((envsworddir[strlen(envsworddir)-1] != '\\') && (envsworddir[strlen(envsworddir)-1] != '/'))
+				if ((envsworddir[envsworddir.length()-1] != '\\') && (envsworddir[envsworddir.length()-1] != '/'))
 					path += "/";
 
 				SWLog::getSystemLog()->logDebug("Checking $SWORD_PATH for mods.conf...");
@@ -451,14 +473,20 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 				sysConfPath = gfp;
 			delete [] globPaths;
 
-			SWBuf homeDir = envhomedir;
-			if (homeDir.size() > 0) {
-				if ((homeDir[homeDir.size()-1] != '\\') && (homeDir[homeDir.size()-1] != '/'))
-					homeDir += "/";
-				homeDir += ".sword/sword.conf";
-				if (FileMgr::existsFile(homeDir)) {
-					SWLog::getSystemLog()->logDebug("Overriding any systemwide sword.conf with one found in users home directory.");
-					sysConfPath = homeDir;
+			if (homeDir.length()) {
+				SWBuf tryPath = homeDir;
+				tryPath += ".sword/sword.conf";
+				if (FileMgr::existsFile(tryPath)) {
+					SWLog::getSystemLog()->logDebug("Overriding any systemwide sword.conf with one found in users home directory (%s)", tryPath.c_str());
+					sysConfPath = tryPath;
+				}
+				else {
+					SWBuf tryPath = homeDir;
+					tryPath += "sword/sword.conf";
+					if (FileMgr::existsFile(tryPath)) {
+						SWLog::getSystemLog()->logDebug("Overriding any systemwide sword.conf with one found in users home directory (%s)", tryPath.c_str());
+						sysConfPath = tryPath;
+					}
 				}
 			}
 		}
@@ -515,14 +543,40 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	if (*configType)
 		return;
 
+	// WE STILL HAVEN'T FOUND A CONFIGURATION.  LET'S LOOK IN SOME OS SPECIFIC
+	// LOCATIONS
+	//
+	// for various flavors of windoze...
+	// check %ALLUSERSPROFILE%/Application Data/sword/
+
+	SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE/Application Data/sword/...");
+
+	SWBuf envallusersdir  = getenv("ALLUSERSPROFILE");
+	if (envallusersdir != NULL) {
+		SWLog::getSystemLog()->logDebug("found (%s).", envallusersdir.c_str());
+		path = envallusersdir;
+		if ((envallusersdir[envallusersdir.length()-1] != '\\') && (envallusersdir[envallusersdir.length()-1] != '/'))
+			path += "/";
+
+		SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE for mods.d...");
+		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+			SWLog::getSystemLog()->logDebug("found.");
+			stdstr(prefixPath, path.c_str());
+			path += "mods.d";
+			stdstr(configPath, path.c_str());
+			*configType = 1;
+			return;
+		}
+	}
+
+
+	// FINALLY CHECK PERSONAL HOME DIRECTORY LOCATIONS
 	// check ~/.sword/
 
 	SWLog::getSystemLog()->logDebug("Checking home directory for ~/.sword...");
 
-	if (envhomedir != NULL) {
-		path = envhomedir;
-		if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
-			path += "/";
+	if (homeDir.length()) {
+		path = homeDir;
 		path += ".sword/";
 		SWLog::getSystemLog()->logDebug("  Checking for %smods.conf...", path.c_str());
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
@@ -533,6 +587,18 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			return;
 		}
 
+		SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
+		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+			SWLog::getSystemLog()->logDebug("found.");
+			stdstr(prefixPath, path.c_str());
+			path += "mods.d";
+			stdstr(configPath, path.c_str());
+			*configType = 2;
+			return;
+		}
+
+		path = homeDir;
+		path += "sword/";
 		SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 			SWLog::getSystemLog()->logDebug("found.");
@@ -685,17 +751,18 @@ signed char SWMgr::Load() {
 		}
 		if (augmentHome) {
 			// augment config with ~/.sword/mods.d if it exists ---------------------
-			char *envhomedir = getenv("HOME");
-			if (envhomedir != NULL && configType != 2) { // 2 = user only
-				SWBuf path = envhomedir;
-				if ((envhomedir[strlen(envhomedir)-1] != '\\') && (envhomedir[strlen(envhomedir)-1] != '/'))
-					path += "/";
+			SWBuf homeDir = getHomeDir();
+			if (homeDir.length() && configType != 2) { // 2 = user only
+				SWBuf path = homeDir;
 				path += ".sword/";
+				augmentModules(path.c_str(), mgrModeMultiMod);
+				path = homeDir;
+				path += "sword/";
 				augmentModules(path.c_str(), mgrModeMultiMod);
 			}
 		}
 // -------------------------------------------------------------------------
-		if ( !Modules.size() ) // config exists, but no modules
+		if (!Modules.size()) // config exists, but no modules
 			ret = 1;
 
 	}

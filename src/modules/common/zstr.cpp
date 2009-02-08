@@ -166,7 +166,7 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) {
 	
 	if (idxfd > 0) {
 		idxfd->seek(ioffset, SEEK_SET);
-		idxfd->read(&offset, sizeof(__u32));
+		idxfd->read(&offset, 4);
 		offset = swordtoarch32(offset);
 		getKeyFromDatOffset(offset, buf);
 	}
@@ -251,8 +251,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 		idxfd->seek(tryoff, SEEK_SET);
 
 		start = size = 0;
-		retval = (idxfd->read(&start, sizeof(__u32))==sizeof(__u32)) ? retval : -1;
-		retval = (idxfd->read(&size, sizeof(__u32))==sizeof(__u32)) ? retval : -1;
+		retval = (idxfd->read(&start, 4) == 4) ? retval : -1;
+		retval = (idxfd->read(&size, 4) == 4) ? retval : -1;
 		start = swordtoarch32(start);
 		size  = swordtoarch32(size);
 
@@ -279,8 +279,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
 					*idxoff = tryoff;
 				break;
 			}
-			idxfd->read(&start, sizeof(__u32));
-			idxfd->read(&size, sizeof(__u32));
+			idxfd->read(&start, 4);
+			idxfd->read(&size, 4);
 			start = swordtoarch32(start);
 			size  = swordtoarch32(size);
 
@@ -324,8 +324,8 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
 
 	do {
 		idxfd->seek(offset, SEEK_SET);
-		idxfd->read(&start, sizeof(__u32));
-		idxfd->read(&size, sizeof(__u32));
+		idxfd->read(&start, 4);
+		idxfd->read(&size, 4);
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
@@ -388,8 +388,8 @@ void zStr::getCompressedText(long block, long entry, char **buf) {
 		__u32 start = 0;
 
 		zdxfd->seek(block * ZDXENTRYSIZE, SEEK_SET);
-		zdxfd->read(&start, sizeof(__u32));
-		zdxfd->read(&size, sizeof(__u32));
+		zdxfd->read(&start, 4);
+		zdxfd->read(&size, 4);
 		start = swordtoarch32(start);
 		size = swordtoarch32(size);
 
@@ -454,8 +454,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		else if ((!diff) && (len > 0 /*we're not deleting*/)) { // got absolute entry
 			do {
 				idxfd->seek(idxoff, SEEK_SET);
-				idxfd->read(&start, sizeof(__u32));
-				idxfd->read(&size, sizeof(__u32));
+				idxfd->read(&start, 4);
+				idxfd->read(&size, 4);
 				start = swordtoarch32(start);
 				size = swordtoarch32(size);
 
@@ -539,8 +539,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		// add a new line to make data file easier to read in an editor
 		datfd->write(&nl, 2);
 		
-		idxfd->write(&outstart, sizeof(__u32));
-		idxfd->write(&outsize, sizeof(__u32));
+		idxfd->write(&outstart, 4);
+		idxfd->write(&outsize, 4);
 		if (idxBytes) {
 			idxfd->write(idxBytes, shiftSize);
 		}
@@ -602,8 +602,8 @@ void zStr::flushCache() {
 			}
 			else {
 				zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
-				zdxfd->read(&start, sizeof(__u32));
-				zdxfd->read(&outsize, sizeof(__u32));
+				zdxfd->read(&start, 4);
+				zdxfd->read(&outsize, 4);
 				start = swordtoarch32(start);
 				outsize = swordtoarch32(outsize);
 				if (start + outsize >= zdtSize) {	// last entry, just overwrite
@@ -629,8 +629,8 @@ void zStr::flushCache() {
 			// add a new line to make data file easier to read in an editor
 			zdtfd->write(&nl, 2);
 			
-			zdxfd->write(&outstart, sizeof(__u32));
-			zdxfd->write(&outsize, sizeof(__u32));
+			zdxfd->write(&outstart, 4);
+			zdxfd->write(&outsize, 4);
 		}
 		delete cacheBlock;
 		cacheBlock = 0;

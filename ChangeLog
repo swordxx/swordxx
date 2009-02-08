@@ -1,5 +1,15 @@
 API ChangeLog 
 
+07-Feb-2008	Troy A. Griffitts <scribe@crosswire.org>
+	Added fallback checks for OS specific module
+		locations:
+			$ALLUSERSPROFILE/Application Data/sword
+
+			~ additionally looked for at:
+			$HOMEDRIVE$HOMEPATH/Application Data
+
+			added ~/sword (note the absense of '.')
+
 26-Dec-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Added list support in OSIS HTML conversion (ghellings)
 

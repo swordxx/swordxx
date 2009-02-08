@@ -26,6 +26,7 @@
 #define RAWSTR_H
 
 #include <defs.h>
+#include <sysdata.h>
 
 SWORD_NAMESPACE_START
 
@@ -48,8 +49,8 @@ public:
 	virtual ~RawStr();
 	void getIDXBuf(long ioffset, char **buf);
 	void getIDXBufDat(long ioffset, char **buf);
-	signed char findOffset(const char *key, long *start, unsigned short *size, long away = 0, long *idxoff = 0);
-	void readText(long start, unsigned short *size, char **idxbuf, SWBuf &buf);
+	signed char findOffset(const char *key, __u32 *start, __u16 *size, long away = 0, __u32 *idxoff = 0);
+	void readText(__u32 start, __u16 *size, char **idxbuf, SWBuf &buf);
 	static signed char createModule(const char *path);
 };
 

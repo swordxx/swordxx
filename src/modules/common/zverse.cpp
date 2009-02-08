@@ -151,12 +151,12 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 	// set start to offset in
 	// set size to
 	// set
-	unsigned long ulBuffNum=0;	          // buffer number
-	unsigned long ulVerseStart=0;	       // verse offset within buffer
-	unsigned short usVerseSize=0;	       // verse size
-	unsigned long ulCompOffset=0;	       // compressed buffer start
-	unsigned long ulCompSize=0;	             // buffer size compressed
-	unsigned long ulUnCompSize=0;	          // buffer size uncompressed
+	__u32 ulBuffNum    = 0;	          // buffer number
+	__u32 ulVerseStart = 0;	       // verse offset within buffer
+	__u16 usVerseSize  = 0;	       // verse size
+	__u32 ulCompOffset = 0;	       // compressed buffer start
+	__u32 ulCompSize   = 0;	             // buffer size compressed
+	__u32 ulUnCompSize = 0;	          // buffer size uncompressed
 
 	*start = *size = 0;
 	//printf ("Finding offset %ld\n", idxoff);
@@ -243,7 +243,8 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		pcCompText.setSize(ulCompSize);
 		rawZFilter(pcCompText, 0); // 0 = decipher
 		
-		compressor->zBuf(&ulCompSize, pcCompText.getRawData());
+		unsigned long bufSize = ulCompSize;
+		compressor->zBuf(&bufSize, pcCompText.getRawData());
 
 		if (cacheBuf) {
 			flushCache();
@@ -307,13 +308,12 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 
 	dirtyCache = true;
 
-	unsigned long start, outstart;
-	unsigned long outBufIdx = cacheBufIdx;
-	unsigned short size;
-	unsigned short outsize;
+	__u32 start;
+	__u16 size;
+	__u32 outBufIdx = cacheBufIdx;
 
 	idxoff *= 10;
-	size = outsize = len;
+	size = len;
 
 	start = strlen(cacheBuf);
 
@@ -321,23 +321,23 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 		start = outBufIdx = 0;
 
 	outBufIdx = archtosword32(outBufIdx);
-	outstart  = archtosword32(start);
-	outsize   = archtosword16(size);
+	start  = archtosword32(start);
+	size   = archtosword16(size);
 
 	compfp[testmt-1]->seek(idxoff, SEEK_SET);
 	compfp[testmt-1]->write(&outBufIdx, 4);
-	compfp[testmt-1]->write(&outstart, 4);
-	compfp[testmt-1]->write(&outsize, 2);
+	compfp[testmt-1]->write(&start, 4);
+	compfp[testmt-1]->write(&size, 2);
 	strcat(cacheBuf, buf);
 }
 
 
 void zVerse::flushCache() {
 	if (dirtyCache) {
-		unsigned long idxoff;
-		unsigned long start, outstart;
-		unsigned long size, outsize;
-		unsigned long zsize, outzsize;
+		__u32 idxoff;
+		__u32 start, outstart;
+		__u32 size, outsize;
+		__u32 zsize, outzsize;
 
 		idxoff = cacheBufIdx * 12;
 		if (cacheBuf) {
@@ -348,12 +348,14 @@ void zVerse::flushCache() {
 	//				compressor = new LZSSCompress();
 	//			}
 				compressor->Buf(cacheBuf);
-				compressor->zBuf(&zsize);
-				outzsize = zsize;
+				unsigned long tmpSize;
+				compressor->zBuf(&tmpSize);
+				outzsize = zsize = tmpSize;
 
 				SWBuf buf;
 				buf.setSize(zsize + 5);
-				memcpy(buf.getRawData(), compressor->zBuf(&zsize), zsize);
+				memcpy(buf.getRawData(), compressor->zBuf(&tmpSize), tmpSize);
+				outzsize = zsize = tmpSize;
 				buf.setSize(zsize);
 				rawZFilter(buf, 1); // 1 = encipher
 
@@ -386,9 +388,9 @@ void zVerse::flushCache() {
  */
 
 void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-	long bufidx;
-	long start;
-	unsigned short size;
+	__s32 bufidx;
+	__s32 start;
+	__u16 size;
 
 	destidxoff *= 10;
 	srcidxoff  *= 10;
@@ -464,8 +466,12 @@ char zVerse::createModule(const char *ipath, int blockBound)
 
 	VerseKey vk;
 	vk.Headings(1);
-	long offset = 0;
-	short size = 0;
+
+	__s32 offset = 0;
+	__s16 size = 0;
+	offset = archtosword32(offset);
+	size   = archtosword16(size);
+
 	for (vk = TOP; !vk.Error(); vk++) {
 		if (vk.Testament() == 1) {
 			fd->write(&offset, 4);	//compBufIdxOffset
@@ -484,10 +490,6 @@ char zVerse::createModule(const char *ipath, int blockBound)
 
 	delete [] path;
 	delete [] buf;
-/*
-	RawVerse rv(path);
-	VerseKey mykey("Rev 22:21");
-*/
 	
 	return 0;
 }

@@ -28,6 +28,7 @@
 #include <rawfiles.h>
 #include <filemgr.h>
 #include <versekey.h>
+#include <sysdata.h>
 
 SWORD_NAMESPACE_START
 
@@ -235,32 +236,40 @@ void RawFiles::deleteEntry() {
 
 char *RawFiles::getNextFilename() {
 	static char incfile[255];
-	long number;
+	__u32 number;
 	FileDesc *datafile;
 
 	sprintf(incfile, "%s/incfile", path);
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
-	if (datafile->read(&number, 4) != 4)
-		number = 0;
+
+	if (datafile->read(&number, 4) != 4) number = 0;
+	number = swordtoarch32(number);
+
 	number++;
 	FileMgr::getSystemFileMgr()->close(datafile);
 	
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+	sprintf(incfile, "%.7d", number-1);
+
+	number = archtosword32(number);
 	datafile->write(&number, 4);
+
 	FileMgr::getSystemFileMgr()->close(datafile);
-	sprintf(incfile, "%.7ld", number-1);
 	return incfile;
 }
 
 
 char RawFiles::createModule (const char *path) {
 	char *incfile = new char [ strlen (path) + 16 ];
-    static long zero = 0;
+
+	__u32 zero = 0;
+	zero = archtosword32(zero);
+
 	FileDesc *datafile;
 
 	sprintf(incfile, "%s/incfile", path);
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-    delete [] incfile;
+	delete [] incfile;
 	datafile->write(&zero, 4);
 	FileMgr::getSystemFileMgr()->close(datafile);
 

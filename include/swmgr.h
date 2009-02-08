@@ -157,6 +157,7 @@ public:
 
 	static bool isICU;
 	static const char *globalConfPath;
+	static SWBuf getHomeDir();
 
 	/**
 	 *
