@@ -552,7 +552,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE/Application Data/sword/...");
 
 	SWBuf envallusersdir  = getenv("ALLUSERSPROFILE");
-	if (envallusersdir != NULL) {
+	if (envallusersdir.length()) {
 		SWLog::getSystemLog()->logDebug("found (%s).", envallusersdir.c_str());
 		path = envallusersdir;
 		if ((envallusersdir[envallusersdir.length()-1] != '\\') && (envallusersdir[envallusersdir.length()-1] != '/'))
