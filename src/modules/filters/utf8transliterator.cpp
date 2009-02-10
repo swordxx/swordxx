@@ -52,7 +52,7 @@ const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
 	//        "UNGEGN",
 	//        "ISO",
 	//        "ALA-LC",
-	//        "BGN-PCGN",
+	//        "BGN",
 	//        "Greek",
 	//        "Hebrew",
 	//        "Cyrillic",
@@ -394,13 +394,13 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                         case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
                         case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
                         case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
-//                        case UBLOCK_MEROITIC: scripts[SE_MEROITIC] = true; break;
-//                        case UBLOCK_LINEARB: scripts[SE_LINEARB] = true; break;
-//                        case UBLOCK_CYPRIOT: scripts[SE_CYPRIOT] = true; break;
+                        case UBLOCK_MEROITIC: scripts[SE_MEROITIC] = true; break;
+                        case UBLOCK_LINEARB: scripts[SE_LINEARB] = true; break;
+                        case UBLOCK_CYPRIOT: scripts[SE_CYPRIOT] = true; break;
                         case UBLOCK_RUNIC: scripts[SE_RUNIC] = true; break;
                         case UBLOCK_OGHAM: scripts[SE_OGHAM] = true; break;
                         case UBLOCK_THAANA: scripts[SE_THAANA] = true; break;
-//                        case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
+                        case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
 //                        case UBLOCK_TENGWAR: scripts[SE_TENGWAR] = true; break;
 //                        case UBLOCK_CIRTH: scripts[SE_CIRTH] = true; break;
 			case UBLOCK_CJK_RADICALS_SUPPLEMENT:
@@ -461,8 +461,8 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
         	                	addTrans("Greek-Latin/ISO", &ID);
                                 else if (option == SE_ALALC)
         	                	addTrans("Greek-Latin/ALALC", &ID);
-                                else if (option == SE_BGNPCGN)
-        	                	addTrans("Greek-Latin/BGNPCGN", &ID);
+                                else if (option == SE_BGN)
+        	                	addTrans("Greek-Latin/BGN", &ID);
                                 else if (option == SE_IPA)
         	                	addTrans("Greek-IPA/Ancient", &ID);
                                 else {
@@ -538,8 +538,8 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
         			addTrans("Georgian-Latin/ISO", &ID);
                         else if (option == SE_ALALC)
         			addTrans("Georgian-Latin/ALALC", &ID);
-                        else if (option == SE_BGNPCGN)
-        			addTrans("Georgian-Latin/BGNPCGN", &ID);
+                        else if (option == SE_BGN)
+        			addTrans("Georgian-Latin/BGN", &ID);
                         else if (option == SE_IPA)
         			addTrans("Georgian-IPA", &ID);
                         else {
@@ -552,8 +552,8 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
         			addTrans("Armenian-Latin/ISO", &ID);
                         else if (option == SE_ALALC)
         			addTrans("Armenian-Latin/ALALC", &ID);
-                        else if (option == SE_BGNPCGN)
-        			addTrans("Armenian-Latin/BGNPCGN", &ID);
+                        else if (option == SE_BGN)
+        			addTrans("Armenian-Latin/BGN", &ID);
                         else if (option == SE_IPA)
         			addTrans("Armenian-IPA", &ID);
                         else {
@@ -616,8 +616,8 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 		if (scripts[SE_THAANA]) {
 			if (option == SE_ALALC)
                         	addTrans("Thaana-Latin/ALALC", &ID);
-			else if (option == SE_BGNPCGN)
-                        	addTrans("Thaana-Latin/BGNPCGN", &ID);
+			else if (option == SE_BGN)
+                        	addTrans("Thaana-Latin/BGN", &ID);
 			else {
 				addTrans("Thaana-Latin", &ID);
 				scripts[SE_LATIN] = true;
