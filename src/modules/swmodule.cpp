@@ -76,7 +76,7 @@ typedef std::list<SWBuf> StringList;
  *	unicode  - if this module is unicode
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char* imodlang) {
+SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, const char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
 	key       = CreateKey();
 	entryBuf  = "";
 	config    = &ownConfig;

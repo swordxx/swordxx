@@ -20,7 +20,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <string>
 #include <stack>
 #include <vector>
 #include <iostream>
@@ -1215,7 +1214,7 @@ int main(int argc, char **argv) {
 	int append          = 0;
 	int compType        = 0;
 	int iType           = 4;
-	string cipherKey    = "";
+	SWBuf cipherKey     = "";
 
 	SWCompress *compressor = 0;
 
@@ -1299,7 +1298,7 @@ int main(int argc, char **argv) {
 
 	SWFilter *cipherFilter = 0;
 
-	if (!cipherKey.empty()) {
+	if (cipherKey.length()) {
 		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
 		cipherFilter = new CipherFilter(cipherKey.c_str());
 		module->AddRawFilter(cipherFilter);

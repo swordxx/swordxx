@@ -38,9 +38,9 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-RawCom4::RawCom4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char* ilang)
+RawCom4::RawCom4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char *ilang, const char *versification)
 		: RawVerse4(ipath),
-            SWCom(iname, idesc, idisp, encoding, dir, markup, ilang){
+            SWCom(iname, idesc, idisp, encoding, dir, markup, ilang, versification) {
 }
 
 

@@ -18,6 +18,7 @@
  *
  */
 
+#include <utilstr.h>
 #include <swtext.h>
 #include <listkey.h>
 #include <localemgr.h>
@@ -33,10 +34,12 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, (char *)"Biblical Texts", enc, dir, mark, ilang) {
-	tmpVK = new VerseKey();
+SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(imodname, imoddesc, idisp, "Biblical Texts", enc, dir, mark, ilang) {
+	this->versification = 0;
+	stdstr(&(this->versification), versification);
 	delete key;
-	key = CreateKey();
+	key = (VerseKey *)CreateKey();
+	tmpVK = (VerseKey *)CreateKey();
 	skipConsecutiveLinks = false;
 }
 
@@ -47,6 +50,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWT
 
 SWText::~SWText() {
 	delete tmpVK;
+	delete [] versification;
 }
 
 
@@ -57,12 +61,8 @@ SWText::~SWText() {
 SWKey *SWText::CreateKey() {
 	VerseKey *vk = new VerseKey();
 
-// TODO: put this config check somewhere once
-//	SWBuf versif = getConfigEntry("Versification");
-//
-//	if (versif.length() > 0)
-//	vk->setVersificationSystem(versif);
-//
+	vk->setVersificationSystem(versification);
+
 	return vk;
 }
 

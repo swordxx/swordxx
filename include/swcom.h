@@ -37,6 +37,7 @@ class SWKey;
 class SWDLLEXPORT SWCom : public SWModule {
 
 	mutable VerseKey *tmpVK;
+	char *versification;
 
 protected:
 	VerseKey &getVerseKey() const;
@@ -47,9 +48,10 @@ public:
 	/** Initializes data for instance of SWCom
 	*/
 	SWCom(const char *imodname = 0, const char *imoddesc = 0,
-			SWDisplay * idisp = 0, SWTextEncoding enc = ENC_UNKNOWN,
+			SWDisplay *idisp = 0, SWTextEncoding enc = ENC_UNKNOWN,
 			SWTextDirection dir = DIRECTION_LTR,
-			SWTextMarkup mark = FMT_UNKNOWN, const char* ilang = 0);
+			SWTextMarkup mark = FMT_UNKNOWN, const char *ilang = 0,
+			const char *versification = "KJV");
 
 	virtual ~SWCom();
 	virtual SWKey *CreateKey();

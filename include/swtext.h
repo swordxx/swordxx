@@ -37,6 +37,7 @@ class SWDLLEXPORT SWText : public SWModule {
 
 	// for conversion if we have been set with a different internal key type
 	mutable VerseKey *tmpVK;
+	char *versification;
 
 protected:
 	VerseKey &getVerseKey() const;
@@ -45,10 +46,11 @@ public:
 	/** Initializes data for instance of SWText
 	*/
 	SWText(const char *imodname = 0, const char *imoddesc = 0,
-			SWDisplay * idisp = 0,
+			SWDisplay *idisp = 0,
 			SWTextEncoding encoding = ENC_UNKNOWN,
 			SWTextDirection dir = DIRECTION_LTR,
-			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+			SWTextMarkup markup = FMT_UNKNOWN, const char *ilang = 0,
+			const char *versification = "KJV");
 
 	virtual ~SWText();
 	/** Create the correct key (VerseKey) for use with SWText

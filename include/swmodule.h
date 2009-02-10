@@ -155,7 +155,7 @@ public:
 	 * @param markup Source Markup of the module (e.g. OSIS)
 	 * @param modlang Language of the module (e.g. en)
 	 */
-	SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* modlang = 0);
+	SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char *modlang = 0);
 
 	/** SWModule d-tor
 	 */

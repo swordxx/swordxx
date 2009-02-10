@@ -481,7 +481,7 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 			line.append(chunk+start, size);
 		}
 	}
-	return ((len>0) || line.length());
+	return ((len > 0) || line.length());
 }
 
 

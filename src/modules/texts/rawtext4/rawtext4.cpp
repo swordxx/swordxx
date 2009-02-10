@@ -57,8 +57,8 @@ typedef list<long> longlist;
  *	idisp	 - Display object to use for displaying
  */
 
-RawText4::RawText4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang)
-		: SWText(iname, idesc, idisp, enc, dir, mark, ilang),
+RawText4::RawText4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification)
+		: SWText(iname, idesc, idisp, enc, dir, mark, ilang, versification),
 		RawVerse4(ipath) {
 }
 

@@ -20,11 +20,14 @@
  */
 
 
+#include <utilstr.h>
 #include <swcom.h>
 #include <localemgr.h>
 #include <versekey.h>
 
+
 SWORD_NAMESPACE_START
+
 
 /******************************************************************************
  * SWCom Constructor - Initializes data for instance of SWCom
@@ -34,10 +37,12 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang): SWModule(imodname, imoddesc, idisp, (char *)"Commentaries", enc, dir, mark, ilang) {
+SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(imodname, imoddesc, idisp, "Commentaries", enc, dir, mark, ilang) {
+	this->versification = 0;
+	stdstr(&(this->versification), versification);
 	delete key;
-	key = CreateKey();
-	tmpVK = new VerseKey();
+	key = (VerseKey *)CreateKey();
+	tmpVK = (VerseKey *)CreateKey();
 }
 
 
@@ -47,10 +52,17 @@ SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTex
 
 SWCom::~SWCom() {
 	delete tmpVK;
+	delete [] versification;
 }
 
 
-SWKey *SWCom::CreateKey() { return new VerseKey(); }
+SWKey *SWCom::CreateKey() {
+	VerseKey *vk = new VerseKey();
+
+	vk->setVersificationSystem(versification);
+
+	return vk;
+}
 
 
 long SWCom::Index() const {
@@ -118,5 +130,6 @@ VerseKey &SWCom::getVerseKey() const {
 	}
 	else	return *key;
 }
+
 
 SWORD_NAMESPACE_END
