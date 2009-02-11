@@ -390,19 +390,19 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 			case UBLOCK_MALAYALAM: scripts[SE_MALAYALAM] = true; break;
 			case UBLOCK_THAI: scripts[SE_THAI] = true; break;
 			case UBLOCK_GEORGIAN: scripts[SE_GEORGIAN] = true; break;
-      			case UBLOCK_ARMENIAN: scripts[SE_ARMENIAN] = true; break;
-                        case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
-                        case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
-                        case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
-                        case UBLOCK_MEROITIC: scripts[SE_MEROITIC] = true; break;
-                        case UBLOCK_LINEARB: scripts[SE_LINEARB] = true; break;
-                        case UBLOCK_CYPRIOT: scripts[SE_CYPRIOT] = true; break;
-                        case UBLOCK_RUNIC: scripts[SE_RUNIC] = true; break;
-                        case UBLOCK_OGHAM: scripts[SE_OGHAM] = true; break;
-                        case UBLOCK_THAANA: scripts[SE_THAANA] = true; break;
-                        case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
-//                        case UBLOCK_TENGWAR: scripts[SE_TENGWAR] = true; break;
-//                        case UBLOCK_CIRTH: scripts[SE_CIRTH] = true; break;
+			case UBLOCK_ARMENIAN: scripts[SE_ARMENIAN] = true; break;
+			case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
+			case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
+			case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
+//			case UBLOCK_MEROITIC: scripts[SE_MEROITIC] = true; break;
+//			case UBLOCK_LINEARB: scripts[SE_LINEARB] = true; break;
+//			case UBLOCK_CYPRIOT: scripts[SE_CYPRIOT] = true; break;
+			case UBLOCK_RUNIC: scripts[SE_RUNIC] = true; break;
+			case UBLOCK_OGHAM: scripts[SE_OGHAM] = true; break;
+			case UBLOCK_THAANA: scripts[SE_THAANA] = true; break;
+			case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
+//			case UBLOCK_TENGWAR: scripts[SE_TENGWAR] = true; break;
+//			case UBLOCK_CIRTH: scripts[SE_CIRTH] = true; break;
 			case UBLOCK_CJK_RADICALS_SUPPLEMENT:
 			case UBLOCK_KANGXI_RADICALS:
 			case UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
