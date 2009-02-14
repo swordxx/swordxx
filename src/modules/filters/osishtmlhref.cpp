@@ -119,7 +119,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 				if (!suspendTextPassThru) {
 					buf.appendFormatted("<small><em>&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\">%s</a>&gt;</em></small>",
 							(gh.length()) ? gh.c_str() : "", 
-							URL::encode(val2).c_str(), 
+							URL::encode(val2).c_str(),
 							val2);
 				}
 			//}

@@ -31,6 +31,27 @@
 
 SWORD_NAMESPACE_START
 
+namespace {
+	typedef std::map< unsigned char, SWBuf > DataMap;
+    	DataMap m;
+	static class __init {
+		public:
+			__init() {
+				for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
+					if ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || strchr("-_.!~*'()", c)) {
+						continue; //we don't need an encoding for this char
+					}
+
+					SWBuf buf;
+					buf.setFormatted("%%%-.2X", c);
+					m[c] = buf;
+				}
+				//the special encodings for certain chars
+				m[' '] = '+';
+			}
+	} ___init;
+}
+
 /**
  * Constructors/Destructors
  */
@@ -197,24 +218,11 @@ void URL::parse () {
 	}
 }
 
+
 const SWBuf URL::encode(const char *urlText) {
 	/*static*/ SWBuf url;
 	url = urlText;
 	
-	typedef std::map< unsigned char, SWBuf > DataMap;
-    	DataMap m;
-	for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
-			if ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || strchr("-_.!~*'()", c)) {
-				continue; //we don't need an encoding for this char
-			}
-
-			SWBuf buf;
-			buf.setFormatted("%%%-.2X", c);
-			m[c] = buf;
-	}
-	//the special encodings for certain chars
-	m[' '] = '+';
-
 	SWBuf buf;
 	const int length = url.length();
 	for (int i = 0; i < length; i++) { //fill "buf"
