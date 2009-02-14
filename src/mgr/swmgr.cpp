@@ -960,11 +960,11 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 */
 	}
 
-	// if a specific module type is set in the config, use this
-	if ((entry = section.find("Type")) != section.end())
-		newmod->Type(entry->second.c_str());
+	if (newmod) {
+		// if a specific module type is set in the config, use this
+		if ((entry = section.find("Type")) != section.end())
+			newmod->Type(entry->second.c_str());
 
-	if (newmod){
 		newmod->setConfig(&section);
 	}
 	
