@@ -95,8 +95,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	*/
 	char headings;
 
-	void initBounds() const;
-
 	/** initialize and allocate books array
 	*/
 	void initstatics();
@@ -104,6 +102,9 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	/** initializes this VerseKey()
 	*/
 	void init();
+
+	// bounds caching is mutable, thus const
+	void initBounds() const;
 
 	/** Binary search to find the index closest, but less
 	* than the given value.
@@ -115,7 +116,8 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	*/
 	int findindex(long *array, int size, long value);
 
-	mutable VerseKey *lowerBound, *upperBound;
+	mutable long lowerBound, upperBound;
+	mutable VerseKey *tmpClone;
 
 
 protected:

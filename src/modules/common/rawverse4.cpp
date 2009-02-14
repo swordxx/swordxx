@@ -284,7 +284,7 @@ char RawVerse4::createModule(const char *ipath)
 	size   = archtosword32(size);
 
 	for (vk = TOP; !vk.Error(); vk++) {
-		if (vk.Testament() == 1) {
+		if (vk.Testament() < 2) {
 			fd->write(&offset, 4);
 			fd->write(&size, 4);
 		}
@@ -293,6 +293,8 @@ char RawVerse4::createModule(const char *ipath)
 			fd2->write(&size, 4);
 		}
 	}
+	fd2->write(&offset, 4);
+	fd2->write(&size, 4);
 
 	FileMgr::getSystemFileMgr()->close(fd);
 	FileMgr::getSystemFileMgr()->close(fd2);

@@ -203,7 +203,7 @@ VerseMgr::Book::~Book() {
 
 int VerseMgr::Book::getVerseMax(int chapter) const {
 	chapter--;
-	return (chapter < (signed int)p->verseMax.size()) ? p->verseMax[chapter] : -1;
+	return (p && (chapter < (signed int)p->verseMax.size()) && (chapter > -1)) ? p->verseMax[chapter] : -1;
 }
 
 
@@ -266,7 +266,7 @@ char VerseMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, 
 		(*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
 		(*verse)   = (offset - *c);
 	}
-	return 0;
+	return ((*chapter > 0) && (*verse > b->getVerseMax(*chapter))) ? KEYERR_OUTOFBOUNDS : 0;
 }
 
 

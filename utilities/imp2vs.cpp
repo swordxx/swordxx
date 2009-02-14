@@ -111,6 +111,8 @@ int main(int argc, char **argv) {
 	}
 	writeEntry(currentKey, currentEntry, module);
 
+	delete vkey;
+
 	return 0;
 }
 
@@ -123,71 +125,27 @@ void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module)
 	if (key.size() && entry.size()) {
 		std::cout << "from file: " << key << std::endl;
 		VerseKey *vkey = (VerseKey *)module->getKey();
-		*vkey = key;
-		if (!vkey->Chapter()) {
-			// bad hack:  0:0 is Book intro; (chapter):0 is Chapter intro; 0:2 is Module intro; 0:1 is Testament intro
-			int backstep = vkey->Verse();
-			if (backstep) {
-				vkey->Verse(1);
-				vkey->Chapter(1);
-				switch (backstep) {
-				case 2:
-					vkey->Book(1);
-					vkey->Testament(0);
-				case 1:
-					vkey->Book(0);
-					vkey->Chapter(0);
-				}
-				vkey->Verse(0);
+		VerseKey *linkMaster = (VerseKey *)module->CreateKey();
+
+		ListKey listKey = vkey->ParseVerseList(key.c_str(), "Gen1:1", true);
+
+		bool first = true;
+		for (listKey = TOP; !listKey.Error(); listKey++) {
+			*vkey = listKey;
+			if (first) {
+				*linkMaster = *vkey;
+				SWBuf text = module->getRawEntry();
+				text += entry;
+				std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
+				module->setEntry(text);
+				first = false;
 			}
-
-			std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)entry.size() << std::endl;
-			module->setEntry(entry.c_str(), entry.size());
-		}
-		else {
-			ListKey listkey = vkey->ParseVerseList(key.c_str(), "Gen1:1", true);
-			int i;
-			bool havefirst = false;
-			VerseKey firstverse;
-			firstverse.Headings(1);
-			firstverse.AutoNormalize(0);
-			for (i = 0; i < listkey.Count(); i++) {
-				VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
-				if (element) {
-					*vkey = element->LowerBound();
-					VerseKey finalkey = element->UpperBound();
-					finalkey.Headings(1);
-					finalkey.AutoNormalize(0);
-					if (!havefirst) {
-						havefirst = true;
-						firstverse = *vkey;
-
-						std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)entry.size() << std::endl;
-						module->setEntry(entry.c_str(), entry.size());
-						(*vkey)++;
-					}
-					while (! (finalkey < (*vkey))) {
-						std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
-						*module << &firstverse;
-						(*vkey)++;
-					}
-				}
-				else {
-					if (havefirst) {
-						*vkey = (*listkey.GetElement(i));
-						std::cout << "linking entry: " << *vkey << " to " << firstverse << std::endl;
-						*module << &firstverse;
-					}
-					else {
-						*vkey = (*listkey.GetElement(i));
-						havefirst = true;
-						firstverse = *vkey;
-
-						std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)entry.size() << std::endl;
-						module->setEntry(entry.c_str(), entry.size());
-					}
-				}
+			else {
+				std::cout << "linking entry: " << *vkey << " to " << *linkMaster << std::endl;
+				module->linkEntry(vkey);
 			}
 		}
+
+		delete linkMaster;
 	}
 }

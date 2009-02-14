@@ -473,7 +473,7 @@ char zVerse::createModule(const char *ipath, int blockBound)
 	size   = archtosword16(size);
 
 	for (vk = TOP; !vk.Error(); vk++) {
-		if (vk.Testament() == 1) {
+		if (vk.Testament() < 2) {
 			fd->write(&offset, 4);	//compBufIdxOffset
 			fd->write(&offset, 4);
 			fd->write(&size, 2);
@@ -484,6 +484,9 @@ char zVerse::createModule(const char *ipath, int blockBound)
 			fd2->write(&size, 2);
 		}
 	}
+	fd2->write(&offset, 4);	//compBufIdxOffset
+	fd2->write(&offset, 4);
+	fd2->write(&size, 2);
 
 	FileMgr::getSystemFileMgr()->close(fd);
 	FileMgr::getSystemFileMgr()->close(fd2);

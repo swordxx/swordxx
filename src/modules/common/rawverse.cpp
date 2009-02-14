@@ -237,7 +237,7 @@ void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 
 
 /******************************************************************************
- * RawVerse::CreateModule	- Creates new module files
+ * RawVerse::createModule	- Creates new module files
  *
  * ENT: path	- directory to store module files
  * RET: error status
@@ -285,7 +285,7 @@ char RawVerse::createModule(const char *ipath)
 	size = archtosword16(size);
 
 	for (vk = TOP; !vk.Error(); vk++) {
-		if (vk.Testament() == 1) {
+		if (vk.Testament() < 2) {
 			fd->write(&offset, 4);
 			fd->write(&size, 2);
 		}
@@ -294,6 +294,8 @@ char RawVerse::createModule(const char *ipath)
 			fd2->write(&size, 2);
 		}
 	}
+	fd2->write(&offset, 4);
+	fd2->write(&size, 2);
 
 	FileMgr::getSystemFileMgr()->close(fd);
 	FileMgr::getSystemFileMgr()->close(fd2);
