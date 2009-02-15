@@ -33,11 +33,23 @@ void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module);
 
 void usage(const char *progName, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
-	fprintf(stderr, "%s (Revision $Rev: 2234 $) SWORD Bible/Commentary importer.\n", progName);
-	fprintf(stderr, "usage: %s <imp_file> [options]\n"
+	fprintf(stderr, "\n=== imp2vs (Revision $Rev: 2234 $) SWORD Bible/Commentary importer.\n");
+	fprintf(stderr, "\nusage: %s <imp_file> [options]\n"
 		"\t -a augment module if exists (default is to create new)\n"
 		"\t -o <output_path> where to write data files.\n"
-		"\t -4 use 4 byte size entries (default is 2).\n"
+		"\t -4 use 4 byte size entries (default is 2).\n\n"
+		"'imp' format is a simple standard for importing data into SWORD modules.\n"
+		"Required is a plain text file containing $$$key lines followed by content.\n\n"
+		"$$$Gen.1.1\n"
+		"In the beginning God created\n"
+		"the heavens and the earth\n"
+		"$$$Gen.1.2\n"
+		"and the earth...\n\n"
+		"Key lines can contain ranges, for example, a commentary entry which discusses\n"
+		"John 1:1-4 might have a key, $$$Jn.1.1-4.  Special keys for intro entries use\n"
+		"standard SWORD notation, e.g. $$$Rom.4.0 for intro of Romans chapter 4,\n"
+		"$$$Rev.0.0 for intro of the Book of Revelation of John.  $$$[ Module Heading ]\n"
+		"for entire module intro.  $$$[ Testament 2 Heading ] for NT intro.\n\n"
 		, progName);
 	exit(-1);
 }

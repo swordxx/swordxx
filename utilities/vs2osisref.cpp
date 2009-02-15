@@ -36,7 +36,6 @@ int main(int argc, char **argv)
 	        exit(-1);
         }
 
-        char * locale;
 
 	if (argc > 3) {
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[3]);
