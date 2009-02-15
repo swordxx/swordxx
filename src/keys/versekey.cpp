@@ -121,20 +121,25 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
  * VerseKey::positionFrom - Positions this VerseKey to another VerseKey
  */
 
-void VerseKey::positionFrom(const VerseKey &ikey) {
-	error = 0;
+void VerseKey::setFromOther(const VerseKey &ikey) {
 	testament = ikey.Testament();
 	book = ikey.Book();
 	chapter = ikey.Chapter();
 	verse = ikey.Verse();
 	suffix = ikey.getSuffix();
+}
+
+
+void VerseKey::positionFrom(const VerseKey &ikey) {
+	error = 0;
+	setFromOther(ikey);
 	// should we always perform bounds checks?  Tried but seems to cause infinite recursion
 	if (_compare(UpperBound()) > 0) {
-		positionFrom(UpperBound());
+		setFromOther(UpperBound());
 		error = KEYERR_OUTOFBOUNDS;
 	}
 	if (_compare(LowerBound()) < 0) {
-		positionFrom(LowerBound());
+		setFromOther(LowerBound());
 		error = KEYERR_OUTOFBOUNDS;
 	}
 }
@@ -467,6 +472,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 	VerseKey *curKey  = (VerseKey *)this->clone();
 	VerseKey *lastKey = (VerseKey *)this->clone();
+	lastKey->ClearBounds();
+	curKey->ClearBounds();
 
 	// some silly checks for corner cases
 	if (!strcmp(buf, "[ Module Heading ]")) {
@@ -958,8 +965,8 @@ void VerseKey::ClearBounds()
 {
 	delete tmpClone;
 	tmpClone = 0;
-	initBounds();
 	boundSet = false;
+	initBounds();
 }
 
 

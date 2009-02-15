@@ -106,6 +106,9 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	// bounds caching is mutable, thus const
 	void initBounds() const;
 
+	// private with no bounds check
+	void setFromOther(const VerseKey &vk);
+
 	/** Binary search to find the index closest, but less
 	* than the given value.
 	*

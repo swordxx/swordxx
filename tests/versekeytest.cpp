@@ -74,9 +74,9 @@ cout << currentVerse << endl;
      VerseKey boundTest("lk", "acts");
 
      boundTest.setText("Is.1.13");
-     std::cout << "Error: " << (int)boundTest.Error() << "\n";
+     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
      boundTest.setText("1Sam.21.1");
-     std::cout << "Error: " << (int)boundTest.Error() << "\n";
+     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
 
 
      *x = "Is.1.13";
