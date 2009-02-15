@@ -15,19 +15,18 @@
  *
  */
 
-using namespace std;
-
 #include <iostream>
 #include <rawtext.h>
- #include <rawtext4.h>
+#include <rawtext4.h>
 #include <versekey.h>
 #include <swbuf.h>
 #include <filemgr.h>
 
-
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
+
+using namespace std;
 
 void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module);
 
