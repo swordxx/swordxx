@@ -1,19 +1,19 @@
 /*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation version 2.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- */
+* Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+*	CrossWire Bible Society
+*	P. O. Box 2528
+*	Tempe, AZ  85280-2528
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation version 2.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+*/
 
 #include <string>
 #include <vector>
@@ -28,165 +28,115 @@
 using std::string;
 
 #ifndef NO_SWORD_NAMESPACE
-using sword::zLD;
-using sword::ZipCompress;
-using sword::RawLD4;
-using sword::RawLD;
-using sword::SWKey;
+
+using namespace sword;
+
 #endif
 
 
 int main(int argc, char **argv) {
 
-  const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
+	const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
 
-  signed long i = 0;
-  string keybuffer;
-  string entbuffer;
-  string linebuffer;
-  char modname[16];
-  char links = 0;
-  std::vector<string> linkbuffer;
+	signed long i = 0;
+	string keybuffer;
+	string entbuffer;
+	string linebuffer;
+	char modname[16];
+	char links = 0;
+	std::vector<string> linkbuffer;
 
-  if (argc > 2) {
-    strcpy (modname, argv[2]);
-  }
-  else if (argc > 1) {
-    for (i = 0; (i < 16) && (argv[1][i]) && (argv[1][i] != '.'); i++) {
-      modname[i] = argv[1][i];
-    }
-    modname[i] = 0;
-  }
-  else {
-    fprintf(stderr, helptext, argv[0]);
-    exit(-1);
-  }
-
-  std::ifstream infile(argv[1]);
-
-  char mode = 1;
-  if (argc > 3) {
-    switch (*argv[3]) {
-    case 'z':
-      mode = 3;
-      break;
-    case '2':
-      mode = 2;
-      break;
-    default:
-      mode = 1;
-    }
-  }
-
-  zLD* modZ = NULL;
-  RawLD* mod2 = NULL;
-  RawLD4* mod4 = NULL;
-  SWKey* key;
-
-  if (mode == 3) {
-    zLD::createModule(modname);
-    modZ = new zLD(modname, 0, 0, 30, new ZipCompress());
-    key = modZ->CreateKey();
-  }
-  else if (mode == 2) {
-    RawLD::createModule(modname);
-    mod2 = new RawLD(modname);
-    key = mod2->CreateKey();
-  }
-  else if (mode == 1) {
-    RawLD4::createModule(modname);
-    mod4 = new RawLD4(modname);
-    key = mod4->CreateKey();
-  }
-
-  key->Persist(1);
-
-  while (!infile.eof()) {
-    std::getline(infile, linebuffer);
-    if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "$$$") {
-      if (keybuffer.size() && entbuffer.size()) {
-	std::cout << keybuffer << std::endl;
-	*key = keybuffer.c_str();
-
-	if (mode == 3) {
-	  modZ->setKey(*key);
-	  modZ->setEntry(entbuffer.c_str(), entbuffer.size());
-          for (i = 0; i < links; i++) {
-                SWKey tmpkey = linkbuffer[i].c_str();
-                modZ->linkEntry(&tmpkey);
-                std::cout << "Linking: " << linkbuffer[i] << std::endl;
-          }
+	if (argc > 2) {
+		strcpy (modname, argv[2]);
 	}
-	else if (mode == 2) {
-	  mod2->setKey(*key);
-	  mod2->setEntry(entbuffer.c_str(), entbuffer.size());
-          for (i = 0; i < links; i++) {
-                SWKey tmpkey = linkbuffer[i].c_str();
-                mod2->linkEntry(&tmpkey);
-                std::cout << "Linking: " << linkbuffer[i] << std::endl;
-          }
+	else if (argc > 1) {
+		for (i = 0; (i < 16) && (argv[1][i]) && (argv[1][i] != '.'); i++) {
+			modname[i] = argv[1][i];
+		}
+		modname[i] = 0;
 	}
-	else if (mode == 1) {
-	  mod4->setKey(*key);
-	  mod4->setEntry(entbuffer.c_str(), entbuffer.size());
-          for (i = 0; i < links; i++) {
-                SWKey tmpkey = linkbuffer[i].c_str();
-                mod4->linkEntry(&tmpkey);
-                std::cout << "Linking: " << linkbuffer[i] << std::endl;
-          }
+	else {
+		fprintf(stderr, helptext, argv[0]);
+		exit(-1);
 	}
-      }
-      if (linebuffer.size() > 3)
-      	keybuffer = linebuffer.substr(3,linebuffer.size()) ;
-      entbuffer.resize(0);
-      linkbuffer.clear();
-      links = 0;
-    }
-    else if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "%%%") {
-      linkbuffer.push_back(linebuffer.substr(3,linebuffer.size()));
-      links++;
-    }
-    else {
-      entbuffer += linebuffer;
-    }
-  }
 
-  //handle final entry
-  if (keybuffer.size() && entbuffer.size()) {
-    std::cout << keybuffer << std::endl;
-    *key = keybuffer.c_str();
+	std::ifstream infile(argv[1]);
 
-    if (mode == 3) {
-	  modZ->setKey(*key);
-          modZ->setEntry(entbuffer.c_str(), entbuffer.size());
-          for (i = 0; i < links; i++) {
-                SWKey tmpkey = linkbuffer[i].c_str();
-                modZ->linkEntry(&tmpkey);
-                std::cout << "Linking: " << linkbuffer[i] << std::endl;
-          }
-    }
-    else if (mode == 2) {
-	  mod2->setKey(*key);
-          mod2->setEntry(entbuffer.c_str(), entbuffer.size());
-          for (i = 0; i < links; i++) {
-                SWKey tmpkey = linkbuffer[i].c_str();
-                mod2->linkEntry(&tmpkey);
-                std::cout << "Linking: " << linkbuffer[i] << std::endl;
-          }
+	char mode = 1;
+	if (argc > 3) {
+		switch (*argv[3]) {
+			case 'z': mode = 3; break;
+			case '2': mode = 2; break;
+			default: mode = 1;
+		}
+	}
 
-    }
-    else if (mode == 1) {
-          mod4->setKey(*key);
-          mod4->setEntry(entbuffer.c_str(), entbuffer.size());
-          for (i = 0; i < links; i++) {
-                SWKey tmpkey = linkbuffer[i].c_str();
-                mod4->linkEntry(&tmpkey);
-                std::cout << "Linking: " << linkbuffer[i] << std::endl;
-          }
+	SWModule *mod = 0;
+	SWKey *key, *linkKey;
 
-    }
-  }
-  infile.close();
+	switch (mode) {
+	case 3:
+		zLD::createModule(modname);
+		mod = new zLD(modname, 0, 0, 30, new ZipCompress());
+	case 2:
+		RawLD::createModule(modname);
+		mod = new RawLD(modname);
+	case 1:
+		RawLD4::createModule(modname);
+		mod = new RawLD4(modname);
+	}
 
-  return 0;
+	key = mod->CreateKey();
+	linkKey = mod->CreateKey();
+	key->Persist(1);
+	mod->setKey(key);
+
+	while (!infile.eof()) {
+		std::getline(infile, linebuffer);
+		if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "$$$") {
+			if (keybuffer.size() && entbuffer.size()) {
+				std::cout << keybuffer << std::endl;
+				*key = keybuffer.c_str();
+
+				mod->setEntry(entbuffer.c_str(), entbuffer.size());
+				for (i = 0; i < links; i++) {
+					std::cout << "Linking: " << linkbuffer[i] << std::endl;
+					*linkKey = linkbuffer[i].c_str();
+					mod->linkEntry(linkKey);
+				}
+			}
+			if (linebuffer.size() > 3)
+				keybuffer = linebuffer.substr(3,linebuffer.size());
+
+			entbuffer.resize(0);
+			linkbuffer.clear();
+			links = 0;
+		}
+		else if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "%%%") {
+			linkbuffer.push_back(linebuffer.substr(3,linebuffer.size()));
+			links++;
+		}
+		else {
+			entbuffer += linebuffer;
+		}
+	}
+
+	//handle final entry
+	if (keybuffer.size() && entbuffer.size()) {
+		std::cout << keybuffer << std::endl;
+		*key = keybuffer.c_str();
+
+		mod->setEntry(entbuffer.c_str(), entbuffer.size());
+		for (i = 0; i < links; i++) {
+			std::cout << "Linking: " << linkbuffer[i] << std::endl;
+			*linkKey = linkbuffer[i].c_str();
+			mod->linkEntry(linkKey);
+		}
+	}
+	infile.close();
+
+	delete key;
+	delete mod;
+
+	return 0;
 }
