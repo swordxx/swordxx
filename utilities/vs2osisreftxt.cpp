@@ -16,6 +16,7 @@
  */
 
 #include <iostream>
+#include <stdio.h>
 
 #include <versekey.h>
 #include <localemgr.h>
