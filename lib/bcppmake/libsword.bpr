@@ -63,7 +63,6 @@
       ..\..\src\modules\filters\plainfootnotes.obj 
       ..\..\src\modules\filters\plainhtml.obj 
       ..\..\src\modules\filters\rtfhtml.obj 
-      ..\..\src\modules\filters\scsuutf8.obj 
       ..\..\src\modules\filters\swbasicfilter.obj 
       ..\..\src\modules\filters\swoptfilter.obj 
       ..\..\src\modules\filters\thmlfootnotes.obj 

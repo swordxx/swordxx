@@ -37,7 +37,6 @@ class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
 
 protected:
         SWFilter *latin1utf8;
-        SWFilter *scsuutf8;
         SWFilter *targetenc;
 
 

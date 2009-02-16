@@ -23,7 +23,7 @@
       ..\..\obj\swgenbook.obj ..\..\obj\rawgenbook.obj ..\..\obj\swfiltermgr.obj 
       ..\..\obj\utf8utf16.obj ..\..\obj\gbfheadings.obj 
       ..\..\obj\gbfhtmlhref.obj ..\..\obj\gbfmorph.obj ..\..\obj\latin1utf16.obj 
-      ..\..\obj\latin1utf8.obj ..\..\obj\scsuutf8.obj 
+      ..\..\obj\latin1utf8.obj 
       ..\..\obj\swbasicfilter.obj ..\..\obj\thmlfootnotes.obj 
       ..\..\obj\thmlheadings.obj ..\..\obj\thmlhtmlhref.obj 
       ..\..\obj\thmllemma.obj ..\..\obj\thmlmorph.obj ..\..\obj\thmlscripref.obj 
@@ -161,7 +161,6 @@
       <FILE FILENAME="..\..\src\modules\filters\gbfmorph.cpp" FORMNAME="" UNITNAME="gbfmorph" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\latin1utf16.cpp" FORMNAME="" UNITNAME="latin1utf16" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\latin1utf8.cpp" FORMNAME="" UNITNAME="latin1utf8" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\src\modules\filters\scsuutf8.cpp" FORMNAME="" UNITNAME="scsuutf8" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\swbasicfilter.cpp" FORMNAME="" UNITNAME="swbasicfilter" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlfootnotes.cpp" FORMNAME="" UNITNAME="thmlfootnotes" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\thmlheadings.cpp" FORMNAME="" UNITNAME="thmlheadings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

@@ -62,7 +62,6 @@ USEUNIT("..\..\src\modules\filters\gbfhtmlhref.cpp");
 USEUNIT("..\..\src\modules\filters\gbfmorph.cpp");
 USEUNIT("..\..\src\modules\filters\latin1utf16.cpp");
 USEUNIT("..\..\src\modules\filters\latin1utf8.cpp");
-USEUNIT("..\..\src\modules\filters\scsuutf8.cpp");
 USEUNIT("..\..\src\modules\filters\swbasicfilter.cpp");
 USEUNIT("..\..\src\modules\filters\thmlfootnotes.cpp");
 USEUNIT("..\..\src\modules\filters\thmlheadings.cpp");

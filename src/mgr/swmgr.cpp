@@ -821,9 +821,7 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 	else
 		markup = FMT_GBF;
 
-	if (!stricmp(encoding.c_str(), "SCSU"))
-		enc = ENC_SCSU;
-	else if (!stricmp(encoding.c_str(), "UTF-8")) {
+	if (!stricmp(encoding.c_str(), "UTF-8")) {
 		enc = ENC_UTF8;
 	}
 	else enc = ENC_LATIN1;

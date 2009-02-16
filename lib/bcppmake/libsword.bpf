@@ -81,7 +81,6 @@ USEUNIT("..\..\src\modules\filters\osiswordjs.cpp");
 USEUNIT("..\..\src\modules\filters\plainfootnotes.cpp");
 USEUNIT("..\..\src\modules\filters\plainhtml.cpp");
 USEUNIT("..\..\src\modules\filters\rtfhtml.cpp");
-USEUNIT("..\..\src\modules\filters\scsuutf8.cpp");
 USEUNIT("..\..\src\modules\filters\swbasicfilter.cpp");
 USEUNIT("..\..\src\modules\filters\swoptfilter.cpp");
 USEUNIT("..\..\src\modules\filters\thmlfootnotes.cpp");

@@ -482,7 +482,6 @@
         <FILE FILENAME="..\..\src\modules\filters\plainfootnotes.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="plainfootnotes" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\plainhtml.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="plainhtml" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\rtfhtml.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rtfhtml" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\modules\filters\scsuutf8.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="scsuutf8" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\swbasicfilter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="swbasicfilter" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\swoptfilter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="swoptfilter" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\thmlfootnotes.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="thmlfootnotes" FORMNAME="" DESIGNCLASS=""/>

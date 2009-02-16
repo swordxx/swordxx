@@ -59,7 +59,6 @@ libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8utf16.cpp
 libsword_la_SOURCES += $(filtersdir)/utf16utf8.cpp
-libsword_la_SOURCES += $(filtersdir)/scsuutf8.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8html.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
 
