@@ -133,8 +133,10 @@ int main(int argc, char **argv) {
 			mod->linkEntry(linkKey);
 		}
 	}
+
 	infile.close();
 
+	delete linkKey;
 	delete key;
 	delete mod;
 
