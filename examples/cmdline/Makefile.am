@@ -10,5 +10,5 @@ listoptions_SOURCES = listoptions.cpp
 verserangeparse_SOURCES = verserangeparse.cpp
 threaded_search_SOURCES = threaded_search.cpp
 outplain_SOURCES = outplain.cpp
-outrender = outrender.cpp
+outrender_SOURCES = outrender.cpp
 threaded_search_LDADD = $(LDADD) -lpthread
