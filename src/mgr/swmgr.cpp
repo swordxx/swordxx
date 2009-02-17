@@ -790,6 +790,8 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 	if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
 		datapath += "/";
 
+	SWBuf versification = ((entry = section.find("Versification"))  != section.end()) ? (*entry).second : (SWBuf)"KJV";
+
 	// DataPath - relative path to data used by module driver.  May be a directory, may be a File.
 	//   Typically not useful by outside world.  See AbsoluteDataPath, PrefixPath, and RelativePrefixPath
 	//   below.
@@ -865,17 +867,17 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 
 		if (compress) {
 			if (!stricmp(driver, "zText"))
-				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
-			else	newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str());
+				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+			else	newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
 		}
 	}
 
 	if (!stricmp(driver, "RawText")) {
-		newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+		newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
 	}
 
 	if (!stricmp(driver, "RawText4")) {
-		newmod = new RawText4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+		newmod = new RawText4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
 	}
 
 	// backward support old drivers
@@ -884,11 +886,11 @@ SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &s
 	}
 
 	if (!stricmp(driver, "RawCom")) {
-		newmod = new RawCom(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+		newmod = new RawCom(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
 	}
 
 	if (!stricmp(driver, "RawCom4")) {
-		newmod = new RawCom4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+		newmod = new RawCom4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
 	}
 
 	if (!stricmp(driver, "RawFiles")) {
