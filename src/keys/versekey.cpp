@@ -1618,8 +1618,8 @@ int VerseKey::compare(const SWKey &ikey)
 
 int VerseKey::_compare(const VerseKey &ivkey)
 {
-	long keyval1 = 0;
-	long keyval2 = 0;
+	unsigned long keyval1 = 0;
+	unsigned long keyval2 = 0;
 
 	keyval1 += Testament()       * 1000000000;
 	keyval2 += ivkey.Testament() * 1000000000;
@@ -1631,8 +1631,7 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	keyval2 += ivkey.Verse()     * 50;
 	keyval1 += (int)getSuffix();
 	keyval2 += (int)ivkey.getSuffix();
-	keyval1 -= keyval2;
-	keyval1 = (keyval1) ? ((keyval1 > 0) ? 1 : -1) /*keyval1/labs(keyval1)*/:0; // -1 | 0 | 1
+	keyval1 = (keyval1 != keyval2) ? ((keyval1 > keyval2) ? 1 : -1) : 0; // -1 | 0 | 1
 	return keyval1;
 }
 
