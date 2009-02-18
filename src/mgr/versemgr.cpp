@@ -207,6 +207,11 @@ int VerseMgr::Book::getVerseMax(int chapter) const {
 }
 
 
+int VerseMgr::System::getBookCount() const {
+	return (p ? p->books.size() : 0);
+}
+
+
 long VerseMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const {
 	long  offset = -1;
 	chapter--;
