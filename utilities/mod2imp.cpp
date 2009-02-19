@@ -15,76 +15,102 @@
  *
  */
 
-#include <fcntl.h>
 #include <iostream>
-#include <fstream>
-#include <string>
+#include <map>
 
-#ifndef __GNUC__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <ztext.h>
-#include <zld.h>
-#include <zcom.h>
+#include <markupfiltmgr.h>
 #include <swmgr.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
+#include <swmodule.h>
 #include <versekey.h>
-#include <stdio.h>
+
+using std::map;
+using std::cout;
+using std::endl;
 
 #ifndef NO_SWORD_NAMESPACE
-using sword::SWModule;
-using sword::SWMgr;
-using sword::ModMap;
-using sword::SWKey;
-using sword::VerseKey;
-using sword::SW_POSITION;
+
+using namespace sword;
+
 #endif
 
 
-void errorOutHelp(char *appName) {
-	std::cerr << appName << " - a tool to output a Sword module in SWORD's 'imp' import format\n";
-	std::cerr << "usage: "<< appName << " <modname> \n";
-	std::cerr << "\n\n";
+void usage(const char *progName, const char *error = 0) {
+	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
+	fprintf(stderr, "\n=== mod2imp (Revision $Rev: 2234 $) SWORD module exporter.\n");
+	fprintf(stderr, "\nusage: %s <module_name> [options]\n"
+		"\t -r [output_format]  - render content instead of outputting raw native\n"
+		"\t\tdata.  output_format can be: OSIS, HTMLHREF, RTF.\n"
+		"\t -s - strip markup instead of outputting raw native data.\n"
+		"\t -f <option_name> <option_value> - when rendering (-r, above), option\n"
+		"\t\tfilter values can be set with this option.\n\n"
+		, progName);
 	exit(-1);
 }
 
 
 int main(int argc, char **argv)
 {
-	SWModule *inModule = 0;
-	
-	if ((argc != 2)) {
-		errorOutHelp(argv[0]);
+	// handle options
+	if (argc < 2) usage(*argv);
+
+	const char *progName   = argv[0];
+	const char *modName    = argv[1];
+	bool render            = false;
+	bool strip             = false;
+	SWBuf renderForm;
+	SWBuf optionName;
+	map<SWBuf, SWBuf> options; // optionName, optionValue;
+
+	for (int i = 2; i < argc; i++) {
+		if (!strcmp(argv[i], "-r")) {
+			if (strip) usage(progName, "-r can't be supplied when using -s");
+			if (i+1 < argc) renderForm = argv[++i];
+			render = true;
+		}
+		else if (!strcmp(argv[i], "-s")) {
+			if (render) usage(progName, "-s can't be supplied when using -r");
+			strip = true;
+		}
+		else if (!strcmp(argv[i], "-f")) {
+			if (i+1 < argc) optionName          = argv[++i];
+			if (i+1 < argc) options[optionName] = argv[++i];
+			else usage(progName, "-f requires <option_name> <option_value>");
+		}
+		else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+	}
+	// -----------------------------------------------------
+
+	MarkupFilterMgr *markupMgr = 0;
+	if       (renderForm == "HTMLHREF") markupMgr = new MarkupFilterMgr(sword::FMT_HTMLHREF);
+	else if  (renderForm == "OSIS")     markupMgr = new MarkupFilterMgr(sword::FMT_OSIS);
+	else if  (renderForm == "RTF")      markupMgr = new MarkupFilterMgr(sword::FMT_RTF);
+	else if  (renderForm.length())      usage(progName, (((SWBuf) "Unknown output_format for -r (")+renderForm+")").c_str());
+
+	SWMgr *mgr = (markupMgr) ? new SWMgr(markupMgr) : new SWMgr();
+
+	// set any options filters passed with -f
+	for (map<SWBuf, SWBuf>::iterator it = options.begin(); it != options.end(); it++) {
+		mgr->setGlobalOption(it->first, it->second);
 	}
 
-	if ((!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
-		errorOutHelp(argv[0]);
-	}
+	SWModule *module = mgr->getModule(modName);
 
-	SWMgr mgr;
+	if (!module) usage(progName, (((SWBuf) "Couldn't find module: ") + modName).c_str());
 
-	ModMap::iterator it = mgr.Modules.find(argv[1]);
-	if (it == mgr.Modules.end()) {
-		fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
-		exit(-2);
-	}
 
-	inModule = it->second;
-
-	SWKey *key = (SWKey *)*inModule;
+	SWKey *key = module->getKey();
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 
 	if (vkey)
 		vkey->Headings(1);
 
-	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
-		std::cout << "$$$" << inModule->KeyText() << std::endl;
-		std::cout << inModule->getRawEntry() << std::endl;
+	for ((*module) = TOP; !module->Error(); (*module)++) {
+		std::cout << "$$$" << module->KeyText() << std::endl;
+		std::cout << ((render) ? module->RenderText() : (strip) ? module->StripText() : module->getRawEntry()) << "\n";
 	}
+
+	cout << endl;
+
 	return 0;
 }
 
