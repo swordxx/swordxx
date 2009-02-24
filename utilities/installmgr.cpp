@@ -263,6 +263,9 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
 		finish(-4);
 	}
 	module = it->second;
+
+	installMgr->setUserDisclaimerConfirmed(true);
+
 	int error = installMgr->installModule(mgr, 0, module->Name(), is);
 	if (error) {
 		cout << "Error installing module: [" << module->Name() << "] (write permissions?)\n";

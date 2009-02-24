@@ -144,9 +144,9 @@ void InstallMgr::readInstallConf() {
 		while (sourceBegin != sourceEnd) {
 			InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
 			sources[is->caption] = is;
-			SWBuf parent = (SWBuf)privatePath + "/" + is->source + "/file";
+			SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
 			FileMgr::createParent(parent.c_str());
-			is->localShadow = (SWBuf)privatePath + "/" + is->source;
+			is->localShadow = (SWBuf)privatePath + "/" + is->uid;
 			sourceBegin++;
 		}
 	}
@@ -331,7 +331,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	SWLog::getSystemLog()->logDebug("***** modName: %s \n", modName);
 
 	if (is)
-		sourceDir = (SWBuf)privatePath + "/" + is->source;
+		sourceDir = (SWBuf)privatePath + "/" + is->uid;
 	else	sourceDir = fromLocation;
 
 	removeTrailingSlash(sourceDir);
@@ -516,7 +516,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	// assert user disclaimer has been confirmed
 	if (!isUserDisclaimerConfirmed()) return -1;
 
-	SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->source.c_str();
+	SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->uid.c_str();
 	removeTrailingSlash(root);
 	SWBuf target = root + "/mods.d";
 	int errorCode = -1; //0 means successful
@@ -687,6 +687,8 @@ InstallSource::InstallSource(const char *type, const char *confEnt) {
 		u         = buf.stripPrefix('|', true);
 		p         = buf.stripPrefix('|', true);
 		uid       = buf.stripPrefix('|', true);
+
+		if (!uid.length()) uid = source;
 
 		removeTrailingSlash(directory);
 	}
