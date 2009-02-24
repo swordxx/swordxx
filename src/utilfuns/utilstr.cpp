@@ -84,13 +84,14 @@ const unsigned char SW_toupper_array[256] =
  */
 
 char *stdstr(char **ipstr, const char *istr, unsigned int memPadFactor) {
+	if (*ipstr)
+		delete [] *ipstr;
 	if (istr) {
-		if (*ipstr)
-			delete [] *ipstr;
 		int len = strlen(istr) + 1;
 		*ipstr = new char [ len * memPadFactor ];
 		memcpy(*ipstr, istr, len);
 	}
+	else *ipstr = 0;
 	return *ipstr;
 }
 

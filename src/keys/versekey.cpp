@@ -30,7 +30,6 @@
 #include <swkey.h>
 #include <swlog.h>
 #include <versekey.h>
-#include <localemgr.h>
 #include <swlocale.h>
 #include <roman.h>
 #include <versemgr.h>
@@ -45,7 +44,6 @@ SWClass VerseKey::classdef(classes);
  */
 
 int           VerseKey::instance       = 0;
-VerseKey::LocaleCache   VerseKey::localeCache;
 
 
 /******************************************************************************
@@ -66,10 +64,8 @@ void VerseKey::init() {
 	chapter = 1;
 	verse = 1;
 	suffix = 0;
-	locale = 0;
 	tmpClone = 0;
 
-	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 	setVersificationSystem("KJV");
 }
 
@@ -157,7 +153,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
 	chapter = ikey.Chapter();
 	verse = ikey.Verse();
 	suffix = ikey.getSuffix();
-	setLocale(getLocale());
+	setLocale(ikey.getLocale());
 	if (ikey.isBoundSet()) {
 		LowerBound(ikey.LowerBound());
 		UpperBound(ikey.UpperBound());
@@ -212,7 +208,6 @@ SWKey *VerseKey::clone() const
 
 VerseKey::~VerseKey() {
 
-	delete [] locale;
 	delete tmpClone;
 
 	--instance;
@@ -233,22 +228,6 @@ void VerseKey::setVersificationSystem(const char *name) {
 
 const char *VerseKey::getVersificationSystem() const { return refSys->getName(); }
 
-void VerseKey::setLocale(const char *name) {
-	bool useCache = false;
-
-	if (localeCache.name)
-		useCache = (!strcmp(localeCache.name, name));
-
-	if (!useCache)	{	// if we're setting params for a new locale
-		stdstr(&(localeCache.name), name);
-	}
-
-	SWLocale *locale = (useCache) ? localeCache.locale : LocaleMgr::getSystemLocaleMgr()->getLocale(name);
-	localeCache.locale = locale;
-
-//	setBookAbbrevs((locale)?locale->getBookAbbrevs():builtin_abbrevs, localeCache.abbrevsCnt);
-	stdstr(&(this->locale), localeCache.name);
-}
 
 
 /******************************************************************************
@@ -350,23 +329,15 @@ void VerseKey::freshtext() const
  * RET:	book number or < 0 = not valid
  */
 
-int VerseKey::getBookAbbrev(const char *iabbr)
+int VerseKey::getBookAbbrev(const char *iabbr) const
 {
 	int diff, abLen, min, max, target, retVal = -1;
 
 	char *abbr = 0;
 
 	int abbrevsCnt;
-	bool useCache = false;
 
-	useCache = (localeCache.name && localeCache.locale);
-
-	if (!useCache)	{	// if we're setting params for a new locale
-		stdstr(&(localeCache.name), locale);
-		localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(locale);
-	}
-
-	const struct abbrev *abbrevs = localeCache.locale->getBookAbbrevs(&abbrevsCnt);
+	const struct abbrev *abbrevs = getPrivateLocale()->getBookAbbrevs(&abbrevsCnt);
 
 	StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 	const bool hasUTF8Support = StringMgr::hasUTF8Support();
@@ -420,6 +391,42 @@ int VerseKey::getBookAbbrev(const char *iabbr)
 	}
 	delete [] abbr;
 	return retVal;
+}
+
+
+/******************************************************************************
+ * VerseKey::validateCurrentLocale - be sure a locale book abbrevs set is complete
+ *
+ */
+void VerseKey::validateCurrentLocale() const {
+	if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
+		for (int t = 0; t < 2; t++) {
+			for (int i = 0; i < BMAX[t]; i++) {
+				const int bn = getBookAbbrev(
+						getPrivateLocale()->translate(refSys->getBook(((t>1)?BMAX[0]:0)+i-1)->getLongName())
+					);
+				if ((bn)%39 != i) {
+					char *abbr = 0;
+					stdstr(&abbr, 
+						getPrivateLocale()->translate(refSys->getBook(((t>1)?BMAX[0]:0)+i-1)->getLongName()), 2);
+					strstrip(abbr);
+					SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d). Required entry should be:",
+						abbr, bn, i);
+
+					StringMgr* stringMgr = StringMgr::getSystemStringMgr();
+					const bool hasUTF8Support = StringMgr::hasUTF8Support();
+					if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+						stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+					}
+					else {
+						stringMgr->upperLatin1(abbr);
+					}
+					SWLog::getSystemLog()->logDebug("%s=%d", abbr, (t*39)+i+1);
+					delete [] abbr;
+				}
+			}
+		}
+	}
 }
 
 
@@ -1015,15 +1022,7 @@ const char *VerseKey::getShortText() const {
 
 
 const char *VerseKey::getBookName() const {
-	bool useCache = false;
-
-	useCache = (localeCache.name && localeCache.locale);
-
-	if (!useCache)	{	// if we're setting params for a new locale
-		stdstr(&(localeCache.name), locale);
-		localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(locale);
-	}
-	return localeCache.locale->translate(refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getLongName());
+	return getPrivateLocale()->translate(refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getLongName());
 }
 
 

@@ -1,7 +1,8 @@
 TOMCAT_HOME=/opt/tomcat
 #SERVLET_LIB=${TOMCAT_HOME}/common/lib/servlet-api.jar
 SERVLET_LIB=${TOMCAT_HOME}/lib/servlet-api.jar
-instdir=/home/swordweb/livehtml/webapp
+instdir=${TOMCAT_HOME}/webapps/swordweb
+#instdir=/home/swordweb/livehtml/webapp
 #instdir=/home/scribe/src/swordweb/webapp
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 

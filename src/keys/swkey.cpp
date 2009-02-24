@@ -24,11 +24,13 @@
 #include <swkey.h>
 #include <utilstr.h>
 #include <string.h>
+#include <localemgr.h>
 
 SWORD_NAMESPACE_START
 
 static const char *classes[] = {"SWKey", "SWObject", 0};
 SWClass SWKey::classdef(classes);
+SWKey::LocaleCache   SWKey::localeCache;
 
 /******************************************************************************
  * SWKey Constructor - initializes instance of SWKey
@@ -38,6 +40,7 @@ SWClass SWKey::classdef(classes);
 
 SWKey::SWKey(const char *ikey)
 {
+	init();
 	index     = 0;
 	persist   = 0;
 	keytext   = 0;
@@ -45,11 +48,12 @@ SWKey::SWKey(const char *ikey)
 	error     = 0;
 	userData  = 0;
 	stdstr(&keytext, ikey);
-	init();
 }
 
 SWKey::SWKey(SWKey const &k)
 {
+	init();
+	stdstr(&localeName, k.localeName);
 	index     = k.index;
 	persist   = k.persist;
 	userData  = k.userData;
@@ -57,12 +61,14 @@ SWKey::SWKey(SWKey const &k)
 	rangeText = 0;
 	error     = k.error;
 	setText(k.getText());
-	init();
 }
 
 void SWKey::init() {
 	myclass = &classdef;
 	boundSet = false;
+	locale = 0;
+	localeName = 0;
+	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 
 SWKey *SWKey::clone() const
@@ -75,10 +81,9 @@ SWKey *SWKey::clone() const
  */
 
 SWKey::~SWKey() {
-	if (keytext)
-		delete [] keytext;
-	if (rangeText)
-		delete [] rangeText;
+	delete [] keytext;
+	delete [] rangeText;
+	delete [] localeName;
 }
 
 
@@ -93,6 +98,28 @@ SWKey::~SWKey() {
 char SWKey::Persist() const
 {
 	return persist;
+}
+
+
+/******************************************************************************
+ * SWKey::getPrivateLocale - Gets a real locale object from our name
+ *
+ * RET:	locale object associated with our name
+ */
+
+SWLocale *SWKey::getPrivateLocale() const {
+	if (!locale) {
+		if ((!localeCache.name) || (strcmp(localeCache.name, localeName))) {
+			stdstr(&(localeCache.name), localeName);
+			// this line is the entire bit of work we're trying to avoid with the cache
+			// worth it?  compare time examples/cmdline/search KJV "God love world" to
+			// same with this method reduced to:
+			// if (!local) local = ... (call below); return locale;
+			localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(localeName);
+		}
+		locale = localeCache.locale;
+	}
+	return locale;
 }
 
 
@@ -150,6 +177,7 @@ void SWKey::setText(const char *ikey) {
 
 void SWKey::copyFrom(const SWKey &ikey) {
 // not desirable	Persist(ikey.Persist());
+	setLocale(ikey.getLocale());
 	setText((const char *)ikey);
 }
 

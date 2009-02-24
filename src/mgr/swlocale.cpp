@@ -151,33 +151,21 @@ void SWLocale::augment(SWLocale &addFrom) {
 	*localeSource += *addFrom.localeSource;
 }
 
-//#define NONNUMERICLOCALETHING 1
 
 const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 	static const char *nullstr = "";
 	if (!bookAbbrevs) {
 		ConfigEntMap::iterator it;
-		int i, j;
+		int i;
 		int size = localeSource->Sections["Book Abbrevs"].size();
 		bookAbbrevs = new struct abbrev[size + 1];
-		for (i = 0, j = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
-			#ifdef NONNUMERICLOCALETHING
-			int booknum = VerseKey::getOSISBookNum((*it).second.c_str());
-			if (booknum != -1) {
-				bookAbbrevs[j].ab = (*it).first.c_str();
-				bookAbbrevs[j].book = booknum;
-				j++;
-			}
-			#else
+		for (i = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
 			bookAbbrevs[i].ab = (*it).first.c_str();
 			bookAbbrevs[i].osis = (*it).second.c_str();
-			j++;
-			#endif
-			//printf("SWLocale::getBookAbbrevs %s:%s %d\n",bookAbbrevs[i].ab,
-			//	(*it).second.c_str(), bookAbbrevs[i].book); 
 		}
-		bookAbbrevs[j].ab = nullstr;
-		bookAbbrevs[j].osis = nullstr;
+
+		bookAbbrevs[i].ab = nullstr;
+		bookAbbrevs[i].osis = nullstr;
 		abbrevsCnt = size;
 	}
 		
