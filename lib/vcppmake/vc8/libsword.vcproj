@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="libsword"
 	ProjectGUID="{97449E5E-F880-4D22-933A-0D2FC32034D4}"
 	RootNamespace="libsword"
@@ -44,8 +44,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../apps/windoze/CBuilder5/InstallMgr/curl,../../../include,../../../src/utilfuns/win32,../../../apps/windoze/CBuilder5/InstallMgr/curl/include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL"
+				AdditionalIncludeDirectories="../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -71,6 +71,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="curllib.lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/Release"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -125,8 +127,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D _CRT_SECURE_NO_DEPRECATE"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../icu-sword/source/common,../../../../icu-sword/source/i18n,../../../include,../../../src/utilfuns/win32"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;_CRT_SECURE_NO_DEPRECATE"
+				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -205,8 +207,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../include,../../../src/utilfuns/win32"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL"
+				AdditionalIncludeDirectories="../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -286,8 +288,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../../icu-sword/include,../../../include,../../../src/utilfuns/win32,../../../apps/windoze/CBuilder5/InstallMgr/curl/include"
-				PreprocessorDefinitions="NDEBUG;_ICU_;WIN32;_LIB;REGEX_MALLOC"
+				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				PreprocessorDefinitions="NDEBUG;_ICU_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -531,6 +533,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\mgr\curlftpt.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\utilfuns\zlib\deflate.c"
@@ -1771,6 +1777,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\mgr\installmgr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\modules\filters\latin1utf16.cpp"
 				>
 				<FileConfiguration
@@ -2435,6 +2445,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\src\modules\filters\osisruby.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\filters\osisscripref.cpp"
@@ -3218,53 +3232,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\common\sapphire.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\src\modules\filters\scsuutf8.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5936,6 +5903,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\mgr\versemgr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\keys\versetreekey.cpp"
 				>
 			</File>
@@ -6325,14 +6296,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ftplib.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\ftplibftpt.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ftpparse.h"
 				>
 			</File>
@@ -6594,10 +6557,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\sapphire.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\scsuutf8.h"
 				>
 			</File>
 			<File
