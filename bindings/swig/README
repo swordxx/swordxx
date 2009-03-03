@@ -17,10 +17,10 @@ make
 # Rather than make, you probably only care about one of the languages bindings.
 # So you might try one of these pairs of commands instead:
 # 
-#   make perl_swig
+#   make perlswig
 #   make perl_make
 #
-#   make python_swig
+#   make pythonswig
 #   make python_make
 #
 
