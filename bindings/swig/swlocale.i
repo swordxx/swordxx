@@ -7,7 +7,7 @@
 
 %include "swlocale.h"
 
-%extend sword::SWLocale {
+/*%extend sword::SWLocale {
         int getNumBookGroupings() {
                 return 2;
         }
@@ -28,4 +28,4 @@
 
                 return books[grouping][booknum];
         }
-};
+};*/

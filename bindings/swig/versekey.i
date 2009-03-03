@@ -1,5 +1,6 @@
 %{
 #include "versekey.h"
+#include "versemgr.h"
 %}
 
 
@@ -18,6 +19,7 @@
 %immutable sword::abbrev::ab;
 
 %include "versekey.h"
+%include "versemgr.h"
 
 %extend sword::abbrev {
 	int getAbbrevCount() {
@@ -63,6 +65,14 @@
 	};
 
 
+    const int getBookCount(){
+        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+            self->getVersificationSystem()
+        );
+        return system->getBookCount();
+    }
+    
+        
 	/* Get name of book
 	* Returns the name of the booknumber in the givn testament.
 	* Testament may be 1 (OT) or 2 (NT)
@@ -70,14 +80,41 @@
 	*/
 	const char* bookName( const int testament, const int book ) {
 		if ( (testament < 1) || (testament > 2) ) {
-			return "";
+			return 0;
 		};
 		if ( (book < 1) || (book > self->BMAX[testament-1]) ) {
-			return "";
+			return 0;
 		}
 
-		return self->books[testament-1][book-1].name;
+        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+            self->getVersificationSystem()
+        );
+        
+        int book_num = (book - 1) + (
+            (testament == 2) ? self->BMAX[0] : 0
+        );
+
+        const sword::VerseMgr::Book* b = system->getBook(book_num);
+        if(!b) {
+            fprintf(stderr, "b is null for %d?!?\n", book_num);
+            return 0;
+        }
+        return b->getLongName();
+
+ 
 	};
+
+    const char* getOSISBookName( const int book ) {
+        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+            self->getVersificationSystem()
+        );
+   		if ( (book < 0) || (book >= system->getBookCount()))
+            return 0;
+
+        return system->getBook(book)->getOSISName();
+    }
+ 
+        
 
 	/* Get number of chapters in the given testament and book number
 	* testament may be 1 (OT) or 2 (NT)
@@ -91,7 +128,21 @@
 			return 0;
 		}
 
-		return self->books[testament-1][book-1].chapmax;
+        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+            self->getVersificationSystem()
+        );
+        
+        int book_num = (book - 1) + (
+            (testament == 2) ? self->BMAX[0] : 0
+        );
+
+        const sword::VerseMgr::Book* b = system->getBook(book_num);
+        if(!b) {
+            fprintf(stderr, "b is null for %d?!?\n", book_num);
+            return 0;
+        }        
+
+        return b->getChapterMax();
 	};
 	/* Get number of verses in the given chapter of the given in the given testament,
 	* testament may be 1 (OT) or 2 (NT)
@@ -105,11 +156,25 @@
 		if ( (book < 1) || (book > self->BMAX[testament-1]) ) {
 			return 0;
 		}
-		if ( (chapter < 1) || (chapter > self->books[testament-1][book-1].chapmax) ) {
+
+        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+            self->getVersificationSystem()
+        );
+        
+        int book_num = (book - 1) + (
+            (testament == 2) ? self->BMAX[0] : 0
+        );
+
+        const sword::VerseMgr::Book* b = system->getBook(book_num);
+        if(!b) {
+            fprintf(stderr, "b is null for %d?!?\n", book_num);
+            return 0;
+        }
+		if ( (chapter < 1) || (chapter > b->getChapterMax()) ) {
 			return 0;
 		}
 
-		return self->books[testament-1][book-1].versemax[chapter-1];
+		return b->getVerseMax(chapter);
 
 	};
 };
