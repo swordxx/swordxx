@@ -51,7 +51,11 @@ public:
 	// Create a class which can be inherited externally
 #ifndef SWIG
 	using sword::OSISHTMLHREF::MyUserData;
-    class MyOsisUserData : public MyUserData {};
+    class MyOsisUserData : public MyUserData {
+        public:
+        MyOsisUserData(const SWModule *module, const SWKey *key):
+            MyUserData(module, key) {};
+    };
 #endif
     
 	PyOSISHTMLHREF(RenderCallback* callback)
@@ -118,7 +122,11 @@ public:
 	// Create a class which can be inherited externally
 #ifndef SWIG
 	using sword::ThMLHTMLHREF::MyUserData;
-	class MyThmlUserData : public MyUserData {};
+	class MyThmlUserData : public MyUserData {
+        public:
+        MyThmlUserData(const SWModule *module, const SWKey *key):
+            MyUserData(module, key) {};
+    };
 #endif
 
 	PyThMLHTMLHREF(RenderCallback* callback)
@@ -183,6 +191,9 @@ public:
 class OSISData : 
 #ifndef SWIG
 public PyOSISHTMLHREF::MyOsisUserData {
+   public:
+   OSISData(const SWModule *module, const SWKey *key):
+       PyOSISHTMLHREF::MyOsisUserData(module, key) {};
 #else
 // trick SWIG into thinking this is not inherited from an inner class...
 public sword::BasicFilterUserData 
@@ -206,6 +217,10 @@ public:
 class ThMLData : 
 #ifndef SWIG
 public PyThMLHTMLHREF::MyThmlUserData {
+   public:
+   ThMLData(const SWModule *module, const SWKey *key):
+       PyThMLHTMLHREF::MyThmlUserData(module, key) {};
+
 #else
 // trick SWIG into thinking this is not inherited from an inner class...
 public sword::BasicFilterUserData 
