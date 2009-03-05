@@ -188,8 +188,16 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 VerseKey::VerseKey(const char *min, const char *max) : SWKey()
 {
 	init();
-	LowerBound(min);
-	UpperBound(max);
+	ListKey tmpListKey = ParseVerseList(min);
+	if (tmpListKey.Count()) {
+		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
+		LowerBound(*newElement);
+	}
+	tmpListKey = ParseVerseList(max, min, true);
+	if (tmpListKey.Count()) {
+		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
+		UpperBound((newElement->isBoundSet())?newElement->UpperBound():*newElement);
+	}
 	setPosition(TOP);
 }
 
@@ -238,42 +246,18 @@ const char *VerseKey::getVersificationSystem() const { return refSys->getName();
 
 char VerseKey::parse(bool checkAutoNormalize)
 {
-
-
 	testament = 2;
 	book      = BMAX[1];
 	chapter   = 1;
 	verse     = 1;
-	//int booklen   = 0;
 
 	int error = 0;
 
 	if (keytext) {
-		ListKey tmpListKey = VerseKey::ParseVerseList(keytext);
+		ListKey tmpListKey = ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
-
 			this->positionFrom(tmpListKey.getElement(0));
 			error = this->error;
-/*
-			SWKey::setText((const char *)tmpListKey);
-			for (int i = 1; i < 3; i++) {
-				for (int j = 1; j <= BMAX[i-1]; j++) {
-					int matchlen = strlen(books[i-1][j-1].name);
-					if (!strncmp(keytext, books[i-1][j-1].name, matchlen)) {
-						if (matchlen > booklen) {
-							booklen = matchlen;
-							testament = i;
-							book = j;
-						}
-					}
-				}
-			}
-
-			if (booklen) {
-				sscanf(&keytext[booklen], "%d:%d", &chapter, &verse);
-			}
-			else	error = 1;
-*/
 		} else error = 1;
 	}
 	if (checkAutoNormalize) {
@@ -517,7 +501,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	while (*buf) {
 		switch (*buf) {
 		case ':':
-			if (buf[1] != ' ') {		// for silly Mat 1:1: this verse....
+			if (buf[1] != ' ') {		// for silly "Mat 1:1: this verse...."
 				number[tonumber] = 0;
 				tonumber = 0;
 				if (*number)
@@ -990,6 +974,7 @@ void VerseKey::initBounds() const
 		upperBound = tmpClone->Index();
 		lowerBound = 0;
 	}
+	else tmpClone->setLocale(getLocale());
 }
 
 
@@ -1288,7 +1273,7 @@ int VerseKey::getVerse() const
 
 
 /******************************************************************************
- * VerseKey::Testament - Sets/gets testament
+ * VerseKey::setTestament - Sets/gets testament
  *
  * ENT:	itestament - value which to set testament
  *		[MAXPOS(char)] - only get
@@ -1463,19 +1448,11 @@ long VerseKey::Index() const
 
 	if (!testament) { // if we want module heading
 		offset = 0;
-		verse  = 0;
-		chapter = 0;
-		book = 0;
 	}
 	else if (!book) {	// we want testament heading
-			offset = ((testament == 2) ? refSys->getNTStartOffset():0) + 1;
-			chapter = 0;
-			verse = 0;
+		offset = ((testament == 2) ? refSys->getNTStartOffset():0) + 1;
 	}
 	else {
-		if (!chapter) {
-			verse   = 0;
-		}
 		offset = refSys->getOffsetFromVerse((((testament>1)?BMAX[0]:0)+book-1), chapter, verse);
 	}
 	return offset;

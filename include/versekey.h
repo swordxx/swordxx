@@ -57,14 +57,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
 	const VerseMgr::System *refSys;
 
-	/** The Testament: 0 - Module Heading; 1 - Old; 2 - New
-	*/
-	signed char testament;
-	mutable signed char book;
-	mutable signed int chapter;
-	mutable signed int verse;
-	mutable char suffix;
-
 	/** flag for auto normalization
 	*/
 	char autonorm;
@@ -103,6 +95,14 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	mutable VerseKey *tmpClone;
 
 protected:
+
+	/** The Testament: 0 - Module Heading; 1 - Old; 2 - New
+	*/
+	signed char testament;
+	signed char book;
+	signed int chapter;
+	signed int verse;
+	signed char suffix;
 
 	/************************************************************************
 	 * VerseKey::getBookAbbrev - Attempts to find a book no from a name or

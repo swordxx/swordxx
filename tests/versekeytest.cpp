@@ -77,6 +77,10 @@ cout << currentVerse << endl;
      std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
      boundTest.setText("1Sam.21.1");
      std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
+     boundTest.setText("acts.5.1");
+     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
+     boundTest.setText("rom.5.1");
+     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
 
 
      *x = "Is.1.13";

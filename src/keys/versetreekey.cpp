@@ -21,6 +21,7 @@
 
 
 #include <versetreekey.h>
+#include <ctype.h>
 
 SWORD_NAMESPACE_START
 
@@ -165,16 +166,36 @@ void VerseTreeKey::positionChanged() {
 		TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
 		int saveError = tkey->Error();
 		long bookmark = tkey->getOffset();
-		SWBuf path;
+		SWBuf seg[4];
 		internalPosChange = true;
 		int legs = 0;
 		do {
-			path = (SWBuf)tkey->getLocalName() + "." + path;
+			seg[legs] = tkey->getLocalName();
 			legs++;
-		} while (tkey->parent());
-		path--;
-		path << 1;
-		setText(path);
+		} while (tkey->parent() && (legs < 4));
+
+		if ((legs < 2) && (!seg[0].length() || seg[0] == "/")) {		//"[ Module Heading ]";
+			testament = 0;
+			book      = 0;
+			chapter   = 0;
+			setVerse(0);
+		}
+		else if ((legs < 2)
+			&& ((!strncmp(seg[0].c_str(), "[ Testament ", 12)) &&		//"[ Testament n Heading ]";
+			    (isdigit(seg[0][12])) &&
+			    (!strcmp(seg[0].c_str()+13, " Heading ]")))) {
+			testament = (seg[0][12]-48);
+			book      = 0;
+			chapter   = 0;
+			setVerse(0);
+		}	//path = "[ Module Heading ]";
+		else {
+			setBookName(seg[legs--]);
+			chapter = (legs > -1) ? atoi(seg[legs--]) : 0;
+			setVerse((legs > -1) ? atoi(seg[legs--]) : 0);
+		}
+
+//		setText(path);
 		if (saveError) {
 			error = saveError;
 		}
@@ -188,7 +209,9 @@ void VerseTreeKey::positionChanged() {
 void VerseTreeKey::syncVerseToTree() {
 	internalPosChange = true;
 	SWBuf path;
-	path.setFormatted("/%s/%d/%d", getOSISBookName(), Chapter(), Verse());
+	if (!Testament()) path = "/"; // "[ Module Heading ]";
+	else if (!Book()) path.setFormatted("/[ Testament %d Heading ]", Testament());
+	else path.setFormatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
 	if (getSuffix()) path += getSuffix();
 	long bookmark = treeKey->getOffset();
 	treeKey->setText(path);
@@ -246,5 +269,14 @@ void VerseTreeKey::setPosition(SW_POSITION p) {
 		break;
 	}
 }
+
+
+/******************************************************************************
+ * VerseTreeKey::copyFrom - Equates this VerseTreeKey to another VerseTreeKey
+
+void VerseTreeKey::copyFrom(const VerseTreeKey &ikey) {
+	VerseKey::copyFrom(ikey);
+}
+ */
 
 SWORD_NAMESPACE_END

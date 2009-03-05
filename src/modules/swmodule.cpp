@@ -273,7 +273,8 @@ char SWModule::Markup(signed char newmark) {
 
 char *SWModule::Lang(const char *imodlang)
 {
-	return stdstr(&modlang, imodlang);
+	if (imodlang) stdstr(&modlang, imodlang);
+	return modlang;
 }
 
 

@@ -37,6 +37,7 @@ int main(int argc, char **argv) {
 	std::cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
 
 
+
 	ModMap::iterator it;
 
 	for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
@@ -48,8 +49,11 @@ int main(int argc, char **argv) {
 			std::cout << (const char *) *(*it).second << "\n\n";
 		}
 	}
+
 	SWModule *mhc = mymgr.Modules["MHC"];
+
 	if (mhc) {
+		std::cout << "MHC, Lang = " << mhc->Lang() << "\n\n";
 		for (mhc->Key("Gen 1:1"); mhc->Key() < (VerseKey) "Gen 1:10"; (*mhc)++)
 			std::cout << (const char *) *mhc << "\n";
 	}
