@@ -435,6 +435,7 @@ void VerseKey::validateCurrentLocale() const {
 ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange) {
 
 	// hold on to our own copy of params, as threads/recursion may change outside values
+	const char *bufStart = buf;
 	SWBuf iBuf = buf;
 	buf = iBuf.c_str();
 	SWBuf iDefaultKey = defaultKey;
@@ -637,7 +638,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->LowerBound(*curKey);
 					lastKey->setPosition(TOP);
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (void *)buf;
+					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
@@ -650,14 +651,14 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->UpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
-							tmpListKey.GetElement()->userData = (void *)buf;
+							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
 							lastKey->LowerBound(*curKey);
 							lastKey->UpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
-							tmpListKey.GetElement()->userData = (void *)buf;
+							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 					else	if (expandRange) {
@@ -669,7 +670,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 								*curKey = MAXVERSE;
 							newElement->UpperBound(*curKey);
 							*newElement = TOP;
-							tmpListKey.GetElement()->userData = (void *)buf;
+							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 				}
@@ -838,7 +839,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			lastKey->LowerBound(*curKey);
 			*lastKey = TOP;
 			tmpListKey << *lastKey;
-			tmpListKey.GetElement()->userData = (void *)buf;
+			tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 		}
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
@@ -851,7 +852,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->UpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (void *)buf;
+					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					lastKey->LowerBound(*curKey);
@@ -859,7 +860,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
 //					tmpListKey << curKey->getText();
-					tmpListKey.GetElement()->userData = (void *)buf;
+					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 			else if (expandRange) {
@@ -871,7 +872,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						*curKey = MAXVERSE;
 						newElement->UpperBound(*curKey);
 					*newElement = TOP;
-					tmpListKey.GetElement()->userData = (void *)buf;
+					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 		}
@@ -1675,8 +1676,10 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 	ListKey verses = defLanguage.ParseVerseList(inRef, (*lastKnownKey), true);
 	const char *startFrag = inRef;
 	for (int i = 0; i < verses.Count(); i++) {
-		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
+		SWKey *element = verses.GetElement(i);
+//		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		SWBuf buf;
+		// TODO: This code really needs to not use fixed size arrays
 		char frag[800];
 		char preJunk[800];
 		char postJunk[800];
@@ -1687,36 +1690,23 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 			outRef += *startFrag;
 			startFrag++;
 		}
-		if (element) {
-			memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
-			frag[((const char *)element->userData - startFrag) + 1] = 0;
-			int j;
-			for (j = strlen(frag)-1; j && (strchr(" {};,()[].", frag[j])); j--);
-			if (frag[j+1])
-				strcpy(postJunk, frag+j+1);
-			frag[j+1]=0;
-			startFrag += ((const char *)element->userData - startFrag) + 1;
-			buf = "<reference osisRef=\"";
-			buf += element->LowerBound().getOSISRef();
-			buf += "-";
-			buf += element->UpperBound().getOSISRef();
-			buf += "\">";
-			buf += frag;
-			buf += "</reference>";
-			buf += postJunk;
-		}
-		else {
-			memmove(frag, startFrag, ((const char *)verses.GetElement(i)->userData - startFrag) + 1);
-			frag[((const char *)verses.GetElement(i)->userData - startFrag) + 1] = 0;
-			int j;
-			for (j = strlen(frag)-1; j && (strchr(" {};,()[].", frag[j])); j--);
-			if (frag[j+1])
-				strcpy(postJunk, frag+j+1);
-			frag[j+1]=0;
-			startFrag += ((const char *)verses.GetElement(i)->userData - startFrag) + 1;
-			buf.setFormatted("<reference osisRef=\"%s\">%s</reference>%s", VerseKey(*verses.GetElement(i)).getOSISRef(), frag, postJunk);
-		}
+		memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
+		frag[((const char *)element->userData - startFrag) + 1] = 0;
+		int j;
+		for (j = strlen(frag)-1; j && (strchr(" {};,()[].", frag[j])); j--);
+		if (frag[j+1])
+			strcpy(postJunk, frag+j+1);
+		frag[j+1]=0;
+		startFrag += ((const char *)element->userData - startFrag) + 1;
+		buf = "<reference osisRef=\"";
+		buf += element->getOSISRefRangeText();
+		buf += "\">";
+		buf += frag;
+		buf += "</reference>";
+		buf += postJunk;
+
 		outRef += buf;
+
 	}
 	if (startFrag < (inRef + strlen(inRef)))
 		outRef += startFrag;
