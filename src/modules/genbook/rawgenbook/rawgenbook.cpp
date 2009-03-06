@@ -231,9 +231,9 @@ char RawGenBook::createModule(const char *ipath) {
 
 
 SWKey *RawGenBook::CreateKey() {
-	SWKey *newKey = new TreeKeyIdx(path);
-	if (verseKey) newKey = new VerseTreeKey((TreeKeyIdx *)newKey);
-	return newKey;
+	TreeKey *tKey = new TreeKeyIdx(path);
+	if (verseKey) { SWKey *vtKey = new VerseTreeKey(tKey); delete tKey; return vtKey; }
+	return tKey;
 }
 
 SWORD_NAMESPACE_END

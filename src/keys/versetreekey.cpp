@@ -74,7 +74,7 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) :
 void VerseTreeKey::init(TreeKey *treeKey)
 {
 	myclass = &classdef;
-	this->treeKey = treeKey;
+	this->treeKey = (TreeKey *)treeKey->clone();
 	this->treeKey->setPositionChangeListener(this);
 	internalPosChange = false;
 }
@@ -120,6 +120,7 @@ int VerseTreeKey::getBookAbbrev(const char *iabbr)
  */
 
 VerseTreeKey::~VerseTreeKey() {
+	delete treeKey;
 }
 
 
@@ -242,11 +243,9 @@ long VerseTreeKey::NewIndex() const {
 
 void VerseTreeKey::setPosition(SW_POSITION p) {
 
-/*
-	if (boundSet) {
+	if (isBoundSet()) {
 		return VerseKey::setPosition(p);
 	}
-*/
 
 	switch (p) {
 	case POS_TOP:

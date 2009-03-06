@@ -84,6 +84,7 @@ private:
 
 public:
 	UTF8Transliterator();
+	~UTF8Transliterator();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 	virtual const char *getOptionName() { return optName; }
 	virtual const char *getOptionTip() { return optTip; }

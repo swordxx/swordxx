@@ -141,6 +141,11 @@ UTF8Transliterator::UTF8Transliterator() {
 #endif
 }
 
+
+UTF8Transliterator::~UTF8Transliterator() {
+}
+
+
 void UTF8Transliterator::Load(UErrorCode &status)
 {
 #ifndef _ICUSWORD_

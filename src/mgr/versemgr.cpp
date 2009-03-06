@@ -99,10 +99,10 @@ void VerseMgr::System::init() {
 
 
 VerseMgr::System::System(const System &other) {
+	init();
 	name = other.name;
 	BMAX[0] = other.BMAX[0];
 	BMAX[1] = other.BMAX[1];
-	init();
 	(*p) = *(other.p);
 	ntStartOffset = other.ntStartOffset;
 }
@@ -111,7 +111,6 @@ VerseMgr::System &VerseMgr::System::operator =(const System &other) {
 	name = other.name;
 	BMAX[0] = other.BMAX[0];
 	BMAX[1] = other.BMAX[1];
-	init();
 	(*p) = *(other.p);
 	ntStartOffset = other.ntStartOffset;
 	return *this;
@@ -334,7 +333,7 @@ const VerseMgr::System *VerseMgr::getVersificationSystem(const char *name) const
 }
 
 void VerseMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax) {
-	p->systems[name] = System(name);
+	p->systems[name] = name;
 	System &s = p->systems[name];
 	s.loadFromSBook(ot, nt, chMax);
 }
