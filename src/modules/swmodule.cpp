@@ -145,7 +145,7 @@ SWModule::~SWModule()
  * RET:	pointer to allocated key
  */
 
-SWKey *SWModule::CreateKey()
+SWKey *SWModule::CreateKey() const
 {
 	return new SWKey();
 }
@@ -874,7 +874,7 @@ const char *SWModule::StripText(const char *buf, int len) {
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
- const char *SWModule::RenderText(SWKey *tmpKey) {
+ const char *SWModule::RenderText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
@@ -905,7 +905,7 @@ const char *SWModule::StripText(const char *buf, int len) {
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(SWKey *tmpKey) {
+const char *SWModule::StripText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
@@ -1314,7 +1314,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, SWKey *key) {
+void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key) {
 	OptionFilterList::iterator it;
 	for (it = filters->begin(); it != filters->end(); it++) {
 		(*it)->processText(buf, key, this);
@@ -1326,7 +1326,7 @@ void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, SWKey *key) {
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, SWKey *key) {
+void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) {
 	FilterList::iterator it;
 	for (it = filters->begin(); it != filters->end(); it++) {
 		(*it)->processText(buf, key, this);

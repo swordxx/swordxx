@@ -141,7 +141,17 @@ void VerseTreeKey::decrement(int steps) {
 		treeKey->setOffset(lastGoodOffset);
 		error = treeError;
 	}
+	if (_compare(UpperBound()) > 0) {
+		positionFrom(UpperBound());
+		error = KEYERR_OUTOFBOUNDS;
+	}
+	if (_compare(LowerBound()) < 0) {
+		positionFrom(LowerBound());
+		error = KEYERR_OUTOFBOUNDS;
+	}
 }
+
+
 void VerseTreeKey::increment(int steps) {
 	int treeError = 0;
 	if (!error) lastGoodOffset = getTreeKey()->getOffset();
@@ -159,6 +169,15 @@ void VerseTreeKey::increment(int steps) {
 		treeKey->setOffset(lastGoodOffset);
 		error = treeError;
 	}
+	// bounds
+	if (_compare(UpperBound()) > 0) {
+		positionFrom(UpperBound());
+		error = KEYERR_OUTOFBOUNDS;
+	}
+	if (_compare(LowerBound()) < 0) {
+		positionFrom(LowerBound());
+		error = KEYERR_OUTOFBOUNDS;
+	}
 }
 
 
@@ -174,6 +193,8 @@ void VerseTreeKey::positionChanged() {
 			seg[legs] = tkey->getLocalName();
 			legs++;
 		} while (tkey->parent() && (legs < 4));
+
+		legs--;
 
 		if ((legs < 2) && (!seg[0].length() || seg[0] == "/")) {		//"[ Module Heading ]";
 			testament = 0;
@@ -191,9 +212,9 @@ void VerseTreeKey::positionChanged() {
 			setVerse(0);
 		}	//path = "[ Module Heading ]";
 		else {
-			setBookName(seg[legs--]);
-			chapter = (legs > -1) ? atoi(seg[legs--]) : 0;
-			setVerse((legs > -1) ? atoi(seg[legs--]) : 0);
+			setBookName(seg[--legs]);
+			chapter = (legs > 0) ? atoi(seg[--legs]) : 0;
+			setVerse((legs > 0) ? atoi(seg[--legs]) : 0);
 		}
 
 //		setText(path);

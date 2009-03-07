@@ -72,13 +72,17 @@ int main(int argc, char **argv) {
 	cout << "\nListkey persist key iteration test\n\n";
 	keys = key1->ParseVerseList("mat1", 0, true);
 
+	for (keys = TOP; !keys.Error(); keys++) {
+		cout << "\n" << keys.getText() << ":\n" << endl;
+	}
+
+
 	keys.Persist(1);
 
 	mod->setKey(keys);
 
 	for ((*mod) = TOP; !mod->Error(); (*mod)++) {
 		cout << "\n" << mod->getKeyText() << ":\n" << endl;
-		
 	}
 
 	delete key1;

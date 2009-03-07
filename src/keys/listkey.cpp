@@ -58,6 +58,8 @@ ListKey::ListKey(ListKey const &k) : SWKey(k.keytext) {
 
 void ListKey::init() {
 	myclass = &classdef;
+	// this is a listkey, bound is always set
+	boundSet = true;
 }
 
 

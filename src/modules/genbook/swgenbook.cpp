@@ -21,6 +21,7 @@
 
 
 #include <swgenbook.h>
+#include <versetreekey.h>
 
 SWORD_NAMESPACE_START
 
@@ -33,14 +34,65 @@ SWORD_NAMESPACE_START
  */
 
 SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, (char *)"Generic Books", enc, dir, mark, ilang) {
+	tmpTreeKey = 0;
 }
 
 
 /******************************************************************************
- * SWLD Destructor - Cleans up instance of SWLD
+ * SWLD Destructor - Cleans up instance of SWGenBook
  */
 
 SWGenBook::~SWGenBook() {
+	delete tmpTreeKey;
+}
+
+
+TreeKey &SWGenBook::getTreeKey() const {
+
+	TreeKey *key = 0;
+
+	SWTRY {
+		key = SWDYNAMIC_CAST(TreeKey, (this->key));
+	}
+	SWCATCH ( ... ) {}
+
+	if (!key) {
+		ListKey *lkTest = 0;
+		SWTRY {
+			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+		}
+		SWCATCH ( ... ) {	}
+		if (lkTest) {
+			SWTRY {
+				key = SWDYNAMIC_CAST(TreeKey, lkTest->GetElement());
+				if (!key) {
+					VerseTreeKey *tkey = 0;
+					SWTRY {
+						tkey = SWDYNAMIC_CAST(VerseTreeKey, lkTest->GetElement());
+					}
+					SWCATCH ( ... ) {}
+					if (tkey) key = tkey->getTreeKey();
+				}
+			}
+			SWCATCH ( ... ) {	}
+		}
+	}
+	if (!key) {
+		VerseTreeKey *tkey = 0;
+		SWTRY {
+			tkey = SWDYNAMIC_CAST(VerseTreeKey, (this->key));
+		}
+		SWCATCH ( ... ) {}
+		if (tkey) key = tkey->getTreeKey();
+	}
+
+	if (!key) {
+		delete tmpTreeKey;
+		tmpTreeKey = (TreeKey *)CreateKey();
+		(*tmpTreeKey) = *(this->key);
+		return (*tmpTreeKey);
+	}
+	else	return *key;
 }
 
 SWORD_NAMESPACE_END

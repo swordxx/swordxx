@@ -56,7 +56,7 @@ SWCom::~SWCom() {
 }
 
 
-SWKey *SWCom::CreateKey() {
+SWKey *SWCom::CreateKey() const {
 	VerseKey *vk = new VerseKey();
 
 	vk->setVersificationSystem(versification);
@@ -104,7 +104,7 @@ long SWCom::Index(long iindex) {
 
 
 VerseKey &SWCom::getVerseKey() const {
-	VerseKey *key = NULL;
+	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
 	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);

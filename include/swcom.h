@@ -54,7 +54,7 @@ public:
 			const char *versification = "KJV");
 
 	virtual ~SWCom();
-	virtual SWKey *CreateKey();
+	virtual SWKey *CreateKey() const;
 
 	virtual long Index() const;
 	virtual long Index(long iindex);

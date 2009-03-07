@@ -51,7 +51,7 @@ public:
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey * linkKey);	// Link current module entry to other module entry
 	virtual void deleteEntry();	// Delete current module entry
-	virtual SWKey *CreateKey();
+	virtual SWKey *CreateKey() const;
 	// end write interface ------------------------
 
 

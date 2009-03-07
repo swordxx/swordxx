@@ -42,7 +42,6 @@ int main(int argc, char **argv)
 	SWModule *target;
 	ListKey listkey;
 	ListKey scope;
-	VerseKey parser;
 	ModMap::iterator it;
 
 	if ((argc < 3) || (argc > 5)) {
@@ -70,14 +69,18 @@ int main(int argc, char **argv)
 	target = (*it).second;
 
 	if (argc > 3) {			// if min / max specified
-		scope = parser.ParseVerseList(argv[3], parser, true);
+		SWKey *k = target->getKey();
+		VerseKey *parser = SWDYNAMIC_CAST(VerseKey, k);
+		VerseKey kjvParser;
+		if (!parser) parser = &kjvParser;	// use standard KJV parsing as fallback
+		scope = parser->ParseVerseList(argv[3], *parser, true);
 		scope.Persist(1);
 		target->setKey(scope);
 	}
 
 	std::cerr << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
-	listkey = target->Search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+	listkey = target->search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 	std::cerr << std::endl;
 	if (argc > 4) {			// if min / max specified
 		scope = listkey;
@@ -85,7 +88,7 @@ int main(int argc, char **argv)
 		target->setKey(scope);
 		printed = 0;
 		std::cerr << " ";
-		listkey = target->Search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+		listkey = target->search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 		std::cerr << std::endl;
 	}
 	listkey.sort();

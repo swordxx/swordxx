@@ -91,7 +91,7 @@ const char *TreeKeyIdx::getLocalName() {
 }
 
 
-const char *TreeKeyIdx::getUserData(int *size) {
+const char *TreeKeyIdx::getUserData(int *size) const {
 	unsnappedKeyText = "";
 	if (size)
 		*size = (int)currentNode.dsize;

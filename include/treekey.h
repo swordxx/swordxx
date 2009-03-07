@@ -74,7 +74,7 @@ public:
 
 	virtual int getLevel() { long bm = getOffset(); int level = 0; do { level++; } while (parent()); setOffset(bm); return level; }
 
-	virtual const char *getUserData(int *size = 0) = 0;
+	virtual const char *getUserData(int *size = 0) const = 0;
 	virtual void setUserData(const char *userData, int size = 0) = 0;
 
 	/** Go to the root node

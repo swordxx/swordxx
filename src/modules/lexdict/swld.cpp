@@ -52,7 +52,7 @@ SWLD::~SWLD()
 }
 
 
-SWKey *SWLD::CreateKey() { return new StrKey(); }
+SWKey *SWLD::CreateKey() const { return new StrKey(); }
 
 
 /******************************************************************************

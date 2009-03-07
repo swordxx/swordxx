@@ -58,7 +58,7 @@ SWText::~SWText() {
  * SWText CreateKey - Create the correct key (VerseKey) for use with SWText
  */
 
-SWKey *SWText::CreateKey() {
+SWKey *SWText::CreateKey() const {
 	VerseKey *vk = new VerseKey();
 
 	vk->setVersificationSystem(versification);
@@ -106,7 +106,7 @@ long SWText::Index(long iindex) {
 
 
 VerseKey &SWText::getVerseKey() const {
-	VerseKey *key = NULL;
+	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
 	SWTRY {
 		key = SWDYNAMIC_CAST(VerseKey, this->key);

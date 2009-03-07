@@ -55,7 +55,7 @@ public:
 	virtual ~SWText();
 	/** Create the correct key (VerseKey) for use with SWText
 	*/
-	virtual SWKey *CreateKey();
+	virtual SWKey *CreateKey() const;
 
 	virtual long Index() const;
 	virtual long Index(long iindex);

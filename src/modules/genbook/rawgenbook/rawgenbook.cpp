@@ -98,37 +98,17 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 
 	__u32 offset = 0;
 	__u32 size = 0;
-	bool freeKey = false;
 
-	TreeKey *key = 0;
-	SWTRY {
-		key = SWDYNAMIC_CAST(TreeKey, (this->key));
-	}
-	SWCATCH ( ... ) {}
-
-	if (!key) {
-		VerseTreeKey *tkey = 0;
-		SWTRY {
-			tkey = SWDYNAMIC_CAST(VerseTreeKey, (this->key));
-		}
-		SWCATCH ( ... ) {}
-		if (tkey) key = tkey->getTreeKey();
-	}
-
-	if (!key) {
-		freeKey = true;
-		key = (TreeKeyIdx *)CreateKey();
-		(*key) = *(this->key);
-	}
+	const TreeKey &key = getTreeKey();
 
 	int dsize;
-	key->getUserData(&dsize);
+	key.getUserData(&dsize);
 	entryBuf = "";
 	if (dsize > 7) {
-		memcpy(&offset, key->getUserData(), 4);
+		memcpy(&offset, key.getUserData(), 4);
 		offset = swordtoarch32(offset);
 
-		memcpy(&size, key->getUserData() + 4, 4);
+		memcpy(&size, key.getUserData() + 4, 4);
 		size = swordtoarch32(size);
 
 		entrySize = size;        // support getEntrySize call
@@ -139,14 +119,11 @@ SWBuf &RawGenBook::getRawEntryBuf() {
 		bdtfd->read(entryBuf.getRawData(), size);
 
 		rawFilter(entryBuf, 0);	// hack, decipher
-		rawFilter(entryBuf, key);
+		rawFilter(entryBuf, &key);
 
 //		   if (!isUnicode())
 			SWModule::prepText(entryBuf);
 	}
-
-	if (freeKey) // free our key if we created a VerseKey
-		delete key;
 
 	return entryBuf;
 }
@@ -156,7 +133,7 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
 	__u32 offset = archtosword32(bdtfd->seek(0, SEEK_END));
 	__u32 size = 0;
-	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
+	TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
 
 	char userData[8];
 
@@ -175,7 +152,7 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
 void RawGenBook::linkEntry(const SWKey *inkey) {
 	TreeKeyIdx *srckey = 0;
-	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
+	TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
 	// see if we have a VerseKey * or decendant
 	SWTRY {
 		srckey = SWDYNAMIC_CAST(TreeKeyIdx, inkey);
@@ -202,7 +179,7 @@ void RawGenBook::linkEntry(const SWKey *inkey) {
  */
 
 void RawGenBook::deleteEntry() {
-	TreeKeyIdx *key = ((TreeKeyIdx *)this->key);
+	TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
 	key->remove();
 }
 
@@ -230,7 +207,7 @@ char RawGenBook::createModule(const char *ipath) {
 }
 
 
-SWKey *RawGenBook::CreateKey() {
+SWKey *RawGenBook::CreateKey() const {
 	TreeKey *tKey = new TreeKeyIdx(path);
 	if (verseKey) { SWKey *vtKey = new VerseTreeKey(tKey); delete tKey; return vtKey; }
 	return tKey;

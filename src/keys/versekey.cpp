@@ -1319,7 +1319,11 @@ void VerseKey::setBookName(const char *bname)
 {
 	int bnum = getBookAbbrev(bname);
 	if (bnum > -1) {
-		setTestament(1);
+		if (bnum > BMAX[0]) {
+			bnum -= BMAX[0];
+			testament = 2;
+		}
+		else	testament = 1;
 		setBook(bnum);
 	}
 	else error = KEYERR_OUTOFBOUNDS;
@@ -1463,7 +1467,7 @@ long VerseKey::Index() const
 
 
 /******************************************************************************
- * VerseKey::Index - Gets index based upon current verse
+ * VerseKey::TestamentIndex - Gets index based upon current verse
  *
  * RET:	offset
  */
@@ -1497,56 +1501,6 @@ long VerseKey::Index(long iindex)
 	if (book < 0) { testament = 0; book = 0; }
 	if (chapter < 0) { book = 0; chapter = 0; }
 
-/*
-	suffix = 0;
-// This is the dirty stuff --------------------------------------------
-
-	if (!testament)
-		testament = 1;
-
-	if (iindex < 1) {				// if (-) or module heading
-		if (testament < 2) {
-			if (iindex < 0) {
-				testament = 0;  // previously we changed 0 -> 1
-				error     = KEYERR_OUTOFBOUNDS;
-			}
-			else testament = 0;		// we want module heading
-		}
-		else {
-			testament--;
-			const VerseMgr::Book *b = refSys->getBook(BMAX[0]+((testament)?BMAX[1]:0)-1);
-			iindex = offsets[testament-1][1][offsize[testament-1][1]-1]
-			       + b->getVerseMax(b->getChapterMax())
-			       + iindex; // What a doozy! ((offset of last chapter + number of verses in the last chapter) + iindex)
-		}
-	}
-
-// --------------------------------------------------------------------
-
-
-	if (testament) {
-		if ((!error) && (iindex)) {
-			offset  = findindex(offsets[testament-1][1], offsize[testament-1][1], iindex);
-			verse   = iindex - offsets[testament-1][1][offset];
-			book    = findindex(offsets[testament-1][0], offsize[testament-1][0], offset);
-			chapter = offset - offsets[testament-1][0][VerseKey::book];
-			verse   = (chapter) ? verse : 0;  // funny check. if we are index=1 (testmt header) all gets set to 0 exept verse.  Don't know why.  Fix if you figure out.  Think its in the offsets table.
-			if (verse) {		// only check if -1 won't give negative
-				if (verse > getVerseMax()) {
-					if (testament > 1) {
-						verse = getVerseMax();
-						error = KEYERR_OUTOFBOUNDS;
-					}
-					else {
-						testament++;
-						const VerseMgr::Book *b = refSys->getBook(book-1);
-						Index(verse - b->getVerseMax(chapter-1));
-					}
-				}
-			}
-		}
-	}
-*/
 	long i = Index();
 
 	initBounds();

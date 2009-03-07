@@ -75,7 +75,7 @@ public:
 	virtual const char *getLocalName();
 	virtual const char *setLocalName(const char *);
 
-	virtual const char *getUserData(int *size = 0);
+	virtual const char *getUserData(int *size = 0) const;
 	virtual void setUserData(const char *userData, int size = 0);
 
 	virtual void root();
