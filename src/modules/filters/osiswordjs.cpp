@@ -91,8 +91,11 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					SWBuf lemmaClass;
 					SWBuf lemma;
 					SWBuf morph;
+					SWBuf page;
 					SWBuf src;
 					char gh = 0;
+					page = module->getEntryAttributes()["Word"][wordstr]["Page"].c_str();
+					if (page.length()) page = (SWBuf)"p:" + page;
 					int count = atoi(module->getEntryAttributes()["Word"][wordstr]["PartCount"].c_str());
 					for (int i = 0; i < count; i++) {
 
@@ -161,7 +164,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						}
 					}
 					// 'p' = 'fillpop' to save bandwidth
-					text.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str(), modName.c_str());
+					text.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str(), page.c_str(), modName.c_str());
 					wordNum++;
 				}
 				if ((*token == '/') && (token[1] == 'w') && option) {	// Word

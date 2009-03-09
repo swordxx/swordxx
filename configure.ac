@@ -80,14 +80,14 @@ AM_MAINTAINER_MODE
 if test x$enable_debug = xyes; then
   GCJFLAGS="-g -O0"
   if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0 -Wall"
+    AM_CFLAGS="-g3 -O0 -Wall -Werror"
   else
-    AM_CFLAGS="-O0 -Wall"
+    AM_CFLAGS="-O0 -Wall -Werror"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
-    AM_CXXFLAGS="-g3 -O0 -Wall"
+    AM_CXXFLAGS="-g3 -O0 -Wall -Werror"
   else
-    AM_CXXFLAGS="-O0 -Wall"
+    AM_CXXFLAGS="-O0 -Wall -Werror"
   fi
 else
   AM_CFLAGS="-O3"

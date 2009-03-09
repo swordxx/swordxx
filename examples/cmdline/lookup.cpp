@@ -19,8 +19,8 @@ using sword::AttributeValue;
 int main(int argc, char **argv)
 {
 	
-//	SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
-	SWMgr manager(new MarkupFilterMgr(FMT_HTMLHREF));
+	SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
+//	SWMgr manager(new MarkupFilterMgr(FMT_HTMLHREF));
 	SWModule *target;
 
 	if (argc != 3) {

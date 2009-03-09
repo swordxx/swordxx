@@ -129,6 +129,7 @@ int main(int argc, char **argv) {
 
 
 
+int page = 0;
 
 
 void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module)
@@ -147,6 +148,38 @@ void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module)
 				*linkMaster = *vkey;
 				SWBuf text = module->getRawEntry();
 				text += entry;
+
+
+				//------------------------------------------------------------
+				//  Tregelles Page marking special stuff
+				//------------------------------------------------------------
+/*
+				const char *pageMarker = "<seg type=\"page\" subtype=\"";
+				int newPage = page;
+				SWBuf pageData = strstr(text.c_str(), pageMarker);
+				if (pageData.length()) {
+					pageData << strlen(pageMarker);
+					const char *pn = pageData.stripPrefix('"');
+					if (pn) newPage = atoi(pn);
+				}
+				// add page stuff for treg
+				if (text.startsWith(pageMarker)) {
+					// don't add anything cuz we already start with one
+				}
+				else {
+					SWBuf pm = pageMarker;
+					pm.appendFormatted("%d\" />", page);
+					text = pm + text;
+				}
+
+				page = newPage;	// when our line set a new page number
+
+*/
+				//------------------------------------------------------------
+
+
+
+
 				std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
 				module->setEntry(text);
 				first = false;

@@ -36,9 +36,8 @@ int main(int argc, char **argv) {
 	if (!book.getRawEntryBuf().size()) return -2; 	// empty module
 	for (;!book.Error(); book++) {
 		cout << "$$$";
-//		if (vk) cout << vk->getOSISRef();
-//		else
-			cout << book.getKeyText();
+		if (vk) cout << vk->getOSISRef();
+		else    cout << book.getKeyText();
 		cout << "\n" << book.RenderText() << "\n\n";
 	}
 }

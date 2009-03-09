@@ -53,6 +53,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	int wordNum = 1;
 	char wordstr[5];
 	const char *wordStart = 0;
+	SWBuf page = "";		// some modules include <seg> page info, so we add these to the words
 
 	const SWBuf orig = text;
 	const char * from = orig.c_str();
@@ -65,6 +66,20 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 		}
 		if (*from == '>') {	// process tokens
 			intoken = false;
+
+			// possible page seg --------------------------------
+			if (token.startsWith("seg ")) {
+				XMLTag stag(token);
+				SWBuf type = stag.getAttribute("type");
+				if (type == "page") {
+					SWBuf number = stag.getAttribute("subtype");
+					if (number.length()) {
+						page = number;
+					}
+				}
+			}
+			// ---------------------------------------------------
+
 			if (token.startsWith("w ")) {	// Word
 				XMLTag wtag(token);
 				if (module->isProcessEntryAttributes()) {
@@ -182,15 +197,17 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 
 					if (lemma.length())
-					module->getEntryAttributes()["Word"][wordstr]["Lemma"] = lemma;
+						module->getEntryAttributes()["Word"][wordstr]["Lemma"] = lemma;
 					if (lemmaClass.length())
-					module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = lemmaClass;
+						module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = lemmaClass;
 					if (morph.length())
-					module->getEntryAttributes()["Word"][wordstr]["Morph"] = morph;
+						module->getEntryAttributes()["Word"][wordstr]["Morph"] = morph;
 					if (morphClass.length())
-					module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = morphClass;
+						module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = morphClass;
 					if (src.length())
 						module->getEntryAttributes()["Word"][wordstr]["Src"] = src;
+					if (page.length())
+						module->getEntryAttributes()["Word"][wordstr]["Page"] = page;
 
 					if (wtag.isEmpty()) {
 						int j;
