@@ -169,6 +169,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"3JOHN", "3John"},		//    3 John
   {"ACTS", "Acts"},			//     Acts
   {"AMOS", "Amos"},			//    Amos
+  {"APOCALYPSE OF JOHN", "Rev"},	//    Apocalypse of John (Rev.)
   {"APOCALYPSE OF ST. JOHN", "Rev"},	//    Apocalypse of St. John (Rev.)
   {"C", "Col"},			//    Colossians
   {"CANTICLE OF CANTICLES", "Song"},	//    Canticle of Canticles (Song of S.)
@@ -293,7 +294,8 @@ const struct abbrev builtin_abbrevs[] = {
   {"PSALMS", "Ps"},		//    Psalms
   {"PSM", "Ps"},			// Psalms
   {"PSS", "Ps"},			// Psalms
-  {"QOHELETH", "Eccl"},              // Qohelet (Ecclesiastes)
+  {"QOHELET", "Eccl"},              // Qohelet (Ecclesiastes)
+  {"QOHELETH", "Eccl"},              // Qoheleth (Ecclesiastes)
   {"REVELATION OF JOHN", "Rev"},	//     Revelation
   {"ROMANS", "Rom"},		//    Romans
   {"RUTH", "Ruth"},			//    Ruth
