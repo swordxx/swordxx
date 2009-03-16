@@ -34,7 +34,7 @@ public:
 	virtual ~RawVerse4();
 	void findOffset(char testmt, long idxoff, long *start,	unsigned long *end);
 	void readText(char testmt, long start, unsigned long size, SWBuf &buf);
-	static char createModule(const char *path);
+	static char createModule(const char *path, const char *v11n = "KJV");
 };
 
 SWORD_NAMESPACE_END

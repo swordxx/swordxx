@@ -28,7 +28,7 @@ SWORD_NAMESPACE_START
 
 /** stdstr - clone a string
 */
-char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
+SWDLLEXPORT char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
 char *strstrip (char *istr);
 const char *stristr (const char *s1, const char *s2);
 int strnicmp(const char *s1, const char *s2, int len);

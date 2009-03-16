@@ -419,7 +419,7 @@ void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 
-char zVerse::createModule(const char *ipath, int blockBound)
+char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
 {
 	char *path = 0;
 	char *buf = new char [ strlen (ipath) + 20 ];
@@ -465,6 +465,7 @@ char zVerse::createModule(const char *ipath, int blockBound)
 	fd2->getFd();
 
 	VerseKey vk;
+	vk.setVersificationSystem(v11n);
 	vk.Headings(1);
 
 	__s32 offset = 0;

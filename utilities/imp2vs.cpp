@@ -37,6 +37,7 @@ void usage(const char *progName, const char *error = 0) {
 		"\t -a augment module if exists (default is to create new)\n"
 		"\t -o <output_path> where to write data files.\n"
 		"\t -4 use 4 byte size entries (default is 2).\n\n"
+		"\t -v <v11n> use versification scheme other than KJV.\n\n"
 		"'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
 		"$$$Gen.1.1\n"
@@ -62,6 +63,7 @@ int main(int argc, char **argv) {
 
 	const char *progName   = argv[0];
 	const char *inFileName = argv[1];
+	SWBuf v11n             = "KJV";
 	SWBuf outPath          = "./";
 	bool fourByteSize      = false;
 	bool append            = false;
@@ -70,9 +72,16 @@ int main(int argc, char **argv) {
 		if (!strcmp(argv[i], "-a")) {
 			append = true;
 		}
+		if (!strcmp(argv[i], "-4")) {
+			fourByteSize = true;
+		}
 		else if (!strcmp(argv[i], "-o")) {
 			if (i+1 < argc) outPath = argv[++i];
 			else usage(progName, "-o requires <output_path>");
+		}
+		else if (!strcmp(argv[i], "-v")) {
+			if (i+1 < argc) v11n = argv[++i];
+			else usage(progName, "-v requires <v11n>");
 		}
 		else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
@@ -82,13 +91,13 @@ int main(int argc, char **argv) {
 	// setup module
 	if (!append) {
 		if (!fourByteSize)
-			RawText::createModule(outPath);
-		else	RawText4::createModule(outPath);
+			RawText::createModule(outPath, v11n);
+		else	RawText4::createModule(outPath, v11n);
 	}
 
 	SWModule *module = (!fourByteSize)
-			? (SWModule *)new RawText(outPath)
-			: (SWModule *)new RawText4(outPath);
+			? (SWModule *)new RawText(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n)
+			: (SWModule *)new RawText4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);
 	// -----------------------------------------------------
 			
 

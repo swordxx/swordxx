@@ -52,7 +52,7 @@ public:
 	void findOffset(char testmt, long idxoff, long *start, unsigned short *end);
 	void zReadText(char testmt, long start, unsigned short size, SWBuf &buf);
 	virtual void rawZFilter(SWBuf &buf, char direction = 0) {}
-	static char createModule(const char *path, int blockBound);
+	static char createModule(const char *path, int blockBound, const char *v11n = "KJV");
 };
 
 SWORD_NAMESPACE_END

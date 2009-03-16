@@ -243,7 +243,7 @@ void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 
-char RawVerse4::createModule(const char *ipath)
+char RawVerse4::createModule(const char *ipath, const char *v11n)
 {
 	char *path = 0;
 	char *buf = new char [ strlen (ipath) + 20 ];
@@ -277,6 +277,7 @@ char RawVerse4::createModule(const char *ipath)
 	fd2->getFd();
 
 	VerseKey vk;
+	vk.setVersificationSystem(v11n);
 	vk.Headings(1);
 	__u32 offset = 0;
 	__u32 size = 0;

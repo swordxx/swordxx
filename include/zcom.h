@@ -51,8 +51,8 @@ public:
 
 	// write interface ----------------------------
 	virtual bool isWritable();
-	static char createModule(const char *path, int blockBound) {
-		return zVerse::createModule(path, blockBound);
+	static char createModule(const char *path, int blockBound, const char *v11n = "KJV") {
+		return zVerse::createModule(path, blockBound, v11n);
 	}
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey * linkKey);	// Link current module entry to other module entry
