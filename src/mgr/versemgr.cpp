@@ -28,6 +28,8 @@
 #include <swlog.h>	// KJV internal versification system
 #include <algorithm>
 
+#include <canon_leningrad.h> // Leningrad Codex (WLC) v11n system
+
 using std::vector;
 using std::map;
 using std::distance;
@@ -315,6 +317,7 @@ VerseMgr *VerseMgr::getSystemVerseMgr() {
 	if (!systemVerseMgr) {
 		systemVerseMgr = new VerseMgr();
 		systemVerseMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
+		systemVerseMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_leningrad, vm_leningrad);
 	}
 	return systemVerseMgr;
 }
