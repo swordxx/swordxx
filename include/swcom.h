@@ -40,7 +40,7 @@ class SWDLLEXPORT SWCom : public SWModule {
 	char *versification;
 
 protected:
-	VerseKey &getVerseKey() const;
+	VerseKey &getVerseKey(const SWKey *key = 0) const;
 
 
 public:

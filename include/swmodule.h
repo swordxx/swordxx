@@ -639,6 +639,8 @@ public:
 	 *	consecutive links when iterating
 	 */
 	virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+	
+	virtual bool isLinked(const SWKey *k1, const SWKey *k2) const { return false; }
 
 	/** Entry Attributes are special data pertaining to the current entry.
 	 *	To see what Entry Attributes exists for a specific entry of a module,

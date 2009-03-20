@@ -54,6 +54,8 @@ public:
 	virtual void deleteEntry();	// Delete current module entry
 	// end write interface ------------------------
 
+	virtual bool isLinked(const SWKey *k1, const SWKey *k2) const;
+	
 	SWMODULE_OPERATORS
 
 };

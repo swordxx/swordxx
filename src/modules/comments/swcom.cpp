@@ -103,17 +103,19 @@ long SWCom::Index(long iindex) {
 }
 
 
-VerseKey &SWCom::getVerseKey() const {
+VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
+	const SWKey *thisKey = keyToConvert ? keyToConvert : this->key;
+
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
 	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
+		key = SWDYNAMIC_CAST(VerseKey, thisKey);
 	}
 	SWCATCH ( ... ) {	}
 	if (!key) {
 		ListKey *lkTest = 0;
 		SWTRY {
-			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+			lkTest = SWDYNAMIC_CAST(ListKey, thisKey);
 		}
 		SWCATCH ( ... ) {	}
 		if (lkTest) {
@@ -125,7 +127,7 @@ VerseKey &SWCom::getVerseKey() const {
 	}
 	if (!key) {
 		tmpVK->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-		(*tmpVK) = *(this->key);
+		(*tmpVK) = *(thisKey);
 		return (*tmpVK);
 	}
 	else	return *key;

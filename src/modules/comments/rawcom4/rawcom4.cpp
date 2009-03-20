@@ -164,5 +164,18 @@ void RawCom4::deleteEntry() {
 	doSetText(key->Testament(), key->TestamentIndex(), "");
 }
 
+bool RawCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
+	long start1, start2;
+	unsigned long size1, size2;
+	VerseKey *vk1 = &getVerseKey(k1);
+	VerseKey *vk2 = &getVerseKey(k2);
+	if (vk1->Testament() != vk2->Testament()) return false;
+
+	findOffset(vk1->Testament(), vk1->TestamentIndex(), &start1, &size1);
+	findOffset(vk2->Testament(), vk2->TestamentIndex(), &start2, &size2);
+	if (!size1 || !size2) return false;
+	return start1 == start2;
+}
+
 
 SWORD_NAMESPACE_END

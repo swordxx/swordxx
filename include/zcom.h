@@ -65,6 +65,8 @@ public:
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
 
+	virtual bool isLinked(const SWKey *k1, const SWKey *k2) const;
+	
 	SWMODULE_OPERATORS
 
 };
