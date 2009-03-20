@@ -42,6 +42,7 @@ SWORD_NAMESPACE_START
  */
 
 int RawStr4::instance = 0;
+const int RawStr4::IDXENTRYSIZE = 8;
 
 
 /******************************************************************************

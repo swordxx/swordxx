@@ -39,6 +39,8 @@ class SWDLLEXPORT RawStr4 {
 	long lastoff;
 
 protected:
+	static const int IDXENTRYSIZE;
+	
 	FileDesc *idxfd;
 	FileDesc *datfd;
 	void doSetText(const char *key, const char *buf, long len = -1);

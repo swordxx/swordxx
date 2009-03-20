@@ -200,4 +200,25 @@ void zLD::deleteEntry() {
 	setText(*key, "");
 }
 
+
+long zLD::getEntryCount() {
+	if (idxfd < 0) return 0;
+	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
+}
+
+
+long zLD::getEntryForKey(const char *key) {
+	long offset;
+	findKeyIndex(key, &offset);
+	return offset / IDXENTRYSIZE;
+}
+
+
+char *zLD::getKeyForEntry(long entry) {
+	char *key = 0;
+	getKeyFromIdxOffset(entry * IDXENTRYSIZE, &key);
+	return key;
+}
+
+
 SWORD_NAMESPACE_END

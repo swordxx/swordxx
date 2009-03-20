@@ -42,6 +42,8 @@ SWORD_NAMESPACE_START
 
 int RawStr::instance = 0;
 char RawStr::nl = '\n';
+const int RawStr::IDXENTRYSIZE = 6;
+
 
 
 /******************************************************************************
@@ -483,7 +485,6 @@ void RawStr::doLinkEntry(const char *destkey, const char *srckey) {
 	doSetText(srckey, text);
 	delete [] text;
 }
-
 
 /******************************************************************************
  * RawLD::CreateModule	- Creates new module files

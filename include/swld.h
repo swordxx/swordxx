@@ -56,6 +56,11 @@ public:
 	virtual void setPosition(SW_POSITION pos);
 
 
+	virtual long getEntryCount() = 0;
+	virtual long getEntryForKey(const char *key) = 0;
+	virtual char *getKeyForEntry(long entry) = 0;
+	
+
 	// OPERATORS -----------------------------------------------------------------
 	
 	SWMODULE_OPERATORS

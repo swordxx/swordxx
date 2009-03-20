@@ -63,6 +63,10 @@ public:
 	virtual void flush() { flushCache(); }
 	// end swcacher interface ----------------------
 
+	virtual long getEntryCount();
+	virtual long getEntryForKey(const char *key);
+	virtual char *getKeyForEntry(long entry);
+
 
 	// OPERATORS -----------------------------------------------------------------
 	

@@ -206,4 +206,26 @@ void RawLD::deleteEntry() {
 	doSetText(*key, "");
 }
 
+
+long RawLD::getEntryCount() {
+	if (idxfd < 0) return 0;
+	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
+}
+
+
+long RawLD::getEntryForKey(const char *key) {
+	__u32 start, offset;
+	__u16 size;
+
+	findOffset(key, &start, &size, 0, &offset);
+	return offset / IDXENTRYSIZE;
+}
+
+
+char *RawLD::getKeyForEntry(long entry) {
+	char *key = 0;
+	getIDXBuf(entry * IDXENTRYSIZE, &key);
+	return key;
+}
+
 SWORD_NAMESPACE_END
