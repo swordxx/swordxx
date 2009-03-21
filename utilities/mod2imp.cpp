@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <map>
+#include <stdio.h>
 
 #include <markupfiltmgr.h>
 #include <swmgr.h>
