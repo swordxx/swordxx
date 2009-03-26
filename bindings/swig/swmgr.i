@@ -22,7 +22,7 @@
     }
     
     SWModule* getModuleAt( const int pos ) {
-        if (pos < 0 || pos > self->Modules.size() )
+        if (pos < 0 || pos > (int)self->Modules.size() )
             return 0;
     
         sword::ModMap::iterator it = self->Modules.begin(); 
