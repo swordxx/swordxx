@@ -131,6 +131,8 @@ int main(int argc, char **argv) {
 	}
 	writeEntry(currentKey, currentEntry, module);
 
+	FileMgr::getSystemFileMgr()->close(fd);
+
 	delete vkey;
 
 	return 0;

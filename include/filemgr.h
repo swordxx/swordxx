@@ -143,7 +143,7 @@ public:
 	* Will only close the file if it was created by this FileMgr object.
 	* @param file The file to close.
 	*/
-	void close(FileDesc * file);
+	void close(FileDesc *file);
 
 	/** Cacher methods overridden
 	 */

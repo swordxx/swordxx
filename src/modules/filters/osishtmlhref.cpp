@@ -432,6 +432,16 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if (lastText.size()) {
 					toupperstr(lastText);
 					scratch.setFormatted("%c<font size=\"-1\">%s</font>", lastText[0], lastText.c_str()+1);
+
+					const unsigned char *tmpBuf = (const unsigned char *)lastText.c_str();
+					getUniCharFromUTF8(&tmpBuf);
+					int char_length = (tmpBuf - (const unsigned char *)lastText.c_str());
+					scratch.setFormatted("%.*s<font size=\"-1\">%s</font>", 
+						char_length, 
+						lastText.c_str(),
+						lastText.c_str() + char_length
+					);
+					
 					outText(scratch.c_str(), buf, u);
 				}               
 			} 

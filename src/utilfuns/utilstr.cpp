@@ -19,19 +19,8 @@
 #include <ctype.h>
 #include <string.h>
 
-#include <localemgr.h>
+#include <sysdata.h>
 
-
-#ifdef _ICU_
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/ustring.h>
-#include <unicode/uchar.h>
-
-#include <unicode/unistr.h>
-#include <unicode/translit.h>
-
-#endif
 
 SWORD_NAMESPACE_START
 
@@ -192,68 +181,58 @@ int stricmp(const char *s1, const char *s2) {
 #endif
 }
 
-/******************************************************************************
- * toupperstr - converts a string to uppercase string
- *
- * ENT:	target - string to convert
- *
- * RET:	target
- */
-
-// char *toupperstr(char *buf) {
-// 	char *ret = buf;
-// 
-// 	/*if (StringHelper::getSystemStringHelper()) {
-// 		StringHelper::getSystemStringHelper()->upperStringLatin1( ret );
-// 	}
-// 	else*/ {
-// 		while (*buf) {
-// 			*buf++ = SW_toupper(*buf);
-// 		}
-// // 	}
-// 	return ret;
-// }
-
 
 /******************************************************************************
- * toupperstr - converts a string to uppercase string
+ * getUniCharFromUTF8 - retrieves the next Unicode codepoint from a UTF8 string
+ * 					and increments buf to start of next codepoint
  *
- * ENT:	target - string to convert
+ * ENT:	buf - address of a utf8 buffer
  *
- * RET:	target
+ * RET:	buf - incremented past last byte used in computing the current codepoint
+ * 		unicode codepoint value (0 with buf incremented is invalid UTF8 byte
  */
 
-// char *toupperstr_utf8(char *buf, unsigned int max) {
-// 	char *ret = buf;
-// 
-// /*	if (StringHelper::getSystemStringHelper()) {
-// 		StringHelper::getSystemStringHelper()->upperStringUtf8( ret );
-// 		return ret;
-// 	}*/
-// 	
-// #ifndef _ICU_
-// 	// try to decide if it's worth trying to toupper.  Do we have more
-// 	// characters that are probably lower latin than not?
-// 	long performOp = 0;
-// 	for (const char *ch = buf; *ch; ch++)
-// 		performOp += (*ch > 0) ? 1 : -1;
-// 
-// 	if (performOp > 0) {
-// 		while (*buf)
-// 			*buf = SW_toupper(*buf++);
-// 	}
-// #else
-// 	if (!max)
-// 		max = strlen(ret);
-// 	UErrorCode err = U_ZERO_ERROR;
-// 	UConverter *conv = ucnv_open("UTF-8", &err);
-// 	UnicodeString str(buf, -1, conv, err);
-// 	UnicodeString ustr = str.toUpper();
-// 	ustr.extract(ret, max, conv, err);
-// 	ucnv_close(conv);
-// #endif
-// 
-// 	return ret;
-// }
+__u32 getUniCharFromUTF8(const unsigned char **buf) {
+	__u32 ch = 0;
+	unsigned char multibuf[7];
+
+	//case: We're at the end
+	if (!(**buf)) {
+		return ch;
+	}
+
+	//case: ANSI
+	if (!(**buf & 128)) {
+		ch = **buf;
+		(*buf)++;
+		return ch;
+	}
+
+	//case: Invalid UTF-8 (illegal continuing byte in initial position)
+	if ((**buf & 128) && (!(**buf & 64))) {
+		(*buf)++;
+		return ch;
+	}
+
+	//case: 2+ byte codepoint
+	multibuf[0] = **buf;
+	multibuf[0] <<= 1;
+	int subsequent;
+	for (subsequent = 1; (multibuf[0] & 128) && (subsequent < 7); subsequent++) {
+		multibuf[0] <<= 1;
+		multibuf[subsequent] = (*buf)[subsequent];
+		multibuf[subsequent] &= 63;
+		ch <<= 6;
+		ch |= multibuf[subsequent];
+	}
+	subsequent--;
+	multibuf[0] <<= 1;
+	char significantFirstBits = 8 - (2+subsequent);
+	
+	ch |= (((__s16)multibuf[0]) << (((6*subsequent)+significantFirstBits)-8));
+	*buf += (subsequent+1);
+	return ch;
+}
+
 
 SWORD_NAMESPACE_END

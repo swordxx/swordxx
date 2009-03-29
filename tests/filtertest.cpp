@@ -17,7 +17,9 @@
 
 #include <iostream>
 #include <swbuf.h>
+#include <filemgr.h>
 #include <papyriplain.h>
+#include <utf8utf16.h>
 //#include <swmgr.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -26,15 +28,42 @@ using namespace std;
 
 
 int main(int argc, char **argv) {
-//	SWMgr mgr;
-//	SWModule *module = mgr.getModule("KJV");
-	PapyriPlain filter;
-	SWBuf buf;
-	buf = "This is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
-	std::cout << "Original:\n\n" << buf << "\n\n-------\n\n";
-	filter.processText(buf);
-//	filter.processText(buf, module->getKey(), module);
-	std::cout << buf << "\n\n+++++++\n";
+	UTF8UTF16 filter;
+//	PapyriPlain filter;
+//
+	FileDesc *fd = (argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : 0;
+
+	SWBuf lineBuffer = "This is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
+
+	std::cout << "Original:\n\n";
+
+	while (!fd || FileMgr::getLine(fd, lineBuffer)) {
+		cout << lineBuffer << "\n";
+		if (!fd) break;
+	}
+
+ 	cout << "\n\n-------\n\n";
+
+	if (fd) {
+		FileMgr::getSystemFileMgr()->close(fd);
+		fd = FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY);
+	}
+
+	while (!fd || FileMgr::getLine(fd, lineBuffer)) {
+		filter.processText(lineBuffer);
+		for (unsigned int i = 0; i < lineBuffer.size(); i++) {
+			printf("%c", lineBuffer[i]);
+		}
+		cout << "\n";
+		if (!fd) break;
+	}
+
+	std::cout << "\n\n+++++++\n";
+
+	if (fd) {
+		FileMgr::getSystemFileMgr()->close(fd);
+	}
 
 	return 0;
 }
+
