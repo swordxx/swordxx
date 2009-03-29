@@ -213,7 +213,12 @@ long RawLD4::getEntryForKey(const char *key) {
 	__u32 start, offset;
 	__u32 size;
 
-	findOffset(key, &start, &size, 0, &offset);
+	char *buf = new char [ strlen(key) + 6 ];
+	strcpy(buf, key);
+
+	strongsPad(buf);
+	
+	findOffset(buf, &start, &size, 0, &offset);
 	return offset / IDXENTRYSIZE;
 }
 

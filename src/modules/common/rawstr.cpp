@@ -245,7 +245,7 @@ signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long
 		*size  = swordtoarch16(tmpSize);
 
 		while (away) {
-			long laststart = *start;
+			unsigned long laststart = *start;
 			unsigned short lastsize = *size;
 			long lasttry = tryoff;
 			tryoff += (away > 0) ? 6 : -6;
@@ -272,7 +272,7 @@ signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long
 			*start = swordtoarch32(tmpStart);
 			*size  = swordtoarch16(tmpSize);
 
-			if (((laststart != *start) || (lastsize != *size)) && (*start >= 0) && (*size)) 
+			if (((laststart != *start) || (lastsize != *size)) && (*size))
 				away += (away < 0) ? 1 : -1;
 		}
 	
@@ -364,7 +364,7 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
 	__u32 start, outstart;
 	__u32 idxoff;
 	__u32 endoff;
-	__u32 shiftSize;
+	__s32 shiftSize;
 	__u16 size;
 	__u16 outsize;
 	static const char nl[] = {13, 10};

@@ -113,7 +113,7 @@ RawVerse::~RawVerse()
  *	size	- address to store the size of the entry
  */
 
-void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size) {
+void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size) const {
 	idxoff *= 6;
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);

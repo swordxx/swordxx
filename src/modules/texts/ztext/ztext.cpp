@@ -77,14 +77,15 @@ bool zText::isWritable() { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode &
 SWBuf &zText::getRawEntryBuf() {
 	long  start = 0;
 	unsigned short size = 0;
+	unsigned long buffnum = 0;
 	VerseKey &key = getVerseKey();
 
-	findOffset(key.Testament(), key.TestamentIndex(), &start, &size);
+	findOffset(key.Testament(), key.TestamentIndex(), &start, &size, &buffnum);
 	entrySize = size;        // support getEntrySize call
 			  
 	entryBuf = "";
 	
-	zReadText(key.Testament(), start, size, entryBuf);
+	zReadText(key.Testament(), start, size, buffnum, entryBuf);
 	rawFilter(entryBuf, &key);
 
 //	if (!isUnicode())
@@ -172,11 +173,12 @@ void zText::deleteEntry() {
  */
 
 void zText::increment(int steps) {
-	long  start;
+	long start;
 	unsigned short size;
+	unsigned long buffnum;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findOffset(tmpkey->Testament(), tmpkey->TestamentIndex(), &start, &size);
+	findOffset(tmpkey->Testament(), tmpkey->TestamentIndex(), &start, &size, &buffnum);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -191,7 +193,7 @@ void zText::increment(int steps) {
 			break;
 		}
 		long index = tmpkey->TestamentIndex();
-		findOffset(tmpkey->Testament(), index, &start, &size);
+		findOffset(tmpkey->Testament(), index, &start, &size, &buffnum);
 
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
@@ -208,13 +210,14 @@ void zText::increment(int steps) {
 bool zText::isLinked(const SWKey *k1, const SWKey *k2) const {
 	long start1, start2;
 	unsigned short size1, size2;
+	unsigned long buffnum1, buffnum2;
 	VerseKey *vk1 = &getVerseKey(k1);
 	VerseKey *vk2 = &getVerseKey(k2);
 	if (vk1->Testament() != vk2->Testament()) return false;
 
-	findOffset(vk1->Testament(), vk1->TestamentIndex(), &start1, &size1);
-	findOffset(vk2->Testament(), vk2->TestamentIndex(), &start2, &size2);
-	return start1 == start2;
+	findOffset(vk1->Testament(), vk1->TestamentIndex(), &start1, &size1, &buffnum1);
+	findOffset(vk2->Testament(), vk2->TestamentIndex(), &start2, &size2, &buffnum2);
+	return start1 == start2 && buffnum1 == buffnum2;
 }
 
 SWORD_NAMESPACE_END

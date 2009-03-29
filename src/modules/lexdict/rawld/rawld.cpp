@@ -216,8 +216,13 @@ long RawLD::getEntryCount() {
 long RawLD::getEntryForKey(const char *key) {
 	__u32 start, offset;
 	__u16 size;
+	
+	char *buf = new char [ strlen(key) + 6 ];
+	strcpy(buf, key);
 
-	findOffset(key, &start, &size, 0, &offset);
+	strongsPad(buf);
+	
+	findOffset(buf, &start, &size, 0, &offset);
 	return offset / IDXENTRYSIZE;
 }
 

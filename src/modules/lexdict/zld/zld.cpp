@@ -207,10 +207,15 @@ long zLD::getEntryCount() {
 }
 
 
-long zLD::getEntryForKey(const char *key) {
+long zLD::getEntryForKey(const char* key) {
 	long offset;
-	findKeyIndex(key, &offset);
-	return offset / IDXENTRYSIZE;
+	char *buf = new char [ strlen(key) + 6 ];
+	strcpy(buf, key);
+
+	strongsPad(buf);
+	
+	findKeyIndex(buf, &offset);
+	return offset/IDXENTRYSIZE;
 }
 
 

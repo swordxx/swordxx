@@ -146,19 +146,15 @@ zVerse::~zVerse()
  *	size	- address to store the size of the entry
  */
 
-void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size)
+void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const
 {
-	// set start to offset in
-	// set size to
-	// set
 	__u32 ulBuffNum    = 0;	          // buffer number
 	__u32 ulVerseStart = 0;	       // verse offset within buffer
 	__u16 usVerseSize  = 0;	       // verse size
-	__u32 ulCompOffset = 0;	       // compressed buffer start
-	__u32 ulCompSize   = 0;	             // buffer size compressed
-	__u32 ulUnCompSize = 0;	          // buffer size uncompressed
-
-	*start = *size = 0;
+	// set start to offset in
+	// set size to
+	// set
+	*start = *size = *buffnum = 0;
 	//printf ("Finding offset %ld\n", idxoff);
 	idxoff *= 10;
 	if (!testmt) {
@@ -176,10 +172,8 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 			return;
 		}
 	}
-	else return;
-
-	ulBuffNum = swordtoarch32(ulBuffNum);
-
+	else return;	
+	
 	if (compfp[testmt-1]->read(&ulVerseStart, 4) < 2)
 	{
 		printf ("Error reading ulVerseStart\n");
@@ -191,17 +185,39 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		return;
 	}
 
+	*buffnum = swordtoarch32(ulBuffNum);
 	*start = swordtoarch32(ulVerseStart);
 	*size = swordtoarch16(usVerseSize);
 
-	if (*size) {
-		if (((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf)) {
-			// have the text buffered
-			return;
-		}
+}
 
+
+/******************************************************************************
+ * zVerse::zreadtext	- gets text at a given offset
+ *
+ * ENT:	testmt	- testament file to search in (0 - Old; 1 - New)
+ *	start	- starting offset where the text is located in the file
+ *	size	- size of text entry + 1 (null)
+ *	buf	- buffer to store text
+ *
+ */
+
+void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned long ulBuffNum, SWBuf &inBuf) {
+	__u32 ulCompOffset = 0;	       // compressed buffer start
+	__u32 ulCompSize   = 0;	             // buffer size compressed
+	__u32 ulUnCompSize = 0;	          // buffer size uncompressed
+
+	if (!testmt) {
+		testmt = ((idxfp[0]) ? 1:2);
+	}
+	
+	// assert we have and valid file descriptor
+	if (compfp[testmt-1]->getFd() < 1)
+		return;
+	
+	if (size && 
+		!(((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf))) {
 		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
-
 
 		if (idxfp[testmt-1]->seek(ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
 		{
@@ -258,21 +274,8 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 		cacheBufSize = strlen(cacheBuf);  // TODO: can we just use len?
 		cacheTestament = testmt;
 		cacheBufIdx = ulBuffNum;
-	}
-}
-
-
-/******************************************************************************
- * zVerse::zreadtext	- gets text at a given offset
- *
- * ENT:	testmt	- testament file to search in (0 - Old; 1 - New)
- *	start	- starting offset where the text is located in the file
- *	size	- size of text entry + 1 (null)
- *	buf	- buffer to store text
- *
- */
-
-void zVerse::zReadText(char testmt, long start, unsigned short size, SWBuf &inBuf) {
+	}	
+	
 	inBuf = "";
 	if ((size > 0) && cacheBuf && ((unsigned)start < cacheBufSize)) {
 		inBuf.setFillByte(0);
