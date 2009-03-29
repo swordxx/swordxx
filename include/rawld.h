@@ -31,7 +31,6 @@
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawLD : public RawStr, public SWLD {
-	void strongsPad(char *buf);
 	char getEntry(long away = 0);
 
 public:

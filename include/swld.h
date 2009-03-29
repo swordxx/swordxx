@@ -35,6 +35,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT SWLD : public SWModule {
 protected:
 	char *entkeytxt;
+	static void strongsPad(char *buf);
 public:
 	/** Initializes data for instance of SWLD
 	*/

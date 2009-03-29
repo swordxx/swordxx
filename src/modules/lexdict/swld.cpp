@@ -19,6 +19,8 @@
  *
  */
 
+#include <ctype.h>
+#include <stdio.h>
 #include <swld.h>
 #include <strkey.h>
 
@@ -92,6 +94,57 @@ void SWLD::setPosition(SW_POSITION p) {
 	}
 	else	*key = p;
 	getRawEntryBuf();
+}
+
+
+/******************************************************************************
+ * SWLD::strongsPad	- Pads a key if (it-1) is 100% digits to 5 places
+ *						allows for final to be alpha, e.g. '123B'
+ *
+ * ENT: buf -	buffer to check and pad
+ */
+
+void SWLD::strongsPad(char *buf)
+{
+	char *check;
+	int size = 0;
+	int len = strlen(buf);
+	char subLet = 0;
+	bool bang = false, prefix=false;
+	if ((len < 9) && (len > 0)) {
+		// Handle initial G or H
+		if (*buf == 'G' || *buf == 'H' || *buf == 'g' || *buf == 'h') {
+			buf += 1;
+			len -= 1;
+			prefix = true;
+		}
+
+		for (check = buf; *(check); check++) {
+			if (!isdigit(*check))
+				break;
+			else size++;
+		}
+
+		if (size && ((size == len) || (size == len - 1) || (size == (len-2)))) {
+			if (*check == '!') {
+				bang = true;
+				check++;
+			}
+			if (isalpha(*check)) {
+				subLet = toupper(*check);
+				*(check-(bang?1:0)) = 0;
+			}
+			sprintf(buf, prefix?"%.4d":"%.5d", atoi(buf));
+			if (subLet) {
+				check = buf+(strlen(buf));
+				if (bang) {
+					*check++ = '!';
+				}
+				*check++ = subLet;
+				*check = 0;
+			}
+		}
+	}
 }
 
 

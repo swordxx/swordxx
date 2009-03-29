@@ -19,8 +19,6 @@
  *
  */
 
-#include <ctype.h>
-#include <stdio.h>
 #include <fcntl.h>
 
 #include <utilstr.h>
@@ -55,50 +53,6 @@ RawLD::~RawLD()
 
 bool RawLD::isWritable() {
 	 return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
-}
-
-
-/******************************************************************************
- * RawLD::strongsPad	- Pads a key if (it-1) is 100% digits to 5 places
- *						allows for final to be alpha, e.g. '123B'
- *
- * ENT: buf -	buffer to check and pad
- */
-
-void RawLD::strongsPad(char *buf)
-{
-	char *check;
-	int size = 0;
-	int len = strlen(buf);
-	char subLet = 0;
-	bool bang = false;
-	if ((len < 8) && (len > 0)) {
-		for (check = buf; *(check+1); check++) {
-			if (!isdigit(*check))
-				break;
-			else size++;
-		}
-
-		if (size && ((size == (len-1)) || (size == (len-2)))) {
-			if (*check == '!') {
-				bang = true;
-				check++;
-			}
-			if (isalpha(*check)) {
-				subLet = toupper(*check);
-				*(check-(bang?1:0)) = 0;
-			}
-			sprintf(buf, "%.5d", atoi(buf));
-			if (subLet) {
-				check = buf+(strlen(buf));
-				if (bang) {
-					*check++ = '!';
-				}
-				*check++ = subLet;
-				*check = 0;
-			}
-		}
-	}
 }
 
 
