@@ -174,10 +174,10 @@ const struct abbrev builtin_abbrevs[] = {
   {"ACTS", "Acts"},		// Acts
   {"ADDDAN", "AddDan"},		// Additions to Daniel
   {"ADDESTH", "AddEsth"},		// Additions to Esther
-  {"ADDPS", "AddPs"},		// Additional Psalm
   {"ADDITIONAL PSALM", "AddPs"},		// Additional Psalm
   {"ADDITIONS TO DANIEL", "AddDan"},		// Additions to Daniel
   {"ADDITIONS TO ESTHER", "AddEsth"},		// Additions to Esther
+  {"ADDPS", "AddPs"},		// Additional Psalm
   {"AMOS", "Amos"},		// Amos
   {"APOCALYPSE OF JOHN", "Rev"},		// Revelation of John
   {"APOCALYPSE OF ST. JOHN", "Rev"},		// Revelation of John
@@ -198,11 +198,11 @@ const struct abbrev builtin_abbrevs[] = {
   {"D", "Deut"},		// Deuteronomy
   {"DAN", "Dan"},		// Daniel
   {"DANGR", "DanGr"},		// Daniel (Greek)
-  {"DANTHEO", "DanTheo"},		// Daniel (Theodotion)
   {"DANIEL", "Dan"},		// Daniel
   {"DANIEL (ADDITIONS)", "AddDan"},		// Additions to Daniel
   {"DANIEL (GREEK)", "DanGr"},		// Daniel (Greek)
   {"DANIEL (THEODOTION)", "DanTheo"},		// Daniel (Theodotion)
+  {"DANTHEO", "DanTheo"},		// Daniel (Theodotion)
   {"DAT", "DanTheo"},		// Daniel (Theodotion)
   {"DEUT", "Deut"},		// Deuteronomy
   {"DEUTERONOMY", "Deut"},		// Deuteronomy
@@ -212,12 +212,12 @@ const struct abbrev builtin_abbrevs[] = {
   {"ECCLESIASTICUS", "Sir"},		// Sirach
   {"ECCLUS", "Sir"},		// Sirach
   {"ENOCH", "1En"},		// I Enoch
-  {"EPJER", "EpJer"},		// Epistle of Jeremiah
-  {"EPLAO", "Lao"},		// Laodiceans
   {"EPH", "Eph"},		// Ephesians
   {"EPHESIANS", "Eph"},		// Ephesians
   {"EPISTLE OF JEREMIAH", "EpJer"},		// Epistle of Jeremiah
   {"EPJ", "EpJer"},		// Epistle of Jeremiah
+  {"EPJER", "EpJer"},		// Epistle of Jeremiah
+  {"EPLAO", "EpLao"},		// Laodiceans
   {"ESDRAS A", "1Esd"},		// I Esdras
   {"ESDRAS B", "2Esd"},		// II Esdras
   {"ESDRASA", "1Esd"},		// I Esdras
@@ -225,10 +225,10 @@ const struct abbrev builtin_abbrevs[] = {
   {"ESG", "EsthGr"},		// Esther (Greek)
   {"ESTER", "Esth"},		// Esther
   {"ESTH", "Esth"},		// Esther
-  {"ESTHGR", "EsthGr"},		// Esther (Greek)
   {"ESTHER", "Esth"},		// Esther
   {"ESTHER (ADDITIONS)", "AddEsth"},		// Additions to Esther
   {"ESTHER (GREEK)", "EsthGr"},		// Esther (Greek)
+  {"ESTHGR", "EsthGr"},		// Esther (Greek)
   {"ETHIOPIC APOCALYPSE OF ENOCH", "1En"},		// I Enoch
   {"EXOD", "Exod"},		// Exodus
   {"EXODUS", "Exod"},		// Exodus
@@ -243,9 +243,9 @@ const struct abbrev builtin_abbrevs[] = {
   {"GEN", "Gen"},		// Genesis
   {"GENESIS", "Gen"},		// Genesis
   {"GRDAN", "DanGr"},		// Daniel (Greek)
-  {"GRESTH", "EsthGr"},		// Esther (Greek)
   {"GREEK DANIEL", "DanGr"},		// Daniel (Greek)
   {"GREEK ESTHER", "EsthGr"},		// Esther (Greek)
+  {"GRESTH", "EsthGr"},		// Esther (Greek)
   {"H", "Heb"},		// Hebrews
   {"HAB", "Hab"},		// Habakkuk
   {"HABAKKUK", "Hab"},		// Habakkuk
@@ -354,6 +354,8 @@ const struct abbrev builtin_abbrevs[] = {
   {"IPARALIPOMENON", "1Chr"},		// I Chronicles
   {"IPETER", "1Pet"},		// I Peter
   {"IPTR", "1Pet"},		// I Peter
+  {"ISA", "Isa"},		// Isaiah
+  {"ISAIAH", "Isa"},		// Isaiah
   {"ISAMUEL", "1Sam"},		// I Samuel
   {"ITHESSALONIANS", "1Thess"},		// I Thessalonians
   {"ITIMOTHY", "1Tim"},		// I Timothy
@@ -371,8 +373,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"IVKINGDOMS", "2Kgs"},		// II Kings
   {"IVKINGS", "2Kgs"},		// II Kings
   {"IVMACCABEES", "4Macc"},		// IV Maccabees
-  {"ISA", "Isa"},		// Isaiah
-  {"ISAIAH", "Isa"},		// Isaiah
   {"J", "Josh"},		// Joshua
   {"JAMES", "Jas"},		// James
   {"JAS", "Jas"},		// James
@@ -411,8 +411,8 @@ const struct abbrev builtin_abbrevs[] = {
   {"L", "Luke"},		// Luke
   {"LAM", "Lam"},		// Lamentations
   {"LAMENTATIONS", "Lam"},		// Lamentations
-  {"LAO", "Lao"},		// Laodiceans
-  {"LAODICEANS", "Lao"},		// Laodiceans
+  {"LAO", "EpLao"},		// Laodiceans
+  {"LAODICEANS", "EpLao"},		// Laodiceans
   {"LESSER GENESIS", "Jub"},		// Jubilees
   {"LETJER", "EpJer"},		// Epistle of Jeremiah
   {"LETTER OF JEREMIAH", "EpJer"},		// Epistle of Jeremiah
@@ -454,13 +454,13 @@ const struct abbrev builtin_abbrevs[] = {
   {"PHLM", "Phlm"},		// Philemon
   {"PHM", "Phlm"},		// Philemon
   {"PHP", "Phil"},		// Philippians
-  {"PRAZAR", "PrAzar"},		// Prayer of Azariah
-  {"PRMAN", "PrMan"},		// Prayer of Manasses
   {"PRA", "PrAzar"},		// Prayer of Azariah
   {"PRAYER OF AZARIAH", "PrAzar"},		// Prayer of Azariah
   {"PRAYER OF MANASSEH", "PrMan"},		// Prayer of Manasses
   {"PRAYER OF MANASSES", "PrMan"},		// Prayer of Manasses
+  {"PRAZAR", "PrAzar"},		// Prayer of Azariah
   {"PRM", "PrMan"},		// Prayer of Manasses
+  {"PRMAN", "PrMan"},		// Prayer of Manasses
   {"PROV", "Prov"},		// Proverbs
   {"PROVERBS", "Prov"},		// Proverbs
   {"PS", "Ps"},		// Psalms
@@ -483,9 +483,9 @@ const struct abbrev builtin_abbrevs[] = {
 //  {"S3Y", "PrAzar"},		// Prayer of Azariah
   {"SIP", "SirP"},		// Sirach (Prologue)
   {"SIR", "Sir"},		// Sirach
-  {"SIRP", "SirP"},		// Sirach (Prologue)
   {"SIRACH", "Sir"},		// Sirach
   {"SIRACH (PROLOGUE)", "SirP"},		// Sirach (Prologue)
+  {"SIRP", "SirP"},		// Sirach (Prologue)
   {"SNG", "Song"},		// Song of Solomon
   {"SOLOMON", "Song"},		// Song of Solomon
   {"SONG", "Song"},		// Song of Solomon
@@ -493,9 +493,9 @@ const struct abbrev builtin_abbrevs[] = {
   {"SONG OF SONGS", "Song"},		// Song of Solomon
   {"SONG OF THE THREE CHILDREN", "PrAzar"},		// Prayer of Azariah
   {"SUS", "Sus"},		// Susanna
-  {"SUSTHEO", "SusTheo"},		// Susanna (Theodotion)
   {"SUSANNA", "Sus"},		// Susanna
   {"SUSANNA (THEODOTION)", "SusTheo"},		// Susanna (Theodotion)
+  {"SUSTHEO", "SusTheo"},		// Susanna (Theodotion)
   {"SUT", "SusTheo"},		// Susanna (Theodotion)
   {"SYRIAC APOCALYPSE OF BARUCH", "2Bar"},		// 2Baruch
   {"TBA", "TobBA"},		// Tobit (Codices Vaticanus Alexandrinusque)
@@ -504,10 +504,10 @@ const struct abbrev builtin_abbrevs[] = {
   {"TITUS", "Titus"},		// Titus
   {"TOB", "Tob"},		// Tobit
   {"TOBBA", "TobBA"},		// Tobit (Codices Vaticanus Alexandrinusque)
-  {"TOBS", "TobS"},		// Tobit (Codex Sinaiticus)
   {"TOBIT", "Tob"},		// Tobit
   {"TOBIT (CODEX SINAITICUS)", "TobS"},		// Tobit (Codex Sinaiticus)
   {"TOBIT (CODICES VATICANUS ALEXANDRINUSQUE)", "TobBA"},		// Tobit (Codices Vaticanus Alexandrinusque)
+  {"TOBS", "TobS"},		// Tobit (Codex Sinaiticus)
   {"WIS", "Wis"},		// Wisdom
   {"WISDOM", "Wis"},		// Wisdom
   {"WISDOM OF BEN SIRA", "Sir"},		// Sirach
