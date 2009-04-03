@@ -89,8 +89,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	*/
 	int findindex(long *array, int size, long value);
 
-	void validateCurrentLocale() const;
-
 	mutable long lowerBound, upperBound;
 	mutable VerseKey *tmpClone;
 
@@ -414,6 +412,9 @@ public:
 
 	virtual void setVersificationSystem(const char *name);
 	virtual const char *getVersificationSystem() const;
+
+	// DEBUG
+	void validateCurrentLocale() const;
 
 
 	// OPERATORS --------------------------------------------------------------------

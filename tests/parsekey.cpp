@@ -19,6 +19,8 @@
 
 #include <versekey.h>
 #include <localemgr.h>
+#include <swlog.h>
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -33,6 +35,9 @@ int main(int argc, char **argv) {
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[2]);
 
 	VerseKey DefaultVSKey;
+
+	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
+	DefaultVSKey.validateCurrentLocale();
 
 	DefaultVSKey = "jas3:1";
 	

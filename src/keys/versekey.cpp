@@ -386,30 +386,24 @@ int VerseKey::getBookAbbrev(const char *iabbr) const
  */
 void VerseKey::validateCurrentLocale() const {
 	if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
-		for (int t = 0; t < 2; t++) {
-			for (int i = 0; i < BMAX[t]; i++) {
-				const int bn = getBookAbbrev(
-						getPrivateLocale()->translate(refSys->getBook(((t>1)?BMAX[0]:0)+i-1)->getLongName())
-					);
-				if ((bn)%39 != i) {
-					char *abbr = 0;
-					stdstr(&abbr, 
-						getPrivateLocale()->translate(refSys->getBook(((t>1)?BMAX[0]:0)+i-1)->getLongName()), 2);
-					strstrip(abbr);
-					SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d(%d). Required entry should be:",
-						abbr, bn, i);
+		for (int i = 0; i < refSys->getBookCount(); i++) {
+			const int bn = getBookAbbrev(getPrivateLocale()->translate(refSys->getBook(i)->getLongName()));
+			if (bn != i+1) {
+				char *abbr = 0;
+				stdstr(&abbr, getPrivateLocale()->translate(refSys->getBook(i)->getLongName()), 2);
+				strstrip(abbr);
+				SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr, bn, i);
 
-					StringMgr* stringMgr = StringMgr::getSystemStringMgr();
-					const bool hasUTF8Support = StringMgr::hasUTF8Support();
-					if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-						stringMgr->upperUTF8(abbr, strlen(abbr)*2);
-					}
-					else {
-						stringMgr->upperLatin1(abbr);
-					}
-					SWLog::getSystemLog()->logDebug("%s=%d", abbr, (t*39)+i+1);
-					delete [] abbr;
+				StringMgr* stringMgr = StringMgr::getSystemStringMgr();
+				const bool hasUTF8Support = StringMgr::hasUTF8Support();
+				if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
+					stringMgr->upperUTF8(abbr, strlen(abbr)*2);
 				}
+				else {
+					stringMgr->upperLatin1(abbr);
+				}
+				SWLog::getSystemLog()->logDebug("%s=%s\n", abbr, refSys->getBook(i)->getOSISName());
+				delete [] abbr;
 			}
 		}
 	}
