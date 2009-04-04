@@ -21,6 +21,7 @@
 #include <versekey.h>
 #include <swbuf.h>
 #include <filemgr.h>
+#include <stdio.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
