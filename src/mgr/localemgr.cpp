@@ -81,7 +81,9 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths);
 		SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY COMPLETE.");
 	}
-	else configPath = (char *)iConfigPath;
+	else {
+		loadConfigDir(iConfigPath);
+	}
 	
 	if (prefixPath) {
 		switch (configType) {

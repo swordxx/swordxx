@@ -622,21 +622,19 @@ void SWMgr::loadConfigDir(const char *ipath)
 		rewinddir(dir);
 		while ((ent = readdir(dir))) {
 			//check whether it ends with .conf, if it doesn't skip it!
-			if (ent->d_name && (strlen(ent->d_name) > 5) && strncmp(".conf", (ent->d_name + strlen(ent->d_name) - 5), 5 )) {
+			if (!ent->d_name || (strlen(ent->d_name) <= 5) || strncmp(".conf", (ent->d_name + strlen(ent->d_name) - 5), 5 )) {
 				continue;
 			}
 			
-			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-				newmodfile = ipath;
-				if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-					newmodfile += "/";
-				newmodfile += ent->d_name;
-				if (config) {
-					SWConfig tmpConfig(newmodfile.c_str());
-					*config += tmpConfig;
-				}
-				else	config = myconfig = new SWConfig(newmodfile.c_str());
+			newmodfile = ipath;
+			if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
+				newmodfile += "/";
+			newmodfile += ent->d_name;
+			if (config) {
+				SWConfig tmpConfig(newmodfile.c_str());
+				*config += tmpConfig;
 			}
+			else	config = myconfig = new SWConfig(newmodfile.c_str());
 		}
 		closedir(dir);
 		

@@ -178,5 +178,13 @@ bool RawCom::isLinked(const SWKey *k1, const SWKey *k2) const {
 	return start1 == start2;
 }
 
+bool RawCom::hasEntry(const SWKey *k) const {
+	long start;
+	unsigned short size;
+	VerseKey *vk = &getVerseKey(k);
+
+	findOffset(vk->Testament(), vk->TestamentIndex(), &start, &size);
+	return size;
+}
 
 SWORD_NAMESPACE_END

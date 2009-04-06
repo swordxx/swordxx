@@ -161,13 +161,13 @@ void RawLD::deleteEntry() {
 }
 
 
-long RawLD::getEntryCount() {
+long RawLD::getEntryCount() const {
 	if (idxfd < 0) return 0;
 	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
 }
 
 
-long RawLD::getEntryForKey(const char *key) {
+long RawLD::getEntryForKey(const char *key) const {
 	__u32 start, offset;
 	__u16 size;
 	
@@ -177,11 +177,14 @@ long RawLD::getEntryForKey(const char *key) {
 	strongsPad(buf);
 	
 	findOffset(buf, &start, &size, 0, &offset);
+
+	delete [] buf;
+
 	return offset / IDXENTRYSIZE;
 }
 
 
-char *RawLD::getKeyForEntry(long entry) {
+char *RawLD::getKeyForEntry(long entry) const {
 	char *key = 0;
 	getIDXBuf(entry * IDXENTRYSIZE, &key);
 	return key;

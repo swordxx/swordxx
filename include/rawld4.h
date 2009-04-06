@@ -54,9 +54,9 @@ public:
 	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry
 	virtual void deleteEntry();	// Delete current module entry
 	// end write interface ------------------------
-	virtual long getEntryCount();
-	virtual long getEntryForKey(const char *key);
-	virtual char *getKeyForEntry(long entry);
+	virtual long getEntryCount() const;
+	virtual long getEntryForKey(const char *key) const;
+	virtual char *getKeyForEntry(long entry) const;
 
 
 	// OPERATORS -----------------------------------------------------------------

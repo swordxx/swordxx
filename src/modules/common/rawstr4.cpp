@@ -105,7 +105,8 @@ RawStr4::~RawStr4()
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr4::getIDXBufDat(long ioffset, char **buf) {
+void RawStr4::getIDXBufDat(long ioffset, char **buf) const
+{
 	int size;
 	char ch;
 	if (datfd > 0) {
@@ -138,7 +139,7 @@ void RawStr4::getIDXBufDat(long ioffset, char **buf) {
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr4::getIDXBuf(long ioffset, char **buf)
+void RawStr4::getIDXBuf(long ioffset, char **buf) const
 {
 	__u32 offset;
 	
@@ -174,7 +175,7 @@ void RawStr4::getIDXBuf(long ioffset, char **buf)
  * RET: error status -1 general error; -2 new file
  */
 
-signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, long away, __u32 *idxoff)
+signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, long away, __u32 *idxoff) const
 {
 	char *trybuf, *maxbuf, *key = 0, quitflag = 0;
 	signed char retval = -1;

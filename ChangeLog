@@ -1,5 +1,23 @@
 API ChangeLog 
 
+30-Mar-2009	Ben Morgan
+	Added new methods to SWModule:
+		bool isLinked(SWKey *k1, SWKey *k2)
+			- are two entries linked
+		bool hasEntry(SWKey *k1)
+			- does an entry for the given key exist?
+	Added new methods to SWLD:
+		long getEntryCount()
+			- number of entries in the dictionary
+		getKeyForEntry(long entry)
+			- get the key for the nth entry
+		getEntryForKey(const char *key)
+			- get the index for the given key
+	Updated strongsPad to work with keys with a prefix of G or H
+	Fixed a bug in SWMgr which would load certain files in the mods.d
+		directory which shouldn't have been loaded.
+	Fix for divineName with non-ascii text in OSISHTMLHREF filter
+
 07-Feb-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Added fallback checks for OS specific module
 		locations:

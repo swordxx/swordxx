@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = 1.6
-AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(includedir) 
 AM_CPPFLAGS += -DUSE_AUTOTOOLS -DUNIX -Dunix -D__unix__
 
 if ZLIB

@@ -157,13 +157,15 @@ void zLD::deleteEntry() {
 }
 
 
-long zLD::getEntryCount() {
+long zLD::getEntryCount() const
+{
 	if (idxfd < 0) return 0;
 	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
 }
 
 
-long zLD::getEntryForKey(const char* key) {
+long zLD::getEntryForKey(const char* key) const
+{
 	long offset;
 	char *buf = new char [ strlen(key) + 6 ];
 	strcpy(buf, key);
@@ -171,11 +173,15 @@ long zLD::getEntryForKey(const char* key) {
 	strongsPad(buf);
 	
 	findKeyIndex(buf, &offset);
+
+	delete [] buf;
+
 	return offset/IDXENTRYSIZE;
 }
 
 
-char *zLD::getKeyForEntry(long entry) {
+char *zLD::getKeyForEntry(long entry) const
+{
 	char *key = 0;
 	getKeyFromIdxOffset(entry * IDXENTRYSIZE, &key);
 	return key;

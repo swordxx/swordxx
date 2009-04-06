@@ -105,7 +105,7 @@ RawStr::~RawStr()
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr::getIDXBufDat(long ioffset, char **buf)
+void RawStr::getIDXBufDat(long ioffset, char **buf) const
 {
 	int size;
 	char ch;
@@ -139,7 +139,7 @@ void RawStr::getIDXBufDat(long ioffset, char **buf)
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void RawStr::getIDXBuf(long ioffset, char **buf)
+void RawStr::getIDXBuf(long ioffset, char **buf) const
 {
 	__u32 offset;
 	
@@ -166,7 +166,7 @@ void RawStr::getIDXBuf(long ioffset, char **buf)
  * RET: error status -1 general error; -2 new file
  */
 
-signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long away, __u32 *idxoff)
+signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long away, __u32 *idxoff) const
 {
 	char *trybuf, *maxbuf, *key = 0, quitflag = 0;
 	signed char retval = -1;

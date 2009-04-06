@@ -213,4 +213,12 @@ SWKey *RawGenBook::CreateKey() const {
 	return tKey;
 }
 
+bool RawGenBook::hasEntry(const SWKey *k) const {
+	TreeKey &key = getTreeKey(k);
+
+	int dsize;
+	key.getUserData(&dsize);
+	return (dsize > 7) && key.Error() == '\x00';
+}
+
 SWORD_NAMESPACE_END

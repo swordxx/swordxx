@@ -47,19 +47,20 @@ SWGenBook::~SWGenBook() {
 }
 
 
-TreeKey &SWGenBook::getTreeKey() const {
+TreeKey &SWGenBook::getTreeKey(const SWKey *k) const {
+	const SWKey* thiskey = k?k:this->key;
 
 	TreeKey *key = 0;
 
 	SWTRY {
-		key = SWDYNAMIC_CAST(TreeKey, (this->key));
+		key = SWDYNAMIC_CAST(TreeKey, (thiskey));
 	}
 	SWCATCH ( ... ) {}
 
 	if (!key) {
 		ListKey *lkTest = 0;
 		SWTRY {
-			lkTest = SWDYNAMIC_CAST(ListKey, this->key);
+			lkTest = SWDYNAMIC_CAST(ListKey, thiskey);
 		}
 		SWCATCH ( ... ) {	}
 		if (lkTest) {
@@ -80,7 +81,7 @@ TreeKey &SWGenBook::getTreeKey() const {
 	if (!key) {
 		VerseTreeKey *tkey = 0;
 		SWTRY {
-			tkey = SWDYNAMIC_CAST(VerseTreeKey, (this->key));
+			tkey = SWDYNAMIC_CAST(VerseTreeKey, (thiskey));
 		}
 		SWCATCH ( ... ) {}
 		if (tkey) key = tkey->getTreeKey();
@@ -89,7 +90,7 @@ TreeKey &SWGenBook::getTreeKey() const {
 	if (!key) {
 		delete tmpTreeKey;
 		tmpTreeKey = (TreeKey *)CreateKey();
-		(*tmpTreeKey) = *(this->key);
+		(*tmpTreeKey) = *(thiskey);
 		return (*tmpTreeKey);
 	}
 	else	return *key;

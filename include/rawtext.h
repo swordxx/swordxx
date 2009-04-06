@@ -50,6 +50,7 @@ public:
 	// end write interface ------------------------
 
 	virtual bool isLinked(const SWKey *k1, const SWKey *k2) const;
+	virtual bool hasEntry(const SWKey *k) const;
 	
 
 	SWMODULE_OPERATORS

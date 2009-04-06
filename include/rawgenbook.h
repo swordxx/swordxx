@@ -54,6 +54,7 @@ public:
 	virtual SWKey *CreateKey() const;
 	// end write interface ------------------------
 
+	virtual bool hasEntry(const SWKey *k) const;
 
 	// OPERATORS -----------------------------------------------------------------
 	

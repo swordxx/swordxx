@@ -36,7 +36,7 @@ class FileDesc;
 class SWDLLEXPORT RawStr {
 	static int instance;		// number of instantiated RawStr objects or derivitives
 	char *path;
-	long lastoff;
+	mutable long lastoff;	 // for caching and optimizing
 	
 
 protected:
@@ -50,9 +50,9 @@ public:
 	static char nl;
 	RawStr(const char *ipath, int fileMode = -1);
 	virtual ~RawStr();
-	void getIDXBuf(long ioffset, char **buf);
-	void getIDXBufDat(long ioffset, char **buf);
-	signed char findOffset(const char *key, __u32 *start, __u16 *size, long away = 0, __u32 *idxoff = 0);
+	void getIDXBuf(long ioffset, char **buf) const;
+	void getIDXBufDat(long ioffset, char **buf) const;
+	signed char findOffset(const char *key, __u32 *start, __u16 *size, long away = 0, __u32 *idxoff = 0) const;
 	void readText(__u32 start, __u16 *size, char **idxbuf, SWBuf &buf);
 	static signed char createModule(const char *path);
 };

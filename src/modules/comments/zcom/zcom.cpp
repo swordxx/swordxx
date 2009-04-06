@@ -214,5 +214,14 @@ bool zCom::isLinked(const SWKey *k1, const SWKey *k2) const {
 	return start1 == start2 && buffnum1 == buffnum2;
 }
 
+bool zCom::hasEntry(const SWKey *k) const {
+	long start;
+	unsigned short size;
+	unsigned long buffnum;
+	VerseKey *vk = &getVerseKey(k);
+
+	findOffset(vk->Testament(), vk->TestamentIndex(), &start, &size, &buffnum);
+	return size;
+}
 
 SWORD_NAMESPACE_END

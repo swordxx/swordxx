@@ -96,6 +96,18 @@ void SWLD::setPosition(SW_POSITION p) {
 	getRawEntryBuf();
 }
 
+bool SWLD::hasEntry(const SWKey *key) const {
+	const char *key_str = *key;
+	char *buf = new char [ strlen(key_str) + 6 ];
+	strcpy(buf, key_str);
+
+	strongsPad(buf);
+	
+	bool retVal = !strcmp(buf, getKeyForEntry(getEntryForKey(buf)));
+	delete buf;
+
+	return retVal;
+}
 
 /******************************************************************************
  * SWLD::strongsPad	- Pads a key if (it-1) is 100% digits to 5 places

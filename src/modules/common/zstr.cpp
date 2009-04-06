@@ -128,7 +128,8 @@ zStr::~zStr() {
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
+void zStr::getKeyFromDatOffset(long ioffset, char **buf) const
+{
 	int size;
 	char ch;
 	if (datfd > 0) {
@@ -161,7 +162,8 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) {
  *		buf		- address of pointer to allocate for storage of string
  */
 
-void zStr::getKeyFromIdxOffset(long ioffset, char **buf) {
+void zStr::getKeyFromIdxOffset(long ioffset, char **buf) const
+{
 	__u32 offset;
 	
 	if (idxfd > 0) {
@@ -185,7 +187,8 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) {
  * RET: error status
  */
 
-signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) {
+signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
+{
 	char *maxbuf = 0, *trybuf = 0, *key = 0, quitflag = 0;
 	signed char retval = 0;
 	__s32 headoff, tailoff, tryoff = 0, maxoff = 0;

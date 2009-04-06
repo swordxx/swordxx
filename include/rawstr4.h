@@ -36,7 +36,7 @@ class SWBuf;
 class SWDLLEXPORT RawStr4 {
 	static int instance;		// number of instantiated RawStr4 objects or derivitives
 	char *path;
-	long lastoff;
+	mutable long lastoff;		// for caching and optimizations
 
 protected:
 	static const int IDXENTRYSIZE;
@@ -49,9 +49,9 @@ public:
 	char nl;
 	RawStr4(const char *ipath, int fileMode = -1);
 	virtual ~RawStr4();
-	void getIDXBuf(long ioffset, char **buf);
-	void getIDXBufDat(long ioffset, char **buf);
-	signed char findOffset(const char *key, __u32 *start, __u32 *size, long away = 0, __u32 *idxoff = 0);
+	void getIDXBuf(long ioffset, char **buf) const;
+	void getIDXBufDat(long ioffset, char **buf) const;
+	signed char findOffset(const char *key, __u32 *start, __u32 *size, long away = 0, __u32 *idxoff = 0) const;
 	void readText(__u32 start, __u32 *size, char **idxbuf, SWBuf &buf);
 	static signed char createModule(const char *path);
 };

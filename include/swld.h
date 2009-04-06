@@ -57,10 +57,11 @@ public:
 	virtual void setPosition(SW_POSITION pos);
 
 
-	virtual long getEntryCount() = 0;
-	virtual long getEntryForKey(const char *key) = 0;
-	virtual char *getKeyForEntry(long entry) = 0;
+	virtual long getEntryCount() const = 0;
+	virtual long getEntryForKey(const char *key) const = 0;
+	virtual char *getKeyForEntry(long entry) const = 0;
 	
+	virtual bool hasEntry(const SWKey *k) const;
 
 	// OPERATORS -----------------------------------------------------------------
 	
