@@ -1,5 +1,8 @@
 API ChangeLog 
 
+06-Apr-2009	Joachim A. <jansorg@crosswire.org>
+	Added Maltese bookname translation prepared by C. S.
+
 30-Mar-2009	Ben Morgan
 	Added new methods to SWModule:
 		bool isLinked(SWKey *k1, SWKey *k2)
