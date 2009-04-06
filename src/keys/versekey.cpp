@@ -426,7 +426,7 @@ void VerseKey::validateCurrentLocale() const {
  * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
  */
 
-ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange) {
+ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange, bool useChapterAsVerse) {
 
 	// hold on to our own copy of params, as threads/recursion may change outside values
 	const char *bufStart = buf;
@@ -599,6 +599,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					curKey->Testament(t);
 					curKey->Book(bookno);
 				}
+				
 
 				if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
 //				if (comma) {
@@ -606,6 +607,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					curKey->Verse(chap);  // chap because this is the first number captured
 				}
 				else {
+					if (useChapterAsVerse && verse < 0 && chap > 0 && curKey->getChapterMax() == 1) {
+						verse = chap;
+						chap = 1;
+					}
+
+					
 					if (chap >= 0) {
 						curKey->Chapter(chap);
 					}
@@ -648,10 +655,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
-							lastKey->LowerBound(*curKey);
-							lastKey->UpperBound(*curKey);
-							*lastKey = TOP;
-							tmpListKey << *lastKey;
+							*lastKey = *curKey;
+							tmpListKey << *curKey;
 							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
@@ -810,6 +815,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			curKey->Verse(chap);  // chap because this is the first number captured
 		}
 		else {
+			if (useChapterAsVerse && verse < 0 && chap > 0 && curKey->getChapterMax() == 1) {
+				verse = chap;
+				chap = 1;
+			}
+
+			
 			if (chap >= 0) {
 				curKey->Chapter(chap);
 			}
@@ -849,11 +860,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
-					lastKey->LowerBound(*curKey);
-					lastKey->UpperBound(*curKey);
-					*lastKey = TOP;
-					tmpListKey << *lastKey;
-//					tmpListKey << curKey->getText();
+					*lastKey = *curKey;					
+					tmpListKey << *curKey;
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
@@ -1028,24 +1036,41 @@ const char *VerseKey::getBookAbbrev() const {
 
 void VerseKey::setPosition(SW_POSITION p) {
 	switch (p) {
-	case POS_TOP: {
-		const VerseKey *lb = &LowerBound();
-		testament = lb->Testament();
-		book      = lb->Book();
-		chapter   = lb->Chapter();
-		verse     = lb->Verse();
-		suffix    = lb->getSuffix();
+	case POS_TOP: 
+		if (isBoundSet()) {
+			const VerseKey *lb = &LowerBound();
+			testament = lb->Testament();
+			book      = lb->Book();
+			chapter   = lb->Chapter();
+			verse     = lb->Verse();
+			suffix    = lb->getSuffix();
+		}
+		else {
+			Index(0);
+		}
 		break;
-	}
-	case POS_BOTTOM: {
-		const VerseKey *ub = &UpperBound();
-		testament = ub->Testament();
-		book      = ub->Book();
-		chapter   = ub->Chapter();
-		verse     = ub->Verse();
-		suffix    = ub->getSuffix();
+	case POS_BOTTOM: 
+		if (isBoundSet()) {
+			const VerseKey *ub = &UpperBound();
+			testament = ub->Testament();
+			book      = ub->Book();
+			chapter   = ub->Chapter();
+			verse     = ub->Verse();
+			suffix    = ub->getSuffix();
+		}
+		else {
+			VerseKey t;
+			t.copyFrom(this);
+			t.AutoNormalize(0);
+			t.Headings(1);
+			t.Testament(2);
+			t.Book(BMAX[1]);
+			t.Chapter(t.getChapterMax());
+			t.Verse(t.getVerseMax());
+			Index(t.Index());
+			
+		}
 		break;
-	}
 	case POS_MAXVERSE:
 		Normalize();
 		verse     = getVerseMax();

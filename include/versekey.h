@@ -389,7 +389,7 @@ public:
 	 */
 	static const char *convertToOSIS(const char *inRef, const SWKey *defaultKey);
 
-	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false);
+	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false, bool useChapterAsVerse = true);
 	virtual const char *getRangeText() const;
 	virtual const char *getOSISRefRangeText() const;
 	/** Compares another	SWKey object
