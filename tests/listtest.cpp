@@ -22,17 +22,33 @@
 #include <versekey.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
+using namespace std;
 #endif
 
 int main(int argc, char **argv)
 {
-	ListKey lk, lk2;
-	VerseKey vk("jn 1:1", "jn 1:12");
-	VerseKey vk2("jude", "jude");
+	// simple bounds check on verse first before we try this with listkey
 	SWKey text;
-
+	VerseKey vk("jn 1:1", "jn 1:12");
 	vk = "jas 1:19";
+	cout << "\nError should be set: " << ((vk.Error()) ? "set":"not set");
 	text = (const char *)vk;
+	cout << "\nshould be jn 1.12: " << text << "\n";
+	vk = "mat 1:19";
+	cout << "\nError should be set: " << ((vk.Error()) ? "set":"not set");
+	text = (const char *)vk;
+	cout << "\nshould be jn 1.1: " << text << "\n";
+	vk = "jn 1:7";
+	cout << "\nError should not be set: " << ((vk.Error()) ? "set":"not set");
+	text = (const char *)vk;
+	cout << "\nshould be jn 1.7: " << text << "\n";
+
+	// complex listkey in listkey text
+	ListKey lk, lk2;
+
+	// c-tor bound setting
+	VerseKey vk2("jude", "jude");
+
 	lk << text;
 	lk << text;
 	lk << text;
@@ -43,15 +59,20 @@ int main(int argc, char **argv)
 	lk2 << lk;
 	lk2 << vk2;
 	lk2 << "test2";
-	for (lk2 = TOP; !lk2.Error(); lk2++)
-		std::cout << (const char *) lk2 << "\n";
+	for (lk2 = TOP; !lk2.Error(); lk2++) {
+		cout << (const char *) lk2 << "\n";
+	}
 
+	cout << "\n\n---------\n";
 
-	lk2 = VerseKey().ParseVerseList("mat-mark", 0, true);
+	lk2 = VerseKey().ParseVerseList("1jn-2jn;mk1.9", 0, true);
 
+	// c-tor not bound setting, just parsing to jn.1.1
 	VerseKey yoyo("john");
 	yoyo = MAXCHAPTER;
-	std::cout << yoyo;
+	cout << "should be jn.21.1: " << yoyo << "\n";
+
+	lk2 << yoyo;
 /*
 
 	for (int i = 0; i < 2; i++) {
@@ -69,22 +90,25 @@ int main(int argc, char **argv)
 	}
 
 */
-	std::cout << "---------\n";
 
 	for (lk2 = TOP; !lk2.Error(); lk2++)
-		std::cout << (const char *) lk2 << "\n";
+		cout << (const char *) lk2 << "\n";
 
 	lk.ClearList();
 	lk << "john 3:16";
-	std::cout << "\nCount should be 1: " << lk.Count();
+	cout << "\nCount should be 1: " << lk.Count();
 
 	lk = vk.ParseVerseList("mat;mark;luke", vk, true);
+	lk = (VerseKey)"mark 3:16";
+	cout << "\nError should not be set: " << ((lk.Error()) ? "set":"not set");
 	lk = (VerseKey)"john 3:16";
-	std::cout << "\nError should be set: " << ((lk.Error()) ? "set":"not set");
+	cout << "\nError should be set: " << ((lk.Error()) ? "set":"not set");
 	lk = vk.ParseVerseList("mk 3:16", vk, true);
 	lk = (VerseKey)"john 3:16";
-	std::cout << "\nError should be set: " << ((lk.Error()) ? "set":"not set");
+	cout << "\nError should be set: " << ((lk.Error()) ? "set":"not set");
+	lk = (VerseKey)"mark 3:16";
+	cout << "\nError should not be set: " << ((lk.Error()) ? "set":"not set");
 
-	std::cout << "\n\n";
+	cout << "\n\n";
 	return 0;
 }
