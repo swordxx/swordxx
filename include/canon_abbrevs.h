@@ -45,6 +45,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"1 MACCABEES", "1Macc"},		// I Maccabees
   {"1 MAKABIAN", "1Meq"},		// I Meqabyan
   {"1 MEQABYAN", "1Meq"},		// I Meqabyan
+  {"1 P", "1Pet"},		// I Peter
   {"1 PARALIPOMENON", "1Chr"},		// I Chronicles
   {"1 PETER", "1Pet"},		// I Peter
   {"1 PTR", "1Pet"},		// I Peter
@@ -72,6 +73,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"1MAKABIAN", "1Meq"},		// I Meqabyan
   {"1MEQ", "1Meq"},		// I Meqabyan
   {"1MEQABYAN", "1Meq"},		// I Meqabyan
+  {"1P", "1Pet"},		// I Peter
   {"1PARALIPOMENON", "1Chr"},		// I Chronicles
   {"1PET", "1Pet"},		// I Peter
   {"1PETER", "1Pet"},		// I Peter
@@ -96,6 +98,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"2 MACCABEES", "2Macc"},		// II Maccabees
   {"2 MAKABIAN", "2Meq"},		// II Meqabyan
   {"2 MEQABYAN", "2Meq"},		// II Meqabyan
+  {"2 P", "2Pet"},		// II Peter
   {"2 PARALIPOMENON", "2Chr"},		// II Chronicles
   {"2 PETER", "2Pet"},		// II Peter
   {"2 PTR", "2Pet"},		// II Peter
@@ -122,6 +125,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"2MAKABIAN", "2Meq"},		// II Meqabyan
   {"2MEQ", "2Meq"},		// II Meqabyan
   {"2MEQABYAN", "2Meq"},		// II Meqabyan
+  {"2P", "2Pet"},		// II Peter
   {"2PARALIPOMENON", "2Chr"},		// II Chronicles
   {"2PET", "2Pet"},		// II Peter
   {"2PETER", "2Pet"},		// II Peter
@@ -270,6 +274,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"I MACCABEES", "1Macc"},		// I Maccabees
   {"I MAKABIAN", "1Meq"},		// I Meqabyan
   {"I MEQABYAN", "1Meq"},		// I Meqabyan
+  {"I P", "1Pet"},		// I Peter
   {"I PARALIPOMENON", "1Chr"},		// I Chronicles
   {"I PETER", "1Pet"},		// I Peter
   {"I PTR", "1Pet"},		// I Peter
@@ -296,6 +301,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"II MACCABEES", "2Macc"},		// II Maccabees
   {"II MAKABIAN", "2Meq"},		// II Meqabyan
   {"II MEQABYAN", "2Meq"},		// II Meqabyan
+  {"II P", "2Pet"},		// II Peter
   {"II PARALIPOMENON", "2Chr"},		// II Chronicles
   {"II PETER", "2Pet"},		// II Peter
   {"II PTR", "2Pet"},		// II Peter
@@ -336,6 +342,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"IIMACCABEES", "2Macc"},		// II Maccabees
   {"IIMAKABIAN", "2Meq"},		// II Meqabyan
   {"IIMEQABYAN", "2Meq"},		// II Meqabyan
+  {"IIP", "2Pet"},		// II Peter
   {"IIPARALIPOMENON", "2Chr"},		// II Chronicles
   {"IIPETER", "2Pet"},		// II Peter
   {"IIPTR", "2Pet"},		// II Peter
@@ -351,6 +358,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"IMACCABEES", "1Macc"},		// I Maccabees
   {"IMAKABIAN", "1Meq"},		// I Meqabyan
   {"IMEQABYAN", "1Meq"},		// I Meqabyan
+  {"IP", "1Pet"},		// I Peter
   {"IPARALIPOMENON", "1Chr"},		// I Chronicles
   {"IPETER", "1Pet"},		// I Peter
   {"IPTR", "1Pet"},		// I Peter
