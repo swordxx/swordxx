@@ -379,7 +379,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 		for (i = 0; i < listkey.Count() && maxverses; i++) {
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
-			if (element) {
+			if (element && element->isBoundSet()) {
 			  target->Key(element->LowerBound());
 				vk = element->UpperBound();
 				while (maxverses && target->Key() <= vk) {
