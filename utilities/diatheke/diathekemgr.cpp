@@ -78,7 +78,9 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 	rtl = ((entry = section.find("Direction")) != section.end()) ? ((*entry).second == "RtoL") : false;
 
 #ifdef _ICU_
-        module->AddRenderFilter(arshaping);
+	if (shape) {
+		module->AddRenderFilter(arshaping);
+	}
 	if (bidi && rtl) {
 		module->AddRenderFilter(bidireorder);
 	}

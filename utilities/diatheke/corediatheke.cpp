@@ -91,11 +91,24 @@ void systemquery(const char * key, ostream* output){
 				*output << endl;
 			}
 		}
+		if (types) *output << "Generic books:\n";
+		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
+			target = it->second;
+			if (!strcmp(target->Type(), "Generic Books")) {
+				if (names) *output << target->Name();
+				if (names && descriptions) *output << " : ";
+				if (descriptions) *output << target->Description();
+				*output << endl;
+			}
+		}
+		
 	}
 }
 
 void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) { 
-	static DiathekeMgr manager;
+	static DiathekeMgr manager(NULL, NULL, false, outputencoding, outputformat,
+		((OP_BIDI & optionfilters) == OP_BIDI),
+		((OP_ARSHAPE & optionfilters) == OP_ARSHAPE));
 
 	ModMap::iterator it;
 	ListKey listkey;
@@ -129,11 +142,6 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	}
 	target = (*it).second;
 
-	manager.Markup(outputformat);
-	manager.Encoding(outputencoding);
-	manager.bidi = ((OP_BIDI & optionfilters) == OP_BIDI);
-	manager.shape = ((OP_ARSHAPE & optionfilters) == OP_ARSHAPE);
-	
 	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
 			if (!::stricmp((char *)(*eit).second.c_str(), "GBF"))
@@ -180,6 +188,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		querytype = QT_COMM;
 	else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
 		querytype = QT_LD;
+	else if (!strcmp(target->Type(), "Generic Books"))
+		querytype = QT_LD;	
 	
 	if (optionfilters & OP_FOOTNOTES)
 		manager.setGlobalOption("Footnotes","On");
@@ -243,6 +253,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		else if (!strcmp(target->Type(), "Commentaries"))
 		  querytype = QT_BIBLE;
 		else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
+		  querytype = QT_LD;
+		else if (!strcmp(target->Type(), "Generic Books"))
 		  querytype = QT_LD;
 		
 		//do search stuff
