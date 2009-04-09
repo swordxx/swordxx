@@ -655,8 +655,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
-							*lastKey = *curKey;
-							tmpListKey << *curKey;
+							lastKey->LowerBound(*curKey);
+							lastKey->UpperBound(*curKey);
+							*lastKey = TOP;
+							tmpListKey << *lastKey;
 							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
@@ -860,8 +862,11 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
-					*lastKey = *curKey;					
-					tmpListKey << *curKey;
+					lastKey->LowerBound(*curKey);
+					lastKey->UpperBound(*curKey);
+					*lastKey = TOP;
+					tmpListKey << *lastKey;
+//					tmpListKey << curKey->getText();
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
@@ -1036,41 +1041,24 @@ const char *VerseKey::getBookAbbrev() const {
 
 void VerseKey::setPosition(SW_POSITION p) {
 	switch (p) {
-	case POS_TOP: 
-		if (isBoundSet()) {
-			const VerseKey *lb = &LowerBound();
-			testament = lb->Testament();
-			book      = lb->Book();
-			chapter   = lb->Chapter();
-			verse     = lb->Verse();
-			suffix    = lb->getSuffix();
-		}
-		else {
-			Index(0);
-		}
+	case POS_TOP: {
+		const VerseKey *lb = &LowerBound();
+		testament = lb->Testament();
+		book      = lb->Book();
+		chapter   = lb->Chapter();
+		verse     = lb->Verse();
+		suffix    = lb->getSuffix();
 		break;
-	case POS_BOTTOM: 
-		if (isBoundSet()) {
-			const VerseKey *ub = &UpperBound();
-			testament = ub->Testament();
-			book      = ub->Book();
-			chapter   = ub->Chapter();
-			verse     = ub->Verse();
-			suffix    = ub->getSuffix();
-		}
-		else {
-			VerseKey t;
-			t.copyFrom(this);
-			t.AutoNormalize(0);
-			t.Headings(1);
-			t.Testament(2);
-			t.Book(BMAX[1]);
-			t.Chapter(t.getChapterMax());
-			t.Verse(t.getVerseMax());
-			Index(t.Index());
-			
-		}
+	}
+	case POS_BOTTOM: {
+		const VerseKey *ub = &UpperBound();
+		testament = ub->Testament();
+		book      = ub->Book();
+		chapter   = ub->Chapter();
+		verse     = ub->Verse();
+		suffix    = ub->getSuffix();
 		break;
+	}
 	case POS_MAXVERSE:
 		Normalize();
 		verse     = getVerseMax();

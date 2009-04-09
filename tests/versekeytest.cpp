@@ -110,6 +110,88 @@ cout << currentVerse << endl;
 	(*mod)--;
 	cout << mod->getKeyText() << "\n";
 */
+	VerseKey vk;
+
+	cout << "\nNormalization on; headings on ====\n\n";
+
+	vk.AutoNormalize(1);
+	vk.Headings(1);
+
+	vk = "jn3.50";
+	cout << "jn.3.50: " << vk << "\n";
+	vk++;
+	cout << "++: " << vk << "\n";
+	vk--;
+	cout << "--: " << vk << "\n";
+	vk = MAXVERSE;
+	cout << "MAXVERSE: " << vk << "\n";
+	vk = MAXCHAPTER;
+	cout << "MAXCHAPTER: " << vk << "\n";
+	vk = TOP;
+	cout << "TOP: " << vk << "\n";
+	vk = BOTTOM;
+	cout << "BOTTOM: " << vk << "\n";
+
+	cout << "\nNormalization off; headings on ====\n\n";
+	
+	vk.AutoNormalize(0);
+	vk.Headings(1);
+
+	vk = "jn3.50";
+	cout << "jn.3.50: " << vk << "\n";
+	vk++;
+	cout << "++: " << vk << "\n";
+	vk--;
+	cout << "--: " << vk << "\n";
+	vk = MAXVERSE;
+	cout << "MAXVERSE: " << vk << "\n";
+	vk = MAXCHAPTER;
+	cout << "MAXCHAPTER: " << vk << "\n";
+	vk = TOP;
+	cout << "TOP: " << vk << "\n";
+	vk = BOTTOM;
+	cout << "BOTTOM: " << vk << "\n";
+
+	cout << "\nNormalization on; headings off ====\n\n";
+	
+	vk.AutoNormalize(1);
+	vk.Headings(0);
+
+	vk = "jn3.50";
+	cout << "jn.3.50: " << vk << "\n";
+	vk++;
+	cout << "++: " << vk << "\n";
+	vk--;
+	cout << "--: " << vk << "\n";
+	vk = MAXVERSE;
+	cout << "MAXVERSE: " << vk << "\n";
+	vk = MAXCHAPTER;
+	cout << "MAXCHAPTER: " << vk << "\n";
+	vk = TOP;
+	cout << "TOP: " << vk << "\n";
+	vk = BOTTOM;
+	cout << "BOTTOM: " << vk << "\n";
+
+	cout << "\nNormalization off; headings off ====\n\n";
+	
+	vk.AutoNormalize(0);
+	vk.Headings(0);
+
+	vk = "jn3.50";
+	cout << "jn.3.50: " << vk << "\n";
+	vk++;
+	cout << "++: " << vk << "\n";
+	vk--;
+	cout << "--: " << vk << "\n";
+	vk = MAXVERSE;
+	cout << "MAXVERSE: " << vk << "\n";
+	vk = MAXCHAPTER;
+	cout << "MAXCHAPTER: " << vk << "\n";
+	vk = TOP;
+	cout << "TOP: " << vk << "\n";
+	vk = BOTTOM;
+	cout << "BOTTOM: " << vk << "\n";
+
 
 	return 0;
 }
