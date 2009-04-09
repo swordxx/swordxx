@@ -903,15 +903,20 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 VerseKey &VerseKey::LowerBound(const VerseKey &lb)
 {
 	initBounds();
+
 	lowerBound = lb.Index();
+	lowerBoundComponents.test  = lb.getTestament();
+	lowerBoundComponents.book  = lb.getBook();
+	lowerBoundComponents.chap  = lb.getChapter();
+	lowerBoundComponents.verse = lb.getVerse();
+
 	// both this following check and UpperBound check force upperBound to
 	// change allowing LowerBound then UpperBound logic to always flow
 	// and set values without restrictions, as expected
 	if (upperBound < lowerBound) upperBound = lowerBound;
-	tmpClone->Index(lowerBound);
 	boundSet = true;
 
-	return (*tmpClone);
+	return LowerBound();
 }
 
 
@@ -922,13 +927,18 @@ VerseKey &VerseKey::LowerBound(const VerseKey &lb)
 VerseKey &VerseKey::UpperBound(const VerseKey &ub)
 {
 	initBounds();
+
 	upperBound = ub.Index();
+	upperBoundComponents.test  = ub.getTestament();
+	upperBoundComponents.book  = ub.getBook();
+	upperBoundComponents.chap  = ub.getChapter();
+	upperBoundComponents.verse = ub.getVerse();
+
 	// see LowerBound comment, above
 	if (upperBound < lowerBound) upperBound = lowerBound;
-	tmpClone->Index(upperBound);
 	boundSet = true;
 
-	return (*tmpClone);
+	return UpperBound();
 }
 
 
@@ -939,7 +949,13 @@ VerseKey &VerseKey::UpperBound(const VerseKey &ub)
 VerseKey &VerseKey::LowerBound() const
 {
 	initBounds();
-	tmpClone->Index(lowerBound);
+	if (!isAutoNormalize()) {
+		tmpClone->testament = lowerBoundComponents.test;
+		tmpClone->book      = lowerBoundComponents.book;
+		tmpClone->chapter   = lowerBoundComponents.chap;
+		tmpClone->setVerse   (lowerBoundComponents.verse);
+	}
+	else tmpClone->Index(lowerBound);
 
 	return (*tmpClone);
 }
@@ -952,7 +968,13 @@ VerseKey &VerseKey::LowerBound() const
 VerseKey &VerseKey::UpperBound() const
 {
 	initBounds();
-	tmpClone->Index(upperBound);
+	if (!isAutoNormalize()) {
+		tmpClone->testament = upperBoundComponents.test;
+		tmpClone->book      = upperBoundComponents.book;
+		tmpClone->chapter   = upperBoundComponents.chap;
+		tmpClone->setVerse   (upperBoundComponents.verse);
+	}
+	else tmpClone->Index(upperBound);
 
 	return (*tmpClone);
 }
@@ -982,7 +1004,17 @@ void VerseKey::initBounds() const
 		tmpClone->Chapter(tmpClone->getChapterMax());
 		tmpClone->Verse(tmpClone->getVerseMax());
 		upperBound = tmpClone->Index();
+		upperBoundComponents.test  = tmpClone->getTestament();
+		upperBoundComponents.book  = tmpClone->getBook();
+		upperBoundComponents.chap  = tmpClone->getChapter();
+		upperBoundComponents.verse = tmpClone->getVerse();
+
 		lowerBound = 0;
+		lowerBoundComponents.test  = 0;
+		lowerBoundComponents.book  = 0;
+		lowerBoundComponents.chap  = 0;
+		lowerBoundComponents.verse = 0;
+
 	}
 	else tmpClone->setLocale(getLocale());
 }
@@ -1043,19 +1075,19 @@ void VerseKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case POS_TOP: {
 		const VerseKey *lb = &LowerBound();
-		testament = lb->Testament();
-		book      = lb->Book();
-		chapter   = lb->Chapter();
-		verse     = lb->Verse();
+		testament = (lb->Testament() || headings) ? lb->Testament() : 1;
+		book      = (lb->Book()      || headings) ? lb->Book() : 1;
+		chapter   = (lb->Chapter()   || headings) ? lb->Chapter() : 1;
+		verse     = (lb->Verse()     || headings) ? lb->Verse() : 1;
 		suffix    = lb->getSuffix();
 		break;
 	}
 	case POS_BOTTOM: {
 		const VerseKey *ub = &UpperBound();
-		testament = ub->Testament();
-		book      = ub->Book();
-		chapter   = ub->Chapter();
-		verse     = ub->Verse();
+		testament = (ub->Testament() || headings) ? ub->Testament() : 1;
+		book      = (ub->Book()      || headings) ? ub->Book() : 1;
+		chapter   = (ub->Chapter()   || headings) ? ub->Chapter() : 1;
+		verse     = (ub->Verse()     || headings) ? ub->Verse() : 1;
 		suffix    = ub->getSuffix();
 		break;
 	}
@@ -1235,7 +1267,7 @@ void VerseKey::Normalize(char autocheck)
 
 
 /******************************************************************************
- * VerseKey::Testament - Gets testament
+ * VerseKey::getTestament - Gets testament
  *
  * RET:	value of testament
  */
@@ -1247,7 +1279,7 @@ char VerseKey::getTestament() const
 
 
 /******************************************************************************
- * VerseKey::Book - Gets book
+ * VerseKey::getBook - Gets book
  *
  * RET:	value of book
  */
@@ -1302,7 +1334,7 @@ void VerseKey::setTestament(char itestament)
 
 
 /******************************************************************************
- * VerseKey::Book - Sets/gets book
+ * VerseKey::setBook - Sets/gets book
  *
  * ENT:	ibook - value which to set book
  */
@@ -1317,7 +1349,7 @@ void VerseKey::setBook(char ibook)
 
 
 /******************************************************************************
- * VerseKey::Book - Sets/gets book by name
+ * VerseKey::setBookName - Sets/gets book by name
  *
  * ENT:	bname - book name/abbrev
  */
@@ -1338,7 +1370,7 @@ void VerseKey::setBookName(const char *bname)
 	
 
 /******************************************************************************
- * VerseKey::Chapter - Sets/gets chapter
+ * VerseKey::setChapter - Sets/gets chapter
  *
  * ENT:	ichapter - value which to set chapter
  */
@@ -1352,7 +1384,7 @@ void VerseKey::setChapter(int ichapter)
 
 
 /******************************************************************************
- * VerseKey::Verse - Sets/gets verse
+ * VerseKey::setVerse - Sets/gets verse
  *
  * ENT:	iverse - value which to set verse
  *		[MAXPOS(int)] - only get
@@ -1380,23 +1412,17 @@ void VerseKey::setSuffix(char suf) {
 /******************************************************************************
  * VerseKey::AutoNormalize - Sets/gets flag that tells VerseKey to auto-
  *				matically normalize itself when modified
- *
- * ENT:	iautonorm - value which to set autonorm
- *		[MAXPOS(char)] - only get
- *
- * RET:	if unchanged ->          value of autonorm
- *		if   changed -> previous value of autonorm
  */
 
-char VerseKey::AutoNormalize(char iautonorm)
+bool VerseKey::isAutoNormalize() const
 {
-	char retval = autonorm;
+	return autonorm;
+}
 
-	if (iautonorm != MAXPOS(char)) {
-		autonorm = iautonorm;
-		Normalize(1);
-	}
-	return retval;
+void VerseKey::setAutoNormalize(bool iautonorm)
+{
+	autonorm = iautonorm?1:0;
+	Normalize(1);
 }
 
 

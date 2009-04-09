@@ -89,7 +89,9 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	*/
 	int findindex(long *array, int size, long value);
 
-	mutable long lowerBound, upperBound;
+	// internal upper/lower bounds optimizations
+	mutable long lowerBound, upperBound;	// if autonorms is on
+	mutable struct { int test; int book; int chap; int verse; } lowerBoundComponents, upperBoundComponents;	// if autonorms is off, we can't optimize with index
 	mutable VerseKey *tmpClone;
 
 protected:
@@ -349,7 +351,11 @@ public:
 	* @return if unchanged -> value of autonorm,
 	* if changed -> previous value of autonorm
 	*/
-	virtual char AutoNormalize(char iautonorm = MAXPOS(char));
+	virtual char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm); return retVal; }	// deprecated
+	virtual char AutoNormalize() const { return isAutoNormalize()?1:0; }	// deprecated
+
+	virtual bool isAutoNormalize() const;
+	virtual void setAutoNormalize(bool iautonorm);
 
 	/** Sets/gets flag that tells VerseKey to include
 	* chapter/book/testament/module headings
