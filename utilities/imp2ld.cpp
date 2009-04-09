@@ -78,12 +78,15 @@ int main(int argc, char **argv) {
 	case 3:
 		zLD::createModule(modname);
 		mod = new zLD(modname, 0, 0, 30, new ZipCompress());
+		break;
 	case 2:
 		RawLD::createModule(modname);
 		mod = new RawLD(modname);
+		break;
 	case 1:
 		RawLD4::createModule(modname);
 		mod = new RawLD4(modname);
+		break;
 	}
 
 	key = mod->CreateKey();
