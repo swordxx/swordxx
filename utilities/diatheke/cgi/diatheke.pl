@@ -138,8 +138,7 @@ foreach $i (@values) {
 	    $range = $mydata;
 	    $range =~ tr/+/ /;
 	    $range =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
-	    $range = "-r \"$range\"";
-            $range = shell_escape($range);
+	    $range = "-r '" . shell_escape($range) . "'";
 	}
 
 	elsif ($varname eq "strongs") {
