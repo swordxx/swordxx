@@ -87,6 +87,8 @@ int main(int argc, char **argv) {
 		else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 	// -----------------------------------------------------
+	const VerseMgr::System *v = VerseMgr::getSystemVerseMgr()->getVersificationSystem(v11n);
+	if(!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
 
 	// setup module
@@ -198,7 +200,7 @@ void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module)
 			}
 			else {
 				std::cout << "linking entry: " << *vkey << " to " << *linkMaster << std::endl;
-				module->linkEntry(vkey);
+				module->linkEntry(linkMaster);
 			}
 		}
 
