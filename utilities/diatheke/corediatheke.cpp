@@ -125,6 +125,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
 	}
 	VerseKey vk;
+	VerseKey *parser;
 
 	//deal with queries to "system"
 	if (!::stricmp(text, "system")) {
@@ -141,6 +142,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		return;
 	}
 	target = (*it).second;
+	parser = (VerseKey*) target->CreateKey();
 
 	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
@@ -267,8 +269,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		*output << "\"-- ";
 
  		if (range) {
- 			VerseKey parser;
- 			ListKey scope = parser.ParseVerseList(range, parser, true);
+ 			ListKey scope = parser->ParseVerseList(range, "Gen 1:1", true);
  			listkey = target->Search(ref, st, REG_ICASE, &scope);
  		}
  		else listkey = target->Search(ref, st, REG_ICASE);
@@ -374,7 +375,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			}
 		}
 		
- 		listkey = vk.ParseVerseList(ref, "Gen1:1", true);
+ 		listkey = parser->ParseVerseList(ref, "Gen1:1", true);
 		int i;
 
 		if (outputformat == FMT_RTF) {
@@ -477,5 +478,6 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		}
 
 	}
+	delete parser;
 }
 
