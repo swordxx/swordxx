@@ -31,6 +31,7 @@
 #include <ztext.h>
 #include <zld.h>
 #include <zcom.h>
+#include <swtext.h>
 #include <swmgr.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
@@ -40,20 +41,7 @@
 
 
 #ifndef NO_SWORD_NAMESPACE
-using sword::SWCompress;
-using sword::CipherFilter;
-using sword::SWModule;
-using sword::SWMgr;
-using sword::ModMap;
-using sword::zText;
-using sword::zLD;
-using sword::zCom;
-using sword::SWFilter;
-using sword::VerseKey;
-using sword::SWKey;
-using sword::SW_POSITION;
-using sword::ZipCompress;
-using sword::LZSSCompress;
+using namespace sword;
 #endif
 
 using std::cerr;
@@ -130,9 +118,12 @@ int main(int argc, char **argv)
 	int result = 0;
 	switch (modType) {
 	case BIBLE:
-	case COM:
-		result = zText::createModule(argv[2], iType);
+	case COM: {
+		SWKey *k = inModule->getKey();
+		VerseKey *vk = SWDYNAMIC_CAST(VerseKey, k);
+		result = zText::createModule(argv[2], iType, vk->getVersificationSystem());
 		break;
+	}
 	case LEX:
 		result = zLD::createModule(argv[2]);
 		break;
@@ -145,10 +136,15 @@ int main(int argc, char **argv)
 
 	switch (modType) {
 	case BIBLE:
-	case COM:
-		outModule = new zText(argv[2], 0, 0, iType, compressor);	// open our datapath with our RawText driver.
+	case COM: {
+		SWKey *k = inModule->getKey();
+		VerseKey *vk = SWDYNAMIC_CAST(VerseKey, k);
+		outModule = new zText(argv[2], 0, 0, iType, compressor,
+			0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
+			vk->getVersificationSystem());	// open our datapath with our RawText driver.
 		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
 		break;
+	}
 	case LEX:
 		outModule = new zLD(argv[2], 0, 0, iType, compressor);		// open our datapath with our RawText driver.
 		break;

@@ -1195,6 +1195,7 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
 	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed, and then normalize to NFC");
 	fprintf(stderr, "\t\t\t\t Note: all UTF-8 texts should be normalized to NFC\n");
+	fprintf(stderr, "  -v <v11n> use versification scheme other than KJV.\n\n");
 	exit(-1);
 }
 
@@ -1215,6 +1216,7 @@ int main(int argc, char **argv) {
 	int compType        = 0;
 	int iType           = 4;
 	SWBuf cipherKey     = "";
+	SWBuf v11n          = "KJV";
 
 	SWCompress *compressor = 0;
 
@@ -1244,6 +1246,10 @@ int main(int argc, char **argv) {
 			if (i+1 < argc) cipherKey = argv[++i];
 			else usage(*argv, "-c requires <cipher_key>");
 		}
+		else if (!strcmp(argv[i], "-v")) {
+			if (i+1 < argc) v11n = argv[++i];
+			else usage(*argv, "-v requires <v11n>");
+		}
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
@@ -1270,12 +1276,12 @@ int main(int argc, char **argv) {
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if ( compressor ) {
-			if ( zText::createModule(path, iType) ) {
+			if ( zText::createModule(path, iType, v11n) ) {
 				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
 				exit(-3);
 			}
 		}
-		else if (RawText::createModule(path)) {
+		else if (RawText::createModule(path, v11n)) {
 			fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
 			exit(-3);
 		}
@@ -1290,10 +1296,12 @@ int main(int argc, char **argv) {
 
 	// Do some initialization stuff
 	if (compressor) {
-		module = new zText(path, 0, 0, iType, compressor);
+		module = new zText(path, 0, 0, iType, compressor,
+			0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
+			v11n);	// open our datapath with our RawText driver.
 	}
 	else{
-		module = new RawText(path);	// open our datapath with our RawText driver.
+		module = new RawText(path, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);	// open our datapath with our RawText driver.
 	}
 
 	SWFilter *cipherFilter = 0;
