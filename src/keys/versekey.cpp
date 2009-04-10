@@ -154,6 +154,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
 	verse = ikey.Verse();
 	suffix = ikey.getSuffix();
 	setLocale(ikey.getLocale());
+	setVersificationSystem(ikey.getVersificationSystem());
 	if (ikey.isBoundSet()) {
 		LowerBound(ikey.LowerBound());
 		UpperBound(ikey.UpperBound());

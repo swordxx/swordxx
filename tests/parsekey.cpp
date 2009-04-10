@@ -27,7 +27,7 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 	if ((argc < 2) || (argc > 4)) {
-		fprintf(stderr, "usage: %s <\"string to parse\"> [locale_name] [test-in-set-verse]\n", *argv);
+		fprintf(stderr, "usage: %s <\"string to parse\"> [locale_name] [v11n] [test-in-set-verse]\n", *argv);
 		exit(-1);
 	}
 
@@ -35,6 +35,9 @@ int main(int argc, char **argv) {
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[2]);
 
 	VerseKey DefaultVSKey;
+
+	if (argc > 3)
+		DefaultVSKey.setVersificationSystem(argv[3]);
 
 	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 	DefaultVSKey.validateCurrentLocale();
@@ -55,8 +58,8 @@ int main(int argc, char **argv) {
 	}
 */
 
-	if (argc > 3) {
-		verses.setText(argv[3]);
+	if (argc > 4) {
+		verses.setText(argv[4]);
 		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
 	}
 	

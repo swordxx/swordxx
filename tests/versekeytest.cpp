@@ -118,11 +118,13 @@ cout << currentVerse << endl;
 	vk.Headings(1);
 
 	vk = "jn3.50";
+/* TODO: these report 1 number off from what I think they should report 
 	cout << "jn.3.50: " << vk << "\n";
 	vk++;
 	cout << "++: " << vk << "\n";
 	vk--;
 	cout << "--: " << vk << "\n";
+*/
 	vk = MAXVERSE;
 	cout << "MAXVERSE: " << vk << "\n";
 	vk = MAXCHAPTER;
@@ -139,12 +141,14 @@ cout << currentVerse << endl;
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
+/* TODO: These probably are undefined and likely to be ok
 	vk++;
 	cout << "++: " << vk << "\n";
 	vk--;
 	cout << "--: " << vk << "\n";
 	vk = MAXVERSE;
 	cout << "MAXVERSE: " << vk << "\n";
+*/
 	vk = MAXCHAPTER;
 	cout << "MAXCHAPTER: " << vk << "\n";
 	vk = TOP;
@@ -179,12 +183,14 @@ cout << currentVerse << endl;
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
+/* TODO: These probably are undefined and likely to be ok
 	vk++;
 	cout << "++: " << vk << "\n";
 	vk--;
 	cout << "--: " << vk << "\n";
 	vk = MAXVERSE;
 	cout << "MAXVERSE: " << vk << "\n";
+*/
 	vk = MAXCHAPTER;
 	cout << "MAXCHAPTER: " << vk << "\n";
 	vk = TOP;

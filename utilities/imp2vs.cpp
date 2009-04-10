@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 	}
 	// -----------------------------------------------------
 	const VerseMgr::System *v = VerseMgr::getSystemVerseMgr()->getVersificationSystem(v11n);
-	if(!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
+	if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
 
 	// setup module
