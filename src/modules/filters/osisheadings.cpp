@@ -50,6 +50,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	bool hide       = false;
 	bool preverse   = false;
 	bool withinTitle = false;
+	bool withinPreverseDiv = false;
 	bool canonical  = false;
 	SWBuf header;
 	int headerNum   = 0;
@@ -71,10 +72,19 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		}
 		if (*from == '>') {	// process tokens
 			intoken = false;
+			tag = token;
 
-			if (!strncmp(token.c_str(), "title", 5) || !strncmp(token.c_str(), "/title", 6)) {
-				withinTitle =  (!strnicmp(token.c_str(), "title", 5));
-				tag = token;
+			// <title> </title> <div subType="x-preverse"> (</div> ## when in previous)
+			if ( (!withinPreverseDiv && !strcmp(tag.getName(), "title")) || 
+				(!strcmp(tag.getName(), "div") &&
+					((tag.isEndTag() && withinPreverseDiv) ||
+					 (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-preverse")))
+				)) {
+
+				withinTitle = !tag.isEndTag();
+				if (!strcmp(tag.getName(), "div")) {
+					withinPreverseDiv = !tag.isEndTag();
+				}
 				
 				if (!tag.isEndTag()) { //start tag
 					if (!tag.isEmpty()) {
@@ -82,8 +92,9 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					}
 				}
 				
-				if (         (tag.getAttribute("subType") && !stricmp(tag.getAttribute("subType"), "x-preverse"))
-						|| (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse"))	// deprecated
+				if ( withinPreverseDiv
+					|| (tag.getAttribute("subType") && !stricmp(tag.getAttribute("subType"), "x-preverse"))
+					|| (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse"))	// deprecated
 						) {
 					hide = true;
 					preverse = true;
