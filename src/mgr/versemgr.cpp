@@ -25,7 +25,7 @@
 #include <map>
 #include <treekey.h>
 #include <canon.h>	// KJV internal versification system
-#include <swlog.h>	// KJV internal versification system
+#include <swlog.h>
 #include <algorithm>
 
 #include <canon_leningrad.h> // Leningrad Codex (WLC) v11n system
