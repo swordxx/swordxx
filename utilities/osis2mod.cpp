@@ -1193,8 +1193,9 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
 	fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
-	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed, and then normalize to NFC");
-	fprintf(stderr, "\t\t\t\t Note: all UTF-8 texts should be normalized to NFC\n");
+	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
+	fprintf(stderr, "\t\t\t\t and then normalize to NFC)\n");
+	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
 	fprintf(stderr, "  -v <v11n> use versification scheme other than KJV.\n\n");
 	exit(-1);
 }
