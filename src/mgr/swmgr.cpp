@@ -285,10 +285,10 @@ void SWMgr::commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, S
 	}
 	else config = 0;
 	if (isysconfig) {
-		sysconfig   = isysconfig;
+		sysConfig   = isysconfig;
 		mysysconfig = 0;
 	}
-	else sysconfig = 0;
+	else sysConfig = 0;
 
 	if (autoload)
 		Load();
@@ -337,7 +337,7 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 	}
 
 	config = 0;
-	sysconfig = 0;
+	sysConfig = 0;
 
 	if (autoload && configPath)
 		Load();
@@ -371,13 +371,14 @@ SWMgr::~SWMgr() {
 }
 
 
-void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths, SWConfig *providedSysConf) {
+void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths, SWConfig **providedSysConf) {
 	SWBuf path;
 	SWBuf sysConfPath;
 	ConfigEntMap::iterator entry;
 	ConfigEntMap::iterator lastEntry;
 
 	SWConfig *sysConf = 0;
+	SWBuf sysConfDataPath = "";
 
 	*configType = 0;
 
@@ -385,18 +386,24 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	// check for a sysConf passed in to us
 	SWLog::getSystemLog()->logDebug("Checking for provided SWConfig(\"sword.conf\")...");
-	if (providedSysConf) {
-		sysConf = providedSysConf;
+	if (providedSysConf && *providedSysConf) {
+		sysConf = *providedSysConf;
 		SWLog::getSystemLog()->logDebug("found.");
 	}
-	else {
+
+	// if we haven't been given our datapath in a sysconf, we need to track it down
+	if (!sysConf) {
 		// check working directory
 		SWLog::getSystemLog()->logDebug("Checking working directory for sword.conf...");
 		if (FileMgr::existsFile(".", "sword.conf")) {
 			SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.sword/ sword.conf with one found in current directory.");
 			sysConfPath = "./sword.conf";
+			sysConf = new SWConfig(sysConfPath);
+			if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
+				sysConfDataPath = (*entry).second;
+			}
 		}
-		else {
+		if (!sysConfDataPath.size()) {
 			SWLog::getSystemLog()->logDebug("Checking working directory for mods.conf...");
 			if (FileMgr::existsFile(".", "mods.conf")) {
 				SWLog::getSystemLog()->logDebug("found.");
@@ -492,16 +499,19 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 		}
 	}
 
-	if (sysConfPath.size()) {
+	if (!sysConf && sysConfPath.size()) {
 		sysConf = new SWConfig(sysConfPath);
 	}
 
 	if (sysConf) {
 		if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
-			path = (*entry).second;
-			if (((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '\\') && ((*entry).second.c_str()[strlen((*entry).second.c_str())-1] != '/'))
-				path += "/";
+			sysConfDataPath = (*entry).second;
+		}
+		if (sysConfDataPath.size()) {
+			if ((!sysConfDataPath.endsWith("\\")) && (!sysConfDataPath.endsWith("/")))
+				sysConfDataPath += "/";
 
+			path = sysConfDataPath;
 			SWLog::getSystemLog()->logDebug("DataPath in %s is set to %s.", sysConfPath.c_str(), path.c_str());
 			SWLog::getSystemLog()->logDebug("Checking for mods.conf in DataPath...");
 			
@@ -523,6 +533,10 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 				*configType = 1;
 			}
 		}
+	}
+
+	// do some extra processing of sysConf if we have one
+	if (sysConf) {
 		if (augPaths) {
 			augPaths->clear();
 			entry     = sysConf->Sections["Install"].lower_bound("AugmentPath");
@@ -534,10 +548,10 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 				augPaths->push_back(path);
 			}
 		}
-	}
-
-	if ((sysConf) && (!providedSysConf)) {
-		delete sysConf;
+		if (providedSysConf) {
+			*providedSysConf = sysConf;
+		}
+		else delete sysConf;
 	}
 
 	if (*configType)
@@ -715,7 +729,9 @@ signed char SWMgr::Load() {
 	if (!config) {	// If we weren't passed a config object at construction, find a config file
 		if (!configPath) {	// If we weren't passed a config path at construction...
 			SWLog::getSystemLog()->logDebug("LOOKING UP MODULE CONFIGURATION...");
-			findConfig(&configType, &prefixPath, &configPath, &augPaths, sysconfig);
+			SWConfig *externalSysConf = sysConfig;	// if we have a sysConf before findConfig, then we were provided one from an external source.
+			findConfig(&configType, &prefixPath, &configPath, &augPaths, &sysConfig);
+			if (!externalSysConf) mysysconfig = sysConfig;	// remind us to delete our own sysConfig in d-tor
 			SWLog::getSystemLog()->logDebug("LOOKING UP MODULE CONFIGURATION COMPLETE.");
 		}
 		if (configPath) {

@@ -70,15 +70,24 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 	locales = new LocaleMap();
 	char *prefixPath = 0;
 	char *configPath = 0;
+	SWConfig *sysConf = 0;
 	char configType = 0;
 	SWBuf path;
 	std::list<SWBuf> augPaths;
+	ConfigEntMap::iterator entry;
 	
 	defaultLocaleName = 0;
 	
 	if (!iConfigPath) {
 		SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
-		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths);
+		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths, &sysConf);
+		if (sysConf) {
+			if ((entry = sysConf->Sections["Install"].find("LocalePath")) != sysConf->Sections["Install"].end()) {
+				configType = 9;	// our own
+				stdstr(&prefixPath, (char *)entry->second.c_str());
+				SWLog::getSystemLog()->logDebug("LocalePath provided in sysConfig.");
+			}
+		}
 		SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY COMPLETE.");
 	}
 	else {
@@ -107,7 +116,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		}
 	}
 	
-	if (augPaths.size()) { //load locale files from all augmented paths
+	if (augPaths.size() && configType != 9) { //load locale files from all augmented paths
 		std::list<SWBuf>::iterator it = augPaths.begin();
 		std::list<SWBuf>::iterator end = augPaths.end();
 		
@@ -129,6 +138,9 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 
 	if (configPath)
 		delete [] configPath;
+
+	if (sysConf)
+		delete sysConf;
 }
 
 

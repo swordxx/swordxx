@@ -414,7 +414,7 @@ void SWModule::decrement(int steps) {
  *				>=0 - regex
  *				-1  - phrase
  *				-2  - multiword
- *				-3  - entryAttrib (eg. Word//Lemma/G1234/)
+ *				-3  - entryAttrib (eg. Word//Lemma./G1234/)	 (Lemma with dot means check components (Lemma.[1-9]) also)
  *				-4  - clucene
  *				-5  - multilemma window; flags = window size
  * 	flags		- options flags for search
@@ -428,6 +428,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	listKey.ClearList();
 	SWBuf term = istr;
+	bool includeComponents = false;	// for entryAttrib e.g., /Lemma.1/ 
 
 #ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
@@ -589,6 +590,10 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			}
 			words.push_back(word);
 		}
+		if ((words.size()>2) && words[2].endsWith(".")) {
+			includeComponents = true;
+			words[2]--;
+		}
 		break;
 	}
 
@@ -699,7 +704,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						i2End   = i1Start->second.end();
 					}
 					for (;i2Start != i2End; i2Start++) {
-						if ((words.size()>2) && (words[2].length())) {
+						if ((words.size()>2) && (words[2].length()) && (!includeComponents)) {
 							i3Start = i2Start->second.find(words[2]);
 							i3End = i3Start;
 							if (i3End != i2Start->second.end())
@@ -711,6 +716,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						}
 						for (;i3Start != i3End; i3Start++) {
 							if ((words.size()>3) && (words[3].length())) {
+								if (includeComponents) {
+									SWBuf key = i3Start->first.c_str();
+									key = key.stripPrefix('.', true);
+									// we're iterating all 3 level keys, so be sure we match our
+									// prefix (e.g., Lemma, Lemma.1, Lemma.2, etc.)
+									if (key != words[2]) continue;
+								}
 								if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
 									bool found = !(((flags & REG_ICASE) == REG_ICASE) ? sword::stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
 									sres = (found) ? i3Start->second.c_str() : 0;

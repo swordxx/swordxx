@@ -162,10 +162,10 @@ public:
 	/**
 	 *
 	 */
-	static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0, SWConfig *providedSysConf = 0);
+	static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0, SWConfig **providedSysConf = 0);
 
 	SWConfig *config;
-	SWConfig *sysconfig;
+	SWConfig *sysConfig;
 
 	/** The path to main module set and locales
 	 */

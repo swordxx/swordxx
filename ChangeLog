@@ -1,5 +1,10 @@
 API ChangeLog 
 
+12-Apr-2009	Troy A. Griffitts <scribe@crosswire.org>
+	Added '.' feature for entryAttrib search, e.g,
+		Word//Lemma./G932/ will find in Lemma, Lemma.1, etc.
+	Added LocalePath feature in sword.conf
+
 06-Apr-2009	Joachim A. <jansorg@crosswire.org>
 	Added Maltese bookname translation prepared by C. S.
 
@@ -21,7 +26,7 @@ API ChangeLog
 		directory which shouldn't have been loaded.
 	Fix for divineName with non-ascii text in OSISHTMLHREF filter
 
-07-Feb-2008	Troy A. Griffitts <scribe@crosswire.org>
+07-Feb-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added fallback checks for OS specific module
 		locations:
 			$ALLUSERSPROFILE/Application Data/sword
