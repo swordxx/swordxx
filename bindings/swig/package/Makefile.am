@@ -76,7 +76,7 @@ python_make: python_makebuild
 
 pythonswig: sword.i
 	mkdir -p python
-	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
+	$(SWIG) -python -DEXCLUDE_FTP -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
 python_makebuild: $(PYTHONSWIG)
 	mkdir -p python

@@ -60,15 +60,15 @@ char OSISRuby::processText(SWBuf &text, const SWKey *key, const SWModule *module
 				intoken = false;
 				if (token.startsWith("w ")) {	// Word
 					XMLTag wtag(token);
-					int count = wtag.getAttributePartCount("gloss", ' ');
-					for (int i = 0; i < count; i++) {
-						SWBuf a = wtag.getAttribute("gloss", i, ' ');
+					const char *l = wtag.getAttribute("gloss");
+					if (l) {
+						wtag.setAttribute("gloss", 0);
+						token = wtag;
+						token.trim();
+						// drop <>
+						token << 1;
+						token--;
 					}
-					token = wtag;
-					token.trim();
-					// drop <>
-					token << 1;
-					token--;
 				}
 				
 				// keep token in text

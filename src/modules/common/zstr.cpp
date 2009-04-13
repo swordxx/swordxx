@@ -194,6 +194,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 	__s32 headoff, tailoff, tryoff = 0, maxoff = 0;
 	__u32 start, size;
 	int diff = 0;
+	bool awayFromSubstrCheck = false;
 
 	if (idxfd->getFd() >= 0) {
 		tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
@@ -240,6 +241,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 			if (headoff >= tailoff) {
 				tryoff = headoff;
 				if (!substr && ((tryoff != maxoff)||(strncmp(key, maxbuf, keylen)<0))) {
+					awayFromSubstrCheck = true;
 					away--;	// if our entry doesn't startwith our key, prefer the previous entry over the next
 				}
 			}
@@ -274,7 +276,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 			else	if (idxfd->seek(tryoff, SEEK_SET) < 0)
 				bad = true;
 			if (bad) {
-				retval = -1;
+				if(!awayFromSubstrCheck)
+					retval = -1;
 				start = laststart;
 				size = lastsize;
 				tryoff = lasttry;

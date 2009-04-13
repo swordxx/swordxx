@@ -196,8 +196,9 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if ((attrib = tag.getAttribute("gloss"))) {
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					outText(" ", buf, u);
+					outText("(", buf, u);
 					outText(val, buf, u);
+					outText(")", buf, u);
 				}
 				if (!morphFirst) {
 					processLemma(u->suspendTextPassThru, tag, buf);
@@ -289,46 +290,53 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {	
 			if (!u->inXRefNote) {	// only show these if we're not in an xref note				
-				if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-					u->suspendTextPassThru = (++u->suspendLevel);
-				}
-				if (tag.isEndTag()) {
-					if (!u->BiblicalText) {
-						SWBuf refList = tag.getAttribute("passage");
-						if (!refList.length())
-							refList = u->lastTextNode;
-						SWBuf version = tag.getAttribute("version");
-						
-						buf.appendFormatted("&nbsp;<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
-							(refList.length()) ? URL::encode(refList.c_str()).c_str() : "", 
-							(version.length()) ? URL::encode(version.c_str()).c_str() : "");
-						buf += u->lastTextNode.c_str();
-						buf += "</a>&nbsp;";
+				if (!tag.isEndTag()) {
+					SWBuf target;
+					SWBuf work;
+					SWBuf ref;
+					bool is_scripRef = false;
+
+					target = tag.getAttribute("osisRef");
+					const char* the_ref = strchr(target, ':');
+					
+					if(!the_ref) {
+						// No work
+						ref = target;
+						is_scripRef = true;
 					}
 					else {
-						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-						VerseKey *vkey = NULL;
-						// see if we have a VerseKey * or descendant
-						SWTRY {
-							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-						}
-						SWCATCH ( ... ) {}
-						if (vkey) {
-							// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-							//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup>*x</sup></small></a>",
-								URL::encode(footnoteNumber.c_str()).c_str(), 
-								URL::encode(u->version.c_str()).c_str(),
-								URL::encode(vkey->getText()).c_str());
-						
-						}
+						// Compensate for starting :
+						ref = the_ref + 1;
+
+						int size = target.size() - ref.size() - 1;
+						work.setSize(size);
+						strncpy(work.getRawData(), target, size);
+
+						// For Bible:Gen.3.15 or Bible.vulgate:Gen.3.15
+						if(!strncmp(work, "Bible", 5))
+							is_scripRef = true;
 					}
-					u->suspendTextPassThru = (--u->suspendLevel);
+
+					if(is_scripRef)
+					{
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
+							URL::encode(ref.c_str()).c_str()
+//							(work.size()) ? URL::encode(work.c_str()).c_str() : "")
+							);
+					}
+					else
+					{
+						// Dictionary link, or something
+						buf.appendFormatted("<a href=\"sword://%s/%s\">",
+							URL::encode(work.c_str()).c_str(),
+							URL::encode(ref.c_str()).c_str()
+							);
+					}
 				}
-			}/*
-			if (tag.isEndTag()) {
-				u->suspendTextPassThru = false;
-			}*/
+				else {
+					outText("</a>", buf, u);
+				}
+			}
 		}
 
 		// <l> poetry, etc

@@ -26,6 +26,7 @@
 #include <utilxml.h>
 #include <swmodule.h>
 #include <url.h>
+#include <iostream>
 
 
 SWORD_NAMESPACE_START
@@ -143,8 +144,8 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 				 !strcmp(tag.getName(), "case") || 
 				 !strcmp(tag.getName(), "gram") || 
 				 !strcmp(tag.getName(), "number") || 
-				 !strcmp(tag.getName(), "pron") ||
-				 !strcmp(tag.getName(), "def")) {
+				 !strcmp(tag.getName(), "pron") /*||
+				 !strcmp(tag.getName(), "def")*/) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "<i>";
 			}
@@ -177,6 +178,67 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 		else if (!strcmp(tag.getName(), "etym") || 
 				 !strcmp(tag.getName(), "usg")) {
 			// do nothing here
+		}
+		else if (!strcmp(tag.getName(), "ref")) {
+			if (!tag.isEndTag()) {
+				u->suspendTextPassThru = true;
+				SWBuf target;
+				SWBuf work;
+				SWBuf ref;
+
+				int was_osisref = false;
+				if(tag.getAttribute("osisRef"))
+				{
+					target += tag.getAttribute("osisRef");
+					was_osisref=true;
+				}
+				else if(tag.getAttribute("target"))
+					target += tag.getAttribute("target");
+
+				if(target.size())
+				{
+					const char* the_ref = strchr(target, ':');
+					
+					if(!the_ref) {
+						// No work
+						ref = target;
+					}
+					else {
+						// Compensate for starting :
+						ref = the_ref + 1;
+
+						int size = target.size() - ref.size() - 1;
+						work.setSize(size);
+						strncpy(work.getRawData(), target, size);
+					}
+
+					if(was_osisref)
+					{
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
+							(ref) ? URL::encode(ref.c_str()).c_str() : "", 
+							(work.size()) ? URL::encode(work.c_str()).c_str() : "");
+					}
+					else
+					{
+						// Dictionary link, or something
+						buf.appendFormatted("<a href=\"sword://%s/%s\">",
+							(work.size()) ? URL::encode(work.c_str()).c_str() : u->version.c_str(),
+							(ref) ? URL::encode(ref.c_str()).c_str() : ""							
+							);
+					}
+				}
+				else
+				{
+					//std::cout << "TARGET WASN'T\n";
+				}
+				
+			}
+			else {
+				buf += u->lastTextNode.c_str();
+				buf += "</a>";
+				
+				u->suspendTextPassThru = false;
+			}
 		}
 
 	   	// <note> tag

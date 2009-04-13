@@ -181,11 +181,13 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 	signed char retval = -1;
 	long headoff, tailoff, tryoff = 0, maxoff = 0;
 	int diff = 0;
+	bool awayFromSubstrCheck = false;
 
 	if (idxfd->getFd() >=0) {
 		tailoff = maxoff = idxfd->seek(0, SEEK_END) - 8;
+
 		retval = (tailoff >= 0) ? 0 : -2;	// if NOT new file
-		if (*ikey) {
+		if (*ikey && retval != -2) {
 			headoff = 0;
 
 			stdstr(&key, ikey, 3);
@@ -229,6 +231,7 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 			if (headoff >= tailoff) {
 				tryoff = headoff;
 				if (!substr && ((tryoff != maxoff)||(strncmp(key, maxbuf, keylen)<0))) {
+					awayFromSubstrCheck = true;
 					away--;	// if our entry doesn't startwith our key, prefer the previous entry over the next
 				}
 			}
@@ -264,7 +267,8 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 			else if (idxfd->seek(tryoff, SEEK_SET) < 0)
 				bad = true;
 			if (bad) {
-				retval = -1;
+				if(!awayFromSubstrCheck)
+					retval = -1;
 				*start = laststart;
 				*size = lastsize;
 				tryoff = lasttry;

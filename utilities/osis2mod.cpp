@@ -609,7 +609,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		inTitle = false;
 		titleDepth = 0;
 #ifdef DEBUG_STACK
-		cout << currentOsisID << ": pop(" << tagStack.size() << ") " << tagStack.top()->getName() << endl;
+		cout << currentOsisID << ": pop(" << tagStack.size() << ") " << tagStack.top().getName() << endl;
 #endif
 		tagStack.pop();
 		return false; // don't add </title> to the text itself
@@ -833,7 +833,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (!strcmp(tokenName, "div") ||
 			    !strcmp(tokenName, "q")   ||
 			    !strcmp(tokenName, "l")   ||
-			    !strcmp(tokenName, "lb")  ||
+			    (!strcmp(tokenName, "lb") 
+				 	// If these were paragraphs, don't wrest them from their
+					// rightful place in the preverse text
+				 	&& strcmp("x-begin-paragraph", token.getAttribute("type"))
+					&& strcmp("x-end-paragraph", token.getAttribute("type"))
+				) ||
 			    !strcmp(tokenName, "lg")
 			   ) {
 #ifdef DEBUG
