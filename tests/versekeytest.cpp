@@ -198,6 +198,9 @@ cout << currentVerse << endl;
 	vk = BOTTOM;
 	cout << "BOTTOM: " << vk << "\n";
 
+	VerseKey yo = "jn.3.16";
+	VerseKey yo2 = yo++;
+	cout << yo2 << ": " << (int)yo2.Error() <<  endl;
 
 	return 0;
 }

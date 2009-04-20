@@ -93,7 +93,7 @@ static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
         VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
-        VerseMgr::System *v11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
+        const VerseMgr::System *v11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
         return v11n->getBookNumberByOSISName(buf) >= 0;
 }
 
@@ -388,7 +388,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 	}
 
 	static VerseKey lastKey;
-	lastKey.setVersificationSystem(currentKey.getVersificationSystem());
+	lastKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	lastKey.AutoNormalize(0);
 	lastKey.Headings(1);
 

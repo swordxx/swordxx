@@ -1,5 +1,7 @@
 API ChangeLog 
 
+* Release 1.6.0 *
+
 12-Apr-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added '.' feature for entryAttrib search, e.g,
 		Word//Lemma./G932/ will find in Lemma, Lemma.1, etc.
