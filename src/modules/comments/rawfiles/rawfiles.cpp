@@ -73,14 +73,7 @@ SWBuf &RawFiles::getRawEntryBuf() {
 	FileDesc *datafile;
 	long  start = 0;
 	unsigned short size = 0;
-	VerseKey *key = 0;
-
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
+	VerseKey *key = &getVerseKey();
 
 	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 
@@ -104,10 +97,6 @@ SWBuf &RawFiles::getRawEntryBuf() {
 		}
 		FileMgr::getSystemFileMgr()->close(datafile);
 	}
-
-	if (key != this->key)
-		delete key;
-
 	return entryBuf;
 }
 
@@ -121,15 +110,9 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 	FileDesc *datafile;
 	long  start;
 	unsigned short size;
-	VerseKey *key = 0;
+	VerseKey *key = &getVerseKey();
 
 	len = (len<0)?strlen(inbuf):len;
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
 
 	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 
@@ -153,9 +136,6 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 		datafile->write(inbuf, len);
 	}
 	FileMgr::getSystemFileMgr()->close(datafile);
-	
-	if (key != this->key)
-		delete key;
 }
 
 
@@ -170,14 +150,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 
 	long  start;
 	unsigned short size;
-	const VerseKey *key = 0;
-
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, inkey);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
+	const VerseKey *key = &getVerseKey();
 
 	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 
@@ -185,21 +158,9 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 		SWBuf tmpbuf;
 		readText(key->Testament(), start, size + 2, tmpbuf);
 
-		if (key != inkey)
-			delete key;
-		key = 0;
-
-		SWTRY {
-			key = SWDYNAMIC_CAST(VerseKey, inkey);
-		}
-		SWCATCH ( ... ) {}
-		if (!key)
-			key = new VerseKey(this->key);
+		key = &getVerseKey(inkey);
 		doSetText(key->Testament(), key->TestamentIndex(), tmpbuf.c_str());
 	}
-	
-	if (key != inkey)
-		delete key;
 }
 
 
@@ -210,20 +171,8 @@ void RawFiles::linkEntry(const SWKey *inkey) {
  */
 
 void RawFiles::deleteEntry() {
-
-	VerseKey *key = 0;
-
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey *key = &getVerseKey();
 	doSetText(key->Testament(), key->TestamentIndex(), "");
-
-	if (key != this->key)
-		delete key;
 }
 
 

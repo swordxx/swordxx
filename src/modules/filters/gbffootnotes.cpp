@@ -48,7 +48,7 @@ GBFFootnotes::~GBFFootnotes() {
 
 char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	
+
 	SWBuf token;
 	bool intoken    = false;
 	bool hide       = false;
@@ -57,11 +57,10 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
-	VerseKey parser = key->getText();
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
-	
+
 	//XMLTag tag;
 
 	for (text = ""; *from; from++) {
@@ -76,7 +75,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 			//XMLTag tag(token);
 			if (!strncmp(token, "RF",2)) {
 // 				tag = token;
-				
+
 				refs = "";
 				startTag = token;
 				hide = true;
@@ -86,7 +85,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 			else if (!strncmp(token, "Rf",2)) {
 				if (module->isProcessEntryAttributes()) {
 					//tag = token;
-				
+
 					if((tagText.length() == 1) || !strcmp(module->Name(), "IGNT")) {
 						if (option) { // for ASV marks text in verse then put explanation at end of verse
 							text.append(" <FS>[");
@@ -108,7 +107,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 					startTag.setAttribute("swordFootnote", buf);
 				}
 				hide = false;
-				if (option) {	
+				if (option) {
 					text.append(startTag);
 					text.append(tagText);
 				}
@@ -135,7 +134,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 		else tagText.append(*from);
 	}
 	return 0;
-	
+
 	/*
 	if (!option) {	// if we don't want footnotes
 		char token[4096]; // cheese.  Fix.

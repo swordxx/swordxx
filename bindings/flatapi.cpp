@@ -319,8 +319,9 @@ const char *SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const
 
 
 
-SWHANDLE listkey_getVerselistIterator(const char * list, const char * key) {
+SWHANDLE listkey_getVerselistIterator(const char *list, const char *key, const char *v11n) {
 	VerseKey versekey;
+        versekey.setVersification(v11n);
 	static ListKey verses;
 	
 	versekey.setText(key);

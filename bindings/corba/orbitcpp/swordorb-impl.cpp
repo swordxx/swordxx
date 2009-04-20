@@ -172,7 +172,6 @@ StringList *SWModule_impl::parseKeyList(const char *keyText) throw(CORBA::System
 SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CORBA::Long flags, const char *scope) throw(CORBA::SystemException) {
 	int stype = 2;
 	sword::ListKey lscope;
-	sword::VerseKey parser;
 	if (searchType == REGEX) stype = 0;
 	if (searchType == PHRASE) stype = -1;
 	if (searchType == MULTIWORD) stype = -2;
@@ -181,8 +180,16 @@ SearchHitList *SWModule_impl::search(const char *istr, SearchType searchType, CO
 	sword::ListKey result;
 
 	if ((scope) && (strlen(scope)) > 0) {
-		lscope = parser.ParseVerseList(scope, parser, true);
+		sword::SWKey *p = delegate->CreateKey();
+        	sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
+	        if (!parser) {
+        		delete p;
+	                parser = new VerseKey();
+	        }
+	        *parser = delegate->getKeyText();
+		lscope = parser->ParseVerseList(scope, *parser, true);
 		result = delegate->Search(istr, stype, flags, &lscope);
+                delete parser;
 	}
 	else	result = delegate->Search(istr, stype, flags);
 

@@ -993,8 +993,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		}
 	}
 
-	
-	// be sure we give CLucene enough file handles	
+
+	// be sure we give CLucene enough file handles
 	FileMgr::getSystemFileMgr()->flush();
 
 	// save key information so as not to disrupt original
@@ -1015,7 +1015,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	IndexWriter *coreWriter = NULL;
 	IndexWriter *fsWriter = NULL;
 	Directory *d = NULL;
- 
+
 	standard::StandardAnalyzer *an = new standard::StandardAnalyzer();
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
@@ -1027,12 +1027,14 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	ramDir = new RAMDirectory();
 	coreWriter = new IndexWriter(ramDir, an, true);
-	
 
- 
+
+
 	char perc = 1;
 	VerseKey *vkcheck = 0;
 	vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+	VerseKey *chapMax = 0;
+        if (vkcheck) chapMax = (VerseKey *)vkcheck->clone();
 
 	TreeKeyIdx *tkcheck = 0;
 	tkcheck = SWDYNAMIC_CAST(TreeKeyIdx, key);
@@ -1050,14 +1052,13 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	// position module at the beginning
 	*this = TOP;
 
-	VerseKey chapMax;
 	SWBuf proxBuf;
 	SWBuf proxLem;
 	SWBuf strong;
 
 	const short int MAX_CONV_SIZE = 2047;
 	wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
-	
+
 	char err = Error();
 	while (!err) {
 		long mindex = key->Index();
@@ -1087,7 +1088,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		if (content && *content) {
 			good = true;
 
-			
+
 			// build "strong" field
 			AttributeTypeList::iterator words;
 			AttributeList::iterator word;
@@ -1144,12 +1145,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 		// for VerseKeys use chapter
 		if (vkcheck) {
-			chapMax = *vkcheck;
+			*chapMax = *vkcheck;
 			// we're the first verse in a chapter
 			if (vkcheck->Verse() == 1) {
-				chapMax = MAXVERSE;
+				*chapMax = MAXVERSE;
 				VerseKey saveKey = *vkcheck;
-				while ((!err) && (*vkcheck <= chapMax)) {
+				while ((!err) && (*vkcheck <= *chapMax)) {
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 
@@ -1185,7 +1186,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 						proxBuf += content;
 						proxBuf.append(' ');
 						proxLem += strong;
-						if (proxLem.length()) 
+						if (proxLem.length())
 							proxLem.append("\n");
 					}
 					(*this)++;
@@ -1195,7 +1196,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				*vkcheck = saveKey;
 			}
 		}
-		
+
 		// for TreeKeys use siblings if we have no children
 		else if (tkcheck) {
 			if (!tkcheck->hasChildren()) {
@@ -1237,7 +1238,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 							proxBuf += content;
 							proxBuf.append(' ');
 							proxLem += strong;
-							if (proxLem.length()) 
+							if (proxLem.length())
 								proxLem.append("\n");
 						}
 					} while (tkcheck->nextSibling());
@@ -1247,11 +1248,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				else tkcheck->nextSibling();	// reposition from our previousSibling test
 			}
 		}
-		
+
 		if (proxBuf.length() > 0) {
-	
+
 			lucene_utf8towcs(wcharBuffer, proxBuf, MAX_CONV_SIZE); //keyText must be utf8
-		
+
 //printf("proxBuf after (%s).\nprox: %s\nproxLem: %s\n", (const char *)*key, proxBuf.c_str(), proxLem.c_str());
 
 			doc->add( *Field::UnStored(_T("prox"), wcharBuffer) );
@@ -1282,7 +1283,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		if (IndexReader::isLocked(d)) {
 			IndexReader::unlock(d);
 		}
- 
+
 		fsWriter = new IndexWriter( d, an, false);
 	} else {
 		d = FSDirectory::getDirectory(target.c_str(), true);
@@ -1306,6 +1307,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	if (searchKey)
 		delete searchKey;
+
+        delete chapMax;
 
 	processEntryAttributes(savePEA);
 

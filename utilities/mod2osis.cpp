@@ -138,13 +138,18 @@ int main(int argc, char **argv)
 	cout << "\t</header>\n\n";
 
 
-	(*inModule) = TOP; 
-//	for ((*inModule) = TOP; (inModule->Key() < (VerseKey)"Mat 2:1"); (*inModule)++) {
-//	for ((*vkey) = "Mark6:29"; !inModule->Error(); (*inModule)++) {
+	(*inModule) = TOP;
 
-	VerseKey tmpKey;
-	tmpKey.Headings(1);
-	tmpKey.AutoNormalize(0);
+	SWKey *p = inModule->CreateKey();
+        VerseKey *tmpKey = SWDYNAMIC_CAST(VerseKey, p);
+	if (!tmpKey) {
+        	delete p;
+	        tmpKey = new VerseKey();
+	}
+	*tmpKey = inModule->getKeyText();
+
+	tmpKey->Headings(1);
+	tmpKey->AutoNormalize(0);
 
 	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
 		bool newTest = false;
@@ -173,10 +178,10 @@ int main(int argc, char **argv)
 					cout << "\t</div>\n";
 			}
 			*buf = 0;
-			tmpKey = *vkey;
-			tmpKey.Chapter(0);
-			tmpKey.Verse(0);
-			sprintf(buf, "\t<div type=\"book\" osisID=\"%s\">\n", tmpKey.getOSISRef());
+			*tmpKey = *vkey;
+			tmpKey->Chapter(0);
+			tmpKey->Verse(0);
+			sprintf(buf, "\t<div type=\"book\" osisID=\"%s\">\n", tmpKey->getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf << endl;
 			openbook = true;
@@ -188,9 +193,9 @@ int main(int argc, char **argv)
 					cout << "\t</chapter>\n";
 			}
 			*buf = 0;
-			tmpKey = *vkey;
-			tmpKey.Verse(0);
-			sprintf(buf, "\t<chapter osisID=\"%s\">\n", tmpKey.getOSISRef());
+			*tmpKey = *vkey;
+			tmpKey->Verse(0);
+			sprintf(buf, "\t<chapter osisID=\"%s\">\n", tmpKey->getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf;
 			openchap = true;

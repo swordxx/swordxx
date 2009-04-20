@@ -36,7 +36,9 @@ class VerseKey;
 class SWDLLEXPORT SWText : public SWModule {
 
 	// for conversion if we have been set with a different internal key type
-	mutable VerseKey *tmpVK;
+	mutable VerseKey *tmpVK1;
+	mutable VerseKey *tmpVK2;
+        mutable bool tmpSecond;
 	char *versification;
 
 protected:

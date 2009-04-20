@@ -114,7 +114,7 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 
 
 /******************************************************************************
- * VerseKey::positionFrom - Positions this VerseKey to another VerseKey
+ * VerseKey::setFromOther - Positions this VerseKey to another VerseKey
  */
 
 void VerseKey::setFromOther(const VerseKey &ikey) {
@@ -126,10 +126,24 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 }
 
 
-void VerseKey::positionFrom(const VerseKey &ikey) {
-	error = 0;
-	setFromOther(ikey);
-	// should we always perform bounds checks?  Tried but seems to cause infinite recursion
+void VerseKey::positionFrom(const SWKey &ikey) {
+ 	error = 0;
+        const SWKey *fromKey = &ikey;
+	ListKey *tryList = SWDYNAMIC_CAST(ListKey, fromKey);
+	if (tryList) {
+		SWKey *k = tryList->getElement();
+		if (k) fromKey = k;
+	}
+	VerseKey *tryVerse = SWDYNAMIC_CAST(VerseKey, fromKey);
+	if (tryVerse) {
+		setFromOther(*tryVerse);
+	}
+	else {
+		SWKey::positionFrom(*fromKey);
+		parse();
+	}
+
+ 	// should we always perform bounds checks?  Tried but seems to cause infinite recursion
 	if (_compare(UpperBound()) > 0) {
 		setFromOther(UpperBound());
 		error = KEYERR_OUTOFBOUNDS;
@@ -259,7 +273,7 @@ char VerseKey::parse(bool checkAutoNormalize)
 	if (keytext) {
 		ListKey tmpListKey = ParseVerseList(keytext);
 		if (tmpListKey.Count()) {
-			this->positionFrom(tmpListKey.getElement(0));
+			this->positionFrom(*tmpListKey.getElement(0));
 			error = this->error;
 		} else error = 1;
 	}

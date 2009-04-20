@@ -62,33 +62,34 @@ char OSISOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 		if (vkey->Verse()) {
 			ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
 		}
-		
+
 		if (ref.length() > 0) {
-			
+
 			text = ref + text;
-			
+
 			if (vkey->Verse()) {
-				VerseKey tmp;
-				tmp = *vkey;
-				tmp.AutoNormalize(0);
-				tmp.Headings(1);
-				
+				VerseKey *tmp = (VerseKey *)vkey->clone();
+				*tmp = *vkey;
+				tmp->AutoNormalize(0);
+				tmp->Headings(1);
+
 				text += "</verse>";
-				
-				tmp = MAXVERSE;
-				if (*vkey == tmp) {
-					tmp.Verse(0);
+
+				*tmp = MAXVERSE;
+				if (*vkey == *tmp) {
+					tmp->Verse(0);
 //					sprintf(ref, "\t</div>");
 //					pushString(&to, ref);
-					tmp = MAXCHAPTER;
-					tmp = MAXVERSE;
-					if (*vkey == tmp) {
-						tmp.Chapter(0);
-						tmp.Verse(0);
+					*tmp = MAXCHAPTER;
+					*tmp = MAXVERSE;
+					if (*vkey == *tmp) {
+						tmp->Chapter(0);
+						tmp->Verse(0);
 //						sprintf(ref, "\t</div>");
 //						pushString(&to, ref);
 					}
 				}
+                                delete tmp;
 			}
 
 //

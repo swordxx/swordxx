@@ -79,7 +79,7 @@ void systemquery(const char * key, ostream* output){
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->Description();
 				*output << endl;
-			} 
+			}
 		}
 		if (types) *output << "Dictionaries:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
@@ -101,11 +101,11 @@ void systemquery(const char * key, ostream* output){
 				*output << endl;
 			}
 		}
-		
+
 	}
 }
 
-void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) { 
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) {
 	static DiathekeMgr manager(NULL, NULL, false, outputencoding, outputformat,
 		((OP_BIDI & optionfilters) == OP_BIDI),
 		((OP_ARSHAPE & optionfilters) == OP_ARSHAPE));
@@ -114,18 +114,16 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	ListKey listkey;
 	SectionMap::iterator sit;
 	ConfigEntMap::iterator eit;
-	
-	SWModule * target;
+
+	SWModule *target;
 	char *font = 0;
 	char inputformat = 0;
 	SWBuf encoding;
-	char querytype = 0;	
+	char querytype = 0;
 
 	if (locale) {
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
 	}
-	VerseKey vk;
-	VerseKey *parser;
 
 	//deal with queries to "system"
 	if (!::stricmp(text, "system")) {
@@ -142,7 +140,12 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		return;
 	}
 	target = (*it).second;
-	parser = (VerseKey*) target->CreateKey();
+	SWKey *p = target->CreateKey();
+        VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
+	if (!parser) {
+        	delete p;
+	        parser = new VerseKey();
+	}
 
 	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
@@ -175,10 +178,11 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	    break;
 	  default:
 	    *output << "Other";
-	  }	 
+	  }
 	  *output << ";";
 	  *output << target->Type();
 	  *output << ";";
+	  delete parser;
 	  return;
 	}
 
@@ -191,8 +195,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
 		querytype = QT_LD;
 	else if (!strcmp(target->Type(), "Generic Books"))
-		querytype = QT_LD;	
-	
+		querytype = QT_LD;
+
 	if (optionfilters & OP_FOOTNOTES)
 		manager.setGlobalOption("Footnotes","On");
 	else
@@ -246,7 +250,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
                 manager.setGlobalOption("Transliteration", script);
 	else
 		manager.setGlobalOption("Transliteration", "Off");
-	
+
 	if (querytype == QT_SEARCH) {
 
 	        //this test is just to determine if we've got SWKeys or VerseKeys
@@ -258,7 +262,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		  querytype = QT_LD;
 		else if (!strcmp(target->Type(), "Generic Books"))
 		  querytype = QT_LD;
-		
+
 		//do search stuff
 		char st = 1 - searchtype;
 		if (querytype == QT_BIBLE) {
@@ -273,13 +277,13 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
  			listkey = target->Search(ref, st, REG_ICASE, &scope);
  		}
  		else listkey = target->Search(ref, st, REG_ICASE);
-		
+
 		if (strlen((const char*)listkey)) {
 		  if (!listkey.Error()) {
 		    if (outputformat == FMT_CGI) *output << "<entry>";
 		    if (querytype == QT_BIBLE) {
-		      vk = listkey;
-		      *output << (const char *)vk;
+		      *parser = listkey;
+		      *output << (const char *)*parser;
 		    }
 		    else *output << (const char *)listkey;
 		    if (outputformat == FMT_CGI) *output << "</entry>";
@@ -289,20 +293,20 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		    *output << " ; ";
 		    if (outputformat == FMT_CGI) *output << "<entry>";
 		    if (querytype == QT_BIBLE) {
-		      vk = listkey;
-		      *output << (const char *)vk;
+		      *parser = listkey;
+		      *output << (const char *)*parser;
 		    }
 		    else *output << (const char *)listkey;
 		    if (outputformat == FMT_CGI) *output << "</entry>";
 		    listkey++;
 		  }
 		  *output << " -- ";
-		  
+
 		  char *temp = new char[10];
 		  sprintf(temp, "%u", listkey.Count());
 		  *output << temp;
 		  delete [] temp;
-		  
+
 		  *output << " matches total (";
 		  *output << target->Name();
 		  *output << ")\n";
@@ -313,12 +317,12 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		  *output << ")\n";
 		}
 	}
-	
+
 	else if (querytype == QT_LD) {
 		//do dictionary stuff
-		
+
 		target->setKey(ref);
-		
+
 		const char * text = (const char *) *target;
 
 		if (outputformat == FMT_RTF) {
@@ -331,8 +335,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		}
 		else if (outputformat == FMT_HTML) {
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
-		}		
-	
+		}
+
 		if (strlen(text)) {
 			*output << (char*)target->KeyText();
 			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
@@ -357,14 +361,14 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			*output << "(";
 			*output << target->Name();
 			*output << ")\n";
-		}	
+		}
 
 		if (outputformat == FMT_RTF) {
 			*output << "}";
 		}
 
 	}
-	
+
 	else if (querytype == QT_BIBLE || querytype == QT_COMM) {
 		//do commentary/Bible stuff
 
@@ -374,7 +378,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				if (strlen(font) == 0) font = 0;
 			}
 		}
-		
+
  		listkey = parser->ParseVerseList(ref, "Gen1:1", true);
 		int i;
 
@@ -394,8 +398,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 			if (element && element->isBoundSet()) {
 			  target->Key(element->LowerBound());
-				vk = element->UpperBound();
-				while (maxverses && target->Key() <= vk) {
+				*parser = element->UpperBound();
+				while (maxverses && target->Key() <= *parser) {
 					*output << (char*)target->KeyText();
 					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << ": <font face=\"";
@@ -426,8 +430,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 						*output << "<CM>";
 
 					*output << "\n";
-					
-					if (target->Key() == vk)
+
+					if (target->Key() == *parser)
 					  break;
 					maxverses--;
 					(*target)++;
@@ -454,7 +458,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				else if (outputformat == FMT_RTF) {
 					*output << "}";
 				}
-					
+
 				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 					*output << "<br />";
 				else if (outputformat == FMT_OSIS)

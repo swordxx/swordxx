@@ -50,15 +50,13 @@ void percentUpdate(char percent, void *userData) {
 
 int main(int argc, char **argv)
 {
-
 	if (argc != 2) {
 		fprintf(stderr, "usage: %s <modname>\n", argv[0]);
 		exit(-1);
 	}
-	
+
 	SWModule *target;
 	ListKey listkey;
-	VerseKey vk;
 	ModMap::iterator it;
 
 	SWMgr manager;

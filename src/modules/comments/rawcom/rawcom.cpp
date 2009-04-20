@@ -105,7 +105,7 @@ void RawCom::increment(int steps) {
 		long laststart = start;
 		unsigned short lastsize = size;
 		SWKey lasttry = *tmpkey;
-		(steps > 0) ? (*key)++ : (*key)--;
+		(steps > 0) ? ++(*key) : --(*key);
 		tmpkey = &getVerseKey();
 
 		if ((error = key->Error())) {
@@ -135,16 +135,7 @@ void RawCom::setEntry(const char *inbuf, long len) {
 
 void RawCom::linkEntry(const SWKey *inkey) {
 	VerseKey *destkey = &getVerseKey();
-	const VerseKey *srckey = 0;
-
-	// see if we have a VerseKey * or decendant
-	SWTRY {
-		srckey = SWDYNAMIC_CAST(VerseKey, inkey);
-	}
-	SWCATCH ( ... ) {}
-	// if we don't have a VerseKey * decendant, create our own
-	if (!srckey)
-		srckey = new VerseKey(inkey);
+	const VerseKey *srckey = &getVerseKey(inkey);
 
 	doLinkEntry(destkey->Testament(), destkey->TestamentIndex(), srckey->TestamentIndex());
 

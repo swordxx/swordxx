@@ -39,7 +39,9 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWT
 	stdstr(&(this->versification), versification);
 	delete key;
 	key = (VerseKey *)CreateKey();
-	tmpVK = (VerseKey *)CreateKey();
+	tmpVK1 = (VerseKey *)CreateKey();
+	tmpVK2 = (VerseKey *)CreateKey();
+        tmpSecond = false;
 	skipConsecutiveLinks = false;
 }
 
@@ -49,7 +51,8 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWT
  */
 
 SWText::~SWText() {
-	delete tmpVK;
+	delete tmpVK1;
+	delete tmpVK2;
 	delete [] versification;
 }
 
@@ -68,37 +71,20 @@ SWKey *SWText::CreateKey() const {
 
 
 long SWText::Index() const {
-	VerseKey *key = 0;
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
-
+	VerseKey *key = &getVerseKey();
 	entryIndex = key->Index();
-
-	if (key != this->key)
-		delete key;
 
 	return entryIndex;
 }
 
 long SWText::Index(long iindex) {
-	VerseKey *key = 0;
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
+	VerseKey *key = &getVerseKey();
 
 	key->Testament(1);
 	key->Index(iindex);
 
 	if (key != this->key) {
 		this->key->copyFrom(*key);
-		delete key;
 	}
 
 	return Index();
@@ -128,9 +114,11 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
 		}
 	}
 	if (!key) {
-		tmpVK->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-		(*tmpVK) = *(thisKey);
-		return (*tmpVK);
+                VerseKey *retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
+                tmpSecond = !tmpSecond;
+		retKey->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+		(*retKey) = *(thisKey);
+		return (*retKey);
 	}
 	else	return *key;
 }

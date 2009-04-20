@@ -97,7 +97,7 @@ const char * SWDLLEXPORT SWModule_getFootnoteType(SWHANDLE hmodule, const char *
 const char * SWDLLEXPORT SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const char *note);
 const char * SWDLLEXPORT SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const char *note);
 
-SWHANDLE SWDLLEXPORT listkey_getVerselistIterator(const char * list, const char * key);
+SWHANDLE SWDLLEXPORT listkey_getVerselistIterator(const char *list, const char *key, const char *v11n = "KJV");
 
 }
 #ifdef __cplusplus

@@ -56,11 +56,17 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
-	VerseKey parser(key->getText());
+	SWKey *p = (module) ? module->CreateKey() : (key) ? key->clone() : new VerseKey();
+        VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
+        if (!parser) {
+        	delete p;
+                parser = new VerseKey();
+        }
+        *parser = key->getText();
 
 	SWBuf orig = text;
 	const char *from = orig.c_str();
-	
+
 	XMLTag tag;
 	bool strongsMarkup = false;
 
@@ -74,20 +80,20 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 			continue;
 		}
 
-		
+
 		if (*from == '<') {
 			intoken = true;
 			token = "";
 			continue;
 		}
-		
-		
-		
+
+
+
 		if (*from == '>') {	// process tokens
-			intoken = false;			
+			intoken = false;
 			if (!strncmp(token, "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
 				tag = token;
-				
+
 				if (!tag.isEndTag()) {
 					if (tag.getAttribute("type") && (!strcmp("x-strongsMarkup", tag.getAttribute("type"))
 											|| !strcmp("strongsMarkup", tag.getAttribute("type")))	// deprecated
@@ -95,7 +101,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 						tag.setEmpty(false);  // handle bug in KJV2003 module where some note open tags were <note ... />
 						strongsMarkup = true;
 					}
-					
+
 					if (!tag.isEmpty()) {
 //					if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {
 						refs = "";
@@ -116,7 +122,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 						startTag.setAttribute("swordFootnote", buf);
 						if ((startTag.getAttribute("type")) && (!strcmp(startTag.getAttribute("type"), "crossReference"))) {
 							if (!refs.length())
-								refs = parser.ParseVerseList(tagText.c_str(), parser, true).getRangeText();
+								refs = parser->ParseVerseList(tagText.c_str(), *parser, true).getRangeText();
 							module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
 						}
 					}
@@ -137,7 +143,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 				if (refs.length()) {
 					refs.append("; ");
 				}
-				
+
 				const char* attr = strstr(token.c_str() + 9, "osisRef=\"");
 				const char* end  = attr ? strchr(attr+9, '"') : 0;
 
@@ -165,6 +171,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 		}
 		else tagText.append(*from);
 	}
+        delete parser;
 	return 0;
 }
 

@@ -72,12 +72,7 @@ SWBuf &HREFCom::getRawEntryBuf() {
 	unsigned short size;
 	VerseKey *key = 0;
 
-	SWTRY {
-		key = SWDYNAMIC_CAST(VerseKey, this->key);
-	}
-	SWCATCH ( ... ) {}
-	if (!key)
-		key = new VerseKey(this->key);
+        key = &getVerseKey();
 
 	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
 	entrySize = size;        // support getEntrySize call

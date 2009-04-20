@@ -549,23 +549,23 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			text = ref + text;
 			
 			if (vkey->Verse()) {
-				VerseKey tmp;
-				tmp = *vkey;
-				tmp.AutoNormalize(0);
-				tmp.Headings(1);
-				
+				VerseKey *tmp = (VerseKey *)vkey->clone();
+				*tmp = *vkey;
+				tmp->AutoNormalize(0);
+				tmp->Headings(1);
+
 				text += "</verse>";
-				
-				tmp = MAXVERSE;
-				if (*vkey == tmp) {
-					tmp.Verse(0);
+
+				*tmp = MAXVERSE;
+				if (*vkey == *tmp) {
+					tmp->Verse(0);
 //					sprintf(ref, "\t</div>");
 //					pushString(&to, ref);
-					tmp = MAXCHAPTER;
-					tmp = MAXVERSE;
-					if (*vkey == tmp) {
-						tmp.Chapter(0);
-						tmp.Verse(0);
+					*tmp = MAXCHAPTER;
+					*tmp = MAXVERSE;
+					if (*vkey == *tmp) {
+						tmp->Chapter(0);
+						tmp->Verse(0);
 //						sprintf(ref, "\t</div>");
 //						pushString(&to, ref);
 /*
@@ -576,6 +576,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 */
 					}
 				}
+                                delete tmp;
 			}
 //			else if (vkey->Chapter()) {
 //				sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());

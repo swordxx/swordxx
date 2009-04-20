@@ -303,10 +303,6 @@ char RawVerse::createModule(const char *ipath, const char *v11n)
 
 	delete [] path;
 	delete [] buf;
-/*
-	RawVerse rv(path);
-	VerseKey mykey("Rev 22:21");
-*/
 	
 	return 0;
 }

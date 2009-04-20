@@ -36,7 +36,9 @@ class SWKey;
   */
 class SWDLLEXPORT SWCom : public SWModule {
 
-	mutable VerseKey *tmpVK;
+	mutable VerseKey *tmpVK1;
+	mutable VerseKey *tmpVK2;
+        mutable bool tmpSecond;
 	char *versification;
 
 protected:

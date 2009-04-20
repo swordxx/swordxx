@@ -160,6 +160,7 @@ int main(int argc, char **argv) {
 	if (argc < 2) {
 //		fprintf(stderr, "usage: %s <vpl_file> </path/to/mod> [0|1 - file includes prepended verse references]\n", argv[0]);
 		fprintf(stderr, "usage: %s <source_vpl_file> </path/to/output/mod/> [0|1 - prepended verse refs] [0|1 - NT only]\n\n", argv[0]);
+		fprintf(stderr, "\tWARNING: THIS IS CURRENTLY A KJV-VERSIFICATION-ONLY UTILITY\n");
 		fprintf(stderr, "\tWith no verse refs, source file must contain exactly 31102 lines.\n");
 		fprintf(stderr, "\tThis is KJV verse count plus headings for MODULE,\n");
 		fprintf(stderr, "\tTESTAMENT, BOOK, CHAPTER. An example snippet follows:\n\n");

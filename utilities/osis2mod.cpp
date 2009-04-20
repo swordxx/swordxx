@@ -88,31 +88,13 @@ ListKey currentKeyIDs = ListKey();
 
 std::vector<ListKey> linkedVerses;
 
-const char *osisabbrevs[] = {
-	"Gen",    "Exod",   "Lev",    "Num",    "Deut",   "Josh",   "Judg",   "Ruth",
-	"1Sam",   "2Sam",   "1Kgs",   "2Kgs",   "1Chr",   "2Chr",   "Ezra",   "Neh",
-	"Esth",   "Job",    "Ps",     "Prov",   "Eccl",   "Song",   "Isa",    "Jer",
-	"Lam",    "Ezek",   "Dan",    "Hos",    "Joel",   "Amos",   "Obad",   "Jonah",
-	"Mic",    "Nah",    "Hab",    "Zeph",   "Hag",    "Zech",   "Mal",
-
-	"Matt",   "Mark",   "Luke",   "John",   "Acts",   "Rom",    "1Cor",   "2Cor",
-	"Gal",    "Eph",    "Phil",   "Col",    "1Thess", "2Thess", "1Tim",   "2Tim",
-	"Titus",  "Phlm",   "Heb",    "Jas",    "1Pet",   "2Pet",   "1John",  "2John",
-	"3John",  "Jude",   "Rev"
-};
-
 static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
 static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
-	bool match = false;
-	for (int i = 0; i < 66; i++) {
-		if (!strcmp(buf, osisabbrevs[i])) {
-			match = true;
-			break;
-		}
-	}
-	return match;
+        VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
+        VerseMgr::System *v11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
+        return v11n->getBookNumberByOSISName(buf) >= 0;
 }
 
 /**
@@ -307,6 +289,8 @@ void prepareSWVerseKey(SWBuf &buf) {
 
 bool isKJVRef(const char *buf) {
 	VerseKey vk, test;
+        vk.setVersificationSystem(currentVerse.getVersificationSystem());
+        test.setVersificationSystem(currentVerse.getVersificationSystem());
 	vk.AutoNormalize(0);
 	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
 	vk.Persist(1);
@@ -351,6 +335,7 @@ bool isKJVRef(const char *buf) {
  */
 void makeKJVRef(VerseKey &key) {
 	VerseKey saveKey;
+        saveKey.setVersificationSystem(key.getVersificationSystem());
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = currentVerse;
@@ -403,10 +388,12 @@ void writeEntry(SWBuf &text, bool force = false) {
 	}
 
 	static VerseKey lastKey;
+	lastKey.setVersificationSystem(currentKey.getVersificationSystem());
 	lastKey.AutoNormalize(0);
 	lastKey.Headings(1);
 
 	VerseKey saveKey;
+        saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = currentVerse;
@@ -455,6 +442,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 		int testmt = currentVerse.Testament();
 		if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
 			VerseKey t;
+                        t.setVersificationSystem(currentVerse.getVersificationSystem());
 			t.AutoNormalize(0);
 			t.Headings(1);
 			t = currentVerse;
@@ -518,6 +506,7 @@ void linkToEntry(VerseKey& linkKey, VerseKey& dest) {
 	}
 
 	VerseKey saveKey;
+        saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = currentVerse;
@@ -657,6 +646,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				}
 				// Initializing a temporary and copying that because there were problems with setting the text directly
 				VerseKey t;
+                                t.setVersificationSystem(currentVerse.getVersificationSystem());
 				t.AutoNormalize(0);
 				t.Headings(1);
 				t = token.getAttribute("osisID");
@@ -699,6 +689,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// as it does not change the content of VerseKey!
 				// currentVerse = token.getAttribute("osisID");
 				VerseKey t;
+                                t.setVersificationSystem(currentVerse.getVersificationSystem());
 				t.AutoNormalize(0);
 				t.Headings(1);
 				t = token.getAttribute("osisID");
@@ -1157,10 +1148,12 @@ void writeLinks()
 {
 	// Link all the verses
 	VerseKey destKey;
+        destKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	destKey.AutoNormalize(0);
 	destKey.Headings(1);
 
 	VerseKey linkKey;
+        linkKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	linkKey.AutoNormalize(0);
 	linkKey.Headings(1);
 	for (unsigned int i = 0; i < linkedVerses.size(); i++) {
@@ -1258,6 +1251,8 @@ int main(int argc, char **argv) {
 		}
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
+
+        currentVerse.setVersificationSystem(v11n);
 
 	switch (compType) {	// these are deleted by zText
 		case 0: break;
