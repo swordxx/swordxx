@@ -506,6 +506,7 @@
         <FILE FILENAME="..\..\src\modules\filters\utf8cantillation.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8cantillation" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\utf8greekaccents.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8greekaccents" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\utf8hebrewpoints.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8hebrewpoints" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\modules\filters\utf8arabicpoints.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8arabicpoints" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\utf8html.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8html" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\utf8latin1.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8latin1" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\modules\filters\utf8nfc.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utf8nfc" FORMNAME="" DESIGNCLASS=""/>

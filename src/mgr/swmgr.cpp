@@ -76,6 +76,7 @@
 #include <utf8greekaccents.h>
 #include <utf8cantillation.h>
 #include <utf8hebrewpoints.h>
+#include <utf8arabicpoints.h>
 #include <greeklexattribs.h>
 #include <swfiltermgr.h>
 #include <swcipher.h>
@@ -212,6 +213,10 @@ void SWMgr::init() {
 
 	tmpFilter = new UTF8HebrewPoints();
 	optionFilters.insert(OptionFilterMap::value_type("UTF8HebrewPoints", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new UTF8ArabicPoints();
+	optionFilters.insert(OptionFilterMap::value_type("UTF8ArabicPoints", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new UTF8Cantillation();

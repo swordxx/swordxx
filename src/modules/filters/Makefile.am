@@ -64,6 +64,7 @@ libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
 
 libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
+libsword_la_SOURCES += $(filtersdir)/utf8arabicpoints.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8greekaccents.cpp
 
 libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp

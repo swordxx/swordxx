@@ -139,6 +139,7 @@ pkginclude_HEADERS += $(swincludedir)/utf8bidireorder.h
 pkginclude_HEADERS += $(swincludedir)/utf8cantillation.h
 pkginclude_HEADERS += $(swincludedir)/utf8greekaccents.h
 pkginclude_HEADERS += $(swincludedir)/utf8hebrewpoints.h
+pkginclude_HEADERS += $(swincludedir)/utf8arabicpoints.h
 pkginclude_HEADERS += $(swincludedir)/utf8html.h
 pkginclude_HEADERS += $(swincludedir)/utf8latin1.h
 pkginclude_HEADERS += $(swincludedir)/utf8nfc.h

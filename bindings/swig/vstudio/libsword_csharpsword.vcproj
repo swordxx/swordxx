@@ -892,6 +892,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\utf8arabicpoints.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\utf8html.h"
 				>
 			</File>

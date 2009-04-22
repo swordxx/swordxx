@@ -46,7 +46,7 @@ void printsyntax() {
 	fprintf (stderr, "Valid search_type values are: regex, multiword, and phrase(def).\n");
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
-	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents),\n");
+	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents), p (Arabic Vowels)\n");
 	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping,\n");
 	fprintf (stderr, "  b (Bi-Directional Reordering), x (Red Words of Christ)\n");
 
@@ -143,6 +143,8 @@ int main(int argc, char **argv)
 					optionfilters |= OP_BIDI;
 				if (strchr(argv[i+1], 'x'))
 					optionfilters |= OP_RED;
+				if (strchr(argv[i+1], 'p'))
+					optionfilters |= OP_ARABICPOINTS;
 				i++;
 			}
 		}

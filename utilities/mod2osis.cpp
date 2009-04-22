@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 	int lastBook = 9999;
 	int lastChap = 9999;
 	if (!vkey) {
-		cerr << "Currently mod2zmod only works with verse keyed modules\n\n";
+		cerr << "Currently mod2osis only works with verse keyed modules\n\n";
 		exit(-1);
 	}
 

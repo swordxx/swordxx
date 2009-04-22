@@ -60,6 +60,7 @@
       ../../src/modules/filters/utf8cantillation.o 
       ../../src/modules/filters/utf8greekaccents.o 
       ../../src/modules/filters/utf8hebrewpoints.o 
+      ../../src/modules/filters/utf8arabicpoints.o 
       ../../src/modules/filters/utf8html.o 
       ../../src/modules/filters/utf8latin1.o ../../src/modules/filters/utf8nfc.o 
       ../../src/modules/filters/utf8nfkd.o 

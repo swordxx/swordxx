@@ -32,6 +32,7 @@
       ..\..\obj\utf8arshaping.obj ..\..\obj\utf8bidireorder.obj 
       ..\..\obj\utf8cantillation.obj ..\..\obj\utf8greekaccents.obj 
       ..\..\obj\utf8hebrewpoints.obj ..\..\obj\utf8html.obj 
+      ...\..\obj\utf8arabicpoints.obj 
       ..\..\obj\utf8latin1.obj ..\..\obj\utf8nfc.obj ..\..\obj\utf8nfkd.obj 
       ..\..\obj\utf8transliterator.obj ..\..\obj\zcom.obj ..\..\obj\rawld4.obj 
       ..\..\obj\zipcomprs.obj ..\..\obj\zld.obj ..\..\obj\entriesblk.obj 
@@ -177,6 +178,7 @@
       <FILE FILENAME="..\..\src\modules\filters\utf8cantillation.cpp" FORMNAME="" UNITNAME="utf8cantillation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\utf8greekaccents.cpp" FORMNAME="" UNITNAME="utf8greekaccents" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\utf8hebrewpoints.cpp" FORMNAME="" UNITNAME="utf8hebrewpoints" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\src\modules\filters\utf8arabicpoints.cpp" FORMNAME="" UNITNAME="utf8arabicpoints" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\utf8html.cpp" FORMNAME="" UNITNAME="utf8html" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\utf8latin1.cpp" FORMNAME="" UNITNAME="utf8latin1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\src\modules\filters\utf8nfc.cpp" FORMNAME="" UNITNAME="utf8nfc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

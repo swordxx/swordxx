@@ -64,6 +64,7 @@
       ..\..\src\modules\filters\utf8cantillation.obj 
       ..\..\src\modules\filters\utf8greekaccents.obj 
       ..\..\src\modules\filters\utf8hebrewpoints.obj 
+      ..\..\src\modules\filters\utf8arabicpoints.obj 
       ..\..\src\modules\filters\utf8html.obj 
       ..\..\src\modules\filters\utf8latin1.obj 
       ..\..\src\modules\filters\utf8nfc.obj 
