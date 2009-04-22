@@ -1,8 +1,26 @@
 #!/usr/bin/perl
-
+#******************************************************************************
+#
 # This program converts a given module into a compressed module of the same type.
 # This is just an example to demomstrate the power of the Perl Sword bindings.
 # The code is almost written the same way the C++ of mod2zmod.cpp code was written
+#
+# $Id$
+#
+# Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+#	CrossWire Bible Society
+#	P. O. Box 2528
+#	Tempe, AZ  85280-2528
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation version 2.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
 
 use Sword;
 use strict;

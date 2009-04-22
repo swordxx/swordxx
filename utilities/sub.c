@@ -1,5 +1,7 @@
 /******************************************************************************
- * Strips ascii 13 chars out of a file
+ * This little utility substitutes all occurances of a string with another
+ * string.  Is this useful?  Maybe not.  But it's been here since r2 so
+ * it seems a shame to remove it :)  Currently not built by build system
  *
  * $Id$
  *
@@ -18,37 +20,39 @@
  * General Public License for more details.
  *
  */
-#include <fcntl.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 
 main(int argc, char **argv)
 {
-	int fd, loop;
-	char ch;
-	char breakcnt = 0;
+	FILE *fp;
+	char *buf;
+	int size;
 
-	if (argc != 2) {
-		fprintf(stderr, "This program writes to stdout, so to be useful,\n\tit should be redirected (e.g no13 bla > bla.dat)\nusage: %s <filename>\n", argv[0]);
-		exit(1);
+	if ((argc < 3) || (argc > 4)) {
+		fprintf(stderr, "usage: %s <string> <substitute string> [filename]\n", *argv);
+		exit(-1);
 	}
-	fd = open(argv[1], O_RDONLY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
-	while (read(fd, &ch, 1) == 1) {
-		if (ch == 0x0d) {	// CR
-			breakcnt++;
+
+	if (argc > 3)
+		fp = fopen(argv[3], "r");
+	else	fp = stdin;
+
+	size = strlen(argv[1]);
+	buf = (char *)calloc(size + 1, 1);
+
+	while ((buf[size - 1] = fgetc(fp)) != EOF) {
+		if (!strcmp(buf, argv[1])) {
+			printf("\n%s", argv[2]);
+			memset(buf, 0, size);
 			continue;
 		}
-		if (ch == 0x1a)	// Ctrl-Z
-			continue;
-
-		if (ch != 0x0a) {	// LF
-			if (breakcnt > 1) {
-				for (loop = breakcnt; loop > 0; loop--)
-					putchar(0x0d);
-				putchar(0x0a);
-			}
-			breakcnt=0;
+		if (*buf) {
+			printf("%c", *buf);
 		}
-		putchar(ch);
+		memmove(buf, &buf[1], size);
 	}
-	close(fd);
+	buf[size - 1] = 0;
+	printf("%s", buf);
 }

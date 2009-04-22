@@ -37,13 +37,48 @@ SWBuf baseDir;
 SWBuf confPath;
 
 
+class MyInstallMgr : public InstallMgr {
+public:
+	MyInstallMgr(const char *privatePath = "./") : InstallMgr(privatePath) {}
+
+virtual bool isUserDisclaimerConfirmed() const {
+	static bool confirmed = false;
+        if (!confirmed) {
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
+		cout << "Although Install Manager provides a convenient way for installing\n";
+		cout << "and upgrading SWORD components, it also uses a systematic method\n";
+		cout << "for accessing sites which gives packet sniffers a target to lock\n";
+		cout << "into for singling out users. \n\n\n";
+		cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
+		cout << "YOU SHOULD *NOT* USE INSTALL MANAGER'S REMOTE SOURCE FEATURES.\n\n\n";
+		cout << "Also, Remote Sources other than CrossWire may contain less than\n";
+		cout << "quality modules, modules with unorthodox content, or even modules\n";
+		cout << "which are not legitimately distributable.  Many repositories\n";
+		cout << "contain wonderfully useful content.  These repositories simply\n";
+		cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
+		cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
+		cout << "If you understand this and are willing to enable remote source features\n";
+		cout << "then type yes at the prompt\n\n";
+		cout << "enable? [no] ";
+
+		char prompt[10];
+		fgets(prompt, 9, stdin);
+		confirmed = (!strcmp(prompt, "yes\n"));
+	}
+	return confirmed;
+}
+
+};
+
+
 void init() {
 	mgr = new SWMgr();
-	char *envhomedir  = getenv ("HOME");
-	SWBuf baseDir = (envhomedir) ? envhomedir : ".";
+	SWBuf baseDir = mgr->getHomeDir();
+	if (baseDir.length() < 1) baseDir = ".";
 	baseDir += "/.sword/InstallMgr";
 	confPath = baseDir + "/InstallMgr.conf";
-	installMgr = new InstallMgr(baseDir);
+	installMgr = new MyInstallMgr(baseDir);
 }
 
 
@@ -77,30 +112,6 @@ void usage(const char *progName) {
 }
 
 
-bool showDisclaimer() {
-	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-	cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
-	cout << "Although Install Manager provides a convenient way for installing\n";
-	cout << "and upgrading SWORD components, it also uses a systematic method\n";
-	cout << "for accessing sites which gives packet sniffers a target to lock\n";
-	cout << "into for singling out users. \n\n\n";
-	cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
-	cout << "YOU SHOULD *NOT* USE INSTALL MANAGER'S REMOTE SOURCE FEATURES.\n\n\n";
-	cout << "Also, Remote Sources other than CrossWire may contain less than\n";
-	cout << "quality modules, module with unorthodox content, or even modules\n";
-	cout << "which are not legitimately distributable.  Many repositories\n";
-	cout << "contain wonderfully useful content.  These repositories simply\n";
-	cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
-	cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
-	cout << "If you understand this and are willing to enable remote source features\n";
-	cout << "then type yes at the prompt\n\n";
-	cout << "enable? [no] ";
-	char prompt[10];
-	fgets(prompt, 9, stdin);
-	return (!strcmp(prompt, "yes\n"));
-}
-
-
 void createBasicConfig(bool enableRemote, bool addCrossWire) {
 
 	FileMgr::createParent(confPath.c_str());
@@ -119,9 +130,10 @@ void createBasicConfig(bool enableRemote, bool addCrossWire) {
 	config.Save();
 }
 
+
 void initConfig() {
 
-	bool enable = showDisclaimer();
+	bool enable = installMgr->isUserDisclaimerConfirmed();
 
 	createBasicConfig(enable, true);
 
@@ -132,7 +144,7 @@ void initConfig() {
 
 void syncConfig() {
 
-	if (!showDisclaimer()) {  // assert disclaimer is accepted
+	if (!installMgr->isUserDisclaimerConfirmed()) {  // assert disclaimer is accepted
 		cout << "\n\nDisclaimer not accepted.  Aborting.";
 		return;
 	}
@@ -142,8 +154,6 @@ void syncConfig() {
 		finish(1); // cleanup and don't exit
 		init();    // re-init with InstallMgr which uses our new config
 	}
-
-	installMgr->setUserDisclaimerConfirmed(true);
 
 	if (!installMgr->refreshRemoteSourceConfiguration()) 
 		cout << "\nSync'd config file with master remote source list.\n";
@@ -198,9 +208,6 @@ void refreshRemoteSource(const char *sourceName) {
 		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
 		finish(-3);
 	}
-
-	// since a remote source is in the config files, we've already confirmed
-	installMgr->setUserDisclaimerConfirmed(true);
 
 	if (!installMgr->refreshRemoteSource(source->second))
 		cout << "Remote Source Refreshed\n";
@@ -263,8 +270,6 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
 		finish(-4);
 	}
 	module = it->second;
-
-	installMgr->setUserDisclaimerConfirmed(true);
 
 	int error = installMgr->installModule(mgr, 0, module->Name(), is);
 	if (error) {

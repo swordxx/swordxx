@@ -1,6 +1,17 @@
 package org.crosswire.util;
 
 /**
+ * <p>
+ * I am placing this code in the Public Domain. Do with it as you will.
+ * This software comes with no guarantees or warranties but with
+ * plenty of well-wishing instead!
+ * Please visit <a href="http://iharder.net/xmlizable">http://iharder.net/xmlizable</a>
+ * periodically to check for updates or to contribute improvements.
+ * </p>
+ *
+ * @author Robert Harder
+ * @author rob@iharder.net
+ * @version 1.3.4
  * Changed last char from '/' to '-' because cookies can't use '/' so we're not really a BASE64
  * standard encoder anymore
  * Changed package name.  --crosswire.
@@ -18,17 +29,6 @@ package org.crosswire.util;
  *  <li>v1.3.3 - Fixed I/O streams which were totally messed up.</li>
  * </ul>
  *
- * <p>
- * I am placing this code in the Public Domain. Do with it as you will.
- * This software comes with no guarantees or warranties but with
- * plenty of well-wishing instead!
- * Please visit <a href="http://iharder.net/xmlizable">http://iharder.net/xmlizable</a>
- * periodically to check for updates or to contribute improvements.
- * </p>
- *
- * @author Robert Harder
- * @author rob@iharder.net
- * @version 1.3.4
  */
 public class Base64
 {

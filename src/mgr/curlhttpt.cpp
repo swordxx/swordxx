@@ -41,8 +41,8 @@ struct FtpFile {
 };
 
 
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
+int my_httpfwrite(void *buffer, size_t size, size_t nmemb, void *stream);
+int my_httpfprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 
 static CURLHTTPTransport_init _CURLHTTPTransport_init;
 
@@ -55,7 +55,7 @@ CURLHTTPTransport_init::~CURLHTTPTransport_init() {
 //	curl_global_cleanup();
 }
 
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
+int my_httpfwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 	struct FtpFile *out=(struct FtpFile *)stream;
 	if (out && !out->stream && !out->destBuf) {
 		/* open file for writing */
@@ -73,7 +73,7 @@ int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 }
 
 
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
+int my_httpfprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
 	if (clientp) {
 		((StatusReporter *)clientp)->statusUpdate(dltotal, dlnow);
 	}
@@ -81,7 +81,7 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 }
 
 
-static int my_trace(CURL *handle, curl_infotype type, unsigned char *data, size_t size, void *userp) {
+static int myhttp_trace(CURL *handle, curl_infotype type, unsigned char *data, size_t size, void *userp) {
 	SWBuf header;
 	(void)userp; /* prevent compiler warning */
 	(void)handle; /* prevent compiler warning */
@@ -129,13 +129,13 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 
 		SWBuf credentials = u + ":" + p;
 		curl_easy_setopt(session, CURLOPT_USERPWD, credentials.c_str());
-		curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, my_fwrite);
+		curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, my_httpfwrite);
 		if (!passive)
 			curl_easy_setopt(session, CURLOPT_FTPPORT, "-");
 		curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
 		curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
-		curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_fprogress);
-		curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, my_trace);
+		curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_httpfprogress);
+		curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, myhttp_trace);
 		/* Set a pointer to our struct to pass to the callback */
 		curl_easy_setopt(session, CURLOPT_FILE, &ftpfile);
 

@@ -5,6 +5,7 @@ pkginclude_HEADERS += $(swincludedir)/GreekChars.h
 pkginclude_HEADERS += $(swincludedir)/canon.h
 pkginclude_HEADERS += $(swincludedir)/cipherfil.h
 pkginclude_HEADERS += $(swincludedir)/curlftpt.h
+pkginclude_HEADERS += $(swincludedir)/curlhttpt.h
 pkginclude_HEADERS += $(swincludedir)/defs.h
 pkginclude_HEADERS += $(swincludedir)/echomod.h
 pkginclude_HEADERS += $(swincludedir)/encfiltmgr.h
