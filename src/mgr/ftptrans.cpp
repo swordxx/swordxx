@@ -29,6 +29,9 @@
 #include <dirent.h>
 #include <swlog.h>
 
+extern "C" {
+#include <ftpparse.h>
+}
 
 using std::vector;
 

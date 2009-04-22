@@ -45,6 +45,7 @@ extern "C" {
 
 #ifdef CURLAVAILABLE
 #include <curlftpt.h>
+#include <curlhttpt.h>
 #else
 #include <ftplibftpt.h>
 #endif
@@ -83,6 +84,14 @@ FTPTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *s
 	return new CURLFTPTransport(host, statusReporter);
 #else
 	return new FTPLibFTPTransport(host, statusReporter);
+#endif
+}
+
+FTPTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporter *statusReporter) {
+#ifdef CURLAVAILABLE
+	return new CURLHTTPTransport(host, statusReporter);
+#else
+	return 0;
 #endif
 }
 
@@ -197,7 +206,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 		// to be sure all files are closed
 		// this does not remove the .conf information from SWMgr
 		manager->deleteModule(modName);
-			
+
 		fileBegin = module->second.lower_bound("File");
 		fileEnd = module->second.upper_bound("File");
 
@@ -266,7 +275,7 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 		trans->setPasswd(p);
 	}
 	trans->setPassive(passive);
-	
+
 	SWBuf urlPrefix = (SWBuf)"ftp://" + is->source;
 
 	// let's be sure we can connect.  This seems to be necessary but sucks
@@ -276,7 +285,7 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 //		 return -1;
 //	}
 
-	   
+
 	if (dirTransfer) {
 		SWBuf dir = (SWBuf)is->directory.c_str();
 		removeTrailingSlash(dir);
@@ -470,47 +479,6 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	return 1;
 }
 
-
-// override this and provide an input mechanism to allow your users
-// to enter the decipher code for a module.
-// return true you added the cipher code to the config.
-// default to return 'aborted'
-bool InstallMgr::getCipherCode(const char *modName, SWConfig *config) {
-	return false;
-
-/* a sample implementation, roughly taken from the windows installmgr
-
-	SectionMap::iterator section;
-	ConfigEntMap::iterator entry;
-	SWBuf tmpBuf;
-	section = config->Sections.find(modName);
-	if (section != config->Sections.end()) {
-		entry = section->second.find("CipherKey");
-		if (entry != section->second.end()) {
-			entry->second = GET_USER_INPUT();
-			config->Save();
-
-			// LET'S SHOW THE USER SOME SAMPLE TEXT FROM THE MODULE
-			SWMgr *mgr = new SWMgr();
-			SWModule *mod = mgr->Modules[modName];
-			mod->setKey("Ipet 2:12");
-			tmpBuf = mod->StripText();
-			mod->setKey("gen 1:10");
-			tmpBuf += "\n\n";
-			tmpBuf += mod->StripText();
-			SOME_DIALOG_CONTROL->SETTEXT(tmpBuf.c_str());
-			delete mgr;
-
-			// if USER CLICKS OK means we should return true
-			return true;
-		}
-	}
-	return false;
-*/
-
-}
-
-
 int InstallMgr::refreshRemoteSource(InstallSource *is) {
 
 	// assert user disclaimer has been confirmed
@@ -520,7 +488,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	removeTrailingSlash(root);
 	SWBuf target = root + "/mods.d";
 	int errorCode = -1; //0 means successful
-	
+
 	FileMgr::removeDir(target.c_str());
 
 	if (!FileMgr::existsDir(target))
@@ -528,17 +496,17 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 
 #ifndef EXCLUDEZLIB
 	SWBuf archive = root + "/mods.d.tar.gz";
-	
+
 	errorCode = ftpCopy(is, "mods.d.tar.gz", archive.c_str(), false);
 	if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
 		FileDesc *fd = FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY);
 		untargz(fd->getFd(), root.c_str());
 		FileMgr::getSystemFileMgr()->close(fd);
 	}
-	else if (!term) //if the tar.gz download was canceled don't continue with another download
+	else
 #endif
 	errorCode = ftpCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
-	
+
 	is->flush();
 	return errorCode;
 }

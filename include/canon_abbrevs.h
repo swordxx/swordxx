@@ -222,6 +222,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"EPJ", "EpJer"},		// Epistle of Jeremiah
   {"EPJER", "EpJer"},		// Epistle of Jeremiah
   {"EPLAO", "EpLao"},		// Laodiceans
+  {"ES", "Esth"},               // Esther
   {"ESDRAS A", "1Esd"},		// I Esdras
   {"ESDRAS B", "2Esd"},		// II Esdras
   {"ESDRASA", "1Esd"},		// I Esdras
@@ -384,6 +385,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"J", "Josh"},		// Joshua
   {"JAMES", "Jas"},		// James
   {"JAS", "Jas"},		// James
+  {"JD", "Judg"},		// Judges
   {"JDA", "JudgA"},		// Judges (Codex Alexandrinus)
   {"JDB", "JudgB"},		// Judges (Codex Vaticanus)
   {"JDGS", "Judg"},		// Judges
@@ -406,6 +408,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"JOSHUA (CODEX VATICANUS)", "JoshB"},		// Joshua (Codex Vaticanus)
   {"JSA", "JoshA"},		// Joshua (Codex Alexandrinus)
   {"JSB", "JoshB"},		// Joshua (Codex Vaticanus)
+  {"JU", "Jude"},		// Jude
   {"JUB", "Jub"},		// Jubilees
   {"JUBILEES", "Jub"},		// Jubilees
   {"JUDE", "Jude"},		// Jude
@@ -421,6 +424,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"LAMENTATIONS", "Lam"},		// Lamentations
   {"LAO", "EpLao"},		// Laodiceans
   {"LAODICEANS", "EpLao"},		// Laodiceans
+  {"LE", "Lev"},		// Leviticus
   {"LESSER GENESIS", "Jub"},		// Jubilees
   {"LETJER", "EpJer"},		// Epistle of Jeremiah
   {"LETTER OF JEREMIAH", "EpJer"},		// Epistle of Jeremiah
@@ -462,6 +466,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"PHLM", "Phlm"},		// Philemon
   {"PHM", "Phlm"},		// Philemon
   {"PHP", "Phil"},		// Philippians
+  {"PR", "Prov"},		// Proverbs
   {"PRA", "PrAzar"},		// Prayer of Azariah
   {"PRAYER OF AZARIAH", "PrAzar"},		// Prayer of Azariah
   {"PRAYER OF MANASSEH", "PrMan"},		// Prayer of Manasses

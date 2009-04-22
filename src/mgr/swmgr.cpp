@@ -254,11 +254,7 @@ SWBuf SWMgr::getHomeDir() {
 	SWBuf homeDir = getenv("HOME");
 	if (!homeDir.length()) {
 		// silly windows
-		homeDir = getenv("HOMEDRIVE");
-		if (homeDir.length()) {
-			homeDir += getenv("HOMEPATH");
-			homeDir += "/Application Data";
-		}
+		homeDir = getenv("APPDATA");
 	}
 	if (homeDir.length()) {
 		if ((homeDir[homeDir.length()-1] != '\\') && (homeDir[homeDir.length()-1] != '/')) {

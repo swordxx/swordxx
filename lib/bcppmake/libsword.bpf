@@ -150,6 +150,7 @@ USEUNIT("..\..\src\modules\common\rawverse4.cpp");
 USEUNIT("..\..\src\modules\filters\teihtmlhref.cpp");
 USEUNIT("..\..\src\mgr\versemgr.cpp");
 USEUNIT("..\..\src\modules\filters\osisruby.cpp");
+USEUNIT("..\..\src\mgr\curlhttpt.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
