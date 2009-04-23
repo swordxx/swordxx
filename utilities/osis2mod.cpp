@@ -28,6 +28,7 @@
 #include <utilstr.h>
 #include <swmgr.h>
 #include <rawtext.h>
+#include <rawtext4.h>
 #include <swbuf.h>
 #include <utilxml.h>
 #include <listkey.h>
@@ -92,9 +93,9 @@ static bool inCanonicalOSISBook = true; // osisID is for a book that is not in S
 static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
-        VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
-        const VerseMgr::System *v11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
-        return v11n->getBookNumberByOSISName(buf) >= 0;
+	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
+	const VerseMgr::System *v11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
+	return v11n->getBookNumberByOSISName(buf) >= 0;
 }
 
 /**
@@ -287,10 +288,10 @@ void prepareSWVerseKey(SWBuf &buf) {
 	}
 }
 
-bool isKJVRef(const char *buf) {
+bool isValidRef(const char *buf) {
 	VerseKey vk, test;
-        vk.setVersificationSystem(currentVerse.getVersificationSystem());
-        test.setVersificationSystem(currentVerse.getVersificationSystem());
+	vk.setVersificationSystem(currentVerse.getVersificationSystem());
+	test.setVersificationSystem(currentVerse.getVersificationSystem());
 	vk.AutoNormalize(0);
 	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
 	vk.Persist(1);
@@ -311,17 +312,16 @@ bool isKJVRef(const char *buf) {
 /**
  * This routine is used to ensure that all the text in the input is saved to the module.
  * Assumption: The input orders all the verses for a chapter in numerical order. Thus, any
- * verses that are not in the KJV versification (v11n) follow those that are.
+ * verses that are not in the chosen versification (v11n) follow those that are.
  *
- * The prior implementation of this adjusted the verse to the last one that is in the KJV v11n.
+ * The prior implementation of this adjusted the verse to the last one that is in the chosen v11n.
  * If it the chapter were extra, then it is appended to the last verse of the last
- * chapter in the KJV v11n for that book. If it is just extra verses for a chapter, then it is
+ * chapter in the chosen v11n for that book. If it is just extra verses for a chapter, then it is
  * appended to the last verse of the chapter.
  *
- * The problem with this is when a OSIS verse refers to more than one KJV v11n verse, e.g.
- * osisID="Gen.1.29 Gen.1.30 Gen.1.31" (Gen.1.31 is the KJV v11n last verse) and then it is
- * followed by Gen.1.31. In this case, we need to append Gen.1.29 and make sure that Gen.1.30
- * and Gen.1.31 link to the new Gen.1.29.
+ * The problem with this is when a OSIS verse refers to more than one verse, e.g.
+ * osisID="Gen.1.29 Gen.1.30 Gen.1.31" (Gen.1.31 is the last verse of the chapter in the chosen v11n)
+ * and then it is followed by Gen.1.32.
  *
  * This routine assumes that linking is postponed to the end so that in the example Gen.1.30-31
  * are not linked but rather empty. This routine will then find the last verse in the computed
@@ -333,9 +333,9 @@ bool isKJVRef(const char *buf) {
  *
  * param key the key that may need to be adjusted
  */
-void makeKJVRef(VerseKey &key) {
+void makeValidRef(VerseKey &key) {
 	VerseKey saveKey;
-        saveKey.setVersificationSystem(key.getVersificationSystem());
+	saveKey.setVersificationSystem(key.getVersificationSystem());
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = currentVerse;
@@ -393,7 +393,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 	lastKey.Headings(1);
 
 	VerseKey saveKey;
-        saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
+	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = currentVerse;
@@ -403,8 +403,8 @@ void writeEntry(SWBuf &text, bool force = false) {
 
 		currentVerse = lastKey;
 
-		if (!isKJVRef(currentVerse)) {
-			makeKJVRef(currentVerse);
+		if (!isValidRef(currentVerse)) {
+			makeValidRef(currentVerse);
 		}
 
 #ifdef _ICU_
@@ -442,7 +442,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 		int testmt = currentVerse.Testament();
 		if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
 			VerseKey t;
-                        t.setVersificationSystem(currentVerse.getVersificationSystem());
+			t.setVersificationSystem(currentVerse.getVersificationSystem());
 			t.AutoNormalize(0);
 			t.Headings(1);
 			t = currentVerse;
@@ -459,10 +459,10 @@ void writeEntry(SWBuf &text, bool force = false) {
 				firstNT = false;
 				break;
 			}
-                }
+		}
 
 		// If the entry already exists, then append this entry to the text.
-		// This is for verses that are outside the KJV versification. They are appended to the prior verse.
+		// This is for verses that are outside the chosen versification. They are appended to the prior verse.
 		// The space should not be needed if we retained verse tags.
 		SWBuf currentText = module->getRawEntry();
 		if (currentText.length()) {
@@ -500,13 +500,13 @@ void writeEntry(SWBuf &text, bool force = false) {
 
 void linkToEntry(VerseKey& linkKey, VerseKey& dest) {
 
-	// Only link verses that are in the KJV versification.
-	if (!isKJVRef(linkKey)) {
+	// Only link verses that are in the versification.
+	if (!isValidRef(linkKey)) {
 		return;
 	}
 
 	VerseKey saveKey;
-        saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
+	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	saveKey.AutoNormalize(0);
 	saveKey.Headings(1);
 	saveKey = currentVerse;
@@ -646,7 +646,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				}
 				// Initializing a temporary and copying that because there were problems with setting the text directly
 				VerseKey t;
-                                t.setVersificationSystem(currentVerse.getVersificationSystem());
+				t.setVersificationSystem(currentVerse.getVersificationSystem());
 				t.AutoNormalize(0);
 				t.Headings(1);
 				t = token.getAttribute("osisID");
@@ -663,7 +663,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 				inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID"));
 #ifdef DEBUG
-				cout << "Current book is " << currentVerse << (!inCanonicalOSISBook ? "not in KJV, ignoring" : "") << endl;
+				cout << "Current book is " << currentVerse << (!inCanonicalOSISBook ? "not in versification, ignoring" : "") << endl;
 #endif
 
 #ifndef INCLUDE_TAGS
@@ -689,7 +689,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// as it does not change the content of VerseKey!
 				// currentVerse = token.getAttribute("osisID");
 				VerseKey t;
-                                t.setVersificationSystem(currentVerse.getVersificationSystem());
+				t.setVersificationSystem(currentVerse.getVersificationSystem());
 				t.AutoNormalize(0);
 				t.Headings(1);
 				t = token.getAttribute("osisID");
@@ -824,10 +824,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (!strcmp(tokenName, "div") ||
 			    !strcmp(tokenName, "q")   ||
 			    !strcmp(tokenName, "l")   ||
-			    (!strcmp(tokenName, "lb") 
-				 	// If these were paragraphs, don't wrest them from their
+			    (!strcmp(tokenName, "lb")
+					// If these were paragraphs, don't wrest them from their
 					// rightful place in the preverse text
-				 	&& strcmp("x-begin-paragraph", token.getAttribute("type"))
+					&& strcmp("x-begin-paragraph", token.getAttribute("type"))
 					&& strcmp("x-end-paragraph", token.getAttribute("type"))
 				) ||
 			    !strcmp(tokenName, "lg")
@@ -1139,7 +1139,7 @@ XMLTag transformBSP(XMLTag t) {
  * While we are minimizing it by postponing the write until we have
  * gathered the next verse, the following scenario is happening:
  * A module is using linked verses and has some verses that are not
- * in the KJV versification. If the out-of-canon verse happens following
+ * in the chosen versification. If the out-of-canon verse happens following
  * a linked verse, the out-of-canon verse is appended to the prior
  * verse. Care has to be taken that the linked verses all point to
  * the first of the set.
@@ -1148,12 +1148,12 @@ void writeLinks()
 {
 	// Link all the verses
 	VerseKey destKey;
-        destKey.setVersificationSystem(currentVerse.getVersificationSystem());
+	destKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	destKey.AutoNormalize(0);
 	destKey.Headings(1);
 
 	VerseKey linkKey;
-        linkKey.setVersificationSystem(currentVerse.getVersificationSystem());
+	linkKey.setVersificationSystem(currentVerse.getVersificationSystem());
 	linkKey.AutoNormalize(0);
 	linkKey.Headings(1);
 	for (unsigned int i = 0; i < linkedVerses.size(); i++) {
@@ -1192,8 +1192,11 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
 	fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
 	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
-	fprintf(stderr, "\t\t\t\t and then normalize to NFC)\n");
-	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
+	fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
+	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC\n");
+	fprintf(stderr, "  -4\t\t use 4 byte size entries (default is 2).\n");
+	fprintf(stderr, "\t\t\t\t Note: useful for commentaries with very large entries\n");
+	fprintf(stderr, "\t\t\t\t\t in uncompressed modules (default is 65535 bytes)\n");
 	fprintf(stderr, "  -v <v11n> use versification scheme other than KJV.\n\n");
 	exit(-1);
 }
@@ -1214,6 +1217,7 @@ int main(int argc, char **argv) {
 	int append          = 0;
 	int compType        = 0;
 	int iType           = 4;
+	int largeEntry      = 0;
 	SWBuf cipherKey     = "";
 	SWBuf v11n          = "KJV";
 
@@ -1225,10 +1229,12 @@ int main(int argc, char **argv) {
 		}
 		else if (!strcmp(argv[i], "-z")) {
 			if (compType) usage(*argv, "Cannot specify both -z and -Z");
+			if (largeEntry) usage(*argv, "Cannot specify both -z and -4");
 			compType = 2;
 		}
 		else if (!strcmp(argv[i], "-Z")) {
 			if (compType) usage(*argv, "Cannot specify both -z and -Z");
+			if (largeEntry) usage(*argv, "Cannot specify both -Z and -4");
 			compType = 1;
 		}
 		else if (!strcmp(argv[i], "-b")) {
@@ -1249,10 +1255,12 @@ int main(int argc, char **argv) {
 			if (i+1 < argc) v11n = argv[++i];
 			else usage(*argv, "-v requires <v11n>");
 		}
+		else if (!strcmp(argv[i], "-4")) {
+			if (compType) usage(*argv, "Cannot specify -4 and -z or -Z");
+			largeEntry = 1;
+		}
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
-
-        currentVerse.setVersificationSystem(v11n);
 
 	switch (compType) {	// these are deleted by zText
 		case 0: break;
@@ -1276,15 +1284,23 @@ int main(int argc, char **argv) {
 	if (!append) {	// == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
-		if ( compressor ) {
-			if ( zText::createModule(path, iType, v11n) ) {
+		if (compressor) {
+			if (zText::createModule(path, iType, v11n)) {
 				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
 				exit(-3);
 			}
 		}
-		else if (RawText::createModule(path, v11n)) {
-			fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
-			exit(-3);
+		else if (largeEntry) {
+			if (RawText4::createModule(path, v11n)) {
+				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
+				exit(-3);
+			}
+		}
+		else {
+			if (RawText::createModule(path, v11n)) {
+				fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program, path);
+				exit(-3);
+			}
 		}
 	}
 
@@ -1297,12 +1313,51 @@ int main(int argc, char **argv) {
 
 	// Do some initialization stuff
 	if (compressor) {
-		module = new zText(path, 0, 0, iType, compressor,
-			0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
-			v11n);	// open our datapath with our RawText driver.
+		// Create a compressed text module allowing very large entries
+		// Taking defaults except for first, fourth, fifth and last argument
+		module = new zText(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				iType,		// iblockType
+				compressor,	// icomp
+				0,		// idisp
+				ENC_UNKNOWN,	// enc
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// lang
+				v11n		// versification
+                       );
 	}
-	else{
-		module = new RawText(path, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);	// open our datapath with our RawText driver.
+	else if (largeEntry) {
+		// Create a raw text module allowing very large entries
+		// Taking defaults except for first and last argument
+		module = new RawText4(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				0,		// idisp
+				ENC_UNKNOWN,	// encoding
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// ilang
+				v11n		// versification
+			);
+	}
+	else {
+		// Create a raw text module allowing reasonable sized entries
+		// Taking defaults except for first and last argument
+		module = new RawText(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				0,		// idisp
+				ENC_UNKNOWN,	// encoding
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// ilang
+				v11n		// versification
+			);
 	}
 
 	SWFilter *cipherFilter = 0;
@@ -1322,10 +1377,10 @@ int main(int argc, char **argv) {
 
 	strcpy(currentOsisID,"N/A");
 
+	currentVerse.setVersificationSystem(v11n);
 	currentVerse.AutoNormalize(0);
 	currentVerse.Headings(1);	// turn on mod/testmnt/book/chap headings
 	currentVerse.Persist(1);
-
 
 	module->setKey(currentVerse);
 	module->setPosition(TOP);
