@@ -385,7 +385,15 @@ int VerseKey::getBookAbbrev(const char *iabbr) const
 					break;
 			}
 
-			retVal = (!diff) ? refSys->getBookNumberByOSISName(abbrevs[target].osis) : -1;
+			if (!diff) {
+				// lets keep moving forward till we find an abbrev in our refSys
+				retVal = refSys->getBookNumberByOSISName(abbrevs[target].osis);
+				while ((retVal < 0)  && (target < max) && (!strncmp(abbr, abbrevs[target+1].ab, abLen))) {
+					target++;
+					retVal = refSys->getBookNumberByOSISName(abbrevs[target].osis);
+				}
+			}
+			else retVal = -1;
 		}
 		if (retVal > 0)
 			break;
