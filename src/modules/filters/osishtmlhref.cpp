@@ -287,6 +287,21 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 		}
 
+		// Milestoned paragraphs, created by osis2mod
+		// <div type="paragraph" sID.../>
+		// <div type="paragraph" eID.../>
+		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "paragraph")) {
+			// <div type="paragraph"  sID... />
+			if (tag.getAttribute("sID")) {	// non-empty start tag
+				outText("<!P><br />", buf, u);
+			}
+			// <div type="paragraph"  eID... />
+			else if (tag.getAttribute("eID")) {
+				outText("<!/P><br />", buf, u);
+				userData->supressAdjacentWhitespace = true;
+			}
+		}
+
 		// <reference> tag
 		else if (!strcmp(tag.getName(), "reference")) {	
 			if (!u->inXRefNote) {	// only show these if we're not in an xref note				

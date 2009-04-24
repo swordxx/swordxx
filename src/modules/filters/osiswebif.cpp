@@ -175,6 +175,14 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 
+                // Milestoned paragraphs, created by osis2mod
+                // <div type="paragraph" sID.../>
+                // <div type="paragraph" eID.../>
+                else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "paragraph")) {
+			// This is properly handled by base class.
+			return OSISHTMLHREF::handleToken(buf, token, userData);
+                }
+
 		// ok to leave these in
 		else if (!strcmp(tag.getName(), "div")) {
 			buf += tag;
