@@ -23,9 +23,9 @@
 
 SWORD_NAMESPACE_START
 
-char isroman (const char* str) {
-	char * ch = (char*)str;
-	for (; *ch; ch++)
+char isroman (const char *str, int maxchars) {
+	char *ch = (char*)str;
+	for (; *ch && (!maxchars || (ch-str) <= maxchars); ch++)
 		if (!strchr("IVXLCDMivxlcdm ", *ch))
 			return 0;
 	return 1;
