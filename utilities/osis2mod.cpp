@@ -498,7 +498,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 }
 
 
-void linkToEntry(VerseKey& linkKey, VerseKey& dest) {
+void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
 	// Only link verses that are in the versification.
 	if (!isValidRef(linkKey)) {
@@ -799,7 +799,6 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Note this requires transformBSP to make them into milestones
 		// Otherwise have to do it here
 		if (!strcmp(tokenName, "q")) {
-			
 			quoteStack.push(token);
 #ifdef DEBUG_QUOTE
 			cout << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
@@ -821,13 +820,13 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// This is a hack to get ESV to work
 		// Don't write if there is not a valid osisID yet.
 		if (!inTitle && !inVerse && token.isEmpty() && strcmp(currentOsisID, "N/A")) {
-			if (!strcmp(tokenName, "div") ||
+			if ((!strcmp(tokenName, "div") && (!typeAttr || strcmp(typeAttr, "paragraph"))) ||
 			    !strcmp(tokenName, "q")   ||
 			    !strcmp(tokenName, "l")   ||
-			    (!strcmp(tokenName, "lb")
-					// If these were paragraphs, don't wrest them from their
+			    (!strcmp(tokenName, "lb") 
+				 	// If these were paragraphs, don't wrest them from their
 					// rightful place in the preverse text
-					&& strcmp("x-begin-paragraph", token.getAttribute("type"))
+				 	&& strcmp("x-begin-paragraph", token.getAttribute("type"))
 					&& strcmp("x-end-paragraph", token.getAttribute("type"))
 				) ||
 			    !strcmp(tokenName, "lg")
@@ -1058,10 +1057,13 @@ XMLTag transformBSP(XMLTag t) {
 			t.setAttribute("sID", buf);
 		}
 
-		// Transform <p> into <lb type="x-begin-paragraph"/>
+		// Transform <p> into <div type="paragraph"> and milestone it
 		else if (!strcmp(tagName, "p")) {
 			// note there is no process that should care about type, it is there for reversability
-			t.setText("<lb type=\"x-begin-paragraph\" />");
+			t.setText("<div type=\"paragraph\" />");
+			sprintf(buf, "gen%d", sID++);
+			t.setAttribute("sID", buf);
+			t.setAttribute("type", "paragraph");
 		}
 
 		// Transform <tag> into <tag  sID="">, where tag is a milestoneable element.
@@ -1106,23 +1108,19 @@ XMLTag transformBSP(XMLTag t) {
 			t.setAttribute("sID", 0);
 		}
 
-		// Look for paragraph tags.
-		// If we have found an end tag for a <p> that was transformed then transform this as well.
-		else if ((!strcmp(tagName, "p")) && (!strcmp(topToken.getName(), "lb"))) {
-			t.setText("<lb type=\"x-end-paragraph\" />");
-		}
-
 		// Look for the milestoneable container tags handled above.
 		else if (!strcmp(tagName, "chapter") ||
 			 !strcmp(tagName, "closer")  ||
 			 !strcmp(tagName, "div")     ||
 			 !strcmp(tagName, "l")       ||
 			 !strcmp(tagName, "lg")      ||
+			 !strcmp(tagName, "p")       ||
 			 !strcmp(tagName, "salute")  ||
 			 !strcmp(tagName, "signed")  ||
 			 !strcmp(tagName, "speech")
 			) {
 			// make this a clone of the start tag with sID changed to eID
+			// Note: in the case of </p> the topToken is a <div type="paragraph">
 			t = topToken;
 			t.setAttribute("eID", t.getAttribute("sID"));
 			t.setAttribute("sID", 0);
@@ -1193,7 +1191,7 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
 	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
 	fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
-	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC\n");
+	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
 	fprintf(stderr, "  -4\t\t use 4 byte size entries (default is 2).\n");
 	fprintf(stderr, "\t\t\t\t Note: useful for commentaries with very large entries\n");
 	fprintf(stderr, "\t\t\t\t\t in uncompressed modules (default is 65535 bytes)\n");
