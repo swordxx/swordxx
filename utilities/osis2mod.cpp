@@ -1188,14 +1188,22 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
-	fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
+	fprintf(stderr, "  -N\t\t\t do not convert UTF-8 or normalize UTF-8 to NFC\n");
 	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
 	fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
 	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
-	fprintf(stderr, "  -4\t\t use 4 byte size entries (default is 2).\n");
+	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default is 2).\n");
 	fprintf(stderr, "\t\t\t\t Note: useful for commentaries with very large entries\n");
-	fprintf(stderr, "\t\t\t\t\t in uncompressed modules (default is 65535 bytes)\n");
-	fprintf(stderr, "  -v <v11n> use versification scheme other than KJV.\n\n");
+	fprintf(stderr, "\t\t\t\t       in uncompressed modules (default is 65535 bytes)\n");
+	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
+	fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
+	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
+	StringList av11n = vmgr->getVersificationSystems();
+	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
+		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
+        }
+	fprintf(stderr, "See http://www.crosswire.org/wiki/osis2mod for more details.\n");
+	fprintf(stderr, "\n");
 	exit(-1);
 }
 
