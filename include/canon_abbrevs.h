@@ -38,6 +38,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"1 K", "1Kgs"},		// I Kings
   {"1 KGDMS", "1Sam"},		// I Samuel
   {"1 KGS", "1Kgs"},		// I Kings
+  {"1 KING", "1Kgs"},		// I Kings
   {"1 KINGDOMS", "1Sam"},		// I Samuel
   {"1 KINGS", "1Kgs"},		// I Kings
   {"1 P", "1Pet"},		// I Peter
@@ -57,6 +58,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"1K", "1Kgs"},		// I Kings
   {"1KGDMS", "1Sam"},		// I Samuel
   {"1KGS", "1Kgs"},		// I Kings
+  {"1KING", "1Kgs"},		// I Kings
   {"1KINGDOMS", "1Sam"},		// I Samuel
   {"1KINGS", "1Kgs"},		// I Kings
   {"1P", "1Pet"},		// I Peter
@@ -78,6 +80,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"2 K", "2Kgs"},		// II Kings
   {"2 KGDMS", "2Sam"},		// II Samuel
   {"2 KGS", "2Kgs"},		// II Kings
+  {"2 KING", "2Kgs"},		// II Kings
   {"2 KINGDOMS", "2Sam"},		// II Samuel
   {"2 KINGS", "2Kgs"},		// II Kings
   {"2 P", "2Pet"},		// II Peter
@@ -97,6 +100,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"2K", "2Kgs"},		// II Kings
   {"2KGDMS", "2Sam"},		// II Samuel
   {"2KGS", "2Kgs"},		// II Kings
+  {"2KING", "2Kgs"},		// II Kings
   {"2KINGDOMS", "2Sam"},		// II Samuel
   {"2KINGS", "2Kgs"},		// II Kings
   {"2P", "2Pet"},		// II Peter
@@ -183,6 +187,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"I K", "1Kgs"},		// I Kings
   {"I KGDMS", "1Sam"},		// I Samuel
   {"I KGS", "1Kgs"},		// I Kings
+  {"I KING", "1Kgs"},		// I Kings
   {"I KINGDOMS", "1Sam"},		// I Samuel
   {"I KINGS", "1Kgs"},		// I Kings
   {"I P", "1Pet"},		// I Peter
@@ -203,6 +208,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"II K", "2Kgs"},		// II Kings
   {"II KGDMS", "2Sam"},		// II Samuel
   {"II KGS", "2Kgs"},		// II Kings
+  {"II KING", "2Kgs"},		// II Kings
   {"II KINGDOMS", "2Sam"},		// II Samuel
   {"II KINGS", "2Kgs"},		// II Kings
   {"II P", "2Pet"},		// II Peter
@@ -232,6 +238,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"IIK", "2Kgs"},		// II Kings
   {"IIKGDMS", "2Sam"},		// II Samuel
   {"IIKGS", "2Kgs"},		// II Kings
+  {"IIKING", "2Kgs"},		// II Kings
   {"IIKINGDOMS", "2Sam"},		// II Samuel
   {"IIKINGS", "2Kgs"},		// II Kings
   {"IIP", "2Pet"},		// II Peter
@@ -246,6 +253,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"IK", "1Kgs"},		// I Kings
   {"IKGDMS", "1Sam"},		// I Samuel
   {"IKGS", "1Kgs"},		// I Kings
+  {"IKING", "1Kgs"},		// I Kings
   {"IKINGDOMS", "1Sam"},		// I Samuel
   {"IKINGS", "1Kgs"},		// I Kings
   {"IP", "1Pet"},		// I Peter
