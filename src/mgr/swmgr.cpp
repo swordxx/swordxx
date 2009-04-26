@@ -570,10 +570,11 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	if (envallusersdir.length()) {
 		SWLog::getSystemLog()->logDebug("found (%s).", envallusersdir.c_str());
 		path = envallusersdir;
-		if ((envallusersdir[envallusersdir.length()-1] != '\\') && (envallusersdir[envallusersdir.length()-1] != '/'))
+		if ((!path.endsWith("\\")) && (!path.endsWith("/")))
 			path += "/";
 
-		SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE for mods.d...");
+		path += "Application Data/sword/";
+		SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 			SWLog::getSystemLog()->logDebug("found.");
 			stdstr(prefixPath, path.c_str());
@@ -584,6 +585,28 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 		}
 	}
 
+	// for Mac OSX...
+	// check $HOME/Library/Application Support/Sword/
+
+	SWLog::getSystemLog()->logDebug("Checking $HOME/Library/Application Support/Sword/...");
+
+	SWBuf pathCheck = getHomeDir();
+	if (pathCheck.length()) {
+		SWLog::getSystemLog()->logDebug("found (%s).", pathCheck.c_str());
+		path = pathCheck;
+		if ((!path.endsWith("\\")) && (!path.endsWith("/")))
+			path += "/";
+
+		SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
+		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+			SWLog::getSystemLog()->logDebug("found.");
+			stdstr(prefixPath, path.c_str());
+			path += "mods.d";
+			stdstr(configPath, path.c_str());
+			*configType = 1;
+			return;
+		}
+	}
 
 	// FINALLY CHECK PERSONAL HOME DIRECTORY LOCATIONS
 	// check ~/.sword/

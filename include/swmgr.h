@@ -43,9 +43,11 @@
  *	if you decide to start a new project.
  *
  * Well known frontends are:\n
+ *	-BibleTime (http://www.bibletime.info)\n
+ *	-BPBible (http://bpbible.com)\n
+ *	-MacSword (http://www.macsword.com)\n
+ *	-Xiphos (http://xiphos.org)\n
  *	-SWORD for Windows (http://crosswire.org/sword/software/biblecs/)\n
- *	-GnomeSword (http://gnomesword.sourceforge.net/)\n
- *	-BibleTime (http://www.bibletime.info/)\n
  */
 
 #ifndef SWMGR_H

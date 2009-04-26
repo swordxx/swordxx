@@ -8,6 +8,8 @@ echo
 REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
 SWORDVER=`grep "define VERSI" ../include/config.h |cut -f2 -d"\""`
 
+sed -i "s/^\(PROJECT_NUMBER\).*/\1 = \"$REV\"/" ../doc/Doxyfile
+
 if test `echo $REV` == `echo $SWORDVER`; then 
 	chmod +x *
 
