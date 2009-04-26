@@ -335,6 +335,7 @@ const VerseMgr::System *VerseMgr::getVersificationSystem(const char *name) const
 	return (it != p->systems.end()) ? &(it->second) : 0;
 }
 
+
 void VerseMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax) {
 	p->systems[name] = name;
 	System &s = p->systems[name];
@@ -345,87 +346,14 @@ void VerseMgr::registerVersificationSystem(const char *name, const sbook *ot, co
 void VerseMgr::registerVersificationSystem(const char *name, const TreeKey *tk) {
 }
 
-// --------------- end statics --------------
 
-/*
-
-long         *VerseKey::offsets[2][2]  = {{VerseKey::otbks, VerseKey::otcps}, {VerseKey::ntbks, VerseKey::ntcps}};
-const char    VerseKey::builtin_BMAX[2]        = {39, 27};
-void SWLocale::getBooks(char **iBMAX, struct sbook ***ibooks) {
-	if (!BMAX) {
-		BMAX = new char [2];
-		BMAX[0] = VerseKey::builtin_BMAX[0];
-		BMAX[1] = VerseKey::builtin_BMAX[1];
-
-		books = new struct sbook *[2];
-		books[0] = new struct sbook[BMAX[0]];
-		books[1] = new struct sbook[BMAX[1]];
-
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < BMAX[i]; j++) {
-				books[i][j] = VerseKey::builtin_books[i][j];
-				books[i][j].name = translate(VerseKey::builtin_books[i][j].name);
-			}
-		}
+const StringList VerseMgr::getVersificationSystems() const {
+	StringList retVal;
+	for (map<SWBuf, System>::const_iterator it = p->systems.begin(); it != p->systems.end(); it++) {
+		retVal.push_back(it->first);
 	}
-
-	*iBMAX  = BMAX;
-	*ibooks = books;
+	return retVal;
 }
-
-~() {
-	if (BMAX) {
-		for (int i = 0; i < 2; i++)
-			delete [] books[i];
-		delete [] BMAX;
-		delete [] books;
-	}
-}
-
-
-******************************************************************************
- * VerseKey::initstatics - initializes statics.  Performed only when first
- *						instance on VerseKey (or descendent) is created.
- */
-
-/*
-void VerseKey::initstatics() {
-	int l1, l2, chaptmp = 0;
-
-	builtin_books[0] = otbooks;
-	builtin_books[1] = ntbooks;
-
-	for (l1 = 0; l1 < 2; l1++) {
-		for (l2 = 0; l2 < builtin_BMAX[l1]; l2++) {
-			builtin_books[l1][l2].versemax = &vm[chaptmp];
-			chaptmp += builtin_books[l1][l2].chapmax;
-		}
-	}
-}
-
-
-const int VerseKey::getOSISBookNum(const char *bookab) {
-	int i;
-	for (i=0; i < 39; i++)
-	{
-		if (!strncmp(bookab, osisotbooks[i], strlen(osisotbooks[i])))
-		{
-			//printf("VerseKey::getOSISBookNum %s is OT %d\n", bookab, i+1);
-			return i+1;
-		}
-	}
-	for (i=0; i < 27; i++)
-	{
-		if (!strncmp(bookab, osisntbooks[i], strlen(osisotbooks[i])))
-		{
-			//printf("VerseKey::getOSISBookNum %s is NT %d\n", bookab, i+1);
-			return i+1;
-		}
-	}
-	return -1;
-}
-
-*/
 
 
 SWORD_NAMESPACE_END

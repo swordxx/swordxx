@@ -1,8 +1,10 @@
 /******************************************************************************
  *
+ * UTF8ArabicPoints - SWFilter descendant to remove UTF-8 Arabic vowel points
+ *
  * $Id: utf8arabicpoints.h 1688 2008-11-30 04:42:26Z refdoc $
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

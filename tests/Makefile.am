@@ -56,7 +56,6 @@ configtest_SOURCES = configtest.cpp
 romantest_SOURCES = romantest.cpp
 testblocks_SOURCES = testblocks.cpp
 filtertest_SOURCES = filtertest.cpp
-arabicfiltertest_SOURCES = arabicfiltertest.cpp
 lextest_SOURCES = lextest.cpp
 rawldidxtest_SOURCES = rawldidxtest.cpp
 swaptest_SOURCES = swaptest.cpp
