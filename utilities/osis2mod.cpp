@@ -762,6 +762,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// The osisID or annotateRef can be more than a single verse
 				// The first or only one is the currentVerse
 				prepareSWVerseKey(keyVal);
+
+				// Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
+				// This should never happen if the references are valid OSIS references
 				ListKey verseKeys = currentVerse.ParseVerseList(keyVal, currentVerse, true);
 				int memberKeyCount = verseKeys.Count();
 				if (memberKeyCount) {
@@ -769,7 +772,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					// See if this osisID or annotateRef refers to more than one verse.
 					// If it does, save it until all verses have been seen.
 					// At that point we will output links.
-					if (memberKeyCount > 1) {
+					if (verseKeys++ != verseKeys) {
 						linkedVerses.push_back(verseKeys);
 					}
 				}
@@ -1155,21 +1158,16 @@ void writeLinks()
 	linkKey.AutoNormalize(0);
 	linkKey.Headings(1);
 	for (unsigned int i = 0; i < linkedVerses.size(); i++) {
-		// The verseKeys is an list of verses
+		// The verseKeys is a list of verses
 		// where the first is the real verse
 		// and the others link to it.
 		ListKey verseKeys = linkedVerses[i];
-		for (verseKeys = TOP; !verseKeys.Error(); verseKeys++) {
-			destKey = verseKeys;
-		}
 		verseKeys.setPosition(TOP);
 		destKey = verseKeys.getElement();
-		destKey.ClearBounds();
 		verseKeys.increment(1);
 
 		while (!verseKeys.Error()) {
 			linkKey = verseKeys.getElement();
-			linkKey.ClearBounds();
 			verseKeys.increment(1);
 			linkToEntry(linkKey, destKey);
 		}

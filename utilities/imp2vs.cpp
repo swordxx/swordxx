@@ -34,12 +34,19 @@ void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module);
 void usage(const char *progName, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
 	fprintf(stderr, "\n=== imp2vs (Revision $Rev: 2234 $) SWORD Bible/Commentary importer.\n");
-	fprintf(stderr, "\nusage: %s <imp_file> [options]\n"
-		"\t -a augment module if exists (default is to create new)\n"
-		"\t -o <output_path> where to write data files.\n"
-		"\t -4 use 4 byte size entries (default is 2).\n\n"
-		"\t -v <v11n> use versification scheme other than KJV.\n\n"
-		"'imp' format is a simple standard for importing data into SWORD modules.\n"
+	fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
+	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
+	fprintf(stderr, "  -o <output_path>\t where to write data files.\n");
+	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default is 2).\n");
+	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
+	fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
+	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
+	StringList av11n = vmgr->getVersificationSystems();
+	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
+		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
+        }
+	fprintf(stderr, "\n");
+	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
 		"$$$Gen.1.1\n"
 		"In the beginning God created\n"
@@ -50,8 +57,7 @@ void usage(const char *progName, const char *error = 0) {
 		"John 1:1-4 might have a key, $$$Jn.1.1-4.  Special keys for intro entries use\n"
 		"standard SWORD notation, e.g. $$$Rom.4.0 for intro of Romans chapter 4,\n"
 		"$$$Rev.0.0 for intro of the Book of Revelation of John.  $$$[ Module Heading ]\n"
-		"for entire module intro.  $$$[ Testament 2 Heading ] for NT intro.\n\n"
-		, progName);
+		"for entire module intro.  $$$[ Testament 2 Heading ] for NT intro.\n\n");
 	exit(-1);
 }
 
