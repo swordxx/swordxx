@@ -45,7 +45,15 @@ cout << currentVerse << endl;
 */
 	VerseKey *parser = new VerseKey(); //(VerseKey *)mod->CreateKey();
 
-     ListKey scope = parser->ParseVerseList("amos", *parser, true);
+	ListKey scope = parser->ParseVerseList("amos 2:2", *parser, true);
+
+	cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
+
+	scope = parser->ParseVerseList("amos", *parser, true);
+
+	cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
+
+	scope = parser->ParseVerseList("amos", *parser, true);
 
 	ListKey result;
 
