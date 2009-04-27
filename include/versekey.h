@@ -91,8 +91,11 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
 	// internal upper/lower bounds optimizations
 	mutable long lowerBound, upperBound;	// if autonorms is on
-	mutable struct { int test; int book; int chap; int verse; } lowerBoundComponents, upperBoundComponents;	// if autonorms is off, we can't optimize with index
 	mutable VerseKey *tmpClone;
+
+	typedef struct { int test; int book; int chap; int verse; } VerseComponents;
+
+	mutable VerseComponents lowerBoundComponents, upperBoundComponents;	// if autonorms is off, we can't optimize with index
 
 protected:
 
