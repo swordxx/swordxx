@@ -37,6 +37,7 @@ const char *SWLocale::DEFAULT_LOCALE_NAME="en_US";
 class SWLocale::Private {
 public:
 	LookupMap lookupTable;
+	LookupMap mergedAbbrevs;
 };
 
 
@@ -155,13 +156,21 @@ void SWLocale::augment(SWLocale &addFrom) {
 const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 	static const char *nullstr = "";
 	if (!bookAbbrevs) {
-		ConfigEntMap::iterator it;
-		int i;
-		int size = localeSource->Sections["Book Abbrevs"].size();
+		// Assure all english abbrevs are present
+		for (int j = 0; builtin_abbrevs[j].osis[0]; j++) {
+			p->mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
+		}
+		ConfigEntMap::iterator it = localeSource->Sections["Book Abbrevs"].begin();
+		ConfigEntMap::iterator end = localeSource->Sections["Book Abbrevs"].end();
+		for (; it != end; it++) {
+			p->mergedAbbrevs[it->first.c_str()] = it->second.c_str();
+		}
+		int size = p->mergedAbbrevs.size();
 		bookAbbrevs = new struct abbrev[size + 1];
-		for (i = 0, it = localeSource->Sections["Book Abbrevs"].begin(); it != localeSource->Sections["Book Abbrevs"].end(); it++, i++) {
-			bookAbbrevs[i].ab = (*it).first.c_str();
-			bookAbbrevs[i].osis = (*it).second.c_str();
+		int i = 0;
+		for (LookupMap::iterator it = p->mergedAbbrevs.begin(); it != p->mergedAbbrevs.end(); it++, i++) {
+			bookAbbrevs[i].ab = it->first.c_str();
+			bookAbbrevs[i].osis = it->second.c_str();
 		}
 
 		bookAbbrevs[i].ab = nullstr;
