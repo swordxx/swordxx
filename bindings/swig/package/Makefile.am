@@ -76,7 +76,7 @@ python_make: python_makebuild
 
 pythonswig: sword.i
 	mkdir -p python
-	$(SWIG) -python -DEXCLUDE_FTP -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
+	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
 
 python_makebuild: $(PYTHONSWIG)
 	mkdir -p python
@@ -93,7 +93,7 @@ python_makebuild: $(PYTHONSWIG)
 	@echo "	include_dirs=['$(SWORD_INCLUDE_DIR)', '..', '../..']," >> python/setup.py
 	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
 	@echo "	libraries=[('sword')], " >> python/setup.py
-	@echo "	define_macros=[('SWIG',1)])], " >> python/setup.py
+	@echo "	)], " >> python/setup.py
 	@echo ")" >> python/setup.py
 
 
