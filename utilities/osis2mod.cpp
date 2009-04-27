@@ -61,6 +61,9 @@
 // Debug for titles
 //#define DEBUG_TITLE
 
+// Debug for re-v11n
+//#define DEBUG_REV11N
+
 //Include all tags starting with the first div in the module
 //#define INCLUDE_TAGS
 
@@ -288,26 +291,47 @@ void prepareSWVerseKey(SWBuf &buf) {
 	}
 }
 
+/**
+ * Determine whether a verse as given is valid for the versification.
+ * This is done by comparing the before and after of normalization.
+ */
 bool isValidRef(const char *buf) {
-	VerseKey vk, test;
-	vk.setVersificationSystem(currentVerse.getVersificationSystem());
-	test.setVersificationSystem(currentVerse.getVersificationSystem());
-	vk.AutoNormalize(0);
-	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
-	vk.Persist(1);
-	// lets do some tests on the verse --------------
-	vk = buf;
-	test = buf;
+	// Create a VerseKey that does not do auto normalization
+	// Note: need to turn on headings so that a heading does not get normalized anyway
+	// And set it to the reference under question
+	VerseKey before;
+	before.setVersificationSystem(currentVerse.getVersificationSystem());
+	before.AutoNormalize(0);
+	before.Headings(1);
+	before.setText(buf);
 
-	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
-#ifdef DEBUG
-		cout << (const char*)vk << " == "  << (const char*)test << endl;
-#endif
-		return (vk == test);
+	// If we are a heading we must bail
+	// These will autonormalize to the last verse of the prior chapter
+	if (!before.Testament() || !before.Book() || !before.Chapter() || !before.Verse()) {
+		return true;
 	}
-	else return true;	// no check if we're a heading... Probably bad.
-}
 
+	// Create a VerseKey that does do auto normalization
+	// And set it to the reference under question
+	VerseKey after;
+	after.setVersificationSystem(currentVerse.getVersificationSystem());
+	after.AutoNormalize(1);
+	after.setText(buf);
+
+	if (before == after)
+	{
+		return true;
+	}
+
+	// If we have gotten here the reference is not in the selected versification.
+	cout << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
+
+#ifdef DEBUG_REV11N
+	cout << "\t" << before << " normalizes to "  << after << endl;
+#endif
+
+	return false;
+}
 
 /**
  * This routine is used to ensure that all the text in the input is saved to the module.
@@ -334,39 +358,48 @@ bool isValidRef(const char *buf) {
  * param key the key that may need to be adjusted
  */
 void makeValidRef(VerseKey &key) {
-	VerseKey saveKey;
-	saveKey.setVersificationSystem(key.getVersificationSystem());
-	saveKey.AutoNormalize(0);
-	saveKey.Headings(1);
-	saveKey = currentVerse;
+
+	int chapterMax = key.getChapterMax();
+	int verseMax   = key.getVerseMax();
+
+#ifdef DEBUG_REV11N
+	cout << "Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
+#endif
 
 	cout << "re-versified " << key;
-#ifdef DEBUG
-	cout << "\tC" << (int)(key.getChapterMax()) << ":V" << (int)(key.getVerseMax());
-#endif
-	if (key.Chapter() > key.getChapterMax()) {
-		key.Chapter(key.getChapterMax());
-		key.Verse(key.getVerseMax());
-	}
-	else if (key.Verse() > key.getVerseMax()) {
-		key.Verse(key.getVerseMax());
+	// Since isValidRef returned false constrain the key to the nearest prior reference.
+	// If we are past the last chapter set the reference to the last chapter
+	if (key.Chapter() > chapterMax) {
+		key.Chapter(chapterMax);
 	}
 
-	currentVerse = key;
-	currentVerse.ClearBounds();
-	currentVerse--;
-	while (!currentVerse.Error() && currentVerse.getVerse() > 0) {
-		SWBuf currentText = module->getRawEntry();
-		if (currentText.length()) {
-			break;
-		}
-		currentVerse--;
+	// Either we set the chapter to the last chapter and now need to set to the last verse in the chapter
+	// Or the verse is beyond the end of the chapter.
+	// In any case we need to constrain the verse to it's chapter.
+	key.Verse(verseMax);
+
+	// There are three cases we want to handle:
+	// In the examples we are using the KJV versification where the last verse of Matt.7 is Matt.7.29.
+	// In each of these cases the out-of-versification, extra verse is Matt.7.30.
+	// 1) The "extra" verse follows the last verse in the chapter.
+	//      <verse osisID="Matt.7.29">...</verse><verse osisID="Matt.7.30">...</verse>
+	//    In this case re-versify Matt.7.30 as Matt.7.29.
+	//
+	// 2) The "extra" verse follows a range (a set of linked verses).
+	//      <verse osisID="Matt.7.28-Matt.7.29">...</verse><verse osisID="Matt.7.30">...</verse>
+	//    In this case, re-versify Matt.7.30 as Matt.7.28, the first verse in the linked set.
+	//    Since we are post-poning linking, we want to re-reversify to the last entry in the module.
+	//
+	// 3) The last verse in the chapter is not in the input. There may be other verses missing as well.
+	//      <verse osisID="Matt.7.8">...</verse><verse osisID="Matt.7.30">...</verse>
+	//    In this case we should re-versify Matt.7.30 as Matt.7.29.
+	//    However, since this and 2) are ambiguous, we'll re-reversify to the last entry in the module.
+	
+	while (!key.Error() && !module->hasEntry(&key)) {
+		key.decrement(1);
 	}
 
-	key = currentVerse;
 	cout << "\tas " << key << endl;
-
-	currentVerse = saveKey;
 }
 
 void writeEntry(SWBuf &text, bool force = false) {
@@ -401,11 +434,11 @@ void writeEntry(SWBuf &text, bool force = false) {
 	// If we have seen a verse and the supplied one is different then we output the collected one.
 	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
 
-		currentVerse = lastKey;
-
-		if (!isValidRef(currentVerse)) {
-			makeValidRef(currentVerse);
+		if (!isValidRef(lastKey)) {
+			makeValidRef(lastKey);
 		}
+
+		currentVerse = lastKey;
 
 #ifdef _ICU_
 		int utf8State = detectUTF8(activeVerseText.c_str());
@@ -496,7 +529,6 @@ void writeEntry(SWBuf &text, bool force = false) {
 	lastKey = currentVerse;
 	strcpy(activeOsisID, keyOsisID);
 }
-
 
 void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
@@ -772,7 +804,11 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					// See if this osisID or annotateRef refers to more than one verse.
 					// If it does, save it until all verses have been seen.
 					// At that point we will output links.
-					if (verseKeys++ != verseKeys) {
+					// This can be done by incrementing, which will produce an error
+					// if there is only one verse.
+					verseKeys.setPosition(TOP);
+					verseKeys.increment(1);
+					if (!verseKeys.Error()) {
 						linkedVerses.push_back(verseKeys);
 					}
 				}
