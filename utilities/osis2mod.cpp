@@ -615,37 +615,41 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	// Otherwise if it a title in a chapter before the first the first verse it
 	// is put into the verse as a preverse title.
 	if (!inVerse) {
-	if (!token.isEmpty() && !isEndTag && titleDepth == 0 && (!strcmp(tokenName, "title")) && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
-		titleOffset = text.length(); //start of the title tag
-		lastTitle = "";
-		inTitle = true;
-		tagStack.push(token);
+		if (!token.isEmpty() &&
+		    !isEndTag &&
+		    titleDepth == 0 &&
+		    (!strcmp(tokenName, "title")) &&
+		    (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter")))) {
+			titleOffset = text.length(); //start of the title tag
+			lastTitle = "";
+			inTitle = true;
+			tagStack.push(token);
 #ifdef DEBUG_STACK
-		cout << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
+			cout << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
 #endif
-		titleDepth = tagStack.size();
-		return false;
-	}
+			titleDepth = tagStack.size();
+			return false;
+		}
 
-	// Check titleDepth since titles can be nested. Don't want to quit too early.
-	else if (inTitle && isEndTag && tagDepth == titleDepth && (!strcmp(tokenName, "title"))) {
-		lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
-		lastTitle.append(token); //</title>
+		// Check titleDepth since titles can be nested. Don't want to quit too early.
+		else if (inTitle && isEndTag && tagDepth == titleDepth && (!strcmp(tokenName, "title"))) {
+			lastTitle.append(text.c_str() + titleOffset); //<title ...> up to the end </title>
+			lastTitle.append(token); //</title>
 
 #ifdef DEBUG_TITLE
-		cout << currentOsisID << ":" << endl;
-		cout << "\tlastTitle:      " << lastTitle.c_str() << endl;
-		cout << "\ttext-lastTitle: " << text.c_str()+titleOffset << endl;
-		cout << "\ttext:	   " << text.c_str() << endl;
+			cout << currentOsisID << ":" << endl;
+			cout << "\tlastTitle:      " << lastTitle.c_str() << endl;
+			cout << "\ttext-lastTitle: " << text.c_str()+titleOffset << endl;
+			cout << "\ttext:	   " << text.c_str() << endl;
 #endif
-		inTitle = false;
-		titleDepth = 0;
+			inTitle = false;
+			titleDepth = 0;
 #ifdef DEBUG_STACK
-		cout << currentOsisID << ": pop(" << tagStack.size() << ") " << tagStack.top().getName() << endl;
+			cout << currentOsisID << ": pop(" << tagStack.size() << ") " << tagStack.top().getName() << endl;
 #endif
-		tagStack.pop();
-		return false; // don't add </title> to the text itself
-	}
+			tagStack.pop();
+			return false; // don't add </title> to the text itself
+		}
 	}
 
 
