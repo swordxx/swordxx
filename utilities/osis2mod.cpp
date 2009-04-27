@@ -75,11 +75,10 @@ using namespace std;
 
 #ifdef _ICU_
 UTF8NFC normalizer;
-int normalized = 0;
-
 Latin1UTF8 converter;
-int converted = 0;
 #endif
+int normalized = 0;
+int converted = 0;
 
 SWText *module = 0;
 VerseKey currentVerse;
@@ -172,6 +171,47 @@ int detectUTF8(const char *txt) {
 	
 	// At this point it is either UTF-8 or 7-bit ascii
 	return countUTF8 ? 1 : -1;
+}
+
+void prepareSWText(const char *key, SWBuf &text)
+{
+	// Always check on UTF8 and report on non-UTF8 entries
+	int utf8State = detectUTF8(text.c_str());
+
+	// Trust, but verify.
+	if (!normalize && !utf8State) {
+		cout << "Warning: " << key << ": Should be converted to UTF-8 (" << text << ")" << endl;
+	}
+
+#ifdef _ICU_
+	if (normalize) {
+		// Don't need to normalize text that is ASCII
+		// But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
+		if (!utf8State) {
+			cout << "Warning: " << key << ": Converting to UTF-8 (" << text << ")" << endl;
+			converter.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+			converted++;
+
+			// Prepare for double check. This probably can be removed.
+			// But for now we are running the check again.
+			// This is to determine whether we need to normalize output of the conversion.
+			utf8State = detectUTF8(text.c_str());
+		}
+
+		// Double check. This probably can be removed.
+		if (!utf8State) {
+			cout << "Error: " << key << ": Converting to UTF-8 (" << text << ")" << endl;
+		}
+
+		if (utf8State > 0) {
+			SWBuf before = text;
+			normalizer.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+			if (before != activeVerseText) {
+				normalized++;
+			}
+		}
+	}
+#endif
 }
 
 // This routine converts an osisID or osisRef into one that SWORD can parse into a verse list
@@ -440,36 +480,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 
 		currentVerse = lastKey;
 
-#ifdef _ICU_
-		int utf8State = detectUTF8(activeVerseText.c_str());
-		if (normalize) {
-			// Don't need to normalize text that is ASCII
-			// But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
-			if (!utf8State) {
-				cout << "Warning: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
-				converter.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
-				converted++;
-
-				// Prepare for double check. This probably can be removed.
-				// But for now we are running the check again.
-				// This is to determine whether we need to normalize output of the conversion.
-				utf8State = detectUTF8(activeVerseText.c_str());
-			}
-
-			// Double check. This probably can be removed.
-			if (!utf8State) {
-				cout << "Error: " << activeOsisID << ": Converting to UTF-8 (" << activeVerseText << ")" << endl;
-			}
-
-			if (utf8State > 0) {
-				SWBuf before = activeVerseText;
-				normalizer.processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
-				if (before != activeVerseText) {
-					normalized++;
-				}
-			}
-		}
-#endif
+		prepareSWText(activeOsisID, activeVerseText);
 
 		// Put the revision into the module
 		int testmt = currentVerse.Testament();
