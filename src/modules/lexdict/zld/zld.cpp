@@ -25,6 +25,8 @@
 #include <zld.h>
 #include <filemgr.h>
 
+#include <stdio.h>
+
 SWORD_NAMESPACE_START
 
  /******************************************************************************

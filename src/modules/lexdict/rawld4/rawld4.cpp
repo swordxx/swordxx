@@ -26,6 +26,8 @@
 #include <rawstr4.h>
 #include <rawld4.h>
 
+#include <stdio.h>
+
 SWORD_NAMESPACE_START
 
  /******************************************************************************
