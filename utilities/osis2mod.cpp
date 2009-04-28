@@ -68,6 +68,9 @@
 // Debug for re-v11n
 //#define DEBUG_REV11N
 
+// Include verse tag
+//#define INCLUDE_VERSE
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -771,7 +774,14 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				inChapterHeader = false;
 				verseDepth      = tagStack.size();
 
-				text.append(token);
+#ifndef INCLUDE_VERSE
+				// Include the token if it is not a verse
+				if (strcmp(tokenName, "verse")) {
+#endif
+					text.append(token);
+#ifndef INCLUDE_VERSE
+				}
+#endif
 
 				if (inWOC) {
 					text.append(wocTag);
@@ -896,7 +906,15 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				text.append("</q>");
 			}
 
-			text.append(token);
+
+#ifndef INCLUDE_VERSE
+			// Include the token if it is not a verse
+			if (strcmp(tokenName, "verse")) {
+#endif
+				text.append(token);
+#ifndef INCLUDE_VERSE
+			}
+#endif
 
 			writeEntry(text);
 
