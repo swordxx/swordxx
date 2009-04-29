@@ -29,79 +29,9 @@ SWORD_NAMESPACE_START
  * [on]tbooks_nrsv - initialize static instance for all canonical
  *		 text names and chapmax
  */
-struct sbook otbooks_nrsv[] = {
-  {"Genesis", "Gen", "Gen", 50},
-  {"Exodus", "Exod", "Exod", 40},
-  {"Leviticus", "Lev", "Lev", 27},
-  {"Numbers", "Num", "Num", 36},
-  {"Deuteronomy", "Deut", "Deut", 34},
-  {"Joshua", "Josh", "Josh", 24},
-  {"Judges", "Judg", "Judg", 21},
-  {"Ruth", "Ruth", "Ruth", 4},
-  {"I Samuel", "1Sam", "1Sam", 31},
-  {"II Samuel", "2Sam", "2Sam", 24},
-  {"I Kings", "1Kgs", "1Kgs", 22},
-  {"II Kings", "2Kgs", "2Kgs", 25},
-  {"I Chronicles", "1Chr", "1Chr", 29},
-  {"II Chronicles", "2Chr", "2Chr", 36},
-  {"Ezra", "Ezra", "Ezra", 10},
-  {"Nehemiah", "Neh", "Neh", 13},
-  {"Esther", "Esth", "Esth", 10},
-  {"Job", "Job", "Job", 42},
-  {"Psalms", "Ps", "Ps", 150},
-  {"Proverbs", "Prov", "Prov", 31},
-  {"Ecclesiastes", "Eccl", "Eccl", 12},
-  {"Song of Solomon", "Song", "Song", 8},
-  {"Isaiah", "Isa", "Isa", 66},
-  {"Jeremiah", "Jer", "Jer", 52},
-  {"Lamentations", "Lam", "Lam", 5},
-  {"Ezekiel", "Ezek", "Ezek", 48},
-  {"Daniel", "Dan", "Dan", 12},
-  {"Hosea", "Hos", "Hos", 14},
-  {"Joel", "Joel", "Joel", 3},
-  {"Amos", "Amos", "Amos", 9},
-  {"Obadiah", "Obad", "Obad", 1},
-  {"Jonah", "Jonah", "Jonah", 4},
-  {"Micah", "Mic", "Mic", 7},
-  {"Nahum", "Nah", "Nah", 3},
-  {"Habakkuk", "Hab", "Hab", 3},
-  {"Zephaniah", "Zeph", "Zeph", 3},
-  {"Haggai", "Hag", "Hag", 2},
-  {"Zechariah", "Zech", "Zech", 14},
-  {"Malachi", "Mal", "Mal", 4},
-  {"", "", "", 0}
-};
+// for otbooks_nrsv, use otbooks
 
-struct sbook ntbooks_nrsv[] = {
-  {"Matthew", "Matt", "Matt", 28},
-  {"Mark", "Mark", "Mark", 16},
-  {"Luke", "Luke", "Luke", 24},
-  {"John", "John", "John", 21},
-  {"Acts", "Acts", "Acts", 28},
-  {"Romans", "Rom", "Rom", 16},
-  {"I Corinthians", "1Cor", "1Cor", 16},
-  {"II Corinthians", "2Cor", "2Cor", 13},
-  {"Galatians", "Gal", "Gal", 6},
-  {"Ephesians", "Eph", "Eph", 6},
-  {"Philippians", "Phil", "Phil", 4},
-  {"Colossians", "Col", "Col", 4},
-  {"I Thessalonians", "1Thess", "1Thess", 5},
-  {"II Thessalonians", "2Thess", "2Thess", 3},
-  {"I Timothy", "1Tim", "1Tim", 6},
-  {"II Timothy", "2Tim", "2Tim", 4},
-  {"Titus", "Titus", "Titus", 3},
-  {"Philemon", "Phlm", "Phlm", 1},
-  {"Hebrews", "Heb", "Heb", 13},
-  {"James", "Jas", "Jas", 5},
-  {"I Peter", "1Pet", "1Pet", 5},
-  {"II Peter", "2Pet", "2Pet", 3},
-  {"I John", "1John", "1John", 5},
-  {"II John", "2John", "2John", 1},
-  {"III John", "3John", "3John", 1},
-  {"Jude", "Jude", "Jude", 1},
-  {"Revelation of John", "Rev", "Rev", 22},
-  {"", "", "", 0}
-};
+// for ntbooks_nrsv, use ntbooks
 
 /******************************************************************************
  *	Maximum verses per chapter

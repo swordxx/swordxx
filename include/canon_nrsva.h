@@ -89,7 +89,7 @@ struct sbook otbooks_nrsva[] = {
   {"", "", "", 0}
 };
 
-// for ntbooks_nrsva, use ntbooks_nrsv
+// for ntbooks_nrsva, use ntbooks
 
 /******************************************************************************
  *	Maximum verses per chapter
