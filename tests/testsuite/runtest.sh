@@ -26,7 +26,7 @@ if [ "$1" = "" ]; then
 fi
 
 ./$1.sh > $1.try
-BAD=`diff -u $1.try $1.good`
+BAD=`diff -uBb $1.try $1.good`
 if [ "$BAD" = "" ]; then
 	if [ "$2" = "-q" ]; then
 		exit 0
