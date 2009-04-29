@@ -203,9 +203,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"BARUCH", "Bar"},		// Baruch
   {"BEL", "Bel"},		// Bel and the Dragon
   {"BEL AND THE DRAGON", "Bel"},		// Bel and the Dragon
-  {"BEL AND THE DRAGON (THEODOTION)", "BelTheo"},		// Bel and the Dragon (Theodotion)
-  {"BELTHEO", "BelTheo"},		// Bel and the Dragon (Theodotion)
-  {"BET", "BelTheo"},		// Bel and the Dragon (Theodotion)
   {"C", "Col"},		// Colossians
   {"CANTICLE OF CANTICLES", "Song"},		// Song of Solomon
   {"COL", "Col"},		// Colossians
@@ -216,9 +213,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"DANIEL", "Dan"},		// Daniel
   {"DANIEL (ADDITIONS)", "AddDan"},		// Additions to Daniel
   {"DANIEL (GREEK)", "DanGr"},		// Daniel (Greek)
-  {"DANIEL (THEODOTION)", "DanTheo"},		// Daniel (Theodotion)
-  {"DANTHEO", "DanTheo"},		// Daniel (Theodotion)
-  {"DAT", "DanTheo"},		// Daniel (Theodotion)
   {"DEUT", "Deut"},		// Deuteronomy
   {"DEUTERONOMY", "Deut"},		// Deuteronomy
   {"DT", "Deut"},		// Deuteronomy
@@ -414,8 +408,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"JAS", "Jas"},		// James
   {"JB", "Job"},		// Job
   {"JD", "Judg"},		// Judges
-  {"JDA", "JudgA"},		// Judges (Codex Alexandrinus)
-  {"JDB", "JudgB"},		// Judges (Codex Vaticanus)
   {"JDGS", "Judg"},		// Judges
   {"JDT", "Jdt"},		// Judith
   {"JER", "Jer"},		// Jeremiah
@@ -429,24 +421,14 @@ const struct abbrev builtin_abbrevs[] = {
   {"JOL", "Joel"},		// Joel
   {"JONAH", "Jonah"},		// Jonah
   {"JOSH", "Josh"},		// Joshua
-  {"JOSHA", "JoshA"},		// Joshua (Codex Alexandrinus)
-  {"JOSHB", "JoshB"},		// Joshua (Codex Vaticanus)
   {"JOSHUA", "Josh"},		// Joshua
-  {"JOSHUA (CODEX ALEXANDRINUS)", "JoshA"},		// Joshua (Codex Alexandrinus)
-  {"JOSHUA (CODEX VATICANUS)", "JoshB"},		// Joshua (Codex Vaticanus)
   {"JS", "Josh"},		// Joshua
-  {"JSA", "JoshA"},		// Joshua (Codex Alexandrinus)
-  {"JSB", "JoshB"},		// Joshua (Codex Vaticanus)
   {"JU", "Jude"},		// Jude
   {"JUB", "Jub"},		// Jubilees
   {"JUBILEES", "Jub"},		// Jubilees
   {"JUDE", "Jude"},		// Jude
   {"JUDG", "Judg"},		// Judges
-  {"JUDGA", "JudgA"},		// Judges (Codex Alexandrinus)
-  {"JUDGB", "JudgB"},		// Judges (Codex Vaticanus)
   {"JUDGES", "Judg"},		// Judges
-  {"JUDGES (CODEX ALEXANDRINUS)", "JudgA"},		// Judges (Codex Alexandrinus)
-  {"JUDGES (CODEX VATICANUS)", "JudgB"},		// Judges (Codex Vaticanus)
   {"JUDITH", "Jdt"},		// Judith
   {"L", "Luke"},		// Luke
   {"LAM", "Lam"},		// Lamentations
@@ -540,22 +522,13 @@ const struct abbrev builtin_abbrevs[] = {
   {"SONG OF THE THREE CHILDREN", "PrAzar"},		// Prayer of Azariah
   {"SUS", "Sus"},		// Susanna
   {"SUSANNA", "Sus"},		// Susanna
-  {"SUSANNA (THEODOTION)", "SusTheo"},		// Susanna (Theodotion)
-  {"SUSTHEO", "SusTheo"},		// Susanna (Theodotion)
-  {"SUT", "SusTheo"},		// Susanna (Theodotion)
   {"SYRIAC APOCALYPSE OF BARUCH", "2Bar"},		// 2Baruch
   {"T", "Titus"},		// Titus
   {"TB", "Tob"},		// Tobit
-  {"TBA", "TobBA"},		// Tobit (Codices Vaticanus Alexandrinusque)
-  {"TBS", "TobS"},		// Tobit (Codex Sinaiticus)
   {"TBT", "Tob"},		// Tobit
   {"TITUS", "Titus"},		// Titus
   {"TOB", "Tob"},		// Tobit
-  {"TOBBA", "TobBA"},		// Tobit (Codices Vaticanus Alexandrinusque)
   {"TOBIT", "Tob"},		// Tobit
-  {"TOBIT (CODEX SINAITICUS)", "TobS"},		// Tobit (Codex Sinaiticus)
-  {"TOBIT (CODICES VATICANUS ALEXANDRINUSQUE)", "TobBA"},		// Tobit (Codices Vaticanus Alexandrinusque)
-  {"TOBS", "TobS"},		// Tobit (Codex Sinaiticus)
   {"WIS", "Wis"},		// Wisdom
   {"WISDOM", "Wis"},		// Wisdom
   {"WISDOM OF BEN SIRA", "Sir"},		// Sirach
