@@ -104,6 +104,13 @@
  
 	};
 
+    int getBookNumberByOSISName( const char* bookname ) {
+        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+            self->getVersificationSystem()
+        );
+        return system->getBookNumberByOSISName(bookname);
+   }
+    
     const char* getOSISBookName( const int book ) {
         const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
             self->getVersificationSystem()
