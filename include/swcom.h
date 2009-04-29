@@ -1,6 +1,18 @@
 /******************************************************************************
  *  swcom.h   - code for base class 'SWCom'.  SWCom is the basis for all
- *		 types of commentary modules
+ *		 types of commentary modules.
+ *		 It is traditionally close to the same as the SWText
+ *		 module type, but has defaults set which more
+ *		 closely represent how a commentary will be used and how
+ *		 the bulk of our commentaries expect to be used.  For example,
+ *		 most commentaries consist of entries for a range of text
+ *		 (Matt.1.1-6: "Matthew begins with by telling us...").  This
+ *		 same entry will be returned when any verse between Matt.1.1-6
+ *		 is requested from the engine.  This is done with verse linking.
+ *		 Since linking is used heavily in commentaries, the flag
+ *		 skipConsecutiveLinks is defaulted to true so when the
+ *		 commentary is incremented, it will go to the next ENTRY,
+ *		 not the next verse (likely Matt.1.7, from our example above).
  *
  * $Id$
  *

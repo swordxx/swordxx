@@ -36,7 +36,12 @@ OPTIONS="--enable-tests $OPTIONS"
 #OPTIONS="--disable-utilities $OPTIONS"
 
 
-CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*
+# Use these for Windows DLL build
+#LIBS="-no-undefined"
+#OPTIONS="lt_cv_deplibs_check_method=pass_all $OPTIONS"
+
+LIBS="$LIBS" CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*
+
 
 echo ""
 echo ""

@@ -16,8 +16,6 @@
  */
 
 #include <iostream>
-#include <string>
-#include <malloc.h>
 #include <string.h>
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
@@ -41,7 +39,7 @@ int main() {
   uLength = strlen(samplestring);
   conv = ucnv_open("utf-8", &status);		
   uBufSize = (uLength/ucnv_getMinCharSize(conv));
-  uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
+  uBuf = new UChar[uBufSize];
   
   target = uBuf;
   
@@ -49,6 +47,8 @@ int main() {
 		samplestring, uLength, &status);
 
   cout << samplestring << endl;
+
+  delete [] uBuf;
 
   return 0;
 }

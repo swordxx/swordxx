@@ -52,9 +52,9 @@ int main(int argc, char **argv) {
 
 	tmpbuf = calloc(strlen(argv[1]) + 11,1);
 	sprintf(tmpbuf, "%s.idx", argv[1]);
-	idxfd = open(tmpbuf, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	idxfd = open(tmpbuf, O_RDONLY|O_BINARY);
 	sprintf(tmpbuf, "%s.dat", argv[1]);
-	datfd = open(tmpbuf, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+	datfd = open(tmpbuf, O_RDONLY|O_BINARY);
 	free(tmpbuf);
 
 	offset = atoi(argv[2]) * 6;

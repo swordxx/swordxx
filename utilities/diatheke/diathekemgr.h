@@ -21,7 +21,7 @@
 #include <swmgr.h>
 #include "diafiltmgr.h"
 
-enum PlatformIDs { WIN32S = 0, WIN9X, WINNT, WINCE };
+//enum PlatformIDs { WIN32S = 0, WIN9X, WINNT, WINCE };
 
 class DiathekeMgr : public SWMgr {
 	SWFilter *arshaping;
