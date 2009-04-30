@@ -5,43 +5,42 @@ using namespace sword;
 
 class MarkupCallback {
 public:
-    virtual ~MarkupCallback() { ;}
-    virtual bool run(SWModule* x) {return false;}
+	virtual ~MarkupCallback() { ;}
+	virtual bool run(SWModule* x) {return false;}
 };
 
-  class MyMarkup : public MarkupFilterMgr
-  {
+class MyMarkup : public MarkupFilterMgr {
+private:
+	MarkupCallback* _callback;
 
-  private:
-      MarkupCallback* _callback;
+public:		
+	MyMarkup(MarkupCallback* callback, char markup = FMT_THML, char encoding = ENC_UTF8) : 
+		MarkupFilterMgr(markup, encoding), _callback(callback) {}
 
-  public:
-          
-      MyMarkup(MarkupCallback* callback, char markup = FMT_THML, char encoding = ENC_UTF8): MarkupFilterMgr(markup, encoding), _callback(callback)
-      {}
-      virtual ~MyMarkup() { 
-          delCallback(); 
-      }
-      void delCallback() { 
-          delete _callback; _callback = 0; 
-      }
-      void setCallback(MarkupCallback *cb)
-  { 
-          delCallback(); 
-          _callback = cb; 
-      }
-      bool call(SWModule* x) { 
-          if (_callback) 
-              return _callback->run(x);                     
-		  return false;
-      }
-  protected:
-      virtual void AddRenderFilters(SWModule *module, ConfigEntMap
-  &section) { 
-          if(!call(module)) {
-              MarkupFilterMgr::AddRenderFilters(module, section);
-          }       
-      }
-  };
+	virtual ~MyMarkup() { 
+		delCallback(); 
+	}
 
+	void delCallback() { 
+		delete _callback; _callback = 0; 
+	}
 
+	void setCallback(MarkupCallback *cb) { 
+		delCallback(); 
+		_callback = cb; 
+	}
+
+	bool call(SWModule* x) { 
+		if (_callback) 
+			return _callback->run(x);					 
+		return false;
+	}
+
+protected:
+	virtual void AddRenderFilters(SWModule *module, 
+			ConfigEntMap &section) { 
+		if(!call(module)) {
+			MarkupFilterMgr::AddRenderFilters(module, section);
+		}	   
+	}
+};
