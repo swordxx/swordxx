@@ -24,11 +24,17 @@
 #include <vector>
 #include <map>
 #include <treekey.h>
-#include <canon.h>	// KJV internal versification system
+#include <canon.h>		// KJV internal versification system
 #include <swlog.h>
 #include <algorithm>
 
-#include <canon_leningrad.h> // Leningrad Codex (WLC) v11n system
+#include <canon_null.h>		// null v11n system
+
+#include <canon_leningrad.h>	// Leningrad Codex (WLC) v11n system
+#include <canon_mt.h>		// Masoretic Text (MT) v11n system
+#include <canon_kjva.h>		// KJV + Apocrypha v11n system
+#include <canon_nrsv.h>		// NRSV v11n system
+#include <canon_nrsva.h>	// NRSVA + Apocrypha v11n system
 
 using std::vector;
 using std::map;
@@ -317,7 +323,11 @@ VerseMgr *VerseMgr::getSystemVerseMgr() {
 	if (!systemVerseMgr) {
 		systemVerseMgr = new VerseMgr();
 		systemVerseMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
-		systemVerseMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_leningrad, vm_leningrad);
+		systemVerseMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
+		systemVerseMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
+		systemVerseMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
+		systemVerseMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
+		systemVerseMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
 	}
 	return systemVerseMgr;
 }
