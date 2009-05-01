@@ -1,5 +1,5 @@
 /******************************************************************************
- * canon_tanakh.h - Versification data for the Tanakh system
+ * canon_mt.h - Versification data for the Masoretic Text (MT) system
  *
  * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -16,20 +16,20 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_TANAKH_H
-#define CANON_TANAKH_H
+#ifndef CANON_MT_H
+#define CANON_MT_H
 
 SWORD_NAMESPACE_START
 
 
-// Versification system: Tanakh
+// Versification system: MT
 // Book order: Gen Exod Lev Num Deut Josh Judg 1Sam 2Sam 1Kgs 2Kgs Isa Jer Ezek Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal Ps Job Prov Ruth Song Eccl Lam Esth Dan Ezra Neh 1Chr 2Chr
 
 /******************************************************************************
- * [on]tbooks_tanakh - initialize static instance for all canonical
+ * [on]tbooks_mt - initialize static instance for all canonical
  *		 text names and chapmax
  */
-struct sbook otbooks_tanakh[] = {
+struct sbook otbooks_mt[] = {
   {"Genesis", "Gen", "Gen", 50},
   {"Exodus", "Exod", "Exod", 40},
   {"Leviticus", "Lev", "Lev", 27},
@@ -72,15 +72,13 @@ struct sbook otbooks_tanakh[] = {
   {"", "", "", 0}
 };
 
-struct sbook ntbooks_tanakh[] = {
-  {"", "", "", 0}
-};
+// for ntbooks_mt, use ntbooks_null
 
 /******************************************************************************
  *	Maximum verses per chapter
  */
 
-int vm_tanakh[] = {
+int vm_mt[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32, 32, 20, 18, 24, 21, 16, 27, 33, 38, 18, 34, 24, 20, 67, 34, 35, 46, 22, 35, 43, 54, 33, 20, 31, 29, 43, 36, 30, 23, 23, 57, 38, 34, 34, 28, 34, 31, 22, 33, 26, 
   // Exodus

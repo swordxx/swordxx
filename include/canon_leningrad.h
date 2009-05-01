@@ -72,9 +72,7 @@ struct sbook otbooks_leningrad[] = {
   {"", "", "", 0}
 };
 
-struct sbook ntbooks_leningrad[] = {
-  {"", "", "", 0}
-};
+// for ntbooks_mt, use ntbooks_null
 
 /******************************************************************************
  *	Maximum verses per chapter
