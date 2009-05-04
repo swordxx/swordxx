@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[2]);
 
 	VerseKey DefaultVSKey;
-//	DefaultVSKey.AutoNormalize(0);
+	DefaultVSKey.AutoNormalize(0);
 
 	if (argc > 3)
 		DefaultVSKey.setVersificationSystem(argv[3]);

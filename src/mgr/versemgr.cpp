@@ -44,6 +44,20 @@ using std::lower_bound;
 SWORD_NAMESPACE_START
 
 
+VerseMgr *VerseMgr::getSystemVerseMgr() {
+	if (!systemVerseMgr) {
+		systemVerseMgr = new VerseMgr();
+		systemVerseMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
+		systemVerseMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
+		systemVerseMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
+		systemVerseMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
+		systemVerseMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
+		systemVerseMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
+	}
+	return systemVerseMgr;
+}
+
+
 class VerseMgr::System::Private {
 public:
 	/** Array[chapmax] of maximum verses in chapters */
@@ -316,20 +330,6 @@ void VerseMgr::init() {
 
 VerseMgr::~VerseMgr() {
 	delete p;
-}
-
-
-VerseMgr *VerseMgr::getSystemVerseMgr() {
-	if (!systemVerseMgr) {
-		systemVerseMgr = new VerseMgr();
-		systemVerseMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
-		systemVerseMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
-		systemVerseMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
-		systemVerseMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
-		systemVerseMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
-		systemVerseMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
-	}
-	return systemVerseMgr;
 }
 
 
