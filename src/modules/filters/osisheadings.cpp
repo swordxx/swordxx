@@ -51,6 +51,8 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	bool preverse   = false;
 	bool withinTitle = false;
 	bool withinPreverseDiv = false;
+	SWBuf preverseDivID = "";
+	const char *pvDID = 0;
 	bool canonical  = false;
 	SWBuf header;
 	int headerNum   = 0;
@@ -77,32 +79,36 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			// <title> </title> <div subType="x-preverse"> (</div> ## when in previous)
 			if ( (!withinPreverseDiv && !strcmp(tag.getName(), "title")) || 
 				(!strcmp(tag.getName(), "div") &&
-					((tag.isEndTag() && withinPreverseDiv) ||
+					((withinPreverseDiv && (tag.isEndTag(pvDID))) ||
 					 (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-preverse")))
 				)) {
 
-				withinTitle = !tag.isEndTag();
+				withinTitle = (!tag.isEndTag(pvDID));
 				if (!strcmp(tag.getName(), "div")) {
-					withinPreverseDiv = !tag.isEndTag();
+					withinPreverseDiv = (!tag.isEndTag(pvDID));
+					if (!pvDID) {
+						preverseDivID = tag.getAttribute("sID");
+						pvDID = (preverseDivID.length())? preverseDivID.c_str() : 0;
+					}
 				}
 				
-				if (!tag.isEndTag()) { //start tag
-					if (!tag.isEmpty()) {
+				if (!tag.isEndTag(pvDID)) { //start tag
+					if (!tag.isEmpty() || pvDID) {
 						startTag = tag;
 					}
 				}
 				
-				if ( withinPreverseDiv
+				if ( !tag.isEndTag(pvDID) && (withinPreverseDiv 
 					|| (tag.getAttribute("subType") && !stricmp(tag.getAttribute("subType"), "x-preverse"))
 					|| (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse"))	// deprecated
-						) {
+						)) {
 					hide = true;
 					preverse = true;
 					header = "";
 					canonical = (tag.getAttribute("canonical") && (!stricmp(tag.getAttribute("canonical"), "true")));
 					continue;
 				}
-				if (!tag.isEndTag()) { //start tag
+				if (!tag.isEndTag(pvDID)) { //start tag
 					hide = true;
 					header = "";
 					if (option || canonical) {	// we want the tag in the text
@@ -112,7 +118,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 					}
 					continue;
 				}
-				if (hide && tag.isEndTag()) {
+				if (hide && tag.isEndTag(pvDID)) {
 					if (module->isProcessEntryAttributes() && ((option || canonical) || (!preverse))) {
 						if (preverse) {
 							sprintf(buf, "%i", pvHeaderNum++);
@@ -138,6 +144,7 @@ char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 						continue;
 					}
 					preverse = false;
+					pvDID = 0;
 				}
 			}
 

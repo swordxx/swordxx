@@ -309,4 +309,13 @@ const char *XMLTag::toString() const {
 }
 
 
+// if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
+// otherwise, we return if we're a simple XML end </tag>.
+bool XMLTag::isEndTag(const char *eID) const {
+	if (eID) {
+		return (SWBuf(eID) == getAttribute("eID"));
+	}
+	return endTag;
+}
+
 SWORD_NAMESPACE_END

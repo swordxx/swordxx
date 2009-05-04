@@ -420,13 +420,14 @@ public:
 	 */
 	inline bool endsWith(const char *postfix) const { unsigned int psize = strlen(postfix); return (size() >= psize)?!strncmp(end-psize, postfix, psize):false; }
 
-	inline int compare(const char *other) const { return strcmp(c_str(), other); }
+	// be sure we've been given a valid pointer to compare.  If not, we return !=; specifically less-than, for lack of better options
+	inline int compare(const char *other) const { return (other?strcmp(c_str(), other):-1); }
 	inline bool operator ==(const char *other) const { return compare(other) == 0; }
 	inline bool operator !=(const char *other) const { return compare(other) != 0; }
-	inline bool operator > (const char *other) const { return compare(other) > 0; }
-	inline bool operator < (const char *other) const { return compare(other) < 0; }
-	inline bool operator <=(const char *other) const { return compare(other) <= 0; }
-	inline bool operator >=(const char *other) const { return compare(other) >= 0; }
+	inline bool operator > (const char *other) const { return other && compare(other) > 0; }
+	inline bool operator < (const char *other) const { return other && compare(other) < 0; }
+	inline bool operator <=(const char *other) const { return other && compare(other) <= 0; }
+	inline bool operator >=(const char *other) const { return other && compare(other) >= 0; }
 };
 
 
