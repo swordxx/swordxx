@@ -403,6 +403,13 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
 				sysConfDataPath = (*entry).second;
 			}
+			if (providedSysConf) {
+				*providedSysConf = sysConf;
+			}
+			else {
+				delete sysConf;
+				sysConf = 0;
+			}
 		}
 		if (!sysConfDataPath.size()) {
 			SWLog::getSystemLog()->logDebug("Checking working directory for mods.conf...");
@@ -422,7 +429,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 				return;
 			}
 
-		   // check working directory ../library/
+			// check working directory ../library/
 			SWLog::getSystemLog()->logDebug("Checking working directory ../library/ for mods.d...");
 			if (FileMgr::existsDir("../library", "mods.d")) {
 				SWLog::getSystemLog()->logDebug("found.");
