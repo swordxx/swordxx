@@ -2,6 +2,14 @@ API ChangeLog
 
 * Release 1.6.0 *
 
+04-May-2009	Troy A. Griffitts <scribe@crosswire.org>
+	Added ability for (SWBuf("xxx") == (const char *)0) to
+		return false;
+	Added OSIS Header logic to accept:
+		<div subType="x-preverse" sID="xyz"/>
+	Added initial set of v11n schemes (Chris Little):
+		KJV, Leningrad, MT, KJVA, NRSV, NRSVA
+	
 12-Apr-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added '.' feature for entryAttrib search, e.g,
 		Word//Lemma./G932/ will find in Lemma, Lemma.1, etc.
