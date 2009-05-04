@@ -50,7 +50,7 @@ int           VerseKey::instance       = 0;
  * VerseKey::init - initializes instance of VerseKey
  */
 
-void VerseKey::init() {
+void VerseKey::init(const char *v11n) {
 	myclass = &classdef;
 
 	instance++;
@@ -65,8 +65,9 @@ void VerseKey::init() {
 	verse = 1;
 	suffix = 0;
 	tmpClone = 0;
+	refSys = 0;
 
-	setVersificationSystem("KJV");
+	setVersificationSystem(v11n);
 }
 
 /******************************************************************************
@@ -200,9 +201,9 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 }
 
 
-VerseKey::VerseKey(const char *min, const char *max) : SWKey()
+VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 {
-	init();
+	init(v11n);
 	ListKey tmpListKey = ParseVerseList(min);
 	if (tmpListKey.Count()) {
 		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
@@ -238,15 +239,19 @@ VerseKey::~VerseKey() {
 
 
 void VerseKey::setVersificationSystem(const char *name) {
-	refSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem(name);
+	const VerseMgr::System *newRefSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem(name);
 	// TODO: cheese, but what should we do if requested v11n system isn't found?
-	if (!refSys) refSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem("KJV");
-	BMAX[0] = refSys->getBMAX()[0];
-	BMAX[1] = refSys->getBMAX()[1];
+	if (!newRefSys)   newRefSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem("KJV");
+	if (refSys != newRefSys) {
+		refSys = newRefSys;
+		BMAX[0] = refSys->getBMAX()[0];
+		BMAX[1] = refSys->getBMAX()[1];
 
-	// TODO: adjust bounds for versificaion system ???
-//	if (lowerBound) LowerBound().setVersificationSystem(name);
-//	if (upperBound) UpperBound().setVersificationSystem(name);
+		// TODO: adjust bounds for versificaion system ???
+		// TODO: when we have mapping done, rethink this
+		//necessary as our bounds might not mean anything in the new v11n system
+		ClearBounds();
+	}
 
 }
 
@@ -263,8 +268,8 @@ const char *VerseKey::getVersificationSystem() const { return refSys->getName();
 
 char VerseKey::parse(bool checkAutoNormalize)
 {
-	testament = 2;
-	book      = BMAX[1];
+	testament = BMAX[1]?2:1;
+	book      = BMAX[BMAX[1]?1:0];
 	chapter   = 1;
 	verse     = 1;
 
@@ -1014,7 +1019,6 @@ void VerseKey::ClearBounds()
 	delete tmpClone;
 	tmpClone = 0;
 	boundSet = false;
-	initBounds();
 }
 
 
@@ -1024,8 +1028,8 @@ void VerseKey::initBounds() const
 		tmpClone = (VerseKey *)this->clone();
 		tmpClone->AutoNormalize(0);
 		tmpClone->Headings(1);
-		tmpClone->Testament(2);
-		tmpClone->Book(BMAX[1]);
+		tmpClone->Testament((BMAX[1])?2:1);
+		tmpClone->Book(BMAX[(BMAX[1])?1:0]);
 		tmpClone->Chapter(tmpClone->getChapterMax());
 		tmpClone->Verse(tmpClone->getVerseMax());
 		upperBound = tmpClone->Index();
@@ -1262,8 +1266,8 @@ void VerseKey::Normalize(char autocheck)
                break;  // If we've made it this far (all failure checks continue) we're ok
           }
 
-          if (testament > 2) {
-               testament = 2;
+          if (testament > (BMAX[1]?2:1)) {
+               testament = BMAX[1]?2:1;
                book      = BMAX[testament-1];
                chapter   = getChapterMax();
                verse     = getVerseMax();

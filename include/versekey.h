@@ -71,7 +71,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
 	/** initializes this VerseKey()
 	*/
-	void init();
+	void init(const char *v11n = "KJV");
 
 	// bounds caching is mutable, thus const
 	void initBounds() const;
@@ -156,7 +156,7 @@ public:
 	* @param min the lower boundary of the new	VerseKey
 	* @param max the upper boundary of the new	VerseKey
 	*/
-	VerseKey(const char *min, const char *max);
+	VerseKey(const char *min, const char *max, const char *v11n = "KJV");
 
 	/**	VerseKey Copy Constructor - will create a new VerseKey
 	* based on an existing SWKey
