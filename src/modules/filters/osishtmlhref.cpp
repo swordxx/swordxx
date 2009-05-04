@@ -602,7 +602,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			outText(URL::encode(u->version.c_str()).c_str(), buf, u);
 			outText("\">", buf, u);
 
-			outText("<img border=0 src=\"", buf, u);
+			outText("<img border=\"0\" src=\"", buf, u);
 			outText(filepath, buf, u);
 			outText("\" />", buf, u);
 
