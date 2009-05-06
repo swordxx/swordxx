@@ -119,11 +119,20 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
  */
 
 void VerseKey::setFromOther(const VerseKey &ikey) {
-	testament = ikey.Testament();
-	book = ikey.Book();
-	chapter = ikey.Chapter();
-	verse = ikey.Verse();
-	suffix = ikey.getSuffix();
+	if (refSys == ikey.refSys) {
+		testament = ikey.Testament();
+		book = ikey.Book();
+		chapter = ikey.Chapter();
+		verse = ikey.Verse();
+		suffix = ikey.getSuffix();
+        }
+        // Here is where we will do v11n system conversions in the future
+        // when we have a conversion mechanism (Ben Morgan has started
+        // thinking about this)
+        else {
+	        // For now, this is the best we can do
+        	setText(ikey.getText());
+        }
 }
 
 
