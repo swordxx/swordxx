@@ -17,6 +17,8 @@
 #ifndef DIRENT_INCLUDED
 #define DIRENT_INCLUDED
 
+#include <defs.h>
+
 typedef struct DIR DIR;
 
 struct dirent
@@ -24,9 +26,9 @@ struct dirent
     char *d_name;
 };
 
-DIR           *opendir(const char *);
-int           closedir(DIR *);
-struct dirent *readdir(DIR *);
-void          rewinddir(DIR *);
+SWDLLEXPORT DIR           *opendir(const char *);
+SWDLLEXPORT int           closedir(DIR *);
+SWDLLEXPORT struct dirent *readdir(DIR *);
+SWDLLEXPORT void          rewinddir(DIR *);
 
 #endif
