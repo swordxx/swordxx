@@ -33,7 +33,7 @@ private:
 protected:
 	// used by derived classes so we have it in the header
 	class QuoteStack;
-	class MyUserData : public BasicFilterUserData {
+	class SWDLLEXPORT MyUserData : public BasicFilterUserData {
 	public:
 		bool osisQToTick;
 		bool inBold;
