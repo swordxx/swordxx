@@ -128,7 +128,7 @@
 				AdditionalOptions="/D _CRT_SECURE_NO_DEPRECATE"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
+				PreprocessorDefinitions="_DEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -154,8 +154,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
-				AdditionalLibraryDirectories="..\..\..\..\curl\lib\Debug"
+				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib icuuc.lib icuin.lib icudt.lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/Release;../../../../icu-sword/lib"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -293,7 +293,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="NDEBUG;_ICU_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
+				PreprocessorDefinitions="NDEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -318,8 +318,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
-				AdditionalLibraryDirectories="../../../../curl/lib/Release"
+				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib icuuc.lib icuin.lib icudt.lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/Release;../../../../icu-sword/lib"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
