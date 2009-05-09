@@ -45,7 +45,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../include;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="curllib.lib"
+				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
 				AdditionalLibraryDirectories="../../../../curl/lib/Release"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -128,7 +128,7 @@
 				AdditionalOptions="/D _CRT_SECURE_NO_DEPRECATE"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -154,6 +154,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
+				AdditionalLibraryDirectories="..\..\..\..\curl\lib\Debug"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -208,7 +210,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../include;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -234,6 +236,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/Debug"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -289,7 +293,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="NDEBUG;_ICU_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE"
+				PreprocessorDefinitions="NDEBUG;_ICU_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -314,6 +318,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/Release"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -536,6 +542,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\mgr\curlftpt.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\mgr\curlhttpt.cpp"
 				>
 			</File>
 			<File
@@ -3329,10 +3339,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\src\utilfuns\sub.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\modules\filters\swbasicfilter.cpp"
 				>
 				<FileConfiguration
@@ -5245,6 +5251,53 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\src\modules\filters\utf8arabicpoints.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug with ICU|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release with ICU|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\src\modules\filters\utf8arshaping.cpp"
 				>
 				<FileConfiguration
@@ -5434,53 +5487,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\modules\filters\utf8hebrewpoints.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release with ICU|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\src\modules\filters\utf8arabicpoints.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6291,11 +6297,35 @@
 			Name="Sword Header Files"
 			>
 			<File
-				RelativePath="..\..\..\include\apocrypha.h"
+				RelativePath="..\..\..\include\canon.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\canon.h"
+				RelativePath="..\..\..\include\canon_abbrevs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_kjva.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_leningrad.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_mt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_nrsv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_nrsva.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_null.h"
 				>
 			</File>
 			<File
@@ -6843,6 +6873,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\utf8arabicpoints.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\utf8arshaping.h"
 				>
 			</File>
@@ -6860,10 +6894,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\utf8hebrewpoints.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\utf8arabicpoints.h"
 				>
 			</File>
 			<File
