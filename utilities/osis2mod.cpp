@@ -44,45 +44,32 @@
 #include <latin1utf8.h>
 #endif
 
-// Debug for everything else
-//#define DEBUG
-
-// Debug for simple transformation stack
-//#define DEBUG_XFORM
-
-// Debug for Words of Christ (aka WOC)
-//#define DEBUG_QUOTE
-
-// Debug for parsing osisRefs
-//#define DEBUG_REF
-
-// Debug for tag stack
-//#define DEBUG_STACK
-
-// Debug for titles
-//#define DEBUG_TITLE
-
-// Debug for interverse material
-//#define DEBUG_INTERVERSE
-
-// Debug for re-v11n
-//#define DEBUG_REV11N
-
-// Include verse tag
-//#define INCLUDE_VERSE
-
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
 
 using namespace std;
 
+// Turn debugging on and off
+//#define DEBUG
+int       debug            =   0;
+const int DEBUG_WRITE      =   1; // writing to module
+const int DEBUG_VERSE      =   2; // verse start and end
+const int DEBUG_QUOTE      =   4; // quotes, especially Words of Christ (WOC)
+const int DEBUG_TITLE      =   8; // titles
+const int DEBUG_INTERVERSE =  16; // inter-verse maerial
+const int DEBUG_XFORM      =  32; // transformations
+const int DEBUG_REV11N     =  64; // versification
+const int DEBUG_REF        = 128; // parsing of osisID and osisRef
+const int DEBUG_STACK      = 256; // cleanup of references
+const int DEBUG_OTHER      = 512; // ins and outs of books, chapters and verses
+
 #ifdef _ICU_
-UTF8NFC normalizer;
+UTF8NFC    normalizer;
 Latin1UTF8 converter;
 #endif
 int normalized = 0;
-int converted = 0;
+int converted  = 0;
 
 SWText *module = 0;
 VerseKey currentVerse;
@@ -237,8 +224,10 @@ void prepareSWVerseKey(SWBuf &buf) {
 	bool inRange = false;
 	while (*p) {
 		if (inRange) {
-#ifdef DEBUG_REF
-		cout << "Copy range marker:" << *p << endl;;
+#ifdef DEBUG
+		if (debug & DEBUG_REF) {
+			cout << "Copy range marker:" << *p << endl;;
+		}
 #endif
 			// Range markers are copied as is
 			*s++ = *p++;
@@ -255,28 +244,36 @@ void prepareSWVerseKey(SWBuf &buf) {
 		if (*n == ':') {
 			// set p to skip the work prefix
 			p = n + 1;
-#ifdef DEBUG_REF
-			cout << "Found a work prefix ";
-			for (char *x = s; x <= n; x++) {
-				cout << *x;
+#ifdef DEBUG
+			if (debug & DEBUG_REF) {
+				cout << "Found a work prefix ";
+				for (char *x = s; x <= n; x++) {
+					cout << *x;
+				}
+				cout << endl;
 			}
-			cout << endl;
 #endif
 		}
 
 		// Now we are in the meat of an osisID.
 		// Copy it to its end but stop on a grain marker of '!'
-#ifdef DEBUG_REF
-		cout << "Copy osisID:";
+#ifdef DEBUG
+		if (debug & DEBUG_REF) {
+			cout << "Copy osisID:";
+		}
 #endif
 		while (*p && *p != '!' && *p != ' ' && *p != '-') {
-#ifdef DEBUG_REF
-			cout << *p;
+#ifdef DEBUG
+			if (debug & DEBUG_REF) {
+				cout << *p;
+			}
 #endif
 			*s++ = *p++;
 		}
-#ifdef DEBUG_REF
-		cout << endl;
+#ifdef DEBUG
+		if (debug & DEBUG_REF) {
+			cout << endl;
+		}
 #endif
 
 		// The ! and everything following until we hit
@@ -286,12 +283,14 @@ void prepareSWVerseKey(SWBuf &buf) {
 			while (*n && *n != ' ' && *n != '-') {
 				n++;
 			}
-#ifdef DEBUG_REF
-			cout << "Found a grain suffix ";
-			for (char *x = p; x < n; x++) {
-				cout << *x;
+#ifdef DEBUG
+			if (debug & DEBUG_REF) {
+				cout << "Found a grain suffix ";
+				for (char *x = p; x < n; x++) {
+					cout << *x;
+				}
+				cout << endl;
 			}
-			cout << endl;
 #endif
 			p = n;
 		}
@@ -302,9 +301,11 @@ void prepareSWVerseKey(SWBuf &buf) {
 		// then we are entering a range
 		inRange = !inRange && *p == '-';
 
-#ifdef DEBUG_REF
-		if (inRange) {
-			cout << "Found a range" << endl;
+#ifdef DEBUG
+		if (debug & DEBUG_REF) {
+			if (inRange) {
+				cout << "Found a range" << endl;
+			}
 		}
 #endif
 
@@ -316,8 +317,10 @@ void prepareSWVerseKey(SWBuf &buf) {
 			}
 			// replacing them all with a ';'
 			*s++ = ';';
-#ifdef DEBUG_REF
-			cout << "replacing space with ;. Remaining: " << p << endl;
+#ifdef DEBUG
+			if (debug & DEBUG_REF) {
+				cout << "replacing space with ;. Remaining: " << p << endl;
+			}
 #endif
 		}
 	}
@@ -329,8 +332,10 @@ void prepareSWVerseKey(SWBuf &buf) {
 		*s = '\0';
 		// Since we modified the swbuf, we need to tell it what we have done
 		buf.setSize(s - buf.c_str());
-#ifdef DEBUG_REF
-		cout << "shortended keyVal to`" << buf.c_str() << "`"<< endl;
+#ifdef DEBUG
+		if (debug & DEBUG_REF) {
+			cout << "shortended keyVal to`" << buf.c_str() << "`"<< endl;
+		}
 #endif
 	}
 }
@@ -370,8 +375,10 @@ bool isValidRef(const char *buf) {
 	// If we have gotten here the reference is not in the selected versification.
 	cout << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
 
-#ifdef DEBUG_REV11N
-	cout << "\t" << before << " normalizes to "  << after << endl;
+#ifdef DEBUG
+	if (debug & DEBUG_REV11N) {
+		cout << "\t" << before << " normalizes to "  << after << endl;
+	}
 #endif
 
 	return false;
@@ -406,8 +413,10 @@ void makeValidRef(VerseKey &key) {
 	int chapterMax = key.getChapterMax();
 	int verseMax   = key.getVerseMax();
 
-#ifdef DEBUG_REV11N
-	cout << "Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
+#ifdef DEBUG
+	if (debug & DEBUG_REV11N) {
+		cout << "Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
+	}
 #endif
 
 	cout << "re-versified " << key;
@@ -519,7 +528,9 @@ void writeEntry(SWBuf &text, bool force = false) {
 		}
 
 #ifdef DEBUG
-		cout << "Write: " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+		if (debug & DEBUG_WRITE) {
+			cout << "Write: " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+		}
 #endif
 
 		module->setEntry(activeVerseText);
@@ -619,8 +630,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Remember non-empty start tags
 		if (!token.isEmpty()) {
 			tagStack.push(token);
-#ifdef DEBUG_STACK
-			cout << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
+#ifdef DEBUG
+			if (debug & DEBUG_STACK) {
+				cout << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
+			}
 #endif
 		}
 
@@ -628,7 +641,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		if (!firstDiv) {
 			if (!strcmp(tokenName, "div")) {
 #ifdef DEBUG
-				cout << "Found first div and pitching prior material: " << text << endl;
+				if (debug & DEBUG_OTHER) {
+					cout << "Found first div and pitching prior material: " << text << endl;
+				}
 #endif
 				// TODO: Save off the content to use it to suggest the module's conf.
 				firstDiv = true;
@@ -647,10 +662,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			// BOOK START, <div type="book" ...>
 			if ((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "book"))) {
 				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
-#ifdef DEBUG_TITLE
-					cout << currentOsisID << ": OOPS HEADING " << endl;
-					cout << "inChapterHeader = " << inChapterHeader << endl;
-					cout << "inBookHeader = " << inBookHeader << endl;
+#ifdef DEBUG
+					if (debug & DEBUG_TITLE) {
+						cout << currentOsisID << ": OOPS HEADING " << endl;
+						cout << "inChapterHeader = " << inChapterHeader << endl;
+						cout << "inBookHeader = " << inBookHeader << endl;
+					}
 #endif
 					currentVerse.Testament(0);
 					currentVerse.Book(0);
@@ -675,7 +692,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 				inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID"));
 #ifdef DEBUG
-				cout << "Current book is " << currentVerse << (!inCanonicalOSISBook ? "not in versification, ignoring" : "") << endl;
+				if (debug & DEBUG_OTHER) {
+					cout << "Current book is " << currentVerse << (!inCanonicalOSISBook ? "not in versification, ignoring" : "") << endl;
+				}
 #endif
 
 				return false;
@@ -686,8 +705,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			     (!strcmp(tokenName, "chapter"))
 			   ) {
 				if (inBookHeader) {
-#ifdef DEBUG_TITLE
-					cout << currentOsisID << ": BOOK HEADING "<< text.c_str() << endl;
+#ifdef DEBUG
+					if (debug & DEBUG_TITLE) {
+						cout << currentOsisID << ": BOOK HEADING "<< text.c_str() << endl;
+					}
 #endif
 					writeEntry(text);
 				}
@@ -695,7 +716,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				currentVerse = token.getAttribute("osisID");
 				currentVerse.Verse(0);
 #ifdef DEBUG
-				cout << "Current chapter is " << currentVerse << " (" << token.getAttribute("osisID") << ")" << endl;
+				if (debug & DEBUG_OTHER) {
+					cout << "Current chapter is " << currentVerse << " (" << token.getAttribute("osisID") << ")" << endl;
+				}
 #endif
 				strcpy(currentOsisID, currentVerse.getOSISRef());
 
@@ -715,15 +738,19 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (!strcmp(tokenName, "verse") ||
 			   (!strcmp(tokenName, "div") && token.getAttribute("annotateType"))) {
 #ifdef DEBUG
-				cout << "Entering verse" << endl;
+				if (debug & DEBUG_OTHER) {
+					cout << "Entering verse" << endl;
+				}
 #endif
 				if (inChapterHeader) {
 					SWBuf heading = text;
 					text = "";
 
 					if (heading.length()) {
-#ifdef DEBUG_TITLE
-						cout << currentOsisID << ": CHAPTER HEADING "<< heading.c_str() << endl;
+#ifdef DEBUG
+						if (debug & DEBUG_TITLE) {
+							cout << currentOsisID << ": CHAPTER HEADING "<< heading.c_str() << endl;
+						}
 #endif
 						writeEntry(heading);
 					}
@@ -769,8 +796,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 				strcpy(currentOsisID, currentVerse.getOSISRef());
 #ifdef DEBUG
-				cout << "New current verse is " << currentVerse << endl;
-				cout << "osisID/annotateRef is adjusted to: " << keyVal << endl;
+				if (debug & DEBUG_OTHER) {
+					cout << "New current verse is " << currentVerse << endl;
+					cout << "osisID/annotateRef is adjusted to: " << keyVal << endl;
+				}
 #endif
 
 				inVerse         = true;
@@ -779,12 +808,22 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				inChapterHeader = false;
 				verseDepth      = tagStack.size();
 
-#ifndef INCLUDE_VERSE
 				// Include the token if it is not a verse
 				if (strcmp(tokenName, "verse")) {
-#endif
 					text.append(token);
-#ifndef INCLUDE_VERSE
+				}
+#ifdef DEBUG
+				else if (debug & DEBUG_VERSE)
+				{
+					// transform the verse into a milestone
+					XMLTag t = "<milestone resp=\"v\" />";
+					// copy all the attributes of the verse element to the milestone
+					StringList attrNames = token.getAttributeNames();
+					for (StringList::iterator loop = attrNames.begin(); loop != attrNames.end(); loop++) {
+						const char* attr = (*loop).c_str();
+						t.setAttribute(attr, token.getAttribute(attr));
+					}
+					text.append(t);
 				}
 #endif
 
@@ -802,8 +841,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Otherwise have to do it here
 		if (!strcmp(tokenName, "q")) {
 			quoteStack.push(token);
-#ifdef DEBUG_QUOTE
-			cout << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
+#ifdef DEBUG
+			if (debug & DEBUG_QUOTE) {
+				cout << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
+			}
 #endif
 			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
 				inWOC = true;
@@ -864,14 +905,16 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			if (inPreVerse) {
 				char genBuf[200];
-				sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" sID=\"pv%d\"/>", genID);
+				sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" sID=\"pv%d\"/>", genID++);
 				text.append(genBuf);
 			}
 		}
 
-#ifdef DEBUG_INTERVERSE
-		if (!inVerse && !inBookHeader && !inChapterHeader) {
-			cout << currentOsisID << ": interverse start token " << token << ":" << text.c_str() << endl;
+#ifdef DEBUG
+		if (debug & DEBUG_INTERVERSE) {
+			if (!inVerse && !inBookHeader && !inChapterHeader) {
+				cout << currentOsisID << ": interverse start token " << token << ":" << text.c_str() << endl;
+			}
 		}
 #endif
 
@@ -890,8 +933,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		if (!token.isEmpty()) {
 			XMLTag topToken = tagStack.top();
 			tagDepth = tagStack.size();
-#ifdef DEBUG_STACK
-			cout << currentOsisID << ": pop(" << tagDepth << ") " << topToken.getName() << endl;
+#ifdef DEBUG
+			if (debug & DEBUG_STACK) {
+				cout << currentOsisID << ": pop(" << tagDepth << ") " << topToken.getName() << endl;
+			}
 #endif
 			tagStack.pop();
 
@@ -921,12 +966,22 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 
-#ifndef INCLUDE_VERSE
 			// Include the token if it is not a verse
 			if (strcmp(tokenName, "verse")) {
-#endif
 				text.append(token);
-#ifndef INCLUDE_VERSE
+			}
+#ifdef DEBUG
+			else if (debug & DEBUG_VERSE)
+			{
+				// transform the verse into a milestone
+				XMLTag t = "<milestone resp=\"v\" />";
+				// copy all the attributes of the verse element to the milestone
+				StringList attrNames = token.getAttributeNames();
+				for (StringList::iterator loop = attrNames.begin(); loop != attrNames.end(); loop++) {
+					const char* attr = (*loop).c_str();
+					t.setAttribute(attr, token.getAttribute(attr));
+				}
+				text.append(t);
 			}
 #endif
 
@@ -944,16 +999,20 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Otherwise have to manage it here
 		if (!strcmp(tokenName, "q")) {
 			XMLTag topToken = quoteStack.top();
-#ifdef DEBUG_QUOTE
-			cout << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+#ifdef DEBUG
+			if (debug & DEBUG_QUOTE) {
+				cout << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+			}
 #endif
 			quoteStack.pop();
 
 			// If we have found an end tag for a <q who="Jesus"> then we are done with the WOC
 			// and we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
 			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
-#ifdef DEBUG_QUOTE
-				cout << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+#ifdef DEBUG
+				if (debug & DEBUG_QUOTE) {
+					cout << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+				}
 #endif
 				inWOC = false;
 				const char *sID = topToken.getAttribute("sID");
@@ -1022,14 +1081,18 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (!inPreVerse) {
 				text.append(token);
 				writeEntry(text);
-#ifdef DEBUG_INTERVERSE
-				cout << currentOsisID << ": appending interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+#ifdef DEBUG
+				if (debug & DEBUG_INTERVERSE) {
+					cout << currentOsisID << ": appending interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+				}
 #endif
 				return true;
 			}
 
-#ifdef DEBUG_INTERVERSE
-			cout << currentOsisID << ": interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+#ifdef DEBUG
+			if (debug & DEBUG_INTERVERSE) {
+				cout << currentOsisID << ": interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+			}
 #endif
 			return false;
 
@@ -1060,8 +1123,10 @@ XMLTag transformBSP(XMLTag t) {
 
 	// Support simplification transformations
 	if (t.isEmpty()) {
-#ifdef DEBUG_XFORM
-		cout << currentOsisID << ": xform empty " << t << endl;
+#ifdef DEBUG
+		if (debug & DEBUG_XFORM) {
+			cout << currentOsisID << ": xform empty " << t << endl;
+		}
 #endif
 		return t;
 	}
@@ -1070,11 +1135,9 @@ XMLTag transformBSP(XMLTag t) {
 	if (!t.isEndTag()) {
 		// Transform <p> into <div type="paragraph"> and milestone it
 		if (!strcmp(tagName, "p")) {
-			// note there is no process that should care about type, it is there for reversability
 			t.setText("<div type=\"paragraph\" />");
 			sprintf(buf, "gen%d", sID++);
 			t.setAttribute("sID", buf);
-			t.setAttribute("type", "paragraph");
 		}
 
 		// Transform <tag> into <tag  sID="">, where tag is a milestoneable element.
@@ -1092,23 +1155,28 @@ XMLTag transformBSP(XMLTag t) {
 			 !strcmp(tagName, "q")       ||
 			 !strcmp(tagName, "salute")  ||
 			 !strcmp(tagName, "signed")  ||
-			 !strcmp(tagName, "speech")
+			 !strcmp(tagName, "speech")  ||
+			 !strcmp(tagName, "verse")
 			) {
 			t.setEmpty(true);
 			sprintf(buf, "gen%d", sID++);
 			t.setAttribute("sID", buf);
 		}
 		bspTagStack.push(t);
-#ifdef DEBUG_XFORM
-		cout << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t << " (tagname=" << tagName << ")" << endl;
-		XMLTag topToken = bspTagStack.top();
-		cout << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken << endl;
+#ifdef DEBUG
+		if (debug & DEBUG_XFORM) {
+			cout << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t << " (tagname=" << tagName << ")" << endl;
+			XMLTag topToken = bspTagStack.top();
+			cout << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken << endl;
+		}
 #endif
 	}
 	else {
 		XMLTag topToken = bspTagStack.top();
-#ifdef DEBUG_XFORM
-		cout << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken << endl;
+#ifdef DEBUG
+		if (debug & DEBUG_XFORM) {
+			cout << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken << endl;
+		}
 #endif
 		bspTagStack.pop();
 
@@ -1122,7 +1190,8 @@ XMLTag transformBSP(XMLTag t) {
 			 !strcmp(tagName, "q")       ||
 			 !strcmp(tagName, "salute")  ||
 			 !strcmp(tagName, "signed")  ||
-			 !strcmp(tagName, "speech")
+			 !strcmp(tagName, "speech")  ||
+			 !strcmp(tagName, "verse")
 			) {
 			// make this a clone of the start tag with sID changed to eID
 			// Note: in the case of </p> the topToken is a <div type="paragraph">
@@ -1202,6 +1271,24 @@ void usage(const char *app, const char *error = 0) {
 	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
         }
+#ifdef DEBUG
+	fprintf(stderr, "  -d <flags>\t\t turn on debugging (default is 0)\n");
+	fprintf(stderr, "\t\t\t\t Note: This flag may change in the future.\n");
+	fprintf(stderr, "\t\t\t\t Flags: The following are valid values:\n");
+	fprintf(stderr, "\t\t\t\t\t0   - no debugging\n");
+	fprintf(stderr, "\t\t\t\t\t1   - writes to module, very verbose\n");
+	fprintf(stderr, "\t\t\t\t\t2   - verse start and end\n");
+	fprintf(stderr, "\t\t\t\t\t4   - quotes, especially Words of Christ (WOC)\n");
+	fprintf(stderr, "\t\t\t\t\t8   - titles\n");
+	fprintf(stderr, "\t\t\t\t\t16  - inter-verse material\n");
+	fprintf(stderr, "\t\t\t\t\t32  - BSP to BCV transformations\n");
+	fprintf(stderr, "\t\t\t\t\t64  - v11n exceptions\n");
+	fprintf(stderr, "\t\t\t\t\t128 - parsing of osisID and osisRef\n");
+	fprintf(stderr, "\t\t\t\t\t256 - internal stack\n");
+	fprintf(stderr, "\t\t\t\t\t512 - miscellaneous\n");
+	fprintf(stderr, "\t\t\t\t This flag can be used more than once.\n");
+#endif
+	fprintf(stderr, "\n");
 	fprintf(stderr, "See http://www.crosswire.org/wiki/osis2mod for more details.\n");
 	fprintf(stderr, "\n");
 	exit(-1);
@@ -1265,6 +1352,12 @@ int main(int argc, char **argv) {
 			if (compType) usage(*argv, "Cannot specify -4 and -z or -Z");
 			largeEntry = 1;
 		}
+#ifdef DEBUG
+		else if (!strcmp(argv[i], "-d")) {
+			if (i+1 < argc) debug |= atoi(argv[++i]);
+			else usage(*argv, "-d requires <flags>");
+		}
+#endif
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
@@ -1282,8 +1375,9 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef DEBUG
-	cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << endl;
-//	exit(-3);
+	if (debug & DEBUG_OTHER) {
+		cout << "path: " << path << " osisDoc: " << osisDoc << " create: " << append << " compressType: " << compType << " blockType: " << iType << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << endl;
+	}
 #endif
 
 
