@@ -1378,7 +1378,7 @@ int main(int argc, char **argv) {
 #ifndef _ICU_
 	if (normalize) {
 		normalize = false;
-		cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Ignoring -n flag." << endl;
+		cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << endl;
 	}
 #endif
 
