@@ -575,6 +575,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	// Everything between the begin chapter tag and the first begin verse tag is inChapterHeader
 	static bool               inChapterHeader = false;
 
+	// Flags indicating whether we are processing the content of a chapter
+	static bool               inChapter       = false;
+
 	// Flags indicating whether we are processing the content of a verse
 	static bool               inVerse         = false;
 
@@ -660,6 +663,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				currentVerse.Verse(0);
 				strcpy(currentOsisID, currentVerse.getOSISRef());
 
+				inChapter       = false;
 				inVerse         = false;
 				inPreVerse      = false;
 				inBookHeader    = true;
@@ -695,6 +699,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 #endif
 				strcpy(currentOsisID, currentVerse.getOSISRef());
 
+				inChapter       = true;
 				inVerse         = false;
 				inPreVerse      = false;
 				inBookHeader    = false;
@@ -802,10 +807,19 @@ bool handleToken(SWBuf &text, XMLTag token) {
 #endif
 			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
 				inWOC = true;
+
+				// Output per verse WOC markup.
 				text.append(wocTag);
-				// This puts the quote marks in the WOC
-				token.setAttribute("who", 0); // remove the who="Jesus"
-				text.append(token);
+
+				// Output the quotation mark if appropriate, inside the WOC.
+				// If there is no marker attribute, let the SWORD engine manufacture one.
+				// If there is a marker attribute and it has content, then output that.
+				// If the marker attribute is present and empty, then there is nothing to do.
+				// And have it within the WOC markup
+				if (!token.getAttribute("marker") || token.getAttribute("marker")[0]) {
+					token.setAttribute("who", 0); // remove the who="Jesus"
+					text.append(token);
+				}
 				return true;
 			}
 			return false;
@@ -844,7 +858,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					inPreVerse      = true;
 				}
 			}
-			else if (!inVerse) {
+			else if (!inVerse && inChapter) {
 				inPreVerse = true;
 			}
 
@@ -954,8 +968,18 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					cout << "Error: improper nesting " << currentVerse << ": matching (sID,eID) not found (" << sID << "," << eID << ")" << endl;
 				}
 
-				// This puts the quote marks in the WOC
-				text.append(token);
+
+				// Output the quotation mark if appropriate, inside the WOC.
+				// If there is no marker attribute, let the SWORD engine manufacture one.
+				// If there is a marker attribute and it has content, then output that.
+				// If the marker attribute is present and empty, then there is nothing to do.
+				// And have it within the WOC markup
+				if (!token.getAttribute("marker") || token.getAttribute("marker")[0]) {
+					token.setAttribute("who", 0); // remove the who="Jesus"
+					text.append(token);
+				}
+
+				// Now close the WOC
 				text.append("</q>");
 				return true;
 			}
@@ -969,6 +993,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (tagDepth == chapterDepth && (!strcmp(tokenName, "div") || !strcmp(tokenName, "chapter"))) {
 				text.append(token);
 				writeEntry(text);
+				inChapter    = false;
 				chapterDepth = 0;
 				verseDepth   = 0;
 				return true;
@@ -1043,15 +1068,8 @@ XMLTag transformBSP(XMLTag t) {
 
 	const char* tagName = t.getName();
 	if (!t.isEndTag()) {
-		// Transform <q> into <q sID=""/> except for <q who="Jesus">
-		if ((!strcmp(tagName, "q")) && (!t.getAttribute("who") || strcmp(t.getAttribute("who"), "Jesus"))) {
-			t.setEmpty(true);
-			sprintf(buf, "gen%d", sID++);
-			t.setAttribute("sID", buf);
-		}
-
 		// Transform <p> into <div type="paragraph"> and milestone it
-		else if (!strcmp(tagName, "p")) {
+		if (!strcmp(tagName, "p")) {
 			// note there is no process that should care about type, it is there for reversability
 			t.setText("<div type=\"paragraph\" />");
 			sprintf(buf, "gen%d", sID++);
@@ -1071,6 +1089,7 @@ XMLTag transformBSP(XMLTag t) {
 			 !strcmp(tagName, "div")     ||
 			 !strcmp(tagName, "l")       ||
 			 !strcmp(tagName, "lg")      ||
+			 !strcmp(tagName, "q")       ||
 			 !strcmp(tagName, "salute")  ||
 			 !strcmp(tagName, "signed")  ||
 			 !strcmp(tagName, "speech")
@@ -1093,21 +1112,14 @@ XMLTag transformBSP(XMLTag t) {
 #endif
 		bspTagStack.pop();
 
-		// If we have found an end tag for a <q> that was transformed then transform this one as well.
-		if ((!strcmp(tagName, "q")) && (!strcmp(topToken.getName(), "q")) && (!topToken.getAttribute("who") || strcmp(topToken.getAttribute("who"), "Jesus"))) {
-			// make this a clone of the start tag with sID changed to eID
-			t = topToken;
-			t.setAttribute("eID", t.getAttribute("sID"));
-			t.setAttribute("sID", 0);
-		}
-
 		// Look for the milestoneable container tags handled above.
-		else if (!strcmp(tagName, "chapter") ||
+		if (!strcmp(tagName, "chapter") ||
 			 !strcmp(tagName, "closer")  ||
 			 !strcmp(tagName, "div")     ||
 			 !strcmp(tagName, "l")       ||
 			 !strcmp(tagName, "lg")      ||
 			 !strcmp(tagName, "p")       ||
+			 !strcmp(tagName, "q")       ||
 			 !strcmp(tagName, "salute")  ||
 			 !strcmp(tagName, "signed")  ||
 			 !strcmp(tagName, "speech")
