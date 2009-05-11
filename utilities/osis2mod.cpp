@@ -699,9 +699,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				verseDepth      = 0;
 
 				inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID"));
+				if (!inCanonicalOSISBook) {
+					cout << "WARNING(V11N): New book is " << token.getAttribute("osisID") << " and is not in " << v11n << " versification, ignoring" << endl;
+				}
 #ifdef DEBUG
-				if (debug & DEBUG_OTHER) {
-					cout << "DEBUG(FOUND): Current book is " << currentVerse.getOSISRef() << (!inCanonicalOSISBook ? "not in versification, ignoring" : "") << endl;
+				else if (debug & DEBUG_OTHER) {
+					cout << "DEBUG(FOUND): New book is " << currentVerse.getOSISRef() << endl;
 				}
 #endif
 
