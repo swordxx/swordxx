@@ -80,6 +80,7 @@ int converted  = 0;
 
 SWText *module = 0;
 VerseKey currentVerse;
+SWBuf v11n     = "KJV";
 char activeOsisID[255];
 char currentOsisID[255];
 
@@ -94,8 +95,8 @@ static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
 	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
-	const VerseMgr::System *v11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
-	return v11n->getBookNumberByOSISName(buf) >= 0;
+	const VerseMgr::System *av11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
+	return av11n->getBookNumberByOSISName(buf) >= 0;
 }
 
 /**
@@ -1258,6 +1259,8 @@ void usage(const char *app, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
 	fprintf(stderr, "\nusage: %s <output/path> <osisDoc> [OPTIONS]\n", app);
+	fprintf(stderr, "  <output/path>\t\t an existing folder that the module will be written\n");
+	fprintf(stderr, "  <osisDoc>\t\t path to the validated OSIS document, or '-' to read from standard input\n");
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
 	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
 	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
@@ -1269,7 +1272,7 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
 	fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
 	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
-	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default is 2).\n");
+	fprintf(stderr, "  -s <2|4>\t\t max text size per entry (default is 2).\n");
 	fprintf(stderr, "\t\t\t\t Note: useful for commentaries with very large entries\n");
 	fprintf(stderr, "\t\t\t\t       in uncompressed modules (default is 65535 bytes)\n");
 	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
@@ -1302,185 +1305,7 @@ void usage(const char *app, const char *error = 0) {
 	exit(EXIT_BAD_ARG);
 }
 
-int main(int argc, char **argv) {
-
-	fprintf(stderr, "You are running osis2mod: $Rev$\n");
-
-	// Let's test our command line arguments
-	if (argc < 3) {
-		usage(*argv);
-	}
-
-	// variables for arguments, holding defaults
-	const char* program = argv[0];
-	const char* path    = argv[1];
-	const char* osisDoc = argv[2];
-	int append          = 0;
-	int compType        = 0;
-	int iType           = 4;
-	int largeEntry      = 0;
-	SWBuf cipherKey     = "";
-	SWBuf v11n          = "KJV";
-
-	SWCompress *compressor = 0;
-
-	for (int i = 3; i < argc; i++) {
-		if (!strcmp(argv[i], "-a")) {
-			append = 1;
-		}
-		else if (!strcmp(argv[i], "-z")) {
-			if (compType) usage(*argv, "Cannot specify both -z and -Z");
-			if (largeEntry) usage(*argv, "Cannot specify both -z and -4");
-			compType = 2;
-		}
-		else if (!strcmp(argv[i], "-Z")) {
-			if (compType) usage(*argv, "Cannot specify both -z and -Z");
-			if (largeEntry) usage(*argv, "Cannot specify both -Z and -4");
-			compType = 1;
-		}
-		else if (!strcmp(argv[i], "-b")) {
-			if (i+1 < argc) {
-				iType = atoi(argv[++i]);
-				if ((iType >= 2) && (iType <= 4)) continue;
-			}
-			usage(*argv, "-b requires one of <2|3|4>");
-		}
-		else if (!strcmp(argv[i], "-N")) {
-			normalize = false;
-		}
-		else if (!strcmp(argv[i], "-c")) {
-			if (i+1 < argc) cipherKey = argv[++i];
-			else usage(*argv, "-c requires <cipher_key>");
-		}
-		else if (!strcmp(argv[i], "-v")) {
-			if (i+1 < argc) v11n = argv[++i];
-			else usage(*argv, "-v requires <v11n>");
-		}
-		else if (!strcmp(argv[i], "-4")) {
-			if (compType) usage(*argv, "Cannot specify -4 and -z or -Z");
-			largeEntry = 1;
-		}
-#ifdef DEBUG
-		else if (!strcmp(argv[i], "-d")) {
-			if (i+1 < argc) debug |= atoi(argv[++i]);
-			else usage(*argv, "-d requires <flags>");
-		}
-#endif
-		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
-	}
-
-	switch (compType) {	// these are deleted by zText
-		case 0: break;
-		case 1: compressor = new LZSSCompress(); break;
-		case 2: compressor = new ZipCompress(); break;
-	}
-
-#ifndef _ICU_
-	if (normalize) {
-		normalize = false;
-		cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << endl;
-	}
-#endif
-
-#ifdef DEBUG
-	if (debug & DEBUG_OTHER) {
-		cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
-	}
-#endif
-
-
-	if (!append) {	// == 0 then create module
-	// Try to initialize a default set of datafiles and indicies at our
-	// datapath location passed to us from the user.
-		if (compressor) {
-			if (zText::createModule(path, iType, v11n)) {
-				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-				exit(EXIT_NO_CREATE);
-			}
-		}
-		else if (largeEntry) {
-			if (RawText4::createModule(path, v11n)) {
-				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-				exit(EXIT_NO_CREATE);
-			}
-		}
-		else {
-			if (RawText::createModule(path, v11n)) {
-				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-				exit(EXIT_NO_CREATE);
-			}
-		}
-	}
-
-	// Let's see if we can open our input file
-	ifstream infile(osisDoc);
-	if (infile.fail()) {
-		fprintf(stderr, "ERROR: %s: couldn't open input file: %s \n", program, osisDoc);
-		exit(EXIT_NO_READ);
-	}
-
-	// Do some initialization stuff
-	if (compressor) {
-		// Create a compressed text module allowing very large entries
-		// Taking defaults except for first, fourth, fifth and last argument
-		module = new zText(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				iType,		// iblockType
-				compressor,	// icomp
-				0,		// idisp
-				ENC_UNKNOWN,	// enc
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// lang
-				v11n		// versification
-                       );
-	}
-	else if (largeEntry) {
-		// Create a raw text module allowing very large entries
-		// Taking defaults except for first and last argument
-		module = new RawText4(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				0,		// idisp
-				ENC_UNKNOWN,	// encoding
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// ilang
-				v11n		// versification
-			);
-	}
-	else {
-		// Create a raw text module allowing reasonable sized entries
-		// Taking defaults except for first and last argument
-		module = new RawText(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				0,		// idisp
-				ENC_UNKNOWN,	// encoding
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// ilang
-				v11n		// versification
-			);
-	}
-
-	SWFilter *cipherFilter = 0;
-
-	if (cipherKey.length()) {
-		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
-		cipherFilter = new CipherFilter(cipherKey.c_str());
-		module->AddRawFilter(cipherFilter);
-	}
-
-	if (!module->isWritable()) {
-		fprintf(stderr, "The module is not writable. Writing text to it will not work.\nExiting.\n" );
-		exit(EXIT_NO_WRITE);
-	}
-
+void processOSIS(istream& infile) {
 	activeOsisID[0] = '\0';
 
 	strcpy(currentOsisID,"N/A");
@@ -1561,15 +1386,212 @@ int main(int argc, char **argv) {
 	writeEntry(text, true);
 	writeLinks();
 
-	delete module;
-	if (cipherFilter)
-		delete cipherFilter;
-	infile.close();
-
 #ifdef _ICU_
 	if (converted)  fprintf(stderr, "osis2mod converted %d verses to UTF-8\n", converted);
 	if (normalized) fprintf(stderr, "osis2mod normalized %d verses to NFC\n", normalized);
 #endif
+}
+
+int main(int argc, char **argv) {
+
+	fprintf(stderr, "You are running osis2mod: $Rev$\n");
+
+	// Let's test our command line arguments
+	if (argc < 3) {
+		usage(*argv);
+	}
+
+	// variables for arguments, holding defaults
+	const char* program    = argv[0];
+	const char* path       = argv[1];
+	const char* osisDoc    = argv[2];
+	int append             = 0;
+	SWBuf compType         = "";
+	bool isCommentary      = false;
+	int iType              = 4;
+	int entrySize          = 0;
+	SWBuf cipherKey        = "";
+	SWCompress *compressor = 0;
+
+	for (int i = 3; i < argc; i++) {
+		if (!strcmp(argv[i], "-a")) {
+			append = 1;
+		}
+		else if (!strcmp(argv[i], "-z")) {
+			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
+			if (entrySize) usage(*argv, "Cannot specify both -z and -s");
+			compType = "ZIP";
+		}
+		else if (!strcmp(argv[i], "-Z")) {
+			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
+			if (entrySize) usage(*argv, "Cannot specify both -Z and -s");
+			compType = "LZSS";
+		}
+		else if (!strcmp(argv[i], "-b")) {
+			if (i+1 < argc) {
+				iType = atoi(argv[++i]);
+				if ((iType >= 2) && (iType <= 4)) continue;
+			}
+			usage(*argv, "-b requires one of <2|3|4>");
+		}
+		else if (!strcmp(argv[i], "-N")) {
+			normalize = false;
+		}
+		else if (!strcmp(argv[i], "-c")) {
+			if (i+1 < argc) cipherKey = argv[++i];
+			else usage(*argv, "-c requires <cipher_key>");
+		}
+		else if (!strcmp(argv[i], "-v")) {
+			if (i+1 < argc) v11n = argv[++i];
+			else usage(*argv, "-v requires <v11n>");
+		}
+		else if (!strcmp(argv[i], "-s")) {
+			if (compType.size()) usage(*argv, "Cannot specify -s and -z or -Z");
+                        if (i+1 < argc) {
+                                entrySize = atoi(argv[++i]);
+                                if (entrySize == 2 || entrySize == 4) {
+                                        continue;
+                                }
+                        }
+                        usage(*argv, "-s requires one of <2|4>");
+		}
+		else if (!strcmp(argv[i], "-C")) {
+			isCommentary = true;
+		}
+#ifdef DEBUG
+		else if (!strcmp(argv[i], "-d")) {
+			if (i+1 < argc) debug |= atoi(argv[++i]);
+			else usage(*argv, "-d requires <flags>");
+		}
+#endif
+		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+	}
+
+        if (compType == "ZIP") {
+                compressor = new ZipCompress();
+        }
+        else if (compType = "LZSS") {
+                compressor = new LZSSCompress();
+        }
+
+#ifndef _ICU_
+	if (normalize) {
+		normalize = false;
+		cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << endl;
+	}
+#endif
+
+#ifdef DEBUG
+	if (debug & DEBUG_OTHER) {
+		cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
+	}
+#endif
+
+	if (!append) {	// == 0 then create module
+	// Try to initialize a default set of datafiles and indicies at our
+	// datapath location passed to us from the user.
+		if (compressor) {
+			if (zText::createModule(path, iType, v11n)) {
+				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
+				exit(EXIT_NO_CREATE);
+			}
+		}
+		else if (entrySize == 4) {
+			if (RawText4::createModule(path, v11n)) {
+				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
+				exit(EXIT_NO_CREATE);
+			}
+		}
+		else {
+			if (RawText::createModule(path, v11n)) {
+				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
+				exit(EXIT_NO_CREATE);
+			}
+		}
+	}
+
+	// Do some initialization stuff
+	if (compressor) {
+		// Create a compressed text module allowing very large entries
+		// Taking defaults except for first, fourth, fifth and last argument
+		module = new zText(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				iType,		// iblockType
+				compressor,	// icomp
+				0,		// idisp
+				ENC_UNKNOWN,	// enc
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// lang
+				v11n		// versification
+                       );
+	}
+	else if (entrySize == 4) {
+		// Create a raw text module allowing very large entries
+		// Taking defaults except for first and last argument
+		module = new RawText4(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				0,		// idisp
+				ENC_UNKNOWN,	// encoding
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// ilang
+				v11n		// versification
+			);
+	}
+	else {
+		// Create a raw text module allowing reasonable sized entries
+		// Taking defaults except for first and last argument
+		module = new RawText(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				0,		// idisp
+				ENC_UNKNOWN,	// encoding
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// ilang
+				v11n		// versification
+			);
+	}
+
+	SWFilter *cipherFilter = 0;
+
+	if (cipherKey.length()) {
+		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
+		cipherFilter = new CipherFilter(cipherKey.c_str());
+		module->AddRawFilter(cipherFilter);
+	}
+
+	if (!module->isWritable()) {
+		fprintf(stderr, "The module is not writable. Writing text to it will not work.\nExiting.\n" );
+		exit(EXIT_NO_WRITE);
+	}
+
+	// Either read from std::cin (aka stdin), when the argument is a '-'
+	// or from a specified file.
+	if (!strcmp(osisDoc, "-")) {
+		processOSIS(cin);
+	}
+	else {
+		// Let's see if we can open our input file
+		ifstream infile(osisDoc);
+		if (infile.fail()) {
+			fprintf(stderr, "ERROR: %s: couldn't open input file: %s \n", program, osisDoc);
+			exit(EXIT_NO_READ);
+		}
+		processOSIS(infile);
+		infile.close();
+	}
+
+	delete module;
+	if (cipherFilter)
+		delete cipherFilter;
+
 	exit(0); // success
 }
 
