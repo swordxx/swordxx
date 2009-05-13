@@ -32,7 +32,7 @@ SWORD_NAMESPACE_START
 
 /** this filter converts OSIS text to Diatheke/CGI format
  */
-class SWDLLEXPORT OSISCGI : public SWBasicFilter {
+class OSISCGI : public SWBasicFilter {
 private:
 protected:
 	class MyUserData : public BasicFilterUserData {

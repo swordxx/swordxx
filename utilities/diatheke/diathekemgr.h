@@ -29,13 +29,13 @@ class DiathekeMgr : public SWMgr {
     SWOptionFilter *transliterator;
 
 #ifdef WIN32
-        char platformID;
+	char platformID;
 #endif
 
 protected:
 	virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
-        virtual signed char Load ();
-        virtual void AddGlobalOptions (SWModule * module, ConfigEntMap & section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
+	virtual signed char Load ();
+	virtual void AddGlobalOptions (SWModule * module, ConfigEntMap & section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
 
 public:
 	bool shape;

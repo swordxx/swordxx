@@ -34,7 +34,7 @@ SWORD_NAMESPACE_START
 typedef std::map<SWBuf, SWBuf> DualStringMap;
 /** this filter converts ThML text to Diatheke/CGI format
  */
-class SWDLLEXPORT ThMLCGI : public SWBasicFilter {
+class ThMLCGI : public SWBasicFilter {
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:

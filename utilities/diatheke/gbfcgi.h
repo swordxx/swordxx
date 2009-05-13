@@ -34,7 +34,7 @@ SWORD_NAMESPACE_START
 typedef std::map<SWBuf, SWBuf> DualStringMap;
 /** this filter converts GBF text to Diatheke/CGI format
  */
-class SWDLLEXPORT GBFCGI : public SWBasicFilter {
+class GBFCGI : public SWBasicFilter {
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
 public:
