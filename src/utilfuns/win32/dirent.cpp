@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct DIR
+struct SWDLLEXPORT DIR
 {
     long                handle; /* -1 for failed rewind */
     struct _finddata_t  info;
@@ -32,7 +32,7 @@ struct DIR
     char                *name;  /* NTBS */
 };
 
-DIR *opendir(const char *name)
+SWDLLEXPORT DIR *opendir(const char *name)
 {
     DIR *dir = 0;
 
@@ -73,7 +73,7 @@ DIR *opendir(const char *name)
     return dir;
 }
 
-int closedir(DIR *dir)
+SWDLLEXPORT int closedir(DIR *dir)
 {
     int result = -1;
 
@@ -96,7 +96,7 @@ int closedir(DIR *dir)
     return result;
 }
 
-struct dirent *readdir(DIR *dir)
+SWDLLEXPORT struct dirent *readdir(DIR *dir)
 {
     struct dirent *result = 0;
 
@@ -116,7 +116,7 @@ struct dirent *readdir(DIR *dir)
     return result;
 }
 
-void rewinddir(DIR *dir)
+SWDLLEXPORT void rewinddir(DIR *dir)
 {
     if(dir && dir->handle != -1)
     {

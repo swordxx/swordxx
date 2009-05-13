@@ -21,7 +21,7 @@
 
 typedef struct DIR DIR;
 
-struct dirent
+struct SWDLLEXPORT dirent
 {
     char *d_name;
 };
