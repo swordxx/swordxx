@@ -1381,8 +1381,9 @@ void VerseKey::setTestament(char itestament)
 
 void VerseKey::setBook(char ibook)
 {
+	verse   = ibook ? 1 : 0;
 	chapter = ibook ? 1 : 0;
-	book = ibook;
+	book    = ibook;
 	Normalize(1);
 }
 
@@ -1417,7 +1418,7 @@ void VerseKey::setBookName(const char *bname)
 
 void VerseKey::setChapter(int ichapter)
 {
-	verse = ichapter ? 1 : 0;
+	verse   = ichapter ? 1 : 0;
 	chapter = ichapter;
 	Normalize(1);
 }
