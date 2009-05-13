@@ -210,5 +210,15 @@ cout << currentVerse << endl;
 	VerseKey yo2 = yo++;
 	cout << yo2 << ": " << (int)yo2.Error() <<  endl;
 
+	VerseKey vkey;
+	VerseKey tmpkey = "1sam 1:1";
+	vkey.AutoNormalize(1);                          // line 147
+	vkey = tmpkey;
+	int chapter = (vkey.Chapter()-1);
+	vkey.Chapter(chapter);
+
+	cout << tmpkey << ": Chapter() - 1: " << vkey << endl;
+
+
 	return 0;
 }

@@ -1235,17 +1235,19 @@ void VerseKey::Normalize(char autocheck)
                     continue;
                }
 
-               if (chapter < 1) {
-                    if (--book > 0) {
-                         chapter += getChapterMax();
-                    }
-                    else	{
-                         if (testament > 1) {
-						chapter += refSys->getBook(BMAX[0]-1)->getChapterMax();
-                         }
-                    }
-                    continue;
-               }
+		if (chapter < 1) {
+			if (--book > 0) {
+				chapter += getChapterMax();
+				verse = getVerseMax();
+			}
+			else {
+				if (testament > 1) {
+					chapter += refSys->getBook(BMAX[0]-1)->getChapterMax();
+					verse = refSys->getBook(BMAX[0]-1)->getVerseMax(chapter);
+				}
+			}
+			continue;
+		}
 
                if (verse > getVerseMax()) { // -1 because e.g chapter 1 of Matthew is books[1][0].versemax[0]
                     verse -= getVerseMax();
@@ -1379,7 +1381,7 @@ void VerseKey::setTestament(char itestament)
 
 void VerseKey::setBook(char ibook)
 {
-	Chapter(ibook ? 1 : 0);
+	chapter = ibook ? 1 : 0;
 	book = ibook;
 	Normalize(1);
 }
@@ -1415,7 +1417,7 @@ void VerseKey::setBookName(const char *bname)
 
 void VerseKey::setChapter(int ichapter)
 {
-	Verse(ichapter ? 1 : 0);
+	verse = ichapter ? 1 : 0;
 	chapter = ichapter;
 	Normalize(1);
 }
