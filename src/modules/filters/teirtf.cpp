@@ -72,10 +72,10 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 		}
 
 		// <hi>
-		else if (!strcmp(tag.getName(), "hi")) {
+		else if (!strcmp(tag.getName(), "hi") || !strcmp(tag.getName(), "emph")) {
 			SWBuf rend = tag.getAttribute("rend");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (rend == "ital")
+				if (rend == "ital" || rend == "italic")
 					buf += "{\\i1 ";
 				else if (rend == "bold")
 					buf += "{\\b1 ";
@@ -173,6 +173,12 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = false;
 			}
+		}
+
+		// <lb/> tag
+		else if (!strcmp(tag.getName(), "lb")) {
+			buf += "{\\par}";
+			userData->supressAdjacentWhitespace = true;
 		}
 
 		else {
