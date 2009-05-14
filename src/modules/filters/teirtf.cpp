@@ -32,6 +32,7 @@ SWORD_NAMESPACE_START
 
 TEIRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	BiblicalText = false;
+	inOsisRef = false;
 	if (module) {
 		version = module->Name();
 		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
@@ -180,6 +181,19 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			buf += "{\\par}";
 			userData->supressAdjacentWhitespace = true;
 		}
+
+		// <ref> tag
+		else if (!strcmp(tag.getName(), "ref")) {
+			if (!tag.isEndTag() && tag.getAttribute("osisRef")) {
+				buf += "{<a href=\"\">";
+				u->inOsisRef = true;
+			}
+			else if (tag.isEndTag() && u->inOsisRef) {
+				buf += "</a>}";
+				u->inOsisRef = false;
+			}
+		}
+
 
 		else {
 			return false;  // we still didn't handle token
