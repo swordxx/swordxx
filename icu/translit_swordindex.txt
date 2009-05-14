@@ -58,19 +58,6 @@ translit_swordindex {
 // Transliterator.getInstance().  The returned Transliterator object
 // then has its ID changed to <id> and is returned.
 
-// ICU < 2.0 additions
-{ "Latin-Hebrew", "file", "translit_Latin_Hebrew", "FORWARD" },
-{ "Hebrew-Latin", "file", "translit_Latin_Hebrew", "REVERSE" },
-{ "Latin-Arabic", "file", "translit_Latin_Arabic", "FORWARD" },
-{ "Arabic-Latin", "file", "translit_Latin_Arabic", "REVERSE" },
-
-// xtradata additions
-//{ "Han-Pinyin", "file", "translit_Han_Pinyin", "FORWARD" },
-//{ "Kanji-English", "file", "translit_Kanji_English", "FORWARD" },
-//{ "Kanji-OnRomaji", "file", "translit_Kanji_OnRomaji", "FORWARD" },
-//{ "HTMLEntities-Unicode", "file", "translit_HTMLEnt_Unicode", "FORWARD" },
-//{ "Unicode-HTMLEntities", "file", "translit_HTMLEnt_Unicode", "REVERSE" },
-
 // SWORD additions for academic Biblical transliteration schemes
 { "BGreek-Greek", "file", "translit_BGreek_Greek", "FORWARD" },
 { "Greek-BGreek", "file", "translit_BGreek_Greek", "REVERSE" },
@@ -80,24 +67,12 @@ translit_swordindex {
 { "Hebrew-CCAT", "file", "translit_CCAT_Hebrew", "REVERSE" }
 { "CCAT-Syriac", "file", "translit_CCAT_Syriac", "FORWARD" },
 { "Syriac-CCAT", "file", "translit_CCAT_Syriac", "REVERSE" },
-//{ "Syriac-Hebrew", "alias", "Syriac-CCAT;CCAT-Hebrew", "" },
-//{ "Hebrew-Syriac", "alias", "Hebrew-CCAT;CCAT-Syriac", "" },
-{ "Latin-Syriac", "file", "translit_Latin_Syriac", "FORWARD" },
-{ "Syriac-Latin", "file", "translit_Latin_Syriac", "REVERSE" },
 
 // SWORD additions for other languages
-{ "Latin-Thai", "file", "translit_Latin_Thai", "FORWARD" },
-{ "Thai-Latin", "file", "translit_Latin_Thai", "REVERSE" },
-{ "Latin-Georgian", "file", "translit_Latin_Georgian", "FORWARD" },
-{ "Georgian-Latin", "file", "translit_Latin_Georgian", "REVERSE" },
-{ "Latin-Armenian", "file", "translit_Latin_Armenian", "FORWARD" },
-{ "Armenian-Latin", "file", "translit_Latin_Armenian", "REVERSE" },
 { "Latin-Coptic", "file", "translit_Latin_Coptic", "FORWARD" },
 { "Coptic-Latin", "file", "translit_Latin_Coptic", "REVERSE" },
 { "Latin-Gothic", "file", "translit_Latin_Gothic", "FORWARD" },
 { "Gothic-Latin", "file", "translit_Latin_Gothic", "REVERSE" },
-{ "Latin-Ethiopic", "file", "translit_Latin_Ethiopic", "FORWARD" },
-{ "Ethiopic-Latin", "file", "translit_Latin_Ethiopic", "REVERSE" },
 { "Latin-Ugaritic", "file", "translit_Latin_Ugaritic", "FORWARD" },
 { "Ugaritic-Latin", "file", "translit_Latin_Ugaritic", "REVERSE" },
 
