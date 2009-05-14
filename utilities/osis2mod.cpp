@@ -1261,9 +1261,11 @@ void usage(const char *app, const char *error = 0) {
 
 	if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
+	fprintf(stderr, "OSIS Bible/commentary module creation tool for The SWORD Project\n");
 	fprintf(stderr, "\nusage: %s <output/path> <osisDoc> [OPTIONS]\n", app);
 	fprintf(stderr, "  <output/path>\t\t an existing folder that the module will be written\n");
-	fprintf(stderr, "  <osisDoc>\t\t path to the validated OSIS document, or '-' to read from standard input\n");
+	fprintf(stderr, "  <osisDoc>\t\t path to the validated OSIS document, or '-' to\n");
+	fprintf(stderr, "\t\t\t\t read from standard input\n");
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
 	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
 	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
@@ -1275,9 +1277,10 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
 	fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
 	fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
-	fprintf(stderr, "  -s <2|4>\t\t max text size per entry (default is 2).\n");
-	fprintf(stderr, "\t\t\t\t Note: useful for commentaries with very large entries\n");
-	fprintf(stderr, "\t\t\t\t       in uncompressed modules (default is 65535 bytes)\n");
+	fprintf(stderr, "  -s <2|4>\t\t bytes used to store entry size (default is 2).\n");
+	fprintf(stderr, "\t\t\t\t Note: useful for commentaries with very large\n");
+	fprintf(stderr, "\t\t\t\t entries in uncompressed modules\n");
+	fprintf(stderr, "\t\t\t\t (2 bytes to store size equal 65535 characters)\n");
 	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
 	fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
 	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();

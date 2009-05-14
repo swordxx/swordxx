@@ -332,7 +332,7 @@ void usage(const char *app, const char *error = 0) {
 			
 	if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 		
-	fprintf(stderr, "TEI Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n");
+	fprintf(stderr, "TEI Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for\n\tThe SWORD Project\n");
 	fprintf(stderr, "\nusage: %s <output/path> <teiDoc> [OPTIONS]\n", app);
 	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
 	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
@@ -340,9 +340,10 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
         fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
-        fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed, and then normalize to NFC");
-        fprintf(stderr, "\t\t\t\t Note: all UTF-8 texts should be normalized to NFC\n");
-	fprintf(stderr, "-z, -Z, and -s are mutually exclusive\n");
+        fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
+        fprintf(stderr, "\t\t\t\t  and then normalize to NFC. Note: all UTF-8\n");
+	fprintf(stderr, "\t\t\t\t  texts should be normalized to NFC.)\n");
+	fprintf(stderr, "\n\tThe options -z, -Z, and -s are mutually exclusive.\n");
 	exit(-1);
 }
 
