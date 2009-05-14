@@ -1,7 +1,7 @@
 
 if HAVE_VSNPRINTF 
 else
-CXXFLAGS += -DNO_VSNPRINTF
+AM_CXXFLAGS += -DNO_VSNPRINTF
 endif
 
 utilfunsdir = $(top_srcdir)/src/utilfuns

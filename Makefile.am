@@ -6,6 +6,8 @@ AUTOMAKE_OPTIONS = 1.6
 
 legalexport := no
 
+ACLOCAL_AMFLAGS = -I m4
+
 ##### Customizable stuff. Set it how you like it #####
 
 # if building dll with gcc on windoze (www.mingw.org)

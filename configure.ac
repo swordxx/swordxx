@@ -5,7 +5,7 @@
 # Version change: Change line 8 only !
 # Change it immediately after a release
 
-AC_INIT(sword, 1.5.11.103, sword-bugs@crosswire.org)
+AC_INIT(sword, 1.6.0, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
 AC_REVISION($Revision: 1.45 $)
@@ -15,6 +15,7 @@ AM_INIT_AUTOMAKE
 
 AM_CONFIG_HEADER(include/config.h)
 
+AC_CONFIG_MACRO_DIR([m4])
 
 # ---------------------------------------------------------------------
 # Check Programs

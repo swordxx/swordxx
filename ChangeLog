@@ -2,6 +2,9 @@ API ChangeLog
 
 * Release 1.6.0 *
 
+14-May-2009	Troy A. Griffitts <scribe@crosswire.org>
+	General cleanup and prep for release
+
 04-May-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added ability for (SWBuf("xxx") == (const char *)0) to
 		return false;
@@ -32,8 +35,8 @@ API ChangeLog
 		getEntryForKey(const char *key)
 			- get the index for the given key
 	Updated strongsPad to work with keys with a prefix of G or H
-	Fixed a bug in SWMgr which would load certain files in the mods.d
-		directory which shouldn't have been loaded.
+	Fixed a bug in SWMgr which would load certain files in the
+		mods.d directory which shouldn't have been loaded.
 	Fix for divineName with non-ascii text in OSISHTMLHREF filter
 
 07-Feb-2009	Troy A. Griffitts <scribe@crosswire.org>
