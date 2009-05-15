@@ -239,8 +239,8 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
 
-					if (		   (type != "x-strongsMarkup")	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-							&& (type != "strongsMarkup")		// deprecated
+					if ((type != "x-strongsMarkup")			// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+							&& (type != "strongsMarkup")	// deprecated
 							) {
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey = NULL;
