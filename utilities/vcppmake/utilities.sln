@@ -47,6 +47,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vs2osisreftxt", "vs2osisref
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xml2gbs", "xml2gbs.vcproj", "{87116D0C-E498-4193-9F2D-301A8771B77D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genbookutil", "genbookutil.vcproj", "{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modwrite", "modwrite.vcproj", "{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vpl2mod", "vpl2mod.vcproj", "{7192CF83-B08C-4387-A869-FD1970167115}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug with ICU|Win32 = Debug with ICU|Win32
@@ -239,6 +245,30 @@ Global
 		{87116D0C-E498-4193-9F2D-301A8771B77D}.Release with ICU|Win32.Build.0 = Release with ICU|Win32
 		{87116D0C-E498-4193-9F2D-301A8771B77D}.Release|Win32.ActiveCfg = Release with ICU|Win32
 		{87116D0C-E498-4193-9F2D-301A8771B77D}.Release|Win32.Build.0 = Release with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Debug with ICU|Win32.ActiveCfg = Debug with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Debug with ICU|Win32.Build.0 = Debug with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Debug|Win32.ActiveCfg = Debug with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Debug|Win32.Build.0 = Debug with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Release with ICU|Win32.ActiveCfg = Release with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Release with ICU|Win32.Build.0 = Release with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Release|Win32.ActiveCfg = Release with ICU|Win32
+		{5C28B5F4-0523-4811-920D-3DB1D3D8CAAA}.Release|Win32.Build.0 = Release with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Debug with ICU|Win32.ActiveCfg = Debug with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Debug with ICU|Win32.Build.0 = Debug with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Debug|Win32.ActiveCfg = Debug with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Debug|Win32.Build.0 = Debug with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Release with ICU|Win32.ActiveCfg = Release with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Release with ICU|Win32.Build.0 = Release with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Release|Win32.ActiveCfg = Release with ICU|Win32
+		{45C674C0-193D-47AF-B9E0-61A4DE57D3E0}.Release|Win32.Build.0 = Release with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Debug with ICU|Win32.ActiveCfg = Debug with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Debug with ICU|Win32.Build.0 = Debug with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Debug|Win32.ActiveCfg = Debug with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Debug|Win32.Build.0 = Debug with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Release with ICU|Win32.ActiveCfg = Release with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Release with ICU|Win32.Build.0 = Release with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Release|Win32.ActiveCfg = Release with ICU|Win32
+		{7192CF83-B08C-4387-A869-FD1970167115}.Release|Win32.Build.0 = Release with ICU|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
