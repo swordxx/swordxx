@@ -1476,7 +1476,7 @@ int main(int argc, char **argv) {
         if (compType == "ZIP") {
                 compressor = new ZipCompress();
         }
-        else if (compType = "LZSS") {
+        else if (compType == "LZSS") {
                 compressor = new LZSSCompress();
         }
 
