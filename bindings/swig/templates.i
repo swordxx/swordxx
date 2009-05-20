@@ -4,6 +4,7 @@
 
 %include <std_pair.i>
 %include <std_multimap.i>
+%include <multimapwdef.h>
 
 /*
 Include SWModule and DirEntry here, so that it will be able to appear below
@@ -11,6 +12,7 @@ Include SWModule and DirEntry here, so that it will be able to appear below
 %{
 #include "swmodule.h"
 #include "filemgr.h"
+#include "swconfig.h"
 %}
 
 /* 
@@ -22,7 +24,9 @@ Both are wrapped as the former, however
 %inline %{
 typedef std::map< sword::SWBuf, sword::SWBuf > AttributeValueMap;
 typedef std::map< sword::SWBuf, AttributeValueMap> AttributeListMap;
-typedef std::map< sword::SWBuf, AttributeListMap> AttributetypeListMap; 
+typedef std::map< sword::SWBuf, AttributeListMap> AttributeTypeListMap; 
+typedef std::multimap < sword::SWBuf, sword::SWBuf, std::less < sword::SWBuf > > PyConfigEntMap;
+typedef std::map < sword::SWBuf, PyConfigEntMap > PySectionMap;
 %}
 
 /* Used by SWModule and SWConfig */
@@ -36,7 +40,12 @@ typedef std::map< sword::SWBuf, AttributeListMap> AttributetypeListMap;
 %template(AttributeTypeListMap) std::map < sword::SWBuf, AttributeListMap>;
 
 /* Used by SWConfig */
-%template(SectionMapMultiMap) std::multimap < sword::SWBuf, AttributeValueMap >;
+%template(PyConfigEntMap) std::multimap < sword::SWBuf, sword::SWBuf, std::less <sword::SWBuf> >;
+/* %template() std::less <sword::SWBuf>;*/
+%template() std::pair < sword::SWBuf, std::multimap < sword::SWBuf,
+ sword::SWBuf > >/*PyConfigEntMap >*/;
+%template(PySectionMap) std::map < sword::SWBuf, std::multimap < sword::SWBuf,
+ sword::SWBuf > >/*std::map < sword::SWBuf, PyConfigEntMap >*/;
 
 /* Used by SWMgr */
 %template() std::pair<sword::SWBuf, sword::SWModule*>;
