@@ -1272,7 +1272,7 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t\t0   - no debugging\n");
 	fprintf(stderr, "\t\t\t\t\t1   - writes to module, very verbose\n");
 	fprintf(stderr, "\t\t\t\t\t2   - verse start and end\n");
-	fprintf(stderr, "\t\t\t\t\t4   - quotes, especially Words of Christ (WOC)\n");
+	fprintf(stderr, "\t\t\t\t\t4   - quotes, esp. Words of Christ\n");
 	fprintf(stderr, "\t\t\t\t\t8   - titles\n");
 	fprintf(stderr, "\t\t\t\t\t16  - inter-verse material\n");
 	fprintf(stderr, "\t\t\t\t\t32  - BSP to BCV transformations\n");
@@ -1280,7 +1280,8 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t\t128 - parsing of osisID and osisRef\n");
 	fprintf(stderr, "\t\t\t\t\t256 - internal stack\n");
 	fprintf(stderr, "\t\t\t\t\t512 - miscellaneous\n");
-	fprintf(stderr, "\t\t\t\t This flag can be used more than once.\n");
+	fprintf(stderr, "\t\t\t\t This argument can be used more than once. (Or\n");
+	fprintf(stderr, "\t\t\t\t the flags may be added together.)\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "See http://www.crosswire.org/wiki/osis2mod for more details.\n");
 	fprintf(stderr, "\n");
