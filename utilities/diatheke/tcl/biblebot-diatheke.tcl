@@ -1,4 +1,4 @@
-# Diatheke/Tcl 3.0 by Chris Little <chrislit@gotjesus.org>
+# Diatheke/Tcl 5.0 by Chris Little <chrislit@crosswire.org>
 # Based on code schema of <cking@acy.digex.net>
 
 # *
@@ -17,32 +17,7 @@
 # * General Public License for more details.
 # *
 
-
-# This script is intended for use with libraries and modules from
-# the SWORD Project, available at http://www.crosswire.org/
-#
-# To install Diatheke/Tcl, install an eggdrop IRC bot, copy the
-# Diatheke/Tcl .tcl file to your eggdrop scripts directory, and
-# add a line to the end of your bot startup script to load the
-# Diatheke/Tcl script.  This script has been tested with eggdrop 1.3.23
-# but should function fine in later versions.
-#
-# This is script assumes you have every single SWORD module installed
-# that was available at the time of release.  Since you probably do not,
-# remove all modules listed in the pub_books function that you do not
-# have installed to hide them from end-users.
-#
-# The !history command only works if you have LOGGING turned on in
-# diatheke (the command line C program).  This command is commented out
-# of the help function and must be uncommented to make it show up for
-# end-users.
-#
-# When you get the script loaded, type !biblehelp in a channel where
-# the bot is present and it will give you a full list of commands.
-# More commands will appear to you depending upon which mode the bot is
-# in and whether you are an op on the bot or voiced in the channel.
-
-set diaver 4.0
+set diaver 5.0
 
 #modify this to reflect actual location of diatheke and dict binaries
 set diatheke "/usr/bin/diatheke"
