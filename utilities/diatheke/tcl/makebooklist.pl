@@ -20,7 +20,7 @@
 
 open TCL, ">:utf8", "biblebot-diatheke-books.tcl";
 
-print TCL "# Diatheke/Tcl 5.0 by Chris Little <chrislit@crosswire.org>\n\n# Copyright 1999-2009 CrossWire Bible Society (http://www.crosswire.org)\n#	CrossWire Bible Society\n#	P. O. Box 2528\n#	Tempe, AZ  85280-2528\n#\n# This program is free software; you can redistribute it and/or modify it\n# under the terms of the GNU General Public License as published by the\n# Free Software Foundation version 2.\n#\n# This program is distributed in the hope that it will be useful, but\n# WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n# GNU General Public License for more details.\n\n";
+print TCL "# Diatheke/Tcl 5.0 by Chris Little <chrislit\@crosswire.org>\n\n# Copyright 1999-2009 CrossWire Bible Society (http://www.crosswire.org)\n#	CrossWire Bible Society\n#	P. O. Box 2528\n#	Tempe, AZ  85280-2528\n#\n# This program is free software; you can redistribute it and/or modify it\n# under the terms of the GNU General Public License as published by the\n# Free Software Foundation version 2.\n#\n# This program is distributed in the hope that it will be useful, but\n# WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n# GNU General Public License for more details.\n\n";
 
 foreach $line (@booklist) {
     $line =~ s/[\r\n]+$//;
