@@ -447,5 +447,3 @@ bind dcc - verseon dcc_verseon
 
 #sets default von mode
 set von 1
-
-source biblebot-diatheke-books.tcl

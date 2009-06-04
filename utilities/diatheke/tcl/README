@@ -33,10 +33,13 @@ necessary.
 To install Diatheke/Tcl, install an eggdrop IRC bot, copy the
 Diatheke/Tcl .tcl files (biblebot-diatheke.tcl and 
 biblebot-diatheke-books.tcl) to your eggdrop scripts directory, and
-add a line to the end of your bot startup script to load the
-Diatheke/Tcl script (e.g. 
-"source /usr/share/eggdrop/scripts/biblebot-diatheke.tcl").  This
-script has been tested with eggdrop 1.3.23 & 1.6.19, but should
+add a line to the end of your bot startup script to load the two
+Diatheke/Tcl scripts, for example:
+ 
+source /usr/share/eggdrop/scripts/biblebot-diatheke.tcl
+source /usr/share/eggdrop/scripts/biblebot-diatheke-books.tcl
+
+This script has been tested with eggdrop 1.3.23 & 1.6.19, but should
 function fine in later versions.
 
 When you get the script loaded, type !biblehelp in a channel where
