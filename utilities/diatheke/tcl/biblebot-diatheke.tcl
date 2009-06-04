@@ -15,11 +15,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
 # GNU General Public License for more details.
 
-set diaver 5.0
-
-#modify this to reflect actual location of diatheke and dict binaries
+# modify this to reflect actual location of diatheke and dict binaries
 set diatheke "/usr/bin/diatheke"
 set dict "/usr/bin/dict"
+
+set diaver 5.0
 
 proc publookupverse {vlookup} {
     global botnick chan bibver diatheke
@@ -38,6 +38,7 @@ proc publookupverse {vlookup} {
     set vlookup [string trimleft $vlookup "@"]
     set vlookup [string trimleft $vlookup "#"]
 
+    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
     catch {exec $diatheke -f plaintext -o $arg -b $bibver -k "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     while {[gets $foofile fooverse] >= 0} {
@@ -68,7 +69,7 @@ proc publookupverse {vlookup} {
 	putmsg $chan "$foo2"
     }
     
-    catch {close $foofile}    
+    catch {close $foofile}
     exec rm /tmp/fooout.$botnick
     return 1
 }
@@ -85,15 +86,15 @@ proc pub_lookup {nick uhost hand channel arg} {
 	putmsg $nick "Only ops can display verses at this time."
 	return 0
     }
-	
-    publookupverse $arg
 
+    publookupverse $arg
 }
 
-# ----------------------------------------------------------------------
+#----------------------------------------------------------------------
 
 proc pubsearchword {vlookup} {
     global botnick chan bibver diatheke
+    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
     catch {exec $diatheke -s $bibver "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
 
@@ -143,9 +144,9 @@ proc pub_lookups {nick uhost hand channel arg} {
 
 #----------------------------------------------------------------------
 
-
 proc publookupdict {vlookup} {
     global botnick chan bibver diatheke
+    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
     catch {exec $diatheke -f plaintext -b $bibver -k "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
 
@@ -153,7 +154,7 @@ proc publookupdict {vlookup} {
 	putmsg $chan "$fooverse"
     }
     catch {close $foofile}
-  #  exec rm /tmp/fooout.$botnick
+    exec rm /tmp/fooout.$botnick
     return 1
 }
 
@@ -173,7 +174,7 @@ proc pub_lookupd {nick uhost hand channel arg} {
 	putmsg $nick "Sorry, only ops can use dictionaries and indices right now."
 	return 0
     }
-    
+
     publookupdict $arg
 }
 
@@ -193,6 +194,7 @@ proc pub_lookupd {nick uhost hand channel arg} {
 
 proc publookupcomm {vlookup} {
     global botnick chan bibver diatheke
+    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
     catch {exec $diatheke -c $bibver "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     while {[gets $foofile fooverse] >= 0} {
@@ -263,6 +265,7 @@ proc dictlookup {nick uhost hand channel arg} {
 	return 0
     }
     
+    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $arg { } arg
     catch {exec $dict "$arg" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     catch {set fooverse [gets $foofile]}
@@ -293,9 +296,6 @@ proc pub_help {nick uhost hand channel arg} {
     putserv "NOTICE $nick :Supported commands:"
     putserv "NOTICE $nick :Help, using \"!biblehelp\""
     putserv "NOTICE $nick :Book list, using \"!books\" (it's long)"
-# Uncomment the next line if you have turned LOGGING on in diatheke to enable
-# the history function.
-#    putserv "NOTICE $nick :See last 5 calls to BibleBot, using \"!history\""
     putserv "NOTICE $nick :Check display status, using \"!status\""
     putserv "NOTICE $nick :Bible lookups, using \"!<bible version> <book> <chapter>:<verse>\""
     putserv "NOTICE $nick :verse ranges can be specified by adding \"-<last verse>\" to this"
@@ -358,25 +358,6 @@ proc pub_status {nick uhost hand channel arg} {
     } else {
 	putserv "NOTICE $nick :Verse displays are currently on for all users, but other BibleBot displays are currently restricted to ops and voiced users."
     }
-    return 1
-}
-
-
-bind pub - !history pub_hist
-bind msg - history pub_hist
-
-proc pub_hist {nick uhost hand channel arg} {
-    global botnick
-    catch {exec tail -n 5 /var/log/diatheke.log >& /tmp/fooout.$botnick}
-    catch {set foofile [open /tmp/fooout.$botnick]}
-    catch {set fooverse [gets $foofile]}
-    putserv "NOTICE $nick :Last 5 calls to Diatheke/Tcl BibleBot"
-    putserv "NOTICE $nick :$fooverse"
-    while {[gets $foofile fooverse] >= 0} {
-	putserv "NOTICE $nick :$fooverse"
-    }
-    catch {close $foofile}
-    exec rm /tmp/fooout.$botnick
     return 1
 }
 

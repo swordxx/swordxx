@@ -24,11 +24,16 @@ The SWORD Project, available at http://www.crosswire.org/
 This script requires the Diatheke command line front end to The SWORD
 Project. You should really install this first, including all optional
 components: zlib, CLucene, ICU (preferrably icu-sword), and cURL. Then
-install any modules you want to make available to users. Finally, run
-the Perl script makebooklist.pl, which will create/overwrite the file
-biblebot-diatheke-books.tcl. This includes all books installed on
-the system, so remove any entries you want to hide from users, as
-necessary.
+install any modules you want to make available to users.
+
+Modify the file biblebot-diatheke.tcl as necessary so that the two
+variables "diatheke" and "dict" point to the copies of the diatheke
+and dict programs on your system.
+
+Finally, run the Perl script makebooklist.pl, which will
+create/overwrite the file biblebot-diatheke-books.tcl. This includes
+all books installed on the system, so remove any entries you want to
+hide from users, as necessary.
 
 To install Diatheke/Tcl, install an eggdrop IRC bot, copy the
 Diatheke/Tcl .tcl files (biblebot-diatheke.tcl and 
