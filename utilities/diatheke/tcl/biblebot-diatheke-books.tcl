@@ -6,7 +6,7 @@ proc setver_KJV {nick uhost hand channel arg} {
     pub_lookup $nick $uhost $hand $channel $arg
 }
 
-bind pub - !sKJS setver_sKJV
+bind pub - !sKJV setver_sKJV
 
 proc setver_sKJV {nick uhost hand channel arg} {
     global botnick chan bibver
