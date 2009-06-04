@@ -38,7 +38,7 @@ proc publookupverse {vlookup} {
     set vlookup [string trimleft $vlookup "@"]
     set vlookup [string trimleft $vlookup "#"]
 
-    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
+    regsub -all {[\[\]\{\}\#\%\\\$\'\"\/\s]} $vlookup { } vlookup
     catch {exec $diatheke -f plaintext -o $arg -b $bibver -k "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     while {[gets $foofile fooverse] >= 0} {
@@ -74,7 +74,6 @@ proc publookupverse {vlookup} {
     return 1
 }
 
-
 proc pub_lookup {nick uhost hand channel arg} {
     global von chan bibver
     set chan $channel
@@ -94,7 +93,7 @@ proc pub_lookup {nick uhost hand channel arg} {
 
 proc pubsearchword {vlookup} {
     global botnick chan bibver diatheke
-    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
+    regsub -all {[\[\]\{\}\#\%\\\$\'\"\/\s]} $vlookup { } vlookup
     catch {exec $diatheke -s $bibver "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
 
@@ -122,7 +121,6 @@ proc pubsearchword {vlookup} {
     return 1
 }
 
-
 proc pub_lookups {nick uhost hand channel arg} {
     global von chan bibver
     set chan $channel
@@ -146,7 +144,7 @@ proc pub_lookups {nick uhost hand channel arg} {
 
 proc publookupdict {vlookup} {
     global botnick chan bibver diatheke
-    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
+    regsub -all {[\[\]\{\}\#\%\\\$\'\"\/\s]} $vlookup { } vlookup
     catch {exec $diatheke -f plaintext -b $bibver -k "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
 
@@ -157,7 +155,6 @@ proc publookupdict {vlookup} {
     exec rm /tmp/fooout.$botnick
     return 1
 }
-
 
 proc pub_lookupd {nick uhost hand channel arg} {
     global von chan bibver
@@ -194,7 +191,7 @@ proc pub_lookupd {nick uhost hand channel arg} {
 
 proc publookupcomm {vlookup} {
     global botnick chan bibver diatheke
-    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $vlookup { } vlookup
+    regsub -all {[\[\]\{\}\#\%\\\$\'\"\/\s]} $vlookup { } vlookup
     catch {exec $diatheke -c $bibver "$vlookup" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     while {[gets $foofile fooverse] >= 0} {
@@ -224,7 +221,6 @@ proc publookupcomm {vlookup} {
     exec rm /tmp/fooout.$botnick
     return 1
 }
-
 
 proc pub_lookupc {nick uhost hand channel arg} {
     global von chan bibver
@@ -265,7 +261,7 @@ proc dictlookup {nick uhost hand channel arg} {
 	return 0
     }
     
-    regsub -all {[[]{};\#\%\\\$\'\"\/\|<>]} $arg { } arg
+    regsub -all {[\[\]\{\}\#\%\\\$\'\"\/\s]} $arg { } arg
     catch {exec $dict "$arg" >& /tmp/fooout.$botnick}
     catch {set foofile [open /tmp/fooout.$botnick]}
     catch {set fooverse [gets $foofile]}
