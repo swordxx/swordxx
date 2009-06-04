@@ -13,3 +13,14 @@ proc setver_sKJV {nick uhost hand channel arg} {
     set bibver KJV
     pub_lookups $nick $uhost $hand $channel $arg
 }
+
+proc printBibles {nick} {
+	putserv "NOTICE $nick :Bibles (1):"
+	putserv "NOTICE $nick :King James Version (1769) with Strongs Numbers and Morphology (!KJV)"
+}
+
+proc printComms {nick} {
+}
+
+proc printDicts {nick} {
+}
