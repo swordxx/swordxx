@@ -1,5 +1,5 @@
-// Diatheke 4.2.1 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999-2005 by CrossWire Bible Society
+// Diatheke 4.5 by Chris Little <chrislit@crosswire.org>
+// Copyright 1999-2009 by CrossWire Bible Society
 // http://www.crosswire.org/sword/diatheke
 
 /*
@@ -31,8 +31,8 @@ using std::cout;
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.2.1\n");
-	fprintf (stderr, "Copyright 1999-2005 by the CrossWire Bible Society\n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.5\n");
+	fprintf (stderr, "Copyright 1999-2009 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "usage: \n  ");
  	fprintf (stderr, "diatheke <-b module_name> [-s search_type] [-r search_range]\n");
@@ -47,7 +47,7 @@ void printsyntax() {
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents), p (Arabic Vowels)\n");
-	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping,\n");
+	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping),\n");
 	fprintf (stderr, "  b (Bi-Directional Reordering), x (Red Words of Christ)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");

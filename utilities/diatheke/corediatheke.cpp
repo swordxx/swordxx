@@ -250,6 +250,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
                 manager.setGlobalOption("Transliteration", script);
 	else
 		manager.setGlobalOption("Transliteration", "Off");
+	if (optionfilters & OP_ARABICPOINTS)
+		manager.setGlobalOption("Arabic Vowel Points","On");
+	else
+		manager.setGlobalOption("Arabic Vowel Points","Off");
 
 	if (querytype == QT_SEARCH) {
 
