@@ -572,11 +572,11 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 //		false if the what has been seen is to be accumulated and considered later.
 bool handleToken(SWBuf &text, XMLTag token) {
 
-	// Everything between the begin book tag and the first begin chapter tag is inBookHeader
-	static bool               inBookHeader    = false;
+	// Everything between the begin book tag and the first begin chapter tag is inBookIntro
+	static bool               inBookIntro     = false;
 
-	// Everything between the begin chapter tag and the first begin verse tag is inChapterHeader
-	static bool               inChapterHeader = false;
+	// Everything between the begin chapter tag and the first begin verse tag is inChapterIntro
+	static bool               inChapterIntro  = false;
 
 	// Flags indicating whether we are processing the content of a chapter
 	static bool               inChapter       = false;
@@ -637,7 +637,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 		// throw away everything up to the first div
 		if (!firstDiv) {
-			if (!strcmp(tokenName, "div")) {
+			if (tokenName == "div") {
 				if (debug & DEBUG_OTHER) {
 					cout << "DEBUG(FOUND): Found first div and pitching prior material: " << text << endl;
 				}
@@ -657,13 +657,13 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		if (token.getAttribute("osisID") || token.getAttribute("annotateRef")) {
 
 			// BOOK START, <div type="book" ...>
-			if ((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "book"))) {
-				if (inBookHeader || inChapterHeader) {	// this one should never happen, but just in case
+			if (tokenName == "div" && typeAttr == "book") {
+				if (inBookIntro || inChapterIntro) {	// this one should never happen, but just in case
 
 					if (debug & DEBUG_TITLE) {
-						cout << "DEBUG(TITLE): " << currentOsisID << ": OOPS HEADING " << endl;
-						cout << "\tinChapterHeader = " << inChapterHeader << endl;
-						cout << "\tinBookHeader = " << inBookHeader << endl;
+						cout << "DEBUG(TITLE): " << currentOsisID << ": OOPS INTRO " << endl;
+						cout << "\tinChapterIntro = " << inChapterIntro << endl;
+						cout << "\tinBookIntro = " << inBookIntro << endl;
 					}
 
 					currentVerse.Testament(0);
@@ -681,8 +681,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				inChapter       = false;
 				inVerse         = false;
 				inPreVerse      = false;
-				inBookHeader    = true;
-				inChapterHeader = false;
+				inBookIntro     = true;
+				inChapterIntro  = false;
+
+				if (debug & DEBUG_TITLE) {
+					cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for book introduction" << endl;
+				}
 
 				bookDepth       = tagStack.size();
 				chapterDepth    = 0;
@@ -699,13 +703,13 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				return false;
 			}
 
-			// CHAPTER START, <div type="chapter" ...> or <chapter ...>
-			if (((!strcmp(tokenName, "div")) && (typeAttr && !strcmp(typeAttr, "chapter"))) ||
-			     (!strcmp(tokenName, "chapter"))
-			   ) {
-				if (inBookHeader) {
+			// CHAPTER START, <chapter> or <div type="chapter" ...>
+			if ((tokenName == "chapter") ||
+			    (tokenName == "div" && typeAttr == "chapter")
+			) {
+				if (inBookIntro) {
 					if (debug & DEBUG_TITLE) {
-						cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK HEADING "<< text.c_str() << endl;
+						cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK INTRO "<< text << endl;
 					}
 
 					writeEntry(text);
@@ -724,8 +728,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				inChapter       = true;
 				inVerse         = false;
 				inPreVerse      = false;
-				inBookHeader    = false;
-				inChapterHeader = true;
+				inBookIntro     = false;
+				inChapterIntro  = true;
+
+				if (debug & DEBUG_TITLE) {
+					cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << endl;
+				}
 
 				chapterDepth    = tagStack.size();
 				verseDepth      = 0;
@@ -734,25 +742,25 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 			// VERSE, <verse ...> OR COMMENTARY START, <div annotateType="xxx" ...>
-			if (!strcmp(tokenName, "verse") ||
-			   (!strcmp(tokenName, "div") && token.getAttribute("annotateType"))) {
+			if ((tokenName == "verse") ||
+			    (tokenName == "div" && token.getAttribute("annotateType"))
+			) {
 				if (debug & DEBUG_OTHER) {
 					cout << "DEBUG(FOUND): Entering verse" << endl;
 				}
 
-				if (inChapterHeader) {
-					SWBuf heading = text;
-					text = "";
-
-					if (heading.length()) {
-						if (debug & DEBUG_TITLE) {
-							cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER HEADING "<< heading.c_str() << endl;
-						}
-
-						writeEntry(heading);
+				if (inChapterIntro) {
+					if (debug & DEBUG_TITLE) {
+						cout << "DEBUG(TITLE): " << currentOsisID << ": Done looking for chapter introduction" << endl;
 					}
 
-					inChapterHeader = false;
+					if (text.length()) {
+						if (debug & DEBUG_TITLE) {
+							cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER INTRO "<< text << endl;
+						}
+
+						writeEntry(text);
+					}
 				}
 
 				// Did we have pre-verse material that needs to be marked?
@@ -763,7 +771,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				}
 
 				// Get osisID for verse or annotateRef for commentary
-				SWBuf keyVal = token.getAttribute(strcmp(tokenName, "verse") ? "annotateRef" : "osisID");
+				SWBuf keyVal = token.getAttribute(tokenName == "verse" ? "osisID" : "annotateRef");
 
 				// Massage the key into a form that ParseVerseList can accept
 				prepareSWVerseKey(keyVal);
@@ -788,7 +796,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					}
 				}
 				else {
-					cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.getAttribute(strcmp(tokenName, "verse") ? "annotateRef" : "osisID") << endl;
+					cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.getAttribute((tokenName == "verse") ? "osisID" : "annotateRef") << endl;
 				}
 
 				strcpy(currentOsisID, currentVerse.getOSISRef());
@@ -801,12 +809,12 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				sidVerse        = token.getAttribute("sID");
 				inVerse         = true;
 				inPreVerse      = false;
-				inBookHeader    = false;
-				inChapterHeader = false;
+				inBookIntro     = false;
+				inChapterIntro  = false;
 				verseDepth      = tagStack.size();
 
 				// Include the token if it is not a verse
-				if (strcmp(tokenName, "verse")) {
+				if (tokenName != "verse") {
 					text.append(token);
 				}
 				else if (debug & DEBUG_VERSE)
@@ -834,7 +842,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Handle WOC quotes.
 		// Note this requires transformBSP to make them into milestones
 		// Otherwise have to do it here
-		if (!strcmp(tokenName, "q")) {
+		if (tokenName == "q") {
 			quoteStack.push(token);
 
 			if (debug & DEBUG_QUOTE) {
@@ -866,30 +874,35 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// 1) Between the opening of a book and the first chapter, all the material is handled as an introduction to the book.
 		// 2) Between the opening of a chapter and the first verse, the material is split between the introduction of the chapter
 		//    and the first verse of the chapter.
-		//    A <div> with a type other than section will be taken as a chapter introduction.
-		//    A <title> of type acrostic, psalm or no type, will be taken as a title for the verse.
-		//    A <title> of type main or chapter will be seen as a chapter title.
+		//    A <div> with a type of section will be taken as surrounding verses.
+		//    A <title> of type other than main, chapter or sub, will be taken as a title for the verse.
+		//    Once one of these conditions is met, the division between chapter introduction and pre-verse is set.
 		// 3) Between verses, the material is split between the prior verse and the next verse.
 		//    Basically, while end and empty tags are found, they belong to the prior verse.
 		//    Once a begin tag is found, it belongs to the next verse.
-		// If the title has an attribute type of "main" or "chapter"
-		// it belongs to its <div> or <chapter> and is treated as part of its heading
-		// Otherwise if it a title in a chapter before the first the first verse it
-		// is put into the verse as a preverse title.
-
-		if (!inPreVerse && !inBookHeader) {
-			if (inChapterHeader) {
+		if (!inPreVerse && !inBookIntro) {
+			if (inChapterIntro) {
 				// Determine when we are no longer in a chapter heading, but in pre-verse material:
 				// If we see one of the following:
 				// 	a section div
-				// 	a title that is not main or chapter
-				if ((!strcmp(tokenName, "div") && (typeAttr && !strcmp(typeAttr, "section"))) ||
-				    (!strcmp(tokenName, "title") && (!typeAttr || (strcmp(typeAttr, "main") && strcmp(typeAttr, "chapter"))))
-				   ) {
-					// Since we have found the boundary, we need to write out the chapter heading
-					writeEntry(text);
+				// 	a title that is not main, chapter or sub or unclassified (no type attribute)
+				if ((tokenName == "div" && typeAttr == "section") ||
+				    (tokenName == "title" && typeAttr.length() != 0 && typeAttr != "main" && typeAttr != "chapter" && typeAttr != "sub")
+				) {
+					if (debug & DEBUG_TITLE) {
+						cout << "DEBUG(TITLE): " << currentOsisID << ": Done looking for chapter introduction" << endl;
+					}
+
+					if (text.length()) {
+						if (debug & DEBUG_TITLE) {
+							cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER INTRO "<< text << endl;
+						}
+
+						// Since we have found the boundary, we need to write out the chapter heading
+						writeEntry(text);
+					}
 					// And we are no longer in the chapter heading
-					inChapterHeader = false;
+					inChapterIntro  = false;
 					// But rather, we are now in pre-verse material
 					inPreVerse      = true;
 				}
@@ -906,7 +919,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		}
 
 		if (debug & DEBUG_INTERVERSE) {
-			if (!inVerse && !inBookHeader && !inChapterHeader) {
+			if (!inVerse && !inBookIntro && !inChapterIntro) {
 				cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse start token " << token << ":" << text.c_str() << endl;
 			}
 		}
@@ -933,7 +946,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			tagStack.pop();
 
-			if (strcmp(topToken.getName(), tokenName)) {
+			if (tokenName != topToken.getName()) {
 				cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.getName() << " found " << tokenName << endl;
 //				exit(EXIT_BAD_NESTING);	// (OSK) I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
 						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
@@ -948,7 +961,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		}
 
 		// VERSE and COMMENTARY END
-		if ((!strcmp(tokenName, "verse")) || ((!strcmp(tokenName, "div")) && (eidAttr == sidVerse))) {
+		if ((tokenName == "verse") ||
+		    (tokenName == "div" && eidAttr == sidVerse)
+		) {
 
 			if (tagDepth != verseDepth) {
 				cout << "WARNING(NESTING): verse " << currentOsisID << " is not well formed:(" << verseDepth << "," << tagDepth << ")" << endl;
@@ -961,7 +976,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 
 			// Include the token if it is not a verse
-			if (strcmp(tokenName, "verse")) {
+			if (tokenName != "verse") {
 				text.append(token);
 			}
 			else if (debug & DEBUG_VERSE)
@@ -989,7 +1004,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 		// Handle WOC quotes.
 		// Note this requires transformBSP to make them into milestones
 		// Otherwise have to manage it here
-		if (!strcmp(tokenName, "q")) {
+		if (tokenName == "q") {
 			XMLTag topToken = quoteStack.top();
 
 			if (debug & DEBUG_QUOTE) {
@@ -1039,9 +1054,11 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 		// Look for the end of document, book and chapter
 		// Also for material that goes with last entry
-		if (!inVerse && !inBookHeader && !inChapterHeader) {
+		if (!inVerse && !inBookIntro && !inChapterIntro) {
 			// Is this the end of a chapter.
-			if (((!strcmp(tokenName, "div")) && (eidAttr == sidChapter)) || (!strcmp(tokenName, "chapter"))) {
+			if ((tokenName == "chapter") ||
+			    (tokenName == "div" && eidAttr == sidChapter)
+			) {
 				text.append(token);
 				writeEntry(text);
 				inChapter    = false;
@@ -1052,7 +1069,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 			// Is it the end of a book
-			if ((!strcmp(tokenName, "div")) && (eidAttr == sidBook)) {
+			if (tokenName == "div" && eidAttr == sidBook) {
 				text.append(token);
 				writeEntry(text);
 				bookDepth    = 0;
@@ -1062,7 +1079,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 			// Do not include the end of an osis document
-			if (!strcmp(tokenName, "osisText") || !strcmp(tokenName, "osis")) {
+			if (tokenName == "osisText" || tokenName == "osis") {
 				bookDepth    = 0;
 				chapterDepth = 0;
 				verseDepth   = 0;
@@ -1122,10 +1139,10 @@ XMLTag transformBSP(XMLTag t) {
 		return t;
 	}
 
-	const char* tagName = t.getName();
+	SWBuf tagName = t.getName();
 	if (!t.isEndTag()) {
 		// Transform <p> into <div type="paragraph"> and milestone it
-		if (!strcmp(tagName, "p")) {
+		if (tagName == "p") {
 			t.setText("<div type=\"paragraph\" />");
 			sprintf(buf, "gen%d", sID++);
 			t.setAttribute("sID", buf);
@@ -1138,17 +1155,17 @@ XMLTag transformBSP(XMLTag t) {
 		//   abbr	When would this ever cross a boundary?
 		//   seg	as it is used for a divineName hack
 		//   foreign	so that it can be easily italicized
-		else if (!strcmp(tagName, "chapter") ||
-			 !strcmp(tagName, "closer")  ||
-			 !strcmp(tagName, "div")     ||
-			 !strcmp(tagName, "l")       ||
-			 !strcmp(tagName, "lg")      ||
-			 !strcmp(tagName, "q")       ||
-			 !strcmp(tagName, "salute")  ||
-			 !strcmp(tagName, "signed")  ||
-			 !strcmp(tagName, "speech")  ||
-			 !strcmp(tagName, "verse")
-			) {
+		else if (tagName == "chapter" ||
+			 tagName == "closer"  ||
+			 tagName == "div"     ||
+			 tagName == "l"       ||
+			 tagName == "lg"      ||
+			 tagName == "q"       ||
+			 tagName == "salute"  ||
+			 tagName == "signed"  ||
+			 tagName == "speech"  ||
+			 tagName == "verse"
+		) {
 			t.setEmpty(true);
 			sprintf(buf, "gen%d", sID++);
 			t.setAttribute("sID", buf);
@@ -1171,18 +1188,18 @@ XMLTag transformBSP(XMLTag t) {
 		bspTagStack.pop();
 
 		// Look for the milestoneable container tags handled above.
-		if (!strcmp(tagName, "chapter") ||
-			 !strcmp(tagName, "closer")  ||
-			 !strcmp(tagName, "div")     ||
-			 !strcmp(tagName, "l")       ||
-			 !strcmp(tagName, "lg")      ||
-			 !strcmp(tagName, "p")       ||
-			 !strcmp(tagName, "q")       ||
-			 !strcmp(tagName, "salute")  ||
-			 !strcmp(tagName, "signed")  ||
-			 !strcmp(tagName, "speech")  ||
-			 !strcmp(tagName, "verse")
-			) {
+		if (tagName == "chapter" ||
+		    tagName == "closer"  ||
+		    tagName == "div"     ||
+		    tagName == "l"       ||
+		    tagName == "lg"      ||
+		    tagName == "p"       ||
+		    tagName == "q"       ||
+		    tagName == "salute"  ||
+		    tagName == "signed"  ||
+		    tagName == "speech"  ||
+		    tagName == "verse"
+		) {
 			// make this a clone of the start tag with sID changed to eID
 			// Note: in the case of </p> the topToken is a <div type="paragraph">
 			t = topToken;
