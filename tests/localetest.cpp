@@ -24,13 +24,13 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 	if (argc != 3) {
-		fprintf(stderr, "usage: %s <locale_name> <text>\n", *argv);
+		std::cerr <<  "usage: " << *argv << " <locale_name> <text>\n";
 		exit(-1);
 	}
 
 	LocaleMgr lm;
 
-	printf("%s\n", lm.translate(argv[1], argv[2]));
+	std::cout << lm.translate(argv[1], argv[2]) << "\n";
 
 	VerseKey bla;
 	bla = "James 1:19";

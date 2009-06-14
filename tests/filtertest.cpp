@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 	while (!fd || FileMgr::getLine(fd, lineBuffer)) {
 		filter.processText(lineBuffer);
 		for (unsigned int i = 0; i < lineBuffer.size(); i++) {
-			printf("%c", lineBuffer[i]);
+			std::cout << lineBuffer[i];
 		}
 		cout << "\n";
 		if (!fd) break;

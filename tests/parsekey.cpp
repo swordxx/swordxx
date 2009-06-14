@@ -27,7 +27,7 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 	if ((argc < 2) || (argc > 4)) {
-		fprintf(stderr, "usage: %s <\"string to parse\"> [locale_name] [v11n] [test-in-set-verse]\n", *argv);
+		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [test-in-set-verse]\n";
 		exit(-1);
 	}
 

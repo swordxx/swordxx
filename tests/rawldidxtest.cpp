@@ -15,7 +15,7 @@
  *
  */
 
-#include <iostream>
+#include <stdio.h>
 #include <rawstr.h>
 #include <swmgr.h>
 #include <filemgr.h>

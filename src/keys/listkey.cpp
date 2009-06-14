@@ -165,7 +165,7 @@ void ListKey::increment(int step) {
 	}
 	Error();		// clear error
 	for(; step && !Error(); step--) {
-		if (arraypos < arraycnt) {
+		if (arraypos < arraycnt && arraycnt) {
 			if (array[arraypos]->isBoundSet())
 				(*(array[arraypos]))++;
 			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
@@ -189,7 +189,7 @@ void ListKey::decrement(int step) {
 	}
 	Error();		// clear error
 	for(; step && !Error(); step--) {
-		if (arraypos > -1) {
+		if (arraypos > -1 && arraycnt) {
 			if (array[arraypos]->isBoundSet())
 				(*(array[arraypos]))--;
 			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
@@ -323,7 +323,7 @@ const char *ListKey::getOSISRefRangeText() const {
 
 const char *ListKey::getText() const {
 	int pos = arraypos;
-	SWKey *key = (pos >= arraycnt) ? 0:array[pos];
+	SWKey *key = (pos >= arraycnt || !arraycnt) ? 0:array[pos];
 	return (key) ? key->getText() : keytext;
 }
 

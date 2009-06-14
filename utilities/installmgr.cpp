@@ -96,8 +96,8 @@ void finish(int status) {
 void usage(const char *progName) {
 	fprintf(stderr, "usage: %s <option>\nOptions:\n"
 		"\t-init\t\t\t\tcreate a basic user config file.\n"
-		"\t-sc\t\t\t\tsync config with known remote repo list\n"
 		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
+		"\t-sc\t\t\t\tsync config with known remote repo list\n"
 		"\t-l\t\t\t\tlist installed modules\n"
 		"\t-u <modName>\t\t\tuninstall module\n"
 		"\t-s\t\t\t\tlist remote sources\n"
@@ -149,6 +149,7 @@ void syncConfig() {
 		return;
 	}
 
+	// be sure we have at least some config file already out there
 	if (!FileMgr::existsFile(confPath.c_str())) {
 		createBasicConfig(true, false);
 		finish(1); // cleanup and don't exit
