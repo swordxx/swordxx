@@ -1,5 +1,11 @@
 API ChangeLog 
 
+
+09-Aug-2009	Troy A. Griffitts <scribe@crosswire.org>
+	Added checks for Hebrew and Arabic when stripping
+		for searching
+
+
 * Release 1.6.0 *
 
 14-May-2009	Troy A. Griffitts <scribe@crosswire.org>

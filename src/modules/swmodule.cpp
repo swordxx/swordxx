@@ -461,6 +461,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	// determine if we might be doing special strip searches.  useful for knowing if we can use shortcuts
 	bool specialStrips = (getConfigEntry("LocalStripFilter")
                        || (getConfig().has("GlobalOptionFilter", "UTF8GreekAccents"))
+                       || (getConfig().has("GlobalOptionFilter", "UTF8HebrewPoints"))
+                       || (getConfig().has("GlobalOptionFilter", "UTF8ArabicPoints"))
                        || (strchr(istr, '<')));
 
 	processEntryAttributes(searchType == -3);
@@ -988,7 +990,10 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		filterSettings.push_back((*filter)->getOptionValue());
 		(*filter)->setOptionValue(*((*filter)->getOptionValues().begin()));
 
-		if (!strcmp("Greek Accents", (*filter)->getOptionName())) {
+		if ( (!strcmp("Greek Accents", (*filter)->getOptionName())) ||
+			(!strcmp("Hebrew Vowel Points", (*filter)->getOptionName())) ||
+			(!strcmp("Arabic Vowel Points", (*filter)->getOptionName()))
+		   ) {
 			(*filter)->setOptionValue("Off");
 		}
 	}
