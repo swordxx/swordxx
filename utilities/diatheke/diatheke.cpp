@@ -162,6 +162,10 @@ int main(int argc, char **argv)
 					outputformat = FMT_GBF;
 					i++;
 				}
+				else if (!::stricmp("htmlhref", argv[i+1])) {
+					outputformat = FMT_HTMLHREF;
+					i++;
+				}
 				else if (!::stricmp("html", argv[i+1])) {
 					outputformat = FMT_HTML;
 					i++;
