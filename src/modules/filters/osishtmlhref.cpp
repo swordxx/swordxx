@@ -474,7 +474,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (type == "b" || type == "x-b") {
+				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("<b>", buf, u);
 					u->inBold = true;
 				}
