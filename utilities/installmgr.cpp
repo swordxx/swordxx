@@ -297,13 +297,13 @@ void localDirInstallModule(const char *dir, const char *modName) {
 
 int main(int argc, char **argv) {
 
-	init();
-
 	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
+
+	init();
 
 	cout << "\n";
 
-	if (argc < 2)
+	if (argc < 2 || !mgr->config)
 		usage(*argv);
 
 	switch (argv[1][1]) {
