@@ -257,9 +257,10 @@ System.out.println("ORB found in session");
 			System.out.println(module.getRenderText());
 		}
 */
+/*
 		module = mgr.getModuleByName("WHNU");
 		module.setKeyText("rev.22.21");
-		System.out.println(new String(module.getRawEntry().getBytes("iso8859-1"), "UTF-8"));
+		System.out.println(module.getRawEntry());
 /*
 		boolean lucene = module.hasSearchFramework();
 		SearchHit[] searchResults = module.search("God love world", (lucene)?SearchType.LUCENE:SearchType.MULTIWORD, 0, "");

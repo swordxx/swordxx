@@ -57,7 +57,7 @@ typedef sequence<SearchHit> SearchHitList;
 
 interface SWModule {
 	void          terminateSearch();
-	SearchHitList search(in string istr, in SearchType searchType, in long flags, in string scope);
+	SearchHitList search(in string istr, in SearchType srchType, in long flags, in string scope);
 	char          error();
 	long          getEntrySize();
 	StringList    getEntryAttribute(in string level1, in string level2, in string level3, in boolean filtered);

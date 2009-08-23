@@ -1,3 +1,3 @@
 EXTRA_DIST = swordorb.idl
 
-SUBDIRS = orbitcpp java
+SUBDIRS = orbitcpp omniorbcpp java

@@ -135,6 +135,14 @@ char *SWMgr_impl::filterText(const char *filterName, const char *text) throw(COR
 	return CORBA::string_dup((char *)buf.c_str());
 }
 
+
+
+
+// ------------------------------------------------------------------------
+
+
+
+
 char *SWModule_impl::getCategory() throw(CORBA::SystemException) {
 	SWBuf type = delegate->Type();
 	SWBuf cat = delegate->getConfigEntry("Category");

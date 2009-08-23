@@ -31,6 +31,7 @@ namespace swordorb {
 static const char *SWNULL = "<SWNULL>";
 extern sword::RawText NULLMod;
 
+
 //Inherit from abstract Skeleton:
 class SWModule_impl : public POA_swordorb::SWModule {
 	sword::SWModule *delegate;
@@ -59,12 +60,16 @@ public:
 	char *getRawEntry() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->getRawEntry()); }
 	void  setRawEntry(const char *entryBuffer) throw(CORBA::SystemException) { delegate->setEntry(entryBuffer); }
 	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }
-	void deleteSearchFramework() throw(CORBA::SystemException) { return delegate->deleteSearchFramework(); }
+	void deleteSearchFramework() throw(CORBA::SystemException) { delegate->deleteSearchFramework(); }
 	CORBA::Boolean hasSearchFramework() throw(CORBA::SystemException) { return (delegate->hasSearchFramework() && delegate->isSearchOptimallySupported("God", -4, 0, 0)); }
 
 };
 
+// ----------------------------------------------------------------------------------
+
 typedef std::map<std::string, SWModule_impl *> SWModuleMap;
+
+// ----------------------------------------------------------------------------------
 
 class SWMgr_impl : public POA_swordorb::SWMgr {
 	WebMgr *delegate;
@@ -90,7 +95,7 @@ public:
 	void setDefaultLocale(const char *name) throw(CORBA::SystemException);
 
 };
-}; // namespace hellomodule
+};
 
 
-#endif //_ORBIT_CPP_IDL_helloworld_IMPL_HH
+#endif
