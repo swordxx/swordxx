@@ -35,35 +35,6 @@ using sword::TreeKeyIdx;
 
 sword::RawText NULLMod("/dev/null", SWNULL, SWNULL);
 
-namespace {
-
-// something about this still doesn't work. see gerlut1545.conf
-SWBuf assureValidUTF8(SWBuf buf) {
-
-	const unsigned char *b = (const unsigned char *)buf.c_str();
-	const unsigned char *q = 0;
-	bool invalidChar = false;
-	while (*b) {
-		q = b;
-		if (!getUniCharFromUTF8(&b)) {
-			long len = b - q;
-			if (len) {
-				invalidChar = true;
-				for (long start = q - (const unsigned char *)buf.c_str(); len; len--) {
-					buf[start+len-1] = 0x1a;	// unicode replacement character
-//					buf[start+len-1] = '?';	// unicode replacement character
-				}
-				
-			}
-		}
-	}
-	if (invalidChar) {
-		std::cerr << "Changing invalid UTF-8 string to (" << buf << ")" << std::endl;
-	}
-	return buf;
-}
-
-}
 
 
 
