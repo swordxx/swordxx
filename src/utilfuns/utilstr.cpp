@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <sysdata.h>
+#include <swlog.h>
 
 
 SWORD_NAMESPACE_START
@@ -234,5 +235,31 @@ __u32 getUniCharFromUTF8(const unsigned char **buf) {
 	return ch;
 }
 
+
+
+SWBuf assureValidUTF8(const char *buf) {
+
+	SWBuf myCopy = buf;
+	const unsigned char *b = (const unsigned char *)myCopy.c_str();
+	const unsigned char *q = 0;
+	bool invalidChar = false;
+	while (*b) {
+		q = b;
+		if (!getUniCharFromUTF8(&b)) {
+			long len = b - q;
+			if (len) {
+				invalidChar = true;
+				for (long start = q - (const unsigned char *)myCopy.c_str(); len; len--) {
+					myCopy[start+len-1] = 0x1a;	// unicode replacement character
+				}
+				
+			}
+		}
+	}
+	if (invalidChar) {
+		SWLog::getSystemLog()->logWarning("Changing invalid UTF-8 string (%s) to (%s)\n", buf, myCopy.c_str());
+	}
+	return myCopy;
+}
 
 SWORD_NAMESPACE_END

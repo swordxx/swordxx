@@ -4,7 +4,7 @@ LDADD = $(top_builddir)/lib/libsword.la
 
 SUBDIRS = cppunit
 
-noinst_PROGRAMS = ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest \
+noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest \
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
  swbuftest xmltest webiftest striptest
@@ -39,6 +39,7 @@ endif
 keytest_SOURCES = keytest.cpp
 mgrtest_SOURCES = mgrtest.cpp
 ciphertest_SOURCES = ciphertest.cpp
+utf8norm_SOURCES = utf8norm.cpp
 parsekey_SOURCES = parsekey.cpp
 versekeytest_SOURCES = versekeytest.cpp
 vtreekeytest_SOURCES = vtreekeytest.cpp
