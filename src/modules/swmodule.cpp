@@ -686,9 +686,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				AttributeValue::iterator i3Start, i3End;
 
 				if ((words.size()) && (words[0].length())) {
-cout << "Word: " << words[0] << endl;
+// cout << "Word: " << words[0] << endl;
 				for (i1Start = entryAttribs.begin(); i1Start != entryAttribs.end(); ++i1Start) {
-cout << "stuff: " << i1Start->first.c_str() << endl;
+// cout << "stuff: " << i1Start->first.c_str() << endl;
 				}
 					i1Start = entryAttribs.find(words[0]);
 					i1End = i1Start;
