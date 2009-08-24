@@ -24,6 +24,7 @@
 
 #include <defs.h>
 #include <sysdata.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -54,6 +55,20 @@ extern const unsigned char SW_toupper_array[256];
  */
 
 __u32 getUniCharFromUTF8(const unsigned char **buf);
+
+
+/******************************************************************************
+ * assureValidUTF8 - iterates the supplied UTF-8 buffer and checks for validity
+ * 					replacing invalid bytes if necessary and returning a
+ *					verified UTF8 buffer, leaving the original input
+ *					unchanged.
+ *
+ * ENT:	buf - a utf8 buffer
+ *
+ * RET:	input buffer validated and any problems fixed by substituting a
+ * 		replacement character for bytes not valid.
+ */
+SWBuf assureValidUTF8(const char *buf);
 
 
 SWORD_NAMESPACE_END
