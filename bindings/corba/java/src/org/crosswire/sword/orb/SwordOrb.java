@@ -249,14 +249,14 @@ System.out.println("ORB found in session");
 		ModInfo[] modInfoList = mgr.getModInfoList();
 		System.out.println("sequence size: " + modInfoList.length);
 		SWModule module;
-/*
 		for (int i = 0; i < modInfoList.length; i++) {
-			System.out.println(modInfoList[i].name + ": " + modInfoList[i].category + ": " + modInfoList[i].language);
+			System.out.println(modInfoList[i].name + ": " + modInfoList[i].category + ": " + modInfoList[i].language + ": " + modInfoList[i].description);
+/*
 			module = mgr.getModuleByName(modInfoList[i].name);
 			module.setKeyText("jas1:19");
 			System.out.println(module.getRenderText());
-		}
 */
+		}
 /*
 		module = mgr.getModuleByName("WHNU");
 		module.setKeyText("rev.22.21");

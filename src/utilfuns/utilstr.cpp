@@ -21,6 +21,7 @@
 
 #include <sysdata.h>
 #include <swlog.h>
+#include <swbuf.h>
 
 
 SWORD_NAMESPACE_START
@@ -223,6 +224,12 @@ __u32 getUniCharFromUTF8(const unsigned char **buf) {
 		multibuf[0] <<= 1;
 		multibuf[subsequent] = (*buf)[subsequent];
 		multibuf[subsequent] &= 63;
+		// subsequent byte did not begin with 10XXXXXX
+		// move our buffer to here and error out
+		if (((*buf)[subsequent] - multibuf[subsequent]) != 128) {
+			*buf += subsequent;
+			return 0;
+		}
 		ch <<= 6;
 		ch |= multibuf[subsequent];
 	}
