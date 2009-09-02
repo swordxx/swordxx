@@ -36,7 +36,7 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 
-	const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver]\n";
+	const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver] [entries per compression block]\n";
 
 	signed long i = 0;
 	string keybuffer;
@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
 	string linebuffer;
 	char modname[16];
 	char links = 0;
+	long blockCount = 30;
 	std::vector<string> linkbuffer;
 
 	if (argc > 2) {
@@ -71,13 +72,20 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	if (argc > 4) {
+		long bcTemp = atoi(argv[4]);
+		if (bcTemp > 0) {
+			blockCount = bcTemp;
+		}
+	}
+
 	SWModule *mod = 0;
 	SWKey *key, *linkKey;
 
 	switch (mode) {
 	case 3:
 		zLD::createModule(modname);
-		mod = new zLD(modname, 0, 0, 30, new ZipCompress());
+		mod = new zLD(modname, 0, 0, blockCount, new ZipCompress());
 		break;
 	case 2:
 		RawLD::createModule(modname);
