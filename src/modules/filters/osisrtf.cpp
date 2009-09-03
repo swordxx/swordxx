@@ -373,7 +373,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (type == "b" || type == "x-b")
+				if (type == "bold" || type == "b" || type == "x-b")
 					outText("{\\b1 ", buf, u);
 				else	// all other types
 					outText("{\\i1 ", buf, u);
