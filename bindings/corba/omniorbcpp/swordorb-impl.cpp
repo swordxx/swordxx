@@ -189,8 +189,21 @@ swordorb::StringList* swordorb_SWModule_i::parseKeyList(const char* keyText){
 	return retVal;
 }
 
-void swordorb_SWModule_i::setKeyText(const char* key){
-	delegate->KeyText(key);
+void swordorb_SWModule_i::setKeyText(const char* keyText) {
+	sword::SWKey *key = delegate->getKey();
+	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+	if (vkey && (*keyText=='+' ||*keyText=='-')) {
+		if (!stricmp(keyText+1, "book")) {
+			vkey->setBook(vkey->getBook() + ((*keyText=='-')?1:-1));
+			return;
+		}
+		else if (!stricmp(keyText+1, "chapter")) {
+			vkey->setChapter(vkey->getChapter() + ((*keyText=='-')?1:-1));
+			return;
+		}
+	}
+
+	delegate->KeyText(keyText);
 }
 
 char* swordorb_SWModule_i::getKeyText(){
@@ -199,7 +212,7 @@ char* swordorb_SWModule_i::getKeyText(){
 
 ::CORBA::Boolean swordorb_SWModule_i::hasKeyChildren(){
 	sword::SWKey *key = delegate->getKey();
-	bool retVal = "";
+	bool retVal = false;
 
 	TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
 	if (tkey) {
@@ -208,6 +221,7 @@ char* swordorb_SWModule_i::getKeyText(){
 	return retVal;
 }
 
+
 swordorb::StringList* swordorb_SWModule_i::getKeyChildren(){
 	sword::SWKey *key = delegate->getKey();
 	swordorb::StringList *retVal = new swordorb::StringList;
@@ -215,12 +229,12 @@ swordorb::StringList* swordorb_SWModule_i::getKeyChildren(){
 
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		retVal->length(6);
+		retVal->length(7);
 		SWBuf num;
 		num.appendFormatted("%d", vkey->Testament());
 		(*retVal)[0] = CORBA::string_dup(num.c_str());
 		num = "";
-		num.appendFormatted("%d", vkey->Book());
+		num.appendFormatted("%d", vkey->getBook());
 		(*retVal)[1] = CORBA::string_dup(num.c_str());
 		num = "";
 		num.appendFormatted("%d", vkey->Chapter());
@@ -234,6 +248,9 @@ swordorb::StringList* swordorb_SWModule_i::getKeyChildren(){
 		num = "";
 		num.appendFormatted("%d", vkey->getVerseMax());
 		(*retVal)[5] = CORBA::string_dup(num.c_str());
+		num = "";
+		num.appendFormatted("%d", vkey->getBookName());
+		(*retVal)[6] = CORBA::string_dup(num.c_str());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);

@@ -62,10 +62,19 @@ interface SWModule {
 	long          getEntrySize();
 	StringList    getEntryAttribute(in string level1, in string level2, in string level3, in boolean filtered);
 	StringList    parseKeyList(in string keyText);
+
+	// Special values handled for VerseKey modules: [+-][book|chapter]
+	//	(e.g.	"+chapter" will increment the VerseKey 1 chapter)
 	void          setKeyText(in string key);
+
 	string        getKeyText();
 	boolean       hasKeyChildren();
+
+	// This method returns child nodes for a genbook,
+	// but has special handling if called on a VerseKey module:
+	//  [0..6] [testament, book, chapter, verse, chapterMax, verseMax, bookName]
 	StringList    getKeyChildren();
+
 	string        getKeyParent();
 	string        getName();
 	string        getDescription();

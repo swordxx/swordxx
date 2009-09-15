@@ -288,6 +288,22 @@ StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *lev
 	return retVal;
 }
 
+void SWModule_impl::setKeyText(const char *key) throw(CORBA::SystemException) {
+	sword::SWKey *key = delegate->getKey();
+	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+	if (vkey && (*keyText=='+' ||*keyText=='-')) {
+		if (!stricmp(keyText+1, "book")) {
+			vkey->setBook(vkey->getBook() + ((*keyText=='-')?1:-1));
+			return;
+		}
+		else if (!stricmp(keyText+1, "chapter")) {
+			vkey->setChapter(vkey->getChapter() + ((*keyText=='-')?1:-1));
+			return;
+		}
+	}
+
+	delegate->KeyText(key);
+}
 
 StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 	sword::SWKey *key = delegate->getKey();
@@ -296,7 +312,7 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		retVal->length(6);
+		retVal->length(7);
 		SWBuf num;
 		num.appendFormatted("%d", vkey->Testament());
 		(*retVal)[0] = CORBA::string_dup(num.c_str());
@@ -315,6 +331,9 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 		num = "";
 		num.appendFormatted("%d", vkey->getVerseMax());
 		(*retVal)[5] = CORBA::string_dup(num.c_str());
+		num = "";
+		num.appendFormatted("%d", vkey->getBookName());
+		(*retVal)[6] = CORBA::string_dup(num.c_str());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
@@ -342,7 +361,7 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 
 CORBA::Boolean SWModule_impl::hasKeyChildren() throw(CORBA::SystemException) {
 	sword::SWKey *key = delegate->getKey();
-	bool retVal = "";
+	bool retVal = false;
 
 	TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
 	if (tkey) {
