@@ -194,11 +194,11 @@ void swordorb_SWModule_i::setKeyText(const char* keyText) {
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey && (*keyText=='+' ||*keyText=='-')) {
 		if (!stricmp(keyText+1, "book")) {
-			vkey->setBook(vkey->getBook() + ((*keyText=='-')?1:-1));
+			vkey->setBook(vkey->getBook() + ((*keyText=='+')?1:-1));
 			return;
 		}
 		else if (!stricmp(keyText+1, "chapter")) {
-			vkey->setChapter(vkey->getChapter() + ((*keyText=='-')?1:-1));
+			vkey->setChapter(vkey->getChapter() + ((*keyText=='+')?1:-1));
 			return;
 		}
 	}
@@ -231,16 +231,16 @@ swordorb::StringList* swordorb_SWModule_i::getKeyChildren(){
 	if (vkey) {
 		retVal->length(7);
 		SWBuf num;
-		num.appendFormatted("%d", vkey->Testament());
+		num.appendFormatted("%d", vkey->getTestament());
 		(*retVal)[0] = CORBA::string_dup(num.c_str());
 		num = "";
 		num.appendFormatted("%d", vkey->getBook());
 		(*retVal)[1] = CORBA::string_dup(num.c_str());
 		num = "";
-		num.appendFormatted("%d", vkey->Chapter());
+		num.appendFormatted("%d", vkey->getChapter());
 		(*retVal)[2] = CORBA::string_dup(num.c_str());
 		num = "";
-		num.appendFormatted("%d", vkey->Verse());
+		num.appendFormatted("%d", vkey->getVerse());
 		(*retVal)[3] = CORBA::string_dup(num.c_str());
 		num = "";
 		num.appendFormatted("%d", vkey->getChapterMax());
