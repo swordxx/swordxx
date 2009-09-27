@@ -159,3 +159,11 @@ pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
 
+pkginclude_HEADERS += $(swincludedir)/canon_kjva.h
+pkginclude_HEADERS += $(swincludedir)/canon_leningrad.h
+pkginclude_HEADERS += $(swincludedir)/canon_mt.h
+pkginclude_HEADERS += $(swincludedir)/canon_nrsv.h
+pkginclude_HEADERS += $(swincludedir)/canon_nrsva.h
+pkginclude_HEADERS += $(swincludedir)/canon_synodal.h
+pkginclude_HEADERS += $(swincludedir)/canon_null.h
+
