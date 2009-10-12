@@ -6,6 +6,7 @@ API ChangeLog
 		by Nic Carter <niccarter@mac.com>
 	Added initial Android ifdefs to get things compiling
 		under the Android NDK.
+	Added bindings/java-jni for Android development.
 
 09-Aug-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added checks for Hebrew and Arabic when stripping

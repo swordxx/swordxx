@@ -47,7 +47,7 @@ void swordorb_SWModule_i::terminateSearch() {
 	delegate->terminateSearch = true;
 }
 
-swordorb::SearchHitList* swordorb_SWModule_i::search(const char* istr, swordorb::SearchType srchType, ::CORBA::Long flags, const char* scope){
+swordorb::SearchHitList* swordorb_SWModule_i::search(const char* istr, swordorb::SearchType srchType, ::CORBA::Long flags, const char* scope) {
 	int stype = 2;
 	sword::ListKey lscope;
 	if (srchType == swordorb::REGEX) stype = 0;
