@@ -1,6 +1,12 @@
 API ChangeLog 
 
 
+12-Oct-2009	Troy A. Griffitts <scribe@crosswire.org>
+	Added initial impl for CurlHTTPTransport submitted
+		by Nic Carter <niccarter@mac.com>
+	Added initial Android ifdefs to get things compiling
+		under the Android NDK.
+
 09-Aug-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added checks for Hebrew and Arabic when stripping
 		for searching

@@ -19,17 +19,20 @@
  *
  */
 
-
-
-#include <curlhttpt.h>
-
 #include <fcntl.h>
+
+#include <vector>
+#include <cctype>
 
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
 
 #include <swlog.h>
+#include <filemgr.h>
+#include <curlhttpt.h>
+
+using std::vector;
 
 SWORD_NAMESPACE_START
 
@@ -173,6 +176,79 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 	return retVal;
 }
 
+
+// we need to find the 2nd "<td" & then find the ">" after that.  The size starts with the next non-space char
+char *findSizeStart(const char *buffer) {
+	const char *listing = buffer;
+	char *pEnd;
+	
+	pEnd = strstr(listing, "<td");
+	if(pEnd == NULL) {
+		return NULL;
+	}
+	listing = pEnd+2;
+	pEnd = strstr(listing, "<td");
+	if(pEnd == NULL)
+		return NULL;
+	listing = pEnd+2;
+	pEnd = strchr(listing, '>');
+	if(pEnd == NULL)
+		return NULL;
+
+	return pEnd+1;
+}
+
+
+vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
+	
+	vector<struct DirEntry> dirList;
+	
+	SWBuf dirBuf;
+	char *pBuf;
+	char *pBufRes;
+	char possibleName[400];
+	double fSize;
+	int possibleNameLength = 0;
+	
+	if (!getURL("", dirURL, &dirBuf)) {
+		pBuf = strstr(dirBuf, "<a href=\"");//Find the next link to a possible file name.
+		while (pBuf != NULL) {
+			pBuf += 9;//move to the start of the actual name.
+			pBufRes = strchr(pBuf, '\"');//Find the end of the possible file name
+			possibleNameLength = pBufRes - pBuf;
+			sprintf(possibleName, "%.*s", possibleNameLength, pBuf);
+			if (isalnum(possibleName[0])) {
+				SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName);
+				pBuf = pBufRes;
+				pBufRes = findSizeStart(pBuf);
+				fSize = 0;
+				if(pBufRes != NULL) {
+					pBuf = pBufRes;
+					fSize = strtod(pBuf, &pBufRes);
+					if (pBufRes[0] == 'K')
+						fSize *= 1024;
+					else if (pBufRes[0] == 'M')
+						fSize *= 1048576;
+				}
+				struct DirEntry i;
+				i.name = possibleName;
+				i.size = fSize;
+				i.isDirectory = (possibleName[possibleNameLength-1] == '/');
+				dirList.push_back(i);
+				pBuf = pBufRes;
+			} else {
+				pBuf += possibleNameLength;
+			}
+			pBuf++;
+			pBuf = strstr(pBuf, "<a href=\"");//Find the next link to a possible file name.
+		}
+	}
+	else
+	{
+		SWLog::getSystemLog()->logWarning("FTPURLGetDir: failed to get dir %s\n", dirURL);
+	}
+	return dirList;
+}
 
 SWORD_NAMESPACE_END
 

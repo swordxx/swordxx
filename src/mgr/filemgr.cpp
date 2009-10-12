@@ -59,6 +59,15 @@
 #endif
 // -----------
 
+// ------- if we still don't have something
+#ifndef S_IREAD
+#define S_IREAD 0400
+#endif
+#ifndef S_IWRITE
+#define S_IWRITE 0200
+#endif
+// -------
+
 
 SWORD_NAMESPACE_START
 

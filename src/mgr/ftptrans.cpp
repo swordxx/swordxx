@@ -128,11 +128,11 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 	removeTrailingSlash(url);
 	url += '/';
 	
-	SWLog::getSystemLog()->logWarning("FTPCopy: getting dir %s\n", url.c_str());
+	SWLog::getSystemLog()->logWarning("NetTransport: getting dir %s\n", url.c_str());
 	vector<struct DirEntry> dirList = getDirList(url.c_str());
 
 	if (!dirList.size()) {
-		SWLog::getSystemLog()->logWarning("FTPCopy: failed to read dir %s\n", url.c_str());
+		SWLog::getSystemLog()->logWarning("NetTransport: failed to read dir %s\n", url.c_str());
 		return -1;
 	}
 				

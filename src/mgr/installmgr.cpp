@@ -158,6 +158,17 @@ void InstallMgr::readInstallConf() {
 			is->localShadow = (SWBuf)privatePath + "/" + is->uid;
 			sourceBegin++;
 		}
+		sourceBegin = confSection->second.lower_bound("HTTPSource");
+		sourceEnd = confSection->second.upper_bound("HTTPSource");
+
+		while (sourceBegin != sourceEnd) {
+			InstallSource *is = new InstallSource("HTTP", sourceBegin->second.c_str());
+			sources[is->caption] = is;
+			SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
+			FileMgr::createParent(parent.c_str());
+			is->localShadow = (SWBuf)privatePath + "/" + is->uid;
+			sourceBegin++;
+		}
 	}
 
 	defaultMods.clear();
@@ -176,11 +187,11 @@ void InstallMgr::readInstallConf() {
 
 void InstallMgr::saveInstallConf() {
 
-	installConf->Sections["Sources"].erase("FTPSource");
+	installConf->Sections["Sources"].clear();
 
 	for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
 		if (it->second) {
-			installConf->Sections["Sources"].insert(ConfigEntMap::value_type("FTPSource", it->second->getConfEnt().c_str()));
+			installConf->Sections["Sources"].insert(ConfigEntMap::value_type(it->second->type + "Source", it->second->getConfEnt().c_str()));
 		}
 	}
 	(*installConf)["General"]["PassiveFTP"] = (isFTPPassive()) ? "true" : "false";
@@ -258,13 +269,21 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 }
 
 
+// TODO: rename to netCopy
 int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
 
 	// assert user disclaimer has been confirmed
 	if (!isUserDisclaimerConfirmed()) return -1;
 
 	int retVal = 0;
-	FTPTransport *trans = createFTPTransport(is->source, statusReporter);
+	FTPTransport *trans = 0;
+	if (is->type == "FTP") {
+		trans = createFTPTransport(is->source, statusReporter);
+		trans->setPassive(passive);
+	}
+	else if (is->type == "HTTP") {
+		trans = createHTTPTransport(is->source, statusReporter);
+	}
 	transport = trans; // set classwide current transport for other thread terminate() call
 	if (is->u.length()) {
 		trans->setUser(is->u);
@@ -274,9 +293,8 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 		trans->setUser(u);
 		trans->setPasswd(p);
 	}
-	trans->setPassive(passive);
 
-	SWBuf urlPrefix = (SWBuf)"ftp://" + is->source;
+	SWBuf urlPrefix = (SWBuf)((is->type == "HTTP") ? "http://" : "ftp://") + is->source;
 
 	// let's be sure we can connect.  This seems to be necessary but sucks
 //	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
@@ -301,7 +319,7 @@ int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bo
 			removeTrailingSlash(url);
 			url += (SWBuf)"/" + src; //dont forget the final slash
 			if (trans->getURL(dest, url.c_str())) {
-				SWLog::getSystemLog()->logDebug("FTPCopy: failed to get file %s", url.c_str());
+				SWLog::getSystemLog()->logDebug("netCopy: failed to get file %s", url.c_str());
 				retVal = -1;
 			}
 		}
@@ -365,7 +383,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 
 		if (fileBegin != fileEnd) {	// copy each file
 			if (is) {
-				while (fileBegin != fileEnd) {	// ftp each file first
+				while (fileBegin != fileEnd) {	// netCopy each file first
 					buffer = sourceDir + fileBegin->second.c_str();
 					if (ftpCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
 						aborted = true;
@@ -394,7 +412,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 
 			if (is) {
 				fileBegin = module->second.lower_bound("File");
-				while (fileBegin != fileEnd) {	// delete each tmp ftp file
+				while (fileBegin != fileEnd) {	// delete each tmp netCopied file
 					buffer = sourceDir + fileBegin->second.c_str();
 					FileMgr::removeFile(buffer.c_str());
 					fileBegin++;
@@ -435,7 +453,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 					SWBuf destPath = (SWBuf)destMgr->prefixPath + relativePath;
 					FileMgr::copyDir(absolutePath.c_str(), destPath.c_str());
 				}
-				if (is) {		// delete tmp ftp files
+				if (is) {		// delete tmp netCopied files
 //					mgr->deleteModule(modName);
 					FileMgr::removeDir(absolutePath.c_str());
 				}
