@@ -854,7 +854,13 @@ const char *SWModule::StripText(const char *buf, int len) {
  */
 
  const char *SWModule::RenderText(const char *buf, int len, bool render) {
-	entryAttributes.clear();
+	bool savePEA = isProcessEntryAttributes();
+	if (!buf) {
+		entryAttributes.clear();
+	}
+	else {
+		processEntryAttributes(false);
+	}
 
 	static SWBuf local;
 	if (buf)
@@ -881,6 +887,8 @@ const char *SWModule::StripText(const char *buf, int len) {
 	else {
 		tmpbuf = null;
 	}
+
+	processEntryAttributes(savePEA);
 
 	return tmpbuf;
 }
