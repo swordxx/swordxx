@@ -1,6 +1,10 @@
 package org.crosswire.android.sword;
 
 public class SWMgr {
+	
+	static {
+		System.loadLibrary("sword");
+	}
 
 	public static class ModInfo {
 		public String name;

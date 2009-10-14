@@ -7,6 +7,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef org_crosswire_android_sword_SWModule_SEARCHTYPE_REGEX
+#define org_crosswire_android_sword_SWModule_SEARCHTYPE_REGEX 1L
+#undef org_crosswire_android_sword_SWModule_SEARCHTYPE_PHRASE
+#define org_crosswire_android_sword_SWModule_SEARCHTYPE_PHRASE -1L
+#undef org_crosswire_android_sword_SWModule_SEARCHTYPE_MULTIWORD
+#define org_crosswire_android_sword_SWModule_SEARCHTYPE_MULTIWORD -2L
+#undef org_crosswire_android_sword_SWModule_SEARCHTYPE_ENTRYATTR
+#define org_crosswire_android_sword_SWModule_SEARCHTYPE_ENTRYATTR -3L
+#undef org_crosswire_android_sword_SWModule_SEARCHTYPE_LUCENE
+#define org_crosswire_android_sword_SWModule_SEARCHTYPE_LUCENE -4L
 /*
  * Class:     org_crosswire_android_sword_SWModule
  * Method:    terminateSearch
@@ -18,10 +28,10 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_terminateSearch
 /*
  * Class:     org_crosswire_android_sword_SWModule
  * Method:    search
- * Signature: (Ljava/lang/String;IJLjava/lang/String;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
+ * Signature: (Ljava/lang/String;IJLjava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
-  (JNIEnv *, jobject, jstring, jint, jlong, jstring);
+  (JNIEnv *, jobject, jstring, jint, jlong, jstring, jobject);
 
 /*
  * Class:     org_crosswire_android_sword_SWModule

@@ -17,6 +17,8 @@
 //#include "first.h"
 #include <iostream>
 
+#include <vector>
+
 #include <jni.h>
 
 #include <utilstr.h>
@@ -24,6 +26,8 @@
 #include <swmgr.h>
 #include <swmodule.h>
 #include <versekey.h>
+#include <localemgr.h>
+#include <treekeyidx.h>
 
 #include "webmgr.hpp"
 #include "org_crosswire_android_sword_SWMgr.h"
@@ -45,6 +49,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_version
 	SWVersion v;
 	return env->NewStringUTF(v.currentVersion);
 }
+
 
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getPrefixPath
   (JNIEnv *env, jobject me) {
@@ -121,14 +126,23 @@ JNIEXPORT jobject JNICALL Java_org_crosswire_android_sword_SWMgr_getModuleByName
 	return retVal;
 }
 
-#if 0
+
 /*
  * Class:     org_crosswire_android_sword_SWMgr
  * Method:    setGlobalOption
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setGlobalOption
-  (JNIEnv *, jobject, jstring, jstring);
+  (JNIEnv *env, jobject me, jstring optionJS, jstring valueJS) {
+     const char *option = env->GetStringUTFChars(optionJS, NULL);
+     const char *value  = env->GetStringUTFChars(valueJS, NULL);
+
+	mgr->setGlobalOption(option, value);
+
+     env->ReleaseStringUTFChars(valueJS, value);
+     env->ReleaseStringUTFChars(optionJS, option);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -136,7 +150,16 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setGlobalOption
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOption
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring optionJS) {
+     const char *option = env->GetStringUTFChars(optionJS, NULL);
+
+	SWBuf value = mgr->getGlobalOption(option);
+
+     env->ReleaseStringUTFChars(optionJS, option);
+
+	return env->NewStringUTF(value);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -144,7 +167,16 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOption
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOptionTip
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring optionJS) {
+     const char *option = env->GetStringUTFChars(optionJS, NULL);
+
+	SWBuf value = mgr->getGlobalOptionTip(option);
+
+     env->ReleaseStringUTFChars(optionJS, option);
+
+	return env->NewStringUTF(value);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -152,7 +184,21 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOption
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_filterText
-  (JNIEnv *, jobject, jstring, jstring);
+  (JNIEnv *env, jobject me, jstring filterNameJS, jstring textJS) {
+     const char *filterName = env->GetStringUTFChars(filterNameJS, NULL);
+     const char *text  = env->GetStringUTFChars(textJS, NULL);
+
+	SWBuf buf = text;
+	// hmmm, in the future, provide a param to specify filter value maybe?
+	mgr->setGlobalOption("Greek Accents", "Off");
+	char errStatus = mgr->filterText(filterName, buf);
+
+     env->ReleaseStringUTFChars(textJS, text);
+     env->ReleaseStringUTFChars(filterNameJS, filterName);
+
+	return env->NewStringUTF(buf);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -160,7 +206,24 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_filterText
  * Signature: ()[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOptions
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+	sword::StringList options = mgr->getGlobalOptions();
+	int count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		count++;
+	}
+
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+
+	count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(*it));
+	}
+
+	return ret;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -168,7 +231,28 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOptionValues
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring optionJS) {
+     const char *option = env->GetStringUTFChars(optionJS, NULL);
+
+	sword::StringList options = mgr->getGlobalOptionValues(option);
+
+     env->ReleaseStringUTFChars(optionJS, option);
+
+	int count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		count++;
+	}
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+
+	count = 0;
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(*it));
+	}
+
+	return ret;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -176,7 +260,16 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setCipherKey
-  (JNIEnv *, jobject, jstring, jstring);
+  (JNIEnv *env, jobject me , jstring modNameJS, jstring keyJS) {
+     const char *modName = env->GetStringUTFChars(modNameJS, NULL);
+     const char *key     = env->GetStringUTFChars(keyJS, NULL);
+
+	mgr->setCipherKey(modName, key);
+
+     env->ReleaseStringUTFChars(keyJS, key);
+     env->ReleaseStringUTFChars(modNameJS, modName);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -184,7 +277,10 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setCipherKey
  * Signature: (Z)V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setJavascript
-  (JNIEnv *, jobject, jboolean);
+  (JNIEnv *env, jobject me, jboolean val) {
+	mgr->setJavascript(val == JNI_TRUE);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -192,7 +288,23 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setJavascript
  * Signature: ()[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailableLocales
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+	sword::StringList localeNames = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();
+	int count = 0;
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+		count++;
+	}
+
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+
+	count = 0;
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(*it));
+	}
+	return ret;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
@@ -200,17 +312,27 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailab
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring localeNameJS) {
+     const char *localeName = env->GetStringUTFChars(localeNameJS, NULL);
 
-#endif
+	LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(localeName);
 
-
-
+     env->ReleaseStringUTFChars(localeNameJS, localeName);
+}
 
 
 
 // SWModule methods ----------------------------------------------------------------------------------
 
+SWModule *getModule(JNIEnv *env, jobject me) {
+	jclass clazzSWModule = env->FindClass("org/crosswire/android/sword/SWModule");
+	jfieldID fieldID = env->GetFieldID(clazzSWModule, "name", "Ljava/lang/String;");
+	jstring modNameJS = (jstring)env->GetObjectField(me, fieldID);
+     const char *modName = env->GetStringUTFChars(modNameJS, NULL);
+	sword::SWModule *module = mgr->getModule(modName);
+     env->ReleaseStringUTFChars(modNameJS, modName);
+	return module;
+}
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -220,12 +342,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_setKeyText
   (JNIEnv *env, jobject me, jstring keyTextJS) {
 
-	jclass clazzSWModule = env->FindClass("org/crosswire/android/sword/SWModule");
-	jfieldID fieldID = env->GetFieldID(clazzSWModule, "name", "Ljava/lang/String;");
-	jstring modNameJS = (jstring)env->GetObjectField(me, fieldID);
-     const char *modName = env->GetStringUTFChars(modNameJS, NULL);
-	sword::SWModule *module = mgr->getModule(modName);
-     env->ReleaseStringUTFChars(modNameJS, modName);
+	SWModule *module = getModule(env, me);
 
 	if (module) {
 		const char *keyText = env->GetStringUTFChars(keyTextJS, NULL);
@@ -257,12 +374,8 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_setKeyText
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyText
   (JNIEnv *env, jobject me) {
-	jclass clazzSWModule = env->FindClass("org/crosswire/android/sword/SWModule");
-	jfieldID fieldID = env->GetFieldID(clazzSWModule, "name", "Ljava/lang/String;");
-	jstring modNameJS = (jstring)env->GetObjectField(me, fieldID);
-     const char *modName = env->GetStringUTFChars(modNameJS, NULL);
-	sword::SWModule *module = mgr->getModule(modName);
-     env->ReleaseStringUTFChars(modNameJS, modName);
+
+	SWModule *module = getModule(env, me);
 
 	jstring retVal = 0;
 	if (module) {
@@ -280,12 +393,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyText
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderText
   (JNIEnv *env, jobject me) {
 
-	jclass clazzSWModule = env->FindClass("org/crosswire/android/sword/SWModule");
-	jfieldID fieldID = env->GetFieldID(clazzSWModule, "name", "Ljava/lang/String;");
-	jstring modNameJS = (jstring)env->GetObjectField(me, fieldID);
-     const char *modName = env->GetStringUTFChars(modNameJS, NULL);
-	sword::SWModule *module = mgr->getModule(modName);
-     env->ReleaseStringUTFChars(modNameJS, modName);
+	SWModule *module = getModule(env, me);
 
 	jstring retVal = 0;
 	if (module) {
@@ -295,25 +403,21 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderTex
 }
 
 
-
-
-#if 0
-
 /*
  * Class:     org_crosswire_android_sword_SWModule
  * Method:    terminateSearch
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_terminateSearch
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
 
-/*
- * Class:     org_crosswire_android_sword_SWModule
- * Method:    search
- * Signature: (Ljava/lang/String;IJLjava/lang/String;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
-  (JNIEnv *, jobject, jstring, jint, jlong, jstring);
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		module->terminateSearch = true;
+	}
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -321,7 +425,13 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
  * Signature: ()C
  */
 JNIEXPORT jchar JNICALL Java_org_crosswire_android_sword_SWModule_error
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+	
+	return (module) ? module->Error() : -99;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -329,7 +439,13 @@ JNIEXPORT jchar JNICALL Java_org_crosswire_android_sword_SWModule_error
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_org_crosswire_android_sword_SWModule_getEntrySize
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+
+	return (module) ? module->getEntrySize() : 0;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -337,7 +453,88 @@ JNIEXPORT jlong JNICALL Java_org_crosswire_android_sword_SWModule_getEntrySize
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntryAttribute
-  (JNIEnv *, jobject, jstring, jstring, jstring, jboolean);
+  (JNIEnv *env, jobject me, jstring level1JS, jstring level2JS, jstring level3JS, jboolean filteredJS) {
+	const char *level1 = env->GetStringUTFChars(level1JS, NULL);
+	const char *level2 = env->GetStringUTFChars(level2JS, NULL);
+	const char *level3 = env->GetStringUTFChars(level3JS, NULL);
+	bool filtered = (filteredJS == JNI_TRUE);
+
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret = (jobjectArray) env->NewObjectArray(0, clazzString, NULL);
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+
+		module->RenderText();	// force parse
+		std::vector<SWBuf> results;
+
+		sword::AttributeTypeList &entryAttribs = module->getEntryAttributes();
+		sword::AttributeTypeList::iterator i1Start, i1End;
+		sword::AttributeList::iterator i2Start, i2End;
+		sword::AttributeValue::iterator i3Start, i3End;
+
+		if ((level1) && (*level1)) {
+			i1Start = entryAttribs.find(level1);
+			i1End = i1Start;
+			if (i1End != entryAttribs.end())
+				i1End++;
+		}
+		else {
+			i1Start = entryAttribs.begin();
+			i1End   = entryAttribs.end();
+		}
+		for (;i1Start != i1End; i1Start++) {
+			if ((level2) && (*level2)) {
+				i2Start = i1Start->second.find(level2);
+				i2End = i2Start;
+				if (i2End != i1Start->second.end())
+					i2End++;
+			}
+			else {
+				i2Start = i1Start->second.begin();
+				i2End   = i1Start->second.end();
+			}
+			for (;i2Start != i2End; i2Start++) {
+				if ((level3) && (*level3)) {
+					i3Start = i2Start->second.find(level3);
+					i3End = i3Start;
+					if (i3End != i2Start->second.end())
+						i3End++;
+				}
+				else {
+					i3Start = i2Start->second.begin();
+					i3End   = i2Start->second.end();
+				}
+				for (;i3Start != i3End; i3Start++) {
+					results.push_back(i3Start->second);
+				}
+				if (i3Start != i3End)
+					break;
+			}
+			if (i2Start != i2End)
+				break;
+		}
+
+		ret = (jobjectArray) env->NewObjectArray(results.size(), clazzString, NULL);
+
+		for (int i = 0; i < results.size(); i++) {
+			if (filtered) {
+				env->SetObjectArrayElement(ret, i, env->NewStringUTF(module->RenderText(results[i].c_str())));
+			}
+			else {
+				env->SetObjectArrayElement(ret, i, env->NewStringUTF(results[i].c_str()));
+			}
+		}
+	}
+
+	env->ReleaseStringUTFChars(level3JS, level3);
+	env->ReleaseStringUTFChars(level2JS, level2);
+	env->ReleaseStringUTFChars(level1JS, level1);
+
+	return ret;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -345,7 +542,42 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_parseKeyList
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring keyListTextJS) {
+
+	const char *keyListText = env->GetStringUTFChars(keyListTextJS, NULL);
+
+	SWModule *module = getModule(env, me);
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret;
+
+	if (module) {
+		sword::SWKey *k = module->getKey();
+		sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, k);
+		if (parser) {
+			sword::ListKey result;
+			result = parser->ParseVerseList(keyListText, *parser, true);
+			int count = 0;
+			for (result = sword::TOP; !result.Error(); result++) {
+				count++;
+			}
+			ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+
+			count = 0;
+			for (result = sword::TOP; !result.Error(); result++) {
+				env->SetObjectArrayElement(ret, count++, env->NewStringUTF((const char *)result));
+			}
+		}
+		else	{
+			ret = (jobjectArray) env->NewObjectArray(1, clazzString, NULL);
+			env->SetObjectArrayElement(ret, 0, env->NewStringUTF(keyListText));
+		}
+	}
+
+	env->ReleaseStringUTFChars(keyListTextJS, keyListText);
+
+	return ret;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -353,7 +585,21 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_parseKe
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasKeyChildren
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+	jboolean retVal = JNI_FALSE;
+
+	if (module) {
+		sword::SWKey *key = module->getKey();
+
+		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
+		if (tkey) {
+			retVal = (tkey->hasChildren())?JNI_TRUE:JNI_FALSE;
+		}
+	}
+	return retVal;
+}
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -361,7 +607,67 @@ JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasKeyChild
  * Signature: ()[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyChildren
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret;
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		sword::SWKey *key = module->getKey();
+		int count = 0;
+
+		sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+		if (vkey) {
+			ret = (jobjectArray) env->NewObjectArray(7, clazzString, NULL);
+			SWBuf num;
+			num.appendFormatted("%d", vkey->getTestament());
+			env->SetObjectArrayElement(ret, 0, env->NewStringUTF(num.c_str()));
+			num = "";
+			num.appendFormatted("%d", vkey->getBook());
+			env->SetObjectArrayElement(ret, 1, env->NewStringUTF(num.c_str()));
+			num = "";
+			num.appendFormatted("%d", vkey->getChapter());
+			env->SetObjectArrayElement(ret, 2, env->NewStringUTF(num.c_str()));
+			num = "";
+			num.appendFormatted("%d", vkey->getVerse());
+			env->SetObjectArrayElement(ret, 3, env->NewStringUTF(num.c_str()));
+			num = "";
+			num.appendFormatted("%d", vkey->getChapterMax());
+			env->SetObjectArrayElement(ret, 4, env->NewStringUTF(num.c_str()));
+			num = "";
+			num.appendFormatted("%d", vkey->getVerseMax());
+			env->SetObjectArrayElement(ret, 5, env->NewStringUTF(num.c_str()));
+			num = "";
+			num.appendFormatted("%d", vkey->getBookName());
+			env->SetObjectArrayElement(ret, 6, env->NewStringUTF(num.c_str()));
+		}
+		else {
+			TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
+			if (tkey) {
+				if (tkey->firstChild()) {
+					do {
+						count++;
+					}
+					while (tkey->nextSibling());
+					tkey->parent();
+				}
+				ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+				count = 0;
+				if (tkey->firstChild()) {
+					do {
+						env->SetObjectArrayElement(ret, count++, env->NewStringUTF(tkey->getLocalName()));
+					}
+					while (tkey->nextSibling());
+					tkey->parent();
+				}
+			}
+		}
+		return ret;
+	}
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -369,7 +675,26 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyParent
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWBuf retVal = "";
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+
+		sword::SWKey *key = module->getKey();
+
+		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
+		if (tkey) {
+			if (tkey->parent()) {
+				retVal = tkey->getText();
+			}
+		}
+	}
+	return env->NewStringUTF(retVal);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -377,7 +702,15 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyParent
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_previous
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		module->decrement();
+	}
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -385,7 +718,15 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_previous
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_next
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		module->increment();
+	}
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -393,7 +734,15 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_next
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_begin
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		module->setPosition(sword::TOP);
+	}
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -401,7 +750,19 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_begin
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getStripText
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWBuf retVal = "";
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		retVal = module->StripText();
+	}
+
+	return env->NewStringUTF(retVal);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -409,7 +770,19 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getStripText
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRawEntry
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWBuf retVal = "";
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		retVal = module->getRawEntry();
+	}
+
+	return env->NewStringUTF(retVal);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -417,7 +790,19 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRawEntry
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_setRawEntry
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring newEntryTextJS) {
+
+	const char *newEntryText = env->GetStringUTFChars(newEntryTextJS, NULL);
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		module->setEntry(newEntryText);
+	}
+
+	env->ReleaseStringUTFChars(newEntryTextJS, newEntryText);
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -425,7 +810,23 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_setRawEntry
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getConfigEntry
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *env, jobject me, jstring configKeyJS) {
+
+	jstring retVal = 0;
+
+	const char *configKey = env->GetStringUTFChars(configKeyJS, NULL);
+
+	SWModule *module = getModule(env, me);
+
+	if (module && module->getConfigEntry(configKey)) {
+		retVal = env->NewStringUTF(module->getConfigEntry(configKey));
+	}
+
+	env->ReleaseStringUTFChars(configKeyJS, configKey);
+
+	return retVal;
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -433,7 +834,15 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getConfigEnt
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_deleteSearchFramework
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
+
+	SWModule *module = getModule(env, me);
+
+	if (module) {
+		module->deleteSearchFramework();
+	}
+}
+
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
@@ -441,6 +850,99 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_deleteSearchFra
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasSearchFramework
-  (JNIEnv *, jobject);
+  (JNIEnv *env, jobject me) {
 
-#endif
+	SWModule *module = getModule(env, me);
+
+	return (module && module->hasSearchFramework()) ? JNI_TRUE : JNI_FALSE;
+}
+
+
+struct pu {
+	pu(JNIEnv *env, jobject pr) : env(env), progressReporter(pr), last(0) {}
+	JNIEnv *env;
+	jobject progressReporter;
+	char last;
+};
+
+
+void percentUpdate(char percent, void *userData) {
+	struct pu *p = (struct pu *)userData;
+
+	if (percent != p->last) {
+		p->last = percent;
+		jclass cls = p->env->GetObjectClass(p->progressReporter);
+		jmethodID mid = p->env->GetMethodID(cls, "progressReport", "(I)V");
+		if (mid != 0) {
+			p->env->CallVoidMethod(p->progressReporter, mid, (jint)percent);
+		}
+	}
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWModule
+ * Method:    search
+ * Signature: (Ljava/lang/String;IJLjava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
+ */
+JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
+  (JNIEnv *env, jobject me, jstring expressionJS, jint srchType, jlong flags, jstring scopeJS, jobject progressReporter) {
+
+	const char *expression = env->GetStringUTFChars(expressionJS, NULL);
+	const char *scope = env->GetStringUTFChars(scopeJS, NULL);
+
+	jclass clazzSearchHit = env->FindClass("org/crosswire/android/sword/SWModule$SearchHit");
+	jobjectArray ret = (jobjectArray) env->NewObjectArray(0, clazzSearchHit, NULL);
+
+	SWModule *module = getModule(env, me);
+
+	struct pu peeuuu(env, progressReporter);
+
+	if (module) {
+		sword::ListKey lscope;
+		sword::ListKey result;
+
+		if ((scope) && (strlen(scope)) > 0) {
+			sword::SWKey *p = module->CreateKey();
+			sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
+			if (!parser) {
+				delete p;
+				parser = new VerseKey();
+			}
+			*parser = module->getKeyText();
+			lscope = parser->ParseVerseList(scope, *parser, true);
+			result = module->search(expression, srchType, flags, &lscope, 0, &percentUpdate, &peeuuu);
+			delete parser;
+		}
+		else	result = module->search(expression, srchType, flags, 0, 0, &percentUpdate, &peeuuu);
+
+		int count = 0;
+		for (result = sword::TOP; !result.Error(); result++) count++;
+
+		ret = (jobjectArray) env->NewObjectArray(count, clazzSearchHit, NULL);
+
+		// if we're sorted by score, let's re-sort by verse, because Java can always re-sort by score
+		result = sword::TOP;
+		if ((count) && (long)result.getElement()->userData)
+			result.sort();
+
+		int i = 0;
+		for (result = sword::TOP; !result.Error(); result++) {
+			jfieldID fieldID;
+			jobject searchHit = env->AllocObject(clazzSearchHit); 
+
+			fieldID = env->GetFieldID(clazzSearchHit, "modName", "Ljava/lang/String;"); env->SetObjectField(searchHit, fieldID, env->NewStringUTF(module->Name()));
+			fieldID = env->GetFieldID(clazzSearchHit, "key", "Ljava/lang/String;"); env->SetObjectField(searchHit, fieldID, env->NewStringUTF((const char *)result));
+			fieldID = env->GetFieldID(clazzSearchHit, "score", "J"); env->SetLongField(searchHit, fieldID, (long)result.getElement()->userData);
+
+			env->SetObjectArrayElement(ret, i++, searchHit);
+		}
+	}
+
+	env->ReleaseStringUTFChars(scopeJS, scope);
+	env->ReleaseStringUTFChars(expressionJS, expression);
+
+	return ret;
+}
+
+

@@ -1,27 +1,33 @@
 package org.crosswire.android.sword;
 
 public class SWModule {
-
-	public final int SEARCHTYPE_REGEX     =  1;
-	public final int SEARCHTYPE_PHRASE    = -1;
-	public final int SEARCHTYPE_MULTIWORD = -2;
-	public final int SEARCHTYPE_ENTRYATTR = -3;
-	public final int SEARCHTYPE_LUCENE    = -4;
-
+	
 	private String name;
 	private String description;
 	private String category;
 
+
+	public static final int SEARCHTYPE_REGEX     =  1;
+	public static final int SEARCHTYPE_PHRASE    = -1;
+	public static final int SEARCHTYPE_MULTIWORD = -2;
+	public static final int SEARCHTYPE_ENTRYATTR = -3;
+	public static final int SEARCHTYPE_LUCENE    = -4;
+
 	private SWModule() {}	// don't allow allocation, instead use factory method SWMgr.getModuleByName to retrieve an instance
 
 	public static class SearchHit {
-		String modName;
-		String key;
-		long   score;
+		public String modName;
+		public String key;
+		public long   score;
+	}
+	
+	public static interface SearchProgressReporter {
+		public void progressReport(int percent);
 	}
 
 	public native void          terminateSearch();
-	public native SearchHit[]   search(String istr, int searchType, long flags, String scope);
+	public native SearchHit[]   search(String expression, int searchType, long flags, String scope, SearchProgressReporter progressReporter);
+	public SearchHit[]          search(String expression) { return search(expression, SEARCHTYPE_MULTIWORD, 0, "", null); }
 	public native char          error();
 	public native long          getEntrySize();
 	public native String[]      getEntryAttribute(String level1, String level2, String level3, boolean filtered);

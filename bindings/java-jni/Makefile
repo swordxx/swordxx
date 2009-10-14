@@ -7,6 +7,7 @@ all:
 	javap -s -classpath classes/ org.crosswire.android.sword.SWMgr.ModInfo > ModInfo.txt
 	javap -s -classpath classes/ org.crosswire.android.sword.SWModule > SWModule.txt
 	javap -s -classpath classes/ org.crosswire.android.sword.SWModule.SearchHit > SearchHit.txt
+	javap -s -classpath classes/ org.crosswire.android.sword.SWModule.SearchProgressReporter > SearchProgressReporter.txt
 	cp src/org/crosswire/android/sword/*.java /home/scribe/workspace/bishop/src/org/crosswire/android/sword/
 
 

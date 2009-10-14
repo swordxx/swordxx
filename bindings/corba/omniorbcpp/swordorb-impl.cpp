@@ -103,7 +103,6 @@ swordorb::StringList* swordorb_SWModule_i::getEntryAttribute(const char* level1,
 	delegate->RenderText();	// force parse
 	std::vector<SWBuf> results;
 	swordorb::StringList *retVal = new swordorb::StringList;
-	int count = 0;
 
 	sword::AttributeTypeList &entryAttribs = delegate->getEntryAttributes();
 	sword::AttributeTypeList::iterator i1Start, i1End;
@@ -158,7 +157,7 @@ swordorb::StringList* swordorb_SWModule_i::getEntryAttribute(const char* level1,
 			(*retVal)[i] = CORBA::string_dup(assureValidUTF8(delegate->RenderText(results[i].c_str())));
 		}
 		else {
-			(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(results[i].c_str()));
+			(*retVal)[i] = CORBA::string_dup(assureValidUTF8(results[i].c_str()));
 		}
 	}
 

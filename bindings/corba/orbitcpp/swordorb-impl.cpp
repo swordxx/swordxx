@@ -226,7 +226,6 @@ StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *lev
 	delegate->RenderText();	// force parse
 	std::vector<SWBuf> results;
 	StringList *retVal = new StringList;
-	int count = 0;
 
 	sword::AttributeTypeList &entryAttribs = delegate->getEntryAttributes();
 	sword::AttributeTypeList::iterator i1Start, i1End;
@@ -281,7 +280,7 @@ StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *lev
 			(*retVal)[i] = CORBA::string_dup(delegate->RenderText(results[i].c_str()));
 		}
 		else {
-			(*retVal)[count++] = CORBA::string_dup(results[i].c_str());
+			(*retVal)[i] = CORBA::string_dup(results[i].c_str());
 		}
 	}
 
