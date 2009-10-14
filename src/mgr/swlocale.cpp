@@ -31,7 +31,7 @@ SWORD_NAMESPACE_START
 
 typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
 
-const char *SWLocale::DEFAULT_LOCALE_NAME="en_US";
+const char *SWLocale::DEFAULT_LOCALE_NAME="en";
 
 // I have bridge patterns, but this hides swconfig and map from lots o stuff
 class SWLocale::Private {
