@@ -639,9 +639,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 			num = "";
 			num.appendFormatted("%d", vkey->getVerseMax());
 			env->SetObjectArrayElement(ret, 5, env->NewStringUTF(num.c_str()));
-			num = "";
-			num.appendFormatted("%d", vkey->getBookName());
-			env->SetObjectArrayElement(ret, 6, env->NewStringUTF(num.c_str()));
+			env->SetObjectArrayElement(ret, 6, env->NewStringUTF(vkey->getBookName()));
 		}
 		else {
 			TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);

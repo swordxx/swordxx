@@ -330,9 +330,7 @@ StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {
 		num = "";
 		num.appendFormatted("%d", vkey->getVerseMax());
 		(*retVal)[5] = CORBA::string_dup(num.c_str());
-		num = "";
-		num.appendFormatted("%d", vkey->getBookName());
-		(*retVal)[6] = CORBA::string_dup(num.c_str());
+		(*retVal)[6] = CORBA::string_dup(vkey->getBookName());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
