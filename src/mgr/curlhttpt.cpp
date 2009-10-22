@@ -178,9 +178,9 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 
 
 // we need to find the 2nd "<td" & then find the ">" after that.  The size starts with the next non-space char
-char *findSizeStart(const char *buffer) {
+const char *findSizeStart(const char *buffer) {
 	const char *listing = buffer;
-	char *pEnd;
+	const char *pEnd;
 	
 	pEnd = strstr(listing, "<td");
 	if(pEnd == NULL) {
@@ -204,7 +204,7 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 	vector<struct DirEntry> dirList;
 	
 	SWBuf dirBuf;
-	char *pBuf;
+	const char *pBuf;
 	char *pBufRes;
 	char possibleName[400];
 	double fSize;
@@ -214,13 +214,13 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 		pBuf = strstr(dirBuf, "<a href=\"");//Find the next link to a possible file name.
 		while (pBuf != NULL) {
 			pBuf += 9;//move to the start of the actual name.
-			pBufRes = strchr(pBuf, '\"');//Find the end of the possible file name
+			pBufRes = (char *)strchr(pBuf, '\"');//Find the end of the possible file name
 			possibleNameLength = pBufRes - pBuf;
 			sprintf(possibleName, "%.*s", possibleNameLength, pBuf);
 			if (isalnum(possibleName[0])) {
 				SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName);
 				pBuf = pBufRes;
-				pBufRes = findSizeStart(pBuf);
+				pBufRes = (char *)findSizeStart(pBuf);
 				fSize = 0;
 				if(pBufRes != NULL) {
 					pBuf = pBufRes;
