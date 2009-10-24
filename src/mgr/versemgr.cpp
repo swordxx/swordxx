@@ -36,6 +36,7 @@
 #include <canon_nrsv.h>		// NRSV v11n system
 #include <canon_nrsva.h>	// NRSVA + Apocrypha v11n system
 #include <canon_synodal.h>	// Russian Synodal v11n system
+#include <canon_vulg.h>		// Vulgate v11n system
 
 using std::vector;
 using std::map;
@@ -55,6 +56,7 @@ VerseMgr *VerseMgr::getSystemVerseMgr() {
 		systemVerseMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
 		systemVerseMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
 		systemVerseMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal);
+		systemVerseMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg);
 	}
 	return systemVerseMgr;
 }
