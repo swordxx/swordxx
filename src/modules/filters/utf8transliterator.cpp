@@ -83,6 +83,7 @@ const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
 	//        "Ogham",
 	//        "Thaana",
 	//        "Glagolitic",
+       	//        "Cherokee",
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
@@ -403,6 +404,7 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 			case UBLOCK_OGHAM: scripts[SE_OGHAM] = true; break;
 			case UBLOCK_THAANA: scripts[SE_THAANA] = true; break;
 			case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
+                        case UBLOCK_CHEROKEE: scripts[SE_CHEROKEE] = true; break;
 //			case UBLOCK_TENGWAR: scripts[SE_TENGWAR] = true; break;
 //			case UBLOCK_CIRTH: scripts[SE_CIRTH] = true; break;
 			case UBLOCK_CJK_RADICALS_SUPPLEMENT:
@@ -637,6 +639,10 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 				scripts[SE_LATIN] = true;
                         }
 		}
+		if (scripts[SE_CHEROKEE]) {
+			addTrans("Cherokee-Latin", &ID);
+			scripts[SE_LATIN] = true;
+		}
 		if (scripts[SE_THAI]) {
 			addTrans("Thai-Latin", &ID);
 			scripts[SE_LATIN] = true;
@@ -868,6 +874,9 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                                 break;
                         case SE_GLAGOLITIC:
 				addTrans("Latin-Glagolitic", &ID);
+                                break;
+                        case SE_CHEROKEE:
+				addTrans("Latin-Cherokee", &ID);
                                 break;
 //                        case SE_TENGWAR:
 //				addTrans("Latin-Tengwar", &ID);
