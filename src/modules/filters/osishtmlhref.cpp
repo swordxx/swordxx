@@ -83,8 +83,8 @@ OSISHTMLHREF::OSISHTMLHREF() {
 
 	setTokenCaseSensitive(true);
 	
-	addTokenSubstitute("lg",  "<br />");
-	addTokenSubstitute("/lg", "<br />");
+	//	addTokenSubstitute("lg",  "<br />");
+	//	addTokenSubstitute("/lg", "<br />");
 
 	morphFirst = false;
 }
@@ -272,8 +272,8 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			}
 		}
 
-		// <p> paragraph tag
-		else if (!strcmp(tag.getName(), "p")) {
+		// <p> paragraph and <lg> linegroup tags
+		else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
 				outText("<!P><br />", buf, u);
 			}

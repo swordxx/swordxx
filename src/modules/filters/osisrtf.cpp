@@ -87,8 +87,8 @@ OSISRTF::OSISRTF() {
 	addEscapeStringSubstitute("lt", "<");
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
-	addTokenSubstitute("lg", "{\\par}");
-	addTokenSubstitute("/lg", "{\\par}");
+	//	addTokenSubstitute("lg", "{\\par}");
+	//	addTokenSubstitute("/lg", "{\\par}");
 
 	setTokenCaseSensitive(true);
 }
@@ -265,8 +265,8 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 			}
 		}
 
-		// <p> paragraph tag
-		else if (!strcmp(tag.getName(), "p")) {
+		// <p> paragraph and <lg> linegroup tags
+		else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
 				outText("{\\fi200\\par}", buf, u);
 			}
@@ -275,7 +275,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				outText("{\\pard\\par\\par}", buf, u);
+				outText("{\\pard\\par}", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
