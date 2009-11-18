@@ -17,6 +17,14 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_version
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    reInit
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_reInit
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
  * Method:    getModInfoList
  * Signature: ()[Lorg/crosswire/android/sword/SWMgr/ModInfo;
  */

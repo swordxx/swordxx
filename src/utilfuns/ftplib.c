@@ -80,6 +80,41 @@
 #define FTPLIB_DEFMODE FTPLIB_PASSIVE
 #endif
 
+#ifdef ANDROID
+#include <android/log.h>
+#define perror(M) __android_log_write(ANDROID_LOG_DEBUG, "perror_ftplib", M)
+#define lllog(M) __android_log_write(ANDROID_LOG_DEBUG, "ftplib", M)
+#else
+#define lllog(M) fprintf(stderr, M);
+#endif
+void *mymemccpy(void *dst, const void *src, int c, size_t n)
+{
+    char*        q     = dst;
+    const char*  p     = src;
+    const char*  p_end = p + n;
+    char         ch    = ~(char)c;  /* ensure ch != c */
+
+    for (;;) {
+        if (ch == c || p >= p_end) break;
+        *q++ = ch = *p++;
+
+        if (ch == c || p >= p_end) break;
+        *q++ = ch = *p++;
+
+        if (ch == c || p >= p_end) break;
+        *q++ = ch = *p++;
+
+        if (ch == c || p >= p_end) break;
+        *q++ = ch = *p++;
+    }
+
+    if (p >= p_end && ch != c)
+        return NULL;
+
+    return q;
+}
+
+
 struct NetBuf {
     char *cput,*cget;
     int handle;
@@ -208,9 +243,10 @@ static int readline(char *buf,int max,netbuf *ctl)
           if (ctl->cavail > 0)
             {
                 x = (max >= ctl->cavail) ? ctl->cavail : max-1;
-                end = memccpy(bp,ctl->cget,'\n',x);
-                if (end != NULL)
+                end = mymemccpy(bp,ctl->cget,'\n',x);
+                if (end != NULL) {
                     x = end - bp;
+			 }
                 retval += x;
                 bp += x;
                 *bp = '\0';
@@ -254,7 +290,7 @@ static int readline(char *buf,int max,netbuf *ctl)
                 retval = -1;
                 break;
             }
-          if (x == 0)
+          if (x == 0) //< ctl->cleft)
               eof = 1;
           ctl->cleft -= x;
           ctl->cavail += x;
@@ -411,7 +447,7 @@ GLOBALDEF int FtpConnect(const char *host, netbuf **nControl)
     pnum = strchr(lhost,':');
     if (pnum == NULL)
       {
-#if defined(VMS)
+#if defined(VMS) || defined(ANDROID)
           sin.sin_port = htons(21);
 #else
           if ((pse = getservbyname("ftp","tcp")) == NULL)

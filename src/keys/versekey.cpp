@@ -491,6 +491,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	char lastPartial = 0;
 	bool inTerm = true;
 	int notAllDigits = 0;
+	bool doubleF = false;
 
 	// assert we have a buffer
 	if (!buf) return internalListKey;
@@ -693,7 +694,14 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
+							bool f = false;
+							if (curKey->getSuffix() == 'f') {
+								curKey->setSuffix(0);
+								f = true;
+							}
 							lastKey->LowerBound(*curKey);
+							if (f && doubleF) (*curKey) = MAXVERSE;
+							else if (f) (*curKey)++;
 							lastKey->UpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
@@ -763,6 +771,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				default:
 					// suffixes (and oddly 'f'-- ff.)
 					if ((*buf >= 'a' && *buf <= 'z') && (chap >=0)) {
+						doubleF = (*buf == 'f' && suffix == 'f');
 						suffix = *buf;
 					}
 					else {
@@ -901,11 +910,17 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
+					bool f = false;
+					if (curKey->getSuffix() == 'f') {
+						curKey->setSuffix(0);
+						f = true;
+					}
 					lastKey->LowerBound(*curKey);
+					if (f && doubleF) (*curKey) = MAXVERSE;
+					else if (f) (*curKey)++;
 					lastKey->UpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-//					tmpListKey << curKey->getText();
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
 			}

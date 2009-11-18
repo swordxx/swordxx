@@ -1,10 +1,13 @@
 package org.crosswire.android.sword;
 
 public class SWModule {
-	
+
 	private String name;
 	private String description;
 	private String category;
+	
+	// if this is a shell module from a remote source...
+	private String remoteSourceName;
 
 
 	public static final int SEARCHTYPE_REGEX     =  1;

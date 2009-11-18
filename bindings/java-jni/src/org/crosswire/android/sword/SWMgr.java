@@ -11,10 +11,13 @@ public class SWMgr {
 		public String description;
 		public String category;
 		public String language;
+		public String version;
+		public String delta;
 	}
 
 
 	public native String version();
+	public native void reInit();
 
 	public native ModInfo[]   getModInfoList();
 	public native SWModule    getModuleByName(String name);

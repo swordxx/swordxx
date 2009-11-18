@@ -264,7 +264,7 @@ SWBuf assureValidUTF8(const char *buf) {
 		}
 	}
 	if (invalidChar) {
-		SWLog::getSystemLog()->logWarning("Changing invalid UTF-8 string (%s) to (%s)\n", buf, myCopy.c_str());
+//		SWLog::getSystemLog()->logWarning("Changing invalid UTF-8 string (%s) to (%s)\n", buf, myCopy.c_str());
 	}
 	return myCopy;
 }

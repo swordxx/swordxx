@@ -271,6 +271,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
 // TODO: rename to netCopy
 int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
+SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_str():"null"), src, (dest?dest:"null"), (dirTransfer?'t':'f'), (suffix?suffix:"null"));
 
 	// assert user disclaimer has been confirmed
 	if (!isUserDisclaimerConfirmed()) return -1;

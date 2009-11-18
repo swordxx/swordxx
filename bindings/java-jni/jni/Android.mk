@@ -31,7 +31,9 @@ LOCAL_MODULE    := libswordcore
 LOCAL_C_INCLUDES := ../sword/include
 LOCAL_CFLAGS	+= -I$(STLPORT_BASE)/stlport \
 		   -D__NEW__ \
+		   -D__unix__ \
 		   -D__SGI_STL_INTERNAL_PAIR_H \
+		   -D_FTPLIB_NO_COMPAT \
 		   -DANDROID \
 		   -DOS_ANDROID
 LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
@@ -149,10 +151,13 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/mgr/filemgr.cpp \
 ../../../src/mgr/versemgr.cpp \
 ../../../src/mgr/ftptrans.cpp \
+../../../src/mgr/ftplibftpt.cpp \
 ../../../src/utilfuns/swobject.cpp \
 ../../../src/utilfuns/roman.cpp \
 ../../../src/utilfuns/swbuf.cpp \
 ../../../src/utilfuns/utilstr.cpp \
+../../../src/utilfuns/ftplib.c \
+../../../src/utilfuns/ftpparse.c \
 ../../../src/utilfuns/url.cpp \
 ../../../src/utilfuns/swversion.cpp \
 ../../../src/utilfuns/utilxml.cpp \
@@ -166,9 +171,9 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/keys/treekey.cpp \
 ../../../src/keys/listkey.cpp \
 ../../../src/frontend/swdisp.cpp \
-../../../src/frontend/swlog.cpp
+../../../src/frontend/swlog.cpp \
+../../../src/utilfuns/zlib/untgz.c
 
-#../../../../../sword/src/mgr/ftplibftpt.cpp \
 #../../../../../sword/src/mgr/curlftpt.cpp \
 #../../../../../sword/src/mgr/curlhttpt.cpp \
 #../../../../../sword/src/utilfuns/win32/dirent.cpp \
@@ -194,7 +199,7 @@ LOCAL_CFLAGS	+= -I$(STLPORT_BASE)/stlport \
 		   -DOS_ANDROID
 
 LOCAL_LDLIBS	+= -L$(STLPORT_BASE)/build/lib/obj/arm-linux-gcc/so \
-		   -lstlport -lz
+		   -lstlport -lz -llog
 
 LOCAL_SRC_FILES := swordstub.cpp
 

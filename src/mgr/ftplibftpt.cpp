@@ -58,15 +58,18 @@ FTPLibFTPTransport::~FTPLibFTPTransport() {
 char FTPLibFTPTransport::assureLoggedIn() {
 	char retVal = 0;
 	if (ftpConnection == 0) {
-		SWLog::getSystemLog()->logDebug("connecting to host %s\n", host.c_str());
-		if (FtpConnect(host, &ftpConnection))
+		SWLog::getSystemLog()->logDebug("connecting to host: %s...\n", host.c_str());
+		if (FtpConnect(host, &ftpConnection)) {
+			SWLog::getSystemLog()->logDebug("connected. logging in...\n");
 			if (FtpLogin(u.c_str(), p.c_str(), ftpConnection)) {
+				SWLog::getSystemLog()->logDebug("logged in.\n");
 				retVal = 0;
 			}
 			else {
 				SWLog::getSystemLog()->logError("Failed to login to %s\n", host.c_str());
 				retVal = -2;
 			}
+		}
 		else {
 			SWLog::getSystemLog()->logError("Failed to connect to %s\n", host.c_str());
 			retVal = -1;
@@ -80,12 +83,28 @@ char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWB
 
 	char retVal = 0;
 
+	SWLog::getSystemLog()->logDebug("FTPLibFTPTransport::getURL(%s, %s, ...);\n", (destPath)?destPath:"(null)", sourceURL);
 	// assert we can login
 	retVal = assureLoggedIn();
 	if (retVal) return retVal;
+	SWLog::getSystemLog()->logDebug("FTPLibFTPTransport - logged in.\n");
 
 	SWBuf sourcePath = sourceURL;
-	SWBuf outFile = (!destBuf) ? destPath : "swftplib.tmp";
+
+	SWBuf outFile;
+	if (!destBuf) {
+		outFile = destPath;
+	}
+	else {
+#ifdef ANDROID
+		outFile = "/sdcard/sword/InstallMgr/swtmpbuf.out";
+#else
+		char tmpName[128];
+		tmpnam(tmpName);
+		outFile = tmpName;
+#endif
+	}
+
 	sourcePath << (6 + host.length()); // shift << "ftp://hostname";
 	SWLog::getSystemLog()->logDebug("getting file %s to %s\n", sourcePath.c_str(), outFile.c_str());
 	if (passive)
@@ -98,6 +117,7 @@ char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWB
 		FtpDir(NULL, sourcePath, ftpConnection);
 		SWLog::getSystemLog()->logDebug("getting real directory %s\n", sourcePath.c_str());
 		retVal = FtpDir(outFile.c_str(), sourcePath, ftpConnection) - 1;
+		SWLog::getSystemLog()->logDebug("got real directory %s to %s\n", sourcePath.c_str(), outFile.c_str());
 	}
 	else {
 		SWLog::getSystemLog()->logDebug("getting file %s\n", sourcePath.c_str());
@@ -108,15 +128,17 @@ char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWB
 	// If not, we probably want to add x-platform way to open a tmp file with FileMgr
 	// This wreaks and will easily fail if a user's CWD is not writable.
 	if (destBuf) {
-		FileDesc *fd = FileMgr::getSystemFileMgr()->open("swftplib.tmp", FileMgr::RDONLY);
+		SWLog::getSystemLog()->logDebug("filling destBuf\n");
+		FileDesc *fd = FileMgr::getSystemFileMgr()->open(outFile.c_str(), FileMgr::RDONLY);
 		long size = fd->seek(0, SEEK_END);
 		fd->seek(0, SEEK_SET);
 		destBuf->size(size);
 		fd->read(destBuf->getRawData(), size);
 		FileMgr::getSystemFileMgr()->close(fd);
-		FileMgr::removeFile("swftplib.tmp");
+		FileMgr::removeFile(outFile.c_str());
 	}
 
+	SWLog::getSystemLog()->logDebug("FTPLibFTPTransport - returning: %d\n", retVal);
 	return retVal;
 }
 
