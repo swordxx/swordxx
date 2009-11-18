@@ -80,6 +80,8 @@
 ../parsekey "1Jn 1:1; 3:10"
 ../parsekey "1Jn 1:1 ;3:10"
 ../parsekey "1Jn 1:1 ; 3:10"
+../parsekey "1Jn1.1f ; 3:10ff"
+../parsekey "1Jn1.1ff ; 3:10f"
 
 en_abbrevs="
 Gen Genes Exod Ex Exo Lev Le Levi Num Nu Numb Deut Deu De Josh Jos Joshu

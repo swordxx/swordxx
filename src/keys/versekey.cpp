@@ -644,6 +644,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 //				if (comma) {
 					curKey->Chapter(lastKey->Chapter());
 					curKey->Verse(chap);  // chap because this is the first number captured
+					if (suffix) {
+						curKey->setSuffix(suffix);
+					}
 				}
 				else {
 					if (useChapterAsVerse && verse < 0 && chap > 0 && curKey->getChapterMax() == 1) {
@@ -770,7 +773,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					break;
 				default:
 					// suffixes (and oddly 'f'-- ff.)
-					if ((*buf >= 'a' && *buf <= 'z') && (chap >=0)) {
+					if (((*buf >= 'a' && *buf <= 'z') && (chap >=0)) || *buf == 'f') {
+						// if suffix is already an 'f', then we need to mark if we're doubleF.
 						doubleF = (*buf == 'f' && suffix == 'f');
 						suffix = *buf;
 					}
@@ -863,6 +867,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
 			curKey->Chapter(lastKey->Chapter());
 			curKey->Verse(chap);  // chap because this is the first number captured
+			if (suffix) {
+				curKey->setSuffix(suffix);
+			}
 		}
 		else {
 			if (useChapterAsVerse && verse < 0 && chap > 0 && curKey->getChapterMax() == 1) {
