@@ -15,13 +15,17 @@
  *
  */
 
+#include <stdio.h>
 #include <iostream>
-#include <rawtext.h>
-#include <rawtext4.h>
-#include <versekey.h>
+
 #include <swbuf.h>
 #include <filemgr.h>
-#include <stdio.h>
+#include <versekey.h>
+#include <rawtext.h>
+#include <rawtext4.h>
+#include <ztext.h>
+#include <lzsscomprs.h>
+#include <zipcomprs.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -36,8 +40,12 @@ void usage(const char *progName, const char *error = 0) {
 	fprintf(stderr, "\n=== imp2vs (Revision $Rev: 2234 $) SWORD Bible/Commentary importer.\n");
 	fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
+	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
+	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
 	fprintf(stderr, "  -o <output_path>\t where to write data files.\n");
 	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default is 2).\n");
+	fprintf(stderr, "  -b <2|3|4>\t\t compression block size (default 4):\n");
+	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
 	fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
 	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
@@ -74,13 +82,33 @@ int main(int argc, char **argv) {
 	SWBuf outPath          = "./";
 	bool fourByteSize      = false;
 	bool append            = false;
+	int iType              = 4;
+	SWCompress *compressor = 0;
+	SWBuf compType         = "";
 
 	for (int i = 2; i < argc; i++) {
 		if (!strcmp(argv[i], "-a")) {
 			append = true;
 		}
-		if (!strcmp(argv[i], "-4")) {
+		else if (!strcmp(argv[i], "-z")) {
+			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
+			if (fourByteSize) usage(*argv, "Cannot specify both -z and -4");
+			compType = "ZIP";
+		}
+		else if (!strcmp(argv[i], "-Z")) {
+			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
+			if (fourByteSize) usage(*argv, "Cannot specify both -Z and -4");
+			compType = "LZSS";
+		}
+		else if (!strcmp(argv[i], "-4")) {
 			fourByteSize = true;
+		}
+		else if (!strcmp(argv[i], "-b")) {
+			if (i+1 < argc) {
+				iType = atoi(argv[++i]);
+				if ((iType >= 2) && (iType <= 4)) continue;
+			}
+			usage(*argv, "-b requires one of <2|3|4>");
 		}
 		else if (!strcmp(argv[i], "-o")) {
 			if (i+1 < argc) outPath = argv[++i];
@@ -96,17 +124,49 @@ int main(int argc, char **argv) {
 	const VerseMgr::System *v = VerseMgr::getSystemVerseMgr()->getVersificationSystem(v11n);
 	if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
+	if (compType == "ZIP") {
+		compressor = new ZipCompress();
+	}
+	else if (compType == "LZSS") {
+		compressor = new LZSSCompress();
+	}
 
 	// setup module
 	if (!append) {
+		if (compressor) {
+			if (zText::createModule(outPath, iType, v11n)) {
+				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", *argv, outPath.c_str());
+				exit(-1);
+			}
+		}
 		if (!fourByteSize)
 			RawText::createModule(outPath, v11n);
 		else	RawText4::createModule(outPath, v11n);
 	}
 
-	SWModule *module = (!fourByteSize)
+	SWModule *module = 0;
+	if (compressor) {
+		// Create a compressed text module allowing very large entries
+		// Taking defaults except for first, fourth, fifth and last argument
+		module = new zText(
+				outPath,		// ipath
+				0,		// iname
+				0,		// idesc
+				iType,		// iblockType
+				compressor,	// icomp
+				0,		// idisp
+				ENC_UNKNOWN,	// enc
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// lang
+				v11n		// versification
+		       );
+	}
+	else {
+		module = (!fourByteSize)
 			? (SWModule *)new RawText(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n)
 			: (SWModule *)new RawText4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);
+	}
 	// -----------------------------------------------------
 			
 
