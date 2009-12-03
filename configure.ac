@@ -29,6 +29,8 @@ AC_PROG_INSTALL
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
+COLORED_ECHO_INIT
+
 AC_C_BIGENDIAN
 
 ACX_CLUCENE
@@ -99,12 +101,16 @@ fi
 # Check libraries
 # ---------------------------------------------------------------------
 if test x$with_zlib  = xyes; then
-	AC_CHECK_LIB(z, compress)
+	AC_CHECK_LIB(z, compress,,with_zlib="no")
+else
+	with_zlib="no"
 fi
 
-#if test x$with_installmgr  = xftplib; then
-#	AC_CHECK_LIB(ftplib, FtpGet)
-#fi
+if test "x$with_zlib" = xno; then
+	AM_CFLAGS="$AM_CFLAGS -DEXCLUDEZLIB"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DEXCLUDEZLIB"
+fi
+
 
 # ---------------------------------------------------------------------
 # Find CppUnit
@@ -167,12 +173,19 @@ if test x$with_icu = xyes; then
      AM_CFLAGS="$AM_CFLAGS -D_ICU_"
 fi
 
+if test "x$ICU_LIBS" != x; then
+	with_icu=yes
+	LIBS="$LIBS $ICU_LIBS $ICU_IOLIBS"
+else
+	with_icu=no
+fi
+
+
+# why?  what is this for?
+with_swordicu=$with_icu
+
 
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
-#  AC_DEFINE(DEBUG)
-#else
-#  AC_DEFINE(NDEBUG)
-#fi
 
 if test x$enable_warnings = xyes; then
   AM_CFLAGS="$AM_CFLAGS -Werror"
@@ -193,29 +206,32 @@ fi
 # Check for curl for installmgr suport
 # ---------------------------------------------------------------------
 
-CURL_AM_CFLAGS=
-CURL_LIBS=
-#if test x$with_installmgr = xcurl; then
+with_internalftplib=no
 if test x$with_curl = xyes; then
     AC_PATH_PROG(CURL_CONFIG, curl-config, no)
     if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
 	echo "*** compiling without libcurl support"
 	with_curl=no
+	with_internalftplib=yes
     else
 	echo "curl found - remote install options available"
 	CURL_AM_CFLAGS=`$CURL_CONFIG --cflags`
 	CURL_LIBS=`$CURL_CONFIG --libs`
-	AM_CXXFLAGS="$AM_CXXFLAGS -DCURLAVAILABLE"
-	AM_CFLAGS="$AM_CFLAGS -DCURLAVAILABLE"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DCURLAVAILABLE $CURL_AM_CFLAGS"
+	AM_CFLAGS="$AM_CFLAGS -DCURLAVAILABLE $CURL_AM_CFLAGS"
+	LIBS="$LIBS $CURL_LIBS"
     fi
+else
+	with_curl=no;
+	with_internalftplib=yes
 fi
 
 # ---------------------------------------------------------------------
 # Check for clucene for lucene searching support
 # ---------------------------------------------------------------------
 
-use_clucene=
+with_clucene=no
 if test -z "$CLUCENE_LIBS"; then
    echo "lucene searching options not available"
 else
@@ -223,7 +239,7 @@ else
    AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
    AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
    LIBS="$LIBS $CLUCENE_LIBS"
-   use_clucene="yes"
+   with_clucene="yes"
 fi
 
 AC_CHECK_FUNCS(vsnprintf, [have_vsnprintf="yes"])
@@ -247,13 +263,7 @@ AC_SUBST(with_icu)
 AC_SUBST(with_conf)
 AC_SUBST(dir_confdef)
 AC_SUBST(CC)
-AC_SUBST(CURL_AM_CFLAGS)
-AC_SUBST(CURL_LIBS)
-#AC_SUBST(LUCENE_LIBS)
-AC_SUBST(ICU_LIBS)
-AC_SUBST(ICU_IOLIBS)
 AC_SUBST(ICU_VER)
-AC_SUBST(XML_LIBS)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 AC_SUBST(AM_CXXFLAGS)
@@ -270,24 +280,21 @@ AC_SUBST(target_mingw32)
 # ---------------------------------------------------------------------
 # Conditional variables
 # ---------------------------------------------------------------------
+
+# don't #ifdef in .cpp files HAVE_ stuff because non-ac compiles won't be able to switch them since we include config.h
+AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
+AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
+AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_swordicu = xyes)
 AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
+
 AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
-AM_CONDITIONAL(ICU, test x$with_icu = xyes)
-AM_CONDITIONAL(USELUCENE, test x$use_clucene = xyes)
-AM_CONDITIONAL(ICUSWORD, test x$with_icu = xsword)
-AM_CONDITIONAL(ZLIB, test x$with_zlib = xyes)
+AM_CONDITIONAL(USELUCENE, test x$with_clucene = xyes)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
-AM_CONDITIONAL(INSTALLMGR, test x$with_curl = xyes)
-#AM_CONDITIONAL(INTERNALFTPLIB, test x$with_installmgr = xinternal)
-#AM_CONDITIONAL(WITHCURL, test x$with_installmgr = xcurl)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
-AM_CONDITIONAL(INTERNALFTPLIB, test x$with_curl != xyes)
-#AM_CONDITIONAL(WITHFTPLIB, test x$with_installmgr = xftplib)
+AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
-#AM_CONDITIONAL(DEBUG, test x$with_debug = xyes)
-#AM_CONDITIONAL(PROFILE, test x$with_profile = xyes)
 AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
 AM_CONDITIONAL(BUILDUTILS, test x$enable_utilities = xyes)
 AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
@@ -297,4 +304,20 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile icu/Makefile sword.pc sword.spec)
 AC_OUTPUT
+
+echo
+echo
+COLORED_ECHO([Configuration:])
+COLORED_ECHO([    DEBUG:            $enable_debug])
+COLORED_ECHO([    PROFILE:          $enable_profile])
+COLORED_ECHO([    LIBZ:             $with_zlib])
+COLORED_ECHO([    ICU:              $with_icu])
+COLORED_ECHO([    ICUSWORD:         $with_swordicu])
+COLORED_ECHO([    CURL:             $with_curl])
+COLORED_ECHO([    INTERNAL FTPLIB:  $with_internalftplib])
+COLORED_ECHO([    CLUCENE:          $with_clucene])
+echo
+echo
+
+
 

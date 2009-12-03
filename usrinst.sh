@@ -40,7 +40,7 @@ OPTIONS="--enable-tests $OPTIONS"
 #LIBS="-no-undefined"
 #OPTIONS="lt_cv_deplibs_check_method=pass_all $OPTIONS"
 
-LIBS="$LIBS" CPPFLAGS="$CFLAGS $CPPFLAGS -DUSBINARY" ./configure $OPTIONS $*
+LIBS="$LIBS" ./configure $OPTIONS $*
 
 
 echo ""

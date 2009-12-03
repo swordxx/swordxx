@@ -83,13 +83,11 @@ SWICUSRC += $(filtersdir)/utf8nfkd.cpp
 SWICUSRC += $(filtersdir)/utf8arshaping.cpp
 SWICUSRC += $(filtersdir)/utf8bidireorder.cpp
 
-if ICU
-ICUDEFS = -D_ICU_
+if HAVE_ICU
 DISTSWICUSRC =
 SWREALICUSRC = $(SWICUSRC)
 else
-if ICUSWORD
-ICUDEFS = -D_ICU_ -D_ICUSWORD_
+if HAVE_ICUSWORD
 DISTSWICUSRC =
 SWREALICUSRC = $(SWICUSRC)
 else
@@ -98,7 +96,6 @@ SWREALICUSRC =
 endif
 endif
 
-AM_CPPFLAGS += $(ICUDEFS)
 libsword_la_SOURCES += $(SWREALICUSRC)
 EXTRA_DIST = $(DISTSWICUSRC)
 

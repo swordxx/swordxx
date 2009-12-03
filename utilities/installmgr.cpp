@@ -17,6 +17,7 @@
 
 #include <swmgr.h>
 #include <installmgr.h>
+#include <ftptrans.h>
 #include <filemgr.h>
 #include <iostream>
 #include <map>
@@ -31,15 +32,17 @@ using std::cin;
 using std::map;
 
 
-SWMgr *mgr;
-InstallMgr *installMgr;
+SWMgr *mgr = 0;
+InstallMgr *installMgr = 0;
+StatusReporter *statusReporter = 0;
 SWBuf baseDir;
 SWBuf confPath;
 
+void usage(const char *progName = 0, const char *error = 0);
 
 class MyInstallMgr : public InstallMgr {
 public:
-	MyInstallMgr(const char *privatePath = "./") : InstallMgr(privatePath) {}
+	MyInstallMgr(const char *privatePath = "./", StatusReporter *sr = 0) : InstallMgr(privatePath, sr) {}
 
 virtual bool isUserDisclaimerConfirmed() const {
 	static bool confirmed = false;
@@ -65,50 +68,73 @@ virtual bool isUserDisclaimerConfirmed() const {
 		char prompt[10];
 		fgets(prompt, 9, stdin);
 		confirmed = (!strcmp(prompt, "yes\n"));
+		cout << "\n";
 	}
 	return confirmed;
 }
 
 };
 
+class MyStatusReporter : public StatusReporter {
+	int last;
+        virtual void statusUpdate(double dltotal, double dlnow) {
+		int p = 74 * (dlnow / dltotal);
+		for (;last < p; ++last) {
+			if (!last) {
+				SWBuf output;
+				output.setFormatted("[ File Bytes: %ld", (long)dltotal);
+				while (output.size() < 75) output += " ";
+				output += "]";
+				cout << output.c_str() << "\n ";
+			}
+			cout << "-";
+		}
+		cout.flush();
+	}
+        virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
+		SWBuf output;
+		output.setFormatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes);
+		while (output.size() < 75) output += " ";
+		output += "]";
+		cout << "\n" << output.c_str() << "\n ";
+		int p = 74 * ((double)completedBytes/totalBytes);
+		for (int i = 0; i < p; ++i) { cout << "="; }
+		cout << "\n\n" << message << "\n";
+		last = 0;
+	}
+};      
+
 
 void init() {
-	mgr = new SWMgr();
-	SWBuf baseDir = mgr->getHomeDir();
-	if (baseDir.length() < 1) baseDir = ".";
-	baseDir += "/.sword/InstallMgr";
-	confPath = baseDir + "/InstallMgr.conf";
-	installMgr = new MyInstallMgr(baseDir);
+	if (!mgr) {
+		mgr = new SWMgr();
+
+		if (!mgr->config)
+			usage(0, "ERROR: SWORD configuration not found.  Please configure SWORD before using this program.");
+
+		SWBuf baseDir = mgr->getHomeDir();
+		if (baseDir.length() < 1) baseDir = ".";
+		baseDir += "/.sword/InstallMgr";
+		confPath = baseDir + "/InstallMgr.conf";
+		statusReporter = new MyStatusReporter();
+		installMgr = new MyInstallMgr(baseDir, statusReporter);
+	}
 }
 
 
 // clean up and exit if status is 0 or negative error code
 void finish(int status) {
+	delete statusReporter;
 	delete installMgr;
 	delete mgr;
+
+	installMgr = 0;
+	mgr        = 0;
+
 	if (status < 1) {
 		cout << "\n";
 		exit(status);
 	}
-}
-
-
-void usage(const char *progName) {
-	fprintf(stderr, "usage: %s <option>\nOptions:\n"
-		"\t-init\t\t\t\tcreate a basic user config file.\n"
-		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
-		"\t-sc\t\t\t\tsync config with known remote repo list\n"
-		"\t-l\t\t\t\tlist installed modules\n"
-		"\t-u <modName>\t\t\tuninstall module\n"
-		"\t-s\t\t\t\tlist remote sources\n"
-		"\t-r  <remoteSrcName>\t\trefresh remote source\n"
-		"\t-rl <remoteSrcName>\t\tlist available modules from remote source\n"
-		"\t-rd <remoteSrcName>\t\tlist new/updated modules from remote source\n"
-		"\t-ri <remoteSrcName> <modName>\tinstall module from remote source\n"
-		"\t-ll <path>\t\t\tlist available modules at local path\n"
-		"\t-li <path> <modName>\t\tinstall module from local path\n"
-		, progName);
-	finish(-1);
 }
 
 
@@ -132,6 +158,7 @@ void createBasicConfig(bool enableRemote, bool addCrossWire) {
 
 
 void initConfig() {
+	init();
 
 	bool enable = installMgr->isUserDisclaimerConfirmed();
 
@@ -143,6 +170,7 @@ void initConfig() {
 
 
 void syncConfig() {
+	init();
 
 	if (!installMgr->isUserDisclaimerConfirmed()) {  // assert disclaimer is accepted
 		cout << "\n\nDisclaimer not accepted.  Aborting.";
@@ -162,24 +190,8 @@ void syncConfig() {
 }
 
 
-void listModules(SWMgr *otherMgr) {
-	cout << "Installed Modules:\n\n";
-	SWModule *module;
-	std::map<SWModule *, int> mods = InstallMgr::getModuleStatus(*mgr, *otherMgr);
-	for (std::map<SWModule *, int>::iterator it = mods.begin(); it != mods.end(); it++) {
-		module = it->first;
-		SWBuf version = module->getConfigEntry("Version");
-		SWBuf status = " ";
-		if (it->second & InstallMgr::MODSTAT_NEW) status = "*";
-		if (it->second & InstallMgr::MODSTAT_OLDER) status = "-";
-		if (it->second & InstallMgr::MODSTAT_UPDATED) status = "+";
-
-		cout << status << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
-	}
-}
-
-
 void uninstallModule(const char *modName) {
+	init();
 	SWModule *module;
 	ModMap::iterator it = mgr->Modules.find(modName);
 	if (it == mgr->Modules.end()) {
@@ -193,6 +205,7 @@ void uninstallModule(const char *modName) {
 
 
 void listRemoteSources() {
+	init();
 	cout << "Remote Sources:\n\n";
 	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
 		cout << "[" << it->second->caption << "]\n";
@@ -204,6 +217,7 @@ void listRemoteSources() {
 
 
 void refreshRemoteSource(const char *sourceName) {
+	init();
 	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
 	if (source == installMgr->sources.end()) {
 		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
@@ -211,41 +225,40 @@ void refreshRemoteSource(const char *sourceName) {
 	}
 
 	if (!installMgr->refreshRemoteSource(source->second))
-		cout << "Remote Source Refreshed\n";
-	else	cerr << "Error Refreshing Remote Source\n";
+		cout << "\nRemote Source Refreshed\n";
+	else	cerr << "\nError Refreshing Remote Source\n";
 }
 
 
-void remoteNewModules(const SWMgr *base, const char *sourceName) {
-	cout << "Updated and New Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
-	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
-	if (source == installMgr->sources.end()) {
-		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
-		finish(-3);
-	}
-	map<SWModule *, int> modStats = installMgr->getModuleStatus(*base, *source->second->getMgr());
+void listModules(SWMgr *otherMgr = 0, bool onlyNewAndUpdates = false) {
+	init();
 	SWModule *module;
-	int status;
-	bool updated;
-	for (map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); it++) {
+	if (!otherMgr) otherMgr = mgr;
+	std::map<SWModule *, int> mods = InstallMgr::getModuleStatus(*mgr, *otherMgr);
+	for (std::map<SWModule *, int>::iterator it = mods.begin(); it != mods.end(); it++) {
 		module = it->first;
-		status = it->second;
-		updated = (status & InstallMgr::MODSTAT_UPDATED);
-		if ((status & InstallMgr::MODSTAT_NEW) || (updated)) {
-			cout << ((updated)?"U":"N") << " [" << module->Name() << "]  \t- " << module->Description() << "\n";
+		SWBuf version = module->getConfigEntry("Version");
+		SWBuf status = " ";
+		if (it->second & InstallMgr::MODSTAT_NEW) status = "*";
+		if (it->second & InstallMgr::MODSTAT_OLDER) status = "-";
+		if (it->second & InstallMgr::MODSTAT_UPDATED) status = "+";
+
+		if (!onlyNewAndUpdates || status == "*" || status == "+") {
+			cout << status << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
 		}
 	}
 }
 
 
-void remoteListModules(const char *sourceName) {
+void remoteListModules(const char *sourceName, bool onlyNewAndUpdated = false) {
+	init();
 	cout << "Available Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
 	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
 	if (source == installMgr->sources.end()) {
 		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
 		finish(-3);
 	}
-	listModules(source->second->getMgr());
+	listModules(source->second->getMgr(), onlyNewAndUpdated);
 }
 
 
@@ -257,6 +270,7 @@ void localDirListModules(const char *dir) {
 
 
 void remoteInstallModule(const char *sourceName, const char *modName) {
+	init();
 	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
 	if (source == installMgr->sources.end()) {
 		fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
@@ -274,12 +288,13 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
 
 	int error = installMgr->installModule(mgr, 0, module->Name(), is);
 	if (error) {
-		cout << "Error installing module: [" << module->Name() << "] (write permissions?)\n";
-	} else cout << "Installed module: [" << module->Name() << "]\n";
+		cout << "\nError installing module: [" << module->Name() << "] (write permissions?)\n";
+	} else cout << "\nInstalled module: [" << module->Name() << "]\n";
 }
 
 
 void localDirInstallModule(const char *dir, const char *modName) {
+	init();
 	SWMgr lmgr(dir);
 	SWModule *module;
 	ModMap::iterator it = lmgr.Modules.find(modName);
@@ -290,88 +305,94 @@ void localDirInstallModule(const char *dir, const char *modName) {
 	module = it->second;
 	int error = installMgr->installModule(mgr, dir, module->Name());
 	if (error) {
-		cout << "Error installing module: [" << module->Name() << "] (write permissions?)\n";
-	} else cout << "Installed module: [" << module->Name() << "]\n";
+		cout << "\nError installing module: [" << module->Name() << "] (write permissions?)\n";
+	} else cout << "\nInstalled module: [" << module->Name() << "]\n";
+}
+
+
+void usage(const char *progName, const char *error) {
+
+	if (error) fprintf(stderr, "\n%s: %s\n", (progName ? progName : "installmgr"), error);
+
+	fprintf(stderr, "\nusage: %s <command> [command ...]\n"
+		"\n  Commands (run in order they are passed):\n\n"
+		"\t-init\t\t\t\tcreate a basic user config file.\n"
+		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
+		"\t-sc\t\t\t\tsync config with known remote repo list\n"
+		"\t\t\t\t\t\tNOTE: also creates if none exists\n"
+		"\t-d\t\t\t\tturn debug output on\n"
+		"\t-l\t\t\t\tlist installed modules\n"
+		"\t-u <modName>\t\t\tuninstall module\n"
+		"\t-s\t\t\t\tlist remote sources\n"
+		"\t-r  <remoteSrcName>\t\trefresh remote source\n"
+		"\t-rl <remoteSrcName>\t\tlist available modules from remote source\n"
+		"\t-rd <remoteSrcName>\t\tlist new/updated modules from remote source\n"
+		"\t-ri <remoteSrcName> <modName>\tinstall module from remote source\n"
+		"\t-ll <path>\t\t\tlist available modules at local path\n"
+		"\t-li <path> <modName>\t\tinstall module from local path\n"
+		, (progName ? progName : "installmgr"));
+	finish(-1);
 }
 
 
 int main(int argc, char **argv) {
 
-	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
+	if (argc < 2) usage(*argv);
 
-	init();
-
-	cout << "\n";
-
-	if (argc < 2 || !mgr->config)
-		usage(*argv);
-
-	switch (argv[1][1]) {
-	case 'i':
-		if (strcmp(argv[1], "-init"))
-			usage(*argv);
-		initConfig();
-		break;
-	case 'l':
-		switch (argv[1][2]) {
-		case 0:			// -l list installed modules
-			listModules(mgr);
-			break;
-		case 'l':		// -ll list from local directory
-			if (argc < 3)
-				usage(*argv);
-			localDirListModules(argv[2]);
-			break;
-		case 'i':		// -li remote install
-			if (argc < 4)
-				usage(*argv);
-			localDirInstallModule(argv[2], argv[3]);
-			break;
-		default: usage(*argv);
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-d")) {
+			SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 		}
-		break;
-	case 'u':
-		if (argc < 3)
-			usage(*argv);
-
-		uninstallModule(argv[2]);
-		break;
-	case 's':
-		switch (argv[1][2]) {
-		case 0:			// -s list sources
+		else if (!strcmp(argv[i], "-init")) {
+			initConfig();
+		}
+		else if (!strcmp(argv[i], "-l")) {	// list installed modules
+			cout << "Installed Modules:\n\n";
+			listModules();
+		}
+		else if (!strcmp(argv[i], "-ll")) {	// list from local directory
+			if (i+1 < argc) localDirListModules(argv[++i]);
+			else usage(*argv, "-ll requires <path>");
+		}
+		else if (!strcmp(argv[i], "-li")) {	// install from local directory
+			if (i+2 < argc) {
+				const char *path = argv[++i];
+				const char *modName = argv[++i];
+				localDirInstallModule(path, modName);
+			}
+			else usage(*argv, "-li requires <path> <modName>");
+		}
+		else if (!strcmp(argv[i], "-u")) {	// uninstall module
+			if (i+1 < argc) uninstallModule(argv[++i]);
+			else usage(*argv, "-u requires <modName>");
+		}
+		else if (!strcmp(argv[i], "-s")) {	// list sources
 			listRemoteSources();
-			break;
-		case 'c':		// -sc sync config with master
+		}
+		else if (!strcmp(argv[i], "-sc")) {	// sync config with master
 			syncConfig();
-			break;
 		}
-		break;
-	case 'r':	// remote option
-		switch (argv[1][2]) {
-		case 0:			// -r refresh
-			if (argc < 3)
-				usage(*argv);
-			refreshRemoteSource(argv[2]);
-			break;
-		case 'l':		// -rl remote list
-			if (argc < 3)
-				usage(*argv);
-			remoteListModules(argv[2]);
-			break;
-		case 'd':		// -rl remote list
-			if (argc < 3)
-				usage(*argv);
-			remoteNewModules(mgr, argv[2]);
-			break;
-		case 'i':		// -ri remote install
-			if (argc < 4)
-				usage(*argv);
-			remoteInstallModule(argv[2], argv[3]);
-			break;
-		default: usage(*argv);
+		else if (!strcmp(argv[i], "-r")) {	// refresh remote source
+			if (i+1 < argc) refreshRemoteSource(argv[++i]);
+			else usage(*argv, "-r requires <remoteSrcName>");
 		}
-		break;
-	default: usage(*argv);
+		else if (!strcmp(argv[i], "-rl")) {	// list remote modules
+			if (i+1 < argc) remoteListModules(argv[++i]);
+			else usage(*argv, "-rl requires <remoteSrcName>");
+		}
+		else if (!strcmp(argv[i], "-rd")) {	// list differences between remote source and installed modules
+			if (i+1 < argc) remoteListModules(argv[++i], true);
+			else usage(*argv, "-rd requires <remoteSrcName>");
+		}
+		else if (!strcmp(argv[i], "-ri")) {	// install from remote directory
+			if (i+2 < argc) {
+				const char *source = argv[++i];
+				const char *modName = argv[++i];
+				remoteInstallModule(source, modName);
+			}
+			else usage(*argv, "-ri requires <remoteSrcName> <modName>");
+		}
+		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
 	finish(0);

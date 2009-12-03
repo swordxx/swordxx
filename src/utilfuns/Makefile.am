@@ -20,7 +20,7 @@ else
 ftpsrc =
 endif
 
-if ZLIB
+if HAVE_LIBZ
 UNTGZ = $(utilfunsdir)/zlib/untgz.c
 else
 UNTGZ =

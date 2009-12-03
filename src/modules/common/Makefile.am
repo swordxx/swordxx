@@ -5,7 +5,7 @@ libsword_la_SOURCES += $(commondir)/rawstr4.cpp
 libsword_la_SOURCES += $(commondir)/swcomprs.cpp
 libsword_la_SOURCES += $(commondir)/lzsscomprs.cpp
 
-if ZLIB
+if HAVE_LIBZ
 SWZLIB = $(commondir)/zipcomprs.cpp
 else
 SWZLIB =

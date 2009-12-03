@@ -47,7 +47,7 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 static CURLFTPTransport_init _CURLFTPTransport_init;
 
 CURLFTPTransport_init::CURLFTPTransport_init() {
-	//curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
+	curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
 }
 
 CURLFTPTransport_init::~CURLFTPTransport_init() {
@@ -72,9 +72,20 @@ int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 }
 
 
+struct MyProgressData {
+	StatusReporter *sr;
+	bool *term;
+};
+
+
 int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
 	if (clientp) {
-		((StatusReporter *)clientp)->statusUpdate(dltotal, dlnow);
+		MyProgressData *pd = (MyProgressData *)clientp;
+SWLog::getSystemLog()->logDebug("CURLFTPTransport report progress: totalSize: %ld; xfered: %ld\n", (long)dltotal, (long)dlnow);
+		if (pd->sr) {
+			pd->sr->statusUpdate(dltotal, dlnow);
+			if (*(pd->term)) return 1;
+		}
 	}
 	return 0;
 }
@@ -124,6 +135,11 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 	CURLcode res;
 	
 	if (session) {
+
+		struct MyProgressData pd;
+		pd.sr = statusReporter;
+		pd.term = &term;
+
 		curl_easy_setopt(session, CURLOPT_URL, sourceURL);
 	
 		SWBuf credentials = u + ":" + p;
@@ -132,7 +148,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 		if (!passive)
 			curl_easy_setopt(session, CURLOPT_FTPPORT, "-");
 		curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
-		curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
+		curl_easy_setopt(session, CURLOPT_PROGRESSDATA, &pd);
 		curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_fprogress);
 		curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, my_trace);
 		/* Set a pointer to our struct to pass to the callback */

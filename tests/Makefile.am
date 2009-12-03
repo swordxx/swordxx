@@ -9,7 +9,7 @@ modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
  swbuftest xmltest webiftest striptest
 
-if ICU
+if HAVE_ICU
 ICUPROG = icutest translittest tlitmgrtest
 else
 ICUPROG =
@@ -17,14 +17,13 @@ endif
 
 noinst_PROGRAMS += $(ICUPROG)
 
-if ICU
+if HAVE_ICU
 icutest_SOURCES = icutest.cpp
 translittest_SOURCES = translittest.cpp
 tlitmgrtest_SOURCES = tlitmgrtest.cpp
-#tlitmgrtest_LDADD = -lustdio
 endif
 
-if ZLIB
+if HAVE_LIBZ
 ZLIBPROG = compzip
 else
 ZLIBPROG =
@@ -32,7 +31,7 @@ endif
 
 noinst_PROGRAMS += $(ZLIBPROG)
 
-if ZLIB
+if HAVE_LIBZ
 compzip_SOURCES = compzip.cpp
 endif
 

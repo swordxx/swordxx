@@ -1,73 +1,25 @@
 AUTOMAKE_OPTIONS = 1.6
 
-# this WILL NOT WORK for you. only inhouse patched version of
-# sapphire will omit enciphering code when set to yes, so leave
-# as no, unless you really know what you're doing
-
-legalexport := no
-
 ACLOCAL_AMFLAGS = -I m4
-
-##### Customizable stuff. Set it how you like it #####
-
-# if building dll with gcc on windoze (www.mingw.org)
-# note you must set need_local_regex and buildshare to yes
-if MINGW
-mingw = yes
-need_local_regex := yes
-else
-
-# need regular expression stuff?
-need_local_regex := no
-
-# shared library - set to yes if you would like to build
-#buildshare := @enable_shared@
-
-endif
-
-# Debugging options etc...
-debug   := @enable_debug@
-profile := @enable_profile@
-
-
-# endian, etc. support for other hardware
-
-system := @target_system@
-
-#system := intel
-#system := sparc_solaris
-#system := macosx
-#system := arm
-#system := gnu_bigendian
-#system := beos
-
-# SPARC Solaris users should define system as sparc_solaris; SPARC users running Linux or other OSes with glibc, like Debian GNU/Linux should use gnu_bigendian instead
-
-# to build on FreeBSD, simply use gmake instead of make
-
-# to build for Darwin on PPC, set system to macosx
-
-
-# zLib support
-zlib := @with_zlib@
-
-# icu support
-icu := @with_icu@
+LDADD = $(top_builddir)/lib/libsword.la
 
 # Global config directory
 globalconfdir := @sysconfdir@
 
 SUBDIRS = lib . icu
+
 if BUILDTESTS
 TESTSDIR = tests
 else
 TESTSDIR =
 endif
+
 if BUILDUTILS
 UTILSDIR = utilities
 else
 UTILSDIR =
 endif
+
 if BUILDEXAMPLES
 EXAMPLESDIR = examples
 else
@@ -76,7 +28,6 @@ endif
 
 SUBDIRS += $(TESTSDIR) $(UTILSDIR) $(EXAMPLESDIR)
 
-AM_CPPFLAGS = -I $(top_srcdir)/include
 EXTRA_DIST = sword.spec sword.kdevprj sword.bmp usrinst.sh autogen.sh sword.pc.in
 
 if USE_PKGCONF
@@ -99,11 +50,6 @@ endif
 noinst_PROGRAMS = buildtest
 buildtest_SOURCES = buildtest.cpp
 
-if ICU
-iculibs = -licui18n -licuuc
-endif
-
-buildtest_LDADD = $(top_builddir)/lib/libsword.la
 
 include locales.d/Makefile.am
 include samples/Makefile.am

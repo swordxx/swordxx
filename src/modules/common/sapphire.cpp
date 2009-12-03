@@ -144,7 +144,6 @@ sapphire::~sapphire()
 
 unsigned char sapphire::encrypt(unsigned char b)
     {
-#ifdef USBINARY
     // Picture a single enigma rotor with 256 positions, rewired
     // on the fly by card-shuffling.
 
@@ -172,9 +171,6 @@ unsigned char sapphire::encrypt(unsigned char b)
                                cards[avalanche])&0xFF]];
     last_plain = b;
     return last_cipher;
-#else
-    return b;
-#endif
     }
 
 unsigned char sapphire::decrypt(unsigned char b)

@@ -432,9 +432,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 #ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
-	char ch = target.c_str()[strlen(target.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
+	if (!target.endsWith("/") && !target.endsWith("\\")) {
 		target.append('/');
+	}
 	target.append("lucene");
 #endif
 	if (justCheckIfSupported) {
@@ -511,7 +511,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			is = new IndexSearcher(ir);
 			(*percent)(10, percentUserData);
 
-			standard::StandardAnalyzer analyzer;
+			const TCHAR *stopWords[] = { 0 };
+			standard::StandardAnalyzer analyzer(stopWords);
 			lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
 			q = QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
 			(*percent)(20, percentUserData);
@@ -978,9 +979,9 @@ bool SWModule::hasSearchFramework() {
 void SWModule::deleteSearchFramework() {
 #ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
-	char ch = target.c_str()[strlen(target.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
+	if (!target.endsWith("/") && !target.endsWith("\\")) {
 		target.append('/');
+	}
 	target.append("lucene");
 
 	FileMgr::removeDir(target.c_str());
@@ -996,6 +997,14 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWKey *searchKey = 0;
 	SWKey textkey;
 	SWBuf c;
+	const int MAX_CONV_SIZE = 1024 * 1024;
+	SWBuf target = getConfigEntry("AbsoluteDataPath");
+	if (!target.endsWith("/") && !target.endsWith("\\")) {
+		target.append('/');
+	}
+	target.append("lucene");
+	int status = FileMgr::createParent(target+"/dummy");
+	if (status) return -1;
 
 
 	// turn all filters to default values
@@ -1030,22 +1039,19 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		setKey(*searchKey);
 	}
 
-	RAMDirectory *ramDir = NULL;
-	IndexWriter *coreWriter = NULL;
-	IndexWriter *fsWriter = NULL;
-	Directory *d = NULL;
+	RAMDirectory *ramDir = 0;
+	IndexWriter *coreWriter = 0;
+	IndexWriter *fsWriter = 0;
+	Directory *d = 0;
 
-	standard::StandardAnalyzer *an = new standard::StandardAnalyzer();
-	SWBuf target = getConfigEntry("AbsoluteDataPath");
+	const TCHAR *stopWords[] = { 0 };
+	standard::StandardAnalyzer *an = new standard::StandardAnalyzer(stopWords);
 	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
-	char ch = target.c_str()[strlen(target.c_str())-1];
-	if ((ch != '/') && (ch != '\\'))
-		target.append('/');
-	target.append("lucene");
-	FileMgr::createParent(target+"/dummy");
 
 	ramDir = new RAMDirectory();
 	coreWriter = new IndexWriter(ramDir, an, true);
+	coreWriter->setMaxFieldLength(MAX_CONV_SIZE);
+
 
 
 
@@ -1075,7 +1081,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWBuf proxLem;
 	SWBuf strong;
 
-	const short int MAX_CONV_SIZE = 2047;
 	wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
 
 	char err = Error();
@@ -1306,7 +1311,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		fsWriter = new IndexWriter( d, an, false);
 	} else {
 		d = FSDirectory::getDirectory(target.c_str(), true);
-		fsWriter = new IndexWriter( d ,an, true);
+		fsWriter = new IndexWriter(d, an, true);
 	}
 
 	Directory *dirs[] = { ramDir, 0 };

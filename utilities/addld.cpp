@@ -92,6 +92,7 @@ int main(int argc, char **argv) {
       mod.setEntry(buffer, entrysize);	// save text to module at current position
     }
     else if (compress) {
+#ifndef EXCLUDEZLIB
       char buffer[1048576];  //this is the max size of any entry
       zLD mod(argv[2], 0, 0, 200, new ZipCompress());	// open our datapath with our RawText driver.
       SWKey* key = mod.CreateKey();
@@ -109,6 +110,10 @@ int main(int argc, char **argv) {
       
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
       mod.setEntry(buffer, entrysize);	// save text to module at current position
+#else
+      fprintf(stderr, "error: %s: SWORD library not built with ZIP compression support.\n", argv[0]);
+      exit(-3);
+#endif
     }
     else {
       char buffer[65536];  //this is the max size of any entry

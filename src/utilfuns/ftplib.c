@@ -325,7 +325,8 @@ static int writeline(char *buf, int len, netbuf *nData)
                       w = net_write(nData->handle, nbp, FTPLIB_BUFSIZ);
                       if (w != FTPLIB_BUFSIZ)
                         {
-                            printf("net_write(1) returned %d, errno = %d\n", w, errno);
+                            if (ftplib_debug > 1)
+                                printf("net_write(1) returned %d, errno = %d\n", w, errno);
                             return(-1);
                         }
                       nb = 0;
@@ -339,7 +340,8 @@ static int writeline(char *buf, int len, netbuf *nData)
                 w = net_write(nData->handle, nbp, FTPLIB_BUFSIZ);
                 if (w != FTPLIB_BUFSIZ)
                   {
-                      printf("net_write(2) returned %d, errno = %d\n", w, errno);
+                        if (ftplib_debug > 1)
+                            printf("net_write(2) returned %d, errno = %d\n", w, errno);
                       return(-1);
                   }
                 nb = 0;
@@ -353,7 +355,8 @@ static int writeline(char *buf, int len, netbuf *nData)
           w = net_write(nData->handle, nbp, nb);
           if (w != nb)
             {
-                printf("net_write(3) returned %d, errno = %d\n", w, errno);
+                if (ftplib_debug > 1)
+                    printf("net_write(3) returned %d, errno = %d\n", w, errno);
                 return(-1);
             }
       }
@@ -409,7 +412,8 @@ GLOBALDEF void FtpInit(void)
     int err;
     wVersionRequested = MAKEWORD(1,1);
     if ((err = WSAStartup(wVersionRequested,&wsadata)) != 0)
-        fprintf(stderr,"Network failed to start: %d\n",err);
+        if (ftplib_debug > 1)
+            fprintf(stderr,"Network failed to start: %d\n",err);
 #endif
 }
 
@@ -538,7 +542,8 @@ GLOBALDEF int FtpConnect(const char *host, netbuf **nControl)
           return 0;
       } 
 
-    printf("connected\n");
+    if (ftplib_debug > 1)
+        printf("connected\n");
 
       //set original flags
     fcntl( sControl, F_SETFL, oldflags);
@@ -833,7 +838,8 @@ static int FtpAcceptConnection(netbuf *nData, netbuf *nControl)
     FD_SET(nData->handle, &mask);
     tv.tv_usec = 0;
     tv.tv_sec = ACCEPT_TIMEOUT;
-    printf("<<<<<<<<<<<<<<<<%d\n",ACCEPT_TIMEOUT);
+    if (ftplib_debug > 1)
+        printf("<<<<<<<<<<<<<<<<%d\n",ACCEPT_TIMEOUT);
     i = nControl->handle;
     if (i < nData->handle)
         i = nData->handle;
@@ -1223,7 +1229,8 @@ static int FtpXfer(const char *localfile, const char *path,
           while ((l = fread(dbuf, 1, FTPLIB_BUFSIZ, local)) > 0)
               if ((c = FtpWrite(dbuf, l, nData)) < l)
                 {
-                    printf("short write: passed %d, wrote %d\n", l, c);
+                    if (ftplib_debug > 1)
+                        printf("short write: passed %d, wrote %d\n", l, c);
                     rv = 0;
                     break;
                 }

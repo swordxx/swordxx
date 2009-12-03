@@ -1,12 +1,22 @@
 API ChangeLog 
 
 
+02-Dec-2009	Troy A. Griffitts <scribe@crosswire.org>
+	Updated installmgr util to allow multiple
+		commands and update dl progress
+	Added progress reporting to FtpLib transport
+	Added ability to cancel during file transport,
+		per Eeli's suggestion
+	Increased clucene buffer size - mwtalbert
+	On clucene index creation, error out on no
+		write perms - mwtalbert
+
 12-Oct-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added initial impl for CurlHTTPTransport submitted
 		by Nic Carter <niccarter@mac.com>
 	Added initial Android ifdefs to get things compiling
-		under the Android NDK.
-	Added bindings/java-jni for Android development.
+		under the Android NDK
+	Added bindings/java-jni for Android development
 
 09-Aug-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added checks for Hebrew and Arabic when stripping

@@ -11,7 +11,7 @@ swicuSOURCES += translit_Any_Latin1.txt
 swicuSOURCES += translit_Any_Latex.txt
 swicuSOURCES += translit_swordindex.txt
 
-if ICU
+if HAVE_ICU
 swicu_DATA = $(swicuSOURCES:.txt=.res)
 else
 swicu_DATA =
@@ -26,7 +26,7 @@ SUFFIXES = .txt .res .dat
 	$(GENRB) -s . -d . $<
 
 
-if ICU
+if HAVE_ICU
 swicudir = $(pkglibdir)/${VERSION}_icu_${ICU_VER}
 
 #installswicu_DATA: $(swicu_DATA)

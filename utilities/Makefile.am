@@ -7,35 +7,17 @@ stepdump step2vpl gbfidx modwrite addvs emptyvss \
 addgb genbookutil treeidxutil
 
 bin_PROGRAMS = mod2imp mod2osis osis2mod tei2mod vs2osisref vs2osisreftxt mod2vpl \
-	mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs
-
-#if INSTALLMGR
-#IMGRPROG =
-#else
-#IMGRPROG = 
-#endif
+	mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs addld imp2ld
 
 
-#if ICU
-#ICUPROG = 
-#else
-#ICUPROG =
-#endif
-
-if ZLIB
-ZLIBPROG = mod2zmod addld imp2ld
+if HAVE_LIBZ
+ZLIBPROG = mod2zmod
 else
 ZLIBPROG =
 endif
 
-
-
-#noinst_PROGRAMS += $(ICUPROG)
 bin_PROGRAMS += $(ZLIBPROG) 
-#$(IMGRPROG)
 
-if ICU
-endif
 
 cipherraw_SOURCES = cipherraw.cpp
 lexdump_SOURCES = lexdump.c
@@ -61,14 +43,13 @@ vs2osisref_SOURCES = vs2osisref.cpp
 vs2osisreftxt_SOURCES = vs2osisreftxt.cpp
 genbookutil_SOURCES = genbookutil.cpp
 treeidxutil_SOURCES = treeidxutil.cpp
-
-installmgr_SOURCES = installmgr.cpp
-#installmgr_LDADD = -lcurl $(CURL_LIBS) $(LDADD)
-
-if ZLIB
-mod2zmod_SOURCES = mod2zmod.cpp
 addld_SOURCES = addld.cpp
 imp2ld_SOURCES = imp2ld.cpp
+
+installmgr_SOURCES = installmgr.cpp
+
+if HAVE_LIBZ
+mod2zmod_SOURCES = mod2zmod.cpp
 endif
 
 EXTRA_DIST = 

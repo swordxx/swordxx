@@ -125,7 +125,11 @@ int main(int argc, char **argv) {
 	if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
 	if (compType == "ZIP") {
+#ifndef EXCLUDEZLIB
 		compressor = new ZipCompress();
+#else
+		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libzip is available when compiling SWORD library");
+#endif
 	}
 	else if (compType == "LZSS") {
 		compressor = new LZSSCompress();

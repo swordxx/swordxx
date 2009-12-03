@@ -75,7 +75,9 @@ pkginclude_HEADERS += $(swincludedir)/rawstr.h
 pkginclude_HEADERS += $(swincludedir)/rawstr4.h
 pkginclude_HEADERS += $(swincludedir)/rawtext.h
 pkginclude_HEADERS += $(swincludedir)/rawverse.h
+if MINGW
 pkginclude_HEADERS += $(swincludedir)/regex.h
+endif
 pkginclude_HEADERS += $(swincludedir)/roman.h
 pkginclude_HEADERS += $(swincludedir)/rtfhtml.h
 pkginclude_HEADERS += $(swincludedir)/sapphire.h

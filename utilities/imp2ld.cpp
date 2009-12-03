@@ -84,8 +84,13 @@ int main(int argc, char **argv) {
 
 	switch (mode) {
 	case 3:
+#ifndef EXCLUDEZLIB
 		zLD::createModule(modname);
 		mod = new zLD(modname, 0, 0, blockCount, new ZipCompress());
+#else
+		fprintf(stderr, "ERROR: %s: SWORD library not compiled with ZIP compression support.\n\tBe sure libzip is available when compiling SWORD library", *argv);
+		exit(-2);
+#endif
 		break;
 	case 2:
 		RawLD::createModule(modname);
