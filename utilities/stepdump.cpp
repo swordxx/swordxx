@@ -15,10 +15,12 @@
  *
  */
 
-#include <iostream>
-#include <string>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
+
+#include <iostream>
+#include <string>
 
 #ifndef __GNUC__
 #include <io.h>
