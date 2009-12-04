@@ -29,6 +29,7 @@ OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 
 OPTIONS="--with-icu $OPTIONS"
+#OPTIONS="--with-icusword $OPTIONS"
 #OPTIONS="--without-clucene $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
 

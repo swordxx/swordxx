@@ -42,6 +42,8 @@ AC_ARG_WITH(zlib,
 	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
 AC_ARG_WITH(icu,
 	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=no)]),,with_icu=no)
+AC_ARG_WITH(icusword,
+	AC_HELP_STRING([--with-icusword],[use custom SWORD ICU (default=no)]),,with_icusword=no)
 AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
 #AC_ARG_WITH(installmgr,
@@ -181,8 +183,10 @@ else
 fi
 
 
-# why?  what is this for?
-with_swordicu=$with_icu
+if test x$with_icusword = xyes; then
+AM_CXXFLAGS="$AM_CXXFLAGS -D_ICUSWORD_"
+AM_CFLAGS="$AM_CFLAGS -D_ICUSWORD_"
+fi
 
 
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
@@ -260,6 +264,7 @@ fi
 # ---------------------------------------------------------------------
 AC_SUBST(with_zlib)
 AC_SUBST(with_icu)
+AC_SUBST(with_icusword)
 AC_SUBST(with_conf)
 AC_SUBST(dir_confdef)
 AC_SUBST(CC)
@@ -284,7 +289,7 @@ AC_SUBST(target_mingw32)
 # don't #ifdef in .cpp files HAVE_ stuff because non-ac compiles won't be able to switch them since we include config.h
 AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
 AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
-AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_swordicu = xyes)
+AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
 AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
 
 AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
@@ -312,7 +317,7 @@ COLORED_ECHO([    DEBUG:            $enable_debug])
 COLORED_ECHO([    PROFILE:          $enable_profile])
 COLORED_ECHO([    LIBZ:             $with_zlib])
 COLORED_ECHO([    ICU:              $with_icu])
-COLORED_ECHO([    ICUSWORD:         $with_swordicu])
+COLORED_ECHO([    ICUSWORD:         $with_icusword])
 COLORED_ECHO([    CURL:             $with_curl])
 COLORED_ECHO([    INTERNAL FTPLIB:  $with_internalftplib])
 COLORED_ECHO([    CLUCENE:          $with_clucene])
