@@ -460,28 +460,18 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
 
 
 SWModule *getModule(JNIEnv *env, jobject me) {
-SWLog::getSystemLog()->logDebug("getModule start");
 
 	init(); 
 
 	SWModule *module = 0;
 	jclass clazzSWModule = env->FindClass("org/crosswire/android/sword/SWModule");
-SWLog::getSystemLog()->logDebug("getModule got SWModule clazz");
 	jfieldID fieldID = env->GetFieldID(clazzSWModule, "name", "Ljava/lang/String;");
-SWLog::getSystemLog()->logDebug("getModule got SWModule::name fid");
 	jfieldID sourceFieldID = env->GetFieldID(clazzSWModule, "remoteSourceName", "Ljava/lang/String;");
-SWLog::getSystemLog()->logDebug("getModule got SWModule::remoteSourceName fid");
 	jstring modNameJS = (jstring)env->GetObjectField(me, fieldID);
-SWLog::getSystemLog()->logDebug("getModule got SWModule::name");
 	jstring sourceNameJS = (jstring)env->GetObjectField(me, sourceFieldID);
-SWLog::getSystemLog()->logDebug("getModule got SWModule::remoteSourceName");
      const char *modName = (modNameJS?env->GetStringUTFChars(modNameJS, NULL):0);
-SWLog::getSystemLog()->logDebug("getModule got SWModule::modName const char *");
      const char *sourceName = (sourceNameJS?env->GetStringUTFChars(sourceNameJS, NULL):0);
-SWLog::getSystemLog()->logDebug("getModule got SWModule::sourceName const char *");
-SWLog::getSystemLog()->logDebug("getModule %s %s", (sourceName?sourceName:"null"), (modName?modName:"null"));
 	if (sourceName && *sourceName) {
-SWLog::getSystemLog()->logDebug("getModule remote");
 		initInstall();
 		InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
 		if (source == installMgr->sources.end()) {
@@ -492,7 +482,6 @@ SWLog::getSystemLog()->logDebug("getModule remote");
 	else module = mgr->getModule(modName);
      if (modName) env->ReleaseStringUTFChars(modNameJS, modName);
      if (sourceName) env->ReleaseStringUTFChars(sourceNameJS, sourceName);
-SWLog::getSystemLog()->logDebug("getModule end");
 	return module;
 }
 
@@ -695,6 +684,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 		}
 
 		ret = (jobjectArray) env->NewObjectArray(results.size(), clazzString, NULL);
+
+SWLog::getSystemLog()->logDebug("getEntryAttributes: size returned: %d", results.size());
 
 		for (int i = 0; i < results.size(); i++) {
 			if (filtered) {
