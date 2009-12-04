@@ -84,8 +84,8 @@ int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, do
 SWLog::getSystemLog()->logDebug("CURLFTPTransport report progress: totalSize: %ld; xfered: %ld\n", (long)dltotal, (long)dlnow);
 		if (pd->sr) {
 			pd->sr->statusUpdate(dltotal, dlnow);
-			if (*(pd->term)) return 1;
 		}
+		if (*(pd->term)) return 1;
 	}
 	return 0;
 }

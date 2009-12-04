@@ -46,8 +46,8 @@ int my_fprogress(netbuf *nControl, int xfered, void *arg) {
 SWLog::getSystemLog()->logDebug("FTPLibFTPTransport report progress: totalSize: %ld; xfered: %d\n", pd->totalSize, xfered);
 		if (pd->sr) {
 			pd->sr->statusUpdate(pd->totalSize, xfered);
-			if (*(pd->term)) return 0;
 		}
+		if (*(pd->term)) return 0;
 	}
 	return 1;
 }
