@@ -72,7 +72,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
-				AdditionalLibraryDirectories="../../../../curl/lib/Release"
+				AdditionalLibraryDirectories="../../../../curl/lib/LIB-Release"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -155,7 +155,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib icuuc.lib icuin.lib icudt.lib"
-				AdditionalLibraryDirectories="../../../../curl/lib/Release;../../../../icu-sword/lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/LIB-Release;../../../../icu-sword/lib"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -237,7 +237,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
-				AdditionalLibraryDirectories="../../../../curl/lib/Debug"
+				AdditionalLibraryDirectories="../../../../curl/lib/LIB-Release"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
@@ -319,7 +319,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib icuuc.lib icuin.lib icudt.lib"
-				AdditionalLibraryDirectories="../../../../curl/lib/Release;../../../../icu-sword/lib"
+				AdditionalLibraryDirectories="../../../../curl/lib/LIB-Release;../../../../icu-sword/lib"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 			/>
