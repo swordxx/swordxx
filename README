@@ -6,8 +6,8 @@ Get the latest source and info at:
 
 UNIX DEVELOPERS
 		You can try a './configure' (or optionally './usrinst.sh'
-		for normal user configure options), then 'make' from this directory.
-		This should compile everthing needed.  You may type
+		for a useful development options configuration), then 'make' from
+		this directory.  This should compile everthing needed.  You may type
 		'./configure --help' to see a list of options.
 		If all compiles fine, a 'make install' (as root, probably) will
 		install libs to your system and you may begin using the library.

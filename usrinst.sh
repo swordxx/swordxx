@@ -1,6 +1,6 @@
 #!/bin/sh
 #******************************************************************************
-# Convenience script specifying most common options to ./configure
+# Convenience script specifying most common development options to ./configure
 #
 # $Id$
 #
