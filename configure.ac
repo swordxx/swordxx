@@ -41,7 +41,7 @@ ACX_CLUCENE
 AC_ARG_WITH(zlib,
 	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
 AC_ARG_WITH(icu,
-	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=no)]),,with_icu=no)
+	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=yes)]),,with_icu=yes)
 AC_ARG_WITH(icusword,
 	AC_HELP_STRING([--with-icusword],[use custom SWORD ICU (default=no)]),,with_icusword=no)
 AC_ARG_WITH(conf,
@@ -70,7 +70,7 @@ AC_ARG_ENABLE(profile,
 AC_ARG_ENABLE(profilefn,
 	AC_HELP_STRING([--enable-profilefn],[allow functioncheck profiling (default=no)]),,enable_profilefn=no)
 AC_ARG_ENABLE(tests,
-	AC_HELP_STRING([--enable-tests],[build test programs (default=no)]),,enable_tests=no)
+	AC_HELP_STRING([--enable-tests],[build test programs (default=yes)]),,enable_tests=yes)
 AC_ARG_ENABLE(utilities,
 	AC_HELP_STRING([--enable-utilities],[build utilities (default=yes)]),,enable_utilities=yes)
 AC_ARG_ENABLE(examples,
@@ -315,6 +315,9 @@ echo
 COLORED_ECHO([Configuration:])
 COLORED_ECHO([    DEBUG:            $enable_debug])
 COLORED_ECHO([    PROFILE:          $enable_profile])
+COLORED_ECHO([    BUILD TESTS:      $enable_tests])
+COLORED_ECHO([    BUILD EXAMPLES:   $enable_examples])
+COLORED_ECHO([    BUILD UTILITIES:  $enable_utilities])
 COLORED_ECHO([    LIBZ:             $with_zlib])
 COLORED_ECHO([    ICU:              $with_icu])
 COLORED_ECHO([    ICUSWORD:         $with_icusword])
