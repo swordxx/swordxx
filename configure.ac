@@ -17,6 +17,16 @@ AM_CONFIG_HEADER(include/config.h)
 
 AC_CONFIG_MACRO_DIR([m4])
 
+case $host_os in
+     mingw*)
+	   # if we don't have system regex, use SWORD's copy
+           AC_CHECK_LIB(regex, regexec,,target_mingw32="yes")
+	   # both lines necessary to convince gcc to build dll
+	   LIBS="$LIBS -no-undefined";
+	   export lt_cv_deplibs_check_method=pass_all;
+	   ;;
+esac
+
 # ---------------------------------------------------------------------
 # Check Programs
 # ---------------------------------------------------------------------
