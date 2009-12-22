@@ -37,8 +37,8 @@
 #include <canon_nrsva.h>	// NRSVA + Apocrypha v11n system
 #include <canon_synodal.h>	// Russian Synodal v11n system
 #include <canon_vulg.h>		// Vulgate v11n system
-#include <canon_synodal.h>	// German v11n system
-#include <canon_synodal.h>	// Luther v11n system
+#include <canon_german.h>	// German v11n system
+#include <canon_luther.h>	// Luther v11n system
 
 using std::vector;
 using std::map;
