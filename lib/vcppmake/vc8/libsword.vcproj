@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;../../../src/utilfuns/win32;../../../../curl/include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -127,7 +127,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D _CRT_SECURE_NO_DEPRECATE"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;&quot;../../../../icu-sword/include&quot;;../../../src/utilfuns/win32;../../../../curl/include"
 				PreprocessorDefinitions="_DEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -209,7 +209,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;../../../src/utilfuns/win32;../../../../curl/include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -292,7 +292,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;../../../../icu-sword/include&quot;;../../../include;../../../src/utilfuns/win32;../../../../curl/include"
+				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;&quot;../../../../icu-sword/include&quot;;../../../src/utilfuns/win32;../../../../curl/include"
 				PreprocessorDefinitions="NDEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -6614,10 +6614,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\rawverse4.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\regex.h"
 				>
 			</File>
 			<File
