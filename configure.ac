@@ -19,8 +19,6 @@ AC_CONFIG_MACRO_DIR([m4])
 
 case $host_os in
      mingw*)
-	   # if we don't have system regex, use SWORD's copy
-           AC_CHECK_LIB(regex, regexec,,target_mingw32="yes")
 	   # both lines necessary to convince gcc to build dll
 	   LIBS="$LIBS -no-undefined";
 	   export lt_cv_deplibs_check_method=pass_all;
@@ -56,16 +54,12 @@ AC_ARG_WITH(icusword,
 	AC_HELP_STRING([--with-icusword],[use custom SWORD ICU (default=no)]),,with_icusword=no)
 AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
-#AC_ARG_WITH(installmgr,
-#	AC_HELP_STRING([--with-installmgr],[build install manager support: 
-#	curl=using libcurl, 
-#	ftplib=using external ftplib, 
-#	internal=using internal ftplib 
-#	(default=internal)]),,with_installmgr=internal)
 AC_ARG_WITH(curl,
 	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
 #AC_ARG_WITH(lucene,
 #	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
+AC_ARG_WITH([internalregex],
+	AS_HELP_STRING([--with-internalregex], [Compile using SWORD's internal copy of regex]))
 
 
 # ---------------------------------------------------------------------
@@ -118,11 +112,23 @@ else
 	with_zlib="no"
 fi
 
-if test "x$with_zlib" = xno; then
+if test x$with_zlib = xno; then
 	AM_CFLAGS="$AM_CFLAGS -DEXCLUDEZLIB"
 	AM_CXXFLAGS="$AM_CXXFLAGS -DEXCLUDEZLIB"
 fi
 
+AS_IF([test "x$with_internalregex" = "xyes"],
+      [have_systemregex="no"],
+      [AC_SEARCH_LIBS(regexec, regex, [have_systemregex="yes"], [have_systemregex="no"])])
+
+AS_IF([test "x$have_systemregex" = "xyes"],
+      [with_internalregex="no"
+       AC_MSG_NOTICE([Using system regex.h])],
+      [with_internalregex="yes"
+       AS_IF([test "x$with_internalregex" = "xno"],
+      	[AC_MSG_ERROR([System regex forced but not found])],
+	[AC_MSG_NOTICE([Using internal regex.h])])])
+ 
 
 # ---------------------------------------------------------------------
 # Find CppUnit
@@ -281,7 +287,10 @@ AC_SUBST(CC)
 AC_SUBST(ICU_VER)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
+
+# TODO: WHY ARE WE SUBST CXXFLAGS BUT NOT CFLAGS?  And why, when I uncomment out the cflags subst do we get compile errors?
 AC_SUBST(AM_CXXFLAGS)
+#AC_SUBST(AM_CFLAGS)
 
 AC_SUBST(target_cpu)
 AC_SUBST(target_vendor)
@@ -302,12 +311,12 @@ AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
 AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
 
-AM_CONDITIONAL(MINGW, test x$target_mingw32 = xyes)
 AM_CONDITIONAL(USELUCENE, test x$with_clucene = xyes)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
 AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
+AM_CONDITIONAL(USE_INTERNAL_REGEX, test x$with_internalregex = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
 AM_CONDITIONAL(USE_PKGCONF, test x$use_pkgconfig = xyes)
 AM_CONDITIONAL(BUILDTESTS, test x$enable_tests = xyes)
@@ -333,6 +342,7 @@ COLORED_ECHO([    ICU:              $with_icu])
 COLORED_ECHO([    ICUSWORD:         $with_icusword])
 COLORED_ECHO([    CURL:             $with_curl])
 COLORED_ECHO([    INTERNAL FTPLIB:  $with_internalftplib])
+COLORED_ECHO([    INTERNAL REGEX:   $with_internalregex])
 COLORED_ECHO([    CLUCENE:          $with_clucene])
 echo
 echo

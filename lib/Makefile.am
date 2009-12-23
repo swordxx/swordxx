@@ -1,6 +1,13 @@
 AUTOMAKE_OPTIONS = 1.6
-AM_CPPFLAGS = -I$(top_srcdir)/include -I$(includedir) 
-AM_CPPFLAGS += -DUSE_AUTOTOOLS -DUNIX -Dunix -D__unix__
+
+AM_CPPFLAGS = -I$(top_srcdir)/include
+
+#TODO: Where else do we need this?
+if USE_INTERNAL_REGEX
+AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
+endif
+
+AM_CPPFLAGS += -I$(includedir) -DUSE_AUTOTOOLS -DUNIX -Dunix -D__unix__
 
 # Global config directory
 globalconfdir := @sysconfdir@

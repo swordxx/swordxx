@@ -1,5 +1,8 @@
 AUTOMAKE_OPTIONS = 1.6
 INCLUDES = -I $(top_srcdir)/include
+if USE_INTERNAL_REGEX
+INCLUDES += -I$(top_srcdir)/include/internal/regex
+endif
 LDADD = $(top_builddir)/lib/libsword.la
 
 noinst_PROGRAMS = lookup search threaded_search listoptions verserangeparse outplain outrender

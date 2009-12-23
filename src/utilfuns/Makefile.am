@@ -29,7 +29,7 @@ endif
 libsword_la_SOURCES += $(UNTGZ) 
 libsword_la_SOURCES += $(ftpsrc)
 
-if MINGW
+if USE_INTERNAL_REGEX
 SWREGEX = $(utilfunsdir)/regex.c
 else
 SWREGEX =
