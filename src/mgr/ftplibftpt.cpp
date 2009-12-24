@@ -106,7 +106,7 @@ char FTPLibFTPTransport::assureLoggedIn() {
 // yeah yeah, I know I know.  Compile with curl support if you don't like it
 #pragma GCC diagnostic ignored "-Wall"
 void my_tmpnam(char *tmpName) {
-	tmpnam(tmpName);
+	tmpName = tmpnam(tmpName);
 }
 #pragma GCC diagnostic warning "-Wall"
 

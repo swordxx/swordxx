@@ -159,7 +159,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 					SWBuf type = tag.getAttribute("type");
 
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					VerseKey *vkey;
+					VerseKey *vkey = 0;
 					// see if we have a VerseKey * or descendant
 					SWTRY {
 						vkey = SWDYNAMIC_CAST(VerseKey, u->key);

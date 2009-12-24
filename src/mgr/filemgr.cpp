@@ -282,20 +282,23 @@ signed char FileMgr::trunc(FileDesc *file) {
 		file->seek(0, SEEK_SET);
 		while (size > 0) {	 
 			bytes = file->read(nibble, 32767);
-			write(fd, nibble, (bytes < size)?bytes:size);
+			bytes = (bytes < size)?bytes:size;
+			if (write(fd, nibble, bytes) != bytes) { break; }
 			size -= bytes;
 		}
-		// zero out the file
-		::close(file->fd);
-		file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
-		::close(file->fd);
-		file->fd = -77;	// force file open by filemgr
-		// copy tmp file back (dumb, but must preserve file permissions)
-		lseek(fd, 0, SEEK_SET);
-		do {
-			bytes = read(fd, nibble, 32767);
-			file->write(nibble, bytes);
-		} while (bytes == 32767);
+		if (size < 1) {
+			// zero out the file
+			::close(file->fd);
+			file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+			::close(file->fd);
+			file->fd = -77;	// force file open by filemgr
+			// copy tmp file back (dumb, but must preserve file permissions)
+			lseek(fd, 0, SEEK_SET);
+			do {
+				bytes = read(fd, nibble, 32767);
+				file->write(nibble, bytes);
+			} while (bytes == 32767);
+		}
 		
 		::close(fd);
 		::close(file->fd);
@@ -415,7 +418,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 
 	do {
 		len = read(sfd, buf, 4096);
-		write(dfd, buf, len);
+		if (write(dfd, buf, len) != len) break;
 	}
 	while(len == 4096);	
 	::close(dfd);
