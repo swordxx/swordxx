@@ -194,11 +194,17 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					outText(val, buf, u);
 				}
 				if ((attrib = tag.getAttribute("gloss"))) {
+					// I'm sure this is not the cleanest way to do it, but it gets the job done
+					// for rendering ruby chars properly ^_^
+					buf -= lastText.length();
+					
+					outText("<ruby><rb>", buf, u);
+					outText(lastText, buf, u);
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					outText("(", buf, u);
+					outText("</rb><rp>(</rp><rt>", buf, u);
 					outText(val, buf, u);
-					outText(")", buf, u);
+					outText("</rt><rp>)</rp></ruby>", buf, u);
 				}
 				if (!morphFirst) {
 					processLemma(u->suspendTextPassThru, tag, buf);
