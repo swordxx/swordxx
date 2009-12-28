@@ -992,12 +992,8 @@ void SWModule::deleteSearchFramework() {
 
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
+
 #ifdef USELUCENE
-	SWKey *saveKey = 0;
-	SWKey *searchKey = 0;
-	SWKey textkey;
-	SWBuf c;
-	const int MAX_CONV_SIZE = 1024 * 1024;
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	if (!target.endsWith("/") && !target.endsWith("\\")) {
 		target.append('/');
@@ -1006,6 +1002,13 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	int status = FileMgr::createParent(target+"/dummy");
 	if (status) return -1;
 
+	SWKey *saveKey = 0;
+	SWKey *searchKey = 0;
+	SWKey textkey;
+	SWBuf c;
+
+	const int MAX_CONV_SIZE = 1024 * 1024;
+	wchar_t *wcharBuffer = new wchar_t[MAX_CONV_SIZE + 1];
 
 	// turn all filters to default values
 	StringList filterSettings;
@@ -1080,8 +1083,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWBuf proxBuf;
 	SWBuf proxLem;
 	SWBuf strong;
-
-	wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
 
 	char err = Error();
 	while (!err) {
@@ -1341,6 +1342,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
 		(*filter)->setOptionValue(*origVal++);
 	}
+
+	delete [] wcharBuffer;
 
 	return 0;
 #else
