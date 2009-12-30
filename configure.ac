@@ -299,6 +299,10 @@ AC_SUBST(target_os)
 AC_SUBST(target_system)
 AC_SUBST(target_mingw32)
 
+AC_SUBST(CURL_LIBS)
+AC_SUBST(CLUCENE_LIBS)
+AC_SUBST(ICU_LIBS)
+AC_SUBST(ICU_IOLIBS)
 
 
 # ---------------------------------------------------------------------
