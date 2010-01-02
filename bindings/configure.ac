@@ -5,7 +5,7 @@
 # Version change: Change line 8 only !
 # Change it immediately after a release
 
-AC_INIT(swordbindings, 1.5.9, sword-bugs@crosswire.org)
+AC_INIT(swordbindings, 1.6.1, sword-bugs@crosswire.org)
 AC_CONFIG_SRCDIR([flatapi.cpp])
 AC_PREREQ(2.52)
 AC_REVISION($Revision$)

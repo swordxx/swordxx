@@ -223,8 +223,11 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 
 std::list <SWBuf> LocaleMgr::getAvailableLocales() {
 	std::list <SWBuf> retVal;
-	for (LocaleMap::iterator it = locales->begin(); it != locales->end(); it++) 
-		retVal.push_back((*it).second->getName());
+	for (LocaleMap::iterator it = locales->begin(); it != locales->end(); it++) {
+		if (strcmp(it->second->getName(), "locales")) {
+			retVal.push_back((*it).second->getName());
+		}
+	}
 
 	return retVal;
 }

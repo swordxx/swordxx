@@ -30,8 +30,9 @@ int main(int argc, char **argv) {
 
 	LocaleMgr lm;
 
-	std::cout << lm.translate(argv[1], argv[2]) << "\n";
+	std::cout << lm.translate(argv[2], argv[1]) << "\n";
 
+/*
 	VerseKey bla;
 	bla = "James 1:19";
 
@@ -45,6 +46,7 @@ int main(int argc, char **argv) {
 	key2.setLocale("en");
 	ListKey list = key2.ParseVerseList("Luke 3:23-28",key2, true);
 	std::cout << list << std::endl;
+*/
 
 
 }

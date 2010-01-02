@@ -1,6 +1,14 @@
 API ChangeLog 
 
 
+* Release 1.6.1 *
+
+01-Jan-2010	Troy A. Griffitts <scribe@crosswire.org>
+	Added locales.d/locales.conf - a special locale which
+		can be queried for localize and English lang names
+	New supported v11n systems: german kjva leningrad luther
+		mt nrsva nrsv synodal vulg <chrislit@crosswire.org>
+
 02-Dec-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Updated installmgr util to allow multiple
 		commands and update dl progress

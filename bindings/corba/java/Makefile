@@ -1,9 +1,17 @@
+#CHANGE THESE TO MATCH YOUR SYSTEM
 TOMCAT_HOME=/opt/tomcat
-#SERVLET_LIB=${TOMCAT_HOME}/common/lib/servlet-api.jar
-SERVLET_LIB=${TOMCAT_HOME}/lib/servlet-api.jar
 instdir=${TOMCAT_HOME}/webapps/swordweb
+
+# Typically you'll point this to your home directory, e.g.
 #instdir=/home/swordweb/livehtml/webapp
 #instdir=/home/scribe/src/swordweb/webapp
+
+SERVLET_LIB=${TOMCAT_HOME}/lib/servlet-api.jar
+
+# Older tomcat uses this path
+#SERVLET_LIB=${TOMCAT_HOME}/common/lib/servlet-api.jar
+
+
 all: src/org/crosswire/sword/orb/SWMgr.java classes/org/crosswire/sword/orb/SwordOrb.class
 
 src/org/crosswire/sword/orb/SWMgr.java: ../swordorb.idl
