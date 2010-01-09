@@ -1323,7 +1323,7 @@ void processOSIS(istream& infile) {
 	bool intoken = false;
 	bool inWhitespace = false;
 	bool seeingSpace = false;
-	char curChar = '\0';
+	unsigned char curChar = '\0';
 
 	while (infile.good()) {
 		
