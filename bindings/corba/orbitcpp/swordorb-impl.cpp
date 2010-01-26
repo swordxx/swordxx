@@ -290,18 +290,26 @@ StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *lev
 void SWModule_impl::setKeyText(const char *key) throw(CORBA::SystemException) {
 	sword::SWKey *key = delegate->getKey();
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
-	if (vkey && (*keyText=='+' ||*keyText=='-')) {
-		if (!stricmp(keyText+1, "book")) {
-			vkey->setBook(vkey->getBook() + ((*keyText=='+')?1:-1));
-			return;
+	if (vkey) {
+		if ((*keyText=='+' || *keyText=='-')) {
+			if (!stricmp(keyText+1, "book")) {
+				vkey->setBook(vkey->getBook() + ((*keyText=='+')?1:-1));
+				return;
+			}
+			else if (!stricmp(keyText+1, "chapter")) {
+				vkey->setChapter(vkey->getChapter() + ((*keyText=='+')?1:-1));
+				return;
+			}
 		}
-		else if (!stricmp(keyText+1, "chapter")) {
-			vkey->setChapter(vkey->getChapter() + ((*keyText=='+')?1:-1));
+		else if (*keyText=='=') {
+			vkey->Headings(true);
+			vkey->AutoNormalize(false);
+			vkey->setText(keyText+1);
 			return;
 		}
 	}
 
-	delegate->KeyText(key);
+	delegate->KeyText(keyText);
 }
 
 StringList *SWModule_impl::getKeyChildren() throw(CORBA::SystemException) {

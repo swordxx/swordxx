@@ -45,6 +45,31 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static final String GENBOOKS = "Generic Books";
 	public static final String DAILYDEVOS = "Daily Devotional";
 
+
+	public static final int DEBUG   = 9;
+	public static final int INFO    = 7;
+	public static final int WARN    = 5;
+	public static final int ERROR   = 2;
+	public static final int NONE    = 0;
+
+	// set this to your desired debug output level
+	public static int debugLevel = INFO;
+
+
+	static void log(int level, String message, Throwable e) {
+		if (debugLevel >= level) {
+			System.err.println(new Date() + " | " + message);
+			// some warnings give a stackstrace, but we don't want to
+			// see the stacktrace part unless our current run level is set to DEBUG
+			if (debugLevel >= DEBUG && e != null) {
+				System.err.println(e);
+				e.printStackTrace(System.err);
+			}
+		}
+	}
+
+
+
 	static java.util.Properties p = new java.util.Properties();
 	static {
 		p.setProperty("com.sun.CORBA.codeset.charsets", "0x05010001, 0x00010109");    // UTF-8, UTF-16
@@ -52,7 +77,7 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	}
 
 	static org.omg.CORBA.ORB orb = org.omg.CORBA_2_3.ORB.init(new String[]{}, p);
-	static Hashtable clients = new Hashtable();
+	static Hashtable<String, Vector<SwordOrb>> clients = new Hashtable<String, Vector<SwordOrb>>();
 	String ior = null;
 	String remoteAddr = null;
 	String localeName = null;
@@ -69,17 +94,22 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 
 		SWMgr retVal = null;
 		try {
-System.out.println("attaching...");
+log(INFO, "attaching...", null);
 			org.omg.CORBA.Object obj = orb.string_to_object(ior);
 			retVal = SWMgrHelper.narrow(obj);
-System.out.println("calling testConnection");
-			retVal.testConnection();
-System.out.println("testConnection successful");
+log(INFO, "calling testConnection", null);
+			try {
+				retVal.testConnection();
+log(INFO, "testConnection successful", null);
+			}
+			catch (Throwable e) {
+log(WARN, "We lost our ORB service.  No worries, it was likely just reaped by a cron to killall ORB services. We'll respawn another...", e);
+				retVal = null;
+			}
 		}
 		catch(Throwable e) {
-//			e.printStackTrace();
 			retVal = null;
-System.out.println("failed in attach");
+log(ERROR, "failed in attach", e);
 		}
 		return retVal;
 	}
@@ -93,7 +123,7 @@ System.out.println("failed in attach");
 	public void finalize () throws Throwable {
 		// shut down external process
 		try {
-System.out.println("calling finalize.");
+log(INFO, "calling finalize.", null);
 			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return property cuz we killed the orb! :)
@@ -112,7 +142,7 @@ int size = -1;
 size = orbs.size();
 				orbs.remove(this);
 			}
-System.out.println("calling valueUnbound. size before: " + size + "; size after: "+orbs.size());
+log(INFO, "calling valueUnbound. size before: " + size + "; size after: "+orbs.size(), null);
 			getSWMgrInstance().terminate();
 		}
 		catch (Exception e) {}	// we know this doesn't return properly cuz we killed the orb! :)
@@ -145,7 +175,7 @@ System.out.println("calling valueUnbound. size before: " + size + "; size after:
 			line = input.readLine();
 //		retVal = p.waitFor();
 			ior = line;
-System.out.println("Launched ORB, IOR: " + ior);
+log(INFO, "Launched ORB, IOR: " + ior, null);
 		}
 		catch (Exception e) {e.printStackTrace();}
 	}
@@ -169,18 +199,18 @@ System.out.println("Launched ORB, IOR: " + ior);
 		checkAccessAbuse();
 		SWMgr retVal = null;
 		try {
-System.out.println("trying to attach to running ORB");
+log(INFO, "trying to see if we have and attach to a running ORB", null);
 			retVal = attach();
 		}
 		catch(Exception e) {
-//			e.printStackTrace();
+log(ERROR, "exception attaching to running ORB", e);
 			retVal = null;
 		}
 		if (retVal == null) {
 			try {
-System.out.println("no ORB running; trying to launch");
+log(INFO, "no ORB running; trying to launch", null);
 				startOrb();
-System.out.println("trying to attach to newly launched ORB");
+log(INFO, "trying to attach to newly launched ORB", null);
 				retVal = attach();
 				if (retVal != null) {
 					if (localeName != null) {
@@ -209,11 +239,11 @@ System.out.println("trying to attach to newly launched ORB");
 		SwordOrb orb = (SwordOrb)session.getAttribute("SwordOrb");
 		String remoteAddr = request.getRemoteAddr();
 		if (orb == null) {
-System.out.println("No ORB found in session; constructing a new instance");
+log(INFO, "No ORB found in session; constructing a new instance", null);
 
-			Vector orbs = (Vector)clients.get(remoteAddr);
+			Vector<SwordOrb> orbs = clients.get(remoteAddr);
 			if (orbs == null) {
-				orbs = new Vector();
+				orbs = new Vector<SwordOrb>();
 				clients.put(remoteAddr, orbs);
 			}
 			if (orbs.size() < MAX_REMOTE_ADDR_CONNECTIONS) {
@@ -229,7 +259,7 @@ System.out.println("No ORB found in session; constructing a new instance");
 			else throw new Exception("Max Remote Addr Connections from: ["+remoteAddr+"]");
 		}
 		else {
-System.out.println("ORB found in session");
+log(INFO, "ORB found in session", null);
 		}
 		return orb;
 	}

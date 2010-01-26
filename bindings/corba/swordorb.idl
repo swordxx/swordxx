@@ -63,8 +63,11 @@ interface SWModule {
 	StringList    getEntryAttribute(in string level1, in string level2, in string level3, in boolean filtered);
 	StringList    parseKeyList(in string keyText);
 
-	// Special values handled for VerseKey modules: [+-][book|chapter]
+	// Special values handled for VerseKey modules:
+	//	[+-][book|chapter]	- [de|in]crement by chapter or book
 	//	(e.g.	"+chapter" will increment the VerseKey 1 chapter)
+	//	[=][key]		- position absolutely and don't normalize
+	//	(e.g.	"jn.1.0" for John Chapter 1 intro; "jn.0.0" For Book of John Intro)
 	void          setKeyText(in string key);
 
 	string        getKeyText();
