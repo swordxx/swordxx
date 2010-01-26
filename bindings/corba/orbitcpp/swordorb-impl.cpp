@@ -287,7 +287,7 @@ StringList *SWModule_impl::getEntryAttribute(const char *level1, const char *lev
 	return retVal;
 }
 
-void SWModule_impl::setKeyText(const char *key) throw(CORBA::SystemException) {
+void SWModule_impl::setKeyText(const char *keyText) throw(CORBA::SystemException) {
 	sword::SWKey *key = delegate->getKey();
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
