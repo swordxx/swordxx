@@ -41,3 +41,8 @@ BOTTOM: Revelation of John 22:21
 John 3:16: 0
 I Samuel 1:1: Chapter() - 1: Ruth 4:22
 
+Book math
+
+Matthew.1.1-- = Malachi 4:6
+++ = Matthew 1:1
+.Book(.Book() - 1) = Malachi 1:1

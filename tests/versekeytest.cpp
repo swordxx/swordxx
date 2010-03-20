@@ -219,6 +219,15 @@ cout << currentVerse << endl;
 
 	cout << tmpkey << ": Chapter() - 1: " << vkey << endl;
 
+	cout << "\nBook math\n\n";
+
+	vkey = "Matthew.1.1";
+	vkey--;
+	cout << "Matthew.1.1-- = " << vkey << "\n";
+	vkey++;
+	cout << "++ = " << vkey << "\n";
+	vkey.Book(vkey.Book() - 1);
+	cout << ".Book(.Book() - 1) = " << vkey << "\n";
 
 	return 0;
 }
