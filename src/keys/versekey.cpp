@@ -966,10 +966,11 @@ VerseKey &VerseKey::LowerBound(const VerseKey &lb)
 	initBounds();
 
 	lowerBound = lb.Index();
-	lowerBoundComponents.test  = lb.getTestament();
-	lowerBoundComponents.book  = lb.getBook();
-	lowerBoundComponents.chap  = lb.getChapter();
-	lowerBoundComponents.verse = lb.getVerse();
+	lowerBoundComponents.test   = lb.getTestament();
+	lowerBoundComponents.book   = lb.getBook();
+	lowerBoundComponents.chap   = lb.getChapter();
+	lowerBoundComponents.verse  = lb.getVerse();
+	lowerBoundComponents.suffix = lb.getSuffix();
 
 	// both this following check and UpperBound check force upperBound to
 	// change allowing LowerBound then UpperBound logic to always flow
@@ -990,10 +991,11 @@ VerseKey &VerseKey::UpperBound(const VerseKey &ub)
 	initBounds();
 
 	upperBound = ub.Index();
-	upperBoundComponents.test  = ub.getTestament();
-	upperBoundComponents.book  = ub.getBook();
-	upperBoundComponents.chap  = ub.getChapter();
-	upperBoundComponents.verse = ub.getVerse();
+	upperBoundComponents.test   = ub.getTestament();
+	upperBoundComponents.book   = ub.getBook();
+	upperBoundComponents.chap   = ub.getChapter();
+	upperBoundComponents.verse  = ub.getVerse();
+	upperBoundComponents.suffix = ub.getSuffix();
 
 	// see LowerBound comment, above
 	if (upperBound < lowerBound) upperBound = lowerBound;
@@ -1015,6 +1017,7 @@ VerseKey &VerseKey::LowerBound() const
 		tmpClone->book      = lowerBoundComponents.book;
 		tmpClone->chapter   = lowerBoundComponents.chap;
 		tmpClone->setVerse   (lowerBoundComponents.verse);
+		tmpClone->setSuffix  (lowerBoundComponents.suffix);
 	}
 	else tmpClone->Index(lowerBound);
 
@@ -1034,6 +1037,7 @@ VerseKey &VerseKey::UpperBound() const
 		tmpClone->book      = upperBoundComponents.book;
 		tmpClone->chapter   = upperBoundComponents.chap;
 		tmpClone->setVerse   (upperBoundComponents.verse);
+		tmpClone->setSuffix  (upperBoundComponents.suffix);
 	}
 	else tmpClone->Index(upperBound);
 
@@ -1064,16 +1068,18 @@ void VerseKey::initBounds() const
 		tmpClone->Chapter(tmpClone->getChapterMax());
 		tmpClone->Verse(tmpClone->getVerseMax());
 		upperBound = tmpClone->Index();
-		upperBoundComponents.test  = tmpClone->getTestament();
-		upperBoundComponents.book  = tmpClone->getBook();
-		upperBoundComponents.chap  = tmpClone->getChapter();
-		upperBoundComponents.verse = tmpClone->getVerse();
+		upperBoundComponents.test   = tmpClone->getTestament();
+		upperBoundComponents.book   = tmpClone->getBook();
+		upperBoundComponents.chap   = tmpClone->getChapter();
+		upperBoundComponents.verse  = tmpClone->getVerse();
+		upperBoundComponents.suffix = tmpClone->getSuffix();
 
 		lowerBound = 0;
-		lowerBoundComponents.test  = 0;
-		lowerBoundComponents.book  = 0;
-		lowerBoundComponents.chap  = 0;
-		lowerBoundComponents.verse = 0;
+		lowerBoundComponents.test   = 0;
+		lowerBoundComponents.book   = 0;
+		lowerBoundComponents.chap   = 0;
+		lowerBoundComponents.verse  = 0;
+		lowerBoundComponents.suffix = 0;
 
 	}
 	else tmpClone->setLocale(getLocale());

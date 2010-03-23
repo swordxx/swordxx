@@ -80,8 +80,15 @@
 ../parsekey "1Jn 1:1; 3:10"
 ../parsekey "1Jn 1:1 ;3:10"
 ../parsekey "1Jn 1:1 ; 3:10"
-../parsekey "1Jn1.1f ; 3:10ff"
-../parsekey "1Jn1.1ff ; 3:10f"
+../parsekey "1Jn 1:1a ; 3:10b"
+
+### These two are not quite right yet
+../parsekey "1Jn 1:1-2a; 3:10b-11"
+../parsekey "1Jn 1:1c;3:10d-12e,13"
+
+../parsekey "1Jn1.1f; 3:10ff"
+../parsekey "1Jn1.1ff;3:10f"
+../parsekey "1Jn1.1,8ff; 3:10-12,14f,17ff"
 
 en_abbrevs="
 Gen Genes Exod Ex Exo Lev Le Levi Num Nu Numb Deut Deu De Josh Jos Joshu
