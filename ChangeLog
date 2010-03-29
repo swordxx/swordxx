@@ -1,11 +1,18 @@
 API ChangeLog 
 
 
+
+29-Mar-2010	Troy A. Griffitts <scribe@crosswire.org>
+	Set verse to 1 when changing chapter and book in VerseKey
+	Fixed a bug where book designations ending in 'f' would
+		trigger the verse+'f'/'ff' feature.
+
+
 * Release 1.6.1 *
 
 01-Jan-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Added locales.d/locales.conf - a special locale which
-		can be queried for localize and English lang names
+		can be queried for localized and English lang names
 	New supported v11n systems: german kjva leningrad luther
 		mt nrsva nrsv synodal vulg <chrislit@crosswire.org>
 

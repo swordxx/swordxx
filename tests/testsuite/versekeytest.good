@@ -39,13 +39,13 @@ MAXCHAPTER: John 21:1
 TOP: Genesis 1:1
 BOTTOM: Revelation of John 22:21
 John 3:16: 0
-I Samuel 1:1: Chapter() - 1: Ruth 4:22
+I Samuel 1:1: getChapter() - 1: Ruth 4:1
 
 Book math
 
 Mark.1.1-- = Matthew 28:20
 ++ = Mark 1:1
-.Chapter(.Chapter() - 1) = Matthew 28:1
+.setChapter(.getChapter() - 1) = Matthew 28:1
 Matthew.1.1-- = Malachi 4:6
 ++ = Matthew 1:1
-.Book(.Book() - 1) = Malachi 1:1
+.setBook(.getBook() - 1) = Malachi 1:1

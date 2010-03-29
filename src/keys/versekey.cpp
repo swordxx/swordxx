@@ -618,6 +618,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					strcpy(book, lastKey->getBookName());
 				}
 				bookno = getBookAbbrev(book);
+				if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
+					suffix = 0;
+				}
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
 				char partial = 0;
@@ -843,6 +846,9 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			strcpy(book, lastKey->getBookName());
 		}
 		bookno = getBookAbbrev(book);
+		if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
+			suffix = 0;
+		}
 	}
 	if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
 		char partial = 0;
@@ -1409,8 +1415,8 @@ void VerseKey::setTestament(char itestament)
 
 void VerseKey::setBook(char ibook)
 {
-	verse   = ibook ? 1 : 0;
-	chapter = ibook ? 1 : 0;
+	verse   = 1;
+	chapter = 1;
 	book    = ibook;
 	Normalize(1);
 }
@@ -1446,9 +1452,11 @@ void VerseKey::setBookName(const char *bname)
 
 void VerseKey::setChapter(int ichapter)
 {
-	verse   = ichapter ? 1 : 0;
+	verse   = 1;
 	chapter = ichapter;
 	Normalize(1);
+	// TODO: easiest fix, but should be in Normalize
+	verse   = 1;
 }
 
 

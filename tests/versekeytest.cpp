@@ -214,10 +214,10 @@ cout << currentVerse << endl;
 	VerseKey tmpkey = "1sam 1:1";
 	vkey.AutoNormalize(1);                          // line 147
 	vkey = tmpkey;
-	int chapter = (vkey.Chapter()-1);
-	vkey.Chapter(chapter);
+	int chapter = (vkey.getChapter()-1);
+	vkey.setChapter(chapter);
 
-	cout << tmpkey << ": Chapter() - 1: " << vkey << endl;
+	cout << tmpkey << ": getChapter() - 1: " << vkey << endl;
 
 	cout << "\nBook math\n\n";
 
@@ -226,16 +226,16 @@ cout << currentVerse << endl;
 	cout << "Mark.1.1-- = " << vkey << "\n";
 	vkey++;
 	cout << "++ = " << vkey << "\n";
-	vkey.Chapter(vkey.Chapter() - 1);
-	cout << ".Chapter(.Chapter() - 1) = " << vkey << "\n";
+	vkey.setChapter(vkey.getChapter() - 1);
+	cout << ".setChapter(.getChapter() - 1) = " << vkey << "\n";
 
 	vkey = "Matthew.1.1";
 	vkey--;
 	cout << "Matthew.1.1-- = " << vkey << "\n";
 	vkey++;
 	cout << "++ = " << vkey << "\n";
-	vkey.Book(vkey.Book() - 1);
-	cout << ".Book(.Book() - 1) = " << vkey << "\n";
+	vkey.setBook(vkey.getBook() - 1);
+	cout << ".setBook(.getBook() - 1) = " << vkey << "\n";
 
 	return 0;
 }
