@@ -25,14 +25,9 @@ LOCAL_PATH:= $(call my-dir)
 #
 include $(CLEAR_VARS)
 
-STLPORT_BASE	:= $(NDK_WRAPPERS_BASE)/stlport
-
 LOCAL_MODULE    := libswordcore
-LOCAL_C_INCLUDES := ../sword/include
-LOCAL_CFLAGS	+= -I$(STLPORT_BASE)/stlport \
-		   -D__NEW__ \
-		   -D__unix__ \
-		   -D__SGI_STL_INTERNAL_PAIR_H \
+LOCAL_C_INCLUDES := ../src/sword/include ../src/sword/include/internal/regex
+LOCAL_CFLAGS	+= -D__unix__ \
 		   -D_FTPLIB_NO_COMPAT \
 		   -DANDROID \
 		   -DOS_ANDROID
@@ -188,18 +183,14 @@ include $(BUILD_STATIC_LIBRARY)
 #
 include $(CLEAR_VARS)
 
-STLPORT_BASE	:= $(NDK_WRAPPERS_BASE)/stlport
-
 LOCAL_MODULE    := libsword
-LOCAL_C_INCLUDES := ../sword/include
-LOCAL_CFLAGS	+= -I$(STLPORT_BASE)/stlport \
-		   -D__NEW__ \
-		   -D__SGI_STL_INTERNAL_PAIR_H \
+LOCAL_C_INCLUDES := ../src/sword/include ../src/sword/include/internal/regex
+LOCAL_CFLAGS	+= -D__unix__ \
+		   -D_FTPLIB_NO_COMPAT \
 		   -DANDROID \
 		   -DOS_ANDROID
 
-LOCAL_LDLIBS	+= -L$(STLPORT_BASE)/build/lib/obj/arm-linux-gcc/so \
-		   -lstlport -lz -llog
+LOCAL_LDLIBS	+= -lz -llog
 
 LOCAL_SRC_FILES := swordstub.cpp
 

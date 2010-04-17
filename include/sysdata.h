@@ -23,17 +23,17 @@ typedef unsigned int __u32;
 //typedef unsigned long long __u64;
 #endif
 
-#undef __swap16
-#undef __swap32
-#undef __swap64
+#undef __swswap16
+#undef __swswap32
+#undef __swswap64
 
-#define __swap16(x) \
+#define __swswap16(x) \
 	((__u16)( \
 		(((__u16)(x) & (__u16)0x00ffU) << 8) | \
 		(((__u16)(x) & (__u16)0xff00U) >> 8) ))
 
 		
-#define __swap32(x) \
+#define __swswap32(x) \
 	((__u32)( \
 		(((__u32)(x) & (__u32)0x000000ffUL) << 24) | \
 		(((__u32)(x) & (__u32)0x0000ff00UL) <<  8) | \
@@ -41,7 +41,7 @@ typedef unsigned int __u32;
 		(((__u32)(x) & (__u32)0xff000000UL) >> 24) ))
 
 		
-#define __swap64(x) \
+#define __swswap64(x) \
 	((__u64)( \
 		(__u64)(((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) | \
 		(__u64)(((__u64)(x) & (__u64)0x000000000000ff00ULL) << 40) | \
@@ -66,12 +66,12 @@ typedef unsigned int __u32;
 
 #else 
 
-#define swordtoarch16(x) __swap16(x)
-#define swordtoarch32(x) __swap32(x)
-#define swordtoarch64(x) __swap64(x)
-#define archtosword16(x) __swap16(x)
-#define archtosword32(x) __swap32(x)
-#define archtosword64(x) __swap64(x)
+#define swordtoarch16(x) __swswap16(x)
+#define swordtoarch32(x) __swswap32(x)
+#define swordtoarch64(x) __swswap64(x)
+#define archtosword16(x) __swswap16(x)
+#define archtosword32(x) __swswap32(x)
+#define archtosword64(x) __swswap64(x)
 
 
 #endif
