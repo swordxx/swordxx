@@ -1,0 +1,38 @@
+Android Build Instructions
+
+You'll need an NDK with STL support.  I have been trying crystax' release
+lately.  You can find it on the web.
+
+After that, you'll need a basic Application.mk file to place in your
+apps folder.  Mine for bishop is here:
+
+~/android-ndk-r3-crystax/apps/bishop/Application.mk
+
+and contains:
+
+APP_PROJECT_PATH := $(call my-dir)/../../../src/bishop
+APP_MODULES      := sword swordcore
+APP_PLATFORM     := android-3
+
+and I have a symlink:
+
+~/src/bishop/jni -> ~/src/sword/bindings/java-jni/jni/
+
+~/src/sword is simply a checkout of the current sword svn repository.
+
+
+So, since my $HOME directly is /home/scribe, my configuration looks like this:
+
+/home/scribe/src/sword/
+/home/scribe/src/bishop/
+/home/scribe/android-ndk-r3-crystax/
+/home/scribe/android-ndk-r3-crystax/apps/bishop/Application.mk
+
+with:
+
+APP_PROJECT_PATH := $(call my-dir)/../../../src/bishop
+APP_MODULES      := sword swordcore
+APP_PLATFORM     := android-3
+
+
+Hope this helps get you started.  Let me know your progress!
