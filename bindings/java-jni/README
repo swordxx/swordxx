@@ -19,6 +19,7 @@ and I have a symlink:
 ~/src/bishop/jni -> ~/src/sword/bindings/java-jni/jni/
 
 ~/src/sword is simply a checkout of the current sword svn repository.
+(svn co https://crosswire.org/svn/sword/trunk ~/src/sword)
 
 
 So, since my $HOME directly is /home/scribe, my configuration looks like this:
