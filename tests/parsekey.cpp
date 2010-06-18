@@ -26,8 +26,8 @@ using namespace sword;
 #endif
 
 int main(int argc, char **argv) {
-	if ((argc < 2) || (argc > 4)) {
-		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [context] [test-in-set-verse]\n";
+	if ((argc < 2) || (argc > 7)) {
+		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [context] [echo params 1|0] [test-in-set-verse]\n";
 		exit(-1);
 	}
 
@@ -49,11 +49,13 @@ int main(int argc, char **argv) {
 	
 	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
 
-	for (int i = 1; i < argc; i++) {
-		if (i > 1) std::cout << " ";
-		std::cout << argv[i];
+	if ((argc > 5) && (argv[5][0] == '1')) {
+		for (int i = 1; i < argc; i++) {
+			if (i > 1) std::cout << " ";
+			std::cout << argv[i];
+		}
+		std::cout << ": ";
 	}
-	std::cout << ": ";
 	std::cout << verses.getRangeText() << "\n";
 /*
 	for (int i = 0; i < verses.Count(); i++) {
@@ -61,7 +63,7 @@ int main(int argc, char **argv) {
 	}
 */
 
-	if (argc > 5) {
+	if (argc > 6) {
 		verses.setText(argv[4]);
 		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
 	}
