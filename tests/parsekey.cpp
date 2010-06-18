@@ -27,7 +27,7 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 	if ((argc < 2) || (argc > 4)) {
-		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [test-in-set-verse]\n";
+		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [context] [test-in-set-verse]\n";
 		exit(-1);
 	}
 
@@ -40,10 +40,12 @@ int main(int argc, char **argv) {
 	if (argc > 3)
 		DefaultVSKey.setVersificationSystem(argv[3]);
 
+	const char *context = (argc > 4) ? argv[4] : "gen.1.1";
+
 	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 	DefaultVSKey.validateCurrentLocale();
 
-	DefaultVSKey = "jas3:1";
+	DefaultVSKey = context;
 	
 	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
 
@@ -59,7 +61,7 @@ int main(int argc, char **argv) {
 	}
 */
 
-	if (argc > 4) {
+	if (argc > 5) {
 		verses.setText(argv[4]);
 		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
 	}
