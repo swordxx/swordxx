@@ -1,6 +1,8 @@
 API ChangeLog 
 
 
+25-Jun-2010	Troy A. Griffitts <scribe@crosswire.org>
+	Added CMake build system, contributed by GHellings
 
 29-Mar-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Set verse to 1 when changing chapter and book in VerseKey
