@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 	cout << "<osis";
 		cout << " xmlns=\"http://www.bibletechnologies.net/2003/OSIS/namespace\"";
 		cout << " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
-		cout << " xsi:schemaLocation=\"http://www.bibletechnologies.net/2003/OSIS/namespace osisCore.2.5.xsd\">\n\n";
+		cout << " xsi:schemaLocation=\"http://www.bibletechnologies.net/2003/OSIS/namespace http://www.bibletechnologies.net/osisCore.2.1.1.xsd\">\n\n";
 	cout << "<osisText";
 		cout << " osisIDWork=\"";
 		cout << inModule->Name() << "\"";
