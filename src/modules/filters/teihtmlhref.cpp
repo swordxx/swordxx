@@ -55,7 +55,7 @@ TEIHTMLHREF::TEIHTMLHREF() {
 	addAllowedEscapeString("amp");
 	addAllowedEscapeString("lt");
 	addAllowedEscapeString("gt");
-	
+
 	setTokenCaseSensitive(true);
 }
 
@@ -87,6 +87,8 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 				u->lastHi = rend;
 				if (rend == "ital")
 					buf += "<i>";
+				else if (rend == "italic")
+					buf += "<i>";
 				else if (rend == "bold")
 					buf += "<b>";
 				else if (rend == "sup")
@@ -96,6 +98,8 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			else if (tag.isEndTag()) {
 				SWBuf rend = u->lastHi;
 				if (rend == "ital")
+					buf += "</i>";
+				else if (rend == "italic")
 					buf += "</i>";
 				else if (rend == "bold")
 					buf += "</b>";
@@ -136,6 +140,11 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			}
 			else if (tag.isEndTag()) {
 			}
+		}
+
+		// <lb.../>
+		else if (!strcmp(tag.getName(), "lb")) {
+			buf += "<br />";
 		}
 
 		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def>
