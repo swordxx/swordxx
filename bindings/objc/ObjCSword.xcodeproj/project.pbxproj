@@ -2863,7 +2863,6 @@
 					"-DUSELUCENE",
 					"-Dunix",
 					"-D__unix__",
-					"-DU_DISABLE_RENAMING=1",
 				);
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -2902,7 +2901,6 @@
 					"-DUSELUCENE",
 					"-Dunix",
 					"-D__unix__",
-					"-DU_DISABLE_RENAMING=1",
 				);
 				OTHER_LDFLAGS = (
 					"-licucore",
