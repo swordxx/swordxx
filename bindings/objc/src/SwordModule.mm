@@ -578,6 +578,13 @@
     return ret;
 }
 
+/**
+ This is just a wrapper method
+ */
+- (SwordModuleTextEntry *)textEntryForKeyString:(NSString *)aKeyString textType:(TextPullType)aType {
+    return [self textEntryForKey:[SwordKey swordKeyWithRef:aKeyString] textType:aType];
+}
+
 // general feature access
 - (BOOL)hasFeature:(NSString *)feature {
 	BOOL has = NO;

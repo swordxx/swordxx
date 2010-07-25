@@ -184,6 +184,7 @@ typedef enum {
  type can be: "rendered" or "stripped"
  */
 - (SwordModuleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType;
+- (SwordModuleTextEntry *)textEntryForKeyString:(NSString *)aKeyString textType:(TextPullType)aType;
 
 // ------- SwordModuleAccess ---------
 - (long)entryCount;

@@ -12,6 +12,7 @@
 #import "ObjCSword/SwordManager.h"
 #import "ObjCSword/SwordBible.h"
 #import "ObjCSword/SwordModule+Index.h"
+#import "ObjCSword/SwordModuleTextEntry.h"
 
 @implementation SwordModuleTest
 
@@ -35,6 +36,15 @@
     NSArray *verses = [bible renderedTextEntriesForRef:@"Gen"];
     STAssertNotNil(verses, @"");
     STAssertTrue([bible numberOfVerseKeysForReference:@"Gen"] == [verses count], @"");    
+}
+
+- (void)testRenderedVerseText {
+    SwordBible *bible = (SwordBible *)[[SwordManager defaultManager] moduleWithName:@"GerSch"];
+    STAssertNotNil(bible, @"Module is nil");
+    
+    SwordModuleTextEntry *text = [bible textEntryForKeyString:@"gen1.1" textType:TextTypeRendered];
+    STAssertNotNil(text, @"");
+    STAssertTrue([[text text] length] > 0, @"");
 }
 
 @end
