@@ -1,5 +1,5 @@
 //
-//  TestLocal.h
+//  SetClassTest.h
 //  ObjCSword
 //
 //  Created by Manfred Bergmann on 12.06.10.

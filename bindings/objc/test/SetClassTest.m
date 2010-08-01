@@ -6,7 +6,7 @@
 //  Copyright 2010 Software by MABE. All rights reserved.
 //
 
-#import "Test.h"
+#import "SetClassTest.h"
 
 @implementation Test
 
