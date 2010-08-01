@@ -7,7 +7,7 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <Test.h>
+#import <SetClassTest.h>
 #import <Test1.h>
 
 @interface TestLocalTest : SenTestCase {

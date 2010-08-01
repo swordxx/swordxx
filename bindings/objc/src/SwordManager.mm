@@ -143,9 +143,6 @@ using std::list;
 # pragma mark - class methods
 
 + (NSDictionary *)linkDataForLinkURL:(NSURL *)aURL {
-    // there are two types of links
-    // our generated sword:// links and study data beginning with applewebdata://
-    
     NSMutableDictionary *ret = [NSMutableDictionary dictionary];
     
     NSString *scheme = [aURL scheme];
@@ -195,42 +192,6 @@ using std::list;
     return ret;
 }
 
-+ (void)initLocale {
-    // set locale swManager
-    NSString *resourcePath = [[NSBundle bundleForClass:[SwordManager class]] resourcePath];
-    NSString *localePath = [resourcePath stringByAppendingPathComponent:@"locales.d"];
-    sword::LocaleMgr *lManager = sword::LocaleMgr::getSystemLocaleMgr();
-    lManager->loadConfigDir([localePath UTF8String]);
-    
-    //get the language
-    NSArray *availLocales = [NSLocale preferredLanguages];
-    
-    NSString *lang = nil;
-    NSString *loc = nil;
-    BOOL haveLocale = NO;
-    // for every language, check if we know the locales
-    sword::StringList localelist = lManager->getAvailableLocales();
-    NSEnumerator *iter = [availLocales objectEnumerator];
-    while((loc = [iter nextObject]) && !haveLocale) {
-        // check if this locale is available in SWORD
-        sword::StringList::iterator it;
-        sword::SWBuf locale;
-        for(it = localelist.begin(); it != localelist.end(); ++it) {
-            locale = *it;
-            NSString *swLoc = [NSString stringWithCString:locale.c_str() encoding:NSUTF8StringEncoding];
-            if([swLoc hasPrefix:loc]) {
-                haveLocale = YES;
-                lang = loc;
-                break;
-            }
-        }        
-    }
-    
-    if(haveLocale) {
-        lManager->setDefaultLocaleName([lang UTF8String]);    
-    }    
-}
-
 + (NSArray *)moduleTypes {
     return [NSArray arrayWithObjects:
             SWMOD_CATEGORY_BIBLES, 
@@ -239,9 +200,6 @@ using std::list;
             SWMOD_CATEGORY_GENBOOKS, nil];
 }
 
-/**
- return a manager for the specified path
- */
 + (SwordManager *)managerWithPath:(NSString *)path {
     SwordManager *manager = [[[SwordManager alloc] initWithPath:path] autorelease];
     return manager;
@@ -257,10 +215,6 @@ using std::list;
 	return instance;
 }
 
-
-/* 
- Initializes Sword Manager with the path to the folder that contains the mods.d, modules.
-*/
 - (id)initWithPath:(NSString *)path {
 
 	if((self = [super init])) {
@@ -272,9 +226,6 @@ using std::list;
 		self.modules = [NSDictionary dictionary];
 		self.managerLock = [[NSRecursiveLock alloc] init];
 
-        // setting locale
-        [SwordManager initLocale];
-        
         [self reInit];
         
         sword::StringList options = swManager->getGlobalOptions();
@@ -287,9 +238,6 @@ using std::list;
 	return self;
 }
 
-/** 
- initialize a new SwordManager with given SWMgr
- */
 - (id)initWithSWMgr:(sword::SWMgr *)aSWMgr {
     self = [super init];
     if(self) {
@@ -306,9 +254,25 @@ using std::list;
     return self;
 }
 
-/** 
- reinit the swManager 
- */
+- (void)finalize {
+    if(!temporaryManager) {
+        delete swManager;
+    }
+    
+	[super finalize];
+}
+
+- (void)dealloc {
+    if(!temporaryManager) {
+        delete swManager;
+    }
+    [self setModules:nil];
+    [self setModulesPath:nil];
+    [self setManagerLock:nil];
+    
+    [super dealloc];
+}
+
 - (void)reInit {
 	[managerLock lock];
     if(modulesPath && [modulesPath length] > 0) {
@@ -354,9 +318,6 @@ using std::list;
 	[managerLock unlock];    
 }
 
-/**
- adds modules in this path
- */
 - (void)addPath:(NSString *)path {
     
 	[managerLock lock];
@@ -372,31 +333,6 @@ using std::list;
     SendNotifyModulesChanged(nil);
 }
 
-/** 
- Unloads Sword Manager.
-*/
-- (void)finalize {
-    if(!temporaryManager) {
-        delete swManager;
-    }
-    
-	[super finalize];
-}
-
-- (void)dealloc {
-    if(!temporaryManager) {
-        delete swManager;
-    }
-    [self setModules:nil];
-    [self setModulesPath:nil];
-    [self setManagerLock:nil];
-    
-    [super dealloc];
-}
-
-/**
- get module with name from internal list
- */
 - (SwordModule *)moduleWithName:(NSString *)name {
     
 	SwordModule	*ret = [modules objectForKey:name];
@@ -442,9 +378,6 @@ using std::list;
 
 #pragma mark - module access
 
-/** 
- Sets global options such as 'Strongs' or 'Footnotes'. 
- */
 - (void)setGlobalOption:(NSString *)option value:(NSString *)value {
 	[managerLock lock];
     swManager->setGlobalOption([option UTF8String], [value UTF8String]);
@@ -455,9 +388,6 @@ using std::list;
     return [[NSString stringWithUTF8String:swManager->getGlobalOption([option UTF8String])] isEqualToString:SW_ON];
 }
 
-/** 
- list all module and return them in a Array 
- */
 - (NSArray *)listModules {
     return [modules allValues];
 }
@@ -469,9 +399,6 @@ using std::list;
     return [[self moduleNames] sortedArrayUsingSelector:@selector(compare:)];
 }
 
-/** 
- Retrieve list of installed modules as an array, where the module has a specific feature
-*/
 - (NSArray *)modulesForFeature:(NSString *)feature {
 
     NSMutableArray *ret = [NSMutableArray array];
@@ -488,9 +415,6 @@ using std::list;
 	return [NSArray arrayWithArray:ret];
 }
 
-/* 
- Retrieve list of installed modules as an array, where type is: @"Biblical Texts", @"Commentaries", ..., @"ALL"
-*/
 - (NSArray *)modulesForType:(NSString *)type {
 
     NSMutableArray *ret = [NSMutableArray array];
@@ -509,16 +433,10 @@ using std::list;
 
 #pragma mark - lowlevel methods
 
-/** 
- return the sword swManager of this class 
- */
 - (sword::SWMgr *)swManager {
     return swManager;
 }
 
-/**
- Retrieves C++ SWModule pointer - used internally by SwordBible. 
- */
 - (sword::SWModule *)getSWModuleWithName:(NSString *)moduleName {
 	sword::SWModule *module = NULL;
 

@@ -53,12 +53,6 @@
     [super dealloc];
 }
 
-/**
- return the tree content for the given treekey
- the treekey has to be already loaded
- @param[in]: treekey that we should look for, nil for root
- @return: SwordTreeEntry
- */
 - (SwordModuleTreeEntry *)treeEntryForKey:(NSString *)treeKey {
     SwordModuleTreeEntry * ret = nil;
     

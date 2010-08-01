@@ -28,11 +28,12 @@
 
 @property(readwrite, retain) NSMutableDictionary *contents;
 
-- (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager;
-#ifdef __cplusplus
-- (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
-#endif
-
+/**
+ return the tree content for the given treekey
+ the treekey has to be already loaded
+ @param[in]: treekey that we should look for, nil for root
+ @return: SwordTreeEntry
+ */
 - (SwordModuleTreeEntry *)treeEntryForKey:(NSString *)treeKey;
 
 @end

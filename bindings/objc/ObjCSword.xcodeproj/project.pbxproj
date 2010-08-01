@@ -98,10 +98,8 @@
 		A94EAC30117B28920018B06F /* SwordVerseManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC08117B28920018B06F /* SwordVerseManager.mm */; };
 		A94EAC31117B28920018B06F /* VerseEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC09117B28920018B06F /* VerseEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC32117B28920018B06F /* VerseEnumerator.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC0A117B28920018B06F /* VerseEnumerator.mm */; };
-		A956316511FD8C55007DC7AD /* libsword-ub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A956316411FD8C55007DC7AD /* libsword-ub.a */; };
 		A956316611FD8C5B007DC7AD /* libsword-ub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A956316411FD8C55007DC7AD /* libsword-ub.a */; };
 		A956316711FD8C5E007DC7AD /* libsword-ub.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A956316411FD8C55007DC7AD /* libsword-ub.a */; };
-		A956324311FD90C9007DC7AD /* libclucene-ub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A956324211FD90C9007DC7AD /* libclucene-ub.a */; };
 		A956324411FD90CE007DC7AD /* libclucene-ub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A956324211FD90C9007DC7AD /* libclucene-ub.a */; };
 		A956324511FD90D2007DC7AD /* libclucene-ub.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A956324211FD90C9007DC7AD /* libclucene-ub.a */; };
 		A964657C11C662CF00640FAC /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
@@ -113,9 +111,9 @@
 		A9921A1A11FD9CA8002DAA72 /* libSword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9921A1911FD9CA8002DAA72 /* libSword.dylib */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9C2819B11C43C6500803CB5 /* TestLocalTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818A11C43B9E00803CB5 /* TestLocalTest.m */; };
-		A9C2819C11C43C6900803CB5 /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818711C43AB200803CB5 /* Test.m */; };
+		A9C2819C11C43C6900803CB5 /* SetClassTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818711C43AB200803CB5 /* SetClassTest.m */; };
 		A9C2819D11C43C6A00803CB5 /* Test1.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818411C43A4300803CB5 /* Test1.m */; };
-		A9C281A611C43CF000803CB5 /* Test.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818111C43A2900803CB5 /* Test.h */; };
+		A9C281A611C43CF000803CB5 /* SetClassTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818111C43A2900803CB5 /* SetClassTest.h */; };
 		A9C281A711C43CF000803CB5 /* Test1.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818311C43A4300803CB5 /* Test1.h */; };
 		A9C281A811C43CF000803CB5 /* TestLocalTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818911C43B9E00803CB5 /* TestLocalTest.h */; };
 		A9C2856F11C446B700803CB5 /* Configuration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2856D11C446B700803CB5 /* Configuration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -125,6 +123,11 @@
 		A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
+		A9EF13B31205952C0078A27C /* libSword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EF13B21205952C0078A27C /* libSword.dylib */; };
+		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; };
+		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
+		A9EF1418120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; };
+		A9EF1419120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 		A9FB273711FD95CD004C4295 /* AnalysisHeader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9FB264511FD95CD004C4295 /* AnalysisHeader.cpp */; };
 		A9FB273911FD95CD004C4295 /* Analyzers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9FB264711FD95CD004C4295 /* Analyzers.cpp */; };
 		A9FB273B11FD95CD004C4295 /* StandardAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9FB264A11FD95CD004C4295 /* StandardAnalyzer.cpp */; };
@@ -503,10 +506,10 @@
 		A975EED911C792B9007C1532 /* mod2osis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2osis; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9921A1911FD9CA8002DAA72 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
-		A9C2818111C43A2900803CB5 /* Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Test.h; path = test/Test.h; sourceTree = "<group>"; };
+		A9C2818111C43A2900803CB5 /* SetClassTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetClassTest.h; path = test/SetClassTest.h; sourceTree = "<group>"; };
 		A9C2818311C43A4300803CB5 /* Test1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Test1.h; path = test/Test1.h; sourceTree = "<group>"; };
 		A9C2818411C43A4300803CB5 /* Test1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Test1.m; path = test/Test1.m; sourceTree = "<group>"; };
-		A9C2818711C43AB200803CB5 /* Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Test.m; path = test/Test.m; sourceTree = "<group>"; };
+		A9C2818711C43AB200803CB5 /* SetClassTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetClassTest.m; path = test/SetClassTest.m; sourceTree = "<group>"; };
 		A9C2818911C43B9E00803CB5 /* TestLocalTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestLocalTest.h; path = test/TestLocalTest.h; sourceTree = "<group>"; };
 		A9C2818A11C43B9E00803CB5 /* TestLocalTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestLocalTest.m; path = test/TestLocalTest.m; sourceTree = "<group>"; };
 		A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -685,7 +688,9 @@
 		A9D43A4811C52E9B007AFE83 /* zstr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zstr.h; sourceTree = "<group>"; };
 		A9D43A4911C52E9B007AFE83 /* ztext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ztext.h; sourceTree = "<group>"; };
 		A9D43A4A11C52E9B007AFE83 /* zverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zverse.h; sourceTree = "<group>"; };
-		A9FB25E011FD939E004C4295 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = libSword.dylib; path = "/Volumes/User/mbergmann/_inProgress/Sources/crosswire/sword-trunk/bindings/objc/build/Release/libSword.dylib"; sourceTree = "<absolute>"; };
+		A9EF13B21205952C0078A27C /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9EF1414120595650078A27C /* SwordLocaleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordLocaleManager.h; path = src/SwordLocaleManager.h; sourceTree = "<group>"; };
+		A9EF1415120595650078A27C /* SwordLocaleManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordLocaleManager.mm; path = src/SwordLocaleManager.mm; sourceTree = "<group>"; };
 		A9FB264511FD95CD004C4295 /* AnalysisHeader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnalysisHeader.cpp; sourceTree = "<group>"; };
 		A9FB264611FD95CD004C4295 /* AnalysisHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalysisHeader.h; sourceTree = "<group>"; };
 		A9FB264711FD95CD004C4295 /* Analyzers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Analyzers.cpp; sourceTree = "<group>"; };
@@ -1114,6 +1119,7 @@
 			files = (
 				A9013D3811E316C700E1CCCA /* Cocoa.framework in Frameworks */,
 				A9921A1A11FD9CA8002DAA72 /* libSword.dylib in Frameworks */,
+				A9EF13B31205952C0078A27C /* libSword.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1130,8 +1136,6 @@
 			files = (
 				A964658F11C6654300640FAC /* SenTestingKit.framework in Frameworks */,
 				A964657C11C662CF00640FAC /* ObjCSword.framework in Frameworks */,
-				A956316511FD8C55007DC7AD /* libsword-ub.a in Frameworks */,
-				A956324311FD90C9007DC7AD /* libclucene-ub.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1153,6 +1157,7 @@
 				A975EED911C792B9007C1532 /* mod2osis */,
 				A9013D3E11E316C700E1CCCA /* ObjCSword_iOS.framework */,
 				A9921A1911FD9CA8002DAA72 /* libSword.dylib */,
+				A9EF13B21205952C0078A27C /* libSword.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1197,44 +1202,46 @@
 		08FB77AEFE84172EC02AAC07 /* SwordWrapper */ = {
 			isa = PBXGroup;
 			children = (
+				A9EF1414120595650078A27C /* SwordLocaleManager.h */,
+				A9EF1415120595650078A27C /* SwordLocaleManager.mm */,
+				A94EABF9117B28920018B06F /* SwordManager.h */,
+				A94EABFA117B28920018B06F /* SwordManager.mm */,
+				A94EAC07117B28920018B06F /* SwordVerseManager.h */,
+				A94EAC08117B28920018B06F /* SwordVerseManager.mm */,
+				A94EABFD117B28920018B06F /* SwordModule.h */,
+				A94EABFE117B28920018B06F /* SwordModule.mm */,
 				A94EABE3117B28910018B06F /* SwordBible.h */,
 				A94EABE4117B28910018B06F /* SwordBible.mm */,
-				A94EABE5117B28920018B06F /* SwordBibleBook.h */,
-				A94EABE6117B28920018B06F /* SwordBibleBook.mm */,
-				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
-				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
-				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
-				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
 				A94EABEB117B28920018B06F /* SwordBook.h */,
 				A94EABEC117B28920018B06F /* SwordBook.mm */,
 				A94EABED117B28920018B06F /* SwordCommentary.h */,
 				A94EABEE117B28920018B06F /* SwordCommentary.mm */,
 				A94EABEF117B28920018B06F /* SwordDictionary.h */,
 				A94EABF0117B28920018B06F /* SwordDictionary.mm */,
-				A94EABF1117B28920018B06F /* SwordInstallSource.h */,
-				A94EABF2117B28920018B06F /* SwordInstallSource.mm */,
-				A94EABF3117B28920018B06F /* SwordInstallSourceController.h */,
-				A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */,
-				A94EABF5117B28920018B06F /* SwordKey.h */,
-				A94EABF6117B28920018B06F /* SwordKey.mm */,
-				A94EABF7117B28920018B06F /* SwordListKey.h */,
-				A94EABF8117B28920018B06F /* SwordListKey.mm */,
-				A94EABF9117B28920018B06F /* SwordManager.h */,
-				A94EABFA117B28920018B06F /* SwordManager.mm */,
-				A94EABFB117B28920018B06F /* SwordModCategory.h */,
-				A94EABFC117B28920018B06F /* SwordModCategory.m */,
-				A94EABFD117B28920018B06F /* SwordModule.h */,
-				A94EABFE117B28920018B06F /* SwordModule.mm */,
+				A94EABE5117B28920018B06F /* SwordBibleBook.h */,
+				A94EABE6117B28920018B06F /* SwordBibleBook.mm */,
+				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
+				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
 				A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */,
 				A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */,
 				A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */,
 				A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */,
+				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
+				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
+				A94EABFB117B28920018B06F /* SwordModCategory.h */,
+				A94EABFC117B28920018B06F /* SwordModCategory.m */,
+				A94EABF5117B28920018B06F /* SwordKey.h */,
+				A94EABF6117B28920018B06F /* SwordKey.mm */,
+				A94EABF7117B28920018B06F /* SwordListKey.h */,
+				A94EABF8117B28920018B06F /* SwordListKey.mm */,
 				A94EAC05117B28920018B06F /* SwordVerseKey.h */,
 				A94EAC06117B28920018B06F /* SwordVerseKey.mm */,
-				A94EAC07117B28920018B06F /* SwordVerseManager.h */,
-				A94EAC08117B28920018B06F /* SwordVerseManager.mm */,
 				A94EAC09117B28920018B06F /* VerseEnumerator.h */,
 				A94EAC0A117B28920018B06F /* VerseEnumerator.mm */,
+				A94EABF1117B28920018B06F /* SwordInstallSource.h */,
+				A94EABF2117B28920018B06F /* SwordInstallSource.mm */,
+				A94EABF3117B28920018B06F /* SwordInstallSourceController.h */,
+				A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */,
 				A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */,
 				A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */,
 			);
@@ -1328,8 +1335,8 @@
 		A9C2857911C4486400803CB5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				A9C2818111C43A2900803CB5 /* Test.h */,
-				A9C2818711C43AB200803CB5 /* Test.m */,
+				A9C2818111C43A2900803CB5 /* SetClassTest.h */,
+				A9C2818711C43AB200803CB5 /* SetClassTest.m */,
 				A9C2818311C43A4300803CB5 /* Test1.h */,
 				A9C2818411C43A4300803CB5 /* Test1.m */,
 				A9C2818911C43B9E00803CB5 /* TestLocalTest.h */,
@@ -2307,6 +2314,7 @@
 				A9C2856F11C446B700803CB5 /* Configuration.h in Headers */,
 				A9C2857311C4471400803CB5 /* OSXConfiguration.h in Headers */,
 				A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */,
+				A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2338,6 +2346,7 @@
 				A9013D1211E316C700E1CCCA /* Configuration.h in Headers */,
 				A9013D1311E316C700E1CCCA /* OSXConfiguration.h in Headers */,
 				A9013D1411E316C700E1CCCA /* SwordModule+Index.h in Headers */,
+				A9EF1418120595650078A27C /* SwordLocaleManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2345,7 +2354,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9C281A611C43CF000803CB5 /* Test.h in Headers */,
+				A9C281A611C43CF000803CB5 /* SetClassTest.h in Headers */,
 				A9C281A711C43CF000803CB5 /* Test1.h in Headers */,
 				A9C281A811C43CF000803CB5 /* TestLocalTest.h in Headers */,
 				A96465AD11C6658200640FAC /* SwordManagerTest.h in Headers */,
@@ -2454,7 +2463,7 @@
 			);
 			name = Sword_iOS;
 			productName = Sword;
-			productReference = A9FB25E011FD939E004C4295 /* libSword.dylib */;
+			productReference = A9EF13B21205952C0078A27C /* libSword.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -2550,6 +2559,7 @@
 				A9C2857411C4471400803CB5 /* OSXConfiguration.m in Sources */,
 				A9C2858311C44A0A00803CB5 /* Configuration.m in Sources */,
 				A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */,
+				A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2579,6 +2589,7 @@
 				A9013D3311E316C700E1CCCA /* OSXConfiguration.m in Sources */,
 				A9013D3411E316C700E1CCCA /* Configuration.m in Sources */,
 				A9013D3511E316C700E1CCCA /* SwordModule+Index.mm in Sources */,
+				A9EF1419120595650078A27C /* SwordLocaleManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2595,7 +2606,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9C2819B11C43C6500803CB5 /* TestLocalTest.m in Sources */,
-				A9C2819C11C43C6900803CB5 /* Test.m in Sources */,
+				A9C2819C11C43C6900803CB5 /* SetClassTest.m in Sources */,
 				A9C2819D11C43C6A00803CB5 /* Test1.m in Sources */,
 				A96465A511C6657900640FAC /* SwordManagerTest.m in Sources */,
 				A918B8E511C6697400024D84 /* SwordModuleTest.m in Sources */,
@@ -2902,7 +2913,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -2931,7 +2942,7 @@
 					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -3133,7 +3144,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3146,12 +3157,8 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
 				INFOPLIST_FILE = "Tests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/sword_build/build/result_inst/lib\"",
-					"\"$(SRCROOT)/clucene_build/build/result_inst/lib\"",
-				);
-				ONLY_ACTIVE_ARCH = NO;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
@@ -3180,11 +3187,7 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
 				INFOPLIST_FILE = "Tests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/sword_build/build/result_inst/lib\"",
-					"\"$(SRCROOT)/clucene_build/build/result_inst/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,

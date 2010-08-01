@@ -83,7 +83,7 @@ class sword::SWModule;
 #define SW_OPTION_GREEKACCENTS          @"Greek Accents"
 #define SW_OPTION_LEMMAS                @"Lemmas"
 #define SW_OPTION_SCRIPTREFS            @"Cross-references"
-#define SW_OPTION_VARIANTS              @"Variants"
+#define SW_OPTION_VARIANTS              @"Textual Variants"
 #define SW_OPTION_REDLETTERWORDS        @"Words of Christ in Red"
 // this is not part of Sword
 #define SW_OPTION_REF                   @"Reference"
@@ -132,37 +132,100 @@ class sword::SWModule;
 
 // --------------------- methods -----------------------
 
+/**
+ Conveniance initializer. Creates an instance of SwordManager for a given module path.
+ Internally -initWithPath: is called.
+ */
 + (SwordManager *)managerWithPath:(NSString*)path;
+
+/**
+ Create an instance of SwordManager that will get the default manager
+ in this application.
+ Internally a static reference is set so that this instance will get a singleton object.
+ */
 + (SwordManager *)defaultManager;
 
-//+ (void)initStringManager;
-+ (void)initLocale;
+/**
+ Retreve a list of known module types.
+ See SWMOD_CATEGORY_*
+ */
 + (NSArray *)moduleTypes;
+
+/**
+ Rendered Module text that has links.
+ This method will return a dictionary with attribute/value pairs from parameters of the link.
+ See ATTRTYPE_* for key types.
+ */
 + (NSDictionary *)linkDataForLinkURL:(NSURL *)aURL;
 
-/** Constructor */
+/**
+ Initializes this manager for the given module path.
+ */
 - (id)initWithPath:(NSString *)path;
-- (void)addPath:(NSString*)path;
-- (void)finalize;
 
-/** reinit the swManager */
+/**
+ Add an additional path to the manager to aument more modules.
+ */
+- (void)addPath:(NSString*)path;
+
+/** 
+ reinit - reloads all modules, filters and such
+ This will be triggered if new module had been installed in the module installer.
+ */
 - (void)reInit;
 
+/**
+ Set a cipher key for the given module to make it unlocked and in order to render it's text.
+ */
 - (void)setCipherKey:(NSString*)key forModuleNamed:(NSString *)name;
+
+/**
+ Set a global option, for example render option.
+ */
 - (void)setGlobalOption:(NSString*)option value:(NSString *)value;
+
+/**
+ Returns the value of an option.
+ */
 - (BOOL)globalOption:(NSString *)option;
 
-- (NSArray *)listModules;
+/**
+ List of module names known by this manager
+ */
 - (NSArray *)moduleNames;
+
+/**
+ List of modules known by this manager
+ */
+- (NSArray *)listModules;
+
+/**
+ Module list sorted by name
+ */
 - (NSArray *)sortedModuleNames;
+
+/**
+ Get module with name from internal list
+ */
 - (SwordModule *)moduleWithName:(NSString *)name;
 
+/**
+ Get modules with certain feature from internal list
+ */
 - (NSArray *)modulesForFeature:(NSString *)feature;
+
+/**
+ Get modules with certain type from internal list
+ */
 - (NSArray *)modulesForType:(NSString *)type;
 
 #ifdef __cplusplus
 - (id)initWithSWMgr:(sword::SWMgr *)smgr;
 - (sword::SWModule *)getSWModuleWithName:(NSString *)moduleName;
+
+/**
+ Returns the underlying sword::SWMgr instance
+ */
 - (sword::SWMgr *)swManager;
 #endif
 

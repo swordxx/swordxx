@@ -100,7 +100,7 @@ NSLock *bibleLock = nil;
     return key->Book() + key->Testament() * 100;
 }
 
-#pragma mark - instance methods
+#pragma mark - Initializers
 
 - (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager {    
 	self = [super initWithName:aName swordManager:aManager];
@@ -123,6 +123,12 @@ NSLock *bibleLock = nil;
 - (void)finalize {
 	[super finalize];
 }
+
+- (void)dealloc {
+    [super dealloc];
+}
+
+#pragma mark - Bible information
 
 - (void)buildBookList {
 	[moduleLock lock];

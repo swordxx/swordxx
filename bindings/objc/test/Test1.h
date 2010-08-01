@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <Test.h>
+#import <SetClassTest.h>
 
 @interface Test1 : NSObject <TestLocal> {
 

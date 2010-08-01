@@ -47,38 +47,8 @@ typedef enum {
     devotional  = 0x0010
 }ModuleType;
 
-@protocol SwordModuleAccess
 
-/** 
- number of entries
- abstract method, should be overriden by subclasses
- */
-- (long)entryCount;
-
-/**
- abstract method, override in subclass
- This method generates stripped text string for a given reference.
- @param[in] reference bible reference
- @return Array of SwordModuleTextEntry instances
- */
-- (NSArray *)strippedTextEntriesForRef:(NSString *)reference;
-
-/** 
- abstract method, override in subclass
- This method generates HTML string for a given reference.
- @param[in] reference bible reference
- @return Array of SwordModuleTextEntry instances
- */
-- (NSArray *)renderedTextEntriesForRef:(NSString *)reference;
-
-/** 
- write value to reference
- */
-- (void)writeEntry:(SwordModuleTextEntry *)anEntry;
-
-@end
-
-@interface SwordModule : NSObject <SwordModuleAccess> {
+@interface SwordModule : NSObject {
     
     NSMutableDictionary *configEntries;
 	ModuleType type;
@@ -106,7 +76,6 @@ typedef enum {
 @property (retain, readwrite) NSString *name;
 @property (retain, readwrite) SwordManager *swManager;
 
-// -------------- class methods --------------
 /**
  maps type string to ModuleType enum
  @param[in] typeStr type String as in -type(SwordModule)
@@ -116,52 +85,157 @@ typedef enum {
 
 // ------------- instance methods ---------------
 
+/**
+ Initializes module with a given name and SwordManager.
+ The SwordManager is needed because the underlying SWModule is retrieved from SwordManager.
+ */
 - (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager;
 #ifdef __cplusplus
+/**
+ Initialize this module with an the SWModule.
+ This initializer should normally not need to be used.
+ */
 - (id)initWithSWModule:(sword::SWModule *)aModule;
+/**
+ Initialize this module with an the SWModule and a SwordManager instance.
+ This initializer should normally not need to be used.
+ */
 - (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
+/**
+ Retrieve the underlying SWModule instance
+ */
 - (sword::SWModule *)swModule;
 #endif
-- (void)finalize;
 
+/**
+ Any error while processing the module?
+ */
 - (NSInteger)error;
+
+// --------------- Conf entries --------------
+
+/**
+ Module description
+ */
 - (NSString *)descr;
+/**
+ Module language
+ */
 - (NSString *)lang;
+/**
+ Module type as string
+ */
 - (NSString *)typeString;
+/**
+ Module version
+ */
 - (NSString *)version;
+/**
+ Module minimum Sword version
+ */
 - (NSString *)minVersion;
+/**
+ Module about text
+ */
 - (NSString *)aboutText;
-- (NSString *)versification;
+/**
+ Module full about text as RTF string
+ */
 - (NSAttributedString *)fullAboutText;
+/**
+ Module versification type
+ */
+- (NSString *)versification;
+/**
+ Is module Unicode UTF-8?
+ */
 - (BOOL)isUnicode;
+/**
+ Is module encrypted
+ */
 - (BOOL)isEncrypted;
+/**
+ Is module locked, that is encrypted but not unlocked?
+ */
 - (BOOL)isLocked;
+/**
+ Is module editable, i.e. is it's a personal commentary?
+ */
 - (BOOL)isEditable;
+/**
+ Is module writing direction Right to Left?
+ */
 - (BOOL)isRTL;
-- (BOOL)unlock:(NSString *)unlockKey;
-
-- (void)aquireModuleLock;
-- (void)releaseModuleLock;
-
+/**
+ Has module this feature?
+ See SWMOD_FEATURE_* in SwordManager
+ */
 - (BOOL)hasFeature:(NSString *)feature;
+/**
+ Returns a config entry for a given config key
+ */
 - (NSString *)configFileEntryForConfigKey:(NSString *)entryKey;
 
+// ------------------ module unlocking ------------------
+
+/**
+ Unlock this module with a cipher key, if it is encrypted.
+ */
+- (BOOL)unlock:(NSString *)unlockKey;
+
+// ------------------ module access semaphores -----------------
+
+/**
+ Aquires a module access lock so that no other thread may access this module.
+ */
+- (void)lockModuleAccess;
+/**
+ Unlock module access. Make it accessible to other threads.
+ */
+- (void)unlockModuleAccess;
+
+// ----------------- module positioning ------------------------
+
+/**
+ Increment module key position
+ */
 - (void)incKeyPosition;
+/**
+ Decrement module key position
+ */
 - (void)decKeyPosition;
+/**
+ Set position key from a string
+ */
 - (void)setKeyString:(NSString *)aKeyString;
+/**
+ Set position from a key
+ */
 - (void)setKey:(SwordKey *)aKey;
 
+/**
+ Module key. New instance created by module.
+ */
 - (id)createKey;
+/**
+ Module key. Reference only.
+ */
 - (id)getKey;
+/**
+ Module key. Reference only but cloned.
+ */
 - (id)getKeyCopy;
 
-- (void)setProcessEntryAttributes:(BOOL)flag;
-- (BOOL)processEntryAttributes;
+// ------------------- module metadata processing ------------------
 
-- (NSString *)renderedText;
-- (NSString *)renderedTextFromString:(NSString *)aString;
-- (NSString *)strippedText;
-- (NSString *)strippedTextFromString:(NSString *)aString;
+/**
+ Process metadata attributes of module entry.
+ */
+- (void)setProcessEntryAttributes:(BOOL)flag;
+/**
+ Are metadata attributes of module entry processed?
+ */
+- (BOOL)processEntryAttributes;
 
 /**
  returns attribute values from the engine for notes, cross-refs and such for the given link type
@@ -179,17 +253,60 @@ typedef enum {
 
 - (NSArray *)entryAttributeValuesLemma;
 
+// ----------------- Module text access ----------------------
+
 /**
- return a dictionary with key and text
- type can be: "rendered" or "stripped"
+ Retrieves a text entry for a given key.
+ Type can be: "rendered" or "stripped"
  */
 - (SwordModuleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType;
+/**
+ Convenience method with a key-string
+ */
 - (SwordModuleTextEntry *)textEntryForKeyString:(NSString *)aKeyString textType:(TextPullType)aType;
 
-// ------- SwordModuleAccess ---------
-- (long)entryCount;
+/**
+ Returns a rendered text for the text at the current module position
+ */
+- (NSString *)renderedText;
+/**
+ Renders the given string with the modules render filters
+ */
+- (NSString *)renderedTextFromString:(NSString *)aString;
+/** 
+ Returns a stripped text for the text at the current module position
+ */
+- (NSString *)strippedText;
+/**
+ Strips the given string with the modules strip filters
+ */
+- (NSString *)strippedTextFromString:(NSString *)aString;
+
+/**
+ abstract method, override in subclass
+ This method generates stripped text string for a given reference.
+ @param[in] reference bible reference
+ @return Array of SwordModuleTextEntry instances
+ */
 - (NSArray *)strippedTextEntriesForRef:(NSString *)reference;
+
+/** 
+ abstract method, override in subclass
+ This method generates HTML string for a given reference.
+ @param[in] reference bible reference
+ @return Array of SwordModuleTextEntry instances
+ */
 - (NSArray *)renderedTextEntriesForRef:(NSString *)reference;
+
+/** 
+ number of entries
+ abstract method, should be overriden by subclasses
+ */
+- (long)entryCount;
+
+/**
+ Write text to module position
+ */
 - (void)writeEntry:(SwordModuleTextEntry *)anEntry;
 
 @end

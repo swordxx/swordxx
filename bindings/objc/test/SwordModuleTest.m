@@ -47,4 +47,14 @@
     STAssertTrue([[text text] length] > 0, @"");
 }
 
+- (void)testCloneModule {
+    SwordBible *bible = (SwordBible *)[[SwordManager defaultManager] moduleWithName:@"GerSch"];
+    STAssertNotNil(bible, @"Module is nil");
+
+    /*
+    SwordBible *cloned = (SwordBible *)[bible clone];
+    STAssertNotNil(cloned, @"Module is nil");    
+     */
+}
+
 @end

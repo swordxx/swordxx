@@ -39,11 +39,6 @@ typedef enum {
 + (int)bookIndexForSWKey:(sword::VerseKey *)key;
 #endif
 
-// ----------- instance methods ------------
-- (id)initWithName:(NSString *)name swordManager:(SwordManager *)aManager;
-#ifdef __cplusplus
-- (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
-#endif
 
 - (BOOL)hasReference:(NSString *)ref;
 - (int)numberOfVerseKeysForReference:(NSString *)aReference;
@@ -61,8 +56,8 @@ typedef enum {
 - (int)versesForChapter:(int)chapter bookName:(NSString *)bookName;
 - (int)versesForBible;
 
+// Text pulling
 - (SwordBibleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType;
-
 - (NSArray *)strippedTextEntriesForRef:(NSString *)reference context:(int)context;
 - (NSArray *)renderedTextEntriesForRef:(NSString *)reference context:(int)context;
 
