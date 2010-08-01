@@ -8,6 +8,8 @@
  */
 
 #import <ObjCSword/SwordManager.h>
+#import <ObjCSword/SwordLocaleManager.h>
+#import <ObjCSword/SwordVerseManager.h>
 #import <ObjCSword/SwordModule.h>
 #import <ObjCSword/SwordBible.h>
 #import <ObjCSword/SwordCommentary.h>
@@ -25,3 +27,5 @@
 #import <ObjCSword/SwordModuleTextEntry.h>
 #import <ObjCSword/SwordModuleTreeEntry.h>
 #import <ObjCSword/VerseEnumerator.h>
+#import <ObjCSword/Configuration.h>
+#import <ObjCSword/OSXConfiguration.h>

@@ -106,7 +106,7 @@
 		A964658F11C6654300640FAC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */; };
 		A96465A511C6657900640FAC /* SwordManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A964658111C663E200640FAC /* SwordManagerTest.m */; };
 		A96465AD11C6658200640FAC /* SwordManagerTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A964658011C663E200640FAC /* SwordManagerTest.h */; };
-		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; };
+		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
 		A9921A1A11FD9CA8002DAA72 /* libSword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9921A1911FD9CA8002DAA72 /* libSword.dylib */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -124,7 +124,7 @@
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
 		A9EF13B31205952C0078A27C /* libSword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EF13B21205952C0078A27C /* libSword.dylib */; };
-		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; };
+		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 		A9EF1418120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; };
 		A9EF1419120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
@@ -1230,6 +1230,14 @@
 				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
 				A94EABFB117B28920018B06F /* SwordModCategory.h */,
 				A94EABFC117B28920018B06F /* SwordModCategory.m */,
+				A94EABF5117B28920018B06F /* SwordKey.h */,
+				A94EABF6117B28920018B06F /* SwordKey.mm */,
+				A94EABF7117B28920018B06F /* SwordListKey.h */,
+				A94EABF8117B28920018B06F /* SwordListKey.mm */,
+				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
+				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
+				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
+				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
 				A94EABF5117B28920018B06F /* SwordKey.h */,
 				A94EABF6117B28920018B06F /* SwordKey.mm */,
 				A94EABF7117B28920018B06F /* SwordListKey.h */,
