@@ -12,6 +12,7 @@
 */
 
 #import <Foundation/Foundation.h>
+#import "SwordModule.h"
 
 #ifdef __cplusplus
 #include <swmgr.h>		// C++ Sword API
@@ -28,12 +29,12 @@
 class sword::SWModule;
 #endif
 
-@class SwordModule;
+/** the major types as returned in -[SwordModule -typeString] */
+#define SWMOD_TYPES_BIBLES              @"Biblical Texts"
+#define SWMOD_TYPES_COMMENTARIES        @"Commentaries"
+#define SWMOD_TYPES_DICTIONARIES        @"Lexicons / Dictionaries"
+#define SWMOD_TYPES_GENBOOKS            @"Generic Books"
 
-#define SWMOD_CATEGORY_BIBLES			@"Biblical Texts"
-#define SWMOD_CATEGORY_COMMENTARIES     @"Commentaries"
-#define SWMOD_CATEGORY_DICTIONARIES     @"Lexicons / Dictionaries"
-#define SWMOD_CATEGORY_GENBOOKS         @"Generic Books"
 #define SWMOD_CATEGORY_DAILYDEVS        @"Daily Devotional"
 #define SWMOD_CATEGORY_GLOSSARIES       @"Glossaries"
 #define SWMOD_CATEGORY_CULTS            @"Cults / Unorthodox / Questionable Material"
@@ -217,7 +218,12 @@ class sword::SWModule;
 /**
  Get modules with certain type from internal list
  */
-- (NSArray *)modulesForType:(NSString *)type;
+- (NSArray *)modulesForType:(ModuleType)type;
+
+/**
+ Get modules with certain category from the internal list
+ */
+- (NSArray *)modulesForCategory:(ModuleCategory)cat;
 
 #ifdef __cplusplus
 - (id)initWithSWMgr:(sword::SWMgr *)smgr;

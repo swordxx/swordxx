@@ -15,6 +15,10 @@
 #import "SwordManager.h"
 #import "SwordModuleTextEntry.h"
 #import "SwordVerseKey.h"
+#import "SwordBible.h"
+#import "SwordCommentary.h"
+#import "SwordDictionary.h"
+#import "SwordBook.h"
 
 #import "rtfhtml.h"
 #import "swtext.h"
@@ -25,7 +29,6 @@
 @property(readwrite, retain) NSMutableDictionary *configEntries;
 - (void)mainInit;
 @end
-
 
 @implementation SwordModule
 
@@ -39,35 +42,81 @@
 @synthesize swManager;
 @synthesize name;
 
-/**
- \brief maps type string to ModuleType enum
- @param[in] typeStr type String as in -moduleType(SwordModule)
- @return type according to ModuleType enum
- */
++ (id)moduleForSWModule:(sword::SWModule *)aModule {
+    return [[[SwordModule alloc] initWithSWModule:aModule] autorelease];
+}
+
++ (id)moduleForSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager {
+    return [[[SwordModule alloc] initWithSWModule:aModule swordManager:aManager] autorelease];
+}
+
++ (id)moduleForType:(ModuleType)aType andName:(NSString *)aName swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager {    
+    SwordModule *sm = nil;
+    if(aType == Bible) {
+        sm = [[[SwordBible alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+    } else if(aType == Commentary) {
+        sm = [[[SwordCommentary alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+    } else if(aType == Dictionary) {
+        sm = [[[SwordDictionary alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+    } else if(aType == Genbook) {
+        sm = [[[SwordBook alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+    } else {
+        sm = [[[SwordModule alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+    }
+    
+    return sm;
+}
+
 + (ModuleType)moduleTypeForModuleTypeString:(NSString *)typeStr {
-     ModuleType ret = bible;
+     ModuleType ret = Bible;
     
     if(typeStr == nil) {
         ALog(@"have a nil typeStr!");
         return ret;
     }
     
-    if([typeStr isEqualToString:SWMOD_CATEGORY_BIBLES]) {
-        ret = bible;
-    } else if([typeStr isEqualToString:SWMOD_CATEGORY_COMMENTARIES]) {
-        ret = commentary;
-    } else if([typeStr isEqualToString:SWMOD_CATEGORY_DICTIONARIES]) {
-        ret = dictionary;
-    } else if([typeStr isEqualToString:SWMOD_CATEGORY_GENBOOKS]) {
-        ret = genbook;
+    if([typeStr isEqualToString:SWMOD_TYPES_BIBLES]) {
+        ret = Bible;
+    } else if([typeStr isEqualToString:SWMOD_TYPES_COMMENTARIES]) {
+        ret = Commentary;
+    } else if([typeStr isEqualToString:SWMOD_TYPES_DICTIONARIES]) {
+        ret = Dictionary;
+    } else if([typeStr isEqualToString:SWMOD_TYPES_GENBOOKS]) {
+        ret = Genbook;
     }
     
     return ret;
 }
 
++ (ModuleCategory)moduleCategoryForModuleCategoryString:(NSString *)categoryStr {
+    ModuleCategory ret = NoCategory;
+    
+    if(categoryStr == nil) {
+        ALog(@"have a nil categoryStr!");
+        return ret;
+    }
+    
+    if([categoryStr isEqualToString:SWMOD_CATEGORY_MAPS]) {
+        ret = Maps;
+    } else if([categoryStr isEqualToString:SWMOD_CATEGORY_IMAGES]) {
+        ret = Images;
+    } else if([categoryStr isEqualToString:SWMOD_CATEGORY_DAILYDEVS]) {
+        ret = DailyDevotion;
+    } else if([categoryStr isEqualToString:SWMOD_CATEGORY_ESSEYS]) {
+        ret = Essays;
+    } else if([categoryStr isEqualToString:SWMOD_CATEGORY_GLOSSARIES]) {
+        ret = Glossary;
+    } else if([categoryStr isEqualToString:SWMOD_CATEGORY_CULTS]) {
+        ret = Cults;
+    }
+    
+    return ret;    
+}
+
 #pragma mark - Initializers
 
 - (void)mainInit {
+    category = Unset;
     self.type = [SwordModule moduleTypeForModuleTypeString:[self typeString]];
     self.moduleLock = [[NSRecursiveLock alloc] init];
     self.indexLock = [[NSLock alloc] init];
@@ -160,6 +209,25 @@
         str = [NSString stringWithCString:swModule->Type() encoding:NSISOLatin1StringEncoding];
     }
     return str;
+}
+
+- (NSString *)categoryString {
+    NSString *cat = [configEntries objectForKey:SWMOD_CONFENTRY_CATEGORY];
+    if(cat == nil) {
+        cat = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_CATEGORY];
+        if(cat != nil) {
+            [configEntries setObject:cat forKey:SWMOD_CONFENTRY_CATEGORY];
+        }
+    }
+    
+    return cat;
+}
+
+- (ModuleCategory)category {
+    if(category == Unset) {
+        category = [SwordModule moduleCategoryForModuleCategoryString:[self categoryString]];
+    }
+    return category;
 }
 
 - (NSString *)cipherKey {

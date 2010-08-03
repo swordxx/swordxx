@@ -49,29 +49,13 @@ using std::list;
 		mod = it->second;
         
         if(mod) {
-            // create module instances
-            NSString *type;
-            NSString *name;
-            if(mod->isUnicode()) {
-                type = [NSString stringWithUTF8String:mod->Type()];
-                name = [NSString stringWithUTF8String:mod->Name()];
-            } else {
-                type = [NSString stringWithCString:mod->Type() encoding:NSISOLatin1StringEncoding];
-                name = [NSString stringWithCString:mod->Name() encoding:NSISOLatin1StringEncoding];
-            }
+            // temporary instance
+            SwordModule *swMod = [SwordModule moduleForSWModule:mod];
+            NSString *type = [swMod typeString];
+            NSString *name = [swMod name];
             
-            SwordModule *sm = nil;
-            if([type isEqualToString:SWMOD_CATEGORY_BIBLES]) {
-                sm = [[SwordBible alloc] initWithSWModule:mod swordManager:self];
-            } else if([type isEqualToString:SWMOD_CATEGORY_COMMENTARIES]) {
-                sm = [[SwordCommentary alloc] initWithSWModule:mod swordManager:self];
-            } else if([type isEqualToString:SWMOD_CATEGORY_DICTIONARIES]) {
-                sm = [[SwordDictionary alloc] initWithSWModule:mod swordManager:self];
-            } else if([type isEqualToString:SWMOD_CATEGORY_GENBOOKS]) {
-                sm = [[SwordBook alloc] initWithSWModule:mod swordManager:self];
-            } else {
-                sm = [[SwordModule alloc] initWithSWModule:mod swordManager:self];
-            }
+            ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
+            SwordModule *sm = [SwordModule moduleForType:aType andName:name swModule:mod swordManager:self];
             [dict setObject:sm forKey:[sm name]];
             
             [self addFiltersToModule:mod];            
@@ -194,10 +178,10 @@ using std::list;
 
 + (NSArray *)moduleTypes {
     return [NSArray arrayWithObjects:
-            SWMOD_CATEGORY_BIBLES, 
-            SWMOD_CATEGORY_COMMENTARIES,
-            SWMOD_CATEGORY_DICTIONARIES,
-            SWMOD_CATEGORY_GENBOOKS, nil];
+            SWMOD_TYPES_BIBLES, 
+            SWMOD_TYPES_COMMENTARIES,
+            SWMOD_TYPES_DICTIONARIES,
+            SWMOD_TYPES_GENBOOKS, nil];
 }
 
 + (SwordManager *)managerWithPath:(NSString *)path {
@@ -341,29 +325,18 @@ using std::list;
         if(mod == NULL) {
             ALog(@"No module by that name: %@!", name);
         } else {
-            NSString *type;
-            if(mod->isUnicode()) {
-                type = [NSString stringWithUTF8String:mod->Type()];
-            } else {
-                type = [NSString stringWithCString:mod->Type() encoding:NSISOLatin1StringEncoding];
-            }
+            // temporary instance
+            SwordModule *swMod = [SwordModule moduleForSWModule:mod];
+            NSString *type = [swMod typeString];
             
-            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:modules];
-            // create module
-            if([type isEqualToString:SWMOD_CATEGORY_BIBLES]) {
-                ret = [[[SwordBible alloc] initWithName:name swordManager:self] autorelease];
-            } else if([type isEqualToString:SWMOD_CATEGORY_COMMENTARIES]) {
-                ret = [[[SwordBible alloc] initWithName:name swordManager:self] autorelease];
-                //ret = [[[SwordCommentary alloc] initWithName:name swordManager:self] autorelease];
-            } else if([type isEqualToString:SWMOD_CATEGORY_DICTIONARIES]) {
-                ret = [[[SwordDictionary alloc] initWithName:name swordManager:self] autorelease];
-            } else if([type isEqualToString:SWMOD_CATEGORY_GENBOOKS]) {
-                ret = [[[SwordBook alloc] initWithName:name swordManager:self] autorelease];
-            } else {
-                ret = [[[SwordModule alloc] initWithName:name swordManager:self] autorelease];
+            ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
+            ret = [SwordModule moduleForType:aType andName:name swModule:mod swordManager:self];
+
+            if(ret != nil) {
+                NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:modules];
+                [dict setObject:ret forKey:name];
+                self.modules = dict;                
             }
-            [dict setObject:ret forKey:name];
-            self.modules = dict;
         }        
     }
     
@@ -400,7 +373,6 @@ using std::list;
 }
 
 - (NSArray *)modulesForFeature:(NSString *)feature {
-
     NSMutableArray *ret = [NSMutableArray array];
     for(SwordModule *mod in [modules allValues]) {
         if([mod hasFeature:feature]) {
@@ -415,11 +387,10 @@ using std::list;
 	return [NSArray arrayWithArray:ret];
 }
 
-- (NSArray *)modulesForType:(NSString *)type {
-
+- (NSArray *)modulesForType:(ModuleType)type {
     NSMutableArray *ret = [NSMutableArray array];
     for(SwordModule *mod in [modules allValues]) {
-        if([[mod typeString] isEqualToString:type]) {
+        if([mod type] == type) {
             [ret addObject:mod];
         }
     }
@@ -429,6 +400,21 @@ using std::list;
     [ret sortUsingDescriptors:sortDescritors];
     
 	return [NSArray arrayWithArray:ret];
+}
+
+- (NSArray *)modulesForCategory:(ModuleCategory)cat {
+    NSMutableArray *ret = [NSMutableArray array];
+    for(SwordModule *mod in [modules allValues]) {
+        if([mod category] == cat) {
+            [ret addObject:mod];
+        }
+    }
+    
+    // sort
+    NSArray *sortDescritors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]; 
+    [ret sortUsingDescriptors:sortDescritors];
+    
+	return [NSArray arrayWithArray:ret];    
 }
 
 #pragma mark - lowlevel methods

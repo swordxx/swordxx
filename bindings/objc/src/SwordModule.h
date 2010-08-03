@@ -39,19 +39,35 @@ typedef enum {
     TextTypeRendered
 }TextPullType;
 
+/** These are the main module types as returned in -typeString */
 typedef enum {
-	bible       = 0x0001, 
-    commentary  = 0x0002, 
-    dictionary  = 0x0004,
-    genbook     = 0x0008, 
-    devotional  = 0x0010
+	Bible       = 0x0001, 
+    Commentary  = 0x0002, 
+    Dictionary  = 0x0004,
+    Genbook     = 0x0008
 }ModuleType;
+
+/**
+ These are the main module categories as returned in -categoryString
+ Remember that modules type bible, commentary, dictionary and genbook not necessarily have a category
+ */
+typedef enum {
+    Unset           = -1,
+    NoCategory      = 0,
+	DailyDevotion   = 0x0001, 
+    Maps            = 0x0002, 
+    Glossary        = 0x0004,
+    Images          = 0x0008,
+    Essays          = 0x0010,
+    Cults           = 0x0011    
+}ModuleCategory;
 
 
 @interface SwordModule : NSObject {
     
     NSMutableDictionary *configEntries;
 	ModuleType type;
+	ModuleCategory category;
     int status;
 	SwordManager *swManager;	
 	NSRecursiveLock *moduleLock;
@@ -76,12 +92,31 @@ typedef enum {
 @property (retain, readwrite) NSString *name;
 @property (retain, readwrite) SwordManager *swManager;
 
+#ifdef __cplusplus
+/**
+ Convenience initializers
+ */
++ (id)moduleForSWModule:(sword::SWModule *)aModule;
++ (id)moduleForSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
+/**
+ Factory method that creates the correct module type instance for the given type
+ */
++ (id)moduleForType:(ModuleType)aType andName:(NSString *)aName swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager;
+#endif
+
 /**
  maps type string to ModuleType enum
- @param[in] typeStr type String as in -type(SwordModule)
+ @param[in] typeStr type String as in -typeString(SwordModule)
  @return type according to ModuleType enum
  */
 + (ModuleType)moduleTypeForModuleTypeString:(NSString *)typeStr;
+
+/**
+ maps type string to ModuleType enum
+ @param[in] categoryStr category String as in -categoryString(SwordModule)
+ @return type according to ModuleCategory enum
+ */
++ (ModuleCategory)moduleCategoryForModuleCategoryString:(NSString *)categoryStr;
 
 // ------------- instance methods ---------------
 
@@ -126,6 +161,14 @@ typedef enum {
  Module type as string
  */
 - (NSString *)typeString;
+/**
+ Module category as string
+ */
+- (NSString *)categoryString;
+/**
+ Module category
+ */
+- (ModuleCategory)category;
 /**
  Module version
  */

@@ -22,7 +22,6 @@
 		A9013D0711E316C700E1CCCA /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF5117B28920018B06F /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9013D0811E316C700E1CCCA /* SwordListKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF7117B28920018B06F /* SwordListKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9013D0911E316C700E1CCCA /* SwordManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF9117B28920018B06F /* SwordManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9013D0A11E316C700E1CCCA /* SwordModCategory.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFB117B28920018B06F /* SwordModCategory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9013D0B11E316C700E1CCCA /* SwordModule.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFD117B28920018B06F /* SwordModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9013D0C11E316C700E1CCCA /* SwordModuleTextEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9013D0D11E316C700E1CCCA /* SwordModuleTreeEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,7 +46,6 @@
 		A9013D2911E316C700E1CCCA /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF6117B28920018B06F /* SwordKey.mm */; };
 		A9013D2A11E316C700E1CCCA /* SwordListKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF8117B28920018B06F /* SwordListKey.mm */; };
 		A9013D2B11E316C700E1CCCA /* SwordManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFA117B28920018B06F /* SwordManager.mm */; };
-		A9013D2C11E316C700E1CCCA /* SwordModCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFC117B28920018B06F /* SwordModCategory.m */; };
 		A9013D2D11E316C700E1CCCA /* SwordModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFE117B28920018B06F /* SwordModule.mm */; };
 		A9013D2E11E316C700E1CCCA /* SwordModuleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */; };
 		A9013D2F11E316C700E1CCCA /* SwordModuleTreeEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */; };
@@ -84,8 +82,6 @@
 		A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF8117B28920018B06F /* SwordListKey.mm */; };
 		A94EAC21117B28920018B06F /* SwordManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF9117B28920018B06F /* SwordManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC22117B28920018B06F /* SwordManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFA117B28920018B06F /* SwordManager.mm */; };
-		A94EAC23117B28920018B06F /* SwordModCategory.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFB117B28920018B06F /* SwordModCategory.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A94EAC24117B28920018B06F /* SwordModCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFC117B28920018B06F /* SwordModCategory.m */; };
 		A94EAC25117B28920018B06F /* SwordModule.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFD117B28920018B06F /* SwordModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC26117B28920018B06F /* SwordModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFE117B28920018B06F /* SwordModule.mm */; };
 		A94EAC27117B28920018B06F /* SwordModuleTextEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -110,12 +106,16 @@
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
 		A9921A1A11FD9CA8002DAA72 /* libSword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9921A1911FD9CA8002DAA72 /* libSword.dylib */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9C2819B11C43C6500803CB5 /* TestLocalTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818A11C43B9E00803CB5 /* TestLocalTest.m */; };
-		A9C2819C11C43C6900803CB5 /* SetClassTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818711C43AB200803CB5 /* SetClassTest.m */; };
-		A9C2819D11C43C6A00803CB5 /* Test1.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2818411C43A4300803CB5 /* Test1.m */; };
-		A9C281A611C43CF000803CB5 /* SetClassTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818111C43A2900803CB5 /* SetClassTest.h */; };
-		A9C281A711C43CF000803CB5 /* Test1.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818311C43A4300803CB5 /* Test1.h */; };
-		A9C281A811C43CF000803CB5 /* TestLocalTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2818911C43B9E00803CB5 /* TestLocalTest.h */; };
+		A9BDFA621207F9870067ED5B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */; };
+		A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
+		A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A964658011C663E200640FAC /* SwordManagerTest.h */; };
+		A9BDFA671207F9870067ED5B /* SwordModuleTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A918B8E211C6697400024D84 /* SwordModuleTest.h */; };
+		A9BDFA781207F9F00067ED5B /* SwordListKeyTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */; };
+		A9BDFA791207F9F00067ED5B /* SwordListKeyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */; };
+		A9BDFA7C1207FA2F0067ED5B /* SwordModuleLongRunTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */; };
+		A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */; };
+		A9BDFA861207FC8C0067ED5B /* ImageModuleTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BDFA841207FC8C0067ED5B /* ImageModuleTest.h */; };
+		A9BDFA871207FC8C0067ED5B /* ImageModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA851207FC8C0067ED5B /* ImageModuleTest.m */; };
 		A9C2856F11C446B700803CB5 /* Configuration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2856D11C446B700803CB5 /* Configuration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9C2857311C4471400803CB5 /* OSXConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2857111C4471400803CB5 /* OSXConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9C2857411C4471400803CB5 /* OSXConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2857211C4471400803CB5 /* OSXConfiguration.m */; };
@@ -400,6 +400,13 @@
 			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = ObjCSword;
 		};
+		A9BDFA5C1207F9870067ED5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = ObjCSword;
+		};
 		A9FB29A011FD965B004C4295 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -468,8 +475,6 @@
 		A94EABF8117B28920018B06F /* SwordListKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordListKey.mm; path = src/SwordListKey.mm; sourceTree = "<group>"; };
 		A94EABF9117B28920018B06F /* SwordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordManager.h; path = src/SwordManager.h; sourceTree = "<group>"; };
 		A94EABFA117B28920018B06F /* SwordManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordManager.mm; path = src/SwordManager.mm; sourceTree = "<group>"; };
-		A94EABFB117B28920018B06F /* SwordModCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModCategory.h; path = src/SwordModCategory.h; sourceTree = "<group>"; };
-		A94EABFC117B28920018B06F /* SwordModCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModCategory.m; path = src/SwordModCategory.m; sourceTree = "<group>"; };
 		A94EABFD117B28920018B06F /* SwordModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModule.h; path = src/SwordModule.h; sourceTree = "<group>"; };
 		A94EABFE117B28920018B06F /* SwordModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordModule.mm; path = src/SwordModule.mm; sourceTree = "<group>"; };
 		A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTextEntry.h; path = src/SwordModuleTextEntry.h; sourceTree = "<group>"; };
@@ -506,12 +511,14 @@
 		A975EED911C792B9007C1532 /* mod2osis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2osis; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9921A1911FD9CA8002DAA72 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
-		A9C2818111C43A2900803CB5 /* SetClassTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetClassTest.h; path = test/SetClassTest.h; sourceTree = "<group>"; };
-		A9C2818311C43A4300803CB5 /* Test1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Test1.h; path = test/Test1.h; sourceTree = "<group>"; };
-		A9C2818411C43A4300803CB5 /* Test1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Test1.m; path = test/Test1.m; sourceTree = "<group>"; };
-		A9C2818711C43AB200803CB5 /* SetClassTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetClassTest.m; path = test/SetClassTest.m; sourceTree = "<group>"; };
-		A9C2818911C43B9E00803CB5 /* TestLocalTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestLocalTest.h; path = test/TestLocalTest.h; sourceTree = "<group>"; };
-		A9C2818A11C43B9E00803CB5 /* TestLocalTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestLocalTest.m; path = test/TestLocalTest.m; sourceTree = "<group>"; };
+		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info copy.plist"; sourceTree = "<group>"; };
+		A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKeyTest.h; path = test/SwordListKeyTest.h; sourceTree = "<group>"; };
+		A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordListKeyTest.m; path = test/SwordListKeyTest.m; sourceTree = "<group>"; };
+		A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleLongRunTest.h; path = test/SwordModuleLongRunTest.h; sourceTree = "<group>"; };
+		A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordModuleLongRunTest.mm; path = test/SwordModuleLongRunTest.mm; sourceTree = "<group>"; };
+		A9BDFA841207FC8C0067ED5B /* ImageModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageModuleTest.h; path = ../../../../test/ImageModuleTest.h; sourceTree = SOURCE_ROOT; };
+		A9BDFA851207FC8C0067ED5B /* ImageModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageModuleTest.m; path = ../../../../test/ImageModuleTest.m; sourceTree = SOURCE_ROOT; };
 		A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A9C2819611C43C4900803CB5 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9C2819711C43C4900803CB5 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
@@ -1130,6 +1137,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9BDFA611207F9870067ED5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BDFA621207F9870067ED5B /* SenTestingKit.framework in Frameworks */,
+				A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9C2819311C43C4900803CB5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1158,6 +1174,7 @@
 				A9013D3E11E316C700E1CCCA /* ObjCSword_iOS.framework */,
 				A9921A1911FD9CA8002DAA72 /* libSword.dylib */,
 				A9EF13B21205952C0078A27C /* libSword.dylib */,
+				A9BDFA6B1207F9870067ED5B /* Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1175,6 +1192,7 @@
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				A9C2819711C43C4900803CB5 /* Tests-Info.plist */,
+				A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */,
 			);
 			name = ObjCSword;
 			sourceTree = "<group>";
@@ -1228,8 +1246,6 @@
 				A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */,
 				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
 				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
-				A94EABFB117B28920018B06F /* SwordModCategory.h */,
-				A94EABFC117B28920018B06F /* SwordModCategory.m */,
 				A94EABF5117B28920018B06F /* SwordKey.h */,
 				A94EABF6117B28920018B06F /* SwordKey.mm */,
 				A94EABF7117B28920018B06F /* SwordListKey.h */,
@@ -1343,16 +1359,16 @@
 		A9C2857911C4486400803CB5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				A9C2818111C43A2900803CB5 /* SetClassTest.h */,
-				A9C2818711C43AB200803CB5 /* SetClassTest.m */,
-				A9C2818311C43A4300803CB5 /* Test1.h */,
-				A9C2818411C43A4300803CB5 /* Test1.m */,
-				A9C2818911C43B9E00803CB5 /* TestLocalTest.h */,
-				A9C2818A11C43B9E00803CB5 /* TestLocalTest.m */,
 				A964658011C663E200640FAC /* SwordManagerTest.h */,
 				A964658111C663E200640FAC /* SwordManagerTest.m */,
 				A918B8E211C6697400024D84 /* SwordModuleTest.h */,
 				A918B8E311C6697400024D84 /* SwordModuleTest.m */,
+				A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */,
+				A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */,
+				A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */,
+				A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */,
+				A9BDFA841207FC8C0067ED5B /* ImageModuleTest.h */,
+				A9BDFA851207FC8C0067ED5B /* ImageModuleTest.m */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -2311,7 +2327,6 @@
 				A94EAC1D117B28920018B06F /* SwordKey.h in Headers */,
 				A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */,
 				A94EAC21117B28920018B06F /* SwordManager.h in Headers */,
-				A94EAC23117B28920018B06F /* SwordModCategory.h in Headers */,
 				A94EAC25117B28920018B06F /* SwordModule.h in Headers */,
 				A94EAC27117B28920018B06F /* SwordModuleTextEntry.h in Headers */,
 				A94EAC29117B28920018B06F /* SwordModuleTreeEntry.h in Headers */,
@@ -2343,7 +2358,6 @@
 				A9013D0711E316C700E1CCCA /* SwordKey.h in Headers */,
 				A9013D0811E316C700E1CCCA /* SwordListKey.h in Headers */,
 				A9013D0911E316C700E1CCCA /* SwordManager.h in Headers */,
-				A9013D0A11E316C700E1CCCA /* SwordModCategory.h in Headers */,
 				A9013D0B11E316C700E1CCCA /* SwordModule.h in Headers */,
 				A9013D0C11E316C700E1CCCA /* SwordModuleTextEntry.h in Headers */,
 				A9013D0D11E316C700E1CCCA /* SwordModuleTreeEntry.h in Headers */,
@@ -2358,15 +2372,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9BDFA651207F9870067ED5B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */,
+				A9BDFA671207F9870067ED5B /* SwordModuleTest.h in Headers */,
+				A9BDFA7C1207FA2F0067ED5B /* SwordModuleLongRunTest.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9C281B611C43DB800803CB5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9C281A611C43CF000803CB5 /* SetClassTest.h in Headers */,
-				A9C281A711C43CF000803CB5 /* Test1.h in Headers */,
-				A9C281A811C43CF000803CB5 /* TestLocalTest.h in Headers */,
 				A96465AD11C6658200640FAC /* SwordManagerTest.h in Headers */,
 				A918B8E411C6697400024D84 /* SwordModuleTest.h in Headers */,
+				A9BDFA781207F9F00067ED5B /* SwordListKeyTest.h in Headers */,
+				A9BDFA861207FC8C0067ED5B /* ImageModuleTest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2437,6 +2460,26 @@
 			productReference = A975EED911C792B9007C1532 /* mod2osis */;
 			productType = "com.apple.product-type.tool";
 		};
+		A9BDFA5A1207F9870067ED5B /* LongRunningTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */;
+			buildPhases = (
+				A9BDFA5D1207F9870067ED5B /* Resources */,
+				A9BDFA5E1207F9870067ED5B /* Sources */,
+				A9BDFA611207F9870067ED5B /* Frameworks */,
+				A9BDFA641207F9870067ED5B /* ShellScript */,
+				A9BDFA651207F9870067ED5B /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */,
+			);
+			name = LongRunningTests;
+			productName = Tests;
+			productReference = A9BDFA6B1207F9870067ED5B /* Tests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		A9C2819511C43C4900803CB5 /* Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9C2819A11C43C4900803CB5 /* Build configuration list for PBXNativeTarget "Tests" */;
@@ -2490,6 +2533,7 @@
 				8DC2EF4F0486A6940098B216 /* ObjCSword */,
 				A9013CF911E316C700E1CCCA /* ObjCSword_iOS */,
 				A9C2819511C43C4900803CB5 /* Tests */,
+				A9BDFA5A1207F9870067ED5B /* LongRunningTests */,
 				A975EED811C792B9007C1532 /* mod2osis */,
 				A9FB25DF11FD939E004C4295 /* Sword_iOS */,
 			);
@@ -2515,6 +2559,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9BDFA5D1207F9870067ED5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9C2819111C43C4900803CB5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2525,6 +2576,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A9BDFA641207F9870067ED5B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 		A9C2819411C43C4900803CB5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2557,7 +2621,6 @@
 				A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */,
 				A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */,
 				A94EAC22117B28920018B06F /* SwordManager.mm in Sources */,
-				A94EAC24117B28920018B06F /* SwordModCategory.m in Sources */,
 				A94EAC26117B28920018B06F /* SwordModule.mm in Sources */,
 				A94EAC28117B28920018B06F /* SwordModuleTextEntry.m in Sources */,
 				A94EAC2A117B28920018B06F /* SwordModuleTreeEntry.m in Sources */,
@@ -2587,7 +2650,6 @@
 				A9013D2911E316C700E1CCCA /* SwordKey.mm in Sources */,
 				A9013D2A11E316C700E1CCCA /* SwordListKey.mm in Sources */,
 				A9013D2B11E316C700E1CCCA /* SwordManager.mm in Sources */,
-				A9013D2C11E316C700E1CCCA /* SwordModCategory.m in Sources */,
 				A9013D2D11E316C700E1CCCA /* SwordModule.mm in Sources */,
 				A9013D2E11E316C700E1CCCA /* SwordModuleTextEntry.m in Sources */,
 				A9013D2F11E316C700E1CCCA /* SwordModuleTreeEntry.m in Sources */,
@@ -2609,15 +2671,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9BDFA5E1207F9870067ED5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9C2819211C43C4900803CB5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9C2819B11C43C6500803CB5 /* TestLocalTest.m in Sources */,
-				A9C2819C11C43C6900803CB5 /* SetClassTest.m in Sources */,
-				A9C2819D11C43C6A00803CB5 /* Test1.m in Sources */,
 				A96465A511C6657900640FAC /* SwordManagerTest.m in Sources */,
 				A918B8E511C6697400024D84 /* SwordModuleTest.m in Sources */,
+				A9BDFA791207F9F00067ED5B /* SwordListKeyTest.m in Sources */,
+				A9BDFA871207FC8C0067ED5B /* ImageModuleTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2898,6 +2967,11 @@
 			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
 			targetProxy = A964657A11C662CA00640FAC /* PBXContainerItemProxy */;
 		};
+		A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
+			targetProxy = A9BDFA5C1207F9870067ED5B /* PBXContainerItemProxy */;
+		};
 		A9FB29A111FD965B004C4295 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A9FB25DF11FD939E004C4295 /* Sword_iOS */;
@@ -3148,6 +3222,68 @@
 			};
 			name = Release;
 		};
+		A9BDFA691207F9870067ED5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.5;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		A9BDFA6A1207F9870067ED5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.5;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		A9C2819811C43C4900803CB5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3303,6 +3439,15 @@
 			buildConfigurations = (
 				A975EEDE11C792BA007C1532 /* Debug */,
 				A975EEDF11C792BA007C1532 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9BDFA691207F9870067ED5B /* Debug */,
+				A9BDFA6A1207F9870067ED5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
