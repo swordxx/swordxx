@@ -9,19 +9,66 @@
 #  ICU_I18N_LIBRARIES - Libraries to link against for ICU internationaliation
 #                       (note: in addition to ICU_LIBRARIES)
 
-# Look for the header file.
-find_path(
-  ICU_INCLUDE_DIR 
-  NAMES unicode/utypes.h
-  DOC "Include directory for the ICU library")
-mark_as_advanced(ICU_INCLUDE_DIR)
+# Our first goal is to find the icu-config script, if possible
+find_program(
+  ICU_CONFIG_BIN
+  icu-config
+)
+find_program(
+     ICU_GENRB
+     genrb
+)
 
-# Look for the library.
-find_library(
-  ICU_LIBRARY
-  NAMES icuuc cygicuuc cygicuuc32
-  DOC "Libraries to link against for the common parts of ICU")
-mark_as_advanced(ICU_LIBRARY)
+if(ICU_CONFIG_BIN)
+  MESSAGE(STATUS "icu-config found at ${ICU_CONFIG_BIN}: Using that for configuration")
+  MESSAGE(STATUS "genrb found at ${ICU_GENRB}: Using that for generating transliteration data")
+
+  # Get include directories
+  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--cppflags"
+    OUTPUT_VARIABLE ICU_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  # Sanitize output
+  string(REPLACE "-I" "" ICU_INCLUDE_DIR ${ICU_INCLUDE_DIR})
+  string(REGEX REPLACE "^[ 	]+" "" ICU_INCLUDE_DIR ${ICU_INCLUDE_DIR})
+
+     # Try to get the Libraries we need
+  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--ldflags"
+    OUTPUT_VARIABLE ICU_LIBRARY_RAW
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  
+  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--ldflags-icuio"
+     OUTPUT_VARIABLE ICU_LIBRARY_IO_RAW
+     OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+     string(REGEX REPLACE "^[ 	]+" "" ICU_LIBRARY ${ICU_LIBRARY_RAW})
+     string(REGEX REPLACE "^[ 	]+" "" ICU_LIBRARY_IO ${ICU_LIBRARY_IO_RAW})
+     # Combine them
+     set(ICU_LIBRARY "${ICU_LIBRARY} ${ICU_LIBRARY_IO_RAW}")
+     
+     # Get the version
+     execute_process(COMMAND "${ICU_CONFIG_BIN}" "--version"
+	  OUTPUT_VARIABLE ICU_VERSION
+	  OUTPUT_STRIP_TRAILING_WHITESPACE
+     )
+else(ICU_CONFIG_BIN)
+
+  # Look for the header file.
+  find_path(
+    ICU_INCLUDE_DIR 
+    NAMES unicode/utypes.h
+    DOC "Include directory for the ICU library")
+  mark_as_advanced(ICU_INCLUDE_DIR)
+
+  # Look for the library.
+  find_library(
+    ICU_LIBRARY
+    NAMES icuuc cygicuuc cygicuuc32
+    DOC "Libraries to link against for the common parts of ICU")
+  mark_as_advanced(ICU_LIBRARY)
+endif(ICU_CONFIG_BIN)
 
 # Copy the results to the output variables.
 if(ICU_INCLUDE_DIR AND ICU_LIBRARY)

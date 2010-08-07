@@ -53,3 +53,21 @@ ENDIF(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/sword.pc.in ${CMAKE_CURRENT_BINARY_DIR}/sword.pc @ONLY)
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/sword.pc
 	DESTINATION "${SWORD_INSTALL_DIR}/lib/pkgconfig")
+
+# Need to build/install the 
+IF(WITH_ICU AND ICU_GENRB)
+      ADD_DEFINITIONS(-DSWICU_DATA="${libdir}/${SWORD_VERSION}_icu_${ICU_VERSION}")
+      FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/icu")
+      FOREACH(translit ${translit_SOURCES})
+	  STRING(REPLACE ".txt" ".res" translit_OUTPUT ${translit})
+	  ADD_CUSTOM_COMMAND(TARGET sword
+	       POST_BUILD
+	       COMMAND ${ICU_GENRB} -s . -d "${CMAKE_CURRENT_BINARY_DIR}/icu" ${translit}
+	       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icu"
+	       COMMENT "Converting ${translit}"
+	       VERBATIM
+	  )
+	  INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/icu/${translit_OUTPUT}"
+	       DESTINATION "${libdir}/${SWORD_VERSION}_icu_${ICU_VERSION}")
+     ENDFOREACH(translit ${translit_SOURCES})
+ENDIF(WITH_ICU AND ICU_GENRB)

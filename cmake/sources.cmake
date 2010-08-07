@@ -405,3 +405,16 @@ SET(SWORD_INSTALL_HEADERS
 SET(INTERNAL_REGEX_HEADER
 	include/internal/regex/regex.h
 )
+
+SET(translit_SOURCES
+	translit_Any_Latex.txt
+	translit_Any_Latin1.txt
+	translit_BETA_Greek.txt
+	translit_BGreek_Greek.txt
+	translit_CCAT_Hebrew.txt
+	translit_CCAT_Syriac.txt
+	translit_Latin_Coptic.txt
+	translit_Latin_Gothic.txt
+	translit_Latin_Ugaritic.txt
+	translit_swordindex.txt
+)
