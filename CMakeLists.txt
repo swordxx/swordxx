@@ -163,6 +163,14 @@ TARGET_LINK_LIBRARIES(buildtest sword)
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 
 ##############################################################################################
+# Bindings are good, right?
+#
+
+IF(SWORD_BINDINGS STREQUAL "Python")
+	INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/bindings.cmake")
+ENDIF(SWORD_BINDINGS STREQUAL "Python")
+
+##############################################################################################
 # Utilities are hawt
 # 
 
