@@ -2,6 +2,7 @@
 echo "*** copying swig files"
 cp -a ../*.i .
 cp -a ../*.h .
+cp -R ../local .
 
 echo "*** Recreating libtool"
 if test -z "$LTIZE"; then
