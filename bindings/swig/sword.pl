@@ -49,29 +49,31 @@ print "testing SWMgr\n";
 $mgr = new Sword::SWMgr();
 print "init ... ";
 #$module = $mgr->module("GerLut1545-temp");
-$module = $mgr->module("WEB");
+$module = $mgr->getModule("WEB");
 print "Printing WEB Module information: \n";
 print "Name:\t", $module->Name(),"\nDescription:\t", $module->Description(), "\nLang:\t", $module->Lang(), "\n";
 
 $key = new Sword::VerseKey("Matthew 3:16");
-$key->setPersist(1);
+#$key->setPersist(1);
 $module->SetKey($key);
 
 for ($i = 0; $i < 15; $i++) {
   print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
-  $key->next();
+  $key->increment();
+  $module->SetKey($key);
 }
 $key->increment(103);
+$module->SetKey($key);
 print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
 
 #testing write interface
 $key->setText("John 3:16");
-#$module->SetKey($key);
-$module->write("This is a test entry! This tests the write abilities of the Sword Perl classes");
+$module->SetKey($key);
+$module->setEntry("This is a test entry! This tests the write abilities of the Sword Perl classes", 78);
 print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
 
 print "Searching for God: ";
-$list = $module->Search("Gott");
+$list = $module->doSearch("God");
 print $list->Count(), " entries found!\n";
 #for ( $i = 0; $i < $list->Count(); $i++) {
 #  print "(", $i, ")\t", $list->GetElement()->getText(), "\n";
@@ -105,7 +107,7 @@ $newmod = new Sword::zText("ldmod/");
 print "Created module;\n";
 
 $newkey = $newmod->CreateKey();
-$newkey->setPersist(1);
+#$newkey->setPersist(1);
 $newkey->setText(" ");
 $module->SetKey($newkey);
 
@@ -119,7 +121,8 @@ for ($i = 0; $i < $list->Count(); $i++) {
 
 	$newmod->SetKey($newkey);
 
-        $newmod->write( $module->StripText() );
-	$list->next();
+	$entry = $module->StripText();
+        $newmod->setEntry( $entry, length $entry );
+	$list->increment();
 }
 

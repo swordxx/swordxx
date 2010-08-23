@@ -3,7 +3,11 @@
 %include <std_list.i>
 
 %include <std_pair.i>
+#ifdef SWIGPYTHON
 %include <std_multimap.i>
+#else
+%include "local/std_multimap.i"
+#endif
 %include <multimapwdef.h>
 
 /*
@@ -40,7 +44,9 @@ typedef std::map < sword::SWBuf, PyConfigEntMap > PySectionMap;
 %template(AttributeTypeListMap) std::map < sword::SWBuf, AttributeListMap>;
 
 /* Used by SWConfig */
+#ifdef SWIGPYTHON
 %template(PyConfigEntMap) std::multimap < sword::SWBuf, sword::SWBuf, std::less <sword::SWBuf> >;
+#endif
 /* %template() std::less <sword::SWBuf>;*/
 %template() std::pair < sword::SWBuf, std::multimap < sword::SWBuf,
  sword::SWBuf > >/*PyConfigEntMap >*/;

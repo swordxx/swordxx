@@ -6,7 +6,9 @@
 /* Ignore warnings about Unknown base class */
 %warnfilter(401);
 
+#ifdef SWIGPYTHON
 %include "directors.i"
+#endif
 
 /* Some generic ignores. These don't map into any Python operators */
 %ignore *::operator=;

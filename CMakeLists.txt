@@ -166,9 +166,9 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 # Bindings are good, right?
 #
 
-IF(SWORD_BINDINGS STREQUAL "Python")
+IF(NOT SWORD_BINDINGS STREQUAL "")
 	INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/bindings.cmake")
-ENDIF(SWORD_BINDINGS STREQUAL "Python")
+ENDIF(NOT SWORD_BINDINGS STREQUAL "")
 
 ##############################################################################################
 # Utilities are hawt
