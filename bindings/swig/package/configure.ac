@@ -4,7 +4,7 @@
 AC_INIT([swordbindings],[1.6.1+svn$Rev$],[sword-bugs@crosswire.org])
 AC_CONFIG_SRCDIR(sword.i)
 AC_PREREQ(2.59)
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision$)
 AM_INIT_AUTOMAKE(swordbindings,1.5.11)
 
 # ---------------------------------------------------------------------
