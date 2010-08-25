@@ -1,9 +1,9 @@
 #####################################################################################################
 #
 # A system to, hopefully, build the Sword bindings which are asked for.  Currently I only know and
-# therefore only support the Python bindings.  YMMV for it, please submit patches or suggestions.
+# therefore only support Python & Perl bindings.  YMMV for it, please submit patches or suggestions.
 # I will try to get them integrated into the system if I can.  If there are bindings that you need
-# other than the Python/Swig bindings, then you should probably speak up now.
+# other than the Python|Perl/Swig bindings, then you should probably speak up now.
 
 #####################################################################################################
 # SWIG
@@ -63,6 +63,7 @@ ELSE(NOT SWIG_FOUND)
 			COMMAND echo " include_dirs=['${SWORD_SWIG_SOURCE}', '${CMAKE_CURRENT_SOURCE_DIR}/include', '${SWORD_SWIG_SOURCE}/..', '${SWORD_SWIG_SOURCE}/../..']," >> ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo " ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo " libraries=[('sword')], " >> ${SWORD_SWIG_BINARY}/python/setup.py
+                        COMMAND echo " library_dirs=[('${CMAKE_CURRENT_BINARY_DIR}')], " >> ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo " )], " >> ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo ")" >> ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo "Python bindings built, to install change into ${SWORD_SWIG_BINARY}/python and type 'python setup.py install'"
