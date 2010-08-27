@@ -178,9 +178,8 @@
 
 #pragma mark - Conf entries
 
-/** abstract method. subclasses should handle implementation. */
 - (NSAttributedString *)fullAboutText {
-    return [[NSMutableAttributedString alloc] init];
+    return [[[NSAttributedString alloc] initWithString:@""] autorelease];
 }
 
 - (NSInteger)error {

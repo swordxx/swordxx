@@ -182,7 +182,7 @@ typedef enum {
  */
 - (NSString *)aboutText;
 /**
- Module full about text as RTF string
+ Override to get custom behaviour.
  */
 - (NSAttributedString *)fullAboutText;
 /**
