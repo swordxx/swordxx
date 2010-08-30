@@ -90,6 +90,14 @@ ELSE(LIBSWORD_LIBRARY_TYPE STREQUAL "Shared")
 #	MESSAGE(ERROR "Please set library build type to either 'Static' or 'Shared'")
 ENDIF(LIBSWORD_LIBRARY_TYPE STREQUAL "Shared")
 
+IF(NOT LIBSWORD_SOVERSION)
+        SET(SWORD_SOVERSION ${SWORD_VERSION})
+ELSE(NOT LIBSWORD_SOVERSION)
+        SET(SWORD_SOVERSION ${LIBSWORD_SOVERSION})
+ENDIF(NOT LIBSWORD_SOVERSION)
+SET_TARGET_PROPERTIES(sword
+        PROPERTIES SOVERSION ${SWORD_SOVERSION})
+
 ###############################################################################################
 # Some options are only needed if we're going to be building a debug option into the library
 # These are generally only for developer building and testing
