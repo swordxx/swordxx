@@ -82,21 +82,44 @@ ENDIF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
 # Most of the work for configuration is done above, already.
 #
 # I want to do this manually, there might be reason in the future
-IF(LIBSWORD_LIBRARY_TYPE STREQUAL "Shared")
+IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
 	ADD_LIBRARY(sword SHARED ${sword_SOURCES})
-ELSE(LIBSWORD_LIBRARY_TYPE STREQUAL "Shared")
-	ADD_LIBRARY(sword STATIC ${sword_SOURCES})
-#ELSE(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
-#	MESSAGE(ERROR "Please set library build type to either 'Static' or 'Shared'")
-ENDIF(LIBSWORD_LIBRARY_TYPE STREQUAL "Shared")
+	MESSAGE(STATUS "Building Shared library.")
+	SET(BUILDING_SHARED 1)
+ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
 
-IF(NOT LIBSWORD_SOVERSION)
+IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*")
+	ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
+	SET(BUILDING_STATIC 1)
+	# With MSVC, the .dll files also create .lib files of the same name
+	# with the exported symbols.  Thus, we don't want the two to have the
+	# same exact name.  In other systems, the .a and .so suffixes suffice
+	# to keep them separate
+	IF(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
+		SET_TARGET_PROPERTIES(sword_static PROPERTIES 
+			OUTPUT_NAME "sword")
+		MESSAGE(STATUS "Building Static library with name sword")
+	ELSE(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
+		MESSAGE(STATUS "Building Static library with name
+		sword_static")
+	ENDIF(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
+ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*")
+
+###############################################################################################
+# This allows the user to set a SONAME for the library.  This allows packagers and those who
+# care about that sort of thing to be happy and have all their SONAMES set properly.
+#
+IF(NOT LIBSWORD_SOVERSION AND BUILDING_SHARED)
         SET(SWORD_SOVERSION ${SWORD_VERSION})
-ELSE(NOT LIBSWORD_SOVERSION)
+ELSE(NOT LIBSWORD_SOVERSION AND BUILDING_SHARED)
         SET(SWORD_SOVERSION ${LIBSWORD_SOVERSION})
-ENDIF(NOT LIBSWORD_SOVERSION)
-SET_TARGET_PROPERTIES(sword
-        PROPERTIES SOVERSION ${SWORD_SOVERSION})
+ENDIF(NOT LIBSWORD_SOVERSION AND BUILDING_SHARED)
+
+IF(BUILDING_SHARED)
+	SET_TARGET_PROPERTIES(sword
+		PROPERTIES SOVERSION ${SWORD_SOVERSION})
+	MESSAGE(STATUS "Setting SOVERSION to ${SWORD_SOVERSION}")
+ENDIF(BUILDING_SHARED)
 
 ###############################################################################################
 # Some options are only needed if we're going to be building a debug option into the library
@@ -104,21 +127,28 @@ SET_TARGET_PROPERTIES(sword
 #
 # Debug testing
 IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES COMPILE_FLAGS "-g3 -Wall -Werror -O0"
-	)
+	SET(SWORD_CFLAGS "-g3 -Wall -Werror -O0")
 ELSE(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES COMPILE_FLAGS "-O3"
-	)
+	SET(SWORD_CFLAGS "-O3")
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 IF(SWORD_ENABLE_WARNINGS STREQUAL "Yes")
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES
-			COMPILE_FLAGS "-Werror"
-	)
+	SET(SWORD_CFLAGS "${SWORD_CFLAGS} -Werror")
 ENDIF(SWORD_ENABLE_WARNINGS STREQUAL "Yes")
+
+IF(BUILDING_SHARED)
+	SET_TARGET_PROPERTIES(sword
+		PROPERTIES COMPILE_FLAGS ${SWORD_CFLAGS}
+	)
+ENDIF(BUILDING_SHARED)
+
+IF(BUILDING_STATIC)
+	SET_TARGET_PROPERTIES(sword_static
+		PROPERTIES COMPILE_FLAGS ${SWORD_CFLAGS}
+	)
+ENDIF(BUILDING_STATIC)
+
+MESSAGE(STATUS "Setting CFlags for compile to ${SWORD_CFLAGS}")
 
 ##############################################################################################
 # Setting libraries and includes
@@ -126,21 +156,31 @@ ENDIF(SWORD_ENABLE_WARNINGS STREQUAL "Yes")
 
 IF(WITH_ZLIB)
 	INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
-	TARGET_LINK_LIBRARIES(sword ${ZLIB_LIBRARY})
+	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${ZLIB_LIBRARY})
 ENDIF(WITH_ZLIB)
 IF(WITH_CURL)
 	INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
-	TARGET_LINK_LIBRARIES(sword ${CURL_LIBRARY})
+	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${CURL_LIBRARY})
 ENDIF(WITH_CURL)
 IF(WITH_CLUCENE)
 	INCLUDE_DIRECTORIES(${CLUCENE_INCLUDE_DIR})
-	TARGET_LINK_LIBRARIES(sword ${CLUCENE_LIBRARY})
+	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${CLUCENE_LIBRARY})
 	LINK_DIRECTORIES(${CLUCENE_LIBRARY_DIR})
 ENDIF(WITH_CLUCENE)
 IF(WITH_ICU)
-	TARGET_LINK_LIBRARIES(sword ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
 	INCLUDE_DIRECTORIES(${ICU_INCLUDE_DIRS})
+	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
 ENDIF(WITH_ICU)
+
+IF(BUILDING_SHARED)
+	TARGET_LINK_LIBRARIES(sword ${SWORD_LINK_LIBRARIES})
+ENDIF(BUILDING_SHARED)
+
+IF(BUILDING_STATIC)
+	TARGET_LINK_LIBRARIES(sword_static ${SWORD_LINK_LIBRARIES})
+ENDIF(BUILDING_STATIC)
+
+MESSAGE(STATUS "Setting link libraries to ${SWORD_LINK_LIBRARIES}")
 
 ##############################################################################################
 #########

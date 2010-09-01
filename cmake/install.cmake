@@ -14,8 +14,14 @@ ELSE(NOT CMAKE_INSTALL_PREFIX)
 ENDIF(NOT CMAKE_INSTALL_PREFIX)
 
 # Install the library
-INSTALL(TARGETS sword
-	DESTINATION ${SWORD_INSTALL_DIR}/lib)
+IF(BUILDING_SHARED)
+	INSTALL(TARGETS sword
+		DESTINATION ${SWORD_INSTALL_DIR}/lib)
+ENDIF(BUILDING_SHARED)
+IF(BUILDING_STATIC)
+	INSTALL(TARGETS sword_static
+		DESTINATION ${SWORD_INSTALL_DIR}/lib)
+ENDIF(BUILDING_STATIC)
 
 # Install the headers
 INSTALL(FILES ${SWORD_INSTALL_HEADERS}
@@ -60,13 +66,25 @@ IF(WITH_ICU AND ICU_GENRB)
       FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/icu")
       FOREACH(translit ${translit_SOURCES})
 	  STRING(REPLACE ".txt" ".res" translit_OUTPUT ${translit})
-	  ADD_CUSTOM_COMMAND(TARGET sword
-	       POST_BUILD
-	       COMMAND ${ICU_GENRB} -s . -d "${CMAKE_CURRENT_BINARY_DIR}/icu" ${translit}
-	       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icu"
-	       COMMENT "Converting ${translit}"
-	       VERBATIM
-	  )
+	  # Only needs to be run once, really, so we'll hook it to the end of either
+	  IF(BUILDING_SHARED)
+		ADD_CUSTOM_COMMAND(TARGET sword
+		POST_BUILD
+		COMMAND ${ICU_GENRB} -s . -d "${CMAKE_CURRENT_BINARY_DIR}/icu" ${translit}
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icu"
+		COMMENT "Converting ${translit}"
+		VERBATIM
+		)
+	  ELSE(BUILDING_SHARED)
+		ADD_CUSTOM_COMMAND(TARGET sword_static
+		POST_BUILD
+		COMMAND ${ICU_GENRB} -s . -d "${CMAKE_CURRENT_BINARY_DIR}/icu" ${translit}
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icu"
+		COMMENT "Converting ${translit}"
+		VERBATIM
+		)
+	  ENDIF(BUILDING_SHARED)
+	  
 	  INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/icu/${translit_OUTPUT}"
 	       DESTINATION "${libdir}/${SWORD_VERSION}_icu_${ICU_VERSION}")
      ENDFOREACH(translit ${translit_SOURCES})
