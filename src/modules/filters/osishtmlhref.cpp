@@ -388,12 +388,15 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		// <milestone type="x-p"/>
 		// <milestone type="cQuote" marker="x"/>
 		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type"))) {
-			if(!strcmp(tag.getAttribute("type"), "line")) {
+			if (!strcmp(tag.getAttribute("type"), "line")) {
 				outText("<br />", buf, u);
+				if (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-PM")) {
+					outText("<br />", buf, u);
+				}
 				userData->supressAdjacentWhitespace = true;
 			}
-			else if(!strcmp(tag.getAttribute("type"),"x-p"))  {
-				if( tag.getAttribute("marker"))
+			else if (!strcmp(tag.getAttribute("type"),"x-p"))  {
+				if (tag.getAttribute("marker"))
 					outText(tag.getAttribute("marker"), buf, u);
 				else outText("<!p>", buf, u);
 			}

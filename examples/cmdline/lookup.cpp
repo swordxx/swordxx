@@ -25,6 +25,7 @@
 #include <swmgr.h>
 #include <swmodule.h>
 #include <markupfiltmgr.h>
+#include <versekey.h>
 
 using sword::SWMgr;
 using sword::MarkupFilterMgr;
@@ -36,6 +37,7 @@ using sword::ModMap;
 using sword::AttributeTypeList;
 using sword::AttributeList;
 using sword::AttributeValue;
+using sword::VerseKey;
 
 int main(int argc, char **argv)
 {
@@ -67,7 +69,16 @@ int main(int argc, char **argv)
 	manager.setGlobalOption("Lemmas", "Off");
 //	manager.setGlobalOption("Greek Accents", "Off");
 
-	target->setKey(argv[2]);
+	VerseKey *vk = dynamic_cast<VerseKey *>(target->getKey());
+
+	if (vk) {
+	//	vk->AutoNormalize(false);
+		vk->Headings(true);
+		vk->setText(argv[2]);
+	}
+	else {
+		target->setKey(argv[2]);
+	}
 
 	target->RenderText();		// force an entry lookup to resolve key to something in the index
 

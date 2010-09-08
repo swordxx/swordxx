@@ -26,8 +26,9 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libswordcore
-LOCAL_C_INCLUDES := ../src/sword/include ../src/sword/include/internal/regex
+LOCAL_C_INCLUDES := ../sword/include ../sword/include/internal/regex
 LOCAL_CFLAGS	+= -D__unix__ \
+		   -Dunix \
 		   -D_FTPLIB_NO_COMPAT \
 		   -DANDROID \
 		   -DOS_ANDROID
@@ -184,8 +185,9 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libsword
-LOCAL_C_INCLUDES := ../src/sword/include ../src/sword/include/internal/regex
+LOCAL_C_INCLUDES := ../sword/include ../sword/include/internal/regex
 LOCAL_CFLAGS	+= -D__unix__ \
+		   -Dunix \
 		   -D_FTPLIB_NO_COMPAT \
 		   -DANDROID \
 		   -DOS_ANDROID
