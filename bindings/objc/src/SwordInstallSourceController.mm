@@ -207,6 +207,7 @@ base path of the module installation
     
     // remove source
     [installSources removeObjectForKey:[is caption]];
+    [installSourceList removeObject:is];
     
     // save at once
     sword::SWConfig config([configFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
