@@ -7,6 +7,8 @@ COMP=core
 VERS=0.9.21b
 BDIR=`pwd`
 
+SRCPACKAGE="$APP-$COMP-$VERS.tar.gz"
+
 DEBUG=0
 FAT=0
 PPC=0
@@ -67,9 +69,16 @@ if [ ! -d $RESULTPREFIX ]; then
 fi
 
 # delete old source dir
-/bin/rm -rf $APP-$COMP-$VERS
+/bin/rm -rf $SRCPACKAGE
+
+# download first is not exist
+# due to size limitation in the source repo this file wil be downloaded
+# and buiding will need an internet connection
+if [ ! -f $SRCPACKAGE ]; then
+  curl -o $SRCPACKAGE http://www.crosswire.org/~mbergmann/$SRCPACKAGE
+fi
 # ungzip src
-gzip -dc $APP-$COMP-$VERS.tar.gz | tar xvf -
+tar -xzf $SRCPACKAGE
 
 CLUCENEPATH="$BDIR/$APP-$COMP-$VERS"
 
