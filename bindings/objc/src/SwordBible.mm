@@ -365,6 +365,24 @@ NSLock *bibleLock = nil;
     return ret;
 }
 
+- (NSString *)versification {
+    NSString *versification = [configEntries objectForKey:SWMOD_CONFENTRY_VERSIFICATION];
+    if(versification == nil) {
+        versification = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_VERSIFICATION];
+        if(versification != nil) {
+            [configEntries setObject:versification forKey:SWMOD_CONFENTRY_VERSIFICATION];
+        }
+    }
+    
+    // if still nil, use KJV versification
+    if(versification == nil) {
+        versification = @"KJV";
+        [configEntries setObject:versification forKey:SWMOD_CONFENTRY_VERSIFICATION];
+    }
+    
+    return versification;    
+}
+
 #pragma mark - SwordModuleAccess
 
 - (id)createKey {
