@@ -57,38 +57,17 @@ FIND_PACKAGE(Regex QUIET)
 INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
 
 ################################################################################################
-# Some random user settings
-#
-
-IF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
-	SET_TARGET_PROPERTIES(libsword
-		PROPERTIES COMPILE_FLAGS "-pg"
-	)
-ENDIF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
-
-IF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
-	SET_TARGET_PROPERTIES(libsword
-		PROPERTIES COMPILE_FLAGS "-g -finstrument-functions"
-	)
-	TARGET_LINK_LIBRARIES(libsword fnccheck)
-ENDIF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
-
-IF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
-	ADD_DEFINITIONS(-DGLOBCONFPATH="${SWORD_GLOBAL_CONF_DIR}/sword.conf")
-ENDIF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
-
-################################################################################################
 # This actually creates the build target that is the libsword building target to be generated.
 # Most of the work for configuration is done above, already.
 #
 # I want to do this manually, there might be reason in the future
-IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
+IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	ADD_LIBRARY(sword SHARED ${sword_SOURCES})
 	MESSAGE(STATUS "Building Shared library.")
 	SET(BUILDING_SHARED 1)
-ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
+ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 
-IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*")
+IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
 	SET(BUILDING_STATIC 1)
 	# With MSVC, the .dll files also create .lib files of the same name
@@ -103,7 +82,29 @@ IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*")
 		MESSAGE(STATUS "Building Static library with name
 		sword_static")
 	ENDIF(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
-ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*")
+ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
+
+################################################################################################
+# Some random user settings
+#
+
+IF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
+	SET_TARGET_PROPERTIES(sword
+		PROPERTIES COMPILE_FLAGS "-pg"
+	)
+ENDIF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
+
+IF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
+	SET_TARGET_PROPERTIES(sword
+		PROPERTIES COMPILE_FLAGS "-g -finstrument-functions"
+	)
+	TARGET_LINK_LIBRARIES(libsword fnccheck)
+ENDIF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
+
+IF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
+	ADD_DEFINITIONS(-DGLOBCONFPATH="${SWORD_GLOBAL_CONF_DIR}/sword.conf")
+ENDIF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
+
 
 ###############################################################################################
 # This allows the user to set a SONAME for the library.  This allows packagers and those who
@@ -202,7 +203,11 @@ ENDIF(APPLE OR iPhone)
 #
 
 ADD_EXECUTABLE(buildtest buildtest.cpp)
-TARGET_LINK_LIBRARIES(buildtest sword)
+IF(BUILDING_STATIC)
+	TARGET_LINK_LIBRARIES(buildtest sword_static)
+ELSE(BUILDING_STATIC)
+	TARGET_LINK_LIBRARIES(buildtest sword)
+ENDIF(BUILDING_STATIC)
 
 ##############################################################################################
 # Installing the library, headers, utilies, etc
