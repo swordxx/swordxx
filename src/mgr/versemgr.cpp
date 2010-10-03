@@ -39,7 +39,8 @@
 #include <canon_vulg.h>		// Vulgate v11n system
 #include <canon_german.h>	// German v11n system
 #include <canon_luther.h>	// Luther v11n system
-#include <canon_catholic.h>	// Catholic v11n system
+#include <canon_catholic.h>	// Catholic v11n system (10 chapter Esther)
+#include <canon_catholic2.h>	// Catholic2 v11n system (16 chapter Esther)
 #include <canon_synodalp.h>	// SynodalP v11n system (KJV with Synodal-like verse counts)
 
 using std::vector;
@@ -64,6 +65,7 @@ VerseMgr *VerseMgr::getSystemVerseMgr() {
 		systemVerseMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
 		systemVerseMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
 		systemVerseMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
+		systemVerseMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
 		systemVerseMgr->registerVersificationSystem("SynodalP", otbooks, ntbooks, vm_synodalp);
 	}
 	return systemVerseMgr;
