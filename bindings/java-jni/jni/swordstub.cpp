@@ -1117,6 +1117,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 
 	init(); 
 
+	const int MAX_RETURN_COUNT = 200;
 
 	const char *expression = env->GetStringUTFChars(expressionJS, NULL);
 	const char *scope = env->GetStringUTFChars(scopeJS, NULL);
@@ -1149,6 +1150,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 		int count = 0;
 		for (result = sword::TOP; !result.Error(); result++) count++;
 
+		if (count > MAX_RETURN_COUNT) count = MAX_RETURN_COUNT;
+
 		ret = (jobjectArray) env->NewObjectArray(count, clazzSearchHit, NULL);
 
 		// if we're sorted by score, let's re-sort by verse, because Java can always re-sort by score
@@ -1166,6 +1169,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 			fieldID = env->GetFieldID(clazzSearchHit, "score", "J"); env->SetLongField(searchHit, fieldID, (long)result.getElement()->userData);
 
 			env->SetObjectArrayElement(ret, i++, searchHit);
+			if (i > MAX_RETURN_COUNT) break;
 		}
 	}
 

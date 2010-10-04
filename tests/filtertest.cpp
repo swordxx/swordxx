@@ -20,6 +20,7 @@
 #include <filemgr.h>
 #include <papyriplain.h>
 #include <utf8utf16.h>
+#include <sysdata.h>
 //#include <swmgr.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -35,30 +36,41 @@ int main(int argc, char **argv) {
 
 	SWBuf lineBuffer = "This is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 
-	std::cout << "Original:\n\n";
+	if (argc > 1 && !strcmp(argv[1], "-v")) {
+		std::cout << "Original:\n\n";
 
-	while (!fd || FileMgr::getLine(fd, lineBuffer)) {
-		cout << lineBuffer << "\n";
-		if (!fd) break;
+		while (!fd || FileMgr::getLine(fd, lineBuffer)) {
+			cout << lineBuffer << "\n";
+			if (!fd) break;
+		}
+
+		cout << "\n\n-------\n\n";
 	}
-
- 	cout << "\n\n-------\n\n";
 
 	if (fd) {
 		FileMgr::getSystemFileMgr()->close(fd);
 		fd = FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY);
 	}
 
+	cout << "\xff\xfe";	// UTF16LE file signature
+
 	while (!fd || FileMgr::getLine(fd, lineBuffer)) {
+		lineBuffer += "\n";
 		filter.processText(lineBuffer);
-		for (unsigned int i = 0; i < lineBuffer.size(); i++) {
+
+/*	Simply way to output byte stream
+		for (unsigned int i = 0; i < lineBuffer.size(); ++i) {
 			std::cout << lineBuffer[i];
 		}
-		cout << "\n";
+*/
+//	Example showing safe to cast to u16 stream
+		unsigned int size = lineBuffer.size() / 2;
+		__u16 *wcharBuf = (__u16 *)lineBuffer.getRawData();
+		for (unsigned int i = 0; i < size; ++i) {
+			std::wcout << (wchar_t)wcharBuf[i];	// must cast for correct output and because wchar_t is different size on linux we couldn't declare out wcharBuf a wchar_t *
+		}
 		if (!fd) break;
 	}
-
-	std::cout << "\n\n+++++++\n";
 
 	if (fd) {
 		FileMgr::getSystemFileMgr()->close(fd);

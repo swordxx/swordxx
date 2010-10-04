@@ -63,6 +63,7 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	}
 	text.setSize(text.size()+2);
 	*((__u16 *)(text.getRawData()+(text.size()-2))) = (__u16)0;
+	text.setSize(text.size()-2);
 	   
 	return 0;
 
