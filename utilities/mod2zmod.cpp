@@ -17,6 +17,10 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <fcntl.h>
 #include <iostream>
 #include <fstream>
@@ -38,7 +42,6 @@
 #include <versekey.h>
 #include <stdio.h>
 #include <cipherfil.h>
-
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;

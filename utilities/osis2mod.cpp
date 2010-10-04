@@ -15,6 +15,10 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -1347,7 +1351,7 @@ void processOSIS(istream& infile) {
 
 		// Outside of tokens merge adjacent whitespace
 		if (!intoken) {
-			seeingSpace = isspace(curChar);
+			seeingSpace = isspace(curChar)!=0;
 			if (seeingSpace) {
 				if (inWhitespace) {
 					continue;

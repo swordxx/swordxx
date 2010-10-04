@@ -15,6 +15,10 @@
 *
 */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -28,9 +32,7 @@
 using std::string;
 
 #ifndef NO_SWORD_NAMESPACE
-
 using namespace sword;
-
 #endif
 
 

@@ -15,11 +15,16 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <iostream>
 #include <stdio.h>
 
 #include <versekey.h>
 #include <localemgr.h>
+
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif

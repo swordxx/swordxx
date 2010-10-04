@@ -15,6 +15,10 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <iostream>
 #include <versekey.h>
 #include <localemgr.h>
@@ -22,6 +26,7 @@
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
+
 using std::endl;
 using std::cerr;
 using std::cout;

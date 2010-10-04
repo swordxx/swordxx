@@ -43,6 +43,10 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <string>
 #include <vector>
 #include <fstream>

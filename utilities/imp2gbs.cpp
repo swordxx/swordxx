@@ -15,6 +15,10 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <ctype.h>
 #include <stdio.h>
 #include <errno.h>
@@ -30,17 +34,13 @@
 #include <stringmgr.h>
 
 #ifdef _ICU_
-
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/ustring.h>
 #include <unicode/uchar.h>
-
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
-
 #include <unicode/locid.h>
-
 #endif
 
 #ifndef NO_SWORD_NAMESPACE
@@ -239,7 +239,7 @@ int main(int argc, char **argv) {
 
 	bool more = true;
 	do {
-		more = FileMgr::getLine(fd, lineBuffer);
+		more = FileMgr::getLine(fd, lineBuffer)!=0;
 		if (lineBuffer.startsWith("$$$")) {
 			if ((keyBuffer.size()) && (entBuffer.size())) {
 				writeEntry(book, keyBuffer, entBuffer);

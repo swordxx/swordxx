@@ -15,12 +15,17 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <swmgr.h>
 #include <swmodule.h>
 #include <swkey.h>
 #include <versekey.h>
 #include <stdio.h>
 #include <iostream>
+
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::VerseKey;

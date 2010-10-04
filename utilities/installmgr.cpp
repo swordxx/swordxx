@@ -15,6 +15,10 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+#endif
+
 #include <swmgr.h>
 #include <installmgr.h>
 #include <ftptrans.h>
@@ -78,7 +82,7 @@ virtual bool isUserDisclaimerConfirmed() const {
 class MyStatusReporter : public StatusReporter {
 	int last;
         virtual void statusUpdate(double dltotal, double dlnow) {
-		int p = 74 * (dlnow / dltotal);
+		int p = 74 * (int)(dlnow / dltotal);
 		for (;last < p; ++last) {
 			if (!last) {
 				SWBuf output;
@@ -97,7 +101,7 @@ class MyStatusReporter : public StatusReporter {
 		while (output.size() < 75) output += " ";
 		output += "]";
 		cout << "\n" << output.c_str() << "\n ";
-		int p = 74 * ((double)completedBytes/totalBytes);
+		int p = 74 * (int)((double)completedBytes/totalBytes);
 		for (int i = 0; i < p; ++i) { cout << "="; }
 		cout << "\n\n" << message << "\n";
 		last = 0;

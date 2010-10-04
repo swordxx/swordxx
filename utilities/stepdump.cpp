@@ -15,6 +15,11 @@
  *
  */
 
+#ifdef _MSC_VER
+	#pragma warning( disable: 4251 )
+	#pragma warning( disable: 4996 )
+#endif
+
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
