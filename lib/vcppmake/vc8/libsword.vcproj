@@ -45,7 +45,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -72,6 +72,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcurl.lib ws2_32.lib winmm.lib wldap32.lib"
+				Version="1.6.1"
 				AdditionalLibraryDirectories="../../../../curl/lib/LIB-Release"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -128,7 +129,7 @@
 				AdditionalOptions="/D _CRT_SECURE_NO_DEPRECATE"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;&quot;../../../../icu-sword/include&quot;;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="_DEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
+				PreprocessorDefinitions="_DEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -210,7 +211,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -293,7 +294,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../include;../../../include/internal/regex;&quot;../../../../icu-sword/include&quot;;../../../src/utilfuns/win32;../../../../curl/include"
-				PreprocessorDefinitions="NDEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY"
+				PreprocessorDefinitions="NDEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -6305,11 +6306,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\canon_catholic.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_catholic2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_german.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\canon_kjva.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\canon_leningrad.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_luther.h"
 				>
 			</File>
 			<File
@@ -6329,6 +6346,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\canon_synodal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_synodalp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\canon_vulg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\cdsourcemgr.h"
 				>
 			</File>
@@ -6342,6 +6371,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\curlftpt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\curlhttpt.h"
 				>
 			</File>
 			<File
@@ -6370,6 +6403,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\flatapi.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ftplib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ftplibftpt.h"
 				>
 			</File>
 			<File
@@ -6530,6 +6571,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\osisrtf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\osisruby.h"
 				>
 			</File>
 			<File
@@ -6930,6 +6975,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\versekey.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\versemgr.h"
 				>
 			</File>
 			<File
