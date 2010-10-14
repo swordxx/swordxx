@@ -32,17 +32,17 @@ private:
 	bool morphFirst;
 protected:
 	// used by derived classes so we have it in the header
-	class QuoteStack;
+	class TagStack;
 	class SWDLLEXPORT MyUserData : public BasicFilterUserData {
 	public:
 		bool osisQToTick;
-		bool inBold;
 		bool inXRefNote;
 		bool BiblicalText;
 		int suspendLevel;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
-                QuoteStack *quoteStack;
+                TagStack *quoteStack;
+                TagStack *hiStack;
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
