@@ -43,7 +43,7 @@ protected:
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
                 TagStacks *tagStacks;	// TODO: modified to wrap all TagStacks necessary for this filter until 1.7.x
-//                TagStack *hiStack;	// TODO: commented out for binary compat for 1.6.x	 wrapped in quoteStack until 1.7.x
+//                TagStack *hiStack;	// TODO: commented out for binary compat for 1.6.x	 wrapped in tagStacks until 1.7.x
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
