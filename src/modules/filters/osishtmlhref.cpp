@@ -34,14 +34,21 @@
 
 SWORD_NAMESPACE_START
 
-class OSISHTMLHREF::TagStack : public std::stack<SWBuf> {
+namespace {
+	typedef std::stack<SWBuf> TagStack;
+}
+
+// TODO: this bridge pattern is to preserve binary compat on 1.6.x
+class OSISHTMLHREF::TagStacks {
+public:
+	TagStack quoteStack;
+	TagStack hiStack;
 };
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	inXRefNote    = false;
 	suspendLevel = 0;
-	quoteStack = new TagStack();
-	hiStack = new TagStack();
+	tagStacks = new TagStacks();
 	wordsOfChristStart = "<font color=\"red\"> ";
 	wordsOfChristEnd   = "</font> ";
 	if (module) {
@@ -56,8 +63,7 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 }
 
 OSISHTMLHREF::MyUserData::~MyUserData() {
-	delete quoteStack;
-	delete hiStack;
+	delete tagStacks;
 }
 
 OSISHTMLHREF::OSISHTMLHREF() {
@@ -486,12 +492,15 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				else {	// all other types
 					outText("<i>", buf, u);
 				}
-				u->hiStack->push(tag.toString());
+				u->tagStacks->hiStack.push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
-				XMLTag tag(u->hiStack->top());
-				u->hiStack->pop();
-				SWBuf type = tag.getAttribute("type");
+				SWBuf type = "";
+				if (!u->tagStacks->hiStack.empty()) {
+					XMLTag tag(u->tagStacks->hiStack.top());
+					u->tagStacks->hiStack.pop();
+					type = tag.getAttribute("type");
+				}
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("</b>", buf, u);
 				}
@@ -520,7 +529,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("sID"))) {
 				// if <q> then remember it for the </q>
 				if (!tag.isEmpty()) {
-					u->quoteStack->push(tag.toString());
+					u->tagStacks->quoteStack.push(tag.toString());
 				}
 
 				// Do this first so quote marks are included as WoC
@@ -537,9 +546,9 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			// close </q> or <q eID... />
 			else if ((tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("eID"))) {
 				// if it is </q> then pop the stack for the attributes
-				if (tag.isEndTag() && !u->quoteStack->empty()) {
-					XMLTag qTag(u->quoteStack->top());
-					u->quoteStack->pop();
+				if (tag.isEndTag() && !u->tagStacks->quoteStack.empty()) {
+					XMLTag qTag(u->tagStacks->quoteStack.top());
+					u->tagStacks->quoteStack.pop();
 
 					type    = qTag.getAttribute("type");
 					who     = qTag.getAttribute("who");

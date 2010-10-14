@@ -32,17 +32,18 @@ private:
 	bool morphFirst;
 protected:
 	// used by derived classes so we have it in the header
-	class TagStack;
+	class TagStacks;
 	class SWDLLEXPORT MyUserData : public BasicFilterUserData {
 	public:
 		bool osisQToTick;
+		bool inBold;	// TODO: obsolete. left for binary compat for 1.6.x
 		bool inXRefNote;
 		bool BiblicalText;
 		int suspendLevel;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
-                TagStack *quoteStack;
-                TagStack *hiStack;
+                TagStacks *tagStacks;	// TODO: modified to wrap all TagStacks necessary for this filter until 1.7.x
+//                TagStack *hiStack;	// TODO: commented out for binary compat for 1.6.x	 wrapped in quoteStack until 1.7.x
 		SWBuf lastTransChange;
 		SWBuf w;
 		SWBuf fn;
