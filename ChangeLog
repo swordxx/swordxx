@@ -1,6 +1,10 @@
 API ChangeLog 
 
 
+14-Oct-2010	Troy A. Griffitts <scribe@crosswire.org>
+	Allow <hi> to be nested in any order in OSIS markup
+	Updates to allow hyphenated book names
+
 25-Jun-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Added CMake build system, contributed by GHellings
 
