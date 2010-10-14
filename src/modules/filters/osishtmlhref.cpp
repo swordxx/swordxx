@@ -34,14 +34,14 @@
 
 SWORD_NAMESPACE_START
 
-class OSISHTMLHREF::QuoteStack : public std::stack<char *> {
+class OSISHTMLHREF::TagStack : public std::stack<SWBuf> {
 };
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	inBold = false;
 	inXRefNote    = false;
 	suspendLevel = 0;
-	quoteStack = new QuoteStack();
+	quoteStack = new TagStack();
+	hiStack = new TagStack();
 	wordsOfChristStart = "<font color=\"red\"> ";
 	wordsOfChristEnd   = "</font> ";
 	if (module) {
@@ -56,13 +56,8 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 }
 
 OSISHTMLHREF::MyUserData::~MyUserData() {
-	// Just in case the quotes are not well formed
-	while (!quoteStack->empty()) {
-		char *tagData = quoteStack->top();
-		quoteStack->pop();
-		delete [] tagData;
-	}
 	delete quoteStack;
+	delete hiStack;
 }
 
 OSISHTMLHREF::OSISHTMLHREF() {
@@ -487,17 +482,18 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("<b>", buf, u);
-					u->inBold = true;
 				}
 				else {	// all other types
 					outText("<i>", buf, u);
-					u->inBold = false;
 				}
+				u->hiStack->push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
-				if(u->inBold) {
+				XMLTag tag(u->hiStack->top());
+				u->hiStack->pop();
+				SWBuf type = tag.getAttribute("type");
+				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("</b>", buf, u);
-					u->inBold = false;
 				}
 				else outText("</i>", buf, u);
 			}
@@ -524,9 +520,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("sID"))) {
 				// if <q> then remember it for the </q>
 				if (!tag.isEmpty()) {
-					char *tagData = 0;
-					stdstr(&tagData, tag.toString());
-					u->quoteStack->push(tagData);
+					u->quoteStack->push(tag.toString());
 				}
 
 				// Do this first so quote marks are included as WoC
@@ -544,10 +538,8 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 			else if ((tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("eID"))) {
 				// if it is </q> then pop the stack for the attributes
 				if (tag.isEndTag() && !u->quoteStack->empty()) {
-					char *tagData  = u->quoteStack->top();
+					XMLTag qTag(u->quoteStack->top());
 					u->quoteStack->pop();
-					XMLTag qTag(tagData);
-					delete [] tagData;
 
 					type    = qTag.getAttribute("type");
 					who     = qTag.getAttribute("who");
