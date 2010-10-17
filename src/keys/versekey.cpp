@@ -779,6 +779,8 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		default:
 			if (isdigit(*buf)) {
 				number[tonumber++] = *buf;
+				suffix = 0;
+				doubleF = 0;
 			}
 			else {
 				switch (*buf) {
@@ -955,7 +957,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						*curKey = MAXCHAPTER;
 					if (partial > 0)
 						*curKey = MAXVERSE;
-						newElement->UpperBound(*curKey);
+					newElement->UpperBound(*curKey);
 					*newElement = TOP;
 					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
 				}
