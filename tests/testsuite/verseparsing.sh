@@ -90,8 +90,10 @@
 ../parsekey "1Jn1.1ff;3:10f" en KJV ge 1
 ../parsekey "1Jn1.1,8ff; 3:10-12,14f,17ff" en KJV ge 1
 
-### false negative
+### check for 'f' in book name which might trigger 'and following'
 ../parsekey "Song of 3:5" en KJV ge 1
+../parsekey "Song of Sol 3:5" en KJV ge 1
+../parsekey "Revelation of John 1:1" en KJV ge 1
 
 en_abbrevs="
 Gen Genes Exod Ex Exo Lev Le Levi Num Nu Numb Deut Deu De Josh Jos Joshu
