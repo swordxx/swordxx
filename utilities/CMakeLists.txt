@@ -92,3 +92,27 @@ FOREACH(UTIL ${install_UTILITIES})
 	)
 ENDFOREACH(UTIL ${install_UTILITIES})
 
+####################################################################
+# And, of course, diatheke is a beast unto itself
+#
+# Let's go!
+#
+ADD_EXECUTABLE(diatheke
+	diatheke/diatheke.cpp
+	diatheke/corediatheke.cpp
+	diatheke/diathekemgr.cpp
+	diatheke/diafiltmgr.cpp
+	diatheke/thmlcgi.cpp
+	diatheke/gbfcgi.cpp
+	diatheke/osiscgi.cpp
+)
+IF(BUILDING_SHARED)
+	TARGET_LINK_LIBRARIES(diatheke sword)
+ELSE(BUILDING_SHARED)
+	TARGET_LINK_LIBRARIES(diatheke sword_static)
+ENDIF(BUILDING_SHARED)
+INSTALL(TARGETS diatheke
+	DESTINATION ${SWORD_INSTALL_DIR}/bin
+	COMPONENT utilities
+)
+
