@@ -48,7 +48,7 @@ zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCoun
  */
 
 zLD::~zLD() {
-
+	flushCache();
 }
 
 
