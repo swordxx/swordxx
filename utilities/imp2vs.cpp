@@ -210,6 +210,7 @@ int main(int argc, char **argv) {
 
 	FileMgr::getSystemFileMgr()->close(fd);
 
+	delete module;
 	delete vkey;
 
 	return 0;
