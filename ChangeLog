@@ -5,6 +5,12 @@ API ChangeLog
 	Allow <hi> to be nested in any order in OSIS markup
 	Updates to allow hyphenated book names
 
+15-Aug-2010 Gregory S. Hellings <greg.hellings@gmail.com>
+	Added a file to SWIG bindings to enable compilation
+		of Perl bindings, which lacked stl_multimap.i.  Updated
+		demo Perl script to reflect new API changes and added
+		support for building Python and Perl with CMake.
+
 25-Jun-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Added CMake build system, contributed by GHellings
 
