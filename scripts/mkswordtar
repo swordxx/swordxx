@@ -9,6 +9,7 @@ REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
 SWORDVER=`grep "define VERSI" ../include/config.h |cut -f2 -d"\""`
 
 sed -i "s/^\(PROJECT_NUMBER\).*/\1 = \"$SWORDVER\"/" ../doc/Doxyfile
+sed -i "s/^SET(SWORD_VERSION.*/SET(SWORD_VERSION $SWORDVER)/" ../CMakeLists.txt
 
 if test `echo $REV` == `echo $SWORDVER`; then 
 	chmod +x *
