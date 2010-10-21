@@ -147,9 +147,11 @@ int main(int argc, char **argv) {
 				exit(-1);
 			}
 		}
-		if (!fourByteSize)
-			RawText::createModule(outPath, v11n);
-		else	RawText4::createModule(outPath, v11n);
+		else {
+			if (!fourByteSize)
+				RawText::createModule(outPath, v11n);
+			else	RawText4::createModule(outPath, v11n);
+		}
 	}
 
 	SWModule *module = 0;
