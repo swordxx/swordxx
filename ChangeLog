@@ -1,6 +1,9 @@
 API ChangeLog 
 
 
+
+* Release 1.6.2 *
+
 18-Oct-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed parsing book names containing the letter 'f'
 		from Ben Morgan
