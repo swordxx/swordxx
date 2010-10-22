@@ -618,9 +618,9 @@ void LZSSCompress::Decode(void)
 				break;
 
 			if (SendChars((char *) c, 1) != 1) {
-				totalLen++;
 				break;
 			}
+			totalLen++;
 
 			// Add to buffer, and increment to next spot. Wrap at end.
 
@@ -673,9 +673,9 @@ void LZSSCompress::Decode(void)
 			// Add the "len" :characters to the output stream.
 
 			if (SendChars((char *) c, len) != (unsigned int)len) {
-				totalLen += len;
 				break;
 			}
+			totalLen += len;
 		}
 	}
 	slen = totalLen;
