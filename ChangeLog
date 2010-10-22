@@ -1,15 +1,22 @@
 API ChangeLog 
 
 
+18-Oct-2010	Troy A. Griffitts <scribe@crosswire.org>
+	Fixed parsing book names containing the letter 'f'
+		from Ben Morgan
+	Fixed imp2vs not flushing cache before exiting when
+		creating compressed modules
+	Fixed LZSS compression
+
 14-Oct-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Allow <hi> to be nested in any order in OSIS markup
 	Updates to allow hyphenated book names
 
-15-Aug-2010 Gregory S. Hellings <greg.hellings@gmail.com>
+15-Aug-2010	Gregory S. Hellings <greg.hellings@gmail.com>
 	Added a file to SWIG bindings to enable compilation
-		of Perl bindings, which lacked stl_multimap.i.  Updated
-		demo Perl script to reflect new API changes and added
-		support for building Python and Perl with CMake.
+		of Perl bindings, which lacked stl_multimap.i
+	Added support for building Python and Perl with CMake
+	Updated demo Perl script to reflect new API changes
 
 25-Jun-2010	Troy A. Griffitts <scribe@crosswire.org>
 	Added CMake build system, contributed by GHellings
@@ -18,6 +25,8 @@ API ChangeLog
 	Set verse to 1 when changing chapter and book in VerseKey
 	Fixed a bug where book designations ending in 'f' would
 		trigger the verse+'f'/'ff' feature.
+	Fixed curl bug which seems to hold on to progress
+		object even after scope of data retrival
 
 
 * Release 1.6.1 *
