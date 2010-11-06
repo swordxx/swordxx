@@ -40,6 +40,14 @@ struct MyProgressData {
 	bool *term;
 };
 
+int my_swbufwriter(netbuf *nControl, void *buffer, size_t size, void *swbuf) {
+	SWBuf &output = *(SWBuf *)swbuf;
+	int s = output.size();
+	output.size(s+size);
+	memcpy(output.getRawData()+s, buffer, size);
+	return size;
+}
+
 int my_fprogress(netbuf *nControl, int xfered, void *arg) {
 	if (arg) {
 		MyProgressData *pd = (MyProgressData *)arg;
@@ -85,6 +93,8 @@ char FTPLibFTPTransport::assureLoggedIn() {
 	if (ftpConnection == 0) {
 		SWLog::getSystemLog()->logDebug("connecting to host: %s...\n", host.c_str());
 		if (FtpConnect(host, &ftpConnection)) {
+			FtpOptions(FTPLIB_CONNMODE, (passive) ? FTPLIB_PASSIVE : FTPLIB_PORT, ftpConnection);
+
 			SWLog::getSystemLog()->logDebug("connected. logging in...\n");
 			if (FtpLogin(u.c_str(), p.c_str(), ftpConnection)) {
 				SWLog::getSystemLog()->logDebug("logged in.\n");
@@ -103,14 +113,6 @@ char FTPLibFTPTransport::assureLoggedIn() {
 	return retVal;
 }
 
-// yeah yeah, I know I know.  Compile with curl support if you don't like it
-#pragma GCC diagnostic ignored "-Wall"
-void my_tmpnam(char *tmpName) {
-	tmpName = tmpnam(tmpName);
-}
-#pragma GCC diagnostic warning "-Wall"
-
-
 
 char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
 
@@ -128,29 +130,22 @@ char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWB
 	if (!destBuf) {
 		outFile = destPath;
 	}
-	else {
-#ifdef ANDROID
-		outFile = "/sdcard/sword/InstallMgr/swtmpbuf.out";
-#else
-		char tmpName[128];
-		my_tmpnam(tmpName);
-		outFile = tmpName;
-#endif
-	}
 
 	sourcePath << (6 + host.length()); // shift << "ftp://hostname";
-	SWLog::getSystemLog()->logDebug("getting file %s to %s\n", sourcePath.c_str(), outFile.c_str());
-	if (passive)
-		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PASSIVE, ftpConnection);
-	else
-		FtpOptions(FTPLIB_CONNMODE, FTPLIB_PORT, ftpConnection);
-
+	SWLog::getSystemLog()->logDebug("getting file %s to %s\n", sourcePath.c_str(), destBuf ? "*internal buffer*" : outFile.c_str());
 	struct MyProgressData pd;
 	pd.sr = statusReporter;
 	pd.term = &term;
 	pd.totalSize = 0;
 
-	// !!!WDG also want to set callback options
+	if (destBuf) {
+		FtpOptions(FTPLIB_CALLBACK_WRITER, (long)&my_swbufwriter, ftpConnection);
+		FtpOptions(FTPLIB_CALLBACK_WRITERARG, (long)destBuf, ftpConnection);
+	}
+	else {
+		FtpOptions(FTPLIB_CALLBACK_WRITER, 0L, ftpConnection);
+	}
+
 	FtpOptions(FTPLIB_CALLBACK, (long)&my_fprogress, ftpConnection);
 	FtpOptions(FTPLIB_CALLBACKARG, (long)&pd, ftpConnection);
 	FtpOptions(FTPLIB_CALLBACKBYTES, (long)2048, ftpConnection);
@@ -159,29 +154,15 @@ char FTPLibFTPTransport::getURL(const char *destPath, const char *sourceURL, SWB
 //		SWLog::getSystemLog()->logDebug("getting test directory %s\n", sourcePath.c_str());
 //		FtpDir(NULL, sourcePath, ftpConnection);
 		SWLog::getSystemLog()->logDebug("getting real directory %s\n", sourcePath.c_str());
-		retVal = FtpDir(outFile.c_str(), sourcePath, ftpConnection) - 1;
-		SWLog::getSystemLog()->logDebug("got real directory %s to %s\n", sourcePath.c_str(), outFile.c_str());
+		retVal = FtpDir(destBuf ? 0 : outFile.c_str(), sourcePath, ftpConnection) - 1;
+		SWLog::getSystemLog()->logDebug("got real directory %s to %s\n", sourcePath.c_str(), destBuf ? "*internal buffer*" : outFile.c_str());
 	}
 	else {
 		SWLog::getSystemLog()->logDebug("getting file %s\n", sourcePath.c_str());
 		int size;
 		FtpSize(sourcePath, &size, FTPLIB_IMAGE, ftpConnection);
 		pd.totalSize = size;
-		retVal = FtpGet(outFile.c_str(), sourcePath, FTPLIB_IMAGE, ftpConnection) - 1;
-	}
-
-	// Is there a way to FTPGet directly to a buffer?
-	// If not, we probably want to add x-platform way to open a tmp file with FileMgr
-	// Currently outFile is set to tmpFile above sortof unsafe
-	if (destBuf) {
-		SWLog::getSystemLog()->logDebug("filling destBuf\n");
-		FileDesc *fd = FileMgr::getSystemFileMgr()->open(outFile.c_str(), FileMgr::RDONLY);
-		long size = fd->seek(0, SEEK_END);
-		fd->seek(0, SEEK_SET);
-		destBuf->size(size);
-		fd->read(destBuf->getRawData(), size);
-		FileMgr::getSystemFileMgr()->close(fd);
-		FileMgr::removeFile(outFile.c_str());
+		retVal = FtpGet(destBuf ? 0 : outFile.c_str(), sourcePath, FTPLIB_IMAGE, ftpConnection) - 1;
 	}
 
 	SWLog::getSystemLog()->logDebug("FTPLibFTPTransport - returning: %d\n", retVal);

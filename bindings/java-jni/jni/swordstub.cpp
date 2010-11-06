@@ -1117,7 +1117,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 
 	init(); 
 
-	const int MAX_RETURN_COUNT = 200;
+	const int MAX_RETURN_COUNT = 999999;
 
 	const char *expression = env->GetStringUTFChars(expressionJS, NULL);
 	const char *scope = env->GetStringUTFChars(scopeJS, NULL);
@@ -1160,16 +1160,20 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 			result.sort();
 
 		int i = 0;
+		jstring modName = env->NewStringUTF(assureValidUTF8(module->Name()));
 		for (result = sword::TOP; !result.Error(); result++) {
 			jfieldID fieldID;
 			jobject searchHit = env->AllocObject(clazzSearchHit); 
 
-			fieldID = env->GetFieldID(clazzSearchHit, "modName", "Ljava/lang/String;"); env->SetObjectField(searchHit, fieldID, env->NewStringUTF(assureValidUTF8(module->Name())));
-			fieldID = env->GetFieldID(clazzSearchHit, "key", "Ljava/lang/String;"); env->SetObjectField(searchHit, fieldID, env->NewStringUTF(assureValidUTF8((const char *)result)));
+			fieldID = env->GetFieldID(clazzSearchHit, "modName", "Ljava/lang/String;"); env->SetObjectField(searchHit, fieldID, modName);
+			jstring key = env->NewStringUTF(assureValidUTF8((const char *)result));
+			fieldID = env->GetFieldID(clazzSearchHit, "key", "Ljava/lang/String;"); env->SetObjectField(searchHit, fieldID, key);
+			env->DeleteLocalRef(key);
 			fieldID = env->GetFieldID(clazzSearchHit, "score", "J"); env->SetLongField(searchHit, fieldID, (long)result.getElement()->userData);
 
 			env->SetObjectArrayElement(ret, i++, searchHit);
-			if (i > MAX_RETURN_COUNT) break;
+			env->DeleteLocalRef(searchHit);
+			if (i >= MAX_RETURN_COUNT) break;
 		}
 	}
 

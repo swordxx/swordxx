@@ -57,6 +57,8 @@
 #define FTPLIB_IDLETIME 3
 #define FTPLIB_CALLBACKARG 4
 #define FTPLIB_CALLBACKBYTES 5
+#define FTPLIB_CALLBACK_WRITER 6
+#define FTPLIB_CALLBACK_WRITERARG 7
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,6 +66,7 @@ extern "C" {
 
 typedef struct NetBuf netbuf;
 typedef int (*FtpCallback)(netbuf *nControl, int xfered, void *arg);
+typedef int (*FtpCallbackWriter)(netbuf *nControl, const void *buffer, size_t size, void *arg);
 
 /* v1 compatibility stuff */
 #if !defined(_FTPLIB_NO_COMPAT)
