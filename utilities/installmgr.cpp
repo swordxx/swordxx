@@ -82,7 +82,7 @@ virtual bool isUserDisclaimerConfirmed() const {
 class MyStatusReporter : public StatusReporter {
 	int last;
         virtual void statusUpdate(double dltotal, double dlnow) {
-		int p = 74 * (int)(dlnow / dltotal);
+		int p = (int)(74.0 * (dlnow / dltotal));
 		for (;last < p; ++last) {
 			if (!last) {
 				SWBuf output;
@@ -101,7 +101,7 @@ class MyStatusReporter : public StatusReporter {
 		while (output.size() < 75) output += " ";
 		output += "]";
 		cout << "\n" << output.c_str() << "\n ";
-		int p = 74 * (int)((double)completedBytes/totalBytes);
+		int p = (int)(74.0 * (double)completedBytes/totalBytes);
 		for (int i = 0; i < p; ++i) { cout << "="; }
 		cout << "\n\n" << message << "\n";
 		last = 0;
