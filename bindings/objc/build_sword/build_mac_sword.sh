@@ -3,7 +3,7 @@
 #
 
 APP=sword
-VERS=1.6.1
+VERS=1.6.2
 BDIR=`pwd`
 
 DEBUG=0
@@ -13,9 +13,9 @@ INTEL=0
 
 SWORDPATH="$BDIR/../../../"
 ICUPATH="$BDIR/../dependencies/icu"
-PPCCLUCENEPATH="$BDIR/../clucene_build/build/ppc_inst"
-INTELCLUCENEPATH="$BDIR/../clucene_build/build/intel_inst"
-INTEL64CLUCENEPATH="$BDIR/../clucene_build/build/intel64_inst"
+PPCCLUCENEPATH="$BDIR/../build_clucene/build/ppc_inst"
+INTELCLUCENEPATH="$BDIR/../build_clucene/build/intel_inst"
+INTEL64CLUCENEPATH="$BDIR/../build_clucene/build/intel64_inst"
 
 # check commandline
 for arg in "$@" 

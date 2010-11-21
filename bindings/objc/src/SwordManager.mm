@@ -56,9 +56,9 @@ using std::list;
             
             ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
             SwordModule *sm = [SwordModule moduleForType:aType andName:name swModule:mod swordManager:self];
-            [dict setObject:sm forKey:[sm name]];
-            
-            [self addFiltersToModule:mod];            
+            [dict setObject:sm forKey:[[sm name] lowercaseString]];
+
+            [self addFiltersToModule:mod];
         }
 	}
     
@@ -319,7 +319,7 @@ using std::list;
 
 - (SwordModule *)moduleWithName:(NSString *)name {
     
-	SwordModule	*ret = [modules objectForKey:name];
+	SwordModule	*ret = [modules objectForKey:[name lowercaseString]];
     if(ret == nil) {
         sword::SWModule *mod = [self getSWModuleWithName:name];
         if(mod == NULL) {
@@ -334,7 +334,7 @@ using std::list;
 
             if(ret != nil) {
                 NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:modules];
-                [dict setObject:ret forKey:name];
+                [dict setObject:ret forKey:[name lowercaseString]];
                 self.modules = dict;                
             }
         }        
