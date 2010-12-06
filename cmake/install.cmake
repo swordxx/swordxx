@@ -62,7 +62,7 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/sword.pc
 
 # Need to build/install the 
 IF(WITH_ICU AND ICU_GENRB)
-      ADD_DEFINITIONS(-DSWICU_DATA="${libdir}/${SWORD_VERSION}_icu_${ICU_VERSION}")
+      ADD_DEFINITIONS(-DSWICU_DATA="${libdir}/sword/${SWORD_VERSION}_icu_${ICU_VERSION}")
       FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/icu")
       FOREACH(translit ${translit_SOURCES})
 	  STRING(REPLACE ".txt" ".res" translit_OUTPUT ${translit})
@@ -86,6 +86,6 @@ IF(WITH_ICU AND ICU_GENRB)
 	  ENDIF(BUILDING_SHARED)
 	  
 	  INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/icu/${translit_OUTPUT}"
-	       DESTINATION "${libdir}/${SWORD_VERSION}_icu_${ICU_VERSION}")
+	       DESTINATION "${libdir}/sword/${SWORD_VERSION}_icu_${ICU_VERSION}")
      ENDFOREACH(translit ${translit_SOURCES})
 ENDIF(WITH_ICU AND ICU_GENRB)
