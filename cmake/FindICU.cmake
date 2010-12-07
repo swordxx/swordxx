@@ -20,8 +20,8 @@ find_program(
 )
 
 if(ICU_CONFIG_BIN)
-  MESSAGE(STATUS "icu-config found at ${ICU_CONFIG_BIN}: Using that for configuration")
-  MESSAGE(STATUS "genrb found at ${ICU_GENRB}: Using that for generating transliteration data")
+  MESSAGE(STATUS "[ICU] icu-config: Yes ${ICU_CONFIG_BIN}")
+  MESSAGE(STATUS "[ICU] genrb: Yes ${ICU_GENRB}")
 
   # Get include directories
   execute_process(COMMAND "${ICU_CONFIG_BIN}" "--cppflags"
@@ -95,4 +95,5 @@ else(ICU_INCLUDE_DIR AND ICU_LIBRARY)
   set(ICU_LIBRARIES)
   set(ICU_I18N_LIBRARIES)
   set(ICU_INCLUDE_DIRS)
+  MESSAGE(STATUS "ICU: No")
 endif(ICU_INCLUDE_DIR AND ICU_LIBRARY)

@@ -1,6 +1,7 @@
 #####################################################################
 # First, install the library itself
 # 
+MESSAGE(STATUS "\n-- CONFIGURING INSTALLATION DESTINATIONS")
 IF(NOT CMAKE_INSTALL_PREFIX)
 	IF(APPLE)
 		SET(SWORD_INSTALL_DIR "/opt/local")
@@ -32,7 +33,7 @@ IF(SWORD_INTERNAL_REGEX)
 		DESTINATION "${SWORD_INSTALL_DIR}/include/sword")
 ENDIF(SWORD_INTERNAL_REGEX)
 
-MESSAGE(STATUS "Installation destination: ${SWORD_INSTALL_DIR}")
+MESSAGE(STATUS "Destination: ${SWORD_INSTALL_DIR}")
 
 # Configuration files, of course
 SET(prefix 		${SWORD_INSTALL_DIR})

@@ -12,6 +12,8 @@
 # more about how these tests work.
 # 
 
+MESSAGE(STATUS "\n-- CONFIGURING LIBRARY TESTS")
+
 SET(test_PROGRAMS
 	casttest
 	ciphertest

@@ -5,15 +5,16 @@
 # I will try to get them integrated into the system if I can.  If there are bindings that you need
 # other than the Python|Perl/Swig bindings, then you should probably speak up now.
 
+MESSAGE(STATUS "\n-- CONFIGURING SWIG BINDINGS")
 #####################################################################################################
 # SWIG
 # We need to find the SWIG executable in order to be able to do this, right?
 FIND_PACKAGE(SWIG)
 
 IF(NOT SWIG_FOUND)
-	MESSAGE(FATAL_ERROR "Swig not found.  Bindings will not be built.")
+	MESSAGE(FATAL_ERROR "Swig: no")
 ELSE(NOT SWIG_FOUND)
-	MESSAGE(STATUS "Swig found at ${SWIG_EXECUTABLE}")
+	MESSAGE(STATUS "Swig: yes")
 	
 	SET(SWORD_SWIG_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/bindings/swig")
 	SET(SWORD_SWIG_BINARY "${CMAKE_CURRENT_BINARY_DIR}/bindings/swig")
@@ -72,7 +73,7 @@ ELSE(NOT SWIG_FOUND)
 			VERBATIM
 		)
 		
-		MESSAGE(STATUS "Configured for building Python bindings.")
+		MESSAGE(STATUS "Python: yes")
 	ENDIF(SWORD_BINDINGS MATCHES ".*Python.*")
 	
 	IF(SWORD_BINDINGS MATCHES ".*Perl.*")
@@ -127,9 +128,9 @@ ELSE(NOT SWIG_FOUND)
 				VERBATIM
 			)
 			
-			MESSAGE(STATUS "Configured for building Perl bindings.")
+			MESSAGE(STATUS "Perl: yes")
 		ELSE(PERL_FOUND)
-			MESSAGE(FATAL_ERROR "Perl not found. Can't create perl bindings without Perl to bind")
+			MESSAGE(FATAL_ERROR "Perl: not found")
 		ENDIF(PERL_FOUND)
 	ENDIF(SWORD_BINDINGS MATCHES ".*Perl.*")
 ENDIF(NOT SWIG_FOUND)

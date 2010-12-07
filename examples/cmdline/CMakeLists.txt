@@ -3,6 +3,7 @@
 # SWORD_BUILD_EXAMPLES="Yes".  These will not be installed, so don't worry about
 # that.
 # 
+MESSAGE(STATUS "\n-- CONFIGURING LIBRARY EXAMPLES")
 SET(example_PROGRAMS
 	listoptions
 	lookup

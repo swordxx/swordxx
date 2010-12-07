@@ -38,6 +38,7 @@ INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include")
 # This will look for various libraries that libsword builds against.  There is no REQUIRED
 # attribute added here, since all of the libraries here are not, in actuality, required.
 #
+MESSAGE(STATUS "\n-- SEARCHING FOR SYTEM PACKAGES")
 # Find our packages
 FIND_PACKAGE(ZLIB QUIET)
 FIND_PACKAGE(ICU QUIET)
@@ -77,11 +78,12 @@ IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	IF(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
 		SET_TARGET_PROPERTIES(sword_static PROPERTIES 
 			OUTPUT_NAME "sword")
-		MESSAGE(STATUS "Building Static library with name sword")
+		#MESSAGE(STATUS "Building Static library with name sword")
 	ELSE(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
-		MESSAGE(STATUS "Building Static library with name
-		sword_static")
+		#MESSAGE(STATUS "Building Static library with name
+		#sword_static")
 	ENDIF(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
+	MESSAGE(STATUS "Building Static library.")
 ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 
 ################################################################################################
@@ -149,7 +151,7 @@ IF(BUILDING_STATIC)
 	)
 ENDIF(BUILDING_STATIC)
 
-MESSAGE(STATUS "Setting CFlags for compile to ${SWORD_CFLAGS}")
+MESSAGE(STATUS "Setting CFlags to ${SWORD_CFLAGS}")
 
 ##############################################################################################
 # Setting libraries and includes
@@ -219,9 +221,9 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 # Bindings are good, right?
 #
 
-IF(NOT SWORD_BINDINGS STREQUAL "")
+IF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 	INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/bindings.cmake")
-ENDIF(NOT SWORD_BINDINGS STREQUAL "")
+ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 
 ##############################################################################################
 # Utilities are hawt
