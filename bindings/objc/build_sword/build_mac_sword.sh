@@ -83,7 +83,6 @@ INTEL64_LIB_EXPORT=
 if [ $PPC -eq 1 ] || [ $FAT -eq 1 ]; then
     echo "building PPC version of library..."    
 	cd $SWORDPATH
-	make clean
 	echo 'autogen.sh ...'
 	./autogen.sh
 	echo 'autogen.sh ... done'
@@ -110,7 +109,6 @@ fi
 if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
     echo "building INTEL version of library..."
 	cd $SWORDPATH
-	make clean
 	echo 'autogen.sh ...'
 	./autogen.sh
 	echo 'autogen.sh ... done'
