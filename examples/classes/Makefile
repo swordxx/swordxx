@@ -1,4 +1,4 @@
-TARGETS= ciphercng swmgrex
+TARGETS= ciphercng swmgrex verseranges
 all: $(TARGETS)
 
 clean:
