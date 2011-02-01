@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
 	VerseKey vkOT(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBMAX()[0]-1)->getOSISName(), refSys->getName());
 	cout << vkOT.getRangeText() << "\n";
 
-	// OT
+	// NT
 	VerseKey vkNT(refSys->getBook(refSys->getBMAX()[0])->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
 	cout << vkNT.getRangeText() << "\n";
 
