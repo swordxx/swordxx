@@ -81,6 +81,7 @@
 #include <swfiltermgr.h>
 #include <swcipher.h>
 #include <swoptfilter.h>
+#include <rtfhtml.h>
 
 #include <swlog.h>
 
@@ -123,6 +124,7 @@ void SWMgr::init() {
 	cipherFilters.clear();
 	optionFilters.clear();
 	cleanupFilters.clear();
+	extraFilters.clear();
 	tmpFilter = new ThMLVariants();
 	optionFilters.insert(OptionFilterMap::value_type("ThMLVariants", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
@@ -250,6 +252,12 @@ void SWMgr::init() {
 
 	teiplain = new TEIPlain();
 	cleanupFilters.push_back(teiplain);
+
+	// filters which aren't really used anywhere but which we want available for a "FilterName" -> filter mapping (e.g., filterText)
+	SWFilter *f = new RTFHTML();
+	extraFilters.insert(FilterMap::value_type("RTFHTML", f));
+	cleanupFilters.push_back(f);
+	
 }
 
 
@@ -1043,12 +1051,23 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
  {
 	char retVal = -1;
+	// why didn't we use find here?
 	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
 		if ((*it).second->getOptionName()) {
-			if (!stricmp(filterName, (*it).second->getOptionName()))
-				retVal = it->second->processText(text, key, module);	// add filter to module
+			if (!stricmp(filterName, (*it).second->getOptionName())) {
+				retVal = it->second->processText(text, key, module);
+				break;
+			}
 		}
 	}
+
+	if (retVal == -1) {
+		FilterMap::iterator it = extraFilters.find(filterName);
+		if (it != extraFilters.end()) {
+			retVal = it->second->processText(text, key, module);
+		}
+	}
+
 	return retVal;
 }
 

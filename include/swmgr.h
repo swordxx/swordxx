@@ -111,6 +111,7 @@ protected:
 	SWFilter *teiplain;
 	SWOptionFilter *transliterator;
 	FilterList cleanupFilters;
+	FilterMap extraFilters;
 	StringList options;
 	virtual void init(); // use to initialize before loading modules
 	virtual char AddModToConfig(FileDesc *conffd, const char *fname);
