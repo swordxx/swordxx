@@ -184,7 +184,7 @@ void RawFiles::deleteEntry() {
  */
 
 const char *RawFiles::getNextFilename() {
-	SWBuf incfile;
+	static SWBuf incfile;
 	__u32 number = 0;
 	FileDesc *datafile;
 
