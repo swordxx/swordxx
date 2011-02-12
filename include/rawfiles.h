@@ -33,7 +33,7 @@ SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawFiles : public RawVerse, public SWCom {
 
-	char *getNextFilename();
+	const char *getNextFilename();
 
 public:
 

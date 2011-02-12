@@ -63,10 +63,10 @@ bool RawFiles::isWritable() {
 
 
 /******************************************************************************
- * RawFiles::getRawEntry	- Returns the correct verse when char * cast
- *					is requested
+ * RawFiles::getRawEntry	- Retrieve the unprocessed entry contents at
+ *					the current key position of this module
  *
- * RET: string buffer with verse
+ * RET: entry contents
  */
 
 SWBuf &RawFiles::getRawEntryBuf() {
@@ -102,7 +102,7 @@ SWBuf &RawFiles::getRawEntryBuf() {
 
 
 /******************************************************************************
- * RawFiles::setEntry(char *)- Update the modules current key entry with
+ * RawFiles::setEntry(char *)- Update the module's current key entry with
  *				provided text
  */
 
@@ -183,22 +183,22 @@ void RawFiles::deleteEntry() {
  * RET: filename
  */
 
-char *RawFiles::getNextFilename() {
-	static char incfile[255];
-	__u32 number;
+const char *RawFiles::getNextFilename() {
+	SWBuf incfile;
+	__u32 number = 0;
 	FileDesc *datafile;
 
-	sprintf(incfile, "%s/incfile", path);
+	incfile.setFormatted("%s/incfile", path);
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
-
-	if (datafile->read(&number, 4) != 4) number = 0;
-	number = swordtoarch32(number);
-
+	if (datafile->getFd() != -1) {
+		if (datafile->read(&number, 4) != 4) number = 0;
+		number = swordtoarch32(number);
+	}
 	number++;
 	FileMgr::getSystemFileMgr()->close(datafile);
 	
 	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-	sprintf(incfile, "%.7d", number-1);
+	incfile.setFormatted("%.7d", number-1);
 
 	number = archtosword32(number);
 	datafile->write(&number, 4);
@@ -208,7 +208,7 @@ char *RawFiles::getNextFilename() {
 }
 
 
-char RawFiles::createModule (const char *path) {
+char RawFiles::createModule(const char *path) {
 	char *incfile = new char [ strlen (path) + 16 ];
 
 	__u32 zero = 0;
