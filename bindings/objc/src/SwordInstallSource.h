@@ -58,11 +58,17 @@ class sword::SWModule;
                  usingManager:(SwordManager *)swManager 
         withInstallController:(SwordInstallSourceController *)sim;
 
-// list modules of this source
+/**
+ List of available InstallSources
+ */
 - (NSArray *)listModules;
+
 /** list module types */
 - (NSArray *)listModuleTypes;
-// get associated SwordManager
+
+/**
+ Returns the SwordManager attached to this SwordInstallSourceController
+ */
 - (SwordManager *)swordManager;
 
 #ifdef __cplusplus
