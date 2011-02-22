@@ -2123,7 +2123,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
-					"dependencies/icu/include/**",
 					"dependencies/clucene/**",
 					"dependencies/libcurl/include/**",
 					"../../include/**",
@@ -2135,13 +2134,12 @@
 				OTHER_CFLAGS = (
 					"-D_APPLE_IOS_",
 					"-DCURLAVAILABLE",
-					"-D_ICU_",
 					"-Dunix",
 					"-D__unix__",
 					"-DUSELUCENE",
 					"-DDEBUG",
 				);
-				OTHER_LDFLAGS = "-licucore";
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = "ObjCSword-iOS";
 				SDKROOT = iphoneos4.2;
