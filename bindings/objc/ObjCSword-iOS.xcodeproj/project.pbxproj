@@ -137,7 +137,6 @@
 		A954E03713117B7B00027756 /* ztext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954DF6E13117B7B00027756 /* ztext.cpp */; };
 		A954E03813117B7B00027756 /* ftplib.c in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7013117B7B00027756 /* ftplib.c */; };
 		A954E03913117B7B00027756 /* ftpparse.c in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7113117B7B00027756 /* ftpparse.c */; };
-		A954E03B13117B7B00027756 /* regex.c in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7413117B7B00027756 /* regex.c */; };
 		A954E03C13117B7B00027756 /* roman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7513117B7B00027756 /* roman.cpp */; };
 		A954E03D13117B7B00027756 /* swbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7613117B7B00027756 /* swbuf.cpp */; };
 		A954E03E13117B7B00027756 /* swobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7713117B7B00027756 /* swobject.cpp */; };
@@ -380,6 +379,7 @@
 		A954E23E13117C6300027756 /* VoidMap.h in Headers */ = {isa = PBXBuildFile; fileRef = A954E15513117C6300027756 /* VoidMap.h */; };
 		A954E23F13117C6300027756 /* CLucene.h in Headers */ = {isa = PBXBuildFile; fileRef = A954E15613117C6300027756 /* CLucene.h */; };
 		A954E44B1311B30300027756 /* libcurl-7.19.6-release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A954E44A1311B30300027756 /* libcurl-7.19.6-release.a */; };
+		A9C94C2213142D0900F88A63 /* regex.c in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7413117B7B00027756 /* regex.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1960,7 +1960,6 @@
 				A954E03713117B7B00027756 /* ztext.cpp in Sources */,
 				A954E03813117B7B00027756 /* ftplib.c in Sources */,
 				A954E03913117B7B00027756 /* ftpparse.c in Sources */,
-				A954E03B13117B7B00027756 /* regex.c in Sources */,
 				A954E03C13117B7B00027756 /* roman.cpp in Sources */,
 				A954E03D13117B7B00027756 /* swbuf.cpp in Sources */,
 				A954E03E13117B7B00027756 /* swobject.cpp in Sources */,
@@ -2072,6 +2071,7 @@
 				A954E23513117C6300027756 /* StringBuffer.cpp in Sources */,
 				A954E23713117C6300027756 /* StringIntern.cpp in Sources */,
 				A954E23B13117C6300027756 /* ThreadLocal.cpp in Sources */,
+				A9C94C2213142D0900F88A63 /* regex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2132,6 +2132,7 @@
 					"\"$(SRCROOT)/dependencies/libcurl\"",
 				);
 				OTHER_CFLAGS = (
+					"-Wall",
 					"-D_APPLE_IOS_",
 					"-DCURLAVAILABLE",
 					"-Dunix",
