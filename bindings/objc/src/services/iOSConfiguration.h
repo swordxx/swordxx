@@ -1,15 +1,17 @@
 //
-//  OSXConfiguration.h
-//  ObjCSword
+//  iOSConfiguration.h
+//  ObjCSword-iOS
 //
-//  Created by Manfred Bergmann on 12.06.10.
-//  Copyright 2010 Software by MABE. All rights reserved.
+//  Created by Manfred Bergmann on 10.03.11.
+//  Copyright 2011 Software by MABE. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "Configuration.h"
 
-@interface OSXConfiguration : Configuration <Configuration> {
+
+@interface iOSConfiguration : Configuration <Configuration> {
 }
 
 - (NSString *)osVersion;

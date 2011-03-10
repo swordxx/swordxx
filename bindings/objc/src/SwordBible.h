@@ -11,7 +11,7 @@
 	General Public License for more details. (http://www.gnu.org/licenses/gpl.html)
 */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "SwordModule.h"
 
 #ifdef __cplusplus

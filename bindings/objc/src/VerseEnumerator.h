@@ -6,7 +6,7 @@
 //  Copyright 2010 Software by MABE. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 @class SwordListKey;
 

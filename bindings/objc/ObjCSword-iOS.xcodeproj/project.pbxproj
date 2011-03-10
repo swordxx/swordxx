@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A942D60813293AD3001225C6 /* Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2858211C44A0A00803CB5 /* Configuration.m */; };
+		A942D60913293AD3001225C6 /* OSXConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2857211C4471400803CB5 /* OSXConfiguration.m */; };
+		A9543B2E13293C6F00AF3565 /* iOSConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9543B2C13293C6F00AF3565 /* iOSConfiguration.h */; };
+		A9543B2F13293C6F00AF3565 /* iOSConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9543B2D13293C6F00AF3565 /* iOSConfiguration.m */; };
 		A954DFA113117B7B00027756 /* swdisp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954DEA413117B7B00027756 /* swdisp.cpp */; };
 		A954DFA213117B7B00027756 /* swlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954DEA513117B7B00027756 /* swlog.cpp */; };
 		A954DFA513117B7B00027756 /* genarray.c in Sources */ = {isa = PBXBuildFile; fileRef = A954DEAB13117B7B00027756 /* genarray.c */; };
@@ -380,6 +384,27 @@
 		A954E23F13117C6300027756 /* CLucene.h in Headers */ = {isa = PBXBuildFile; fileRef = A954E15613117C6300027756 /* CLucene.h */; };
 		A954E44B1311B30300027756 /* libcurl-7.19.6-release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A954E44A1311B30300027756 /* libcurl-7.19.6-release.a */; };
 		A9C94C2213142D0900F88A63 /* regex.c in Sources */ = {isa = PBXBuildFile; fileRef = A954DF7413117B7B00027756 /* regex.c */; };
+		A9F2E6411327EB3000DF82AA /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
+		A9F2E6431327EB3000DF82AA /* SwordManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFA117B28920018B06F /* SwordManager.mm */; };
+		A9F2E6451327EB3000DF82AA /* SwordVerseManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC08117B28920018B06F /* SwordVerseManager.mm */; };
+		A9F2E6471327EB3000DF82AA /* SwordModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFE117B28920018B06F /* SwordModule.mm */; };
+		A9F2E6491327EB3000DF82AA /* SwordBible.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE4117B28910018B06F /* SwordBible.mm */; };
+		A9F2E64B1327EB3000DF82AA /* SwordBook.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEC117B28920018B06F /* SwordBook.mm */; };
+		A9F2E64D1327EB3000DF82AA /* SwordCommentary.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEE117B28920018B06F /* SwordCommentary.mm */; };
+		A9F2E64F1327EB3000DF82AA /* SwordDictionary.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF0117B28920018B06F /* SwordDictionary.mm */; };
+		A9F2E6511327EB3000DF82AA /* SwordBibleBook.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE6117B28920018B06F /* SwordBibleBook.mm */; };
+		A9F2E6531327EB3000DF82AA /* SwordBibleChapter.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE8117B28920018B06F /* SwordBibleChapter.m */; };
+		A9F2E6551327EB3000DF82AA /* SwordModuleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */; };
+		A9F2E6571327EB3000DF82AA /* SwordModuleTreeEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */; };
+		A9F2E6591327EB3000DF82AA /* SwordBibleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */; };
+		A9F2E65B1327EB3000DF82AA /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF6117B28920018B06F /* SwordKey.mm */; };
+		A9F2E65D1327EB3000DF82AA /* SwordListKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF8117B28920018B06F /* SwordListKey.mm */; };
+		A9F2E65F1327EB3000DF82AA /* SwordVerseKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC06117B28920018B06F /* SwordVerseKey.mm */; };
+		A9F2E6611327EB3000DF82AA /* VerseEnumerator.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC0A117B28920018B06F /* VerseEnumerator.mm */; };
+		A9F2E6631327EB3000DF82AA /* SwordInstallSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF2117B28920018B06F /* SwordInstallSource.mm */; };
+		A9F2E6651327EB3000DF82AA /* SwordInstallSourceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */; };
+		A9F2E6671327EB3000DF82AA /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
+		A9F2E6701327EE9300DF82AA /* ObjCSword-iOS_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A9F2E66F1327EE9300DF82AA /* ObjCSword-iOS_Prefix.pch */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -424,6 +449,8 @@
 		A94EAC08117B28920018B06F /* SwordVerseManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordVerseManager.mm; path = src/SwordVerseManager.mm; sourceTree = "<group>"; };
 		A94EAC09117B28920018B06F /* VerseEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerseEnumerator.h; path = src/VerseEnumerator.h; sourceTree = "<group>"; };
 		A94EAC0A117B28920018B06F /* VerseEnumerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VerseEnumerator.mm; path = src/VerseEnumerator.mm; sourceTree = "<group>"; };
+		A9543B2C13293C6F00AF3565 /* iOSConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSConfiguration.h; path = src/services/iOSConfiguration.h; sourceTree = "<group>"; };
+		A9543B2D13293C6F00AF3565 /* iOSConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iOSConfiguration.m; path = src/services/iOSConfiguration.m; sourceTree = "<group>"; };
 		A954DEA413117B7B00027756 /* swdisp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swdisp.cpp; sourceTree = "<group>"; };
 		A954DEA513117B7B00027756 /* swlog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swlog.cpp; sourceTree = "<group>"; };
 		A954DEAB13117B7B00027756 /* genarray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = genarray.c; sourceTree = "<group>"; };
@@ -808,6 +835,7 @@
 		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
 		A9EF1414120595650078A27C /* SwordLocaleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordLocaleManager.h; path = src/SwordLocaleManager.h; sourceTree = "<group>"; };
 		A9EF1415120595650078A27C /* SwordLocaleManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordLocaleManager.mm; path = src/SwordLocaleManager.mm; sourceTree = "<group>"; };
+		A9F2E66F1327EE9300DF82AA /* ObjCSword-iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObjCSword-iOS_Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -937,6 +965,7 @@
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A9F2E66F1327EE9300DF82AA /* ObjCSword-iOS_Prefix.pch */,
 				A9A2C17C118D9D3D0002873D /* Notifications.h */,
 				32DBCF5E0370ADEE00C91783 /* ObjCSword_Prefix.pch */,
 				A975EAC411C77862007C1532 /* ObjCSword.h */,
@@ -951,6 +980,8 @@
 				A9C2858211C44A0A00803CB5 /* Configuration.m */,
 				A9C2857111C4471400803CB5 /* OSXConfiguration.h */,
 				A9C2857211C4471400803CB5 /* OSXConfiguration.m */,
+				A9543B2C13293C6F00AF3565 /* iOSConfiguration.h */,
+				A9543B2D13293C6F00AF3565 /* iOSConfiguration.m */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -1777,6 +1808,8 @@
 				A954E23D13117C6300027756 /* VoidList.h in Headers */,
 				A954E23E13117C6300027756 /* VoidMap.h in Headers */,
 				A954E23F13117C6300027756 /* CLucene.h in Headers */,
+				A9F2E6701327EE9300DF82AA /* ObjCSword-iOS_Prefix.pch in Headers */,
+				A9543B2E13293C6F00AF3565 /* iOSConfiguration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1830,6 +1863,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A942D60813293AD3001225C6 /* Configuration.m in Sources */,
+				A942D60913293AD3001225C6 /* OSXConfiguration.m in Sources */,
+				A9543B2F13293C6F00AF3565 /* iOSConfiguration.m in Sources */,
+				A9F2E6411327EB3000DF82AA /* SwordLocaleManager.mm in Sources */,
+				A9F2E6431327EB3000DF82AA /* SwordManager.mm in Sources */,
+				A9F2E6451327EB3000DF82AA /* SwordVerseManager.mm in Sources */,
+				A9F2E6471327EB3000DF82AA /* SwordModule.mm in Sources */,
+				A9F2E6491327EB3000DF82AA /* SwordBible.mm in Sources */,
+				A9F2E64B1327EB3000DF82AA /* SwordBook.mm in Sources */,
+				A9F2E64D1327EB3000DF82AA /* SwordCommentary.mm in Sources */,
+				A9F2E64F1327EB3000DF82AA /* SwordDictionary.mm in Sources */,
+				A9F2E6511327EB3000DF82AA /* SwordBibleBook.mm in Sources */,
+				A9F2E6531327EB3000DF82AA /* SwordBibleChapter.m in Sources */,
+				A9F2E6551327EB3000DF82AA /* SwordModuleTextEntry.m in Sources */,
+				A9F2E6571327EB3000DF82AA /* SwordModuleTreeEntry.m in Sources */,
+				A9F2E6591327EB3000DF82AA /* SwordBibleTextEntry.m in Sources */,
+				A9F2E65B1327EB3000DF82AA /* SwordKey.mm in Sources */,
+				A9F2E65D1327EB3000DF82AA /* SwordListKey.mm in Sources */,
+				A9F2E65F1327EB3000DF82AA /* SwordVerseKey.mm in Sources */,
+				A9F2E6611327EB3000DF82AA /* VerseEnumerator.mm in Sources */,
+				A9F2E6631327EB3000DF82AA /* SwordInstallSource.mm in Sources */,
+				A9F2E6651327EB3000DF82AA /* SwordInstallSourceController.mm in Sources */,
+				A9F2E6671327EB3000DF82AA /* SwordModule+Index.mm in Sources */,
 				A954DFA113117B7B00027756 /* swdisp.cpp in Sources */,
 				A954DFA213117B7B00027756 /* swlog.cpp in Sources */,
 				A954DFA513117B7B00027756 /* genarray.c in Sources */,
@@ -2122,6 +2178,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "ObjCSword-iOS_Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"dependencies/clucene/**",
 					"dependencies/libcurl/include/**",
@@ -2145,6 +2202,7 @@
 				PRODUCT_NAME = "ObjCSword-iOS";
 				SDKROOT = iphoneos4.2;
 				TARGETED_DEVICE_FAMILY = 2;
+				VALID_ARCHS = "armv6 armv7 i386";
 			};
 			name = Debug;
 		};
@@ -2161,7 +2219,8 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "ObjCSword-iOS";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos4.2;
+				VALID_ARCHS = "armv6 armv7 i386";
 				ZERO_LINK = NO;
 			};
 			name = Release;
