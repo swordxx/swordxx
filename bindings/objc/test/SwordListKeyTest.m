@@ -7,7 +7,13 @@
 //
 
 #import "SwordListKeyTest.h"
+#ifdef TARGET_IPHONE_SIMULATOR
+#import "SwordListKey.h"
+#import "SwordVerseKey.h"
+#import "VerseEnumerator.h"
+#else
 #import "ObjCSword/ObjCSword.h"
+#endif
 
 @implementation SwordListKeyTest
 

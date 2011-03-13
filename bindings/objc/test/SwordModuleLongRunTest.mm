@@ -7,12 +7,26 @@
 //
 
 #import "SwordModuleTest.h"
+#ifdef TARGET_IPHONE_SIMULATOR
+#import "SwordManager.h"
+#import "Configuration.h"
+#import "iOSConfiguration.h"
+#import "SwordModule.h"
+#import "SwordBibleTextEntry.h"
+#import "VerseEnumerator.h"
+#import "SwordListKey.h"
+#else
 #import "ObjCSword/ObjCSword.h"
+#endif
 
 @implementation SwordModuleTest
 
 - (void)setUp {
+#ifdef TARGET_IPHONE_SIMULATOR
+    [[Configuration config] setClass:[iOSConfiguration class]];
+#else
     [[Configuration config] setClass:[OSXConfiguration class]];
+#endif
     mod = [[SwordManager defaultManager] moduleWithName:@"GerNeUe"];    
 }
 
