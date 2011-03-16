@@ -30,6 +30,7 @@
 #include <ztext.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
+#include <localemgr.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -58,6 +59,7 @@ void usage(const char *progName, const char *error = 0) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
         }
 	fprintf(stderr, "\n");
+	fprintf(stderr, "  -l <locale>\t\t specify a locale scheme to use (default is en)\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
 		"$$$Gen.1.1\n"
@@ -84,6 +86,8 @@ int main(int argc, char **argv) {
 	const char *inFileName = argv[1];
 	SWBuf v11n             = "KJV";
 	SWBuf outPath          = "./";
+	SWBuf locale	       = "en";
+	
 	bool fourByteSize      = false;
 	bool append            = false;
 	int iType              = 4;
@@ -121,6 +125,10 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-v")) {
 			if (i+1 < argc) v11n = argv[++i];
 			else usage(progName, "-v requires <v11n>");
+		}
+		else if (!strcmp(argv[i], "-l")) {
+			if (i+1 < argc) locale = argv[++i];
+			else usage(progName, "-l requires <locale>");
 		}
 		else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
@@ -178,9 +186,14 @@ int main(int argc, char **argv) {
 			: (SWModule *)new RawText4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);
 	}
 	// -----------------------------------------------------
+	
+	// setup locale manager
+	
+	LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
 			
 
 	// setup module key to allow full range of possible values, and then some
+	
 	VerseKey *vkey = (VerseKey *)module->CreateKey();
 	vkey->Headings(1);
 	vkey->AutoNormalize(0);
