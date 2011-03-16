@@ -58,8 +58,8 @@ void usage(const char *progName, const char *error = 0) {
 	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
         }
-	fprintf(stderr, "\n");
 	fprintf(stderr, "  -l <locale>\t\t specify a locale scheme to use (default is en)\n");
+	fprintf(stderr, "\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
 		"$$$Gen.1.1\n"
