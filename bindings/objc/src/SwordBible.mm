@@ -49,12 +49,20 @@ NSLock *bibleLock = nil;
 	if(!bibleLock) bibleLock = [[NSLock alloc] init];
 	[bibleLock lock];
 	
-	sword::VerseKey vk([ref UTF8String]);
-	
-	*bookName = [NSString stringWithUTF8String:vk.getBookName()];
-    *book = vk.Book();
-	*chapter = vk.Chapter();
-	*verse = vk.Verse();
+    SwordVerseKey *key = [SwordVerseKey verseKeyWithRef:ref];
+
+    if(bookName != NULL) {
+        *bookName = [key bookName];        
+    }
+    if(book != NULL) {
+        *book = [key book];        
+    }
+    if(chapter != NULL) {
+        *chapter = [key chapter];        
+    }
+    if(verse != NULL) {
+        *verse = [key verse];
+    }
     
 	[bibleLock unlock];
 }

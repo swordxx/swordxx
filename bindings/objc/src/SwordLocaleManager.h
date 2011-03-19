@@ -19,4 +19,10 @@
  */
 - (void)initLocale;
 
+/**
+ Initializes global locale system.
+ Loads the locale (locale.d) folder from the specified path.
+ */
+- (void)initLocaleWithLocaledPath:(NSString *)aPath;
+
 @end

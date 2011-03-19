@@ -27,8 +27,12 @@
     // set locale swManager
     NSString *resourcePath = [[NSBundle bundleForClass:[SwordLocaleManager class]] resourcePath];
     NSString *localePath = [resourcePath stringByAppendingPathComponent:@"locales.d"];
+    [self initLocaleWithLocaledPath:localePath];
+}
+
+- (void)initLocaleWithLocaledPath:(NSString *)aPath {
     sword::LocaleMgr *lManager = sword::LocaleMgr::getSystemLocaleMgr();
-    lManager->loadConfigDir([localePath UTF8String]);
+    lManager->loadConfigDir([aPath UTF8String]);
     
     //get the language
     NSArray *availLocales = [NSLocale preferredLanguages];
@@ -56,7 +60,7 @@
     
     if(haveLocale) {
         lManager->setDefaultLocaleName([lang UTF8String]);    
-    }    
+    }
 }
 
 @end
