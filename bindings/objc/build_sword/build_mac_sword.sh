@@ -6,46 +6,71 @@ APP=sword
 VERS=1.6.2
 BDIR=`pwd`
 
-DEBUG=0
-FAT=0
-PPC=0
-INTEL=0
-
 SWORDPATH="$BDIR/../../../"
 ICUPATH="$BDIR/../dependencies/icu"
 PPCCLUCENEPATH="$BDIR/../build_clucene/build/ppc_inst"
 INTELCLUCENEPATH="$BDIR/../build_clucene/build/intel_inst"
 INTEL64CLUCENEPATH="$BDIR/../build_clucene/build/intel64_inst"
 
-# check commandline
-for arg in "$@" 
+usage() {
+cat << EOF
+usage: $0 options
+
+OPTIONS:
+   -d      Buildtype debug version
+   -a      Architecture [intel|ppc|fat]
+   -b      Buildpath, default = "build"
+   -c      With clucene
+EOF
+}
+
+DEBUG=0
+FAT=0
+PPC=0
+INTEL=0
+USECLUCENE=0
+BUILDDIR=build
+
+while getopts “da:b:c?” OPTION
 do
-	if [ "$arg" = "debug" ]; then
-		DEBUG=1
-		echo "building debug version"
-	fi
-	if [ "$arg" = "fat" ]; then
-		FAT=1
-		PPC=1
-		INTEL=1
-		echo "building fat version"
-	fi
-	if [ "$arg" = "ppc" ]; then
-		PPC=1
-		echo "building ppc version"
-	else
-		PPC=0
-	fi
-	if [ "$arg" = "intel" ]; then
-		INTEL=1
-		echo "building intel version"
-	else
-		INTEL=0
-	fi
+     case $OPTION in
+         d)
+         DEBUG=1
+         echo "building debug version"
+         ;;
+         a)
+         if [ "$OPTARG" = "fat" ]; then
+           FAT=1
+           PPC=1
+           INTEL=1
+           echo "building fat version"
+         fi
+         if [ "$OPTARG" = "ppc" ]; then
+           PPC=1
+           echo "building ppc version"
+         fi
+         if [ "$OPTARG" = "intel" ]; then
+           INTEL=1
+           echo "building intel version"
+         fi
+         ;;
+         b)
+         BUILDDIR="$OPTARG"
+         echo "using builddir $BUILDDIR"
+         ;;
+         c)
+         USECLUCENE=1
+         echo "building with clucene"
+         ;;
+         ?)
+         usage
+         exit
+         ;;
+     esac
 done
 
 # using seperate build dirs and building in them doesn't work with sword
-BUILD=$BDIR/build
+BUILD=$BDIR/"$BUILDDIR"
 PPCPREFIX=$BUILD/ppc_inst
 INTELPREFIX=$BUILD/intel_inst
 INTEL64PREFIX=$BUILD/intel64_inst
@@ -96,14 +121,18 @@ if [ $PPC -eq 1 ] || [ $FAT -eq 1 ]; then
 	fi
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-isysroot $SDK -Wl,-syslibroot,$SDK"
-	./configure --prefix=$PPCPREFIX --with-clucene=$PPCCLUCENEPATH --with-zlib --with-conf --with-icu --with-curl --disable-tests --disable-shared --enable-utilities
+	if [ $USECLUCENE -eq 1 ]; then
+  	./configure --prefix=$PPCPREFIX --with-clucene=$PPCCLUCENEPATH --with-zlib --with-conf --with-icu --with-curl --disable-tests --disable-shared
+	else
+  	./configure --prefix=$PPCPREFIX --without-clucene --with-zlib --with-conf --with-icu --with-curl --disable-tests --disable-shared --enable-utilities
+  fi
 	make all install
 	make clean
 	cd $BDIR
 	# copy to result dir
 	PPC_LIB_EXPORT="$RESULTPREFIX/lib/lib$APP-ppc.a"
 	cp $PPCPREFIX/lib/lib$APP.a $PPC_LIB_EXPORT
-    echo "building PPC version of library...done"
+  echo "building PPC version of library...done"
 fi
 
 if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
@@ -122,16 +151,20 @@ if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
 	fi
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-isysroot $SDK -Wl,-syslibroot,$SDK"
-	./configure --prefix=$INTELPREFIX --with-clucene=$INTELCLUCENEPATH --with-zlib --with-conf --with-icu --with-curl --enable-tests --disable-shared --enable-utilities
+	if [ $USECLUCENE -eq 1 ]; then
+  	./configure --prefix=$INTELPREFIX --with-clucene=$INTELCLUCENEPATH --with-zlib --with-conf --with-icu --with-curl --enable-tests --disable-shared
+  else
+  	./configure --prefix=$INTELPREFIX --without-clucene --with-zlib --with-conf --with-icu --with-curl --enable-tests --disable-shared --enable-utilities
+  fi
 	make all install
 	make clean
 	cd $BDIR
 	# copy to result dir
 	INTEL_LIB_EXPORT="$RESULTPREFIX/lib/lib$APP-intel.a"
 	cp $INTELPREFIX/lib/lib$APP.a $INTEL_LIB_EXPORT
-    echo "building INTEL version of library...done"
+  echo "building INTEL version of library...done"
 
-    echo "building INTEL64 version of library..."
+  echo "building INTEL64 version of library..."
 	cd $SWORDPATH
 	make clean
 	echo 'autogen.sh ...'
@@ -147,14 +180,18 @@ if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
 	fi
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-isysroot $SDK -Wl,-syslibroot,$SDK"
-	./configure --prefix=$INTEL64PREFIX --with-clucene=$INTEL64CLUCENEPATH --with-zlib --with-conf --with-icu --with-curl --enable-tests --disable-shared --enable-utilities
+	if [ $USECLUCENE -eq 1 ]; then
+  	./configure --prefix=$INTEL64PREFIX --with-clucene=$INTEL64CLUCENEPATH --with-zlib --with-conf --with-icu --with-curl --enable-tests --disable-shared
+  else
+  	./configure --prefix=$INTEL64PREFIX --without-clucene --with-zlib --with-conf --with-icu --with-curl --enable-tests --disable-shared --enable-utilities
+  fi
 	make all install
 	make clean
 	cd $BDIR
 	# copy to result dir
 	INTEL64_LIB_EXPORT="$RESULTPREFIX/lib/lib$APP-intel64.a"
 	cp $INTEL64PREFIX/lib/lib$APP.a $INTEL64_LIB_EXPORT
-    echo "building INTEL64 version of library...done"
+  echo "building INTEL64 version of library...done"
 fi
 
 # only for fat version

@@ -4,10 +4,13 @@
 
 # dependencies for this script are:
 # that "build_mac_sword.sh" has been executed in "fat" mode and
-# successfully created a "build" folder with directories: "ppc_inst" and "intel_inst"
+# successfully created a "build_tools" folder with directories: "ppc_inst" and "intel_inst"
+
+# first build library
+./build_mac_sword.sh -a fat -b build_tools
 
 BDIR=.
-SWORDBUILD=$BDIR/build
+SWORDBUILD=$BDIR/build_tools
 PPCPREFIX=$SWORDBUILD/ppc_inst
 INTELPREFIX=$SWORDBUILD/intel_inst
 RESULTPREFIX=$SWORDBUILD/result_inst
