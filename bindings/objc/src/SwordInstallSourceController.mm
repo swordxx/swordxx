@@ -12,7 +12,6 @@
 #import "SwordModule.h"
 
 #include "installmgr.h"
-//#include "MyInstallMgr.h"
 
 #ifdef __cplusplus
 typedef std::map<sword::SWBuf, sword::InstallSource *> InstallSourceMap;
@@ -95,6 +94,10 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
     }
     
     return singleton;
+}
+
++ (SwordInstallSourceController *)controllerWithPath:(NSString *)aPath {
+    return [[[SwordInstallSourceController alloc] initWithPath:aPath createPath:YES] autorelease];
 }
 
 /**

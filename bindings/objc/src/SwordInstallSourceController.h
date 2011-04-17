@@ -59,6 +59,7 @@ typedef enum _ModuleStatusConst {
 
 // initialization
 + (SwordInstallSourceController *)defaultController;
++ (SwordInstallSourceController *)controllerWithPath:(NSString *)aPath;
 
 /**
 base path of the module installation
