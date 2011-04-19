@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SwordModule.h>
 
 #ifdef __cplusplus
 #include <swmgr.h>
@@ -58,10 +59,11 @@ class sword::SWModule;
                  usingManager:(SwordManager *)swManager 
         withInstallController:(SwordInstallSourceController *)sim;
 
-/**
- List of available InstallSources
- */
+/** List of available InstallSources */
 - (NSArray *)listModules;
+
+/** List of modules for given type */
+- (NSArray *)listModulesForType:(ModuleType)aType;
 
 /** list module types */
 - (NSArray *)listModuleTypes;

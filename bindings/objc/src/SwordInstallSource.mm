@@ -140,9 +140,7 @@
 
 /** list all modules of this source */
 - (NSArray *)listModules {
-    NSArray *ret = nil;
-    
-    DLog(@"");    
+    NSArray *ret = [NSArray array];
     
     SwordManager *sm = [self swordManager];
     if(sm) {
@@ -150,6 +148,19 @@
     } else {
         ALog(@"Have nil SwordManager");        
     }
+    
+    return ret;
+}
+
+- (NSArray *)listModulesForType:(ModuleType)aType {
+    NSArray *ret = [NSArray array];
+
+    SwordManager *sm = [self swordManager];
+    if(sm) {
+        ret = [sm modulesForType:aType];
+    } else {
+        ALog(@"Have nil SwordManager");        
+    }    
     
     return ret;
 }
