@@ -26,10 +26,10 @@ class sword::SWModule;
     sword::InstallSource *swInstallSource;
 #endif
     
-    /** the sword manager for this source */
-    SwordManager *swordManager;
-    
     BOOL temporarySource;
+
+    /** the sword manager for this source */
+    SwordManager *swordManager;    
 }
 
 // init
@@ -68,10 +68,9 @@ class sword::SWModule;
 /** list module types */
 - (NSArray *)listModuleTypes;
 
-/**
- Returns the SwordManager attached to this SwordInstallSourceController
- */
+/** Returns the SwordManager attached to this SwordInstallSourceController */
 - (SwordManager *)swordManager;
+- (void)setSwordManager:(SwordManager *)swManager;
 
 #ifdef __cplusplus
 - (sword::InstallSource *)installSource;

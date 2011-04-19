@@ -10,27 +10,14 @@
 #import "SwordInstallSourceController.h"
 #import "SwordManager.h"
 
-@interface SwordInstallSource (PrivateAPI)
-
-- (void)setSwordManager:(SwordManager *)swManager;
-
-@end
-
-@implementation SwordInstallSource (PrivateAPI)
-
-- (void)setSwordManager:(SwordManager *)swManager {
-    [swManager retain];
-    [swordManager release];
-    swordManager = swManager;
-}
+@interface SwordInstallSource ()
 
 @end
 
 @implementation SwordInstallSource
 
 // init
-- (id)init
-{
+- (id)init {
     self = [super init];
     if(self) {
         temporarySource = NO;
@@ -84,6 +71,12 @@
 
 - (void)dealloc {
     [super dealloc];
+}
+
+- (void)setSwordManager:(SwordManager *)swManager {
+    [swManager retain];
+    [swordManager release];
+    swordManager = swManager;
 }
 
 // accessors
