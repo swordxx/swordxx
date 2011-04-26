@@ -390,7 +390,7 @@ using std::list;
 - (NSArray *)modulesForType:(ModuleType)type {
     NSMutableArray *ret = [NSMutableArray array];
     for(SwordModule *mod in [modules allValues]) {
-        if([mod type] == type) {
+        if([mod type] == type || type == All) {
             [ret addObject:mod];
         }
     }
