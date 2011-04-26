@@ -41,6 +41,7 @@ typedef enum {
 
 /** These are the main module types as returned in -typeString */
 typedef enum {
+    All         = 0x0000,
 	Bible       = 0x0001, 
     Commentary  = 0x0002, 
     Dictionary  = 0x0004,
