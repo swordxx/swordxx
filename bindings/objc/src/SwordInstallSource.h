@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <SwordModule.h>
+#import "SwordModule.h"
 
 #ifdef __cplusplus
 #include <swmgr.h>
