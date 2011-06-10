@@ -287,6 +287,7 @@ typedef enum {
  @return NSString for text data
  */
 - (id)attributeValueForParsedLinkData:(NSDictionary *)data;
+- (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType;
 
 /** returns the pre-verse entry value */
 - (NSString *)entryAttributeValuePreverse;
@@ -308,6 +309,11 @@ typedef enum {
  Convenience method with a key-string
  */
 - (SwordModuleTextEntry *)textEntryForKeyString:(NSString *)aKeyString textType:(TextPullType)aType;
+/**
+ Pulls all text entries for the given reference
+ @return Array of SwordModuleTextEntry
+ */
+- (NSArray *)textEntriesForReference:(NSString *)aReference textType:(TextPullType)textType;
 
 /**
  Returns a rendered text for the text at the current module position

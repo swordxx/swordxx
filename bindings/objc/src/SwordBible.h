@@ -60,5 +60,10 @@ typedef enum {
 - (SwordBibleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType;
 - (NSArray *)strippedTextEntriesForRef:(NSString *)reference context:(int)context;
 - (NSArray *)renderedTextEntriesForRef:(NSString *)reference context:(int)context;
+/**
+ Override from super class
+ @return Array of SwordBibleTextEntry
+ */
+- (NSArray *)textEntriesForReference:(NSString *)aReference textType:(TextPullType)textType;
 
 @end

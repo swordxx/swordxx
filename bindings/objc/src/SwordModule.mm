@@ -492,6 +492,10 @@
 #pragma mark - Module metadata processing
 
 - (id)attributeValueForParsedLinkData:(NSDictionary *)data {
+    return [self attributeValueForParsedLinkData:data withTextRenderType:TextTypeStripped];
+}
+
+- (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType {
     id ret = nil;
     
     NSString *passage = [data objectForKey:ATTRTYPE_PASSAGE];
@@ -503,16 +507,28 @@
         NSString *footnoteText = [self entryAttributeValueFootnoteOfType:attrType 
                                                               indexValue:[data objectForKey:ATTRTYPE_VALUE] 
                                                                   forKey:[SwordKey swordKeyWithRef:passage]];
-        ret = [self strippedTextFromString:footnoteText];
+        if(textType == TextTypeRendered) {
+            ret = [self renderedTextEntriesForRef:footnoteText];
+        } else {
+            ret = [self strippedTextEntriesForRef:footnoteText];            
+        }
     } else if([attrType isEqualToString:@"x"]) {
         NSString *refListString = [self entryAttributeValueFootnoteOfType:attrType
                                                                indexValue:[data objectForKey:ATTRTYPE_VALUE] 
                                                                    forKey:[SwordKey swordKeyWithRef:passage]];
-        ret = [self strippedTextEntriesForRef:refListString];
+        if(textType == TextTypeRendered) {
+            ret = [self renderedTextEntriesForRef:refListString];
+        } else {
+            ret = [self strippedTextEntriesForRef:refListString];
+        }
     } else if([attrType isEqualToString:@"scriptRef"] || [attrType isEqualToString:@"scripRef"]) {
         NSString *key = [[[data objectForKey:ATTRTYPE_VALUE] stringByReplacingOccurrencesOfString:@"+" 
                                                                                        withString:@" "] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        ret = [self strippedTextEntriesForRef:key];
+        if(textType == TextTypeRendered) {
+            ret = [self renderedTextEntriesForRef:key];
+        } else {
+            ret = [self strippedTextEntriesForRef:key];
+        }
     }
     
     return ret;
@@ -633,27 +649,11 @@
 }
 
 - (NSArray *)strippedTextEntriesForRef:(NSString *)reference {
-    NSArray *ret = nil;
-    
-    SwordModuleTextEntry *entry = [self textEntryForKey:[SwordKey swordKeyWithRef:reference] 
-                                               textType:TextTypeStripped];
-    if(entry) {
-        ret = [NSArray arrayWithObject:entry];
-    }
-    
-    return ret;    
+    return [self textEntriesForReference:reference textType:TextTypeStripped];
 }
 
 - (NSArray *)renderedTextEntriesForRef:(NSString *)reference {
-    NSArray *ret = nil;
-    
-    SwordModuleTextEntry *entry = [self textEntryForKey:[SwordKey swordKeyWithRef:reference] 
-                                               textType:TextTypeRendered];
-    if(entry) {
-        ret = [NSArray arrayWithObject:entry];
-    }
-    
-    return ret;
+    return [self textEntriesForReference:reference textType:TextTypeRendered];
 }
 
 - (SwordModuleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType {
@@ -686,6 +686,17 @@
     return [self textEntryForKey:[SwordKey swordKeyWithRef:aKeyString] textType:aType];
 }
 
+- (NSArray *)textEntriesForReference:(NSString *)aReference textType:(TextPullType)textType {
+    NSArray *ret = nil;
+    
+    SwordModuleTextEntry *entry = [self textEntryForKey:[SwordKey swordKeyWithRef:aReference] 
+                                               textType:textType];
+    if(entry) {
+        ret = [NSArray arrayWithObject:entry];
+    }
+    
+    return ret;    
+}
 
 - (void)writeEntry:(SwordModuleTextEntry *)anEntry {}
 

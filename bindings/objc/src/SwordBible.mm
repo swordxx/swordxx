@@ -434,6 +434,10 @@ NSLock *bibleLock = nil;
     return [self textEntriesForReference:reference context:context textType:TextTypeRendered];
 }
 
+- (NSArray *)textEntriesForReference:(NSString *)aReference textType:(TextPullType)textType {
+    return [self textEntriesForReference:aReference context:0 textType:textType];
+}
+
 - (NSArray *)textEntriesForReference:(NSString *)aReference context:(int)context textType:(TextPullType)textType {
     NSMutableArray *ret = [NSMutableArray array];
     
