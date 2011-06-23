@@ -156,8 +156,12 @@
 }
 
 - (id)attributeValueForParsedLinkData:(NSDictionary *)data {
-    id ret = nil;
+    return [self attributeValueForParsedLinkData:data withTextRenderType:TextTypeStripped];
+}
 
+- (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType {
+    id ret = nil;
+    
     NSString *attrType = [data objectForKey:ATTRTYPE_TYPE];
     if([attrType isEqualToString:@"scriptRef"] || 
        [attrType isEqualToString:@"scripRef"] ||

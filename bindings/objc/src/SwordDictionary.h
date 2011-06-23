@@ -24,5 +24,4 @@
 - (NSArray *)allKeys;
 - (NSString *)entryForKey:(NSString *)aKey;
 
-
 @end
