@@ -617,6 +617,12 @@ public:
 	 */
 	virtual const char *RenderText(const char *buf = 0, int len = -1, bool render = true);
 
+	/** Produces any header data which might be useful which associated with the
+	 *	processing done with this filter.  A typical example is a suggested
+	 *	CSS style block for classed containers.
+	 */
+	virtual const char *getRenderHeader() const;
+
 	/** Produces plain text, without markup, of the module entry at the supplied key
 	 * @param tmpKey desired module entry
 	 * @return result buffer

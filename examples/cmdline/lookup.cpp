@@ -89,11 +89,8 @@ int main(int argc, char **argv)
 	std::cout << target->getRawEntry();
 	std::cout << "\n";
 	std::cout << "==Render=Entry============\n";
-	FilterList::const_iterator first = target->getRenderFilters().begin();
-	if (first != target->getRenderFilters().end()) {
-		std::cout << (*first)->getHeader();
-		std::cout << "\n";
-	}
+	std::cout << target->getRenderHeader();
+	std::cout << "\n";
 	std::cout << target->RenderText();
 	std::cout << "\n";
 	std::cout << "==========================\n";

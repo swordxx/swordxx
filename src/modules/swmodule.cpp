@@ -846,6 +846,20 @@ const char *SWModule::StripText(const char *buf, int len) {
 }
 
 
+/** SWModule::getRenderHeader()	- Produces any header data which might be
+ *	useful which associated with the processing done with this filter.
+ *	A typical example is a suggested CSS style block for classed
+ *	containers.
+ */
+const char *SWModule::getRenderHeader() const {
+	FilterList::const_iterator first = getRenderFilters().begin();
+	if (first != getRenderFilters().end()) {
+		return (*first)->getHeader();
+	}
+	return "";
+}
+
+
 /******************************************************************************
  * SWModule::RenderText 	- calls all renderfilters on current text
  *

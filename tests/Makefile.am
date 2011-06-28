@@ -7,7 +7,7 @@ LDADD = $(top_builddir)/lib/libsword.la
 
 SUBDIRS = cppunit
 
-noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest bibliography\
+noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest \
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
  swbuftest xmltest webiftest striptest

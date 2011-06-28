@@ -54,7 +54,6 @@ public:
 
 	/** This method can supply a header associated with the processing done with this filter.
 	 *	A typical example is a suggested CSS style block for classed containers.
-	 * @param text The text to be filtered/converted
 	 */
 	virtual const char *getHeader() const { return ""; }
 };
