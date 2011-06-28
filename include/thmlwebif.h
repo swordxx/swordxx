@@ -21,13 +21,13 @@
 #ifndef _ThMLWEBIF_H
 #define _ThMLWEBIF_H
 
-#include <thmlhtmlhref.h>
+#include <thmlxhtml.h>
 
 SWORD_NAMESPACE_START
 
 /** this filter converts ThML text to HTML text with hrefs
  */
-class SWDLLEXPORT ThMLWEBIF : public ThMLHTMLHREF {
+class SWDLLEXPORT ThMLWEBIF : public ThMLXHTML {
 	const SWBuf baseURL;
 	const SWBuf passageStudyURL;
 
@@ -36,5 +36,7 @@ protected:
 public:
 	ThMLWEBIF();
 };
+
 SWORD_NAMESPACE_END
-#endif /* _ThMLWEBIF_H */
+
+#endif

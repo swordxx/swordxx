@@ -5,6 +5,7 @@ libsword_la_SOURCES += $(filtersdir)/swoptfilter.cpp
 
 GBFFIL = $(filtersdir)/gbfhtml.cpp
 GBFFIL += $(filtersdir)/gbfhtmlhref.cpp
+GBFFIL += $(filtersdir)/gbfxhtml.cpp
 GBFFIL += $(filtersdir)/gbfwebif.cpp
 GBFFIL += $(filtersdir)/gbfplain.cpp
 GBFFIL += $(filtersdir)/gbfrtf.cpp
@@ -26,6 +27,7 @@ THMLFIL += $(filtersdir)/thmlgbf.cpp
 THMLFIL += $(filtersdir)/thmlrtf.cpp
 THMLFIL += $(filtersdir)/thmlhtml.cpp
 THMLFIL += $(filtersdir)/thmlhtmlhref.cpp
+THMLFIL += $(filtersdir)/thmlxhtml.cpp
 THMLFIL += $(filtersdir)/thmlwebif.cpp
 THMLFIL += $(filtersdir)/thmlwordjs.cpp
 
@@ -42,6 +44,7 @@ CONVFIL += $(filtersdir)/osisosis.cpp
 OSISFIL = $(filtersdir)/osisheadings.cpp
 OSISFIL += $(filtersdir)/osisfootnotes.cpp 
 OSISFIL += $(filtersdir)/osishtmlhref.cpp
+OSISFIL += $(filtersdir)/osisxhtml.cpp
 OSISFIL += $(filtersdir)/osiswebif.cpp
 OSISFIL += $(filtersdir)/osismorph.cpp
 OSISFIL += $(filtersdir)/osisstrongs.cpp

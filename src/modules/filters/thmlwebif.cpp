@@ -31,7 +31,6 @@
 SWORD_NAMESPACE_START
 
 ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
-  //all's done in ThMLHTMLHREF
 }
 
 bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
@@ -100,7 +99,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 		else {
-			return ThMLHTMLHREF::handleToken(buf,token,userData);
+			return ThMLXHTML::handleToken(buf, token, userData);
 		}
 	}
 	return true;

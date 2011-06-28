@@ -29,9 +29,6 @@
 SWORD_NAMESPACE_START
 
 GBFWEBIF::GBFWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
-//all is done in GBFHTMLHREF since it inherits form this class
-	addTokenSubstitute("FR", "<span class=\"wordsOfJesus\">"); // words of Jesus begin
-	addTokenSubstitute("Fr", "</span>");
 }
 
 bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
@@ -189,7 +186,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		}
 
 		else {
-			return GBFHTMLHREF::handleToken(buf, token, userData);
+			return GBFXHTML::handleToken(buf, token, userData);
 		}
 	}
 	return true;

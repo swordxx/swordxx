@@ -43,6 +43,9 @@
 #include <thmlwebif.h>
 #include <osiswebif.h>
 #include <swmodule.h>
+#include <thmlxhtml.h>
+#include <gbfxhtml.h>
+#include <osisxhtml.h>
 
 #include <markupfiltmgr.h>
 
@@ -286,6 +289,13 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromthml = NULL;
                         fromgbf = NULL;
                         fromosis = NULL;
+                        fromtei = NULL;
+                        break;
+                case FMT_XHTML:
+                        fromplain = NULL;
+                        fromthml = new ThMLXHTML();
+                        fromgbf = new GBFXHTML();
+                        fromosis = new OSISXHTML();
                         fromtei = NULL;
                         break;
                 }

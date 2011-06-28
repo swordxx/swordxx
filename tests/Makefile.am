@@ -7,7 +7,7 @@ LDADD = $(top_builddir)/lib/libsword.la
 
 SUBDIRS = cppunit
 
-noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest \
+noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest bibliography\
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
  swbuftest xmltest webiftest striptest
@@ -66,7 +66,7 @@ swbuftest_SOURCES = swbuftest.cpp
 webiftest_SOURCES = webiftest.cpp
 striptest_SOURCES = striptest.cpp
 xmltest_SOURCES = xmltest.cpp
-
+bibliography_SOURCES = bibliography.cpp
 
 EXTRA_DIST = 
 include bcppmake/Makefile.am

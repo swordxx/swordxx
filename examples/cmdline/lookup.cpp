@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <swmgr.h>
 #include <swmodule.h>
+#include <swfilter.h>
 #include <markupfiltmgr.h>
 #include <versekey.h>
 
@@ -38,6 +39,7 @@ using sword::AttributeTypeList;
 using sword::AttributeList;
 using sword::AttributeValue;
 using sword::VerseKey;
+using sword::FilterList;
 
 int main(int argc, char **argv)
 {
@@ -87,6 +89,11 @@ int main(int argc, char **argv)
 	std::cout << target->getRawEntry();
 	std::cout << "\n";
 	std::cout << "==Render=Entry============\n";
+	FilterList::const_iterator first = target->getRenderFilters().begin();
+	if (first != target->getRenderFilters().end()) {
+		std::cout << (*first)->getHeader();
+		std::cout << "\n";
+	}
 	std::cout << target->RenderText();
 	std::cout << "\n";
 	std::cout << "==========================\n";

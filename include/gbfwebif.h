@@ -21,13 +21,13 @@
 #ifndef GBFWEBIF_H
 #define GBFWEBIF_H
 
-#include <gbfhtmlhref.h>
+#include <gbfxhtml.h>
 
 SWORD_NAMESPACE_START
 
-/** this filter converts GBF  text to HTML text with hrefs
+/** this filter converts GBF text to classed XHTML for web interfaces
  */
-class SWDLLEXPORT GBFWEBIF : public GBFHTMLHREF {
+class SWDLLEXPORT GBFWEBIF : public GBFXHTML {
 	const SWBuf baseURL;
 	const SWBuf passageStudyURL;
 

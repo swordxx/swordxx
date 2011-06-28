@@ -1,8 +1,8 @@
 /******************************************************************************
  *
- * $Id$
+ * gbfxhtmlhref.h
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,26 +18,30 @@
  *
  */
 
-#ifndef OSISWEBIF_H
-#define OSISWEBIF_H
+#ifndef GBFXHTML_H
+#define GBFXHTML_H
 
-#include <osisxhtml.h>
+#include <swbasicfilter.h>
 
 SWORD_NAMESPACE_START
 
-/** this filter converts OSIS  text to HTML text with hrefs
+/** this filter converts GBF text to classed XHTML text
  */
-class SWDLLEXPORT OSISWEBIF : public OSISXHTML {
-	const SWBuf baseURL;
-	const SWBuf passageStudyURL;
-	bool javascript;
-
+class SWDLLEXPORT GBFXHTML : public SWBasicFilter {
 protected:
+	class MyUserData : public BasicFilterUserData {
+	public:
+		MyUserData(const SWModule *module, const SWKey *key);
+		bool hasFootnotePreTag;
+		SWBuf version;
+	};
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new MyUserData(module, key);
+	}
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 public:
-	OSISWEBIF();
-	void setJavascript(bool mode) { javascript = mode; }
+	GBFXHTML();
+	virtual const char *getHeader() const;
 };
 
 SWORD_NAMESPACE_END
