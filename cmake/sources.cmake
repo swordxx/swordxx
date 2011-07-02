@@ -63,6 +63,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/swoptfilter.cpp
 
 	src/modules/filters/gbfhtml.cpp
+	src/modules/filters/gbfxhtml.cpp
 	src/modules/filters/gbfhtmlhref.cpp
 	src/modules/filters/gbfwebif.cpp
 	src/modules/filters/gbfplain.cpp
@@ -84,6 +85,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/thmlgbf.cpp
 	src/modules/filters/thmlrtf.cpp
 	src/modules/filters/thmlhtml.cpp
+	src/modules/filters/thmlxhtml.cpp
 	src/modules/filters/thmlhtmlhref.cpp
 	src/modules/filters/thmlwebif.cpp
 	src/modules/filters/thmlwordjs.cpp
@@ -101,6 +103,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/osisheadings.cpp
 	src/modules/filters/osisfootnotes.cpp 
 	src/modules/filters/osishtmlhref.cpp
+	src/modules/filters/osisxhtml.cpp
 	src/modules/filters/osiswebif.cpp
 	src/modules/filters/osismorph.cpp
 	src/modules/filters/osisstrongs.cpp
@@ -254,6 +257,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/gbffootnotes.h
 	include/gbfheadings.h
 	include/gbfhtml.h
+	include/gbfxhtml.h
 	include/gbfhtmlhref.h
 	include/gbfwebif.h
 	include/gbfmorph.h
@@ -280,6 +284,7 @@ SET(SWORD_INSTALL_HEADERS
 
 	include/osisheadings.h
 	include/osishtmlhref.h
+	include/osisxhtml.h
 	include/osiswebif.h
 	include/osismorph.h
 	include/osismorphsegmentation.h
@@ -343,6 +348,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/thmlgbf.h
 	include/thmlheadings.h
 	include/thmlhtml.h
+	include/thmlxhtml.h
 	include/thmlhtmlhref.h
 	include/thmlwebif.h
 	include/thmllemma.h
