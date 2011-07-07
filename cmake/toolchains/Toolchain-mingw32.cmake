@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 SET(MINGW32_ROOT "/usr/i686-pc-mingw32/sys-root/mingw")
 
->>>>>>> fix-icu
 SET(CMAKE_SYSTEM_NAME Windows)
 
 # specify the cross compiler
@@ -10,11 +7,7 @@ SET(CMAKE_C_COMPILER /usr/bin/i686-pc-mingw32-gcc)
 SET(CMAKE_CXX_COMPILER /usr/bin/i686-pc-mingw32-g++)
 
 # where is the target environment
-<<<<<<< HEAD
-SET(CMAKE_FIND_ROOT_PATH /usr/i686-pc-mingw32/sys-root/mingw /usr/local/i686-pc-mingw32)
-=======
 SET(CMAKE_FIND_ROOT_PATH "${MINGW32_ROOT}" /usr/local/i686-pc-mingw32)
->>>>>>> fix-icu
 
 # search for programs in the build host directories
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
@@ -32,12 +25,9 @@ SET(CMAKE_RC_COMPILER /usr/bin/i686-pc-mingw32-windres)
 
 # override boost library suffix which defaults to -mgw
 SET(Boost_COMPILER -gcc45)
-<<<<<<< HEAD
-=======
 
 # Since ICU is all strange and smart and stuff, let's do this
 SET(ICU_CONFIG_BIN_PATH "${MINGW32_ROOT}/bin/")
 
 INCLUDE_DIRECTORIES("${MINGW32_ROOT}/include/glib-2.0")
 INCLUDE_DIRECTORIES("${MINGW32_ROOT}/lib/glib-2.0/include")
->>>>>>> fix-icu
