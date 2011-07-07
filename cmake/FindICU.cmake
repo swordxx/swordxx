@@ -13,6 +13,7 @@
 find_program(
   ICU_CONFIG_BIN
   icu-config
+  HINTS "${ICU_CONFIG_BIN_PATH}"
 )
 find_program(
      ICU_GENRB
@@ -24,7 +25,7 @@ if(ICU_CONFIG_BIN)
   MESSAGE(STATUS "[ICU] genrb: Yes ${ICU_GENRB}")
 
   # Get include directories
-  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--cppflags"
+  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--noverify" "--cppflags"
     OUTPUT_VARIABLE ICU_INCLUDE_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
@@ -33,12 +34,12 @@ if(ICU_CONFIG_BIN)
   string(REGEX REPLACE "^[ 	]+" "" ICU_INCLUDE_DIR ${ICU_INCLUDE_DIR})
 
      # Try to get the Libraries we need
-  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--ldflags"
+  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--noverify" "--ldflags"
     OUTPUT_VARIABLE ICU_LIBRARY_RAW
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
   
-  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--ldflags-icuio"
+  execute_process(COMMAND "${ICU_CONFIG_BIN}" "--noverify" "--ldflags-icuio"
      OUTPUT_VARIABLE ICU_LIBRARY_IO_RAW
      OUTPUT_STRIP_TRAILING_WHITESPACE
   )
@@ -49,7 +50,7 @@ if(ICU_CONFIG_BIN)
      set(ICU_LIBRARY "${ICU_LIBRARY} ${ICU_LIBRARY_IO_RAW}")
      
      # Get the version
-     execute_process(COMMAND "${ICU_CONFIG_BIN}" "--version"
+     execute_process(COMMAND "${ICU_CONFIG_BIN}" "--noverify" "--version"
 	  OUTPUT_VARIABLE ICU_VERSION
 	  OUTPUT_STRIP_TRAILING_WHITESPACE
      )
