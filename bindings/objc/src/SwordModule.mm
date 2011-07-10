@@ -507,23 +507,17 @@
         NSString *footnoteText = [self entryAttributeValueFootnoteOfType:attrType 
                                                               indexValue:[data objectForKey:ATTRTYPE_VALUE] 
                                                                   forKey:[SwordKey swordKeyWithRef:passage]];
-        if(textType == TextTypeRendered) {
-            ret = [self renderedTextEntriesForRef:footnoteText];
+        ret = footnoteText;
+    } else if([attrType isEqualToString:@"x"] || [attrType isEqualToString:@"scriptRef"] || [attrType isEqualToString:@"scripRef"]) {
+        NSString *key = @"";
+        if([attrType isEqualToString:@"x"]) {
+            key = [self entryAttributeValueFootnoteOfType:attrType
+                                               indexValue:[data objectForKey:ATTRTYPE_VALUE] 
+                                                   forKey:[SwordKey swordKeyWithRef:passage]];            
         } else {
-            ret = [self strippedTextEntriesForRef:footnoteText];            
+            key = [[[data objectForKey:ATTRTYPE_VALUE] stringByReplacingOccurrencesOfString:@"+" 
+                                                                                 withString:@" "] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];            
         }
-    } else if([attrType isEqualToString:@"x"]) {
-        NSString *refListString = [self entryAttributeValueFootnoteOfType:attrType
-                                                               indexValue:[data objectForKey:ATTRTYPE_VALUE] 
-                                                                   forKey:[SwordKey swordKeyWithRef:passage]];
-        if(textType == TextTypeRendered) {
-            ret = [self renderedTextEntriesForRef:refListString];
-        } else {
-            ret = [self strippedTextEntriesForRef:refListString];
-        }
-    } else if([attrType isEqualToString:@"scriptRef"] || [attrType isEqualToString:@"scripRef"]) {
-        NSString *key = [[[data objectForKey:ATTRTYPE_VALUE] stringByReplacingOccurrencesOfString:@"+" 
-                                                                                       withString:@" "] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         if(textType == TextTypeRendered) {
             ret = [self renderedTextEntriesForRef:key];
         } else {
