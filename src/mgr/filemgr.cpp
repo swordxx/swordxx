@@ -540,12 +540,15 @@ int FileMgr::removeDir(const char *targetDir) {
 					FileMgr::removeFile(targetPath.c_str());
 				}
 				else {
-					removeDir(targetPath.c_str());
+					FileMgr::removeDir(targetPath.c_str());
 				}
 			}
 		}
 		closedir(dir);
-		removeFile(targetDir);
+		int status = FileMgr::removeFile(targetDir);
+          int stuff = errno;
+          char *err = strerror(errno);
+          int x = stuff;
 	}
 	return 0;
 }
