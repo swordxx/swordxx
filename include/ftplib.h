@@ -23,6 +23,10 @@
 #if !defined(__FTPLIB_H)
 #define __FTPLIB_H
 
+#define _FTPLIB_NO_COMPAT
+
+
+
 #if defined(__unix__) || defined(VMS)
 #define GLOBALDEF
 #define GLOBALREF extern
@@ -50,7 +54,6 @@
 /* connection modes */
 #define FTPLIB_PASSIVE 1
 #define FTPLIB_PORT 2
-
 /* connection option names */
 #define FTPLIB_CONNMODE 1
 #define FTPLIB_CALLBACK 2

@@ -285,7 +285,8 @@ char VerseKey::parse(bool checkAutoNormalize)
 	int error = 0;
 
 	if (keytext) {
-		ListKey tmpListKey = ParseVerseList(keytext);
+		// pass our own copy of keytext as keytext memory may be freshed during parse 
+		ListKey tmpListKey = ParseVerseList(SWBuf(keytext).c_str());
 		if (tmpListKey.Count()) {
 			this->positionFrom(*tmpListKey.getElement(0));
 			error = this->error;

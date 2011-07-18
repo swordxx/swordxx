@@ -153,6 +153,9 @@ USEUNIT("..\..\src\modules\filters\teihtmlhref.cpp");
 USEUNIT("..\..\src\mgr\versemgr.cpp");
 USEUNIT("..\..\src\modules\filters\osisruby.cpp");
 USEUNIT("..\..\src\mgr\curlhttpt.cpp");
+USEUNIT("..\..\src\modules\filters\gbfxhtml.cpp");
+USEUNIT("..\..\src\modules\filters\osisxhtml.cpp");
+USEUNIT("..\..\src\modules\filters\thmlxhtml.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

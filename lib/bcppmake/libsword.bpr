@@ -119,7 +119,10 @@
       ..\..\src\modules\comments\rawcom4\rawcom4.obj 
       ..\..\src\modules\common\rawverse4.obj 
       ..\..\src\modules\filters\teihtmlhref.obj ..\..\src\mgr\versemgr.obj 
-      ..\..\src\modules\filters\osisruby.obj ..\..\src\mgr\curlhttpt.obj"/>
+      ..\..\src\modules\filters\osisruby.obj ..\..\src\mgr\curlhttpt.obj 
+      ..\..\src\modules\filters\gbfxhtml.obj 
+      ..\..\src\modules\filters\osisxhtml.obj 
+      ..\..\src\modules\filters\thmlxhtml.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -164,7 +167,7 @@
     <CFLAG1 value="-Od -Vx -X- -r- -a8 -4 -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zi"/>
-    <LFLAGS value="/P512"/>
+    <LFLAGS value="/P1024"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="$(OBJFILES)"/>
@@ -273,12 +276,14 @@ Item1=../\
 Item2=../
 
 [HistoryLists\hlTlibPageSize]
-Count=5
-Item0=0x0200
-Item1=0x0080
-Item2=0x0040
-Item3=0x0020
-Item4=0x0010
+Count=7
+Item0=0x0400
+Item1=1024
+Item2=0x0200
+Item3=0x0080
+Item4=0x0040
+Item5=0x0020
+Item6=0x0010
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
