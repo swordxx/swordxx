@@ -123,8 +123,8 @@ public:
 	virtual void decrement(int steps = 1) = 0;
 	virtual void increment(int steps = 1) = 0;
 	virtual bool isTraversable() const { return true; }
-	virtual long Index() const { return getOffset(); }
-	virtual long Index(long iindex) { setOffset(iindex); return getOffset(); }
+	virtual long getIndex() const { return getOffset(); }
+	virtual void setIndex(long iindex) { setOffset(iindex); }
 
 	/** Set the key to this path.  If the path doesn't exist, then
 	 *	nodes are created as necessary

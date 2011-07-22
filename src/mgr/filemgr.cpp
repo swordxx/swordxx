@@ -545,10 +545,13 @@ int FileMgr::removeDir(const char *targetDir) {
 			}
 		}
 		closedir(dir);
+		FileMgr::removeFile(targetDir);
+/*
 		int status = FileMgr::removeFile(targetDir);
           int stuff = errno;
           char *err = strerror(errno);
           int x = stuff;
+*/
 	}
 	return 0;
 }

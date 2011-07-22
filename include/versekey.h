@@ -65,10 +65,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	*/
 	char headings;
 
-	/** initialize and allocate books array
-	*/
-	void initstatics();
-
 	/** initializes this VerseKey()
 	*/
 	void init(const char *v11n = "KJV");
@@ -370,24 +366,28 @@ public:
 	*/
 	virtual char Headings(char iheadings = MAXPOS(char));
 
+
 	/** Gets index based upon current verse
 	*
 	* @return offset
 	*/
-	virtual long Index() const;
+	virtual long getIndex() const;
+
 
 	/** Sets index based upon current verse
 	*
 	* @param iindex value to set index to
 	* @return offset
 	*/
-	virtual long Index(long iindex);
+	virtual void setIndex(long iindex);
+
 
 	/** Gets index into current testament based upon current verse
 	*
 	* @return offset
 	*/
-	virtual long TestamentIndex() const;
+	virtual long getTestamentIndex() const;
+	virtual long TestamentIndex() const { return getTestamentIndex(); }	// deprecated, use getTestamentIndex()
 
 	virtual const char *getOSISRef() const;
 	virtual const char *getOSISBookName() const;

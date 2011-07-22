@@ -124,7 +124,7 @@ public:
 	virtual void increment(int step = 1);
 
 	virtual bool isTraversable() const { return true; }
-	virtual long Index() const { return arraypos; }
+	virtual long getIndex() const { return arraypos; }
 	virtual const char *getRangeText() const;
 	virtual const char *getOSISRefRangeText() const;
 
@@ -132,7 +132,7 @@ public:
 	 * Returns the index for the new one given as as parameter.
 	 * The first parameter is the new index.
 	 */
-	virtual long Index(long index) { SetToElement(index); return Index (); }
+	virtual void setIndex(long index) { SetToElement(index); }
 	virtual const char *getText() const;
 	virtual void setText(const char *ikey);
 	virtual void sort();

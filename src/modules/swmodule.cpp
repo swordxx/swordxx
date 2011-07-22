@@ -483,7 +483,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	(*percent)(perc, percentUserData);
 
 	*this = BOTTOM;
-	long highIndex = key->Index();
+	long highIndex = key->getIndex();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 	*this = TOP;
@@ -607,7 +607,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	
 	while ((searchType != -4) && !Error() && !terminateSearch) {
-		long mindex = key->Index();
+		long mindex = key->getIndex();
 		float per = (float)mindex / highIndex;
 		per *= 93;
 		per += 5;
@@ -619,7 +619,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		else if (newperc < perc) {
 #ifndef _MSC_VER
 			std::cerr << "Serious error: new percentage complete is less than previous value\n";
-			std::cerr << "index: " << (key->Index()) << "\n";
+			std::cerr << "index: " << (key->getIndex()) << "\n";
 			std::cerr << "highIndex: " << highIndex << "\n";
 			std::cerr << "newperc ==" << (int)newperc << "%" << "is smaller than\n";
 			std::cerr << "perc == "  << (int )perc << "% \n";
@@ -1083,7 +1083,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 
 	*this = BOTTOM;
-	long highIndex = key->Index();
+	long highIndex = key->getIndex();
 	if (!highIndex)
 		highIndex = 1;		// avoid division by zero errors.
 
@@ -1100,7 +1100,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	char err = Error();
 	while (!err) {
-		long mindex = key->Index();
+		long mindex = key->getIndex();
 
 		proxBuf = "";
 		proxLem = "";

@@ -241,8 +241,12 @@ public:
 	}
 
 
-	virtual long Index() const { return entryIndex; }
-	virtual long Index(long iindex) { entryIndex = iindex; return entryIndex; }
+	virtual long getIndex() const { return entryIndex; }
+	virtual void setIndex(long iindex) { entryIndex = iindex; }
+	// deprecated, use getIndex()
+	long Index() const { return getIndex(); }
+	// deprecated, use setIndex(...)
+	long Index(long iindex) { setIndex(iindex); return getIndex(); }
 
 	/** Calls this module's display object and passes itself
 	 *

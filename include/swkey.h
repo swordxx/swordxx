@@ -216,11 +216,13 @@ public:
 
 	/** Use this function to get an index position within a module.
 	 */
-	virtual long Index() const { return index; }
+	virtual long getIndex() const { return index; }
+	long Index() const { return getIndex(); }	// deprecated, use getIndex()
 
 	/** See documentation for @ref Index()
 	 */
-	virtual long Index(long iindex) { index = iindex; return index; }
+	virtual void setIndex(long iindex) { index = iindex; }
+	long Index(long iindex) { setIndex(iindex); return getIndex(); }	// deprecated, use setIndex(...)
 
 	SWKEY_OPERATORS
 

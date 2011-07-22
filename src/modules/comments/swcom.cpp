@@ -68,22 +68,20 @@ SWKey *SWCom::CreateKey() const {
 }
 
 
-long SWCom::Index() const {
+long SWCom::getIndex() const {
 	VerseKey *key = &getVerseKey();
-	entryIndex = key->Index();
+	entryIndex = key->getIndex();
 	return entryIndex;
 }
 
-long SWCom::Index(long iindex) {
+void SWCom::setIndex(long iindex) {
 	VerseKey *key = &getVerseKey();
 	key->Testament(1);
-	key->Index(iindex);
+	key->setIndex(iindex);
 
 	if (key != this->key) {
 		this->key->copyFrom(*key);
 	}
-
-	return Index();
 }
 
 

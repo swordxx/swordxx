@@ -70,24 +70,22 @@ SWKey *SWText::CreateKey() const {
 }
 
 
-long SWText::Index() const {
+long SWText::getIndex() const {
 	VerseKey *key = &getVerseKey();
-	entryIndex = key->Index();
+	entryIndex = key->getIndex();
 
 	return entryIndex;
 }
 
-long SWText::Index(long iindex) {
+void SWText::setIndex(long iindex) {
 	VerseKey *key = &getVerseKey();
 
 	key->Testament(1);
-	key->Index(iindex);
+	key->setIndex(iindex);
 
 	if (key != this->key) {
 		this->key->copyFrom(*key);
 	}
-
-	return Index();
 }
 
 

@@ -59,8 +59,8 @@ public:
 	*/
 	virtual SWKey *CreateKey() const;
 
-	virtual long Index() const;
-	virtual long Index(long iindex);
+	virtual long getIndex() const;
+	virtual void setIndex(long iindex);
 
 	// OPERATORS -----------------------------------------------------------------
 	
