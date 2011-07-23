@@ -48,7 +48,7 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
-# define SWDEPRECATED __declspec(deprecated("** WARNING: deprecated method **"))
+#  define SWDEPRECATED __declspec(deprecated("** WARNING: deprecated method **"))
 
 
 #elif defined(__SWPM__)
@@ -67,7 +67,7 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
-# define SWDEPRECATED 
+#  define SWDEPRECATED 
 
 
 #elif defined(__GNUWIN32__)
@@ -86,7 +86,7 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
-# define SWDEPRECATED __declspec(deprecated("** WARNING: deprecated method **"))
+#  define SWDEPRECATED  __attribute__((__deprecated__))
 
 
 #elif defined(__BORLANDC__)
