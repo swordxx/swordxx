@@ -81,8 +81,8 @@ int main(int argc, char **argv) {
 
 	key.AutoNormalize(0);
 	key.Headings(1);
-	for (key.Index(0); (!key.Error()); key++) {
-		rawdrv->findOffset(key.Testament(), key.Index(), &offset, &size);
+	for (key.setIndex(0); (!key.Error()); key++) {
+		rawdrv->findOffset(key.Testament(), key.getIndex(), &offset, &size);
 		printf("%s: OLD offset: %ld; size: %d\n", (const char *)key, offset, size);
 
 		if ((offset == loffset) && (size == lsize)) {

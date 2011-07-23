@@ -48,6 +48,9 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
+# define SWDEPRECATED __declspec(deprecated("** WARNING: deprecated method **"))
+
+
 #elif defined(__SWPM__)
 
 #  ifdef SWMAKINGDLL
@@ -63,6 +66,9 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_DATA(type) type
 #    define SWDLLEXPORT_CTORFN
 #  endif
+
+# define SWDEPRECATED 
+
 
 #elif defined(__GNUWIN32__)
 
@@ -80,6 +86,9 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
+# define SWDEPRECATED __declspec(deprecated("** WARNING: deprecated method **"))
+
+
 #elif defined(__BORLANDC__)
 #  ifdef SWMAKINGDLL
 #    define SWDLLEXPORT _export
@@ -95,11 +104,23 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
+#  define SWDEPRECATED
+
+
+#elif defined(__GNUC__)
+#  define SWDLLEXPORT
+#  define SWDLLEXPORT_DATA(type) type
+#  define SWDLLEXPORT_CTORFN
+#  define SWDEPRECATED  __attribute__((__deprecated__))
+
+
 #else
 #  define SWDLLEXPORT
 #  define SWDLLEXPORT_DATA(type) type
 #  define SWDLLEXPORT_CTORFN
+#  define SWDEPRECATED
 #endif
+
 
 // For ostream, istream ofstream
 #if defined(__BORLANDC__) && defined( _RTLDLL )
@@ -107,6 +128,8 @@ SWORD_NAMESPACE_START
 #else
 #  define SWDLLIMPORT
 #endif
+
+
 
 enum {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};
 enum {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS, FMT_WEBIF, FMT_TEI, FMT_XHTML};

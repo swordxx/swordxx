@@ -205,7 +205,7 @@ public:
 
 	/** deprecated, use isTraversible
 	 */
-	char Traversable() { return (isTraversable()) ? 1:0; }
+	SWDEPRECATED char Traversable() { return (isTraversable()) ? 1:0; }
 
 	/** Whether or not this key can be ++ -- incremented
 	 */
@@ -217,12 +217,12 @@ public:
 	/** Use this function to get an index position within a module.
 	 */
 	virtual long getIndex() const { return index; }
-	long Index() const { return getIndex(); }	// deprecated, use getIndex()
+	SWDEPRECATED long Index() const { return getIndex(); }	// deprecated, use getIndex()
 
 	/** See documentation for @ref Index()
 	 */
 	virtual void setIndex(long iindex) { index = iindex; }
-	long Index(long iindex) { setIndex(iindex); return getIndex(); }	// deprecated, use setIndex(...)
+	SWDEPRECATED long Index(long iindex) { setIndex(iindex); return getIndex(); }	// deprecated, use setIndex(...)
 
 	SWKEY_OPERATORS
 

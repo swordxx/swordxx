@@ -53,9 +53,9 @@ int main(int argc, char **argv)
 	max = (argc < 4) ? 10 : atoi(argv[3]);
 
 	for (loop = 0; loop < max; loop++) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")";
-		bla.Index(index+1);
+		bla.setIndex(index+1);
 		std::cout << "-> " << (const char *)bla << "\n";
 	}
 
@@ -66,9 +66,9 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")";
-		bla.Index(index-1);
+		bla.setIndex(index-1);
 		std::cout << "-> " << (const char *)bla << "\n";
 	}
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = 0; loop < max && !bla.Error(); loop++,bla++) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop && !bla.Error(); loop--, bla--) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla--) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla--) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla--) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 	else	bla = argv[2];
 
 	for (loop = max; loop; loop--, bla++) {
-		index = bla.Index();
+		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
@@ -198,12 +198,12 @@ int main(int argc, char **argv)
 	bla.Testament(1);
 	bla = BOTTOM;
 	std::cout << bla.TestamentIndex() << "\n";
-	std::cout << bla.Index() << "\n";
+	std::cout << bla.getIndex() << "\n";
 	std::cout << bla << "\n";
 	bla.Testament(2);
 	bla = BOTTOM;
 	std::cout << bla.TestamentIndex() << "\n";
-	std::cout << bla.Index() << "\n";
+	std::cout << bla.getIndex() << "\n";
 	std::cout << bla << "\n";
 	return 0;
 }
