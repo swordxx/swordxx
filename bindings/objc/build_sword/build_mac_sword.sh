@@ -117,7 +117,7 @@ if [ $PPC -eq 1 ] || [ $FAT -eq 1 ]; then
 	if [ $DEBUG -eq 1 ]; then
 		export CFLAGS="-O0 -g -arch ppc -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
 	else
-	    export CFLAGS="-O2 -g0 -arch ppc -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
+	  export CFLAGS="-O2 -g0 -arch ppc -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
 	fi
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-isysroot $SDK -Wl,-syslibroot,$SDK"
@@ -147,7 +147,7 @@ if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
 	if [ $DEBUG -eq 1 ]; then
 		export CFLAGS="-O0 -g -arch i686 -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
 	else
-	    export CFLAGS="-O2 -g0 -arch i686 -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
+	  export CFLAGS="-O2 -g0 -arch i686 -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
 	fi
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-isysroot $SDK -Wl,-syslibroot,$SDK"
@@ -176,7 +176,7 @@ if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
 	if [ $DEBUG -eq 1 ]; then
 		export CFLAGS="-O0 -g -arch x86_64 -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
 	else
-	    export CFLAGS="-O2 -g0 -arch x86_64 -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
+	  export CFLAGS="-O2 -g0 -arch x86_64 -mmacosx-version-min=10.5 -isysroot $SDK -I$SDK/usr/include -I$ICUPATH/include"
 	fi
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-isysroot $SDK -Wl,-syslibroot,$SDK"
@@ -200,6 +200,7 @@ if [ $FAT -eq 1 ]; then
 	# build fat binary with lipo
 	lipo -create $PPC_LIB_EXPORT $INTEL_LIB_EXPORT $INTEL64_LIB_EXPORT -output $RESULTPREFIX/lib/lib$APP-ub.a
 fi
+
 
 # run runlib to update the library content
 #ranlib $RESULTPREFIX/lib/*
