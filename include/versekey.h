@@ -258,6 +258,7 @@ public:
 	*/
 	virtual char Testament() const { return getTestament(); }	// deprecated
 	virtual char getTestament() const;
+	virtual int getTestamentMax() const { return 2; }
 
 	/** Gets book
 	*
@@ -265,6 +266,7 @@ public:
 	*/
 	virtual char Book() const { return getBook(); }	// deprecated
 	virtual char getBook() const;
+	virtual int getBookMax() const { return BMAX[testament-1]; }
 
 	/** Gets chapter
 	*
