@@ -829,7 +829,7 @@ signed char SWMgr::Load() {
 	return ret;
 }
 
-SWModule *SWMgr::CreateMod(const char *name, const char *driver, ConfigEntMap &section)
+SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap &section)
 {
 	SWBuf description, datapath, misc1;
 	ConfigEntMap::iterator entry;
@@ -1197,7 +1197,7 @@ void SWMgr::CreateMods(bool multiMod) {
 		
 		driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
 		if (driver.length()) {
-			newmod = CreateMod((*it).first, driver, section);
+			newmod = createModule((*it).first, driver, section);
 			if (newmod) {
 				// Filters to add for this module and globally announce as an option to the user
 				// e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally

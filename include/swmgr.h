@@ -100,7 +100,8 @@ protected:
 	SWConfig *mysysconfig;
 	SWConfig *homeConfig;
 	void CreateMods(bool multiMod = false);
-	SWModule *CreateMod(const char *name, const char *driver, ConfigEntMap &section);
+	SWDEPRECATED SWModule *CreateMod(const char *name, const char *driver, ConfigEntMap &section) { return createModule(name, driver, section); }
+	virtual SWModule *createModule(const char *name, const char *driver, ConfigEntMap &section);
 	void DeleteMods();
 	char configType;		// 0 = file; 1 = directory
 	OptionFilterMap optionFilters;
