@@ -8,9 +8,10 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@class SwordModule;
+@class SwordModule, SwordManager;
 
 @interface SwordModuleTest : SenTestCase {
+    SwordManager *mgr;
     SwordModule *mod;
 }
 

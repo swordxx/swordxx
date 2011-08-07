@@ -8,25 +8,19 @@
 
 #import "SwordManagerTest.h"
 
-#ifdef TARGET_IPHONE_SIMULATOR
 #import "Configuration.h"
-#import "iOSConfiguration.h"
+//#import "iOSConfiguration.h"
 #import "OSXConfiguration.h"
 #import "SwordManager.h"
-#else
-#import "ObjCSword/SwordManager.h"
-#import "ObjCSword/Configuration.h"
-#import "ObjCSword/OSXConfiguration.h"
-#endif
 
 @implementation SwordManagerTest
 
 - (void)setUp {
 #ifdef TARGET_IPHONE_SIMULATOR
-    [[Configuration config] setClass:[iOSConfiguration class]];
+//    [[Configuration config] setClass:[iOSConfiguration class]];
 #else
-    [[Configuration config] setClass:[OSXConfiguration class]];
 #endif
+    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
 }
 
 - (void)testSwordManagerInit {

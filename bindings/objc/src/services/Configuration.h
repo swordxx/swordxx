@@ -27,10 +27,12 @@
 @end
 
 @interface Configuration : NSObject <Configuration> {
+    Configuration *impl;
     
 }
 
 + (Configuration *)config;
++ (Configuration *)configWithImpl:(id<Configuration>)configImpl;
 
 - (NSString *)osVersion;
 - (NSString *)bundleVersion;
@@ -39,6 +41,6 @@
 - (NSString *)tempFolder;
 - (NSString *)logFile;
 
-- (void)setClass:(Class<Configuration>)classImpl;
+- (void)setImpl:(id<Configuration>)configImpl;
 
 @end

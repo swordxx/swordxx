@@ -10,7 +10,8 @@
 #ifdef TARGET_IPHONE_SIMULATOR
 #import "SwordManager.h"
 #import "Configuration.h"
-#import "iOSConfiguration.h"
+#import "OSXConfiguration.h"
+//#import "iOSConfiguration.h"
 #import "SwordModule.h"
 #import "SwordModuleTextEntry.h"
 #import "VerseEnumerator.h"
@@ -25,15 +26,16 @@
 
 - (void)setUp {
 #ifdef TARGET_IPHONE_SIMULATOR
-    [[Configuration config] setClass:[OSXConfiguration class]];
+//    [[Configuration config] setClass:[iOSConfiguration class]];
 #else
-    [[Configuration config] setClass:[OSXConfiguration class]];
 #endif
-    mod = [[SwordManager defaultManager] moduleWithName:@"GerNeUe"];    
+    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
+    mgr = [SwordManager managerWithPath:[[Configuration config] defaultModulePath]];
+    mod = [mgr moduleWithName:@"GerNeUe"];    
 }
 
 - (void)testLoopRenderedVerses {
-    SwordBible *bible = (SwordBible *)[[SwordManager defaultManager] moduleWithName:@"GerSch"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
     STAssertNotNil(bible, @"Module is nil");
 
     NSArray *verses = [bible renderedTextEntriesForRef:@"Gen"];
@@ -42,7 +44,7 @@
 }
 
 - (void)testRenderedVerseText {
-    SwordBible *bible = (SwordBible *)[[SwordManager defaultManager] moduleWithName:@"GerSch"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
     STAssertNotNil(bible, @"Module is nil");
     
     SwordModuleTextEntry *text = [bible textEntryForKeyString:@"gen1.1" textType:TextTypeRendered];
@@ -51,7 +53,7 @@
 }
 
 - (void)testCloneModule {
-    SwordBible *bible = (SwordBible *)[[SwordManager defaultManager] moduleWithName:@"GerSch"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
     STAssertNotNil(bible, @"Module is nil");
 
     /*

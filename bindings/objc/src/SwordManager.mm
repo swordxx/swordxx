@@ -268,7 +268,7 @@ using std::list;
             ALog(@"Cannot create SWMgr instance for default module path!");
         } else {
             NSFileManager *fm = [NSFileManager defaultManager];
-            NSArray *subDirs = [fm directoryContentsAtPath:modulesPath];
+            NSArray *subDirs = [fm contentsOfDirectoryAtPath:modulesPath error:NULL];
             // for all sub directories add module
             BOOL directory;
             NSString *fullSubDir = nil;

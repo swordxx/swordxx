@@ -35,20 +35,20 @@
         ret = modPath;
         
         // create folder
-        [fm createDirectoryAtPath:modPath attributes:nil];
+        [fm createDirectoryAtPath:modPath withIntermediateDirectories:NO attributes:nil error:NULL];
         
         // create mods.d folder
         NSString *modsdPath = [modPath stringByAppendingPathComponent:@"mods.d"];
-        [fm createDirectoryAtPath:modsdPath attributes:nil];
+        [fm createDirectoryAtPath:modsdPath withIntermediateDirectories:NO attributes:nil error:NULL];
         // create module folder
         NSString *dataPath = [modPath stringByAppendingPathComponent:@"modules"];
-        [fm createDirectoryAtPath:dataPath attributes:nil];
+        [fm createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:NULL];
         dataPath = [dataPath stringByAppendingPathComponent:@"comments"];
-        [fm createDirectoryAtPath:dataPath attributes:nil];
+        [fm createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:NULL];
         dataPath = [dataPath stringByAppendingPathComponent:@"rawfiles"];
-        [fm createDirectoryAtPath:dataPath attributes:nil];
+        [fm createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:NULL];
         dataPath = [dataPath stringByAppendingPathComponent:aName];
-        [fm createDirectoryAtPath:dataPath attributes:nil];
+        [fm createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:NULL];
         
         // let's create a brand new empty module
         sword::RawFiles::createModule([dataPath UTF8String]);

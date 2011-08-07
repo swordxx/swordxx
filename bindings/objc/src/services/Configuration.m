@@ -18,6 +18,11 @@
     return instance;
 }
 
++ (Configuration *)configWithImpl:(id<Configuration>)configImpl {
+    [[Configuration config] setImpl:configImpl];
+    return [Configuration config];
+}
+
 - (id)init {
     return [super init];
 }
@@ -30,17 +35,17 @@
     [super dealloc];
 }
 
-- (void)setClass:(Class<Configuration>)classImpl {
-    object_setClass(self, classImpl);
+- (void)setImpl:(id<Configuration>)configImpl {
+    impl = (Configuration *)configImpl;
 }
 
 #pragma mark Configuration implementation
 
-- (NSString *)osVersion {return @"";}
-- (NSString *)bundleVersion {return @"";}
-- (NSString *)defaultModulePath {return @"";}
-- (NSString *)defaultAppSupportPath {return @"";}
-- (NSString *)tempFolder {return @"";}
-- (NSString *)logFile {return @"";}
+- (NSString *)osVersion {return [impl osVersion];}
+- (NSString *)bundleVersion {return [impl bundleVersion];}
+- (NSString *)defaultModulePath {return [impl defaultModulePath];}
+- (NSString *)defaultAppSupportPath {return [impl defaultAppSupportPath];}
+- (NSString *)tempFolder {return [impl tempFolder];}
+- (NSString *)logFile {return [impl logFile];}
 
 @end

@@ -1,0 +1,1060 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+		A918B8E411C6697400024D84 /* SwordModuleTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A918B8E211C6697400024D84 /* SwordModuleTest.h */; };
+		A918B8E511C6697400024D84 /* SwordModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A918B8E311C6697400024D84 /* SwordModuleTest.m */; };
+		A94EAC0B117B28920018B06F /* SwordBible.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE3117B28910018B06F /* SwordBible.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC0C117B28920018B06F /* SwordBible.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE4117B28910018B06F /* SwordBible.mm */; };
+		A94EAC0D117B28920018B06F /* SwordBibleBook.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE5117B28920018B06F /* SwordBibleBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC0E117B28920018B06F /* SwordBibleBook.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE6117B28920018B06F /* SwordBibleBook.mm */; };
+		A94EAC0F117B28920018B06F /* SwordBibleChapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE7117B28920018B06F /* SwordBibleChapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC10117B28920018B06F /* SwordBibleChapter.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE8117B28920018B06F /* SwordBibleChapter.m */; };
+		A94EAC11117B28920018B06F /* SwordBibleTextEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC12117B28920018B06F /* SwordBibleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */; };
+		A94EAC13117B28920018B06F /* SwordBook.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABEB117B28920018B06F /* SwordBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC14117B28920018B06F /* SwordBook.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEC117B28920018B06F /* SwordBook.mm */; };
+		A94EAC15117B28920018B06F /* SwordCommentary.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABED117B28920018B06F /* SwordCommentary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC16117B28920018B06F /* SwordCommentary.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEE117B28920018B06F /* SwordCommentary.mm */; };
+		A94EAC17117B28920018B06F /* SwordDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABEF117B28920018B06F /* SwordDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC18117B28920018B06F /* SwordDictionary.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF0117B28920018B06F /* SwordDictionary.mm */; };
+		A94EAC19117B28920018B06F /* SwordInstallSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF1117B28920018B06F /* SwordInstallSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC1A117B28920018B06F /* SwordInstallSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF2117B28920018B06F /* SwordInstallSource.mm */; };
+		A94EAC1B117B28920018B06F /* SwordInstallSourceController.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF3117B28920018B06F /* SwordInstallSourceController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC1C117B28920018B06F /* SwordInstallSourceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */; };
+		A94EAC1D117B28920018B06F /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF5117B28920018B06F /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF6117B28920018B06F /* SwordKey.mm */; };
+		A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF7117B28920018B06F /* SwordListKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF8117B28920018B06F /* SwordListKey.mm */; };
+		A94EAC21117B28920018B06F /* SwordManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF9117B28920018B06F /* SwordManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC22117B28920018B06F /* SwordManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFA117B28920018B06F /* SwordManager.mm */; };
+		A94EAC25117B28920018B06F /* SwordModule.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFD117B28920018B06F /* SwordModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC26117B28920018B06F /* SwordModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFE117B28920018B06F /* SwordModule.mm */; };
+		A94EAC27117B28920018B06F /* SwordModuleTextEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC28117B28920018B06F /* SwordModuleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */; };
+		A94EAC29117B28920018B06F /* SwordModuleTreeEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC2A117B28920018B06F /* SwordModuleTreeEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */; };
+		A94EAC2D117B28920018B06F /* SwordVerseKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC05117B28920018B06F /* SwordVerseKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC2E117B28920018B06F /* SwordVerseKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC06117B28920018B06F /* SwordVerseKey.mm */; };
+		A94EAC2F117B28920018B06F /* SwordVerseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC07117B28920018B06F /* SwordVerseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC30117B28920018B06F /* SwordVerseManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC08117B28920018B06F /* SwordVerseManager.mm */; };
+		A94EAC31117B28920018B06F /* VerseEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC09117B28920018B06F /* VerseEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC32117B28920018B06F /* VerseEnumerator.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC0A117B28920018B06F /* VerseEnumerator.mm */; };
+		A956316611FD8C5B007DC7AD /* libsword-ub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A956316411FD8C55007DC7AD /* libsword-ub.a */; };
+		A956316711FD8C5E007DC7AD /* libsword-ub.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A956316411FD8C55007DC7AD /* libsword-ub.a */; };
+		A956324411FD90CE007DC7AD /* libclucene-ub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A956324211FD90C9007DC7AD /* libclucene-ub.a */; };
+		A956324511FD90D2007DC7AD /* libclucene-ub.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A956324211FD90C9007DC7AD /* libclucene-ub.a */; };
+		A964657C11C662CF00640FAC /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
+		A964658F11C6654300640FAC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */; };
+		A96465A511C6657900640FAC /* SwordManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A964658111C663E200640FAC /* SwordManagerTest.m */; };
+		A96465AD11C6658200640FAC /* SwordManagerTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A964658011C663E200640FAC /* SwordManagerTest.h */; };
+		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
+		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9BDFA621207F9870067ED5B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */; };
+		A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
+		A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A964658011C663E200640FAC /* SwordManagerTest.h */; };
+		A9BDFA671207F9870067ED5B /* SwordModuleTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A918B8E211C6697400024D84 /* SwordModuleTest.h */; };
+		A9BDFA781207F9F00067ED5B /* SwordListKeyTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */; };
+		A9BDFA791207F9F00067ED5B /* SwordListKeyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */; };
+		A9BDFA7C1207FA2F0067ED5B /* SwordModuleLongRunTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */; };
+		A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */; };
+		A9C2856F11C446B700803CB5 /* Configuration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2856D11C446B700803CB5 /* Configuration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9C2857311C4471400803CB5 /* OSXConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2857111C4471400803CB5 /* OSXConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9C2857411C4471400803CB5 /* OSXConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2857211C4471400803CB5 /* OSXConfiguration.m */; };
+		A9C2858311C44A0A00803CB5 /* Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2858211C44A0A00803CB5 /* Configuration.m */; };
+		A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
+		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
+		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A964657A11C662CA00640FAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = ObjCSword;
+		};
+		A9BDFA5C1207F9870067ED5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = ObjCSword;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A9A5050211C75C4B00EB6EA5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A956324511FD90D2007DC7AD /* libclucene-ub.a in CopyFiles */,
+				A956316711FD8C5E007DC7AD /* libsword-ub.a in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		32DBCF5E0370ADEE00C91783 /* ObjCSword_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCSword_Prefix.pch; sourceTree = "<group>"; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* ObjCSword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCSword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9013D3F11E316C700E1CCCA /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
+		A918B8E211C6697400024D84 /* SwordModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTest.h; path = test/SwordModuleTest.h; sourceTree = "<group>"; };
+		A918B8E311C6697400024D84 /* SwordModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTest.m; path = test/SwordModuleTest.m; sourceTree = "<group>"; };
+		A94EABE3117B28910018B06F /* SwordBible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBible.h; path = src/SwordBible.h; sourceTree = "<group>"; };
+		A94EABE4117B28910018B06F /* SwordBible.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordBible.mm; path = src/SwordBible.mm; sourceTree = "<group>"; };
+		A94EABE5117B28920018B06F /* SwordBibleBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBibleBook.h; path = src/SwordBibleBook.h; sourceTree = "<group>"; };
+		A94EABE6117B28920018B06F /* SwordBibleBook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordBibleBook.mm; path = src/SwordBibleBook.mm; sourceTree = "<group>"; };
+		A94EABE7117B28920018B06F /* SwordBibleChapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBibleChapter.h; path = src/SwordBibleChapter.h; sourceTree = "<group>"; };
+		A94EABE8117B28920018B06F /* SwordBibleChapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleChapter.m; path = src/SwordBibleChapter.m; sourceTree = "<group>"; };
+		A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBibleTextEntry.h; path = src/SwordBibleTextEntry.h; sourceTree = "<group>"; };
+		A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleTextEntry.m; path = src/SwordBibleTextEntry.m; sourceTree = "<group>"; };
+		A94EABEB117B28920018B06F /* SwordBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBook.h; path = src/SwordBook.h; sourceTree = "<group>"; };
+		A94EABEC117B28920018B06F /* SwordBook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordBook.mm; path = src/SwordBook.mm; sourceTree = "<group>"; };
+		A94EABED117B28920018B06F /* SwordCommentary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordCommentary.h; path = src/SwordCommentary.h; sourceTree = "<group>"; };
+		A94EABEE117B28920018B06F /* SwordCommentary.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordCommentary.mm; path = src/SwordCommentary.mm; sourceTree = "<group>"; };
+		A94EABEF117B28920018B06F /* SwordDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordDictionary.h; path = src/SwordDictionary.h; sourceTree = "<group>"; };
+		A94EABF0117B28920018B06F /* SwordDictionary.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordDictionary.mm; path = src/SwordDictionary.mm; sourceTree = "<group>"; };
+		A94EABF1117B28920018B06F /* SwordInstallSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordInstallSource.h; path = src/SwordInstallSource.h; sourceTree = "<group>"; };
+		A94EABF2117B28920018B06F /* SwordInstallSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSource.mm; path = src/SwordInstallSource.mm; sourceTree = "<group>"; };
+		A94EABF3117B28920018B06F /* SwordInstallSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordInstallSourceController.h; path = src/SwordInstallSourceController.h; sourceTree = "<group>"; };
+		A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSourceController.mm; path = src/SwordInstallSourceController.mm; sourceTree = "<group>"; };
+		A94EABF5117B28920018B06F /* SwordKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordKey.h; path = src/SwordKey.h; sourceTree = "<group>"; };
+		A94EABF6117B28920018B06F /* SwordKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordKey.mm; path = src/SwordKey.mm; sourceTree = "<group>"; };
+		A94EABF7117B28920018B06F /* SwordListKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKey.h; path = src/SwordListKey.h; sourceTree = "<group>"; };
+		A94EABF8117B28920018B06F /* SwordListKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordListKey.mm; path = src/SwordListKey.mm; sourceTree = "<group>"; };
+		A94EABF9117B28920018B06F /* SwordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordManager.h; path = src/SwordManager.h; sourceTree = "<group>"; };
+		A94EABFA117B28920018B06F /* SwordManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordManager.mm; path = src/SwordManager.mm; sourceTree = "<group>"; };
+		A94EABFD117B28920018B06F /* SwordModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModule.h; path = src/SwordModule.h; sourceTree = "<group>"; };
+		A94EABFE117B28920018B06F /* SwordModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordModule.mm; path = src/SwordModule.mm; sourceTree = "<group>"; };
+		A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTextEntry.h; path = src/SwordModuleTextEntry.h; sourceTree = "<group>"; };
+		A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTextEntry.m; path = src/SwordModuleTextEntry.m; sourceTree = "<group>"; };
+		A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTreeEntry.h; path = src/SwordModuleTreeEntry.h; sourceTree = "<group>"; };
+		A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTreeEntry.m; path = src/SwordModuleTreeEntry.m; sourceTree = "<group>"; };
+		A94EAC05117B28920018B06F /* SwordVerseKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordVerseKey.h; path = src/SwordVerseKey.h; sourceTree = "<group>"; };
+		A94EAC06117B28920018B06F /* SwordVerseKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordVerseKey.mm; path = src/SwordVerseKey.mm; sourceTree = "<group>"; };
+		A94EAC07117B28920018B06F /* SwordVerseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordVerseManager.h; path = src/SwordVerseManager.h; sourceTree = "<group>"; };
+		A94EAC08117B28920018B06F /* SwordVerseManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordVerseManager.mm; path = src/SwordVerseManager.mm; sourceTree = "<group>"; };
+		A94EAC09117B28920018B06F /* VerseEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerseEnumerator.h; path = src/VerseEnumerator.h; sourceTree = "<group>"; };
+		A94EAC0A117B28920018B06F /* VerseEnumerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VerseEnumerator.mm; path = src/VerseEnumerator.mm; sourceTree = "<group>"; };
+		A956316411FD8C55007DC7AD /* libsword-ub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsword-ub.a"; path = "build_sword/build/result_inst/lib/libsword-ub.a"; sourceTree = "<group>"; };
+		A956324211FD90C9007DC7AD /* libclucene-ub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libclucene-ub.a"; path = "build_clucene/build/result_inst/lib/libclucene-ub.a"; sourceTree = "<group>"; };
+		A964658011C663E200640FAC /* SwordManagerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordManagerTest.h; path = test/SwordManagerTest.h; sourceTree = "<group>"; };
+		A964658111C663E200640FAC /* SwordManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordManagerTest.m; path = test/SwordManagerTest.m; sourceTree = "<group>"; };
+		A975EAC411C77862007C1532 /* ObjCSword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCSword.h; sourceTree = "<group>"; };
+		A975ED9811C7925C007C1532 /* imp2gbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imp2gbs.cpp; sourceTree = "<group>"; };
+		A975ED9911C7925C007C1532 /* imp2ld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imp2ld.cpp; sourceTree = "<group>"; };
+		A975ED9A11C7925C007C1532 /* imp2vs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imp2vs.cpp; sourceTree = "<group>"; };
+		A975ED9B11C7925C007C1532 /* installmgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = installmgr.cpp; sourceTree = "<group>"; };
+		A975EDAB11C7925C007C1532 /* mod2imp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mod2imp.cpp; sourceTree = "<group>"; };
+		A975EDAC11C7925C007C1532 /* mod2osis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mod2osis.cpp; sourceTree = "<group>"; };
+		A975EDAD11C7925C007C1532 /* mod2vpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mod2vpl.cpp; sourceTree = "<group>"; };
+		A975EDAE11C7925C007C1532 /* mod2zmod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mod2zmod.cpp; sourceTree = "<group>"; };
+		A975EDB111C7925C007C1532 /* osis2mod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osis2mod.cpp; sourceTree = "<group>"; };
+		A975EDB811C7925C007C1532 /* step2vpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = step2vpl.cpp; sourceTree = "<group>"; };
+		A975EDB911C7925C007C1532 /* stepdump.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stepdump.cpp; sourceTree = "<group>"; };
+		A975EDBB11C7925C007C1532 /* tei2mod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tei2mod.cpp; sourceTree = "<group>"; };
+		A975EDD811C7925C007C1532 /* vpl2mod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vpl2mod.cpp; sourceTree = "<group>"; };
+		A975EDD911C7925C007C1532 /* vs2osisref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vs2osisref.cpp; sourceTree = "<group>"; };
+		A975EDDA11C7925C007C1532 /* vs2osisreftxt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vs2osisreftxt.cpp; sourceTree = "<group>"; };
+		A975EDDB11C7925C007C1532 /* xml2gbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml2gbs.cpp; sourceTree = "<group>"; };
+		A975EED911C792B9007C1532 /* mod2osis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2osis; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9921A1911FD9CA8002DAA72 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
+		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info copy.plist"; sourceTree = "<group>"; };
+		A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKeyTest.h; path = test/SwordListKeyTest.h; sourceTree = "<group>"; };
+		A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordListKeyTest.m; path = test/SwordListKeyTest.m; sourceTree = "<group>"; };
+		A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleLongRunTest.h; path = test/SwordModuleLongRunTest.h; sourceTree = "<group>"; };
+		A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordModuleLongRunTest.mm; path = test/SwordModuleLongRunTest.mm; sourceTree = "<group>"; };
+		A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		A9C2819611C43C4900803CB5 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9C2819711C43C4900803CB5 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
+		A9C2856D11C446B700803CB5 /* Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Configuration.h; path = src/services/Configuration.h; sourceTree = "<group>"; };
+		A9C2857111C4471400803CB5 /* OSXConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXConfiguration.h; path = src/services/OSXConfiguration.h; sourceTree = "<group>"; };
+		A9C2857211C4471400803CB5 /* OSXConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OSXConfiguration.m; path = src/services/OSXConfiguration.m; sourceTree = "<group>"; };
+		A9C2858211C44A0A00803CB5 /* Configuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Configuration.m; path = src/services/Configuration.m; sourceTree = "<group>"; };
+		A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SwordModule+Index.h"; path = "src/SwordModule+Index.h"; sourceTree = "<group>"; };
+		A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "SwordModule+Index.mm"; path = "src/SwordModule+Index.mm"; sourceTree = "<group>"; };
+		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
+		A9EF1414120595650078A27C /* SwordLocaleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordLocaleManager.h; path = src/SwordLocaleManager.h; sourceTree = "<group>"; };
+		A9EF1415120595650078A27C /* SwordLocaleManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordLocaleManager.mm; path = src/SwordLocaleManager.mm; sourceTree = "<group>"; };
+		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A956324411FD90CE007DC7AD /* libclucene-ub.a in Frameworks */,
+				A956316611FD8C5B007DC7AD /* libsword-ub.a in Frameworks */,
+				8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A975EED711C792B9007C1532 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9BDFA611207F9870067ED5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BDFA621207F9870067ED5B /* SenTestingKit.framework in Frameworks */,
+				A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9C2819311C43C4900803CB5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A964658F11C6654300640FAC /* SenTestingKit.framework in Frameworks */,
+				A964657C11C662CF00640FAC /* ObjCSword.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* ObjCSword.framework */,
+				A9C2819611C43C4900803CB5 /* Tests.octest */,
+				A975EED911C792B9007C1532 /* mod2osis */,
+				A9921A1911FD9CA8002DAA72 /* libSword.dylib */,
+				A9BDFA6B1207F9870067ED5B /* Tests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* ObjCSword */ = {
+			isa = PBXGroup;
+			children = (
+				A975ECD211C7925B007C1532 /* Utilities */,
+				A9C2857911C4486400803CB5 /* Tests */,
+				A94EAE72117B32AF0018B06F /* Services */,
+				08FB77AEFE84172EC02AAC07 /* SwordWrapper */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+				A9C2819711C43C4900803CB5 /* Tests-Info.plist */,
+				A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */,
+			);
+			name = ObjCSword;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
+				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A9D437CE11C52947007AFE83 /* locales.d */,
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+				A9013D3F11E316C700E1CCCA /* Info copy.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* SwordWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				A9EF1414120595650078A27C /* SwordLocaleManager.h */,
+				A9EF1415120595650078A27C /* SwordLocaleManager.mm */,
+				A94EABF9117B28920018B06F /* SwordManager.h */,
+				A94EABFA117B28920018B06F /* SwordManager.mm */,
+				A94EAC07117B28920018B06F /* SwordVerseManager.h */,
+				A94EAC08117B28920018B06F /* SwordVerseManager.mm */,
+				A94EABFD117B28920018B06F /* SwordModule.h */,
+				A94EABFE117B28920018B06F /* SwordModule.mm */,
+				A94EABE3117B28910018B06F /* SwordBible.h */,
+				A94EABE4117B28910018B06F /* SwordBible.mm */,
+				A94EABEB117B28920018B06F /* SwordBook.h */,
+				A94EABEC117B28920018B06F /* SwordBook.mm */,
+				A94EABED117B28920018B06F /* SwordCommentary.h */,
+				A94EABEE117B28920018B06F /* SwordCommentary.mm */,
+				A94EABEF117B28920018B06F /* SwordDictionary.h */,
+				A94EABF0117B28920018B06F /* SwordDictionary.mm */,
+				A94EABE5117B28920018B06F /* SwordBibleBook.h */,
+				A94EABE6117B28920018B06F /* SwordBibleBook.mm */,
+				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
+				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
+				A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */,
+				A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */,
+				A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */,
+				A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */,
+				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
+				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
+				A94EABF5117B28920018B06F /* SwordKey.h */,
+				A94EABF6117B28920018B06F /* SwordKey.mm */,
+				A94EABF7117B28920018B06F /* SwordListKey.h */,
+				A94EABF8117B28920018B06F /* SwordListKey.mm */,
+				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
+				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
+				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
+				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
+				A94EABF5117B28920018B06F /* SwordKey.h */,
+				A94EABF6117B28920018B06F /* SwordKey.mm */,
+				A94EABF7117B28920018B06F /* SwordListKey.h */,
+				A94EABF8117B28920018B06F /* SwordListKey.mm */,
+				A94EAC05117B28920018B06F /* SwordVerseKey.h */,
+				A94EAC06117B28920018B06F /* SwordVerseKey.mm */,
+				A94EAC09117B28920018B06F /* VerseEnumerator.h */,
+				A94EAC0A117B28920018B06F /* VerseEnumerator.mm */,
+				A94EABF1117B28920018B06F /* SwordInstallSource.h */,
+				A94EABF2117B28920018B06F /* SwordInstallSource.mm */,
+				A94EABF3117B28920018B06F /* SwordInstallSourceController.h */,
+				A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */,
+				A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */,
+				A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */,
+			);
+			name = SwordWrapper;
+			sourceTree = "<group>";
+		};
+		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */,
+				A956316411FD8C55007DC7AD /* libsword-ub.a */,
+				A956324211FD90C9007DC7AD /* libclucene-ub.a */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+				D2F7E79907B2D74100F64583 /* CoreData.framework */,
+				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+				A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A9A2C17C118D9D3D0002873D /* Notifications.h */,
+				32DBCF5E0370ADEE00C91783 /* ObjCSword_Prefix.pch */,
+				A975EAC411C77862007C1532 /* ObjCSword.h */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		A94EAE72117B32AF0018B06F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A9C2856D11C446B700803CB5 /* Configuration.h */,
+				A9C2858211C44A0A00803CB5 /* Configuration.m */,
+				A9C2857111C4471400803CB5 /* OSXConfiguration.h */,
+				A9C2857211C4471400803CB5 /* OSXConfiguration.m */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		A975ECD211C7925B007C1532 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A975ED9811C7925C007C1532 /* imp2gbs.cpp */,
+				A975ED9911C7925C007C1532 /* imp2ld.cpp */,
+				A975ED9A11C7925C007C1532 /* imp2vs.cpp */,
+				A975ED9B11C7925C007C1532 /* installmgr.cpp */,
+				A975EDAB11C7925C007C1532 /* mod2imp.cpp */,
+				A975EDAC11C7925C007C1532 /* mod2osis.cpp */,
+				A975EDAD11C7925C007C1532 /* mod2vpl.cpp */,
+				A975EDAE11C7925C007C1532 /* mod2zmod.cpp */,
+				A975EDB111C7925C007C1532 /* osis2mod.cpp */,
+				A975EDB811C7925C007C1532 /* step2vpl.cpp */,
+				A975EDB911C7925C007C1532 /* stepdump.cpp */,
+				A975EDBB11C7925C007C1532 /* tei2mod.cpp */,
+				A975EDD811C7925C007C1532 /* vpl2mod.cpp */,
+				A975EDD911C7925C007C1532 /* vs2osisref.cpp */,
+				A975EDDA11C7925C007C1532 /* vs2osisreftxt.cpp */,
+				A975EDDB11C7925C007C1532 /* xml2gbs.cpp */,
+			);
+			name = Utilities;
+			path = ../../utilities;
+			sourceTree = SOURCE_ROOT;
+		};
+		A9C2857911C4486400803CB5 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A964658011C663E200640FAC /* SwordManagerTest.h */,
+				A964658111C663E200640FAC /* SwordManagerTest.m */,
+				A918B8E211C6697400024D84 /* SwordModuleTest.h */,
+				A918B8E311C6697400024D84 /* SwordModuleTest.m */,
+				A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */,
+				A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */,
+				A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */,
+				A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A975EAC511C77862007C1532 /* ObjCSword.h in Headers */,
+				A94EAC0B117B28920018B06F /* SwordBible.h in Headers */,
+				A94EAC0D117B28920018B06F /* SwordBibleBook.h in Headers */,
+				A94EAC0F117B28920018B06F /* SwordBibleChapter.h in Headers */,
+				A94EAC11117B28920018B06F /* SwordBibleTextEntry.h in Headers */,
+				A94EAC13117B28920018B06F /* SwordBook.h in Headers */,
+				A94EAC15117B28920018B06F /* SwordCommentary.h in Headers */,
+				A94EAC17117B28920018B06F /* SwordDictionary.h in Headers */,
+				A94EAC19117B28920018B06F /* SwordInstallSource.h in Headers */,
+				A94EAC1B117B28920018B06F /* SwordInstallSourceController.h in Headers */,
+				A94EAC1D117B28920018B06F /* SwordKey.h in Headers */,
+				A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */,
+				A94EAC21117B28920018B06F /* SwordManager.h in Headers */,
+				A94EAC25117B28920018B06F /* SwordModule.h in Headers */,
+				A94EAC27117B28920018B06F /* SwordModuleTextEntry.h in Headers */,
+				A94EAC29117B28920018B06F /* SwordModuleTreeEntry.h in Headers */,
+				A94EAC2D117B28920018B06F /* SwordVerseKey.h in Headers */,
+				A94EAC2F117B28920018B06F /* SwordVerseManager.h in Headers */,
+				A94EAC31117B28920018B06F /* VerseEnumerator.h in Headers */,
+				A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */,
+				A9C2856F11C446B700803CB5 /* Configuration.h in Headers */,
+				A9C2857311C4471400803CB5 /* OSXConfiguration.h in Headers */,
+				A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */,
+				A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9BDFA651207F9870067ED5B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */,
+				A9BDFA671207F9870067ED5B /* SwordModuleTest.h in Headers */,
+				A9BDFA7C1207FA2F0067ED5B /* SwordModuleLongRunTest.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9C281B611C43DB800803CB5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A96465AD11C6658200640FAC /* SwordManagerTest.h in Headers */,
+				A918B8E411C6697400024D84 /* SwordModuleTest.h in Headers */,
+				A9BDFA781207F9F00067ED5B /* SwordListKeyTest.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DC2EF4F0486A6940098B216 /* ObjCSword */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "ObjCSword" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+				A9A5050211C75C4B00EB6EA5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ObjCSword;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = ObjCSword;
+			productReference = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A975EED811C792B9007C1532 /* mod2osis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A975EEE811C79326007C1532 /* Build configuration list for PBXNativeTarget "mod2osis" */;
+			buildPhases = (
+				A975EED611C792B9007C1532 /* Sources */,
+				A975EED711C792B9007C1532 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mod2osis;
+			productName = mod2osis;
+			productReference = A975EED911C792B9007C1532 /* mod2osis */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9BDFA5A1207F9870067ED5B /* LongRunningTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */;
+			buildPhases = (
+				A9BDFA5D1207F9870067ED5B /* Resources */,
+				A9BDFA5E1207F9870067ED5B /* Sources */,
+				A9BDFA611207F9870067ED5B /* Frameworks */,
+				A9BDFA641207F9870067ED5B /* ShellScript */,
+				A9BDFA651207F9870067ED5B /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */,
+			);
+			name = LongRunningTests;
+			productName = Tests;
+			productReference = A9BDFA6B1207F9870067ED5B /* Tests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		A9C2819511C43C4900803CB5 /* Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9C2819A11C43C4900803CB5 /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildPhases = (
+				A9C2819111C43C4900803CB5 /* Resources */,
+				A9C2819211C43C4900803CB5 /* Sources */,
+				A9C2819311C43C4900803CB5 /* Frameworks */,
+				A9C2819411C43C4900803CB5 /* ShellScript */,
+				A9C281B611C43DB800803CB5 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A964657B11C662CA00640FAC /* PBXTargetDependency */,
+			);
+			name = Tests;
+			productName = Tests;
+			productReference = A9C2819611C43C4900803CB5 /* Tests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* ObjCSword */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* ObjCSword */,
+				A9C2819511C43C4900803CB5 /* Tests */,
+				A9BDFA5A1207F9870067ED5B /* LongRunningTests */,
+				A975EED811C792B9007C1532 /* mod2osis */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
+				A9D4382311C52947007AFE83 /* locales.d in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9BDFA5D1207F9870067ED5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9C2819111C43C4900803CB5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A9BDFA641207F9870067ED5B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		A9C2819411C43C4900803CB5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94EAC0C117B28920018B06F /* SwordBible.mm in Sources */,
+				A94EAC0E117B28920018B06F /* SwordBibleBook.mm in Sources */,
+				A94EAC10117B28920018B06F /* SwordBibleChapter.m in Sources */,
+				A94EAC12117B28920018B06F /* SwordBibleTextEntry.m in Sources */,
+				A94EAC14117B28920018B06F /* SwordBook.mm in Sources */,
+				A94EAC16117B28920018B06F /* SwordCommentary.mm in Sources */,
+				A94EAC18117B28920018B06F /* SwordDictionary.mm in Sources */,
+				A94EAC1A117B28920018B06F /* SwordInstallSource.mm in Sources */,
+				A94EAC1C117B28920018B06F /* SwordInstallSourceController.mm in Sources */,
+				A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */,
+				A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */,
+				A94EAC22117B28920018B06F /* SwordManager.mm in Sources */,
+				A94EAC26117B28920018B06F /* SwordModule.mm in Sources */,
+				A94EAC28117B28920018B06F /* SwordModuleTextEntry.m in Sources */,
+				A94EAC2A117B28920018B06F /* SwordModuleTreeEntry.m in Sources */,
+				A94EAC2E117B28920018B06F /* SwordVerseKey.mm in Sources */,
+				A94EAC30117B28920018B06F /* SwordVerseManager.mm in Sources */,
+				A94EAC32117B28920018B06F /* VerseEnumerator.mm in Sources */,
+				A9C2857411C4471400803CB5 /* OSXConfiguration.m in Sources */,
+				A9C2858311C44A0A00803CB5 /* Configuration.m in Sources */,
+				A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */,
+				A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A975EED611C792B9007C1532 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9BDFA5E1207F9870067ED5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9C2819211C43C4900803CB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A96465A511C6657900640FAC /* SwordManagerTest.m in Sources */,
+				A918B8E511C6697400024D84 /* SwordModuleTest.m in Sources */,
+				A9BDFA791207F9F00067ED5B /* SwordListKeyTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A964657B11C662CA00640FAC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
+			targetProxy = A964657A11C662CA00640FAC /* PBXContainerItemProxy */;
+		};
+		A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
+			targetProxy = A9BDFA5C1207F9870067ED5B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ObjCSword_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build_sword/build/result_inst/lib\"",
+					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DDEBUG";
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = ObjCSword;
+				SDKROOT = macosx10.5;
+				WARNING_CFLAGS = "-Wall";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					ppc,
+					"$(ARCHS_STANDARD_32_64_BIT)",
+				);
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ObjCSword_Prefix.pch;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build_sword/build/result_inst/lib\"",
+					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				OTHER_CFLAGS = "-DRELEASE";
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = ObjCSword;
+				SDKROOT = macosx10.5;
+				WARNING_CFLAGS = "-Wall";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		A975EEDE11C792BA007C1532 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
+				PREBINDING = NO;
+				PRODUCT_NAME = mod2osis;
+				SDKROOT = macosx10.5;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A975EEDF11C792BA007C1532 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
+				PREBINDING = NO;
+				PRODUCT_NAME = mod2osis;
+				SDKROOT = macosx10.5;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9BDFA691207F9870067ED5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.5;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		A9BDFA6A1207F9870067ED5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.5;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9C2819811C43C4900803CB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.5;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		A9C2819911C43C4900803CB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.5;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "ObjCSword" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A975EEE811C79326007C1532 /* Build configuration list for PBXNativeTarget "mod2osis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A975EEDE11C792BA007C1532 /* Debug */,
+				A975EEDF11C792BA007C1532 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9BDFA691207F9870067ED5B /* Debug */,
+				A9BDFA6A1207F9870067ED5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9C2819A11C43C4900803CB5 /* Build configuration list for PBXNativeTarget "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9C2819811C43C4900803CB5 /* Debug */,
+				A9C2819911C43C4900803CB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

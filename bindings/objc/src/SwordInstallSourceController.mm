@@ -46,7 +46,7 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
             BOOL isDir;
             if(([fm fileExistsAtPath:configPath] == NO) && createPath == YES) {
                 // create path
-                [fm createDirectoryAtPath:configPath attributes:nil];
+                [fm createDirectoryAtPath:configPath withIntermediateDirectories:NO attributes:nil error:NULL];
             }
             
             if(([fm fileExistsAtPath:configPath isDirectory:&isDir] == YES) && (isDir)) {
