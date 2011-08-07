@@ -3,17 +3,26 @@
 
 QUICKSTART
 
-Try:
+Either:
+	Obtain source via SVN with:
+		svn co http://crosswire.org/svn/sword/trunk sword
+		cd sword
+		./autogen.sh
+
+	or,
+		unpack a source package and change to that directory.
+
+
+Then, try:
 
 	./usrinst.sh
 	make
-	su
-	make install
+	sudo make install
 
 If you have never installed sword before and/or are happy with a default
 configuration, you may wish to type:
 
-    make install_config
+	sudo make install_config
 
 for a basic configuration.  WARNING: THIS WILL OVERWRITE AN EXISTING
 CONFIGURATION.  It is OK to rerun this if you have not changed any
@@ -22,6 +31,7 @@ parameters in /etc/sword.conf
 If the above steps do not work, or if you're particular about your
 configuration, please read on.
 
+________________________________________________________________
 
 BUILD CONFIGURATION
 
@@ -133,7 +143,7 @@ Also, when a sword.conf file is used, any number of:
 AugmentDataPath=/where/more/modules/are/installed
 
 entries may be included.  These are useful to tell sword to scan,
-for example, CDROM, MMC, or other removable media locations.
+for example, CDROM, SDCARD, or other removable media locations.
 
 
 
