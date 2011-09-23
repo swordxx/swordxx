@@ -66,7 +66,6 @@ swbuftest_SOURCES = swbuftest.cpp
 webiftest_SOURCES = webiftest.cpp
 striptest_SOURCES = striptest.cpp
 xmltest_SOURCES = xmltest.cpp
-bibliography_SOURCES = bibliography.cpp
 
 EXTRA_DIST = 
 include bcppmake/Makefile.am
