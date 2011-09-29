@@ -231,7 +231,7 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 				}
 				struct DirEntry i;
 				i.name = possibleName;
-				i.size = fSize;
+				i.size = (long unsigned int)fSize;
 				i.isDirectory = (possibleName[possibleNameLength-1] == '/');
 				dirList.push_back(i);
 				pBuf = pBufRes;

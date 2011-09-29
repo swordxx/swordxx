@@ -37,8 +37,6 @@ AC_PROG_INSTALL
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
-COLORED_ECHO_INIT
-
 AC_C_BIGENDIAN
 
 ACX_CLUCENE
@@ -335,19 +333,19 @@ AC_OUTPUT
 
 echo
 echo
-COLORED_ECHO([Configuration:])
-COLORED_ECHO([    DEBUG:            $enable_debug])
-COLORED_ECHO([    PROFILE:          $enable_profile])
-COLORED_ECHO([    BUILD TESTS:      $enable_tests])
-COLORED_ECHO([    BUILD EXAMPLES:   $enable_examples])
-COLORED_ECHO([    BUILD UTILITIES:  $enable_utilities])
-COLORED_ECHO([    LIBZ:             $with_zlib])
-COLORED_ECHO([    ICU:              $with_icu])
-COLORED_ECHO([    ICUSWORD:         $with_icusword])
-COLORED_ECHO([    CURL:             $with_curl])
-COLORED_ECHO([    INTERNAL FTPLIB:  $with_internalftplib])
-COLORED_ECHO([    INTERNAL REGEX:   $with_internalregex])
-COLORED_ECHO([    CLUCENE:          $with_clucene])
+echo "Configuration:"
+echo     "     DEBUG:            $enable_debug"
+echo     "     PROFILE:          $enable_profile"
+echo     "     BUILD TESTS:      $enable_tests"
+echo     "     BUILD EXAMPLES:   $enable_examples"
+echo     "     BUILD UTILITIES:  $enable_utilities"
+echo     "     LIBZ:             $with_zlib"
+echo     "     ICU:              $with_icu"
+echo     "     ICUSWORD:         $with_icusword"
+echo     "     CURL:             $with_curl"
+echo     "     INTERNAL FTPLIB:  $with_internalftplib"
+echo     "     INTERNAL REGEX:   $with_internalregex"
+echo     "     CLUCENE:          $with_clucene"
 echo
 echo
 

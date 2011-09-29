@@ -1336,12 +1336,14 @@ void processOSIS(istream& infile) {
 
 	while (infile.good()) {
 		
-		curChar = infile.get();
+		int possibleChar = infile.get();
 
 		// skip the character if it is bad. infile.good() will catch the problem
-		if (curChar == -1) {
+		if (possibleChar == -1) {
 			continue;
 		}
+
+		curChar = (unsigned char) possibleChar;
 
 		if (!intoken && curChar == '<') {
 			intoken = true;
