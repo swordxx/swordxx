@@ -154,14 +154,13 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	SWModule *module = 0;
 	if (compressor) {
 		// Create a compressed text module allowing very large entries
 		// Taking defaults except for first, fourth, fifth and last argument
 		mod = new zLD(outPath, 0, 0, blockCount, compressor, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
 	}
 	else {
-		module = (!fourByteSize)
+		mod = (!fourByteSize)
 			? (SWModule *)new RawLD (outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive)
 			: (SWModule *)new RawLD4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
 	}
