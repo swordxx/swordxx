@@ -54,7 +54,7 @@ const int RawStr::IDXENTRYSIZE = 6;
  *		(e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStr::RawStr(const char *ipath, int fileMode)
+RawStr::RawStr(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
 	SWBuf buf;
 
@@ -121,7 +121,7 @@ void RawStr::getIDXBufDat(long ioffset, char **buf) const
 			datfd->read(*buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr_utf8(*buf, size*2);
+		if (!caseSensitive) toupperstr_utf8(*buf, size*2);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -181,7 +181,7 @@ signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long
 			headoff = 0;
 
 			stdstr(&key, ikey, 3);
-			toupperstr_utf8(key, strlen(key)*3);
+			if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
 			int keylen = strlen(key);
 			bool substr = false;
@@ -380,7 +380,7 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
 
 	char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey, 2);
-	toupperstr_utf8(key, strlen(key)*2);
+	if (!caseSensitive) toupperstr_utf8(key, strlen(key)*2);
 
 	len = (len < 0) ? strlen(buf) : len;
 

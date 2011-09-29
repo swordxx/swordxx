@@ -39,7 +39,7 @@ SWORD_NAMESPACE_START
  *		idisp	- Display object to use for displaying
  */
 
-RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawStr(ipath), SWLD(iname, idesc, idisp, enc, dir, mark, ilang)
+RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive) : RawStr(ipath, -1, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang)
 {
 }
 

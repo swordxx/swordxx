@@ -243,6 +243,11 @@ __u32 getUniCharFromUTF8(const unsigned char **buf) {
 }
 
 
+SWBuf getUTF8FromUniChar(__u32 uchar) {
+	// TODO: finish this logic
+	return SWBuf((char)uchar);
+}
+
 
 SWBuf assureValidUTF8(const char *buf) {
 
@@ -268,5 +273,46 @@ SWBuf assureValidUTF8(const char *buf) {
 	}
 	return myCopy;
 }
+
+
+/****
+ * This can be called to convert a UTF8 stream to an SWBuf which manages
+ *	a wchar_t[]
+ *	access buffer with (wchar_t *)SWBuf::getRawData();
+ * 
+ */
+SWBuf utf8ToWChar(const char *buf) {
+
+	const char *q = 0;
+	SWBuf wcharBuf;
+	while (*buf) {
+		q = buf;
+		wchar_t wc = getUniCharFromUTF8((const unsigned char **)&buf);
+		if (!wc) {
+			// if my buffer was advanced but nothing was converted, I had invalid data
+			if (buf - q) {
+				// invalid bytes in UTF8 stream
+				wcharBuf.append((wchar_t)0x1a);		// unicode replacement character
+			}
+		}
+		else wcharBuf.append(wc);
+	}
+	return wcharBuf;
+}
+
+
+/****
+ * This can be called to convert a wchar_t[] to a UTF-8 SWBuf
+ * 
+ */
+SWBuf wcharToUTF8(const wchar_t *buf) {
+
+	SWBuf utf8Buf;
+	while (*buf) {
+		utf8Buf.append(getUTF8FromUniChar(*buf++));
+	}
+	return utf8Buf;
+}
+
 
 SWORD_NAMESPACE_END

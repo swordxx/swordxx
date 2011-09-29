@@ -53,7 +53,7 @@ const int RawStr4::IDXENTRYSIZE = 8;
  *		(e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStr4::RawStr4(const char *ipath, int fileMode)
+RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
 	SWBuf buf;
 
@@ -121,7 +121,7 @@ void RawStr4::getIDXBufDat(long ioffset, char **buf) const
 			datfd->read(*buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr_utf8(*buf, size*2);
+		if (!caseSensitive) toupperstr_utf8(*buf, size*2);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -157,7 +157,7 @@ void RawStr4::getIDXBuf(long ioffset, char **buf) const
 		}
 		*targetbuf = 0;
 		trybuf = 0;
-		toupperstr_utf8(targetbuf);
+		if (!caseSensitive) toupperstr_utf8(targetbuf);
 */
 	}
 }
@@ -191,7 +191,7 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 			headoff = 0;
 
 			stdstr(&key, ikey, 3);
-			toupperstr_utf8(key, strlen(key)*3);
+			if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
 			int keylen = strlen(key);
 			bool substr = false;
@@ -388,7 +388,7 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 
 	char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey, 3);
-	toupperstr_utf8(key, strlen(key)*3);
+	if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
 	len = (len < 0) ? strlen(buf) : len;
 	getIDXBufDat(start, &dbKey);

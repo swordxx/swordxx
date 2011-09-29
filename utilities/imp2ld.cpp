@@ -38,25 +38,25 @@ using namespace sword;
 
 int main(int argc, char **argv) {
 
-	const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver] [entries per compression block]\n";
+	const char * helptext ="imp2ld 1.0 Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for the SWORD Project\n  usage:\n   %s <filename> [modname] [ 4 (default) | 2 | z - module driver] [entries per compression block] [true - caseSensitiveKeys]\n";
 
 	signed long i = 0;
 	string keybuffer;
 	string entbuffer;
 	string linebuffer;
-	char modname[16];
+	string modname;
 	char links = 0;
 	long blockCount = 30;
+	bool caseSensitive = false;
 	std::vector<string> linkbuffer;
 
 	if (argc > 2) {
-		strcpy (modname, argv[2]);
+		modname = argv[2];
 	}
 	else if (argc > 1) {
 		for (i = 0; (i < 16) && (argv[1][i]) && (argv[1][i] != '.'); i++) {
-			modname[i] = argv[1][i];
+			modname += argv[1][i];
 		}
-		modname[i] = 0;
 	}
 	else {
 		fprintf(stderr, helptext, argv[0]);
@@ -81,26 +81,30 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	if (argc > 5) {
+		caseSensitive = !sword::stricmp(argv[4], "true");
+	}
+
 	SWModule *mod = 0;
 	SWKey *key, *linkKey;
 
 	switch (mode) {
 	case 3:
 #ifndef EXCLUDEZLIB
-		zLD::createModule(modname);
-		mod = new zLD(modname, 0, 0, blockCount, new ZipCompress());
+		zLD::createModule(modname.c_str());
+		mod = new zLD(modname.c_str(), 0, 0, blockCount, new ZipCompress(), 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
 #else
 		fprintf(stderr, "ERROR: %s: SWORD library not compiled with ZIP compression support.\n\tBe sure libzip is available when compiling SWORD library", *argv);
 		exit(-2);
 #endif
 		break;
 	case 2:
-		RawLD::createModule(modname);
-		mod = new RawLD(modname);
+		RawLD::createModule(modname.c_str());
+		mod = new RawLD(modname.c_str(), 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
 		break;
 	case 1:
-		RawLD4::createModule(modname);
-		mod = new RawLD4(modname);
+		RawLD4::createModule(modname.c_str());
+		mod = new RawLD4(modname.c_str(), 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
 		break;
 	}
 

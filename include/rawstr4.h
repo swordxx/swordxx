@@ -36,6 +36,7 @@ class SWBuf;
 class SWDLLEXPORT RawStr4 {
 	static int instance;		// number of instantiated RawStr4 objects or derivitives
 	char *path;
+	bool caseSensitive;
 	mutable long lastoff;		// for caching and optimizations
 
 protected:
@@ -47,7 +48,7 @@ protected:
 	void doLinkEntry(const char *destkey, const char *srckey);
 public:
 	char nl;
-	RawStr4(const char *ipath, int fileMode = -1);
+	RawStr4(const char *ipath, int fileMode = -1, bool caseSensitive = false);
 	virtual ~RawStr4();
 	void getIDXBuf(long ioffset, char **buf) const;
 	void getIDXBufDat(long ioffset, char **buf) const;

@@ -38,7 +38,7 @@ SWORD_NAMESPACE_START
  *		idisp	- Display object to use for displaying
  */
 
-zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : zStr(ipath, -1, blockCount, icomp), SWLD(iname, idesc, idisp, enc, dir, mark, ilang) {
+zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang) {
 
 }
 

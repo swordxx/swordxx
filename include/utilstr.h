@@ -70,6 +70,21 @@ __u32 getUniCharFromUTF8(const unsigned char **buf);
  */
 SWBuf assureValidUTF8(const char *buf);
 
+/****
+ * This can be called to convert a UTF8 stream to an SWBuf which manages
+ *	a wchar_t[]
+ *	access buffer with (wchar_t *)SWBuf::getRawData();
+ * 
+ */
+SWBuf utf8ToWChar(const char *buf);
+
+/****
+ * This can be called to convert a wchar_t[] to a UTF-8 SWBuf
+ * 
+ */
+SWBuf wcharToUTF8(const wchar_t *buf);
+
+
 
 SWORD_NAMESPACE_END
 #endif

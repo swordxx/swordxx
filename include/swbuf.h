@@ -254,6 +254,19 @@ public:
 	}
 
 	/**
+	* SWBuf::append - appends a wide charachter value to the current value of this SWBuf
+	* If the allocated memory is not enough, it will be resized accordingly.
+	* NOTE: This is dangerous, as wchar_t is currently different sizes on different
+	* platforms (stupid windoze; stupid c++ spec for not mandating 4byte).
+	* @param ch Append this.
+	*/
+	inline void append(wchar_t wch) {
+		assureMore(sizeof(wchar_t)*2);
+		for (unsigned int i = 0; i < sizeof(wchar_t); i++) *end++ = ((char *)&wch)[i];
+		for (unsigned int i = 0; i < sizeof(wchar_t); i++) end[i] = 0;
+	}
+
+	/**
 	* SWBuf::appendFormatted - appends formatted strings to the current value of this SWBuf.
 	*
 	* @warning This function can only write at most JUNKBUFSIZE to the string per call.

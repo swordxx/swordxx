@@ -54,7 +54,7 @@ const int zStr::ZDXENTRYSIZE = 8;
  * ENT:	ipath - path of the directory where data and index files are located.
  */
 
-zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp)
+zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, bool caseSensitive) : caseSensitive(caseSensitive)
 {
 	SWBuf buf;
 
@@ -144,7 +144,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) const
 			datfd->read(*buf, size);
 		}
 		(*buf)[size] = 0;
-		toupperstr_utf8(*buf, size*2);
+		if (!caseSensitive) toupperstr_utf8(*buf, size*2);
 	}
 	else {
 		*buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
@@ -201,7 +201,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 		if (*ikey) {
 			headoff = 0;
 			stdstr(&key, ikey, 3);
-			toupperstr_utf8(key, strlen(key)*3);
+			if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
 			int keylen = strlen(key);
 			bool substr = false;
@@ -446,7 +446,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 	len = (len < 0) ? strlen(buf) : len;
 	stdstr(&key, ikey, 3);
-	toupperstr_utf8(key, strlen(key)*3);
+	if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
 	char notFound = findKeyIndex(ikey, &idxoff, 0);
 	if (!notFound) {

@@ -1381,13 +1381,13 @@ void processOSIS(istream& infile) {
 		}
 
 		if (intoken) {
-			token.append(curChar);
+			token.append((char)curChar);
 		}
 		else {
 			switch (curChar) {
 				case '>' : text.append("&gt;"); break;
 				case '<' : text.append("&lt;"); break;
-				default  : text.append(curChar); break;
+				default  : text.append((char)curChar); break;
 			}
 		}
 	}

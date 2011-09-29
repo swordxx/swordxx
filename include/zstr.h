@@ -42,6 +42,7 @@ private:
 	long cacheBlockIndex;
 	bool cacheDirty;
 	char *path;
+	bool caseSensitive;
 	mutable long lastoff;		// for caching and optimization
 	long blockCount;
 	SWCompress *compressor;
@@ -61,7 +62,7 @@ protected:
 
 public:
 	char nl;
-	zStr(const char *ipath, int fileMode = -1, long blockCount = 100, SWCompress *icomp = 0);
+	zStr(const char *ipath, int fileMode = -1, long blockCount = 100, SWCompress *icomp = 0, bool caseSensitive = false);
 	virtual ~zStr();
 	signed char findKeyIndex(const char *ikey, long *idxoff, long away = 0) const;
 	void getText(long index, char **idxbuf, char **buf);
