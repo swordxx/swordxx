@@ -57,7 +57,6 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		char token[2112]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		bool lastspace = false;
 		int word = 1;
 		char val[128];
 		char wordstr[5];
@@ -192,6 +191,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 
 
 
+							if (!sMorph) sMorph = 0;	// to pass unused warning for now
 /*
 							if (sMorph) {
 								SWBuf popMorph = "<a onclick=\"";
@@ -223,7 +223,6 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			else	{
 				text += *from;
-				lastspace = (*from == ' ');
 			}
 		}
 

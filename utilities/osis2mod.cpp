@@ -1476,6 +1476,8 @@ int main(int argc, char **argv) {
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
+	if (isCommentary) isCommentary = true;	// avoid unused warning for now
+
 	if (compType == "ZIP") {
 #ifndef EXCLUDEZLIB
 		compressor = new ZipCompress();

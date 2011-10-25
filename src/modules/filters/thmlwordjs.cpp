@@ -58,7 +58,6 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		char token[2112]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		bool lastspace = false;
 		int word = 1;
 		char val[128];
 		char *valto;
@@ -206,6 +205,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 
 
 
+							if (!sMorph) sMorph = 0;	// avoid unused warnings for now
 /*
 							if (sMorph) {
 								SWBuf popMorph = "<a onclick=\"";
@@ -237,7 +237,6 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			}
 			else	{
 				text += *from;
-				lastspace = (*from == ' ');
 			}
 		}
 

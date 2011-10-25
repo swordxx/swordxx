@@ -45,7 +45,6 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		char token[2048]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		bool lastspace = false;
 		SWBuf orig = text;
 		const char *from = orig.c_str();
 		
@@ -90,7 +89,6 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			else	{
 				text.append(*from);
-				lastspace = (*from == ' ');
 			}
 		}
 	}

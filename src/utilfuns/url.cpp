@@ -174,6 +174,7 @@ void URL::parse () {
 		SWBuf paramName;
 		SWBuf paramValue;
 				
+		if (checkAnchor) checkAnchor = false;
 /*
 		end = strchr(urlPtr, '#');
 		if (!end) {

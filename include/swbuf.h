@@ -415,6 +415,11 @@ public:
 	 */
 	inline bool endsWith(const SWBuf &postfix) const { return (size() >= postfix.size())?!strncmp(end-postfix.size(), postfix.c_str(), postfix.size()):false; }
 
+	/**
+	 * @return returns the index of a substring if it is found in this buffer; otherwise, returns < 0
+	 */
+	inline long indexOf(const SWBuf &needle) const { const char *ch = strstr(buf, needle.c_str()); return (ch) ? ch - buf : -1; }
+	
 	inline int compare(const SWBuf &other) const { return strcmp(c_str(), other.c_str()); }
 	inline bool operator ==(const SWBuf &other) const { return compare(other) == 0; }
 	inline bool operator !=(const SWBuf &other) const { return compare(other) != 0; }

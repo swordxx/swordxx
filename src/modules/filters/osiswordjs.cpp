@@ -59,7 +59,6 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		char token[2112]; // cheese.  Fix.
 		int tokpos = 0;
 		bool intoken = false;
-		bool lastspace = false;
 		int wordNum = 1;
 		char wordstr[5];
 		SWBuf modName = (module)?module->Name():"";
@@ -186,7 +185,6 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			}
 			else	{
 				text.append(*from);
-				lastspace = (*from == ' ');
 			}
 		}
 	}

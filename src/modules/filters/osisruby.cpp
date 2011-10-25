@@ -44,7 +44,6 @@ OSISRuby::~OSISRuby() {
 char OSISRuby::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
 	bool intoken = false;
-	bool lastspace = false;
 
 	const SWBuf orig = text;
 	const char * from = orig.c_str();
@@ -83,7 +82,6 @@ char OSISRuby::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			}
 			else	{
 				text.append(*from);
-				lastspace = (*from == ' ');
 			}
 		}
 	}

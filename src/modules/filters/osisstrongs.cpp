@@ -49,7 +49,6 @@ OSISStrongs::~OSISStrongs() {
 char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
 	bool intoken = false;
-	bool lastspace = false;
 	int wordNum = 1;
 	char wordstr[5];
 	const char *wordStart = 0;
@@ -280,7 +279,6 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 		}
 		else	{
 			text.append(*from);
-			lastspace = (*from == ' ');
 		}
 	}
 	return 0;

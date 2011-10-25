@@ -899,7 +899,6 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
-		int blockNum = 1;
 		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (SWBuf)"CHAPTER";
 		if (!stricmp(misc1.c_str(), "VERSE"))
 			blockType = VERSEBLOCKS;
@@ -908,9 +907,6 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 		else if (!stricmp(misc1.c_str(), "BOOK"))
 			blockType = BOOKBLOCKS;
 		
-		misc1 = ((entry = section.find("BlockNumber")) != section.end()) ? (*entry).second : (SWBuf)"1";
-		blockNum = atoi(misc1.c_str());
-
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
 #ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))

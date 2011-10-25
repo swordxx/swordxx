@@ -44,7 +44,6 @@ OSISLemma::~OSISLemma() {
 char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 	SWBuf token;
 	bool intoken = false;
-	bool lastspace = false;
 
 	const SWBuf orig = text;
 	const char * from = orig.c_str();
@@ -90,7 +89,6 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 			else	{
 				text.append(*from);
-				lastspace = (*from == ' ');
 			}
 		}
 	}

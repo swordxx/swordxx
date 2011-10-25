@@ -42,7 +42,6 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	SWBuf strongnum;
 	SWBuf strongtense;
 	bool hideText = false;
-	int wordLen = 0;
 	int wordCount = 0;
 
 	const char *from;
@@ -50,7 +49,6 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	from = orig.c_str();
 	for (text = ""; *from; from++) {
 		if (*from == '<') {
-			wordLen = wordCount;
 			wordCount = 0;
 			intoken = true;
 			tokpos = 0;

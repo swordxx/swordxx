@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 	}
 
 	
-	int encipher = atoi(argv[2]);
+	long encipher = atoi(argv[2]);
 
 	SWFilter *filter = new CipherFilter(argv[1]);
 
