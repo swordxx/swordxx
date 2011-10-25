@@ -486,9 +486,14 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <hi> text highlighting
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
+			// handle tei rend attribute
+			if (!type.length()) type = tag.getAttribute("rend");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("<b>", buf, u);
+				}
+				else if (type == "ol") {
+					outText("<span style=\"text-decoration:overline\">", buf, u);
 				}
 				else {	// all other types
 					outText("<i>", buf, u);
@@ -501,9 +506,13 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					XMLTag tag(u->tagStacks->hiStack.top());
 					u->tagStacks->hiStack.pop();
 					type = tag.getAttribute("type");
+					if (!type.length()) type = tag.getAttribute("rend");
 				}
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("</b>", buf, u);
+				}
+				else if (type == "ol") {
+					outText("</span>", buf, u);
 				}
 				else outText("</i>", buf, u);
 			}
