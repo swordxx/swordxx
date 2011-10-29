@@ -9,7 +9,7 @@ AC_ARG_WITH(clucene,
 	AC_HELP_STRING([ --with-clucene=<path>],
 		[prefix of CLucene-Core installation. e.g. /usr/local or /usr]),,)
 
-AC_MSG_CHECKING([how to include clucene])
+AC_MSG_CHECKING([how to include clucene 0.x])
 if test "x$with_clucene" = "xno"; then
 	AC_MSG_RESULT(excluding support)
 else
