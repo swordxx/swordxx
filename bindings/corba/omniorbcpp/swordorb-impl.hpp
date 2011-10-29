@@ -65,6 +65,7 @@ public:
   char* getRawEntry();
   void setRawEntry(const char* entryBuffer);
   char* getConfigEntry(const char* key);
+  char* translate(const char* text, const char* localeName);
   void deleteSearchFramework();
   ::CORBA::Boolean hasSearchFramework();
 
@@ -107,6 +108,9 @@ public:
   void setJavascript(::CORBA::Boolean val);
   swordorb::StringList* getAvailableLocales();
   void setDefaultLocale(const char* name);
+  char* translate(const char* text, const char* localeName);
+  swordorb::StringList* getRepos();
+  swordorb::_objref_SWMgr* getShadowMgr(const char*);
 
 };
 

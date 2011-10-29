@@ -1,9 +1,10 @@
 #CHANGE THESE TO MATCH YOUR SYSTEM
 TOMCAT_HOME=/opt/tomcat
-instdir=${TOMCAT_HOME}/webapps/swordweb
+#instdir=${TOMCAT_HOME}/webapps/swordweb
 
 # Typically you'll point this to your home directory, e.g.
-#instdir=/home/swordweb/livehtml/webapp
+instdir=/home/swordweb/livehtml/webapp
+#instdir=/home/sword/html
 #instdir=/home/scribe/src/swordweb/webapp
 
 SERVLET_LIB=${TOMCAT_HOME}/lib/servlet-api.jar
@@ -30,4 +31,4 @@ clean:
 	rm -rf classes/*
 
 install:
-	cp -a classes/org/ ${instdir}/WEB-INF/classes/
+	cp -r classes/org/ ${instdir}/WEB-INF/classes/

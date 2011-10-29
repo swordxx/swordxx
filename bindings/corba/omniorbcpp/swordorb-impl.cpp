@@ -21,6 +21,7 @@
 #include <swordorb-impl.hpp>
 
 #include <swmgr.h>
+#include <installmgr.h>
 #include <versekey.h>
 #include <treekeyidx.h>
 #include <swbuf.h>
@@ -177,7 +178,7 @@ swordorb::StringList* swordorb_SWModule_i::parseKeyList(const char* keyText){
 		retVal->length(count);
 		count = 0;
 		for (result = sword::TOP; !result.Error(); result++) {
-			(*retVal)[count++] = CORBA::string_dup(assureValidUTF8((const char *)result));
+			(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(VerseKey(result).getOSISRef()));
 		}
 	}
 	else	{
@@ -499,3 +500,27 @@ void swordorb_SWMgr_i::setDefaultLocale(const char* name){
 }
 
 
+char* swordorb_SWMgr_i::translate(const char* text, const char* localeName) {
+	return CORBA::string_dup(LocaleMgr::getSystemLocaleMgr()->translate(text, localeName));
+}
+
+swordorb::StringList* swordorb_SWMgr_i::getRepos() {
+	swordorb::StringList *retVal = new swordorb::StringList;
+	int count = 0;
+	sword::InstallMgr *installMgr = new sword::InstallMgr();
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+		count++;
+	}
+	retVal->length(count);
+	count = 0;
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+		(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(it->second->caption.c_str()));
+	}
+	delete installMgr;
+	return retVal;
+}
+
+// Don't call me yet
+swordorb::_objref_SWMgr* swordorb_SWMgr_i::getShadowMgr(const char*) {
+	return 0;
+}

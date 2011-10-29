@@ -16,9 +16,9 @@ LIBS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --libs omniOR
 LIBS += -L/usr/lib64 
 
 #comment out for release
-CXXFLAGS += -g -O0
-CFLAGS += -g -O0
-LDFLAGS += -g -O0
+#CXXFLAGS += -g -O0
+#CFLAGS += -g -O0
+#LDFLAGS += -g -O0
 #-----------------------------------------------------------------------------
 
 

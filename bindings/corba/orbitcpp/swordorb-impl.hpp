@@ -43,7 +43,7 @@ public:
 	void  terminateSearch() throw(CORBA::SystemException) { delegate->terminateSearch = true; }
 	char  error() throw(CORBA::SystemException) { return delegate->Error(); }
 	CORBA::Long getEntrySize() throw(CORBA::SystemException) { return delegate->getEntrySize(); }
-	void  setKeyText(const char *key) throw(CORBA::SystemException) { delegate->KeyText(key); }
+	void  setKeyText(const char *key) throw(CORBA::SystemException);
 	char *getKeyText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->KeyText()); }
 	StringList *getKeyChildren() throw(CORBA::SystemException);
 	char *getKeyParent() throw(CORBA::SystemException);
@@ -93,6 +93,7 @@ public:
 	void setJavascript(CORBA::Boolean) throw(CORBA::SystemException);
 	StringList *getAvailableLocales() throw(CORBA::SystemException);
 	void setDefaultLocale(const char *name) throw(CORBA::SystemException);
+	char *translate(const char *text, const char *locale) throw(CORBA::SystemException);
 
 };
 };

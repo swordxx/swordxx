@@ -24,6 +24,9 @@
 #include <stdlib.h>
 #include <rtfhtml.h>
 #include <swbuf.h>
+#include <swunicod.h>
+#include <ctype.h>
+#include <sysdata.h>
 
 SWORD_NAMESPACE_START
 
@@ -43,12 +46,26 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	{
 		if (*from == '\\') // a RTF command
 		{
+			// \u12345?
+			if ( *(from+1) == 'u' && (*(from+2) == '-' || isdigit(*(from+2)))) {
+				unsigned char buf[8];
+				from += 2;
+				const char *end = from;
+				while (isdigit(*++end));
+				SWBuf num;
+				num.append(from, end-from);
+				__s16 n = atoi(num.c_str());
+				__u32 u = (__u16)n;
+				text.append((const char *)UTF32to8(u, buf));
+				from += (end-from);
+				continue;
+			}
 			if ( !strncmp(from+1, "pard", 4) )
 				//(from[1] == 'p') && (from[2] == 'a') && (from[3] == 'r') && (from[4] == 'd'))
 			{ // switch all modifiers off
 				if (center)
 				{
-					text += "</CENTER>";
+					text += "</center>";
 					center = false;
 				}
 				from += 4;
@@ -57,7 +74,7 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			if ( !strncmp(from+1, "par", 3) )
 				//(from[1] == 'p') && (from[2] == 'a') && (from[3] == 'r'))
 			{
-				text += "<P>\n";
+				text += "<p/>\n";
 				from += 3;
 				continue;
 			}
@@ -71,7 +88,7 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 			{
 				if (!center)
 				{
-					text += "<CENTER>";
+					text += "<center>";
 					center = true;
 				}
 				from += 2;

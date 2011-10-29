@@ -410,4 +410,8 @@ void SWMgr_impl::setDefaultLocale(const char *name) throw(CORBA::SystemException
 	LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(name);
 }
 
+char* SWMgr_impl::translate(const char* text, const char* localeName) throw(CORBA::SystemException) {
+	return CORBA::string_dup(LocaleMgr::getSystemLocaleMgr()->translate(text, localeName));
+}
+
 }

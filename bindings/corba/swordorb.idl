@@ -115,6 +115,9 @@ interface SWMgr {
 	void        setJavascript(in boolean val);
 	StringList  getAvailableLocales();
 	void        setDefaultLocale(in string name);
+	string      translate(in string text, in string localeName);
+	StringList  getRepos();
+	SWMgr	  getShadowMgr(in string repoName);
 };
 
 };
