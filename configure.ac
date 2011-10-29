@@ -39,7 +39,7 @@ AC_PROG_LIBTOOL
 
 AC_C_BIGENDIAN
 
-PKG_CHECK_MODULES([CLUCENE2], [libclucene-core >= 2.3])
+PKG_CHECK_MODULES([CLUCENE2], [libclucene-core >= 2.3],,true)
 if test "x$CLUCENE2_LIBS" = x; then
 ACX_CLUCENE
 fi
