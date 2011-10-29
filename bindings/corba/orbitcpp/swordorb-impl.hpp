@@ -94,6 +94,8 @@ public:
 	StringList *getAvailableLocales() throw(CORBA::SystemException);
 	void setDefaultLocale(const char *name) throw(CORBA::SystemException);
 	char *translate(const char *text, const char *locale) throw(CORBA::SystemException);
+	StringList *getRepos() throw(CORBA::SystemException);
+	swordorb::SWMgr_ptr getShadowMgr (CORBA_char const *repoName) throw (CORBA::SystemException);
 
 };
 };

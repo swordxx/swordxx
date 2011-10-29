@@ -18,6 +18,7 @@
 #include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
+#include <installmgr.h>
 #include <versekey.h>
 #include <treekeyidx.h>
 #include <swbuf.h>
@@ -414,4 +415,24 @@ char* SWMgr_impl::translate(const char* text, const char* localeName) throw(CORB
 	return CORBA::string_dup(LocaleMgr::getSystemLocaleMgr()->translate(text, localeName));
 }
 
+swordorb::StringList *SWMgr_impl::getRepos() throw(CORBA::SystemException) {
+	swordorb::StringList *retVal = new swordorb::StringList;
+	int count = 0;
+	sword::InstallMgr *installMgr = new sword::InstallMgr();
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+		count++;
+	}
+	retVal->length(count);
+	count = 0;
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+		(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(it->second->caption.c_str()));
+	}
+	delete installMgr;
+	return retVal;
+}
+
+// Don't call me yet
+swordorb::SWMgr_ptr SWMgr_impl::getShadowMgr (CORBA_char const *repoName) throw (CORBA::SystemException) {
+	return 0;
+}
 }
