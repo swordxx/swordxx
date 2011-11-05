@@ -252,18 +252,19 @@ fi
 # Check for clucene for lucene searching support
 # ---------------------------------------------------------------------
 
+# NOTE the $libdir hack at the end of the c[xx]flags.  Apparently F16 finds that clucene is not multilib-save and places some include files in /usr/lib[64]/
 with_clucene=no
 if test "x$CLUCENE2_LIBS" != x; then
    echo "clucene 2.x found - lucene searching options available"
-   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2"
-   AM_CFLAGS="$AM_CFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2"
+   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2 -I$libdir"
+   AM_CFLAGS="$AM_CFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2 -I$libdir"
    LIBS="$LIBS $CLUCENE2_LIBS"
    with_clucene="yes 2.x"
 else
 if test "x$CLUCENE_LIBS" != x; then
    echo "lucene 0.x found - lucene searching options available"
-   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
-   AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
+   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE -I$libdir"
+   AM_CFLAGS="$AM_CFLAGS -DUSELUCENE -I$libdir"
    LIBS="$LIBS $CLUCENE_LIBS"
    with_clucene="yes 0.x"
 else
@@ -344,6 +345,7 @@ AC_OUTPUT
 echo
 echo
 echo "Configuration:"
+echo     "     LIBDIR:           $libdir"
 echo     "     DEBUG:            $enable_debug"
 echo     "     PROFILE:          $enable_profile"
 echo     "     BUILD TESTS:      $enable_tests"

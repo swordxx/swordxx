@@ -696,7 +696,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->LowerBound(*curKey);
 					lastKey->setPosition(TOP);
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
@@ -709,7 +709,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->UpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
-							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
 							bool f = false;
@@ -723,7 +723,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->UpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
-							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 					else	if (expandRange) {
@@ -735,7 +735,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 								*curKey = MAXVERSE;
 							newElement->UpperBound(*curKey);
 							*newElement = TOP;
-							tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 				}
@@ -921,7 +921,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			lastKey->LowerBound(*curKey);
 			*lastKey = TOP;
 			tmpListKey << *lastKey;
-			tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+			tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 		}
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
@@ -934,7 +934,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->UpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					bool f = false;
@@ -948,7 +948,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->UpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 			else if (expandRange) {
@@ -960,7 +960,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						*curKey = MAXVERSE;
 					newElement->UpperBound(*curKey);
 					*newElement = TOP;
-					tmpListKey.GetElement()->userData = (void *)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 		}

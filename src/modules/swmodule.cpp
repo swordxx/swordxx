@@ -529,7 +529,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 					}
 				}
 				listKey << *resultKey;
-				listKey.GetElement()->userData = (void *)((__u32)(h->score(i)*100));
+				listKey.GetElement()->userData = (__u64)((__u32)(h->score(i)*100));
 			}
 			(*percent)(98, percentUserData);
 		}

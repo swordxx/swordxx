@@ -27,6 +27,7 @@
 #include <swobject.h>
 
 #include <defs.h>
+#include <sysdata.h>
 #include <utilstr.h>
 
 SWORD_NAMESPACE_START
@@ -111,8 +112,8 @@ protected:
 
 public:
 
-	// misc pointer for whatever
-	void *userData;
+	// misc storage for whatever
+	__u64 userData;
 
 	/** initializes instance of SWKey from a string
 	 * All keys can be reduced to a string representation which should be able
