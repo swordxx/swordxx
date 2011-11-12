@@ -1612,6 +1612,12 @@ long VerseKey::getTestamentIndex() const
 
 void VerseKey::setIndex(long iindex)
 {
+	// assert we're sane
+	if (iindex < 0) {
+		error = KEYERR_OUTOFBOUNDS;
+		return;
+	}
+
 	int b;
 	error = refSys->getVerseFromOffset(iindex, &b, &chapter, &verse);
 	book = (unsigned char)b;
