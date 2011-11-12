@@ -769,9 +769,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 				// Did we have pre-verse material that needs to be marked?
 				if (inPreVerse) {
-//					char genBuf[200];
-//					sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" eID=\"pv%d\"/>", genID++);
-//					text.append(genBuf);
+					char genBuf[200];
+					sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" eID=\"pv%d\"/>", genID++);
+					text.append(genBuf);
 				}
 
 				// Get osisID for verse or annotateRef for commentary
@@ -916,9 +916,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 			if (inPreVerse) {
-//				char genBuf[200];
-//				sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" sID=\"pv%d\"/>", genID);
-//				text.append(genBuf);
+				char genBuf[200];
+				sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" sID=\"pv%d\"/>", genID);
+				text.append(genBuf);
 			}
 		}
 
