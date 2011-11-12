@@ -1605,6 +1605,7 @@ int main(int argc, char **argv) {
 	if (cipherFilter)
 		delete cipherFilter;
 
+	fprintf(stderr, "SUCCESS: %s: has finished its work and will now rest\n", program);
 	exit(0); // success
 }
 
