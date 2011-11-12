@@ -515,7 +515,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// iterate thru each good module position that meets the search
 			bool checkBounds = getKey()->isBoundSet();
-			for (unsigned long i = 0; i < h->length(); i++) {
+			for (unsigned long i = 0; i < (unsigned long)h->length(); i++) {
 				Document &doc = h->doc(i);
 
 				// set a temporary verse key to this module position

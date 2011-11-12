@@ -590,7 +590,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 	// Flags indicating whether we are processing the content of to be prepended to a verse
 	static bool               inPreVerse      = false;
-//	static int                genID           = 1;
+	static int                genID           = 1;
 
 	// Flag indicating whether we are in "Words of Christ"
 	static bool               inWOC           = false;
