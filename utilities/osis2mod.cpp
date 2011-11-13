@@ -375,8 +375,7 @@ bool isValidRef(const char *buf) {
 	}
 
 	// If we have gotten here the reference is not in the selected versification.
-	cout << "INFO(V11N): " << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
-
+	// cout << "INFO(V11N): " << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
 	if (debug & DEBUG_REV11N) {
 		cout << "DEBUG(V11N): " << before << " normalizes to "  << after << endl;
 	}
@@ -409,17 +408,15 @@ bool isValidRef(const char *buf) {
  * param key the key that may need to be adjusted
  */
 void makeValidRef(VerseKey &key) {
+	VerseKey saveKey;
+	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
+	saveKey.AutoNormalize(0);
+	saveKey.Headings(1);
+	saveKey = currentVerse;
 
-	int chapterMax = key.getChapterMax();
-	int verseMax   = key.getVerseMax();
-
-	if (debug & DEBUG_REV11N) {
-		cout << "DEBUG(V11N) Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
-	}
-
-	cout << "INFO(V11N): " << key.getOSISRef() << " is not in the " << key.getVersificationSystem() << " versification.";
 	// Since isValidRef returned false constrain the key to the nearest prior reference.
 	// If we are past the last chapter set the reference to the last chapter
+	int chapterMax = key.getChapterMax();
 	if (key.Chapter() > chapterMax) {
 		key.Chapter(chapterMax);
 	}
@@ -427,7 +424,12 @@ void makeValidRef(VerseKey &key) {
 	// Either we set the chapter to the last chapter and now need to set to the last verse in the chapter
 	// Or the verse is beyond the end of the chapter.
 	// In any case we need to constrain the verse to it's chapter.
+	int verseMax   = key.getVerseMax();
 	key.Verse(verseMax);
+
+	if (debug & DEBUG_REV11N) {
+		cout << "DEBUG(V11N) Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
+	}
 
 	// There are three cases we want to handle:
 	// In the examples we are using the KJV versification where the last verse of Matt.7 is Matt.7.29.
@@ -450,7 +452,9 @@ void makeValidRef(VerseKey &key) {
 		key.decrement(1);
 	}
 
-	cout << " Appending content to " << key.getOSISRef() << endl;
+	cout << "INFO(V11N): " << saveKey.getOSISRef()
+	     << " is not in the " << key.getVersificationSystem()
+	     << " versification. Appending content to " << key.getOSISRef() << endl;
 }
 
 void writeEntry(SWBuf &text, bool force = false) {
