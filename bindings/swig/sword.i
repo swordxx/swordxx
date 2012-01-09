@@ -17,6 +17,8 @@
 %ignore *::operator const char *;
 %ignore *::operator sword::SWKey &;
 %ignore *::operator sword::SWKey *;
+/* An ignore for missing wchar_t compatibility */
+%ignore sword::SWBuf::append(wchar_t);
 
 %include "defs.i"
 %include "swbuf.i"
