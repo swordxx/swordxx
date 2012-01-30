@@ -154,7 +154,7 @@ if [ $PPC -eq 1 ] || [ $FAT -eq 1 ]; then
 fi
 
 if [ $INTEL -eq 1 ] || [ $FAT -eq 1 ]; then
-    echo "building INTEL version of library..."
+  echo "building INTEL version of library..."
 	cd $SWORDPATH
 	echo 'autogen.sh ...'
 	./autogen.sh
@@ -186,7 +186,6 @@ fi
 if [ $INTEL64 -eq 1 ] || [ $FAT -eq 1 ]; then
   echo "building INTEL64 version of library..."
 	cd $SWORDPATH
-	make clean
 	echo 'autogen.sh ...'
 	./autogen.sh
 	echo 'autogen.sh ... done'

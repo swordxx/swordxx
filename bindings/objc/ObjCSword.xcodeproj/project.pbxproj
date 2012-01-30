@@ -6,6 +6,36 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		A9D271FA14D7193300DA8926 /* Utilities */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A9D271FB14D7193300DA8926 /* Build configuration list for PBXAggregateTarget "Utilities" */;
+			buildPhases = (
+			);
+			dependencies = (
+				A9D271FF14D7193A00DA8926 /* PBXTargetDependency */,
+				A9D2720114D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720314D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720514D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720714D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720914D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720B14D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720D14D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2720F14D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721114D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721314D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721514D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721714D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721914D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721B14D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721D14D7194E00DA8926 /* PBXTargetDependency */,
+				A9D2721F14D7194E00DA8926 /* PBXTargetDependency */,
+			);
+			name = Utilities;
+			productName = Utilities;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
@@ -310,6 +340,9 @@
 		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
+		A9A7EEBF14D5D65900B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		A9BDFA621207F9870067ED5B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */; };
 		A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
 		A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A964658011C663E200640FAC /* SwordManagerTest.h */; };
@@ -327,6 +360,34 @@
 		A9C2857311C4471400803CB5 /* OSXConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C2857111C4471400803CB5 /* OSXConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9C2857411C4471400803CB5 /* OSXConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2857211C4471400803CB5 /* OSXConfiguration.m */; };
 		A9C2858311C44A0A00803CB5 /* Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2858211C44A0A00803CB5 /* Configuration.m */; };
+		A9D2714A14D717D800DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2715014D717F600DA8926 /* imp2gbs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975ED9811C7925C007C1532 /* imp2gbs.cpp */; };
+		A9D2715714D717FD00DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2715D14D7180F00DA8926 /* imp2ld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975ED9911C7925C007C1532 /* imp2ld.cpp */; };
+		A9D2716414D7181200DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2716A14D7182100DA8926 /* imp2vs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975ED9A11C7925C007C1532 /* imp2vs.cpp */; };
+		A9D2717114D7182300DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2717714D7183700DA8926 /* installmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975ED9B11C7925C007C1532 /* installmgr.cpp */; };
+		A9D2717E14D7183B00DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2718414D7184E00DA8926 /* mod2imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAB11C7925C007C1532 /* mod2imp.cpp */; };
+		A9D2718B14D7185800DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2719114D7186800DA8926 /* mod2vpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAD11C7925C007C1532 /* mod2vpl.cpp */; };
+		A9D2719814D7186A00DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D2719E14D7187A00DA8926 /* mod2zmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAE11C7925C007C1532 /* mod2zmod.cpp */; };
+		A9D271A514D7187E00DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271AB14D7189100DA8926 /* step2vpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB811C7925C007C1532 /* step2vpl.cpp */; };
+		A9D271B214D7189300DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271B814D718A300DA8926 /* stepdump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB911C7925C007C1532 /* stepdump.cpp */; };
+		A9D271BF14D718A400DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271C514D718B700DA8926 /* tei2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDBB11C7925C007C1532 /* tei2mod.cpp */; };
+		A9D271CC14D718B800DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271D214D718C600DA8926 /* vpl2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDD811C7925C007C1532 /* vpl2mod.cpp */; };
+		A9D271D914D718C800DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271DF14D718DE00DA8926 /* vs2osisref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDD911C7925C007C1532 /* vs2osisref.cpp */; };
+		A9D271E614D718DF00DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271EC14D718F400DA8926 /* vs2osisreftxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDDA11C7925C007C1532 /* vs2osisreftxt.cpp */; };
+		A9D271F314D718F500DA8926 /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9D271F914D7190400DA8926 /* xml2gbs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDDB11C7925C007C1532 /* xml2gbs.cpp */; };
 		A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
@@ -337,6 +398,20 @@
 
 /* Begin PBXContainerItemProxy section */
 		A954ABC913EE9D0F0094E3FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9A7EEAD14D5D4BB00B76B6A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9A7EEC014D5D66400B76B6A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
@@ -356,6 +431,223 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = ObjCSword;
+		};
+		A9D2714614D717D800DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2715314D717FD00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2716014D7181200DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2716D14D7182300DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2717A14D7183B00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2718714D7185800DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2719414D7186A00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271A114D7187E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271AE14D7189300DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271BB14D718A400DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271C814D718B800DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271D514D718C800DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271E214D718DF00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271EF14D718F500DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D271FE14D7193A00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
+		};
+		A9D2720014D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2714414D717D800DA8926;
+			remoteInfo = imp2gbs;
+		};
+		A9D2720214D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2715114D717FD00DA8926;
+			remoteInfo = imp2ld;
+		};
+		A9D2720414D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2715E14D7181200DA8926;
+			remoteInfo = imp2vs;
+		};
+		A9D2720614D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2716B14D7182300DA8926;
+			remoteInfo = installmgr;
+		};
+		A9D2720814D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2717814D7183B00DA8926;
+			remoteInfo = mod2imp;
+		};
+		A9D2720A14D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A975EED811C792B9007C1532;
+			remoteInfo = mod2osis;
+		};
+		A9D2720C14D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2718514D7185800DA8926;
+			remoteInfo = mod2vpl;
+		};
+		A9D2720E14D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2719214D7186A00DA8926;
+			remoteInfo = mod2zmod;
+		};
+		A9D2721014D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9A7EEB314D5D61700B76B6A;
+			remoteInfo = osis2mod;
+		};
+		A9D2721214D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D2719F14D7187E00DA8926;
+			remoteInfo = step2vpl;
+		};
+		A9D2721414D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D271AC14D7189300DA8926;
+			remoteInfo = stepdump;
+		};
+		A9D2721614D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D271B914D718A400DA8926;
+			remoteInfo = tei2mod;
+		};
+		A9D2721814D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D271C614D718B800DA8926;
+			remoteInfo = vpl2mod;
+		};
+		A9D2721A14D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D271D314D718C800DA8926;
+			remoteInfo = vs2osisref;
+		};
+		A9D2721C14D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D271E014D718DF00DA8926;
+			remoteInfo = vs2osisreftxt;
+		};
+		A9D2721E14D7194E00DA8926 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D271ED14D718F500DA8926;
+			remoteInfo = xml2gbs;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -847,6 +1139,7 @@
 		A975EED911C792B9007C1532 /* mod2osis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2osis; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9921A1911FD9CA8002DAA72 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
+		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info copy.plist"; sourceTree = "<group>"; };
 		A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKeyTest.h; path = ../test/SwordListKeyTest.h; sourceTree = "<group>"; };
@@ -868,6 +1161,20 @@
 		A9C2857111C4471400803CB5 /* OSXConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXConfiguration.h; path = src/services/OSXConfiguration.h; sourceTree = "<group>"; };
 		A9C2857211C4471400803CB5 /* OSXConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OSXConfiguration.m; path = src/services/OSXConfiguration.m; sourceTree = "<group>"; };
 		A9C2858211C44A0A00803CB5 /* Configuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Configuration.m; path = src/services/Configuration.m; sourceTree = "<group>"; };
+		A9D2714E14D717D800DA8926 /* imp2gbs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = imp2gbs; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D2715B14D717FD00DA8926 /* imp2ld */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = imp2ld; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D2716814D7181200DA8926 /* imp2vs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = imp2vs; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D2717514D7182300DA8926 /* installmgr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = installmgr; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D2718214D7183B00DA8926 /* mod2imp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2imp; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D2718F14D7185800DA8926 /* mod2vpl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2vpl; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D2719C14D7186A00DA8926 /* mod2zmod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2zmod; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271A914D7187E00DA8926 /* step2vpl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step2vpl; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271B614D7189300DA8926 /* stepdump */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = stepdump; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271C314D718A400DA8926 /* tei2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tei2mod; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271D014D718B800DA8926 /* vpl2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vpl2mod; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271DD14D718C800DA8926 /* vs2osisref */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vs2osisref; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271EA14D718DF00DA8926 /* vs2osisreftxt */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vs2osisreftxt; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D271F714D718F500DA8926 /* xml2gbs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xml2gbs; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SwordModule+Index.h"; path = "src/SwordModule+Index.h"; sourceTree = "<group>"; };
 		A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "SwordModule+Index.mm"; path = "src/SwordModule+Index.mm"; sourceTree = "<group>"; };
 		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
@@ -901,6 +1208,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9A7EEB114D5D61700B76B6A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9A7EEBF14D5D65900B76B6A /* libsword.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +1239,118 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9D2714914D717D800DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2714A14D717D800DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2715614D717FD00DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2715714D717FD00DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2716314D7181200DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2716414D7181200DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2717014D7182300DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2717114D7182300DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2717D14D7183B00DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2717E14D7183B00DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2718A14D7185800DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2718B14D7185800DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2719714D7186A00DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2719814D7186A00DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271A414D7187E00DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271A514D7187E00DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271B114D7189300DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271B214D7189300DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271BE14D718A400DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271BF14D718A400DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271CB14D718B800DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271CC14D718B800DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271D814D718C800DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271D914D718C800DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271E514D718DF00DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271E614D718DF00DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271F214D718F500DA8926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271F314D718F500DA8926 /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -935,6 +1363,21 @@
 				A9BDFA6B1207F9870067ED5B /* Tests.octest */,
 				A9BFB0A213EDF51000032679 /* Tests.octest */,
 				A954ABC313EE9AB00094E3FE /* libsword.dylib */,
+				A9A7EEB414D5D61700B76B6A /* osis2mod */,
+				A9D2714E14D717D800DA8926 /* imp2gbs */,
+				A9D2715B14D717FD00DA8926 /* imp2ld */,
+				A9D2716814D7181200DA8926 /* imp2vs */,
+				A9D2717514D7182300DA8926 /* installmgr */,
+				A9D2718214D7183B00DA8926 /* mod2imp */,
+				A9D2718F14D7185800DA8926 /* mod2vpl */,
+				A9D2719C14D7186A00DA8926 /* mod2zmod */,
+				A9D271A914D7187E00DA8926 /* step2vpl */,
+				A9D271B614D7189300DA8926 /* stepdump */,
+				A9D271C314D718A400DA8926 /* tei2mod */,
+				A9D271D014D718B800DA8926 /* vpl2mod */,
+				A9D271DD14D718C800DA8926 /* vs2osisref */,
+				A9D271EA14D718DF00DA8926 /* vs2osisreftxt */,
+				A9D271F714D718F500DA8926 /* xml2gbs */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1971,10 +2414,28 @@
 			buildRules = (
 			);
 			dependencies = (
+				A9A7EEAE14D5D4BB00B76B6A /* PBXTargetDependency */,
 			);
 			name = mod2osis;
 			productName = mod2osis;
 			productReference = A975EED911C792B9007C1532 /* mod2osis */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9A7EEB314D5D61700B76B6A /* osis2mod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9A7EEBB14D5D61700B76B6A /* Build configuration list for PBXNativeTarget "osis2mod" */;
+			buildPhases = (
+				A9A7EEB014D5D61700B76B6A /* Sources */,
+				A9A7EEB114D5D61700B76B6A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9A7EEC114D5D66400B76B6A /* PBXTargetDependency */,
+			);
+			name = osis2mod;
+			productName = osis2mod;
+			productReference = A9A7EEB414D5D61700B76B6A /* osis2mod */;
 			productType = "com.apple.product-type.tool";
 		};
 		A9BDFA5A1207F9870067ED5B /* LongRunningTests */ = {
@@ -2016,13 +2477,251 @@
 			productReference = A9BFB0A213EDF51000032679 /* Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		A9D2714414D717D800DA8926 /* imp2gbs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2714B14D717D800DA8926 /* Build configuration list for PBXNativeTarget "imp2gbs" */;
+			buildPhases = (
+				A9D2714714D717D800DA8926 /* Sources */,
+				A9D2714914D717D800DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2714514D717D800DA8926 /* PBXTargetDependency */,
+			);
+			name = imp2gbs;
+			productName = mod2osis;
+			productReference = A9D2714E14D717D800DA8926 /* imp2gbs */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2715114D717FD00DA8926 /* imp2ld */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2715814D717FD00DA8926 /* Build configuration list for PBXNativeTarget "imp2ld" */;
+			buildPhases = (
+				A9D2715414D717FD00DA8926 /* Sources */,
+				A9D2715614D717FD00DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2715214D717FD00DA8926 /* PBXTargetDependency */,
+			);
+			name = imp2ld;
+			productName = mod2osis;
+			productReference = A9D2715B14D717FD00DA8926 /* imp2ld */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2715E14D7181200DA8926 /* imp2vs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2716514D7181200DA8926 /* Build configuration list for PBXNativeTarget "imp2vs" */;
+			buildPhases = (
+				A9D2716114D7181200DA8926 /* Sources */,
+				A9D2716314D7181200DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2715F14D7181200DA8926 /* PBXTargetDependency */,
+			);
+			name = imp2vs;
+			productName = mod2osis;
+			productReference = A9D2716814D7181200DA8926 /* imp2vs */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2716B14D7182300DA8926 /* installmgr */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2717214D7182300DA8926 /* Build configuration list for PBXNativeTarget "installmgr" */;
+			buildPhases = (
+				A9D2716E14D7182300DA8926 /* Sources */,
+				A9D2717014D7182300DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2716C14D7182300DA8926 /* PBXTargetDependency */,
+			);
+			name = installmgr;
+			productName = mod2osis;
+			productReference = A9D2717514D7182300DA8926 /* installmgr */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2717814D7183B00DA8926 /* mod2imp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2717F14D7183B00DA8926 /* Build configuration list for PBXNativeTarget "mod2imp" */;
+			buildPhases = (
+				A9D2717B14D7183B00DA8926 /* Sources */,
+				A9D2717D14D7183B00DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2717914D7183B00DA8926 /* PBXTargetDependency */,
+			);
+			name = mod2imp;
+			productName = mod2osis;
+			productReference = A9D2718214D7183B00DA8926 /* mod2imp */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2718514D7185800DA8926 /* mod2vpl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2718C14D7185800DA8926 /* Build configuration list for PBXNativeTarget "mod2vpl" */;
+			buildPhases = (
+				A9D2718814D7185800DA8926 /* Sources */,
+				A9D2718A14D7185800DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2718614D7185800DA8926 /* PBXTargetDependency */,
+			);
+			name = mod2vpl;
+			productName = mod2osis;
+			productReference = A9D2718F14D7185800DA8926 /* mod2vpl */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2719214D7186A00DA8926 /* mod2zmod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D2719914D7186A00DA8926 /* Build configuration list for PBXNativeTarget "mod2zmod" */;
+			buildPhases = (
+				A9D2719514D7186A00DA8926 /* Sources */,
+				A9D2719714D7186A00DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D2719314D7186A00DA8926 /* PBXTargetDependency */,
+			);
+			name = mod2zmod;
+			productName = mod2osis;
+			productReference = A9D2719C14D7186A00DA8926 /* mod2zmod */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D2719F14D7187E00DA8926 /* step2vpl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271A614D7187E00DA8926 /* Build configuration list for PBXNativeTarget "step2vpl" */;
+			buildPhases = (
+				A9D271A214D7187E00DA8926 /* Sources */,
+				A9D271A414D7187E00DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271A014D7187E00DA8926 /* PBXTargetDependency */,
+			);
+			name = step2vpl;
+			productName = osis2mod;
+			productReference = A9D271A914D7187E00DA8926 /* step2vpl */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D271AC14D7189300DA8926 /* stepdump */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271B314D7189300DA8926 /* Build configuration list for PBXNativeTarget "stepdump" */;
+			buildPhases = (
+				A9D271AF14D7189300DA8926 /* Sources */,
+				A9D271B114D7189300DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271AD14D7189300DA8926 /* PBXTargetDependency */,
+			);
+			name = stepdump;
+			productName = osis2mod;
+			productReference = A9D271B614D7189300DA8926 /* stepdump */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D271B914D718A400DA8926 /* tei2mod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271C014D718A400DA8926 /* Build configuration list for PBXNativeTarget "tei2mod" */;
+			buildPhases = (
+				A9D271BC14D718A400DA8926 /* Sources */,
+				A9D271BE14D718A400DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271BA14D718A400DA8926 /* PBXTargetDependency */,
+			);
+			name = tei2mod;
+			productName = osis2mod;
+			productReference = A9D271C314D718A400DA8926 /* tei2mod */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D271C614D718B800DA8926 /* vpl2mod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271CD14D718B800DA8926 /* Build configuration list for PBXNativeTarget "vpl2mod" */;
+			buildPhases = (
+				A9D271C914D718B800DA8926 /* Sources */,
+				A9D271CB14D718B800DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271C714D718B800DA8926 /* PBXTargetDependency */,
+			);
+			name = vpl2mod;
+			productName = osis2mod;
+			productReference = A9D271D014D718B800DA8926 /* vpl2mod */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D271D314D718C800DA8926 /* vs2osisref */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271DA14D718C800DA8926 /* Build configuration list for PBXNativeTarget "vs2osisref" */;
+			buildPhases = (
+				A9D271D614D718C800DA8926 /* Sources */,
+				A9D271D814D718C800DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271D414D718C800DA8926 /* PBXTargetDependency */,
+			);
+			name = vs2osisref;
+			productName = osis2mod;
+			productReference = A9D271DD14D718C800DA8926 /* vs2osisref */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D271E014D718DF00DA8926 /* vs2osisreftxt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271E714D718DF00DA8926 /* Build configuration list for PBXNativeTarget "vs2osisreftxt" */;
+			buildPhases = (
+				A9D271E314D718DF00DA8926 /* Sources */,
+				A9D271E514D718DF00DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271E114D718DF00DA8926 /* PBXTargetDependency */,
+			);
+			name = vs2osisreftxt;
+			productName = osis2mod;
+			productReference = A9D271EA14D718DF00DA8926 /* vs2osisreftxt */;
+			productType = "com.apple.product-type.tool";
+		};
+		A9D271ED14D718F500DA8926 /* xml2gbs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D271F414D718F500DA8926 /* Build configuration list for PBXNativeTarget "xml2gbs" */;
+			buildPhases = (
+				A9D271F014D718F500DA8926 /* Sources */,
+				A9D271F214D718F500DA8926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D271EE14D718F500DA8926 /* PBXTargetDependency */,
+			);
+			name = xml2gbs;
+			productName = osis2mod;
+			productReference = A9D271F714D718F500DA8926 /* xml2gbs */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0420;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2042,9 +2741,25 @@
 			targets = (
 				8DC2EF4F0486A6940098B216 /* ObjCSword */,
 				A9BDFA5A1207F9870067ED5B /* LongRunningTests */,
-				A975EED811C792B9007C1532 /* mod2osis */,
 				A9BFB0A113EDF51000032679 /* Tests */,
 				A954ABC213EE9AB00094E3FE /* sword */,
+				A9D2714414D717D800DA8926 /* imp2gbs */,
+				A9D2715114D717FD00DA8926 /* imp2ld */,
+				A9D2715E14D7181200DA8926 /* imp2vs */,
+				A9D2716B14D7182300DA8926 /* installmgr */,
+				A9D2717814D7183B00DA8926 /* mod2imp */,
+				A975EED811C792B9007C1532 /* mod2osis */,
+				A9D2718514D7185800DA8926 /* mod2vpl */,
+				A9D2719214D7186A00DA8926 /* mod2zmod */,
+				A9A7EEB314D5D61700B76B6A /* osis2mod */,
+				A9D2719F14D7187E00DA8926 /* step2vpl */,
+				A9D271AC14D7189300DA8926 /* stepdump */,
+				A9D271B914D718A400DA8926 /* tei2mod */,
+				A9D271C614D718B800DA8926 /* vpl2mod */,
+				A9D271D314D718C800DA8926 /* vs2osisref */,
+				A9D271E014D718DF00DA8926 /* vs2osisreftxt */,
+				A9D271ED14D718F500DA8926 /* xml2gbs */,
+				A9D271FA14D7193300DA8926 /* Utilities */,
 			);
 		};
 /* End PBXProject section */
@@ -2407,6 +3122,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9A7EEB014D5D61700B76B6A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9BDFA5E1207F9870067ED5B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2425,6 +3148,118 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9D2714714D717D800DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2715014D717F600DA8926 /* imp2gbs.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2715414D717FD00DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2715D14D7180F00DA8926 /* imp2ld.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2716114D7181200DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2716A14D7182100DA8926 /* imp2vs.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2716E14D7182300DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2717714D7183700DA8926 /* installmgr.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2717B14D7183B00DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2718414D7184E00DA8926 /* mod2imp.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2718814D7185800DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2719114D7186800DA8926 /* mod2vpl.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D2719514D7186A00DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D2719E14D7187A00DA8926 /* mod2zmod.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271A214D7187E00DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271AB14D7189100DA8926 /* step2vpl.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271AF14D7189300DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271B814D718A300DA8926 /* stepdump.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271BC14D718A400DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271C514D718B700DA8926 /* tei2mod.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271C914D718B800DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271D214D718C600DA8926 /* vpl2mod.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271D614D718C800DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271DF14D718DE00DA8926 /* vs2osisref.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271E314D718DF00DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271EC14D718F400DA8926 /* vs2osisreftxt.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D271F014D718F500DA8926 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D271F914D7190400DA8926 /* xml2gbs.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2432,6 +3267,16 @@
 			isa = PBXTargetDependency;
 			target = A954ABC213EE9AB00094E3FE /* sword */;
 			targetProxy = A954ABC913EE9D0F0094E3FE /* PBXContainerItemProxy */;
+		};
+		A9A7EEAE14D5D4BB00B76B6A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9A7EEAD14D5D4BB00B76B6A /* PBXContainerItemProxy */;
+		};
+		A9A7EEC114D5D66400B76B6A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9A7EEC014D5D66400B76B6A /* PBXContainerItemProxy */;
 		};
 		A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2442,6 +3287,161 @@
 			isa = PBXTargetDependency;
 			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
 			targetProxy = A9BFB0BA13EDF5B600032679 /* PBXContainerItemProxy */;
+		};
+		A9D2714514D717D800DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2714614D717D800DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2715214D717FD00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2715314D717FD00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2715F14D7181200DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2716014D7181200DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2716C14D7182300DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2716D14D7182300DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2717914D7183B00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2717A14D7183B00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2718614D7185800DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2718714D7185800DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2719314D7186A00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D2719414D7186A00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271A014D7187E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271A114D7187E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271AD14D7189300DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271AE14D7189300DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271BA14D718A400DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271BB14D718A400DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271C714D718B800DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271C814D718B800DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271D414D718C800DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271D514D718C800DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271E114D718DF00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271E214D718DF00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271EE14D718F500DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271EF14D718F500DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D271FF14D7193A00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D271FE14D7193A00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720114D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2714414D717D800DA8926 /* imp2gbs */;
+			targetProxy = A9D2720014D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720314D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2715114D717FD00DA8926 /* imp2ld */;
+			targetProxy = A9D2720214D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720514D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2715E14D7181200DA8926 /* imp2vs */;
+			targetProxy = A9D2720414D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720714D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2716B14D7182300DA8926 /* installmgr */;
+			targetProxy = A9D2720614D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720914D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2717814D7183B00DA8926 /* mod2imp */;
+			targetProxy = A9D2720814D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720B14D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A975EED811C792B9007C1532 /* mod2osis */;
+			targetProxy = A9D2720A14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720D14D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2718514D7185800DA8926 /* mod2vpl */;
+			targetProxy = A9D2720C14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2720F14D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2719214D7186A00DA8926 /* mod2zmod */;
+			targetProxy = A9D2720E14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721114D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9A7EEB314D5D61700B76B6A /* osis2mod */;
+			targetProxy = A9D2721014D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721314D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D2719F14D7187E00DA8926 /* step2vpl */;
+			targetProxy = A9D2721214D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721514D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D271AC14D7189300DA8926 /* stepdump */;
+			targetProxy = A9D2721414D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721714D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D271B914D718A400DA8926 /* tei2mod */;
+			targetProxy = A9D2721614D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721914D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D271C614D718B800DA8926 /* vpl2mod */;
+			targetProxy = A9D2721814D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721B14D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D271D314D718C800DA8926 /* vs2osisref */;
+			targetProxy = A9D2721A14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721D14D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D271E014D718DF00DA8926 /* vs2osisreftxt */;
+			targetProxy = A9D2721C14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D2721F14D7194E00DA8926 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D271ED14D718F500DA8926 /* xml2gbs */;
+			targetProxy = A9D2721E14D7194E00DA8926 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2480,13 +3480,12 @@
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_GC = required;
-				GCC_ENABLE_SYMBOL_SEPARATION = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ObjCSword_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../../include/**";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@rpath";
@@ -2505,7 +3504,8 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -2528,9 +3528,10 @@
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ObjCSword_Prefix.pch;
+				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../../include/**";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@rpath";
@@ -2548,7 +3549,8 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -2560,10 +3562,11 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -2572,9 +3575,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -2592,7 +3596,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2613,6 +3617,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -2625,7 +3630,8 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = 4.2;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2647,6 +3653,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
@@ -2661,9 +3668,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = "../../include/**";
 				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -2678,11 +3685,52 @@
 				GCC_MODEL_TUNING = G5;
 				HEADER_SEARCH_PATHS = "../../include/**";
 				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9A7EEBC14D5D61700B76B6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A9A7EEBD14D5D61700B76B6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -2711,7 +3759,7 @@
 					SenTestingKit,
 				);
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -2738,7 +3786,7 @@
 					SenTestingKit,
 				);
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
 			};
@@ -2767,7 +3815,7 @@
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -2790,8 +3838,561 @@
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		A9D2714C14D717D800DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = imp2gbs;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2714D14D717D800DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = imp2gbs;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D2715914D717FD00DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = imp2ld;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2715A14D717FD00DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = imp2ld;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D2716614D7181200DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = imp2vs;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2716714D7181200DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = imp2vs;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D2717314D7182300DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = installmgr;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2717414D7182300DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = installmgr;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D2718014D7183B00DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = mod2imp;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2718114D7183B00DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = mod2imp;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D2718D14D7185800DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = mod2vpl;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2718E14D7185800DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = mod2vpl;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D2719A14D7186A00DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = mod2zmod;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+			};
+			name = Debug;
+		};
+		A9D2719B14D7186A00DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				PRODUCT_NAME = mod2zmod;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A9D271A714D7187E00DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = step2vpl;
+			};
+			name = Debug;
+		};
+		A9D271A814D7187E00DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = step2vpl;
+			};
+			name = Release;
+		};
+		A9D271B414D7189300DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = stepdump;
+			};
+			name = Debug;
+		};
+		A9D271B514D7189300DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = stepdump;
+			};
+			name = Release;
+		};
+		A9D271C114D718A400DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = tei2mod;
+			};
+			name = Debug;
+		};
+		A9D271C214D718A400DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = tei2mod;
+			};
+			name = Release;
+		};
+		A9D271CE14D718B800DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = vpl2mod;
+			};
+			name = Debug;
+		};
+		A9D271CF14D718B800DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = vpl2mod;
+			};
+			name = Release;
+		};
+		A9D271DB14D718C800DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = vs2osisref;
+			};
+			name = Debug;
+		};
+		A9D271DC14D718C800DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = vs2osisref;
+			};
+			name = Release;
+		};
+		A9D271E814D718DF00DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = vs2osisreftxt;
+			};
+			name = Debug;
+		};
+		A9D271E914D718DF00DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = vs2osisreftxt;
+			};
+			name = Release;
+		};
+		A9D271F514D718F500DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = xml2gbs;
+			};
+			name = Debug;
+		};
+		A9D271F614D718F500DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = xml2gbs;
+			};
+			name = Release;
+		};
+		A9D271FC14D7193300DA8926 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A9D271FD14D7193300DA8926 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -2834,6 +4435,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		A9A7EEBB14D5D61700B76B6A /* Build configuration list for PBXNativeTarget "osis2mod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9A7EEBC14D5D61700B76B6A /* Debug */,
+				A9A7EEBD14D5D61700B76B6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2851,6 +4461,140 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A9D2714B14D717D800DA8926 /* Build configuration list for PBXNativeTarget "imp2gbs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2714C14D717D800DA8926 /* Debug */,
+				A9D2714D14D717D800DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D2715814D717FD00DA8926 /* Build configuration list for PBXNativeTarget "imp2ld" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2715914D717FD00DA8926 /* Debug */,
+				A9D2715A14D717FD00DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D2716514D7181200DA8926 /* Build configuration list for PBXNativeTarget "imp2vs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2716614D7181200DA8926 /* Debug */,
+				A9D2716714D7181200DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D2717214D7182300DA8926 /* Build configuration list for PBXNativeTarget "installmgr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2717314D7182300DA8926 /* Debug */,
+				A9D2717414D7182300DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D2717F14D7183B00DA8926 /* Build configuration list for PBXNativeTarget "mod2imp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2718014D7183B00DA8926 /* Debug */,
+				A9D2718114D7183B00DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D2718C14D7185800DA8926 /* Build configuration list for PBXNativeTarget "mod2vpl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2718D14D7185800DA8926 /* Debug */,
+				A9D2718E14D7185800DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D2719914D7186A00DA8926 /* Build configuration list for PBXNativeTarget "mod2zmod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D2719A14D7186A00DA8926 /* Debug */,
+				A9D2719B14D7186A00DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271A614D7187E00DA8926 /* Build configuration list for PBXNativeTarget "step2vpl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271A714D7187E00DA8926 /* Debug */,
+				A9D271A814D7187E00DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271B314D7189300DA8926 /* Build configuration list for PBXNativeTarget "stepdump" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271B414D7189300DA8926 /* Debug */,
+				A9D271B514D7189300DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271C014D718A400DA8926 /* Build configuration list for PBXNativeTarget "tei2mod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271C114D718A400DA8926 /* Debug */,
+				A9D271C214D718A400DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271CD14D718B800DA8926 /* Build configuration list for PBXNativeTarget "vpl2mod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271CE14D718B800DA8926 /* Debug */,
+				A9D271CF14D718B800DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271DA14D718C800DA8926 /* Build configuration list for PBXNativeTarget "vs2osisref" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271DB14D718C800DA8926 /* Debug */,
+				A9D271DC14D718C800DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271E714D718DF00DA8926 /* Build configuration list for PBXNativeTarget "vs2osisreftxt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271E814D718DF00DA8926 /* Debug */,
+				A9D271E914D718DF00DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271F414D718F500DA8926 /* Build configuration list for PBXNativeTarget "xml2gbs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271F514D718F500DA8926 /* Debug */,
+				A9D271F614D718F500DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D271FB14D7193300DA8926 /* Build configuration list for PBXAggregateTarget "Utilities" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D271FC14D7193300DA8926 /* Debug */,
+				A9D271FD14D7193300DA8926 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

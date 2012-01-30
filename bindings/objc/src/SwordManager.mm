@@ -208,7 +208,7 @@ using std::list;
         self.modulesPath = path;
 
 		self.modules = [NSDictionary dictionary];
-		self.managerLock = [[NSRecursiveLock alloc] init];
+		self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
 
         [self reInit];
         
@@ -230,7 +230,7 @@ using std::list;
         temporaryManager = YES;
         
 		self.modules = [NSDictionary dictionary];
-        self.managerLock = [[NSRecursiveLock alloc] init];
+        self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
         
 		[self refreshModules];
     }

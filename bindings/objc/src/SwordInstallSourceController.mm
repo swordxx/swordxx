@@ -152,11 +152,7 @@ base path of the module installation
         // init install sources
         for(InstallSourceMap::iterator it = swInstallMgr->sources.begin(); it != swInstallMgr->sources.end(); it++) {
             sword::InstallSource *sis = it->second;
-#if defined (TARGET_OS_MAC)
-            SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:(id)sis];
-#else
-            SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:(sword::InstallSource *)sis];
-#endif
+            SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:sis];
             
             [installSources setObject:is forKey:[is caption]];
             // also add to list
