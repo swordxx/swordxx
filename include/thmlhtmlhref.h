@@ -30,6 +30,7 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
 	SWBuf imgPrefix;
+	bool renderNoteNumbers;
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
@@ -48,6 +49,7 @@ public:
 	ThMLHTMLHREF();
 	virtual const char *getImagePrefix() { return imgPrefix.c_str(); }
 	virtual void setImagePrefix(const char *newImgPrefix) { imgPrefix = newImgPrefix; }
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 SWORD_NAMESPACE_END
 #endif /* _THMLHTMLHREF_H */

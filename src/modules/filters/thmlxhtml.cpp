@@ -162,6 +162,8 @@ ThMLXHTML::ThMLXHTML() {
 	setTokenCaseSensitive(true);
 //	addTokenSubstitute("scripture", "<i> ");
 	addTokenSubstitute("/scripture", "</i> ");
+
+	renderNoteNumbers = false;
 }
 
 
@@ -208,6 +210,7 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+					SWBuf noteName = tag.getAttribute("n");
 					VerseKey *vkey = NULL;
 					// see if we have a VerseKey * or descendant
 					SWTRY {
@@ -217,23 +220,25 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c</sup></small></a>", 
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>", 
 							ch, 
 							URL::encode(footnoteNumber.c_str()).c_str(), 
 							URL::encode(u->version.c_str()).c_str(), 
 							URL::encode(vkey->getText()).c_str(), 
 							ch,
-							ch);
+							ch, 
+							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
 					}
 					else {
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c</sup></small></a>", 
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>", 
 							ch, 
 							URL::encode(footnoteNumber.c_str()).c_str(), 
 							URL::encode(u->version.c_str()).c_str(), 
 							URL::encode(u->key->getText()).c_str(),  
 							ch,
-							ch);
+							ch, 
+							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
 					}
 					u->suspendTextPassThru = true;
 				}
@@ -267,6 +272,7 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 				else {
 					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
+					SWBuf noteName = tag.getAttribute("n");
 					VerseKey *vkey = NULL;
 					// see if we have a VerseKey * or descendant
 					SWTRY {
@@ -276,11 +282,11 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x</sup></small></a>",
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",
 							URL::encode(footnoteNumber.c_str()).c_str(), 
 							URL::encode(u->version.c_str()).c_str(),
-							URL::encode(vkey->getText()).c_str());
-					
+							URL::encode(vkey->getText()).c_str(), 
+							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
 					}
 				}
 

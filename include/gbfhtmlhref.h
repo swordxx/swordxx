@@ -28,6 +28,7 @@ SWORD_NAMESPACE_START
 /** this filter converts GBF  text to HTML text with hrefs
  */
 class SWDLLEXPORT GBFHTMLHREF : public SWBasicFilter {
+	bool renderNoteNumbers;
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
@@ -41,6 +42,7 @@ protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	GBFHTMLHREF();
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 SWORD_NAMESPACE_END

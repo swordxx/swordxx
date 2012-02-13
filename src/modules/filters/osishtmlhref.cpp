@@ -155,6 +155,7 @@ OSISHTMLHREF::OSISHTMLHREF() {
 	//	addTokenSubstitute("/lg", "<br />");
 
 	morphFirst = false;
+	renderNoteNumbers = false;
 }
 
 
@@ -240,6 +241,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						SWBuf noteName = tag.getAttribute("n");
 						VerseKey *vkey = NULL;
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 
@@ -253,22 +255,24 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c</sup></small></a>",
+							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
 								URL::encode(u->version.c_str()).c_str(), 
 								URL::encode(vkey->getText()).c_str(), 
 								ch,
-								ch);
+								ch, 
+								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
 						}
 						else {
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c</sup></small></a>",
+							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
 								URL::encode(u->version.c_str()).c_str(), 
 								URL::encode(u->key->getText()).c_str(),  
 								ch,
-								ch);
+								ch, 
+								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
 						}
 					}
 				}

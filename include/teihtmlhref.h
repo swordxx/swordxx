@@ -29,6 +29,7 @@ SWORD_NAMESPACE_START
  */
 class SWDLLEXPORT TEIHTMLHREF : public SWBasicFilter {
 private:
+	bool renderNoteNumbers;
 
 protected:
 	class MyUserData : public BasicFilterUserData {
@@ -45,6 +46,7 @@ protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	TEIHTMLHREF();
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 SWORD_NAMESPACE_END

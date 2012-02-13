@@ -57,6 +57,8 @@ TEIHTMLHREF::TEIHTMLHREF() {
 	addAllowedEscapeString("gt");
 
 	setTokenCaseSensitive(true);
+
+	renderNoteNumbers = false;
 }
 
 bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
@@ -259,11 +261,13 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			}
 			if (tag.isEndTag()) {
 				SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+				SWBuf noteName = tag.getAttribute("n");
 				
-				buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n</sup></small></a>",
+				buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
 					URL::encode(footnoteNumber.c_str()).c_str(), 
 					URL::encode(u->version.c_str()).c_str(),
-					URL::encode(u->key->getText()).c_str());
+					URL::encode(u->key->getText()).c_str(), 
+					(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
 				
 				u->suspendTextPassThru = false;
 			}

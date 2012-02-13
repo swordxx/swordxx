@@ -28,6 +28,7 @@ SWORD_NAMESPACE_START
 /** this filter converts GBF text to classed XHTML text
  */
 class SWDLLEXPORT GBFXHTML : public SWBasicFilter {
+	bool renderNoteNumbers;
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
@@ -42,6 +43,7 @@ protected:
 public:
 	GBFXHTML();
 	virtual const char *getHeader() const;
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 SWORD_NAMESPACE_END

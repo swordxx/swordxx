@@ -30,6 +30,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT OSISXHTML : public SWBasicFilter {
 private:
 	bool morphFirst;
+	bool renderNoteNumbers;
 protected:
 	// used by derived classes so we have it in the header
 	class TagStacks;
@@ -58,6 +59,7 @@ protected:
 public:
 	OSISXHTML();
 	void setMorphFirst(bool val = true) { morphFirst = val; }
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 	virtual const char *getHeader() const;
 };
 
