@@ -87,8 +87,6 @@ class SWOptionFilter;
  * @version $Id$
  */
 class SWDLLEXPORT SWMgr {
-
-
 private:
 	bool mgrModeMultiMod;
 	bool augmentHome;
@@ -158,6 +156,14 @@ protected:
 
 
 public:
+
+	// constants which represent module types used in SWModule::getType
+	static const char *MODTYPE_BIBLES;
+	static const char *MODTYPE_COMMENTARIES;
+	static const char *MODTYPE_LEXDICTS;
+	static const char *MODTYPE_GENBOOKS;
+	static const char *MODTYPE_DAILYDEVOS;
+
 
 	static bool isICU;
 	static const char *globalConfPath;

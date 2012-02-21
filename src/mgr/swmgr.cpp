@@ -111,6 +111,12 @@ const char *SWMgr::globalConfPath = GLOBCONFPATH;
 const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif
 
+const char *SWMgr::MODTYPE_BIBLES = "Biblical Texts";
+const char *SWMgr::MODTYPE_COMMENTARIES = "Commentaries";
+const char *SWMgr::MODTYPE_LEXDICTS = "Lexicons / Dictionaries";
+const char *SWMgr::MODTYPE_GENBOOKS = "Generic Books";
+const char *SWMgr::MODTYPE_DAILYDEVOS = "Daily Devotional";
+
 void SWMgr::init() {
 	SWOptionFilter *tmpFilter = 0;
 	configPath  = 0;
