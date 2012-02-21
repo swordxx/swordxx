@@ -1,5 +1,9 @@
 /******************************************************************************
  * This simple example shows how to perform a search on a SWORD module
+ * It amounts to a simple commandline search tool with a usage like:
+ *
+ *	 search KJV "swift hear slow speak"
+ *
  *
  * $Id$
  *
@@ -31,13 +35,13 @@
 using namespace sword;
 #endif
 
-  /*
-	 *			>=0 - regex
-	 *			-1  - phrase
-	 *			-2  - multiword
-	 *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
-	 *			-4  - Lucene
-   */
+/*
+ *			>=0 - regex
+ *			-1  - phrase
+ *			-2  - multiword
+ *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
+ *			-4  - Lucene
+ */
 char SEARCH_TYPE=-2;
 
 char printed = 0;

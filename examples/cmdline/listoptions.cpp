@@ -1,6 +1,8 @@
 /******************************************************************************
- * Simple example to show how to see which options are available from the
+ * Simple example to show how to see which 'options' are available from the
  * installed set of modules and their possible settings.
+ * Options in SWORD refer to things like "Strong's Numbers", "Morphology", etc.
+ * 
  *
  * $Id: swmgr.h 2321 2009-04-13 01:17:00Z scribe $
  *

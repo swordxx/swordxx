@@ -1,8 +1,5 @@
 /******************************************************************************
  * Class SWMgr manages installed modules for a frontend.
- * SWMgr reads a mods.conf file to discover its information.
- * It then instantiates the correct decendent of SWModule for each
- * module entry in mods.conf
  * The developer may use this class to query what modules are installed
  * and to retrieve an (SWModule *) for any one of these modules
  *

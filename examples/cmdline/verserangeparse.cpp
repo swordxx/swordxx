@@ -67,19 +67,20 @@ int main(int argc, char **argv)
 		cout << "*** " << book->getKeyText() << ": " << book->RenderText() << "\n";
 	}
 
-	// since we've told our result key to persist in book, we can reuse our
+	// Since we've told our result key to persist in book, we can reuse our
 	// setup by simply resetting result, e.g.
 	//
 	// result = parser.ParseVerseList(someNewRange, parser, true);
 	//
-	// now an iteration of book will give us our new range.
+	// Now an iteration of book will give us our new range.
 	//
-	// to stop persistence of our custom key, we'll need to set our book's key
+	// To stop persistence of our custom key, we'll need to set our book's key
 	// to something simple:
 	// 
 	// book->setKey("gen.1.1");
 	// 
-	// this allows book to create and use an instance of its preferred key type
+	// Resetting our book object's key to something not persistent will revert our book object to using its default key for positioning
+	//
 	//
 
 	return 0;

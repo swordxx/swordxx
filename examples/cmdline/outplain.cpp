@@ -1,11 +1,15 @@
 /******************************************************************************
- * This example show how to output the plain text entries from a SWORD module.
- * This is also good for speed tests
+ * This example shows how to output the plain text entries from a SWORD module.
+ * This small program outputs a SWORD module in 'imp' format, e.g.,
+ *
+ * $$$Gen.1.1
+ * In the beginning God created
+ * the heavens and the earth
+ *
+ * $$$Gen.1.2
+ * ...
  *
  * Class SWMgr manages installed modules for a frontend.
- * SWMgr reads a mods.conf file to discover its information.
- * It then instantiates the correct decendent of SWModule for each
- * module entry in mods.conf
  * The developer may use this class to query what modules are installed
  * and to retrieve an (SWModule *) for any one of these modules
  *
@@ -29,21 +33,6 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- *
- */
-
-/******************************************************************************
- * Class SWMgr manages installed modules for a frontend.
- * SWMgr reads a mods.conf file to discover its information.
- * It then instantiates the correct decendent of SWModule for each
- * module entry in mods.conf
- * The developer may use this class to query what modules are installed
- * and to retrieve an (SWModule *) for any one of these modules
- *
- * SWMgr makes its modules available as an STL Map.
- * The Map definition is typedef'ed as ModMap
- * ModMap consists of: FIRST : SWBuf moduleName
- *                     SECOND: SWModule *module
  *
  */
 
