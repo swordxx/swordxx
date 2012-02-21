@@ -1,3 +1,26 @@
+/******************************************************************************
+ *
+ * This example demonstrates how to work with contiguous verse ranges using
+ * 	VerseKey
+ *
+ *
+ * $Id: $
+ *
+ * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 #include <iostream>
 
 #include <swmgr.h>
@@ -21,9 +44,10 @@ int main(int argc, char **argv) {
 
 	VerseKey *vk = (VerseKey *)bible->CreateKey();
 
+	// let's set verse ranges for a variety of different contiguous regions
 
-	// whole Bible
-	vk->LowerBound(*vk);
+	// set a verse range for the whole Bible
+	vk->LowerBound(*vk);	// vk initially points to TOP, so we don't need to set position first
 	vk->setPosition(BOTTOM);
 	vk->UpperBound(*vk);
 	cout << vk->getRangeText() << "\n";
@@ -35,11 +59,10 @@ int main(int argc, char **argv) {
 	// Old Testament
 	vk->setPosition(TOP);
 	vk->LowerBound(*vk);
-	// doesn't work because MAXBOOK hasn't been implemented in versekey.cpp:1159
-//	vk->setPosition(MAXBOOK); vk->setPosition(MAXCHAPTER); vk->setPosition(MAXVERSE);
+
 	vk->setTestament(2);
 	(*vk)--;
-//	---- end of workaround
+
 	vk->UpperBound(*vk);
 	cout << vk->getRangeText() << "\n";
 
@@ -48,7 +71,7 @@ int main(int argc, char **argv) {
 
 
 	// New Testament
-	vk->setPosition(TOP);	// stupid workaround to set book, chap, and verse to 1 because setTestament doesn't follow suit and do this like setChapter and setBook do.
+	vk->setPosition(TOP);
 	vk->setTestament(2);
 	vk->LowerBound(*vk);
 	vk->setPosition(BOTTOM);
@@ -68,7 +91,10 @@ int main(int argc, char **argv) {
 	cout << vk->getRangeText() << "\n";
 
 
-	// Shorter syntax using the parser and based on book names
+	// -------------------------
+	// Shorter syntax using the parser and based on book names, and requires intimate knowledge of VerseMgr
+	// You're probably better off using the above code, but this is here for completeness
+	//
 	const VerseMgr::System *refSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem(vk->getVersificationSystem());
 
 
