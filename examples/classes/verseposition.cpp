@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 
 	SWMgr library;
 
-	SWModule *book = library.getModule("HunKar");
+	SWModule *book = library.getModule(modName);
 
 	if (!book) {
 		cerr << "Can't find module: " << modName << endl;
