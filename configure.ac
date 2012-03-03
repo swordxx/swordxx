@@ -260,6 +260,7 @@ if test "x$CLUCENE2_LIBS" != x; then
    AM_CFLAGS="$AM_CFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2 -I$libdir"
    LIBS="$LIBS $CLUCENE2_LIBS"
    with_clucene="yes 2.x"
+   CLUCENE_LIBS="$CLUCENE_LIBS $CLUCENE2_LIBS"
 else
 if test "x$CLUCENE_LIBS" != x; then
    echo "lucene 0.x found - lucene searching options available"
@@ -312,6 +313,7 @@ AC_SUBST(target_mingw32)
 AC_SUBST(CURL_LIBS)
 AC_SUBST(ICU_LIBS)
 AC_SUBST(ICU_IOLIBS)
+AC_SUBST(CLUCENE_LIBS)
 
 
 # ---------------------------------------------------------------------
