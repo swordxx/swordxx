@@ -114,7 +114,7 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	}
 
 	// are we a title or a preverse div?
-	else if (	    name == "title"
+	else if (   name == "title"
 		|| (name == "div"
 			&& ( SWBuf("x-preverse") == tag.getAttribute("subType")
 			  || SWBuf("x-preverse") == tag.getAttribute("subtype")))) {
