@@ -10,7 +10,7 @@ SUBDIRS = cppunit
 noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest vtreekeytest versemgrtest listtest casttest \
 modtest compnone complzss localetest introtest indextest configtest keycast \
 romantest testblocks filtertest rawldidxtest lextest swaptest \
- swbuftest xmltest webiftest striptest
+ swbuftest xmltest webiftest striptest osistest
 
 if HAVE_ICU
 ICUPROG = icutest translittest tlitmgrtest
@@ -66,6 +66,7 @@ swbuftest_SOURCES = swbuftest.cpp
 webiftest_SOURCES = webiftest.cpp
 striptest_SOURCES = striptest.cpp
 xmltest_SOURCES = xmltest.cpp
+osistest_SOURCES = osistest.cpp
 
 EXTRA_DIST = 
 include bcppmake/Makefile.am

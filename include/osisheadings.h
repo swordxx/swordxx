@@ -22,16 +22,17 @@
 #define OSISHEADINGS_H
 
 #include <swoptfilter.h>
+#include <swbasicfilter.h>
 
 SWORD_NAMESPACE_START
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISHeadings : public SWOptionFilter {
+class SWDLLEXPORT OSISHeadings : public SWOptionFilter, public SWBasicFilter {
 public:
 	OSISHeadings();
-	virtual ~OSISHeadings();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 };
 
 SWORD_NAMESPACE_END

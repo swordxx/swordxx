@@ -35,7 +35,7 @@ typedef std::list < SWBuf > StringList;
 
   /** Base class for all option filters.
   */
-class SWDLLEXPORT SWOptionFilter : public SWFilter {
+class SWDLLEXPORT SWOptionFilter : public virtual SWFilter {
 protected:
 	SWBuf optionValue;
 	const char *optName;

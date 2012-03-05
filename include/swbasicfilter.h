@@ -55,7 +55,7 @@ public:
  * <code>*buf</code> address and change <code>*buf</code> to point past
  * the last char of the written sequence.
  */
-class SWDLLEXPORT SWBasicFilter : public SWFilter {
+class SWDLLEXPORT SWBasicFilter : public virtual SWFilter {
 
 class Private;
 

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<osis
+  xmlns="http://www.bibletechnologies.net/2003/OSIS/namespace"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.bibletechnologies.net/2003/OSIS/namespace
+  http://www.bibletechnologies.net/osisCore.2.1.1.xsd">
+
+<osisText osisIDWork="KJV" osisRefWork="defaultReferenceScheme" xml:lang="en">
+
+<header>
+  <work osisWork="KJV">
+    <title>King James Version (1769) with Strongs Numbers and Morphology</title>
+    <identifier type="OSIS">Bible.KJV</identifier>
+    <scope>Gen-Rev</scope>
+    <refSystem>Bible.KJV</refSystem>
+  </work>
+  <work osisWork="defaultReferenceScheme">
+    <refSystem>Bible.KJV</refSystem>
+  </work>
+  <work osisWork="strong">
+    <refSystem>Dict.Strongs</refSystem>
+  </work>
+  <work osisWork="robinson">
+    <refSystem>Dict.Robinsons</refSystem>
+  </work>
+  <work osisWork="osmorph">
+    <refSystem>Dict.osmorph</refSystem>
+  </work>
+  <work osisWork="oslemma">
+    <refSystem>Dict.oslemma</refSystem>
+  </work>
+</header>
+<div type="bookGroup">
+ <title>Old Testament</title>
+ <div type="book" osisID="Gen">
+  <title type="main">THE FIRST BOOK OF MOSES CALLED GENESIS</title>
+  <div type="section">
+   <title>Introduction and Outline</title>
+    <p>
+     This is the <hi type="bold">Book of Genesis</hi>, the <hi type="italic">first</hi> book in the Bible. It may be outlined as follows:
+    </p>
+    <p>
+     <list>
+      <item><hi type="super">1</hi>Creation of Heaven and Earth, 1:1-2:4a</item>
+      <item><hi type="super">2</hi>Creation of Man and Woman, 2:4b-25</item>
+      <item><hi type="sub">3</hi>Fall, 3:1-24</item>
+      <item>...</item>
+     </list>
+    </p>
+    <p>
+     Tables work like this:
+     <table>
+      <row>
+       <cell><hi type="bold">Column 1 Label</hi></cell>
+       <cell><hi type="bold">Column 2 Label</hi></cell>
+      </row>
+      <row>
+       <cell>Column 1, Row 1</cell>
+       <cell>Column 2, Row 1</cell>
+      </row>
+      <row>
+       <cell>Column 1, Row 2</cell>
+       <cell>Column 2, Row 2</cell>
+      </row>
+     </table>
+    </p>
+  </div>
+  <chapter sID="Gen.1" osisID="Gen.1"/>
+   <div type="majorSection">
+    <title>From Creation to Abraham (1:1–11:9)</title>
+    <div type="section">
+     <title>Creation of the Heavens and the Earth</title>
+     <p>
+      <verse sID="Gen.1.1" osisID="Gen.1.1"/>
+       <w lemma="strong:H07225">In the beginning</w> 
+       <w lemma="strong:H0430">God</w> 
+       <w lemma="strong:H0853 strong:H01254">created</w> 
+       <w lemma="strong:H8064">the heaven</w> 
+       <w lemma="strong:H0853">and</w> 
+       <w lemma="strong:H0776">the earth</w>.
+      <verse eID="Gen.1.1"/>
+     </p>
+     <p>
+      <verse sID="Gen.1.2" osisID="Gen.1.2"/>Text of verse 2.<verse eID="Gen.1.2"/>
+      <verse sID="Gen.1.3" osisID="Gen.1.3"/>
+       Text of verse 3.
+       <note type="crossReference" n="a" osisID="Gen.1.3!crossReference.a" osisRef="Gen.1.3">
+       <reference osisRef="2Cor.4.6">2 Cor 4:6</reference>
+       </note>
+      <verse eID="Gen.1.3"/>
+      <verse sID="Gen.1.4" osisID="Gen.1.4"/>
+       And God saw the light, that 
+       <transChange type="added">it was</transChange> good: 
+       and God divided the light from the darkness.
+       <note type="study">the light from…: Heb. between the light and between the darkness</note>
+      <verse eID="Gen.1.4"/>
+      <verse sID="Gen.1.5" osisID="Gen.1.5"/>
+       <w lemma="oslemma:וְ oslemma:קרא" morph="osmorph:Cv osmorph:Vqi3ms" src="1 2">וַיִּקְרָ֨א</w>
+       <w lemma="oslemma:אֱלֹהִים" morph="osmorph:Ncmp">אֱלֹהִ֤ים</w>
+       <w lemma="oslemma:לְ oslemma:הַ oslemma:אֹור" morph="osmorph:R osmorph:Td osmorph:Ncms" src="1 2 3">לָאֹור֙</w>
+       <w lemma="oslemma:יֹום" morph="osmorph:Ncms">יֹ֔ום</w>
+       <w lemma="oslemma:וְ oslemma:לְ oslemma:הַ oslemma:חֹשֶׁכְ" morph="osmorph:Cc osmorph:R osmorph:Td osmorph:Ncms" src="1 2 3 4">וְלַחֹ֖שֶׁךְ</w>
+       <w lemma="oslemma:קרא" morph="osmorph:Vqp3ms">קָ֣רָא</w>
+       <w lemma="oslemma:לַיְלָה" morph="osmorph:Ncms">לָ֑יְלָה</w>
+       <w lemma="oslemma:וְ oslemma:היה" morph="osmorph:Cv osmorph:Vqi3ms" src="1 2">וַֽיְהִי־</w><w lemma="oslemma:עֶרֶב" morph="osmorph:Ncms">עֶ֥רֶב</w>
+       <w lemma="oslemma:וְ oslemma:היה" morph="osmorph:Cv osmorph:Vqi3ms" src="1 2">וַֽיְהִי־</w><w lemma="oslemma:בֹּקֶר" morph="osmorph:Ncms">בֹ֖קֶר</w>
+       <w lemma="oslemma:יֹום" morph="osmorph:Ncms">יֹ֥ום</w>
+       <w lemma="oslemma:אֶחָד" morph="osmorph:Acms">אֶחָֽד</w>׃
+       <w lemma="oslemma:פ" morph="osmorph:M">פ</w>
+      <verse eID="Gen.1.5"/>
+     </p>
+  <chapter eID="Gen.1"/>
+    </div>
+   </div>
+ </div>
+ <div type="book" osisID="Ps">
+  <title type="main">THE BOOK OF PSALMS</title>
+  <chapter sID="Ps.3" osisID="Ps.3"/>
+   <title type="chapter">PSALM 3.</title>
+   <div type="section">
+   <title type="psalm" canonical="true">A Psalm of David, when he fled from Absalom his son.</title>
+    <p>
+     <lg>
+      <verse sID="Ps.3.1" osisID="Ps.3.1"/>
+       <l level="1"><seg><divineName>Lord</divineName></seg>, how are they increased that trouble me!</l>
+       <l level="1">many <transChange type="added">are</transChange> they that rise up against me.</l>
+      <verse eID="Ps.3.1"/>
+      <verse sID="Ps.3.2" osisID="Ps.3.2"/>
+       <l level="1">Many <transChange type="added">there be</transChange> which say of my soul,</l>
+       <l level="1"><transChange type="added">There is</transChange> no help for him in God.</l>
+       <l type="selah">Selah.</l> 
+      <verse eID="Ps.3.2"/>
+      <verse sID="Ps.3.3" osisID="Ps.3.3"/>
+       
+      <verse eID="Ps.3.3"/>
+     </lg>
+    </p>
+   </div>
+  <chapter eID="Ps.3"/>
+ </div>
+</div>
+<div type="bookGroup">
+ <title>New Testament</title>
+ <div type="book" osisID="Mark">
+  <title type="main">THE GOSPEL ACCORDING TO <abbr expansion="Saint">ST.</abbr> MARK</title>
+  <chapter sID="Mark.1" osisID="Mark.1"/>
+   <div type="section">
+    <title>The Beginning of the Ministry of Jesus</title>
+    <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; 
+     <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; 
+     <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>)
+    </title>
+    <p>
+     <verse sID="Mark.1.14" osisID="Mark.1.14"/>
+      <w src="2" lemma="strong:G1161" morph="robinson:CONJ">Now</w> 
+      <w src="1" lemma="strong:G3326" morph="robinson:PREP">after</w> that 
+      <w src="5 6" lemma="strong:G3588 strong:G2491" morph="robinson:T-ASM robinson:N-ASM">John</w> 
+      <w src="4" lemma="strong:G3860" morph="robinson:V-APN">was put in prison</w>, 
+      <w src="8 9" lemma="strong:G3588 strong:G2424" morph="robinson:T-NSM robinson:N-NSM">Jesus</w> 
+      <w src="7" lemma="strong:G2064" morph="robinson:V-2AAI-3S">came</w> 
+      <w src="10" lemma="strong:G1519" morph="robinson:PREP">into</w> 
+      <w src="11 12" lemma="strong:G3588 strong:G1056" morph="robinson:T-ASF robinson:N-ASF">Galilee</w>, 
+      <w src="13" lemma="strong:G2784" morph="robinson:V-PAP-NSM">preaching</w> 
+      <w src="14 15" lemma="strong:G3588 strong:G2098" morph="robinson:T-ASN robinson:N-ASN">the gospel</w> 
+      <w src="16 17" lemma="strong:G3588 strong:G932" morph="robinson:T-GSF robinson:N-GSF">of the kingdom</w> 
+      <w src="18 19" lemma="strong:G3588 strong:G2316" morph="robinson:T-GSM robinson:N-GSM">of God</w>,
+      <w src="3" lemma="strong:G3588" morph="robinson:T-ASN"></w>
+     <verse eID="Mark.1.14"/>
+     <verse sID="Mark.1.15" osisID="Mark.1.15"/>
+      And saying, 
+      <q who="Jesus">The time is fulfilled, and the kingdom of God is at hand: repent ye, and believe the <seg type="x-variant" subType="x-1">gospel</seg>
+<seg type="x-variant" subType="x-2">good news</seg>.</q>
+     <verse eID="Mark.1.15"/>
+    </p>
+   </div>
+  <chapter eID="Mark.1"/>
+ </div>
+</div>
+</osisText>
+</osis>

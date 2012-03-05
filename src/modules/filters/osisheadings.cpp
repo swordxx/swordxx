@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *osisheadings -	SWFilter descendant to hide or show headings
+ * osisheadings -	SWFilter descendant to hide or show headings
  *			in an OSIS module.
  *
  *
@@ -35,143 +35,104 @@ const char oTip[] = "Toggles Headings On and Off if they exist";
 const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
 
+
+namespace {
+	class MyUserData : public BasicFilterUserData {
+	public:
+		SWBuf currentHeadingName;
+		XMLTag currentHeadingTag;
+		const char *sID;
+		SWBuf heading;
+		int depth;
+		int headerNum;
+
+		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+			currentHeadingName = "";
+			currentHeadingTag = "";
+			sID = 0;
+			heading = "";
+			depth = 0;
+			headerNum = 0;
+		}
+	};
+};
+
+
+BasicFilterUserData *OSISHeadings::createUserData(const SWModule *module, const SWKey *key) {
+	return new MyUserData(module, key);
+}
+
+
 OSISHeadings::OSISHeadings() : SWOptionFilter(oName, oTip, &oValues) {
 	setOptionValue("Off");
+	setPassThruUnknownToken(true);
 }
 
 
-OSISHeadings::~OSISHeadings() {
-}
+bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 
+	MyUserData *u = (MyUserData *)userData;
+	XMLTag tag(token);
+	SWBuf name = tag.getName();
 
-char OSISHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	SWBuf token;
-	bool intoken    = false;
-	bool hide       = false;
-	bool preverse   = false;
-	bool withinTitle = false;
-	bool withinPreverseDiv = false;
-	SWBuf preverseDivID = "";
-	const char *pvDID = 0;
-	bool canonical  = false;
-	SWBuf header;
-	int headerNum   = 0;
-	int pvHeaderNum = 0;
-	char buf[254];
-	XMLTag startTag;
+	// we only care about titles and divs or if we're already in a heading
+	//
+	// are we currently in a heading?
+	if (u->currentHeadingName.size()) {
+		u->heading.append(u->lastTextNode);
+		if (name == u->currentHeadingName) {
+			if (tag.isEndTag(u->sID)) {
+				if (!u->depth-- || u->sID) {
+					// we've just finished a heading.  It's all stored up in u->heading
+					bool canonical = (SWBuf("true") == u->currentHeadingTag.getAttribute("canonical"));
+					bool preverse = (SWBuf("x-preverse") == tag.getAttribute("subType") || SWBuf("x-preverse") == tag.getAttribute("subtype"));
 
-	SWBuf orig = text;
-	const char *from = orig.c_str();
-	
-	XMLTag tag;
+					// do we want to put anything in EntryAttributes?
+					if (u->module->isProcessEntryAttributes() && (option || canonical || !preverse)) {
+						SWBuf buf; buf.appendFormatted("%i", u->headerNum++);
+						u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][buf] = u->heading;
 
-	for (text = ""; *from; ++from) {
-		if (*from == '<') {
-			intoken = true;
-			token = "";
-			
-			continue;
-		}
-		if (*from == '>') {	// process tokens
-			intoken = false;
-			tag = token;
-
-			// <title> </title> <div subType="x-preverse"> (</div> ## when in previous)
-			if ( (!withinPreverseDiv && !strcmp(tag.getName(), "title")) || 
-				(!strcmp(tag.getName(), "div") &&
-					((withinPreverseDiv && (tag.isEndTag(pvDID))) ||
-					 (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-preverse")))
-				)) {
-
-				withinTitle = (!tag.isEndTag(pvDID));
-				if (!strcmp(tag.getName(), "div")) {
-					withinPreverseDiv = (!tag.isEndTag(pvDID));
-					if (!pvDID) {
-						preverseDivID = tag.getAttribute("sID");
-						pvDID = (preverseDivID.length())? preverseDivID.c_str() : 0;
-					}
-				}
-				
-				if (!tag.isEndTag(pvDID)) { //start tag
-					if (!tag.isEmpty() || pvDID) {
-						startTag = tag;
-					}
-				}
-				
-				if ( !tag.isEndTag(pvDID) && (withinPreverseDiv 
-					|| (tag.getAttribute("subType") && !stricmp(tag.getAttribute("subType"), "x-preverse"))
-					|| (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse"))	// deprecated
-						)) {
-					hide = true;
-					preverse = true;
-					header = "";
-					canonical = (tag.getAttribute("canonical") && (!stricmp(tag.getAttribute("canonical"), "true")));
-					continue;
-				}
-				if (!tag.isEndTag(pvDID)) { //start tag
-					hide = true;
-					header = "";
-					if (option || canonical) {	// we want the tag in the text
-						text.append('<');
-						text.append(token);
-						text.append('>');
-					}
-					continue;
-				}
-				if (hide && tag.isEndTag(pvDID)) {
-					if (module->isProcessEntryAttributes() && ((option || canonical) || (!preverse))) {
-						if (preverse) {
-							sprintf(buf, "%i", pvHeaderNum++);
-							module->getEntryAttributes()["Heading"]["Preverse"][buf] = header;
-						}
-						else {
-							sprintf(buf, "%i", headerNum++);
-							module->getEntryAttributes()["Heading"]["Interverse"][buf] = header;
-							if (option || canonical) {	// we want the tag in the text
-								text.append(header);
-							}
-						}
-						
-						StringList attributes = startTag.getAttributeNames();
+						StringList attributes = u->currentHeadingTag.getAttributeNames();
 						for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
-							module->getEntryAttributes()["Heading"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
+							u->module->getEntryAttributes()["Heading"][buf][it->c_str()] = u->currentHeadingTag.getAttribute(it->c_str());
 						}
 					}
-					
-					hide = false;
-					if (!(option || canonical) || preverse) {	// we don't want the tag in the text anymore
-						preverse = false;
-						continue;
-					}
-					preverse = false;
-					pvDID = 0;
-				}
-			}
 
-			if (withinTitle) {
-				header.append('<');
-				header.append(token);
-				header.append('>');
-			} else {
-				// if not a heading token, keep token in text
-				if (!hide) {
-					text.append('<');
-					text.append(token);
-					text.append('>');
+					// do we want the heading in the body?
+					if (!preverse && (option || canonical)) {
+						buf.append(u->currentHeadingTag);
+						buf.append(u->heading);
+						buf.append(tag);
+					}
+					u->suspendTextPassThru = false;
 				}
 			}
-			continue;
+			else u->depth++;
 		}
-		if (intoken) { //copy token
-			token.append(*from);
-		}
-		else if (!hide) { //copy text which is not inside a token
-			text.append(*from);
-		}
-		else header.append(*from);
+		u->heading.append(tag);
+		return true;
 	}
-	return 0;
+
+	// are we a title or a preverse div?
+	else if (	    name == "title"
+		|| (name == "div"
+			&& ( SWBuf("x-preverse") == tag.getAttribute("subType")
+			  || SWBuf("x-preverse") == tag.getAttribute("subtype")))) {
+
+		u->currentHeadingName = name;
+		u->currentHeadingTag = tag;
+		u->heading = "";
+		u->sID = u->currentHeadingTag.getAttribute("sID");
+		u->depth = 0;
+		u->suspendTextPassThru = true;
+
+		return true;
+	}
+
+	return false;
 }
+
+
 
 SWORD_NAMESPACE_END
 
