@@ -85,7 +85,7 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if (!u->depth-- || u->sID) {
 					// we've just finished a heading.  It's all stored up in u->heading
 					bool canonical = (SWBuf("true") == u->currentHeadingTag.getAttribute("canonical"));
-					bool preverse = (SWBuf("x-preverse") == tag.getAttribute("subType") || SWBuf("x-preverse") == tag.getAttribute("subtype"));
+					bool preverse = (SWBuf("x-preverse") == u->currentHeadingTag.getAttribute("subType") || SWBuf("x-preverse") == u->currentHeadingTag.getAttribute("subtype"));
 
 					// do we want to put anything in EntryAttributes?
 					if (u->module->isProcessEntryAttributes() && (option || canonical || !preverse)) {
