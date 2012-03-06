@@ -126,9 +126,13 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 		verse = ikey.Verse();
 		suffix = ikey.getSuffix();
         }
+	// TODO: versification mapping
         // Here is where we will do v11n system conversions in the future
-        // when we have a conversion mechanism (Ben Morgan has started
-        // thinking about this)
+        // when we have a conversion mechanism
+        // Ben Morgan has started thinking about this
+        // Konstantin Maslyuk <kalemas@mail.ru> has submitted a patch)
+        // Asked Konstantin to try his patch out with his favorite
+        // SWORD frontend and report back how it goes.  Need to follow up
         else {
 	        // For now, this is the best we can do
         	setText(ikey.getText());

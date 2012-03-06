@@ -279,40 +279,46 @@ public:
 	 *
 	 * @return pointer to modname
 	 */
-	virtual char *Name() const;
+	char *Name() const { return getName(); }
+	virtual char *getName() const;
 
 	/** Sets module name
 	 *
 	 * @param imodname Value which to set modname; [0]-only get
 	 * @return pointer to modname
 	 */
-	virtual char *Name(const char *imodname);
+	char *Name(const char *imodname) { setName(imodname); return getName(); }
+	virtual void setName(const char *imodname);
 
 	/** Gets module description
 	 *
 	 * @return pointer to moddesc
 	 */
-	virtual char *Description() const;
+	char *Description() const { return getDescription(); }
+	virtual char *getDescription() const;
 
 	/** Sets module description
 	 *
 	 * @param imoddesc Value which to set moddesc; [0]-only get
 	 * @return pointer to moddesc
 	 */
-	virtual char *Description(const char *imoddesc);
+	char *Description(const char *imoddesc) { setDescription(imoddesc); return getDescription(); }
+	virtual void setDescription(const char *imoddesc);
 
 	/** Gets module type
 	 *
 	 * @return pointer to modtype
 	 */
-	virtual char *Type() const;
+	char *Type() const { return getType(); }
+	virtual char *getType() const;
 
 	/** Sets module type
 	 *
 	 * @param imodtype Value which to set modtype; [0]-only get
 	 * @return pointer to modtype
 	 */
-	virtual char *Type(const char *imodtype);
+	char *Type(const char *imodtype) { setType(imodtype); return getType(); }
+	virtual void setType(const char *imodtype);
 
 	/** Sets/gets module direction
 	 *
@@ -650,8 +656,8 @@ public:
 	 */
 	virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
 	
-	virtual bool isLinked(const SWKey *k1, const SWKey *k2) const { return false; }
-	virtual bool hasEntry(const SWKey *k) const { return false; }
+	virtual bool isLinked(const SWKey *, const SWKey *) const { return false; }
+	virtual bool hasEntry(const SWKey *) const { return false; }
 
 	/** Entry Attributes are special data pertaining to the current entry.
 	 *	To see what Entry Attributes exists for a specific entry of a module,
