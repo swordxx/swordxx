@@ -1328,6 +1328,16 @@ void usage(const char *app, const char *error = 0) {
 }
 
 void processOSIS(istream& infile) {
+	typedef enum {
+		CS_NOT_IN_COMMENT,		// or seen starting "<"
+		CS_SEEN_STARTING_EXCLAMATION,
+		CS_SEEN_STARTING_HYPHEN,
+		CS_IN_COMMENT,
+		CS_SEEN_ENDING_HYPHEN,
+		CS_SEEN_SECOND_ENDING_HYPHEN,
+		CS_SEEN_ENDING_GREATER_THAN
+	} t_commentstate;
+
 	activeOsisID[0] = '\0';
 
 	strcpy(currentOsisID,"N/A");
@@ -1342,6 +1352,8 @@ void processOSIS(istream& infile) {
 
 	SWBuf token;
 	SWBuf text;
+	bool incomment = false;
+	t_commentstate commentstate = CS_NOT_IN_COMMENT;
 	bool intoken = false;
 	bool inWhitespace = false;
 	bool seeingSpace = false;
@@ -1364,6 +1376,95 @@ void processOSIS(istream& infile) {
 			continue;
 		}
 
+		// Handle XML comments starting with "<!--", ending with "-->"
+
+		if (intoken && !incomment) {
+			switch (commentstate) {
+				case CS_NOT_IN_COMMENT :
+					if (curChar == '!') {
+						commentstate = CS_SEEN_STARTING_EXCLAMATION;
+						token.append((char) curChar);
+						continue;
+					} else {
+						break;
+					}
+
+				case CS_SEEN_STARTING_EXCLAMATION :
+					if (curChar == '-') {
+						commentstate = CS_SEEN_STARTING_HYPHEN;
+						token.append((char) curChar);
+						continue;
+					} else {
+						commentstate = CS_NOT_IN_COMMENT;
+						break;
+					}
+
+				case CS_SEEN_STARTING_HYPHEN :
+					if (curChar == '-') {
+						incomment = true;
+						commentstate = CS_IN_COMMENT;
+						token.append((char) curChar);
+
+						if (debug & DEBUG_OTHER) {
+							cout << "DEBUG(COMMENTS): in comment" << endl;
+						}
+
+						continue;
+					} else {
+						commentstate = CS_NOT_IN_COMMENT;
+						break;
+					}
+
+				default:
+					cout << "FATAL(COMMENTS): unknown commentstate on comment start: " << commentstate << endl;
+					exit(EXIT_BAD_NESTING);
+			}
+		}
+
+		if (incomment) {
+			switch (commentstate) {
+				case CS_IN_COMMENT:
+					if (curChar == '-') {
+						commentstate = CS_SEEN_ENDING_HYPHEN;
+						continue;
+					} else {
+						// ignore the character
+						continue;
+					}
+
+				case CS_SEEN_ENDING_HYPHEN :
+					if (curChar == '-') {
+						commentstate = CS_SEEN_SECOND_ENDING_HYPHEN;
+						continue;
+					} else {
+						// ignore character
+						commentstate = CS_IN_COMMENT;
+						continue;
+					}
+
+				case CS_SEEN_SECOND_ENDING_HYPHEN :
+					if (curChar == '>') {
+						intoken = false;
+						incomment = false;
+						commentstate = CS_NOT_IN_COMMENT;
+
+						if (debug & DEBUG_OTHER) {
+							cout << "DEBUG(COMMENTS): out of comment" << endl;
+						}
+
+						continue;
+					} else {
+						// ignore character
+						commentstate = CS_IN_COMMENT;
+						continue;
+					}
+
+				default:
+					cout << "FATAL(COMMENTS): unknown commentstate on comment end: " << commentstate << endl;
+					exit(EXIT_BAD_NESTING);
+			}
+		}
+
 		// Outside of tokens merge adjacent whitespace
 		if (!intoken) {
 			seeingSpace = isspace(curChar)!=0;
@@ -1382,25 +1483,28 @@ void processOSIS(istream& infile) {
 			inWhitespace = false;
 			token.append('>');
 			// take this isalpha if out to check for bugs in text
-			if ((isalpha(token[1])) || (isalpha(token[2]))) {
+			if (isalpha(token[1]) ||
+			    (((token[1] == '/') || (token[1] == '?')) && isalpha(token[2]))) {
 				//cout << "Handle:" << token.c_str() << endl;
 				XMLTag t = transformBSP(token.c_str());
 
 				if (!handleToken(text, t)) {
 					text.append(t);
 				}
+			} else {
+				cout << "WARNING(PARSE): malformed token: " << token << endl;
 			}
 			continue;
 		}
 
 		if (intoken) {
-			token.append((char)curChar);
+			token.append((char) curChar);
 		}
 		else {
 			switch (curChar) {
 				case '>' : text.append("&gt;"); break;
 				case '<' : text.append("&lt;"); break;
-				default  : text.append((char)curChar); break;
+				default  : text.append((char) curChar); break;
 			}
 		}
 	}
