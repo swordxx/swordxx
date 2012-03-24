@@ -603,6 +603,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 	// Flag used to indicate where useful text begins
 	static bool               firstDiv        = false;
+	static bool               headerEnded     = false;
 
 	// Retain the sID of book, chapter and verse (commentary) divs so that we can find them again.
 	// This relies on transformBSP.
@@ -643,9 +644,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 		}
 
-		// throw away everything up to the first div
+		// throw away everything up to the first div (that is outside the header)
 		if (!firstDiv) {
-			if (tokenName == "div") {
+			if (headerEnded && (tokenName == "div")) {
 				if (debug & DEBUG_OTHER) {
 					cout << "DEBUG(FOUND): Found first div and pitching prior material: " << text << endl;
 				}
@@ -962,8 +963,16 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 		}
 
-		// We haven't seen the first div so there is nothing to do.
+		// We haven't seen the first div outside the header so there is little to do.
 		if (!firstDiv) {
+			if (tokenName == "header") {
+				headerEnded = true;
+
+				if (debug & DEBUG_OTHER) {
+					cout << "DEBUG(FOUND): End of header found" << endl;
+				}
+			}
+
 			// Collect the content so it can be used to suggest the module's conf.
 			return false;
 		}
@@ -1339,7 +1348,7 @@ void processOSIS(istream& infile) {
 	unsigned char curChar = '\0';
 
 	while (infile.good()) {
-		
+
 		int possibleChar = infile.get();
 
 		// skip the character if it is bad. infile.good() will catch the problem
