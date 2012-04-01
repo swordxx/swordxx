@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
 	cerr << "\n\n*** Don't use this utility *** \n\n";
 	cerr << "Its purpose is to eventually obtain round trip \n";
-	cerr << "lossless import / export, but we are not there yes. \n\n";
+	cerr << "lossless import / export, but we are not there yet. \n\n";
 	cerr << "In fact, you should never export SWORD modules.\n";
 	cerr << "Many CrossWire modules are licensed for use from publishers\n";
 	cerr << "and you will need to obtain your own permissions.\n";
