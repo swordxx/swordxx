@@ -44,7 +44,7 @@ using std::cerr;
 using std::cout;
 
 void errorOutHelp(char *appName) {
-	cerr << appName << " - a tool to output a Sword module in OSIS format\n";
+	cerr << appName << " - a tool to output a SWORD module in OSIS format\n";
 	cerr << "usage: "<< appName << " <modname> \n";
 	cerr << "\n\n";
 	exit(-1);
@@ -55,6 +55,19 @@ int main(int argc, char **argv)
 {
 	SWModule *inModule = 0;
 	ThMLOSIS filter;
+
+	cerr << "\n\n*** Don't use this utility *** \n\n";
+	cerr << "Its purpose is to eventually obtain round trip \n";
+	cerr << "lossless import / export, but we are not there yes. \n\n";
+	cerr << "In fact, you should never export SWORD modules.\n";
+	cerr << "Many CrossWire modules are licensed for use from publishers\n";
+	cerr << "and you will need to obtain your own permissions.\n";
+	cerr << "We also do not encourage propogating encoding errors\n";
+	cerr << "which you will avoid by obtaining text data from the source.\n\n";
+	cerr << "Please see the TextSource entry in the module's .conf file\n";
+	cerr << "for information where to obtain module data from our source.\n\n";
+	cerr << "If you still must export SWORD module data, use mod2imp.\n";
+	cerr << "It is more lossless; or less lossful, and easier to read.\n\n";
 	
 	if ((argc != 2)) {
 		errorOutHelp(argv[0]);
