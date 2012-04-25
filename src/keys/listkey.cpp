@@ -327,6 +327,12 @@ const char *ListKey::getText() const {
 	return (key) ? key->getText() : keytext;
 }
 
+const char *ListKey::getShortText() const {
+	int pos = arraypos;
+	SWKey *key = (pos >= arraycnt || !arraycnt) ? 0:array[pos];
+	return (key) ? key->getShortText() : keytext;
+}
+
 
 void ListKey::setText(const char *ikey) {
 	// at least try to set the current element to this text
