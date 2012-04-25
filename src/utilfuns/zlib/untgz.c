@@ -12,7 +12,10 @@
 #include <errno.h>
 #include <fcntl.h>
 #ifdef unix
-# include <unistd.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #else
 # include <direct.h>
 # include <io.h>
@@ -80,7 +83,6 @@ union tar_buffer {
 
 enum { TGZ_EXTRACT = 0, TGZ_LIST };
 
-static char *TGZfname	OF((const char *));
 void TGZnotfound	OF((const char *));
 
 int getoct		OF((char *, int));
@@ -104,23 +106,6 @@ static char *TGZprefix[] = { "\0", ".tgz", ".tar.gz", ".tar", NULL };
 
 /* Return the real name of the TGZ archive */
 /* or NULL if it does not exist. */
-
-static char *TGZfname OF((const char *fname))
-{
-  static char buffer[1024];
-  int origlen,i;
-  
-  strcpy(buffer,fname);
-  origlen = strlen(buffer);
-
-  for (i=0; TGZprefix[i]; i++)
-    {
-       strcpy(buffer+origlen,TGZprefix[i]);
-       if (access(buffer,F_OK) == 0)
-         return buffer;
-    }
-  return NULL;
-}
 
 /* error message for the filename */
 
