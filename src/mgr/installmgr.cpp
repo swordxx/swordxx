@@ -147,6 +147,7 @@ void InstallMgr::readInstallConf() {
 	ConfigEntMap::iterator sourceEnd;
 
 	if (confSection != installConf->Sections.end()) {
+
 		sourceBegin = confSection->second.lower_bound("FTPSource");
 		sourceEnd = confSection->second.upper_bound("FTPSource");
 
@@ -163,6 +164,18 @@ void InstallMgr::readInstallConf() {
 
 		while (sourceBegin != sourceEnd) {
 			InstallSource *is = new InstallSource("HTTP", sourceBegin->second.c_str());
+			sources[is->caption] = is;
+			SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
+			FileMgr::createParent(parent.c_str());
+			is->localShadow = (SWBuf)privatePath + "/" + is->uid;
+			sourceBegin++;
+		}
+
+		sourceBegin = confSection->second.lower_bound("HTTPSSource");
+		sourceEnd   = confSection->second.upper_bound("HTTPSSource");
+
+		while (sourceBegin != sourceEnd) {
+			InstallSource *is = new InstallSource("HTTPS", sourceBegin->second.c_str());
 			sources[is->caption] = is;
 			SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
 			FileMgr::createParent(parent.c_str());
@@ -282,7 +295,7 @@ SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_
 		trans = createFTPTransport(is->source, statusReporter);
 		trans->setPassive(passive);
 	}
-	else if (is->type == "HTTP") {
+	else if (is->type == "HTTP" || is->type == "HTTPS") {
 		trans = createHTTPTransport(is->source, statusReporter);
 	}
 	transport = trans; // set classwide current transport for other thread terminate() call
@@ -295,7 +308,17 @@ SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_
 		trans->setPasswd(p);
 	}
 
-	SWBuf urlPrefix = (SWBuf)((is->type == "HTTP") ? "http://" : "ftp://") + is->source;
+	SWBuf urlPrefix;
+	if (is->type == "HTTP") {
+		urlPrefix = (SWBuf) "http://";
+	}
+	else if (is->type == "HTTPS") {
+		urlPrefix = (SWBuf) "https://";
+	}
+	else {
+		urlPrefix = (SWBuf) "ftp://";
+	}
+	urlPrefix.append(is->source);
 
 	// let's be sure we can connect.  This seems to be necessary but sucks
 //	SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
