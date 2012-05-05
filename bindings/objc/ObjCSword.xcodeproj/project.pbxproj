@@ -55,8 +55,8 @@
 		A94EAC18117B28920018B06F /* SwordDictionary.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF0117B28920018B06F /* SwordDictionary.mm */; };
 		A94EAC19117B28920018B06F /* SwordInstallSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF1117B28920018B06F /* SwordInstallSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC1A117B28920018B06F /* SwordInstallSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF2117B28920018B06F /* SwordInstallSource.mm */; };
-		A94EAC1B117B28920018B06F /* SwordInstallSourceController.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF3117B28920018B06F /* SwordInstallSourceController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A94EAC1C117B28920018B06F /* SwordInstallSourceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */; };
+		A94EAC1B117B28920018B06F /* SwordInstallSourceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF3117B28920018B06F /* SwordInstallSourceManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A94EAC1C117B28920018B06F /* SwordInstallSourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */; };
 		A94EAC1D117B28920018B06F /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF5117B28920018B06F /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF6117B28920018B06F /* SwordKey.mm */; };
 		A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF7117B28920018B06F /* SwordListKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -691,8 +691,8 @@
 		A94EABF0117B28920018B06F /* SwordDictionary.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordDictionary.mm; path = src/SwordDictionary.mm; sourceTree = "<group>"; };
 		A94EABF1117B28920018B06F /* SwordInstallSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordInstallSource.h; path = src/SwordInstallSource.h; sourceTree = "<group>"; };
 		A94EABF2117B28920018B06F /* SwordInstallSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSource.mm; path = src/SwordInstallSource.mm; sourceTree = "<group>"; };
-		A94EABF3117B28920018B06F /* SwordInstallSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordInstallSourceController.h; path = src/SwordInstallSourceController.h; sourceTree = "<group>"; };
-		A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSourceController.mm; path = src/SwordInstallSourceController.mm; sourceTree = "<group>"; };
+		A94EABF3117B28920018B06F /* SwordInstallSourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordInstallSourceManager.h; path = src/SwordInstallSourceManager.h; sourceTree = "<group>"; };
+		A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSourceManager.mm; path = src/SwordInstallSourceManager.mm; sourceTree = "<group>"; };
 		A94EABF5117B28920018B06F /* SwordKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordKey.h; path = src/SwordKey.h; sourceTree = "<group>"; };
 		A94EABF6117B28920018B06F /* SwordKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordKey.mm; path = src/SwordKey.mm; sourceTree = "<group>"; };
 		A94EABF7117B28920018B06F /* SwordListKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKey.h; path = src/SwordListKey.h; sourceTree = "<group>"; };
@@ -1468,8 +1468,8 @@
 				A94EAC0A117B28920018B06F /* VerseEnumerator.mm */,
 				A94EABF1117B28920018B06F /* SwordInstallSource.h */,
 				A94EABF2117B28920018B06F /* SwordInstallSource.mm */,
-				A94EABF3117B28920018B06F /* SwordInstallSourceController.h */,
-				A94EABF4117B28920018B06F /* SwordInstallSourceController.mm */,
+				A94EABF3117B28920018B06F /* SwordInstallSourceManager.h */,
+				A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */,
 				A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */,
 				A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */,
 			);
@@ -2328,7 +2328,7 @@
 				A94EAC15117B28920018B06F /* SwordCommentary.h in Headers */,
 				A94EAC17117B28920018B06F /* SwordDictionary.h in Headers */,
 				A94EAC19117B28920018B06F /* SwordInstallSource.h in Headers */,
-				A94EAC1B117B28920018B06F /* SwordInstallSourceController.h in Headers */,
+				A94EAC1B117B28920018B06F /* SwordInstallSourceManager.h in Headers */,
 				A94EAC1D117B28920018B06F /* SwordKey.h in Headers */,
 				A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */,
 				A94EAC21117B28920018B06F /* SwordManager.h in Headers */,
@@ -2721,7 +2721,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2833,7 +2833,7 @@
 				A94EAC16117B28920018B06F /* SwordCommentary.mm in Sources */,
 				A94EAC18117B28920018B06F /* SwordDictionary.mm in Sources */,
 				A94EAC1A117B28920018B06F /* SwordInstallSource.mm in Sources */,
-				A94EAC1C117B28920018B06F /* SwordInstallSourceController.mm in Sources */,
+				A94EAC1C117B28920018B06F /* SwordInstallSourceManager.mm in Sources */,
 				A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */,
 				A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */,
 				A94EAC22117B28920018B06F /* SwordManager.mm in Sources */,
@@ -3666,9 +3666,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2osis;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3683,9 +3697,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2osis;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3706,12 +3734,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -3724,12 +3766,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -3852,9 +3908,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = imp2gbs;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3869,9 +3939,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = imp2gbs;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3888,9 +3972,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = imp2ld;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3905,9 +4003,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = imp2ld;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3924,9 +4036,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = imp2vs;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3941,9 +4067,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = imp2vs;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3960,9 +4100,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = installmgr;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3977,9 +4131,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = installmgr;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -3996,9 +4164,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2imp;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -4013,9 +4195,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2imp;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -4032,9 +4228,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2vpl;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -4049,9 +4259,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2vpl;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -4068,9 +4292,23 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2zmod;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -4085,9 +4323,23 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = mod2zmod;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -4108,12 +4360,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = step2vpl;
 			};
 			name = Debug;
@@ -4126,12 +4392,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = step2vpl;
 			};
 			name = Release;
@@ -4149,12 +4429,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = stepdump;
 			};
 			name = Debug;
@@ -4167,12 +4461,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = stepdump;
 			};
 			name = Release;
@@ -4190,12 +4498,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = tei2mod;
 			};
 			name = Debug;
@@ -4208,12 +4530,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = tei2mod;
 			};
 			name = Release;
@@ -4231,12 +4567,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = vpl2mod;
 			};
 			name = Debug;
@@ -4249,12 +4599,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = vpl2mod;
 			};
 			name = Release;
@@ -4272,12 +4636,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = vs2osisref;
 			};
 			name = Debug;
@@ -4290,12 +4668,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = vs2osisref;
 			};
 			name = Release;
@@ -4313,12 +4705,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = vs2osisreftxt;
 			};
 			name = Debug;
@@ -4331,12 +4737,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = vs2osisreftxt;
 			};
 			name = Release;
@@ -4354,12 +4774,26 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = xml2gbs;
 			};
 			name = Debug;
@@ -4372,12 +4806,26 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "../../include/**";
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
 				PRODUCT_NAME = xml2gbs;
 			};
 			name = Release;
@@ -4595,6 +5043,7 @@
 				A9D271FD14D7193300DA8926 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

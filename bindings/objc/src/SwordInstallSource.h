@@ -16,7 +16,7 @@ class sword::SWModule;
 #endif
 
 @class SwordManager;
-@class SwordInstallSourceController;
+@class SwordInstallSourceManager;
 
 #define INSTALLSOURCE_TYPE_FTP  @"FTP"
 
@@ -57,7 +57,7 @@ class sword::SWModule;
 // install module
 - (void)installModuleWithName:(NSString *)mName 
                  usingManager:(SwordManager *)swManager 
-        withInstallController:(SwordInstallSourceController *)sim;
+        withInstallController:(SwordInstallSourceManager *)sim;
 
 /** List of available InstallSources */
 - (NSArray *)listModules;

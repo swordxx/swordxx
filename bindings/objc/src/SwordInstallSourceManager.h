@@ -32,7 +32,7 @@ typedef enum _ModuleStatusConst {
     ModStatCipheredKeyPresent = 0x020
 }ModuleStatusConst;
 
-@interface SwordInstallSourceController : NSObject {
+@interface SwordInstallSourceManager : NSObject {
 @private
 #ifdef __cplusplus
     sword::InstallMgr *swInstallMgr;
@@ -58,8 +58,8 @@ typedef enum _ModuleStatusConst {
 // -------------------- methods --------------------
 
 // initialization
-+ (SwordInstallSourceController *)defaultController;
-+ (SwordInstallSourceController *)controllerWithPath:(NSString *)aPath;
++ (SwordInstallSourceManager *)defaultController;
++ (SwordInstallSourceManager *)controllerWithPath:(NSString *)aPath;
 
 /**
 base path of the module installation
@@ -84,7 +84,7 @@ base path of the module installation
 
 // disclaimer
 - (BOOL)userDisclaimerConfirmed;
-- (void)setUserDisclainerConfirmed:(BOOL)flag;
+- (void)setUserDisclaimerConfirmed:(BOOL)flag;
 
 // list modules in sources
 - (NSArray *)listModulesForSource:(SwordInstallSource *)is;

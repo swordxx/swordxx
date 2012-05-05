@@ -7,7 +7,7 @@
 //
 
 #import "SwordInstallSource.h"
-#import "SwordInstallSourceController.h"
+#import "SwordInstallSourceManager.h"
 #import "SwordManager.h"
 
 @interface SwordInstallSource ()
@@ -126,7 +126,7 @@
 }
 
 /** install module */
-- (void)installModuleWithName:(NSString *)mName usingManager:(SwordManager *)swManager withInstallController:(SwordInstallSourceController *)sim {
+- (void)installModuleWithName:(NSString *)mName usingManager:(SwordManager *)swManager withInstallController:(SwordInstallSourceManager *)sim {
     sword::InstallMgr *im = [sim installMgr];
     im->installModule([swManager swManager], 0, [mName UTF8String], swInstallSource);
 }

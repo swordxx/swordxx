@@ -6,12 +6,10 @@
 //  Copyright 2007 __MyCompanyName__. All rights reserved.
 //
 
-#import "SwordInstallSourceController.h"
+#import "SwordInstallSourceManager.h"
 #import "SwordInstallSource.h"
 #import "SwordManager.h"
-#import "SwordModule.h"
-
-#include "installmgr.h"
+#import "ObjCSword_Prefix.pch"
 
 #ifdef __cplusplus
 typedef std::map<sword::SWBuf, sword::InstallSource *> InstallSourceMap;
@@ -21,7 +19,7 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
 #define INSTALLSOURCE_SECTION_TYPE_FTP  "FTPSource"
 #define INSTALLSOURCE_SECTION_TYPE_HTTP	"HTTPSource"
 
-@implementation SwordInstallSourceController
+@implementation SwordInstallSourceManager
 
 @dynamic configPath;
 @synthesize configFilePath;
@@ -87,17 +85,17 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
 // -------------------- methods --------------------
 
 // initialization
-+ (SwordInstallSourceController *)defaultController {
-    static SwordInstallSourceController *singleton;
++ (SwordInstallSourceManager *)defaultController {
+    static SwordInstallSourceManager *singleton = nil;
     if(singleton == nil) {
-        singleton = [[SwordInstallSourceController alloc] init];
+        singleton = [[SwordInstallSourceManager alloc] init];
     }
     
     return singleton;
 }
 
-+ (SwordInstallSourceController *)controllerWithPath:(NSString *)aPath {
-    return [[[SwordInstallSourceController alloc] initWithPath:aPath createPath:YES] autorelease];
++ (SwordInstallSourceManager *)controllerWithPath:(NSString *)aPath {
+    return [[[SwordInstallSourceManager alloc] initWithPath:aPath createPath:YES] autorelease];
 }
 
 /**
@@ -143,7 +141,7 @@ base path of the module installation
     if(swInstallMgr == nil) {
         ALog(@"Could not initialize InstallMgr!");
     } else {
-        [self setUserDisclainerConfirmed:disclaimerConfirmed];
+        [self setUserDisclaimerConfirmed:disclaimerConfirmed];
         
         // empty all lists
         [installSources removeAllObjects];
@@ -152,7 +150,7 @@ base path of the module installation
         // init install sources
         for(InstallSourceMap::iterator it = swInstallMgr->sources.begin(); it != swInstallMgr->sources.end(); it++) {
             sword::InstallSource *sis = it->second;
-            SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:sis];
+            SwordInstallSource *is = [[[SwordInstallSource alloc] initWithSource:sis] autorelease];
             
             [installSources setObject:is forKey:[is caption]];
             // also add to list
@@ -218,9 +216,7 @@ base path of the module installation
     config["Sources"].erase(INSTALLSOURCE_SECTION_TYPE_FTP);
     
     // build up new
-    NSEnumerator *iter = [installSources objectEnumerator];
-    SwordInstallSource *sis = nil;
-    while((sis = [iter nextObject])) {
+    for(SwordInstallSource *sis in installSources) {
 		if([[sis type] isEqualToString:INSTALLSOURCE_TYPE_FTP]) {
 			config["Sources"].insert(ConfigEntMap::value_type(INSTALLSOURCE_SECTION_TYPE_FTP, [[sis configEntry] UTF8String]));
 		} else {
@@ -242,7 +238,7 @@ base path of the module installation
 // installation/uninstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager {
     
-    int stat = -1;
+    int stat;
     if([[is source] isEqualToString:@"localhost"]) {
         stat = swInstallMgr->installModule([manager swManager], [[is directory] UTF8String], [[aModule name] UTF8String]);
     } else {
@@ -308,7 +304,7 @@ base path of the module installation
 		module = it->first;
 		status = it->second;
         
-        SwordModule *mod = [[SwordModule alloc] initWithSWModule:module];
+        SwordModule *mod = [[[SwordModule alloc] initWithSWModule:module] autorelease];
         [mod setStatus:status];
         [ar addObject:mod];
 	}
@@ -324,7 +320,7 @@ base path of the module installation
     return swInstallMgr->isUserDisclaimerConfirmed();
 }
 
-- (void)setUserDisclainerConfirmed:(BOOL)flag {
+- (void)setUserDisclaimerConfirmed:(BOOL)flag {
     swInstallMgr->setUserDisclaimerConfirmed(flag);
 }
 

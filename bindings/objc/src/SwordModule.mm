@@ -24,15 +24,21 @@
 #import "swtext.h"
 #import "versekey.h"
 #import "regex.h"
+#import "ObjCSword_Prefix.pch"
 
 @interface SwordModule ()
+
+@property (retain, readwrite) NSString *name;
+@property (retain, readwrite) NSString *typeString;
+@property (retain, readwrite) NSString *descr;
+@property (retain, readwrite) NSString *lang;
 @property(readwrite, retain) NSMutableDictionary *configEntries;
+
 - (void)mainInit;
+
 @end
 
 @implementation SwordModule
-
-#pragma mark - Property implementations
 
 @synthesize configEntries;
 @synthesize type;
@@ -41,6 +47,10 @@
 @synthesize indexLock;
 @synthesize swManager;
 @synthesize name;
+@synthesize typeString;
+@synthesize descr;
+@synthesize lang;
+
 
 + (id)moduleForSWModule:(sword::SWModule *)aModule {
     return [[[SwordModule alloc] initWithSWModule:aModule] autorelease];
@@ -50,8 +60,8 @@
     return [[[SwordModule alloc] initWithSWModule:aModule swordManager:aManager] autorelease];
 }
 
-+ (id)moduleForType:(ModuleType)aType andName:(NSString *)aName swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager {    
-    SwordModule *sm = nil;
++ (id)moduleForType:(ModuleType)aType swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager {
+    SwordModule *sm;
     if(aType == Bible) {
         sm = [[[SwordBible alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
     } else if(aType == Commentary) {
@@ -117,11 +127,15 @@
 
 - (void)mainInit {
     category = Unset;
-    self.type = [SwordModule moduleTypeForModuleTypeString:[self typeString]];
-    self.moduleLock = [[NSRecursiveLock alloc] init];
-    self.indexLock = [[NSLock alloc] init];
+    self.name = [self retrieveName];
+    self.typeString = [self retrieveType];
+    self.descr = [self retrieveDescr];
+    self.lang = [self retrieveLang];
+
+    self.type = [SwordModule moduleTypeForModuleTypeString:self.typeString];
+    self.moduleLock = [[[NSRecursiveLock alloc] init] autorelease];
+    self.indexLock = [[[NSLock alloc] init] autorelease];
     self.configEntries = [NSMutableDictionary dictionary];
-    self.name = [NSString stringWithCString:swModule->Name() encoding:NSUTF8StringEncoding];
 }
 
 - (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager {
@@ -162,6 +176,9 @@
     [self setModuleLock:nil];
     [self setIndexLock:nil];
     [self setName:nil];
+    [self setDescr:nil];
+    [self setTypeString:nil];
+    [self setLang:nil];
 
     [super dealloc];
 }
@@ -186,7 +203,15 @@
     return swModule->Error();
 }
 
-- (NSString *)descr {
+- (NSString *)retrieveName {
+    NSString *str = [NSString stringWithCString:swModule->Name() encoding:NSUTF8StringEncoding];
+    if(!str) {
+        str = [NSString stringWithCString:swModule->Name() encoding:NSISOLatin1StringEncoding];
+    }
+    return str;
+}
+
+- (NSString *)retrieveDescr {
     NSString *str = [NSString stringWithCString:swModule->Description() encoding:NSUTF8StringEncoding];
     if(!str) {
         str = [NSString stringWithCString:swModule->Description() encoding:NSISOLatin1StringEncoding];
@@ -194,7 +219,7 @@
     return str;
 }
 
-- (NSString *)lang {
+- (NSString *)retrieveLang {
     NSString *str = [NSString stringWithCString:swModule->Lang() encoding:NSUTF8StringEncoding];
     if(!str) {
         str = [NSString stringWithCString:swModule->Lang() encoding:NSISOLatin1StringEncoding];
@@ -202,7 +227,7 @@
     return str;
 }
 
-- (NSString *)typeString {
+- (NSString *)retrieveType {
     NSString *str = [NSString stringWithCString:swModule->Type() encoding:NSUTF8StringEncoding];
     if(!str) {
         str = [NSString stringWithCString:swModule->Type() encoding:NSISOLatin1StringEncoding];
@@ -289,7 +314,7 @@
 					if (d == 'u') {
 						//we have an unicode character!
 						@try {
-							NSUInteger unicodeChar = 0;
+							NSInteger unicodeChar = 0;
 							NSMutableString *unicodeCharString = [[@"" mutableCopy] autorelease];
 							int j = 0;
 							BOOL negative = NO;

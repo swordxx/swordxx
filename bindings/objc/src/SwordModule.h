@@ -19,7 +19,7 @@
 
 #define My_SWDYNAMIC_CAST(className, object) (sword::className *)((object)?((object->getClass()->isAssignableFrom(#className))?object:0):0)
 
-// defines for dictionary entries for passagestudy
+// defines for dictionary entries for passage study
 #define ATTRTYPE_TYPE       @"type"
 #define ATTRTYPE_PASSAGE    @"passage"
 #define ATTRTYPE_MODULE     @"modulename"
@@ -75,7 +75,11 @@ typedef enum {
     NSLock *indexLock;
     
     /** we store the name separately */
+    NSString *typeString;
     NSString *name;
+    NSString *descr;
+    NSString *lang;
+
     
     /** yes, we have a delegate to report any action to */
     id delegate;
@@ -90,8 +94,13 @@ typedef enum {
 @property (readwrite) int status;
 @property (retain, readwrite) NSRecursiveLock *moduleLock;
 @property (retain, readwrite) NSLock *indexLock;
-@property (retain, readwrite) NSString *name;
 @property (retain, readwrite) SwordManager *swManager;
+
+// swmodule properties
+@property (retain, readonly) NSString *name;
+@property (retain, readonly) NSString *typeString;
+@property (retain, readonly) NSString *descr;
+@property (retain, readonly) NSString *lang;
 
 #ifdef __cplusplus
 /**
@@ -102,7 +111,7 @@ typedef enum {
 /**
  Factory method that creates the correct module type instance for the given type
  */
-+ (id)moduleForType:(ModuleType)aType andName:(NSString *)aName swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager;
++ (id)moduleForType:(ModuleType)aType swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager;
 #endif
 
 /**
@@ -150,18 +159,6 @@ typedef enum {
 
 // --------------- Conf entries --------------
 
-/**
- Module description
- */
-- (NSString *)descr;
-/**
- Module language
- */
-- (NSString *)lang;
-/**
- Module type as string
- */
-- (NSString *)typeString;
 /**
  Module category as string
  */

@@ -27,6 +27,7 @@
 #import "SwordDictionary.h"
 #import "SwordListKey.h"
 #import "SwordVerseKey.h"
+#import "ObjCSword_Prefix.pch"
 
 using std::string;
 using std::list;
@@ -52,10 +53,9 @@ using std::list;
             // temporary instance
             SwordModule *swMod = [SwordModule moduleForSWModule:mod];
             NSString *type = [swMod typeString];
-            NSString *name = [swMod name];
-            
+
             ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
-            SwordModule *sm = [SwordModule moduleForType:aType andName:name swModule:mod swordManager:self];
+            SwordModule *sm = [SwordModule moduleForType:aType swModule:mod swordManager:self];
             [dict setObject:sm forKey:[[sm name] lowercaseString]];
 
             [self addFiltersToModule:mod];
@@ -330,7 +330,7 @@ using std::list;
             NSString *type = [swMod typeString];
             
             ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
-            ret = [SwordModule moduleForType:aType andName:name swModule:mod swordManager:self];
+            ret = [SwordModule moduleForType:aType swModule:mod swordManager:self];
 
             if(ret != nil) {
                 NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:modules];
@@ -381,8 +381,8 @@ using std::list;
     }
 	
     // sort
-    NSArray *sortDescritors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]; 
-    [ret sortUsingDescriptors:sortDescritors];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+    [ret sortUsingDescriptors:sortDescriptors];
 
 	return [NSArray arrayWithArray:ret];
 }

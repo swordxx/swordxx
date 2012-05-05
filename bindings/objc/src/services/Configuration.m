@@ -11,7 +11,7 @@
 @implementation Configuration
 
 + (Configuration *)config {
-    static Configuration *instance;
+    static Configuration *instance = nil;
     if(instance == nil) {
         instance = [[Configuration alloc] init];
     }
@@ -32,11 +32,14 @@
 }
 
 - (void)dealloc {
+    [impl release];
+
     [super dealloc];
 }
 
 - (void)setImpl:(id<Configuration>)configImpl {
     impl = (Configuration *)configImpl;
+    [impl retain];
 }
 
 #pragma mark Configuration implementation

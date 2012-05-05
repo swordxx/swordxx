@@ -28,7 +28,6 @@
 
 @interface Configuration : NSObject <Configuration> {
     Configuration *impl;
-    
 }
 
 + (Configuration *)config;
