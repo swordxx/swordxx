@@ -771,7 +771,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					if ((!isdigit(book[notAllDigits-1])) && (!strchr(" .", book[notAllDigits-1])))
 						break;
 				}
-				if (!notAllDigits)
+				if (!notAllDigits && !isdigit(buf[1]))
 					break;
 
 			number[tonumber] = 0;
