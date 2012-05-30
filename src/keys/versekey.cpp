@@ -738,6 +738,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 							if (partial > 0)
 								*curKey = MAXVERSE;
 							newElement->UpperBound(*curKey);
+							*lastKey = *curKey;
 							*newElement = TOP;
 							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
@@ -924,16 +925,16 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
 			lastKey->LowerBound(*curKey);
 			*lastKey = TOP;
-			tmpListKey << *lastKey;
-			tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
-		}
-		else {
-			if (!dash) { 	// if last separator was not a dash just add
-				if (expandRange && partial) {
-					lastKey->LowerBound(*curKey);
-					if (partial > 1)
-						*curKey = MAXCHAPTER;
-					if (partial > 0)
+				tmpListKey << *lastKey;
+				tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+			}
+			else {
+				if (!dash) { 	// if last separator was not a dash just add
+					if (expandRange && partial) {
+						lastKey->LowerBound(*curKey);
+						if (partial > 1)
+							*curKey = MAXCHAPTER;
+						if (partial > 0)
 						*curKey = MAXVERSE;
 					lastKey->UpperBound(*curKey);
 					*lastKey = TOP;

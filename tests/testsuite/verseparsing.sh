@@ -18,6 +18,9 @@
 # General Public License for more details.
 #
 
+../parsekey "jn.1.1-2.5,9,3;7.9" en KJV ge 1
+../parsekey "jn.1.1-2.5" en KJV ge 1
+
 ../parsekey "1jn.2.3" en KJV ge 1
 ../parsekey "1 jn.2.3" en KJV ge 1
 ../parsekey "Ijn.2.3" en KJV ge 1
