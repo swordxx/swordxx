@@ -935,7 +935,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					if (partial > 1)
 						*curKey = MAXCHAPTER;
 					if (partial > 0)
-					*curKey = MAXVERSE;
+						*curKey = MAXVERSE;
 					lastKey->UpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
