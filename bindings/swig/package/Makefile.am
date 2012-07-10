@@ -1,4 +1,4 @@
-INCLUDES = $(SWORD_INCLUDES)
+INCLUDES = $(SWORD_CFLAGS)
 lib_LTLIBRARIES = libsword_csharpsword.la
 libsword_csharpsword_la_LIBADD = $(SWORD_LIBS)
 libsword_csharpsword_la_SOURCES = csharp/Sword.cxx
@@ -26,7 +26,7 @@ perl_make: perl_makebuild
 
 perlswig: sword.i
 	mkdir -p perl
-	$(SWIG) -perl -c++ -shadow -o perl/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
+	$(SWIG) -perl -c++ -shadow -o perl/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
 
 perl_makebuild: $(PERLSWIG)
 	mkdir -p perl
@@ -40,7 +40,7 @@ perl_makebuild: $(PERLSWIG)
 	@echo "WriteMakefile(" >> perl/Makefile.PL
 	@echo "		'NAME'		=> 'Sword'," >> perl/Makefile.PL
 	@echo "		'VERSION'	=> '$(VERSION)'," >> perl/Makefile.PL
-	@echo "		'INC'		=> '$(SWORD_INCLUDES) -I..'," >> perl/Makefile.PL
+	@echo "		'INC'		=> '$(SWORD_CFLAGS) -I..'," >> perl/Makefile.PL
 	@echo "		'DEFINE'	=> '-DSWIG'," >> perl/Makefile.PL
 	@echo "		'LIBS'		=> '$(LIB_SWORD) -lz'," >> perl/Makefile.PL
 	@echo "		'PREREQ_PM'	=> {}, # e.g., Module::Name => 1.1" >> perl/Makefile.PL
@@ -69,14 +69,14 @@ perl_makebuild: $(PERLSWIG)
 
 tclswig: sword.i
 	mkdir -p tcl
-	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
+	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
 
 python_make: python_makebuild
 	cd python && $(PYTHON) setup.py build_ext $(LIB_SWORD)
 
 pythonswig: sword.i
 	mkdir -p python
-	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
+	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
 
 python_makebuild: $(PYTHONSWIG)
 	mkdir -p python
@@ -90,7 +90,7 @@ python_makebuild: $(PYTHONSWIG)
 	@echo "	maintainer_email = \"sword-devel@crosswire.org\"," >> python/setup.py
 	@echo "	url = \"http://www.crosswire.org/sword\"," >> python/setup.py
 	@echo "	py_modules = [\"Sword\"]," >> python/setup.py
-	@echo "	include_dirs=['$(SWORD_INCLUDE_DIR)', '..', '../..']," >> python/setup.py
+	@echo "	include_dirs=['..', '../..']," >> python/setup.py
 	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
 	@echo "	libraries=[('sword')], " >> python/setup.py
 	@echo "	)], " >> python/setup.py
@@ -100,14 +100,14 @@ python_makebuild: $(PYTHONSWIG)
 
 phpswig: sword.i
 	mkdir -p php
-	$(SWIG) -php4 -c++ -phpfull -o php/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES) $(top_srcdir)/sword.i
+	$(SWIG) -php4 -c++ -phpfull -o php/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
 
 
 csharp/Sword.cxx: csharpswig
 
 csharpswig: sword.i
 	        mkdir -p csharp
-		        $(SWIG) -csharp -c++ -nodefaultctor -dllimport libsword_csharpwrap.dll -o csharp/Sword.cxx -I$(top_srcdir) $(SWORD_INCLUDES)  $(top_srcdir)/sword.i
+		        $(SWIG) -csharp -c++ -nodefaultctor -dllimport libsword_csharpwrap.dll -o csharp/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS)  $(top_srcdir)/sword.i
 
 csharpmake:
 	        mcs -out:csharp/Sword.dll -target:library csharp/*.cs
