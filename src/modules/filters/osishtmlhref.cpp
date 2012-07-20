@@ -253,27 +253,14 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
 						SWCATCH ( ... ) {	}
-						if (vkey) {
-							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
-								ch, 
-								URL::encode(footnoteNumber.c_str()).c_str(), 
-								URL::encode(u->version.c_str()).c_str(), 
-								URL::encode(vkey->getText()).c_str(), 
-								ch,
-								ch, 
-								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
-						}
-						else {
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
-								ch, 
-								URL::encode(footnoteNumber.c_str()).c_str(), 
-								URL::encode(u->version.c_str()).c_str(), 
-								URL::encode(u->key->getText()).c_str(),  
-								ch,
-								ch, 
-								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
-						}
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+						        ch, 
+							URL::encode(footnoteNumber.c_str()).c_str(), 
+							URL::encode(u->version.c_str()).c_str(), 
+							URL::encode(vkey ? vkey->getText() : u->key->getText()).c_str(), 
+							ch,
+							ch, 
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 				}
 				u->suspendTextPassThru = (++u->suspendLevel);
