@@ -29,9 +29,9 @@
 @property(readwrite, retain) NSMutableDictionary *contents;
 
 /**
- return the tree content for the given treekey
- the treekey has to be already loaded
- @param[in]: treekey that we should look for, nil for root
+ return the tree content for the given treeKey
+ the treeKey has to be already loaded
+ @param[in]: treeKey that we should look for, nil for root
  @return: SwordTreeEntry
  */
 - (SwordModuleTreeEntry *)treeEntryForKey:(NSString *)treeKey;

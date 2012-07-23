@@ -40,7 +40,7 @@
         [self setTestament:vk.Testament()];
         [self setNumberInTestament:vk.Book()];
         
-        // get system localemgr to be able to translate the english bookname
+        // get system localeMgr to be able to translate the english bookName
         sword::LocaleMgr *lmgr = sword::LocaleMgr::getSystemLocaleMgr();
         self.localizedName = [NSString stringWithUTF8String:lmgr->translate(swBook->getLongName())];        
     }
@@ -85,7 +85,7 @@
     if(chapters == nil) {
         NSMutableArray *temp = [NSMutableArray array];
         for(int i = 0;i < swBook->getChapterMax();i++) {
-            [temp addObject:[[SwordBibleChapter alloc] initWithBook:self andChapter:i+1]];
+            [temp addObject:[[[SwordBibleChapter alloc] initWithBook:self andChapter:i+1] autorelease]];
         }
         [self setChapters:[NSArray arrayWithArray:temp]];
     }
@@ -93,7 +93,7 @@
 }
 
 /**
- get book index for versekey
+ get book index for verseKey
  that is: book number + testament * 100
  */
 - (int)generatedIndex {

@@ -11,19 +11,19 @@
 
 @implementation SwordKey
 
-+ (id)swordKey {
++ (SwordKey *)swordKey {
     return [[[SwordKey alloc] init] autorelease];
 }
 
-+ (id)swordKeyWithRef:(NSString *)aRef {
++ (SwordKey *)swordKeyWithRef:(NSString *)aRef {
     return [[[SwordKey alloc] initWithRef:aRef] autorelease];
 }
 
-+ (id)swordKeyWithSWKey:(sword::SWKey *)aSk {
++ (SwordKey *)swordKeyWithSWKey:(sword::SWKey *)aSk {
     return [[[SwordKey alloc] initWithSWKey:aSk] autorelease];
 }
 
-+ (id)swordKeyWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy {
++ (SwordKey *)swordKeyWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy {
     return [[[SwordKey alloc] initWithSWKey:aSk makeCopy:copy] autorelease];    
 }
 
@@ -31,11 +31,11 @@
     return [self initWithRef:nil];
 }
 
-- (id)initWithSWKey:(sword::SWKey *)aSk {
+- (SwordKey *)initWithSWKey:(sword::SWKey *)aSk {
     return [self initWithSWKey:aSk makeCopy:NO];
 }
 
-- (id)initWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy {
+- (SwordKey *)initWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy {
     self = [super init];
     if(self) {
         if(copy) {
@@ -53,7 +53,7 @@
     return self;    
 }
 
-- (id)initWithRef:(NSString *)aRef {
+- (SwordKey *)initWithRef:(NSString *)aRef {
     self = [super init];
     if(self) {
         sk = new sword::SWKey([aRef UTF8String]);
@@ -79,7 +79,7 @@
     [super dealloc];    
 }
 
-- (id)clone {
+- (SwordKey *)clone {
     return [SwordKey swordKeyWithSWKey:sk];
 }
 

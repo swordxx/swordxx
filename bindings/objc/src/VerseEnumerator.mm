@@ -31,6 +31,7 @@
 }
 
 - (void)dealloc {
+    [listKey release];
     [super dealloc];
 }
 
@@ -39,7 +40,7 @@
     for(*[listKey swListKey] = sword::TOP;![listKey swListKey]->Error(); *[listKey swListKey] += 1) {
         [t addObject:[listKey keyText]];
     }
-    // possition TOP again
+    // position TOP again
     *[listKey swListKey] = sword::TOP;
     
     return [NSArray arrayWithArray:t];

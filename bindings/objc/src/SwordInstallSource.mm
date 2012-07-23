@@ -62,7 +62,7 @@
 
 - (void)finalize {
     if(temporarySource == NO) {
-        //LogL(LOG_DEBUG, @"[SwordInstallSource -finalize] deleting swInstalSource");
+        //LogL(LOG_DEBUG, @"[SwordInstallSource -finalize] deleting swInstallSource");
         //delete swInstallSource;
     }
     
@@ -70,6 +70,7 @@
 }
 
 - (void)dealloc {
+    [swordManager release];
     [super dealloc];
 }
 
@@ -160,12 +161,8 @@
 
 /** list module types */
 - (NSArray *)listModuleTypes {
-    NSArray *ret = nil;
-    
-    DLog(@"");
-    ret = [SwordManager moduleTypes];
-    
-    return ret;    
+    NSArray *ret = [SwordManager moduleTypes];
+    return ret;
 }
 
 // get associated SwordManager
@@ -176,7 +173,7 @@
         sword::SWMgr *mgr;
         if([[self source] isEqualToString:@"localhost"]) {
             // create SwordManager from new SWMgr of path
-            mgr = (sword::SWMgr *)new sword::SWMgr([[self directory] UTF8String], true, NULL, false, false);
+            mgr = new sword::SWMgr([[self directory] UTF8String], true, NULL, false, false);
         } else {
             // create SwordManager from the SWMgr of this source
             mgr = swInstallSource->getMgr();    

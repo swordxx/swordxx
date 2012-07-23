@@ -15,31 +15,32 @@
 #endif
 
 @class SwordBible, VerseEnumerator;
+@class SwordVerseKey;
 
 @interface SwordListKey : SwordKey {
 }
 
-+ (id)listKeyWithRef:(NSString *)aRef;
-+ (id)listKeyWithRef:(NSString *)aRef v11n:(NSString *)scheme;
-+ (id)listKeyWithRef:(NSString *)aRef headings:(BOOL)headings v11n:(NSString *)scheme;
++ (SwordListKey *)listKeyWithRef:(NSString *)aRef;
++ (SwordListKey *)listKeyWithRef:(NSString *)aRef v11n:(NSString *)scheme;
++ (SwordListKey *)listKeyWithRef:(NSString *)aRef headings:(BOOL)headings v11n:(NSString *)scheme;
 
 #ifdef __cplusplus
-+ (id)listKeyWithSWListKey:(sword::ListKey *)aLk;
-+ (id)listKeyWithSWListKey:(sword::ListKey *)aLk makeCopy:(BOOL)copy;
-- (id)initWithSWListKey:(sword::ListKey *)aLk;
-- (id)initWithSWListKey:(sword::ListKey *)aLk makeCopy:(BOOL)copy;
++ (SwordListKey *)listKeyWithSWListKey:(sword::ListKey *)aLk;
++ (SwordListKey *)listKeyWithSWListKey:(sword::ListKey *)aLk makeCopy:(BOOL)copy;
+- (SwordListKey *)initWithSWListKey:(sword::ListKey *)aLk;
+- (SwordListKey *)initWithSWListKey:(sword::ListKey *)aLk makeCopy:(BOOL)copy;
 - (sword::ListKey *)swListKey;
 #endif
 
-- (id)initWithRef:(NSString *)aRef;
-- (id)initWithRef:(NSString *)aRef v11n:(NSString *)scheme;
-- (id)initWithRef:(NSString *)aRef headings:(BOOL)headings v11n:(NSString *)scheme;
+- (SwordListKey *)initWithRef:(NSString *)aRef;
+- (SwordListKey *)initWithRef:(NSString *)aRef v11n:(NSString *)scheme;
+- (SwordListKey *)initWithRef:(NSString *)aRef headings:(BOOL)headings v11n:(NSString *)scheme;
 
 - (void)parse;
 - (void)parseWithHeaders;
 - (VerseEnumerator *)verseEnumerator;
 
 - (NSInteger)numberOfVerses;
-- (BOOL)containsKey:(SwordKey *)aVerseKey;
+- (BOOL)containsKey:(SwordVerseKey *)aVerseKey;
 
 @end

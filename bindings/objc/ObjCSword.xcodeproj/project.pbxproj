@@ -711,6 +711,8 @@
 		A94EAC08117B28920018B06F /* SwordVerseManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordVerseManager.mm; path = src/SwordVerseManager.mm; sourceTree = "<group>"; };
 		A94EAC09117B28920018B06F /* VerseEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerseEnumerator.h; path = src/VerseEnumerator.h; sourceTree = "<group>"; };
 		A94EAC0A117B28920018B06F /* VerseEnumerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VerseEnumerator.mm; path = src/VerseEnumerator.mm; sourceTree = "<group>"; };
+		A95043E315BC87F600D89B38 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A950440315BC87F600D89B38 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A954A80113EE98B30094E3FE /* swdisp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swdisp.cpp; sourceTree = "<group>"; };
 		A954A80213EE98B30094E3FE /* swlog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swlog.cpp; sourceTree = "<group>"; };
 		A954A80913EE98B30094E3FE /* listkey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = listkey.cpp; sourceTree = "<group>"; };
@@ -3450,6 +3452,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C1667FE841158C02AAC07 /* English */,
+				A95043E315BC87F600D89B38 /* cs */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3458,6 +3461,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A9BFB0B013EDF51100032679 /* en */,
+				A950440315BC87F600D89B38 /* cs */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3504,7 +3508,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
@@ -3549,7 +3553,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
@@ -3566,7 +3570,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -3578,7 +3582,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -3615,7 +3619,7 @@
 					"-D_ICU_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
 				VALID_ARCHS = x86_64;
 			};
@@ -3651,7 +3655,7 @@
 					"-D_ICU_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
 				VALID_ARCHS = x86_64;
 			};
@@ -3684,7 +3688,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -3715,7 +3719,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -3815,7 +3819,7 @@
 					SenTestingKit,
 				);
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -3842,7 +3846,7 @@
 					SenTestingKit,
 				);
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
 			};
@@ -3871,7 +3875,7 @@
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -3894,7 +3898,7 @@
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
@@ -3926,7 +3930,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2gbs;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -3957,7 +3961,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2gbs;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -3990,7 +3994,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2ld;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4021,7 +4025,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2ld;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4054,7 +4058,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2vs;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4085,7 +4089,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2vs;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4118,7 +4122,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = installmgr;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4149,7 +4153,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = installmgr;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4182,7 +4186,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2imp;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4213,7 +4217,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2imp;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4246,7 +4250,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2vpl;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4277,7 +4281,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2vpl;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4310,7 +4314,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2zmod;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4341,7 +4345,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2zmod;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};

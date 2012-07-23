@@ -235,7 +235,7 @@ base path of the module installation
     [self addInstallSource:is];
 }
 
-// installation/uninstallation
+// installation/unInstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager {
     
     int stat;

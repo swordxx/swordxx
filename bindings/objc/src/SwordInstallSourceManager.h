@@ -70,7 +70,7 @@ base path of the module installation
 /** re-init after adding or removing new modules */
 - (void)reinitialize;
 
-// installation/uninstallation
+// installation/unInstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager;
 - (int)uninstallModule:(SwordModule *)aModule fromManager:(SwordManager *)swManager;
 

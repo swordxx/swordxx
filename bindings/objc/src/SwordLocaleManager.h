@@ -15,7 +15,7 @@
 
 /**
  Initializes the global locale system.
- Any created instance that needs localozed information will use it.
+ Any created instance that needs localized information will use it.
  */
 - (void)initLocale;
 

@@ -11,23 +11,15 @@
 	General Public License for more details. (http://www.gnu.org/licenses/gpl.html)
 */
 
+#import "ObjCSword_Prefix.pch"
 #import "SwordManager.h"
 #import "Configuration.h"
 #include <string>
-#include <list>
 
 #include "gbfplain.h"
 #include "thmlplain.h"
 #include "osisplain.h"
 #import "Notifications.h"
-#import "SwordBook.h"
-#import "SwordModule.h"
-#import "SwordBible.h"
-#import "SwordCommentary.h"
-#import "SwordDictionary.h"
-#import "SwordListKey.h"
-#import "SwordVerseKey.h"
-#import "ObjCSword_Prefix.pch"
 
 using std::string;
 using std::list;
@@ -190,7 +182,7 @@ using std::list;
 }
 
 + (SwordManager *)defaultManager {
-    static SwordManager *instance;
+    static SwordManager *instance = nil;
     if(instance == nil) {
         // use default path
         instance = [[SwordManager alloc] initWithPath:[[Configuration config] defaultModulePath]];
@@ -208,7 +200,7 @@ using std::list;
         self.modulesPath = path;
 
 		self.modules = [NSDictionary dictionary];
-		self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
+		self.managerLock = [(NSLock *)[[NSRecursiveLock alloc] init] autorelease];
 
         [self reInit];
         
@@ -230,7 +222,7 @@ using std::list;
         temporaryManager = YES;
         
 		self.modules = [NSDictionary dictionary];
-        self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
+        self.managerLock = [(NSLock *)[[NSRecursiveLock alloc] init] autorelease];
         
 		[self refreshModules];
     }
@@ -271,8 +263,8 @@ using std::list;
             NSArray *subDirs = [fm contentsOfDirectoryAtPath:modulesPath error:NULL];
             // for all sub directories add module
             BOOL directory;
-            NSString *fullSubDir = nil;
-            NSString *subDir = nil;
+            NSString *fullSubDir;
+            NSString *subDir;
             for(subDir in subDirs) {
                 // as long as it's not hidden
                 if(![subDir hasPrefix:@"."] && 
@@ -381,7 +373,7 @@ using std::list;
     }
 	
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease]];
     [ret sortUsingDescriptors:sortDescriptors];
 
 	return [NSArray arrayWithArray:ret];
@@ -396,8 +388,8 @@ using std::list;
     }
     
     // sort
-    NSArray *sortDescritors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]; 
-    [ret sortUsingDescriptors:sortDescritors];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease]];
+    [ret sortUsingDescriptors:sortDescriptors];
     
 	return [NSArray arrayWithArray:ret];
 }
@@ -411,20 +403,20 @@ using std::list;
     }
     
     // sort
-    NSArray *sortDescritors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]; 
-    [ret sortUsingDescriptors:sortDescritors];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease]];
+    [ret sortUsingDescriptors:sortDescriptors];
     
 	return [NSArray arrayWithArray:ret];    
 }
 
-#pragma mark - lowlevel methods
+#pragma mark - lowLevel methods
 
 - (sword::SWMgr *)swManager {
     return swManager;
 }
 
 - (sword::SWModule *)getSWModuleWithName:(NSString *)moduleName {
-	sword::SWModule *module = NULL;
+	sword::SWModule *module;
 
 	[managerLock lock];
 	module = swManager->Modules[[moduleName UTF8String]];	

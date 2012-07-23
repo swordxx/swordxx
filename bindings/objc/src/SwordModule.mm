@@ -11,6 +11,7 @@
 	General Public License for more details. (http://www.gnu.org/licenses/gpl.html)
 */
 
+#import "ObjCSword_Prefix.pch"
 #import "SwordModule.h"
 #import "SwordManager.h"
 #import "SwordModuleTextEntry.h"
@@ -19,12 +20,6 @@
 #import "SwordCommentary.h"
 #import "SwordDictionary.h"
 #import "SwordBook.h"
-
-#import "rtfhtml.h"
-#import "swtext.h"
-#import "versekey.h"
-#import "regex.h"
-#import "ObjCSword_Prefix.pch"
 
 @interface SwordModule ()
 
@@ -494,11 +489,11 @@
     swModule->setKey([aKeyString UTF8String]);
 }
 
-- (void)setKey:(SwordKey *)aKey {
+- (void)setSwordKey:(SwordKey *)aKey {
     swModule->setKey([aKey swKey]);
 }
 
-- (id)createKey {
+- (SwordKey *)createKey {
     sword::SWKey *sk = swModule->CreateKey();
     SwordKey *newKey = [SwordKey swordKeyWithSWKey:sk makeCopy:YES];
     delete sk;
@@ -506,11 +501,11 @@
     return newKey;
 }
 
-- (id)getKey {
+- (SwordKey *)getKey {
     return [SwordKey swordKeyWithSWKey:swModule->getKey()];
 }
 
-- (id)getKeyCopy {
+- (SwordKey *)getKeyCopy {
     return [SwordKey swordKeyWithSWKey:swModule->getKey() makeCopy:YES];
 }
 
@@ -562,8 +557,7 @@
 }
 
 - (NSString *)entryAttributeValuePreverse {
-    NSString *ret = @"";
-    ret = [NSString stringWithUTF8String:swModule->getEntryAttributes()["Heading"]["Preverse"]["0"].c_str()];
+    NSString *ret = [NSString stringWithUTF8String:swModule->getEntryAttributes()["Heading"]["Preverse"]["0"].c_str()];
     
     return ret;
 }
@@ -595,7 +589,7 @@
                     if (word->second.find("Text") == word->second.end())
                         continue;	// no text? let's skip
                 }
-                NSMutableString *stringValStr = [NSMutableString stringWithUTF8String:strongVal->second];
+                NSMutableString *stringValStr = [NSMutableString stringWithUTF8String:(const char *)strongVal->second];
                 if(stringValStr) {
                     [stringValStr replaceOccurrencesOfString:@"|x-Strongs:" withString:@" " options:0 range:NSMakeRange(0, [stringValStr length])];                    
                     [array addObject:stringValStr];
@@ -608,7 +602,7 @@
 
 - (NSString *)entryAttributeValuePreverseForKey:(SwordKey *)aKey {
     [moduleLock lock];
-    [self setKey:aKey];
+    [self setSwordKey:aKey];
     swModule->RenderText(); // force processing of key
     NSString *value = [self entryAttributeValuePreverse];
     [moduleLock unlock];
@@ -617,7 +611,7 @@
 
 - (NSString *)entryAttributeValueFootnoteOfType:(NSString *)fnType indexValue:(NSString *)index forKey:(SwordKey *)aKey {
     [moduleLock lock];
-    [self setKey:aKey];
+    [self setSwordKey:aKey];
     swModule->RenderText(); // force processing of key
     NSString *value = [self entryAttributeValueFootnoteOfType:fnType indexValue:index];
     [moduleLock unlock];
@@ -680,7 +674,7 @@
     
     if(aKey) {
         [moduleLock lock];
-        [self setKey:aKey];
+        [self setSwordKey:aKey];
         if(![self error]) {
             NSString *txt = @"";
             if(aType == TextTypeRendered) {

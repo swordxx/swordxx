@@ -19,20 +19,20 @@
     BOOL created;
 }
 
-+ (id)swordKey;
-+ (id)swordKeyWithRef:(NSString *)aRef;
++ (SwordKey *)swordKey;
++ (SwordKey *)swordKeyWithRef:(NSString *)aRef;
 
 #ifdef __cplusplus
-+ (id)swordKeyWithSWKey:(sword::SWKey *)aSk;
-+ (id)swordKeyWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy;
-- (id)initWithSWKey:(sword::SWKey *)aSk;
-- (id)initWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy;
++ (SwordKey *)swordKeyWithSWKey:(sword::SWKey *)aSk;
++ (SwordKey *)swordKeyWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy;
+- (SwordKey *)initWithSWKey:(sword::SWKey *)aSk;
+- (SwordKey *)initWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy;
 - (sword::SWKey *)swKey;
 #endif
 
-- (id)initWithRef:(NSString *)aRef;
+- (SwordKey *)initWithRef:(NSString *)aRef;
 
-- (id)clone;
+- (SwordKey *)clone;
 - (void)setPersist:(BOOL)flag;
 - (BOOL)persist;
 

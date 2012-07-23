@@ -252,20 +252,20 @@ typedef enum {
 /**
  Set position from a key
  */
-- (void)setKey:(SwordKey *)aKey;
+- (void)setSwordKey:(SwordKey *)aKey;
 
 /**
  Module key. New instance created by module.
  */
-- (id)createKey;
+- (SwordKey *)createKey;
 /**
  Module key. Reference only.
  */
-- (id)getKey;
+- (SwordKey *)getKey;
 /**
  Module key. Reference only but cloned.
  */
-- (id)getKeyCopy;
+- (SwordKey *)getKeyCopy;
 
 // ------------------- module metadata processing ------------------
 

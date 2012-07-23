@@ -16,28 +16,28 @@
 @interface SwordVerseKey : SwordKey {
 }
 
-+ (id)verseKey;
-+ (id)verseKeyWithVersification:(NSString *)scheme;
-+ (id)verseKeyWithRef:(NSString *)aRef;
-+ (id)verseKeyWithRef:(NSString *)aRef v11n:(NSString *)scheme;
++ (SwordVerseKey *)verseKey;
++ (SwordVerseKey *)verseKeyWithVersification:(NSString *)scheme;
++ (SwordVerseKey *)verseKeyWithRef:(NSString *)aRef;
++ (SwordVerseKey *)verseKeyWithRef:(NSString *)aRef v11n:(NSString *)scheme;
 
 #ifdef __cplusplus
-+ (id)verseKeyWithSWVerseKey:(sword::VerseKey *)aVk;
-+ (id)verseKeyWithSWVerseKey:(sword::VerseKey *)aVk makeCopy:(BOOL)copy;
-- (id)initWithSWVerseKey:(sword::VerseKey *)aVk;
-- (id)initWithSWVerseKey:(sword::VerseKey *)aVk makeCopy:(BOOL)copy;
++ (SwordVerseKey *)verseKeyWithSWVerseKey:(sword::VerseKey *)aVk;
++ (SwordVerseKey *)verseKeyWithSWVerseKey:(sword::VerseKey *)aVk makeCopy:(BOOL)copy;
+- (SwordVerseKey *)initWithSWVerseKey:(sword::VerseKey *)aVk;
+- (SwordVerseKey *)initWithSWVerseKey:(sword::VerseKey *)aVk makeCopy:(BOOL)copy;
 - (sword::VerseKey *)swVerseKey;
 #endif
 
-- (id)initWithVersification:(NSString *)scheme;
-- (id)initWithRef:(NSString *)aRef;
-- (id)initWithRef:(NSString *)aRef v11n:(NSString *)scheme;
+- (SwordVerseKey *)initWithVersification:(NSString *)scheme;
+- (SwordVerseKey *)initWithRef:(NSString *)aRef;
+- (SwordVerseKey *)initWithRef:(NSString *)aRef v11n:(NSString *)scheme;
 
 - (int)index;
 - (int)testament;
-- (void)setTestament:(int)val;
+- (void)setTestament:(char)val;
 - (int)book;
-- (void)setBook:(int)val;
+- (void)setBook:(char)val;
 - (int)chapter;
 - (void)setChapter:(int)val;
 - (int)verse;

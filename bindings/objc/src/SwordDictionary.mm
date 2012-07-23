@@ -12,7 +12,6 @@
 */
 
 #import "SwordDictionary.h"
-#import "SwordModuleTextEntry.h"
 #import "Configuration.h"
 
 @interface SwordDictionary (/* Private, class continuation */)
@@ -78,7 +77,7 @@
 - (void)readFromCache {
 	//open cached file
     NSString *cachePath = [[[Configuration config] defaultAppSupportPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"cache-%@", [self name]]];
-	NSMutableArray *data = [NSArray arrayWithContentsOfFile:cachePath];
+	NSMutableArray *data = [NSMutableArray arrayWithContentsOfFile:cachePath];
     if(data != nil) {
         self.keys = data;
     } else {

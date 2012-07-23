@@ -57,7 +57,11 @@ typedef enum {
 - (int)versesForBible;
 
 // Text pulling
-- (SwordBibleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType;
+
+/**
+* @return SwordBibleTextEntry
+*/
+- (SwordModuleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType;
 - (NSArray *)strippedTextEntriesForRef:(NSString *)reference context:(int)context;
 - (NSArray *)renderedTextEntriesForRef:(NSString *)reference context:(int)context;
 /**

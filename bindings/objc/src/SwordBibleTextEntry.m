@@ -10,7 +10,7 @@
 
 @implementation SwordBibleTextEntry
 
-@synthesize preverseHeading;
+@synthesize preVerseHeading;
 
 + (id)textEntryForKey:(NSString *)aKey andText:(NSString *)aText {
     return [[[SwordBibleTextEntry alloc] initWithKey:aKey andText:aText] autorelease];
@@ -30,7 +30,7 @@
 }
 
 - (void)dealloc {
-    [self setPreverseHeading:nil];
+    [self setPreVerseHeading:nil];
     
     [super dealloc];
 }

@@ -65,7 +65,7 @@
 - (void)testLoopWithModulePos {
     SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen" v11n:[mod versification]];
     [lk setPersist:YES];
-    [mod setKey:lk];
+    [mod setSwordKey:lk];
     NSString *ref = nil;
     NSString *rendered = nil;
     while(![mod error]) {
@@ -83,7 +83,7 @@
     NSString *rendered = nil;
     while(![lk error]) {
         ref = [lk keyText];
-        [mod setKey:lk];
+        [mod setSwordKey:lk];
         rendered = [mod renderedText];
         //NSLog(@"%@:%@", ref, rendered);
         [lk increment];
@@ -93,7 +93,7 @@
 - (void)testLoopWithModulePosWithHeadings {
     SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen" headings:YES v11n:[mod versification]];
     [lk setPersist:YES];
-    [mod setKey:lk];
+    [mod setSwordKey:lk];
     NSString *ref = nil;
     NSString *rendered = nil;
     while(![mod error]) {
@@ -106,7 +106,7 @@
 - (void)testLoopWithModulePosWithDiverseReference {
     SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:1;4:5-8" v11n:[mod versification]];
     [lk setPersist:YES];
-    [mod setKey:lk];
+    [mod setSwordKey:lk];
     NSString *ref = nil;
     NSString *rendered = nil;
     while(![mod error]) {
@@ -125,7 +125,7 @@
     NSString *rendered = nil;
     while(![lk error]) {
         ref = [lk keyText];
-        [mod setKey:lk];
+        [mod setSwordKey:lk];
         rendered = [mod renderedText];
         NSLog(@"%@:%@", ref, rendered);
         [lk increment];
@@ -138,7 +138,7 @@
     [vk setPersist:YES];
     SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:1;4:5;8:4;10:2-5" v11n:[mod versification]];
     [lk setPersist:YES];
-    [mod setKey:lk];
+    [mod setSwordKey:lk];
     NSString *ref = nil;
     NSString *rendered = nil;
     while(![mod error]) {
@@ -147,7 +147,7 @@
             long lowVerse = [vk verse] - context;
             long highVerse = lowVerse + (context * 2);
             [vk setVerse:lowVerse];
-            [mod setKey:vk];
+            [mod setSwordKey:vk];
             for(;lowVerse <= highVerse;lowVerse++) {
                 ref = [vk keyText];
                 rendered = [mod renderedText];                
@@ -155,7 +155,7 @@
                 [mod incKeyPosition];
             }
             // set back list key
-            [mod setKey:lk];
+            [mod setSwordKey:lk];
             [mod incKeyPosition];
         } else {
             ref = [lk keyText];

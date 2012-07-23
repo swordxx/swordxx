@@ -165,7 +165,7 @@ class sword::SWModule;
 - (id)initWithPath:(NSString *)path;
 
 /**
- Add an additional path to the manager to aument more modules.
+ Add an additional path to the manager to augment more modules.
  */
 - (void)addPath:(NSString*)path;
 
@@ -226,7 +226,7 @@ class sword::SWModule;
 - (NSArray *)modulesForCategory:(ModuleCategory)cat;
 
 #ifdef __cplusplus
-- (id)initWithSWMgr:(sword::SWMgr *)smgr;
+- (id)initWithSWMgr:(sword::SWMgr *)swMgr;
 - (sword::SWModule *)getSWModuleWithName:(NSString *)moduleName;
 
 /**

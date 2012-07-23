@@ -66,7 +66,7 @@
     
     SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:1-2"];
     [lk setPersist:YES];
-    [com setKey:lk];
+    [com setSwordKey:lk];
     NSString *ref = nil;
     NSString *rendered = nil;
     int count = 0;
@@ -91,7 +91,7 @@
     int count = 0;
     while(![lk error]) {
         ref = [lk keyText];
-        [com setKey:lk];
+        [com setSwordKey:lk];
         rendered = [com renderedText];
         NSLog(@"%@:%@", ref, rendered);
         [lk increment];

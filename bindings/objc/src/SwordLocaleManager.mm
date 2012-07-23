@@ -14,7 +14,7 @@
 @implementation SwordLocaleManager
 
 + (SwordLocaleManager *)defaultManager {
-    static SwordLocaleManager *instance;
+    static SwordLocaleManager *instance = nil;
     if(instance == nil) {
         // use default path
         instance = [[SwordLocaleManager alloc] init];
@@ -38,16 +38,16 @@
     NSArray *availLocales = [NSLocale preferredLanguages];
     
     NSString *lang = nil;
-    NSString *loc = nil;
+    NSString *loc;
     BOOL haveLocale = NO;
     // for every language, check if we know the locales
-    sword::StringList localelist = lManager->getAvailableLocales();
+    sword::StringList localeList = lManager->getAvailableLocales();
     NSEnumerator *iter = [availLocales objectEnumerator];
     while((loc = [iter nextObject]) && !haveLocale) {
         // check if this locale is available in SWORD
         sword::StringList::iterator it;
         sword::SWBuf locale;
-        for(it = localelist.begin(); it != localelist.end(); ++it) {
+        for(it = localeList.begin(); it != localeList.end(); ++it) {
             locale = *it;
             NSString *swLoc = [NSString stringWithCString:locale.c_str() encoding:NSUTF8StringEncoding];
             if([swLoc hasPrefix:loc]) {

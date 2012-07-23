@@ -21,7 +21,7 @@
 @synthesize booksPerVersification;
 
 + (SwordVerseManager *)defaultManager {
-    static SwordVerseManager *singleton;
+    static SwordVerseManager *singleton = nil;
     if(!singleton) {
         singleton = [[SwordVerseManager alloc] init];
     }
@@ -60,12 +60,12 @@
     if(ret == nil) {
         // hasn't been initialized yet
         const sword::VerseMgr::System *system = verseMgr->getVersificationSystem([verseScheme UTF8String]);
-        int bookCount = system->getBookCount();
+        NSUInteger bookCount = (NSUInteger)system->getBookCount();
         NSMutableArray *buf = [NSMutableArray arrayWithCapacity:bookCount];
         for(int i = 0;i < bookCount;i++) {
             sword::VerseMgr::Book *book = (sword::VerseMgr::Book *)system->getBook(i);
             
-            SwordBibleBook *bb = [[SwordBibleBook alloc] initWithBook:book];
+            SwordBibleBook *bb = [[[SwordBibleBook alloc] initWithBook:book] autorelease];
             [bb setNumber:i+1]; // VerseKey-Book() starts at index 1
             
             // add to array

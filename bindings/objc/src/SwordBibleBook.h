@@ -22,14 +22,14 @@ class sword::VerseMgr::Book;
     
     NSString *localizedName;
     int number;
-    int numberInTestament;
-    int testament;
+    char numberInTestament;
+    char testament;
     NSArray *chapters;
 }
 
 @property (readwrite) int number;
-@property (readwrite) int numberInTestament;
-@property (readwrite) int testament;
+@property (readwrite) char numberInTestament;
+@property (readwrite) char testament;
 @property (retain, readwrite) NSString *localizedName;
 @property (retain, readwrite) NSArray *chapters;
 
@@ -43,7 +43,7 @@ class sword::VerseMgr::Book;
 - (int)numberOfChapters;
 - (int)numberOfVersesForChapter:(int)chapter;
 /**
- get book index for versekey
+ get book index for verseKey
  that is: book number + testament * 100
  */
 - (int)generatedIndex;
