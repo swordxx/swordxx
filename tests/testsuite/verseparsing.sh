@@ -85,9 +85,10 @@
 ../parsekey "1Jn 1:1 ; 3:10" en KJV ge 1
 ../parsekey "1Jn 1:1a ; 3:10b" en KJV ge 1
 
-### These two are not quite right yet
+### Suffix parsing
 ../parsekey "1Jn 1:1-2a; 3:10b-11" en KJV ge 1
 ../parsekey "1Jn 1:1c;3:10d-12e,13" en KJV ge 1
+../parsekey "Luke 2:45b-3:1a;3:1b-7;3:8-14;3:15-21a" en KJV ge 1
 
 ../parsekey "1Jn1.1f; 3:10ff" en KJV ge 1
 ../parsekey "1Jn1.1ff;3:10f" en KJV ge 1

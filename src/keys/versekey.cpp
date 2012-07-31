@@ -593,7 +593,14 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			tobook = 0;
 			bookno = -1;
 			if (*book) {
-				for (loop = strlen(book) - 1; loop+1; loop--) {
+				loop = strlen(book) - 1;
+
+				for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
+
+				if (loop > 0 && isdigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
+					book[loop--] = 0;
+				}
+				for (; loop+1; loop--) {
 					if ((isdigit(book[loop])) || (book[loop] == ' ')) {
 						book[loop] = 0;
 						continue;
@@ -795,9 +802,15 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 					break;
 				default:
 					// suffixes (and oddly 'f'-- ff.)
-					if (((*buf >= 'a' && *buf <= 'z') && (chap >=0)) || *buf == 'f') {
+					if ((*buf >= 'a' && *buf <= 'z' && (chap >=0 || bookno > -1 || lastKey->isBoundSet()))
+							|| *buf == 'f') {
 						// if suffix is already an 'f', then we need to mark if we're doubleF.
 						doubleF = (*buf == 'f' && suffix == 'f');
+						if (suffix && !doubleF) {
+							// we've already had a suffix one, so this is another letter, thus any number is not a number, e.g., '2jn'. We're on 'n'
+							number[tonumber] = 0;
+							tonumber = 0;
+						}
 						suffix = *buf;
 					}
 					else {
@@ -823,7 +836,14 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	book[tobook] = 0;
 	tobook = 0;
 	if (*book) {
-		for (loop = strlen(book) - 1; loop+1; loop--) {
+		loop = strlen(book) - 1;
+
+		for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
+
+		if (loop > 0 && isdigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
+			book[loop--] = 0;
+		}
+		for (; loop+1; loop--) {
 			if ((isdigit(book[loop])) || (book[loop] == ' ')) {
 				book[loop] = 0;
 				continue;
@@ -1044,7 +1064,10 @@ VerseKey &VerseKey::LowerBound() const
 		tmpClone->setVerse   (lowerBoundComponents.verse);
 		tmpClone->setSuffix  (lowerBoundComponents.suffix);
 	}
-	else tmpClone->setIndex(lowerBound);
+	else {
+		tmpClone->setIndex(lowerBound);
+		tmpClone->setSuffix  (lowerBoundComponents.suffix);
+	}
 
 	return (*tmpClone);
 }
@@ -1064,7 +1087,10 @@ VerseKey &VerseKey::UpperBound() const
 		tmpClone->setVerse   (upperBoundComponents.verse);
 		tmpClone->setSuffix  (upperBoundComponents.suffix);
 	}
-	else tmpClone->setIndex(upperBound);
+	else {
+		tmpClone->setIndex(upperBound);
+		tmpClone->setSuffix  (upperBoundComponents.suffix);
+	}
 
 	return (*tmpClone);
 }
