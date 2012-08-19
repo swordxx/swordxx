@@ -200,24 +200,24 @@ const struct abbrev builtin_abbrevs[] = {
   {"BAR", "Bar"},		// Baruch
   {"BARUCH", "Bar"},		// Baruch
   {"BEL", "Bel"},		// Bel and the Dragon
-  {"BELTH", "BelTh"},		// Bel and the Dragon Th
-  {"BEL TH", "BelTh"},		// Bel and the Dragon Th
   {"BEL AND THE DRAGON", "Bel"},		// Bel and the Dragon
-  {"BEL AND THE DRAGONTH", "BelTh"},		// Bel and the Dragon Th
   {"BEL AND THE DRAGON TH", "BelTh"},		// Bel and the Dragon Th
+  {"BEL AND THE DRAGONTH", "BelTh"},		// Bel and the Dragon Th
+  {"BEL TH", "BelTh"},		// Bel and the Dragon Th
+  {"BELTH", "BelTh"},		// Bel and the Dragon Th
   {"C", "Col"},		// Colossians
   {"CANTICLE OF CANTICLES", "Song"},		// Song of Solomon
   {"COL", "Col"},		// Colossians
   {"COLOSSIANS", "Col"},		// Colossians
   {"D", "Deut"},		// Deuteronomy
   {"DAN", "Dan"},		// Daniel
-  {"DANTH", "DanTh"},		// Daniel Th
   {"DANGR", "DanGr"},		// Daniel (Greek)
   {"DANIEL", "Dan"},		// Daniel
-  {"DANIELTH", "DanTh"},		// Daniel Th
-  {"DANIEL TH", "DanTh"},		// Daniel Th
   {"DANIEL (ADDITIONS)", "AddDan"},		// Additions to Daniel
   {"DANIEL (GREEK)", "DanGr"},		// Daniel (Greek)
+  {"DANIEL TH", "DanTh"},		// Daniel Th
+  {"DANIELTH", "DanTh"},		// Daniel Th
+  {"DANTH", "DanTh"},		// Daniel Th
   {"DEUT", "Deut"},		// Deuteronomy
   {"DEUTERONOMY", "Deut"},		// Deuteronomy
   {"DT", "Deut"},		// Deuteronomy
@@ -426,8 +426,8 @@ const struct abbrev builtin_abbrevs[] = {
   {"JOSH", "Josh"},		// Joshua
   {"JOSHA", "JoshA"},		// Joshua A
   {"JOSHUA", "Josh"},		// Joshua
-  {"JOSHUAA", "JoshA"},		// Joshua A
   {"JOSHUA A", "JoshA"},		// Joshua A
+  {"JOSHUAA", "JoshA"},		// Joshua A
   {"JS", "Josh"},		// Joshua
   {"JU", "Jude"},		// Jude
   {"JUB", "Jub"},		// Jubilees
@@ -436,8 +436,8 @@ const struct abbrev builtin_abbrevs[] = {
   {"JUDG", "Judg"},		// Judges
   {"JUDGB", "JudgB"},		// Judges B
   {"JUDGES", "Judg"},		// Judges
-  {"JUDGESB", "JudgB"},		// Judges B
   {"JUDGES B", "JudgB"},		// Judges B
+  {"JUDGESB", "JudgB"},		// Judges B
   {"JUDITH", "Jdt"},		// Judith
   {"L", "Luke"},		// Luke
   {"LAM", "Lam"},		// Lamentations
@@ -530,20 +530,20 @@ const struct abbrev builtin_abbrevs[] = {
   {"SONG OF SONGS", "Song"},		// Song of Solomon
   {"SONG OF THE THREE CHILDREN", "PrAzar"},		// Prayer of Azariah
   {"SUS", "Sus"},		// Susanna
-  {"SUSTH", "SusTh"},		// Susanna Th
   {"SUSANNA", "Sus"},		// Susanna
-  {"SUSANNATH", "SusTh"},		// Susanna Th
   {"SUSANNA TH", "SusTh"},		// Susanna Th
+  {"SUSANNATH", "SusTh"},		// Susanna Th
+  {"SUSTH", "SusTh"},		// Susanna Th
   {"SYRIAC APOCALYPSE OF BARUCH", "2Bar"},		// 2Baruch
   {"T", "Titus"},		// Titus
   {"TB", "Tob"},		// Tobit
   {"TBT", "Tob"},		// Tobit
   {"TITUS", "Titus"},		// Titus
   {"TOB", "Tob"},		// Tobit
-  {"TOBS", "TobS"},		// Tobit S
   {"TOBIT", "Tob"},		// Tobit
-  {"TOBITS", "TobS"},		// Tobit S
   {"TOBIT S", "TobS"},		// Tobit S
+  {"TOBITS", "TobS"},		// Tobit S
+  {"TOBS", "TobS"},		// Tobit S
   {"WIS", "Wis"},		// Wisdom
   {"WISDOM", "Wis"},		// Wisdom
   {"WISDOM OF BEN SIRA", "Sir"},		// Sirach
