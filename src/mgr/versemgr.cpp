@@ -41,6 +41,7 @@
 #include <canon_luther.h>	// Luther v11n system
 #include <canon_catholic.h>	// Catholic v11n system (10 chapter Esther)
 #include <canon_catholic2.h>	// Catholic2 v11n system (16 chapter Esther)
+#include <canon_rahlfs.h>	// Rahlfs LXX v11n system
 
 using std::vector;
 using std::map;
@@ -65,6 +66,7 @@ VerseMgr *VerseMgr::getSystemVerseMgr() {
 		systemVerseMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
 		systemVerseMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
 		systemVerseMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
+		systemVerseMgr->registerVersificationSystem("Rahlfs", otbooks_rahlfs, ntbooks, vm_rahlfs);
 	}
 	return systemVerseMgr;
 }
