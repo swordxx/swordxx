@@ -92,10 +92,6 @@ struct sbook otbooks_rahlfs[] = {
   {"", "", "", 0}
 };
 
-struct sbook ntbooks_rahlfs[] = {
-  {"", "", "", 0}
-};
-
 /******************************************************************************
  *	Maximum verses per chapter
  */
