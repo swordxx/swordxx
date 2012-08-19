@@ -175,5 +175,6 @@ pkginclude_HEADERS += $(swincludedir)/canon_german.h
 pkginclude_HEADERS += $(swincludedir)/canon_luther.h
 pkginclude_HEADERS += $(swincludedir)/canon_catholic.h
 pkginclude_HEADERS += $(swincludedir)/canon_catholic2.h
+pkginclude_HEADERS += $(swincludedir)/canon_rahlfs.h
 pkginclude_HEADERS += $(swincludedir)/canon_null.h
 
