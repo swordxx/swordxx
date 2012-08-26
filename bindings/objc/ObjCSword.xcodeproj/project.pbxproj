@@ -3794,6 +3794,669 @@
 			};
 			name = Release;
 		};
+		A9ADDA2815E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				SDKROOT = macosx10.7;
+			};
+			name = AppStore;
+		};
+		A9ADDA2915E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ObjCSword_Prefix.pch;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = "../../include/**";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build_sword/build/result_inst/lib\"",
+					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = "-DRELEASE";
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = ObjCSword;
+				SDKROOT = macosx10.7;
+				VALID_ARCHS = x86_64;
+				WARNING_CFLAGS = "-Wall";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = AppStore;
+		};
+		A9ADDA2A15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = Tests;
+				SDKROOT = macosx10.7;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA2B15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.7;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = AppStore;
+		};
+		A9ADDA2C15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../include/**",
+					"$(SRCROOT)/dependencies/clucene/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-DUSELUCENE",
+					"-D_ICU_",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.7;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
+				VALID_ARCHS = x86_64;
+			};
+			name = AppStore;
+		};
+		A9ADDA2D15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = imp2gbs;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA2E15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = imp2ld;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA2F15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = imp2vs;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA3015E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = installmgr;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA3115E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = mod2imp;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA3215E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = mod2osis;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA3315E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = mod2vpl;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA3415E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = mod2zmod;
+				SDKROOT = macosx10.7;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				ZERO_LINK = NO;
+			};
+			name = AppStore;
+		};
+		A9ADDA3515E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppStore;
+		};
+		A9ADDA3615E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = step2vpl;
+			};
+			name = AppStore;
+		};
+		A9ADDA3715E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = stepdump;
+			};
+			name = AppStore;
+		};
+		A9ADDA3815E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = tei2mod;
+			};
+			name = AppStore;
+		};
+		A9ADDA3915E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = vpl2mod;
+			};
+			name = AppStore;
+		};
+		A9ADDA3A15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = vs2osisref;
+			};
+			name = AppStore;
+		};
+		A9ADDA3B15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = vs2osisreftxt;
+			};
+			name = AppStore;
+		};
+		A9ADDA3C15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../include/**",
+					"$(SRCROOT)/dependencies/icu/include/**",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = xml2gbs;
+			};
+			name = AppStore;
+		};
+		A9ADDA3D15E2D73E00675628 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppStore;
+		};
 		A9BDFA691207F9870067ED5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4856,6 +5519,7 @@
 			buildConfigurations = (
 				1DEB91AE08733DA50010E9CD /* Debug */,
 				1DEB91AF08733DA50010E9CD /* Release */,
+				A9ADDA2915E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4865,6 +5529,7 @@
 			buildConfigurations = (
 				1DEB91B208733DA50010E9CD /* Debug */,
 				1DEB91B308733DA50010E9CD /* Release */,
+				A9ADDA2815E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4874,6 +5539,7 @@
 			buildConfigurations = (
 				A954ABC513EE9AB00094E3FE /* Debug */,
 				A954ABC613EE9AB00094E3FE /* Release */,
+				A9ADDA2C15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4883,6 +5549,7 @@
 			buildConfigurations = (
 				A975EEDE11C792BA007C1532 /* Debug */,
 				A975EEDF11C792BA007C1532 /* Release */,
+				A9ADDA3215E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4892,6 +5559,7 @@
 			buildConfigurations = (
 				A9A7EEBC14D5D61700B76B6A /* Debug */,
 				A9A7EEBD14D5D61700B76B6A /* Release */,
+				A9ADDA3515E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4901,6 +5569,7 @@
 			buildConfigurations = (
 				A9BDFA691207F9870067ED5B /* Debug */,
 				A9BDFA6A1207F9870067ED5B /* Release */,
+				A9ADDA2A15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4910,6 +5579,7 @@
 			buildConfigurations = (
 				A9BFB0B813EDF51100032679 /* Debug */,
 				A9BFB0B913EDF51100032679 /* Release */,
+				A9ADDA2B15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4919,6 +5589,7 @@
 			buildConfigurations = (
 				A9D2714C14D717D800DA8926 /* Debug */,
 				A9D2714D14D717D800DA8926 /* Release */,
+				A9ADDA2D15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4928,6 +5599,7 @@
 			buildConfigurations = (
 				A9D2715914D717FD00DA8926 /* Debug */,
 				A9D2715A14D717FD00DA8926 /* Release */,
+				A9ADDA2E15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4937,6 +5609,7 @@
 			buildConfigurations = (
 				A9D2716614D7181200DA8926 /* Debug */,
 				A9D2716714D7181200DA8926 /* Release */,
+				A9ADDA2F15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4946,6 +5619,7 @@
 			buildConfigurations = (
 				A9D2717314D7182300DA8926 /* Debug */,
 				A9D2717414D7182300DA8926 /* Release */,
+				A9ADDA3015E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4955,6 +5629,7 @@
 			buildConfigurations = (
 				A9D2718014D7183B00DA8926 /* Debug */,
 				A9D2718114D7183B00DA8926 /* Release */,
+				A9ADDA3115E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4964,6 +5639,7 @@
 			buildConfigurations = (
 				A9D2718D14D7185800DA8926 /* Debug */,
 				A9D2718E14D7185800DA8926 /* Release */,
+				A9ADDA3315E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4973,6 +5649,7 @@
 			buildConfigurations = (
 				A9D2719A14D7186A00DA8926 /* Debug */,
 				A9D2719B14D7186A00DA8926 /* Release */,
+				A9ADDA3415E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4982,6 +5659,7 @@
 			buildConfigurations = (
 				A9D271A714D7187E00DA8926 /* Debug */,
 				A9D271A814D7187E00DA8926 /* Release */,
+				A9ADDA3615E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4991,6 +5669,7 @@
 			buildConfigurations = (
 				A9D271B414D7189300DA8926 /* Debug */,
 				A9D271B514D7189300DA8926 /* Release */,
+				A9ADDA3715E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5000,6 +5679,7 @@
 			buildConfigurations = (
 				A9D271C114D718A400DA8926 /* Debug */,
 				A9D271C214D718A400DA8926 /* Release */,
+				A9ADDA3815E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5009,6 +5689,7 @@
 			buildConfigurations = (
 				A9D271CE14D718B800DA8926 /* Debug */,
 				A9D271CF14D718B800DA8926 /* Release */,
+				A9ADDA3915E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5018,6 +5699,7 @@
 			buildConfigurations = (
 				A9D271DB14D718C800DA8926 /* Debug */,
 				A9D271DC14D718C800DA8926 /* Release */,
+				A9ADDA3A15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5027,6 +5709,7 @@
 			buildConfigurations = (
 				A9D271E814D718DF00DA8926 /* Debug */,
 				A9D271E914D718DF00DA8926 /* Release */,
+				A9ADDA3B15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5036,6 +5719,7 @@
 			buildConfigurations = (
 				A9D271F514D718F500DA8926 /* Debug */,
 				A9D271F614D718F500DA8926 /* Release */,
+				A9ADDA3C15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5045,6 +5729,7 @@
 			buildConfigurations = (
 				A9D271FC14D7193300DA8926 /* Debug */,
 				A9D271FD14D7193300DA8926 /* Release */,
+				A9ADDA3D15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
