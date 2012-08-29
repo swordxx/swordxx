@@ -1,0 +1,3 @@
+EXECUTE_PROCESS(COMMAND
+	make install
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bindings/swig/perl/)

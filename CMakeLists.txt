@@ -66,11 +66,16 @@ IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	ADD_LIBRARY(sword SHARED ${sword_SOURCES})
 	MESSAGE(STATUS "Building Shared library.")
 	SET(BUILDING_SHARED 1)
+	SET(SWORD_LINK_NAME sword)
 ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
 	SET(BUILDING_STATIC 1)
+	# Defaults to linking against the shared if it is also being built
+	IF(NOT BUILDING_SHARED)
+		SET(SWORD_LINK_NAME sword_static)
+	ENDIF(NOT BUILDING_SHARED)
 	# With MSVC, the .dll files also create .lib files of the same name
 	# with the exported symbols.  Thus, we don't want the two to have the
 	# same exact name.  In other systems, the .a and .so suffixes suffice
@@ -225,7 +230,7 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 #
 
 IF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
-	INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/bindings.cmake")
+	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings/swig")
 ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 
 ##############################################################################################
