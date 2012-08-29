@@ -406,6 +406,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/canon_german.h
 	include/canon_luther.h
 	include/canon_null.h
+	include/canon_rahlfs.h
 )
 
 SET(INTERNAL_REGEX_HEADER
