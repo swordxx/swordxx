@@ -79,9 +79,6 @@ ELSE(NOT SWIG_FOUND)
 	IF(SWORD_BINDINGS MATCHES ".*Perl.*")
 		FIND_PACKAGE(Perl REQUIRED)
 		IF(PERL_FOUND)
-			# This is a terrible hack.  Don't leave it stay here.  It's ugly
-			SET(LIB_SWORD "${CMAKE_CURRENT_BINARY_DIR}/libsword.a")
-# 			MESSAGE(STATUS "LIB_SWORD is ${LIB_SWORD}")
 			# This should add the perlswig target to be build with the "make" command is executed
 			ADD_CUSTOM_TARGET(perlswig ALL
 				mkdir -p "${SWORD_SWIG_BINARY}/perl"
@@ -98,7 +95,7 @@ ELSE(NOT SWIG_FOUND)
 				COMMAND echo "         'VERSION'       => '${SWORD_VERSION}'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "         'INC'           => '-I${CMAKE_CURRENT_SOURCE_DIR}/include -I${SWORD_SWIG_SOURCE}'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "         'DEFINE'        => '-DSWIG'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
-				COMMAND echo "         'LIBS'          => '-lsword -lz'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
+				COMMAND echo "         'LIBS'          => '-L${CMAKE_CURRENT_BINARY_DIR} -lsword -lz'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "         'PREREQ_PM'     => {}, # e.g., Module::Name => 1.1" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "                 ($] >= 5.005 ?         ## Add these new keywords supported since 5.005" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "                 (ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
