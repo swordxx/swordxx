@@ -5,6 +5,7 @@
 #  ICU_INCLUDE_DIRS   - Directory to include to get ICU headers
 #                       Note: always include ICU headers as, e.g., 
 #                       unicode/utypes.h
+#  ICU_DEFINITIONS    - Definitions
 #  ICU_LIBRARIES      - Libraries to link against for the common ICU
 #  ICU_I18N_LIBRARIES - Libraries to link against for ICU internationaliation
 #                       (note: in addition to ICU_LIBRARIES)
@@ -26,14 +27,15 @@ if(ICU_CONFIG_BIN)
 
   # Get include directories
   execute_process(COMMAND "${ICU_CONFIG_BIN}" ${ICU_CONFIG_OPTS} "--cppflags"
-    OUTPUT_VARIABLE ICU_INCLUDE_DIR
+    OUTPUT_VARIABLE ICU_CPPFLAGS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
   # Sanitize output
+  string(REGEX MATCHALL "-I[^ ]*\ |-I[^ ]*$" ICU_INCLUDE_DIR ${ICU_CPPFLAGS})
+  string(REGEX MATCHALL "-D[^ ]*\ |-D[^ ]*$" ICU_DEFINITIONS ${ICU_CPPFLAGS})
   string(REPLACE "-I" "" ICU_INCLUDE_DIR ${ICU_INCLUDE_DIR})
-  string(REGEX REPLACE "^[ 	]+" "" ICU_INCLUDE_DIR ${ICU_INCLUDE_DIR})
 
-     # Try to get the Libraries we need
+  # Try to get the Libraries we need
   execute_process(COMMAND "${ICU_CONFIG_BIN}" ${ICU_CONFIG_OPTS} "--ldflags"
     OUTPUT_VARIABLE ICU_LIBRARY_RAW
     OUTPUT_STRIP_TRAILING_WHITESPACE
