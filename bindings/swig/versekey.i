@@ -12,6 +12,7 @@
 %ignore sword::VerseKey::builtin_books;
 %ignore sword::VerseKey::BMAX;
 %ignore sword::VerseKey::books;
+%ignore sword::VerseKey::VerseKey(SWKey const &);
 
 %immutable sword::VerseKey::builtin_abbrevs;
 %immutable sword::sbook::name;

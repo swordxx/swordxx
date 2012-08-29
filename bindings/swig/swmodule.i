@@ -2,8 +2,8 @@
 #include "swmodule.h"
 %}
 
-%ignore sword::SWModule::operator sword::SWKey &;
-%ignore sword::SWModule::operator sword::SWKey *;
+%ignore sword::SWModule::operator SWKey &;
+%ignore sword::SWModule::operator SWKey *;
 
 %ignore sword::SWModule::Search;
 
@@ -12,6 +12,8 @@
 %ignore sword::SWModule::getEntryAttributes;
 %ignore sword::SWModule::getConfig;
 %ignore sword::SWModule::setConfig;
+%ignore sword::SWModule::SetKey(SWKey const &);
+%ignore sword::SWModule::setKey(SWKey const &);
 
 %include "swmodule.h"
 
