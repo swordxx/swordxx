@@ -90,19 +90,6 @@ ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 # Some random user settings
 #
 
-IF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES COMPILE_FLAGS "-pg"
-	)
-ENDIF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
-
-IF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES COMPILE_FLAGS "-g -finstrument-functions"
-	)
-	TARGET_LINK_LIBRARIES(libsword fnccheck)
-ENDIF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
-
 IF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
 	ADD_DEFINITIONS(-DGLOBCONFPATH="${SWORD_GLOBAL_CONF_DIR}/sword.conf")
 ENDIF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
@@ -125,33 +112,41 @@ IF(BUILDING_SHARED)
 ENDIF(BUILDING_SHARED)
 
 ###############################################################################################
-# Some options are only needed if we're going to be building a debug option into the library
-# These are generally only for developer building and testing
+# The buildflags depend on the CMAKE_BUILD_TYPE supplied at the command line.
+# For a full lists of different flags see http://cmake.org/Wiki/CMake_Useful_Variables
 #
-# Debug testing
-IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	SET(SWORD_CFLAGS "-g3 -Wall -Werror -O0")
-ELSE(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	SET(SWORD_CFLAGS "-O3")
-ENDIF(CMAKE_BUILD_TYPE STREQUAL "Debug")
+# Cmake has sane defaults for None aka '', DEBUG, RELEASE, RELWITHDEBINFO for known compilers.
+#
+# You can override these variables on the command-line or here.
+# We provide our own defaults below
+#
+# Note the below two initialisations done for us by cmake:
+#
+#SET(CMAKE_C_FLAGS                  "${CMAKE_C_FLAGS}"   or "$ENV{CFLAGS}" or "" )
+#SET(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS}" or "$ENV{CXXFLAGS}" or "" )
 
 IF(SWORD_ENABLE_WARNINGS STREQUAL "Yes")
-	SET(SWORD_CFLAGS "${SWORD_CFLAGS} -Werror")
+	SET(CMAKE_C_FLAGS "-Werror ${CMAKE_C_FLAGS}")
+	SET(CMAKE_CXX_FLAGS "-Werror ${CMAKE_CXX_FLAGS}")
 ENDIF(SWORD_ENABLE_WARNINGS STREQUAL "Yes")
 
-IF(BUILDING_SHARED)
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES COMPILE_FLAGS ${SWORD_CFLAGS}
-	)
-ENDIF(BUILDING_SHARED)
+IF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
+	SET(CMAKE_C_FLAGS   "-pg ${CMAKE_C_FLAGS}")
+	SET(CMAKE_CXX_FLAGS "-pg ${CMAKE_CXX_FLAGS}")
+ENDIF(SWORD_ENABLE_PROFILE STREQUAL "Yes")
 
-IF(BUILDING_STATIC)
-	SET_TARGET_PROPERTIES(sword_static
-		PROPERTIES COMPILE_FLAGS ${SWORD_CFLAGS}
-	)
-ENDIF(BUILDING_STATIC)
+IF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
+	SET(CMAKE_C_FLAGS   "-g -finstrument-functions ${CMAKE_C_FLAGS}")
+	SET(CMAKE_CXX_FLAGS "-g -finstrument-functions ${CMAKE_CXX_FLAGS}")
+	TARGET_LINK_LIBRARIES(libsword fnccheck)
+ENDIF(SWORD_ENABLE_PROFILEFN STREQUAL "Yes")
 
-MESSAGE(STATUS "Setting CFlags to ${SWORD_CFLAGS}")
+SET(CMAKE_C_FLAGS_DEBUG            "-g3 -Wall -O0 ${CMAKE_C_FLAGS}")
+SET(CMAKE_C_FLAGS_RELEASE          "-O3 ${CMAKE_C_FLAGS}")
+SET(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O3 -g ${CMAKE_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Wall -O0 ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS_RELEASE        "-O3 ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g ${CMAKE_CXX_FLAGS}")
 
 ##############################################################################################
 # Setting libraries and includes
