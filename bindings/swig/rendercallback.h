@@ -18,9 +18,9 @@ class ReturnSuccess
 {
 public:
 	ReturnSuccess(): data(""), success(FAILED) {}
-	ReturnSuccess(char* data, int success): data(data), success(success) {}
+	ReturnSuccess(const char* data, int success): data(data), success(success) {}
 	virtual ~ReturnSuccess() {}
-	char* data;
+	const char* data;
 	int success;
 };
 
