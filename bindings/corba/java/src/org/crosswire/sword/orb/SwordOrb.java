@@ -53,7 +53,7 @@ public class SwordOrb extends Object implements HttpSessionBindingListener {
 	public static final int NONE    = 0;
 
 	// set this to your desired debug output level
-	public static int debugLevel = INFO;
+	public static int debugLevel = WARN;
 
 
 	static void log(int level, String message, Throwable e) {
