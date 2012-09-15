@@ -51,7 +51,7 @@ void printsyntax() {
 	fprintf (stderr, "  b (Bi-Directional Reordering), x (Red Words of Christ)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
-	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, OSIS, CGI, and plain (def)\n");
+	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, HTMLHREF, XHTML, OSIS, CGI, and plain (def)\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
@@ -168,6 +168,10 @@ int main(int argc, char **argv)
 				}
 				else if (!::stricmp("html", argv[i+1])) {
 					outputformat = FMT_HTML;
+					i++;
+				}
+				else if (!::stricmp("xhtml", argv[i+1])) {
+					outputformat = FTM_XHTML;
 					i++;
 				}
 				else if (!::stricmp("rtf", argv[i+1])) {
