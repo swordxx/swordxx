@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 					i++;
 				}
 				else if (!::stricmp("xhtml", argv[i+1])) {
-					outputformat = FTM_XHTML;
+					outputformat = FMT_XHTML;
 					i++;
 				}
 				else if (!::stricmp("rtf", argv[i+1])) {
