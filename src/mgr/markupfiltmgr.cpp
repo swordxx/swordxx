@@ -46,6 +46,7 @@
 #include <thmlxhtml.h>
 #include <gbfxhtml.h>
 #include <osisxhtml.h>
+#include <teixhtml.h>
 
 #include <markupfiltmgr.h>
 
@@ -292,11 +293,11 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromtei = NULL;
                         break;
                 case FMT_XHTML:
-                        fromplain = NULL;
+                        fromplain = new PLAINHTML();
                         fromthml = new ThMLXHTML();
                         fromgbf = new GBFXHTML();
                         fromosis = new OSISXHTML();
-                        fromtei = NULL;
+                        fromtei = new TEIXHTML();
                         break;
                 }
 

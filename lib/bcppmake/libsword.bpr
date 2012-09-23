@@ -122,7 +122,8 @@
       ..\..\src\modules\filters\osisruby.obj ..\..\src\mgr\curlhttpt.obj 
       ..\..\src\modules\filters\gbfxhtml.obj 
       ..\..\src\modules\filters\osisxhtml.obj 
-      ..\..\src\modules\filters\thmlxhtml.obj"/>
+      ..\..\src\modules\filters\thmlxhtml.obj 
+      ..\..\src\modules\filters\teixhtml.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

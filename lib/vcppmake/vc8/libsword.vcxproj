@@ -1626,6 +1626,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\modules\filters\teixhtml.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\teihtmlhref.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\teiplain.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\teirtf.cpp" />
@@ -2480,6 +2481,7 @@
     <ClInclude Include="..\..\..\include\swwinlog.h" />
     <ClInclude Include="..\..\..\include\sysdata.h" />
     <ClInclude Include="..\..\..\include\tbdisp.h" />
+    <ClInclude Include="..\..\..\include\teixhtml.h" />
     <ClInclude Include="..\..\..\include\teihtmlhref.h" />
     <ClInclude Include="..\..\..\include\teiplain.h" />
     <ClInclude Include="..\..\..\include\teirtf.h" />

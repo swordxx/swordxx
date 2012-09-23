@@ -92,6 +92,7 @@ SET(sword_base_module_SOURCES
 
 	src/modules/filters/teiplain.cpp
 	src/modules/filters/teirtf.cpp
+	src/modules/filters/teixhtml.cpp
 	src/modules/filters/teihtmlhref.cpp
 
 	src/modules/filters/gbfthml.cpp
@@ -363,6 +364,7 @@ SET(SWORD_INSTALL_HEADERS
 
 	include/teiplain.h
 	include/teirtf.h
+	include/teixhtml.h
 	include/teihtmlhref.h
 
 	include/treekey.h

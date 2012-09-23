@@ -156,6 +156,7 @@ USEUNIT("..\..\src\mgr\curlhttpt.cpp");
 USEUNIT("..\..\src\modules\filters\gbfxhtml.cpp");
 USEUNIT("..\..\src\modules\filters\osisxhtml.cpp");
 USEUNIT("..\..\src\modules\filters\thmlxhtml.cpp");
+USEUNIT("..\..\src\modules\filters\teixhtml.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

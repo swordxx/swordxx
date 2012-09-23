@@ -97,6 +97,7 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/thmlhtml.cpp \
 ../../../src/modules/filters/gbfthml.cpp \
 ../../../src/modules/filters/teihtmlhref.cpp \
+../../../src/modules/filters/teixhtml.cpp \
 ../../../src/modules/filters/gbfrtf.cpp \
 ../../../src/modules/filters/gbfosis.cpp \
 ../../../src/modules/filters/teirtf.cpp \
