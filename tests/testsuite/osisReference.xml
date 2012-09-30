@@ -144,6 +144,9 @@
  <div type="book" osisID="Mark">
   <title type="main">THE GOSPEL ACCORDING TO <abbr expansion="Saint">ST.</abbr> MARK</title>
   <chapter sID="Mark.1" osisID="Mark.1"/>
+   <verse sID="Mark.1.13" osisID="Mark.1.13"/>
+And He was in the wilderness forty days being tempted by Satan; and He was with the wild beasts, and the angels were ministering to Him.
+   <verse eID="Mark.1.13"/>
    <div type="section">
     <title>The Beginning of the Ministry of Jesus</title>
     <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; 
