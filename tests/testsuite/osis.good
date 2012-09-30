@@ -1,8 +1,37 @@
 SUCCESS: ../../utilities/osis2mod: has finished its work and will now rest
+Key:
+Psalms 3:1
 -------
+Preverse Header 0:
+Raw:
 <div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="paragraph"/> <lg sID="gen14"/> 
 -------
+Rendered Header:
 <div sID="gen12" type="section"/> <h3>A Psalm of David, when he fled from Absalom his son.</h3>   
 -------
+CSS:
 		.divineName {			font-variant: small-caps;		}		.wordsOfJesus {			color: red;		}	
+-------
+RenderText:
  Lord, how are they increased that trouble me! many are they that rise up against me.
+-------
+-------
+
+Key:
+Mark 1:14
+-------
+Preverse Header 0:
+Raw:
+<div sID="gen22" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen23" type="paragraph"/> 
+-------
+Rendered Header:
+<div sID="gen22" type="section"/> <h3>The Beginning of the Ministry of Jesus</h3> (Matt 4:12–22; Luke 4:14, 15; 5:1-11) <h3>The Beginning of the Ministry of Jesus</h3> <h3>(<a href="passagestudy.jsp?action=showRef&type=scripRef&value=Matt.4.12-Matt.4.22&module=">Matt 4:12–22</a>; <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.4.14&module=">Luke 4:14</a>, <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.4.15&module=">15</a>; <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.5.1-Luke.5.11&module=">5:1-11</a>) </h3>  
+-------
+CSS:
+		.divineName {			font-variant: small-caps;		}		.wordsOfJesus {			color: red;		}	
+-------
+RenderText:
+ Now after that John was put in prison, Jesus came into Galilee, preaching the gospel of the kingdom of God, 
+-------
+-------
+
