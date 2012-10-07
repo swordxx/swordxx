@@ -47,6 +47,9 @@ namespace {
 		int headerNum;
 
 		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+			clear();
+		}
+		void clear() {
 			currentHeadingName = "";
 			currentHeadingTag = "";
 			sID = 0;
@@ -105,6 +108,7 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						buf.append(tag);
 					}
 					u->suspendTextPassThru = false;
+					u->clear();
 				}
 			}
 			else u->depth++;
