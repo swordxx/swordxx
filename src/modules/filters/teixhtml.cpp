@@ -1,8 +1,8 @@
 /***************************************************************************
- *					 teirtf.cpp  -  TEI to XHTML filter
+ *					 teixhtml.cpp  -  TEI to XHTML filter
  *							 -------------------
- *	begin				: 2006-07-03
- *	copyright			: 2006 by CrossWire Bible Society
+ *	begin				: 2012-09-23
+ *	copyright			: 2012 by CrossWire Bible Society
  *
  * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
