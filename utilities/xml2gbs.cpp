@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2009-2012 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -42,9 +42,9 @@ using sword::SWKey;
 //#define DEBUG
 
 
-enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML };
+enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML, F_TEI };
 
-#define HELPTEXT "xml2gbs 1.0 OSIS/ThML General Book module creation tool for the SWORD Project\n  usage:\n   xml2gbs [-l] [-i] [-fT|-fO] <filename> [modname]\n  -l uses long div names in ThML files\n  -i exports to IMP format instead of creating a module\n  -fO and -fT will set the importer to expect OSIS or ThML format respectively\n    (otherwise it attempts to autodetect)\n"
+#define HELPTEXT "xml2gbs 1.0 OSIS/ThML/TEI General Book module creation tool for the SWORD Project\n  usage:\n   xml2gbs [-l] [-i] [-fT|-fO|-fE] <filename> [modname]\n  -l uses long div names in ThML files\n  -i exports to IMP format instead of creating a module\n  -fO, -fT, and -fE will set the importer to expect OSIS, ThML, or TEI format respectively\n    (otherwise it attempts to autodetect)\n"
 
 unsigned char detectFormat(char* filename) {
 
@@ -65,6 +65,9 @@ unsigned char detectFormat(char* filename) {
                 else if (strstr(entbuffer.c_str(), "<ThML")) {
                         format = F_THML;
                 }
+		else if (strstr(entbuffer.c_str(), "<TEI")) {
+                        format = F_TEI;
+		}
         }
         infile.close();
   }
