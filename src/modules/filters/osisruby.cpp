@@ -26,8 +26,8 @@
 
 SWORD_NAMESPACE_START
 
-const char oName[] = "Ruby";
-const char oTip[] = "Toggles Ruby On and Off if they exist";
+const char oName[] = "Glosses";
+const char oTip[] = "Toggles Glosses On and Off if they exist";
 
 const SWBuf choices[3] = {"Off", "On", ""};
 const StringList oValues(&choices[0], &choices[2]);
