@@ -1,8 +1,8 @@
 /***************************************************************************
  *                         gbfhtml.cpp  -   GBF to HTML filter 
  *                            -------------------
- *   begin                    : 2001-09-03
- *   copyright            : 2001 by CrossWire Bible Society
+ *   begin                : 2001-09-03
+ *   copyright            : 2001-2012 by CrossWire Bible Society
  *
  * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -54,7 +54,7 @@ GBFHTML::GBFHTML() {
 	addTokenSubstitute("Pp", "</cite>");
 	addTokenSubstitute("Fn", "</font>"); //  font  end
 	addTokenSubstitute("CL", "<br />"); //  new line
-	addTokenSubstitute("CM", "<!P><br />"); //  paragraph <!P> is a non showing comment that can be changed in the front end to <P> if desired
+	addTokenSubstitute("CM", "<br /><br />"); //  two new-lines
 	addTokenSubstitute("CG", ""); //  ???
 	addTokenSubstitute("CT", ""); // ???
 	addTokenSubstitute("JR", "<div align=\"right\">"); // right align begin
