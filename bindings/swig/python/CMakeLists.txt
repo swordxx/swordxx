@@ -13,7 +13,7 @@
 
 FIND_PACKAGE(PythonInterp REQUIRED)
 
-SET(PY_SCRIPT "#!${PYTHON_EXECUTABLE} python
+SET(PY_SCRIPT "#!${PYTHON_EXECUTABLE}
 
 from distutils.core import setup, Extension
 setup(name='sword',version='${SWORD_VERSION}',
