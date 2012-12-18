@@ -15,15 +15,10 @@ cmake -DSWORD_BINDINGS="Python Perl" \
 	-DLIBSWORD_LIBRARY_TYPE="Shared Static" \
 	-DCMAKE_BUILD_TYPE="Release" \
 	-DCMAKE_INSTALL_PREFIX="/opt/sword" ..
-make -j5
-cd bindings/swig/perl
-make
-cd ../python
-python setup.py build
+make -j10
+cd ..
 
 echo "Now the library has been built, along with the Perl and Python bindings. \
-	If you would like to install, you may now do so by changing into the build \
-	directory and typing \"sudo make install\".  Python bindings may be installed \
-	by then changing into tye build/bindings/swig/python diretory and typing \"sudo python \
-	setup.py install\" and Perl bindings may be installed by changing into the \
-	build/bindings/swig/perl directory and issuing the command \"sudo make install\"."
+If you now execute 'make install' from the build directory you will \
+install the library to /opt/sword if you have privileges to write there \
+with the account you execute the install from."
