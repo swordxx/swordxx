@@ -23,7 +23,7 @@
 #import <ObjCSword/SwordBibleTextEntry.h>
 #import <ObjCSword/SwordVerseManager.h>
 #import <ObjCSword/SwordInstallSource.h>
-#import "SwordInstallSourceManager.h"
+#import <ObjCSword/SwordInstallSourceManager.h>
 #import <ObjCSword/SwordModuleTextEntry.h>
 #import <ObjCSword/SwordModuleTreeEntry.h>
 #import <ObjCSword/VerseEnumerator.h>

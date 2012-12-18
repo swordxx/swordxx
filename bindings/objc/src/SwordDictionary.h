@@ -12,9 +12,8 @@
 */
 
 #import <Foundation/Foundation.h>
-#import "SwordModule.h"
 
-@class SwordManager;
+@class SwordManager, SwordModule;
 
 @interface SwordDictionary : SwordModule {
     /** only keys are buffered here */

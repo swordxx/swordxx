@@ -11,15 +11,12 @@
 	General Public License for more details. (http://www.gnu.org/licenses/gpl.html)
 */
 
-#import "ObjCSword_Prefix.pch"
-#import "SwordManager.h"
-#import "Configuration.h"
-#include <string>
-
-#include "gbfplain.h"
-#include "thmlplain.h"
-#include "osisplain.h"
+#import <ObjCSword/ObjCSword.h>
 #import "Notifications.h"
+#import "FilterProviderFactory.h"
+#import "DefaultFilterProvider.h"
+
+#include "encfiltmgr.h"
 
 using std::string;
 using std::list;
@@ -60,47 +57,54 @@ using std::list;
 
 - (void)addFiltersToModule:(sword::SWModule *)mod {
     // prepare display filters
+
+    id<FilterProvider> filterProvider = [[FilterProviderFactory providerFactory] get];
+
     switch(mod->Markup()) {
         case sword::FMT_GBF:
             if(!gbfFilter) {
-                gbfFilter = new sword::GBFHTMLHREF();
+                gbfFilter = [filterProvider newGbfRenderFilter];
             }
             if(!gbfStripFilter) {
-                gbfStripFilter = new sword::GBFPlain();
+                gbfStripFilter = [filterProvider newGbfPlainFilter];
             }
             mod->AddRenderFilter(gbfFilter);
             mod->AddStripFilter(gbfStripFilter);
             break;
         case sword::FMT_THML:
             if(!thmlFilter) {
-                thmlFilter = new sword::ThMLHTMLHREF();
+                thmlFilter = [filterProvider newThmlRenderFilter];
             }
             if(!thmlStripFilter) {
-                thmlStripFilter = new sword::ThMLPlain();
+                thmlStripFilter = [filterProvider newThmlPlainFilter];
             }
             mod->AddRenderFilter(thmlFilter);
             mod->AddStripFilter(thmlStripFilter);
             break;
         case sword::FMT_OSIS:
             if(!osisFilter) {
-                osisFilter = new sword::OSISHTMLHREF();
+                osisFilter = [filterProvider newOsisRenderFilter];
             }
             if(!osisStripFilter) {
-                osisStripFilter = new sword::OSISPlain();
+                osisStripFilter = [filterProvider newOsisPlainFilter];
             }
             mod->AddRenderFilter(osisFilter);
             mod->AddStripFilter(osisStripFilter);
             break;
         case sword::FMT_TEI:
             if(!teiFilter) {
-                teiFilter = new sword::TEIHTMLHREF();
+                teiFilter = [filterProvider newTeiRenderFilter];
+            }
+            if(!teiStripFilter) {
+                teiStripFilter = [filterProvider newTeiPlainFilter];
             }
             mod->AddRenderFilter(teiFilter);
+            mod->AddStripFilter(teiStripFilter);
             break;
         case sword::FMT_PLAIN:
         default:
             if(!plainFilter) {
-                plainFilter = new sword::PLAINHTML();
+                plainFilter = [filterProvider newHtmlPlainFilter];
             }
             mod->AddRenderFilter(plainFilter);
             break;
@@ -117,56 +121,6 @@ using std::list;
 @synthesize temporaryManager;
 
 # pragma mark - class methods
-
-+ (NSDictionary *)linkDataForLinkURL:(NSURL *)aURL {
-    NSMutableDictionary *ret = [NSMutableDictionary dictionary];
-    
-    NSString *scheme = [aURL scheme];
-    if([scheme isEqualToString:@"sword"]) {
-        // in this case host is the module and path the reference
-        [ret setObject:[aURL host] forKey:ATTRTYPE_MODULE];
-        [ret setObject:[[[aURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] 
-                        stringByReplacingOccurrencesOfString:@"/" withString:@""]
-                forKey:ATTRTYPE_VALUE];
-        [ret setObject:@"scriptRef" forKey:ATTRTYPE_TYPE];
-        [ret setObject:@"showRef" forKey:ATTRTYPE_ACTION];
-    } else if([scheme isEqualToString:@"applewebdata"]) {
-        // in this case
-        NSString *path = [aURL path];
-        NSString *query = [aURL query];
-        if([[path lastPathComponent] isEqualToString:@"passagestudy.jsp"]) {
-            NSArray *data = [query componentsSeparatedByString:@"&"];
-            NSString *type = @"x";
-            NSString *module = @"";
-            NSString *passage = @"";
-            NSString *value = @"1";
-            NSString *action = @"";
-            for(NSString *entry in data) {
-                if([entry hasPrefix:@"type="]) {
-                    type = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
-                } else if([entry hasPrefix:@"module="]) {
-                    module = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
-                } else if([entry hasPrefix:@"passage="]) {
-                    passage = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
-                } else if([entry hasPrefix:@"action="]) {
-                    action = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];                    
-                } else if([entry hasPrefix:@"value="]) {
-                    value = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];                    
-                } else {
-                    ALog(@"Unknown parameter: %@", entry);
-                }
-            }
-            
-            [ret setObject:module forKey:ATTRTYPE_MODULE];
-            [ret setObject:passage forKey:ATTRTYPE_PASSAGE];
-            [ret setObject:value forKey:ATTRTYPE_VALUE];
-            [ret setObject:action forKey:ATTRTYPE_ACTION];
-            [ret setObject:type forKey:ATTRTYPE_TYPE];
-        }
-    }
-    
-    return ret;
-}
 
 + (NSArray *)moduleTypes {
     return [NSArray arrayWithObjects:
@@ -200,7 +154,7 @@ using std::list;
         self.modulesPath = path;
 
 		self.modules = [NSDictionary dictionary];
-		self.managerLock = [(NSLock *)[[NSRecursiveLock alloc] init] autorelease];
+		self.managerLock = (NSLock *)[[[NSRecursiveLock alloc] init] autorelease];
 
         [self reInit];
         
@@ -288,14 +242,13 @@ using std::list;
             // clear some data
             [self refreshModules];
             
-            SendNotifyModulesChanged(nil);
+            SendNotifyModulesChanged(NULL);
         }
     }
 	[managerLock unlock];    
 }
 
-- (void)addPath:(NSString *)path {
-    
+- (void)addModulesPath:(NSString *)path {
 	[managerLock lock];
 	if(swManager == nil) {
 		swManager = new sword::SWMgr([path UTF8String], true, new sword::EncodingFilterMgr(sword::ENC_UTF8));
@@ -306,7 +259,7 @@ using std::list;
 	[self refreshModules];
 	[managerLock unlock];
     
-    SendNotifyModulesChanged(nil);
+    SendNotifyModulesChanged(NULL);
 }
 
 - (SwordModule *)moduleWithName:(NSString *)name {

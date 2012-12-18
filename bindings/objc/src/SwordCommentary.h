@@ -12,13 +12,15 @@
 */
 
 #import <Foundation/Foundation.h>
-#import "SwordBible.h"
+#import <ObjCSword/ObjCSword.h>
 
 #ifdef __cplusplus
 #include <rawfiles.h>
 class sword::RawFiles;
 class sword::SWConfig;
 #endif
+
+
 
 @interface SwordCommentary : SwordBible {
 }

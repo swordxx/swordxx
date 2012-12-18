@@ -12,7 +12,6 @@
 */
 
 #import "SwordCommentary.h"
-#import "Configuration.h"
 
 @implementation SwordCommentary
 

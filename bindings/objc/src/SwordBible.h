@@ -12,13 +12,13 @@
 */
 
 #import <Foundation/Foundation.h>
-#import "SwordModule.h"
 
 #ifdef __cplusplus
 #import "versekey.h"
 #endif
 
-@class SwordManager, SwordBibleBook, SwordModuleTextEntry, SwordBibleTextEntry;
+@class SwordModule, SwordManager, SwordBibleBook, SwordModuleTextEntry, SwordBibleTextEntry;
+@class SwordKey;
 
 typedef enum {
 	OldTestament = 1,

@@ -37,6 +37,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		8C92C5E680D42D8CA7372C1F /* FilterProviderFactory.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */; };
+		8C92C5F8212FBE600D41B567 /* SwordUtil.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */; };
+		8C92CC5DBC97CC4797507817 /* DefaultFilterProvider.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */; };
+		8C92CC7B68FDCDFFFB8B4A31 /* DefaultFilterProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */; };
+		8C92CE0B19FBB659FB8F8B71 /* FilterProviderFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */; };
+		8C92CE39E231FF9CAAB5308B /* SwordUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C92C291C40A77060C12A21B /* SwordUtil.m */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 		A94EAC0B117B28920018B06F /* SwordBible.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE3117B28910018B06F /* SwordBible.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -337,6 +343,7 @@
 		A954ACDB13EEA5340094E3FE /* untgz.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F713EE98B30094E3FE /* untgz.c */; };
 		A954ACDC13EEA5340094E3FE /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F813EE98B30094E3FE /* zutil.c */; };
 		A954ACDD13EEA6780094E3FE /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
 		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -392,6 +399,7 @@
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
 		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9E9C5EE16806A2B00ECEB39 /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
 		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 /* End PBXBuildFile section */
@@ -659,6 +667,9 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */,
+				8C92C5F8212FBE600D41B567 /* SwordUtil.h in CopyFiles */,
+				8C92C5E680D42D8CA7372C1F /* FilterProviderFactory.h in CopyFiles */,
+				8C92CC5DBC97CC4797507817 /* DefaultFilterProvider.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,6 +681,12 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* ObjCSword_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCSword_Prefix.pch; sourceTree = "<group>"; };
+		8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DefaultFilterProvider.mm; path = src/DefaultFilterProvider.mm; sourceTree = "<group>"; };
+		8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FilterProviderFactory.mm; path = src/FilterProviderFactory.mm; sourceTree = "<group>"; };
+		8C92C291C40A77060C12A21B /* SwordUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordUtil.m; path = src/SwordUtil.m; sourceTree = "<group>"; };
+		8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterProviderFactory.h; path = src/FilterProviderFactory.h; sourceTree = "<group>"; };
+		8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordUtil.h; path = src/SwordUtil.h; sourceTree = "<group>"; };
+		8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefaultFilterProvider.h; path = src/DefaultFilterProvider.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* ObjCSword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCSword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9013D3F11E316C700E1CCCA /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
@@ -1180,6 +1197,7 @@
 		A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SwordModule+Index.h"; path = "src/SwordModule+Index.h"; sourceTree = "<group>"; };
 		A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "SwordModule+Index.mm"; path = "src/SwordModule+Index.mm"; sourceTree = "<group>"; };
 		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
+		A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = teixhtml.cpp; sourceTree = "<group>"; };
 		A9EF1414120595650078A27C /* SwordLocaleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordLocaleManager.h; path = src/SwordLocaleManager.h; sourceTree = "<group>"; };
 		A9EF1415120595650078A27C /* SwordLocaleManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordLocaleManager.mm; path = src/SwordLocaleManager.mm; sourceTree = "<group>"; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -1474,6 +1492,12 @@
 				A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */,
 				A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */,
 				A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */,
+				8C92C291C40A77060C12A21B /* SwordUtil.m */,
+				8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */,
+				8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */,
+				8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */,
+				8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */,
+				8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */,
 			);
 			name = SwordWrapper;
 			sourceTree = "<group>";
@@ -1691,6 +1715,7 @@
 		A954A85413EE98B30094E3FE /* filters */ = {
 			isa = PBXGroup;
 			children = (
+				A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */,
 				A954A85513EE98B30094E3FE /* cipherfil.cpp */,
 				A954A85613EE98B30094E3FE /* gbffootnotes.cpp */,
 				A954A85713EE98B30094E3FE /* gbfheadings.cpp */,
@@ -2849,6 +2874,10 @@
 				A9C2858311C44A0A00803CB5 /* Configuration.m in Sources */,
 				A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */,
 				A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */,
+				8C92CE39E231FF9CAAB5308B /* SwordUtil.m in Sources */,
+				8C92CE0B19FBB659FB8F8B71 /* FilterProviderFactory.mm in Sources */,
+				8C92CC7B68FDCDFFFB8B4A31 /* DefaultFilterProvider.mm in Sources */,
+				A9E9C5EE16806A2B00ECEB39 /* teixhtml.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2856,6 +2885,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */,
 				A954ACCA13EEA5340094E3FE /* ftplib.c in Sources */,
 				A954ACCB13EEA5340094E3FE /* ftpparse.c in Sources */,
 				A954ACCD13EEA5340094E3FE /* adler32.c in Sources */,

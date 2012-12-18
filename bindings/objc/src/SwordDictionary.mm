@@ -11,8 +11,7 @@
 	General Public License for more details. (http://www.gnu.org/licenses/gpl.html)
 */
 
-#import "SwordDictionary.h"
-#import "Configuration.h"
+#import <ObjCSword/ObjCSword.h>
 
 @interface SwordDictionary (/* Private, class continuation */)
 /** private property */

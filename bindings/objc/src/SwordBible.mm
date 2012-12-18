@@ -11,13 +11,7 @@
 	General Public License for more details. (http://www.gnu.org/licenses/gpl.html)
 */
 
-#import "SwordBible.h"
-#import "SwordManager.h"
-#import "SwordBibleBook.h"
-#import "SwordListKey.h"
-#import "SwordModuleTextEntry.h"
-#import "SwordBibleTextEntry.h"
-#import "SwordVerseKey.h"
+#import <ObjCSword/ObjCSword.h>
 
 using sword::AttributeTypeList;
 using sword::AttributeList;

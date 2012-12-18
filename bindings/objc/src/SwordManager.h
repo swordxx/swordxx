@@ -17,14 +17,6 @@
 #ifdef __cplusplus
 #include <swmgr.h>		// C++ Sword API
 #include <localemgr.h>
-#include <markupfiltmgr.h>
-// Filters
-#include <markupfiltmgr.h>
-#include <osishtmlhref.h>
-#include <thmlhtmlhref.h>
-#include <gbfhtmlhref.h>
-#include <teihtmlhref.h>
-#include <plainhtml.h>
 #include <versekey.h>
 class sword::SWModule;
 #endif
@@ -110,13 +102,12 @@ class sword::SWModule;
 // CipherKeys NSUserdefaultsKey
 #define DefaultsModuleCipherKeysKey     @"DefaultsModuleCipherKeysKey"
 
-
 @interface SwordManager : NSObject {
     
 #ifdef __cplusplus
 	sword::SWMgr *swManager;
 	sword::SWFilter *plainFilter, *thmlFilter, *gbfFilter, *osisFilter, *teiFilter;
-	sword::SWFilter *thmlStripFilter, *gbfStripFilter, *osisStripFilter;
+	sword::SWFilter *thmlStripFilter, *gbfStripFilter, *osisStripFilter, *teiStripFilter;
 #endif
 
 	NSDictionary *modules;
@@ -134,7 +125,7 @@ class sword::SWModule;
 // --------------------- methods -----------------------
 
 /**
- Conveniance initializer. Creates an instance of SwordManager for a given module path.
+ Convenience initializer. Creates an instance of SwordManager for a given module path.
  Internally -initWithPath: is called.
  */
 + (SwordManager *)managerWithPath:(NSString*)path;
@@ -147,17 +138,10 @@ class sword::SWModule;
 + (SwordManager *)defaultManager;
 
 /**
- Retreve a list of known module types.
+ Retrieve a list of known module types.
  See SWMOD_CATEGORY_*
  */
 + (NSArray *)moduleTypes;
-
-/**
- Rendered Module text that has links.
- This method will return a dictionary with attribute/value pairs from parameters of the link.
- See ATTRTYPE_* for key types.
- */
-+ (NSDictionary *)linkDataForLinkURL:(NSURL *)aURL;
 
 /**
  Initializes this manager for the given module path.
@@ -167,10 +151,10 @@ class sword::SWModule;
 /**
  Add an additional path to the manager to augment more modules.
  */
-- (void)addPath:(NSString*)path;
+- (void)addModulesPath:(NSString*)path;
 
 /** 
- reinit - reloads all modules, filters and such
+ re-init - reloads all modules, filters and such
  This will be triggered if new module had been installed in the module installer.
  */
 - (void)reInit;
@@ -233,6 +217,7 @@ class sword::SWModule;
  Returns the underlying sword::SWMgr instance
  */
 - (sword::SWMgr *)swManager;
+
 #endif
 
 @end
