@@ -20,6 +20,7 @@
 #import "SwordCommentary.h"
 #import "SwordDictionary.h"
 #import "SwordBook.h"
+#import "SwordFilter.h"
 
 @interface SwordModule ()
 
@@ -118,7 +119,7 @@
     return ret;    
 }
 
-#pragma mark - Initializers
+#pragma mark - Initializer
 
 - (void)mainInit {
     category = Unset;
@@ -176,6 +177,16 @@
     [self setLang:nil];
 
     [super dealloc];
+}
+
+#pragma mark - Filters
+
+- (void)addRenderFilter:(SwordFilter *)aFilter {
+    swModule->AddRenderFilter([aFilter swFilter]);
+}
+
+- (void)addStripFilter:(SwordFilter *)aFilter {
+    swModule->AddStripFilter([aFilter swFilter]);
 }
 
 #pragma mark - Module access semaphores

@@ -5,55 +5,44 @@
 
 
 #import "DefaultFilterProvider.h"
-
-#include "gbfplain.h"
-#include "thmlplain.h"
-#include "osisplain.h"
-#include "teiplain.h"
-#include "markupfiltmgr.h"
-#include "osishtmlhref.h"
-#include "thmlhtmlhref.h"
-#include "gbfhtmlhref.h"
-#include "teihtmlhref.h"
-#include "plainhtml.h"
-
+#import "SwordFilter.h"
 
 @implementation DefaultFilterProvider
 
-- (sword::SWFilter *)newOsisRenderFilter {
-    return new sword::OSISHTMLHREF();
+- (SwordFilter *)newOsisRenderFilter {
+    return [SwordOsisHtmlRefFilter filter];
 }
 
-- (sword::SWFilter *)newOsisPlainFilter {
-    return new sword::OSISPlain();
+- (SwordFilter *)newOsisPlainFilter {
+    return [SwordOsisPlainFilter filter];
 }
 
-- (sword::SWFilter *)newGbfRenderFilter {
-    return new sword::GBFHTMLHREF();
+- (SwordFilter *)newGbfRenderFilter {
+    return [SwordGbfHtmlFilter filter];
 }
 
-- (sword::SWFilter *)newGbfPlainFilter {
-    return new sword::GBFPlain();
+- (SwordFilter *)newGbfPlainFilter {
+    return [SwordGbfPlainFilter filter];
 }
 
-- (sword::SWFilter *)newThmlRenderFilter {
-    return new sword::ThMLHTMLHREF();
+- (SwordFilter *)newThmlRenderFilter {
+    return [SwordThmlHtmlFilter filter];
 }
 
-- (sword::SWFilter *)newThmlPlainFilter {
-    return new sword::ThMLPlain();
+- (SwordFilter *)newThmlPlainFilter {
+    return [SwordThmlPlainFilter filter];
 }
 
-- (sword::SWFilter *)newTeiRenderFilter {
-    return new sword::TEIHTMLHREF();
+- (SwordFilter *)newTeiRenderFilter {
+    return [SwordTeiHtmlFilter filter];
 }
 
-- (sword::SWFilter *)newTeiPlainFilter {
-    return new sword::TEIPlain();
+- (SwordFilter *)newTeiPlainFilter {
+    return [SwordTeiPlainFilter filter];
 }
 
-- (sword::SWFilter *)newHtmlPlainFilter {
-    return new sword::PLAINHTML();
+- (SwordFilter *)newHtmlPlainFilter {
+    return [SwordPlainHtmlFilter filter];
 }
 
 @end

@@ -17,8 +17,6 @@
 #import "swmodule.h"
 #endif
 
-#define My_SWDYNAMIC_CAST(className, object) (sword::className *)((object)?((object->getClass()->isAssignableFrom(#className))?object:0):0)
-
 // defines for dictionary entries for passage study
 #define ATTRTYPE_TYPE       @"type"
 #define ATTRTYPE_PASSAGE    @"passage"
@@ -33,6 +31,7 @@
 
 
 @class SwordManager, SwordModuleTextEntry, SwordKey;
+@class SwordFilter;
 
 typedef enum {
     TextTypeStripped = 1,
@@ -103,15 +102,35 @@ typedef enum {
 @property (retain, readonly) NSString *lang;
 
 #ifdef __cplusplus
+
 /**
- Convenience initializers
+ Convenience initializer
  */
 + (id)moduleForSWModule:(sword::SWModule *)aModule;
 + (id)moduleForSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
+
 /**
  Factory method that creates the correct module type instance for the given type
  */
 + (id)moduleForType:(ModuleType)aType swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager;
+
+/**
+ Initialize this module with an the SWModule.
+ This initializer should normally not need to be used.
+ */
+- (id)initWithSWModule:(sword::SWModule *)aModule;
+
+/**
+ Initialize this module with an the SWModule and a SwordManager instance.
+ This initializer should normally not need to be used.
+ */
+- (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
+
+/**
+ Retrieve the underlying SWModule instance
+ */
+- (sword::SWModule *)swModule;
+
 #endif
 
 /**
@@ -135,22 +154,12 @@ typedef enum {
  The SwordManager is needed because the underlying SWModule is retrieved from SwordManager.
  */
 - (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager;
-#ifdef __cplusplus
-/**
- Initialize this module with an the SWModule.
- This initializer should normally not need to be used.
- */
-- (id)initWithSWModule:(sword::SWModule *)aModule;
-/**
- Initialize this module with an the SWModule and a SwordManager instance.
- This initializer should normally not need to be used.
- */
-- (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager;
-/**
- Retrieve the underlying SWModule instance
- */
-- (sword::SWModule *)swModule;
-#endif
+
+/** Adds a render filter to this module */
+- (void)addRenderFilter:(SwordFilter *)aFilter;
+
+/** Adds a strip filter to this module */
+- (void)addStripFilter:(SwordFilter *)aFilter;
 
 /**
  Any error while processing the module?

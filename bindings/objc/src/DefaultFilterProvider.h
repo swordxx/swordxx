@@ -6,39 +6,32 @@
 
 
 #import <Foundation/Foundation.h>
-
-#ifdef __cplusplus
-#include <swmgr.h>		// C++ Sword API
-#endif
+#import "SwordFilter.h"
 
 @protocol FilterProvider
 
-#ifdef __cplusplus
-- (sword::SWFilter *)newOsisRenderFilter;
-- (sword::SWFilter *)newOsisPlainFilter;
-- (sword::SWFilter *)newGbfRenderFilter;
-- (sword::SWFilter *)newGbfPlainFilter;
-- (sword::SWFilter *)newThmlRenderFilter;
-- (sword::SWFilter *)newThmlPlainFilter;
-- (sword::SWFilter *)newTeiRenderFilter;
-- (sword::SWFilter *)newTeiPlainFilter;
-- (sword::SWFilter *)newHtmlPlainFilter;
-#endif
+- (SwordFilter *)newOsisRenderFilter;
+- (SwordFilter *)newOsisPlainFilter;
+- (SwordFilter *)newGbfRenderFilter;
+- (SwordFilter *)newGbfPlainFilter;
+- (SwordFilter *)newThmlRenderFilter;
+- (SwordFilter *)newThmlPlainFilter;
+- (SwordFilter *)newTeiRenderFilter;
+- (SwordFilter *)newTeiPlainFilter;
+- (SwordFilter *)newHtmlPlainFilter;
 
 @end
 
 @interface DefaultFilterProvider : NSObject <FilterProvider>
 
-#ifdef __cplusplus
-- (sword::SWFilter *)newOsisRenderFilter;
-- (sword::SWFilter *)newOsisPlainFilter;
-- (sword::SWFilter *)newGbfRenderFilter;
-- (sword::SWFilter *)newGbfPlainFilter;
-- (sword::SWFilter *)newThmlRenderFilter;
-- (sword::SWFilter *)newThmlPlainFilter;
-- (sword::SWFilter *)newTeiRenderFilter;
-- (sword::SWFilter *)newTeiPlainFilter;
-- (sword::SWFilter *)newHtmlPlainFilter;
-#endif
+- (SwordFilter *)newOsisRenderFilter;
+- (SwordFilter *)newOsisPlainFilter;
+- (SwordFilter *)newGbfRenderFilter;
+- (SwordFilter *)newGbfPlainFilter;
+- (SwordFilter *)newThmlRenderFilter;
+- (SwordFilter *)newThmlPlainFilter;
+- (SwordFilter *)newTeiRenderFilter;
+- (SwordFilter *)newTeiPlainFilter;
+- (SwordFilter *)newHtmlPlainFilter;
 
 @end

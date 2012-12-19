@@ -17,6 +17,7 @@
 #import "DefaultFilterProvider.h"
 
 #include "encfiltmgr.h"
+#import "SwordFilter.h"
 
 using std::string;
 using std::list;
@@ -24,7 +25,7 @@ using std::list;
 @interface SwordManager (PrivateAPI)
 
 - (void)refreshModules;
-- (void)addFiltersToModule:(sword::SWModule *)mod;
+- (void)addFiltersToModule:(SwordModule *)mod;
 
 @end
 
@@ -47,7 +48,7 @@ using std::list;
             SwordModule *sm = [SwordModule moduleForType:aType swModule:mod swordManager:self];
             [dict setObject:sm forKey:[[sm name] lowercaseString]];
 
-            [self addFiltersToModule:mod];
+            [self addFiltersToModule:sm];
         }
 	}
     
@@ -55,12 +56,12 @@ using std::list;
     self.modules = dict;
 }
 
-- (void)addFiltersToModule:(sword::SWModule *)mod {
+- (void)addFiltersToModule:(SwordModule *)mod {
     // prepare display filters
 
     id<FilterProvider> filterProvider = [[FilterProviderFactory providerFactory] get];
 
-    switch(mod->Markup()) {
+    switch([mod swModule]->Markup()) {
         case sword::FMT_GBF:
             if(!gbfFilter) {
                 gbfFilter = [filterProvider newGbfRenderFilter];
@@ -68,8 +69,8 @@ using std::list;
             if(!gbfStripFilter) {
                 gbfStripFilter = [filterProvider newGbfPlainFilter];
             }
-            mod->AddRenderFilter(gbfFilter);
-            mod->AddStripFilter(gbfStripFilter);
+            [mod addRenderFilter:gbfFilter];
+            [mod addStripFilter:gbfStripFilter];
             break;
         case sword::FMT_THML:
             if(!thmlFilter) {
@@ -78,8 +79,8 @@ using std::list;
             if(!thmlStripFilter) {
                 thmlStripFilter = [filterProvider newThmlPlainFilter];
             }
-            mod->AddRenderFilter(thmlFilter);
-            mod->AddStripFilter(thmlStripFilter);
+            [mod addRenderFilter:thmlFilter];
+            [mod addStripFilter:thmlStripFilter];
             break;
         case sword::FMT_OSIS:
             if(!osisFilter) {
@@ -88,8 +89,8 @@ using std::list;
             if(!osisStripFilter) {
                 osisStripFilter = [filterProvider newOsisPlainFilter];
             }
-            mod->AddRenderFilter(osisFilter);
-            mod->AddStripFilter(osisStripFilter);
+            [mod addRenderFilter:osisFilter];
+            [mod addStripFilter:osisStripFilter];
             break;
         case sword::FMT_TEI:
             if(!teiFilter) {
@@ -98,15 +99,15 @@ using std::list;
             if(!teiStripFilter) {
                 teiStripFilter = [filterProvider newTeiPlainFilter];
             }
-            mod->AddRenderFilter(teiFilter);
-            mod->AddStripFilter(teiStripFilter);
+            [mod addRenderFilter:teiFilter];
+            [mod addStripFilter:teiStripFilter];
             break;
         case sword::FMT_PLAIN:
         default:
             if(!plainFilter) {
                 plainFilter = [filterProvider newHtmlPlainFilter];
             }
-            mod->AddRenderFilter(plainFilter);
+            [mod addRenderFilter:plainFilter];
             break;
     }    
 }
@@ -199,7 +200,16 @@ using std::list;
     [self setModules:nil];
     [self setModulesPath:nil];
     [self setManagerLock:nil];
-    
+
+    [gbfFilter release];
+    [gbfStripFilter release];
+    [thmlFilter release];
+    [thmlStripFilter release];
+    [osisFilter release];
+    [osisStripFilter release];
+    [teiFilter release];
+    [teiStripFilter release];
+    [plainFilter release];
     [super dealloc];
 }
 

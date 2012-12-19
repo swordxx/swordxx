@@ -106,8 +106,8 @@ class sword::SWModule;
     
 #ifdef __cplusplus
 	sword::SWMgr *swManager;
-	sword::SWFilter *plainFilter, *thmlFilter, *gbfFilter, *osisFilter, *teiFilter;
-	sword::SWFilter *thmlStripFilter, *gbfStripFilter, *osisStripFilter, *teiStripFilter;
+	SwordFilter *plainFilter, *thmlFilter, *gbfFilter, *osisFilter, *teiFilter;
+    SwordFilter *thmlStripFilter, *gbfStripFilter, *osisStripFilter, *teiStripFilter;
 #endif
 
 	NSDictionary *modules;
