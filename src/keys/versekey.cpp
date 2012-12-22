@@ -544,8 +544,11 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 			if (buf[1] != ' ') {		// for silly "Mat 1:1: this verse...."
 				number[tonumber] = 0;
 				tonumber = 0;
-				if (*number)
-					chap = atoi(number);
+				if (*number) {
+					if (chap >= 0)
+						verse = atoi(number);
+					else	chap  = atoi(number);
+				}
 				*number = 0;
 				comma = 0;
 				break;
@@ -774,19 +777,23 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		case '}':
 			break;
 		case '.':
-			if (buf > orig)			// ignore (break) if preceeding char is not a digit
+			if (buf > orig) {			// ignore (break) if preceeding char is not a digit 
 				for (notAllDigits = tobook; notAllDigits; notAllDigits--) {
 					if ((!isdigit(book[notAllDigits-1])) && (!strchr(" .", book[notAllDigits-1])))
 						break;
 				}
 				if (!notAllDigits && !isdigit(buf[1]))
 					break;
+			}
 
 			number[tonumber] = 0;
 			tonumber = 0;
-			if (*number)
-				chap = atoi(number);
-			*number = 0;
+			if (*number) {
+				if (chap >= 0)
+					verse = atoi(number);
+				else	chap  = atoi(number);
+				*number = 0;
+			}
 			break;
 
 		default:
@@ -830,7 +837,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	if (*number) {
 		if (chap >= 0)
 			verse = atoi(number);
-		else	chap = atoi(number);
+		else	chap  = atoi(number);
 	}
 	*number = 0;
 	book[tobook] = 0;

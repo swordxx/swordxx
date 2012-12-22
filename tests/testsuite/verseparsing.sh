@@ -93,6 +93,8 @@
 ../parsekey "1Jn1.1f; 3:10ff" en KJV ge 1
 ../parsekey "1Jn1.1ff;3:10f" en KJV ge 1
 ../parsekey "1Jn1.1,8ff; 3:10-12,14f,17ff" en KJV ge 1
+../parsekey "1Jn2.3f." en KJV ge 1
+../parsekey "1Jn2.3ff." en KJV ge 1
 
 ### check for 'f' in book name which might trigger 'and following'
 ../parsekey "Song of 3:5" en KJV ge 1
