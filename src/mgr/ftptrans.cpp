@@ -101,10 +101,13 @@ vector<struct DirEntry> FTPTransport::getDirList(const char *dirURL) {
 			}
 			SWLog::getSystemLog()->logWarning("FTPURLGetDir: parsing item %s(%d)\n", start, end-start);
 			int status = ftpparse(&item, start, end - start);
-			SWLog::getSystemLog()->logWarning("FTPURLGetDir: got item %s\n", item.name);
-			if (status) {
+			// in ftpparse.h, there is a warning that name is not necessarily null terminated
+			SWBuf name;
+			name.append(item.name, item.namelen);
+			SWLog::getSystemLog()->logWarning("FTPURLGetDir: got item %s\n", name.c_str());
+			if (status && name != "." && name != "..") {
 				struct DirEntry i;
-				i.name = item.name;
+				i.name = name;
 				i.size = item.size;
 				i.isDirectory = (item.flagtrycwd == 1);
 				dirList.push_back(i);
@@ -112,8 +115,7 @@ vector<struct DirEntry> FTPTransport::getDirList(const char *dirURL) {
 			start = end;
 		}
 	}
-	else
-	{
+	else {
 		SWLog::getSystemLog()->logWarning("FTPURLGetDir: failed to get dir %s\n", dirURL);
 	}
 	return dirList;
