@@ -324,16 +324,16 @@ void usage(const char *progName, const char *error) {
 		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
 		"\t-sc\t\t\t\tsync config with known remote repo list\n"
 		"\t\t\t\t\t\tNOTE: also creates if none exists\n"
-		"\t-d\t\t\t\tturn debug output on\n"
-		"\t-l\t\t\t\tlist installed modules\n"
-		"\t-u <modName>\t\t\tuninstall module\n"
 		"\t-s\t\t\t\tlist remote sources\n"
 		"\t-r  <remoteSrcName>\t\trefresh remote source\n"
 		"\t-rl <remoteSrcName>\t\tlist available modules from remote source\n"
 		"\t-rd <remoteSrcName>\t\tlist new/updated modules from remote source\n"
 		"\t-ri <remoteSrcName> <modName>\tinstall module from remote source\n"
+		"\t-l\t\t\t\tlist installed modules\n"
+		"\t-u <modName>\t\t\tuninstall module\n"
 		"\t-ll <path>\t\t\tlist available modules at local path\n"
 		"\t-li <path> <modName>\t\tinstall module from local path\n"
+		"\t-d\t\t\t\tturn debug output on\n"
 		, (progName ? progName : "installmgr"));
 	finish(-1);
 }
