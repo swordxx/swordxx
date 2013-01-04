@@ -29,6 +29,8 @@ MESSAGE(STATUS "Configuring your system to build libsword.")
 #
 # Our include directory, for our own internally created "FIND_PACKAGE" calls, like CLucene
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# User options
+INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
 # Source variables
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
