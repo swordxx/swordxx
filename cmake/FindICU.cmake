@@ -23,6 +23,16 @@ find_library(
   DOC "Libraries to link against for the common parts of ICU")
 mark_as_advanced(ICU_LIBRARY)
 
+find_program(
+  ICU_GENRB
+  NAMES genrb)
+
+find_package(PkgConfig)
+if(PKG_CONFIG_FOUND)
+	pkg_check_modules(ICU icu-uc)
+	MESSAGE(STATUS "ICU version: ${ICU_VERSION}")
+endif(PKG_CONFIG_FOUND)
+
 # Copy the results to the output variables.
 if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
   set(ICU_FOUND 1)
