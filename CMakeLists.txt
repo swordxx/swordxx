@@ -231,7 +231,7 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 #
 
 IF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings/swig")
+	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings")
 ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 
 ##############################################################################################
