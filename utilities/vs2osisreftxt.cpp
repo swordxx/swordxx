@@ -42,13 +42,13 @@ int main(int argc, char **argv) {
 
 	DefaultVSKey = "jas3:1";
 	
-	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
+	ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey, true);
 
 	std::cout << verses.getOSISRefRangeText() << "\n";
 
 	if (argc > 3) {
 		verses.setText(argv[3]);
-		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
+		std::cout << "Verse is" << ((verses.popError()) ? " NOT" : "") << " in set.\n\n";
 	}
 	
 	return 0;

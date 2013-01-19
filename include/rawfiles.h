@@ -43,13 +43,13 @@ public:
 			SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
 			const char *ilang = 0);
 	virtual ~RawFiles();
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 
 	// write interface ----------------------------
 	/** Is the module writable? :)
 	* @return yes or no
 	*/
-	virtual bool isWritable();
+	virtual bool isWritable() const;
 
 	/** Creates a new module
 	* @param path The first parameter is path of the new module

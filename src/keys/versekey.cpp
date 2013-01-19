@@ -55,7 +55,7 @@ void VerseKey::init(const char *v11n) {
 
 	instance++;
 	autonorm = 1;		// default auto normalization to true
-	headings = 0;		// default display headings option is false
+	intros = false;		// default display intros option is false
 	upperBound = 0;
 	lowerBound = 0;
 	boundSet = false;
@@ -120,10 +120,10 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 
 void VerseKey::setFromOther(const VerseKey &ikey) {
 	if (refSys == ikey.refSys) {
-		testament = ikey.Testament();
-		book = ikey.Book();
-		chapter = ikey.Chapter();
-		verse = ikey.Verse();
+		testament = ikey.getTestament();
+		book = ikey.getBook();
+		chapter = ikey.getChapter();
+		verse = ikey.getVerse();
 		suffix = ikey.getSuffix();
         }
 	// TODO: versification mapping
@@ -158,12 +158,12 @@ void VerseKey::positionFrom(const SWKey &ikey) {
 	}
 
  	// should we always perform bounds checks?  Tried but seems to cause infinite recursion
-	if (_compare(UpperBound()) > 0) {
-		setFromOther(UpperBound());
+	if (_compare(getUpperBound()) > 0) {
+		setFromOther(getUpperBound());
 		error = KEYERR_OUTOFBOUNDS;
 	}
-	if (_compare(LowerBound()) < 0) {
-		setFromOther(LowerBound());
+	if (_compare(getLowerBound()) < 0) {
+		setFromOther(getLowerBound());
 		error = KEYERR_OUTOFBOUNDS;
 	}
 }
@@ -175,17 +175,17 @@ void VerseKey::positionFrom(const SWKey &ikey) {
 
 void VerseKey::copyFrom(const VerseKey &ikey) {
 	autonorm = ikey.autonorm;
-	headings = ikey.headings;
-	testament = ikey.Testament();
-	book = ikey.Book();
-	chapter = ikey.Chapter();
-	verse = ikey.Verse();
+	intros = ikey.intros;
+	testament = ikey.getTestament();
+	book = ikey.getBook();
+	chapter = ikey.getChapter();
+	verse = ikey.getVerse();
 	suffix = ikey.getSuffix();
 	setLocale(ikey.getLocale());
 	setVersificationSystem(ikey.getVersificationSystem());
 	if (ikey.isBoundSet()) {
-		LowerBound(ikey.LowerBound());
-		UpperBound(ikey.UpperBound());
+		setLowerBound(ikey.getLowerBound());
+		setUpperBound(ikey.getUpperBound());
 	}
 }
 
@@ -217,15 +217,15 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 {
 	init(v11n);
-	ListKey tmpListKey = ParseVerseList(min);
+	ListKey tmpListKey = parseVerseList(min);
 	if (tmpListKey.Count()) {
 		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
-		LowerBound(*newElement);
+		setLowerBound(*newElement);
 	}
-	tmpListKey = ParseVerseList(max, min, true);
+	tmpListKey = parseVerseList(max, min, true);
 	if (tmpListKey.Count()) {
 		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
-		UpperBound((newElement->isBoundSet())?newElement->UpperBound():*newElement);
+		setUpperBound((newElement->isBoundSet())?newElement->getUpperBound():*newElement);
 	}
 	setPosition(TOP);
 }
@@ -263,7 +263,7 @@ void VerseKey::setVersificationSystem(const char *name) {
 		// TODO: adjust bounds for versificaion system ???
 		// TODO: when we have mapping done, rethink this
 		//necessary as our bounds might not mean anything in the new v11n system
-		ClearBounds();
+		clearBounds();
 	}
 
 }
@@ -290,14 +290,14 @@ char VerseKey::parse(bool checkAutoNormalize)
 
 	if (keytext) {
 		// pass our own copy of keytext as keytext memory may be freshed during parse 
-		ListKey tmpListKey = ParseVerseList(SWBuf(keytext).c_str());
+		ListKey tmpListKey = parseVerseList(SWBuf(keytext).c_str());
 		if (tmpListKey.Count()) {
 			this->positionFrom(*tmpListKey.getElement(0));
 			error = this->error;
 		} else error = 1;
 	}
 	if (checkAutoNormalize) {
-		Normalize(1);
+		normalize(true);
 	}
 	freshtext();
 
@@ -349,7 +349,7 @@ void VerseKey::freshtext() const
  * RET:	book number or < 0 = not valid
  */
 
-int VerseKey::getBookAbbrev(const char *iabbr) const
+int VerseKey::getBookFromAbbrev(const char *iabbr) const
 {
 	int diff, abLen, min, max, target, retVal = -1;
 
@@ -429,7 +429,7 @@ int VerseKey::getBookAbbrev(const char *iabbr) const
 void VerseKey::validateCurrentLocale() const {
 	if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
 		for (int i = 0; i < refSys->getBookCount(); i++) {
-			const int bn = getBookAbbrev(getPrivateLocale()->translate(refSys->getBook(i)->getLongName()));
+			const int bn = getBookFromAbbrev(getPrivateLocale()->translate(refSys->getBook(i)->getLongName()));
 			if (bn != i+1) {
 				char *abbr = 0;
 				stdstr(&abbr, getPrivateLocale()->translate(refSys->getBook(i)->getLongName()), 2);
@@ -453,7 +453,7 @@ void VerseKey::validateCurrentLocale() const {
 
 
 /******************************************************************************
- * VerseKey::ParseVerseList - Attempts to parse a buffer into separate
+ * VerseKey::parseVerseList - Attempts to parse a buffer into separate
  *				verse entries returned in a ListKey
  *
  * ENT:	buf		- buffer to parse;
@@ -468,7 +468,7 @@ void VerseKey::validateCurrentLocale() const {
  * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
  */
 
-ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool expandRange, bool useChapterAsVerse) {
+ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool expandRange, bool useChapterAsVerse) {
 
 	// hold on to our own copy of params, as threads/recursion may change outside values
 	const char *bufStart = buf;
@@ -503,17 +503,17 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 	VerseKey *curKey  = (VerseKey *)this->clone();
 	VerseKey *lastKey = (VerseKey *)this->clone();
-	lastKey->ClearBounds();
-	curKey->ClearBounds();
+	lastKey->clearBounds();
+	curKey->clearBounds();
 
 	// some silly checks for corner cases
 	if (!strcmp(buf, "[ Module Heading ]")) {
-		curKey->Verse(0);
-		curKey->Chapter(0);
-		curKey->Book(0);
-		curKey->Testament(0);
-		lastKey->LowerBound(*curKey);
-		lastKey->UpperBound(*curKey);
+		curKey->setVerse(0);
+		curKey->setChapter(0);
+		curKey->setBook(0);
+		curKey->setTestament(0);
+		lastKey->setLowerBound(*curKey);
+		lastKey->setUpperBound(*curKey);
 		internalListKey << *lastKey;
 		delete curKey;
 		delete lastKey;
@@ -522,20 +522,20 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 	if ((!strncmp(buf, "[ Testament ", 12)) &&
 	    (isdigit(buf[12])) &&
 	    (!strcmp(buf+13, " Heading ]"))) {
-		curKey->Verse(0);
-		curKey->Chapter(0);
-		curKey->Book(0);
-		curKey->Testament(buf[12]-48);
-		lastKey->LowerBound(*curKey);
-		lastKey->UpperBound(*curKey);
+		curKey->setVerse(0);
+		curKey->setChapter(0);
+		curKey->setBook(0);
+		curKey->setTestament(buf[12]-48);
+		lastKey->setLowerBound(*curKey);
+		lastKey->setUpperBound(*curKey);
 		internalListKey << *lastKey;
 		delete curKey;
 		delete lastKey;
 		return internalListKey;
 	}
 
-	curKey->AutoNormalize(AutoNormalize());
-	lastKey->AutoNormalize(0);
+	curKey->setAutoNormalize(isAutoNormalize());
+	lastKey->setAutoNormalize(false);
 	if (defaultKey) *lastKey = defaultKey;
 
 	while (*buf) {
@@ -575,7 +575,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				book[tobook] = *buf;
 				book[tobook+1] = *(buf+1);
 				book[tobook+2] = 0;
-				int bookno = getBookAbbrev(book);
+				int bookno = getBookFromAbbrev(book);
 				if (bookno > -1) {
 					tobook++;
 					buf++;
@@ -636,27 +636,27 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev
 					if (verse == -1) {
 						verse = chap;
-						chap = lastKey->Chapter();
+						chap = lastKey->getChapter();
 						*book = 0;
 					}
 				}
 				if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
 					strcpy(book, lastKey->getBookName());
 				}
-				bookno = getBookAbbrev(book);
+				bookno = getBookFromAbbrev(book);
 				if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
 					suffix = 0;
 				}
 			}
 			if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
 				char partial = 0;
-				curKey->Verse(1);
-				curKey->Chapter(1);
-				curKey->Book(1);
+				curKey->setVerse(1);
+				curKey->setChapter(1);
+				curKey->setBook(1);
 
 				if (bookno < 0) {
-					curKey->Testament(lastKey->Testament());
-					curKey->Book(lastKey->Book());
+					curKey->setTestament(lastKey->getTestament());
+					curKey->setBook(lastKey->getBook());
 				}
 				else {
 					int t = 1;
@@ -664,15 +664,15 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						t++;
 						bookno -= BMAX[0];
 					}
-					curKey->Testament(t);
-					curKey->Book(bookno);
+					curKey->setTestament(t);
+					curKey->setBook(bookno);
 				}
 				
 
 				if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
 //				if (comma) {
-					curKey->Chapter(lastKey->Chapter());
-					curKey->Verse(chap);  // chap because this is the first number captured
+					curKey->setChapter(lastKey->getChapter());
+					curKey->setVerse(chap);  // chap because this is the first number captured
 					if (suffix) {
 						curKey->setSuffix(suffix);
 					}
@@ -685,21 +685,21 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 					
 					if (chap >= 0) {
-						curKey->Chapter(chap);
+						curKey->setChapter(chap);
 					}
 					else {
 						partial++;
-						curKey->Chapter(1);
+						curKey->setChapter(1);
 					}
 					if (verse >= 0) {
-						curKey->Verse(verse);
+						curKey->setVerse(verse);
 						if (suffix) {
 							curKey->setSuffix(suffix);
 						}
 					}
 					else {
 						partial++;
-						curKey->Verse(1);
+						curKey->setVerse(1);
 					}
 				}
 
@@ -707,7 +707,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				for (q = 0; ((buf[q]) && (buf[q] == ' ')); q++);
 				if ((buf[q] == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
 					buf+=q;
-					lastKey->LowerBound(*curKey);
+					lastKey->setLowerBound(*curKey);
 					lastKey->setPosition(TOP);
 					tmpListKey << *lastKey;
 					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -715,12 +715,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
 						if (expandRange && partial) {
-							lastKey->LowerBound(*curKey);
+							lastKey->setLowerBound(*curKey);
 							if (partial > 1)
 								curKey->setPosition(MAXCHAPTER);
 							if (partial > 0)
 								*curKey = MAXVERSE;
-							lastKey->UpperBound(*curKey);
+							lastKey->setUpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
 							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -731,10 +731,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 								curKey->setSuffix(0);
 								f = true;
 							}
-							lastKey->LowerBound(*curKey);
+							lastKey->setLowerBound(*curKey);
 							if (f && doubleF) (*curKey) = MAXVERSE;
 							else if (f) (*curKey)++;
-							lastKey->UpperBound(*curKey);
+							lastKey->setUpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
 							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -747,7 +747,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 								*curKey = MAXCHAPTER;
 							if (partial > 0)
 								*curKey = MAXVERSE;
-							newElement->UpperBound(*curKey);
+							newElement->setUpperBound(*curKey);
 							*lastKey = *curKey;
 							*newElement = TOP;
 							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -883,7 +883,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {	// Verse abbrev.
 			if (verse == -1) {
 				verse = chap;
-				chap = lastKey->Chapter();
+				chap = lastKey->getChapter();
 				*book = 0;
 			}
 		}
@@ -891,20 +891,20 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {	// Verse abbrev
 			strcpy(book, lastKey->getBookName());
 		}
-		bookno = getBookAbbrev(book);
+		bookno = getBookFromAbbrev(book);
 		if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
 			suffix = 0;
 		}
 	}
 	if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
 		char partial = 0;
-		curKey->Verse(1);
-		curKey->Chapter(1);
-		curKey->Book(1);
+		curKey->setVerse(1);
+		curKey->setChapter(1);
+		curKey->setBook(1);
 
 		if (bookno < 0) {
-			curKey->Testament(lastKey->Testament());
-			curKey->Book(lastKey->Book());
+			curKey->setTestament(lastKey->getTestament());
+			curKey->setBook(lastKey->getBook());
 		}
 		else {
 			int t = 1;
@@ -912,13 +912,13 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 				t++;
 				bookno -= BMAX[0];
 			}
-			curKey->Testament(t);
-			curKey->Book(bookno);
+			curKey->setTestament(t);
+			curKey->setBook(bookno);
 		}
 
 		if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
-			curKey->Chapter(lastKey->Chapter());
-			curKey->Verse(chap);  // chap because this is the first number captured
+			curKey->setChapter(lastKey->getChapter());
+			curKey->setVerse(chap);  // chap because this is the first number captured
 			if (suffix) {
 				curKey->setSuffix(suffix);
 			}
@@ -931,26 +931,26 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 			
 			if (chap >= 0) {
-				curKey->Chapter(chap);
+				curKey->setChapter(chap);
 			}
 			else {
 				partial++;
-				curKey->Chapter(1);
+				curKey->setChapter(1);
 			}
 			if (verse >= 0) {
-				curKey->Verse(verse);
+				curKey->setVerse(verse);
 				if (suffix) {
 					curKey->setSuffix(suffix);
 				}
 			}
 			else {
 				partial++;
-				curKey->Verse(1);
+				curKey->setVerse(1);
 			}
 		}
 
 		if ((*buf == '-') && (expandRange)) {	// if this is a dash save lowerBound and wait for upper
-			lastKey->LowerBound(*curKey);
+			lastKey->setLowerBound(*curKey);
 			*lastKey = TOP;
 			tmpListKey << *lastKey;
 			tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -958,12 +958,12 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
 				if (expandRange && partial) {
-					lastKey->LowerBound(*curKey);
+					lastKey->setLowerBound(*curKey);
 					if (partial > 1)
 						*curKey = MAXCHAPTER;
 					if (partial > 0)
 						*curKey = MAXVERSE;
-					lastKey->UpperBound(*curKey);
+					lastKey->setUpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
 					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -974,10 +974,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						curKey->setSuffix(0);
 						f = true;
 					}
-					lastKey->LowerBound(*curKey);
+					lastKey->setLowerBound(*curKey);
 					if (f && doubleF) (*curKey) = MAXVERSE;
 					else if (f) (*curKey)++;
-					lastKey->UpperBound(*curKey);
+					lastKey->setUpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
 					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
@@ -990,7 +990,7 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 						*curKey = MAXCHAPTER;
 					if (partial > 0)
 						*curKey = MAXVERSE;
-					newElement->UpperBound(*curKey);
+					newElement->setUpperBound(*curKey);
 					*newElement = TOP;
 					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
@@ -1010,10 +1010,10 @@ ListKey VerseKey::ParseVerseList(const char *buf, const char *defaultKey, bool e
 
 
 /******************************************************************************
- * VerseKey::LowerBound	- sets / gets the lower boundary for this key
+ * VerseKey::setLowerBound	- sets / gets the lower boundary for this key
  */
 
-VerseKey &VerseKey::LowerBound(const VerseKey &lb)
+void VerseKey::setLowerBound(const VerseKey &lb)
 {
 	initBounds();
 
@@ -1029,16 +1029,14 @@ VerseKey &VerseKey::LowerBound(const VerseKey &lb)
 	// and set values without restrictions, as expected
 	if (upperBound < lowerBound) upperBound = lowerBound;
 	boundSet = true;
-
-	return LowerBound();
 }
 
 
 /******************************************************************************
- * VerseKey::UpperBound	- sets / gets the upper boundary for this key
+ * VerseKey::setUpperBound	- sets / gets the upper boundary for this key
  */
 
-VerseKey &VerseKey::UpperBound(const VerseKey &ub)
+void VerseKey::setUpperBound(const VerseKey &ub)
 {
 	initBounds();
 
@@ -1049,19 +1047,17 @@ VerseKey &VerseKey::UpperBound(const VerseKey &ub)
 	upperBoundComponents.verse  = ub.getVerse();
 	upperBoundComponents.suffix = ub.getSuffix();
 
-	// see LowerBound comment, above
+	// see setLowerBound comment, above
 	if (upperBound < lowerBound) upperBound = lowerBound;
 	boundSet = true;
-
-	return UpperBound();
 }
 
 
 /******************************************************************************
- * VerseKey::LowerBound	- sets / gets the lower boundary for this key
+ * VerseKey::getLowerBound	- gets the lower boundary for this key
  */
 
-VerseKey &VerseKey::LowerBound() const
+VerseKey &VerseKey::getLowerBound() const
 {
 	initBounds();
 	if (!isAutoNormalize()) {
@@ -1081,10 +1077,10 @@ VerseKey &VerseKey::LowerBound() const
 
 
 /******************************************************************************
- * VerseKey::UpperBound	- sets / gets the upper boundary for this key
+ * VerseKey::getUpperBound	- sets / gets the upper boundary for this key
  */
 
-VerseKey &VerseKey::UpperBound() const
+VerseKey &VerseKey::getUpperBound() const
 {
 	initBounds();
 	if (!isAutoNormalize()) {
@@ -1104,10 +1100,10 @@ VerseKey &VerseKey::UpperBound() const
 
 
 /******************************************************************************
- * VerseKey::ClearBounds	- clears bounds for this VerseKey
+ * VerseKey::clearBounds	- clears bounds for this VerseKey
  */
 
-void VerseKey::ClearBounds()
+void VerseKey::clearBounds()
 {
 	delete tmpClone;
 	tmpClone = 0;
@@ -1119,12 +1115,12 @@ void VerseKey::initBounds() const
 {
 	if (!tmpClone) {
 		tmpClone = (VerseKey *)this->clone();
-		tmpClone->AutoNormalize(0);
-		tmpClone->Headings(1);
-		tmpClone->Testament((BMAX[1])?2:1);
-		tmpClone->Book(BMAX[(BMAX[1])?1:0]);
-		tmpClone->Chapter(tmpClone->getChapterMax());
-		tmpClone->Verse(tmpClone->getVerseMax());
+		tmpClone->setAutoNormalize(false);
+		tmpClone->setIntros(true);
+		tmpClone->setTestament((BMAX[1])?2:1);
+		tmpClone->setBook(BMAX[(BMAX[1])?1:0]);
+		tmpClone->setChapter(tmpClone->getChapterMax());
+		tmpClone->setVerse(tmpClone->getVerseMax());
 		upperBound = tmpClone->getIndex();
 		upperBoundComponents.test   = tmpClone->getTestament();
 		upperBoundComponents.book   = tmpClone->getBook();
@@ -1198,37 +1194,37 @@ const char *VerseKey::getBookAbbrev() const {
 void VerseKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case POS_TOP: {
-		const VerseKey *lb = &LowerBound();
-		testament = (lb->Testament() || headings) ? lb->Testament() : 1;
-		book      = (lb->Book()      || headings) ? lb->Book() : 1;
-		chapter   = (lb->Chapter()   || headings) ? lb->Chapter() : 1;
-		verse     = (lb->Verse()     || headings) ? lb->Verse() : 1;
+		const VerseKey *lb = &getLowerBound();
+		testament = (lb->getTestament() || intros) ? lb->getTestament() : 1;
+		book      = (lb->getBook()      || intros) ? lb->getBook() : 1;
+		chapter   = (lb->getChapter()   || intros) ? lb->getChapter() : 1;
+		verse     = (lb->getVerse()     || intros) ? lb->getVerse() : 1;
 		suffix    = lb->getSuffix();
 		break;
 	}
 	case POS_BOTTOM: {
-		const VerseKey *ub = &UpperBound();
-		testament = (ub->Testament() || headings) ? ub->Testament() : 1;
-		book      = (ub->Book()      || headings) ? ub->Book() : 1;
-		chapter   = (ub->Chapter()   || headings) ? ub->Chapter() : 1;
-		verse     = (ub->Verse()     || headings) ? ub->Verse() : 1;
+		const VerseKey *ub = &getUpperBound();
+		testament = (ub->getTestament() || intros) ? ub->getTestament() : 1;
+		book      = (ub->getBook()      || intros) ? ub->getBook() : 1;
+		chapter   = (ub->getChapter()   || intros) ? ub->getChapter() : 1;
+		verse     = (ub->getVerse()     || intros) ? ub->getVerse() : 1;
 		suffix    = ub->getSuffix();
 		break;
 	}
 	case POS_MAXVERSE:
-		Normalize();
+		normalize();
 		verse     = getVerseMax();
 		suffix    = 0;
 		break;
 	case POS_MAXCHAPTER:
 		verse     = 1;
 		suffix    = 0;
-		Normalize();
+		normalize();
 		chapter   = getChapterMax();
 		break;
 	}
-	Normalize(1);
-	Error();	// clear error from normalize
+	normalize(true);
+	popError();	// clear error from normalize
 }
 
 int VerseKey::getChapterMax() const {
@@ -1253,9 +1249,9 @@ int VerseKey::getVerseMax() const {
 void VerseKey::increment(int step) {
 	char ierror = 0;
 	setIndex(getIndex() + step);
-	while ((!verse) && (!headings) && (!ierror)) {
+	while ((!verse) && (!intros) && (!ierror)) {
 		setIndex(getIndex() + 1);
-		ierror = Error();
+		ierror = popError();
 	}
 
 	error = (ierror) ? ierror : error;
@@ -1274,11 +1270,11 @@ void VerseKey::decrement(int step) {
 	char ierror = 0;
 
 	setIndex(getIndex() - step);
-	while ((!verse) && (!headings) && (!ierror)) {
+	while ((!verse) && (!intros) && (!ierror)) {
 		setIndex(getIndex() - 1);
-		ierror = Error();
+		ierror = popError();
 	}
-	if ((ierror) && (!headings))
+	if ((ierror) && (!intros))
 		(*this)++;
 
 	error = (ierror) ? ierror : error;
@@ -1286,18 +1282,18 @@ void VerseKey::decrement(int step) {
 
 
 /******************************************************************************
- * VerseKey::Normalize	- checks limits and normalizes if necessary (e.g.
+ * VerseKey::normalize	- checks limits and normalizes if necessary (e.g.
  *				Matthew 29:47 = Mark 2:2).  If last verse is
  *				exceeded, key is set to last Book CH:VS
  * RET: *this
  */
 
-void VerseKey::Normalize(char autocheck)
+void VerseKey::normalize(bool autocheck)
 {
 
 	if (((!autocheck) || (autonorm))	// only normalize if we were explicitely called or if autonorm is turned on
                &&
-	          ((!headings) || ((verse) && (chapter)))) {		// this is cheeze and temporary until deciding what actions should be taken; so headings should only be turned on when positioning with setIndex() or incrementors
+	          ((!intros) || ((verse) && (chapter)))) {		// this is cheeze and temporary until deciding what actions should be taken; so intros should only be turned on when positioning with setIndex() or incrementors
 		error = 0;
 
           while ((testament < 3) && (testament > 0)) {
@@ -1372,20 +1368,20 @@ void VerseKey::Normalize(char autocheck)
           }
 
           if (testament < 1) {
-               error     = ((!headings) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
-               testament = ((headings) ? 0 : 1);
-               book      = ((headings) ? 0 : 1);
-               chapter   = ((headings) ? 0 : 1);
-               verse     = ((headings) ? 0 : 1);
+               error     = ((!intros) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
+               testament = ((intros) ? 0 : 1);
+               book      = ((intros) ? 0 : 1);
+               chapter   = ((intros) ? 0 : 1);
+               verse     = ((intros) ? 0 : 1);
           }
 
           // should we always perform bounds checks?  Tried but seems to cause infinite recursion
-          if (_compare(UpperBound()) > 0) {
-               positionFrom(UpperBound());
+          if (_compare(getUpperBound()) > 0) {
+               positionFrom(getUpperBound());
                error = KEYERR_OUTOFBOUNDS;
           }
-          if (_compare(LowerBound()) < 0) {
-               positionFrom(LowerBound());
+          if (_compare(getLowerBound()) < 0) {
+               positionFrom(getLowerBound());
                error = KEYERR_OUTOFBOUNDS;
           }
      }
@@ -1417,7 +1413,7 @@ char VerseKey::getBook() const
 
 
 /******************************************************************************
- * VerseKey::Chapter - Gets chapter
+ * VerseKey::getChapter - Gets chapter
  *
  * RET:	value of chapter
  */
@@ -1429,7 +1425,7 @@ int VerseKey::getChapter() const
 
 
 /******************************************************************************
- * VerseKey::Verse - Gets verse
+ * VerseKey::getVerse - Gets verse
  *
  * RET:	value of verse
  */
@@ -1454,7 +1450,7 @@ void VerseKey::setTestament(char itestament)
 {
 	if (itestament != MAXPOS(char)) {
 		testament = itestament;
-		Normalize(1);
+		normalize(true);
 	}
 }
 
@@ -1470,7 +1466,7 @@ void VerseKey::setBook(char ibook)
 	verse   = 1;
 	chapter = 1;
 	book    = ibook;
-	Normalize(1);
+	normalize(true);
 }
 
 
@@ -1483,7 +1479,7 @@ void VerseKey::setBook(char ibook)
 
 void VerseKey::setBookName(const char *bname)
 {
-	int bnum = getBookAbbrev(bname);
+	int bnum = getBookFromAbbrev(bname);
 	if (bnum > -1) {
 		if (bnum > BMAX[0]) {
 			bnum -= BMAX[0];
@@ -1506,8 +1502,8 @@ void VerseKey::setChapter(int ichapter)
 {
 	verse   = 1;
 	chapter = ichapter;
-	Normalize(1);
-	// TODO: easiest fix, but should be in Normalize
+	normalize(true);
+	// TODO: easiest fix, but should be in normalize
 	verse   = 1;
 }
 
@@ -1526,7 +1522,7 @@ void VerseKey::setVerse(int iverse)
 {
 	setSuffix(0);
 	verse = iverse;
-	Normalize(1);
+	normalize(true);
 }
 
 
@@ -1539,7 +1535,7 @@ void VerseKey::setSuffix(char suf) {
 }
 
 /******************************************************************************
- * VerseKey::AutoNormalize - Sets/gets flag that tells VerseKey to auto-
+ * VerseKey::isAutoNormalize - gets flag that tells VerseKey to auto-
  *				matically normalize itself when modified
  */
 
@@ -1551,32 +1547,28 @@ bool VerseKey::isAutoNormalize() const
 void VerseKey::setAutoNormalize(bool iautonorm)
 {
 	autonorm = iautonorm?1:0;
-	Normalize(1);
+	normalize(true);
 }
 
 
 /******************************************************************************
- * VerseKey::Headings - Sets/gets flag that tells VerseKey to include
- *					chap/book/testmnt/module headings
+ * VerseKey::setIntros - Sets flag that tells VerseKey to include
+ *					chap/book/testmnt/module introductions
  *
- * ENT:	iheadings - value which to set headings
- *		[MAXPOS(char)] - only get
+ * ENT:	val - value which to set intros
  *
- * RET:	if unchanged ->          value of headings
- *		if   changed -> previous value of headings
  */
 
-char VerseKey::Headings(char iheadings)
+void VerseKey::setIntros(bool val)
 {
-	char retval = headings;
-
-	if (iheadings != MAXPOS(char)) {
-		headings = iheadings;
-		Normalize(1);
-	}
-	return retval;
+	intros = val;
+	normalize(true);
 }
 
+bool VerseKey::isIntros() const
+{
+	return intros;
+}
 
 /******************************************************************************
  * VerseKey::findindex - binary search to find the index closest, but less
@@ -1720,14 +1712,14 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	unsigned long keyval1 = 0;
 	unsigned long keyval2 = 0;
 
-	keyval1 += Testament()       * 1000000000;
-	keyval2 += ivkey.Testament() * 1000000000;
-	keyval1 += Book()            * 10000000;
-	keyval2 += ivkey.Book()      * 10000000;
-	keyval1 += Chapter()         * 10000;
-	keyval2 += ivkey.Chapter()   * 10000;
-	keyval1 += Verse()           * 50;
-	keyval2 += ivkey.Verse()     * 50;
+	keyval1 += getTestament()       * 1000000000;
+	keyval2 += ivkey.getTestament() * 1000000000;
+	keyval1 += getBook()            * 10000000;
+	keyval2 += ivkey.getBook()      * 10000000;
+	keyval1 += getChapter()         * 10000;
+	keyval2 += ivkey.getChapter()   * 10000;
+	keyval1 += getVerse()           * 50;
+	keyval2 += ivkey.getVerse()     * 50;
 	keyval1 += (int)getSuffix();
 	keyval2 += (int)ivkey.getSuffix();
 	keyval1 = (keyval1 != keyval2) ? ((keyval1 > keyval2) ? 1 : -1) : 0; // -1 | 0 | 1
@@ -1742,11 +1734,11 @@ const char *VerseKey::getOSISRef() const {
 	if (loop > 4)
 		loop = 0;
 
-	if (Verse())
-		sprintf(buf[loop], "%s.%d.%d", getOSISBookName(), (int)Chapter(), (int)Verse());
-	else if (Chapter())
-		sprintf(buf[loop], "%s.%d", getOSISBookName(), (int)Chapter());
-	else if (Book())
+	if (getVerse())
+		sprintf(buf[loop], "%s.%d.%d", getOSISBookName(), getChapter(), getVerse());
+	else if (getChapter())
+		sprintf(buf[loop], "%s.%d", getOSISBookName(), getChapter());
+	else if (getBook())
 		sprintf(buf[loop], "%s", getOSISBookName());
 	else	buf[loop][0] = 0;
 	return buf[loop++];
@@ -1759,9 +1751,9 @@ const char *VerseKey::getOSISRef() const {
 
 const char *VerseKey::getRangeText() const {
 	if (isBoundSet() && lowerBound != upperBound) {
-		SWBuf buf = (const char *)LowerBound();
+		SWBuf buf = (const char *)getLowerBound();
 		buf += "-";
-		buf += (const char *)UpperBound();
+		buf += (const char *)getUpperBound();
 		stdstr(&rangeText, buf.c_str());
 	}
 	else stdstr(&rangeText, getText());
@@ -1775,9 +1767,9 @@ const char *VerseKey::getRangeText() const {
 
 const char *VerseKey::getOSISRefRangeText() const {
 	if (isBoundSet() && (lowerBound != upperBound)) {
-		SWBuf buf = LowerBound().getOSISRef();
+		SWBuf buf = getLowerBound().getOSISRef();
 		buf += "-";
-		buf += UpperBound().getOSISRef();
+		buf += getUpperBound().getOSISRef();
 		stdstr(&rangeText, buf.c_str());
 	}
 	else stdstr(&rangeText, getOSISRef());
@@ -1793,7 +1785,7 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 	outRef = "";
 
 	VerseKey defLanguage;
-	ListKey verses = defLanguage.ParseVerseList(inRef, (*lastKnownKey), true);
+	ListKey verses = defLanguage.parseVerseList(inRef, (*lastKnownKey), true);
 	const char *startFrag = inRef;
 	for (int i = 0; i < verses.Count(); i++) {
 		SWKey *element = verses.GetElement(i);

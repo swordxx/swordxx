@@ -480,7 +480,7 @@ int main(int argc, char **argv) {
 	if (cipherKey.size()) {
 		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
 		cipherFilter = new CipherFilter(cipherKey.c_str());
-		module->AddRawFilter(cipherFilter);
+		module->addRawFilter(cipherFilter);
 	}
 
         if (!module->isWritable()) {
@@ -495,8 +495,8 @@ int main(int argc, char **argv) {
 		exit(-2);
 	}
 
-	currentKey = module->CreateKey();
-	currentKey->Persist(1);
+	currentKey = module->createKey();
+	currentKey->setPersist(true);
 	module->setKey(*currentKey);
 
 	(*module) = TOP;

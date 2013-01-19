@@ -28,11 +28,11 @@ int main(int argc, char **argv) {
 	ModMap::iterator it;
 	SWModule *module = mymgr.Modules["KJV"];
 	VerseKey parser;
-	ListKey lk = parser.ParseVerseList("mal4:6-rev", parser, true);
-	lk.Persist(1);
-	module->SetKey(lk);
+	ListKey lk = parser.parseVerseList("mal4:6-rev", parser, true);
+	lk.setPersist(true);
+	module->setKey(lk);
 
 	(*module) = TOP;
-	std::cout << module->KeyText() << "\n";
+	std::cout << module->getKeyText() << "\n";
 	return 0;
 }

@@ -130,14 +130,14 @@ char *parseVReg(char *buf) {
 
 bool isKJVRef(const char *buf) {
 	VerseKey vk, test;
-	vk.AutoNormalize(0);
-	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
-	vk.Persist(1);
+	vk.setAutoNormalize(false);
+	vk.setIntros(true);	// turn on mod/testmnt/book/chap headings
+	vk.setPersist(true);
 	// lets do some tests on the verse --------------
 	vk = buf;
 	test = buf;
 
-	if (vk.Testament() && vk.Book() && vk.Chapter() && vk.Verse()) { // if we're not a heading
+	if (vk.getTestament() && vk.getBook() && vk.getChapter() && vk.getVerse()) { // if we're not a heading
 //		std::cerr << (const char*)vk << " == "  << (const char*)test << std::endl;
 		return (vk == test);
 	}
@@ -213,9 +213,9 @@ int main(int argc, char **argv) {
 	char *buffer = 0;
 	RawText mod(argv[2]);	// open our datapath with our RawText driver.
 	VerseKey vk;
-	vk.AutoNormalize(0);
-	vk.Headings(1);	// turn on mod/testmnt/book/chap headings
-	vk.Persist(1);
+	vk.setAutoNormalize(false);
+	vk.setIntros(true);	// turn on mod/testmnt/book/chap headings
+	vk.setPersist(true);
 
 	mod.setKey(vk);
 
@@ -225,7 +225,7 @@ int main(int argc, char **argv) {
 	if (ntonly) vk = "Matthew 1:1";
 	  
 	int successive = 0;  //part of hack below
-	while ((!mod.Error()) && (!readline(fd, &buffer))) {
+	while ((!mod.popError()) && (!readline(fd, &buffer))) {
 		if (*buffer == '|')	// comments, ignore line
 			continue;
 		if (vref) {
@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
 			}
 
 			vk = buffer;
-			if (vk.Error()) {
+			if (vk.popError()) {
 				std::cerr << "Error parsing key: " << buffer << "\n";
 				exit(-5);
 			}
@@ -248,7 +248,7 @@ int main(int argc, char **argv) {
 				do {
 					vk--;
 				}
-				while (!vk.Error() && !isKJVRef(vk)); */
+				while (!vk.popError() && !isKJVRef(vk)); */
 				//hack to replace above:
 				successive++;
 				vk -= successive;

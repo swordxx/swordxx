@@ -65,7 +65,7 @@ OSISPlain::OSISPlain() {
 BasicFilterUserData *OSISPlain::createUserData(const SWModule *module, const SWKey *key) {
 	MyUserData *u = new MyUserData(module, key);
 	u->vk = SWDYNAMIC_CAST(VerseKey, u->key);
-	u->testament = (u->vk) ? u->vk->Testament() : 2;	// default to NT
+	u->testament = (u->vk) ? u->vk->getTestament() : 2;	// default to NT
 	return u;
 }
 

@@ -517,7 +517,7 @@ void TreeKeyIdx::setText(const char *ikey) {
 	SWBuf leaf = strtok(buf, "/");
 	leaf.trim();
 	root();
-	while ((leaf.size()) && (!Error())) {
+	while ((leaf.size()) && (!popError())) {
 		bool ok, inChild = false;
 		error = KEYERR_OUTOFBOUNDS;
 		for (ok = firstChild(); ok; ok = nextSibling()) {
@@ -562,7 +562,7 @@ void TreeKeyIdx::setPosition(SW_POSITION p) {
 		break;
 	} 
 	positionChanged();
-	Error();	// clear error from normalize
+	popError();	// clear error from normalize
 }
 
 

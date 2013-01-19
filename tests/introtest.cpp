@@ -30,79 +30,79 @@ int main(int argc, char **argv) {
 	RawText mod(".");
 
 	VerseKey vk;
-	vk.Headings(1);
-	vk.AutoNormalize(0);
-	vk.Persist(1);
+	vk.setIntros(true);
+	vk.setAutoNormalize(false);
+	vk.setPersist(true);
 	mod.setKey(vk);
 
-	vk.Verse(0);
-	vk.Chapter(0);
-	vk.Book(0);
-	vk.Testament(0);
+	vk.setVerse(0);
+	vk.setChapter(0);
+	vk.setBook(0);
+	vk.setTestament(0);
 
 	mod << "Module heading text";
 
-	vk.Verse(0);
-	vk.Chapter(0);
-	vk.Book(0);
-	vk.Testament(1);
+	vk.setVerse(0);
+	vk.setChapter(0);
+	vk.setBook(0);
+	vk.setTestament(1);
 
 	mod << "OT heading text";
 
-	vk.Testament(1);
-	vk.Book(1);
-	vk.Chapter(0);
-	vk.Verse(0);
+	vk.setTestament(1);
+	vk.setBook(1);
+	vk.setChapter(0);
+	vk.setVerse(0);
 
 	mod << "Gen heading text";
 
-	vk.Testament(1);
-	vk.Book(1);
-	vk.Chapter(1);
-	vk.Verse(0);
+	vk.setTestament(1);
+	vk.setBook(1);
+	vk.setChapter(1);
+	vk.setVerse(0);
 
 	mod << "Gen 1 heading text";
 
-	vk.Testament(1);
-	vk.Book(1);
-	vk.Chapter(1);
-	vk.Verse(1);
+	vk.setTestament(1);
+	vk.setBook(1);
+	vk.setChapter(1);
+	vk.setVerse(1);
 
 	mod << "Gen 1:1 text";
 
 	
-	vk.Testament(0);
-	vk.Book(0);
-	vk.Chapter(0);
-	vk.Verse(0);
+	vk.setTestament(0);
+	vk.setBook(0);
+	vk.setChapter(0);
+	vk.setVerse(0);
 
 	std::cout << "Module heading text ?= " << (const char*)mod << std::endl;
 
-	vk.Testament(1);
-	vk.Book(0);
-	vk.Chapter(0);
-	vk.Verse(0);
+	vk.setTestament(1);
+	vk.setBook(0);
+	vk.setChapter(0);
+	vk.setVerse(0);
 
 	std::cout << "OT heading text ?= " << (const char*)mod << std::endl;
 
-	vk.Testament(1);
-	vk.Book(1);
-	vk.Chapter(0);
-	vk.Verse(0);
+	vk.setTestament(1);
+	vk.setBook(1);
+	vk.setChapter(0);
+	vk.setVerse(0);
 
 	std::cout << "Gen heading text ?= " << (const char*)mod << std::endl;
 
-	vk.Testament(1);
-	vk.Book(1);
-	vk.Chapter(1);
-	vk.Verse(0);
+	vk.setTestament(1);
+	vk.setBook(1);
+	vk.setChapter(1);
+	vk.setVerse(0);
 
 	std::cout << "Gen 1 heading text ?= " << (const char*)mod << std::endl;
 
-	vk.Testament(1);
-	vk.Book(1);
-	vk.Chapter(1);
-	vk.Verse(1);
+	vk.setTestament(1);
+	vk.setBook(1);
+	vk.setChapter(1);
+	vk.setVerse(1);
 
 	std::cout << "Gen 1:1 text ?= " << (const char*)mod << std::endl;
 
@@ -111,9 +111,9 @@ int main(int argc, char **argv) {
 
 	if (mhc) {
 		VerseKey vk;
-		vk.Headings(1);
-		vk.AutoNormalize(0);
-		vk.Persist(1);
+		vk.setIntros(true);
+		vk.setAutoNormalize(false);
+		vk.setPersist(true);
 		vk = "jas 0:0";
 		std::cout << vk << ":\n";
 		mhc->setKey(vk);

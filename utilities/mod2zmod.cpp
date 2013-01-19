@@ -109,9 +109,9 @@ int main(int argc, char **argv)
 #define COM 3
 
 	int modType = 0;
-	if (!strcmp(inModule->Type(), "Biblical Texts")) modType = BIBLE;
-	if (!strcmp(inModule->Type(), "Lexicons / Dictionaries")) modType = LEX;
-	if (!strcmp(inModule->Type(), "Commentaries")) modType = COM;
+	if (!strcmp(inModule->getType(), "Biblical Texts")) modType = BIBLE;
+	if (!strcmp(inModule->getType(), "Lexicons / Dictionaries")) modType = LEX;
+	if (!strcmp(inModule->getType(), "Commentaries")) modType = COM;
 
 	switch (compType) {	// these are deleted by zText
 	case 1: compressor = new LZSSCompress(); break;
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 		outModule = new zText(argv[2], 0, 0, iType, compressor,
 			0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
 			vk->getVersificationSystem());	// open our datapath with our RawText driver.
-		((VerseKey *)(SWKey *)(*inModule))->Headings(1);
+		((VerseKey *)(SWKey *)(*inModule))->setIntros(true);
 		break;
 	}
 	case LEX:
@@ -156,24 +156,24 @@ int main(int argc, char **argv)
 	SWFilter *cipherFilter = 0;
 	if (!cipherKey.empty()) {
 		cipherFilter = new CipherFilter(cipherKey.c_str());
-		outModule->AddRawFilter(cipherFilter);
+		outModule->addRawFilter(cipherFilter);
 	}
 
 	string lastBuffer = "Something that would never be first module entry";
 	SWKey bufferKey;
 	SWKey lastBufferKey;
-	SWKey *outModuleKey = outModule->CreateKey();
+	SWKey *outModuleKey = outModule->createKey();
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, outModuleKey);
-	outModuleKey->Persist(1);
+	outModuleKey->setPersist(true);
 	if (vkey) {
-		vkey->Headings(1);
-		vkey->AutoNormalize(0);
+		vkey->setIntros(true);
+		vkey->setAutoNormalize(false);
 	}
 	outModule->setKey(*outModuleKey);
 
 	inModule->setSkipConsecutiveLinks(false);
 	(*inModule) = TOP;
-	while (!inModule->Error()) {
+	while (!inModule->popError()) {
 		bufferKey = *(SWKey *)(*inModule);
 		// pseudo-check for link.  Will get most common links.
 		if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 		}
 		else {
 			lastBuffer = inModule->getRawEntry();
-			lastBufferKey = inModule->KeyText();
+			lastBufferKey = inModule->getKeyText();
 			if (lastBuffer.length() > 0) {
 				cout << "Adding [" << bufferKey << "] new text.\n";
 				*outModuleKey = bufferKey;

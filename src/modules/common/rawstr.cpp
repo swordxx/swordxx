@@ -302,7 +302,7 @@ signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long
  *
  */
 
-void RawStr::readText(__u32 istart, __u16 *isize, char **idxbuf, SWBuf &buf)
+void RawStr::readText(__u32 istart, __u16 *isize, char **idxbuf, SWBuf &buf) const
 {
 	unsigned int ch;
 	char *idxbuflocal = 0;

@@ -107,10 +107,10 @@ int main(int argc, char **argv)
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 
 	if (vkey)
-		vkey->Headings(1);
+		vkey->setIntros(true);
 
-	for ((*module) = TOP; !module->Error(); (*module)++) {
-		std::cout << "$$$" << module->KeyText() << std::endl;
+	for ((*module) = TOP; !module->popError(); (*module)++) {
+		std::cout << "$$$" << module->getKeyText() << std::endl;
 		std::cout << ((render) ? module->RenderText() : (strip) ? module->StripText() : module->getRawEntry()) << "\n";
 	}
 

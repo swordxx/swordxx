@@ -40,7 +40,7 @@ SWClass SWDisplay::classdef(classes);
  * RET:	error status
  */
 
-char SWDisplay::Display(SWModule &imodule)
+char SWDisplay::display(SWModule &imodule)
 {
 #ifndef	_WIN32_WCE
 	std::cout << (const char *)imodule;

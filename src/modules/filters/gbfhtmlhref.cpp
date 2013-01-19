@@ -34,7 +34,7 @@ SWORD_NAMESPACE_START
 
 GBFHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	if (module) {
-		version = module->Name(); 
+		version = module->getName(); 
 	}	
 }
 

@@ -352,13 +352,13 @@ bool isValidRef(const char *buf) {
 	// And set it to the reference under question
 	VerseKey before;
 	before.setVersificationSystem(currentVerse.getVersificationSystem());
-	before.AutoNormalize(0);
-	before.Headings(1);
+	before.setAutoNormalize(false);
+	before.setIntros(true);
 	before.setText(buf);
 
 	// If we are a heading we must bail
 	// These will autonormalize to the last verse of the prior chapter
-	if (!before.Testament() || !before.Book() || !before.Chapter() || !before.Verse()) {
+	if (!before.getTestament() || !before.getBook() || !before.getChapter() || !before.getVerse()) {
 		return true;
 	}
 
@@ -366,7 +366,7 @@ bool isValidRef(const char *buf) {
 	// And set it to the reference under question
 	VerseKey after;
 	after.setVersificationSystem(currentVerse.getVersificationSystem());
-	after.AutoNormalize(1);
+	after.setAutoNormalize(true);
 	after.setText(buf);
 
 	if (before == after)
@@ -410,22 +410,22 @@ bool isValidRef(const char *buf) {
 void makeValidRef(VerseKey &key) {
 	VerseKey saveKey;
 	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
-	saveKey.AutoNormalize(0);
-	saveKey.Headings(1);
+	saveKey.setAutoNormalize(false);
+	saveKey.setIntros(true);
 	saveKey = currentVerse;
 
 	// Since isValidRef returned false constrain the key to the nearest prior reference.
 	// If we are past the last chapter set the reference to the last chapter
 	int chapterMax = key.getChapterMax();
-	if (key.Chapter() > chapterMax) {
-		key.Chapter(chapterMax);
+	if (key.getChapter() > chapterMax) {
+		key.setChapter(chapterMax);
 	}
 
 	// Either we set the chapter to the last chapter and now need to set to the last verse in the chapter
 	// Or the verse is beyond the end of the chapter.
 	// In any case we need to constrain the verse to it's chapter.
 	int verseMax   = key.getVerseMax();
-	key.Verse(verseMax);
+	key.setVerse(verseMax);
 
 	if (debug & DEBUG_REV11N) {
 		cout << "DEBUG(V11N) Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
@@ -448,7 +448,7 @@ void makeValidRef(VerseKey &key) {
 	//    In this case we should re-versify Matt.7.30 as Matt.7.29.
 	//    However, since this and 2) are ambiguous, we'll re-reversify to the last entry in the module.
 	
-	while (!key.Error() && !module->hasEntry(&key)) {
+	while (!key.popError() && !module->hasEntry(&key)) {
 		key.decrement(1);
 	}
 
@@ -477,13 +477,13 @@ void writeEntry(SWBuf &text, bool force = false) {
 
 	static VerseKey lastKey;
 	lastKey.setVersificationSystem(currentVerse.getVersificationSystem());
-	lastKey.AutoNormalize(0);
-	lastKey.Headings(1);
+	lastKey.setAutoNormalize(0);
+	lastKey.setIntros(1);
 
 	VerseKey saveKey;
 	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
-	saveKey.AutoNormalize(0);
-	saveKey.Headings(1);
+	saveKey.setAutoNormalize(0);
+	saveKey.setIntros(1);
 	saveKey = currentVerse;
 
 	// If we have seen a verse and the supplied one is different then we output the collected one.
@@ -498,16 +498,16 @@ void writeEntry(SWBuf &text, bool force = false) {
 		prepareSWText(activeOsisID, activeVerseText);
 
 		// Put the revision into the module
-		int testmt = currentVerse.Testament();
+		int testmt = currentVerse.getTestament();
 		if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
 			VerseKey t;
 			t.setVersificationSystem(currentVerse.getVersificationSystem());
-			t.AutoNormalize(0);
-			t.Headings(1);
+			t.setAutoNormalize(0);
+			t.setIntros(1);
 			t = currentVerse;
-			currentVerse.Book(0);
-			currentVerse.Chapter(0);
-			currentVerse.Verse(0);
+			currentVerse.setBook(0);
+			currentVerse.setChapter(0);
+			currentVerse.setVerse(0);
 			module->setEntry(revision);
 			currentVerse = t;
 			switch (testmt) {
@@ -565,8 +565,8 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
 	VerseKey saveKey;
 	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
-	saveKey.AutoNormalize(0);
-	saveKey.Headings(1);
+	saveKey.setAutoNormalize(0);
+	saveKey.setIntros(1);
 	saveKey = currentVerse;
 	currentVerse = linkKey;
 
@@ -675,15 +675,15 @@ bool handleToken(SWBuf &text, XMLTag token) {
 						cout << "\tinBookIntro = " << inBookIntro << endl;
 					}
 
-					currentVerse.Testament(0);
-					currentVerse.Book(0);
-					currentVerse.Chapter(0);
-					currentVerse.Verse(0);
+					currentVerse.setTestament(0);
+					currentVerse.setBook(0);
+					currentVerse.setChapter(0);
+					currentVerse.setVerse(0);
 					writeEntry(text);
 				}
 				currentVerse = token.getAttribute("osisID");
-				currentVerse.Chapter(0);
-				currentVerse.Verse(0);
+				currentVerse.setChapter(0);
+				currentVerse.setVerse(0);
 				strcpy(currentOsisID, currentVerse.getOSISRef());
 
 				sidBook         = token.getAttribute("sID");
@@ -725,7 +725,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				}
 
 				currentVerse = token.getAttribute("osisID");
-				currentVerse.Verse(0);
+				currentVerse.setVerse(0);
 
 				if (debug & DEBUG_OTHER) {
 					cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.getAttribute("osisID") << ")" << endl;
@@ -782,14 +782,14 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// Get osisID for verse or annotateRef for commentary
 				SWBuf keyVal = token.getAttribute(tokenName == "verse" ? "osisID" : "annotateRef");
 
-				// Massage the key into a form that ParseVerseList can accept
+				// Massage the key into a form that parseVerseList can accept
 				prepareSWVerseKey(keyVal);
 
 				// The osisID or annotateRef can be more than a single verse
 				// The first or only one is the currentVerse
 				// Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
 				// This should never happen if the references are valid OSIS references
-				ListKey verseKeys = currentVerse.ParseVerseList(keyVal, currentVerse, true);
+				ListKey verseKeys = currentVerse.parseVerseList(keyVal, currentVerse, true);
 				int memberKeyCount = verseKeys.Count();
 				if (memberKeyCount) {
 					currentVerse = verseKeys.getElement(0);
@@ -800,7 +800,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					// if there is only one verse.
 					verseKeys.setPosition(TOP);
 					verseKeys.increment(1);
-					if (!verseKeys.Error()) {
+					if (!verseKeys.popError()) {
 						linkedVerses.push_back(verseKeys);
 					}
 				}
@@ -1250,13 +1250,13 @@ void writeLinks()
 	// Link all the verses
 	VerseKey destKey;
 	destKey.setVersificationSystem(currentVerse.getVersificationSystem());
-	destKey.AutoNormalize(0);
-	destKey.Headings(1);
+	destKey.setAutoNormalize(0);
+	destKey.setIntros(1);
 
 	VerseKey linkKey;
 	linkKey.setVersificationSystem(currentVerse.getVersificationSystem());
-	linkKey.AutoNormalize(0);
-	linkKey.Headings(1);
+	linkKey.setAutoNormalize(0);
+	linkKey.setIntros(1);
 	for (unsigned int i = 0; i < linkedVerses.size(); i++) {
 		// The verseKeys is a list of verses
 		// where the first is the real verse
@@ -1266,7 +1266,7 @@ void writeLinks()
 		destKey = verseKeys.getElement();
 		verseKeys.increment(1);
 
-		while (!verseKeys.Error()) {
+		while (!verseKeys.popError()) {
 			linkKey = verseKeys.getElement();
 			verseKeys.increment(1);
 			linkToEntry(linkKey, destKey);
@@ -1343,9 +1343,9 @@ void processOSIS(istream& infile) {
 	strcpy(currentOsisID,"N/A");
 
 	currentVerse.setVersificationSystem(v11n);
-	currentVerse.AutoNormalize(0);
-	currentVerse.Headings(1);	// turn on mod/testmnt/book/chap headings
-	currentVerse.Persist(1);
+	currentVerse.setAutoNormalize(false);
+	currentVerse.setIntros(true);	// turn on mod/testmnt/book/chap headings
+	currentVerse.setPersist(true);
 
 	module->setKey(currentVerse);
 	module->setPosition(TOP);
@@ -1694,7 +1694,7 @@ int main(int argc, char **argv) {
 	if (cipherKey.length()) {
 		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
 		cipherFilter = new CipherFilter(cipherKey.c_str());
-		module->AddRawFilter(cipherFilter);
+		module->addRawFilter(cipherFilter);
 	}
 
 	if (!module->isWritable()) {

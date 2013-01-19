@@ -30,9 +30,9 @@ int main(int argc, char **argv) {
 
 	if (bbe) {
 		VerseKey vk;
-		vk.Persist(1);
+		vk.setPersist(true);
 		bbe->setKey(vk);
-		for (; !bbe->Error(); (*bbe)++ ) {
+		for (; !bbe->popError(); (*bbe)++ ) {
 			std::cout << vk.getIndex() << std::endl; 
 		}
 	}

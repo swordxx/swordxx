@@ -150,7 +150,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 							if ((lClass == "x-Strongs") || (lClass == "strong") || (lClass == "Strong")) {
 								if (isdigit(attrib[0])) {
 									if (vkey) {
-										gh = vkey->Testament() ? 'H' : 'G';
+										gh = vkey->getTestament() ? 'H' : 'G';
 									}
 								}
 								else {

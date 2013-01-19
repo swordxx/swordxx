@@ -34,7 +34,7 @@ class SWDLLEXPORT EchoMod : public SWText
 public:
 	EchoMod();
 	virtual ~EchoMod();
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 };
 
 SWORD_NAMESPACE_END

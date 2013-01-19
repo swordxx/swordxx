@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
 
   // Do some initialization stuff
   TreeKeyIdx *treeKey = new TreeKeyIdx(argv[2]);
-  if (treeKey->Error()) {
+  if (treeKey->popError()) {
     treeKey->create(argv[2]);
     delete treeKey;
     treeKey = new TreeKeyIdx(argv[2]);

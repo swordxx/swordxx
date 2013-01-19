@@ -23,9 +23,25 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <map>
 #include "gbfcgi.h"
 
 SWORD_NAMESPACE_START
+
+typedef std::map<SWBuf, SWBuf> DualStringMap;
+
+namespace {
+	class MyUserData : public BasicFilterUserData {
+	public:
+		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+		DualStringMap properties;
+	};
+}
+
+
+BasicFilterUserData *GBFCGI::createUserData(const SWModule *module, const SWKey *key) {
+	return new MyUserData(module, key);
+}
 
 GBFCGI::GBFCGI() {
 	setTokenStart("<");
@@ -64,7 +80,8 @@ GBFCGI::GBFCGI() {
 }
 
 
-bool GBFCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool GBFCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *baseUserData) {
+	MyUserData *userData = (MyUserData *) baseUserData;
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 		if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
@@ -113,12 +130,12 @@ bool GBFCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData)
 
 		else if (!strncmp(token, "RB", 2)) {
 			buf += "<i>";
-			userData["hasFootnotePreTag"] = "true";
+			userData->properties["hasFootnotePreTag"] = "true";
 		}
 
 		else if (!strncmp(token, "RF", 2)) {
-			if(userData["hasFootnotePreTag"] == "true") {
-				userData["hasFootnotePreTag"] = "false";
+			if(userData->properties["hasFootnotePreTag"] == "true") {
+				userData->properties["hasFootnotePreTag"] = "false";
 				buf += "</i> ";
 			}
 			buf += "<font color=\"#800000\"><small> (";

@@ -53,7 +53,7 @@ RawLD4::~RawLD4()
 }
 
 
-bool RawLD4::isWritable() {
+bool RawLD4::isWritable() const {
 	return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
@@ -67,7 +67,7 @@ bool RawLD4::isWritable() {
  * RET: error status
  */
 
-char RawLD4::getEntry(long away)
+char RawLD4::getEntry(long away) const
 {
 	__u32 start  = 0;
 	__u32 size   = 0;
@@ -85,7 +85,7 @@ char RawLD4::getEntry(long away)
 		rawFilter(entryBuf, 0);	// hack, decipher
 		rawFilter(entryBuf, key);
 		entrySize = size;        // support getEntrySize call
-		if (!key->Persist())			// If we have our own key
+		if (!key->isPersist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
 
 		stdstr(&entkeytxt, idxbuf);	// set entry key text that module 'snapped' to.
@@ -104,7 +104,7 @@ char RawLD4::getEntry(long away)
  * RET: string buffer with entry
  */
 
-SWBuf &RawLD4::getRawEntryBuf() {
+SWBuf &RawLD4::getRawEntryBuf() const {
 
 	char ret = getEntry();
 	if (!ret) {
@@ -130,7 +130,7 @@ void RawLD4::increment(int steps) {
 
 	if (key->isTraversable()) {
 		*key += steps;
-		error = key->Error();
+		error = key->popError();
 		steps = 0;
 	}
 	

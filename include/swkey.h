@@ -103,7 +103,7 @@ protected:
 	char *keytext;
 	mutable char *rangeText;
 	mutable bool boundSet;
-	char persist;
+	bool persist;
 	char error;
 
 	char *localeName;
@@ -137,23 +137,27 @@ public:
 	 */
 	virtual SWKey *clone() const;
 
+
 	/** Gets whether this key should persist in any module to which it is set
 	 * otherwise just a copy will be used in the module.
 	 * @return 1 - persists in module; 0 - a copy is attempted
 	 */
-	char Persist() const;
+	bool isPersist() const;
+	SWDEPRECATED char Persist() const { return isPersist(); }
 
 	/** Sets whether this key should persist in any module to which it is set
 	 * otherwise just a copy will be used in the module.
 	 * @param ipersist value which to set persist;
 	 * @return 1 - persists in module; 0 - a copy is attempted
 	 */
-	char Persist(signed char ipersist);
+	SWDEPRECATED char Persist(signed char ipersist) { setPersist(ipersist); return isPersist(); }
+	void setPersist(bool ipersist);
 
 	/** Gets and clears error status
 	 * @return error status
 	 */
-	virtual char Error();
+	SWDEPRECATED char Error() { return popError(); }
+	virtual char popError();
 	virtual void setError(char err) { error = err; }
 
 	/** Sets this SWKey with a character string
@@ -204,10 +208,6 @@ public:
 	 */
 	virtual void increment(int steps = 1);
 
-	/** deprecated, use isTraversible
-	 */
-	SWDEPRECATED char Traversable() { return (isTraversable()) ? 1:0; }
-
 	/** Whether or not this key can be ++ -- incremented
 	 */
 	virtual bool isTraversable() const { return false; }
@@ -218,12 +218,10 @@ public:
 	/** Use this function to get an index position within a module.
 	 */
 	virtual long getIndex() const { return index; }
-	SWDEPRECATED long Index() const { return getIndex(); }	// deprecated, use getIndex()
 
 	/** See documentation for @ref Index()
 	 */
 	virtual void setIndex(long iindex) { index = iindex; }
-	SWDEPRECATED long Index(long iindex) { setIndex(iindex); return getIndex(); }	// deprecated, use setIndex(...)
 
 	SWKEY_OPERATORS
 

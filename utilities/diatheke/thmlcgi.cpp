@@ -23,10 +23,25 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "thmlcgi.h"
+#include <map>
 #include <utilstr.h>
+#include "thmlcgi.h"
 
 SWORD_NAMESPACE_START
+
+typedef std::map<SWBuf, SWBuf> DualStringMap;
+
+namespace {
+	class MyUserData : public BasicFilterUserData {
+	public:
+		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+		DualStringMap properties;
+	};
+}
+
+BasicFilterUserData *ThMLCGI::createUserData(const SWModule *module, const SWKey *key) {
+	return new MyUserData(module, key);
+}
 
 ThMLCGI::ThMLCGI() {
 	setTokenStart("<");
@@ -39,7 +54,8 @@ ThMLCGI::ThMLCGI() {
 }
 
 
-bool ThMLCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData) {
+bool ThMLCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *baseUserData) {
+	MyUserData *userData = (MyUserData *) baseUserData;
 	unsigned long i;
 	if (!substituteToken(buf, token)) {
 	// manually process if it wasn't a simple substitution
@@ -109,7 +125,7 @@ bool ThMLCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 		}
 
 		else if (!strncmp(token, "scripRef p", 10) || !strncmp(token, "scripRef v", 10)) {
-        		userData["inscriptRef"] = "true";
+        		userData->properties["inscriptRef"] = "true";
 			buf += "<a href=\"!DIATHEKE_URL!";
 			for (i = 9; i < strlen(token); i++) {
 			  if (!strncmp(token+i, "version=\"", 9)) {
@@ -133,47 +149,47 @@ bool ThMLCGI::handleToken(SWBuf &buf, const char *token, DualStringMap &userData
 
 		// we're starting a scripRef like "<scripRef>John 3:16</scripRef>"
 		else if (!strcmp(token, "scripRef")) {
-			userData["inscriptRef"] = "false";
+			userData->properties["inscriptRef"] = "false";
 			// let's stop text from going to output
-			userData["suspendTextPassThru"] = "true";
+			userData->properties["suspendTextPassThru"] = "true";
 		}
 
 		// we've ended a scripRef 
 		else if (!strcmp(token, "/scripRef")) {
-			if (userData["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
-				userData["inscriptRef"] = "false";
+			if (userData->properties["inscriptRef"] == "true") { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+				userData->properties["inscriptRef"] = "false";
 				buf += "</a>";
 			}
 			
 			else { // like "<scripRef>John 3:16</scripRef>"
 				buf += "<a href=\"!DIATHEKE_URL!verse=";
 
-				char* vref = (char*)userData["lastTextNode"].c_str();
+				char* vref = (char*)userData->properties["lastTextNode"].c_str();
 				while (*vref) {
 				  if (*vref == ' ') buf += '+';
 				  else buf += *vref;
 				  vref++;
 				}
 				buf += "\">";
-				buf += userData["lastTextNode"].c_str();
+				buf += userData->properties["lastTextNode"].c_str();
 				// let's let text resume to output again
-				userData["suspendTextPassThru"] = "false";	
+				userData->properties["suspendTextPassThru"] = "false";	
 				buf += "</a>";
 			}
 		}
 
 		else if (!strncmp(token, "div class=\"sechead\"", 19)) {
-		        userData["SecHead"] = "true";
+		        userData->properties["SecHead"] = "true";
 			buf += "<br /><b><i>";
 		}
 		else if (!strncmp(token, "div class=\"title\"", 19)) {
-		        userData["SecHead"] = "true";
+		        userData->properties["SecHead"] = "true";
 			buf += "<br /><b><i>";
 		}
 		else if (!strncmp(token, "/div", 4)) {
-		        if (userData["SecHead"] == "true") {
+		        if (userData->properties["SecHead"] == "true") {
 			        buf += "</i></b><br />";
-				userData["SecHead"] = "false";
+				userData->properties["SecHead"] = "false";
 			}
 		}
 

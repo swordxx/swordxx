@@ -65,7 +65,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 		bool newText = false;
 		bool needWordOut = false;
 		AttributeValue *wordAttrs = 0;
-		SWBuf modName = (module)?module->Name():"";
+		SWBuf modName = (module)?module->getName():"";
 		SWBuf wordSrcPrefix = modName;
 		
 		const SWBuf orig = text;
@@ -145,7 +145,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 						gh = isdigit(strong[0]) ? 0:strong[0];
 						if (!gh) {
 							if (vkey) {
-								gh = vkey->Testament() ? 'H' : 'G';
+								gh = vkey->getTestament() ? 'H' : 'G';
 							}
 						}
 						else strong << 1;
@@ -164,7 +164,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 						if (sLex) {
 							// we can pass the real lex name in, but we have some
 							// aliases in the javascript to optimize bandwidth
-							lexName = sLex->Name();
+							lexName = sLex->getName();
 							if (lexName == "StrongsGreek")
 								lexName = "G";
 							if (lexName == "StrongsHebrew")
@@ -173,7 +173,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 						SWBuf wordID;
 						if (vkey) {
 							// optimize for bandwidth and use only the verse as the unique entry id
-							wordID.appendFormatted("%d", vkey->Verse());
+							wordID.appendFormatted("%d", vkey->getVerse());
 						}
 						else {
 							wordID = key->getText();
@@ -195,7 +195,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 /*
 							if (sMorph) {
 								SWBuf popMorph = "<a onclick=\"";
-								popMorph.appendFormatted("p(\'%s\',\'%s\','%s','');\" >%s</a>", sMorph->Name(), morph.c_str(), wordID.c_str(), morph.c_str());
+								popMorph.appendFormatted("p(\'%s\',\'%s\','%s','');\" >%s</a>", sMorph->getName(), morph.c_str(), wordID.c_str(), morph.c_str());
 								morph = popMorph;
 							}
 */
@@ -240,7 +240,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			gh = isdigit(strong[0]) ? 0:strong[0];
 			if (!gh) {
 				if (vkey) {
-					gh = vkey->Testament() ? 'H' : 'G';
+					gh = vkey->getTestament() ? 'H' : 'G';
 				}
 			}
 			else strong << 1;
@@ -256,7 +256,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			if (sLex) {
 				// we can pass the real lex name in, but we have some
 				// aliases in the javascript to optimize bandwidth
-				lexName = sLex->Name();
+				lexName = sLex->getName();
 				if (lexName == "StrongsGreek")
 					lexName = "G";
 				if (lexName == "StrongsHebrew")
@@ -265,7 +265,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			SWBuf wordID;
 			if (vkey) {
 				// optimize for bandwidth and use only the verse as the unique entry id
-				wordID.appendFormatted("%d", vkey->Verse());
+				wordID.appendFormatted("%d", vkey->getVerse());
 			}
 			else {
 				wordID = key->getText();

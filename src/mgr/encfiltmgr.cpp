@@ -82,13 +82,13 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
 	SWBuf encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (SWBuf)"";
 	if (!encoding.length() || !stricmp(encoding.c_str(), "Latin-1")) {
-                module->AddRawFilter(latin1utf8);
+                module->addRawFilter(latin1utf8);
 	}
 }
 
 void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
         if (targetenc)
-                module->AddEncodingFilter(targetenc);
+                module->addEncodingFilter(targetenc);
 }
 
 /******************************************************************************
@@ -126,17 +126,17 @@ char EncodingFilterMgr::Encoding(char enc) {
                         if (oldfilter) {
                                 if (!targetenc) {
                                         for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                                                module->second->RemoveRenderFilter(oldfilter);
+                                                module->second->removeRenderFilter(oldfilter);
                                 }
                                 else {
                                         for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                                                module->second->ReplaceRenderFilter(oldfilter, targetenc);
+                                                module->second->replaceRenderFilter(oldfilter, targetenc);
                                 }
                                 delete oldfilter;
                         }
                         else if (targetenc) {
                                 for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                                        module->second->AddRenderFilter(targetenc);
+                                        module->second->addRenderFilter(targetenc);
                         }
                 }
 

@@ -61,7 +61,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		bool intoken = false;
 		int wordNum = 1;
 		char wordstr[5];
-		SWBuf modName = (module)?module->Name():"";
+		SWBuf modName = (module)?module->getName():"";
 		// add TR to w src in KJV then remove this next line
 		SWBuf wordSrcPrefix = (modName == "KJV")?SWBuf("TR"):modName;
 
@@ -134,10 +134,10 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					// we can pass the real lex name in, but we have some
 					// aliases in the javascript to optimize bandwidth
 					if ((gh == 'G') && (defaultGreekLex)) {
-						lexName = (!strcmp(defaultGreekLex->Name(), "StrongsGreek"))?"G":defaultGreekLex->Name();
+						lexName = (!strcmp(defaultGreekLex->getName(), "StrongsGreek"))?"G":defaultGreekLex->getName();
 					}
 					else if ((gh == 'H') && (defaultHebLex)) {
-						lexName = (!strcmp(defaultHebLex->Name(), "StrongsHebrew"))?"H":defaultHebLex->Name();
+						lexName = (!strcmp(defaultHebLex->getName(), "StrongsHebrew"))?"H":defaultHebLex->getName();
 					}
 
 					SWBuf xlit = wtag.getAttribute("xlit");
@@ -150,7 +150,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 					SWBuf wordID;
 					if (vkey) {
 						// optimize for bandwidth and use only the verse as the unique entry id
-						wordID.appendFormatted("%d", vkey->Verse());
+						wordID.appendFormatted("%d", vkey->getVerse());
 					}
 					else {
 						wordID = key->getText();

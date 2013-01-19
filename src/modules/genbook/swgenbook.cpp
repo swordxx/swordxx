@@ -89,7 +89,7 @@ TreeKey &SWGenBook::getTreeKey(const SWKey *k) const {
 
 	if (!key) {
 		delete tmpTreeKey;
-		tmpTreeKey = (TreeKey *)CreateKey();
+		tmpTreeKey = (TreeKey *)createKey();
 		(*tmpTreeKey) = *(thiskey);
 		return (*tmpTreeKey);
 	}

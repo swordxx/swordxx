@@ -53,8 +53,8 @@ namespace {
 		BiblicalText  = false;
 		suspendLevel  = 0;
 		if (module) {
-			version = module->Name();
-			BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+			version = module->getName();
+			BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 		}	
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 	}
@@ -251,7 +251,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
-							scratch.setFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());
+							scratch.setFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
 							outText(scratch.c_str(), buf, u);
 							u->inXRefNote = (ch == 'x');
 						}

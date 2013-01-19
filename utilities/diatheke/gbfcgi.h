@@ -25,18 +25,16 @@
 #define GBFCGI_H
 
 #include <swbasicfilter.h>
-#include <swbuf.h>
 #include <defs.h>
-#include <map>
 
 SWORD_NAMESPACE_START
 
-typedef std::map<SWBuf, SWBuf> DualStringMap;
 /** this filter converts GBF text to Diatheke/CGI format
  */
 class GBFCGI : public SWBasicFilter {
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
   GBFCGI ();
 };

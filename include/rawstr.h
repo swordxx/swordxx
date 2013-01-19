@@ -54,7 +54,7 @@ public:
 	void getIDXBuf(long ioffset, char **buf) const;
 	void getIDXBufDat(long ioffset, char **buf) const;
 	signed char findOffset(const char *key, __u32 *start, __u16 *size, long away = 0, __u32 *idxoff = 0) const;
-	void readText(__u32 start, __u16 *size, char **idxbuf, SWBuf &buf);
+	void readText(__u32 start, __u16 *size, char **idxbuf, SWBuf &buf) const;
 	static signed char createModule(const char *path);
 };
 

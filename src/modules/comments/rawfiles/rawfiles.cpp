@@ -57,7 +57,7 @@ RawFiles::~RawFiles()
 /** Is the module writable? :)
 * @return yes or no
 */
-bool RawFiles::isWritable() {
+bool RawFiles::isWritable() const {
 	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
@@ -69,19 +69,19 @@ bool RawFiles::isWritable() {
  * RET: entry contents
  */
 
-SWBuf &RawFiles::getRawEntryBuf() {
+SWBuf &RawFiles::getRawEntryBuf() const {
 	FileDesc *datafile;
 	long  start = 0;
 	unsigned short size = 0;
 	VerseKey *key = &getVerseKey();
 
-	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
+	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
 	entryBuf = "";
 	if (size) {
 		SWBuf tmpbuf = path;
 		tmpbuf += '/';
-		readText(key->Testament(), start, size, entryBuf);
+		readText(key->getTestament(), start, size, entryBuf);
 		tmpbuf += entryBuf;
 		entryBuf = "";
 		datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
@@ -114,13 +114,13 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 
 	len = (len<0)?strlen(inbuf):len;
 
-	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
+	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
 	if (size) {
 		SWBuf tmpbuf;
 		entryBuf = path;
 		entryBuf += '/';
-		readText(key->Testament(), start, size, tmpbuf);
+		readText(key->getTestament(), start, size, tmpbuf);
 		entryBuf += tmpbuf;
 	}
 	else {
@@ -128,7 +128,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 		entryBuf = path;
 		entryBuf += '/';
 		tmpbuf = getNextFilename();
-		doSetText(key->Testament(), key->TestamentIndex(), tmpbuf);
+		doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf);
 		entryBuf += tmpbuf;
 	}
 	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
@@ -152,14 +152,14 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 	unsigned short size;
 	const VerseKey *key = &getVerseKey();
 
-	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
+	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
 	if (size) {
 		SWBuf tmpbuf;
-		readText(key->Testament(), start, size + 2, tmpbuf);
+		readText(key->getTestament(), start, size + 2, tmpbuf);
 
 		key = &getVerseKey(inkey);
-		doSetText(key->Testament(), key->TestamentIndex(), tmpbuf.c_str());
+		doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf.c_str());
 	}
 }
 
@@ -172,7 +172,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
 
 void RawFiles::deleteEntry() {
 	VerseKey *key = &getVerseKey();
-	doSetText(key->Testament(), key->TestamentIndex(), "");
+	doSetText(key->getTestament(), key->getTestamentIndex(), "");
 }
 
 

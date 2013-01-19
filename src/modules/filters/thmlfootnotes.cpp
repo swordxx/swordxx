@@ -56,7 +56,7 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
-	SWKey *p = (module) ? module->CreateKey() : (key) ? key->clone() : new VerseKey();
+	SWKey *p = (module) ? module->createKey() : (key) ? key->clone() : new VerseKey();
         VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
         if (!parser) {
         	delete p;
@@ -101,7 +101,7 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 						startTag.setAttribute("swordFootnote", buf);
 						if ((startTag.getAttribute("type")) && (!strcmp(startTag.getAttribute("type"), "crossReference"))) {
 							if (!refs.length())
-								refs = parser->ParseVerseList(tagText.c_str(), *parser, true).getRangeText();
+								refs = parser->parseVerseList(tagText.c_str(), *parser, true).getRangeText();
 							module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
 						}
 					}

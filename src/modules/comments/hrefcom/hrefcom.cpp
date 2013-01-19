@@ -67,19 +67,19 @@ HREFCom::~HREFCom()
  * RET: string buffer with verse
  */
 
-SWBuf &HREFCom::getRawEntryBuf() {
+SWBuf &HREFCom::getRawEntryBuf() const {
 	long  start;
 	unsigned short size;
 	VerseKey *key = 0;
 
         key = &getVerseKey();
 
-	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
+	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
 	SWBuf tmpbuf;
 
-	readText(key->Testament(), start, size, tmpbuf);
+	readText(key->getTestament(), start, size, tmpbuf);
 	entryBuf = prefix;
 	entryBuf += tmpbuf.c_str();
 	prepText(entryBuf);

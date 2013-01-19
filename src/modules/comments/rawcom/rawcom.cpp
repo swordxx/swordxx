@@ -54,7 +54,7 @@ RawCom::~RawCom()
 }
 
 
-bool RawCom::isWritable() {
+bool RawCom::isWritable() const {
 	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 /******************************************************************************
@@ -64,16 +64,16 @@ bool RawCom::isWritable() {
  * RET: string buffer with verse
  */
 
-SWBuf &RawCom::getRawEntryBuf() {
+SWBuf &RawCom::getRawEntryBuf() const {
 	long  start = 0;
 	unsigned short size = 0;
 	VerseKey *key = &getVerseKey();
 
-	findOffset(key->Testament(), key->TestamentIndex(), &start, &size);
+	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 	entrySize = size;        // support getEntrySize call
 
 	entryBuf = "";
-	readText(key->Testament(), start, size, entryBuf);
+	readText(key->getTestament(), start, size, entryBuf);
 
 	rawFilter(entryBuf, 0);	// hack, decipher
 	rawFilter(entryBuf, key);
@@ -98,7 +98,7 @@ void RawCom::increment(int steps) {
 	unsigned short size;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findOffset(tmpkey->Testament(), tmpkey->TestamentIndex(), &start, &size);
+	findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -108,12 +108,12 @@ void RawCom::increment(int steps) {
 		(steps > 0) ? ++(*key) : --(*key);
 		tmpkey = &getVerseKey();
 
-		if ((error = key->Error())) {
+		if ((error = key->popError())) {
 			*key = lastgood;
 			break;
 		}
-		long index = tmpkey->TestamentIndex();
-		findOffset(tmpkey->Testament(), index, &start, &size);
+		long index = tmpkey->getTestamentIndex();
+		findOffset(tmpkey->getTestament(), index, &start, &size);
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
 //				&& (start > 0)
@@ -129,7 +129,7 @@ void RawCom::increment(int steps) {
 
 void RawCom::setEntry(const char *inbuf, long len) {
 	VerseKey *key = &getVerseKey();
-	doSetText(key->Testament(), key->TestamentIndex(), inbuf, len);
+	doSetText(key->getTestament(), key->getTestamentIndex(), inbuf, len);
 }
 
 
@@ -137,7 +137,7 @@ void RawCom::linkEntry(const SWKey *inkey) {
 	VerseKey *destkey = &getVerseKey();
 	const VerseKey *srckey = &getVerseKey(inkey);
 
-	doLinkEntry(destkey->Testament(), destkey->TestamentIndex(), srckey->TestamentIndex());
+	doLinkEntry(destkey->getTestament(), destkey->getTestamentIndex(), srckey->getTestamentIndex());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -153,7 +153,7 @@ void RawCom::linkEntry(const SWKey *inkey) {
 void RawCom::deleteEntry() {
 
 	VerseKey *key = &getVerseKey();
-	doSetText(key->Testament(), key->TestamentIndex(), "");
+	doSetText(key->getTestament(), key->getTestamentIndex(), "");
 }
 
 bool RawCom::isLinked(const SWKey *k1, const SWKey *k2) const {
@@ -161,10 +161,10 @@ bool RawCom::isLinked(const SWKey *k1, const SWKey *k2) const {
 	unsigned short size1, size2;
 	VerseKey *vk1 = &getVerseKey(k1);
 	VerseKey *vk2 = &getVerseKey(k2);
-	if (vk1->Testament() != vk2->Testament()) return false;
+	if (vk1->getTestament() != vk2->getTestament()) return false;
 
-	findOffset(vk1->Testament(), vk1->TestamentIndex(), &start1, &size1);
-	findOffset(vk2->Testament(), vk2->TestamentIndex(), &start2, &size2);
+	findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1);
+	findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2);
 	if (!size1 || !size2) return false;
 	return start1 == start2;
 }
@@ -174,7 +174,7 @@ bool RawCom::hasEntry(const SWKey *k) const {
 	unsigned short size;
 	VerseKey *vk = &getVerseKey(k);
 
-	findOffset(vk->Testament(), vk->TestamentIndex(), &start, &size);
+	findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
 	return size;
 }
 

@@ -62,22 +62,22 @@ DiathekeFilterMgr::~DiathekeFilterMgr() {
 }
 
 void DiathekeFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
-        switch (module->Markup()) {
+        switch (module->getMarkup()) {
         case FMT_THML:
                 if (fromthml)
-                        module->AddRenderFilter(fromthml);
+                        module->addRenderFilter(fromthml);
                 break;
         case FMT_GBF:
                 if (fromgbf)
-                        module->AddRenderFilter(fromgbf);
+                        module->addRenderFilter(fromgbf);
                 break;
         case FMT_PLAIN:
                 if (fromplain)
-                        module->AddRenderFilter(fromplain);
+                        module->addRenderFilter(fromplain);
                 break;
         case FMT_OSIS:
                 if (fromosis)
-                        module->AddRenderFilter(fromosis);
+                        module->addRenderFilter(fromosis);
                 break;
         }
 	EncodingFilterMgr::AddRenderFilters(module, section);
@@ -97,19 +97,19 @@ char DiathekeFilterMgr::Markup(char mark) {
                 CreateFilters(markup);
 
                 for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                        switch (module->second->Markup()) {
+                        switch (module->second->getMarkup()) {
                         case FMT_THML:
                                 if (oldthml != fromthml) {
                                         if (oldthml) {
                                                 if (!fromthml) {
-                                                        module->second->RemoveRenderFilter(oldthml);
+                                                        module->second->removeRenderFilter(oldthml);
                                                 }
                                                 else {
-                                                        module->second->ReplaceRenderFilter(oldthml, fromthml);
+                                                        module->second->replaceRenderFilter(oldthml, fromthml);
                                                 }
                                         }
                                         else if (fromthml) {
-                                                module->second->AddRenderFilter(fromthml);
+                                                module->second->addRenderFilter(fromthml);
                                         }
                                 }
                                 break;
@@ -117,14 +117,14 @@ char DiathekeFilterMgr::Markup(char mark) {
                                 if (oldgbf != fromgbf) {
                                         if (oldgbf) {
                                                 if (!fromgbf) {
-                                                        module->second->RemoveRenderFilter(oldgbf);
+                                                        module->second->removeRenderFilter(oldgbf);
                                                 }
                                                 else {
-                                                        module->second->ReplaceRenderFilter(oldgbf, fromgbf);
+                                                        module->second->replaceRenderFilter(oldgbf, fromgbf);
                                                 }
                                         }
                                         else if (fromgbf) {
-                                                module->second->AddRenderFilter(fromgbf);
+                                                module->second->addRenderFilter(fromgbf);
                                         }
                                         break;
                                 }
@@ -132,14 +132,14 @@ char DiathekeFilterMgr::Markup(char mark) {
                                 if (oldplain != fromplain) {
                                         if (oldplain) {
                                                 if (!fromplain) {
-                                                        module->second->RemoveRenderFilter(oldplain);
+                                                        module->second->removeRenderFilter(oldplain);
                                                 }
                                                 else {
-                                                        module->second->ReplaceRenderFilter(oldplain, fromplain);
+                                                        module->second->replaceRenderFilter(oldplain, fromplain);
                                                 }
                                         }
                                         else if (fromplain) {
-                                                module->second->AddRenderFilter(fromplain);
+                                                module->second->addRenderFilter(fromplain);
                                         }
                                         break;
                                 }
@@ -147,14 +147,14 @@ char DiathekeFilterMgr::Markup(char mark) {
                                 if (oldosis != fromosis) {
                                         if (oldosis) {
                                                 if (!fromosis) {
-                                                        module->second->RemoveRenderFilter(oldosis);
+                                                        module->second->removeRenderFilter(oldosis);
                                                 }
                                                 else {
-                                                        module->second->ReplaceRenderFilter(oldosis, fromosis);
+                                                        module->second->replaceRenderFilter(oldosis, fromosis);
                                                 }
                                         }
                                         else if (fromosis) {
-                                                module->second->AddRenderFilter(fromosis);
+                                                module->second->addRenderFilter(fromosis);
                                         }
                                         break;
                                 }

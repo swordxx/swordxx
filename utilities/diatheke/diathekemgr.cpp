@@ -79,10 +79,10 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 
 #ifdef _ICU_
 	if (shape) {
-		module->AddRenderFilter(arshaping);
+		module->addRenderFilter(arshaping);
 	}
 	if (bidi && rtl) {
-		module->AddRenderFilter(bidireorder);
+		module->addRenderFilter(bidireorder);
 	}
 #endif
 	SWMgr::AddRenderFilters(module, section);
@@ -103,7 +103,7 @@ void DiathekeMgr::AddGlobalOptions (SWModule * module, ConfigEntMap & section,
 
         SWMgr::AddGlobalOptions(module, section, start, end);
 #ifdef _ICU_
-        module->AddOptionFilter(transliterator);
+        module->addOptionFilter(transliterator);
 #endif
 };
 

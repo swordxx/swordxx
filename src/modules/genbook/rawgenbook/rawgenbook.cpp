@@ -51,13 +51,13 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 	stdstr(&path, ipath);
 	verseKey = !strcmp("VerseKey", keyType);
 
-	if (verseKey) Type("Biblical Texts");
+	if (verseKey) setType("Biblical Texts");
 
 	if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
 		path[strlen(path)-1] = 0;
 
 	delete key;
-	key = CreateKey();
+	key = createKey();
 
 
 	sprintf(buf, "%s.bdt", path);
@@ -82,7 +82,7 @@ RawGenBook::~RawGenBook() {
 }
 
 
-bool RawGenBook::isWritable() {
+bool RawGenBook::isWritable() const {
 	return ((bdtfd->getFd() > 0) && ((bdtfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
@@ -94,7 +94,7 @@ bool RawGenBook::isWritable() {
  * RET: string buffer with verse
  */
 
-SWBuf &RawGenBook::getRawEntryBuf() {
+SWBuf &RawGenBook::getRawEntryBuf() const {
 
 	__u32 offset = 0;
 	__u32 size = 0;
@@ -160,7 +160,7 @@ void RawGenBook::linkEntry(const SWKey *inkey) {
 	SWCATCH ( ... ) {}
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey) {
-		srckey = (TreeKeyIdx *)CreateKey();
+		srckey = (TreeKeyIdx *)createKey();
 		(*srckey) = *inkey;
 	}
 
@@ -207,7 +207,7 @@ char RawGenBook::createModule(const char *ipath) {
 }
 
 
-SWKey *RawGenBook::CreateKey() const {
+SWKey *RawGenBook::createKey() const {
 	TreeKey *tKey = new TreeKeyIdx(path);
 	if (verseKey) { SWKey *vtKey = new VerseTreeKey(tKey); delete tKey; return vtKey; }
 	return tKey;
@@ -218,7 +218,7 @@ bool RawGenBook::hasEntry(const SWKey *k) const {
 
 	int dsize;
 	key.getUserData(&dsize);
-	return (dsize > 7) && key.Error() == '\x00';
+	return (dsize > 7) && key.popError() == '\x00';
 }
 
 SWORD_NAMESPACE_END

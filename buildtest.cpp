@@ -50,13 +50,13 @@ int main(int argc, char **argv)
 
 
 	if (argc > 3)
-		mykey.AutoNormalize(0);  // Turn off autonormalize if 3 args to allow for intros
+		mykey.setAutoNormalize(false);  // Turn off autonormalize if 3 args to allow for intros
 				// This is kludgy but at lease you can try it
 				// with something like: sword "Matthew 1:0" 1 1
 
 
 	mykey = (argc < 2) ? "James    1:19" : argv[1];
-	mykey.Persist(1);
+	mykey.setPersist(true);
 	text.setKey(mykey);
 	commentary.setKey(mykey);
 
@@ -69,10 +69,10 @@ int main(int argc, char **argv)
 
 	for (loop = 0; loop < max; loop++) {
 		cout << (SWKey &)text << ":\n";
-		text.Display();
+		text.display();
 		cout << "\n";
 		cout << "-------------\n";
-		commentary.Display();
+		commentary.display();
 		cout << "\n";
 		cout << "==========================\n";
 		mykey++;

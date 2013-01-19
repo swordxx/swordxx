@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
 
 	TreeKeyIdx *treeKey = new TreeKeyIdx(argv[1]);
 
-	if (treeKey->Error()) {
+	if (treeKey->popError()) {
 		treeKey->create(argv[1]);
 		delete treeKey;
 		treeKey = new TreeKeyIdx(argv[1]);

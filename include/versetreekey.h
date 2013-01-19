@@ -47,7 +47,7 @@ class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChange
 	long lastGoodOffset;
 
 protected:
-	virtual int getBookAbbrev(const char *abbr);
+	virtual int getBookFromAbbrev(const char *abbr) const;
 
 public:
 

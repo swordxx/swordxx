@@ -69,8 +69,8 @@ int main(int argc, char **argv) {
 
 /*
 VerseKey currentVerse;
-currentVerse.AutoNormalize(0);
-currentVerse.Headings(1);
+currentVerse.setAutoNormalize(true);
+currentVerse.setIntros(true);
 currentVerse.Persist(1);
 currentVerse = "jn2";
 cout << currentVerse << endl;
@@ -80,15 +80,15 @@ cout << currentVerse << endl;
 */
 	VerseKey *parser = new VerseKey(); //(VerseKey *)mod->CreateKey();
 
-	ListKey scope = parser->ParseVerseList("amos 2:2", *parser, true);
+	ListKey scope = parser->parseVerseList("amos 2:2", *parser, true);
 
 	cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
 
-	scope = parser->ParseVerseList("amos", *parser, true);
+	scope = parser->parseVerseList("amos", *parser, true);
 
 	cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
 
-	scope = parser->ParseVerseList("amos", *parser, true);
+	scope = parser->parseVerseList("amos", *parser, true);
 
 	ListKey result;
 
@@ -112,28 +112,28 @@ cout << currentVerse << endl;
 	std::cout << result.getText() << "\n";
 
      const char *bounds = "lk,acts";
-     scope = parser->ParseVerseList(bounds, *parser, true);
+     scope = parser->parseVerseList(bounds, *parser, true);
 
      VerseKey boundTest("lk", "acts");
 
      boundTest.setText("Is.1.13");
-     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
+     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest << "\n";
      boundTest.setText("1Sam.21.1");
-     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
+     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest << "\n";
      boundTest.setText("acts.5.1");
-     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
+     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest << "\n";
      boundTest.setText("rom.5.1");
-     std::cout << "Error: " << (int)boundTest.Error() << ": " << boundTest << "\n";
+     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest << "\n";
 
 
      *x = "Is.1.13";
      scope = *x;
 //     if (scope == x) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
-     if (!scope.Error()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+     if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
      *x = "1Sam.21.1";
      scope = *x;
-     if (!scope.Error()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+     if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
 /*
 	VerseKey *y = (VerseKey *)mod->CreateKey();
@@ -156,8 +156,8 @@ cout << currentVerse << endl;
 
 	cout << "\nNormalization on; headings on ====\n\n";
 
-	vk.AutoNormalize(1);
-	vk.Headings(1);
+	vk.setAutoNormalize(true);
+	vk.setIntros(true);
 
 	vk = "jn3.50";
 /* TODO: these report 1 number off from what I think they should report 
@@ -178,8 +178,8 @@ cout << currentVerse << endl;
 
 	cout << "\nNormalization off; headings on ====\n\n";
 	
-	vk.AutoNormalize(0);
-	vk.Headings(1);
+	vk.setAutoNormalize(false);
+	vk.setIntros(true);
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
@@ -200,8 +200,8 @@ cout << currentVerse << endl;
 
 	cout << "\nNormalization on; headings off ====\n\n";
 	
-	vk.AutoNormalize(1);
-	vk.Headings(0);
+	vk.setAutoNormalize(true);
+	vk.setIntros(false);
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
@@ -220,8 +220,8 @@ cout << currentVerse << endl;
 
 	cout << "\nNormalization off; headings off ====\n\n";
 	
-	vk.AutoNormalize(0);
-	vk.Headings(0);
+	vk.setAutoNormalize(false);
+	vk.setIntros(false);
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
@@ -242,11 +242,11 @@ cout << currentVerse << endl;
 
 	VerseKey yo = "jn.3.16";
 	VerseKey yo2 = yo++;
-	cout << yo2 << ": " << (int)yo2.Error() <<  endl;
+	cout << yo2 << ": " << (int)yo2.popError() <<  endl;
 
 	VerseKey vkey;
 	VerseKey tmpkey = "1sam 1:1";
-	vkey.AutoNormalize(1);                          // line 147
+	vkey.setAutoNormalize(true);                          // line 147
 	vkey = tmpkey;
 	int chapter = (vkey.getChapter()-1);
 	vkey.setChapter(chapter);

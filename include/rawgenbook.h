@@ -44,14 +44,14 @@ public:
 			SWTextDirection dir = DIRECTION_LTR,
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, const char *keyType = "TreeKey");
 	virtual ~RawGenBook();
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 	// write interface ----------------------------
-	virtual bool isWritable();
+	virtual bool isWritable() const;
 	static char createModule(const char *ipath);
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey * linkKey);	// Link current module entry to other module entry
 	virtual void deleteEntry();	// Delete current module entry
-	virtual SWKey *CreateKey() const;
+	virtual SWKey *createKey() const;
 	// end write interface ------------------------
 
 	virtual bool hasEntry(const SWKey *k) const;

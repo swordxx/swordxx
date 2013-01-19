@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 	}
 	book->setKey(keyText.c_str());
 	SWBuf entryStripped = book->StripText();
-	cout << "Module: " << book->Description() << "\t Key: " << book->getKeyText() << "\n";
+	cout << "Module: " << book->getDescription() << "\t Key: " << book->getKeyText() << "\n";
 	cout << "RawEntry:\n" << book->getRawEntry() << "\n";
 	cout << "StripText:\n" << entryStripped << "\n";
 	cout << "Search Target: " << searchText << "\n";

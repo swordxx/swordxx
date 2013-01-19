@@ -38,9 +38,9 @@ class SWDLLEXPORT zStr {
 
 private:
 	static int instance;		// number of instantiated zStr objects or derivitives
-	EntriesBlock *cacheBlock;
-	long cacheBlockIndex;
-	bool cacheDirty;
+	mutable EntriesBlock *cacheBlock;
+	mutable long cacheBlockIndex;
+	mutable bool cacheDirty;
 	char *path;
 	bool caseSensitive;
 	mutable long lastoff;		// for caching and optimization
@@ -55,8 +55,8 @@ protected:
 	static const int IDXENTRYSIZE;
 	static const int ZDXENTRYSIZE;
 
-	void getCompressedText(long block, long entry, char **buf);
-	void flushCache();
+	void getCompressedText(long block, long entry, char **buf) const;
+	void flushCache() const;
 	void getKeyFromDatOffset(long ioffset, char **buf) const;
 	void getKeyFromIdxOffset(long ioffset, char **buf) const;
 
@@ -65,10 +65,10 @@ public:
 	zStr(const char *ipath, int fileMode = -1, long blockCount = 100, SWCompress *icomp = 0, bool caseSensitive = false);
 	virtual ~zStr();
 	signed char findKeyIndex(const char *ikey, long *idxoff, long away = 0) const;
-	void getText(long index, char **idxbuf, char **buf);
+	void getText(long index, char **idxbuf, char **buf) const;
 	void setText(const char *ikey, const char *buf, long len = -1);
 	void linkEntry(const char *destkey, const char *srckey);
-	virtual void rawZFilter(SWBuf &buf, char direction = 0) {}
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) const {}
 	static signed char createModule (const char *path);
 };
 

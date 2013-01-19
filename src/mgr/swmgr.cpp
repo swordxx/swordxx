@@ -1023,7 +1023,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 	if (newmod) {
 		// if a specific module type is set in the config, use this
 		if ((entry = section.find("Type")) != section.end())
-			newmod->Type(entry->second.c_str());
+			newmod->setType(entry->second.c_str());
 
 		newmod->setConfig(&section);
 	}
@@ -1037,7 +1037,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 		OptionFilterMap::iterator it;
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
-			module->AddOptionFilter((*it).second);	// add filter to module and option as a valid option
+			module->addOptionFilter((*it).second);	// add filter to module and option as a valid option
 			StringList::iterator loop;
 			for (loop = options.begin(); loop != options.end(); loop++) {
 				if (!strcmp((*loop).c_str(), (*it).second->getOptionName()))
@@ -1050,7 +1050,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 	if (filterMgr)
 		filterMgr->AddGlobalOptions(module, section, start, end);
 #ifdef _ICU_
-	   module->AddOptionFilter(transliterator);
+	   module->addOptionFilter(transliterator);
 #endif
 }
 
@@ -1085,7 +1085,7 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 		OptionFilterMap::iterator it;
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
-			module->AddOptionFilter((*it).second);	// add filter to module
+			module->addOptionFilter((*it).second);	// add filter to module
 		}
 	}
 
@@ -1101,7 +1101,7 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMa
 		OptionFilterMap::iterator it;
 		it = optionFilters.find((*start).second);
 		if (it != optionFilters.end()) {
-			module->AddStripFilter((*it).second);	// add filter to module
+			module->addStripFilter((*it).second);	// add filter to module
 		}
 	}
 }
@@ -1114,9 +1114,9 @@ void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 	cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (SWBuf)"";
 	if (cipherKey.length()) {
 		SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
-		cipherFilters.insert(FilterMap::value_type(module->Name(), cipherFilter));
+		cipherFilters.insert(FilterMap::value_type(module->getName(), cipherFilter));
 		cleanupFilters.push_back(cipherFilter);
-		module->AddRawFilter(cipherFilter);
+		module->addRawFilter(cipherFilter);
 	}
 
 	if (filterMgr)
@@ -1171,16 +1171,16 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 	}
 	
 	if (!stricmp(sourceformat.c_str(), "GBF")) {
-		module->AddStripFilter(gbfplain);
+		module->addStripFilter(gbfplain);
 	}
 	else if (!stricmp(sourceformat.c_str(), "ThML")) {
-		module->AddStripFilter(thmlplain);
+		module->addStripFilter(thmlplain);
 	}
 	else if (!stricmp(sourceformat.c_str(), "OSIS")) {
-		module->AddStripFilter(osisplain);
+		module->addStripFilter(osisplain);
 	}
 	else if (!stricmp(sourceformat.c_str(), "TEI")) {
-		module->AddStripFilter(teiplain);
+		module->addStripFilter(teiplain);
 	}
 
 	if (filterMgr)
@@ -1232,12 +1232,12 @@ void SWMgr::CreateMods(bool multiMod) {
 				AddRenderFilters(newmod, section);
 				AddEncodingFilters(newmod, section);
 				
-				SWModule *oldmod = Modules[newmod->Name()];
+				SWModule *oldmod = Modules[newmod->getName()];
 				if (oldmod) {
 					delete oldmod;
 				}
 				
-				Modules[newmod->Name()] = newmod;
+				Modules[newmod->getName()] = newmod;
 			}
 		}
 	}
@@ -1408,7 +1408,7 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
 			SWFilter *cipherFilter = new CipherFilter(key);
 			cipherFilters.insert(FilterMap::value_type(modName, cipherFilter));
 			cleanupFilters.push_back(cipherFilter);
-			(*it2).second->AddRawFilter(cipherFilter);
+			(*it2).second->addRawFilter(cipherFilter);
 			return 0;
 		}
 	}

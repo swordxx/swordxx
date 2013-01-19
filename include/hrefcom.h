@@ -40,7 +40,7 @@ public:
 	HREFCom(const char *ipath, const char *prefix, const char *iname = 0,
 			const char *idesc = 0, SWDisplay * idisp = 0);
 	virtual ~HREFCom();
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 
 	// OPERATORS -----------------------------------------------------------------
 	

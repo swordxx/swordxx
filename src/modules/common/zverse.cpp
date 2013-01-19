@@ -202,7 +202,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
  *
  */
 
-void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned long ulBuffNum, SWBuf &inBuf) {
+void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned long ulBuffNum, SWBuf &inBuf) const {
 	__u32 ulCompOffset = 0;	       // compressed buffer start
 	__u32 ulCompSize   = 0;	             // buffer size compressed
 	__u32 ulUnCompSize = 0;	          // buffer size uncompressed
@@ -335,7 +335,7 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 }
 
 
-void zVerse::flushCache() {
+void zVerse::flushCache() const {
 	if (dirtyCache) {
 		__u32 idxoff;
 		__u32 start, outstart;
@@ -469,15 +469,15 @@ char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
 
 	VerseKey vk;
 	vk.setVersificationSystem(v11n);
-	vk.Headings(1);
+	vk.setIntros(true);
 
 	__s32 offset = 0;
 	__s16 size = 0;
 	offset = archtosword32(offset);
 	size   = archtosword16(size);
 
-	for (vk = TOP; !vk.Error(); vk++) {
-		if (vk.Testament() < 2) {
+	for (vk = TOP; !vk.popError(); vk++) {
+		if (vk.getTestament() < 2) {
 			fd->write(&offset, 4);	//compBufIdxOffset
 			fd->write(&offset, 4);
 			fd->write(&size, 2);

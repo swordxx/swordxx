@@ -79,18 +79,18 @@ int main(int argc, char **argv) {
 	write(oxfd[1], &lzoffset, 4);
 	write(oxfd[1], &lzsize, 2);
 
-	key.AutoNormalize(0);
-	key.Headings(1);
-	for (key.setIndex(0); (!key.Error()); key++) {
-		rawdrv->findOffset(key.Testament(), key.getIndex(), &offset, &size);
+	key.setAutoNormalize(false);
+	key.setIntros(true);
+	for (key.setIndex(0); (!key.popError()); key++) {
+		rawdrv->findOffset(key.getTestament(), key.getIndex(), &offset, &size);
 		printf("%s: OLD offset: %ld; size: %d\n", (const char *)key, offset, size);
 
 		if ((offset == loffset) && (size == lsize)) {
 			printf("using previous offset,size %d\n", size);
-			offset = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);
+			offset = lseek(oxfd[key.getTestament() - 1], 0, SEEK_CUR);
 			printf("%ld %ld %d \n", offset, lzoffset, lzsize);
-			write(oxfd[key.Testament() - 1], &lzoffset, 4);
-			write(oxfd[key.Testament() - 1], &lzsize, 2);
+			write(oxfd[key.getTestament() - 1], &lzoffset, 4);
+			write(oxfd[key.getTestament() - 1], &lzsize, 2);
 		}
 		else {
 			lsize   = size;
@@ -98,22 +98,22 @@ int main(int argc, char **argv) {
 
 			if (size) {
 				SWBuf tmpbuf;
-				rawdrv->readText(key.Testament(), offset, size, tmpbuf);
+				rawdrv->readText(key.getTestament(), offset, size, tmpbuf);
 				zobj->Buf(tmpbuf.c_str(), size);
 				unsigned long ulSize = size;
 				zobj->cipherBuf(&ulSize);
 				size = (unsigned int)ulSize;
 			}
-			offset = lseek(ofd[key.Testament() - 1], 0, SEEK_CUR);
-			tmpoff = lseek(oxfd[key.Testament() - 1], 0, SEEK_CUR);
+			offset = lseek(ofd[key.getTestament() - 1], 0, SEEK_CUR);
+			tmpoff = lseek(oxfd[key.getTestament() - 1], 0, SEEK_CUR);
 			printf("%s: (%ld) NEW offset: %ld; size: %d\n", (const char *)key, tmpoff, offset, size);
-			write(oxfd[key.Testament() - 1], &offset, 4);
+			write(oxfd[key.getTestament() - 1], &offset, 4);
 			unsigned long ulSize = size;
 			if (size) 
-				write(ofd[key.Testament() - 1], zobj->cipherBuf(&ulSize), size);
+				write(ofd[key.getTestament() - 1], zobj->cipherBuf(&ulSize), size);
 			size = (unsigned int)ulSize;
 			lzoffset = offset;
-			write(oxfd[key.Testament() - 1], &size, 2);
+			write(oxfd[key.getTestament() - 1], &size, 2);
 			lzsize = size;
 		}
 	}

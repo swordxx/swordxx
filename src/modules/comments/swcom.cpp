@@ -41,9 +41,9 @@ SWCom::SWCom(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTex
 	this->versification = 0;
 	stdstr(&(this->versification), versification);
 	delete key;
-	key = (VerseKey *)CreateKey();
-	tmpVK1 = (VerseKey *)CreateKey();
-	tmpVK2 = (VerseKey *)CreateKey();
+	key = (VerseKey *)createKey();
+	tmpVK1 = (VerseKey *)createKey();
+	tmpVK2 = (VerseKey *)createKey();
         tmpSecond = false;
 }
 
@@ -59,7 +59,7 @@ SWCom::~SWCom() {
 }
 
 
-SWKey *SWCom::CreateKey() const {
+SWKey *SWCom::createKey() const {
 	VerseKey *vk = new VerseKey();
 
 	vk->setVersificationSystem(versification);
@@ -76,7 +76,7 @@ long SWCom::getIndex() const {
 
 void SWCom::setIndex(long iindex) {
 	VerseKey *key = &getVerseKey();
-	key->Testament(1);
+	key->setTestament(1);
 	key->setIndex(iindex);
 
 	if (key != this->key) {

@@ -36,12 +36,12 @@ int main(int argc, char **argv) {
 	SWMgr mgr;
 	SWModule *mod = mgr.getModule("KJVgb");
 
-	VerseKey *key1 = (VerseKey *)mod->CreateKey();
+	VerseKey *key1 = (VerseKey *)mod->createKey();
 
-	key1->Testament(2);
-	key1->Book(4);
-	key1->Chapter(2);
-	key1->Verse(3);
+	key1->setTestament(2);
+	key1->setBook(4);
+	key1->setChapter(2);
+	key1->setVerse(3);
 
 	cout << "\n" << key1->getText() << ":\n\n";
 
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
 	cout << "\n" << keys2.getRangeText() << ":\n\n";
 
-	keys = key1->ParseVerseList("Lk.4.5");
+	keys = key1->parseVerseList("Lk.4.5");
 
 	cout << "\n" << key1->getText() << ":\n\n";
 
@@ -70,18 +70,18 @@ int main(int argc, char **argv) {
 
 
 	cout << "\nListkey persist key iteration test\n\n";
-	keys = key1->ParseVerseList("mat1", 0, true);
+	keys = key1->parseVerseList("mat1", 0, true);
 
-	for (keys = TOP; !keys.Error(); keys++) {
+	for (keys = TOP; !keys.popError(); keys++) {
 		cout << "\n" << keys.getText() << ":\n" << endl;
 	}
 
 
-	keys.Persist(1);
+	keys.setPersist(true);
 
 	mod->setKey(keys);
 
-	for ((*mod) = TOP; !mod->Error(); (*mod)++) {
+	for ((*mod) = TOP; !mod->popError(); (*mod)++) {
 		cout << "\n" << mod->getKeyText() << ":\n" << endl;
 	}
 

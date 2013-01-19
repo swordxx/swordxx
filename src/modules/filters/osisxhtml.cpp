@@ -41,6 +41,9 @@ const char *OSISXHTML::getHeader() const {
 		.wordsOfJesus {\
 			color: red;\
 		}\
+		.transChangeSupplied {\
+			font-style: italic;\
+		}\
 	";
 }
 
@@ -133,8 +136,8 @@ OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
 	wordsOfChristEnd   = "</span> ";
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-		version = module->Name();
-		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
 	else {
 		osisQToTick = true;	// default
@@ -300,14 +303,14 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <p> paragraph and <lg> linegroup tags
 		else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				outText("<!P><br />", buf, u);
+				outText("<br />", buf, u);
 			}
 			else if (tag.isEndTag()) {	// end tag
-				outText("<!/P><br />", buf, u);
+				outText("<br />", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				outText("<!P><br />", buf, u);
+				outText("<br />", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -318,11 +321,11 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "paragraph")) {
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
-				outText("<!P><br />", buf, u);
+				outText("<br />", buf, u);
 			}
 			// <div type="paragraph"  eID... />
 			else if (tag.getAttribute("eID")) {
-				outText("<!/P><br />", buf, u);
+				outText("<br />", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -594,14 +597,14 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 				// just do all transChange tags this way for now
 				if ((type == "added") || (type == "supplied"))
-					outText("<i>", buf, u);
+					outText("<span class=\"transChangeSupplied\">", buf, u);
 				else if (type == "tenseChange")
 					buf += "*";
 			}
 			else if (tag.isEndTag()) {
 				SWBuf type = u->lastTransChange;
 				if ((type == "added") || (type == "supplied"))
-					outText("</i>", buf, u);
+					outText("</span>", buf, u);
 			}
 			else {	// empty transChange marker?
 			}

@@ -34,7 +34,7 @@ SWORD_NAMESPACE_START
   */
 class SWDLLEXPORT SWLD : public SWModule {
 protected:
-	char *entkeytxt;
+	mutable char *entkeytxt;
 	static void strongsPad(char *buf);
 public:
 	/** Initializes data for instance of SWLD
@@ -45,7 +45,7 @@ public:
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 	
 	virtual ~SWLD();
-	virtual SWKey *CreateKey() const;
+	virtual SWKey *createKey() const;
 
 	/** Sets/gets module KeyText, getting from saved text if key is persistent
 	*
@@ -53,7 +53,7 @@ public:
 	*  [0] - only get
 	* @return pointer to keytext
 	*/
-	virtual const char *KeyText(const char *ikeytext = 0);
+	virtual const char *getKeyText() const;
 	virtual void setPosition(SW_POSITION pos);
 
 

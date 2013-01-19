@@ -31,7 +31,7 @@
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT RawLD : public RawStr, public SWLD {
-	char getEntry(long away = 0);
+	char getEntry(long away = 0) const;
 
 public:
 
@@ -42,12 +42,12 @@ public:
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool caseSensitive = false);
 
 	virtual ~RawLD();
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
 	// write interface ----------------------------
-	virtual bool isWritable();
+	virtual bool isWritable() const;
 	static char createModule(const char *path) { return RawStr::createModule (path); }
 
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry

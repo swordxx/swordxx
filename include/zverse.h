@@ -28,12 +28,12 @@ protected:
 	char *path;
 	void doSetText(char testmt, long idxoff, const char *buf, long len = 0);
 	void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
-	void flushCache();
-	char *cacheBuf;
-	unsigned int cacheBufSize;
-	char cacheTestament;
-	long cacheBufIdx;
-	bool dirtyCache;
+	void flushCache() const;
+	mutable char *cacheBuf;
+	mutable unsigned int cacheBufSize;
+	mutable char cacheTestament;
+	mutable long cacheBufIdx;
+	mutable bool dirtyCache;
 
 public:
 
@@ -50,8 +50,8 @@ public:
 	virtual ~zVerse();
 
 	void findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const;
-	void zReadText(char testmt, long start, unsigned short size, unsigned long buffnum, SWBuf &buf);
-	virtual void rawZFilter(SWBuf &buf, char direction = 0) {}
+	void zReadText(char testmt, long start, unsigned short size, unsigned long buffnum, SWBuf &buf) const;
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) const {}
 	static char createModule(const char *path, int blockBound, const char *v11n = "KJV");
 };
 

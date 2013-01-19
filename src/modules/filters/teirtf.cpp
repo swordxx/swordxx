@@ -34,8 +34,8 @@ TEIRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Basic
 	BiblicalText = false;
 	inOsisRef = false;
 	if (module) {
-		version = module->Name();
-		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
 }
 

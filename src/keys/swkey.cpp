@@ -95,7 +95,7 @@ SWKey::~SWKey() {
  * RET:	value of persist
  */
 
-char SWKey::Persist() const
+bool SWKey::isPersist() const
 {
 	return persist;
 }
@@ -126,20 +126,14 @@ SWLocale *SWKey::getPrivateLocale() const {
 /******************************************************************************
  * SWKey::Persist - Set/gets whether this object itself persists within a
  *			module that it was used to setKey or just a copy.
- *			(1 - persists in module; 0 - a copy is attempted
+ *			(true - persists in module; false - a copy is attempted
  *
  * ENT:	ipersist - value which to set persist
- *		[-1] - only get
- *
- * RET:	value of persist
  */
 
-char SWKey::Persist(signed char ipersist)
+void SWKey::setPersist(bool ipersist)
 {
-	if (ipersist != -1)
-		persist = ipersist;
-
-	return persist;
+	persist = ipersist;
 }
 
 
@@ -149,7 +143,7 @@ char SWKey::Persist(signed char ipersist)
  * RET:	error status
  */
 
-char SWKey::Error()
+char SWKey::popError()
 {
 	char retval = error;
 

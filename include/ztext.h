@@ -59,13 +59,13 @@ public:
 			const char *versification = "KJV");
 
 	virtual ~zText();
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
 
   // write interface ----------------------------
-	virtual bool isWritable();
+	virtual bool isWritable() const;
 	static char createModule(const char *path, int blockBound, const char *v11n = "KJV") {
 		return zVerse::createModule(path, blockBound, v11n);
 	}
@@ -75,7 +75,7 @@ public:
 	virtual void deleteEntry();	// Delete current module entry
   // end write interface ------------------------
   
-	virtual void rawZFilter(SWBuf &buf, char direction = 0) { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
 	// swcacher interface ----------------------
 	virtual void flush() { flushCache(); }

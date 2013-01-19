@@ -53,7 +53,7 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	SWBuf refs = "";
 	int footnoteNum = 1;
 	char buf[254];
-	SWKey *p = (module) ? module->CreateKey() : (key) ? key->clone() : new VerseKey();
+	SWKey *p = (module) ? module->createKey() : (key) ? key->clone() : new VerseKey();
         VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
         if (!parser) {
         	delete p;
@@ -98,8 +98,8 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 						startTag.setAttribute("swordFootnote", buf);
 						SWBuf passage = startTag.getAttribute("passage");
 						if (passage.length())
-							refs = parser->ParseVerseList(passage.c_str(), *parser, true).getRangeText();
-						else	refs = parser->ParseVerseList(tagText.c_str(), *parser, true).getRangeText();
+							refs = parser->parseVerseList(passage.c_str(), *parser, true).getRangeText();
+						else	refs = parser->parseVerseList(tagText.c_str(), *parser, true).getRangeText();
 						module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
 					}
 					hide = false;

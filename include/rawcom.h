@@ -41,13 +41,13 @@ public:
 			const char *ilang = 0, const char *versification = "KJV");
 	virtual ~RawCom();
 
-	virtual SWBuf &getRawEntryBuf();
+	virtual SWBuf &getRawEntryBuf() const;
 
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
 
 	// write interface ----------------------------
-	virtual bool isWritable();
+	virtual bool isWritable() const;
 	static char createModule(const char *path, const char *v11n = "KJV") { return RawVerse::createModule(path, v11n); }
 	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
 	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry

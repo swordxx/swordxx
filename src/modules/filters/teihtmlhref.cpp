@@ -35,8 +35,8 @@ SWORD_NAMESPACE_START
 TEIHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	BiblicalText = false;
 	if (module) {
-		version = module->Name();
-		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
 }
 

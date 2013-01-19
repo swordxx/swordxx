@@ -67,14 +67,14 @@ int main(int argc, char **argv)
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
+			fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
 		}
 		exit(-1);
 	}
 	target = it->second;
 
 	if (!target->hasSearchFramework()) {
-		fprintf(stderr, "%s: error: %s does not support a search framework.\n", *argv, it->second->Name());
+		fprintf(stderr, "%s: error: %s does not support a search framework.\n", *argv, it->second->getName());
 		exit(-2);
 	}
 

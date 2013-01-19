@@ -61,9 +61,9 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	*/
 	char autonorm;
 
-	/** flag for headings on/off
+	/** flag for intros on/off
 	*/
-	char headings;
+	char intros;
 
 	/** initializes this VerseKey()
 	*/
@@ -104,13 +104,13 @@ protected:
 	signed char suffix;
 
 	/************************************************************************
-	 * VerseKey::getBookAbbrev - Attempts to find a book no from a name or
+	 * VerseKey::getBookFromAbbrev - Attempts to find a book no from a name or
 	 *                           abbreviation
 	 *
 	 * ENT:	@param abbr - key for which to search;
 	 * RET:	@return book number or < 0 = not valid
 	 */
-	virtual int getBookAbbrev(const char *abbr) const;
+	virtual int getBookFromAbbrev(const char *abbr) const;
 
 	/** Refresh keytext based on testament|book|chapter|verse
 	* default auto normalization to true
@@ -173,36 +173,38 @@ public:
 	*/
 	virtual ~VerseKey();
 
-	/** sets the lower boundary for this	VerseKey
-	* and returns the new boundary
+	/** sets the lower boundary for this VerseKey
 	*
-	* @param ub the new upper boundary for this	VerseKey
-	* @return the lower boundary the key was set to
+	* @param lb the new lower boundary for this VerseKey
 	*/
-	VerseKey &LowerBound(const VerseKey &ub);
+	void setLowerBound(const VerseKey &lb);
+	SWDEPRECATED VerseKey &LowerBound(const VerseKey &lb) { setLowerBound(lb); return getLowerBound(); }
 
-	/** sets the upper boundary for this	VerseKey
-	* and returns the new boundary
-	* @param ub the new upper boundary for this	VerseKey
+	/** sets the upper boundary for this VerseKey
+	* @param ub the new upper boundary for this VerseKey
 	* @return the upper boundary the key was set to
 	*/
-	VerseKey &UpperBound(const VerseKey &ub);
+	void setUpperBound(const VerseKey &ub);
+	SWDEPRECATED VerseKey &UpperBound(const VerseKey &ub) { setUpperBound(ub); return getUpperBound(); }
 
-	/** gets the lower boundary of this	VerseKey
-	* @return the lower boundary of this	VerseKey
+	/** gets the lower boundary of this VerseKey
+	* @return the lower boundary of this VerseKey
 	*/
-	VerseKey &LowerBound() const;
+	VerseKey &getLowerBound() const;
+	SWDEPRECATED VerseKey &LowerBound() const { return getLowerBound(); }
 
-	/** gets the upper boundary of this	VerseKey
-	* @return the upper boundary of this	VerseKey
+	/** gets the upper boundary of this VerseKey
+	* @return the upper boundary of this VerseKey
 	*/
-	VerseKey &UpperBound() const;
+	VerseKey &getUpperBound() const;
+	SWDEPRECATED VerseKey &UpperBound() const { return getUpperBound(); }
 
-	/** clears the boundaries of this	VerseKey
+	/** clears the boundaries of this VerseKey
 	*/
-	void ClearBounds();
+	void clearBounds();
+	SWDEPRECATED void ClearBounds() { clearBounds(); }
 
-	/** Creates a new	SWKey based on the current	VerseKey
+	/** Creates a new SWKey based on the current VerseKey
 	* see also the Copy Constructor
 	*/
 	virtual SWKey *clone() const;
@@ -256,32 +258,44 @@ public:
 	*
 	* @return value of testament
 	*/
-	virtual char Testament() const { return getTestament(); }	// deprecated
 	virtual char getTestament() const;
+	/**
+	* @deprecated Use getTestament() instead.
+	*/
+	SWDEPRECATED char Testament() const { return getTestament(); }	// deprecated
 	virtual int getTestamentMax() const { return 2; }
 
 	/** Gets book
 	*
 	* @return value of book
 	*/
-	virtual char Book() const { return getBook(); }	// deprecated
 	virtual char getBook() const;
+	/**
+	* @deprecated Use getBook() instead.
+	*/
+	SWDEPRECATED char Book() const { return getBook(); }	// deprecated
 	virtual int getBookMax() const { return BMAX[testament-1]; }
 
 	/** Gets chapter
 	*
 	* @return value of chapter
 	*/
-	virtual int Chapter() const { return getChapter(); }	// deprecated
 	virtual int getChapter() const;
+	/**
+	* @deprecated Use getChapter() instead.
+	*/
+	SWDEPRECATED int Chapter() const { return getChapter(); }	// deprecated
 	virtual int getChapterMax() const;
 
 	/** Gets verse
 	*
 	* @return value of verse
 	*/
-	virtual int Verse() const { return getVerse(); }		// deprecated
 	virtual int getVerse() const;
+	/**
+	* @deprecated Use getVerse() instead.
+	*/
+	SWDEPRECATED int Verse() const { return getVerse(); }		// deprecated
 	virtual int getVerseMax() const;
 
 	/** Gets verse suffix
@@ -290,45 +304,45 @@ public:
 	*/
 	virtual char getSuffix() const;
 
-	/** Sets/gets testament
+	/** Sets testament
 	*
 	* @param itestament value which to set testament
-	* [MAXPOS(char)] - only get
-	* @return if unchanged -> value of testament,
-	* if changed -> previous value of testament
 	*/
-	virtual char Testament(char itestament) { char retVal = getTestament(); setTestament(itestament); return retVal; } // deprecated
 	virtual void setTestament(char itestament);
+	/**
+	* @deprecated Use setTestament() instead.
+	*/
+	SWDEPRECATED char Testament(char itestament) { char retVal = getTestament(); setTestament(itestament); return retVal; } // deprecated
 
-	/** Sets/gets book
+	/** Sets book
 	*
 	* @param ibook value which to set book
-	* [MAXPOS(char)] - only get
-	* @return if unchanged -> value of book,
-	* if changed -> previous value of book
 	*/
-	virtual char Book(char ibook) { char retVal = getBook(); setBook(ibook); return retVal; } // deprecated
 	virtual void setBook(char ibook);
+	/**
+	* @deprecated Use setBook() instead.
+	*/
+	SWDEPRECATED char Book(char ibook) { char retVal = getBook(); setBook(ibook); return retVal; } // deprecated
 
-	/** Sets/gets chapter
+	/** Sets chapter
 	*
 	* @param ichapter value which to set chapter
-	* [MAXPOS(int)] - only get
-	* @return if unchanged -> value of chapter,
-	* if changed -> previous value of chapter
 	*/
-	virtual int Chapter(int ichapter) { char retVal = getChapter(); setChapter(ichapter); return retVal; } // deprecated
 	virtual void setChapter(int ichapter);
+	/**
+	* @deprecated Use setChapter() instead.
+	*/
+	SWDEPRECATED int Chapter(int ichapter) { char retVal = getChapter(); setChapter(ichapter); return retVal; } // deprecated
 
-	/** Sets/gets verse
+	/** Sets verse
 	*
 	* @param iverse value which to set verse
-	* [MAXPOS(int)] - only get
-	* @return if unchanged -> value of verse,
-	* if changed -> previous value of verse
 	*/
-	virtual int Verse(int iverse) { char retVal = getVerse(); setVerse(iverse); return retVal; } // deprecated;
 	virtual void setVerse(int iverse);
+	/**
+	* @deprecated Use setVerse() instead.
+	*/
+	SWDEPRECATED int Verse(int iverse) { char retVal = getVerse(); setVerse(iverse); return retVal; } // deprecated;
 
 	/** Sets/gets verse suffix
 	*
@@ -342,9 +356,10 @@ public:
 	*
 	* @return *this
 	*/
-	virtual void Normalize(char autocheck = 0);
+	virtual void normalize(bool autocheck = false);
+	SWDEPRECATED void Normalize(char autocheck = 0) { normalize(autocheck); }
 
-	/** Sets/gets flag that tells VerseKey to
+	/** Sets flag that tells VerseKey to
 	* automatically normalize itself when modified
 	*
 	* @param iautonorm value which to set autonorm
@@ -352,21 +367,35 @@ public:
 	* @return if unchanged -> value of autonorm,
 	* if changed -> previous value of autonorm
 	*/
-	virtual char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm); return retVal; }	// deprecated
-	virtual char AutoNormalize() const { return isAutoNormalize()?1:0; }	// deprecated
-
-	virtual bool isAutoNormalize() const;
 	virtual void setAutoNormalize(bool iautonorm);
+	virtual bool isAutoNormalize() const;
+
+	/**
+	* @deprecated Use setAutoNormalize() instead.
+	*/
+	SWDEPRECATED char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm); return retVal; }	// deprecated
+	/**
+	* @deprecated Use isAutoNormalize() instead.
+	*/
+	SWDEPRECATED char AutoNormalize() const { return isAutoNormalize()?1:0; }	// deprecated
+
 
 	/** Sets/gets flag that tells VerseKey to include
-	* chapter/book/testament/module headings
+	* chapter/book/testament/module intros
 	*
-	* @param iheadings value which to set headings
+	* @deprecated Use setIntros() and isIntros() instead.
+	* @param iheadings value which to set intros
 	* [MAXPOS(char)] - only get
-	* @return if unchanged -> value of headings,
-	* if changed -> previous value of headings
+	* @return if unchanged -> value of intros,
+	* if changed -> previous value of intros
 	*/
-	virtual char Headings(char iheadings = MAXPOS(char));
+	SWDEPRECATED char Headings(char iheadings = MAXPOS(char)) { char retVal = isIntros(); if (iheadings != MAXPOS(char)) setIntros(iheadings); return retVal; }
+
+	/** The Intros property determine whether or not to include
+	* chapter/book/testament/module intros
+	*/
+	virtual void setIntros(bool val);
+	virtual bool isIntros() const;
 
 
 	/** Gets index based upon current verse
@@ -389,7 +418,11 @@ public:
 	* @return offset
 	*/
 	virtual long getTestamentIndex() const;
-	virtual long TestamentIndex() const { return getTestamentIndex(); }	// deprecated, use getTestamentIndex()
+
+	/**
+	* @deprecated Use getTestamentIndex()
+	*/
+	SWDEPRECATED long TestamentIndex() const { return getTestamentIndex(); }	// deprecated, use getTestamentIndex()
 
 	virtual const char *getOSISRef() const;
 	virtual const char *getOSISBookName() const;
@@ -400,7 +433,23 @@ public:
 	 */
 	static const char *convertToOSIS(const char *inRef, const SWKey *defaultKey);
 
-	virtual ListKey ParseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false, bool useChapterAsVerse = false);
+	/******************************************************************************
+	 * VerseKey::parseVerseList - Attempts to parse a buffer into separate
+	 *				verse entries returned in a ListKey
+	 *
+	 * ENT:	buf		- buffer to parse;
+	 *	defaultKey	- if verse, chap, book, or testament is left off,
+	 *				pull info from this key (ie. Gen 2:3; 4:5;
+	 *				Gen would be used when parsing the 4:5 section)
+	 *	expandRange	- whether or not to expand eg. John 1:10-12 or just
+	 *				save John 1:10
+	 *
+	 * RET:	ListKey reference filled with verse entries contained in buf
+	 *
+	 * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
+	 */
+	virtual ListKey parseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false, bool useChapterAsVerse = false);
+	SWDEPRECATED ListKey ParseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false, bool useChapterAsVerse = false);
 	virtual const char *getRangeText() const;
 	virtual const char *getOSISRefRangeText() const;
 	/** Compares another	SWKey object

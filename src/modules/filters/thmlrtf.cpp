@@ -215,8 +215,8 @@ ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Basi
 	this->SecHead = false;
 	XMLTag startTag = "";
 	if (module) {
-		version = module->Name();
-		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}	
 }
 
@@ -263,7 +263,7 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->Verse(), footnoteNumber.c_str());
+						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
 					}
 					u->suspendTextPassThru = true;
 				}
@@ -301,7 +301,7 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					SWCATCH ( ... ) {}
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-						buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->Verse(), footnoteNumber.c_str());
+						buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
 					}
 				}
 

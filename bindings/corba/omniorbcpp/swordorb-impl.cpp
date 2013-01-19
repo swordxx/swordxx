@@ -59,22 +59,22 @@ swordorb::SearchHitList* swordorb_SWModule_i::search(const char* istr, swordorb:
 	sword::ListKey result;
 
 	if ((scope) && (strlen(scope)) > 0) {
-		sword::SWKey *p = delegate->CreateKey();
+		sword::SWKey *p = delegate->createKey();
         	sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
 	        if (!parser) {
         		delete p;
 	                parser = new VerseKey();
 	        }
 	        *parser = delegate->getKeyText();
-		lscope = parser->ParseVerseList(scope, *parser, true);
-		result = delegate->Search(istr, stype, flags, &lscope);
+		lscope = parser->parseVerseList(scope, *parser, true);
+		result = delegate->search(istr, stype, flags, &lscope);
                 delete parser;
 	}
-	else	result = delegate->Search(istr, stype, flags);
+	else	result = delegate->search(istr, stype, flags);
 
 	swordorb::SearchHitList *retVal = new swordorb::SearchHitList;
 	int count = 0;
-	for (result = sword::TOP; !result.Error(); result++) count++;
+	for (result = sword::TOP; !result.popError(); result++) count++;
 	retVal->length(count);
 	int i = 0;
 
@@ -83,8 +83,8 @@ swordorb::SearchHitList* swordorb_SWModule_i::search(const char* istr, swordorb:
 	if ((count) && (long)result.getElement()->userData)
 		result.sort();
 
-	for (result = sword::TOP; !result.Error(); result++) {
-		(*retVal)[i].modName = CORBA::string_dup(assureValidUTF8(delegate->Name()));
+	for (result = sword::TOP; !result.popError(); result++) {
+		(*retVal)[i].modName = CORBA::string_dup(assureValidUTF8(delegate->getName()));
 		(*retVal)[i].key = CORBA::string_dup(assureValidUTF8((const char *)result));
 		(*retVal)[i++].score = (long)result.getElement()->userData;
 	}
@@ -93,7 +93,7 @@ swordorb::SearchHitList* swordorb_SWModule_i::search(const char* istr, swordorb:
 }
 
 ::CORBA::Char swordorb_SWModule_i::error() {
-	return delegate->Error();
+	return delegate->popError();
 }
 
 ::CORBA::Long swordorb_SWModule_i::getEntrySize(){
@@ -170,14 +170,14 @@ swordorb::StringList* swordorb_SWModule_i::parseKeyList(const char* keyText){
 	swordorb::StringList *retVal = new swordorb::StringList;
 	if (parser) {
 		sword::ListKey result;
-		result = parser->ParseVerseList(keyText, *parser, true);
+		result = parser->parseVerseList(keyText, *parser, true);
 		int count = 0;
-		for (result = sword::TOP; !result.Error(); result++) {
+		for (result = sword::TOP; !result.popError(); result++) {
 			count++;
 		}
 		retVal->length(count);
 		count = 0;
-		for (result = sword::TOP; !result.Error(); result++) {
+		for (result = sword::TOP; !result.popError(); result++) {
 			(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(VerseKey(result).getOSISRef()));
 		}
 	}
@@ -204,18 +204,18 @@ void swordorb_SWModule_i::setKeyText(const char* keyText) {
 			}
 		}
 		else if (*keyText=='=') {
-			vkey->Headings(true);
-			vkey->AutoNormalize(false);
+			vkey->setIntros(true);
+			vkey->setAutoNormalize(false);
 			vkey->setText(keyText+1);
 			return;
 		}
 	}
 
-	delegate->KeyText(keyText);
+	delegate->setKey(keyText);
 }
 
 char* swordorb_SWModule_i::getKeyText(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->KeyText()));
+	return CORBA::string_dup(assureValidUTF8((char *)delegate->getKeyText()));
 }
 
 ::CORBA::Boolean swordorb_SWModule_i::hasKeyChildren(){
@@ -296,15 +296,15 @@ char* swordorb_SWModule_i::getKeyParent(){
 }
 
 char* swordorb_SWModule_i::getName(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->Name()));
+	return CORBA::string_dup(assureValidUTF8((char *)delegate->getName()));
 }
 
 char* swordorb_SWModule_i::getDescription(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->Description()));
+	return CORBA::string_dup(assureValidUTF8((char *)delegate->getDescription()));
 }
 
 char* swordorb_SWModule_i::getCategory(){
-	SWBuf type = delegate->Type();
+	SWBuf type = delegate->getType();
 	SWBuf cat = delegate->getConfigEntry("Category");
 	if (cat.length() > 0)
 		type = cat;
@@ -378,14 +378,14 @@ swordorb::ModInfoList* swordorb_SWMgr_i::getModInfoList() {
 	for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); it++) {
 		module = it->second;
 		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
-			SWBuf type = module->Type();
+			SWBuf type = module->getType();
 			SWBuf cat = module->getConfigEntry("Category");
 			if (cat.length() > 0)
 				type = cat;
-			(*milist)[i].name = CORBA::string_dup(assureValidUTF8(module->Name()));
-			(*milist)[i].description = CORBA::string_dup(assureValidUTF8(module->Description()));
+			(*milist)[i].name = CORBA::string_dup(assureValidUTF8(module->getName()));
+			(*milist)[i].description = CORBA::string_dup(assureValidUTF8(module->getDescription()));
 			(*milist)[i].category = CORBA::string_dup(assureValidUTF8(type.c_str()));
-			(*milist)[i++].language = CORBA::string_dup(assureValidUTF8(module->Lang()));
+			(*milist)[i++].language = CORBA::string_dup(assureValidUTF8(module->getLanguage()));
 			if (i >= size) break;
 		}
 	}

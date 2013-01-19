@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <swld.h>
 #include <strkey.h>
+#include <swkey.h>
 
 SWORD_NAMESPACE_START
 
@@ -37,7 +38,7 @@ SWORD_NAMESPACE_START
 SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang)
 {
 	delete key;
-	key = CreateKey();
+	key = createKey();
 	entkeytxt = new char [1];
 	*entkeytxt = 0;
 }
@@ -54,7 +55,7 @@ SWLD::~SWLD()
 }
 
 
-SWKey *SWLD::CreateKey() const { return new StrKey(); }
+SWKey *SWLD::createKey() const { return new StrKey(); }
 
 
 /******************************************************************************
@@ -67,13 +68,11 @@ SWKey *SWLD::CreateKey() const { return new StrKey(); }
  * RET:	pointer to keytext
  */
 
-const char *SWLD::KeyText(const char *ikeytext)
-{
-	if (key->Persist() && !ikeytext) {
+const char *SWLD::getKeyText() const {
+	if (key->isPersist()) {
 		getRawEntryBuf();	// force module key to snap to entry
-		return entkeytxt;
 	}
-	else return SWModule::KeyText(ikeytext);
+	return entkeytxt;
 }
 
 

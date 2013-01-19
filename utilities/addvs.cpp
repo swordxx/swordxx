@@ -60,21 +60,21 @@ int main(int argc, char **argv) {
     char buffer[65536];  //this is the max size of any entry
     RawText * mod = new RawText(argv[2]);	// open our datapath with our RawText driver.
     VerseKey *vkey = new VerseKey;
-    vkey->Headings(1);
-    vkey->AutoNormalize(0);
-    vkey->Persist(1);      // the magical setting
+    vkey->setIntros(true);
+    vkey->setAutoNormalize(false);
+    vkey->setPersist(true);      // the magical setting
     *vkey = argv[3];   
     // Set our VerseKey
     mod->setKey(*vkey);
-    if (!vkey->Chapter()) {
+    if (!vkey->getChapter()) {
       // bad hack >>
       // 0:0 is Book intro
       // (chapter):0 is Chapter intro
       //
       // 0:2 is Module intro
       // 0:1 is Testament intro
-      int backstep = vkey->Verse();
-      vkey->Verse(0);
+      int backstep = vkey->getVerse();
+      vkey->setVerse(0);
       *mod -= backstep;       
       // << bad hack
 
@@ -90,19 +90,19 @@ int main(int argc, char **argv) {
       mod->setEntry(buffer, entrysize);	// save text to module at current position
     }
     else {
-      ListKey listkey = vkey->ParseVerseList(argv[3], "Gen1:1", true);
+      ListKey listkey = vkey->parseVerseList(argv[3], "Gen1:1", true);
       int i;
       bool havefirst = false;
       VerseKey firstverse;
       for (i = 0; i < listkey.Count(); i++) {
 	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 	if (element) {
-	  mod->Key(element->LowerBound());
-	  VerseKey finalkey = element->UpperBound();
-	  std::cout << (const char*)mod->Key() << "-" << (const char*)finalkey << std::endl;
+	  mod->setKey(element->getLowerBound());
+	  VerseKey finalkey = element->getUpperBound();
+	  std::cout << mod->getKeyText() << "-" << (const char*)finalkey << std::endl;
 	  if (!havefirst) {
 	    havefirst = true;
-	    firstverse = mod->Key();
+	    firstverse = *mod->getKey();
 	    FILE *infile;
 	    // case: add from text file
 	    //Open our data file and read its contents into the buffer
@@ -116,22 +116,22 @@ int main(int argc, char **argv) {
 	    std::cout << "f" << (const char*)firstverse << std::endl;
 	    (*mod)++;
 	  }
-	  while (mod->Key() <= finalkey) {
-	    std::cout << (const char*)mod->Key() << std::endl;
+	  while (*mod->getKey() <= finalkey) {
+	    std::cout << mod->getKeyText() << std::endl;
 	    *(SWModule*)mod << &firstverse;
 	    (*mod)++;
 	  }
 	}
 	else {
 	  if (havefirst) {
-	    mod->Key(*listkey.GetElement(i));
+	    mod->setKey(*listkey.getElement(i));
 	    *(SWModule*)mod << &firstverse;
-	    std::cout << (const char*)mod->Key() << std::endl;
+	    std::cout << mod->getKeyText() << std::endl;
 	  }
 	  else {
-	    mod->Key(*listkey.GetElement(i));
+	    mod->setKey(*listkey.getElement(i));
 	    havefirst = true;
-	    firstverse = mod->Key();
+	    firstverse = *mod->getKey();
 	    FILE *infile;
 	    // case: add from text file
 	    //Open our data file and read its contents into the buffer
@@ -163,15 +163,15 @@ int main(int argc, char **argv) {
  else if (!strcmp(argv[1], "-d") && argc == 4) {
    RawText mod(argv[2]);	// open our datapath with our RawText driver.
    VerseKey *vkey = new VerseKey;
-   vkey->Headings(1);
-   vkey->AutoNormalize(0);
-   vkey->Persist(1);      // the magical setting
+   vkey->setIntros(true);
+   vkey->setAutoNormalize(false);
+   vkey->setPersist(true);      // the magical setting
    
    // Set our VerseKey
    mod.setKey(*vkey);
    *vkey = argv[3];
 
-   if (!vkey->Chapter())
+   if (!vkey->getChapter())
      {
        // bad hack >>
        // 0:0 is Book intro
@@ -179,8 +179,8 @@ int main(int argc, char **argv) {
        //
        // 0:2 is Module intro
        // 0:1 is Testament intro
-       int backstep = vkey->Verse();
-       vkey->Verse(0);
+       int backstep = vkey->getVerse();
+       vkey->setVerse(0);
        mod -= backstep;       
        // << bad hack
      }

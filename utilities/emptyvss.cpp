@@ -62,13 +62,13 @@ int main(int argc, char **argv) {
 		exit(-3);
 	}
 
-	vkey->Headings(1);	// turn on mod/testmnt/book/chap headings
+	vkey->setIntros(false);	// turn on mod/testmnt/book/chap headings
 
 	(*mod) = TOP;
 
-	while (!mod->Error()) {
+	while (!mod->popError()) {
 	  
-	  if (vkey->Verse())
+	  if (vkey->getVerse())
 	    if (!strlen ((const char *)(*mod)))
 	      std::cout << *vkey << std::endl;
 	  (*mod)++;

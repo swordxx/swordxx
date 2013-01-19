@@ -25,18 +25,16 @@
 #define THMLCGI_H
 
 #include <swbasicfilter.h>
-#include <map>
-
 #include <defs.h>
 
 SWORD_NAMESPACE_START
 
-typedef std::map<SWBuf, SWBuf> DualStringMap;
 /** this filter converts ThML text to Diatheke/CGI format
  */
 class ThMLCGI : public SWBasicFilter {
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, DualStringMap &userData);
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	ThMLCGI();
 };

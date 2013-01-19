@@ -64,40 +64,40 @@ void systemquery(const char * key, ostream* output){
 		if (types) *output << "Biblical Texts:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
-			if (!strcmp(target->Type(), "Biblical Texts")) {
-				if (names) *output << target->Name();
+			if (!strcmp(target->getType(), "Biblical Texts")) {
+				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
-				if (descriptions) *output << target->Description();
+				if (descriptions) *output << target->getDescription();
 				*output << endl;
 			}
 		}
 		if (types) *output << "Commentaries:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
-			if (!strcmp(target->Type(), "Commentaries")) {
-				if (names) *output << target->Name();
+			if (!strcmp(target->getType(), "Commentaries")) {
+				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
-				if (descriptions) *output << target->Description();
+				if (descriptions) *output << target->getDescription();
 				*output << endl;
 			}
 		}
 		if (types) *output << "Dictionaries:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
-			if (!strcmp(target->Type(), "Lexicons / Dictionaries")) {
-				if (names) *output << target->Name();
+			if (!strcmp(target->getType(), "Lexicons / Dictionaries")) {
+				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
-				if (descriptions) *output << target->Description();
+				if (descriptions) *output << target->getDescription();
 				*output << endl;
 			}
 		}
 		if (types) *output << "Generic books:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
-			if (!strcmp(target->Type(), "Generic Books")) {
-				if (names) *output << target->Name();
+			if (!strcmp(target->getType(), "Generic Books")) {
+				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
-				if (descriptions) *output << target->Description();
+				if (descriptions) *output << target->getDescription();
 				*output << endl;
 			}
 		}
@@ -140,14 +140,14 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		return;
 	}
 	target = (*it).second;
-	SWKey *p = target->CreateKey();
+	SWKey *p = target->createKey();
         VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
 	if (!parser) {
         	delete p;
 	        parser = new VerseKey();
 	}
 
-	if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
+	if ((sit = manager.config->Sections.find((*it).second->getName())) != manager.config->Sections.end()) {
 		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
 			if (!::stricmp((char *)(*eit).second.c_str(), "GBF"))
 				inputformat = FMT_GBF;
@@ -180,7 +180,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	    *output << "Other";
 	  }
 	  *output << ";";
-	  *output << target->Type();
+	  *output << target->getType();
 	  *output << ";";
 	  delete parser;
 	  return;
@@ -188,13 +188,13 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 	if (searchtype)
 		querytype = QT_SEARCH;
-	else if (!strcmp(target->Type(), "Biblical Texts"))
+	else if (!strcmp(target->getType(), "Biblical Texts"))
 		querytype = QT_BIBLE;
-	else if (!strcmp(target->Type(), "Commentaries"))
+	else if (!strcmp(target->getType(), "Commentaries"))
 		querytype = QT_COMM;
-	else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
+	else if (!strcmp(target->getType(), "Lexicons / Dictionaries"))
 		querytype = QT_LD;
-	else if (!strcmp(target->Type(), "Generic Books"))
+	else if (!strcmp(target->getType(), "Generic Books"))
 		querytype = QT_LD;
 
 	if (optionfilters & OP_FOOTNOTES)
@@ -258,13 +258,13 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	if (querytype == QT_SEARCH) {
 
 	        //this test is just to determine if we've got SWKeys or VerseKeys
-	        if (!strcmp(target->Type(), "Biblical Texts"))
+	        if (!strcmp(target->getType(), "Biblical Texts"))
 		  querytype = QT_BIBLE;
-		else if (!strcmp(target->Type(), "Commentaries"))
+		else if (!strcmp(target->getType(), "Commentaries"))
 		  querytype = QT_BIBLE;
-		else if (!strcmp(target->Type(), "Lexicons / Dictionaries"))
+		else if (!strcmp(target->getType(), "Lexicons / Dictionaries"))
 		  querytype = QT_LD;
-		else if (!strcmp(target->Type(), "Generic Books"))
+		else if (!strcmp(target->getType(), "Generic Books"))
 		  querytype = QT_LD;
 
 		//do search stuff
@@ -277,13 +277,13 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		*output << "\"-- ";
 
  		if (range) {
- 			ListKey scope = parser->ParseVerseList(range, "Gen 1:1", true);
- 			listkey = target->Search(ref, st, REG_ICASE, &scope);
+ 			ListKey scope = parser->parseVerseList(range, "Gen 1:1", true);
+ 			listkey = target->search(ref, st, REG_ICASE, &scope);
  		}
- 		else listkey = target->Search(ref, st, REG_ICASE);
+ 		else listkey = target->search(ref, st, REG_ICASE);
 
 		if (strlen((const char*)listkey)) {
-		  if (!listkey.Error()) {
+		  if (!listkey.popError()) {
 		    if (outputformat == FMT_CGI) *output << "<entry>";
 		    if (querytype == QT_BIBLE) {
 		      *parser = listkey;
@@ -293,7 +293,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		    if (outputformat == FMT_CGI) *output << "</entry>";
 		  }
 		  listkey++;
-		  while (!listkey.Error()) {
+		  while (!listkey.popError()) {
 		    *output << " ; ";
 		    if (outputformat == FMT_CGI) *output << "<entry>";
 		    if (querytype == QT_BIBLE) {
@@ -312,12 +312,12 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		  delete [] temp;
 
 		  *output << " matches total (";
-		  *output << target->Name();
+		  *output << target->getName();
 		  *output << ")\n";
 		}
 		else {
 		  *output << "none (";
-		  *output << target->Name();
+		  *output << target->getName();
 		  *output << ")\n";
 		}
 	}
@@ -342,7 +342,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		}
 
 		if (strlen(text)) {
-			*output << (char*)target->KeyText();
+			*output << (char*)target->getKeyText();
 			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 				*output << ": <font face=\"";
 				*output << font;
@@ -363,7 +363,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			}
 
 			*output << "(";
-			*output << target->Name();
+			*output << target->getName();
 			*output << ")\n";
 		}
 
@@ -376,14 +376,14 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else if (querytype == QT_BIBLE || querytype == QT_COMM) {
 		//do commentary/Bible stuff
 
-		if ((sit = manager.config->Sections.find((*it).second->Name())) != manager.config->Sections.end()) {
+		if ((sit = manager.config->Sections.find((*it).second->getName())) != manager.config->Sections.end()) {
 			if ((eit = (*sit).second.find("Font")) != (*sit).second.end()) {
 				font = (char *)(*eit).second.c_str();
 				if (strlen(font) == 0) font = 0;
 			}
 		}
 
- 		listkey = parser->ParseVerseList(ref, "Gen1:1", true);
+ 		listkey = parser->parseVerseList(ref, "Gen1:1", true);
 		int i;
 
 		if (outputformat == FMT_RTF) {
@@ -401,10 +401,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		for (i = 0; i < listkey.Count() && maxverses; i++) {
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
 			if (element && element->isBoundSet()) {
-			  target->Key(element->LowerBound());
-				*parser = element->UpperBound();
-				while (maxverses && target->Key() <= *parser) {
-					*output << (char*)target->KeyText();
+			  target->setKey(element->getLowerBound());
+				*parser = element->getUpperBound();
+				while (maxverses && *target->getKey() <= *parser) {
+					*output << (char*)target->getKeyText();
 					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << ": <font face=\"";
 						*output << font;
@@ -435,15 +435,15 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 					*output << "\n";
 
-					if (target->Key() == *parser)
+					if (*target->getKey() == *parser)
 					  break;
 					maxverses--;
 					(*target)++;
 				}
 			}
 			else {
-				target->Key(*listkey.GetElement(i));
-				*output << (char*)target->KeyText();
+				target->setKey(*listkey.GetElement(i));
+				*output << (char*)target->getKeyText();
 				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << ": <font face=\"";
 					*output << font;
@@ -478,7 +478,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		}
 
 		*output << "(";
-		*output << target->Name();
+		*output << target->getName();
 		*output << ")\n";
 
 		if (outputformat == FMT_RTF) {

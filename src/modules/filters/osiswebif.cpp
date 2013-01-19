@@ -142,7 +142,7 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if (!tag.isEmpty()) {
 					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-						SWBuf modName = (u->module) ? u->module->Name() : "";
+						SWBuf modName = (u->module) ? u->module->getName() : "";
 						VerseKey *vkey = NULL;
 						// see if we have a VerseKey * or descendant
 						SWTRY {

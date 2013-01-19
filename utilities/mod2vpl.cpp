@@ -85,11 +85,11 @@ int main(int argc, char **argv) {
 		exit(-3);
 	}
 
-	vkey->Headings(1);	// turn on mod/testmnt/book/chap headings
+	vkey->setIntros(true);	// turn on mod/testmnt/book/chap headings
 
 	(*mod) = TOP;
 
-	while (!mod->Error()) {
+	while (!mod->popError()) {
 		buffer = new char [ strlen ((const char *)(*mod)) + 1 ];
 		strcpy(buffer, (const char *)(*mod));
 		cleanbuf(buffer);

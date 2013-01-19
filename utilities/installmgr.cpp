@@ -203,7 +203,7 @@ void uninstallModule(const char *modName) {
 		finish(-2);
 	}
 	module = it->second;
-	installMgr->removeModule(mgr, module->Name());
+	installMgr->removeModule(mgr, module->getName());
 	cout << "Removed module: [" << modName << "]\n";
 }
 
@@ -248,7 +248,7 @@ void listModules(SWMgr *otherMgr = 0, bool onlyNewAndUpdates = false) {
 		if (it->second & InstallMgr::MODSTAT_UPDATED) status = "+";
 
 		if (!onlyNewAndUpdates || status == "*" || status == "+") {
-			cout << status << "[" << module->Name() << "]  \t(" << version << ")  \t- " << module->Description() << "\n";
+			cout << status << "[" << module->getName() << "]  \t(" << version << ")  \t- " << module->getDescription() << "\n";
 		}
 	}
 }
@@ -290,10 +290,10 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
 	}
 	module = it->second;
 
-	int error = installMgr->installModule(mgr, 0, module->Name(), is);
+	int error = installMgr->installModule(mgr, 0, module->getName(), is);
 	if (error) {
-		cout << "\nError installing module: [" << module->Name() << "] (write permissions?)\n";
-	} else cout << "\nInstalled module: [" << module->Name() << "]\n";
+		cout << "\nError installing module: [" << module->getName() << "] (write permissions?)\n";
+	} else cout << "\nInstalled module: [" << module->getName() << "]\n";
 }
 
 
@@ -307,10 +307,10 @@ void localDirInstallModule(const char *dir, const char *modName) {
 		finish(-4);
 	}
 	module = it->second;
-	int error = installMgr->installModule(mgr, dir, module->Name());
+	int error = installMgr->installModule(mgr, dir, module->getName());
 	if (error) {
-		cout << "\nError installing module: [" << module->Name() << "] (write permissions?)\n";
-	} else cout << "\nInstalled module: [" << module->Name() << "]\n";
+		cout << "\nError installing module: [" << module->getName() << "] (write permissions?)\n";
+	} else cout << "\nInstalled module: [" << module->getName() << "]\n";
 }
 
 

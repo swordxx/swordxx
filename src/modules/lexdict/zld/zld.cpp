@@ -52,7 +52,7 @@ zLD::~zLD() {
 }
 
 
-bool zLD::isWritable() {
+bool zLD::isWritable() const {
 	return ((idxfd->getFd() > 0) && ((idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
@@ -66,7 +66,7 @@ bool zLD::isWritable() {
  * RET: error status
  */
 
-char zLD::getEntry(long away) {
+char zLD::getEntry(long away) const {
 	char *idxbuf = 0;
 	char *ebuf = 0;
 	char retval = 0;
@@ -86,7 +86,7 @@ char zLD::getEntry(long away) {
 		rawFilter(entryBuf, key);
 
 		entrySize = size;        // support getEntrySize call
-		if (!key->Persist())			// If we have our own key
+		if (!key->isPersist())			// If we have our own key
 			*key = idxbuf;				// reset it to entry index buffer
 
 		stdstr(&entkeytxt, idxbuf);	// set entry key text that module 'snapped' to.
@@ -106,7 +106,7 @@ char zLD::getEntry(long away) {
  * RET: string buffer with entry
  */
 
-SWBuf &zLD::getRawEntryBuf() {
+SWBuf &zLD::getRawEntryBuf() const {
 	if (!getEntry() /*&& !isUnicode()*/) {
 		prepText(entryBuf);
 	}
@@ -128,7 +128,7 @@ void zLD::increment(int steps) {
 
 	if (key->isTraversable()) {
 		*key += steps;
-		error = key->Error();
+		error = key->popError();
 		steps = 0;
 	}
 	

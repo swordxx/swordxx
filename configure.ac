@@ -92,14 +92,14 @@ AM_MAINTAINER_MODE
 if test x$enable_debug = xyes; then
   GCJFLAGS="-g -O0"
   if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0 -Wall -Werror"
+    AM_CFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
   else
-    AM_CFLAGS="-O0 -Wall -Werror"
+    AM_CFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
-    AM_CXXFLAGS="-g3 -O0 -Wall -Werror"
+    AM_CXXFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
   else
-    AM_CXXFLAGS="-O0 -Wall -Werror"
+    AM_CXXFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
   fi
 else
   AM_CFLAGS="-O3"
@@ -211,8 +211,8 @@ fi
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
 
 if test x$enable_warnings = xyes; then
-  AM_CFLAGS="$AM_CFLAGS -Werror"
-  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
+  AM_CFLAGS="$AM_CFLAGS -Werror -Woverloaded-virtual"
+  AM_CXXFLAGS="$AM_CXXFLAGS -Werror -Woverloaded-virtual"
 fi
 
 if test x$enable_profile = xyes; then

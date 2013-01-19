@@ -35,7 +35,7 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT SWGenBook : public SWModule {
 
 protected:
-	char *entkeytxt;
+	mutable char *entkeytxt;
 	mutable TreeKey *tmpTreeKey;
 	TreeKey &getTreeKey(const SWKey *k = 0) const;
 
@@ -48,7 +48,7 @@ public:
 			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 
 	virtual ~SWGenBook();
-	virtual SWKey *CreateKey() const = 0;
+	virtual SWKey *createKey() const = 0;
 
 
 	// OPERATORS -----------------------------------------------------------------

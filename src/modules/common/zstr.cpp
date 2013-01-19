@@ -321,7 +321,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
  *
  */
 
-void zStr::getText(long offset, char **idxbuf, char **buf) {
+void zStr::getText(long offset, char **idxbuf, char **buf) const {
 	char *ch;
 	char *idxbuflocal = 0;
 	getKeyFromIdxOffset(offset, &idxbuflocal);
@@ -386,7 +386,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) {
  * 		file.
  */
 
-void zStr::getCompressedText(long block, long entry, char **buf) {
+void zStr::getCompressedText(long block, long entry, char **buf) const {
 
 	__u32 size = 0;
 
@@ -583,7 +583,7 @@ void zStr::linkEntry(const char *destkey, const char *srckey) {
 }
 
 
-void zStr::flushCache() {
+void zStr::flushCache() const {
 	if (cacheBlock) {
 		if (cacheDirty) {
 			__u32 start = 0;

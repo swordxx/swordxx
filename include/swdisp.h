@@ -46,7 +46,7 @@ public:
   * @param imodule module to display
   * @return error status
   */
-  virtual char Display (SWModule & imodule);
+  virtual char display(SWModule & imodule);
 };
 
 SWORD_NAMESPACE_END

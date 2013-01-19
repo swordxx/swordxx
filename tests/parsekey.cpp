@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 
 	DefaultVSKey = context;
 	
-	ListKey verses = DefaultVSKey.ParseVerseList(argv[1], DefaultVSKey, true);
+	ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey, true);
 
 	if ((argc > 5) && (argv[5][0] == '1')) {
 		for (int i = 1; i < argc; i++) {
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 
 	if (argc > 6) {
 		verses.setText(argv[4]);
-		std::cout << "Verse is" << ((verses.Error()) ? " NOT" : "") << " in set.\n\n";
+		std::cout << "Verse is" << ((verses.popError()) ? " NOT" : "") << " in set.\n\n";
 	}
 	
 	return 0;

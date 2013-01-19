@@ -59,7 +59,7 @@ zCom::~zCom() {
 }
 
 
-bool zCom::isWritable() {
+bool zCom::isWritable() const {
 	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
@@ -70,17 +70,17 @@ bool zCom::isWritable() {
  *
  * RET: string buffer with verse
  */
-SWBuf &zCom::getRawEntryBuf() {
+SWBuf &zCom::getRawEntryBuf() const {
 	long  start = 0;
 	unsigned short size = 0;
 	unsigned long buffnum;
 	VerseKey *key = &getVerseKey();
 
-	findOffset(key->Testament(), key->TestamentIndex(), &start, &size, &buffnum);
+	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size, &buffnum);
 	entrySize = size;        // support getEntrySize call
 
 	entryBuf = "";
-	zReadText(key->Testament(), start, size, buffnum, entryBuf);
+	zReadText(key->getTestament(), start, size, buffnum, entryBuf);
 
 	rawFilter(entryBuf, key);
 
@@ -92,18 +92,18 @@ SWBuf &zCom::getRawEntryBuf() {
 
 
 bool zCom::sameBlock(VerseKey *k1, VerseKey *k2) {
-	if (k1->Testament() != k2->Testament())
+	if (k1->getTestament() != k2->getTestament())
 		return false;
 
 	switch (blockType) {
 	case VERSEBLOCKS:
-		if (k1->Verse() != k2->Verse())
+		if (k1->getVerse() != k2->getVerse())
 			return false;
 	case CHAPTERBLOCKS:
-		if (k1->Chapter() != k2->Chapter())
+		if (k1->getChapter() != k2->getChapter())
 			return false;
 	case BOOKBLOCKS:
-		if (k1->Book() != k2->Book())
+		if (k1->getBook() != k2->getBook())
 			return false;
 	}
 	return true;
@@ -120,7 +120,7 @@ void zCom::setEntry(const char *inbuf, long len) {
 		delete lastWriteKey;
 	}
 
-	doSetText(key->Testament(), key->TestamentIndex(), inbuf, len);
+	doSetText(key->getTestament(), key->getTestamentIndex(), inbuf, len);
 
 	lastWriteKey = (VerseKey *)key->clone();	// must delete
 }
@@ -130,7 +130,7 @@ void zCom::linkEntry(const SWKey *inkey) {
 	VerseKey *destkey = &getVerseKey();
 	const VerseKey *srckey = &getVerseKey(inkey);
 
-	doLinkEntry(destkey->Testament(), destkey->TestamentIndex(), srckey->TestamentIndex());
+	doLinkEntry(destkey->getTestament(), destkey->getTestamentIndex(), srckey->getTestamentIndex());
 
 	if (inkey != srckey) // free our key if we created a VerseKey
 		delete srckey;
@@ -145,7 +145,7 @@ void zCom::linkEntry(const SWKey *inkey) {
 void zCom::deleteEntry() {
 
 	VerseKey *key = &getVerseKey();
-	doSetText(key->Testament(), key->TestamentIndex(), "");
+	doSetText(key->getTestament(), key->getTestamentIndex(), "");
 }
 
 
@@ -163,7 +163,7 @@ void zCom::increment(int steps) {
 	unsigned long buffnum;
 	VerseKey *tmpkey = &getVerseKey();
 
-	findOffset(tmpkey->Testament(), tmpkey->TestamentIndex(), &start, &size, &buffnum);
+	findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size, &buffnum);
 
 	SWKey lastgood = *tmpkey;
 	while (steps) {
@@ -173,12 +173,12 @@ void zCom::increment(int steps) {
 		(steps > 0) ? ++(*key) : --(*key);
 		tmpkey = &getVerseKey();
 
-		if ((error = key->Error())) {
+		if ((error = key->popError())) {
 			*key = lastgood;
 			break;
 		}
-		long index = tmpkey->TestamentIndex();
-		findOffset(tmpkey->Testament(), index, &start, &size, &buffnum);
+		long index = tmpkey->getTestamentIndex();
+		findOffset(tmpkey->getTestament(), index, &start, &size, &buffnum);
 		if (
 			(((laststart != start) || (lastsize != size))	// we're a different entry
 //				&& (start > 0) 
@@ -197,10 +197,10 @@ bool zCom::isLinked(const SWKey *k1, const SWKey *k2) const {
 	unsigned long buffnum1, buffnum2;
 	VerseKey *vk1 = &getVerseKey(k1);
 	VerseKey *vk2 = &getVerseKey(k2);
-	if (vk1->Testament() != vk2->Testament()) return false;
+	if (vk1->getTestament() != vk2->getTestament()) return false;
 
-	findOffset(vk1->Testament(), vk1->TestamentIndex(), &start1, &size1, &buffnum1);
-	findOffset(vk2->Testament(), vk2->TestamentIndex(), &start2, &size2, &buffnum2);
+	findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1, &buffnum1);
+	findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2, &buffnum2);
 	return start1 == start2 && buffnum1 == buffnum2;
 }
 
@@ -210,7 +210,7 @@ bool zCom::hasEntry(const SWKey *k) const {
 	unsigned long buffnum;
 	VerseKey *vk = &getVerseKey(k);
 
-	findOffset(vk->Testament(), vk->TestamentIndex(), &start, &size, &buffnum);
+	findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size, &buffnum);
 	return size;
 }
 

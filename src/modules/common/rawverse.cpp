@@ -149,7 +149,7 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
  *
  */
 
-void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf) {
+void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf) const {
 	buf = "";
 	buf.setFillByte(0);
 	buf.setSize(size + 1);
@@ -278,15 +278,15 @@ char RawVerse::createModule(const char *ipath, const char *v11n)
 
 	VerseKey vk;
 	vk.setVersificationSystem(v11n);
-	vk.Headings(1);
+	vk.setIntros(1);
 
 	__s32 offset = 0;
 	__u16 size = 0;
 	offset = archtosword32(offset);
 	size = archtosword16(size);
 
-	for (vk = TOP; !vk.Error(); vk++) {
-		if (vk.Testament() < 2) {
+	for (vk = TOP; !vk.popError(); vk++) {
+		if (vk.getTestament() < 2) {
 			fd->write(&offset, 4);
 			fd->write(&size, 2);
 		}

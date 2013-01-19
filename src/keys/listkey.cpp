@@ -163,12 +163,12 @@ void ListKey::increment(int step) {
 		decrement(step*-1);
 		return;
 	}
-	Error();		// clear error
-	for(; step && !Error(); step--) {
+	popError();		// clear error
+	for(; step && !popError(); step--) {
 		if (arraypos < arraycnt && arraycnt) {
 			if (array[arraypos]->isBoundSet())
 				(*(array[arraypos]))++;
-			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
+			if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
 				SetToElement(arraypos+1);
 			}
 			else SWKey::setText((const char *)(*array[arraypos]));
@@ -187,12 +187,12 @@ void ListKey::decrement(int step) {
 		increment(step*-1);
 		return;
 	}
-	Error();		// clear error
-	for(; step && !Error(); step--) {
+	popError();		// clear error
+	for(; step && !popError(); step--) {
 		if (arraypos > -1 && arraycnt) {
 			if (array[arraypos]->isBoundSet())
 				(*(array[arraypos]))--;
-			if ((array[arraypos]->Error()) || (!array[arraypos]->isBoundSet())) {
+			if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
 				SetToElement(arraypos-1, BOTTOM);
 			}
 			else SWKey::setText((const char *)(*array[arraypos]));
@@ -341,7 +341,7 @@ void ListKey::setText(const char *ikey) {
 		if (key) {
 			if (key->isTraversable() && key->isBoundSet()) {
 				key->setText(ikey);
-				if (!key->Error())
+				if (!key->popError())
 					break;
 			}
 			else {

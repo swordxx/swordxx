@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		bla = "James    1:19";
 	else	bla = argv[2];
 
-	std::cout << "\n Headings: " << (bool)bla.Headings() << "\n";
+	std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
 	std::cout << " (.Index(Index()+1))\n";
 
 	max = (argc < 4) ? 10 : atoi(argv[3]);
@@ -73,29 +73,29 @@ int main(int argc, char **argv)
 	}
 
 	std::cout << "-----------------\n";
-	bla.Headings(true);
-	std::cout << "\n Headings: " << (bool)bla.Headings() << "\n";
+	bla.setIntros(true);
+	std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
 	std::cout << " key++\n";
 
 	if (argc < 2) 
 		bla = "Matthew  1:5";
 	else	bla = argv[2];
 
-	for (loop = 0; loop < max && !bla.Error(); loop++,bla++) {
+	for (loop = 0; loop < max && !bla.popError(); loop++,bla++) {
 		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
 
 	std::cout << "-----------------\n";
-	bla.Headings(true);
-	std::cout << "\n Headings: " << (bool)bla.Headings() << "\n";
+	bla.setIntros(true);
+	std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
 	std::cout << " key--\n";
 
 	if (argc < 2) 
 		bla = "Matthew  1:5";
 	else	bla = argv[2];
 
-	for (loop = max; loop && !bla.Error(); loop--, bla--) {
+	for (loop = max; loop && !bla.popError(); loop--, bla--) {
 		index = bla.getIndex();
 		std::cout << (const char *)bla << "(" << index << ")\n";
 	}
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 	std::cout << "-----------------\n";
 	std::cout << "-------- Headings ---------\n";
 
-	bla.Headings(1);
+	bla.setIntros(true);
 
 	if (argc < 2) 
 		bla = "Matthew  1:5";
@@ -187,22 +187,22 @@ int main(int argc, char **argv)
 	bla = "Revelation of John 23:19";
 	std::cout << "bla = \"Revelation of John 23:19\"\n";
 	std::cout << "(const char *)bla = " << (const char *)bla << "\n";
-	std::cout << "bla.Error() = " << (int)bla.Error() << " \n";
+	std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
 	std::cout << "bla++ \n";
 	bla++;
-	std::cout << "bla.Error() = " << (int)bla.Error() << " \n";
+	std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
 
-	bla.Headings(0);
-	for (bla = BOTTOM; !bla.Error(); bla.Book(bla.Book()-1))
+	bla.setIntros(false);
+	for (bla = BOTTOM; !bla.popError(); bla.setBook(bla.getBook()-1))
 		std::cout << (const char *)bla << "\n";
-	bla.Testament(1);
+	bla.setTestament(1);
 	bla = BOTTOM;
-	std::cout << bla.TestamentIndex() << "\n";
+	std::cout << bla.getTestamentIndex() << "\n";
 	std::cout << bla.getIndex() << "\n";
 	std::cout << bla << "\n";
-	bla.Testament(2);
+	bla.setTestament(2);
 	bla = BOTTOM;
-	std::cout << bla.TestamentIndex() << "\n";
+	std::cout << bla.getTestamentIndex() << "\n";
 	std::cout << bla.getIndex() << "\n";
 	std::cout << bla << "\n";
 	return 0;

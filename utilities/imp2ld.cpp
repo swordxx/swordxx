@@ -168,9 +168,9 @@ int main(int argc, char **argv) {
 
 
 
-	key = mod->CreateKey();
-	linkKey = mod->CreateKey();
-	key->Persist(1);
+	key = mod->createKey();
+	linkKey = mod->createKey();
+	key->setPersist(true);
 	mod->setKey(key);
 
 	while (!infile.eof()) {

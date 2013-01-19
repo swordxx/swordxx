@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-	vkey->Headings(0);
+	vkey->setIntros(false);
 
 	cout << "<?xml version=\"1.0\" ";
 		if (inModule->getConfigEntry("Encoding")) {
@@ -134,19 +134,19 @@ int main(int argc, char **argv)
 		cout << " xsi:schemaLocation=\"http://www.bibletechnologies.net/2003/OSIS/namespace http://www.bibletechnologies.net/osisCore.2.1.1.xsd\">\n\n";
 	cout << "<osisText";
 		cout << " osisIDWork=\"";
-		cout << inModule->Name() << "\"";
+		cout << inModule->getName() << "\"";
 		cout << " osisRefWork=\"defaultReferenceScheme\"";
-		if (inModule->Lang()) {
-			if (strlen(inModule->Lang()))
-				cout << " xml:lang=\"" << inModule->Lang() << "\"";
+		if (inModule->getLanguage()) {
+			if (strlen(inModule->getLanguage()))
+				cout << " xml:lang=\"" << inModule->getLanguage() << "\"";
 		}
 		cout << ">\n\n";
 
 	cout << "\t<header>\n";
 	cout << "\t\t<work osisWork=\"";
-	cout << inModule->Name() << "\">\n";
-	cout << "\t\t\t<title>" << inModule->Description() << "</title>\n";
-	cout << "\t\t\t<identifier type=\"OSIS\">Bible." << inModule->Name() << "</identifier>\n";
+	cout << inModule->getName() << "\">\n";
+	cout << "\t\t\t<title>" << inModule->getDescription() << "</title>\n";
+	cout << "\t\t\t<identifier type=\"OSIS\">Bible." << inModule->getName() << "</identifier>\n";
 	cout << "\t\t\t<refSystem>Bible.KJV</refSystem>\n";
 	cout << "\t\t</work>\n";
 	cout << "\t\t<work osisWork=\"defaultReferenceScheme\">\n";
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 
 	(*inModule) = TOP;
 
-	SWKey *p = inModule->CreateKey();
+	SWKey *p = inModule->createKey();
         VerseKey *tmpKey = SWDYNAMIC_CAST(VerseKey, p);
 	if (!tmpKey) {
         	delete p;
@@ -165,10 +165,10 @@ int main(int argc, char **argv)
 	}
 	*tmpKey = inModule->getKeyText();
 
-	tmpKey->Headings(1);
-	tmpKey->AutoNormalize(0);
+	tmpKey->setIntros(true);
+	tmpKey->setAutoNormalize(false);
 
-	for ((*inModule) = TOP; !inModule->Error(); (*inModule)++) {
+	for ((*inModule) = TOP; !inModule->popError(); (*inModule)++) {
 		bool newTest = false;
 		bool newBook = false;
 
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 			continue;
 		}
 
-		if ((vkey->Testament() != lastTest)) {
+		if ((vkey->getTestament() != lastTest)) {
 			if (openchap)
 				cout << "\t</chapter>\n";
 			if (openbook)
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 			opentest = true;
 			newTest = true;
 		}
-		if ((vkey->Book() != lastBook) || newTest) {
+		if ((vkey->getBook() != lastBook) || newTest) {
 			if (!newTest) {
 				if (openchap)
 					cout << "\t</chapter>\n";
@@ -196,22 +196,22 @@ int main(int argc, char **argv)
 			}
 			*buf = 0;
 			*tmpKey = *vkey;
-			tmpKey->Chapter(0);
-			tmpKey->Verse(0);
+			tmpKey->setChapter(0);
+			tmpKey->setVerse(0);
 			sprintf(buf, "\t<div type=\"book\" osisID=\"%s\">\n", tmpKey->getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf << endl;
 			openbook = true;
 			newBook = true;
 		}
-		if ((vkey->Chapter() != lastChap) || newBook) {
+		if ((vkey->getChapter() != lastChap) || newBook) {
 			if (!newBook) {
 				if (openchap)
 					cout << "\t</chapter>\n";
 			}
 			*buf = 0;
 			*tmpKey = *vkey;
-			tmpKey->Verse(0);
+			tmpKey->setVerse(0);
 			sprintf(buf, "\t<chapter osisID=\"%s\">\n", tmpKey->getOSISRef());
 //			filter.ProcessText(buf, 200 - 3, &lastHeading, inModule);
 			cout << "" << buf;
@@ -220,9 +220,9 @@ int main(int argc, char **argv)
 		SWBuf verseText = inModule->getRawEntry();
 		sprintf(buf, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
 		cout << buf << verseText.c_str() << "</verse>\n" << endl;
-		lastChap = vkey->Chapter();
-		lastBook = vkey->Book();
-		lastTest = vkey->Testament();
+		lastChap = vkey->getChapter();
+		lastBook = vkey->getBook();
+		lastTest = vkey->getTestament();
 	}
 	if (openchap)
 		cout << "\t</chapter>\n";

@@ -38,9 +38,9 @@ SWText::SWText(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWT
 	this->versification = 0;
 	stdstr(&(this->versification), versification);
 	delete key;
-	key = (VerseKey *)CreateKey();
-	tmpVK1 = (VerseKey *)CreateKey();
-	tmpVK2 = (VerseKey *)CreateKey();
+	key = (VerseKey *)createKey();
+	tmpVK1 = (VerseKey *)createKey();
+	tmpVK2 = (VerseKey *)createKey();
         tmpSecond = false;
 	skipConsecutiveLinks = false;
 }
@@ -58,10 +58,10 @@ SWText::~SWText() {
 
 
 /******************************************************************************
- * SWText CreateKey - Create the correct key (VerseKey) for use with SWText
+ * SWText createKey - Create the correct key (VerseKey) for use with SWText
  */
 
-SWKey *SWText::CreateKey() const {
+SWKey *SWText::createKey() const {
 	VerseKey *vk = new VerseKey();
 
 	vk->setVersificationSystem(versification);
@@ -80,7 +80,7 @@ long SWText::getIndex() const {
 void SWText::setIndex(long iindex) {
 	VerseKey *key = &getVerseKey();
 
-	key->Testament(1);
+	key->setTestament(1);
 	key->setIndex(iindex);
 
 	if (key != this->key) {
