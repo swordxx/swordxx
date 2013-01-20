@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	VerseKey parser;
 	ListKey result;
 
-	result = parser.ParseVerseList(range, parser, true);
+	result = parser.parseVerseList(range, parser, true);
 	// let's iterate the key and display
 	for (result = TOP; !result.Error(); result++) {
 		cout << result << "\n";

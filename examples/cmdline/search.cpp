@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 		VerseKey *parser = SWDYNAMIC_CAST(VerseKey, k);
 		VerseKey kjvParser;
 		if (!parser) parser = &kjvParser;	// use standard KJV parsing as fallback
-		scope = parser->ParseVerseList(argv[3], *parser, true);
+		scope = parser->parseVerseList(argv[3], *parser, true);
 		scope.Persist(1);
 		target->setKey(scope);
 	}

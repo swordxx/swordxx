@@ -98,7 +98,7 @@ void SearchThread::search()  {
 		return;
 	}
 
-	ListKey scopeList = VerseKey().ParseVerseList("Luke;John;Revelation","", true);
+	ListKey scopeList = VerseKey().parseVerseList("Luke;John;Revelation","", true);
 	for (int i=0; i < scopeList.Count(); ++i) {
 		std::cout << (const char*)*scopeList.GetElement(i) << std::endl;
 	}
