@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 	it = manager.Modules.find(argv[1]);
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
-		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
+		for (it = manager.Modules.begin(); it != manager.Modules.end(); ++it) {
 			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
 		}
 		exit(-1);

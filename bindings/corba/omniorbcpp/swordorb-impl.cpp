@@ -114,35 +114,35 @@ swordorb::StringList* swordorb_SWModule_i::getEntryAttribute(const char* level1,
 		i1Start = entryAttribs.find(level1);
 		i1End = i1Start;
 		if (i1End != entryAttribs.end())
-			i1End++;
+			++i1End;
 	}
 	else {
 		i1Start = entryAttribs.begin();
 		i1End   = entryAttribs.end();
 	}
-	for (;i1Start != i1End; i1Start++) {
+	for (;i1Start != i1End; ++i1Start) {
 		if ((level2) && (*level2)) {
 			i2Start = i1Start->second.find(level2);
 			i2End = i2Start;
 			if (i2End != i1Start->second.end())
-				i2End++;
+				++i2End;
 		}
 		else {
 			i2Start = i1Start->second.begin();
 			i2End   = i1Start->second.end();
 		}
-		for (;i2Start != i2End; i2Start++) {
+		for (;i2Start != i2End; ++i2Start) {
 			if ((level3) && (*level3)) {
 				i3Start = i2Start->second.find(level3);
 				i3End = i3Start;
 				if (i3End != i2Start->second.end())
-					i3End++;
+					++i3End;
 			}
 			else {
 				i3Start = i2Start->second.begin();
 				i3End   = i2Start->second.end();
 			}
-			for (;i3Start != i3End; i3Start++) {
+			for (;i3Start != i3End; ++i3Start) {
 				results.push_back(i3Start->second);
 			}
 			if (i3Start != i3End)
@@ -367,7 +367,7 @@ swordorb::ModInfoList* swordorb_SWMgr_i::getModInfoList() {
 	sword::SWModule *module = 0;
 
 	int size = 0;
-	for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); it++) {
+	for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); ++it) {
 		if ((!(it->second->getConfigEntry("CipherKey"))) || (*(it->second->getConfigEntry("CipherKey"))))
 			size++;
 	}
@@ -375,7 +375,7 @@ swordorb::ModInfoList* swordorb_SWMgr_i::getModInfoList() {
 //	if (size > 183) size = 183;
 	milist->length(size);
 	int i = 0;
-	for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); it++) {
+	for (sword::ModMap::iterator it = delegate->Modules.begin(); it != delegate->Modules.end(); ++it) {
 		module = it->second;
 		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
 			SWBuf type = module->getType();
@@ -438,12 +438,12 @@ swordorb::StringList* swordorb_SWMgr_i::getGlobalOptions(){
 	sword::StringList options = delegate->getGlobalOptions();
 	swordorb::StringList *retVal = new swordorb::StringList;
 	int count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		count++;
 	}
 	retVal->length(count);
 	count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(it->c_str()));
 	}
 	return retVal;
@@ -453,12 +453,12 @@ swordorb::StringList* swordorb_SWMgr_i::getGlobalOptionValues(const char* option
 	sword::StringList options = delegate->getGlobalOptionValues(option);
 	swordorb::StringList *retVal = new swordorb::StringList;
 	int count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		count++;
 	}
 	retVal->length(count);
 	count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(it->c_str()));
 	}
 	return retVal;
@@ -484,12 +484,12 @@ swordorb::StringList* swordorb_SWMgr_i::getAvailableLocales(){
 	sword::StringList localeNames = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();
 	swordorb::StringList *retVal = new swordorb::StringList;
 	int count = 0;
-	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); ++it) {
 		count++;
 	}
 	retVal->length(count);
 	count = 0;
-	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); ++it) {
 		(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(it->c_str()));
 	}
 	return retVal;
@@ -508,12 +508,12 @@ swordorb::StringList* swordorb_SWMgr_i::getRepos() {
 	swordorb::StringList *retVal = new swordorb::StringList;
 	int count = 0;
 	sword::InstallMgr *installMgr = new sword::InstallMgr();
-	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
 		count++;
 	}
 	retVal->length(count);
 	count = 0;
-	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
 		(*retVal)[count++] = CORBA::string_dup(assureValidUTF8(it->second->caption.c_str()));
 	}
 	delete installMgr;

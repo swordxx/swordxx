@@ -108,17 +108,17 @@ int sword__Quick_getJScriptAttribArray(xsd__string modName, xsd__string modKey, 
 		static string retVal = "";
 		retVal = "var entryAttribs = new Array();\n";
 		string l1keys = "entryAttribs[0] = new Array(";
-		for (l1=0,i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); i1++,l1++) {
+		for (l1=0,i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); ++i1,++l1) {
 			sprintf(lbuf1, "%d", l1+1);
 			retVal += "entryAttribs["+lbuf1+"] = new Array();\n";
 			string l2keys = "entryAttribs["+lbuf1+"][0] = new Array(";
 			cout << "[ " << i1->first << " ]\n";
-			for (l2=0,i2 = i1->second.begin(); i2 != i1->second.end(); i2++,l2++) {
+			for (l2=0,i2 = i1->second.begin(); i2 != i1->second.end(); ++i2,++l2) {
 				sprintf(lbuf2, "%d", l2+1);
 				retVal += "entryAttribs["+lbuf1+"]["+lbuf2+"][0] = new Array();\n";
 				string l3keys = "entryAttribs["+lbuf1+"]["+lbuf2+"][0] = new Array(";
 				cout << "\t[ " << i2->first << " ]\n";
-				for (l3=0,i3 = i2->second.begin(); i3 != i2->second.end(); i3++,l3++) {
+				for (l3=0,i3 = i2->second.begin(); i3 != i2->second.end(); ++i3,++l3) {
 					cout << "\t\t" << i3->first << " = " << i3->second << "\n";
 				}
 			}

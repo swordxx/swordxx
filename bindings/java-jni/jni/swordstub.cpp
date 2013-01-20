@@ -154,7 +154,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getModInfo
 	init();
 
 	int size = 0;
-	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); it++) {
+	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
 		if ((!(it->second->getConfigEntry("CipherKey"))) || (*(it->second->getConfigEntry("CipherKey"))))
 			size++;
 	}
@@ -172,7 +172,7 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(size, clazzModInfo, NULL);
 
 	int i = 0;
-	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); it++) {
+	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
 		SWModule *module = it->second;
 
 		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
@@ -328,7 +328,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
 
 	sword::StringList options = mgr->getGlobalOptions();
 	int count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		count++;
 	}
 
@@ -336,7 +336,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 
 	count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8(*it)));
 	}
 
@@ -361,14 +361,14 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
      env->ReleaseStringUTFChars(optionJS, option);
 
 	int count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		count++;
 	}
 	jclass clazzString = env->FindClass("java/lang/String");
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 
 	count = 0;
-	for (sword::StringList::iterator it = options.begin(); it != options.end(); it++) {
+	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
 		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8(*it)));
 	}
 
@@ -422,7 +422,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailab
 
 	sword::StringList localeNames = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();
 	int count = 0;
-	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); ++it) {
 		count++;
 	}
 
@@ -430,7 +430,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailab
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 
 	count = 0;
-	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); it++) {
+	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); ++it) {
 		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8(*it)));
 	}
 	return ret;
@@ -645,35 +645,35 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 			i1Start = entryAttribs.find(level1);
 			i1End = i1Start;
 			if (i1End != entryAttribs.end())
-				i1End++;
+				++i1End;
 		}
 		else {
 			i1Start = entryAttribs.begin();
 			i1End   = entryAttribs.end();
 		}
-		for (;i1Start != i1End; i1Start++) {
+		for (;i1Start != i1End; ++i1Start) {
 			if ((level2) && (*level2)) {
 				i2Start = i1Start->second.find(level2);
 				i2End = i2Start;
 				if (i2End != i1Start->second.end())
-					i2End++;
+					++i2End;
 			}
 			else {
 				i2Start = i1Start->second.begin();
 				i2End   = i1Start->second.end();
 			}
-			for (;i2Start != i2End; i2Start++) {
+			for (;i2Start != i2End; ++i2Start) {
 				if ((level3) && (*level3)) {
 					i3Start = i2Start->second.find(level3);
 					i3End = i3Start;
 					if (i3End != i2Start->second.end())
-						i3End++;
+						++i3End;
 				}
 				else {
 					i3Start = i2Start->second.begin();
 					i3End   = i2Start->second.end();
 				}
-				for (;i3Start != i3End; i3Start++) {
+				for (;i3Start != i3End; ++i3Start) {
 					results.push_back(i3Start->second);
 				}
 				if (i3Start != i3End)
@@ -1262,12 +1262,12 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_InstallMgr_getRe
 	jobjectArray ret;
 
 	int count = 0;
-	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
 		count++;
 	}
 	ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 	count = 0;
-	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
 		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8(it->second->caption.c_str())));
 	}
 
@@ -1331,7 +1331,7 @@ SWLog::getSystemLog()->logDebug("found source: %s\n", sourceName);
 	map<SWModule *, int> modStats = installMgr->getModuleStatus(*mgr, *source->second->getMgr());
 
 	int size = 0;
-	for (map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); it++) {
+	for (map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); ++it) {
 		size++;
 	}
 
@@ -1339,7 +1339,7 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(size, clazzModInfo, NULL);
 
 	int i = 0;
-	for (map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); it++) {
+	for (map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); ++it) {
 		SWModule *module = it->first;
 		int status = it->second;
 
