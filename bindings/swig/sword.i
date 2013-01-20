@@ -6,6 +6,8 @@
 /* Ignore warnings about Unknown base class */
 %warnfilter(401);
 
+%include "deprecations.i"
+
 #ifdef SWIGPYTHON
 %include "directors.i"
 #endif

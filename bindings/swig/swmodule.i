@@ -12,8 +12,6 @@
 %ignore sword::SWModule::getEntryAttributes;
 %ignore sword::SWModule::getConfig;
 %ignore sword::SWModule::setConfig;
-%ignore sword::SWModule::SetKey(SWKey const &);
-%ignore sword::SWModule::setKey(SWKey const &);
 
 %include "swmodule.h"
 
