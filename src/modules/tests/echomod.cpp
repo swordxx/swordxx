@@ -33,7 +33,7 @@ EchoMod::~EchoMod() {
 }
 
 
-SWBuf &EchoMod::getRawEntryBuf()
+SWBuf &EchoMod::getRawEntryBuf() const
 {
 	static SWBuf retVal;
 	retVal = *key;
