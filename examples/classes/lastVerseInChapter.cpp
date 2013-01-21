@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 	SWModule *book = library.getModule("KJV");
 
 	VerseKey *vk = (VerseKey *) book->getKey();
-	for (;!vk->Error();vk->setChapter(vk->getChapter()+1)) {
+	for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {
 		vk->setVerse(vk->getVerseMax());
 		SWBuf text = book->StripText();
 		text = text.trim();

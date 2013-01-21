@@ -42,52 +42,52 @@ int main(int argc, char **argv) {
 		exit(-1);
 	}
 
-	VerseKey *vk = (VerseKey *)bible->CreateKey();
+	VerseKey *vk = (VerseKey *)bible->createKey();
 
 	// let's set verse ranges for a variety of different contiguous regions
 
 	// set a verse range for the whole Bible
-	vk->LowerBound(*vk);	// vk initially points to TOP, so we don't need to set position first
+	vk->setLowerBound(*vk);	// vk initially points to TOP, so we don't need to set position first
 	vk->setPosition(BOTTOM);
-	vk->UpperBound(*vk);
+	vk->setUpperBound(*vk);
 	cout << vk->getRangeText() << "\n";
 
 
-	vk->ClearBounds();
+	vk->clearBounds();
 
 
 	// Old Testament
 	vk->setPosition(TOP);
-	vk->LowerBound(*vk);
+	vk->setLowerBound(*vk);
 
 	vk->setTestament(2);
 	(*vk)--;
 
-	vk->UpperBound(*vk);
+	vk->setUpperBound(*vk);
 	cout << vk->getRangeText() << "\n";
 
 
-	vk->ClearBounds();
+	vk->clearBounds();
 
 
 	// New Testament
 	vk->setPosition(TOP);
 	vk->setTestament(2);
-	vk->LowerBound(*vk);
+	vk->setLowerBound(*vk);
 	vk->setPosition(BOTTOM);
-	vk->UpperBound(*vk);
+	vk->setUpperBound(*vk);
 	cout << vk->getRangeText() << "\n";
 
 
-	vk->ClearBounds();
+	vk->clearBounds();
 
 
 	// Current Book
 	vk->setText("John 3:16");
 	vk->setChapter(1); vk->setVerse(1);
-	vk->LowerBound(*vk);
+	vk->setLowerBound(*vk);
 	vk->setChapter(vk->getChapterMax()); vk->setVerse(vk->getVerseMax());
-	vk->UpperBound(*vk);
+	vk->setUpperBound(*vk);
 	cout << vk->getRangeText() << "\n";
 
 

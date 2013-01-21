@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
         }
         VerseKey* key = ((VerseKey *)book->getKey());
 
-        key->Headings(true);
+        key->setIntros(true);
         book->setSkipConsecutiveLinks(true);
         book->setPosition(TOP);
 

@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
 	while (true) {
 		cout << "\nModule text:\n";
 		module->setKey("1jn 1:9");
-		cout << "[ " << module->KeyText() << " ]\n";
+		cout << "[ " << module->getKeyText() << " ]\n";
 		cout << (const char *)*module;
 		cout << "\n\nEnter new cipher key: ";
 		cin >> key;

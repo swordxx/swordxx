@@ -34,7 +34,7 @@
 using namespace sword;
 using namespace std;
 
-main() {
+int main(int argc, char **argv) {
 	SWMgr manager;		// create a default manager that looks in the current directory for mods.conf
 
 	cout << "\nInstalled Modules:\n\n";
@@ -47,14 +47,14 @@ main() {
 		SWBuf   modName  = (*modIterator).first;  // mod.conf section name (stored in module->Name())
 		SWModule *module  = (*modIterator).second;
 
-		cout << modName << "(" << module->Name() << ") | " << module->Type() << "\n";
+		cout << modName << "(" << module->getName() << ") | " << module->getType() << "\n";
 	}
 
 // Print out a verse from the first module:
 
-	cout << "\n" << manager.Modules.begin()->second->KeyText() << ":\n";
+	cout << "\n" << manager.Modules.begin()->second->getKeyText() << ":\n";
 	cout << (const char *)(*manager.Modules.begin()->second);
-	cout << " (" << manager.Modules.begin()->second->Name() << ")\n";
+	cout << " (" << manager.Modules.begin()->second->getName() << ")\n";
 
 // Print out the same verse from the second module (less confusing):
 
@@ -63,9 +63,9 @@ main() {
 
 	SWModule *mod = modIterator->second;
 
-	cout << "\n" << mod->KeyText() << ":\n";
+	cout << "\n" << mod->getKeyText() << ":\n";
 //	cout << (const char *)(*mod);		// we could do this, the same as above
-	mod->Display();				// instead of casting mod to const char * to get its contents, we'll call the default display method that writes to stdout;
-	cout << " (" << mod->Name() << ")\n\n";
+	mod->display();				// instead of casting mod to const char * to get its contents, we'll call the default display method that writes to stdout;
+	cout << " (" << mod->getName() << ")\n\n";
 
 }
