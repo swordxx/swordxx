@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); ++it) {
-			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
+			fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
 		}
 		exit(-1);
 	}
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 		VerseKey kjvParser;
 		if (!parser) parser = &kjvParser;	// use standard KJV parsing as fallback
 		scope = parser->parseVerseList(argv[3], *parser, true);
-		scope.Persist(1);
+		scope.setPersist(1);
 		target->setKey(scope);
 	}
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	std::cerr << std::endl;
 	if (argc > 4) {			// if min / max specified
 		scope = listkey;
-		scope.Persist(1);
+		scope.setPersist(1);
 		target->setKey(scope);
 		printed = 0;
 		std::cerr << " ";
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 		std::cerr << std::endl;
 	}
 	listkey.sort();
-	while (!listkey.Error()) {
+	while (!listkey.popError()) {
 		std::cout << (const char *)listkey << std::endl;
 		listkey++;
 	}

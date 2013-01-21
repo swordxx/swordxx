@@ -104,7 +104,7 @@ void SearchThread::search()  {
 	}
 	SWKey* scope = &scopeList;
 
-	searchResult = module->Search(searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
+	searchResult = module->search(searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
 
 	if (!scope)
 		std::cout << "bad scope!" << std::endl;
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n",  argv[1]);
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); ++it) {
-			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
+			fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
 		}
 		exit(-1);
 	}

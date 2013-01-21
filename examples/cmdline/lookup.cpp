@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
 		ModMap::iterator it;
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); ++it) {
-			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
+			fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
 		}
 		exit(-1);
 	}
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
 	if (vk) {
 	//	vk->AutoNormalize(false);
-		vk->Headings(true);
+		vk->setIntros(true);
 		vk->setText(argv[2]);
 	}
 	else {
