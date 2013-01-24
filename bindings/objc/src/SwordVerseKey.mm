@@ -88,10 +88,6 @@
     return [SwordVerseKey verseKeyWithSWVerseKey:(sword::VerseKey *)sk];
 }
 
-- (int)index {
-    return sk->Index();
-}
-
 - (BOOL)headings {
     return (BOOL)((sword::VerseKey *)sk)->Headings();
 }
