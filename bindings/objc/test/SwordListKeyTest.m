@@ -6,14 +6,8 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import <ObjCSword/ObjCSword.h>
 #import "SwordListKeyTest.h"
-#ifdef TARGET_IPHONE_SIMULATOR
-#import "SwordListKey.h"
-#import "SwordVerseKey.h"
-#import "VerseEnumerator.h"
-#else
-#import "ObjCSword/ObjCSword.h"
-#endif
 
 @implementation SwordListKeyTest
 
@@ -47,7 +41,7 @@
     
     VerseEnumerator *ve = [lk verseEnumerator];
     int count = 0;
-    NSString *ref = nil;
+    NSString *ref;
     while((ref = [ve nextObject])) {
         count++;
     }

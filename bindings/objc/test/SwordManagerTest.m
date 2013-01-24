@@ -6,21 +6,13 @@
 //  Copyright 2010 Software by MABE. All rights reserved.
 //
 
+#import <ObjCSword/ObjCSword.h>
 #import "SwordManagerTest.h"
-
-#import "Configuration.h"
-//#import "iOSConfiguration.h"
-#import "OSXConfiguration.h"
-#import "SwordManager.h"
 
 @implementation SwordManagerTest
 
 - (void)setUp {
-#ifdef TARGET_IPHONE_SIMULATOR
-//    [[Configuration config] setClass:[iOSConfiguration class]];
-#else
-#endif
-    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
+    [Configuration configWithImpl:[[[OSXConfiguration alloc] init] autorelease]];
 }
 
 - (void)testSwordManagerInit {
