@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 		target->setKey(argv[2]);
 	}
 
-	target->RenderText();		// force an entry lookup to resolve key to something in the index
+	target->renderText();		// force an entry lookup to resolve key to something in the index
 
 	std::cout << "==Raw=Entry===============\n";
 	std::cout << target->getKeyText() << ":\n";
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 	std::cout << "==Render=Entry============\n";
 	std::cout << target->getRenderHeader();
 	std::cout << "\n";
-	std::cout << target->RenderText();
+	std::cout << target->renderText();
 	std::cout << "\n";
 	std::cout << "==========================\n";
 	std::cout << "Entry Attributes:\n\n";

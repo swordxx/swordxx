@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 		VerseKey kjvParser;
 		if (!parser) parser = &kjvParser;	// use standard KJV parsing as fallback
 		scope = parser->parseVerseList(argv[3], *parser, true);
-		scope.setPersist(1);
+		scope.setPersist(true);
 		target->setKey(scope);
 	}
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	std::cerr << std::endl;
 	if (argc > 4) {			// if min / max specified
 		scope = listkey;
-		scope.setPersist(1);
+		scope.setPersist(true);
 		target->setKey(scope);
 		printed = 0;
 		std::cerr << " ";

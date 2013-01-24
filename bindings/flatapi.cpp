@@ -257,19 +257,19 @@ void SWModule_begin(SWHANDLE hmodule) {
   
 const char *SWModule_getStripText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->StripText() : 0);
+	return (const char *)((module) ? module->stripText() : 0);
 }
   
   
 const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->RenderText() : 0);
+	return (const char *)((module) ? module->renderText() : 0);
 }
 
 const char *SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3) {
 	SWModule *module = (SWModule *)hmodule;
 	static SWBuf retval;	
-	module->RenderText();                 	
+	module->renderText();                 	
 	retval = module->getEntryAttributes()[level1][level2][level3].c_str();
 	return (retval.length()) ? (const char*)retval.c_str() : NULL;
 }
@@ -280,7 +280,7 @@ const char *SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pv
 	char buf[12];	
 	sprintf(buf, "%i", pvHeading);  
 	module->setKey(key);	
-	module->RenderText();                 	
+	module->renderText();                 	
 	preverseHeading = module->getEntryAttributes()["Heading"]["Preverse"][buf].c_str();
 	return (preverseHeading.length()) ? (const char*)preverseHeading.c_str() : NULL;
 }
@@ -290,7 +290,7 @@ const char *SWModule_getFootnoteType(SWHANDLE hmodule, const char *key, const ch
 	static SWBuf type;
 	module->popError();
 	module->setKey(key);
-	module->RenderText();	
+	module->renderText();	
 	type = module->getEntryAttributes()["Footnote"][note]["type"].c_str();
 	return (type) ? (const char*)type.c_str() : NULL;
 }
@@ -300,7 +300,7 @@ const char *SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const ch
 	static SWBuf body;
 	module->popError();
 	module->setKey(key);
-	module->RenderText();
+	module->renderText();
 	body = module->getEntryAttributes()["Footnote"][note]["body"].c_str();
 	SWKey *keybuf = module->getKey();;
 	module->renderFilter(body, keybuf);
@@ -312,7 +312,7 @@ const char *SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const
 	static SWBuf refList;
 	module->popError();
 	module->setKey(key);
-	module->RenderText();	
+	module->renderText();	
 	refList = module->getEntryAttributes()["Footnote"][note]["refList"].c_str();
 	return (refList) ? (const char*)refList.c_str() : NULL;
 }

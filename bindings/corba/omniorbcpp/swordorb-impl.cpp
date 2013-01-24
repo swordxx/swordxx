@@ -101,7 +101,7 @@ swordorb::SearchHitList* swordorb_SWModule_i::search(const char* istr, swordorb:
 }
 
 swordorb::StringList* swordorb_SWModule_i::getEntryAttribute(const char* level1, const char* level2, const char* level3, ::CORBA::Boolean filtered){
-	delegate->RenderText();	// force parse
+	delegate->renderText();	// force parse
 	std::vector<SWBuf> results;
 	swordorb::StringList *retVal = new swordorb::StringList;
 
@@ -155,7 +155,7 @@ swordorb::StringList* swordorb_SWModule_i::getEntryAttribute(const char* level1,
 	retVal->length(results.size());
 	for (int i = 0; i < results.size(); i++) {
 		if (filtered) {
-			(*retVal)[i] = CORBA::string_dup(assureValidUTF8(delegate->RenderText(results[i].c_str())));
+			(*retVal)[i] = CORBA::string_dup(assureValidUTF8(delegate->renderText(results[i].c_str())));
 		}
 		else {
 			(*retVal)[i] = CORBA::string_dup(assureValidUTF8(results[i].c_str()));
@@ -324,11 +324,11 @@ void swordorb_SWModule_i::begin(){
 }
 
 char* swordorb_SWModule_i::getStripText(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->StripText()));
+	return CORBA::string_dup(assureValidUTF8((char *)delegate->stripText()));
 }
 
 char* swordorb_SWModule_i::getRenderText(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->RenderText()));
+	return CORBA::string_dup(assureValidUTF8((char *)delegate->renderText()));
 }
 
 char* swordorb_SWModule_i::getRawEntry(){

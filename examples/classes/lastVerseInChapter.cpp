@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	VerseKey *vk = (VerseKey *) book->getKey();
 	for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {
 		vk->setVerse(vk->getVerseMax());
-		SWBuf text = book->StripText();
+		SWBuf text = book->stripText();
 		text = text.trim();
 		if (text.endsWith(",")) {
 			cout << vk->getText() << ":\n\n";

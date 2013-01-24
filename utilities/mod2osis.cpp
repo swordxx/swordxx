@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 		bool newTest = false;
 		bool newBook = false;
 
-		if (!strlen(inModule->RenderText())) {
+		if (!strlen(inModule->renderText())) {
 			continue;
 		}
 

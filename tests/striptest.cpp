@@ -20,13 +20,13 @@ int main(int argc, char **argv) {
 	    library.setGlobalOption(*it, "Off");
 	}
 	book->setKey(keyText.c_str());
-	SWBuf entryStripped = book->StripText();
+	SWBuf entryStripped = book->stripText();
 	cout << "Module: " << book->getDescription() << "\t Key: " << book->getKeyText() << "\n";
 	cout << "RawEntry:\n" << book->getRawEntry() << "\n";
 	cout << "StripText:\n" << entryStripped << "\n";
 	cout << "Search Target: " << searchText << "\n";
-	cout << "Search Target StripText: " << book->StripText(searchText) << "\n";
-	cout << "Found: " << ((strstr(entryStripped.c_str(), book->StripText(searchText))) ? "true":"false") << endl; 
+	cout << "Search Target StripText: " << book->stripText(searchText) << "\n";
+	cout << "Found: " << ((strstr(entryStripped.c_str(), book->stripText(searchText))) ? "true":"false") << endl; 
 
 	return 0;
 }

@@ -10,7 +10,7 @@ using namespace sword;
 
 void outputCurrentVerse(SWModule *module) {
 
-	module->RenderText();
+	module->renderText();
 
 	cout << "Key:\n";
 	cout << module->getKeyText() << "\n";
@@ -21,13 +21,13 @@ void outputCurrentVerse(SWModule *module) {
 	cout << header << endl;
 	cout << "-------\n";
 	cout << "Rendered Header:\n";
-	cout << module->RenderText(header) << endl;
+	cout << module->renderText(header) << endl;
 	cout << "-------\n";
 	cout << "CSS:\n";
 	cout << module->getRenderHeader() << endl;
 	cout << "-------\n";
 	cout << "RenderText:\n";
-	cout << module->RenderText() << endl;
+	cout << module->renderText() << endl;
 	cout << "-------\n";
 	cout << "-------\n\n";
 }

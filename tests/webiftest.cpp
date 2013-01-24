@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 		module = mgr.Modules.begin()->second;
 	}
 	module->setKey(keyName);
-	std::cout << module->RenderText() << std::endl<< std::endl<< std::endl;
+	std::cout << module->renderText() << std::endl<< std::endl<< std::endl;
 
 	//------------------------
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 	}
 
 	module->setKey(keyName);
-	std::cout << module->RenderText() << std::endl;
+	std::cout << module->renderText() << std::endl;
 
 	return 0;
 }

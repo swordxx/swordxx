@@ -47,6 +47,6 @@ int main(int argc, char **argv) {
 		cout << "$$$";
 		if (vk) cout << vk->getOSISRef();
 		else    cout << book.getKeyText();
-		cout << "\n" << book.RenderText() << "\n\n";
+		cout << "\n" << book.renderText() << "\n\n";
 	}
 }

@@ -108,7 +108,7 @@ inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
 inline SWBuf &toupperstr(SWBuf &b) {
 	char *utf8 = 0;
 	stdstr(&utf8, b.c_str(), 2);
-	toupperstr(utf8, strlen(utf8)*2);
+	toupperstr(utf8, (unsigned int)strlen(utf8)*2);
 	b = utf8;
 	delete [] utf8;
 	return b;

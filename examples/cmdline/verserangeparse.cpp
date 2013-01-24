@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
 	// now let's iterate the book and display
 	for ((*book) = TOP; !book->popError(); (*book)++) {
-		cout << "*** " << book->getKeyText() << ": " << book->RenderText() << "\n";
+		cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
 	}
 
 	// Since we've told our result key to persist in book, we can reuse our

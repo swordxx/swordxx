@@ -82,7 +82,7 @@ void assurePath(TreeKeyIdx *treeKey) {
 
 void viewEntryText(RawGenBook *book) {
 	std::cout << "\n";
-	std::cout << book->RenderText();
+	std::cout << book->renderText();
 	std::cout << "\n";
 }
 

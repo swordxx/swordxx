@@ -43,7 +43,7 @@ class SWFilter;
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
 #define SWMODULE_OPERATORS \
-	operator const char *() { return RenderText(); } \
+	operator const char *() { return renderText(); } \
 	operator SWKey &() { return *getKey(); } \
 	operator SWKey *() { return getKey(); } \
 	SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
@@ -405,7 +405,7 @@ public:
 	 */
 	virtual SWBuf &getRawEntryBuf() const = 0;
 
-	virtual const char *getRawEntry() { return getRawEntryBuf().c_str(); }
+	const char *getRawEntry() const { return getRawEntryBuf().c_str(); }
 
 	// write interface ----------------------------
 	/** Is the module writable? :)
@@ -648,7 +648,8 @@ public:
 	 * @param len max len to process
 	 * @return result buffer
 	 */
-	virtual const char *StripText(const char *buf = 0, int len = -1);
+	virtual const char *stripText(const char *buf = 0, int len = -1);
+	SWDEPRECATED const char *StripText(const char *buf = 0, int len = -1) { return stripText(buf, len); }
 
 	/** Produces renderable text of the current module entry or supplied text
 	 *
@@ -658,7 +659,8 @@ public:
 	 * @param render for internal use
 	 * @return result buffer
 	 */
-	virtual const char *RenderText(const char *buf = 0, int len = -1, bool render = true);
+	virtual const char *renderText(const char *buf = 0, int len = -1, bool render = true);
+	SWDEPRECATED const char *RenderText(const char *buf = 0, int len = -1, bool render = true) { return renderText(buf, len, render); }
 
 	/** Produces any header data which might be useful which associated with the
 	 *	processing done with this filter.  A typical example is a suggested
@@ -670,13 +672,13 @@ public:
 	 * @param tmpKey desired module entry
 	 * @return result buffer
 	 */
-	virtual const char *StripText(const SWKey *tmpKey);
+	virtual const char *stripText(const SWKey *tmpKey);
 
 	/** Produces renderable text of the module entry at the supplied key
 	 * @param tmpKey key to use to grab text
 	 * @return this module's text at specified key location massaged by Render filters
 	 */
-	virtual const char *RenderText(const SWKey *tmpKey);
+	virtual const char *renderText(const SWKey *tmpKey);
 
 	/** Whether or not to only hit one entry when iterating encounters
 	 *	consecutive links when iterating

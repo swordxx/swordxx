@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 
 	for ((*module) = TOP; !module->popError(); (*module)++) {
 		std::cout << "$$$" << module->getKeyText() << std::endl;
-		std::cout << ((render) ? module->RenderText() : (strip) ? module->StripText() : module->getRawEntry()) << "\n";
+		std::cout << ((render) ? module->renderText() : (strip) ? module->stripText() : module->getRawEntry()) << "\n";
 	}
 
 	cout << endl;

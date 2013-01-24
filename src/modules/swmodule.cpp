@@ -559,7 +559,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 		}
 		if (searchType >= 0) {
-			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
+			if (!regexec(&preg,  stripText(), 0, 0, 0)) {
 				*resultKey = *getKey();
 				resultKey->clearBound();
 				listKey << *resultKey;
@@ -573,10 +573,10 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// phrase
 			case -1:
-				textBuf = StripText();
+				textBuf = stripText();
 				if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
 				sres = strstr(textBuf.c_str(), term.c_str());
-				if (sres) { //it's also in the StripText(), so we have a valid search result item now
+				if (sres) { //it's also in the stripText(), so we have a valid search result item now
 					*resultKey = *getKey();
 					resultKey->clearBound();
 					listKey << *resultKey;
@@ -588,7 +588,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				int loopCount = 0;
 				unsigned int foundWords = 0;
 				do {
-					textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : StripText();
+					textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : stripText();
 					foundWords = 0;
 					
 					for (unsigned int i = 0; i < words.size(); i++) {
@@ -613,7 +613,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// entry attributes
 			case -3: {
-				RenderText();	// force parse
+				renderText();	// force parse
 				AttributeTypeList &entryAttribs = getEntryAttributes();
 				AttributeTypeList::iterator i1Start, i1End;
 				AttributeList::iterator i2Start, i2End;
@@ -766,7 +766,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 
 /******************************************************************************
- * SWModule::StripText() 	- calls all stripfilters on current text
+ * SWModule::stripText() 	- calls all stripfilters on current text
  *
  * ENT:	buf	- buf to massage instead of this modules current text
  * 	len	- max len of buf
@@ -774,8 +774,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
  * RET: this module's text at current key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(const char *buf, int len) {
-	return RenderText(buf, len, false);
+const char *SWModule::stripText(const char *buf, int len) {
+	return renderText(buf, len, false);
 }
 
 
@@ -794,14 +794,14 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::RenderText 	- calls all renderfilters on current text
+ * SWModule::renderText 	- calls all renderfilters on current text
  *
  * ENT:	buf	- buffer to Render instead of current module position
  *
- * RET: this module's text at current key location massaged by RenderText filters
+ * RET: this module's text at current key location massaged by renderText filters
  */
 
- const char *SWModule::RenderText(const char *buf, int len, bool render) {
+ const char *SWModule::renderText(const char *buf, int len, bool render) {
 	bool savePEA = isProcessEntryAttributes();
 	if (!buf) {
 		entryAttributes.clear();
@@ -843,14 +843,14 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::RenderText 	- calls all renderfilters on current text
+ * SWModule::renderText 	- calls all renderfilters on current text
  *
  * ENT:	tmpKey	- key to use to grab text
  *
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
- const char *SWModule::RenderText(const SWKey *tmpKey) {
+ const char *SWModule::renderText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
@@ -862,7 +862,7 @@ const char *SWModule::getRenderHeader() const {
 
 	setKey(*tmpKey);
 
-	retVal = RenderText();
+	retVal = renderText();
 
 	setKey(*saveKey);
 
@@ -874,14 +874,14 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::StripText 	- calls all StripTextFilters on current text
+ * SWModule::stripText 	- calls all StripTextFilters on current text
  *
  * ENT:	tmpKey	- key to use to grab text
  *
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(const SWKey *tmpKey) {
+const char *SWModule::stripText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
@@ -893,7 +893,7 @@ const char *SWModule::StripText(const SWKey *tmpKey) {
 
 	setKey(*tmpKey);
 
-	retVal = StripText();
+	retVal = stripText();
 
 	setKey(*saveKey);
 
@@ -1051,7 +1051,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		}
 
 		// get "content" field
-		const char *content = StripText();
+		const char *content = stripText();
 
 		bool good = false;
 
@@ -1135,7 +1135,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 
-					content = StripText();
+					content = stripText();
 					if (content && *content) {
 						// build "strong" field
 						strong = "";
@@ -1200,7 +1200,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 //fflush(stdout);
 
-						content = StripText();
+						content = stripText();
 						if (content && *content) {
 							// build "strong" field
 							strong = "";
