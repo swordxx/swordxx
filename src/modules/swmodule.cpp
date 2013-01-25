@@ -60,7 +60,7 @@ using std::vector;
 
 SWORD_NAMESPACE_START
 
-SWDisplay SWModule::rawdisp;
+SWModule::StdOutDisplay SWModule::rawdisp;
 
 typedef std::list<SWBuf> StringList;
 

@@ -32,7 +32,7 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="diatheke.bpf"/>
-    <INCLUDEPATH value="..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include"/>
+    <INCLUDEPATH value="..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include;..\..\include\internal\regex"/>
     <LIBPATH value="..\diatheke;..\..\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
@@ -79,10 +79,11 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=3
-Item0=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include
-Item1=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include\
-Item2=..\diatheke;$(BCB)\include;$(BCB)\include\vcl
+Count=4
+Item0=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include;..\..\include\internal\regex
+Item1=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include
+Item2=..\diatheke;$(BCB)\include;$(BCB)\include\vcl;..\..\include\
+Item3=..\diatheke;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=2

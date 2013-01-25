@@ -13,8 +13,7 @@ PROJECTS = icuuc.lib icuin.lib libcurl.lib clucene.lib libsword.lib \
   osis2mod.exe mod2zmod.exe mod2vpl.exe mkfastmod.exe imp2gbs.exe vpl2mod.exe \
   imp2ld.exe imp2vs.exe mod2imp.exe cipherraw.exe step2vpl.exe stepdump.exe \
   mod2osis.exe vs2osisref.exe vs2osisreftxt.exe xml2gbs.exe diatheke.exe \
-  installmgr.exe tei2mod.exe emptyvss.exe addgb.exe addld.exe addvs.exe \
-  treeidxutil.exe
+  installmgr.exe tei2mod.exe addgb.exe addld.exe addvs.exe treeidxutil.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -120,10 +119,6 @@ addld.exe: addld.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 addvs.exe: addvs.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-emptyvss.exe: emptyvss.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

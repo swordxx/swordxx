@@ -104,7 +104,9 @@ SWORD_NAMESPACE_START
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
-#  define SWDEPRECATED
+#define COMMENT SLASH(/)
+#define SLASH(s) /##s
+#  define SWDEPRECATED COMMENT
 
 
 #elif defined(__GNUC__)

@@ -21,6 +21,9 @@ typedef unsigned int __u32;
 #ifdef __GNUC__
 __extension__ typedef __signed__ long long __s64;
 __extension__ typedef unsigned long long __u64;
+#elif defined(__BORLANDC__)
+typedef signed __int64 __s64;
+typedef unsigned __int64 __u64;
 #else
 typedef signed long long __s64;
 typedef unsigned long long __u64;

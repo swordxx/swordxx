@@ -46,7 +46,7 @@ public:
   * @param imodule module to display
   * @return error status
   */
-  virtual char display(SWModule &imodule);
+  virtual char display(SWModule &imodule) = 0;
   SWDEPRECATED char Display(SWModule &imodule) { return display(imodule); }
 };
 

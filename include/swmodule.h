@@ -30,6 +30,9 @@
 
 #include <swcacher.h>
 #include <swsearchable.h>
+#ifndef	_WIN32_WCE
+#include <iostream>
+#endif
 
 #include <list>
 
@@ -86,6 +89,16 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 
 class SWDLLEXPORT SWModule : public SWCacher, public SWSearchable {
 
+class StdOutDisplay : public SWDisplay {
+     char display(SWModule &imodule)
+     {
+     #ifndef	_WIN32_WCE
+          std::cout << (const char *)imodule;
+     #endif
+          return 0;
+     }
+};
+
 protected:
 
 	ConfigEntMap ownConfig;
@@ -112,7 +125,7 @@ protected:
 	/** this module's display object */
 	SWDisplay *disp;
 
-	static SWDisplay rawdisp;
+	static StdOutDisplay rawdisp;
 	mutable SWBuf entryBuf;
 
 	/** filters to be executed to remove all markup (for searches) */
@@ -227,10 +240,7 @@ public:
 	 * @param ikeytext Value which to set keytext; [0]-only get
 	 * @return pointer to keytext
 	 */
-	SWDEPRECATED const char *KeyText(const char *ikeytext = 0) {
-		if (ikeytext) setKey(ikeytext);
-		return *getKey();
-	}
+	SWDEPRECATED const char *KeyText(const char *ikeytext = 0) { if (ikeytext) setKey(ikeytext); return *getKey(); }
 
 	/**
 	 * gets the key text for the module.
@@ -271,11 +281,7 @@ public:
 	/**
 	 * @deprecated Use get/setDisplay() instead.
 	 */
-	SWDEPRECATED SWDisplay *Disp(SWDisplay * idisp = 0) {
-		if (idisp)
-			setDisplay(idisp);
-		return getDisplay();
-	}
+	SWDEPRECATED SWDisplay *Disp(SWDisplay * idisp = 0) { if (idisp)	setDisplay(idisp); return getDisplay();	}
 
 	/** Gets module name
 	 *
@@ -380,13 +386,7 @@ public:
 			void *percentUserData = 0);
 
 	// for backward compat-- deprecated
-	SWDEPRECATED ListKey &Search(const char *istr, int searchType = 0, int flags = 0,
-			SWKey * scope = 0,
-			bool * justCheckIfSupported = 0,
-			void (*percent) (char, void *) = &nullPercent,
-			void *percentUserData = 0) {
-		return search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
-	}
+	SWDEPRECATED ListKey &Search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent) (char, void *) = &nullPercent, void *percentUserData = 0) {	return search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);	}
 
 
 	/** Allocates a key of specific type for module
@@ -473,9 +473,7 @@ public:
 		renderFilters->push_back(newFilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &AddRenderFilter(SWFilter *newFilter) {
-		return addRenderFilter(newFilter);
-	}
+	SWDEPRECATED SWModule &AddRenderFilter(SWFilter *newFilter) { return addRenderFilter(newFilter); }
 
 	/** Retrieves a container of render filters associated with this
 	 *	module.
@@ -493,9 +491,7 @@ public:
 		renderFilters->remove(oldFilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &RemoveRenderFilter(SWFilter *oldFilter) {
-		return removeRenderFilter(oldFilter);
-	}
+	SWDEPRECATED SWModule &RemoveRenderFilter(SWFilter *oldFilter) {	return removeRenderFilter(oldFilter); }
 
 	/** Replaces a RenderFilter in this module's renderfilters queue
 	 * @param oldfilter the filter to remove
@@ -510,9 +506,7 @@ public:
 		}
 		return *this;
 	}
-	SWDEPRECATED SWModule &ReplaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) {
-		return replaceRenderFilter(oldFilter, newFilter);
-	}
+	SWDEPRECATED SWModule &ReplaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) { return replaceRenderFilter(oldFilter, newFilter); }
 
 	/** RenderFilter run a buf through this module's Render Filters
 	 * @param buf the buffer to filter
@@ -533,9 +527,7 @@ public:
 		encodingFilters->push_back(newFilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &AddEncodingFilter(SWFilter *newFilter) {
-		return addEncodingFilter(newFilter);
-	}
+	SWDEPRECATED SWModule &AddEncodingFilter(SWFilter *newFilter) { return addEncodingFilter(newFilter); }
 
 	/** Removes an EncodingFilter from this module's encodingFilters queue
 	 * @param oldfilter the filter to remove
@@ -545,9 +537,7 @@ public:
 		encodingFilters->remove(oldFilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &RemoveEncodingFilter(SWFilter *oldFilter) {
-		return removeEncodingFilter(oldFilter);
-	}
+	SWDEPRECATED SWModule &RemoveEncodingFilter(SWFilter *oldFilter) { return removeEncodingFilter(oldFilter); }
 
 	/** Replaces an EncodingFilter in this module's encodingfilters queue
 	 * @param oldfilter the filter to remove
@@ -562,9 +552,7 @@ public:
 		}
 		return *this;
 	}
-	SWDEPRECATED SWModule &ReplaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) {
-		return replaceEncodingFilter(oldFilter, newFilter);
-	}
+	SWDEPRECATED SWModule &ReplaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) { return replaceEncodingFilter(oldFilter, newFilter); }
 
 	/** encodingFilter run a buf through this module's Encoding Filters
 	 * @param buf the buffer to filter
@@ -584,9 +572,7 @@ public:
 		stripFilters->push_back(newFilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &AddStripFilter(SWFilter *newFilter) {
-		return addStripFilter(newFilter);
-	}
+	SWDEPRECATED SWModule &AddStripFilter(SWFilter *newFilter) { return addStripFilter(newFilter);	}
 
 	/** Adds a RawFilter to this module's rawFilters queue
 	 * @param newFilter the filter to add
@@ -596,9 +582,7 @@ public:
 		rawFilters->push_back(newfilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &AddRawFilter(SWFilter *newFilter) {
-		return addRawFilter(newFilter);
-	}
+	SWDEPRECATED SWModule &AddRawFilter(SWFilter *newFilter) { return addRawFilter(newFilter); }
 
 	/** StripFilter run a buf through this module's Strip Filters
 	 * @param buf the buffer to filter
@@ -628,9 +612,7 @@ public:
 		optionFilters->push_back(newFilter);
 		return *this;
 	}
-	SWDEPRECATED SWModule &AddOptionFilter(SWOptionFilter *newFilter) {
-		return addOptionFilter(newFilter);
-	}
+	SWDEPRECATED SWModule &AddOptionFilter(SWOptionFilter *newFilter) { return addOptionFilter(newFilter); }
 
 	/** OptionFilter a text buffer
 	 * @param buf the buffer to filter

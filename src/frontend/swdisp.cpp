@@ -19,9 +19,6 @@
  */
 
 
-#ifndef	_WIN32_WCE
-#include <iostream>
-#endif
 #include <swmodule.h>
 #include <swdisp.h>
 
@@ -40,12 +37,5 @@ SWClass SWDisplay::classdef(classes);
  * RET:	error status
  */
 
-char SWDisplay::display(SWModule &imodule)
-{
-#ifndef	_WIN32_WCE
-	std::cout << (const char *)imodule;
-#endif
-	return 0;
-}
 
 SWORD_NAMESPACE_END
