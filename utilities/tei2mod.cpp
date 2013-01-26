@@ -429,7 +429,7 @@ int main(int argc, char **argv) {
 		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libzip is available when compiling SWORD library");
 #endif
 	}
-	else if (compType = "LZSS") {
+	else if (compType == "LZSS") {
 		compressor = new LZSSCompress();
 	}
 
