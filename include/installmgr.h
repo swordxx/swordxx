@@ -214,7 +214,7 @@ A sample implementation, roughly taken from the windows installmgr:
 	return false;
 }
 	*/
-       	virtual bool getCipherCode(const char *modName, SWConfig *config) { return false; }
+		virtual bool getCipherCode(const char *modName, SWConfig *config) { (void) modName; (void) config; return false; }
 
 
 

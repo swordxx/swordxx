@@ -51,7 +51,7 @@ public:
 
 	void findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const;
 	void zReadText(char testmt, long start, unsigned short size, unsigned long buffnum, SWBuf &buf) const;
-	virtual void rawZFilter(SWBuf &buf, char direction = 0) const {}
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) const { (void) buf; (void) direction; }
 	static char createModule(const char *path, int blockBound, const char *v11n = "KJV");
 };
 
