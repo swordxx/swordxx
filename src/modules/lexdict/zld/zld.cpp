@@ -38,7 +38,7 @@ SWORD_NAMESPACE_START
  *		idisp	- Display object to use for displaying
  */
 
-zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang) {
+zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang, strongsPadding) {
 
 }
 
@@ -75,7 +75,7 @@ char zLD::getEntry(long away) const {
 	char *buf = new char [ strlen(*key) + 6 ];
 	strcpy(buf, *key);
 
-	strongsPad(buf);
+	if (strongsPadding) strongsPad(buf);
 
 	entryBuf = "";
 	if (!(retval = findKeyIndex(buf, &index, away))) {
@@ -172,7 +172,7 @@ long zLD::getEntryForKey(const char* key) const
 	char *buf = new char [ strlen(key) + 6 ];
 	strcpy(buf, key);
 
-	strongsPad(buf);
+	if (strongsPadding) strongsPad(buf);
 	
 	findKeyIndex(buf, &offset);
 

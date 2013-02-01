@@ -36,13 +36,14 @@ class SWDLLEXPORT SWLD : public SWModule {
 protected:
 	mutable char *entkeytxt;
 	static void strongsPad(char *buf);
+	bool strongsPadding;
 public:
 	/** Initializes data for instance of SWLD
 	*/
 	SWLD(const char *imodname = 0, const char *imoddesc = 0,
 			SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
 			SWTextDirection dir = DIRECTION_LTR,
-			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool strongsPadding = true);
 	
 	virtual ~SWLD();
 	virtual SWKey *createKey() const;

@@ -39,7 +39,7 @@ SWORD_NAMESPACE_START
  *		idisp	- Display object to use for displaying
  */
 
-RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive) : RawStr(ipath, -1, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang)
+RawLD::RawLD(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : RawStr(ipath, -1, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang, strongsPadding)
 {
 }
 
@@ -77,7 +77,7 @@ char RawLD::getEntry(long away) const
 	char *buf = new char [ strlen(*key) + 6 ];
 	strcpy(buf, *key);
 
-	strongsPad(buf);
+	if (strongsPadding) strongsPad(buf);
 
 	if (!(retval = findOffset(buf, &start, &size, away))) {
 		readText(start, &size, &idxbuf, entryBuf);
@@ -176,7 +176,7 @@ long RawLD::getEntryForKey(const char *key) const {
 	char *buf = new char [ strlen(key) + 6 ];
 	strcpy(buf, key);
 
-	strongsPad(buf);
+	if (strongsPadding) strongsPad(buf);
 	
 	findOffset(buf, &start, &size, 0, &offset);
 
