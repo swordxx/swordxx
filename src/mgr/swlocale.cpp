@@ -25,7 +25,7 @@
 #include <map>
 #include <swconfig.h>
 #include <versekey.h>
-#include <versemgr.h>
+#include <versificationmgr.h>
 
 SWORD_NAMESPACE_START
 

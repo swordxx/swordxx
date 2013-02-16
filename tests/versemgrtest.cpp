@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <versemgr.h>
+#include <versificationmgr.h>
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 #endif
@@ -31,10 +31,10 @@ int main(int argc, char **argv) {
 
 	const char *v11n = (argc > 1) ? argv[1] : "KJV";
 
-	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
-	const VerseMgr::System *system = vmgr->getVersificationSystem(v11n);
+	VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
+	const VersificationMgr::System *system = vmgr->getVersificationSystem(v11n);
 	int bookCount = system->getBookCount();
-	const VerseMgr::Book *lastBook = system->getBook(bookCount-1);
+	const VersificationMgr::Book *lastBook = system->getBook(bookCount-1);
 	int chapMax = lastBook->getChapterMax();
 	int verseMax = lastBook->getVerseMax(chapMax);
 	long offsetMax = system->getOffsetFromVerse(bookCount-1, chapMax, verseMax);

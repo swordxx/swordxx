@@ -1,8 +1,8 @@
 /******************************************************************************
- *  versemgr.cpp	- implementation of class VerseMgr used for managing
+ *  versificationmgr.cpp	- implementation of class VersificationMgr used for managing
  *  					versification systems
  *
- * $Id: versemgr.cpp 2108 2007-10-13 20:35:02Z scribe $
+ * $Id: versificationmgr.cpp 2108 2007-10-13 20:35:02Z scribe $
  *
  * Copyright 2010 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -20,7 +20,7 @@
  *
  */
 
-#include <versemgr.h>
+#include <versificationmgr.h>
 #include <vector>
 #include <map>
 #include <treekey.h>
@@ -51,28 +51,28 @@ using std::lower_bound;
 SWORD_NAMESPACE_START
 
 
-VerseMgr *VerseMgr::getSystemVerseMgr() {
-	if (!systemVerseMgr) {
-		systemVerseMgr = new VerseMgr();
-		systemVerseMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
-		systemVerseMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
-		systemVerseMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
-		systemVerseMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
-		systemVerseMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
-		systemVerseMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
-		systemVerseMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal);
-		systemVerseMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg);
-		systemVerseMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
-		systemVerseMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
-		systemVerseMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
-		systemVerseMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
-		systemVerseMgr->registerVersificationSystem("Rahlfs", otbooks_rahlfs, ntbooks_null, vm_rahlfs);
+VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
+	if (!systemVersificationMgr) {
+		systemVersificationMgr = new VersificationMgr();
+		systemVersificationMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
+		systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
+		systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
+		systemVersificationMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
+		systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
+		systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
+		systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal);
+		systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg);
+		systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
+		systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
+		systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
+		systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
+		systemVersificationMgr->registerVersificationSystem("Rahlfs", otbooks_rahlfs, ntbooks_null, vm_rahlfs);
 	}
-	return systemVerseMgr;
+	return systemVersificationMgr;
 }
 
 
-class VerseMgr::System::Private {
+class VersificationMgr::System::Private {
 public:
 	/** Array[chapmax] of maximum verses in chapters */
 	vector<Book> books;
@@ -80,11 +80,11 @@ public:
 
 	Private() {
 	}
-	Private(const VerseMgr::System::Private &other) {
+	Private(const VersificationMgr::System::Private &other) {
 		books = other.books;
 		osisLookup = other.osisLookup;
 	}
-	VerseMgr::System::Private &operator =(const VerseMgr::System::Private &other) {
+	VersificationMgr::System::Private &operator =(const VersificationMgr::System::Private &other) {
 		books = other.books;
 		osisLookup = other.osisLookup;
 		return *this;
@@ -92,7 +92,7 @@ public:
 };
 
 
-class VerseMgr::Book::Private {
+class VersificationMgr::Book::Private {
 friend struct BookOffsetLess;
 public:
 	/** Array[chapmax] of maximum verses in chapters */
@@ -102,12 +102,12 @@ public:
 	Private() {
 		verseMax.clear();
 	}
-	Private(const VerseMgr::Book::Private &other) {
+	Private(const VersificationMgr::Book::Private &other) {
 		verseMax.clear();
 		verseMax = other.verseMax;
 		offsetPrecomputed = other.offsetPrecomputed;
 	}
-	VerseMgr::Book::Private &operator =(const VerseMgr::Book::Private &other) {
+	VersificationMgr::Book::Private &operator =(const VersificationMgr::Book::Private &other) {
 		verseMax.clear();
 		verseMax = other.verseMax;
 		offsetPrecomputed = other.offsetPrecomputed;
@@ -116,17 +116,17 @@ public:
 };
 
 struct BookOffsetLess {
-	bool operator() (const VerseMgr::Book &o1, const VerseMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
-	bool operator() (const long &o1, const VerseMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
-	bool operator() (const VerseMgr::Book &o1, const long &o2) const { return o1.p->offsetPrecomputed[0] < o2; }
+	bool operator() (const VersificationMgr::Book &o1, const VersificationMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
+	bool operator() (const long &o1, const VersificationMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
+	bool operator() (const VersificationMgr::Book &o1, const long &o2) const { return o1.p->offsetPrecomputed[0] < o2; }
 	bool operator() (const long &o1, const long &o2) const { return o1 < o2; }
 };
 
-void VerseMgr::Book::init() {
+void VersificationMgr::Book::init() {
 	p = new Private();
 }
 
-void VerseMgr::System::init() {
+void VersificationMgr::System::init() {
 	p = new Private();
 	BMAX[0] = 0;
 	BMAX[1] = 0;
@@ -134,7 +134,7 @@ void VerseMgr::System::init() {
 }
 
 
-VerseMgr::System::System(const System &other) {
+VersificationMgr::System::System(const System &other) {
 	init();
 	name = other.name;
 	BMAX[0] = other.BMAX[0];
@@ -143,7 +143,7 @@ VerseMgr::System::System(const System &other) {
 	ntStartOffset = other.ntStartOffset;
 }
 
-VerseMgr::System &VerseMgr::System::operator =(const System &other) {
+VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
 	name = other.name;
 	BMAX[0] = other.BMAX[0];
 	BMAX[1] = other.BMAX[1];
@@ -153,22 +153,22 @@ VerseMgr::System &VerseMgr::System::operator =(const System &other) {
 }
 
 
-VerseMgr::System::~System() {
+VersificationMgr::System::~System() {
 	delete p;
 }
 
-const VerseMgr::Book *VerseMgr::System::getBook(int number) const {
+const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const {
 	return (number < (signed int)p->books.size()) ? &(p->books[number]) : 0;
 }
 
 
-int VerseMgr::System::getBookNumberByOSISName(const char *bookName) const {
+int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const {
 	map<SWBuf, int>::const_iterator it = p->osisLookup.find(bookName);
 	return (it != p->osisLookup.end()) ? it->second : -1;
 }
 
 
-void VerseMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax) {
+void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax) {
 	int chap = 0;
 	int book = 0;
 	long offset = 0;	// module heading
@@ -211,7 +211,7 @@ void VerseMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMa
 }
 
 
-VerseMgr::Book::Book(const Book &other) {
+VersificationMgr::Book::Book(const Book &other) {
 	longName = other.longName;
 	osisName = other.osisName;
 	prefAbbrev = other.prefAbbrev;
@@ -220,7 +220,7 @@ VerseMgr::Book::Book(const Book &other) {
 	(*p) = *(other.p);
 }
 
-VerseMgr::Book& VerseMgr::Book::operator =(const Book &other) {
+VersificationMgr::Book& VersificationMgr::Book::operator =(const Book &other) {
 	longName = other.longName;
 	osisName = other.osisName;
 	prefAbbrev = other.prefAbbrev;
@@ -231,23 +231,23 @@ VerseMgr::Book& VerseMgr::Book::operator =(const Book &other) {
 }
 
 
-VerseMgr::Book::~Book() {
+VersificationMgr::Book::~Book() {
 	delete p;
 }
 
 
-int VerseMgr::Book::getVerseMax(int chapter) const {
+int VersificationMgr::Book::getVerseMax(int chapter) const {
 	chapter--;
 	return (p && (chapter < (signed int)p->verseMax.size()) && (chapter > -1)) ? p->verseMax[chapter] : -1;
 }
 
 
-int VerseMgr::System::getBookCount() const {
+int VersificationMgr::System::getBookCount() const {
 	return (p ? p->books.size() : 0);
 }
 
 
-long VerseMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const {
+long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const {
 	long  offset = -1;
 	chapter--;
 
@@ -272,7 +272,7 @@ long VerseMgr::System::getOffsetFromVerse(int book, int chapter, int verse) cons
 }
 
 
-char VerseMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const {
+char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const {
 
 	if (offset < 1) {	// just handle the module heading corner case up front (and error case)
 		(*book) = -1;
@@ -311,67 +311,67 @@ char VerseMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, 
 
 
 /***************************************************
- * VerseMgr
+ * VersificationMgr
  */
 
-class VerseMgr::Private {
+class VersificationMgr::Private {
 public:
 	Private() {
 	}
-	Private(const VerseMgr::Private &other) {
+	Private(const VersificationMgr::Private &other) {
 		systems = other.systems;
 	}
-	VerseMgr::Private &operator =(const VerseMgr::Private &other) {
+	VersificationMgr::Private &operator =(const VersificationMgr::Private &other) {
 		systems = other.systems;
 		return *this;
 	}
 	map<SWBuf, System> systems;
 };
 // ---------------- statics -----------------
-VerseMgr *VerseMgr::systemVerseMgr = 0;
+VersificationMgr *VersificationMgr::systemVersificationMgr = 0;
 
-class __staticsystemVerseMgr {
+class __staticsystemVersificationMgr {
 public:
-	__staticsystemVerseMgr() { }
-	~__staticsystemVerseMgr() { delete VerseMgr::systemVerseMgr; }
-} _staticsystemVerseMgr;
+	__staticsystemVersificationMgr() { }
+	~__staticsystemVersificationMgr() { delete VersificationMgr::systemVersificationMgr; }
+} _staticsystemVersificationMgr;
 
 
-void VerseMgr::init() {
+void VersificationMgr::init() {
 	p = new Private();
 }
 
 
-VerseMgr::~VerseMgr() {
+VersificationMgr::~VersificationMgr() {
 	delete p;
 }
 
 
-void VerseMgr::setSystemVerseMgr(VerseMgr *newVerseMgr) {
-	if (systemVerseMgr)
-		delete systemVerseMgr;
-	systemVerseMgr = newVerseMgr;
+void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificationMgr) {
+	if (systemVersificationMgr)
+		delete systemVersificationMgr;
+	systemVersificationMgr = newVersificationMgr;
 }
 
 
-const VerseMgr::System *VerseMgr::getVersificationSystem(const char *name) const {
+const VersificationMgr::System *VersificationMgr::getVersificationSystem(const char *name) const {
 	map<SWBuf, System>::const_iterator it = p->systems.find(name);
 	return (it != p->systems.end()) ? &(it->second) : 0;
 }
 
 
-void VerseMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax) {
+void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax) {
 	p->systems[name] = name;
 	System &s = p->systems[name];
 	s.loadFromSBook(ot, nt, chMax);
 }
 
 
-void VerseMgr::registerVersificationSystem(const char *name, const TreeKey *tk) {
+void VersificationMgr::registerVersificationSystem(const char *name, const TreeKey *tk) {
 }
 
 
-const StringList VerseMgr::getVersificationSystems() const {
+const StringList VersificationMgr::getVersificationSystems() const {
 	StringList retVal;
 	for (map<SWBuf, System>::const_iterator it = p->systems.begin(); it != p->systems.end(); it++) {
 		retVal.push_back(it->first);

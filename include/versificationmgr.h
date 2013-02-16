@@ -1,8 +1,8 @@
 /******************************************************************************
- *  versemgr.h	- definition of class VerseMgr used for managing
+ *  versification.h	- definition of class VersificationMgr used for managing
  *  					versification systems
  *
- * $Id: versemgr.cpp 2108 2007-10-13 20:35:02Z scribe $
+ * $Id: versification.cpp 2108 2007-10-13 20:35:02Z scribe $
  *
  * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -26,8 +26,8 @@
 #include <swbuf.h>
 
 
-#ifndef VERSEMGR_H
-#define VERSEMGR_H
+#ifndef VERSIFICATIONMGR_H
+#define VERSIFICATIONMGR_H
 
 
 SWORD_NAMESPACE_START
@@ -66,14 +66,14 @@ struct sbook {
 };
 
 
-class SWDLLEXPORT VerseMgr : public SWCacher {
+class SWDLLEXPORT VersificationMgr : public SWCacher {
 
 
 public:
 	class System;
 
 private:
-	friend class __staticsystemVerseMgr;
+	friend class __staticsystemVersificationMgr;
 
 	class Private;
 	Private *p;
@@ -81,7 +81,7 @@ private:
 	void init();
 
 protected:
-	static VerseMgr *systemVerseMgr;
+	static VersificationMgr *systemVersificationMgr;
 
 public:
 	class SWDLLEXPORT Book {
@@ -147,10 +147,10 @@ public:
 		const int *getBMAX() const { return BMAX; };
 		long getNTStartOffset() const { return ntStartOffset; }
 	};
-	VerseMgr() { init(); }
-	~VerseMgr();
-	static VerseMgr *getSystemVerseMgr();
-	static void setSystemVerseMgr(VerseMgr *newVerseMgr);
+	VersificationMgr() { init(); }
+	~VersificationMgr();
+	static VersificationMgr *getSystemVersificationMgr();
+	static void setSystemVersificationMgr(VersificationMgr *newVersificationMgr);
 	const StringList getVersificationSystems() const;
 	const System *getVersificationSystem(const char *name) const;
 	void registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax);

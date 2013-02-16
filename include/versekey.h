@@ -26,7 +26,7 @@
 #include <swkey.h>
 #include <swmacs.h>
 #include <listkey.h>
-#include <versemgr.h>
+#include <versificationmgr.h>
 
 #include <defs.h>
 
@@ -55,7 +55,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	static int instance;
 	ListKey internalListKey;
 
-	const VerseMgr::System *refSys;
+	const VersificationMgr::System *refSys;
 
 	/** flag for auto normalization
 	*/

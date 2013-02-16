@@ -32,7 +32,7 @@
 #include <versekey.h>
 #include <swlocale.h>
 #include <roman.h>
-#include <versemgr.h>
+#include <versificationmgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -252,9 +252,9 @@ VerseKey::~VerseKey() {
 
 
 void VerseKey::setVersificationSystem(const char *name) {
-	const VerseMgr::System *newRefSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem(name);
+	const VersificationMgr::System *newRefSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(name);
 	// TODO: cheese, but what should we do if requested v11n system isn't found?
-	if (!newRefSys)   newRefSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem("KJV");
+	if (!newRefSys)   newRefSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem("KJV");
 	if (refSys != newRefSys) {
 		refSys = newRefSys;
 		BMAX[0] = refSys->getBMAX()[0];
@@ -1228,12 +1228,12 @@ void VerseKey::setPosition(SW_POSITION p) {
 }
 
 int VerseKey::getChapterMax() const {
-	const VerseMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
+	const VersificationMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
 	return (b) ? b->getChapterMax() : -1;
 }
 
 int VerseKey::getVerseMax() const {
-	const VerseMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
+	const VersificationMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
 	return (b) ? b->getVerseMax(chapter) : -1;
 }
 
@@ -1343,12 +1343,12 @@ void VerseKey::normalize(bool autocheck)
                     }
                     else	{
                          if (book > 1) {
-						const VerseMgr::Book *prevBook = refSys->getBook(((testament>1)?BMAX[0]:0)+book-2);
+						const VersificationMgr::Book *prevBook = refSys->getBook(((testament>1)?BMAX[0]:0)+book-2);
                               verse += prevBook->getVerseMax(prevBook->getChapterMax());
                          }
                          else	{
                               if (testament > 1) {
-							const VerseMgr::Book *lastOTBook = refSys->getBook(BMAX[0]-1);
+							const VersificationMgr::Book *lastOTBook = refSys->getBook(BMAX[0]-1);
                                    verse += lastOTBook->getVerseMax(lastOTBook->getChapterMax());
                               }
                          }
