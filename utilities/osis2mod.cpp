@@ -538,14 +538,12 @@ void writeEntry(SWBuf &text, bool force = false) {
 	}
 
 	// The following is for initial verse content and for appending interverse content.
-	// Eliminate leading whitespace on the beginning of each verse and
-	// before we append to current content, since we just added one
-	text.trimStart();
 	if (activeVerseText.length()) {
-		activeVerseText += " ";
 		activeVerseText += text;
 	}
 	else {
+		// Eliminate leading whitespace on the beginning of each verse
+		text.trimStart();
 		activeVerseText = text;
 	}
 	// text has been consumed so clear it out.
@@ -1369,6 +1367,12 @@ void processOSIS(istream& infile) {
 		}
 
 		curChar = (unsigned char) possibleChar;
+
+		// All newlines are simply whitespace
+		// Does a SWORD module actually require this?
+		if (curChar == '\n') {
+			curChar = ' ';
+		}
 
 		if (!intoken && curChar == '<') {
 			intoken = true;
