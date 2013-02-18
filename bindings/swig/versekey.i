@@ -1,6 +1,6 @@
 %{
 #include "versekey.h"
-#include "versemgr.h"
+#include "versificationmgr.h"
 %}
 
 
@@ -20,7 +20,7 @@
 %immutable sword::abbrev::ab;
 
 %include "versekey.h"
-%include "versemgr.h"
+%include "versificationmgr.h"
 
 %extend sword::abbrev {
 	int getAbbrevCount() {
@@ -67,7 +67,7 @@
 
 
     const int getBookCount(){
-        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+        const sword::VersificationMgr::System* system = sword::VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(
             self->getVersificationSystem()
         );
         return system->getBookCount();
@@ -87,7 +87,7 @@
 			return 0;
 		}
 
-        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+        const sword::VersificationMgr::System* system = sword::VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(
             self->getVersificationSystem()
         );
         
@@ -95,7 +95,7 @@
             (testament == 2) ? self->BMAX[0] : 0
         );
 
-        const sword::VerseMgr::Book* b = system->getBook(book_num);
+        const sword::VersificationMgr::Book* b = system->getBook(book_num);
         if(!b) {
             fprintf(stderr, "b is null for %d?!?\n", book_num);
             return 0;
@@ -106,14 +106,14 @@
 	};
 
     int getBookNumberByOSISName( const char* bookname ) {
-        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+        const sword::VersificationMgr::System* system = sword::VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(
             self->getVersificationSystem()
         );
         return system->getBookNumberByOSISName(bookname);
    }
     
     const char* getOSISBookName( const int book ) {
-        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+        const sword::VersificationMgr::System* system = sword::VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(
             self->getVersificationSystem()
         );
    		if ( (book < 0) || (book >= system->getBookCount()))
@@ -136,7 +136,7 @@
 			return 0;
 		}
 
-        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+        const sword::VersificationMgr::System* system = sword::VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(
             self->getVersificationSystem()
         );
         
@@ -144,7 +144,7 @@
             (testament == 2) ? self->BMAX[0] : 0
         );
 
-        const sword::VerseMgr::Book* b = system->getBook(book_num);
+        const sword::VersificationMgr::Book* b = system->getBook(book_num);
         if(!b) {
             fprintf(stderr, "b is null for %d?!?\n", book_num);
             return 0;
@@ -165,7 +165,7 @@
 			return 0;
 		}
 
-        const sword::VerseMgr::System* system = sword::VerseMgr::getSystemVerseMgr()->getVersificationSystem(
+        const sword::VersificationMgr::System* system = sword::VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(
             self->getVersificationSystem()
         );
         
@@ -173,7 +173,7 @@
             (testament == 2) ? self->BMAX[0] : 0
         );
 
-        const sword::VerseMgr::Book* b = system->getBook(book_num);
+        const sword::VersificationMgr::Book* b = system->getBook(book_num);
         if(!b) {
             fprintf(stderr, "b is null for %d?!?\n", book_num);
             return 0;

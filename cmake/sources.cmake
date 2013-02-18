@@ -29,7 +29,7 @@ SET(sword_base_mgr_SOURCES
 	src/mgr/encfiltmgr.cpp
 	src/mgr/markupfiltmgr.cpp
 	src/mgr/filemgr.cpp
-	src/mgr/versemgr.cpp
+	src/mgr/versificationmgr.cpp
 	src/mgr/ftptrans.cpp
 	src/mgr/swlocale.cpp
 	src/mgr/localemgr.cpp
@@ -248,7 +248,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/entriesblk.h
 	include/femain.h
 	include/filemgr.h
-	include/versemgr.h
+	include/versificationmgr.h
 	include/flatapi.h
 	include/ftpparse.h
 	include/ftptrans.h
