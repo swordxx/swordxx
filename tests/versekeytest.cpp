@@ -79,6 +79,15 @@ cout << currentVerse << endl;
 	SWModule *mod = mgr.getModule("KJVgb");
 */
 	VerseKey *parser = new VerseKey(); //(VerseKey *)mod->CreateKey();
+	parser->setIntros(true);
+
+	ListKey result = parser->parseVerseList("[ Testament 1 Heading ]");
+	cout << "Should be: [ Testament 1 Heading ]\n" << result << "\n\n";
+
+	parser->setText("[ Testament 1 Heading ]");
+	cout << "Should be: [ Testament 1 Heading ]\n" << *parser << "\n\n";
+
+	result.clear();
 
 	ListKey scope = parser->parseVerseList("amos 2:2", *parser, true);
 
@@ -89,8 +98,6 @@ cout << currentVerse << endl;
 	cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
 
 	scope = parser->parseVerseList("amos", *parser, true);
-
-	ListKey result;
 
 	scope++;
 	scope++;
@@ -128,7 +135,7 @@ cout << currentVerse << endl;
 
      *x = "Is.1.13";
      scope = *x;
-//     if (scope == x) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+     if (scope == *x) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
      if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
      *x = "1Sam.21.1";
@@ -160,13 +167,11 @@ cout << currentVerse << endl;
 	vk.setIntros(true);
 
 	vk = "jn3.50";
-/* TODO: these report 1 number off from what I think they should report 
 	cout << "jn.3.50: " << vk << "\n";
 	vk++;
 	cout << "++: " << vk << "\n";
 	vk--;
 	cout << "--: " << vk << "\n";
-*/
 	vk = MAXVERSE;
 	cout << "MAXVERSE: " << vk << "\n";
 	vk = MAXCHAPTER;
@@ -183,14 +188,12 @@ cout << currentVerse << endl;
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
-/* TODO: These probably are undefined and likely to be ok
 	vk++;
 	cout << "++: " << vk << "\n";
 	vk--;
 	cout << "--: " << vk << "\n";
 	vk = MAXVERSE;
 	cout << "MAXVERSE: " << vk << "\n";
-*/
 	vk = MAXCHAPTER;
 	cout << "MAXCHAPTER: " << vk << "\n";
 	vk = TOP;
@@ -225,14 +228,12 @@ cout << currentVerse << endl;
 
 	vk = "jn3.50";
 	cout << "jn.3.50: " << vk << "\n";
-/* TODO: These probably are undefined and likely to be ok
 	vk++;
 	cout << "++: " << vk << "\n";
 	vk--;
 	cout << "--: " << vk << "\n";
 	vk = MAXVERSE;
 	cout << "MAXVERSE: " << vk << "\n";
-*/
 	vk = MAXCHAPTER;
 	cout << "MAXCHAPTER: " << vk << "\n";
 	vk = TOP;
@@ -246,7 +247,7 @@ cout << currentVerse << endl;
 
 	VerseKey vkey;
 	VerseKey tmpkey = "1sam 1:1";
-	vkey.setAutoNormalize(true);                          // line 147
+	vkey.setAutoNormalize(true);
 	vkey = tmpkey;
 	int chapter = (vkey.getChapter()-1);
 	vkey.setChapter(chapter);

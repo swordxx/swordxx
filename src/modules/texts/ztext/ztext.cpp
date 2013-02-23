@@ -182,16 +182,20 @@ void zText::increment(int steps) {
 		findOffset(tmpkey->getTestament(), index, &start, &size, &buffnum);
 
 		if (
-			(((laststart != start) || (lastsize != size))	// we're a different entry
+			(
+				((laststart != start) || (lastsize != size))	// we're a different entry
 //				&& (start > 0)
-				&& (size))	// and we actually have a size
-				||(!skipConsecutiveLinks)) {	// or we don't want to skip consecutive links
+				&& (size)	// and we actually have a size
+			)
+			|| !skipConsecutiveLinks
+		) {	// or we don't want to skip consecutive links
 			steps += (steps < 0) ? 1 : -1;
 			lastgood = *tmpkey;
 		}
 	}
 	error = (error) ? KEYERR_OUTOFBOUNDS : 0;
 }
+
 
 bool zText::isLinked(const SWKey *k1, const SWKey *k2) const {
 	long start1, start2;

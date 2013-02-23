@@ -710,6 +710,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setLowerBound(*curKey);
 					lastKey->setPosition(TOP);
 					tmpListKey << *lastKey;
+					((VerseKey *)tmpListKey.GetElement())->setAutoNormalize(isAutoNormalize());
 					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
@@ -723,6 +724,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->setUpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
+							((VerseKey *)tmpListKey.GetElement())->setAutoNormalize(isAutoNormalize());
 							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
@@ -737,6 +739,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->setUpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
+							((VerseKey *)tmpListKey.GetElement())->setAutoNormalize(isAutoNormalize());
 							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
@@ -1212,13 +1215,16 @@ void VerseKey::setPosition(SW_POSITION p) {
 		break;
 	}
 	case POS_MAXVERSE:
+		suffix    = 0;
+		verse     = 1;
 		normalize();
 		verse     = getVerseMax();
 		suffix    = 0;
 		break;
 	case POS_MAXCHAPTER:
-		verse     = 1;
 		suffix    = 0;
+		verse     = 1;
+		chapter   = 1;
 		normalize();
 		chapter   = getChapterMax();
 		break;
@@ -1247,6 +1253,12 @@ int VerseKey::getVerseMax() const {
  */
 
 void VerseKey::increment(int step) {
+	// if we're not autonormalizing and we're already not normalized
+	if (!autonorm && chapter > 0 && verse > getVerseMax()) {
+		verse += step;
+		checkBounds();
+		return;
+	}
 	char ierror = 0;
 	setIndex(getIndex() + step);
 	while ((!verse) && (!intros) && (!ierror)) {
@@ -1267,8 +1279,13 @@ void VerseKey::increment(int step) {
  */
 
 void VerseKey::decrement(int step) {
+	// if we're not autonormalizing and we're already not normalized
+	if (!autonorm && chapter > 0 && verse > getVerseMax()) {
+		verse -= step;
+		checkBounds();
+		return;
+	}
 	char ierror = 0;
-
 	setIndex(getIndex() - step);
 	while ((!verse) && (!intros) && (!ierror)) {
 		setIndex(getIndex() - 1);
@@ -1291,100 +1308,81 @@ void VerseKey::decrement(int step) {
 void VerseKey::normalize(bool autocheck)
 {
 
-	if (((!autocheck) || (autonorm))	// only normalize if we were explicitely called or if autonorm is turned on
-               &&
-	          ((!intros) || ((verse) && (chapter)))) {		// this is cheeze and temporary until deciding what actions should be taken; so intros should only be turned on when positioning with setIndex() or incrementors
+	if ((!autocheck || autonorm)	// only normalize if we were explicitely called or if autonorm is turned on
+	) {
 		error = 0;
 
-          while ((testament < 3) && (testament > 0)) {
+		while ((testament < 3) && (testament > 0)) {
 
-               if (book > BMAX[testament-1]) {
-                    book -= BMAX[testament-1];
-                    testament++;
-                    continue;
-               }
 
-               if (book < 1) {
-                    if (--testament > 0) {
-                         book += BMAX[testament-1];
-                    }
-                    continue;
-               }
-
-               if (chapter > getChapterMax()) {
-                    chapter -= getChapterMax();
-                    book++;
-                    continue;
-               }
-
-		if (chapter < 1) {
-			if (--book > 0) {
-				chapter += getChapterMax();
-				verse = getVerseMax();
+			if (book > BMAX[testament-1]) {
+				book -= (BMAX[testament-1] + (intros?1:0));
+				testament++;
+				continue;
 			}
-			else {
-				if (testament > 1) {
-					chapter += refSys->getBook(BMAX[0]-1)->getChapterMax();
-					verse = refSys->getBook(BMAX[0]-1)->getVerseMax(chapter);
+			if (book < (intros?0:1)) {
+				if (--testament > 0) {
+					book += (BMAX[testament-1] + (intros?1:0));
 				}
+				continue;
 			}
-			continue;
+
+
+			if (chapter > getChapterMax()) {
+				chapter -= (getChapterMax() + (intros?1:0));
+				book++;
+				continue;
+			}
+			if (chapter < (intros?0:1)) {
+				--book;
+				chapter += (getChapterMax() + (intros?1:0));
+				continue;
+			}
+
+
+			if (chapter > 0 && verse > getVerseMax()) {
+				verse -= (getVerseMax() + (intros?1:0));
+				chapter++;
+				continue;
+			}
+			if (verse < (intros?0:1)) {
+				if (--chapter < (intros?0:1)) {
+					--book;
+					chapter += (getChapterMax() + (intros?1:0));
+				}
+				verse += (getVerseMax() + (intros?1:0));
+				continue;
+			}
+
+			break;  // If we've made it this far (all failure checks continue) we're ok
 		}
 
-               if (verse > getVerseMax()) { // -1 because e.g chapter 1 of Matthew is books[1][0].versemax[0]
-                    verse -= getVerseMax();
-				chapter++;
-                    continue;
-               }
+		if (testament > (BMAX[1]?2:1)) {
+			testament = BMAX[1]?2:1;
+			book      = BMAX[testament-1];
+			chapter   = getChapterMax();
+			verse     = getVerseMax();
+			error     = KEYERR_OUTOFBOUNDS;
+		}
 
-               if (verse < 1) {
-                    if (--chapter > 0) {
-                         verse += getVerseMax();
-                    }
-                    else	{
-                         if (book > 1) {
-						const VersificationMgr::Book *prevBook = refSys->getBook(((testament>1)?BMAX[0]:0)+book-2);
-                              verse += prevBook->getVerseMax(prevBook->getChapterMax());
-                         }
-                         else	{
-                              if (testament > 1) {
-							const VersificationMgr::Book *lastOTBook = refSys->getBook(BMAX[0]-1);
-                                   verse += lastOTBook->getVerseMax(lastOTBook->getChapterMax());
-                              }
-                         }
-                    }
-                    continue;
-               }
+		if (testament < 1) {
+			error     = ((!intros) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
+			testament = ((intros) ? 0 : 1);
+			book      = ((intros) ? 0 : 1);
+			chapter   = ((intros) ? 0 : 1);
+			verse     = ((intros) ? 0 : 1);
+		}
 
-               break;  // If we've made it this far (all failure checks continue) we're ok
-          }
-
-          if (testament > (BMAX[1]?2:1)) {
-               testament = BMAX[1]?2:1;
-               book      = BMAX[testament-1];
-               chapter   = getChapterMax();
-               verse     = getVerseMax();
-               error     = KEYERR_OUTOFBOUNDS;
-          }
-
-          if (testament < 1) {
-               error     = ((!intros) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
-               testament = ((intros) ? 0 : 1);
-               book      = ((intros) ? 0 : 1);
-               chapter   = ((intros) ? 0 : 1);
-               verse     = ((intros) ? 0 : 1);
-          }
-
-          // should we always perform bounds checks?  Tried but seems to cause infinite recursion
-          if (_compare(getUpperBound()) > 0) {
-               positionFrom(getUpperBound());
-               error = KEYERR_OUTOFBOUNDS;
-          }
-          if (_compare(getLowerBound()) < 0) {
-               positionFrom(getLowerBound());
-               error = KEYERR_OUTOFBOUNDS;
-          }
-     }
+			// should we always perform bounds checks?  Tried but seems to cause infinite recursion
+		if (_compare(getUpperBound()) > 0) {
+			positionFrom(getUpperBound());
+			error = KEYERR_OUTOFBOUNDS;
+		}
+		if (_compare(getLowerBound()) < 0) {
+			positionFrom(getLowerBound());
+			error = KEYERR_OUTOFBOUNDS;
+		}
+	}
 }
 
 
@@ -1442,16 +1440,16 @@ int VerseKey::getVerse() const
  * ENT:	itestament - value which to set testament
  *		[MAXPOS(char)] - only get
  *
- * RET:	if unchanged ->          value of testament
- *	if   changed -> previous value of testament
  */
 
 void VerseKey::setTestament(char itestament)
 {
-	if (itestament != MAXPOS(char)) {
-		testament = itestament;
-		normalize(true);
-	}
+	suffix  = 0;
+	verse   = (intros) ? 0 : 1;
+	chapter = (intros) ? 0 : 1;
+	book    = (intros) ? 0 : 1;
+	testament = itestament;
+	normalize(true);
 }
 
 
@@ -1463,8 +1461,9 @@ void VerseKey::setTestament(char itestament)
 
 void VerseKey::setBook(char ibook)
 {
-	verse   = 1;
-	chapter = 1;
+	suffix  = 0;
+	verse   = (intros) ? 0 : 1;
+	chapter = (intros) ? 0 : 1;
 	book    = ibook;
 	normalize(true);
 }
@@ -1500,11 +1499,10 @@ void VerseKey::setBookName(const char *bname)
 
 void VerseKey::setChapter(int ichapter)
 {
-	verse   = 1;
+	suffix  = 0;
+	verse   = (intros) ? 0 : 1;
 	chapter = ichapter;
 	normalize(true);
-	// TODO: easiest fix, but should be in normalize
-	verse   = 1;
 }
 
 
@@ -1520,8 +1518,8 @@ void VerseKey::setChapter(int ichapter)
 
 void VerseKey::setVerse(int iverse)
 {
-	setSuffix(0);
-	verse = iverse;
+	suffix  = 0;
+	verse   = iverse;
 	normalize(true);
 }
 
@@ -1568,32 +1566,6 @@ void VerseKey::setIntros(bool val)
 bool VerseKey::isIntros() const
 {
 	return intros;
-}
-
-/******************************************************************************
- * VerseKey::findindex - binary search to find the index closest, but less
- *						than the given value.
- *
- * ENT:	array	- long * to array to search
- *		size		- number of elements in the array
- *		value	- value to find
- *
- * RET:	the index into the array that is less than but closest to value
- */
-
-int VerseKey::findindex(long *array, int size, long value)
-{
-	int lbound, ubound, tval;
-
-	lbound = 0;
-	ubound = size - 1;
-	while ((ubound - lbound) > 1) {
-		tval = lbound + (ubound-lbound)/2;
-		if (array[tval] <= value)
-			lbound = tval;
-		else ubound = tval;
-	}
-	return (array[ubound] <= value) ? ubound : lbound;
 }
 
 
@@ -1659,6 +1631,11 @@ void VerseKey::setIndex(long iindex)
 	// special case for Module and Testament heading
 	if (book < 0) { testament = 0; book = 0; }
 	if (chapter < 0) { book = 0; chapter = 0; }
+
+	checkBounds();
+}
+
+void VerseKey::checkBounds() {
 
 	long i = getIndex();
 

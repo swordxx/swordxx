@@ -26,8 +26,8 @@ using namespace sword;
 #endif
 
 int main(int argc, char **argv) {
-	if ((argc < 2) || (argc > 7)) {
-		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [context] [echo params 1|0] [test-in-set-verse]\n";
+	if ((argc < 2) || (argc > 8)) {
+		std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [context] [echo params 1|0] [test-in-set-verse 1|0] [intros 1|0]\n";
 		exit(-1);
 	}
 
@@ -42,14 +42,20 @@ int main(int argc, char **argv) {
 
 	const char *context = (argc > 4) ? argv[4] : "gen.1.1";
 
+	bool echo = (argc > 5) ? !strcmp(argv[5], "1") : false;
+	bool inSetTest = (argc > 6) ? !strcmp(argv[6], "1") : false;
+	bool intros = (argc > 7) ? !strcmp(argv[7], "1") : false;
+
+	DefaultVSKey.setIntros(intros);
+
 	SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 	DefaultVSKey.validateCurrentLocale();
 
 	DefaultVSKey = context;
-	
+
 	ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey, true);
 
-	if ((argc > 5) && (argv[5][0] == '1')) {
+	if (echo) {
 		for (int i = 1; i < argc; i++) {
 			if (i > 1) std::cout << " ";
 			std::cout << argv[i];
@@ -63,8 +69,8 @@ int main(int argc, char **argv) {
 	}
 */
 
-	if (argc > 6) {
-		verses.setText(argv[4]);
+	if (inSetTest) {
+		verses.setText(context);
 		std::cout << "Verse is" << ((verses.popError()) ? " NOT" : "") << " in set.\n\n";
 	}
 	
