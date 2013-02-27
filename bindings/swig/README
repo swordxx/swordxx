@@ -1,3 +1,7 @@
+WARNING These directions have not been tested in a while and might not work,
+see the updated directions in the README file in the parent directory from this
+file (<sword-root>/bindings/README) for directions on building with CMake.
+
 Building the SWIG Bindings
 ==========================
 
