@@ -40,7 +40,7 @@ d = pq(filename=sys.argv[1])
 # Get the list of versifications
 if debug:
 	print 'Fetching a list of versifications'
-vmgr = Sword.VerseMgr.getSystemVerseMgr()
+vmgr = Sword.VersificationMgr.getSystemVersificationMgr()
 av11ns = vmgr.getVersificationSystems()
 
 # Get the list of all osisIDs
@@ -59,7 +59,7 @@ for v11n in av11ns:
 	ntextraKeys = [] # Anything that gets placed in here is extraneous NT material (we think)
 	
 	inNT = False
-	while key.Error() == '\x00':
+	while key.popError() == '\x00':
 		skey = key.getOSISRef()
 		if not inNT and re.match('^Matt', skey): # Assume we enter the NT when we hit Matthew
 			inNT = True
