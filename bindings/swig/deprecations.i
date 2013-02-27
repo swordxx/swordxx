@@ -1,5 +1,7 @@
 /* Methods that are deprecated in SWORD and should be ignored. */
 
+%ignore sword::SWDisplay::Display(SWModule&);
+
 %ignore sword::SWKey::Error();
 %ignore sword::SWKey::Persist() const;
 %ignore sword::SWKey::Persist(signed char);
@@ -26,10 +28,12 @@
 %ignore sword::SWModule::processEntryAttributes(bool) const;
 %ignore sword::SWModule::ReplaceEncodingFilter(SWFilter*, SWFilter*);
 %ignore sword::SWModule::RemoveEncodingFilter(SWFilter*);
+%ignore sword::SWModule::RenderText;
 %ignore sword::SWModule::ReplaceRenderFilter(SWFilter*, SWFilter*);
 %ignore sword::SWModule::RemoveRenderFilter(SWFilter*);
 %ignore sword::SWModule::SetKey;
 %ignore sword::SWModule::setKey(SWKey const &);
+%ignore sword::SWModule::StripText;
 %ignore sword::SWModule::Type;
 
 %ignore sword::VerseKey::AutoNormalize;
