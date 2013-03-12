@@ -1,4 +1,4 @@
-TARGETS= ciphercng swmgrex verseranges lastVerseInChapter verseposition
+TARGETS= ciphercng swmgrex verseranges lastVerseInChapter verseposition showchapter
 all: $(TARGETS)
 
 clean:
