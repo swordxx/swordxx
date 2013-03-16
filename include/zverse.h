@@ -9,12 +9,12 @@
 #define ZVERSE_H
 
 #include <defs.h>
-#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
 class FileDesc;
 class SWCompress;
+class SWBuf;
 
 class SWDLLEXPORT zVerse {
 	SWCompress *compressor;

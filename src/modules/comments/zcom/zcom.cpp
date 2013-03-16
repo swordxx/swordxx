@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+#include <swbuf.h>
 #include <zverse.h>
 #include <versekey.h>
 #include <zcom.h>
