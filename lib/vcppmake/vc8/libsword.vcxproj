@@ -27,21 +27,25 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug with ICU|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -210,6 +214,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\mgr\versificationmgr.cpp" />
     <ClCompile Include="..\..\..\src\utilfuns\zlib\adler32.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug with ICU|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug with ICU|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -2229,7 +2234,6 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\mgr\versemgr.cpp" />
     <ClCompile Include="..\..\..\src\keys\versetreekey.cpp" />
     <ClCompile Include="..\..\..\src\modules\comments\zcom\zcom.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug with ICU|Win32'">Disabled</Optimization>
@@ -2364,6 +2368,7 @@
     <ClInclude Include="..\..\..\include\canon_nrsv.h" />
     <ClInclude Include="..\..\..\include\canon_nrsva.h" />
     <ClInclude Include="..\..\..\include\canon_null.h" />
+    <ClInclude Include="..\..\..\include\canon_rahlfs.h" />
     <ClInclude Include="..\..\..\include\canon_synodal.h" />
     <ClInclude Include="..\..\..\include\canon_synodalp.h" />
     <ClInclude Include="..\..\..\include\canon_vulg.h" />
@@ -2379,8 +2384,6 @@
     <ClInclude Include="..\..\..\include\femain.h" />
     <ClInclude Include="..\..\..\include\filemgr.h" />
     <ClInclude Include="..\..\..\include\flatapi.h" />
-    <ClInclude Include="..\..\..\include\ftplib.h" />
-    <ClInclude Include="..\..\..\include\ftplibftpt.h" />
     <ClInclude Include="..\..\..\include\ftpparse.h" />
     <ClInclude Include="..\..\..\include\ftptrans.h" />
     <ClInclude Include="..\..\..\include\gbffootnotes.h" />
@@ -2396,6 +2399,7 @@
     <ClInclude Include="..\..\..\include\gbfthml.h" />
     <ClInclude Include="..\..\..\include\gbfwebif.h" />
     <ClInclude Include="..\..\..\include\gbfwordjs.h" />
+    <ClInclude Include="..\..\..\include\gbfxhtml.h" />
     <ClInclude Include="..\..\..\include\Greek2Greek.h" />
     <ClInclude Include="..\..\..\include\GreekChars.h" />
     <ClInclude Include="..\..\..\include\greeklexattribs.h" />
@@ -2427,6 +2431,7 @@
     <ClInclude Include="..\..\..\include\osisvariants.h" />
     <ClInclude Include="..\..\..\include\osiswebif.h" />
     <ClInclude Include="..\..\..\include\osiswordjs.h" />
+    <ClInclude Include="..\..\..\include\osisxhtml.h" />
     <ClInclude Include="..\..\..\include\papyriplain.h" />
     <ClInclude Include="..\..\..\include\plainfootnotes.h" />
     <ClInclude Include="..\..\..\include\plainhtml.h" />
@@ -2500,6 +2505,7 @@
     <ClInclude Include="..\..\..\include\thmlvariants.h" />
     <ClInclude Include="..\..\..\include\thmlwebif.h" />
     <ClInclude Include="..\..\..\include\thmlwordjs.h" />
+    <ClInclude Include="..\..\..\include\thmlxhtml.h" />
     <ClInclude Include="..\..\..\include\treekey.h" />
     <ClInclude Include="..\..\..\include\treekeyidx.h" />
     <ClInclude Include="..\..\..\include\unicodertf.h" />
@@ -2523,8 +2529,8 @@
     <ClInclude Include="..\..\..\include\utilstr.h" />
     <ClInclude Include="..\..\..\include\utilxml.h" />
     <ClInclude Include="..\..\..\include\versekey.h" />
-    <ClInclude Include="..\..\..\include\versemgr.h" />
     <ClInclude Include="..\..\..\include\versetreekey.h" />
+    <ClInclude Include="..\..\..\include\versificationmgr.h" />
     <ClInclude Include="..\..\..\include\zcom.h" />
     <ClInclude Include="..\..\..\include\zconf.h" />
     <ClInclude Include="..\..\..\include\zipcomprs.h" />

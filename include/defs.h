@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------------
-// Making or using sword as a Windows DLL
+// Global defines, mostly platform-specific stuff
 // ----------------------------------------------------------------------------
 #ifndef SWORDDEFS_H
 #define SWORDDEFS_H
