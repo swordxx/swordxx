@@ -1234,11 +1234,13 @@ void VerseKey::setPosition(SW_POSITION p) {
 }
 
 int VerseKey::getChapterMax() const {
+	if (book < 1) return 0;
 	const VersificationMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
 	return (b) ? b->getChapterMax() : -1;
 }
 
 int VerseKey::getVerseMax() const {
+	if (book < 1) return 0;
 	const VersificationMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
 	return (b) ? b->getVerseMax(chapter) : -1;
 }
