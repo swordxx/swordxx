@@ -566,7 +566,9 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 				break;
 			}
 			if (inTerm) {
-				book[tobook++] = ' ';
+				if (tobook < 1 || book[tobook-1] != ' ') {
+					book[tobook++] = ' ';
+				}
 				break;
 			}
 
@@ -628,6 +630,23 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 								chap = from_rom(&book[loop+1]);
 								book[loop] = 0;
 							}
+						}
+	        				break;
+					}
+				}
+
+				// check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
+				for (loop = strlen(book) - 1; loop+1; loop--) {
+					if (book[loop] == ' ') {
+						if (!strnicmp(&book[loop+1], "inscriptio", strlen(&book[loop+1]))) {
+							book[loop] = 0;
+							verse = 0;
+							chap = 0;
+						}
+						else if (!strnicmp(&book[loop+1], "subscriptio", strlen(&book[loop+1]))) {
+							book[loop] = 0;
+							verse = 0;
+							chap = 1;
 						}
 	        				break;
 					}
@@ -797,6 +816,10 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 				else	chap  = atoi(number);
 				*number = 0;
 			}
+			else if (chap == -1 && (tobook < 1 || book[tobook-1] != ' ')) {
+				book[tobook++] = ' ';
+			}
+			
 			break;
 
 		default:
@@ -848,11 +871,16 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 	if (*book) {
 		loop = strlen(book) - 1;
 
+		// strip trailing spaces
 		for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
 
+		// check if endsWith([0-9][a-z]) and kill the last letter, e.g., ...12a, and chop off the 'a'
+		// why?  What's this for? wouldn't this mess up 2t?
 		if (loop > 0 && isdigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
 			book[loop--] = 0;
 		}
+
+		// skip trailing spaces and numbers
 		for (; loop+1; loop--) {
 			if ((isdigit(book[loop])) || (book[loop] == ' ')) {
 				book[loop] = 0;
@@ -869,6 +897,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 			break;
 		}
 
+		// check for roman numeral chapter
 		for (loop = strlen(book) - 1; loop+1; loop--) {
 			if (book[loop] == ' ') {
 				// "PS C" is ok, but "II C" is not ok
@@ -878,6 +907,24 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 						chap = from_rom(&book[loop+1]);
 						book[loop] = 0;
 					}
+				}
+				break;
+			}
+		}
+		// check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
+		for (loop = strlen(book) - 1; loop+1; loop--) {
+			if (book[loop] == ' ') {
+				if (!strnicmp(&book[loop+1], "inscriptio", strlen(&book[loop+1]))) {
+					book[loop] = 0;
+					verse = 0;
+					chap = 0;
+					suffix = 0;
+				}
+				else if (!strnicmp(&book[loop+1], "subscriptio", strlen(&book[loop+1]))) {
+					book[loop] = 0;
+					verse = 0;
+					chap = 1;
+						suffix = 0;
 				}
 				break;
 			}

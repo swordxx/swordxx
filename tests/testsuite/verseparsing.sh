@@ -101,6 +101,15 @@
 ../parsekey "Song of Sol 3:5" en KJV ge 1
 ../parsekey "Revelation of John 1:1" en KJV ge 1
 
+### check for 'inscriptio' and 'subscriptio' special chapters which parse to Book 0:0 and Book 1:0 respectively (for INTF)
+../parsekey "Matt.Inscriptio" en KJV ge 1 0 1
+../parsekey "Matt.Subscriptio" en KJV ge 1 0 1
+../parsekey "Matt Inscriptio" en KJV ge 1 0 1
+../parsekey "Matt  Inscriptio" en KJV ge 1 0 1
+../parsekey "Matt  subsc" en KJV ge 1 0 1
+
+
+
 en_abbrevs="
 Gen Genes Exod Ex Exo Lev Le Levi Num Nu Numb Deut Deu De Josh Jos Joshu
 Judg Jdg Judge Ruth Ru Rut 1Sam 1Sa 1Samu 2Sam 2Sa 2Samu 1Kgs 1Ki 1King
