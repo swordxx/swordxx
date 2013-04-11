@@ -75,7 +75,7 @@ interface SWModule {
 
 	// This method returns child nodes for a genbook,
 	// but has special handling if called on a VerseKey module:
-	//  [0..6] [testament, book, chapter, verse, chapterMax, verseMax, bookName]
+	//  [0..7] [testament, book, chapter, verse, chapterMax, verseMax, bookName, osisRef]
 	StringList    getKeyChildren();
 
 	string        getKeyParent();
