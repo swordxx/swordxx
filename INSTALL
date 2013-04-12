@@ -12,11 +12,16 @@ Either:
 	or,
 		unpack a source package and change to that directory.
 
+Have a look at the OPTIONS in usrinst.sh to see if they suit your needs.
+Pay particular attention to libdir=/usr/lib64.  Ubuntu and many other
+systems store 64bit libraries simply in /usr/lib.  If you are building
+on a 32-bit machine, you'll almost certainly wish to change this to
+/usr/lib
 
 Then, try:
 
 	./usrinst.sh
-	make
+	make -j
 	sudo make install
 
 If you have never installed sword before and/or are happy with a default
@@ -27,6 +32,19 @@ configuration, you may wish to type:
 for a basic configuration.  WARNING: THIS WILL OVERWRITE AN EXISTING
 CONFIGURATION.  It is OK to rerun this if you have not changed any
 parameters in /etc/sword.conf
+
+Now let's grab some content:
+
+	cd utilities/
+	sudo ./installmgr -sc
+	sudo ./installmgr -r CrossWire
+	sudo ./installmgr -ri CrossWire KJV
+
+Now lets try it out:
+
+	cd ../examples/cmdline
+	make
+	./lookup KJV Jn.3.16
 
 If the above steps do not work, or if you're particular about your
 configuration, please read on.
