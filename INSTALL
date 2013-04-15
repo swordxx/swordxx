@@ -21,7 +21,7 @@ on a 32-bit machine, you'll almost certainly wish to change this to
 Then, try:
 
 	./usrinst.sh
-	make -j
+	make
 	sudo make install
 
 If you have never installed sword before and/or are happy with a default
