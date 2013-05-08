@@ -3,6 +3,7 @@
 #include <swmgr.h>
 #include <markupfiltmgr.h>
 #include <swmodule.h>
+#include <versekey.h>
 
 using namespace std;
 using namespace sword;
@@ -55,6 +56,28 @@ int main(int argc, char **argv) {
 
 	module->setKey("Mark.1.14");
 	outputCurrentVerse(module);
+
+
+	cout << "\nWhitespace tests around headings:\n";
+	((VerseKey *)module->getKey())->setIntros(true);
+	*module = TOP;
+	// module heading
+	cout << module->renderText() << "\n";
+	(*module)++;
+	// testament heading
+	cout << module->renderText() << "\n";
+	(*module)++;
+	// book heading
+	cout << module->renderText() << "\n";
+	(*module)++;
+	// chapter heading
+	cout << module->renderText() << "\n";
+	(*module)++;
+	// verse body
+	cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
+	(*module)++;
+	// verse body
+	cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
 
 	return 0;
 }
