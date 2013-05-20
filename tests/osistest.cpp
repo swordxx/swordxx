@@ -74,9 +74,15 @@ int main(int argc, char **argv) {
 	cout << module->renderText() << "\n";
 	(*module)++;
 	// verse body
+	module->renderText();
+	SWBuf header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
+	cout << module->renderText(header) << endl;
 	cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
 	(*module)++;
 	// verse body
+	module->renderText();
+	header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
+	cout << module->renderText(header) << endl;
 	cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
 
 	return 0;

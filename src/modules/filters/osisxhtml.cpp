@@ -126,6 +126,7 @@ class OSISXHTML::TagStacks {
 public:
 	TagStack quoteStack;
 	TagStack hiStack;
+	TagStack titleStack;
 };
 
 OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -303,14 +304,14 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <p> paragraph and <lg> linegroup tags
 		else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 			}
 			else if (tag.isEndTag()) {	// end tag
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -321,11 +322,11 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "paragraph")) {
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 			}
 			// <div type="paragraph"  eID... />
 			else if (tag.getAttribute("eID")) {
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 				userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -386,22 +387,22 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "l")) {
 			// end line marker
 			if (tag.getAttribute("eID")) {
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 			}
 			// <l/> without eID or sID
 			// Note: this is improper osis. This should be <lb/>
 			else if (tag.isEmpty() && !tag.getAttribute("sID")) {
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 			}
 			// end of the line
 			else if (tag.isEndTag()) {
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 			}
 		}
 
 		// <lb.../>
 		else if (!strcmp(tag.getName(), "lb")) {
-			outText("<br />", buf, u);
+			outText("<br />\n", buf, u);
 			userData->supressAdjacentWhitespace = true;
 		}
 		// <milestone type="line"/>
@@ -409,9 +410,9 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <milestone type="cQuote" marker="x"/>
 		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type"))) {
 			if (!strcmp(tag.getAttribute("type"), "line")) {
-				outText("<br />", buf, u);
+				outText("<br />\n", buf, u);
 				if (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-PM")) {
-					outText("<br />", buf, u);
+					outText("<br />\n", buf, u);
 				}
 				userData->supressAdjacentWhitespace = true;
 			}
@@ -439,10 +440,47 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<h3>";
+				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+				if (vkey && !vkey->getVerse()) {
+					if (!vkey->getChapter()) {
+						if (!vkey->getBook()) {
+							if (!vkey->getTestament()) {
+								buf += "<h1 class=\"moduleHeader\">";
+								tag.setAttribute("pushed", "h1");
+							}
+							else {
+								buf += "<h1 class=\"testamentHeader\">";
+								tag.setAttribute("pushed", "h1");
+							}
+						}
+						else {
+							buf += "<h1 class=\"bookHeader\">";
+							tag.setAttribute("pushed", "h1");
+						}
+					}
+					else {
+						buf += "<h2 class=\"chapterHeader\">";
+						tag.setAttribute("pushed", "h2");
+					}
+				}
+				else {
+					buf += "<h3>";
+					tag.setAttribute("pushed", "h3");
+				}
+				u->tagStacks->titleStack.push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
-				buf += "</h3>";
+				if (!u->tagStacks->titleStack.empty()) {
+					XMLTag tag(u->tagStacks->titleStack.top());
+					u->tagStacks->titleStack.pop();
+					SWBuf pushed = tag.getAttribute("pushed");
+					if (pushed.size()) {
+						buf += (SWBuf)"</" + pushed + ">\n\n";
+					}
+					else {
+						buf += "</h3>\n\n";
+					}
+				}
 			}
 		}
 		
@@ -452,17 +490,17 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				outText("<ul>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</ul>", buf, u);
+				outText("</ul>\n", buf, u);
 			}
 		}
 
 		// <item>
 		else if (!strcmp(tag.getName(), "item")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<li>", buf, u);
+				outText("\t<li>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</li>", buf, u);
+				outText("</li>\n", buf, u);
 			}
 		}
 		// <catchWord> & <rdg> tags (italicize)
@@ -640,7 +678,18 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 		// ok to leave these in
 		else if (!strcmp(tag.getName(), "div")) {
-			buf += tag;
+			SWBuf type = tag.getAttribute("type");
+			if (type == "bookGroup") {
+			}
+			else if (type == "book") {
+			}
+			else if (type == "section") {
+			}
+			else if (type == "majorSection") {
+			}
+			else {
+				buf += tag;
+			}
 		}
 		else if (!strcmp(tag.getName(), "span")) {
 			buf += tag;
