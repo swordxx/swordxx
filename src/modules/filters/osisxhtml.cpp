@@ -35,15 +35,12 @@ SWORD_NAMESPACE_START
 
 const char *OSISXHTML::getHeader() const {
 	return "\
-		.divineName {\
-			font-variant: small-caps;\
-		}\
-		.wordsOfJesus {\
-			color: red;\
-		}\
-		.transChangeSupplied {\
-			font-style: italic;\
-		}\
+		.divineName { font-variant: small-caps; }\n\
+		.wordsOfJesus { color: red; }\n\
+		.transChangeSupplied { font-style: italic; }\n\
+		.small, .sub, .sup { font-size: .83em }\n\
+		.sub             { vertical-align: sub }\n\
+		.sup             { vertical-align: super }\n\
 	";
 }
 
@@ -487,7 +484,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <list>
 		else if (!strcmp(tag.getName(), "list")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<ul>", buf, u);
+				outText("<ul>\n", buf, u);
 			}
 			else if (tag.isEndTag()) {
 				outText("</ul>\n", buf, u);
@@ -540,6 +537,12 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				else if (type == "ol") {
 					outText("<span style=\"text-decoration:overline\">", buf, u);
 				}
+				else if (type == "super") {
+					outText("<span class=\"sup\">", buf, u);
+				}
+				else if (type == "sub") {
+					outText("<span class=\"sub\">", buf, u);
+				}
 				else {	// all other types
 					outText("<i>", buf, u);
 				}
@@ -556,7 +559,9 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("</b>", buf, u);
 				}
-				else if (type == "ol") {
+				else if (  	   type == "ol"
+						|| type == "super"
+						|| type == "sub") {
 					outText("</span>", buf, u);
 				}
 				else outText("</i>", buf, u);
@@ -697,7 +702,32 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "br")) {
 			buf += tag;
 		}
-
+		else if (!strcmp(tag.getName(), "table")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<table><tbody>\n";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</tbody></table>\n";
+			}
+			
+		}
+		else if (!strcmp(tag.getName(), "row")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\t<tr>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</tr>\n";
+			}
+			
+		}
+		else if (!strcmp(tag.getName(), "cell")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<td>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</td>";
+			}
+		}
 		else {
 		      return false;  // we still didn't handle token
 		}
