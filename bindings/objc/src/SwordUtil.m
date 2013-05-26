@@ -50,11 +50,11 @@
                 }
             }
 
-            [ret setObject:module forKey:ATTRTYPE_MODULE];
-            [ret setObject:passage forKey:ATTRTYPE_PASSAGE];
-            [ret setObject:value forKey:ATTRTYPE_VALUE];
-            [ret setObject:action forKey:ATTRTYPE_ACTION];
-            [ret setObject:type forKey:ATTRTYPE_TYPE];
+            [ret setObject:[module stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_MODULE];
+            [ret setObject:[passage stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_PASSAGE];
+            [ret setObject:[value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_VALUE];
+            [ret setObject:[action stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_ACTION];
+            [ret setObject:[type stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_TYPE];
         }
     }
 

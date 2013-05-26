@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 
 #ifdef __cplusplus
-#include <versemgr.h>
+#include <versificationmgr.h>
 #include <versekey.h>
 #include <localemgr.h>
-class sword::VerseMgr::Book;
+class sword::VersificationMgr::Book;
 #endif
 
 @interface SwordBibleBook : NSObject {
 #ifdef __cplusplus
-    sword::VerseMgr::Book *swBook;
+    sword::VersificationMgr::Book *swBook;
 #endif
     
     NSString *localizedName;
@@ -34,8 +34,8 @@ class sword::VerseMgr::Book;
 @property (retain, readwrite) NSArray *chapters;
 
 #ifdef __cplusplus
-- (id)initWithBook:(sword::VerseMgr::Book *)aBook;
-- (sword::VerseMgr::Book *)book;
+- (id)initWithBook:(sword::VersificationMgr::Book *)aBook;
+- (sword::VersificationMgr::Book *)book;
 #endif
 
 - (NSString *)name;

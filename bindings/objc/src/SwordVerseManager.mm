@@ -33,7 +33,7 @@
     self = [super init];
     if(self) {
         self.booksPerVersification = [NSMutableDictionary dictionary];
-        verseMgr = sword::VerseMgr::getSystemVerseMgr();
+        verseMgr = sword::VersificationMgr::getSystemVersificationMgr();
     }
     
     return self;
@@ -59,11 +59,11 @@
     NSArray *ret = [booksPerVersification objectForKey:verseScheme];
     if(ret == nil) {
         // hasn't been initialized yet
-        const sword::VerseMgr::System *system = verseMgr->getVersificationSystem([verseScheme UTF8String]);
+        const sword::VersificationMgr::System *system = verseMgr->getVersificationSystem([verseScheme UTF8String]);
         NSUInteger bookCount = (NSUInteger)system->getBookCount();
         NSMutableArray *buf = [NSMutableArray arrayWithCapacity:bookCount];
         for(int i = 0;i < bookCount;i++) {
-            sword::VerseMgr::Book *book = (sword::VerseMgr::Book *)system->getBook(i);
+            sword::VersificationMgr::Book *book = (sword::VersificationMgr::Book *)system->getBook(i);
             
             SwordBibleBook *bb = [[[SwordBibleBook alloc] initWithBook:book] autorelease];
             [bb setNumber:i+1]; // VerseKey-Book() starts at index 1
@@ -78,7 +78,7 @@
     return ret;
 }
 
-- (sword::VerseMgr *)verseMgr {
+- (sword::VersificationMgr *)verseMgr {
     return verseMgr;
 }
 

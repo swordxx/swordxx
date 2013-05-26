@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 
 #ifdef __cplusplus
-#include <versemgr.h>
-class sword::VerseMgr::Book;
+#include <versificationmgr.h>
+class sword::VersificationMgr::Book;
 #endif
 
 #define SW_VERSIFICATION_KJV       @"KJV"
 
 @interface SwordVerseManager : NSObject {
 #ifdef __cplusplus
-    sword::VerseMgr *verseMgr;
+    sword::VersificationMgr *verseMgr;
 #endif
     NSMutableDictionary *booksPerVersification;
 }
@@ -30,7 +30,7 @@ class sword::VerseMgr::Book;
 - (NSArray *)booksForVersification:(NSString *)verseScheme;
 
 #ifdef __cplusplus
-- (sword::VerseMgr *)verseMgr;
+- (sword::VersificationMgr *)verseMgr;
 #endif
 
 @end

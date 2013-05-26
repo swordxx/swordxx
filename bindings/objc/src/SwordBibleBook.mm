@@ -31,7 +31,7 @@
     return self;
 }
 
-- (id)initWithBook:(sword::VerseMgr::Book *)aBook {
+- (id)initWithBook:(sword::VersificationMgr::Book *)aBook {
     self = [self init];
     if(self) {
         swBook = aBook;
@@ -100,7 +100,7 @@
     return number + testament * 100;
 }
 
-- (sword::VerseMgr::Book *)book {
+- (sword::VersificationMgr::Book *)book {
     return swBook;
 }
 

@@ -133,13 +133,13 @@ NSLock *bibleLock = nil;
 - (void)buildBookList {
 	[moduleLock lock];
     
-    sword::VerseMgr *vmgr = sword::VerseMgr::getSystemVerseMgr();
-    const sword::VerseMgr::System *system = vmgr->getVersificationSystem([[self versification] UTF8String]);
+    sword::VersificationMgr *vmgr = sword::VersificationMgr::getSystemVersificationMgr();
+    const sword::VersificationMgr::System *system = vmgr->getVersificationSystem([[self versification] UTF8String]);
 
     NSMutableDictionary *buf = [NSMutableDictionary dictionary];
     int bookCount = system->getBookCount();
     for(int i = 0;i < bookCount;i++) {
-        sword::VerseMgr::Book *book = (sword::VerseMgr::Book *)system->getBook(i);
+        sword::VersificationMgr::Book *book = (sword::VersificationMgr::Book *)system->getBook(i);
         
         SwordBibleBook *bb = [[[SwordBibleBook alloc] initWithBook:book] autorelease];
         [bb setNumber:i+1];

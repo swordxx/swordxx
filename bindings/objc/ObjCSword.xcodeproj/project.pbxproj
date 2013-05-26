@@ -44,6 +44,8 @@
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 		A917AF2616B1BE38006367FC /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A917AF2516B1BE38006367FC /* Tests-Info.plist */; };
+		A91C8B67175233F3008702B9 /* versificationmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91C8B66175233F3008702B9 /* versificationmgr.cpp */; };
+		A91C8B6817523609008702B9 /* versificationmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91C8B66175233F3008702B9 /* versificationmgr.cpp */; };
 		A929619C16B1BA240094E5BE /* SwordBibleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */; };
 		A929619D16B1BA240094E5BE /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A929619716B1BA240094E5BE /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A929619E16B1BA240094E5BE /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A929619816B1BA240094E5BE /* SwordKey.mm */; };
@@ -212,7 +214,6 @@
 		A954AC5013EEA0C10094E3FE /* swlocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A82713EE98B30094E3FE /* swlocale.cpp */; };
 		A954AC5113EEA0C10094E3FE /* swmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A82813EE98B30094E3FE /* swmgr.cpp */; };
 		A954AC5213EEA0C10094E3FE /* swsearchable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A82913EE98B30094E3FE /* swsearchable.cpp */; };
-		A954AC5313EEA0C10094E3FE /* versemgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A82A13EE98B30094E3FE /* versemgr.cpp */; };
 		A954AC5413EEA0C10094E3FE /* hrefcom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A82E13EE98B30094E3FE /* hrefcom.cpp */; };
 		A954AC5513EEA0C10094E3FE /* rawcom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A83613EE98B30094E3FE /* rawcom.cpp */; };
 		A954AC5613EEA0C10094E3FE /* rawcom4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A83913EE98B30094E3FE /* rawcom4.cpp */; };
@@ -689,6 +690,7 @@
 		A917AF2516B1BE38006367FC /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		A918B8E211C6697400024D84 /* SwordModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTest.h; path = ../test/SwordModuleTest.h; sourceTree = "<group>"; };
 		A918B8E311C6697400024D84 /* SwordModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTest.m; path = ../test/SwordModuleTest.m; sourceTree = "<group>"; };
+		A91C8B66175233F3008702B9 /* versificationmgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = versificationmgr.cpp; sourceTree = "<group>"; };
 		A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleTextEntry.m; path = src/SwordBibleTextEntry.m; sourceTree = "<group>"; };
 		A929619716B1BA240094E5BE /* SwordKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordKey.h; path = src/SwordKey.h; sourceTree = "<group>"; };
 		A929619816B1BA240094E5BE /* SwordKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordKey.mm; path = src/SwordKey.mm; sourceTree = "<group>"; };
@@ -750,7 +752,6 @@
 		A954A82713EE98B30094E3FE /* swlocale.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swlocale.cpp; sourceTree = "<group>"; };
 		A954A82813EE98B30094E3FE /* swmgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swmgr.cpp; sourceTree = "<group>"; };
 		A954A82913EE98B30094E3FE /* swsearchable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swsearchable.cpp; sourceTree = "<group>"; };
-		A954A82A13EE98B30094E3FE /* versemgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = versemgr.cpp; sourceTree = "<group>"; };
 		A954A82E13EE98B30094E3FE /* hrefcom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hrefcom.cpp; sourceTree = "<group>"; };
 		A954A83613EE98B30094E3FE /* rawcom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rawcom.cpp; sourceTree = "<group>"; };
 		A954A83913EE98B30094E3FE /* rawcom4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rawcom4.cpp; sourceTree = "<group>"; };
@@ -1586,6 +1587,7 @@
 		A954A81713EE98B30094E3FE /* mgr */ = {
 			isa = PBXGroup;
 			children = (
+				A91C8B66175233F3008702B9 /* versificationmgr.cpp */,
 				A954A81813EE98B30094E3FE /* curlftpt.cpp */,
 				A954A81913EE98B30094E3FE /* curlhttpt.cpp */,
 				A954A81A13EE98B30094E3FE /* encfiltmgr.cpp */,
@@ -1602,7 +1604,6 @@
 				A954A82713EE98B30094E3FE /* swlocale.cpp */,
 				A954A82813EE98B30094E3FE /* swmgr.cpp */,
 				A954A82913EE98B30094E3FE /* swsearchable.cpp */,
-				A954A82A13EE98B30094E3FE /* versemgr.cpp */,
 			);
 			path = mgr;
 			sourceTree = "<group>";
@@ -2854,6 +2855,7 @@
 				A929619C16B1BA240094E5BE /* SwordBibleTextEntry.m in Sources */,
 				A929619E16B1BA240094E5BE /* SwordKey.mm in Sources */,
 				A92961A016B1BA240094E5BE /* SwordListKey.mm in Sources */,
+				A91C8B67175233F3008702B9 /* versificationmgr.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2861,6 +2863,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A91C8B6817523609008702B9 /* versificationmgr.cpp in Sources */,
 				A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */,
 				A954ACCA13EEA5340094E3FE /* ftplib.c in Sources */,
 				A954ACCB13EEA5340094E3FE /* ftpparse.c in Sources */,
@@ -2904,7 +2907,6 @@
 				A954AC5013EEA0C10094E3FE /* swlocale.cpp in Sources */,
 				A954AC5113EEA0C10094E3FE /* swmgr.cpp in Sources */,
 				A954AC5213EEA0C10094E3FE /* swsearchable.cpp in Sources */,
-				A954AC5313EEA0C10094E3FE /* versemgr.cpp in Sources */,
 				A954AC5413EEA0C10094E3FE /* hrefcom.cpp in Sources */,
 				A954AC5513EEA0C10094E3FE /* rawcom.cpp in Sources */,
 				A954AC5613EEA0C10094E3FE /* rawcom4.cpp in Sources */,
