@@ -1,5 +1,5 @@
  /*****************************************************************************
- * FTPTransport functions
+ * RemoteTransport functions
  *
  *
  *
@@ -22,7 +22,7 @@
 
  
 
-#include <ftptrans.h>
+#include <remotetrans.h>
 #include <filemgr.h>
 
 #include <fcntl.h>
@@ -58,7 +58,7 @@ void StatusReporter::statusUpdate(double dtTotal, double dlNow) {
 }
 
 
-FTPTransport::FTPTransport(const char *host, StatusReporter *statusReporter) {
+RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter) {
 	this->statusReporter = statusReporter;
 	this->host = host;
 	u = "ftp";
@@ -67,18 +67,18 @@ FTPTransport::FTPTransport(const char *host, StatusReporter *statusReporter) {
 }
 
 
-FTPTransport::~FTPTransport() {
+RemoteTransport::~RemoteTransport() {
 }
 
 
 // override this method in your real transport class
-char FTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
+char RemoteTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
 	char retVal = 0;
 	return retVal;
 }
 
 
-vector<struct DirEntry> FTPTransport::getDirList(const char *dirURL) {
+vector<struct DirEntry> RemoteTransport::getDirList(const char *dirURL) {
 
 	vector<struct DirEntry> dirList;
 	
@@ -99,12 +99,12 @@ vector<struct DirEntry> FTPTransport::getDirList(const char *dirURL) {
 				else if ((*end != 10) && (*end != 13))
 					break;
 			}
-			SWLog::getSystemLog()->logWarning("FTPURLGetDir: parsing item %s(%d)\n", start, end-start);
+			SWLog::getSystemLog()->logWarning("getDirList: parsing item %s(%d)\n", start, end-start);
 			int status = ftpparse(&item, start, end - start);
 			// in ftpparse.h, there is a warning that name is not necessarily null terminated
 			SWBuf name;
 			name.append(item.name, item.namelen);
-			SWLog::getSystemLog()->logWarning("FTPURLGetDir: got item %s\n", name.c_str());
+			SWLog::getSystemLog()->logWarning("getDirList: got item %s\n", name.c_str());
 			if (status && name != "." && name != "..") {
 				struct DirEntry i;
 				i.name = name;
@@ -116,13 +116,13 @@ vector<struct DirEntry> FTPTransport::getDirList(const char *dirURL) {
 		}
 	}
 	else {
-		SWLog::getSystemLog()->logWarning("FTPURLGetDir: failed to get dir %s\n", dirURL);
+		SWLog::getSystemLog()->logWarning("getDirList: failed to get dir %s\n", dirURL);
 	}
 	return dirList;
 }
 
 
-int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
+int RemoteTransport::copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
 	unsigned int i;
 	int retVal = 0;
 	
@@ -165,7 +165,7 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 				url += dirEntry.name; //dont forget the final slash
 				if (!dirEntry.isDirectory) {
 					if (getURL(buffer.c_str(), url.c_str())) {
-						SWLog::getSystemLog()->logWarning("FTPCopy: failed to get file %s\n", url.c_str());
+						SWLog::getSystemLog()->logWarning("copyDirectory: failed to get file %s\n", url.c_str());
 						return -2;
 					}
 					completedBytes += dirEntry.size;
@@ -175,7 +175,7 @@ int FTPTransport::copyDirectory(const char *urlPrefix, const char *dir, const ch
 					removeTrailingSlash(subdir);
 					subdir += (SWBuf)"/" + dirEntry.name;
 					if (copyDirectory(urlPrefix, subdir, buffer.c_str(), suffix)) {
-						SWLog::getSystemLog()->logWarning("FTPCopy: failed to get file %s\n", subdir.c_str());
+						SWLog::getSystemLog()->logWarning("copyDirectory: failed to get file %s\n", subdir.c_str());
 						return -2;
 					}
 				}

@@ -21,7 +21,12 @@
 #
 
 OPTIONS="--prefix=/usr $OPTIONS"
-OPTIONS="--libdir=/usr/lib64 $OPTIONS"
+if [ -d /usr/lib64 ]
+then
+	OPTIONS="--libdir=/usr/lib64 $OPTIONS"
+else
+	OPTIONS="--libdir=/usr/lib $OPTIONS"
+fi
 OPTIONS="--sysconfdir=/etc $OPTIONS"
 OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--disable-shared $OPTIONS"

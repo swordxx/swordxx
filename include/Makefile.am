@@ -16,7 +16,7 @@ pkginclude_HEADERS += $(swincludedir)/filemgr.h
 pkginclude_HEADERS += $(swincludedir)/versificationmgr.h
 pkginclude_HEADERS += $(swincludedir)/flatapi.h
 pkginclude_HEADERS += $(swincludedir)/ftpparse.h
-pkginclude_HEADERS += $(swincludedir)/ftptrans.h
+pkginclude_HEADERS += $(swincludedir)/remotetrans.h
 pkginclude_HEADERS += $(swincludedir)/ftplibftpt.h
 pkginclude_HEADERS += $(swincludedir)/ftplib.h
 

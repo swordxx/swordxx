@@ -21,7 +21,7 @@
 
 #include <swmgr.h>
 #include <installmgr.h>
-#include <ftptrans.h>
+#include <remotetrans.h>
 #include <filemgr.h>
 #include <iostream>
 #include <map>

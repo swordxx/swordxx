@@ -37,12 +37,6 @@ OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.js
 }
 
 
-BasicFilterUserData *OSISWEBIF::createUserData(const SWModule *module, const SWKey *key) {
-	MyUserData *u = new MyUserData(module, key);
-	return u;
-}
-
-
 bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
 	SWBuf scratch;

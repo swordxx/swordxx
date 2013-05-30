@@ -22,7 +22,7 @@
 #define CURLHTTPT_H
 
 #include <defs.h>
-#include <ftptrans.h>
+#include <remotetrans.h>
 
 SWORD_NAMESPACE_START
 
@@ -36,7 +36,7 @@ public:
 };
 
 
-class SWDLLEXPORT CURLHTTPTransport : public FTPTransport {
+class SWDLLEXPORT CURLHTTPTransport : public RemoteTransport {
 	CURL *session;
 
 public:

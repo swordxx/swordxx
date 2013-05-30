@@ -1,5 +1,5 @@
 /******************************************************************************
-*  ftptrans.h  - code for FTP Transport
+*  remotetrans.h  - code for Remote Transport
 *
 * $Id: swbuf.h 2218 2008-12-23 09:33:38Z scribe $
 *
@@ -19,10 +19,8 @@
 *
 */
 
-// TODO: Rename this to RemoteTransport in 1.7.x
-
-#ifndef FTPTRANS_H
-#define FTPTRANS_H
+#ifndef REMOTETRANS_H
+#define REMOTETRANS_H
 
 #include <vector>
 #include <defs.h>
@@ -44,10 +42,10 @@ public:
 };
 
 
-/** TODO: document
+/**
 * A base class to be used for reimplementation of network services.
 */
-class SWDLLEXPORT FTPTransport {	// TODO: rename to more generic RemoteTransport
+class SWDLLEXPORT RemoteTransport {
 
 protected:
 	StatusReporter *statusReporter;
@@ -58,8 +56,8 @@ protected:
 	SWBuf p;
 
 public:
-	FTPTransport(const char *host, StatusReporter *statusReporter = 0);
-	virtual ~FTPTransport();
+	RemoteTransport(const char *host, StatusReporter *statusReporter = 0);
+	virtual ~RemoteTransport();
 
 	/***********
 	 * override this method in your real impl

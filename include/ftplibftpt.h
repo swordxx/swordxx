@@ -22,7 +22,7 @@
 #define FTPLIBFTPT_H
 
 #include <defs.h>
-#include <ftptrans.h>
+#include <remotetrans.h>
 
 typedef struct NetBuf netbuf;
 
@@ -37,7 +37,7 @@ public:
 };
 
 
-class SWDLLEXPORT FTPLibFTPTransport : public FTPTransport {
+class SWDLLEXPORT FTPLibFTPTransport : public RemoteTransport {
 	netbuf *ftpConnection;
 
 	char assureLoggedIn();

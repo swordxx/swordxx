@@ -76,10 +76,10 @@ const int InstallMgr::MODSTAT_NEW              = 0x008;
 const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
 const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
-// override this method and provide your own custom FTPTransport subclass
+// override this method and provide your own custom RemoteTransport subclass
 // here we try a couple defaults if sword was compiled with support for them.
 // see these classes for examples of how to make your own
-FTPTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *statusReporter) {
+RemoteTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *statusReporter) {
 #ifdef CURLAVAILABLE
 	return new CURLFTPTransport(host, statusReporter);
 #else
@@ -87,7 +87,7 @@ FTPTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *s
 #endif
 }
 
-FTPTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporter *statusReporter) {
+RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporter *statusReporter) {
 #ifdef CURLAVAILABLE
 	return new CURLHTTPTransport(host, statusReporter);
 #else
@@ -298,14 +298,14 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
 
 // TODO: rename to netCopy
-int InstallMgr::ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
-SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_str():"null"), src, (dest?dest:"null"), (dirTransfer?'t':'f'), (suffix?suffix:"null"));
+int InstallMgr::remoteCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
+SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source.c_str():"null"), src, (dest?dest:"null"), (dirTransfer?'t':'f'), (suffix?suffix:"null"));
 
 	// assert user disclaimer has been confirmed
 	if (!isUserDisclaimerConfirmed()) return -1;
 
 	int retVal = 0;
-	FTPTransport *trans = 0;
+	RemoteTransport *trans = 0;
 	if (is->type == "FTP" 
 #ifdef CURLSFTPAVAILABLE
 		|| is->type == "SFTP"
@@ -377,7 +377,7 @@ SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_
 		}
 	}
 	SWTRY {
-		FTPTransport *deleteMe = trans;
+		RemoteTransport *deleteMe = trans;
 		// do this order for threadsafeness
 		// (see terminate())
 		trans = transport = 0;
@@ -434,7 +434,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 			if (is) {
 				while (fileBegin != fileEnd) {	// netCopy each file first
 					buffer = sourceDir + fileBegin->second.c_str();
-					if (ftpCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
+					if (remoteCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
 						aborted = true;
 						break;	// user aborted
 					}
@@ -494,7 +494,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 				SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
 				if (is) {
-					if (ftpCopy(is, relativePath.c_str(), absolutePath.c_str(), true)) {
+					if (remoteCopy(is, relativePath.c_str(), absolutePath.c_str(), true)) {
 						aborted = true;	// user aborted
 					}
 				}
@@ -564,7 +564,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 #ifndef EXCLUDEZLIB
 	SWBuf archive = root + "/mods.d.tar.gz";
 
-	errorCode = ftpCopy(is, "mods.d.tar.gz", archive.c_str(), false);
+	errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
 	if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
 		FileDesc *fd = FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY);
 		untargz(fd->getFd(), root.c_str());
@@ -572,7 +572,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	}
 	else
 #endif
-	errorCode = ftpCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
+	errorCode = remoteCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
 
 	is->flush();
 	return errorCode;
@@ -651,7 +651,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 	InstallSource is("FTP");
 	is.source = "ftp.crosswire.org";
 	is.directory = "/pub/sword";
-	int errorCode = ftpCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
+	int errorCode = remoteCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
 	if (!errorCode) { //sucessfully downloaded the repo list
 		SWConfig masterList(masterRepoListPath);
 		SectionMap::iterator sections = masterList.Sections.find("Repos");

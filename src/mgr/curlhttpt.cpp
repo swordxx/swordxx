@@ -110,7 +110,7 @@ static int myhttp_trace(CURL *handle, curl_infotype type, unsigned char *data, s
 	return 0;
 }
 
-CURLHTTPTransport::CURLHTTPTransport(const char *host, StatusReporter *sr) : FTPTransport(host, sr) {
+CURLHTTPTransport::CURLHTTPTransport(const char *host, StatusReporter *sr) : RemoteTransport(host, sr) {
 	session = (CURL *)curl_easy_init();
 }
 

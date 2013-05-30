@@ -11,7 +11,7 @@ SWORD_NAMESPACE_START
 class SWMgr;
 class SWModule;
 class SWConfig;
-class FTPTransport;
+class RemoteTransport;
 class StatusReporter;
 
 /** A remote installation source configuration
@@ -55,19 +55,19 @@ protected:
 	bool passive;
 	SWBuf u, p;
 
-	/** override this method and provide your own custom FTPTransport subclass
+	/** override this method and provide your own custom RemoteTransport subclass
          */
-	virtual FTPTransport *createFTPTransport(const char *host, StatusReporter *statusReporter);
+	virtual RemoteTransport *createFTPTransport(const char *host, StatusReporter *statusReporter);
 
-	/** override this method and provide your own custom HTTP RemoteTransport (still called FTPTransport in pre 1.7.x) subclass
+	/** override this method and provide your own custom HTTP RemoteTransport
          */
-	virtual FTPTransport *createHTTPTransport(const char *host, StatusReporter *statusReporter);
+	virtual RemoteTransport *createHTTPTransport(const char *host, StatusReporter *statusReporter);
 
 
 	/** we have a transport member to set as current running transport so we
 	 *  can ask it to terminate below, if user requests
          */
-	FTPTransport *transport;
+	RemoteTransport *transport;
 
 public:
 
@@ -109,9 +109,9 @@ public:
          */
 	virtual int removeModule(SWMgr *manager, const char *modName);
 
-        /** mostly an internally used method to ftp download from an remote source to a local destination
+        /** mostly an internally used method to remote download from a remote source to a local destination
          */
-	virtual int ftpCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
+	virtual int remoteCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
 
         /** call to install a module from a local path (fromLocation) or remote InstallSource (is) (leave the other 0)
          */
