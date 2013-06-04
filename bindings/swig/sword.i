@@ -93,7 +93,7 @@
 %include "swlog.i"
 
 #ifndef EXCLUDE_FTP
-%include "ftptrans.i"
+%include "remotetrans.i"
 
 #ifndef EXCLUDE_INSTALLMGR
 %include "installmgr.i"
