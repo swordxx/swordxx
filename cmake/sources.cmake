@@ -30,7 +30,7 @@ SET(sword_base_mgr_SOURCES
 	src/mgr/markupfiltmgr.cpp
 	src/mgr/filemgr.cpp
 	src/mgr/versificationmgr.cpp
-	src/mgr/ftptrans.cpp
+	src/mgr/remotetrans.cpp
 	src/mgr/swlocale.cpp
 	src/mgr/localemgr.cpp
 	src/mgr/swcacher.cpp
@@ -251,7 +251,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/versificationmgr.h
 	include/flatapi.h
 	include/ftpparse.h
-	include/ftptrans.h
+	include/remotetrans.h
 	include/ftplibftpt.h
 	include/ftplib.h
 
