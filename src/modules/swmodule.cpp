@@ -386,9 +386,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		return listKey;
 	}
 	
-	SWKey *saveKey = 0;
+	SWKey *saveKey   = 0;
 	SWKey *searchKey = 0;
 	SWKey *resultKey = createKey();
+	SWKey *lastKey   = createKey();
+	SWBuf lastBuf = "";
 	regex_t preg;
 	vector<SWBuf> words;
 	vector<SWBuf> window;
@@ -559,10 +561,20 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 		}
 		if (searchType >= 0) {
-			if (!regexec(&preg,  stripText(), 0, 0, 0)) {
+			SWBuf textBuf = stripText();
+			if (!regexec(&preg, textBuf, 0, 0, 0)) {
 				*resultKey = *getKey();
 				resultKey->clearBound();
 				listKey << *resultKey;
+				lastBuf = "";
+			}
+			else if (!regexec(&preg, lastBuf + ' ' + textBuf, 0, 0, 0)) {
+				lastKey->clearBound();
+				listKey << *lastKey;
+				lastBuf = textBuf;
+			}
+			else {
+				lastBuf = textBuf;
 			}
 		}
 
@@ -737,6 +749,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				break;
 			} // end switch
 		}
+		*lastKey = *getKey();
 		(*this)++;
 	}
 	
@@ -753,6 +766,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	if (searchKey)
 		delete searchKey;
 	delete resultKey;
+	delete lastKey;
 
 	listKey = TOP;
 	setProcessEntryAttributes(savePEA);
