@@ -155,7 +155,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 	// set size to
 	// set
 	*start = *size = *buffnum = 0;
-	//printf ("Finding offset %ld\n", idxoff);
+	//fprintf(stderr, "Finding offset %ld\n", idxoff);
 	idxoff *= 10;
 	if (!testmt) {
 		testmt = ((idxfp[0]) ? 1:2);
@@ -168,7 +168,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 	long newOffset = compfp[testmt-1]->seek(idxoff, SEEK_SET);
 	if (newOffset == idxoff) {
 		if (compfp[testmt-1]->read(&ulBuffNum, 4) != 4) {
-			printf ("Error reading ulBuffNum\n");
+			fprintf(stderr, "Error reading ulBuffNum\n");
 			return;
 		}
 	}
@@ -176,12 +176,12 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
 	
 	if (compfp[testmt-1]->read(&ulVerseStart, 4) < 2)
 	{
-		printf ("Error reading ulVerseStart\n");
+		fprintf(stderr, "Error reading ulVerseStart\n");
 		return;
 	}
 	if (compfp[testmt-1]->read(&usVerseSize, 2) < 2)
 	{
-		printf ("Error reading usVerseSize\n");
+		fprintf(stderr, "Error reading usVerseSize\n");
 		return;
 	}
 
@@ -217,26 +217,26 @@ void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned lo
 	
 	if (size && 
 		!(((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf))) {
-		//printf ("Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
+		//fprintf(stderr, "Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
 
 		if (idxfp[testmt-1]->seek(ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
 		{
-			printf ("Error seeking compressed file index\n");
+			fprintf(stderr, "Error seeking compressed file index\n");
 			return;
 		}
 		if (idxfp[testmt-1]->read(&ulCompOffset, 4)<4)
 		{
-			printf ("Error reading ulCompOffset\n");
+			fprintf(stderr, "Error reading ulCompOffset\n");
 			return;
 		}
 		if (idxfp[testmt-1]->read(&ulCompSize, 4)<4)
 		{
-			printf ("Error reading ulCompSize\n");
+			fprintf(stderr, "Error reading ulCompSize\n");
 			return;
 		}
 		if (idxfp[testmt-1]->read(&ulUnCompSize, 4)<4)
 		{
-			printf ("Error reading ulUnCompSize\n");
+			fprintf(stderr, "Error reading ulUnCompSize\n");
 			return;
 		}
 
@@ -246,14 +246,14 @@ void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned lo
 
 		if (textfp[testmt-1]->seek(ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
 		{
-			printf ("Error: could not seek to right place in compressed text\n");
+			fprintf(stderr, "Error: could not seek to right place in compressed text\n");
 			return;
 		}
 		SWBuf pcCompText;
 		pcCompText.setSize(ulCompSize+5);
 
 		if (textfp[testmt-1]->read(pcCompText.getRawData(), ulCompSize)<(long)ulCompSize) {
-			printf ("Error reading compressed text\n");
+			fprintf(stderr, "Error reading compressed text\n");
 			return;
 		}
 		pcCompText.setSize(ulCompSize);
