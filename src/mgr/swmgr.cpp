@@ -51,6 +51,8 @@
 #include <gbfheadings.h>
 #include <gbfredletterwords.h>
 #include <gbfmorph.h>
+#include <osisenum.h>
+#include <osisglosses.h>
 #include <osisheadings.h>
 #include <osisfootnotes.h>
 #include <osisstrongs.h>
@@ -58,8 +60,8 @@
 #include <osislemma.h>
 #include <osisredletterwords.h>
 #include <osismorphsegmentation.h>
-#include <osisruby.h>
 #include <osisscripref.h>
+#include <osisxlit.h>
 #include <thmlstrongs.h>
 #include <thmlfootnotes.h>
 #include <thmlheadings.h>
@@ -187,8 +189,17 @@ void SWMgr::init() {
 	optionFilters.insert(OptionFilterMap::value_type("OSISMorphSegmentation", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
-	tmpFilter = new OSISRuby();
+	tmpFilter = new OSISGlosses();
+	optionFilters.insert(OptionFilterMap::value_type("OSISGlosses", tmpFilter));
 	optionFilters.insert(OptionFilterMap::value_type("OSISRuby", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISXlit();
+	optionFilters.insert(OptionFilterMap::value_type("OSISXlit", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISEnum();
+	optionFilters.insert(OptionFilterMap::value_type("OSISEnum", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLStrongs();
