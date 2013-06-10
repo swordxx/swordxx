@@ -55,6 +55,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vpl2mod", "vpl2mod.vcxproj"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lexdump", "lexdump.vcxproj", "{D1115CD8-3810-48B0-8A21-F695016C3557}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "diatheke", "..\diatheke\diatheke.vcxproj", "{891A765C-5503-4FED-B427-7AE1413DB264}"
+	ProjectSection(ProjectDependencies) = postProject
+		{97449E5E-F880-4D22-933A-0D2FC32034D4} = {97449E5E-F880-4D22-933A-0D2FC32034D4}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug with ICU|Win32 = Debug with ICU|Win32
@@ -63,8 +68,8 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Debug with ICU|Win32.ActiveCfg = Release with ICU|Win32
-		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Debug with ICU|Win32.Build.0 = Release with ICU|Win32
+		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Debug with ICU|Win32.ActiveCfg = Debug with ICU|Win32
+		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Debug with ICU|Win32.Build.0 = Debug with ICU|Win32
 		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Debug|Win32.ActiveCfg = Debug|Win32
 		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Debug|Win32.Build.0 = Debug|Win32
 		{97449E5E-F880-4D22-933A-0D2FC32034D4}.Release with ICU|Win32.ActiveCfg = Release with ICU|Win32
@@ -279,6 +284,14 @@ Global
 		{D1115CD8-3810-48B0-8A21-F695016C3557}.Release with ICU|Win32.Build.0 = Release with ICU|Win32
 		{D1115CD8-3810-48B0-8A21-F695016C3557}.Release|Win32.ActiveCfg = Release with ICU|Win32
 		{D1115CD8-3810-48B0-8A21-F695016C3557}.Release|Win32.Build.0 = Release with ICU|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Debug with ICU|Win32.ActiveCfg = Debug with ICU|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Debug with ICU|Win32.Build.0 = Debug with ICU|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Debug|Win32.ActiveCfg = Debug|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Debug|Win32.Build.0 = Debug|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Release with ICU|Win32.ActiveCfg = Release with ICU|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Release with ICU|Win32.Build.0 = Release with ICU|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Release|Win32.ActiveCfg = Release|Win32
+		{891A765C-5503-4FED-B427-7AE1413DB264}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
