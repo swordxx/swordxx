@@ -48,7 +48,7 @@ public:
 * It is used because dynamic_cast is not available on all plattforms supported
 * by Sword. Use SWDYNAMIC_CAST(classname, object) instead of dynamic_cast<classname>(object).
 */
-class SWObject {
+class SWDLLEXPORT SWObject {
 protected:
 	SWClass * myclass;
      

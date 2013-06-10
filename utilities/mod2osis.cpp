@@ -24,6 +24,7 @@
 #include <fstream>
 #include <string>
 
+#include <swbuf.h>
 #include <ztext.h>
 #include <zld.h>
 #include <zcom.h>
