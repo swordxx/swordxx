@@ -115,7 +115,8 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>libcurl.lib;ws2_32.lib;winmm.lib;wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <Version>1.6.1</Version>
+      <Version>
+      </Version>
       <AdditionalLibraryDirectories>../../../../curl/lib/LIB-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
