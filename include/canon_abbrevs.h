@@ -485,6 +485,7 @@ const struct abbrev builtin_abbrevs[] = {
   {"PHILEMON", "Phlm"},		// Philemon
   {"PHILIPPIANS", "Phil"},		// Philippians
   {"PHLM", "Phlm"},		// Philemon
+  {"PHLP", "Phil"},		// Philippians
   {"PHM", "Phlm"},		// Philemon
   {"PHP", "Phil"},		// Philippians
   {"PR", "Prov"},		// Proverbs
