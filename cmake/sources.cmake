@@ -101,6 +101,9 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/thmlplain.cpp
 	src/modules/filters/osisosis.cpp
 
+	src/modules/filters/osisenum.cpp 
+	src/modules/filters/osisglosses.cpp 
+	src/modules/filters/osisxlit.cpp 
 	src/modules/filters/osisheadings.cpp
 	src/modules/filters/osisfootnotes.cpp 
 	src/modules/filters/osishtmlhref.cpp
@@ -116,7 +119,6 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/osisvariants.cpp
 	src/modules/filters/osiswordjs.cpp
 	src/modules/filters/osismorphsegmentation.cpp
-	src/modules/filters/osisruby.cpp 
 
 	src/modules/filters/latin1utf8.cpp
 	src/modules/filters/latin1utf16.cpp
@@ -283,6 +285,9 @@ SET(SWORD_INSTALL_HEADERS
 	include/multimapwdef.h
 	include/nullim.h
 
+	include/osisenum.h
+	include/osisglosses.h
+	include/osisxlit.h
 	include/osisheadings.h
 	include/osishtmlhref.h
 	include/osisxhtml.h
