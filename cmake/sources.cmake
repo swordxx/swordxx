@@ -187,21 +187,21 @@ SET(sword_zlib_used_SOURCES
 	src/utilfuns/zlib/untgz.c
 )
 SET(sword_zlib_nofound_SOURCES
-	src/utilfuns/zlib/gzio.c
-	src/utilfuns/zlib/zutil.c
-	src/utilfuns/zlib/uncompr.c
-	src/utilfuns/zlib/trees.c
-	src/utilfuns/zlib/maketree.c
-	src/utilfuns/zlib/infutil.c
+	src/utilfuns/zlib/adler32.c
+	src/utilfuns/zlib/compress.c
+	src/utilfuns/zlib/crc32.c
+	src/utilfuns/zlib/deflate.c
+	src/utilfuns/zlib/gzclose.c
+	src/utilfuns/zlib/gzlib.c
+	src/utilfuns/zlib/gzread.c
+	src/utilfuns/zlib/gzwrite.c
+	src/utilfuns/zlib/infback.c
 	src/utilfuns/zlib/inftrees.c
 	src/utilfuns/zlib/inflate.c
 	src/utilfuns/zlib/inffast.c
-	src/utilfuns/zlib/infcodes.c
-	src/utilfuns/zlib/infblock.c
-	src/utilfuns/zlib/deflate.c
-	src/utilfuns/zlib/crc32.c
-	src/utilfuns/zlib/compress.c
-	src/utilfuns/zlib/adler32.c
+	src/utilfuns/zlib/trees.c
+	src/utilfuns/zlib/uncompr.c
+	src/utilfuns/zlib/zutil.c
 )
 
 # Sources relying on cURL
