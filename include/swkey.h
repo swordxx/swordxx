@@ -150,7 +150,7 @@ public:
 	 * @param ipersist value which to set persist;
 	 * @return 1 - persists in module; 0 - a copy is attempted
 	 */
-	SWDEPRECATED char Persist(signed char ipersist) { setPersist(ipersist); return isPersist(); }
+	SWDEPRECATED char Persist(signed char ipersist) { setPersist(ipersist!=0); return isPersist(); }
 	void setPersist(bool ipersist);
 
 	/** Gets and clears error status

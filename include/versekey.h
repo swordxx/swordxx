@@ -349,7 +349,7 @@ public:
 	* @return *this
 	*/
 	virtual void normalize(bool autocheck = false);
-	SWDEPRECATED void Normalize(char autocheck = 0) { normalize(autocheck); }
+	SWDEPRECATED void Normalize(char autocheck = 0) { normalize(autocheck!=0); }
 
 	/** Sets flag that tells VerseKey to
 	* automatically normalize itself when modified
@@ -365,7 +365,7 @@ public:
 	/**
 	* @deprecated Use setAutoNormalize() instead.
 	*/
-	SWDEPRECATED char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm); return retVal; }	// deprecated
+	SWDEPRECATED char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm!=0); return retVal; }	// deprecated
 	/**
 	* @deprecated Use isAutoNormalize() instead.
 	*/
@@ -381,7 +381,7 @@ public:
 	* @return if unchanged -> value of intros,
 	* if changed -> previous value of intros
 	*/
-	SWDEPRECATED char Headings(char iheadings = MAXPOS(char)) { char retVal = isIntros(); if (iheadings != MAXPOS(char)) setIntros(iheadings); return retVal; }
+	SWDEPRECATED char Headings(char iheadings = MAXPOS(char)) { char retVal = isIntros(); if (iheadings != MAXPOS(char)) setIntros(iheadings!=0); return retVal; }
 
 	/** The Intros property determine whether or not to include
 	* chapter/book/testament/module intros
