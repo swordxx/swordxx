@@ -93,6 +93,7 @@ int main (int argc, char *argv[])
 			std::cout << "KeyText: " << module->getKeyText() << "\n";
 			std::cout << "Text: " << module->getRenderText() << "\n";
 		}
+		std::cout << "RenderHeader:\n" << module->getRenderHeader() << "\n";
 /*
 		swordorb::SearchHitList *searchResults;
 		bool lucene = module->hasSearchFramework();

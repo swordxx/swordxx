@@ -57,6 +57,7 @@ public:
 	char *getStripText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->StripText()); }
 	StringList *getEntryAttribute(const char *level1, const char *level2, const char *level3, CORBA::Boolean filtered) throw(CORBA::SystemException);
 	char *getRenderText() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->RenderText()); }
+	char *getRenderHeader() throw(CORBA::SystemException) { return CORBA::string_dup((char *)((delegate->getRenderHeader()?delegate->getRenderHeader():""))); }
 	char *getRawEntry() throw(CORBA::SystemException) { return CORBA::string_dup((char *)delegate->getRawEntry()); }
 	void  setRawEntry(const char *entryBuffer) throw(CORBA::SystemException) { delegate->setEntry(entryBuffer); }
 	char *getConfigEntry(const char *key) throw(CORBA::SystemException) { return CORBA::string_dup(((char *)delegate->getConfigEntry(key)) ? (char *)delegate->getConfigEntry(key):SWNULL); }

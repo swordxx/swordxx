@@ -87,6 +87,8 @@ interface SWModule {
 	void          begin();
 	string        getStripText();
 	string        getRenderText();
+	// CSS styles associated with this text
+	string        getRenderHeader();
 	string        getRawEntry();
 	void          setRawEntry(in string entryBuffer);
 	string        getConfigEntry(in string key);

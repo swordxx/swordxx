@@ -232,7 +232,7 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
 	*/
-	void append(const char *str, long max = -1);
+	SWBuf &append(const char *str, long max = -1);
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
@@ -240,17 +240,18 @@ public:
 	* @param str Append this.
 	* @param max Append only max chars.
 	*/
-	inline void append(const SWBuf &str, long max = -1) { append(str.c_str(), max); }
+	inline SWBuf &append(const SWBuf &str, long max = -1) { return append(str.c_str(), max); }
 
 	/**
 	* SWBuf::append - appends a value to the current value of this SWBuf
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* @param ch Append this.
 	*/
-	inline void append(char ch) {
+	inline SWBuf &append(char ch) {
 		assureMore(1);
 		*end++ = ch;
 		*end = 0;
+		return *this;
 	}
 
 	/**
@@ -260,10 +261,11 @@ public:
 	* platforms (stupid windoze; stupid c++ spec for not mandating 4byte).
 	* @param ch Append this.
 	*/
-	inline void append(wchar_t wch) {
+	inline SWBuf &append(wchar_t wch) {
 		assureMore(sizeof(wchar_t)*2);
 		for (unsigned int i = 0; i < sizeof(wchar_t); i++) *end++ = ((char *)&wch)[i];
 		for (unsigned int i = 0; i < sizeof(wchar_t); i++) end[i] = 0;
+		return *this;
 	}
 
 	/**
@@ -282,7 +284,7 @@ public:
 	* @param format The format string. Same syntax as printf, for example.
 	* @param ... Add all arguments here.
 	*/
-	void appendFormatted(const char *format, ...);
+	SWBuf &appendFormatted(const char *format, ...);
 	
 	/** 
 	* SWBuf::insert - inserts the given string at position into this string

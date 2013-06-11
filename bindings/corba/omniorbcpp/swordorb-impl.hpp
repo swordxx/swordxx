@@ -62,6 +62,7 @@ public:
   void begin();
   char* getStripText();
   char* getRenderText();
+  char* getRenderHeader();
   char* getRawEntry();
   void setRawEntry(const char* entryBuffer);
   char* getConfigEntry(const char* key);

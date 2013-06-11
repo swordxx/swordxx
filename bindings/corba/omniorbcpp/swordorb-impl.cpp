@@ -332,6 +332,10 @@ char* swordorb_SWModule_i::getRenderText(){
 	return CORBA::string_dup(assureValidUTF8((char *)delegate->renderText()));
 }
 
+char* swordorb_SWModule_i::getRenderHeader(){
+	return CORBA::string_dup(assureValidUTF8(((char *)(delegate->getRenderHeader() ? delegate->getRenderHeader():""))));
+}
+
 char* swordorb_SWModule_i::getRawEntry(){
 	return CORBA::string_dup(assureValidUTF8((char *)delegate->getRawEntry()));
 }

@@ -50,6 +50,7 @@ protected:
 		TagStack *quoteStack;
 		TagStack *hiStack;
 		TagStack *titleStack;
+		TagStack *lineStack;
 		int consecutiveNewlines;
 		SWBuf lastTransChange;
 		SWBuf w;

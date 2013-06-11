@@ -34,14 +34,19 @@
 SWORD_NAMESPACE_START
 
 const char *OSISXHTML::getHeader() const {
-	return "\
+	const static char *header = "\
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
 		.transChangeSupplied { font-style: italic; }\n\
 		.small, .sub, .sup { font-size: .83em }\n\
 		.sub             { vertical-align: sub }\n\
 		.sup             { vertical-align: super }\n\
+		.indent1         { margin-left: 10px }\n\
+		.indent2         { margin-left: 20px }\n\
+		.indent3         { margin-left: 30px }\n\
+		.indent4         { margin-left: 40px }\n\
 	";
+	return header;
 }
 
 
@@ -153,7 +158,7 @@ OSISXHTML::OSISXHTML() {
 class OSISXHTML::TagStack : public std::stack<SWBuf> {
 };
 
-OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()) {
+OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()), lineStack(new TagStack()) {
 	inXRefNote    = false;
 	suspendLevel = 0;
 	wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
@@ -174,6 +179,7 @@ OSISXHTML::MyUserData::~MyUserData() {
 	delete quoteStack;
 	delete hiStack;
 	delete titleStack;
+	delete lineStack;
 }
 
 void OSISXHTML::MyUserData::outputNewline(SWBuf &buf) {
@@ -389,17 +395,21 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 		// <l> poetry, etc
 		else if (!strcmp(tag.getName(), "l")) {
+			// start line marker
+			if (tag.getAttribute("sID") || (!tag.isEndTag() && !tag.isEmpty())) {
+				// nested lines plus if the line itself has an x-indent type attribute value
+				outText(SWBuf("<span class=\"line indent").appendFormatted("%d\">", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
+				u->lineStack->push(tag.toString());
+			}
 			// end line marker
-			if (tag.getAttribute("eID")) {
+			else if (tag.getAttribute("eID") || tag.isEndTag()) {
+				outText("</span>", buf, u);
 				u->outputNewline(buf);
+				if (u->lineStack->size()) u->lineStack->pop();
 			}
 			// <l/> without eID or sID
 			// Note: this is improper osis. This should be <lb/>
 			else if (tag.isEmpty() && !tag.getAttribute("sID")) {
-				u->outputNewline(buf);
-			}
-			// end of the line
-			else if (tag.isEndTag()) {
 				u->outputNewline(buf);
 			}
 		}
@@ -474,7 +484,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			else if (tag.isEndTag()) {
 				if (!u->titleStack->empty()) {
 					XMLTag tag(u->titleStack->top());
-					u->titleStack->pop();
+					if (u->titleStack->size()) u->titleStack->pop();
 					SWBuf pushed = tag.getAttribute("pushed");
 					if (pushed.size()) {
 						buf += (SWBuf)"</" + pushed + ">\n\n";
@@ -563,7 +573,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				SWBuf type = "";
 				if (!u->hiStack->empty()) {
 					XMLTag tag(u->hiStack->top());
-					u->hiStack->pop();
+					if (u->hiStack->size()) u->hiStack->pop();
 					type = tag.getAttribute("type");
 					if (!type.length()) type = tag.getAttribute("rend");
 				}
@@ -619,7 +629,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				// if it is </q> then pop the stack for the attributes
 				if (tag.isEndTag() && !u->quoteStack->empty()) {
 					XMLTag qTag(u->quoteStack->top());
-					u->quoteStack->pop();
+					if (u->quoteStack->size()) u->quoteStack->pop();
 
 					type    = qTag.getAttribute("type");
 					who     = qTag.getAttribute("who");
