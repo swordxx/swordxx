@@ -23,8 +23,9 @@
 #if !defined(__FTPLIB_H)
 #define __FTPLIB_H
 
+#ifndef _FTPLIB_NO_COMPAT
 #define _FTPLIB_NO_COMPAT
-
+#endif
 
 
 #if defined(__unix__) || defined(VMS)

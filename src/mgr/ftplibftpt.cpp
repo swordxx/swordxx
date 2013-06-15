@@ -76,7 +76,7 @@ FTPLibFTPTransport_init::~FTPLibFTPTransport_init() {
 }
 
 
-FTPLibFTPTransport::FTPLibFTPTransport(const char *host, StatusReporter *sr) : FTPTransport(host, sr) {
+FTPLibFTPTransport::FTPLibFTPTransport(const char *host, StatusReporter *sr) : RemoteTransport(host, sr) {
 
 	ftpConnection = 0;
 }
