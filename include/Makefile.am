@@ -48,6 +48,8 @@ pkginclude_HEADERS += $(swincludedir)/markupfiltmgr.h
 pkginclude_HEADERS += $(swincludedir)/multimapwdef.h
 pkginclude_HEADERS += $(swincludedir)/nullim.h
 
+pkginclude_HEADERS += $(swincludedir)/osisglosses.h
+pkginclude_HEADERS += $(swincludedir)/osisenum.h
 pkginclude_HEADERS += $(swincludedir)/osisheadings.h
 pkginclude_HEADERS += $(swincludedir)/osishtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/osisxhtml.h
@@ -64,11 +66,13 @@ pkginclude_HEADERS += $(swincludedir)/osisredletterwords.h
 pkginclude_HEADERS += $(swincludedir)/osisscripref.h   
 pkginclude_HEADERS += $(swincludedir)/osiswordjs.h   
 pkginclude_HEADERS += $(swincludedir)/osisvariants.h   
+pkginclude_HEADERS += $(swincludedir)/osisxlit.h   
 
 pkginclude_HEADERS += $(swincludedir)/papyriplain.h
 pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
 pkginclude_HEADERS += $(swincludedir)/plainhtml.h
 pkginclude_HEADERS += $(swincludedir)/rawcom.h
+pkginclude_HEADERS += $(swincludedir)/rawcom4.h
 pkginclude_HEADERS += $(swincludedir)/rawfiles.h
 pkginclude_HEADERS += $(swincludedir)/rawgenbook.h
 pkginclude_HEADERS += $(swincludedir)/rawld.h
@@ -76,7 +80,9 @@ pkginclude_HEADERS += $(swincludedir)/rawld4.h
 pkginclude_HEADERS += $(swincludedir)/rawstr.h
 pkginclude_HEADERS += $(swincludedir)/rawstr4.h
 pkginclude_HEADERS += $(swincludedir)/rawtext.h
+pkginclude_HEADERS += $(swincludedir)/rawtext4.h
 pkginclude_HEADERS += $(swincludedir)/rawverse.h
+pkginclude_HEADERS += $(swincludedir)/rawverse4.h
 if USE_INTERNAL_REGEX
 pkginclude_HEADERS += $(swincludedir)/internal/regex/regex.h
 endif
@@ -158,7 +164,6 @@ pkginclude_HEADERS += $(swincludedir)/utilxml.h
 pkginclude_HEADERS += $(swincludedir)/versekey.h
 pkginclude_HEADERS += $(swincludedir)/versetreekey.h
 pkginclude_HEADERS += $(swincludedir)/zcom.h
-pkginclude_HEADERS += $(swincludedir)/zconf.h
 pkginclude_HEADERS += $(swincludedir)/zipcomprs.h
 pkginclude_HEADERS += $(swincludedir)/zld.h
 pkginclude_HEADERS += $(swincludedir)/zstr.h
