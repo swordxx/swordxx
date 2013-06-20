@@ -13,9 +13,11 @@ ENDIF(APPLE)
 IF(CMAKE_INSTALL_PREFIX)
 	SET(PREFIX "${CMAKE_INSTALL_PREFIX}" CACHE STRING "Directory into which to install architecture-dependent files. Defaults to ${SWORD_INSTALL_DIR}.")
 ELSE(CMAKE_INSTALL_PREFIX)
-	OPTION(PREFIX "${SWORD_INSTALL_DIR}" CACHE STRING "Directory into which to install architecture-dependent files. Defaults to ${SWORD_INSTALL_DIR}")
+	SET(PREFIX "${SWORD_INSTALL_DIR}" CACHE STRING "Directory into which to install architecture-dependent files. Defaults to ${SWORD_INSTALL_DIR}")
 ENDIF(CMAKE_INSTALL_PREFIX)
 
-SET(LIBDIR "${PREFIX}/lib" CACHE STRING "Object code library install directory. Defaults to ${CMAKE_INSTALL_PREFIX}/lib")
+SET(LIBDIR "${PREFIX}/lib" CACHE STRING "Object code library install directory. Defaults to ${SWORD_INSTALL_DIR}/lib")
 
-SET(INCLUDEDIR "${PREFIX}/include" CACHE STRING "C Header files install directory. Defaults to ${CMAKE_INSTALL_PREFIX}/include.")
+SET(INCLUDEDIR "${PREFIX}/include" CACHE STRING "C Header files install directory. Defaults to ${SWORD_INSTALL_DIR}/include.")
+
+SET(BINDIR "${PREFIX}/bin" CACHE STRING "Directory to install binary executable files. Defaults to ${SWORD_INSTALL_DIR}/bin.")
