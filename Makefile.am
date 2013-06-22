@@ -6,7 +6,7 @@ LDADD = $(top_builddir)/lib/libsword.la
 # Global config directory
 globalconfdir := @sysconfdir@
 
-SUBDIRS = lib . icu
+SUBDIRS = lib .
 
 if BUILDTESTS
 TESTSDIR = tests
@@ -81,7 +81,6 @@ install-data-am: installlocaleDATA installmodsDATA install-pkgconfigDATA
 uninstall-am: uninstall-info-am uninstalllocaleDATA \
 	uninstallmodsDATA uninstall-sysconfDATA uninstall-pkgconfigDATA
 
-	
 register:
 	@echo ""
 	echo "(***) $$USER@$$HOSTNAME, $$(date), $$(uname -m -r -s), SWORD @VERSION@, ${pkgdatadir}" | mail sword.users@crosswire.org
