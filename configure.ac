@@ -171,11 +171,6 @@ ICU_VER=
 ICU_LIBS=
 ICU_IOLIBS=
 if test x$with_icu = xyes; then
-	AC_PATH_PROG([PKGDATA], [pkgdata],[/usr/bin/pkgdata],[$PATH:/usr/sbin:.])
-	AC_PATH_PROG([GENCCODE], [genccode], [/usr/bin/genccode], [$PATH:/usr/sbin:.])
-	AC_PATH_PROG([GENCMN], [gencmn], [/usr/bin/gencmn], [$PATH:/usr/sbin:.])
-	AC_PATH_PROG([GENRB], [genrb], [/usr/bin/genrb], [$PATH:/usr/sbin:.])
-	
 	AC_PATH_PROG(ICU_CONFIG, icu-config, no)
 # The icu-config script was new in icu 2.2
 	if test "$ICU_CONFIG" = "no" ; then
