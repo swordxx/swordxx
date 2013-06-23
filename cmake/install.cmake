@@ -52,33 +52,3 @@ ENDIF(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/sword.pc.in ${CMAKE_CURRENT_BINARY_DIR}/sword.pc @ONLY)
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/sword.pc
 	DESTINATION "${LIBDIR}/pkgconfig")
-
-# Need to build/install the 
-IF(WITH_ICU AND ICU_GENRB)
-	ADD_DEFINITIONS(-DSWICU_DATA="${LIBDIR}/sword/${SWORD_VERSION}_icu_${ICU_VERSION}")
-      FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/icu")
-      FOREACH(translit ${translit_SOURCES})
-	  STRING(REPLACE ".txt" ".res" translit_OUTPUT ${translit})
-	  # Only needs to be run once, really, so we'll hook it to the end of either
-	  IF(BUILDING_SHARED)
-		ADD_CUSTOM_COMMAND(TARGET sword
-		POST_BUILD
-		COMMAND ${ICU_GENRB} -s . -d "${CMAKE_CURRENT_BINARY_DIR}/icu" ${translit}
-		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icu"
-		COMMENT "Converting ${translit}"
-		VERBATIM
-		)
-	  ELSE(BUILDING_SHARED)
-		ADD_CUSTOM_COMMAND(TARGET sword_static
-		POST_BUILD
-		COMMAND ${ICU_GENRB} -s . -d "${CMAKE_CURRENT_BINARY_DIR}/icu" ${translit}
-		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icu"
-		COMMENT "Converting ${translit}"
-		VERBATIM
-		)
-	  ENDIF(BUILDING_SHARED)
-	  
-	  INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/icu/${translit_OUTPUT}"
-		  DESTINATION "${LIBDIR}/sword/${SWORD_VERSION}_icu_${ICU_VERSION}")
-     ENDFOREACH(translit ${translit_SOURCES})
-ENDIF(WITH_ICU AND ICU_GENRB)
