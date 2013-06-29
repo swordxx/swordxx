@@ -92,7 +92,7 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
                 module->addRawFilter(latin1utf8);
 	}
 	else if (!stricmp(encoding.c_str(), "SCSU")) {
-		module->AddRawFilter(scsuutf8);
+		module->addRawFilter(scsuutf8);
 	}
 }
 
