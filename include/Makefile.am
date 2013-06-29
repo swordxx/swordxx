@@ -67,8 +67,6 @@ pkginclude_HEADERS += $(swincludedir)/osisvariants.h
 pkginclude_HEADERS += $(swincludedir)/osisxlit.h   
 
 pkginclude_HEADERS += $(swincludedir)/papyriplain.h
-pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
-pkginclude_HEADERS += $(swincludedir)/plainhtml.h
 pkginclude_HEADERS += $(swincludedir)/rawcom.h
 pkginclude_HEADERS += $(swincludedir)/rawcom4.h
 pkginclude_HEADERS += $(swincludedir)/rawfiles.h
