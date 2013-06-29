@@ -302,8 +302,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/osisvariants.h   
 
 	include/papyriplain.h
-	include/plainfootnotes.h
-	include/plainhtml.h
 	include/rawcom.h
 	include/rawfiles.h
 	include/rawgenbook.h
