@@ -135,8 +135,6 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/cipherfil.cpp
 
 	src/modules/filters/rtfhtml.cpp
-	src/modules/filters/plainfootnotes.cpp
-	src/modules/filters/plainhtml.cpp
 	src/modules/filters/greeklexattribs.cpp
 	src/modules/filters/unicodertf.cpp
 	src/modules/filters/papyriplain.cpp

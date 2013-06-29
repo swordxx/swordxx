@@ -303,8 +303,6 @@
     <ClCompile Include="..\..\..\src\modules\filters\osiswordjs.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\osisxhtml.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\papyriplain.cpp" />
-    <ClCompile Include="..\..\..\src\modules\filters\plainfootnotes.cpp" />
-    <ClCompile Include="..\..\..\src\modules\filters\plainhtml.cpp" />
     <ClCompile Include="..\..\..\src\modules\comments\rawcom\rawcom.cpp" />
     <ClCompile Include="..\..\..\src\modules\comments\rawcom4\rawcom4.cpp" />
     <ClCompile Include="..\..\..\src\modules\comments\rawfiles\rawfiles.cpp" />
@@ -485,8 +483,6 @@
     <ClInclude Include="..\..\..\include\osisxhtml.h" />
     <ClInclude Include="..\..\..\include\osisxlit.h" />
     <ClInclude Include="..\..\..\include\papyriplain.h" />
-    <ClInclude Include="..\..\..\include\plainfootnotes.h" />
-    <ClInclude Include="..\..\..\include\plainhtml.h" />
     <ClInclude Include="..\..\..\include\rawcom.h" />
     <ClInclude Include="..\..\..\include\rawcom4.h" />
     <ClInclude Include="..\..\..\include\rawfiles.h" />
