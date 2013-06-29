@@ -1,11 +1,15 @@
 #!/bin/perl
 
-# Diatheke/Tcl 5.0 by Chris Little <chrislit@crosswire.org>
-
-# Copyright 1999-2009 CrossWire Bible Society (http://www.crosswire.org)
-# 	CrossWire Bible Society
-# 	P. O. Box 2528
-# 	Tempe, AZ  85280-2528
+#******************************************************************************
+#
+#  makebooklist.pl -
+#
+# $Id$
+#
+# Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
+#	CrossWire Bible Society
+#	P. O. Box 2528
+#	Tempe, AZ  85280-2528
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -13,8 +17,9 @@
 #
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
 
 @booklist = `diatheke -b system -k modulelist`;
 

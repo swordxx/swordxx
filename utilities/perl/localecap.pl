@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 #******************************************************************************
 #
-# This tool is only for locales in Latin-1, not UTF-8 (should such locales be supported at a later date)
+#  localecap.pl -	This tool is only for locales in Latin-1, not UTF-8
 #
 # $Id$
 #
-# Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+# Copyright 2001-2009 CrossWire Bible Society (http://www.crosswire.org)
 #	CrossWire Bible Society
 #	P. O. Box 2528
 #	Tempe, AZ  85280-2528

@@ -1,13 +1,16 @@
 #!/usr/bin/perl
+
 #******************************************************************************
 #
-# This program converts a given module into a compressed module of the same type.
-# This is just an example to demomstrate the power of the Perl Sword bindings.
-# The code is almost written the same way the C++ of mod2zmod.cpp code was written
+#  mod2zmod.pl -	This program converts a given module into a compressed
+#			module of the same type. This is just an example to
+#			demomstrate the power of the Perl Sword bindings. The
+#			code is almost written the same way the C++ of
+#			mod2zmod.cpp code was written
 #
 # $Id$
 #
-# Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+# Copyright 2002-2009 CrossWire Bible Society (http://www.crosswire.org)
 #	CrossWire Bible Society
 #	P. O. Box 2528
 #	Tempe, AZ  85280-2528

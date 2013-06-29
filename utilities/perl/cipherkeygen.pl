@@ -1,15 +1,13 @@
 #!/usr/bin/perl
+
 #******************************************************************************
 #
-# cipherkeygen.pl
-#
-# generates a cipher key of the format \d{4}[a-zA-Z]{4}\d{4}[a-zA-Z]{4}.
-# because I'm lazy and not random enough.
-# and because the utilities/perl directory is kinda bare...
+#  cipherkeygen.pl -	generates a cipher key of the format
+#			\d{4}[a-zA-Z]{4}\d{4}[a-zA-Z]{4}
 #
 # $Id$
 #
-# Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+# Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
 #	CrossWire Bible Society
 #	P. O. Box 2528
 #	Tempe, AZ  85280-2528
