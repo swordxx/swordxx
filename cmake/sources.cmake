@@ -237,8 +237,6 @@ SET(sword_icu_found_SOURCES
 
 # Headers
 SET(SWORD_INSTALL_HEADERS
-	include/Greek2Greek.h
-	include/GreekChars.h
 	include/canon.h
 	include/canon_abbrevs.h
 	include/cipherfil.h

@@ -1,8 +1,6 @@
 swincludedir = $(top_srcdir)/include
 
-pkginclude_HEADERS =  $(swincludedir)/Greek2Greek.h
-pkginclude_HEADERS += $(swincludedir)/GreekChars.h
-pkginclude_HEADERS += $(swincludedir)/canon.h
+pkginclude_HEADERS =  $(swincludedir)/canon.h
 pkginclude_HEADERS += $(swincludedir)/canon_abbrevs.h
 pkginclude_HEADERS += $(swincludedir)/cipherfil.h
 pkginclude_HEADERS += $(swincludedir)/curlftpt.h
