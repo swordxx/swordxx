@@ -1,9 +1,11 @@
 /******************************************************************************
- *  rawld.cpp - code for class 'RawLD'- a module that reads raw lexicon and
- *				dictionary files: *.dat *.idx
  *
+ *  rawld.cpp -	code for class 'RawLD'- a module that reads raw lexicon and
+ *		dictionary files: *.dat *.idx
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,11 +1,11 @@
 /***************************************************************************
- *                         OSISWEBIF.cpp  -   OSIS to HTML filter with hrefs 
- *			        for strongs and morph tags
- *                            -------------------
- *   begin                    : 2003-10-23
- *   copyright            : 2003 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  osiswebif.cpp -	OSIS to HTML filter with hrefs for strongs and
+ *			morph tags
+ * 
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

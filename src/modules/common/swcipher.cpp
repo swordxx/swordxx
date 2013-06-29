@@ -1,9 +1,11 @@
 /******************************************************************************
- *  swcipher.cpp   - code for class 'SWCipher'- a driver class that provides
- *				cipher utilities.
  *
+ *  swcipher.cpp -	code for class 'SWCipher'- a driver class that
+ *			provides cipher utilities
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

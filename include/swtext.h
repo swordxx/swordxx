@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swtext.h   - code for base class 'SWText'.  SWText is the basis for all
- *		 types of text modules
+ *
+ *  swtext.h -	code for base class 'SWText'.  SWText is the basis for all
+ *		types of text modules
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

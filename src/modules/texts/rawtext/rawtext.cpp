@@ -1,9 +1,11 @@
 /******************************************************************************
- *  rawtext.cpp - code for class 'RawText'- a module that reads raw text files:
- *		  ot and nt using indexs ??.bks ??.cps ??.vss
  *
+ *  rawtext.cpp -	code for class 'RawText'- a module that reads raw text
+ *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

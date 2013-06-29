@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * utf8html -	SWFilter descendant to convert a UTF-8 stream to HTML escapes
+ *  utf8html.cpp -	SWFilter descendant to convert a UTF-8 stream to
+ *			HTML escapes
  *
+ * $Id$
  *
- *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

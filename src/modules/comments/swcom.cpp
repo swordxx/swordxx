@@ -1,9 +1,11 @@
 /******************************************************************************
- *  swcom.cpp  - code for base class 'SWCom'- The basis for all commentary
- *			modules
  *
+ *  swcom.cpp -	code for base class 'SWCom'- The basis for all commentary
+ *		modules
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

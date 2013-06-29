@@ -1,11 +1,10 @@
 /***************************************************************************
- *                  osishtmlhref.cpp  -  OSIS to HTML with hrefs filter
- *		      -------------------
- *   begin                : 2003-06-24
- *   copyright            : 2003 by CrossWire Bible Society
- * 
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  osishtmlhref.cpp -	OSIS to HTML with hrefs filter
+ * 
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

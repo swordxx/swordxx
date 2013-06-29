@@ -1,9 +1,10 @@
- /*****************************************************************************
- * FTPLibFTPTransport functions
+/*****************************************************************************
  *
+ *  ftplibftpt.cpp -	FTPLibFTPTransport
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,7 +19,6 @@
  * General Public License for more details.
  *
  */
-
  
 #include <stdio.h>
 #include <fcntl.h>

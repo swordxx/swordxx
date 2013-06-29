@@ -16,11 +16,14 @@
 //     e-mail  : wd@isis.co.za                                              ***
 // Church WWW  : http://www.hatfield.co.za                                  ***
 //*****************************************************************************
-/*
+
+/******************************************************************************
+ *
+ *  GreekChars.h -	
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

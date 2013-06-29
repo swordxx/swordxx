@@ -1,19 +1,42 @@
-/* sapphire.h -- Interface for the Saphire II stream cipher.
+/******************************************************************************
+ *
+ *  sapphire.h -	the Saphire II stream cipher class
+ *
+ * $Id$
+ * 
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
-   Dedicated to the Public Domain the author and inventor
-   (Michael Paul Johnson).  This code comes with no warranty.
-   Use it at your own risk.
-   Ported from the Pascal implementation of the Sapphire Stream
-   Cipher 9 December 1994.
-   Added hash-specific functions 27 December 1994.
-   Made index variable initialization key-dependent,
-   made the output function more resistant to cryptanalysis,
-   and renamed to Sapphire II Stream Cipher 2 January 1995.
-
-   unsigned char is assumed to be 8 bits.  If it is not, the
-   results of assignments need to be reduced to 8 bits with
-   & 0xFF or % 0x100, whichever is faster.
-*/  
+/******************************************************************************
+ *
+ * Original license notice & credits:
+ * Dedicated to the Public Domain the author and inventor
+ * (Michael Paul Johnson).  This code comes with no warranty.
+ * Use it at your own risk.
+ * Ported from the Pascal implementation of the Sapphire Stream
+ * Cipher 9 December 1994.
+ * Added hash-specific functions 27 December 1994.
+ * Made index variable initialization key-dependent,
+ * made the output function more resistant to cryptanalysis,
+ * and renamed to Sapphire II Stream Cipher 2 January 1995.
+ *
+ * unsigned char is assumed to be 8 bits.  If it is not, the
+ * results of assignments need to be reduced to 8 bits with
+ * & 0xFF or % 0x100, whichever is faster.
+ */  
   
 #ifndef NULL
 #define NULL 0

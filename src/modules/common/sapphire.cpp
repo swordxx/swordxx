@@ -1,15 +1,39 @@
-/* sapphire.cpp -- the Saphire II stream cipher class.
-   Dedicated to the Public Domain the author and inventor:
-   (Michael Paul Johnson).  This code comes with no warranty.
-   Use it at your own risk.
-   Ported from the Pascal implementation of the Sapphire Stream
-   Cipher 9 December 1994.
-   Added hash pre- and post-processing 27 December 1994.
-   Modified initialization to make index variables key dependent,
-   made the output function more resistant to cryptanalysis,
-   and renamed to Sapphire II 2 January 1995
-*/
+/******************************************************************************
+ *
+ *  sapphire.cpp -	the Saphire II stream cipher class
+ *
+ * $Id$
+ * 
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
+/******************************************************************************
+ *
+ * Original license notice & credits:
+ * Dedicated to the Public Domain the author and inventor:
+ * (Michael Paul Johnson).  This code comes with no warranty.
+ * Use it at your own risk.
+ * Ported from the Pascal implementation of the Sapphire Stream
+ * Cipher 9 December 1994.
+ * Added hash pre- and post-processing 27 December 1994.
+ * Modified initialization to make index variables key dependent,
+ * made the output function more resistant to cryptanalysis,
+ * and renamed to Sapphire II 2 January 1995
+ *
+ */
 
 #include <string.h>
 

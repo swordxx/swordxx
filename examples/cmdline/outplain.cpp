@@ -1,6 +1,8 @@
 /******************************************************************************
- * This example shows how to output the plain text entries from a SWORD module.
- * This small program outputs a SWORD module in 'imp' format, e.g.,
+ *
+ *  outplain.cpp -	This example shows how to output the plain text
+ *			entries from a SWORD module. This small program
+ *			outputs a SWORD module in 'imp' format, e.g.:
  *
  * $$$Gen.1.1
  * In the beginning God created
@@ -18,9 +20,9 @@
  * ModMap consists of: FIRST : SWBuf moduleName
  *                     SECOND: SWModule *module
  *
- * $Id: swmgr.h 2321 2009-04-13 01:17:00Z scribe $
+ * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,7 +1,12 @@
 #!/usr/bin/perl
 
+# /****************************************************************************
 # *
-# * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+# *  sapouni.cgi -	CGI SOAP interface to diatheke
+# *
+# * $Id$
+# *
+# * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
 # *	CrossWire Bible Society
 # *	P. O. Box 2528
 # *	Tempe, AZ  85280-2528
@@ -15,6 +20,7 @@
 # * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # * General Public License for more details.
 # *
+# */
 
 #version 1.0
 

@@ -1,8 +1,10 @@
 /******************************************************************************
  *
- * $Id: osisvariants.h 1688 2005-01-01 04:42:26Z scribe $
+ *  osisvariants.h -	Implementation of OSISVariants
  *
- * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

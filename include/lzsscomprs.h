@@ -1,9 +1,11 @@
 /******************************************************************************
- *  lzsscomprs.h   - definition of Class SWCompress used for data compression
+ *
+ *  lzsscomprs.h -	definition of Class SWCompress used for data
+ *			compression
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

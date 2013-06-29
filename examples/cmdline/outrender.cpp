@@ -1,12 +1,13 @@
 /******************************************************************************
- * This example show how to choose an output render markup and render 
- * entries from a SWORD module. The following snippet outputs a module
- * in HTML output encoded as UTF8.
  *
+ *  outrender.cpp -	This example show how to choose an output render
+ *			markup and render entries from a SWORD module. The
+ *			following snippet outputs a module in HTML output
+ *			encoded as UTF8.
  *
- * $Id: $
+ * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

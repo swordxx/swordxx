@@ -1,8 +1,10 @@
 /***************************************************************************
  *
+ *  gbfplain.h -	Implementation of GBFPlain
+ *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997k-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

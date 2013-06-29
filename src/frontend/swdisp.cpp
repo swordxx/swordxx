@@ -1,8 +1,12 @@
 /******************************************************************************
- *  swdisp.cpp  - code for base class 'swdisp'.  swdisp is the basis for all
- *		  types of displays (e.g. raw textout, curses, xwindow, etc.)
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  swdisp.cpp -	code for base class 'SWDisplay'.  SWDisplay is the
+ *			basis for all types of displays (e.g. raw textout,
+ *			curses, xwindow, etc.)
+ *
+ * $Id$
+ *
+ * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  modtest.cpp -	
+ *
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swdisp.h  - code for base class 'swdisp'.  swdisp is the basis for all
+ *
+ *  swdisp.h -	code for base class 'swdisp'.  swdisp is the basis for all
  *		types of displays (e.g. raw textout, curses, xwindow, etc.)
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

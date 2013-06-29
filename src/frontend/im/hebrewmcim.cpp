@@ -1,14 +1,15 @@
-
-/**
- * Title: Keyboard mapping for Michigan-Claremont Hebrew input
- * Description:
- * Copyright:    Copyright (c) 2001 CrossWire Bible Society under the terms of the GNU GPL
- * Company:
- * @author Troy A. Griffitts
- * @version 1.0
- */
-
-/*
+/******************************************************************************
+ *
+ *  hebrewmcim.cpp -	HebrewMCIM: Keyboard mapping for Michigan-Claremont
+ *			Hebrew input
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation version 2.
@@ -19,7 +20,6 @@
  * General Public License for more details.
  *
  */
-
 
 #include <hebrewmcim.h>
 

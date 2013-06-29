@@ -1,10 +1,10 @@
 /******************************************************************************
- *  osisplain.cpp	- An SWFilter
- *  				impl that provides stripping of OSIS tags
+ *
+ *  osisplain.cpp -	An SWFilter that provides stripping of OSIS tags
  *
  * $Id$
  *
- * Copyright 2001 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swmgr.h   - definition of class SWMgr used to interact with an install
- *				base of sword modules.
+ *
+ *  swmgr.h -	definition of class SWMgr used to interact with an install
+ *		base of sword modules.
  *
  * $Id$
  *
- * Copyright 1998-2008 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

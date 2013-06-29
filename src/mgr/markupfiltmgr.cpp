@@ -1,9 +1,12 @@
 /******************************************************************************
- *  swmarkupmgr.cpp   - implementaion of class MarkupFilterMgr, subclass of
- *                        used to transcode all module text to a requested
- *                        markup.
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *  markupfiltmgr.cpp -	implementaion of class MarkupFilterMgr, subclass of
+ *			used to transcode all module text to a requested
+ *			markup
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

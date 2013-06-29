@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  mod2imp.cpp -	Utility to export a module in IMP format
+ *
+ * $Id$
+ *
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

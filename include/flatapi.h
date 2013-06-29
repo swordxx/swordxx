@@ -1,10 +1,10 @@
 /******************************************************************************
- *	swordapi.h	- This file contains an api usable by non-C++
- *					environments
+ *
+ *  flatapi.h -	This file contains an api usable by non-C++ environments
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

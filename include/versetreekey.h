@@ -1,12 +1,14 @@
 /******************************************************************************
- *	versekey.h - code for class 'versekey'- a standard Biblical verse key
  *
- * $Id: versekey.h 1864 2005-11-20 06:06:40Z scribe $
+ *  versetreekey.h -	code for class 'VerseTreeKey'- a standard Biblical
+ *			verse key
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
- *	Tempe, AZ	85280-2528
+ *	Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swfiltermgr.cpp   - definition of class SWFilterMgr used as an interface to
- *				manage filters on a module
+ *
+ *  swfiltermgr.cpp -	Implementation of SWFilterMgr, used as an interface
+ *			to manage filters on a module
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

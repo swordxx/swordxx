@@ -1,16 +1,18 @@
 /******************************************************************************
- * Class SWMgr manages installed modules for a frontend.
- * The developer may use this class to query what modules are installed
- * and to retrieve an (SWModule *) for any one of these modules
  *
- * SWMgr makes its modules available as an STL Map.
- * The Map definition is typedef'ed as ModMap
- * ModMap consists of: FIRST : SWBuf moduleName
- *                     SECOND: SWModule *module
+ *  swmgrex.cpp -	Class SWMgr manages installed modules for a frontend.
+ *			The developer may use this class to query what modules
+ *			are installed and to retrieve an (SWModule *) for any
+ *			one of these modules
+ *
+ *			SWMgr makes its modules available as an STL Map.
+ *			The Map definition is typedef'ed as ModMap
+ *			ModMap consists of:	FIRST : SWBuf moduleName
+ *              				SECOND: SWModule *module
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

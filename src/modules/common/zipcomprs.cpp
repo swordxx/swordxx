@@ -1,9 +1,11 @@
 /******************************************************************************
- *  swcomprs.cpp   - code for class 'ZipCompress'- a driver class that provides
- *				compression utilities. - using zlib
  *
+ *  zipcomprs.cpp -	ZipCompress, a driver class that provides zlib
+ *			compression
+ *				
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,9 +1,11 @@
 /******************************************************************************
- *  swld.cpp   - code for base class 'SWLD'.  SWLD is the basis for all
- *		 types of Lexicon and Dictionary modules (hence the 'LD').
  *
+ *  swld.cpp -	code for base class 'SWLD'.  SWLD is the basis for all
+ *		types of Lexicon and Dictionary modules (hence the 'LD').
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

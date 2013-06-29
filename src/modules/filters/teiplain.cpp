@@ -1,10 +1,10 @@
 /***************************************************************************
- *                    teiplain.cpp  -  TEI to Plaintext filter
- *                            -------------------
- *   begin                : 2006-07-05
- *   copyright            : 2006 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  teiplain.cpp -	TEI to Plaintext filter
+ *
+ * $Id$
+ *
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,8 +1,10 @@
 /******************************************************************************
  *
- * $Id:
+ *  teihtmlhref.h -	Implementation of TEIHTMLHREF
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * osisglosses        -	SWFilter descendant to hide or show glosses
- *			in an OSIS module.
+ *  osisglosses.cpp -	SWFilter descendant to hide or show glosses
+ *			in an OSIS module
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

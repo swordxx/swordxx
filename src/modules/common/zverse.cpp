@@ -1,11 +1,13 @@
 /******************************************************************************
- *  zverse.h   - code for class 'zVerse'- a module that reads raw text
+ *
+ *  zverse.cpp -	code for class 'zVerse'- a module that reads raw text
  *			files:  ot and nt using indexs ??.bks ??.cps ??.vss
  *			and provides lookup and parsing functions based on
  *			class VerseKey for compressed modules
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

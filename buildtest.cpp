@@ -1,10 +1,12 @@
 /******************************************************************************
- * This is a dumby program which does nothing useful but links to the
- * SWORD engine to confirm basic things were built ok.
+ *
+ *  buildtest.cpp -	This is a dumby program which does nothing useful but
+ *			links to the SWORD engine to confirm basic things were
+ *			built ok.
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

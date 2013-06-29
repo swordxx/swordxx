@@ -1,10 +1,10 @@
 /***************************************************************************
- *                    teirtf.cpp  -  TEI to RTF filter
- *                            -------------------
- *   begin                : 2006-07-03
- *   copyright            : 2006 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  teirtf.cpp -	TEI to RTF filter
+ *
+ * $Id$
+ *
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,12 +1,12 @@
 /******************************************************************************
- * listkey.h	- code for base class 'listkey'.  listkey is the basis for all
- *				types of keys for indexing into modules
- *				(e.g. verse, word,
- *				place, etc.)
+ *
+ *  listkey.h -	code for base class 'listkey'.  listkey is the basis for all
+ *		types of keys for indexing into modules
+ *		(e.g. verse, word, place, etc.)
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

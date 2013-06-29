@@ -1,10 +1,11 @@
 /******************************************************************************
- *  echomod.h  - code for class 'EchoMod' - a test module that just echo back
- *		 text of key.
+ *
+ *  echomod.h -	code for class 'EchoMod' - a test module that just echo back
+ *		text of key.
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

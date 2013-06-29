@@ -1,9 +1,10 @@
 /******************************************************************************
- * This example shows how to do a thread search
+ *
+ *  threaded_search.cpp -	This example shows how to do a thread search
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,6 +19,7 @@
  * General Public License for more details.
  *
  */
+
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>

@@ -1,7 +1,10 @@
 /******************************************************************************
- *  roman.h	- roman numeral functions
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *  roman.h -	roman numeral functions
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

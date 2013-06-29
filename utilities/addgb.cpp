@@ -1,5 +1,11 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  addgb.cpp -	Utility to create/modify a GenBook module by adding a single
+ *		entry
+ *
+ * $Id$
+ *
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

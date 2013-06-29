@@ -1,11 +1,10 @@
-/***************************************************************************
- *                  thmlcgi.h  -  OSIS to Diatheke/CGI format
- *                            -------------------
- *   begin                : 2001-11-12
- *   copyright            : 2001 by CrossWire Bible Society
+/******************************************************************************
  *
+ *  thmlcgi.h -	ThMLCGI: ThML to Diatheke/CGI format filter
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

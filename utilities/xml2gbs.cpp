@@ -1,5 +1,10 @@
-/*
- * Copyright 2009-2012 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  xml2gbs.cpp -	Importer for GenBooks formatted as OSIS, ThML, or TEI
+ *
+ * $Id$
+ *
+ * Copyright 2003-2012 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

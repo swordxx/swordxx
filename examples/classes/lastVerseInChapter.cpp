@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- * This example demonstrates how to navigate verses using VerseKey.  It 
- * 	uselessly iterates every chapter of the KJV, finds the last verse
- * 	and prints out the sole verse in the KJV which ends in a ','
- * 	-- just for fun.
+ *  lastVerseInChapter.cpp -	This example demonstrates how to navigate
+ *				verses using VerseKey.  It uselessly iterates
+ *				every chapter of the KJV, finds the last verse
+ *				and prints out the sole verse in the KJV which
+ *				ends in a ',' -- just for fun.
  *
+ * $Id$
  *
- * $Id: $
- *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

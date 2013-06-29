@@ -1,9 +1,10 @@
 /******************************************************************************
  *
- * gbfxhtml.cpp -	GBF to classed XHTML
+ *  gbfxhtml.cpp -	GBF to classed XHTML
  *
+ * $Id$
  *
- * Copyright 2011 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

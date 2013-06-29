@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  vpl2mod.cpp -	Utility to import VPL formatted modules
+ *
+ * $Id$
+ *
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

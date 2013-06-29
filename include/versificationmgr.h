@@ -1,10 +1,11 @@
 /******************************************************************************
- *  versification.h	- definition of class VersificationMgr used for managing
- *  					versification systems
  *
- * $Id: versification.cpp 2108 2007-10-13 20:35:02Z scribe $
+ *  versification.h -	definition of class VersificationMgr used for managing
+ *			versification systems
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

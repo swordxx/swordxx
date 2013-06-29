@@ -1,5 +1,7 @@
 /******************************************************************************
- * This is about the simplest useful example of using the sword engine.
+ *
+ *  simple.cpp -	This is about the simplest useful example of using the
+ *			SWORD engine.
  *
  * After sword is installed, it should compile with something similar to:
  *
@@ -14,9 +16,9 @@
  *
  *	SWMgr library(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF));
  *
- * $Id: swmgr.h 2321 2009-04-13 01:17:00Z scribe $
+ * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

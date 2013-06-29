@@ -1,7 +1,10 @@
 /******************************************************************************
- * canon_luther.h - Versification data for the Luther system
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  canon_luther.h -	Versification data for the Luther system
+ *
+ * $Id$
+ *
+ * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

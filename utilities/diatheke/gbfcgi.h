@@ -1,11 +1,10 @@
-/**************************************************************************
- *                         gbfcgi.h  -  description
- *                            -------------------
- *   begin                : 2001-11-12
- *   copyright            : 2001 by CrossWire Bible Society
+/***************************************************************************
  *
+ *  gbfcgi.h -	GBF to Diatheke/CGI format
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

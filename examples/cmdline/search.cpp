@@ -1,13 +1,14 @@
 /******************************************************************************
- * This simple example shows how to perform a search on a SWORD module
- * It amounts to a simple commandline search tool with a usage like:
  *
- *	 search KJV "swift hear slow speak"
+ *  search.cpp -	This simple example shows how to perform a search on a
+ *			SWORD module. It amounts to a simple commandline
+ *			search tool with a usage like:
  *
+ *				search KJV "swift hear slow speak"
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

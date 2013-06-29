@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- * UTF16UTF8 -	SWFilter descendant to convert UTF-16 to UTF-8
+ * utf16utf8.cpp -	SWFilter descendant to convert UTF-16 to UTF-8
  *
+ * $Id$
  *
- *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,10 +1,12 @@
 /******************************************************************************
- *  swmodule.cpp - code for base class 'module'.  Module is the basis for all
- *		   types of modules (e.g. texts, commentaries, maps, lexicons,
- *		   etc.)
  *
+ *  swmodule.cpp -	code for base class 'SWModule'. SWModule is the basis
+ *			for all types of modules (e.g. texts, commentaries,
+ *			maps, lexicons, etc.)
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

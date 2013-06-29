@@ -1,11 +1,12 @@
-/******************************************************************
- * This example shows:
- *	How to parse a verse reference
- *	How to persist a custom range key in a book
+/******************************************************************************
  *
- * $Id: swmgr.h 2321 2009-04-13 01:17:00Z scribe $
+ *  verserangeparse.cpp -	This example shows:
+ *				How to parse a verse reference
+ *				How to persist a custom range key in a book
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

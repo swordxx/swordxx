@@ -1,5 +1,7 @@
 /******************************************************************************
  *
+ *  osisenum.h -	Implementation of OSISEnum
+ *
  * $Id$
  *
  * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)

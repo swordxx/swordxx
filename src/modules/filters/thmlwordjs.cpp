@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- * thmlstrongs -	SWFilter descendant to hide or show strongs number
- *			in a ThML module.
+ *  thmlwordjs.cpp -	SWFilter descendant to ???
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2005-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

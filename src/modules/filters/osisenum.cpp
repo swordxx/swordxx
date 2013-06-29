@@ -1,7 +1,7 @@
 /******************************************************************************
  *
- * osisenum          -	SWFilter descendant to hide or show word enumations
- *			in an OSIS module.
+ *  osisenum.cpp -	SWFilter descendant to hide or show word enumations
+ *			in an OSIS module
  *
  * $Id$
  *

@@ -1,12 +1,13 @@
 /*****************************************************************************
- * rawstr.h   - code for class 'RawStr'- a module that reads raw text
- *			files:  ot and nt using indexs ??.bks ??.cps ??.vss
- *			and provides lookup and parsing functions based on
- *			class StrKey
+ *
+ *  rawstr4.h -	code for class 'RawStr4'- a module that reads raw text
+ *		files:  ot and nt using indexs ??.bks ??.cps ??.vss
+ *		and provides lookup and parsing functions based on
+ *		class StrKey
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

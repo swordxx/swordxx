@@ -1,8 +1,11 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: f; c-basic-offset: 4 -*- */
-
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
+/******************************************************************************
+ *
+ *  testclient.cpp -	
+ *
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * 	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
  *

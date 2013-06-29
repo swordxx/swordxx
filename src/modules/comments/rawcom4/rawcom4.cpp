@@ -1,9 +1,12 @@
 /******************************************************************************
- *  rawcom4.cpp - code for class 'RawCom4'- a module that reads raw commentary
- *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
+ *  rawcom4.cpp -	code for class 'RawCom4'- a module that reads raw
+ *			commentary files:
+ *			ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2007-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

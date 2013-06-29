@@ -1,9 +1,11 @@
 /******************************************************************************
  *
- * gbfheadings -	SWFilter descendant to hide or show headings
- *			in a GBF module.
+ *  gbfheadings.cpp -	SWFilter descendant to hide or show headings
+ *			in a GBF module
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

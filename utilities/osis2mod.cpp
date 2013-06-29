@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  osis2mod.cpp -	Utility to import a module in OSIS format
+ *
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -460,7 +465,7 @@ void makeValidRef(VerseKey &key) {
 void writeEntry(SWBuf &text, bool force = false) {
 	char keyOsisID[255];
 
-	static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev$\"/>";
+	static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev: 2783 $\"/>";
 	static bool firstOT = true;
 	static bool firstNT = true;
 
@@ -1526,7 +1531,7 @@ void processOSIS(istream& infile) {
 
 int main(int argc, char **argv) {
 
-	fprintf(stderr, "You are running osis2mod: $Rev$\n");
+	fprintf(stderr, "You are running osis2mod: $Rev: 2783 $\n");
 
 	// Let's test our command line arguments
 	if (argc < 3) {

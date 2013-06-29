@@ -1,9 +1,11 @@
 /******************************************************************************
- *  echomod.cpp - code for class 'echomod'- a dummy test text module that just
- *		  echos back the key
  *
+ *  echomod.cpp -	code for class 'EchoMod'- a dummy test text module
+ *			that just echos back the key
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

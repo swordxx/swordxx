@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swlocale.cpp   - implementation of Class SWLocale used for retrieval
- *				of locale lookups
+ *
+ *  swlocale.cpp -	implementation of Class SWLocale used for retrieval
+ *			of locale lookups
  *
  * $Id$
  *
- * Copyright 2000 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

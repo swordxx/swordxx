@@ -1,10 +1,12 @@
 /******************************************************************************
  *
- * osismorphsegmentation - SWFilter descendant to toggle splitting of morphemes
- *	                   (for morpheme segmented Hebrew in the WLC)
+ *  osismorphsegmentation.cpp -	SWFilter descendant to toggle splitting of
+ *				morphemes (for morpheme segmented Hebrew in
+ *				the WLC)
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,10 +1,12 @@
 /******************************************************************************
- *  rawfiles.cpp - code for class 'RawFiles'- a module that produces HTML HREFs
- *			pointing to actual text desired.  Uses standard
+ *
+ *  rawfiles.cpp -	code for class 'RawFiles'- a module that produces HTML
+ *			HREFs pointing to actual text desired.  Uses standard
  *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

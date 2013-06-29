@@ -1,9 +1,10 @@
 /******************************************************************************
- *  swld.cpp   - code for base class 'SWLD'.  SWLD is the basis for all
- *		 types of Lexicon and Dictionary modules (hence the 'LD').
  *
+ *  swgenbook.cpp -	Implementation of SWGenBook class
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -26,7 +27,7 @@
 SWORD_NAMESPACE_START
 
 /******************************************************************************
- * SWLD Constructor - Initializes data for instance of SWLD
+ * SWGenBook Constructor - Initializes data for instance of SWGenBook
  *
  * ENT:	imodname - Internal name for module
  *	imoddesc - Name to display to user for module
@@ -39,7 +40,7 @@ SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWDisplay *idis
 
 
 /******************************************************************************
- * SWLD Destructor - Cleans up instance of SWGenBook
+ * SWGenBook Destructor - Cleans up instance of SWGenBook
  */
 
 SWGenBook::~SWGenBook() {

@@ -1,8 +1,10 @@
 /***************************************************************************
  *
- * $Id: papyriplain.h 1688 2005-01-01 04:42:26Z scribe $
+ *  papyriplain.h -	Implementation of PapyriPlain
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2005-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,8 +20,8 @@
  *
  */
 
-#ifndef PapyriPLAIN_H
-#define PapyriPLAIN_H
+#ifndef PAPYRIPLAIN_H
+#define PAPYRIPLAIN_H
 
 #include <swoptfilter.h>
 

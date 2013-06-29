@@ -1,9 +1,10 @@
 /******************************************************************************
  *
- * gbfrtf -	SWFilter descendant to convert all GBF tags to RTF tags
+ *  gbfrtf.cpp -	SWFilter descendant to convert all GBF tags to RTF tags
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

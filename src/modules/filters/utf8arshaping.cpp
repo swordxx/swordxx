@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * utf8arshaping - SWFilter descendant to perform Arabic shaping on
- *                   UTF-8 text
+ *  utf8arshaping.cpp -	SWFilter descendant to perform Arabic shaping on
+ *			UTF-8 text
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

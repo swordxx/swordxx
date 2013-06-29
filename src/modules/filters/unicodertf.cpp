@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- * unicodertf -	SWFilter descendant to convert a double byte unicode file
- *				 to RTF tags
+ *  unicodertf.cpp -	SWFilter descendant to convert UTF-8 to RTF tags
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

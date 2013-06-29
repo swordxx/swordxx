@@ -1,8 +1,10 @@
 /***************************************************************************
  *
- * $Id: osisstrongs.h 1688 2005-01-01 04:42:26Z scribe $
+ *  osiswordjs.h -	Implementation of OSISWordJS
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2005-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

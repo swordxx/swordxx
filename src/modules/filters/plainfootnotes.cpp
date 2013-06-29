@@ -1,11 +1,12 @@
 /***************************************************************************
- *                         plainfootnotes.cpp  -  description
- *                            -------------------
- *   begin                : Wed Oct 13 1999
- *   copyright            : (C) 1999 by The team of BibleTime
- *   email                : info@bibletime.de
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  plainfootnotes.cpp -	filter to toggle footnotes in plaintext
+ *				modules
+ *
+ * $Id$
+ *
+ * Copyright 1999 The team of BibleTime (info@bibletime.de)
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

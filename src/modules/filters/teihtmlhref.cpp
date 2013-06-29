@@ -1,10 +1,10 @@
 /***************************************************************************
- *					 teirtf.cpp  -  TEI to HTMLHREF filter
- *							 -------------------
- *	begin				: 2006-07-03
- *	copyright			: 2006 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  teihtmlhref.cpp -	TEI to HTML with hrefs filter
+ *
+ * $Id$
+ *
+ * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

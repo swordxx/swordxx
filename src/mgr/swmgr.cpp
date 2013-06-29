@@ -1,10 +1,10 @@
 /******************************************************************************
- *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
- *				base of sword modules.
+ *
+ *  swmgr.cpp -	used to interact with an install base of sword modules
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

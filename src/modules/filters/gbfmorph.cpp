@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * gbfmorph -	SWFilter descendant to hide or show morph tags
- *			in a GBF module.
+ *  gbfmorph.cpp -	SWFilter descendant to hide or show morph tags
+ *			in a GBF module
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

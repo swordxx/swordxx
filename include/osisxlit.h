@@ -1,5 +1,7 @@
 /******************************************************************************
  *
+ *  osisxlit.h -	Implementation of OSISXlit
+ *
  * $Id$
  *
  * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)

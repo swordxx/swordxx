@@ -1,11 +1,10 @@
 /***************************************************************************
- *                     osisrtf.cpp  -  OSIS to RTF filter
- *                            -------------------
- *   begin                : 2003-02-15
- *   copyright            : 2003 by CrossWire Bible Society
  *
+ *  osisrtf.cpp -	OSIS to RTF filter
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$ *
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

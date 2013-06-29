@@ -1,9 +1,10 @@
 /******************************************************************************
- * This is part of a program to test CLX bindings
+ *
+ *  MainTest.cpp -	This is part of a program to test CLX bindings
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

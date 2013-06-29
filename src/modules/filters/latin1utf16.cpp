@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * Latin1UTF16 - SWFilter descendant to convert a Latin-1 character to UTF-16
+ *  latin1utf16.cpp -	SWFilter descendant Latin1UTF16 to convert a Latin-1
+ *			character to UTF-16
  *
+ * $Id$
  *
- *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

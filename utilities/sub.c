@@ -1,11 +1,13 @@
 /******************************************************************************
- * This little utility substitutes all occurances of a string with another
- * string.  Is this useful?  Maybe not.  But it's been here since r2 so
- * it seems a shame to remove it :)  Currently not built by build system
+ *
+ *  sub.c -	This little utility substitutes all occurances of a string
+ *		with another string.  Is this useful?  Maybe not.  But it's
+ *		been here since r2 so it seems a shame to remove it :)
+ *		Currently not built by build system
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2009 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

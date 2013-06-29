@@ -1,11 +1,11 @@
 /***************************************************************************
- *                         plainhtml.cpp  -  description
- *                            -------------------
- *   begin                : Thu Jun 24 1999
- *   copyright            : (C) 1999 by Torsten Uhlmann
- *   email                : TUhlmann@gmx.de
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  plainhtml.cpp -	filter to convert plaintext to HTML
+ *
+ * $Id$
+ *
+ * Copyright 1999 Torsten Ulhmann (TUhlmann@gmx.de)
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

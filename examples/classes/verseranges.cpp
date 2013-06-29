@@ -1,12 +1,11 @@
 /******************************************************************************
  *
- * This example demonstrates how to work with contiguous verse ranges using
- * 	VerseKey
+ *  verseranges.cpp -	This example demonstrates how to work with contiguous
+ *			verse ranges using VerseKey
  *
+ * $Id$
  *
- * $Id: $
- *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,9 +1,10 @@
 /******************************************************************************
- *  stringmgr.cpp - implementation of class StringMgr
+ *
+ *  stringmgr.cpp -	implementation of class StringMgr
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

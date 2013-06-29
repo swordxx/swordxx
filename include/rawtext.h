@@ -1,10 +1,11 @@
 /******************************************************************************
- *  rawtext.h   - code for class 'RawText'- a module that reads raw text files:
- *		  ot and nt using indexs ??.bks ??.cps ??.vss
+ *
+ *  rawtext.h -	code for class 'RawText'- a module that reads raw text files:
+ *		ot and nt using indexs ??.bks ??.cps ??.vss
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

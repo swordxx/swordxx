@@ -1,10 +1,10 @@
 /***************************************************************************
- *                    gbfthml.cpp  -  GBF to ThML filter
- *                            -------------------
- *   begin                : 1999-10-27
- *   copyright            : 2001 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  gbfthml.cpp -	GBF to ThML filter
+ *
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

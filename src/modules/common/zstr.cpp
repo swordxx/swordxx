@@ -1,10 +1,12 @@
 /******************************************************************************
- *  zstr.cpp   - code for class 'zStr'- a module that reads compressed text
+ *
+ *  zstr.cpp -	code for class 'zStr'- a module that reads compressed text
  *		files and provides lookup and parsing functions based on
  *		class StrKey
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

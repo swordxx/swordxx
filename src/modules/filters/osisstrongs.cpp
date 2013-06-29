@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * osisstrongs -	SWFilter descendant to hide or show strongs number
- *			in a OSIS module.
+ *  osisstrongs.cpp -	SWFilter descendant to hide or show Strong's number
+ *			in a OSIS module
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,11 +1,10 @@
 /***************************************************************************
- *                         gbfhtmlhref.cpp  -   GBF to HTML filter with hrefs 
- *			        for strongs and morph tags
- *                            -------------------
- *   begin                    : 2001-09-03
- *   copyright            : 2001 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  gbfhtmlhref.cpp -	GBF to HTML filter with hrefs
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

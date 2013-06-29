@@ -1,7 +1,10 @@
 /******************************************************************************
- * canon_rahlfs.h - Versification data for the Rahlfs system
  *
- * Copyright 2012 CrossWire Bible Society (http://www.crosswire.org)
+ *  canon_rahlfs.h -	Versification data for the Rahlfs system
+ *
+ * $Id$
+ *
+ * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

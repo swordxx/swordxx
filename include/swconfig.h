@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swconfig.h   - definition of Class SWConfig used for saving and retrieval
- *				of configuration information
+ *
+ *  swconfig.h -	definition of Class SWConfig used for saving and
+ *			retrieval of configuration information
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

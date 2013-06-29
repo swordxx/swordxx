@@ -1,8 +1,10 @@
 /******************************************************************************
  *
- * $Id: thmlhtmlhref.h 2157 2008-05-13 23:37:56Z scribe $
+ *  thmlxhtml.h -	Implementation of ThMLXHTML
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

@@ -1,9 +1,10 @@
-// Diatheke 4.2 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999-2009 by CrossWire Bible Society
-// http://www.crosswire.org/sword/diatheke
-
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  corediatheke.h -	
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -17,6 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
  *
+ */
+
+/******************************************************************************
+ * Diatheke 4.5 by Chris Little <chrislit@crosswire.org>
+ * http://www.crosswire.org/sword/diatheke
  */
 
 #include <stdio.h>

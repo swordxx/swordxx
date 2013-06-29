@@ -1,9 +1,11 @@
 /******************************************************************************
  *
- * gbffootnotes -	SWFilter descendant to hide or show footnotes
- *			in a GBF module.
+ *  gbffootnotes.cpp -	SWFilter descendant to hide or show footnotes
+ *			in a GBF module
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528

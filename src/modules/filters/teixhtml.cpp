@@ -1,10 +1,10 @@
 /***************************************************************************
- *					 teixhtml.cpp  -  TEI to XHTML filter
- *							 -------------------
- *	begin				: 2012-09-23
- *	copyright			: 2012 by CrossWire Bible Society
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ *  teixhtml.cpp -	TEI to XHTML filter
+ *
+ * $Id$
+ *
+ * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
