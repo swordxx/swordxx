@@ -25,6 +25,7 @@
 #include <encfiltmgr.h>
 #include <utilstr.h>
 
+#include <scsuutf8.h>
 #include <latin1utf8.h>
 
 #include <unicodertf.h>
@@ -47,6 +48,7 @@ SWORD_NAMESPACE_START
 EncodingFilterMgr::EncodingFilterMgr (char enc)
 		   : SWFilterMgr() {
 
+        scsuutf8 = new SCSUUTF8();
         latin1utf8 = new Latin1UTF8();
 
         encoding = enc;
@@ -73,6 +75,8 @@ EncodingFilterMgr::EncodingFilterMgr (char enc)
  * EncodingFilterMgr Destructor - Cleans up instance of EncodingFilterMgr
  */
 EncodingFilterMgr::~EncodingFilterMgr() {
+        if (scsuutf8)
+                delete scsuutf8;
         if (latin1utf8)
                 delete latin1utf8;
         if (targetenc)
@@ -86,6 +90,9 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 	SWBuf encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (SWBuf)"";
 	if (!encoding.length() || !stricmp(encoding.c_str(), "Latin-1")) {
                 module->addRawFilter(latin1utf8);
+	}
+	else if (!stricmp(encoding.c_str(), "SCSU")) {
+		module->AddRawFilter(scsuutf8);
 	}
 }
 

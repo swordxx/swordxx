@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug with ICU|Win32">
@@ -257,6 +257,7 @@
     <ClCompile Include="..\..\..\src\modules\filters\osisenum.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\osisglosses.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\osisxlit.cpp" />
+    <ClCompile Include="..\..\..\src\modules\filters\scsuutf8.cpp" />
     <ClCompile Include="..\..\..\src\utilfuns\win32\dirent.cpp" />
     <ClCompile Include="..\..\..\src\modules\tests\echomod.cpp" />
     <ClCompile Include="..\..\..\src\mgr\encfiltmgr.cpp" />
@@ -499,6 +500,7 @@
     <ClInclude Include="..\..\..\include\roman.h" />
     <ClInclude Include="..\..\..\include\rtfhtml.h" />
     <ClInclude Include="..\..\..\include\sapphire.h" />
+    <ClInclude Include="..\..\..\include\scsuutf8.h" />
     <ClInclude Include="..\..\..\include\stringmgr.h" />
     <ClInclude Include="..\..\..\include\strkey.h" />
     <ClInclude Include="..\..\..\include\swbasicfilter.h" />

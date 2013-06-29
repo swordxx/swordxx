@@ -185,7 +185,7 @@ public:
 	/**
 	 * @return  True if this module is encoded in Unicode, otherwise returns false.
 	 */
-	virtual bool isUnicode() const { return (encoding == (char)ENC_UTF8); }
+	virtual bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
 
 	// These methods are useful for modules that come from a standard SWORD install (most do).
 	// SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they

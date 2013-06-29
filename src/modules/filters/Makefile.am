@@ -67,6 +67,8 @@ libsword_la_SOURCES += $(filtersdir)/utf8utf16.cpp
 libsword_la_SOURCES += $(filtersdir)/utf16utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8html.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
+libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
+libsword_la_SOURCES += $(filtersdir)/scsuutf8.cpp
 
 libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
@@ -77,7 +79,6 @@ libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp
 
 PLFIL = $(filtersdir)/rtfhtml.cpp
 PLFIL += $(filtersdir)/greeklexattribs.cpp
-PLFIL += $(filtersdir)/unicodertf.cpp
 PLFIL += $(filtersdir)/papyriplain.cpp
 
 

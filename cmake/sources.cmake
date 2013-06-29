@@ -126,6 +126,8 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/utf16utf8.cpp
 	src/modules/filters/utf8html.cpp
 	src/modules/filters/utf8latin1.cpp
+	src/modules/filters/unicodertf.cpp
+	src/modules/filters/scsuutf8.cpp
 
 	src/modules/filters/utf8cantillation.cpp
 	src/modules/filters/utf8hebrewpoints.cpp
@@ -136,7 +138,6 @@ SET(sword_base_module_SOURCES
 
 	src/modules/filters/rtfhtml.cpp
 	src/modules/filters/greeklexattribs.cpp
-	src/modules/filters/unicodertf.cpp
 	src/modules/filters/papyriplain.cpp
 
 	src/modules/genbook/swgenbook.cpp
@@ -315,6 +316,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/roman.h
 	include/rtfhtml.h
 	include/sapphire.h
+	include/scsuutf8.h
 	include/strkey.h
 	include/swbasicfilter.h
 	include/swbuf.h
