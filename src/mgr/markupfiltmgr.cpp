@@ -30,7 +30,6 @@
 #include <gbfthml.h>
 #include <thmlhtml.h>
 #include <gbfhtml.h>
-#include <plainhtml.h>
 #include <thmlhtmlhref.h>
 #include <gbfhtmlhref.h>
 #include <teihtmlhref.h>
@@ -254,14 +253,14 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromtei = NULL;
                         break;
                 case FMT_HTML:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLHTML();
                         fromgbf = new GBFHTML();
                         fromosis = NULL;
                         fromtei = NULL;
                         break;
                 case FMT_HTMLHREF:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
                         fromosis = new OSISHTMLHREF();
@@ -296,7 +295,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromtei = NULL;
                         break;
                 case FMT_XHTML:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLXHTML();
                         fromgbf = new GBFXHTML();
                         fromosis = new OSISXHTML();

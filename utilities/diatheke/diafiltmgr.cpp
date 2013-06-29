@@ -26,7 +26,6 @@
 #include <gbfthml.h>
 #include <thmlhtml.h>
 #include <gbfhtml.h>
-#include <plainhtml.h>
 #include <thmlhtmlhref.h>
 #include <gbfhtmlhref.h>
 #include <thmlrtf.h>
@@ -203,7 +202,7 @@ void DiathekeFilterMgr::CreateFilters(char markup) {
                         fromosis = NULL;
                         break;
                 case FMT_HTML:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLHTML();
                         fromgbf = new GBFHTML();
                         fromosis = NULL;

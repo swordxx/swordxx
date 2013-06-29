@@ -572,14 +572,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\plainfootnotes.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\plainhtml.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\rawcom.h"
 				>
 			</File>

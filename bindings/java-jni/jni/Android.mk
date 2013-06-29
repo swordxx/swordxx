@@ -67,7 +67,6 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/utf8greekaccents.cpp \
 ../../../src/modules/filters/utf16utf8.cpp \
 ../../../src/modules/filters/gbfwebif.cpp \
-../../../src/modules/filters/plainfootnotes.cpp \
 ../../../src/modules/filters/utf8transliterator.cpp \
 ../../../src/modules/filters/gbfstrongs.cpp \
 ../../../src/modules/filters/osisplain.cpp \
@@ -129,7 +128,6 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/osismorphsegmentation.cpp \
 ../../../src/modules/filters/thmlwebif.cpp \
 ../../../src/modules/filters/thmlvariants.cpp \
-../../../src/modules/filters/plainhtml.cpp \
 ../../../src/modules/filters/thmllemma.cpp \
 ../../../src/modules/filters/gbfmorph.cpp \
 ../../../src/modules/filters/teiplain.cpp \
