@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  zipcomprs.h -	definition of Class ZipCompress used for data
+ *  xzcomprs.h -	XzCompress, a driver class that provides xz (LZMA2)
  *			compression
  *
  * $Id$
@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef ZIPCOMPRS_H
-#define ZIPCOMPRS_H
+#ifndef XZCOMPRS_H
+#define XZCOMPRS_H
 
 #include <swcomprs.h>
 
@@ -30,12 +30,12 @@
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT ZipCompress : public SWCompress {
+class SWDLLEXPORT XzCompress : public SWCompress {
 
 protected:
 public:
-	ZipCompress();
-	virtual ~ZipCompress();
+	XzCompress();
+	virtual ~XzCompress();
 
 	virtual void Encode(void);
 	virtual void Decode(void);

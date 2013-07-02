@@ -1,7 +1,7 @@
 /******************************************************************************
  *
- *  zipcomprs.h -	definition of Class ZipCompress used for data
- *			compression
+ *  bz2comprs.h -	Bzip2Compress, a driver class that provides bzip2
+ *			compression (Burrows–Wheeler with Huffman coding)
  *
  * $Id$
  *
@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef ZIPCOMPRS_H
-#define ZIPCOMPRS_H
+#ifndef BZ2COMPRS_H
+#define BZ2COMPRS_H
 
 #include <swcomprs.h>
 
@@ -30,12 +30,12 @@
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT ZipCompress : public SWCompress {
+class SWDLLEXPORT Bzip2Compress : public SWCompress {
 
 protected:
 public:
-	ZipCompress();
-	virtual ~ZipCompress();
+	Bzip2Compress();
+	virtual ~Bzip2Compress();
 
 	virtual void Encode(void);
 	virtual void Decode(void);
