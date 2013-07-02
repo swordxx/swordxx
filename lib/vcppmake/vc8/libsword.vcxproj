@@ -259,7 +259,6 @@
     <ClCompile Include="..\..\..\src\modules\filters\osisxlit.cpp" />
     <ClCompile Include="..\..\..\src\modules\filters\scsuutf8.cpp" />
     <ClCompile Include="..\..\..\src\utilfuns\win32\dirent.cpp" />
-    <ClCompile Include="..\..\..\src\modules\tests\echomod.cpp" />
     <ClCompile Include="..\..\..\src\mgr\encfiltmgr.cpp" />
     <ClCompile Include="..\..\..\src\modules\common\entriesblk.cpp" />
     <ClCompile Include="..\..\..\src\mgr\filemgr.cpp" />
@@ -429,10 +428,8 @@
     <ClInclude Include="..\..\..\include\curlftpt.h" />
     <ClInclude Include="..\..\..\include\curlhttpt.h" />
     <ClInclude Include="..\..\..\include\defs.h" />
-    <ClInclude Include="..\..\..\include\echomod.h" />
     <ClInclude Include="..\..\..\include\encfiltmgr.h" />
     <ClInclude Include="..\..\..\include\entriesblk.h" />
-    <ClInclude Include="..\..\..\include\femain.h" />
     <ClInclude Include="..\..\..\include\filemgr.h" />
     <ClInclude Include="..\..\..\include\flatapi.h" />
     <ClInclude Include="..\..\..\include\ftplib.h" />
@@ -453,7 +450,6 @@
     <ClInclude Include="..\..\..\include\gbfwordjs.h" />
     <ClInclude Include="..\..\..\include\gbfxhtml.h" />
     <ClInclude Include="..\..\..\include\greeklexattribs.h" />
-    <ClInclude Include="..\..\..\include\hebrewmcim.h" />
     <ClInclude Include="..\..\..\include\hrefcom.h" />
     <ClInclude Include="..\..\..\include\installmgr.h" />
     <ClInclude Include="..\..\..\include\latin1utf16.h" />
@@ -463,7 +459,6 @@
     <ClInclude Include="..\..\..\include\lzsscomprs.h" />
     <ClInclude Include="..\..\..\include\markupfiltmgr.h" />
     <ClInclude Include="..\..\..\include\multimapwdef.h" />
-    <ClInclude Include="..\..\..\include\nullim.h" />
     <ClInclude Include="..\..\..\include\osisenum.h" />
     <ClInclude Include="..\..\..\include\osisfootnotes.h" />
     <ClInclude Include="..\..\..\include\osisglosses.h" />
@@ -514,7 +509,6 @@
     <ClInclude Include="..\..\..\include\swfilter.h" />
     <ClInclude Include="..\..\..\include\swfiltermgr.h" />
     <ClInclude Include="..\..\..\include\swgenbook.h" />
-    <ClInclude Include="..\..\..\include\swinputmeth.h" />
     <ClInclude Include="..\..\..\include\swkey.h" />
     <ClInclude Include="..\..\..\include\swld.h" />
     <ClInclude Include="..\..\..\include\swlocale.h" />
