@@ -78,7 +78,7 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		const char *from = orig.c_str();
 
 		//we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code
-		//const char* variantCompareString = (option == 0) ? "div type=\"variant\" class=\"1\"" : "div type=\"variant\" class=\"2\"";
+		const char* variantCompareString = (option == 0) ? "seg type=\"x-variant\" subType=\"x-1\"" : "seg type=\"x-variant\" subType=\"x-2\"";
 		
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
@@ -89,16 +89,12 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			else if (*from == '>') {	// process tokens
 				intoken = false;
 				
-				if (!strncmp(token.c_str(), "seg ", 4)) { //only one of the variants
+				if (!strncmp(token.c_str(), variantCompareString, 34)) { //only one of the variants, length of the two strings is 34 in both cases
 					invar = true;
 					hide = true;
 					continue;
 				}
-				if (!strncmp(token.c_str(), "div type=\"variant\"", 18)) {
-					invar = true;
-					continue;
-				}
-				if (!strncmp(token.c_str(), "/div", 4)) {
+				if (!strncmp(token.c_str(), "/seg", 4)) {
 					hide = false;
 					if (invar) {
 						invar = false;
