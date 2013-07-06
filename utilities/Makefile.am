@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = 1.6
 SUBDIRS = diatheke
-INCLUDES = -I $(top_srcdir)/include
+AM_CPPFLAGS = -I $(top_srcdir)/include
 if USE_INTERNAL_REGEX
-INCLUDES += -I$(top_srcdir)/include/internal/regex
+AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
 endif
 LDADD = $(top_builddir)/lib/libsword.la
 noinst_PROGRAMS = cipherraw lexdump \
