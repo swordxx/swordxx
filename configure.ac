@@ -92,9 +92,9 @@ AM_MAINTAINER_MODE
 if test x$enable_debug = xyes; then
   GCJFLAGS="-g -O0"
   if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
+    AM_CFLAGS="-g3 -O0 -Wall -Werror"
   else
-    AM_CFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
+    AM_CFLAGS="-O0 -Wall -Werror"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
     AM_CXXFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
@@ -105,6 +105,9 @@ else
   AM_CFLAGS="-O3"
   AM_CXXFLAGS="-O3"
 fi
+
+AM_CFLAGS="$AM_CFLAGS -fPIC"
+AM_CXXFLAGS="$AM_CXXFLAGS -fPIC"
 
 # ---------------------------------------------------------------------
 # Check libraries
@@ -206,7 +209,7 @@ fi
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
 
 if test x$enable_warnings = xyes; then
-  AM_CFLAGS="$AM_CFLAGS -Werror -Woverloaded-virtual"
+  AM_CFLAGS="$AM_CFLAGS -Werror"
   AM_CXXFLAGS="$AM_CXXFLAGS -Werror -Woverloaded-virtual"
 fi
 
@@ -306,9 +309,8 @@ AC_SUBST(ICU_VER)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 
-# TODO: WHY ARE WE SUBST CXXFLAGS BUT NOT CFLAGS?  And why, when I uncomment out the cflags subst do we get compile errors?
 AC_SUBST(AM_CXXFLAGS)
-#AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CFLAGS)
 
 AC_SUBST(target_cpu)
 AC_SUBST(target_vendor)

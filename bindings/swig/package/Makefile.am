@@ -90,7 +90,7 @@ python_makebuild: $(PYTHONSWIG)
 	@echo "	maintainer_email = \"sword-devel@crosswire.org\"," >> python/setup.py
 	@echo "	url = \"http://www.crosswire.org/sword\"," >> python/setup.py
 	@echo "	py_modules = [\"Sword\"]," >> python/setup.py
-	@echo "	include_dirs=['..', '../..']," >> python/setup.py
+	@echo "	include_dirs=['..', '../..', '../../../../include']," >> python/setup.py
 	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
 	@echo "	libraries=[('sword')], " >> python/setup.py
 	@echo "	)], " >> python/setup.py

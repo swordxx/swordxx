@@ -409,7 +409,7 @@ void error(const char *msg)
 
 
 int untargz(int fd, const char *dest) {
-	gzFile	*f;
+	gzFile	f;
 
 	f = gzdopen(fd, "rb");
 	if (f == NULL) {

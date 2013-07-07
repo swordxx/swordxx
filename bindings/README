@@ -1,10 +1,16 @@
 Building Perl or Python (through swig)
 -------------
 
-To build the SWIG (Perl, Python) bindings the recommended path is to build the library
-with the CMake toolchain. This requires installing the CMake application appropriate to
-your operating system (most Linux distributions will have this as an existing package
-as CMake is integral to building many popular applications).
+Using autotools
+---------------
+See swig/packages/README
+
+Using CMake
+-----------
+Building the SWIG (Perl, Python) bindings with the CMake toolchain requires installing
+the CMake application appropriate to your operating system (most Linux distributions
+will have this as an existing package as CMake is integral to building many popular
+applications).
 
 Additionally you will need the development packages for the language you are targeting
 and the swig application itself. All of these should be directly available through your
