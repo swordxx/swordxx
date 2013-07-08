@@ -48,14 +48,16 @@ char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *key, const SWModule
 		SWBuf orig = text;
 		const unsigned char* from = (unsigned char*)orig.c_str();
 		for (text = ""; *from; from++) {
-			if (((*from == 0xFC) && (*(from + 1) >= 0xE5 && *(from + 1) <= 0x63)) || ((*from == 0xFE) && (*(from + 1) >= 0x70 && *(from + 1) <= 0x7F)) || ((*from == 0x06) && (*(from + 1) >= 0x4B && *(from + 1) <= 0x55))){
+			if ((*from == 0xD9) && (*(from + 1) >= 0x8B && *(from + 1) <= 0x95)) {
 				from++;
 			}
-			else {
-     			        text += *from;
-                        }
+			else if ((*from == 0xEF) &&
+				 (((*(from + 1) == 0xB1) && (*(from + 2) >= 0x9E && *(from + 2) <= 0xA3)) ||
+				  ((*(from + 1) == 0xB9) && (*(from + 2) >= 0x4B && *(from + 2) <= 0x55)))) {
+				from += 2;
+			}
 		}
-     	}
+	}
 	return 0;
 }
 
