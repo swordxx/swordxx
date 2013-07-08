@@ -4,7 +4,7 @@
  *
  * $Id$
  *
- * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -38,13 +38,13 @@ using std::cout;
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
 	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.5\n");
-	fprintf (stderr, "Copyright 1999-2009 by the CrossWire Bible Society\n");
+	fprintf (stderr, "Copyright 1999-2013 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
-	fprintf (stderr, "usage: \n  ");
- 	fprintf (stderr, "diatheke <-b module_name> [-s search_type] [-r search_range]\n");
-	fprintf (stderr, "[-o option_filters] [-m maximum_verses] [-f output_format]\n");
-	fprintf (stderr, "[-e output_encoding] [-t script] [-v variant#(-1=all|0|1)]\n");
-	fprintf (stderr, "[-l locale] <-k query_key>\n");
+	fprintf (stderr, "\n");
+	fprintf (stderr, "usage:  diatheke <-b module_name> [-s search_type] [-r search_range]\n");
+	fprintf (stderr, "    [-o option_filters] [-m maximum_verses] [-f output_format]\n");
+	fprintf (stderr, "    [-e output_encoding] [-v variant#(-1=all|0|1)]\n");
+	fprintf (stderr, "    [-l locale] <-k query_key>\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", and \"localelist\".");
@@ -54,15 +54,18 @@ void printsyntax() {
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents), p (Arabic Vowels)\n");
 	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping),\n");
-	fprintf (stderr, "  b (Bi-Directional Reordering), x (Red Words of Christ)\n");
+	fprintf (stderr, "  b (Bi-Directional Reordering), w (Red Words of Christ),\n");
+	fprintf (stderr, "  g (Glosses/Ruby), e (Word Enumerations),\n");
+	fprintf (stderr, "  x (Encoded Transliterations), t (Algorithmic Transliterations via ICU)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
-	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, HTMLHREF, XHTML, OSIS, CGI, and plain (def)\n");
+	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, HTMLHREF, XHTML, OSIS,\n");
+	fprintf (stderr, "  CGI, and plain (def)\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
-	fprintf (stderr, "  arguments are added to the key.\n\n");
-
+	fprintf (stderr, "  arguments are added to the key.\n");
+	fprintf (stderr, "\n");
 	fprintf (stderr, "Example usage:\n");
 	fprintf (stderr, "  diatheke -b KJV -o fmnx -k Jn 3:16\n");
 	fprintf (stderr, "  diatheke -b WHNU -t Latin -o mn -k Mt 24\n");
@@ -74,9 +77,10 @@ int main(int argc, char **argv)
 	int maxverses = -1;
 	unsigned char outputformat = FMT_PLAIN, searchtype = ST_NONE, outputencoding = ENC_UTF8;
 	unsigned long optionfilters = OP_NONE;
- 	char *text = 0, *locale = 0, *ref = 0, *script = 0, *range = 0;
+ 	char *text = 0, *locale = 0, *ref = 0, *range = 0;
+	char script[] = "Latin"; // for the moment, only this target script is supported
 	signed short variants = 0;
-	
+
 	char runquery = 0; // used to check that we have enough arguments to perform a legal query
 	// (a querytype & text = 1 and a ref = 2)
 	
@@ -147,10 +151,18 @@ int main(int argc, char **argv)
 					optionfilters |= OP_ARSHAPE;
 				if (strchr(argv[i+1], 'b'))
 					optionfilters |= OP_BIDI;
-				if (strchr(argv[i+1], 'x'))
-					optionfilters |= OP_RED;
+				if (strchr(argv[i+1], 'w'))
+					optionfilters |= OP_REDLETTERWORDS;
 				if (strchr(argv[i+1], 'p'))
 					optionfilters |= OP_ARABICPOINTS;
+				if (strchr(argv[i+1], 'g'))
+					optionfilters |= OP_GLOSSES;
+				if (strchr(argv[i+1], 'x'))
+					optionfilters |= OP_XLIT;
+				if (strchr(argv[i+1], 'e'))
+					optionfilters |= OP_ENUM;
+				if (strchr(argv[i+1], 't'))
+					optionfilters |= OP_TRANSLITERATOR;
 				i++;
 			}
 		}
@@ -236,6 +248,7 @@ int main(int argc, char **argv)
 				i++;
 			}
 		}
+		/*
 		else if (!::stricmp("-t", argv[i])) {
 			if (i+1 <= argc) {
 				script = argv[i+1];
@@ -243,6 +256,7 @@ int main(int argc, char **argv)
 				i++;
 			}
 		}
+		*/
 	}
 	
 	

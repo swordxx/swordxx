@@ -40,23 +40,27 @@
 
 #define OP_NONE 0
 #define OP_STRONGS 1
-#define OP_FOOTNOTES 2
-#define OP_HEADINGS 4
-#define OP_MORPH 8
-#define OP_CANTILLATION 16
-#define OP_HEBREWPOINTS 32
-#define OP_GREEKACCENTS 64
-#define OP_TRANSLITERATOR 128
-#define OP_LEMMAS 256
-#define OP_SCRIPREF 512
-#define OP_ARSHAPE 1024
-#define OP_BIDI 2048
-#define OP_VARIANTS 4096
-#define OP_RED 8192
-#define OP_ARABICPOINTS 16384
+#define OP_FOOTNOTES (1<<1)
+#define OP_HEADINGS (1<<2)
+#define OP_MORPH (1<<3)
+#define OP_CANTILLATION (1<<4)
+#define OP_HEBREWPOINTS (1<<5)
+#define OP_GREEKACCENTS (1<<6)
+#define OP_TRANSLITERATOR (1<<7)
+#define OP_LEMMAS (1<<8)
+#define OP_SCRIPREF (1<<9)
+#define OP_ARSHAPE (1<<10)
+#define OP_BIDI (1<<11)
+#define OP_VARIANTS (1<<12)
+#define OP_REDLETTERWORDS (1<<13)
+#define OP_ARABICPOINTS (1<<14)
+#define OP_GLOSSES (1<<15)
+#define OP_XLIT (1<<16)
+#define OP_ENUM (1<<17)
+
 #define ST_NONE 0
-#define ST_REGEX 1 //0
-#define ST_PHRASE 2  // -1
+#define ST_REGEX 1     //  0
+#define ST_PHRASE 2    // -1
 #define ST_MULTIWORD 3 // -2
 
 using namespace std;
