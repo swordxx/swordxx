@@ -27,7 +27,7 @@
 
 SWORD_NAMESPACE_START
 
-const char oName[] = "Transliterated forms";
+const char oName[] = "Transliterated Forms";
 const char oTip[] = "Toggles transliterated forms On and Off if they exist";
 
 const SWBuf choices[3] = {"Off", "On", ""};
