@@ -7,7 +7,7 @@ dnl		Check wheter to use static linking
 dnl		first parameter is the required version
 dnl		second is whether to use static sword library
 dnl ----------------------------------------------------------------------
-AC_DEFUN(SW_CHECK_SWORD,
+AC_DEFUN([SW_CHECK_SWORD],
 [
 dnl AC_MSG_CHECKING([for a Sword installation])
 

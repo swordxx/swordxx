@@ -1,4 +1,5 @@
-INCLUDES = $(SWORD_CFLAGS)
+AM_CPPFLAGS = $(SWORD_CFLAGS)
+ACLOCAL_AMFLAGS=$(ACLOCAL_AMFLAGS) -I m4
 lib_LTLIBRARIES = libsword_csharpsword.la
 libsword_csharpsword_la_LIBADD = $(SWORD_LIBS)
 libsword_csharpsword_la_SOURCES = csharp/Sword.cxx
@@ -42,7 +43,7 @@ perl_makebuild: $(PERLSWIG)
 	@echo "		'VERSION'	=> '$(VERSION)'," >> perl/Makefile.PL
 	@echo "		'INC'		=> '$(SWORD_CFLAGS) -I..'," >> perl/Makefile.PL
 	@echo "		'DEFINE'	=> '-DSWIG'," >> perl/Makefile.PL
-	@echo "		'LIBS'		=> '$(LIB_SWORD) -lz'," >> perl/Makefile.PL
+	@echo "		'LIBS'		=> '$(LIB_SWORD) -lz -lsword -lstdc++'," >> perl/Makefile.PL
 	@echo "		'PREREQ_PM'	=> {}, # e.g., Module::Name => 1.1" >> perl/Makefile.PL
 	@echo "			($$] >= 5.005 ?		## Add these new keywords supported since 5.005" >> perl/Makefile.PL
 	@echo "			(ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module" >> perl/Makefile.PL

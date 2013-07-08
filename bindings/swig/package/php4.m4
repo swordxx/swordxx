@@ -2,7 +2,7 @@
 # Look for Php4
 #-------------------------------------------------------------------------
 
-AC_DEFUN(SW_FIND_PHP4,
+AC_DEFUN([SW_FIND_PHP4],
 [
 
 PHP4BIN=

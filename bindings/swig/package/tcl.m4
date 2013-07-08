@@ -2,7 +2,7 @@
 #	Try to locate the Tcl package
 #--------------------------------------------------------------------
 
-AC_DEFUN(SW_FIND_TCL,
+AC_DEFUN([SW_FIND_TCL],
 [
 
 

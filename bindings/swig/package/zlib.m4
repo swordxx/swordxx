@@ -1,7 +1,7 @@
 ##   -*- autoconf -*-
 
 
-AC_DEFUN(AC_FIND_ZLIB,
+AC_DEFUN([AC_FIND_ZLIB],
 [
 AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 AC_MSG_CHECKING([for libz])
@@ -34,7 +34,7 @@ else
 fi
 ])
 
-AC_DEFUN(KDE_CHECK_EXTRA_LIBS,
+AC_DEFUN([KDE_CHECK_EXTRA_LIBS],
 [
 AC_MSG_CHECKING(for extra includes)
 AC_ARG_WITH(extra-includes, [  --with-extra-includes=DIR
@@ -93,7 +93,7 @@ dnl ------------------------------------------------------------------------
 dnl Find a file (or one of more files in a list of dirs)
 dnl ------------------------------------------------------------------------
 dnl
-AC_DEFUN(AC_FIND_FILE,
+AC_DEFUN([AC_FIND_FILE],
 [
 $3=NO
 for i in $2;

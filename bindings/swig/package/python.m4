@@ -2,7 +2,7 @@
 # Look for Python
 #----------------------------------------------------------------
 
-AC_DEFUN(SW_FIND_PYTHON,
+AC_DEFUN([SW_FIND_PYTHON],
 [
 
 PYINCLUDE=

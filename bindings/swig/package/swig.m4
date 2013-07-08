@@ -2,7 +2,7 @@
 # Look for SWIG
 #----------------------------------------------------------------
 
-AC_DEFUN(SW_PROG_SWIG,
+AC_DEFUN([SW_PROG_SWIG],
 [
 
 AC_ARG_WITH(swigbin,[  --with-swigbin=path        Set location of swig executable],[ SWIGBIN="$withval"], [SWIGBIN=])

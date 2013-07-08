@@ -2,7 +2,7 @@
 # Look for Perl5
 #----------------------------------------------------------------
 
-AC_DEFUN(SW_FIND_PERL,
+AC_DEFUN([SW_FIND_PERL],
 [
 
 

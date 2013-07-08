@@ -7,10 +7,12 @@ SWIG 1.3 (see http://www.swig.org)
 one of perl, python, tcl, php
 Sword 1.5.8 or newer
 
-First run ./autogen.sh to generate this directory
+First run
+./autogen.sh
+./configure
+
 Then, e.g.,:
 
-./configure
 make perlswig
 make perl_make
 cd perl
