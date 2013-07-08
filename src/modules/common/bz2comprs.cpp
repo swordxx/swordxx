@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <bzcomprs.h>
+#include <bz2comprs.h>
 #include <zlib.h>
 
 SWORD_NAMESPACE_START

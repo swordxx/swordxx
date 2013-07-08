@@ -91,6 +91,8 @@
 
 #ifndef EXCLUDEZLIB
 #include "zipcomprs.h"
+#include "bz2comprs.h"
+#include "xzcomprs.h"
 #endif
 
 
@@ -930,6 +932,12 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 #ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
+		else
+		if (!stricmp(misc1.c_str(), "BZIP2_UNSUPPORTED"))
+			compress = new Bzip2Compress();
+		else
+		if (!stricmp(misc1.c_str(), "XZ_UNSUPPORTED"))
+			compress = new XzCompress();
 		else
 #endif
 		if (!stricmp(misc1.c_str(), "LZSS"))

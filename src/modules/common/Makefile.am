@@ -6,7 +6,9 @@ libsword_la_SOURCES += $(commondir)/swcomprs.cpp
 libsword_la_SOURCES += $(commondir)/lzsscomprs.cpp
 
 if HAVE_LIBZ
-SWZLIB = $(commondir)/zipcomprs.cpp
+SWZLIB =  $(commondir)/zipcomprs.cpp
+SWZLIB += $(commondir)/bz2comprs.cpp
+SWZLIB += $(commondir)/xzcomprs.cpp
 else
 SWZLIB =
 endif

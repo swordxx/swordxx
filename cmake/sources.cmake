@@ -185,6 +185,8 @@ SET(sword_base_SOURCES
 # Sources relying on ZLib
 SET(sword_zlib_used_SOURCES
 	src/modules/common/zipcomprs.cpp
+	src/modules/common/bz2comprs.cpp
+	src/modules/common/xzcomprs.cpp
 	src/utilfuns/zlib/untgz.c
 )
 SET(sword_zlib_nofound_SOURCES
