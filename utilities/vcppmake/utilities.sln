@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsword", "..\..\lib\vcppmake\vc8\libsword.vcxproj", "{97449E5E-F880-4D22-933A-0D2FC32034D4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsword", "..\..\lib\vcppmake\libsword.vcxproj", "{97449E5E-F880-4D22-933A-0D2FC32034D4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osis2mod", "osis2mod.vcxproj", "{3D885A23-DA8F-43C1-B241-7F44CA7AAF75}"
 	ProjectSection(ProjectDependencies) = postProject

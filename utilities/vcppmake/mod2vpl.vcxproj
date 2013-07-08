@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug with ICU|Win32">
@@ -71,7 +71,7 @@
     <Link>
       <AdditionalDependencies>libsword.lib;icuuc.lib;icuin.lib;icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Debug\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/vc8/ICUDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/ICUDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>
@@ -95,7 +95,7 @@
     <Link>
       <AdditionalDependencies>libsword.lib;icuuc.lib;icuin.lib;icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Release\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/vc8/ICURelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/ICURelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -106,7 +106,7 @@
     <ClCompile Include="..\mod2vpl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\vcppmake\vc8\libsword.vcxproj">
+    <ProjectReference Include="..\..\lib\vcppmake\libsword.vcxproj">
       <Project>{97449e5e-f880-4d22-933a-0d2fc32034d4}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

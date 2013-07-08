@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug with ICU|Win32">
@@ -123,7 +123,7 @@
       <AdditionalDependencies>icuin.lib;icuuc.lib;icudt.lib;libsword.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/diatheke.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/vc8/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/diatheke.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -168,7 +168,7 @@
       <AdditionalDependencies>icuin.lib;icuuc.lib;icudt.lib;libsword.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/diatheke.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/vc8/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\Release/diatheke.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -210,7 +210,7 @@
       <AdditionalDependencies>icuin.lib;icuuc.lib;icudt.lib;libsword.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\ICUDebug/diatheke.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/vc8/ICUDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/ICUDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\ICUDebug/diatheke.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -254,7 +254,7 @@
       <AdditionalDependencies>icuin.lib;icuuc.lib;icudt.lib;libsword.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\ICURelease/diatheke.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/vc8/ICURelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/ICURelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\ICURelease/diatheke.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
