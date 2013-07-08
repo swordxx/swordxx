@@ -43,6 +43,7 @@
 #include <canon_catholic.h>	// Catholic v11n system (10 chapter Esther)
 #include <canon_catholic2.h>	// Catholic2 v11n system (16 chapter Esther)
 #include <canon_rahlfs.h>	// Rahlfs LXX v11n system
+#include <canon_lxx_nt.h>	// Rahlfs LXX + NTv11n system
 
 using std::vector;
 using std::map;
@@ -68,6 +69,7 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 		systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
 		systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
 		systemVersificationMgr->registerVersificationSystem("Rahlfs", otbooks_rahlfs, ntbooks_null, vm_rahlfs);
+		systemVersificationMgr->registerVersificationSystem("LXX_NT", otbooks_rahlfs, ntbooks, vm_lxx_nt);
 	}
 	return systemVersificationMgr;
 }
