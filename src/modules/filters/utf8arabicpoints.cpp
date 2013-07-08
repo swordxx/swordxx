@@ -40,7 +40,8 @@ UTF8ArabicPoints::UTF8ArabicPoints() : SWOptionFilter(oName, oTip, &oValues) {
 
 UTF8ArabicPoints::~UTF8ArabicPoints(){};
 
-char* UTF8ArabicPoints::next_mark(const char* from, int* mark_size)
+namespace {
+char *nextMark(const char* from, int* mark_size)
 {
 	// Arabic vowel points currently targeted for elimination:
 	// Table entries excerpted from
@@ -112,6 +113,7 @@ char* UTF8ArabicPoints::next_mark(const char* from, int* mark_size)
 	}
 	return (char*)byte;
 }
+}
 
 
 char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *) {
@@ -122,18 +124,18 @@ char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *)
 		return 0;
 
 	// Eliminate Arabic vowel marks from the text.
-	// The recognized marks are determined by the "next_mark" function.
+	// The recognized marks are determined by the "nextMark" function.
 
-	// If next_mark were polymorphic (a virtual function or a function
+	// If nextMark were polymorphic (a virtual function or a function
 	// pointer), this function could be generically used in any filter that
 	// only removed (vs. replaced) areas of text based on the arbitrary
-	// match criteria encapsulated in the specific next_mark
+	// match criteria encapsulated in the specific nextMark
 	// implementation.
 	int mark_size = 0;
-	char* mark_pos = next_mark(text.c_str(), &mark_size);
+	char* mark_pos = nextMark(text.c_str(), &mark_size);
 
 	// Here and at the end of the loop,
-	// test BOTH mark_pos AND *mark_pos for safety and to give next_mark
+	// test BOTH mark_pos AND *mark_pos for safety and to give nextMark
 	// the option of returning either NULL or a pointer to the null
 	// terminator when done.
 	if (!mark_pos || !*mark_pos)
@@ -168,7 +170,7 @@ char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *)
 		// Ensure the mark never gets copied.
 		start_of_input = mark_pos + mark_size;
 		// Find the next mark.
-		mark_pos = next_mark(start_of_input, &mark_size);
+		mark_pos = nextMark(start_of_input, &mark_size);
 
 	} while (mark_pos && *mark_pos); // No more marks.
 
