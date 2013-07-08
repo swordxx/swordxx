@@ -35,6 +35,8 @@ public:
 	UTF8ArabicPoints();
 	virtual ~UTF8ArabicPoints();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+private:
+	static char* UTF8ArabicPoints::next_mark(const char* from, int* mark_size);
 };
 
 SWORD_NAMESPACE_END
