@@ -2,9 +2,9 @@
  *
  *  canon_lxx.h -	Versification data for the LXX system
  *
- * $Id: canon_lxx.h 2833 2013-06-29 06:40:28Z chrislit $
+ * $Id$
  *
- * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
