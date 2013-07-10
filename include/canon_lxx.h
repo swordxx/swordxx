@@ -26,10 +26,19 @@ SWORD_NAMESPACE_START
 
 
 // Versification system: LXX
-// Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr 1Esd Ezra Esth Jdt Tob 1Macc 2Macc 3Macc 4Macc Ps PrMan Prov Eccl Song Job Wis Sir PssSol Hos Amos Mic Joel Obad Jonah Nah Hab Zeph Hag Zech Mal Isa Jer Bar Lam EpJer Ezek Sus SusTh Dan DanTh Bel Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev
+// Book order: TBD
 
-// This is a compromise versification, intended to allow encoding of Bibles using a number of slightly varying LXX-based versification systems. In particular, it was produced in consultation with Rahlfs' & Swete's editions of the LXX, the NETS and OSB. This is not intended for critical editions that separately encode variant traditions of Joshua, Judges, Tobit, etc. that are already served by the Rahlfs versification system (q.v.).
-// In addition to the LXX OT, the GNT has been included in this system to facilitate production of modern Bibles such as the OSB, which are translated from the LXX but include a NT translation.
+// This is a compromise versification system, intended to allow encoding of Bibles using a number of slightly varying LXX-based versification systems. In particular, it was produced in consultation with Rahlfs' & Swete's editions of the LXX, the NETS, SAAS (OSB OT), & Brenton translations, and R. H. Charles' & James H. Charlesworth's anthologies of Apocrypha & Pseudepigrapha. All of these Bibles & texts should be accomodated by this versification definition without requiring that any extra verses be appended; as a consequence, no Bible will include every verse of this system. This is not intended for critical editions that separately encode variant traditions of Joshua, Judges, Tobit, etc. that are already served by the Rahlfs versification system (q.v.).
+// In addition to the LXX OT, the GNT has been included in this system to facilitate production of modern Bibles such as the OSB, which are translated from the LXX but include the NT as well.
+
+// Todo:
+// X Rahlfs
+// X Swete
+//   NETS
+//   SAAS
+// X Brenton
+//   Charles
+//   Charlseworth
 
 /******************************************************************************
  * [on]tbooks_lxx - initialize static instance for all canonical
