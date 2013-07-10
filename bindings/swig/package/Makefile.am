@@ -84,16 +84,29 @@ python_makebuild: $(PYTHONSWIG)
 	echo "writing python/setup.py"
 	@echo "#! /usr/bin/python" > python/setup.py
 	@echo "" >> python/setup.py
-	@echo "from distutils.core import setup, Extension" >> python/setup.py
+	@echo "from distutils.core import setup" >> python/setup.py
+	@echo "from distutils.extension import Extension" >> python/setup.py
+	@echo "import commands" >> python/setup.py
+	@echo "" >> python/setup.py
+	@echo "def pkgconfig(*packages, **kw):" >> python/setup.py
+	@echo "	flag_map = {'-I': 'include_dirs', '-L': 'library_dirs', '-l': 'libraries'}" >> python/setup.py
+	@echo "	for token in commands.getoutput(\"pkg-config --libs --cflags %s\" % ' '.join(packages)).split():" >> python/setup.py
+	@echo "		if flag_map.has_key(token[:2]):" >> python/setup.py
+	@echo "			kw.setdefault(flag_map.get(token[:2]), []).append(token[2:])" >> python/setup.py
+	@echo "		else: # throw others to extra_link_args" >> python/setup.py
+	@echo "			kw.setdefault('extra_link_args', []).append(token)" >> python/setup.py
+	@echo "	for k, v in kw.iteritems(): # remove duplicated" >> python/setup.py
+	@echo "		kw[k] = list(set(v))" >> python/setup.py
+	@echo "	return kw" >> python/setup.py
+	@echo "" >> python/setup.py
 	@echo "setup (name = \"sword\"," >> python/setup.py
 	@echo "	version = \"$(VERSION)\"," >> python/setup.py
 	@echo "	maintainer = \"Sword Developers\"," >> python/setup.py
 	@echo "	maintainer_email = \"sword-devel@crosswire.org\"," >> python/setup.py
 	@echo "	url = \"http://www.crosswire.org/sword\"," >> python/setup.py
 	@echo "	py_modules = [\"Sword\"]," >> python/setup.py
-	@echo "	include_dirs=['..', '../..', '../../../../include']," >> python/setup.py
-	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
-	@echo "	libraries=[('sword')], " >> python/setup.py
+	@echo "	include_dirs=['..', '../..']," >> python/setup.py
+	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"], **pkgconfig('sword')" >> python/setup.py
 	@echo "	)], " >> python/setup.py
 	@echo ")" >> python/setup.py
 
