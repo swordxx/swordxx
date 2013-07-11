@@ -26,19 +26,32 @@ SWORD_NAMESPACE_START
 
 
 // Versification system: LXX
-// Book order: TBD
+// Book order: TBD, probably by the OSB ordering, approximately
 
-// This is a compromise versification system, intended to allow encoding of Bibles using a number of slightly varying LXX-based versification systems. In particular, it was produced in consultation with Rahlfs' & Swete's editions of the LXX, the NETS, SAAS (OSB OT), & Brenton translations, and R. H. Charles' & James H. Charlesworth's anthologies of Apocrypha & Pseudepigrapha. All of these Bibles & texts should be accomodated by this versification definition without requiring that any extra verses be appended; as a consequence, no Bible will include every verse of this system. This is not intended for critical editions that separately encode variant traditions of Joshua, Judges, Tobit, etc. that are already served by the Rahlfs versification system (q.v.).
-// In addition to the LXX OT, the GNT has been included in this system to facilitate production of modern Bibles such as the OSB, which are translated from the LXX but include the NT as well.
+// This is a compromise versification system, intended to allow encoding of Bibles using a number of slightly varying LXX-based versification systems. In particular, it was produced in consultation with OTs:
+// Rahlfs' & Swete's editions of the LXX
+// the NETS, SAAS (OSB OT), & Brenton translations
+// R. H. Charles' & James H. Charlesworth's anthologies of Apocrypha & Pseudepigrapha
+//
+// In addition to the LXX OT, the GNT has been included in this system to facilitate production of modern Bibles such as the OSB, which are translated from the LXX but include the NT as well. The following NTs were consulted in producing this versification system:
+// Antoniades' Patriarchal GNT and its translation, the EOB
+// the NRSV & NKJV translations
+//
+// All of these Bibles & texts should be accomodated by this versification definition without requiring that any extra verses be appended; as a consequence, no Bible will include every verse of this system. This is not intended for critical editions that separately encode variant traditions of Joshua, Judges, Tobit, etc. that are already served by the Rahlfs versification system (q.v.).
 
 // Todo:
 // X Rahlfs
 // X Swete
-//   NETS
-//   SAAS
+//   NETS (http://ccat.sas.upenn.edu/nets/edition/)
+//   SAAS Deut-
 // X Brenton
-//   Charles
-//   Charlseworth
+// X Charles
+// X Charlseworth
+//   Tischendorf (http://www.apostoliki-diakonia.gr/bible/bible.asp?contents=old_testament/contents.asp&main=OldTes)
+//   EOB
+//   NRSV NT (OT?)
+//   NKJV NT
+// X Antoniades (Partriarchal) GNT (1904/1912)
 
 /******************************************************************************
  * [on]tbooks_lxx - initialize static instance for all canonical
@@ -231,11 +244,11 @@ int vm_lxx[] = {
   // Luke
   80, 52, 38, 44, 39, 49, 50, 56, 62, 42, 54, 59, 35, 35, 32, 31, 37, 43, 48, 47, 38, 71, 56, 53,
   // John
-  51, 25, 36, 54, 47, 71, 53, 59, 41, 42, 57, 50, 38, 31, 27, 33, 26, 40, 42, 31, 25,
+  52, 25, 36, 54, 47, 71, 53, 59, 41, 42, 57, 50, 38, 31, 27, 33, 26, 40, 42, 31, 25,
   // Acts
   26, 47, 26, 37, 42, 15, 60, 40, 43, 48, 30, 25, 52, 28, 41, 40, 34, 28, 41, 38, 40, 30, 35, 27, 27, 32, 44, 31,
   // Romans
-  32, 29, 31, 25, 21, 23, 25, 39, 33, 21, 36, 21, 14, 23, 33, 27,
+  32, 29, 31, 25, 21, 23, 25, 39, 33, 21, 36, 21, 14, 26, 33, 27,
   // I Corinthians
   31, 16, 23, 21, 13, 20, 40, 13, 27, 33, 34, 31, 13, 40, 58, 24,
   // II Corinthians
@@ -277,7 +290,7 @@ int vm_lxx[] = {
   // Jude
   25,
   // Revelation of John
-  20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 18, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21
+  20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 18, 18, 20, 9, 21, 18, 24, 21, 15, 27, 21
 };
 
 
