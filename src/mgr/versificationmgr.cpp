@@ -43,7 +43,9 @@
 #include <canon_catholic.h>	// Catholic v11n system (10 chapter Esther)
 #include <canon_catholic2.h>	// Catholic2 v11n system (16 chapter Esther)
 #include <canon_rahlfs.h>	// Rahlfs LXX v11n system
-#include <canon_lxx_nt.h>	// Rahlfs LXX + NTv11n system
+//#include <canon_lxx_nt.h>	// Rahlfs LXX + NTv11n system
+#include <canon_lxx.h>		// General LXX v11n system (includes GNT, as used in Orthodox Bibles)
+#include <canon_orthodox.h>	// Orthodox v11n system (includes GNT, as used in Orthodox Bibles)
 
 using std::vector;
 using std::map;
@@ -69,7 +71,9 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 		systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
 		systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
 		systemVersificationMgr->registerVersificationSystem("Rahlfs", otbooks_rahlfs, ntbooks_null, vm_rahlfs);
-		systemVersificationMgr->registerVersificationSystem("LXX_NT", otbooks_rahlfs, ntbooks, vm_lxx_nt);
+		//systemVersificationMgr->registerVersificationSystem("LXX_NT", otbooks_rahlfs, ntbooks, vm_lxx_nt);
+		systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
+		systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
 	}
 	return systemVersificationMgr;
 }
