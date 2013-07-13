@@ -404,7 +404,7 @@ void help(int exitval)
 void error(const char *msg)
 {
     fprintf(stderr, "%s: %s\n", prog, msg);
-    exit(1);
+//    exit(1); // don't exit on error
 }
 
 
