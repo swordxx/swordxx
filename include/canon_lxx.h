@@ -26,7 +26,7 @@ SWORD_NAMESPACE_START
 
 
 // Versification system: LXX
-// Book order: TBD, probably by the OSB ordering, approximately
+// Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr 1Esd Ezra Neh Esth Jdt Tob 1Macc 2Macc 3Macc 4Macc Ps PrMan Prov Eccl Song Job Wis Sir PssSol Hos Amos Mic Joel Obad Jonah Nah Hab Zeph Hag Zech Mal Isa Jer Bar Lam EpJer Ezek PrAzar Sus Dan Bel 1En Odes Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev
 
 // This is a compromise versification system, intended to allow encoding of Bibles using a number of slightly varying LXX-based versification systems. In particular, it was produced in consultation with OTs:
 // Rahlfs', Swete's, & Tischendorf's editions of the LXX
@@ -62,7 +62,7 @@ struct sbook otbooks_lxx[] = {
   {"I Esdras", "1Esd", "1Esd", 9},
   {"Ezra", "Ezra", "Ezra", 10},
   {"Nehemiah", "Neh", "Neh", 13},
-  {"Esther", "Esth", "Esth", 10},
+  {"Esther", "Esth", "Esth", 16},
   {"Judith", "Jdt", "Jdt", 16},
   {"Tobit", "Tob", "Tob", 14},
   {"I Maccabees", "1Macc", "1Macc", 16},
@@ -180,7 +180,7 @@ int vm_lxx[] = {
   36, 47, 31,
   // Esther (chapters 11-16 represent the additions, whether identified as chapters 11-16 or additions A-F)
   22, 23, 19, 29, 24, 22, 59, 17, 32, 13,
-  18, 7, 30, 19, 24, 24
+  18, 7, 30, 19, 24, 24,
   // Judith
   16, 28, 15, 17, 28, 21, 32, 36, 14, 23,
   23, 20, 31, 19, 15, 30,
@@ -254,7 +254,7 @@ int vm_lxx[] = {
   // Micah
   16, 13, 12, 14, 15, 16, 20,
   // Joel
-  20, 32, 26 21,
+  20, 32, 26, 21,
   // Obadiah
   21,
   // Jonah
@@ -271,7 +271,7 @@ int vm_lxx[] = {
   21, 17, 11, 14, 11, 15, 14, 23, 17, 12,
   17, 14, 9, 21,
   // Malachi
-  14, 17, 24, 6
+  14, 17, 24, 6,
   // Isaiah
   31, 22, 26, 6, 30, 13, 25, 23, 21, 34,
   16, 6, 22, 32, 9, 14, 14, 7, 25, 6,
@@ -319,7 +319,7 @@ int vm_lxx[] = {
   17, 37, 8, 17, 9, 14, 9, 17, 6, 8,
   10, 20, 11, 6, 10, 6, 4, 3, 77, 42,
   19, 5, 14, 11, 7, 8, 10, 16, 16, 13,
-  9, 11, 15, 13, 2, 19, 3, 15
+  9, 11, 15, 13, 2, 19, 3, 15,
   // Odes
   19, 43, 10, 20, 20, 19, 45, 88, 79, 88,
   55, 32, 79, 46,
