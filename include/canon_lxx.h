@@ -39,21 +39,6 @@ SWORD_NAMESPACE_START
 //
 // All of these Bibles & texts should be accomodated by this versification definition without requiring that any extra verses be appended; as a consequence, no Bible will include every verse of this system. This is not intended for critical editions that separately encode variant traditions of Joshua, Judges, Tobit, etc. that are already served by the Rahlfs versification system (q.v.).
 
-// Todo:
-// X Rahlfs
-// X Swete Primary
-// X Swete Secondary
-// X NETS Primary (http://ccat.sas.upenn.edu/nets/edition/)
-// X NETS Secondary (http://ccat.sas.upenn.edu/nets/edition/)
-// X SAAS
-// X Brenton
-// X Charles
-// X Charlseworth
-// X Tischendorf 
-// X EOB
-// X NRSV
-// X NKJV
-// X Antoniades (Partriarchal) GNT (1904/1912)
 
 /******************************************************************************
  * [on]tbooks_lxx - initialize static instance for all canonical
