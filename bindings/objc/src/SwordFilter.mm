@@ -16,7 +16,6 @@
 #import "teihtmlhref.h"
 #import "teixhtml.h"
 #import "teiplain.h"
-#import "plainhtml.h"
 
 @implementation SwordFilter {
     sword::SWFilter *swFilter;
@@ -141,12 +140,3 @@
 }
 @end
 
-@implementation SwordPlainHtmlFilter
-+ (SwordPlainHtmlFilter *)filter {
-    return [[[SwordPlainHtmlFilter alloc] init] autorelease];
-}
-
-- (id)init {
-    return [super initWithSWFilter:new sword::PLAINHTML()];
-}
-@end

@@ -59,7 +59,3 @@
 @interface SwordTeiPlainFilter : SwordFilter
 + (SwordTeiPlainFilter *)filter;
 @end
-
-@interface SwordPlainHtmlFilter : SwordFilter
-+ (SwordPlainHtmlFilter *)filter;
-@end

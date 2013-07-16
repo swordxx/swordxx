@@ -1,5 +1,10 @@
-Building ObjCSword wrapper framework howto
-==========================================
+Building ObjCSword wrapper framework howto (>= Mac OSX Lion (10.7)
+===================================================================
+Open Xcode Project (ObjCSword.xcodeproj) and build.
+
+
+Building ObjCSword wrapper framework howto (pre Mac OSX Lion (10.7)
+===================================================================
 
 Mac OS X target:
 The framework for Mac OS X relies on a manually, via makefile compiled SWORD library.

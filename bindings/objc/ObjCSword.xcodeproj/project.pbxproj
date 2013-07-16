@@ -44,7 +44,6 @@
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 		A917AF2616B1BE38006367FC /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A917AF2516B1BE38006367FC /* Tests-Info.plist */; };
-		A91C8B67175233F3008702B9 /* versificationmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91C8B66175233F3008702B9 /* versificationmgr.cpp */; };
 		A91C8B6817523609008702B9 /* versificationmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91C8B66175233F3008702B9 /* versificationmgr.cpp */; };
 		A929619C16B1BA240094E5BE /* SwordBibleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */; };
 		A929619D16B1BA240094E5BE /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A929619716B1BA240094E5BE /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -266,8 +265,6 @@
 		A954AC8713EEA0C10094E3FE /* osiswordjs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87813EE98B30094E3FE /* osiswordjs.cpp */; };
 		A954AC8813EEA0C10094E3FE /* osisxhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87913EE98B30094E3FE /* osisxhtml.cpp */; };
 		A954AC8913EEA0C10094E3FE /* papyriplain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87A13EE98B30094E3FE /* papyriplain.cpp */; };
-		A954AC8A13EEA0C10094E3FE /* plainfootnotes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87B13EE98B30094E3FE /* plainfootnotes.cpp */; };
-		A954AC8B13EEA0C10094E3FE /* plainhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87C13EE98B30094E3FE /* plainhtml.cpp */; };
 		A954AC8C13EEA0C10094E3FE /* rtfhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87D13EE98B30094E3FE /* rtfhtml.cpp */; };
 		A954AC8D13EEA0C10094E3FE /* swbasicfilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87E13EE98B30094E3FE /* swbasicfilter.cpp */; };
 		A954AC8E13EEA0C10094E3FE /* swoptfilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A87F13EE98B30094E3FE /* swoptfilter.cpp */; };
@@ -338,15 +335,6 @@
 		A954ACDC13EEA5340094E3FE /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F813EE98B30094E3FE /* zutil.c */; };
 		A954ACDD13EEA6780094E3FE /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
-		A96C2348176AF139008D714B /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C233E176AF139008D714B /* gzclose.c */; };
-		A96C234A176AF139008D714B /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2340176AF139008D714B /* gzlib.c */; };
-		A96C234B176AF139008D714B /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2341176AF139008D714B /* gzread.c */; };
-		A96C234C176AF139008D714B /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2342176AF139008D714B /* gzwrite.c */; };
-		A96C234D176AF139008D714B /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2343176AF139008D714B /* infback.c */; };
-		A96C2352176AF188008D714B /* remotetrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2351176AF188008D714B /* remotetrans.cpp */; };
-		A96C2356176AF19C008D714B /* osisenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2353176AF19C008D714B /* osisenum.cpp */; };
-		A96C2357176AF19C008D714B /* osisglosses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2354176AF19C008D714B /* osisglosses.cpp */; };
-		A96C2358176AF19C008D714B /* osisxlit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisxlit.cpp */; };
 		A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2351176AF188008D714B /* remotetrans.cpp */; };
 		A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2353176AF19C008D714B /* osisenum.cpp */; };
 		A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2354176AF19C008D714B /* osisglosses.cpp */; };
@@ -358,6 +346,9 @@
 		A96C2361176AFA3C008D714B /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2343176AF139008D714B /* infback.c */; };
 		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
+		A999FF3F17951CCE00E65919 /* bz2comprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3917951C8900E65919 /* bz2comprs.cpp */; };
+		A999FF4017951CCE00E65919 /* xzcomprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3A17951C8900E65919 /* xzcomprs.cpp */; };
+		A999FF4117951CCE00E65919 /* scsuutf8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3D17951CA000E65919 /* scsuutf8.cpp */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
@@ -410,7 +401,6 @@
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
 		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
-		A9E9C5EE16806A2B00ECEB39 /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
 		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 /* End PBXBuildFile section */
@@ -818,8 +808,6 @@
 		A954A87813EE98B30094E3FE /* osiswordjs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osiswordjs.cpp; sourceTree = "<group>"; };
 		A954A87913EE98B30094E3FE /* osisxhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisxhtml.cpp; sourceTree = "<group>"; };
 		A954A87A13EE98B30094E3FE /* papyriplain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = papyriplain.cpp; sourceTree = "<group>"; };
-		A954A87B13EE98B30094E3FE /* plainfootnotes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plainfootnotes.cpp; sourceTree = "<group>"; };
-		A954A87C13EE98B30094E3FE /* plainhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plainhtml.cpp; sourceTree = "<group>"; };
 		A954A87D13EE98B30094E3FE /* rtfhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rtfhtml.cpp; sourceTree = "<group>"; };
 		A954A87E13EE98B30094E3FE /* swbasicfilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swbasicfilter.cpp; sourceTree = "<group>"; };
 		A954A87F13EE98B30094E3FE /* swoptfilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swoptfilter.cpp; sourceTree = "<group>"; };
@@ -1158,6 +1146,9 @@
 		A975EDDB11C7925C007C1532 /* xml2gbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml2gbs.cpp; sourceTree = "<group>"; };
 		A975EED911C792B9007C1532 /* mod2osis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2osis; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9921A1911FD9CA8002DAA72 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A999FF3917951C8900E65919 /* bz2comprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bz2comprs.cpp; sourceTree = "<group>"; };
+		A999FF3A17951C8900E65919 /* xzcomprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xzcomprs.cpp; sourceTree = "<group>"; };
+		A999FF3D17951CA000E65919 /* scsuutf8.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scsuutf8.cpp; sourceTree = "<group>"; };
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
 		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1686,6 +1677,8 @@
 		A954A84313EE98B30094E3FE /* common */ = {
 			isa = PBXGroup;
 			children = (
+				A999FF3917951C8900E65919 /* bz2comprs.cpp */,
+				A999FF3A17951C8900E65919 /* xzcomprs.cpp */,
 				A954A84513EE98B30094E3FE /* entriesblk.cpp */,
 				A954A84613EE98B30094E3FE /* lzsscomprs.cpp */,
 				A954A84913EE98B30094E3FE /* rawstr.cpp */,
@@ -1705,6 +1698,7 @@
 		A954A85413EE98B30094E3FE /* filters */ = {
 			isa = PBXGroup;
 			children = (
+				A999FF3D17951CA000E65919 /* scsuutf8.cpp */,
 				A96C2353176AF19C008D714B /* osisenum.cpp */,
 				A96C2354176AF19C008D714B /* osisglosses.cpp */,
 				A96C2355176AF19C008D714B /* osisxlit.cpp */,
@@ -1744,8 +1738,6 @@
 				A954A87813EE98B30094E3FE /* osiswordjs.cpp */,
 				A954A87913EE98B30094E3FE /* osisxhtml.cpp */,
 				A954A87A13EE98B30094E3FE /* papyriplain.cpp */,
-				A954A87B13EE98B30094E3FE /* plainfootnotes.cpp */,
-				A954A87C13EE98B30094E3FE /* plainhtml.cpp */,
 				A954A87D13EE98B30094E3FE /* rtfhtml.cpp */,
 				A954A87E13EE98B30094E3FE /* swbasicfilter.cpp */,
 				A954A87F13EE98B30094E3FE /* swoptfilter.cpp */,
@@ -2722,7 +2714,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2848,21 +2840,10 @@
 				8C92CE39E231FF9CAAB5308B /* SwordUtil.m in Sources */,
 				8C92CE0B19FBB659FB8F8B71 /* FilterProviderFactory.mm in Sources */,
 				8C92CC7B68FDCDFFFB8B4A31 /* DefaultFilterProvider.mm in Sources */,
-				A9E9C5EE16806A2B00ECEB39 /* teixhtml.cpp in Sources */,
 				8C92C31DC92DF0671FCEB5B3 /* SwordFilter.mm in Sources */,
 				A929619C16B1BA240094E5BE /* SwordBibleTextEntry.m in Sources */,
 				A929619E16B1BA240094E5BE /* SwordKey.mm in Sources */,
 				A92961A016B1BA240094E5BE /* SwordListKey.mm in Sources */,
-				A91C8B67175233F3008702B9 /* versificationmgr.cpp in Sources */,
-				A96C2348176AF139008D714B /* gzclose.c in Sources */,
-				A96C234A176AF139008D714B /* gzlib.c in Sources */,
-				A96C234B176AF139008D714B /* gzread.c in Sources */,
-				A96C234C176AF139008D714B /* gzwrite.c in Sources */,
-				A96C234D176AF139008D714B /* infback.c in Sources */,
-				A96C2352176AF188008D714B /* remotetrans.cpp in Sources */,
-				A96C2356176AF19C008D714B /* osisenum.cpp in Sources */,
-				A96C2357176AF19C008D714B /* osisglosses.cpp in Sources */,
-				A96C2358176AF19C008D714B /* osisxlit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2870,6 +2851,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A999FF3F17951CCE00E65919 /* bz2comprs.cpp in Sources */,
+				A999FF4017951CCE00E65919 /* xzcomprs.cpp in Sources */,
+				A999FF4117951CCE00E65919 /* scsuutf8.cpp in Sources */,
 				A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */,
 				A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */,
 				A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */,
@@ -2971,8 +2955,6 @@
 				A954AC8713EEA0C10094E3FE /* osiswordjs.cpp in Sources */,
 				A954AC8813EEA0C10094E3FE /* osisxhtml.cpp in Sources */,
 				A954AC8913EEA0C10094E3FE /* papyriplain.cpp in Sources */,
-				A954AC8A13EEA0C10094E3FE /* plainfootnotes.cpp in Sources */,
-				A954AC8B13EEA0C10094E3FE /* plainhtml.cpp in Sources */,
 				A954AC8C13EEA0C10094E3FE /* rtfhtml.cpp in Sources */,
 				A954AC8D13EEA0C10094E3FE /* swbasicfilter.cpp in Sources */,
 				A954AC8E13EEA0C10094E3FE /* swoptfilter.cpp in Sources */,
@@ -3482,6 +3464,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -3512,7 +3495,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
@@ -3524,6 +3507,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -3553,7 +3537,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
@@ -3570,7 +3554,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -3582,7 +3566,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -3591,6 +3575,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				EXECUTABLE_PREFIX = lib;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3619,7 +3604,7 @@
 					"-D_ICU_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
 				VALID_ARCHS = x86_64;
 			};
@@ -3630,6 +3615,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
@@ -3655,7 +3641,7 @@
 					"-D_ICU_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
 				VALID_ARCHS = x86_64;
 			};
@@ -3688,7 +3674,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -3719,7 +3705,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -3799,6 +3785,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3819,7 +3806,7 @@
 					SenTestingKit,
 				);
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 			};
@@ -3829,6 +3816,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
@@ -3847,7 +3835,7 @@
 					SenTestingKit,
 				);
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
@@ -3859,6 +3847,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3876,7 +3865,7 @@
 				INFOPLIST_FILE = "test/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 			};
@@ -3887,6 +3876,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
@@ -3899,7 +3889,7 @@
 				INFOPLIST_FILE = "test/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 			};
@@ -3932,7 +3922,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2gbs;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -3963,7 +3953,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2gbs;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -3996,7 +3986,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2ld;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4027,7 +4017,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2ld;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4060,7 +4050,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2vs;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4091,7 +4081,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = imp2vs;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4124,7 +4114,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = installmgr;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4155,7 +4145,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = installmgr;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4188,7 +4178,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2imp;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4219,7 +4209,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2imp;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4252,7 +4242,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2vpl;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4283,7 +4273,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2vpl;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4316,7 +4306,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2zmod;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -4347,7 +4337,7 @@
 					"-licucore",
 				);
 				PRODUCT_NAME = mod2zmod;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 				ZERO_LINK = NO;
 			};
@@ -4839,6 +4829,7 @@
 		A9D271FC14D7193300DA8926 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -4846,6 +4837,7 @@
 		A9D271FD14D7193300DA8926 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

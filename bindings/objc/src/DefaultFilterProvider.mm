@@ -41,8 +41,4 @@
     return [SwordTeiPlainFilter filter];
 }
 
-- (SwordFilter *)newHtmlPlainFilter {
-    return [SwordPlainHtmlFilter filter];
-}
-
 @end
