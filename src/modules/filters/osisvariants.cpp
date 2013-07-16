@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <osisvariants.h>
 #include <utilstr.h>
+#include <utilxml.h>
+#include <iostream>
 
 SWORD_NAMESPACE_START
 
@@ -36,7 +38,7 @@ const char OSISVariants::optTip[] = "Switch between Textual Variants modes";
 
 
 OSISVariants::OSISVariants() {
-	option = false;
+	option = 0;
 	options.push_back(primary);
 	options.push_back(secondary);
 	options.push_back(all);
@@ -55,7 +57,7 @@ void OSISVariants::setOptionValue(const char *ival)
 
 const char *OSISVariants::getOptionValue()
 {
-        if (option == 0) {
+    if (option == 0) {
 	        return primary;
 	}
 	else if (option == 1) {
@@ -76,9 +78,10 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 		SWBuf token;
 		SWBuf orig = text;
 		const char *from = orig.c_str();
+		XMLTag tag;
 
 		//we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code
-		const char* variantCompareString = (option == 0) ? "seg type=\"x-variant\" subType=\"x-1\"" : "seg type=\"x-variant\" subType=\"x-2\"";
+		const char* variantChoice = (option == 0) ? "x-2" : "x-1";
 		
 		for (text = ""; *from; from++) {
 			if (*from == '<') {
@@ -89,10 +92,14 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 			else if (*from == '>') {	// process tokens
 				intoken = false;
 				
-				if (!strncmp(token.c_str(), variantCompareString, 34)) { //only one of the variants, length of the two strings is 34 in both cases
-					invar = true;
-					hide = true;
-					continue;
+				if (!strncmp(token.c_str(), "seg", 3)) {
+					tag = token;
+					
+					if (tag.getAttribute("type") && !strcmp("x-variant", tag.getAttribute("type")) && tag.getAttribute("subType") && !strcmp(variantChoice, tag.getAttribute("subType"))) {
+						invar = true;
+						hide = true;
+						continue;
+					}
 				}
 				if (!strncmp(token.c_str(), "/seg", 4)) {
 					hide = false;

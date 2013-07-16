@@ -61,6 +61,7 @@
 #include <osisredletterwords.h>
 #include <osismorphsegmentation.h>
 #include <osisscripref.h>
+#include <osisvariants.h>
 #include <osisxlit.h>
 #include <thmlstrongs.h>
 #include <thmlfootnotes.h>
@@ -202,6 +203,10 @@ void SWMgr::init() {
 
 	tmpFilter = new OSISEnum();
 	optionFilters.insert(OptionFilterMap::value_type("OSISEnum", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISVariants();
+	optionFilters.insert(OptionFilterMap::value_type("OSISVariants", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLStrongs();
