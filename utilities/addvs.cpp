@@ -100,8 +100,8 @@ int main(int argc, char **argv) {
       int i;
       bool havefirst = false;
       VerseKey firstverse;
-      for (i = 0; i < listkey.Count(); i++) {
-	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+      for (i = 0; i < listkey.getCount(); i++) {
+	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
 	if (element) {
 	  mod->setKey(element->getLowerBound());
 	  VerseKey finalkey = element->getUpperBound();

@@ -283,7 +283,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		  *output << " -- ";
 
 		  char *temp = new char[10];
-		  sprintf(temp, "%u", listkey.Count());
+		  sprintf(temp, "%u", listkey.getCount());
 		  *output << temp;
 		  delete [] temp;
 
@@ -374,8 +374,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
 		}
 
-		for (i = 0; i < listkey.Count() && maxverses; i++) {
-			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+		for (i = 0; i < listkey.getCount() && maxverses; i++) {
+			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
 			if (element && element->isBoundSet()) {
 			  target->setKey(element->getLowerBound());
 				*parser = element->getUpperBound();
@@ -418,7 +418,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				}
 			}
 			else {
-				target->setKey(*listkey.GetElement(i));
+				target->setKey(*listkey.getElement(i));
 				*output << (char*)target->getKeyText();
 				if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << ": <font face=\"";

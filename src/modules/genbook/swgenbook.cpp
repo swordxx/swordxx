@@ -66,11 +66,11 @@ TreeKey &SWGenBook::getTreeKey(const SWKey *k) const {
 		SWCATCH ( ... ) {	}
 		if (lkTest) {
 			SWTRY {
-				key = SWDYNAMIC_CAST(TreeKey, lkTest->GetElement());
+				key = SWDYNAMIC_CAST(TreeKey, lkTest->getElement());
 				if (!key) {
 					VerseTreeKey *tkey = 0;
 					SWTRY {
-						tkey = SWDYNAMIC_CAST(VerseTreeKey, lkTest->GetElement());
+						tkey = SWDYNAMIC_CAST(VerseTreeKey, lkTest->getElement());
 					}
 					SWCATCH ( ... ) {}
 					if (tkey) key = tkey->getTreeKey();

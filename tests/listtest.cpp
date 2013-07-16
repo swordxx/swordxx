@@ -99,9 +99,9 @@ int main(int argc, char **argv)
 	for (lk2 = TOP; !lk2.popError(); lk2++)
 		cout << (const char *) lk2 << "\n";
 
-	lk.ClearList();
+	lk.clear();
 	lk << "john 3:16";
-	cout << "\nCount should be 1: " << lk.Count();
+	cout << "\nCount should be 1: " << lk.getCount();
 
 	lk = vk.parseVerseList("mat;mark;luke", vk, true);
 	lk = (VerseKey)"mark 3:16";

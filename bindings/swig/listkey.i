@@ -3,6 +3,11 @@
 %}
 
 %ignore sword::ListKey::operator<<;
+%ignore sword::ListKey::ClearList;
+%ignore sword::ListKey::Count;
+%ignore sword::ListKey::Remove;
+%ignore sword::ListKey::SetToElement;
+%ignore sword::ListKey::GetElement;
 
 %include "listkey.h"
 

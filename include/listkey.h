@@ -64,26 +64,36 @@ public:
 	/** Clears out elements of list
 	 */
 	virtual void clear();
+	// deprecated, use clear(), instead
+	SWDEPRECATED virtual void ClearList() { clear(); }
 
-	/** deprecated, use clear(), instead
-	 */
-	virtual void ClearList() { clear(); }
 
-	/** Returns number of elements in list
-	 * @return number of elements in list
+	/** Returns number of key elements in list
+	 * @return number of key elements in list
 	 */
-	virtual int Count();
+	virtual int getCount() const;
+	//deprecated, use getCount
+	SWDEPRECATED virtual int Count() { return getCount(); }
 	
 	/** Removes current element from list
 	 */
-	virtual void Remove();
+	virtual void remove();
+	// deprecated use remove
+	SWDEPRECATED virtual void Remove() { remove(); }
+
 	
-	/** Sets key to element number
+	/** Sets container to subkey element number and repositions that subkey to either top or bottom
 	 *
-	 * @param ielement element number to set to
+	 * @param ielement - element number to set to
+	 * @param pos - set the subkey element to position (TOP) or BOTTOM
 	 * @return error status
+	 * deprecated use setToElement
 	 */
-	virtual char SetToElement(int ielement, SW_POSITION = TOP);
+	virtual char setToElement(int ielement, SW_POSITION = TOP);
+	// deprecated use setToElement
+	SWDEPRECATED virtual char SetToElement(int ielement, SW_POSITION pos = TOP) { return setToElement(ielement, pos); }
+
+
 	
 	/** Gets a key element number
 	 *
@@ -91,9 +101,10 @@ public:
 	 * @return Key or null on error
 	 */
 	virtual SWKey *getElement(int pos = -1);
+	virtual const SWKey *getElement(int pos = -1) const;
 	
 	// deprecated, use above function
-	virtual SWKey *GetElement(int pos = -1) { return getElement(pos); }
+	SWDEPRECATED virtual SWKey *GetElement(int pos = -1) { return getElement(pos); }
 
 	/** Adds an element to the list
 	 * @param ikey the element to add
@@ -133,7 +144,7 @@ public:
 	 * Returns the index for the new one given as as parameter.
 	 * The first parameter is the new index.
 	 */
-	virtual void setIndex(long index) { SetToElement(index); }
+	virtual void setIndex(long index) { setToElement(index); }
 	virtual const char *getText() const;
 	virtual void setText(const char *ikey);
 	virtual void sort();

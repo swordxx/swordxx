@@ -104,7 +104,7 @@ VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
 		SWCATCH ( ... ) {	}
 		if (lkTest) {
 			SWTRY {
-				key = SWDYNAMIC_CAST(VerseKey, lkTest->GetElement());
+				key = SWDYNAMIC_CAST(VerseKey, lkTest->getElement());
 			}
 			SWCATCH ( ... ) {	}
 		}

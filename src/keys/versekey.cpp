@@ -221,13 +221,13 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 {
 	init(v11n);
 	ListKey tmpListKey = parseVerseList(min);
-	if (tmpListKey.Count()) {
-		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
+	if (tmpListKey.getCount()) {
+		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement(0));
 		setLowerBound(*newElement);
 	}
 	tmpListKey = parseVerseList(max, min, true);
-	if (tmpListKey.Count()) {
-		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement(0));
+	if (tmpListKey.getCount()) {
+		VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement(0));
 		setUpperBound((newElement->isBoundSet())?newElement->getUpperBound():*newElement);
 	}
 	setPosition(TOP);
@@ -294,7 +294,7 @@ char VerseKey::parse(bool checkAutoNormalize)
 	if (keytext) {
 		// pass our own copy of keytext as keytext memory may be freshed during parse 
 		ListKey tmpListKey = parseVerseList(SWBuf(keytext).c_str());
-		if (tmpListKey.Count()) {
+		if (tmpListKey.getCount()) {
 			this->positionFrom(*tmpListKey.getElement(0));
 			error = this->error;
 		} else error = 1;
@@ -732,8 +732,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setLowerBound(*curKey);
 					lastKey->setPosition(TOP);
 					tmpListKey << *lastKey;
-					((VerseKey *)tmpListKey.GetElement())->setAutoNormalize(isAutoNormalize());
-					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
+					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
@@ -746,8 +746,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->setUpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
-							((VerseKey *)tmpListKey.GetElement())->setAutoNormalize(isAutoNormalize());
-							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+							((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
+							tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
 							bool f = false;
@@ -761,12 +761,12 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							lastKey->setUpperBound(*curKey);
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
-							((VerseKey *)tmpListKey.GetElement())->setAutoNormalize(isAutoNormalize());
-							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+							((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
+							tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 					else	if (expandRange) {
-						VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
+						VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement());
 						if (newElement) {
 							if (partial > 1)
 								*curKey = MAXCHAPTER;
@@ -775,7 +775,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							newElement->setUpperBound(*curKey);
 							*lastKey = *curKey;
 							*newElement = TOP;
-							tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 				}
@@ -1006,7 +1006,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 			lastKey->setLowerBound(*curKey);
 			*lastKey = TOP;
 			tmpListKey << *lastKey;
-			tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+			tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 		}
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
@@ -1019,7 +1019,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setUpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					bool f = false;
@@ -1033,11 +1033,11 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setUpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 			else if (expandRange) {
-				VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.GetElement());
+				VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement());
 				if (newElement) {
 					if (partial > 1)
 						*curKey = MAXCHAPTER;
@@ -1045,7 +1045,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 						*curKey = MAXVERSE;
 					newElement->setUpperBound(*curKey);
 					*newElement = TOP;
-					tmpListKey.GetElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 		}
@@ -1816,8 +1816,8 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 	VerseKey defLanguage;
 	ListKey verses = defLanguage.parseVerseList(inRef, (*lastKnownKey), true);
 	const char *startFrag = inRef;
-	for (int i = 0; i < verses.Count(); i++) {
-		SWKey *element = verses.GetElement(i);
+	for (int i = 0; i < verses.getCount(); i++) {
+		SWKey *element = verses.getElement(i);
 //		VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
 		SWBuf buf;
 		// TODO: This code really needs to not use fixed size arrays

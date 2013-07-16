@@ -793,7 +793,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
 				// This should never happen if the references are valid OSIS references
 				ListKey verseKeys = currentVerse.parseVerseList(keyVal, currentVerse, true);
-				int memberKeyCount = verseKeys.Count();
+				int memberKeyCount = verseKeys.getCount();
 				if (memberKeyCount) {
 					currentVerse = verseKeys.getElement(0);
 					// See if this osisID or annotateRef refers to more than one verse.

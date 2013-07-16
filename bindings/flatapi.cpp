@@ -178,7 +178,7 @@ SWHANDLE SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type,
 	if (!module) 	
 		return -1;
 	
-	results.ClearList();
+	results.clear();
 	results = module->search(searchString, type, params, scope, 0, percent, (void *) &percentUserData);
 	
 	return (SWHANDLE)&results;
@@ -326,7 +326,7 @@ SWHANDLE listkey_getVerselistIterator(const char *list, const char *key, const c
 	static ListKey verses;
 	
 	versekey.setText(key);
-	verses.ClearList();
+	verses.clear();
 	verses = versekey.parseVerseList(list, versekey);
 	return (SWHANDLE)&verses;
 }

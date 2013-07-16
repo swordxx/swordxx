@@ -367,7 +367,7 @@ void SWModule::decrement(int steps) {
 
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 
-	listKey.ClearList();
+	listKey.clear();
 	SWBuf term = istr;
 	bool includeComponents = false;	// for entryAttrib e.g., /Lemma.1/ 
 
@@ -473,7 +473,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 					}
 				}
 				listKey << *resultKey;
-				listKey.GetElement()->userData = (__u64)((__u32)(h->score(i)*100));
+				listKey.getElement()->userData = (__u64)((__u32)(h->score(i)*100));
 			}
 			(*percent)(98, percentUserData);
 		}

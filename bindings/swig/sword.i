@@ -25,6 +25,9 @@
 %include "defs.i"
 %include "swbuf.i"
 
+%include "multimapwdef.i"
+
+
 /* Now include all the STL templates we are going to use */
 %include "templates.i"
 
