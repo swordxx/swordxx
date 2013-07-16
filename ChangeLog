@@ -8,11 +8,6 @@ normalized ListKey method names and deprecated old names
 added multimapwdef.i to ignore unsupported operator []
 
 ------------------------------------------------------------------------
-r2892 | chrislit | 2013-07-14 01:45:09 +0200 (Sun, 14 Jul 2013) | 3 lines
-
-added LXX & Orthodox v11ns to VersificationMgr
-
-------------------------------------------------------------------------
 r2887 | scribe | 2013-07-13 16:33:05 +0200 (Sat, 13 Jul 2013) | 4 lines
 
 set FTP timeout to 45 seconds which seems to actually take double from running timings with:
@@ -25,17 +20,9 @@ r2877 | scribe | 2013-07-11 00:34:11 +0200 (Thu, 11 Jul 2013) | 2 lines
 more work on python bindings to use pkg-config
 
 ------------------------------------------------------------------------
-r2867 | chrislit | 2013-07-09 00:14:23 +0200 (Tue, 09 Jul 2013) | 5 lines
-
-added Enum, Xlit, & Glosses filter options to command-line
-simplified preprocessor defines
-simplified filter toggles
-added framework of HTMLHREF & XHTML output
-
-------------------------------------------------------------------------
 r2862 | chrislit | 2013-07-08 11:08:04 +0200 (Mon, 08 Jul 2013) | 1 line
 
-applied submitted UTF8ArabicPoints code (needs testing because I replaced deprecated bcopy with memmove)
+applied submitted UTF8ArabicPoints code
 
 ------------------------------------------------------------------------
 r2858 | chrislit | 2013-07-08 05:08:10 +0200 (Mon, 08 Jul 2013) | 2 lines
@@ -43,25 +30,14 @@ r2858 | chrislit | 2013-07-08 05:08:10 +0200 (Mon, 08 Jul 2013) | 2 lines
 plugged Bzip2Compress & XzCompress into the API, though these remain clones of the ZipCompress class and will not be supported in 1.7.0
 
 ------------------------------------------------------------------------
-r2857 | chrislit | 2013-07-08 04:14:10 +0200 (Mon, 08 Jul 2013) | 1 line
-
-updated to the latest version of regex.c/h that preceded GNU's redesign of the system (dated 2001-11-15, from the glibc 2.2.5 tarball), which fixes the warnings when using internal regex
-
-------------------------------------------------------------------------
 r2853 | scribe | 2013-07-06 03:43:10 +0200 (Sat, 06 Jul 2013) | 2 lines
 
 Fix for buffer overrun in non-standard Apache dir list output. Applied modified patch from Jaak Ristioja <jaak@ristioja.ee>
 
 ------------------------------------------------------------------------
-r2852 | chrislit | 2013-07-03 20:22:57 +0200 (Wed, 03 Jul 2013) | 1 line
-
-addressed API-162 bug (untested in any front end)
-
-------------------------------------------------------------------------
 r2844 | chrislit | 2013-06-29 14:04:03 +0200 (Sat, 29 Jun 2013) | 3 lines
 
-removed PLAINHTML and PLAINFootnotes filters, which assumed plaintext modules had a very specific format that they do not in fact have
-
+removed PLAINHTML and PLAINFootnotes filters
 
 ------------------------------------------------------------------------
 r2824 | greg.hellings | 2013-06-19 16:01:28 +0200 (Wed, 19 Jun 2013) | 2 lines
@@ -81,10 +57,6 @@ r2815 | chrislit | 2013-06-10 14:25:58 +0200 (Mon, 10 Jun 2013) | 2 lines
 added basic OSISEnum & OSISXlit filters
 renamed OSISRuby to the more general OSISGlosses
 
-------------------------------------------------------------------------
-r2809 | chrislit | 2013-06-10 08:24:27 +0200 (Mon, 10 Jun 2013) | 1 line
-
-updated our 10 year-old copy of zlib, though untgz.c still needs an update to fix VC++ errors
 ------------------------------------------------------------------------
 r2806 | scribe | 2013-06-07 15:32:16 +0200 (Fri, 07 Jun 2013) | 2 lines
 
@@ -223,24 +195,9 @@ r2727 | greg.hellings | 2012-08-29 04:52:01 +0200 (Wed, 29 Aug 2012) | 1 line
 Clean up warnings. Python install step now builds cleanly in gcc 4.7 and Perl install step is almost clean.
 
 ------------------------------------------------------------------------
-r2720 | chrislit | 2012-08-19 09:59:52 +0200 (Sun, 19 Aug 2012) | 2 lines
-
-fixed verse count for Jer.23 (caused by out of order verses)
-
-------------------------------------------------------------------------
 r2717 | chrislit | 2012-08-19 09:08:57 +0200 (Sun, 19 Aug 2012) | 2 lines
 
 added Rahlfs v11n
-
-------------------------------------------------------------------------
-r2715 | chrislit | 2012-08-15 10:40:19 +0200 (Wed, 15 Aug 2012) | 2 lines
-
-removed deactivated SynodalP v11n
-
-------------------------------------------------------------------------
-r2714 | chrislit | 2012-08-15 09:29:49 +0200 (Wed, 15 Aug 2012) | 2 lines
-
-added Inuktitut (iu) locale
 
 ------------------------------------------------------------------------
 r2712 | scribe | 2012-07-31 17:39:24 +0200 (Tue, 31 Jul 2012) | 2 lines
