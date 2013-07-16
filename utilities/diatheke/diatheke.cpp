@@ -246,7 +246,6 @@ int main(int argc, char **argv)
 				variants = atoi(argv[i+1]);
 				optionfilters |= OP_VARIANTS;
 				i++;
-				cout << variants << endl;
 			}
 		}
 		/*

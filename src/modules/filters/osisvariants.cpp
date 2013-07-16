@@ -25,7 +25,6 @@
 #include <osisvariants.h>
 #include <utilstr.h>
 #include <utilxml.h>
-#include <iostream>
 
 SWORD_NAMESPACE_START
 
