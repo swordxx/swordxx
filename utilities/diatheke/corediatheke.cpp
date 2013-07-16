@@ -220,15 +220,15 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");
 	
-	if (optionfilters & OP_VARIANTS && variants) {
-			if (variants == -1)
-				manager.setGlobalOption("Textual Variants", "All Readings");
-			else if (variants == 1)
-				manager.setGlobalOption("Textual Variants", "Secondary Readings");
+
+	if ((optionfilters & OP_VARIANTS) && variants) {
+		if (variants == -1)
+			manager.setGlobalOption("Textual Variants", "All Readings");
+		else if (variants == 1)
+			manager.setGlobalOption("Textual Variants", "Secondary Reading");
 	}
 	else
-		manager.setGlobalOption("Textual Variants", "Primary Readings");
-        
+		manager.setGlobalOption("Textual Variants", "Primary Reading");
 
 
 	if (querytype == QT_SEARCH) {
