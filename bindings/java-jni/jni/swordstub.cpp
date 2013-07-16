@@ -181,7 +181,7 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 		SWModule *module = it->second;
 
 		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
-			SWBuf type = module->Type();
+			SWBuf type = module->getType();
 			SWBuf cat = module->getConfigEntry("Category");
 			SWBuf version = module->getConfigEntry("Version");
 			if (cat.length() > 0) type = cat;
@@ -222,7 +222,7 @@ JNIEXPORT jobject JNICALL Java_org_crosswire_android_sword_SWMgr_getModuleByName
      env->ReleaseStringUTFChars(modNameJS, modName);
 
 	if (module) {
-		SWBuf type = module->Type();
+		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
 		if (cat.length() > 0) type = cat;
 		jfieldID fieldID;
@@ -596,7 +596,7 @@ JNIEXPORT jchar JNICALL Java_org_crosswire_android_sword_SWModule_error
 
 	SWModule *module = getModule(env, me);
 	
-	return (module) ? module->Error() : -99;
+	return (module) ? module->popError() : -99;
 }
 
 
@@ -731,15 +731,15 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_parseKe
 		sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, k);
 		if (parser) {
 			sword::ListKey result;
-			result = parser->ParseVerseList(keyListText, *parser, true);
+			result = parser->parseVerseList(keyListText, *parser, true);
 			int count = 0;
-			for (result = sword::TOP; !result.Error(); result++) {
+			for (result = sword::TOP; !result.popError(); result++) {
 				count++;
 			}
 			ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 
 			count = 0;
-			for (result = sword::TOP; !result.Error(); result++) {
+			for (result = sword::TOP; !result.popError(); result++) {
 				env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8((const char *)result)));
 			}
 		}
@@ -1139,21 +1139,21 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 		sword::ListKey result;
 
 		if ((scope) && (strlen(scope)) > 0) {
-			sword::SWKey *p = module->CreateKey();
+			sword::SWKey *p = module->createKey();
 			sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
 			if (!parser) {
 				delete p;
 				parser = new VerseKey();
 			}
 			*parser = module->getKeyText();
-			lscope = parser->ParseVerseList(scope, *parser, true);
+			lscope = parser->parseVerseList(scope, *parser, true);
 			result = module->search(expression, srchType, flags, &lscope, 0, &percentUpdate, &peeuuu);
 			delete parser;
 		}
 		else	result = module->search(expression, srchType, flags, 0, 0, &percentUpdate, &peeuuu);
 
 		int count = 0;
-		for (result = sword::TOP; !result.Error(); result++) count++;
+		for (result = sword::TOP; !result.popError(); result++) count++;
 
 		if (count > MAX_RETURN_COUNT) count = MAX_RETURN_COUNT;
 
@@ -1169,7 +1169,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 		jfieldID fieldIDModName = env->GetFieldID(clazzSearchHit, "modName", "Ljava/lang/String;");
 		jfieldID fieldIDKey     = env->GetFieldID(clazzSearchHit, "key"    , "Ljava/lang/String;");
 		jfieldID fieldIDScore   = env->GetFieldID(clazzSearchHit, "score"  , "J");
-		for (result = sword::TOP; !result.Error(); result++) {
+		for (result = sword::TOP; !result.popError(); result++) {
 			jfieldID fieldID;
 			jobject searchHit = env->AllocObject(clazzSearchHit); 
 
@@ -1354,7 +1354,7 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 		if (it->second & InstallMgr::MODSTAT_OLDER) statusString = "-";
 		if (it->second & InstallMgr::MODSTAT_UPDATED) statusString = "+";
 
-		SWBuf type = module->Type();
+		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
 		if (cat.length() > 0) type = cat;
 		jobject modInfo = env->AllocObject(clazzModInfo); 
@@ -1447,7 +1447,7 @@ SWLog::getSystemLog()->logDebug("Couldn't find remote source [%s]\n", sourceName
      env->ReleaseStringUTFChars(modNameJS, modName);
 
 	if (module) {
-		SWBuf type = module->Type();
+		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
 		if (cat.length() > 0) type = cat;
 		jfieldID fieldID;

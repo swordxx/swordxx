@@ -28,7 +28,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := libswordcore
 LOCAL_C_INCLUDES := ../sword/include ../sword/include/internal/regex
 LOCAL_CFLAGS	+= -D__unix__ \
-		   -Dunix \
+		   -DSTDC_HEADERS \
+	 	   -Dunix \
 		   -D_FTPLIB_NO_COMPAT \
 		   -DANDROID \
 		   -DOS_ANDROID
@@ -53,6 +54,8 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/common/rawstr4.cpp \
 ../../../src/modules/common/lzsscomprs.cpp \
 ../../../src/modules/common/zipcomprs.cpp \
+../../../src/modules/common/bz2comprs.cpp \
+../../../src/modules/common/xzcomprs.cpp \
 ../../../src/modules/common/rawverse4.cpp \
 ../../../src/modules/common/swcipher.cpp \
 ../../../src/modules/common/swcomprs.cpp \
@@ -69,8 +72,8 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/gbfwebif.cpp \
 ../../../src/modules/filters/utf8transliterator.cpp \
 ../../../src/modules/filters/gbfstrongs.cpp \
-../../../src/modules/filters/osisplain.cpp \
 ../../../src/modules/filters/thmlhtmlhref.cpp \
+../../../src/modules/filters/thmlxhtml.cpp \
 ../../../src/modules/filters/thmlgbf.cpp \
 ../../../src/modules/filters/utf8utf16.cpp \
 ../../../src/modules/filters/utf8cantillation.cpp \
@@ -83,16 +86,34 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/thmlosis.cpp \
 ../../../src/modules/filters/utf8nfkd.cpp \
 ../../../src/modules/filters/thmlstrongs.cpp \
+../../../src/modules/filters/osisenum.cpp \
+../../../src/modules/filters/osisfootnotes.cpp \
+../../../src/modules/filters/osisglosses.cpp \
+../../../src/modules/filters/osisheadings.cpp \
+../../../src/modules/filters/osishtmlhref.cpp \
+../../../src/modules/filters/osislemma.cpp \
+../../../src/modules/filters/osismorph.cpp \
+../../../src/modules/filters/osismorphsegmentation.cpp \
+../../../src/modules/filters/osisosis.cpp \
+../../../src/modules/filters/osisplain.cpp \
+../../../src/modules/filters/osisredletterwords.cpp \
+../../../src/modules/filters/osisrtf.cpp \
+../../../src/modules/filters/osisscripref.cpp \
+../../../src/modules/filters/osisstrongs.cpp \
 ../../../src/modules/filters/osisvariants.cpp \
+../../../src/modules/filters/osiswebif.cpp \
+../../../src/modules/filters/osiswordjs.cpp \
+../../../src/modules/filters/osisxhtml.cpp \
+../../../src/modules/filters/osisxlit.cpp \
 ../../../src/modules/filters/thmlmorph.cpp \
 ../../../src/modules/filters/gbfplain.cpp \
 ../../../src/modules/filters/gbfhtmlhref.cpp \
+../../../src/modules/filters/gbfxhtml.cpp \
 ../../../src/modules/filters/utf8html.cpp \
 ../../../src/modules/filters/utf8nfc.cpp \
 ../../../src/modules/filters/rtfhtml.cpp \
 ../../../src/modules/filters/gbfredletterwords.cpp \
 ../../../src/modules/filters/latin1utf16.cpp \
-../../../src/modules/filters/osisscripref.cpp \
 ../../../src/modules/filters/thmlhtml.cpp \
 ../../../src/modules/filters/gbfthml.cpp \
 ../../../src/modules/filters/teihtmlhref.cpp \
@@ -102,36 +123,24 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/teirtf.cpp \
 ../../../src/modules/filters/thmlwordjs.cpp \
 ../../../src/modules/filters/papyriplain.cpp \
-../../../src/modules/filters/osisfootnotes.cpp \
-../../../src/modules/filters/osiswordjs.cpp \
-../../../src/modules/filters/osismorph.cpp \
-../../../src/modules/filters/osislemma.cpp \
-../../../src/modules/filters/osisredletterwords.cpp \
-../../../src/modules/filters/osisrtf.cpp \
-../../../src/modules/filters/gbfheadings.cpp \
-../../../src/modules/filters/osisruby.cpp \
-../../../src/modules/filters/osishtmlhref.cpp \
 ../../../src/modules/filters/utf8bidireorder.cpp \
+../../../src/modules/filters/gbfheadings.cpp \
 ../../../src/modules/filters/thmlrtf.cpp \
 ../../../src/modules/filters/swoptfilter.cpp \
 ../../../src/modules/filters/utf8arabicpoints.cpp \
-../../../src/modules/filters/osisstrongs.cpp \
-../../../src/modules/filters/osisheadings.cpp \
 ../../../src/modules/filters/unicodertf.cpp \
 ../../../src/modules/filters/gbffootnotes.cpp \
 ../../../src/modules/filters/greeklexattribs.cpp \
-../../../src/modules/filters/osiswebif.cpp \
 ../../../src/modules/filters/thmlfootnotes.cpp \
 ../../../src/modules/filters/thmlplain.cpp \
-../../../src/modules/filters/osisosis.cpp \
 ../../../src/modules/filters/utf8hebrewpoints.cpp \
-../../../src/modules/filters/osismorphsegmentation.cpp \
 ../../../src/modules/filters/thmlwebif.cpp \
 ../../../src/modules/filters/thmlvariants.cpp \
 ../../../src/modules/filters/thmllemma.cpp \
 ../../../src/modules/filters/gbfmorph.cpp \
 ../../../src/modules/filters/teiplain.cpp \
 ../../../src/modules/filters/swbasicfilter.cpp \
+../../../src/modules/filters/scsuutf8.cpp \
 ../../../src/mgr/stringmgr.cpp \
 ../../../src/mgr/swmgr.cpp \
 ../../../src/mgr/swsearchable.cpp \
@@ -144,8 +153,8 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/mgr/installmgr.cpp \
 ../../../src/mgr/swlocale.cpp \
 ../../../src/mgr/filemgr.cpp \
-../../../src/mgr/versemgr.cpp \
-../../../src/mgr/ftptrans.cpp \
+../../../src/mgr/versificationmgr.cpp \
+../../../src/mgr/remotetrans.cpp \
 ../../../src/mgr/ftplibftpt.cpp \
 ../../../src/utilfuns/swobject.cpp \
 ../../../src/utilfuns/roman.cpp \
