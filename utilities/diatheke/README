@@ -1,4 +1,4 @@
-Diatheke Suite release 4.0
+Diatheke Suite
 by Chris Little <chrislit@crosswire.org>
 
 This suite is intended for use with libraries and modules from
@@ -7,10 +7,10 @@ the SWORD Project, available at http://www.crosswire.org/
 The latest versions of this suite and its components are available
 at http://www.crosswire.org/sword/diatheke
 
-Version 4.0 of this suite consists of the following components:
+This suite consists of the following components:
 
-Diatheke 4.0 - a command line utility, good for lots of stuff
-Diatheke/CGI 4.0 - a PERL CGI module interface to Diatheke 4.0
+Diatheke - a command line utility, good for lots of stuff
+Diatheke/CGI - a PERL CGI module interface to Diatheke 4.0
 
 --------------------------------------------------------------------
 INSTALLING Diatheke/CGI
@@ -47,29 +47,36 @@ default page to create a custom index.html for your users.
 ----------------------------------------------------------------------
 VERSION HISTORY
 
-4.0	July 8, 2001.
+4.6     July 16, 2013
+	Updated for Sword 1.7.0.
+
+4.5
+
+4.0	July 8, 2001
 	Updated to Sword 1.5.2 with innumerable bug fixes.
 	Now builds properly for Win32 using VC++.
 	Diatheke/Tcl and HANDiatheke were omitted, for the moment
 	from this release, but are still available in the CVS.
 
-3.0	March 31, 2001.
+3.0	March 31, 2001
 	Self-generating HTML page for the lazy (Diatheke/CGI).
 	Localization support. (Diatheke and Diatheke/CGI).
 
-2.5	Now supports ThML.  Numerous bugfixes.  December 10, 2000.
+2.5	December 10, 2000
+	Now supports ThML.  Numerous bugfixes.
 	Includes Diatheke 3.0, Diatheke/CGI 3.0, Diatheke/Tcl 3.0,
 	and HANDiatheke 3.0 (initial version, but version-synced)
 
-2.0	First public release, including Diatheke 2.0, Diatheke/CGI
-	2.0, and Diatheke/Tcl 2.5.  October 23, 1999.
+2.0	October 23, 1999.
+	First public release, including Diatheke 2.0, Diatheke/CGI
+	2.0, and Diatheke/Tcl 2.5.
 
 -----------------------------------------------------------------------
 COPYRIGHT
 
 The Diatheke Suite and its components, Diatheke, Diatheke/CGI, and
-Diatheke/Tcl are Copyright 1999, 2000, 2001 by CrossWire Bible Society.
-HANDiatheke is Copyright 2000, 2001 by CrossWire Bible Society.
+Diatheke/Tcl are Copyright 1999-2013 by CrossWire Bible Society.
+HANDiatheke is Copyright 2000-2001 by CrossWire Bible Society.
 The Diatheke Suite and all of its components are licensed through
 the GNU General Public License and are intended for free distribution.
 See http://www.gnu.org/copyleft/gpl.html for details.

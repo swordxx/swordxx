@@ -21,7 +21,7 @@
  */
 
 /******************************************************************************
- * Diatheke 4.5 by Chris Little <chrislit@crosswire.org>
+ * Diatheke 4.6 by Chris Little <chrislit@crosswire.org>
  * http://www.crosswire.org/sword/diatheke
  */
 
@@ -37,7 +37,7 @@ using std::cout;
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.5\n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.6\n");
 	fprintf (stderr, "Copyright 1999-2013 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "\n");
@@ -246,6 +246,7 @@ int main(int argc, char **argv)
 				variants = atoi(argv[i+1]);
 				optionfilters |= OP_VARIANTS;
 				i++;
+				cout << variants << endl;
 			}
 		}
 		/*

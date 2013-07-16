@@ -21,7 +21,7 @@
  */
 
 /******************************************************************************
- * Diatheke 4.5 by Chris Little <chrislit@crosswire.org>
+ * Diatheke by Chris Little <chrislit@crosswire.org>
  * http://www.crosswire.org/sword/diatheke
  */
 
@@ -111,7 +111,7 @@ void systemquery(const char * key, ostream* output){
 	}
 }
 
-void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) {
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed char variants = 0) {
 	static DiathekeMgr manager(NULL, NULL, false, outputencoding, outputformat,
 		((OP_BIDI & optionfilters) == OP_BIDI),
 		((OP_ARSHAPE & optionfilters) == OP_ARSHAPE));
@@ -222,12 +222,12 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	
 	if (optionfilters & OP_VARIANTS && variants) {
 			if (variants == -1)
-				manager.setGlobalOption("Variants", "All Readings");
+				manager.setGlobalOption("Textual Variants", "All Readings");
 			else if (variants == 1)
-				manager.setGlobalOption("Variants", "Secondary Readings");
+				manager.setGlobalOption("Textual Variants", "Secondary Readings");
 	}
 	else
-		manager.setGlobalOption("Variants", "Primary Readings");
+		manager.setGlobalOption("Textual Variants", "Primary Readings");
         
 
 
