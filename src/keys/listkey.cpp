@@ -81,7 +81,7 @@ ListKey::~ListKey()
 
 
 /******************************************************************************
- * ListKey::ClearList	- Clears out elements of list
+ * ListKey::clear	- Clears out elements of list
  */
 
 void ListKey::clear()
@@ -205,7 +205,7 @@ void ListKey::decrement(int step) {
 
 
 /******************************************************************************
- * ListKey::Count	- Returns number of elements in list
+ * ListKey::getCount	- Returns number of elements in list
  */
 
 int ListKey::getCount() const {
@@ -214,7 +214,7 @@ int ListKey::getCount() const {
 
 
 /******************************************************************************
- * ListKey::SetToElement	- Sets key to element number
+ * ListKey::setToElement	- Sets key to element number
  *
  * ENT:	ielement	- element number to set to
  * 	pos		- set the subkey element to position (TOP) or BOTTOM
@@ -250,7 +250,7 @@ char ListKey::setToElement(int ielement, SW_POSITION pos) {
 
 
 /******************************************************************************
- * ListKey::GetElement	- Gets a key element number
+ * ListKey::getElement	- Gets a key element number
  *
  * ENT:	pos	- element number to get (or default current)
  *
@@ -274,7 +274,7 @@ SWKey *ListKey::getElement(int pos) {
 	
 
 /******************************************************************************
- * ListKey::Remove	- Removes current element from list
+ * ListKey::remove	- Removes current element from list
  */
 
 void ListKey::remove() {
