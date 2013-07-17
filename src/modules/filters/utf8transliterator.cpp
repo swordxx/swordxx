@@ -140,9 +140,11 @@ UTF8Transliterator::UTF8Transliterator() {
 	for (i = 0; i < NUMTARGETSCRIPTS; i++) {
 		options.push_back(optionstring[i]);
 	}
+#ifdef ICU_CUSTOM_RESOURCE_BUILDING
 #ifndef _ICUSWORD_
 	utf8status = U_ZERO_ERROR;
 	Load(utf8status);
+#endif
 #endif
 }
 
