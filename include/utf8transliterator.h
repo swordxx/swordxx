@@ -56,10 +56,6 @@ struct SWTransData {
 typedef std::map<const UnicodeString, SWTransData> SWTransMap;
 typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 
-// Chris, please add more javadoc-style documentation in this header file
-// so that the information will show up in the doxygen-generated
-// api-docs.
-
 /** This Filter uses ICU for transliteration
 */
 class SWDLLEXPORT UTF8Transliterator : public SWOptionFilter {
@@ -71,17 +67,20 @@ private:
 
 	static const char optName[];
 	static const char optTip[];
+	StringList options;
+
+#ifdef ICU_CUSTOM_RESOURCE_BUILDING
 	static const char SW_RB_RULE_BASED_IDS[];
 	static const char SW_RB_RULE[];
 	static const char SW_RESDATA[];
-	StringList options;
 	static SWTransMap transMap;
 	UErrorCode utf8status;
 
 	void Load(UErrorCode &status);
-	void registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status);
-	bool addTrans(const char* newTrans, SWBuf* transList);
+	void registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status);	
 	bool checkTrans(const UnicodeString& ID, UErrorCode &status);
+#endif
+	bool addTrans(const char* newTrans, SWBuf* transList);
 	Transliterator *createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status);
 
 public:

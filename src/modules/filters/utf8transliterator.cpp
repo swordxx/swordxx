@@ -42,54 +42,57 @@ SWORD_NAMESPACE_START
 const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Off",
         "Latin",
-	//        "IPA",
-	//        "Basic Latin",
-	//        "SBL",
-	//        "TC",
-	//        "Beta",
-	//        "BGreek",
-	//        "SERA",
-	//        "Hugoye",
-	//        "UNGEGN",
-	//        "ISO",
-	//        "ALA-LC",
-	//        "BGN",
-	//        "Greek",
-	//        "Hebrew",
-	//        "Cyrillic",
-	//        "Arabic",
-	//        "Syriac",
-	//        "Katakana",
-	//        "Hiragana",
-	//        "Hangul",
-	//        "Devanagari",
-	//        "Tamil",
-	//        "Bengali",
-	//        "Gurmukhi",
-	//        "Gujarati",
-	//        "Oriya",
-	//        "Telugu",
-	//        "Kannada",
-	//        "Malayalam",
-	//        "Thai",
-	//        "Georgian",
-	//        "Armenian",
-	//        "Ethiopic",
-	//        "Gothic",
-	//        "Ugaritic",
-	//        "Coptic",
-	//        "Linear B",
-	//        "Cypriot",
-	//        "Runic",
-	//        "Ogham",
-	//        "Thaana",
-	//        "Glagolitic",
-       	//        "Cherokee",
+        /*
+        "IPA",
+        "Basic Latin",
+        "SBL",
+        "TC",
+        "Beta",
+        "BGreek",
+        "SERA",
+        "Hugoye",
+        "UNGEGN",
+        "ISO",
+        "ALA-LC",
+        "BGN",
+        "Greek",
+        "Hebrew",
+        "Cyrillic",
+        "Arabic",
+        "Syriac",
+        "Katakana",
+        "Hiragana",
+        "Hangul",
+        "Devanagari",
+        "Tamil",
+        "Bengali",
+        "Gurmukhi",
+        "Gujarati",
+        "Oriya",
+        "Telugu",
+        "Kannada",
+        "Malayalam",
+        "Thai",
+        "Georgian",
+        "Armenian",
+        "Ethiopic",
+        "Gothic",
+        "Ugaritic",
+        "Coptic",
+        "Linear B",
+        "Cypriot",
+        "Runic",
+        "Ogham",
+        "Thaana",
+        "Glagolitic",
+        "Cherokee",
+        */
 };
 
 const char UTF8Transliterator::optName[] = "Transliteration";
 const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
 
+#ifdef ICU_CUSTOM_RESOURCE_BUILDING
 SWTransMap UTF8Transliterator::transMap;
 
 #ifndef _ICUSWORD_
@@ -129,7 +132,7 @@ SWCharString::~SWCharString() {
 }
 
 #endif // _ICUSWORD_
-
+#endif // ICU_CUSTOM_RESOURCE_BUILDING
 
 UTF8Transliterator::UTF8Transliterator() {
 	option = 0;
@@ -147,7 +150,7 @@ UTF8Transliterator::UTF8Transliterator() {
 UTF8Transliterator::~UTF8Transliterator() {
 }
 
-
+#ifdef ICU_CUSTOM_RESOURCE_BUILDING
 void UTF8Transliterator::Load(UErrorCode &status)
 {
 #ifndef _ICUSWORD_
@@ -300,22 +303,28 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
 return true;
 #endif // _ICUSWORD_
 }
+#endif // ICU_CUSTOM_RESOURCE_BUILDING
 
 bool UTF8Transliterator::addTrans(const char* newTrans, SWBuf* transList) {
+#ifdef ICU_CUSTOM_RESOURCE_BUILDING
 #ifdef _ICUSWORD_
-        UErrorCode status;
+	UErrorCode status;
 	if (checkTrans(UnicodeString(newTrans), status)) {
 #endif
+#endif // ICU_CUSTOM_RESOURCE_BUILDING
 		*transList += newTrans;
-                *transList += ";";
-                return true;
+		*transList += ";";
+		return true;
+#ifdef ICU_CUSTOM_RESOURCE_BUILDING
 #ifdef _ICUSWORD_
-        }
-        else {
-        	return false;
-        }
+	}
+	else {
+    	return false;
+	}
 #endif
+#endif // ICU_CUSTOM_RESOURCE_BUILDING
 }
+
 
 Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status )
 {
