@@ -268,7 +268,8 @@ const SWKey *ListKey::getElement(int pos) const {
 }
 
 SWKey *ListKey::getElement(int pos) {
-	return const_cast<SWKey *>(getElement(pos));
+	const ListKey &self = *this;
+	return const_cast<SWKey *>(self.getElement(pos));
 }
 
 	
