@@ -123,9 +123,10 @@ Updated naming conventions in swkey and swmodule, which rippled out to most ever
 
 
 ------------------------------------------------------------------------
-r2762 | scribe | 2013-01-06 20:32:03 +0100 (Sun, 06 Jan 2013) | 2 lines
-
-Applied GHelling's SFTP patch to include support for SFTPSouce= entried in the InstallMgr.conf which will use CURL's SFTP functionality to supply the transport.  This is conditionally compiled into the engine based on whether SFTP is supported in the installed CURL development libraries.
+06-Jan-2013 Gregory S. Hellings <greg.hellings@gmail.com>
+	Added support to install from SFTP sources using username/password
+		authentication in places where cURL has SFTP support (no support
+		for public-key auth yet)
 
 ------------------------------------------------------------------------
 r2751 | mdbergmann | 2012-12-19 20:45:45 +0100 (Wed, 19 Dec 2012) | 1 line
@@ -203,9 +204,9 @@ r2698 | scribe | 2012-04-25 07:22:25 +0200 (Wed, 25 Apr 2012) | 2 lines
 added missing getShortText for ListKey
 
 ------------------------------------------------------------------------
-r2696 | scribe | 2012-04-25 07:19:01 +0200 (Wed, 25 Apr 2012) | 2 lines
-
-added HTTPS option for install source, contributed by Greg Hellings.
+25-Apr-2012 Gregory S. Hellings <greg.hellings@gmail.com>
+	InstallMgr now supports HTTPS connections where cURL has support
+		for that transport
 
 ------------------------------------------------------------------------
 r2693 | dmsmith | 2012-03-24 23:38:01 +0100 (Sat, 24 Mar 2012) | 1 line
@@ -258,12 +259,6 @@ r2663 | scribe | 2011-10-29 17:38:34 +0200 (Sat, 29 Oct 2011) | 4 lines
 Added parsing of rtf \\number codes to facilitate our rtf .conf files
 Adjusted abuser detection in SwordOrb and made orbs cycle when max is reached for an IP (probably a server using us as a service)
 Added translate and installmgr functions to orb
-
-------------------------------------------------------------------------
-r2661 | scribe | 2011-10-29 17:16:41 +0200 (Sat, 29 Oct 2011) | 3 lines
-
-Commiting patch from GHellings to support both CLucene 0.9x and 2.x
-Leaving the CMake stuff for Greg to commit himself so CMake blame stays with him ;)
 
 ------------------------------------------------------------------------
 r2660 | scribe | 2011-10-25 20:09:21 +0200 (Tue, 25 Oct 2011) | 2 lines
