@@ -45,7 +45,7 @@
 #include <canon_rahlfs.h>	// Rahlfs LXX v11n system
 //#include <canon_lxx_nt.h>	// Rahlfs LXX + NTv11n system
 //#include <canon_lxx.h>	// General LXX v11n system (includes GNT, as used in Orthodox Bibles)
-//#include <canon_orthodox.h>	// Orthodox v11n system (includes GNT, as used in Orthodox Bibles)
+#include <canon_orthodox.h>	// Orthodox v11n system as used in Orthodox Bibles (NT only in 1.7.0)
 
 using std::vector;
 using std::map;
@@ -73,7 +73,7 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 		systemVersificationMgr->registerVersificationSystem("Rahlfs", otbooks_rahlfs, ntbooks, vm_rahlfs);
 		//systemVersificationMgr->registerVersificationSystem("LXX_NT", otbooks_rahlfs, ntbooks, vm_lxx_nt);
 		//systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
-		//systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
+		systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_null, ntbooks, vm_orthodox);
 	}
 	return systemVersificationMgr;
 }
