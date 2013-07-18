@@ -40,10 +40,9 @@ r2844 | chrislit | 2013-06-29 14:04:03 +0200 (Sat, 29 Jun 2013) | 3 lines
 removed PLAINHTML and PLAINFootnotes filters
 
 ------------------------------------------------------------------------
-r2824 | greg.hellings | 2013-06-19 16:01:28 +0200 (Wed, 19 Jun 2013) | 2 lines
-
-Add greater flexibility on install and move more option handling
-into the options.cmake file for ease of access.
+19-Jun-2013 Gregory S. Hellings <greg.hellings@gmail.com>
+	Introduced CMake options to specify exact install locations
+		of subcomponents
 
 ------------------------------------------------------------------------
 r2820 | scribe | 2013-06-11 19:21:12 +0200 (Tue, 11 Jun 2013) | 5 lines
@@ -129,16 +128,6 @@ r2762 | scribe | 2013-01-06 20:32:03 +0100 (Sun, 06 Jan 2013) | 2 lines
 Applied GHelling's SFTP patch to include support for SFTPSouce= entried in the InstallMgr.conf which will use CURL's SFTP functionality to supply the transport.  This is conditionally compiled into the engine based on whether SFTP is supported in the installed CURL development libraries.
 
 ------------------------------------------------------------------------
-r2760 | greg.hellings | 2013-01-04 23:07:54 +0100 (Fri, 04 Jan 2013) | 6 lines
-
-Took hints from Ben's patch to set ICU_VERSION.
-
-For some reason, setting the ICU_VERSION varaible in CMake fixes
-the problems with UTF8Transliterator in utilities. This version
-of the process does not rely on icu-config, however, which is
-horribly broken.
-
-------------------------------------------------------------------------
 r2751 | mdbergmann | 2012-12-19 20:45:45 +0100 (Wed, 19 Dec 2012) | 1 line
 
 Added ObjC wrappers for the Sword filter classes. Mainly because in Eloquent project it is not possible to access any of the plain C++ Sword stuff. Wrappers are necessary.
@@ -170,30 +159,12 @@ r2733 | scribe | 2012-09-14 14:12:29 +0200 (Fri, 14 Sep 2012) | 2 lines
 
 changed default log setting to WARN from INFO.  INFO gives us too much INFO!
 
-------------------------------------------------------------------------
-r2732 | greg.hellings | 2012-08-29 15:37:05 +0200 (Wed, 29 Aug 2012) | 2 lines
-
-Added -fPIC to build the library. Now bindings support linking against
-either static or shared library versions.
-------------------------------------------------------------------------
-r2731 | greg.hellings | 2012-08-29 10:16:39 +0200 (Wed, 29 Aug 2012) | 11 lines
-
-Greatly streamlined the building of bindings.
-
-1) Made CMake files more readable by writing file instead of echoing
-2) Made compile times faster by reducing the number of compiles from
-two to one.
-3) Broke .cxx generation from compile to enhance readability.
-4) Forced CMake's basic system to work, but discovered it had no way
-of installing the resultant libraries and that it still suffered from
-mult-compile mania. Abandoned.
-5) Moved binding-specific code into the bindings folder rather than
-under the cmake modules.
-------------------------------------------------------------------------
-r2727 | greg.hellings | 2012-08-29 04:52:01 +0200 (Wed, 29 Aug 2012) | 1 line
-
-Clean up warnings. Python install step now builds cleanly in gcc 4.7 and Perl install step is almost clean.
-
+29-Aug-2012 Gregory S. Hellings <greg.hellings@gmail.com>
+	Swig bindings may now be built against shared or static libraries.
+	Cleaned up almost all gcc 4.7 warnings from the swig bindings and eliminated
+		errors which packagers had discovered.
+	Swig bindings are now installed by the normal 'make install' under
+		CMake
 ------------------------------------------------------------------------
 r2717 | chrislit | 2012-08-19 09:08:57 +0200 (Sun, 19 Aug 2012) | 2 lines
 
@@ -258,10 +229,9 @@ r2680 | scribe | 2012-02-21 09:08:39 +0100 (Tue, 21 Feb 2012) | 2 lines
 Added long overdue constants for module types
 
 ------------------------------------------------------------------------
-r2678 | greg.hellings | 2012-02-14 01:57:03 +0100 (Tue, 14 Feb 2012) | 2 lines
+14-Feb-2012 Gregory S. Hellings <greg.hellings@gmail.com>
+	Added cross-compile support to CMake, including sample Toolchain files.
 
-Adding standard cross-compile CMake toolchain files to allow building
-for Windows from Linux.
 ------------------------------------------------------------------------
 r2677 | charcoal | 2012-02-13 02:48:36 +0100 (Mon, 13 Feb 2012) | 1 line
 
@@ -271,11 +241,6 @@ r2676 | mdbergmann | 2012-01-30 19:56:15 +0100 (Mon, 30 Jan 2012) | 1 line
 
 update to Lion Project. All SWORD utils are now in Xcode project and can be built from there. They are however prepared to be used from with Eloquent.
 ------------------------------------------------------------------------
-r2675 | greg.hellings | 2012-01-09 21:01:45 +0100 (Mon, 09 Jan 2012) | 2 lines
-
-A fix, proposed by brianlovesjesus@perffection.com, which allows
-the Python and Perl SWIG bindings to compile again.
-------------------------------------------------------------------------
 r2672 | chrislit | 2011-12-07 07:40:36 +0100 (Wed, 07 Dec 2011) | 1 line
 
 removed SynodalP v11n from library
@@ -284,9 +249,9 @@ r2668 | dmsmith | 2011-11-12 18:35:32 +0100 (Sat, 12 Nov 2011) | 1 line
 
 re-added the preverse div markers
 ------------------------------------------------------------------------
-r2665 | greg.hellings | 2011-11-02 15:53:20 +0100 (Wed, 02 Nov 2011) | 1 line
+02-Nov-2011 Gregory S. Hellings <greg.hellings@gmail.com>
+	Improved handling of CLucene and included support for CLucene 2
 
-Adding changes to CLucene detection into CMake toolchain.
 ------------------------------------------------------------------------
 r2663 | scribe | 2011-10-29 17:38:34 +0200 (Sat, 29 Oct 2011) | 4 lines
 
@@ -354,22 +319,14 @@ Added XHTML filters.
 turn compat off in ftplib.h
 versekey pass own copy of buf.  Why was this change in the SWORD checkout for BibleCS?  Need new memory.
 ------------------------------------------------------------------------
-r2642 | greg.hellings | 2011-07-14 01:57:41 +0200 (Thu, 14 Jul 2011) | 1 line
-
-Adding an example Python file that compares versifications to OSIS files.
-------------------------------------------------------------------------
-r2641 | greg.hellings | 2011-07-11 15:25:55 +0200 (Mon, 11 Jul 2011) | 1 line
-
-Windows needs a Regex library
+14-Jul-2011 Gregory S. Hellings <greg.hellings@gmail.com>
+	Added a sample Python script that demonstrates the bindings and compares
+		osisIDs in an XML file to known Versification schemes
 ------------------------------------------------------------------------
 r2638 | mdbergmann | 2011-07-10 12:16:37 +0200 (Sun, 10 Jul 2011) | 2 lines
 
 fix and simplification for - (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType.
 
-------------------------------------------------------------------------
-r2634 | greg.hellings | 2011-07-07 21:28:34 +0200 (Thu, 07 Jul 2011) | 1 line
-
-Toolchain file for building Mingw32 on Fedora
 ------------------------------------------------------------------------
 r2628 | scribe | 2011-06-28 22:40:34 +0200 (Tue, 28 Jun 2011) | 2 lines
 
