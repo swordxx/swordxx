@@ -9,16 +9,16 @@
       ..\..\src\keys\swkey.obj ..\..\src\keys\treekey.obj 
       ..\..\src\keys\treekeyidx.obj ..\..\src\keys\listkey.obj 
       ..\..\src\mgr\swsearchable.obj ..\..\src\mgr\encfiltmgr.obj 
-      ..\..\src\mgr\filemgr.obj ..\..\src\mgr\ftptrans.obj 
-      ..\..\src\mgr\installmgr.obj ..\..\src\mgr\localemgr.obj 
-      ..\..\src\mgr\markupfiltmgr.obj ..\..\src\mgr\stringmgr.obj 
-      ..\..\src\mgr\swcacher.obj ..\..\src\mgr\swconfig.obj 
-      ..\..\src\mgr\swfiltermgr.obj ..\..\src\mgr\swlocale.obj 
-      ..\..\src\mgr\swmgr.obj ..\..\src\mgr\curlftpt.obj 
-      ..\..\src\utilfuns\utilxml.obj ..\..\src\utilfuns\roman.obj 
-      ..\..\src\utilfuns\swbuf.obj ..\..\src\utilfuns\swobject.obj 
-      ..\..\src\utilfuns\swunicod.obj ..\..\src\utilfuns\swversion.obj 
-      ..\..\src\utilfuns\url.obj ..\..\src\utilfuns\utilstr.obj 
+      ..\..\src\mgr\filemgr.obj ..\..\src\mgr\installmgr.obj 
+      ..\..\src\mgr\localemgr.obj ..\..\src\mgr\markupfiltmgr.obj 
+      ..\..\src\mgr\stringmgr.obj ..\..\src\mgr\swcacher.obj 
+      ..\..\src\mgr\swconfig.obj ..\..\src\mgr\swfiltermgr.obj 
+      ..\..\src\mgr\swlocale.obj ..\..\src\mgr\swmgr.obj 
+      ..\..\src\mgr\curlftpt.obj ..\..\src\utilfuns\utilxml.obj 
+      ..\..\src\utilfuns\roman.obj ..\..\src\utilfuns\swbuf.obj 
+      ..\..\src\utilfuns\swobject.obj ..\..\src\utilfuns\swunicod.obj 
+      ..\..\src\utilfuns\swversion.obj ..\..\src\utilfuns\url.obj 
+      ..\..\src\utilfuns\utilstr.obj 
       ..\..\src\modules\comments\hrefcom\hrefcom.obj 
       ..\..\src\modules\comments\rawcom\rawcom.obj 
       ..\..\src\modules\comments\rawfiles\rawfiles.obj 
@@ -60,8 +60,6 @@
       ..\..\src\modules\filters\osisstrongs.obj 
       ..\..\src\modules\filters\osiswebif.obj 
       ..\..\src\modules\filters\osiswordjs.obj 
-      ..\..\src\modules\filters\plainfootnotes.obj 
-      ..\..\src\modules\filters\plainhtml.obj 
       ..\..\src\modules\filters\rtfhtml.obj 
       ..\..\src\modules\filters\swbasicfilter.obj 
       ..\..\src\modules\filters\swoptfilter.obj 
@@ -104,13 +102,10 @@
       ..\..\src\modules\texts\ztext\ztext.obj ..\..\src\modules\texts\swtext.obj 
       ..\..\src\modules\swmodule.obj ..\..\src\utilfuns\zlib\zutil.obj 
       ..\..\src\utilfuns\zlib\compress.obj ..\..\src\utilfuns\zlib\crc32.obj 
-      ..\..\src\utilfuns\zlib\deflate.obj ..\..\src\utilfuns\zlib\gzio.obj 
-      ..\..\src\utilfuns\zlib\infblock.obj ..\..\src\utilfuns\zlib\infcodes.obj 
-      ..\..\src\utilfuns\zlib\inffast.obj ..\..\src\utilfuns\zlib\inflate.obj 
-      ..\..\src\utilfuns\zlib\inftrees.obj ..\..\src\utilfuns\zlib\infutil.obj 
-      ..\..\src\utilfuns\zlib\maketree.obj ..\..\src\utilfuns\zlib\trees.obj 
-      ..\..\src\utilfuns\zlib\uncompr.obj ..\..\src\utilfuns\zlib\untgz.obj 
-      ..\..\src\utilfuns\zlib\adler32.obj 
+      ..\..\src\utilfuns\zlib\deflate.obj ..\..\src\utilfuns\zlib\inffast.obj 
+      ..\..\src\utilfuns\zlib\inflate.obj ..\..\src\utilfuns\zlib\inftrees.obj 
+      ..\..\src\utilfuns\zlib\trees.obj ..\..\src\utilfuns\zlib\uncompr.obj 
+      ..\..\src\utilfuns\zlib\untgz.obj ..\..\src\utilfuns\zlib\adler32.obj 
       ..\..\src\modules\filters\papyriplain.obj ..\..\src\utilfuns\ftpparse.obj 
       ..\..\src\modules\filters\osismorphsegmentation.obj 
       ..\..\src\keys\versetreekey.obj ..\..\src\modules\filters\teiplain.obj 
@@ -118,12 +113,20 @@
       ..\..\src\modules\texts\rawtext4\rawtext4.obj 
       ..\..\src\modules\comments\rawcom4\rawcom4.obj 
       ..\..\src\modules\common\rawverse4.obj 
-      ..\..\src\modules\filters\teihtmlhref.obj ..\..\src\mgr\versemgr.obj 
-      ..\..\src\modules\filters\osisruby.obj ..\..\src\mgr\curlhttpt.obj 
+      ..\..\src\modules\filters\teihtmlhref.obj ..\..\src\mgr\curlhttpt.obj 
       ..\..\src\modules\filters\gbfxhtml.obj 
       ..\..\src\modules\filters\osisxhtml.obj 
       ..\..\src\modules\filters\thmlxhtml.obj 
-      ..\..\src\modules\filters\teixhtml.obj"/>
+      ..\..\src\modules\filters\teixhtml.obj ..\..\src\mgr\remotetrans.obj 
+      ..\..\src\modules\filters\osisglosses.obj 
+      ..\..\src\modules\filters\osisenum.obj ..\..\src\utilfuns\zlib\gzclose.obj 
+      ..\..\src\utilfuns\zlib\gzlib.obj ..\..\src\utilfuns\zlib\gzread.obj 
+      ..\..\src\utilfuns\zlib\gzwrite.obj ..\..\src\utilfuns\zlib\infback.obj 
+      ..\..\src\mgr\versificationmgr.obj ..\..\src\modules\common\xzcomprs.obj 
+      ..\..\src\modules\common\bz2comprs.obj 
+      ..\..\src\modules\filters\osisvariants.obj 
+      ..\..\src\modules\filters\osisxlit.obj 
+      ..\..\src\modules\filters\scsuutf8.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -137,7 +140,7 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE;LUCENE_ENABLE_REFCOUNT;_DEBUG"/>
+    <USERDEFINES value="UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE;LUCENE_ENABLE_REFCOUNT"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="libsword.bpf"/>
     <INCLUDEPATH value="..\..\src\modules\comments\rawcom4;..\..\src\modules\texts\rawtext4;..\..\src\modules\tests;..\..\src\utilfuns\zlib;..\..\src\modules\lexdict\zld;..\..\src\modules\lexdict\rawld4;..\..\src\modules\comments\zcom;..\..\src\modules\genbook\rawgenbook;..\..\src\modules\genbook;..\..\src\modules\texts\ztext;..\..\src\modules\texts\rawtext;..\..\src\modules\texts;..\..\src\modules\lexdict\rawld;..\..\src\modules\lexdict;..\..\src\modules\filters;..\..\src\modules\common;..\..\src\modules\comments\rawfiles;..\..\src\modules\comments\rawcom;..\..\src\modules\comments\hrefcom;..\..\src\modules\comments;..\..\src\modules;..\..\src\frontend;..\..\src\utilfuns;..\..\src\mgr;..\..\src\keys;..\..\..\icu-sword\source\common;..\..\apps\windoze\CBuilder5\InstallMgr\curl\include;..\..\include;..\..\include\internal\regex;$(BCB)\include;$(BCB)\include\vcl;..\..\..\icu-sword\source\i18n;..\..\..\biblecs\clucene\src;..\..\..\biblecs\apps\InstallMgr\curl\include"/>
@@ -165,9 +168,9 @@
       -D_ICU_ -D_ICUSWORD_ -DUSBINARY -DU_HAVE_PLACEMENT_NEW=0 -DUSELUCENE 
       -D_WIN32 -D_CL_DISABLE_MULTITHREADING -DCURLAVAILABLE 
       -DLUCENE_ENABLE_REFCOUNT -no_tie -boa"/>
-    <CFLAG1 value="-Od -Vx -X- -r- -a8 -4 -b- -k -y -v -vi- -c -tW -tWM"/>
-    <PFLAGS value="-$Y+ -$W -$O- -v -JPHNE -M"/>
-    <AFLAGS value="/mx /w2 /zi"/>
+    <CFLAG1 value="-O2 -Vx -X- -a8 -4 -b- -k- -vi -c -tW -tWM"/>
+    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zn"/>
     <LFLAGS value="/P1024"/>
   </OPTIONS>
   <LINKER>
@@ -244,8 +247,8 @@ Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
 Count=25
-Item0=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE;LUCENE_ENABLE_REFCOUNT;_DEBUG
-Item1=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE;LUCENE_ENABLE_REFCOUNT
+Item0=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE;LUCENE_ENABLE_REFCOUNT
+Item1=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE;LUCENE_ENABLE_REFCOUNT;_DEBUG
 Item2=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;CURLAVAILABLE
 Item3=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING
 Item4=UNICODE;_ICU_;_ICUSWORD_;USBINARY;U_HAVE_PLACEMENT_NEW=0;USELUCENE;_WIN32;_CL_DISABLE_MULTITHREADING;_DEBUG
