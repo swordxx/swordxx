@@ -1,7 +1,0 @@
-REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
-cd /; tar cfvz sword-$REV.i386.tar.gz /etc/sword.conf /usr/lib/libsword.* /usr/include/sword/* /usr/bin/cheatah /usr/doc/sword/ /usr/share/sword/mods.d/globals.conf
-
-echo 
-echo Did you set legalexport := yes
-echo did you set buildshare := yes
-echo

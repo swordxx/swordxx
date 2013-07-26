@@ -1,1 +1,0 @@
-cd /dosc/usr/troy/src/; tar -v -c -p -s -z -f ~/src/webster.tgz sword/modules/texts/rawtext/webster
