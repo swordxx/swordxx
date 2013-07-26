@@ -418,10 +418,12 @@
     <ClInclude Include="..\..\include\canon_kjva.h" />
     <ClInclude Include="..\..\include\canon_leningrad.h" />
     <ClInclude Include="..\..\include\canon_luther.h" />
+    <ClInclude Include="..\..\include\canon_lxx.h" />
     <ClInclude Include="..\..\include\canon_mt.h" />
     <ClInclude Include="..\..\include\canon_nrsv.h" />
     <ClInclude Include="..\..\include\canon_nrsva.h" />
     <ClInclude Include="..\..\include\canon_null.h" />
+    <ClInclude Include="..\..\include\canon_orthodox.h" />
     <ClInclude Include="..\..\include\canon_rahlfs.h" />
     <ClInclude Include="..\..\include\canon_synodal.h" />
     <ClInclude Include="..\..\include\canon_vulg.h" />
