@@ -214,7 +214,6 @@ public:
 	 * @return Error status
 	 */
 	char setKey(const SWKey &ikey) { return setKey(&ikey); }
-	char setKey(const char *keyText) { return setKey(keyText); }
 	/**
 	 * @deprecated Use setKey() instead.
 	 */

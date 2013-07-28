@@ -101,8 +101,8 @@ void SearchThread::search()  {
 	}
 
 	ListKey scopeList = VerseKey().parseVerseList("Luke;John;Revelation","", true);
-	for (int i=0; i < scopeList.Count(); ++i) {
-		std::cout << (const char*)*scopeList.GetElement(i) << std::endl;
+	for (int i=0; i < scopeList.getCount(); ++i) {
+		std::cout << (const char*)*scopeList.getElement(i) << std::endl;
 	}
 	SWKey* scope = &scopeList;
 
@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
 			std::cout.flush();
 	};
 
-	std::cout << std::endl << "Number of found items: " << searchThread->searchResult.Count() << std::endl;
+	std::cout << std::endl << "Number of found items: " << searchThread->searchResult.getCount() << std::endl;
 	std::cout << "Finished program" << std::endl;
 	std::cout.flush();
 

@@ -125,6 +125,7 @@ if test x$with_zlib = xno; then
 	AM_CXXFLAGS="$AM_CXXFLAGS -DEXCLUDEZLIB"
 fi
 
+
 AS_IF([test "x$with_internalregex" = "xyes"],
       [have_systemregex="no"],
       [AC_SEARCH_LIBS(regexec, regex, [have_systemregex="yes"], [have_systemregex="no"])])
@@ -297,8 +298,10 @@ PKG_CHECK_MODULES([QT4], [QtCore QtGui >= 4.4.0], [
 else
 	with_qt="no"
 fi
-if test x$with_qt = xyes; then
-ACX_QT4
+
+if test x$with_qt  = xyes; then
+	AM_CXXFLAGS="$AM_CXXFLAGS $QT4_CFLAGS"
+	LIBS="$LIBS $QT4_LIBS"
 fi
 
 

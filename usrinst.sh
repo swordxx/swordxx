@@ -38,6 +38,7 @@ OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--with-icusword $OPTIONS"
 #OPTIONS="--without-clucene $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
+OPTIONS="--without-qt $OPTIONS"
 
 #OPTIONS="--disable-tests $OPTIONS"
 #OPTIONS="--disable-utilities $OPTIONS"
