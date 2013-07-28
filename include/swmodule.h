@@ -663,7 +663,7 @@ public:
 	 * @param tmpKey key to use to grab text
 	 * @return this module's text at specified key location massaged by Render filters
 	 */
-	virtual const char *renderText(const SWKey *tmpKey);
+	SWBuf renderText(const SWKey *tmpKey);
 
 	/** Whether or not to only hit one entry when iterating encounters
 	 *	consecutive links when iterating

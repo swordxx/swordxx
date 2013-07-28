@@ -866,7 +866,7 @@ const char *SWModule::getRenderHeader() const {
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
- const char *SWModule::renderText(const SWKey *tmpKey) {
+SWBuf SWModule::renderText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
