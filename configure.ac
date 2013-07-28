@@ -47,6 +47,8 @@ fi
 # ---------------------------------------------------------------------
 # With options
 # ---------------------------------------------------------------------
+AC_ARG_WITH(qt,
+	AC_HELP_STRING([--with-qt],[allow easier integration with Qt (default=yes)]),,with_qt=yes)
 AC_ARG_WITH(zlib,
 	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
 AC_ARG_WITH(icu,
@@ -285,6 +287,21 @@ fi
 
 AC_CHECK_FUNCS(vsnprintf, [have_vsnprintf="yes"])
 
+
+if test x$with_qt  = xyes; then
+PKG_CHECK_MODULES([QT4], [QtCore QtGui >= 4.4.0], [
+  AC_PATH_PROGS(MOC, [moc-qt4 moc], moc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
+  AC_PATH_PROG(RCC, rcc, rcc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
+  AC_PATH_PROGS(UIC, [uic-qt4 uic], uic,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
+], with_qt="no")
+else
+	with_qt="no"
+fi
+if test x$with_qt = xyes; then
+ACX_QT4
+fi
+
+
 # ---------------------------------------------------------------------
 # Alter global conf directory only if not /etc
 # ---------------------------------------------------------------------
@@ -330,6 +347,7 @@ AC_SUBST(CLUCENE_LIBS)
 # ---------------------------------------------------------------------
 
 # don't #ifdef in .cpp files HAVE_ stuff because non-ac compiles won't be able to switch them since we include config.h
+AM_CONDITIONAL(HAVE_QT, test x$with_qt = xyes)
 AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
 AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
@@ -371,6 +389,7 @@ echo     "     CURL SFTP:        $with_curl_sftp"
 echo     "     INTERNAL FTPLIB:  $with_internalftplib"
 echo     "     INTERNAL REGEX:   $with_internalregex"
 echo     "     CLUCENE:          $with_clucene"
+echo     "     QT SUPPORT:       $with_qt"
 echo
 echo
 

@@ -88,6 +88,7 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 // Just leave for now.  This lets us always able to call module->flush()
 // to manually flush a cache, and doesn't hurt if there is no work done.
 
+
 class SWDLLEXPORT SWModule : public SWCacher, public SWSearchable {
 
 class StdOutDisplay : public SWDisplay {
@@ -213,6 +214,7 @@ public:
 	 * @return Error status
 	 */
 	char setKey(const SWKey &ikey) { return setKey(&ikey); }
+	char setKey(const char *keyText) { return setKey(keyText); }
 	/**
 	 * @deprecated Use setKey() instead.
 	 */
@@ -642,7 +644,7 @@ public:
 	 * @param render for internal use
 	 * @return result buffer
 	 */
-	virtual const char *renderText(const char *buf = 0, int len = -1, bool render = true);
+	SWBuf renderText(const char *buf = 0, int len = -1, bool render = true);
 	SWDEPRECATED const char *RenderText(const char *buf = 0, int len = -1, bool render = true) { return renderText(buf, len, render); }
 
 	/** Produces any header data which might be useful which is associated with the

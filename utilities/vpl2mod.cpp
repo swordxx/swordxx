@@ -41,8 +41,7 @@
 #include <filemgr.h>
 #include <swmgr.h>
 #include <rawtext.h>
-#include <iostream>
-#include <string>
+#include <swbuf.h>
 #include <versekey.h>
 
 #ifndef NO_SWORD_NAMESPACE
@@ -50,10 +49,10 @@ using sword::FileMgr;
 using sword::SWMgr;
 using sword::RawText;
 using sword::VerseKey;
+using sword::SWBuf;
 using sword::SW_POSITION;
 #endif
 
-using std::string;
 
 char readline(int fd, char **buf) {
 	char ch;
@@ -245,7 +244,7 @@ int main(int argc, char **argv) {
 				std::cerr << "Error parsing key: " << buffer << "\n";
 				exit(-5);
 			}
-			string orig = mod.getRawEntry();
+			SWBuf orig = mod.getRawEntry();
 
 			if (!isKJVRef(buffer)) {
 				VerseKey origVK = vk;
@@ -266,7 +265,7 @@ int main(int argc, char **argv) {
 				orig += ") ";
 				orig += verseText;
 				orig += " ] ";
-				verseText = orig.c_str();
+				verseText = orig;
 			}
 			else {
 			  successive = 0;

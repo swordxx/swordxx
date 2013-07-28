@@ -264,7 +264,7 @@ const char *SWModule_getStripText(SWHANDLE hmodule) {
   
 const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->renderText() : 0);
+	return (const char *)((module) ? module->renderText().c_str() : 0);
 }
 
 const char *SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3) {

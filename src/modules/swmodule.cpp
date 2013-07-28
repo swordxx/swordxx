@@ -817,7 +817,7 @@ const char *SWModule::getRenderHeader() const {
  * RET: this module's text at current key location massaged by renderText filters
  */
 
- const char *SWModule::renderText(const char *buf, int len, bool render) {
+ SWBuf SWModule::renderText(const char *buf, int len, bool render) {
 	bool savePEA = isProcessEntryAttributes();
 	if (!buf) {
 		entryAttributes.clear();
