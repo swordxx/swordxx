@@ -136,6 +136,7 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 		if (!passive)
 			curl_easy_setopt(session, CURLOPT_FTPPORT, "-");
 		curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
+		curl_easy_setopt(session, CURLOPT_FAILONERROR, 1);
 		curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
 		curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_httpfprogress);
 		curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, myhttp_trace);
