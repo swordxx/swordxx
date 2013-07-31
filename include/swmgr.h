@@ -214,7 +214,6 @@ public:
 	 * @return the module, if found, otherwise 0
 	 */
 	SWModule *getModule(const char *modName) { ModMap::iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
-	SWModule *getModule(const SWBuf &modName) { return getModule(modName.c_str()); }
 	const SWModule *getModule(const char *modName) const { ModMap::const_iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
 
 

@@ -30,9 +30,6 @@
 #include <defs.h>
 #include <sysdata.h>
 #include <utilstr.h>
-#include <string>
-
-class QString;
 
 SWORD_NAMESPACE_START
 
@@ -43,7 +40,6 @@ SWORD_NAMESPACE_START
   SWKey &operator =(const SWKey &ikey) { positionFrom(ikey); return *this; } \
   SWKey &operator =(SW_POSITION pos) { setPosition(pos); return *this; } \
   operator const char *() const { return getText(); } \
-  operator const std::string() const { return getText(); } \
   bool operator ==(const SWKey &ikey) { return equals(ikey); } \
   bool operator !=(const SWKey &ikey) { return !equals(ikey); } \
   virtual bool operator >(const SWKey &ikey) { return (compare(ikey) > 0); } \
@@ -126,13 +122,11 @@ public:
 	 * @param ikey string to use for initializing this new key
 	 */
 	SWKey(const char *ikey = 0);
-	SWKey(const std::string &);
 
 	/** Copy Constructor
 	 * @param k The SWKey object to copy.
 	 */
 	SWKey(const SWKey &k);
-	SWKey(const QString &k);
 
 	/** Destructor, cleans up this instance of SWKey
 	 */

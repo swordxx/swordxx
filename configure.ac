@@ -5,7 +5,7 @@
 # Version change: Change line 8 only !
 # Change it immediately after a release
 
-AC_INIT(sword, 1.6.2, sword-bugs@crosswire.org, sword, http://crosswire.org/sword)
+AC_INIT(sword, 1.6.901, sword-bugs@crosswire.org, sword, http://crosswire.org/sword)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
 AC_REVISION($Revision: 1.45 $)
@@ -47,8 +47,6 @@ fi
 # ---------------------------------------------------------------------
 # With options
 # ---------------------------------------------------------------------
-AC_ARG_WITH(qt,
-	AC_HELP_STRING([--with-qt],[allow easier integration with Qt (default=yes)]),,with_qt=yes)
 AC_ARG_WITH(zlib,
 	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
 AC_ARG_WITH(icu,
@@ -124,7 +122,6 @@ if test x$with_zlib = xno; then
 	AM_CFLAGS="$AM_CFLAGS -DEXCLUDEZLIB"
 	AM_CXXFLAGS="$AM_CXXFLAGS -DEXCLUDEZLIB"
 fi
-
 
 AS_IF([test "x$with_internalregex" = "xyes"],
       [have_systemregex="no"],
@@ -288,23 +285,6 @@ fi
 
 AC_CHECK_FUNCS(vsnprintf, [have_vsnprintf="yes"])
 
-
-if test x$with_qt  = xyes; then
-PKG_CHECK_MODULES([QT4], [QtCore QtGui >= 4.4.0], [
-  AC_PATH_PROGS(MOC, [moc-qt4 moc], moc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-  AC_PATH_PROG(RCC, rcc, rcc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-  AC_PATH_PROGS(UIC, [uic-qt4 uic], uic,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-], with_qt="no")
-else
-	with_qt="no"
-fi
-
-if test x$with_qt  = xyes; then
-	AM_CXXFLAGS="$AM_CXXFLAGS $QT4_CFLAGS"
-	LIBS="$LIBS $QT4_LIBS"
-fi
-
-
 # ---------------------------------------------------------------------
 # Alter global conf directory only if not /etc
 # ---------------------------------------------------------------------
@@ -350,7 +330,6 @@ AC_SUBST(CLUCENE_LIBS)
 # ---------------------------------------------------------------------
 
 # don't #ifdef in .cpp files HAVE_ stuff because non-ac compiles won't be able to switch them since we include config.h
-AM_CONDITIONAL(HAVE_QT, test x$with_qt = xyes)
 AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
 AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
@@ -392,7 +371,6 @@ echo     "     CURL SFTP:        $with_curl_sftp"
 echo     "     INTERNAL FTPLIB:  $with_internalftplib"
 echo     "     INTERNAL REGEX:   $with_internalregex"
 echo     "     CLUCENE:          $with_clucene"
-echo     "     QT SUPPORT:       $with_qt"
 echo
 echo
 

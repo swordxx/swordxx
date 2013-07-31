@@ -26,14 +26,8 @@ else
 UNTGZ =
 endif
 
-if HAVE_QT
-QTSUPPORT=$(utilfunsdir)/qt/qtsupport.cpp
-AM_CPPFLAGS += $(QT4_CFLAGS)
-endif
-
 libsword_la_SOURCES += $(UNTGZ) 
 libsword_la_SOURCES += $(ftpsrc)
-libsword_la_SOURCES += $(QTSUPPORT) 
 
 if USE_INTERNAL_REGEX
 SWREGEX = $(utilfunsdir)/regex.c

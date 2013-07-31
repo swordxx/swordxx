@@ -29,9 +29,6 @@
 #ifdef __BORLANDC__
 #include <mem.h>
 #endif
-#include <string>
-
-class QString;
 
 SWORD_NAMESPACE_START
 
@@ -99,8 +96,6 @@ public:
  	*
  	*/
 	SWBuf(const char *initVal, unsigned long initSize = 0);
-	SWBuf(const std::string &initVal);
-	SWBuf(const QString &initVal);
 //	SWBuf(unsigned long initSize);
 
 	/**
@@ -330,8 +325,6 @@ public:
 	inline char *getRawData() { return buf; }
 
 	inline operator const char *() const { return c_str(); }
-	inline operator std::string() const { return c_str(); }
-	operator QString () const;
 	inline char &operator[](unsigned long pos) { return charAt(pos); }
 	inline char &operator[](long pos) { return charAt((unsigned long)pos); }
 	inline char &operator[](unsigned int pos) { return charAt((unsigned long)pos); }
