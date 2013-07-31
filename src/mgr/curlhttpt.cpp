@@ -78,7 +78,10 @@ int my_httpfwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 
 int my_httpfprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
 	if (clientp) {
-		((StatusReporter *)clientp)->statusUpdate(dltotal, dlnow);
+		if (dltotal < 0) dltotal = 0;
+		if (dlnow < 0) dlnow = 0;
+		if (dlnow > dltotal) dlnow = dltotal;
+		((StatusReporter *)clientp)->update(dltotal, dlnow);
 	}
 	return 0;
 }

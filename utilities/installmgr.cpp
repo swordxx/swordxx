@@ -86,12 +86,12 @@ virtual bool isUserDisclaimerConfirmed() const {
 
 class MyStatusReporter : public StatusReporter {
 	int last;
-        virtual void statusUpdate(double dltotal, double dlnow) {
-		int p = (int)(74.0 * (dlnow / dltotal));
+        virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
+		int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
 		for (;last < p; ++last) {
 			if (!last) {
 				SWBuf output;
-				output.setFormatted("[ File Bytes: %ld", (long)dltotal);
+				output.setFormatted("[ File Bytes: %ld", totalBytes);
 				while (output.size() < 75) output += " ";
 				output += "]";
 				cout << output.c_str() << "\n ";

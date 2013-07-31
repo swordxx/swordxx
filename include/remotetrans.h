@@ -39,7 +39,8 @@ public:
 	virtual void preStatus(long totalBytes, long completedBytes, const char *message);
 
 	/** frequently called throughout a download, to report status */
-	virtual void statusUpdate(double dtTotal, double dlNow);
+	SWDEPRECATED virtual void statusUpdate(double dtTotal, double dlNow);
+	virtual void update(unsigned long totalBytes, unsigned long completedBytes);
 };
 
 

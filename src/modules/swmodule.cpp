@@ -791,7 +791,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
  */
 
 const char *SWModule::stripText(const char *buf, int len) {
-	return renderText(buf, len, false);
+	static SWBuf local;
+	local = renderText(buf, len, false);
+	return local.c_str();
 }
 
 
