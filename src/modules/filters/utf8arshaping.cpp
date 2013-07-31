@@ -32,7 +32,7 @@
 
 SWORD_NAMESPACE_START
 
-UTF8arShaping::UTF8arShaping() {
+UTF8arShaping::UTF8arShaping() : err(U_ZERO_ERROR) {
 	conv = ucnv_open("UTF-8", &err);
 }
 

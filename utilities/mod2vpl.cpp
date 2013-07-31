@@ -95,8 +95,8 @@ int main(int argc, char **argv) {
 	(*mod) = TOP;
 
 	while (!mod->popError()) {
-		buffer = new char [ strlen ((const char *)(*mod)) + 1 ];
-		strcpy(buffer, (const char *)(*mod));
+		buffer = new char [ mod->renderText().length() + 1 ];
+		strcpy(buffer, mod->renderText());
 		cleanbuf(buffer);
 		if (vref) {
 			if ((strlen(buffer) > 0) && (vref)) {

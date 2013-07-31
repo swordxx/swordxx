@@ -81,35 +81,35 @@ int main(int argc, char **argv) {
 	vk.setChapter(0);
 	vk.setVerse(0);
 
-	std::cout << "Module heading text ?= " << (const char*)mod << std::endl;
+	std::cout << "Module heading text ?= " << mod.renderText() << std::endl;
 
 	vk.setTestament(1);
 	vk.setBook(0);
 	vk.setChapter(0);
 	vk.setVerse(0);
 
-	std::cout << "OT heading text ?= " << (const char*)mod << std::endl;
+	std::cout << "OT heading text ?= " << mod.renderText() << std::endl;
 
 	vk.setTestament(1);
 	vk.setBook(1);
 	vk.setChapter(0);
 	vk.setVerse(0);
 
-	std::cout << "Gen heading text ?= " << (const char*)mod << std::endl;
+	std::cout << "Gen heading text ?= " << mod.renderText() << std::endl;
 
 	vk.setTestament(1);
 	vk.setBook(1);
 	vk.setChapter(1);
 	vk.setVerse(0);
 
-	std::cout << "Gen 1 heading text ?= " << (const char*)mod << std::endl;
+	std::cout << "Gen 1 heading text ?= " << mod.renderText() << std::endl;
 
 	vk.setTestament(1);
 	vk.setBook(1);
 	vk.setChapter(1);
 	vk.setVerse(1);
 
-	std::cout << "Gen 1:1 text ?= " << (const char*)mod << std::endl;
+	std::cout << "Gen 1:1 text ?= " << mod.renderText() << std::endl;
 
 	  /* old introtest
 	SWModule *mhc = mymgr.Modules["MHC"];

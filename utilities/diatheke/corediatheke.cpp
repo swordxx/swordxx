@@ -303,7 +303,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 		target->setKey(ref);
 
-		SWBuf text = (const char *) *target;
+		SWBuf text = target->renderText();
 
 		if (outputformat == FMT_RTF) {
 			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
@@ -392,7 +392,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					else {
 						*output << ": ";
 					}
-					*output << (const char*)*target;
+					*output << target->renderText();
 					if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << "</font>";
 					}
@@ -431,7 +431,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				else {
 					*output << ": ";
 				}
-				*output << (const char*)*target;
+				*output << target->renderText();
 				if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << "</font>";
 				}

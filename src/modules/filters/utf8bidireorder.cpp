@@ -33,7 +33,7 @@
 
 SWORD_NAMESPACE_START
 
-UTF8BiDiReorder::UTF8BiDiReorder() {
+UTF8BiDiReorder::UTF8BiDiReorder() : err(U_ZERO_ERROR) {
 
         conv = ucnv_open("UTF-8", &err);
 

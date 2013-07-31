@@ -47,7 +47,8 @@ class SWFilter;
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
 #define SWMODULE_OPERATORS \
-	operator const char *() { return renderText(); } \
+	SWDEPRECATED operator const char *() { static SWBuf unsafeTmp = renderText(); return unsafeTmp.c_str(); } \
+	operator SWBuf() { return renderText(); } \
 	operator SWKey &() { return *getKey(); } \
 	operator SWKey *() { return getKey(); } \
 	SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
@@ -95,7 +96,7 @@ class StdOutDisplay : public SWDisplay {
      char display(SWModule &imodule)
      {
      #ifndef	_WIN32_WCE
-          std::cout << (const char *)imodule;
+          std::cout << imodule.renderText();
      #endif
           return 0;
      }
