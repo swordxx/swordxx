@@ -303,7 +303,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 		target->setKey(ref);
 
-		const char * text = (const char *) *target;
+		SWBuf text = (const char *) *target;
 
 		if (outputformat == FMT_RTF) {
 			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
@@ -317,7 +317,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
 		}
 
-		if (strlen(text)) {
+		if (text.length()) {
 			*output << (char*)target->getKeyText();
 			if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 				*output << ": <font face=\"";
