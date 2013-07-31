@@ -37,6 +37,7 @@
 #include <canon_nrsv.h>		// NRSV v11n system
 #include <canon_nrsva.h>	// NRSV + Apocrypha v11n system
 #include <canon_synodal.h>	// Russian Synodal v11n system
+#include <canon_synodalprot.h>	// Russian Synodal v11n system
 #include <canon_vulg.h>		// Vulgate v11n system
 #include <canon_german.h>	// German v11n system
 #include <canon_luther.h>	// Luther v11n system
@@ -65,6 +66,7 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 		systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
 		systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
 		systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal);
+		systemVersificationMgr->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodalProt, vm_synodalProt);
 		systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg);
 		systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
 		systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);

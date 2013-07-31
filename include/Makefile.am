@@ -173,6 +173,7 @@ pkginclude_HEADERS += $(swincludedir)/canon_mt.h
 pkginclude_HEADERS += $(swincludedir)/canon_nrsv.h
 pkginclude_HEADERS += $(swincludedir)/canon_nrsva.h
 pkginclude_HEADERS += $(swincludedir)/canon_synodal.h
+pkginclude_HEADERS += $(swincludedir)/canon_synodalprot.h
 pkginclude_HEADERS += $(swincludedir)/canon_vulg.h
 pkginclude_HEADERS += $(swincludedir)/canon_german.h
 pkginclude_HEADERS += $(swincludedir)/canon_luther.h
