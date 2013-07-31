@@ -191,10 +191,10 @@ int RemoteTransport::copyDirectory(const char *urlPrefix, const char *dir, const
 	return retVal;
 }
 
-void StatusReporter::update(unsigned long totalBytes, unsigned long completedBytes) {
 #if defined(__GNUC__)
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
+void StatusReporter::update(unsigned long totalBytes, unsigned long completedBytes) {
 	statusUpdate(totalBytes, completedBytes);
 }
 
