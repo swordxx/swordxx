@@ -414,6 +414,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/canon_rahlfs.h
 	include/canon_lxx.h
 	include/canon_orthodox.h
+	include/canon_synodalprot.h
 )
 
 SET(INTERNAL_REGEX_HEADER

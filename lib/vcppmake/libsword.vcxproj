@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -308,6 +308,7 @@
     <ClInclude Include="..\..\include\canon_orthodox.h" />
     <ClInclude Include="..\..\include\canon_rahlfs.h" />
     <ClInclude Include="..\..\include\canon_synodal.h" />
+    <ClInclude Include="..\..\include\canon_synodalprot.h" />
     <ClInclude Include="..\..\include\canon_vulg.h" />
     <ClInclude Include="..\..\include\cipherfil.h" />
     <ClInclude Include="..\..\include\config.h" />
