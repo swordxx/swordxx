@@ -828,7 +828,7 @@ const char *SWModule::getRenderHeader() const {
 		setProcessEntryAttributes(false);
 	}
 
-	static SWBuf local;
+	SWBuf local;
 	if (buf)
 		local = buf;
 
