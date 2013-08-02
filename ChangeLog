@@ -1,4 +1,4 @@
-API ChangeLog 
+API ChangeLog
 
 
 16-July-2013	Troy A. Griffitts <scribe@crosswire.org>
@@ -361,7 +361,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 		<div subType="x-preverse" sID="xyz"/>
 	Added initial set of v11n schemes (Chris Little):
 		KJV, Leningrad, MT, KJVA, NRSV, NRSVA
-	
+
 12-Apr-2009	Troy A. Griffitts <scribe@crosswire.org>
 	Added '.' feature for entryAttrib search, e.g,
 		Word//Lemma./G932/ will find in Lemma, Lemma.1, etc.
@@ -416,7 +416,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 	Added param on SWBuf::stripPrefix to allow use more
 		like a safe string tokenizer to replace strtok
 
-		
+
 16-Dec-2008	Joachim A. <jansorg@crosswire.org>
 	Added two Chinese bookname translations provided by
 		F. Lee
@@ -437,7 +437,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 	Added Japanese locale from http://bible.50webs.org/en/
 	Applied Ben Morgan's TEIHTMLHREF filter
 	Added TEIHTMLHREF filter to BCB5 project
-		
+
 11-May-2008	Troy A. Griffitts <scribe@crosswire.org>
 	Applied patch to better handle x-refs in notes
 		-Ben Morgan <benpmorgan at gmail dot com>
@@ -550,7 +550,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 	Added SWBuf::startsWith, endsWith
 	Added entry attribute exposure of multipart words
 	Added beginnings of VerseKey subclass which uses TreeKey
-	
+
 25-Apr-2006	Troy A. Griffitts <scribe@crosswire.org>
 	Changed SWModule::search to fill result set up with more
 		specialized SWKey objects, instead of always SWKey
@@ -582,7 +582,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 	Fixed the dutch locale file
 
 21-Sep-2005	Martin Gruner <mgruner@crosswire.org>
-	Added Hebrew locale for both Tanach (OT) and 
+	Added Hebrew locale for both Tanach (OT) and
 	Berit Chadashah (NT).
 
 * Release 1.5.8 *
@@ -796,7 +796,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 		more consistently deal with strongs numbers
 
 23-Oct-2002	Daniel Glassey <dglassey@crosswire.org>
-	Some base work for installmgr on classes to 
+	Some base work for installmgr on classes to
 		manage mods.d
 
 
@@ -825,7 +825,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 
 07-Oct-2002	Troy A. Griffitts <scribe@crosswire.org>
 	Fixed rawFilter bug where entrySize was being passed
-		instead of maxBufferSize.  This problem caused 
+		instead of maxBufferSize.  This problem caused
 		a number of problems with the engine.
 	Applied a few of Franklin Bratcher's critical patches
 		to diatheke.
@@ -966,7 +966,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 	Updated make system to display better user output
 	Updated 'readme'-type files
 	Added make install_config
-	
+
 21-Mar-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Changed SWMgr::Load ONE MORE TIME (blame Osk) to return
 		signed char for mac ppc to work correctly
@@ -1040,7 +1040,7 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 	Fixed RawGenBook memory bugs
 	Isolated all byte swapping logic to sysdata.h
 	Changed BIGENDIAN to SWBIGENDIAN
-	
+
 27-Feb-2002     Troy A. Griffitts <scribe@crosswire.org>
 	Commited tbiggs' update to thmlhtmlhref.cpp
 	Commited dglassey's update to make system
@@ -1128,12 +1128,12 @@ module names are stored as lower case string in SwordManagers module cache. -mod
 11-Jun-2001     Troy A. Griffitts <scribe@crosswire.org>
 	Added limited unicode support
 	Added French locale from Dominique Corbex
-	
+
 02-Jun-2001	Chris Little <chrislit@crosswire.org>
 	Added GBFMorph OptionFilter to handle <WT...> tags and adjusted
 		GBFStrongs & other filters to not handle <WTG/H...> as a
 		Strong's number
-	
+
 20-May-2001	Joachim Ansorg <jansorg@gmx.de>
 	Updated the Czech translation of booknames (cs.conf)
 
@@ -1147,7 +1147,7 @@ Kolatzek.
 	Added emptyvss utility to list empty verses in a module
 	Added warning to vpl2mod for cases where a verse is being
 		overwritten
-	
+
 23-Mar-2001	Joachim Ansorg <jansorg@gmx.de>
 	Made some changes to the API documentation in the headers
 		(documented new classes).
@@ -1209,7 +1209,7 @@ Kolatzek.
 
 10-Dec-2000     Chris Little <chrislit@crosswire.org>
 	Added addld utility for adding single entries to LD modules
-	
+
 09-Dec-2000     Chris Little <chrislit@crosswire.org>
 	Added addvs utility for adding single verses to modules
 	Added Diatheke (and CGI/Tcl/PQA frontends to it) to source
@@ -1249,7 +1249,7 @@ Kolatzek.
 	Added more debug for tests/mgrtest.cpp
 	Hardcoded VerseKey::NewIndex to KJV max index
 
-01-Nov-2000	Joachim Ansorg <jansorg@crosswire.org> 
+01-Nov-2000	Joachim Ansorg <jansorg@crosswire.org>
 	Added test program for indexes using VerseKey::NewIndex()
 
 31-Oct-2000	Joachim Ansorg <jansorg@crosswire.org>
@@ -1272,7 +1272,7 @@ Kolatzek.
 	gbfhtml.cpp: Changed the HTML tag for new paragraph from <P> to <BR>
 		because it's bad HTML without a closing </P> tag.
 
-23-Oct-2000	Joachim Ansorg <jansorg@crosswire.org> 
+23-Oct-2000	Joachim Ansorg <jansorg@crosswire.org>
 	Changed the private section of versekey.h into a protected one
 	because we need the change for current BibleTime!
 
@@ -1289,7 +1289,7 @@ Kolatzek.
 	Added write link support in RawText.
 	Added new test introtest to test module intros.
 	Fixed abbrev parsing to see Phil as Php.
-	
+
 05-Sep-2000	Joachim Ansorg <jansorg@gmx.de>
 	Fixed a problem in Makefile.cfg with profiler support and
 		non-debugging lib (-s removes the profiler support,
@@ -1316,7 +1316,7 @@ Kolatzek.
 
 16-Aug-2000	Joachim Ansorg <jansorg@gmx.de>
 	Fixed utilities/mkfastmod.cpp
-	Added a template for translations of international booknames 
+	Added a template for translations of international booknames
 		(doc/translation-template.conf).
 
 14-Aug-2000	Troy A. Griffitts <scribe@crosswire.org>
@@ -1394,7 +1394,7 @@ Kolatzek.
 	Added scoped searches
 	More bug fixes, as always
 	Profiling to speed up some sections of code
-	
+
 09-Jan-1999
 	Various API bug fixes.
 	Added navigation support for all module types
@@ -1410,12 +1410,12 @@ Kolatzek.
 	Moved directory structure.
 	Added Luis Cortes' wxSword frontend to apps tree. GREAT START!
 	Fixed bug in canon.h that incorrectly assumed static structures were
-		allocated on the heap sequential if they were in the source 
+		allocated on the heap sequential if they were in the source
 		sequentially.
 	Changed SWModule::Search(char *... to SWModule::Search(const char *
 	Removed -Werror from Makefile.cfg to avoid problems with different
 		warnings that get displayed with different versions of egcs
-	
+
 12-Dec-1997
 	Fixed typo in about box of BibleCS
 	Changed font copyright notice in n27u4
@@ -1435,7 +1435,7 @@ Kolatzek.
 			sword Bible Search WEB knee[ls]
 		WARNING: case sensitive module names
 		See ddetest program under BibleCS directory
-		
+
 29-Nov-1997
 	Added SWFilter and modified appropriate modules to use these.
 	Added RawGBF class that automatically adds a GBFPlain filter to
@@ -1455,7 +1455,7 @@ Kolatzek.
 	Added module 'web' (The World English Bible)
 	Added swmgr class for module management.
 	Added swconfig class for .conf file manipulation.
-	
+
 05-Oct-1997
 	Added regular expression functionality to SWModule.Search() Used GNU
 		regex.h and regex.c with slight modifications to #define's
@@ -1482,7 +1482,7 @@ Kolatzek.
 
 	once again.. probably many other things I forgot to list, but I'm
 		getting better! ;)  Sorry for the time lapse.
-	
+
 
 8-Apr-1996
 
@@ -1545,8 +1545,8 @@ Kolatzek.
 	Almost useful .exe in frontend/windoze/bcowl25/ (at least it shows an
 		example of coding direction for use of the API)
 	... probably more that I forgot ...
-	
-	
+
+
 22-Jan-1996
 
 	Added chapmax and versemax information (canon.h)
