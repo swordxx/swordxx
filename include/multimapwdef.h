@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef MULTIMAPWDEF
-#define MULTIMAPWDEF
+#ifndef MULTIMAPWDEF_H
+#define MULTIMAPWDEF_H
 
 #include <map>
 

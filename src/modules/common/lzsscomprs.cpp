@@ -25,7 +25,51 @@
 #include <string.h>
 #include <lzsscomprs.h>
 
+// The following are constant sizes used by the compression algorithm.
+//
+//  N         - This is the size of the ring buffer.  It is set
+//              to 4K.  It is important to note that a position
+//              within the ring buffer requires 12 bits.  
+//
+//  F         - This is the maximum length of a character sequence
+//              that can be taken from the ring buffer.  It is set
+//              to 18.  Note that a length must be 3 before it is
+//              worthwhile to store a position/length pair, so the
+//              length can be encoded in only 4 bits.  Or, put yet
+//              another way, it is not necessary to encode a length
+//              of 0-18, it is necessary to encode a length of
+//              3-18, which requires 4 bits.
+//              
+//  THRESHOLD - It takes 2 bytes to store an offset and
+//              a length.  If a character sequence only
+//              requires 1 or 2 characters to store 
+//              uncompressed, then it is better to store
+//              it uncompressed than as an offset into
+//              the ring buffer.
+//
+// Note that the 12 bits used to store the position and the 4 bits
+// used to store the length equal a total of 16 bits, or 2 bytes.
+
+#define N		4096
+#define F		18
+#define THRESHOLD	3
+#define NOT_USED	N
+
+
 SWORD_NAMESPACE_START
+
+class LZSSCompress::Private {
+public:
+	static unsigned char m_ring_buffer[N + F - 1];
+	static short int m_match_position;
+	static short int m_match_length;
+	static short int m_lson[N + 1];
+	static short int m_rson[N + 257];
+	static short int m_dad[N + 1];
+	void InitTree();
+	void InsertNode(short int Pos);
+	void DeleteNode(short int Node);
+};
 
 /******************************************************************************
  * LZSSCompress Statics
@@ -46,7 +90,7 @@ SWORD_NAMESPACE_START
 // The ring buffer contain N bytes, with an additional F - 1 bytes
 // to facilitate string comparison.
 
-unsigned char LZSSCompress::m_ring_buffer[N + F - 1];
+unsigned char LZSSCompress::Private::m_ring_buffer[N + F - 1];
 
 // m_match_position and m_match_length are set by InsertNode().
 //
@@ -54,8 +98,8 @@ unsigned char LZSSCompress::m_ring_buffer[N + F - 1];
 // and the number of characters at that position that match
 // a given string.
 
-short int LZSSCompress::m_match_position;
-short int LZSSCompress::m_match_length;
+short int LZSSCompress::Private::m_match_position;
+short int LZSSCompress::Private::m_match_length;
 
 // m_lson, m_rson, and m_dad are the Japanese way of referring to
 // a tree structure.  The dad is the parent and it has a right and
@@ -75,9 +119,9 @@ short int LZSSCompress::m_match_length;
 // integers (for 32-bit applications).  Therefore, these are 
 // defined as "short ints."
 
-short int LZSSCompress::m_lson[N + 1];
-short int LZSSCompress::m_rson[N + 257];
-short int LZSSCompress::m_dad[N + 1];
+short int LZSSCompress::Private::m_lson[N + 1];
+short int LZSSCompress::Private::m_rson[N + 257];
+short int LZSSCompress::Private::m_dad[N + 1];
 
 
 /******************************************************************************
@@ -86,6 +130,7 @@ short int LZSSCompress::m_dad[N + 1];
  */
 
 LZSSCompress::LZSSCompress() : SWCompress() {
+	p = new Private();
 }
 
 
@@ -94,6 +139,7 @@ LZSSCompress::LZSSCompress() : SWCompress() {
  */
 
 LZSSCompress::~LZSSCompress() {
+	delete p;
 }
 
 
@@ -102,7 +148,7 @@ LZSSCompress::~LZSSCompress() {
  *							"empty" states. 
  */
 
-void LZSSCompress::InitTree(void) {
+void LZSSCompress::Private::InitTree(void) {
 	int  i;
 
 	// For i = 0 to N - 1, m_rson[i] and m_lson[i] will be the right
@@ -161,7 +207,7 @@ void LZSSCompress::InitTree(void) {
  * ENT:	pos	- position in the buffer
  */
 
-void LZSSCompress::InsertNode(short int Pos)
+void LZSSCompress::Private::InsertNode(short int Pos)
 {
 	short int i;
 	short int p;
@@ -259,7 +305,7 @@ void LZSSCompress::InsertNode(short int Pos)
  * ENT:	node	- node to be removed
  */
 
-void LZSSCompress::DeleteNode(short int Node)
+void LZSSCompress::Private::DeleteNode(short int Node)
 {
 	short int  q;
 
@@ -332,7 +378,7 @@ void LZSSCompress::Encode(void)
 
 	// Start with a clean tree.
 
-	InitTree();
+	p->InitTree();
 	direct = 0;	// set direction needed by parent [Get|Send]Chars()
 
 	// code_buf[0] works as eight flags.  A "1" represents that the
@@ -368,14 +414,14 @@ void LZSSCompress::Encode(void)
 	// This is because those F bytes will be filled in immediately
 	// with bytes from the input stream.
 
-	memset(m_ring_buffer, ' ', N - F);
+	memset(p->m_ring_buffer, ' ', N - F);
 	
 	// Read F bytes into the last F bytes of the ring buffer.
 	//
 	// This function loads the buffer with X characters and returns
 	// the actual amount loaded.
 
-	len = GetChars((char *) &(m_ring_buffer[r]), F);
+	len = GetChars((char *) &(p->m_ring_buffer[r]), F);
 
 	// Make sure there is something to be compressed.
 
@@ -388,13 +434,13 @@ void LZSSCompress::Encode(void)
 	// to occur.
 
 	for (i = 1; i <= F; i++) {
-		InsertNode((short int) (r - i));
+		p->InsertNode((short int) (r - i));
 	}
 
 	// Finally, insert the whole string just read.  The
 	// member variables match_length and match_position are set.
 
-	InsertNode(r);
+	p->InsertNode(r);
 
 	// Now that we're preloaded, continue till done.
 
@@ -403,20 +449,20 @@ void LZSSCompress::Encode(void)
 		// m_match_length may be spuriously long near the end of
 		// text.
 
-		if (m_match_length > len) {
-			m_match_length = len;
+		if (p->m_match_length > len) {
+			p->m_match_length = len;
 		}
 
 		// Is it cheaper to store this as a single character?  If so,
 		// make it so.
 
-		if (m_match_length < THRESHOLD) {
+		if (p->m_match_length < THRESHOLD) {
 			// Send one character.  Remember that code_buf[0] is the
 			// set of flags for the next eight items.
 
-			m_match_length = 1;	 
+			p->m_match_length = 1;	 
 			code_buf[0] |= mask;  
-			code_buf[code_buf_pos++] = m_ring_buffer[r];
+			code_buf[code_buf_pos++] = p->m_ring_buffer[r];
 		}
 
 		// Otherwise, we do indeed have a string that can be stored
@@ -426,10 +472,10 @@ void LZSSCompress::Encode(void)
 			// The next 16 bits need to contain the position (12 bits)
 			// and the length (4 bits).
 
-			code_buf[code_buf_pos++] = (unsigned char) m_match_position;
+			code_buf[code_buf_pos++] = (unsigned char) p->m_match_position;
 			code_buf[code_buf_pos++] = (unsigned char) (
-				((m_match_position >> 4) & 0xf0) | 
-				(m_match_length - THRESHOLD) );
+				((p->m_match_position >> 4) & 0xf0) | 
+				(p->m_match_length - THRESHOLD) );
 		}
 
 		// Shift the mask one bit to the left so that it will be ready
@@ -454,7 +500,7 @@ void LZSSCompress::Encode(void)
 			mask = 1;
 		}
 
-		last_match_length = m_match_length;
+		last_match_length = p->m_match_length;
 
 		// Delete old strings and read new bytes...
 
@@ -466,7 +512,7 @@ void LZSSCompress::Encode(void)
 
 			// Delete "old strings"
 
-			DeleteNode(s);
+			p->DeleteNode(s);
 
 			// Put this character into the ring buffer.
 			//		  
@@ -493,10 +539,10 @@ void LZSSCompress::Encode(void)
 			//										 |
 			//				  duplicate of front of buffer
 
-			m_ring_buffer[s] = c;
+			p->m_ring_buffer[s] = c;
 
 			if (s < F - 1) {
-				m_ring_buffer[s + N] = c;
+				p->m_ring_buffer[s + N] = c;
 			}
 
 			// Increment the position, and wrap around when we're at
@@ -508,7 +554,7 @@ void LZSSCompress::Encode(void)
 			// Register the string that is found in 
 			// m_ring_buffer[r..r+F-1].
 
-			InsertNode(r);
+			p->InsertNode(r);
 		}
 
 		// If we didn't quit because we hit the last_match_length,
@@ -516,7 +562,7 @@ void LZSSCompress::Encode(void)
 		// to process.
 
 		while (i++ < last_match_length) {							  
-			DeleteNode(s);
+			p->DeleteNode(s);
 
 			s = (short int) ( (s + 1) & (N - 1) );
 			r = (short int) ( (r + 1) & (N - 1) );
@@ -529,7 +575,7 @@ void LZSSCompress::Encode(void)
 			// short strings).
 
 			if (--len) {
-				InsertNode(r);	   /* buffer may not be empty. */
+				p->InsertNode(r);	   /* buffer may not be empty. */
 			}
 		}
 
@@ -579,7 +625,7 @@ void LZSSCompress::Decode(void)
 	//
 	// Note that the last F bytes of the ring buffer are not filled.
 
-	memset(m_ring_buffer, ' ', N - F);
+	memset(p->m_ring_buffer, ' ', N - F);
 	
 	r = N - F;
 
@@ -626,7 +672,7 @@ void LZSSCompress::Decode(void)
 
 			// Add to buffer, and increment to next spot. Wrap at end.
 
-			m_ring_buffer[r] = c[0];
+			p->m_ring_buffer[r] = c[0];
 			r = (short int) ( (r + 1) & (N - 1) );
 		}
 
@@ -664,11 +710,11 @@ void LZSSCompress::Decode(void)
 			// len is never more than F.
 
 			for (k = 0; k < len; k++) {
-				c[k] = m_ring_buffer[(pos + k) & (N - 1)];
+				c[k] = p->m_ring_buffer[(pos + k) & (N - 1)];
 
 				// Add to buffer, and increment to next spot. Wrap at end.
 
-				m_ring_buffer[r] = c[k];
+				p->m_ring_buffer[r] = c[k];
 				r = (short int) ( (r + 1) & (N - 1) );
 			}
 
