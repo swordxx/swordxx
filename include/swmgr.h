@@ -43,12 +43,13 @@
  *	some of the existing ones.  They can always use help, and will also prove to be good examples
  *	if you decide to start a new project.
  *
- * Well known frontends are:\n
- *	-BibleTime (http://www.bibletime.info)\n
- *	-BPBible (http://bpbible.com)\n
- *	-MacSword (http://www.macsword.com)\n
- *	-Xiphos (http://xiphos.org)\n
- *	-SWORD for Windows (http://crosswire.org/sword/software/biblecs/)\n
+ * Well known frontends are:
+ *	-BibleTime (http://www.bibletime.info)
+ *	-BPBible (http://bpbible.com)
+ *	-Eloquent (http://www.macsword.com)
+ *	-PocketSword (http://crosswire.org/pocketsword/)
+ *	-SWORD for Windows (http://crosswire.org/sword/software/biblecs/)
+ *	-Xiphos (http://xiphos.org) 
  */
 
 #ifndef SWMGR_H
