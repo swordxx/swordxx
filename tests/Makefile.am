@@ -69,7 +69,7 @@ webiftest_SOURCES = webiftest.cpp
 striptest_SOURCES = striptest.cpp
 xmltest_SOURCES = xmltest.cpp
 osistest_SOURCES = osistest.cpp
-bibliotest_SOURCE = bibliotest.cpp
+bibliotest_SOURCES = bibliotest.cpp
 
 EXTRA_DIST = 
 include bcppmake/Makefile.am
