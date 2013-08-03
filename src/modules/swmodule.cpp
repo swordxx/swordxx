@@ -921,6 +921,23 @@ const char *SWModule::stripText(const SWKey *tmpKey) {
 	return retVal;
 }
 
+/******************************************************************************
+ * SWModule::getBibliography 	- checks whether module conf file has an key
+ * "Bibliography" and returns the relevant entry or creates a rudimentary BibTex
+ * entry from existing data
+ *
+ * RET: Bibliography entry in BibTex format
+ */
+
+const char *SWModule::getBibliography() const {
+	if (const char *c = getConfigEntry("Bibliography"))
+		return c;	
+	else {	 
+		SWBuf s = SWBuf("@Book {") + (SWBuf) modname + SWBuf(", Title = \"") + (SWBuf) moddesc + SWBuf("\", Publisher = \"CrossWire Bible Society\"}");
+		(*config)["Bibliography"] = s;
+		return getConfigEntry("Bibliography");
+	}
+}
 
 const char *SWModule::getConfigEntry(const char *key) const {
 	ConfigEntMap::iterator it = config->find(key);
