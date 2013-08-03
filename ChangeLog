@@ -125,9 +125,8 @@ Then initialize the Factory with this provider.
 	New Lucene index field for searching 'morph' (lemma@morphology)
 
 ------------------------------------------------------------------------
-r2704 | refdoc | 2012-06-21 01:13:39 +0200 (Thu, 21 Jun 2012) | 2 lines
-
-Added Pohnpeian language locale
+21-Jun-2012 	Peter von Kaehne <refdoc@crosswire.org>
+	Added Pohnpeian language locale
 
 
 ------------------------------------------------------------------------
@@ -230,16 +229,11 @@ r2618 | mdbergmann | 2011-03-19 12:54:58 +0100 (Sat, 19 Mar 2011) | 1 line
 SwordLocaleManager can be initialized with a given path to locales.d. Swordbible decodeRef class method will now only pass back values where not NULL was delivered.
 
 ------------------------------------------------------------------------
-r2616 | refdoc | 2011-03-16 16:29:18 +0100 (Wed, 16 Mar 2011) | 4 lines
+16-Mar-2011 Peter von Kaehne <refdoc@crosswire.org>
+	introducing localised keys to imp2vs.cpp
 
-introducing localised keys to imp2vs.cpp
-
-
-------------------------------------------------------------------------
-r2612 | refdoc | 2011-03-15 10:20:58 +0100 (Tue, 15 Mar 2011) | 2 lines
-
-Faroese locale
-
+15-Mar-2011 Peter von Kaehne <refdoc@crosswire.org>
+	Faroese Locale
 
 ------------------------------------------------------------------------
 r2590 | mdbergmann | 2010-11-21 17:14:35 +0100 (Sun, 21 Nov 2010) | 1 line
