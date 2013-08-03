@@ -197,9 +197,12 @@ public:
 	virtual const char *getConfigEntry(const char *key) const;
 
 	/**
-	 * @return  This medhod will either return an existing BibTex entry from the module's conf file or construct and return a rudimentary one. The size of the text entry for the module's current key position.
+	 * Returns bibliographic data for a module in the requested format
+	 *
+	 * @param bibFormat format of the bibliographic data
+	 * @return bibliographic data in the requested format as a string (BibTeX by default)
 	 */
-	virtual const char *getBibliography() const;
+	virtual const char *getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
 
 	/**
 	 * @return The size of the text entry for the module's current key position.
