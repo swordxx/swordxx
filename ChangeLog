@@ -34,7 +34,7 @@ API ChangeLog
 29-Jun=2013	Chris Little <chrislit@crosswire.org>
 	removed PLAINHTML and PLAINFootnotes filters
 
-19-Jun-2013 Gregory S. Hellings <greg.hellings@gmail.com>
+19-Jun-2013	Gregory S. Hellings <greg.hellings@gmail.com>
 	Introduced CMake options to specify exact install locations
 		of subcomponents
 
@@ -78,11 +78,6 @@ API ChangeLog
 	Greatly improved navigation with intros and normalization turned
 		on/off
 
-------------------------------------------------------------------------
-r2783 | dmsmith | 2013-02-18 17:56:43 +0100 (Mon, 18 Feb 2013) | 1 line
-
-treat \n as a space and don't introduce space
-
 1-Feb-2013	Troy A. Griffitts <scribe@crosswire.org>
 	New .conf entries honored:
 		StrongsPadding=false, which turns off
@@ -92,7 +87,7 @@ treat \n as a space and don't introduce space
 29-Jan-2013	Jaak Ristioja <jaak@ristioja.ee>
 	Removed warnings in header files for unused variables
 
-06-Jan-2013 Gregory S. Hellings <greg.hellings@gmail.com>
+06-Jan-2013	Gregory S. Hellings <greg.hellings@gmail.com>
 	Added support to install from SFTP sources using username/password
 		authentication in places where cURL has SFTP support (no support
 		for public-key auth yet)
@@ -119,7 +114,7 @@ Then initialize the Factory with this provider.
 14-Sep-2012	Troy A. Griffitts <scribe@crosswire.org>
 	Changed default log level to WARN from INFO
 
-29-Aug-2012 Gregory S. Hellings <greg.hellings@gmail.com>
+29-Aug-2012	Gregory S. Hellings <greg.hellings@gmail.com>
 	Swig bindings may now be built against shared or static libraries.
 	Cleaned up almost all gcc 4.7 warnings from the swig bindings and
 		eliminated errors which packagers had discovered.
@@ -136,7 +131,7 @@ Added Pohnpeian language locale
 
 
 ------------------------------------------------------------------------
-25-Apr-2012 Gregory S. Hellings <greg.hellings@gmail.com>
+25-Apr-2012	Gregory S. Hellings <greg.hellings@gmail.com>
 	InstallMgr now supports HTTPS connections where cURL has support
 		for that transport
 
@@ -156,20 +151,17 @@ Allow div in header of osis document. From John Zaitseff
 		MODTYPE_GENBOOKS, MODTYPE_DAILYDEVOS
 
 ------------------------------------------------------------------------
-14-Feb-2012 Gregory S. Hellings <greg.hellings@gmail.com>
+14-Feb-2012	Gregory S. Hellings <greg.hellings@gmail.com>
 	Added cross-compile support to CMake, including sample Toolchain files.
 
-------------------------------------------------------------------------
-r2677 | charcoal | 2012-02-13 02:48:36 +0100 (Mon, 13 Feb 2012) | 1 line
+13-Feb-2012	Karl Kleinpaste <karl@kleinpaste.org>
+	Added ability for *HTML* wrappers to render n attribute from notes
 
-add setRenderNoteNumbers to get n=X content attached to *n/*x
 ------------------------------------------------------------------------
 r2676 | mdbergmann | 2012-01-30 19:56:15 +0100 (Mon, 30 Jan 2012) | 1 line
 
 update to Lion Project. All SWORD utils are now in Xcode project and can be built from there. They are however prepared to be used from with Eloquent.
 
-------------------------------------------------------------------------
-r2672 | chrislit | 2011-12-07 07:40:36 +0100 (Wed, 07 Dec 2011) | 1 line
 07-Dec-2011	Chris Little <chrislit@crosswire.org>
 	removed SynodalP v11n from library
 
@@ -178,7 +170,7 @@ r2668 | dmsmith | 2011-11-12 18:35:32 +0100 (Sat, 12 Nov 2011) | 1 line
 
 re-added the preverse div markers
 ------------------------------------------------------------------------
-02-Nov-2011 Gregory S. Hellings <greg.hellings@gmail.com>
+02-Nov-2011	Gregory S. Hellings <greg.hellings@gmail.com>
 	Improved handling of CLucene and included support for CLucene 2
 
 29-Oct-2011	Troy A. Griffitts <scribe@crosswire.org>
@@ -202,7 +194,7 @@ r2648 | mdbergmann | 2011-07-24 17:09:27 +0200 (Sun, 24 Jul 2011) | 1 line
 readded ppc archiecture for Xcode project.
 
 
-14-Jul-2011 Gregory S. Hellings <greg.hellings@gmail.com>
+14-Jul-2011	Gregory S. Hellings <greg.hellings@gmail.com>
 	Added a sample Python script that demonstrates the bindings and compares
 		osisIDs in an XML file to known Versification schemes
 

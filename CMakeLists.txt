@@ -15,7 +15,7 @@
 # A CMake port of the SWORD build system... we hope
 PROJECT(libsword CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
-SET(SWORD_VERSION 1.6.901)
+SET(SWORD_VERSION 1.6.902)
 
 # Make sure it's an out-of-stream build
 IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
