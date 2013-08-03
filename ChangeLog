@@ -135,14 +135,9 @@ Added Pohnpeian language locale
 	InstallMgr now supports HTTPS connections where cURL has support
 		for that transport
 
-------------------------------------------------------------------------
-r2693 | dmsmith | 2012-03-24 23:38:01 +0100 (Sat, 24 Mar 2012) | 1 line
-
-Allow comments to be in osis document and to be stripped out. From John Zaitseff
-------------------------------------------------------------------------
-r2692 | dmsmith | 2012-03-24 23:21:11 +0100 (Sat, 24 Mar 2012) | 1 line
-
-Allow div in header of osis document. From John Zaitseff
+24-Mar-2012	DM Smith <dmsmith@crosswire.org>
+	osis2mod: Allow comments to be in osis document and to be stripped out. From John Zaitseff
+	osis2mod: Allow div in header of osis document. From John Zaitseff
 
 
 21-Feb-2012	Troy A. Griffitts <scribe@crosswire.org>
@@ -165,11 +160,9 @@ update to Lion Project. All SWORD utils are now in Xcode project and can be buil
 07-Dec-2011	Chris Little <chrislit@crosswire.org>
 	removed SynodalP v11n from library
 
-------------------------------------------------------------------------
-r2668 | dmsmith | 2011-11-12 18:35:32 +0100 (Sat, 12 Nov 2011) | 1 line
+12-Nov-2011	DM Smith <dmsmith@crosswire.org>
+	osis2mod: re-added the preverse div markers
 
-re-added the preverse div markers
-------------------------------------------------------------------------
 02-Nov-2011	Gregory S. Hellings <greg.hellings@gmail.com>
 	Improved handling of CLucene and included support for CLucene 2
 
