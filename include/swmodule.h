@@ -202,7 +202,7 @@ public:
 	 * @param bibFormat format of the bibliographic data
 	 * @return bibliographic data in the requested format as a string (BibTeX by default)
 	 */
-	virtual const char *getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
+	virtual SWBuf getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
 
 	/**
 	 * @return The size of the text entry for the module's current key position.

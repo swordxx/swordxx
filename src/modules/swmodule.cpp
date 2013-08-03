@@ -930,11 +930,11 @@ const char *SWModule::stripText(const SWKey *tmpKey) {
  * RET: bibliographic data in the requested format as a string (BibTeX by default)
  */
 
-const char *SWModule::getBibliography(unsigned char bibFormat) const {
+SWBuf SWModule::getBibliography(unsigned char bibFormat) const {
 	SWBuf s;
 	switch (bibFormat) {
 	case BIB_BIBTEX:
-		s = SWBuf("@Book {") + (SWBuf) modname + SWBuf(", Title = \"") + (SWBuf) moddesc + SWBuf("\", Publisher = \"CrossWire Bible Society\"}");
+		s.append("@Book {").append(modname).append(", Title = \"").append(moddesc).append("\", Publisher = \"CrossWire Bible Society\"}");
 		break;
 	}
 	return s;
