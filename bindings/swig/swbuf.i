@@ -33,5 +33,11 @@
         char charAt2(unsigned int pos) {
                 return self->charAt((unsigned long)pos);
         }
+        %extend {
+                char *__str__() {
+                        return const_cast<char *>(self->c_str());
+                }
+        }
+
 };
 
