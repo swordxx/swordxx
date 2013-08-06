@@ -295,6 +295,21 @@ else
   dir_confdef="yes"
 fi
 
+changequote(<<,>>)
+V1=`expr $VERSION : '\([0-9]*\)\.[0-9]*\.*[0-9]*[a-zA-Z]*[0-9]*'`
+V2=`expr $VERSION : '[0-9]*\.\([0-9]*\)\.*[0-9]*[a-zA-Z]*[0-9]*'`
+V3=`expr $VERSION : '[0-9]*\.[0-9]*\.*\([0-9]*\)[a-zA-Z]*[0-9]*'`
+V4=`expr $VERSION : '[0-9]*\.[0-9]*\.*[0-9]*\([a-zA-Z]*\)[0-9]*'`
+V5=`expr $VERSION : '[0-9]*\.[0-9]*\.*[0-9]*[a-zA-Z]*\([0-9]*\)'`
+changequote([,])
+
+if test "$V2" -le 9 ; then V2=0$V2 ; fi
+if test "$V3" -le 9 ; then V3=00$V3 ; elif test "$V3" -le 99 ; then V3=0$V3 ; fi
+
+SWORD_NUMVERSION=$V1$V2$V3
+AC_SUBST(SWORD_NUMVERSION)
+
+
 
 # ---------------------------------------------------------------------
 # Substitute variables into makefiles
