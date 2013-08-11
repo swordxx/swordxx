@@ -2,7 +2,7 @@
 #include "swbuf.h"
 %}
 
-%ignore sword::SWBuf::operator const char *;
+%rename(__str__) sword::SWBuf::operator const char *;
 %ignore sword::SWBuf::operator[];
 %ignore sword::SWBuf::operator+;
 %ignore sword::SWBuf::operator==;
@@ -33,11 +33,5 @@
         char charAt2(unsigned int pos) {
                 return self->charAt((unsigned long)pos);
         }
-        %extend {
-                char *__str__() {
-                        return const_cast<char *>(self->c_str());
-                }
-        }
-
 };
 

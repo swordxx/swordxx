@@ -1,5 +1,18 @@
 /* Methods that are deprecated in SWORD and should be ignored. */
 
+/* These are all together */
+%ignore sword::SWModule::operator const char *;
+%ignore sword::SWVersion::operator const char *;
+%ignore sword::SWKey::operator const char *;
+%ignore sword::ListKey::operator const char *;
+%ignore sword::VerseKey::operator const char *;
+%ignore sword::TreeKey::operator const char *;
+%ignore sword::TreeKeyIdx::operator const char *;
+%ignore sword::VerseTreeKey::operator const char *;
+%ignore sword::XMLTag::operator const char *;
+
+%ignore sword::StatusReporter::statusUpdate;
+
 %ignore sword::SWDisplay::Display(SWModule&);
 
 %ignore sword::SWKey::Error();

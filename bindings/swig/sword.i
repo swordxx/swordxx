@@ -12,11 +12,13 @@
 %include "directors.i"
 #endif
 
+/* Some renames for sanity */
+%ignore *::operator SWBuf;
+
 /* Some generic ignores. These don't map into any Python operators */
 %ignore *::operator=;
 %ignore *::operator++;
 %ignore *::operator--;
-%ignore *::operator const char *;
 %ignore *::operator sword::SWKey &;
 %ignore *::operator sword::SWKey *;
 /* An ignore for missing wchar_t compatibility */
