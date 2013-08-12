@@ -24,7 +24,9 @@ UNIX DEVELOPERS
 
 	If you are an end user looking for a nice SWORD, graphical Bible study
 	software suite, then you'll probably want to download one of the
-	many nice frontends found at http://crosswire.org
+	many nice frontends found at
+
+	http://crosswire.org/applications.jsp
 
 	./buildtest.cpp compiles to the executable 'buildtest' as a test to
 	see if the libs have compiled and can be linked against successfully.
@@ -44,7 +46,7 @@ LANGUAGE BINDINGS
 	Kylix bindings (and maybe Delphi bindings) may be found in sword/bindings/clx
 	CORBA (orbit-c++) bindings with Java example classes in /bindings/corba
 	Perl stuff in bindings/perl
-	SWIG stuff (Python, .NET, many others) in bindings/swig
+	SWIG stuff (Python, Perl) in bindings/swig
 
 
 C++BUILDER DEVELOPERS

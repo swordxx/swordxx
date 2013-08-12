@@ -135,8 +135,10 @@ struct NetBuf {
     char response[256];
 };
 
+#if 0
 static char *version =
 "ftplib Release 3.1-1 9/16/00, copyright 1996-2000 Thomas Pfau";
+#endif
 
 GLOBALDEF int ftplib_debug = 0;
 

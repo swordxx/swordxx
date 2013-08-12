@@ -296,16 +296,30 @@ else
 fi
 
 changequote(<<,>>)
-V1=`expr $VERSION : '\([0-9]*\)\.[0-9]*\.*[0-9]*[a-zA-Z]*[0-9]*'`
-V2=`expr $VERSION : '[0-9]*\.\([0-9]*\)\.*[0-9]*[a-zA-Z]*[0-9]*'`
-V3=`expr $VERSION : '[0-9]*\.[0-9]*\.*\([0-9]*\)[a-zA-Z]*[0-9]*'`
+V1=`expr $VERSION : '\([0-9]*\)\.[0-9]*\.*[0-9]*\.*[0-9]*'`
+V2=`expr $VERSION : '[0-9]*\.\([0-9]*\)\.*[0-9]*\.*[0-9]*'`
+V3=`expr $VERSION : '[0-9]*\.[0-9]*\.*\([0-9]*\)\.*[0-9]*'`
+V4=`expr $VERSION : '[0-9]*\.[0-9]*\.*[0-9]*\.*\([0-9]*\)'`
 changequote([,])
+
+SWORD_VERSION_STR=$VERSION
+SWORD_VERSION_MAJOR=$V1
+SWORD_VERSION_MINOR=$V2
+SWORD_VERSION_MICRO=$V3
+if test "$V4" = "" ; then V4=0; fi
+SWORD_VERSION_NANO=$V4
 
 if test "$V2" -le 9 ; then V2=0$V2 ; fi
 if test "$V3" -le 9 ; then V3=00$V3 ; elif test "$V3" -le 99 ; then V3=0$V3 ; fi
+if test "$V4" -le 9 ; then V4=00$V4 ; elif test "$V4" -le 99 ; then V4=0$V4 ; fi
+SWORD_VERSION_NUM=$V1$V2$V3$V4
 
-SWORD_NUMVERSION=$V1$V2$V3
-AC_SUBST(SWORD_NUMVERSION)
+AC_SUBST(SWORD_VERSION_NUM)
+AC_SUBST(SWORD_VERSION_STR)
+AC_SUBST(SWORD_VERSION_MAJOR)
+AC_SUBST(SWORD_VERSION_MINOR)
+AC_SUBST(SWORD_VERSION_MICRO)
+AC_SUBST(SWORD_VERSION_NANO)
 
 
 
@@ -364,7 +378,7 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile sword.pc sword.spec)
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile sword.pc include/swversion.h sword.spec)
 AC_OUTPUT
 
 echo

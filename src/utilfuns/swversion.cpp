@@ -20,8 +20,6 @@
  *
  */
 
-#include <config.h>
-
 #include <swversion.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,7 +27,7 @@
 
 SWORD_NAMESPACE_START
 
-SWVersion SWVersion::currentVersion( VERSION );
+SWVersion SWVersion::currentVersion( SWORD_VERSION_STR );
 
 /******************************************************************************
  * SWVersion c-tor - Constructs a new SWVersion

@@ -48,6 +48,11 @@ int my_swbufwriter(netbuf *nControl, void *buffer, size_t size, void *swbuf) {
 	return size;
 }
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 int my_fprogress(netbuf *nControl, int xfered, void *arg) {
 	if (arg) {
 		MyProgressData *pd = (MyProgressData *)arg;
@@ -59,6 +64,10 @@ SWLog::getSystemLog()->logDebug("FTPLibFTPTransport report progress: totalSize: 
 	}
 	return 1;
 }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 }
 
