@@ -10,5 +10,5 @@ Version: @VERSION@
 @SHAREDLIB_TRUE@Libs: -L${libdir} -lsword
 @SHAREDLIB_FALSE@Libs: -L${libdir} -lsword -lz @CURL_LIBS@ @CLUCENE_LIBS@ @ICU_LIBS@ @ICU_IOLIBS@
 Libs.private: -L${libdir} -lsword -lz @CURL_LIBS@ @CLUCENE_LIBS@ @ICU_LIBS@ @ICU_IOLIBS@
-Cflags: -I${includedir}/sword -DSWORD_NUMVERSION=@SWORD_NUMVERSION@
+Cflags: -I${includedir}/sword 
 
