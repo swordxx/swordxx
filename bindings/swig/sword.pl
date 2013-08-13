@@ -51,30 +51,30 @@ print "init ... ";
 #$module = $mgr->module("GerLut1545-temp");
 $module = $mgr->getModule("WEB");
 print "Printing WEB Module information: \n";
-print "Name:\t", $module->Name(),"\nDescription:\t", $module->Description(), "\nLang:\t", $module->Lang(), "\n";
+print "Name:\t", $module->getName(),"\nDescription:\t", $module->getDescription(), "\nLang:\t", $module->getLanguage(), "\n";
 
 $key = new Sword::VerseKey("Matthew 3:16");
 #$key->setPersist(1);
-$module->SetKey($key);
+$module->setKey($key);
 
 for ($i = 0; $i < 15; $i++) {
-  print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
+  print "(", $module->getKeyText() ,")\t", $module->stripText(), "\n";
   $key->increment();
-  $module->SetKey($key);
+  $module->setKey($key);
 }
 $key->increment(103);
-$module->SetKey($key);
-print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
+$module->setKey($key);
+print "(", $module->getKeyText() ,")\t", $module->stripText(), "\n";
 
 #testing write interface
 $key->setText("John 3:16");
-$module->SetKey($key);
+$module->setKey($key);
 $module->setEntry("This is a test entry! This tests the write abilities of the Sword Perl classes", 78);
-print "(", $module->KeyText() ,")\t", $module->StripText(), "\n";
+print "(", $module->getKeyText() ,")\t", $module->stripText(), "\n";
 
 print "Searching for God: ";
 $list = $module->doSearch("God");
-print $list->Count(), " entries found!\n";
+print $list->getCount(), " entries found!\n";
 #for ( $i = 0; $i < $list->Count(); $i++) {
 #  print "(", $i, ")\t", $list->GetElement()->getText(), "\n";
 #  $list->next();
@@ -106,22 +106,22 @@ $newmod = new Sword::zText("ldmod/");
 
 print "Created module;\n";
 
-$newkey = $newmod->CreateKey();
+$newkey = $newmod->createKey();
 #$newkey->setPersist(1);
 $newkey->setText(" ");
-$module->SetKey($newkey);
+$module->setKey($newkey);
 
 print "Loop! \n";
 
-for ($i = 0; $i < $list->Count(); $i++) {
-	print $list->GetElement()->getText() . "\n";
+for ($i = 0; $i < $list->getCount(); $i++) {
+	print $list->getElement()->getText() . "\n";
 
-        $key->setText($list->GetElement()->getText());
-        $newkey->setText($list->GetElement()->getText());
+        $key->setText($list->getElement()->getText());
+        $newkey->setText($list->getElement()->getText());
 
-	$newmod->SetKey($newkey);
+	$newmod->setKey($newkey);
 
-	$entry = $module->StripText();
+	$entry = $module->stripText();
         $newmod->setEntry( $entry, length $entry );
 	$list->increment();
 }
