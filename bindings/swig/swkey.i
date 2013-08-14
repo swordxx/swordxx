@@ -10,6 +10,7 @@
 
 %include "swkey.h"
 
+#ifndef SWIGPERL
 %extend sword::SWKey {
         %extend {
                 char *__str__() {
@@ -18,3 +19,4 @@
         }
 
 };
+#endif
