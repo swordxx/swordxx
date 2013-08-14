@@ -25,15 +25,16 @@ WriteMakefile(
 	'INC'		=> '-I${CMAKE_SOURCE_DIR}/include -I${CMAKE_CURRENT_SOURCE_DIR}/..',
 	'DEFINE'	=> '-DSWIG',
 	'LIBS'		=> '-L${CMAKE_BINARY_DIR} -lsword -lz',
+	'FIRST_MAKEFILE' => 'Makefile.perlswig',
 	'PREREQ_PM'	=> {},
 		($] >= 5.005 ? ## Add these new keywords supported since 5.005
 		(ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module
 		AUTHOR => 'Sword Project <sword-devel@crosswire.org>') : ()),
 );
 
-rename 'Makefile', 'Makefile.old' or die \"Can't rename Makefile\";
-open(INPUT, '<Makefile.old') or die \"Can't open input Makefile.old\";
-open(OUTPUT,'>Makefile') or die \"Can't open output Makefile\";
+rename 'Makefile.perlswig', 'Makefile.perlswig.old' or die \"Can't rename Makefile\";
+open(INPUT, '<Makefile.perlswig.old') or die \"Can't open input Makefile.old\";
+open(OUTPUT,'>Makefile.perlswig') or die \"Can't open output Makefile\";
 while (<INPUT>) {
   s/\\-lsword/\\-lsword \\-lstdc\\+\\+/;
   print OUTPUT \"$_\";
@@ -52,14 +53,14 @@ FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/Makefile.SKIP "${SKIP_MAKEFILE}")
 
 SWORD_SWIG_GENERATE(perl)
 
-ADD_CUSTOM_COMMAND(OUTPUT MANIFEST
-	COMMAND ${PERL_EXECUTABLE} Makefile.PL && make -j1 clean
-	COMMAND ${PERL_EXECUTABLE} Makefile.PL && make -j1 manifest
+ADD_CUSTOM_COMMAND(OUTPUT MANIFEST Makefile.perlswig
+	COMMAND ${PERL_EXECUTABLE} Makefile.PL && make -f Makefile.perlswig clean
+	COMMAND ${PERL_EXECUTABLE} Makefile.PL && make -f Makefile.perlswig manifest
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 ADD_CUSTOM_TARGET(perlswig ALL
-	COMMAND make -j1
-	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Sword.cxx ${CMAKE_CURRENT_BINARY_DIR}/MANIFEST ${SWORD_LINK_NAME}
+	COMMAND make -f Makefile.perlswig
+	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Sword.cxx ${CMAKE_CURRENT_BINARY_DIR}/Makefile.perlswig ${SWORD_LINK_NAME}
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 INSTALL(SCRIPT install.cmake)
