@@ -345,7 +345,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/swsearchable.h
 	include/swtext.h
 	include/swunicod.h
-	include/swversion.h
+    "${CMAKE_CURRENT_BINARY_DIR}/include/swversion.h"
 	include/sysdata.h
 
 	include/thmlfootnotes.h

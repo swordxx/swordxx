@@ -50,5 +50,7 @@ ELSE(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
 ENDIF(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
 # The @ONLY restricts it because our ${variable} which are left there as part of pkg-config
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/sword.pc.in ${CMAKE_CURRENT_BINARY_DIR}/sword.pc @ONLY)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/swversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/swversion.h @ONLY)
+
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/sword.pc
 	DESTINATION "${LIBDIR}/pkgconfig")
