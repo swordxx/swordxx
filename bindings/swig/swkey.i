@@ -11,12 +11,5 @@
 %include "swkey.h"
 
 #ifndef SWIGPERL
-%extend sword::SWKey {
-        %extend {
-                char *__str__() {
-                        return const_cast<char *>(self->getText());
-                }
-        }
-
-};
+%rename(__str__) sword::SWKey::operator const char *;
 #endif
