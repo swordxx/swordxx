@@ -92,19 +92,17 @@ API ChangeLog
 		authentication in places where cURL has SFTP support (no support
 		for public-key auth yet)
 
-------------------------------------------------------------------------
-r2751 | mdbergmann | 2012-12-19 20:45:45 +0100 (Wed, 19 Dec 2012) | 1 line
-
-Added ObjC wrappers for the Sword filter classes. Mainly because in Eloquent project it is not possible to access any of the plain C++ Sword stuff. Wrappers are necessary.
-------------------------------------------------------------------------
-r2750 | mdbergmann | 2012-12-18 12:11:35 +0100 (Tue, 18 Dec 2012) | 7 lines
-
-- some fixes to imports.
-- added FilterProvider and FilterProviderFactory.
-They have been created to add the possibility for application to override the default filters (render/strip).
-To add a custom FilterProvider, subclass DefaultFilterProvider and override the methods that are required to return other filter instances.
-Then initialize the Factory with this provider.
-+[FilterProviderFactory initWithImpl:<your impl>]
+19-Dec-2012	Manfred Bergmann <manfred.bergmann@me.com>
+	Added ObjC wrappers for the SWORD filter classes. Mainly because in
+		Eloquent project it is not possible to access any of the plain
+		C++ SWORD stuff. Wrappers are necessary
+	Added FilterProvider and FilterProviderFactory. They have been
+		created to add the possibility for application to override
+		the default filters (render/strip). To add a custom FilterProvider,
+		subclass DefaultFilterProvider and override the methods that are
+		required to return other filter instances. Then initialize the
+		Factory with this provider
+		+[FilterProviderFactory initWithImpl:<your impl>]
 
 07-Nov-2012	Chris Little <chrislit@crosswire.org>
 	Starting (very minimal) support for TEI in xml2gbs
@@ -124,18 +122,16 @@ Then initialize the Factory with this provider.
 11-Jul-2012	Troy A. Griffitts <scribe@crosswire.org>
 	New Lucene index field for searching 'morph' (lemma@morphology)
 
-------------------------------------------------------------------------
 21-Jun-2012 	Peter von Kaehne <refdoc@crosswire.org>
 	Added Pohnpeian language locale
 
-
-------------------------------------------------------------------------
 25-Apr-2012	Gregory S. Hellings <greg.hellings@gmail.com>
 	InstallMgr now supports HTTPS connections where cURL has support
 		for that transport
 
 24-Mar-2012	DM Smith <dmsmith@crosswire.org>
-	osis2mod: Allow comments to be in osis document and to be stripped out. From John Zaitseff
+	osis2mod: Allow comments to be in osis document and to be stripped out.
+		From John Zaitseff
 	osis2mod: Allow div in header of osis document. From John Zaitseff
 
 
@@ -144,17 +140,16 @@ Then initialize the Factory with this provider.
 		SWMgr::MODTYPE_BIBLES, MODTYPE_COMMENTARIES, MODTYPE_LEXDICTS,
 		MODTYPE_GENBOOKS, MODTYPE_DAILYDEVOS
 
-------------------------------------------------------------------------
 14-Feb-2012	Gregory S. Hellings <greg.hellings@gmail.com>
 	Added cross-compile support to CMake, including sample Toolchain files.
 
 13-Feb-2012	Karl Kleinpaste <karl@kleinpaste.org>
 	Added ability for *HTML* wrappers to render n attribute from notes
 
-------------------------------------------------------------------------
-r2676 | mdbergmann | 2012-01-30 19:56:15 +0100 (Mon, 30 Jan 2012) | 1 line
-
-update to Lion Project. All SWORD utils are now in Xcode project and can be built from there. They are however prepared to be used from with Eloquent.
+30-Jan-2012	Manfred Bergmann <manfred.bergmann@me.com>
+	Update to Lion Project. All SWORD utils are now in Xcode project and can
+		be built from there. They are however prepared to be used from with
+		Eloquent
 
 07-Dec-2011	Chris Little <chrislit@crosswire.org>
 	removed SynodalP v11n from library
@@ -175,70 +170,43 @@ update to Lion Project. All SWORD utils are now in Xcode project and can be buil
 	Added sane parameter parsing to imp2ld
 	Added methods for utf8 / wchar conversion to help clucene
 
-------------------------------------------------------------------------
-r2653 | mdbergmann | 2011-08-07 22:27:19 +0200 (Sun, 07 Aug 2011) | 1 line
-
-added new Lion Xcode project where the Sword stuff is compiled in Xcode project. Changed -setClass: and instead added a protocol implementation based setting of configuration.
-
-------------------------------------------------------------------------
-r2648 | mdbergmann | 2011-07-24 17:09:27 +0200 (Sun, 24 Jul 2011) | 1 line
-
-readded ppc archiecture for Xcode project.
-
+07-Aug-2011	Manfred Bergmann <manfred.bergmann@me.com>
+	Added new Lion Xcode project where the SWORD stuff is compiled in Xcode
+		project. Changed -setClass: and instead added a protocol
+		implementation based setting of configuration
+	ObjC: Re-added ppc archiecture for Xcode project
 
 14-Jul-2011	Gregory S. Hellings <greg.hellings@gmail.com>
 	Added a sample Python script that demonstrates the bindings and compares
 		osisIDs in an XML file to known Versification schemes
 
-------------------------------------------------------------------------
-r2638 | mdbergmann | 2011-07-10 12:16:37 +0200 (Sun, 10 Jul 2011) | 2 lines
+10-Jul-2011	Manfred Bergmann <manfred.bergmann@me.com>
+	ObjC: Fix and simplification for -
+		(id)attributeValueForParsedLinkData:(NSDictionary *)data
+		withTextRenderType:(TextPullType)textType
 
-fix and simplification for - (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType.
+10-Jul-2011	Manfred Bergmann <manfred.bergmann@me.com>
+	ObjC: Added option to retrieve texts for link data as rendered or
+		stripped.
+		Minor changes to SwordInstallSource and Controller.
+		Adaption of ModuleType "All" to modulesForType: method.
+		Added additional "All" enum ModuleType
+		Changed visibility of swordManager.
+		Added listModulesForType: method.
+		Added convenience constructor for SwordInstallSourceController.
+		SwordLocaleManager can be initialized with a given path to
+		locales.d. Swordbible decodeRef class method will now only pass back values where not NULL was delivered.
 
-------------------------------------------------------------------------
-r2626 | mdbergmann | 2011-06-10 10:02:20 +0200 (Fri, 10 Jun 2011) | 1 line
-
-added option to retrieve texts for link data as rendered or stripped.
-------------------------------------------------------------------------
-r2625 | mdbergmann | 2011-05-08 00:26:51 +0200 (Sun, 08 May 2011) | 1 line
-
-minor changes to SwordInstallSource and Controller.
-------------------------------------------------------------------------
-r2624 | mdbergmann | 2011-04-26 22:09:23 +0200 (Tue, 26 Apr 2011) | 1 line
-
-adaption of ModuleType "All" to modulesForType: method.
-------------------------------------------------------------------------
-r2623 | mdbergmann | 2011-04-26 21:59:02 +0200 (Tue, 26 Apr 2011) | 1 line
-
-added additional "All" enum ModuleType
-------------------------------------------------------------------------
-r2622 | mdbergmann | 2011-04-19 20:58:09 +0200 (Tue, 19 Apr 2011) | 1 line
-
-changed visibility of swordManager.
-------------------------------------------------------------------------
-r2621 | mdbergmann | 2011-04-19 19:14:09 +0200 (Tue, 19 Apr 2011) | 1 line
-
-Added listModulesForType: method.
-------------------------------------------------------------------------
-r2620 | mdbergmann | 2011-04-17 18:15:08 +0200 (Sun, 17 Apr 2011) | 1 line
-
-added convenience constructor for SwordInstallSourceController.
-------------------------------------------------------------------------
-r2618 | mdbergmann | 2011-03-19 12:54:58 +0100 (Sat, 19 Mar 2011) | 1 line
-
-SwordLocaleManager can be initialized with a given path to locales.d. Swordbible decodeRef class method will now only pass back values where not NULL was delivered.
-
-------------------------------------------------------------------------
 16-Mar-2011 Peter von Kaehne <refdoc@crosswire.org>
-	introducing localised keys to imp2vs.cpp
+	Introducing localised keys to imp2vs.cpp
 
 15-Mar-2011 Peter von Kaehne <refdoc@crosswire.org>
 	Faroese Locale
 
-------------------------------------------------------------------------
-r2590 | mdbergmann | 2010-11-21 17:14:35 +0100 (Sun, 21 Nov 2010) | 1 line
-
-module names are stored as lower case string in SwordManagers module cache. -moduleForName: now als uses a lower case string to pull the module from the cache.
+10-Jul-2011	Manfred Bergmann <manfred.bergmann@me.com>
+	Module names are stored as lower case string in SwordManagers module
+		cache. -moduleForName: now als uses a lower case string to pull
+		the module from the cache
 
 
 
