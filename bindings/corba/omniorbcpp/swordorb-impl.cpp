@@ -330,19 +330,19 @@ void swordorb_SWModule_i::begin(){
 }
 
 char* swordorb_SWModule_i::getStripText(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->stripText()));
+	return CORBA::string_dup(assureValidUTF8((const char *)delegate->stripText()));
 }
 
 char* swordorb_SWModule_i::getRenderText(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->renderText()));
+	return CORBA::string_dup(assureValidUTF8((const char *)delegate->renderText()));
 }
 
 char* swordorb_SWModule_i::getRenderHeader(){
-	return CORBA::string_dup(assureValidUTF8(((char *)(delegate->getRenderHeader() ? delegate->getRenderHeader():""))));
+	return CORBA::string_dup(assureValidUTF8(((const char *)(delegate->getRenderHeader() ? delegate->getRenderHeader():""))));
 }
 
 char* swordorb_SWModule_i::getRawEntry(){
-	return CORBA::string_dup(assureValidUTF8((char *)delegate->getRawEntry()));
+	return CORBA::string_dup(assureValidUTF8((const char *)delegate->getRawEntry()));
 }
 
 void swordorb_SWModule_i::setRawEntry(const char* entryBuffer){
