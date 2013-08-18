@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 // Print out a verse from the first module:
 
 	cout << "\n" << manager.Modules.begin()->second->getKeyText() << ":\n";
-	cout << (const char *)(*manager.Modules.begin()->second);
+	cout << manager.Modules.begin()->second->renderText();
 	cout << " (" << manager.Modules.begin()->second->getName() << ")\n";
 
 // Print out the same verse from the second module (less confusing):
