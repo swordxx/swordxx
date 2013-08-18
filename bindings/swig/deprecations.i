@@ -3,7 +3,6 @@
 /* These are all together */
 %ignore sword::SWModule::operator const char *;
 %ignore sword::SWVersion::operator const char *;
-%ignore sword::SWKey::operator const char *;
 %ignore sword::ListKey::operator const char *;
 %ignore sword::VerseKey::operator const char *;
 %ignore sword::TreeKey::operator const char *;
