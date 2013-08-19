@@ -6,7 +6,7 @@ echo
 (cd ..;./autogen.sh)
 
 REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
-SWORDVER=`grep "define VERSI" ../include/config.h |cut -f2 -d"\""`
+SWORDVER=`grep AC_INIT ../configure.ac|cut -f2 -d' '|cut -f1 -d,`
 
 sed -i "s/^\(PROJECT_NUMBER\).*/\1 = \"$SWORDVER\"/" ../doc/Doxyfile
 sed -i "s/^SET(SWORD_VERSION.*/SET(SWORD_VERSION $SWORDVER)/" ../CMakeLists.txt
@@ -25,7 +25,7 @@ if [ "$REV" = "$SWORDVER" ]; then
 	cd ..; tar -v -c -p -s -z --exclude sword-$REV/bin --exclude sword-$REV/autom4te.cache --exclude sword-$REV/bindings/swig/package/autom4te.cache -X sword-$REV/distignore -f sword-$REV.tar.gz sword-$REV/*
 
 else
-	echo $"Directory version is $REV, but config.h has $SWORDVER"
+	echo $"Directory version is $REV, but configure.ac has $SWORDVER"
 	exit 1
 
 fi
