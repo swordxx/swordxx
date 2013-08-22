@@ -204,41 +204,17 @@ const struct abbrev builtin_abbrevs[] = {
   {"BAR", "Bar"},		// Baruch
   {"BARUCH", "Bar"},		// Baruch
   {"BEL", "Bel"},		// Bel and the Dragon
-  {"BEL ALT", "BelTh"},		// Bel and the Dragon Th
   {"BEL AND THE DRAGON", "Bel"},		// Bel and the Dragon
-  {"BEL AND THE DRAGON ALT", "BelTh"},		// Bel and the Dragon Th
-  {"BEL AND THE DRAGON S", "Bel"},		// Bel and the Dragon (S)
-  {"BEL AND THE DRAGON TH", "BelTh"},		// Bel and the Dragon Th
-  {"BEL AND THE DRAGONTALT", "BelTh"},		// Bel and the Dragon Th
-  {"BEL AND THE DRAGONTS", "Bel"},		// Bel and the Dragon (S)
-  {"BEL AND THE DRAGONTH", "BelTh"},		// Bel and the Dragon Th
-  {"BEL S", "Bel"},		// Bel and the Dragon (S)
-  {"BEL TH", "BelTh"},		// Bel and the Dragon Th
-  {"BELALT", "BelTh"},		// Bel and the Dragon Th
-  {"BELS", "Bel"},		// Bel and the Dragon (S)
-  {"BELTH", "BelTh"},		// Bel and the Dragon Th
   {"C", "Col"},		// Colossians
   {"CANTICLE OF CANTICLES", "Song"},		// Song of Solomon
   {"COL", "Col"},		// Colossians
   {"COLOSSIANS", "Col"},		// Colossians
   {"D", "Deut"},		// Deuteronomy
   {"DAN", "Dan"},		// Daniel
-  {"DAN ALT", "DanTh"},		// Daniel Th
-  {"DAN S", "Dan"},		// Daniel (S)
-  {"DAN TH", "DanTh"},		// Daniel Th
-  {"DANALT", "DanTh"},		// Daniel Th
   {"DANGR", "DanGr"},		// Daniel (Greek)
   {"DANIEL", "Dan"},		// Daniel
   {"DANIEL (ADDITIONS)", "AddDan"},		// Additions to Daniel
   {"DANIEL (GREEK)", "DanGr"},		// Daniel (Greek)
-  {"DANIEL ALT", "DanTh"},		// Daniel Th
-  {"DANIEL S", "Dan"},		// Daniel (S)
-  {"DANIEL TH", "DanTh"},		// Daniel Th
-  {"DANIELALT", "DanTh"},		// Daniel Th
-  {"DANIELS", "Dan"},		// Daniel (S)
-  {"DANIELTH", "DanTh"},		// Daniel Th
-  {"DANS", "Dan"},		// Daniel (S)
-  {"DANTH", "DanTh"},		// Daniel Th
   {"DEUT", "Deut"},		// Deuteronomy
   {"DEUTERONOMY", "Deut"},		// Deuteronomy
   {"DT", "Deut"},		// Deuteronomy
@@ -432,8 +408,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"JAS", "Jas"},		// James
   {"JB", "Job"},		// Job
   {"JD", "Judg"},		// Judges
-  {"JDA", "Judg"},		// Judges (A)
-  {"JDB", "JudgB"},		// Judges B
   {"JDGS", "Judg"},		// Judges
   {"JDT", "Jdt"},		// Judith
   {"JER", "Jer"},		// Jeremiah
@@ -447,40 +421,14 @@ const struct abbrev builtin_abbrevs[] = {
   {"JOL", "Joel"},		// Joel
   {"JONAH", "Jonah"},		// Jonah
   {"JOSH", "Josh"},		// Joshua
-  {"JOSH A", "JoshA"},		// Joshua A
-  {"JOSH ALT", "JoshA"},		// Joshua A
-  {"JOSH B", "Josh"},		// Joshua (B)
-  {"JOSHA", "JoshA"},		// Joshua A
-  {"JOSHALT", "JoshA"},		// Joshua A
-  {"JOSHB", "Josh"},		// Joshua (B)
   {"JOSHUA", "Josh"},		// Joshua
-  {"JOSHUA A", "JoshA"},		// Joshua A
-  {"JOSHUA ALT", "JoshA"},		// Joshua A
-  {"JOSHUA B", "Josh"},		// Joshua (B)
-  {"JOSHUAA", "JoshA"},		// Joshua A
-  {"JOSHUAALT", "JoshA"},		// Joshua A
-  {"JOSHUAB", "Josh"},		// Joshua (B)
   {"JS", "Josh"},		// Joshua
-  {"JSA", "JoshA"},		// Joshua A
-  {"JSB", "Josh"},		// Joshua (B)
   {"JU", "Jude"},		// Jude
   {"JUB", "Jub"},		// Jubilees
   {"JUBILEES", "Jub"},		// Jubilees
   {"JUDE", "Jude"},		// Jude
   {"JUDG", "Judg"},		// Judges
-  {"JUDG A", "Judg"},		// Judges (A)
-  {"JUDG ALT", "JudgB"},		// Judges B
-  {"JUDG B", "JudgB"},		// Judges B
-  {"JUDGA", "Judg"},		// Judges (A)
-  {"JUDGALT", "JudgB"},		// Judges B
-  {"JUDGB", "JudgB"},		// Judges B
   {"JUDGES", "Judg"},		// Judges
-  {"JUDGES A", "Judg"},		// Judges (A)
-  {"JUDGES ALT", "JudgB"},		// Judges B
-  {"JUDGES B", "JudgB"},		// Judges B
-  {"JUDGESA", "Judg"},		// Judges (A)
-  {"JUDGESALT", "JudgB"},		// Judges B
-  {"JUDGESB", "JudgB"},		// Judges B
   {"JUDITH", "Jdt"},		// Judith
   {"L", "Luke"},		// Luke
   {"LAM", "Lam"},		// Lamentations
@@ -574,38 +522,14 @@ const struct abbrev builtin_abbrevs[] = {
   {"SONG OF SONGS", "Song"},		// Song of Solomon
   {"SONG OF THE THREE CHILDREN", "PrAzar"},		// Prayer of Azariah
   {"SUS", "Sus"},		// Susanna
-  {"SUS ALT", "SusTh"},		// Susanna Th
-  {"SUS S", "Sus"},		// Susanna (S)
-  {"SUS TH", "SusTh"},		// Susanna Th
-  {"SUSALT", "SusTh"},		// Susanna Th
   {"SUSANNA", "Sus"},		// Susanna
-  {"SUSANNA ALT", "SusTh"},		// Susanna Th
-  {"SUSANNA S", "Sus"},		// Susanna (S)
-  {"SUSANNA TH", "SusTh"},		// Susanna Th
-  {"SUSANNAALT", "SusTh"},		// Susanna Th
-  {"SUSANNAS", "Sus"},		// Susanna (S)
-  {"SUSANNATH", "SusTh"},		// Susanna Th
-  {"SUSS", "Sus"},		// Susanna (S)
-  {"SUSTH", "SusTh"},		// Susanna Th
   {"SYRIAC APOCALYPSE OF BARUCH", "2Bar"},		// 2Baruch
   {"T", "Titus"},		// Titus
   {"TB", "Tob"},		// Tobit
   {"TBT", "Tob"},		// Tobit
   {"TITUS", "Titus"},		// Titus
   {"TOB", "Tob"},		// Tobit
-  {"TOB ALT", "TobS"},		// Tobit S
-  {"TOB BA", "Tob"},		// Tobit (BA)
-  {"TOB S", "TobS"},		// Tobit S
   {"TOBIT", "Tob"},		// Tobit
-  {"TOBIT ALT", "TobS"},		// Tobit S
-  {"TOBIT BA", "Tob"},		// Tobit (BA)
-  {"TOBIT S", "TobS"},		// Tobit S
-  {"TOBITALT", "TobS"},		// Tobit S
-  {"TOBITBA", "Tob"},		// Tobit (BA)
-  {"TOBITS", "TobS"},		// Tobit S
-  {"TOBALT", "TobS"},		// Tobit S
-  {"TOBBA", "Tob"},		// Tobit (BA)
-  {"TOBS", "TobS"},		// Tobit S
   {"WIS", "Wis"},		// Wisdom
   {"WISDOM", "Wis"},		// Wisdom
   {"WISDOM OF BEN SIRA", "Sir"},		// Sirach
