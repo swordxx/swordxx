@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 	cerr << "lossless import / export, but we are not there yet. \n\n";
 	cerr << "This utility is done, in fact it is already too complex.\n";
 	cerr << "The ENGINE needs more work to assure export as OSIS works\n";
-	cerr << "This utilitie only gives us occasion to improve engine.\n";
+	cerr << "This utility only gives us occasion to improve the engine.\n";
 	cerr << "Our goal is not to produce an export tool.\n\n";
 	cerr << "In fact, you should never export SWORD modules.\n";
 	cerr << "Many CrossWire modules are licensed for use from publishers\n";
