@@ -148,6 +148,7 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 
 		/* Switch on full protocol/debug output */
 		curl_easy_setopt(session, CURLOPT_VERBOSE, true);
+		curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, 45);
 		
 		/* Disable checking host certificate */
 		curl_easy_setopt(session, CURLOPT_SSL_VERIFYPEER, false);
