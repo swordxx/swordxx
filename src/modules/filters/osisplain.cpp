@@ -35,6 +35,7 @@ public:
 	XMLTag tag;
 	VerseKey *vk;
 	char testament;
+	SWBuf hiType;
 	MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
 };
 }
@@ -201,6 +202,31 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			char* end = buf.getRawData();
 			end += buf.size() - u->lastTextNode.size();
 			toupperstr(end);
+		}
+		else if (!strncmp(token, "hi", 2)) {
+				if (strstr(token, "rend=\"ol\"")) {
+					u->hiType = "ol";
+				}
+				else u->hiType = "";
+				u->suspendTextPassThru = true;
+			}
+		else if (!strncmp(token, "/hi", 3)) {
+			if (u->hiType == "ol") {
+				const unsigned char *b = (const unsigned char *)u->lastTextNode.c_str();
+				while (*b) {
+					const unsigned char *o = b;
+					if (getUniCharFromUTF8(&b)) {
+						while (o != b) buf.append(*(o++));
+						buf.append("\u0305");
+					}
+				}
+			}
+			else {
+				buf.append("*");
+				buf.append(u->lastTextNode);
+				buf.append("*");
+			}
+			u->suspendTextPassThru = false;
 		}
 
                 // <milestone type="line"/>

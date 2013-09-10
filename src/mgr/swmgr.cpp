@@ -267,15 +267,19 @@ void SWMgr::init() {
 
 	gbfplain = new GBFPlain();
 	cleanupFilters.push_back(gbfplain);
+	extraFilters.insert(FilterMap::value_type("GBFPlain", gbfplain));
 
 	thmlplain = new ThMLPlain();
 	cleanupFilters.push_back(thmlplain);
+	extraFilters.insert(FilterMap::value_type("ThMLPlain", thmlplain));
 
 	osisplain = new OSISPlain();
 	cleanupFilters.push_back(osisplain);
+	extraFilters.insert(FilterMap::value_type("OSISPlain", osisplain));
 
 	teiplain = new TEIPlain();
 	cleanupFilters.push_back(teiplain);
+	extraFilters.insert(FilterMap::value_type("TEIPlain", teiplain));
 
 	// filters which aren't really used anywhere but which we want available for a "FilterName" -> filter mapping (e.g., filterText)
 	SWFilter *f = new RTFHTML();

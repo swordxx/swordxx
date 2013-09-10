@@ -254,6 +254,12 @@ public:
 		*end = 0;
 		return *this;
 	}
+	inline SWBuf &append(const unsigned char ch) {
+		assureMore(1);
+		*end++ = ch;
+		*end = 0;
+		return *this;
+	}
 
 	/**
 	* SWBuf::append - appends a wide charachter value to the current value of this SWBuf

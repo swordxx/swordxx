@@ -78,6 +78,7 @@ int main (int argc, char *argv[])
 			std::cout << (*localeNames)[i] << "\n";
 		}
 */
+		std::cout << "filterText: " << mgr->filterText("OSISPlain", "this should be <abbr type=\"nomSac\"><hi rend=\"ol\">overlined</hi></abbr>") << "\n";
 		mgr->setDefaultLocale("de");
 		mgr->setJavascript(true);
 		mgr->setGlobalOption("Textual Variants", "Secondary Reading");
