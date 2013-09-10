@@ -59,7 +59,7 @@ bool  greekFilter = false;
 bool  augMod      = false;
 bool  augEnt      = true;
 int   lexLevels   = 0;
-UTF8GreekAccents greekAccentsFilter;
+UTF8GreekAccents *greekAccentsFilter = 0;
 
 
 void usage(const char *app) {
@@ -132,7 +132,7 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 
 
 	if (greekFilter) {
-		greekAccentsFilter.processText(keyBuffer);
+		greekAccentsFilter->processText(keyBuffer);
 	}
 
 	if (toUpper) {
@@ -220,7 +220,9 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 
 
 int main(int argc, char **argv) {
-	greekAccentsFilter.setOptionValue("Off");		// off = accents off
+	UTF8GreekAccents gaf;
+	greekAccentsFilter = &gaf;
+	greekAccentsFilter->setOptionValue("Off");		// off = accents off
 	parseParams(argc, argv);
   
 	// Let's see if we can open our input file

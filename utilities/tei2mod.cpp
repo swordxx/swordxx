@@ -79,7 +79,7 @@ using namespace sword;
 using namespace std;
 
 #ifdef _ICU_
-UTF8NFC normalizer;
+UTF8NFC *normalizer = 0;
 int normalized = 0;
 
 Latin1UTF8 converter;
@@ -192,7 +192,7 @@ void normalizeInput(SWKey &key, SWBuf &text) {
 
 		if (utf8State > 0) {
 			SWBuf before = text;
-			normalizer.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+			normalizer->processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
 			if (before != text) {
 				normalized++;
 			}
@@ -358,6 +358,8 @@ void usage(const char *app, const char *error = 0) {
 }
 
 int main(int argc, char **argv) {
+	UTF8NFC normalizr;
+	normalizer = &normalizr;
 
 	SWBuf program = argv[0];
 	fprintf(stderr, "You are running %s: $Rev: 2138 $\n", argv[0]);
