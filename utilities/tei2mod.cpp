@@ -358,8 +358,10 @@ void usage(const char *app, const char *error = 0) {
 }
 
 int main(int argc, char **argv) {
+#ifdef _ICU_
 	UTF8NFC normalizr;
 	normalizer = &normalizr;
+#endif
 
 	SWBuf program = argv[0];
 	fprintf(stderr, "You are running %s: $Rev: 2138 $\n", argv[0]);
