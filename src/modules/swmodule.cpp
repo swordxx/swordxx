@@ -29,7 +29,6 @@
 #include <sysdata.h>
 #include <swmodule.h>
 #include <utilstr.h>
-#include <regex.h>	// GNU
 #include <swfilter.h>
 #include <versekey.h>	// KLUDGE for Search
 #include <treekeyidx.h>	// KLUDGE for Search
@@ -38,6 +37,15 @@
 #include <stringmgr.h>
 #ifndef _MSC_VER
 #include <iostream>
+#endif
+
+#ifdef USECXX11REGEX
+#include <regex>
+#ifndef REG_ICASE
+#define REG_ICASE std::regex::icase
+#endif
+#else
+#include <regex.h>	// GNU
 #endif
 
 #ifdef USELUCENE
@@ -393,7 +401,16 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	SWKey *resultKey = createKey();
 	SWKey *lastKey   = createKey();
 	SWBuf lastBuf = "";
+
+#ifdef USECXX11REGEX
+    std::locale oldLocale;
+    std::locale::global(std::locale("en_US.UTF-8"));
+
+    std::regex preg;
+#else
 	regex_t preg;
+#endif
+
 	vector<SWBuf> words;
 	vector<SWBuf> window;
 	const char *sres;
@@ -431,8 +448,12 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		highIndex = 1;		// avoid division by zero errors.
 	*this = TOP;
 	if (searchType >= 0) {
+#ifdef USECXX11REGEX
+		preg = std::regex((SWBuf(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
+#else
 		flags |=searchType|REG_NOSUB|REG_EXTENDED;
 		regcomp(&preg, istr, flags);
+#endif
 	}
 
 	(*percent)(++perc, percentUserData);
@@ -564,13 +585,21 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 		if (searchType >= 0) {
 			SWBuf textBuf = stripText();
+#ifdef USECXX11REGEX
+			if (std::regex_match(std::string(textBuf.c_str()), preg)) {
+#else
 			if (!regexec(&preg, textBuf, 0, 0, 0)) {
+#endif
 				*resultKey = *getKey();
 				resultKey->clearBound();
 				listKey << *resultKey;
 				lastBuf = "";
 			}
+#ifdef USECXX11REGEX
+			else if (std::regex_match(std::string((lastBuf + ' ' + textBuf).c_str()), preg)) {
+#else
 			else if (!regexec(&preg, lastBuf + ' ' + textBuf, 0, 0, 0)) {
+#endif
 				lastKey->clearBound();
 				listKey << *lastKey;
 				lastBuf = textBuf;
@@ -757,8 +786,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	
 
 	// cleaup work
-	if (searchType >= 0)
+	if (searchType >= 0) {
+#ifdef USECXX11REGEX
+		std::locale::global(oldLocale);
+#else
 		regfree(&preg);
+#endif
+	}
 
 	setKey(*saveKey);
 

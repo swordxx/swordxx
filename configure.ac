@@ -55,6 +55,8 @@ AC_ARG_WITH(icusword,
 	AC_HELP_STRING([--with-icusword],[use custom SWORD ICU (default=no)]),,with_icusword=no)
 AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
+AC_ARG_WITH(cxx11regex,
+	AC_HELP_STRING([--with-cxx11regex],[build regex support using c++11 regex (default=no)]),,with_cxx11regex=no)
 AC_ARG_WITH(curl,
 	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
 AC_ARG_WITH(curl_sftp,
@@ -258,6 +260,10 @@ else
 	with_internalftplib=yes
 fi
 
+if test x$with_cxx11regex = xyes; then
+	AM_CXXFLAGS="$AM_CXXFLAGS -DUSECXX11REGEX -std=c++11 -ftemplate-depth=100"
+fi
+
 # ---------------------------------------------------------------------
 # Check for clucene for lucene searching support
 # ---------------------------------------------------------------------
@@ -356,7 +362,6 @@ AC_SUBST(CLUCENE_LIBS)
 # Conditional variables
 # ---------------------------------------------------------------------
 
-# don't #ifdef in .cpp files HAVE_ stuff because non-ac compiles won't be able to switch them since we include config.h
 AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
 AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
@@ -365,6 +370,7 @@ AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
 AM_CONDITIONAL(USELUCENE, test "x$with_clucene" != xno)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
+AM_CONDITIONAL(USECXX11REGEX, test x$with_cxx11regex = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
 AM_CONDITIONAL(WITHCURLSFTP, test x$with_curl_sftp = xyes)
 AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
@@ -393,6 +399,7 @@ echo     "     BUILD UTILITIES:  $enable_utilities"
 echo     "     LIBZ:             $with_zlib"
 echo     "     ICU:              $with_icu"
 echo     "     ICUSWORD:         $with_icusword"
+echo     "     CXX11REGEX:       $with_cxx11regex"
 echo     "     CURL:             $with_curl"
 echo     "     CURL SFTP:        $with_curl_sftp"
 echo     "     INTERNAL FTPLIB:  $with_internalftplib"
