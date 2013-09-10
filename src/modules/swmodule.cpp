@@ -134,17 +134,17 @@ SWModule::~SWModule()
 	}
 
 	stripFilters->clear();
-     rawFilters->clear();
-     renderFilters->clear();
-     optionFilters->clear();
-     encodingFilters->clear();
+	rawFilters->clear();
+	renderFilters->clear();
+	optionFilters->clear();
+	encodingFilters->clear();
 	entryAttributes.clear();
 
-     delete stripFilters;
-     delete rawFilters;
-     delete renderFilters;
-     delete optionFilters;
-     delete encodingFilters;
+	delete stripFilters;
+	delete rawFilters;
+	delete renderFilters;
+	delete optionFilters;
+	delete encodingFilters;
 }
 
 
@@ -225,7 +225,7 @@ const char *SWModule::getType() const {
  * RET:	char direction
  */
 char SWModule::getDirection() const {
-        return direction;
+	return direction;
 }
 
 
@@ -253,8 +253,8 @@ void SWModule::setDisplay(SWDisplay *idisp) {
  *     */
 
 char SWModule::display() {
-     disp->display(*this);
-     return 0;
+	disp->display(*this);
+	return 0;
 }
 
 /******************************************************************************
@@ -403,10 +403,10 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	SWBuf lastBuf = "";
 
 #ifdef USECXX11REGEX
-    std::locale oldLocale;
-    std::locale::global(std::locale("en_US.UTF-8"));
+	std::locale oldLocale;
+	std::locale::global(std::locale("en_US.UTF-8"));
 
-    std::regex preg;
+	std::regex preg;
 #else
 	regex_t preg;
 #endif
@@ -420,10 +420,10 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	// determine if we might be doing special strip searches.  useful for knowing if we can use shortcuts
 	bool specialStrips = (getConfigEntry("LocalStripFilter")
-                       || (getConfig().has("GlobalOptionFilter", "UTF8GreekAccents"))
-                       || (getConfig().has("GlobalOptionFilter", "UTF8HebrewPoints"))
-                       || (getConfig().has("GlobalOptionFilter", "UTF8ArabicPoints"))
-                       || (strchr(istr, '<')));
+			|| (getConfig().has("GlobalOptionFilter", "UTF8GreekAccents"))
+			|| (getConfig().has("GlobalOptionFilter", "UTF8HebrewPoints"))
+			|| (getConfig().has("GlobalOptionFilter", "UTF8ArabicPoints"))
+			|| (strchr(istr, '<')));
 
 	setProcessEntryAttributes(searchType == -3);
 	
@@ -1078,7 +1078,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	VerseKey *vkcheck = 0;
 	vkcheck = SWDYNAMIC_CAST(VerseKey, key);
 	VerseKey *chapMax = 0;
-        if (vkcheck) chapMax = (VerseKey *)vkcheck->clone();
+	if (vkcheck) chapMax = (VerseKey *)vkcheck->clone();
 
 	TreeKeyIdx *tkcheck = 0;
 	tkcheck = SWDYNAMIC_CAST(TreeKeyIdx, key);
@@ -1395,7 +1395,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	if (searchKey)
 		delete searchKey;
 
-        delete chapMax;
+	delete chapMax;
 
 	setProcessEntryAttributes(savePEA);
 
