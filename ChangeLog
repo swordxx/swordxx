@@ -1,6 +1,10 @@
 API ChangeLog
 
 
+14-Aug-2013	Troy A. Griffitts <scribe@crosswire.org>
+	Added new version macros in swversion.h and removed
+		config.h as a packaged and included entity 
+
 2-Aug-2013	Chris Little <chrislit@crosswire.org>
 	Added basic bibliography method to SWModule
 		(mostly from refdoc's patch)
