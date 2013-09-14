@@ -29,16 +29,23 @@
 #include <swmodule.h>
 #include <stdio.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Headings";
-const char oTip[] = "Toggles Headings On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Headings";
+	static const char oTip[]  = "Toggles Headings On and Off if they exist";
 
-ThMLHeadings::ThMLHeadings() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+ThMLHeadings::ThMLHeadings() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

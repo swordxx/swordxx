@@ -29,8 +29,10 @@
 
 SWORD_NAMESPACE_START
 
+
 SWConfig::SWConfig() {
 }
+
 
 SWConfig::SWConfig(const char * ifilename) {
 	filename = ifilename;
@@ -40,6 +42,7 @@ SWConfig::SWConfig(const char * ifilename) {
 
 SWConfig::~SWConfig() {
 }
+
 
 void SWConfig::Load() {
 
@@ -165,4 +168,6 @@ ConfigEntMap & SWConfig::operator [] (const char *section) {
     return Sections[section];
 }
 
+
 SWORD_NAMESPACE_END
+

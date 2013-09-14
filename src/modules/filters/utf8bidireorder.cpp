@@ -31,7 +31,9 @@
 #include <utf8bidireorder.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 UTF8BiDiReorder::UTF8BiDiReorder() : err(U_ZERO_ERROR) {
 
@@ -39,9 +41,11 @@ UTF8BiDiReorder::UTF8BiDiReorder() : err(U_ZERO_ERROR) {
 
 }
 
+
 UTF8BiDiReorder::~UTF8BiDiReorder() {
         ucnv_close(conv);
 }
+
 
 char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
@@ -73,6 +77,7 @@ char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule 
         delete [] ustr;
 	return 0;
 }
+
 
 SWORD_NAMESPACE_END
 #endif

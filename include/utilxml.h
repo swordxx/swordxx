@@ -47,7 +47,6 @@ private:
 	
 	void parse() const;
 	const char *getPart(const char *buf, int partNum = 0, char partSplit = '|') const;
-	static const char *nullstr;
 	
 public:
 	XMLTag(const char *tagString = 0);
@@ -55,7 +54,7 @@ public:
 	~XMLTag();
 
 	void setText(const char *tagString);
-	inline const char *getName() const { return (name)?name:nullstr; }
+	inline const char *getName() const { return (name) ? name : SWBuf::nullStr; }
 
 	inline bool isEmpty() const {
 		if (!parsed)

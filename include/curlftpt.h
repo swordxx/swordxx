@@ -30,13 +30,6 @@ SWORD_NAMESPACE_START
 
 class CURL;
 
-// initialize/cleanup SYSTEMWIDE library with life of this static.
-class CURLFTPTransport_init {
-public:
-	CURLFTPTransport_init();
-	~CURLFTPTransport_init();
-};
-
 
 class SWDLLEXPORT CURLFTPTransport : public RemoteTransport {
 	CURL *session;

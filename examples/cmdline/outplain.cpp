@@ -45,10 +45,13 @@
 #include <versekey.h>
 #include <markupfiltmgr.h>
 
+
 using namespace sword;
 using namespace std;
 
+
 int main(int argc, char **argv) {
+
 	SWMgr manager(new MarkupFilterMgr(sword::FMT_HTMLHREF, sword::ENC_UTF16));
 
 	const char *bookName = (argc > 1) ? argv[1] : "WLC";
@@ -65,4 +68,6 @@ int main(int argc, char **argv) {
 		else    cout << book.getKeyText();
 		cout << "\n" << book.stripText() << "\n\n";
 	}
+
+	return 0;
 }

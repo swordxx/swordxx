@@ -28,17 +28,20 @@
 
 SWORD_NAMESPACE_START
 
+
 namespace {
-class MyUserData : public BasicFilterUserData {
-public:
-	SWBuf w;
-	XMLTag tag;
-	VerseKey *vk;
-	char testament;
-	SWBuf hiType;
-	MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-};
+
+	class MyUserData : public BasicFilterUserData {
+	public:
+		SWBuf w;
+		XMLTag tag;
+		VerseKey *vk;
+		char testament;
+		SWBuf hiType;
+		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+	};
 }
+
 
 OSISPlain::OSISPlain() {
 	setTokenStart("<");

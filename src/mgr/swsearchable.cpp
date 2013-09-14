@@ -24,9 +24,12 @@
 #include <swsearchable.h>
 #include <listkey.h>
 
+
 SWORD_NAMESPACE_START
 
+
 void SWSearchable::nullPercent(char percent, void *percentUserData) {}
+
 
 SWSearchable::SWSearchable() {
 }
@@ -35,7 +38,8 @@ SWSearchable::SWSearchable() {
 SWSearchable::~SWSearchable() {
 }
 
-	// special search framework
+
+// special search framework
 signed char SWSearchable::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 	return 0;
 }
@@ -51,4 +55,6 @@ bool SWSearchable::isSearchOptimallySupported(const char *istr, int searchType, 
 	return retVal;
 }
 
+
 SWORD_NAMESPACE_END
+

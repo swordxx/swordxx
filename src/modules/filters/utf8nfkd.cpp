@@ -30,15 +30,19 @@
 #include <utf8nfkd.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 UTF8NFKD::UTF8NFKD() {
         conv = ucnv_open("UTF-8", &err);
 }
 
+
 UTF8NFKD::~UTF8NFKD() {
          ucnv_close(conv);
 }
+
 
 char UTF8NFKD::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
@@ -64,6 +68,7 @@ char UTF8NFKD::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
 	return 0;
 }
+
 
 SWORD_NAMESPACE_END
 #endif

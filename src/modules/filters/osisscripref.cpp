@@ -26,16 +26,23 @@
 #include <swmodule.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Cross-references";
-const char oTip[] = "Toggles Scripture Cross-references On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Cross-references";
+	static const char oTip[]  = "Toggles Scripture Cross-references On and Off if they exist";
 
-OSISScripref::OSISScripref() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("On");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"On", "Off", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+OSISScripref::OSISScripref() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

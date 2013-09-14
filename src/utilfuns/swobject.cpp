@@ -30,7 +30,9 @@
 #include <string.h>
 #endif
 
+
 SWORD_NAMESPACE_START
+
 
 bool SWClass::isAssignableFrom(const char *className) const {
 	for (int i = 0; descends[i]; i++) {
@@ -44,4 +46,6 @@ bool SWClass::isAssignableFrom(const char *className) const {
 	return false;
 }
 
+
 SWORD_NAMESPACE_END
+

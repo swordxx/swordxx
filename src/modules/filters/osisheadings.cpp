@@ -28,16 +28,21 @@
 #include <utilxml.h>
 #include <utilstr.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Headings";
-const char oTip[] = "Toggles Headings On and Off if they exist";
-
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
-
-
 namespace {
+
+	static const char oName[] = "Headings";
+	static const char oTip[]  = "Toggles Headings On and Off if they exist";
+
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+
+
 	class MyUserData : public BasicFilterUserData {
 	public:
 		SWBuf currentHeadingName;
@@ -59,7 +64,7 @@ namespace {
 			headerNum = 0;
 		}
 	};
-};
+}
 
 
 BasicFilterUserData *OSISHeadings::createUserData(const SWModule *module, const SWKey *key) {
@@ -67,8 +72,7 @@ BasicFilterUserData *OSISHeadings::createUserData(const SWModule *module, const 
 }
 
 
-OSISHeadings::OSISHeadings() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+OSISHeadings::OSISHeadings() : SWOptionFilter(oName, oTip, oValues()) {
 	setPassThruUnknownToken(true);
 }
 

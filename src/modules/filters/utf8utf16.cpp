@@ -28,7 +28,9 @@
 #include <utilstr.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 UTF8UTF16::UTF8UTF16() {
 }

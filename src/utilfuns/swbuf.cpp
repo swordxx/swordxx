@@ -26,10 +26,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+
 SWORD_NAMESPACE_START
 
+
 char *SWBuf::nullStr = (char *)"";
-char SWBuf::junkBuf[JUNKBUFSIZE];
 
 /******************************************************************************
 * SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
@@ -82,6 +83,7 @@ SWBuf &SWBuf::setFormatted(const char *format, ...) {
 
 	va_start(argptr, format);
 #ifdef NO_VSNPRINTF
+	static char junkBuf[JUNKBUFSIZE];
 	int len = vsprintf(junkBuf, format, argptr)+1;
 #else
 	int len = vsnprintf(0, 0, format, argptr)+1;
@@ -131,6 +133,7 @@ SWBuf &SWBuf::appendFormatted(const char *format, ...) {
 
 	va_start(argptr, format);
 #ifdef NO_VSNPRINTF
+	static char junkBuf[JUNKBUFSIZE];
 	int len = vsprintf(junkBuf, format, argptr)+1;
 #else
 	int len = vsnprintf(0, 0, format, argptr)+1;

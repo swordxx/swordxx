@@ -25,16 +25,23 @@
 #include <osislemma.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Lemmas";
-const char oTip[] = "Toggles Lemmas On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Lemmas";
+	static const char oTip[]  = "Toggles Lemmas On and Off if they exist";
 
-OSISLemma::OSISLemma() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+OSISLemma::OSISLemma() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

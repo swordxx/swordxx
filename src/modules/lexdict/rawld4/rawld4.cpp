@@ -30,7 +30,9 @@
 
 #include <stdio.h>
 
+
 SWORD_NAMESPACE_START
+
 
  /******************************************************************************
  * RawLD Constructor - Initializes data for instance of RawLD
@@ -162,10 +164,12 @@ void RawLD4::deleteEntry() {
 	doSetText(*key, "");
 }
 
+
 long RawLD4::getEntryCount() const {
 	if (idxfd < 0) return 0;
 	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
 }
+
 
 long RawLD4::getEntryForKey(const char *key) const {
 	__u32 start, offset;
@@ -183,10 +187,13 @@ long RawLD4::getEntryForKey(const char *key) const {
 	return offset / IDXENTRYSIZE;
 }
 
+
 char *RawLD4::getKeyForEntry(long entry) const {
 	char *key = 0;
 	getIDXBuf(entry * IDXENTRYSIZE, &key);
 	return key;
 }
 
+
 SWORD_NAMESPACE_END
+

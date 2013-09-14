@@ -26,94 +26,101 @@
 #include <stdio.h>
 #include <utf8arabicpoints.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Arabic Vowel Points";
-const char oTip[] = "Toggles Arabic Vowel Points";
+namespace {
 
-const SWBuf choices[3] = {"On", "Off", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Arabic Vowel Points";
+	static const char oTip[]  = "Toggles Arabic Vowel Points";
 
-UTF8ArabicPoints::UTF8ArabicPoints() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("On");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"On", "Off", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+
+
+	static char *nextMark(const char* from, int* mark_size) {
+		// Arabic vowel points currently targeted for elimination:
+		// Table entries excerpted from
+		// http://www.utf8-chartable.de/unicode-utf8-table.pl.
+		// Code   UTF-8     Description
+		// point
+		// -----  --------- -----------
+		// U+064B d9 8b     ARABIC FATHATAN
+		// U+064C d9 8c     ARABIC DAMMATAN
+		// U+064D d9 8d     ARABIC KASRATAN
+		// U+064E d9 8e     ARABIC FATHA
+		// U+064F d9 8f     ARABIC DAMMA
+		// U+0650 d9 90     ARABIC KASRA
+		// U+0651 d9 91     ARABIC SHADDA
+		// U+0652 d9 92     ARABIC SUKUN
+		// U+0653 d9 93     ARABIC MADDAH ABOVE
+		// U+0654 d9 94     ARABIC HAMZA ABOVE
+		// U+0655 d9 95     ARABIC HAMZA BELOW
+		//
+		// U+FC5E ef b1 9e  ARABIC LIGATURE SHADDA WITH DAMMATAN ISOLATED FORM
+		// U+FC5F ef b1 9f  ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM
+		// U+FC60 ef b1 a0  ARABIC LIGATURE SHADDA WITH FATHA ISOLATED FORM
+		// U+FC61 ef b1 a1  ARABIC LIGATURE SHADDA WITH DAMMA ISOLATED FORM
+		// U+FC62 ef b1 a2  ARABIC LIGATURE SHADDA WITH KASRA ISOLATED FORM
+		// U+FC63 ef b1 a3  ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM
+		//
+		// U+FE70 ef b9 b0  ARABIC FATHATAN ISOLATED FORM
+		// U+FE71 ef b9 b1  ARABIC TATWEEL WITH FATHATAN ABOVE
+		// U+FE72 ef b9 b2  ARABIC DAMMATAN ISOLATED FORM
+		// U+FE73 ef b9 b3  ARABIC TAIL FRAGMENT
+		// U+FE74 ef b9 b4  ARABIC KASRATAN ISOLATED FORM
+		// U+FE75 ef b9 b5	 ???
+		// U+FE76 ef b9 b6  ARABIC FATHA ISOLATED FORM
+		// U+FE77 ef b9 b7  ARABIC FATHA MEDIAL FORM
+		// U+FE78 ef b9 b8  ARABIC DAMMA ISOLATED FORM
+		// U+FE79 ef b9 b9  ARABIC DAMMA MEDIAL FORM
+		// U+FE7A ef b9 ba  ARABIC KASRA ISOLATED FORM
+		// U+FE7B ef b9 bb  ARABIC KASRA MEDIAL FORM
+		// U+FE7C ef b9 bc  ARABIC SHADDA ISOLATED FORM
+		// U+FE7D ef b9 bd  ARABIC SHADDA MEDIAL FORM
+		// U+FE7E ef b9 be  ARABIC SUKUN ISOLATED FORM
+		// U+FE7F ef b9 bf  ARABIC SUKUN MEDIAL FORM
+
+		unsigned char* byte = (unsigned char*) from;
+		for (; *byte; ++byte) {
+			if (byte[0] == 0xD9) {
+				if (byte[1] >= 0x8B && byte[1] <= 0x95) {
+				  *mark_size = 2;
+				  break;
+				}
+			  continue;
+			}
+			if (byte[0] == 0xEF) {
+				if (byte[1] == 0xB1) {
+				 if (byte[2] >= 0x9E && byte[2] <= 0xA3) {
+					*mark_size = 3;
+					break;
+				 }
+				 continue;
+			  }
+				if (byte[1] == 0xB9) {
+				 if (byte[2] >= 0xB0 && byte[2] <= 0xBF) {
+					*mark_size = 3;
+					break;
+				 }
+				 continue;
+			  }
+			}
+		}
+		return (char*)byte;
+	}
 }
+
+
+UTF8ArabicPoints::UTF8ArabicPoints() : SWOptionFilter(oName, oTip, oValues()) {
+}
+
 
 UTF8ArabicPoints::~UTF8ArabicPoints(){};
 
-namespace {
-char *nextMark(const char* from, int* mark_size)
-{
-	// Arabic vowel points currently targeted for elimination:
-	// Table entries excerpted from
-	// http://www.utf8-chartable.de/unicode-utf8-table.pl.
-	// Code   UTF-8     Description
-	// point
-	// -----  --------- -----------
-	// U+064B d9 8b     ARABIC FATHATAN
-	// U+064C d9 8c     ARABIC DAMMATAN
-	// U+064D d9 8d     ARABIC KASRATAN
-	// U+064E d9 8e     ARABIC FATHA
-	// U+064F d9 8f     ARABIC DAMMA
-	// U+0650 d9 90     ARABIC KASRA
-	// U+0651 d9 91     ARABIC SHADDA
-	// U+0652 d9 92     ARABIC SUKUN
-	// U+0653 d9 93     ARABIC MADDAH ABOVE
-	// U+0654 d9 94     ARABIC HAMZA ABOVE
-	// U+0655 d9 95     ARABIC HAMZA BELOW
-	//
-	// U+FC5E ef b1 9e  ARABIC LIGATURE SHADDA WITH DAMMATAN ISOLATED FORM
-	// U+FC5F ef b1 9f  ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM
-	// U+FC60 ef b1 a0  ARABIC LIGATURE SHADDA WITH FATHA ISOLATED FORM
-	// U+FC61 ef b1 a1  ARABIC LIGATURE SHADDA WITH DAMMA ISOLATED FORM
-	// U+FC62 ef b1 a2  ARABIC LIGATURE SHADDA WITH KASRA ISOLATED FORM
-	// U+FC63 ef b1 a3  ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM
-	//
-	// U+FE70 ef b9 b0  ARABIC FATHATAN ISOLATED FORM
-	// U+FE71 ef b9 b1  ARABIC TATWEEL WITH FATHATAN ABOVE
-	// U+FE72 ef b9 b2  ARABIC DAMMATAN ISOLATED FORM
-	// U+FE73 ef b9 b3  ARABIC TAIL FRAGMENT
-	// U+FE74 ef b9 b4  ARABIC KASRATAN ISOLATED FORM
-	// U+FE75 ef b9 b5	 ???
-	// U+FE76 ef b9 b6  ARABIC FATHA ISOLATED FORM
-	// U+FE77 ef b9 b7  ARABIC FATHA MEDIAL FORM
-	// U+FE78 ef b9 b8  ARABIC DAMMA ISOLATED FORM
-	// U+FE79 ef b9 b9  ARABIC DAMMA MEDIAL FORM
-	// U+FE7A ef b9 ba  ARABIC KASRA ISOLATED FORM
-	// U+FE7B ef b9 bb  ARABIC KASRA MEDIAL FORM
-	// U+FE7C ef b9 bc  ARABIC SHADDA ISOLATED FORM
-	// U+FE7D ef b9 bd  ARABIC SHADDA MEDIAL FORM
-	// U+FE7E ef b9 be  ARABIC SUKUN ISOLATED FORM
-	// U+FE7F ef b9 bf  ARABIC SUKUN MEDIAL FORM
-
-	unsigned char* byte = (unsigned char*) from;
-	for (; *byte; ++byte) {
-		if (byte[0] == 0xD9) {
-			if (byte[1] >= 0x8B && byte[1] <= 0x95) {
-			  *mark_size = 2;
-			  break;
-			}
-            continue;
-		}
-		if (byte[0] == 0xEF) {
-			if (byte[1] == 0xB1) {
-                if (byte[2] >= 0x9E && byte[2] <= 0xA3) {
-                    *mark_size = 3;
-                    break;
-                }
-                continue;
-            }
-			if (byte[1] == 0xB9) {
-                if (byte[2] >= 0xB0 && byte[2] <= 0xBF) {
-                    *mark_size = 3;
-                    break;
-                }
-                continue;
-            }
-		}
-	}
-	return (char*)byte;
-}
-}
 
 
 char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *) {

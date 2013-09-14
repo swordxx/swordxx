@@ -27,7 +27,9 @@
 #include <strkey.h>
 #include <swkey.h>
 
+
 SWORD_NAMESPACE_START
+
 
 /******************************************************************************
  * SWLD Constructor - Initializes data for instance of SWLD
@@ -97,6 +99,7 @@ void SWLD::setPosition(SW_POSITION p) {
 	getRawEntryBuf();
 }
 
+
 bool SWLD::hasEntry(const SWKey *key) const {
 	const char *key_str = *key;
 	char *buf = new char [ strlen(key_str) + 6 ];
@@ -109,6 +112,7 @@ bool SWLD::hasEntry(const SWKey *key) const {
 
 	return retVal;
 }
+
 
 /******************************************************************************
  * SWLD::strongsPad	- Pads a key if (it-1) is 100% digits to 5 places
@@ -162,3 +166,4 @@ void SWLD::strongsPad(char *buf)
 
 
 SWORD_NAMESPACE_END
+

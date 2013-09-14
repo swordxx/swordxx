@@ -23,6 +23,7 @@
 
 #include <swfiltermgr.h>
 
+
 SWORD_NAMESPACE_START
 
 
@@ -91,4 +92,6 @@ void SWFilterMgr::AddStripFilters(SWModule * module, ConfigEntMap & section) {
 void SWFilterMgr::AddRawFilters(SWModule * module, ConfigEntMap & section) {
 }
 
+
 SWORD_NAMESPACE_END
+

@@ -38,8 +38,10 @@
 #include <swmodule.h>
 #include <iostream>
 
+
 using namespace sword;
 using std::cout;
+
 
 int main(int argc, char **argv) {
 	SWMgr library;
@@ -49,3 +51,4 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
+

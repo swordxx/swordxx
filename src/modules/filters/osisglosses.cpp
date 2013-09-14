@@ -25,16 +25,23 @@
 #include <osisglosses.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Glosses";
-const char oTip[] = "Toggles Glosses On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Glosses";
+	static const char oTip[]  = "Toggles Glosses On and Off if they exist";
 
-OSISGlosses::OSISGlosses() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+OSISGlosses::OSISGlosses() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

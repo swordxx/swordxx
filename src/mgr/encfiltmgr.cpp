@@ -36,7 +36,9 @@
 
 #include <swmgr.h>
 
+
 SWORD_NAMESPACE_START
+
 
 /******************************************************************************
  * EncodingFilterMgr Constructor - initializes instance of EncodingFilterMgr
@@ -44,44 +46,34 @@ SWORD_NAMESPACE_START
  * ENT:
  *      enc - Encoding format to emit
  */
+EncodingFilterMgr::EncodingFilterMgr(char enc)
+		: SWFilterMgr() {
 
-EncodingFilterMgr::EncodingFilterMgr (char enc)
-		   : SWFilterMgr() {
+	scsuutf8   = new SCSUUTF8();
+	latin1utf8 = new Latin1UTF8();
 
-        scsuutf8 = new SCSUUTF8();
-        latin1utf8 = new Latin1UTF8();
+	encoding = enc;
 
-        encoding = enc;
-
-        switch (encoding) {
-        case ENC_LATIN1:
-                targetenc = new UTF8Latin1();
-                break;
-        case ENC_UTF16:
-                targetenc = new UTF8UTF16();
-                break;
-        case ENC_RTF:
-                targetenc = new UnicodeRTF();
-                break;
-        case ENC_HTML:
-                targetenc = new UTF8HTML();
-                break;
-        default: // i.e. case ENC_UTF8
-                targetenc = NULL;
-        }
+	switch (encoding) {
+		case ENC_LATIN1: targetenc = new UTF8Latin1(); break;
+		case ENC_UTF16:  targetenc = new UTF8UTF16();  break;
+		case ENC_RTF:    targetenc = new UnicodeRTF(); break;
+		case ENC_HTML:   targetenc = new UTF8HTML();   break;
+		default: // i.e. case ENC_UTF8
+			targetenc = NULL;
+	}
 }
+
 
 /******************************************************************************
  * EncodingFilterMgr Destructor - Cleans up instance of EncodingFilterMgr
  */
 EncodingFilterMgr::~EncodingFilterMgr() {
-        if (scsuutf8)
-                delete scsuutf8;
-        if (latin1utf8)
-                delete latin1utf8;
-        if (targetenc)
-                delete targetenc;
+	delete scsuutf8;
+	delete latin1utf8;
+	delete targetenc;
 }
+
 
 void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 
@@ -96,10 +88,12 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 	}
 }
 
+
 void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
-        if (targetenc)
-                module->addEncodingFilter(targetenc);
+	if (targetenc)
+		module->addEncodingFilter(targetenc);
 }
+
 
 /******************************************************************************
  * EncodingFilterMgr::Encoding	- sets/gets encoding
@@ -109,49 +103,41 @@ void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &secti
  * RET: encoding
  */
 char EncodingFilterMgr::Encoding(char enc) {
-        if (enc && enc != encoding) {
-                encoding = enc;
-                SWFilter * oldfilter = targetenc;
-                
-                switch (encoding) {
-                case ENC_LATIN1:
-                        targetenc = new UTF8Latin1();
-                        break;
-                case ENC_UTF16:
-                        targetenc = new UTF8UTF16();
-                        break;
-                case ENC_RTF:
-                        targetenc = new UnicodeRTF();
-                        break;
-                case ENC_HTML:
-                        targetenc = new UTF8HTML();
-                        break;
-                default: // i.e. case ENC_UTF8
-                        targetenc = NULL;
-                }
+	if (enc && enc != encoding) {
+		encoding = enc;
+		SWFilter *oldfilter = targetenc;
 
-                ModMap::const_iterator module;
+		switch (encoding) {
+			case ENC_LATIN1: targetenc = new UTF8Latin1(); break;
+			case ENC_UTF16:  targetenc = new UTF8UTF16();  break;
+			case ENC_RTF:    targetenc = new UnicodeRTF(); break;
+			case ENC_HTML:   targetenc = new UTF8HTML();   break;
+			default: // i.e. case ENC_UTF8
+				targetenc = NULL;
+		}
 
-                if (oldfilter != targetenc) {
-                        if (oldfilter) {
-                                if (!targetenc) {
-                                        for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                                                module->second->removeRenderFilter(oldfilter);
-                                }
-                                else {
-                                        for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                                                module->second->replaceRenderFilter(oldfilter, targetenc);
-                                }
-                                delete oldfilter;
-                        }
-                        else if (targetenc) {
-                                for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
-                                        module->second->addRenderFilter(targetenc);
-                        }
-                }
+		ModMap::const_iterator module;
 
-        }
-        return encoding;
+		if (oldfilter != targetenc) {
+			if (oldfilter) {
+				if (!targetenc) {
+					for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
+						module->second->removeRenderFilter(oldfilter);
+					}
+				else {
+					for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
+						module->second->replaceRenderFilter(oldfilter, targetenc);
+				}
+				delete oldfilter;
+			}
+			else if (targetenc) {
+				for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); module++)
+					module->second->addRenderFilter(targetenc);
+			}
+		}
+	}
+	return encoding;
 }
+
 
 SWORD_NAMESPACE_END

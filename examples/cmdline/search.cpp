@@ -43,6 +43,7 @@ using namespace sword;
  *			-3  - entryAttrib (eg. Word//Lemma/G1234/)
  *			-4  - Lucene
  */
+
 char SEARCH_TYPE=-2;
 
 char printed = 0;
@@ -123,5 +124,7 @@ int main(int argc, char **argv)
 		std::cout << (const char *)listkey << std::endl;
 		listkey++;
 	}
+
+	return 0;
 
 }

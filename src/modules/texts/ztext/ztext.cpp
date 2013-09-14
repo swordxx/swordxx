@@ -30,9 +30,6 @@
 
 #include <ztext.h>
 
-#include <regex.h>	// GNU
-
-
 SWORD_NAMESPACE_START
 
 /******************************************************************************

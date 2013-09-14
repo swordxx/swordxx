@@ -25,16 +25,23 @@
 #include <stdio.h>
 #include <utf8cantillation.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Hebrew Cantillation";
-const char oTip[] = "Toggles Hebrew Cantillation Marks";
+namespace {
 
-const SWBuf choices[3] = {"On", "Off", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Hebrew Cantillation";
+	static const char oTip[]  = "Toggles Hebrew Cantillation Marks";
 
-UTF8Cantillation::UTF8Cantillation() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+UTF8Cantillation::UTF8Cantillation() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

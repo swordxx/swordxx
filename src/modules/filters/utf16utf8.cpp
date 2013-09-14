@@ -27,7 +27,9 @@
 #include <utf16utf8.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 UTF16UTF8::UTF16UTF8() {
 }
@@ -100,8 +102,6 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
   
   return 0;
 }
-
-
 
 
 SWORD_NAMESPACE_END

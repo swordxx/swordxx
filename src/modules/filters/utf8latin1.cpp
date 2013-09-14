@@ -26,7 +26,9 @@
 #include <utf8latin1.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
 }
@@ -84,6 +86,7 @@ char UTF8Latin1::processText(SWBuf &text, const SWKey *key, const SWModule *modu
   }
   return 0;
 }
+
 
 SWORD_NAMESPACE_END
 

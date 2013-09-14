@@ -29,95 +29,99 @@
 
 #include <swlog.h>
 
+
 SWORD_NAMESPACE_START
 
+namespace {
 
-struct FtpFile {
-  const char *filename;
-  FILE *stream;
-  SWBuf *destBuf;
-};
-
-
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
-
-static CURLFTPTransport_init _CURLFTPTransport_init;
-
-CURLFTPTransport_init::CURLFTPTransport_init() {
-	curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
-}
-
-CURLFTPTransport_init::~CURLFTPTransport_init() {
-	curl_global_cleanup();
-}
-
-int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
-	struct FtpFile *out=(struct FtpFile *)stream;
-	if (out && !out->stream && !out->destBuf) {
-		/* open file for writing */
-		out->stream=fopen(out->filename, "wb");
-		if (!out->stream)
-			return -1; /* failure, can't open file to write */
-	}
-	if (out->destBuf) {
-		int s = out->destBuf->size();
-		out->destBuf->size(s+(size*nmemb));
-		memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
-		return nmemb;
-	}
-	return fwrite(buffer, size, nmemb, out->stream);
-}
+	struct FtpFile {
+		const char *filename;
+		FILE *stream;
+		SWBuf *destBuf;
+	};
 
 
-struct MyProgressData {
-	StatusReporter *sr;
-	bool *term;
-};
-
-
-int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
-	if (clientp) {
-		MyProgressData *pd = (MyProgressData *)clientp;
-SWLog::getSystemLog()->logDebug("CURLFTPTransport report progress: totalSize: %ld; xfered: %ld\n", (long)dltotal, (long)dlnow);
-		if (pd->sr) {
-			if (dltotal < 0) dltotal = 0;
-			if (dlnow < 0) dlnow = 0;
-			if (dlnow > dltotal) dlnow = dltotal;
-			pd->sr->update(dltotal, dlnow);
+	// initialize/cleanup SYSTEMWIDE library with life of this static.
+	static class CURLFTPTransport_init {
+	public:
+		CURLFTPTransport_init() {
+			curl_global_init(CURL_GLOBAL_DEFAULT);  // curl_easy_init automatically calls it if needed
 		}
-		if (*(pd->term)) return 1;
+
+		~CURLFTPTransport_init() {
+			curl_global_cleanup();
+		}
+	} _curlFTPTransport_init;
+
+
+	static int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
+		struct FtpFile *out=(struct FtpFile *)stream;
+		if (out && !out->stream && !out->destBuf) {
+			/* open file for writing */
+			out->stream=fopen(out->filename, "wb");
+			if (!out->stream)
+				return -1; /* failure, can't open file to write */
+		}
+		if (out->destBuf) {
+			int s = out->destBuf->size();
+			out->destBuf->size(s+(size*nmemb));
+			memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
+			return nmemb;
+		}
+		return fwrite(buffer, size, nmemb, out->stream);
 	}
-	return 0;
-}
 
 
-static int my_trace(CURL *handle, curl_infotype type, unsigned char *data, size_t size, void *userp) {
-	SWBuf header;
-	(void)userp; /* prevent compiler warning */
-	(void)handle; /* prevent compiler warning */
+	struct MyProgressData {
+		StatusReporter *sr;
+		bool *term;
+	};
 
-	switch (type) {
-	case CURLINFO_TEXT: header = "TEXT"; break;
-	case CURLINFO_HEADER_OUT: header = "=> Send header"; break;
-	case CURLINFO_HEADER_IN: header = "<= Recv header"; break;
-	
-	// these we don't want to log (HUGE)
-	case CURLINFO_DATA_OUT: header = "=> Send data";
-	case CURLINFO_SSL_DATA_OUT: header = "=> Send SSL data";
-	case CURLINFO_DATA_IN: header = "<= Recv data"; 
-	case CURLINFO_SSL_DATA_IN: header = "<= Recv SSL data";
-	default: /* in case a new one is introduced to shock us */
+
+	static int my_fprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
+		if (clientp) {
+			MyProgressData *pd = (MyProgressData *)clientp;
+			SWLog::getSystemLog()->logDebug("CURLFTPTransport report progress: totalSize: %ld; xfered: %ld\n", (long)dltotal, (long)dlnow);
+			if (pd->sr) {
+				if (dltotal < 0) dltotal = 0;
+				if (dlnow < 0) dlnow = 0;
+				if (dlnow > dltotal) dlnow = dltotal;
+				pd->sr->update(dltotal, dlnow);
+			}
+			if (*(pd->term)) return 1;
+		}
 		return 0;
 	}
-	
-	if (size > 120) size = 120;
-	SWBuf text;
-	text.size(size);
-	memcpy(text.getRawData(), data, size);
-	SWLog::getSystemLog()->logDebug("CURLFTPTransport: %s: %s", header.c_str(), text.c_str());
-	return 0;
+
+
+	static int my_trace(CURL *handle, curl_infotype type, unsigned char *data, size_t size, void *userp) {
+		SWBuf header;
+		(void)userp; /* prevent compiler warning */
+		(void)handle; /* prevent compiler warning */
+
+		switch (type) {
+		case CURLINFO_TEXT: header = "TEXT"; break;
+		case CURLINFO_HEADER_OUT: header = "=> Send header"; break;
+		case CURLINFO_HEADER_IN: header = "<= Recv header"; break;
+		
+		// these we don't want to log (HUGE)
+		case CURLINFO_DATA_OUT: header = "=> Send data";
+		case CURLINFO_SSL_DATA_OUT: header = "=> Send SSL data";
+		case CURLINFO_DATA_IN: header = "<= Recv data"; 
+		case CURLINFO_SSL_DATA_IN: header = "<= Recv SSL data";
+		default: /* in case a new one is introduced to shock us */
+			return 0;
+		}
+		
+		if (size > 120) size = 120;
+		SWBuf text;
+		text.size(size);
+		memcpy(text.getRawData(), data, size);
+		SWLog::getSystemLog()->logDebug("CURLFTPTransport: %s: %s", header.c_str(), text.c_str());
+		return 0;
+	}
 }
+
 
 CURLFTPTransport::CURLFTPTransport(const char *host, StatusReporter *sr) : RemoteTransport(host, sr) {
 	session = (CURL *)curl_easy_init();

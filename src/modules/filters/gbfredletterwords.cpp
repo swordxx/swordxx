@@ -26,16 +26,23 @@
 #include <swmodule.h>
 #include <ctype.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Words of Christ in Red";
-const char oTip[] = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Words of Christ in Red";
+	static const char oTip[]  = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
-GBFRedLetterWords::GBFRedLetterWords() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+GBFRedLetterWords::GBFRedLetterWords() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

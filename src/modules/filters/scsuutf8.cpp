@@ -38,7 +38,9 @@
 
 #include <scsuutf8.h>
 
+
 SWORD_NAMESPACE_START
+
 
 SCSUUTF8::SCSUUTF8() {
 }
@@ -76,6 +78,7 @@ unsigned char* SCSUUTF8::UTF8Output(unsigned long uchar, unsigned char* text)
   
   return text;
 }
+
 
 char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
 /*
@@ -238,5 +241,6 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 */
   return 0;
 }
+
 
 SWORD_NAMESPACE_END

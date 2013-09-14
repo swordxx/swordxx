@@ -32,14 +32,6 @@ typedef struct NetBuf netbuf;
 SWORD_NAMESPACE_START
 
 
-// initialize/cleanup SYSTEMWIDE library with life of this static.
-class FTPLibFTPTransport_init {
-public:
-	FTPLibFTPTransport_init();
-	~FTPLibFTPTransport_init();
-};
-
-
 class SWDLLEXPORT FTPLibFTPTransport : public RemoteTransport {
 	netbuf *ftpConnection;
 

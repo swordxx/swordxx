@@ -20,14 +20,17 @@
  * General Public License for more details.
  *
  */
+
 #include <iostream>
 
 #include <swmgr.h>
 #include <swmodule.h>
 #include <versekey.h>
 
+
 using namespace sword;
 using namespace std;
+
 
 int main(int argc, char **argv) {
 
@@ -121,3 +124,4 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
+

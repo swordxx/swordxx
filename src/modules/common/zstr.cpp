@@ -60,7 +60,6 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
 {
 	SWBuf buf;
 
-	nl = '\n';
 	lastoff = -1;
 	path = 0;
 	stdstr(&path, ipath);
@@ -433,12 +432,13 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
 
 void zStr::setText(const char *ikey, const char *buf, long len) {
 
+	static const char nl[] = {13, 10};
+
 	__u32 start, outstart;
 	__u32 size, outsize;
 	__s32 endoff;
 	long idxoff = 0;
 	__s32 shiftSize;
-	static const char nl[] = {13, 10};
 	char *tmpbuf = 0;
 	char *key = 0;
 	char *dbKey = 0;
@@ -586,6 +586,9 @@ void zStr::linkEntry(const char *destkey, const char *srckey) {
 
 
 void zStr::flushCache() const {
+
+	static const char nl[] = {13, 10};
+
 	if (cacheBlock) {
 		if (cacheDirty) {
 			__u32 start = 0;

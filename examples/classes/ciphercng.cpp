@@ -33,6 +33,7 @@
 using namespace sword;
 using namespace std;
 
+
 int main(int argc, char **argv) {
 
 	if (argc != 2) {
@@ -64,5 +65,5 @@ int main(int argc, char **argv) {
 		manager.setCipherKey(argv[1], key.c_str());
 	}
 
-
+	return 0;
 }

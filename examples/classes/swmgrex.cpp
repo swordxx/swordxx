@@ -33,10 +33,13 @@
 #include <swmgr.h>
 #include <swmodule.h>
 
+
 using namespace sword;
 using namespace std;
 
+
 int main(int argc, char **argv) {
+
 	SWMgr manager;		// create a default manager that looks in the current directory for mods.conf
 
 	cout << "\nInstalled Modules:\n\n";
@@ -69,5 +72,7 @@ int main(int argc, char **argv) {
 //	cout << (const char *)(*mod);		// we could do this, the same as above
 	mod->display();				// instead of casting mod to const char * to get its contents, we'll call the default display method that writes to stdout;
 	cout << " (" << mod->getName() << ")\n\n";
+
+	return 0;
 
 }

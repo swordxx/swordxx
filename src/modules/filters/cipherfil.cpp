@@ -27,7 +27,9 @@
 #include <swcipher.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 CipherFilter::CipherFilter(const char *key) {
 	cipher = new SWCipher((unsigned char *)key);
@@ -61,4 +63,6 @@ char CipherFilter::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	return 0;
 }
 
+
 SWORD_NAMESPACE_END
+

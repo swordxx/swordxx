@@ -25,50 +25,39 @@
 #include <thmlvariants.h>
 #include <utilstr.h>
 
+
 SWORD_NAMESPACE_START
 
-const char ThMLVariants::primary[] = "Primary Reading";
-const char ThMLVariants::secondary[] = "Secondary Reading";
-const char ThMLVariants::all[] = "All Readings";
+namespace {
 
-const char ThMLVariants::optName[] = "Textual Variants";
-const char ThMLVariants::optTip[] = "Switch between Textual Variants modes";
+	static const char oName[] = "Textual Variants";
+	static const char oTip[]  = "Switch between Textual Variants modes";
+	static const char *choices[4] = { "Primary Reading", "Secondary Reading", "All Readings", "" };
+
+	static const StringList *oValues() {
+		static const StringList oVals(&choices[0], &choices[3]);
+		return &oVals;
+	}
+}
 
 
-ThMLVariants::ThMLVariants() {
-	option = false;
-	options.push_back(primary);
-	options.push_back(secondary);
-	options.push_back(all);
+ThMLVariants::ThMLVariants() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 
 ThMLVariants::~ThMLVariants() {
 }
 
-void ThMLVariants::setOptionValue(const char *ival)
-{
-	if (!stricmp(ival, primary)) option = 0;
-        else if (!stricmp(ival, secondary)) option = 1;
-        else option = 2;
-}
-
-const char *ThMLVariants::getOptionValue()
-{
-        if (option == 0) {
-	        return primary;
-	}
-	else if (option == 1) {
-	        return secondary;
-	}
-	else {
-	        return all;
-	}
-}
 
 char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-        if ( option == 0 || option == 1) { //we want primary or variant only
+
+	int option = 0;
+	if      (optionValue == choices[0]) option = 0;
+	else if (optionValue == choices[1]) option = 1;
+	else                                option = 2;
+
+	if (option == 0 || option == 1) { //we want primary or variant only
 		bool intoken = false;
 		bool hide = false;
 		bool invar = false;
@@ -125,9 +114,6 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 	return 0;
 }
-
-
-
 
 
 

@@ -23,12 +23,15 @@
  * General Public License for more details.
  *
  */
+
 #include <iostream>
 #include <swmgr.h>
+
 
 using sword::SWMgr;
 using sword::StringList;
 using std::cout;
+
 
 int main(int argc, char **argv)
 {
@@ -42,5 +45,8 @@ int main(int argc, char **argv)
 			cout << "\t" << *it2 << "\n";
 		}
 	}
+
 	return 0;
+
 }
+

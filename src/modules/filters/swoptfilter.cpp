@@ -35,10 +35,13 @@ SWOptionFilter::SWOptionFilter() {
 	optValues = &empty;
 }
 
+
 SWOptionFilter::SWOptionFilter(const char *oName, const char *oTip, const StringList *oValues) {
 	optName   = oName;
 	optTip    = oTip;
 	optValues = oValues;
+	if (optValues->begin() != optValues->end()) setOptionValue(*(optValues->begin()));
+	isBooleanVal = optValues->size() == 2 && (optionValue == "On" || optionValue == "Off");
 }
 
 

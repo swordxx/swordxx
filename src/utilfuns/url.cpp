@@ -20,7 +20,6 @@
  *
  */
 
-//Sword includes
 #include <url.h>
 #include <swlog.h>
 
@@ -30,10 +29,12 @@
 #include <stdio.h>
 #include <iostream>
 
+
 SWORD_NAMESPACE_START
 
+
 namespace {
-	typedef std::map< unsigned char, SWBuf > DataMap;
+	typedef std::map<unsigned char, SWBuf> DataMap;
     	DataMap m;
 	static class __init {
 		public:
@@ -53,10 +54,11 @@ namespace {
 	} ___init;
 }
 
+
 /**
  * Constructors/Destructors
  */
-URL::URL(const char* url)  
+URL::URL(const char *url)  
 	: 	url(""),
 		protocol(""),
 		hostname(""),
@@ -68,27 +70,32 @@ URL::URL(const char* url)
 	}
 }
 
-const char* URL::getProtocol() const {
+
+const char *URL::getProtocol() const {
 	return protocol.c_str();
 }
 
-const char* URL::getHostName () const {
+
+const char *URL::getHostName () const {
 	return hostname.c_str();
 }
 
-const char* URL::getPath() const {
+
+const char *URL::getPath() const {
 	return path.c_str();
 }
+
 
 const URL::ParameterMap &URL::getParameters() const {
 	return parameterMap;
 }
 
+
 /**
  * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".
  * If the parameter is not set an empty string is returned.
  */
-const char* URL::getParameterValue(const char* name) const {
+const char *URL::getParameterValue(const char *name) const {
 	static SWBuf emptyStr("");
 
 	ParameterMap::const_iterator it = parameterMap.find(name);
@@ -107,22 +114,22 @@ const char* URL::getParameterValue(const char* name) const {
  * Parse the URL into the protocol, the hostname, the path and the paramters with their values
  * 
  */
-void URL::parse () {
+void URL::parse() {
 	/* format example		protocol://hostname/path/path/path.pl?param1=value1&amp;param2=value2
-	 * we include the script name in the path, so the path would be /path/path/path.pl in this example
-	 *  &amp; could also be &
-	 */
+	* we include the script name in the path, so the path would be /path/path/path.pl in this example
+	*  &amp; could also be &
+	*/
+
+	//1. Init
+	const char *urlPtr = url.c_str();
 	 
-	 //1. Init
-	 const char* urlPtr = url.c_str();
-	 	 
-	 protocol = "";
-	 hostname = "";
-	 path = "";
-	 parameterMap.clear();
+	protocol = "";
+	hostname = "";
+	path     = "";
+	parameterMap.clear();
 	 
 	 // 2. Get the protocol, which is from the begining to the first ://
-	 const char* end = strchr( urlPtr, ':' );
+	const char *end = strchr( urlPtr, ':' );
 	if (end) { //protocol was found
 	 	protocol.append(urlPtr, end-urlPtr);
 	 	urlPtr = end + 1;
@@ -190,7 +197,7 @@ void URL::parse () {
 			paramValue = "";
 			
 			//search for the equal sign to find the value part
-			const char* valueStart = strchr(end, '=');		
+			const char *valueStart = strchr(end, '=');		
 			if (valueStart) {
 				const char* valueEnd = strstr(valueStart, "&amp;") ? strstr(valueStart, "&amp;") : strstr(valueStart, "&"); //try to find a new paramter part
 				
@@ -236,6 +243,7 @@ const SWBuf URL::encode(const char *urlText) {
 	return url;
 }
 
+
 const SWBuf URL::decode(const char *encoded) {
 	/*static*/ SWBuf text;
 	text = encoded;	
@@ -276,4 +284,6 @@ const SWBuf URL::decode(const char *encoded) {
 	return text;
 }
 
+
 SWORD_NAMESPACE_END
+

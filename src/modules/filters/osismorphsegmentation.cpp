@@ -28,16 +28,23 @@
 #include <swmodule.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Morpheme Segmentation";
-const char oTip[] = "Toggles Morpheme Segmentation On and Off, when present";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Morpheme Segmentation";
+	static const char oTip[]  = "Toggles Morpheme Segmentation On and Off, when present";
 
-OSISMorphSegmentation::OSISMorphSegmentation() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+OSISMorphSegmentation::OSISMorphSegmentation() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

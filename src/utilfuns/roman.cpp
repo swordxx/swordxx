@@ -24,7 +24,9 @@
 #include <string.h>
 #include <roman.h>
 
+
 SWORD_NAMESPACE_START
+
 
 char isroman (const char *str, int maxchars) {
 	char *ch = (char*)str;
@@ -85,4 +87,6 @@ int from_rom(const char* str) {
 	return n;
 }
 
+
 SWORD_NAMESPACE_END
+

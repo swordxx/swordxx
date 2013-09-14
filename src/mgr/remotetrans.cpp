@@ -20,9 +20,6 @@
  *
  */
 
-
- 
-
 #include <remotetrans.h>
 #include <filemgr.h>
 
@@ -30,9 +27,11 @@
 #include <dirent.h>
 #include <swlog.h>
 
+
 extern "C" {
 #include <ftpparse.h>
 }
+
 
 using std::vector;
 
@@ -42,18 +41,19 @@ SWORD_NAMESPACE_START
 
 namespace {
 
-void removeTrailingSlash(SWBuf &buf) {
-	int len = buf.size();
-	if ((buf[len-1] == '/')
-	 || (buf[len-1] == '\\'))
-		buf.size(len-1);
-}
+	void removeTrailingSlash(SWBuf &buf) {
+		int len = buf.size();
+		if ((buf[len-1] == '/')
+		 || (buf[len-1] == '\\'))
+			buf.size(len-1);
+	}
 
 };
 
 
 void StatusReporter::preStatus(long totalBytes, long completedBytes, const char *message) {
 }
+
 
 void StatusReporter::statusUpdate(double dtTotal, double dlNow) {
 }
@@ -191,12 +191,14 @@ int RemoteTransport::copyDirectory(const char *urlPrefix, const char *dir, const
 	return retVal;
 }
 
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 void StatusReporter::update(unsigned long totalBytes, unsigned long completedBytes) {
 	statusUpdate(totalBytes, completedBytes);
 }
+
 
 SWORD_NAMESPACE_END
 

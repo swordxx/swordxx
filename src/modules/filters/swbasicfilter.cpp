@@ -34,8 +34,10 @@
 
 SWORD_NAMESPACE_START
 
+
 typedef std::map<SWBuf, SWBuf> DualStringMap;
 typedef std::set<SWBuf> StringSet;
+
 
 // I hate bridge patterns but this isolates std::map from a ton of filters
 class SWBasicFilter::Private {
@@ -45,10 +47,12 @@ public:
 	StringSet escPassSet;
 };
 
+
 const char SWBasicFilter::INITIALIZE = 1;
 const char SWBasicFilter::PRECHAR    = 2;
 const char SWBasicFilter::POSTCHAR   = 4;
 const char SWBasicFilter::FINALIZE   = 8;
+
 
 SWBasicFilter::SWBasicFilter() {
 
@@ -99,6 +103,7 @@ void SWBasicFilter::setPassThruUnknownEscapeString(bool val) {
 	passThruUnknownEsc = val;
 }
 
+
 void SWBasicFilter::setPassThruNumericEscapeString(bool val) {
 	passThruUnknownEsc = val;
 }
@@ -133,6 +138,7 @@ void SWBasicFilter::removeTokenSubstitute(const char *findString) {
 	}
 }
 
+
 void SWBasicFilter::addAllowedEscapeString(const char *findString) {
 	char *buf = 0;
 
@@ -145,11 +151,13 @@ void SWBasicFilter::addAllowedEscapeString(const char *findString) {
 	else p->escPassSet.insert(StringSet::value_type(findString));
 }
 
+
 void SWBasicFilter::removeAllowedEscapeString(const char *findString) {
 	if (p->escPassSet.find(findString) != p->escPassSet.end()) {
 		p->escPassSet.erase( p->escPassSet.find(findString) );
 	}
 }
+
 
 void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char *replaceString) {
 	char *buf = 0;
@@ -163,11 +171,13 @@ void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char
 	else p->escSubMap.insert(DualStringMap::value_type(findString, replaceString));
 }
 
+
 void SWBasicFilter::removeEscapeStringSubstitute(const char *findString) {
 	if (p->escSubMap.find(findString) != p->escSubMap.end()) {
 		p->escSubMap.erase( p->escSubMap.find(findString) );
 	}
 }
+
 
 bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 	DualStringMap::iterator it;
@@ -188,11 +198,13 @@ bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 	return false;
 }
 
+
 void SWBasicFilter::appendEscapeString(SWBuf &buf, const char *escString) {
 	buf += escStart;
 	buf += escString;
 	buf += escEnd;
 }
+
 
 bool SWBasicFilter::passAllowedEscapeString(SWBuf &buf, const char *escString) {
 	StringSet::iterator it;
@@ -214,6 +226,7 @@ bool SWBasicFilter::passAllowedEscapeString(SWBuf &buf, const char *escString) {
 	return false;
 }
 
+
 bool SWBasicFilter::handleNumericEscapeString(SWBuf &buf, const char *escString) {
 	if (passThruNumericEsc) {
 		appendEscapeString(buf, escString);
@@ -221,6 +234,7 @@ bool SWBasicFilter::handleNumericEscapeString(SWBuf &buf, const char *escString)
 	}
 	return false;
 }
+
 
 bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 	DualStringMap::iterator it;
@@ -403,5 +417,6 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	delete userData;
 	return 0;
 }
+
 
 SWORD_NAMESPACE_END

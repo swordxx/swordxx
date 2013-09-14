@@ -30,24 +30,37 @@
 #include <versekey.h>
 #include <markupfiltmgr.h>
 
+
 using namespace sword;
 using namespace std;
 
+
 int main(int argc, char **argv) {
+
 	SWMgr manager(new MarkupFilterMgr(sword::FMT_HTMLHREF, sword::ENC_UTF16));
 
 	const char *bookName = (argc > 1) ? argv[1] : "WLC";
+
 	SWModule *b = manager.getModule(bookName);
 	if (!b) return -1;
+
 	SWModule &book = *b;
 	book.setProcessEntryAttributes(false);
 	VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
+
+	// find the first non-zero entry
 	for (book = TOP; !book.popError() && !book.getRawEntryBuf().size(); book++);
 	if (!book.getRawEntryBuf().size()) return -2; 	// empty module
+
 	for (;!book.popError(); book++) {
+
 		cout << "$$$";
 		if (vk) cout << vk->getOSISRef();
 		else    cout << book.getKeyText();
+
 		cout << "\n" << book.renderText() << "\n\n";
 	}
+
+	return 0;
 }
+

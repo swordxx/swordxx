@@ -25,6 +25,7 @@
 
 SWORD_NAMESPACE_START
 
+
 PapyriPlain::PapyriPlain() {
 }
 

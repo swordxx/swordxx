@@ -28,13 +28,19 @@
 #include <versekey.h>
 #include <versificationmgr.h>
 
+
 SWORD_NAMESPACE_START
 
-typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
+
+namespace {
+	typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
+}
+
 
 const char *SWLocale::DEFAULT_LOCALE_NAME="en";
 
-// I have bridge patterns, but this hides swconfig and map from lots o stuff
+
+// I hate bridge patterns, but this hides swconfig and map from lots o stuff
 class SWLocale::Private {
 public:
 	LookupMap lookupTable;
@@ -145,9 +151,11 @@ const char *SWLocale::getDescription() {
 	return description;
 }
 
+
 const char *SWLocale::getEncoding() {
 	return encoding;
 }
+
 
 void SWLocale::augment(SWLocale &addFrom) {
 	*localeSource += *addFrom.localeSource;
@@ -185,3 +193,4 @@ const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 
 
 SWORD_NAMESPACE_END
+

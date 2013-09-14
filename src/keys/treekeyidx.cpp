@@ -33,7 +33,6 @@
 
 SWORD_NAMESPACE_START
 
-static const char nl = '\n';
 static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKeyIdx::classdef(classes);
 

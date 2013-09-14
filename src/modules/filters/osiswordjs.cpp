@@ -30,17 +30,23 @@
 #include <versekey.h>
 #include <stdio.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Word Javascript";
-const char oTip[] = "Toggles Word Javascript data";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Word Javascript";
+	static const char oTip[]  = "Toggles Word Javascript data";
+
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
 
 
-OSISWordJS::OSISWordJS() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+OSISWordJS::OSISWordJS() : SWOptionFilter(oName, oTip, oValues()) {
 
      defaultGreekLex   = 0;
      defaultHebLex     = 0;

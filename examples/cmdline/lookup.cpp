@@ -30,6 +30,7 @@
 #include <markupfiltmgr.h>
 #include <versekey.h>
 
+
 using sword::SWMgr;
 using sword::MarkupFilterMgr;
 using sword::SWModule;
@@ -42,6 +43,7 @@ using sword::AttributeList;
 using sword::AttributeValue;
 using sword::VerseKey;
 using sword::FilterList;
+
 
 int main(int argc, char **argv)
 {
@@ -110,5 +112,7 @@ int main(int argc, char **argv)
 		}
 	}
 	std::cout << std::endl;
+
 	return 0;
 }
+

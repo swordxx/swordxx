@@ -40,7 +40,9 @@
 
 SWORD_NAMESPACE_START
 
+
 LocaleMgr *LocaleMgr::systemLocaleMgr = 0;
+
 
 class __staticsystemLocaleMgr {
 public:
@@ -275,4 +277,6 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 	delete [] tmplang;
 }
 
+
 SWORD_NAMESPACE_END
+

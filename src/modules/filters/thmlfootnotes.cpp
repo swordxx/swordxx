@@ -31,16 +31,23 @@
 #include <versekey.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Footnotes";
-const char oTip[] = "Toggles Footnotes On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Footnotes";
+	static const char oTip[]  = "Toggles Footnotes On and Off if they exist";
 
-ThMLFootnotes::ThMLFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+ThMLFootnotes::ThMLFootnotes() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

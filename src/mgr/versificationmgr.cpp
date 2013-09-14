@@ -51,6 +51,7 @@ using std::map;
 using std::distance;
 using std::lower_bound;
 
+
 SWORD_NAMESPACE_START
 
 
@@ -120,6 +121,7 @@ public:
 	}
 };
 
+
 struct BookOffsetLess {
 	bool operator() (const VersificationMgr::Book &o1, const VersificationMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
 	bool operator() (const long &o1, const VersificationMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
@@ -127,9 +129,11 @@ struct BookOffsetLess {
 	bool operator() (const long &o1, const long &o2) const { return o1 < o2; }
 };
 
+
 void VersificationMgr::Book::init() {
 	p = new Private();
 }
+
 
 void VersificationMgr::System::init() {
 	p = new Private();
@@ -148,6 +152,7 @@ VersificationMgr::System::System(const System &other) {
 	ntStartOffset = other.ntStartOffset;
 }
 
+
 VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
 	name = other.name;
 	BMAX[0] = other.BMAX[0];
@@ -161,6 +166,7 @@ VersificationMgr::System &VersificationMgr::System::operator =(const System &oth
 VersificationMgr::System::~System() {
 	delete p;
 }
+
 
 const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const {
 	return (number < (signed int)p->books.size()) ? &(p->books[number]) : 0;
@@ -224,6 +230,7 @@ VersificationMgr::Book::Book(const Book &other) {
 	init();
 	(*p) = *(other.p);
 }
+
 
 VersificationMgr::Book& VersificationMgr::Book::operator =(const Book &other) {
 	longName = other.longName;
@@ -386,3 +393,4 @@ const StringList VersificationMgr::getVersificationSystems() const {
 
 
 SWORD_NAMESPACE_END
+

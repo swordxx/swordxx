@@ -26,50 +26,39 @@
 #include <utilstr.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
 
-const char OSISVariants::primary[] = "Primary Reading";
-const char OSISVariants::secondary[] = "Secondary Reading";
-const char OSISVariants::all[] = "All Readings";
+namespace {
 
-const char OSISVariants::optName[] = "Textual Variants";
-const char OSISVariants::optTip[] = "Switch between Textual Variants modes";
+	static const char oName[] = "Textual Variants";
+	static const char oTip[]  = "Switch between Textual Variants modes";
+	static const char *choices[4] = { "Primary Reading", "Secondary Reading", "All Readings", "" };
+
+	static const StringList *oValues() {
+		static const StringList oVals(&choices[0], &choices[3]);
+		return &oVals;
+	}
+}
 
 
-OSISVariants::OSISVariants() {
-	option = 0;
-	options.push_back(primary);
-	options.push_back(secondary);
-	options.push_back(all);
+OSISVariants::OSISVariants() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 
 OSISVariants::~OSISVariants() {
 }
 
-void OSISVariants::setOptionValue(const char *ival)
-{
-	if (!stricmp(ival, primary)) option = 0;
-        else if (!stricmp(ival, secondary)) option = 1;
-        else option = 2;
-}
-
-const char *OSISVariants::getOptionValue()
-{
-    if (option == 0) {
-	        return primary;
-	}
-	else if (option == 1) {
-	        return secondary;
-	}
-	else {
-	        return all;
-	}
-}
 
 char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-        if (option == 0 || option == 1) { //we want primary or variant only
+
+	int option = 0;
+	if      (optionValue == choices[0]) option = 0;
+	else if (optionValue == choices[1]) option = 1;
+	else                                option = 2;
+
+	if (option == 0 || option == 1) { //we want primary or variant only
 		bool intoken = false;
 		bool hide = false;
 		bool invar = false;
@@ -127,10 +116,6 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 	return 0;
 }
-
-
-
-
 
 
 SWORD_NAMESPACE_END

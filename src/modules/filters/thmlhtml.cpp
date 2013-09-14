@@ -25,7 +25,9 @@
 #include <swmodule.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
+
 
 ThMLHTML::ThMLHTML() {
 	setTokenStart("<");

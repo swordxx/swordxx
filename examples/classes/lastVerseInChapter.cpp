@@ -29,8 +29,10 @@
 #include <versekey.h>
 #include <iostream>
 
+
 using namespace sword;
 using namespace std;
+
 
 int main(int argc, char **argv) {
 
@@ -48,5 +50,7 @@ int main(int argc, char **argv) {
 			cout << text << endl;
 		}
 	}
+
 	return 0;
 }
+

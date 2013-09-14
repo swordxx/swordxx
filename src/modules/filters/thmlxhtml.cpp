@@ -30,10 +30,12 @@
 
 SWORD_NAMESPACE_START
  
+
 const char *ThMLXHTML::getHeader() const {
 	return "\
 	";
 }
+
 
 ThMLXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	if (module) {

@@ -33,23 +33,7 @@
 #include <versekey.h>
 #include <stringmgr.h>
 
-#include <regex.h>	// GNU
-#include <map>
-#include <list>
-#include <algorithm>
-
-#ifndef USELUCENE
-using std::map;
-using std::list;
-using std::find;
-#endif
-
 SWORD_NAMESPACE_START
-
-#ifndef USELUCENE
-typedef  map < SWBuf, list<long> > strlist;
-typedef list<long> longlist;
-#endif
 
 /******************************************************************************
  * RawText4 Constructor - Initializes data for instance of RawText4

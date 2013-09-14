@@ -101,7 +101,9 @@
 #include <utf8transliterator.h>
 #endif
 
+
 SWORD_NAMESPACE_START
+
 
 #ifdef _ICU_
 bool SWMgr::isICU = true;
@@ -116,11 +118,13 @@ const char *SWMgr::globalConfPath = GLOBCONFPATH;
 const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif
 
+
 const char *SWMgr::MODTYPE_BIBLES = "Biblical Texts";
 const char *SWMgr::MODTYPE_COMMENTARIES = "Commentaries";
 const char *SWMgr::MODTYPE_LEXDICTS = "Lexicons / Dictionaries";
 const char *SWMgr::MODTYPE_GENBOOKS = "Generic Books";
 const char *SWMgr::MODTYPE_DAILYDEVOS = "Daily Devotional";
+
 
 void SWMgr::init() {
 	SWOptionFilter *tmpFilter = 0;
@@ -857,6 +861,7 @@ signed char SWMgr::Load() {
 	return ret;
 }
 
+
 SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap &section)
 {
 	SWBuf description, datapath, misc1;
@@ -1089,7 +1094,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 
 
 char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
- {
+{
 	char retVal = -1;
 	// why didn't we use find here?
 	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
@@ -1448,4 +1453,6 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
 	return -1;
 }
 
+
 SWORD_NAMESPACE_END
+

@@ -26,7 +26,9 @@
 #include <latin1utf8.h>
 #include <swmodule.h>
 
+
 SWORD_NAMESPACE_START
+
 
 Latin1UTF8::Latin1UTF8() {
 }
@@ -36,7 +38,7 @@ char Latin1UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 {
     const unsigned char *from;
 
-	 if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
 		return (char)-1;
 
 	SWBuf orig = text;
@@ -185,5 +187,6 @@ char Latin1UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	}
 	return 0;
 }
+
 
 SWORD_NAMESPACE_END

@@ -34,54 +34,54 @@ SWORD_NAMESPACE_START
 
 namespace {
 
-struct MyProgressData {
-	StatusReporter *sr;
-	long totalSize;
-	bool *term;
-};
+	static struct MyProgressData {
+		StatusReporter *sr;
+		long totalSize;
+		bool *term;
+	};
 
-int my_swbufwriter(netbuf *nControl, void *buffer, size_t size, void *swbuf) {
-	SWBuf &output = *(SWBuf *)swbuf;
-	int s = output.size();
-	output.size(s+size);
-	memcpy(output.getRawData()+s, buffer, size);
-	return size;
-}
+	static int my_swbufwriter(netbuf *nControl, void *buffer, size_t size, void *swbuf) {
+		SWBuf &output = *(SWBuf *)swbuf;
+		int s = output.size();
+		output.size(s+size);
+		memcpy(output.getRawData()+s, buffer, size);
+		return size;
+	}
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-int my_fprogress(netbuf *nControl, int xfered, void *arg) {
-	if (arg) {
-		MyProgressData *pd = (MyProgressData *)arg;
-SWLog::getSystemLog()->logDebug("FTPLibFTPTransport report progress: totalSize: %ld; xfered: %d\n", pd->totalSize, xfered);
-		if (pd->sr) {
-			pd->sr->statusUpdate(pd->totalSize, xfered);
+	static int my_fprogress(netbuf *nControl, int xfered, void *arg) {
+		if (arg) {
+			MyProgressData *pd = (MyProgressData *)arg;
+	SWLog::getSystemLog()->logDebug("FTPLibFTPTransport report progress: totalSize: %ld; xfered: %d\n", pd->totalSize, xfered);
+			if (pd->sr) {
+				pd->sr->statusUpdate(pd->totalSize, xfered);
+			}
+			if (*(pd->term)) return 0;
 		}
-		if (*(pd->term)) return 0;
+		return 1;
 	}
-	return 1;
-}
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
-}
 
+	// initialize/cleanup SYSTEMWIDE library with life of this static.
+	static class FTPLibFTPTransport_init {
+	public:
+		FTPLibFTPTransport_init() {
+			FtpInit();
+		}
 
+		~FTPLibFTPTransport_init() {
+		}
 
-static FTPLibFTPTransport_init _FTPLibFTPTransport_init;
+	} _ftpLibFTPTransport_init;
 
-
-
-FTPLibFTPTransport_init::FTPLibFTPTransport_init() {
-	FtpInit();
-}
-
-FTPLibFTPTransport_init::~FTPLibFTPTransport_init() {
 }
 
 

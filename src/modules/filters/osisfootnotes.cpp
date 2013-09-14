@@ -30,17 +30,23 @@
 #include <utilxml.h>
 #include <utilstr.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Footnotes";
-const char oTip[] = "Toggles Footnotes On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Footnotes";
+	static const char oTip[]  = "Toggles Footnotes On and Off if they exist";
+
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
 
 
-OSISFootnotes::OSISFootnotes() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+OSISFootnotes::OSISFootnotes() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

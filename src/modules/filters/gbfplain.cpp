@@ -25,7 +25,9 @@
 #include <gbfplain.h>
 #include <swbuf.h>
 
+
 SWORD_NAMESPACE_START
+
 
 GBFPlain::GBFPlain() {
 }
@@ -110,4 +112,6 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 	return 0;
 }
 
+
 SWORD_NAMESPACE_END
+

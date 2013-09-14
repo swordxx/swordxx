@@ -25,8 +25,10 @@
 #include <swmodule.h>
 #include <versekey.h>
 
+
 using namespace sword;
 using namespace std;
+
 
 int main(int argc, char **argv) {
 
@@ -44,5 +46,6 @@ int main(int argc, char **argv) {
         book->setPosition(TOP);
 
         cout << *key << endl;
+
         return 0;
 }

@@ -1,8 +1,7 @@
 /******************************************************************************
  *
- *  verserangeparse.cpp -	This example shows:
- *				How to parse a verse reference
- *				How to persist a custom range key in a book
+ *  verserangeparse.cpp -	This example shows
+ *				how to parse a verse reference
  *
  * $Id$
  *
@@ -47,42 +46,29 @@ int main(int argc, char **argv)
 	ListKey result;
 
 	result = parser.parseVerseList(range, parser, true);
+
 	// let's iterate the key and display
 	for (result = TOP; !result.popError(); result++) {
 		cout << result << "\n";
 	}
 	cout << endl;
 
-	// Now if we'd like persist this key for use inside of a book...
-	result.setPersist(true);
+	// Now let's output a module with the entries from the result
 	
-	// Let's get a book;
+	// we'll initialize our library of books
 	SWMgr library(new MarkupFilterMgr(FMT_PLAIN));	// render plain without fancy markup
+
+	// Let's get a book;
 	SWModule *book = library.getModule("KJV");
 
-	// and set our limited key inside
-	book->setKey(result);
+	// couldn't find our test module
+	if (!book) return -1;
 
 	// now let's iterate the book and display
-	for ((*book) = TOP; !book->popError(); (*book)++) {
+	for (result = TOP; !result.popError(); result++) {
+		book->setKey(result);
 		cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
 	}
-
-	// Since we've told our result key to persist in book, we can reuse our
-	// setup by simply resetting result, e.g.
-	//
-	// result = parser.ParseVerseList(someNewRange, parser, true);
-	//
-	// Now an iteration of book will give us our new range.
-	//
-	// To stop persistence of our custom key, we'll need to set our book's key
-	// to something simple:
-	// 
-	// book->setKey("gen.1.1");
-	// 
-	// Resetting our book object's key to something not persistent will revert our book object to using its default key for positioning
-	//
-	//
 
 	return 0;
 }

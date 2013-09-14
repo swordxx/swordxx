@@ -29,7 +29,9 @@
 #include <swlog.h>
 #include <stdarg.h>
 
+
 SWORD_NAMESPACE_START
+
 
 GBFOSIS::GBFOSIS() {
 }

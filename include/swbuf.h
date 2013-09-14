@@ -48,8 +48,6 @@ class SWDLLEXPORT SWBuf {
 	char *endAlloc;
 	char fillByte;
 	unsigned long allocSize;
-	static char *nullStr;
-	static char junkBuf[JUNKBUFSIZE];
 
 	inline void assureMore(size_t pastEnd) {
 		if (size_t(endAlloc-end) < pastEnd) {
@@ -81,6 +79,8 @@ class SWDLLEXPORT SWBuf {
 
 
 public:
+
+	static char *nullStr;
 
 	/******************************************************************************
 	* SWBuf Constructor - Creates an empty SWBuf object
@@ -144,7 +144,7 @@ public:
 	*	@param pos The position of the requested character.
 	* @return The character at the specified position
 	*/
-	inline char &charAt(unsigned long pos) { return ((pos <= (unsigned long)(end - buf)) ? buf[pos] : ((*junkBuf=0),*junkBuf)); }
+	inline char &charAt(unsigned long pos) { return ((pos <= (unsigned long)(end - buf)) ? buf[pos] : (*nullStr)); }
 
 	/** 
 	* @return size() and length() return only the number of characters of the string.

@@ -25,9 +25,10 @@
 #include <ctype.h>
 #include <utilstr.h>
 
+
 SWORD_NAMESPACE_START
 
-const char *XMLTag::nullstr = "";
+
 void XMLTag::parse() const {
 	int i;
 	int start;
@@ -123,6 +124,7 @@ XMLTag::XMLTag(const char *tagString) {
 	setText(tagString);
 }
 
+
 XMLTag::XMLTag(const XMLTag& t) : attributes(t.attributes)  {
 	parsed = t.parsed;
 	empty = t.empty;
@@ -138,6 +140,7 @@ XMLTag::XMLTag(const XMLTag& t) : attributes(t.attributes)  {
 		memcpy(name, t.name, len + 1);
 	}
 }
+
 
 void XMLTag::setText(const char *tagString) {
 	parsed = false;
@@ -175,12 +178,14 @@ void XMLTag::setText(const char *tagString) {
 	}
 }
 
+
 XMLTag::~XMLTag() {
 	if (buf)
 		delete [] buf;
 	if (name)
 		delete [] name;
 }
+
 
 const StringList XMLTag::getAttributeNames() const {
 	StringList retVal;
@@ -278,6 +283,7 @@ const char *XMLTag::setAttribute(const char *attribName, const char *attribValue
 	return attribValue;
 }
 
+
 const char *XMLTag::toString() const {
 	SWBuf tag = "<";
 	if (!parsed)
@@ -320,4 +326,6 @@ bool XMLTag::isEndTag(const char *eID) const {
 	return endTag;
 }
 
+
 SWORD_NAMESPACE_END
+

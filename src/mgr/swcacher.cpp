@@ -24,6 +24,7 @@
 
 #include <swcacher.h>
 
+
 SWORD_NAMESPACE_START
 
 
@@ -46,4 +47,6 @@ long SWCacher::lastAccess() {
 	return 0;
 }
 
+
 SWORD_NAMESPACE_END
+

@@ -30,7 +30,9 @@
 
 #include <stdio.h>
 
+
 SWORD_NAMESPACE_START
+
 
  /******************************************************************************
  * RawLD Constructor - Initializes data for instance of RawLD
@@ -194,4 +196,6 @@ char *RawLD::getKeyForEntry(long entry) const {
 	return key;
 }
 
+
 SWORD_NAMESPACE_END
+

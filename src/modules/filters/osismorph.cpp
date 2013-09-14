@@ -26,14 +26,20 @@
 
 SWORD_NAMESPACE_START
 
-const char oName[] = "Morphological Tags";
-const char oTip[] = "Toggles Morphological Tags On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Morphological Tags";
+	static const char oTip[]  = "Toggles Morphological Tags On and Off if they exist";
 
-OSISMorph::OSISMorph() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+
+}
+
+OSISMorph::OSISMorph() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 

@@ -25,16 +25,23 @@
 #include <osisenum.h>
 #include <utilxml.h>
 
+
 SWORD_NAMESPACE_START
 
-const char oName[] = "Enumerations";
-const char oTip[] = "Toggles Enumerations On and Off if they exist";
+namespace {
 
-const SWBuf choices[3] = {"Off", "On", ""};
-const StringList oValues(&choices[0], &choices[2]);
+	static const char oName[] = "Enumerations";
+	static const char oTip[]  = "Toggles Enumerations On and Off if they exist";
 
-OSISEnum::OSISEnum() : SWOptionFilter(oName, oTip, &oValues) {
-	setOptionValue("Off");
+	static const StringList *oValues() {
+		static const SWBuf choices[3] = {"Off", "On", ""};
+		static const StringList oVals(&choices[0], &choices[2]);
+		return &oVals;
+	}
+}
+
+
+OSISEnum::OSISEnum() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 
