@@ -247,8 +247,100 @@ __u32 getUniCharFromUTF8(const unsigned char **buf) {
 
 
 SWBuf getUTF8FromUniChar(__u32 uchar) {
-	// TODO: finish this logic
-	return SWBuf((char)uchar);
+	SWBuf retVal("", 7);
+	unsigned int i;
+
+	if (uchar < 0x80) {
+		retVal.append((unsigned char)uchar);
+		retVal.setSize(1);
+	}
+	else if (uchar < 0x800) {
+		i = uchar & 0x3f;
+		retVal[1] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x1f;
+		retVal[0] = (unsigned char)(0xc0 | i);
+		retVal.setSize(2);
+	}
+	else if (uchar < 0x10000) {
+		i = uchar & 0x3f;
+		retVal[2] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[1] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x0f;
+		retVal[0] = (unsigned char)(0xe0 | i);
+		retVal.setSize(3);
+	}
+	else if (uchar < 0x200000) {
+		i = uchar & 0x3f;
+		retVal[3] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[2] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[1] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x07;
+		retVal[0] = (unsigned char)(0xf0 | i);
+		retVal.setSize(4);
+	}
+	else if (uchar < 0x4000000) {
+		i = uchar & 0x3f;
+		retVal[4] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[3] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[2] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[1] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x03;
+		retVal[0] = (unsigned char)(0xf8 | i);
+		retVal.setSize(5);
+	}
+	else if (uchar < 0x80000000) {
+		i = uchar & 0x3f;
+		retVal[5] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[4] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[3] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[2] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x3f;
+		retVal[1] = (unsigned char)(0x80 | i);
+		uchar >>= 6;
+
+		i = uchar & 0x01;
+		retVal[0] = (unsigned char)(0xfc | i);
+		retVal.setSize(6);
+	}
+
+	return retVal;
 }
 
 

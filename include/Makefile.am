@@ -111,7 +111,6 @@ pkginclude_HEADERS += $(swincludedir)/swoptfilter.h
 pkginclude_HEADERS += $(swincludedir)/swobject.h
 pkginclude_HEADERS += $(swincludedir)/swsearchable.h
 pkginclude_HEADERS += $(swincludedir)/swtext.h
-pkginclude_HEADERS += $(swincludedir)/swunicod.h
 pkginclude_HEADERS += $(swincludedir)/swversion.h
 pkginclude_HEADERS += $(swincludedir)/sysdata.h
 

@@ -59,6 +59,19 @@ __u32 getUniCharFromUTF8(const unsigned char **buf);
 
 
 /******************************************************************************
+ * getUTF8FromUniChar - retrieves us UTF8 string from a
+ * 					Unicode codepoint
+ *
+ * ENT:	uchar - unicode codepoint value
+ *
+ * RET:	buf - a UTF8 string which consists of the proper UTF8 sequence of
+ * 				bytes for the given Unicode codepoint
+ */
+
+SWBuf getUTF8FromUniChar(__u32 uchar);
+
+
+/******************************************************************************
  * assureValidUTF8 - iterates the supplied UTF-8 buffer and checks for validity
  * 					replacing invalid bytes if necessary and returning a
  *					verified UTF8 buffer, leaving the original input

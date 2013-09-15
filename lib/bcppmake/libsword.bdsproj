@@ -429,7 +429,6 @@
         <FILE FILENAME="..\..\src\utilfuns\roman.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="roman" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\utilfuns\swbuf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="swbuf" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\utilfuns\swobject.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="swobject" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\utilfuns\swunicod.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="swunicod" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\utilfuns\swversion.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="swversion" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\utilfuns\url.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="url" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\utilfuns\utilstr.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="utilstr" FORMNAME="" DESIGNCLASS=""/>

@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.06.10"/>
     <PROJECT value="libsword.a"/>
-    <OBJFILES value="../../src/utilfuns/Greek2Greek.o ../../src/utilfuns/swunicod.o 
+    <OBJFILES value="../../src/utilfuns/Greek2Greek.o 
       ../../src/utilfuns/swversion.o ../../src/utilfuns/utilconf.o 
       ../../src/utilfuns/utilstr.o ../../src/keys/listkey.o 
       ../../src/keys/strkey.o ../../src/keys/swkey.o ../../src/keys/treekey.o 
@@ -109,7 +109,6 @@
   <FILELIST>
       <FILE FILENAME="libsword.bpf" FORMNAME="" UNITNAME="libsword" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/utilfuns/Greek2Greek.cpp" FORMNAME="" UNITNAME="Greek2Greek.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="../../src/utilfuns/swunicod.cpp" FORMNAME="" UNITNAME="swunicod.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/utilfuns/swversion.cpp" FORMNAME="" UNITNAME="swversion.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/utilfuns/utilconf.cpp" FORMNAME="" UNITNAME="utilconf.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="../../src/utilfuns/utilstr.cpp" FORMNAME="" UNITNAME="utilstr.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

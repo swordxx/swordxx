@@ -8,7 +8,6 @@ utilfunsdir = $(top_srcdir)/src/utilfuns
 libsword_la_SOURCES += $(utilfunsdir)/swobject.cpp
 libsword_la_SOURCES += $(utilfunsdir)/utilstr.cpp
 libsword_la_SOURCES += $(utilfunsdir)/utilxml.cpp
-libsword_la_SOURCES += $(utilfunsdir)/swunicod.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swversion.cpp
 libsword_la_SOURCES += $(utilfunsdir)/swbuf.cpp
 libsword_la_SOURCES += $(utilfunsdir)/ftpparse.c

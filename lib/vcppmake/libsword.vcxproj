@@ -223,7 +223,6 @@
     <ClCompile Include="..\..\src\modules\filters\swoptfilter.cpp" />
     <ClCompile Include="..\..\src\mgr\swsearchable.cpp" />
     <ClCompile Include="..\..\src\modules\texts\swtext.cpp" />
-    <ClCompile Include="..\..\src\utilfuns\swunicod.cpp" />
     <ClCompile Include="..\..\src\utilfuns\swversion.cpp" />
     <ClCompile Include="..\..\src\modules\filters\teixhtml.cpp" />
     <ClCompile Include="..\..\src\modules\filters\teihtmlhref.cpp" />
@@ -405,7 +404,6 @@
     <ClInclude Include="..\..\include\swoptfilter.h" />
     <ClInclude Include="..\..\include\swsearchable.h" />
     <ClInclude Include="..\..\include\swtext.h" />
-    <ClInclude Include="..\..\include\swunicod.h" />
     <ClInclude Include="..\..\include\swversion.h" />
     <ClInclude Include="..\..\include\sysdata.h" />
     <ClInclude Include="..\..\include\teixhtml.h" />

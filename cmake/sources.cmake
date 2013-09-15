@@ -159,7 +159,6 @@ SET(sword_base_utilfns_SOURCES
 	src/utilfuns/swobject.cpp
 	src/utilfuns/utilstr.cpp
 	src/utilfuns/utilxml.cpp
-	src/utilfuns/swunicod.cpp
 	src/utilfuns/swversion.cpp
 	src/utilfuns/swbuf.cpp
 	src/utilfuns/ftpparse.c
@@ -344,7 +343,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/swobject.h
 	include/swsearchable.h
 	include/swtext.h
-	include/swunicod.h
     "${CMAKE_CURRENT_BINARY_DIR}/include/swversion.h"
 	include/sysdata.h
 

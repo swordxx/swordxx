@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <rtfhtml.h>
 #include <swbuf.h>
-#include <swunicod.h>
+#include <utilstr.h>
 #include <ctype.h>
 #include <sysdata.h>
 
@@ -48,7 +48,6 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 		{
 			// \u12345?
 			if ( *(from+1) == 'u' && (*(from+2) == '-' || isdigit(*(from+2)))) {
-				unsigned char buf[8];
 				from += 2;
 				const char *end = from;
 				while (isdigit(*++end));
@@ -56,7 +55,7 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				num.append(from, end-from);
 				__s16 n = atoi(num.c_str());
 				__u32 u = (__u16)n;
-				text.append((const char *)UTF32to8(u, buf));
+				text.append(getUTF8FromUniChar(u));
 				from += (end-from);
 				continue;
 			}

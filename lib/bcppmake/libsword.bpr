@@ -16,7 +16,7 @@
       ..\..\src\mgr\swlocale.obj ..\..\src\mgr\swmgr.obj 
       ..\..\src\mgr\curlftpt.obj ..\..\src\utilfuns\utilxml.obj 
       ..\..\src\utilfuns\roman.obj ..\..\src\utilfuns\swbuf.obj 
-      ..\..\src\utilfuns\swobject.obj ..\..\src\utilfuns\swunicod.obj 
+      ..\..\src\utilfuns\swobject.obj 
       ..\..\src\utilfuns\swversion.obj ..\..\src\utilfuns\url.obj 
       ..\..\src\utilfuns\utilstr.obj 
       ..\..\src\modules\comments\hrefcom\hrefcom.obj 

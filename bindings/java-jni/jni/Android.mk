@@ -165,7 +165,6 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/utilfuns/url.cpp \
 ../../../src/utilfuns/swversion.cpp \
 ../../../src/utilfuns/utilxml.cpp \
-../../../src/utilfuns/swunicod.cpp \
 ../../../src/utilfuns/regex.c \
 ../../../src/keys/swkey.cpp \
 ../../../src/keys/versetreekey.cpp \

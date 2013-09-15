@@ -315,7 +315,6 @@
 		A954ACBB13EEA0C10094E3FE /* roman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D513EE98B30094E3FE /* roman.cpp */; };
 		A954ACBC13EEA0C10094E3FE /* swbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D613EE98B30094E3FE /* swbuf.cpp */; };
 		A954ACBD13EEA0C10094E3FE /* swobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D713EE98B30094E3FE /* swobject.cpp */; };
-		A954ACBE13EEA0C10094E3FE /* swunicod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D813EE98B30094E3FE /* swunicod.cpp */; };
 		A954ACBF13EEA0C10094E3FE /* swversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D913EE98B30094E3FE /* swversion.cpp */; };
 		A954ACC013EEA0C10094E3FE /* url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8DA13EE98B30094E3FE /* url.cpp */; };
 		A954ACC113EEA0C10094E3FE /* utilstr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8DB13EE98B30094E3FE /* utilstr.cpp */; };
@@ -862,7 +861,6 @@
 		A954A8D513EE98B30094E3FE /* roman.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = roman.cpp; sourceTree = "<group>"; };
 		A954A8D613EE98B30094E3FE /* swbuf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swbuf.cpp; sourceTree = "<group>"; };
 		A954A8D713EE98B30094E3FE /* swobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swobject.cpp; sourceTree = "<group>"; };
-		A954A8D813EE98B30094E3FE /* swunicod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swunicod.cpp; sourceTree = "<group>"; };
 		A954A8D913EE98B30094E3FE /* swversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swversion.cpp; sourceTree = "<group>"; };
 		A954A8DA13EE98B30094E3FE /* url.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = url.cpp; sourceTree = "<group>"; };
 		A954A8DB13EE98B30094E3FE /* utilstr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilstr.cpp; sourceTree = "<group>"; };
@@ -1882,7 +1880,6 @@
 				A954A8D513EE98B30094E3FE /* roman.cpp */,
 				A954A8D613EE98B30094E3FE /* swbuf.cpp */,
 				A954A8D713EE98B30094E3FE /* swobject.cpp */,
-				A954A8D813EE98B30094E3FE /* swunicod.cpp */,
 				A954A8D913EE98B30094E3FE /* swversion.cpp */,
 				A954A8DA13EE98B30094E3FE /* url.cpp */,
 				A954A8DB13EE98B30094E3FE /* utilstr.cpp */,
@@ -3005,7 +3002,6 @@
 				A954ACBB13EEA0C10094E3FE /* roman.cpp in Sources */,
 				A954ACBC13EEA0C10094E3FE /* swbuf.cpp in Sources */,
 				A954ACBD13EEA0C10094E3FE /* swobject.cpp in Sources */,
-				A954ACBE13EEA0C10094E3FE /* swunicod.cpp in Sources */,
 				A954ACBF13EEA0C10094E3FE /* swversion.cpp in Sources */,
 				A954ACC013EEA0C10094E3FE /* url.cpp in Sources */,
 				A954ACC113EEA0C10094E3FE /* utilstr.cpp in Sources */,

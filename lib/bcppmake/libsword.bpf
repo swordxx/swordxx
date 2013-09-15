@@ -29,7 +29,6 @@ USEUNIT("..\..\src\utilfuns\utilxml.cpp");
 USEUNIT("..\..\src\utilfuns\roman.cpp");
 USEUNIT("..\..\src\utilfuns\swbuf.cpp");
 USEUNIT("..\..\src\utilfuns\swobject.cpp");
-USEUNIT("..\..\src\utilfuns\swunicod.cpp");
 USEUNIT("..\..\src\utilfuns\swversion.cpp");
 USEUNIT("..\..\src\utilfuns\url.cpp");
 USEUNIT("..\..\src\utilfuns\utilstr.cpp");

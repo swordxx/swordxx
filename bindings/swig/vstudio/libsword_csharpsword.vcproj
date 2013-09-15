@@ -752,10 +752,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\swunicod.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\swversion.h"
 				>
 			</File>
