@@ -34,7 +34,7 @@ SWORD_NAMESPACE_START
 
 namespace {
 
-	static struct MyProgressData {
+	struct MyProgressData {
 		StatusReporter *sr;
 		long totalSize;
 		bool *term;
