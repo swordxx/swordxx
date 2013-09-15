@@ -26,6 +26,8 @@
 #define BASEI 102400000L
 
 #include <swbuf.h>
+#include <utilstr.h>
+
 typedef sword::SWBuf StringType;
 
 //#include <string>
@@ -33,6 +35,8 @@ typedef sword::SWBuf StringType;
 
 using std::cout;
 using std::cerr;
+using sword::utf8ToWChar;
+using sword::wcharToUTF8;
 
 void markTime() {
 	static clock_t start = clock();
@@ -137,6 +141,8 @@ void insertStringTest() {
 }
 
 int main(int argc, char **argv) {
+
+	bool showTimings = !(argc > 1 && !strcmp(argv[1], "--no-timings"));
 	StringType x;
 	cout << "x should be (): (" << x << ")\n";
 	cout << "size should be 0: " << x.size() << "\n";
@@ -157,6 +163,11 @@ int main(int argc, char **argv) {
 	cout << "Prefix should be (prefix): " << prefixTest.stripPrefix(':') << "\n";
 	cout << "Value should be (value): " << prefixTest << "\n";
 
+	x = utf8ToWChar("ⲉⲛⲧⲁⲡⲛⲟⲩⲧⲉ");
+	cout << (wchar_t *)x.getRawData() << "\n";
+	x = wcharToUTF8((wchar_t *)x.getRawData());
+	cout << x << "\n";
+
 //	y.appendFormatted(" from %d %s running %02.05f miles", 4, "dogs", 1.9f);
 //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles): (" << y << ")\n";
 //	y += '!';
@@ -164,18 +175,18 @@ int main(int argc, char **argv) {
 //	y.append(y.c_str(),5);
 //	cout << "should be (hello wurld hello wurld from 4 dogs running 1.90000 miles!hello): (" << y << ")\n";
 
-	markTime();
+	if (showTimings) markTime();
 	appendChTest();
-	markTime();
+	if (showTimings) markTime();
 	appendStringTest();
-	markTime();
+	if (showTimings) markTime();
 	subscriptTest();
-	markTime();
+	if (showTimings) markTime();
 	ctorAssignTest();
-	markTime();
+	if (showTimings) markTime();
 	compareTest();
-	markTime();
+	if (showTimings) markTime();
 	insertStringTest();
-	markTime();
+	if (showTimings) markTime();
 }
 

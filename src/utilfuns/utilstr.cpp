@@ -255,15 +255,16 @@ SWBuf getUTF8FromUniChar(__u32 uchar) {
 		retVal.setSize(1);
 	}
 	else if (uchar < 0x800) {
+		retVal.setSize(2);
 		i = uchar & 0x3f;
 		retVal[1] = (unsigned char)(0x80 | i);
 		uchar >>= 6;
 
 		i = uchar & 0x1f;
 		retVal[0] = (unsigned char)(0xc0 | i);
-		retVal.setSize(2);
 	}
 	else if (uchar < 0x10000) {
+		retVal.setSize(3);
 		i = uchar & 0x3f;
 		retVal[2] = (unsigned char)(0x80 | i);
 		uchar >>= 6;
@@ -274,9 +275,9 @@ SWBuf getUTF8FromUniChar(__u32 uchar) {
 
 		i = uchar & 0x0f;
 		retVal[0] = (unsigned char)(0xe0 | i);
-		retVal.setSize(3);
 	}
 	else if (uchar < 0x200000) {
+		retVal.setSize(4);
 		i = uchar & 0x3f;
 		retVal[3] = (unsigned char)(0x80 | i);
 		uchar >>= 6;
@@ -291,9 +292,9 @@ SWBuf getUTF8FromUniChar(__u32 uchar) {
 
 		i = uchar & 0x07;
 		retVal[0] = (unsigned char)(0xf0 | i);
-		retVal.setSize(4);
 	}
 	else if (uchar < 0x4000000) {
+		retVal.setSize(5);
 		i = uchar & 0x3f;
 		retVal[4] = (unsigned char)(0x80 | i);
 		uchar >>= 6;
@@ -312,9 +313,9 @@ SWBuf getUTF8FromUniChar(__u32 uchar) {
 
 		i = uchar & 0x03;
 		retVal[0] = (unsigned char)(0xf8 | i);
-		retVal.setSize(5);
 	}
 	else if (uchar < 0x80000000) {
+		retVal.setSize(6);
 		i = uchar & 0x3f;
 		retVal[5] = (unsigned char)(0x80 | i);
 		uchar >>= 6;
@@ -337,7 +338,6 @@ SWBuf getUTF8FromUniChar(__u32 uchar) {
 
 		i = uchar & 0x01;
 		retVal[0] = (unsigned char)(0xfc | i);
-		retVal.setSize(6);
 	}
 
 	return retVal;
