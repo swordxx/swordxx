@@ -549,15 +549,24 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <hi> text highlighting
 		else if (!strcmp(tag.getName(), "hi")) {
 			SWBuf type = tag.getAttribute("type");
-			// handle tei rend attribute
+
+			// handle tei rend attribute if type doesn't exist
 			if (!type.length()) type = tag.getAttribute("rend");
+
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("<b>", buf, u);
 				}
-				else if (type == "ol") {
+
+				// there is no officially supported OSIS overline attribute,
+				// thus either TEI overline or OSIS x-overline would be best,
+				// but we have used "ol" in the past, as well.  Once a valid
+				// OSIS overline attribute is made available, these should all
+				// eventually be deprecated and never documented that they are supported.
+				else if (type == "ol"  || type == "overline" || type == "x-overline") {
 					outText("<span style=\"text-decoration:overline\">", buf, u);
 				}
+
 				else if (type == "super") {
 					outText("<span class=\"sup\">", buf, u);
 				}

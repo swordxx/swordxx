@@ -95,6 +95,8 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 					buf += "<b>";
 				else if (rend == "sup")
 					buf += "<small><sup>";
+				else if (rend == "overline")
+					buf += "<span style=\"text-decoration:overline\">";
 
 			}
 			else if (tag.isEndTag()) {
@@ -107,6 +109,8 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 					buf += "</b>";
 				else if (rend == "sup")
 					buf += "</sup></small>";
+				else if (rend == "overline")
+					buf += "</span>";
 			}
 		}
 
