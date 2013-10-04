@@ -159,6 +159,7 @@ USEUNIT("..\..\src\modules\common\xzcomprs.cpp");
 USEUNIT("..\..\src\modules\common\bz2comprs.cpp");
 USEUNIT("..\..\src\modules\filters\osisvariants.cpp");
 USEUNIT("..\..\src\modules\filters\osisxlit.cpp");
+USEUNIT("..\..\src\modules\filters\osisreferencelinks.cpp");
 USEUNIT("..\..\src\modules\filters\scsuutf8.cpp");
 //---------------------------------------------------------------------------
 #define Library

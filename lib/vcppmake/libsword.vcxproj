@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\src\modules\filters\osisenum.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisglosses.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisxlit.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\osisreferencelinks.cpp" />
     <ClCompile Include="..\..\src\modules\filters\scsuutf8.cpp" />
     <ClCompile Include="..\..\src\utilfuns\win32\dirent.cpp" />
     <ClCompile Include="..\..\src\mgr\encfiltmgr.cpp" />
@@ -362,6 +363,7 @@
     <ClInclude Include="..\..\include\osiswordjs.h" />
     <ClInclude Include="..\..\include\osisxhtml.h" />
     <ClInclude Include="..\..\include\osisxlit.h" />
+    <ClInclude Include="..\..\include\osisreferencelinks.h" />
     <ClInclude Include="..\..\include\papyriplain.h" />
     <ClInclude Include="..\..\include\rawcom.h" />
     <ClInclude Include="..\..\include\rawcom4.h" />

@@ -338,6 +338,7 @@
 		A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2353176AF19C008D714B /* osisenum.cpp */; };
 		A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2354176AF19C008D714B /* osisglosses.cpp */; };
 		A96C235C176AFA3C008D714B /* osisxlit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisxlit.cpp */; };
+		A96C235C176AFA3C008D714B /* osisreferencelinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisreferencelinks.cpp */; };
 		A96C235D176AFA3C008D714B /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C233E176AF139008D714B /* gzclose.c */; };
 		A96C235E176AFA3C008D714B /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2340176AF139008D714B /* gzlib.c */; };
 		A96C235F176AFA3C008D714B /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2341176AF139008D714B /* gzread.c */; };
@@ -1125,6 +1126,7 @@
 		A96C2353176AF19C008D714B /* osisenum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisenum.cpp; sourceTree = "<group>"; };
 		A96C2354176AF19C008D714B /* osisglosses.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisglosses.cpp; sourceTree = "<group>"; };
 		A96C2355176AF19C008D714B /* osisxlit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisxlit.cpp; sourceTree = "<group>"; };
+		A96C2355176AF19C008D714B /* osisreferencelinks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisreferencelinks.cpp; sourceTree = "<group>"; };
 		A975EAC411C77862007C1532 /* ObjCSword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCSword.h; sourceTree = "<group>"; };
 		A975ED9811C7925C007C1532 /* imp2gbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imp2gbs.cpp; sourceTree = "<group>"; };
 		A975ED9911C7925C007C1532 /* imp2ld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imp2ld.cpp; sourceTree = "<group>"; };
@@ -1700,6 +1702,7 @@
 				A96C2353176AF19C008D714B /* osisenum.cpp */,
 				A96C2354176AF19C008D714B /* osisglosses.cpp */,
 				A96C2355176AF19C008D714B /* osisxlit.cpp */,
+				A96C2355176AF19C008D714B /* osisreferencelinks.cpp */,
 				A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */,
 				A954A85513EE98B30094E3FE /* cipherfil.cpp */,
 				A954A85613EE98B30094E3FE /* gbffootnotes.cpp */,
@@ -2855,6 +2858,7 @@
 				A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */,
 				A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */,
 				A96C235C176AFA3C008D714B /* osisxlit.cpp in Sources */,
+				A96C235C176AFA3C008D714B /* osisreferencelinks.cpp in Sources */,
 				A96C235D176AFA3C008D714B /* gzclose.c in Sources */,
 				A96C235E176AFA3C008D714B /* gzlib.c in Sources */,
 				A96C235F176AFA3C008D714B /* gzread.c in Sources */,

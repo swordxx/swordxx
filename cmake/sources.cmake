@@ -119,6 +119,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/osisvariants.cpp
 	src/modules/filters/osiswordjs.cpp
 	src/modules/filters/osismorphsegmentation.cpp
+	src/modules/filters/osisreferencelinks.cpp
 
 	src/modules/filters/latin1utf8.cpp
 	src/modules/filters/latin1utf16.cpp
@@ -302,6 +303,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/osisscripref.h   
 	include/osiswordjs.h   
 	include/osisvariants.h   
+	include/osisreferencelinks.h   
 
 	include/papyriplain.h
 	include/rawcom.h

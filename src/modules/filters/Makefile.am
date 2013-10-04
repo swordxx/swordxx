@@ -60,6 +60,7 @@ OSISFIL += $(filtersdir)/osismorphsegmentation.cpp
 OSISFIL += $(filtersdir)/osisglosses.cpp
 OSISFIL += $(filtersdir)/osisenum.cpp
 OSISFIL += $(filtersdir)/osisxlit.cpp
+OSISFIL += $(filtersdir)/osisreferencelinks.cpp
 
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp
