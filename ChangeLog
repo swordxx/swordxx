@@ -1,6 +1,19 @@
 API ChangeLog
 
 
+* Release 1.7.0 *
+
+5-Oct-2013	Troy A. Griffitts <scribe@crosswire.org>
+	Add a new Option filter, OSISReferenceLinks, based on work submitted
+		by "John Austin", which allows removal of references based on
+		a type/subtype combination. .conf usage is:
+		GlobalOptionFilter=OSISReferenceLinks|Option Name|Option Tip
+			|OSIS Reference Type|OSIS Reference SubType|Default Value
+		e.g,
+		GlobalOptionFilter=OSISReferenceLinks|Reference Material Links
+			|Hide or show links in the Biblical text to study helps|x-glossary
+			||On
+
 14-Aug-2013	Troy A. Griffitts <scribe@crosswire.org>
 	Added new version macros in swversion.h and removed
 		config.h as a packaged and included entity 
@@ -26,8 +39,8 @@ API ChangeLog
 	SWIG bindings updated to build and work with autotools
 
 8-Jul-2013	Chris Little <chrislit@crosswire.org>
-	applied submitted UTF8ArabicPoints code
-	plugged Bzip2Compress & XzCompress into the API, though these
+	Applied submitted UTF8ArabicPoints code
+	Plugged Bzip2Compress & XzCompress into the API, though these
 		remain clones of the ZipCompress class and will not be
 		supported in 1.7.0
 
@@ -36,7 +49,7 @@ API ChangeLog
 		Apache dir list output
 
 29-Jun=2013	Chris Little <chrislit@crosswire.org>
-	removed PLAINHTML and PLAINFootnotes filters
+	Removed PLAINHTML and PLAINFootnotes filters
 
 19-Jun-2013	Gregory S. Hellings <greg.hellings@gmail.com>
 	Introduced CMake options to specify exact install locations
@@ -53,8 +66,8 @@ API ChangeLog
 			poetry lines
 
 10-Jun-2013	Chris Little <chrislit@crosswire.org>
-	added basic OSISEnum & OSISXlit filters
-	renamed OSISRuby to the more general OSISGlosses
+	Added basic OSISEnum & OSISXlit filters
+	Renamed OSISRuby to the more general OSISGlosses
 
 7-Jun-2013	Troy A. Griffitts <scribe@crosswire.org>
 	Enhanced regex searches to return result which cross a single
@@ -110,7 +123,7 @@ API ChangeLog
 
 07-Nov-2012	Chris Little <chrislit@crosswire.org>
 	Starting (very minimal) support for TEI in xml2gbs
-	generalizing ruby as glosses (for use in non-Japanese texts or
+	Generalizing ruby as glosses (for use in non-Japanese texts or
 		even Japanese texts with non-ruby glosses)
 
 14-Sep-2012	Troy A. Griffitts <scribe@crosswire.org>
@@ -156,7 +169,7 @@ API ChangeLog
 		Eloquent
 
 07-Dec-2011	Chris Little <chrislit@crosswire.org>
-	removed SynodalP v11n from library
+	Removed SynodalP v11n from library
 
 12-Nov-2011	DM Smith <dmsmith@crosswire.org>
 	osis2mod: re-added the preverse div markers
@@ -199,7 +212,8 @@ API ChangeLog
 		Added listModulesForType: method.
 		Added convenience constructor for SwordInstallSourceController.
 		SwordLocaleManager can be initialized with a given path to
-		locales.d. Swordbible decodeRef class method will now only pass back values where not NULL was delivered.
+		locales.d. Swordbible decodeRef class method will now only pass back
+		values where not NULL was delivered.
 
 16-Mar-2011 Peter von Kaehne <refdoc@crosswire.org>
 	Introducing localised keys to imp2vs.cpp
