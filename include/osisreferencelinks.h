@@ -1,10 +1,11 @@
 /******************************************************************************
  *
- * osisreferencelinks.h -
+ *  osisreferencelinks.h -	SWFilter descendant to toggle OSIS reference
+ *				links with specified type/subType
  *
- * $Id: osisreferencelinks.h 1688 2005-01-01 04:42:26Z $
+ * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
  *      CrossWire Bible Society
  *      P. O. Box 2528
  *      Tempe, AZ  85280-2528
@@ -17,8 +18,6 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- *
- * modified:  2009 by John Austin  
  *
  */
 
@@ -39,8 +38,8 @@ class SWDLLEXPORT OSISReferenceLinks : public SWOptionFilter {
 public:
 
 	/**
-      * @param optionName - name of this option
-      * @param optionTip - user help tip for this option
+	 * @param optionName - name of this option
+	 * @param optionTip - user help tip for this option
 	 * @param type - which reference types to hide
 	 * @param subType - which reference subTypes to hide (optional)
 	 * @param defaultValue - default value of option "On" or "Off" (optional)
