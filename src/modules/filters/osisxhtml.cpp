@@ -415,7 +415,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 
 		// <lb.../>
-		else if (!strcmp(tag.getName(), "lb")) {
+		else if (!strcmp(tag.getName(), "lb") && (strcmp(tag.getAttribute("type"), "x-optional"))) {
 				u->outputNewline(buf);
 		}
 		// <milestone type="line"/>
