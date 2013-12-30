@@ -136,11 +136,14 @@
     <ClCompile Include="..\..\src\modules\filters\cipherfil.cpp" />
     <ClCompile Include="..\..\src\mgr\curlftpt.cpp" />
     <ClCompile Include="..\..\src\mgr\curlhttpt.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\gbflatex.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisenum.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisglosses.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\osislatex.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisxlit.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisreferencelinks.cpp" />
     <ClCompile Include="..\..\src\modules\filters\scsuutf8.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\thmllatex.cpp" />
     <ClCompile Include="..\..\src\utilfuns\win32\dirent.cpp" />
     <ClCompile Include="..\..\src\mgr\encfiltmgr.cpp" />
     <ClCompile Include="..\..\src\modules\common\entriesblk.cpp" />
@@ -324,6 +327,7 @@
     <ClInclude Include="..\..\include\gbfheadings.h" />
     <ClInclude Include="..\..\include\gbfhtml.h" />
     <ClInclude Include="..\..\include\gbfhtmlhref.h" />
+    <ClInclude Include="..\..\include\gbflatex.h" />
     <ClInclude Include="..\..\include\gbfmorph.h" />
     <ClInclude Include="..\..\include\gbfosis.h" />
     <ClInclude Include="..\..\include\gbfplain.h" />
@@ -349,6 +353,7 @@
     <ClInclude Include="..\..\include\osisglosses.h" />
     <ClInclude Include="..\..\include\osisheadings.h" />
     <ClInclude Include="..\..\include\osishtmlhref.h" />
+    <ClInclude Include="..\..\include\osislatex.h" />
     <ClInclude Include="..\..\include\osislemma.h" />
     <ClInclude Include="..\..\include\osismorph.h" />
     <ClInclude Include="..\..\include\osismorphsegmentation.h" />
@@ -417,6 +422,7 @@
     <ClInclude Include="..\..\include\thmlheadings.h" />
     <ClInclude Include="..\..\include\thmlhtml.h" />
     <ClInclude Include="..\..\include\thmlhtmlhref.h" />
+    <ClInclude Include="..\..\include\thmllatex.h" />
     <ClInclude Include="..\..\include\thmllemma.h" />
     <ClInclude Include="..\..\include\thmlmorph.h" />
     <ClInclude Include="..\..\include\thmlosis.h" />

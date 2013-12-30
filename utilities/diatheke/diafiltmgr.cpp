@@ -32,6 +32,9 @@
 #include <gbfrtf.h>
 #include <osisrtf.h>
 #include <osishtmlhref.h>
+#include <osislatex.h>
+#include <gbflatex.h>
+#include <thmllatex.h>
 #include <swmodule.h>
 #include <osisplain.h>
 #include <thmlosis.h>
@@ -177,12 +180,12 @@ char DiathekeFilterMgr::Markup(char mark) {
 void DiathekeFilterMgr::CreateFilters(char markup) {
 
                 switch (markup) {
-		case FMT_CGI:
-			fromplain = NULL;
-			fromthml = new ThMLCGI();
-			fromgbf = new GBFCGI();
-			fromosis = new OSISCGI();
-			break;
+				case FMT_CGI:
+						fromplain = NULL;
+						fromthml = new ThMLCGI();
+						fromgbf = new GBFCGI();
+						fromosis = new OSISCGI();
+						break;
                 case FMT_PLAIN:
                         fromplain = NULL;
                         fromthml = new ThMLPlain();
@@ -212,6 +215,12 @@ void DiathekeFilterMgr::CreateFilters(char markup) {
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
                         fromosis = new OSISHTMLHREF();
+                        break;
+                case FMT_LATEX:
+                        fromplain = NULL;
+                        fromthml = new ThMLLaTeX();
+                        fromgbf = new GBFLaTeX();
+                        fromosis = new OSISLaTeX();
                         break;
                 case FMT_RTF:
                         fromplain = NULL;

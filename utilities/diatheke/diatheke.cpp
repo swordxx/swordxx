@@ -59,8 +59,8 @@ void printsyntax() {
 	fprintf (stderr, "  x (Encoded Transliterations), t (Algorithmic Transliterations via ICU)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
-	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, HTMLHREF, XHTML, OSIS,\n");
-	fprintf (stderr, "  CGI, and plain (def)\n");
+	fprintf (stderr, "Valid output_format values are: CGI, GBF, HTML, HTMLHREF, LaTeX, OSIS, RTF,\n");
+ 	fprintf (stderr, "  ThML, XHTML, and plain (def)\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
@@ -198,6 +198,10 @@ int main(int argc, char **argv)
 				}
 				else if (!::stricmp("osis", argv[i+1])) {
 					outputformat = FMT_OSIS;
+					i++;
+				}
+				else if (!::stricmp("latex", argv[i+1])) {
+					outputformat = FMT_LATEX;
 					i++;
 				}
 				else i++;

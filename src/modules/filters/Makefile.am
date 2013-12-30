@@ -15,6 +15,7 @@ GBFFIL += $(filtersdir)/gbfheadings.cpp
 GBFFIL += $(filtersdir)/gbfredletterwords.cpp
 GBFFIL += $(filtersdir)/gbfmorph.cpp
 GBFFIL += $(filtersdir)/gbfwordjs.cpp
+GBFFIL += $(filtersdir)/gbflatex.cpp
 
 THMLFIL = $(filtersdir)/thmlstrongs.cpp
 THMLFIL += $(filtersdir)/thmlfootnotes.cpp
@@ -30,6 +31,7 @@ THMLFIL += $(filtersdir)/thmlhtmlhref.cpp
 THMLFIL += $(filtersdir)/thmlxhtml.cpp
 THMLFIL += $(filtersdir)/thmlwebif.cpp
 THMLFIL += $(filtersdir)/thmlwordjs.cpp
+THMLFIL += $(filtersdir)/thmllatex.cpp
 
 TEIFIL = $(filtersdir)/teiplain.cpp
 TEIFIL += $(filtersdir)/teirtf.cpp
@@ -61,6 +63,7 @@ OSISFIL += $(filtersdir)/osisglosses.cpp
 OSISFIL += $(filtersdir)/osisenum.cpp
 OSISFIL += $(filtersdir)/osisxlit.cpp
 OSISFIL += $(filtersdir)/osisreferencelinks.cpp
+OSISFIL += $(filtersdir)/osislatex.cpp
 
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp

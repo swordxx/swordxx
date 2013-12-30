@@ -161,6 +161,9 @@ USEUNIT("..\..\src\modules\filters\osisvariants.cpp");
 USEUNIT("..\..\src\modules\filters\osisxlit.cpp");
 USEUNIT("..\..\src\modules\filters\osisreferencelinks.cpp");
 USEUNIT("..\..\src\modules\filters\scsuutf8.cpp");
+USEUNIT("..\..\src\modules\filters\gbflatex.cpp");
+USEUNIT("..\..\src\modules\filters\osislatex.cpp");
+USEUNIT("..\..\src\modules\filters\thmllatex.cpp");
 //---------------------------------------------------------------------------
 #define Library
 
