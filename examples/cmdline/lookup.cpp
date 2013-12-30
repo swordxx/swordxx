@@ -37,6 +37,7 @@ using sword::SWModule;
 using sword::FMT_WEBIF;
 using sword::FMT_HTMLHREF;
 using sword::FMT_RTF;
+using sword::FMT_LATEX;
 using sword::ModMap;
 using sword::AttributeTypeList;
 using sword::AttributeList;
