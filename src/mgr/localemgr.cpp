@@ -264,12 +264,12 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 	stdstr(&defaultLocaleName, tmplang);
 
 	// First check for what we ask for
-	if (!getLocale(tmplang)) {
+	if (locales->find(tmplang) == locales->end()) {
 		// check for locale without country
 		char *nocntry=0;
 		stdstr(&nocntry, tmplang);
 		strtok(nocntry, "_");
-		if (getLocale(nocntry)) {
+		if (locales->find(nocntry) != locales->end()) {
 			stdstr(&defaultLocaleName, nocntry);
 		}
 		delete [] nocntry;
