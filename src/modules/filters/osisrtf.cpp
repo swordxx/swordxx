@@ -326,7 +326,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		// <milestone type="line"/> or <lb.../>
-		else if ((!strcmp(tag.getName(), "lb") && (strcmp(tag.getAttribute("type"), "x-optional"))) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
+		else if ((!strcmp(tag.getName(), "lb") && (!tag.getAttribute("type") || strcmp(tag.getAttribute("type"), "x-optional"))) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
 			outText("{\\par}", buf, u);
 			userData->supressAdjacentWhitespace = true;
 		}

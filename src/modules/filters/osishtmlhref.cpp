@@ -371,7 +371,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		}
 
 		// <lb.../>
-		else if (!strcmp(tag.getName(), "lb") && (strcmp(tag.getAttribute("type"), "x-optional"))) {
+		else if (!strcmp(tag.getName(), "lb") && (!tag.getAttribute("type") || strcmp(tag.getAttribute("type"), "x-optional"))) {
 			outText("<br />", buf, u);
 			userData->supressAdjacentWhitespace = true;
 		}
