@@ -1140,7 +1140,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
  * requiring each stored entry (i.e. verses) to be well-formed xml.
  * This routine normalizes container elements which could cross verse boundaries into milestones.
  * For most of these OSIS elements, there is a milestone form. However, p is not milestoneable.
- * For this reason, p is transformed into lb elements.
+ * For this reason, p is transformed into div elements with type x-p.
  * param t the tag to transform
  * return the transformed tag or the original one
  */
@@ -1161,9 +1161,9 @@ XMLTag transformBSP(XMLTag t) {
 
 	SWBuf tagName = t.getName();
 	if (!t.isEndTag()) {
-		// Transform <p> into <div type="paragraph"> and milestone it
+		// Transform <p> into <div type="x-p"> and milestone it
 		if (tagName == "p") {
-			t.setText("<div type=\"paragraph\" />");
+			t.setText("<div type=\"x-p\" />");
 			sprintf(buf, "gen%d", sID++);
 			t.setAttribute("sID", buf);
 		}
@@ -1222,7 +1222,7 @@ XMLTag transformBSP(XMLTag t) {
 			    tagName == "verse"
 			) {
 				// make this a clone of the start tag with sID changed to eID
-				// Note: in the case of </p> the topToken is a <div type="paragraph">
+				// Note: in the case of </p> the topToken is a <div type="x-p">
 				t = topToken;
 				t.setAttribute("eID", t.getAttribute("sID"));
 				t.setAttribute("sID", 0);
