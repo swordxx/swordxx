@@ -329,7 +329,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			} 
 			
 			*output << "\\begin{document}\n";
-			*output << "\\setlength{\\parskip}{3pt} \% 1ex plus 0.5ex minus 0.2ex}\n";
+			*output << "\\setlength{\\parskip}{3pt} % 1ex plus 0.5ex minus 0.2ex}\n";
 		}
 
 
@@ -409,7 +409,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << "}";
 			} 
 			*output << "\\begin{document}\n";
-			*output << "\\setlength{\\parskip}{3pt} \% 1ex plus 0.5ex minus 0.2ex}\n";
+			*output << "\\setlength{\\parskip}{3pt} % 1ex plus 0.5ex minus 0.2ex}\n";
 		}
 
 
