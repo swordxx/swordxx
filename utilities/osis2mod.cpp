@@ -1214,6 +1214,7 @@ XMLTag transformBSP(XMLTag t) {
 			    tagName == "div"     ||
 			    tagName == "l"       ||
 			    tagName == "lg"      ||
+			    tagName == "p"       ||
 			    tagName == "q"       ||
 			    tagName == "salute"  ||
 			    tagName == "signed"  ||
