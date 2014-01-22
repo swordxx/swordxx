@@ -30,6 +30,7 @@
 
 #include "diathekemgr.h"
 #include <localemgr.h>
+#include <swlocale.h>
 
 #define QT_BIBLE 1
 #define QT_COMM 2
