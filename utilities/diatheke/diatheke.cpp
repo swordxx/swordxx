@@ -61,6 +61,7 @@ void printsyntax() {
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: CGI, GBF, HTML, HTMLHREF, LaTeX, OSIS, RTF,\n");
  	fprintf (stderr, "  ThML, XHTML, and plain (def)\n");
+ 	fprintf (stderr, "The option LaTeX will produce a compilable document, but may well require tweaking to be usable.\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
