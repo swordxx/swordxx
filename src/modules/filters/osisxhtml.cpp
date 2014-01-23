@@ -330,7 +330,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// Milestoned paragraphs, created by osis2mod
 		// <div type="paragraph" sID.../>
 		// <div type="paragraph" eID.../>
-		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "paragraph")) {
+		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && (!strcmp(tag.getAttribute("type"), "x-p") || !strcmp(tag.getAttribute("type"), "paragraph"))) {
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
 				u->outputNewline(buf);
