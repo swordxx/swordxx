@@ -414,10 +414,10 @@ bool isValidRef(const char *buf) {
  */
 void makeValidRef(VerseKey &key) {
 	VerseKey saveKey;
-	saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
+	saveKey.setVersificationSystem(key.getVersificationSystem());
 	saveKey.setAutoNormalize(false);
 	saveKey.setIntros(true);
-	saveKey = currentVerse;
+	saveKey = key;
 
 	// Since isValidRef returned false constrain the key to the nearest prior reference.
 	// If we are past the last chapter set the reference to the last chapter
