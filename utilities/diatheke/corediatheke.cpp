@@ -363,9 +363,11 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			}
 			
 			*output << (char*)target->getKeyText();
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
-				*output << ": <span style=\"font:\"" << font << ";\""
-				        << " lang=\"" << modlocale << "\">";
+			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
+				*output << ": <span ";
+				if (font) { *output << "style=\"font:\"" << font << ";\""; }
+				if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
+				*output << ">";
 			}
 			else if (outputformat == FMT_RTF) {
 				*output << ": {\\f1 ";
@@ -374,7 +376,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << ": ";
 			}
 			*output << text;
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
 				*output << "</span>";
 			}
 			else if (outputformat == FMT_RTF) {
@@ -436,7 +438,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				modlanguage = "english";
 				}
 			if (!(font)) {	
-				font = "Gentium";
+				strcpy(font,"Gentium");
 				}
 							
 			if (!(modlanguage == syslanguage))	{		
@@ -466,7 +468,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>";
+				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n";
 		}
 
 		for (i = 0; i < listkey.getCount() && maxverses; i++) {
@@ -551,9 +553,12 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					*output << (char*)target->getKeyText();
 					}
 
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
-					*output << ": <font face=\"" << font << "\">";
-				}
+				if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
+						*output << ": <span ";
+						if (font) { *output << "style=\"font:\""  << font << ";\" " ;}
+						if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
+						*output << ">";
+					}
 				else if (outputformat == FMT_RTF) {
 					*output << ": {\\f1 ";
 				}
@@ -564,8 +569,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					*output << ": ";
 				}
 				*output << target->renderText();
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
-					*output << "</font>";
+				if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
+					*output << "</span>";
 				}
 				else if (outputformat == FMT_RTF) {
 					*output << "}";
