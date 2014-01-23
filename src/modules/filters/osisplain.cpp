@@ -185,7 +185,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// Milestoned paragraph, created by osis2mod
 		// <div type="paragraph"  sID... />
 		// <div type="paragraph"  eID... />
-		else if (!strcmp(u->tag.getName(), "div") && u->tag.getAttribute("type") && !strcmp(u->tag.getAttribute("type"), "paragraph") &&
+		else if (!strcmp(u->tag.getName(), "div") && u->tag.getAttribute("type") && (!strcmp(u->tag.getAttribute("type"), "x-p") || !strcmp(u->tag.getAttribute("type"), "paragraph")) &&
 			(u->tag.isEmpty() && (u->tag.getAttribute("sID") || u->tag.getAttribute("eID")))) {
 				userData->supressAdjacentWhitespace = true;
 				buf.append('\n');
