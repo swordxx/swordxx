@@ -43,7 +43,7 @@ void systemquery(const char * key, ostream* output){
 
 	SWModule *target;
 	
-	bool types = false, descriptions = false, names = false;
+	bool types = false, descriptions = false, names = false, bibliography = false;
 
 	if (!::stricmp(key, "localelist")) {		
 		LocaleMgr *lm = LocaleMgr::getSystemLocaleMgr();
@@ -64,9 +64,12 @@ void systemquery(const char * key, ostream* output){
 	else if (!::stricmp(key, "modulelistdescriptions")) {
 		descriptions = true;
 	}
+	else if (!::stricmp(key, "bibliography")) {
+		bibliography = true;
+	}
 	
 	
-	if (types || descriptions || names) {
+	if (types || descriptions || names || bibliography) {
 		if (types) *output << "Biblical Texts:\n";
 		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
 			target = it->second;
@@ -74,6 +77,7 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->getDescription();
+				if (bibliography) *output << target->getBibliography();
 				*output << endl;
 			}
 		}
@@ -84,6 +88,7 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->getDescription();
+				if (bibliography) *output << target->getBibliography();
 				*output << endl;
 			}
 		}
@@ -94,6 +99,7 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->getDescription();
+				if (bibliography) *output << target->getBibliography();
 				*output << endl;
 			}
 		}
@@ -104,6 +110,7 @@ void systemquery(const char * key, ostream* output){
 				if (names) *output << target->getName();
 				if (names && descriptions) *output << " : ";
 				if (descriptions) *output << target->getDescription();
+				if (bibliography) *output << target->getBibliography();
 				*output << endl;
 			}
 		}
