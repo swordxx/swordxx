@@ -343,6 +343,54 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				   " lang=\"" << locale << "\" xml:lang=\"" << locale << "\"/>";
 		}
 		else if (outputformat == FMT_LATEX) {
+			*output << "\\documentclass{scrbook}\n"
+				   "\\usepackage{geometry}\n"
+				   "\\usepackage{setspace}\n"
+				   "\\usepackage{polyglossia}\n"
+			           "\\usepackage{lettrine}\n"
+				   "\\usepackage[perpage,para]{footmisc}\n"
+			           "\\title{" << target->getDescription() << " \\\\\\small " << ref << "}\n";
+
+			if (syslanguage.size()) {
+				syslanguage[0] = tolower(syslanguage[0]);
+				*output << "\\setmainlanguage{" << syslanguage << "}\n";
+				}
+			
+			if (modlanguage.size()) {
+				modlanguage[0] = tolower(modlanguage[0]);
+				}
+			else {	
+				modlanguage = "english";
+				}
+			if (!(font)) {	
+				font = "Gentium";
+				}
+							
+			if (!(modlanguage == syslanguage))	{		
+		
+				*output << "\\setotherlanguage{" << modlanguage << "}\n"
+			        	   "\\newfontfamily\\" << syslanguage << "font{Gentium}\n"
+			 	  	   "\\newfontfamily\\" << modlanguage << "font{" << font << "} \% apply following options e.g for Persian [Script=Arabic,Scale=1.3,Ligatures=TeX,Numbers=OldStyle,Mapping=arabicdigits]\n";				   	  
+				}
+			 	
+			 
+			*output << "\\date{}\n"
+				   "\\onehalfspacing\n"
+				   "\\setlength{\\parskip}{\\smallskipamount}\n"
+				   "\\setlength{\\parindent}{0pt}\n"
+				   
+				   "\\renewcommand{\\thefootnote}{\\alph{footnote}}\n"
+				   "\\begin{document}\n"
+				   "\\setlength{\\parskip}{3pt} % 1ex plus 0.5ex minus 0.2ex}\n"
+				   "\\maketitle\n";
+				   
+                        if (!(modlanguage == syslanguage))      {
+				   *output << "\\begin{" << modlanguage << "}\n";
+				   }
+
+		}
+
+/*		else if (outputformat == FMT_LATEX) {
 			*output << "\\documentclass[12pt]{book}\n"
 				   "\\usepackage{fontspec}\n"
 				   "\\usepackage{geometry}\n"
@@ -356,7 +404,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			*output << "\\setlength{\\parskip}{3pt} % 1ex plus 0.5ex minus 0.2ex}\n";
 		}
 
-
+*/
 		if (text.length()) {
 			if (outputformat == FMT_LATEX) {
 				*output << "\\\\ ";
@@ -383,14 +431,23 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << "}";
 			}
 
-			*output << "(" << target->getName() << ")\n";
+			*output << "(" << target->getName(); 
+			
+		
+			if (outputformat == FMT_LATEX) {
+				*output << ", ";
+				*output << target->getConfigEntry("DistributionLicense");
+				}
+
+			
+			*output << ")\n";
 		}
 
 		if (outputformat == FMT_RTF) {
 			*output << "}";
 		}
 		else if (outputformat == FMT_LATEX) {
-			*output << "\\end{document}";
+			*output << "\\end{document}\n";
 		}
 
 	}
@@ -438,7 +495,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				modlanguage = "english";
 				}
 			if (!(font)) {	
-				strcpy(font,"Gentium");
+				font = "Gentium";
 				}
 							
 			if (!(modlanguage == syslanguage))	{		
@@ -601,6 +658,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		if (outputformat == FMT_LATEX) {
 			*output << ", ";
 			*output << target->getConfigEntry("DistributionLicense");
+			
 		}
 		*output << ")\n";
 
