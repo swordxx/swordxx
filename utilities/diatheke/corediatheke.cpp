@@ -65,6 +65,8 @@ void systemquery(const char * key, ostream* output){
 		descriptions = true;
 	}
 	else if (!::stricmp(key, "bibliography")) {
+		types = true;
+		names = true;
 		bibliography = true;
 	}
 	
@@ -75,7 +77,7 @@ void systemquery(const char * key, ostream* output){
 			target = it->second;
 			if (!strcmp(target->getType(), "Biblical Texts")) {
 				if (names) *output << target->getName();
-				if (names && descriptions) *output << " : ";
+				if (names && (descriptions || bibliography)) *output << " : ";
 				if (descriptions) *output << target->getDescription();
 				if (bibliography) *output << target->getBibliography();
 				*output << endl;
@@ -86,7 +88,7 @@ void systemquery(const char * key, ostream* output){
 			target = it->second;
 			if (!strcmp(target->getType(), "Commentaries")) {
 				if (names) *output << target->getName();
-				if (names && descriptions) *output << " : ";
+				if (names && (descriptions||bibliography)) *output << " : ";
 				if (descriptions) *output << target->getDescription();
 				if (bibliography) *output << target->getBibliography();
 				*output << endl;
@@ -97,7 +99,7 @@ void systemquery(const char * key, ostream* output){
 			target = it->second;
 			if (!strcmp(target->getType(), "Lexicons / Dictionaries")) {
 				if (names) *output << target->getName();
-				if (names && descriptions) *output << " : ";
+				if (names && (descriptions||bibliography)) *output << " : ";
 				if (descriptions) *output << target->getDescription();
 				if (bibliography) *output << target->getBibliography();
 				*output << endl;
@@ -108,7 +110,7 @@ void systemquery(const char * key, ostream* output){
 			target = it->second;
 			if (!strcmp(target->getType(), "Generic Books")) {
 				if (names) *output << target->getName();
-				if (names && descriptions) *output << " : ";
+				if (names && (descriptions||bibliography)) *output << " : ";
 				if (descriptions) *output << target->getDescription();
 				if (bibliography) *output << target->getBibliography();
 				*output << endl;
