@@ -47,7 +47,7 @@ void printsyntax() {
 	fprintf (stderr, "    [-l locale] <-k query_key>\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
-	fprintf (stderr, "\"modulelistnames\", \"bibliography\" and \"localelist\".");
+	fprintf (stderr, "\"modulelistnames\", \"bibliography\", and \"localelist\".");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "Valid search_type values are: regex, multiword, and phrase(def).\n");
 	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
