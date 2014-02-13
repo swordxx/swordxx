@@ -5,7 +5,7 @@
  *
  * $Id$
  *
- * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -44,12 +44,14 @@
  *	if you decide to start a new project.
  *
  * Well known frontends are:
- *	-BibleTime (http://www.bibletime.info)
- *	-BPBible (http://bpbible.com)
- *	-Eloquent (http://www.macsword.com)
- *	-PocketSword (http://crosswire.org/pocketsword/)
- *	-SWORD for Windows (http://crosswire.org/sword/software/biblecs/)
- *	-Xiphos (http://xiphos.org) 
+ *	-BibleTime
+ *	-BPBible
+ *	-Eloquent
+ *	-PocketSword
+ *	-The SWORD Projectfor Windows
+ *	-Xiphos
+ * See http://crosswire.org/applications.jsp for links to each and a more
+ * complete list.
  */
 
 #ifndef SWMGR_H
