@@ -129,10 +129,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	ListKey listkey;
 	SectionMap::iterator sit;
 	ConfigEntMap::iterator eit;
-
+	const char * DEFAULT_FONT = "Gentium";
 	SWModule *target;
 	
-	char *font = 0;
+	const char *font = 0;
 	SWBuf modlanguage;
 	SWBuf modlocale;
 	SWBuf syslanguage;
@@ -372,7 +372,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				modlanguage = "english";
 				}
 			if (!(font)) {	
-				font = "Gentium";
+				font = DEFAULT_FONT;
 				}
 							
 			if (!(modlanguage == syslanguage))	{		
