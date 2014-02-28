@@ -1,4 +1,4 @@
-TARGETS= ciphercng swmgrex verseranges lastVerseInChapter verseposition showchapter
+TARGETS= ciphercng swmgrex verseranges lastVerseInChapter verseposition simplechapter flatapilookup
 all: $(TARGETS)
 
 clean:
@@ -6,5 +6,7 @@ clean:
 
 .cpp:
 	g++ -O0 -g -Wall -Werror `pkg-config --cflags sword` $< -o $@ `pkg-config --libs sword`
+.c:
+	gcc -O0 -g -Wall -Werror `pkg-config --cflags sword` $< -o $@ `pkg-config --libs sword` -lstdc++
 
 

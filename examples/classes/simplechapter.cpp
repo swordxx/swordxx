@@ -33,9 +33,9 @@ using namespace std;
 int main(int argc, char **argv) {
 
 	SWMgr library;
-	SWModule *kjv = library.getModule("KJV");
+	SWModule *kjv = library.getModule((argc > 1)?argv[1]:"KJV");
 
-	kjv->setKey(argc > 1 ? argv[1] : "Jn.3.16");
+	kjv->setKey(argc > 2 ? argv[2] : "Jn.3.16");
 
 	VerseKey *key = (VerseKey *)kjv->getKey();
 
