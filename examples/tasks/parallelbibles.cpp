@@ -36,7 +36,6 @@ using namespace std;
 
 void parallelDisplay(vector<SWModule *>modules, const char *key) {
 
-
 	// We'll use the first module's key as our master key to position all other modules.
 	VerseKey *master = (VerseKey *)modules[0]->createKey();
 
@@ -45,11 +44,11 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 	int curChapter = master->getChapter();
 	int curBook    = master->getBook();
 
-	cout << "<table><thead></thead><tbody>";
 	for (master->setVerse(1);	   (master->getBook()    == curBook)
 					&& (master->getChapter() == curChapter)
 					&& !master->popError();
-								(*master)++) {
+										(*master)++) {
+
 		cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
 		for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
 			(*module)->setKey(master);
@@ -60,10 +59,9 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 		}
 		cout << "</tr>";
 	}
-	cout << "</tbody></table>";
-
 	delete master;
 }
+
 
 void outputHeader(vector<SWModule *>modules, const char *key) {
 
@@ -80,7 +78,7 @@ void outputHeader(vector<SWModule *>modules, const char *key) {
 	<< "<head profile=\"http://www.w3.org/2000/08/w3c-synd/#\">"
 	<< "<meta name=\"keywords\" content=\"Jesus, Christ, Church, Bible, Iran, Persian, Persia, Azeri, Azerbaijan, Armenian, God, Gospel, CrossWire, Java, Web, Software\" />"
 	<< "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-	<< "<title>OSIS Web: James 1:19 - Parallel Bible study</title>"
+	<< "<title>OSIS Web: " << modules[0]->getKeyText() << " - Parallel Bible study</title>"
 	<< "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"http://crosswire.org/study/common.css\"  />"
 	<< "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" title=\"Washed Out\" href=\"http://crosswire.org/study/wash.css\"  />"
 	<< "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css\"/>"
@@ -103,14 +101,36 @@ void outputHeader(vector<SWModule *>modules, const char *key) {
 	<<       "<style>"
 	<<         modules[0]->getRenderHeader()
 	<<       "</style>"
-	<<       "<h2>Parallel Viewing: " << modules[0]->getKeyText() << "</h2>";
+	<<       "<h2>Parallel Viewing: " << modules[0]->getKeyText() << "</h2><br/>"
+	<<       "<table><thead><tr>";
+
+	for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
+		cout << "<th>" << (*module)->getDescription() << "</th>";
+	}
+
+	cout
+	<<       "</tr></thead><tbody>";
 
 	
 }
 
-void outputFooter() {
+void outputFooter(vector<SWModule *>modules) {
 
 	cout
+	<<       "</tbody><tfoot><tr>";
+
+	for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
+		SWBuf copyLine = (*module)->getConfigEntry("ShortCopyright");
+		SWBuf promoLine = (*module)->getConfigEntry("ShortPromo");
+		cout
+		<< "<th>"
+		<< "<div class=\"copyLine\">" <<  copyLine << "</div>"
+		<< "<div class=\"promoLine\">" << promoLine << "</div>"
+		<< "</th>";
+	}
+
+	cout
+	<<       "</tr></tfoot></table>"
 	<<     "</div>"
 	<<   "</div>"
 	<<   "<div id=\"footer\">"
@@ -125,6 +145,7 @@ void outputFooter() {
 	<< "</body>"
 	<< "</html>";
 }
+
 
 int main(int argc, char **argv) {
 
@@ -152,7 +173,7 @@ int main(int argc, char **argv) {
 
 	outputHeader(modules, argv[argc-1]);
 	parallelDisplay(modules, argv[argc-1]);
-	outputFooter();
+	outputFooter(modules);
 
 	return 0;
 }
