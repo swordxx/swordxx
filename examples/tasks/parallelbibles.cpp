@@ -53,7 +53,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 		for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
 			(*module)->setKey(master);
 			if (!(*module)->popError()) {
-				cout << "<td>" << "<span class=\"verseNum\">" << master->getVerse() << "</span> ";
+				cout << "<td>" << "<span class=\"versenum\">" << master->getVerse() << "</span> ";
 				cout << (*module)->renderText() << "</td>";
 			}
 		}
