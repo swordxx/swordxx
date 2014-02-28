@@ -270,6 +270,7 @@ ENDIF(NOT SWORD_BUILD_UTILS STREQUAL "No")
 
 IF(SWORD_BUILD_EXAMPLES STREQUAL "Yes")
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
+	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/tasks")
 ENDIF(SWORD_BUILD_EXAMPLES STREQUAL "Yes")
 
 ##############################################################################################
