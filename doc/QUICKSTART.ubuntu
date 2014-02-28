@@ -10,7 +10,7 @@
 # the engine, install a modules, and test with a simple command line tool:
 
 # install necessary packages for all features of SWORD to be enabled
-sudo apt-get install autoconf autogen automake subversion g++ libtool zlib1g-dev libicu-dev libclucene-dev libcurl4-openssl-dev
+sudo apt-get install autoconf autogen automake subversion make g++ libtool zlib1g-dev libicu-dev libclucene-dev libcurl4-openssl-dev
 
 # checkout and build the source tree
 svn co https://crosswire.org/svn/sword/trunk sword
