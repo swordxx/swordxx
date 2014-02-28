@@ -50,7 +50,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 					&& (master->getChapter() == curChapter)
 					&& !master->popError();
 								(*master)++) {
-		cout << "<tr class=\"" << (master->getVerse() == curVerse ? "curverse":"verse") << "\">";
+		cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
 		for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
 			(*module)->setKey(master);
 			if (!(*module)->popError()) {
