@@ -51,6 +51,8 @@ AC_ARG_WITH(zlib,
 	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
 AC_ARG_WITH(bzip2,
 	AC_HELP_STRING([--with-bzip2],[allow bzip2 compressed modules (default=yes)]),,with_bzip2=yes)
+AC_ARG_WITH(xz,
+	AC_HELP_STRING([--with-xz],[allow xz compressed modules (default=yes)]),,with_xz=yes)
 AC_ARG_WITH(icu,
 	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=yes)]),,with_icu=yes)
 AC_ARG_WITH(icusword,
@@ -136,6 +138,17 @@ fi
 if test x$with_bzip2 = xno; then
 	AM_CFLAGS="$AM_CFLAGS -DEXCLUDEBZIP2"
 	AM_CXXFLAGS="$AM_CXXFLAGS -DEXCLUDEBZIP2"
+fi
+
+if test x$with_xz  = xyes; then
+	AC_CHECK_LIB(lzma, lzma_block_buffer_encode,,with_xz="no")
+else
+	with_xz="no"
+fi
+
+if test x$with_xz = xno; then
+	AM_CFLAGS="$AM_CFLAGS -DEXCLUDEXZ"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DEXCLUDEXZ"
 fi
 
 AS_IF([test "x$with_internalregex" = "xyes"],
@@ -413,6 +426,7 @@ echo     "     BUILD EXAMPLES:   $enable_examples"
 echo     "     BUILD UTILITIES:  $enable_utilities"
 echo     "     LIBZ:             $with_zlib"
 echo     "     BZIP2:            $with_bzip2"
+echo     "     XZ:               $with_xz"
 echo     "     ICU:              $with_icu"
 echo     "     ICUSWORD:         $with_icusword"
 echo     "     CXX11REGEX:       $with_cxx11regex"

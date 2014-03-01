@@ -28,6 +28,8 @@
 
 #include <defs.h>
 
+#include <lzma.h>
+
 SWORD_NAMESPACE_START
 
 class SWDLLEXPORT XzCompress : public SWCompress {
@@ -39,6 +41,8 @@ public:
 
 	virtual void Encode(void);
 	virtual void Decode(void);
+private:
+	lzma_block block;
 };
 
 SWORD_NAMESPACE_END
