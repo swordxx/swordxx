@@ -93,7 +93,11 @@
 
 #ifndef EXCLUDEZLIB
 #include "zipcomprs.h"
+#endif
+#ifndef EXCLUDEBZIP2
 #include "bz2comprs.h"
+#endif
+#ifndef EXCLUDEXZ
 #include "xzcomprs.h"
 #endif
 
@@ -944,17 +948,24 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 			blockType = BOOKBLOCKS;
 		
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
+
+		if (false) {}
 #ifndef EXCLUDEZLIB
+		else
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
+#endif
+#ifndef EXCLUDEBZIP2
 		else
 		if (!stricmp(misc1.c_str(), "BZIP2_UNSUPPORTED"))
 			compress = new Bzip2Compress();
+#endif
+#ifndef EXCLUDEXZ
 		else
 		if (!stricmp(misc1.c_str(), "XZ_UNSUPPORTED"))
 			compress = new XzCompress();
-		else
 #endif
+		else
 		if (!stricmp(misc1.c_str(), "LZSS"))
 			compress = new LZSSCompress();
 
