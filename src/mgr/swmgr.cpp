@@ -948,31 +948,29 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 			blockType = BOOKBLOCKS;
 		
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
-
-		if (false) {}
 #ifndef EXCLUDEZLIB
-		else
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
+		else
 #endif
 #ifndef EXCLUDEBZIP2
-		else
-		if (!stricmp(misc1.c_str(), "BZIP2_UNSUPPORTED"))
+		if (!stricmp(misc1.c_str(), "BZIP2"))
 			compress = new Bzip2Compress();
+		else
 #endif
 #ifndef EXCLUDEXZ
-		else
-		if (!stricmp(misc1.c_str(), "XZ_UNSUPPORTED"))
+		if (!stricmp(misc1.c_str(), "XZ"))
 			compress = new XzCompress();
-#endif
 		else
+#endif
 		if (!stricmp(misc1.c_str(), "LZSS"))
 			compress = new LZSSCompress();
 
 		if (compress) {
 			if (!stricmp(driver, "zText"))
 				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
-			else	newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+			else
+				newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
 		}
 	}
 
@@ -1034,6 +1032,16 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 #ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
+		else
+#endif
+#ifndef EXCLUDEBZIP2
+		if (!stricmp(misc1.c_str(), "BZIP2"))
+			compress = new Bzip2Compress();
+		else
+#endif
+#ifndef EXCLUDEXZ
+		if (!stricmp(misc1.c_str(), "XZ"))
+			compress = new XzCompress();
 		else
 #endif
 		if (!stricmp(misc1.c_str(), "LZSS"))

@@ -5,17 +5,18 @@ libsword_la_SOURCES += $(commondir)/rawstr4.cpp
 libsword_la_SOURCES += $(commondir)/swcomprs.cpp
 libsword_la_SOURCES += $(commondir)/lzsscomprs.cpp
 
-SWZLIB =
 if HAVE_LIBZ
-SWZLIB += $(commondir)/zipcomprs.cpp
+libsword_la_SOURCES += $(commondir)/zipcomprs.cpp
 endif
-if HAVE_LIBXZ
-SWZLIB += $(commondir)/xzcomprs.cpp
+
+if HAVE_BZIP2
+libsword_la_SOURCES += $(commondir)/bz2comprs.cpp
 endif
-if HAVE_LIBBZ2
-SWZLIB += $(commondir)/bz2comprs.cpp
+
+if HAVE_XZ
+libsword_la_SOURCES += $(commondir)/xzcomprs.cpp
 endif
-libsword_la_SOURCES += $(SWZLIB)
+
 libsword_la_SOURCES += $(commondir)/rawverse.cpp
 libsword_la_SOURCES += $(commondir)/rawverse4.cpp
 libsword_la_SOURCES += $(commondir)/swcipher.cpp
@@ -23,4 +24,3 @@ libsword_la_SOURCES += $(commondir)/zverse.cpp
 libsword_la_SOURCES += $(commondir)/zstr.cpp
 libsword_la_SOURCES += $(commondir)/entriesblk.cpp
 libsword_la_SOURCES += $(commondir)/sapphire.cpp
-
