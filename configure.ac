@@ -390,7 +390,8 @@ AC_SUBST(CLUCENE_LIBS)
 # ---------------------------------------------------------------------
 
 AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
-AM_CONDITIONAL(HAVE_BZIP2, test x$with_bzip2 = xyes)
+AM_CONDITIONAL(HAVE_LIBXZ, test x$with_xz = xyes)
+AM_CONDITIONAL(HAVE_LIBBZ2, test x$with_bzip2 = xyes)
 AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
 AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)

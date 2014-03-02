@@ -5,12 +5,15 @@ libsword_la_SOURCES += $(commondir)/rawstr4.cpp
 libsword_la_SOURCES += $(commondir)/swcomprs.cpp
 libsword_la_SOURCES += $(commondir)/lzsscomprs.cpp
 
-if HAVE_LIBZ
-SWZLIB =  $(commondir)/zipcomprs.cpp
-SWZLIB += $(commondir)/bz2comprs.cpp
-SWZLIB += $(commondir)/xzcomprs.cpp
-else
 SWZLIB =
+if HAVE_LIBZ
+SWZLIB += $(commondir)/zipcomprs.cpp
+endif
+if HAVE_LIBXZ
+SWZLIB += $(commondir)/xzcomprs.cpp
+endif
+if HAVE_LIBBZ2
+SWZLIB += $(commondir)/bz2comprs.cpp
 endif
 libsword_la_SOURCES += $(SWZLIB)
 libsword_la_SOURCES += $(commondir)/rawverse.cpp
