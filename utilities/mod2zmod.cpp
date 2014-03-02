@@ -4,7 +4,7 @@
  *
  * $Id$
  *
- * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -43,6 +43,8 @@
 #include <swmgr.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
+#include <bz2comprs.h>
+#include <xzcomprs.h>
 #include <versekey.h>
 #include <stdio.h>
 #include <cipherfil.h>
@@ -61,7 +63,7 @@ void errorOutHelp(char *appName) {
 	cerr << "usage: "<< appName << " <modname> <datapath> [blockType [compressType [cipherKey]]]\n\n";
 	cerr << "datapath: the directory in which to write the zModule\n";
 	cerr << "blockType  : (default 4)\n\t2 - verses\n\t3 - chapters\n\t4 - books\n";
-	cerr << "compressType: (default 1):\n\t1 - LZSS\n\t2 - Zip\n";
+	cerr << "compressType: (default 1):\n\t1 - LZSS\n\t2 - Zip\n\t3 - bzip2\n\t4 - xz\n";
 	cerr << "\n\n";
 	exit(-1);
 }
@@ -91,7 +93,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if ((iType < 2) || (compType < 1) || (compType > 2) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
+	if ((iType < 2) || (compType < 1) || (compType > 4) || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
 		errorOutHelp(argv[0]);
 	}
 
@@ -120,6 +122,8 @@ int main(int argc, char **argv)
 	switch (compType) {	// these are deleted by zText
 	case 1: compressor = new LZSSCompress(); break;
 	case 2: compressor = new ZipCompress(); break;
+	case 3: compressor = new Bzip2Compress(); break;
+	case 4: compressor = new XzCompress(); break;
 	}
 
 	int result = 0;

@@ -46,6 +46,8 @@
 #include <ztext.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
+#include <bz2comprs.h>
+#include <xzcomprs.h>
 #include <cipherfil.h>
 
 #ifdef _ICU_
@@ -1287,9 +1289,9 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
 	fprintf(stderr, "  <osisDoc>\t\t path to the validated OSIS document, or '-' to\n");
 	fprintf(stderr, "\t\t\t\t read from standard input\n");
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
-	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
-	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
-	fprintf(stderr, "  -b <2|3|4>\t\t compression block size (default 4):\n");
+	fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
+	fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");
+	fprintf(stderr, "  -b <2|3|4>\t\t compression block size (default: 4)\n");
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
@@ -1583,9 +1585,16 @@ int main(int argc, char **argv) {
 			append = 1;
 		}
 		else if (!strcmp(argv[i], "-z")) {
-			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
 			if (entrySize) usage(*argv, "Cannot specify both -z and -s");
 			compType = "ZIP";
+			if (i+1 < argc && argv[i+1][0] != '-') {
+				switch (argv[i+1][0]) {
+				case 'l': compType = "LZSS";
+				case 'z': compType = "ZIP";
+				case 'b': compType = "BZIP2";
+				case 'x': compType = "XZ";
+				}
+			}
 		}
 		else if (!strcmp(argv[i], "-Z")) {
 			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
@@ -1611,7 +1620,7 @@ int main(int argc, char **argv) {
 			else usage(*argv, "-v requires <v11n>");
 		}
 		else if (!strcmp(argv[i], "-s")) {
-			if (compType.size()) usage(*argv, "Cannot specify -s and -z or -Z");
+			if (compType.size()) usage(*argv, "Cannot specify -s and -z");
 			if (i+1 < argc) {
 				entrySize = atoi(argv[++i]);
 				if (entrySize == 2 || entrySize == 4) {
@@ -1632,15 +1641,29 @@ int main(int argc, char **argv) {
 
 	if (isCommentary) isCommentary = true;	// avoid unused warning for now
 
-	if (compType == "ZIP") {
+	if (compType == "LZSS") {
+		compressor = new LZSSCompress();
+	}
+	else if (compType == "ZIP") {
 #ifndef EXCLUDEZLIB
 		compressor = new ZipCompress();
 #else
-		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libzip is available when compiling SWORD library");
+		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libz is available when compiling SWORD library");
 #endif
 	}
-	else if (compType == "LZSS") {
-		compressor = new LZSSCompress();
+	else if (compType == "BZIP2") {
+#ifndef EXCLUDEBZIP2
+		compressor = new Bzip2Compress();
+#else
+		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
+#endif
+	}
+	else if (compType = "XZ") {
+#ifndef EXCLUDEXZ
+		compressor = new XzCompress();
+#else
+		usage(*argv, "ERROR: SWORD library not compiled with xz compression support.\n\tBe sure liblzma is available when compiling SWORD library");
+#endif		
 	}
 
 #ifndef _ICU_

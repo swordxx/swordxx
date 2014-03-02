@@ -4,7 +4,7 @@
  *
  * $Id$
  *
- * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2008-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -62,8 +62,10 @@
 #include <rawld.h>
 #include <rawld4.h>
 #include <zld.h>
-#include <zipcomprs.h>
 #include <lzsscomprs.h>
+#include <zipcomprs.h>
+#include <bz2comprs.h>
+#include <xzcomprs.h>
 #include <stdio.h>
 #include <cipherfil.h>
 
@@ -344,16 +346,16 @@ void usage(const char *app, const char *error = 0) {
 		
 	fprintf(stderr, "TEI Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for\n\tThe SWORD Project\n");
 	fprintf(stderr, "\nusage: %s <output/path> <teiDoc> [OPTIONS]\n", app);
-	fprintf(stderr, "  -z\t\t\t use ZIP compression (default no compression)\n");
-	fprintf(stderr, "  -Z\t\t\t use LZSS compression (default no compression)\n");
-	fprintf(stderr, "  -s <2|4>\t\t max text size per entry(default 4):\n");
+	fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
+	fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");
+	fprintf(stderr, "  -s <2|4>\t\t max text size per entry (default: 4)\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
-	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
+	fprintf(stderr, "\t\t\t\t (default: none)\n");
         fprintf(stderr, "  -N\t\t\t Do not convert UTF-8 or normalize UTF-8 to NFC\n");
         fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
         fprintf(stderr, "\t\t\t\t  and then normalize to NFC. Note: all UTF-8\n");
 	fprintf(stderr, "\t\t\t\t  texts should be normalized to NFC.)\n");
-	fprintf(stderr, "\n\tThe options -z, -Z, and -s are mutually exclusive.\n");
+	fprintf(stderr, "\n\tThe options -z and -s are mutually exclusive.\n");
 	exit(-1);
 }
 
@@ -382,9 +384,16 @@ int main(int argc, char **argv) {
 
 	for (int i = 3; i < argc; i++) {
 		if (!strcmp(argv[i], "-z")) {
-			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
 			if (modDrv.size()) usage(*argv, "Cannot specify both -z and -s");
 			compType = "ZIP";
+			if (i+1 < argc && argv[i+1][0] != '-') {
+				switch (argv[i+1][0]) {
+				case 'l': compType = "LZSS";
+				case 'z': compType = "ZIP";
+				case 'b': compType = "BZIP2";
+				case 'x': compType = "XZ";
+				}
+			}
 			modDrv = "zLD";
 			recommendedPath += "zld/";
 		}
@@ -392,10 +401,11 @@ int main(int argc, char **argv) {
 			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
 			if (modDrv.size()) usage(*argv, "Cannot specify both -Z and -s");
 			compType = "LZSS";
+			modDrv = "zLD";
 			recommendedPath += "zld/";
 		}
 		else if (!strcmp(argv[i], "-s")) {
-			if (compType.size()) usage(*argv, "Cannot specify both -s and -z or -Z");
+			if (compType.size()) usage(*argv, "Cannot specify both -s and -z");
 			if (i+1 < argc) {
 				int size = atoi(argv[++i]);
 				if (size == 2) {
@@ -432,15 +442,29 @@ int main(int argc, char **argv) {
 	}
 #endif
 
-	if (compType == "ZIP") {
+	if (compType == "LZSS") {
+		compressor = new LZSSCompress();
+	}
+	else if (compType == "ZIP") {
 #ifndef EXCLUDEZLIB
 		compressor = new ZipCompress();
 #else
-		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libzip is available when compiling SWORD library");
+		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libz is available when compiling SWORD library");
 #endif
 	}
-	else if (compType == "LZSS") {
-		compressor = new LZSSCompress();
+	else if (compType == "BZIP2") {
+#ifndef EXCLUDEBZIP2
+		compressor = new Bzip2Compress();
+#else
+		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
+#endif
+	}
+	else if (compType = "XZ") {
+#ifndef EXCLUDEXZ
+		compressor = new XzCompress();
+#else
+		usage(*argv, "ERROR: SWORD library not compiled with xz compression support.\n\tBe sure liblzma is available when compiling SWORD library");
+#endif		
 	}
 
 #ifdef DEBUG
