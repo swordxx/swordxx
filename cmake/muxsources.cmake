@@ -5,12 +5,14 @@
 #
 # Written by Greg Hellings
 SET(sword_SOURCES ${sword_base_SOURCES})
+
+MESSAGE(STATUS "\n-- CONFIGURING SOURCE LIST")
+
 # Check for if we've found ZLIB
 # This one is a bit more unique, since we still allow compilation without
 # a ZLIB at all, and allowing a user to disable it does not bring about use
 # of some internal fall-back but just leaves the ability to read ZLIB files
 # out of the library altogether
-MESSAGE(STATUS "\n-- CONFIGURING SOURCE LIST")
 IF(SWORD_NO_ZLIB STREQUAL "Yes")
 	MESSAGE(STATUS "ZLib: excluded by use option")
 	ADD_DEFINITIONS(-DEXCLUDEZLIB)
@@ -26,6 +28,32 @@ ELSE(SWORD_NO_ZLIB STREQUAL "Yes")
 		SET(WITH_ZLIB 1)
 	ENDIF(NOT ZLIB_FOUND OR SWORD_USE_INTERNAL_ZLIB STREQUAL "Yes")
 ENDIF(SWORD_NO_ZLIB STREQUAL "Yes")
+
+# Check for if we've found bzip2 (libbz2)
+IF(SWORD_NO_BZIP2 STREQUAL "Yes")
+	MESSAGE(STATUS "bzip2: excluded by use option")
+	ADD_DEFINITIONS(-DEXCLUDEBZIP2)
+	SET(WITH_BZIP2 0)
+ELSE(SWORD_NO_BZIP2 STREQUAL "Yes")
+	SET(sword_SOURCES ${sword_SOURCES} ${sword_bzip2_used_SOURCES})
+	IF(BZIP2_FOUND)
+		MESSAGE(STATUS "bzip2: system ${BZIP2_LIBRARY}")
+		SET(WITH_BZIP2 1)
+	ENDIF(BZIP2_FOUND)
+ENDIF(SWORD_NO_BZIP2 STREQUAL "Yes")
+
+# Check for if we've found xz (liblzma)
+IF(SWORD_NO_XZ STREQUAL "Yes")
+	MESSAGE(STATUS "xz: excluded by use option")
+	ADD_DEFINITIONS(-DEXCLUDEXZ)
+	SET(WITH_XZ 0)
+ELSE(SWORD_NO_XZ STREQUAL "Yes")
+	SET(sword_SOURCES ${sword_SOURCES} ${sword_xz_used_SOURCES})
+	IF(XZ_FOUND)
+		MESSAGE(STATUS "xz: system ${XZ_LIBRARY}")
+		SET(WITH_XZ 1)
+	ENDIF(XZ_FOUND)
+ENDIF(SWORD_NO_XZ STREQUAL "Yes")
 
 # Check for if we've found cURL
 IF(CURL_FOUND AND NOT SWORD_NO_CURL STREQUAL "Yes")

@@ -188,8 +188,6 @@ SET(sword_base_SOURCES
 # Sources relying on ZLib
 SET(sword_zlib_used_SOURCES
 	src/modules/common/zipcomprs.cpp
-	src/modules/common/bz2comprs.cpp
-	src/modules/common/xzcomprs.cpp
 	src/utilfuns/zlib/untgz.c
 )
 SET(sword_zlib_nofound_SOURCES
@@ -208,6 +206,16 @@ SET(sword_zlib_nofound_SOURCES
 	src/utilfuns/zlib/trees.c
 	src/utilfuns/zlib/uncompr.c
 	src/utilfuns/zlib/zutil.c
+)
+
+# Sources relying on bzip2 (libbz2)
+SET(sword_bzip2_used_SOURCES
+	src/modules/common/bz2comprs.cpp
+)
+
+# Sources relying on xz (liblzma)
+SET(sword_xz_used_SOURCES
+	src/modules/common/xzcomprs.cpp
 )
 
 # Sources relying on cURL
