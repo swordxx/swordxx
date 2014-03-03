@@ -32,9 +32,15 @@
 #include <rawld4.h>
 #include <zld.h>
 #include <lzsscomprs.h>
+#ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
+#endif
+#ifndef EXCLUDEBZIP2
 #include <bz2comprs.h>
+#endif
+#ifndef EXCLUDEXZ
 #include <xzcomprs.h>
+#endif
 #include <stdio.h>
 
 using std::string;

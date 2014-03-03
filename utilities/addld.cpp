@@ -40,11 +40,15 @@
 #include <rawld.h>
 #include <rawld4.h>
 #include <zld.h>
+#ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
+#endif
 
 #ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
+#ifndef EXCLUDEZLIB
 using sword::ZipCompress;
+#endif
 using sword::RawLD4;
 using sword::SWKey;
 using sword::zLD;

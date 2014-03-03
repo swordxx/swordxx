@@ -45,9 +45,15 @@
 
 #include <ztext.h>
 #include <lzsscomprs.h>
+#ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
+#endif
+#ifndef EXCLUDEBZIP2
 #include <bz2comprs.h>
+#endif
+#ifndef EXCLUDEXZ
 #include <xzcomprs.h>
+#endif
 #include <cipherfil.h>
 
 #ifdef _ICU_

@@ -42,9 +42,16 @@
 #include <swtext.h>
 #include <swmgr.h>
 #include <lzsscomprs.h>
+#ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
+#endif
+#ifndef EXCLUDEBZIP2
 #include <bz2comprs.h>
+#endif
+#ifndef EXCLUDEXZ
 #include <xzcomprs.h>
+#endif
+
 #include <versekey.h>
 #include <stdio.h>
 #include <cipherfil.h>
@@ -121,9 +128,15 @@ int main(int argc, char **argv)
 
 	switch (compType) {	// these are deleted by zText
 	case 1: compressor = new LZSSCompress(); break;
+	#ifndef EXCLUDEZLIB
 	case 2: compressor = new ZipCompress(); break;
+	#endif
+	#ifndef EXCLUDEBZIP2
 	case 3: compressor = new Bzip2Compress(); break;
+	#endif
+	#ifndef EXCLUDEXZ
 	case 4: compressor = new XzCompress(); break;
+	#endif
 	}
 
 	int result = 0;
