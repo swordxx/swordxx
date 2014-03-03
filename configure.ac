@@ -141,7 +141,7 @@ if test x$with_bzip2 = xno; then
 fi
 
 if test x$with_xz  = xyes; then
-	AC_CHECK_LIB(lzma, lzma_block_buffer_encode,,with_xz="no")
+	AC_CHECK_LIB(lzma, lzma_easy_buffer_encode,,with_xz="no")
 else
 	with_xz="no"
 fi
