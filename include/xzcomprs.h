@@ -42,7 +42,7 @@ public:
 	virtual void Encode(void);
 	virtual void Decode(void);
 private:
-	lzma_block block;
+	uint64_t memlimit; // memory usage limit during decompression
 };
 
 SWORD_NAMESPACE_END
