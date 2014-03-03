@@ -13,15 +13,16 @@ API ChangeLog
 		by "John Austin", which allows removal of references based on
 		a type/subtype combination. .conf usage is:
 		GlobalOptionFilter=OSISReferenceLinks|Option Name|Option Tip
-			|OSIS Reference Type|OSIS Reference SubType|Default Value
+			|OSIS Reference Type|OSIS Reference SubType
+			|Default Value
 		e.g,
 		GlobalOptionFilter=OSISReferenceLinks|Reference Material Links
-			|Hide or show links in the Biblical text to study helps|x-glossary
-			||On
+			|Hide or show links in the Biblical text to study helps
+			|x-glossary||On
 
 14-Aug-2013	Troy A. Griffitts <scribe@crosswire.org>
 	Added new version macros in swversion.h and removed
-		config.h as a packaged and included entity 
+		config.h as a packaged and included entity
 
 2-Aug-2013	Chris Little <chrislit@crosswire.org>
 	Added basic bibliography method to SWModule
@@ -120,10 +121,10 @@ API ChangeLog
 		C++ SWORD stuff. Wrappers are necessary
 	Added FilterProvider and FilterProviderFactory. They have been
 		created to add the possibility for application to override
-		the default filters (render/strip). To add a custom FilterProvider,
-		subclass DefaultFilterProvider and override the methods that are
-		required to return other filter instances. Then initialize the
-		Factory with this provider
+		the default filters (render/strip). To add a custom
+		FilterProvider, subclass DefaultFilterProvider and override the
+		methods that are required to return other filter instances.
+		Then initialize the Factory with this provider
 		+[FilterProviderFactory initWithImpl:<your impl>]
 
 07-Nov-2012	Chris Little <chrislit@crosswire.org>
@@ -170,8 +171,8 @@ API ChangeLog
 
 30-Jan-2012	Manfred Bergmann <manfred.bergmann@me.com>
 	Update to Lion Project. All SWORD utils are now in Xcode project and can
-		be built from there. They are however prepared to be used from with
-		Eloquent
+		be built from there. They are however prepared to be used from
+		with Eloquent
 
 07-Dec-2011	Chris Little <chrislit@crosswire.org>
 	Removed SynodalP v11n from library
@@ -217,8 +218,8 @@ API ChangeLog
 		Added listModulesForType: method.
 		Added convenience constructor for SwordInstallSourceController.
 		SwordLocaleManager can be initialized with a given path to
-		locales.d. Swordbible decodeRef class method will now only pass back
-		values where not NULL was delivered.
+		locales.d. Swordbible decodeRef class method will now only pass
+		back values where not NULL was delivered.
 
 16-Mar-2011 Peter von Kaehne <refdoc@crosswire.org>
 	Introducing localised keys to imp2vs.cpp
@@ -1362,10 +1363,11 @@ Kolatzek.
 	Changed font copyright notice in n27u4
 
 09-Dec-1997
-	Fixed Search window in BibleCS to search currently focused Bible Text module
-		and report such in the title bar.
+	Fixed Search window in BibleCS to search currently focused Bible Text
+		module and report such in the title bar.
 	Added ALPHA website to the CD Loader
-	Added a full report of the About section of a module when installing. (BibleCS)
+	Added a full report of the About section of a module when installing.
+		(BibleCS)
 	Renamed module n26u4 to n27u4.
 
 04-Dec-1997
@@ -1381,8 +1383,9 @@ Kolatzek.
 	Added SWFilter and modified appropriate modules to use these.
 	Added RawGBF class that automatically adds a GBFPlain filter to
 		strip GBF tags before searching.
-	Added sword/frontend/windoze/cbuilder/biblecs frontend.  To build, use cmdline
-		compiler: make -fsword  DO NOT OPEN sword.mak WITH C++BUILDER
+	Added sword/frontend/windoze/cbuilder/biblecs frontend.  To build, use
+		cmdline compiler: make -fsword  DO NOT OPEN sword.mak WITH
+		C++BUILDER
 	Added sword/frontend/windoze/cbuilder/biblecs/cdstartup for autorun
 		CDROMs.
 	Made some functions const.
@@ -1404,16 +1407,17 @@ Kolatzek.
 	Added .Search() method to SWModule
 	Added SWListKey key type to facilitate lists of verses (used by .Search)
 	Added .Headings() boolean method to VerseKey to allow incrementor to
-		work including or excluding headers (e.g. chapter/book/testm/mod)
+		work including or excluding headers (e.g.
+		chapter/book/testm/mod)
 	Started z series of modules for compression access using the compression
 		algorithms in the STEP specs.  (These are either not done or
 		extremely unstable, be warned ;)
 	Added .Index() method to VerseKey
 	Changed VerseKey incrementors to use Index(Index() [+-] val) instead of
 		counting on Normalize();
-	Added checks and output appropriate in VerseKey.freshtext() for headings.
-		This also fixed some bugs when trying to display VerseKey when
-		indexed to a heading.
+	Added checks and output appropriate in VerseKey.freshtext() for
+		headings. This also fixed some bugs when trying to display
+		VerseKey when indexed to a heading.
 	Added frontend/widoze/Delphi20/swtxtdsp: the beginings of a Delphi RTF
 		control.
 	Changed Makefiles slightly for more logical compiles.
@@ -1427,7 +1431,8 @@ Kolatzek.
 8-Apr-1996
 	Fixed bug in VerseKey for old testament references!
 	Fixed VerseKey from crashing when set with text that it cannot parse.
-	Removed the need for Keys data files.  Added information instead to canon.h
+	Removed the need for Keys data files.  Added information instead to
+		canon.h
 	Added procedural API (frontend/windoze/bcowl25/swordapi) and 16 & 32
 		bit DLLs for windoze (sword16.dll; sword32.dll).
 	Added Delphi components (frontend/windoze/delphi20/swordvc) and
@@ -1446,9 +1451,9 @@ Kolatzek.
 	Added module 'vines' (Vine's Bible Dictionary)
 	Added executable demo 'lookup' that used RawLD and the 'eastons'and
 		'vines' modules to lookup argv[1] (module decided by argv[2])
-	Moved sword/frontend/windows/bcowl25 to examples/windoze/bcowl25/multimod
-		and added lexicon/dictionary support to demo. (Highligh a word and
-		right-click for menu)
+	Moved sword/frontend/windows/bcowl25 to
+		examples/windoze/bcowl25/multimod and added lexicon/dictionary
+		support to demo. (Highligh a word and right-click for menu)
 	Fixed VerseKey post-increment bug (operator ++(int))
 	... once again: probably more that I forgot ...
 
