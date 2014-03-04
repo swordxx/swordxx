@@ -379,7 +379,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		
 				*output << "\\setotherlanguage{" << modlanguage << "}\n"
 			        	   "\\newfontfamily\\" << syslanguage << "font{Gentium}\n"
-			 	  	   "\\newfontfamily\\" << modlanguage << "font{" << font << "} \% apply following options e.g for Persian [Script=Arabic,Scale=1.3,Ligatures=TeX,Numbers=OldStyle,Mapping=arabicdigits]\n";				   	  
+			 	  	   "\\newfontfamily\\" << modlanguage << "font{" << font << "} % apply following options e.g for Persian [Script=Arabic,Scale=1.3,Ligatures=TeX,Numbers=OldStyle,Mapping=arabicdigits]\n";				   	  
 				}
 			 	
 			 
@@ -511,7 +511,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		
 				*output << "\\setotherlanguage{" << modlanguage << "}\n"
 			        	   "\\newfontfamily\\" << syslanguage << "font{Gentium}\n"
-			 	  	   "\\newfontfamily\\" << modlanguage << "font{" << font << "} \% apply following options e.g for Persian [Script=Arabic,Scale=1.3,Ligatures=TeX,Numbers=OldStyle,Mapping=arabicdigits]\n";				   	  
+			 	  	   "\\newfontfamily\\" << modlanguage << "font{" << font << "} % apply following options e.g for Persian [Script=Arabic,Scale=1.3,Ligatures=TeX,Numbers=OldStyle,Mapping=arabicdigits]\n";				   	  
 				}
 			 	
 			 
