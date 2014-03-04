@@ -1,7 +1,7 @@
 #!/bin/sh
 #******************************************************************************
 #
-# $Id: swmgr.h 2321 2009-04-13 01:17:00Z scribe $
+# $Id$
 #
 # Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
 #	CrossWire Bible Society

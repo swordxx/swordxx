@@ -372,7 +372,7 @@ int main(int argc, char **argv) {
 #endif
 
 	SWBuf program = argv[0];
-	fprintf(stderr, "You are running %s: $Rev: 2138 $\n", argv[0]);
+	fprintf(stderr, "You are running %s: $Rev$\n", argv[0]);
 
 	// Let's test our command line arguments
 	if (argc < 3) {

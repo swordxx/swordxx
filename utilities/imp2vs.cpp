@@ -55,7 +55,7 @@ void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module);
 
 void usage(const char *progName, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
-	fprintf(stderr, "\n=== imp2vs (Revision $Rev: 2234 $) SWORD Bible/Commentary importer.\n");
+	fprintf(stderr, "\n=== imp2vs (Revision $Rev$) SWORD Bible/Commentary importer.\n");
 	fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
 	fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none):\n");
