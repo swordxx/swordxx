@@ -13,7 +13,7 @@
 #include "corba/orbitcpp/webmgr.hpp"
 
 extern "C" {
-#include <swordminflat.h>
+#include <flatapi.h>
 }
 
 using sword::VerseKey;
