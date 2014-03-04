@@ -21,11 +21,13 @@
  *
  */
 
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <xzcomprs.h>
+
+#define LZMA_API_STATIC
+#include <lzma.h>
 
 #define XZ_PRESET 3 | LZMA_PRESET_EXTREME
 

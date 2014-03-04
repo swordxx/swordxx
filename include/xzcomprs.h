@@ -24,11 +24,11 @@
 #ifndef XZCOMPRS_H
 #define XZCOMPRS_H
 
+#include <stdint.h>
+
 #include <swcomprs.h>
 
 #include <defs.h>
-
-#include <lzma.h>
 
 SWORD_NAMESPACE_START
 
