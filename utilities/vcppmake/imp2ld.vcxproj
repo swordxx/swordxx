@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -59,7 +59,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../include;../../src/utilfuns/win32;../../../icu-sword/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;../../src/utilfuns/win32;../../../icu-sword/include;../../../bzip2;../../../xz/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_CONSOLE;_ICU_;_ICUSWORD_;SWUSINGDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -69,9 +69,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libsword.lib;icuuc.lib;icuin.lib;icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsword.lib;icuuc.lib;icuin.lib;icudt.lib;libbz2.lib;liblzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Debug\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;../../lib/vcppmake/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>
@@ -82,7 +82,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../include;../../src/utilfuns/win32;../../../icu-sword/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;../../src/utilfuns/win32;../../../icu-sword/include;../../../bzip2;../../../xz/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_CONSOLE;_ICU_;_ICUSWORD_;SWUSINGDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -93,9 +93,9 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libsword.lib;icuuc.lib;icuin.lib;icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsword.lib;icuuc.lib;icuin.lib;icudt.lib;libbz2.lib;liblzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Release\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../lib/vcppmake/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;../../lib/vcppmake/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

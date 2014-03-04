@@ -63,7 +63,7 @@
     <ClCompile>
       <AdditionalOptions>/D _CRT_SECURE_NO_DEPRECATE %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../include;../../include/internal/regex;../../../icu-sword/include;../../src/utilfuns/win32;../../../curl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;../../include/internal/regex;../../../icu-sword/include;../../src/utilfuns/win32;../../../curl/include;../../../xz/include;../../../bzip2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -85,8 +85,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libcurl_a.lib;ws2_32.lib;winmm.lib;wldap32.lib;icuuc.lib;icuin.lib;icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc10-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl_a.lib;ws2_32.lib;winmm.lib;wldap32.lib;icuuc.lib;icuin.lib;icudt.lib;libbz2.lib;liblzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc10-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -99,7 +99,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../include;../../include/internal/regex;../../../icu-sword/include;../../src/utilfuns/win32;../../../curl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;../../include/internal/regex;../../../icu-sword/include;../../src/utilfuns/win32;../../../curl/include;../../../xz/include;../../../bzip2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_ICU_;_ICUSWORD_;WIN32;_LIB;REGEX_MALLOC;SWMAKINGDLL;CURLAVAILABLE;CURL_STATICLIB;USBINARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>
       </StringPooling>
@@ -123,8 +123,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libcurl_a.lib;ws2_32.lib;winmm.lib;wldap32.lib;icuuc.lib;icuin.lib;icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc10-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl_a.lib;ws2_32.lib;winmm.lib;wldap32.lib;icuuc.lib;icuin.lib;icudt.lib;libbz2.lib;liblzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc10-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
