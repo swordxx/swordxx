@@ -49,8 +49,9 @@ void printsyntax() {
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", \"bibliography\", and \"localelist\".");
 	fprintf (stderr, "\n");
-	fprintf (stderr, "Valid search_type values are: regex, multiword, and phrase(def).\n");
-	fprintf (stderr, "Valid option_filters values are: n (Strong's numbers),\n");
+	fprintf (stderr, "Valid search_type values are: phrase (default), regex, multiword,\n");
+	fprintf (stderr, "  attribute, lucene, multilemma.\n");
+	fprintf (stderr, "Valid (output) option_filters values are: n (Strong's numbers),\n");
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents), p (Arabic Vowels)\n");
 	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping),\n");
@@ -95,19 +96,30 @@ int main(int argc, char **argv)
 		}
 		else if (!::stricmp("-s", argv[i])) {
 			if (i+1 <= argc) {
-				if (!::stricmp("phrase", argv[i+1])) {
+				i++;
+				if (!::stricmp("phrase", argv[i])) {
 					searchtype = ST_PHRASE;
-					i++;
 				}
-				else if (!::stricmp("regex", argv[i+1])) {
+				else if (!::stricmp("regex", argv[i])) {
 					searchtype = ST_REGEX;
-					i++;
 				}
-				else if (!::stricmp("multiword", argv[i+1])) {
+				else if (!::stricmp("multiword", argv[i])) {
 					searchtype = ST_MULTIWORD;
-					i++;
 				}
-				else i++;
+				else if (!::stricmp("lucene", argv[i])) {
+					searchtype = ST_CLUCENE;
+				}
+				else if (!::stricmp("attribute", argv[i])) {
+					searchtype = ST_ENTRYATTRIB;
+				}
+				else if (!::stricmp("multilemma", argv[i])) {
+					searchtype = ST_MULTILEMMA;
+				}
+				else {
+					fprintf (stderr, "Unknown search_type: %s\n", argv[i]);
+					fprintf (stderr, "Try diatheke --help\n");
+					return 0;
+				}
 			}
 		}
  		else if (!::stricmp("-r", argv[i])) {
@@ -268,6 +280,7 @@ int main(int argc, char **argv)
 	if (runquery == (RQ_BOOK | RQ_REF)) {
  	    doquery(maxverses, outputformat, outputencoding, optionfilters, searchtype, range, text, locale, ref, &cout, script, variants);
 	}
+	//if we got this far without exiting, something went wrong, so print syntax
 	else printsyntax();
 
 	return 0;
