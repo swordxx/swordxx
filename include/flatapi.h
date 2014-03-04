@@ -1,106 +1,469 @@
-/******************************************************************************
- *
- *  flatapi.h -	This file contains an api usable by non-C++ environments
- *
- * $Id$
- *
- * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation version 2.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- */
+#ifndef SWORDMINFLAT_H
+#define SWORDMINFLAT_H
 
-#ifndef SWORDAPI_H
-#define SWORDAPI_H
-
-#include <defs.h>
 #include <inttypes.h>
-#ifdef __cplusplus
-#endif
+#include <defs.h>
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 #define SWHANDLE intptr_t
 
-
-//-----------------------------------------------------------------
-// stringlist_iterator methods
-
-void SWDLLEXPORT stringlist_iterator_next(SWHANDLE hsli);
-const char * SWDLLEXPORT stringlist_iterator_val(SWHANDLE hsli);
-
-//-----------------------------------------------------------------
-// listkey_iterator methods
-
-void SWDLLEXPORT listkey_iterator_next(SWHANDLE lki);
-const char * SWDLLEXPORT listkey_iterator_val(SWHANDLE hsli);
-	
-//-----------------------------------------------------------------
-// modmap methods
-//
-void SWDLLEXPORT ModList_iterator_next(SWHANDLE hmmi);
-SWHANDLE SWDLLEXPORT ModList_iterator_val(SWHANDLE hmmi);
+struct org_crosswire_sword_ModInfo {
+	char *name;
+	char *description;
+	char *category;
+	char *language;
+};
 
 
-//-----------------------------------------------------------------
-// SWMgr methods
-//
-SWHANDLE SWDLLEXPORT SWMgr_new(char filterType);
-// SWConfig *, SWConfig *, bool, SWFilterMgr *
-SWHANDLE SWDLLEXPORT SWMgr_newEx(SWHANDLE hiconfig, SWHANDLE hisysconfig, char autoload, SWHANDLE hfilterMgr);
-void     SWDLLEXPORT SWMgr_delete(SWHANDLE hmgr);
-SWHANDLE SWDLLEXPORT SWMgr_getConfig(SWHANDLE hmgr);
-SWHANDLE SWDLLEXPORT SWMgr_getModulesIterator(SWHANDLE hmgr);
-SWHANDLE SWDLLEXPORT SWMgr_getModuleByName(SWHANDLE hmgr, const char *name);
-const char *   SWDLLEXPORT SWMgr_getPrefixPath(SWHANDLE hmgr);
-const char *   SWDLLEXPORT SWMgr_getConfigPath(SWHANDLE hmgr);
-void     SWDLLEXPORT SWMgr_setGlobalOption(SWHANDLE hmgr, const char *option, const char *value);
-const char *   SWDLLEXPORT SWMgr_getGlobalOption(SWHANDLE hmgr, const char *option);
-const char *   SWDLLEXPORT SWMgr_getGlobalOptionTip(SWHANDLE hmgr, const char *option);
-// ret: forward_iterator
-SWHANDLE SWDLLEXPORT SWMgr_getGlobalOptionsIterator(SWHANDLE hmgr);
-// ret: forward_iterator
-SWHANDLE SWDLLEXPORT SWMgr_getGlobalOptionValuesIterator(SWHANDLE hmgr, const char *option);
-void     SWDLLEXPORT SWMgr_setCipherKey(SWHANDLE hmgr, const char *modName, const char *key);
+struct org_crosswire_sword_SearchHit {
+	const char *modName;
+	char *key;
+	long  score;
+};
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    reInit
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_InstallMgr_reInit
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    setUserDisclaimerConfirmed
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_InstallMgr_setUserDisclaimerConfirmed
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    syncConfig
+ * Signature: ()I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_syncConfig
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    uninstallModule
+ * Signature: (Ljava/lang/String;)I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_uninstallModule
+  (SWHANDLE hInstallMgr, const char *);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    getRemoteSources
+ * Signature: ()[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteSources
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    refreshRemoteSource
+ * Signature: (Ljava/lang/String;)I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_refreshRemoteSource
+  (SWHANDLE hInstallMgr, const char *);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    getRemoteModInfoList
+ * Signature: (Ljava/lang/String;)[Lorg/crosswire/android/sword/SWMgr/ModInfo;
+ */
+const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModInfoList
+  (SWHANDLE hInstallMgr, const char *);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    remoteInstallModule
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
+  (SWHANDLE hInstallMgr, const char *, const char *);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    getRemoteModuleByName
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
+  (SWHANDLE hInstallMgr, const char *, const char *);
 
 
-//-----------------------------------------------------------------
-// SWModule methods
+#undef org_crosswire_sword_SWModule_SEARCHTYPE_REGEX
+#define org_crosswire_sword_SWModule_SEARCHTYPE_REGEX 1L
+#undef org_crosswire_sword_SWModule_SEARCHTYPE_PHRASE
+#define org_crosswire_sword_SWModule_SEARCHTYPE_PHRASE -1L
+#undef org_crosswire_sword_SWModule_SEARCHTYPE_MULTIWORD
+#define org_crosswire_sword_SWModule_SEARCHTYPE_MULTIWORD -2L
+#undef org_crosswire_sword_SWModule_SEARCHTYPE_ENTRYATTR
+#define org_crosswire_sword_SWModule_SEARCHTYPE_ENTRYATTR -3L
+#undef org_crosswire_sword_SWModule_SEARCHTYPE_LUCENE
+#define org_crosswire_sword_SWModule_SEARCHTYPE_LUCENE -4L
 
-void  SWDLLEXPORT SWModule_terminateSearch(SWHANDLE hmodule);
-SWHANDLE SWDLLEXPORT SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type, int params,  void (*percent) (char, void *), void *percentUserData);
-char  SWDLLEXPORT SWModule_error(SWHANDLE hmodule);
-int   SWDLLEXPORT SWModule_getEntrySize(SWHANDLE hmodule);
-void  SWDLLEXPORT SWModule_setKeyText(SWHANDLE hmodule, const char *key);
-const char * SWDLLEXPORT SWModule_getKeyText(SWHANDLE hmodule);
-const char * SWDLLEXPORT SWModule_getName(SWHANDLE hmodule);
-const char * SWDLLEXPORT SWModule_getDescription(SWHANDLE hmodule);
-const char * SWDLLEXPORT SWModule_getType(SWHANDLE hmodule);
-void  SWDLLEXPORT SWModule_previous(SWHANDLE hmodule);
-void  SWDLLEXPORT SWModule_next(SWHANDLE hmodule);
-void  SWDLLEXPORT SWModule_begin(SWHANDLE hmodule);
-const char * SWDLLEXPORT SWModule_getStripText(SWHANDLE hmodule);
-const char * SWDLLEXPORT SWModule_getRenderText(SWHANDLE hmodule);
-const char * SWDLLEXPORT SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3);
-const char * SWDLLEXPORT SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pvHeading);
-const char * SWDLLEXPORT SWModule_getFootnoteType(SWHANDLE hmodule, const char *key, const char *note);
-const char * SWDLLEXPORT SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const char *note);
-const char * SWDLLEXPORT SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const char *note);
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    terminateSearch
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWModule_terminateSearch
+  (SWHANDLE hSWModule);
 
-SWHANDLE SWDLLEXPORT listkey_getVerselistIterator(const char *list, const char *key, const char *v11n = "KJV");
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    search
+ * Signature: (Ljava/lang/String;IJLjava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
+ */
+const struct org_crosswire_sword_SearchHit * SWDLLEXPORT org_crosswire_sword_SWModule_search
+  (SWHANDLE hSWModule, const char *searchString, int searchType, long flags, const char *scope, SWHANDLE progressReporter);
 
-}
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    error
+ * Signature: ()C
+ */
+char SWDLLEXPORT org_crosswire_sword_SWModule_popError
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getEntrySize
+ * Signature: ()J
+ */
+long SWDLLEXPORT org_crosswire_sword_SWModule_getEntrySize
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getEntryAttribute
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getEntryAttribute
+  (SWHANDLE hSWModule, const char *level1, const char *level2, const char *level3, char filteredBool);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    parseKeyList
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWModule_parseKeyList
+  (SWHANDLE hSWModule, const char *keyText);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    setKeyText
+ * Signature: (Ljava/lang/String;)V
+ */
+// Special values handled for VerseKey modules:
+//	[+-][book|chapter]	- [de|in]crement by chapter or book
+//	(e.g.	"+chapter" will increment the VerseKey 1 chapter)
+//	[=][key]		- position absolutely and don't normalize
+//	(e.g.	"jn.1.0" for John Chapter 1 intro; "jn.0.0" For Book of John Intro)
+void SWDLLEXPORT org_crosswire_sword_SWModule_setKeyText
+  (SWHANDLE hSWModule, const char *key);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getKeyText
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getKeyText
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    hasKeyChildren
+ * Signature: ()Z
+ */
+char SWDLLEXPORT org_crosswire_sword_SWModule_hasKeyChildren
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getKeyChildren
+ * Signature: ()[Ljava/lang/String;
+ */
+
+// This method returns child nodes for a genbook,
+// but has special handling if called on a VerseKey module:
+//  [0..7] [testament, book, chapter, verse, chapterMax, verseMax, bookName, osisRef]
+const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getKeyChildren
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getName
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getName
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getDescription
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getDescription
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getCategory
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getCategory
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getKeyParent
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getKeyParent
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    previous
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWModule_previous
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    next
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWModule_next
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    begin
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWModule_begin
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getStripText
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_stripText
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getRenderText
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_renderText
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getRenderHeader
+ * Signature: ()Ljava/lang/String;
+ */
+// CSS styles associated with this text
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getRenderHeader
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getRawEntry
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getRawEntry
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    setRawEntry
+ * Signature: (Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWModule_setRawEntry
+  (SWHANDLE hSWModule, const char *entryBuffer);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    getConfigEntry
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWModule_getConfigEntry
+  (SWHANDLE hSWModule, const char *key);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    deleteSearchFramework
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWModule_deleteSearchFramework
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWModule
+ * Method:    hasSearchFramework
+ * Signature: ()Z
+ */
+char SWDLLEXPORT org_crosswire_sword_SWModule_hasSearchFramework
+  (SWHANDLE hSWModule);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    new
+ * Signature: ()V
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_new
+  ();
+
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    delete
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_delete
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    version
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_version
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getModInfoList
+ * Signature: ()[Lorg/crosswire/android/sword/SWMgr/ModInfo;
+ */
+const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr_getModInfoList
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getModuleByName
+ * Signature: (Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_getModuleByName
+  (SWHANDLE hSWMgr, const char *moduleName);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getPrefixPath
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_getPrefixPath
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getConfigPath
+ * Signature: ()Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_getConfigPath
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    setGlobalOption
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_setGlobalOption
+  (SWHANDLE hSWMgr, const char *option, const char *value);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getGlobalOption
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOption
+  (SWHANDLE hSWMgr, const char *option);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getGlobalOptionTip
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOptionTip
+  (SWHANDLE hSWMgr, const char *option);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    filterText
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_filterText
+  (SWHANDLE hSWMgr, const char *filterName, const char *text);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getGlobalOptions
+ * Signature: ()[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOptions
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getGlobalOptionValues
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOptionValues
+  (SWHANDLE hSWMgr, const char *option);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    setCipherKey
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_setCipherKey
+  (SWHANDLE hSWMgr, const char *modName, const char *key);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    setJavascript
+ * Signature: (Z)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_setJavascript
+  (SWHANDLE hSWMgr, char valueBool);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    getAvailableLocales
+ * Signature: ()[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getAvailableLocales
+  (SWHANDLE hSWMgr);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    setDefaultLocale
+ * Signature: (Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_setDefaultLocale
+  (SWHANDLE hSWMgr, const char *name);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    translate
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
+  (SWHANDLE hSWMgr, const char *text, const char *localeName);
+
 #ifdef __cplusplus
+}
 #endif
-
 #endif
