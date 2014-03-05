@@ -1,11 +1,10 @@
 /******************************************************************************
  *
- *  thmllatex.cpp -	SWFilter descendant to create LaTeX formatted text
- *			from ThML tags 
+ *  thmllatex.cpp -	ThML to classed LaTeX
  *
  * $Id$
  *
- * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -23,225 +22,356 @@
 
 #include <stdlib.h>
 #include <thmllatex.h>
-#include <swbuf.h>
+#include <swmodule.h>
+#include <utilxml.h>
+#include <utilstr.h>
+#include <versekey.h>
+#include <url.h>
 
 SWORD_NAMESPACE_START
+ 
 
-ThMLLaTeX::ThMLLaTeX() {
+const char *ThMLLaTeX::getHeader() const {
+	return "\
+	";
 }
 
-char ThMLLaTeX::processText(SWBuf &text, const SWKey *key, const SWModule *module)
-{
-	char token[2048];
-	int tokpos = 0;
-	bool intoken = false;
-	bool ampersand = false;
 
-	const char *from;
-	SWBuf orig = text;
-	from = orig.c_str();
-	for (text = ""; *from; from++)
-	{
-		if (*from == 10 || *from == 13)
-			from++;
-		if (*from == '<') {
-			intoken = true;
-			tokpos = 0;
-			token[0] = 0;
-			token[1] = 0;
-			token[2] = 0;
-			ampersand = false;
-			continue;
-		}
-		else if (*from == '&') {
-			intoken = true;
-			tokpos = 0;
-			token[0] = 0;
-			token[1] = 0;
-			token[2] = 0;
-			ampersand = true;
-			continue;
-		}
-		if (*from == ';' && ampersand) {
-			intoken = false;
-			ampersand = false;
+ThMLLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	if (module) {
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+		SecHead = false;
+	}	
+}
 
-			if (!strncmp("nbsp", token, 4)) text += ' ';
-			else if (!strncmp("quot", token, 4)) text += '"';
-			else if (!strncmp("amp", token, 3)) text += '&';
-			else if (!strncmp("lt", token, 2)) text += '<';
-			else if (!strncmp("gt", token, 2)) text += '>';
-			else if (!strncmp("brvbar", token, 6)) text += "¶";
-			else if (!strncmp("sect", token, 4)) text += "ß";
-			else if (!strncmp("copy", token, 4)) text += "©";
-			else if (!strncmp("laquo", token, 5)) text += "´";
-			else if (!strncmp("reg", token, 3)) text += "Æ";
-			else if (!strncmp("acute", token, 5)) text += "¥";
-			else if (!strncmp("para", token, 4)) text += "∂";
-			else if (!strncmp("raquo", token, 5)) text += "ª";
 
-			else if (!strncmp("Aacute", token, 6)) text += "¡";
-			else if (!strncmp("Agrave", token, 6)) text += "¿";
-			else if (!strncmp("Acirc", token, 5)) text += "¬";
-			else if (!strncmp("Auml", token, 4)) text += "ƒ";
-			else if (!strncmp("Atilde", token, 6)) text += "√";
-			else if (!strncmp("Aring", token, 5)) text += "≈";
-			else if (!strncmp("aacute", token, 6)) text += "·";
-			else if (!strncmp("agrave", token, 6)) text += "‡";
-			else if (!strncmp("acirc", token, 5)) text += "‚";
-			else if (!strncmp("auml", token, 4)) text += "‰";
-			else if (!strncmp("atilde", token, 6)) text += "„";
-			else if (!strncmp("aring", token, 5)) text += "Â";
-			else if (!strncmp("Eacute", token, 6)) text += "…";
-			else if (!strncmp("Egrave", token, 6)) text += "»";
-			else if (!strncmp("Ecirc", token, 5)) text += " ";
-			else if (!strncmp("Euml", token, 4)) text += "À";
-			else if (!strncmp("eacute", token, 6)) text += "È";
-			else if (!strncmp("egrave", token, 6)) text += "Ë";
-			else if (!strncmp("ecirc", token, 5)) text += "Í";
-			else if (!strncmp("euml", token, 4)) text += "Î";
-			else if (!strncmp("Iacute", token, 6)) text += "Õ";
-			else if (!strncmp("Igrave", token, 6)) text += "Ã";
-			else if (!strncmp("Icirc", token, 5)) text += "Œ";
-			else if (!strncmp("Iuml", token, 4)) text += "œ";
-			else if (!strncmp("iacute", token, 6)) text += "Ì";
-			else if (!strncmp("igrave", token, 6)) text += "Ï";
-			else if (!strncmp("icirc", token, 5)) text += "Ó";
-			else if (!strncmp("iuml", token, 4)) text += "Ô";
-			else if (!strncmp("Oacute", token, 6)) text += "”";
-			else if (!strncmp("Ograve", token, 6)) text += "“";
-			else if (!strncmp("Ocirc", token, 5)) text += "‘";
-			else if (!strncmp("Ouml", token, 4)) text += "÷";
-			else if (!strncmp("Otilde", token, 6)) text += "’";
-			else if (!strncmp("oacute", token, 6)) text += "Û";
-			else if (!strncmp("ograve", token, 6)) text += "Ú";
-			else if (!strncmp("ocirc", token, 5)) text += "Ù";
-			else if (!strncmp("ouml", token, 4)) text += "ˆ";
-			else if (!strncmp("otilde", token, 6)) text += "ı";
-			else if (!strncmp("Uacute", token, 6)) text += "⁄";
-			else if (!strncmp("Ugrave", token, 6)) text += "Ÿ";
-			else if (!strncmp("Ucirc", token, 5)) text += "€";
-			else if (!strncmp("Uuml", token, 4)) text += "‹";
-			else if (!strncmp("uacute", token, 6)) text += "˙";
-			else if (!strncmp("ugrave", token, 6)) text += "˘";
-			else if (!strncmp("ucirc", token, 5)) text += "˚";
-			else if (!strncmp("uuml", token, 4)) text += "¸";
-			else if (!strncmp("Yacute", token, 6)) text += "›";
-			else if (!strncmp("yacute", token, 6)) text += "˝";
-			else if (!strncmp("yuml", token, 4)) text += "ˇ";
+ThMLLaTeX::ThMLLaTeX() {
+	setTokenStart("<");
+	setTokenEnd(">");
 
-			else if (!strncmp("deg", token, 3)) text += "∞";
-			else if (!strncmp("plusmn", token, 6)) text += "±";
-			else if (!strncmp("sup2", token, 4)) text += "≤";
-			else if (!strncmp("sup3", token, 4)) text += "≥";
-			else if (!strncmp("sup1", token, 4)) text += "π";
-			else if (!strncmp("nbsp", token, 4)) text += "∫";
-			else if (!strncmp("pound", token, 5)) text += "£";
-			else if (!strncmp("cent", token, 4)) text += "¢";
-			else if (!strncmp("frac14", token, 6)) text += "º";
-			else if (!strncmp("frac12", token, 6)) text += "Ω";
-			else if (!strncmp("frac34", token, 6)) text += "æ";
-			else if (!strncmp("iquest", token, 6)) text += "ø";
-			else if (!strncmp("iexcl", token, 5)) text += "°";
-			else if (!strncmp("ETH", token, 3)) text += "–";
-			else if (!strncmp("eth", token, 3)) text += "";
-			else if (!strncmp("THORN", token, 5)) text += "ﬁ";
-			else if (!strncmp("thorn", token, 5)) text += "˛";
-			else if (!strncmp("AElig", token, 5)) text += "∆";
-			else if (!strncmp("aelig", token, 5)) text += "Ê";
-			else if (!strncmp("Oslash", token, 6)) text += "ÿ";
-			else if (!strncmp("curren", token, 6)) text += "§";
-			else if (!strncmp("Ccedil", token, 6)) text += "«";
-			else if (!strncmp("ccedil", token, 6)) text += "Á";
-			else if (!strncmp("szlig", token, 5)) text += "ﬂ";
-			else if (!strncmp("Ntilde", token, 6)) text += "—";
-			else if (!strncmp("ntilde", token, 6)) text += "Ò";
-			else if (!strncmp("yen", token, 3)) text += "•";
-			else if (!strncmp("not", token, 3)) text += "¨";
-			else if (!strncmp("ordf", token, 4)) text += "™";
-			else if (!strncmp("uml", token, 3)) text += "®";
-			else if (!strncmp("shy", token, 3)) text += "≠";
-			else if (!strncmp("macr", token, 4)) text += "Ø";
-			else if (!strncmp("micro", token, 5)) text += "µ";
-			else if (!strncmp("middot", token, 6)) text += "∑";
-			else if (!strncmp("cedil", token, 5)) text += "∏";
-			else if (!strncmp("ordm", token, 4)) text += "∫";
-			else if (!strncmp("times", token, 5)) text += "◊";
-			else if (!strncmp("divide", token, 6)) text += "˜";
-			else if (!strncmp("oslash", token, 6)) text += "¯";
-			continue;
+	setEscapeStart("&");
+	setEscapeEnd(";");
 
+	setEscapeStringCaseSensitive(true);
+	setPassThruNumericEscapeString(true);
+
+	addAllowedEscapeString("quot");
+	addAllowedEscapeString("amp");
+	addAllowedEscapeString("lt");
+	addAllowedEscapeString("gt");
+
+	addAllowedEscapeString("nbsp");
+	addAllowedEscapeString("brvbar"); // "≈†"
+	addAllowedEscapeString("sect");   // "¬ß"
+	addAllowedEscapeString("copy");   // "¬©"
+	addAllowedEscapeString("laquo");  // "¬´"
+	addAllowedEscapeString("reg");    // "¬Æ"
+	addAllowedEscapeString("acute");  // "≈Ω"
+	addAllowedEscapeString("para");   // "¬∂"
+	addAllowedEscapeString("raquo");  // "¬ª"
+
+	addAllowedEscapeString("Aacute"); // "√Å"
+	addAllowedEscapeString("Agrave"); // "√Ä"
+	addAllowedEscapeString("Acirc");  // "√Ç"
+	addAllowedEscapeString("Auml");   // "√Ñ"
+	addAllowedEscapeString("Atilde"); // "√É"
+	addAllowedEscapeString("Aring");  // "√Ö"
+	addAllowedEscapeString("aacute"); // "√°"
+	addAllowedEscapeString("agrave"); // "√†"
+	addAllowedEscapeString("acirc");  // "√¢"
+	addAllowedEscapeString("auml");   // "√§"
+	addAllowedEscapeString("atilde"); // "√£"
+	addAllowedEscapeString("aring");  // "√•"
+	addAllowedEscapeString("Eacute"); // "√â"
+	addAllowedEscapeString("Egrave"); // "√à"
+	addAllowedEscapeString("Ecirc");  // "√ä"
+	addAllowedEscapeString("Euml");   // "√ã"
+	addAllowedEscapeString("eacute"); // "√©"
+	addAllowedEscapeString("egrave"); // "√®"
+	addAllowedEscapeString("ecirc");  // "√™"
+	addAllowedEscapeString("euml");   // "√´"
+	addAllowedEscapeString("Iacute"); // "√ç"
+	addAllowedEscapeString("Igrave"); // "√å"
+	addAllowedEscapeString("Icirc");  // "√é"
+	addAllowedEscapeString("Iuml");   // "√è"
+	addAllowedEscapeString("iacute"); // "√≠"
+	addAllowedEscapeString("igrave"); // "√¨"
+	addAllowedEscapeString("icirc");  // "√Æ"
+	addAllowedEscapeString("iuml");   // "√Ø"
+	addAllowedEscapeString("Oacute"); // "√ì"
+	addAllowedEscapeString("Ograve"); // "√í"
+	addAllowedEscapeString("Ocirc");  // "√î"
+	addAllowedEscapeString("Ouml");   // "√ñ"
+	addAllowedEscapeString("Otilde"); // "√ï"
+	addAllowedEscapeString("oacute"); // "√≥"
+	addAllowedEscapeString("ograve"); // "√≤"
+	addAllowedEscapeString("ocirc");  // "√¥"
+	addAllowedEscapeString("ouml");   // "√∂"
+	addAllowedEscapeString("otilde"); // "√µ"
+	addAllowedEscapeString("Uacute"); // "√ö"
+	addAllowedEscapeString("Ugrave"); // "√ô"
+	addAllowedEscapeString("Ucirc");  // "√õ"
+	addAllowedEscapeString("Uuml");   // "√ú"
+	addAllowedEscapeString("uacute"); // "√∫"
+	addAllowedEscapeString("ugrave"); // "√π"
+	addAllowedEscapeString("ucirc");  // "√ª"
+	addAllowedEscapeString("uuml");   // "√º"
+	addAllowedEscapeString("Yacute"); // "√ù"
+	addAllowedEscapeString("yacute"); // "√Ω"
+	addAllowedEscapeString("yuml");   // "√ø"
+
+	addAllowedEscapeString("deg");    // "¬∞"
+	addAllowedEscapeString("plusmn"); // "¬±"
+	addAllowedEscapeString("sup2");   // "¬≤"
+	addAllowedEscapeString("sup3");   // "¬≥"
+	addAllowedEscapeString("sup1");   // "¬π"
+	addAllowedEscapeString("nbsp");   // "¬∫"
+	addAllowedEscapeString("pound");  // "¬£"
+	addAllowedEscapeString("cent");   // "¬¢"
+	addAllowedEscapeString("frac14"); // "≈í"
+	addAllowedEscapeString("frac12"); // "≈ì"
+	addAllowedEscapeString("frac34"); // "≈∏"
+	addAllowedEscapeString("iquest"); // "¬ø"
+	addAllowedEscapeString("iexcl");  // "¬°"
+	addAllowedEscapeString("ETH");    // "√ê"
+	addAllowedEscapeString("eth");    // "√∞"
+	addAllowedEscapeString("THORN");  // "√û"
+	addAllowedEscapeString("thorn");  // "√æ"
+	addAllowedEscapeString("AElig");  // "√Ü"
+	addAllowedEscapeString("aelig");  // "√¶"
+	addAllowedEscapeString("Oslash"); // "√ò"
+	addAllowedEscapeString("curren"); // "‚Ç¨"
+	addAllowedEscapeString("Ccedil"); // "√á"
+	addAllowedEscapeString("ccedil"); // "√ß"
+	addAllowedEscapeString("szlig");  // "√ü"
+	addAllowedEscapeString("Ntilde"); // "√ë"
+	addAllowedEscapeString("ntilde"); // "√±"
+	addAllowedEscapeString("yen");    // "¬•"
+	addAllowedEscapeString("not");    // "¬¨"
+	addAllowedEscapeString("ordf");   // "¬™"
+	addAllowedEscapeString("uml");    // "≈°"
+	addAllowedEscapeString("shy");    // "¬≠"
+	addAllowedEscapeString("macr");   // "¬Ø"
+
+	addAllowedEscapeString("micro");  // "¬µ"
+	addAllowedEscapeString("middot"); // "¬∑"
+	addAllowedEscapeString("cedil");  // "≈æ"
+	addAllowedEscapeString("ordm");   // "¬∫"
+	addAllowedEscapeString("times");  // "√ó"
+	addAllowedEscapeString("divide"); // "√∑"
+	addAllowedEscapeString("oslash"); // "√∏"
+
+	setTokenCaseSensitive(true);
+//	addTokenSubstitute("scripture", "<i> ");
+	addTokenSubstitute("/scripture", "</i> ");
+
+	renderNoteNumbers = false;
+}
+
+
+bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+	if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
+		MyUserData *u = (MyUserData *)userData;		
+
+		XMLTag tag(token);
+		if ((!tag.isEndTag()) && (!tag.isEmpty()))
+			u->startTag = tag;
+
+		if (tag.getName() && !strcmp(tag.getName(), "sync")) {
+			SWBuf value = tag.getAttribute("value");
+			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
+				if(value.length())
+					buf.appendFormatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\" class=\"morph\">%s</a>)</em></small>", 
+						URL::encode(value.c_str()).c_str(),
+						value.c_str());
+			}
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "lemma")) { //&gt;
+				if(value.length())
+					// empty "type=" is deliberate.
+					buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>", 
+						URL::encode(value.c_str()).c_str(),
+						value.c_str());
+			}
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
+				char ch = *value;
+				value<<1;
+				buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
+						    ((ch == 'H') ? "Hebrew" : "Greek"),
+						    URL::encode(value.c_str()).c_str());
+				buf += (value.length()) ? value.c_str() : "";
+				buf += "</a>&gt;</em></small>";
+			}
+			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+				buf += (tag.isEndTag() ? "</b>" : "<b>");
+			}
+				
 		}
-		else if (*from == '>' && !ampersand) {
-			intoken = false;
-			// process desired tokens
-			if (!strncmp(token, "sync type=\"Strongs\" value=\"", 27)) {
-				text += ' ';
-				text += '<';
-				for (unsigned int i = 27; token[i] != '\"'; i++)
-					text += token[i];
-				text += '>';
-				continue;
+		// <note> tag
+		else if (!strcmp(tag.getName(), "note")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					SWBuf type = tag.getAttribute("type");
+					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+					SWBuf noteName = tag.getAttribute("n");
+					VerseKey *vkey = NULL;
+					// see if we have a VerseKey * or descendant
+					SWTRY {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					SWCATCH ( ... ) {	}
+					if (vkey) {
+						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>", 
+							ch, 
+							URL::encode(footnoteNumber.c_str()).c_str(), 
+							URL::encode(u->version.c_str()).c_str(), 
+							URL::encode(vkey->getText()).c_str(), 
+							ch,
+							ch, 
+							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+					}
+					else {
+						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>", 
+							ch, 
+							URL::encode(footnoteNumber.c_str()).c_str(), 
+							URL::encode(u->version.c_str()).c_str(), 
+							URL::encode(u->key->getText()).c_str(),  
+							ch,
+							ch, 
+							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+					}
+					u->suspendTextPassThru = true;
+				}
 			}
-			if (!strncmp(token, "sync type=\"morph\" value=\"", 25)) {
-				text += ' ';
-				text += '(';
-				for (unsigned int i = 25; token[i] != '\"'; i++)
-					text += token[i];
-				text += ')';
-				continue;
+			if (tag.isEndTag()) {
+				u->suspendTextPassThru = false;
 			}
-			if (!strncmp("note", token, 4)) {
-				text += " \\footnote{";
-			}
-			if (!strncmp("title", token, 5)) {
-				text += " \\section*{";
-			}
-			if (!strncmp("scripRef", token, 8)) {
-				text += " \\footnoteB{";
-			}
-			else if (!strncmp("br", token, 2))
-				text += "\\\\";
-			else if (!strncmp("/p", token, 2))
-				text += "\\paragraph ";
-			else if (!strncmp("/note", token, 5)) {
-				text += '}';
-				text += ' ';
-			}
-			else if (!strncmp("/scripRef", token, 9)) {
-				text += '}';
-				text += ' ';
-			}
-			else if (!strncmp("/title", token, 6)) {
-				text += '}';
-				text += ' ';
-			}
-			continue;
 		}
-		if (intoken) {
-			if (tokpos < 2045)
-				token[tokpos++] = *from;
-				token[tokpos+2] = 0;
+		else if (!strcmp(tag.getName(), "scripture")) {
+			buf += (tag.isEndTag() ? "</i>" : "<i>");
 		}
-		else	text += *from;
+		// <scripRef> tag
+		else if (!strcmp(tag.getName(), "scripRef")) {
+			if (!tag.isEndTag()) {
+				if (!tag.isEmpty()) {
+					u->suspendTextPassThru = true;
+				}
+			}
+			if (tag.isEndTag()) {	//	</scripRef>
+				if (!u->BiblicalText) {
+					SWBuf refList = u->startTag.getAttribute("passage");
+					if (!refList.length())
+						refList = u->lastTextNode;
+					SWBuf version = tag.getAttribute("version");
+					
+					buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
+						(refList.length()) ? URL::encode(refList.c_str()).c_str() : "", 
+						(version.length()) ? URL::encode(version.c_str()).c_str() : "");
+					buf += u->lastTextNode.c_str();
+					buf += "</a>";
+				}
+				else {
+					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
+					SWBuf noteName = tag.getAttribute("n");
+					VerseKey *vkey = NULL;
+					// see if we have a VerseKey * or descendant
+					SWTRY {
+						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+					}
+					SWCATCH ( ... ) {}
+					if (vkey) {
+						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
+						//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
+						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",
+							URL::encode(footnoteNumber.c_str()).c_str(), 
+							URL::encode(u->version.c_str()).c_str(),
+							URL::encode(vkey->getText()).c_str(), 
+							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+					}
+				}
+
+				// let's let text resume to output again
+				u->suspendTextPassThru = false;
+			}
+		}
+		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
+			if (tag.isEndTag() && u->SecHead) {
+				buf += "</i></b><br />";
+				u->SecHead = false;
+			}
+			else if (tag.getAttribute("class")) {
+				if (!stricmp(tag.getAttribute("class"), "sechead")) {
+					u->SecHead = true;
+					buf += "<br /><b><i>";
+				}
+				else if (!stricmp(tag.getAttribute("class"), "title")) {
+					u->SecHead = true;
+					buf += "<br /><b><i>";
+				}
+				else {
+					buf += tag;
+				}
+			}
+			else {
+				buf += tag;
+			}
+		}
+		else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
+			const char *src = strstr(token, "src");
+			if (!src)		// assert we have a src attribute
+				return false;
+
+			const char *c, *d;
+			if (((c = strchr(src+3, '"')) == NULL) ||
+			    ((d = strchr( ++c , '"')) == NULL))	// identify endpoints.
+				return false;			// abandon hope.
+
+			SWBuf imagename = "file:";
+			if (*c == '/')				// as below, inside for loop.
+				imagename += userData->module->getConfigEntry("AbsoluteDataPath");
+			while (c != d)				// move bits into the name.
+			    imagename += *(c++);
+
+			// images become clickable, if the UI supports showImage.
+			buf.appendFormatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><",
+					    URL::encode(imagename.c_str()).c_str(),
+					    URL::encode(u->version.c_str()).c_str());
+
+			for (c = token; *c; c++) {
+				if ((*c == '/') && (*(c+1) == '\0'))
+					continue;
+				if (c == src) {
+					for (;((*c) && (*c != '"')); c++)
+						buf += *c;
+
+					if (!*c) { c--; continue; }
+
+					buf += '"';
+					if (*(c+1) == '/') {
+						buf += "file:";
+						buf += userData->module->getConfigEntry("AbsoluteDataPath");
+						if (buf[buf.length()-2] == '/')
+							c++;		// skip '/'
+					}
+					continue;
+				}
+				buf += *c;
+			}
+               buf += " border=0 /></a>";
+		}
+		else {
+			buf += '<';
+			/*for (const char *tok = token; *tok; tok++)
+				buf += *tok;*/
+			buf += token;
+			buf += '>';
+			//return false;  // we still didn't handle token
+		}
 	}
-
-	orig = text;
-	from = orig.c_str();
-	for (text = ""; *from; from++) {  //loop to remove extra spaces
-                if ((strchr(" \t\n\r", *from))) {
-                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
-                                from++;
-                        }
-                        text += " ";
-                }
-                else {
-                        text += *from;
-                }
-        }
-        text += (char)0;
-
-	return 0;
+	return true;
 }
 
 

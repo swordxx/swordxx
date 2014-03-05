@@ -4,7 +4,7 @@
  *
  * $Id$
  *
- * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,20 +20,41 @@
  *
  */
 
-#ifndef THMLLATEX_H
-#define THMLLATEX_H
+#ifndef _THMLLaTeX_H
+#define _THMLLaTeX_H
 
-#include <swfilter.h>
+#include <swbasicfilter.h>
+#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
-/** this filter converts ThML text to LaTeX text
+/** this filter converts ThML text to LaTeX
  */
-class SWDLLEXPORT ThMLLaTeX : public SWFilter {
+class SWDLLEXPORT ThMLLaTeX : public SWBasicFilter {
+	SWBuf imgPrefix;
+	bool renderNoteNumbers;
+protected:
+	class MyUserData : public BasicFilterUserData {
+	public:
+		MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
+		bool inscriptRef;
+		bool SecHead;
+		bool BiblicalText;
+		SWBuf version;
+		XMLTag startTag;
+	};
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new MyUserData(module, key);
+	}
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	ThMLLaTeX();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual const char *getImagePrefix() { return imgPrefix.c_str(); }
+	virtual void setImagePrefix(const char *newImgPrefix) { imgPrefix = newImgPrefix; }
+	virtual const char *getHeader() const;
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 SWORD_NAMESPACE_END
+
 #endif
