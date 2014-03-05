@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\src\modules\filters\scsuutf8.cpp" />
     <ClCompile Include="..\..\src\modules\filters\teilatex.cpp" />
     <ClCompile Include="..\..\src\modules\filters\thmllatex.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\utf8scsu.cpp" />
     <ClCompile Include="..\..\src\utilfuns\win32\dirent.cpp" />
     <ClCompile Include="..\..\src\mgr\encfiltmgr.cpp" />
     <ClCompile Include="..\..\src\modules\common\entriesblk.cpp" />
@@ -452,6 +453,7 @@
     <ClInclude Include="..\..\include\utf8latin1.h" />
     <ClInclude Include="..\..\include\utf8nfc.h" />
     <ClInclude Include="..\..\include\utf8nfkd.h" />
+    <ClInclude Include="..\..\include\utf8scsu.h" />
     <ClInclude Include="..\..\include\utf8transliterator.h" />
     <ClInclude Include="..\..\include\utf8utf16.h" />
     <ClInclude Include="..\..\include\utilstr.h" />

@@ -74,6 +74,7 @@ libsword_la_SOURCES += $(filtersdir)/utf8html.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
 libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
 libsword_la_SOURCES += $(filtersdir)/scsuutf8.cpp
+libsword_la_SOURCES += $(filtersdir)/utf8scsu.cpp
 
 libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp

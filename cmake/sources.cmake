@@ -133,6 +133,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/utf8latin1.cpp
 	src/modules/filters/unicodertf.cpp
 	src/modules/filters/scsuutf8.cpp
+	src/modules/filters/utf8scsu.cpp
 
 	src/modules/filters/utf8cantillation.cpp
 	src/modules/filters/utf8hebrewpoints.cpp

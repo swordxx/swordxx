@@ -39,15 +39,16 @@ class SWFilter;
 class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
 
 protected:
-        SWFilter *latin1utf8;
+	SWFilter *latin1utf8;
 	SWFilter *scsuutf8;
-        SWFilter *targetenc;
+	SWFilter *utf16utf8;
+	SWFilter *targetenc;
 
 
 	/*
 	 * current encoding value
 	 */        
-        char encoding;
+	char encoding;
 
 public:
 
@@ -56,33 +57,33 @@ public:
 	 *
 	 * @param encoding The desired encoding.
 	 */
-        EncodingFilterMgr (char encoding = ENC_UTF8);
+	EncodingFilterMgr (char encoding = ENC_UTF8);
 
 	/**
 	 * The destructor of SWEncodingMgr.
 	 */
-        ~EncodingFilterMgr();
+	~EncodingFilterMgr();
 
 	/** Markup sets/gets the encoding after initialization
 	 * 
 	 * @param enc The new encoding or ENC_UNKNOWN if you just want to get the current markup.
 	 * @return The current (possibly changed) encoding format.
 	 */
-        char Encoding(char enc);
+	char Encoding(char enc);
 
 	/**
 	 * Adds the raw filters which are defined in "section" to the SWModule object "module".
 	 * @param module To this module the raw filter(s) are added
 	 * @param section We use this section to get a list of filters we should apply to the module
 	 */
-        virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
+	virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
 
 	/**
 	 * Adds the encoding filters which are defined in "section" to the SWModule object "module".
 	 * @param module To this module the encoding filter(s) are added
 	 * @param section We use this section to get a list of filters we should apply to the module
 	 */
-        virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
+	virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
 };
 
 SWORD_NAMESPACE_END
