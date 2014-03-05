@@ -4,7 +4,7 @@
  *
  * $Id$
  *
- * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISLaTeX_H
-#define OSISLaTeX_H
+#ifndef OSISLATEX_H
+#define OSISLATEX_H
 
 #include <swbasicfilter.h>
 

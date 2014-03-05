@@ -2,9 +2,9 @@
  *
  *  teilatex.h -	Implementation of TEILaTeX
  *
- * $Id: teixhtml.h 2833 2013-06-29 06:40:28Z chrislit $
+ * $Id$
  *
- * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2012-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TEILaTeX_H
-#define TEILaTeX_H
+#ifndef TEILATEX_H
+#define TEILATEX_H
 
 #include <swbasicfilter.h>
 

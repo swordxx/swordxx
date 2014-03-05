@@ -2,9 +2,9 @@
  *
  *  teilatex.cpp -	TEI to LATEX filter
  *
- * $Id: teilatex.cpp 2984 2013-09-20 12:18:45Z refdoc $
+ * $Id$
  *
- * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2012-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
