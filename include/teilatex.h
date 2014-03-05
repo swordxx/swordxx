@@ -1,10 +1,10 @@
-/***************************************************************************
+/******************************************************************************
  *
  *  teilatex.h -	Implementation of TEILaTeX
  *
- * $Id: gbflatex.h 2998 2013-12-30 13:10:35Z chrislit $
+ * $Id: teixhtml.h 2833 2013-06-29 06:40:28Z chrislit $
  *
- * Copyright 2014 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,14 +20,36 @@
  *
  */
 
-#ifndef TEILATEX_H
-#define TEILATEX_H
+#ifndef TEILaTeX_H
+#define TEILaTeX_H
+
+#include <swbasicfilter.h>
 
 SWORD_NAMESPACE_START
 
+/** this filter converts TEI text to XHTML text
+ */
+class SWDLLEXPORT TEILaTeX : public SWBasicFilter {
+private:
+	bool renderNoteNumbers;
+
+protected:
+	class MyUserData : public BasicFilterUserData {
+	public:
+		bool BiblicalText;
+		SWBuf lastHi;
+		
+		SWBuf version;
+		MyUserData(const SWModule *module, const SWKey *key);
+	};
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new MyUserData(module, key);
+	}
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+public:
+	TEILaTeX();
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+};
 
 SWORD_NAMESPACE_END
 #endif
-
-
-

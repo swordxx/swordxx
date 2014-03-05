@@ -138,6 +138,7 @@ pkginclude_HEADERS += $(swincludedir)/teiplain.h
 pkginclude_HEADERS += $(swincludedir)/teirtf.h
 pkginclude_HEADERS += $(swincludedir)/teixhtml.h
 pkginclude_HEADERS += $(swincludedir)/teihtmlhref.h
+pkginclude_HEADERS += $(swincludedir)/teilatex.h
 
 pkginclude_HEADERS += $(swincludedir)/treekey.h
 pkginclude_HEADERS += $(swincludedir)/treekeyidx.h
