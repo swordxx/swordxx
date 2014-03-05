@@ -1,10 +1,10 @@
-/***************************************************************************
+/******************************************************************************
  *
  *  gbflatex.h -	Implementation of GBFLaTeX
  *
  * $Id$
  *
- * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,23 +20,33 @@
  *
  */
 
-#ifndef GBFLATEX_H
-#define GBFLATEX_H
+#ifndef GBFLaTeX_H
+#define GBFLaTeX_H
 
-#include <swfilter.h>
+#include <swbasicfilter.h>
 
 SWORD_NAMESPACE_START
 
-/** This filter converts GBF text to LaTeX text
+/** this filter converts GBF text to classed LaTeX text
  */
-class SWDLLEXPORT GBFLaTeX : public SWFilter {
+class SWDLLEXPORT GBFLaTeX : public SWBasicFilter {
+	bool renderNoteNumbers;
+protected:
+	class MyUserData : public BasicFilterUserData {
+	public:
+		MyUserData(const SWModule *module, const SWKey *key);
+		bool hasFootnotePreTag;
+		SWBuf version;
+	};
+	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+		return new MyUserData(module, key);
+	}
+	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
 	GBFLaTeX();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+	virtual const char *getHeader() const;
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 SWORD_NAMESPACE_END
 #endif
-
-
-
