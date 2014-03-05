@@ -52,6 +52,7 @@
 #include <teixhtml.h>
 #include <gbflatex.h>
 #include <thmllatex.h>
+#include <teilatex.h>
  
 #include <markupfiltmgr.h>
 
@@ -287,7 +288,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
 		fromthml  = new ThMLLaTeX();
 		fromgbf   = new GBFLaTeX();
 		fromosis  = new OSISLaTeX();
-		fromtei   = NULL;
+		fromtei   = new TEILaTeX();
 		break;
 
 	case FMT_OSIS:

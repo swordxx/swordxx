@@ -37,6 +37,7 @@ TEIFIL = $(filtersdir)/teiplain.cpp
 TEIFIL += $(filtersdir)/teirtf.cpp
 TEIFIL += $(filtersdir)/teihtmlhref.cpp
 TEIFIL += $(filtersdir)/teixhtml.cpp
+TEIFIL += $(filtersdir)/teilatex.cpp
 
 CONVFIL = $(filtersdir)/gbfthml.cpp
 CONVFIL += $(filtersdir)/gbfosis.cpp

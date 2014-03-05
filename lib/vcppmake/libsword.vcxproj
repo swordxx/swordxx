@@ -143,6 +143,7 @@
     <ClCompile Include="..\..\src\modules\filters\osisxlit.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisreferencelinks.cpp" />
     <ClCompile Include="..\..\src\modules\filters\scsuutf8.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\teilatex.cpp" />
     <ClCompile Include="..\..\src\modules\filters\thmllatex.cpp" />
     <ClCompile Include="..\..\src\utilfuns\win32\dirent.cpp" />
     <ClCompile Include="..\..\src\mgr\encfiltmgr.cpp" />
@@ -413,6 +414,7 @@
     <ClInclude Include="..\..\include\swtext.h" />
     <ClInclude Include="..\..\include\swversion.h" />
     <ClInclude Include="..\..\include\sysdata.h" />
+    <ClInclude Include="..\..\include\teilatex.h" />
     <ClInclude Include="..\..\include\teixhtml.h" />
     <ClInclude Include="..\..\include\teihtmlhref.h" />
     <ClInclude Include="..\..\include\teiplain.h" />
