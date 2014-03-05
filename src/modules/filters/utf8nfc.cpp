@@ -23,9 +23,6 @@
 
 #ifdef _ICU_
 
-#include <stdlib.h>
-
-#include <utilstr.h>
 #include <unicode/unistr.h>
 #include <unicode/normlzr.h>
 #include <unicode/unorm.h>
@@ -48,16 +45,16 @@ char UTF8NFC::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
 		return -1;
         
-	UErrorCode status = U_ZERO_ERROR;
-	UnicodeString source(text.getRawData(), text.length(), conv, status);
+	err = U_ZERO_ERROR;
+	UnicodeString source(text.getRawData(), text.length(), conv, err);
 	UnicodeString target;
 
-	status = U_ZERO_ERROR;
-	Normalizer::normalize(source, UNORM_NFC, 0, target, status);
+	err = U_ZERO_ERROR;
+	Normalizer::normalize(source, UNORM_NFC, 0, target, err);
 
-	status = U_ZERO_ERROR;
+	err = U_ZERO_ERROR;
 	text.setSize(text.size()*2); // potentially, it can grow to 2x the original size
-	int32_t len = target.extract(text.getRawData(), text.size(), conv, status);
+	int32_t len = target.extract(text.getRawData(), text.size(), conv, err);
 	text.setSize(len);
 
 	return 0;

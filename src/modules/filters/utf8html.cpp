@@ -21,7 +21,6 @@
  *
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <utf8html.h>
 #include <swbuf.h>

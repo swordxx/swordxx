@@ -20,9 +20,6 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <utf8latin1.h>
 #include <swbuf.h>
 

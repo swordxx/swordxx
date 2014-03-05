@@ -32,10 +32,11 @@
 
 SWORD_NAMESPACE_START
 
+/** This filter normalizes UTF-8 encoded text
+ */
 class SWDLLEXPORT UTF8NFC : public SWFilter {
 private:
 	UConverter* conv;
-	UChar *source, *target;
 	UErrorCode err;
 public:
 	UTF8NFC();

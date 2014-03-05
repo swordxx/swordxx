@@ -20,10 +20,7 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
 
-#include <sysdata.h>
 #include <utf8utf16.h>
 #include <utilstr.h>
 #include <swbuf.h>
@@ -68,7 +65,6 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	text.setSize(text.size()-2);
 	   
 	return 0;
-
 }
 
 SWORD_NAMESPACE_END

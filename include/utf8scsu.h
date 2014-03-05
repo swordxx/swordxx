@@ -25,13 +25,22 @@
 
 #include <swfilter.h>
 
+#include <unicode/utypes.h>
+#include <unicode/ucnv.h>
+#include <unicode/uchar.h>
+
 SWORD_NAMESPACE_START
 
 /** This filter converts UTF-8 encoded text to SCSU
  */
 class SWDLLEXPORT UTF8SCSU : public SWFilter {
+private:
+	UConverter* scsuConv;
+	UConverter* utf8Conv;
+	UErrorCode err;
 public:
 	UTF8SCSU();
+	~UTF8SCSU();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 

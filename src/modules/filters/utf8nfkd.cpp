@@ -23,10 +23,6 @@
 
 #ifdef _ICU_
 
-#include <stdlib.h>
-
-#include <utilstr.h>
-
 #include <utf8nfkd.h>
 #include <swbuf.h>
 

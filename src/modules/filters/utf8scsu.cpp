@@ -20,30 +20,42 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
+#ifdef _ICU_
 
-#include <sysdata.h>
 #include <utf8scsu.h>
-#include <utilstr.h>
 #include <swbuf.h>
-
 
 SWORD_NAMESPACE_START
 
 
 UTF8SCSU::UTF8SCSU() {
+	// initialize SCSU converter
+	scsuConv = ucnv_open("SCSU", &err);
+
+	// initialize UTF-8 converter
+	utf8Conv = ucnv_open("UTF-8", &err);
 }
 
+UTF8SCSU::~UTF8SCSU() {
+         ucnv_close(scsuConv);
+         ucnv_close(utf8Conv);
+}
 
 char UTF8SCSU::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	const unsigned char *from;
-	SWBuf orig = text;
+	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
+		return -1;
 
-	from = (const unsigned char *)orig.c_str();
-
+	err = U_ZERO_ERROR;
+	UnicodeString utf16Text(text.getRawData(), text.length(), utf8Conv, err);
+	err = U_ZERO_ERROR;
+	int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
+	if (len > text.size()+1) {
+		text.setSize(len+1);
+		int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
+	}
 
 	return 0;
 }
 
 SWORD_NAMESPACE_END
+#endif

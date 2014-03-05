@@ -20,7 +20,6 @@
  *
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <unicodertf.h>
 #include <swbuf.h>
