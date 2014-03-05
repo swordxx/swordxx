@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- *  osislatex.h -	Implementation of OSISLaTeX
+ *  osislatex.h -	Render filter for LaTeX of an OSIS module
  *
  * $Id$
  *
- * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,23 +20,54 @@
  *
  */
 
-#ifndef OSISLATEX_H
-#define OSISLATEX_H
+#ifndef OSISLaTeX_H
+#define OSISLaTeX_H
 
 #include <swbasicfilter.h>
-#include <utilxml.h>
 
 SWORD_NAMESPACE_START
 
-/** this filter converts OSIS text to LaTeX text
+/** this filter converts OSIS text to classed XHTML
  */
 class SWDLLEXPORT OSISLaTeX : public SWBasicFilter {
-public:
+private:
+	bool morphFirst;
+	bool renderNoteNumbers;
 protected:
+
+	class TagStack;
+	// used by derived classes so we have it in the header
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+
+
+	class MyUserData : public BasicFilterUserData {
+	public:
+		bool osisQToTick;
+		bool inXRefNote;
+		bool BiblicalText;
+		int suspendLevel;
+		SWBuf wordsOfChristStart;
+		SWBuf wordsOfChristEnd;
+		TagStack *quoteStack;
+		TagStack *hiStack;
+		TagStack *titleStack;
+		TagStack *lineStack;
+		int consecutiveNewlines;
+		SWBuf lastTransChange;
+		SWBuf w;
+		SWBuf fn;
+		SWBuf version;
+
+		MyUserData(const SWModule *module, const SWKey *key);
+		~MyUserData();
+		void outputNewline(SWBuf &buf);
+	};
 public:
 	OSISLaTeX();
+	void setMorphFirst(bool val = true) { morphFirst = val; }
+	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+	virtual const char *getHeader() const;
 };
 
 SWORD_NAMESPACE_END
