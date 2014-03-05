@@ -68,24 +68,24 @@ bool zCom::isWritable() const {
 
 
 /******************************************************************************
- * zCom::getRawEntry	- Returns the correct verse when char * cast
- *					is requested
+ * zCom::getRawEntry	- Returns the current verse buffer
  *
- * RET: string buffer with verse
+ * RET: buffer with verse
  */
+
 SWBuf &zCom::getRawEntryBuf() const {
 	long  start = 0;
 	unsigned short size = 0;
-	unsigned long buffnum;
-	VerseKey *key = &getVerseKey();
+	unsigned long buffnum = 0;
+	VerseKey &key = getVerseKey();
 
-	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size, &buffnum);
+	findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
 	entrySize = size;        // support getEntrySize call
-
+			  
 	entryBuf = "";
-	zReadText(key->getTestament(), start, size, buffnum, entryBuf);
-
-	rawFilter(entryBuf, key);
+	
+	zReadText(key.getTestament(), start, size, buffnum, entryBuf);
+	rawFilter(entryBuf, &key);
 
 //	if (!isUnicode())
 		prepText(entryBuf);
