@@ -25,16 +25,31 @@
 
 #include <swfilter.h>
 
+#ifdef _ICU_
+#include <unicode/utypes.h>
+#include <unicode/ucnv.h>
+#include <unicode/uchar.h>
+#endif
+
 SWORD_NAMESPACE_START
 
 /** This filter converts SCSU compressed (encoded) text to UTF-8
  */
 class SWDLLEXPORT SCSUUTF8 : public SWFilter {
-  unsigned long c, d;
-  unsigned char* UTF8Output(unsigned long, unsigned char* text);
+private:
+#ifdef _ICU_
+	UConverter* scsuConv;
+	UConverter* utf8Conv;
+	UErrorCode err;
+#else
+	// without ICU, we'll attempt to use Roman Czyborra's SCSU decoder code
+	unsigned long c, d;
+	unsigned char* UTF8Output(unsigned long, unsigned char* text);
+#endif
   
 public:
 	SCSUUTF8();
+	~SCSUUTF8();
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
