@@ -43,8 +43,15 @@ private:
 	UErrorCode err;
 #else
 	// without ICU, we'll attempt to use Roman Czyborra's SCSU decoder code
+	unsigned char active;
+	bool mode;
 	unsigned long c, d;
-	unsigned char* UTF8Output(unsigned long, unsigned char* text);
+
+	static unsigned short start[8];
+	static unsigned short slide[8];
+	static unsigned short win[256];
+
+	int UTF8Output(unsigned long, SWBuf* utf8Buf);
 #endif
   
 public:
