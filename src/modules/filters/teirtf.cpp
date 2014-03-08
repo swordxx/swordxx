@@ -114,6 +114,16 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			}
 		}
 
+ 		// <orth>
+ 		else if (!strcmp(tag.getName(), "orth")) {
+ 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+ 				buf += "{\\b1 ";
+ 			}
+ 			else if (tag.isEndTag()) {
+ 			        buf += "}";
+ 			}
+ 		}
+
 		// <div>
 		else if (!strcmp(tag.getName(), "div")) {
 
