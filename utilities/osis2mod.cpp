@@ -59,7 +59,9 @@
 #ifdef _ICU_
 #include <utf8nfc.h>
 #include <latin1utf8.h>
+#include <utf8scsu.h>
 #endif
+#include <utf8utf16.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -90,6 +92,8 @@ const int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
 UTF8NFC    normalizer;
 Latin1UTF8 converter;
 #endif
+SWFilter*  outputConverter;     
+
 int normalized = 0;
 int converted  = 0;
 
@@ -121,7 +125,8 @@ bool isOSISAbbrev(const char *buf) {
  * U-00000000 - U-0000007F  0nnnnnnn
  * U-00000080 - U-000007FF  110nnnnn  10nnnnnn
  * U-00000800 - U-0000FFFF  1110nnnn  10nnnnnn  10nnnnnn
- * U-00010000 - U-001FFFFF  11110nnn  10nnnnnn  10nnnnnn  10nnnnnn
+ * U-00010000 - U-0010FFFF  11110nnn  10nnnnnn  10nnnnnn  10nnnnnn
+ *
  * Note:
  *   1.  The latest UTF-8 RFC allows for a max of 4 bytes.
  *       Earlier allowed 6.
@@ -533,9 +538,17 @@ void writeEntry(SWBuf &text, bool force = false) {
 			}
 		}
 
+		// If the desired output encoding is non-UTF-8, convert to that encoding
+		if (outputConverter) {
+			outputConverter->processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+		}
+
 		// If the entry already exists, then append this entry to the text.
 		// This is for verses that are outside the chosen versification. They are appended to the prior verse.
 		// The space should not be needed if we retained verse tags.
+		// TODO: in the case of SCSU output, very slightly better compression might be
+		// achieved by decoding the currentText & activeVerseText, concatenating them,
+		// and re-encoding them as SCSU
 		SWBuf currentText = module->getRawEntry();
 		if (currentText.length()) {
 			cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
@@ -968,7 +981,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			if (tokenName != topToken.getName()) {
 				cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.getName() << " found " << tokenName << endl;
-//				exit(EXIT_BAD_NESTING);	// (OSK) I'm sure this validity check is a good idea, but there's a but somewhere that's killing the converter here.
+//				exit(EXIT_BAD_NESTING);	// (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
 						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 						// (DM) This has nothing to do with well-form or valid. It checks milestoned elements for proper nesting.
 			}
@@ -1302,8 +1315,10 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
 
-#ifdef _ICU_       
-	fprintf(stderr, "  -N\t\t\t do not convert UTF-8 or normalize UTF-8 to NFC\n");
+#ifdef _ICU_
+	fprintf(stderr, "  -e <1|2|s>\t\t convert Unicode encoding (default: 1)\n");
+	fprintf(stderr, "\t\t\t\t 1 - UTF-8 ; 2 - UTF-16 ; s - SCSU\n");
+	fprintf(stderr, "  -N\t\t\t do not normalize to NFC\n");
 	if (verboseHelp) {
 		fprintf(stderr, "\t\t\t\t (default is to convert to UTF-8, if needed,\n");
 		fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
@@ -1594,11 +1609,11 @@ int main(int argc, char **argv) {
 			if (entrySize) usage(*argv, "Cannot specify both -z and -s");
 			compType = "ZIP";
 			if (i+1 < argc && argv[i+1][0] != '-') {
-				switch (argv[i+1][0]) {
-				case 'l': compType = "LZSS";
-				case 'z': compType = "ZIP";
-				case 'b': compType = "BZIP2";
-				case 'x': compType = "XZ";
+				switch (argv[++i][0]) {
+				case 'l': compType = "LZSS"; break;
+				case 'z': compType = "ZIP"; break;
+				case 'b': compType = "BZIP2"; break;
+				case 'x': compType = "XZ"; break;
 				}
 			}
 		}
@@ -1616,6 +1631,18 @@ int main(int argc, char **argv) {
 		}
 		else if (!strcmp(argv[i], "-N")) {
 			normalize = false;
+		}
+		else if (!strcmp(argv[i], "-e")) {
+			if (i+1 < argc) {
+				switch (argv[++i][0]) {
+				case '1': outputConverter = NULL; break; // leave as UTF-8
+				case '2': outputConverter = new UTF8UTF16(); break;
+#ifdef _ICU_
+				case 's': outputConverter = new UTF8SCSU(); break;
+#endif
+				default: outputConverter = NULL;
+				}
+			} 
 		}
 		else if (!strcmp(argv[i], "-c")) {
 			if (i+1 < argc) cipherKey = argv[++i];
@@ -1787,6 +1814,8 @@ int main(int argc, char **argv) {
 	delete module;
 	if (cipherFilter)
 		delete cipherFilter;
+	if (outputConverter)
+		delete outputConverter;
 
 	fprintf(stderr, "SUCCESS: %s: has finished its work and will now rest\n", program);
 	exit(0); // success
