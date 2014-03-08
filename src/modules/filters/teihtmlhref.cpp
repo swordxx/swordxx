@@ -93,6 +93,8 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 					buf += "<i>";
 				else if (rend == "bold")
 					buf += "<b>";
+				else if (rend == "subscript")
+					buf += "<small><sub>";
 				else if (rend == "sup")
 					buf += "<small><sup>";
 
@@ -105,6 +107,8 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 					buf += "</i>";
 				else if (rend == "bold")
 					buf += "</b>";
+				else if (rend == "subscript")
+					buf += "</small></sub>";
 				else if (rend == "sup")
 					buf += "</sup></small>";
 			}

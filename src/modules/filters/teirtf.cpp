@@ -80,6 +80,8 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 					buf += "{\\i1 ";
 				else if (rend == "bold")
 					buf += "{\\b1 ";
+				else if (rend == "subscript")
+					buf += "{\\sub ";
 				else if (rend == "sup")
 				        buf += "{\\super ";
 
