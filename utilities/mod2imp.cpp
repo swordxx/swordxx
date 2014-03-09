@@ -49,7 +49,7 @@ void usage(const char *progName, const char *error = 0) {
 	fprintf(stderr, "\n=== mod2imp (Revision $Rev$) SWORD module exporter.\n");
 	fprintf(stderr, "\nusage: %s <module_name> [options]\n"
 		"\t -r [output_format]  - render content instead of outputting raw native\n"
-		"\t\tdata.  output_format can be: OSIS, HTMLHREF, RTF.\n"
+		"\t\tdata.  output_format can be: OSIS, XHTML, LaTeX, HTMLHREF, RTF.\n"
 		"\t -s - strip markup instead of outputting raw native data.\n"
 		"\t -f <option_name> <option_value> - when rendering (-r, above), option\n"
 		"\t\tfilter values can be set with this option.\n\n"
@@ -94,6 +94,9 @@ int main(int argc, char **argv)
 	if       (renderForm == "HTMLHREF") markupMgr = new MarkupFilterMgr(sword::FMT_HTMLHREF);
 	else if  (renderForm == "OSIS")     markupMgr = new MarkupFilterMgr(sword::FMT_OSIS);
 	else if  (renderForm == "RTF")      markupMgr = new MarkupFilterMgr(sword::FMT_RTF);
+	else if  (renderForm == "LATEX")    markupMgr = new MarkupFilterMgr(sword::FMT_LATEX);
+	else if  (renderForm == "XHTML")    markupMgr = new MarkupFilterMgr(sword::FMT_XHTML);
+	
 	else if  (renderForm.length())      usage(progName, (((SWBuf) "Unknown output_format for -r (")+renderForm+")").c_str());
 
 	SWMgr *mgr = (markupMgr) ? new SWMgr(markupMgr) : new SWMgr();
