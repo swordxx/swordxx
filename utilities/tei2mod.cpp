@@ -393,11 +393,11 @@ int main(int argc, char **argv) {
 			if (modDrv.size()) usage(*argv, "Cannot specify both -z and -s");
 			compType = "ZIP";
 			if (i+1 < argc && argv[i+1][0] != '-') {
-				switch (argv[i+1][0]) {
-				case 'l': compType = "LZSS";
-				case 'z': compType = "ZIP";
-				case 'b': compType = "BZIP2";
-				case 'x': compType = "XZ";
+				switch (argv[++i][0]) {
+				case 'l': compType = "LZSS"; break;
+				case 'z': compType = "ZIP"; break;
+				case 'b': compType = "BZIP2"; break;
+				case 'x': compType = "XZ"; break;
 				}
 			}
 			modDrv = "zLD";
