@@ -76,15 +76,14 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 		else if (!strcmp(tag.getName(), "hi") || !strcmp(tag.getName(), "emph")) {
 			SWBuf rend = tag.getAttribute("rend");
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				if (rend == "ital" || rend == "italic")
+				if (rend == "italic" || rend == "ital")
 					buf += "{\\i1 ";
 				else if (rend == "bold")
 					buf += "{\\b1 ";
-				else if (rend == "subscript")
-					buf += "{\\sub ";
-				else if (rend == "sup")
+				else if (rend == "super" || rend == "sup")
 				        buf += "{\\super ";
-
+				else if (rend == "sub")
+					buf += "{\\sub ";
 			}
 			else if (tag.isEndTag()) {
 				buf += "}";

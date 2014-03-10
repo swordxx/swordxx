@@ -87,32 +87,28 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				SWBuf rend = tag.getAttribute("rend");
 				
 				u->lastHi = rend;
-				if (rend == "ital")
-					buf += "<i>";
-				else if (rend == "italic")
+				if (rend == "italic" || rend == "ital")
 					buf += "<i>";
 				else if (rend == "bold")
 					buf += "<b>";
-				else if (rend == "sup")
-					buf += "<small><sup>";
-				else if (rend == "subscript")
-					buf += "<small><sub>";
+				else if (rend == "super" || rend == "sup")
+					buf += "<sup>";
+				else if (rend == "sub")
+					buf += "<sub>";
 				else if (rend == "overline")
 					buf += "<span style=\"text-decoration:overline\">";
 
 			}
 			else if (tag.isEndTag()) {
 				SWBuf rend = u->lastHi;
-				if (rend == "ital")
-					buf += "</i>";
-				else if (rend == "italic")
+				if (rend == "italic" || rend == "ital")
 					buf += "</i>";
 				else if (rend == "bold")
 					buf += "</b>";
-				else if (rend == "sup")
-					buf += "</sup></small>";
-				else if (rend == "subscript")
-					buf += "</small></sub>";
+				else if (rend = "super" || rend == "sup")
+					buf += "</sup>";
+				else if (rend == "sub")
+					buf += "</sub>";
 				else if (rend == "overline")
 					buf += "</span>";
 			}

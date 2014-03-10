@@ -87,30 +87,30 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				SWBuf rend = tag.getAttribute("rend");
 				
 				u->lastHi = rend;
-				if (rend == "ital")
-					buf += "<i>";
-				else if (rend == "italic")
-					buf += "<i>";
+				if (rend == "italic" || rend == "ital")
+					buf += "\\it{";
 				else if (rend == "bold")
-					buf += "<b>";
-				else if (rend == "sup")
-					buf += "<small><sup>";
+					buf += "\\bd{";
+				else if (rend == "super" || rend == "sup")
+					buf += "^{";
+				else if (rend == "sub")
+					buf += "_{";
 				else if (rend == "overline")
-					buf += "<span style=\"text-decoration:overline\">";
+					buf += "\\overline{";
 
 			}
 			else if (tag.isEndTag()) {
 				SWBuf rend = u->lastHi;
-				if (rend == "ital")
-					buf += "</i>";
-				else if (rend == "italic")
-					buf += "</i>";
+				if (rend == "italic" || rend == "ital")
+					buf += "}";
 				else if (rend == "bold")
-					buf += "</b>";
-				else if (rend == "sup")
-					buf += "</sup></small>";
+					buf += "}";
+				else if (rend == "super" || rend == "sup")
+					buf += "}";
+				else if (rend == "sub")
+					buf += "}";
 				else if (rend == "overline")
-					buf += "</span>";
+					buf += "}";
 			}
 		}
 
