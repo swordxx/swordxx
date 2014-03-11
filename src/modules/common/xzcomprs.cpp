@@ -132,6 +132,8 @@ void XzCompress::Encode(void)
 
 void XzCompress::Decode(void)
 {
+	direct = 1;	// set direction needed by parent [Get|Send]Chars()
+
 	// get buffer
 	char chunk[1024];
 	char *zbuf = (char *)calloc(1, 1024);
