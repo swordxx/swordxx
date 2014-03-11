@@ -139,9 +139,10 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	UnicodeString utf16Text(text.getRawData(), text.length(), scsuConv, err);
 	err = U_ZERO_ERROR;
 	int32_t len = utf16Text.extract(text.getRawData(), text.size(), utf8Conv, err);
-	if (len > text.size()+1) {
+	if (len > (int32_t)text.size()+1) {
 		text.setSize(len+1);
 		int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
+		(void) len;	// avoid unused warning
 	}
 #else
 	// If ICU is unavailable, decode using Czyborra's decoder

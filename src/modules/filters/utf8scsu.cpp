@@ -49,9 +49,10 @@ char UTF8SCSU::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	UnicodeString utf16Text(text.getRawData(), text.length(), utf8Conv, err);
 	err = U_ZERO_ERROR;
 	int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
-	if (len > text.size()+1) {
+	if (len > (int32_t)text.size()+1) {
 		text.setSize(len+1);
 		int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
+		(void) len;
 	}
 
 	return 0;
