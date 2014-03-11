@@ -105,7 +105,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 					buf += "</i>";
 				else if (rend == "bold")
 					buf += "</b>";
-				else if (rend = "super" || rend == "sup")
+				else if (rend == "super" || rend == "sup")
 					buf += "</sup>";
 				else if (rend == "sub")
 					buf += "</sub>";
