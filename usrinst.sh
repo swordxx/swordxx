@@ -31,7 +31,7 @@ fi
 OPTIONS="--sysconfdir=/etc $OPTIONS"
 OPTIONS="--without-conf $OPTIONS"
 OPTIONS="--disable-shared $OPTIONS"
-#OPTIONS="--enable-debug $OPTIONS"
+OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 
 #OPTIONS="--with-cxx11regex $OPTIONS"
