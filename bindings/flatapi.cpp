@@ -103,7 +103,6 @@ public:
 		if (searchHits) {
 			for (int i = 0; true; ++i) {
 				if (searchHits[i].modName) {
-					delete [] searchHits[i].modName;
 					delete [] searchHits[i].key;
 				}
 				else break;
@@ -286,7 +285,7 @@ const struct org_crosswire_sword_SearchHit * SWDLLEXPORT org_crosswire_sword_SWM
 		// don't alloc this; we have a persistent const char * in SWModule we can just reference
 		retVal[i].modName = module->getName();
 		stdstr(&(retVal[i].key), assureValidUTF8(result.getShortText()));
-		retVal[i].score = (long)result.getElement()->userData;
+		retVal[i++].score = (long)result.getElement()->userData;
 		// in case we limit count to a max number of hits
 		if (i >= count) break;
 	}
@@ -383,7 +382,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getEntryAttribute
 	}
 
 	const char **retVal = (const char **)calloc(results.size()+1, sizeof(const char *));
-	for (int i = 0; i < results.size(); i++) {
+	for (int i = 0; i < (int)results.size(); i++) {
 		if (filteredBool) {
 			stdstr((char **)&(retVal[i]), assureValidUTF8(module->renderText(results[i].c_str())));
 		}
@@ -979,6 +978,7 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_filterText
 //	mgr->setGlobalOption("Greek Accents", "Off");
 
 	char errStatus = mgr->filterText(filterName, hmgr->filterBuf);
+	(void)errStatus;
 	return hmgr->filterBuf.c_str();
 }
 
