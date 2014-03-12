@@ -4,7 +4,7 @@
  *
  * $Id$
  *
- * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1999-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -21,7 +21,7 @@
  */
 
 /******************************************************************************
- * Diatheke 4.6 by Chris Little <chrislit@crosswire.org>
+ * Diatheke 4.7 by Chris Little <chrislit@crosswire.org>
  * http://www.crosswire.org/sword/diatheke
  */
 
@@ -37,8 +37,8 @@ using std::cout;
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.6\n");
-	fprintf (stderr, "Copyright 1999-2013 by the CrossWire Bible Society\n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.7\n");
+	fprintf (stderr, "Copyright 1999-2014 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "usage:  diatheke <-b module_name> [-s search_type] [-r search_range]\n");

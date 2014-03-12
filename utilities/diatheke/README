@@ -47,6 +47,8 @@ default page to create a custom index.html for your users.
 ----------------------------------------------------------------------
 VERSION HISTORY
 
+4.7	
+
 4.6     July 16, 2013
 	Updated for Sword 1.7.0.
 
@@ -75,7 +77,7 @@ VERSION HISTORY
 COPYRIGHT
 
 The Diatheke Suite and its components, Diatheke, Diatheke/CGI, and
-Diatheke/Tcl are Copyright 1999-2013 by CrossWire Bible Society.
+Diatheke/Tcl are Copyright 1999-2014 by CrossWire Bible Society.
 HANDiatheke is Copyright 2000-2001 by CrossWire Bible Society.
 The Diatheke Suite and all of its components are licensed through
 the GNU General Public License and are intended for free distribution.
