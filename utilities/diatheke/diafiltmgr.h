@@ -37,6 +37,7 @@ protected:
         SWFilter* fromgbf;
         SWFilter* fromplain;
         SWFilter* fromosis;
+        SWFilter* fromtei;
 
         char markup;
 

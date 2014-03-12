@@ -61,9 +61,10 @@ void printsyntax() {
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: CGI, GBF, HTML, HTMLHREF, LaTeX, OSIS, RTF,\n");
- 	fprintf (stderr, "  ThML, XHTML, and plain (def)\n");
- 	fprintf (stderr, "The option LaTeX will produce a compilable document, but may well require tweaking to be usable.\n");
-	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
+ 	fprintf (stderr, "  ThML, WEBIF, XHTML, and plain (def)\n");
+ 	fprintf (stderr, "The option LaTeX will produce a compilable document, but may well require\n");
+	fprintf (stderr, "  tweaking to be usable.\n");
+	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, RTF, and SCSU\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
 	fprintf (stderr, "  arguments are added to the key.\n");
@@ -183,66 +184,61 @@ int main(int argc, char **argv)
 			if (i+1 <= argc) {
 				if (!::stricmp("thml", argv[i+1])) {
 					outputformat = FMT_THML;
-					i++;
 				}
 				else if (!::stricmp("cgi", argv[i+1])) {
 					outputformat = FMT_CGI;
-					i++;
 				}
 				else if (!::stricmp("gbf", argv[i+1])) {
 					outputformat = FMT_GBF;
-					i++;
 				}
 				else if (!::stricmp("htmlhref", argv[i+1])) {
 					outputformat = FMT_HTMLHREF;
-					i++;
 				}
 				else if (!::stricmp("html", argv[i+1])) {
 					outputformat = FMT_HTML;
-					i++;
 				}
 				else if (!::stricmp("xhtml", argv[i+1])) {
 					outputformat = FMT_XHTML;
-					i++;
 				}
 				else if (!::stricmp("rtf", argv[i+1])) {
 					outputformat = FMT_RTF;
-					i++;
 				}
 				else if (!::stricmp("osis", argv[i+1])) {
 					outputformat = FMT_OSIS;
-					i++;
 				}
 				else if (!::stricmp("latex", argv[i+1])) {
 					outputformat = FMT_LATEX;
-					i++;
 				}
-				else i++;
+				else if (!::stricmp("plain", argv[i+1])) {
+					outputformat = FMT_PLAIN;
+				}
+				else if (!::stricmp("webif", argv[i+1])) {
+					outputformat = FMT_WEBIF;
+				}
+				i++;
 			}
 		}
 		else if (!::stricmp("-e", argv[i])) {
 			if (i+1 <= argc) {
 				if (!::stricmp("utf8", argv[i+1])) {
 					outputencoding = ENC_UTF8;
-					i++;
 				}
 				else if (!::stricmp("rtf", argv[i+1])) {
 					outputencoding = ENC_RTF;
-					i++;
 				}
 				else if (!::stricmp("html", argv[i+1])) {
 					outputencoding = ENC_HTML;
-					i++;
 				}
 				else if (!::stricmp("latin1", argv[i+1])) {
 					outputencoding = ENC_LATIN1;
-					i++;
 				}
 				else if (!::stricmp("utf16", argv[i+1])) {
 					outputencoding = ENC_UTF16;
-					i++;
 				}
-				else i++;
+				else if (!::stricmp("scsu", argv[i+1])) {
+					outputencoding = ENC_SCSU;
+				}
+				i++;
 			}
 		}
 		else if (!::stricmp("-k", argv[i])) {

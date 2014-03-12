@@ -20,27 +20,42 @@
  *
  */
 
+#include <swmgr.h>
+#include <swmodule.h>
+
 #include <thmlplain.h>
-#include <gbfplain.h>
 #include <thmlgbf.h>
-#include <gbfthml.h>
+#include <thmlosis.h>
 #include <thmlhtml.h>
-#include <gbfhtml.h>
 #include <thmlhtmlhref.h>
-#include <gbfhtmlhref.h>
+#include <thmlxhtml.h>
+#include <thmllatex.h>
 #include <thmlrtf.h>
+#include <thmlwebif.h>
+
+#include <gbfplain.h>
+#include <gbfthml.h>
+#include <gbfosis.h>
+#include <gbfhtml.h>
+#include <gbfhtmlhref.h>
+#include <gbfxhtml.h>
+#include <gbflatex.h>
 #include <gbfrtf.h>
+#include <gbfwebif.h>
+
+#include <osisplain.h>
+#include <osisosis.h>
 #include <osisrtf.h>
 #include <osishtmlhref.h>
+#include <osisxhtml.h>
 #include <osislatex.h>
-#include <gbflatex.h>
-#include <thmllatex.h>
-#include <swmodule.h>
-#include <osisplain.h>
-#include <thmlosis.h>
-#include <gbfosis.h>
+#include <osiswebif.h>
 
-#include <swmgr.h>
+#include <teiplain.h>
+#include <teirtf.h>
+#include <teihtmlhref.h>
+#include <teixhtml.h>
+#include <teilatex.h>
 
 #include "diafiltmgr.h"
 #include "thmlcgi.h"
@@ -64,6 +79,8 @@ DiathekeFilterMgr::~DiathekeFilterMgr() {
                 delete (fromplain);
         if (fromosis)
                 delete (fromosis);
+        if (fromtei)
+                delete (fromtei);
 }
 
 void DiathekeFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
@@ -84,6 +101,10 @@ void DiathekeFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section
                 if (fromosis)
                         module->addRenderFilter(fromosis);
                 break;
+        case FMT_TEI:
+                if (fromtei)
+                        module->addRenderFilter(fromtei);
+                break;
         }
 	EncodingFilterMgr::AddRenderFilters(module, section);
 }
@@ -98,6 +119,7 @@ char DiathekeFilterMgr::Markup(char mark) {
                 SWFilter * oldthml = fromthml;
                 SWFilter * oldgbf = fromgbf;
                 SWFilter * oldosis = fromosis;
+                SWFilter * oldtei = fromtei;
 
                 CreateFilters(markup);
 
@@ -163,6 +185,21 @@ char DiathekeFilterMgr::Markup(char mark) {
                                         }
                                         break;
                                 }
+                        case FMT_TEI:
+                                if (oldtei != fromtei) {
+                                        if (oldtei) {
+                                                if (!fromtei) {
+                                                        module->second->removeRenderFilter(oldtei);
+                                                }
+                                                else {
+                                                        module->second->replaceRenderFilter(oldtei, fromtei);
+                                                }
+                                        }
+                                        else if (fromtei) {
+                                                module->second->addRenderFilter(fromtei);
+                                        }
+                                        break;
+                                }
                         }
 
                 if (oldthml)
@@ -173,6 +210,8 @@ char DiathekeFilterMgr::Markup(char mark) {
                         delete oldplain;
                 if (oldosis)
                         delete oldosis;
+                if (oldtei)
+                        delete oldtei;
         }
         return markup;
 }
@@ -180,60 +219,101 @@ char DiathekeFilterMgr::Markup(char mark) {
 void DiathekeFilterMgr::CreateFilters(char markup) {
 
                 switch (markup) {
-				case FMT_CGI:
-						fromplain = NULL;
-						fromthml = new ThMLCGI();
-						fromgbf = new GBFCGI();
-						fromosis = new OSISCGI();
-						break;
-                case FMT_PLAIN:
-                        fromplain = NULL;
-                        fromthml = new ThMLPlain();
-                        fromgbf = new GBFPlain();
-                        fromosis = new OSISPlain();
-                        break;
-                case FMT_THML:
-                        fromplain = NULL;
-                        fromthml = NULL;
-                        fromgbf = new GBFThML();
-                        fromosis = NULL;
-                        break;
-                case FMT_GBF:
-                        fromplain = NULL;
-                        fromthml = new ThMLGBF();
-                        fromgbf = NULL;
-                        fromosis = NULL;
-                        break;
-                case FMT_HTML:
-                        fromplain = NULL;
-                        fromthml = new ThMLHTML();
-                        fromgbf = new GBFHTML();
-                        fromosis = NULL;
-                        break;
-                case FMT_HTMLHREF:
-                        fromplain = NULL;
-                        fromthml = new ThMLHTMLHREF();
-                        fromgbf = new GBFHTMLHREF();
-                        fromosis = new OSISHTMLHREF();
-                        break;
-                case FMT_LATEX:
-                        fromplain = NULL;
-                        fromthml = new ThMLLaTeX();
-                        fromgbf = new GBFLaTeX();
-                        fromosis = new OSISLaTeX();
-                        break;
-                case FMT_RTF:
-                        fromplain = NULL;
-                        fromthml = new ThMLRTF();
-                        fromgbf = new GBFRTF();
-                        fromosis = new OSISRTF();
-                        break;
-                case FMT_OSIS:
-                        fromplain = NULL;
-                        fromthml = new ThMLOSIS();
-                        fromgbf = new GBFOSIS();
-                        fromosis = NULL;
-                        break;
+		case FMT_CGI:
+			fromplain = NULL;
+			fromthml = new ThMLCGI();
+			fromgbf = new GBFCGI();
+			fromosis = new OSISCGI();
+			fromtei = NULL; // TODO: write TEICGI()
+			break;
+
+		case FMT_PLAIN:
+			fromplain = NULL;
+			fromthml  = new ThMLPlain();
+			fromgbf   = new GBFPlain();
+			fromosis  = new OSISPlain();
+			fromtei   = new TEIPlain();
+			break;
+			
+		case FMT_THML:
+			fromplain = NULL;
+			fromthml  = NULL;
+			fromgbf   = new GBFThML();
+			fromosis  = NULL;
+			fromtei   = NULL;
+			break;
+			
+		case FMT_GBF:
+			fromplain = NULL;
+			fromthml  = new ThMLGBF();
+			fromgbf   = NULL;
+			fromosis  = NULL;
+			fromtei   = NULL;
+			break;
+			
+		case FMT_HTML:
+			fromplain = NULL;
+			fromthml  = new ThMLHTML();
+			fromgbf   = new GBFHTML();
+			fromosis  = NULL;
+			fromtei   = NULL;
+			break;
+			
+		case FMT_HTMLHREF:
+			fromplain = NULL;
+			fromthml  = new ThMLHTMLHREF();
+			fromgbf   = new GBFHTMLHREF();
+			fromosis  = new OSISHTMLHREF();
+			fromtei   = new TEIHTMLHREF();
+			break;
+			
+		case FMT_RTF:
+			fromplain = NULL;
+			fromthml  = new ThMLRTF();
+			fromgbf   = new GBFRTF();
+			fromosis  = new OSISRTF();
+			fromtei   = new TEIRTF();
+			break;
+			
+		case FMT_LATEX:
+			fromplain = NULL;
+			fromthml  = new ThMLLaTeX();
+			fromgbf   = new GBFLaTeX();
+			fromosis  = new OSISLaTeX();
+			fromtei   = new TEILaTeX();
+			break;
+			
+		case FMT_OSIS:
+			fromplain = NULL;
+			fromthml  = new ThMLOSIS();
+			fromgbf   = new GBFOSIS();
+			fromosis  = new OSISOSIS();
+			fromtei   = NULL;
+			break;
+			
+		case FMT_WEBIF:
+			fromplain = NULL;
+			fromthml  = new ThMLWEBIF();
+			fromgbf   = new GBFWEBIF();
+			fromosis  = new OSISWEBIF();
+			fromtei   = NULL;
+			break;
+			
+		case FMT_TEI:
+			fromplain = NULL;
+			fromthml  = NULL;
+			fromgbf   = NULL;
+			fromosis  = NULL;
+			fromtei   = NULL;
+			break;
+			
+		case FMT_XHTML:
+			fromplain = NULL;
+			fromthml  = new ThMLXHTML();
+			fromgbf   = new GBFXHTML();
+			fromosis  = new OSISXHTML();
+			fromtei   = new TEIXHTML();
+			break;
                 }
 
 }
