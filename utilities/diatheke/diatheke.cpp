@@ -73,6 +73,8 @@ void printsyntax() {
 	fprintf (stderr, "  diatheke -b KJV -o fmnx -k Jn 3:16\n");
 	fprintf (stderr, "  diatheke -b WHNU -t Latin -o mn -k Mt 24\n");
 	fprintf (stderr, "  diatheke -b KJV -s phrase -r Mt -k love\n");
+
+	exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
@@ -246,8 +248,11 @@ int main(int argc, char **argv)
 			if (i < argc) {
 				SWBuf key = argv[i];
 				i++;
-				for (; i < argc; i++)
+				for (; i < argc; i++) {
+					if (!::stricmp("-h", argv[i]) || !::stricmp("--help", argv[i]))
+						printsyntax();
 					key = key + " " + argv[i];
+				}
 				ref = new char[key.length() + 1];
 				strcpy (ref, key.c_str());
 				if (strlen(ref))
@@ -270,6 +275,11 @@ int main(int argc, char **argv)
 			}
 		}
 		*/
+		else {
+			// unexpected argument, so print the syntax
+			// -h, --help, /?, etc. will trigger this
+			printsyntax();
+		}
 	}
 	
 	
