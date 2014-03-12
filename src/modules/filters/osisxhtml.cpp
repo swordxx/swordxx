@@ -568,10 +568,10 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 
 				else if (type == "super") {
-					outText("<span class=\"sup\">", buf, u);
+					outText("<sup>", buf, u);
 				}
 				else if (type == "sub") {
-					outText("<span class=\"sub\">", buf, u);
+					outText("<sub>", buf, u);
 				}
 				else {	// all other types
 					outText("<i>", buf, u);
@@ -589,12 +589,18 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("</b>", buf, u);
 				}
-				else if (  	   type == "ol"
-						|| type == "super"
-						|| type == "sub") {
+				else if (type == "ol") {
 					outText("</span>", buf, u);
 				}
-				else outText("</i>", buf, u);
+				else if (type == "sup") {
+					outText("</sup>", buf, u);
+				}
+				else if (type == "sub") {
+					outText("</sub>", buf, u);
+				}
+				else {
+					outText("</i>", buf, u);
+				}
 			}
 		}
 
