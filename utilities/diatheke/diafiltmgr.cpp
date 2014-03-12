@@ -219,6 +219,14 @@ char DiathekeFilterMgr::Markup(char mark) {
 void DiathekeFilterMgr::CreateFilters(char markup) {
 
                 switch (markup) {
+		case FMT_INTERNAL:
+			fromplain = NULL;
+			fromthml = NULL;
+			fromgbf = NULL;
+			fromosis = NULL;
+			fromtei = NULL;
+			break;
+
 		case FMT_CGI:
 			fromplain = NULL;
 			fromthml = new ThMLCGI();

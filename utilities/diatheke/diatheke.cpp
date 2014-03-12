@@ -61,7 +61,7 @@ void printsyntax() {
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: CGI, GBF, HTML, HTMLHREF, LaTeX, OSIS, RTF,\n");
- 	fprintf (stderr, "  ThML, WEBIF, XHTML, and plain (def)\n");
+ 	fprintf (stderr, "  ThML, WEBIF, XHTML, plain, and internal (def)\n");
  	fprintf (stderr, "The option LaTeX will produce a compilable document, but may well require\n");
 	fprintf (stderr, "  tweaking to be usable.\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, RTF, and SCSU\n");
@@ -80,7 +80,7 @@ void printsyntax() {
 int main(int argc, char **argv)
 {
 	int maxverses = -1;
-	unsigned char outputformat = FMT_PLAIN, searchtype = ST_NONE, outputencoding = ENC_UTF8;
+	unsigned char outputformat = FMT_INTERNAL, searchtype = ST_NONE, outputencoding = ENC_UTF8;
 	unsigned long optionfilters = OP_NONE;
  	char *text = 0, *locale = 0, *ref = 0, *range = 0;
 	char script[] = "Latin"; // for the moment, only this target script is supported
@@ -217,6 +217,9 @@ int main(int argc, char **argv)
 				}
 				else if (!::stricmp("webif", argv[i])) {
 					outputformat = FMT_WEBIF;
+				}
+				else if (!::stricmp("internal", argv[i])) {
+					outputformat = FMT_INTERNAL;
 				}
 			}
 		}

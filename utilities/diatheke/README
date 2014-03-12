@@ -47,15 +47,17 @@ default page to create a custom index.html for your users.
 ----------------------------------------------------------------------
 VERSION HISTORY
 
-4.7	
+4.7	..., 2014
 	Updated for Sword 1.8.0.
 	Supports LaTeX, XHTML, & WEBIF output.
-	Supports outputting SCSU-encoded text.	
+	Supports outputting SCSU-encoded text.
+	Added 'internal' output format, which applies no formatting
+	      filtes--useful for debugging & diagnostics.
 
 4.6     July 16, 2013
 	Updated for Sword 1.7.0.
 
-4.5
+4.5	
 
 4.0	July 8, 2001
 	Updated to Sword 1.5.2 with innumerable bug fixes.

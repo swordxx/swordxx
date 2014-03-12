@@ -24,6 +24,7 @@
 #define DIAFILTMGR_H
 
 #define FMT_CGI 127
+#define FMT_INTERNAL 126
 
 #include <encfiltmgr.h>
 
