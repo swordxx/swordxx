@@ -5,7 +5,7 @@
  *
  * $Id$
  *
- * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -141,8 +141,7 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	int32_t len = utf16Text.extract(text.getRawData(), text.size(), utf8Conv, err);
 	if (len > (int32_t)text.size()+1) {
 		text.setSize(len+1);
-		int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
-		(void) len;	// avoid unused warning
+		utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
 	}
 #else
 	// If ICU is unavailable, decode using Czyborra's decoder
