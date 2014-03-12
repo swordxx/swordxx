@@ -76,13 +76,14 @@ DiathekeMgr::~DiathekeMgr()
 void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 {
 	SWBuf lang;
-	bool rtl;
 	ConfigEntMap::iterator entry;
 
 	lang = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (SWBuf)"en";
-	rtl = ((entry = section.find("Direction")) != section.end()) ? ((*entry).second == "RtoL") : false;
 
 #ifdef _ICU_
+	bool rtl;
+	rtl = ((entry = section.find("Direction")) != section.end()) ? ((*entry).second == "RtoL") : false;
+
 	if (shape) {
 		module->addRenderFilter(arshaping);
 	}
