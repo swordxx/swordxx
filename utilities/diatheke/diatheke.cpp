@@ -89,17 +89,17 @@ int main(int argc, char **argv)
 	char runquery = 0; // used to check that we have enough arguments to perform a legal query
 	// (a querytype & text = 1 and a ref = 2)
 	
-	for (int i = 1; i < argc; i++) {
+	for (int i = 1; i < argc; ++i) {
 		if (!::stricmp("-b", argv[i])) {
 			if (i+1 <= argc) {
-				text = argv[i+1];
-				i++;
+				++i;
+				text = argv[i];
 				runquery |= RQ_BOOK;
 			}
 		}
 		else if (!::stricmp("-s", argv[i])) {
 			if (i+1 <= argc) {
-				i++;
+				++i;
 				if (!::stricmp("phrase", argv[i])) {
 					searchtype = ST_PHRASE;
 				}
@@ -127,128 +127,128 @@ int main(int argc, char **argv)
 		}
  		else if (!::stricmp("-r", argv[i])) {
  			if (i+1 <= argc) {
- 				range = argv[i+1];
- 				i++;
+				++i;
+ 				range = argv[i];
  			}	
  		}
 		else if (!::stricmp("-l", argv[i])) {
 			if (i+1 <= argc) {
-				locale = argv[i+1];
-				i++;
+				++i;
+				locale = argv[i];
 			}
 		}
 		else if (!::stricmp("-m", argv[i])) {
 			if (i+1 <= argc) {
-				maxverses = atoi(argv[i+1]);
-				i++;
+				++i;
+				maxverses = atoi(argv[i]);
 			}
 		}
 		else if (!::stricmp("-o", argv[i])) {
 			if (i+1 <= argc) {
-				if (strchr(argv[i+1], 'f'))
+				++i;
+				if (strchr(argv[i], 'f'))
 					optionfilters |= OP_FOOTNOTES;
-				if (strchr(argv[i+1], 'n'))
+				if (strchr(argv[i], 'n'))
 					optionfilters |= OP_STRONGS;
-				if (strchr(argv[i+1], 'h'))
+				if (strchr(argv[i], 'h'))
 					optionfilters |= OP_HEADINGS;
-				if (strchr(argv[i+1], 'm'))
+				if (strchr(argv[i], 'm'))
 					optionfilters |= OP_MORPH;
-				if (strchr(argv[i+1], 'c'))
+				if (strchr(argv[i], 'c'))
 					optionfilters |= OP_CANTILLATION;
-				if (strchr(argv[i+1], 'v'))
+				if (strchr(argv[i], 'v'))
 					optionfilters |= OP_HEBREWPOINTS;
-				if (strchr(argv[i+1], 'a'))
+				if (strchr(argv[i], 'a'))
 					optionfilters |= OP_GREEKACCENTS;
-				if (strchr(argv[i+1], 'l'))
+				if (strchr(argv[i], 'l'))
 					optionfilters |= OP_LEMMAS;
-				if (strchr(argv[i+1], 's'))
+				if (strchr(argv[i], 's'))
 					optionfilters |= OP_SCRIPREF;
-				if (strchr(argv[i+1], 'r'))
+				if (strchr(argv[i], 'r'))
 					optionfilters |= OP_ARSHAPE;
-				if (strchr(argv[i+1], 'b'))
+				if (strchr(argv[i], 'b'))
 					optionfilters |= OP_BIDI;
-				if (strchr(argv[i+1], 'w'))
+				if (strchr(argv[i], 'w'))
 					optionfilters |= OP_REDLETTERWORDS;
-				if (strchr(argv[i+1], 'p'))
+				if (strchr(argv[i], 'p'))
 					optionfilters |= OP_ARABICPOINTS;
-				if (strchr(argv[i+1], 'g'))
+				if (strchr(argv[i], 'g'))
 					optionfilters |= OP_GLOSSES;
-				if (strchr(argv[i+1], 'x'))
+				if (strchr(argv[i], 'x'))
 					optionfilters |= OP_XLIT;
-				if (strchr(argv[i+1], 'e'))
+				if (strchr(argv[i], 'e'))
 					optionfilters |= OP_ENUM;
-				if (strchr(argv[i+1], 't'))
+				if (strchr(argv[i], 't'))
 					optionfilters |= OP_TRANSLITERATOR;
-				i++;
 			}
 		}
 		else if (!::stricmp("-f", argv[i])) {
 			if (i+1 <= argc) {
-				if (!::stricmp("thml", argv[i+1])) {
+				++i;
+				if (!::stricmp("thml", argv[i])) {
 					outputformat = FMT_THML;
 				}
-				else if (!::stricmp("cgi", argv[i+1])) {
+				else if (!::stricmp("cgi", argv[i])) {
 					outputformat = FMT_CGI;
 				}
-				else if (!::stricmp("gbf", argv[i+1])) {
+				else if (!::stricmp("gbf", argv[i])) {
 					outputformat = FMT_GBF;
 				}
-				else if (!::stricmp("htmlhref", argv[i+1])) {
+				else if (!::stricmp("htmlhref", argv[i])) {
 					outputformat = FMT_HTMLHREF;
 				}
-				else if (!::stricmp("html", argv[i+1])) {
+				else if (!::stricmp("html", argv[i])) {
 					outputformat = FMT_HTML;
 				}
-				else if (!::stricmp("xhtml", argv[i+1])) {
+				else if (!::stricmp("xhtml", argv[i])) {
 					outputformat = FMT_XHTML;
 				}
-				else if (!::stricmp("rtf", argv[i+1])) {
+				else if (!::stricmp("rtf", argv[i])) {
 					outputformat = FMT_RTF;
 				}
-				else if (!::stricmp("osis", argv[i+1])) {
+				else if (!::stricmp("osis", argv[i])) {
 					outputformat = FMT_OSIS;
 				}
-				else if (!::stricmp("latex", argv[i+1])) {
+				else if (!::stricmp("latex", argv[i])) {
 					outputformat = FMT_LATEX;
 				}
-				else if (!::stricmp("plain", argv[i+1])) {
+				else if (!::stricmp("plain", argv[i])) {
 					outputformat = FMT_PLAIN;
 				}
-				else if (!::stricmp("webif", argv[i+1])) {
+				else if (!::stricmp("webif", argv[i])) {
 					outputformat = FMT_WEBIF;
 				}
-				i++;
 			}
 		}
 		else if (!::stricmp("-e", argv[i])) {
 			if (i+1 <= argc) {
-				if (!::stricmp("utf8", argv[i+1])) {
+				++i;
+				if (!::stricmp("utf8", argv[i])) {
 					outputencoding = ENC_UTF8;
 				}
-				else if (!::stricmp("rtf", argv[i+1])) {
+				else if (!::stricmp("rtf", argv[i])) {
 					outputencoding = ENC_RTF;
 				}
-				else if (!::stricmp("html", argv[i+1])) {
+				else if (!::stricmp("html", argv[i])) {
 					outputencoding = ENC_HTML;
 				}
-				else if (!::stricmp("latin1", argv[i+1])) {
+				else if (!::stricmp("latin1", argv[i])) {
 					outputencoding = ENC_LATIN1;
 				}
-				else if (!::stricmp("utf16", argv[i+1])) {
+				else if (!::stricmp("utf16", argv[i])) {
 					outputencoding = ENC_UTF16;
 				}
-				else if (!::stricmp("scsu", argv[i+1])) {
+				else if (!::stricmp("scsu", argv[i])) {
 					outputencoding = ENC_SCSU;
 				}
-				i++;
 			}
 		}
 		else if (!::stricmp("-k", argv[i])) {
-			i++;	
+			++i;	
 			if (i < argc) {
 				SWBuf key = argv[i];
-				i++;
-				for (; i < argc; i++) {
+				++i;
+				for (; i < argc; ++i) {
 					if (!::stricmp("-h", argv[i]) || !::stricmp("--help", argv[i]))
 						printsyntax();
 					key = key + " " + argv[i];
@@ -261,17 +261,17 @@ int main(int argc, char **argv)
 		}
 		else if (!::stricmp("-v", argv[i])) {
 			if (i+1 <= argc) {
-				variants = atoi(argv[i+1]);
+				++i;
+				variants = atoi(argv[i]);
 				optionfilters |= OP_VARIANTS;
-				i++;
 			}
 		}
 		/*
 		else if (!::stricmp("-t", argv[i])) {
 			if (i+1 <= argc) {
-				script = argv[i+1];
+				++i;
+				script = argv[i];
 				optionfilters |= OP_TRANSLITERATOR;
-				i++;
 			}
 		}
 		*/
