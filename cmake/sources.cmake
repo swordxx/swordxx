@@ -251,6 +251,7 @@ SET(sword_icu_found_SOURCES
 
 # Headers
 SET(SWORD_INSTALL_HEADERS
+	include/bz2comprs.h
 	include/canon.h
 	include/canon_abbrevs.h
 	include/cipherfil.h
@@ -403,6 +404,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/utf8latin1.h
 	include/utf8nfc.h
 	include/utf8nfkd.h
+	include/utf8scsu.h
 	include/utf8transliterator.h
 	include/utf8utf16.h
 	include/utilstr.h
@@ -410,6 +412,7 @@ SET(SWORD_INSTALL_HEADERS
 
 	include/versekey.h
 	include/versetreekey.h
+	include/xzcomprs.h
 	include/zcom.h
 	include/zconf.h
 	include/zipcomprs.h
