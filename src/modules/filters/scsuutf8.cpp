@@ -152,7 +152,7 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	for (int i = 0; i < len;) {
 		
 		if (i >= len) break;
-		c = scsuString[++i];
+		c = scsuString[i++];
 		
 		if (c >= 0x80)
 		{
@@ -169,7 +169,7 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 		else if (c >= 0x1 && c <= 0x8) // SQn
 		{
 			if (i >= len) break;
-			d = scsuString[++i]; // single quote
+			d = scsuString[i++]; // single quote
 			
 			UTF8Output(d < 0x80 ? d + start[c - 0x1] :
 				    d - 0x80 + slide[c - 0x1], &utf8Buf);
@@ -182,25 +182,25 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 		{
 			active = c - 0x18;  // define window
 			if (i >= len) break;
-			slide[active] = win[(unsigned char)scsuString[++i]];
+			slide[active] = win[(unsigned char)scsuString[i++]];
 		}
 		else if (c == 0xB) // SDX
 		{
 			if (i >= len) break;
-			c = scsuString[++i];
+			c = scsuString[i++];
 			
 			if (i >= len) break;
-			d = scsuString[++i];
+			d = scsuString[i++];
 			
 			slide[active = c>>5] = 0x10000 + (((c & 0x1F) << 8 | d) << 7);
 		}
 		else if (c == 0xE) // SQU
 		{
 			if (i >= len) break;
-			c = scsuString[++i]; // SQU
+			c = scsuString[i++]; // SQU
 			
 			if (i >= len) break;
-			UTF8Output(c << 8 | scsuString[++i], &utf8Buf);
+			UTF8Output(c << 8 | scsuString[i++], &utf8Buf);
 		}
 		else if (c == 0xF) // SCU
 		{
@@ -209,20 +209,20 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 			while (mode)
 			{
 				if (i >= len) break;
-				c = scsuString[++i];
+				c = scsuString[i++];
 				
 				if (c <= 0xDF || c >= 0xF3)
 				{
 					if (i >= len) break;
-					UTF8Output(c << 8 | scsuString[++i], &utf8Buf);
+					UTF8Output(c << 8 | scsuString[i++], &utf8Buf);
 				}
 				else if (c == 0xF0) // UQU
 				{
 					if (i >= len) break;
-					c = scsuString[++i];
+					c = scsuString[i++];
 					
 					if (i >= len) break;
-					UTF8Output(c << 8 | scsuString[++i], &utf8Buf);
+					UTF8Output(c << 8 | scsuString[i++], &utf8Buf);
 				}
 				else if (c >= 0xE0 && c <= 0xE7) // UCn
 				{
@@ -232,16 +232,16 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 				else if (c >= 0xE8 && c <= 0xEF) // UDn
 				{
 					if (i >= len) break;
-					slide[active=c-0xE8] = win[(unsigned char)scsuString[++i]];
+					slide[active=c-0xE8] = win[(unsigned char)scsuString[i++]];
 					mode = 0;
 				}
 				else if (c == 0xF1) // UDX
 				{
 					if (i >= len) break;
-					c = scsuString[++i];
+					c = scsuString[i++];
 					
 					if (i >= len) break;
-					d = scsuString[++i];
+					d = scsuString[i++];
 					
 					slide[active = c>>5] =
 						0x10000 + (((c & 0x1F) << 8 | d) << 7);
