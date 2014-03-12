@@ -428,7 +428,11 @@ char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
 {
 	char *path = 0;
 	char *buf = new char [ strlen (ipath) + 20 ];
+	char retVal = 0;
 	FileDesc *fd, *fd2;
+	__s32 offset = 0;
+	__s16 size = 0;
+	VerseKey vk;
 
 	stdstr(&path, ipath);
 
@@ -438,69 +442,81 @@ char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
 	sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-	fd->getFd();
+	if (fd->getFd() < 1) goto erroropen1;
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-	fd->getFd();
+	if (fd->getFd() < 1) goto erroropen1;
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-	fd->getFd();
+	if (fd->getFd() < 1) goto erroropen1;
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
-	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-	fd2->getFd();
+	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+	if (fd->getFd() < 1) goto erroropen1;
 	FileMgr::getSystemFileMgr()->close(fd);
 
 	sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-	fd->getFd();
+	if (fd->getFd() < 1) goto erroropen1;
 
 	sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockBound]);
 	FileMgr::removeFile(buf);
 	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-	fd2->getFd();
+	if (fd2->getFd() < 1) goto erroropen2;
 
-	VerseKey vk;
 	vk.setVersificationSystem(v11n);
 	vk.setIntros(true);
 
-	__s32 offset = 0;
-	__s16 size = 0;
 	offset = archtosword32(offset);
 	size   = archtosword16(size);
 
 	for (vk = TOP; !vk.popError(); vk++) {
 		if (vk.getTestament() < 2) {
-			fd->write(&offset, 4);	//compBufIdxOffset
-			fd->write(&offset, 4);
-			fd->write(&size, 2);
+			if (fd->write(&offset, 4) != 4) goto writefailure;	//compBufIdxOffset
+			if (fd->write(&offset, 4) != 4) goto writefailure;
+			if (fd->write(&size, 2) != 2) goto writefailure;
 		}
 		else {
-			fd2->write(&offset, 4);	//compBufIdxOffset
-			fd2->write(&offset, 4);
-			fd2->write(&size, 2);
+			if (fd2->write(&offset, 4) != 4) goto writefailure;	//compBufIdxOffset
+			if (fd2->write(&offset, 4) != 4) goto writefailure;
+			if (fd2->write(&size, 2) != 2) goto writefailure;
 		}
 	}
 	fd2->write(&offset, 4);	//compBufIdxOffset
 	fd2->write(&offset, 4);
 	fd2->write(&size, 2);
 
-	FileMgr::getSystemFileMgr()->close(fd);
+	goto cleanup;
+
+erroropen1:
+	retVal = -1;
+	goto cleanup1;
+
+erroropen2:
+	retVal = -1;
+	goto cleanup;
+
+writefailure:
+	retVal = -2;
+
+cleanup:
 	FileMgr::getSystemFileMgr()->close(fd2);
+cleanup1:
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	delete [] path;
 	delete [] buf;
 	
-	return 0;
+	return retVal;
 }
 
 
