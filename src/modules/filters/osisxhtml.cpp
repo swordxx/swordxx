@@ -38,9 +38,6 @@ const char *OSISXHTML::getHeader() const {
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
 		.transChangeSupplied { font-style: italic; }\n\
-		.small, .sub, .sup { font-size: .83em }\n\
-		.sub             { vertical-align: sub }\n\
-		.sup             { vertical-align: super }\n\
 		.indent1         { margin-left: 10px }\n\
 		.indent2         { margin-left: 20px }\n\
 		.indent3         { margin-left: 30px }\n\
