@@ -29,8 +29,6 @@
 #define LZMA_API_STATIC
 #include <lzma.h>
 
-#define XZ_PRESET 3 | LZMA_PRESET_EXTREME
-
 SWORD_NAMESPACE_START
 
 /******************************************************************************
@@ -39,8 +37,10 @@ SWORD_NAMESPACE_START
  */
 
 XzCompress::XzCompress() : SWCompress() {
+	level = 3;
+	
 	// start with the estimated memory usage for our preset
-	memlimit = lzma_easy_decoder_memusage(XZ_PRESET);
+	memlimit = lzma_easy_decoder_memusage(level | LZMA_PRESET_EXTREME);
 	
 	// and round up to a power of 2--
 	// bit twiddle hack to determine next greatest power of 2 from:
@@ -102,7 +102,7 @@ void XzCompress::Encode(void)
 	if (len)
 	{
 		//printf("Doing compress\n");
-		switch (lzma_easy_buffer_encode(XZ_PRESET, LZMA_CHECK_CRC64, NULL, (const uint8_t*)buf, (size_t)len, (uint8_t*)zbuf, &zpos, (size_t)zlen)) {
+		switch (lzma_easy_buffer_encode(level | LZMA_PRESET_EXTREME, LZMA_CHECK_CRC64, NULL, (const uint8_t*)buf, (size_t)len, (uint8_t*)zbuf, &zpos, (size_t)zlen)) {
 		        case LZMA_OK: SendChars(zbuf, zpos);  break;
 			case LZMA_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during compression.\n"); break;
 			case LZMA_UNSUPPORTED_CHECK: fprintf(stderr, "ERROR: unsupported_check error encountered during decompression.\n"); break;
@@ -179,5 +179,35 @@ void XzCompress::Decode(void)
 	//printf("Finished decoding\n");
 	free (zbuf);
 }
+
+
+/******************************************************************************
+ * XzCompress::SetLevel - This function sets the compression level of the
+ *			compressor.
+ */
+
+void XzCompress::SetLevel(int l) {
+	level = l;
+
+	// having changed the compression level, we need to adjust our memlimit accordingly,
+	// as in the constructor:
+
+	// start with the estimated memory usage for our preset
+	memlimit = lzma_easy_decoder_memusage(level | LZMA_PRESET_EXTREME);
+	
+	// and round up to a power of 2--
+	// bit twiddle hack to determine next greatest power of 2 from:
+	// http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+	memlimit--;
+	memlimit |= memlimit >> 1;
+	memlimit |= memlimit >> 2;
+	memlimit |= memlimit >> 4;
+	memlimit |= memlimit >> 8;
+	memlimit |= memlimit >> 16;
+	memlimit++;
+
+	// double that for safety's sake
+	memlimit <<= 1;
+};
 
 SWORD_NAMESPACE_END

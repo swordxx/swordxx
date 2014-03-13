@@ -38,6 +38,7 @@ SWORD_NAMESPACE_START
 ZipCompress::ZipCompress() : SWCompress()
 {
 //	fprintf(stderr, "init compress\n");
+	level = Z_DEFAULT_COMPRESSION;
 }
 
 
@@ -62,18 +63,20 @@ ZipCompress::~ZipCompress() {
 void ZipCompress::Encode(void)
 {
 /*
-ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
-                                 const Bytef *source, uLong sourceLen));
-     Compresses the source buffer into the destination buffer.  sourceLen is
-   the byte length of the source buffer. Upon entry, destLen is the total
-   size of the destination buffer, which must be at least 0.1% larger than
-   sourceLen plus 12 bytes. Upon exit, destLen is the actual size of the
+ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
+                                  const Bytef *source, uLong sourceLen,
+                                  int level));
+
+     Compresses the source buffer into the destination buffer.  The level
+   parameter has the same meaning as in deflateInit.  sourceLen is the byte
+   length of the source buffer.  Upon entry, destLen is the total size of the
+   destination buffer, which must be at least the value returned by
+   compressBound(sourceLen).  Upon exit, destLen is the actual size of the
    compressed buffer.
-     This function can be used to compress a whole file at once if the
-   input file is mmap'ed.
-     compress returns Z_OK if success, Z_MEM_ERROR if there was not
-   enough memory, Z_BUF_ERROR if there was not enough room in the output
-   buffer.
+
+     compress2 returns Z_OK if success, Z_MEM_ERROR if there was not enough
+   memory, Z_BUF_ERROR if there was not enough room in the output buffer,
+   Z_STREAM_ERROR if the level parameter is invalid.
 */
 	direct = 0;	// set direction needed by parent [Get|Send]Chars()
 
@@ -98,7 +101,7 @@ ZEXTERN int ZEXPORT compress OF((Bytef *dest,   uLongf *destLen,
 	if (len)
 	{
 		//printf("Doing compress\n");
-		if (compress((Bytef*)zbuf, &zlen, (const Bytef*)buf, len) != Z_OK)
+		if (compress2((Bytef*)zbuf, &zlen, (const Bytef*)buf, len, level) != Z_OK)
 		{
 			printf("ERROR in compression\n");
 		}

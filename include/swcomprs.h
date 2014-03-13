@@ -35,15 +35,18 @@ class SWDLLEXPORT SWCompress
 protected:
   char *buf, *zbuf, direct;	// 0 - encode; 1 - decode
   unsigned long zlen, zpos, pos, slen;
+  int level;
 public:
-    SWCompress ();
-    virtual ~ SWCompress ();
+  SWCompress ();
+  virtual ~ SWCompress ();
   virtual char *Buf (const char *buf = 0, unsigned long *len = 0);
   virtual char *zBuf (unsigned long *len, char *buf = 0);
   virtual unsigned long GetChars (char *buf, unsigned long len);	// override for other than buffer compression
   virtual unsigned long SendChars (char *buf, unsigned long len);	// override for other than buffer compression
   virtual void Encode (void);	// override to provide compression algorythm
   virtual void Decode (void);	// override to provide compression algorythm
+  virtual void SetLevel(int l) {level = l;};
+  virtual int GetLevel() {return level;};
 };
 
 SWORD_NAMESPACE_END

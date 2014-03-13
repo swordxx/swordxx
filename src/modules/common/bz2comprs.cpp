@@ -36,6 +36,7 @@ SWORD_NAMESPACE_START
  */
 
 Bzip2Compress::Bzip2Compress() : SWCompress() {
+	level = 9;
 }
 
 
@@ -82,7 +83,7 @@ void Bzip2Compress::Encode(void)
 	if (len)
 	{
 		//printf("Doing compress\n");
-		if (BZ2_bzBuffToBuffCompress(zbuf, (unsigned int*)&zlen, buf, len, 9, 0, 0) != BZ_OK)
+		if (BZ2_bzBuffToBuffCompress(zbuf, (unsigned int*)&zlen, buf, len, level, 0, 0) != BZ_OK)
 		{
 			printf("ERROR in compression\n");
 		}

@@ -41,6 +41,7 @@ public:
 
 	virtual void Encode(void);
 	virtual void Decode(void);
+	virtual void SetLevel(int l);
 private:
 	uint64_t memlimit; // memory usage limit during decompression
 };
