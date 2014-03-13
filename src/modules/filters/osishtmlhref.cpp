@@ -481,7 +481,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("<b>", buf, u);
 				}
-				else if (type == "ol") {
+				else if (type == "ol" || type == "overline" || type == "x-overline") {
 					outText("<span style=\"text-decoration:overline\">", buf, u);
 				}
 				else if (type == "super") {

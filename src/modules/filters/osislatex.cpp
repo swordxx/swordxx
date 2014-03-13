@@ -563,7 +563,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				// but we have used "ol" in the past, as well.  Once a valid
 				// OSIS overline attribute is made available, these should all
 				// eventually be deprecated and never documented that they are supported.
-				else if (type == "ol"  || type == "overline" || type == "x-overline") {
+				else if (type == "ol" || type == "overline" || type == "x-overline") {
 					outText("<span style=\"text-decoration:overline\">", buf, u);
 				}
 
