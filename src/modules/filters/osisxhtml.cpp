@@ -38,6 +38,7 @@ const char *OSISXHTML::getHeader() const {
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
 		.transChangeSupplied { font-style: italic; }\n\
+		.overline        { text-decoration: overline; }\n\
 		.indent1         { margin-left: 10px }\n\
 		.indent2         { margin-left: 20px }\n\
 		.indent3         { margin-left: 30px }\n\
@@ -561,7 +562,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				// OSIS overline attribute is made available, these should all
 				// eventually be deprecated and never documented that they are supported.
 				else if (type == "ol" || type == "overline" || type == "x-overline") {
-					outText("<span style=\"text-decoration:overline\">", buf, u);
+					outText("<span class=\"overline\">", buf, u);
 				}
 
 				else if (type == "super") {
