@@ -45,8 +45,8 @@ public:
   virtual unsigned long SendChars (char *buf, unsigned long len);	// override for other than buffer compression
   virtual void Encode (void);	// override to provide compression algorythm
   virtual void Decode (void);	// override to provide compression algorythm
-  virtual void SetLevel(int l) {level = l;};
-  virtual int GetLevel() {return level;};
+  virtual void setLevel(int l) {level = l;};
+  virtual int getLevel() {return level;};
 };
 
 SWORD_NAMESPACE_END

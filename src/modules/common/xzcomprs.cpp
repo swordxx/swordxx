@@ -186,7 +186,7 @@ void XzCompress::Decode(void)
  *			compressor.
  */
 
-void XzCompress::SetLevel(int l) {
+void XzCompress::setLevel(int l) {
 	level = l;
 
 	// having changed the compression level, we need to adjust our memlimit accordingly,
