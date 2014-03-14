@@ -1308,10 +1308,11 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
 	fprintf(stderr, "  <osisDoc>\t\t path to the validated OSIS document, or '-' to\n");
 	fprintf(stderr, "\t\t\t\t read from standard input\n");
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
-	fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
+	fprintf(stderr, "  -z <l|z|b|x>\t\t compression type (default: none)\n");
 	fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");
 	fprintf(stderr, "  -b <2|3|4>\t\t compression block size (default: 4)\n");
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
+	fprintf(stderr, "  -l <1-9>\t\t compression level (default varies by compression type)\n");
 	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
 	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
 
@@ -1600,6 +1601,7 @@ int main(int argc, char **argv) {
 	int entrySize          = 0;
 	SWBuf cipherKey        = "";
 	SWCompress *compressor = 0;
+	int compLevel      = 0;
 
 	for (int i = 3; i < argc; i++) {
 		if (!strcmp(argv[i], "-a")) {
@@ -1669,6 +1671,16 @@ int main(int argc, char **argv) {
 			if (i+1 < argc) debug |= atoi(argv[++i]);
 			else usage(*argv, "-d requires <flags>");
 		}
+		else if (!strcmp(argv[i], "-l")) {
+			if (i+1 < argc) {
+				compLevel = atoi(argv[++i]);
+			}		      
+			else usage(*argv, "-l requires a value from 1-9");
+			
+			if (compLevel < 0 || compLevel > 10) {
+				usage(*argv, "-l requires a value from 1-9");
+			}
+		}
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
@@ -1697,6 +1709,10 @@ int main(int argc, char **argv) {
 #else
 		usage(*argv, "ERROR: SWORD library not compiled with xz compression support.\n\tBe sure liblzma is available when compiling SWORD library");
 #endif		
+	}
+
+	if (compressor && compLevel > 0) {
+		compressor->setLevel(compLevel);
 	}
 
 #ifndef _ICU_
