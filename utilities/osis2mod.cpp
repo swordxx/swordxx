@@ -549,8 +549,9 @@ void writeEntry(SWBuf &text, bool force = false) {
 		// If the entry already exists, then append this entry to the text.
 		// This is for verses that are outside the chosen versification. They are appended to the prior verse.
 		// The space should not be needed if we retained verse tags.
-		SWBuf currentText = module->getRawEntry();
-		if (currentText.length()) {
+		if (module->hasEntry(&currentVerse)) {
+			module->flush();
+			SWBuf currentText = module->getRawEntry();
 			cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
 
 			// If we have a non-UTF-8 encoding, we should decode it before concatenating, then re-encode it
@@ -1650,6 +1651,7 @@ int main(int argc, char **argv) {
 					outputEncoder = NULL;
 					outputDecoder = NULL;
 					break;
+
 				case '2':
 					outputEncoder = new UTF8UTF16();
 					outputDecoder = new UTF16UTF8();
