@@ -60,8 +60,10 @@
 #include <utf8nfc.h>
 #include <latin1utf8.h>
 #include <utf8scsu.h>
+#include <scsuutf8.h>
 #endif
 #include <utf8utf16.h>
+#include <utf16utf8.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -92,7 +94,8 @@ const int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
 UTF8NFC    normalizer;
 Latin1UTF8 converter;
 #endif
-SWFilter*  outputConverter;     
+SWFilter*  outputEncoder;
+SWFilter*  outputDecoder;
 
 int normalized = 0;
 int converted  = 0;
@@ -539,20 +542,26 @@ void writeEntry(SWBuf &text, bool force = false) {
 		}
 
 		// If the desired output encoding is non-UTF-8, convert to that encoding
-		if (outputConverter) {
-			outputConverter->processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
+		if (outputEncoder) {
+			outputEncoder->processText(activeVerseText, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
 		}
 
 		// If the entry already exists, then append this entry to the text.
 		// This is for verses that are outside the chosen versification. They are appended to the prior verse.
 		// The space should not be needed if we retained verse tags.
-		// TODO: in the case of SCSU output, very slightly better compression might be
-		// achieved by decoding the currentText & activeVerseText, concatenating them,
-		// and re-encoding them as SCSU
 		SWBuf currentText = module->getRawEntry();
 		if (currentText.length()) {
 			cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+
+			// If we have a non-UTF-8 encoding, we should decode it before concatenating, then re-encode it
+			if (outputDecoder) {
+				outputDecoder->processText(activeVerseText, (SWKey *)2);
+				outputDecoder->processText(currentText, (SWKey *)2);
+			}
 			activeVerseText = currentText + " " + activeVerseText;
+			if (outputEncoder) {
+				outputDecoder->processText(activeVerseText, (SWKey *)2);
+			}
 		}
 
 		if (debug & DEBUG_WRITE) {
@@ -1637,12 +1646,23 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-e")) {
 			if (i+1 < argc) {
 				switch (argv[++i][0]) {
-				case '1': outputConverter = NULL; break; // leave as UTF-8
-				case '2': outputConverter = new UTF8UTF16(); break;
+				case '1': // leave as UTF-8
+					outputEncoder = NULL;
+					outputDecoder = NULL;
+					break;
+				case '2':
+					outputEncoder = new UTF8UTF16();
+					outputDecoder = new UTF16UTF8();
+					break;
 #ifdef _ICU_
-				case 's': outputConverter = new UTF8SCSU(); break;
+				case 's':
+					outputEncoder = new UTF8SCSU();
+					outputDecoder = new SCSUUTF8();
+					break;
 #endif
-				default: outputConverter = NULL;
+				default:
+					outputEncoder = NULL;
+					outputDecoder = NULL;
 				}
 			} 
 		}
@@ -1830,8 +1850,10 @@ int main(int argc, char **argv) {
 	delete module;
 	if (cipherFilter)
 		delete cipherFilter;
-	if (outputConverter)
-		delete outputConverter;
+	if (outputEncoder)
+		delete outputEncoder;
+	if (outputDecoder)
+		delete outputDecoder;
 
 	fprintf(stderr, "SUCCESS: %s: has finished its work and will now rest\n", program);
 	exit(0); // success
