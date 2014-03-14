@@ -94,8 +94,8 @@ const int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
 UTF8NFC    normalizer;
 Latin1UTF8 converter;
 #endif
-SWFilter*  outputEncoder;
-SWFilter*  outputDecoder;
+SWFilter*  outputEncoder = NULL;
+SWFilter*  outputDecoder = NULL;
 
 int normalized = 0;
 int converted  = 0;
