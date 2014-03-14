@@ -1703,7 +1703,7 @@ int main(int argc, char **argv) {
 		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
 #endif
 	}
-	else if (compType = "XZ") {
+	else if (compType == "XZ") {
 #ifndef EXCLUDEXZ
 		compressor = new XzCompress();
 #else
@@ -1723,7 +1723,7 @@ int main(int argc, char **argv) {
 #endif
 
 	if (debug & DEBUG_OTHER) {
-		cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
+		cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcompressLevel: " << compLevel << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
 	}
 
 	if (!append) {	// == 0 then create module
