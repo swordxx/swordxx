@@ -49,9 +49,7 @@ class SWDLLEXPORT zText:public zVerse, public SWText {
 	bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
 	int blockType;
 
-
 public:
-    
 	zText(const char *ipath, const char *iname = 0, const char *idesc = 0,
 			int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0,
 			SWDisplay *idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
@@ -65,16 +63,16 @@ public:
 	virtual void increment(int steps = 1);
 	virtual void decrement(int steps = 1) { increment(-steps); }
 
-  // write interface ----------------------------
+	// write interface ----------------------------
 	virtual bool isWritable() const;
 	static char createModule(const char *path, int blockBound, const char *v11n = "KJV") {
 		return zVerse::createModule(path, blockBound, v11n);
 	}
 
-     virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
-     virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry
+	virtual void setEntry(const char *inbuf, long len = -1);	// Modify current module entry
+	virtual void linkEntry(const SWKey *linkKey);	// Link current module entry to other module entry
 	virtual void deleteEntry();	// Delete current module entry
-  // end write interface ------------------------
+	// end write interface ------------------------
   
 	virtual void rawZFilter(SWBuf &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
@@ -86,7 +84,6 @@ public:
 	virtual bool hasEntry(const SWKey *k) const;
 	
 	SWMODULE_OPERATORS
-
 };
 
 SWORD_NAMESPACE_END
