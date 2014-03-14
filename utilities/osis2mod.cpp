@@ -561,7 +561,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 			}
 			activeVerseText = currentText + " " + activeVerseText;
 			if (outputEncoder) {
-				outputDecoder->processText(activeVerseText, (SWKey *)2);
+				outputEncoder->processText(activeVerseText, (SWKey *)2);
 			}
 		}
 
