@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	SWModule *outModule    = 0;
 	int compLevel = 0;
 
-	if ((argc < 3) || (argc > 6)) {
+	if ((argc < 3) || (argc > 7)) {
 		errorOutHelp(argv[0]);
 	}
 
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 			if (argc > 5) {
 				compLevel = atoi(argv[5]);
 				if (argc > 6) {
-					cipherKey = argv[5];
+					cipherKey = argv[6];
 				}
 			}
 		}
