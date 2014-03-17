@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -290,13 +290,16 @@
     <ClCompile Include="..\..\src\keys\versekey.cpp" />
     <ClCompile Include="..\..\src\keys\versetreekey.cpp" />
     <ClCompile Include="..\..\src\modules\comments\zcom\zcom.cpp" />
+    <ClCompile Include="..\..\src\modules\comments\zcom4\zcom4.cpp" />
     <ClCompile Include="..\..\src\modules\common\zipcomprs.cpp" />
     <ClCompile Include="..\..\src\modules\common\bz2comprs.cpp" />
     <ClCompile Include="..\..\src\modules\common\xzcomprs.cpp" />
     <ClCompile Include="..\..\src\modules\lexdict\zld\zld.cpp" />
     <ClCompile Include="..\..\src\modules\common\zstr.cpp" />
     <ClCompile Include="..\..\src\modules\texts\ztext\ztext.cpp" />
+    <ClCompile Include="..\..\src\modules\texts\ztext4\ztext4.cpp" />
     <ClCompile Include="..\..\src\modules\common\zverse.cpp" />
+    <ClCompile Include="..\..\src\modules\common\zverse4.cpp" />
     <ClCompile Include="..\..\src\utilfuns\zlib\zutil.c" />
   </ItemGroup>
   <ItemGroup>
@@ -465,6 +468,7 @@
     <ClInclude Include="..\..\include\versetreekey.h" />
     <ClInclude Include="..\..\include\versificationmgr.h" />
     <ClInclude Include="..\..\include\zcom.h" />
+    <ClInclude Include="..\..\include\zcom4.h" />
     <ClInclude Include="..\..\include\zconf.h" />
     <ClInclude Include="..\..\include\zipcomprs.h" />
     <ClInclude Include="..\..\include\bz2comprs.h" />
@@ -473,7 +477,9 @@
     <ClInclude Include="..\..\include\zlib.h" />
     <ClInclude Include="..\..\include\zstr.h" />
     <ClInclude Include="..\..\include\ztext.h" />
+    <ClInclude Include="..\..\include\ztext4.h" />
     <ClInclude Include="..\..\include\zverse.h" />
+    <ClInclude Include="..\..\include\zverse4.h" />
     <ClInclude Include="..\..\src\utilfuns\zlib\crc32.h" />
     <ClInclude Include="..\..\src\utilfuns\zlib\deflate.h" />
     <ClInclude Include="..\..\src\utilfuns\zlib\gzguts.h" />

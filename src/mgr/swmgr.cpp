@@ -74,8 +74,10 @@
 #include <cipherfil.h>
 #include <rawfiles.h>
 #include <ztext.h>
+#include <ztext4.h>
 #include <zld.h>
 #include <zcom.h>
+#include <zcom4.h>
 #include <lzsscomprs.h>
 #include <utf8greekaccents.h>
 #include <utf8cantillation.h>
@@ -940,7 +942,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 		direction = DIRECTION_LTR;
 	}
 
-	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom"))) {
+	if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom")) || (!stricmp(driver, "zText4")) || (!stricmp(driver, "zCom4"))) {
 		SWCompress *compress = 0;
 		int blockType = CHAPTERBLOCKS;
 		misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (SWBuf)"CHAPTER";
@@ -973,6 +975,10 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 		if (compress) {
 			if (!stricmp(driver, "zText"))
 				newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+			else if (!stricmp(driver, "zText4"))
+				newmod = new zText4(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+			else if (!stricmp(driver, "zCom4"))
+				newmod = new zCom4(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
 			else
 				newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
 		}

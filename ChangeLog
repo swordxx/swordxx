@@ -1,5 +1,9 @@
 API ChangeLog
 
+17-Mar-2014	Chris Little <chrislit@crosswire.org>
+	Added zVerse4, zText4, & zCom4 classes to support compressed text/
+		commentary modules with entry sizes > 64k
+
 3-Mar-2014	Chris Little <chrislit@crosswire.org>
 	Added support for bzip2 (Burrows-Wheeler) module compression via libbz2
 	Added support for xz (LZMA2) module compression via liblzma

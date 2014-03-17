@@ -48,6 +48,7 @@ SET(sword_base_module_SOURCES
 	src/modules/comments/rawcom4/rawcom4.cpp
 	src/modules/comments/rawfiles/rawfiles.cpp
 	src/modules/comments/zcom/zcom.cpp
+	src/modules/comments/zcom4/zcom4.cpp
 	src/modules/common/rawstr.cpp
 	src/modules/common/rawstr4.cpp
 	src/modules/common/swcomprs.cpp
@@ -56,6 +57,7 @@ SET(sword_base_module_SOURCES
 	src/modules/common/rawverse4.cpp
 	src/modules/common/swcipher.cpp
 	src/modules/common/zverse.cpp
+	src/modules/common/zverse4.cpp
 	src/modules/common/zstr.cpp
 	src/modules/common/entriesblk.cpp
 	src/modules/common/sapphire.cpp
@@ -158,6 +160,7 @@ SET(sword_base_module_SOURCES
 	src/modules/texts/rawtext/rawtext.cpp
 	src/modules/texts/rawtext4/rawtext4.cpp
 	src/modules/texts/ztext/ztext.cpp
+	src/modules/texts/ztext4/ztext4.cpp
 )
 SOURCE_GROUP("src\\modules" FILES ${sword_base_module_SOURCES})
 
@@ -414,12 +417,15 @@ SET(SWORD_INSTALL_HEADERS
 	include/versetreekey.h
 	include/xzcomprs.h
 	include/zcom.h
+	include/zcom4.h
 	include/zconf.h
 	include/zipcomprs.h
 	include/zld.h
 	include/zstr.h
 	include/ztext.h
+	include/ztext4.h
 	include/zverse.h
+	include/zverse4.h
 
 	include/canon_kjva.h
 	include/canon_leningrad.h

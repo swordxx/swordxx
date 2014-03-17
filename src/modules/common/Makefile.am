@@ -21,6 +21,7 @@ libsword_la_SOURCES += $(commondir)/rawverse.cpp
 libsword_la_SOURCES += $(commondir)/rawverse4.cpp
 libsword_la_SOURCES += $(commondir)/swcipher.cpp
 libsword_la_SOURCES += $(commondir)/zverse.cpp
+libsword_la_SOURCES += $(commondir)/zverse4.cpp
 libsword_la_SOURCES += $(commondir)/zstr.cpp
 libsword_la_SOURCES += $(commondir)/entriesblk.cpp
 libsword_la_SOURCES += $(commondir)/sapphire.cpp

@@ -165,13 +165,16 @@ pkginclude_HEADERS += $(swincludedir)/utilxml.h
 pkginclude_HEADERS += $(swincludedir)/versekey.h
 pkginclude_HEADERS += $(swincludedir)/versetreekey.h
 pkginclude_HEADERS += $(swincludedir)/zcom.h
+pkginclude_HEADERS += $(swincludedir)/zcom4.h
 pkginclude_HEADERS += $(swincludedir)/zipcomprs.h
 pkginclude_HEADERS += $(swincludedir)/bz2comprs.h
 pkginclude_HEADERS += $(swincludedir)/xzcomprs.h
 pkginclude_HEADERS += $(swincludedir)/zld.h
 pkginclude_HEADERS += $(swincludedir)/zstr.h
 pkginclude_HEADERS += $(swincludedir)/ztext.h
+pkginclude_HEADERS += $(swincludedir)/ztext4.h
 pkginclude_HEADERS += $(swincludedir)/zverse.h
+pkginclude_HEADERS += $(swincludedir)/zverse4.h
 
 pkginclude_HEADERS += $(swincludedir)/canon_kjva.h
 pkginclude_HEADERS += $(swincludedir)/canon_leningrad.h
