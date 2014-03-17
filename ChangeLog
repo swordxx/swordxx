@@ -4,6 +4,8 @@ API ChangeLog
 	Added support for bzip2 (Burrows-Wheeler) module compression via libbz2
 	Added support for xz (LZMA2) module compression via liblzma
 
+30-Dec-2013 	Peter von Kaehne <refdoc@crosswire.org>
+	Added LaTeX output filters
 
 
 * Release 1.7.0 *
