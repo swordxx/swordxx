@@ -43,7 +43,7 @@ SWORD_NAMESPACE_START
  */
 
 int RawStr::instance = 0;
-char RawStr::nl = '\n';
+const char RawStr::nl = '\n';
 const int RawStr::IDXENTRYSIZE = 6;
 
 
@@ -372,7 +372,6 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
 	__s32 shiftSize;
 	__u16 size;
 	__u16 outsize;
-	static const char nl[] = {13, 10};
 	char *tmpbuf = 0;
 	char *key = 0;
 	char *dbKey = 0;
@@ -452,7 +451,7 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
 		datfd->write(outbuf, (int)size);
 
 		// add a new line to make data file easier to read in an editor
-		datfd->write(&nl, 2);
+		datfd->write(&nl, 1);
 		
 		idxfd->write(&outstart, 4);
 		idxfd->write(&outsize, 2);

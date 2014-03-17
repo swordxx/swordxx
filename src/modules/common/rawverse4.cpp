@@ -46,7 +46,7 @@ SWORD_NAMESPACE_START
  */
 
 int RawVerse4::instance = 0;
-const char *RawVerse4::nl = "\r\n";
+const char RawVerse4::nl = '\n';
 
 
 /******************************************************************************
@@ -195,7 +195,7 @@ void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
 		textfp[testmt-1]->write(buf, (int)size);
 
 		// add a new line to make data file easier to read in an editor
-		textfp[testmt-1]->write(nl, 2);
+		textfp[testmt-1]->write(&nl, 1);
 	}
 	else {
 		start = 0;

@@ -48,7 +48,7 @@ protected:
 	void doSetText(const char *key, const char *buf, long len = -1);
 	void doLinkEntry(const char *destkey, const char *srckey);
 public:
-	char nl;
+	static const char nl;
 	RawStr4(const char *ipath, int fileMode = -1, bool caseSensitive = false);
 	virtual ~RawStr4();
 	void getIDXBuf(long ioffset, char **buf) const;

@@ -49,7 +49,7 @@ protected:
 	static const int IDXENTRYSIZE;
 
 public:
-	static char nl;
+	static const char nl;
 	RawStr(const char *ipath, int fileMode = -1, bool caseSensitive = false);
 	virtual ~RawStr();
 	void getIDXBuf(long ioffset, char **buf) const;
