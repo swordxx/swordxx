@@ -5,6 +5,7 @@
  *			and provides lookup and parsing functions based on
  *			class VerseKey
  *
+ * $Id $
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
