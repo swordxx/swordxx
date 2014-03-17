@@ -44,6 +44,7 @@
 #include <versekey.h>
 
 #include <ztext.h>
+#include <ztext4.h>
 #include <lzsscomprs.h>
 #ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
@@ -1618,7 +1619,6 @@ int main(int argc, char **argv) {
 			append = 1;
 		}
 		else if (!strcmp(argv[i], "-z")) {
-			if (entrySize) usage(*argv, "Cannot specify both -z and -s");
 			compType = "ZIP";
 			if (i+1 < argc && argv[i+1][0] != '-') {
 				switch (argv[++i][0]) {
@@ -1631,7 +1631,6 @@ int main(int argc, char **argv) {
 		}
 		else if (!strcmp(argv[i], "-Z")) {
 			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
-			if (entrySize) usage(*argv, "Cannot specify both -Z and -s");
 			compType = "LZSS";
 		}
 		else if (!strcmp(argv[i], "-b")) {
@@ -1677,7 +1676,6 @@ int main(int argc, char **argv) {
 			else usage(*argv, "-v requires <v11n>");
 		}
 		else if (!strcmp(argv[i], "-s")) {
-			if (compType.size()) usage(*argv, "Cannot specify -s and -z");
 			if (i+1 < argc) {
 				entrySize = atoi(argv[++i]);
 				if (entrySize == 2 || entrySize == 4) {
@@ -1752,9 +1750,17 @@ int main(int argc, char **argv) {
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if (compressor) {
-			if (zText::createModule(path, iType, v11n)) {
-				fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-				exit(EXIT_NO_CREATE);
+			if (entrySize == 4) {
+				if (zText4::createModule(path, iType, v11n)) {
+					fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
+					exit(EXIT_NO_CREATE);
+				}
+			}
+			else {
+				if (zText::createModule(path, iType, v11n)) {
+					fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
+					exit(EXIT_NO_CREATE);
+				}
 			}
 		}
 		else if (entrySize == 4) {
@@ -1773,9 +1779,10 @@ int main(int argc, char **argv) {
 
 	// Do some initialization stuff
 	if (compressor) {
-		// Create a compressed text module allowing very large entries
-		// Taking defaults except for first, fourth, fifth and last argument
-		module = new zText(
+		if (entrySize == 4) {
+			// Create a compressed text module allowing very large entries
+			// Taking defaults except for first, fourth, fifth and last argument
+			module = new zText4(
 				path,		// ipath
 				0,		// iname
 				0,		// idesc
@@ -1788,6 +1795,24 @@ int main(int argc, char **argv) {
 				0,		// lang
 				v11n		// versification
 		       );
+		}
+		else {
+			// Create a compressed text module allowing reasonable sized entries
+			// Taking defaults except for first, fourth, fifth and last argument
+			module = new zText(
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				iType,		// iblockType
+				compressor,	// icomp
+				0,		// idisp
+				ENC_UNKNOWN,	// enc
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// lang
+				v11n		// versification
+		       );
+		}
 	}
 	else if (entrySize == 4) {
 		// Create a raw text module allowing very large entries
