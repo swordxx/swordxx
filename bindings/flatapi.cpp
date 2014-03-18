@@ -1003,7 +1003,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOptions
 	retVal = (const char **)calloc(count+1, sizeof(const char *));
 	count = 0;
 	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
-		stdstr((char **)&((*retVal)[count++]), it->c_str());
+		stdstr((char **)&(retVal[count++]), it->c_str());
 	}
 
 	hmgr->globalOptions = retVal;
@@ -1031,7 +1031,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOptionValues
 	retVal = (const char **)calloc(count+1, sizeof(const char *));
 	count = 0;
 	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
-		stdstr((char **)&((*retVal)[count++]), it->c_str());
+		stdstr((char **)&(retVal[count++]), it->c_str());
 	}
 
 	hmgr->globalOptionValues = retVal;
@@ -1084,7 +1084,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getAvailableLocales
 	retVal = (const char **)calloc(count+1, sizeof(const char *));
 	count = 0;
 	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); ++it) {
-		stdstr((char **)&((*retVal)[count++]), it->c_str());
+		stdstr((char **)&(retVal[count++]), it->c_str());
 	}
 
 	hmgr->availableLocales = retVal;
