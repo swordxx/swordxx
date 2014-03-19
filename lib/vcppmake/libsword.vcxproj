@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -86,7 +86,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;ws2_32.lib;winmm.lib;wldap32.lib;icuuc.lib;icuin.lib;icudt.lib;libbz2.lib;liblzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc10-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -125,7 +125,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;ws2_32.lib;winmm.lib;wldap32.lib;icuuc.lib;icuin.lib;icudt.lib;libbz2.lib;liblzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc10-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../curl/builds/libcurl-vc-x86-release-static-ipv6-sspi-spnego-winssl/lib;../../../icu-sword/lib;../../../bzip2/Release;../../../xz/bin_i486;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
