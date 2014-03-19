@@ -28,8 +28,10 @@
 #include <swversion.h>
 #include <swmgr.h>
 #include <installmgr.h>
+#include <remotetrans.h>
 #include <versekey.h>
 #include <treekeyidx.h>
+#include <filemgr.h>
 #include <swbuf.h>
 #include <localemgr.h>
 #include <utilstr.h>
@@ -45,10 +47,11 @@ using sword::SWBuf;
 using sword::TreeKeyIdx;
 
 
-#define GETSWMGR(handle, failReturn) HandleSWMgr *hmgr = (HandleSWMgr *)hSWMgr; if (!hmgr) return failReturn; WebMgr *mgr = hmgr->mgr; if (!mgr) return failReturn;
+#define GETSWMGR(handle, failReturn) HandleSWMgr *hmgr = (HandleSWMgr *)handle; if (!hmgr) return failReturn; WebMgr *mgr = hmgr->mgr; if (!mgr) return failReturn;
 
-#define GETSWMODULE(handle, failReturn) HandleSWModule *hmod = (HandleSWModule *)hSWModule; if (!hmod) return failReturn; SWModule *module = hmod->mod; if (!module) return failReturn;
+#define GETSWMODULE(handle, failReturn) HandleSWModule *hmod = (HandleSWModule *)handle; if (!hmod) return failReturn; SWModule *module = hmod->mod; if (!module) return failReturn;
 
+#define GETINSTMGR(handle, failReturn) HandleInstMgr *hinstmgr = (HandleInstMgr *)handle; if (!hinstmgr) return failReturn; InstallMgr *installMgr = hinstmgr->installMgr; if (!installMgr) return failReturn;
 
 namespace {
 
@@ -67,6 +70,84 @@ void clearStringArray(const char ***stringArray) {
 }
 
 
+void clearModInfo(org_crosswire_sword_ModInfo **modInfo) {
+	if (*modInfo) {
+		for (int i = 0; true; ++i) {
+			if ((*modInfo)[i].name) {
+				delete [] (*modInfo)[i].name;
+				delete [] (*modInfo)[i].description;
+				delete [] (*modInfo)[i].category;
+				delete [] (*modInfo)[i].language;
+				delete [] (*modInfo)[i].version;
+				delete [] (*modInfo)[i].delta;
+			}
+			else break;
+		}
+		free((*modInfo));
+		(*modInfo) = 0;
+	}
+}
+
+
+struct pu {
+	char last;
+	SWHANDLE progressReporter;
+
+	void init(SWHANDLE pr) { progressReporter = pr; last = 0; }
+/*
+	pu(JNIEnv *env, jobject pr) : env(env), progressReporter(pr), last(0) {}
+	JNIEnv *env;
+	jobject progressReporter;
+*/
+};
+void percentUpdate(char percent, void *userData) {
+	struct pu *p = (struct pu *)userData;
+
+	if (percent != p->last) {
+		p->last = percent;
+/*
+		jclass cls = p->env->GetObjectClass(p->progressReporter);
+		jmethodID mid = p->env->GetMethodID(cls, "progressReport", "(I)V");
+		if (mid != 0) {
+			p->env->CallVoidMethod(p->progressReporter, mid, (jint)percent);
+		}
+*/
+	}
+}
+
+class MyStatusReporter : public StatusReporter {
+public:
+	int last;
+	SWHANDLE statusReporter;
+	MyStatusReporter() : last(0), statusReporter(0) {}
+	void init(SWHANDLE sr) { statusReporter = sr; last = 0; }
+        virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
+		int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
+		for (;last < p; ++last) {
+			if (!last) {
+				SWBuf output;
+				output.setFormatted("[ File Bytes: %ld", totalBytes);
+				while (output.size() < 75) output += " ";
+				output += "]";
+//				cout << output.c_str() << "\n ";
+			}
+//			cout << "-";
+		}
+//		cout.flush();
+	}
+        virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
+		SWBuf output;
+		output.setFormatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes);
+		while (output.size() < 75) output += " ";
+		output += "]";
+//		cout << "\n" << output.c_str() << "\n ";
+//		int p = (int)(74.0 * (double)completedBytes/totalBytes);
+//		for (int i = 0; i < p; ++i) { cout << "="; }
+//		cout << "\n\n" << message << "\n";
+		last = 0;
+	}
+};      
+
 class HandleSWModule {
 public:
 	SWModule *mod;
@@ -75,6 +156,7 @@ public:
 	char *renderHeader;
 	char *rawEntry;
 	char *configEntry;
+	struct pu peeuuu;
 	// making searchHits cache static saves memory only having a single
 	// outstanding copy, but also is not threadsafe.  Remove static here
 	// and fix compiling bugs and add clearSearchHits() to d-tor to change
@@ -139,19 +221,7 @@ public:
 	}
 
 	void clearModInfo() {
-		if (modInfo) {
-			for (int i = 0; true; ++i) {
-				if (modInfo[i].name) {
-					delete [] modInfo[i].name;
-					delete [] modInfo[i].description;
-					delete [] modInfo[i].category;
-					delete [] modInfo[i].language;
-				}
-				else break;
-			}
-			free(modInfo);
-			modInfo = 0;
-		}
+		::clearModInfo(&modInfo);
 	}
 
 	~HandleSWMgr() {
@@ -184,6 +254,46 @@ public:
 };
 
 
+class HandleInstMgr {
+public:
+	static const char **remoteSources;
+	InstallMgr *installMgr;
+	org_crosswire_sword_ModInfo *modInfo;
+	std::map<SWModule *, HandleSWModule *> moduleHandles;
+
+	MyStatusReporter statusReporter;
+	HandleInstMgr() : installMgr(0), modInfo(0) {}
+	HandleInstMgr(InstallMgr *mgr) {
+		this->installMgr = installMgr;
+		this->modInfo = 0;
+	}
+
+	~HandleInstMgr() {
+		clearModInfo();
+		for (std::map<SWModule *, HandleSWModule *>::iterator it = moduleHandles.begin(); it != moduleHandles.end(); ++it) {
+			delete it->second;
+		}
+		delete installMgr;
+	}
+
+	HandleSWModule *getModuleHandle(SWModule *mod) {
+		if (!mod) return 0;
+		if (moduleHandles.find(mod) == moduleHandles.end()) {
+			moduleHandles[mod] = new HandleSWModule(mod);
+		}
+		return moduleHandles[mod];
+	}
+
+	static void clearRemoteSources() {
+		clearStringArray(&remoteSources);
+	}
+
+	void clearModInfo() {
+		::clearModInfo(&modInfo);
+	}
+};
+
+
 org_crosswire_sword_SearchHit *HandleSWModule::searchHits = 0;
 const char **HandleSWModule::entryAttributes = 0;
 const char **HandleSWModule::parseKeyList = 0;
@@ -192,6 +302,8 @@ const char **HandleSWModule::keyChildren = 0;
 const char **HandleSWMgr::globalOptions = 0;
 const char **HandleSWMgr::globalOptionValues = 0;
 const char **HandleSWMgr::availableLocales = 0;
+
+const char **HandleInstMgr::remoteSources = 0;
 
 class InitStatics {
 public:
@@ -205,6 +317,8 @@ public:
 		HandleSWMgr::globalOptions = 0;
 		HandleSWMgr::globalOptionValues = 0;
 		HandleSWMgr::availableLocales = 0;
+
+		HandleInstMgr::remoteSources = 0;
 	}
 	~InitStatics() {
 		HandleSWModule::clearSearchHits();
@@ -214,8 +328,12 @@ public:
 
 		HandleSWMgr::clearGlobalOptions();
 		HandleSWMgr::clearGlobalOptionValues();
+
+		HandleInstMgr::clearRemoteSources();
 	}
 } _initStatics;
+
+
 
 }
 
@@ -256,6 +374,7 @@ const struct org_crosswire_sword_SearchHit * SWDLLEXPORT org_crosswire_sword_SWM
 	sword::ListKey result;
 
 
+	hmod->peeuuu.init(progressReporter);
 	if ((scope) && (strlen(scope)) > 0) {
 		sword::SWKey *p = module->createKey();
         	sword::VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
@@ -265,10 +384,10 @@ const struct org_crosswire_sword_SearchHit * SWDLLEXPORT org_crosswire_sword_SWM
 	        }
 	        *parser = module->getKeyText();
 		lscope = parser->parseVerseList(scope, *parser, true);
-		result = module->search(searchString, searchType, flags, &lscope);
+		result = module->search(searchString, searchType, flags, &lscope, 0, &percentUpdate, &(hmod->peeuuu));
                 delete parser;
 	}
-	else	result = module->search(searchString, searchType, flags);
+	else	result = module->search(searchString, searchType, flags, 0, 0, &percentUpdate, &(hmod->peeuuu));
 
 	int count = 0;
 	for (result = sword::TOP; !result.popError(); result++) count++;
@@ -872,12 +991,14 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr
 		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
 			SWBuf type = module->getType();
 			SWBuf cat = module->getConfigEntry("Category");
-			if (cat.length() > 0)
-				type = cat;
+			SWBuf version = module->getConfigEntry("Version");
+			if (cat.length() > 0) type = cat;
 			stdstr(&(milist[i].name), assureValidUTF8(module->getName()));
 			stdstr(&(milist[i].description), assureValidUTF8(module->getDescription()));
 			stdstr(&(milist[i].category), assureValidUTF8(type.c_str()));
 			stdstr(&(milist[i++].language), assureValidUTF8(module->getLanguage()));
+			stdstr(&(milist[i++].version), assureValidUTF8(version.c_str()));
+			stdstr(&(milist[i++].delta), "");
 			if (i >= size) break;
 		}
 	}
@@ -1129,11 +1250,26 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
- * Method:    reInit
- * Signature: ()V
+ * Method:    new
+ * Signature: (Ljava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)V
  */
-void SWDLLEXPORT org_crosswire_sword_InstallMgr_reInit
-  (SWHANDLE hInstallMgr) {}
+SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_new
+  (const char *baseDir, SWHANDLE statusReporter) {
+	SWBuf confPath = SWBuf(baseDir) + "/InstallMgr.conf";
+	// be sure we have at least some config file already out there
+	if (!FileMgr::existsFile(confPath.c_str())) {
+		FileMgr::createParent(confPath.c_str());
+//		remove(confPath.c_str());
+
+		SWConfig config(confPath.c_str());
+		config["General"]["PassiveFTP"] = "true";
+		config.Save();
+	}
+	HandleInstMgr *hinstmgr = new HandleInstMgr();
+	hinstmgr->statusReporter.init(statusReporter);
+	hinstmgr->installMgr = new InstallMgr(baseDir, &(hinstmgr->statusReporter));
+	return (SWHANDLE) hinstmgr;
+}
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
@@ -1141,7 +1277,12 @@ void SWDLLEXPORT org_crosswire_sword_InstallMgr_reInit
  * Signature: ()V
  */
 void SWDLLEXPORT org_crosswire_sword_InstallMgr_setUserDisclaimerConfirmed
-  (SWHANDLE hInstallMgr) {}
+  (SWHANDLE hInstallMgr) {
+
+	GETINSTMGR(hInstallMgr, );
+
+	installMgr->setUserDisclaimerConfirmed(true);
+}
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
@@ -1151,18 +1292,29 @@ void SWDLLEXPORT org_crosswire_sword_InstallMgr_setUserDisclaimerConfirmed
 int SWDLLEXPORT org_crosswire_sword_InstallMgr_syncConfig
   (SWHANDLE hInstallMgr) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr, -1);
+
+	return installMgr->refreshRemoteSourceConfiguration();
 }
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    uninstallModule
- * Signature: (Ljava/lang/String;)I
+ * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;)I
  */
 int SWDLLEXPORT org_crosswire_sword_InstallMgr_uninstallModule
-  (SWHANDLE hInstallMgr, const char *) {
+  (SWHANDLE hInstallMgr, SWHANDLE hSWMgr_removeFrom, const char *modName) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr, -1);
+	GETSWMGR(hSWMgr_removeFrom, -1);
+
+	SWModule *module;
+	ModMap::iterator it = mgr->Modules.find(modName);
+	if (it == mgr->Modules.end()) {
+		return -2;
+	}
+	module = it->second;
+	return installMgr->removeModule(mgr, module->getName());
 }
 
 /*
@@ -1173,7 +1325,23 @@ int SWDLLEXPORT org_crosswire_sword_InstallMgr_uninstallModule
 const char ** SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteSources
   (SWHANDLE hInstallMgr) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr, 0);
+
+	hinstmgr->clearRemoteSources();
+	sword::StringList vals = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();
+	const char **retVal = 0;
+	int count = 0;
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
+		count++;
+	}
+	retVal = (const char **)calloc(count+1, sizeof(const char *));
+	count = 0;
+	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
+		stdstr((char **)&(retVal[count++]), it->second->caption.c_str());
+	}
+
+	hinstmgr->remoteSources = retVal;
+	return retVal;
 }
 
 /*
@@ -1182,31 +1350,106 @@ const char ** SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteSources
  * Signature: (Ljava/lang/String;)I
  */
 int SWDLLEXPORT org_crosswire_sword_InstallMgr_refreshRemoteSource
-  (SWHANDLE hInstallMgr, const char *) {
+  (SWHANDLE hInstallMgr, const char *sourceName) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr, -1);
+
+	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
+	if (source == installMgr->sources.end()) {
+		return -3;
+	}
+
+	return installMgr->refreshRemoteSource(source->second);
 }
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    getRemoteModInfoList
- * Signature: (Ljava/lang/String;)[Lorg/crosswire/android/sword/SWMgr/ModInfo;
+ * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;)[Lorg/crosswire/android/sword/SWMgr/ModInfo;
  */
 const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModInfoList
-  (SWHANDLE hInstallMgr, const char *) {
+  (SWHANDLE hInstallMgr, SWHANDLE hSWMgr_deltaCompareTo, const char *sourceName) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr, 0);
+	GETSWMGR(hSWMgr_deltaCompareTo, 0);
+
+	struct org_crosswire_sword_ModInfo *retVal = 0;
+
+	hinstmgr->clearModInfo();
+
+	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
+	if (source == installMgr->sources.end()) {
+		retVal = (struct org_crosswire_sword_ModInfo *)calloc(1, sizeof(struct org_crosswire_sword_ModInfo));
+		hinstmgr->modInfo = retVal;
+		return retVal;
+	}
+
+	std::map<SWModule *, int> modStats = installMgr->getModuleStatus(*mgr, *source->second->getMgr());
+
+	int size = 0;
+	for (std::map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); ++it) {
+		size++;
+	}
+	retVal = (struct org_crosswire_sword_ModInfo *)calloc(size+1, sizeof(struct org_crosswire_sword_ModInfo));
+	int i = 0;
+	for (std::map<SWModule *, int>::iterator it = modStats.begin(); it != modStats.end(); ++it) {
+		SWModule *module = it->first;
+		int status = it->second;
+
+		SWBuf version = module->getConfigEntry("Version");
+		SWBuf statusString = " ";
+		if (status & InstallMgr::MODSTAT_NEW) statusString = "*";
+		if (status & InstallMgr::MODSTAT_OLDER) statusString = "-";
+		if (status & InstallMgr::MODSTAT_UPDATED) statusString = "+";
+
+		SWBuf type = module->getType();
+		SWBuf cat = module->getConfigEntry("Category");
+		if (cat.length() > 0) type = cat;
+
+		stdstr(&(retVal[i].name), assureValidUTF8(module->getName()));
+		stdstr(&(retVal[i].description), assureValidUTF8(module->getDescription()));
+		stdstr(&(retVal[i].category), assureValidUTF8(type.c_str()));
+		stdstr(&(retVal[i].language), assureValidUTF8(module->getLanguage()));
+		stdstr(&(retVal[i].version), assureValidUTF8(version.c_str()));
+		stdstr(&(retVal[i++].delta), assureValidUTF8(statusString.c_str()));
+		if (i >= size) break;
+	}
+	hinstmgr->modInfo = retVal;
+	return retVal;
 }
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    remoteInstallModule
- * Signature: (Ljava/lang/String;Ljava/lang/String;)I
+ * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;Ljava/lang/String;)I
  */
 int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
-  (SWHANDLE hInstallMgr, const char *, const char *) {
+  (SWHANDLE hInstallMgr_from, SWHANDLE hSWMgr_to, const char *sourceName, const char *modName) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr_from, -1);
+	GETSWMGR(hSWMgr_to, -1);
+
+	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
+
+	if (source == installMgr->sources.end()) {
+		return -3;
+	}
+
+	InstallSource *is = source->second;
+	SWMgr *rmgr = is->getMgr();
+	SWModule *module;
+
+	ModMap::iterator it = rmgr->Modules.find(modName);
+
+	if (it == rmgr->Modules.end()) {
+		return -4;
+	}
+
+	module = it->second;
+
+	int error = installMgr->installModule(mgr, 0, module->getName(), is);
+
+	return error;
 }
 
 /*
@@ -1215,7 +1458,24 @@ int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
  */
 SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
-  (SWHANDLE hInstallMgr, const char *, const char *) {
+  (SWHANDLE hInstallMgr, const char *sourceName, const char *modName) {
 
-	return 0;
+	GETINSTMGR(hInstallMgr, 0);
+
+	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
+
+	if (source == installMgr->sources.end()) {
+		return 0;
+	}
+
+	SWMgr *mgr = source->second->getMgr();
+
+	sword::SWModule *module = mgr->getModule(modName);
+
+	if (!module) {
+		return 0;
+	}
+
+	return (SWHANDLE)hinstmgr->getModuleHandle(module);
+
 }

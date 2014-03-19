@@ -37,6 +37,8 @@ struct org_crosswire_sword_ModInfo {
 	char *description;
 	char *category;
 	char *language;
+	char *version;
+	char *delta;
 };
 
 
@@ -45,78 +47,6 @@ struct org_crosswire_sword_SearchHit {
 	char *key;
 	long  score;
 };
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    reInit
- * Signature: ()V
- */
-void SWDLLEXPORT org_crosswire_sword_InstallMgr_reInit
-  (SWHANDLE hInstallMgr);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    setUserDisclaimerConfirmed
- * Signature: ()V
- */
-void SWDLLEXPORT org_crosswire_sword_InstallMgr_setUserDisclaimerConfirmed
-  (SWHANDLE hInstallMgr);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    syncConfig
- * Signature: ()I
- */
-int SWDLLEXPORT org_crosswire_sword_InstallMgr_syncConfig
-  (SWHANDLE hInstallMgr);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    uninstallModule
- * Signature: (Ljava/lang/String;)I
- */
-int SWDLLEXPORT org_crosswire_sword_InstallMgr_uninstallModule
-  (SWHANDLE hInstallMgr, const char *);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    getRemoteSources
- * Signature: ()[Ljava/lang/String;
- */
-const char ** SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteSources
-  (SWHANDLE hInstallMgr);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    refreshRemoteSource
- * Signature: (Ljava/lang/String;)I
- */
-int SWDLLEXPORT org_crosswire_sword_InstallMgr_refreshRemoteSource
-  (SWHANDLE hInstallMgr, const char *);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    getRemoteModInfoList
- * Signature: (Ljava/lang/String;)[Lorg/crosswire/android/sword/SWMgr/ModInfo;
- */
-const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModInfoList
-  (SWHANDLE hInstallMgr, const char *);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    remoteInstallModule
- * Signature: (Ljava/lang/String;Ljava/lang/String;)I
- */
-int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
-  (SWHANDLE hInstallMgr, const char *, const char *);
-
-/*
- * Class:     org_crosswire_sword_InstallMgr
- * Method:    getRemoteModuleByName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
- */
-SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
-  (SWHANDLE hInstallMgr, const char *, const char *);
 
 
 #undef org_crosswire_sword_SWModule_SEARCHTYPE_REGEX
@@ -484,6 +414,88 @@ void SWDLLEXPORT org_crosswire_sword_SWMgr_setDefaultLocale
  */
 const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
   (SWHANDLE hSWMgr, const char *text, const char *localeName);
+
+
+
+
+
+//
+// InstallMgr methods
+//
+//
+
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    new
+ * Signature: (Ljava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)V
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_new
+  (const char *baseDir, SWHANDLE statusReporter);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    setUserDisclaimerConfirmed
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_InstallMgr_setUserDisclaimerConfirmed
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    syncConfig
+ * Signature: ()I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_syncConfig
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    uninstallModule
+ * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;)I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_uninstallModule
+  (SWHANDLE hInstallMgr, SWHANDLE hSWMgr_removeFrom, const char *modName);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    getRemoteSources
+ * Signature: ()[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteSources
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    refreshRemoteSource
+ * Signature: (Ljava/lang/String;)I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_refreshRemoteSource
+  (SWHANDLE hInstallMgr, const char *sourceName);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    getRemoteModInfoList
+ * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;)[Lorg/crosswire/android/sword/SWMgr/ModInfo;
+ */
+const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModInfoList
+  (SWHANDLE hInstallMgr, SWHANDLE hSWMgr_deltaCompareTo, const char *sourceName);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    remoteInstallModule
+ * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;Ljava/lang/String;)I
+ */
+int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
+  (SWHANDLE hInstallMgr_from, SWHANDLE hSWMgr_to, const char *sourceName, const char *modName);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
+ * Method:    getRemoteModuleByName
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
+  (SWHANDLE hInstallMgr, const char *sourceName, const char *modName);
 
 #ifdef __cplusplus
 }

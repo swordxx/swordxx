@@ -1132,6 +1132,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 
 	SWModule *module = getModule(env, me);
 
+	// TODO: remove this from the stack
 	struct pu peeuuu(env, progressReporter);
 
 	if (module) {
@@ -1245,11 +1246,11 @@ SWLog::getSystemLog()->logDebug("uninstallModule %s\n", modName);
 		return -2;
 	}
 	module = it->second;
-	installMgr->removeModule(mgr, module->getName());
+	int retVal = installMgr->removeModule(mgr, module->getName());
 
 	env->ReleaseStringUTFChars(modNameJS, modName);
 
-	return 0;
+	return retVal;
 }
 
 
@@ -1350,9 +1351,9 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 
 		SWBuf version = module->getConfigEntry("Version");
 		SWBuf statusString = " ";
-		if (it->second & InstallMgr::MODSTAT_NEW) statusString = "*";
-		if (it->second & InstallMgr::MODSTAT_OLDER) statusString = "-";
-		if (it->second & InstallMgr::MODSTAT_UPDATED) statusString = "+";
+		if (status & InstallMgr::MODSTAT_NEW) statusString = "*";
+		if (status & InstallMgr::MODSTAT_OLDER) statusString = "-";
+		if (status & InstallMgr::MODSTAT_UPDATED) statusString = "+";
 
 		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
