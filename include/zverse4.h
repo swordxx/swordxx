@@ -5,7 +5,7 @@
  *			and provides lookup and parsing functions based on
  *			class VerseKey
  *
- * $Id: zverse4.h 2833 2013-06-29 06:40:28Z chrislit $
+ * $Id$
  *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

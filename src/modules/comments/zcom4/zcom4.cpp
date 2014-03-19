@@ -3,7 +3,7 @@
  *  zcom4.cpp -	code for class 'zCom4'- a module that reads compressed
  *		commentary files
  *
- * $Id: zcom4.cpp 3073 2014-03-05 00:27:52Z scribe $
+ * $Id$
  *
  * Copyright 1996-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

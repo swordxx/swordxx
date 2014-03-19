@@ -3,7 +3,7 @@
  *  ztext4.h -	code for class 'zText4'- a module that reads compressed text
  *		files: ot and nt using indexs ??.vss
  *
- * $Id: ztext4.h 3126 2014-03-14 11:59:36Z chrislit $
+ * $Id$
  *
  * Copyright 1996-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

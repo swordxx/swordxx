@@ -3,7 +3,7 @@
  *  ztext4.cpp -	code for class 'zText4'- a module that reads compressed
  *			text files
  *
- * $Id: ztext4.cpp 2980 2013-09-14 21:51:47Z scribe $
+ * $Id$
  *
  * Copyright 1996-2014 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
