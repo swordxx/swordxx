@@ -281,6 +281,15 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_new
 
 /*
  * Class:     org_crosswire_sword_SWMgr
+ * Method:    newWithPath
+ * Signature: ()V
+ * Signature: (Ljava/lang/String;)V
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_newWithPath
+  (const char *path);
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
  * Method:    delete
  * Signature: ()V
  */

@@ -941,6 +941,26 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_new() {
 	return (SWHANDLE) new HandleSWMgr(new WebMgr(sysConf));
 }
 
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    new
+ * Signature: ()V
+ */
+SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_newWithPath(const char *path) { 
+	SWBuf confPath = path;
+	if (!confPath.endsWith("/")) confPath.append('/');
+	SWBuf modsd = confPath.append("mods.d");
+	// be sure we have at least some config file already out there
+	if (!FileMgr::existsFile(modsd.c_str())) {
+		modsd.append("/globals.conf");
+		FileMgr::createParent(modsd.c_str());
+		SWConfig config(modsd.c_str());
+		config["Globals"]["HiAndroid"] = "weeee";
+		config.Save();
+	}
+	return (SWHANDLE) new HandleSWMgr(new WebMgr(confPath.c_str()));
+}
+
 
 /*
  * Class:     org_crosswire_sword_SWMgr
