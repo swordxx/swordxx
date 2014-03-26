@@ -78,6 +78,7 @@ public class SWModule {
 	public native void          next();
 	public native void          begin();
 	public native String        getStripText();
+	public native String        getRenderHeader();
 	public native String        getRenderText();
 	public native String        getRawEntry();
 	public native void          setRawEntry(String entryBuffer);

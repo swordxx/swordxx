@@ -50,9 +50,10 @@ using std::vector;
 
 using namespace sword;
 
-
+namespace {
 WebMgr *mgr = 0;
 InstallMgr *installMgr = 0;
+bool disclaimerConfirmed = false;
 
 class AndroidLogger : public SWLog {
 	vector<int> levelMapping;
@@ -96,21 +97,25 @@ static void init() {
 static void initInstall() {
 
 	if (!installMgr) {
+SWLog::getSystemLog()->logDebug("initInstall: installMgr is null");
 		SWBuf baseDir  = "/sdcard/sword/InstallMgr";
 		SWBuf confPath = baseDir + "/InstallMgr.conf";
 		// be sure we have at least some config file already out there
+SWLog::getSystemLog()->logDebug("initInstall: confPath: %s", confPath.c_str());
 		if (!FileMgr::existsFile(confPath.c_str())) {
+SWLog::getSystemLog()->logDebug("initInstall: file doesn't exist: %s", confPath.c_str());
 			FileMgr::createParent(confPath.c_str());
-			remove(confPath.c_str());
-
 			SWConfig config(confPath.c_str());
 			config["General"]["PassiveFTP"] = "true";
 			config.Save();
 		}
 		installMgr = new InstallMgr(baseDir);
+		if (disclaimerConfirmed) installMgr->setUserDisclaimerConfirmed(true);
+SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseDir: %s", baseDir.c_str());
 	}
 }
 
+}
 
 
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_version
@@ -509,7 +514,9 @@ SWLog::getSystemLog()->logDebug("setKeyText(%s, %s)", module->getName(), keyText
 		sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 		if (vkey && (*keyText=='+' ||*keyText=='-')) {
 			if (!stricmp(keyText+1, "book")) {
-				vkey->setBook(vkey->getBook() + ((*keyText=='+')?1:-1));
+				int newBook = vkey->getBook() + ((*keyText=='+')?1:-1);
+SWLog::getSystemLog()->logDebug("setting book to %d", newBook);
+				vkey->setBook(newBook);
 				env->ReleaseStringUTFChars(keyTextJS, keyText);
 				return;
 			}
@@ -561,6 +568,26 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderTex
 	jstring retVal = 0;
 	if (module) {
 		retVal = env->NewStringUTF(assureValidUTF8(module->renderText()));
+	}
+	return retVal;
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWModule
+ * Method:    getRenderHeader
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderHeader
+  (JNIEnv *env, jobject me) {
+
+	init();
+
+	SWModule *module = getModule(env, me);
+
+	jstring retVal = 0;
+	if (module) {
+		retVal = env->NewStringUTF(assureValidUTF8(((const char *)(module->getRenderHeader() ? module->getRenderHeader():""))));
 	}
 	return retVal;
 }
@@ -802,7 +829,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 
 		sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 		if (vkey) {
-			ret = (jobjectArray) env->NewObjectArray(7, clazzString, NULL);
+			ret = (jobjectArray) env->NewObjectArray(10, clazzString, NULL);
 			SWBuf num;
 			num.appendFormatted("%d", vkey->getTestament());
 			env->SetObjectArrayElement(ret, 0, env->NewStringUTF(assureValidUTF8(num.c_str())));
@@ -822,6 +849,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 			num.appendFormatted("%d", vkey->getVerseMax());
 			env->SetObjectArrayElement(ret, 5, env->NewStringUTF(assureValidUTF8(num.c_str())));
 			env->SetObjectArrayElement(ret, 6, env->NewStringUTF(assureValidUTF8(vkey->getBookName())));
+			env->SetObjectArrayElement(ret, 7, env->NewStringUTF(assureValidUTF8(vkey->getOSISRef())));
+			env->SetObjectArrayElement(ret, 8, env->NewStringUTF(assureValidUTF8(vkey->getShortText())));
+			env->SetObjectArrayElement(ret, 9, env->NewStringUTF(assureValidUTF8(vkey->getBookAbbrev())));
 		}
 		else {
 			TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
@@ -1271,6 +1301,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_InstallMgr_getRe
 	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
 		count++;
 	}
+SWLog::getSystemLog()->logDebug("getRemoteSources: count: %d\n", count);
 	ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 	count = 0;
 	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
@@ -1475,6 +1506,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_InstallMgr_setUserDiscla
 
 	initInstall();
 
+	disclaimerConfirmed = true;
 	installMgr->setUserDisclaimerConfirmed(true);
 }
 

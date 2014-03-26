@@ -139,6 +139,14 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getStripText
 
 /*
  * Class:     org_crosswire_android_sword_SWModule
+ * Method:    getRenderHeader
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderHeader
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_crosswire_android_sword_SWModule
  * Method:    getRenderText
  * Signature: ()Ljava/lang/String;
  */
