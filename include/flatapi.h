@@ -444,6 +444,14 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_new
 
 /*
  * Class:     org_crosswire_sword_InstallMgr
+ * Method:    delete
+ * Signature: ()V
+ */
+void SWDLLEXPORT org_crosswire_sword_InstallMgr_delete
+  (SWHANDLE hInstallMgr);
+
+/*
+ * Class:     org_crosswire_sword_InstallMgr
  * Method:    setUserDisclaimerConfirmed
  * Signature: ()V
  */
