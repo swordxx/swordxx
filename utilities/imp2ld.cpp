@@ -143,6 +143,10 @@ int main(int argc, char **argv) {
 	}
 
 	std::ifstream infile(inFileName);
+	if (!infile.is_open()) {
+		fprintf(stderr, "\nERROR: %s: could not open file for reading: %s\n\n", *argv, inFileName);
+		exit(-2);
+	}
 
 
 	SWModule *mod = 0;
@@ -165,7 +169,7 @@ int main(int argc, char **argv) {
 		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
 #endif
 	}
-	else if (compType = "XZ") {
+	else if (compType == "XZ") {
 #ifndef EXCLUDEXZ
 		compressor = new XzCompress();
 #else
