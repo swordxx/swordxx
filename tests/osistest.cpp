@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 	SWModule *module = library.getModule(argv[1]);
 
 	if (!module) {
-		cerr << "\nCouldn't file modules: " << argv[1] << "\n" << endl;
+		cerr << "\nCouldn't find module: " << argv[1] << "\n" << endl;
 		exit(-2);
 	}
 
