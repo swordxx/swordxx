@@ -78,13 +78,15 @@ char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, cons
 			if (!strncmp(token.c_str(), "seg ", 4) || !strncmp(token.c_str(), "/seg", 4)) {
 				tag = token;
 
-				if (!tag.isEndTag() && tag.getAttribute("type") && !strcmp("morph", tag.getAttribute("type"))) {  //<seg type="morph"> start tag
+				if (!tag.isEndTag() && tag.getAttribute("type") &&
+					(  !strcmp("morph", tag.getAttribute("type"))
+					|| !strcmp("x-morph", tag.getAttribute("type")))) {  //<seg type="morph"> start tag
 					hide = !option; //only hide if option is Off
 					tagText = "";
 					inMorpheme = true;
 				}
 
-				if (tag.isEndTag()) {
+				if (tag.isEndTag() && inMorpheme) {
 						buf.setFormatted("%.3d", morphemeNum++);
 						module->getEntryAttributes()["Morpheme"][buf]["body"] = tagText;
 						inMorpheme = false;
