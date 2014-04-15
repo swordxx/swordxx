@@ -103,12 +103,19 @@ int main(int argc, char **argv)
 	AttributeTypeList::iterator i1;
 	AttributeList::iterator i2;
 	AttributeValue::iterator i3;
+	bool heading = false;
+	bool preverse = false;
 	for (i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); ++i1) {
 		std::cout << "[ " << i1->first << " ]\n";
+		heading = (i1->first == "Heading");
 		for (i2 = i1->second.begin(); i2 != i1->second.end(); ++i2) {
 			std::cout << "\t[ " << i2->first << " ]\n";
+			preverse = (heading && i2->first == "Preverse");
 			for (i3 = i2->second.begin(); i3 != i2->second.end(); ++i3) {
 				std::cout << "\t\t" << i3->first << " = " << i3->second << "\n";
+				if (preverse) {
+					std::cout << "\t\tmodule->renderText(heading[" << i3->first << "]) = " << target->renderText(i3->second) << "\n";
+				}
 			}
 		}
 	}
