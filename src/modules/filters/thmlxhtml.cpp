@@ -299,17 +299,19 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 			if (tag.isEndTag() && u->SecHead) {
-				buf += "</i></b><br />";
+				buf += "</h";
+				buf += u->SecHead;
+				buf += ">";
 				u->SecHead = false;
 			}
 			else if (tag.getAttribute("class")) {
 				if (!stricmp(tag.getAttribute("class"), "sechead")) {
-					u->SecHead = true;
-					buf += "<br /><b><i>";
+					u->SecHead = '3';
+					buf += "<h3>";
 				}
 				else if (!stricmp(tag.getAttribute("class"), "title")) {
-					u->SecHead = true;
-					buf += "<br /><b><i>";
+					u->SecHead = '2';
+					buf += "<h2>";
 				}
 				else {
 					buf += tag;
