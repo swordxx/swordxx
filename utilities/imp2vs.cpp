@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
 #endif
 	}
-	else if (compType = "XZ") {
+	else if (compType == "XZ") {
 #ifndef EXCLUDEXZ
 		compressor = new XzCompress();
 #else
