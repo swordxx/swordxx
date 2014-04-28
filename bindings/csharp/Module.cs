@@ -74,7 +74,7 @@ namespace Sword
 			}
 		}
 		
-		public string Rendertext()
+		public string RenderText()
 		{
 			IntPtr keyTextPtr = NativeMethods.org_crosswire_sword_SWModule_renderText(_handle);
 			return Marshal.PtrToStringAnsi(keyTextPtr);
