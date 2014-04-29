@@ -289,7 +289,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								URL::encode(vkey->getText()).c_str(), 
 								ch,
 								ch, 
-								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+								(renderNoteNumbers ? noteName.c_str() : ""));
 						}
 						else {
 							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
@@ -299,7 +299,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								URL::encode(u->key->getText()).c_str(),  
 								ch,
 								ch, 
-								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+								(renderNoteNumbers ? noteName.c_str() : ""));
 						}
 					}
 				}

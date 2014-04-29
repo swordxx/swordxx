@@ -230,7 +230,7 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							URL::encode(vkey->getText()).c_str(), 
 							ch,
 							ch, 
-							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 					else {
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
@@ -241,7 +241,7 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							URL::encode(u->key->getText()).c_str(),  
 							ch,
 							ch, 
-							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 					u->suspendTextPassThru = true;
 				}
@@ -289,7 +289,7 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							URL::encode(footnoteNumber.c_str()).c_str(), 
 							URL::encode(u->version.c_str()).c_str(),
 							URL::encode(vkey->getText()).c_str(), 
-							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 				}
 
