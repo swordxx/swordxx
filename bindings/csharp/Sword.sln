@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sword", "Sword\Sword.csproj", "{EFEE3557-86F2-4E46-AF7E-8BADEE240764}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sword", "Sword.csproj", "{EFEE3557-86F2-4E46-AF7E-8BADEE240764}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sword.Tests", "Sword.Tests\Sword.Tests.csproj", "{72212684-1186-4F68-8FBD-BDBFDB8CC9BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sword.Tests", "tests\Sword.Tests.csproj", "{72212684-1186-4F68-8FBD-BDBFDB8CC9BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookupExample", "examples\LookupExample.csproj", "{60F12DE9-FBC5-42B1-8341-9AB097D661AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{60F12DE9-FBC5-42B1-8341-9AB097D661AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60F12DE9-FBC5-42B1-8341-9AB097D661AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60F12DE9-FBC5-42B1-8341-9AB097D661AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60F12DE9-FBC5-42B1-8341-9AB097D661AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72212684-1186-4F68-8FBD-BDBFDB8CC9BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72212684-1186-4F68-8FBD-BDBFDB8CC9BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72212684-1186-4F68-8FBD-BDBFDB8CC9BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -21,7 +27,7 @@ Global
 		{EFEE3557-86F2-4E46-AF7E-8BADEE240764}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Sword\Sword.csproj
+		StartupItem = Sword.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None

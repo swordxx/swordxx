@@ -10,7 +10,7 @@
     <RootNamespace>Sword</RootNamespace>
     <AssemblyName>CSSword</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\sword.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>sword.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{72212684-1186-4F68-8FBD-BDBFDB8CC9BC}</ProjectGuid>
+    <ProjectGuid>{60F12DE9-FBC5-42B1-8341-9AB097D661AE}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Sword.Tests</RootNamespace>
-    <AssemblyName>CSSword.Tests</AssemblyName>
+    <RootNamespace>LookupExample</RootNamespace>
+    <AssemblyName>LookupExample</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -19,7 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>ESV jn.3.16</Commandlineparameters>
+    <Commandlineparameters>ESV john.3.16</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -31,23 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.core, Version=2.5.10.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Private>False</Private>
-      <Package>mono-nunit</Package>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.10.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Private>False</Private>
-      <Package>mono-nunit</Package>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ModuleTests.cs" />
-    <Compile Include="ManagerTests.cs" />
-    <Compile Include="InstallManagerTests.cs" />
-    <Compile Include="Main.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="LookupExample.cs" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sword.csproj">
       <Project>{EFEE3557-86F2-4E46-AF7E-8BADEE240764}</Project>
