@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 	SWCompress *compressor = 0;
 	SWBuf compType         = "";
 	bool fourByteSize      = false;
-    bool strongsPadding    = true;
+	bool strongsPadding    = true;
 
 	if (argc < 2) usage(*argv);
 
@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
 		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
 #endif
 	}
-	else if (compType = "XZ") {
+	else if (compType == "XZ") {
 #ifndef EXCLUDEXZ
 		compressor = new XzCompress();
 #else
