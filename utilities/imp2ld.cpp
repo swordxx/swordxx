@@ -56,10 +56,12 @@ void usage(const char *progName, const char *error = 0) {
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
 	fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
 	fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");
-	fprintf(stderr, "  -o <output_path>\t where to write data files.\n");
+	fprintf(stderr, "  -o <output_path>\t\t where to write data files.\n");
 	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default: 2).\n");
 	fprintf(stderr, "  -b <entry_count>\t\t compression block size (default 30 entries)\n");
 	fprintf(stderr, "  -s\t\t\t case sensitive keys (default is not case sensitive)\n");
+	fprintf(stderr, "  -P\t\t\t disable Strong's number padding check for digit entries. "
+		"Incorrect padding without StrongsPadding=false in you conf file will cause eternal loop.\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
@@ -87,6 +89,7 @@ int main(int argc, char **argv) {
 	SWCompress *compressor = 0;
 	SWBuf compType         = "";
 	bool fourByteSize      = false;
+    bool paddingCheck      = true;
 
 	if (argc < 2) usage(*argv);
 
@@ -117,6 +120,9 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-4")) {
 			fourByteSize = true;
 		}
+        else if (!strcmp(argv[i], "-P")) {
+            paddingCheck = false;
+        }
 		else if (!strcmp(argv[i], "-b")) {
 			if (i+1 < argc) {
 				blockCount = atoi(argv[++i]);
@@ -219,6 +225,14 @@ int main(int argc, char **argv) {
 				std::cout << keybuffer << std::endl;
 				*key = keybuffer.c_str();
 
+				if(paddingCheck) {
+					char *buf = new char [ strlen(*key) + 6 ];
+					strcpy(buf, *key);
+					SWLD::strongsPad(buf);
+					if(strcmp(buf, *key))
+						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
+				}
+
 				mod->setEntry(entbuffer.c_str(), entbuffer.size());
 				for (i = 0; i < links; i++) {
 					std::cout << "Linking: " << linkbuffer[i] << std::endl;
@@ -247,6 +261,13 @@ int main(int argc, char **argv) {
 		std::cout << keybuffer << std::endl;
 		*key = keybuffer.c_str();
 
+				if(paddingCheck) {
+					char *buf = new char [ strlen(*key) + 6 ];
+					strcpy(buf, *key);
+					SWLD::strongsPad(buf);
+					if(strcmp(buf, *key))
+						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
+				}
 		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 		for (i = 0; i < links; i++) {
 			std::cout << "Linking: " << linkbuffer[i] << std::endl;
