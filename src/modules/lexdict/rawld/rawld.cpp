@@ -147,8 +147,8 @@ void RawLD::increment(int steps) {
 
 
 void RawLD::setEntry(const char *inbuf, long len) {
-	char *buf = new char [ strlen(key) + 6 ];
-	strcpy(buf, key);
+	char *buf = new char [ strlen(*key) + 6 ];
+	strcpy(buf, *key);
 
 	if (strongsPadding) strongsPad(buf);
 
@@ -159,8 +159,8 @@ void RawLD::setEntry(const char *inbuf, long len) {
 
 
 void RawLD::linkEntry(const SWKey *inkey) {
-	char *buf = new char [ strlen(key) + 6 ];
-	strcpy(buf, key);
+	char *buf = new char [ strlen(*key) + 6 ];
+	strcpy(buf, *key);
 
 	if (strongsPadding) strongsPad(buf);
 
@@ -177,8 +177,8 @@ void RawLD::linkEntry(const SWKey *inkey) {
  */
 
 void RawLD::deleteEntry() {
-	char *buf = new char [ strlen(key) + 6 ];
-	strcpy(buf, key);
+	char *buf = new char [ strlen(*key) + 6 ];
+	strcpy(buf, *key);
 
 	if (strongsPadding) strongsPad(buf);
 
