@@ -8,7 +8,7 @@ Name: SWORD
 Description: Biblical Text Research Engine
 Version: @VERSION@
 @SHAREDLIB_TRUE@Libs: -L${libdir} -lsword
-@SHAREDLIB_FALSE@Libs: -L${libdir} -lsword -lz @CURL_LIBS@ @CLUCENE_LIBS@ @ICU_LIBS@ @ICU_IOLIBS@
-Libs.private: -L${libdir} -lsword -lz @CURL_LIBS@ @CLUCENE_LIBS@ @ICU_LIBS@ @ICU_IOLIBS@
+@SHAREDLIB_FALSE@Libs: -L${libdir} -lsword @LIBS@
+Libs.private: -L${libdir} -lsword @LIBS@
 Cflags: -I${includedir}/sword 
 
