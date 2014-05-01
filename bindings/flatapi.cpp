@@ -569,11 +569,11 @@ void SWDLLEXPORT org_crosswire_sword_SWModule_setKeyText
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
 		if ((*keyText=='+' || *keyText=='-')) {
-			if (!stricmp(keyText+1, "book")) {
+			if (!sword::stricmp(keyText+1, "book")) {
 				vkey->setBook(vkey->getBook() + ((*keyText=='+')?1:-1));
 				return;
 			}
-			else if (!stricmp(keyText+1, "chapter")) {
+			else if (!sword::stricmp(keyText+1, "chapter")) {
 				vkey->setChapter(vkey->getChapter() + ((*keyText=='+')?1:-1));
 				return;
 			}
