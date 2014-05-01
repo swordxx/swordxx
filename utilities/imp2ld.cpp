@@ -235,6 +235,7 @@ int main(int argc, char **argv) {
 					SWLD::strongsPad(buf);
 					if(strcmp(buf, *key))
 						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
+					delete buf;
 				}
 
 				mod->setEntry(entbuffer.c_str(), entbuffer.size());
@@ -265,13 +266,15 @@ int main(int argc, char **argv) {
 		std::cout << keybuffer << std::endl;
 		*key = keybuffer.c_str();
 
-				if(paddingCheck) {
-					char *buf = new char [ strlen(*key) + 6 ];
-					strcpy(buf, *key);
-					SWLD::strongsPad(buf);
-					if(strcmp(buf, *key))
-						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
-				}
+		if(paddingCheck) {
+			char *buf = new char [ strlen(*key) + 6 ];
+			strcpy(buf, *key);
+			SWLD::strongsPad(buf);
+			if(strcmp(buf, *key))
+				std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
+			delete buf;
+		}
+		
 		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 		for (i = 0; i < links; i++) {
 			std::cout << "Linking: " << linkbuffer[i] << std::endl;
