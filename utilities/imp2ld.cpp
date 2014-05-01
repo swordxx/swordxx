@@ -150,6 +150,10 @@ int main(int argc, char **argv) {
 
 	std::ifstream infile(inFileName);
 
+	if(!infile.is_open()) {
+		std::cout << "Unable to open file " << inFileName << std::endl;
+		return -1;
+	}
 
 	SWModule *mod = 0;
 	SWKey *key, *linkKey;
@@ -275,7 +279,6 @@ int main(int argc, char **argv) {
 	infile.close();
 
 	delete linkKey;
-	delete key;
 	delete mod;
 
 	return 0;
