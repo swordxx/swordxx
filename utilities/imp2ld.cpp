@@ -149,15 +149,7 @@ int main(int argc, char **argv) {
 	}
 
 	std::ifstream infile(inFileName);
-	if (!infile.is_open()) {
-		fprintf(stderr, "\nERROR: %s: could not open file for reading: %s\n\n", *argv, inFileName);
-		exit(-2);
-	}
 
-	if(!infile.is_open()) {
-		std::cout << "Unable to open file " << inFileName << std::endl;
-		return -1;
-	}
 
 	SWModule *mod = 0;
 	SWKey *key, *linkKey;
@@ -179,7 +171,7 @@ int main(int argc, char **argv) {
 		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
 #endif
 	}
-	else if (compType == "XZ") {
+	else if (compType = "XZ") {
 #ifndef EXCLUDEXZ
 		compressor = new XzCompress();
 #else
@@ -235,7 +227,6 @@ int main(int argc, char **argv) {
 					SWLD::strongsPad(buf);
 					if(strcmp(buf, *key))
 						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
-					delete buf;
 				}
 
 				mod->setEntry(entbuffer.c_str(), entbuffer.size());
@@ -266,15 +257,13 @@ int main(int argc, char **argv) {
 		std::cout << keybuffer << std::endl;
 		*key = keybuffer.c_str();
 
-		if(paddingCheck) {
-			char *buf = new char [ strlen(*key) + 6 ];
-			strcpy(buf, *key);
-			SWLD::strongsPad(buf);
-			if(strcmp(buf, *key))
-				std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
-			delete buf;
-		}
-		
+				if(paddingCheck) {
+					char *buf = new char [ strlen(*key) + 6 ];
+					strcpy(buf, *key);
+					SWLD::strongsPad(buf);
+					if(strcmp(buf, *key))
+						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
+				}
 		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 		for (i = 0; i < links; i++) {
 			std::cout << "Linking: " << linkbuffer[i] << std::endl;
@@ -286,6 +275,7 @@ int main(int argc, char **argv) {
 	infile.close();
 
 	delete linkKey;
+	delete key;
 	delete mod;
 
 	return 0;
