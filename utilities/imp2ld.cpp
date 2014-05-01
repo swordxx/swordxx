@@ -60,8 +60,7 @@ void usage(const char *progName, const char *error = 0) {
 	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default: 2).\n");
 	fprintf(stderr, "  -b <entry_count>\t\t compression block size (default 30 entries)\n");
 	fprintf(stderr, "  -s\t\t\t case sensitive keys (default is not case sensitive)\n");
-	fprintf(stderr, "  -P\t\t\t disable Strong's number padding check for digit entries. "
-		"Incorrect padding without StrongsPadding=false in you conf file will cause eternal loop.\n");
+	fprintf(stderr, "  -P\t\t\t disable key Strong's number padding (by defalut keys will be padded).");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
@@ -89,7 +88,7 @@ int main(int argc, char **argv) {
 	SWCompress *compressor = 0;
 	SWBuf compType         = "";
 	bool fourByteSize      = false;
-    bool paddingCheck      = true;
+    bool strongsPadding    = true;
 
 	if (argc < 2) usage(*argv);
 
@@ -120,9 +119,9 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-4")) {
 			fourByteSize = true;
 		}
-        else if (!strcmp(argv[i], "-P")) {
-            paddingCheck = false;
-        }
+		else if (!strcmp(argv[i], "-P")) {
+			strongsPadding = false;
+		}
 		else if (!strcmp(argv[i], "-b")) {
 			if (i+1 < argc) {
 				blockCount = atoi(argv[++i]);
@@ -202,12 +201,12 @@ int main(int argc, char **argv) {
 	if (compressor) {
 		// Create a compressed text module allowing very large entries
 		// Taking defaults except for first, fourth, fifth and last argument
-		mod = new zLD(outPath, 0, 0, blockCount, compressor, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
+		mod = new zLD(outPath, 0, 0, blockCount, compressor, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding);
 	}
 	else {
 		mod = (!fourByteSize)
-			? (SWModule *)new RawLD (outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive)
-			: (SWModule *)new RawLD4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
+			? (SWModule *)new RawLD (outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding)
+			: (SWModule *)new RawLD4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding);
 	}
 
 
@@ -224,15 +223,6 @@ int main(int argc, char **argv) {
 			if (keybuffer.size() && entbuffer.size()) {
 				std::cout << keybuffer << std::endl;
 				*key = keybuffer.c_str();
-
-				if(paddingCheck) {
-					char *buf = new char [ strlen(*key) + 6 ];
-					strcpy(buf, *key);
-					SWLD::strongsPad(buf);
-					if(strcmp(buf, *key))
-						std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
-					delete buf;
-				}
 
 				mod->setEntry(entbuffer.c_str(), entbuffer.size());
 				for (i = 0; i < links; i++) {
@@ -262,15 +252,6 @@ int main(int argc, char **argv) {
 		std::cout << keybuffer << std::endl;
 		*key = keybuffer.c_str();
 
-		if(paddingCheck) {
-			char *buf = new char [ strlen(*key) + 6 ];
-			strcpy(buf, *key);
-			SWLD::strongsPad(buf);
-			if(strcmp(buf, *key))
-				std::cout << "Warning: entry " << *key << " is a number but not padded correctly. ";
-			delete buf;
-		}
-		
 		mod->setEntry(entbuffer.c_str(), entbuffer.size());
 		for (i = 0; i < links; i++) {
 			std::cout << "Linking: " << linkbuffer[i] << std::endl;

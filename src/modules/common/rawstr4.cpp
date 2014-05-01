@@ -174,7 +174,7 @@ void RawStr4::getIDXBuf(long ioffset, char **buf) const
  *		away		- number of entries before of after to jump
  *					(default = 0)
  *
- * RET: error status -1 general error; -2 new file; -3 inconsecutive index
+ * RET: error status -1 general error; -2 new file
  */
 
 signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, long away, __u32 *idxoff) const
@@ -282,11 +282,6 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 			idxfd->read(&tmpSize, 4);
 			if (idxoff)
 				*idxoff = tryoff;
-
-			if(away > 0 && tmpStart < *start) {
-				SWLog::getSystemLog()->logError("inconsequtive index for module at path %s", path);
-				retval = -3;
-			}
 
 			*start = swordtoarch32(tmpStart);
 			*size  = swordtoarch32(tmpSize);

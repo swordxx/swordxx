@@ -36,10 +36,9 @@ SWORD_NAMESPACE_START
 class SWDLLEXPORT SWLD : public SWModule {
 protected:
 	mutable char *entkeytxt;
+	static void strongsPad(char *buf);
 	bool strongsPadding;
-
 public:
-
 	/** Initializes data for instance of SWLD
 	*/
 	SWLD(const char *imodname = 0, const char *imoddesc = 0,
@@ -65,13 +64,6 @@ public:
 	virtual char *getKeyForEntry(long entry) const = 0;
 	
 	virtual bool hasEntry(const SWKey *k) const;
-
-
-	/** Pads a key if (it-1) is 100% digits to 5 places allows for final to be alpha, e.g. '123B'
-	*
-	* @param[in,out] buffer to check and pad
-	*/
-	static void strongsPad(char *buffer);
 
 	// OPERATORS -----------------------------------------------------------------
 	
