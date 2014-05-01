@@ -56,10 +56,11 @@ void usage(const char *progName, const char *error = 0) {
 	fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
 	fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
 	fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");
-	fprintf(stderr, "  -o <output_path>\t where to write data files.\n");
+	fprintf(stderr, "  -o <output_path>\t\t where to write data files.\n");
 	fprintf(stderr, "  -4\t\t\t use 4 byte size entries (default: 2).\n");
 	fprintf(stderr, "  -b <entry_count>\t\t compression block size (default 30 entries)\n");
 	fprintf(stderr, "  -s\t\t\t case sensitive keys (default is not case sensitive)\n");
+	fprintf(stderr, "  -P\t\t\t disable key Strong's number padding (by default keys will be padded).");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
@@ -87,6 +88,7 @@ int main(int argc, char **argv) {
 	SWCompress *compressor = 0;
 	SWBuf compType         = "";
 	bool fourByteSize      = false;
+	bool strongsPadding    = true;
 
 	if (argc < 2) usage(*argv);
 
@@ -116,6 +118,9 @@ int main(int argc, char **argv) {
 		}
 		else if (!strcmp(argv[i], "-4")) {
 			fourByteSize = true;
+		}
+		else if (!strcmp(argv[i], "-P")) {
+			strongsPadding = false;
 		}
 		else if (!strcmp(argv[i], "-b")) {
 			if (i+1 < argc) {
@@ -147,7 +152,6 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "\nERROR: %s: could not open file for reading: %s\n\n", *argv, inFileName);
 		exit(-2);
 	}
-
 
 	SWModule *mod = 0;
 	SWKey *key, *linkKey;
@@ -196,12 +200,12 @@ int main(int argc, char **argv) {
 	if (compressor) {
 		// Create a compressed text module allowing very large entries
 		// Taking defaults except for first, fourth, fifth and last argument
-		mod = new zLD(outPath, 0, 0, blockCount, compressor, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
+		mod = new zLD(outPath, 0, 0, blockCount, compressor, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding);
 	}
 	else {
 		mod = (!fourByteSize)
-			? (SWModule *)new RawLD (outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive)
-			: (SWModule *)new RawLD4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive);
+			? (SWModule *)new RawLD (outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding)
+			: (SWModule *)new RawLD4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding);
 	}
 
 
@@ -258,8 +262,8 @@ int main(int argc, char **argv) {
 	infile.close();
 
 	delete linkKey;
-	delete key;
 	delete mod;
+	delete key;
 
 	return 0;
 }

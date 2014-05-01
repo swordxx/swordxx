@@ -144,12 +144,26 @@ void zLD::increment(int steps) {
 
 
 void zLD::setEntry(const char *inbuf, long len) {
-	setText(*key, inbuf, len);
+	char *buf = new char [ strlen(*key) + 6 ];
+	strcpy(buf, *key);
+
+	if (strongsPadding) strongsPad(buf);
+
+	setText(buf, inbuf, len);
+
+	delete [] buf;
 }
 
 
 void zLD::linkEntry(const SWKey *inkey) {
-	zStr::linkEntry(*key, *inkey);
+	char *buf = new char [ strlen(*key) + 6 ];
+	strcpy(buf, *key);
+
+	if (strongsPadding) strongsPad(buf);
+
+	zStr::linkEntry(buf, *inkey);
+
+	delete [] buf;
 }
 
 
@@ -160,7 +174,14 @@ void zLD::linkEntry(const SWKey *inkey) {
  */
 
 void zLD::deleteEntry() {
-	setText(*key, "");
+	char *buf = new char [ strlen(*key) + 6 ];
+	strcpy(buf, *key);
+
+	if (strongsPadding) strongsPad(buf);
+
+	setText(buf, "");
+
+	delete [] buf;
 }
 
 
