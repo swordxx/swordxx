@@ -148,10 +148,9 @@ int main(int argc, char **argv) {
 	}
 
 	std::ifstream infile(inFileName);
-
-	if(!infile.is_open()) {
-		std::cout << "Unable to open file " << inFileName << std::endl;
-		return -1;
+	if (!infile.is_open()) {
+		fprintf(stderr, "\nERROR: %s: could not open file for reading: %s\n\n", *argv, inFileName);
+		exit(-2);
 	}
 
 	SWModule *mod = 0;
