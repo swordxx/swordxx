@@ -37,6 +37,7 @@
 #include <localemgr.h>
 #include <treekeyidx.h>
 #include <installmgr.h>
+#include <remotetrans.h>
 
 #include "webmgr.hpp"
 #include "org_crosswire_android_sword_SWMgr.h"
@@ -53,6 +54,65 @@ using namespace sword;
 namespace {
 WebMgr *mgr = 0;
 InstallMgr *installMgr = 0;
+
+class InstallStatusReporter : public StatusReporter {
+public:
+	JNIEnv *env;
+	jobject callback;
+	unsigned long last;
+	void init(JNIEnv *env, jobject callback) {
+		this->env = env;
+		this->callback = callback;
+		last = 0xffffffff;
+	}
+        virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
+		if (completedBytes != last) {
+			last = completedBytes;
+			jclass cls = env->GetObjectClass(callback);
+			jmethodID mid = env->GetMethodID(cls, "update", "(JJ)V");
+			if (mid != 0) {
+				env->CallVoidMethod(callback, mid, (jlong)totalBytes, (jlong)completedBytes);
+			}
+			env->DeleteLocalRef(cls);
+		}
+		
+/*
+		int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
+		for (;last < p; ++last) {
+			if (!last) {
+				SWBuf output;
+				output.setFormatted("[ File Bytes: %ld", totalBytes);
+				while (output.size() < 75) output += " ";
+				output += "]";
+				cout << output.c_str() << "\n ";
+			}
+			cout << "-";
+		}
+		cout.flush();
+*/
+	}
+        virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
+		jclass cls = env->GetObjectClass(callback);
+		jmethodID mid = env->GetMethodID(cls, "preStatus", "(JJLjava/lang/String;)V");
+		if (mid != 0) {
+			jstring msg = env->NewStringUTF(assureValidUTF8((const char *)message));
+			env->CallVoidMethod(callback, mid, (jlong)totalBytes, (jlong)completedBytes, msg);
+			env->DeleteLocalRef(msg);
+		}
+		env->DeleteLocalRef(cls);
+/*
+		SWBuf output;
+		output.setFormatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes);
+		while (output.size() < 75) output += " ";
+		output += "]";
+		cout << "\n" << output.c_str() << "\n ";
+		int p = (int)(74.0 * (double)completedBytes/totalBytes);
+		for (int i = 0; i < p; ++i) { cout << "="; }
+		cout << "\n\n" << message << "\n";
+		last = 0;
+*/
+	}
+} *installStatusReporter = 0;
 bool disclaimerConfirmed = false;
 
 class AndroidLogger : public SWLog {
@@ -96,6 +156,9 @@ static void init() {
 
 static void initInstall() {
 
+	if (!installStatusReporter) {
+		installStatusReporter = new InstallStatusReporter();
+	}
 	if (!installMgr) {
 SWLog::getSystemLog()->logDebug("initInstall: installMgr is null");
 		SWBuf baseDir  = "/sdcard/sword/InstallMgr";
@@ -109,7 +172,7 @@ SWLog::getSystemLog()->logDebug("initInstall: file doesn't exist: %s", confPath.
 			config["General"]["PassiveFTP"] = "true";
 			config.Save();
 		}
-		installMgr = new InstallMgr(baseDir);
+		installMgr = new InstallMgr(baseDir, installStatusReporter);
 		if (disclaimerConfirmed) installMgr->setUserDisclaimerConfirmed(true);
 SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseDir: %s", baseDir.c_str());
 	}
@@ -1138,6 +1201,7 @@ void percentUpdate(char percent, void *userData) {
 		if (mid != 0) {
 			p->env->CallVoidMethod(p->progressReporter, mid, (jint)percent);
 		}
+		p->env->DeleteLocalRef(cls);
 	}
 }
 
@@ -1409,16 +1473,17 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 	return ret;
 }
 
-
 /*
  * Class:     org_crosswire_android_sword_InstallMgr
  * Method:    remoteInstallModule
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_org_crosswire_android_sword_InstallMgr_remoteInstallModule
-  (JNIEnv *env, jobject me, jstring sourceNameJS, jstring modNameJS) {
+  (JNIEnv *env, jobject me, jstring sourceNameJS, jstring modNameJS, jobject progressReporter) {
 
 	initInstall();
+
+	installStatusReporter->init(env, progressReporter);
 
 	const char *sourceName = env->GetStringUTFChars(sourceNameJS, NULL);
 SWLog::getSystemLog()->logDebug("remoteInstallModule: sourceName: %s\n", sourceName);
@@ -1445,6 +1510,15 @@ SWLog::getSystemLog()->logDebug("remoteInstallModule: modName: %s\n", modName);
 	module = it->second;
 
 	int error = installMgr->installModule(mgr, 0, module->getName(), is);
+
+	jclass cls = env->GetObjectClass(progressReporter);
+	jmethodID mid = env->GetMethodID(cls, "preStatus", "(JJLjava/lang/String;)V");
+	if (mid != 0) {
+		jstring msg = env->NewStringUTF("Complete");
+		env->CallVoidMethod(progressReporter, mid, (jlong)0, (jlong)0, msg);
+		env->DeleteLocalRef(msg);
+	}
+	env->DeleteLocalRef(cls);
 
 	return error;
 }

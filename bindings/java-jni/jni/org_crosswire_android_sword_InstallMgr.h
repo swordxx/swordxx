@@ -69,7 +69,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_InstallMgr_getRe
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_org_crosswire_android_sword_InstallMgr_remoteInstallModule
-  (JNIEnv *, jobject, jstring, jstring);
+  (JNIEnv *, jobject, jstring, jstring, jobject);
 
 /*
  * Class:     org_crosswire_android_sword_InstallMgr
