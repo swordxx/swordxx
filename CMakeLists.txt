@@ -36,6 +36,9 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For swversion.h
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include") # For everything else
+IF(MSVC)
+	INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/src/utilfuns/win32/")
+ENDIF(MSVC)
 
 ###########################################################################################
 # This will look for various libraries that libsword builds against.  There is no REQUIRED
