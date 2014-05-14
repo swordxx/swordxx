@@ -70,7 +70,7 @@ void clearStringArray(const char ***stringArray) {
 }
 
 
-void clearModInfo(org_crosswire_sword_ModInfo **modInfo) {
+void clearModInfoArray(org_crosswire_sword_ModInfo **modInfo) {
 	if (*modInfo) {
 		for (int i = 0; true; ++i) {
 			if ((*modInfo)[i].name) {
@@ -221,7 +221,7 @@ public:
 	}
 
 	void clearModInfo() {
-		::clearModInfo(&modInfo);
+		clearModInfoArray(&modInfo);
 	}
 
 	~HandleSWMgr() {
@@ -289,7 +289,7 @@ public:
 	}
 
 	void clearModInfo() {
-		::clearModInfo(&modInfo);
+		clearModInfoArray(&modInfo);
 	}
 };
 
