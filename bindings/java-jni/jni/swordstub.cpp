@@ -66,6 +66,10 @@ public:
 		last = 0xffffffff;
 	}
         virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
+
+		// assert we have a callback
+		if (!callback) return;
+
 		if (completedBytes != last) {
 			last = completedBytes;
 			jclass cls = env->GetObjectClass(callback);
@@ -92,6 +96,10 @@ public:
 */
 	}
         virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
+
+		// assert we have a callback
+		if (!callback) return;
+
 		jclass cls = env->GetObjectClass(callback);
 		jmethodID mid = env->GetMethodID(cls, "preStatus", "(JJLjava/lang/String;)V");
 		if (mid != 0) {
@@ -1194,6 +1202,9 @@ struct pu {
 void percentUpdate(char percent, void *userData) {
 	struct pu *p = (struct pu *)userData;
 
+	// assert we've actually been given a progressReporter
+	if (!p->progressReporter) return;
+
 	if (percent != p->last) {
 		p->last = percent;
 		jclass cls = p->env->GetObjectClass(p->progressReporter);
@@ -1511,14 +1522,16 @@ SWLog::getSystemLog()->logDebug("remoteInstallModule: modName: %s\n", modName);
 
 	int error = installMgr->installModule(mgr, 0, module->getName(), is);
 
-	jclass cls = env->GetObjectClass(progressReporter);
-	jmethodID mid = env->GetMethodID(cls, "preStatus", "(JJLjava/lang/String;)V");
-	if (mid != 0) {
-		jstring msg = env->NewStringUTF("Complete");
-		env->CallVoidMethod(progressReporter, mid, (jlong)0, (jlong)0, msg);
-		env->DeleteLocalRef(msg);
+	if (progressReporter) {
+		jclass cls = env->GetObjectClass(progressReporter);
+		jmethodID mid = env->GetMethodID(cls, "preStatus", "(JJLjava/lang/String;)V");
+		if (mid != 0) {
+			jstring msg = env->NewStringUTF("Complete");
+			env->CallVoidMethod(progressReporter, mid, (jlong)0, (jlong)0, msg);
+			env->DeleteLocalRef(msg);
+		}
+		env->DeleteLocalRef(cls);
 	}
-	env->DeleteLocalRef(cls);
 
 	return error;
 }

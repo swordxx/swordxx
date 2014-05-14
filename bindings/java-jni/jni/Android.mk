@@ -36,6 +36,9 @@ LOCAL_CFLAGS	+= -D__unix__ \
 		   -DEXCLUDEBZIP2 \
 		   -DEXCLUDEXZ \
 		   -DOS_ANDROID
+
+#LOCAL_CFLAGS	+= -g
+
 LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/comments/rawfiles/rawfiles.cpp \
 ../../../src/modules/comments/rawcom4/rawcom4.cpp \
