@@ -1230,7 +1230,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 	const int MAX_RETURN_COUNT = 999999;
 
 	const char *expression = env->GetStringUTFChars(expressionJS, NULL);
-	const char *scope = env->GetStringUTFChars(scopeJS, NULL);
+	const char *scope = scopeJS ? env->GetStringUTFChars(scopeJS, NULL) : 0;
 
 	jclass clazzSearchHit = env->FindClass("org/crosswire/android/sword/SWModule$SearchHit");
 	jobjectArray ret = 0;
@@ -1292,7 +1292,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
 		env->DeleteLocalRef(modName);
 	}
 
-	env->ReleaseStringUTFChars(scopeJS, scope);
+	if (scope) env->ReleaseStringUTFChars(scopeJS, scope);
 	env->ReleaseStringUTFChars(expressionJS, expression);
 
 	return (ret) ? ret : (jobjectArray) env->NewObjectArray(0, clazzSearchHit, NULL);
