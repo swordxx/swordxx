@@ -1,5 +1,11 @@
 # TODO: write FindICU (icu-config only for 2.2 and up) -- currently taken from another CMake system
 #       limit pkg-config version to >= 0.14, demo, utilities, doc, tests
+#       use SYSCONF_INSTALL_DIR
+#       use LIB_INSTALL_DIR
+#       use INCLUDE_INSTALL_DIR
+#       use BUILD_SHARED_LIBS
+#       actually install sword.conf when asked
+#       convince perl swig bindings to build properly
 #
 # NOTES: Defaults to build type of Shared
 #        Forces out-of-source tree build
