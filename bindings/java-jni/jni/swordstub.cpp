@@ -158,6 +158,9 @@ static void init() {
 			config.Save();
 		}
 		mgr = new WebMgr("/sdcard/sword");
+
+		// for And Bible modules
+		mgr->augmentModules("/sdcard/Android/data/net.bible.android.activity/files", true);
 	}
 }
 
@@ -744,7 +747,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 		sword::AttributeList::iterator i2Start, i2End;
 		sword::AttributeValue::iterator i3Start, i3End;
 
-		if ((level1) && (*level1)) {
+		if ((level1) && (*level1) && *level1 != '-') {
 			i1Start = entryAttribs.find(level1);
 			i1End = i1Start;
 			if (i1End != entryAttribs.end())
@@ -755,35 +758,50 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 			i1End   = entryAttribs.end();
 		}
 		for (;i1Start != i1End; ++i1Start) {
-			if ((level2) && (*level2)) {
-				i2Start = i1Start->second.find(level2);
-				i2End = i2Start;
-				if (i2End != i1Start->second.end())
-					++i2End;
+			if (level1 && *level1 && *level1 == '-') {
+				results.push_back(i1Start->first);
 			}
 			else {
-				i2Start = i1Start->second.begin();
-				i2End   = i1Start->second.end();
-			}
-			for (;i2Start != i2End; ++i2Start) {
-				if ((level3) && (*level3)) {
-					i3Start = i2Start->second.find(level3);
-					i3End = i3Start;
-					if (i3End != i2Start->second.end())
-						++i3End;
+				if (level2 && *level2 && *level2 != '-') {
+					i2Start = i1Start->second.find(level2);
+					i2End = i2Start;
+					if (i2End != i1Start->second.end())
+						++i2End;
 				}
 				else {
-					i3Start = i2Start->second.begin();
-					i3End   = i2Start->second.end();
+					i2Start = i1Start->second.begin();
+					i2End   = i1Start->second.end();
 				}
-				for (;i3Start != i3End; ++i3Start) {
-					results.push_back(i3Start->second);
+				for (;i2Start != i2End; ++i2Start) {
+					if (level2 && *level2 && *level2 == '-') {
+						results.push_back(i2Start->first);
+					}
+					else {
+						if (level3 && *level3 && *level3 != '-') {
+							i3Start = i2Start->second.find(level3);
+							i3End = i3Start;
+							if (i3End != i2Start->second.end())
+								++i3End;
+						}
+						else {
+							i3Start = i2Start->second.begin();
+							i3End   = i2Start->second.end();
+						}
+						for (;i3Start != i3End; ++i3Start) {
+							if (level3 && *level3 && *level3 == '-') {
+								results.push_back(i3Start->first);
+							}
+							else {
+								results.push_back(i3Start->second);
+							}
+						}
+						if (i3Start != i3End)
+							break;
+					}
 				}
-				if (i3Start != i3End)
+				if (i2Start != i2End)
 					break;
 			}
-			if (i2Start != i2End)
-				break;
 		}
 
 		ret = (jobjectArray) env->NewObjectArray(results.size(), clazzString, NULL);
