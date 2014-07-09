@@ -157,7 +157,9 @@ void VerseKey::positionFrom(const SWKey &ikey) {
 	}
 	else {
 		SWKey::positionFrom(*fromKey);
-		parse();
+// extraneous parse which inadvertently clears error flag
+// SWKey::positionFrom already calls copyFrom which calls setText, which VerseKey::setText already calls parse()
+//		parse();
 	}
 
  	// should we always perform bounds checks?  Tried but seems to cause infinite recursion
@@ -212,7 +214,9 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 	}
 	else {
 		SWKey::copyFrom(*fromKey);
-		parse();
+// extraneous parse which inadvertently clears error flag
+// SWKey::copyFrom already calls setText, which VerseKey::setText already calls parse()
+//		parse();
 	}
 }
 
