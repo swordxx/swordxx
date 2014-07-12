@@ -62,11 +62,11 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 		systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
 		systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
 		systemVersificationMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
-		systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv);
+		systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
 		systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
-		systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal);
+		systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
 		systemVersificationMgr->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
-		systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg);
+		systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
 		systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
 		systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
 		systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
@@ -83,6 +83,19 @@ public:
 	/** Array[chapmax] of maximum verses in chapters */
 	vector<Book> books;
 	map<SWBuf, int> osisLookup;
+	/** General mapping rule is that first verse of every chapter corresponds first
+		verse of another chapter in default intermediate canon(kjva), so mapping data
+		contains expections. Intermediate canon could not contain corresponding data.
+		
+		pointers on uchar[7]: 1 value - book id 1-based, ot+nt, 2-4 map to, 5-7 map
+		from (chap,verse from, verse to if greater then "verse from")
+		
+		TODO what if book name in one v11n differs from cannon
+			special section in mapping for book transformation
+	*/
+	typedef vector<const unsigned char*> mapping;
+	vector<mapping> mappings;
+	vector<const char*> mappingsExtraBooks;
 
 	Private() {
 	}
@@ -179,7 +192,7 @@ int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) cons
 }
 
 
-void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax) {
+void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings) {
 	int chap = 0;
 	int book = 0;
 	long offset = 0;	// module heading
@@ -219,6 +232,23 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
 	BMAX[1] = book;
 
 	// TODO: build offset speed array
+
+	// parse mappings
+	if (mappings != NULL) {
+		const unsigned char *m=mappings;
+		for (; *m != 0; m += strlen((const char*)m)+1) {
+			p->mappingsExtraBooks.push_back((const char*)m);
+		}
+		p->mappings.resize(p->books.size()+p->mappingsExtraBooks.size());
+
+		for (++m; *m != 0; m += 7) {
+			p->mappings[m[0]-1].push_back(m);
+			if (*m > p->books.size()) {
+				p->mappings[m[7]-1].push_back(m);
+				m += 1;
+			}
+		}
+	}
 }
 
 
@@ -372,10 +402,10 @@ const VersificationMgr::System *VersificationMgr::getVersificationSystem(const c
 }
 
 
-void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax) {
+void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings) {
 	p->systems[name] = name;
 	System &s = p->systems[name];
-	s.loadFromSBook(ot, nt, chMax);
+	s.loadFromSBook(ot, nt, chMax, mappings);
 }
 
 
@@ -391,6 +421,138 @@ const StringList VersificationMgr::getVersificationSystems() const {
 	return retVal;
 }
 
+void VersificationMgr::System::translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const {
+	SWLog::getSystemLog()->logError("translate verse from %s to %s: %s.%i.%i-%i\n",getName(), dstSys->getName(), *book, *chapter, *verse, *verse_end);
+
+	if (!strcmp(getName(),"KJVA") || !strcmp(getName(),"KJV")) {
+		if (!strcmp(dstSys->getName(),"KJVA") || !strcmp(dstSys->getName(),"KJV"))
+			return;
+		// reversed mapping
+		SWLog::getSystemLog()->logError("Perform reversed mapping.\n");
+		int b = dstSys->getBookNumberByOSISName(*book)-1;
+
+		SWLog::getSystemLog()->logError("\tgetBookNumberByOSISName %i %s.\n", b, *book);
+
+		if (b < 0) {
+			SWLog::getSystemLog()->logError("\tmappingsExtraBooks.size() %i.\n", dstSys->p->mappingsExtraBooks.size());
+			for (int i=0; i<(int)dstSys->p->mappingsExtraBooks.size(); ++i) {
+				SWLog::getSystemLog()->logError("\t%s %s.\n", *book, dstSys->p->mappingsExtraBooks[i]);
+				if (!strcmp(*book, dstSys->p->mappingsExtraBooks[i])) {
+					b = p->books.size()+i-2;
+					break;
+				}
+			}
+		}
+
+		SWLog::getSystemLog()->logError("\tb %i.\n", b);
+
+		if (b >= (int)dstSys->p->mappings.size() || b < 0) {
+			SWLog::getSystemLog()->logError("no modification");
+			return;
+		}
+		
+		const unsigned char *a = NULL;
+		
+		// reversed mapping should use forward search for item
+		for (unsigned int i=0; i<dstSys->p->mappings[b].size(); ++i) {
+			const unsigned char *m = dstSys->p->mappings[b][i];
+			if (m[4] == *chapter && m[5] <= *verse) {
+				SWLog::getSystemLog()->logError("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
+				if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
+					// inside of any mapping range
+					*chapter = m[1];
+					*verse = m[2];
+					*verse_end = m[3];
+					if (*m >= dstSys->p->books.size()) {
+						SWLog::getSystemLog()->logError("map to extra books, possible bug source\n");
+						*book = dstSys->getBook(m[7]-1)->getOSISName();
+					}
+					return;
+				}
+				// destination mapping can have duplicate items, use the last (by using <=)
+				if (a == NULL || (a[5]>a[6]?a[5]:a[6]) <= (m[5]>m[6]?m[5]:m[6]))
+					a = m;
+			}
+		}
+		if (a != NULL) {
+			SWLog::getSystemLog()->logError("set appropriate: %i %i %i %i %i %i\n",a[1],a[2],a[3],a[4],a[5],a[6]);
+			(*chapter) = a[1];
+			// shift verse
+			const int d = (a[3]>a[2]?a[3]:a[2])-(a[6]>a[5]?a[6]:a[5]);
+			if (*verse < *verse_end)
+				*verse_end += d;
+			else
+				*verse_end = (*verse) + d;
+			*verse += d;
+			if (*a > dstSys->p->books.size()) {
+				SWLog::getSystemLog()->logError("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
+				SWLog::getSystemLog()->logError("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName());
+				*book = dstSys->getBook(a[7]-1)->getOSISName();
+			}
+			return;
+		}
+		SWLog::getSystemLog()->logError("There is no mapping.\n");
+	}
+	else if (strcmp(dstSys->getName(),"KJVA") && strcmp(dstSys->getName(),"KJV")) {
+		const System *kjva = getSystemVersificationMgr()->getVersificationSystem("KJVA");
+		const int src_verse = *verse;
+		
+		translateVerse(kjva, book, chapter, verse, verse_end);
+		
+		int interm_verse = *verse, interm_range = *verse_end, interm_chapter = *chapter;
+		const char *interm_book = *book;
+		
+		kjva->translateVerse(dstSys, book, chapter, verse, verse_end);
+		
+		// contraction->expansion fix
+		if (verse < verse_end && !(interm_verse < interm_range)) {
+			kjva->translateVerse(this, &interm_book, &interm_chapter, &interm_verse, &interm_range);
+			if (interm_verse < interm_range) {
+				*verse += src_verse - interm_verse;
+				if (*verse > *verse_end)
+					*verse = *verse_end;
+				else
+					*verse_end = *verse;
+			}
+		}
+	}
+	else {
+		SWLog::getSystemLog()->logError("Perform forward mapping.\n");
+		const int b = getBookNumberByOSISName(*book)-1;
+		if (b >= (int)p->mappings.size())
+			return;
+		// forward mapping should use reversed search for item
+		for (int i=p->mappings[b].size()-1; i>=0; --i) {
+			const unsigned char *m = p->mappings[b][i];
+			if (m[1] < *chapter) {
+				SWLog::getSystemLog()->logError("There is no mapping for this chapter.\n");
+				return;
+			}
+			if (m[1] == *chapter && m[2] <= *verse) {
+				SWLog::getSystemLog()->logError("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
+				if (m[2] == *verse || (m[3] >= *verse && m[2] <= *verse)) {
+					*chapter = m[4];
+					*verse = m[5];
+					*verse_end = m[6];
+				}
+				else {
+					*chapter = m[4];
+					// shift verse
+					const int d = (m[6]>m[5]?m[6]:m[5])-(m[3]>m[2]?m[3]:m[2]);
+					if (*verse < *verse_end)
+						*verse_end += d;
+					else
+						*verse_end = (*verse) + d;
+					*verse += d;
+				}
+				if (*m > p->books.size())
+					*book = p->mappingsExtraBooks[m[0]-p->books.size()-1];
+				return;
+			}
+		}
+		SWLog::getSystemLog()->logError("No mapping.\n");
+	}
+}
 
 SWORD_NAMESPACE_END
 

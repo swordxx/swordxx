@@ -264,6 +264,12 @@ int vm_nrsv[] = {
   27, 21
 };
 
+unsigned char mappings_nrsv[] = {
+    0,
+    66,  12,  18,  19,  13,  1,   0,
+    66,  13,  1,   1,   13,  1,   0,
+    0
+};
 
 SWORD_NAMESPACE_END
 
