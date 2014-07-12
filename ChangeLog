@@ -1,5 +1,9 @@
 API ChangeLog
 
+12-Jul-2014	Костя Маслюк <kostyamaslyuk@gmail.com>
+	Versification mapping implementation and example at
+		examples/tasks/parallelbibles.cpp
+
 27-Apr-2014	Troy A. Griffitts <scribe@crosswire.org>
 	Added C# bindings contributed by Daniel Hughes <trampster@gmail.com>
 

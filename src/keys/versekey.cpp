@@ -172,9 +172,9 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 			if (map_range > refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getVerseMax(chapter))
 				++map_range;
 			verse = map_range;
-			UpperBound(this);
+			setUpperBound(this);
 			verse = map_verse;
-			LowerBound(this);
+			setLowerBound(this);
 		}
 	}
 }
