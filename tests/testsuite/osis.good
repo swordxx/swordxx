@@ -4,7 +4,7 @@ Psalms 3:1
 -------
 Preverse Header 0:
 Raw:
-<div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="paragraph"/> <lg sID="gen14"/> 
+<div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/> 
 -------
 Rendered Header:
  <h3>A Psalm of David, when he fled from Absalom his son.</h3>
@@ -16,9 +16,7 @@ CSS:
 		.divineName { font-variant: small-caps; }
 		.wordsOfJesus { color: red; }
 		.transChangeSupplied { font-style: italic; }
-		.small, .sub, .sup { font-size: .83em }
-		.sub             { vertical-align: sub }
-		.sup             { vertical-align: super }
+		.overline        { text-decoration: overline; }
 		.indent1         { margin-left: 10px }
 		.indent2         { margin-left: 20px }
 		.indent3         { margin-left: 30px }
@@ -37,7 +35,7 @@ Mark 1:14
 -------
 Preverse Header 0:
 Raw:
-<div sID="gen22" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen23" type="paragraph"/> 
+<div sID="gen22" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen23" type="x-p"/> 
 -------
 Rendered Header:
  <h3>The Beginning of the Ministry of Jesus</h3>
@@ -51,9 +49,7 @@ CSS:
 		.divineName { font-variant: small-caps; }
 		.wordsOfJesus { color: red; }
 		.transChangeSupplied { font-style: italic; }
-		.small, .sub, .sup { font-size: .83em }
-		.sub             { vertical-align: sub }
-		.sup             { vertical-align: super }
+		.overline        { text-decoration: overline; }
 		.indent1         { margin-left: 10px }
 		.indent2         { margin-left: 20px }
 		.indent3         { margin-left: 30px }
@@ -79,9 +75,9 @@ Whitespace tests around headings:
 This is the <b>Book of Genesis</b>, the <i>first</i> book in the Bible. It may be outlined as follows: <br />
 <br />
 <ul>
- 	<li><span class="sup">1</span>Creation of Heaven and Earth, 1:1-2:4a</li>
-	<li><span class="sup">2</span>Creation of Man and Woman, 2:4b-25</li>
-	<li><span class="sub">3</span>Fall, 3:1-24</li>
+ 	<li><sup>1</i>Creation of Heaven and Earth, 1:1-2:4a</li>
+	<li><sup>2</i>Creation of Man and Woman, 2:4b-25</li>
+	<li><sub>3</sub>Fall, 3:1-24</li>
 	<li>...</li>
 </ul>
  <br />
