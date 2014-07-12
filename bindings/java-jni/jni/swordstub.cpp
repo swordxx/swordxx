@@ -39,6 +39,12 @@
 #include <installmgr.h>
 #include <remotetrans.h>
 
+#define BIBLESYNC
+
+#ifdef BIBLESYNC
+#include <biblesync.hh>
+#endif
+
 #include "webmgr.hpp"
 #include "org_crosswire_android_sword_SWMgr.h"
 #include "org_crosswire_android_sword_SWModule.h"
@@ -54,6 +60,12 @@ using namespace sword;
 namespace {
 WebMgr *mgr = 0;
 InstallMgr *installMgr = 0;
+
+#ifdef BIBLESYNC
+BibleSync *bibleSync = 0;
+#endif
+jobject bibleSyncListener = 0;
+JNIEnv *bibleSyncListenerEnv = 0;
 
 class InstallStatusReporter : public StatusReporter {
 public:
@@ -187,6 +199,54 @@ SWLog::getSystemLog()->logDebug("initInstall: file doesn't exist: %s", confPath.
 		if (disclaimerConfirmed) installMgr->setUserDisclaimerConfirmed(true);
 SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseDir: %s", baseDir.c_str());
 	}
+}
+
+#ifdef BIBLESYNC
+void bibleSyncCallback(char cmd, string bible, string ref, string alt, string group, string domain, string info, string dump) {
+SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
+	if (::bibleSyncListener) {
+SWLog::getSystemLog()->logDebug("bibleSync listener is true");
+		jclass cls = bibleSyncListenerEnv->GetObjectClass(::bibleSyncListener);
+		jmethodID mid = bibleSyncListenerEnv->GetMethodID(cls, "messageReceived", "(Ljava/lang/String;)V");
+SWLog::getSystemLog()->logDebug("bibleSync listener mid: %ld", mid);
+		if (mid) {
+SWLog::getSystemLog()->logDebug("bibleSync listener mid is available");
+			switch(cmd) {
+			// error
+			case 'E':
+			// mismatch
+			case 'M':
+			// new speaker
+			case 'S':
+			// dead speaker
+			case 'D':
+			// announce
+			case 'A':
+				break;
+			// navigation
+			case 'N':
+SWLog::getSystemLog()->logDebug("bibleSync Nav Received: %s", ref.c_str());
+				jstring msg = bibleSyncListenerEnv->NewStringUTF(ref.c_str());
+				bibleSyncListenerEnv->CallVoidMethod(::bibleSyncListener, mid, msg);
+				bibleSyncListenerEnv->DeleteLocalRef(msg);
+				break;
+			}
+		}
+SWLog::getSystemLog()->logDebug("bibleSync listener deleting local ref to cls");
+		bibleSyncListenerEnv->DeleteLocalRef(cls);
+	}
+}
+#endif
+
+static void initBibleSync() {
+#ifdef BIBLESYNC
+	if (!bibleSync) {
+SWLog::getSystemLog()->logDebug("bibleSync initializing c-tor");
+		bibleSync = new BibleSync("SWORD", (const char *)SWVersion().currentVersion, "SwordUser");
+SWLog::getSystemLog()->logDebug("bibleSync initializing setMode");
+		bibleSync->setMode(BSP_MODE_PERSONAL, bibleSyncCallback, "passphrase");
+	}
+#endif
 }
 
 }
@@ -697,7 +757,8 @@ JNIEXPORT jchar JNICALL Java_org_crosswire_android_sword_SWModule_error
 
 	SWModule *module = getModule(env, me);
 	
-	return (module) ? module->popError() : -99;
+	int error = (module) ? module->popError() : -99;
+	return error;
 }
 
 
@@ -1510,6 +1571,7 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 JNIEXPORT jint JNICALL Java_org_crosswire_android_sword_InstallMgr_remoteInstallModule
   (JNIEnv *env, jobject me, jstring sourceNameJS, jstring modNameJS, jobject progressReporter) {
 
+	init();
 	initInstall();
 
 	installStatusReporter->init(env, progressReporter);
@@ -1613,5 +1675,48 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_InstallMgr_setUserDiscla
 
 	disclaimerConfirmed = true;
 	installMgr->setUserDisclaimerConfirmed(true);
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    sendBibleSyncMessage
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_sendBibleSyncMessage
+  (JNIEnv *env, jobject me, jstring osisRefJS) {
+	initBibleSync();
+	const char *osisRef = env->GetStringUTFChars(osisRefJS, NULL);
+
+#ifdef BIBLESYNC
+	BibleSync_xmit_status retval = bibleSync->Transmit(BSP_SYNC, "Bible", osisRef);
+#endif
+
+	env->ReleaseStringUTFChars(osisRefJS, osisRef);
+}
+
+
+/*
+ * NOTE: this method blocks and should be called in a new thread
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    registerBibleSyncListener
+ * Signature: (Ljava/lang/Object;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_registerBibleSyncListener
+  (JNIEnv *env, jobject me, jobject bibleSyncListener) {
+SWLog::getSystemLog()->logDebug("registerBibleSyncListener");
+	::bibleSyncListener = bibleSyncListener;
+	::bibleSyncListenerEnv = env;
+SWLog::getSystemLog()->logDebug("registerBibleSyncListener - calling init");
+	initBibleSync();
+#ifdef BIBLESYNC
+SWLog::getSystemLog()->logDebug("registerBibleSyncListener - starting while listener");
+	while(::bibleSyncListener) {
+SWLog::getSystemLog()->logDebug("bibleSyncListener - while loop iteration");
+		BibleSync::Receive(bibleSync);
+SWLog::getSystemLog()->logDebug("bibleSyncListener - sleeping for 2 seconds");
+		sleep(2);
+	}
+#endif
 }
 

@@ -186,6 +186,13 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/frontend/swlog.cpp \
 ../../../src/utilfuns/zlib/untgz.c
 
+# add BibleSync 
+LOCAL_C_INCLUDES += ../biblesync/include
+LOCAL_SRC_FILES += \
+	../../../../biblesync/src/biblesync.cc \
+	../../../../biblesync/src/ifaddrs.c
+	
+
 #../../../src/modules/common/bz2comprs.cpp \
 #../../../src/modules/common/xzcomprs.cpp \
 #../../../../../sword/src/mgr/curlftpt.cpp \
@@ -204,6 +211,10 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libsword
 LOCAL_C_INCLUDES := ../sword/include ../sword/include/internal/regex
+
+# add BibleSync stuff
+LOCAL_C_INCLUDES += ../biblesync/include
+
 LOCAL_CFLAGS	+= -D__unix__ \
 		   -Dunix \
 		   -D_FTPLIB_NO_COMPAT \

@@ -135,6 +135,23 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailab
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
   (JNIEnv *, jobject, jstring);
 
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    sendBibleSyncMessage
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_sendBibleSyncMessage
+  (JNIEnv *, jobject, jstring);
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    registerBibleSyncListener
+ * Signature: (Ljava/lang/Object;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_registerBibleSyncListener
+  (JNIEnv *, jobject, jobject);
+
 #ifdef __cplusplus
 }
 #endif
