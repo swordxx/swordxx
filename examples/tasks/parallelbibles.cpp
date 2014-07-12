@@ -33,13 +33,19 @@
 using namespace sword;
 using namespace std;
 
+const bool o = 1;
 
 void parallelDisplay(vector<SWModule *>modules, const char *key) {
+
+	//cout << "Start key:" << key;
 
 	// We'll use the first module's key as our master key to position all other modules.
 	VerseKey *master = (VerseKey *)modules[0]->createKey();
 
 	master->setText(key);
+
+	//cout << "\t key:" << master->getText();
+
 	int curVerse   = master->getVerse();
 	int curChapter = master->getChapter();
 	int curBook    = master->getBook();
@@ -49,15 +55,66 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 					&& !master->popError();
 										(*master)++) {
 
-		cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
+		if(o) cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
+
 		for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
+			//cout << "\n\n====================\nfromKey" << master->getOSISRef();
+
 			(*module)->setKey(master);
+			VerseKey slave((*module)->getKey());
+
+			//cout << "setKey" << (*module)->getName() << slave.getBookName() << slave.getRangeText() << slave.getShortText();
+
+			if(o) cout << "<td>" << "<span class=\"versenum\">";
+
+			//cout << "[" << (int)slave.getBook() << " " << (int)master->getBook() << " " << (int)slave.getTestament() << " " << (int)master->getTestament() << "]";
+
+
 			if (!(*module)->popError()) {
-				cout << "<td>" << "<span class=\"versenum\">" << master->getVerse() << "</span> ";
-				cout << (*module)->renderText() << "</td>";
+
+				if(strcmp(slave.getBookName(), master->getBookName())) {
+					if(o) cout << slave.getShortText();
+				}
+				else if(slave.getChapter() != master->getChapter()) {
+					if(o) cout << slave.getChapter() << ":" << slave.getVerse();
+				}
+				else {
+					if(o) cout << slave.getVerse();
+				}
+
+				if(slave.isBoundSet()) {
+					if(o) cout << "-";
+					if(slave.getUpperBound().getBook() != slave.getLowerBound().getBook()) {
+						if(o) cout << slave.getUpperBound().getShortText();
+					}
+					else if(slave.getUpperBound().getChapter() != slave.getLowerBound().getChapter()) {
+						if(o) cout << slave.getUpperBound().getChapter() << ":" << slave.getUpperBound().getVerse();
+					}
+					else {
+						if(o) cout << slave.getUpperBound().getVerse();
+					}
+				}
+
+				if(o) cout << "</span> ";
+
+
+				if(slave.isBoundSet()) {
+					VerseKey temp(slave);
+					for(int i = slave.getLowerBound().getIndex(); i <= slave.getUpperBound().getIndex(); ++i) {
+						if(i > 0) if(o) cout << " ";
+						temp.setIndex(i);
+						(*module)->setKey(temp);
+						if(o) cout << (*module)->renderText();
+					}
+				}
+				else {
+					if(o) cout << (*module)->renderText();
+				}
+
+				if(o) cout << "</td>";
 			}
 		}
-		cout << "</tr>";
+		if(o) cout << "</tr>";
 	}
 	delete master;
 }
@@ -171,9 +228,9 @@ int main(int argc, char **argv) {
 		modules.push_back(bible);
 	}
 
-	outputHeader(modules, argv[argc-1]);
+	if(o) outputHeader(modules, argv[argc-1]);
 	parallelDisplay(modules, argv[argc-1]);
-	outputFooter(modules);
+	if(o) outputFooter(modules);
 
 	return 0;
 }
