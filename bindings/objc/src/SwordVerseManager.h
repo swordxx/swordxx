@@ -10,7 +10,6 @@
 
 #ifdef __cplusplus
 #include <versificationmgr.h>
-class sword::VersificationMgr::Book;
 #endif
 
 #define SW_VERSIFICATION_KJV       @"KJV"

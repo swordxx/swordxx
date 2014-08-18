@@ -13,8 +13,6 @@
 #include <installmgr.h>
 #include <swconfig.h>
 #include <multimapwdef.h>
-class sword::SWModule;
-class sword::InstallMgr;
 using sword::SWModule;
 using sword::InstallMgr;
 #endif

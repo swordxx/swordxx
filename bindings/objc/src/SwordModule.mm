@@ -182,11 +182,11 @@
 #pragma mark - Filters
 
 - (void)addRenderFilter:(SwordFilter *)aFilter {
-    swModule->AddRenderFilter([aFilter swFilter]);
+    swModule->addRenderFilter([aFilter swFilter]);
 }
 
 - (void)addStripFilter:(SwordFilter *)aFilter {
-    swModule->AddStripFilter([aFilter swFilter]);
+    swModule->addStripFilter([aFilter swFilter]);
 }
 
 #pragma mark - Module access semaphores
@@ -210,33 +210,33 @@
 }
 
 - (NSString *)retrieveName {
-    NSString *str = [NSString stringWithCString:swModule->Name() encoding:NSUTF8StringEncoding];
+    NSString *str = [NSString stringWithCString:swModule->getName() encoding:NSUTF8StringEncoding];
     if(!str) {
-        str = [NSString stringWithCString:swModule->Name() encoding:NSISOLatin1StringEncoding];
+        str = [NSString stringWithCString:swModule->getName() encoding:NSISOLatin1StringEncoding];
     }
     return str;
 }
 
 - (NSString *)retrieveDescr {
-    NSString *str = [NSString stringWithCString:swModule->Description() encoding:NSUTF8StringEncoding];
+    NSString *str = [NSString stringWithCString:swModule->getDescription() encoding:NSUTF8StringEncoding];
     if(!str) {
-        str = [NSString stringWithCString:swModule->Description() encoding:NSISOLatin1StringEncoding];
+        str = [NSString stringWithCString:swModule->getDescription() encoding:NSISOLatin1StringEncoding];
     }
     return str;
 }
 
 - (NSString *)retrieveLang {
-    NSString *str = [NSString stringWithCString:swModule->Lang() encoding:NSUTF8StringEncoding];
+    NSString *str = [NSString stringWithCString:swModule->getLanguage() encoding:NSUTF8StringEncoding];
     if(!str) {
-        str = [NSString stringWithCString:swModule->Lang() encoding:NSISOLatin1StringEncoding];
+        str = [NSString stringWithCString:swModule->getLanguage() encoding:NSISOLatin1StringEncoding];
     }
     return str;
 }
 
 - (NSString *)retrieveType {
-    NSString *str = [NSString stringWithCString:swModule->Type() encoding:NSUTF8StringEncoding];
+    NSString *str = [NSString stringWithCString:swModule->getType() encoding:NSUTF8StringEncoding];
     if(!str) {
-        str = [NSString stringWithCString:swModule->Type() encoding:NSISOLatin1StringEncoding];
+        str = [NSString stringWithCString:swModule->getType() encoding:NSISOLatin1StringEncoding];
     }
     return str;
 }
@@ -505,7 +505,7 @@
 }
 
 - (SwordKey *)createKey {
-    sword::SWKey *sk = swModule->CreateKey();
+    sword::SWKey *sk = swModule->createKey();
     SwordKey *newKey = [SwordKey swordKeyWithSWKey:sk makeCopy:YES];
     delete sk;
     
@@ -560,7 +560,7 @@
 }
 
 - (void)setProcessEntryAttributes:(BOOL)flag {
-    swModule->processEntryAttributes(flag);
+    swModule->setProcessEntryAttributes(flag);
 }
 
 - (BOOL)processEntryAttributes {
@@ -614,7 +614,7 @@
 - (NSString *)entryAttributeValuePreverseForKey:(SwordKey *)aKey {
     [moduleLock lock];
     [self setSwordKey:aKey];
-    swModule->RenderText(); // force processing of key
+    swModule->renderText(); // force processing of key
     NSString *value = [self entryAttributeValuePreverse];
     [moduleLock unlock];
     return value;
@@ -623,7 +623,7 @@
 - (NSString *)entryAttributeValueFootnoteOfType:(NSString *)fnType indexValue:(NSString *)index forKey:(SwordKey *)aKey {
     [moduleLock lock];
     [self setSwordKey:aKey];
-    swModule->RenderText(); // force processing of key
+    swModule->renderText(); // force processing of key
     NSString *value = [self entryAttributeValueFootnoteOfType:fnType indexValue:index];
     [moduleLock unlock];
     return value;
@@ -638,36 +638,36 @@
 
 - (NSString *)renderedText {
     NSString *ret = @"";
-    ret = [NSString stringWithUTF8String:swModule->RenderText()];
+    ret = [NSString stringWithUTF8String:swModule->renderText()];
     if(!ret) {
-        ret = [NSString stringWithCString:swModule->RenderText() encoding:NSISOLatin1StringEncoding];
+        ret = [NSString stringWithCString:swModule->renderText() encoding:NSISOLatin1StringEncoding];
     }
     return ret;
 }
 
 - (NSString *)renderedTextFromString:(NSString *)aString {
     NSString *ret = @"";
-    ret = [NSString stringWithUTF8String:swModule->RenderText([aString UTF8String])];
+    ret = [NSString stringWithUTF8String:swModule->renderText([aString UTF8String])];
     if(!ret) {
-        ret = [NSString stringWithCString:swModule->RenderText([aString UTF8String]) encoding:NSISOLatin1StringEncoding];
+        ret = [NSString stringWithCString:swModule->renderText([aString UTF8String]) encoding:NSISOLatin1StringEncoding];
     }
     return ret;
 }
 
 - (NSString *)strippedText {
     NSString *ret = @"";
-    ret = [NSString stringWithUTF8String:swModule->StripText()];
+    ret = [NSString stringWithUTF8String:swModule->stripText()];
     if(!ret) {
-        ret = [NSString stringWithCString:swModule->StripText() encoding:NSISOLatin1StringEncoding];
+        ret = [NSString stringWithCString:swModule->stripText() encoding:NSISOLatin1StringEncoding];
     }
     return ret;
 }
 
 - (NSString *)strippedTextFromString:(NSString *)aString {
     NSString *ret = @"";
-    ret = [NSString stringWithUTF8String:swModule->RenderText([aString UTF8String])];
+    ret = [NSString stringWithUTF8String:swModule->renderText([aString UTF8String])];
     if(!ret) {
-        ret = [NSString stringWithCString:swModule->RenderText([aString UTF8String]) encoding:NSISOLatin1StringEncoding];
+        ret = [NSString stringWithCString:swModule->renderText([aString UTF8String]) encoding:NSISOLatin1StringEncoding];
     }
     return ret;
 }

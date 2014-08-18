@@ -61,7 +61,7 @@ using std::list;
 
     id<FilterProvider> filterProvider = [[FilterProviderFactory providerFactory] get];
 
-    switch([mod swModule]->Markup()) {
+    switch([mod swModule]->getMarkup()) {
         case sword::FMT_GBF:
             if(!gbfFilter) {
                 gbfFilter = [filterProvider newGbfRenderFilter];

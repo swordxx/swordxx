@@ -96,7 +96,7 @@ NSLock *bibleLock = nil;
  that is: book number + testament * 100
  */
 + (int)bookIndexForSWKey:(sword::VerseKey *)key {
-    return key->Book() + key->Testament() * 100;
+    return key->getBookMax() + key->getTestamentMax() * 100;
 }
 
 #pragma mark - Initializers
@@ -183,11 +183,11 @@ NSLock *bibleLock = nil;
 - (BOOL)hasReference:(NSString *)ref {
 	[moduleLock lock];
 	
-	sword::VerseKey	*key = (sword::VerseKey *)(swModule->CreateKey());
+	sword::VerseKey	*key = (sword::VerseKey *)(swModule->createKey());
 	(*key) = [ref UTF8String];
     NSString *bookName = [NSString stringWithUTF8String:key->getBookName()];
-    int chapter = key->Chapter();
-    int verse = key->Verse();
+    int chapter = key->getChapterMax();
+    int verse = key->getVerseMax();
     
     SwordBibleBook *bb = [[self books] objectForKey:bookName];
     if(bb) {
@@ -208,9 +208,9 @@ NSLock *bibleLock = nil;
     
     if(aReference && [aReference length] > 0) {
         sword::VerseKey vk;
-        sword::ListKey listKey = vk.ParseVerseList([aReference UTF8String], "Gen1", true);
+        sword::ListKey listKey = vk.parseVerseList([aReference UTF8String], "Gen1", true);
         // unfortunately there is no other way then loop though all verses to know how many
-        for(listKey = sword::TOP; !listKey.Error(); listKey++) ret++;    
+        for(listKey = sword::TOP; !listKey.popError(); listKey++) ret++;
     }
     
     return ret;
@@ -220,7 +220,7 @@ NSLock *bibleLock = nil;
 	[moduleLock lock];
 	
 	int maxChapters;
-	sword::VerseKey *key = (sword::VerseKey *)swModule->CreateKey();
+	sword::VerseKey *key = (sword::VerseKey *)swModule->createKey();
 	(*key) = [bookName UTF8String];
 	maxChapters = key->getChapterMax();
 	delete key;
@@ -386,7 +386,7 @@ NSLock *bibleLock = nil;
 #pragma mark - SwordModuleAccess
 
 - (SwordKey *)createKey {
-    sword::VerseKey *vk = (sword::VerseKey *)swModule->CreateKey();
+    sword::VerseKey *vk = (sword::VerseKey *)swModule->createKey();
     SwordVerseKey *newKey = [SwordVerseKey verseKeyWithSWVerseKey:vk makeCopy:YES];
     delete vk;
     
@@ -403,9 +403,9 @@ NSLock *bibleLock = nil;
 
 - (long)entryCount {
     swModule->setPosition(sword::TOP);
-    long verseLowIndex = swModule->Index();
+    long verseLowIndex = swModule->getIndex();
     swModule->setPosition(sword::BOTTOM);
-    long verseHighIndex = swModule->Index();
+    long verseHighIndex = swModule->getIndex();
     
     return verseHighIndex - verseLowIndex;
 }

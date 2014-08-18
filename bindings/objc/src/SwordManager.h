@@ -18,7 +18,6 @@
 #include <swmgr.h>		// C++ Sword API
 #include <localemgr.h>
 #include <versekey.h>
-class sword::SWModule;
 #endif
 
 /** the major types as returned in -[SwordModule -typeString] */

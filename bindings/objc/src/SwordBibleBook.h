@@ -12,7 +12,6 @@
 #include <versificationmgr.h>
 #include <versekey.h>
 #include <localemgr.h>
-class sword::VersificationMgr::Book;
 #endif
 
 @interface SwordBibleBook : NSObject {

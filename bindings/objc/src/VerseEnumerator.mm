@@ -37,7 +37,7 @@
 
 - (NSArray *)allObjects {
     NSMutableArray *t = [NSMutableArray array];
-    for(*[listKey swListKey] = sword::TOP;![listKey swListKey]->Error(); *[listKey swListKey] += 1) {
+    for(*[listKey swListKey] = sword::TOP;![listKey swListKey]->popError(); *[listKey swListKey] += 1) {
         [t addObject:[listKey keyText]];
     }
     // position TOP again
@@ -48,7 +48,7 @@
 
 - (NSString *)nextObject {
     NSString *ret = nil;
-    if(![listKey swListKey]->Error()) {
+    if(![listKey swListKey]->popError()) {
         ret = [listKey keyText];
         *[listKey swListKey] += 1;
     }

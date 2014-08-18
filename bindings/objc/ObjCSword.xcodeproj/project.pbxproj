@@ -184,10 +184,6 @@
 		A954AC2F13EE9E470094E3FE /* StringBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954AACB13EE9A2B0094E3FE /* StringBuffer.cpp */; };
 		A954AC3013EE9E470094E3FE /* StringIntern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954AACD13EE9A2B0094E3FE /* StringIntern.cpp */; };
 		A954AC3113EE9E470094E3FE /* ThreadLocal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954AAD113EE9A2B0094E3FE /* ThreadLocal.cpp */; };
-		A954AC3313EE9F620094E3FE /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954AC3213EE9F620094E3FE /* libcurl.dylib */; };
-		A954AC3713EE9FA10094E3FE /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954AC3413EE9FA10094E3FE /* libicucore.dylib */; };
-		A954AC3813EE9FA10094E3FE /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954AC3513EE9FA10094E3FE /* libstdc++.dylib */; };
-		A954AC3913EE9FA10094E3FE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954AC3613EE9FA10094E3FE /* libz.dylib */; };
 		A954AC3A13EEA0C10094E3FE /* swdisp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80113EE98B30094E3FE /* swdisp.cpp */; };
 		A954AC3B13EEA0C10094E3FE /* swlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80213EE98B30094E3FE /* swlog.cpp */; };
 		A954AC3C13EEA0C10094E3FE /* listkey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80913EE98B30094E3FE /* listkey.cpp */; };
@@ -337,8 +333,6 @@
 		A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2351176AF188008D714B /* remotetrans.cpp */; };
 		A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2353176AF19C008D714B /* osisenum.cpp */; };
 		A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2354176AF19C008D714B /* osisglosses.cpp */; };
-		A96C235C176AFA3C008D714B /* osisxlit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisxlit.cpp */; };
-		A96C235C176AFA3C008D714B /* osisreferencelinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisreferencelinks.cpp */; };
 		A96C235D176AFA3C008D714B /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C233E176AF139008D714B /* gzclose.c */; };
 		A96C235E176AFA3C008D714B /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2340176AF139008D714B /* gzlib.c */; };
 		A96C235F176AFA3C008D714B /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2341176AF139008D714B /* gzread.c */; };
@@ -346,9 +340,23 @@
 		A96C2361176AFA3C008D714B /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2343176AF139008D714B /* infback.c */; };
 		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
+		A982036D19A08B7C00DD808C /* osisreferencelinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisreferencelinks.cpp */; };
+		A982038A19A09BC000DD808C /* ztext4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982038819A09BC000DD808C /* ztext4.cpp */; };
+		A982038B19A09C3C00DD808C /* zcom4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037319A09AE500DD808C /* zcom4.cpp */; };
+		A982038C19A09C3C00DD808C /* zverse4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037719A09B5C00DD808C /* zverse4.cpp */; };
+		A982038D19A09C3C00DD808C /* gbflatex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037919A09B7800DD808C /* gbflatex.cpp */; };
+		A982038E19A09C3C00DD808C /* osislatex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037A19A09B7800DD808C /* osislatex.cpp */; };
+		A982038F19A09C3C00DD808C /* osisxlit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037B19A09B7800DD808C /* osisxlit.cpp */; };
+		A982039019A09C3C00DD808C /* teilatex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037C19A09B7800DD808C /* teilatex.cpp */; };
+		A982039119A09C3C00DD808C /* thmllatex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982037D19A09B7800DD808C /* thmllatex.cpp */; };
+		A982039419A09FFD00DD808C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A982039319A09FFD00DD808C /* libbz2.dylib */; };
+		A982039619A0A01200DD808C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A982039519A0A01200DD808C /* libicucore.dylib */; };
+		A982039819A0A02300DD808C /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A982039719A0A02300DD808C /* libstdc++.dylib */; };
+		A982039A19A0A02C00DD808C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A982039919A0A02C00DD808C /* libz.dylib */; };
+		A982039C19A0A03A00DD808C /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A982039B19A0A03A00DD808C /* libcurl.dylib */; };
+		A982039F19A0A5FA00DD808C /* scsuutf8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982039D19A0A5FA00DD808C /* scsuutf8.cpp */; };
+		A98203A019A0A5FA00DD808C /* utf8scsu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982039E19A0A5FA00DD808C /* utf8scsu.cpp */; };
 		A999FF3F17951CCE00E65919 /* bz2comprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3917951C8900E65919 /* bz2comprs.cpp */; };
-		A999FF4017951CCE00E65919 /* xzcomprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3A17951C8900E65919 /* xzcomprs.cpp */; };
-		A999FF4117951CCE00E65919 /* scsuutf8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3D17951CA000E65919 /* scsuutf8.cpp */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
@@ -758,8 +766,6 @@
 		A954A83913EE98B30094E3FE /* rawcom4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rawcom4.cpp; sourceTree = "<group>"; };
 		A954A83D13EE98B30094E3FE /* rawfiles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rawfiles.cpp; sourceTree = "<group>"; };
 		A954A83E13EE98B30094E3FE /* swcom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swcom.cpp; sourceTree = "<group>"; };
-		A954A84013EE98B30094E3FE /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		A954A84113EE98B30094E3FE /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 		A954A84213EE98B30094E3FE /* zcom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zcom.cpp; sourceTree = "<group>"; };
 		A954A84513EE98B30094E3FE /* entriesblk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entriesblk.cpp; sourceTree = "<group>"; };
 		A954A84613EE98B30094E3FE /* lzsscomprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lzsscomprs.cpp; sourceTree = "<group>"; };
@@ -1125,7 +1131,6 @@
 		A96C2351176AF188008D714B /* remotetrans.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = remotetrans.cpp; sourceTree = "<group>"; };
 		A96C2353176AF19C008D714B /* osisenum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisenum.cpp; sourceTree = "<group>"; };
 		A96C2354176AF19C008D714B /* osisglosses.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisglosses.cpp; sourceTree = "<group>"; };
-		A96C2355176AF19C008D714B /* osisxlit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisxlit.cpp; sourceTree = "<group>"; };
 		A96C2355176AF19C008D714B /* osisreferencelinks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisreferencelinks.cpp; sourceTree = "<group>"; };
 		A975EAC411C77862007C1532 /* ObjCSword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCSword.h; sourceTree = "<group>"; };
 		A975ED9811C7925C007C1532 /* imp2gbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imp2gbs.cpp; sourceTree = "<group>"; };
@@ -1145,10 +1150,23 @@
 		A975EDDA11C7925C007C1532 /* vs2osisreftxt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vs2osisreftxt.cpp; sourceTree = "<group>"; };
 		A975EDDB11C7925C007C1532 /* xml2gbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml2gbs.cpp; sourceTree = "<group>"; };
 		A975EED911C792B9007C1532 /* mod2osis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mod2osis; sourceTree = BUILT_PRODUCTS_DIR; };
+		A982037319A09AE500DD808C /* zcom4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zcom4.cpp; sourceTree = "<group>"; };
+		A982037719A09B5C00DD808C /* zverse4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zverse4.cpp; sourceTree = "<group>"; };
+		A982037919A09B7800DD808C /* gbflatex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gbflatex.cpp; sourceTree = "<group>"; };
+		A982037A19A09B7800DD808C /* osislatex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osislatex.cpp; sourceTree = "<group>"; };
+		A982037B19A09B7800DD808C /* osisxlit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisxlit.cpp; sourceTree = "<group>"; };
+		A982037C19A09B7800DD808C /* teilatex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = teilatex.cpp; sourceTree = "<group>"; };
+		A982037D19A09B7800DD808C /* thmllatex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thmllatex.cpp; sourceTree = "<group>"; };
+		A982038819A09BC000DD808C /* ztext4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ztext4.cpp; sourceTree = "<group>"; };
+		A982039319A09FFD00DD808C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		A982039519A0A01200DD808C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		A982039719A0A02300DD808C /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		A982039919A0A02C00DD808C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		A982039B19A0A03A00DD808C /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
+		A982039D19A0A5FA00DD808C /* scsuutf8.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scsuutf8.cpp; sourceTree = "<group>"; };
+		A982039E19A0A5FA00DD808C /* utf8scsu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utf8scsu.cpp; sourceTree = "<group>"; };
 		A9921A1911FD9CA8002DAA72 /* libSword.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSword.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A999FF3917951C8900E65919 /* bz2comprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bz2comprs.cpp; sourceTree = "<group>"; };
-		A999FF3A17951C8900E65919 /* xzcomprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xzcomprs.cpp; sourceTree = "<group>"; };
-		A999FF3D17951CA000E65919 /* scsuutf8.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scsuutf8.cpp; sourceTree = "<group>"; };
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
 		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1204,10 +1222,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A954AC3713EE9FA10094E3FE /* libicucore.dylib in Frameworks */,
-				A954AC3813EE9FA10094E3FE /* libstdc++.dylib in Frameworks */,
-				A954AC3913EE9FA10094E3FE /* libz.dylib in Frameworks */,
-				A954AC3313EE9F620094E3FE /* libcurl.dylib in Frameworks */,
+				A982039C19A0A03A00DD808C /* libcurl.dylib in Frameworks */,
+				A982039A19A0A02C00DD808C /* libz.dylib in Frameworks */,
+				A982039819A0A02300DD808C /* libstdc++.dylib in Frameworks */,
+				A982039619A0A01200DD808C /* libicucore.dylib in Frameworks */,
+				A982039419A09FFD00DD808C /* libbz2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1628,6 +1647,7 @@
 				A954A83A13EE98B30094E3FE /* rawfiles */,
 				A954A83E13EE98B30094E3FE /* swcom.cpp */,
 				A954A83F13EE98B30094E3FE /* zcom */,
+				A982037019A09AE500DD808C /* zcom4 */,
 			);
 			path = comments;
 			sourceTree = "<group>";
@@ -1667,8 +1687,6 @@
 		A954A83F13EE98B30094E3FE /* zcom */ = {
 			isa = PBXGroup;
 			children = (
-				A954A84013EE98B30094E3FE /* Makefile */,
-				A954A84113EE98B30094E3FE /* Makefile.am */,
 				A954A84213EE98B30094E3FE /* zcom.cpp */,
 			);
 			path = zcom;
@@ -1678,7 +1696,6 @@
 			isa = PBXGroup;
 			children = (
 				A999FF3917951C8900E65919 /* bz2comprs.cpp */,
-				A999FF3A17951C8900E65919 /* xzcomprs.cpp */,
 				A954A84513EE98B30094E3FE /* entriesblk.cpp */,
 				A954A84613EE98B30094E3FE /* lzsscomprs.cpp */,
 				A954A84913EE98B30094E3FE /* rawstr.cpp */,
@@ -1691,6 +1708,7 @@
 				A954A85113EE98B30094E3FE /* zipcomprs.cpp */,
 				A954A85213EE98B30094E3FE /* zstr.cpp */,
 				A954A85313EE98B30094E3FE /* zverse.cpp */,
+				A982037719A09B5C00DD808C /* zverse4.cpp */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -1698,10 +1716,16 @@
 		A954A85413EE98B30094E3FE /* filters */ = {
 			isa = PBXGroup;
 			children = (
-				A999FF3D17951CA000E65919 /* scsuutf8.cpp */,
+				A982039D19A0A5FA00DD808C /* scsuutf8.cpp */,
+				A982039E19A0A5FA00DD808C /* utf8scsu.cpp */,
+				A982037919A09B7800DD808C /* gbflatex.cpp */,
+				A982037A19A09B7800DD808C /* osislatex.cpp */,
+				A982037B19A09B7800DD808C /* osisxlit.cpp */,
+				A982037C19A09B7800DD808C /* teilatex.cpp */,
+				A982037D19A09B7800DD808C /* thmllatex.cpp */,
 				A96C2353176AF19C008D714B /* osisenum.cpp */,
 				A96C2354176AF19C008D714B /* osisglosses.cpp */,
-				A96C2355176AF19C008D714B /* osisxlit.cpp */,
+				A96C2355176AF19C008D714B /* osisreferencelinks.cpp */,
 				A96C2355176AF19C008D714B /* osisreferencelinks.cpp */,
 				A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */,
 				A954A85513EE98B30094E3FE /* cipherfil.cpp */,
@@ -1846,6 +1870,7 @@
 				A954A8C713EE98B30094E3FE /* rawtext4 */,
 				A954A8CA13EE98B30094E3FE /* swtext.cpp */,
 				A954A8CB13EE98B30094E3FE /* ztext */,
+				A982038519A09BC000DD808C /* ztext4 */,
 			);
 			path = texts;
 			sourceTree = "<group>";
@@ -2268,9 +2293,31 @@
 			path = ../../utilities;
 			sourceTree = SOURCE_ROOT;
 		};
+		A982037019A09AE500DD808C /* zcom4 */ = {
+			isa = PBXGroup;
+			children = (
+				A982037319A09AE500DD808C /* zcom4.cpp */,
+			);
+			path = zcom4;
+			sourceTree = "<group>";
+		};
+		A982038519A09BC000DD808C /* ztext4 */ = {
+			isa = PBXGroup;
+			children = (
+				A982038819A09BC000DD808C /* ztext4.cpp */,
+			);
+			name = ztext4;
+			path = "/Users/mbergmann/Development/MySources/crosswire/Eloquent_MacOS/trunk/sword_src/sword-trunk/src/modules/texts/ztext4";
+			sourceTree = "<absolute>";
+		};
 		A9BFB0A313EDF51000032679 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A982039B19A0A03A00DD808C /* libcurl.dylib */,
+				A982039919A0A02C00DD808C /* libz.dylib */,
+				A982039719A0A02300DD808C /* libstdc++.dylib */,
+				A982039519A0A01200DD808C /* libicucore.dylib */,
+				A982039319A09FFD00DD808C /* libbz2.dylib */,
 				A9BFB0A413EDF51000032679 /* SenTestingKit.framework */,
 				A9BFB0A613EDF51100032679 /* Cocoa.framework */,
 				A9BFB0A813EDF51100032679 /* Other Frameworks */,
@@ -2714,7 +2761,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2851,14 +2898,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A982038B19A09C3C00DD808C /* zcom4.cpp in Sources */,
+				A982038C19A09C3C00DD808C /* zverse4.cpp in Sources */,
+				A982038D19A09C3C00DD808C /* gbflatex.cpp in Sources */,
+				A982038E19A09C3C00DD808C /* osislatex.cpp in Sources */,
+				A982038F19A09C3C00DD808C /* osisxlit.cpp in Sources */,
+				A982039019A09C3C00DD808C /* teilatex.cpp in Sources */,
+				A982039119A09C3C00DD808C /* thmllatex.cpp in Sources */,
 				A999FF3F17951CCE00E65919 /* bz2comprs.cpp in Sources */,
-				A999FF4017951CCE00E65919 /* xzcomprs.cpp in Sources */,
-				A999FF4117951CCE00E65919 /* scsuutf8.cpp in Sources */,
 				A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */,
 				A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */,
+				A982039F19A0A5FA00DD808C /* scsuutf8.cpp in Sources */,
 				A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */,
-				A96C235C176AFA3C008D714B /* osisxlit.cpp in Sources */,
-				A96C235C176AFA3C008D714B /* osisreferencelinks.cpp in Sources */,
+				A982036D19A08B7C00DD808C /* osisreferencelinks.cpp in Sources */,
 				A96C235D176AFA3C008D714B /* gzclose.c in Sources */,
 				A96C235E176AFA3C008D714B /* gzlib.c in Sources */,
 				A96C235F176AFA3C008D714B /* gzread.c in Sources */,
@@ -2931,6 +2983,7 @@
 				A954AC6D13EEA0C10094E3FE /* gbfplain.cpp in Sources */,
 				A954AC6E13EEA0C10094E3FE /* gbfredletterwords.cpp in Sources */,
 				A954AC6F13EEA0C10094E3FE /* gbfrtf.cpp in Sources */,
+				A98203A019A0A5FA00DD808C /* utf8scsu.cpp in Sources */,
 				A954AC7013EEA0C10094E3FE /* gbfstrongs.cpp in Sources */,
 				A954AC7113EEA0C10094E3FE /* gbfthml.cpp in Sources */,
 				A954AC7213EEA0C10094E3FE /* gbfwebif.cpp in Sources */,
@@ -3042,6 +3095,7 @@
 				A954ABE813EE9E470094E3FE /* SegmentInfos.cpp in Sources */,
 				A954ABE913EE9E470094E3FE /* SegmentMergeInfo.cpp in Sources */,
 				A954ABEA13EE9E470094E3FE /* SegmentMergeQueue.cpp in Sources */,
+				A982038A19A09BC000DD808C /* ztext4.cpp in Sources */,
 				A954ABEB13EE9E470094E3FE /* SegmentMerger.cpp in Sources */,
 				A954ABEC13EE9E470094E3FE /* SegmentReader.cpp in Sources */,
 				A954ABED13EE9E470094E3FE /* SegmentTermDocs.cpp in Sources */,
@@ -3463,7 +3517,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -3474,7 +3527,6 @@
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_GC = required;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3506,7 +3558,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -3517,7 +3568,6 @@
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_GC = required;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -3547,7 +3597,6 @@
 		1DEB91B208733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = "";
@@ -3561,7 +3610,6 @@
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3574,7 +3622,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				EXECUTABLE_PREFIX = lib;
@@ -3601,7 +3648,7 @@
 					"-Dunix",
 					"-D__unix__",
 					"-DUSELUCENE",
-					"-D_ICU_",
+					"-DEXCLUDEXZ",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -3614,7 +3661,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3637,8 +3683,8 @@
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
 					"-DUSELUCENE",
-					"-D_ICU_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -3651,7 +3697,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -3683,7 +3728,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -3715,7 +3759,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -3752,7 +3795,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -3784,7 +3826,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
@@ -3846,7 +3887,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
@@ -3875,7 +3915,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3899,7 +3938,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -3931,7 +3969,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -3963,7 +4000,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -3995,7 +4031,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -4027,7 +4062,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -4059,7 +4093,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -4091,7 +4124,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -4123,7 +4155,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -4155,7 +4186,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -4187,7 +4217,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -4219,7 +4248,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -4251,7 +4279,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -4283,7 +4310,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -4315,7 +4341,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -4347,7 +4372,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4384,7 +4408,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4416,7 +4439,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4453,7 +4475,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4485,7 +4506,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4522,7 +4542,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4554,7 +4573,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4591,7 +4609,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4623,7 +4640,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4660,7 +4676,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4692,7 +4707,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4729,7 +4743,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4761,7 +4774,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -4798,7 +4810,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;

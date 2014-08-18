@@ -37,7 +37,7 @@
 
 	NSMutableArray *retArray = [NSMutableArray array];
 	if(results.Count() > 0) {
-		while(!results.Error()) {
+		while(!results.popError()) {
             NSString *keyString = [NSString stringWithUTF8String:results.getText()];
 			SwordModuleTextEntry *entry = [SwordModuleTextEntry textEntryForKey:keyString andText:nil];
 			[retArray addObject:entry];

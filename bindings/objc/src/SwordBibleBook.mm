@@ -37,8 +37,8 @@
         swBook = aBook;
         
         sword::VerseKey vk = sword::VerseKey(aBook->getOSISName());
-        [self setTestament:vk.Testament()];
-        [self setNumberInTestament:vk.Book()];
+        [self setTestament:vk.getTestamentMax()];
+        [self setNumberInTestament:vk.getBookMax()];
         
         // get system localeMgr to be able to translate the english bookName
         sword::LocaleMgr *lmgr = sword::LocaleMgr::getSystemLocaleMgr();

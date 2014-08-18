@@ -88,20 +88,24 @@
     return [SwordVerseKey verseKeyWithSWVerseKey:(sword::VerseKey *)sk];
 }
 
+- (int)index {
+    return ((sword::VerseKey *)sk)->getIndex();
+}
+
 - (BOOL)headings {
-    return (BOOL)((sword::VerseKey *)sk)->Headings();
+    return (BOOL)((sword::VerseKey *)sk)->isIntros();
 }
 
 - (void)setHeadings:(BOOL)flag {
-    ((sword::VerseKey *)sk)->Headings(flag);
+    ((sword::VerseKey *)sk)->setIntros(flag);
 }
 
 - (BOOL)autoNormalize {
-    return (BOOL)((sword::VerseKey *)sk)->AutoNormalize();
+    return (BOOL)((sword::VerseKey *)sk)->isAutoNormalize();
 }
 
 - (void)setAutoNormalize:(BOOL)flag {
-    ((sword::VerseKey *)sk)->AutoNormalize(flag);
+    ((sword::VerseKey *)sk)->setAutoNormalize(flag);
 }
 
 - (int)testament {

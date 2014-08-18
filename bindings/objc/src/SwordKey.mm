@@ -86,15 +86,15 @@
 #pragma mark - Methods
 
 - (void)setPersist:(BOOL)flag {
-    sk->Persist((int)flag);
+    sk->setPersist(flag);
 }
 
 - (BOOL)persist {
-    return (BOOL)sk->Persist();
+    return (BOOL)sk->isPersist();
 }
 
 - (int)error {
-    return sk->Error();
+    return sk->popError();
 }
 
 - (void)setPosition:(int)aPosition {
