@@ -155,8 +155,6 @@ USEUNIT("..\..\src\utilfuns\zlib\gzread.c");
 USEUNIT("..\..\src\utilfuns\zlib\gzwrite.c");
 USEUNIT("..\..\src\utilfuns\zlib\infback.c");
 USEUNIT("..\..\src\mgr\versificationmgr.cpp");
-USEUNIT("..\..\src\modules\common\xzcomprs.cpp");
-USEUNIT("..\..\src\modules\common\bz2comprs.cpp");
 USEUNIT("..\..\src\modules\filters\osisvariants.cpp");
 USEUNIT("..\..\src\modules\filters\osisxlit.cpp");
 USEUNIT("..\..\src\modules\filters\osisreferencelinks.cpp");
@@ -164,6 +162,11 @@ USEUNIT("..\..\src\modules\filters\scsuutf8.cpp");
 USEUNIT("..\..\src\modules\filters\gbflatex.cpp");
 USEUNIT("..\..\src\modules\filters\osislatex.cpp");
 USEUNIT("..\..\src\modules\filters\thmllatex.cpp");
+USEUNIT("..\..\src\modules\texts\ztext4\ztext4.cpp");
+USEUNIT("..\..\src\modules\comments\zcom4\zcom4.cpp");
+USEUNIT("..\..\src\modules\common\zverse4.cpp");
+USEUNIT("..\..\src\modules\filters\teilatex.cpp");
+USEUNIT("..\..\src\modules\filters\utf8scsu.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

@@ -314,13 +314,13 @@ void SWModule::setPosition(SW_POSITION p) {
 
 	switch (p) {
 	case POS_TOP:
-		(*this)++;
-		(*this)--;
+		this->increment();
+		this->decrement();
 		break;
 
 	case POS_BOTTOM:
-		(*this)--;
-		(*this)++;
+		this->decrement();
+		this->increment();
 		break;
 	}
 

@@ -27,6 +27,7 @@
 #include <swcomprs.h>
 
 #include <defs.h>
+#include <sysdata.h>
 
 SWORD_NAMESPACE_START
 
@@ -41,7 +42,7 @@ public:
 	virtual void Decode(void);
 	virtual void setLevel(int l);
 private:
-	uint64_t memlimit; // memory usage limit during decompression
+	__u64 memlimit; // memory usage limit during decompression
 };
 
 SWORD_NAMESPACE_END

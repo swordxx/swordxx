@@ -128,7 +128,8 @@ public:
 	}
 	VersificationMgr::Book::Private &operator =(const VersificationMgr::Book::Private &other) {
 		verseMax.clear();
-		verseMax = other.verseMax;
+                int s = other.verseMax.size();
+                if (s) verseMax = other.verseMax;
 		offsetPrecomputed = other.offsetPrecomputed;
 		return *this;
 	}
@@ -422,21 +423,21 @@ const StringList VersificationMgr::getVersificationSystems() const {
 }
 
 void VersificationMgr::System::translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const {
-	SWLog::getSystemLog()->logError("translate verse from %s to %s: %s.%i.%i-%i\n",getName(), dstSys->getName(), *book, *chapter, *verse, *verse_end);
+	SWLog::getSystemLog()->logDebug("translate verse from %s to %s: %s.%i.%i-%i\n",getName(), dstSys->getName(), *book, *chapter, *verse, *verse_end);
 
 	if (!strcmp(getName(),"KJVA") || !strcmp(getName(),"KJV")) {
 		if (!strcmp(dstSys->getName(),"KJVA") || !strcmp(dstSys->getName(),"KJV"))
 			return;
 		// reversed mapping
-		SWLog::getSystemLog()->logError("Perform reversed mapping.\n");
+		SWLog::getSystemLog()->logDebug("Perform reversed mapping.\n");
 		int b = dstSys->getBookNumberByOSISName(*book)-1;
 
-		SWLog::getSystemLog()->logError("\tgetBookNumberByOSISName %i %s.\n", b, *book);
+		SWLog::getSystemLog()->logDebug("\tgetBookNumberByOSISName %i %s.\n", b, *book);
 
 		if (b < 0) {
-			SWLog::getSystemLog()->logError("\tmappingsExtraBooks.size() %i.\n", dstSys->p->mappingsExtraBooks.size());
+			SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys->p->mappingsExtraBooks.size());
 			for (int i=0; i<(int)dstSys->p->mappingsExtraBooks.size(); ++i) {
-				SWLog::getSystemLog()->logError("\t%s %s.\n", *book, dstSys->p->mappingsExtraBooks[i]);
+				SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->p->mappingsExtraBooks[i]);
 				if (!strcmp(*book, dstSys->p->mappingsExtraBooks[i])) {
 					b = p->books.size()+i-2;
 					break;
@@ -444,10 +445,10 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 			}
 		}
 
-		SWLog::getSystemLog()->logError("\tb %i.\n", b);
+		SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
 
 		if (b >= (int)dstSys->p->mappings.size() || b < 0) {
-			SWLog::getSystemLog()->logError("no modification");
+			SWLog::getSystemLog()->logDebug("no modification");
 			return;
 		}
 		
@@ -457,14 +458,14 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 		for (unsigned int i=0; i<dstSys->p->mappings[b].size(); ++i) {
 			const unsigned char *m = dstSys->p->mappings[b][i];
 			if (m[4] == *chapter && m[5] <= *verse) {
-				SWLog::getSystemLog()->logError("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
+				SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
 				if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
 					// inside of any mapping range
 					*chapter = m[1];
 					*verse = m[2];
 					*verse_end = m[3];
 					if (*m >= dstSys->p->books.size()) {
-						SWLog::getSystemLog()->logError("map to extra books, possible bug source\n");
+						SWLog::getSystemLog()->logWarning("map to extra books, possible bug source\n");
 						*book = dstSys->getBook(m[7]-1)->getOSISName();
 					}
 					return;
@@ -475,7 +476,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 			}
 		}
 		if (a != NULL) {
-			SWLog::getSystemLog()->logError("set appropriate: %i %i %i %i %i %i\n",a[1],a[2],a[3],a[4],a[5],a[6]);
+			SWLog::getSystemLog()->logDebug("set appropriate: %i %i %i %i %i %i\n",a[1],a[2],a[3],a[4],a[5],a[6]);
 			(*chapter) = a[1];
 			// shift verse
 			const int d = (a[3]>a[2]?a[3]:a[2])-(a[6]>a[5]?a[6]:a[5]);
@@ -485,13 +486,13 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 				*verse_end = (*verse) + d;
 			*verse += d;
 			if (*a > dstSys->p->books.size()) {
-				SWLog::getSystemLog()->logError("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-				SWLog::getSystemLog()->logError("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName());
+				SWLog::getSystemLog()->logDebug("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
+				SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName());
 				*book = dstSys->getBook(a[7]-1)->getOSISName();
 			}
 			return;
 		}
-		SWLog::getSystemLog()->logError("There is no mapping.\n");
+		SWLog::getSystemLog()->logDebug("There is no mapping.\n");
 	}
 	else if (strcmp(dstSys->getName(),"KJVA") && strcmp(dstSys->getName(),"KJV")) {
 		const System *kjva = getSystemVersificationMgr()->getVersificationSystem("KJVA");
@@ -517,7 +518,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 		}
 	}
 	else {
-		SWLog::getSystemLog()->logError("Perform forward mapping.\n");
+		SWLog::getSystemLog()->logDebug("Perform forward mapping.\n");
 		const int b = getBookNumberByOSISName(*book)-1;
 		if (b >= (int)p->mappings.size())
 			return;
@@ -525,11 +526,11 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 		for (int i=p->mappings[b].size()-1; i>=0; --i) {
 			const unsigned char *m = p->mappings[b][i];
 			if (m[1] < *chapter) {
-				SWLog::getSystemLog()->logError("There is no mapping for this chapter.\n");
+				SWLog::getSystemLog()->logWarning("There is no mapping for this chapter.\n");
 				return;
 			}
 			if (m[1] == *chapter && m[2] <= *verse) {
-				SWLog::getSystemLog()->logError("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
+				SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
 				if (m[2] == *verse || (m[3] >= *verse && m[2] <= *verse)) {
 					*chapter = m[4];
 					*verse = m[5];
@@ -550,7 +551,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 				return;
 			}
 		}
-		SWLog::getSystemLog()->logError("No mapping.\n");
+		SWLog::getSystemLog()->logDebug("No mapping.\n");
 	}
 }
 
