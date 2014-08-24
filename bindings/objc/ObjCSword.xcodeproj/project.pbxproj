@@ -2269,7 +2269,6 @@
 		A918B8E211C6697400024D84 /* SwordModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTest.h; path = ../test/SwordModuleTest.h; sourceTree = "<group>"; };
 		A918B8E311C6697400024D84 /* SwordModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTest.m; path = ../test/SwordModuleTest.m; sourceTree = "<group>"; };
 		A91C8B66175233F3008702B9 /* versificationmgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = versificationmgr.cpp; sourceTree = "<group>"; };
-		A927767019A2296E00670FCB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleTextEntry.m; path = src/SwordBibleTextEntry.m; sourceTree = "<group>"; };
 		A929619716B1BA240094E5BE /* SwordKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordKey.h; path = src/SwordKey.h; sourceTree = "<group>"; };
 		A929619816B1BA240094E5BE /* SwordKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordKey.mm; path = src/SwordKey.mm; sourceTree = "<group>"; };
@@ -6705,7 +6704,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C1667FE841158C02AAC07 /* English */,
-				A927767019A2296E00670FCB /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -6917,16 +6915,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -6947,16 +6944,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -6986,16 +6982,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7017,16 +7012,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7158,16 +7152,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7188,16 +7181,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7220,16 +7212,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7250,16 +7241,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7282,16 +7272,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7312,16 +7301,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7344,16 +7332,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7374,16 +7361,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7406,16 +7392,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7436,16 +7421,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7468,16 +7452,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7498,16 +7481,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7530,16 +7512,15 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7559,16 +7540,15 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				INSTALL_PATH = /usr/local/bin;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7597,16 +7577,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7628,16 +7607,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7664,16 +7642,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7695,16 +7672,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7731,16 +7707,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7762,16 +7737,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7798,16 +7772,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7829,16 +7802,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7865,16 +7837,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7896,16 +7867,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7932,16 +7902,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7963,16 +7932,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7999,16 +7967,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -8030,16 +7997,15 @@
 				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DCURLAVAILABLE",
 					"-Dunix",
 					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
