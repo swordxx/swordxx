@@ -42,7 +42,16 @@
         
         // get system localeMgr to be able to translate the english bookName
         sword::LocaleMgr *lmgr = sword::LocaleMgr::getSystemLocaleMgr();
-        self.localizedName = [NSString stringWithUTF8String:lmgr->translate(swBook->getLongName())];        
+        const char *translated = lmgr->translate(swBook->getLongName());
+        self.localizedName = [NSString stringWithUTF8String:translated];
+
+        // in case we don't have ICU support this still works.
+        if(self.localizedName == nil) {
+            self.localizedName = [NSString stringWithCString:translated encoding:NSISOLatin1StringEncoding];
+        }
+        if(self.localizedName == nil) {
+            DLog(@"Unable to get this bookname: %s", translated);
+        }
     }
     
     return self;
