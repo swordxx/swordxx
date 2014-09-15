@@ -172,6 +172,7 @@ swordorb::StringList* swordorb_SWModule_i::getEntryAttribute(const char* level1,
 
 swordorb::StringList* swordorb_SWModule_i::parseKeyList(const char* keyText){
 	sword::VerseKey *parser = dynamic_cast<VerseKey *>(delegate->getKey());
+	parser->setIntros(true);
 	swordorb::StringList *retVal = new swordorb::StringList;
 	if (parser) {
 		sword::ListKey result;
