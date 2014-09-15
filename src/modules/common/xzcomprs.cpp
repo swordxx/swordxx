@@ -158,7 +158,7 @@ void XzCompress::Decode(void)
 		size_t zpos = 0;
 		size_t bpos = 0;
 
-		switch (lzma_stream_buffer_decode(&memlimit, 0, NULL, (const uint8_t*)zbuf, &zpos, (size_t)zlen, (uint8_t*)buf, &bpos, (size_t)&blen)){
+		switch (lzma_stream_buffer_decode((uint64_t *)&memlimit, 0, NULL, (const uint8_t*)zbuf, &zpos, (size_t)zlen, (uint8_t*)buf, &bpos, (size_t)&blen)){
 			case LZMA_OK: SendChars(buf, bpos); slen = bpos; break;
 			case LZMA_FORMAT_ERROR: fprintf(stderr, "ERROR: format error encountered during decompression.\n"); break;
 			case LZMA_OPTIONS_ERROR: fprintf(stderr, "ERROR: options error encountered during decompression.\n"); break;
