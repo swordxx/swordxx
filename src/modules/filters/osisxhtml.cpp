@@ -161,6 +161,8 @@ OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
 	suspendLevel = 0;
 	wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
 	wordsOfChristEnd   = "</span> ";
+	interModuleLinkStart = "<a href=\"sword://%s/%s\">";
+	interModuleLinkEnd = "</a>";
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 		version = module->getName();
@@ -379,14 +381,14 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					else
 					{
 						// Dictionary link, or something
-						buf.appendFormatted("<a href=\"sword://%s/%s\">",
+						buf.appendFormatted(u->interModuleLinkStart, 
 							URL::encode(work.c_str()).c_str(),
 							URL::encode(ref.c_str()).c_str()
 							);
 					}
 				}
 				else {
-					outText("</a>", buf, u);
+					outText(u->interModuleLinkEnd, buf, u);
 				}
 			}
 		}

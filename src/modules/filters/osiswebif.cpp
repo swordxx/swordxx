@@ -37,6 +37,13 @@ OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.js
 }
 
 
+BasicFilterUserData *OSISWEBIF::createUserData(const SWModule *module, const SWKey *key) {
+	MyUserData *u = (MyUserData *)OSISXHTML::createUserData(module, key);
+	u->interModuleLinkStart = "<a href=\"#\" onclick=\"return im('%s', '%s');\">";
+	u->interModuleLinkEnd = "</a>";
+	return u;
+}
+
 bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
 	SWBuf scratch;

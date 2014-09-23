@@ -36,11 +36,11 @@ private:
 protected:
 
 	class TagStack;
-	// used by derived classes so we have it in the header
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 
 
+	// used by derived classes so we have it in the header
 	class MyUserData : public BasicFilterUserData {
 	public:
 		bool osisQToTick;
@@ -49,6 +49,8 @@ protected:
 		int suspendLevel;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
+		SWBuf interModuleLinkStart;
+		SWBuf interModuleLinkEnd;
 		TagStack *quoteStack;
 		TagStack *hiStack;
 		TagStack *titleStack;
