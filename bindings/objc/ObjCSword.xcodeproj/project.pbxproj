@@ -1140,6 +1140,10 @@
 		A982039F19A0A5FA00DD808C /* scsuutf8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982039D19A0A5FA00DD808C /* scsuutf8.cpp */; };
 		A98203A019A0A5FA00DD808C /* utf8scsu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A982039E19A0A5FA00DD808C /* utf8scsu.cpp */; };
 		A999FF3F17951CCE00E65919 /* bz2comprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A999FF3917951C8900E65919 /* bz2comprs.cpp */; };
+		A9A127A519DE93A0005BCBC1 /* SwordUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9A127A619DE93A0005BCBC1 /* FilterProviderFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9A127A719DE93A0005BCBC1 /* DefaultFilterProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9A127A819DE93A0005BCBC1 /* SwordFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C92C02A5C86E1C75ED1CEF4 /* SwordFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
@@ -4792,6 +4796,10 @@
 				A929619D16B1BA240094E5BE /* SwordKey.h in Headers */,
 				A929619F16B1BA240094E5BE /* SwordListKey.h in Headers */,
 				A92961A116B1BA240094E5BE /* SwordVerseKey.h in Headers */,
+				A9A127A519DE93A0005BCBC1 /* SwordUtil.h in Headers */,
+				A9A127A619DE93A0005BCBC1 /* FilterProviderFactory.h in Headers */,
+				A9A127A719DE93A0005BCBC1 /* DefaultFilterProvider.h in Headers */,
+				A9A127A819DE93A0005BCBC1 /* SwordFilter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
