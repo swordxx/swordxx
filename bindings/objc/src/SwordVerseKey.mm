@@ -12,27 +12,27 @@
 @implementation SwordVerseKey
 
 + (SwordVerseKey *)verseKey {
-    return [[[SwordVerseKey alloc] init] autorelease];
+    return [[SwordVerseKey alloc] init];
 }
 
 + (SwordVerseKey *)verseKeyWithVersification:(NSString *)scheme {
-    return [[[SwordVerseKey alloc] initWithVersification:scheme] autorelease];
+    return [[SwordVerseKey alloc] initWithVersification:scheme];
 }
 
 + (SwordVerseKey *)verseKeyWithRef:(NSString *)aRef {
-    return [[[SwordVerseKey alloc] initWithRef:aRef] autorelease];
+    return [[SwordVerseKey alloc] initWithRef:aRef];
 }
 
 + (SwordVerseKey *)verseKeyWithRef:(NSString *)aRef v11n:(NSString *)scheme {
-    return [[[SwordVerseKey alloc] initWithRef:aRef v11n:scheme] autorelease];
+    return [[SwordVerseKey alloc] initWithRef:aRef v11n:scheme];
 }
 
 + (SwordVerseKey *)verseKeyWithSWVerseKey:(sword::VerseKey *)aVk {
-    return [[[SwordVerseKey alloc] initWithSWVerseKey:aVk] autorelease];
+    return [[SwordVerseKey alloc] initWithSWVerseKey:aVk];
 }
 
 + (SwordVerseKey *)verseKeyWithSWVerseKey:(sword::VerseKey *)aVk makeCopy:(BOOL)copy {
-    return [[[SwordVerseKey alloc] initWithSWVerseKey:aVk makeCopy:copy] autorelease];    
+    return [[SwordVerseKey alloc] initWithSWVerseKey:aVk makeCopy:copy];    
 }
 
 - (id)init {
@@ -76,13 +76,7 @@
     return self;
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [super dealloc];    
-}
 
 - (SwordKey *)clone {
     return [SwordVerseKey verseKeyWithSWVerseKey:(sword::VerseKey *)sk];

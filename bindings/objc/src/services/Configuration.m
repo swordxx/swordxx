@@ -27,19 +27,10 @@
     return [super init];
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [impl release];
-
-    [super dealloc];
-}
 
 - (void)setImpl:(id<Configuration>)configImpl {
     impl = (Configuration *)configImpl;
-    [impl retain];
 }
 
 #pragma mark Configuration implementation

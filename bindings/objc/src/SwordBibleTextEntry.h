@@ -13,7 +13,7 @@
     NSString *preVerseHeading;
 }
 
-@property (readwrite, retain) NSString *preVerseHeading;
+@property (readwrite, strong) NSString *preVerseHeading;
 
 + (id)textEntryForKey:(NSString *)aKey andText:(NSString *)aText;
 - (id)initWithKey:(NSString *)aKey andText:(NSString *)aText;

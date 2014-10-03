@@ -42,11 +42,11 @@ typedef enum _ModuleStatusConst {
 }
 
 // ------------------- getter / setter -------------------
-@property (retain, readwrite) NSString *configPath;
-@property (retain, readwrite) NSString *configFilePath;
-@property (retain, readwrite) NSMutableArray *installSourceList;
+@property (strong, readwrite) NSString *configPath;
+@property (strong, readwrite) NSString *configFilePath;
+@property (strong, readwrite) NSMutableArray *installSourceList;
 /** Dictionary of InstallSources. Key: Caption */
-@property (retain, readwrite) NSMutableDictionary *installSources;
+@property (strong, readwrite) NSMutableDictionary *installSources;
 
 // -------------------- methods --------------------
 

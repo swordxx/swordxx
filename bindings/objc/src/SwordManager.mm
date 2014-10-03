@@ -105,7 +105,7 @@ using std::list;
         case sword::FMT_PLAIN:
         default:
             if(!plainFilter) {
-                plainFilter = [filterProvider newHtmlPlainFilter];
+                plainFilter = [filterProvider newOsisPlainFilter];
             }
             [mod addRenderFilter:plainFilter];
             break;
@@ -132,7 +132,7 @@ using std::list;
 }
 
 + (SwordManager *)managerWithPath:(NSString *)path {
-    SwordManager *manager = [[[SwordManager alloc] initWithPath:path] autorelease];
+    SwordManager *manager = [[SwordManager alloc] initWithPath:path];
     return manager;
 }
 
@@ -155,7 +155,7 @@ using std::list;
         self.modulesPath = path;
 
 		self.modules = [NSDictionary dictionary];
-		self.managerLock = (NSLock *)[[[NSRecursiveLock alloc] init] autorelease];
+		self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
 
         [self reInit];
         
@@ -177,7 +177,7 @@ using std::list;
         temporaryManager = YES;
         
 		self.modules = [NSDictionary dictionary];
-        self.managerLock = [(NSLock *)[[NSRecursiveLock alloc] init] autorelease];
+        self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
         
 		[self refreshModules];
     }
@@ -185,32 +185,12 @@ using std::list;
     return self;
 }
 
-- (void)finalize {
-    if(!temporaryManager) {
-        delete swManager;
-    }
-    
-	[super finalize];
-}
 
 - (void)dealloc {
     if(!temporaryManager) {
         delete swManager;
     }
-    [self setModules:nil];
-    [self setModulesPath:nil];
-    [self setManagerLock:nil];
 
-    [gbfFilter release];
-    [gbfStripFilter release];
-    [thmlFilter release];
-    [thmlStripFilter release];
-    [osisFilter release];
-    [osisStripFilter release];
-    [teiFilter release];
-    [teiStripFilter release];
-    [plainFilter release];
-    [super dealloc];
 }
 
 - (void)reInit {
@@ -336,7 +316,7 @@ using std::list;
     }
 	
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease]];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
 
 	return [NSArray arrayWithArray:ret];
@@ -351,7 +331,7 @@ using std::list;
     }
     
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease]];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
     
 	return [NSArray arrayWithArray:ret];
@@ -366,7 +346,7 @@ using std::list;
     }
     
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease]];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
     
 	return [NSArray arrayWithArray:ret];    

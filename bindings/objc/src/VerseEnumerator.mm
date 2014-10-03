@@ -10,7 +10,7 @@
 #import "SwordListKey.h"
 
 @interface VerseEnumerator ()
-@property (retain, readwrite) SwordListKey *listKey;
+@property (strong, readwrite) SwordListKey *listKey;
 @end
 
 @implementation VerseEnumerator
@@ -26,14 +26,7 @@
     return self;
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [listKey release];
-    [super dealloc];
-}
 
 - (NSArray *)allObjects {
     NSMutableArray *t = [NSMutableArray array];

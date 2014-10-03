@@ -11,23 +11,23 @@
 @implementation SwordListKey
 
 + (SwordListKey *)listKeyWithRef:(NSString *)aRef {
-    return [[[SwordListKey alloc] initWithRef:aRef] autorelease];
+    return [[SwordListKey alloc] initWithRef:aRef];
 }
 
 + (SwordListKey *)listKeyWithRef:(NSString *)aRef v11n:(NSString *)scheme {
-    return [[[SwordListKey alloc] initWithRef:aRef v11n:scheme] autorelease];
+    return [[SwordListKey alloc] initWithRef:aRef v11n:scheme];
 }
 
 + (SwordListKey *)listKeyWithRef:(NSString *)aRef headings:(BOOL)headings v11n:(NSString *)scheme {
-    return [[[SwordListKey alloc] initWithRef:aRef headings:headings v11n:scheme] autorelease];
+    return [[SwordListKey alloc] initWithRef:aRef headings:headings v11n:scheme];
 }
 
 + (SwordListKey *)listKeyWithSWListKey:(sword::ListKey *)aLk {
-    return [[[SwordListKey alloc] initWithSWListKey:aLk] autorelease];
+    return [[SwordListKey alloc] initWithSWListKey:aLk];
 }
 
 + (SwordListKey *)listKeyWithSWListKey:(sword::ListKey *)aLk makeCopy:(BOOL)copy {
-    return [[[SwordListKey alloc] initWithSWListKey:aLk makeCopy:copy] autorelease];    
+    return [[SwordListKey alloc] initWithSWListKey:aLk makeCopy:copy];    
 }
 
 - (id)init {
@@ -61,13 +61,7 @@
     return (SwordListKey *) [super initWithSWKey:lk];
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [super dealloc];    
-}
 
 - (NSInteger)numberOfVerses {
     NSInteger ret = 0;
@@ -87,7 +81,7 @@
 }
 
 - (VerseEnumerator *)verseEnumerator {
-    return [[[VerseEnumerator alloc] initWithListKey:self] autorelease];
+    return [[VerseEnumerator alloc] initWithListKey:self];
 }
 
 - (BOOL)containsKey:(SwordVerseKey *)aVerseKey {

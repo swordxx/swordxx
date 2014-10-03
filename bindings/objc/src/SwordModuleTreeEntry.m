@@ -24,15 +24,6 @@
     return self;
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [self setKey:nil];
-    [self setContent:nil];
-    
-    [super dealloc];
-}
 
 @end

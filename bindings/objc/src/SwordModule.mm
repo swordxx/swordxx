@@ -24,11 +24,11 @@
 
 @interface SwordModule ()
 
-@property (retain, readwrite) NSString *name;
-@property (retain, readwrite) NSString *typeString;
-@property (retain, readwrite) NSString *descr;
-@property (retain, readwrite) NSString *lang;
-@property(readwrite, retain) NSMutableDictionary *configEntries;
+@property (strong, readwrite) NSString *name;
+@property (strong, readwrite) NSString *typeString;
+@property (strong, readwrite) NSString *descr;
+@property (strong, readwrite) NSString *lang;
+@property(readwrite, strong) NSMutableDictionary *configEntries;
 
 - (void)mainInit;
 
@@ -49,25 +49,25 @@
 
 
 + (id)moduleForSWModule:(sword::SWModule *)aModule {
-    return [[[SwordModule alloc] initWithSWModule:aModule] autorelease];
+    return [[SwordModule alloc] initWithSWModule:aModule];
 }
 
 + (id)moduleForSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager {
-    return [[[SwordModule alloc] initWithSWModule:aModule swordManager:aManager] autorelease];
+    return [[SwordModule alloc] initWithSWModule:aModule swordManager:aManager];
 }
 
 + (id)moduleForType:(ModuleType)aType swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager {
     SwordModule *sm;
     if(aType == Bible) {
-        sm = [[[SwordBible alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+        sm = [[SwordBible alloc] initWithSWModule:swModule swordManager:aManager];
     } else if(aType == Commentary) {
-        sm = [[[SwordCommentary alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+        sm = [[SwordCommentary alloc] initWithSWModule:swModule swordManager:aManager];
     } else if(aType == Dictionary) {
-        sm = [[[SwordDictionary alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+        sm = [[SwordDictionary alloc] initWithSWModule:swModule swordManager:aManager];
     } else if(aType == Genbook) {
-        sm = [[[SwordBook alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+        sm = [[SwordBook alloc] initWithSWModule:swModule swordManager:aManager];
     } else {
-        sm = [[[SwordModule alloc] initWithSWModule:swModule swordManager:aManager] autorelease];
+        sm = [[SwordModule alloc] initWithSWModule:swModule swordManager:aManager];
     }
     
     return sm;
@@ -129,8 +129,8 @@
     self.lang = [self retrieveLang];
 
     self.type = [SwordModule moduleTypeForModuleTypeString:self.typeString];
-    self.moduleLock = [[[NSRecursiveLock alloc] init] autorelease];
-    self.indexLock = [[[NSLock alloc] init] autorelease];
+    self.moduleLock = [[NSRecursiveLock alloc] init];
+    self.indexLock = [[NSLock alloc] init];
     self.configEntries = [NSMutableDictionary dictionary];
 }
 
@@ -162,22 +162,7 @@
     return self;
 }
 
-- (void)finalize {    
-	[super finalize];
-}
 
-- (void)dealloc {
-    [self setConfigEntries:nil];
-    [self setSwManager:nil];
-    [self setModuleLock:nil];
-    [self setIndexLock:nil];
-    [self setName:nil];
-    [self setDescr:nil];
-    [self setTypeString:nil];
-    [self setLang:nil];
-
-    [super dealloc];
-}
 
 #pragma mark - Filters
 
@@ -202,7 +187,7 @@
 #pragma mark - Conf entries
 
 - (NSAttributedString *)fullAboutText {
-    return [[[NSAttributedString alloc] initWithString:@""] autorelease];
+    return [[NSAttributedString alloc] initWithString:@""];
 }
 
 - (NSInteger)error {
@@ -311,7 +296,7 @@
 			[aboutText replaceOccurrencesOfString:@"\\pard" withString:@"" options:0 range:NSMakeRange(0, [aboutText length])];
 			[aboutText replaceOccurrencesOfString:@"\\par" withString:@"\n" options:0 range:NSMakeRange(0, [aboutText length])];
             
-			NSMutableString *retStr = [[@"" mutableCopy] autorelease];
+			NSMutableString *retStr = [@"" mutableCopy];
 			for(NSUInteger i=0; i<[aboutText length]; i++) {
 				unichar c = [aboutText characterAtIndex:i];
                 
@@ -321,7 +306,7 @@
 						//we have an unicode character!
 						@try {
 							NSInteger unicodeChar = 0;
-							NSMutableString *unicodeCharString = [[@"" mutableCopy] autorelease];
+							NSMutableString *unicodeCharString = [@"" mutableCopy];
 							int j = 0;
 							BOOL negative = NO;
 							if ([aboutText characterAtIndex:(i+2)] == '-') {

@@ -12,19 +12,19 @@
 @implementation SwordKey
 
 + (SwordKey *)swordKey {
-    return [[[SwordKey alloc] init] autorelease];
+    return [[SwordKey alloc] init];
 }
 
 + (SwordKey *)swordKeyWithRef:(NSString *)aRef {
-    return [[[SwordKey alloc] initWithRef:aRef] autorelease];
+    return [[SwordKey alloc] initWithRef:aRef];
 }
 
 + (SwordKey *)swordKeyWithSWKey:(sword::SWKey *)aSk {
-    return [[[SwordKey alloc] initWithSWKey:aSk] autorelease];
+    return [[SwordKey alloc] initWithSWKey:aSk];
 }
 
 + (SwordKey *)swordKeyWithSWKey:(sword::SWKey *)aSk makeCopy:(BOOL)copy {
-    return [[[SwordKey alloc] initWithSWKey:aSk makeCopy:copy] autorelease];    
+    return [[SwordKey alloc] initWithSWKey:aSk makeCopy:copy];    
 }
 
 - (id)init {
@@ -63,20 +63,12 @@
     return self;    
 }
 
-- (void)finalize {
-    if(created) {
-        delete sk;
-    }
-    
-    [super finalize];
-}
 
 - (void)dealloc {
     if(created) {
         delete sk;
     }
     
-    [super dealloc];    
 }
 
 - (SwordKey *)clone {

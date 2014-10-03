@@ -12,12 +12,12 @@
 
 @interface SwordBibleChapter : NSObject {
     /** the back reference */
-    SwordBibleBook *book;
+    SwordBibleBook *__unsafe_unretained book;
     int number;
 }
 
 @property (readwrite) int number;
-@property (readwrite, assign) SwordBibleBook *book;
+@property (readwrite, unsafe_unretained) SwordBibleBook *book;
 
 - (id)initWithBook:(SwordBibleBook *)aBook andChapter:(int)aNumber;
 

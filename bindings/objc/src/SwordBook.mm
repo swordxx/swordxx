@@ -42,15 +42,7 @@
     return self;
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [self setContents:nil];
-    
-    [super dealloc];
-}
 
 - (SwordModuleTreeEntry *)treeEntryForKey:(NSString *)treeKey {
     SwordModuleTreeEntry * ret;
@@ -86,7 +78,7 @@
 }
 
 - (SwordModuleTreeEntry *)_treeEntryForKey:(sword::TreeKeyIdx *)treeKey {
-    SwordModuleTreeEntry *ret = [[[SwordModuleTreeEntry alloc] init] autorelease];
+    SwordModuleTreeEntry *ret = [[SwordModuleTreeEntry alloc] init];
     
 	char *treeNodeName = (char *)treeKey->getText();
 	NSString *nName;

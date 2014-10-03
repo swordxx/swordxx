@@ -57,15 +57,10 @@
     return self;
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
 - (void)dealloc {
-    [self setLocalizedName:nil];
     [self setChapters:nil];
     
-    [super dealloc];
 }
 
 - (NSString *)name {
@@ -85,8 +80,6 @@
 }
 
 - (void)setChapters:(NSArray *)anArray {
-    [anArray retain];
-    [chapters release];
     chapters = anArray;
 }
 
@@ -94,7 +87,7 @@
     if(chapters == nil) {
         NSMutableArray *temp = [NSMutableArray array];
         for(int i = 0;i < swBook->getChapterMax();i++) {
-            [temp addObject:[[[SwordBibleChapter alloc] initWithBook:self andChapter:i+1] autorelease]];
+            [temp addObject:[[SwordBibleChapter alloc] initWithBook:self andChapter:i+1]];
         }
         [self setChapters:[NSArray arrayWithArray:temp]];
     }

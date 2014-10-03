@@ -29,7 +29,7 @@ typedef enum {
     NSMutableDictionary *books;
 }
 
-@property (retain, readwrite) NSMutableDictionary *books;
+@property (strong, readwrite) NSMutableDictionary *books;
 
 // ----------- class methods -------------
 + (void)decodeRef:(NSString *)ref intoBook:(NSString **)bookName book:(int *)book chapter:(int *)chapter verse:(int *)verse;

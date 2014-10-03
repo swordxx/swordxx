@@ -1191,7 +1191,7 @@
 		A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
-		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 /* End PBXBuildFile section */
@@ -3040,13 +3040,10 @@
 				A94EABF0117B28920018B06F /* SwordDictionary.mm */,
 				A94EABE5117B28920018B06F /* SwordBibleBook.h */,
 				A94EABE6117B28920018B06F /* SwordBibleBook.mm */,
-				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
-				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
 				A94EABFF117B28920018B06F /* SwordModuleTextEntry.h */,
 				A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */,
 				A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */,
 				A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */,
-				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
 				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
 				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
 				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
@@ -4136,7 +4133,6 @@
 				A982037D19A09B7800DD808C /* thmllatex.cpp */,
 				A96C2353176AF19C008D714B /* osisenum.cpp */,
 				A96C2354176AF19C008D714B /* osisglosses.cpp */,
-				A96C2355176AF19C008D714B /* osisreferencelinks.cpp */,
 				A96C2355176AF19C008D714B /* osisreferencelinks.cpp */,
 				A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */,
 				A954A85513EE98B30094E3FE /* cipherfil.cpp */,
@@ -5234,7 +5230,7 @@
 			name = LongRunningTests;
 			productName = Tests;
 			productReference = A9BDFA6B1207F9870067ED5B /* Tests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		A9BFB0A113EDF51000032679 /* Tests */ = {
 			isa = PBXNativeTarget;
@@ -5253,7 +5249,7 @@
 			name = Tests;
 			productName = "Tests-new";
 			productReference = A9BFB0A213EDF51000032679 /* Tests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		A9D2714414D717D800DA8926 /* imp2gbs */ = {
 			isa = PBXNativeTarget;
@@ -5499,7 +5495,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -6715,6 +6711,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -6757,6 +6754,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -6797,6 +6795,7 @@
 		1DEB91B208733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = "";
@@ -6804,17 +6803,20 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
@@ -6823,6 +6825,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -6873,6 +6876,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;

@@ -15,7 +15,7 @@
 @synthesize text;
 
 + (id)textEntryForKey:(NSString *)aKey andText:(NSString *)aText {
-    return [[[SwordModuleTextEntry alloc] initWithKey:aKey andText:aText] autorelease];
+    return [[SwordModuleTextEntry alloc] initWithKey:aKey andText:aText];
 }
 
 - (id)initWithKey:(NSString *)aKey andText:(NSString *)aText {
@@ -28,15 +28,6 @@
     return self;
 }
 
-- (void)finalize {
-    [super finalize];
-}
 
-- (void)dealloc {
-    [self setKey:nil];
-    [self setText:nil];
-    
-    [super dealloc];
-}
 
 @end

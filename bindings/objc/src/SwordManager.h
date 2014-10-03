@@ -116,9 +116,9 @@
 }
 
 // ------------------- getter / setter -------------------
-@property (retain, readwrite) NSDictionary *modules;
-@property (retain, readwrite) NSString *modulesPath;
-@property (retain, readwrite) NSLock *managerLock;
+@property (strong, readwrite) NSDictionary *modules;
+@property (strong, readwrite) NSString *modulesPath;
+@property (strong, readwrite) NSLock *managerLock;
 @property (readwrite) BOOL temporaryManager;
 
 // --------------------- methods -----------------------

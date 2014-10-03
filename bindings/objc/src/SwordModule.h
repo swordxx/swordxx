@@ -91,15 +91,15 @@ typedef enum {
 // ------------- properties ---------------
 @property (readwrite) ModuleType type;
 @property (readwrite) int status;
-@property (retain, readwrite) NSRecursiveLock *moduleLock;
-@property (retain, readwrite) NSLock *indexLock;
-@property (retain, readwrite) SwordManager *swManager;
+@property (strong, readwrite) NSRecursiveLock *moduleLock;
+@property (strong, readwrite) NSLock *indexLock;
+@property (strong, readwrite) SwordManager *swManager;
 
 // swmodule properties
-@property (retain, readonly) NSString *name;
-@property (retain, readonly) NSString *typeString;
-@property (retain, readonly) NSString *descr;
-@property (retain, readonly) NSString *lang;
+@property (strong, readonly) NSString *name;
+@property (strong, readonly) NSString *typeString;
+@property (strong, readonly) NSString *descr;
+@property (strong, readonly) NSString *lang;
 
 #ifdef __cplusplus
 

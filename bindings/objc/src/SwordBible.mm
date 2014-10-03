@@ -119,14 +119,7 @@ NSLock *bibleLock = nil;
     return self;
 }
 
-- (void)finalize {
-	[super finalize];
-}
 
-- (void)dealloc {
-    [books release];
-    [super dealloc];
-}
 
 #pragma mark - Bible information
 
@@ -141,7 +134,7 @@ NSLock *bibleLock = nil;
     for(int i = 0;i < bookCount;i++) {
         sword::VersificationMgr::Book *book = (sword::VersificationMgr::Book *)system->getBook(i);
         
-        SwordBibleBook *bb = [[[SwordBibleBook alloc] initWithBook:book] autorelease];
+        SwordBibleBook *bb = [[SwordBibleBook alloc] initWithBook:book];
         [bb setNumber:i+1];
         
         NSString *bookName = [bb name];
@@ -169,8 +162,6 @@ NSLock *bibleLock = nil;
 }
 
 - (void)setBooks:(NSMutableDictionary *)aBooks {
-    [aBooks retain];
-    [books release];
     books = aBooks;
 }
 
@@ -274,7 +265,7 @@ NSLock *bibleLock = nil;
     NSString *ret;
     
     // save key
-    SwordVerseKey *save = [(SwordVerseKey *)[self getKeyCopy] autorelease];
+    SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
     
     SwordVerseKey *key = [SwordVerseKey verseKeyWithVersification:[self versification]];
     [key setHeadings:YES];
@@ -292,7 +283,7 @@ NSLock *bibleLock = nil;
     NSString *ret;
     
     // save key
-    SwordVerseKey *save = [(SwordVerseKey *)[self getKeyCopy] autorelease];
+    SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
 
     SwordVerseKey *key = [SwordVerseKey verseKeyWithVersification:[self versification]];
     [key setHeadings:YES];
@@ -314,7 +305,7 @@ NSLock *bibleLock = nil;
     NSString *ret;
     
     // save key
-    SwordVerseKey *save = [(SwordVerseKey *)[self getKeyCopy] autorelease];
+    SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
 
     SwordVerseKey *key = [SwordVerseKey verseKeyWithVersification:[self versification]];
     [key setHeadings:YES];

@@ -29,8 +29,8 @@
 @property (readwrite) int number;
 @property (readwrite) char numberInTestament;
 @property (readwrite) char testament;
-@property (retain, readwrite) NSString *localizedName;
-@property (retain, readwrite) NSArray *chapters;
+@property (strong, readwrite) NSString *localizedName;
+@property (strong, readwrite) NSArray *chapters;
 
 #ifdef __cplusplus
 - (id)initWithBook:(sword::VersificationMgr::Book *)aBook;
