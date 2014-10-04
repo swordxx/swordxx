@@ -12,7 +12,7 @@
 @implementation SwordManagerTest
 
 - (void)setUp {
-    [Configuration configWithImpl:[[[OSXConfiguration alloc] init] autorelease]];
+    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
 }
 
 - (void)testSwordManagerInit {
@@ -20,7 +20,7 @@
     NSLog(@"%@", modPath);
     
     SwordManager *sm = [SwordManager managerWithPath:modPath]; 
-    STAssertTrue([[sm modules] count] > 0, @"");
+    XCTAssertTrue([[sm modules] count] > 0, @"");
 }
 
 @end

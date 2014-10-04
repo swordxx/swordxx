@@ -9,35 +9,47 @@
 #import <ObjCSword/ObjCSword.h>
 #import "SwordModuleTest.h"
 
+@class SwordModule, SwordManager;
+
+@interface SwordModuleTest : XCTestCase {
+    SwordManager *mgr;
+    SwordModule *mod;
+}
+
+@end
+
 @implementation SwordModuleTest
 
 - (void)setUp {
-    [Configuration configWithImpl:[[[OSXConfiguration alloc] init] autorelease]];
+    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
+
+    [[FilterProviderFactory providerFactory] initWithImpl:[[DefaultFilterProvider alloc] init]];
+    
     mgr = [SwordManager managerWithPath:[[Configuration config] defaultModulePath]];
     mod = [mgr moduleWithName:@"GerNeUe"];
 }
 
 - (void)testLoopRenderedVerses {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
-    STAssertNotNil(bible, @"Module is nil");
+    XCTAssertNotNil(bible, @"Module is nil");
 
     NSArray *verses = [bible renderedTextEntriesForRef:@"Gen"];
-    STAssertNotNil(verses, @"");
-    STAssertTrue([bible numberOfVerseKeysForReference:@"Gen"] == [verses count], @"");    
+    XCTAssertNotNil(verses, @"");
+    XCTAssertTrue([bible numberOfVerseKeysForReference:@"Gen"] == [verses count], @"");    
 }
 
 - (void)testRenderedVerseText {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
-    STAssertNotNil(bible, @"Module is nil");
+    XCTAssertNotNil(bible, @"Module is nil");
     
     SwordModuleTextEntry *text = [bible textEntryForKeyString:@"gen1.1" textType:TextTypeRendered];
-    STAssertNotNil(text, @"");
-    STAssertTrue([[text text] length] > 0, @"");
+    XCTAssertNotNil(text, @"");
+    XCTAssertTrue([[text text] length] > 0, @"");
 }
 
 - (void)testCloneModule {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
-    STAssertNotNil(bible, @"Module is nil");
+    XCTAssertNotNil(bible, @"Module is nil");
 
     /*
     SwordBible *cloned = (SwordBible *)[bible clone];
@@ -129,7 +141,7 @@
             [vk setKeyText:[lk keyText]];
             long lowVerse = [vk verse] - context;
             long highVerse = lowVerse + (context * 2);
-            [vk setVerse:lowVerse];
+            [vk setVerse:(int)lowVerse];
             [mod setSwordKey:vk];
             for(;lowVerse <= highVerse;lowVerse++) {
                 ref = [vk keyText];

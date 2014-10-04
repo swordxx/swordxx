@@ -26,6 +26,9 @@
 #import <ObjCSword/SwordInstallSourceManager.h>
 #import <ObjCSword/SwordModuleTextEntry.h>
 #import <ObjCSword/SwordModuleTreeEntry.h>
+#import <ObjCSword/SwordFilter.h>
 #import <ObjCSword/VerseEnumerator.h>
 #import <ObjCSword/Configuration.h>
 #import <ObjCSword/OSXConfiguration.h>
+#import <ObjCSword/FilterProviderFactory.h>
+#import <ObjCSword/DefaultFilterProvider.h>

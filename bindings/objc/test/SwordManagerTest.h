@@ -6,10 +6,10 @@
 //  Copyright 2010 Software by MABE. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 
-@interface SwordManagerTest : SenTestCase {
+@interface SwordManagerTest : XCTestCase {
 
 }
 

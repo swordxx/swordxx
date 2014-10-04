@@ -6,9 +6,9 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface SwordListKeyTest : SenTestCase {
+@interface SwordListKeyTest : XCTestCase {
 }
 
 @end
