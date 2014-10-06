@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class SwordBibleChapter;
+
 #ifdef __cplusplus
 #include <versificationmgr.h>
 #include <versekey.h>
@@ -21,14 +23,14 @@
     
     NSString *localizedName;
     int number;
-    char numberInTestament;
-    char testament;
+    int numberInTestament;
+    int testament;
     NSArray *chapters;
 }
 
 @property (readwrite) int number;
-@property (readwrite) char numberInTestament;
-@property (readwrite) char testament;
+@property (readwrite) int numberInTestament;
+@property (readwrite) int testament;
 @property (strong, readwrite) NSString *localizedName;
 @property (strong, readwrite) NSArray *chapters;
 

@@ -6,11 +6,11 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 @class SwordModule;
 
-@interface SwordModuleTest : SenTestCase {
+@interface SwordModuleLongRunTest : XCTestCase {
     SwordModule *mod;
 }
 

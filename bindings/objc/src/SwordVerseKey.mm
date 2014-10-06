@@ -64,14 +64,15 @@
     self = [super initWithSWKey:vk];
     if(self) {
         created = YES;
+        [self setPersist:YES];
         if(scheme) {
             [self setVersification:scheme];
         }
         
         if(aRef) {
             [self setKeyText:aRef];
-        }        
-    }    
+        }
+    }
     
     return self;
 }

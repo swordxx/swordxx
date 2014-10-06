@@ -1114,6 +1114,7 @@
 		A954ACDC13EEA5340094E3FE /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F813EE98B30094E3FE /* zutil.c */; };
 		A954ACDD13EEA6780094E3FE /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
+		A968BE4D19DFF832002C9B78 /* SwordBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968BE4C19DFF832002C9B78 /* SwordBibleTest.swift */; };
 		A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2351176AF188008D714B /* remotetrans.cpp */; };
 		A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2353176AF19C008D714B /* osisenum.cpp */; };
 		A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2354176AF19C008D714B /* osisglosses.cpp */; };
@@ -1331,11 +1332,6 @@
 		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
 		A9A7EEBF14D5D65900B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
-		A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
-		A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A964658011C663E200640FAC /* SwordManagerTest.h */; };
-		A9BDFA671207F9870067ED5B /* SwordModuleTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A918B8E211C6697400024D84 /* SwordModuleTest.h */; };
-		A9BDFA7C1207FA2F0067ED5B /* SwordModuleLongRunTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */; };
-		A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */; };
 		A9BFB0A713EDF51100032679 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9BFB0A613EDF51100032679 /* Cocoa.framework */; };
 		A9BFB0BC13EDF5C900032679 /* SwordManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A964658111C663E200640FAC /* SwordManagerTest.m */; };
 		A9BFB0BD13EDF5C900032679 /* SwordModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A918B8E311C6697400024D84 /* SwordModuleTest.m */; };
@@ -1377,6 +1373,8 @@
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
 		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A9EE8A9119E286E500CFFE6A /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
+		A9EE8A9719E2877500CFFE6A /* SwordModuleLongRunTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */; };
 		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 /* End PBXBuildFile section */
@@ -1402,13 +1400,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
 			remoteInfo = sword;
-		};
-		A9BDFA5C1207F9870067ED5B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
-			remoteInfo = ObjCSword;
 		};
 		A9BFB0BA13EDF5B600032679 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1633,6 +1624,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A9D271ED14D718F500DA8926;
 			remoteInfo = xml2gbs;
+		};
+		A9EE8A9219E286E500CFFE6A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = ObjCSword;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -2876,6 +2874,8 @@
 		A954AC3613EE9FA10094E3FE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = SDKs/MacOSX10.7.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		A964658011C663E200640FAC /* SwordManagerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordManagerTest.h; path = ../test/SwordManagerTest.h; sourceTree = "<group>"; };
 		A964658111C663E200640FAC /* SwordManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordManagerTest.m; path = ../test/SwordManagerTest.m; sourceTree = "<group>"; };
+		A968BE4B19DFF831002C9B78 /* Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		A968BE4C19DFF832002C9B78 /* SwordBibleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwordBibleTest.swift; sourceTree = "<group>"; };
 		A96C233E176AF139008D714B /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzclose.c; sourceTree = "<group>"; };
 		A96C2340176AF139008D714B /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzlib.c; sourceTree = "<group>"; };
 		A96C2341176AF139008D714B /* gzread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzread.c; sourceTree = "<group>"; };
@@ -3107,7 +3107,6 @@
 		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9B77D4319A3BB3B00F34557 /* liblzma.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblzma.dylib; path = usr/lib/liblzma.dylib; sourceTree = SDKROOT; };
 		A9B77D4519A3BB8000F34557 /* xzcomprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xzcomprs.cpp; sourceTree = "<group>"; };
-		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKeyTest.h; path = ../test/SwordListKeyTest.h; sourceTree = "<group>"; };
 		A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordListKeyTest.m; path = ../test/SwordListKeyTest.m; sourceTree = "<group>"; };
 		A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleLongRunTest.h; path = ../test/SwordModuleLongRunTest.h; sourceTree = "<group>"; };
@@ -3139,6 +3138,8 @@
 		A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "SwordModule+Index.mm"; path = "src/SwordModule+Index.mm"; sourceTree = "<group>"; };
 		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
 		A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = teixhtml.cpp; sourceTree = "<group>"; };
+		A9EE8A8B19E286E500CFFE6A /* LongRunningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LongRunningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9EE8A8E19E286E500CFFE6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9EF1414120595650078A27C /* SwordLocaleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordLocaleManager.h; path = src/SwordLocaleManager.h; sourceTree = "<group>"; };
 		A9EF1415120595650078A27C /* SwordLocaleManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordLocaleManager.mm; path = src/SwordLocaleManager.mm; sourceTree = "<group>"; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -3178,14 +3179,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9A7EEBF14D5D65900B76B6A /* libsword.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9BDFA611207F9870067ED5B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9BDFA631207F9870067ED5B /* ObjCSword.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3310,6 +3303,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9EE8A8819E286E500CFFE6A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9EE8A9119E286E500CFFE6A /* ObjCSword.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -3319,7 +3320,6 @@
 				8DC2EF5B0486A6940098B216 /* ObjCSword.framework */,
 				A975EED911C792B9007C1532 /* mod2osis */,
 				A9921A1911FD9CA8002DAA72 /* libSword.dylib */,
-				A9BDFA6B1207F9870067ED5B /* Tests.octest */,
 				A9BFB0A213EDF51000032679 /* Tests.xctest */,
 				A954ABC313EE9AB00094E3FE /* libsword.dylib */,
 				A9A7EEB414D5D61700B76B6A /* osis2mod */,
@@ -3337,6 +3337,7 @@
 				A9D271DD14D718C800DA8926 /* vs2osisref */,
 				A9D271EA14D718DF00DA8926 /* vs2osisreftxt */,
 				A9D271F714D718F500DA8926 /* xml2gbs */,
+				A9EE8A8B19E286E500CFFE6A /* LongRunningTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3352,6 +3353,7 @@
 				089C1665FE841158C02AAC07 /* Resources */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
 				A9BFB0AC13EDF51100032679 /* Tests */,
+				A9EE8A8C19E286E500CFFE6A /* LongRunningTests */,
 				A9BFB0A313EDF51000032679 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
@@ -3380,12 +3382,12 @@
 		08FB77AEFE84172EC02AAC07 /* SwordWrapper */ = {
 			isa = PBXGroup;
 			children = (
-				A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */,
 				A929619716B1BA240094E5BE /* SwordKey.h */,
 				A929619816B1BA240094E5BE /* SwordKey.mm */,
 				A929619916B1BA240094E5BE /* SwordListKey.h */,
 				A929619A16B1BA240094E5BE /* SwordListKey.mm */,
 				A929619B16B1BA240094E5BE /* SwordVerseKey.h */,
+				A94EAC06117B28920018B06F /* SwordVerseKey.mm */,
 				A9EF1414120595650078A27C /* SwordLocaleManager.h */,
 				A9EF1415120595650078A27C /* SwordLocaleManager.mm */,
 				A94EABF9117B28920018B06F /* SwordManager.h */,
@@ -3411,7 +3413,7 @@
 				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
 				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
 				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
-				A94EAC06117B28920018B06F /* SwordVerseKey.mm */,
+				A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */,
 				A94EAC09117B28920018B06F /* VerseEnumerator.h */,
 				A94EAC0A117B28920018B06F /* VerseEnumerator.mm */,
 				A94EABF1117B28920018B06F /* SwordInstallSource.h */,
@@ -5322,13 +5324,31 @@
 				A964658111C663E200640FAC /* SwordManagerTest.m */,
 				A918B8E211C6697400024D84 /* SwordModuleTest.h */,
 				A918B8E311C6697400024D84 /* SwordModuleTest.m */,
-				A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */,
-				A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */,
 				A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */,
 				A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */,
+				A968BE4C19DFF832002C9B78 /* SwordBibleTest.swift */,
+				A968BE4B19DFF831002C9B78 /* Tests-Bridging-Header.h */,
 			);
 			name = Tests;
 			path = test;
+			sourceTree = "<group>";
+		};
+		A9EE8A8C19E286E500CFFE6A /* LongRunningTests */ = {
+			isa = PBXGroup;
+			children = (
+				A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */,
+				A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */,
+				A9EE8A8D19E286E500CFFE6A /* Supporting Files */,
+			);
+			path = LongRunningTests;
+			sourceTree = "<group>";
+		};
+		A9EE8A8D19E286E500CFFE6A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A9EE8A8E19E286E500CFFE6A /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -5884,16 +5904,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9BDFA651207F9870067ED5B /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9BDFA661207F9870067ED5B /* SwordManagerTest.h in Headers */,
-				A9BDFA671207F9870067ED5B /* SwordModuleTest.h in Headers */,
-				A9BDFA7C1207FA2F0067ED5B /* SwordModuleLongRunTest.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -5968,26 +5978,6 @@
 			productName = osis2mod;
 			productReference = A9A7EEB414D5D61700B76B6A /* osis2mod */;
 			productType = "com.apple.product-type.tool";
-		};
-		A9BDFA5A1207F9870067ED5B /* LongRunningTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */;
-			buildPhases = (
-				A9BDFA5D1207F9870067ED5B /* Resources */,
-				A9BDFA5E1207F9870067ED5B /* Sources */,
-				A9BDFA611207F9870067ED5B /* Frameworks */,
-				A9BDFA641207F9870067ED5B /* ShellScript */,
-				A9BDFA651207F9870067ED5B /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */,
-			);
-			name = LongRunningTests;
-			productName = Tests;
-			productReference = A9BDFA6B1207F9870067ED5B /* Tests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		A9BFB0A113EDF51000032679 /* Tests */ = {
 			isa = PBXNativeTarget;
@@ -6246,6 +6236,24 @@
 			productReference = A9D271F714D718F500DA8926 /* xml2gbs */;
 			productType = "com.apple.product-type.tool";
 		};
+		A9EE8A8A19E286E500CFFE6A /* LongRunningTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9EE8A9419E286E500CFFE6A /* Build configuration list for PBXNativeTarget "LongRunningTests" */;
+			buildPhases = (
+				A9EE8A8719E286E500CFFE6A /* Sources */,
+				A9EE8A8819E286E500CFFE6A /* Frameworks */,
+				A9EE8A8919E286E500CFFE6A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9EE8A9319E286E500CFFE6A /* PBXTargetDependency */,
+			);
+			name = LongRunningTests;
+			productName = LongRunningTests;
+			productReference = A9EE8A8B19E286E500CFFE6A /* LongRunningTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -6254,6 +6262,11 @@
 			attributes = {
 				LastTestingUpgradeCheck = 0610;
 				LastUpgradeCheck = 0610;
+				TargetAttributes = {
+					A9EE8A8A19E286E500CFFE6A = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "ObjCSword" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -6273,8 +6286,8 @@
 			projectRoot = "";
 			targets = (
 				8DC2EF4F0486A6940098B216 /* ObjCSword */,
-				A9BDFA5A1207F9870067ED5B /* LongRunningTests */,
 				A9BFB0A113EDF51000032679 /* Tests */,
+				A9EE8A8A19E286E500CFFE6A /* LongRunningTests */,
 				A954ABC213EE9AB00094E3FE /* sword */,
 				A9D2714414D717D800DA8926 /* imp2gbs */,
 				A9D2715114D717FD00DA8926 /* imp2ld */,
@@ -6308,14 +6321,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9BDFA5D1207F9870067ED5B /* Resources */ = {
+		A9BFB09F13EDF51000032679 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9BFB09F13EDF51000032679 /* Resources */ = {
+		A9EE8A8919E286E500CFFE6A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -6325,19 +6338,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A9BDFA641207F9870067ED5B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
 		A9BFB0A013EDF51000032679 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -7138,18 +7138,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9BDFA5E1207F9870067ED5B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A9BFB09D13EDF51000032679 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A968BE4D19DFF832002C9B78 /* SwordBibleTest.swift in Sources */,
 				A9BFB0BC13EDF5C900032679 /* SwordManagerTest.m in Sources */,
 				A9BFB0BD13EDF5C900032679 /* SwordModuleTest.m in Sources */,
 				A9BFB0BE13EDF5C900032679 /* SwordListKeyTest.m in Sources */,
@@ -7268,6 +7261,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9EE8A8719E286E500CFFE6A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9EE8A9719E2877500CFFE6A /* SwordModuleLongRunTest.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -7285,11 +7286,6 @@
 			isa = PBXTargetDependency;
 			target = A954ABC213EE9AB00094E3FE /* sword */;
 			targetProxy = A9A7EEC014D5D66400B76B6A /* PBXContainerItemProxy */;
-		};
-		A9BDFA5B1207F9870067ED5B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
-			targetProxy = A9BDFA5C1207F9870067ED5B /* PBXContainerItemProxy */;
 		};
 		A9BFB0BB13EDF5B600032679 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -7450,6 +7446,11 @@
 			isa = PBXTargetDependency;
 			target = A9D271ED14D718F500DA8926 /* xml2gbs */;
 			targetProxy = A9D2721E14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9EE8A9319E286E500CFFE6A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8DC2EF4F0486A6940098B216 /* ObjCSword */;
+			targetProxy = A9EE8A9219E286E500CFFE6A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -7830,83 +7831,11 @@
 			};
 			name = Release;
 		};
-		A9BDFA691207F9870067ED5B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_OBJC_GC = unsupported;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/mbergmann/Development/Apps/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(PROJECT_DIR)/../../include",
-				);
-				INFOPLIST_FILE = "test/Tests-Info.plist";
-				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Cocoa,
-					"-framework",
-					SenTestingKit,
-				);
-				PRODUCT_NAME = Tests;
-				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		A9BDFA6A1207F9870067ED5B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_OBJC_GC = unsupported;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/mbergmann/Development/Apps/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(PROJECT_DIR)/../../include",
-				);
-				INFOPLIST_FILE = "test/Tests-Info.plist";
-				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Cocoa,
-					"-framework",
-					SenTestingKit,
-				);
-				PRODUCT_NAME = Tests;
-				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
-				WRAPPER_EXTENSION = octest;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		A9BFB0B813EDF51100032679 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -7929,9 +7858,12 @@
 					/Users/mbergmann/Development/Apps/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = "test/Tests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
@@ -7940,6 +7872,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -7957,9 +7890,11 @@
 					/Users/mbergmann/Development/Apps/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = "test/Tests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
 				VALID_ARCHS = x86_64;
 			};
 			name = Release;
@@ -9053,6 +8988,100 @@
 			};
 			name = Release;
 		};
+		A9EE8A9519E286E500CFFE6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/mbergmann/Development/Apps/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/../../include",
+				);
+				INFOPLIST_FILE = LongRunningTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A9EE8A9619E286E500CFFE6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/mbergmann/Development/Apps/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/../../include",
+				);
+				INFOPLIST_FILE = LongRunningTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -9097,15 +9126,6 @@
 			buildConfigurations = (
 				A9A7EEBC14D5D61700B76B6A /* Debug */,
 				A9A7EEBD14D5D61700B76B6A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A9BDFA681207F9870067ED5B /* Build configuration list for PBXNativeTarget "LongRunningTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A9BDFA691207F9870067ED5B /* Debug */,
-				A9BDFA6A1207F9870067ED5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -9253,6 +9273,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A9EE8A9419E286E500CFFE6A /* Build configuration list for PBXNativeTarget "LongRunningTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9EE8A9519E286E500CFFE6A /* Debug */,
+				A9EE8A9619E286E500CFFE6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

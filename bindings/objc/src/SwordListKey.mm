@@ -61,20 +61,15 @@
     return (SwordListKey *) [super initWithSWKey:lk];
 }
 
-
-
 - (NSInteger)numberOfVerses {
     NSInteger ret = 0;
-    
     if(sk) {
         for(*sk = sword::TOP; !sk->popError(); *sk++) ret++;
     }
-    
     return ret;
 }
 
 - (void)parse {
-    
 }
 
 - (void)parseWithHeaders {

@@ -701,7 +701,7 @@
     SwordModuleTextEntry *entry = [self textEntryForKey:[SwordKey swordKeyWithRef:aReference] 
                                                textType:textType];
     if(entry) {
-        ret = [NSArray arrayWithObject:entry];
+        ret = @[entry];
     }
     
     return ret;    

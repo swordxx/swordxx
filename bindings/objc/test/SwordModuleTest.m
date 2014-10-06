@@ -6,8 +6,8 @@
 //  Copyright 2010 Software by MABE. All rights reserved.
 //
 
-#import <ObjCSword/ObjCSword.h>
 #import "SwordModuleTest.h"
+#import <ObjCSword/ObjCSword.h>
 
 @class SwordModule, SwordManager;
 
@@ -29,6 +29,57 @@
     mod = [mgr moduleWithName:@"GerNeUe"];
 }
 
+
+- (void)testModuleIntroduction {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+
+    NSString *modIntro = [bible moduleIntroduction];
+    NSLog(@"mod intro: %@", modIntro);
+    XCTAssertNotNil(modIntro);
+    XCTAssertEqual(@"Im Anfang schuf Gott Himmel und Erde.", modIntro);
+}
+
+- (void)testFirstBookATIntro {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+    
+    SwordBibleBook *book = [bible bookList][0];
+    NSString *intro = [bible bookIntroductionFor:book];
+    NSLog(@"testament: '%i', book '%@' intro: %@", [book testament], [book name], intro);
+    XCTAssertNotNil(intro);
+    XCTAssertTrue([intro hasPrefix:@" <!P><br />Das erste Buch der Bibel wird auch Genesis"]);
+}
+
+- (void)testFirstBookNTIntro {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+
+    SwordBibleBook *book = [bible bookWithNamePrefix:@"Mat"];
+    NSString *intro = [bible bookIntroductionFor:book];
+    NSLog(@"testament: '%i', book '%@' intro: %@", [book testament], [book name], intro);
+    XCTAssertNotNil(intro);
+    XCTAssertTrue([intro hasPrefix:@" <!P><br />Um die Zeit der Apostelversammlung herum"]);
+}
+
+- (void)testFirstChapterIntroInGen {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+
+    SwordBibleBook *book = [bible bookWithNamePrefix:@"Gen"];
+    NSString *intro = [bible chapterIntroductionIn:book forChapter:1];
+    NSLog(@"testament: '%i', book '%@', intro: %@", [book testament], [book name], intro);
+    XCTAssertNotNil(intro);
+    XCTAssertTrue([intro hasPrefix:@" <!P><br />Um die Zeit der Apostelversammlung herum"]);
+}
+
+- (void)testPreverseHeading {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+
+    [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_ON];
+    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Numbers 1:47" textType:TextTypeRendered];
+    NSLog(@"Preverse text: %@", [text preVerseHeading]);
+    XCTAssertTrue([[text preVerseHeading] length] > 0);
+    XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Sonderstellung der Leviten</title>"]);
+    [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_OFF];
+}
+
 - (void)testLoopRenderedVerses {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
     XCTAssertNotNil(bible, @"Module is nil");
@@ -45,16 +96,6 @@
     SwordModuleTextEntry *text = [bible textEntryForKeyString:@"gen1.1" textType:TextTypeRendered];
     XCTAssertNotNil(text, @"");
     XCTAssertTrue([[text text] length] > 0, @"");
-}
-
-- (void)testCloneModule {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
-    XCTAssertNotNil(bible, @"Module is nil");
-
-    /*
-    SwordBible *cloned = (SwordBible *)[bible clone];
-    STAssertNotNil(cloned, @"Module is nil");    
-     */
 }
 
 - (void)testLoopWithModulePos {
@@ -166,8 +207,15 @@
     NSLog(@"start position: %@", [vk keyText]);
     [vk decrement];
     NSLog(@"decrement position: %@", [vk keyText]);
+    XCTAssertTrue([vk chapter] == 1);
+    XCTAssertTrue([vk book] == 1);
+    XCTAssertTrue([vk verse] == 1);
+
     [vk setVerse:[vk verse] + 3];
     NSLog(@"verse + 3: %@", [vk keyText]);
+    XCTAssertTrue([vk chapter] == 1);
+    XCTAssertTrue([vk book] == 1);
+    XCTAssertTrue([vk verse] == 4);
 }
 
 @end

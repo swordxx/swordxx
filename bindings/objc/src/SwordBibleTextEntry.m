@@ -21,6 +21,7 @@
     if(self) {
         self.key = aKey;
         self.text = aText;
+        self.preVerseHeading = @"";
     }    
     return self;
 }

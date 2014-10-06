@@ -41,10 +41,11 @@
         if(copy) {
             if(aSk) {
                 sk = aSk->clone();            
-                created = YES;                
+                created = YES;
             } else {
                 created = NO;
             }
+            [self setPersist:YES];
         } else {
             sk = aSk;
             created = NO;

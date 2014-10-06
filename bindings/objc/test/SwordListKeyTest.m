@@ -12,21 +12,21 @@
 @implementation SwordListKeyTest
 
 - (void)testContainsKey {
-    SwordListKey *lk = [SwordListKey listKeyWithRef:@"Gen 1:1-5"];
+    SwordListKey *lk = [SwordListKey listKeyWithRef:@"Gen 1:1-5" v11n:@"KJV"];
     SwordVerseKey *vk = [SwordVerseKey verseKeyWithRef:@"Gen 1:3"];
     XCTAssertTrue([lk containsKey:vk], @"");
 }
 
 /*
 - (void)testNumberOfVerses {
-    SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:2-20"];
-    STAssertNotNil(lk, @"");
-    STAssertTrue(([lk numberOfVerses] == 19), @"");
+    SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:2-20" v11n:@"KJV"];
+    XCTAssertNotNil(lk, @"");
+    XCTAssertTrue(([lk numberOfVerses] == 19), @"");
 }
 */
 
 - (void)testVerseEnumeratorAllObjects {
-    SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:2-20"];
+    SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:2-20" v11n:@"KJV"];
     XCTAssertNotNil(lk, @"");
     
     VerseEnumerator *ve = [lk verseEnumerator];
@@ -36,7 +36,7 @@
 }
 
 - (void)testVerseEnumeratorNextObject {
-    SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:2-20"];
+    SwordListKey *lk = [SwordListKey listKeyWithRef:@"gen 1:2-20" v11n:@"KJV"];
     XCTAssertNotNil(lk, @"");
     
     VerseEnumerator *ve = [lk verseEnumerator];

@@ -78,14 +78,14 @@ NSLock *bibleLock = nil;
 	
 	//if abbr contains : or . then we are a verse so return a chapter
 	if([abbr rangeOfString:@":"].location != NSNotFound || [abbr rangeOfString:@"."].location != NSNotFound) {
-		return [firstBits objectAtIndex:0];
+		return firstBits[0];
     }
 	
 	//otherwise return a book
 	firstBits = [first componentsSeparatedByString:@" "];
 	
 	if([firstBits count] > 0) {
-		return [firstBits objectAtIndex:0];
+		return firstBits[0];
     }
 	
 	return abbr;
@@ -124,8 +124,6 @@ NSLock *bibleLock = nil;
 #pragma mark - Bible information
 
 - (void)buildBookList {
-	[moduleLock lock];
-    
     sword::VersificationMgr *vmgr = sword::VersificationMgr::getSystemVersificationMgr();
     const sword::VersificationMgr::System *system = vmgr->getVersificationSystem([[self versification] UTF8String]);
 
@@ -138,11 +136,9 @@ NSLock *bibleLock = nil;
         [bb setNumber:i+1];
         
         NSString *bookName = [bb name];
-        [buf setObject:bb forKey:bookName];
+        buf[bookName] = bb;
     }
     self.books = buf;
-    
-	[moduleLock unlock];
 }
 
 - (BOOL)containsBookNumber:(int)aBookNum {
@@ -180,7 +176,7 @@ NSLock *bibleLock = nil;
     int chapter = key->getChapterMax();
     int verse = key->getVerseMax();
     
-    SwordBibleBook *bb = [[self books] objectForKey:bookName];
+    SwordBibleBook *bb = [self books][bookName];
     if(bb) {
         if(chapter > 0 && chapter < [bb numberOfChapters]) {
             if(verse > 0 && verse < [bb numberOfVersesForChapter:chapter]) {
@@ -208,32 +204,20 @@ NSLock *bibleLock = nil;
 }
 
 - (int)chaptersForBookName:(NSString *)bookName {
-	[moduleLock lock];
-	
-	int maxChapters;
-	sword::VerseKey *key = (sword::VerseKey *)swModule->createKey();
-	(*key) = [bookName UTF8String];
-	maxChapters = key->getChapterMax();
-	delete key;
-	
-	[moduleLock unlock];
-	
-	return maxChapters;
+    SwordBibleBook *book = [self bookForName:bookName];
+    if(book != nil) {
+        return [book numberOfChapters];
+    }
+	return -1;
 }
-
 
 - (int)versesForChapter:(int)chapter bookName:(NSString *)bookName {
     int ret = -1;
     
-	[moduleLock lock];
-	
-    SwordBibleBook *bb = [[self books] objectForKey:bookName];
+    SwordBibleBook *bb = [self books][bookName];
     if(bb) {
         ret = [bb numberOfVersesForChapter:chapter];
     }
-    
-	[moduleLock unlock];
-	
 	return ret;
 }
 
@@ -252,9 +236,18 @@ NSLock *bibleLock = nil;
     return ret;
 }
 
-- (SwordBibleBook *)bookForLocalizedName:(NSString *)bookName {
+- (SwordBibleBook *)bookForName:(NSString *)bookName {
     for(SwordBibleBook *book in [[self books] allValues]) {
-        if([[book localizedName] isEqualToString:bookName]) {
+        if([[book localizedName] isEqualToString:bookName] || [[book name] isEqualToString:bookName]) {
+            return book;
+        }
+    }
+    return nil;
+}
+
+- (SwordBibleBook *)bookWithNamePrefix:(NSString *)aPrefix {
+    for(SwordBibleBook *book in [[self books] allValues]) {
+        if([[book localizedName] hasPrefix:aPrefix] || [[book name] hasPrefix:aPrefix]) {
             return book;
         }
     }
@@ -264,61 +257,68 @@ NSLock *bibleLock = nil;
 - (NSString *)moduleIntroduction {
     NSString *ret;
     
+    [moduleLock lock];
+
     // save key
     SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
     
     SwordVerseKey *key = [SwordVerseKey verseKeyWithVersification:[self versification]];
     [key setHeadings:YES];
-    [key setPosition:0];
+    [key setTestament:0];
     [self setSwordKey:key];
     ret = [self renderedText];
     
     // restore old key
     [self setSwordKey:save];
     
+    [moduleLock unlock];
+
     return ret;
 }
 
 - (NSString *)bookIntroductionFor:(SwordBibleBook *)aBook {
     NSString *ret;
     
+    [moduleLock lock];
+
     // save key
     SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
 
     SwordVerseKey *key = [SwordVerseKey verseKeyWithVersification:[self versification]];
     [key setHeadings:YES];
-    [key setAutoNormalize:NO];
-    [key setTestament:[aBook testament]];
-    [key setBook:[aBook numberInTestament]];
-    [key setChapter:0];
-    [key setVerse:0];
+    [key setTestament:(char) [aBook testament]];
+    [key setBook:(char) [aBook numberInTestament]];
     [self setSwordKey:key];
     ret = [self renderedText];
     
     // restore old key
     [self setSwordKey:save];
+
+    [moduleLock unlock];
 
     return ret;
 }
 
-- (NSString *)chapterIntroductionFor:(SwordBibleBook *)aBook chapter:(int)chapter {
+- (NSString *)chapterIntroductionIn:(SwordBibleBook *)aBook forChapter:(int)chapter {
     NSString *ret;
-    
+
+    [moduleLock lock];
+
     // save key
     SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
 
     SwordVerseKey *key = [SwordVerseKey verseKeyWithVersification:[self versification]];
     [key setHeadings:YES];
-    [key setAutoNormalize:NO];
-    [key setTestament:[aBook testament]];
-    [key setBook:[aBook numberInTestament]];
+    [key setTestament:(char) [aBook testament]];
+    [key setBook:(char) [aBook numberInTestament]];
     [key setChapter:chapter];
-    [key setVerse:0];
     [self setSwordKey:key];
     ret = [self renderedText];
     
     // restore old key
     [self setSwordKey:save];
+
+    [moduleLock unlock];
 
     return ret;    
 }
@@ -357,18 +357,18 @@ NSLock *bibleLock = nil;
 }
 
 - (NSString *)versification {
-    NSString *versification = [configEntries objectForKey:SWMOD_CONFENTRY_VERSIFICATION];
+    NSString *versification = configEntries[SWMOD_CONFENTRY_VERSIFICATION];
     if(versification == nil) {
         versification = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_VERSIFICATION];
         if(versification != nil) {
-            [configEntries setObject:versification forKey:SWMOD_CONFENTRY_VERSIFICATION];
+            configEntries[SWMOD_CONFENTRY_VERSIFICATION] = versification;
         }
     }
     
     // if still nil, use KJV versification
     if(versification == nil) {
         versification = @"KJV";
-        [configEntries setObject:versification forKey:SWMOD_CONFENTRY_VERSIFICATION];
+        configEntries[SWMOD_CONFENTRY_VERSIFICATION] = versification;
     }
     
     return versification;    

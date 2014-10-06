@@ -37,8 +37,8 @@
         swBook = aBook;
         
         sword::VerseKey vk = sword::VerseKey(aBook->getOSISName());
-        [self setTestament:vk.getTestamentMax()];
-        [self setNumberInTestament:vk.getBookMax()];
+        [self setTestament:vk.getTestament()];
+        [self setNumberInTestament:vk.getBook()];
         
         // get system localeMgr to be able to translate the english bookName
         sword::LocaleMgr *lmgr = sword::LocaleMgr::getSystemLocaleMgr();
@@ -60,7 +60,7 @@
 
 - (void)dealloc {
     [self setChapters:nil];
-    
+    [self setLocalizedName:nil];
 }
 
 - (NSString *)name {
@@ -108,7 +108,7 @@
 
 /** we implement this for sorting */
 - (NSComparisonResult)compare:(SwordBibleBook *)b {
-    return [[NSNumber numberWithInt:number] compare:[NSNumber numberWithInt:[b number]]];
+    return [@(number) compare:@([b number])];
 }
 
 @end
