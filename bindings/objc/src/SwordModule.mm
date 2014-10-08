@@ -18,9 +18,6 @@
 #import "SwordVerseKey.h"
 #import "SwordBible.h"
 #import "SwordCommentary.h"
-#import "SwordDictionary.h"
-#import "SwordBook.h"
-#import "SwordFilter.h"
 
 @interface SwordModule ()
 
@@ -191,7 +188,7 @@
 }
 
 - (NSInteger)error {
-    return swModule->Error();
+    return swModule->popError();
 }
 
 - (NSString *)retrieveName {
@@ -227,11 +224,11 @@
 }
 
 - (NSString *)categoryString {
-    NSString *cat = [configEntries objectForKey:SWMOD_CONFENTRY_CATEGORY];
+    NSString *cat = configEntries[SWMOD_CONFENTRY_CATEGORY];
     if(cat == nil) {
         cat = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_CATEGORY];
         if(cat != nil) {
-            [configEntries setObject:cat forKey:SWMOD_CONFENTRY_CATEGORY];
+            configEntries[SWMOD_CONFENTRY_CATEGORY] = cat;
         }
     }
     
@@ -246,11 +243,11 @@
 }
 
 - (NSString *)cipherKey {
-    NSString *cipherKey = [configEntries objectForKey:SWMOD_CONFENTRY_CIPHERKEY];
+    NSString *cipherKey = configEntries[SWMOD_CONFENTRY_CIPHERKEY];
     if(cipherKey == nil) {
         cipherKey = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_CIPHERKEY];
         if(cipherKey != nil) {
-            [configEntries setObject:cipherKey forKey:SWMOD_CONFENTRY_CIPHERKEY];
+            configEntries[SWMOD_CONFENTRY_CIPHERKEY] = cipherKey;
         }
     }
     
@@ -258,11 +255,11 @@
 }
 
 - (NSString *)version {
-    NSString *version = [configEntries objectForKey:SWMOD_CONFENTRY_VERSION];
+    NSString *version = configEntries[SWMOD_CONFENTRY_VERSION];
     if(version == nil) {
         version = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_VERSION];
         if(version != nil) {
-            [configEntries setObject:version forKey:SWMOD_CONFENTRY_VERSION];
+            configEntries[SWMOD_CONFENTRY_VERSION] = version;
         }
     }
     
@@ -270,11 +267,11 @@
 }
 
 - (NSString *)minVersion {
-    NSString *minVersion = [configEntries objectForKey:SWMOD_CONFENTRY_MINVERSION];
+    NSString *minVersion = configEntries[SWMOD_CONFENTRY_MINVERSION];
     if(minVersion == nil) {
         minVersion = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_MINVERSION];
         if(minVersion != nil) {
-            [configEntries setObject:minVersion forKey:SWMOD_CONFENTRY_MINVERSION];
+            configEntries[SWMOD_CONFENTRY_MINVERSION] = minVersion;
         }
     }
     
@@ -283,7 +280,7 @@
 
 /** this might be RTF string  but the return value will be converted to UTF8 */
 - (NSString *)aboutText {
-    NSMutableString *aboutText = [configEntries objectForKey:SWMOD_CONFENTRY_ABOUT];
+    NSMutableString *aboutText = configEntries[SWMOD_CONFENTRY_ABOUT];
     if(aboutText == nil) {
         aboutText = [NSMutableString stringWithString:[self configFileEntryForConfigKey:SWMOD_CONFENTRY_ABOUT]];
         if(aboutText != nil) {
@@ -339,7 +336,7 @@
         } else {
             aboutText = [NSMutableString string];
         }
-        [configEntries setObject:aboutText forKey:SWMOD_CONFENTRY_ABOUT];
+        configEntries[SWMOD_CONFENTRY_ABOUT] = aboutText;
     }
     
     return aboutText;    
@@ -352,11 +349,11 @@
 
 - (BOOL)isEditable {
     BOOL ret = NO;
-    NSString *editable = [configEntries objectForKey:SWMOD_CONFENTRY_EDITABLE];
+    NSString *editable = configEntries[SWMOD_CONFENTRY_EDITABLE];
     if(editable == nil) {
         editable = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_EDITABLE];
         if(editable != nil) {
-            [configEntries setObject:editable forKey:SWMOD_CONFENTRY_EDITABLE];
+            configEntries[SWMOD_CONFENTRY_EDITABLE] = editable;
         }
     }
     
@@ -371,11 +368,11 @@
 
 - (BOOL)isRTL {
     BOOL ret = NO;
-    NSString *direction = [configEntries objectForKey:SWMOD_CONFENTRY_DIRECTION];
+    NSString *direction = configEntries[SWMOD_CONFENTRY_DIRECTION];
     if(direction == nil) {
         direction = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_DIRECTION];
         if(direction != nil) {
-            [configEntries setObject:direction forKey:SWMOD_CONFENTRY_DIRECTION];
+            configEntries[SWMOD_CONFENTRY_DIRECTION] = direction;
         }
     }
     
@@ -463,7 +460,7 @@
     
     NSMutableDictionary	*cipherKeys = [NSMutableDictionary dictionaryWithDictionary:
                                        [[NSUserDefaults standardUserDefaults] objectForKey:DefaultsModuleCipherKeysKey]];
-    [cipherKeys setObject:unlockKey forKey:[self name]];
+    cipherKeys[[self name]] = unlockKey;
     [[NSUserDefaults standardUserDefaults] setObject:cipherKeys forKey:DefaultsModuleCipherKeysKey];
     
 	[swManager setCipherKey:unlockKey forModuleNamed:[self name]];
@@ -514,25 +511,25 @@
 - (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType {
     id ret = nil;
     
-    NSString *passage = [data objectForKey:ATTRTYPE_PASSAGE];
+    NSString *passage = data[ATTRTYPE_PASSAGE];
     if(passage) {
         passage = [[passage stringByReplacingOccurrencesOfString:@"+" withString:@" "] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     } 
-    NSString *attrType = [data objectForKey:ATTRTYPE_TYPE];
+    NSString *attrType = data[ATTRTYPE_TYPE];
     if([attrType isEqualToString:@"n"]) {
         NSString *footnoteText = [self entryAttributeValueFootnoteOfType:attrType 
-                                                              indexValue:[data objectForKey:ATTRTYPE_VALUE] 
+                                                              indexValue:data[ATTRTYPE_VALUE]
                                                                   forKey:[SwordKey swordKeyWithRef:passage]];
         ret = footnoteText;
     } else if([attrType isEqualToString:@"x"] || [attrType isEqualToString:@"scriptRef"] || [attrType isEqualToString:@"scripRef"]) {
         NSString *key = @"";
         if([attrType isEqualToString:@"x"]) {
             key = [self entryAttributeValueFootnoteOfType:attrType
-                                               indexValue:[data objectForKey:ATTRTYPE_VALUE] 
+                                               indexValue:data[ATTRTYPE_VALUE]
                                                    forKey:[SwordKey swordKeyWithRef:passage]];            
         } else {
-            key = [[[data objectForKey:ATTRTYPE_VALUE] stringByReplacingOccurrencesOfString:@"+" 
-                                                                                 withString:@" "] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];            
+            key = [[data[ATTRTYPE_VALUE] stringByReplacingOccurrencesOfString:@"+"
+                                                                   withString:@" "] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
         if(textType == TextTypeRendered) {
             ret = [self renderedTextEntriesForRef:key];

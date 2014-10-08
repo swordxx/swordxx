@@ -29,9 +29,8 @@
     mod = [mgr moduleWithName:@"GerNeUe"];
 }
 
-
 - (void)testModuleIntroduction {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
 
     NSString *modIntro = [bible moduleIntroduction];
     NSLog(@"mod intro: %@", modIntro);
@@ -40,7 +39,7 @@
 }
 
 - (void)testFirstBookATIntro {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
     
     SwordBibleBook *book = [bible bookList][0];
     NSString *intro = [bible bookIntroductionFor:book];
@@ -49,7 +48,27 @@
     XCTAssertTrue([intro hasPrefix:@" <!P><br />Das erste Buch der Bibel wird auch Genesis"]);
 }
 
+- (void)testFirstBookATIntroGer {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+
+    SwordBibleBook *book = [bible bookList][0];
+    NSString *intro = [bible bookIntroductionFor:book];
+    NSLog(@"testament: '%i', book '%@' intro: %@", [book testament], [book name], intro);
+    XCTAssertNotNil(intro);
+    XCTAssertTrue([intro hasPrefix:@" <!P><br />Das erste Buch der Bibel wird auch Genesis"]);
+}
+
 - (void)testFirstBookNTIntro {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+
+    SwordBibleBook *book = [bible bookWithNamePrefix:@"Mat"];
+    NSString *intro = [bible bookIntroductionFor:book];
+    NSLog(@"testament: '%i', book '%@' intro: %@", [book testament], [book name], intro);
+    XCTAssertNotNil(intro);
+    XCTAssertTrue([intro hasPrefix:@" <!P><br />Um die Zeit der Apostelversammlung herum"]);
+}
+
+- (void)testFirstBookNTIntroGer {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
     SwordBibleBook *book = [bible bookWithNamePrefix:@"Mat"];
@@ -59,21 +78,22 @@
     XCTAssertTrue([intro hasPrefix:@" <!P><br />Um die Zeit der Apostelversammlung herum"]);
 }
 
-- (void)testFirstChapterIntroInGen {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
-
-    SwordBibleBook *book = [bible bookWithNamePrefix:@"Gen"];
-    NSString *intro = [bible chapterIntroductionIn:book forChapter:1];
-    NSLog(@"testament: '%i', book '%@', intro: %@", [book testament], [book name], intro);
-    XCTAssertNotNil(intro);
-    XCTAssertTrue([intro hasPrefix:@" <!P><br />Um die Zeit der Apostelversammlung herum"]);
-}
-
 - (void)testPreverseHeading {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
     [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_ON];
     SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Numbers 1:47" textType:TextTypeRendered];
+    NSLog(@"Preverse text: %@", [text preVerseHeading]);
+    XCTAssertTrue([[text preVerseHeading] length] > 0);
+    XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Sonderstellung der Leviten</title>"]);
+    [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_OFF];
+}
+
+- (void)testPreverseHeading2 {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+
+    [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_ON];
+    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Numbers 4:21" textType:TextTypeRendered];
     NSLog(@"Preverse text: %@", [text preVerseHeading]);
     XCTAssertTrue([[text preVerseHeading] length] > 0);
     XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Sonderstellung der Leviten</title>"]);

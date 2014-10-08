@@ -13,11 +13,8 @@
 
 #import <ObjCSword/ObjCSword.h>
 #import "Notifications.h"
-#import "FilterProviderFactory.h"
-#import "DefaultFilterProvider.h"
 
 #include "encfiltmgr.h"
-#import "SwordFilter.h"
 
 using std::string;
 using std::list;
@@ -46,7 +43,7 @@ using std::list;
 
             ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
             SwordModule *sm = [SwordModule moduleForType:aType swModule:mod swordManager:self];
-            [dict setObject:sm forKey:[[sm name] lowercaseString]];
+            dict[[[sm name] lowercaseString]] = sm;
 
             [self addFiltersToModule:sm];
         }
@@ -124,11 +121,7 @@ using std::list;
 # pragma mark - class methods
 
 + (NSArray *)moduleTypes {
-    return [NSArray arrayWithObjects:
-            SWMOD_TYPES_BIBLES, 
-            SWMOD_TYPES_COMMENTARIES,
-            SWMOD_TYPES_DICTIONARIES,
-            SWMOD_TYPES_GENBOOKS, nil];
+    return @[SWMOD_TYPES_BIBLES, SWMOD_TYPES_COMMENTARIES, SWMOD_TYPES_DICTIONARIES, SWMOD_TYPES_GENBOOKS];
 }
 
 + (SwordManager *)managerWithPath:(NSString *)path {
@@ -155,7 +148,7 @@ using std::list;
         self.modulesPath = path;
 
 		self.modules = [NSDictionary dictionary];
-		self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
+		self.managerLock = (id) [[NSRecursiveLock alloc] init];
 
         [self reInit];
         
@@ -163,7 +156,7 @@ using std::list;
         sword::StringList::iterator	it;
         for(it = options.begin(); it != options.end(); it++) {
             [self setGlobalOption:[NSString stringWithCString:it->c_str() encoding:NSUTF8StringEncoding] value:SW_OFF];
-        }        
+        }
     }	
 	
 	return self;
@@ -177,7 +170,7 @@ using std::list;
         temporaryManager = YES;
         
 		self.modules = [NSDictionary dictionary];
-        self.managerLock = (NSLock *)[[NSRecursiveLock alloc] init];
+        self.managerLock = (id) [[NSRecursiveLock alloc] init];
         
 		[self refreshModules];
     }

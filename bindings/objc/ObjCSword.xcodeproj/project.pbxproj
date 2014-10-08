@@ -1372,6 +1372,8 @@
 		A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
+		A9D8FD3319E2EC5B0055700C /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9D8FD3819E2EC730055700C /* introtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D8FD2C19E2EC0E0055700C /* introtest.cpp */; };
 		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A9EE8A9119E286E500CFFE6A /* ObjCSword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* ObjCSword.framework */; };
 		A9EE8A9719E2877500CFFE6A /* SwordModuleLongRunTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */; };
@@ -1624,6 +1626,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A9D271ED14D718F500DA8926;
 			remoteInfo = xml2gbs;
+		};
+		A9D8FD2F19E2EC5B0055700C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A954ABC213EE9AB00094E3FE;
+			remoteInfo = sword;
 		};
 		A9EE8A9219E286E500CFFE6A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3137,6 +3146,8 @@
 		A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SwordModule+Index.h"; path = "src/SwordModule+Index.h"; sourceTree = "<group>"; };
 		A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "SwordModule+Index.mm"; path = "src/SwordModule+Index.mm"; sourceTree = "<group>"; };
 		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
+		A9D8FD2C19E2EC0E0055700C /* introtest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = introtest.cpp; path = ../../tests/introtest.cpp; sourceTree = "<group>"; };
+		A9D8FD3719E2EC5B0055700C /* introtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = introtest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = teixhtml.cpp; sourceTree = "<group>"; };
 		A9EE8A8B19E286E500CFFE6A /* LongRunningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LongRunningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9EE8A8E19E286E500CFFE6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -3303,6 +3314,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9D8FD3219E2EC5B0055700C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D8FD3319E2EC5B0055700C /* libsword.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9EE8A8819E286E500CFFE6A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -3338,6 +3357,7 @@
 				A9D271EA14D718DF00DA8926 /* vs2osisreftxt */,
 				A9D271F714D718F500DA8926 /* xml2gbs */,
 				A9EE8A8B19E286E500CFFE6A /* LongRunningTests.xctest */,
+				A9D8FD3719E2EC5B0055700C /* introtest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3347,6 +3367,7 @@
 			children = (
 				A954A7EB13EE96FC0094E3FE /* Sword */,
 				A975ECD211C7925B007C1532 /* Utilities */,
+				A9D8FD2B19E2EBD80055700C /* Samples */,
 				A94EAE72117B32AF0018B06F /* Services */,
 				08FB77AEFE84172EC02AAC07 /* SwordWrapper */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
@@ -5333,6 +5354,14 @@
 			path = test;
 			sourceTree = "<group>";
 		};
+		A9D8FD2B19E2EBD80055700C /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				A9D8FD2C19E2EC0E0055700C /* introtest.cpp */,
+			);
+			name = Samples;
+			sourceTree = "<group>";
+		};
 		A9EE8A8C19E286E500CFFE6A /* LongRunningTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -6236,6 +6265,23 @@
 			productReference = A9D271F714D718F500DA8926 /* xml2gbs */;
 			productType = "com.apple.product-type.tool";
 		};
+		A9D8FD2D19E2EC5B0055700C /* introtest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D8FD3419E2EC5B0055700C /* Build configuration list for PBXNativeTarget "introtest" */;
+			buildPhases = (
+				A9D8FD3019E2EC5B0055700C /* Sources */,
+				A9D8FD3219E2EC5B0055700C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D8FD2E19E2EC5B0055700C /* PBXTargetDependency */,
+			);
+			name = introtest;
+			productName = mod2osis;
+			productReference = A9D8FD3719E2EC5B0055700C /* introtest */;
+			productType = "com.apple.product-type.tool";
+		};
 		A9EE8A8A19E286E500CFFE6A /* LongRunningTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9EE8A9419E286E500CFFE6A /* Build configuration list for PBXNativeTarget "LongRunningTests" */;
@@ -6306,6 +6352,7 @@
 				A9D271E014D718DF00DA8926 /* vs2osisreftxt */,
 				A9D271ED14D718F500DA8926 /* xml2gbs */,
 				A9D271FA14D7193300DA8926 /* Utilities */,
+				A9D8FD2D19E2EC5B0055700C /* introtest */,
 			);
 		};
 /* End PBXProject section */
@@ -7261,6 +7308,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9D8FD3019E2EC5B0055700C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D8FD3819E2EC730055700C /* introtest.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9EE8A8719E286E500CFFE6A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -7446,6 +7501,11 @@
 			isa = PBXTargetDependency;
 			target = A9D271ED14D718F500DA8926 /* xml2gbs */;
 			targetProxy = A9D2721E14D7194E00DA8926 /* PBXContainerItemProxy */;
+		};
+		A9D8FD2E19E2EC5B0055700C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A954ABC213EE9AB00094E3FE /* sword */;
+			targetProxy = A9D8FD2F19E2EC5B0055700C /* PBXContainerItemProxy */;
 		};
 		A9EE8A9319E286E500CFFE6A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8988,6 +9048,80 @@
 			};
 			name = Release;
 		};
+		A9D8FD3519E2EC5B0055700C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../include",
+					"$(SRCROOT)/dependencies/icu/source/i18n",
+					"$(SRCROOT)/dependencies/icu/source/common",
+					"$(SRCROOT)/dependencies/icu/source/io",
+					"$(SRCROOT)/dependencies/clucene",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = introtest;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		A9D8FD3619E2EC5B0055700C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../include",
+					"$(SRCROOT)/dependencies/icu/source/i18n",
+					"$(SRCROOT)/dependencies/icu/source/common",
+					"$(SRCROOT)/dependencies/icu/source/io",
+					"$(SRCROOT)/dependencies/clucene",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
+				OTHER_CFLAGS = (
+					"-DCURLAVAILABLE",
+					"-Dunix",
+					"-D__unix__",
+					"-DEXCLUDEXZ",
+					"-D_ICU_",
+				);
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lz",
+					"-licucore",
+				);
+				PRODUCT_NAME = introtest;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = x86_64;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		A9EE8A9519E286E500CFFE6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -9274,6 +9408,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		A9D8FD3419E2EC5B0055700C /* Build configuration list for PBXNativeTarget "introtest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D8FD3519E2EC5B0055700C /* Debug */,
+				A9D8FD3619E2EC5B0055700C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A9EE8A9419E286E500CFFE6A /* Build configuration list for PBXNativeTarget "LongRunningTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -9281,6 +9424,7 @@
 				A9EE8A9619E286E500CFFE6A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
