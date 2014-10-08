@@ -44,7 +44,7 @@ using namespace sword;
  *			-4  - Lucene
  */
 
-char SEARCH_TYPE=-2;
+char SEARCH_TYPE=-4;
 
 char printed = 0;
 void percentUpdate(char percent, void *userData) {

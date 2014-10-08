@@ -69,6 +69,8 @@ AC_ARG_WITH(curl_sftp,
 #	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 AC_ARG_WITH([internalregex],
 	AS_HELP_STRING([--with-internalregex], [Compile using SWORDs internal copy of regex]))
+AC_ARG_WITH(xapian,
+	AC_HELP_STRING([--with-xapian],[use xapian search engine (default=yes)]),,with_xapian=yes)
 
 
 # ---------------------------------------------------------------------
@@ -304,6 +306,23 @@ else
 fi
 fi
 
+if test x$with_xapian  = xyes; then
+	AC_LANG_CPLUSPLUS
+	AC_CHECK_LIB(xapian,main,,with_xapian="no")
+else
+	with_xapian="no"
+fi
+
+if test x$with_xapian = xyes; then
+	AM_CFLAGS="$AM_CFLAGS -DUSEXAPIAN"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DUSEXAPIAN"
+	if test x$with_clucene = xno; then
+		with_clucene="no"
+	else
+		with_clucene="$with_clucene; but using XAPIAN instead"
+	fi
+fi
+
 AC_CHECK_FUNCS(vsnprintf, [have_vsnprintf="yes"])
 
 # ---------------------------------------------------------------------
@@ -425,6 +444,7 @@ echo     "     CURL SFTP:        $with_curl_sftp"
 echo     "     INTERNAL FTPLIB:  $with_internalftplib"
 echo     "     INTERNAL REGEX:   $with_internalregex"
 echo     "     CLUCENE:          $with_clucene"
+echo     "     XAPIAN:           $with_xapian"
 echo
 echo
 

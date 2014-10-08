@@ -48,7 +48,9 @@
 #include <regex.h>	// GNU
 #endif
 
-#ifdef USELUCENE
+#if defined USEXAPIAN
+#include <xapian.h>
+#elif defined USELUCENE
 #include <CLucene.h>
 
 //Lucence includes
@@ -380,16 +382,22 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	SWBuf term = istr;
 	bool includeComponents = false;	// for entryAttrib e.g., /Lemma.1/ 
 
-#ifdef USELUCENE
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	if (!target.endsWith("/") && !target.endsWith("\\")) {
 		target.append('/');
 	}
+#if defined USEXAPIAN
+	target.append("xapian");
+#elif defined USELUCENE
 	target.append("lucene");
 #endif
 	if (justCheckIfSupported) {
 		*justCheckIfSupported = (searchType >= -3);
-#ifdef USELUCENE
+#if defined USEXAPIAN
+		if ((searchType == -4) && (FileMgr::existsDir(target))) {
+			*justCheckIfSupported = true;
+		}
+#elif defined USELUCENE
 		if ((searchType == -4) && (IndexReader::indexExists(target.c_str()))) {
 			*justCheckIfSupported = true;
 		}
@@ -460,8 +468,23 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	(*percent)(++perc, percentUserData);
 
 
-#ifdef USELUCENE
-	if (searchType == -4) {	// lucene
+#if defined USEXAPIAN || defined USELUCENE
+	(*percent)(10, percentUserData);
+	if (searchType == -4) {	// indexed search
+#if defined USEXAPIAN
+		SWTRY {
+			Xapian::Database database(target.c_str());
+			Xapian::QueryParser queryParser;
+			queryParser.set_stemmer(Xapian::Stem("en"));
+			queryParser.set_stemming_strategy(queryParser.STEM_SOME);
+			queryParser.add_prefix("content", "C");
+			queryParser.add_prefix("lemma", "L");
+			queryParser.add_prefix("morph", "M");
+			queryParser.add_prefix("prox", "P");
+			queryParser.add_prefix("proxlem", "PL");
+			queryParser.add_prefix("proxmorph", "PM");
+
+#elif defined USELUCENE
 		
 		lucene::index::IndexReader    *ir = 0;
 		lucene::search::IndexSearcher *is = 0;
@@ -470,22 +493,44 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		SWTRY {
 			ir = IndexReader::open(target);
 			is = new IndexSearcher(ir);
-			(*percent)(10, percentUserData);
-
 			const TCHAR *stopWords[] = { 0 };
 			standard::StandardAnalyzer analyzer(stopWords);
+#endif
+
+			// parse the query
+#if defined USEXAPIAN
+			Xapian::Query q = queryParser.parse_query(istr);
+			Xapian::Enquire enquire = Xapian::Enquire(database);
+#elif defined USELUCENE
 			q = QueryParser::parse((wchar_t *)utf8ToWChar(istr).getRawData(), _T("content"), &analyzer);
+#endif
 			(*percent)(20, percentUserData);
+
+			// perform the search
+#if defined USEXAPIAN
+			enquire.set_query(q);
+			Xapian::MSet h = enquire.get_mset(0, 99999);
+#elif defined USELUCENE
 			h = is->search(q);
+#endif
 			(*percent)(80, percentUserData);
 
 			// iterate thru each good module position that meets the search
 			bool checkBounds = getKey()->isBoundSet();
+#if defined USEXAPIAN
+			Xapian::MSetIterator i;
+			for (i = h.begin(); i != h.end(); ++i) {
+//				cout << "Document ID " << *i << "\t";
+				__u64 score = i.get_percent();
+				Xapian::Document doc = i.get_document();
+				*resultKey = doc.get_data().c_str();
+#elif defined USELUCENE
 			for (unsigned long i = 0; i < (unsigned long)h->length(); i++) {
 				Document &doc = h->doc(i);
-
 				// set a temporary verse key to this module position
 				*resultKey = wcharToUTF8(doc.get(_T("key"))); //TODO Does a key always accept utf8?
+				__u64 score = (__u64)((__u32)(h->score(i)*100));
+#endif
 
 				// check to see if it sets ok (within our bounds) and if not, skip
 				if (checkBounds) {
@@ -495,14 +540,19 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 					}
 				}
 				listKey << *resultKey;
-				listKey.getElement()->userData = (__u64)((__u32)(h->score(i)*100));
+				listKey.getElement()->userData = score;
 			}
 			(*percent)(98, percentUserData);
 		}
 		SWCATCH (...) {
+#if defined USEXAPIAN
+#elif defined USELUCENE
 			q = 0;
+#endif
 			// invalid clucene query
 		}
+#if defined USEXAPIAN
+#elif defined USELUCENE
 		delete h;
 		delete q;
 
@@ -510,6 +560,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		if (ir) {
 			ir->close();
 		}
+#endif
 	}
 #endif
 
@@ -1011,12 +1062,17 @@ void SWModule::deleteSearchFramework() {
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 
-#ifdef USELUCENE
+#if defined USELUCENE || defined USEXAPIAN
 	SWBuf target = getConfigEntry("AbsoluteDataPath");
 	if (!target.endsWith("/") && !target.endsWith("\\")) {
 		target.append('/');
 	}
+#if defined USEXAPIAN
+	target.append("xapian");
+#elif defined USELUCENE
+	const int MAX_CONV_SIZE = 1024 * 1024;
 	target.append("lucene");
+#endif
 	int status = FileMgr::createParent(target+"/dummy");
 	if (status) return -1;
 
@@ -1025,7 +1081,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWKey textkey;
 	SWBuf c;
 
-	const int MAX_CONV_SIZE = 1024 * 1024;
 
 	// turn all filters to default values
 	StringList filterSettings;
@@ -1059,6 +1114,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		setKey(*searchKey);
 	}
 
+	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
+
+	// lets create or open our search index
+#if defined USEXAPIAN
+	Xapian::WritableDatabase database(target.c_str(), Xapian::DB_CREATE_OR_OPEN);
+	Xapian::TermGenerator termGenerator;
+	termGenerator.set_stemmer(Xapian::Stem("en"));
+
+#elif defined USELUCENE
 	RAMDirectory *ramDir = 0;
 	IndexWriter *coreWriter = 0;
 	IndexWriter *fsWriter = 0;
@@ -1066,11 +1130,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	const TCHAR *stopWords[] = { 0 };
 	standard::StandardAnalyzer *an = new standard::StandardAnalyzer(stopWords);
-	bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 
 	ramDir = new RAMDirectory();
 	coreWriter = new IndexWriter(ramDir, an, true);
 	coreWriter->setMaxFieldLength(MAX_CONV_SIZE);
+#endif
 
 
 
@@ -1127,7 +1191,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		bool good = false;
 
 		// start out entry
+#if defined USEXAPIAN
+		Xapian::Document doc;
+		termGenerator.set_document(doc);
+#elif defined USELUCENE
 		Document *doc = new Document();
+#endif
 		// get "key" field
 		SWBuf keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
 		if (content && *content) {
@@ -1173,7 +1242,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				}
 			}
 
+#if defined USEXAPIAN
+			doc.set_data(keyText.c_str());
+#elif defined USELUCENE
 			doc->add(*_CLNEW Field(_T("key"), (wchar_t *)utf8ToWChar(keyText).getRawData(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+#endif
 
 			if (includeKeyInSearch) {
 				c = keyText;
@@ -1182,11 +1255,21 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				content = c.c_str();
 			}
 
+#if defined USEXAPIAN
+			termGenerator.index_text(content);
+			termGenerator.index_text(content, 1, "C");
+#elif defined USELUCENE
 			doc->add(*_CLNEW Field(_T("content"), (wchar_t *)utf8ToWChar(content).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+#endif
 
 			if (strong.length() > 0) {
+#if defined USEXAPIAN
+				termGenerator.index_text(strong.c_str(), 1, "L");
+				termGenerator.index_text(morph.c_str(), 1, "M");
+#elif defined USELUCENE
 				doc->add(*_CLNEW Field(_T("lemma"), (wchar_t *)utf8ToWChar(strong).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 				doc->add(*_CLNEW Field(_T("morph"), (wchar_t *)utf8ToWChar(morph).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+#endif
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
 			}
 
@@ -1331,20 +1414,39 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 		if (proxBuf.length() > 0) {
 
+#if defined USEXAPIAN
+			termGenerator.index_text(proxBuf.c_str(), 1, "P");
+#elif defined USELUCENE
 			doc->add(*_CLNEW Field(_T("prox"), (wchar_t *)utf8ToWChar(proxBuf).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+#endif
 			good = true;
 		}
 		if (proxLem.length() > 0) {
+#if defined USEXAPIAN
+			termGenerator.index_text(proxLem.c_str(), 1, "PL");
+			termGenerator.index_text(proxMorph.c_str(), 1, "PM");
+#elif defined USELUCENE
 			doc->add(*_CLNEW Field(_T("proxlem"), (wchar_t *)utf8ToWChar(proxLem).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
 			doc->add(*_CLNEW Field(_T("proxmorph"), (wchar_t *)utf8ToWChar(proxMorph).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
+#endif
 			good = true;
 		}
 		if (good) {
 //printf("writing (%s).\n", (const char *)*key);
 //fflush(stdout);
+#if defined USEXAPIAN
+			SWBuf idTerm;
+			idTerm.setFormatted("Q%ld", key->getIndex());
+			doc.add_boolean_term(idTerm.c_str());
+			database.replace_document(idTerm.c_str(), doc);
+#elif defined USELUCENE
 			coreWriter->addDocument(doc);
+#endif
 		}
+#if defined USEXAPIAN
+#elif defined USELUCENE
 		delete doc;
+#endif
 
 		(*this)++;
 		err = popError();
@@ -1352,6 +1454,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	// Optimizing automatically happens with the call to addIndexes
 	//coreWriter->optimize();
+#if defined USEXAPIAN
+#elif defined USELUCENE
 	coreWriter->close();
 
 #ifdef CLUCENE2
@@ -1386,6 +1490,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	delete coreWriter;
 	delete fsWriter;
 	delete an;
+#endif
 
 	// reposition module back to where it was before we were called
 	setKey(*saveKey);
