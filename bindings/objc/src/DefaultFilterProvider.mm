@@ -5,7 +5,6 @@
 
 
 #import "DefaultFilterProvider.h"
-#import "SwordFilter.h"
 
 @implementation DefaultFilterProvider
 

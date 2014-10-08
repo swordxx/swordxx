@@ -115,6 +115,7 @@
     
     SwordModuleTextEntry *text = [bible textEntryForKeyString:@"gen1.1" textType:TextTypeRendered];
     XCTAssertNotNil(text, @"");
+    NSLog(@"text: %@", [text text]);
     XCTAssertTrue([[text text] length] > 0, @"");
 }
 
