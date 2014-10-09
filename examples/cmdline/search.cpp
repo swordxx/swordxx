@@ -119,9 +119,12 @@ int main(int argc, char **argv)
 		listkey = target->search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
 		std::cerr << std::endl;
 	}
-	listkey.sort();
+// we don't want to sort by verse if we've been given scores
+//	listkey.sort();
 	while (!listkey.popError()) {
-		std::cout << (const char *)listkey << std::endl;
+		std::cout << (const char *)listkey;
+		if (listkey.getElement()->userData) std::cout << " : " << (__u64)listkey.getElement()->userData << "%";
+		std::cout << std::endl;
 		listkey++;
 	}
 
