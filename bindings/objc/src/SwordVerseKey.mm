@@ -60,11 +60,10 @@
 }
 
 - (SwordVerseKey *)initWithRef:(NSString *)aRef v11n:(NSString *)scheme {
-    sword::VerseKey *vk = new sword::VerseKey();            
-    self = [super initWithSWKey:vk];
+    sword::VerseKey vk;
+    self = [super initWithSWKey:&vk makeCopy:YES];
     if(self) {
         created = YES;
-        [self setPersist:YES];
         if(scheme) {
             [self setVersification:scheme];
         }

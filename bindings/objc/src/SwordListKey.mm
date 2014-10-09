@@ -58,6 +58,8 @@
     }
     sword::ListKey listKey = vk.parseVerseList([aRef UTF8String], "gen", true);
     sword::ListKey *lk = new sword::ListKey(listKey);
+    lk->setPersist(true);
+
     return (SwordListKey *) [super initWithSWKey:lk];
 }
 

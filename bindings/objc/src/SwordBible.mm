@@ -426,7 +426,6 @@ NSLock *bibleLock = nil;
     
     SwordListKey *lk = [SwordListKey listKeyWithRef:aReference v11n:[self versification]];
     [lk setPosition:SWPOS_TOP];
-    [lk setPersist:NO];
     SwordVerseKey *vk = [SwordVerseKey verseKeyWithRef:[lk keyText] v11n:[self versification]];
     while(![lk error]) {
         // set current key to vk

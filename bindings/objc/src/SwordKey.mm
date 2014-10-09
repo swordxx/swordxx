@@ -40,17 +40,17 @@
     if(self) {
         if(copy) {
             if(aSk) {
-                sk = aSk->clone();            
+                sk = aSk->clone();
+                sk->setPersist(true);
                 created = YES;
             } else {
                 created = NO;
             }
-            [self setPersist:YES];
         } else {
             sk = aSk;
             created = NO;
         }
-    }    
+    }
     return self;    
 }
 

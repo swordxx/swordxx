@@ -483,6 +483,7 @@
 }
 
 - (void)setSwordKey:(SwordKey *)aKey {
+    swModule->getKey()->setPersist(true);
     swModule->setKey([aKey swKey]);
 }
 
