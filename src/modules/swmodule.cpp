@@ -476,7 +476,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			Xapian::Database database(target.c_str());
 			Xapian::QueryParser queryParser;
 			queryParser.set_default_op(Xapian::Query::OP_AND);
-			queryParser.set_stemmer(Xapian::Stem("en"));
+			SWTRY {
+				queryParser.set_stemmer(Xapian::Stem(getLanguage()));
+			} SWCATCH(...) {}
 			queryParser.set_stemming_strategy(queryParser.STEM_SOME);
 			queryParser.add_prefix("content", "C");
 			queryParser.add_prefix("lemma", "L");
@@ -1121,7 +1123,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 #if defined USEXAPIAN
 	Xapian::WritableDatabase database(target.c_str(), Xapian::DB_CREATE_OR_OPEN);
 	Xapian::TermGenerator termGenerator;
-	termGenerator.set_stemmer(Xapian::Stem("en"));
+	SWTRY {
+		termGenerator.set_stemmer(Xapian::Stem(getLanguage()));
+	} SWCATCH(...) {}
 
 #elif defined USELUCENE
 	RAMDirectory *ramDir = 0;
