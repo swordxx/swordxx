@@ -475,6 +475,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		SWTRY {
 			Xapian::Database database(target.c_str());
 			Xapian::QueryParser queryParser;
+			queryParser.set_default_op(Xapian::Query::OP_AND);
 			queryParser.set_stemmer(Xapian::Stem("en"));
 			queryParser.set_stemming_strategy(queryParser.STEM_SOME);
 			queryParser.add_prefix("content", "C");
