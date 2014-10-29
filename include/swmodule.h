@@ -194,6 +194,16 @@ public:
 	// are not comfortable with, or don't wish to use  stl maps).
 	virtual void setConfig(ConfigEntMap *config);
 	virtual const ConfigEntMap &getConfig() const { return *config; }
+
+	/**
+	 * Get's a configuration property about a module.  These entries are primarily
+	 * pulled from the modules .conf file, but also include some virtual entries
+	 * such as:
+	 * 	PrefixPath - the absolute filesystem path to the sword module repository
+	 *	location where this module is located.
+	 *	AbsoluteDataPath - the full path to the root folder where the module
+	 *	data is stored.
+	 */
 	virtual const char *getConfigEntry(const char *key) const;
 
 	/**
