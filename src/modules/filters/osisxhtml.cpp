@@ -43,7 +43,11 @@ const char *OSISXHTML::getHeader() const {
 		.indent2         { margin-left: 20px }\n\
 		.indent3         { margin-left: 30px }\n\
 		.indent4         { margin-left: 40px }\n\
+		.small-caps { font-variant: small-caps; }\n\
+		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n\
+		.acrostic { text-align: center; }\n\
 	";
+	// Acrostic for things like the titles in Psalm 119
 	return header;
 }
 
@@ -397,14 +401,28 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "l")) {
 			// start line marker
 			if (tag.getAttribute("sID") || (!tag.isEndTag() && !tag.isEmpty())) {
-				// nested lines plus if the line itself has an x-indent type attribute value
-				outText(SWBuf("<span class=\"line indent").appendFormatted("%d\">", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
+				SWBuf type = tag.getAttribute("type");
+				if (type == "selah") {
+					outText("<p class=\"selah\">", buf, u);
+				} else {
+					// nested lines plus if the line itself has an x-indent type attribute value
+					outText(SWBuf("<span class=\"line indent").appendFormatted("%d\">", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
+				}
 				u->lineStack->push(tag.toString());
 			}
 			// end line marker
 			else if (tag.getAttribute("eID") || tag.isEndTag()) {
-				outText("</span>", buf, u);
-				u->outputNewline(buf);
+				SWBuf type = "";
+				if (!u->lineStack->empty()) {
+					XMLTag startTag(u->lineStack->top());
+					type = startTag.getAttribute("type");
+				}
+				if (type == "selah") {
+					outText("</p>", buf, u);
+				} else {
+					outText("</span>", buf, u);
+					u->outputNewline(buf);
+				}
 				if (u->lineStack->size()) u->lineStack->pop();
 			}
 			// <l/> without eID or sID
@@ -452,31 +470,36 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				SWBuf type = tag.getAttribute("type");
+				bool keepType = false;
+				if (type.size()) {
+					keepType = true;
+				}
 				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 				if (vkey && !vkey->getVerse()) {
 					if (!vkey->getChapter()) {
 						if (!vkey->getBook()) {
 							if (!vkey->getTestament()) {
-								buf += "<h1 class=\"moduleHeader\">";
+								buf += SWBuf("<h1 class=\"moduleHeader ") + (keepType ? type : "") + "\">";
 								tag.setAttribute("pushed", "h1");
 							}
 							else {
-								buf += "<h1 class=\"testamentHeader\">";
+								buf += SWBuf("<h1 class=\"testamentHeader ") + (keepType ? type : "") + "\">";
 								tag.setAttribute("pushed", "h1");
 							}
 						}
 						else {
-							buf += "<h1 class=\"bookHeader\">";
+							buf += SWBuf("<h1 class=\"bookHeader ") + (keepType ? type : "") + "\">";
 							tag.setAttribute("pushed", "h1");
 						}
 					}
 					else {
-						buf += "<h2 class=\"chapterHeader\">";
+						buf += SWBuf("<h2 class=\"chapterHeader ") + (keepType ? type : "") + "\">";
 						tag.setAttribute("pushed", "h2");
 					}
 				}
 				else {
-					buf += "<h3>";
+					buf += SWBuf("<h3 class=\"") + (keepType ? type : "") + "\">";
 					tag.setAttribute("pushed", "h3");
 				}
 				u->titleStack->push(tag.toString());
@@ -573,8 +596,10 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				else if (type == "sub") {
 					outText("<sub>", buf, u);
 				}
-				else {	// all other types
+				else if (type == "i" || type == "italic") {
 					outText("<i>", buf, u);
+				} else {	// all other types
+					outText(SWBuf("<span class=\"") + type + SWBuf("\">"), buf, u);
 				}
 				u->hiStack->push(tag.toString());
 			}
@@ -598,8 +623,10 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				else if (type == "sub") {
 					outText("</sub>", buf, u);
 				}
-				else {
+				else if (type == "i" || type == "italic") {
 					outText("</i>", buf, u);
+				} else {
+					outText("</span>", buf, u);
 				}
 			}
 		}

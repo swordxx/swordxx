@@ -1,5 +1,9 @@
 API ChangeLog
 
+03-Dec-2014	Karl Kleinpaste <charcoal@users.sf.net>
+	Corrected anomalous OSIS highlighting output w/GHellings' patches in
+		src/modules/filters/osis{plain,xhtml}.cpp
+
 12-Jul-2014	Костя Маслюк <kostyamaslyuk@gmail.com>
 	Versification mapping implementation and example at
 		examples/tasks/parallelbibles.cpp

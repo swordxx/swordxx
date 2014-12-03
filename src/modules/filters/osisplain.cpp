@@ -235,7 +235,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 			else {
 				buf.append("*");
-				buf.append(u->lastTextNode);
+				buf.append(u->lastSuspendSegment);
 				buf.append("*");
 			}
 			u->suspendTextPassThru = false;
