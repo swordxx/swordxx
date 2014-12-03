@@ -12,6 +12,7 @@
 # 
 SET(install_UTILITIES
 	addld
+	emptyvss
 	imp2gbs
 	imp2ld
 	imp2vs
@@ -42,7 +43,6 @@ SET(noinstall_UTILITIES
 	addgb
 	addvs
 	cipherraw
-	emptyvss
 	gbfidx
 	genbookutil
 	modwrite
