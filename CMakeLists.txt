@@ -1,10 +1,6 @@
 # TODO: write FindICU (icu-config only for 2.2 and up) -- currently taken from another CMake system
 #       limit pkg-config version to >= 0.14, demo, utilities, doc, tests
-#       use SYSCONF_INSTALL_DIR
-#       use LIB_INSTALL_DIR
-#       use INCLUDE_INSTALL_DIR
 #       use BUILD_SHARED_LIBS
-#       actually install sword.conf when asked
 #       convince perl swig bindings to build properly
 #
 # NOTES: Defaults to build type of Shared
@@ -16,9 +12,6 @@
 # of their own GPLv2 license and all copyright is transferred to them for
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
-#
-#
-# A CMake port of the SWORD build system... we hope
 PROJECT(libsword CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
 SET(SWORD_VERSION 1.7.3)
@@ -117,10 +110,10 @@ ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 ################################################################################################
 # Some random user settings
 #
-
-IF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
-	ADD_DEFINITIONS(-DGLOBCONFPATH="${SWORD_GLOBAL_CONF_DIR}/sword.conf")
-ENDIF(NOT SWORD_GLOBAL_CONF_DIR STREQUAL "")
+ADD_DEFINITIONS(-DGLOBCONFPATH="${SYSCONF_INSTALL_DIR}/sword.conf")
+SET(CONFFILE "[Install]
+DataPath=${SHARE_INSTALL_PREFIX}/sword")
+FILE(WRITE "${CMAKE_CURRENT_BINARY_DIR}/sword.conf" "${CONFFILE}")
 
 
 ###############################################################################################
