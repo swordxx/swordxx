@@ -1,5 +1,9 @@
 API ChangeLog
 
+15-Dec-2014	DM Smith <dmsmith@crosswire.org>
+	Added support for Psalm Book divisions using <div type=majorSection>
+	from GHellings
+
 03-Dec-2014	Karl Kleinpaste <charcoal@users.sf.net>
 	Corrected anomalous OSIS highlighting output w/GHellings' patches in
 		src/modules/filters/osis{plain,xhtml}.cpp
