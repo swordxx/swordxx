@@ -883,6 +883,36 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 		// Now consider everything else.
 
+		// "majorSection" is code for the Book 1-5 of Psalms
+		if (tokenName == "div" && typeAttr == "majorSection") {
+			if (inBookIntro) {
+				if (debug & DEBUG_TITLE) {
+					cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK INTRO "<< text << endl;
+				}
+				writeEntry(text);
+			}
+
+			if (debug & DEBUG_OTHER) {
+				cout << "DEBUG(FOUND): majorSection found " << currentVerse.getOSISRef() << endl;
+			}
+
+			strcpy(currentOsisID, currentVerse.getOSISRef());
+
+			inChapter       = false;
+			inVerse         = false;
+			inPreVerse      = false;
+			inBookIntro     = false;
+			inChapterIntro  = true;
+
+			if (debug & DEBUG_TITLE) {
+				cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << endl;
+			}
+
+			verseDepth      = 0;
+
+			return false;
+		}
+
 		// Handle WOC quotes.
 		// Note this requires transformBSP to make them into milestones
 		// Otherwise have to do it here
