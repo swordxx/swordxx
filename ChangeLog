@@ -1,6 +1,9 @@
 API ChangeLog
 
 15-Dec-2014	DM Smith <dmsmith@crosswire.org>
+	Fixed endless loop in osis2mod for some inputs.
+
+15-Dec-2014	DM Smith <dmsmith@crosswire.org>
 	Added support for Psalm Book divisions using <div type=majorSection>
 	from GHellings
 

@@ -368,7 +368,7 @@ void prepareSWVerseKey(SWBuf &buf) {
  * Determine whether a verse as given is valid for the versification.
  * This is done by comparing the before and after of normalization.
  */
-bool isValidRef(const char *buf) {
+bool isValidRef(const char *buf, const char *caller) {
 	// Create a VerseKey that does not do auto normalization
 	// Note: need to turn on headings so that a heading does not get normalized anyway
 	// And set it to the reference under question
@@ -399,7 +399,7 @@ bool isValidRef(const char *buf) {
 	// If we have gotten here the reference is not in the selected versification.
 	// cout << "INFO(V11N): " << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
 	if (debug & DEBUG_REV11N) {
-		cout << "DEBUG(V11N): " << before << " normalizes to "  << after << endl;
+		cout << "DEBUG(V11N)[" << caller << "]: " << before << " normalizes to "  << after << endl;
 	}
 
 	return false;
@@ -511,7 +511,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 	// If we have seen a verse and the supplied one is different then we output the collected one.
 	if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
 
-		if (!isValidRef(lastKey)) {
+		if (!isValidRef(lastKey, "writeEntry")) {
 			makeValidRef(lastKey);
 		}
 
@@ -594,7 +594,7 @@ void writeEntry(SWBuf &text, bool force = false) {
 void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
 	// Only link verses that are in the versification.
-	if (!isValidRef(linkKey)) {
+	if (!isValidRef(linkKey, "linkToEntry")) {
 		return;
 	}
 
@@ -826,7 +826,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// This should never happen if the references are valid OSIS references
 				ListKey verseKeys = currentVerse.parseVerseList(keyVal, currentVerse, true);
 				int memberKeyCount = verseKeys.getCount();
-				if (memberKeyCount) {
+				if (memberKeyCount > 1) {
 					currentVerse = verseKeys.getElement(0);
 					// See if this osisID or annotateRef refers to more than one verse.
 					// If it does, save it until all verses have been seen.
@@ -836,6 +836,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					verseKeys.setPosition(TOP);
 					verseKeys.increment(1);
 					if (!verseKeys.popError()) {
+					cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << endl;
 						linkedVerses.push_back(verseKeys);
 					}
 				}
@@ -1333,8 +1334,8 @@ void writeLinks()
 
 		while (!verseKeys.popError()) {
 			linkKey = verseKeys.getElement();
-			verseKeys.increment(1);
 			linkToEntry(linkKey, destKey);
+			verseKeys.increment(1);
 		}
 	}
 }
