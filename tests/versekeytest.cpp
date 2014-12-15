@@ -277,5 +277,19 @@ cout << currentVerse << endl;
 	vkey.setBook(vkey.getBook() - 1);
 	cout << ".setBook(.getBook() - 1) = " << vkey << "\n";
 
+	cout << "\nChapter math\n\n";
+
+	cout << "Matthew.1.1 - 1 chapter\n";
+	vkey = "Matthew.1.1";
+	vkey.setChapter(vkey.getChapter() - 1);
+	cout << ".setChapter(.getChapter() - 1) = " << vkey << "\n";
+
+	cout << "\nVerse math\n\n";
+
+	cout << "Matthew.1.1 - 1 verse\n";
+	vkey = "Matthew.1.1";
+	vkey.setVerse(vkey.getVerse() - 1);
+	cout << ".setVerse(.getVerse() - 1) = " << vkey << "\n";
+
 	return 0;
 }
