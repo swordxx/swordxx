@@ -33,6 +33,8 @@ namespace Sword
 		public string Description;
 		public string Category;
 		public string Language;
+		public string Version;
+		public string Delta;
 	};
 	
 	[StructLayout(LayoutKind.Sequential)]
