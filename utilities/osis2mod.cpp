@@ -826,18 +826,20 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// This should never happen if the references are valid OSIS references
 				ListKey verseKeys = currentVerse.parseVerseList(keyVal, currentVerse, true);
 				int memberKeyCount = verseKeys.getCount();
-				if (memberKeyCount > 1) {
+				if (memberKeyCount) {
 					currentVerse = verseKeys.getElement(0);
 					// See if this osisID or annotateRef refers to more than one verse.
 					// If it does, save it until all verses have been seen.
 					// At that point we will output links.
 					// This can be done by incrementing, which will produce an error
 					// if there is only one verse.
-					verseKeys.setPosition(TOP);
-					verseKeys.increment(1);
-					if (!verseKeys.popError()) {
-					cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << endl;
-						linkedVerses.push_back(verseKeys);
+					if (memberKeyCount > 1) {
+						verseKeys.setPosition(TOP);
+						verseKeys.increment(1);
+						if (!verseKeys.popError()) {
+							cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << endl;
+							linkedVerses.push_back(verseKeys);
+						}
 					}
 				}
 				else {
