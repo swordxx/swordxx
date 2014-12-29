@@ -60,18 +60,17 @@ restore:
 
 install: install-recursive
 	@echo ""
-	@echo "sword is installed."
+	@echo "SWORD is installed."
 	@echo ""
-	@echo "if this is your first time, you may need a basic global"
-	@echo "configuration file.  one can be generated to $(DESTDIR)$(sysconfdir)/sword.conf"
-	@echo "by typing: \"make install_config\""
+	@echo "If this is your first time, you may need a basic global"
+	@echo "configuration file.  One can be generated to $(DESTDIR)$(sysconfdir)/sword.conf"
+	@echo "by typing: \"sudo make install_config\""
 	@echo ""
-	@echo "modules (Bibles, etc.), may then be unzipped to $(pkgdatadir)/"
+	@echo "Modules (Bibles, etc.), may then be unzipped to $(pkgdatadir)/"
+	@echo "or installed with the command line tool: installmgr"
 	@echo ""
-	@echo "type \"make register\" to help us keep track of how many"
-	@echo "people are using sword."
-	@echo "(you may consider exiting from 'root', first, to make this"
-	@echo "a little more personal)"
+	@echo "Type \"make register\" to help us keep track of how many"
+	@echo "people are using SWORD."
 	@echo ""
 
 
@@ -92,6 +91,12 @@ install_config:
 	@echo "[Install]" > $(DESTDIR)$(sysconfdir)/sword.conf
 	@echo "DataPath=$(pkgdatadir)/" >> $(DESTDIR)$(sysconfdir)/sword.conf
 	@echo "sword.conf generated"
+	@echo ""
+	@echo "You can now try to install modules with installmgr, e.g.,"
+	@echo "sudo installmgr -sc -r CrossWire -ri CrossWire KJV"
+	@echo ""
+	@echo "Run installmgr with no options for help."
+
 
 
 dist-hook:

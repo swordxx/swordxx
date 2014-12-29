@@ -154,8 +154,8 @@ if test x$with_xz = xno; then
 fi
 
 AS_IF([test "x$with_internalregex" = "xyes"],
-      [have_systemregex="no"],
-      [AC_SEARCH_LIBS(regexec, regex, [have_systemregex="yes"], [have_systemregex="no"])])
+      [have_systemregex="no, using internal regex"],
+      [AC_SEARCH_LIBS(regexec, regex, [have_systemregex="yes"], [have_systemregex="no, using internal regex"])])
 
 AS_IF([test "x$have_systemregex" = "xyes"],
       [with_internalregex="no"
@@ -252,7 +252,7 @@ if test x$with_curl = xyes; then
     if test "$CURL_CONFIG" = "no" ; then
 	echo "*** The curl-config script installed by curl could not be found"
 	echo "*** compiling without libcurl support"
-	with_curl=no
+	with_curl="no, using internal ftplib"
 	with_curl_sftp=no
 	with_internalftplib=yes
     else
@@ -272,7 +272,7 @@ if test x$with_curl = xyes; then
 	fi
     fi
 else
-	with_curl=no;
+	with_curl="no, using internal ftplib"
 	with_curl_sftp=no;
 	with_internalftplib=yes
 fi
@@ -427,26 +427,28 @@ AC_OUTPUT
 echo
 echo
 echo "Configuration:"
-echo     "     LIBDIR:           $libdir"
-echo     "     DEBUG:            $enable_debug"
-echo     "     PROFILE:          $enable_profile"
-echo     "     BUILD TESTS:      $enable_tests"
-echo     "     BUILD EXAMPLES:   $enable_examples"
-echo     "     BUILD UTILITIES:  $enable_utilities"
-echo     "     LIBZ:             $with_zlib"
-echo     "     BZIP2:            $with_bzip2"
-echo     "     XZ:               $with_xz"
-echo     "     ICU:              $with_icu"
-echo     "     ICUSWORD:         $with_icusword"
-echo     "     CXX11REGEX:       $with_cxx11regex"
-echo     "     CURL:             $with_curl"
-echo     "     CURL SFTP:        $with_curl_sftp"
-echo     "     INTERNAL FTPLIB:  $with_internalftplib"
-echo     "     INTERNAL REGEX:   $with_internalregex"
-echo     "     CLUCENE:          $with_clucene"
-echo     "     XAPIAN:           $with_xapian"
-echo
-echo
-
+echo     ""
+echo     " Settings:"
+echo     "     LIBDIR:               $libdir"
+echo     "     DEBUG:                $enable_debug"
+echo     "     PROFILE:              $enable_profile"
+echo     "     BUILD TESTS:          $enable_tests"
+echo     "     BUILD EXAMPLES:       $enable_examples"
+echo     "     BUILD UTILITIES:      $enable_utilities"
+echo     ""
+echo     " Dependencies for standard use:"
+echo     "     REGEX:                $have_systemregex"
+echo     "     ZLIB:                 $with_zlib"
+echo     "     LIBICU:               $with_icu"
+echo     "     LIBCURL:              $with_curl"
+echo     "     CLUCENE-CORE:         $with_clucene"
+echo     ""
+echo     " Optional / Experimental:"
+echo     "     LIBCURL SFTP:         $with_curl_sftp"
+echo     "     BZIP2:                $with_bzip2"
+echo     "     XZ:                   $with_xz"
+echo     "     ICUSWORD:             $with_icusword"
+echo     "     CXX11REGEX:           $with_cxx11regex"
+echo     "     XAPIAN-CORE:          $with_xapian"
 
 
