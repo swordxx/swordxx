@@ -617,7 +617,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				else if (type == "ol") {
 					outText("</span>", buf, u);
 				}
-				else if (type == "sup") {
+				else if (type == "super") {
 					outText("</sup>", buf, u);
 				}
 				else if (type == "sub") {
