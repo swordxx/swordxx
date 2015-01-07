@@ -57,7 +57,8 @@ void printsyntax() {
 	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping),\n");
 	fprintf (stderr, "  b (Bi-Directional Reordering), w (Red Words of Christ),\n");
 	fprintf (stderr, "  g (Glosses/Ruby), e (Word Enumerations),\n");
-	fprintf (stderr, "  x (Encoded Transliterations), t (Algorithmic Transliterations via ICU)\n");
+	fprintf (stderr, "  x (Encoded Transliterations), t (Algorithmic Transliterations via ICU),\n");
+	fprintf (stderr, "  M (morpheme segmentation)\n");
 
 	fprintf (stderr, "Maximum verses may be any integer value\n");
 	fprintf (stderr, "Valid output_format values are: CGI, GBF, HTML, HTMLHREF, LaTeX, OSIS, RTF,\n");
@@ -180,6 +181,8 @@ int main(int argc, char **argv)
 					optionfilters |= OP_ENUM;
 				if (strchr(argv[i], 't'))
 					optionfilters |= OP_TRANSLITERATOR;
+				if (strchr(argv[i], 'M'))
+					optionfilters |= OP_MORPHSEG;
 			}
 		}
 		else if (!::stricmp("-f", argv[i])) {

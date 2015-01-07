@@ -251,6 +251,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	manager.setGlobalOption("Glosses", (optionfilters & OP_GLOSSES) ? "On": "Off");
 	manager.setGlobalOption("Transliterated Forms", (optionfilters & OP_XLIT) ? "On": "Off");
 	manager.setGlobalOption("Enumerations", (optionfilters & OP_ENUM) ? "On": "Off");
+	manager.setGlobalOption("Morpheme Segmentation", (optionfilters & OP_MORPHSEG) ? "On": "Off");
 
 	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");
 	
