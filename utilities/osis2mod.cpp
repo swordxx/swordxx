@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osis2mod.cpp -	Utility to import a module in OSIS format
+ *  osis2mod.cpp - Utility to import a module in OSIS format
  *
  * $Id$
  *
  * Copyright 2003-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *      CrossWire Bible Society
+ *      P. O. Box 2528
+ *      Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -612,7 +612,7 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 }
 
 // Return true if the content was handled or is to be ignored.
-//		false if the what has been seen is to be accumulated and considered later.
+//        false if the what has been seen is to be accumulated and considered later.
 bool handleToken(SWBuf &text, XMLTag token) {
 
 	// Everything between the begin book tag and the first begin chapter tag is inBookIntro
@@ -702,7 +702,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			// BOOK START, <div type="book" ...>
 			if (tokenName == "div" && typeAttr == "book") {
-				if (inBookIntro || inChapterIntro) {	// this one should never happen, but just in case
+				if (inBookIntro || inChapterIntro) { // this one should never happen, but just in case
 
 					if (debug & DEBUG_TITLE) {
 						cout << "DEBUG(TITLE): " << currentOsisID << ": OOPS INTRO " << endl;
@@ -961,8 +961,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (inChapterIntro) {
 				// Determine when we are no longer in a chapter heading, but in pre-verse material:
 				// If we see one of the following:
-				// 	a section div
-				// 	a title that is not main, chapter or sub or unclassified (no type attribute)
+				//     a section div
+				//     a title that is not main, chapter or sub or unclassified (no type attribute)
 				if ((tokenName == "div" && typeAttr == "section") ||
 				    (tokenName == "title" && typeAttr.length() != 0 && typeAttr != "main" && typeAttr != "chapter" && typeAttr != "sub")
 				) {
@@ -1025,7 +1025,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			if (tokenName != topToken.getName()) {
 				cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.getName() << " found " << tokenName << endl;
-//				exit(EXIT_BAD_NESTING);	// (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
+//				exit(EXIT_BAD_NESTING); // (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
 						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 						// (DM) This has nothing to do with well-form or valid. It checks milestoned elements for proper nesting.
 			}
@@ -1237,9 +1237,9 @@ XMLTag transformBSP(XMLTag t) {
 		// The following containers are milestoneable.
 		// abbr, closer, div, foreign, l, lg, salute, signed, speech
 		// Leaving out:
-		//   abbr	When would this ever cross a boundary?
-		//   seg	as it is used for a divineName hack
-		//   foreign	so that it can be easily italicized
+		//   abbr       When would this ever cross a boundary?
+		//   seg        as it is used for a divineName hack
+		//   foreign    so that it can be easily italicized
 		else if (tagName == "chapter" ||
 			 tagName == "closer"  ||
 			 tagName == "div"     ||
@@ -1420,7 +1420,7 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
 
 void processOSIS(istream& infile) {
 	typedef enum {
-		CS_NOT_IN_COMMENT,		// or seen starting "<"
+		CS_NOT_IN_COMMENT,            // or seen starting "<"
 		CS_SEEN_STARTING_EXCLAMATION,
 		CS_SEEN_STARTING_HYPHEN,
 		CS_IN_COMMENT,
@@ -1435,7 +1435,7 @@ void processOSIS(istream& infile) {
 
 	currentVerse.setVersificationSystem(v11n);
 	currentVerse.setAutoNormalize(false);
-	currentVerse.setIntros(true);	// turn on mod/testmnt/book/chap headings
+	currentVerse.setIntros(true);  // turn on mod/testmnt/book/chap headings
 	currentVerse.setPersist(true);
 
 	module->setKey(currentVerse);
@@ -1599,8 +1599,8 @@ void processOSIS(istream& infile) {
 		}
 		else {
 			switch (curChar) {
-				case '>' : text.append("&gt;"); break;
-				case '<' : text.append("&lt;"); break;
+				case '>' : COUT << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
+				case '<' : COUT << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
 				default  : text.append((char) curChar); break;
 			}
 		}
@@ -1698,7 +1698,7 @@ int main(int argc, char **argv) {
 					outputEncoder = NULL;
 					outputDecoder = NULL;
 				}
-			} 
+			}
 		}
 		else if (!strcmp(argv[i], "-c")) {
 			if (i+1 < argc) cipherKey = argv[++i];
@@ -1727,7 +1727,7 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-l")) {
 			if (i+1 < argc) {
 				compLevel = atoi(argv[++i]);
-			}		      
+			}
 			else usage(*argv, "-l requires a value from 1-9");
 			
 			if (compLevel < 0 || compLevel > 10) {
@@ -1737,7 +1737,7 @@ int main(int argc, char **argv) {
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
-	if (isCommentary) isCommentary = true;	// avoid unused warning for now
+	if (isCommentary) isCommentary = true;  // avoid unused warning for now
 
 	if (compType == "LZSS") {
 		compressor = new LZSSCompress();
@@ -1779,7 +1779,7 @@ int main(int argc, char **argv) {
 		cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcompressLevel: " << compLevel << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
 	}
 
-	if (!append) {	// == 0 then create module
+	if (!append) {  // == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if (compressor) {
@@ -1816,34 +1816,34 @@ int main(int argc, char **argv) {
 			// Create a compressed text module allowing very large entries
 			// Taking defaults except for first, fourth, fifth and last argument
 			module = new zText4(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				iType,		// iblockType
-				compressor,	// icomp
-				0,		// idisp
-				ENC_UNKNOWN,	// enc
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// lang
-				v11n		// versification
+				path,           // ipath
+				0,              // iname
+				0,              // idesc
+				iType,          // iblockType
+				compressor,     // icomp
+				0,              // idisp
+				ENC_UNKNOWN,    // enc
+				DIRECTION_LTR,  // dir
+				FMT_UNKNOWN,    // markup
+				0,              // lang
+				v11n            // versification
 		       );
 		}
 		else {
 			// Create a compressed text module allowing reasonable sized entries
 			// Taking defaults except for first, fourth, fifth and last argument
 			module = new zText(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				iType,		// iblockType
-				compressor,	// icomp
-				0,		// idisp
-				ENC_UNKNOWN,	// enc
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// lang
-				v11n		// versification
+				path,           // ipath
+				0,              // iname
+				0,              // idesc
+				iType,          // iblockType
+				compressor,     // icomp
+				0,              // idisp
+				ENC_UNKNOWN,    // enc
+				DIRECTION_LTR,  // dir
+				FMT_UNKNOWN,    // markup
+				0,              // lang
+				v11n            // versification
 		       );
 		}
 	}
@@ -1851,30 +1851,30 @@ int main(int argc, char **argv) {
 		// Create a raw text module allowing very large entries
 		// Taking defaults except for first and last argument
 		module = new RawText4(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				0,		// idisp
-				ENC_UNKNOWN,	// encoding
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// ilang
-				v11n		// versification
+				path,           // ipath
+				0,              // iname
+				0,              // idesc
+				0,              // idisp
+				ENC_UNKNOWN,    // encoding
+				DIRECTION_LTR,  // dir
+				FMT_UNKNOWN,    // markup
+				0,              // ilang
+				v11n            // versification
 			);
 	}
 	else {
 		// Create a raw text module allowing reasonable sized entries
 		// Taking defaults except for first and last argument
 		module = new RawText(
-				path,		// ipath
-				0,		// iname
-				0,		// idesc
-				0,		// idisp
-				ENC_UNKNOWN,	// encoding
-				DIRECTION_LTR,	// dir
-				FMT_UNKNOWN,	// markup
-				0,		// ilang
-				v11n		// versification
+				path,           // ipath
+				0,              // iname
+				0,              // idesc
+				0,              // idisp
+				ENC_UNKNOWN,    // encoding
+				DIRECTION_LTR,  // dir
+				FMT_UNKNOWN,    // markup
+				0,              // ilang
+				v11n            // versification
 			);
 	}
 
