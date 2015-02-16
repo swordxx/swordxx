@@ -1599,8 +1599,8 @@ void processOSIS(istream& infile) {
 		}
 		else {
 			switch (curChar) {
-				case '>' : COUT << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
-				case '<' : COUT << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
+				case '>' : cout << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
+				case '<' : cout << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
 				default  : text.append((char) curChar); break;
 			}
 		}
