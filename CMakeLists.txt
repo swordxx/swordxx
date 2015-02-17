@@ -79,9 +79,11 @@ INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
 # Most of the work for configuration is done above, already.
 #
 # I want to do this manually, there might be reason in the future
+SET(CPPCHECK_POSSIBLEERROR_ARG "--enable=all")
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	ADD_LIBRARY(sword SHARED ${sword_SOURCES})
     ADD_CPPCHECK(sword
+        POSSIBLE_ERROR TRUE
         FORCE TRUE)
 	MESSAGE(STATUS "Building Shared library.")
 	SET(BUILDING_SHARED 1)
@@ -91,6 +93,7 @@ ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
     ADD_CPPCHECK(sword_static
+        POSSIBLE_ERROR TRUE
         FORCE TRUE)
 	SET_TARGET_PROPERTIES(sword_static PROPERTIES COMPILE_FLAGS "-fPIC")
 	SET(BUILDING_STATIC 1)
