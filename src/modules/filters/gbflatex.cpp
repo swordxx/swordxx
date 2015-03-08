@@ -90,69 +90,69 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		
 		if (!strncmp(token, "WG", 2)) { // strong's numbers
 			//buf += " <small><em>&lt;<a href=\"type=Strongs value=";
-			buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
+			buf += " \\swordstrong{";
 			for (tok = token+2; *tok; tok++)
 				//if(token[i] != '\"')
 					buf += *tok;
-			buf += "\" class=\"strongs\">";
+			buf += ", ";
 			for (tok = token + 2; *tok; tok++)
 				//if(token[i] != '\"')
 					buf += *tok;
-			buf += "</a>&gt;</em></small>";
+			buf += "}";
 		}
 		else if (!strncmp(token, "WH", 2)) { // strong's numbers
 			//buf += " <small><em>&lt;<a href=\"type=Strongs value=";
-			buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
+			buf += " \\swordstrong[Hebrew]{";
 			for (tok = token+2; *tok; tok++)
 				//if(token[i] != '\"')
 					buf += *tok;
-			buf += "\" class=\"strongs\">";
+			buf += ", ";
 			for (tok = token + 2; *tok; tok++)
 				//if(token[i] != '\"')
 					buf += *tok;
-			buf += "</a>&gt;</em></small>";
+			buf += "}";
 		}
 		else if (!strncmp(token, "WTG", 3)) { // strong's numbers tense
 			//buf += " <small><em>(<a href=\"type=Strongs value=";
-			buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
+			buf += " \\swordstrong[Greektense]{";
 			for (tok = token + 3; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
-			buf += "\" class=\"strongs\">";
+			buf += ", ";
 			for (tok = token + 3; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
-			buf += "</a>)</em></small>";
+			buf += "}";
 		}
 		else if (!strncmp(token, "WTH", 3)) { // strong's numbers tense
 			//buf += " <small><em>(<a href=\"type=Strongs value=";
-			buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
+			buf += " \\swordstrong[Hebrewtense]{";
 			for (tok = token + 3; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
-			buf += "\" class=\"strongs\">";
+			buf += ",";
 			for (tok = token + 3; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
-			buf += "</a>)</em></small>";
+			buf += "}";
 		}
 
 		else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
 			//buf += " <small><em>(<a href=\"type=morph class=none value=";
-			buf += " <small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=";
+			buf += " \\swordmorph{";
 			
 			for (tok = token + 2; *tok; tok++)
 				if(*tok != '\"')
 					buf += *tok;
-			buf += "\" class=\"morph\">";
+			buf += ", >";
 			for (tok = token + 2; *tok; tok++)				
 				if(*tok != '\"') 			
 					buf += *tok;		
-			buf += "</a>)</em></small>";
+			buf += "}";
 		}
 
 		else if (!strcmp(tag.getName(), "RX")) {
-			buf += "<a href=\"";
+			buf += "\\swordxref{";
 			for (tok = token + 3; *tok; tok++) {
 			  if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
 			    buf += *tok;
@@ -161,7 +161,7 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			    break;
 			  }
 			}
-			buf += "\">";
+			buf += "}";
 		}
 		else if (!strcmp(tag.getName(), "RF")) {
 			SWBuf type = tag.getAttribute("type");
@@ -211,11 +211,11 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		}
 */
 		else if (!strncmp(token, "FN", 2)) {
-			buf += "<font face=\"";
+			buf += "\\swordfont{";
 			for (tok = token + 2; *tok; tok++)				
 				if(*tok != '\"') 			
 					buf += *tok;
-			buf += "\">";
+			buf += "}";
 		}
 
 		else if (!strncmp(token, "CA", 2)) {	// ASCII value
