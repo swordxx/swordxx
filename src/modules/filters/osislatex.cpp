@@ -161,17 +161,8 @@ class OSISLaTeX::TagStack : public std::stack<SWBuf> {
 OSISLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()), lineStack(new TagStack()) {
 	inXRefNote    = false;
 	suspendLevel = 0;
-	wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
-	wordsOfChristEnd   = "</span> ";
-	if (module) {
-		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
-	}
-	else {
-		osisQToTick = true;	// default
-		version = "";
-	}
+	wordsOfChristStart = "\\swordwoj{";
+	wordsOfChristEnd   = "}";
 	consecutiveNewlines = 0;
 }
 
@@ -184,7 +175,7 @@ OSISLaTeX::MyUserData::~MyUserData() {
 
 void OSISLaTeX::MyUserData::outputNewline(SWBuf &buf) {
 	if (++consecutiveNewlines <= 2) {
-		outText("<br />\n", buf, this);
+		outText("////", buf, this);
 		supressAdjacentWhitespace = true;
 	}
 }
@@ -229,13 +220,13 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					// for rendering ruby chars properly ^_^
 					buf -= lastText.length();
 					
-					outText("<ruby><rb>", buf, u);
+					outText("\\ruby{", buf, u);
 					outText(lastText, buf, u);
 					val = strchr(attrib, ':');
 					val = (val) ? (val + 1) : attrib;
-					outText("</rb><rp>(</rp><rt>", buf, u);
+					outText("}{", buf, u);
 					outText(val, buf, u);
-					outText("</rt><rp>)</rp></ruby>", buf, u);
+					outText("}", buf, u);
 				}
 				if (!morphFirst) {
 					processLemma(u->suspendTextPassThru, tag, buf);
@@ -457,54 +448,38 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (!vkey->getChapter()) {
 						if (!vkey->getBook()) {
 							if (!vkey->getTestament()) {
-								buf += "<h1 class=\"moduleHeader\">";
-								tag.setAttribute("pushed", "h1");
+								buf += "\\swordmodule*{";
 							}
 							else {
-								buf += "<h1 class=\"testamentHeader\">";
-								tag.setAttribute("pushed", "h1");
+								buf += "\\swordtestament*{";
 							}
 						}
 						else {
-							buf += "<h1 class=\"bookHeader\">";
-							tag.setAttribute("pushed", "h1");
+							buf += "\\swordbook*{";
 						}
 					}
 					else {
-						buf += "<h2 class=\"chapterHeader\">";
-						tag.setAttribute("pushed", "h2");
+						buf += "\\swordchapter*{";
 					}
 				}
 				else {
-					buf += "<h3>";
-					tag.setAttribute("pushed", "h3");
+					buf += "\\swordsection*{";
 				}
-				u->titleStack->push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
-				if (!u->titleStack->empty()) {
-					XMLTag tag(u->titleStack->top());
-					if (u->titleStack->size()) u->titleStack->pop();
-					SWBuf pushed = tag.getAttribute("pushed");
-					if (pushed.size()) {
-						buf += (SWBuf)"</" + pushed + ">\n\n";
-					}
-					else {
-						buf += "</h3>\n\n";
-					}
-					++u->consecutiveNewlines;
-					u->supressAdjacentWhitespace = true;
-				}
+				buf += "}\n\n";
+				++u->consecutiveNewlines;
+				u->supressAdjacentWhitespace = true;	
 			}
 		}
 		
 		// <list>
 		else if (!strcmp(tag.getName(), "list")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<ul>\n", buf, u);
+				outText("\\begin{itemize}", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</ul>\n", buf, u);
+				outText("\\end{itemize}", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -513,10 +488,10 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <item>
 		else if (!strcmp(tag.getName(), "item")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("\t<li>", buf, u);
+				outText("\\item ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</li>\n", buf, u);
+				outText("\n", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -524,10 +499,10 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <catchWord> & <rdg> tags (italicize)
 		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<i>", buf, u);
+				outText("\\emph{", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</i>", buf, u);
+				outText("}", buf, u);
 			}
 		}
 
@@ -540,7 +515,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				SWBuf lastText = u->lastSuspendSegment.c_str();
 				u->suspendTextPassThru = (--u->suspendLevel);
 				if (lastText.size()) {
-					scratch.setFormatted("<span class=\"divineName\">%s</span>", lastText.c_str());
+					scratch.setFormatted("\\sworddivinename{%s}", lastText.c_str());
 					outText(scratch.c_str(), buf, u);
 				}               
 			} 
@@ -555,7 +530,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (type == "bold" || type == "b" || type == "x-b") {
-					outText("<b>", buf, u);
+					outText("\\textbold{", buf, u);
 				}
 
 				// there is no officially supported OSIS overline attribute,
@@ -564,37 +539,22 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				// OSIS overline attribute is made available, these should all
 				// eventually be deprecated and never documented that they are supported.
 				else if (type == "ol" || type == "overline" || type == "x-overline") {
-					outText("<span style=\"text-decoration:overline\">", buf, u);
+					outText("\\textoverline{", buf, u);
 				}
 
 				else if (type == "super") {
-					outText("<span class=\"sup\">", buf, u);
+					outText("\\textsuperscript{", buf, u);
 				}
 				else if (type == "sub") {
-					outText("<span class=\"sub\">", buf, u);
+					outText("\\textsubscript{", buf, u);
 				}
 				else {	// all other types
-					outText("<i>", buf, u);
+					outText("\\emph {", buf, u);
 				}
 				u->hiStack->push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
-				SWBuf type = "";
-				if (!u->hiStack->empty()) {
-					XMLTag tag(u->hiStack->top());
-					if (u->hiStack->size()) u->hiStack->pop();
-					type = tag.getAttribute("type");
-					if (!type.length()) type = tag.getAttribute("rend");
-				}
-				if (type == "bold" || type == "b" || type == "x-b") {
-					outText("</b>", buf, u);
-				}
-				else if (  	   type == "ol"
-						|| type == "super"
-						|| type == "sub") {
-					outText("</span>", buf, u);
-				}
-				else outText("</i>", buf, u);
+				outText("}", buf, u);
 			}
 		}
 
@@ -722,14 +682,14 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			else if (type == "majorSection") {
 			}
 			else {
-				buf += tag;
+				buf += "\\\\";;
 			}
 		}
 		else if (!strcmp(tag.getName(), "span")) {
-			buf += tag;
+			buf += "";
 		}
 		else if (!strcmp(tag.getName(), "br")) {
-			buf += tag;
+			buf += "\\";
 		}
 		else if (!strcmp(tag.getName(), "table")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
