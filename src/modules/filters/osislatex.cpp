@@ -34,18 +34,9 @@
 SWORD_NAMESPACE_START
 
 const char *OSISLaTeX::getHeader() const {
-	const static char *header = "\
-		.divineName { font-variant: small-caps; }\n\
-		.wordsOfJesus { color: red; }\n\
-		.transChangeSupplied { font-style: italic; }\n\
-		.small, .sub, .sup { font-size: .83em }\n\
-		.sub             { vertical-align: sub }\n\
-		.sup             { vertical-align: super }\n\
-		.indent1         { margin-left: 10px }\n\
-		.indent2         { margin-left: 20px }\n\
-		.indent3         { margin-left: 30px }\n\
-		.indent4         { margin-left: 40px }\n\
-	";
+// can be used to return static start-up info, like packages to load. Not sure yet if I want to retain it.
+
+	const static char *header = "";
 	return header;
 }
 
@@ -80,9 +71,8 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 			//	show = false;
 			//else {
 				if (!suspendTextPassThru) {
-					buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
+					buf.appendFormatted("\\swordstrong{%s}{%s}",
 							(gh.length()) ? gh.c_str() : "", 
-							URL::encode(val2).c_str(),
 							val2);
 				}
 			//}
@@ -112,10 +102,9 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 				if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 					val2+=2;
 				if (!suspendTextPassThru) {
-					buf.appendFormatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
-							URL::encode(tag.getAttribute("morph")).c_str(),
-							URL::encode(val).c_str(), 
-							val2);
+					buf.appendFormatted("\\swordmorph{%s}",
+							tag.getAttribute("morph")
+							);
 				}
 			} while (++i < count);
 		//}
@@ -249,6 +238,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 
 		// <note> tag
+		
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				SWBuf type = tag.getAttribute("type");
@@ -263,7 +253,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						SWBuf noteName = tag.getAttribute("n");
 						VerseKey *vkey = NULL;
-						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+						// char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 
 						u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
@@ -275,24 +265,19 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
-								ch, 
-								URL::encode(footnoteNumber.c_str()).c_str(), 
-								URL::encode(u->version.c_str()).c_str(), 
-								URL::encode(vkey->getText()).c_str(), 
-								ch,
-								ch, 
-								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+								 
+								footnoteNumber.c_str(), 
+								u->version.c_str(), 
+								vkey->getText(), 
+								(renderNoteNumbers ? noteName.c_str() : ""));
 						}
 						else {
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
-								ch, 
-								URL::encode(footnoteNumber.c_str()).c_str(), 
-								URL::encode(u->version.c_str()).c_str(), 
-								URL::encode(u->key->getText()).c_str(),  
-								ch,
-								ch, 
-								(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+								footnoteNumber.c_str(), 
+								u->version.c_str(), 
+								u->key->getText(),  
+								(renderNoteNumbers ? noteName.c_str() : ""));
 						}
 					}
 				}
@@ -302,6 +287,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				u->suspendTextPassThru = (--u->suspendLevel);
 				u->inXRefNote = false;
 				u->lastSuspendSegment = ""; // fix/work-around for nasb devineName in note bug
+				buf +="}";
 			}
 		}
 
@@ -364,22 +350,22 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 					if(is_scripRef)
 					{
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
-							URL::encode(ref.c_str()).c_str()
+						buf.appendFormatted("\\swordxref{%s}{",
+							ref.c_str()
 //							(work.size()) ? URL::encode(work.c_str()).c_str() : "")
 							);
 					}
 					else
 					{
 						// Dictionary link, or something
-						buf.appendFormatted("<a href=\"sword://%s/%s\">",
-							URL::encode(work.c_str()).c_str(),
-							URL::encode(ref.c_str()).c_str()
+						buf.appendFormatted("\\sworddiclink{%s}{%s}{", // work, entry
+							work.c_str(),
+							ref.c_str()
 							);
 					}
 				}
 				else {
-					outText("</a>", buf, u);
+					outText("}", buf, u);
 				}
 			}
 		}
@@ -389,12 +375,12 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			// start line marker
 			if (tag.getAttribute("sID") || (!tag.isEndTag() && !tag.isEmpty())) {
 				// nested lines plus if the line itself has an x-indent type attribute value
-				outText(SWBuf("<span class=\"line indent").appendFormatted("%d\">", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
+				outText(SWBuf("\\swordindent{").appendFormatted("%d}", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
 				u->lineStack->push(tag.toString());
 			}
 			// end line marker
 			else if (tag.getAttribute("eID") || tag.isEndTag()) {
-				outText("</span>", buf, u);
+				outText("}", buf, u);
 				u->outputNewline(buf);
 				if (u->lineStack->size()) u->lineStack->pop();
 			}
@@ -509,13 +495,14 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// divineName  
 		else if (!strcmp(tag.getName(), "divineName")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\\sworddivinename{";
 				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			else if (tag.isEndTag()) {
 				SWBuf lastText = u->lastSuspendSegment.c_str();
 				u->suspendTextPassThru = (--u->suspendLevel);
 				if (lastText.size()) {
-					scratch.setFormatted("\\sworddivinename{%s}", lastText.c_str());
+					scratch.setFormatted("%s}", lastText.c_str());
 					outText(scratch.c_str(), buf, u);
 				}               
 			} 
@@ -630,14 +617,12 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 				// just do all transChange tags this way for now
 				if ((type == "added") || (type == "supplied"))
-					outText("<span class=\"transChangeSupplied\">", buf, u);
+					outText("\\swordtranschange{supplied}{", buf, u);
 				else if (type == "tenseChange")
-					buf += "*";
+					buf += "\\swordtranschange{tense}{";
 			}
 			else if (tag.isEndTag()) {
-				SWBuf type = u->lastTransChange;
-				if ((type == "added") || (type == "supplied"))
-					outText("</span>", buf, u);
+				outText("}", buf, u);
 			}
 			else {	// empty transChange marker?
 			}
