@@ -662,7 +662,8 @@ public:
 	 * @param render for internal use
 	 * @return result buffer
 	 */
-	SWBuf renderText(const char *buf = 0, int len = -1, bool render = true);
+	SWBuf renderText();
+	SWBuf renderText(const char *buf, int len = -1, bool render = true) const;
 	SWDEPRECATED const char *RenderText(const char *buf = 0, int len = -1, bool render = true) { return renderText(buf, len, render); }
 
 	/** Produces any header data which might be useful which is associated with the

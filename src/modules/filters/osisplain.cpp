@@ -25,6 +25,8 @@
 #include <ctype.h>
 #include <versekey.h>
 #include <stringmgr.h>
+#include <utilxml.h>
+#include <swmodule.h>
 
 SWORD_NAMESPACE_START
 
@@ -168,6 +170,12 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					buf.append(" [");
 				}
 				else	u->suspendTextPassThru = true;
+				if (u) {
+					XMLTag tag = token;
+					SWBuf swordFootnote = tag.getAttribute("swordFootnote");
+					SWBuf footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
+					buf.append(u->module->renderText(footnoteBody));
+				}
 			}
 		else if (!strncmp(token, "/note", 5)) {
 			if (!u->suspendTextPassThru)

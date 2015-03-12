@@ -901,14 +901,33 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::renderText 	- calls all renderfilters on current text
- *
- * ENT:	buf	- buffer to Render instead of current module position
+ * SWModule::renderText 	- calls all renderfilters on current module
+ *				position
  *
  * RET: this module's text at current key location massaged by renderText filters
  */
+SWBuf SWModule::renderText() {
+	return renderText((const char *)0);
+}
 
- SWBuf SWModule::renderText(const char *buf, int len, bool render) {
+/******************************************************************************
+ * SWModule::renderText 	- calls all renderfilters on provided text
+ *				or current module position provided text null
+ *
+ * ENT:	buf	- buffer to render
+ *
+ * RET: this module's text at current key location massaged by renderText filters
+ *
+ * NOTES: This method is only truly const if called with a provided text; using
+ * module's current position may produce a new entry attributes map which
+ * logically violates the const semantic, which is why the above method
+ * which takes no params is not const, i.e., don't call this method with
+ * null as text param, but instead use non-const method above.  The public
+ * interface for this method expects a value for the text param.  We use it
+ * internally sometimes calling with null to save duplication of code.
+ */
+
+SWBuf SWModule::renderText(const char *buf, int len, bool render) const {
 	bool savePEA = isProcessEntryAttributes();
 	if (!buf) {
 		entryAttributes.clear();
@@ -928,7 +947,7 @@ const char *SWModule::getRenderHeader() const {
 	if (tmpbuf) {
 		unsigned long size = (len < 0) ? ((getEntrySize()<0) ? strlen(tmpbuf) : getEntrySize()) : len;
 		if (size > 0) {
-			key = (SWKey *)*this;
+			key = this->getKey();
 
 			optionFilter(tmpbuf, key);
 	
