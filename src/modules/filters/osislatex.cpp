@@ -232,8 +232,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					outText(val, buf, u);
 				}
 
-				/*if (endTag)
-					buf += "}";*/
+				
 			}
 		}
 
@@ -251,6 +250,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+						SWBuf footnoteBody = u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
 						SWBuf noteName = tag.getAttribute("n");
 						VerseKey *vkey = NULL;
 						// char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
@@ -265,19 +265,21 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s",
 								 
 								footnoteNumber.c_str(), 
 								u->version.c_str(), 
 								vkey->getText(), 
-								(renderNoteNumbers ? noteName.c_str() : ""));
+								(renderNoteNumbers ? noteName.c_str() : ""),
+								u->module->renderText(footnoteBody).c_str());
 						}
 						else {
-							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s",
 								footnoteNumber.c_str(), 
 								u->version.c_str(), 
 								u->key->getText(),  
-								(renderNoteNumbers ? noteName.c_str() : ""));
+								(renderNoteNumbers ? noteName.c_str() : ""),
+								u->module->renderText(footnoteBody).c_str());
 						}
 					}
 				}
@@ -286,7 +288,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = (--u->suspendLevel);
 				u->inXRefNote = false;
-				u->lastSuspendSegment = ""; // fix/work-around for nasb devineName in note bug
+				u->lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
 				buf +="}";
 			}
 		}
