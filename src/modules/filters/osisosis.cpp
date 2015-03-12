@@ -58,39 +58,28 @@ char OSISOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	char status = SWBasicFilter::processText(text, key, module);
 	VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		SWBuf ref = "";
 		if (vkey->getVerse()) {
-			ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
-		}
+			VerseKey *tmp = (VerseKey *)vkey->clone();
+			*tmp = *vkey;
+			tmp->setAutoNormalize(false);
+			tmp->setIntros(true);
 
-		if (ref.length() > 0) {
-
-			text = ref + text;
-
-			if (vkey->getVerse()) {
-				VerseKey *tmp = (VerseKey *)vkey->clone();
-				*tmp = *vkey;
-				tmp->setAutoNormalize(false);
-				tmp->setIntros(true);
-
-				text += "</verse>";
-
+			*tmp = MAXVERSE;
+			if (*vkey == *tmp) {
+				tmp->setVerse(0);
+//				sprintf(ref, "\t</div>");
+//				pushString(&to, ref);
+				*tmp = MAXCHAPTER;
 				*tmp = MAXVERSE;
 				if (*vkey == *tmp) {
+					tmp->setChapter(0);
 					tmp->setVerse(0);
 //					sprintf(ref, "\t</div>");
 //					pushString(&to, ref);
-					*tmp = MAXCHAPTER;
-					*tmp = MAXVERSE;
-					if (*vkey == *tmp) {
-						tmp->setChapter(0);
-						tmp->setVerse(0);
-//						sprintf(ref, "\t</div>");
-//						pushString(&to, ref);
-					}
 				}
-                                delete tmp;
 			}
+                        delete tmp;
+		}
 
 //
 //			else if (vkey->Chapter()) {
@@ -98,7 +87,7 @@ char OSISOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 //			}
 //			else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
 //
-		}
+		
 	}
 	return status;
 }
@@ -149,8 +138,6 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				SWBuf type = tag.getAttribute("type");
-                                SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-                                SWBuf footnoteBody = u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
 				                                                                                                
 				bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");	// the latter is deprecated
 				if (strongsMarkup) {
