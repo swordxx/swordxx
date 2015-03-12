@@ -314,7 +314,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if (tag.isEndTag()) {
 				u->suspendTextPassThru = (--u->suspendLevel);
 				u->inXRefNote = false;
-				u->lastSuspendSegment = ""; // fix/work-around for nasb devineName in note bug
+				u->lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
 			}
 		}
 
