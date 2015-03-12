@@ -1,4 +1,5 @@
 #!/bin/sh
+# Lexicon / Dictionary regularization tests to make sure we pad and lookup correctly
 
 rm -rf ldr12n/
 mkdir -p ldr12n/mods.d
