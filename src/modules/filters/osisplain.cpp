@@ -170,7 +170,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					buf.append(" [");
 				}
 				else	u->suspendTextPassThru = true;
-				if (u) {
+				if (u->module) {
 					XMLTag tag = token;
 					SWBuf swordFootnote = tag.getAttribute("swordFootnote");
 					SWBuf footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
