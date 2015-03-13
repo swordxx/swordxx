@@ -47,6 +47,7 @@ protected:
 		bool inXRefNote;
 		bool BiblicalText;
 		int suspendLevel;
+		bool firstCell;
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
 		TagStack *quoteStack;

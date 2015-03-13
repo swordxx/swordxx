@@ -153,6 +153,7 @@ OSISLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
 	wordsOfChristStart = "\\swordwoj{";
 	wordsOfChristEnd   = "}";
 	consecutiveNewlines = 0;
+	firstCell = false;
 }
 
 OSISLaTeX::MyUserData::~MyUserData() {
@@ -171,6 +172,7 @@ void OSISLaTeX::MyUserData::outputNewline(SWBuf &buf) {
 bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
 	SWBuf scratch;
+	
 	bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
 	if (!sub) {
   // manually process if it wasn't a simple substitution
@@ -650,7 +652,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				filepath += src;
 
 				// images become clickable, if the UI supports showImage.
-				outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
+				outText("\\figure{", buf, u);
 				outText(URL::encode(filepath.c_str()).c_str(), buf, u);
 				outText("&module=", buf, u);
 				outText(URL::encode(u->version.c_str()).c_str(), buf, u);
@@ -687,10 +689,10 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (!strcmp(tag.getName(), "table")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<table><tbody>\n";
+				buf += "\n\\begin{tabular}\n";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</tbody></table>\n";
+				buf += "\n\\end{tabular}\n";
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -698,19 +700,26 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (!strcmp(tag.getName(), "row")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\t<tr>";
+				buf += "";
+				u->firstCell = true;
 			}
 			else if (tag.isEndTag()) {
-				buf += "</tr>\n";
+				buf += "//\n";
+				u->firstCell = false;
 			}
 			
 		}
 		else if (!strcmp(tag.getName(), "cell")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<td>";
+				if (u->firstCell == false) {
+					buf += " & ";
+				}
+				else {
+					u->firstCell = false;
+				}
 			}
 			else if (tag.isEndTag()) {
-				buf += "</td>";
+				buf += "";
 			}
 		}
 		else {
