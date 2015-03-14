@@ -178,9 +178,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 					outText(scratch.c_str(), buf, u);
 				}
 				if ((attrib = tag.getAttribute("gloss"))) {
-					val = strchr(attrib, ':');
-					val = (val) ? (val + 1) : attrib;
-					scratch.setFormatted(" {\\fs15 <%s>}", val);
+					scratch.setFormatted(" {\\fs15 <%s>}", attrib);
 					outText(scratch.c_str(), buf, u);
 				}
 				if ((attrib = tag.getAttribute("lemma"))) {

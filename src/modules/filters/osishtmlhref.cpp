@@ -201,10 +201,8 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					
 					outText("<ruby><rb>", buf, u);
 					outText(lastText, buf, u);
-					val = strchr(attrib, ':');
-					val = (val) ? (val + 1) : attrib;
 					outText("</rb><rp>(</rp><rt>", buf, u);
-					outText(val, buf, u);
+					outText(attrib, buf, u);
 					outText("</rt><rp>)</rp></ruby>", buf, u);
 				}
 				if (!morphFirst) {

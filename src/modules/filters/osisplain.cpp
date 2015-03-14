@@ -107,10 +107,8 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				buf.append('>');
 			}
 			if ((attrib = u->tag.getAttribute("gloss"))) {
-				val = strchr(attrib, ':');
-				val = (val) ? (val + 1) : attrib;
 				buf.append(" <");
-				buf.append(val);
+				buf.append(attrib);
 				buf.append('>');
 			}
 			if ((attrib = u->tag.getAttribute("lemma"))) {

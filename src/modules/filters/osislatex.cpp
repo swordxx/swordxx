@@ -214,10 +214,8 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					
 					outText("\\ruby{", buf, u);
 					outText(lastText, buf, u);
-					val = strchr(attrib, ':');
-					val = (val) ? (val + 1) : attrib;
 					outText("}{", buf, u);
-					outText(val, buf, u);
+					outText(attrib, buf, u);
 					outText("}", buf, u);
 				}
 				if (!morphFirst) {
