@@ -47,9 +47,11 @@ protected:
 		bool inXRefNote;
 		bool BiblicalText;
 		int suspendLevel;
-		bool firstCell;
+		bool firstCell; // for tables, indicates whether a cell is the first one in a row
 		SWBuf wordsOfChristStart;
 		SWBuf wordsOfChristEnd;
+		SWBuf divLevel;  // divLevel "module", "testament, "bookgroup", "book", "majorsection", "section", "paragraph" , ignore others.
+		
 		TagStack *quoteStack;
 		TagStack *hiStack;
 		TagStack *titleStack;

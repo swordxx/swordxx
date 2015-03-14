@@ -150,6 +150,7 @@ class OSISLaTeX::TagStack : public std::stack<SWBuf> {
 OSISLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()), lineStack(new TagStack()) {
 	inXRefNote    = false;
 	suspendLevel = 0;
+	divLevel = "module";
 	wordsOfChristStart = "\\swordwoj{";
 	wordsOfChristEnd   = "}";
 	consecutiveNewlines = 0;
@@ -165,7 +166,7 @@ OSISLaTeX::MyUserData::~MyUserData() {
 
 void OSISLaTeX::MyUserData::outputNewline(SWBuf &buf) {
 	if (++consecutiveNewlines <= 2) {
-		outText("////", buf, this);
+		outText("//\n", buf, this);
 		supressAdjacentWhitespace = true;
 	}
 }
@@ -386,7 +387,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			// start line marker
 			if (tag.getAttribute("sID") || (!tag.isEndTag() && !tag.isEmpty())) {
 				// nested lines plus if the line itself has an x-indent type attribute value
-				outText(SWBuf("\\swordindent{").appendFormatted("%d}", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
+				outText("\\swordpoetryline{", buf, u);
 				u->lineStack->push(tag.toString());
 			}
 			// end line marker
@@ -438,33 +439,24 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 
 		// <title>
+		
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-				if (vkey && !vkey->getVerse()) {
-					if (!vkey->getChapter()) {
-						if (!vkey->getBook()) {
-							if (!vkey->getTestament()) {
-								buf += "\\swordmodule*{";
-							}
-							else {
-								buf += "\\swordtestament*{";
-							}
-						}
-						else {
-							buf += "\\swordbook*{";
-						}
-					}
-					else {
-						buf += "\\swordchapter*{";
-					}
-				}
-				else {
-					buf += "\\swordsection*{";
-				}
+				const char *tmp = tag.getAttribute("type");
+				bool hasType    = tmp;
+				SWBuf type      = tmp;
+				
+				outText("\n\\swordtitle{", buf, u);
+				outText(u->divLevel, buf, u);
+				outText("}{", buf, u);
+				
+				if (hasType) outText(type, buf, u);
+				else outText("", buf, u);
+				
+				outText("}{", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "}\n\n";
+				buf += "}";
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;	
 			}
@@ -473,10 +465,10 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <list>
 		else if (!strcmp(tag.getName(), "list")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("\\begin{itemize}", buf, u);
+				outText("\n\\begin{itemize}", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("\\end{itemize}", buf, u);
+				outText("\n\\end{itemize}", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -485,10 +477,9 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <item>
 		else if (!strcmp(tag.getName(), "item")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("\\item ", buf, u);
+				outText("\n\\item ", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("\n", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -651,34 +642,44 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 				filepath += src;
 
-				// images become clickable, if the UI supports showImage.
 				outText("\\figure{", buf, u);
-				outText(URL::encode(filepath.c_str()).c_str(), buf, u);
-				outText("&module=", buf, u);
-				outText(URL::encode(u->version.c_str()).c_str(), buf, u);
-				outText("\">", buf, u);
-
-				outText("<img src=\"file:", buf, u);
-				outText(filepath, buf, u);
-				outText("\" border=\"0\" />", buf, u);
-
-				outText("</a>", buf, u);
+				outText("\\includegraphics{", buf, u);
+				outText(filepath.c_str(), buf, u);
+				outText("}}", buf, u);
+				
 			}
 		}
 
 		// ok to leave these in
 		else if (!strcmp(tag.getName(), "div")) {
 			SWBuf type = tag.getAttribute("type");
-			if (type == "bookGroup") {
+			if (type == "module") {
+				u->divLevel = type;
+				buf +="\n";
+			}			
+			else if (type == "testament") {
+				u->divLevel = type;
+				buf +="\n";
+			}
+			else if (type == "bookGroup") {
+				u->divLevel = type;
+				buf +="\n";
 			}
 			else if (type == "book") {
-			}
-			else if (type == "section") {
+				u->divLevel = type;
+				buf +="\n";
 			}
 			else if (type == "majorSection") {
+				u->divLevel = type;
+				buf +="\n";
 			}
-			else {
-				buf += "\\\\";;
+			else if (type == "section") {
+				u->divLevel = type;
+				buf +="\n";
+			}
+			else if (type == "paragraph") {
+				u->divLevel = type;
+				buf +="\n";
 			}
 		}
 		else if (!strcmp(tag.getName(), "span")) {
@@ -689,10 +690,10 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (!strcmp(tag.getName(), "table")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\n\\begin{tabular}\n";
+				buf += "\n\\begin{tabular}";
 			}
 			else if (tag.isEndTag()) {
-				buf += "\n\\end{tabular}\n";
+				buf += "\n\\end{tabular}";
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -700,11 +701,11 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (!strcmp(tag.getName(), "row")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "";
+				buf += "\n";
 				u->firstCell = true;
 			}
 			else if (tag.isEndTag()) {
-				buf += "//\n";
+				buf += "//";
 				u->firstCell = false;
 			}
 			
