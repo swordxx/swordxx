@@ -100,17 +100,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
 			}
 			else if (tag.isEndTag()) {
-				SWBuf rend = u->lastHi;
-				if (rend == "italic" || rend == "ital")
-					buf += "}";
-				else if (rend == "bold")
-					buf += "}";
-				else if (rend == "super" || rend == "sup")
-					buf += "}";
-				else if (rend == "sub")
-					buf += "}";
-				else if (rend == "overline")
-					buf += "}";
+				buf += "}";
 			}
 		}
 
@@ -119,9 +109,9 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf n = tag.getAttribute("n");				
 				if (n != "") {
-					buf += "<b>";
+					buf += "\\teiEntryFree{";
 					buf += n;
-					buf += "</b>";
+					buf += "}";
 				}
 			}
 		}
@@ -131,9 +121,9 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf n = tag.getAttribute("n");
 				if (n != "") {
-					buf += "<br /><b>";
+					buf += "\n\\teiSense{";
 					buf += n;
-					buf += "</b>";
+					buf += "}";
 				}
 			}
 		}
@@ -162,30 +152,32 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				 !strcmp(tag.getName(), "pron") /*||
 				 !strcmp(tag.getName(), "def")*/) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<i>";
+				buf += "\\tei";
+				buf += tag.getName();
+				buf += "{";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</i>";
+				buf += "}";
 			}
 		}
 
 		// <tr>
 		else if (!strcmp(tag.getName(), "tr")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<i>";
+				buf += "\\teitr";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</i>";
+				buf += "}";
 			}
 		}
 		
 		// orth
 		else if (!strcmp(tag.getName(), "orth")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<b>";
+				buf += "\\teiorth{";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</b>";
+				buf += "}";
 			}
 		}
 
@@ -250,7 +242,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			}
 			else {
 				buf += u->lastTextNode.c_str();
-				buf += "</a>";
+				buf += "}";
 				
 				u->suspendTextPassThru = false;
 			}
