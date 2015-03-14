@@ -81,7 +81,9 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 //					buf.appendFormatted(" %s", val);
 				}
 				if ((attrib = tag.getAttribute("gloss"))) {
-					buf.appendFormatted(" %s", attrib);
+					val = strchr(attrib, ':');
+					val = (val) ? (val + 1) : attrib;
+//					buf.appendFormatted(" %s", val);
 				}
 				if ((attrib = tag.getAttribute("lemma"))) {
 					int count = tag.getAttributePartCount("lemma", ' ');
