@@ -260,10 +260,10 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				SWBuf noteName = tag.getAttribute("n");
 				
 				buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
-					URL::encode(footnoteNumber.c_str()).c_str(), 
-					URL::encode(u->version.c_str()).c_str(),
-					URL::encode(u->key->getText()).c_str(), 
-					(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+					footnoteNumber.c_str(), 
+					u->version.c_str(),
+					u->key->getText(), 
+					renderNoteNumbers ? noteName.c_str() : ""));
 				
 				u->suspendTextPassThru = false;
 			}
