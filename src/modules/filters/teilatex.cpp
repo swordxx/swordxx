@@ -258,13 +258,19 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			if (tag.isEndTag()) {
 				SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 				SWBuf noteName = tag.getAttribute("n");
-				
-				buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
+				SWBuf footnoteBody = "";
+				if (u->module){
+					footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
+				}
+										
+				buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
 					footnoteNumber.c_str(), 
 					u->version.c_str(),
 					u->key->getText(), 
 					renderNoteNumbers ? noteName.c_str() : ""));
-				
+					if (u->module) {
+						buf += u->module->renderText(footnoteBody).c_str();
+					}			
 				u->suspendTextPassThru = false;
 			}
 		}
