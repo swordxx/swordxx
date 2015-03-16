@@ -69,14 +69,14 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
 		if (!strcmp(tag.getName(), "p")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "<!P><br />";
+				buf += "";
 			}
 			else if (tag.isEndTag()) {	// end tag
-				buf += "<!/P><br />";
+				buf += "//\n";
 				//userData->supressAdjacentWhitespace = true;
 			}
 			else {					// empty paragraph break marker
-				buf += "<!P><br />";
+				buf += "//\n";
 				//userData->supressAdjacentWhitespace = true;
 			}
 		}
@@ -221,16 +221,16 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
 					if(was_osisref)
 					{
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
-							(ref) ? URL::encode(ref.c_str()).c_str() : "", 
-							(work.size()) ? URL::encode(work.c_str()).c_str() : "");
+						buf.appendFormatted("\\swordref{%s}{%s}{",
+							(ref) ? ref.c_str() : "", 
+							(work.size()) ? work.c_str() : "");
 					}
 					else
 					{
 						// Dictionary link, or something
-						buf.appendFormatted("<a href=\"sword://%s/%s\">",
-							(work.size()) ? URL::encode(work.c_str()).c_str() : u->version.c_str(),
-							(ref) ? URL::encode(ref.c_str()).c_str() : ""							
+						buf.appendFormatted("\\sworddictref{%s}{%s}{",
+							(work.size()) work.c_str() : u->version.c_str(),
+							(ref) ? ref.c_str() : ""							
 							);
 					}
 				}
