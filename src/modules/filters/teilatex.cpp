@@ -223,13 +223,13 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 					{
 						buf.appendFormatted("\\swordref{%s}{%s}{",
 							(ref) ? ref.c_str() : "", 
-							(work.size()) ? work.c_str() : "");
+							(work.size()) ? work.c_str() : "" );
 					}
 					else
 					{
 						// Dictionary link, or something
 						buf.appendFormatted("\\sworddictref{%s}{%s}{",
-							(work.size()) work.c_str() : u->version.c_str(),
+							(work.size()) ? work.c_str() : u->version.c_str(),
 							(ref) ? ref.c_str() : ""							
 							);
 					}
@@ -267,7 +267,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 					footnoteNumber.c_str(), 
 					u->version.c_str(),
 					u->key->getText(), 
-					renderNoteNumbers ? noteName.c_str() : ""));
+					renderNoteNumbers ? noteName.c_str() : "");
 					if (u->module) {
 						buf += u->module->renderText(footnoteBody).c_str();
 					}			
