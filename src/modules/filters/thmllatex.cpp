@@ -163,8 +163,8 @@ ThMLLaTeX::ThMLLaTeX() {
 	addAllowedEscapeString("oslash"); // "ø"
 
 	setTokenCaseSensitive(true);
-//	addTokenSubstitute("scripture", "<i> ");
-	addTokenSubstitute("/scripture", "</i> ");
+	addTokenSubstitute("scripture", " \\swordquote{ ");
+	addTokenSubstitute("/scripture", "}");
 
 	renderNoteNumbers = false;
 }
@@ -194,16 +194,22 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						value.c_str());
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
-				char ch = *value;
-				value<<1;
-				buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
+				if (!tag.isEndTag()) {
+				        char ch = *value;
+				        value<<1;
+				        buf.appendFormatted("\\swordstrong[%s]{%s}",
 						    ((ch == 'H') ? "Hebrew" : "Greek"),
-						    URL::encode(value.c_str()).c_str());
-				buf += (value.length()) ? value.c_str() : "";
-				buf += "</a>&gt;</em></small>";
-			}
+						    value.c_str());
+                                        }
+                                else { 	buf += "}"; }
+                        }
+				
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
-				buf += (tag.isEndTag() ? "</b>" : "<b>");
+				if (!tag.isEndTag()) {
+				        buf.appendFormatted("\\sworddict{%s}",
+						    value.c_str());
+                                }
+                                else { buf += "}"; }
 			}
 				
 		}

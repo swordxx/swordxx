@@ -132,7 +132,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		else if (!strcmp(tag.getName(), "div")) {
 
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<!P>";
+				buf += "";
 			}
 			else if (tag.isEndTag()) {
 			}
@@ -140,7 +140,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
 		// <lb.../>
 		else if (!strcmp(tag.getName(), "lb")) {
-			buf += "<br />";
+			buf += "//\n";
 		}
 
 		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def>
@@ -149,8 +149,14 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				 !strcmp(tag.getName(), "case") || 
 				 !strcmp(tag.getName(), "gram") || 
 				 !strcmp(tag.getName(), "number") || 
-				 !strcmp(tag.getName(), "pron") /*||
-				 !strcmp(tag.getName(), "def")*/) {
+				 !strcmp(tag.getName(), "pron") ||
+				 !strcmp(tag.getName(), "tr") || 
+				 !strcmp(tag.getName(), "orth") ||
+				 !strcmp(tag.getName(), "etym") || 
+				 !strcmp(tag.getName(), "usg") ||
+				 
+				 
+				 !strcmp(tag.getName(), "def")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				buf += "\\tei";
 				buf += tag.getName();
@@ -161,31 +167,6 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			}
 		}
 
-		// <tr>
-		else if (!strcmp(tag.getName(), "tr")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\\teitr";
-			}
-			else if (tag.isEndTag()) {
-				buf += "}";
-			}
-		}
-		
-		// orth
-		else if (!strcmp(tag.getName(), "orth")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\\teiorth{";
-			}
-			else if (tag.isEndTag()) {
-				buf += "}";
-			}
-		}
-
-		// <etym>, <usg>
-		else if (!strcmp(tag.getName(), "etym") || 
-				 !strcmp(tag.getName(), "usg")) {
-			// do nothing here
-		}
 		else if (!strcmp(tag.getName(), "ref")) {
 			if (!tag.isEndTag()) {
 				u->suspendTextPassThru = true;
