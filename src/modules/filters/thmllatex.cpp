@@ -182,22 +182,20 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			SWBuf value = tag.getAttribute("value");
 			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
 				if(value.length())
-					buf.appendFormatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\" class=\"morph\">%s</a>)</em></small>", 
-						URL::encode(value.c_str()).c_str(),
-						value.c_str());
+					buf.appendFormatted("\\swordmorph[Greek]{%s}", 
+						value.c_str();
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "lemma")) { //&gt;
 				if(value.length())
 					// empty "type=" is deliberate.
-					buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>", 
-						URL::encode(value.c_str()).c_str(),
+					buf.appendFormatted("\\swordmorph[lemma]{%s}", 
 						value.c_str());
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
 				if (!tag.isEndTag()) {
 				        char ch = *value;
 				        value<<1;
-				        buf.appendFormatted("\\swordstrong[%s]{%s}",
+				        buf.appendFormatted("\\swordstrong[%s]{%s}{",
 						    ((ch == 'H') ? "Hebrew" : "Greek"),
 						    value.c_str());
                                         }
@@ -206,7 +204,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
 				if (!tag.isEndTag()) {
-				        buf.appendFormatted("\\sworddict{%s}",
+				        buf.appendFormatted("\\sworddict{%s}{",
 						    value.c_str());
                                 }
                                 else { buf += "}"; }
@@ -229,25 +227,21 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>", 
+						buf.appendFormatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{", 
 							ch, 
-							URL::encode(footnoteNumber.c_str()).c_str(), 
-							URL::encode(u->version.c_str()).c_str(), 
-							URL::encode(vkey->getText()).c_str(), 
-							ch,
-							ch, 
-							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							footnoteNumber.c_str(), 
+							u->version.c_str(), 
+							vkey->getText(),  
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 					else {
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>", 
 							ch, 
-							URL::encode(footnoteNumber.c_str()).c_str(), 
-							URL::encode(u->version.c_str()).c_str(), 
-							URL::encode(u->key->getText()).c_str(),  
-							ch,
-							ch, 
-							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+							footnoteNumber.c_str(), 
+							u->version.c_str(), 
+							u->key->getText(),   
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 					u->suspendTextPassThru = true;
 				}
@@ -257,7 +251,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 		else if (!strcmp(tag.getName(), "scripture")) {
-			buf += (tag.isEndTag() ? "</i>" : "<i>");
+			buf += (tag.isEndTag() ? "\\swordquote" : "}");
 		}
 		// <scripRef> tag
 		else if (!strcmp(tag.getName(), "scripRef")) {
@@ -273,11 +267,11 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						refList = u->lastTextNode;
 					SWBuf version = tag.getAttribute("version");
 					
-					buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
-						(refList.length()) ? URL::encode(refList.c_str()).c_str() : "", 
-						(version.length()) ? URL::encode(version.c_str()).c_str() : "");
+					buf.appendFormatted("\\swordxref{%s}{%s}{",
+						(refList.length()) ? refList.c_str() : "", 
+						(version.length()) ? version.c_str() : "");
 					buf += u->lastTextNode.c_str();
-					buf += "</a>";
+					buf += "}";
 				}
 				else {
 					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
@@ -291,11 +285,11 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",
-							URL::encode(footnoteNumber.c_str()).c_str(), 
-							URL::encode(u->version.c_str()).c_str(),
-							URL::encode(vkey->getText()).c_str(), 
-							(renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
+						buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}",
+							footnoteNumber.c_str(), 
+							u->version.c_str(),
+							vkey->getText(), 
+							(renderNoteNumbers ? noteName.c_str() : ""));
 					}
 				}
 
