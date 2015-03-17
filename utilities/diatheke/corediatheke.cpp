@@ -514,13 +514,15 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					if (outputformat == FMT_LATEX) {
 						VerseKey *outkey = new VerseKey(target->getKey());
 						if (outkey->getVerse() == 1) {
-							*output << "\n\\swordchapter{"
-							        << outkey->getChapter()
-							        << "}";
+							*output << "\n\\swordchapter{" 
+								<< outkey->getOSISRef() << "}{"
+								<< outkey->getText() << "}{" 
+								<< outkey->getChapter() << "}";
 						}
 						*output << "\\swordverse{"
-							<< outkey->getVerse()
-							<< "} ";
+							<< outkey->getOSISRef() << "}{"
+							<< outkey->getText() << "}{" 
+							<< outkey->getVerse() << "} ";
 						
 						}
 					else { 						
@@ -577,10 +579,16 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				if (outputformat == FMT_LATEX) {
 					VerseKey *outkey = new VerseKey(target->getKey());
 					if (outkey->getVerse() == 1) {
-						*output << "\n\\swordchapter{"  << outkey->getChapter() << "}";
+						*output << "\n\\swordchapter{" 
+							<< outkey->getOSISRef() << "}{" 
+							<< outkey->getText() << "}{" 
+							<< outkey->getChapter() << "}";
 					}
 					
-					*output << "\\swordverse{" << outkey->getVerse() << "} ";
+					*output << "\\swordverse{"
+						<< outkey->getOSISRef() << "}{" 
+						<< outkey->getText() << "}{" 
+						<< outkey->getVerse() << "} ";
 					
 				}	
 				else { 						
