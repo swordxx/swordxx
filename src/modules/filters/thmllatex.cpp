@@ -183,7 +183,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
 				if(value.length())
 					buf.appendFormatted("\\swordmorph[Greek]{%s}", 
-						value.c_str();
+						value.c_str());
 			}
 			else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "lemma")) { //&gt;
 				if(value.length())
