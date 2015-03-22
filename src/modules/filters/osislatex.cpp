@@ -275,9 +275,9 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								u->version.c_str(), 
 								vkey->getText(), 
 								(renderNoteNumbers ? noteName.c_str() : ""));
-								if (u->module) {
-									buf += u->module->renderText(footnoteBody).c_str();
-								}
+							if (u->module) {
+								buf += u->module->renderText(footnoteBody).c_str();
+							}
 						}
 						else {
 							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
@@ -285,9 +285,9 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								u->version.c_str(), 
 								u->key->getText(),  
 								(renderNoteNumbers ? noteName.c_str() : ""));
-								if (u->module) {
-									buf += u->module->renderText(footnoteBody).c_str();
-								}
+							if (u->module) {
+								buf += u->module->renderText(footnoteBody).c_str();
+							}
 						}
 					}
 				}
