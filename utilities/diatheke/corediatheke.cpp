@@ -254,6 +254,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	manager.setGlobalOption("Transliterated Forms", (optionfilters & OP_XLIT) ? "On": "Off");
 	manager.setGlobalOption("Enumerations", (optionfilters & OP_ENUM) ? "On": "Off");
 	manager.setGlobalOption("Morpheme Segmentation", (optionfilters & OP_MORPHSEG) ? "On": "Off");
+	manager.setGlobalOption("Introductions", (optionfilters & OP_INTROS) ? "On": "Off");
 
 	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");
 	
@@ -352,8 +353,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			*output << ";}}";
 		}
 		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
-			*output << "<meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" << locale << "\" xml:lang=\"" << locale << "\"/>";
+			*output << "<html><head><meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
+				   " lang=\"" << locale << "\" xml:lang=\"" << locale << "\"/>"
+				   "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body>";
+				   
 		}
 		else if (outputformat == FMT_LATEX) {
 			*output << "\\documentclass{bibletext}\n"
@@ -500,12 +503,16 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 
 		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
-			*output << "<meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n";
+			*output << "<html><head><meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
+				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n"
+				   "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body>";
+				   
 		}
 
 		for (i = 0; i < listkey.getCount() && maxverses; i++) {
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
+			element->setIntros(true);			
+			
 			if (element && element->isBoundSet()) {
 			  target->setKey(element->getLowerBound());
 				*parser = element->getUpperBound();
@@ -513,6 +520,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 					if (outputformat == FMT_LATEX) {
 						VerseKey *outkey = new VerseKey(target->getKey());
+						
+						
 						if (outkey->getVerse() == 1) {
 							*output << "\n\\swordchapter{" 
 								<< outkey->getOSISRef() << "}{"
@@ -523,6 +532,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 							<< outkey->getOSISRef() << "}{"
 							<< outkey->getText() << "}{" 
 							<< outkey->getVerse() << "} ";
+						delete outkey;
 						
 						}
 					else { 						
@@ -655,7 +665,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			*output << "}";
 		}
 		else if (outputformat == FMT_LATEX) {
-			*output << "\\end{document}\n";
+			*output << "\\end{document}\n";			
+		}
+		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
+			*output << "</body></html>\n";
 		}
 	}
 	delete parser;

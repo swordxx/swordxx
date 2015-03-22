@@ -56,7 +56,7 @@ void printsyntax() {
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents), p (Arabic Vowels)\n");
 	fprintf (stderr, "  l (Lemmas), s (Scripture Crossrefs), r (Arabic Shaping),\n");
 	fprintf (stderr, "  b (Bi-Directional Reordering), w (Red Words of Christ),\n");
-	fprintf (stderr, "  g (Glosses/Ruby), e (Word Enumerations),\n");
+	fprintf (stderr, "  g (Glosses/Ruby), e (Word Enumerations), i (Intros)\n");
 	fprintf (stderr, "  x (Encoded Transliterations), t (Algorithmic Transliterations via ICU),\n");
 	fprintf (stderr, "  M (morpheme segmentation)\n");
 
@@ -179,6 +179,8 @@ int main(int argc, char **argv)
 					optionfilters |= OP_XLIT;
 				if (strchr(argv[i], 'e'))
 					optionfilters |= OP_ENUM;
+				if (strchr(argv[i], 'i'))
+					optionfilters |= OP_INTROS;
 				if (strchr(argv[i], 't'))
 					optionfilters |= OP_TRANSLITERATOR;
 				if (strchr(argv[i], 'M'))

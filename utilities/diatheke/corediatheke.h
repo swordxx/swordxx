@@ -59,6 +59,7 @@
 #define OP_XLIT (1<<16)
 #define OP_ENUM (1<<17)
 #define OP_MORPHSEG (1<<18)
+#define OP_INTROS (1<<19)
 
 #define ST_NONE 0
 #define ST_REGEX 1     //  0
