@@ -250,7 +250,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					u->suspendTextPassThru = true;
 					if (u->module) {
                                                 buf += u->module->renderText(footnoteBody).c_str();
-                                                }
+                                        }
 				}
 			}
 			if (tag.isEndTag()) {
