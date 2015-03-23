@@ -36,6 +36,32 @@ const char *TEIXHTML::getHeader() const {
 	return header;
 }
 
+const char *TEIXHTML::getHeader() const {
+		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def> <tr> <orth> <etym> <usg>
+	const static char *header = "\n\
+		.entryFree, .form, .etym, .def, .usg, .quote{display:block;}\n\
+		.pron, .pos, .oVar, .ref, {display:inline}\n\
+		.entryFree {text-transform:small-capitals}\n\
+		[type=headword] {font-weight:bold;font-variant:small-caps;text-decoration:underline;}\n\
+		[type=derivative] {}\n\
+		.entryFree>pron:before {content: \"Pronounciation:\";display:block;font-weight:bold;}\n\
+		.etym:before {content:\"Etymology:\"; display:block; font-weight:bold;}\n\
+		.usg:before {content:\"Usage:\"; display:block; font-weight:bold;}\n\
+		.def:before {content:\"Definition:\" display:block; font-weight:bold;}\n\
+		.pron:before {content:\"Pronounciation:\" ;display:block;font-size:small;}\n\
+		.usg:before {content:\"Usage:\"; display:block; font-weight:bold;}\n\
+		.quote {background-color:#cfcfdf;padding:0.3em;margin:0.5em;border-width:1px; border-style:solid;}\n\
+		.cit:before {content:\"quote:\" ;display:block; margin-top:0.5em;font-size:small}\n\
+		.cit {align:center}\n\
+		.cit>.persName:before{content:\"by: \"}\n\
+		.number {font-style:bold;}\n\
+		.def {font-style:bold;}\n\
+		";
+	return header;
+}
+
+
+
 TEIXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	BiblicalText = false;
 	if (module) {
@@ -123,9 +149,9 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf n = tag.getAttribute("n");				
 				if (n != "") {
-					buf += "<b>";
+					buf += "<span class=\"entryFree\">";
 					buf += n;
-					buf += "</b>";
+					buf += "</span>";
 				}
 			}
 		}
@@ -134,11 +160,17 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 		else if (!strcmp(tag.getName(), "sense")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf n = tag.getAttribute("n");
+				buf += "<br/><span class=\"sense";
 				if (n != "") {
-					buf += "<br /><b>";
+					buf += "\" n=\"";
 					buf += n;
-					buf += "</b>";
+					
+					
 				}
+				buf += "\">";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</span>";
 			}
 		}
 
@@ -157,47 +189,41 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			buf += "<br />";
 		}
 
-		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def>
+		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def> <tr> <orth> <etym> <usg>
 		else if (!strcmp(tag.getName(), "pos") || 
 				 !strcmp(tag.getName(), "gen") || 
 				 !strcmp(tag.getName(), "case") || 
 				 !strcmp(tag.getName(), "gram") || 
 				 !strcmp(tag.getName(), "number") || 
-				 !strcmp(tag.getName(), "pron") /*||
-				 !strcmp(tag.getName(), "def")*/) {
+				 !strcmp(tag.getName(), "pron") ||
+				 !strcmp(tag.getName(), "def") || 
+				 !strcmp(tag.getName(), "tr") ||
+				 !strcmp(tag.getName(), "orth") ||
+				 !strcmp(tag.getName(), "etym") ||
+				 !strcmp(tag.getName(), "usg") ||
+				 !strcmp(tag.getName(), "quote")||
+				 !strcmp(tag.getName(), "cit")||
+				 !strcmp(tag.getName(), "persName")||
+				 !strcmp(tag.getName(), "oVar")) 
+				 {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<i>";
+				buf += "<span class=\"";
+				buf += tag.getName();
+				if (tag.getAttribute("type")) {
+					buf += "\" type =\"";
+					buf += tag.getAttribute("type");
+				}
+				if (tag.getAttribute("rend")) {
+					buf += "\" rend =\"";
+					buf += tag.getAttribute("rend");
+				}
+				buf += "\">";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</i>";
+				buf += "</span>";
 			}
 		}
 
-		// <tr>
-		else if (!strcmp(tag.getName(), "tr")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<i>";
-			}
-			else if (tag.isEndTag()) {
-				buf += "</i>";
-			}
-		}
-		
-		// orth
-		else if (!strcmp(tag.getName(), "orth")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<b>";
-			}
-			else if (tag.isEndTag()) {
-				buf += "</b>";
-			}
-		}
-
-		// <etym>, <usg>
-		else if (!strcmp(tag.getName(), "etym") || 
-				 !strcmp(tag.getName(), "usg")) {
-			// do nothing here
-		}
 		else if (!strcmp(tag.getName(), "ref")) {
 			if (!tag.isEndTag()) {
 				u->suspendTextPassThru = true;
