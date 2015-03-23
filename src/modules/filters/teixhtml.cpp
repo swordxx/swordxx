@@ -51,9 +51,9 @@ const char *TEIXHTML::getHeader() const {
 		.quote {background-color:#cfcfdf; padding:0.3em; margin:0.5em; border-width:1px; border-style:solid;}\n\
 		.cit:before {content:\"quote:\" ; display:block; margin-top:0.5em; font-size:small;}\n\
 		.cit {align:center;}\n\
-		.cit .persName:before {content:\" (\"; font-size:small;}\n\
-		.cit .persName:after {content:\") \"; font-size:small;}\n\
-		.cit .persName {font-size:small;}\n\
+		.persName:before {content:\" (\"; font-size:small;}\n\
+		.persName:after {content:\") \"; font-size:small;}\n\
+		.persName {font-size:small;}\n\
 		.number {font-style:bold;}\n\
 		.def {font-style:bold;}\n\
 		";
