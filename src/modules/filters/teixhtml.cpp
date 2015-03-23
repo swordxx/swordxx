@@ -35,21 +35,25 @@ SWORD_NAMESPACE_START
 const char *TEIXHTML::getHeader() const {
 		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def> <tr> <orth> <etym> <usg>
 	const static char *header = "\n\
-		.entryFree, .form, .etym, .def, .usg, .quote{display:block;}\n\
+		.entryFree, .form, .etym, .def, .usg, .quote {display:block;}\n\
 		.pron, .pos, .oVar, .ref, {display:inline}\n\
-		.entryFree {text-transform:small-capitals}\n\
-		[type=headword] {font-weight:bold;font-variant:small-caps;text-decoration:underline;}\n\
-		[type=derivative] {}\n\
-		.entryFree>pron:before {content: \"Pronounciation:\";display:block;font-weight:bold;}\n\
-		.etym:before {content:\"Etymology:\"; display:block; font-weight:bold;}\n\
-		.usg:before {content:\"Usage:\"; display:block; font-weight:bold;}\n\
-		.def:before {content:\"Definition:\" display:block; font-weight:bold;}\n\
-		.pron:before {content:\"Pronounciation:\" ;display:block;font-size:small;}\n\
-		.usg:before {content:\"Usage:\"; display:block; font-weight:bold;}\n\
-		.quote {background-color:#cfcfdf;padding:0.3em;margin:0.5em;border-width:1px; border-style:solid;}\n\
-		.cit:before {content:\"quote:\" ;display:block; margin-top:0.5em;font-size:small}\n\
-		.cit {align:center}\n\
-		.cit>.persName:before{content:\"by: \"}\n\
+		[type=headword] {font-weight:bold; font-variant:small-caps; text-decoration:underline;}\n\
+		[type=derivative] {font-weight:bold; font-variant:small-caps;}\n\
+		[rend=italic] {font-style:italic;}\n\
+		[rend=bold] {font-weight:bold;}\n\
+		[rend=small-caps] {font-variant:small-caps}\n\
+		.pos:before {content: \"Pos.: \"; font-weight:bold;}\n\
+		.pron:before {content:\" \\\\ \";}\n\
+		.pron:after {content:\" \\\\ \";}\n\
+		.etym:before {content:\"Etym.:\"; display:block; font-weight:bold;}\n\
+		.usg:before {content:\"Usg.:\"; display:block; font-weight:bold;}\n\
+		.def:before {content:\"Def.:\" display:block; font-weight:bold;}\n\
+		.quote {background-color:#cfcfdf; padding:0.3em; margin:0.5em; border-width:1px; border-style:solid;}\n\
+		.cit:before {content:\"quote:\" ; display:block; margin-top:0.5em; font-size:small;}\n\
+		.cit {align:center;}\n\
+		.cit .persName:before {content:\" (\"; font-size:small;}\n\
+		.cit .persName:after {content:\") \"; font-size:small;}\n\
+		.cit .persName {font-size:small;}\n\
 		.number {font-style:bold;}\n\
 		.def {font-style:bold;}\n\
 		";
