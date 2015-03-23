@@ -31,6 +31,10 @@
 
 SWORD_NAMESPACE_START
 
+const char *TEIXHTML::getHeader() const {
+	const static char *header = "";
+	return header;
+}
 
 TEIXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	BiblicalText = false;
