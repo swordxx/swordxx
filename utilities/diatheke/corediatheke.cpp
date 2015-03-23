@@ -254,10 +254,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	manager.setGlobalOption("Transliterated Forms", (optionfilters & OP_XLIT) ? "On": "Off");
 	manager.setGlobalOption("Enumerations", (optionfilters & OP_ENUM) ? "On": "Off");
 	manager.setGlobalOption("Morpheme Segmentation", (optionfilters & OP_MORPHSEG) ? "On": "Off");
-	manager.setGlobalOption("Introductions", (optionfilters & OP_INTROS) ? "On": "Off");
 
-	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");
-	
+	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");	
 
 	if ((optionfilters & OP_VARIANTS) && variants) {
 		if (variants == -1)
@@ -267,6 +265,8 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	}
 	else
 		manager.setGlobalOption("Textual Variants", "Primary Reading");
+
+
 
 
 	if (querytype == QT_SEARCH) {
@@ -354,9 +354,10 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		}
 		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
 			*output << "<html><head><meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" << locale << "\" xml:lang=\"" << locale << "\"/>"
-				   "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body>";
-				   
+				   " lang=\"" << locale << "\" xml:lang=\"" << locale << "\"/>";
+			*output << "<style type=\"text/css\">";
+			*output << target->getRenderHeader();
+			*output << "</style></head><body>";				   
 		}
 		else if (outputformat == FMT_LATEX) {
 			*output << "\\documentclass{bibletext}\n"
@@ -504,14 +505,15 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
 			*output << "<html><head><meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n"
-				   "<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body>";
-				   
+				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n";
+			*output << "<style type=\"text/css\">";
+			*output << target->getRenderHeader();
+			*output << "</style></head><body>";				   
+						   
 		}
 
 		for (i = 0; i < listkey.getCount() && maxverses; i++) {
 			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
-			element->setIntros(true);			
 			
 			if (element && element->isBoundSet()) {
 			  target->setKey(element->getLowerBound());
