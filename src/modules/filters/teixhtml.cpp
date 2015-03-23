@@ -31,10 +31,6 @@
 
 SWORD_NAMESPACE_START
 
-const char *TEIXHTML::getHeader() const {
-	const static char *header = "";
-	return header;
-}
 
 const char *TEIXHTML::getHeader() const {
 		// <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def> <tr> <orth> <etym> <usg>
