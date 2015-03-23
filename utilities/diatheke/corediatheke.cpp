@@ -48,9 +48,8 @@ void systemquery(const char * key, ostream* output){
 	if (!::stricmp(key, "localelist")) {		
 		LocaleMgr *lm = LocaleMgr::getSystemLocaleMgr();
 		list<SWBuf> loclist =	lm->getAvailableLocales();
-		list<SWBuf>::iterator li = loclist.begin();
-		for (;li != loclist.end(); li++) {
-		  *output << li->c_str() << endl;
+		for (list<SWBuf>::iterator li = loclist.begin(); li != loclist.end(); ++li) {
+			*output << li->c_str() << endl;
 		}
 	}
 	else if (!::stricmp(key, "modulelist")) {
@@ -70,66 +69,41 @@ void systemquery(const char * key, ostream* output){
 		bibliography = true;
 	}
 	
-	
 	if (types || descriptions || names || bibliography) {
-		if (types) *output << "Biblical Texts:\n";
-		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-			target = it->second;
-			if (!strcmp(target->getType(), "Biblical Texts")) {
-				if (names) *output << target->getName();
-				if (names && (descriptions || bibliography)) *output << " : ";
-				if (descriptions) *output << target->getDescription();
-				if (bibliography) *output << target->getBibliography();
-				*output << endl;
-			}
-		}
-		if (types) *output << "Commentaries:\n";
-		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-			target = it->second;
-			if (!strcmp(target->getType(), "Commentaries")) {
-				if (names) *output << target->getName();
-				if (names && (descriptions||bibliography)) *output << " : ";
-				if (descriptions) *output << target->getDescription();
-				if (bibliography) *output << target->getBibliography();
-				*output << endl;
-			}
-		}
-		if (types) *output << "Dictionaries:\n";
-		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-			target = it->second;
-			if (!strcmp(target->getType(), "Lexicons / Dictionaries")) {
-				if (names) *output << target->getName();
-				if (names && (descriptions||bibliography)) *output << " : ";
-				if (descriptions) *output << target->getDescription();
-				if (bibliography) *output << target->getBibliography();
-				*output << endl;
-			}
-		}
-		if (types) *output << "Generic books:\n";
-		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-			target = it->second;
-			if (!strcmp(target->getType(), "Generic Books")) {
-				if (names) *output << target->getName();
-				if (names && (descriptions||bibliography)) *output << " : ";
-				if (descriptions) *output << target->getDescription();
-				if (bibliography) *output << target->getBibliography();
-				*output << endl;
+		const char *modTypes[] = {
+			SWMgr::MODTYPE_BIBLES,
+			SWMgr::MODTYPE_COMMENTARIES,
+			SWMgr::MODTYPE_LEXDICTS,
+			SWMgr::MODTYPE_DAILYDEVOS,
+			SWMgr::MODTYPE_GENBOOKS,
+			0
+		};
+
+		for (int i = 0; modTypes[i]; ++i) {
+	
+			if (types) *output << modTypes[i] << ":\n";
+			for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
+				target = it->second;
+				if (!strcmp(target->getType(), modTypes[i])) {
+					if (names) *output << target->getName();
+					if (names && (descriptions || bibliography)) *output << " : ";
+					if (descriptions) *output << target->getDescription();
+					if (bibliography) *output << target->getBibliography();
+					*output << endl;
+				}
 			}
 		}
 
 	}
 }
 
-void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed char variants = 0) {
-	static DiathekeMgr manager(NULL, NULL, false, outputencoding, outputformat,
-		((OP_BIDI & optionfilters) == OP_BIDI),
-		((OP_ARSHAPE & optionfilters) == OP_ARSHAPE));
 
-	ModMap::iterator it;
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed char variants = 0) {
+
+	static DiathekeMgr manager(NULL, NULL, false, outputencoding, outputformat, ((OP_BIDI & optionfilters) == OP_BIDI), ((OP_ARSHAPE & optionfilters) == OP_ARSHAPE));
+
 	ListKey listkey;
-	SectionMap::iterator sit;
-	ConfigEntMap::iterator eit;
-	const char * DEFAULT_FONT = "Gentium";
+	const char *DEFAULT_FONT = "Gentium";
 	SWModule *target;
 	
 	const char *font = 0;
@@ -140,7 +114,6 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	SWBuf header;
 	
 	char inputformat = 0;
-	SWBuf encoding;
 	char querytype = 0;
 
 	if (!locale) { locale = "en";
@@ -164,80 +137,45 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		text = ref;
 	}
 	//otherwise, we have a real book
-	it = manager.Modules.find(text);
-	if (it == manager.Modules.end()) { //book not found
-		return;
-	}
-	target = (*it).second;
-	SWKey *p = target->createKey();
-        VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
-        
-        
+	target = manager.getModule(text);
+	if (!target) return;
+
 	if (target->getLanguage()) {
 		modlocale = target->getLanguage();
 		LocaleMgr *lm = LocaleMgr::getSystemLocaleMgr();
 		modlanguage = lm->translate(modlocale.append(".en"), "locales");
 		modlocale -= 3; 			
-		}
+	}
 	else {
 		modlocale = "en";
 		modlanguage = "English";
-		} 
+	} 
 
-	if (!parser) {
-        	delete p;
-	        parser = new VerseKey();
-	}
 
-	if ((sit = manager.config->Sections.find((*it).second->getName())) != manager.config->Sections.end()) {
-		if ((eit = (*sit).second.find("SourceType")) != (*sit).second.end()) {
-			if (!::stricmp((char *)(*eit).second.c_str(), "GBF"))
-				inputformat = FMT_GBF;
-			else if (!::stricmp((char *)(*eit).second.c_str(), "ThML"))
-				inputformat = FMT_THML;
-			else if (!::stricmp((char *)(*eit).second.c_str(), "OSIS"))
-				inputformat = FMT_OSIS;
-			else if (!::stricmp((char *)(*eit).second.c_str(), "TEI"))
-				inputformat = FMT_TEI;
-		}
-		encoding = ((eit = (*sit).second.find("Encoding")) != (*sit).second.end()) ? (*eit).second : (SWBuf)"";
-	}
+	SWBuf sourceType = target->getConfigEntry("SourceType");
+	if      (sourceType == "GBF") 	inputformat = FMT_GBF;
+	else if (sourceType == "ThML")	inputformat = FMT_THML;
+	else if (sourceType == "OSIS")	inputformat = FMT_OSIS;
+	else if (sourceType == "TEI")	inputformat = FMT_TEI;
+
+	SWBuf encoding = target->getConfigEntry("Encoding");
 
 
 	if (querytype == QT_INFO) {
-	  switch (inputformat) {
-	  case FMT_THML :
-	    *output << "ThML";
-	    break;
-	  case FMT_GBF :
-	    *output << "GBF";
-	    break;
-	  case FMT_OSIS :
-	    *output << "OSIS";
-	    break;
-	  case FMT_TEI :
-	    *output << "TEI";
-	    break;
-	  default:
-	    *output << "Other";
-	  }
-	  *output << ";";
-	  *output << target->getType();
-	  *output << ";";
-	  delete parser;
-	  return;
+		switch (inputformat) {
+			case FMT_THML : *output << "ThML"; break;
+			case FMT_GBF  : *output << "GBF" ; break;
+			case FMT_OSIS : *output << "OSIS"; break;
+			case FMT_TEI  : *output << "TEI" ; break;
+			default:        *output << "Other";
+		}
+		*output << ";";
+		*output << target->getType();
+		*output << ";";
+		return;
 	}
 
-	if (searchtype)
-		querytype = QT_SEARCH;
-	else if (!strcmp(target->getType(), "Biblical Texts"))
-		querytype = QT_BIBLE;
-	else if (!strcmp(target->getType(), "Commentaries"))
-		querytype = QT_COMM;
-	else if (!strcmp(target->getType(), "Lexicons / Dictionaries"))
-		querytype = QT_LD;
-	else if (!strcmp(target->getType(), "Generic Books"))
-		querytype = QT_LD;
+	if (searchtype) querytype = QT_SEARCH;
 
 	manager.setGlobalOption("Footnotes", (optionfilters & OP_FOOTNOTES) ? "On": "Off");
 	manager.setGlobalOption("Headings", (optionfilters & OP_HEADINGS) ? "On": "Off");
@@ -254,8 +192,11 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	manager.setGlobalOption("Transliterated Forms", (optionfilters & OP_XLIT) ? "On": "Off");
 	manager.setGlobalOption("Enumerations", (optionfilters & OP_ENUM) ? "On": "Off");
 	manager.setGlobalOption("Morpheme Segmentation", (optionfilters & OP_MORPHSEG) ? "On": "Off");
+	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");
 
-	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");	
+        VerseKey *parser = (SWDYNAMIC_CAST(VerseKey, target->getKey())) ? (VerseKey *)target->createKey() : 0;
+	if (parser && (optionfilters & OP_INTROS)) { parser->setIntros(true); ((VerseKey *)target->getKey())->setIntros(true); }
+	
 
 	if ((optionfilters & OP_VARIANTS) && variants) {
 		if (variants == -1)
@@ -263,206 +204,59 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		else if (variants == 1)
 			manager.setGlobalOption("Textual Variants", "Secondary Reading");
 	}
-	else
-		manager.setGlobalOption("Textual Variants", "Primary Reading");
-
-
+	else	manager.setGlobalOption("Textual Variants", "Primary Reading");
 
 
 	if (querytype == QT_SEARCH) {
-
-	        //this test is just to determine if we've got SWKeys or VerseKeys
-	        if (!strcmp(target->getType(), "Biblical Texts"))
-		  querytype = QT_BIBLE;
-		else if (!strcmp(target->getType(), "Commentaries"))
-		  querytype = QT_BIBLE;
-		else if (!strcmp(target->getType(), "Lexicons / Dictionaries"))
-		  querytype = QT_LD;
-		else if (!strcmp(target->getType(), "Generic Books"))
-		  querytype = QT_LD;
-
 		//do search stuff
 		char st = 1 - searchtype;
 		if (querytype == QT_BIBLE) {
-		  *output << "Verses containing \"";
+			*output << "Verses containing \"";
 		}
-		else *output << "Entries containing \"";
+		else	*output << "Entries containing \"";
 	        *output << ref;
 		*output << "\"-- ";
 
- 		if (range) {
+ 		if (range && parser) {
  			ListKey scope = parser->parseVerseList(range, "Gen 1:1", true);
  			listkey = target->search(ref, st, REG_ICASE, &scope);
  		}
  		else listkey = target->search(ref, st, REG_ICASE);
 
-		if (strlen((const char*)listkey)) {
-		  if (!listkey.popError()) {
-		    if (outputformat == FMT_CGI) *output << "<entry>";
-		    if (querytype == QT_BIBLE) {
-		      *parser = listkey;
-		      *output << (const char *)*parser;
-		    }
-		    else *output << (const char *)listkey;
-		    if (outputformat == FMT_CGI) *output << "</entry>";
-		  }
-		  listkey++;
-		  while (!listkey.popError()) {
-		    *output << " ; ";
-		    if (outputformat == FMT_CGI) *output << "<entry>";
-		    if (querytype == QT_BIBLE) {
-		      *parser = listkey;
-		      *output << (const char *)*parser;
-		    }
-		    else *output << (const char *)listkey;
-		    if (outputformat == FMT_CGI) *output << "</entry>";
-		    listkey++;
-		  }
-		  *output << " -- ";
+		bool first = true;
+		if (listkey.getCount()) {
+			for (listkey = TOP; !listkey.popError(); listkey++) {
+				if (!listkey.popError()) {
+					if (outputformat == FMT_CGI) *output << "<entry>";
+					*output << listkey.getText();
+					if (outputformat == FMT_CGI) *output << "</entry>";
+				}
+				if (first) first = false;
+				else *output << " ; ";
+			}
+			*output << " -- ";
 
-		  char *temp = new char[10];
-		  sprintf(temp, "%u", listkey.getCount());
-		  *output << temp;
-		  delete [] temp;
-
-		  *output << " matches total (";
-		  *output << target->getName();
-		  *output << ")\n";
+			*output << listkey.getCount() << " matches total (";
 		}
 		else {
-		  *output << "none (";
-		  *output << target->getName();
-		  *output << ")\n";
+			*output << "none (";
 		}
+		*output << target->getName();
+		*output << ")\n";
 	}
+	else {
 
-	else if (querytype == QT_LD) {
-		//do dictionary stuff
-
-		target->setKey(ref);
-
-		SWBuf text = target->renderText();
+		if (parser) {
+			listkey = parser->parseVerseList(ref, "Gen1:1", true);
+		}
+		else listkey << ref;
 		
-		
+		font = target->getConfigEntry("Font");
+		if (!font) font = DEFAULT_FONT;
+
 		if (outputformat == FMT_RTF) {
 			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
-			if (font)
-				*output << font;
-			else
-				*output << "Times New Roman";
-			*output << ";}}";
-		}
-		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
-			*output << "<html><head><meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" << locale << "\" xml:lang=\"" << locale << "\"/>";
-			*output << "<style type=\"text/css\">";
-			*output << target->getRenderHeader();
-			*output << "</style></head><body>";				   
-		}
-		else if (outputformat == FMT_LATEX) {
-			*output << "\\documentclass{bibletext}\n"
-				   "\\usepackage{sword}\n"
-				   "\\title{" << target->getDescription() << " \\\\\\small " << ref << "}\n";
-
-			if (syslanguage.size()) {
-				syslanguage[0] = tolower(syslanguage[0]);
-				*output << "\\setmainlanguage{" << syslanguage << "}\n";
-				}
-			
-			if (modlanguage.size()) {
-				modlanguage[0] = tolower(modlanguage[0]);
-				}
-			else {	
-				modlanguage = "english";
-				}
-			if (!(font)) {	
-				font = DEFAULT_FONT;
-				}
-							
-			if (!(modlanguage == syslanguage))	{		
-		
-				*output << "\\setotherlanguage{" << modlanguage << "}\n"
-			        	   "\\newfontfamily\\" << syslanguage << "font{Gentium}\n"
-			 	  	   "\\newfontfamily\\" << modlanguage << "font{" << font << "} % apply following options e.g for Persian [Script=Arabic,Scale=1.3,Ligatures=TeX,Numbers=OldStyle,Mapping=arabicdigits]\n";				   	  
-				}
-			 	
-			 
-			*output << "\\date{}\n"
-				   "\\begin{document}\n"
-				   "\\maketitle\n";
-				   
-                        if (!(modlanguage == syslanguage))      {
-				   *output << "\\begin{" << modlanguage << "}\n";
-				   }
-
-		}
-
-		if (text.length()) {
-			if (outputformat == FMT_LATEX) {
-				*output << "\\\\ ";
-			}
-			
-			*output << (char*)target->getKeyText();
-			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
-				*output << ": <span ";
-				if (font) { *output << "style=\"font:\"" << font << ";\""; }
-				if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
-				*output << ">";
-			}
-			else if (outputformat == FMT_RTF) {
-				*output << ": {\\f1 ";
-			}
-			else {
-				*output << ": ";
-			}
-			*output << text;
-			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
-				*output << "</span>";
-			}
-			else if (outputformat == FMT_RTF) {
-				*output << "}";
-			}
-
-			*output << "(" << target->getName(); 
-			
-		
-			if (outputformat == FMT_LATEX) {
-				*output << ", ";
-				*output << target->getConfigEntry("DistributionLicense");
-				}
-
-			
-			*output << ")\n";
-		}
-
-		if (outputformat == FMT_RTF) {
-			*output << "}";
-		}
-		else if (outputformat == FMT_LATEX) {
-			*output << "\\end{document}\n";
-		}
-
-	}
-
-	else if (querytype == QT_BIBLE || querytype == QT_COMM) {
-		//do commentary/Bible stuff
-
-		if ((sit = manager.config->Sections.find((*it).second->getName())) != manager.config->Sections.end()) {
-			if ((eit = (*sit).second.find("Font")) != (*sit).second.end()) {
-				font = (char *)(*eit).second.c_str();
-				if (strlen(font) == 0) font = 0;
-			}
-		}
-
- 		listkey = parser->parseVerseList(ref, "Gen1:1", true);
-		int i;
-		
-		if (outputformat == FMT_RTF) {
-			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
-			if (font)
-				*output << font;
-			else
-				*output << "Times New Roman";
+			*output << font;
 			*output << ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
 		}
 
@@ -474,181 +268,134 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			if (syslanguage.size()) {
 				syslanguage[0] = tolower(syslanguage[0]);
 				*output << "\\setmainlanguage{" << syslanguage << "}\n";
-				}
+			}
 			
 			if (modlanguage.size()) {
 				modlanguage[0] = tolower(modlanguage[0]);
-				}
+			}
 			else {	
 				modlanguage = "english";
-				}
-			if (!(font)) {	
-				font = "Gentium";
-				}
+			}
 							
-			if (!(modlanguage == syslanguage))	{		
-		
+			if (!(modlanguage == syslanguage)) {		
 				*output << "\\setotherlanguage{" << modlanguage << "}\n";
-				}
+			}
 			 	
 			 
 			*output << "\\date{}\n"
 				   "\\begin{document}\n"
 				   "\\maketitle\n";
 				   
-                        if (!(modlanguage == syslanguage))      {
-				   *output << "\\begin{" << modlanguage << "}\n";
-				   }
-
+			if (!(modlanguage == syslanguage))      {
+				*output << "\\begin{" << modlanguage << "}\n";
+			}
 		}
 
 
 		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
 			*output << "<html><head><meta http-equiv=\"content-type\" content=\"text/html\" charset=\"UTF-8\""
-				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n";
-			*output << "<style type=\"text/css\">";
-			*output << target->getRenderHeader();
-			*output << "</style></head><body>";				   
-						   
+				   " lang=\"" <<  locale << "\" xml:lang=\"" <<   locale << "\"/>\n"
+				   "<style type=\"text/css\">" << target->getRenderHeader() << "</style></head><body>";
+				   
 		}
 
-		for (i = 0; i < listkey.getCount() && maxverses; i++) {
-			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
+		for (listkey = TOP; !listkey.popError() && maxverses; listkey++) {
+			target->setKey(listkey);
+			VerseKey *vk = SWDYNAMIC_CAST(VerseKey, target->getKey());
 			
-			if (element && element->isBoundSet()) {
-			  target->setKey(element->getLowerBound());
-				*parser = element->getUpperBound();
-				while (maxverses && *target->getKey() <= *parser) {
-
+			// if we've got a VerseKey (Bible or Commentary)
+			if (vk) {
+				// let's do some special processing if we're at verse 1
+				if (vk->getVerse() == 1) {
+					if (vk->getChapter() == 1) {
+						if (vk->getBook() == 1) {
+							if (vk->getTestament() == 1) {
+								// MODULE START SPECIAL PROCESSING
+								if (outputformat == FMT_LATEX) {
+									// put your latex module start stuff here
+								}
+							}
+							// TESTAMENT START SPECIAL PROCESSING
+							if (outputformat == FMT_LATEX) {
+								// put your latex testament start stuff here
+							}
+						}
+						// BOOK START SPECIAL PROCESSING
+						if (outputformat == FMT_LATEX) {
+							// put your latex book start stuff here
+						}
+					}
+					// CHAPTER START SPECIAL PROCESSING
 					if (outputformat == FMT_LATEX) {
-						VerseKey *outkey = new VerseKey(target->getKey());
-						
-						
-						if (outkey->getVerse() == 1) {
-							*output << "\n\\swordchapter{" 
-								<< outkey->getOSISRef() << "}{"
-								<< outkey->getText() << "}{" 
-								<< outkey->getChapter() << "}";
-						}
-						*output << "\\swordverse{"
-							<< outkey->getOSISRef() << "}{"
-							<< outkey->getText() << "}{" 
-							<< outkey->getVerse() << "} ";
-						delete outkey;
-						
-						}
-					else { 						
-						*output << (char*)target->getKeyText();
+						*output << "\n\\swordchapter{" 
+							<< vk->getOSISRef() << "}{"
+							<< vk->getText() << "}{" 
+							<< vk->getChapter() << "}";
 					}
-					if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
-						*output << ": <span ";
-						if (font) { *output << "style=\"font:\""  << font << ";\" " ;}
-						if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
-						*output << ">";
-					}
-					else if (outputformat == FMT_RTF) {
-						*output << ": {\\f1 ";
-					}
-					else if (outputformat == FMT_LATEX) {
-						*output << " ";
-					}
-					else {
-						*output << ": ";
-					}
-					
-					header = target->getEntryAttributes()["Heading"]["Preverse"]["0"];
-					*output << target->renderText(header);
-					*output << target->renderText();
-					
-					
-					if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
-						*output << "</span>";
-					}
-					else if (outputformat == FMT_RTF) {
-						*output << "}";
-					}
-
-					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI))
-						*output << "<br />";
-					else if (outputformat == FMT_OSIS)
-						*output << "<milestone type=\"line\"/>";
-					else if (outputformat == FMT_RTF)
-						*output << "\\par ";
-					else if (outputformat == FMT_GBF)
-						*output << "<CM>";
-
-					*output << "\n";
-
-					if (*target->getKey() == *parser)
-					  break;
-					maxverses--;
-					(*target)++;
 				}
+
+				// PREVERSE MATTER
+				header = target->getEntryAttributes()["Heading"]["Preverse"]["0"];
+				*output << target->renderText(header);
+
+				// VERSE PROCESSING
+				if (outputformat == FMT_LATEX) {
+					*output << "\\swordverse{"
+						<< vk->getOSISRef() << "}{"
+						<< vk->getText() << "}{" 
+						<< vk->getVerse() << "} ";
+				}
+				// no special format processing default: just show the key
+				else {
+					*output << target->getKeyText();
+				}
+			}
+			// if we're not a VerseKey, then simply output the key
+			else { 						
+				*output << target->getKeyText();
+			}
+
+			// OUTPUT RENDER ENTRY
+			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
+				*output << ": <span ";
+				*output << "style=\"font:\""  << font << ";\" ";
+				if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
+				*output << ">";
+			}
+			else if (outputformat == FMT_RTF) {
+				*output << ": {\\f1 ";
+			}
+			else if (outputformat == FMT_LATEX) {
+				*output << " ";
 			}
 			else {
-				target->setKey(*listkey.getElement(i));
-	
-				if (outputformat == FMT_LATEX) {
-					VerseKey *outkey = new VerseKey(target->getKey());
-					if (outkey->getVerse() == 1) {
-						*output << "\n\\swordchapter{" 
-							<< outkey->getOSISRef() << "}{" 
-							<< outkey->getText() << "}{" 
-							<< outkey->getChapter() << "}";
-					}
-					
-					*output << "\\swordverse{"
-						<< outkey->getOSISRef() << "}{" 
-						<< outkey->getText() << "}{" 
-						<< outkey->getVerse() << "} ";
-					
-				}	
-				else { 						
-					*output << (char*)target->getKeyText();
-					}
-
-				if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
-						*output << ": <span ";
-						if (font) { *output << "style=\"font:\""  << font << ";\" " ;}
-						if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
-						*output << ">";
-					}
-				else if (outputformat == FMT_RTF) {
-					*output << ": {\\f1 ";
-				}
-				else if (outputformat == FMT_LATEX) {
-					*output << " ";
-				}
-				else {
-					*output << ": ";
-				}
-				
-				header = target->getEntryAttributes()["Heading"]["Preverse"]["0"];
-				*output << target->renderText(header);	
-				*output << target->renderText();
-				
-				if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
-					*output << "</span>";
-				}
-				else if (outputformat == FMT_RTF) {
-					*output << "}";
-				}
-
-				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI))
-					*output << "<br />";
-				else if (outputformat == FMT_OSIS)
-					*output << "<milestone type=\"line\"/>";
-				else if (outputformat == FMT_RTF)
-					*output << "\\par ";
-				else if (outputformat == FMT_LATEX)
-					*output << "\\\\ ";
-				else if (outputformat == FMT_GBF)
-					*output << "<CM>";
-
-				*output << "\n";
-				maxverses--;
+				*output << ": ";
 			}
+					
+			*output << target->renderText();
+			
+	
+			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
+				*output << "</span>";
+			}
+			else if (outputformat == FMT_RTF) {
+				*output << "}";
+			}
+
+			if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI))
+				*output << "<br />";
+			else if (outputformat == FMT_OSIS)
+				*output << "<milestone type=\"line\"/>";
+			else if (outputformat == FMT_RTF)
+				*output << "\\par ";
+			else if (outputformat == FMT_GBF)
+				*output << "<CM>";
+
+			*output << "\n";
+
+			maxverses--;
 		}
+
 		if ((outputformat == FMT_LATEX) && (!(modlanguage == syslanguage))) {
 			*output << "\\end{" << modlanguage << "}\n";
 		}
@@ -656,11 +403,13 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		
 		*output << "(";
 		*output << target->getName();
+		
 		if (outputformat == FMT_LATEX) {
 			*output << ", ";
 			*output << target->getConfigEntry("DistributionLicense");
 			
 		}
+
 		*output << ")\n";
 
 		if (outputformat == FMT_RTF) {
