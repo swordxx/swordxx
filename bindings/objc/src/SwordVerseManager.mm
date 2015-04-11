@@ -48,7 +48,7 @@
 
 /** books for a versification scheme */
 - (NSArray *)booksForVersification:(NSString *)verseScheme {
-    NSArray *ret = [booksPerVersification objectForKey:verseScheme];
+    NSArray *ret = booksPerVersification[verseScheme];
     if(ret == nil) {
         // hasn't been initialized yet
         const sword::VersificationMgr::System *system = verseMgr->getVersificationSystem([verseScheme UTF8String]);
@@ -63,7 +63,7 @@
             // add to array
             [buf addObject:bb];
         }
-        [booksPerVersification setObject:buf forKey:verseScheme];
+        booksPerVersification[verseScheme] = buf;
         ret = buf;
     }
     

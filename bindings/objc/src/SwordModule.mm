@@ -405,7 +405,7 @@
     if(key != nil) {
         // check user defaults, that's where we store the entered keys
         NSDictionary *cipherKeys = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultsModuleCipherKeysKey];
-        if([key length] == 0 && [[cipherKeys allKeys] containsObject:[self name]] == NO) {
+        if([key length] == 0 && ![[cipherKeys allKeys] containsObject:[self name]]) {
             locked = YES;
         }
     }

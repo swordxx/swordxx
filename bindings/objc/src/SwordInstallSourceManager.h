@@ -60,6 +60,7 @@ base path of the module installation
  */
 - (id)init;
 - (id)initWithPath:(NSString *)aPath createPath:(BOOL)create;
+- (id)initWithFtpUser:(NSString *)aFtpUser ftpPassword:(NSString *)aFtpPassword;
 
 /** re-init after adding or removing new modules */
 - (void)reinitialize;
