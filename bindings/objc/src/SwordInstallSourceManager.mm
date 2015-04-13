@@ -24,90 +24,23 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
 
 @property (strong, nonatomic) NSString *ftpUser;
 @property (strong, nonatomic) NSString *ftpPassword;
+@property (strong, readwrite) NSString *configPath;
+@property (readwrite) BOOL createConfigPath;
 
 @end
 
 @implementation SwordInstallSourceManager
 
-@dynamic configPath;
-
-// ------------------- getter / setter -------------------
-- (NSString *)configPath {
-    return configPath;
-}
-
-- (void)setConfigPath:(NSString *)value {
-    DLog(@"");
-    
-    if(configPath != value) {
-        configPath = [value copy];
-        
-        if(value == nil) {
-            return;
-        }
-        
-        
-        // check for existence
-        NSFileManager *fm = [NSFileManager defaultManager];
-        BOOL isDir;
-        if(![fm fileExistsAtPath:configPath] && createPath) {
-            // create path
-            [fm createDirectoryAtPath:configPath withIntermediateDirectories:NO attributes:nil error:NULL];
-        }
-        
-        if([fm fileExistsAtPath:configPath isDirectory:&isDir] && (isDir)) {
-            // set configFilePath
-            [self setConfigFilePath:[configPath stringByAppendingPathComponent:@"InstallMgr.conf"]];
-            
-            // check config
-            if(![fm fileExistsAtPath:self.configFilePath]) {
-                // create config entry
-                sword::SWConfig config([self.configFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
-                config["General"]["PassiveFTP"] = "true";
-                config.Save();
-
-                // create default Install source
-                SwordInstallSource *is = [[SwordInstallSource alloc] initWithType:INSTALLSOURCE_TYPE_FTP];
-                [is setCaption:@"CrossWire"];
-                [is setSource:@"ftp.crosswire.org"];
-                [is setDirectory:@"/pub/sword/raw"];
-                                    
-                // addInstallSource will reinitialize
-                [self addInstallSource:is withReinitialize:NO];
-                
-            }
-            // init installMgr
-            [self reinitialize];                
-
-            // sync with master install source list
-            //[self refreshMasterRemoteInstallSourceList];
-
-        } else {
-            ALog(@"Config path does not exist: %@", configPath);
-        }
-    }
-}
-
 // -------------------- methods --------------------
 
+static SwordInstallSourceManager *singleton = nil;
 // initialization
-+ (SwordInstallSourceManager *)defaultController {
-    static SwordInstallSourceManager *singleton = nil;
++ (SwordInstallSourceManager *)defaultManager {
     if(singleton == nil) {
         singleton = [[SwordInstallSourceManager alloc] init];
     }
     
     return singleton;
-}
-
-+ (SwordInstallSourceManager *)defaultControllerWithPath:(NSString *)aPath {
-    SwordInstallSourceManager *m = [SwordInstallSourceManager defaultController];
-    [m setConfigPath:aPath];
-    return m;
-}
-
-+ (SwordInstallSourceManager *)controllerWithPath:(NSString *)aPath {
-    return [[SwordInstallSourceManager alloc] initWithPath:aPath createPath:YES];
 }
 
 /**
@@ -116,9 +49,8 @@ base path of the module installation
 - (id)init {
     self = [super init];
     if(self) {
-        createPath = NO;
+        [self setCreateConfigPath:NO];
         [self setConfigPath:nil];
-        [self setConfigFilePath:nil];
         [self setInstallSources:[NSMutableDictionary dictionary]];
         [self setInstallSourceList:[NSMutableArray array]];
         [self setFtpUser:@"ftp"];
@@ -134,55 +66,16 @@ base path of the module installation
 - (id)initWithPath:(NSString *)aPath createPath:(BOOL)create {
     self = [self init];
     if(self) {
-        createPath = create;
+        [self setCreateConfigPath:create];
         [self setConfigPath:aPath];
     }
     
     return self;
 }
 
-- (id)initWithFtpUser:(NSString *)aFtpUser ftpPassword:(NSString *)aFtpPassword {
-    self = [self init];
-    if(self) {
-        [self setFtpUser:aFtpUser];
-        [self setFtpPassword:aFtpPassword];
-    }
-    return self;
+- (void)useAsDefaultManager {
+    singleton = self;
 }
-
-/** re-init after adding or removing new modules */
-- (void)reinitialize {
-    sword::SWConfig config([self.configFilePath UTF8String]);
-    config.Load();
-
-    // init installMgr
-    BOOL disclaimerConfirmed = NO;
-    if(swInstallMgr != nil) {
-        disclaimerConfirmed = [self userDisclaimerConfirmed];
-    }
-    ALog(@"Creating InstallMgr with: %@, %i, %@, %@", configPath, 0, [self ftpUser], [self ftpPassword]);
-    swInstallMgr = new sword::InstallMgr([configPath UTF8String], 0, sword::SWBuf([[self ftpUser] UTF8String]), sword::SWBuf([[self ftpPassword] UTF8String]));
-    if(swInstallMgr == nil) {
-        ALog(@"Could not initialize InstallMgr!");
-    } else {
-        [self setUserDisclaimerConfirmed:disclaimerConfirmed];
-        
-        // empty all lists
-        [self.installSources removeAllObjects];
-        [self.installSourceList removeAllObjects];
-        
-        // init install sources
-        for(InstallSourceMap::iterator it = swInstallMgr->sources.begin(); it != swInstallMgr->sources.end(); it++) {
-            sword::InstallSource *sis = it->second;
-            SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:sis];
-            
-            self.installSources[[is caption]] = is;
-            // also add to list
-            [self.installSourceList addObject:is];
-        }
-    }
-}
-
 
 - (void)dealloc {
     if(swInstallMgr != nil) {
@@ -190,43 +83,153 @@ base path of the module installation
     }
 }
 
-- (void)addInstallSource:(SwordInstallSource *)is {
-    [self addInstallSource:is withReinitialize:YES];
+/** init after adding or removing new modules */
+- (void)initManager {
+    [self setupConfig];
+
+    // safe disclaimer flag
+    BOOL disclaimerConfirmed = NO;
+    if(swInstallMgr != NULL) {
+        disclaimerConfirmed = [self userDisclaimerConfirmed];
+    }
+
+    if(swInstallMgr == NULL) {
+        ALog(@"Initializing swInstallMgr");
+        swInstallMgr = [self newDefaultInstallMgr];
+        if(swInstallMgr == nil) {
+            ALog(@"Could not initialize InstallMgr!");
+
+        } else {
+            [self setUserDisclaimerConfirmed:disclaimerConfirmed];
+
+            if(![self existsDefaultInstallSource]) {
+                [self addDefaultInstallSource];
+            }
+
+            [self setupInstallSources];
+        }
+
+    } else {
+        ALog(@"Re-initializing swInstallMgr");
+        [self reInitialize];
+    }
 }
 
-// add/remove install sources
-- (void)addInstallSource:(SwordInstallSource *)is withReinitialize:(BOOL)reinit {
-    
-    // save at once
-    sword::SWConfig config([self.configFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
+- (void)reInitialize {
+    [self readInstallMgrConf];
+    [self setupInstallSources];
+}
+
+- (sword::InstallMgr *)newDefaultInstallMgr {
+    ALog(@"Creating InstallMgr with: %@, %i, %@, %@", [self configPath], 0, [self ftpUser], [self ftpPassword]);
+    return new sword::InstallMgr(
+            [[self configPath] UTF8String],
+            0,
+            sword::SWBuf([[self ftpUser] UTF8String]),
+            sword::SWBuf([[self ftpPassword] UTF8String]));
+}
+
+- (BOOL)existsDefaultInstallSource {
+    sword::InstallMgr mgr = sword::InstallMgr([[self configPath] UTF8String]);
+
+    for(InstallSourceMap::iterator it = mgr.sources.begin(); it != mgr.sources.end(); it++) {
+        sword::InstallSource *sis = it->second;
+
+        if([[NSString stringWithCString:sis->caption.c_str() encoding:NSUTF8StringEncoding] isEqualToString:@"CrossWire"]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void)addDefaultInstallSource {
+    SwordInstallSource *is = [[SwordInstallSource alloc] initWithType:INSTALLSOURCE_TYPE_FTP];
+    [is setCaption:@"CrossWire"];
+    [is setSource:@"ftp.crosswire.org"];
+    [is setDirectory:@"/pub/sword/raw"];
+
+    [self addInstallSource:is];
+}
+
+- (void)setupConfig {
+    if([self configPath] == nil) {
+        ALog(@"No config path configured!");
+        return;
+    }
+
+    // check for existence
+    NSFileManager *fm = [NSFileManager defaultManager];
+    BOOL isDir;
+    ALog(@"Checking for config path at: %@", [self configPath]);
+    if(![fm fileExistsAtPath:[self configPath]] && [self createConfigPath]) {
+        ALog(@"Config dir doesn't exist, creating it...");
+        [fm createDirectoryAtPath:[self configPath] withIntermediateDirectories:NO attributes:nil error:NULL];
+        ALog(@"Config dir doesn't exist, creating it...done");
+    }
+
+    if([fm fileExistsAtPath:[self configPath] isDirectory:&isDir] && (isDir)) {
+        // check config
+        if(![fm fileExistsAtPath:[self createInstallMgrConfPath]]) {
+            // create config entry
+            sword::SWConfig config([[self createInstallMgrConfPath] UTF8String]);
+            config["General"]["PassiveFTP"] = "true";
+            config.Save();
+        }
+
+    } else {
+        ALog(@"Config path does not exist: %@", [self configPath]);
+    }
+}
+
+- (void)setupInstallSources {
+    ALog(@"Cleaning all install sources...");
+    [[self installSources] removeAllObjects];
+    [[self installSourceList] removeAllObjects];
+    ALog(@"Cleaning all install sources...done");
+
+    for(InstallSourceMap::iterator it = swInstallMgr->sources.begin(); it != swInstallMgr->sources.end(); it++) {
+        sword::InstallSource *sis = it->second;
+        SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:sis];
+
+        ALog(@"Adding install source: %@", [is caption]);
+        [self installSources][[is caption]] = is;
+        [[self installSourceList] addObject:is];
+    }
+}
+
+- (NSString *)createInstallMgrConfPath {
+    return [[self configPath] stringByAppendingPathComponent:@"InstallMgr.conf"];
+}
+
+- (void)addInstallSource:(SwordInstallSource *)is {
+    ALog(@"Adding install source: %@", [is caption]);
+    [self installSources][[is caption]] = is;
+    [[self installSourceList] addObject:is];
+
+    // modify conf file
+    sword::SWConfig config([[self createInstallMgrConfPath] UTF8String]);
 	if([[is type] isEqualToString:INSTALLSOURCE_TYPE_FTP]) {
 		config["Sources"].insert(ConfigEntMap::value_type(INSTALLSOURCE_SECTION_TYPE_FTP, [[is configEntry] UTF8String]));
 	} else {
 		config["Sources"].insert(ConfigEntMap::value_type(INSTALLSOURCE_SECTION_TYPE_HTTP, [[is configEntry] UTF8String]));
 	}
     config.Save();
-    
-	if(reinit)
-		[self reinitialize];
+
+    [self readInstallMgrConf];
 }
 
 - (void)removeInstallSource:(SwordInstallSource *)is {
-    [self removeInstallSource:is withReinitialize:NO];
-}
-
-- (void)removeInstallSource:(SwordInstallSource *)is withReinitialize:(BOOL)reinit {
-    
-    // remove source
+    ALog(@"Removing install source: %@", [is caption]);
     [self.installSources removeObjectForKey:[is caption]];
     [self.installSourceList removeObject:is];
-    
-    // save at once
-    sword::SWConfig config([self.configFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
+
+    // modify conf file
+    sword::SWConfig config([[self createInstallMgrConfPath] UTF8String]);
     config["Sources"].erase(INSTALLSOURCE_SECTION_TYPE_HTTP);
     config["Sources"].erase(INSTALLSOURCE_SECTION_TYPE_FTP);
-    
+
     // build up new
-    for(SwordInstallSource *sis in self.installSources) {
+    for(SwordInstallSource *sis in self.installSourceList) {
 		if([[sis type] isEqualToString:INSTALLSOURCE_TYPE_FTP]) {
 			config["Sources"].insert(ConfigEntMap::value_type(INSTALLSOURCE_SECTION_TYPE_FTP, [[sis configEntry] UTF8String]));
 		} else {
@@ -234,27 +237,24 @@ base path of the module installation
 		}
     }
     config.Save();
-    
-	if(reinit)
-		[self reinitialize];
+
+    [self readInstallMgrConf];
 }
 
 - (void)updateInstallSource:(SwordInstallSource *)is {
     // first remove, then add again
-    [self removeInstallSource:is withReinitialize:NO];
+    [self removeInstallSource:is];
     [self addInstallSource:is];
 }
 
 // installation/unInstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager {
-    
     int stat;
     if([[is source] isEqualToString:@"localhost"]) {
         stat = swInstallMgr->installModule([manager swManager], [[is directory] UTF8String], [[aModule name] UTF8String]);
     } else {
         stat = swInstallMgr->installModule([manager swManager], 0, [[aModule name] UTF8String], [is installSource]);
     }
-    
     return stat;
 }
 
@@ -332,6 +332,10 @@ base path of the module installation
 
 - (void)setUserDisclaimerConfirmed:(BOOL)flag {
     swInstallMgr->setUserDisclaimerConfirmed(flag);
+}
+
+- (void)readInstallMgrConf {
+    swInstallMgr->readInstallConf();
 }
 
 /** low level access */

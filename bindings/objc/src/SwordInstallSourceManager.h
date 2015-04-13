@@ -35,15 +35,9 @@ typedef enum _ModuleStatusConst {
 #ifdef __cplusplus
     sword::InstallMgr *swInstallMgr;
 #endif
-
-    BOOL createPath;
-    
-    NSString *configPath;
 }
 
-// ------------------- getter / setter -------------------
-@property (strong, readwrite) NSString *configPath;
-@property (strong, readwrite) NSString *configFilePath;
+// ------------------- properties -------------------
 @property (strong, readwrite) NSMutableArray *installSourceList;
 /** Dictionary of InstallSources. Key: Caption */
 @property (strong, readwrite) NSMutableDictionary *installSources;
@@ -51,19 +45,18 @@ typedef enum _ModuleStatusConst {
 // -------------------- methods --------------------
 
 // initialization
-+ (SwordInstallSourceManager *)defaultController;
-+ (SwordInstallSourceManager *)defaultControllerWithPath:(NSString *)aPath;
-+ (SwordInstallSourceManager *)controllerWithPath:(NSString *)aPath;
++ (SwordInstallSourceManager *)defaultManager;
 
 /**
-base path of the module installation
+    base path of the module installation
  */
-- (id)init;
 - (id)initWithPath:(NSString *)aPath createPath:(BOOL)create;
-- (id)initWithFtpUser:(NSString *)aFtpUser ftpPassword:(NSString *)aFtpPassword;
 
-/** re-init after adding or removing new modules */
-- (void)reinitialize;
+/** marks this manager as the default one / singleton */
+- (void)useAsDefaultManager;
+
+/** init after adding or removing new modules */
+- (void)initManager;
 
 // installation/unInstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager;
@@ -71,9 +64,7 @@ base path of the module installation
 
 // add/remove install sources
 - (void)addInstallSource:(SwordInstallSource *)is;
-- (void)addInstallSource:(SwordInstallSource *)is withReinitialize:(BOOL)reinit;
 - (void)removeInstallSource:(SwordInstallSource *)is;
-- (void)removeInstallSource:(SwordInstallSource *)is withReinitialize:(BOOL)reinit;
 - (void)updateInstallSource:(SwordInstallSource *)is;
 - (int)refreshMasterRemoteInstallSourceList;
 
