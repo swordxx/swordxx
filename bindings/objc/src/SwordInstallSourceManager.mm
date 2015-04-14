@@ -257,6 +257,8 @@ base path of the module installation
     int stat = swInstallMgr->refreshRemoteSourceConfiguration();
     if(stat) {
         ALog(@"Unable to refresh with master install source!");
+    } else {
+        [self reInitialize];
     }
     
     return stat;
