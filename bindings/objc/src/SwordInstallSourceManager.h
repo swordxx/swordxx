@@ -38,9 +38,13 @@ typedef enum _ModuleStatusConst {
 }
 
 // ------------------- properties -------------------
-@property (strong, readwrite) NSMutableArray *installSourceList;
 /** Dictionary of InstallSources. Key: Caption */
 @property (strong, readwrite) NSMutableDictionary *installSources;
+@property (strong, readwrite) NSMutableArray *installSourceList;
+@property (strong, nonatomic) NSString *ftpUser;
+@property (strong, nonatomic) NSString *ftpPassword;
+@property (strong, readwrite) NSString *configPath;
+@property (readwrite) BOOL createConfigPath;
 
 // -------------------- methods --------------------
 

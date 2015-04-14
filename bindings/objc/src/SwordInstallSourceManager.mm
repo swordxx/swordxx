@@ -22,11 +22,6 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
 
 @interface SwordInstallSourceManager ()
 
-@property (strong, nonatomic) NSString *ftpUser;
-@property (strong, nonatomic) NSString *ftpPassword;
-@property (strong, readwrite) NSString *configPath;
-@property (readwrite) BOOL createConfigPath;
-
 @end
 
 @implementation SwordInstallSourceManager
