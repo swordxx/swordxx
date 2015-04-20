@@ -7558,6 +7558,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OBJROOT = "$(PROJECT_DIR)/Build/Intermediates";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
 				OTHER_LDFLAGS = (
@@ -7567,6 +7568,7 @@
 				);
 				PRODUCT_NAME = ObjCSword;
 				SDKROOT = macosx;
+				SYMROOT = "$(PROJECT_DIR)/Build/Products";
 				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
@@ -7601,6 +7603,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OBJROOT = "$(PROJECT_DIR)/Build/Intermediates";
 				OTHER_CFLAGS = "-DRELEASE";
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -7609,6 +7612,7 @@
 				);
 				PRODUCT_NAME = ObjCSword;
 				SDKROOT = macosx;
+				SYMROOT = "$(PROJECT_DIR)/Build/Products";
 				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = framework;
@@ -7624,6 +7628,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OBJROOT = Build/Intermediates;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
@@ -7638,6 +7643,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OBJROOT = Build/Intermediates;
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -7928,6 +7934,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SYMROOT = "$(PROJECT_DIR)/Build/Products";
 				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
@@ -7959,6 +7966,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
+				SYMROOT = "$(PROJECT_DIR)/Build/Products";
 				VALID_ARCHS = x86_64;
 			};
 			name = Release;

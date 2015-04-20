@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "SwordInstallSourceManager.h"
 #import "SwordInstallSource.h"
+#import "SwordManager.h"
 
 @interface SwordInstallSourceManagerTest : XCTestCase
 
@@ -17,10 +18,14 @@
 @implementation SwordInstallSourceManagerTest
 
 NSString *testConfigPath = @"/tmp/testmodinst";
+NSString *testModuleManagerPath = @"/tmp/testmodmgr";
+#define PROJECT_PATH [@"~/Development/MySources/crosswire/Eloquent_MacOS/trunk/sword_src/sword-trunk/bindings/objc" stringByExpandingTildeInPath]
+#define LOCAL_INSTALLSOURCE_PATH [PROJECT_PATH stringByAppendingPathComponent:@"LocalTestInstallSource"]
 
 - (void)setUp {
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm removeItemAtPath:testConfigPath error:NULL];
+    [fm removeItemAtPath:testModuleManagerPath error:NULL];
 
     [super setUp];
 }
@@ -32,6 +37,81 @@ NSString *testConfigPath = @"/tmp/testmodinst";
 - (void)testObjectCreate {
     SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:@"" createPath:YES];
     XCTAssertTrue(mgr != nil, @"");
+}
+
+- (void)testLocalInstallSource {
+    SwordInstallSource *is = [[SwordInstallSource alloc] init];
+    [is setSource:@"localhost"];
+    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setCaption:@"LocalTest"];
+
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
+    [mgr addInstallSource:is];
+
+    NSArray *mods = [mgr listModulesForSource:is];
+    XCTAssertTrue([mods count] == 1);
+    XCTAssertTrue([[((SwordModule *) mods[0]) name] isEqualToString:@"KJV"]);
+}
+
+- (void)testLocalInstallSourceStatusNew {
+    SwordInstallSource *is = [[SwordInstallSource alloc] init];
+    [is setSource:@"localhost"];
+    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setCaption:@"LocalTest"];
+
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
+    [mgr addInstallSource:is];
+
+    SwordManager *swMgr = [SwordManager managerWithPath:testModuleManagerPath];
+    NSArray *stats = [mgr moduleStatusInInstallSource:is baseManager:swMgr];
+    for(SwordModule *mod in stats) {
+        NSLog(@"mod.name=%@", [mod name]);
+        NSLog(@"mod.stat=%i", [mod status]);
+    }
+
+    XCTAssertTrue([((SwordModule *) stats[0]).name isEqualToString:@"KJV"]);
+    XCTAssertTrue(((SwordModule *) stats[0]).status == ModStatNew);
+}
+
+- (void)testLocalInstallSourceStatusSame {
+    SwordInstallSource *is = [[SwordInstallSource alloc] init];
+    [is setSource:@"localhost"];
+    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setCaption:@"LocalTest"];
+
+    SwordManager *swMgr = [SwordManager managerWithPath:testModuleManagerPath];
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
+    [mgr addInstallSource:is];
+
+    [mgr installModule:[mgr listModulesForSource:is][0] fromSource:is withManager:swMgr];
+
+    [swMgr reInit];
+    NSArray *stats = [mgr moduleStatusInInstallSource:is baseManager:swMgr];
+    for(SwordModule *mod in stats) {
+        NSLog(@"mod.name=%@", [mod name]);
+        NSLog(@"mod.stat=%i", [mod status]);
+    }
+
+    XCTAssertTrue([((SwordModule *) stats[0]).name isEqualToString:@"KJV"]);
+    XCTAssertTrue(((SwordModule *) stats[0]).status == ModStatSameVersion);
+}
+
+- (void)testInstallModuleFromLocalSource {
+    SwordInstallSource *is = [[SwordInstallSource alloc] init];
+    [is setSource:@"localhost"];
+    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setCaption:@"LocalTest"];
+
+    SwordManager *swMgr = [SwordManager managerWithPath:testModuleManagerPath];
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
+    [mgr addInstallSource:is];
+
+    int stat = [mgr installModule:[mgr listModulesForSource:is][0] fromSource:is withManager:swMgr];
+    XCTAssertTrue(stat == 0);
 }
 
 - (void)testInitManagerCheckConfigPath {

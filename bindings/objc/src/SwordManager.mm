@@ -183,20 +183,23 @@ using std::list;
     if(!temporaryManager) {
         delete swManager;
     }
-
 }
 
 - (void)reInit {
 	[managerLock lock];
     if(modulesPath && [modulesPath length] > 0) {
         
+        NSFileManager *fm = [NSFileManager defaultManager];
+        if(![fm fileExistsAtPath:modulesPath]) {
+            [self createModuleFolderTemplate];
+        }
+
         // modulePath is the main sw manager
         swManager = new sword::SWMgr([modulesPath UTF8String], true, new sword::EncodingFilterMgr(sword::ENC_UTF8));
 
         if(!swManager) {
             ALog(@"Cannot create SWMgr instance for default module path!");
         } else {
-            NSFileManager *fm = [NSFileManager defaultManager];
             NSArray *subDirs = [fm contentsOfDirectoryAtPath:modulesPath error:NULL];
             // for all sub directories add module
             BOOL directory;
@@ -231,6 +234,13 @@ using std::list;
 	[managerLock unlock];    
 }
 
+- (void)createModuleFolderTemplate {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm createDirectoryAtPath:modulesPath withIntermediateDirectories:NO attributes:nil error:NULL];
+    [fm createDirectoryAtPath:[modulesPath stringByAppendingPathComponent:@"mods.d"] withIntermediateDirectories:NO attributes:nil error:NULL];
+    [fm createDirectoryAtPath:[modulesPath stringByAppendingPathComponent:@"modules"] withIntermediateDirectories:NO attributes:nil error:NULL];
+}
+
 - (void)addModulesPath:(NSString *)path {
 	[managerLock lock];
 	if(swManager == nil) {
@@ -247,7 +257,7 @@ using std::list;
 
 - (SwordModule *)moduleWithName:(NSString *)name {
     
-	SwordModule	*ret = [modules objectForKey:[name lowercaseString]];
+	SwordModule	*ret = modules[[name lowercaseString]];
     if(ret == nil) {
         sword::SWModule *mod = [self getSWModuleWithName:name];
         if(mod == NULL) {
@@ -262,7 +272,7 @@ using std::list;
 
             if(ret != nil) {
                 NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:modules];
-                [dict setObject:ret forKey:[name lowercaseString]];
+                dict[[name lowercaseString]] = ret;
                 self.modules = dict;                
             }
         }        
@@ -309,7 +319,7 @@ using std::list;
     }
 	
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+    NSArray *sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
 
 	return [NSArray arrayWithArray:ret];
@@ -324,7 +334,7 @@ using std::list;
     }
     
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+    NSArray *sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
     
 	return [NSArray arrayWithArray:ret];
@@ -339,7 +349,7 @@ using std::list;
     }
     
     // sort
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+    NSArray *sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
     
 	return [NSArray arrayWithArray:ret];    

@@ -155,7 +155,7 @@
     if(swordManager == nil) {
         // create SwordManager from the SWMgr of this source
         sword::SWMgr *mgr;
-        if([[self source] isEqualToString:@"localhost"]) {
+        if([self isLocalSource]) {
             // create SwordManager from new SWMgr of path
             mgr = new sword::SWMgr([[self directory] UTF8String], true, NULL, false, false);
         } else {
