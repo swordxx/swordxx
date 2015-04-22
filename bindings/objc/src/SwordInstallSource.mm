@@ -22,9 +22,6 @@
 - (id)init {
     self = [super init];
     if(self) {
-        // at first we have no sword manager
-        [self setSwordManager:nil];
-
         swInstallSource = new sword::InstallSource("", "");
         self.deleteSwInstallSource = YES;
     }
@@ -45,8 +42,6 @@
 - (id)initWithSource:(sword::InstallSource *)is {
     self = [super init];
     if(self) {
-        // at first we have no sword manager
-        [self setSwordManager:nil];
         swInstallSource = is;
         self.deleteSwInstallSource = NO;
     }
@@ -59,10 +54,6 @@
         ALog(@"Deleting swInstallSource");
         delete swInstallSource;
     }
-}
-
-- (void)setSwordManager:(SwordManager *)swManager {
-    swordManager = swManager;
 }
 
 - (NSString *)caption {
@@ -151,26 +142,23 @@
 
 // get associated SwordManager
 - (SwordManager *)swordManager {
-
-    if(swordManager == nil) {
+    // create SwordManager from the SWMgr of this source
+    sword::SWMgr *mgr;
+    if([self isLocalSource]) {
+        // create SwordManager from new SWMgr of path
+        mgr = new sword::SWMgr([[self directory] UTF8String], true, NULL, false, false);
+    } else {
         // create SwordManager from the SWMgr of this source
-        sword::SWMgr *mgr;
-        if([self isLocalSource]) {
-            // create SwordManager from new SWMgr of path
-            mgr = new sword::SWMgr([[self directory] UTF8String], true, NULL, false, false);
-        } else {
-            // create SwordManager from the SWMgr of this source
-            mgr = swInstallSource->getMgr();
-        }
-        
-        if(mgr == nil) {
-            ALog(@"Have a nil SWMgr!");
-        } else {
-            swordManager = [[SwordManager alloc] initWithSWMgr:mgr];    
-        }
+        mgr = swInstallSource->getMgr();
     }
-    
-    return swordManager;
+
+    if(mgr == nil) {
+        ALog(@"Have a nil SWMgr!");
+        return nil;
+
+    } else {
+        return [[SwordManager alloc] initWithSWMgr:mgr];
+    }
 }
 
 /** low level API */

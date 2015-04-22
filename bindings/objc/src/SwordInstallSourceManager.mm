@@ -250,9 +250,12 @@ base path of the module installation
 }
 
 - (void)updateInstallSource:(SwordInstallSource *)is {
+    // hold a ref to the is
+    SwordInstallSource *save = is;
     // first remove, then add again
-    [self removeInstallSource:is];
-    [self addInstallSource:is];
+    [self removeInstallSource:save];
+    [self addInstallSource:save];
+    save = nil;
 }
 
 // installation/unInstallation
@@ -309,12 +312,9 @@ base path of the module installation
 }
 
 /**
- returns an array of Modules with status set, nil on error
+ returns an array of Modules with status set
  */
 - (NSArray *)moduleStatusInInstallSource:(SwordInstallSource *)is baseManager:(SwordManager *)baseMgr {
-    
-    NSArray *ret = nil;
-    
     // get modules map
     NSMutableArray *ar = [NSMutableArray array];
     std::map<sword::SWModule *, int> modStats = swInstallMgr->getModuleStatus(*[baseMgr swManager], *[[is swordManager] swManager]);
@@ -328,12 +328,8 @@ base path of the module installation
         [mod setStatus:status];
         [ar addObject:mod];
 	}
-    
-    if(ar) {
-        ret = [NSArray arrayWithArray:ar];
-    }
-    
-    return ret;
+
+    return [NSArray arrayWithArray:ar];
 }
 
 - (BOOL)userDisclaimerConfirmed {
