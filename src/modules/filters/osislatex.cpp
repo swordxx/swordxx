@@ -36,7 +36,44 @@ SWORD_NAMESPACE_START
 const char *OSISLaTeX::getHeader() const {
 // can be used to return static start-up info, like packages to load. Not sure yet if I want to retain it.
 
-	const static char *header = "";
+	const static char *header = "\
+		\\LoadClass[11pt,a4paper,twoside,headinclude=true,footinclude=true,BCOR=0mm,DIV=calc]{scrbook}\n\
+		\\LoadClass[11pt,a4paper,twoside,headinclude=true,footinclude=true,BCOR=0mm,DIV=calc]{scrbook}\n\
+		\\NeedsTeXFormat{LaTeX2e}\n\
+		\\ProvidesClass{sword}[2015/03/29 CrossWire LaTeX class for Biblical texts]\n\
+		%\\sworddiclink{%s}{%s}{\n\
+		%\\sworddictref{%s}{%s}{\n\
+		%\\sworddict{%s}{\n\
+		%\\sworddivinename}{%s}{\n\
+		%\\swordfont{\n\
+		%\\swordfootnote[%c]{%s}{%s}{%s}{%s}{\n\
+		%\\swordfootnote{%s}{%s}{%s}{\n\
+		%\\swordfootnote{%s}{%s}{%s}{%s}{\n\
+		%\\swordmorph{\n\
+		%\\swordmorph[Greek]{%s}\n\
+		%\\swordmorph[lemma]{%s}\n\
+		%\\swordmorph{%s}\n\
+		%\\swordpoetryline{\n\
+		%\\swordquote{\n\
+		%\\swordref{%s}{%s}{\n\
+		%\\swordsection{\n\
+		%\\swordsection{}{\n\
+		%\\swordsection{book}{\n\
+		%\\swordsection{sechead}{\n\
+		%\\swordstrong[Greek]{\n\
+		%\\swordstrong[Greektense]{\n\
+		%\\swordstrong[Hebrew]{\n\
+		%\\swordstrong[Hebrewtense]{\n\
+		%\\swordstrong[%s]{%s}{\n\
+		%\\swordstrong{%s}{%s}\n\
+		%\\swordtitle{\n\
+		%\\swordtranschange{supplied}{\n\
+		%\\swordtranschange{tense}{\n\
+		%\\swordwoj{\n\
+		%\\swordxref{\n\
+		%\\swordxref{%s}{\n\
+		%\\swordxref{%s}{%s}{\n\
+	";
 	return header;
 }
 
