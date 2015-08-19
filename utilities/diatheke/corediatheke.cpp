@@ -309,20 +309,23 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				if (vk->getVerse() == 1) {
 					if (vk->getChapter() == 1) {
 						if (vk->getBook() == 1) {
-							if (vk->getTestament() == 1) {
-								// MODULE START SPECIAL PROCESSING
-								if (outputformat == FMT_LATEX) {
+							if (vk->getTestament() == 1) {								
+								// MODULE START SPECIAL PROCESSING								
+								if (outputformat == FMT_LATEX)
+									 { *output << "\\swordmodule\n";
 									// put your latex module start stuff here
 								}
 							}
 							// TESTAMENT START SPECIAL PROCESSING
 							if (outputformat == FMT_LATEX) {
 								// put your latex testament start stuff here
+								*output << "\\swordtestament\n";
 							}
 						}
 						// BOOK START SPECIAL PROCESSING
 						if (outputformat == FMT_LATEX) {
 							// put your latex book start stuff here
+							*output << "\\swordbook\n";
 						}
 					}
 					// CHAPTER START SPECIAL PROCESSING
