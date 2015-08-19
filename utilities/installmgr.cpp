@@ -47,6 +47,8 @@ StatusReporter *statusReporter = 0;
 SWBuf baseDir;
 SWBuf confPath;
 
+bool isConfirmed;
+
 void usage(const char *progName = 0, const char *error = 0);
 
 class MyInstallMgr : public InstallMgr {
@@ -55,6 +57,10 @@ public:
 
 virtual bool isUserDisclaimerConfirmed() const {
 	static bool confirmed = false;
+	
+	if (isConfirmed) { 
+		confirmed = true;
+	}
         if (!confirmed) {
 		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 		cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
@@ -323,7 +329,12 @@ void usage(const char *progName, const char *error) {
 
 	if (error) fprintf(stderr, "\n%s: %s\n", (progName ? progName : "installmgr"), error);
 
-	fprintf(stderr, "\nusage: %s <command> [command ...]\n"
+	fprintf(stderr, "\nusage: %s [--allow...] <command> [command ...]\n"
+		"\n\t --allow-internet-access-and-risk-tracing-and-jail-or-martyrdom \n"
+		"\n  This aptly named option will allow the program to connect to the internet without asking for user confirmation\n"
+		"  In many places this may well be a risky or even foolish undertaking.\n"
+		"  Please take special care before you use this option in scripts, particularly in scripts you want to offer for public download.\n" 
+		"  What may appear to be safe for you, may well not be safe for someone else, who uses your scripts. \n"
 		"\n  Commands (run in order they are passed):\n\n"
 		"\t-init\t\t\t\tcreate a basic user config file.\n"
 		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
@@ -345,12 +356,17 @@ void usage(const char *progName, const char *error) {
 
 
 int main(int argc, char **argv) {
-
+	
+	isConfirmed = false;
+	
 	if (argc < 2) usage(*argv);
 
 	for (int i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "-d")) {
 			SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
+		}
+		else if (!strcmp(argv[i], "--allow-internet-access-and-risk-tracing-and-jail-or-martyrdom")) {
+			isConfirmed = true;
 		}
 		else if (!strcmp(argv[i], "-init")) {
 			initConfig();
