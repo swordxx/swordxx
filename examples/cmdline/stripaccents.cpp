@@ -1,12 +1,13 @@
 /******************************************************************************
  *
- *  search.cpp -	This simple example shows how to perform a search on a
- *			SWORD module. It amounts to a simple commandline
- *			search tool with a usage like:
+ *  stripaccents.cpp -	This simple example shows how to strip diacritical marks from a stringa
+ *			using the SWORD library. It amounts to a simple commandline
+ *			tool with a usage like:
+ *				
+ *                               stripaccents 4 "וְהָאָ֗רֶץ הָיְתָ֥ה תֹ֙הוּ֙ וָבֹ֔הוּ וְחֹ֖שֶׁךְ עַל־פְּנֵ֣י תְהֹ֑ום וְר֣וּחַ "
+ *				
  *
- *				search KJV "swift hear slow speak"
- *
- * $Id: search.cpp 3269 2014-10-09 14:55:14Z scribe $
+ * $Id: stripaccents.cpp 3382 2015-09-01 22:57GMT refdoc $
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
