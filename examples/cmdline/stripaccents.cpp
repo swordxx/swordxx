@@ -68,10 +68,10 @@ int main(int argc, char **argv)
 	manager.setGlobalOption("Hebrew Vowel Points", "Off");
 	manager.setGlobalOption("Hebrew Cantillation", "Off");
 	
-	if (stripFilters & (1 << 0)) manager.filterText("Hebrew Vowel Points", stripTerm);
-	if (stripFilters & (1 << 1)) manager.filterText("Hebrew Cantillation", stripTerm);
-	if (stripFilters & (1 << 2)) manager.filterText("Arabic Vowel Points", stripTerm);
-	if (stripFilters & (1 << 3)) manager.filterText("Greek Accents", stripTerm);
+	if (stripFilters & (1 << 3)) manager.filterText("Hebrew Vowel Points", stripTerm);
+	if (stripFilters & (1 << 2)) manager.filterText("Hebrew Cantillation", stripTerm);
+	if (stripFilters & (1 << 1)) manager.filterText("Arabic Vowel Points", stripTerm);
+	if (stripFilters & (1 << 0)) manager.filterText("Greek Accents", stripTerm);
 	
 	fprintf(stdout,"%s\n",stripTerm.c_str());
 	return 0;
