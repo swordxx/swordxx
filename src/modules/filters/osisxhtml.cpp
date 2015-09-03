@@ -43,6 +43,7 @@ const char *OSISXHTML::getHeader() const {
 		.indent2         { margin-left: 20px }\n\
 		.indent3         { margin-left: 30px }\n\
 		.indent4         { margin-left: 40px }\n\
+		abbr { &:hover{ &:before{ content: attr(title) } } }\n\
 		.small-caps { font-variant: small-caps; }\n\
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n\
 		.acrostic { text-align: center; }\n\
@@ -762,7 +763,16 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			buf += tag;
 		}
 		else if (!strcmp(tag.getName(), "abbr")) {
-			buf += tag;
+			if (!tag.isEndTag()) {
+				SWBuf title = tag.getAttribute("expansion");
+				buf += "<abbr title=\"";
+				buf += title;
+				buf += "\">";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</abbr>";
+			}
+		
 		}
 		else if (!strcmp(tag.getName(), "br")) {
 			buf += tag;
