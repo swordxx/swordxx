@@ -294,7 +294,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						}
 						SWBuf noteName = tag.getAttribute("n");
 						VerseKey *vkey = NULL;
-						// char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+
 
 						u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
@@ -306,21 +306,23 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}(%s){",
 								 
 								footnoteNumber.c_str(), 
 								u->version.c_str(), 
 								vkey->getText(), 
+								tag.getAttribute("type"),
 								(renderNoteNumbers ? noteName.c_str() : ""));
 							if (u->module) {
 								buf += u->module->renderText(footnoteBody).c_str();
 							}
 						}
 						else {
-							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
 								footnoteNumber.c_str(), 
 								u->version.c_str(), 
-								u->key->getText(),  
+								u->key->getText(),
+								tag.getAttribute("type"),  
 								(renderNoteNumbers ? noteName.c_str() : ""));
 							if (u->module) {
 								buf += u->module->renderText(footnoteBody).c_str();
