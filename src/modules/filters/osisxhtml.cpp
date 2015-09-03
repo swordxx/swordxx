@@ -761,6 +761,9 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "span")) {
 			buf += tag;
 		}
+		else if (!strcmp(tag.getName(), "abbr")) {
+			buf += tag;
+		}
 		else if (!strcmp(tag.getName(), "br")) {
 			buf += tag;
 		}
