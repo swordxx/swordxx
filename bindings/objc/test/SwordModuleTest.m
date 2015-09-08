@@ -30,7 +30,7 @@
 }
 
 - (void)testModuleIntroduction {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
     NSString *modIntro = [bible moduleIntroduction];
     NSLog(@"mod intro: %@", modIntro);
@@ -38,6 +38,7 @@
     XCTAssertEqual(@"Im Anfang schuf Gott Himmel und Erde.", modIntro);
 }
 
+/*
 - (void)testFirstBookATIntro {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
     
@@ -47,6 +48,7 @@
     XCTAssertNotNil(intro);
     XCTAssertTrue([intro hasPrefix:@" <!P><br />Das erste Buch der Bibel wird auch Genesis"]);
 }
+*/
 
 - (void)testFirstBookATIntroGer {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
@@ -58,6 +60,7 @@
     XCTAssertTrue([intro hasPrefix:@" <!P><br />Das erste Buch der Bibel wird auch Genesis"]);
 }
 
+/*
 - (void)testFirstBookNTIntro {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
 
@@ -67,6 +70,7 @@
     XCTAssertNotNil(intro);
     XCTAssertTrue([intro hasPrefix:@" <!P><br />Um die Zeit der Apostelversammlung herum"]);
 }
+*/
 
 - (void)testFirstBookNTIntroGer {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
@@ -96,7 +100,7 @@
     SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Numbers 4:21" textType:TextTypeRendered];
     NSLog(@"Preverse text: %@", [text preVerseHeading]);
     XCTAssertTrue([[text preVerseHeading] length] > 0);
-    XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Sonderstellung der Leviten</title>"]);
+    XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Gerschoniten</title>"]);
     [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_OFF];
 }
 
@@ -223,7 +227,7 @@
     }
 }
 
-- (void)testStrippedTextForRef {
+- (void)testVersePositioning {
     SwordVerseKey *vk = [SwordVerseKey verseKeyWithRef:@"1Mo 1:2"];
     NSLog(@"start position: %@", [vk keyText]);
     [vk decrement];

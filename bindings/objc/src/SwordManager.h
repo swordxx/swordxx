@@ -115,7 +115,6 @@
 @property (strong, readonly) NSDictionary *modules;
 @property (strong, readwrite) NSString *modulesPath;
 @property (strong, readwrite) NSLock *managerLock;
-@property (readwrite) BOOL temporaryManager;
 
 // --------------------- methods -----------------------
 

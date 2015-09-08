@@ -40,7 +40,7 @@
 	if([keys count] == 0) {
         NSMutableArray *arr = [NSMutableArray array];
 
-        [moduleLock lock];
+        [self.moduleLock lock];
         
         swModule->setSkipConsecutiveLinks(true);
         *swModule = sword::TOP;
@@ -66,7 +66,7 @@
             (*swModule)++;
         }
 
-        [moduleLock unlock];
+        [self.moduleLock unlock];
         
         self.keys = arr;        
         [self writeToCache];
@@ -133,14 +133,14 @@
 - (NSString *)entryForKey:(NSString *)aKey {
     NSString *ret = nil;
     
-	[moduleLock lock];	
+	[self.moduleLock lock];
     [self setKeyString:aKey];    
 	if([self error]) {
         ALog(@"Error on setting key!");
     } else {
         ret = [self strippedText];
     }
-	[moduleLock unlock];
+	[self.moduleLock unlock];
 	
 	return ret;
 }
@@ -152,13 +152,13 @@
 - (id)attributeValueForParsedLinkData:(NSDictionary *)data withTextRenderType:(TextPullType)textType {
     id ret = nil;
     
-    NSString *attrType = [data objectForKey:ATTRTYPE_TYPE];
+    NSString *attrType = data[ATTRTYPE_TYPE];
     if([attrType isEqualToString:@"scriptRef"] || 
        [attrType isEqualToString:@"scripRef"] ||
        [attrType isEqualToString:@"Greek"] ||
        [attrType isEqualToString:@"Hebrew"] ||
        [attrType hasPrefix:@"strongMorph"] || [attrType hasPrefix:@"robinson"]) {
-        NSString *key = [data objectForKey:ATTRTYPE_VALUE];
+        NSString *key = data[ATTRTYPE_VALUE];
         ret = [self strippedTextEntriesForRef:key];
     }
     

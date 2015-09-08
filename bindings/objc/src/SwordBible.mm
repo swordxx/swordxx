@@ -168,7 +168,7 @@ NSLock *bibleLock = nil;
 }
 
 - (BOOL)hasReference:(NSString *)ref {
-	[moduleLock lock];
+	[self.moduleLock lock];
 	
 	sword::VerseKey	*key = (sword::VerseKey *)(swModule->createKey());
 	(*key) = [ref UTF8String];
@@ -185,7 +185,7 @@ NSLock *bibleLock = nil;
         }
     }    
     
-	[moduleLock unlock];
+	[self.moduleLock unlock];
 	
 	return NO;
 }
@@ -257,7 +257,7 @@ NSLock *bibleLock = nil;
 - (NSString *)moduleIntroduction {
     NSString *ret;
     
-    [moduleLock lock];
+    [self.moduleLock lock];
 
     // save key
     SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
@@ -271,7 +271,7 @@ NSLock *bibleLock = nil;
     // restore old key
     [self setSwordKey:save];
     
-    [moduleLock unlock];
+    [self.moduleLock unlock];
 
     return ret;
 }
@@ -279,7 +279,7 @@ NSLock *bibleLock = nil;
 - (NSString *)bookIntroductionFor:(SwordBibleBook *)aBook {
     NSString *ret;
     
-    [moduleLock lock];
+    [self.moduleLock lock];
 
     // save key
     SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
@@ -294,7 +294,7 @@ NSLock *bibleLock = nil;
     // restore old key
     [self setSwordKey:save];
 
-    [moduleLock unlock];
+    [self.moduleLock unlock];
 
     return ret;
 }
@@ -302,7 +302,7 @@ NSLock *bibleLock = nil;
 - (NSString *)chapterIntroductionIn:(SwordBibleBook *)aBook forChapter:(int)chapter {
     NSString *ret;
 
-    [moduleLock lock];
+    [self.moduleLock lock];
 
     // save key
     SwordVerseKey *save = (SwordVerseKey *)[self getKeyCopy];
@@ -318,7 +318,7 @@ NSLock *bibleLock = nil;
     // restore old key
     [self setSwordKey:save];
 
-    [moduleLock unlock];
+    [self.moduleLock unlock];
 
     return ret;    
 }
@@ -327,7 +327,7 @@ NSLock *bibleLock = nil;
     SwordBibleTextEntry *ret = nil;
     
     if(aKey) {
-        [moduleLock lock];
+        [self.moduleLock lock];
         [self setSwordKey:aKey];
         if(![self error]) {
             NSString *txt;
@@ -343,32 +343,32 @@ NSLock *bibleLock = nil;
                 ALog(@"nil key");
             }
 
-            if([swManager globalOption:SW_OPTION_HEADINGS] && [self hasFeature:SWMOD_FEATURE_HEADINGS]) {
+            if([self.swManager globalOption:SW_OPTION_HEADINGS] && [self hasFeature:SWMOD_FEATURE_HEADINGS]) {
                 NSString *preverseHeading = [self entryAttributeValuePreverse];
                 if(preverseHeading && [preverseHeading length] > 0) {
                     [ret setPreVerseHeading:preverseHeading];
                 }
             }        
         }
-        [moduleLock unlock];
+        [self.moduleLock unlock];
     }
     
     return ret;
 }
 
 - (NSString *)versification {
-    NSString *versification = configEntries[SWMOD_CONFENTRY_VERSIFICATION];
+    NSString *versification = self.configEntries[SWMOD_CONFENTRY_VERSIFICATION];
     if(versification == nil) {
         versification = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_VERSIFICATION];
         if(versification != nil) {
-            configEntries[SWMOD_CONFENTRY_VERSIFICATION] = versification;
+            self.configEntries[SWMOD_CONFENTRY_VERSIFICATION] = versification;
         }
     }
     
     // if still nil, use KJV versification
     if(versification == nil) {
         versification = @"KJV";
-        configEntries[SWMOD_CONFENTRY_VERSIFICATION] = versification;
+        self.configEntries[SWMOD_CONFENTRY_VERSIFICATION] = versification;
     }
     
     return versification;    
@@ -456,16 +456,16 @@ NSLock *bibleLock = nil;
 - (void)writeEntry:(SwordModuleTextEntry *)anEntry {
 	
     const char *data = [[anEntry text] UTF8String];
-    int dLen = strlen(data);
+    size_t dLen = strlen(data);
 
-	[moduleLock lock];
+	[self.moduleLock lock];
     [self setKeyString:[anEntry key]];
     if(![self error]) {
         swModule->setEntry(data, dLen);	// save text to module at current position    
     } else {
         ALog(@"error at positioning module!");
     }
-	[moduleLock unlock];
+	[self.moduleLock unlock];
 }
 
 @end

@@ -23,7 +23,6 @@ typedef sword::multimapwithdefault<sword::SWBuf, sword::SWBuf, std::less <sword:
 @interface SwordInstallSourceManager ()
 
 @property (strong, readwrite) NSDictionary *installSources;
-@property (strong, readwrite) NSArray *installSourceList;
 
 @end
 
@@ -50,7 +49,6 @@ base path of the module installation
         [self setCreateConfigPath:NO];
         [self setConfigPath:nil];
         [self setInstallSources:[NSDictionary dictionary]];
-        [self setInstallSourceList:[NSArray array]];
         [self setFtpUser:@"ftp"];
         [self setFtpPassword:@"ObjCSword@crosswire.org"];
     }
@@ -76,7 +74,9 @@ base path of the module installation
 }
 
 - (void)dealloc {
+    DLog(@"");
     if(swInstallMgr != nil) {
+        DLog(@"deleting InstallMgr");
         delete swInstallMgr;
     }
 }
@@ -92,7 +92,7 @@ base path of the module installation
     }
 
     if(swInstallMgr == NULL) {
-        ALog(@"Initializing swInstallMgr");
+        DLog(@"Initializing swInstallMgr");
         swInstallMgr = [self newDefaultInstallMgr];
         if(swInstallMgr == nil) {
             ALog(@"Could not initialize InstallMgr!");
@@ -181,18 +181,15 @@ base path of the module installation
 
 - (void)setupInstallSources {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSMutableArray *arr = [NSMutableArray array];
     for(InstallSourceMap::iterator it = swInstallMgr->sources.begin(); it != swInstallMgr->sources.end(); it++) {
         sword::InstallSource *sis = it->second;
         SwordInstallSource *is = [[SwordInstallSource alloc] initWithSource:sis];
 
         ALog(@"Adding install source: %@", [is caption]);
         dict[[is caption]] = is;
-        [arr addObject:is];
     }
 
     [self setInstallSources:dict];
-    [self setInstallSourceList:arr];
 }
 
 - (NSString *)createInstallMgrConfPath {
@@ -203,10 +200,8 @@ base path of the module installation
     ALog(@"Adding install source: %@", [is caption]);
 
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[self installSources]];
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:[self installSourceList]];
 
     dict[[is caption]] = is;
-    [arr addObject:is];
 
     // modify conf file
     sword::SWConfig config([[self createInstallMgrConfPath] UTF8String]);
@@ -218,16 +213,13 @@ base path of the module installation
     config.Save();
 
     [self setInstallSources:dict];
-    [self setInstallSourceList:arr];
     [self readInstallMgrConf];
 }
 
 - (void)removeInstallSource:(SwordInstallSource *)is {
     ALog(@"Removing install source: %@", [is caption]);
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[self installSources]];
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:[self installSourceList]];
     [dict removeObjectForKey:[is caption]];
-    [arr removeObject:is];
 
     // modify conf file
     sword::SWConfig config([[self createInstallMgrConfPath] UTF8String]);
@@ -235,7 +227,7 @@ base path of the module installation
     config["Sources"].erase(INSTALLSOURCE_SECTION_TYPE_FTP);
 
     // build up new
-    for(SwordInstallSource *sis in self.installSourceList) {
+    for(SwordInstallSource *sis in [self.installSources allValues]) {
 		if([[sis type] isEqualToString:INSTALLSOURCE_TYPE_FTP]) {
 			config["Sources"].insert(ConfigEntMap::value_type(INSTALLSOURCE_SECTION_TYPE_FTP, [[sis configEntry] UTF8String]));
 		} else {
@@ -245,11 +237,11 @@ base path of the module installation
     config.Save();
 
     [self setInstallSources:dict];
-    [self setInstallSourceList:arr];
     [self readInstallMgrConf];
 }
 
 - (void)updateInstallSource:(SwordInstallSource *)is {
+    ALog(@"Updating install source [remove|add]: %@", [is caption]);
     // hold a ref to the is
     SwordInstallSource *save = is;
     // first remove, then add again
@@ -258,8 +250,8 @@ base path of the module installation
     save = nil;
 }
 
-// installation/unInstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager {
+    ALog(@"Installing module: %@, from source: %@", [aModule name], [is caption]);
     int stat;
     if([is isLocalSource]) {
         stat = swInstallMgr->installModule([manager swManager], [[is directory] UTF8String], [[aModule name] UTF8String]);
@@ -269,22 +261,19 @@ base path of the module installation
     return stat;
 }
 
+- (int)uninstallModule:(SwordModule *)aModule fromManager:(SwordManager *)swManager {
+    ALog(@"Removing module: %@", [aModule name]);
+    return swInstallMgr->removeModule([swManager swManager], [[aModule name] UTF8String]);
+}
+
 - (int)refreshMasterRemoteInstallSourceList {
+    ALog(@"Refreshing remote install sources from master repo.");
     int stat = swInstallMgr->refreshRemoteSourceConfiguration();
     if(stat) {
         ALog(@"Unable to refresh with master install source!");
     } else {
         [self reInitialize];
     }
-    
-    return stat;
-}
-
-/**
- uninstalls a module from a SwordManager
- */
-- (int)uninstallModule:(SwordModule *)aModule fromManager:(SwordManager *)swManager {
-    int stat = swInstallMgr->removeModule([swManager swManager], [[aModule name] UTF8String]);
     
     return stat;
 }
@@ -298,8 +287,8 @@ base path of the module installation
  refreshing the install source is necessary before installation of 
  */
 - (int)refreshInstallSource:(SwordInstallSource *)is {
+    ALog(@"Refreshing install source:%@", [is caption]);
     int ret = 1;
-    
     if(is == nil) {
         ALog(@"Install source is nil");
     } else {
@@ -315,6 +304,7 @@ base path of the module installation
  returns an array of Modules with status set
  */
 - (NSArray *)moduleStatusInInstallSource:(SwordInstallSource *)is baseManager:(SwordManager *)baseMgr {
+    ALog(@"Retrieving module status for install source:%@", [is caption]);
     // get modules map
     NSMutableArray *ar = [NSMutableArray array];
     std::map<sword::SWModule *, int> modStats = swInstallMgr->getModuleStatus(*[baseMgr swManager], *[[is swordManager] swManager]);

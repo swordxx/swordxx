@@ -138,13 +138,32 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [mgr initManager];
 
     XCTAssertTrue([[mgr installSources] count] == 1, @"");
-    XCTAssertTrue([[mgr installSourceList] count] == 1, @"");
+    XCTAssertTrue([[[[[mgr installSources] allValues] firstObject] caption] isEqualToString:@"CrossWire"], @"");
+    XCTAssertTrue([[[[[mgr installSources] allValues] firstObject] source] isEqualToString:@"ftp.crosswire.org"], @"");
+    XCTAssertTrue([[[[[mgr installSources] allValues] firstObject] directory] isEqualToString:@"/pub/sword/raw"], @"");
+}
 
-    XCTAssertEqual([[mgr installSourceList] firstObject], [mgr installSources][@"CrossWire"]);
+- (void)testDisclaimerNotApproved {
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
 
-    XCTAssertTrue([[[[mgr installSourceList] firstObject] caption] isEqualToString:@"CrossWire"], @"");
-    XCTAssertTrue([[[[mgr installSourceList] firstObject] source] isEqualToString:@"ftp.crosswire.org"], @"");
-    XCTAssertTrue([[[[mgr installSourceList] firstObject] directory] isEqualToString:@"/pub/sword/raw"], @"");
+    XCTAssertTrue([[mgr installSources] count] == 1, @"");
+
+    NSInteger stat = [mgr refreshInstallSource:[[mgr installSources] allValues][0]];
+    NSLog(@"stat: %li", stat);
+    XCTAssertTrue(stat == -1);
+}
+
+- (void)testRefreshInstallSource {
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
+
+    XCTAssertTrue([[mgr installSources] count] == 1, @"");
+
+    [mgr setUserDisclaimerConfirmed:YES];
+    NSInteger stat = [mgr refreshInstallSource:[[mgr installSources] allValues][0]];
+    NSLog(@"stat: %li", stat);
+    XCTAssertTrue(stat == 0);
 }
 
 - (void)testAddInstallSource {
@@ -159,7 +178,6 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [mgr addInstallSource:is];
 
     XCTAssertTrue([[mgr installSources] count] == 2, @"");
-    XCTAssertTrue([[mgr installSourceList] count] == 2, @"");
 
     XCTAssertTrue([[[mgr installSources][@"test"] caption] isEqualToString:@"test"], @"");
     XCTAssertTrue([[[mgr installSources][@"test"] source] isEqualToString:@"foo.bar.local"], @"");
@@ -179,7 +197,6 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [mgr addInstallSource:is];
 
     XCTAssertTrue([[mgr installSources] count] == 2, @"");
-    XCTAssertTrue([[mgr installSourceList] count] == 2, @"");
 
     XCTAssertTrue([[[mgr installSources][@"test"] caption] isEqualToString:@"test"], @"");
     XCTAssertTrue([[[mgr installSources][@"test"] source] isEqualToString:@"foo.bar.local"], @"");
@@ -189,7 +206,33 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [mgr removeInstallSource:is];
 
     XCTAssertTrue([[mgr installSources] count] == 1, @"");
-    XCTAssertTrue([[mgr installSourceList] count] == 1, @"");
+}
+
+- (void)testUpdateInstallSource {
+    SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
+    [mgr initManager];
+
+    // first add
+    SwordInstallSource *is = [[SwordInstallSource alloc] initWithType:INSTALLSOURCE_TYPE_FTP];
+    [is setCaption:@"test"];
+    [is setSource:@"foo.bar.local"];
+    [is setDirectory:@"/foobar"];
+    [mgr addInstallSource:is];
+
+    XCTAssertTrue([[mgr installSources] count] == 2, @"");
+    XCTAssertTrue([[[mgr installSources][@"test"] caption] isEqualToString:@"test"], @"");
+    XCTAssertTrue([[[mgr installSources][@"test"] source] isEqualToString:@"foo.bar.local"], @"");
+    XCTAssertTrue([[[mgr installSources][@"test"] directory] isEqualToString:@"/foobar"], @"");
+
+    SwordInstallSource *update = [mgr installSources][@"test"];
+    [update setSource:@"local.bar.foo"];
+
+    [mgr updateInstallSource:update];
+
+    XCTAssertTrue([[mgr installSources] count] == 2, @"");
+    XCTAssertTrue([[[mgr installSources][@"test"] caption] isEqualToString:@"test"], @"");
+    XCTAssertTrue([[[mgr installSources][@"test"] source] isEqualToString:@"local.bar.foo"], @"");
+    XCTAssertTrue([[[mgr installSources][@"test"] directory] isEqualToString:@"/foobar"], @"");
 }
 
 - (void)testUseAsDefaultManager {

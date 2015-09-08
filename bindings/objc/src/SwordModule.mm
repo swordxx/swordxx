@@ -21,29 +21,9 @@
 
 @interface SwordModule ()
 
-@property (strong, readwrite) NSString *name;
-@property (strong, readwrite) NSString *typeString;
-@property (strong, readwrite) NSString *descr;
-@property (strong, readwrite) NSString *lang;
-@property(readwrite, strong) NSMutableDictionary *configEntries;
-
-- (void)mainInit;
-
 @end
 
 @implementation SwordModule
-
-@synthesize configEntries;
-@synthesize type;
-@synthesize status;
-@synthesize moduleLock;
-@synthesize indexLock;
-@synthesize swManager;
-@synthesize name;
-@synthesize typeString;
-@synthesize descr;
-@synthesize lang;
-
 
 + (id)moduleForSWModule:(sword::SWModule *)aModule {
     return [[SwordModule alloc] initWithSWModule:aModule];
@@ -120,12 +100,8 @@
 
 - (void)mainInit {
     category = Unset;
-    self.name = [self retrieveName];
-    self.typeString = [self retrieveType];
-    self.descr = [self retrieveDescr];
-    self.lang = [self retrieveLang];
 
-    self.type = [SwordModule moduleTypeForModuleTypeString:self.typeString];
+    self.type = [SwordModule moduleTypeForModuleTypeString:[self typeString]];
     self.moduleLock = [[NSRecursiveLock alloc] init];
     self.indexLock = [[NSLock alloc] init];
     self.configEntries = [NSMutableDictionary dictionary];
@@ -159,7 +135,9 @@
     return self;
 }
 
-
+- (void)dealloc {
+//    ALog(@"");
+}
 
 #pragma mark - Filters
 
@@ -174,14 +152,44 @@
 #pragma mark - Module access semaphores
 
 - (void)lockModuleAccess {
-    [moduleLock lock];
+    [self.moduleLock lock];
 }
 
 - (void)unlockModuleAccess {
-    [moduleLock unlock];
+    [self.moduleLock unlock];
 }
 
-#pragma mark - Conf entries
+- (NSString *)name {
+    NSString *str = [NSString stringWithCString:swModule->getName() encoding:NSUTF8StringEncoding];
+    if(!str) {
+        str = [NSString stringWithCString:swModule->getName() encoding:NSISOLatin1StringEncoding];
+    }
+    return str;
+}
+
+- (NSString *)descr {
+    NSString *str = [NSString stringWithCString:swModule->getDescription() encoding:NSUTF8StringEncoding];
+    if(!str) {
+        str = [NSString stringWithCString:swModule->getDescription() encoding:NSISOLatin1StringEncoding];
+    }
+    return str;
+}
+
+- (NSString *)lang {
+    NSString *str = [NSString stringWithCString:swModule->getLanguage() encoding:NSUTF8StringEncoding];
+    if(!str) {
+        str = [NSString stringWithCString:swModule->getLanguage() encoding:NSISOLatin1StringEncoding];
+    }
+    return str;
+}
+
+- (NSString *)typeString {
+    NSString *str = [NSString stringWithCString:swModule->getType() encoding:NSUTF8StringEncoding];
+    if(!str) {
+        str = [NSString stringWithCString:swModule->getType() encoding:NSISOLatin1StringEncoding];
+    }
+    return str;
+}
 
 - (NSAttributedString *)fullAboutText {
     return [[NSAttributedString alloc] initWithString:@""];
@@ -191,44 +199,14 @@
     return swModule->popError();
 }
 
-- (NSString *)retrieveName {
-    NSString *str = [NSString stringWithCString:swModule->getName() encoding:NSUTF8StringEncoding];
-    if(!str) {
-        str = [NSString stringWithCString:swModule->getName() encoding:NSISOLatin1StringEncoding];
-    }
-    return str;
-}
-
-- (NSString *)retrieveDescr {
-    NSString *str = [NSString stringWithCString:swModule->getDescription() encoding:NSUTF8StringEncoding];
-    if(!str) {
-        str = [NSString stringWithCString:swModule->getDescription() encoding:NSISOLatin1StringEncoding];
-    }
-    return str;
-}
-
-- (NSString *)retrieveLang {
-    NSString *str = [NSString stringWithCString:swModule->getLanguage() encoding:NSUTF8StringEncoding];
-    if(!str) {
-        str = [NSString stringWithCString:swModule->getLanguage() encoding:NSISOLatin1StringEncoding];
-    }
-    return str;
-}
-
-- (NSString *)retrieveType {
-    NSString *str = [NSString stringWithCString:swModule->getType() encoding:NSUTF8StringEncoding];
-    if(!str) {
-        str = [NSString stringWithCString:swModule->getType() encoding:NSISOLatin1StringEncoding];
-    }
-    return str;
-}
+#pragma mark - Conf entries
 
 - (NSString *)categoryString {
-    NSString *cat = configEntries[SWMOD_CONFENTRY_CATEGORY];
+    NSString *cat = self.configEntries[SWMOD_CONFENTRY_CATEGORY];
     if(cat == nil) {
         cat = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_CATEGORY];
         if(cat != nil) {
-            configEntries[SWMOD_CONFENTRY_CATEGORY] = cat;
+            self.configEntries[SWMOD_CONFENTRY_CATEGORY] = cat;
         }
     }
     
@@ -243,11 +221,11 @@
 }
 
 - (NSString *)cipherKey {
-    NSString *cipherKey = configEntries[SWMOD_CONFENTRY_CIPHERKEY];
+    NSString *cipherKey = self.configEntries[SWMOD_CONFENTRY_CIPHERKEY];
     if(cipherKey == nil) {
         cipherKey = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_CIPHERKEY];
         if(cipherKey != nil) {
-            configEntries[SWMOD_CONFENTRY_CIPHERKEY] = cipherKey;
+            self.configEntries[SWMOD_CONFENTRY_CIPHERKEY] = cipherKey;
         }
     }
     
@@ -255,11 +233,11 @@
 }
 
 - (NSString *)version {
-    NSString *version = configEntries[SWMOD_CONFENTRY_VERSION];
+    NSString *version = self.configEntries[SWMOD_CONFENTRY_VERSION];
     if(version == nil) {
         version = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_VERSION];
         if(version != nil) {
-            configEntries[SWMOD_CONFENTRY_VERSION] = version;
+            self.configEntries[SWMOD_CONFENTRY_VERSION] = version;
         }
     }
     
@@ -267,11 +245,11 @@
 }
 
 - (NSString *)minVersion {
-    NSString *minVersion = configEntries[SWMOD_CONFENTRY_MINVERSION];
+    NSString *minVersion = self.configEntries[SWMOD_CONFENTRY_MINVERSION];
     if(minVersion == nil) {
         minVersion = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_MINVERSION];
         if(minVersion != nil) {
-            configEntries[SWMOD_CONFENTRY_MINVERSION] = minVersion;
+            self.configEntries[SWMOD_CONFENTRY_MINVERSION] = minVersion;
         }
     }
     
@@ -280,7 +258,7 @@
 
 /** this might be RTF string  but the return value will be converted to UTF8 */
 - (NSString *)aboutText {
-    NSMutableString *aboutText = configEntries[SWMOD_CONFENTRY_ABOUT];
+    NSMutableString *aboutText = self.configEntries[SWMOD_CONFENTRY_ABOUT];
     if(aboutText == nil) {
         aboutText = [NSMutableString stringWithString:[self configFileEntryForConfigKey:SWMOD_CONFENTRY_ABOUT]];
         if(aboutText != nil) {
@@ -336,7 +314,7 @@
         } else {
             aboutText = [NSMutableString string];
         }
-        configEntries[SWMOD_CONFENTRY_ABOUT] = aboutText;
+        self.configEntries[SWMOD_CONFENTRY_ABOUT] = aboutText;
     }
     
     return aboutText;    
@@ -349,11 +327,11 @@
 
 - (BOOL)isEditable {
     BOOL ret = NO;
-    NSString *editable = configEntries[SWMOD_CONFENTRY_EDITABLE];
+    NSString *editable = self.configEntries[SWMOD_CONFENTRY_EDITABLE];
     if(editable == nil) {
         editable = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_EDITABLE];
         if(editable != nil) {
-            configEntries[SWMOD_CONFENTRY_EDITABLE] = editable;
+            self.configEntries[SWMOD_CONFENTRY_EDITABLE] = editable;
         }
     }
     
@@ -368,11 +346,11 @@
 
 - (BOOL)isRTL {
     BOOL ret = NO;
-    NSString *direction = configEntries[SWMOD_CONFENTRY_DIRECTION];
+    NSString *direction = self.configEntries[SWMOD_CONFENTRY_DIRECTION];
     if(direction == nil) {
         direction = [self configFileEntryForConfigKey:SWMOD_CONFENTRY_DIRECTION];
         if(direction != nil) {
-            configEntries[SWMOD_CONFENTRY_DIRECTION] = direction;
+            self.configEntries[SWMOD_CONFENTRY_DIRECTION] = direction;
         }
     }
     
@@ -437,7 +415,7 @@
 - (NSString *)configFileEntryForConfigKey:(NSString *)entryKey {
 	NSString *result = nil;
     
-	[moduleLock lock];
+	[self.moduleLock lock];
     const char *entryStr = swModule->getConfigEntry([entryKey UTF8String]);
 	if(entryStr) {
 		result = [NSString stringWithUTF8String:entryStr];
@@ -445,7 +423,7 @@
             result = [NSString stringWithCString:entryStr encoding:NSISOLatin1StringEncoding];
         }
     }
-	[moduleLock unlock];
+	[self.moduleLock unlock];
 	
 	return result;
 }
@@ -463,7 +441,7 @@
     cipherKeys[[self name]] = unlockKey;
     [[NSUserDefaults standardUserDefaults] setObject:cipherKeys forKey:DefaultsModuleCipherKeysKey];
     
-	[swManager setCipherKey:unlockKey forModuleNamed:[self name]];
+	[self.swManager setCipherKey:unlockKey forModuleNamed:[self name]];
     
 	return YES;
 }
@@ -595,20 +573,20 @@
 }
 
 - (NSString *)entryAttributeValuePreverseForKey:(SwordKey *)aKey {
-    [moduleLock lock];
+    [self.moduleLock lock];
     [self setSwordKey:aKey];
     swModule->renderText(); // force processing of key
     NSString *value = [self entryAttributeValuePreverse];
-    [moduleLock unlock];
+    [self.moduleLock unlock];
     return value;
 }
 
 - (NSString *)entryAttributeValueFootnoteOfType:(NSString *)fnType indexValue:(NSString *)index forKey:(SwordKey *)aKey {
-    [moduleLock lock];
+    [self.moduleLock lock];
     [self setSwordKey:aKey];
     swModule->renderText(); // force processing of key
     NSString *value = [self entryAttributeValueFootnoteOfType:fnType indexValue:index];
-    [moduleLock unlock];
+    [self.moduleLock unlock];
     return value;
 }
 
@@ -667,7 +645,7 @@
     SwordModuleTextEntry *ret = nil;
     
     if(aKey) {
-        [moduleLock lock];
+        [self.moduleLock lock];
         [self setSwordKey:aKey];
         if(![self error]) {
             NSString *txt = @"";
@@ -683,7 +661,7 @@
                 ALog(@"Nil key");
             }
         }
-        [moduleLock unlock];
+        [self.moduleLock unlock];
     }
     
     return ret;

@@ -69,7 +69,6 @@
     if(created) {
         delete sk;
     }
-    
 }
 
 - (SwordKey *)clone {

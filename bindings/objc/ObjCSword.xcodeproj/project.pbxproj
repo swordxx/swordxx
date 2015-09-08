@@ -6312,6 +6312,9 @@
 				LastTestingUpgradeCheck = 0610;
 				LastUpgradeCheck = 0610;
 				TargetAttributes = {
+					8DC2EF4F0486A6940098B216 = {
+						DevelopmentTeam = 27XS5W9C3J;
+					};
 					A9EE8A8A19E286E500CFFE6A = {
 						CreatedOnToolsVersion = 6.1;
 					};
@@ -7535,7 +7538,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -7580,7 +7583,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;

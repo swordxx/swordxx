@@ -47,17 +47,17 @@
 - (SwordModuleTreeEntry *)treeEntryForKey:(NSString *)treeKey {
     SwordModuleTreeEntry * ret;
     
-    [moduleLock lock];
+    [self.moduleLock lock];
     if(treeKey == nil) {
-        ret = [contents objectForKey:@"root"];
+        ret = contents[@"root"];
         if(ret == nil) {
             sword::TreeKeyIdx *tk = dynamic_cast<sword::TreeKeyIdx*>((sword::SWKey *)*(swModule));
             ret = [self _treeEntryForKey:tk];
             // add to content
-            [contents setObject:ret forKey:@"root"];
+            contents[@"root"] = ret;
         }
     } else {
-        ret = [contents objectForKey:treeKey];
+        ret = contents[treeKey];
         if(ret == nil) {
             const char *keyStr = [treeKey UTF8String];
             if(![self isUnicode]) {
@@ -69,10 +69,10 @@
             sword::TreeKeyIdx *key = dynamic_cast<sword::TreeKeyIdx*>((sword::SWKey *)*(swModule));
             ret = [self _treeEntryForKey:key];
             // add to content
-            [contents setObject:ret forKey:treeKey];
+            contents[treeKey] = ret;
         }
     }
-    [moduleLock unlock];
+    [self.moduleLock unlock];
     
     return ret;
 }

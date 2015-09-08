@@ -67,7 +67,7 @@
         if(scheme) {
             [self setVersification:scheme];
         }
-        
+
         if(aRef) {
             [self setKeyText:aRef];
         }
@@ -82,7 +82,7 @@
     return [SwordVerseKey verseKeyWithSWVerseKey:(sword::VerseKey *)sk];
 }
 
-- (int)index {
+- (long)index {
     return ((sword::VerseKey *)sk)->getIndex();
 }
 

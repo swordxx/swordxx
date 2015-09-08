@@ -22,6 +22,7 @@ using std::list;
 @interface SwordManager ()
 
 @property (strong, readwrite) NSDictionary *modules;
+@property (readwrite) BOOL deleteSWMgr;
 
 - (void)refreshModules;
 - (void)addFiltersToModule:(SwordModule *)mod;
@@ -53,13 +54,10 @@ using std::list;
 }
 
 - (id)initWithPath:(NSString *)path {
-
 	if((self = [super init])) {
-        // this is our main swManager
-        self.temporaryManager = NO;
-        
+        ALog(@"Init with path:%@", path);
+        self.deleteSWMgr = YES;
         self.modulesPath = path;
-
 		self.modules = [NSDictionary dictionary];
 		self.managerLock = (id) [[NSRecursiveLock alloc] init];
 
@@ -78,10 +76,9 @@ using std::list;
 - (id)initWithSWMgr:(sword::SWMgr *)aSWMgr {
     self = [super init];
     if(self) {
+        ALog(@"Init with temporary SWMgr");
         swManager = aSWMgr;
-        // this is a temporary swManager
-        self.temporaryManager = YES;
-        
+        self.deleteSWMgr = NO;
 		self.modules = [NSDictionary dictionary];
         self.managerLock = (id) [[NSRecursiveLock alloc] init];
         
@@ -93,13 +90,15 @@ using std::list;
 
 
 - (void)dealloc {
-    if(!self.temporaryManager) {
+    DLog(@"");
+    if(!self.deleteSWMgr) {
         ALog(@"Deleting SWMgr!");
         delete swManager;
     }
 }
 
 - (void)reInit {
+    DLog(@"");
 	[self.managerLock lock];
     if(self.modulesPath && [self.modulesPath length] > 0) {
         
@@ -139,10 +138,7 @@ using std::list;
                 }
             }
             
-            // clear some data
             [self refreshModules];
-            
-            SendNotifyModulesChanged(NULL);
         }
     }
 	[self.managerLock unlock];
@@ -165,14 +161,12 @@ using std::list;
 	
 	[self refreshModules];
 	[self.managerLock unlock];
-    
-    SendNotifyModulesChanged(NULL);
 }
 
 - (void)refreshModules {
+    DLog(@"");
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 
-    // loop over modules
     sword::SWModule *mod;
 	for(sword::ModMap::iterator it = swManager->Modules.begin(); it != swManager->Modules.end(); it++) {
 		mod = it->second;
@@ -190,7 +184,7 @@ using std::list;
         }
 	}
 
-    // set modules
+    SendNotifyModulesChanged(NULL);
     self.modules = dict;
 }
 
@@ -343,7 +337,6 @@ using std::list;
         }
     }
     
-    // sort
     NSArray *sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
     [ret sortUsingDescriptors:sortDescriptors];
     

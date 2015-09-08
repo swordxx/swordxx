@@ -40,7 +40,6 @@ typedef enum _ModuleStatusConst {
 // ------------------- properties -------------------
 /** Dictionary of InstallSources. Key: Caption */
 @property (strong, readonly) NSDictionary *installSources;
-@property (strong, readonly) NSArray *installSourceList;
 @property (strong, nonatomic) NSString *ftpUser;
 @property (strong, nonatomic) NSString *ftpPassword;
 @property (strong, readwrite) NSString *configPath;

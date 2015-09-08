@@ -50,8 +50,9 @@
 }
 
 - (void)dealloc {
+    ALog(@"");
     if(swInstallSource != NULL && self.deleteSwInstallSource) {
-        ALog(@"Deleting swInstallSource");
+        ALog(@"Deleting InstallSource");
         delete swInstallSource;
     }
 }
