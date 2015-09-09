@@ -91,7 +91,9 @@ using std::list;
 
 - (void)dealloc {
     DLog(@"");
-    if(!self.deleteSWMgr) {
+    if(self.deleteSWMgr) {
+        // only delete swManager is we created it
+        // if it came from someplace else then we're not responsible
         ALog(@"Deleting SWMgr!");
         delete swManager;
     }
@@ -114,9 +116,6 @@ using std::list;
             ALog(@"Cannot create SWMgr instance for default module path!");
         } else {
             NSArray *subDirs = [fm contentsOfDirectoryAtPath:self.modulesPath error:NULL];
-            // for all sub directories add module
-            BOOL directory;
-            NSString *fullSubDir;
             NSString *subDir;
             for(subDir in subDirs) {
                 // as long as it's not hidden
@@ -124,10 +123,11 @@ using std::list;
                    ![subDir isEqualToString:@"InstallMgr"] && 
                    ![subDir isEqualToString:@"mods.d"] &&
                    ![subDir isEqualToString:@"modules"]) {
-                    fullSubDir = [self.modulesPath stringByAppendingPathComponent:subDir];
+                    NSString *fullSubDir = [self.modulesPath stringByAppendingPathComponent:subDir];
                     fullSubDir = [fullSubDir stringByStandardizingPath];
                     
                     //if its a directory
+                    BOOL directory;
                     if([fm fileExistsAtPath:fullSubDir isDirectory:&directory]) {
                         if(directory) {
                             DLog(@"Augmenting folder: %@", fullSubDir);

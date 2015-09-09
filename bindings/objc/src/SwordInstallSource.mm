@@ -141,7 +141,6 @@
     return ret;
 }
 
-// get associated SwordManager
 - (SwordManager *)swordManager {
     // create SwordManager from the SWMgr of this source
     sword::SWMgr *mgr;
