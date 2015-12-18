@@ -275,6 +275,52 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 				u->suspendTextPassThru = false;
 			}
 		}
+		// <graphic> image tag
+		else if (!strcmp(tag.getName(), "graphic")) {
+			const char *url = tag.getAttribute("url");
+			if (url) {		// assert we have a url attribute
+				SWBuf filepath;
+				if (userData->module) {
+					filepath = userData->module->getConfigEntry("AbsoluteDataPath");
+					if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (url[0] != '/'))
+						filepath += '/';
+				}
+				filepath += url;
+				// images become clickable, if the UI supports showImage.
+				buf.appendFormatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><img src=\"file:%s\" border=\"0\" /></a>",
+						    URL::encode(filepath.c_str()).c_str(),
+						    URL::encode(u->version.c_str()).c_str(),
+						    filepath.c_str());
+				u->suspendTextPassThru = true;
+			}
+		}
+		// <table> <row> <cell>
+		else if (!strcmp(tag.getName(), "table")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<table><tbody>\n";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</tbody></table>\n";
+				u->supressAdjacentWhitespace = true;
+			}
+
+		}
+		else if (!strcmp(tag.getName(), "row")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\t<tr>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</tr>\n";
+			}
+		}
+		else if (!strcmp(tag.getName(), "cell")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<td>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</td>";
+			}
+		}
 
 		else {
 			return false;  // we still didn't handle token
