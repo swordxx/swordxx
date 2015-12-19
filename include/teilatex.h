@@ -38,6 +38,8 @@ protected:
 	public:
 		bool BiblicalText;
 		SWBuf lastHi;
+		bool firstCell; // for tables, indicates whether a cell is the first one in a row
+		int consecutiveNewlines;
 		
 		SWBuf version;
 		MyUserData(const SWModule *module, const SWKey *key);
