@@ -1,8 +1,12 @@
 API ChangeLog
 18-Dec-2015     Peter von Kaehne <refdoc@crosswire.org>
+	Added image and table handling to TEI latex
+	Added image handling to TEI RTF
+
+18-Dec-2015	Peter von Kaehne <refdoc@crosswire.org>
 	Added image and table handling to TEI xhtml and htmlhref filters
 	contributed by Dominique Corbex <dominique.corbex@gmail.com> 
-
+	
 15-Dec-2014	DM Smith <dmsmith@crosswire.org>
 	Fixed endless loop in osis2mod for some inputs.
 
