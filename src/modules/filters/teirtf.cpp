@@ -205,6 +205,22 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			}
 		}
 
+		else if (!strcmp(tag.getName(), "graphic")) {
+			const char *src = tag.getAttribute("url");
+			if (!src)		// assert we have a src attribute
+				return false;
+
+			char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
+			*filepath = 0;
+			strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
+			strcat(filepath, src);
+
+// we do this because BibleCS looks for this EXACT format for an image tag
+			buf += "<img src=\"";
+			buf += filepath;
+			buf += "\" />";
+			delete [] filepath;
+		}
 
 		else {
 			return false;  // we still didn't handle token
