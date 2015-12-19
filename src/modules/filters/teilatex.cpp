@@ -256,6 +256,63 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			}
 		}
 
+		// <graphic> image tag
+		else if (!strcmp(tag.getName(), "graphic")) {
+			const char *url = tag.getAttribute("url");
+			if (url) {		// assert we have a url attribute
+				SWBuf filepath;
+				if (userData->module) {
+					filepath = userData->module->getConfigEntry("AbsoluteDataPath");
+					if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (url[0] != '/'))
+						filepath += '/';
+				}
+				filepath += url;
+
+				buf.appendFormatted("\\figure{\\includegraphics{%s}}",
+						    filepath.c_str());
+				u->suspendTextPassThru = false;
+				
+			}
+		}
+
+		// <table> <row> <cell>
+		else if (!strcmp(tag.getName(), "table")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\n\\begin{tabular}";
+			}
+			else if (tag.isEndTag()) {
+				buf += "\n\\end{tabular}";
+				++u->consecutiveNewlines;
+				u->supressAdjacentWhitespace = true;
+			}
+			
+		}
+		else if (!strcmp(tag.getName(), "row")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\n";
+				u->firstCell = true;
+			}
+			else if (tag.isEndTag()) {
+				buf += "//";
+				u->firstCell = false;
+			}
+			
+		}
+		else if (!strcmp(tag.getName(), "cell")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				if (u->firstCell == false) {
+					buf += " & ";
+				}
+				else {
+					u->firstCell = false;
+				}
+			}
+			else if (tag.isEndTag()) {
+				buf += "";
+			}
+		}
+
+
 		else {
 			return false;  // we still didn't handle token
 		}
