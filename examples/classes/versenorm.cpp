@@ -35,27 +35,38 @@ int main(int argc, char **argv) {
         const char *modName = "RusCARS";
         const char *keyTextRegular = "1Sam1.20";
         const char *keyTextNeedsNormalization = "1Sam1.200";
+
+
         SWMgr library;
         SWModule *book = library.getModule(modName);
         if (!book) {
                 cerr << "Can't find module: " << modName << endl;
                 return -1;
         }
+
+
+	// get two VerseKey objects for a module
         VerseKey *verse = ((VerseKey *)book->createKey());
         VerseKey *verseNormalized = ((VerseKey *)book->createKey());
 
+	// turn off autonormalization for one VerseKey reference
         verse->setAutoNormalize(false);
 
+	// set a reference not requiring normalization to both VerseKey objects
 	verse->setText(keyTextRegular);
 	verseNormalized->setText(keyTextRegular);
 
+	// check to see if they are equal
         cout << *verse << ((*verse) == (*verseNormalized) ? " == " : " != ") << *verseNormalized << endl;
 
+	// now do the same for a reference which requires normalization in this module's v11n system
 	verse->setText(keyTextNeedsNormalization);
 	verseNormalized->setText(keyTextNeedsNormalization);
 
         cout << *verse << ((*verse) == (*verseNormalized) ? " == " : " != ") << *verseNormalized << endl;
 
+	delete verse;
+	delete verseNormalized;
 
         return 0;
 }
