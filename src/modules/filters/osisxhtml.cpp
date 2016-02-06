@@ -37,7 +37,7 @@ const char *OSISXHTML::getHeader() const {
 	const static char *header = "\
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
-		.transChangeSupplied { font-style: italic; }\n\
+		.transChange { font-style: italic;}\n\
 		.overline        { text-decoration: overline; }\n\
 		.indent1         { margin-left: 10px }\n\
 		.indent2         { margin-left: 20px }\n\
@@ -47,6 +47,9 @@ const char *OSISXHTML::getHeader() const {
 		.small-caps { font-variant: small-caps; }\n\
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n\
 		.acrostic { text-align: center; }\n\
+		.colophon {display:block;}\n\
+		.rdg { font-style: italic;}\n\
+		.catchWord {font-style: bold;}\n\
 	";
 	// Acrostic for things like the titles in Psalm 119
 	return header;
@@ -335,7 +338,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// Milestoned paragraphs, created by osis2mod
 		// <div type="paragraph" sID.../>
 		// <div type="paragraph" eID.../>
-		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && (!strcmp(tag.getAttribute("type"), "x-p") || !strcmp(tag.getAttribute("type"), "paragraph"))) {
+		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && (!strcmp(tag.getAttribute("type"), "x-p") || !strcmp(tag.getAttribute("type"), "paragraph") || !strcmp(tag.getAttribute("type"), "colophon"))) {
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
 				u->outputNewline(buf);
@@ -548,10 +551,12 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <catchWord> & <rdg> tags (italicize)
 		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<i>", buf, u);
+				outText("<span class=\"", buf, u);
+				outText(tag.getName(), buf, u);
+				outText("\">", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</i>", buf, u);
+				outText("</span>", buf, u);
 			}
 		}
 
@@ -701,17 +706,17 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf type = tag.getAttribute("type");
 				u->lastTransChange = type;
-
-				// just do all transChange tags this way for now
-				if ((type == "added") || (type == "supplied"))
-					outText("<span class=\"transChangeSupplied\">", buf, u);
-				else if (type == "tenseChange")
-					buf += "*";
+				
+				outText("<span class=\"transChange\"", buf, u);
+				if (type) {
+					buf += " type=\"";
+					buf += type;
+					buf += "\"";
+				}
+				outText(">", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				SWBuf type = u->lastTransChange;
-				if ((type == "added") || (type == "supplied"))
-					outText("</span>", buf, u);
+				outText("</span>", buf, u);
 			}
 			else {	// empty transChange marker?
 			}
@@ -755,9 +760,17 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 			else if (type == "majorSection") {
 			}
-			else {
-				buf += tag;
+			else if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				SWBuf type = tag.getAttribute("type");
+				buf += "<div class=\"";
+				buf += type;
+				buf += "\">";	
+			     }
+			     else if (tag.isEndTag()) {
+			     	buf += "</div>";
 			}
+			else buf += tag;
+			
 		}
 		else if (!strcmp(tag.getName(), "span")) {
 			buf += tag;
