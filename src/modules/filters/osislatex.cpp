@@ -306,7 +306,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}(%s){",
+							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
 								 
 								footnoteNumber.c_str(), 
 								u->version.c_str(), 
@@ -314,7 +314,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								tag.getAttribute("type"),
 								(renderNoteNumbers ? noteName.c_str() : ""));
 							if (u->module) {
-								buf += u->module->renderText(footnoteBody).c_str();
+								outText( u->module->renderText(footnoteBody).c_str(), buf, u);
 							}
 						}
 						else {
@@ -325,7 +325,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								tag.getAttribute("type"),  
 								(renderNoteNumbers ? noteName.c_str() : ""));
 							if (u->module) {
-								buf += u->module->renderText(footnoteBody).c_str();
+								outText( u->module->renderText(footnoteBody).c_str(), buf, u);
 							}
 						}
 					}
@@ -336,7 +336,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				u->suspendTextPassThru = (--u->suspendLevel);
 				u->inXRefNote = false;
 				u->lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
-				buf +="}";
+				outText("}", buf, u);
 			}
 		}
 
@@ -493,7 +493,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				outText("}{", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "}";
+				outText( "}", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;	
 			}
@@ -534,7 +534,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// divineName  
 		else if (!strcmp(tag.getName(), "divineName")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\\sworddivinename{";
+				outText( "\\sworddivinename{", buf, u);
 				u->suspendTextPassThru = (++u->suspendLevel);
 			}
 			else if (tag.isEndTag()) {
@@ -658,7 +658,7 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if ((type == "added") || (type == "supplied"))
 					outText("\\swordtranschange{supplied}{", buf, u);
 				else if (type == "tenseChange")
-					buf += "\\swordtranschange{tense}{";
+					outText( "\\swordtranschange{tense}{", buf, u);
 			}
 			else if (tag.isEndTag()) {
 				outText("}", buf, u);
@@ -692,45 +692,45 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			SWBuf type = tag.getAttribute("type");
 			if (type == "module") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}			
 			else if (type == "testament") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}
 			else if (type == "bookGroup") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}
 			else if (type == "book") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}
 			else if (type == "majorSection") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}
 			else if (type == "section") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}
 			else if (type == "paragraph") {
 				u->divLevel = type;
-				buf +="\n";
+				outText("\n", buf, u);
 			}
 		}
 		else if (!strcmp(tag.getName(), "span")) {
-			buf += "";
+			outText( "", buf, u);
 		}
 		else if (!strcmp(tag.getName(), "br")) {
-			buf += "\\";
+			outText( "\\", buf, u);
 		}
 		else if (!strcmp(tag.getName(), "table")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\n\\begin{tabular}";
+				outText( "\n\\begin{tabular}", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "\n\\end{tabular}";
+				outText( "\n\\end{tabular}", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -738,11 +738,11 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (!strcmp(tag.getName(), "row")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\n";
+				outText( "\n", buf, u);
 				u->firstCell = true;
 			}
 			else if (tag.isEndTag()) {
-				buf += "//";
+				outText( "//", buf, u);
 				u->firstCell = false;
 			}
 			
@@ -750,14 +750,14 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "cell")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				if (u->firstCell == false) {
-					buf += " & ";
+					outText( " & ", buf, u);
 				}
 				else {
 					u->firstCell = false;
 				}
 			}
 			else if (tag.isEndTag()) {
-				buf += "";
+				outText( "", buf, u);
 			}
 		}
 		else {

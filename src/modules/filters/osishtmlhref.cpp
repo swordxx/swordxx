@@ -595,7 +595,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 				if ((type == "added") || (type == "supplied"))
 					outText("<i>", buf, u);
 				else if (type == "tenseChange")
-					buf += "*";
+					outText( "*", buf, u);
 			}
 			else if (tag.isEndTag()) {
 				SWBuf type = u->lastTransChange;

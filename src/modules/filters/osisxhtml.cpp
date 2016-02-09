@@ -38,6 +38,8 @@ const char *OSISXHTML::getHeader() const {
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
 		.transChange { font-style: italic;}\n\
+		.transChange[type=tenseChange]::before { content: '|'; vertical-align:sub; font-size: 0.75em; color: red;}\n\
+		.transChange[type=tenseChange]::after    { content: '|'; vertical-align:sub; font-size: 0.75em; color: red;}\n\
 		.overline        { text-decoration: overline; }\n\
 		.indent1         { margin-left: 10px }\n\
 		.indent2         { margin-left: 20px }\n\
@@ -47,7 +49,7 @@ const char *OSISXHTML::getHeader() const {
 		.small-caps { font-variant: small-caps; }\n\
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n\
 		.acrostic { text-align: center; }\n\
-		.colophon {display:block;}\n\
+		.colophon {font-style: italic; font-size=small; display:block;}\n\
 		.rdg { font-style: italic;}\n\
 		.catchWord {font-style: bold;}\n\
 	";
@@ -261,7 +263,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 
 				/*if (endTag)
-					buf += "}";*/
+					outText( "}", buf, u);*/
 			}
 		}
 
@@ -342,10 +344,18 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
 				u->outputNewline(buf);
+				if (!strcmp(tag.getAttribute("type"), "colophon")) {
+					outText("<div class=\"colophon\">", buf, u);
+				}
+				
 			}
 			// <div type="paragraph"  eID... />
 			else if (tag.getAttribute("eID")) {
 				u->outputNewline(buf);
+				if (!strcmp(tag.getAttribute("type"), "colophon")) {
+					outText("</div>", buf, u);
+				}
+				
 			}
 		}
 
@@ -484,21 +494,21 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (!vkey->getChapter()) {
 						if (!vkey->getBook()) {
 							if (!vkey->getTestament()) {
-								buf += SWBuf("<h1 class=\"moduleHeader ") + (keepType ? type : "") + "\">";
+								outText(SWBuf("<h1 class=\"moduleHeader ") + (keepType ? type : "") + "\">",  buf, u);
 								tag.setAttribute("pushed", "h1");
 							}
 							else {
-								buf += SWBuf("<h1 class=\"testamentHeader ") + (keepType ? type : "") + "\">";
+								outText(SWBuf("<h1 class=\"testamentHeader ") + (keepType ? type : "") + "\">", buf, u);
 								tag.setAttribute("pushed", "h1");
 							}
 						}
 						else {
-							buf += SWBuf("<h1 class=\"bookHeader ") + (keepType ? type : "") + "\">";
+							outText(SWBuf("<h1 class=\"bookHeader ") + (keepType ? type : "") + "\">", buf, u);
 							tag.setAttribute("pushed", "h1");
 						}
 					}
 					else {
-						buf += SWBuf("<h2 class=\"chapterHeader ") + (keepType ? type : "") + "\">";
+						outText(SWBuf("<h2 class=\"chapterHeader ") + (keepType ? type : "") + "\">", buf, u);
 						tag.setAttribute("pushed", "h2");
 					}
 				}
@@ -514,10 +524,10 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (u->titleStack->size()) u->titleStack->pop();
 					SWBuf pushed = tag.getAttribute("pushed");
 					if (pushed.size()) {
-						buf += (SWBuf)"</" + pushed + ">\n\n";
+						outText((SWBuf)"</" + pushed + ">\n\n", buf, u);
 					}
 					else {
-						buf += "</h3>\n\n";
+						outText( "</h3>\n\n", buf, u);
 					}
 					++u->consecutiveNewlines;
 					u->supressAdjacentWhitespace = true;
@@ -709,9 +719,9 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				
 				outText("<span class=\"transChange\"", buf, u);
 				if (type) {
-					buf += " type=\"";
-					buf += type;
-					buf += "\"";
+					outText( " type=\"", buf, u);
+					outText( type, buf, u);
+					outText( "\"", buf, u);
 				}
 				outText(">", buf, u);
 			}
@@ -762,40 +772,40 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 			else if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf type = tag.getAttribute("type");
-				buf += "<div class=\"";
-				buf += type;
-				buf += "\">";	
+				outText("<div class=\"", buf, u);
+				outText(type, buf, u);
+				outText("\">", buf, u);
 			     }
 			     else if (tag.isEndTag()) {
-			     	buf += "</div>";
+			     	outText("</div>", buf, u);
 			}
-			else buf += tag;
+			else if (!(type == "colophon")) outText(tag, buf, u);
 			
 		}
 		else if (!strcmp(tag.getName(), "span")) {
-			buf += tag;
+			outText(tag, buf, u);
 		}
 		else if (!strcmp(tag.getName(), "abbr")) {
 			if (!tag.isEndTag()) {
 				SWBuf title = tag.getAttribute("expansion");
-				buf += "<abbr title=\"";
-				buf += title;
-				buf += "\">";
+				outText("<abbr title=\"", buf, u);
+				outText(title, buf, u); 
+				outText("\">", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "</abbr>";
+				outText("</abbr>", buf, u);
 			}
 		
 		}
 		else if (!strcmp(tag.getName(), "br")) {
-			buf += tag;
+			outText( tag, buf, u);
 		}
 		else if (!strcmp(tag.getName(), "table")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<table><tbody>\n";
+				outText( "<table><tbody>\n", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "</tbody></table>\n";
+				outText( "</tbody></table>\n", buf, u);
 				++u->consecutiveNewlines;
 				u->supressAdjacentWhitespace = true;
 			}
@@ -803,19 +813,19 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (!strcmp(tag.getName(), "row")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "\t<tr>";
+				outText( "\t<tr>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "</tr>\n";
+				outText( "</tr>\n", buf, u);
 			}
 			
 		}
 		else if (!strcmp(tag.getName(), "cell")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<td>";
+				outText( "<td>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				buf += "</td>";
+				outText( "</td>", buf, u);
 			}
 		}
 		else {
