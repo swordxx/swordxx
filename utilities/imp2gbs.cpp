@@ -126,7 +126,7 @@ void parseParams(int argc, char **argv) {
 		outPath.size(i);
 	}
 }
-  
+
 
 void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 
@@ -222,22 +222,22 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 int main(int argc, char **argv) {
 	greekAccentsFilter.setOptionValue("Off");		// off = accents off
 	parseParams(argc, argv);
-  
+
 	// Let's see if we can open our input file
 	FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFile, FileMgr::RDONLY);
 	if (fd->getFd() < 0) {
 		fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], inFile.c_str());
 		exit(-2);
 	}
-  
+
 	RawGenBook *book;
-  
+
 	// Do some initialization stuff
 	if (!augMod) {
 		RawGenBook::createModule(outPath);
 	}
 	book = new RawGenBook(outPath);
-  
+
 	SWBuf lineBuffer;
 	SWBuf keyBuffer;
 	SWBuf entBuffer;

@@ -51,7 +51,7 @@ using namespace sword;
 
 using namespace std;
 
-void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module);
+void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry);
 
 void usage(const char *progName, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
@@ -241,27 +241,36 @@ int main(int argc, char **argv) {
 	FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFileName, FileMgr::RDONLY);
 
 	SWBuf lineBuffer;
-	SWBuf currentKey;
-	SWBuf currentEntry;
+        SWBuf keyBuffer;
+        SWBuf entBuffer;
 
-	while (FileMgr::getLine(fd, lineBuffer)) {
-		if (lineBuffer.startsWith("$$$")) {
-			writeEntry(currentKey, currentEntry, module);
-			currentKey = lineBuffer;
-			currentKey << 3;
-			currentKey.trim();
-			currentEntry = "";
-		}
-		else {
-			currentEntry += lineBuffer;
-		}
-	}
-	writeEntry(currentKey, currentEntry, module);
-
-	FileMgr::getSystemFileMgr()->close(fd);
+        bool more = true;
+        do {
+                more = FileMgr::getLine(fd, lineBuffer)!=0;
+                if (lineBuffer.startsWith("$$$")) {
+                        if ((keyBuffer.size()) && (entBuffer.size())) {
+                                writeEntry(module, keyBuffer, entBuffer);
+                        }
+                        keyBuffer = lineBuffer;
+                        keyBuffer << 3;
+                        keyBuffer.trim();
+                        entBuffer.size(0);
+                }
+                else {
+                        if (keyBuffer.size()) {
+                                entBuffer += lineBuffer;
+                                entBuffer += "\n";
+                        }
+                }
+        } while (more);
+        if ((keyBuffer.size()) && (entBuffer.size())) {
+                writeEntry(module, keyBuffer, entBuffer);
+        }
 
 	delete module;
 	delete vkey;
+
+	FileMgr::getSystemFileMgr()->close(fd);
 
 	return 0;
 }
@@ -271,7 +280,7 @@ int main(int argc, char **argv) {
 int page = 0;
 
 
-void writeEntry(const SWBuf &key, const SWBuf &entry, SWModule *module)
+void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
 {
 	if (key.size() && entry.size()) {
 		std::cout << "from file: " << key << std::endl;
