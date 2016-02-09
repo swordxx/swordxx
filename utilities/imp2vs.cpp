@@ -70,7 +70,7 @@ void usage(const char *progName, const char *error = 0) {
 	StringList av11n = vmgr->getVersificationSystems();
 	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
-        }
+	}
 	fprintf(stderr, "  -l <locale>\t\t specify a locale scheme to use (default is en)\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
@@ -97,15 +97,15 @@ int main(int argc, char **argv) {
 
 	const char *progName   = argv[0];
 	const char *inFileName = argv[1];
-	SWBuf v11n             = "KJV";
-	SWBuf outPath          = "./";
+	SWBuf v11n	     = "KJV";
+	SWBuf outPath	  = "./";
 	SWBuf locale	       = "en";
 	
 	bool fourByteSize      = false;
-	bool append            = false;
-	int iType              = 4;
+	bool append	    = false;
+	int iType	      = 4;
 	SWCompress *compressor = 0;
-	SWBuf compType         = "";
+	SWBuf compType	 = "";
 
 	for (int i = 2; i < argc; i++) {
 		if (!strcmp(argv[i], "-a")) {
@@ -241,31 +241,31 @@ int main(int argc, char **argv) {
 	FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFileName, FileMgr::RDONLY);
 
 	SWBuf lineBuffer;
-        SWBuf keyBuffer;
-        SWBuf entBuffer;
+	SWBuf keyBuffer;
+	SWBuf entBuffer;
 
-        bool more = true;
-        do {
-                more = FileMgr::getLine(fd, lineBuffer)!=0;
-                if (lineBuffer.startsWith("$$$")) {
-                        if ((keyBuffer.size()) && (entBuffer.size())) {
-                                writeEntry(module, keyBuffer, entBuffer);
-                        }
-                        keyBuffer = lineBuffer;
-                        keyBuffer << 3;
-                        keyBuffer.trim();
-                        entBuffer.size(0);
-                }
-                else {
-                        if (keyBuffer.size()) {
-                                entBuffer += lineBuffer;
-                                entBuffer += "\n";
-                        }
-                }
-        } while (more);
-        if ((keyBuffer.size()) && (entBuffer.size())) {
-                writeEntry(module, keyBuffer, entBuffer);
-        }
+	bool more = true;
+	do {
+		more = FileMgr::getLine(fd, lineBuffer)!=0;
+		if (lineBuffer.startsWith("$$$")) {
+			if ((keyBuffer.size()) && (entBuffer.size())) {
+				writeEntry(module, keyBuffer, entBuffer);
+			}
+			keyBuffer = lineBuffer;
+			keyBuffer << 3;
+			keyBuffer.trim();
+			entBuffer.size(0);
+		}
+		else {
+			if (keyBuffer.size()) {
+				entBuffer += lineBuffer;
+				entBuffer += "\n";
+			}
+		}
+	} while (more);
+	if ((keyBuffer.size()) && (entBuffer.size())) {
+		writeEntry(module, keyBuffer, entBuffer);
+	}
 
 	delete module;
 	delete vkey;
