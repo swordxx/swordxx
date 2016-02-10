@@ -72,6 +72,16 @@
 }
 */
 
+- (void)testJesusWordsInRed {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+    XCTAssertNotNil(bible, @"Module is nil");
+
+    [mgr setGlobalOption:SW_OPTION_REDLETTERWORDS value:SW_ON];
+    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Mat 4:4" textType:TextTypeRendered];
+    XCTAssertTrue(text != nil);
+    NSLog(@"Mat 4:4: %@", [text text]);
+}
+
 - (void)testFirstBookNTIntroGer {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
@@ -228,7 +238,7 @@
 }
 
 - (void)testVersePositioning {
-    SwordVerseKey *vk = [SwordVerseKey verseKeyWithRef:@"1Mo 1:2"];
+    SwordVerseKey *vk = [SwordVerseKey verseKeyWithRef:@"gen 1:2"];
     NSLog(@"start position: %@", [vk keyText]);
     [vk decrement];
     NSLog(@"decrement position: %@", [vk keyText]);

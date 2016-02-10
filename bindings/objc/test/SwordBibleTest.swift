@@ -18,7 +18,7 @@ class SwordBibleTest: XCTestCase {
     
         Configuration.configWithImpl(OSXConfiguration())
         FilterProviderFactory().initWithImpl(DefaultFilterProvider())
-        mgr = SwordManager(path: Configuration.config().defaultModulePath())
+        mgr = SwordManager(path:Configuration.config().defaultModulePath())
     }
     
     func testGetBible() {

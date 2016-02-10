@@ -1102,28 +1102,12 @@
 		A954ACC213EEA0C10094E3FE /* utilxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A8DC13EE98B30094E3FE /* utilxml.cpp */; };
 		A954ACCA13EEA5340094E3FE /* ftplib.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D013EE98B30094E3FE /* ftplib.c */; };
 		A954ACCB13EEA5340094E3FE /* ftpparse.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8D113EE98B30094E3FE /* ftpparse.c */; };
-		A954ACCD13EEA5340094E3FE /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8E113EE98B30094E3FE /* adler32.c */; };
-		A954ACCE13EEA5340094E3FE /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8E213EE98B30094E3FE /* compress.c */; };
-		A954ACCF13EEA5340094E3FE /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8E313EE98B30094E3FE /* crc32.c */; };
-		A954ACD013EEA5340094E3FE /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8E413EE98B30094E3FE /* deflate.c */; };
-		A954ACD413EEA5340094E3FE /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8EB13EE98B30094E3FE /* inffast.c */; };
-		A954ACD513EEA5340094E3FE /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8EE13EE98B30094E3FE /* inflate.c */; };
-		A954ACD613EEA5340094E3FE /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8EF13EE98B30094E3FE /* inftrees.c */; };
-		A954ACD913EEA5340094E3FE /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F413EE98B30094E3FE /* trees.c */; };
-		A954ACDA13EEA5340094E3FE /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F613EE98B30094E3FE /* uncompr.c */; };
-		A954ACDB13EEA5340094E3FE /* untgz.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F713EE98B30094E3FE /* untgz.c */; };
-		A954ACDC13EEA5340094E3FE /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F813EE98B30094E3FE /* zutil.c */; };
 		A954ACDD13EEA6780094E3FE /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
 		A968BE4D19DFF832002C9B78 /* SwordBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968BE4C19DFF832002C9B78 /* SwordBibleTest.swift */; };
 		A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2351176AF188008D714B /* remotetrans.cpp */; };
 		A96C235A176AFA3C008D714B /* osisenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2353176AF19C008D714B /* osisenum.cpp */; };
 		A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2354176AF19C008D714B /* osisglosses.cpp */; };
-		A96C235D176AFA3C008D714B /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C233E176AF139008D714B /* gzclose.c */; };
-		A96C235E176AFA3C008D714B /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2340176AF139008D714B /* gzlib.c */; };
-		A96C235F176AFA3C008D714B /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2341176AF139008D714B /* gzread.c */; };
-		A96C2360176AFA3C008D714B /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2342176AF139008D714B /* gzwrite.c */; };
-		A96C2361176AFA3C008D714B /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = A96C2343176AF139008D714B /* infback.c */; };
 		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
 		A982036D19A08B7C00DD808C /* osisreferencelinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96C2355176AF19C008D714B /* osisreferencelinks.cpp */; };
@@ -1333,6 +1317,22 @@
 		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
 		A9A7EEBF14D5D65900B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9BB67771C6BCDD700EB1A49 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67401C6BCD9600EB1A49 /* adler32.c */; };
+		A9BB67781C6BCDD700EB1A49 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67411C6BCD9600EB1A49 /* compress.c */; };
+		A9BB67791C6BCDD700EB1A49 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67421C6BCD9600EB1A49 /* crc32.c */; };
+		A9BB677A1C6BCDD700EB1A49 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67441C6BCD9600EB1A49 /* deflate.c */; };
+		A9BB677B1C6BCDD700EB1A49 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67461C6BCD9600EB1A49 /* gzclose.c */; };
+		A9BB677C1C6BCDD700EB1A49 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67481C6BCD9600EB1A49 /* gzlib.c */; };
+		A9BB677D1C6BCDD700EB1A49 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67491C6BCD9600EB1A49 /* gzread.c */; };
+		A9BB677E1C6BCDD700EB1A49 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB674A1C6BCD9600EB1A49 /* gzwrite.c */; };
+		A9BB677F1C6BCDD700EB1A49 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB674B1C6BCD9600EB1A49 /* infback.c */; };
+		A9BB67801C6BCDD700EB1A49 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB674C1C6BCD9600EB1A49 /* inffast.c */; };
+		A9BB67811C6BCDD700EB1A49 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB674F1C6BCD9600EB1A49 /* inflate.c */; };
+		A9BB67821C6BCDD700EB1A49 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67511C6BCD9600EB1A49 /* inftrees.c */; };
+		A9BB67831C6BCDD700EB1A49 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67531C6BCD9600EB1A49 /* trees.c */; };
+		A9BB67841C6BCDD700EB1A49 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67551C6BCD9600EB1A49 /* uncompr.c */; };
+		A9BB67851C6BCDD700EB1A49 /* untgz.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67561C6BCD9600EB1A49 /* untgz.c */; };
+		A9BB67861C6BCDD700EB1A49 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67591C6BCD9600EB1A49 /* zutil.c */; };
 		A9BFB0A713EDF51100032679 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9BFB0A613EDF51100032679 /* Cocoa.framework */; };
 		A9BFB0BC13EDF5C900032679 /* SwordManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A964658111C663E200640FAC /* SwordManagerTest.m */; };
 		A9BFB0BD13EDF5C900032679 /* SwordModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A918B8E311C6697400024D84 /* SwordModuleTest.m */; };
@@ -2626,7 +2626,6 @@
 		A954A8CE13EE98B30094E3FE /* ztext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ztext.cpp; sourceTree = "<group>"; };
 		A954A8D013EE98B30094E3FE /* ftplib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ftplib.c; sourceTree = "<group>"; };
 		A954A8D113EE98B30094E3FE /* ftpparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ftpparse.c; sourceTree = "<group>"; };
-		A954A8D413EE98B30094E3FE /* regex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regex.c; sourceTree = "<group>"; };
 		A954A8D513EE98B30094E3FE /* roman.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = roman.cpp; sourceTree = "<group>"; };
 		A954A8D613EE98B30094E3FE /* swbuf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swbuf.cpp; sourceTree = "<group>"; };
 		A954A8D713EE98B30094E3FE /* swobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swobject.cpp; sourceTree = "<group>"; };
@@ -2634,17 +2633,6 @@
 		A954A8DA13EE98B30094E3FE /* url.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = url.cpp; sourceTree = "<group>"; };
 		A954A8DB13EE98B30094E3FE /* utilstr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilstr.cpp; sourceTree = "<group>"; };
 		A954A8DC13EE98B30094E3FE /* utilxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utilxml.cpp; sourceTree = "<group>"; };
-		A954A8E113EE98B30094E3FE /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
-		A954A8E213EE98B30094E3FE /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
-		A954A8E313EE98B30094E3FE /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
-		A954A8E413EE98B30094E3FE /* deflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deflate.c; sourceTree = "<group>"; };
-		A954A8EB13EE98B30094E3FE /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
-		A954A8EE13EE98B30094E3FE /* inflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inflate.c; sourceTree = "<group>"; };
-		A954A8EF13EE98B30094E3FE /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inftrees.c; sourceTree = "<group>"; };
-		A954A8F413EE98B30094E3FE /* trees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trees.c; sourceTree = "<group>"; };
-		A954A8F613EE98B30094E3FE /* uncompr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uncompr.c; sourceTree = "<group>"; };
-		A954A8F713EE98B30094E3FE /* untgz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = untgz.c; sourceTree = "<group>"; };
-		A954A8F813EE98B30094E3FE /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		A954A9E413EE9A2B0094E3FE /* AnalysisHeader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnalysisHeader.cpp; sourceTree = "<group>"; };
 		A954A9E513EE9A2B0094E3FE /* AnalysisHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalysisHeader.h; sourceTree = "<group>"; };
 		A954A9E613EE9A2B0094E3FE /* Analyzers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Analyzers.cpp; sourceTree = "<group>"; };
@@ -2887,11 +2875,6 @@
 		A964658111C663E200640FAC /* SwordManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordManagerTest.m; path = ../test/SwordManagerTest.m; sourceTree = "<group>"; };
 		A968BE4B19DFF831002C9B78 /* Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		A968BE4C19DFF832002C9B78 /* SwordBibleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwordBibleTest.swift; sourceTree = "<group>"; };
-		A96C233E176AF139008D714B /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzclose.c; sourceTree = "<group>"; };
-		A96C2340176AF139008D714B /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzlib.c; sourceTree = "<group>"; };
-		A96C2341176AF139008D714B /* gzread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzread.c; sourceTree = "<group>"; };
-		A96C2342176AF139008D714B /* gzwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzwrite.c; sourceTree = "<group>"; };
-		A96C2343176AF139008D714B /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
 		A96C2351176AF188008D714B /* remotetrans.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = remotetrans.cpp; sourceTree = "<group>"; };
 		A96C2353176AF19C008D714B /* osisenum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisenum.cpp; sourceTree = "<group>"; };
 		A96C2354176AF19C008D714B /* osisglosses.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osisglosses.cpp; sourceTree = "<group>"; };
@@ -3118,6 +3101,22 @@
 		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9B77D4319A3BB3B00F34557 /* liblzma.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblzma.dylib; path = usr/lib/liblzma.dylib; sourceTree = SDKROOT; };
 		A9B77D4519A3BB8000F34557 /* xzcomprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xzcomprs.cpp; sourceTree = "<group>"; };
+		A9BB67401C6BCD9600EB1A49 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
+		A9BB67411C6BCD9600EB1A49 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
+		A9BB67421C6BCD9600EB1A49 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
+		A9BB67441C6BCD9600EB1A49 /* deflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deflate.c; sourceTree = "<group>"; };
+		A9BB67461C6BCD9600EB1A49 /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzclose.c; sourceTree = "<group>"; };
+		A9BB67481C6BCD9600EB1A49 /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzlib.c; sourceTree = "<group>"; };
+		A9BB67491C6BCD9600EB1A49 /* gzread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzread.c; sourceTree = "<group>"; };
+		A9BB674A1C6BCD9600EB1A49 /* gzwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzwrite.c; sourceTree = "<group>"; };
+		A9BB674B1C6BCD9600EB1A49 /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
+		A9BB674C1C6BCD9600EB1A49 /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
+		A9BB674F1C6BCD9600EB1A49 /* inflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inflate.c; sourceTree = "<group>"; };
+		A9BB67511C6BCD9600EB1A49 /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inftrees.c; sourceTree = "<group>"; };
+		A9BB67531C6BCD9600EB1A49 /* trees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trees.c; sourceTree = "<group>"; };
+		A9BB67551C6BCD9600EB1A49 /* uncompr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uncompr.c; sourceTree = "<group>"; };
+		A9BB67561C6BCD9600EB1A49 /* untgz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = untgz.c; sourceTree = "<group>"; };
+		A9BB67591C6BCD9600EB1A49 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKeyTest.h; path = ../test/SwordListKeyTest.h; sourceTree = "<group>"; };
 		A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordListKeyTest.m; path = ../test/SwordListKeyTest.m; sourceTree = "<group>"; };
 		A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleLongRunTest.h; path = ../test/SwordModuleLongRunTest.h; sourceTree = "<group>"; };
@@ -3445,14 +3444,14 @@
 				A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */,
 				A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */,
 				A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */,
-				8C92C291C40A77060C12A21B /* SwordUtil.m */,
 				8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */,
-				8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */,
+				8C92C291C40A77060C12A21B /* SwordUtil.m */,
 				8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */,
-				8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */,
+				8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */,
 				8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */,
-				8C92CC111DC521DE0C054C60 /* SwordFilter.mm */,
+				8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */,
 				8C92C02A5C86E1C75ED1CEF4 /* SwordFilter.h */,
+				8C92CC111DC521DE0C054C60 /* SwordFilter.mm */,
 			);
 			name = SwordWrapper;
 			sourceTree = "<group>";
@@ -4698,9 +4697,9 @@
 		A954A8CF13EE98B30094E3FE /* utilfuns */ = {
 			isa = PBXGroup;
 			children = (
+				A9BB673F1C6BCD9600EB1A49 /* zlib */,
 				A954A8D013EE98B30094E3FE /* ftplib.c */,
 				A954A8D113EE98B30094E3FE /* ftpparse.c */,
-				A954A8D413EE98B30094E3FE /* regex.c */,
 				A954A8D513EE98B30094E3FE /* roman.cpp */,
 				A954A8D613EE98B30094E3FE /* swbuf.cpp */,
 				A954A8D713EE98B30094E3FE /* swobject.cpp */,
@@ -4708,32 +4707,8 @@
 				A954A8DA13EE98B30094E3FE /* url.cpp */,
 				A954A8DB13EE98B30094E3FE /* utilstr.cpp */,
 				A954A8DC13EE98B30094E3FE /* utilxml.cpp */,
-				A954A8E013EE98B30094E3FE /* zlib */,
 			);
 			path = utilfuns;
-			sourceTree = "<group>";
-		};
-		A954A8E013EE98B30094E3FE /* zlib */ = {
-			isa = PBXGroup;
-			children = (
-				A96C233E176AF139008D714B /* gzclose.c */,
-				A96C2340176AF139008D714B /* gzlib.c */,
-				A96C2341176AF139008D714B /* gzread.c */,
-				A96C2342176AF139008D714B /* gzwrite.c */,
-				A96C2343176AF139008D714B /* infback.c */,
-				A954A8E113EE98B30094E3FE /* adler32.c */,
-				A954A8E213EE98B30094E3FE /* compress.c */,
-				A954A8E313EE98B30094E3FE /* crc32.c */,
-				A954A8E413EE98B30094E3FE /* deflate.c */,
-				A954A8EB13EE98B30094E3FE /* inffast.c */,
-				A954A8EE13EE98B30094E3FE /* inflate.c */,
-				A954A8EF13EE98B30094E3FE /* inftrees.c */,
-				A954A8F413EE98B30094E3FE /* trees.c */,
-				A954A8F613EE98B30094E3FE /* uncompr.c */,
-				A954A8F713EE98B30094E3FE /* untgz.c */,
-				A954A8F813EE98B30094E3FE /* zutil.c */,
-			);
-			path = zlib;
 			sourceTree = "<group>";
 		};
 		A954A9E013EE9A2B0094E3FE /* clucene */ = {
@@ -5311,6 +5286,29 @@
 				A9A1295119DF144D005BCBC1 /* regex.h */,
 			);
 			path = regex;
+			sourceTree = "<group>";
+		};
+		A9BB673F1C6BCD9600EB1A49 /* zlib */ = {
+			isa = PBXGroup;
+			children = (
+				A9BB67401C6BCD9600EB1A49 /* adler32.c */,
+				A9BB67411C6BCD9600EB1A49 /* compress.c */,
+				A9BB67421C6BCD9600EB1A49 /* crc32.c */,
+				A9BB67441C6BCD9600EB1A49 /* deflate.c */,
+				A9BB67461C6BCD9600EB1A49 /* gzclose.c */,
+				A9BB67481C6BCD9600EB1A49 /* gzlib.c */,
+				A9BB67491C6BCD9600EB1A49 /* gzread.c */,
+				A9BB674A1C6BCD9600EB1A49 /* gzwrite.c */,
+				A9BB674B1C6BCD9600EB1A49 /* infback.c */,
+				A9BB674C1C6BCD9600EB1A49 /* inffast.c */,
+				A9BB674F1C6BCD9600EB1A49 /* inflate.c */,
+				A9BB67511C6BCD9600EB1A49 /* inftrees.c */,
+				A9BB67531C6BCD9600EB1A49 /* trees.c */,
+				A9BB67551C6BCD9600EB1A49 /* uncompr.c */,
+				A9BB67561C6BCD9600EB1A49 /* untgz.c */,
+				A9BB67591C6BCD9600EB1A49 /* zutil.c */,
+			);
+			path = zlib;
 			sourceTree = "<group>";
 		};
 		A9BFB0A313EDF51000032679 /* Frameworks */ = {
@@ -6309,8 +6307,9 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastTestingUpgradeCheck = 0610;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					8DC2EF4F0486A6940098B216 = {
 						DevelopmentTeam = 27XS5W9C3J;
@@ -6457,6 +6456,7 @@
 				A901663619A9E8EB00F7FC7D /* GlyphSubstitutionTables.cpp in Sources */,
 				A982039119A09C3C00DD808C /* thmllatex.cpp in Sources */,
 				A90165E819A9E8EB00F7FC7D /* wintzimpl.cpp in Sources */,
+				A9BB67781C6BCDD700EB1A49 /* compress.c in Sources */,
 				A901639919A9E8EB00F7FC7D /* ucnvbocu.cpp in Sources */,
 				A999FF3F17951CCE00E65919 /* bz2comprs.cpp in Sources */,
 				A96C2359176AFA3C008D714B /* remotetrans.cpp in Sources */,
@@ -6480,10 +6480,8 @@
 				A96C235B176AFA3C008D714B /* osisglosses.cpp in Sources */,
 				A982036D19A08B7C00DD808C /* osisreferencelinks.cpp in Sources */,
 				A90164B219A9E8EB00F7FC7D /* csr2022.cpp in Sources */,
-				A96C235D176AFA3C008D714B /* gzclose.c in Sources */,
 				A901648719A9E8EB00F7FC7D /* collationcompare.cpp in Sources */,
 				A901663819A9E8EB00F7FC7D /* GlyphSubstLookupProc.cpp in Sources */,
-				A96C235E176AFA3C008D714B /* gzlib.c in Sources */,
 				A901641919A9E8EB00F7FC7D /* unisetspan.cpp in Sources */,
 				A90165D119A9E8EB00F7FC7D /* usearch.cpp in Sources */,
 				A90164C519A9E8EB00F7FC7D /* datefmt.cpp in Sources */,
@@ -6493,14 +6491,12 @@
 				A901656019A9E8EB00F7FC7D /* tznames_impl.cpp in Sources */,
 				A901666719A9E8EB00F7FC7D /* LigatureSubstSubtables.cpp in Sources */,
 				A901653519A9E8EB00F7FC7D /* rematch.cpp in Sources */,
-				A96C235F176AFA3C008D714B /* gzread.c in Sources */,
 				A901649B19A9E8EB00F7FC7D /* collationroot.cpp in Sources */,
 				A901650919A9E8EB00F7FC7D /* nortrans.cpp in Sources */,
 				A901668B19A9E8EB00F7FC7D /* OpenTypeUtilities.cpp in Sources */,
 				A901654D19A9E8EB00F7FC7D /* timezone.cpp in Sources */,
 				A901655D19A9E8EB00F7FC7D /* tzgnames.cpp in Sources */,
 				A901650D19A9E8EB00F7FC7D /* numfmt.cpp in Sources */,
-				A96C2360176AFA3C008D714B /* gzwrite.c in Sources */,
 				A901645A19A9E8EB00F7FC7D /* uvectr64.cpp in Sources */,
 				A901656219A9E8EB00F7FC7D /* tzrule.cpp in Sources */,
 				A901662A19A9E8EB00F7FC7D /* GlyphDefinitionTables.cpp in Sources */,
@@ -6510,7 +6506,6 @@
 				A901651C19A9E8EB00F7FC7D /* rbt.cpp in Sources */,
 				A901654219A9E8EB00F7FC7D /* smpdtfmt.cpp in Sources */,
 				A901663219A9E8EB00F7FC7D /* GlyphPositioningTables.cpp in Sources */,
-				A96C2361176AFA3C008D714B /* infback.c in Sources */,
 				A901644719A9E8EB00F7FC7D /* utf_impl.c in Sources */,
 				A901637D19A9E8EB00F7FC7D /* ucharstrieiterator.cpp in Sources */,
 				A901644519A9E8EB00F7FC7D /* ustrtrns.cpp in Sources */,
@@ -6528,22 +6523,11 @@
 				A954ACCB13EEA5340094E3FE /* ftpparse.c in Sources */,
 				A901644419A9E8EB00F7FC7D /* ustring.cpp in Sources */,
 				A901644219A9E8EB00F7FC7D /* ustrfmt.c in Sources */,
-				A954ACCD13EEA5340094E3FE /* adler32.c in Sources */,
-				A954ACCE13EEA5340094E3FE /* compress.c in Sources */,
 				A901669919A9E8EC00F7FC7D /* SegmentSingleProcessor2.cpp in Sources */,
 				A901645819A9E8EB00F7FC7D /* uvectr32.cpp in Sources */,
-				A954ACCF13EEA5340094E3FE /* crc32.c in Sources */,
 				A901669119A9E8EB00F7FC7D /* ScriptAndLanguageTags.cpp in Sources */,
-				A954ACD013EEA5340094E3FE /* deflate.c in Sources */,
-				A954ACD413EEA5340094E3FE /* inffast.c in Sources */,
-				A954ACD513EEA5340094E3FE /* inflate.c in Sources */,
-				A954ACD613EEA5340094E3FE /* inftrees.c in Sources */,
 				A901660519A9E8EB00F7FC7D /* AlternateSubstSubtables.cpp in Sources */,
-				A954ACD913EEA5340094E3FE /* trees.c in Sources */,
-				A954ACDA13EEA5340094E3FE /* uncompr.c in Sources */,
 				A901632019A9E8EB00F7FC7D /* locbased.cpp in Sources */,
-				A954ACDB13EEA5340094E3FE /* untgz.c in Sources */,
-				A954ACDC13EEA5340094E3FE /* zutil.c in Sources */,
 				A901655A19A9E8EB00F7FC7D /* tridpars.cpp in Sources */,
 				A901643719A9E8EB00F7FC7D /* usprep.cpp in Sources */,
 				A901652719A9E8EB00F7FC7D /* regexcmp.cpp in Sources */,
@@ -6690,6 +6674,7 @@
 				A90165E619A9E8EB00F7FC7D /* winnmfmt.cpp in Sources */,
 				A901631819A9E8EB00F7FC7D /* filterednormalizer2.cpp in Sources */,
 				A954AC6A13EEA0C10094E3FE /* gbfhtmlhref.cpp in Sources */,
+				A9BB67821C6BCDD700EB1A49 /* inftrees.c in Sources */,
 				A901662E19A9E8EB00F7FC7D /* GlyphLookupTables.cpp in Sources */,
 				A954AC6B13EEA0C10094E3FE /* gbfmorph.cpp in Sources */,
 				A901662519A9E8EB00F7FC7D /* ExtensionSubtables.cpp in Sources */,
@@ -6704,6 +6689,7 @@
 				A98203A019A0A5FA00DD808C /* utf8scsu.cpp in Sources */,
 				A954AC7013EEA0C10094E3FE /* gbfstrongs.cpp in Sources */,
 				A954AC7113EEA0C10094E3FE /* gbfthml.cpp in Sources */,
+				A9BB67841C6BCDD700EB1A49 /* uncompr.c in Sources */,
 				A954AC7213EEA0C10094E3FE /* gbfwebif.cpp in Sources */,
 				A90164F119A9E8EB00F7FC7D /* indiancal.cpp in Sources */,
 				A901650519A9E8EB00F7FC7D /* nfrule.cpp in Sources */,
@@ -6738,10 +6724,12 @@
 				A90165D319A9E8EB00F7FC7D /* uspoof_build.cpp in Sources */,
 				A954AC7C13EEA0C10094E3FE /* osismorph.cpp in Sources */,
 				A954AC7D13EEA0C10094E3FE /* osismorphsegmentation.cpp in Sources */,
+				A9BB67801C6BCDD700EB1A49 /* inffast.c in Sources */,
 				A901641E19A9E8EB00F7FC7D /* unistr_cnv.cpp in Sources */,
 				A954AC7E13EEA0C10094E3FE /* osisosis.cpp in Sources */,
 				A901646B19A9E8EB00F7FC7D /* alphaindex.cpp in Sources */,
 				A901643819A9E8EB00F7FC7D /* ustack.cpp in Sources */,
+				A9BB67811C6BCDD700EB1A49 /* inflate.c in Sources */,
 				A90164D419A9E8EB00F7FC7D /* dtfmtsym.cpp in Sources */,
 				A901649319A9E8EB00F7FC7D /* collationfastlatinbuilder.cpp in Sources */,
 				A954AC7F13EEA0C10094E3FE /* osisplain.cpp in Sources */,
@@ -6757,8 +6745,10 @@
 				A90164CF19A9E8EB00F7FC7D /* decNumber.c in Sources */,
 				A901630319A9E8EB00F7FC7D /* bytestrie.cpp in Sources */,
 				A901641619A9E8EB00F7FC7D /* uniset.cpp in Sources */,
+				A9BB677D1C6BCDD700EB1A49 /* gzread.c in Sources */,
 				A954AC8413EEA0C10094E3FE /* osisstrongs.cpp in Sources */,
 				A90165E219A9E8EB00F7FC7D /* vzone.cpp in Sources */,
+				A9BB677B1C6BCDD700EB1A49 /* gzclose.c in Sources */,
 				A901633519A9E8EB00F7FC7D /* parsepos.cpp in Sources */,
 				A901663C19A9E8EB00F7FC7D /* GXLayoutEngine2.cpp in Sources */,
 				A90162FD19A9E8EB00F7FC7D /* bmpset.cpp in Sources */,
@@ -6777,6 +6767,7 @@
 				A90164FD19A9E8EB00F7FC7D /* measure.cpp in Sources */,
 				A901638319A9E8EB00F7FC7D /* ucmndata.c in Sources */,
 				A954AC8E13EEA0C10094E3FE /* swoptfilter.cpp in Sources */,
+				A9BB67831C6BCDD700EB1A49 /* trees.c in Sources */,
 				A901660719A9E8EB00F7FC7D /* AnchorTables.cpp in Sources */,
 				A90164E919A9E8EB00F7FC7D /* gender.cpp in Sources */,
 				A954AC8F13EEA0C10094E3FE /* teihtmlhref.cpp in Sources */,
@@ -6817,6 +6808,7 @@
 				A901635519A9E8EB00F7FC7D /* serv.cpp in Sources */,
 				A901650719A9E8EB00F7FC7D /* nfsubs.cpp in Sources */,
 				A954AC9F13EEA0C10094E3FE /* thmlwebif.cpp in Sources */,
+				A9BB67791C6BCDD700EB1A49 /* crc32.c in Sources */,
 				A954ACA013EEA0C10094E3FE /* thmlwordjs.cpp in Sources */,
 				A954ACA113EEA0C10094E3FE /* thmlxhtml.cpp in Sources */,
 				A901642819A9E8EB00F7FC7D /* ures_cnv.c in Sources */,
@@ -6899,6 +6891,7 @@
 				A901647F19A9E8EB00F7FC7D /* coleitr.cpp in Sources */,
 				A901641719A9E8EB00F7FC7D /* uniset_closure.cpp in Sources */,
 				A954ACBD13EEA0C10094E3FE /* swobject.cpp in Sources */,
+				A9BB677F1C6BCDD700EB1A49 /* infback.c in Sources */,
 				A954ACBF13EEA0C10094E3FE /* swversion.cpp in Sources */,
 				A901655719A9E8EB00F7FC7D /* translit.cpp in Sources */,
 				A901661819A9E8EB00F7FC7D /* ContextualGlyphSubstProc.cpp in Sources */,
@@ -6969,6 +6962,7 @@
 				A901631219A9E8EB00F7FC7D /* dictbe.cpp in Sources */,
 				A90164EF19A9E8EB00F7FC7D /* identifier_info.cpp in Sources */,
 				A954ABDD13EE9E470094E3FE /* Document.cpp in Sources */,
+				A9BB677A1C6BCDD700EB1A49 /* deflate.c in Sources */,
 				A954ABDE13EE9E470094E3FE /* Field.cpp in Sources */,
 				A954ABDF13EE9E470094E3FE /* CompoundFile.cpp in Sources */,
 				A90163B419A9E8EB00F7FC7D /* uiter.cpp in Sources */,
@@ -6989,6 +6983,7 @@
 				A954ABE813EE9E470094E3FE /* SegmentInfos.cpp in Sources */,
 				A901651519A9E8EB00F7FC7D /* plurrule.cpp in Sources */,
 				A954ABE913EE9E470094E3FE /* SegmentMergeInfo.cpp in Sources */,
+				A9BB677E1C6BCDD700EB1A49 /* gzwrite.c in Sources */,
 				A954ABEA13EE9E470094E3FE /* SegmentMergeQueue.cpp in Sources */,
 				A901649919A9E8EB00F7FC7D /* collationkeys.cpp in Sources */,
 				A982038A19A09BC000DD808C /* ztext4.cpp in Sources */,
@@ -7130,11 +7125,13 @@
 				A901635419A9E8EB00F7FC7D /* schriter.cpp in Sources */,
 				A901637719A9E8EB00F7FC7D /* ucasemap_titlecase_brkiter.cpp in Sources */,
 				A90164BF19A9E8EB00F7FC7D /* currfmt.cpp in Sources */,
+				A9BB677C1C6BCDD700EB1A49 /* gzlib.c in Sources */,
 				A954AC1B13EE9E470094E3FE /* TermQuery.cpp in Sources */,
 				A954AC1C13EE9E470094E3FE /* TermScorer.cpp in Sources */,
 				A90164C319A9E8EB00F7FC7D /* dangical.cpp in Sources */,
 				A954AC1D13EE9E470094E3FE /* WildcardQuery.cpp in Sources */,
 				A901637119A9E8EB00F7FC7D /* ubrk.cpp in Sources */,
+				A9BB67861C6BCDD700EB1A49 /* zutil.c in Sources */,
 				A90163AD19A9E8EB00F7FC7D /* uhash.c in Sources */,
 				A954AC1E13EE9E470094E3FE /* WildcardTermEnum.cpp in Sources */,
 				A901639519A9E8EB00F7FC7D /* ucnv_u16.c in Sources */,
@@ -7155,6 +7152,7 @@
 				A901657719A9E8EB00F7FC7D /* unesctrn.cpp in Sources */,
 				A90165CB19A9E8EB00F7FC7D /* unum.cpp in Sources */,
 				A901667A19A9E8EB00F7FC7D /* MirroredCharData.cpp in Sources */,
+				A9BB67851C6BCDD700EB1A49 /* untgz.c in Sources */,
 				A954AC2713EE9E470094E3FE /* BitSet.cpp in Sources */,
 				A90166B719A9E8EC00F7FC7D /* ThaiStateTables.cpp in Sources */,
 				A954AC2813EE9E470094E3FE /* dirent.cpp in Sources */,
@@ -7170,6 +7168,7 @@
 				A954AC2E13EE9E470094E3FE /* Reader.cpp in Sources */,
 				A954AC2F13EE9E470094E3FE /* StringBuffer.cpp in Sources */,
 				A954AC3013EE9E470094E3FE /* StringIntern.cpp in Sources */,
+				A9BB67771C6BCDD700EB1A49 /* adler32.c in Sources */,
 				A901648319A9E8EB00F7FC7D /* collationbasedatabuilder.cpp in Sources */,
 				A954AC3113EE9E470094E3FE /* ThreadLocal.cpp in Sources */,
 			);
@@ -7537,6 +7536,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -7548,6 +7548,7 @@
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -7569,6 +7570,7 @@
 					"-lz",
 					"-licucore",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.crosswire.ObjCSword;
 				PRODUCT_NAME = ObjCSword;
 				SDKROOT = macosx;
 				SYMROOT = "$(PROJECT_DIR)/Build/Products";
@@ -7582,6 +7584,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -7593,6 +7596,7 @@
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -7613,6 +7617,7 @@
 					"-lz",
 					"-licucore",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.crosswire.ObjCSword;
 				PRODUCT_NAME = ObjCSword;
 				SDKROOT = macosx;
 				SYMROOT = "$(PROJECT_DIR)/Build/Products";
@@ -7626,7 +7631,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -7642,7 +7648,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Developer ID Application: Manfred Bergmann";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -7690,7 +7696,6 @@
 					"-DUSELUCENE",
 					"-DEXCLUDEXZ",
 					"-D_ICU_",
-					"-DU_PLATFORM_IS_DARWIN_BASED",
 					"-DU_COMMON_IMPLEMENTATION",
 					"-DU_IO_IMPLEMENTATION",
 					"-DU_I18N_IMPLEMENTATION",
@@ -7738,7 +7743,6 @@
 					"-DUSELUCENE",
 					"-DEXCLUDEXZ",
 					"-D_ICU_",
-					"-DU_PLATFORM_IS_DARWIN_BASED",
 					"-DU_COMMON_IMPLEMENTATION",
 					"-DU_IO_IMPLEMENTATION",
 					"-DU_I18N_IMPLEMENTATION",
@@ -7933,6 +7937,7 @@
 				INFOPLIST_FILE = "test/Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.mabe.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
@@ -7966,6 +7971,7 @@
 				INFOPLIST_FILE = "test/Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.mabe.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
@@ -9182,6 +9188,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.mabe.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -9227,6 +9234,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.mabe.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
