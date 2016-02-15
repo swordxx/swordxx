@@ -17,12 +17,11 @@
     NSString *scheme = [aURL scheme];
     if([scheme isEqualToString:@"sword"]) {
         // in this case host is the module and path the reference
-        [ret setObject:[aURL host] forKey:ATTRTYPE_MODULE];
-        [ret setObject:[[[aURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
-                        stringByReplacingOccurrencesOfString:@"/" withString:@""]
-                forKey:ATTRTYPE_VALUE];
-        [ret setObject:@"scriptRef" forKey:ATTRTYPE_TYPE];
-        [ret setObject:@"showRef" forKey:ATTRTYPE_ACTION];
+        ret[ATTRTYPE_MODULE] = [aURL host];
+        ret[ATTRTYPE_VALUE] = [[[aURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                stringByReplacingOccurrencesOfString:@"/" withString:@""];
+        ret[ATTRTYPE_TYPE] = @"scriptRef";
+        ret[ATTRTYPE_ACTION] = @"showRef";
     } else if([scheme isEqualToString:@"applewebdata"]) {
         // in this case
         NSString *path = [aURL path];
@@ -36,25 +35,25 @@
             NSString *action = @"";
             for(NSString *entry in data) {
                 if([entry hasPrefix:@"type="]) {
-                    type = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
+                    type = [entry componentsSeparatedByString:@"="][1];
                 } else if([entry hasPrefix:@"module="]) {
-                    module = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
+                    module = [entry componentsSeparatedByString:@"="][1];
                 } else if([entry hasPrefix:@"passage="]) {
-                    passage = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
+                    passage = [entry componentsSeparatedByString:@"="][1];
                 } else if([entry hasPrefix:@"action="]) {
-                    action = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
+                    action = [entry componentsSeparatedByString:@"="][1];
                 } else if([entry hasPrefix:@"value="]) {
-                    value = [[entry componentsSeparatedByString:@"="] objectAtIndex:1];
+                    value = [entry componentsSeparatedByString:@"="][1];
                 } else {
                     ALog(@"Unknown parameter: %@", entry);
                 }
             }
 
-            [ret setObject:[module stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_MODULE];
-            [ret setObject:[passage stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_PASSAGE];
-            [ret setObject:[value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_VALUE];
-            [ret setObject:[action stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_ACTION];
-            [ret setObject:[type stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:ATTRTYPE_TYPE];
+            ret[ATTRTYPE_MODULE] = [module stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            ret[ATTRTYPE_PASSAGE] = [passage stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            ret[ATTRTYPE_VALUE] = [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            ret[ATTRTYPE_ACTION] = [action stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            ret[ATTRTYPE_TYPE] = [type stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
     }
 
@@ -88,7 +87,7 @@
             key = [key stringByReplacingOccurrencesOfString:@" " withString:@""];
             NSArray *keyComps = [key componentsSeparatedByString:prefix];
             if(keyComps.count == 2) {
-                NSString *keyValue = [self leftPadWithZero:keyComps[1] maxDigits:5];
+                NSString *keyValue = [self leftPadStrongsFormat:keyComps[1]];
                 // add to result array
                 [buf addObject:[NSString stringWithFormat:@"%@%@", prefix, keyValue]];
             }
@@ -100,15 +99,9 @@
     return [NSArray arrayWithArray:buf];
 }
 
-+ (NSString *)leftPadWithZero:(NSString *)unpadded maxDigits:(NSInteger)maxDigits {
-    NSString *padded = unpadded;
-    if(padded.length < maxDigits) {
-        NSInteger pad = maxDigits - padded.length;
-        for(int i = 0;i < pad;i++) {
-            padded = [NSString stringWithFormat:@"0%@", padded];
-        }
-    }
-    return padded;
++ (NSString *)leftPadStrongsFormat:(NSString *)unpadded {
+    int number = [unpadded intValue];
+    return [NSString stringWithFormat:@"%005i", number];
 }
 
 @end
