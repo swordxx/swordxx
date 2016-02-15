@@ -83,7 +83,7 @@
     XCTAssertTrue([[text text] containsString:@"But he answered and said, <font color=\"red\"> It is written, Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God.</font>"]);
 }
 
-- (void)testStrongsNumberRetrieval {
+- (void)testStrongsNumberHebrewRetrieval {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
     XCTAssertNotNil(bible, @"Module is nil");
 
@@ -94,6 +94,45 @@
     NSString *combinedString = [strongsNumbers componentsJoinedByString:@","];
     NSLog(@"%@", combinedString);
     XCTAssertTrue([@"H07225,H0430,H0853 H01254,H08064,H0853,H0776" isEqualToString:combinedString]);
+}
+
+- (void)testStrongsNumberHebrewNormalizedRetrieval {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+    XCTAssertNotNil(bible, @"Module is nil");
+    
+    [bible setKeyString:@"Gen 1:1"];
+    NSArray *strongsNumbers = [bible entryAttributeValuesLemmaNormalized];
+    XCTAssertTrue(strongsNumbers != nil);
+    XCTAssertTrue([strongsNumbers count] > 0);
+    NSString *combinedString = [strongsNumbers componentsJoinedByString:@","];
+    NSLog(@"%@", combinedString);
+    XCTAssertTrue([@"H07225,H00430,H00853,H01254,H08064,H00853,H00776" isEqualToString:combinedString]);
+}
+
+- (void)testStrongsNumberGreekRetrieval {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+    XCTAssertNotNil(bible, @"Module is nil");
+    
+    [bible setKeyString:@"Mat 1:1"];
+    NSArray *strongsNumbers = [bible entryAttributeValuesLemma];
+    XCTAssertTrue(strongsNumbers != nil);
+    XCTAssertTrue([strongsNumbers count] > 0);
+    NSString *combinedString = [strongsNumbers componentsJoinedByString:@","];
+    NSLog(@"%@", combinedString);
+    XCTAssertTrue([@"G976,G1078,G2424,G5547,G5207,G1138,G5207,G11" isEqualToString:combinedString]);
+}
+
+- (void)testStrongsNumberGreekNormalizedRetrieval {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+    XCTAssertNotNil(bible, @"Module is nil");
+    
+    [bible setKeyString:@"Mat 1:1"];
+    NSArray *strongsNumbers = [bible entryAttributeValuesLemmaNormalized];
+    XCTAssertTrue(strongsNumbers != nil);
+    XCTAssertTrue([strongsNumbers count] > 0);
+    NSString *combinedString = [strongsNumbers componentsJoinedByString:@","];
+    NSLog(@"%@", combinedString);
+    XCTAssertTrue([@"G00976,G01078,G02424,G05547,G05207,G01138,G05207,G00011" isEqualToString:combinedString]);
 }
 
 - (void)testFirstBookNTIntroGer {
