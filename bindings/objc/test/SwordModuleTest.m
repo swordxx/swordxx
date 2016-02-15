@@ -80,6 +80,20 @@
     SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Mat 4:4" textType:TextTypeRendered];
     XCTAssertTrue(text != nil);
     NSLog(@"Mat 4:4: %@", [text text]);
+    XCTAssertTrue([[text text] containsString:@"But he answered and said, <font color=\"red\"> It is written, Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God.</font>"]);
+}
+
+- (void)testStrongsNumberRetrieval {
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
+    XCTAssertNotNil(bible, @"Module is nil");
+
+    [bible setKeyString:@"Gen 1:1"];
+    NSArray *strongsNumbers = [bible entryAttributeValuesLemma];
+    XCTAssertTrue(strongsNumbers != nil);
+    XCTAssertTrue([strongsNumbers count] > 0);
+    NSString *combinedString = [strongsNumbers componentsJoinedByString:@","];
+    NSLog(@"%@", combinedString);
+    XCTAssertTrue([@"H07225,H0430,H0853 H01254,H08064,H0853,H0776" isEqualToString:combinedString]);
 }
 
 - (void)testFirstBookNTIntroGer {

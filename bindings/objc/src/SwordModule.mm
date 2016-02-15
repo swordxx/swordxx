@@ -547,7 +547,9 @@
 - (NSArray *)entryAttributeValuesLemma {
     NSMutableArray *array = [NSMutableArray array];
     
-    // parse entry attributes and look for Lemma (String's numbers)
+    swModule->stripText(); // force processing of key
+    
+    // parse entry attributes and look for Lemma (Strong's numbers)
     sword::AttributeTypeList::iterator words;
     sword::AttributeList::iterator word;
     sword::AttributeValue::iterator strongVal;
