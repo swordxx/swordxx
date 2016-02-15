@@ -30,4 +30,10 @@
  */
 + (NSArray *)padStrongsNumber:(NSString *)unpaddedNumber;
 
+/**
+ * Pads a string on the left until maxDigits is reached
+ */
++ (NSString *)leftPadWithZero:(NSString *)unpadded maxDigits:(NSInteger)maxDigits;
+
+
 @end

@@ -88,13 +88,7 @@
             key = [key stringByReplacingOccurrencesOfString:@" " withString:@""];
             NSArray *keyComps = [key componentsSeparatedByString:prefix];
             if(keyComps.count == 2) {
-                NSString *keyValue = keyComps[1];
-                if(keyValue.length < 5) {
-                    NSInteger pad = 5 - keyValue.length;
-                    for(int i = 0;i < pad;i++) {
-                        keyValue = [NSString stringWithFormat:@"0%@", keyValue];
-                    }
-                }
+                NSString *keyValue = [self leftPadWithZero:keyComps[1] maxDigits:5];
                 // add to result array
                 [buf addObject:[NSString stringWithFormat:@"%@%@", prefix, keyValue]];
             }
@@ -104,6 +98,17 @@
     }
     
     return [NSArray arrayWithArray:buf];
+}
+
++ (NSString *)leftPadWithZero:(NSString *)unpadded maxDigits:(NSInteger)maxDigits {
+    NSString *padded = unpadded;
+    if(padded.length < maxDigits) {
+        NSInteger pad = maxDigits - padded.length;
+        for(int i = 0;i < pad;i++) {
+            padded = [NSString stringWithFormat:@"0%@", padded];
+        }
+    }
+    return padded;
 }
 
 @end
