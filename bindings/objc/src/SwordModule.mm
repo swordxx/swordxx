@@ -18,6 +18,7 @@
 #import "SwordVerseKey.h"
 #import "SwordBible.h"
 #import "SwordCommentary.h"
+#import "SwordUtil.h"
 
 @interface SwordModule ()
 
@@ -574,43 +575,7 @@
     NSArray *lemmas = [self entryAttributeValuesLemma];
     // post process all codes and mormalize the number
     // Hebrew keys should have 5 number digits
-    NSMutableArray *buf = [NSMutableArray array];
-    for(NSString *lemma in lemmas) {
-        // Hebrew
-        NSString *prefix = nil;
-        if([lemma hasPrefix:@"H"]) {
-            prefix = @"H";
-        }
-        if([lemma hasPrefix:@"G"]) {
-            prefix = @"G";
-        }
-        
-        if(prefix == nil) {
-            // add as is
-            [buf addObject:lemma];
-            
-        } else {
-            // lemma may contain more codes concatenated by space
-            NSArray *keys = [lemma componentsSeparatedByString:@" "];
-            for(__strong NSString *key in keys) {
-                // trim
-                key = [key stringByReplacingOccurrencesOfString:@" " withString:@""];
-                NSArray *keyComps = [key componentsSeparatedByString:prefix];
-                if(keyComps.count == 2) {
-                    NSString *keyValue = keyComps[1];
-                    if(keyValue.length < 5) {
-                        NSInteger pad = 5 - keyValue.length;
-                        for(int i = 0;i < pad;i++) {
-                            keyValue = [NSString stringWithFormat:@"0%@", keyValue];
-                        }
-                    }
-                    // add to result array
-                    [buf addObject:[NSString stringWithFormat:@"%@%@", prefix, keyValue]];
-                }
-            }
-        }
-    }
-    return [NSArray arrayWithArray:buf];
+    return [SwordUtil padStrongsNumbers:lemmas];
 }
 
 - (NSString *)entryAttributeValuePreverseForKey:(SwordKey *)aKey {

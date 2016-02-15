@@ -61,4 +61,49 @@
     return ret;
 }
 
++ (NSArray *)padStrongsNumbers:(NSArray *)unpaddedNumbers {
+    NSMutableArray *buf = [NSMutableArray array];
+    for(NSString *lemma in unpaddedNumbers) {
+        [buf addObjectsFromArray:[self padStrongsNumber:lemma]];
+    }
+    return [NSArray arrayWithArray:buf];
+}
+
++ (NSArray *)padStrongsNumber:(NSString *)unpaddedNumber {
+    NSMutableArray *buf = [NSMutableArray array];
+    // Hebrew
+    NSString *prefix = nil;
+    if([unpaddedNumber hasPrefix:@"H"]) {
+        prefix = @"H";
+    }
+    if([unpaddedNumber hasPrefix:@"G"]) {
+        prefix = @"G";
+    }
+    
+    if(prefix != nil) {
+        // lemma may contain more codes concatenated by space
+        NSArray *keys = [unpaddedNumber componentsSeparatedByString:@" "];
+        for(__strong NSString *key in keys) {
+            // trim
+            key = [key stringByReplacingOccurrencesOfString:@" " withString:@""];
+            NSArray *keyComps = [key componentsSeparatedByString:prefix];
+            if(keyComps.count == 2) {
+                NSString *keyValue = keyComps[1];
+                if(keyValue.length < 5) {
+                    NSInteger pad = 5 - keyValue.length;
+                    for(int i = 0;i < pad;i++) {
+                        keyValue = [NSString stringWithFormat:@"0%@", keyValue];
+                    }
+                }
+                // add to result array
+                [buf addObject:[NSString stringWithFormat:@"%@%@", prefix, keyValue]];
+            }
+        }
+    } else {
+        [buf addObject:unpaddedNumber];
+    }
+    
+    return [NSArray arrayWithArray:buf];
+}
+
 @end
