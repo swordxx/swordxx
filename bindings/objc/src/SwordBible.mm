@@ -19,7 +19,7 @@ using sword::AttributeValue;
 
 @interface SwordBible ()
 
-- (void)buildBookList;
+- (NSDictionary *)buildBookList;
 - (BOOL)containsBookNumber:(int)aBookNum;
 - (NSArray *)textEntriesForReference:(NSString *)aReference context:(int)context textType:(TextPullType)textType;
 
@@ -123,7 +123,7 @@ NSLock *bibleLock = nil;
 
 #pragma mark - Bible information
 
-- (void)buildBookList {
+- (NSDictionary *)buildBookList {
     sword::VersificationMgr *vmgr = sword::VersificationMgr::getSystemVersificationMgr();
     const sword::VersificationMgr::System *system = vmgr->getVersificationSystem([[self versification] UTF8String]);
 
@@ -138,7 +138,7 @@ NSLock *bibleLock = nil;
         NSString *bookName = [bb name];
         buf[bookName] = bb;
     }
-    self.books = buf;
+    self.books = [NSDictionary dictionaryWithDictionary:buf];
 }
 
 - (BOOL)containsBookNumber:(int)aBookNum {
@@ -150,15 +150,15 @@ NSLock *bibleLock = nil;
     return NO;
 }
 
-- (NSMutableDictionary *)books {
-    if(books == nil) {
+- (NSDictionary *)books {
+    if(self.books == nil) {
         [self buildBookList];
     }
-    return books;
+    return self.books;
 }
 
-- (void)setBooks:(NSMutableDictionary *)aBooks {
-    books = aBooks;
+- (void)setBooks:(NSDictionary *)aBooks {
+    self.books = aBooks;
 }
 
 - (NSArray *)bookList {
