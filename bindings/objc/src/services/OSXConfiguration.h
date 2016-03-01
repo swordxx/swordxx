@@ -15,7 +15,6 @@
 - (NSString *)osVersion;
 - (NSString *)bundleVersion;
 - (NSString *)defaultModulePath;
-- (NSString *)defaultAppSupportPath;
 - (NSString *)tempFolder;
 - (NSString *)logFile;
 

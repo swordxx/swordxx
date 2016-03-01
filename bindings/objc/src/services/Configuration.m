@@ -38,7 +38,6 @@
 - (NSString *)osVersion {return [impl osVersion];}
 - (NSString *)bundleVersion {return [impl bundleVersion];}
 - (NSString *)defaultModulePath {return [impl defaultModulePath];}
-- (NSString *)defaultAppSupportPath {return [impl defaultAppSupportPath];}
 - (NSString *)tempFolder {return [impl tempFolder];}
 - (NSString *)logFile {return [impl logFile];}
 

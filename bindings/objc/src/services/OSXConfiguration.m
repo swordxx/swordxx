@@ -20,19 +20,27 @@
 }
 
 - (NSString *)defaultModulePath {
-    return [@"~/Library/Application Support/Sword" stringByExpandingTildeInPath];
-}
-
-- (NSString *)defaultAppSupportPath {
-    return [@"~/Library/Application Support/MacSword" stringByExpandingTildeInPath];
+    NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+    if(urls.count > 0) {
+        return [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"Sword"];
+    }
+    return nil;
 }
 
 - (NSString *)tempFolder {
-    return [@"~/Library/Caches/ObjCSword" stringByExpandingTildeInPath];
+    NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask];
+    if(urls.count > 0) {
+        return [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"ObjCSword"];
+    }
+    return nil;
 }
 
 - (NSString *)logFile {
-    return [@"~/Library/Logs/ObjCSword.log" stringByExpandingTildeInPath];
+    NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
+    if(urls.count > 0) {
+        return [[[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"Logs"] stringByAppendingPathComponent:@"ObjCSword.log"];
+    }
+    return nil;
 }
 
 @end
