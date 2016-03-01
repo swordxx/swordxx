@@ -138,7 +138,7 @@ NSLock *bibleLock = nil;
         NSString *bookName = [bb name];
         buf[bookName] = bb;
     }
-    self.books = [NSDictionary dictionaryWithDictionary:buf];
+    return [NSDictionary dictionaryWithDictionary:buf];
 }
 
 - (BOOL)containsBookNumber:(int)aBookNum {
@@ -151,14 +151,14 @@ NSLock *bibleLock = nil;
 }
 
 - (NSDictionary *)books {
-    if(self.books == nil) {
-        [self buildBookList];
+    if(_books == nil) {
+        _books = [self buildBookList];
     }
-    return self.books;
+    return _books;
 }
 
 - (void)setBooks:(NSDictionary *)aBooks {
-    self.books = aBooks;
+    _books = aBooks;
 }
 
 - (NSArray *)bookList {
