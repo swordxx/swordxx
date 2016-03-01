@@ -22,7 +22,23 @@
 - (NSString *)defaultModulePath {
     NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
     if(urls.count > 0) {
-        return [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"Sword"];
+        NSString *folder = [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"Sword"];
+        if(![[NSFileManager defaultManager] fileExistsAtPath:folder]) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:NO attributes:nil error:NULL];
+        }
+        return folder;
+    }
+    return nil;
+}
+
+- (NSString *)defaultAppSupportPath {
+    NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+    if(urls.count > 0) {
+        NSString *folder = [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"ObjCSword"];
+        if(![[NSFileManager defaultManager] fileExistsAtPath:folder]) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:NO attributes:nil error:NULL];
+        }
+        return folder;
     }
     return nil;
 }
@@ -30,7 +46,11 @@
 - (NSString *)tempFolder {
     NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask];
     if(urls.count > 0) {
-        return [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"ObjCSword"];
+        NSString *folder = [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"ObjCSword"];
+        if(![[NSFileManager defaultManager] fileExistsAtPath:folder]) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:NO attributes:nil error:NULL];
+        }
+        return folder;
     }
     return nil;
 }
