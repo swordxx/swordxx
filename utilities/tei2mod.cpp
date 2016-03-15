@@ -390,7 +390,6 @@ int main(int argc, char **argv) {
 
 	for (int i = 3; i < argc; i++) {
 		if (!strcmp(argv[i], "-z")) {
-cout << "-z\n";
 			if (modDrv.size()) usage(*argv, "Cannot specify both -z and -s");
 			compType = "ZIP";
 			if (i+1 < argc && argv[i+1][0] != '-') {
@@ -405,7 +404,6 @@ cout << "-z\n";
 			recommendedPath += "zld/";
 		}
 		else if (!strcmp(argv[i], "-Z")) {
-cout << "-Z\n";
 			if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
 			if (modDrv.size()) usage(*argv, "Cannot specify both -Z and -s");
 			compType = "LZSS";
@@ -413,7 +411,6 @@ cout << "-Z\n";
 			recommendedPath += "zld/";
 		}
 		else if (!strcmp(argv[i], "-s")) {
-cout << "-s\n";
 			if (compType.size()) usage(*argv, "Cannot specify both -s and -z");
 			if (i+1 < argc) {
 				int size = atoi(argv[++i]);
@@ -431,18 +428,15 @@ cout << "-s\n";
 			usage(*argv, "-s requires one of <2|4>");
 		}
 		else if (!strcmp(argv[i], "-N")) {
-cout << "-N\n";
 			normalize = false;
 		}
 		else if (!strcmp(argv[i], "-c")) {
-cout << "-c\n";
 			if (i+1 < argc) cipherKey = argv[++i];
 			else usage(*argv, "-c requires <cipher_key>");
 		}
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 	if (!modDrv.size()) {
-cout << "RawLD4\n";
 		modDrv           = "RawLD4";
 		recommendedPath += "rawld4/";
 	}
