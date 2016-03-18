@@ -25,17 +25,11 @@ For those of you using the GUI interfaces with, for example, Windows or OS X or 
     * Click "Configure"
           o If prompted to create the build directory, say "Yes"
           o Select the "generator" for this project... for this, select the system you wish to use to actually do the compile. Some examples are different versions of Microsoft Visual Studio, Unix Makefiles, MSYS Makefiles, Cygwin Makefiles, Xcode projects, Eclipse projects, Borland projects and more.
-          o Unless you are building for the iPhone (in which case you should skip to the section especially for iPhones!), you will probably want to leave "Use default native compilers" unless you are a power user and know what compiler you would like to use. You could use special options here if you need to select special cross-compilers or similar. 
+          o You will probably want to leave "Use default native compilers" unless you are a power user and know what compiler you would like to use. You could use special options here if you need to select special cross-compilers or similar. 
     * After configure is completed, if there were errors, you will have a chance to correct them. If certain libraries were not located or you wish to use other values, you can select the Advanced View or check Show Advanced and manually edit any of the cached values.
     * If you are happy with the results and there are no errors or after you have corrected any errors, click Configure a second time.
     * Click Generate
     * Navigate to the directory where you specified to build the binaries and invoke your build system through its native mechanics - open the project file, execute the Makefiles, etc. 
-
-iPhone
-
-There are special steps to be taken to build for the iPhone, if you so wish. When I next get on my Mac, I will post these directions especially for you.
-
-    * alternatively, talk to me about how I do things for PocketSword. I use neither the Make system or CMake. --Niccarter 12:10, 19 April 2010 (UTC) 
 
 How can I customize my options?
 

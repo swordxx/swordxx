@@ -228,9 +228,9 @@ ADD_DEFINITIONS(-D_FTPLIB_NO_COMPAT)
 # Platform-specifc bits that I will eventually refactor out into their own files, once I am happy
 # with the stuff that is here.
 # 
-IF(APPLE OR iPhone)
+IF(APPLE)
 	ADD_DEFINITIONS(-Dunix)
-ENDIF(APPLE OR iPhone)
+ENDIF(APPLE)
 
 ##############################################################################################
 # Our build test
