@@ -1,5 +1,4 @@
 # TODO: write FindICU (icu-config only for 2.2 and up) -- currently taken from another CMake system
-#       limit pkg-config version to >= 0.14, demo, utilities, doc, tests
 #       use BUILD_SHARED_LIBS
 #
 # NOTES: Defaults to build type of Shared
@@ -47,7 +46,6 @@ FIND_PACKAGE(ICU QUIET)
 FIND_PACKAGE(CURL REQUIRED QUIET)
 FIND_PACKAGE(CLucene QUIET)
 FIND_PACKAGE(ZLIB REQUIRED QUIET)
-FIND_PACKAGE(PkgConfig QUIET)
 
 ###########################################################################################
 # Based on user input and the results of the above tests, we may need to mux with the source

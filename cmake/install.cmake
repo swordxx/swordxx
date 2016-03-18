@@ -46,7 +46,7 @@ IF(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
 ELSE(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
 	SET(SHAREDLIB_FALSE "#")
 ENDIF(LIBSWORD_LIBRARY_TYPE STREQUAL "Static")
-# The @ONLY restricts it because our ${variable} which are left there as part of pkg-config
+
 SET(prefix ${CMAKE_INSTALL_PREFIX})
 SET(libdir ${LIB_INSTALL_DIR})
 SET(exec_prefix ${BINDIR})
