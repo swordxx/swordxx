@@ -27,7 +27,7 @@
 #include <swobject.h>
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWModule;
 
@@ -51,5 +51,5 @@ public:
   SWDEPRECATED char Display(SWModule &imodule) { return display(imodule); }
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

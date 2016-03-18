@@ -26,7 +26,7 @@
 #include <utilxml.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -96,4 +96,4 @@ char OSISEnum::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

@@ -31,7 +31,7 @@
 #include <unicode/uchar.h>
 #endif
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This filter converts SCSU compressed (encoded) text to UTF-8
  */
@@ -60,5 +60,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

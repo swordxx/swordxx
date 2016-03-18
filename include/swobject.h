@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 #define SWDYNAMIC_CAST(className, object) (className *)((object)?((object->getClass()->isAssignableFrom(#className))?object:0):0)
 
 /**
@@ -62,5 +62,5 @@ public:
 	}
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

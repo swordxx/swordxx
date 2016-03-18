@@ -27,7 +27,7 @@
 #include <stack>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 class SWDLLEXPORT QuoteStack {
@@ -66,5 +66,5 @@ public:
 	char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif /* THMLOSIS_H */

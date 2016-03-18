@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWKey;
 class SWBuf;
@@ -59,5 +59,5 @@ public:
 	virtual const char *getHeader() const { return ""; }
 };
 
-	SWORD_NAMESPACE_END
+	} /* namespace sword */
 #endif

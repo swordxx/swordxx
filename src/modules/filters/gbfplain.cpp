@@ -26,7 +26,7 @@
 #include <swbuf.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 GBFPlain::GBFPlain() {
@@ -113,5 +113,5 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

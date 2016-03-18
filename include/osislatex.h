@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts OSIS text to classed XHTML
  */
@@ -73,5 +73,5 @@ public:
 	virtual const char *getHeader() const;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

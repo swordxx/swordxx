@@ -26,7 +26,7 @@
 #include <swmodule.h>
 #include <swdisp.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 static const char *classes[] = {"SWDisplay", "SWObject", 0};
 SWClass SWDisplay::classdef(classes);
@@ -42,4 +42,4 @@ SWClass SWDisplay::classdef(classes);
  */
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

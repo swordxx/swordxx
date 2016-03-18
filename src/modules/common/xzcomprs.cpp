@@ -29,7 +29,7 @@
 #define LZMA_API_STATIC
 #include <lzma.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * XzCompress Constructor - Initializes data for instance of XzCompress
@@ -210,4 +210,4 @@ void XzCompress::setLevel(int l) {
 	memlimit <<= 1;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

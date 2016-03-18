@@ -27,7 +27,7 @@
 #include <swmodule.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 Latin1UTF8::Latin1UTF8() {
@@ -189,4 +189,4 @@ char Latin1UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

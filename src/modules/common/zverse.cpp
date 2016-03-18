@@ -40,7 +40,7 @@
 #include <swcomprs.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * zVerse Statics
@@ -519,4 +519,4 @@ cleanup1:
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

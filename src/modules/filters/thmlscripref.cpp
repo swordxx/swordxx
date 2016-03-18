@@ -29,7 +29,7 @@
 #include <swmodule.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -150,4 +150,4 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

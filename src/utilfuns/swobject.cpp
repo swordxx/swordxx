@@ -31,7 +31,7 @@
 #endif
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 bool SWClass::isAssignableFrom(const char *className) const {
@@ -47,5 +47,5 @@ bool SWClass::isAssignableFrom(const char *className) const {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

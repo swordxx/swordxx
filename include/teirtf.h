@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts TEI text to RTF text
  */
@@ -49,5 +49,5 @@ public:
 	TEIRTF();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

@@ -28,7 +28,7 @@
 #include <swbuf.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** Class for reporting status
 */
@@ -79,6 +79,6 @@ public:
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

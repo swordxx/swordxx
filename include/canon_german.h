@@ -22,7 +22,7 @@
 #ifndef CANON_GERMAN_H
 #define CANON_GERMAN_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: German
@@ -304,7 +304,7 @@ int vm_german[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

@@ -30,7 +30,7 @@
 
 #include <ztext.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * zText Constructor - Initializes data for instance of zText
@@ -220,4 +220,4 @@ bool zText::hasEntry(const SWKey *k) const {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

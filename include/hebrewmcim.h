@@ -35,7 +35,7 @@
 #include <swinputmeth.h>
 #include <map>
 #include <defs.h>
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 class SWDLLEXPORT HebrewMCIM : public SWInputMethod {
@@ -50,5 +50,5 @@ public:
     int *translate(char in);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

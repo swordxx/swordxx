@@ -27,7 +27,7 @@
 #include <utilxml.h>
 #include <ctype.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
@@ -107,4 +107,4 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

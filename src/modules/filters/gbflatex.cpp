@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <url.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 const char *GBFLaTeX::getHeader() const {
 	return "\\usepackage{color}";
@@ -201,4 +201,4 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 	return true;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

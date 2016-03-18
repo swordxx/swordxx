@@ -28,7 +28,7 @@
 #include <swkey.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 /******************************************************************************
@@ -165,5 +165,5 @@ void SWLD::strongsPad(char *buf)
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

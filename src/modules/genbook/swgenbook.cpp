@@ -24,7 +24,7 @@
 #include <swgenbook.h>
 #include <versetreekey.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * SWGenBook Constructor - Initializes data for instance of SWGenBook
@@ -97,4 +97,4 @@ TreeKey &SWGenBook::getTreeKey(const SWKey *k) const {
 	else	return *key;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

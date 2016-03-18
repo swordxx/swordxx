@@ -56,7 +56,7 @@
 #define NOT_USED	N
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class LZSSCompress::Private {
 public:
@@ -729,4 +729,4 @@ void LZSSCompress::Decode(void)
 	slen = totalLen;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

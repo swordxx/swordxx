@@ -29,7 +29,7 @@
 #include <swbuf.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -129,4 +129,4 @@ char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, cons
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

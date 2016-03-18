@@ -40,7 +40,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class VerseKey;
 class SWKey;
@@ -82,5 +82,5 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

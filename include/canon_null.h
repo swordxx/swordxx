@@ -22,7 +22,7 @@
 #ifndef CANON_NULL_H
 #define CANON_NULL_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: null
@@ -41,7 +41,7 @@ struct sbook ntbooks_null[] = {
   {"", "", "", 0}
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

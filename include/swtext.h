@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class VerseKey;
 
@@ -69,6 +69,6 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

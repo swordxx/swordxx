@@ -30,7 +30,7 @@
 #include <versekey.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -313,4 +313,4 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

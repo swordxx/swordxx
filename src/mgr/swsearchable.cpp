@@ -25,7 +25,7 @@
 #include <listkey.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 void SWSearchable::nullPercent(char percent, void *percentUserData) {}
@@ -56,5 +56,5 @@ bool SWSearchable::isSearchOptimallySupported(const char *istr, int searchType, 
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

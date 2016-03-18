@@ -39,7 +39,7 @@
 #include <filemgr.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * zStr Statics
@@ -697,4 +697,4 @@ signed char zStr::createModule(const char *ipath) {
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

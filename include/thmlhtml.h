@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts ThML text to HTML text
  */
@@ -44,5 +44,5 @@ public:
 	ThMLHTML();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

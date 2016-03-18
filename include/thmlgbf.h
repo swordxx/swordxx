@@ -25,7 +25,7 @@
 
 #include <swfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts ThML text to GBF text
  */
@@ -36,5 +36,5 @@ public:
 	ThMLGBF();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

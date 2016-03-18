@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class RawStr;
 
@@ -58,5 +58,5 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

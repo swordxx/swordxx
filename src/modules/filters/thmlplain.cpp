@@ -25,7 +25,7 @@
 #include <thmlplain.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 ThMLPlain::ThMLPlain() {
 }
@@ -232,4 +232,4 @@ char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

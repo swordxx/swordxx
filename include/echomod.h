@@ -28,7 +28,7 @@
 #include <defs.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT EchoMod : public SWText
 {
@@ -38,5 +38,5 @@ public:
 	virtual SWBuf &getRawEntryBuf() const;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

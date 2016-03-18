@@ -34,7 +34,7 @@
 #include <treekeyidx.h>
 #include <versetreekey.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * RawGenBook Constructor - Initializes data for instance of RawGenBook
@@ -223,4 +223,4 @@ bool RawGenBook::hasEntry(const SWKey *k) const {
 	return (dsize > 7) && key.popError() == '\x00';
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

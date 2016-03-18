@@ -22,7 +22,7 @@
 #ifndef CANON_NRSV_H
 #define CANON_NRSV_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: NRSV
@@ -271,7 +271,7 @@ unsigned char mappings_nrsv[] = {
     0
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

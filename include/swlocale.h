@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWConfig;
 static const int ENDOFABBREVS = -2;
@@ -74,5 +74,5 @@ public:
 	static const char *DEFAULT_LOCALE_NAME;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

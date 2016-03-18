@@ -27,7 +27,7 @@
 #include <sysdata.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** stdstr - clone a string
 */
@@ -100,5 +100,5 @@ SWBuf wcharToUTF8(const wchar_t *buf);
 
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

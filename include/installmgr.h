@@ -28,7 +28,7 @@
 #include <map>
 #include <set>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWMgr;
 class SWModule;
@@ -271,6 +271,6 @@ A sample implementation, roughly taken from the windows installmgr:
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

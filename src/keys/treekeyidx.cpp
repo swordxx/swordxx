@@ -31,7 +31,7 @@
 #include <filemgr.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKeyIdx::classdef(classes);
@@ -669,4 +669,4 @@ SWKey *TreeKeyIdx::clone() const
 	return new TreeKeyIdx(*this);
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

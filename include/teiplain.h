@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts TEI text to plain text
  */
@@ -47,5 +47,5 @@ public:
 	TEIPlain();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

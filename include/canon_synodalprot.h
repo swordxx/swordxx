@@ -22,7 +22,7 @@
 #ifndef CANON_SYNODALPROT_H
 #define CANON_SYNODALPROT_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 // Versification system: SynodalProt
 // This versification data is based on the synodal system. The only change is the removal of the deuterocanonical passages: PrMan, 1Esd, Tob, Jdt, Wis, Sir, EpJer, Bar, 1Macc, 2Macc, 3Macc, 2Esd, Dan 13-14, Ps 151, Josh 24:34-36, Prov 4:28-29, 13:14, 18:8, and Dan 3:24-90.
@@ -310,7 +310,7 @@ int vm_synodalProt[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts TEI text to XHTML text
  */
@@ -52,5 +52,5 @@ public:
 	virtual const char *getHeader() const;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

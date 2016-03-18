@@ -25,7 +25,7 @@
 
 #include <gbfxhtml.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts GBF text to classed XHTML for web interfaces
  */
@@ -39,5 +39,5 @@ public:
 	GBFWEBIF();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

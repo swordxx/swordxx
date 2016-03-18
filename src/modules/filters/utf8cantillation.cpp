@@ -26,7 +26,7 @@
 #include <utf8cantillation.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -75,4 +75,4 @@ char UTF8Cantillation::processText(SWBuf &text, const SWKey *key, const SWModule
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

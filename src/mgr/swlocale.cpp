@@ -29,7 +29,7 @@
 #include <versificationmgr.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 namespace {
@@ -192,5 +192,5 @@ const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

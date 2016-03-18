@@ -46,7 +46,7 @@
 using std::map;
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -742,5 +742,5 @@ SWMgr *InstallSource::getMgr() {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

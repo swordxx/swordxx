@@ -27,7 +27,7 @@
 #include <treekey.h>
 #include <sysdata.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class FileDesc;
 
@@ -122,6 +122,6 @@ public:
 	static signed char create(const char *path);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

@@ -43,7 +43,7 @@
 #include <swmgr.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 /******************************************************************************
@@ -157,4 +157,4 @@ char EncodingFilterMgr::Encoding(char enc) {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

@@ -25,7 +25,7 @@
 #include <swcacher.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 SWCacher::SWCacher() {
@@ -48,5 +48,5 @@ long SWCacher::lastAccess() {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

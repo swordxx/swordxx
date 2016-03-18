@@ -27,7 +27,7 @@
 #include <fcntl.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 SWConfig::SWConfig() {
@@ -169,5 +169,5 @@ ConfigEntMap & SWConfig::operator [] (const char *section) {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

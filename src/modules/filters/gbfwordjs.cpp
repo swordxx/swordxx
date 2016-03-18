@@ -29,7 +29,7 @@
 #include <versekey.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -299,4 +299,4 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

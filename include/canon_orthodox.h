@@ -22,7 +22,7 @@
 #ifndef CANON_ORTHODOX_H
 #define CANON_ORTHODOX_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: Orthodox
@@ -364,7 +364,7 @@ int vm_orthodox[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

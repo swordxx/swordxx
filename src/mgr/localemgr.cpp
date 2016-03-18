@@ -38,7 +38,7 @@
 #include <swlog.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 LocaleMgr *LocaleMgr::systemLocaleMgr = 0;
@@ -278,5 +278,5 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

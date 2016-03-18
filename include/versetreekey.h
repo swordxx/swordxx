@@ -32,7 +32,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /**
  * Class VerseKey
@@ -122,6 +122,6 @@ public:
 //	virtual void copyFrom(const VerseTreeKey &ikey);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif //VERSETREEKEY_H

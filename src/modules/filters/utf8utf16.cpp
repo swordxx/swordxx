@@ -26,7 +26,7 @@
 #include <swbuf.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 UTF8UTF16::UTF8UTF16() {
@@ -67,4 +67,4 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

@@ -30,7 +30,7 @@
 #include <unicode/uchar.h>
 #include <unicode/ushape.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This Filter controls the arabic shaping of UTF-8 text
  * FIXME: is that correct? how to control it?
@@ -45,7 +45,7 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif
 
 

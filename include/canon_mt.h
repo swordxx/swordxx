@@ -22,7 +22,7 @@
 #ifndef CANON_MT_H
 #define CANON_MT_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: MT
@@ -237,7 +237,7 @@ int vm_mt[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

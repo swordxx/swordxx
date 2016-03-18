@@ -70,7 +70,7 @@
 // -------
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 int FileMgr::CREAT = O_CREAT;
@@ -583,4 +583,4 @@ long FileMgr::resourceConsumption() {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

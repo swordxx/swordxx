@@ -32,7 +32,7 @@
 #include <utilxml.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 ThMLOSIS::ThMLOSIS() {
 }
@@ -588,4 +588,4 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

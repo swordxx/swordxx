@@ -39,7 +39,7 @@
 
 #include "sapphire.h"
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 unsigned char sapphire::keyrand(int limit,
                                 unsigned char *user_key,
@@ -233,4 +233,4 @@ void sapphire::hash_final(unsigned char *hash,      // Destination
         hash[i] = encrypt(0);
     }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

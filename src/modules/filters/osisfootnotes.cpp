@@ -31,7 +31,7 @@
 #include <utilstr.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -182,5 +182,5 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

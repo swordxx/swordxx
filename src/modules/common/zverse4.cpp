@@ -38,7 +38,7 @@
 #include <swcomprs.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * zVerse4 Statics
@@ -513,4 +513,4 @@ cleanup1:
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

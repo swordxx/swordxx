@@ -29,7 +29,7 @@
 #include <defs.h>
 #include <sysdata.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class FileDesc;
 class SWBuf;
@@ -58,5 +58,5 @@ public:
 	static signed char createModule(const char *path);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

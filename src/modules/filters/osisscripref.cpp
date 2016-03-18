@@ -27,7 +27,7 @@
 #include <utilxml.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -120,4 +120,4 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

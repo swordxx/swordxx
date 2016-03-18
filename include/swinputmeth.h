@@ -24,7 +24,7 @@
 #define SWINPUTMETHOD_H
 
 #include <defs.h>
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT SWInputMethod {
 
@@ -43,5 +43,5 @@ public:
     virtual void clearState();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

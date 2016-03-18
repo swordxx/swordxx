@@ -30,7 +30,7 @@
 #include <unicode/uchar.h>
 #include <unicode/ubidi.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This Filter reorders UTF-8 text according to Unicode BiDi
  */
@@ -44,6 +44,6 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif
 

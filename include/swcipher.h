@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT SWCipher
 {
@@ -50,5 +50,5 @@ public:
   virtual void Decode (void);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

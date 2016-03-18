@@ -36,7 +36,7 @@
 #include <swbuf.h>
 #include <stringmgr.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * RawStr Statics
@@ -525,4 +525,4 @@ signed char RawStr::createModule(const char *ipath)
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

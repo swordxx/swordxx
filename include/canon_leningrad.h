@@ -22,7 +22,7 @@
 #ifndef CANON_LENINGRAD_H
 #define CANON_LENINGRAD_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: Leningrad
@@ -237,7 +237,7 @@ int vm_leningrad[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <url.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 GBFHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	if (module) {
@@ -294,4 +294,4 @@ bool GBFHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 	return true;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

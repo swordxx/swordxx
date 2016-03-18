@@ -27,7 +27,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT SWLog {
 protected:
@@ -60,5 +60,5 @@ public:
 	virtual void logMessage(const char *message, int level) const;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

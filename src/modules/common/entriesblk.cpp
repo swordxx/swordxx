@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 const int EntriesBlock::METAHEADERSIZE = 4;
 	// count(4);
@@ -191,4 +191,4 @@ void EntriesBlock::removeEntry(int entryIndex) {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

@@ -26,7 +26,7 @@
 #include <defs.h>
 #include <remotetrans.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class CURL;
 
@@ -42,6 +42,6 @@ public:
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

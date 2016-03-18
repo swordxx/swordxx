@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT zCom4 : public zVerse4, public SWCom {
 
@@ -73,6 +73,6 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

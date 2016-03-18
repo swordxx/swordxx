@@ -24,7 +24,7 @@
 #include <gbfhtml.h>
 #include <ctype.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 GBFHTML::GBFHTML() {
 	setTokenStart("<");
@@ -184,4 +184,4 @@ bool GBFHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 	return true;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

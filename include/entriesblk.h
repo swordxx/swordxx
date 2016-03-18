@@ -26,7 +26,7 @@
 #include <sysdata.h>
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT EntriesBlock {
 	static const int METAHEADERSIZE;
@@ -52,5 +52,5 @@ public:
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

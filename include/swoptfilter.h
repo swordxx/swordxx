@@ -27,7 +27,7 @@
 #include <swbuf.h>
 #include <list>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /**
 * The type definitoin for option types
@@ -89,5 +89,5 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

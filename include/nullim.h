@@ -25,7 +25,7 @@
 
 #include <swinputmeth.h>
 #include <defs.h>
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT NullIM : public SWInputMethod {
 
@@ -34,5 +34,5 @@ public:
 	int * translate(char ch);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

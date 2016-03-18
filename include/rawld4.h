@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT RawLD4 : public RawStr4, public SWLD {
 	char getEntry(long away = 0) const;
@@ -66,5 +66,5 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

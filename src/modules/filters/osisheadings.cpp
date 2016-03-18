@@ -29,7 +29,7 @@
 #include <utilstr.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -157,5 +157,5 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

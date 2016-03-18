@@ -29,7 +29,7 @@
 #include <treekey.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** The basis for all Book modules.
 */
@@ -58,5 +58,5 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

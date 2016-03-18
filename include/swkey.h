@@ -31,7 +31,7 @@
 #include <sysdata.h>
 #include <utilstr.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 #define KEYERR_OUTOFBOUNDS 1
 
@@ -228,5 +228,5 @@ public:
 
 	};
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

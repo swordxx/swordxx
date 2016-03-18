@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class FileDesc;
 class SWBuf;
@@ -55,5 +55,5 @@ public:
 	static char createModule(const char *path, const char *v11n = "KJV");
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

@@ -27,7 +27,7 @@
 #include <utilstr.h>
 #include <versekey.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 ThMLRTF::ThMLRTF() {
 	setTokenStart("<");
@@ -349,4 +349,4 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

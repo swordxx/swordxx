@@ -31,7 +31,7 @@
 #include <stringmgr.h>
 #include <stack>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 	typedef std::stack<SWBuf> TagStack;
@@ -642,4 +642,4 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

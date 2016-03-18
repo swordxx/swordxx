@@ -36,7 +36,7 @@ extern "C" {
 using std::vector;
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 namespace {
@@ -202,5 +202,5 @@ void StatusReporter::update(unsigned long totalBytes, unsigned long completedByt
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

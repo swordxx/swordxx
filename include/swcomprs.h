@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT SWCompress
 {
@@ -49,5 +49,5 @@ public:
   virtual int getLevel() {return level;};
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

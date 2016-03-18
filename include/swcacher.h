@@ -27,7 +27,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** used to provide an interface for objects that cache and want
  *	a standard interface for cleaning up.
@@ -41,5 +41,5 @@ public:
 	virtual long lastAccess();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

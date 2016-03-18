@@ -26,7 +26,7 @@
 #include <string.h>
 #include <swcipher.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * SWCipher Constructor - Initializes data for instance of SWCipher
@@ -144,4 +144,4 @@ void SWCipher::setCipherKey(const char *ikey) {
 	master.initialize(key, strlen((char *)key));
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

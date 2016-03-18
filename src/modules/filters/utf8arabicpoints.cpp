@@ -27,7 +27,7 @@
 #include <utf8arabicpoints.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -186,4 +186,4 @@ char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *)
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

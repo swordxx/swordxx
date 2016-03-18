@@ -25,7 +25,7 @@
 
 #include <map>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 // multmap that still lets you use [] to reference FIRST
 // entry of a key if multiples exist
@@ -57,5 +57,5 @@ public:
 	}
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

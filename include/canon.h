@@ -25,7 +25,7 @@
 
 #include <canon_abbrevs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 /******************************************************************************
@@ -335,7 +335,7 @@ int vm[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

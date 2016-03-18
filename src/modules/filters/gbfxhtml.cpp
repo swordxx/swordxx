@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <url.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 const char *GBFXHTML::getHeader() const {
 	return "\
@@ -233,4 +233,4 @@ bool GBFXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 	return true;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

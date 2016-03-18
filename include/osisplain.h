@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts OSIS text to plain text
  */
@@ -39,5 +39,5 @@ public:
 	OSISPlain();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

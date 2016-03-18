@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts internal OSIS text to public OSIS text
  */
@@ -52,5 +52,5 @@ public:
 	OSISOSIS();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

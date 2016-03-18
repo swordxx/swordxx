@@ -29,7 +29,7 @@
 #include <iostream>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 const char *TEIXHTML::getHeader() const {
@@ -359,5 +359,5 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

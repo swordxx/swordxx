@@ -28,7 +28,7 @@
 #include <utilxml.h>
 #include <swmodule.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 namespace {
@@ -264,4 +264,4 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

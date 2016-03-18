@@ -37,7 +37,7 @@
 #include <roman.h>
 #include <versificationmgr.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 static const char *classes[] = {"VerseKey", "SWKey", "SWObject", 0};
 SWClass VerseKey::classdef(classes);
@@ -1894,4 +1894,4 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 		outRef += startFrag;
 	return outRef.c_str();
 }
-SWORD_NAMESPACE_END
+} /* namespace sword */

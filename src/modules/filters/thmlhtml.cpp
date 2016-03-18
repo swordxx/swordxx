@@ -26,7 +26,7 @@
 #include <utilxml.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 ThMLHTML::ThMLHTML() {
@@ -241,4 +241,4 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

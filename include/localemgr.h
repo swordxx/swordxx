@@ -30,7 +30,7 @@
 #include <defs.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWLocale;
  
@@ -115,5 +115,5 @@ public:
 
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

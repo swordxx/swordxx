@@ -45,7 +45,7 @@ SE_JAMO, SE_HAN, SE_KANJI
 #include <defs.h>
 #include <map>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWModule;
 
@@ -94,5 +94,5 @@ public:
 	virtual StringList getOptionValues() { return options; }
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

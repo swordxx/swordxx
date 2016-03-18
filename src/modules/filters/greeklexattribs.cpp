@@ -30,7 +30,7 @@
 
 using std::string;
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 GreekLexAttribs::GreekLexAttribs() {
 }
@@ -114,4 +114,4 @@ char GreekLexAttribs::processText(SWBuf &text, const SWKey *key, const SWModule 
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

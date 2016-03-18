@@ -30,7 +30,7 @@
 #include <utf8nfc.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 UTF8NFC::UTF8NFC() {
         conv = ucnv_open("UTF-8", &err);
@@ -60,5 +60,5 @@ char UTF8NFC::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

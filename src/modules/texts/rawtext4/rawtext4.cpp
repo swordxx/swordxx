@@ -33,7 +33,7 @@
 #include <versekey.h>
 #include <stringmgr.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * RawText4 Constructor - Initializes data for instance of RawText4
@@ -176,4 +176,4 @@ bool RawText4::hasEntry(const SWKey *k) const {
 	return size;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

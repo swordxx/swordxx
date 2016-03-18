@@ -25,7 +25,7 @@
 
 #include <swfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This filter converts Latin-1 encoded text to UTF-8
  */
@@ -35,5 +35,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

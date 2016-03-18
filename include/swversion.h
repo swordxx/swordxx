@@ -32,7 +32,7 @@
 #define SWORD_VERSION_NANO 0
 
 #include <defs.h>
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** A basic tool class to handle program version numbers.
 */
@@ -69,6 +69,6 @@ class SWDLLEXPORT SWVersion {
 	static SWVersion currentVersion;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif
 

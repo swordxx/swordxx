@@ -28,7 +28,7 @@
 #include <versekey.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 /******************************************************************************
@@ -120,4 +120,4 @@ VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

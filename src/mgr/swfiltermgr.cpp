@@ -24,7 +24,7 @@
 #include <swfiltermgr.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 SWFilterMgr::SWFilterMgr() {
@@ -93,5 +93,5 @@ void SWFilterMgr::AddRawFilters(SWModule * module, ConfigEntMap & section) {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

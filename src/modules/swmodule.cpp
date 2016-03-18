@@ -68,7 +68,7 @@ using namespace lucene::search;
 
 using std::vector;
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 SWModule::StdOutDisplay SWModule::rawdisp;
 
@@ -1549,4 +1549,4 @@ void SWModule::prepText(SWBuf &buf) {
 	}
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

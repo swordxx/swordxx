@@ -52,7 +52,7 @@ using std::distance;
 using std::lower_bound;
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
@@ -555,5 +555,5 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 	}
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

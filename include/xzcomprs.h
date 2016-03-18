@@ -29,7 +29,7 @@
 #include <defs.h>
 #include <sysdata.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWDLLEXPORT XzCompress : public SWCompress {
 
@@ -45,5 +45,5 @@ private:
 	__u64 memlimit; // memory usage limit during decompression
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

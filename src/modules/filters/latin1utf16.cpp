@@ -26,7 +26,7 @@
 #include <latin1utf16.h>
 #include <swbuf.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 Latin1UTF16::Latin1UTF16() {
 }
@@ -132,4 +132,4 @@ char Latin1UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *mod
     return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

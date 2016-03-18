@@ -25,7 +25,7 @@
 #include <versetreekey.h>
 #include <ctype.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 static const char *classes[] = {"VerseTreeKey", "VerseKey", "SWKey", "SWObject", 0};
 SWClass VerseTreeKey::classdef(classes);
@@ -301,4 +301,4 @@ void VerseTreeKey::copyFrom(const VerseTreeKey &ikey) {
 }
  */
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

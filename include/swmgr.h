@@ -64,7 +64,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWModule;
 class SWFilter;
@@ -363,5 +363,5 @@ public:
 	virtual signed char setCipherKey(const char *modName, const char *key);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

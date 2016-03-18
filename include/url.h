@@ -26,7 +26,7 @@
 #include <swbuf.h>
 #include <map>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** URL provides URL parsing
  * The URL class provides an interface to work on the data of an URL like "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody"
@@ -89,6 +89,6 @@ private:
 	ParameterMap parameterMap;
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif //URL_H

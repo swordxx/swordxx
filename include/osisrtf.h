@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts OSIS text to RTF text
  */
@@ -40,5 +40,5 @@ public:
 	OSISRTF();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
   /** a standard string key class (used
   * for modules that index on single strings (eg. cities,
@@ -51,6 +51,6 @@ public:
   SWKEY_OPERATORS
 
 };
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 #endif

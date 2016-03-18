@@ -28,7 +28,7 @@
 #include <string.h>
 #include <localemgr.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 static const char *classes[] = {"SWKey", "SWObject", 0};
 SWClass SWKey::classdef(classes);
@@ -263,4 +263,4 @@ void SWKey::decrement(int) {
 	error = KEYERR_OUTOFBOUNDS;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

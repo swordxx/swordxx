@@ -25,7 +25,7 @@
 
 #include <swoptfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This Filter shows/hides textual variants
  */
@@ -36,5 +36,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

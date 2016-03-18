@@ -26,7 +26,7 @@
 #include <string.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 SWVersion SWVersion::currentVersion( SWORD_VERSION_STR );
@@ -104,5 +104,5 @@ const char *SWVersion::getText() const {
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 

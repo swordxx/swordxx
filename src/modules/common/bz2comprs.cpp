@@ -28,7 +28,7 @@
 #include <bz2comprs.h>
 #include <bzlib.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /******************************************************************************
  * Bzip2Compress Constructor - Initializes data for instance of Bzip2Compress
@@ -149,4 +149,4 @@ void Bzip2Compress::Decode(void)
 	free (zbuf);
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

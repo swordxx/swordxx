@@ -25,9 +25,9 @@
 
 #include <defs.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 // Maximum positive value of a signed numeric type
 #define MAXPOS(x) ((x)((unsigned x)(1L << (sizeof(x)*8-1)) - 1))
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

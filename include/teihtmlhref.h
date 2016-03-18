@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts TEI text to HTMLHREF text
  */
@@ -51,5 +51,5 @@ public:
 	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

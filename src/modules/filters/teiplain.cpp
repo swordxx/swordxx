@@ -24,7 +24,7 @@
 #include <teiplain.h>
 #include <ctype.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 TEIPlain::TEIPlain() {
 	setTokenStart("<");
@@ -119,4 +119,4 @@ bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 }
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

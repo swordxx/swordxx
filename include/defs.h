@@ -25,15 +25,7 @@
 #ifndef SWORDDEFS_H
 #define SWORDDEFS_H
 
-#if defined(__cplusplus)
- #define SWORD_NAMESPACE_START namespace sword {
- #define SWORD_NAMESPACE_END }
-#else
- #define SWORD_NAMESPACE_START 
- #define SWORD_NAMESPACE_END 
-#endif
-
-SWORD_NAMESPACE_START
+namespace sword {
 
 #define SWTRY try
 #define SWCATCH(x) catch (x)
@@ -161,5 +153,5 @@ enum {ENC_UNKNOWN = 0, ENC_LATIN1, ENC_UTF8, ENC_SCSU, ENC_UTF16, ENC_RTF, ENC_H
 enum {BIB_BIBTEX = 0, /* possible future formats: BIB_MARCXML, BIB_MARC21, BIB_DCMI BIB_OSISHEADER, BIB_SBL_XHTML, BIB_MLA_XHTML, BIB_APA_XHTML, BIB_CHICAGO_XHTML */};
 #endif
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif //SWORDDEFS_H

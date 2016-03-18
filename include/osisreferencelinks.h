@@ -26,7 +26,7 @@
 
 #include <swoptfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This Filter hides reference links with a particular type/subtype in an OSIS text
  */
@@ -49,7 +49,7 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif
 
 

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <osismorph.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -102,4 +102,4 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

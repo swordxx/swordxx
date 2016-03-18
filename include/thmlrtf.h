@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** this filter converts ThML text to RTF text
  */
@@ -49,5 +49,5 @@ public:
 	ThMLRTF();
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

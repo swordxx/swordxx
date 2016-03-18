@@ -30,7 +30,7 @@
 #include <utilxml.h>
 
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 namespace {
 
@@ -291,4 +291,4 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	return 0;
 }
 
-SWORD_NAMESPACE_END
+} /* namespace sword */

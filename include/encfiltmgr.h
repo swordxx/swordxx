@@ -27,7 +27,7 @@
 
 #include <swfiltermgr.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWFilter;
 
@@ -86,5 +86,5 @@ public:
 	virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

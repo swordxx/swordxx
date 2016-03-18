@@ -30,7 +30,7 @@
 #include <mem.h>
 #endif
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 #define JUNKBUFSIZE 65534
@@ -459,5 +459,5 @@ public:
 
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

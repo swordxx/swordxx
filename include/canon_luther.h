@@ -22,7 +22,7 @@
 #ifndef CANON_LUTHER_H
 #define CANON_LUTHER_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: Luther
@@ -375,7 +375,7 @@ int vm_luther[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

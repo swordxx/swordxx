@@ -25,7 +25,7 @@
 
 #include <swoptfilter.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 /** This Filter shows/hides "red letter tags" (marking the
  * words of Jesus) in a GBF text. Turn this off if you don't want
@@ -38,5 +38,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif

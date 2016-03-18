@@ -22,7 +22,7 @@
 #ifndef CANON_LXX_H
 #define CANON_LXX_H
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 
 // Versification system: LXX
@@ -397,7 +397,7 @@ int vm_lxx[] = {
 };
 
 
-SWORD_NAMESPACE_END
+} /* namespace sword */
 
 
 #endif

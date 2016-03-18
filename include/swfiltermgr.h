@@ -27,7 +27,7 @@
 #include <defs.h>
 #include <swconfig.h>
 
-SWORD_NAMESPACE_START
+namespace sword {
 
 class SWModule;
 class SWMgr;
@@ -84,5 +84,5 @@ public:
   virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
 
 };
-SWORD_NAMESPACE_END
+} /* namespace sword */
 #endif
