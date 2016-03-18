@@ -35,9 +35,7 @@
 #include <ztext.h>
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
-#ifndef EXCLUDEBZIP2
 #include <bz2comprs.h>
-#endif
 #ifndef EXCLUDEXZ
 #include <xzcomprs.h>
 #endif
@@ -161,11 +159,7 @@ int main(int argc, char **argv) {
         compressor = new ZipCompress();
 	}
 	else if (compType == "BZIP2") {
-#ifndef EXCLUDEBZIP2
 		compressor = new Bzip2Compress();
-#else
-		usage(*argv, "ERROR: SWORD library not compiled with bzip2 compression support.\n\tBe sure libbz2 is available when compiling SWORD library");
-#endif
 	}
 	else if (compType == "XZ") {
 #ifndef EXCLUDEXZ

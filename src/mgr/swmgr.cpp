@@ -94,9 +94,7 @@
 #include <iterator>
 
 #include "zipcomprs.h"
-#ifndef EXCLUDEBZIP2
 #include "bz2comprs.h"
-#endif
 #ifndef EXCLUDEXZ
 #include "xzcomprs.h"
 #endif
@@ -954,12 +952,9 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
-		else
-#ifndef EXCLUDEBZIP2
-		if (!stricmp(misc1.c_str(), "BZIP2"))
+        else if (!stricmp(misc1.c_str(), "BZIP2"))
 			compress = new Bzip2Compress();
-		else
-#endif
+        else
 #ifndef EXCLUDEXZ
 		if (!stricmp(misc1.c_str(), "XZ"))
 			compress = new XzCompress();
@@ -1037,12 +1032,9 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 		misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
-		else
-#ifndef EXCLUDEBZIP2
-		if (!stricmp(misc1.c_str(), "BZIP2"))
+        else if (!stricmp(misc1.c_str(), "BZIP2"))
 			compress = new Bzip2Compress();
 		else
-#endif
 #ifndef EXCLUDEXZ
 		if (!stricmp(misc1.c_str(), "XZ"))
 			compress = new XzCompress();
