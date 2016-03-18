@@ -217,16 +217,6 @@ IF(APPLE)
 	ADD_DEFINITIONS(-Dunix)
 ENDIF(APPLE)
 
-##############################################################################################
-# Our build test
-#
-
-ADD_EXECUTABLE(buildtest buildtest.cpp)
-IF(BUILDING_STATIC)
-	TARGET_LINK_LIBRARIES(buildtest sword_static)
-ELSE(BUILDING_STATIC)
-	TARGET_LINK_LIBRARIES(buildtest sword)
-ENDIF(BUILDING_STATIC)
 
 ##############################################################################################
 # Installing the library, headers, utilies, etc
