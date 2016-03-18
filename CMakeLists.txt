@@ -206,22 +206,25 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 # Utilities are hawt
 # 
 
-IF(NOT SWORD_BUILD_UTILS STREQUAL "No")
+IF(NOT (DEFINED SWORD_BUILD_UTILS))
+  SET(SWORD_BUILD_UTILS TRUE)
+ENDIF()
+IF(NOT SWORD_BUILD_UTILS)
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
-ENDIF(NOT SWORD_BUILD_UTILS STREQUAL "No")
+ENDIF()
 
 ##############################################################################################
 # Demos are also hawt
 # 
 
-IF(SWORD_BUILD_EXAMPLES STREQUAL "Yes")
+IF(SWORD_BUILD_EXAMPLES)
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/tasks")
-ENDIF(SWORD_BUILD_EXAMPLES STREQUAL "Yes")
+ENDIF()
 
 ##############################################################################################
 # Tests, however, are not
 
-IF(SWORD_BUILD_TESTS STREQUAL "Yes")
+IF(SWORD_BUILD_TESTS)
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
-ENDIF(SWORD_BUILD_TESTS STREQUAL "Yes")
+ENDIF()

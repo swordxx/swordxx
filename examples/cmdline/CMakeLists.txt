@@ -1,6 +1,6 @@
 ##################################################################################
 # These are some examples.  If you want examples to be built, you need to define
-# SWORD_BUILD_EXAMPLES="Yes".  These will not be installed, so don't worry about
+# SWORD_BUILD_EXAMPLES="YES".  These will not be installed, so don't worry about
 # that.
 # 
 MESSAGE(STATUS "\n-- CONFIGURING LIBRARY EXAMPLES")
