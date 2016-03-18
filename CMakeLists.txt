@@ -201,15 +201,6 @@ ENDIF(BUILDING_STATIC)
 MESSAGE(STATUS "Setting link libraries to ${SWORD_LINK_LIBRARIES}")
 
 
-#############################################################################################
-# Platform-specifc bits that I will eventually refactor out into their own files, once I am happy
-# with the stuff that is here.
-# 
-IF(APPLE)
-	ADD_DEFINITIONS(-Dunix)
-ENDIF(APPLE)
-
-
 ##############################################################################################
 # Installing the library, headers, utilies, etc
 # 
