@@ -58,7 +58,6 @@ Developer or Packager specific options
 
     * LIBSWORD_LIBRARY_TYPE - If this has the value "Shared" then a shared library will be build (DLL or .so) along with the exported linking stub. If this is unspecified, then a static library will be built.
     * CMAKE_BUILD_TYPE - If this is given the value of "Debug" then the default SWORD debugging flags (-g3 -Wall -Werror -O0) will be enabled. If this is unspecified or any value other than "Debug" then the flag -O3 will be enabled.
-    * SWORD_ENABLE_WARNINGS - If this has the value "Yes" then -Werror will be passed to the compiler. This would allow independent specification of -Werror without needing to enable actual debugging. Should this also enable -Wall?
     * SWORD_ENABLE_PROFILE - if this has the value of "Yes" then the -pg option will be passed to the compiler. I don't know what this does, but it was available with Autotools, so it has been replicated here. This defaults to off.
     * SWORD_ENABLE_PROFILEN - if this has the value of "Yes" then the "-g -finstrument-functions" options will be passed to the compiler. The same disclaimer goes for this as goes for the previous option. This also defaults to off. 
 
