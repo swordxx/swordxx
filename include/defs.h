@@ -31,10 +31,6 @@ namespace sword {
 #define GLOBCONFPATH "/Program Files/sword/sword.conf"
 #endif
 
-#ifdef ANDROID
-#define _NO_IOSTREAM_
-#endif
-
 // _declspec works in BC++ 5 and later, as well as VC++
 #if defined(_MSC_VER)
 
