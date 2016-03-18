@@ -31,8 +31,6 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
 # Source variables
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
-# Cppcheck
-INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/CppcheckTargets.cmake")
 # Our local includes
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For swversion.h
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include") # For everything else
@@ -66,22 +64,15 @@ INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
 # Most of the work for configuration is done above, already.
 #
 # I want to do this manually, there might be reason in the future
-SET(CPPCHECK_POSSIBLEERROR_ARG "--enable=all")
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
-	ADD_LIBRARY(sword SHARED ${sword_SOURCES})
-    ADD_CPPCHECK(sword
-        POSSIBLE_ERROR TRUE
-        FORCE TRUE)
+    ADD_LIBRARY(sword SHARED ${sword_SOURCES})
 	MESSAGE(STATUS "Building Shared library.")
 	SET(BUILDING_SHARED 1)
 	SET(SWORD_LINK_NAME sword)
 ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
-	ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
-    ADD_CPPCHECK(sword_static
-        POSSIBLE_ERROR TRUE
-        FORCE TRUE)
+    ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
 	SET_TARGET_PROPERTIES(sword_static PROPERTIES COMPILE_FLAGS "-fPIC")
 	SET(BUILDING_STATIC 1)
 	# Defaults to linking against the shared if it is also being built
