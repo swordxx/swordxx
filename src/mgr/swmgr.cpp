@@ -95,9 +95,7 @@
 
 #include "zipcomprs.h"
 #include "bz2comprs.h"
-#ifndef EXCLUDEXZ
 #include "xzcomprs.h"
-#endif
 
 
 #ifdef _ICU_
@@ -955,11 +953,9 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         else if (!stricmp(misc1.c_str(), "BZIP2"))
 			compress = new Bzip2Compress();
         else
-#ifndef EXCLUDEXZ
 		if (!stricmp(misc1.c_str(), "XZ"))
 			compress = new XzCompress();
 		else
-#endif
 		if (!stricmp(misc1.c_str(), "LZSS"))
 			compress = new LZSSCompress();
 
@@ -1035,11 +1031,9 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         else if (!stricmp(misc1.c_str(), "BZIP2"))
 			compress = new Bzip2Compress();
 		else
-#ifndef EXCLUDEXZ
 		if (!stricmp(misc1.c_str(), "XZ"))
 			compress = new XzCompress();
 		else
-#endif
 		if (!stricmp(misc1.c_str(), "LZSS"))
 			compress = new LZSSCompress();
 

@@ -36,9 +36,7 @@
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
 #include <bz2comprs.h>
-#ifndef EXCLUDEXZ
 #include <xzcomprs.h>
-#endif
 #include <localemgr.h>
 
 #ifndef NO_SWORD_NAMESPACE
@@ -162,11 +160,7 @@ int main(int argc, char **argv) {
 		compressor = new Bzip2Compress();
 	}
 	else if (compType == "XZ") {
-#ifndef EXCLUDEXZ
 		compressor = new XzCompress();
-#else
-		usage(*argv, "ERROR: SWORD library not compiled with xz compression support.\n\tBe sure liblzma is available when compiling SWORD library");
-#endif		
 	}
 
 

@@ -44,9 +44,7 @@
 #include <lzsscomprs.h>
 #include <zipcomprs.h>
 #include <bz2comprs.h>
-#ifndef EXCLUDEXZ
 #include <xzcomprs.h>
-#endif
 
 #include <versekey.h>
 #include <stdio.h>
@@ -130,9 +128,7 @@ int main(int argc, char **argv)
 	case 1: compressor = new LZSSCompress(); break;
 	case 2: compressor = new ZipCompress(); break;
 	case 3: compressor = new Bzip2Compress(); break;
-	#ifndef EXCLUDEXZ
 	case 4: compressor = new XzCompress(); break;
-	#endif
 	}
 	if (compressor && compLevel > 0) {
 		compressor->setLevel(compLevel);
