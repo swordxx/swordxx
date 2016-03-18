@@ -35,6 +35,7 @@ SET(test_PROGRAMS
 	ldtest
 	parsekey
 	rawldidxtest
+    refsystest
 	romantest
 	striptest
 	swaptest
