@@ -28,8 +28,6 @@ SET(SWORD_PYTHON_INSTALL_DIR "" CACHE STRING "Directory where the Python binding
 # Installation options
 IF(APPLE)
 	SET(SWORD_INSTALL_DIR "/opt/local")
-ELSEIF(MSVC)
-	SET(SWORD_INSTALL_DIR "C:\\Program Files (x86)\\libsword\\")
 ELSE(APPLE)
 	SET(SWORD_INSTALL_DIR "/usr/local")
 ENDIF(APPLE)

@@ -34,12 +34,6 @@ if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
     ICU_I18N_LIBRARY
     NAMES icuin icui18n cygicuin cygicuin32
     DOC "Libraries to link against for ICU internationalization")
-  if(MSVC)
-    find_library(ICU_DATA_LIBRARY
-	  NAMES icudt
-	  DOC "Libraries to link against for ICU data")
-	set(ICU_LIBRARIES ${ICU_LIBRARIES} ${ICU_DATA_LIBRARY})
-  endif(MSVC)
   mark_as_advanced(ICU_I18N_LIBRARY)
   mark_as_advanced(ICU_DATA_LIBRARY)
   if (ICU_I18N_LIBRARY)

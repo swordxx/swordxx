@@ -176,11 +176,6 @@ SET(sword_base_utilfns_SOURCES
 )
 SOURCE_GROUP("src\\utilfns" FILES ${sword_base_utilfns_SOURCES})
 
-SET(sword_base_msvc_SOURCES
-	src/utilfuns/win32/dirent.cpp
-)
-SOURCE_GROUP("src\\utilfns\\win32" FILES ${sword_base_msvc_SOURCES})
-
 # Universal sources
 SET(sword_base_SOURCES
 	${sword_base_frontend_SOURCES}
@@ -189,17 +184,6 @@ SET(sword_base_SOURCES
 	${sword_base_module_SOURCES}
 	${sword_base_utilfns_SOURCES}
 )
-
-IF(NOT MSVC)
-	SET(sword_base_SOURCES
-		${sword_base_SOURCES}
-	)
-ELSE(NOT MSVC)
-	SET(sword_base_SOURCES
-		${sword_base_SOURCES}
-		${sword_base_msvc_SOURCES}
-	)
-ENDIF(NOT MSVC)
 
 # Sources relying on ZLib
 SET(sword_zlib_used_SOURCES
