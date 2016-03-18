@@ -1,7 +1,6 @@
 # TODO: write FindICU (icu-config only for 2.2 and up) -- currently taken from another CMake system
 #       limit pkg-config version to >= 0.14, demo, utilities, doc, tests
 #       use BUILD_SHARED_LIBS
-#       convince perl swig bindings to build properly
 #
 # NOTES: Defaults to build type of Shared
 #        Forces out-of-source tree build
@@ -284,14 +283,6 @@ ENDIF(BUILDING_STATIC)
 # 
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
-
-##############################################################################################
-# Bindings are good, right?
-#
-
-IF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings")
-ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 
 ##############################################################################################
 # Utilities are hawt

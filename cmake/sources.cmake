@@ -181,10 +181,6 @@ SET(sword_base_msvc_SOURCES
 )
 SOURCE_GROUP("src\\utilfns\\win32" FILES ${sword_base_msvc_SOURCES})
 
-SET(sword_base_binding_SOURCES
-	bindings/flatapi.cpp
-)
-
 # Universal sources
 SET(sword_base_SOURCES
 	${sword_base_frontend_SOURCES}
@@ -197,7 +193,6 @@ SET(sword_base_SOURCES
 IF(NOT MSVC)
 	SET(sword_base_SOURCES
 		${sword_base_SOURCES}
-		${sword_base_binding_SOURCES}
 	)
 ELSE(NOT MSVC)
 	SET(sword_base_SOURCES
