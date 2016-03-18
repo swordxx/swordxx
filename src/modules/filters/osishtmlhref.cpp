@@ -248,10 +248,10 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 //						u->inXRefNote = (ch == 'x');
 
 						// see if we have a VerseKey * or descendant
-						SWTRY {
+						try {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
-						SWCATCH ( ... ) {	}
+						catch ( ... ) {	}
 						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 						        ch, 
 							URL::encode(footnoteNumber.c_str()).c_str(), 

@@ -27,21 +27,12 @@
 
 namespace sword {
 
-#define SWTRY try
-#define SWCATCH(x) catch (x)
-
 #ifdef _WIN32_WCE
-#define SWTRY
-#define SWCATCH(x) if (0)
 #define GLOBCONFPATH "/Program Files/sword/sword.conf"
 #endif
 
 #ifdef ANDROID
 #define _NO_IOSTREAM_
-#undef SWTRY
-#undef SWCATCH
-#define SWTRY
-#define SWCATCH(x) if (0)
 #endif
 
 // _declspec works in BC++ 5 and later, as well as VC++

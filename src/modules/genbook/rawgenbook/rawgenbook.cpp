@@ -156,10 +156,10 @@ void RawGenBook::linkEntry(const SWKey *inkey) {
 	TreeKeyIdx *srckey = 0;
 	TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
 	// see if we have a VerseKey * or decendant
-	SWTRY {
+	try {
 		srckey = SWDYNAMIC_CAST(TreeKeyIdx, inkey);
 	}
-	SWCATCH ( ... ) {}
+	catch ( ... ) {}
 	// if we don't have a VerseKey * decendant, create our own
 	if (!srckey) {
 		srckey = (TreeKeyIdx *)createKey();

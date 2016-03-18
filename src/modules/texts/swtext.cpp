@@ -97,21 +97,21 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
 
 	VerseKey *key = 0;
 	// see if we have a VerseKey * or decendant
-	SWTRY {
+	try {
 		key = SWDYNAMIC_CAST(VerseKey, thisKey);
 	}
-	SWCATCH ( ... ) {	}
+	catch ( ... ) {	}
 	if (!key) {
 		ListKey *lkTest = 0;
-		SWTRY {
+		try {
 			lkTest = SWDYNAMIC_CAST(ListKey, thisKey);
 		}
-		SWCATCH ( ... ) {	}
+		catch ( ... ) {	}
 		if (lkTest) {
-			SWTRY {
+			try {
 				key = SWDYNAMIC_CAST(VerseKey, lkTest->getElement());
 			}
-			SWCATCH ( ... ) {	}
+			catch ( ... ) {	}
 		}
 	}
 	if (!key) {

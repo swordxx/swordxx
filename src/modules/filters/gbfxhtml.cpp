@@ -173,10 +173,10 @@ bool GBFXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			SWBuf noteName = tag.getAttribute("n");
 			VerseKey *vkey = NULL;
 			// see if we have a VerseKey * or descendant
-			SWTRY {
+			try {
 				vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 			}
-			SWCATCH ( ... ) {	}
+			catch ( ... ) {	}
 			if (vkey) {
 				// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 				//char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');

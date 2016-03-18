@@ -165,10 +165,10 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			SWBuf noteName = tag.getAttribute("n");
 			VerseKey *vkey = NULL;
 			// see if we have a VerseKey * or descendant
-			SWTRY {
+			try {
 				vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 			}
-			SWCATCH ( ... ) {	}
+			catch ( ... ) {	}
 			if (vkey) {
 				
 				buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{", 

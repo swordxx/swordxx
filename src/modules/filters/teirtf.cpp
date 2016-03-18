@@ -172,10 +172,10 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 					VerseKey *vkey = 0;
 					// see if we have a VerseKey * or descendant
-					SWTRY {
+					try {
 						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 					}
-					SWCATCH ( ... ) {	}
+					catch ( ... ) {	}
 					if (vkey) {
 						buf.appendFormatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
 					}

@@ -246,10 +246,10 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						VerseKey *vkey = NULL;
 						// see if we have a VerseKey * or descendant
-						SWTRY {
+						try {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
-						SWCATCH ( ... ) {	}
+						catch ( ... ) {	}
 						if (vkey) {
 							char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
 							scratch.setFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());

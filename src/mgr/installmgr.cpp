@@ -352,7 +352,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
 
 	}
 	else {
-		SWTRY {
+		try {
 			SWBuf url = urlPrefix + is->directory.c_str();
 			removeTrailingSlash(url);
 			url += (SWBuf)"/" + src; //dont forget the final slash
@@ -361,18 +361,18 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
 				retVal = -1;
 			}
 		}
-		SWCATCH (...) {
+		catch (...) {
 			retVal = -1;
 		}
 	}
-	SWTRY {
+	try {
 		RemoteTransport *deleteMe = trans;
 		// do this order for threadsafeness
 		// (see terminate())
 		trans = transport = 0;
 		delete deleteMe;
 	}
-	SWCATCH (...) {}
+	catch (...) {}
 	return retVal;
 }
 

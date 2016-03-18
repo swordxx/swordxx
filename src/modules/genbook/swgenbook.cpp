@@ -53,38 +53,38 @@ TreeKey &SWGenBook::getTreeKey(const SWKey *k) const {
 
 	TreeKey *key = 0;
 
-	SWTRY {
+	try {
 		key = SWDYNAMIC_CAST(TreeKey, (thiskey));
 	}
-	SWCATCH ( ... ) {}
+	catch ( ... ) {}
 
 	if (!key) {
 		ListKey *lkTest = 0;
-		SWTRY {
+		try {
 			lkTest = SWDYNAMIC_CAST(ListKey, thiskey);
 		}
-		SWCATCH ( ... ) {	}
+		catch ( ... ) {	}
 		if (lkTest) {
-			SWTRY {
+			try {
 				key = SWDYNAMIC_CAST(TreeKey, lkTest->getElement());
 				if (!key) {
 					VerseTreeKey *tkey = 0;
-					SWTRY {
+					try {
 						tkey = SWDYNAMIC_CAST(VerseTreeKey, lkTest->getElement());
 					}
-					SWCATCH ( ... ) {}
+					catch ( ... ) {}
 					if (tkey) key = tkey->getTreeKey();
 				}
 			}
-			SWCATCH ( ... ) {	}
+			catch ( ... ) {	}
 		}
 	}
 	if (!key) {
 		VerseTreeKey *tkey = 0;
-		SWTRY {
+		try {
 			tkey = SWDYNAMIC_CAST(VerseTreeKey, (thiskey));
 		}
-		SWCATCH ( ... ) {}
+		catch ( ... ) {}
 		if (tkey) key = tkey->getTreeKey();
 	}
 

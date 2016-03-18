@@ -146,10 +146,10 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWBuf modName = (u->module) ? u->module->getName() : "";
 						VerseKey *vkey = NULL;
 						// see if we have a VerseKey * or descendant
-						SWTRY {
+						try {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
-						SWCATCH ( ... ) {	}
+						catch ( ... ) {	}
 						if (vkey) {
 							char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 //							buf.appendFormatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);

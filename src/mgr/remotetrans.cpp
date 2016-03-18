@@ -161,7 +161,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
 			if (statusReporter)
 				statusReporter->preStatus(totalBytes, completedBytes, buffer2.c_str());
 			FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
-			SWTRY {
+			try {
 				SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir;
 				removeTrailingSlash(url);
 				url += "/";
@@ -183,7 +183,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
 					}
 				}
 			}
-			SWCATCH (...) {}
+			catch (...) {}
 			if (term) {
 				retVal = -3;
 				break;

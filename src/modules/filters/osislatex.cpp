@@ -300,10 +300,10 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 //						u->inXRefNote = (ch == 'x');
 
 						// see if we have a VerseKey * or descendant
-						SWTRY {
+						try {
 							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 						}
-						SWCATCH ( ... ) {	}
+						catch ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
 							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",

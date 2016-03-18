@@ -468,7 +468,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		lucene::search::IndexSearcher *is = 0;
 		Query                         *q  = 0;
 		Hits                          *h  = 0;
-		SWTRY {
+		try {
 			ir = IndexReader::open(target);
 			is = new IndexSearcher(ir);
 			const TCHAR *stopWords[] = { 0 };
@@ -502,7 +502,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			}
 			(*percent)(98, percentUserData);
 		}
-		SWCATCH (...) {
+		catch (...) {
 			q = 0;
 			// invalid clucene query
 		}
