@@ -41,12 +41,8 @@ extern "C" {
 #include <stdio.h>
 #include <map>
 
-#ifdef CURLAVAILABLE
 #include <curlftpt.h>
 #include <curlhttpt.h>
-#else
-#include <ftplibftpt.h>
-#endif
 
 #include <iostream>
 
@@ -82,20 +78,12 @@ const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 // here we try a couple defaults if sword was compiled with support for them.
 // see these classes for examples of how to make your own
 RemoteTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *statusReporter) {
-#ifdef CURLAVAILABLE
 	return new CURLFTPTransport(host, statusReporter);
-#else
-	return new FTPLibFTPTransport(host, statusReporter);
-#endif
 }
 
 
 RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporter *statusReporter) {
-#ifdef CURLAVAILABLE
 	return new CURLHTTPTransport(host, statusReporter);
-#else
-	return 0;
-#endif
 }
 
 

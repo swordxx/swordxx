@@ -223,10 +223,6 @@ SET(sword_curl_found_SOURCES
 	src/mgr/curlftpt.cpp
 	src/mgr/curlhttpt.cpp
 )
-SET(sword_curl_nofound_SOURCES
-	src/mgr/ftplibftpt.cpp
-	src/utilfuns/ftplib.c
-)
 
 # Sources relying on CLucene
 SET(sword_clucene_found_SOURCES)
@@ -259,8 +255,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/flatapi.h
 	include/ftpparse.h
 	include/remotetrans.h
-	include/ftplibftpt.h
-	include/ftplib.h
 
 	include/gbffootnotes.h
 	include/gbfheadings.h

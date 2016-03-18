@@ -59,7 +59,6 @@ General, interesting options
 Optional dependencies
 
     * SWORD_NO_ZLIB and SWORD_USE_INTERNAL_ZLIB - If SWORD_NO_ZLIB has value "Yes" then No ZLib support will be built into the library. If SWORD_NO_ZLIB has any other value, then ZLib support will be built into the library. If support is to be built in, and either a system-wide ZLib is not found OR SWORD_USE_INTERNAL_ZLIB is set to "Yes", then the internal version will be built. If a system library is found AND SWORD_USE_INTERNAL_ZLIB is set to anything other than "Yes" or has no value, then the system library will be linked against. If both SWORD_NO_ZLIB and SWORD_USE_INTERNAL_ZLIB are set to "Yes" then SWORD_NO_ZLIB will be used, and no ZLib support will be built.
-    * SWORD_NO_CURL - If this is set to "Yes" then cURL support will not be included regardless of whether cURL is found on the system. If this is any other value or has no value set, then cURL will be built against if it is located and ignored if it cannot be located.
     * SWORD_NO_CLUCENE - If this is set to "Yes" then CLucene will be ignored if found. If this is set to any other value or has no value, then the library will be built against CLucene if it can be located and ignored if it cannot be located. 
 
 Developer or Packager specific options
