@@ -11,7 +11,7 @@
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
 PROJECT(libsword CXX C)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 SET(SWORD_VERSION 1.7.3)
 
 # Make sure it's an out-of-stream build
