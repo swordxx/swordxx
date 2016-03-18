@@ -27,10 +27,6 @@
 
 namespace sword {
 
-#ifdef _WIN32_WCE
-#define GLOBCONFPATH "/Program Files/sword/sword.conf"
-#endif
-
 // _declspec works in BC++ 5 and later, as well as VC++
 #if defined(_MSC_VER)
 
