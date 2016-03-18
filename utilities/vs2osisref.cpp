@@ -28,9 +28,7 @@
 #include <versekey.h>
 #include <localemgr.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 
 using std::endl;
 using std::cerr;

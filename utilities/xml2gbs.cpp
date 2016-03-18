@@ -38,11 +38,9 @@
 #include <rawgenbook.h>
 
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::TreeKeyIdx;
 using sword::RawGenBook;
 using sword::SWKey;
-#endif
 
 //#define DEBUG
 

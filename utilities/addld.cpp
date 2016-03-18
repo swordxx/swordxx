@@ -42,14 +42,12 @@
 #include <zld.h>
 #include <zipcomprs.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::ZipCompress;
 using sword::RawLD4;
 using sword::SWKey;
 using sword::zLD;
 using sword::RawLD;
-#endif
 
 
 int main(int argc, char **argv) {

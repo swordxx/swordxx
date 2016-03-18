@@ -31,14 +31,12 @@
 #include <stdio.h>
 #include <iostream>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::VerseKey;
 using sword::SWModule;
 using sword::SWKey;
 using sword::SW_POSITION;
 using sword::ModMap;
-#endif
 
 void cleanbuf(char *buf) {
 	char *from = buf;

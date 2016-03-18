@@ -44,14 +44,12 @@
 #include <swbuf.h>
 #include <versekey.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::FileMgr;
 using sword::SWMgr;
 using sword::RawText;
 using sword::VerseKey;
 using sword::SWBuf;
 using sword::SW_POSITION;
-#endif
 
 
 char readline(int fd, char **buf) {

@@ -26,9 +26,7 @@
 #include <ctype.h>
 #include <roman.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::from_rom;
-#endif
 
 int main(int argc, char **argv) {
 	if (argc != 2) {

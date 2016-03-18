@@ -60,9 +60,7 @@
 #include <utf8utf16.h>
 #include <utf16utf8.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 
 using namespace std;
 

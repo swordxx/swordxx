@@ -28,9 +28,7 @@
 #include <rtfhtml.h>
 #include <sysdata.h>
 //#include <swmgr.h>
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 using namespace std;
 
 

@@ -31,14 +31,12 @@
 #include <markupfiltmgr.h>
 #include <swbuf.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::SWModule;
 using sword::ListKey;
 using sword::VerseKey;
 using sword::ModMap;
 using sword::SWBuf;
-#endif
 
 void percentUpdate(char percent, void *userData) {
 	static char printed = 0;

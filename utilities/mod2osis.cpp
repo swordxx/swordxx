@@ -42,9 +42,7 @@
 #include <markupfiltmgr.h>
 #include <algorithm>
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 using std::endl;
 using std::cerr;
 using std::cout;

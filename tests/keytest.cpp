@@ -30,9 +30,7 @@
 
 #include <localemgr.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 
 int main(int argc, char **argv)
 {

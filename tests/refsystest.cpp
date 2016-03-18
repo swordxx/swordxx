@@ -27,9 +27,7 @@
 
 #include <refsysmgr.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 using std::cout;
 using std::endl;
 

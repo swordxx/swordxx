@@ -22,9 +22,7 @@
 
 #include <iostream>
 #include <swconfig.h>
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWConfig;
-#endif
 
 int main(int argc, char **argv) {
     SWConfig config("./test1.conf");

@@ -30,14 +30,12 @@
 
 #include <pthread.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::ListKey;
 using sword::SWModule;
 using sword::VerseKey;
 using sword::SWKey;
 using sword::ModMap;
-#endif
 
 int cms_currentProgress;
 

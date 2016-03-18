@@ -48,9 +48,7 @@
 #include <unicode/locid.h>
 #endif
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 
 SWBuf outPath;
 SWBuf inFile;

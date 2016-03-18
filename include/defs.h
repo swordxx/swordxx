@@ -25,13 +25,7 @@
 #ifndef SWORDDEFS_H
 #define SWORDDEFS_H
 
-// TODO: What is this? jansorg, why does NO_SWORD_NAMESPACE still define
-// a C++ namespace, and then force using it?  This makes no sense to me.
-// see commit 1195
-#ifdef NO_SWORD_NAMESPACE
- #define SWORD_NAMESPACE_START namespace sword {
- #define SWORD_NAMESPACE_END }; using namespace sword;
-#elif defined(__cplusplus)
+#if defined(__cplusplus)
  #define SWORD_NAMESPACE_START namespace sword {
  #define SWORD_NAMESPACE_END }
 #else

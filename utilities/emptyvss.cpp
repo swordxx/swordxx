@@ -30,14 +30,12 @@
 #include <iostream>
 #include <stdio.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::VerseKey;
 using sword::ModMap;
 using sword::SWKey;
 using sword::SWModule;
 using sword::SW_POSITION;
-#endif
 
 int main(int argc, char **argv) {
 	if (argc < 2) {

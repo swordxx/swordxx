@@ -44,11 +44,9 @@
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::TreeKeyIdx;
 using sword::RawGenBook;
 using sword::SWKey;
-#endif
 
 
 void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {

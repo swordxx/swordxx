@@ -25,10 +25,8 @@
 #include <stdlib.h>
 #include <listkey.h>
 #include <versekey.h>
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
 using namespace std;
-#endif
 
 int main(int argc, char **argv)
 {

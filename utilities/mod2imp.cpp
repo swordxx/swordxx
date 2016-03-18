@@ -37,11 +37,7 @@ using std::map;
 using std::cout;
 using std::endl;
 
-#ifndef NO_SWORD_NAMESPACE
-
 using namespace sword;
-
-#endif
 
 
 void usage(const char *progName, const char *error = 0) {

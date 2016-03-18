@@ -39,12 +39,10 @@
 #include <swmodule.h>
 #include <stdio.h>
 
-#ifndef NO_SWORD_NAMESPACE
 using sword::SWMgr;
 using sword::SWModule;
 using sword::ModMap;
 using sword::SWKey;
-#endif
 
 using std::cerr;
 

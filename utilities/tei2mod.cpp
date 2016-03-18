@@ -74,9 +74,7 @@
 #include <latin1utf8.h>
 #endif
 
-#ifndef NO_SWORD_NAMESPACE
 using namespace sword;
-#endif
 
 using namespace std;
 

@@ -32,9 +32,8 @@
 #include <regex.h> // GNU
 #include <iostream>
 
-#ifndef NO_SWORD_NAMESPACE
+
 using namespace sword;
-#endif
 
 /*
  *			>=0 - regex
