@@ -248,12 +248,6 @@ SET(sword_curl_nofound_SOURCES
 SET(sword_clucene_found_SOURCES)
 SET(sword_clucene_nofound_SOURCES)
 
-# Sources based on the regex stuff
-SET(sword_internal_regex_SOURCES
-	src/utilfuns/regex.c
-)
-SET(sword_external_regex_SOURCES)
-
 # Sources based on the ICU status
 SET(sword_icu_found_SOURCES
 	src/modules/filters/utf8transliterator.cpp
@@ -451,8 +445,4 @@ SET(SWORD_INSTALL_HEADERS
 	include/canon_lxx.h
 	include/canon_orthodox.h
 	include/canon_synodalprot.h
-)
-
-SET(INTERNAL_REGEX_HEADER
-	include/internal/regex/regex.h
 )
