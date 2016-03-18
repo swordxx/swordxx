@@ -22,9 +22,6 @@ macro(_SET_FANCY _var _value _comment)
     endif()
 endmacro(_SET_FANCY)
 
-# A list of the options that the library supports
-SET(SWORD_PYTHON_INSTALL_DIR "" CACHE STRING "Directory where the Python bindings will be installed. Defaults to default Python path.")
-
 # Installation options
 IF(APPLE)
 	SET(SWORD_INSTALL_DIR "/opt/local")
