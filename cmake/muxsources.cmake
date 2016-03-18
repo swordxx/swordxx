@@ -8,26 +8,8 @@ SET(sword_SOURCES ${sword_base_SOURCES})
 
 MESSAGE(STATUS "\n-- CONFIGURING SOURCE LIST")
 
-# Check for if we've found ZLIB
-# This one is a bit more unique, since we still allow compilation without
-# a ZLIB at all, and allowing a user to disable it does not bring about use
-# of some internal fall-back but just leaves the ability to read ZLIB files
-# out of the library altogether
-IF(SWORD_NO_ZLIB STREQUAL "Yes")
-	MESSAGE(STATUS "ZLib: excluded by use option")
-	ADD_DEFINITIONS(-DEXCLUDEZLIB)
-	SET(WITH_ZLIB 0)
-ELSE(SWORD_NO_ZLIB STREQUAL "Yes")
-	SET(sword_SOURCES ${sword_SOURCES} ${sword_zlib_used_SOURCES})
-	IF(NOT ZLIB_FOUND OR SWORD_USE_INTERNAL_ZLIB STREQUAL "Yes")
-		MESSAGE(STATUS "ZLib: internal")
-		SET(sword_SOURCES ${sword_SOURCES} ${sword_zlib_nofound_SOURCES})
-		SET(WITH_INTERNAL_ZLIB 1)
-	ELSE(NOT ZLIB_FOUND OR SWORD_USE_INTERNAL_ZLIB STREQUAL "Yes")
-		MESSAGE(STATUS "ZLib: system ${ZLIB_LIBRARY}")
-		SET(WITH_ZLIB 1)
-	ENDIF(NOT ZLIB_FOUND OR SWORD_USE_INTERNAL_ZLIB STREQUAL "Yes")
-ENDIF(SWORD_NO_ZLIB STREQUAL "Yes")
+SET(sword_SOURCES ${sword_SOURCES} ${sword_zlib_used_SOURCES})
+MESSAGE(STATUS "ZLib: system ${ZLIB_LIBRARY}")
 
 # Check for if we've found bzip2 (libbz2)
 IF(BZIP2_FOUND AND NOT SWORD_NO_BZIP2 STREQUAL "Yes")

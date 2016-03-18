@@ -21,7 +21,7 @@
 # include <io.h>
 #endif
 
-#include "zlib.h"
+#include <zlib.h>
 
 #ifdef WIN32
 # include <windows.h>
@@ -83,20 +83,20 @@ union tar_buffer {
 
 enum { TGZ_EXTRACT = 0, TGZ_LIST };
 
-void TGZnotfound	OF((const char *));
+void TGZnotfound(const char *);
 
-int getoct		OF((char *, int));
-char *strtime		OF((time_t *));
-int ExprMatch		OF((char *,char *));
+int getoct(char *, int);
+char *strtime(time_t *);
+int ExprMatch(char *, char *);
 
-int makedir		OF((char *));
-int matchname		OF((int,int,char **,char *));
+int makedir(char *);
+int matchname(int, int, char **, char *);
 
-void error		OF((const char *));
-int  tar		OF((gzFile, int, int, int, char **));
+void error(const char *);
+int tar(gzFile, int, int, int, char **);
 
-void help		OF((int));
-int main		OF((int, char **));
+void help(int);
+int main(int, char **);
 
 char *prog;
 
@@ -109,7 +109,7 @@ static char *TGZprefix[] = { "\0", ".tgz", ".tar.gz", ".tar", NULL };
 
 /* error message for the filename */
 
-void TGZnotfound OF((const char *fname))
+void TGZnotfound(const char *fname)
 {
   int i;
 

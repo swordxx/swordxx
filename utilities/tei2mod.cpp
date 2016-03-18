@@ -63,9 +63,7 @@
 #include <rawld4.h>
 #include <zld.h>
 #include <lzsscomprs.h>
-#ifndef EXCLUDEZLIB
 #include <zipcomprs.h>
-#endif
 #ifndef EXCLUDEBZIP2
 #include <bz2comprs.h>
 #endif
@@ -452,11 +450,7 @@ int main(int argc, char **argv) {
 		compressor = new LZSSCompress();
 	}
 	else if (compType == "ZIP") {
-#ifndef EXCLUDEZLIB
 		compressor = new ZipCompress();
-#else
-		usage(*argv, "ERROR: SWORD library not compiled with ZIP compression support.\n\tBe sure libz is available when compiling SWORD library");
-#endif
 	}
 	else if (compType == "BZIP2") {
 #ifndef EXCLUDEBZIP2

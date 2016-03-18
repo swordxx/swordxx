@@ -20,11 +20,7 @@
  *
  */
 
-#ifndef EXCLUDEZLIB
-extern "C" {
-#include <untgz.h>
-}
-#endif
+#include "untgz.h"
 
 #include <installmgr.h>
 #include <filemgr.h>
@@ -556,7 +552,6 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 	if (!FileMgr::existsDir(target))
 		FileMgr::createPathAndFile(target+"/globals.conf");
 
-#ifndef EXCLUDEZLIB
 	SWBuf archive = root + "/mods.d.tar.gz";
 
 	errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
@@ -565,8 +560,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 		untargz(fd->getFd(), root.c_str());
 		FileMgr::getSystemFileMgr()->close(fd);
 	}
-	else
-#endif
+    else
 	errorCode = remoteCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
 
 	is->flush();

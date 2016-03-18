@@ -29,9 +29,7 @@ SET(install_UTILITIES
 	osis2mod
 )
 
-IF(WITH_ZLIB OR WITH_INTERNAL_ZLIB)
-	SET(install_UTILITIES ${install_UTILITIES} mod2zmod)
-ENDIF(WITH_ZLIB OR WITH_INTERNAL_ZLIB)
+SET(install_UTILITIES ${install_UTILITIES} mod2zmod)
 
 ######################################################################
 # These utilities will be built, but they will not be installed
