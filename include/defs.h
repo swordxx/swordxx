@@ -85,26 +85,6 @@ namespace sword {
 #  define SWDEPRECATED  __attribute__((__deprecated__))
 
 
-#elif defined(__BORLANDC__)
-#  ifdef SWMAKINGDLL
-#    define SWDLLEXPORT _export
-#    define SWDLLEXPORT_DATA(type) __declspec( dllexport ) type
-#    define SWDLLEXPORT_CTORFN
-#  elif defined(SWUSINGDLL)
-#    define SWDLLEXPORT __declspec( dllimport )
-#    define SWDLLEXPORT_DATA(type) __declspec( dllimport ) type
-#    define SWDLLEXPORT_CTORFN
-#  else
-#    define SWDLLEXPORT
-#    define SWDLLEXPORT_DATA(type) type
-#    define SWDLLEXPORT_CTORFN
-#  endif
-
-#define COMMENT SLASH(/)
-#define SLASH(s) /##s
-#  define SWDEPRECATED COMMENT
-
-
 #elif defined(__GNUC__)
 #  define SWDLLEXPORT
 #  define SWDLLEXPORT_DATA(type) type
@@ -121,7 +101,7 @@ namespace sword {
 
 
 // For ostream, istream ofstream
-#if defined(__BORLANDC__) && defined( _RTLDLL )
+#if defined( _RTLDLL )
 #  define SWDLLIMPORT __import
 #else
 #  define SWDLLIMPORT

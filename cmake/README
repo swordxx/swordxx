@@ -24,7 +24,7 @@ For those of you using the GUI interfaces with, for example, Windows or OS X or 
     * If you wish to specify certain options (see the section on options), click the "Add Entry" button and enter the argument you wish to specify under "Name" and the value of that argument under "Value".
     * Click "Configure"
           o If prompted to create the build directory, say "Yes"
-          o Select the "generator" for this project... for this, select the system you wish to use to actually do the compile. Some examples are different versions of Microsoft Visual Studio, Unix Makefiles, MSYS Makefiles, Cygwin Makefiles, Xcode projects, Eclipse projects, Borland projects and more.
+          o Select the "generator" for this project... for this, select the system you wish to use to actually do the compile. Some examples are different versions of Microsoft Visual Studio, Unix Makefiles, MSYS Makefiles, Cygwin Makefiles, Xcode projects, Eclipse projects and more.
           o You will probably want to leave "Use default native compilers" unless you are a power user and know what compiler you would like to use. You could use special options here if you need to select special cross-compilers or similar. 
     * After configure is completed, if there were errors, you will have a chance to correct them. If certain libraries were not located or you wish to use other values, you can select the Advanced View or check Show Advanced and manually edit any of the cached values.
     * If you are happy with the results and there are no errors or after you have corrected any errors, click Configure a second time.

@@ -26,9 +26,6 @@
 #include <defs.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __BORLANDC__
-#include <mem.h>
-#endif
 
 namespace sword {
 
