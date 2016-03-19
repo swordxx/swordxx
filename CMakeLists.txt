@@ -52,7 +52,6 @@ IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 	MESSAGE(FATAL_ERROR "Please invoke CMake from a different directory than the source.")
 ENDIF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 
-MESSAGE(STATUS "Configuring your system to build libsword.")
 
 ###########################################################################################
 # Here are some basic CMake variables we need to setup in order for things to work properly
