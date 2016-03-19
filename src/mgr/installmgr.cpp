@@ -123,6 +123,62 @@ bool parseVersionString(char const * a, uint32_t & triple) noexcept {
     }
 }
 
+#if 0
+void testParseVersionString() {
+    static auto const succeed = [](char const * const str, uint32_t const expected) {
+        uint32_t parsed;
+        if (!parseVersionString(str, parsed)) {
+            std::cerr << str << ": Expected 0x" << expected << ", got failure" << std::endl;
+            abort();
+        }
+        if (parsed != expected) {
+            std::cerr << str << ": Expected 0x" << expected << ", got 0x" << parsed << std::endl;
+            abort();
+        }
+    };
+    static auto const fail = [](char const * const str) {
+        uint32_t parsed;
+        if (parseVersionString(str, parsed)) {
+            std::cerr << str << ": Expected failure, got 0x" << parsed << std::endl;
+            abort();
+        }
+    };
+    std::cerr << std::hex;
+    fail("");
+    fail("x");
+    fail(".");
+    fail(".3");
+    fail(".3.2");
+    fail(".3.2");
+    fail("00");
+    fail("01");
+    fail("3.01");
+    fail("3.1.9.1.2.01");
+    succeed("0",     0x000000);
+    succeed("3",     0x030000);
+    succeed("3.2",   0x030200);
+    succeed("3.2.1", 0x030201);
+    succeed("3.2.1.12.0.7.fF", 0x030201);
+    succeed("12.34.56", 0x123456);
+    succeed("78.9a.bc", 0x789abc);
+    succeed("de.fA.BC", 0xdefabc);
+    succeed("DE.F0.12", 0xdef012);
+    fail("0.");
+    fail("3.");
+    fail("3.2.");
+    fail("3.2.1.");
+    fail("3.2.1.12.0.7.fF.");
+    fail("12.34.56.");
+    fail("78.9a.bc.");
+    fail("de.fA.BC.");
+    fail("DE.F0.12.");
+    fail("3..2");
+    fail("3.2..1");
+    fail("3..2.1");
+    fail("3.2.1.12.0.7..fF");
+}
+#endif
+
 }
 
 
