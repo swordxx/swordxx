@@ -233,7 +233,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/entriesblk.h
 	include/filemgr.h
 	include/versificationmgr.h
-	include/flatapi.h
 	include/ftpparse.h
 	include/remotetrans.h
 
