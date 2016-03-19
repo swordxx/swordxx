@@ -32,49 +32,38 @@ namespace swordxx {
 
 #  ifdef SWMAKINGDLL
 #    define SWDLLEXPORT _declspec( dllexport )
-#    define SWDLLEXPORT_DATA(type) _declspec( dllexport ) type
 #  elif defined(SWUSINGDLL)
 #    define SWDLLEXPORT _declspec( dllimport )
-#    define SWDLLEXPORT_DATA(type) _declspec( dllimport ) type
 #  else
 #    define SWDLLEXPORT
-#    define SWDLLEXPORT_DATA(type) type
 #  endif
 
 #elif defined(__SWPM__)
 
 #  ifdef SWMAKINGDLL
 #    define SWDLLEXPORT _Export
-#    define SWDLLEXPORT_DATA(type) _Export type
 #  elif defined(SWUSINGDLL)
 #    define SWDLLEXPORT _Export
-#    define SWDLLEXPORT_DATA(type) _Export type
 #  else
 #    define SWDLLEXPORT
-#    define SWDLLEXPORT_DATA(type) type
 #  endif
 
 #elif defined(__GNUWIN32__)
 
 #  ifdef SWMAKINGDLL
 #    define SWDLLEXPORT __declspec( dllexport )
-#    define SWDLLEXPORT_DATA(type) __declspec( dllexport ) type
 #  elif defined(SWUSINGDLL)
 #    define SWDLLEXPORT __declspec( dllimport )
-#    define SWDLLEXPORT_DATA(type) __declspec( dllimport ) type
 #  else
 #    define SWDLLEXPORT
-#    define SWDLLEXPORT_DATA(type) type
 #  endif
 
 #elif defined(__GNUC__)
 
 #  define SWDLLEXPORT
-#  define SWDLLEXPORT_DATA(type) type
 
 #else
 #  define SWDLLEXPORT
-#  define SWDLLEXPORT_DATA(type) type
 #endif
 
 
