@@ -11,7 +11,7 @@
 #include <time.h>
 #include <errno.h>
 #include <fcntl.h>
-#if defined(unix) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
