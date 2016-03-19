@@ -23,17 +23,19 @@
 #ifndef SIZEDTYPES_H
 #define SIZEDTYPES_H
 
-#undef __swswap16
-#undef __swswap32
-#undef __swswap64
+#include <cstdint>
 
-#define __swswap16(x) \
+#undef swswap16
+#undef swswap32
+#undef swswap64
+
+#define swswap16(x) \
 	((uint16_t)( \
 		(((uint16_t)(x) & (uint16_t)0x00ffU) << 8) | \
 		(((uint16_t)(x) & (uint16_t)0xff00U) >> 8) ))
 
 		
-#define __swswap32(x) \
+#define swswap32(x) \
 	((uint32_t)( \
 		(((uint32_t)(x) & (uint32_t)0x000000ffUL) << 24) | \
 		(((uint32_t)(x) & (uint32_t)0x0000ff00UL) <<  8) | \
@@ -41,7 +43,7 @@
 		(((uint32_t)(x) & (uint32_t)0xff000000UL) >> 24) ))
 
 		
-#define __swswap64(x) \
+#define swswap64(x) \
 	((uint64_t)( \
 		(uint64_t)(((uint64_t)(x) & (uint64_t)0x00000000000000ffULL) << 56) | \
 		(uint64_t)(((uint64_t)(x) & (uint64_t)0x000000000000ff00ULL) << 40) | \
@@ -66,12 +68,12 @@
 
 #else 
 
-#define swordtoarch16(x) __swswap16(x)
-#define swordtoarch32(x) __swswap32(x)
-#define swordtoarch64(x) __swswap64(x)
-#define archtosword16(x) __swswap16(x)
-#define archtosword32(x) __swswap32(x)
-#define archtosword64(x) __swswap64(x)
+#define swordtoarch16(x) swswap16(x)
+#define swordtoarch32(x) swswap32(x)
+#define swordtoarch64(x) swswap64(x)
+#define archtosword16(x) swswap16(x)
+#define archtosword32(x) swswap32(x)
+#define archtosword64(x) swswap64(x)
 
 
 #endif
