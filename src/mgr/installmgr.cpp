@@ -61,6 +61,68 @@ namespace {
 
     static const char *masterRepoList = "masterRepoList.conf";
 
+bool parseVersionString(char const * a, uint32_t & triple) noexcept {
+    unsigned haveTripleDigits = 0u;
+    uint32_t outTriple = 0u;
+    assert(a);
+    enum { NEEDNUM, NUM_DELIM_OR_END, DELIM_OR_END } state = NEEDNUM;
+    unsigned lastDigit = 0u;
+    for (;; ++a) {
+        switch (*a) {
+        case '0':
+            if (state == DELIM_OR_END)
+                return false;
+            if (state == NUM_DELIM_OR_END)
+                lastDigit *= 0x10u;
+            state = DELIM_OR_END;
+            break;
+        #define D(ch,val) \
+            case ch: \
+                if (state == DELIM_OR_END) \
+                    return false; \
+                if (state == NEEDNUM) { \
+                    state = NUM_DELIM_OR_END; \
+                    lastDigit = (val); \
+                } else { \
+                    state = DELIM_OR_END; \
+                    lastDigit = (lastDigit * 0x10u) + (val); \
+                } \
+                break;
+        D('1',1u)  D('2',2u)  D('3',3u)  D('4',4u)
+        D('5',5u)  D('6',6u)  D('7',7u)  D('8',8u)  D('9',9u)
+        D('a',10u) D('b',11u) D('c',12u) D('d',13u) D('e',14u) D('f',15u)
+        D('A',10u) D('B',11u) D('C',12u) D('D',13u) D('E',14u) D('F',15u)
+        #undef D
+        case '.':
+            if (state == NEEDNUM)
+                return false;
+            if (haveTripleDigits < 3u) {
+                ++haveTripleDigits;
+                outTriple = (outTriple * 0x100u) + lastDigit;
+                lastDigit = 0u;
+            }
+            state = NEEDNUM;
+            break;
+        case '\0':
+            if (state != NEEDNUM) {
+                if (haveTripleDigits < 3u) {
+                    ++haveTripleDigits;
+                    outTriple = (outTriple * 0x100u) + lastDigit;
+                }
+                while (haveTripleDigits < 3u) {
+                    ++haveTripleDigits;
+                    outTriple *= 0x100u;
+                }
+                triple = outTriple;
+                return true;
+            }
+            return false;
+        default:
+            return false;
+        }
+    }
+}
+
 }
 
 
@@ -592,70 +654,6 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
             cipher = true;
             keyPresent = *v;
         }
-
-        // ##(.##)*
-        static auto const parseVersionString = [](char const * a,
-                                                  uint32_t & triple) noexcept
-        {
-            unsigned haveTripleDigits = 0u;
-            uint32_t outTriple = 0u;
-            assert(a);
-            enum { NEEDNUM, NUM_DELIM_OR_END, DELIM_OR_END } state = NEEDNUM;
-            unsigned lastDigit = 0u;
-            for (;; ++a) {
-                switch (*a) {
-                case '0':
-                    if (state == DELIM_OR_END)
-                        return false;
-                    if (state == NUM_DELIM_OR_END)
-                        lastDigit *= 0x10u;
-                    state = DELIM_OR_END;
-                    break;
-                #define D(ch,val) \
-                    case ch: \
-                        if (state == DELIM_OR_END) \
-                            return false; \
-                        if (state == NEEDNUM) { \
-                            state = NUM_DELIM_OR_END; \
-                            lastDigit = (val); \
-                        } else { \
-                            state = DELIM_OR_END; \
-                            lastDigit = (lastDigit * 0x10u) + (val); \
-                        } \
-                        break;
-                D('1',1u) D('2',2u) D('3',3u) D('4',4u)
-                D('5',5u) D('6',6u) D('7',7u) D('8',8u) D('9',9u)
-                D('a',10u)D('b',11u)D('c',12u)D('d',13u)D('e',14u)D('f',15u)
-                D('A',10u)D('B',11u)D('C',12u)D('D',13u)D('E',14u)D('F',15u)
-                #undef D
-                case '.':
-                    if (state == NEEDNUM)
-                        return false;
-                    if (haveTripleDigits < 3u) {
-                        ++haveTripleDigits;
-                        outTriple = (outTriple * 0x100u) + lastDigit;
-                        lastDigit = 0u;
-                    }
-                    state = NEEDNUM;
-                    break;
-                case '\0':
-                    if (state != NEEDNUM) {
-                        if (haveTripleDigits < 3u) {
-                            ++haveTripleDigits;
-                            outTriple = (outTriple * 0x100u) + lastDigit;
-                        }
-                        while (haveTripleDigits < 3u) {
-                            ++haveTripleDigits;
-                            outTriple *= 0x100u;
-                        }
-                        triple = outTriple;
-                        return true;
-                    }
-                    return false;
-                default: return false;
-                }
-            }
-        };
 
         static auto const getVersion = [](char const * const str,
                                           uint32_t const defValue) noexcept
