@@ -232,7 +232,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/echomod.h
 	include/encfiltmgr.h
 	include/entriesblk.h
-	include/femain.h
 	include/filemgr.h
 	include/versificationmgr.h
 	include/flatapi.h
