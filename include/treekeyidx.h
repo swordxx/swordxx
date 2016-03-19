@@ -24,8 +24,8 @@
 #ifndef TREEKEYIDX_H
 #define TREEKEYIDX_H
 
+#include <cstdint>
 #include <treekey.h>
-#include <sysdata.h>
 
 namespace sword {
 
@@ -42,12 +42,12 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 		TreeNode();
 		~TreeNode();
 		void clear();
-		__s32 offset;
-		__s32 parent;
-		__s32 next;
-		__s32 firstChild;
+		int32_t offset;
+		int32_t parent;
+		int32_t next;
+		int32_t firstChild;
 		char *name;
-		__u16 dsize;
+		uint16_t dsize;
 		char *userData;
 	} currentNode;
 

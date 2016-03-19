@@ -21,6 +21,7 @@
  */
 
 #include <entriesblk.h>
+#include <cstdint>
 #include <stdlib.h>
 #include <string.h>
 
@@ -37,13 +38,13 @@ EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
 		memcpy(block, iBlock, size);
 	}
 	else {
-		block = (char *)calloc(1, sizeof(__u32));
+		block = (char *)calloc(1, sizeof(uint32_t));
 	}
 }
 
 
 EntriesBlock::EntriesBlock() {
-	block = (char *)calloc(1, sizeof(__u32));
+	block = (char *)calloc(1, sizeof(uint32_t));
 }
 
 
@@ -53,22 +54,22 @@ EntriesBlock::~EntriesBlock() {
 
 
 void EntriesBlock::setCount(int count) {
-	__u32 rawCount = archtosword32(count);
-	memcpy(block, &rawCount, sizeof(__u32));
+	uint32_t rawCount = archtosword32(count);
+	memcpy(block, &rawCount, sizeof(uint32_t));
 }
 
 
 int EntriesBlock::getCount() {
-	__u32 count = 0;
-	memcpy(&count, block, sizeof(__u32));
+	uint32_t count = 0;
+	memcpy(&count, block, sizeof(uint32_t));
 	count = swordtoarch32(count);
 	return count;
 }
 
 
 void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long *size) {
-	__u32 rawOffset = 0;
-	__u32 rawSize = 0;
+	uint32_t rawOffset = 0;
+	uint32_t rawSize = 0;
 	*offset = 0;
 	*size = 0;
 	if (index >= getCount())	// assert index < count
@@ -84,8 +85,8 @@ void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long 
 
 
 void EntriesBlock::setMetaEntry(int index, unsigned long offset, unsigned long size) {
-	__u32 rawOffset = archtosword32(offset);
-	__u32 rawSize = archtosword32(size);
+	uint32_t rawOffset = archtosword32(offset);
+	uint32_t rawSize = archtosword32(size);
 
 	if (index >= getCount())	// assert index < count
 		return;

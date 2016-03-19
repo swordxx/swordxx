@@ -143,7 +143,7 @@ void RawStr::getIDXBufDat(long ioffset, char **buf) const
 
 void RawStr::getIDXBuf(long ioffset, char **buf) const
 {
-	__u32 offset;
+	uint32_t offset;
 	
 	if (idxfd > 0) {
 		idxfd->seek(ioffset, SEEK_SET);
@@ -168,7 +168,7 @@ void RawStr::getIDXBuf(long ioffset, char **buf) const
  * RET: error status -1 general error; -2 new file
  */
 
-signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long away, __u32 *idxoff) const
+signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size, long away, uint32_t *idxoff) const
 {
 	char *trybuf, *maxbuf, *key = 0, quitflag = 0;
 	signed char retval = -1;
@@ -237,8 +237,8 @@ signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long
 
 		idxfd->seek(tryoff, SEEK_SET);
 
-		__u32 tmpStart;
-		__u16 tmpSize;
+		uint32_t tmpStart;
+		uint16_t tmpSize;
 		*start = *size = tmpStart = tmpSize = 0;
 		idxfd->read(&tmpStart, 4);
 		idxfd->read(&tmpSize, 2);
@@ -304,12 +304,12 @@ signed char RawStr::findOffset(const char *ikey, __u32 *start, __u16 *size, long
  *
  */
 
-void RawStr::readText(__u32 istart, __u16 *isize, char **idxbuf, SWBuf &buf) const
+void RawStr::readText(uint32_t istart, uint16_t *isize, char **idxbuf, SWBuf &buf) const
 {
 	unsigned int ch;
 	char *idxbuflocal = 0;
 	getIDXBufDat(istart, &idxbuflocal);
-	__u32 start = istart;
+	uint32_t start = istart;
 
 	do {
 		if (*idxbuf)
@@ -366,12 +366,12 @@ void RawStr::readText(__u32 istart, __u16 *isize, char **idxbuf, SWBuf &buf) con
 void RawStr::doSetText(const char *ikey, const char *buf, long len)
 {
 
-	__u32 start, outstart;
-	__u32 idxoff;
-	__u32 endoff;
-	__s32 shiftSize;
-	__u16 size;
-	__u16 outsize;
+	uint32_t start, outstart;
+	uint32_t idxoff;
+	uint32_t endoff;
+	int32_t shiftSize;
+	uint16_t size;
+	uint16_t outsize;
 	char *tmpbuf = 0;
 	char *key = 0;
 	char *dbKey = 0;

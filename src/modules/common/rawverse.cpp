@@ -24,7 +24,7 @@
  */
 
 
-
+#include <cstdint>
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -122,8 +122,8 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
 		
 	if (idxfp[testmt-1]->getFd() >= 0) {
 		idxfp[testmt-1]->seek(idxoff, SEEK_SET);
-		__s32 tmpStart;
-		__u16 tmpSize;
+		int32_t tmpStart;
+		uint16_t tmpSize;
 		idxfp[testmt-1]->read(&tmpStart, 4);
 		long len = idxfp[testmt-1]->read(&tmpSize, 2); 		// read size
 
@@ -177,8 +177,8 @@ void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf
 
 void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
-	__s32 start;
-	__u16 size;
+	int32_t start;
+	uint16_t size;
 
 	idxoff *= 6;
 	if (!testmt)
@@ -217,8 +217,8 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
  */
 
 void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-	__s32 start;
-	__u16 size;
+	int32_t start;
+	uint16_t size;
 
 	destidxoff *= 6;
 	srcidxoff  *= 6;
@@ -282,8 +282,8 @@ char RawVerse::createModule(const char *ipath, const char *v11n)
 	vk.setVersificationSystem(v11n);
 	vk.setIntros(1);
 
-	__s32 offset = 0;
-	__u16 size = 0;
+	int32_t offset = 0;
+	uint16_t size = 0;
 	offset = archtosword32(offset);
 	size = archtosword16(size);
 

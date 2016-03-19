@@ -26,8 +26,8 @@
 #ifndef RAWSTR4_H
 #define RAWSTR4_H
 
+#include <cstdint>
 #include <defs.h>
-#include <sysdata.h>
 
 namespace sword {
 
@@ -53,8 +53,8 @@ public:
 	virtual ~RawStr4();
 	void getIDXBuf(long ioffset, char **buf) const;
 	void getIDXBufDat(long ioffset, char **buf) const;
-	signed char findOffset(const char *key, __u32 *start, __u32 *size, long away = 0, __u32 *idxoff = 0) const;
-	void readText(__u32 start, __u32 *size, char **idxbuf, SWBuf &buf) const;
+	signed char findOffset(const char *key, uint32_t *start, uint32_t *size, long away = 0, uint32_t *idxoff = 0) const;
+	void readText(uint32_t start, uint32_t *size, char **idxbuf, SWBuf &buf) const;
 	static signed char createModule(const char *path);
 };
 

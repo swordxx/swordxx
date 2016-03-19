@@ -23,8 +23,8 @@
 #ifndef UTILSTR_H
 #define UTILSTR_H
 
+#include <cstdint>
 #include <defs.h>
-#include <sysdata.h>
 #include <swbuf.h>
 
 namespace sword {
@@ -55,7 +55,7 @@ extern const unsigned char SW_toupper_array[256];
  * 		unicode codepoint value (0 with buf incremented is invalid UTF8 byte
  */
 
-__u32 getUniCharFromUTF8(const unsigned char **buf);
+uint32_t getUniCharFromUTF8(const unsigned char **buf);
 
 
 /******************************************************************************
@@ -68,7 +68,7 @@ __u32 getUniCharFromUTF8(const unsigned char **buf);
  * 				bytes for the given Unicode codepoint
  */
 
-SWBuf getUTF8FromUniChar(__u32 uchar);
+SWBuf getUTF8FromUniChar(uint32_t uchar);
 
 
 /******************************************************************************

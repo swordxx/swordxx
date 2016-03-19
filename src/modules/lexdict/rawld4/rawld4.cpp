@@ -21,8 +21,8 @@
  *
  */
 
+#include <cstdint>
 #include <fcntl.h>
-
 #include <filemgr.h>
 #include <utilstr.h>
 #include <rawstr4.h>
@@ -73,8 +73,8 @@ bool RawLD4::isWritable() const {
 
 char RawLD4::getEntry(long away) const
 {
-	__u32 start  = 0;
-	__u32 size   = 0;
+	uint32_t start  = 0;
+	uint32_t size   = 0;
 	char *idxbuf = 0;
 	char retval  = 0;
 
@@ -193,8 +193,8 @@ long RawLD4::getEntryCount() const {
 
 
 long RawLD4::getEntryForKey(const char *key) const {
-	__u32 start, offset;
-	__u32 size;
+	uint32_t start, offset;
+	uint32_t size;
 
 	char *buf = new char [ strlen(key) + 6 ];
 	strcpy(buf, key);

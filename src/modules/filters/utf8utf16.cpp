@@ -20,7 +20,7 @@
  *
  */
 
-
+#include <cstdint>
 #include <utf8utf16.h>
 #include <utilstr.h>
 #include <swbuf.h>
@@ -43,25 +43,25 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	text = "";
 	while (*from) {
 
-		__u32 ch = getUniCharFromUTF8(&from);
+		uint32_t ch = getUniCharFromUTF8(&from);
 
 		if (!ch) continue;	// invalid char
 
 		if (ch < 0x10000) {
 			text.setSize(text.size()+2);
-			*((__u16 *)(text.getRawData()+(text.size()-2))) = (__u16)ch;
+			*((uint16_t *)(text.getRawData()+(text.size()-2))) = (uint16_t)ch;
 		}
 		else {
-			__u16 utf16;
-			utf16 = (__s16)((ch - 0x10000) / 0x400 + 0xD800);
+			uint16_t utf16;
+			utf16 = (int16_t)((ch - 0x10000) / 0x400 + 0xD800);
 			text.setSize(text.size()+4);
-			*((__u16 *)(text.getRawData()+(text.size()-4))) = utf16;
-			utf16 = (__s16)((ch - 0x10000) % 0x400 + 0xDC00);
-			*((__u16 *)(text.getRawData()+(text.size()-2))) = utf16;
+			*((uint16_t *)(text.getRawData()+(text.size()-4))) = utf16;
+			utf16 = (int16_t)((ch - 0x10000) % 0x400 + 0xDC00);
+			*((uint16_t *)(text.getRawData()+(text.size()-2))) = utf16;
 		}
 	}
 	text.setSize(text.size()+2);
-	*((__u16 *)(text.getRawData()+(text.size()-2))) = (__u16)0;
+	*((uint16_t *)(text.getRawData()+(text.size()-2))) = (uint16_t)0;
 	text.setSize(text.size()-2);
 	   
 	return 0;

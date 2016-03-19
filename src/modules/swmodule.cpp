@@ -23,8 +23,8 @@
  */
 
 
+#include <cstdint>
 #include <vector>
-
 #include <swlog.h>
 #include <sysdata.h>
 #include <swmodule.h>
@@ -488,7 +488,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				Document &doc = h->doc(i);
 				// set a temporary verse key to this module position
 				*resultKey = wcharToUTF8(doc.get(_T("key"))); //TODO Does a key always accept utf8?
-				__u64 score = (__u64)((__u32)(h->score(i)*100));
+				uint64_t score = (uint64_t)((uint32_t)(h->score(i)*100));
 
 				// check to see if it sets ok (within our bounds) and if not, skip
 				if (checkBounds) {

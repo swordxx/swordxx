@@ -197,8 +197,8 @@ int stricmp(const char *s1, const char *s2) {
  * 		unicode codepoint value (0 with buf incremented is invalid UTF8 byte
  */
 
-__u32 getUniCharFromUTF8(const unsigned char **buf) {
-	__u32 ch = 0;
+uint32_t getUniCharFromUTF8(const unsigned char **buf) {
+	uint32_t ch = 0;
 	unsigned char multibuf[7];
 
 	//case: We're at the end
@@ -240,13 +240,13 @@ __u32 getUniCharFromUTF8(const unsigned char **buf) {
 	multibuf[0] <<= 1;
 	char significantFirstBits = 8 - (2+subsequent);
 	
-	ch |= (((__s16)multibuf[0]) << (((6*subsequent)+significantFirstBits)-8));
+	ch |= (((int16_t)multibuf[0]) << (((6*subsequent)+significantFirstBits)-8));
 	*buf += (subsequent+1);
 	return ch;
 }
 
 
-SWBuf getUTF8FromUniChar(__u32 uchar) {
+SWBuf getUTF8FromUniChar(uint32_t uchar) {
 	SWBuf retVal("", 7);
 	unsigned int i;
 

@@ -22,6 +22,7 @@
  */
 
 
+#include <cstdint>
 #include <swmacs.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -774,7 +775,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setPosition(TOP);
 					tmpListKey << *lastKey;
 					((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					if (!dash) { 	// if last separator was not a dash just add
@@ -788,7 +789,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
 							((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-							tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 						}
 						else {
 							bool f = false;
@@ -803,7 +804,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							*lastKey = TOP;
 							tmpListKey << *lastKey;
 							((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-							tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 					else	if (expandRange) {
@@ -816,7 +817,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 							newElement->setUpperBound(*curKey);
 							*lastKey = *curKey;
 							*newElement = TOP;
-							tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+							tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 						}
 					}
 				}
@@ -1047,7 +1048,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 			lastKey->setLowerBound(*curKey);
 			*lastKey = TOP;
 			tmpListKey << *lastKey;
-			tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+			tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 		}
 		else {
 			if (!dash) { 	// if last separator was not a dash just add
@@ -1060,7 +1061,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setUpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 				}
 				else {
 					bool f = false;
@@ -1074,7 +1075,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 					lastKey->setUpperBound(*curKey);
 					*lastKey = TOP;
 					tmpListKey << *lastKey;
-					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 			else if (expandRange) {
@@ -1086,7 +1087,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 						*curKey = MAXVERSE;
 					newElement->setUpperBound(*curKey);
 					*newElement = TOP;
-					tmpListKey.getElement()->userData = (__u64)(bufStart+(buf-iBuf.c_str()));
+					tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
 				}
 			}
 		}

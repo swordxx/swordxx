@@ -25,7 +25,7 @@
  */
 
 
-
+#include <cstdint>
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -123,8 +123,8 @@ void RawVerse4::findOffset(char testmt, long idxoff, long *start, unsigned long 
 		
 	if (idxfp[testmt-1]->getFd() >= 0) {
 		idxfp[testmt-1]->seek(idxoff, SEEK_SET);
-		__u32 tmpStart;
-		__u32 tmpSize;
+		uint32_t tmpStart;
+		uint32_t tmpSize;
 		idxfp[testmt-1]->read(&tmpStart, 4);
 		long len = idxfp[testmt-1]->read(&tmpSize, 4); 		// read size
 
@@ -178,8 +178,8 @@ void RawVerse4::readText(char testmt, long start, unsigned long size, SWBuf &buf
 
 void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
-	__u32 start;
-	__u32 size;
+	uint32_t start;
+	uint32_t size;
 
 	idxoff *= 8;
 	if (!testmt)
@@ -218,8 +218,8 @@ void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
  */
 
 void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-	__u32 start;
-	__u32 size;
+	uint32_t start;
+	uint32_t size;
 
 	destidxoff *= 8;
 	srcidxoff  *= 8;
@@ -282,8 +282,8 @@ char RawVerse4::createModule(const char *ipath, const char *v11n)
 	VerseKey vk;
 	vk.setVersificationSystem(v11n);
 	vk.setIntros(1);
-	__u32 offset = 0;
-	__u32 size = 0;
+	uint32_t offset = 0;
+	uint32_t size = 0;
 	offset = archtosword32(offset);
 	size   = archtosword32(size);
 

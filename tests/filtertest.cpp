@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstdint>
 #include <iostream>
 #include <swbuf.h>
 #include <filemgr.h>
@@ -70,7 +71,7 @@ int main(int argc, char **argv) {
 /*
 //	Example showing safe to cast to u16 stream
 		unsigned int size = lineBuffer.size() / 2;
-		__u16 *wcharBuf = (__u16 *)lineBuffer.getRawData();
+		uint16_t *wcharBuf = (uint16_t *)lineBuffer.getRawData();
 		for (unsigned int i = 0; i < size; ++i) {
 			std::wcout << (wchar_t)wcharBuf[i];	// must cast for correct output and because wchar_t is different size on linux we couldn't declare out wcharBuf a wchar_t *
 		}

@@ -30,6 +30,7 @@
 #include <utilstr.h>
 #include <filemgr.h>
 #include <swbuf.h>
+#include <sysdata.h>
 
 namespace sword {
 
@@ -174,7 +175,7 @@ bool TreeKeyIdx::nextSibling() {
 
 bool TreeKeyIdx::previousSibling() {
 	TreeNode iterator;
-	__s32 target = currentNode.offset;
+	int32_t target = currentNode.offset;
 	if (currentNode.parent > -1) {
 		getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
 		getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
@@ -204,10 +205,10 @@ void TreeKeyIdx::append() {
 		while (lastSib.next > -1) {
 			getTreeNodeFromIdxOffset(lastSib.next, &lastSib);
 		}
-		__u32 idxOffset = idxfd->seek(0, SEEK_END);
+		uint32_t idxOffset = idxfd->seek(0, SEEK_END);
 		lastSib.next = idxOffset;
 		saveTreeNodeOffsets(&lastSib);
-		__u32 parent = currentNode.parent;
+		uint32_t parent = currentNode.parent;
 		currentNode.clear();
 		currentNode.offset = idxOffset;
 		currentNode.parent = parent;
@@ -221,10 +222,10 @@ void TreeKeyIdx::appendChild() {
 		append();
 	}
 	else {
-		__u32 idxOffset = idxfd->seek(0, SEEK_END);
+		uint32_t idxOffset = idxfd->seek(0, SEEK_END);
 		currentNode.firstChild = idxOffset;
 		saveTreeNodeOffsets(&currentNode);
-		__u32 parent = currentNode.offset;
+		uint32_t parent = currentNode.offset;
 		currentNode.clear();
 		currentNode.offset = idxOffset;
 		currentNode.parent = parent;
@@ -254,7 +255,7 @@ void TreeKeyIdx::remove() {
 		}
 		if (!done) {
 			TreeNode iterator;
-			__s32 target = currentNode.offset;
+			int32_t target = currentNode.offset;
 			if (currentNode.parent > -1) {
 				getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
 				getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
@@ -328,8 +329,8 @@ signed char TreeKeyIdx::create(const char *ipath) {
 void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 	unsnappedKeyText = "";
 	char ch;
-	__s32  tmp;
-	__u16  tmp2;
+	int32_t  tmp;
+	uint16_t  tmp2;
 
 	if (datfd > 0) {
 
@@ -376,7 +377,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 
 char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 	unsnappedKeyText = "";
-	__u32 offset;
+	uint32_t offset;
 	char error = KEYERR_OUTOFBOUNDS;
 	
 	if (ioffset < 0) {
@@ -420,7 +421,7 @@ void TreeKeyIdx::setOffset(unsigned long offset) {
 void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 	unsnappedKeyText = "";
 	long datOffset = 0;
-	__s32 tmp;
+	int32_t tmp;
 
 	if (idxfd > 0) {
 		idxfd->seek(node->offset, SEEK_SET);
@@ -487,7 +488,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 
 void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 	long datOffset = 0;
-	__s32 tmp;
+	int32_t tmp;
 	if (idxfd > 0) {
 
 		idxfd->seek(node->offset, SEEK_SET);
@@ -501,7 +502,7 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 		char null = 0;
 		datfd->write(&null, 1);
 
-		__u16 tmp2 = archtosword16(node->dsize);
+		uint16_t tmp2 = archtosword16(node->dsize);
 		datfd->write(&tmp2, 2);
 
 		if (node->dsize) {

@@ -24,7 +24,7 @@
  */
 
 
-
+#include <cstdint>
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -149,9 +149,9 @@ zVerse::~zVerse()
 
 void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const
 {
-	__u32 ulBuffNum    = 0;	          // buffer number
-	__u32 ulVerseStart = 0;	       // verse offset within buffer
-	__u16 usVerseSize  = 0;	       // verse size
+	uint32_t ulBuffNum    = 0;	          // buffer number
+	uint32_t ulVerseStart = 0;	       // verse offset within buffer
+	uint16_t usVerseSize  = 0;	       // verse size
 	// set start to offset in
 	// set size to
 	// set
@@ -204,9 +204,9 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
  */
 
 void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned long ulBuffNum, SWBuf &inBuf) const {
-	__u32 ulCompOffset = 0;	       // compressed buffer start
-	__u32 ulCompSize   = 0;	             // buffer size compressed
-	__u32 ulUnCompSize = 0;	          // buffer size uncompressed
+	uint32_t ulCompOffset = 0;	       // compressed buffer start
+	uint32_t ulCompSize   = 0;	             // buffer size compressed
+	uint32_t ulUnCompSize = 0;	          // buffer size uncompressed
 
 	if (!testmt) {
 		testmt = ((idxfp[0]) ? 1:2);
@@ -312,9 +312,9 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 
 	dirtyCache = true;
 
-	__u32 start;
-	__u16 size;
-	__u32 outBufIdx = cacheBufIdx;
+	uint32_t start;
+	uint16_t size;
+	uint32_t outBufIdx = cacheBufIdx;
 
 	idxoff *= 10;
 	size = len;
@@ -338,10 +338,10 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 
 void zVerse::flushCache() const {
 	if (dirtyCache) {
-		__u32 idxoff;
-		__u32 start, outstart;
-		__u32 size, outsize;
-		__u32 zsize, outzsize;
+		uint32_t idxoff;
+		uint32_t start, outstart;
+		uint32_t size, outsize;
+		uint32_t zsize, outzsize;
 
 		idxoff = cacheBufIdx * 12;
 		if (cacheBuf) {
@@ -392,9 +392,9 @@ void zVerse::flushCache() const {
  */
 
 void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-	__s32 bufidx;
-	__s32 start;
-	__u16 size;
+	int32_t bufidx;
+	int32_t start;
+	uint16_t size;
 
 	destidxoff *= 10;
 	srcidxoff  *= 10;
@@ -429,8 +429,8 @@ char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
 	char *buf = new char [ strlen (ipath) + 20 ];
 	char retVal = 0;
 	FileDesc *fd, *fd2;
-	__s32 offset = 0;
-	__s16 size = 0;
+	int32_t offset = 0;
+	int16_t size = 0;
 	VerseKey vk;
 
 	stdstr(&path, ipath);

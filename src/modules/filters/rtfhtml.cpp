@@ -21,6 +21,7 @@
  *
  */
 
+#include <cstdint>
 #include <stdlib.h>
 #include <rtfhtml.h>
 #include <swbuf.h>
@@ -53,8 +54,8 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				while (isdigit(*++end));
 				SWBuf num;
 				num.append(from, end-from);
-				__s16 n = atoi(num.c_str());
-				__u32 u = (__u16)n;
+				int16_t n = atoi(num.c_str());
+				uint32_t u = (uint16_t)n;
 				text.append(getUTF8FromUniChar(u));
 				from += (end-from);
 				continue;

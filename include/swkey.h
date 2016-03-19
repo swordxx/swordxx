@@ -27,8 +27,8 @@
 
 #include <swobject.h>
 
+#include <cstdint>
 #include <defs.h>
-#include <sysdata.h>
 #include <utilstr.h>
 
 namespace sword {
@@ -114,7 +114,7 @@ protected:
 public:
 
 	// misc storage for whatever
-	__u64 userData;
+	uint64_t userData;
 
 	/** initializes instance of SWKey from a string
 	 * All keys can be reduced to a string representation which should be able

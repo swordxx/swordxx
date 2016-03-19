@@ -22,7 +22,7 @@
  */
 
 
-
+#include <cstdint>
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -98,8 +98,8 @@ bool RawGenBook::isWritable() const {
 
 SWBuf &RawGenBook::getRawEntryBuf() const {
 
-	__u32 offset = 0;
-	__u32 size = 0;
+	uint32_t offset = 0;
+	uint32_t size = 0;
 
 	const TreeKey &key = getTreeKey();
 
@@ -133,8 +133,8 @@ SWBuf &RawGenBook::getRawEntryBuf() const {
 
 void RawGenBook::setEntry(const char *inbuf, long len) {
 
-	__u32 offset = archtosword32(bdtfd->seek(0, SEEK_END));
-	__u32 size = 0;
+	uint32_t offset = archtosword32(bdtfd->seek(0, SEEK_END));
+	uint32_t size = 0;
 	TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
 
 	char userData[8];

@@ -22,7 +22,7 @@
  *
  */
 
-
+#include <cstdint>
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -165,7 +165,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) const
 
 void zStr::getKeyFromIdxOffset(long ioffset, char **buf) const
 {
-	__u32 offset;
+	uint32_t offset;
 	
 	if (idxfd > 0) {
 		idxfd->seek(ioffset, SEEK_SET);
@@ -192,8 +192,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 {
 	char *maxbuf = 0, *trybuf = 0, *key = 0, quitflag = 0;
 	signed char retval = 0;
-	__s32 headoff, tailoff, tryoff = 0, maxoff = 0;
-	__u32 start, size;
+	int32_t headoff, tailoff, tryoff = 0, maxoff = 0;
+	uint32_t start, size;
 	int diff = 0;
 	bool awayFromSubstrCheck = false;
 
@@ -266,9 +266,9 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 			*idxoff = tryoff;
 
 		while (away) {
-			__u32 laststart = start;
-			__u32 lastsize = size;
-			__s32 lasttry = tryoff;
+			uint32_t laststart = start;
+			uint32_t lastsize = size;
+			int32_t lasttry = tryoff;
 			tryoff += (away > 0) ? IDXENTRYSIZE : -IDXENTRYSIZE;
 
 			bool bad = false;
@@ -326,8 +326,8 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 	char *ch;
 	char *idxbuflocal = 0;
 	getKeyFromIdxOffset(offset, &idxbuflocal);
-	__u32 start;
-	__u32 size;
+	uint32_t start;
+	uint32_t size;
 
 	do {
 		idxfd->seek(offset, SEEK_SET);
@@ -366,16 +366,16 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 	while (true);	// while we're resolving links
 
 	if (idxbuflocal) {
-		__u32 localsize = strlen(idxbuflocal);
+		uint32_t localsize = strlen(idxbuflocal);
 		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
 		strncpy(*idxbuf, idxbuflocal, localsize);
 		(*idxbuf)[localsize] = 0;
 		free(idxbuflocal);
 	}
-	__u32 block = 0;
-	__u32 entry = 0;
-	memmove(&block, *buf, sizeof(__u32));
-	memmove(&entry, *buf + sizeof(__u32), sizeof(__u32));
+	uint32_t block = 0;
+	uint32_t entry = 0;
+	memmove(&block, *buf, sizeof(uint32_t));
+	memmove(&entry, *buf + sizeof(uint32_t), sizeof(uint32_t));
 	block = swordtoarch32(block);
 	entry = swordtoarch32(entry);
 	getCompressedText(block, entry, buf);
@@ -389,10 +389,10 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 
 void zStr::getCompressedText(long block, long entry, char **buf) const {
 
-	__u32 size = 0;
+	uint32_t size = 0;
 
 	if (cacheBlockIndex != block) {
-		__u32 start = 0;
+		uint32_t start = 0;
 
 		zdxfd->seek(block * ZDXENTRYSIZE, SEEK_SET);
 		zdxfd->read(&start, 4);
@@ -434,11 +434,11 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 	static const char nl[] = {13, 10};
 
-	__u32 start, outstart;
-	__u32 size, outsize;
-	__s32 endoff;
+	uint32_t start, outstart;
+	uint32_t size, outsize;
+	int32_t endoff;
 	long idxoff = 0;
-	__s32 shiftSize;
+	int32_t shiftSize;
 	char *tmpbuf = 0;
 	char *key = 0;
 	char *dbKey = 0;
@@ -521,13 +521,13 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 			cacheBlock = new EntriesBlock();
 			cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
 		}
-		__u32 entry = cacheBlock->addEntry(buf);
+		uint32_t entry = cacheBlock->addEntry(buf);
 		cacheDirty = true;
 		outstart = archtosword32(cacheBlockIndex);
 		outsize = archtosword32(entry);
-		memcpy (outbuf + size, &outstart, sizeof(__u32));
-		memcpy (outbuf + size + sizeof(__u32), &outsize, sizeof(__u32));
-		size += (sizeof(__u32) * 2);
+		memcpy (outbuf + size, &outstart, sizeof(uint32_t));
+		memcpy (outbuf + size + sizeof(uint32_t), &outsize, sizeof(uint32_t));
+		size += (sizeof(uint32_t) * 2);
 	}
 	else {	// link
 		memcpy(outbuf + size, buf, len);
@@ -591,9 +591,9 @@ void zStr::flushCache() const {
 
 	if (cacheBlock) {
 		if (cacheDirty) {
-			__u32 start = 0;
+			uint32_t start = 0;
 			unsigned long size = 0;
-			__u32 outstart = 0, outsize = 0;
+			uint32_t outstart = 0, outsize = 0;
 
 			const char *rawBuf = cacheBlock->getRawData(&size);
 			compressor->Buf(rawBuf, &size);
@@ -631,7 +631,7 @@ void zStr::flushCache() const {
 
 
 			outstart = archtosword32(start);
-			outsize  = archtosword32((__u32)size);
+			outsize  = archtosword32((uint32_t)size);
 
 			zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
 			zdtfd->seek(start, SEEK_SET);

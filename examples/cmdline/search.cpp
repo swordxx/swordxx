@@ -24,6 +24,7 @@
  *
  */
 
+#include <cstdint>
 #include <stdio.h>
 #include <rawtext.h>
 #include <swmgr.h>
@@ -122,7 +123,7 @@ int main(int argc, char **argv)
 //	listkey.sort();
 	while (!listkey.popError()) {
 		std::cout << (const char *)listkey;
-		if (listkey.getElement()->userData) std::cout << " : " << (__u64)listkey.getElement()->userData << "%";
+		if (listkey.getElement()->userData) std::cout << " : " << (uint64_t)listkey.getElement()->userData << "%";
 		std::cout << std::endl;
 		listkey++;
 	}

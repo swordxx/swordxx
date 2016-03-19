@@ -26,8 +26,8 @@
 
 #include <swcomprs.h>
 
+#include <cstdint>
 #include <defs.h>
-#include <sysdata.h>
 
 namespace sword {
 
@@ -42,7 +42,7 @@ public:
 	virtual void Decode(void);
 	virtual void setLevel(int l);
 private:
-	__u64 memlimit; // memory usage limit during decompression
+	uint64_t memlimit; // memory usage limit during decompression
 };
 
 } /* namespace sword */
