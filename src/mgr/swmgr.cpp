@@ -708,7 +708,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 		rewinddir(dir);
 		while ((ent = readdir(dir))) {
 			//check whether it ends with .conf, if it doesn't skip it!
-			if (!ent->d_name || (strlen(ent->d_name) <= 5) || strncmp(".conf", (ent->d_name + strlen(ent->d_name) - 5), 5 )) {
+            if ((strlen(ent->d_name) <= 5) || strncmp(".conf", (ent->d_name + strlen(ent->d_name) - 5), 5 )) {
 				continue;
 			}
 			
