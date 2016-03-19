@@ -12,6 +12,39 @@
 # not, then this file is released under the GPLv2 by myself.
 PROJECT(libsword CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_POLICY(SET CMP0017 NEW)
+
+# If SWORD_USER_CONFIG set, load the file and fail on error. Otherwise, try to
+# include either "config.cmake" under either the build directory or the source
+# directory, whichever file first exists, if at all.
+IF(DEFINED SWORDXX_BUILDCONFIG)
+  IF(SWORDXX_BUILDCONFIG_IS_RELATIVE)
+      SET(SWORDXX_BUILDCONFIG
+          "${CMAKE_CURRENT_BINARY_DIR}/${SWORDXX_BUILDCONFIG}")
+  ENDIF()
+  INCLUDE("${SWORDXX_BUILDCONFIG}" OPTIONAL RESULT_VARIABLE r)
+  IF(r)
+    MESSAGE(STATUS "Included \"${SWORDXX_BUILDCONFIG}\"")
+    UNSET(r)
+  ELSE()
+    MESSAGE(FATAL_ERROR
+      "Failed to include SWORDXX_BUILDCONFIG from \"${SWORDXX_BUILDCONFIG}\"!")
+  ENDIF()
+ELSE()
+  INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.cmake" OPTIONAL RESULT_VARIABLE r)
+  IF(r)
+    MESSAGE(STATUS "Included \"${r}\"")
+  ELSE()
+    INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/config.cmake"
+            OPTIONAL RESULT_VARIABLE r)
+    IF(r)
+      MESSAGE(STATUS "Included \"${r}\"")
+    ENDIF()
+  ENDIF()
+  UNSET(r)
+ENDIF()
+
+
 SET(SWORD_VERSION 1.7.3)
 
 # Make sure it's an out-of-stream build
