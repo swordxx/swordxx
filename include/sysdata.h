@@ -22,14 +22,6 @@
 
 #ifndef SIZEDTYPES_H
 #define SIZEDTYPES_H
-/*
- * __xx is ok: it doesn't pollute the POSIX namespace. Use these in the
- * header files exported to user space
- */
-#ifdef USE_AUTOTOOLS
-#include "config.h"
-#endif
-
 
 typedef signed char __s8;
 typedef unsigned char __u8;

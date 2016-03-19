@@ -12,7 +12,9 @@ Bash or other command-line tool, probably Unix/Linux environment
     * Change into your build directory: cd cmake_build
     * Issue the call to CMake with any options you want to test and point it to the root of your SWORD sources: cmake <options> ../cmake_sword/
     * Check that there are no error messages and that CMake ends with the messages "Configuring done", "Generating done", and "Build files have been written to: <object directory>"
-    * From here on out, building should be just like building with Autotools - make -j4/sudo make install 
+    * From here on out, just execute something like
+      * make
+      * sudo make install 
 
 GUI users
 
@@ -32,9 +34,6 @@ For those of you using the GUI interfaces with, for example, Windows or OS X or 
     * Navigate to the directory where you specified to build the binaries and invoke your build system through its native mechanics - open the project file, execute the Makefiles, etc. 
 
 How can I customize my options?
-
-While not all of the options and functionality of the original SWORD automake system are necessarily supported, I would like to document those which I know about and their status. Also, I want to document the basic method of specifying these options.
-CMake Options
 
 Probably the only important CMake option for normal users is the "Generator" option. For those of you using a GUI, you will be prompted for the Generator to use the first time you click Configure. For command-line users, the default will generally be Unix Makefiles - this goes for Linux, Mac OS X and MinGW in my experience - (possibly different if you're using the DOS prompt in Windows, I haven't checked there) unless you specify otherwise. To get a list of the generators supported by your version of CMake run "cmake --help". The generators will be listed at the bottom. Select the one you would like, for example Xcode, and add the option string: -G Xcode to your invocation of CMake. Other examples might be -G "KDevelop3 - Unix Makefiles" if you wanted to use KDevelop3 but have it managing Unix Makefiles.
 SWORD Options
@@ -58,7 +57,7 @@ Developer or Packager specific options
 
     * LIBSWORD_LIBRARY_TYPE - If this has the value "Shared" then a shared library will be build (DLL or .so) along with the exported linking stub. If this is unspecified, then a static library will be built.
     * CMAKE_BUILD_TYPE - If this is given the value of "Debug" then the default SWORD debugging flags (-g3 -Wall -Werror -O0) will be enabled. If this is unspecified or any value other than "Debug" then the flag -O3 will be enabled.
-    * SWORD_ENABLE_PROFILE - if this has the value of "Yes" then the -pg option will be passed to the compiler. I don't know what this does, but it was available with Autotools, so it has been replicated here. This defaults to off.
+    * SWORD_ENABLE_PROFILE - if this has the value of "Yes" then the -pg option will be passed to the compiler. This defaults to off.
     * SWORD_ENABLE_PROFILEN - if this has the value of "Yes" then the "-g -finstrument-functions" options will be passed to the compiler. The same disclaimer goes for this as goes for the previous option. This also defaults to off. 
 
 How do I hack the code?
