@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
   /** a standard string key class (used
   * for modules that index on single strings (eg. cities,
@@ -51,6 +51,6 @@ public:
   SWKEY_OPERATORS
 
 };
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

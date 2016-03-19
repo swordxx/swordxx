@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts GBF text to classed XHTML text
  */
@@ -48,5 +48,5 @@ public:
 	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -32,7 +32,7 @@
 #include <map>
 #include <set>
 
-namespace sword {
+namespace swordxx {
 
 
 typedef std::map<SWBuf, SWBuf> DualStringMap;
@@ -419,4 +419,4 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -191,4 +191,4 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

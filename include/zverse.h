@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class FileDesc;
 class SWCompress;
@@ -72,5 +72,5 @@ public:
 	static char createModule(const char *path, int blockBound, const char *v11n = "KJV");
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

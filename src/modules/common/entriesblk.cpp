@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-namespace sword {
+namespace swordxx {
 
 const int EntriesBlock::METAHEADERSIZE = 4;
 	// count(4);
@@ -192,4 +192,4 @@ void EntriesBlock::removeEntry(int entryIndex) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

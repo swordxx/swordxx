@@ -37,7 +37,7 @@ namespace lucene { namespace search {
 class IndexSearcher;
 }}
 
-namespace sword {
+namespace swordxx {
 
 /*** SWModule implementation for compressed modules
 * This class handles compressed modules.
@@ -86,5 +86,5 @@ public:
 	SWMODULE_OPERATORS
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

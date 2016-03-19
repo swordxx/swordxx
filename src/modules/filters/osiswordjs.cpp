@@ -31,7 +31,7 @@
 #include <stdio.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -201,4 +201,4 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

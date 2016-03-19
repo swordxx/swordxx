@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts OSIS text to plain text
  */
@@ -39,5 +39,5 @@ public:
 	OSISPlain();
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

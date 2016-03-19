@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 /**
  * Class TreeKey
@@ -138,5 +138,5 @@ public:
 
 	};
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

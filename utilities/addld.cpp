@@ -42,12 +42,12 @@
 #include <zld.h>
 #include <zipcomprs.h>
 
-using sword::SWMgr;
-using sword::ZipCompress;
-using sword::RawLD4;
-using sword::SWKey;
-using sword::zLD;
-using sword::RawLD;
+using swordxx::SWMgr;
+using swordxx::ZipCompress;
+using swordxx::RawLD4;
+using swordxx::SWKey;
+using swordxx::zLD;
+using swordxx::RawLD;
 
 
 int main(int argc, char **argv) {

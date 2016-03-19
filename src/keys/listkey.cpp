@@ -29,7 +29,7 @@
 #include <listkey.h>
 #include <string.h>
 
-namespace sword {
+namespace swordxx {
 
 static const char *classes[] = {"ListKey", "SWKey", "SWObject", 0};
 SWClass ListKey::classdef(classes);
@@ -380,5 +380,5 @@ void ListKey::sort() {
 	}
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 

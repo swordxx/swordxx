@@ -28,7 +28,7 @@
 #include <ctype.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -146,4 +146,4 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -25,7 +25,7 @@
 
 #include <osisxhtml.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts OSIS  text to HTML text with hrefs
  */
@@ -42,5 +42,5 @@ public:
 	void setJavascript(bool mode) { javascript = mode; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

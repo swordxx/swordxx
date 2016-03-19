@@ -42,7 +42,7 @@
 #include <lzsscomprs.h>
 
 using namespace std;
-using namespace sword;
+using namespace swordxx;
 
 typedef struct {
 	short versionRecordSize;

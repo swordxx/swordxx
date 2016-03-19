@@ -33,7 +33,7 @@
 #include <versekey.h>
 #include <sysdata.h>
 
-namespace sword {
+namespace swordxx {
 
  /******************************************************************************
  * RawFiles Constructor - Initializes data for instance of RawFiles
@@ -230,4 +230,4 @@ char RawFiles::createModule(const char *path) {
 
 
 
-} /* namespace sword */
+} /* namespace swordxx */

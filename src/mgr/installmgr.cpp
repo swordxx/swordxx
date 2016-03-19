@@ -46,7 +46,7 @@
 using std::map;
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -738,5 +738,5 @@ SWMgr *InstallSource::getMgr() {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

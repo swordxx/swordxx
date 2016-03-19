@@ -42,12 +42,12 @@
 #include <rawtext.h>
 #include <iostream>
 
-using sword::SWMgr;
-using sword::RawText;
-using sword::SWKey;
-using sword::VerseKey;
-using sword::ListKey;
-using sword::SWModule;
+using swordxx::SWMgr;
+using swordxx::RawText;
+using swordxx::SWKey;
+using swordxx::VerseKey;
+using swordxx::ListKey;
+using swordxx::SWModule;
 
 int main(int argc, char **argv) {
   

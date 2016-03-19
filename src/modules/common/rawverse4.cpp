@@ -39,7 +39,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 /******************************************************************************
  * RawVerse4 Statics
@@ -309,4 +309,4 @@ char RawVerse4::createModule(const char *ipath, const char *v11n)
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

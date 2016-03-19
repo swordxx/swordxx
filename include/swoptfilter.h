@@ -27,7 +27,7 @@
 #include <swbuf.h>
 #include <list>
 
-namespace sword {
+namespace swordxx {
 
 /**
 * The type definitoin for option types
@@ -89,5 +89,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

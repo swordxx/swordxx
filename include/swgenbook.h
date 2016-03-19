@@ -29,7 +29,7 @@
 #include <treekey.h>
 
 
-namespace sword {
+namespace swordxx {
 
 /** The basis for all Book modules.
 */
@@ -58,5 +58,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

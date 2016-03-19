@@ -39,7 +39,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWOptionFilter;
 class SWFilter;
@@ -656,5 +656,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

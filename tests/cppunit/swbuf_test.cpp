@@ -25,7 +25,7 @@
 #include <iostream>
 
 #include "swbuf.h"
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 class SWBufTest : public CppUnit::TestFixture  {

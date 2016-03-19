@@ -30,7 +30,7 @@
 #include <unicode/uchar.h>
 #include <unicode/unorm.h>
 
-namespace sword {
+namespace swordxx {
 
 /** This filter normalizes UTF-8 encoded text
  */
@@ -44,5 +44,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

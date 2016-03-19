@@ -26,7 +26,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 UTF8UTF16::UTF8UTF16() {
@@ -67,4 +67,4 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

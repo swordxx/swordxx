@@ -68,7 +68,7 @@ using namespace lucene::search;
 
 using std::vector;
 
-namespace sword {
+namespace swordxx {
 
 SWModule::StdOutDisplay SWModule::rawdisp;
 
@@ -713,7 +713,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 									if (key != words[2]) continue;
 								}
 								if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
-									bool found = !(((flags & REG_ICASE) == REG_ICASE) ? sword::stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
+									bool found = !(((flags & REG_ICASE) == REG_ICASE) ? swordxx::stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
 									sres = (found) ? i3Start->second.c_str() : 0;
 								}
 								else {
@@ -1549,4 +1549,4 @@ void SWModule::prepText(SWBuf &buf) {
 	}
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

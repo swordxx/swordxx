@@ -27,7 +27,7 @@
 #include <defs.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 /** stdstr - clone a string
 */
@@ -100,5 +100,5 @@ SWBuf wcharToUTF8(const wchar_t *buf);
 
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

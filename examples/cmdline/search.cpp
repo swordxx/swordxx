@@ -34,7 +34,7 @@
 #include <iostream>
 
 
-using namespace sword;
+using namespace swordxx;
 
 /*
  *			>=0 - regex

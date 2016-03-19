@@ -27,7 +27,7 @@
 #include <stdlib.h>
 
 using namespace std;
-using namespace sword;
+using namespace swordxx;
 
 void addEntry(EntriesBlock *eb) {
 	string input;

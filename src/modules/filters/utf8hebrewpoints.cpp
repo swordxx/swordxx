@@ -26,7 +26,7 @@
 #include <utf8hebrewpoints.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -66,4 +66,4 @@ char UTF8HebrewPoints::processText(SWBuf &text, const SWKey *key, const SWModule
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

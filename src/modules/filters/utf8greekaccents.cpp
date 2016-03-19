@@ -28,11 +28,11 @@
 
 #ifdef _ICU_
 #include <utf8nfkd.h>
-sword::UTF8NFKD decompose;
+swordxx::UTF8NFKD decompose;
 #endif
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -282,4 +282,4 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
 
 
 
-} /* namespace sword */
+} /* namespace swordxx */

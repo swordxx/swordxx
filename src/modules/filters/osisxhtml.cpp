@@ -31,7 +31,7 @@
 #include <stringmgr.h>
 #include <stack>
 
-namespace sword {
+namespace swordxx {
 
 const char *OSISXHTML::getHeader() const {
 	const static char *header = "\
@@ -838,4 +838,4 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

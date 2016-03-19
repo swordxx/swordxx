@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 #define SWDYNAMIC_CAST(className, object) (className *)((object)?((object->getClass()->isAssignableFrom(#className))?object:0):0)
 
 /**
@@ -62,5 +62,5 @@ public:
 	}
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

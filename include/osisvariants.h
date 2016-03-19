@@ -26,7 +26,7 @@
 #include <swoptfilter.h>
 #include <swmodule.h>
 
-namespace sword {
+namespace swordxx {
 
 /** This Filter shows/hides textual variants
  */
@@ -38,5 +38,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -28,7 +28,7 @@
 #include <versekey.h>
 #include <url.h>
 
-namespace sword {
+namespace swordxx {
  
 
 const char *ThMLLaTeX::getHeader() const {
@@ -406,4 +406,4 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

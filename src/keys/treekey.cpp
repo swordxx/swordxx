@@ -26,7 +26,7 @@
 #include <utilstr.h>
 #include <string.h>
 
-namespace sword {
+namespace swordxx {
 
 static const char *classes[] = {"TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKey::classdef(classes);
@@ -96,4 +96,4 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

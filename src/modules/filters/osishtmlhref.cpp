@@ -31,7 +31,7 @@
 #include <stringmgr.h>
 #include <stack>
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 	typedef std::stack<SWBuf> TagStack;
@@ -642,4 +642,4 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

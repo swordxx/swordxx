@@ -28,7 +28,7 @@
 #include <list>
 #include <map>
 
-namespace sword {
+namespace swordxx {
 
 typedef std::map<SWBuf, SWBuf> StringPairMap;
 typedef std::list<SWBuf> StringList;
@@ -88,6 +88,6 @@ public:
 	inline XMLTag & operator =(const XMLTag &other) { setText(other.toString()); return *this; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif
 

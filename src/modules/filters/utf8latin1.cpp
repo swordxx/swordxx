@@ -24,7 +24,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
@@ -85,5 +85,5 @@ char UTF8Latin1::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

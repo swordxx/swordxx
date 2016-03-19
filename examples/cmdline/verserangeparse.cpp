@@ -28,13 +28,13 @@
 #include <swmodule.h>
 #include <markupfiltmgr.h>
 
-using sword::SWMgr;
-using sword::VerseKey;
-using sword::ListKey;
-using sword::SWModule;
-using sword::SW_POSITION;
-using sword::FMT_PLAIN;
-using sword::MarkupFilterMgr;
+using swordxx::SWMgr;
+using swordxx::VerseKey;
+using swordxx::ListKey;
+using swordxx::SWModule;
+using swordxx::SW_POSITION;
+using swordxx::FMT_PLAIN;
+using swordxx::MarkupFilterMgr;
 using std::cout;
 using std::endl;
 

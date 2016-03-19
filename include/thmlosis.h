@@ -25,7 +25,7 @@
 
 #include <swfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts ThML text to OSIS text
  */
@@ -36,5 +36,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif /* THMLOSIS_H */

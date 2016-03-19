@@ -44,7 +44,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
   class sapphire 
 {
@@ -79,4 +79,4 @@ unsigned *keypos); public:sapphire (unsigned char
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */

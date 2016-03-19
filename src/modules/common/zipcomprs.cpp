@@ -28,7 +28,7 @@
 #include <zipcomprs.h>
 #include <zlib.h>
 
-namespace sword {
+namespace swordxx {
 
 /******************************************************************************
  * ZipCompress Constructor - Initializes data for instance of ZipCompress
@@ -184,4 +184,4 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 	free (zbuf);
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

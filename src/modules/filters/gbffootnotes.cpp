@@ -31,7 +31,7 @@
 #include <utilxml.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -212,4 +212,4 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
 	return 0;*/
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

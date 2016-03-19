@@ -26,7 +26,7 @@
 #include <utilstr.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -117,4 +117,4 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
 
 
-} /* namespace sword */
+} /* namespace swordxx */

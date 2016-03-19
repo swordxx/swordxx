@@ -25,7 +25,7 @@
 
 #include <thmlxhtml.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts ThML text to HTML text with hrefs
  */
@@ -39,6 +39,6 @@ public:
 	ThMLWEBIF();
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

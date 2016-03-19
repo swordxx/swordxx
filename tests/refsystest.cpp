@@ -27,7 +27,7 @@
 
 #include <refsysmgr.h>
 
-using namespace sword;
+using namespace swordxx;
 using std::cout;
 using std::endl;
 

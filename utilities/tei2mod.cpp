@@ -74,7 +74,7 @@
 #include <latin1utf8.h>
 #endif
 
-using namespace sword;
+using namespace swordxx;
 
 using namespace std;
 

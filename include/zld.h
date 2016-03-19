@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT zLD : public zStr, public SWLD {
 	char getEntry(long away = 0) const;
@@ -72,5 +72,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

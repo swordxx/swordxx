@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 char *SWBuf::nullStr = (char *)"";
@@ -171,4 +171,4 @@ void SWBuf::insert(unsigned long pos, const char* str, unsigned long start, sign
 	*end = 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

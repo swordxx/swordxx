@@ -26,7 +26,7 @@
 #include <canon_abbrevs.h>
 #include <versificationmgr.h>
 
-namespace sword {
+namespace swordxx {
 
 
 /******************************************************************************
@@ -336,7 +336,7 @@ int vm[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

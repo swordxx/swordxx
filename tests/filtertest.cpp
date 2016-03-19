@@ -29,7 +29,7 @@
 #include <rtfhtml.h>
 #include <sysdata.h>
 //#include <swmgr.h>
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 

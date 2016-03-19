@@ -30,7 +30,7 @@
 #include <multimapwdef.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 typedef multimapwithdefault < SWBuf, SWBuf, std::less < SWBuf > >ConfigEntMap;
 typedef std::map < SWBuf, ConfigEntMap, std::less < SWBuf > >SectionMap;
@@ -85,5 +85,5 @@ public:
 	*/
 	virtual ConfigEntMap & operator [](const char *section);
 	};
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

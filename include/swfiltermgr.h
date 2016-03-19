@@ -27,7 +27,7 @@
 #include <defs.h>
 #include <swconfig.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWModule;
 class SWMgr;
@@ -84,5 +84,5 @@ public:
   virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
 
 };
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -25,7 +25,7 @@
 #include <utf8scsu.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 
 UTF8SCSU::UTF8SCSU() {
@@ -57,5 +57,5 @@ char UTF8SCSU::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

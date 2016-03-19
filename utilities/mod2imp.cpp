@@ -37,7 +37,7 @@ using std::map;
 using std::cout;
 using std::endl;
 
-using namespace sword;
+using namespace swordxx;
 
 
 void usage(const char *progName, const char *error = 0) {
@@ -87,11 +87,11 @@ int main(int argc, char **argv)
 	// -----------------------------------------------------
 
 	MarkupFilterMgr *markupMgr = 0;
-	if       (renderForm == "HTMLHREF") markupMgr = new MarkupFilterMgr(sword::FMT_HTMLHREF);
-	else if  (renderForm == "OSIS")     markupMgr = new MarkupFilterMgr(sword::FMT_OSIS);
-	else if  (renderForm == "RTF")      markupMgr = new MarkupFilterMgr(sword::FMT_RTF);
-	else if  (renderForm == "LATEX")    markupMgr = new MarkupFilterMgr(sword::FMT_LATEX);
-	else if  (renderForm == "XHTML")    markupMgr = new MarkupFilterMgr(sword::FMT_XHTML);
+	if       (renderForm == "HTMLHREF") markupMgr = new MarkupFilterMgr(swordxx::FMT_HTMLHREF);
+	else if  (renderForm == "OSIS")     markupMgr = new MarkupFilterMgr(swordxx::FMT_OSIS);
+	else if  (renderForm == "RTF")      markupMgr = new MarkupFilterMgr(swordxx::FMT_RTF);
+	else if  (renderForm == "LATEX")    markupMgr = new MarkupFilterMgr(swordxx::FMT_LATEX);
+	else if  (renderForm == "XHTML")    markupMgr = new MarkupFilterMgr(swordxx::FMT_XHTML);
 	
 	else if  (renderForm.length())      usage(progName, (((SWBuf) "Unknown output_format for -r (")+renderForm+")").c_str());
 

@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts TEI text to XHTML text
  */
@@ -53,5 +53,5 @@ public:
 	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

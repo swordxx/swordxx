@@ -27,7 +27,7 @@
 #include <swmodule.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 namespace {
@@ -109,6 +109,6 @@ char OSISReferenceLinks::processText(SWBuf &text, const SWKey *key, const SWModu
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 

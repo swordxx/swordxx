@@ -29,7 +29,7 @@
 #include <utilstr.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -157,5 +157,5 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

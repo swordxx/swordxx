@@ -22,7 +22,7 @@
 #ifndef CANON_CATHOLIC2_H
 #define CANON_CATHOLIC2_H
 
-namespace sword {
+namespace swordxx {
 
 
 // Versification system: Catholic2
@@ -338,7 +338,7 @@ int vm_catholic2[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

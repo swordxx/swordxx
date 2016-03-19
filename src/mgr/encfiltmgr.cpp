@@ -43,7 +43,7 @@
 #include <swmgr.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 /******************************************************************************
@@ -157,4 +157,4 @@ char EncodingFilterMgr::Encoding(char enc) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

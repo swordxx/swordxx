@@ -22,7 +22,7 @@
 #ifndef CANON_MT_H
 #define CANON_MT_H
 
-namespace sword {
+namespace swordxx {
 
 
 // Versification system: MT
@@ -237,7 +237,7 @@ int vm_mt[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

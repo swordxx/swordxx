@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-namespace sword {
+namespace swordxx {
 
 
 #define JUNKBUFSIZE 65534
@@ -456,5 +456,5 @@ public:
 
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

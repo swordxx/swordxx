@@ -30,7 +30,7 @@
 #include <defs.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWLocale;
  
@@ -115,5 +115,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

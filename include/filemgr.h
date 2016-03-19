@@ -30,7 +30,7 @@
 #include <swcacher.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT FileMgr;
 
@@ -187,5 +187,5 @@ public:
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

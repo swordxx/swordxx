@@ -27,7 +27,7 @@
 #include <strkey.h>
 #include <stdio.h>
 
-namespace sword {
+namespace swordxx {
 
 static const char *classes[] = {"StrKey", "SWKey", "SWObject", 0};
 SWClass StrKey::classdef(classes);
@@ -58,4 +58,4 @@ void StrKey::init() {
 StrKey::~StrKey() {
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

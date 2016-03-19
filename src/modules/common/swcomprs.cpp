@@ -25,7 +25,7 @@
 #include <string.h>
 #include <swcomprs.h>
 
-namespace sword {
+namespace swordxx {
 
 /******************************************************************************
  * SWCompress Constructor - Initializes data for instance of SWCompress
@@ -209,4 +209,4 @@ void SWCompress::cycleStream() {
 	zlen = slen = totlen;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

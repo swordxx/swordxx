@@ -44,12 +44,12 @@
 #include <swbuf.h>
 #include <versekey.h>
 
-using sword::FileMgr;
-using sword::SWMgr;
-using sword::RawText;
-using sword::VerseKey;
-using sword::SWBuf;
-using sword::SW_POSITION;
+using swordxx::FileMgr;
+using swordxx::SWMgr;
+using swordxx::RawText;
+using swordxx::VerseKey;
+using swordxx::SWBuf;
+using swordxx::SW_POSITION;
 
 
 char readline(int fd, char **buf) {

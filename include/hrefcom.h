@@ -30,7 +30,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT HREFCom:public RawVerse, public SWCom {
 	char *prefix;
@@ -49,5 +49,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

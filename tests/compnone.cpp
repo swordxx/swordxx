@@ -38,7 +38,7 @@
 #include <filemgr.h>
 #include <swcomprs.h>
 
-using namespace sword;
+using namespace swordxx;
 
 class FileCompress: public SWCompress {
 	int ifd;

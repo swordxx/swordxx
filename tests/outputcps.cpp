@@ -28,7 +28,7 @@ This program requires versekey.h to be changed locally so that
 otbks, otcps, ntbks and ntcps are public
 */
 
-using namespace sword;
+using namespace swordxx;
 
 int
 main(int argc, char *argv[])
@@ -37,7 +37,7 @@ main(int argc, char *argv[])
 	long offset1, offset2, otoffset;
 	int *vmaxarray;
 	int vmax;
-	sword::VerseKey *tk = new sword::VerseKey("Genesis 0:0");
+	swordxx::VerseKey *tk = new swordxx::VerseKey("Genesis 0:0");
 	
 	//tk->Testament(1);
 	//tk->Book(1);

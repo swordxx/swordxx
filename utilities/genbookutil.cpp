@@ -30,7 +30,7 @@
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
-using namespace sword;
+using namespace swordxx;
 
 void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 	if (!target)

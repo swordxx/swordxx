@@ -26,7 +26,7 @@
 #include <ctype.h>
 #include <roman.h>
 
-using sword::from_rom;
+using swordxx::from_rom;
 
 int main(int argc, char **argv) {
 	if (argc != 2) {

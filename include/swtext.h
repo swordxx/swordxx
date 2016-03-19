@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class VerseKey;
 
@@ -69,6 +69,6 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

@@ -23,7 +23,7 @@
 #define ROMAN_H
 
 #include <defs.h>
-namespace sword {
+namespace swordxx {
 
 /** Checks if a string is a roman numeral.
 */
@@ -35,5 +35,5 @@ char isroman(const char *, int maxchars = 0);
 */
 int from_rom(const char *s);
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts ThML text to HTML text with hrefs
  */
@@ -53,5 +53,5 @@ public:
 	virtual void setImagePrefix(const char *newImgPrefix) { imgPrefix = newImgPrefix; }
 	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
-} /* namespace sword */
+} /* namespace swordxx */
 #endif /* _THMLHTMLHREF_H */

@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
   /** the basis for all types of Lexicon and
   * Dictionary modules (hence the 'LD').
@@ -71,5 +71,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

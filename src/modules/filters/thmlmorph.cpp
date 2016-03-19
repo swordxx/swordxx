@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <thmlmorph.h>
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -84,4 +84,4 @@ char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -29,7 +29,7 @@
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
 
-namespace sword {
+namespace swordxx {
 
 /** This filter converts UTF-8 encoded text to SCSU
  */
@@ -44,5 +44,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -39,10 +39,10 @@
 #include <swmodule.h>
 #include <stdio.h>
 
-using sword::SWMgr;
-using sword::SWModule;
-using sword::ModMap;
-using sword::SWKey;
+using swordxx::SWMgr;
+using swordxx::SWModule;
+using swordxx::ModMap;
+using swordxx::SWKey;
 
 using std::cerr;
 

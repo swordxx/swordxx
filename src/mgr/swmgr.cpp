@@ -103,7 +103,7 @@
 #endif
 
 
-namespace sword {
+namespace swordxx {
 
 
 #ifdef _ICU_
@@ -1490,5 +1490,5 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

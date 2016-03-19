@@ -31,13 +31,13 @@
 #endif
 
 
-namespace sword {
+namespace swordxx {
 
 
 bool SWClass::isAssignableFrom(const char *className) const {
 	for (int i = 0; descends[i]; i++) {
 #ifndef __CYGWIN__
-		if (!sword::stricmp(descends[i], className))
+		if (!swordxx::stricmp(descends[i], className))
 #else
 		if (!stricmp(descends[i], className))
 #endif
@@ -47,5 +47,5 @@ bool SWClass::isAssignableFrom(const char *className) const {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

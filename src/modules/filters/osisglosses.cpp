@@ -26,7 +26,7 @@
 #include <utilxml.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -96,4 +96,4 @@ char OSISGlosses::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

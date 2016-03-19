@@ -31,7 +31,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class RawStr;
 
@@ -59,5 +59,5 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

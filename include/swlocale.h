@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWConfig;
 static const int ENDOFABBREVS = -2;
@@ -74,5 +74,5 @@ public:
 	static const char *DEFAULT_LOCALE_NAME;
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

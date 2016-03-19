@@ -39,7 +39,7 @@
 
 using std::string;
 
-using namespace sword;
+using namespace swordxx;
 
 void usage(const char *progName, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);

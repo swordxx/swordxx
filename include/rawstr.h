@@ -29,7 +29,7 @@
 #include <cstdint>
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWBuf;
 class FileDesc;
@@ -59,5 +59,5 @@ public:
 	static signed char createModule(const char *path);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

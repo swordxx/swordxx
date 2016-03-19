@@ -24,7 +24,7 @@
 #ifndef CANON_ABBREVS_H
 #define CANON_ABBREVS_H
 
-namespace sword {
+namespace swordxx {
 
 
 /******************************************************************************
@@ -544,7 +544,7 @@ const struct abbrev builtin_abbrevs[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

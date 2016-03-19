@@ -32,7 +32,7 @@
 #include <rawcom.h>
 #include <versekey.h>
 
-namespace sword {
+namespace swordxx {
 
  /******************************************************************************
  * RawCom Constructor - Initializes data for instance of RawCom
@@ -181,4 +181,4 @@ bool RawCom::hasEntry(const SWKey *k) const {
 	return size;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -30,7 +30,7 @@
 #include <iostream>
 
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 

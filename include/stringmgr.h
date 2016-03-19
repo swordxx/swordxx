@@ -29,7 +29,7 @@
 #include <swbuf.h>
 #include <utilstr.h>
 
-namespace sword {
+namespace swordxx {
 
 /** StringMgr is a way to provide UTf8 handling by the Sword frontend
  * Each platform, if it's up-to-date, should provide functions to handle unicode and utf8. This class makes it possible to implement Unicode support on the user-side and not in Sword itself.
@@ -115,7 +115,7 @@ inline SWBuf &toupperstr(SWBuf &b) {
 	return b;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif //STRINGMGR_H

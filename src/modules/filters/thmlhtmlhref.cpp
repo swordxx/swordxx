@@ -29,7 +29,7 @@
 #include <url.h>
 
 
-namespace sword {
+namespace swordxx {
  
 
 ThMLHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -370,4 +370,4 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

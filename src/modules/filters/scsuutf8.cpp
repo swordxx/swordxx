@@ -33,7 +33,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 SCSUUTF8::SCSUUTF8() {
@@ -256,4 +256,4 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

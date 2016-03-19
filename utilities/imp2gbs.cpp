@@ -48,7 +48,7 @@
 #include <unicode/locid.h>
 #endif
 
-using namespace sword;
+using namespace swordxx;
 
 SWBuf outPath;
 SWBuf inFile;

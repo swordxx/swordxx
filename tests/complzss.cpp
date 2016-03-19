@@ -38,7 +38,7 @@
 #include <filemgr.h>
 #include <lzsscomprs.h>
 
-using namespace sword;
+using namespace swordxx;
 
 class FileCompress: public LZSSCompress {
 	int ifd;

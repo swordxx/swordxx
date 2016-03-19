@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class ListKey;
 class SWKey;
@@ -98,5 +98,5 @@ public:
 	virtual bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -25,7 +25,7 @@
 
 #include <swoptfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWMgr;
   /** This Filter shows/hides strong's numbers in a GBF text
@@ -50,5 +50,5 @@ public:
 	void setMgr(SWMgr *mgr) { this->mgr = mgr; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

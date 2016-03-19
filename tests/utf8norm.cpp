@@ -24,7 +24,7 @@
 #include <utilstr.h>
 #include <swbuf.h>
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 int main(int argc, char **argv) {

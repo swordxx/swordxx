@@ -32,7 +32,7 @@
 #include <swbuf.h>
 #include <sysdata.h>
 
-namespace sword {
+namespace swordxx {
 
 static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKeyIdx::classdef(classes);
@@ -669,4 +669,4 @@ SWKey *TreeKeyIdx::clone() const
 	return new TreeKeyIdx(*this);
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

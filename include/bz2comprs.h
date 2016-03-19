@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT Bzip2Compress : public SWCompress {
 
@@ -41,5 +41,5 @@ public:
 	virtual void Decode(void);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -27,7 +27,7 @@
 #include <utilxml.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -118,4 +118,4 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

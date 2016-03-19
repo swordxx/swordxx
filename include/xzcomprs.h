@@ -29,7 +29,7 @@
 #include <cstdint>
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT XzCompress : public SWCompress {
 
@@ -45,5 +45,5 @@ private:
 	uint64_t memlimit; // memory usage limit during decompression
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

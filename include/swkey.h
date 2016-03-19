@@ -31,7 +31,7 @@
 #include <defs.h>
 #include <utilstr.h>
 
-namespace sword {
+namespace swordxx {
 
 #define KEYERR_OUTOFBOUNDS 1
 
@@ -225,5 +225,5 @@ public:
 
 	};
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

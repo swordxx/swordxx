@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <swlog.h>
 
-using namespace sword;
+using namespace swordxx;
 using std::cout;
 using std::cerr;
 using std::cin;

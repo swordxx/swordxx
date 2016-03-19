@@ -30,7 +30,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class FileDesc;
 class SWBuf;
@@ -56,5 +56,5 @@ public:
 	static char createModule(const char *path, const char *v11n = "KJV");
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

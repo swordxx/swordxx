@@ -42,7 +42,7 @@
 #include <markupfiltmgr.h>
 #include <algorithm>
 
-using namespace sword;
+using namespace swordxx;
 using std::endl;
 using std::cerr;
 using std::cout;

@@ -64,7 +64,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWModule;
 class SWFilter;
@@ -363,5 +363,5 @@ public:
 	virtual signed char setCipherKey(const char *modName, const char *key);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

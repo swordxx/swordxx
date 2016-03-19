@@ -29,7 +29,7 @@
 #include <iostream>
 
 
-namespace sword {
+namespace swordxx {
 
 
 TEILaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -322,5 +322,5 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

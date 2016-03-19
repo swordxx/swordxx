@@ -28,7 +28,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 CipherFilter::CipherFilter(const char *key) {
@@ -64,5 +64,5 @@ char CipherFilter::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

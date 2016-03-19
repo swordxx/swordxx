@@ -26,7 +26,7 @@
 #include <defs.h>
 #include <remotetrans.h>
 
-namespace sword {
+namespace swordxx {
 
 class CURL;
 
@@ -42,6 +42,6 @@ public:
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

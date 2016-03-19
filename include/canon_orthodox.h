@@ -22,7 +22,7 @@
 #ifndef CANON_ORTHODOX_H
 #define CANON_ORTHODOX_H
 
-namespace sword {
+namespace swordxx {
 
 
 // Versification system: Orthodox
@@ -364,7 +364,7 @@ int vm_orthodox[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

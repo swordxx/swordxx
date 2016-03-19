@@ -26,7 +26,7 @@
 #include <swoptfilter.h>
 #include <swbasicfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
@@ -37,5 +37,5 @@ public:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

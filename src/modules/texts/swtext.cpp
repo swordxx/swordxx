@@ -27,7 +27,7 @@
 #include <localemgr.h>
 #include <versekey.h>
 
-namespace sword {
+namespace swordxx {
 
 /******************************************************************************
  * SWText Constructor - Initializes data for instance of SWText
@@ -125,4 +125,4 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

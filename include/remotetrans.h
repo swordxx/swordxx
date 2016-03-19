@@ -29,7 +29,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 /** Class for reporting status
 */
@@ -79,6 +79,6 @@ public:
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

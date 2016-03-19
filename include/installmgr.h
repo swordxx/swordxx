@@ -30,7 +30,7 @@
 #include <set>
 #include <remotetrans.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWMgr;
 class SWModule;
@@ -272,6 +272,6 @@ A sample implementation, roughly taken from the windows installmgr:
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

@@ -29,7 +29,7 @@
 #include <swfilter.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 
 // not a protected inner class because MSVC++ sucks and can't handle it
@@ -201,5 +201,5 @@ protected:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

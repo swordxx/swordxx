@@ -28,15 +28,15 @@
 #include <swbuf.h>
 #include <utilstr.h>
 
-typedef sword::SWBuf StringType;
+typedef swordxx::SWBuf StringType;
 
 //#include <string>
 //typedef std::string StringType;
 
 using std::cout;
 using std::cerr;
-using sword::utf8ToWChar;
-using sword::wcharToUTF8;
+using swordxx::utf8ToWChar;
+using swordxx::wcharToUTF8;
 
 void markTime() {
 	static clock_t start = clock();
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
 	StringType y = x + " " + x;
 	cout << "should be (hello wurld hello wurld): (" << y << ")\n";
 
-	sword::SWBuf prefixTest = "prefix:value";
+	swordxx::SWBuf prefixTest = "prefix:value";
 	cout << "Prefix test: " << prefixTest << "\n";
 	cout << "Prefix should be (prefix): " << prefixTest.stripPrefix(':') << "\n";
 	cout << "Value should be (value): " << prefixTest << "\n";

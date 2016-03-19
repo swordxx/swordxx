@@ -30,7 +30,7 @@
 #include <ctype.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp"), javascript(false) {
@@ -175,5 +175,5 @@ bool OSISWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

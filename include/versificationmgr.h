@@ -31,7 +31,7 @@
 #define VERSIFICATIONMGR_H
 
 
-namespace sword {
+namespace swordxx {
 
 typedef std::list <SWBuf>StringList;
 
@@ -161,5 +161,5 @@ public:
 
 SWDLLEXPORT extern const struct abbrev builtin_abbrevs[];
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

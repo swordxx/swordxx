@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <papyriplain.h>
 
-namespace sword {
+namespace swordxx {
 
 
 PapyriPlain::PapyriPlain() {
@@ -85,4 +85,4 @@ char PapyriPlain::processText (SWBuf &text, const SWKey *key, const SWModule *mo
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -24,7 +24,7 @@
 #include <unicodertf.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 UnicodeRTF::UnicodeRTF() {
 }
@@ -98,4 +98,4 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

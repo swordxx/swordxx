@@ -26,7 +26,7 @@
 
 #include "stringmgr.h"
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 class StringMgrTest : public CppUnit::TestFixture  {

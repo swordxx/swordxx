@@ -24,7 +24,7 @@
 #include <gbfhtml.h>
 #include <ctype.h>
 
-namespace sword {
+namespace swordxx {
 
 GBFHTML::GBFHTML() {
 	setTokenStart("<");
@@ -184,4 +184,4 @@ bool GBFHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 	return true;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

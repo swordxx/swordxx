@@ -22,7 +22,7 @@
 #ifndef CANON_VULG_H
 #define CANON_VULG_H
 
-namespace sword {
+namespace swordxx {
 
 // Versification system: Vulg
 // Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr Ezra Neh Tob Jdt Esth Job Ps Prov Eccl Song Wis Sir Isa Jer Lam Bar Ezek Dan Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal 1Macc 2Macc Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev PrMan 1Esd 2Esd AddPs EpLao
@@ -668,6 +668,6 @@ unsigned char mappings_vulg[] = {
      0
  };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

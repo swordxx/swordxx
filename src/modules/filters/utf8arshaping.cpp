@@ -30,7 +30,7 @@
 #include <utf8arshaping.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 UTF8arShaping::UTF8arShaping() : err(U_ZERO_ERROR) {
 	conv = ucnv_open("UTF-8", &err);
@@ -64,5 +64,5 @@ char UTF8arShaping::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

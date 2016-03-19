@@ -22,7 +22,7 @@
 
 #include <iostream>
 #include <rawld.h>
-using namespace sword;
+using namespace swordxx;
 using std::cout;
 using std::endl;
 

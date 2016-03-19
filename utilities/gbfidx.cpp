@@ -37,7 +37,7 @@
 #include <versekey.h>
 #include <filemgr.h>
 
-using namespace sword;
+using namespace swordxx;
 
 void writeidx(VerseKey &key1, VerseKey &key2, VerseKey &key3, long offset, short size);
 char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short *size);

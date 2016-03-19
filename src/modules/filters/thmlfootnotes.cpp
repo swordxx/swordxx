@@ -32,7 +32,7 @@
 #include <utilxml.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -153,4 +153,4 @@ char ThMLFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

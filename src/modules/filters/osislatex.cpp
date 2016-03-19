@@ -31,7 +31,7 @@
 #include <stringmgr.h>
 #include <stack>
 
-namespace sword {
+namespace swordxx {
 
 const char *OSISLaTeX::getHeader() const {
 // can be used to return static start-up info, like packages to load. Not sure yet if I want to retain it.
@@ -770,4 +770,4 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -28,8 +28,8 @@
 #include <swmgr.h>
 
 
-using sword::SWMgr;
-using sword::StringList;
+using swordxx::SWMgr;
+using swordxx::StringList;
 using std::cout;
 
 

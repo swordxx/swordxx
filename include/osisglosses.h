@@ -25,7 +25,7 @@
 
 #include <swoptfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
@@ -36,5 +36,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

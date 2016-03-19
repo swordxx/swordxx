@@ -27,7 +27,7 @@
 #include <swmodule.h>
 #include <versekey.h>
 
-namespace sword {
+namespace swordxx {
 
 
 TEIRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -231,5 +231,5 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

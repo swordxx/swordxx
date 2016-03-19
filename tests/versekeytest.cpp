@@ -29,7 +29,7 @@
 #include <localemgr.h>
 #include <swmgr.h>
 #include <swmodule.h>
-using namespace sword;
+using namespace swordxx;
 
 using std::cout;
 using std::endl;

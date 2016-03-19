@@ -24,7 +24,7 @@
 #include <echomod.h>
 
 
-namespace sword {
+namespace swordxx {
 
 EchoMod::EchoMod() : SWText("echomod", "Echos back key")
 {
@@ -42,4 +42,4 @@ SWBuf &EchoMod::getRawEntryBuf() const
 	return retVal;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

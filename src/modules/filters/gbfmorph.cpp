@@ -25,7 +25,7 @@
 #include <gbfmorph.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -97,4 +97,4 @@ char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

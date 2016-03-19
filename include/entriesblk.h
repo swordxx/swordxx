@@ -26,7 +26,7 @@
 #include <sysdata.h>
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT EntriesBlock {
 	static const int METAHEADERSIZE;
@@ -52,5 +52,5 @@ public:
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

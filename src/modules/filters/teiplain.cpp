@@ -24,7 +24,7 @@
 #include <teiplain.h>
 #include <ctype.h>
 
-namespace sword {
+namespace swordxx {
 
 TEIPlain::TEIPlain() {
 	setTokenStart("<");
@@ -119,4 +119,4 @@ bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -25,7 +25,7 @@
 
 #include <encfiltmgr.h>
 
-namespace sword {
+namespace swordxx {
 
 /** This class is like a normal SWEncodingMgr,
 * but you can additonally specify which markup
@@ -73,5 +73,5 @@ public:
         virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

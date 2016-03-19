@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWKey;
 class SWBuf;
@@ -59,5 +59,5 @@ public:
 	virtual const char *getHeader() const { return ""; }
 };
 
-	} /* namespace sword */
+	} /* namespace swordxx */
 #endif

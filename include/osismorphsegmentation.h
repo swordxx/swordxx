@@ -25,7 +25,7 @@
 
 #include <swoptfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /*  This filters toggles splitting of morphemes
  *  (for morpheme segmented Hebrew in the WLC)
@@ -40,5 +40,5 @@ public:
 	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

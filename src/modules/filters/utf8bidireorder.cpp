@@ -32,7 +32,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 UTF8BiDiReorder::UTF8BiDiReorder() : err(U_ZERO_ERROR) {
@@ -79,5 +79,5 @@ char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule 
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

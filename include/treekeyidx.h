@@ -27,7 +27,7 @@
 #include <cstdint>
 #include <treekey.h>
 
-namespace sword {
+namespace swordxx {
 
 class FileDesc;
 
@@ -122,6 +122,6 @@ public:
 	static signed char create(const char *path);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

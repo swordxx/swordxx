@@ -30,7 +30,7 @@
 #include <stdarg.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 GBFOSIS::GBFOSIS() {
@@ -435,4 +435,4 @@ void QuoteStack::QuoteInstance::pushStartStream(SWBuf &text) {
 	text.appendFormatted("<quote level=\"%d\">", level);
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

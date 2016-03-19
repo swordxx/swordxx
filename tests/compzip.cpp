@@ -36,7 +36,7 @@
 #include <filemgr.h>
 #include <zipcomprs.h>
 
-using namespace sword;
+using namespace swordxx;
 
 class FileCompress: public ZipCompress {
 	int ifd;

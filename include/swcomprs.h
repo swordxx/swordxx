@@ -26,7 +26,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT SWCompress
 {
@@ -49,5 +49,5 @@ public:
   virtual int getLevel() {return level;};
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

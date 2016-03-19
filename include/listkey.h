@@ -29,7 +29,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
   /** ListKey is the basis for all
   * types of keys that have lists of specified indexes
@@ -141,5 +141,5 @@ public:
 	ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

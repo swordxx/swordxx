@@ -30,7 +30,7 @@
 #include <swmodule.h>
 
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 

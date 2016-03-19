@@ -30,7 +30,7 @@
 #include <swlog.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -197,5 +197,5 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

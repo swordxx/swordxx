@@ -30,12 +30,12 @@
 
 #include <pthread.h>
 
-using sword::SWMgr;
-using sword::ListKey;
-using sword::SWModule;
-using sword::VerseKey;
-using sword::SWKey;
-using sword::ModMap;
+using swordxx::SWMgr;
+using swordxx::ListKey;
+using swordxx::SWModule;
+using swordxx::VerseKey;
+using swordxx::SWKey;
+using swordxx::ModMap;
 
 int cms_currentProgress;
 

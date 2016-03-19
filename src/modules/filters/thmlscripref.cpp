@@ -29,7 +29,7 @@
 #include <swmodule.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -150,4 +150,4 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -25,7 +25,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 GBFThML::GBFThML()
@@ -220,4 +220,4 @@ char GBFThML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

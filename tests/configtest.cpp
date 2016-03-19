@@ -22,7 +22,7 @@
 
 #include <iostream>
 #include <swconfig.h>
-using sword::SWConfig;
+using swordxx::SWConfig;
 
 int main(int argc, char **argv) {
     SWConfig config("./test1.conf");

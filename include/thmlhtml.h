@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts ThML text to HTML text
  */
@@ -44,5 +44,5 @@ public:
 	ThMLHTML();
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

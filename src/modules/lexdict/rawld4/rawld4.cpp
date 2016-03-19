@@ -31,7 +31,7 @@
 #include <stdio.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
  /******************************************************************************
@@ -214,5 +214,5 @@ char *RawLD4::getKeyForEntry(long entry) const {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

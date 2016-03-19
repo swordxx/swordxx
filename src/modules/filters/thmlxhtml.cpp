@@ -28,7 +28,7 @@
 #include <versekey.h>
 #include <url.h>
 
-namespace sword {
+namespace swordxx {
  
 
 const char *ThMLXHTML::getHeader() const {
@@ -377,4 +377,4 @@ bool ThMLXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

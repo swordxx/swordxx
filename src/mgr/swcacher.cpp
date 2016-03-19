@@ -25,7 +25,7 @@
 #include <swcacher.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 SWCacher::SWCacher() {
@@ -48,5 +48,5 @@ long SWCacher::lastAccess() {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

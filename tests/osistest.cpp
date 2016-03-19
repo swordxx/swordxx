@@ -28,7 +28,7 @@
 #include <versekey.h>
 
 using namespace std;
-using namespace sword;
+using namespace swordxx;
 
 
 void outputCurrentVerse(SWModule *module) {

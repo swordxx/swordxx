@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <listkey.h>
 #include <versekey.h>
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 int main(int argc, char **argv)

@@ -24,7 +24,7 @@
 #include <swtext.h>
 #include <versekey.h>
 #include <iostream>
-using namespace sword;
+using namespace swordxx;
 
 int main(int argc, char **argv) {
 	SWMgr mymgr;

@@ -30,7 +30,7 @@
 
 #include <localemgr.h>
 
-using namespace sword;
+using namespace swordxx;
 
 int main(int argc, char **argv)
 {

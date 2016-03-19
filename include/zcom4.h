@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT zCom4 : public zVerse4, public SWCom {
 
@@ -73,6 +73,6 @@ public:
 
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

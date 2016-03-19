@@ -30,7 +30,7 @@
 #include <stringmgr.h>
 #include <stack>
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 	class MyUserData : public BasicFilterUserData {
@@ -555,4 +555,4 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

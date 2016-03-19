@@ -44,7 +44,7 @@ using std::list;
 using std::find;
 #endif
 
-namespace sword {
+namespace swordxx {
 
 #ifndef USELUCENE
 typedef  map < SWBuf, list<long> > strlist;
@@ -200,4 +200,4 @@ bool RawText::hasEntry(const SWKey *k) const {
 
 	
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -25,7 +25,7 @@
 
 #include <swbasicfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts GBF  text to HTML text 
  */
@@ -44,5 +44,5 @@ public:
 	GBFHTML();
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

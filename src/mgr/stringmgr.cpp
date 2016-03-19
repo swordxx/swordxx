@@ -40,7 +40,7 @@
 #endif
 
 
-namespace sword {
+namespace swordxx {
 
 
 StringMgr *StringMgr::systemStringMgr = 0;
@@ -284,4 +284,4 @@ char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
 	
 #endif
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -24,7 +24,7 @@
 #include <swoptfilter.h>
 #include <utilstr.h>
 
-namespace sword {
+namespace swordxx {
 
 
 SWOptionFilter::SWOptionFilter() {
@@ -64,4 +64,4 @@ const char *SWOptionFilter::getOptionValue() {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -28,7 +28,7 @@
 #include <versekey.h>
 #include <localemgr.h>
 
-using namespace sword;
+using namespace swordxx;
 
 using std::endl;
 using std::cerr;

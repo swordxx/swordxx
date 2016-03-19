@@ -32,19 +32,19 @@
 //#include "../../bindings/corba/orbitcpp/webmgr.hpp"
 
 
-using sword::SWMgr;
-using sword::MarkupFilterMgr;
-using sword::SWModule;
-using sword::FMT_WEBIF;
-using sword::FMT_HTMLHREF;
-using sword::FMT_RTF;
-using sword::FMT_LATEX;
-using sword::ModMap;
-using sword::AttributeTypeList;
-using sword::AttributeList;
-using sword::AttributeValue;
-using sword::VerseKey;
-using sword::FilterList;
+using swordxx::SWMgr;
+using swordxx::MarkupFilterMgr;
+using swordxx::SWModule;
+using swordxx::FMT_WEBIF;
+using swordxx::FMT_HTMLHREF;
+using swordxx::FMT_RTF;
+using swordxx::FMT_LATEX;
+using swordxx::ModMap;
+using swordxx::AttributeTypeList;
+using swordxx::AttributeList;
+using swordxx::AttributeValue;
+using swordxx::VerseKey;
+using swordxx::FilterList;
 
 
 int main(int argc, char **argv)

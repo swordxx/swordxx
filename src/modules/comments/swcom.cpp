@@ -28,7 +28,7 @@
 #include <versekey.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 /******************************************************************************
@@ -120,4 +120,4 @@ VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

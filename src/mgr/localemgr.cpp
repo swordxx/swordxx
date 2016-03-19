@@ -38,7 +38,7 @@
 #include <swlog.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 LocaleMgr *LocaleMgr::systemLocaleMgr = 0;
@@ -278,5 +278,5 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

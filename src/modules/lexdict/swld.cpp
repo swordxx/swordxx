@@ -28,7 +28,7 @@
 #include <swkey.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 /******************************************************************************
@@ -165,5 +165,5 @@ void SWLD::strongsPad(char *buf)
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

@@ -27,7 +27,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWDLLEXPORT SWLog {
 protected:
@@ -60,5 +60,5 @@ public:
 	virtual void logMessage(const char *message, int level) const;
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -26,7 +26,7 @@
 #include <versekey.h>
 #include <swmodule.h>
 
-namespace sword {
+namespace swordxx {
 
 
 OSISOSIS::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -175,4 +175,4 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

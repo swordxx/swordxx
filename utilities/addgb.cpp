@@ -44,9 +44,9 @@
 #include <treekeyidx.h>
 #include <rawgenbook.h>
 
-using sword::TreeKeyIdx;
-using sword::RawGenBook;
-using sword::SWKey;
+using swordxx::TreeKeyIdx;
+using swordxx::RawGenBook;
+using swordxx::SWKey;
 
 
 void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {

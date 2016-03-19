@@ -31,7 +31,7 @@
 #include <zcom.h>
 #include <filemgr.h>
 
-namespace sword {
+namespace swordxx {
 
 /******************************************************************************
  * zCom Constructor - Initializes data for instance of zCom
@@ -217,4 +217,4 @@ bool zCom::hasEntry(const SWKey *k) const {
 	return size;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

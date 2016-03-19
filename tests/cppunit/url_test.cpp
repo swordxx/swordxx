@@ -26,7 +26,7 @@
 
 #include "url.h"
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 class URLTest : public CppUnit::TestFixture  {
@@ -41,15 +41,15 @@ CPPUNIT_TEST( testDecode );
 CPPUNIT_TEST_SUITE_END();
 
 private:
-	sword::URL* m_url1;
-	sword::URL* m_url2;
-	sword::URL* m_url3;
+	swordxx::URL* m_url1;
+	swordxx::URL* m_url2;
+	swordxx::URL* m_url3;
 	
 public:
 	void setUp() {
-		m_url1 = new sword::URL("http://www.crosswire.org/index.jsp?page=help&user=foo&name=bar");
-		m_url2 = new sword::URL("ftp://ftp.crosswire.org/sword/wiki/index.jsp?page=help&amp;user=foo&amp;name=foo%20bar");
-		m_url3 = new sword::URL("crosswire.org/index.jsp");
+		m_url1 = new swordxx::URL("http://www.crosswire.org/index.jsp?page=help&user=foo&name=bar");
+		m_url2 = new swordxx::URL("ftp://ftp.crosswire.org/sword/wiki/index.jsp?page=help&amp;user=foo&amp;name=foo%20bar");
+		m_url3 = new swordxx::URL("crosswire.org/index.jsp");
 	}	
 	void tearDown()  {
 		delete m_url1;
@@ -80,15 +80,15 @@ public:
 
 	void testParametersMap()
 	{	
- 		std::map< sword::SWBuf, sword::SWBuf > params = m_url1->getParameters();
-		CPPUNIT_ASSERT( !strcmp(params[sword::SWBuf("page")].c_str(), "help") );
-		CPPUNIT_ASSERT( !strcmp(params[sword::SWBuf("user")].c_str(),  "foo") );
-		CPPUNIT_ASSERT( !strcmp(params[sword::SWBuf("name")].c_str(), "bar") );
+ 		std::map< swordxx::SWBuf, swordxx::SWBuf > params = m_url1->getParameters();
+		CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("page")].c_str(), "help") );
+		CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("user")].c_str(),  "foo") );
+		CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("name")].c_str(), "bar") );
 	
  		params = m_url2->getParameters(); //test url2 params
-		CPPUNIT_ASSERT( !strcmp(params[sword::SWBuf("page")].c_str(), "help") );
-		CPPUNIT_ASSERT( !strcmp(params[sword::SWBuf("user")].c_str(),  "foo") );
-		CPPUNIT_ASSERT( !strcmp(params[sword::SWBuf("name")].c_str(), "foo bar") );
+		CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("page")].c_str(), "help") );
+		CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("user")].c_str(),  "foo") );
+		CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("name")].c_str(), "foo bar") );
 	
  		params = m_url3->getParameters(); //test url3 params
 		CPPUNIT_ASSERT( params.size() == 0 );

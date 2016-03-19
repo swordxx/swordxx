@@ -26,7 +26,7 @@
 #include <swbasicfilter.h>
 #include <utilxml.h>
 
-namespace sword {
+namespace swordxx {
 
 /** this filter converts ThML text to classed XHTML
  */
@@ -55,6 +55,6 @@ public:
 	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif

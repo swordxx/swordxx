@@ -25,7 +25,7 @@
 #include <roman.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 char isroman (const char *str, int maxchars) {
@@ -88,5 +88,5 @@ int from_rom(const char* str) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

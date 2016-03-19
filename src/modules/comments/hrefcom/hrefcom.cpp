@@ -33,7 +33,7 @@
 #include <swbuf.h>
 #include <versekey.h>
 
-namespace sword {
+namespace swordxx {
 
  /******************************************************************************
  * HREFCom Constructor - Initializes data for instance of HREFCom
@@ -92,4 +92,4 @@ SWBuf &HREFCom::getRawEntryBuf() const {
 	return entryBuf;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

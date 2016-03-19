@@ -25,7 +25,7 @@
 #include <utilstr.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 ThMLGBF::ThMLGBF()
 {
@@ -294,4 +294,4 @@ char ThMLGBF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -36,7 +36,7 @@ extern "C" {
 using std::vector;
 
 
-namespace sword {
+namespace swordxx {
 
 
 namespace {
@@ -190,4 +190,4 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
 	return retVal;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

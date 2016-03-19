@@ -37,7 +37,7 @@
 #include <swmgr.h>
 #include <swmodule.h>
 #include <markupfiltmgr.h>
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 #define MAXBUF 30000

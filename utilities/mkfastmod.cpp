@@ -31,12 +31,12 @@
 #include <markupfiltmgr.h>
 #include <swbuf.h>
 
-using sword::SWMgr;
-using sword::SWModule;
-using sword::ListKey;
-using sword::VerseKey;
-using sword::ModMap;
-using sword::SWBuf;
+using swordxx::SWMgr;
+using swordxx::SWModule;
+using swordxx::ListKey;
+using swordxx::VerseKey;
+using swordxx::ModMap;
+using swordxx::SWBuf;
 
 void percentUpdate(char percent, void *userData) {
 	static char printed = 0;

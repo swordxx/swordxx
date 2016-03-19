@@ -25,7 +25,7 @@
 
 #include <swfilter.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWCipher;
 
@@ -38,5 +38,5 @@ public:
 	virtual SWCipher *getCipher();
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

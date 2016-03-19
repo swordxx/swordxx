@@ -28,7 +28,7 @@
 #include <utilxml.h>
 #include <swmodule.h>
 
-namespace sword {
+namespace swordxx {
 
 
 namespace {
@@ -264,4 +264,4 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

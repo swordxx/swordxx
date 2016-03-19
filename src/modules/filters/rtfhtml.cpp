@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <sysdata.h>
 
-namespace sword {
+namespace swordxx {
 
 RTFHTML::RTFHTML()
 {
@@ -101,4 +101,4 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

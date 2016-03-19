@@ -22,7 +22,7 @@
 #ifndef CANON_SYNODAL_H
 #define CANON_SYNODAL_H
 
-namespace sword {
+namespace swordxx {
 
 // Versification system: Synodal
 // Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr PrMan Ezra Neh 1Esd Tob Jdt Esth Job Ps Prov Eccl Song Wis Sir Isa Jer Lam EpJer Bar Ezek Dan Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal 1Macc 2Macc 3Macc 2Esd Matt Mark Luke John Acts Jas 1Pet 2Pet 1John 2John 3John Jude Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Rev
@@ -587,7 +587,7 @@ unsigned char mappings_synodal[] = {
     0
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

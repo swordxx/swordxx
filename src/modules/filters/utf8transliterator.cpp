@@ -37,7 +37,7 @@
 #endif
 #include <swlog.h>
 
-namespace sword {
+namespace swordxx {
 
 const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
         "Off",
@@ -920,7 +920,7 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif
 
 

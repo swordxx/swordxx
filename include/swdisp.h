@@ -27,7 +27,7 @@
 #include <swobject.h>
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWModule;
 
@@ -50,5 +50,5 @@ public:
   virtual char display(SWModule &imodule) = 0;
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

@@ -27,7 +27,7 @@
 #include <fcntl.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 SWConfig::SWConfig() {
@@ -169,5 +169,5 @@ ConfigEntMap & SWConfig::operator [] (const char *section) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

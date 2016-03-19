@@ -32,7 +32,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 #define POS_MAXVERSE ((char)3)
 #define POS_MAXCHAPTER ((char)4)
@@ -414,6 +414,6 @@ public:
 	virtual SWKey &operator =(const VerseKey &ikey) { positionFrom(ikey); return *this; }
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 #endif //VERSEKEY_H

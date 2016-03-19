@@ -30,7 +30,7 @@
 
 #include <ztext.h>
 
-namespace sword {
+namespace swordxx {
 
 /******************************************************************************
  * zText Constructor - Initializes data for instance of zText
@@ -220,4 +220,4 @@ bool zText::hasEntry(const SWKey *k) const {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

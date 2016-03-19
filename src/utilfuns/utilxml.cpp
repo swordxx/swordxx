@@ -26,7 +26,7 @@
 #include <utilstr.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 void XMLTag::parse() const {
@@ -327,5 +327,5 @@ bool XMLTag::isEndTag(const char *eID) const {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

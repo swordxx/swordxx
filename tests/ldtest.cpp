@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 int main(int argc, char **argv) {

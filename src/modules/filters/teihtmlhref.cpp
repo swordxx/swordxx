@@ -29,7 +29,7 @@
 #include <iostream>
 
 
-namespace sword {
+namespace swordxx {
 
 
 TEIHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
@@ -331,5 +331,5 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

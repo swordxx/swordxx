@@ -46,13 +46,13 @@
 #include <markupfiltmgr.h>
 
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 
 int main(int argc, char **argv) {
 
-	SWMgr manager(new MarkupFilterMgr(sword::FMT_HTMLHREF, sword::ENC_UTF16));
+	SWMgr manager(new MarkupFilterMgr(swordxx::FMT_HTMLHREF, swordxx::ENC_UTF16));
 
 	const char *bookName = (argc > 1) ? argv[1] : "WLC";
 	SWModule *b = manager.getModule(bookName);

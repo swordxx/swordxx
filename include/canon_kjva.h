@@ -22,7 +22,7 @@
 #ifndef CANON_KJVA_H
 #define CANON_KJVA_H
 
-namespace sword {
+namespace swordxx {
 
 
 // Versification system: KJVA
@@ -360,7 +360,7 @@ int vm_kjva[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

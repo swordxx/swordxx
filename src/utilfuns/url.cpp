@@ -30,7 +30,7 @@
 #include <iostream>
 
 
-namespace sword {
+namespace swordxx {
 
 
 namespace {
@@ -285,5 +285,5 @@ const SWBuf URL::decode(const char *encoded) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

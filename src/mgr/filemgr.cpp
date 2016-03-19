@@ -70,7 +70,7 @@
 // -------
 
 
-namespace sword {
+namespace swordxx {
 
 
 int FileMgr::CREAT = O_CREAT;
@@ -583,4 +583,4 @@ long FileMgr::resourceConsumption() {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

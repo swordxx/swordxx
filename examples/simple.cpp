@@ -39,7 +39,7 @@
 #include <iostream>
 
 
-using namespace sword;
+using namespace swordxx;
 using std::cout;
 
 

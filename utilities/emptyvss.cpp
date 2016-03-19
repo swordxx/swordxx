@@ -30,12 +30,12 @@
 #include <iostream>
 #include <stdio.h>
 
-using sword::SWMgr;
-using sword::VerseKey;
-using sword::ModMap;
-using sword::SWKey;
-using sword::SWModule;
-using sword::SW_POSITION;
+using swordxx::SWMgr;
+using swordxx::VerseKey;
+using swordxx::ModMap;
+using swordxx::SWKey;
+using swordxx::SWModule;
+using swordxx::SW_POSITION;
 
 int main(int argc, char **argv) {
 	if (argc < 2) {

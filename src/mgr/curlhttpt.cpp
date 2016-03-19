@@ -35,7 +35,7 @@
 using std::vector;
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -250,5 +250,5 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 	return dirList;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 

@@ -50,7 +50,7 @@
 #include <stdio.h>
 #include <cipherfil.h>
 
-using namespace sword;
+using namespace swordxx;
 
 using std::cerr;
 using std::string;

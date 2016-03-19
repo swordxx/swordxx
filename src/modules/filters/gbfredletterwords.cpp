@@ -27,7 +27,7 @@
 #include <ctype.h>
 
 
-namespace sword {
+namespace swordxx {
 
 namespace {
 
@@ -113,4 +113,4 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -28,7 +28,7 @@
 #include "swbuf.h"
 #include "versekey.h"
 
-using namespace sword;
+using namespace swordxx;
 using namespace std;
 
 class VerseKeyTest : public CppUnit::TestFixture  {
@@ -51,7 +51,7 @@ CPPUNIT_TEST_SUITE_END();
 
 protected:
 	SWBuf parseKey(const char* keyValue, const char* locale) {
-		sword::VerseKey vk;
+		swordxx::VerseKey vk;
 		vk.setLocale(locale);
 		vk.setText(keyValue);
 				
@@ -96,9 +96,9 @@ protected:
 		
 public:
 	void setUp() {
-/*		m_vk1 = new sword::VerseKey();
-		m_vk2 = new sword::VerseKey();
-		m_vk3 = new sword::VerseKey();
+/*		m_vk1 = new swordxx::VerseKey();
+		m_vk2 = new swordxx::VerseKey();
+		m_vk3 = new swordxx::VerseKey();
 		
 		setLocaleToAll("en");*/
 	}	

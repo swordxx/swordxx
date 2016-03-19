@@ -29,7 +29,7 @@
 #include <swbuf.h>
 
 
-namespace sword {
+namespace swordxx {
 
 const unsigned char SW_toupper_array[256] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -410,4 +410,4 @@ SWBuf wcharToUTF8(const wchar_t *buf) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -31,7 +31,7 @@
 #include <stdio.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
  /******************************************************************************
@@ -213,5 +213,5 @@ char *zLD::getKeyForEntry(long entry) const
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

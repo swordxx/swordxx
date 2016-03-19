@@ -26,7 +26,7 @@
 #include <ctype.h>
 #include <url.h>
 
-namespace sword {
+namespace swordxx {
 
 GBFWEBIF::GBFWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
 }
@@ -192,4 +192,4 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 	return true;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

@@ -25,7 +25,7 @@
 #include <ctype.h>
 #include <swbuf.h>
 
-namespace sword {
+namespace swordxx {
 
 GBFRTF::GBFRTF() {
 }
@@ -321,5 +321,5 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 	return 0;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */
 

@@ -31,7 +31,7 @@
 #include "swlog.h"
 
 
-namespace sword {
+namespace swordxx {
 
 
 SWLog *SWLog::systemLog = 0;
@@ -131,4 +131,4 @@ void SWLog::logMessage(const char *message, int level) const {
 	std::cerr << message;
 	std::cerr << std::endl;
 }
-} /* namespace sword */
+} /* namespace swordxx */

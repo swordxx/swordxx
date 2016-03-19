@@ -28,7 +28,7 @@
 
 #include <defs.h>
 
-namespace sword {
+namespace swordxx {
 
 class SWCompress;
 class EntriesBlock;
@@ -72,5 +72,5 @@ public:
 	static signed char createModule (const char *path);
 };
 
-} /* namespace sword */
+} /* namespace swordxx */
 #endif

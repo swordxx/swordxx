@@ -60,7 +60,7 @@
 #include <utf8utf16.h>
 #include <utf16utf8.h>
 
-using namespace sword;
+using namespace swordxx;
 
 using namespace std;
 

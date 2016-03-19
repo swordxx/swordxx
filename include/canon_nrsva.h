@@ -22,7 +22,7 @@
 #ifndef CANON_NRSVA_H
 #define CANON_NRSVA_H
 
-namespace sword {
+namespace swordxx {
 
 // Versification system: NRSVA
 // Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr Ezra Neh Esth Job Ps Prov Eccl Song Isa Jer Lam Ezek Dan Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal Tob Jdt EsthGr Wis Sir Bar PrAzar Sus Bel 1Macc 2Macc 1Esd PrMan AddPs 3Macc 2Esd 4Macc Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev
@@ -369,7 +369,7 @@ int vm_nrsva[] = {
 };
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 
 
 #endif

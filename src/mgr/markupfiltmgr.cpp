@@ -59,7 +59,7 @@
 #include <swmgr.h>
 
 
-namespace sword {
+namespace swordxx {
 
 
 /******************************************************************************
@@ -327,5 +327,5 @@ void MarkupFilterMgr::CreateFilters(char markup) {
 }
 
 
-} /* namespace sword */
+} /* namespace swordxx */
 

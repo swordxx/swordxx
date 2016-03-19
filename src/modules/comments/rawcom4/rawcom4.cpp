@@ -31,7 +31,7 @@
 #include <rawcom4.h>
 #include <versekey.h>
 
-namespace sword {
+namespace swordxx {
 
  /******************************************************************************
  * RawCom4 Constructor - Initializes data for instance of RawCom4
@@ -176,4 +176,4 @@ bool RawCom4::hasEntry(const SWKey *k) const {
 	return size;
 }
 
-} /* namespace sword */
+} /* namespace swordxx */

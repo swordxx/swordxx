@@ -31,12 +31,12 @@
 #include <stdio.h>
 #include <iostream>
 
-using sword::SWMgr;
-using sword::VerseKey;
-using sword::SWModule;
-using sword::SWKey;
-using sword::SW_POSITION;
-using sword::ModMap;
+using swordxx::SWMgr;
+using swordxx::VerseKey;
+using swordxx::SWModule;
+using swordxx::SWKey;
+using swordxx::SW_POSITION;
+using swordxx::ModMap;
 
 void cleanbuf(char *buf) {
 	char *from = buf;
